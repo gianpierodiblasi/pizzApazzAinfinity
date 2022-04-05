@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<project name="pizzApazzA4Ever" basedir="." default="build"> 
+ 
+  <property name="src.dir" value="${basedir}/src" /> 
+  <property name="build.dir" value="${basedir}/build" /> 
+  
+  <target name="clean"> 
+    <delete>
+      <fileset dir="${build.dir}"/>
+    </delete> 
+  </target> 
+  
+  <target name="js_source_list_comma">
+    <loadfile property="js_source_list_comma" srcFile="${src.dir}/js/source_list.properties">
+      <filterchain>
+        <linecontainsregexp negate="true">
+          <regexp pattern="#.*"/>
+        </linecontainsregexp>
+        <suffixlines suffix=", "/>
+        <striplinebreaks/>
+      </filterchain>
+    </loadfile>
+  </target>
+  
+  <target name="js_source_list_space">
+    <loadfile property="js_source_list_space" srcFile="${src.dir}/js/source_list.properties">
+      <filterchain>
+        <linecontainsregexp negate="true">
+          <regexp pattern="#.*"/>
+        </linecontainsregexp>
+        <suffixlines suffix=" "/>
+        <striplinebreaks/>
+      </filterchain>
+    </loadfile>
+  </target>
+  
+  <target name="css_source_list_comma">
+    <loadfile property="css_source_list_comma" srcFile="${src.dir}/css/source_list.properties">
+      <filterchain>
+        <linecontainsregexp negate="true">
+          <regexp pattern="#.*"/>
+        </linecontainsregexp>
+        <suffixlines suffix=", "/>
+        <striplinebreaks/>
+      </filterchain>
+    </loadfile>
+  </target>
+  
+  <target name="css_source_list_space">
+    <loadfile property="css_source_list_space" srcFile="${src.dir}/css/source_list.properties">
+      <filterchain>
+        <linecontainsregexp negate="true">
+          <regexp pattern="#.*"/>
+        </linecontainsregexp>
+        <suffixlines suffix=" "/>
+        <striplinebreaks/>
+      </filterchain>
+    </loadfile>
+  </target>
+  
+  <target name="build_js" depends="js_source_list_comma">
+    <concat destfile="${build.dir}/bundle.js" fixlastline="yes">
+      <filterchain>
+        <linecontainsregexp negate="true">
+          <regexp pattern="/* global .* */"/>
+        </linecontainsregexp>
+      </filterchain>
+      
+      <filelist dir="${basedir}" files="${js_source_list_comma}"/>
+    </concat>
+  </target>
+  
+  <target name="build_css" depends="css_source_list_comma">
+    <concat destfile="${build.dir}/bundle.css" fixlastline="yes">
+      <filelist dir="${basedir}" files="${css_source_list_comma}"/>
+    </concat>
+  </target>
+      
+  <target name="build_js_min" depends="js_source_list_space">
+    <exec executable="cmd">
+      <arg value="/c"/>
+      <arg value="terser"/>
+      <arg line="${js_source_list_space}"/>
+      <arg line="--output ${build.dir}/bundle.min.js"/>
+      <arg value="--compress"/>
+      <arg value="--mangle"/>
+      <arg line="--source-map &quot;url='bundle.min.js.map'&quot;"/>
+    </exec>
+    
+    <replace file="${build.dir}/bundle.min.js.map" token="src/js/" value="../src/js/"/>
+  </target> 
+  
+  <target name="build_css_min" depends="css_source_list_space">
+    <exec executable="cmd">
+      <arg value="/c"/>
+      <arg value="cleancss"/>
+      <arg line="--source-map"/>
+      <arg line="-O2"/>
+      <arg line="-o ${build.dir}/bundle.min.css"/>
+      <arg line="${css_source_list_space}"/>
+    </exec>
+    
+    <replace file="${build.dir}/bundle.min.css.map" token="src\\css\\" value="../src/css/"/>
+  </target>
+  
+  <target name="copy_images">
+    <copy todir="${build.dir}">
+      <fileset dir="${src.dir}/image"/>
+    </copy>
+  </target>
+  
+  <target name="build" depends="build_js,build_css,build_js_min,build_css_min,copy_images">
+  </target>
+</project>
