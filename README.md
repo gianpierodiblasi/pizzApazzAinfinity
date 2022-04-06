@@ -25,7 +25,7 @@ More attention was dedicated to the usability and to the ergonomics of all funct
 - macro recorder
 - presentation manager (TommyGun)
 
-Several implementation of pizzApazzA exist:
+Several implementations of pizzApazzA exist:
 - a VisualBasic6 edition (developed by  my friend Ettore Luzio)
 - a Java Swing edition
 - an Android edition
@@ -37,11 +37,12 @@ This is the fifth edition of pizzApazzA and the first "completely web based" (wh
 I'm a Java developer, I love Java, I love NetBeans, I love everything in Java, but sadly Java for desktop (and browser) is a mess.
 So, I decided to rewrite pizzApazzA in JavaScript (to be more precise in ES6).
 
-But... OMG!! I can't live without strong typization! So what can I do? I can develop in Java and transpile in JavaScript. Well I need a
+But... OMG! I can't live without strong typization! So what can I do? I can develop in Java and transpile in JavaScript. Well I need a
 transpiler and there are several Java to JavaScript transpiler; but I'm a Java developer! So why don't write a transpiler by myself? Yes,
 but this is [another history](https://github.com/gianpierodiblasi/josetta).
 
-I want everyone from everywhere can use pizzApazzA, with a pc, a mac, a chromebook, a tablet and everything able to run a browser.
+Ok, so I was talking about JavaScript and the web. I want everyone from everywhere can use pizzApazzA, with a pc, a mac, a chromebook,
+a tablet and everything able to run a browser.
 
 I'm not a professional JavaScript developer; I consider myself a simply good JavaScript developer and I know that several things can be
 done better (starting from the build system... why to use ANT for a JavaScript build? Am I crazy?); so, if you have any suggestion to
