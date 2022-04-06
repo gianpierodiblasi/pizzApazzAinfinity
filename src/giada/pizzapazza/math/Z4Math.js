@@ -7,7 +7,6 @@ class Z4Math {
   static DEG2RAD = Math.PI / 180;
 
   constructor() {
-
   }
 
   static rad2deg(radians) {
