@@ -1,5 +1,7 @@
 package giada.pizzapazza.math;
 
+import def.js.Math;
+
 /**
  * The utility library for math
  */
@@ -9,27 +11,22 @@ public class Z4Math {
    * 2*PI value
    */
   public final static double TWO_PI = 2 * Math.PI;
-  
   /**
    * PI/2 value
    */
   public final static double HALF_PI = Math.PI / 2;
-  
   /**
    * The gold section
    */
   public final static double GOLD_SECTION = (1 + Math.sqrt(5)) / 2;
-  
   /**
    * The gold section square
    */
   public final static double SQUARE_GOLD_SECTION = Z4Math.GOLD_SECTION * Z4Math.GOLD_SECTION;
-  
   /**
    * RAD to DEG conversion
    */
   public final static double RAD2DEG = 180 / Math.PI;
-  
   /**
    * DEG to RAD conversion
    */
@@ -37,6 +34,7 @@ public class Z4Math {
 
   /**
    * Converts an angle from radiants to degrees
+   *
    * @param radians The angle in radians
    * @return The angle in degree
    */
@@ -46,6 +44,7 @@ public class Z4Math {
 
   /**
    * Converts an angle from degrees to radians
+   *
    * @param degrees The angle in degrees
    * @return The angle in radians
    */
@@ -55,6 +54,7 @@ public class Z4Math {
 
   /**
    * Returns the distance between two points
+   *
    * @param x1 The x-axis coordinate of the first point
    * @param y1 The y-axis coordinate of the first point
    * @param x2 The x-axis coordinate of the second point
@@ -70,6 +70,7 @@ public class Z4Math {
   /**
    * Returns the theta component of a point or a vector, in polar coordinates.
    * The value is normalized in the range [0,2*PI]
+   *
    * @param x0 The x-axis coordinate of the start point
    * @param y0 The y-axis coordinate of the start point
    * @param x The x-axis coordinate of the end point
@@ -83,6 +84,7 @@ public class Z4Math {
 
   /**
    * Generates a ripple around a value
+   *
    * @param value The value
    * @param min The minimum allowed value
    * @param max The maximum allowed value
