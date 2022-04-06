@@ -75,6 +75,7 @@
         <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/4">
             <compilation-unit>
                 <package-root>src</package-root>
+                <classpath mode="compile">lib/jsweet-core-6.0.1.jar</classpath>
                 <source-level>1.8</source-level>
             </compilation-unit>
             <compilation-unit>
