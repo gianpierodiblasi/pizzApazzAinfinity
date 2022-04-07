@@ -81,6 +81,7 @@
             <compilation-unit>
                 <package-root>test</package-root>
                 <unit-tests/>
+                <classpath mode="compile">lib/josetta-1.0.1-jar-with-dependencies.jar</classpath>
                 <source-level>1.8</source-level>
             </compilation-unit>
         </java-data>

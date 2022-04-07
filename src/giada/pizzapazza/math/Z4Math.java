@@ -96,7 +96,7 @@ public class Z4Math {
     value += Math.random() > 0.5 ? rnd : -rnd;
     return value < min ? min : value > max ? max : value;
   }
-  
+
   private Z4Math() {
   }
 }
