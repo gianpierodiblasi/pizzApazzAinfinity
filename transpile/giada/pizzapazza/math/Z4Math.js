@@ -1,5 +1,7 @@
 /**
  * The utility library for math
+ *
+ * @author gianpiero.di.blasi
  */
 class Z4Math {
 

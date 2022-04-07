@@ -124,4 +124,17 @@
   
   <target name="build" depends="transpile,build_js,build_css,build_js_min,build_css_min,copy_images">
   </target>
+  
+  <target name="watch">
+    <java classname="giada.josetta.Josetta">
+      <arg value="-in"/>
+      <arg value="${src.dir}"/>
+      <arg value="-out"/>
+      <arg value="${transpile.dir}"/>
+      <arg value="-w"/>
+      <classpath>
+        <pathelement path="${basedir}/lib/josetta-1.0.1-jar-with-dependencies.jar"/>
+      </classpath>
+    </java>
+  </target>
 </project>

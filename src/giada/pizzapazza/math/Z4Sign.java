@@ -4,6 +4,8 @@ import def.js.Math;
 
 /**
  * The signs of a value
+ *
+ * @author gianpiero.di.blasi
  */
 public class Z4Sign {
 

@@ -1,5 +1,7 @@
 /**
  * The signs of a value
+ *
+ * @author gianpiero.di.blasi
  */
 class Z4Sign {
 

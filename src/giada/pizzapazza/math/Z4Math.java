@@ -4,6 +4,8 @@ import def.js.Math;
 
 /**
  * The utility library for math
+ *
+ * @author gianpiero.di.blasi
  */
 public class Z4Math {
 
