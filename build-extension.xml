@@ -10,8 +10,20 @@
     </delete> 
   </target> 
   
+  <target name="transpile">
+    <java classname="giada.josetta.Josetta">
+      <arg value="-in"/>
+      <arg value="${src.dir}"/>
+      <arg value="-out"/>
+      <arg value="${build.dir}/js"/>
+      <classpath>
+        <pathelement path="${basedir}/lib/josetta-1.0.1-jar-with-dependencies.jar"/>
+      </classpath>
+    </java>
+  </target>
+  
   <target name="js_source_list_comma">
-    <loadfile property="js_source_list_comma" srcFile="${src.dir}/js/source_list.properties">
+    <loadfile property="js_source_list_comma" srcFile="${basedir}/js_list.properties">
       <filterchain>
         <linecontainsregexp negate="true">
           <regexp pattern="#.*"/>
@@ -23,7 +35,7 @@
   </target>
   
   <target name="js_source_list_space">
-    <loadfile property="js_source_list_space" srcFile="${src.dir}/js/source_list.properties">
+    <loadfile property="js_source_list_space" srcFile="${basedir}/js_list.properties">
       <filterchain>
         <linecontainsregexp negate="true">
           <regexp pattern="#.*"/>
@@ -35,7 +47,7 @@
   </target>
   
   <target name="css_source_list_comma">
-    <loadfile property="css_source_list_comma" srcFile="${src.dir}/css/source_list.properties">
+    <loadfile property="css_source_list_comma" srcFile="${basedir}/css_list.properties">
       <filterchain>
         <linecontainsregexp negate="true">
           <regexp pattern="#.*"/>
@@ -47,7 +59,7 @@
   </target>
   
   <target name="css_source_list_space">
-    <loadfile property="css_source_list_space" srcFile="${src.dir}/css/source_list.properties">
+    <loadfile property="css_source_list_space" srcFile="${basedir}/css_list.properties">
       <filterchain>
         <linecontainsregexp negate="true">
           <regexp pattern="#.*"/>
@@ -75,7 +87,7 @@
       <filelist dir="${basedir}" files="${css_source_list_comma}"/>
     </concat>
   </target>
-      
+  
   <target name="build_js_min" depends="js_source_list_space">
     <exec executable="cmd">
       <arg value="/c"/>
@@ -87,8 +99,8 @@
       <arg line="--source-map &quot;url='bundle.min.js.map'&quot;"/>
     </exec>
     
-    <replace file="${build.dir}/bundle.min.js.map" token="src/js/" value="../src/js/"/>
-  </target> 
+    <replace file="${build.dir}/bundle.min.js.map" token="build/js/" value="../build/js/"/>
+  </target>
   
   <target name="build_css_min" depends="css_source_list_space">
     <exec executable="cmd">
@@ -109,6 +121,6 @@
     </copy>
   </target>
   
-  <target name="build" depends="build_js,build_css,build_js_min,build_css_min,copy_images">
+  <target name="build" depends="transpile,build_js,build_css,build_js_min,build_css_min,copy_images">
   </target>
 </project>
