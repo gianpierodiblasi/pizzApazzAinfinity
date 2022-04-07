@@ -2,6 +2,7 @@
 <project name="pizzApazzA4Ever" basedir="." default="build"> 
  
   <property name="src.dir" value="${basedir}/src" /> 
+  <property name="transpile.dir" value="${basedir}/transpile" /> 
   <property name="build.dir" value="${basedir}/build" /> 
   
   <target name="clean"> 
@@ -15,7 +16,7 @@
       <arg value="-in"/>
       <arg value="${src.dir}"/>
       <arg value="-out"/>
-      <arg value="${build.dir}/js"/>
+      <arg value="${transpile.dir}"/>
       <classpath>
         <pathelement path="${basedir}/lib/josetta-1.0.1-jar-with-dependencies.jar"/>
       </classpath>
@@ -99,7 +100,7 @@
       <arg line="--source-map &quot;url='bundle.min.js.map'&quot;"/>
     </exec>
     
-    <replace file="${build.dir}/bundle.min.js.map" token="build/js/" value="../build/js/"/>
+    <replace file="${build.dir}/bundle.min.js.map" token="transpile/" value="../transpile/"/>
   </target>
   
   <target name="build_css_min" depends="css_source_list_space">
@@ -116,7 +117,7 @@
   </target>
   
   <target name="copy_images">
-    <copy todir="${build.dir}">
+    <copy todir="${build.dir}/image">
       <fileset dir="${src.dir}/image"/>
     </copy>
   </target>
