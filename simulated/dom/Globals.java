@@ -11,10 +11,6 @@ public class Globals {
     return 0;
   }
 
-  public static int parseInt(String str) {
-    return 0;
-  }
-
   public static int parseInt(String str, int radix) {
     return 0;
   }
