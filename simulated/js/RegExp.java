@@ -1,7 +1,7 @@
 package js;
 
 /**
- * The simulation of JavaScript RegExp
+ * The simulation of the JavaScript RegExp
  *
  * @author gianpiero.di.blasi
  */
