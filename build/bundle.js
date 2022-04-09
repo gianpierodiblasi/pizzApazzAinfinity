@@ -283,6 +283,10 @@ class Z4RandomValue {
   static  stepped(value, length) {
     return new Z4RandomValue(value, 3, length);
   }
+
+
+
+
 }
 /**
  * The fanciful value
@@ -376,6 +380,61 @@ class Z4FancifulValue {
     } else {
       return this.constantSign.next() * this.constantValue + this.randomSign.next() * this.randomValue.next() + this.proportionalSign.next() * sensibility * this.proportionalValue;
     }
+  }
+}
+/**
+ * The lighting of a color
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4Lighting {
+
+  /**
+   * No lighting
+   */
+  static  NONE = new Z4Lighting();
+
+  /**
+   * lighting
+   */
+  static  LIGTHED = new Z4Lighting();
+
+  /**
+   * darkening
+   */
+  static  DARKENED = new Z4Lighting();
+
+  constructor() {
+  }
+}
+/**
+ * The progression of a color
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4Progression {
+
+  /**
+   * The spatial progression
+   */
+  static  SPATIAL = new Z4Progression();
+
+  /**
+   * The temporal progression
+   */
+  static  TEMPORAL = new Z4Progression();
+
+  /**
+   * The progression relative to a path
+   */
+  static  RELATIVE_TO_PATH = new Z4Progression();
+
+  /**
+   * The random progression
+   */
+  static  RANDOM = new Z4Progression();
+
+  constructor() {
   }
 }
 /**
@@ -493,4 +552,14 @@ class Z4Color {
     let result = new RegExp("^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$", "i").exec(color);
     return new Z4Color(a, parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16));
   }
+
+
+
+
+
+
+
+
+
+
 }

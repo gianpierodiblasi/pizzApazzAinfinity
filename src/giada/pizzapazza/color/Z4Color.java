@@ -7,7 +7,7 @@ package giada.pizzapazza.color;
  */
 public class Z4Color {
 
-  private int a;
+  private final int a;
   private int r;
   private int g;
   private int b;
@@ -126,43 +126,37 @@ public class Z4Color {
   }
 
   private static int $parseInt(double v) {
-    return v != 0 ? 0 : 0;
+    return 0;
   }
 
   private static int $parseInt(String str, int radix) {
-    return str != null ? radix : radix;
+    return 0;
   }
 
   private static class $Number {
 
-    public double unused;
-
     private $Number(double value) {
-      unused = value;
     }
 
     private $InternalString toString(int radix) {
-      return radix == 0 ? null : null;
+      return null;
     }
   }
 
   private static class $InternalString {
 
     private $InternalString padStart(int targetLength, String padString) {
-      return targetLength == 0 && padString != null ? null : null;
+      return null;
     }
   }
 
   private static class $RegExp {
 
-    public String unused;
-
     private $RegExp(String pattern, String flags) {
-      unused = pattern + flags;
     }
 
     private String[] exec(String string) {
-      return new String[]{unused, string};
+      return null;
     }
   }
 }

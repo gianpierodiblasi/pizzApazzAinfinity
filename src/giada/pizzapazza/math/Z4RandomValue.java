@@ -128,20 +128,17 @@ public class Z4RandomValue {
 
   private static class $Point {
 
-    public double x;
-    public double y;
+    private double x;
+    private double y;
   }
 
   private static class $Bezier {
 
-    public final double unused;
-
     private $Bezier(double x1, double y1, double x2, double y2, double x3, double y3) {
-      unused = x1 + y1 + x2 + y2 + x3 + y3;
     }
 
     private $Point get(double t) {
-      return t != 0 ? null : null;
+      return null;
     }
   }
 }
