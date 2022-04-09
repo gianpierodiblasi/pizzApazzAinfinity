@@ -5,10 +5,7 @@
  */
 class Z4RandomValue {
 
-  /**
-   * The classic random behaviour
-   */
-  static  CLASSIC = new Z4RandomValue(0, 0);
+   value = 0;
 
    type = 0;
 
@@ -24,7 +21,8 @@ class Z4RandomValue {
 
    bezierCurve = null;
 
-  constructor(type, length) {
+  constructor(value, type, length) {
+    this.value = value;
     this.type = type;
     this.length = length;
     this.step = 0;
@@ -43,13 +41,13 @@ class Z4RandomValue {
   /**
    * Returns the next random value
    *
-   * @return
+   * @return The next random value (in the range [0,value[)
    */
    next() {
     switch(this.type) {
       case 0:
       default:
-        return Math.random();
+        return value * Math.random();
       case 1:
         if (this.step === this.length) {
           this.step = 0;
@@ -60,7 +58,7 @@ class Z4RandomValue {
         } else {
           this.step++;
         }
-        return this.bezierCurve.get(this.step / this.length).y;
+        return value * this.bezierCurve.get(this.step / this.length).y;
       case 2:
         if (this.step === this.length) {
           this.step = 0;
@@ -69,7 +67,7 @@ class Z4RandomValue {
         } else {
           this.step++;
         }
-        return (this.nextRandom - this.prevRandom) * this.step / this.length + this.prevRandom;
+        return value * ((this.nextRandom - this.prevRandom) * this.step / this.length + this.prevRandom);
       case 3:
         if (this.step === this.length) {
           this.step = 0;
@@ -77,37 +75,50 @@ class Z4RandomValue {
         } else {
           this.step++;
         }
-        return this.prevRandom;
+        return value * this.prevRandom;
     }
+  }
+
+  /**
+   * Returns a Z4RandomValue generating "classic "random values
+   *
+   * @param value The value
+   * @return The Z4RandomValue
+   */
+  static  classic(value) {
+    return new Z4RandomValue(value, 0, 0);
   }
 
   /**
    * Returns a Z4RandomValue generating random values on a bezier curve
    *
+   * @param value The value
    * @param length The curve length
    * @return The Z4RandomValue
    */
-  static  bezier(length) {
-    return new Z4RandomValue(1, length);
+  static  bezier(value, length) {
+    return new Z4RandomValue(value, 1, length);
   }
 
   /**
    * Returns a Z4RandomValue generating random values on a polyline
    *
+   * @param value The value
    * @param length The polyline length
    * @return The Z4RandomValue
    */
-  static  polyline(length) {
-    return new Z4RandomValue(2, length);
+  static  polyline(value, length) {
+    return new Z4RandomValue(value, 2, length);
   }
 
   /**
    * Returns a Z4RandomValue generating random values on a stepped line
    *
+   * @param value The value
    * @param length The step length
    * @return The Z4RandomValue
    */
-  static  stepped(length) {
-    return new Z4RandomValue(3, length);
+  static  stepped(value, length) {
+    return new Z4RandomValue(value, 3, length);
   }
 }
