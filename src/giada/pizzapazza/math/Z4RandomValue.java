@@ -21,7 +21,7 @@ public class Z4RandomValue {
 
   private int step;
   private double prevRandom;
-  private double crtlRandom;
+  private double controlRandom;
   private double nextRandom;
   private Bezier bezierCurve;
 
@@ -31,7 +31,7 @@ public class Z4RandomValue {
 
     this.step = 0;
     this.prevRandom = Math.random();
-    this.crtlRandom = 1;
+    this.controlRandom = 1;
     this.nextRandom = Math.random();
 
     if (this.type == 1) {
@@ -47,7 +47,7 @@ public class Z4RandomValue {
     Point p2 = new Point() {
     };
     p2.x = this.length / 2;
-    p2.y = this.ctrlRandom;
+    p2.y = this.controlRandom;
     Point p3 = new Point() {
     };
     p3.x = 1;
@@ -70,7 +70,7 @@ public class Z4RandomValue {
         if (this.step == this.length) {
           this.step = 0;
           this.prevRandom = this.nextRandom;
-          this.crtlRandom = this.crtlRandom == 1 ? 0 : 1;
+          this.controlRandom = this.controlRandom == 1 ? 0 : 1;
           this.nextRandom = Math.random();
 
           this.createBezierCurve();

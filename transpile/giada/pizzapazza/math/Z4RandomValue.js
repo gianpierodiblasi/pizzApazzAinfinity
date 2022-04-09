@@ -18,7 +18,7 @@ class Z4RandomValue {
 
    prevRandom = 0.0;
 
-   crtlRandom = 0.0;
+   controlRandom = 0.0;
 
    nextRandom = 0.0;
 
@@ -29,7 +29,7 @@ class Z4RandomValue {
     this.length = length;
     this.step = 0;
     this.prevRandom = Math.random();
-    this.crtlRandom = 1;
+    this.controlRandom = 1;
     this.nextRandom = Math.random();
     if (this.type === 1) {
       this.createBezierCurve();
@@ -44,7 +44,7 @@ class Z4RandomValue {
     let p2 = new Point() {
     };
     p2.x = this.length / 2;
-    p2.y = this.ctrlRandom;
+    p2.y = this.controlRandom;
     let p3 = new Point() {
     };
     p3.x = 1;
@@ -66,7 +66,7 @@ class Z4RandomValue {
         if (this.step === this.length) {
           this.step = 0;
           this.prevRandom = this.nextRandom;
-          this.crtlRandom = this.crtlRandom === 1 ? 0 : 1;
+          this.controlRandom = this.controlRandom === 1 ? 0 : 1;
           this.nextRandom = Math.random();
           this.createBezierCurve();
         } else {
