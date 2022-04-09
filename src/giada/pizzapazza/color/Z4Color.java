@@ -1,9 +1,5 @@
 package giada.pizzapazza.color;
 
-import static dom.Globals.parseInt;
-import js.Number;
-import js.RegExp;
-
 /**
  * The color
  *
@@ -40,10 +36,10 @@ public class Z4Color {
 
     this.hex
             = "#"
-            + new Number(this.r).toString(16).padStart(2, "0")
-            + new Number(this.g).toString(16).padStart(2, "0")
-            + new Number(this.b).toString(16).padStart(2, "0")
-            + new Number(this.a).toString(16).padStart(2, "0");
+            + new $Number(this.r).toString(16).padStart(2, "0")
+            + new $Number(this.g).toString(16).padStart(2, "0")
+            + new $Number(this.b).toString(16).padStart(2, "0")
+            + new $Number(this.a).toString(16).padStart(2, "0");
 
     return this;
   }
@@ -55,7 +51,7 @@ public class Z4Color {
    * @return This gray scaled Z4Color
    */
   public Z4Color gray() {
-    int gray = parseInt(0.21 * this.r + 0.71 * this.g + 0.08 * this.b);
+    int gray = $parseInt(0.21 * this.r + 0.71 * this.g + 0.08 * this.b);
 
     this.r = gray;
     this.g = gray;
@@ -84,9 +80,9 @@ public class Z4Color {
    * @return This lighted Z4Color
    */
   public Z4Color lighted(double lightingFactor) {
-    this.r = parseInt((255 - this.r) * lightingFactor + this.r);
-    this.g = parseInt((255 - this.g) * lightingFactor + this.g);
-    this.b = parseInt((255 - this.b) * lightingFactor + this.b);
+    this.r = $parseInt((255 - this.r) * lightingFactor + this.r);
+    this.g = $parseInt((255 - this.g) * lightingFactor + this.g);
+    this.b = $parseInt((255 - this.b) * lightingFactor + this.b);
 
     return this.init();
   }
@@ -100,9 +96,9 @@ public class Z4Color {
   public Z4Color darkened(double darkeningFactor) {
     darkeningFactor = 1 - darkeningFactor;
 
-    this.r = parseInt(darkeningFactor * this.r);
-    this.g = parseInt(darkeningFactor * this.g);
-    this.b = parseInt(darkeningFactor * this.b);
+    this.r = $parseInt(darkeningFactor * this.r);
+    this.g = $parseInt(darkeningFactor * this.g);
+    this.b = $parseInt(darkeningFactor * this.b);
 
     return this.init();
   }
@@ -125,7 +121,48 @@ public class Z4Color {
    * @return The Z4Color
    */
   public static Z4Color fromHEX(String color, int a) {
-    String[] result = new RegExp("^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$", "i").exec(color);
-    return new Z4Color(a, parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16));
+    String[] result = new $RegExp("^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$", "i").exec(color);
+    return new Z4Color(a, $parseInt(result[1], 16), $parseInt(result[2], 16), $parseInt(result[3], 16));
+  }
+
+  private static int $parseInt(double v) {
+    return v != 0 ? 0 : 0;
+  }
+
+  private static int $parseInt(String str, int radix) {
+    return str != null ? radix : radix;
+  }
+
+  private static class $Number {
+
+    public double unused;
+
+    private $Number(double value) {
+      unused = value;
+    }
+
+    private $InternalString toString(int radix) {
+      return radix == 0 ? null : null;
+    }
+  }
+
+  private static class $InternalString {
+
+    private $InternalString padStart(int targetLength, String padString) {
+      return targetLength == 0 && padString != null ? null : null;
+    }
+  }
+
+  private static class $RegExp {
+
+    public String unused;
+
+    private $RegExp(String pattern, String flags) {
+      unused = pattern + flags;
+    }
+
+    private String[] exec(String string) {
+      return new String[]{unused, string};
+    }
   }
 }

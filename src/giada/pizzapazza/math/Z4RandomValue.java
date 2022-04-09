@@ -1,6 +1,5 @@
 package giada.pizzapazza.math;
 
-import bezier.Bezier;
 import def.js.Math;
 
 /**
@@ -18,7 +17,7 @@ public class Z4RandomValue {
   private double prevRandom;
   private double controlRandom;
   private double nextRandom;
-  private Bezier bezierCurve;
+  private $Bezier bezierCurve;
 
   private Z4RandomValue(int value, int type, int length) {
     this.value = value;
@@ -36,7 +35,7 @@ public class Z4RandomValue {
   }
 
   private void createBezierCurve() {
-    this.bezierCurve = new Bezier(0, this.prevRandom, this.length / 2, this.controlRandom, 1, this.nextRandom);
+    this.bezierCurve = new $Bezier(0, this.prevRandom, this.length / 2, this.controlRandom, 1, this.nextRandom);
   }
 
   /**
@@ -125,5 +124,24 @@ public class Z4RandomValue {
    */
   public static Z4RandomValue stepped(int value, int length) {
     return new Z4RandomValue(value, 3, length);
+  }
+
+  private static class $Point {
+
+    public double x;
+    public double y;
+  }
+
+  private static class $Bezier {
+
+    public final double unused;
+
+    private $Bezier(double x1, double y1, double x2, double y2, double x3, double y3) {
+      unused = x1 + y1 + x2 + y2 + x3 + y3;
+    }
+
+    private $Point get(double t) {
+      return t != 0 ? null : null;
+    }
   }
 }
