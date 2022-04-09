@@ -306,12 +306,6 @@ class Z4FancifulValue {
    uniformSign = false;
 
   /**
-   * Creates a Z4FancifulValue
-   */
-  constructor() {
-  }
-
-  /**
    * Sets the constant component
    *
    * @param constantSign The sign of the constant component
