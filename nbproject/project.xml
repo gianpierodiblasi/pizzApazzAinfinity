@@ -40,6 +40,12 @@
                     <location>transpile</location>
                     <encoding>UTF-8</encoding>
                 </source-folder>
+                <source-folder>
+                    <label>simulated</label>
+                    <type>java</type>
+                    <location>simulated</location>
+                    <encoding>UTF-8</encoding>
+                </source-folder>
             </folders>
             <ide-actions>
                 <action name="build">
@@ -70,6 +76,10 @@
                         <label>transpile</label>
                         <location>transpile</location>
                     </source-folder>
+                    <source-folder style="packages">
+                        <label>simulated</label>
+                        <location>simulated</location>
+                    </source-folder>
                     <source-file>
                         <location>${ant.script}</location>
                     </source-file>
@@ -85,7 +95,7 @@
         <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/4">
             <compilation-unit>
                 <package-root>src</package-root>
-                <classpath mode="compile">lib/jsweet-core-6.0.1.jar;lib/bezier-js-0.0.0-1.1.0-20160525.jar</classpath>
+                <classpath mode="compile">lib/jsweet-core-6.0.1.jar;simulated</classpath>
                 <source-level>1.8</source-level>
             </compilation-unit>
             <compilation-unit>
@@ -95,6 +105,10 @@
             </compilation-unit>
             <compilation-unit>
                 <package-root>transpile</package-root>
+                <source-level>1.8</source-level>
+            </compilation-unit>
+            <compilation-unit>
+                <package-root>simulated</package-root>
                 <source-level>1.8</source-level>
             </compilation-unit>
         </java-data>

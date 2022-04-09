@@ -50,7 +50,7 @@ improve my code I will be happy to do it, but... please don't focus your attenti
 pizzApazzA is an idea, not the code to realize it.
 
 ## Dependencies
-- geometry.js - [link](https://resources.jointjs.com/docs/jointjs/v3.5/geometry.html)
+- Bezier.js - [link](https://pomax.github.io/bezierjs/)
 
 ## Build
 pizzApazzA is developed in NetBeans as an ANT project. In order to perform a build the following tools are necessary:

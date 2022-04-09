@@ -1,7 +1,6 @@
 package giada.pizzapazza.math;
 
-import def.bezier_js.bezierjs.Bezier;
-import def.bezier_js.bezierjs.Point;
+import bezier.Bezier;
 import def.js.Math;
 
 /**
@@ -40,20 +39,7 @@ public class Z4RandomValue {
   }
 
   private void createBezierCurve() {
-    Point p1 = new Point() {
-    };
-    p1.x = 0;
-    p1.y = this.prevRandom;
-    Point p2 = new Point() {
-    };
-    p2.x = this.length / 2;
-    p2.y = this.controlRandom;
-    Point p3 = new Point() {
-    };
-    p3.x = 1;
-    p3.y = this.nextRandom;
-
-    this.bezierCurve = new Bezier(p1, p2, p3);
+    this.bezierCurve = new Bezier(0, this.prevRandom, this.length / 2, this.controlRandom, 1, this.nextRandom);
   }
 
   /**
