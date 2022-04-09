@@ -13,7 +13,6 @@ public class Z4Sign {
    * Positive sign
    */
   public final static Z4Sign POSITIVE = new Z4Sign(1);
-
   /**
    * Negative sign
    */

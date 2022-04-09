@@ -10,7 +10,7 @@ import def.js.Math;
  */
 public class Z4RandomValue {
 
-  private int value;
+  private final int value;
   private final int type;
   private final int length;
 
