@@ -121,8 +121,4 @@ class Z4RandomValue {
   static  stepped(value, length) {
     return new Z4RandomValue(value, 3, length);
   }
-
-
-
-
 }
