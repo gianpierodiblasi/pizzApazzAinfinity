@@ -4,6 +4,7 @@
   <property name="src.dir" value="${basedir}/src" /> 
   <property name="transpile.dir" value="${basedir}/transpile" /> 
   <property name="build.dir" value="${basedir}/build" /> 
+  <property name="josetta.jar" value="${basedir}/lib/josetta-1.1.0-jar-with-dependencies.jar" /> 
   
   <target name="clean"> 
     <delete>
@@ -18,7 +19,7 @@
       <arg value="-out"/>
       <arg value="${transpile.dir}"/>
       <classpath>
-        <pathelement path="${basedir}/lib/josetta-1.0.1-jar-with-dependencies.jar"/>
+        <pathelement path="${josetta.jar}"/>
       </classpath>
     </java>
   </target>
@@ -133,7 +134,7 @@
       <arg value="${transpile.dir}"/>
       <arg value="-w"/>
       <classpath>
-        <pathelement path="${basedir}/lib/josetta-1.0.1-jar-with-dependencies.jar"/>
+        <pathelement path="${josetta.jar}"/>
       </classpath>
     </java>
   </target>

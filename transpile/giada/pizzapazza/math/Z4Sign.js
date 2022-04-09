@@ -22,11 +22,6 @@ class Z4Sign {
 
    sign = 0;
 
-  /**
-   * Creates a Z4Sign
-   *
-   * @param sign The sign
-   */
   constructor(sign) {
     this.sign = sign;
   }

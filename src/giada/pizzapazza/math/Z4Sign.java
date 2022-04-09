@@ -25,11 +25,6 @@ public class Z4Sign {
 
   private int sign;
 
-  /**
-   * Creates a Z4Sign
-   *
-   * @param sign The sign
-   */
   private Z4Sign(int sign) {
     this.sign = sign;
   }
