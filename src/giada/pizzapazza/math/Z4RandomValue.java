@@ -128,7 +128,6 @@ public class Z4RandomValue {
 
   private static class $Point {
 
-    private double x;
     private double y;
   }
 
