@@ -16,12 +16,6 @@ public class Z4FancifulValue {
   private boolean uniformSign;
 
   /**
-   * Creates a Z4FancifulValue
-   */
-  public Z4FancifulValue() {
-  }
-
-  /**
    * Sets the constant component
    *
    * @param constantSign The sign of the constant component
