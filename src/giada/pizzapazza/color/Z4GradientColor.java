@@ -1,7 +1,9 @@
 package giada.pizzapazza.color;
 
+import def.dom.CanvasGradient;
 import def.js.Array;
 import giada.pizzapazza.math.Z4Math;
+import simulation.dom.$CanvasRenderingContext2D;
 
 /**
  * The gradient color (a sequence of Z4StopColor)
@@ -149,5 +151,54 @@ public class Z4GradientColor {
 
     double div = (position - before.getPosition()) / (after.getPosition() - before.getPosition());
     return Z4Color.fromZ4AbstractColors(before, after, div);
+  }
+
+  /**
+   * Returns a linear gradient (without ripple and mirroring)
+   *
+   * @param context The context to create the gradient
+   * @param x1 The x-axis coordinate of the start point
+   * @param y1 The y-axis coordinate of the start point
+   * @param x2 The x-axis coordinate of the end point
+   * @param y2 The y-axis coordinate of the end point
+   * @return The linear gradient
+   */
+  public CanvasGradient getLinearGradient($CanvasRenderingContext2D context, double x1, double y1, double x2, double y2) {
+    CanvasGradient gradient = context.createLinearGradient(x1, y1, x2, y2);
+    this.z4StopColors.forEach((z4StopColor, index, array) -> gradient.addColorStop(z4StopColor.getPosition(), z4StopColor.getHEX()));
+    return gradient;
+  }
+
+  /**
+   * Returns a radial gradient (without ripple and mirroring)
+   *
+   * @param context The context to create the gradient
+   * @param x1 The x-axis coordinate of the start circle
+   * @param y1 The y-axis coordinate of the start circle
+   * @param r1 The radius of the start circle
+   * @param x2 The x-axis coordinate of the end circle
+   * @param y2 The y-axis coordinate of the end circle
+   * @param r2 The radius of the end circle
+   * @return The radial gradient
+   */
+  public CanvasGradient getRadialGradient($CanvasRenderingContext2D context, double x1, double y1, double r1, double x2, double y2, double r2) {
+    CanvasGradient gradient = context.createRadialGradient(x1, y1, r1, x2, y2, r2);
+    this.z4StopColors.forEach((z4StopColor, index, array) -> gradient.addColorStop(z4StopColor.getPosition(), z4StopColor.getHEX()));
+    return gradient;
+  }
+
+  /**
+   * Returns a conic gradient (without ripple and mirroring)
+   *
+   * @param context The context to create the gradient
+   * @param x The x-axis coordinate of the centre of the gradient
+   * @param y The y-axis coordinate of the centre of the gradient
+   * @param angle The angle at which to begin the gradient, in radians
+   * @return The conic gradient
+   */
+  public CanvasGradient getConicGradient($CanvasRenderingContext2D context, double x, double y, double angle) {
+    CanvasGradient gradient = context.createConicGradient(angle, x, y);
+    this.z4StopColors.forEach((z4StopColor, index, array) -> gradient.addColorStop(z4StopColor.getPosition(), z4StopColor.getHEX()));
+    return gradient;
   }
 }
