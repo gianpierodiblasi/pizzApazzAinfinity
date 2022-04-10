@@ -11,7 +11,7 @@ import static simulation.js.$Globals.parseInt;
  */
 public class Z4StopColor extends Z4AbstractColor<Z4StopColor> {
 
-  private final double position;
+  private double position;
 
   /**
    * Creates a Z4StopColor
@@ -29,13 +29,29 @@ public class Z4StopColor extends Z4AbstractColor<Z4StopColor> {
   }
 
   /**
+   * Returns the position
+   * @return The position in a sequence (in the range [0,1])
+   */
+  public double getPosition() {
+    return position;
+  }
+
+  /**
+   * Sets the position
+   * @param position The position in a sequence (in the range [0,1])
+   */
+  public void setPosition(double position) {
+    this.position = position;
+  }
+
+  /**
    * Creates a Z4StopColor from an ARGB integer color
    *
    * @param color The color
    * @param position The position in a sequence (in the range [0,1])
    * @return The Z4StopColor
    */
-  public static Z4StopColor fromColor(int color, double position) {
+  public static Z4StopColor fromARGB(int color, double position) {
     return new Z4StopColor(color >>> 24 & 0xff, color >>> 16 & 0xff, color >>> 8 & 0xff, color & 0xff, position);
   }
 

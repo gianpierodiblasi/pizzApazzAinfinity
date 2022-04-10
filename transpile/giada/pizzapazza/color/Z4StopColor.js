@@ -22,13 +22,29 @@ class Z4StopColor extends Z4AbstractColor {
   }
 
   /**
+   * Returns the position
+   * @return The position in a sequence (in the range [0,1])
+   */
+   getPosition() {
+    return position;
+  }
+
+  /**
+   * Sets the position
+   * @param position The position in a sequence (in the range [0,1])
+   */
+   setPosition(position) {
+    this.position = position;
+  }
+
+  /**
    * Creates a Z4StopColor from an ARGB integer color
    *
    * @param color The color
    * @param position The position in a sequence (in the range [0,1])
    * @return The Z4StopColor
    */
-  static  fromColor(color, position) {
+  static  fromARGB(color, position) {
     return new Z4StopColor(color >>> 24 & 0xff, color >>> 16 & 0xff, color >>> 8 & 0xff, color & 0xff, position);
   }
 

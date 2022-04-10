@@ -19,7 +19,7 @@ class Z4AbstractColor {
    hex = null;
 
   /**
-   * Creates a Z4Color
+   * Creates a Z4AbstractColor
    *
    * @param a The transparency component
    * @param r The red component
@@ -41,10 +41,53 @@ class Z4AbstractColor {
   }
 
   /**
-   * In place converts this Z4Color to gray scaled, the transparency is not
-   * changed
+   * Returns the components of this Z4AbstractColor (a, r, g, b)
    *
-   * @return This gray scaled Z4Color
+   * @return The six components of this Z4AbstractColor
+   */
+   getComponents() {
+    let components = new Array();
+    components.push(this.a, this.r, this.g, this.b);
+    return components;
+  }
+
+  /**
+   * Returns the ARGB integer representing this Z4AbstractColor
+   *
+   * @return The ARGB integer representing this Z4AbstractColor
+   */
+   getARGB() {
+    return this.argb;
+  }
+
+  /**
+   * Returns the RGB hex string representing this Z4AbstractColor
+   *
+   * @return The RGB hex string representing this Z4AbstractColor
+   */
+   getHEX() {
+    return this.hex;
+  }
+
+  /**
+   * Sets this Z4AbstractColor from an ARGB integer color
+   *
+   * @param color The color
+   * @return This Z4AbstractColor
+   */
+   set(color) {
+    this.a = color >>> 24 & 0xff;
+    this.r = color >>> 16 & 0xff;
+    this.g = color >>> 8 & 0xff;
+    this.b = color & 0xff;
+    return this.init();
+  }
+
+  /**
+   * In place converts this Z4AbstractColor to gray scaled, the transparency is
+   * not changed
+   *
+   * @return This gray scaled Z4AbstractColor
    */
    gray() {
     let gray = parseInt(0.21 * this.r + 0.71 * this.g + 0.08 * this.b);
@@ -55,9 +98,10 @@ class Z4AbstractColor {
   }
 
   /**
-   * In place converts this Z4Color to negative, the transparency is not changed
+   * In place converts this Z4AbstractColor to negative, the transparency is not
+   * changed
    *
-   * @return This negativized Z4Color
+   * @return This negativized Z4AbstractColor
    */
    negative() {
     this.r = 255 - this.r;
@@ -67,10 +111,10 @@ class Z4AbstractColor {
   }
 
   /**
-   * In place lights up this Z4Color, the transparency is not changed
+   * In place lights up this Z4AbstractColor, the transparency is not changed
    *
    * @param lightingFactor The lighting factor (in the range [0,1])
-   * @return This lighted Z4Color
+   * @return This lighted Z4AbstractColor
    */
    lighted(lightingFactor) {
     this.r = parseInt((255 - this.r) * lightingFactor + this.r);
@@ -80,10 +124,10 @@ class Z4AbstractColor {
   }
 
   /**
-   * In place darkens this Z4Color, the transparency is not changed
+   * In place darkens this Z4AbstractColor, the transparency is not changed
    *
    * @param darkeningFactor The darkening factor (in the range [0,1])
-   * @return This darkened Z4Color
+   * @return This darkened Z4AbstractColor
    */
    darkened(darkeningFactor) {
     darkeningFactor = 1 - darkeningFactor;

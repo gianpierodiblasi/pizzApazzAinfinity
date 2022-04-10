@@ -23,7 +23,7 @@ class Z4Color extends Z4AbstractColor {
    * @param color The color
    * @return The Z4Color
    */
-  static  fromColor(color) {
+  static  fromARGB(color) {
     return new Z4Color(color >>> 24 & 0xff, color >>> 16 & 0xff, color >>> 8 & 0xff, color & 0xff);
   }
 
@@ -37,5 +37,20 @@ class Z4Color extends Z4AbstractColor {
   static  fromHEX(color, a) {
     let result = new RegExp("^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$", "i").exec(color);
     return new Z4Color(a, parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16));
+  }
+
+  /**
+   * Creates a Z4Color from two Z4AbstractColor
+   *
+   * @param before The color before
+   * @param after The color after
+   * @param div The percentage between before and after (in the range [0,1],
+   * 0=before, 1=after)
+   * @return The Z4Color
+   */
+  static  fromZ4AbstractColors(before, after, div) {
+    let cBefore = before.getComponents();
+    let cAfter = after.getComponents();
+    return new Z4Color(parseInt((cAfter[0] - cBefore[0]) * div + cBefore[0]), parseInt((cAfter[1] - cBefore[1]) * div + cBefore[1]), parseInt((cAfter[2] - cBefore[2]) * div + cBefore[2]), parseInt((cAfter[3] - cBefore[3]) * div + cBefore[3]));
   }
 }
