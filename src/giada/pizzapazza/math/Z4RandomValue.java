@@ -1,6 +1,7 @@
 package giada.pizzapazza.math;
 
 import def.js.Math;
+import simulation.bezier.$Bezier;
 
 /**
  * The random value
@@ -124,20 +125,5 @@ public class Z4RandomValue {
    */
   public static Z4RandomValue stepped(int value, int length) {
     return new Z4RandomValue(value, 3, length);
-  }
-
-  private static class $Point {
-
-    private double y;
-  }
-
-  private static class $Bezier {
-
-    private $Bezier(double x1, double y1, double x2, double y2, double x3, double y3) {
-    }
-
-    private $Point get(double t) {
-      return null;
-    }
   }
 }

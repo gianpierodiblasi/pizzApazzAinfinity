@@ -1,5 +1,9 @@
 package giada.pizzapazza.color;
 
+import def.js.RegExp;
+import def.js.RegExpExecArray;
+import static simulation.js.$Globals.$parseInt;
+
 /**
  * The color
  *
@@ -37,21 +41,7 @@ public class Z4Color extends Z4AbstractColor<Z4Color> {
    * @return The Z4Color
    */
   public static Z4Color fromHEX(String color, int a) {
-    String[] result = new $RegExp("^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$", "i").exec(color);
-    return new Z4Color(a, $parseInt(result[1], 16), $parseInt(result[2], 16), $parseInt(result[3], 16));
-  }
-
-  private static int $parseInt(String str, int radix) {
-    return 0;
-  }
-
-  private static class $RegExp {
-
-    private $RegExp(String pattern, String flags) {
-    }
-
-    private String[] exec(String string) {
-      return null;
-    }
+    RegExpExecArray result = new RegExp("^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$", "i").exec(color);
+    return new Z4Color(a, $parseInt(result.$get(1), 16), $parseInt(result.$get(2), 16), $parseInt(result.$get(3), 16));
   }
 }

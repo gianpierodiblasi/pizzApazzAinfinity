@@ -1,5 +1,8 @@
 package giada.pizzapazza.color;
 
+import static simulation.js.$Globals.$parseInt;
+import simulation.js.$Number;
+
 /**
  * The abstract color
  *
@@ -37,10 +40,10 @@ public abstract class Z4AbstractColor<T extends Z4AbstractColor<T>> {
 
     this.hex
             = "#"
-            + new $Number(this.r).toString(16).padStart(2, "0")
-            + new $Number(this.g).toString(16).padStart(2, "0")
-            + new $Number(this.b).toString(16).padStart(2, "0")
-            + new $Number(this.a).toString(16).padStart(2, "0");
+            + new $Number(this.r).$toString(16).$padStart(2, "0")
+            + new $Number(this.g).$toString(16).$padStart(2, "0")
+            + new $Number(this.b).$toString(16).$padStart(2, "0")
+            + new $Number(this.a).$toString(16).$padStart(2, "0");
 
     return this;
   }
@@ -102,26 +105,5 @@ public abstract class Z4AbstractColor<T extends Z4AbstractColor<T>> {
     this.b = $parseInt(darkeningFactor * this.b);
 
     return this.init();
-  }
-
-  private static int $parseInt(double v) {
-    return 0;
-  }
-
-  private static class $Number {
-
-    private $Number(double value) {
-    }
-
-    private $InternalString toString(int radix) {
-      return null;
-    }
-  }
-
-  private static class $InternalString {
-
-    private $InternalString padStart(int targetLength, String padString) {
-      return null;
-    }
   }
 }
