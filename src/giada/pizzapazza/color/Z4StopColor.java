@@ -2,7 +2,7 @@ package giada.pizzapazza.color;
 
 import def.js.RegExp;
 import def.js.RegExpExecArray;
-import static simulation.js.$Globals.$parseInt;
+import static simulation.js.$Globals.parseInt;
 
 /**
  * The stop color in a sequence
@@ -49,6 +49,6 @@ public class Z4StopColor extends Z4AbstractColor<Z4StopColor> {
    */
   public static Z4StopColor fromHEX(String color, int a, double position) {
     RegExpExecArray result = new RegExp("^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$", "i").exec(color);
-    return new Z4StopColor(a, $parseInt(result.$get(1), 16), $parseInt(result.$get(2), 16), $parseInt(result.$get(3), 16), position);
+    return new Z4StopColor(a, parseInt(result.$get(1), 16), parseInt(result.$get(2), 16), parseInt(result.$get(3), 16), position);
   }
 }

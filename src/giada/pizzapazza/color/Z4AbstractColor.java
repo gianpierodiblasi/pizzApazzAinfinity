@@ -1,6 +1,6 @@
 package giada.pizzapazza.color;
 
-import static simulation.js.$Globals.$parseInt;
+import static simulation.js.$Globals.parseInt;
 import simulation.js.$Number;
 
 /**
@@ -40,10 +40,10 @@ public abstract class Z4AbstractColor<T extends Z4AbstractColor<T>> {
 
     this.hex
             = "#"
-            + new $Number(this.r).$toString(16).$padStart(2, "0")
-            + new $Number(this.g).$toString(16).$padStart(2, "0")
-            + new $Number(this.b).$toString(16).$padStart(2, "0")
-            + new $Number(this.a).$toString(16).$padStart(2, "0");
+            + new $Number(this.r).toString(16).padStart(2, "0")
+            + new $Number(this.g).toString(16).padStart(2, "0")
+            + new $Number(this.b).toString(16).padStart(2, "0")
+            + new $Number(this.a).toString(16).padStart(2, "0");
 
     return this;
   }
@@ -55,7 +55,7 @@ public abstract class Z4AbstractColor<T extends Z4AbstractColor<T>> {
    * @return This gray scaled Z4Color
    */
   public Z4AbstractColor<T> gray() {
-    int gray = $parseInt(0.21 * this.r + 0.71 * this.g + 0.08 * this.b);
+    int gray = parseInt(0.21 * this.r + 0.71 * this.g + 0.08 * this.b);
 
     this.r = gray;
     this.g = gray;
@@ -84,9 +84,9 @@ public abstract class Z4AbstractColor<T extends Z4AbstractColor<T>> {
    * @return This lighted Z4Color
    */
   public Z4AbstractColor<T> lighted(double lightingFactor) {
-    this.r = $parseInt((255 - this.r) * lightingFactor + this.r);
-    this.g = $parseInt((255 - this.g) * lightingFactor + this.g);
-    this.b = $parseInt((255 - this.b) * lightingFactor + this.b);
+    this.r = parseInt((255 - this.r) * lightingFactor + this.r);
+    this.g = parseInt((255 - this.g) * lightingFactor + this.g);
+    this.b = parseInt((255 - this.b) * lightingFactor + this.b);
 
     return this.init();
   }
@@ -100,9 +100,9 @@ public abstract class Z4AbstractColor<T extends Z4AbstractColor<T>> {
   public Z4AbstractColor<T> darkened(double darkeningFactor) {
     darkeningFactor = 1 - darkeningFactor;
 
-    this.r = $parseInt(darkeningFactor * this.r);
-    this.g = $parseInt(darkeningFactor * this.g);
-    this.b = $parseInt(darkeningFactor * this.b);
+    this.r = parseInt(darkeningFactor * this.r);
+    this.g = parseInt(darkeningFactor * this.g);
+    this.b = parseInt(darkeningFactor * this.b);
 
     return this.init();
   }

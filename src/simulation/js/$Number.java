@@ -10,7 +10,7 @@ public class $Number extends def.js.Number {
   public $Number(double value) {
   }
 
-  public $String $toString(int radix) {
+  public $String toString(int radix) {
     return null;
   }
 }
