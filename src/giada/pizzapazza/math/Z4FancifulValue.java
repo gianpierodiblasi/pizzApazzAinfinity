@@ -1,5 +1,7 @@
 package giada.pizzapazza.math;
 
+import giada.pizzapazza.setting.Z4Setting;
+
 /**
  * The fanciful value
  *
@@ -75,12 +77,22 @@ public class Z4FancifulValue {
    * @return The next "fanciful" value
    */
   public double next(double sensibility) {
-    if (this.uniformSign) {
-      return this.constantSign.next() * (this.constantValue + this.randomValue.next() + sensibility * this.proportionalValue);
+    if (Z4Setting.isLiteMode()) {
+      return this.constantSign.next() * this.constantValue;
+    } else if (Z4Setting.isStandardMode()) {
+      if (this.uniformSign) {
+        return this.constantSign.next() * (this.constantValue + this.randomValue.next());
+      } else {
+        return this.constantSign.next() * this.constantValue + this.randomSign.next() * this.randomValue.next();
+      }
+    } else if (Z4Setting.isProMode()) {
+      if (this.uniformSign) {
+        return this.constantSign.next() * (this.constantValue + this.randomValue.next() + sensibility * this.proportionalValue);
+      } else {
+        return this.constantSign.next() * this.constantValue + this.randomSign.next() * this.randomValue.next() + this.proportionalSign.next() * sensibility * this.proportionalValue;
+      }
     } else {
-      return this.constantSign.next() * this.constantValue
-              + this.randomSign.next() * this.randomValue.next()
-              + this.proportionalSign.next() * sensibility * this.proportionalValue;
+      return 0;
     }
   }
 }
