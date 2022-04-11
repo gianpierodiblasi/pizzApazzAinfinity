@@ -1,11 +1,17 @@
 package simulation.js;
 
+import simulation.dom.$Navigator;
+import simulation.dom.$Window;
+
 /**
  * Simulation of global JavaScript functions
  *
  * @author gianpiero.di.blasi
  */
 public class $Globals {
+
+  public static $Navigator navigator;
+  public static $Window window;
 
   public static int parseInt(double v) {
     return 0;

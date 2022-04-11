@@ -1,3 +1,5 @@
+/* global Array, Z4Color, Z4Math, Z4StopColor */
+
 /**
  * The gradient color (a sequence of Z4StopColor)
  *
@@ -138,5 +140,54 @@ class Z4GradientColor {
     let after = this.z4StopColors.filter((z4StopColor, index, array) => pos === 0 ? z4StopColor.getPosition() > pos : z4StopColor.getPosition() >= pos).reduce((found, current, index, array) => found === null ? current : found.getPosition() < current.getPosition() ? found : current);
     let div = (position - before.getPosition()) / (after.getPosition() - before.getPosition());
     return Z4Color.fromZ4AbstractColors(before, after, div);
+  }
+
+  /**
+   * Returns a linear gradient (without ripple and mirroring)
+   *
+   * @param context The context to create the gradient
+   * @param x1 The x-axis coordinate of the start point
+   * @param y1 The y-axis coordinate of the start point
+   * @param x2 The x-axis coordinate of the end point
+   * @param y2 The y-axis coordinate of the end point
+   * @return The linear gradient
+   */
+   getLinearGradient(context, x1, y1, x2, y2) {
+    let gradient = context.createLinearGradient(x1, y1, x2, y2);
+    this.z4StopColors.forEach((z4StopColor, index, array) => gradient.addColorStop(z4StopColor.getPosition(), z4StopColor.getHEX()));
+    return gradient;
+  }
+
+  /**
+   * Returns a radial gradient (without ripple and mirroring)
+   *
+   * @param context The context to create the gradient
+   * @param x1 The x-axis coordinate of the start circle
+   * @param y1 The y-axis coordinate of the start circle
+   * @param r1 The radius of the start circle
+   * @param x2 The x-axis coordinate of the end circle
+   * @param y2 The y-axis coordinate of the end circle
+   * @param r2 The radius of the end circle
+   * @return The radial gradient
+   */
+   getRadialGradient(context, x1, y1, r1, x2, y2, r2) {
+    let gradient = context.createRadialGradient(x1, y1, r1, x2, y2, r2);
+    this.z4StopColors.forEach((z4StopColor, index, array) => gradient.addColorStop(z4StopColor.getPosition(), z4StopColor.getHEX()));
+    return gradient;
+  }
+
+  /**
+   * Returns a conic gradient (without ripple and mirroring)
+   *
+   * @param context The context to create the gradient
+   * @param x The x-axis coordinate of the centre of the gradient
+   * @param y The y-axis coordinate of the centre of the gradient
+   * @param angle The angle at which to begin the gradient, in radians
+   * @return The conic gradient
+   */
+   getConicGradient(context, x, y, angle) {
+    let gradient = context.createConicGradient(angle, x, y);
+    this.z4StopColors.forEach((z4StopColor, index, array) => gradient.addColorStop(z4StopColor.getPosition(), z4StopColor.getHEX()));
+    return gradient;
   }
 }

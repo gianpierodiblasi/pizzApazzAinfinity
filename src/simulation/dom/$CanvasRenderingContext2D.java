@@ -4,7 +4,7 @@ import def.dom.CanvasGradient;
 import def.dom.CanvasRenderingContext2D;
 
 /**
- * The simulation of the CanvasRenderingContext2D
+ * The simulation of the CanvasRenderingContext2D object
  *
  * @author gianpiero.di.blasi
  */

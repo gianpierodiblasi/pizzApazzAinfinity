@@ -1,3 +1,5 @@
+/* global Z4RandomValue */
+
 /**
  * The fanciful value
  *

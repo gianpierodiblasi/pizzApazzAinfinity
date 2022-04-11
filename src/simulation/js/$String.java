@@ -7,6 +7,13 @@ package simulation.js;
  */
 public class $String extends def.js.String {
 
+  public $String(Object value) {
+    super(value);
+  }
+
+  public $String() {
+  }
+
   public $String padStart(int targetLength, java.lang.String padString) {
     return null;
   }

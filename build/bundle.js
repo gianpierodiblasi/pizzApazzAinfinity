@@ -1,3 +1,4 @@
+
 /**
  * The utility library for math
  *
@@ -103,6 +104,7 @@ class Z4Math {
   constructor() {
   }
 }
+
 /**
  * The signs of a value
  *
@@ -160,6 +162,7 @@ class Z4Sign {
     return new Z4Sign(-2);
   }
 }
+
 /**
  * The random value
  *
@@ -284,6 +287,7 @@ class Z4RandomValue {
     return new Z4RandomValue(value, 3, length);
   }
 }
+
 /**
  * The fanciful value
  *
@@ -372,6 +376,7 @@ class Z4FancifulValue {
     }
   }
 }
+
 /**
  * The lighting of a color
  *
@@ -397,6 +402,7 @@ class Z4Lighting {
   constructor() {
   }
 }
+
 /**
  * The progression of a color
  *
@@ -427,6 +433,7 @@ class Z4Progression {
   constructor() {
   }
 }
+
 /**
  * The color
  *
@@ -483,6 +490,7 @@ class Z4Color extends Z4AbstractColor {
     return new Z4Color(parseInt((cAfter[0] - cBefore[0]) * div + cBefore[0]), parseInt((cAfter[1] - cBefore[1]) * div + cBefore[1]), parseInt((cAfter[2] - cBefore[2]) * div + cBefore[2]), parseInt((cAfter[3] - cBefore[3]) * div + cBefore[3]));
   }
 }
+
 /**
  * The stop color in a sequence
  *
@@ -544,5 +552,197 @@ class Z4StopColor extends Z4AbstractColor {
   static  fromHEX(color, a, position) {
     let result = new RegExp("^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$", "i").exec(color);
     return new Z4StopColor(a, parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16), position);
+  }
+}
+
+/**
+ * The gradient color (a sequence of Z4StopColor)
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4GradientColor {
+
+   z4StopColors = new Array();
+
+   ripple = 0.0;
+
+   mirrored = false;
+
+  /**
+   * Creates a Z4GradientColor
+   */
+  constructor() {
+    this.z4StopColors.push(new Z4StopColor(255, 255, 255, 255, 0));
+    this.z4StopColors.push(new Z4StopColor(255, 0, 0, 0, 1));
+  }
+
+  /**
+   * Adds or updates a color
+   *
+   * @param position The position in the sequence (in the range [0,1]), if there
+   * is no color in this position then it is added otherwise it is updated
+   * @param color An ARGB integer color
+   * @return This Z4GradientColor
+   */
+   addOrUpdateColor(position, color) {
+    let found = this.z4StopColors.find((z4StopColor, index, array) => z4StopColor.getPosition() === position);
+    if (found !== null) {
+      found.set(color);
+    } else {
+      this.z4StopColors.push(Z4StopColor.fromARGB(color, position));
+    }
+    return this;
+  }
+
+  /**
+   * Generates a color in a position computed as the linear interpolation of the
+   * colors before and after the position
+   *
+   * @param position The position in the sequence (in the range [0,1]), if there
+   * is no color in this position then it is added otherwise it is updated
+   * @return This Z4GradientColor
+   */
+   generateColor(position) {
+    return this.addOrUpdateColor(position, this.getZ4ColorAt(position, false, false).getARGB());
+  }
+
+  /**
+   * Removes a color
+   *
+   * @param position The position in the sequence (in the range [0,1])
+   * @return This Z4GradientColor
+   */
+   removeColor(position) {
+    this.z4StopColors = this.z4StopColors.filter((z4StopColor, index, array) => z4StopColor.getPosition() !== position);
+    return this;
+  }
+
+  /**
+   * Moves the position of a color
+   *
+   * @param from The old color position (in the range [0,1])
+   * @param to The new color position (in the range [0,1])
+   * @return This Z4GradientColor
+   */
+   move(from, to) {
+    let found = this.z4StopColors.find((z4StopColor, index, array) => z4StopColor.getPosition() === from);
+    if (found !== null && from !== 0 && from !== 1 && to !== 0 && to !== 1) {
+      found.setPosition(to);
+    }
+    return this;
+  }
+
+  /**
+   * Sets the ripple
+   *
+   * @param ripple The ripple (in the range [0,1])
+   * @return This Z4GradientColor
+   */
+   setRipple(ripple) {
+    this.ripple = ripple;
+    return this;
+  }
+
+  /**
+   * Sets the mirrored
+   *
+   * @param mirrored true if the color is mirrored, false otherwise
+   * @return This Z4GradientColor
+   */
+   setMirrored(mirrored) {
+    this.mirrored = mirrored;
+    return this;
+  }
+
+  /**
+   * In place converts this Z4GradientColor to negative, the transparency is not
+   * changed
+   *
+   * @return This negativized Z4GradientColor
+   */
+   negative() {
+    this.z4StopColors.forEach(z4StopColor => z4StopColor.negative());
+    return this;
+  }
+
+  /**
+   * In place inverts this Z4GradientColor
+   *
+   * @return This inverted Z4GradientColor
+   */
+   inverted() {
+    this.z4StopColors.forEach(z4StopColor => z4StopColor.setPosition(1 - z4StopColor.getPosition()));
+    return this;
+  }
+
+  /**
+   * Returns a Z4Color in a position
+   *
+   * @param position The color position (in the range [0,1])
+   * @param useRipple true to use ripple, false otherwise
+   * @param useMirrored true to use mirrored, false otherwise
+   * @return The Z4Color
+   */
+   getZ4ColorAt(position, useRipple, useMirrored) {
+    if (useMirrored && this.mirrored) {
+      position = 2 * (position < 0.5 ? position : 1 - position);
+    }
+    if (useRipple && this.ripple !== 0) {
+      position = Z4Math.ripple(position, 0, 1, this.ripple);
+    }
+    let pos = position;
+    let before = this.z4StopColors.filter((z4StopColor, index, array) => pos === 1 ? z4StopColor.getPosition() < pos : z4StopColor.getPosition() <= pos).reduce((found, current, index, array) => found === null ? current : found.getPosition() > current.getPosition() ? found : current);
+    let after = this.z4StopColors.filter((z4StopColor, index, array) => pos === 0 ? z4StopColor.getPosition() > pos : z4StopColor.getPosition() >= pos).reduce((found, current, index, array) => found === null ? current : found.getPosition() < current.getPosition() ? found : current);
+    let div = (position - before.getPosition()) / (after.getPosition() - before.getPosition());
+    return Z4Color.fromZ4AbstractColors(before, after, div);
+  }
+
+  /**
+   * Returns a linear gradient (without ripple and mirroring)
+   *
+   * @param context The context to create the gradient
+   * @param x1 The x-axis coordinate of the start point
+   * @param y1 The y-axis coordinate of the start point
+   * @param x2 The x-axis coordinate of the end point
+   * @param y2 The y-axis coordinate of the end point
+   * @return The linear gradient
+   */
+   getLinearGradient(context, x1, y1, x2, y2) {
+    let gradient = context.createLinearGradient(x1, y1, x2, y2);
+    this.z4StopColors.forEach((z4StopColor, index, array) => gradient.addColorStop(z4StopColor.getPosition(), z4StopColor.getHEX()));
+    return gradient;
+  }
+
+  /**
+   * Returns a radial gradient (without ripple and mirroring)
+   *
+   * @param context The context to create the gradient
+   * @param x1 The x-axis coordinate of the start circle
+   * @param y1 The y-axis coordinate of the start circle
+   * @param r1 The radius of the start circle
+   * @param x2 The x-axis coordinate of the end circle
+   * @param y2 The y-axis coordinate of the end circle
+   * @param r2 The radius of the end circle
+   * @return The radial gradient
+   */
+   getRadialGradient(context, x1, y1, r1, x2, y2, r2) {
+    let gradient = context.createRadialGradient(x1, y1, r1, x2, y2, r2);
+    this.z4StopColors.forEach((z4StopColor, index, array) => gradient.addColorStop(z4StopColor.getPosition(), z4StopColor.getHEX()));
+    return gradient;
+  }
+
+  /**
+   * Returns a conic gradient (without ripple and mirroring)
+   *
+   * @param context The context to create the gradient
+   * @param x The x-axis coordinate of the centre of the gradient
+   * @param y The y-axis coordinate of the centre of the gradient
+   * @param angle The angle at which to begin the gradient, in radians
+   * @return The conic gradient
+   */
+   getConicGradient(context, x, y, angle) {
+    let gradient = context.createConicGradient(angle, x, y);
+    this.z4StopColors.forEach((z4StopColor, index, array) => gradient.addColorStop(z4StopColor.getPosition(), z4StopColor.getHEX()));
+    return gradient;
   }
 }

@@ -1,3 +1,5 @@
+/* global Math, Z4Sign */
+
 /**
  * The signs of a value
  *

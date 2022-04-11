@@ -1,3 +1,5 @@
+/* global Math */
+
 /**
  * The utility library for math
  *

@@ -1,3 +1,5 @@
+/* global RegExp, Z4StopColor, parseInt */
+
 /**
  * The stop color in a sequence
  *

@@ -1,3 +1,5 @@
+/* global RegExp, Z4Color, parseInt */
+
 /**
  * The color
  *
