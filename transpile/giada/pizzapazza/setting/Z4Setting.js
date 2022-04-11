@@ -21,11 +21,11 @@ class Z4Setting {
         return row.substring(10);
       }
     }
-    if (!!(navigator.languages)) {
+    if (navigator.languages) {
       return navigator.languages[0].substring(0, 2);
-    } else if (!!(navigator.language)) {
+    } else if (navigator.language) {
       return navigator.language.substring(0, 2);
-    } else if (!!(navigator.userLanguage)) {
+    } else if (navigator.userLanguage) {
       return navigator.userLanguage.substring(0, 2);
     } else {
       return "en";
@@ -33,7 +33,7 @@ class Z4Setting {
   }
 
   static  initDarkMode() {
-    if (!!(window.matchMedia)) {
+    if (window.matchMedia) {
       let matchMedia = window.matchMedia("(prefers-color-scheme: dark)");
       matchMedia.addListener(event => {
         Z4Setting.darkMode = event.matches;
@@ -126,6 +126,7 @@ class Z4Setting {
     // JS equality for strings
     return Z4Setting.mode === "pro";
   }
+
   constructor() {
   }
 }

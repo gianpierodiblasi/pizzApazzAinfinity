@@ -1,4 +1,4 @@
-/* global Array, Z4Color, Z4Math, Z4StopColor */
+/* global Array, Z4Color, Z4Math, Z4Setting, Z4StopColor */
 
 /**
  * The abstract gradient color (a sequence of Z4StopColor)
@@ -23,6 +23,15 @@ class Z4AbstractGradientColor {
   }
 
   /**
+   * Returns the components of this Z4AbstractGradientColor
+   *
+   * @return The components of this Z4AbstractGradientColor
+   */
+   getComponents() {
+    return this.z4StopColors;
+  }
+
+  /**
    * Adds or updates a color
    *
    * @param position The position in the sequence (in the range [0,1]), if there
@@ -32,7 +41,7 @@ class Z4AbstractGradientColor {
    */
    addOrUpdateColor(position, color) {
     let found = this.z4StopColors.find((z4StopColor, index, array) => z4StopColor.getPosition() === position);
-    if (found !== null) {
+    if (!found) {
       found.set(color);
     } else {
       this.z4StopColors.push(Z4StopColor.fromARGB(color, position));
@@ -72,7 +81,7 @@ class Z4AbstractGradientColor {
    */
    move(from, to) {
     let found = this.z4StopColors.find((z4StopColor, index, array) => z4StopColor.getPosition() === from);
-    if (found !== null && from !== 0 && from !== 1 && to !== 0 && to !== 1) {
+    if (found && from !== 0 && from !== 1 && to !== 0 && to !== 1) {
       found.setPosition(to);
     }
     return this;
@@ -101,8 +110,8 @@ class Z4AbstractGradientColor {
   }
 
   /**
-   * In place converts this Z4AbstractGradientColor to negative, the transparency is not
-   * changed
+   * In place converts this Z4AbstractGradientColor to negative, the
+   * transparency is not changed
    *
    * @return This negativized Z4AbstractGradientColor
    */
@@ -122,25 +131,31 @@ class Z4AbstractGradientColor {
   }
 
   /**
-   * Returns a Z4Color in a position
+   * Returns a Z4AbstractColor in a position
    *
    * @param position The color position (in the range [0,1])
    * @param useRipple true to use ripple, false otherwise
    * @param useMirrored true to use mirrored, false otherwise
-   * @return The Z4Color
+   * @return The Z4AbstractColor
    */
    getZ4ColorAt(position, useRipple, useMirrored) {
-    if (useMirrored && this.mirrored) {
-      position = 2 * (position < 0.5 ? position : 1 - position);
+    if (Z4Setting.isLiteMode()) {
+      return this.z4StopColors.find((z4StopColor, index, array) => z4StopColor.getPosition() === 1);
+    } else if (Z4Setting.isStandardMode() && Z4Setting.isProMode()) {
+      if (useMirrored && this.mirrored) {
+        position = 2 * (position < 0.5 ? position : 1 - position);
+      }
+      if (useRipple && this.ripple !== 0) {
+        position = Z4Math.ripple(position, 0, 1, this.ripple);
+      }
+      let pos = position;
+      let before = this.z4StopColors.filter((z4StopColor, index, array) => pos === 1 ? z4StopColor.getPosition() < pos : z4StopColor.getPosition() <= pos).reduce((found, current, index, array) => !found ? current : found.getPosition() > current.getPosition() ? found : current);
+      let after = this.z4StopColors.filter((z4StopColor, index, array) => pos === 0 ? z4StopColor.getPosition() > pos : z4StopColor.getPosition() >= pos).reduce((found, current, index, array) => !found ? current : found.getPosition() < current.getPosition() ? found : current);
+      let div = (position - before.getPosition()) / (after.getPosition() - before.getPosition());
+      return Z4Color.fromZ4AbstractColors(before, after, div);
+    } else {
+      return null;
     }
-    if (useRipple && this.ripple !== 0) {
-      position = Z4Math.ripple(position, 0, 1, this.ripple);
-    }
-    let pos = position;
-    let before = this.z4StopColors.filter((z4StopColor, index, array) => pos === 1 ? z4StopColor.getPosition() < pos : z4StopColor.getPosition() <= pos).reduce((found, current, index, array) => found === null ? current : found.getPosition() > current.getPosition() ? found : current);
-    let after = this.z4StopColors.filter((z4StopColor, index, array) => pos === 0 ? z4StopColor.getPosition() > pos : z4StopColor.getPosition() >= pos).reduce((found, current, index, array) => found === null ? current : found.getPosition() < current.getPosition() ? found : current);
-    let div = (position - before.getPosition()) / (after.getPosition() - before.getPosition());
-    return Z4Color.fromZ4AbstractColors(before, after, div);
   }
 
   /**
