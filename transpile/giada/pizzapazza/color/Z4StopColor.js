@@ -25,6 +25,7 @@ class Z4StopColor extends Z4AbstractColor {
 
   /**
    * Returns the position
+   *
    * @return The position in a sequence (in the range [0,1])
    */
    getPosition() {
@@ -33,10 +34,13 @@ class Z4StopColor extends Z4AbstractColor {
 
   /**
    * Sets the position
+   *
    * @param position The position in a sequence (in the range [0,1])
+   * @return This Z4StopColor
    */
    setPosition(position) {
     this.position = position;
+    return this;
   }
 
   /**

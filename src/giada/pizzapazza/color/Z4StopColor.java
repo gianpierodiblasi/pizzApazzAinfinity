@@ -30,6 +30,7 @@ public class Z4StopColor extends Z4AbstractColor<Z4StopColor> {
 
   /**
    * Returns the position
+   *
    * @return The position in a sequence (in the range [0,1])
    */
   public double getPosition() {
@@ -38,10 +39,13 @@ public class Z4StopColor extends Z4AbstractColor<Z4StopColor> {
 
   /**
    * Sets the position
+   *
    * @param position The position in a sequence (in the range [0,1])
+   * @return This Z4StopColor
    */
-  public void setPosition(double position) {
+  public Z4StopColor setPosition(double position) {
     this.position = position;
+    return this;
   }
 
   /**
