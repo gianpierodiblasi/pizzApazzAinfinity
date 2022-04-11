@@ -15,13 +15,25 @@ public class Z4GradientColor extends Z4AbstractGradientColor<Z4GradientColor> {
   }
 
   /**
+   * Creates a Z4GradientColor from a Z4AbstractGradientColor
+   *
+   * @param color The Z4AbstractGradientColor
+   * @return The Z4GradientColor
+   */
+  public static Z4GradientColor fromZ4AbstractColor(Z4AbstractGradientColor<?> color) {
+    Z4GradientColor z4GradientColor = new Z4GradientColor();
+    color.getComponents().forEach(z4StopColor -> z4GradientColor.addOrUpdateColor(z4StopColor.getPosition(), z4StopColor.getARGB()));
+    return z4GradientColor;
+  }
+
+  /**
    * Creates a Z4GradientColor from two Z4AbstractGradientColor
    *
    * @param before The color before
    * @param after The color after
    * @param div The percentage between before and after (in the range [0,1],
    * 0=before, 1=after)
-   * @return The Z4Color
+   * @return The Z4GradientColor
    */
   public static Z4GradientColor fromZ4AbstractColors(Z4AbstractGradientColor<?> before, Z4AbstractGradientColor<?> after, double div) {
     Z4GradientColor z4GradientColor = new Z4GradientColor();

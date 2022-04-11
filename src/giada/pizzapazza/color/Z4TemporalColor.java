@@ -26,18 +26,30 @@ public class Z4TemporalColor {
   /**
    * Adds or updates a color
    *
-   * @param position The position in the sequence (in the range [0,1]), if there
+   * @param temporal The position in the sequence (in the range [0,1]), if there
+   * is no color in this position then it is added otherwise it is updated
+   * @param spatial The position in the sequence (in the range [0,1]), if there
    * is no color in this position then it is added otherwise it is updated
    * @param color An ARGB integer color
    * @return This Z4TemporalColor
    */
-  public Z4TemporalColor addOrUpdateColor(double position, int color) {
-    Z4StopGradientColor found = this.z4StopGradientColors.find((z4StopGradientColor, index, array) -> z4StopGradientColor.getPosition() == position);
+  public Z4TemporalColor addOrUpdateColor(double temporal, double spatial, int color) {
+    Z4StopGradientColor found = this.z4StopGradientColors.find((z4StopGradientColor, index, array) -> z4StopGradientColor.getPosition() == temporal);
     if (found != null) {
-//      found.set(color);
-    } else {
-//      this.z4StopGradientColors.push(Z4StopColor.fromARGB(color, position));
+      Z4AbstractGradientColor<?> z4StopGradientColor = this.getZ4GradientColorAt(temporal, false, false);
+      this.z4StopGradientColors.push(Z4StopGradientColor.fromZ4AbstractColor(z4StopGradientColor, temporal));
     }
+
+    this.z4StopGradientColors.forEach(z4StopGradientColor -> {
+      if (z4StopGradientColor.getPosition() != temporal) {
+        Z4StopColor found2 = z4StopGradientColor.getComponents().find((z4StopColor, index, array) -> z4StopColor.getPosition() == spatial);
+        if (found2 == null) {
+          z4StopGradientColor.generateColor(spatial);
+        }
+      } else {
+        z4StopGradientColor.addOrUpdateColor(spatial, color);
+      }
+    });
 
     return this;
   }
@@ -48,19 +60,29 @@ public class Z4TemporalColor {
    *
    * @param temporal The temporal position in the sequence (in the range [0,1]),
    * if there is no color in this position then it is added otherwise it is
-   * updated
+   * updated, -1 to not generate anything
+   * @param spatial The spatial position in the sequence (in the range [0,1]),
+   * if there is no color in this position then it is added otherwise it is
+   * updated, -1 to not generate anything
    * @return This Z4TemporalColor
    */
   public Z4TemporalColor generateColor(double temporal, double spatial) {
-//    return this.addOrUpdateColor(temporal, this.getZ4ColorAt(temporal, false, false).getARGB());
-    return null;
+    if (temporal != -1) {
+    }
+    if (spatial != -1) {
+      this.z4StopGradientColors.forEach(z4StopGradientColor -> z4StopGradientColor.generateColor(spatial));
+    }
+
+    return this;
   }
 
   /**
    * Removes a color
    *
-   * @param temporal The temporal position in the sequence (in the range [0,1])
-   * @param spatial The spatial position in the sequence (in the range [0,1])
+   * @param temporal The temporal position in the sequence (in the range [0,1]),
+   * -1 to not remove anything
+   * @param spatial The spatial position in the sequence (in the range [0,1]),
+   * -1 to not remove anything
    * @return This Z4TemporalColor
    */
   public Z4TemporalColor removeColor(double temporal, double spatial) {
@@ -72,9 +94,11 @@ public class Z4TemporalColor {
   /**
    * Moves the position of a color
    *
-   * @param fromT The old temporal color position (in the range [0,1])
+   * @param fromT The old temporal color position (in the range [0,1]), -1 to
+   * not move anything
    * @param toT The new temporal color position (in the range [0,1])
-   * @param fromS The old spatial color position (in the range [0,1])
+   * @param fromS The old spatial color position (in the range [0,1]), -1 to not
+   * remove anything
    * @param toS The new spatial color position (in the range [0,1])
    * @return This Z4TemporalColor
    */
