@@ -1,4 +1,4 @@
-/* global Z4RandomValue */
+/* global Z4RandomValue, Z4Sign */
 
 /**
  * The fanciful value
