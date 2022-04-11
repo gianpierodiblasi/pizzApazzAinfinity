@@ -5,6 +5,7 @@ import def.js.Array;
 import giada.pizzapazza.math.Z4Math;
 import giada.pizzapazza.setting.Z4Setting;
 import simulation.dom.$CanvasRenderingContext2D;
+import static simulation.js.$Globals.$exists;
 
 /**
  * The abstract gradient color (a sequence of Z4StopColor)
@@ -45,7 +46,7 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
    */
   public Z4AbstractGradientColor<T> addOrUpdateColor(double position, int color) {
     Z4StopColor found = this.z4StopColors.find((z4StopColor, index, array) -> z4StopColor.getPosition() == position);
-    if (found != null) {
+    if (!$exists(found)) {
       found.set(color);
     } else {
       this.z4StopColors.push(Z4StopColor.fromARGB(color, position));
@@ -86,7 +87,7 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
    */
   public Z4AbstractGradientColor<T> move(double from, double to) {
     Z4StopColor found = this.z4StopColors.find((z4StopColor, index, array) -> z4StopColor.getPosition() == from);
-    if (found != null && from != 0 && from != 1 && to != 0 && to != 1) {
+    if ($exists(found) && from != 0 && from != 1 && to != 0 && to != 1) {
       found.setPosition(to);
     }
     return this;
@@ -157,11 +158,11 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
       double pos = position;
       Z4StopColor before = this.z4StopColors.
               filter((z4StopColor, index, array) -> pos == 1 ? z4StopColor.getPosition() < pos : z4StopColor.getPosition() <= pos).
-              reduce((found, current, index, array) -> found == null ? current : found.getPosition() > current.getPosition() ? found : current);
+              reduce((found, current, index, array) -> !$exists(found) ? current : found.getPosition() > current.getPosition() ? found : current);
 
       Z4StopColor after = this.z4StopColors.
               filter((z4StopColor, index, array) -> pos == 0 ? z4StopColor.getPosition() > pos : z4StopColor.getPosition() >= pos).
-              reduce((found, current, index, array) -> found == null ? current : found.getPosition() < current.getPosition() ? found : current);
+              reduce((found, current, index, array) -> !$exists(found) ? current : found.getPosition() < current.getPosition() ? found : current);
 
       double div = (position - before.getPosition()) / (after.getPosition() - before.getPosition());
       return Z4Color.fromZ4AbstractColors(before, after, div);

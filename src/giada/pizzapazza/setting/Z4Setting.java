@@ -4,6 +4,7 @@ import static def.dom.Globals.document;
 import def.dom.MediaQueryList;
 import def.js.Date;
 import static def.js.Globals.decodeURIComponent;
+import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.navigator;
 import static simulation.js.$Globals.window;
 
@@ -137,10 +138,6 @@ public class Z4Setting {
   @SuppressWarnings("StringEquality")
   public static boolean isProMode() {
     return Z4Setting.mode == "pro"; // JS equality for strings
-  }
-
-  private static boolean $exists(Object object) {
-    return false;
   }
 
   private Z4Setting() {

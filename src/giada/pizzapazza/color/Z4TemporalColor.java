@@ -3,6 +3,7 @@ package giada.pizzapazza.color;
 import def.js.Array;
 import giada.pizzapazza.math.Z4Math;
 import giada.pizzapazza.setting.Z4Setting;
+import static simulation.js.$Globals.$exists;
 
 /**
  * The temporal color (a sequence of Z4StopGradientColor)
@@ -35,7 +36,7 @@ public class Z4TemporalColor {
    */
   public Z4TemporalColor addOrUpdateColor(double temporal, double spatial, int color) {
     Z4StopGradientColor found = this.z4StopGradientColors.find((z4StopGradientColor, index, array) -> z4StopGradientColor.getPosition() == temporal);
-    if (found != null) {
+    if ($exists(found)) {
       Z4AbstractGradientColor<?> z4StopGradientColor = this.getZ4GradientColorAt(temporal, false, false);
       this.z4StopGradientColors.push(Z4StopGradientColor.fromZ4AbstractColor(z4StopGradientColor, temporal));
     }
@@ -43,7 +44,7 @@ public class Z4TemporalColor {
     this.z4StopGradientColors.forEach(z4StopGradientColor -> {
       if (z4StopGradientColor.getPosition() != temporal) {
         Z4StopColor found2 = z4StopGradientColor.getComponents().find((z4StopColor, index, array) -> z4StopColor.getPosition() == spatial);
-        if (found2 == null) {
+        if (!$exists(found2)) {
           z4StopGradientColor.generateColor(spatial);
         }
       } else {
@@ -104,7 +105,7 @@ public class Z4TemporalColor {
    */
   public Z4TemporalColor move(double fromT, double toT, double fromS, double toS) {
     Z4StopGradientColor found = this.z4StopGradientColors.find((z4StopGradientColor, index, array) -> z4StopGradientColor.getPosition() == fromT);
-    if (found != null && fromT != 0 && fromT != 1 && toT != 0 && toT != 1) {
+    if ($exists(found) && fromT != 0 && fromT != 1 && toT != 0 && toT != 1) {
       found.setPosition(toT);
     }
     this.z4StopGradientColors.forEach(z4StopGradientColor -> z4StopGradientColor.move(fromS, toS));
@@ -187,11 +188,11 @@ public class Z4TemporalColor {
       double pos = position;
       Z4StopGradientColor before = this.z4StopGradientColors.
               filter((z4StopGradientColor, index, array) -> pos == 1 ? z4StopGradientColor.getPosition() < pos : z4StopGradientColor.getPosition() <= pos).
-              reduce((found, current, index, array) -> found == null ? current : found.getPosition() > current.getPosition() ? found : current);
+              reduce((found, current, index, array) -> !$exists(found) ? current : found.getPosition() > current.getPosition() ? found : current);
 
       Z4StopGradientColor after = this.z4StopGradientColors.
               filter((z4StopGradientColor, index, array) -> pos == 0 ? z4StopGradientColor.getPosition() > pos : z4StopGradientColor.getPosition() >= pos).
-              reduce((found, current, index, array) -> found == null ? current : found.getPosition() < current.getPosition() ? found : current);
+              reduce((found, current, index, array) -> !$exists(found) ? current : found.getPosition() < current.getPosition() ? found : current);
 
       double div = (pos - before.getPosition()) / (after.getPosition() - before.getPosition());
 
