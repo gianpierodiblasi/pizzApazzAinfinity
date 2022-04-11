@@ -3,6 +3,7 @@ package giada.pizzapazza.color;
 import def.dom.CanvasGradient;
 import def.js.Array;
 import giada.pizzapazza.math.Z4Math;
+import giada.pizzapazza.setting.Z4Setting;
 import simulation.dom.$CanvasRenderingContext2D;
 
 /**
@@ -23,6 +24,15 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
   public Z4AbstractGradientColor() {
     this.z4StopColors.push(new Z4StopColor(255, 255, 255, 255, 0));
     this.z4StopColors.push(new Z4StopColor(255, 0, 0, 0, 1));
+  }
+
+  /**
+   * Returns the components of this Z4AbstractGradientColor
+   *
+   * @return The components of this Z4AbstractGradientColor
+   */
+  public Array<Z4StopColor> getComponents() {
+    return this.z4StopColors;
   }
 
   /**
@@ -105,8 +115,8 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
   }
 
   /**
-   * In place converts this Z4AbstractGradientColor to negative, the transparency is not
-   * changed
+   * In place converts this Z4AbstractGradientColor to negative, the
+   * transparency is not changed
    *
    * @return This negativized Z4AbstractGradientColor
    */
@@ -126,32 +136,38 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
   }
 
   /**
-   * Returns a Z4Color in a position
+   * Returns a Z4AbstractColor in a position
    *
    * @param position The color position (in the range [0,1])
    * @param useRipple true to use ripple, false otherwise
    * @param useMirrored true to use mirrored, false otherwise
-   * @return The Z4Color
+   * @return The Z4AbstractColor
    */
-  public Z4Color getZ4ColorAt(double position, boolean useRipple, boolean useMirrored) {
-    if (useMirrored && this.mirrored) {
-      position = 2 * (position < 0.5 ? position : 1 - position);
+  public Z4AbstractColor<?> getZ4ColorAt(double position, boolean useRipple, boolean useMirrored) {
+    if (Z4Setting.isLiteMode()) {
+      return this.z4StopColors.find((z4StopColor, index, array) -> z4StopColor.getPosition() == 1);
+    } else if (Z4Setting.isStandardMode() && Z4Setting.isProMode()) {
+      if (useMirrored && this.mirrored) {
+        position = 2 * (position < 0.5 ? position : 1 - position);
+      }
+      if (useRipple && this.ripple != 0) {
+        position = Z4Math.ripple(position, 0, 1, this.ripple);
+      }
+
+      double pos = position;
+      Z4StopColor before = this.z4StopColors.
+              filter((z4StopColor, index, array) -> pos == 1 ? z4StopColor.getPosition() < pos : z4StopColor.getPosition() <= pos).
+              reduce((found, current, index, array) -> found == null ? current : found.getPosition() > current.getPosition() ? found : current);
+
+      Z4StopColor after = this.z4StopColors.
+              filter((z4StopColor, index, array) -> pos == 0 ? z4StopColor.getPosition() > pos : z4StopColor.getPosition() >= pos).
+              reduce((found, current, index, array) -> found == null ? current : found.getPosition() < current.getPosition() ? found : current);
+
+      double div = (position - before.getPosition()) / (after.getPosition() - before.getPosition());
+      return Z4Color.fromZ4AbstractColors(before, after, div);
+    } else {
+      return null;
     }
-    if (useRipple && this.ripple != 0) {
-      position = Z4Math.ripple(position, 0, 1, this.ripple);
-    }
-
-    double pos = position;
-    Z4StopColor before = this.z4StopColors.
-            filter((z4StopColor, index, array) -> pos == 1 ? z4StopColor.getPosition() < pos : z4StopColor.getPosition() <= pos).
-            reduce((found, current, index, array) -> found == null ? current : found.getPosition() > current.getPosition() ? found : current);
-
-    Z4StopColor after = this.z4StopColors.
-            filter((z4StopColor, index, array) -> pos == 0 ? z4StopColor.getPosition() > pos : z4StopColor.getPosition() >= pos).
-            reduce((found, current, index, array) -> found == null ? current : found.getPosition() < current.getPosition() ? found : current);
-
-    double div = (position - before.getPosition()) / (after.getPosition() - before.getPosition());
-    return Z4Color.fromZ4AbstractColors(before, after, div);
   }
 
   /**

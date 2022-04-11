@@ -1,10 +1,8 @@
 package giada.pizzapazza.color;
 
-import def.dom.CanvasGradient;
 import def.js.Array;
 import giada.pizzapazza.math.Z4Math;
 import giada.pizzapazza.setting.Z4Setting;
-import simulation.dom.$CanvasRenderingContext2D;
 
 /**
  * The temporal color (a sequence of Z4StopGradientColor)
@@ -31,175 +29,172 @@ public class Z4TemporalColor {
    * @param position The position in the sequence (in the range [0,1]), if there
    * is no color in this position then it is added otherwise it is updated
    * @param color An ARGB integer color
-   * @return This Z4AbstractGradientColor
+   * @return This Z4TemporalColor
    */
-//  public Z4TemporalColor<T> addOrUpdateColor(double position, int color) {
-//    Z4StopColor found = this.z4StopColors.find((z4StopColor, index, array) -> z4StopColor.getPosition() == position);
-//    if (found != null) {
+  public Z4TemporalColor addOrUpdateColor(double position, int color) {
+    Z4StopGradientColor found = this.z4StopGradientColors.find((z4StopGradientColor, index, array) -> z4StopGradientColor.getPosition() == position);
+    if (found != null) {
 //      found.set(color);
-//    } else {
-//      this.z4StopColors.push(Z4StopColor.fromARGB(color, position));
-//    }
-//
-//    return this;
-//  }
+    } else {
+//      this.z4StopGradientColors.push(Z4StopColor.fromARGB(color, position));
+    }
+
+    return this;
+  }
+
   /**
    * Generates a color in a position computed as the linear interpolation of the
    * colors before and after the position
    *
-   * @param position The position in the sequence (in the range [0,1]), if there
-   * is no color in this position then it is added otherwise it is updated
-   * @return This Z4AbstractGradientColor
+   * @param temporal The temporal position in the sequence (in the range [0,1]),
+   * if there is no color in this position then it is added otherwise it is
+   * updated
+   * @return This Z4TemporalColor
    */
-//  public Z4TemporalColor<T> generateColor(double position) {
-//    return this.addOrUpdateColor(position, this.getZ4ColorAt(position, false, false).getARGB());
-//  }
+  public Z4TemporalColor generateColor(double temporal, double spatial) {
+//    return this.addOrUpdateColor(temporal, this.getZ4ColorAt(temporal, false, false).getARGB());
+    return null;
+  }
+
   /**
    * Removes a color
    *
-   * @param position The position in the sequence (in the range [0,1])
-   * @return This Z4AbstractGradientColor
+   * @param temporal The temporal position in the sequence (in the range [0,1])
+   * @param spatial The spatial position in the sequence (in the range [0,1])
+   * @return This Z4TemporalColor
    */
-//  public Z4TemporalColor<T> removeColor(double position) {
-//    this.z4StopColors = this.z4StopColors.filter((z4StopColor, index, array) -> z4StopColor.getPosition() != position);
-//    return this;
-//  }
+  public Z4TemporalColor removeColor(double temporal, double spatial) {
+    this.z4StopGradientColors = this.z4StopGradientColors.filter((z4StopGradientColor, index, array) -> z4StopGradientColor.getPosition() != temporal);
+    this.z4StopGradientColors.forEach(z4StopGradientColor -> z4StopGradientColor.removeColor(spatial));
+    return this;
+  }
+
   /**
    * Moves the position of a color
    *
-   * @param from The old color position (in the range [0,1])
-   * @param to The new color position (in the range [0,1])
-   * @return This Z4AbstractGradientColor
+   * @param fromT The old temporal color position (in the range [0,1])
+   * @param toT The new temporal color position (in the range [0,1])
+   * @param fromS The old spatial color position (in the range [0,1])
+   * @param toS The new spatial color position (in the range [0,1])
+   * @return This Z4TemporalColor
    */
-//  public Z4TemporalColor<T> move(double from, double to) {
-//    Z4StopColor found = this.z4StopColors.find((z4StopColor, index, array) -> z4StopColor.getPosition() == from);
-//    if (found != null && from != 0 && from != 1 && to != 0 && to != 1) {
-//      found.setPosition(to);
-//    }
-//    return this;
-//  }
+  public Z4TemporalColor move(double fromT, double toT, double fromS, double toS) {
+    Z4StopGradientColor found = this.z4StopGradientColors.find((z4StopGradientColor, index, array) -> z4StopGradientColor.getPosition() == fromT);
+    if (found != null && fromT != 0 && fromT != 1 && toT != 0 && toT != 1) {
+      found.setPosition(toT);
+    }
+    this.z4StopGradientColors.forEach(z4StopGradientColor -> z4StopGradientColor.move(fromS, toS));
+    return this;
+  }
+
   /**
    * Sets the ripple
    *
-   * @param ripple The ripple (in the range [0,1])
-   * @return This Z4AbstractGradientColor
+   * @param temporal The temporal ripple (in the range [0,1])
+   * @param spatial The spatial ripple (in the range [0,1])
+   * @return This Z4TemporalColor
    */
-//  public Z4TemporalColor<T> setRipple(double ripple) {
-//    this.ripple = ripple;
-//    return this;
-//  }
+  public Z4TemporalColor setRipple(double temporal, double spatial) {
+    this.ripple = temporal;
+    this.z4StopGradientColors.forEach(z4StopGradientColor -> z4StopGradientColor.setRipple(spatial));
+    return this;
+  }
+
   /**
    * Sets the mirrored
    *
-   * @param mirrored true if the color is mirrored, false otherwise
-   * @return This Z4AbstractGradientColor
+   * @param temporal true if the color is temporaly mirrored, false otherwise
+   * @param spatial true if the color is spatialy mirrored, false otherwise
+   * @return This Z4TemporalColor
    */
-//  public Z4TemporalColor<T> setMirrored(boolean mirrored) {
-//    this.mirrored = mirrored;
-//    return this;
-//  }
+  public Z4TemporalColor setMirrored(boolean temporal, boolean spatial) {
+    this.mirrored = temporal;
+    this.z4StopGradientColors.forEach(z4StopGradientColor -> z4StopGradientColor.setMirrored(spatial));
+    return this;
+  }
+
   /**
-   * In place converts this Z4AbstractGradientColor to negative, the
-   * transparency is not changed
+   * In place converts this Z4TemporalColor to negative, the transparency is not
+   * changed
    *
-   * @return This negativized Z4AbstractGradientColor
+   * @return This negativized Z4TemporalColor
    */
-//  public Z4TemporalColor<T> negative() {
-//    this.z4StopColors.forEach(z4StopColor -> z4StopColor.negative());
-//    return this;
-//  }
+  public Z4TemporalColor negative() {
+    this.z4StopGradientColors.forEach(z4StopGradientColor -> z4StopGradientColor.negative());
+    return this;
+  }
+
   /**
    * In place inverts this Z4AbstractGradientColor
    *
-   * @return This inverted Z4AbstractGradientColor
+   * @param temporal true for temporal inversion, false otherwise
+   * @param spatial true for spatial inversion, false otherwise
+   * @return This inverted Z4TemporalColor
    */
-//  public Z4TemporalColor<T> inverted() {
-//    this.z4StopColors.forEach(z4StopColor -> z4StopColor.setPosition(1 - z4StopColor.getPosition()));
-//    return this;
-//  }
+  public Z4TemporalColor inverted(boolean temporal, boolean spatial) {
+    if (temporal) {
+      this.z4StopGradientColors.forEach(z4StopGradientColor -> z4StopGradientColor.setPosition(1 - z4StopGradientColor.getPosition()));
+    }
+    if (spatial) {
+      this.z4StopGradientColors.forEach(z4StopGradientColor -> z4StopGradientColor.inverted());
+    }
+    return this;
+  }
+
   /**
-   * Returns a Z4Color in a position
+   * Returns a Z4GradientColor in a position
    *
-   * @param temporal The temporal color position (in the range [0,1])
-   * @param spatial The spatial color position (in the range [0,1])
+   * @param position The temporal color position (in the range [0,1])
    * @param useRipple true to use ripple, false otherwise
    * @param useMirrored true to use mirrored, false otherwise
-   * @return The Z4Color
+   * @return The Z4GradientColor
    */
-  public Z4Color getZ4ColorAt(double temporal, double spatial, boolean useRipple, boolean useMirrored) {
-    if (Z4Setting.isLiteMode()) {
-      return this.z4StopGradientColors.$get(0).getZ4ColorAt(1, false, false);
-    } else if (Z4Setting.isStandardMode()) {
-      return this.z4StopGradientColors.$get(0).getZ4ColorAt(spatial, useRipple, useMirrored);
-    } else if (Z4Setting.isLiteMode()) {
+  public Z4AbstractGradientColor<?> getZ4GradientColorAt(double position, boolean useRipple, boolean useMirrored) {
+    if (Z4Setting.isLiteMode() && Z4Setting.isStandardMode()) {
+      return this.z4StopGradientColors.find((z4StopGradienColor, index, array) -> z4StopGradienColor.getPosition() == 0);
+    } else if (Z4Setting.isProMode()) {
       if (useMirrored && this.mirrored) {
-        temporal = 2 * (temporal < 0.5 ? temporal : 1 - temporal);
+        position = 2 * (position < 0.5 ? position : 1 - position);
       }
       if (useRipple && this.ripple != 0) {
-        temporal = Z4Math.ripple(temporal, 0, 1, this.ripple);
+        position = Z4Math.ripple(position, 0, 1, this.ripple);
       }
 
-      double temp = temporal;
-//    Z4StopColor before = this.z4StopColors.
-//            filter((z4StopColor, index, array) -> pos == 1 ? z4StopColor.getPosition() < pos : z4StopColor.getPosition() <= pos).
-//            reduce((found, current, index, array) -> found == null ? current : found.getPosition() > current.getPosition() ? found : current);
-//
-//    Z4StopColor after = this.z4StopColors.
-//            filter((z4StopColor, index, array) -> pos == 0 ? z4StopColor.getPosition() > pos : z4StopColor.getPosition() >= pos).
-//            reduce((found, current, index, array) -> found == null ? current : found.getPosition() < current.getPosition() ? found : current);
-//
-//    double div = (position - before.getPosition()) / (after.getPosition() - before.getPosition());
-//    return Z4Color.fromZ4AbstractColors(before, after, div);
-      return null;
+      double pos = position;
+      Z4StopGradientColor before = this.z4StopGradientColors.
+              filter((z4StopGradientColor, index, array) -> pos == 1 ? z4StopGradientColor.getPosition() < pos : z4StopGradientColor.getPosition() <= pos).
+              reduce((found, current, index, array) -> found == null ? current : found.getPosition() > current.getPosition() ? found : current);
+
+      Z4StopGradientColor after = this.z4StopGradientColors.
+              filter((z4StopGradientColor, index, array) -> pos == 0 ? z4StopGradientColor.getPosition() > pos : z4StopGradientColor.getPosition() >= pos).
+              reduce((found, current, index, array) -> found == null ? current : found.getPosition() < current.getPosition() ? found : current);
+
+      double div = (pos - before.getPosition()) / (after.getPosition() - before.getPosition());
+
+      return Z4GradientColor.fromZ4AbstractColors(before, after, div);
     } else {
       return null;
     }
   }
 
   /**
-   * Returns a linear gradient (without ripple and mirroring)
+   * Returns a Z4AbstractColor in a position
    *
-   * @param context The context to create the gradient
-   * @param x1 The x-axis coordinate of the start point
-   * @param y1 The y-axis coordinate of the start point
-   * @param x2 The x-axis coordinate of the end point
-   * @param y2 The y-axis coordinate of the end point
-   * @return The linear gradient
+   * @param temporal The temporal color position (in the range [0,1])
+   * @param spatial The spatial color position (in the range [0,1])
+   * @param useRipple true to use ripple, false otherwise
+   * @param useMirrored true to use mirrored, false otherwise
+   * @return The Z4AbstractColor
    */
-//  public CanvasGradient getLinearGradient($CanvasRenderingContext2D context, double x1, double y1, double x2, double y2) {
-//    CanvasGradient gradient = context.createLinearGradient(x1, y1, x2, y2);
-//    this.z4StopColors.forEach((z4StopColor, index, array) -> gradient.addColorStop(z4StopColor.getPosition(), z4StopColor.getHEX()));
-//    return gradient;
-//  }
-  /**
-   * Returns a radial gradient (without ripple and mirroring)
-   *
-   * @param context The context to create the gradient
-   * @param x1 The x-axis coordinate of the start circle
-   * @param y1 The y-axis coordinate of the start circle
-   * @param r1 The radius of the start circle
-   * @param x2 The x-axis coordinate of the end circle
-   * @param y2 The y-axis coordinate of the end circle
-   * @param r2 The radius of the end circle
-   * @return The radial gradient
-   */
-//  public CanvasGradient getRadialGradient($CanvasRenderingContext2D context, double x1, double y1, double r1, double x2, double y2, double r2) {
-//    CanvasGradient gradient = context.createRadialGradient(x1, y1, r1, x2, y2, r2);
-//    this.z4StopColors.forEach((z4StopColor, index, array) -> gradient.addColorStop(z4StopColor.getPosition(), z4StopColor.getHEX()));
-//    return gradient;
-//  }
-  /**
-   * Returns a conic gradient (without ripple and mirroring)
-   *
-   * @param context The context to create the gradient
-   * @param x The x-axis coordinate of the centre of the gradient
-   * @param y The y-axis coordinate of the centre of the gradient
-   * @param angle The angle at which to begin the gradient, in radians
-   * @return The conic gradient
-   */
-//  public CanvasGradient getConicGradient($CanvasRenderingContext2D context, double x, double y, double angle) {
-//    CanvasGradient gradient = context.createConicGradient(angle, x, y);
-//    this.z4StopColors.forEach((z4StopColor, index, array) -> gradient.addColorStop(z4StopColor.getPosition(), z4StopColor.getHEX()));
-//    return gradient;
-//  }
+  public Z4AbstractColor<?> getZ4ColorAt(double temporal, double spatial, boolean useRipple, boolean useMirrored) {
+    if (Z4Setting.isLiteMode()) {
+      return this.getZ4GradientColorAt(0, false, false).getZ4ColorAt(1, false, false);
+    } else if (Z4Setting.isStandardMode()) {
+      return this.getZ4GradientColorAt(0, false, false).getZ4ColorAt(spatial, useRipple, useMirrored);
+    } else if (Z4Setting.isProMode()) {
+      return this.getZ4GradientColorAt(temporal, useRipple, useMirrored).getZ4ColorAt(spatial, useRipple, useMirrored);
+    } else {
+      return null;
+    }
+  }
 }
