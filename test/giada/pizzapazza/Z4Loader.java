@@ -58,9 +58,9 @@ public class Z4Loader {
         scriptBundle.setAttribute("src", "../../../../build/bundle.min.js");
         scriptBundle.setAttribute("type", "text/javascript");
         scriptBundle.setAttribute("async", "false");
-        document.querySelector("head").appendChild(scriptBundle);
+        scriptBundle.addEventListener("load", (event2) -> Z4Loader.loadScript(jsFile));
 
-        Z4Loader.loadScript(jsFile);
+        document.querySelector("head").appendChild(scriptBundle);
       }
       return null;
     };
@@ -75,9 +75,7 @@ public class Z4Loader {
         scriptRow.setAttribute("src", "../../../../" + row);
         scriptRow.setAttribute("type", "text/javascript");
         scriptRow.setAttribute("async", "false");
-        scriptRow.addEventListener("load", (event) -> {
-          Z4Loader.loadScripts(scripts.slice(1), jsFile);
-        });
+        scriptRow.addEventListener("load", (event) -> Z4Loader.loadScripts(scripts.slice(1), jsFile));
 
         document.querySelector("head").appendChild(scriptRow);
       } else {
@@ -97,10 +95,10 @@ public class Z4Loader {
       HTMLElement script2 = document.createElement("script");
       script2.setAttribute("type", "text/javascript");
       script2.innerText = jsFile.replace(".js", "") + ".onLoad();";
-      
+
       document.querySelector("head").appendChild(script2);
     });
-    
+
     document.querySelector("head").appendChild(script);
   }
 

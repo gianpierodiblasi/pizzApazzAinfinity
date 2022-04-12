@@ -1,7 +1,6 @@
 package giada.pizzapazza.color;
 
 import static def.dom.Globals.document;
-import static def.dom.Globals.window;
 import def.js.Array;
 import def.js.JSON;
 import java.util.function.BiFunction;
@@ -18,6 +17,9 @@ public class test_color1 {
     document.getElementById("test1").textContent = "new Z4Color(0,0,0,0) => " + test_color1.stringify(new Z4Color(0, 0, 0, 0));
     document.getElementById("test2").textContent = "new Z4Color(0,255,0,0) => " + test_color1.stringify(new Z4Color(0, 255, 0, 0));
     document.getElementById("test3").textContent = "new Z4Color(255,255,255,255) => " + test_color1.stringify(new Z4Color(255, 255, 255, 255));
+
+    document.getElementById("test4").textContent = "Z4Color.fromColor(255) => " + test_color1.stringify(Z4Color.fromARGB(255));
+    document.getElementById("test5").textContent = "Z4Color.fromColor(65535) => " + test_color1.stringify(Z4Color.fromARGB(65535));
   }
 
   private static String stringify(Object object) {
