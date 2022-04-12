@@ -36,9 +36,16 @@ public class test_color2 {
     test_color2.fillCanvas("canvas9", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative().inverted(), 1);
     test_color2.fillCanvas("canvas10", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative().inverted(), 2);
     test_color2.fillCanvas("canvas11", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative().inverted(), 3);
-
+    test_color2.setCanvas("canvas12");
+    
     test_color2.drawCanvas2("canvas13", "slider1", new Z4GradientColor());
     test_color2.drawCanvas2("canvas14", "slider2", new Z4GradientColor().addOrUpdateColor(0.5, 255 << 24 | 255 << 16));
+  }
+
+  private static void setCanvas(String id) {
+    $Canvas canvas = ($Canvas) document.getElementById(id);
+    canvas.width = document.body.clientWidth / 2 - 100;
+    canvas.height = 100;
   }
 
   private static void drawCanvas(String id, Z4GradientColor color) {
@@ -55,6 +62,15 @@ public class test_color2 {
 
     $CanvasRenderingContext2D ctx = canvas.getContext("2d");
     ctx.drawImage(offscreen, 0, 0);
+  }
+
+  private static void drawCanvas2(String canvas, String slider, Z4GradientColor color) {
+    test_color2.drawCanvas(canvas, color);
+    document.getElementById(slider).oninput = (event) -> {
+      color.setRipple(document.$getElementById(slider).valueAsNumber);
+      test_color2.drawCanvas(canvas, color);
+      return null;
+    };
   }
 
   private static void fillCanvas(String id, Z4GradientColor color, int style) {
@@ -79,15 +95,6 @@ public class test_color2 {
 
     $CanvasRenderingContext2D ctx = canvas.getContext("2d");
     ctx.drawImage(offscreen, 0, 0);
-  }
-
-  private static void drawCanvas2(String canvas, String slider, Z4GradientColor color) {
-    test_color2.drawCanvas(canvas, color);
-    document.getElementById(slider).oninput = (event) -> {
-      color.setRipple(document.$getElementById(slider).valueAsNumber);
-      test_color2.drawCanvas(canvas, color);
-      return null;
-    };
   }
 
   private static String stringify(Object object) {
