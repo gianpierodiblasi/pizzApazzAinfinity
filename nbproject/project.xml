@@ -40,6 +40,12 @@
                     <location>transpile</location>
                     <encoding>UTF-8</encoding>
                 </source-folder>
+                <source-folder>
+                    <label>transpile-test</label>
+                    <type>java</type>
+                    <location>transpile-test</location>
+                    <encoding>UTF-8</encoding>
+                </source-folder>
             </folders>
             <ide-actions>
                 <action name="build">
@@ -70,6 +76,10 @@
                         <label>transpile</label>
                         <location>transpile</location>
                     </source-folder>
+                    <source-folder style="packages">
+                        <label>transpile-test</label>
+                        <location>transpile-test</location>
+                    </source-folder>
                     <source-file>
                         <location>${ant.script}</location>
                     </source-file>
@@ -91,10 +101,16 @@
             <compilation-unit>
                 <package-root>test</package-root>
                 <unit-tests/>
+                <classpath mode="compile">lib/jsweet-core-6.3.1.jar;src</classpath>
                 <source-level>1.8</source-level>
             </compilation-unit>
             <compilation-unit>
                 <package-root>transpile</package-root>
+                <source-level>1.8</source-level>
+            </compilation-unit>
+            <compilation-unit>
+                <package-root>transpile-test</package-root>
+                <unit-tests/>
                 <source-level>1.8</source-level>
             </compilation-unit>
         </java-data>
