@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?> 
-<project name="pizzApazzA4Ever" basedir="." default="build"> 
+<project name="pizzApazzAinfinity" basedir="." default="build"> 
  
   <property name="src.dir" value="${basedir}/src" /> 
   <property name="transpile.dir" value="${basedir}/transpile" /> 

@@ -15,9 +15,16 @@ import static simulation.js.$Globals.window;
  */
 public class Z4Setting {
 
+  private final static String PATH = Z4Setting.initPath();
   private static String language = Z4Setting.initLanguage();
   private static boolean darkMode = Z4Setting.initDarkMode();
   private static String mode = Z4Setting.initMode();
+
+  private static String initPath() {
+    int start = window.location.href.indexOf('/', 10);
+    int end = window.location.href.indexOf('/', start + 1);
+    return window.location.href.substring(start, end);
+  }
 
   @SuppressWarnings("ForLoopReplaceableByForEach")
   private static String initLanguage() {
@@ -25,7 +32,7 @@ public class Z4Setting {
     for (int index = 0; index < decodedCookies.length; index++) {
       String row = decodedCookies[index].trim();
       if (row.startsWith("z4language")) {
-        return row.substring(10);
+        return row.substring(11);
       }
     }
 
@@ -59,8 +66,8 @@ public class Z4Setting {
     String[] decodedCookies = decodeURIComponent(document.cookie).split(";");
     for (int index = 0; index < decodedCookies.length; index++) {
       String row = decodedCookies[index].trim();
-      if (row.startsWith("z4Mode")) {
-        return row.substring(6);
+      if (row.startsWith("z4mode")) {
+        return row.substring(7);
       }
     }
     return "standard";
@@ -74,7 +81,7 @@ public class Z4Setting {
   public static void setLanguage(String language) {
     Date date = new Date();
     date.setTime(date.getTime() + 365 * 24 * 60 * 60 * 1000);
-    document.cookie = "z4language=" + language + ";expires=" + date.toUTCString() + ";path=/pizzApazzAinfinity";
+    document.cookie = "z4language=" + language + ";expires=" + date.toUTCString() + ";path=" + Z4Setting.PATH;
 
     Z4Setting.language = language;
   }
@@ -107,7 +114,16 @@ public class Z4Setting {
 
     Date date = new Date();
     date.setTime(date.getTime() + 365 * 24 * 60 * 60 * 1000);
-    document.cookie = "z4mode=" + mode + ";expires=" + date.toUTCString() + ";path=/pizzApazzAinfinity";
+    document.cookie = "z4mode=" + mode + ";expires=" + date.toUTCString() + ";path=" + Z4Setting.PATH;
+  }
+
+  /**
+   * Returns the mode
+   *
+   * @return The mode ("lite", "standard", "pro")
+   */
+  public static String getMode() {
+    return Z4Setting.mode;
   }
 
   /**
@@ -117,7 +133,7 @@ public class Z4Setting {
    */
   @SuppressWarnings("StringEquality")
   public static boolean isLiteMode() {
-    return Z4Setting.mode == "line"; // JS equality for strings
+    return Z4Setting.mode == "lite"; // JS equality for strings
   }
 
   /**

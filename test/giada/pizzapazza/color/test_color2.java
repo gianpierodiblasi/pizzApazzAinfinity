@@ -2,6 +2,7 @@ package giada.pizzapazza.color;
 
 import def.js.Array;
 import def.js.JSON;
+import giada.pizzapazza.setting.Z4Setting;
 import java.util.function.BiFunction;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
@@ -24,6 +25,17 @@ public class test_color2 {
     document.getElementById("test5").textContent = "new Z4GradientColor().getZ4ColorAt(0.5,false,false) => " + test_color2.stringify(new Z4GradientColor().getZ4ColorAt(0.5, false, false));
     document.getElementById("test6").textContent = "new Z4GradientColor().setRipple(0.2).getZ4ColorAt(0.75,true,false) => " + test_color2.stringify(new Z4GradientColor().setRipple(0.2).getZ4ColorAt(0.75, true, false));
 
+    test_color2.drawAll();
+
+    document.$getElementById("mode").value = Z4Setting.getMode();
+    document.$getElementById("mode").onchange = (event) -> {
+      Z4Setting.setMode(document.$getElementById("mode").value);
+      test_color2.drawAll();
+      return null;
+    };
+  }
+
+  private static void drawAll() {
     test_color2.drawCanvas("canvas1", new Z4GradientColor());
     test_color2.drawCanvas("canvas2", new Z4GradientColor().setRipple(0.2));
     test_color2.drawCanvas("canvas3", new Z4GradientColor().setRipple(0.4).addOrUpdateColor(0.5, 255 << 24 | 255 << 16));
@@ -37,7 +49,7 @@ public class test_color2 {
     test_color2.fillCanvas("canvas10", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative().inverted(), 2);
     test_color2.fillCanvas("canvas11", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative().inverted(), 3);
     test_color2.setCanvas("canvas12");
-    
+
     test_color2.drawCanvas2("canvas13", "slider1", new Z4GradientColor());
     test_color2.drawCanvas2("canvas14", "slider2", new Z4GradientColor().addOrUpdateColor(0.5, 255 << 24 | 255 << 16));
   }

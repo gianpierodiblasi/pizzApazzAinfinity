@@ -1,4 +1,4 @@
-/* global Array, JSON, OffscreenCanvas, Z4GradientColor */
+/* global Array, JSON, OffscreenCanvas, Z4GradientColor, Z4Setting */
 
 /**
  * @author gianpiero.di.blasi
@@ -12,6 +12,16 @@ class test_color2 {
     document.getElementById("test4").textContent = "new Z4GradientColor().setRipple(0.2) => " + test_color2.stringify(new Z4GradientColor().setRipple(0.2));
     document.getElementById("test5").textContent = "new Z4GradientColor().getZ4ColorAt(0.5,false,false) => " + test_color2.stringify(new Z4GradientColor().getZ4ColorAt(0.5, false, false));
     document.getElementById("test6").textContent = "new Z4GradientColor().setRipple(0.2).getZ4ColorAt(0.75,true,false) => " + test_color2.stringify(new Z4GradientColor().setRipple(0.2).getZ4ColorAt(0.75, true, false));
+    test_color2.drawAll();
+    document.getElementById("mode").value = Z4Setting.getMode();
+    document.getElementById("mode").onchange = (event) => {
+      Z4Setting.setMode(document.getElementById("mode").value);
+      test_color2.drawAll();
+      return null;
+    };
+  }
+
+  static  drawAll() {
     test_color2.drawCanvas("canvas1", new Z4GradientColor());
     test_color2.drawCanvas("canvas2", new Z4GradientColor().setRipple(0.2));
     test_color2.drawCanvas("canvas3", new Z4GradientColor().setRipple(0.4).addOrUpdateColor(0.5, 255 << 24 | 255 << 16));

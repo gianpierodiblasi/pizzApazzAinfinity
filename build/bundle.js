@@ -6,18 +6,26 @@
  */
 class Z4Setting {
 
+  static  PATH = Z4Setting.initPath();
+
   static  language = Z4Setting.initLanguage();
 
   static  darkMode = Z4Setting.initDarkMode();
 
   static  mode = Z4Setting.initMode();
 
+  static  initPath() {
+    let start = window.location.href.indexOf('/', 10);
+    let end = window.location.href.indexOf('/', start + 1);
+    return window.location.href.substring(start, end);
+  }
+
   static  initLanguage() {
     let decodedCookies = decodeURIComponent(document.cookie).split(";");
     for (let index = 0; index < decodedCookies.length; index++) {
       let row = decodedCookies[index].trim();
       if (row.startsWith("z4language")) {
-        return row.substring(10);
+        return row.substring(11);
       }
     }
     if (navigator.languages) {
@@ -47,8 +55,8 @@ class Z4Setting {
     let decodedCookies = decodeURIComponent(document.cookie).split(";");
     for (let index = 0; index < decodedCookies.length; index++) {
       let row = decodedCookies[index].trim();
-      if (row.startsWith("z4Mode")) {
-        return row.substring(6);
+      if (row.startsWith("z4mode")) {
+        return row.substring(7);
       }
     }
     return "standard";
@@ -62,7 +70,7 @@ class Z4Setting {
   static  setLanguage(language) {
     let date = new Date();
     date.setTime(date.getTime() + 365 * 24 * 60 * 60 * 1000);
-    document.cookie = "z4language=" + language + ";expires=" + date.toUTCString() + ";path=/pizzApazzAinfinity";
+    document.cookie = "z4language=" + language + ";expires=" + date.toUTCString() + ";path=" + Z4Setting.PATH;
     Z4Setting.language = language;
   }
 
@@ -93,7 +101,16 @@ class Z4Setting {
     Z4Setting.mode = mode;
     let date = new Date();
     date.setTime(date.getTime() + 365 * 24 * 60 * 60 * 1000);
-    document.cookie = "z4mode=" + mode + ";expires=" + date.toUTCString() + ";path=/pizzApazzAinfinity";
+    document.cookie = "z4mode=" + mode + ";expires=" + date.toUTCString() + ";path=" + Z4Setting.PATH;
+  }
+
+  /**
+   * Returns the mode
+   *
+   * @return The mode ("lite", "standard", "pro")
+   */
+  static  getMode() {
+    return Z4Setting.mode;
   }
 
   /**
@@ -103,7 +120,7 @@ class Z4Setting {
    */
   static  isLiteMode() {
     // JS equality for strings
-    return Z4Setting.mode === "line";
+    return Z4Setting.mode === "lite";
   }
 
   /**
