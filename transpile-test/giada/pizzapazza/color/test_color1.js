@@ -11,6 +11,10 @@ class test_color1 {
     document.getElementById("test3").textContent = "new Z4Color(255,255,255,255) => " + test_color1.stringify(new Z4Color(255, 255, 255, 255));
     document.getElementById("test4").textContent = "Z4Color.fromColor(255) => " + test_color1.stringify(Z4Color.fromARGB(255));
     document.getElementById("test5").textContent = "Z4Color.fromColor(65535) => " + test_color1.stringify(Z4Color.fromARGB(65535));
+    document.getElementById("test6").textContent = "Z4Color.fromColor(65535).gray() => " + test_color1.stringify(Z4Color.fromARGB(65535).gray());
+    document.getElementById("test7").textContent = "Z4Color.fromColor(65535).negative() => " + test_color1.stringify(Z4Color.fromARGB(65535).negative());
+    document.getElementById("test8").textContent = "Z4Color.fromColor(65535).lighted(0.3) => " + test_color1.stringify(Z4Color.fromARGB(65535).lighted(0.3));
+    document.getElementById("test9").textContent = "Z4Color.fromColor(65535).darkened(0.3) => " + test_color1.stringify(Z4Color.fromARGB(65535).darkened(0.3));
   }
 
   static  stringify(object) {
