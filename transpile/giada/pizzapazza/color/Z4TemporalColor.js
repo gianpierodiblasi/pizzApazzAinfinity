@@ -33,7 +33,7 @@ class Z4TemporalColor {
    */
    addOrUpdateColor(temporal, spatial, color) {
     let found = this.z4StopGradientColors.find((z4StopGradientColor, index, array) => z4StopGradientColor.getPosition() === temporal);
-    if (found) {
+    if (!found) {
       let z4StopGradientColor = this.getZ4GradientColorAt(temporal, false, false);
       this.z4StopGradientColors.push(Z4StopGradientColor.fromZ4AbstractGradientColor(z4StopGradientColor, temporal));
     }
@@ -64,6 +64,7 @@ class Z4TemporalColor {
    */
    generateColor(temporal, spatial) {
     if (temporal !== -1) {
+      return this.addOrUpdateColor(temporal, spatial, this.getZ4ColorAt(temporal, spatial, false, false).getARGB());
     }
     if (spatial !== -1) {
       this.z4StopGradientColors.forEach(z4StopGradientColor => z4StopGradientColor.generateColor(spatial));
@@ -144,7 +145,7 @@ class Z4TemporalColor {
   }
 
   /**
-   * In place inverts this Z4AbstractGradientColor
+   * In place inverts this Z4TemporalColor
    *
    * @param temporal true for temporal inversion, false otherwise
    * @param spatial true for spatial inversion, false otherwise
@@ -161,12 +162,12 @@ class Z4TemporalColor {
   }
 
   /**
-   * Returns a Z4GradientColor in a position
+   * Returns a Z4AbstractGradientColor in a position
    *
    * @param position The temporal color position (in the range [0,1])
    * @param useRipple true to use ripple, false otherwise
    * @param useMirrored true to use mirrored, false otherwise
-   * @return The Z4GradientColor
+   * @return The Z4AbstractGradientColor
    */
    getZ4GradientColorAt(position, useRipple, useMirrored) {
     if (Z4Setting.isLiteMode() && Z4Setting.isStandardMode()) {

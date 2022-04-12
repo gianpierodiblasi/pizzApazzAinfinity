@@ -71,4 +71,15 @@ public class Z4StopColor extends Z4AbstractColor<Z4StopColor> {
     RegExpExecArray result = new RegExp("^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$", "i").exec(color);
     return new Z4StopColor(a, parseInt(result.$get(1), 16), parseInt(result.$get(2), 16), parseInt(result.$get(3), 16), position);
   }
+
+  /**
+   * Creates a Z4StopColor from a Z4AbstractColor
+   *
+   * @param color The Z4AbstractColor
+   * @param position The position in a sequence (in the range [0,1])
+   * @return The Z4StopColor
+   */
+  public static Z4StopColor fromZ4AbstractColor(Z4AbstractColor<?> color, double position) {
+    return Z4StopColor.fromARGB(color.getARGB(), position);
+  }
 }

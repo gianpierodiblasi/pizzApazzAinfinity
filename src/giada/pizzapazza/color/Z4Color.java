@@ -47,6 +47,16 @@ public class Z4Color extends Z4AbstractColor<Z4Color> {
   }
 
   /**
+   * Creates a Z4Color from a Z4AbstractColor
+   *
+   * @param color The color Z4AbstractColor
+   * @return The Z4Color
+   */
+  public static Z4Color fromZ4AbstractColor(Z4AbstractColor<?> color) {
+    return Z4Color.fromARGB(color.getARGB());
+  }
+
+  /**
    * Creates a Z4Color from two Z4AbstractColor
    *
    * @param before The color before
