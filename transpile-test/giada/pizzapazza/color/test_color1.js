@@ -1,4 +1,4 @@
-/* global Array, JSON, Z4Color, stringify */
+/* global Array, JSON, Z4Color */
 
 /**
  * @author gianpiero.di.blasi
@@ -6,12 +6,9 @@
 class test_color1 {
 
   static  onLoad() {
-    window.onload = (event) => {
-      document.getElementById("test1").textContent = "new Z4Color(0,0,0,0) => " + stringify(new Z4Color(0, 0, 0, 0));
-      document.getElementById("test2").textContent = "new Z4Color(0,255,0,0) => " + stringify(new Z4Color(0, 255, 0, 0));
-      document.getElementById("test3").textContent = "new Z4Color(255,255,255,255) => " + stringify(new Z4Color(255, 255, 255, 255));
-      return null;
-    };
+    document.getElementById("test1").textContent = "new Z4Color(0,0,0,0) => " + test_color1.stringify(new Z4Color(0, 0, 0, 0));
+    document.getElementById("test2").textContent = "new Z4Color(0,255,0,0) => " + test_color1.stringify(new Z4Color(0, 255, 0, 0));
+    document.getElementById("test3").textContent = "new Z4Color(255,255,255,255) => " + test_color1.stringify(new Z4Color(255, 255, 255, 255));
   }
 
   static  stringify(object) {

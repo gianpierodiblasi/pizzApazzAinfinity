@@ -76,9 +76,15 @@ class Z4Loader {
 
   static  loadScript(jsFile) {
     let script = document.createElement("script");
-    script.setAttribute("src", "color/" + jsFile);
+    script.setAttribute("src", jsFile);
     script.setAttribute("type", "text/javascript");
     script.setAttribute("async", "false");
+    script.addEventListener("load", (event) => {
+      let script2 = document.createElement("script");
+      script2.setAttribute("type", "text/javascript");
+      script2.innerText = jsFile.replace(".js", "") + ".onLoad();";
+      document.querySelector("head").appendChild(script2);
+    });
     document.querySelector("head").appendChild(script);
   }
 
