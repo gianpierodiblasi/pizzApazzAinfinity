@@ -17,6 +17,10 @@ public class $Globals {
     return false;
   }
 
+  public static boolean $typeof(Object obj, String type) {
+    return false;
+  }
+
   public static int parseInt(double v) {
     return 0;
   }

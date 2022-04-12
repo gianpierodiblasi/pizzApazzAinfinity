@@ -18,10 +18,10 @@ class test_color1 {
     let replacer = (k, v) => {
       if (!k) {
         return v;
-        // } else if (typeof v === "number") {
-        // return v;
-        // } else if (typeof v === "boolean") {
-        // return v;
+      } else if (typeof v === "number") {
+        return v;
+      } else if (typeof v === "boolean") {
+        return v;
       } else if (Array.isArray(v)) {
         return v;
       } else {

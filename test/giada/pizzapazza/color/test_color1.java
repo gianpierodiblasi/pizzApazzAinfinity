@@ -6,6 +6,7 @@ import def.js.Array;
 import def.js.JSON;
 import java.util.function.BiFunction;
 import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.$typeof;
 
 /**
  *
@@ -28,10 +29,10 @@ public class test_color1 {
     BiFunction<String, Object, Object> replacer = (k, v) -> {
       if (!$exists(k)) {
         return v;
-//  } else if (typeof v === "number") {
-//    return v;
-//  } else if (typeof v === "boolean") {
-//    return v;
+      } else if ($typeof(v, "number")) {
+        return v;
+      } else if ($typeof(v, "boolean")) {
+        return v;
       } else if (Array.isArray(v)) {
         return v;
       } else {
