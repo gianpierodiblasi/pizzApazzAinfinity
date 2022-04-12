@@ -1,6 +1,5 @@
 package giada.pizzapazza.color;
 
-import static def.dom.Globals.document;
 import def.js.Array;
 import def.js.JSON;
 import java.util.function.BiFunction;
@@ -9,6 +8,7 @@ import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$OffscreenCanvas;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.$typeof;
+import static simulation.js.$Globals.document;
 
 /**
  *
@@ -31,11 +31,18 @@ public class test_color2 {
     test_color2.drawCanvas("canvas5", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8));
     test_color2.drawCanvas("canvas6", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative());
     test_color2.drawCanvas("canvas7", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative().inverted());
+    test_color2.drawCanvas("canvas8", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative().inverted().setMirrored(true));
+
+    test_color2.fillCanvas("canvas9", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative().inverted(), 1);
+    test_color2.fillCanvas("canvas10", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative().inverted(), 2);
+    test_color2.fillCanvas("canvas11", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative().inverted(), 3);
+
+    test_color2.drawCanvas2("canvas13", "slider1", new Z4GradientColor());
+    test_color2.drawCanvas2("canvas14", "slider2", new Z4GradientColor().addOrUpdateColor(0.5, 255 << 24 | 255 << 16));
   }
 
   private static void drawCanvas(String id, Z4GradientColor color) {
     $Canvas canvas = ($Canvas) document.getElementById(id);
-
     canvas.width = document.body.clientWidth / 2 - 100;
     canvas.height = 100;
 
@@ -48,6 +55,39 @@ public class test_color2 {
 
     $CanvasRenderingContext2D ctx = canvas.getContext("2d");
     ctx.drawImage(offscreen, 0, 0);
+  }
+
+  private static void fillCanvas(String id, Z4GradientColor color, int style) {
+    $Canvas canvas = ($Canvas) document.getElementById(id);
+    canvas.width = document.body.clientWidth / 2 - 100;
+    canvas.height = 100;
+
+    $OffscreenCanvas offscreen = new $OffscreenCanvas(canvas.width, canvas.height);
+    $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
+    switch (style) {
+      case 1:
+        offscreenCtx.fillStyle = color.$getLinearGradient(offscreenCtx, canvas.width / 2 - 5, 0, canvas.width / 2 + 5, canvas.height);
+        break;
+      case 2:
+        offscreenCtx.fillStyle = color.$getRadialGradient(offscreenCtx, canvas.width / 2, canvas.height / 2, 50, canvas.width / 2, canvas.height / 2, 100);
+        break;
+      case 3:
+        offscreenCtx.fillStyle = color.$getConicGradient(offscreenCtx, canvas.width / 2, canvas.height / 2, 0);
+        break;
+    }
+    offscreenCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+    $CanvasRenderingContext2D ctx = canvas.getContext("2d");
+    ctx.drawImage(offscreen, 0, 0);
+  }
+
+  private static void drawCanvas2(String canvas, String slider, Z4GradientColor color) {
+    test_color2.drawCanvas(canvas, color);
+    document.getElementById(slider).oninput = (event) -> {
+      color.setRipple(document.$getElementById(slider).valueAsNumber);
+      test_color2.drawCanvas(canvas, color);
+      return null;
+    };
   }
 
   private static String stringify(Object object) {

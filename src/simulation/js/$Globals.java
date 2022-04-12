@@ -1,5 +1,6 @@
 package simulation.js;
 
+import simulation.dom.$Document;
 import simulation.dom.$Navigator;
 import simulation.dom.$Window;
 
@@ -12,6 +13,7 @@ public class $Globals {
 
   public static $Navigator navigator;
   public static $Window window;
+  public static $Document document;
 
   public static boolean $exists(Object object) {
     return false;

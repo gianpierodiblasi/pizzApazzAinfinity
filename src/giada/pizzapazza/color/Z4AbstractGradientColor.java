@@ -1,9 +1,11 @@
 package giada.pizzapazza.color;
 
 import def.dom.CanvasGradient;
+import def.dom.CanvasPattern;
 import def.js.Array;
 import giada.pizzapazza.math.Z4Math;
 import giada.pizzapazza.setting.Z4Setting;
+import jsweet.util.union.Union4;
 import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
 
@@ -53,7 +55,7 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
       this.z4StopColors.push(Z4StopColor.fromARGB(color, position));
     }
 
-    return (T)this;
+    return (T) this;
   }
 
   /**
@@ -77,7 +79,7 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
   @SuppressWarnings("unchecked")
   public T removeColor(double position) {
     this.z4StopColors = this.z4StopColors.filter((z4StopColor, index, array) -> z4StopColor.getPosition() != position);
-    return (T)this;
+    return (T) this;
   }
 
   /**
@@ -93,7 +95,7 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
     if ($exists(found) && from != 0 && from != 1 && to != 0 && to != 1) {
       found.setPosition(to);
     }
-    return (T)this;
+    return (T) this;
   }
 
   /**
@@ -105,7 +107,7 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
   @SuppressWarnings("unchecked")
   public T setRipple(double ripple) {
     this.ripple = ripple;
-    return (T)this;
+    return (T) this;
   }
 
   /**
@@ -117,7 +119,7 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
   @SuppressWarnings("unchecked")
   public T setMirrored(boolean mirrored) {
     this.mirrored = mirrored;
-    return (T)this;
+    return (T) this;
   }
 
   /**
@@ -129,7 +131,7 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
   @SuppressWarnings("unchecked")
   public T negative() {
     this.z4StopColors.forEach(z4StopColor -> z4StopColor.negative());
-    return (T)this;
+    return (T) this;
   }
 
   /**
@@ -140,7 +142,7 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
   @SuppressWarnings("unchecked")
   public T inverted() {
     this.z4StopColors.forEach(z4StopColor -> z4StopColor.setPosition(1 - z4StopColor.getPosition()));
-    return (T)this;
+    return (T) this;
   }
 
   /**
@@ -195,6 +197,21 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
   }
 
   /**
+   * Utility method to simulate the fill style of a canvas
+   *
+   * @param context The context to create the gradient
+   * @param x1 The x-axis coordinate of the start point
+   * @param y1 The y-axis coordinate of the start point
+   * @param x2 The x-axis coordinate of the end point
+   * @param y2 The y-axis coordinate of the end point
+   * @return NOTHING
+   */
+  public Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getLinearGradient($CanvasRenderingContext2D context, double x1, double y1, double x2, double y2) {
+    return new Union4<String, CanvasGradient, CanvasPattern, Object>() {
+    };
+  }
+
+  /**
    * Returns a radial gradient (without ripple and mirroring)
    *
    * @param context The context to create the gradient
@@ -213,6 +230,23 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
   }
 
   /**
+   * Utility method to simulate the fill style of a canvas
+   *
+   * @param context The context to create the gradient
+   * @param x1 The x-axis coordinate of the start circle
+   * @param y1 The y-axis coordinate of the start circle
+   * @param r1 The radius of the start circle
+   * @param x2 The x-axis coordinate of the end circle
+   * @param y2 The y-axis coordinate of the end circle
+   * @param r2 The radius of the end circle
+   * @return NOTHING
+   */
+  public Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getRadialGradient($CanvasRenderingContext2D context, double x1, double y1, double r1, double x2, double y2, double r2) {
+    return new Union4<String, CanvasGradient, CanvasPattern, Object>() {
+    };
+  }
+
+  /**
    * Returns a conic gradient (without ripple and mirroring)
    *
    * @param context The context to create the gradient
@@ -225,5 +259,19 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
     CanvasGradient gradient = context.createConicGradient(angle, x, y);
     this.z4StopColors.forEach((z4StopColor, index, array) -> gradient.addColorStop(z4StopColor.getPosition(), z4StopColor.getHEX()));
     return gradient;
+  }
+
+  /**
+   * Utility method to simulate the fill style of a canvas
+   *
+   * @param context The context to create the gradient
+   * @param x The x-axis coordinate of the centre of the gradient
+   * @param y The y-axis coordinate of the centre of the gradient
+   * @param angle The angle at which to begin the gradient, in radians
+   * @return NOTHING
+   */
+  public Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getConicGradient($CanvasRenderingContext2D context, double x, double y, double angle) {
+    return new Union4<String, CanvasGradient, CanvasPattern, Object>() {
+    };
   }
 }

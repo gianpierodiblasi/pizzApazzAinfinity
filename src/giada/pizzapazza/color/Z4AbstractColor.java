@@ -50,7 +50,7 @@ public abstract class Z4AbstractColor<T extends Z4AbstractColor<T>> {
             + new $Number(this.b).toString(16).padStart(2, "0")
             + new $Number(this.a).toString(16).padStart(2, "0");
 
-    return (T)this;
+    return (T) this;
   }
 
   /**

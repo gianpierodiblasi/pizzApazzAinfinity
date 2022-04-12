@@ -119,7 +119,7 @@
         &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16).<br/>
         &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.75,255&lt;&lt;24|255&lt;&lt;8).<br/>
         &nbsp;&nbsp;&nbsp;&nbsp;negative().inverted()<br/>
-        [white => blue => red => green => black negative inverted "linear gradient"]
+        [white => blue => red => green => black negative inverted mirrored]
       </div>
     </div>
     <div style="display: flex">
@@ -135,7 +135,7 @@
         &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16).<br/>
         &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.75,255&lt;&lt;24|255&lt;&lt;8).<br/>
         &nbsp;&nbsp;&nbsp;&nbsp;negative().inverted()<br/>
-        [white => blue => red => green => black negative inverted "radial gradient"]
+        [white => blue => red => green => black negative inverted "linear gradient"]
       </div>
       <div class="spacer"></div>
       <div class="divStyle2">
@@ -144,7 +144,7 @@
         &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16).<br/>
         &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.75,255&lt;&lt;24|255&lt;&lt;8).<br/>
         &nbsp;&nbsp;&nbsp;&nbsp;negative().inverted()<br/>
-        [white => blue => red => green => black negative inverted "conic gradient"]
+        [white => blue => red => green => black negative inverted "radial gradient"]
       </div>
     </div>
     <div style="display: flex">
@@ -153,6 +153,45 @@
       <canvas id="canvas10"></canvas>
     </div>
     <hr/>
-
+    <div style="display: flex">
+      <div class="divStyle2">
+        new Z4GradientColor().<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.25,255&lt;&lt;24|255).<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16).<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.75,255&lt;&lt;24|255&lt;&lt;8).<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;negative().inverted()<br/>
+        [white => blue => red => green => black negative inverted "conic gradient"]
+      </div>
+      <div class="spacer"></div>
+      <div class="divStyle2"></div>
+    </div>
+    <div style="display: flex">
+      <canvas id="canvas11"></canvas>
+      <div class="spacer"></div>
+      <canvas id="canvas12"></canvas>
+    </div>
+    <hr/>
+    <div style="display: flex">
+      <div class="divStyle2">
+        new Z4GradientColor()<br/>[white => black]
+        <div style="display: flex">
+          Ripple <input id="slider1" type="range" value="0" min="0" max="1" step="0.01" style="vertical-align:middle;flex:1"/>  
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <div class="divStyle2">
+        new Z4GradientColor().<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16)<br/>
+        [white => red => black]
+        <div style="display: flex">
+          Ripple <input id="slider2" type="range" value="0" min="0" max="1" step="0.01" style="vertical-align:middle;flex:1"/>  
+        </div>
+      </div>
+    </div>
+    <div style="display: flex">
+      <canvas id="canvas13"></canvas>
+      <div class="spacer"></div>
+      <canvas id="canvas14"></canvas>
+    </div>
   </body>
 </html>
