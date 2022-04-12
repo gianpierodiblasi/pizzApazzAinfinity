@@ -170,7 +170,7 @@ class Z4TemporalColor {
    * @return The Z4AbstractGradientColor
    */
    getZ4GradientColorAt(position, useRipple, useMirrored) {
-    if (Z4Setting.isLiteMode() && Z4Setting.isStandardMode()) {
+    if (Z4Setting.isLiteMode() || Z4Setting.isStandardMode()) {
       return this.z4StopGradientColors.find((z4StopGradienColor, index, array) => z4StopGradienColor.getPosition() === 0);
     } else if (Z4Setting.isProMode()) {
       if (useMirrored && this.mirrored) {

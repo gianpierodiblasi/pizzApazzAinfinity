@@ -46,7 +46,7 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
    */
   public Z4AbstractGradientColor<T> addOrUpdateColor(double position, int color) {
     Z4StopColor found = this.z4StopColors.find((z4StopColor, index, array) -> z4StopColor.getPosition() == position);
-    if (!$exists(found)) {
+    if ($exists(found)) {
       found.set(color);
     } else {
       this.z4StopColors.push(Z4StopColor.fromARGB(color, position));
@@ -147,7 +147,7 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
   public Z4AbstractColor<?> getZ4ColorAt(double position, boolean useRipple, boolean useMirrored) {
     if (Z4Setting.isLiteMode()) {
       return this.z4StopColors.find((z4StopColor, index, array) -> z4StopColor.getPosition() == 1);
-    } else if (Z4Setting.isStandardMode() && Z4Setting.isProMode()) {
+    } else if (Z4Setting.isStandardMode() || Z4Setting.isProMode()) {
       if (useMirrored && this.mirrored) {
         position = 2 * (position < 0.5 ? position : 1 - position);
       }

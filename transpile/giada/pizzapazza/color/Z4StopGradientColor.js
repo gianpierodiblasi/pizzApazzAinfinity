@@ -25,7 +25,7 @@ class Z4StopGradientColor extends Z4AbstractGradientColor {
    * @return The position in a sequence (in the range [0,1])
    */
    getPosition() {
-    return position;
+    return this.position;
   }
 
   /**
