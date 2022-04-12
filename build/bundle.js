@@ -1035,7 +1035,6 @@ class Z4AbstractGradientColor {
     this.z4StopColors.forEach((z4StopColor, index, array) => gradient.addColorStop(z4StopColor.getPosition(), z4StopColor.getHEX()));
     return gradient;
   }
-
   /**
    * Returns a radial gradient (without ripple and mirroring)
    *
@@ -1053,7 +1052,6 @@ class Z4AbstractGradientColor {
     this.z4StopColors.forEach((z4StopColor, index, array) => gradient.addColorStop(z4StopColor.getPosition(), z4StopColor.getHEX()));
     return gradient;
   }
-
   /**
    * Returns a conic gradient (without ripple and mirroring)
    *
