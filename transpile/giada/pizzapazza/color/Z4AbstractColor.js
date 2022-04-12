@@ -70,7 +70,6 @@ class Z4AbstractColor {
    getHEX() {
     return this.hex;
   }
-
   /**
    * Sets this Z4AbstractColor from an ARGB integer color
    *

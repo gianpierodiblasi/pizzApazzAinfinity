@@ -10,6 +10,9 @@ import def.dom.CanvasRenderingContext2D;
  */
 public class $CanvasRenderingContext2D extends CanvasRenderingContext2D {
 
+  public void drawImage($OffscreenCanvas canvas, double x, double y) {
+  }
+
   public CanvasGradient createConicGradient(double angle, double x, double y) {
     return null;
   }

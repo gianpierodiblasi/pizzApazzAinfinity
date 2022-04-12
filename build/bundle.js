@@ -647,7 +647,6 @@ class Z4AbstractColor {
    getHEX() {
     return this.hex;
   }
-
   /**
    * Sets this Z4AbstractColor from an ARGB integer color
    *
@@ -813,7 +812,7 @@ class Z4StopColor extends Z4AbstractColor {
    * @return The position in a sequence (in the range [0,1])
    */
    getPosition() {
-    return position;
+    return this.position;
   }
 
   /**
@@ -904,7 +903,7 @@ class Z4AbstractGradientColor {
    */
    addOrUpdateColor(position, color) {
     let found = this.z4StopColors.find((z4StopColor, index, array) => z4StopColor.getPosition() === position);
-    if (!found) {
+    if (found) {
       found.set(color);
     } else {
       this.z4StopColors.push(Z4StopColor.fromARGB(color, position));
@@ -1004,7 +1003,7 @@ class Z4AbstractGradientColor {
    getZ4ColorAt(position, useRipple, useMirrored) {
     if (Z4Setting.isLiteMode()) {
       return this.z4StopColors.find((z4StopColor, index, array) => z4StopColor.getPosition() === 1);
-    } else if (Z4Setting.isStandardMode() && Z4Setting.isProMode()) {
+    } else if (Z4Setting.isStandardMode() || Z4Setting.isProMode()) {
       if (useMirrored && this.mirrored) {
         position = 2 * (position < 0.5 ? position : 1 - position);
       }
@@ -1142,7 +1141,7 @@ class Z4StopGradientColor extends Z4AbstractGradientColor {
    * @return The position in a sequence (in the range [0,1])
    */
    getPosition() {
-    return position;
+    return this.position;
   }
 
   /**
@@ -1340,7 +1339,7 @@ class Z4TemporalColor {
    * @return The Z4AbstractGradientColor
    */
    getZ4GradientColorAt(position, useRipple, useMirrored) {
-    if (Z4Setting.isLiteMode() && Z4Setting.isStandardMode()) {
+    if (Z4Setting.isLiteMode() || Z4Setting.isStandardMode()) {
       return this.z4StopGradientColors.find((z4StopGradienColor, index, array) => z4StopGradienColor.getPosition() === 0);
     } else if (Z4Setting.isProMode()) {
       if (useMirrored && this.mirrored) {

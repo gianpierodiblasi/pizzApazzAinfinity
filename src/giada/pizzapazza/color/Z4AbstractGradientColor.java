@@ -44,7 +44,8 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
    * @param color An ARGB integer color
    * @return This Z4AbstractGradientColor
    */
-  public Z4AbstractGradientColor<T> addOrUpdateColor(double position, int color) {
+  @SuppressWarnings("unchecked")
+  public T addOrUpdateColor(double position, int color) {
     Z4StopColor found = this.z4StopColors.find((z4StopColor, index, array) -> z4StopColor.getPosition() == position);
     if ($exists(found)) {
       found.set(color);
@@ -52,7 +53,7 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
       this.z4StopColors.push(Z4StopColor.fromARGB(color, position));
     }
 
-    return this;
+    return (T)this;
   }
 
   /**
@@ -63,7 +64,7 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
    * is no color in this position then it is added otherwise it is updated
    * @return This Z4AbstractGradientColor
    */
-  public Z4AbstractGradientColor<T> generateColor(double position) {
+  public T generateColor(double position) {
     return this.addOrUpdateColor(position, this.getZ4ColorAt(position, false, false).getARGB());
   }
 
@@ -73,9 +74,10 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
    * @param position The position in the sequence (in the range [0,1])
    * @return This Z4AbstractGradientColor
    */
-  public Z4AbstractGradientColor<T> removeColor(double position) {
+  @SuppressWarnings("unchecked")
+  public T removeColor(double position) {
     this.z4StopColors = this.z4StopColors.filter((z4StopColor, index, array) -> z4StopColor.getPosition() != position);
-    return this;
+    return (T)this;
   }
 
   /**
@@ -85,12 +87,13 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
    * @param to The new color position (in the range [0,1])
    * @return This Z4AbstractGradientColor
    */
-  public Z4AbstractGradientColor<T> move(double from, double to) {
+  @SuppressWarnings("unchecked")
+  public T move(double from, double to) {
     Z4StopColor found = this.z4StopColors.find((z4StopColor, index, array) -> z4StopColor.getPosition() == from);
     if ($exists(found) && from != 0 && from != 1 && to != 0 && to != 1) {
       found.setPosition(to);
     }
-    return this;
+    return (T)this;
   }
 
   /**
@@ -99,9 +102,10 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
    * @param ripple The ripple (in the range [0,1])
    * @return This Z4AbstractGradientColor
    */
-  public Z4AbstractGradientColor<T> setRipple(double ripple) {
+  @SuppressWarnings("unchecked")
+  public T setRipple(double ripple) {
     this.ripple = ripple;
-    return this;
+    return (T)this;
   }
 
   /**
@@ -110,9 +114,10 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
    * @param mirrored true if the color is mirrored, false otherwise
    * @return This Z4AbstractGradientColor
    */
-  public Z4AbstractGradientColor<T> setMirrored(boolean mirrored) {
+  @SuppressWarnings("unchecked")
+  public T setMirrored(boolean mirrored) {
     this.mirrored = mirrored;
-    return this;
+    return (T)this;
   }
 
   /**
@@ -121,9 +126,10 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
    *
    * @return This negativized Z4AbstractGradientColor
    */
-  public Z4AbstractGradientColor<T> negative() {
+  @SuppressWarnings("unchecked")
+  public T negative() {
     this.z4StopColors.forEach(z4StopColor -> z4StopColor.negative());
-    return this;
+    return (T)this;
   }
 
   /**
@@ -131,9 +137,10 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
    *
    * @return This inverted Z4AbstractGradientColor
    */
-  public Z4AbstractGradientColor<T> inverted() {
+  @SuppressWarnings("unchecked")
+  public T inverted() {
     this.z4StopColors.forEach(z4StopColor -> z4StopColor.setPosition(1 - z4StopColor.getPosition()));
-    return this;
+    return (T)this;
   }
 
   /**

@@ -1,6 +1,9 @@
 package giada.pizzapazza.color;
 
+import def.dom.CanvasGradient;
+import def.dom.CanvasPattern;
 import def.js.Array;
+import jsweet.util.union.Union4;
 import static simulation.js.$Globals.parseInt;
 import simulation.js.$Number;
 
@@ -36,7 +39,8 @@ public abstract class Z4AbstractColor<T extends Z4AbstractColor<T>> {
     this.init();
   }
 
-  private Z4AbstractColor<T> init() {
+  @SuppressWarnings("unchecked")
+  private T init() {
     this.argb = this.a << 24 | this.r << 16 | this.g << 8 | this.b;
 
     this.hex
@@ -46,7 +50,7 @@ public abstract class Z4AbstractColor<T extends Z4AbstractColor<T>> {
             + new $Number(this.b).toString(16).padStart(2, "0")
             + new $Number(this.a).toString(16).padStart(2, "0");
 
-    return this;
+    return (T)this;
   }
 
   /**
@@ -79,12 +83,22 @@ public abstract class Z4AbstractColor<T extends Z4AbstractColor<T>> {
   }
 
   /**
+   * Utility method to simulate the fill style of a canvas
+   *
+   * @return NOTHING
+   */
+  public Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getHEX() {
+    return new Union4<String, CanvasGradient, CanvasPattern, Object>() {
+    };
+  }
+
+  /**
    * Sets this Z4AbstractColor from an ARGB integer color
    *
    * @param color The color
    * @return This Z4AbstractColor
    */
-  public Z4AbstractColor<T> set(int color) {
+  public T set(int color) {
     this.a = color >>> 24 & 0xff;
     this.r = color >>> 16 & 0xff;
     this.g = color >>> 8 & 0xff;
@@ -99,7 +113,7 @@ public abstract class Z4AbstractColor<T extends Z4AbstractColor<T>> {
    *
    * @return This gray scaled Z4AbstractColor
    */
-  public Z4AbstractColor<T> gray() {
+  public T gray() {
     int gray = parseInt(0.21 * this.r + 0.71 * this.g + 0.08 * this.b);
 
     this.r = gray;
@@ -115,7 +129,7 @@ public abstract class Z4AbstractColor<T extends Z4AbstractColor<T>> {
    *
    * @return This negativized Z4AbstractColor
    */
-  public Z4AbstractColor<T> negative() {
+  public T negative() {
     this.r = 255 - this.r;
     this.g = 255 - this.g;
     this.b = 255 - this.b;
@@ -129,7 +143,7 @@ public abstract class Z4AbstractColor<T extends Z4AbstractColor<T>> {
    * @param lightingFactor The lighting factor (in the range [0,1])
    * @return This lighted Z4AbstractColor
    */
-  public Z4AbstractColor<T> lighted(double lightingFactor) {
+  public T lighted(double lightingFactor) {
     this.r = parseInt((255 - this.r) * lightingFactor + this.r);
     this.g = parseInt((255 - this.g) * lightingFactor + this.g);
     this.b = parseInt((255 - this.b) * lightingFactor + this.b);
@@ -143,7 +157,7 @@ public abstract class Z4AbstractColor<T extends Z4AbstractColor<T>> {
    * @param darkeningFactor The darkening factor (in the range [0,1])
    * @return This darkened Z4AbstractColor
    */
-  public Z4AbstractColor<T> darkened(double darkeningFactor) {
+  public T darkened(double darkeningFactor) {
     darkeningFactor = 1 - darkeningFactor;
 
     this.r = parseInt(darkeningFactor * this.r);

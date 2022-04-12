@@ -6,7 +6,7 @@
   <property name="build.dir" value="${basedir}/build" /> 
   <property name="test.dir" value="${basedir}/test" /> 
   <property name="transpile-test.dir" value="${basedir}/transpile-test" /> 
-  <property name="josetta.jar" value="${basedir}/lib/josetta-1.6.0-jar-with-dependencies.jar" /> 
+  <property name="josetta.jar" value="${basedir}/lib/josetta-1.7.0-jar-with-dependencies.jar" /> 
   
   <target name="clean"> 
     <delete>

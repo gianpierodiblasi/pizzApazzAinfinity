@@ -4,6 +4,9 @@ import static def.dom.Globals.document;
 import def.js.Array;
 import def.js.JSON;
 import java.util.function.BiFunction;
+import simulation.dom.$Canvas;
+import simulation.dom.$CanvasRenderingContext2D;
+import simulation.dom.$OffscreenCanvas;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.$typeof;
 
@@ -20,6 +23,26 @@ public class test_color2 {
     document.getElementById("test4").textContent = "new Z4GradientColor().setRipple(0.2) => " + test_color2.stringify(new Z4GradientColor().setRipple(0.2));
     document.getElementById("test5").textContent = "new Z4GradientColor().getZ4ColorAt(0.5,false,false) => " + test_color2.stringify(new Z4GradientColor().getZ4ColorAt(0.5, false, false));
     document.getElementById("test6").textContent = "new Z4GradientColor().setRipple(0.2).getZ4ColorAt(0.75,true,false) => " + test_color2.stringify(new Z4GradientColor().setRipple(0.2).getZ4ColorAt(0.75, true, false));
+
+    test_color2.drawCanvas("canvas1", new Z4GradientColor());
+    test_color2.drawCanvas("canvas2", new Z4GradientColor().setRipple(0.2));
+  }
+
+  private static void drawCanvas(String id, Z4GradientColor color) {
+    $Canvas canvas = ($Canvas) document.getElementById(id);
+
+    canvas.width = document.body.clientWidth / 2 - 100;
+    canvas.height = 100;
+
+    $OffscreenCanvas offscreen = new $OffscreenCanvas(canvas.width, canvas.height);
+    $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
+    for (int x = 0; x < canvas.width; x++) {
+      offscreenCtx.fillStyle = color.getZ4ColorAt(x / canvas.width, true, true).$getHEX();
+      offscreenCtx.fillRect(x, 0, 1, canvas.height);
+    }
+
+    $CanvasRenderingContext2D ctx = canvas.getContext("2d");
+    ctx.drawImage(offscreen, 0, 0);
   }
 
   private static String stringify(Object object) {
