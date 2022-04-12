@@ -26,6 +26,11 @@ public class test_color2 {
 
     test_color2.drawCanvas("canvas1", new Z4GradientColor());
     test_color2.drawCanvas("canvas2", new Z4GradientColor().setRipple(0.2));
+    test_color2.drawCanvas("canvas3", new Z4GradientColor().setRipple(0.4).addOrUpdateColor(0.5, 255 << 24 | 255 << 16));
+    test_color2.drawCanvas("canvas4", new Z4GradientColor().setRipple(1).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8));
+    test_color2.drawCanvas("canvas5", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8));
+    test_color2.drawCanvas("canvas6", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative());
+    test_color2.drawCanvas("canvas7", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative().inverted());
   }
 
   private static void drawCanvas(String id, Z4GradientColor color) {
