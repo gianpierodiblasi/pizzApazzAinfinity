@@ -13,14 +13,14 @@ class Z4Loader {
       let urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get("allFiles")) {
         let client = new XMLHttpRequest();
-        client.open("GET", "../../../../css_list.properties", false);
+        client.open("GET", "/css_list.properties", false);
         client.onreadystatechange = (event2) => {
           if (client.readyState === 4 && client.status === 200) {
             new String(client.responseText).split("\n").forEach(row => {
               if (row && !row.startsWith("#")) {
                 let cssRow = document.createElement("link");
                 cssRow.setAttribute("rel", "stylesheet");
-                cssRow.setAttribute("href", "../../../../" + row);
+                cssRow.setAttribute("href", "/" + row);
                 document.querySelector("head").appendChild(cssRow);
               }
             });
@@ -28,7 +28,7 @@ class Z4Loader {
           return null;
         };
         client.send();
-        client.open("GET", "../../../../js_list.properties", false);
+        client.open("GET", "/js_list.properties", false);
         client.onreadystatechange = (event2) => {
           if (client.readyState === 4 && client.status === 200) {
             let scripts = new String(client.responseText).split("\n");
@@ -40,10 +40,10 @@ class Z4Loader {
       } else {
         let cssBundle = document.createElement("link");
         cssBundle.setAttribute("rel", "stylesheet");
-        cssBundle.setAttribute("href", "../../../../build/bundle.min.css");
+        cssBundle.setAttribute("href", "/build/bundle.min.css");
         document.querySelector("head").appendChild(cssBundle);
         let scriptBundle = document.createElement("script");
-        scriptBundle.setAttribute("src", "../../../../build/bundle.min.js");
+        scriptBundle.setAttribute("src", "/build/bundle.min.js");
         scriptBundle.setAttribute("type", "text/javascript");
         scriptBundle.setAttribute("async", "false");
         scriptBundle.addEventListener("load", (event2) => Z4Loader.loadScript(jsFile));
@@ -59,7 +59,7 @@ class Z4Loader {
       if (row && !row.startsWith("#")) {
         let scriptRow = document.createElement("script");
         scriptRow.setAttribute("id", row.substring(row.lastIndexOf("/") + 1).toString());
-        scriptRow.setAttribute("src", "../../../../" + row);
+        scriptRow.setAttribute("src", "/" + row);
         scriptRow.setAttribute("type", "text/javascript");
         scriptRow.setAttribute("async", "false");
         scriptRow.addEventListener("load", (event) => Z4Loader.loadScripts(scripts.slice(1), jsFile));

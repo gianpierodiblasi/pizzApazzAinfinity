@@ -81,7 +81,7 @@ class Z4Setting {
    * @return The language
    */
   static  getLanguage() {
-    return language;
+    return Z4Setting.language;
   }
 
   /**

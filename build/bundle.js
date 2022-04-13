@@ -80,7 +80,7 @@ class Z4Setting {
    * @return The language
    */
   static  getLanguage() {
-    return language;
+    return Z4Setting.language;
   }
 
   /**
@@ -141,6 +141,67 @@ class Z4Setting {
   static  isProMode() {
     // JS equality for strings
     return Z4Setting.mode === "pro";
+  }
+
+  constructor() {
+  }
+}
+
+/**
+ * The message factory
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4MessageFactory {
+
+  static  MESSAGE = Z4MessageFactory.initMessages();
+
+  /**
+   * Returns a message
+   *
+   * @param key The message key
+   * @return The message value
+   */
+  static  get(key) {
+    return Z4MessageFactory.MESSAGE[key];
+  }
+
+  static  initMessages() {
+    let array = new Array();
+    let urlParams = new URLSearchParams(window.location.search);
+    let path = urlParams.get("allFiles") ? "/src/message/" : "/build/message/";
+    let file = "message-" + Z4Setting.getLanguage() + ".properties";
+    let client = new XMLHttpRequest();
+    client.open("GET", path + file, false);
+    client.onreadystatechange = (event2) => {
+      if (client.readyState === 4 && client.status === 200) {
+        Z4MessageFactory.readMessages(array, client.responseText);
+      }
+      return null;
+    };
+    client.send();
+    if (Object.keys(array).length === 0) {
+      file = "message-en.properties";
+      let clientEN = new XMLHttpRequest();
+      clientEN.open("GET", path + file, false);
+      clientEN.onreadystatechange = (event2) => {
+        if (clientEN.readyState === 4 && clientEN.status === 200) {
+          Z4MessageFactory.readMessages(array, clientEN.responseText);
+        }
+        return null;
+      };
+      clientEN.send();
+    }
+    return array;
+  }
+
+  static  readMessages(array, responseText) {
+    new String(responseText).split("\n").forEach(row => {
+      if (row && !row.startsWith("#")) {
+        let keyValue = row.split("=");
+        array[keyValue[0].trim()] = keyValue[1].trim();
+      }
+    });
   }
 
   constructor() {

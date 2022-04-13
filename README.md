@@ -50,6 +50,7 @@ improve my code I will be happy to do it, but... please don't focus your attenti
 pizzApazzA is an idea, not the code to realize it.
 
 ## Dependencies
+- Bootstrap - [link](https://getbootstrap.com)
 - Bezier.js - [link](https://pomax.github.io/bezierjs/)
 
 ## Build

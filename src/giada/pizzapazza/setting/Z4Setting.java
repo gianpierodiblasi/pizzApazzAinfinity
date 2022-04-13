@@ -92,7 +92,7 @@ public class Z4Setting {
    * @return The language
    */
   public static String getLanguage() {
-    return language;
+    return Z4Setting.language;
   }
 
   /**
