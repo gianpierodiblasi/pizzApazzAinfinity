@@ -1,11 +1,13 @@
 package giada.pizzapazza.setting;
 
 import static def.dom.Globals.window;
+import def.dom.HTMLElement;
 import def.dom.XMLHttpRequest;
 import def.js.Array;
 import def.js.Object;
 import giada.pizzapazza.Z4Loader;
 import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.document;
 import simulation.js.$String;
 import simulation.js.$URLSearchParams;
 
@@ -16,7 +18,7 @@ import simulation.js.$URLSearchParams;
  */
 public class Z4MessageFactory {
 
-  private final static Array<def.js.String> MESSAGE = Z4MessageFactory.initMessages();
+  private static Array<def.js.String> MESSAGE = Z4MessageFactory.initMessages();
 
   /**
    * Returns a message
@@ -26,6 +28,14 @@ public class Z4MessageFactory {
    */
   public static String get(String key) {
     return Z4MessageFactory.MESSAGE.$get(key);
+  }
+
+  /**
+   * Method to call when the language changes
+   */
+  public static void changingLanguage() {
+    Z4MessageFactory.MESSAGE = Z4MessageFactory.initMessages();
+    document.querySelectorAll("[data-token-lang-inner_text]").forEach(element -> ((HTMLElement) element).innerText = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text")));
   }
 
   private static Array<def.js.String> initMessages() {
@@ -45,6 +55,7 @@ public class Z4MessageFactory {
     client.send();
 
     if (Object.keys(array).length == 0) {
+      Z4Setting.setLanguage("en");
       file = "message-en.properties";
 
       XMLHttpRequest clientEN = new XMLHttpRequest();

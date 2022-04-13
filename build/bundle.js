@@ -166,6 +166,14 @@ class Z4MessageFactory {
     return Z4MessageFactory.MESSAGE[key];
   }
 
+  /**
+   * Method to call when the language changes
+   */
+  static  changingLanguage() {
+    Z4MessageFactory.MESSAGE = Z4MessageFactory.initMessages();
+    document.querySelectorAll("[data-token-lang-inner_text]").forEach(element => (element).innerText = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text")));
+  }
+
   static  initMessages() {
     let array = new Array();
     let urlParams = new URLSearchParams(window.location.search);
@@ -181,6 +189,7 @@ class Z4MessageFactory {
     };
     client.send();
     if (Object.keys(array).length === 0) {
+      Z4Setting.setLanguage("en");
       file = "message-en.properties";
       let clientEN = new XMLHttpRequest();
       clientEN.open("GET", path + file, false);
