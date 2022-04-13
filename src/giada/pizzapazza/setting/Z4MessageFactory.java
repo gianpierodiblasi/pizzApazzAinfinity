@@ -4,6 +4,7 @@ import static def.dom.Globals.window;
 import def.dom.XMLHttpRequest;
 import def.js.Array;
 import def.js.Object;
+import giada.pizzapazza.Z4Loader;
 import static simulation.js.$Globals.$exists;
 import simulation.js.$String;
 import simulation.js.$URLSearchParams;
@@ -30,7 +31,7 @@ public class Z4MessageFactory {
   private static Array<def.js.String> initMessages() {
     Array<def.js.String> array = new Array<>();
     $URLSearchParams urlParams = new $URLSearchParams(window.location.search);
-    String path = urlParams.get("allFiles") ? "/src/message/" : "/build/message/";
+    String path = Z4Loader.UP + (urlParams.get("allFiles") ? "/src/message/" : "/build/message/");
     String file = "message-" + Z4Setting.getLanguage() + ".properties";
 
     XMLHttpRequest client = new XMLHttpRequest();

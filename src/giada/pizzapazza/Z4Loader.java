@@ -17,34 +17,35 @@ import simulation.js.$URLSearchParams;
 public class Z4Loader {
 
   /**
+   * The up path
+   */
+  public static String UP;
+
+  /**
    * The onLoad method
    *
    * @param level The level where the onLoad starts
    */
   public static void onLoad(int level) {
-    String up = "";
+    Z4Loader.UP = "";
     for (int i = 0; i < level; i++) {
-      up += "../";
+      Z4Loader.UP += "../";
     }
 
-    Z4Loader.onLoadInternal(up);
-  }
-
-  private static void onLoadInternal(String up) {
     window.onload = (event) -> {
       final String jsFile = window.location.href.substring(window.location.href.lastIndexOf('/') + 1).replace(".html", ".js");
 
       $URLSearchParams urlParams = new $URLSearchParams(window.location.search);
       if (urlParams.get("allFiles")) {
         XMLHttpRequest client = new XMLHttpRequest();
-        client.open("GET", up + "css_list.properties", false);
+        client.open("GET", Z4Loader.UP + "css_list.properties", false);
         client.onreadystatechange = (event2) -> {
           if (client.readyState == 4 && client.status == 200) {
             new $String(client.responseText).split("\n").forEach(row -> {
               if ($exists(row) && !row.startsWith("#")) {
                 HTMLElement cssRow = document.createElement("link");
                 cssRow.setAttribute("rel", "stylesheet");
-                cssRow.setAttribute("href", up + "" + row);
+                cssRow.setAttribute("href", Z4Loader.UP + "" + row);
                 document.querySelector("head").appendChild(cssRow);
               }
             });
@@ -53,11 +54,11 @@ public class Z4Loader {
         };
         client.send();
 
-        client.open("GET", up + "js_list.properties", false);
+        client.open("GET", Z4Loader.UP + "js_list.properties", false);
         client.onreadystatechange = (event2) -> {
           if (client.readyState == 4 && client.status == 200) {
             Array<def.js.String> scripts = new $String(client.responseText).split("\n");
-            Z4Loader.loadScripts(scripts, jsFile.substring(0, jsFile.lastIndexOf('?')), up);
+            Z4Loader.loadScripts(scripts, jsFile.substring(0, jsFile.lastIndexOf('?')));
           }
           return null;
         };
@@ -65,11 +66,11 @@ public class Z4Loader {
       } else {
         HTMLElement cssBundle = document.createElement("link");
         cssBundle.setAttribute("rel", "stylesheet");
-        cssBundle.setAttribute("href", up + "build/bundle.min.css");
+        cssBundle.setAttribute("href", Z4Loader.UP + "build/bundle.min.css");
         document.querySelector("head").appendChild(cssBundle);
 
         HTMLElement scriptBundle = document.createElement("script");
-        scriptBundle.setAttribute("src", up + "build/bundle.min.js");
+        scriptBundle.setAttribute("src", Z4Loader.UP + "build/bundle.min.js");
         scriptBundle.setAttribute("type", "text/javascript");
         scriptBundle.setAttribute("async", "false");
         scriptBundle.addEventListener("load", (event2) -> Z4Loader.loadScript(jsFile));
@@ -80,20 +81,20 @@ public class Z4Loader {
     };
   }
 
-  private static void loadScripts(Array<def.js.String> scripts, String jsFile, String up) {
+  private static void loadScripts(Array<def.js.String> scripts, String jsFile) {
     if (scripts.length > 0) {
       def.js.String row = scripts.$get(0);
       if ($exists(row) && !row.startsWith("#")) {
         HTMLElement scriptRow = document.createElement("script");
         scriptRow.setAttribute("id", row.substring(row.lastIndexOf("/") + 1).toString());
-        scriptRow.setAttribute("src", up + "" + row);
+        scriptRow.setAttribute("src", Z4Loader.UP + "" + row);
         scriptRow.setAttribute("type", "text/javascript");
         scriptRow.setAttribute("async", "false");
-        scriptRow.addEventListener("load", (event) -> Z4Loader.loadScripts(scripts.slice(1), jsFile, up));
+        scriptRow.addEventListener("load", (event) -> Z4Loader.loadScripts(scripts.slice(1), jsFile));
 
         document.querySelector("head").appendChild(scriptRow);
       } else {
-        Z4Loader.loadScripts(scripts.slice(1), jsFile, up);
+        Z4Loader.loadScripts(scripts.slice(1), jsFile);
       }
     } else {
       Z4Loader.loadScript(jsFile);
