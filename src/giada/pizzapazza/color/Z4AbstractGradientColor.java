@@ -111,6 +111,15 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
   }
 
   /**
+   * Returns the ripple
+   *
+   * @return The ripple (in the range [0,1])
+   */
+  public double getRipple() {
+    return this.ripple;
+  }
+
+  /**
    * Sets the mirrored
    *
    * @param mirrored true if the color is mirrored, false otherwise
@@ -120,6 +129,15 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
   public T setMirrored(boolean mirrored) {
     this.mirrored = mirrored;
     return (T) this;
+  }
+
+  /**
+   * Returns if the color is mirrored
+   *
+   * @return true if the color is mirrored, false otherwise
+   */
+  public boolean isMirrored() {
+    return this.mirrored;
   }
 
   /**
@@ -173,8 +191,12 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
               filter((z4StopColor, index, array) -> pos == 0 ? z4StopColor.getPosition() > pos : z4StopColor.getPosition() >= pos).
               reduce((found, current, index, array) -> !$exists(found) ? current : found.getPosition() < current.getPosition() ? found : current);
 
-      double div = (position - before.getPosition()) / (after.getPosition() - before.getPosition());
-      return Z4Color.fromZ4AbstractColors(before, after, div);
+      if (before == after) {
+        return before;
+      } else {
+        double div = (position - before.getPosition()) / (after.getPosition() - before.getPosition());
+        return Z4Color.fromZ4AbstractColors(before, after, div);
+      }
     } else {
       return null;
     }

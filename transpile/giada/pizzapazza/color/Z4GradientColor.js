@@ -42,6 +42,6 @@ class Z4GradientColor extends Z4AbstractGradientColor {
       let color = Z4Color.fromZ4AbstractColors(z4StopColorBefore, z4StopColorAfter, div);
       z4GradientColor.addOrUpdateColor(z4StopColorBefore.getPosition(), color.getARGB());
     });
-    return z4GradientColor;
+    return z4GradientColor.setRipple(before.getRipple()).setMirrored(before.isMirrored());
   }
 }

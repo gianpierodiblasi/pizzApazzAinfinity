@@ -195,9 +195,12 @@ public class Z4TemporalColor {
               filter((z4StopGradientColor, index, array) -> pos == 0 ? z4StopGradientColor.getPosition() > pos : z4StopGradientColor.getPosition() >= pos).
               reduce((found, current, index, array) -> !$exists(found) ? current : found.getPosition() < current.getPosition() ? found : current);
 
-      double div = (pos - before.getPosition()) / (after.getPosition() - before.getPosition());
-
-      return Z4GradientColor.fromZ4AbstractGradientColors(before, after, div);
+      if (before == after) {
+        return before;
+      } else {
+        double div = (pos - before.getPosition()) / (after.getPosition() - before.getPosition());
+        return Z4GradientColor.fromZ4AbstractGradientColors(before, after, div);
+      }
     } else {
       return null;
     }

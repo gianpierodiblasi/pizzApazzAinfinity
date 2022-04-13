@@ -182,8 +182,12 @@ class Z4TemporalColor {
       let pos = position;
       let before = this.z4StopGradientColors.filter((z4StopGradientColor, index, array) => pos === 1 ? z4StopGradientColor.getPosition() < pos : z4StopGradientColor.getPosition() <= pos).reduce((found, current, index, array) => !found ? current : found.getPosition() > current.getPosition() ? found : current);
       let after = this.z4StopGradientColors.filter((z4StopGradientColor, index, array) => pos === 0 ? z4StopGradientColor.getPosition() > pos : z4StopGradientColor.getPosition() >= pos).reduce((found, current, index, array) => !found ? current : found.getPosition() < current.getPosition() ? found : current);
-      let div = (pos - before.getPosition()) / (after.getPosition() - before.getPosition());
-      return Z4GradientColor.fromZ4AbstractGradientColors(before, after, div);
+      if (before === after) {
+        return before;
+      } else {
+        let div = (pos - before.getPosition()) / (after.getPosition() - before.getPosition());
+        return Z4GradientColor.fromZ4AbstractGradientColors(before, after, div);
+      }
     } else {
       return null;
     }

@@ -978,6 +978,15 @@ class Z4AbstractGradientColor {
   }
 
   /**
+   * Returns the ripple
+   *
+   * @return The ripple (in the range [0,1])
+   */
+   getRipple() {
+    return this.ripple;
+  }
+
+  /**
    * Sets the mirrored
    *
    * @param mirrored true if the color is mirrored, false otherwise
@@ -986,6 +995,15 @@ class Z4AbstractGradientColor {
    setMirrored(mirrored) {
     this.mirrored = mirrored;
     return this;
+  }
+
+  /**
+   * Returns if the color is mirrored
+   *
+   * @return true if the color is mirrored, false otherwise
+   */
+   isMirrored() {
+    return this.mirrored;
   }
 
   /**
@@ -1030,8 +1048,12 @@ class Z4AbstractGradientColor {
       let pos = position;
       let before = this.z4StopColors.filter((z4StopColor, index, array) => pos === 1 ? z4StopColor.getPosition() < pos : z4StopColor.getPosition() <= pos).reduce((found, current, index, array) => !found ? current : found.getPosition() > current.getPosition() ? found : current);
       let after = this.z4StopColors.filter((z4StopColor, index, array) => pos === 0 ? z4StopColor.getPosition() > pos : z4StopColor.getPosition() >= pos).reduce((found, current, index, array) => !found ? current : found.getPosition() < current.getPosition() ? found : current);
-      let div = (position - before.getPosition()) / (after.getPosition() - before.getPosition());
-      return Z4Color.fromZ4AbstractColors(before, after, div);
+      if (before === after) {
+        return before;
+      } else {
+        let div = (position - before.getPosition()) / (after.getPosition() - before.getPosition());
+        return Z4Color.fromZ4AbstractColors(before, after, div);
+      }
     } else {
       return null;
     }
@@ -1127,7 +1149,7 @@ class Z4GradientColor extends Z4AbstractGradientColor {
       let color = Z4Color.fromZ4AbstractColors(z4StopColorBefore, z4StopColorAfter, div);
       z4GradientColor.addOrUpdateColor(z4StopColorBefore.getPosition(), color.getARGB());
     });
-    return z4GradientColor;
+    return z4GradientColor.setRipple(before.getRipple()).setMirrored(before.isMirrored());
   }
 }
 
@@ -1366,8 +1388,12 @@ class Z4TemporalColor {
       let pos = position;
       let before = this.z4StopGradientColors.filter((z4StopGradientColor, index, array) => pos === 1 ? z4StopGradientColor.getPosition() < pos : z4StopGradientColor.getPosition() <= pos).reduce((found, current, index, array) => !found ? current : found.getPosition() > current.getPosition() ? found : current);
       let after = this.z4StopGradientColors.filter((z4StopGradientColor, index, array) => pos === 0 ? z4StopGradientColor.getPosition() > pos : z4StopGradientColor.getPosition() >= pos).reduce((found, current, index, array) => !found ? current : found.getPosition() < current.getPosition() ? found : current);
-      let div = (pos - before.getPosition()) / (after.getPosition() - before.getPosition());
-      return Z4GradientColor.fromZ4AbstractGradientColors(before, after, div);
+      if (before === after) {
+        return before;
+      } else {
+        let div = (pos - before.getPosition()) / (after.getPosition() - before.getPosition());
+        return Z4GradientColor.fromZ4AbstractGradientColors(before, after, div);
+      }
     } else {
       return null;
     }
