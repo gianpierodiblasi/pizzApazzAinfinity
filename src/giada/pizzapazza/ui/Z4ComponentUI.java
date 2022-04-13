@@ -8,7 +8,6 @@ import def.js.Date;
 import giada.pizzapazza.Z4Loader;
 import simulation.dom.$HTMLElement;
 import simulation.js.$Apply_1_Void;
-import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.parseInt;
 import simulation.js.$URLSearchParams;
@@ -22,11 +21,12 @@ import simulation.js.$URLSearchParams;
 public abstract class Z4ComponentUI<T> {
 
   private final HTMLElement html;
-  
+
   /**
    * The onchange function
    */
-  public $Apply_1_Void<T> onchange;
+  public $Apply_1_Void<T> onchange = element -> {
+  };
 
   /**
    * Loads an HTML file

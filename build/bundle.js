@@ -221,7 +221,8 @@ class Z4ComponentUI {
   /**
    * The onchange function
    */
-   onchange = null;
+   onchange = element => {
+  };
 
   /**
    * Loads an HTML file
@@ -1568,13 +1569,13 @@ class Z4ColorUI extends Z4ComponentUI {
     this.colorLabel.innerText = Z4MessageFactory.get("COLOR");
     this.querySelector(".opacity-color-label").innerText = Z4MessageFactory.get("OPACITY");
     this.color.onchange = (event) => {
-      this.onchange.apply(this.getZ4Color());
+      this.onchange(this.getZ4Color());
       return null;
     };
     let formRangeLabel = this.querySelector(".form-range-label");
     this.formRange.oninput = (event) => {
       formRangeLabel.innerText = this.formRange.value;
-      this.onchange.apply(this.getZ4Color());
+      this.onchange(this.getZ4Color());
       return null;
     };
   }

@@ -13,7 +13,8 @@ class Z4ComponentUI {
   /**
    * The onchange function
    */
-   onchange = null;
+   onchange = element => {
+  };
 
   /**
    * Loads an HTML file

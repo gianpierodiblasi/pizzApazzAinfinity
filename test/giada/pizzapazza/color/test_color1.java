@@ -15,7 +15,9 @@ import static simulation.js.$Globals.$typeof;
 public class test_color1 {
 
   public static void onLoad() {
-    new Z4ColorUI().appendTo(document.querySelector("#test10")).onchange = (z4Color) -> document.getElementById("test11").textContent = test_color1.stringify(z4Color);
+    Z4ColorUI ui = new Z4ColorUI();
+    ui.appendTo(document.querySelector("#test10")).onchange = (z4Color) -> document.getElementById("test11").textContent = test_color1.stringify(z4Color);
+    document.getElementById("test11").textContent = test_color1.stringify(ui.getZ4Color());
 
     document.getElementById("test1").textContent = "new Z4Color(0,0,0,0) => " + test_color1.stringify(new Z4Color(0, 0, 0, 0));
     document.getElementById("test2").textContent = "new Z4Color(0,255,0,0) => " + test_color1.stringify(new Z4Color(0, 255, 0, 0));
