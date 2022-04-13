@@ -1,11 +1,13 @@
 package giada.pizzapazza.ui;
 
 import def.dom.Element;
+import def.dom.Event;
 import static def.dom.Globals.window;
 import def.dom.HTMLElement;
 import def.dom.XMLHttpRequest;
 import def.js.Date;
 import giada.pizzapazza.Z4Loader;
+import java.util.function.Consumer;
 import simulation.dom.$HTMLElement;
 import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.parseInt;
@@ -22,6 +24,7 @@ public abstract class Z4ComponentUI {
 
   /**
    * Loads an HTML file
+   *
    * @param html The HTML file
    * @return The HTML file
    */
@@ -53,6 +56,7 @@ public abstract class Z4ComponentUI {
 
   /**
    * Selects a child of this component
+   *
    * @param selector The selector
    * @return The child of this component
    */
