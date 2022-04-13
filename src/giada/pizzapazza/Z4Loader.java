@@ -39,30 +39,21 @@ public class Z4Loader {
       if (urlParams.get("allFiles")) {
         XMLHttpRequest client = new XMLHttpRequest();
         client.open("GET", Z4Loader.UP + "css_list.properties", false);
-        client.onreadystatechange = (event2) -> {
-          if (client.readyState == 4 && client.status == 200) {
-            new $String(client.responseText).split("\n").forEach(row -> {
-              if ($exists(row) && !row.startsWith("#")) {
-                HTMLElement cssRow = document.createElement("link");
-                cssRow.setAttribute("rel", "stylesheet");
-                cssRow.setAttribute("href", Z4Loader.UP + "" + row);
-                document.querySelector("head").appendChild(cssRow);
-              }
-            });
-          }
-          return null;
-        };
         client.send();
 
-        client.open("GET", Z4Loader.UP + "js_list.properties", false);
-        client.onreadystatechange = (event2) -> {
-          if (client.readyState == 4 && client.status == 200) {
-            Array<def.js.String> scripts = new $String(client.responseText).split("\n");
-            Z4Loader.loadScripts(scripts, jsFile.substring(0, jsFile.lastIndexOf('?')));
+        new $String(client.responseText).split("\n").forEach(row -> {
+          if ($exists(row) && !row.startsWith("#")) {
+            HTMLElement cssRow = document.createElement("link");
+            cssRow.setAttribute("rel", "stylesheet");
+            cssRow.setAttribute("href", Z4Loader.UP + "" + row);
+            document.querySelector("head").appendChild(cssRow);
           }
-          return null;
-        };
+        });
+
+        client.open("GET", Z4Loader.UP + "js_list.properties", false);
         client.send();
+        Array<def.js.String> scripts = new $String(client.responseText).split("\n");
+        Z4Loader.loadScripts(scripts, jsFile.substring(0, jsFile.lastIndexOf('?')));
       } else {
         HTMLElement cssBundle = document.createElement("link");
         cssBundle.setAttribute("rel", "stylesheet");

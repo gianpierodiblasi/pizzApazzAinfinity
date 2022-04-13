@@ -28,29 +28,19 @@ class Z4Loader {
       if (urlParams.get("allFiles")) {
         let client = new XMLHttpRequest();
         client.open("GET", Z4Loader.UP + "css_list.properties", false);
-        client.onreadystatechange = (event2) => {
-          if (client.readyState === 4 && client.status === 200) {
-            new String(client.responseText).split("\n").forEach(row => {
-              if (row && !row.startsWith("#")) {
-                let cssRow = document.createElement("link");
-                cssRow.setAttribute("rel", "stylesheet");
-                cssRow.setAttribute("href", Z4Loader.UP + "" + row);
-                document.querySelector("head").appendChild(cssRow);
-              }
-            });
-          }
-          return null;
-        };
         client.send();
+        new String(client.responseText).split("\n").forEach(row => {
+          if (row && !row.startsWith("#")) {
+            let cssRow = document.createElement("link");
+            cssRow.setAttribute("rel", "stylesheet");
+            cssRow.setAttribute("href", Z4Loader.UP + "" + row);
+            document.querySelector("head").appendChild(cssRow);
+          }
+        });
         client.open("GET", Z4Loader.UP + "js_list.properties", false);
-        client.onreadystatechange = (event2) => {
-          if (client.readyState === 4 && client.status === 200) {
-            let scripts = new String(client.responseText).split("\n");
-            Z4Loader.loadScripts(scripts, jsFile.substring(0, jsFile.lastIndexOf('?')));
-          }
-          return null;
-        };
         client.send();
+        let scripts = new String(client.responseText).split("\n");
+        Z4Loader.loadScripts(scripts, jsFile.substring(0, jsFile.lastIndexOf('?')));
       } else {
         let cssBundle = document.createElement("link");
         cssBundle.setAttribute("rel", "stylesheet");

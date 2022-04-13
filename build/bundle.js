@@ -209,6 +209,54 @@ class Z4MessageFactory {
 }
 
 /**
+ * The abstract class of all UI components
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4ComponentUI {
+
+   html = null;
+
+  /**
+   * Loads an HTML file
+   * @param html The HTML file
+   * @return The HTML file
+   */
+  static  loadHTML(html) {
+    let urlParams = new URLSearchParams(window.location.search);
+    let path = Z4Loader.UP + (urlParams.get("allFiles") ? "src/" : "build/html/");
+    let client = new XMLHttpRequest();
+    client.open("GET", path + html, false);
+    client.send();
+    return client.responseText;
+  }
+
+  constructor(ui) {
+    this.html = document.createElement("div");
+    this.html.setAttribute("id", new Date().getTime() + "-" + parseInt(1000 * Math.random()));
+    this.html.innerHTML = ui;
+  }
+
+  /**
+   * Appends this component to its parent
+   *
+   * @param parent The parent
+   */
+   appendTo(parent) {
+    parent.appendChild(this.html);
+  }
+
+  /**
+   * Selects a child of this component
+   * @param selector The selector
+   * @return The child of this component
+   */
+   querySelector(selector) {
+    return this.html.querySelector(selector);
+  }
+}
+
+/**
  * The utility library for math
  *
  * @author gianpiero.di.blasi
@@ -1479,5 +1527,51 @@ class Z4TemporalColor {
     } else {
       return null;
     }
+  }
+}
+
+/**
+ * The component to show a color
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4ColorUI extends Z4ComponentUI {
+
+   colorLabel = this.querySelector(".color-label");
+
+   color = this.querySelector(".form-control");
+
+   formRange = this.querySelector(".form-range");
+
+  static  UI = Z4ComponentUI.loadHTML("giada/pizzapazza/color/ui/Z4ColorUI.html");
+
+  constructor() {
+    super(Z4ColorUI.UI);
+    this.colorLabel.innerText = Z4MessageFactory.get("COLOR");
+    this.querySelector(".opacity-color-label").innerText = Z4MessageFactory.get("OPACITY");
+    let formRangeLabel = this.querySelector(".form-range-label");
+    this.formRange.oninput = (event) => {
+      formRangeLabel.innerText = this.formRange.value;
+      return null;
+    };
+  }
+
+  /**
+   * Sets the token of the color label
+   *
+   * @param token The token of the color label
+   */
+   setColorLabel(token) {
+    this.colorLabel.setAttribute("data-token-lang", token);
+    this.colorLabel.innerText = Z4MessageFactory.get(token);
+  }
+
+  /**
+   * Returns the Z4Color
+   *
+   * @return The Z4Color
+   */
+   getZ4Color() {
+    return Z4Color.fromHEX(this.color.value, this.formRange.valueAsNumber);
   }
 }
