@@ -6,7 +6,7 @@
 class test_color1 {
 
   static  onLoad() {
-    new Z4ColorUI().appendTo(document.querySelector("#test10"));
+    new Z4ColorUI().appendTo(document.querySelector("#test10")).onchange = (z4Color) => document.getElementById("test11").textContent = test_color1.stringify(z4Color);
     document.getElementById("test1").textContent = "new Z4Color(0,0,0,0) => " + test_color1.stringify(new Z4Color(0, 0, 0, 0));
     document.getElementById("test2").textContent = "new Z4Color(0,255,0,0) => " + test_color1.stringify(new Z4Color(0, 255, 0, 0));
     document.getElementById("test3").textContent = "new Z4Color(255,255,255,255) => " + test_color1.stringify(new Z4Color(255, 255, 255, 255));

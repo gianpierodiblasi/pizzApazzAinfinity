@@ -1,14 +1,14 @@
 package giada.pizzapazza.ui;
 
 import def.dom.Element;
-import def.dom.Event;
 import static def.dom.Globals.window;
 import def.dom.HTMLElement;
 import def.dom.XMLHttpRequest;
 import def.js.Date;
 import giada.pizzapazza.Z4Loader;
-import java.util.function.Consumer;
 import simulation.dom.$HTMLElement;
+import simulation.js.$Apply_1_Void;
+import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.parseInt;
 import simulation.js.$URLSearchParams;
@@ -16,11 +16,17 @@ import simulation.js.$URLSearchParams;
 /**
  * The abstract class of all UI components
  *
+ * @param <T>
  * @author gianpiero.di.blasi
  */
-public abstract class Z4ComponentUI {
+public abstract class Z4ComponentUI<T> {
 
   private final HTMLElement html;
+  
+  /**
+   * The onchange function
+   */
+  public $Apply_1_Void<T> onchange;
 
   /**
    * Loads an HTML file
@@ -28,7 +34,7 @@ public abstract class Z4ComponentUI {
    * @param html The HTML file
    * @return The HTML file
    */
-  public static String loadHTML(String html) {
+  protected static String loadHTML(String html) {
     $URLSearchParams urlParams = new $URLSearchParams(window.location.search);
     String path = Z4Loader.UP + (urlParams.get("allFiles") ? "src/" : "build/html/");
 
@@ -39,19 +45,15 @@ public abstract class Z4ComponentUI {
     return client.responseText;
   }
 
-  public Z4ComponentUI(String ui) {
+  /**
+   * Creates a Z4ComponentUI
+   *
+   * @param ui The HTML
+   */
+  protected Z4ComponentUI(String ui) {
     this.html = document.createElement("div");
     this.html.setAttribute("id", new Date().getTime() + "-" + parseInt(1000 * Math.random()));
     this.html.innerHTML = ui;
-  }
-
-  /**
-   * Appends this component to its parent
-   *
-   * @param parent The parent
-   */
-  public void appendTo(Element parent) {
-    parent.appendChild(this.html);
   }
 
   /**
@@ -62,5 +64,16 @@ public abstract class Z4ComponentUI {
    */
   protected $HTMLElement querySelector(String selector) {
     return ($HTMLElement) this.html.querySelector(selector);
+  }
+
+  /**
+   * Appends this Z4ComponentUI to its parent
+   *
+   * @param parent The parent
+   * @return This Z4ComponentUI
+   */
+  public Z4ComponentUI<T> appendTo(Element parent) {
+    parent.appendChild(this.html);
+    return this;
   }
 }

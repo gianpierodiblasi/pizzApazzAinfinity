@@ -15,13 +15,21 @@ class Z4ColorUI extends Z4ComponentUI {
 
   static  UI = Z4ComponentUI.loadHTML("giada/pizzapazza/color/ui/Z4ColorUI.html");
 
+  /**
+   * Creates a Z4ColorUI
+   */
   constructor() {
     super(Z4ColorUI.UI);
     this.colorLabel.innerText = Z4MessageFactory.get("COLOR");
     this.querySelector(".opacity-color-label").innerText = Z4MessageFactory.get("OPACITY");
+    this.color.onchange = (event) => {
+      this.onchange.apply(this.getZ4Color());
+      return null;
+    };
     let formRangeLabel = this.querySelector(".form-range-label");
     this.formRange.oninput = (event) => {
       formRangeLabel.innerText = this.formRange.value;
+      this.onchange.apply(this.getZ4Color());
       return null;
     };
   }
@@ -30,10 +38,12 @@ class Z4ColorUI extends Z4ComponentUI {
    * Sets the token of the color label
    *
    * @param token The token of the color label
+   * @return This Z4ColorUI
    */
    setColorLabel(token) {
     this.colorLabel.setAttribute("data-token-lang", token);
     this.colorLabel.innerText = Z4MessageFactory.get(token);
+    return this;
   }
 
   /**

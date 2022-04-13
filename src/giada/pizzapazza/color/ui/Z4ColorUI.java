@@ -10,7 +10,7 @@ import simulation.dom.$HTMLElement;
  *
  * @author gianpiero.di.blasi
  */
-public class Z4ColorUI extends Z4ComponentUI {
+public class Z4ColorUI extends Z4ComponentUI<Z4Color> {
 
   private final $HTMLElement colorLabel = this.querySelector(".color-label");
   private final $HTMLElement color = this.querySelector(".form-control");
@@ -18,15 +18,24 @@ public class Z4ColorUI extends Z4ComponentUI {
 
   private final static String UI = Z4ComponentUI.loadHTML("giada/pizzapazza/color/ui/Z4ColorUI.html");
 
+  /**
+   * Creates a Z4ColorUI
+   */
   public Z4ColorUI() {
     super(Z4ColorUI.UI);
 
     this.colorLabel.innerText = Z4MessageFactory.get("COLOR");
     this.querySelector(".opacity-color-label").innerText = Z4MessageFactory.get("OPACITY");
 
+    this.color.onchange = (event) -> {
+      this.onchange.$apply(this.getZ4Color());
+      return null;
+    };
+
     $HTMLElement formRangeLabel = this.querySelector(".form-range-label");
     this.formRange.oninput = (event) -> {
       formRangeLabel.innerText = this.formRange.value;
+      this.onchange.$apply(this.getZ4Color());
       return null;
     };
   }
@@ -35,10 +44,12 @@ public class Z4ColorUI extends Z4ComponentUI {
    * Sets the token of the color label
    *
    * @param token The token of the color label
+   * @return This Z4ColorUI
    */
-  public void setColorLabel(String token) {
+  public Z4ColorUI setColorLabel(String token) {
     this.colorLabel.setAttribute("data-token-lang", token);
     this.colorLabel.innerText = Z4MessageFactory.get(token);
+    return this;
   }
 
   /**
