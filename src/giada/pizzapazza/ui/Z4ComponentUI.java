@@ -20,7 +20,10 @@ import simulation.js.$URLSearchParams;
  */
 public abstract class Z4ComponentUI<T> {
 
-  private final HTMLElement html;
+  /**
+   * The HTML
+   */
+  protected final HTMLElement html;
 
   /**
    * The onchange function

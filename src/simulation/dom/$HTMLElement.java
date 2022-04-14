@@ -11,4 +11,5 @@ public class $HTMLElement extends HTMLElement {
 
   public double valueAsNumber;
   public String value;
+  public boolean checked;
 }

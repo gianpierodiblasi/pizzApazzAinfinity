@@ -2,6 +2,7 @@ package giada.pizzapazza.color;
 
 import def.js.Array;
 import def.js.JSON;
+import giada.pizzapazza.color.ui.Z4GradientColorUI;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.setting.Z4Setting;
 import java.util.function.BiFunction;
@@ -25,14 +26,14 @@ public class test_color2 {
       Z4MessageFactory.changingLanguage();
       return null;
     };
-    
+
     document.$getElementById("mode").value = Z4Setting.getMode();
     document.$getElementById("mode").onchange = (event) -> {
       Z4Setting.setMode(document.$getElementById("mode").value);
       test_color2.drawAll();
       return null;
     };
-    
+
     document.getElementById("test1").textContent = "new Z4GradientColor() => " + test_color2.stringify(new Z4GradientColor());
     document.getElementById("test2").textContent = "new Z4GradientColor().addOrUpdateColor(0,65535) => " + test_color2.stringify(new Z4GradientColor().addOrUpdateColor(0, 65535));
     document.getElementById("test3").textContent = "new Z4GradientColor().addOrUpdateColor(0.3,65535).move(0.3,0.4) => " + test_color2.stringify(new Z4GradientColor().addOrUpdateColor(0.3, 65535).move(0.3, 0.4));
@@ -41,6 +42,10 @@ public class test_color2 {
     document.getElementById("test6").textContent = "new Z4GradientColor().setRipple(0.2).getZ4ColorAt(0.75,true,false) => " + test_color2.stringify(new Z4GradientColor().setRipple(0.2).getZ4ColorAt(0.75, true, false));
 
     test_color2.drawAll();
+
+    Z4GradientColorUI ui = new Z4GradientColorUI();
+    ui.appendTo(document.querySelector("#test7")).onchange = (z4GradientColor) -> document.getElementById("test8").textContent = test_color2.stringify(z4GradientColor);
+    document.getElementById("test8").textContent = test_color2.stringify(ui.getZ4GradientColor());
   }
 
   private static void drawAll() {
@@ -57,9 +62,6 @@ public class test_color2 {
     test_color2.fillCanvas("canvas10", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative().inverted(), 2);
     test_color2.fillCanvas("canvas11", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative().inverted(), 3);
     test_color2.setCanvas("canvas12");
-
-    test_color2.drawCanvas2("canvas13", "slider1", new Z4GradientColor());
-    test_color2.drawCanvas2("canvas14", "slider2", new Z4GradientColor().addOrUpdateColor(0.5, 255 << 24 | 255 << 16));
   }
 
   private static void setCanvas(String id) {
@@ -82,15 +84,6 @@ public class test_color2 {
 
     $CanvasRenderingContext2D ctx = canvas.getContext("2d");
     ctx.drawImage(offscreen, 0, 0);
-  }
-
-  private static void drawCanvas2(String canvas, String slider, Z4GradientColor color) {
-    test_color2.drawCanvas(canvas, color);
-    document.getElementById(slider).oninput = (event) -> {
-      color.setRipple(document.$getElementById(slider).valueAsNumber);
-      test_color2.drawCanvas(canvas, color);
-      return null;
-    };
   }
 
   private static void fillCanvas(String id, Z4GradientColor color, int style) {

@@ -1,4 +1,4 @@
-/* global Array, JSON, OffscreenCanvas, Z4GradientColor, Z4MessageFactory, Z4Setting */
+/* global Array, JSON, OffscreenCanvas, Z4GradientColor, Z4GradientColorUI, Z4MessageFactory, Z4Setting */
 
 /**
  * @author gianpiero.di.blasi
@@ -25,6 +25,9 @@ class test_color2 {
     document.getElementById("test5").textContent = "new Z4GradientColor().getZ4ColorAt(0.5,false,false) => " + test_color2.stringify(new Z4GradientColor().getZ4ColorAt(0.5, false, false));
     document.getElementById("test6").textContent = "new Z4GradientColor().setRipple(0.2).getZ4ColorAt(0.75,true,false) => " + test_color2.stringify(new Z4GradientColor().setRipple(0.2).getZ4ColorAt(0.75, true, false));
     test_color2.drawAll();
+    let ui = new Z4GradientColorUI();
+    ui.appendTo(document.querySelector("#test7")).onchange = (z4GradientColor) => document.getElementById("test8").textContent = test_color2.stringify(z4GradientColor);
+    document.getElementById("test8").textContent = test_color2.stringify(ui.getZ4GradientColor());
   }
 
   static  drawAll() {
@@ -40,8 +43,6 @@ class test_color2 {
     test_color2.fillCanvas("canvas10", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative().inverted(), 2);
     test_color2.fillCanvas("canvas11", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative().inverted(), 3);
     test_color2.setCanvas("canvas12");
-    test_color2.drawCanvas2("canvas13", "slider1", new Z4GradientColor());
-    test_color2.drawCanvas2("canvas14", "slider2", new Z4GradientColor().addOrUpdateColor(0.5, 255 << 24 | 255 << 16));
   }
 
   static  setCanvas(id) {
@@ -62,15 +63,6 @@ class test_color2 {
     }
     let ctx = canvas.getContext("2d");
     ctx.drawImage(offscreen, 0, 0);
-  }
-
-  static  drawCanvas2(canvas, slider, color) {
-    test_color2.drawCanvas(canvas, color);
-    document.getElementById(slider).oninput = (event) => {
-      color.setRipple(document.getElementById(slider).valueAsNumber);
-      test_color2.drawCanvas(canvas, color);
-      return null;
-    };
   }
 
   static  fillCanvas(id, color, style) {

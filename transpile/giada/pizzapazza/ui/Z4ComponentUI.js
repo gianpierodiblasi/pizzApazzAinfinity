@@ -8,6 +8,9 @@
  */
 class Z4ComponentUI {
 
+  /**
+   * The HTML
+   */
    html = null;
 
   /**

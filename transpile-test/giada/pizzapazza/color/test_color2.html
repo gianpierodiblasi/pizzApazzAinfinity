@@ -10,6 +10,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <style>
+      .pre {
+        line-height: 1.1;
+        font-size: 12px;
+        white-space: pre;
+      }
+
       .divStyle1 {
         font-family: sans-serif;
         font-size: 14px;
@@ -36,175 +42,104 @@
     <script>Z4Loader.onLoad(4);</script>
   </head>
   <body>
-    <select id="language">
-      <option value="en">en</option>
-      <option value="it">it</option>
-    </select>
-    <select id="mode">
-      <option value="lite">Lite</option>
-      <option value="standard">Standard</option>
-      <option value="pro">Pro</option>
-    </select>
-    <hr/>
-    <div style="display: flex">
-      <div id="test1" class="divStyle1"></div>
-      <div id="test2" class="divStyle1"></div>      
-    </div>
-    <hr/>
-    <div style="display: flex">
-      <div id="test3" class="divStyle1"></div>
-      <div id="test4" class="divStyle1"></div>
-    </div>
-    <hr/>
-    <div style="display: flex">
-      <div id="test5" class="divStyle1"></div>
-      <div id="test6" class="divStyle1"></div>
-    </div>
-    <hr/>
-    <div style="display: flex">
-      <div class="divStyle2">new Z4GradientColor()<br/>[white => black]</div>
-      <div class="spacer"></div>
-      <div class="divStyle2">new Z4GradientColor().setRipple(0.2)<br/>[white => black rippled]</div>
-    </div>
-    <div style="display: flex">
-      <canvas id="canvas1"></canvas>
-      <div class="spacer"></div>
-      <canvas id="canvas2"></canvas>
-    </div>
-    <hr/>
-    <div style="display: flex">
-      <div class="divStyle2">
-        new Z4GradientColor().setRipple(0.4).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16)<br/>
-        [white => red => black rippled]
-      </div>
-      <div class="spacer"></div>
-      <div class="divStyle2">
-        new Z4GradientColor().setRipple(1).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.75,255&lt;&lt;24|255&lt;&lt;8)<br/>
-        [white => red => green => black rippled]
-      </div>
-    </div>
-    <div style="display: flex">
-      <canvas id="canvas3"></canvas>
-      <div class="spacer"></div>
-      <canvas id="canvas4"></canvas>
-    </div>
-    <hr/>
-    <div style="display: flex">
-      <div class="divStyle2">
-        new Z4GradientColor().<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.25,255&lt;&lt;24|255).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.75,255&lt;&lt;24|255&lt;&lt;8)<br/>
-        [white => blue => red => green => black]
-      </div>
-      <div class="spacer"></div>
-      <div class="divStyle2">
-        new Z4GradientColor().<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.25,255&lt;&lt;24|255).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.75,255&lt;&lt;24|255&lt;&lt;8).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;negative()<br/>
-        [white => blue => red => green => black negative]
-      </div>
-    </div>
-    <div style="display: flex">
-      <canvas id="canvas5"></canvas>
-      <div class="spacer"></div>
-      <canvas id="canvas6"></canvas>
-    </div>
-    <hr/>
-    <div style="display: flex">
-      <div class="divStyle2">
-        new Z4GradientColor().<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.25,255&lt;&lt;24|255).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.75,255&lt;&lt;24|255&lt;&lt;8).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;negative().inverted()<br/>
-        [white => blue => red => green => black negative inverted]
-      </div>
-      <div class="spacer"></div>
-      <div class="divStyle2">
-        new Z4GradientColor().<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.25,255&lt;&lt;24|255).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.75,255&lt;&lt;24|255&lt;&lt;8).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;negative().inverted().setMirrored(true)<br/>
-        [white => blue => red => green => black negative inverted mirrored]
-      </div>
-    </div>
-    <div style="display: flex">
-      <canvas id="canvas7"></canvas>
-      <div class="spacer"></div>
-      <canvas id="canvas8"></canvas>
-    </div>
-    <hr/>
-    <div style="display: flex">
-      <div class="divStyle2">
-        new Z4GradientColor().<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.25,255&lt;&lt;24|255).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.75,255&lt;&lt;24|255&lt;&lt;8).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;negative().inverted()<br/>
-        [white => blue => red => green => black negative inverted "linear gradient"]
-      </div>
-      <div class="spacer"></div>
-      <div class="divStyle2">
-        new Z4GradientColor().<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.25,255&lt;&lt;24|255).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.75,255&lt;&lt;24|255&lt;&lt;8).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;negative().inverted()<br/>
-        [white => blue => red => green => black negative inverted "radial gradient"]
-      </div>
-    </div>
-    <div style="display: flex">
-      <canvas id="canvas9"></canvas>
-      <div class="spacer"></div>
-      <canvas id="canvas10"></canvas>
-    </div>
-    <hr/>
-    <div style="display: flex">
-      <div class="divStyle2">
-        new Z4GradientColor().<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.25,255&lt;&lt;24|255).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.75,255&lt;&lt;24|255&lt;&lt;8).<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;negative().inverted()<br/>
-        [white => blue => red => green => black negative inverted "conic gradient"]
-      </div>
-      <div class="spacer"></div>
-      <div class="divStyle2"></div>
-    </div>
-    <div style="display: flex">
-      <canvas id="canvas11"></canvas>
-      <div class="spacer"></div>
-      <canvas id="canvas12"></canvas>
-    </div>
-    <hr/>
-    <div style="display: flex">
-      <div class="divStyle2">
-        new Z4GradientColor()<br/>[white => black]
-        <div style="display: flex">
-          Ripple <input id="slider1" type="range" value="0" min="0" max="1" step="0.01" style="vertical-align:middle;flex:1"/>  
-        </div>
-      </div>
-      <div class="spacer"></div>
-      <div class="divStyle2">
-        new Z4GradientColor().<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16)<br/>
-        [white => red => black]
-        <div style="display: flex">
-          Ripple <input id="slider2" type="range" value="0" min="0" max="1" step="0.01" style="vertical-align:middle;flex:1"/>  
-        </div>
-      </div>
-    </div>
-    <div style="display: flex">
-      <canvas id="canvas13"></canvas>
-      <div class="spacer"></div>
-      <canvas id="canvas14"></canvas>
+    <div class="container-fluid">
+      <select id="language">
+        <option value="en">en</option>
+        <option value="it">it</option>
+      </select>
+      <select id="mode">
+        <option value="lite">Lite</option>
+        <option value="standard">Standard</option>
+        <option value="pro">Pro</option>
+      </select>
+
+      <table class="table">
+        <tbody>
+          <tr>
+            <td id="test1" class="pre"></td>
+            <td id="test2" class="pre"></td>
+          </tr>      
+          <tr>
+            <td id="test3" class="pre"></td>
+            <td id="test4" class="pre"></td>
+          </tr>      
+          <tr>
+            <td id="test5" class="pre"></td>
+            <td id="test6" class="pre"></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="pre">new Z4GradientColor()<br/>[white => black]</div>
+              <canvas id="canvas1"></canvas>
+            </td>
+            <td>
+              <div class="pre">new Z4GradientColor().setRipple(0.2)<br/>[white => black rippled]</div>
+              <canvas id="canvas2"></canvas>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="pre">new Z4GradientColor().setRipple(0.4).<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16)<br/>[white => red => black rippled]</div>
+              <canvas id="canvas3"></canvas>
+            </td>
+            <td>
+              <div class="pre">new Z4GradientColor().setRipple(1).<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16).<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.75,255&lt;&lt;24|255&lt;&lt;8)<br/>[white => red => green => black rippled]</div>
+              <canvas id="canvas4"></canvas>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="pre">new Z4GradientColor().<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.25,255&lt;&lt;24|255).<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16).<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.75,255&lt;&lt;24|255&lt;&lt;8)<br/>[white => blue => red => green => black]
+              </div>
+              <canvas id="canvas5"></canvas>
+            </td>
+            <td>
+              <div class="pre">new Z4GradientColor().<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.25,255&lt;&lt;24|255).<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16).<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.75,255&lt;&lt;24|255&lt;&lt;8).<br/>&nbsp;&nbsp;&nbsp;&nbsp;negative()<br/>[white => blue => red => green => black negative]</div>
+              <canvas id="canvas6"></canvas>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="pre">new Z4GradientColor().<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.25,255&lt;&lt;24|255).<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16).<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.75,255&lt;&lt;24|255&lt;&lt;8).<br/>&nbsp;&nbsp;&nbsp;&nbsp;negative().inverted()<br/>[white => blue => red => green => black negative inverted]</div>
+              <canvas id="canvas7"></canvas>
+            </td>
+            <td>
+              <div class="pre">new Z4GradientColor().<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.25,255&lt;&lt;24|255).<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16).<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.75,255&lt;&lt;24|255&lt;&lt;8).<br/>&nbsp;&nbsp;&nbsp;&nbsp;negative().inverted().setMirrored(true)<br/>[white => blue => red => green => black negative inverted mirrored]</div>
+              <canvas id="canvas8"></canvas>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="pre">new Z4GradientColor().<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.25,255&lt;&lt;24|255).<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16).<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.75,255&lt;&lt;24|255&lt;&lt;8).<br/>&nbsp;&nbsp;&nbsp;&nbsp;negative().inverted()<br/>[white => blue => red => green => black negative inverted "linear gradient"]</div>
+              <canvas id="canvas9"></canvas>
+            </td>
+            <td>
+              <div class="pre">new Z4GradientColor().<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.25,255&lt;&lt;24|255).<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16).<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.75,255&lt;&lt;24|255&lt;&lt;8).<br/>&nbsp;&nbsp;&nbsp;&nbsp;negative().inverted()<br/>[white => blue => red => green => black negative inverted "radial gradient"]</div>
+              <canvas id="canvas10"></canvas>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="pre">new Z4GradientColor().<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.25,255&lt;&lt;24|255).<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.5,255&lt;&lt;24|255&lt;&lt;16).<br/>&nbsp;&nbsp;&nbsp;&nbsp;addOrUpdateColor(0.75,255&lt;&lt;24|255&lt;&lt;8).<br/>&nbsp;&nbsp;&nbsp;&nbsp;negative().inverted()<br/>[white => blue => red => green => black negative inverted "conic gradient"]</div>
+              <canvas id="canvas11"></canvas>
+            </td>
+            <td>
+              <div class="pre"></div>
+              <canvas id="canvas12"></canvas>
+            </td>
+          </tr>
+
+          <tr>
+            <td id="test7"></td>
+            <td id="test8" class="pre"></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </body>
 </html>
