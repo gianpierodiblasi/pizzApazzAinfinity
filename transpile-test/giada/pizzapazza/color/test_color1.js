@@ -24,6 +24,9 @@ class test_color1 {
     let ui = new Z4ColorUI();
     ui.appendTo(document.querySelector("#test10")).onchange = (z4Color) => document.getElementById("test11").textContent = test_color1.stringify(z4Color);
     document.getElementById("test11").textContent = test_color1.stringify(ui.getZ4Color());
+    ui = new Z4ColorUI().setZ4Color(new Z4Color(120, 60, 20, 70));
+    ui.appendTo(document.querySelector("#test13")).onchange = (z4Color) => document.getElementById("test14").textContent = test_color1.stringify(z4Color);
+    document.getElementById("test14").textContent = test_color1.stringify(ui.getZ4Color());
   }
 
   static  stringify(object) {

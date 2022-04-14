@@ -1,7 +1,12 @@
-<label class="form-label color-label" data-token-lang-inner_text="COLOR">Color</label>
-<div style="display:flex;align-items:center">
-  <input type="color" class="form-control" style="flex:0.1" value="#000000">
-  <label class="form-label opacity-color-label" style="margin:0px 5px" data-token-lang-inner_text="OPACITY">Opacity</label>
-  <input type="range" class="form-range" value="255" min="0" max="255" step="1" style="flex:1;margin:0px 5px"/>  
-  <label class="form-label form-range-label" style="width:30px;margin-bottom:0px;text-align:right">255</label>
+<label class="form-label color-label" style="display:block" data-token-lang-inner_text="COLOR">Color</label>
+<div class="btn-group dropend">
+  <input type="color" class="btn btn-outline-secondary form-control-color" value="#000000">
+
+  <button class="btn btn-outline-secondary btn-sm dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown"></button>
+
+  <div class="dropdown-menu">
+    <label class="form-label opacity-color-label" data-token-lang-inner_text="OPACITY">Opacity</label>
+    <label class="form-label form-range-label">255</label>
+    <input type="range" class="form-range" value="255" min="0" max="255" step="1" />
+  </div>
 </div>

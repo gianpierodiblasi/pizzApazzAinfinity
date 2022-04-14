@@ -45,7 +45,7 @@ public class Z4Loader {
           if ($exists(row) && !row.startsWith("#")) {
             HTMLElement cssRow = document.createElement("link");
             cssRow.setAttribute("rel", "stylesheet");
-            cssRow.setAttribute("href", Z4Loader.UP + "" + row);
+            cssRow.setAttribute("href", Z4Loader.UP + row);
             document.querySelector("head").appendChild(cssRow);
           }
         });
@@ -78,7 +78,7 @@ public class Z4Loader {
       if ($exists(row) && !row.startsWith("#")) {
         HTMLElement scriptRow = document.createElement("script");
         scriptRow.setAttribute("id", row.substring(row.lastIndexOf("/") + 1).toString());
-        scriptRow.setAttribute("src", Z4Loader.UP + "" + row);
+        scriptRow.setAttribute("src", Z4Loader.UP + row);
         scriptRow.setAttribute("type", "text/javascript");
         scriptRow.setAttribute("async", "false");
         scriptRow.addEventListener("load", (event) -> Z4Loader.loadScripts(scripts.slice(1), jsFile));

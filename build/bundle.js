@@ -1564,7 +1564,9 @@ class Z4ColorUI extends Z4ComponentUI {
 
    colorLabel = this.querySelector(".color-label");
 
-   color = this.querySelector(".form-control");
+   color = this.querySelector(".form-control-color");
+
+   formRangeLabel = this.querySelector(".form-range-label");
 
    formRange = this.querySelector(".form-range");
 
@@ -1581,7 +1583,6 @@ class Z4ColorUI extends Z4ComponentUI {
       this.onchange(this.getZ4Color());
       return null;
     };
-    let formRangeLabel = this.querySelector(".form-range-label");
     this.formRange.oninput = (event) => {
       formRangeLabel.innerText = this.formRange.value;
       this.onchange(this.getZ4Color());
@@ -1598,6 +1599,19 @@ class Z4ColorUI extends Z4ComponentUI {
    setColorLabel(token) {
     this.colorLabel.setAttribute("data-token-lang", token);
     this.colorLabel.innerText = Z4MessageFactory.get(token);
+    return this;
+  }
+
+  /**
+   * Sets the Z4Color
+   *
+   * @param color The Z4Color
+   * @return This Z4ColorUI
+   */
+   setZ4Color(color) {
+    this.color.value = color.getHEX().substring(0, 7);
+    this.formRange.valueAsNumber = color.getComponents()[0];
+    this.formRangeLabel.innerText = this.formRange.value;
     return this;
   }
 
