@@ -2,6 +2,7 @@ package giada.pizzapazza.color;
 
 import def.js.Array;
 import def.js.JSON;
+import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.setting.Z4Setting;
 import java.util.function.BiFunction;
 import simulation.dom.$Canvas;
@@ -18,6 +19,20 @@ import static simulation.js.$Globals.document;
 public class test_color2 {
 
   public static void onLoad() {
+    document.$getElementById("language").value = Z4Setting.getLanguage();
+    document.$getElementById("language").onchange = (event) -> {
+      Z4Setting.setLanguage(document.$getElementById("language").value);
+      Z4MessageFactory.changingLanguage();
+      return null;
+    };
+    
+    document.$getElementById("mode").value = Z4Setting.getMode();
+    document.$getElementById("mode").onchange = (event) -> {
+      Z4Setting.setMode(document.$getElementById("mode").value);
+      test_color2.drawAll();
+      return null;
+    };
+    
     document.getElementById("test1").textContent = "new Z4GradientColor() => " + test_color2.stringify(new Z4GradientColor());
     document.getElementById("test2").textContent = "new Z4GradientColor().addOrUpdateColor(0,65535) => " + test_color2.stringify(new Z4GradientColor().addOrUpdateColor(0, 65535));
     document.getElementById("test3").textContent = "new Z4GradientColor().addOrUpdateColor(0.3,65535).move(0.3,0.4) => " + test_color2.stringify(new Z4GradientColor().addOrUpdateColor(0.3, 65535).move(0.3, 0.4));
@@ -26,13 +41,6 @@ public class test_color2 {
     document.getElementById("test6").textContent = "new Z4GradientColor().setRipple(0.2).getZ4ColorAt(0.75,true,false) => " + test_color2.stringify(new Z4GradientColor().setRipple(0.2).getZ4ColorAt(0.75, true, false));
 
     test_color2.drawAll();
-
-    document.$getElementById("mode").value = Z4Setting.getMode();
-    document.$getElementById("mode").onchange = (event) -> {
-      Z4Setting.setMode(document.$getElementById("mode").value);
-      test_color2.drawAll();
-      return null;
-    };
   }
 
   private static void drawAll() {

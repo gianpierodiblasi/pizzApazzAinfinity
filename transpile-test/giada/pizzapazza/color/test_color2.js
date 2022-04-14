@@ -1,4 +1,4 @@
-/* global Array, JSON, OffscreenCanvas, Z4GradientColor, Z4Setting */
+/* global Array, JSON, OffscreenCanvas, Z4GradientColor, Z4MessageFactory, Z4Setting */
 
 /**
  * @author gianpiero.di.blasi
@@ -6,6 +6,18 @@
 class test_color2 {
 
   static  onLoad() {
+    document.getElementById("language").value = Z4Setting.getLanguage();
+    document.getElementById("language").onchange = (event) => {
+      Z4Setting.setLanguage(document.getElementById("language").value);
+      Z4MessageFactory.changingLanguage();
+      return null;
+    };
+    document.getElementById("mode").value = Z4Setting.getMode();
+    document.getElementById("mode").onchange = (event) => {
+      Z4Setting.setMode(document.getElementById("mode").value);
+      test_color2.drawAll();
+      return null;
+    };
     document.getElementById("test1").textContent = "new Z4GradientColor() => " + test_color2.stringify(new Z4GradientColor());
     document.getElementById("test2").textContent = "new Z4GradientColor().addOrUpdateColor(0,65535) => " + test_color2.stringify(new Z4GradientColor().addOrUpdateColor(0, 65535));
     document.getElementById("test3").textContent = "new Z4GradientColor().addOrUpdateColor(0.3,65535).move(0.3,0.4) => " + test_color2.stringify(new Z4GradientColor().addOrUpdateColor(0.3, 65535).move(0.3, 0.4));
@@ -13,12 +25,6 @@ class test_color2 {
     document.getElementById("test5").textContent = "new Z4GradientColor().getZ4ColorAt(0.5,false,false) => " + test_color2.stringify(new Z4GradientColor().getZ4ColorAt(0.5, false, false));
     document.getElementById("test6").textContent = "new Z4GradientColor().setRipple(0.2).getZ4ColorAt(0.75,true,false) => " + test_color2.stringify(new Z4GradientColor().setRipple(0.2).getZ4ColorAt(0.75, true, false));
     test_color2.drawAll();
-    document.getElementById("mode").value = Z4Setting.getMode();
-    document.getElementById("mode").onchange = (event) => {
-      Z4Setting.setMode(document.getElementById("mode").value);
-      test_color2.drawAll();
-      return null;
-    };
   }
 
   static  drawAll() {

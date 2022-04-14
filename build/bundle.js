@@ -1584,7 +1584,7 @@ class Z4ColorUI extends Z4ComponentUI {
       return null;
     };
     this.formRange.oninput = (event) => {
-      formRangeLabel.innerText = this.formRange.value;
+      this.formRangeLabel.innerText = this.formRange.value;
       this.onchange(this.getZ4Color());
       return null;
     };
