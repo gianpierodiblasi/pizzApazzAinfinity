@@ -38,7 +38,7 @@ class Z4GradientColorUI extends Z4ComponentUI {
     this.gradientColorLabel.innerText = Z4MessageFactory.get("GRADIENT_COLOR");
     this.canvas.style.border = "1px dashed gray";
     this.canvas.style.width = Z4GradientColorUI.WIDTH + "px";
-    this.canvas.style.height = Z4GradientColorUI.HEIGHT + "50px";
+    this.canvas.style.height = Z4GradientColorUI.HEIGHT + "px";
     this.querySelector(".ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
     this.querySelector(".mirrored-label").innerText = Z4MessageFactory.get("MIRRORED");
     this.formCheckInput.onchange = (event) => {
