@@ -1,4 +1,4 @@
-/* global Image, OffscreenCanvas, Z4ComponentUI, Z4GradientColor, Z4MessageFactory */
+/* global OffscreenCanvas, Z4ComponentUI, Z4GradientColor, Z4ImageFactory, Z4MessageFactory */
 
 /**
  * The component to show a color
@@ -13,7 +13,7 @@ class Z4GradientColorUI extends Z4ComponentUI {
 
    ctx = this.canvas.getContext("2d");
 
-   chessboard = null;
+   chessboard = this.ctx.createPattern(Z4ImageFactory.get("CHESSBOARD"), "repeat");
 
    formRangeLabel = this.querySelector(".form-range-label");
 
@@ -31,11 +31,6 @@ class Z4GradientColorUI extends Z4ComponentUI {
   constructor() {
     super(Z4GradientColorUI.UI);
     this.html.style.textAlign = "center";
-    let image = new Image();
-    image.src = Z4Loader.UP + "build/image/chessboard.png";
-    // image.onload = function() {
-    // var pattern = ctx.createPattern(img, 'repeat');
-    // this.chessboard = this.ctx.createPattern(image, "repeat");
     this.gradientColorLabel.innerText = Z4MessageFactory.get("GRADIENT_COLOR");
     this.canvas.style.border = "1px dashed gray";
     this.querySelector(".ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");

@@ -46,13 +46,8 @@ public class Z4MessageFactory {
 
     XMLHttpRequest client = new XMLHttpRequest();
     client.open("GET", path + file, false);
-    client.onreadystatechange = (event2) -> {
-      if (client.readyState == 4 && client.status == 200) {
-        Z4MessageFactory.readMessages(array, client.responseText);
-      }
-      return null;
-    };
     client.send();
+    Z4MessageFactory.readMessages(array, client.responseText);
 
     if (Object.keys(array).length == 0) {
       Z4Setting.setLanguage("en");
@@ -60,13 +55,8 @@ public class Z4MessageFactory {
 
       XMLHttpRequest clientEN = new XMLHttpRequest();
       clientEN.open("GET", path + file, false);
-      clientEN.onreadystatechange = (event2) -> {
-        if (clientEN.readyState == 4 && clientEN.status == 200) {
-          Z4MessageFactory.readMessages(array, clientEN.responseText);
-        }
-        return null;
-      };
       clientEN.send();
+      Z4MessageFactory.readMessages(array, clientEN.responseText);
     }
 
     return array;
