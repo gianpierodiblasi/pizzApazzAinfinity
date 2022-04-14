@@ -1,4 +1,4 @@
-/* global OffscreenCanvas, Z4ComponentUI, Z4GradientColor, Z4MessageFactory */
+/* global Image, OffscreenCanvas, Z4ComponentUI, Z4GradientColor, Z4MessageFactory */
 
 /**
  * The component to show a color
@@ -10,6 +10,10 @@ class Z4GradientColorUI extends Z4ComponentUI {
    gradientColorLabel = this.querySelector(".gradient-color-label");
 
    canvas = this.querySelector(".canvas");
+
+   ctx = this.canvas.getContext("2d");
+
+   chessboard = null;
 
    formRangeLabel = this.querySelector(".form-range-label");
 
@@ -27,6 +31,11 @@ class Z4GradientColorUI extends Z4ComponentUI {
   constructor() {
     super(Z4GradientColorUI.UI);
     this.html.style.textAlign = "center";
+    let image = new Image();
+    image.src = Z4Loader.UP + "build/image/chessboard.png";
+    // image.onload = function() {
+    // var pattern = ctx.createPattern(img, 'repeat');
+    // this.chessboard = this.ctx.createPattern(image, "repeat");
     this.gradientColorLabel.innerText = Z4MessageFactory.get("GRADIENT_COLOR");
     this.canvas.style.border = "1px dashed gray";
     this.querySelector(".ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
@@ -87,7 +96,8 @@ class Z4GradientColorUI extends Z4ComponentUI {
       offscreenCtx.fillStyle = this.gradientColor.getZ4ColorAt(x / this.canvas.width, true, true).getHEX();
       offscreenCtx.fillRect(x, 0, 1, this.canvas.height);
     }
-    let ctx = this.canvas.getContext("2d");
-    ctx.drawImage(offscreen, 0, 0);
+    this.ctx.fillStyle = this.chessboard;
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    // this.ctx.drawImage(offscreen, 0, 0);
   }
 }

@@ -1,11 +1,16 @@
 package giada.pizzapazza.color.ui;
 
+import def.dom.CanvasGradient;
+import def.dom.CanvasPattern;
+import giada.pizzapazza.Z4Loader;
 import giada.pizzapazza.color.Z4GradientColor;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.ui.Z4ComponentUI;
+import jsweet.util.union.Union4;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$HTMLElement;
+import simulation.dom.$Image;
 import simulation.dom.$OffscreenCanvas;
 
 /**
@@ -17,6 +22,8 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
 
   private final $HTMLElement gradientColorLabel = this.querySelector(".gradient-color-label");
   private final $Canvas canvas = ($Canvas) this.querySelector(".canvas");
+  private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
+  private final Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> chessboard;
   private final $HTMLElement formRangeLabel = this.querySelector(".form-range-label");
   private final $HTMLElement formCheckInput = this.querySelector(".form-check-input");
   private final $HTMLElement formRange = this.querySelector(".form-range");
@@ -30,6 +37,16 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
   public Z4GradientColorUI() {
     super(Z4GradientColorUI.UI);
     this.html.style.textAlign = "center";
+
+    $Image image = new $Image();
+    image.src = Z4Loader.UP + "build/image/chessboard.png";
+    
+//    image.onload = function() {
+//  var pattern = ctx.createPattern(img, 'repeat');
+    
+    
+    
+//    this.chessboard = this.ctx.createPattern(image, "repeat");
 
     this.gradientColorLabel.innerText = Z4MessageFactory.get("GRADIENT_COLOR");
     this.canvas.style.border = "1px dashed gray";
@@ -95,7 +112,8 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
       offscreenCtx.fillRect(x, 0, 1, this.canvas.height);
     }
 
-    $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
-    ctx.drawImage(offscreen, 0, 0);
+    this.ctx.fillStyle = this.chessboard;
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+//    this.ctx.drawImage(offscreen, 0, 0);
   }
 }
