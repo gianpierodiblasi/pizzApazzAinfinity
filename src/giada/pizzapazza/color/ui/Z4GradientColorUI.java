@@ -11,7 +11,6 @@ import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$HTMLElement;
 import simulation.dom.$OffscreenCanvas;
-import static simulation.js.$Globals.window;
 
 /**
  * The component to show a color
@@ -25,31 +24,26 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
   private final Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> chessboard = this.ctx.createPattern(Z4ImageFactory.get("CHESSBOARD"), "repeat");
   private final $HTMLElement formRangeLabel = this.querySelector(".form-range-label");
-  private final $HTMLElement formCheckInput = this.querySelector(".form-check-input");
+  private final $HTMLElement mirroredCheck = this.querySelector(".mirrored-check");
   private final $HTMLElement formRange = this.querySelector(".form-range");
 
   private Z4GradientColor gradientColor = new Z4GradientColor();
   private final static String UI = Z4ComponentUI.loadHTML("giada/pizzapazza/color/ui/Z4GradientColorUI.html");
-  private final static int WIDTH = 500;
-  private final static int HEIGHT = 50;
 
   /**
    * Creates a Z4ColorUI
    */
   public Z4GradientColorUI() {
     super(Z4GradientColorUI.UI);
-    this.html.style.textAlign = "center";
 
     this.gradientColorLabel.innerText = Z4MessageFactory.get("GRADIENT_COLOR");
     this.canvas.style.border = "1px dashed gray";
-    this.canvas.style.width = Z4GradientColorUI.WIDTH + "px";
-    this.canvas.style.height = Z4GradientColorUI.HEIGHT + "px";
 
     this.querySelector(".ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
     this.querySelector(".mirrored-label").innerText = Z4MessageFactory.get("MIRRORED");
 
-    this.formCheckInput.onchange = (event) -> {
-      this.gradientColor.setMirrored(this.formCheckInput.checked);
+    this.mirroredCheck.onchange = (event) -> {
+      this.gradientColor.setMirrored(this.mirroredCheck.checked);
       this.drawCanvas();
       this.onchange.$apply(this.gradientColor);
       return null;
@@ -63,11 +57,6 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
       return null;
     };
 
-    this.drawCanvas();
-  }
-
-  @Override
-  protected void devicePixelRatioChanged() {
     this.drawCanvas();
   }
 
@@ -105,10 +94,6 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
   }
 
   private void drawCanvas() {
-    double scale = window.devicePixelRatio;
-    this.canvas.width = Math.floor(Z4GradientColorUI.WIDTH * scale);
-    this.canvas.height = Math.floor(Z4GradientColorUI.HEIGHT * scale);
-
     $OffscreenCanvas offscreen = new $OffscreenCanvas(this.canvas.width, this.canvas.height);
     $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
     for (int x = 0; x < this.canvas.width; x++) {
@@ -116,11 +101,8 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
       offscreenCtx.fillRect(x, 0, 1, this.canvas.height);
     }
 
-    this.ctx.save();
-    this.ctx.scale(scale, scale);
     this.ctx.fillStyle = this.chessboard;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.drawImage(offscreen, 0, 0);
-    this.ctx.restore();
   }
 }

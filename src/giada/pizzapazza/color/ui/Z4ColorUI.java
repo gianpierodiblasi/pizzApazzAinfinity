@@ -40,10 +40,6 @@ public class Z4ColorUI extends Z4ComponentUI<Z4Color> {
     };
   }
 
-  @Override
-  protected void devicePixelRatioChanged() {
-  }
-
   /**
    * Sets the token of the color label
    *

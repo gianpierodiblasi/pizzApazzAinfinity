@@ -261,9 +261,6 @@ class Z4ImageFactory {
  */
 class Z4ComponentUI {
 
-  /**
-   * The HTML
-   */
    html = null;
 
   /**
@@ -271,8 +268,6 @@ class Z4ComponentUI {
    */
    onchange = element => {
   };
-
-   devicePixelRatioListener = null;
 
   /**
    * Loads an HTML file
@@ -298,7 +293,6 @@ class Z4ComponentUI {
     this.html = document.createElement("div");
     this.html.setAttribute("id", new Date().getTime() + "-" + parseInt(1000 * Math.random()));
     this.html.innerHTML = ui;
-    this.initDevicePixelRatio();
   }
 
   /**
@@ -309,28 +303,6 @@ class Z4ComponentUI {
    */
    querySelector(selector) {
     return this.html.querySelector(selector);
-  }
-
-   initDevicePixelRatio() {
-    if (window.matchMedia) {
-      this.devicePixelRatioListener = () => {
-        this.devicePixelRatioChanged();
-        this.addDevicePixelRatioListener();
-      };
-      this.addDevicePixelRatioListener();
-    }
-  }
-
-   addDevicePixelRatioListener() {
-    let options = new Object();
-    options["once"] = true;
-    window.matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
-  }
-
-  /**
-   * Method called when the device pixel ratio changes
-   */
-   devicePixelRatioChanged() {
   }
 
   /**
@@ -1654,9 +1626,6 @@ class Z4ColorUI extends Z4ComponentUI {
     };
   }
 
-   devicePixelRatioChanged() {
-  }
-
   /**
    * Sets the token of the color label
    *
@@ -1709,7 +1678,7 @@ class Z4GradientColorUI extends Z4ComponentUI {
 
    formRangeLabel = this.querySelector(".form-range-label");
 
-   formCheckInput = this.querySelector(".form-check-input");
+   mirroredCheck = this.querySelector(".mirrored-check");
 
    formRange = this.querySelector(".form-range");
 
@@ -1717,24 +1686,17 @@ class Z4GradientColorUI extends Z4ComponentUI {
 
   static  UI = Z4ComponentUI.loadHTML("giada/pizzapazza/color/ui/Z4GradientColorUI.html");
 
-  static  WIDTH = 500;
-
-  static  HEIGHT = 50;
-
   /**
    * Creates a Z4ColorUI
    */
   constructor() {
     super(Z4GradientColorUI.UI);
-    this.html.style.textAlign = "center";
     this.gradientColorLabel.innerText = Z4MessageFactory.get("GRADIENT_COLOR");
     this.canvas.style.border = "1px dashed gray";
-    this.canvas.style.width = Z4GradientColorUI.WIDTH + "px";
-    this.canvas.style.height = Z4GradientColorUI.HEIGHT + "px";
     this.querySelector(".ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
     this.querySelector(".mirrored-label").innerText = Z4MessageFactory.get("MIRRORED");
-    this.formCheckInput.onchange = (event) => {
-      this.gradientColor.setMirrored(this.formCheckInput.checked);
+    this.mirroredCheck.onchange = (event) => {
+      this.gradientColor.setMirrored(this.mirroredCheck.checked);
       this.drawCanvas();
       this.onchange(this.gradientColor);
       return null;
@@ -1746,10 +1708,6 @@ class Z4GradientColorUI extends Z4ComponentUI {
       this.onchange(this.gradientColor);
       return null;
     };
-    this.drawCanvas();
-  }
-
-   devicePixelRatioChanged() {
     this.drawCanvas();
   }
 
@@ -1787,20 +1745,14 @@ class Z4GradientColorUI extends Z4ComponentUI {
   }
 
    drawCanvas() {
-    let scale = window.devicePixelRatio;
-    this.canvas.width = Math.floor(Z4GradientColorUI.WIDTH * scale);
-    this.canvas.height = Math.floor(Z4GradientColorUI.HEIGHT * scale);
     let offscreen = new OffscreenCanvas(this.canvas.width, this.canvas.height);
     let offscreenCtx = offscreen.getContext("2d");
     for (let x = 0; x < this.canvas.width; x++) {
       offscreenCtx.fillStyle = this.gradientColor.getZ4ColorAt(x / this.canvas.width, true, true).getHEX();
       offscreenCtx.fillRect(x, 0, 1, this.canvas.height);
     }
-    this.ctx.save();
-    this.ctx.scale(scale, scale);
     this.ctx.fillStyle = this.chessboard;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.drawImage(offscreen, 0, 0);
-    this.ctx.restore();
   }
 }

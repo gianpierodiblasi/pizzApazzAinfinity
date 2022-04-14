@@ -35,9 +35,6 @@ class Z4ColorUI extends Z4ComponentUI {
     };
   }
 
-   devicePixelRatioChanged() {
-  }
-
   /**
    * Sets the token of the color label
    *
