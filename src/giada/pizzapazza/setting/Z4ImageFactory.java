@@ -46,7 +46,7 @@ public class Z4ImageFactory {
       if ($exists(row) && !row.startsWith("#")) {
         Array<def.js.String> keyValue = row.split("=");
         $Image image = new $Image();
-//        image.onload = (event) -> Z4ImageFactory.readImages(path, array, images.slice(1));
+        image.onload = (event) -> Z4ImageFactory.readImages(path, array, images.slice(1));
         image.src = path + keyValue.$get(1).trim();
 
         array.$set(keyValue.$get(0).trim(), image);

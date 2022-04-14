@@ -25,29 +25,21 @@ class Z4ImageFactory {
     let path = Z4Loader.UP + (urlParams.get("allFiles") ? "src/image/" : "build/image/");
     let client = new XMLHttpRequest();
     client.open("GET", Z4Loader.UP + "image_list.properties", false);
-    client.onreadystatechange = (event2) => {
-      if (client.readyState === 4 && client.status === 200) {
-        Z4ImageFactory.readImages(path, array, new String(client.responseText).split("\n"));
-      }
-      return null;
-    };
     client.send();
+    Z4ImageFactory.readImages(path, array, new String(client.responseText).split("\n"));
     return array;
   }
 
   static  readImages(path, array, images) {
-    if (images.length > 0) {
-      let row = images[0];
+    images.forEach(row => {
       if (row && !row.startsWith("#")) {
         let keyValue = row.split("=");
         let image = new Image();
-        array[keyValue[0].trim()] = image;
-        // image.onload = (event) -> Z4ImageFactory.readImages(path, array, images.slice(1));
+        image.onload = (event) => Z4ImageFactory.readImages(path, array, images.slice(1));
         image.src = path + keyValue[1].trim();
-      } else {
-        Z4ImageFactory.readImages(path, array, images.slice(1));
+        array[keyValue[0].trim()] = image;
       }
-    }
+    });
   }
 
   constructor() {

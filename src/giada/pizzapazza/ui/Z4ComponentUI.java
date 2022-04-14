@@ -1,15 +1,18 @@
 package giada.pizzapazza.ui;
 
 import def.dom.Element;
-import static def.dom.Globals.window;
 import def.dom.HTMLElement;
 import def.dom.XMLHttpRequest;
 import def.js.Date;
 import giada.pizzapazza.Z4Loader;
 import simulation.dom.$HTMLElement;
+import simulation.js.$Apply_0_Void;
 import simulation.js.$Apply_1_Void;
+import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.parseInt;
+import static simulation.js.$Globals.window;
+import simulation.js.$Object;
 import simulation.js.$URLSearchParams;
 
 /**
@@ -30,6 +33,8 @@ public abstract class Z4ComponentUI<T> {
    */
   public $Apply_1_Void<T> onchange = element -> {
   };
+
+  private $Apply_0_Void devicePixelRatioListener;
 
   /**
    * Loads an HTML file
@@ -57,6 +62,8 @@ public abstract class Z4ComponentUI<T> {
     this.html = document.createElement("div");
     this.html.setAttribute("id", new Date().getTime() + "-" + parseInt(1000 * Math.random()));
     this.html.innerHTML = ui;
+
+    this.initDevicePixelRatio();
   }
 
   /**
@@ -68,6 +75,27 @@ public abstract class Z4ComponentUI<T> {
   protected $HTMLElement querySelector(String selector) {
     return ($HTMLElement) this.html.querySelector(selector);
   }
+
+  private void initDevicePixelRatio() {
+    if ($exists(window.matchMedia)) {
+      this.devicePixelRatioListener = () -> {
+        this.devicePixelRatioChanged();
+        this.addDevicePixelRatioListener();
+      };
+      this.addDevicePixelRatioListener();
+    }
+  }
+
+  private void addDevicePixelRatioListener() {
+    $Object options = new $Object();
+    options.$set("once", true);
+    window.$matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
+  }
+
+  /**
+   * Method called when the device pixel ratio changes
+   */
+  protected abstract void devicePixelRatioChanged();
 
   /**
    * Appends this Z4ComponentUI to its parent

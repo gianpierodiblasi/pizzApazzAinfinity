@@ -19,7 +19,7 @@ public class Z4Setting {
   private static String language = Z4Setting.initLanguage();
   private static boolean darkMode = Z4Setting.initDarkMode();
   private static String mode = Z4Setting.initMode();
-
+  
   private static String initPath() {
     int start = window.location.href.indexOf('/', 10);
     int end = window.location.href.indexOf('/', start + 1);

@@ -11,12 +11,12 @@ import simulation.dom.$HTMLElement;
  * @author gianpiero.di.blasi
  */
 public class Z4ColorUI extends Z4ComponentUI<Z4Color> {
-  
+
   private final $HTMLElement colorLabel = this.querySelector(".color-label");
   private final $HTMLElement color = this.querySelector(".form-control-color");
   private final $HTMLElement formRangeLabel = this.querySelector(".form-range-label");
   private final $HTMLElement formRange = this.querySelector(".form-range");
-  
+
   private final static String UI = Z4ComponentUI.loadHTML("giada/pizzapazza/color/ui/Z4ColorUI.html");
 
   /**
@@ -24,20 +24,24 @@ public class Z4ColorUI extends Z4ComponentUI<Z4Color> {
    */
   public Z4ColorUI() {
     super(Z4ColorUI.UI);
-    
+
     this.colorLabel.innerText = Z4MessageFactory.get("COLOR");
     this.querySelector(".opacity-color-label").innerText = Z4MessageFactory.get("OPACITY");
-    
+
     this.color.onchange = (event) -> {
       this.onchange.$apply(this.getZ4Color());
       return null;
     };
-    
+
     this.formRange.oninput = (event) -> {
       this.formRangeLabel.innerText = this.formRange.value;
       this.onchange.$apply(this.getZ4Color());
       return null;
     };
+  }
+
+  @Override
+  protected void devicePixelRatioChanged() {
   }
 
   /**

@@ -10,4 +10,6 @@ import def.dom.Window;
 public class $Window extends Window {
 
   public String matchMedia;
+  
+  public native $MediaQueryList $matchMedia(String string);
 }

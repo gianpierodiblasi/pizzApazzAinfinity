@@ -1,4 +1,4 @@
-/* global Date, Math, URLSearchParams, XMLHttpRequest, parseInt */
+/* global Date, Math, Object, URLSearchParams, XMLHttpRequest, parseInt */
 
 /**
  * The abstract class of all UI components
@@ -18,6 +18,8 @@ class Z4ComponentUI {
    */
    onchange = element => {
   };
+
+   devicePixelRatioListener = null;
 
   /**
    * Loads an HTML file
@@ -43,6 +45,7 @@ class Z4ComponentUI {
     this.html = document.createElement("div");
     this.html.setAttribute("id", new Date().getTime() + "-" + parseInt(1000 * Math.random()));
     this.html.innerHTML = ui;
+    this.initDevicePixelRatio();
   }
 
   /**
@@ -53,6 +56,28 @@ class Z4ComponentUI {
    */
    querySelector(selector) {
     return this.html.querySelector(selector);
+  }
+
+   initDevicePixelRatio() {
+    if (window.matchMedia) {
+      this.devicePixelRatioListener = () => {
+        this.devicePixelRatioChanged();
+        this.addDevicePixelRatioListener();
+      };
+      this.addDevicePixelRatioListener();
+    }
+  }
+
+   addDevicePixelRatioListener() {
+    let options = new Object();
+    options["once"] = true;
+    window.matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
+  }
+
+  /**
+   * Method called when the device pixel ratio changes
+   */
+   devicePixelRatioChanged() {
   }
 
   /**

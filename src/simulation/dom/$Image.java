@@ -1,6 +1,8 @@
 package simulation.dom;
 
+import def.dom.Event;
 import def.dom.Image;
+import java.util.function.Consumer;
 
 /**
  * The simulation of a JavaScript Image Object
@@ -10,4 +12,5 @@ import def.dom.Image;
 public class $Image extends Image {
 
   public String src;
+  public Consumer<Event> onload;
 }
