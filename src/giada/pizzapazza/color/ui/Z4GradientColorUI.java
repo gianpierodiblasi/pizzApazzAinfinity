@@ -3,6 +3,7 @@ package giada.pizzapazza.color.ui;
 import def.dom.CanvasGradient;
 import def.dom.CanvasPattern;
 import def.dom.HTMLElement;
+import static def.js.Globals.parseFloat;
 import giada.pizzapazza.color.Z4GradientColor;
 import giada.pizzapazza.setting.Z4ImageFactory;
 import giada.pizzapazza.setting.Z4MessageFactory;
@@ -37,7 +38,7 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
 
   private Z4GradientColor gradientColor = new Z4GradientColor();
   private $Apply_0_Void devicePixelRatioListener;
-  
+
   private final static String UI = Z4ComponentUI.loadHTML("giada/pizzapazza/color/ui/Z4GradientColorUI.html");
   private final static int WIDTH = 500;
   private final static int HEIGHT = 50;
@@ -91,6 +92,13 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
     };
 
     this.z4ColorUI.appendTo(this.querySelector(".canvas-container"));
+    this.z4ColorUI.onchange = (z4Color) -> {
+      $HTMLElement input = this.querySelector(".sliders .form-check-input:checked");
+      this.gradientColor.addOrUpdateColor(parseFloat(input.value), z4Color.getARGB());
+
+      this.drawCanvas();
+      this.onchange.$apply(this.gradientColor);
+    };
 
     this.setZ4GradientColor(this.gradientColor);
   }
@@ -120,6 +128,17 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
   public Z4GradientColorUI setGradientColorLabel(String token) {
     this.gradientColorLabel.setAttribute("data-token-lang", token);
     this.gradientColorLabel.innerText = Z4MessageFactory.get(token);
+    return this;
+  }
+
+  /**
+   * Sets the token of the color label
+   *
+   * @param token The token of the color label
+   * @return This Z4GradientColorUI
+   */
+  public Z4GradientColorUI setColorLabel(String token) {
+    this.z4ColorUI.setColorLabel(token);
     return this;
   }
 

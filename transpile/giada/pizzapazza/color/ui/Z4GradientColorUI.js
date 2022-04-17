@@ -1,4 +1,4 @@
-/* global Math, Object, OffscreenCanvas, Z4ColorUI, Z4ComponentUI, Z4GradientColor, Z4ImageFactory, Z4MessageFactory */
+/* global Math, Object, OffscreenCanvas, Z4ColorUI, Z4ComponentUI, Z4GradientColor, Z4ImageFactory, Z4MessageFactory, parseFloat */
 
 /**
  * The component to show a color
@@ -74,6 +74,12 @@ class Z4GradientColorUI extends Z4ComponentUI {
       return null;
     };
     this.z4ColorUI.appendTo(this.querySelector(".canvas-container"));
+    this.z4ColorUI.onchange = (z4Color) => {
+      let input = this.querySelector(".sliders .form-check-input:checked");
+      this.gradientColor.addOrUpdateColor(parseFloat(input.value), z4Color.getARGB());
+      this.drawCanvas();
+      this.onchange(this.gradientColor);
+    };
     this.setZ4GradientColor(this.gradientColor);
   }
 
@@ -102,6 +108,17 @@ class Z4GradientColorUI extends Z4ComponentUI {
    setGradientColorLabel(token) {
     this.gradientColorLabel.setAttribute("data-token-lang", token);
     this.gradientColorLabel.innerText = Z4MessageFactory.get(token);
+    return this;
+  }
+
+  /**
+   * Sets the token of the color label
+   *
+   * @param token The token of the color label
+   * @return This Z4GradientColorUI
+   */
+   setColorLabel(token) {
+    this.z4ColorUI.setColorLabel(token);
     return this;
   }
 

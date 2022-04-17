@@ -1685,6 +1685,8 @@ class Z4GradientColorUI extends Z4ComponentUI {
 
    formRange = this.querySelector(".form-range");
 
+   z4ColorUI = new Z4ColorUI();
+
    gradientColor = new Z4GradientColor();
 
    devicePixelRatioListener = null;
@@ -1702,26 +1704,28 @@ class Z4GradientColorUI extends Z4ComponentUI {
     super(Z4GradientColorUI.UI);
     this.initDevicePixelRatio();
     this.gradientColorLabel.innerText = Z4MessageFactory.get("GRADIENT_COLOR");
+    let inverted = this.querySelector(".gradient-inverted");
+    inverted.innerText = Z4MessageFactory.get("INVERTED");
+    inverted.onclick = (event) => {
+      this.setZ4GradientColor(this.gradientColor.inverted());
+      this.onchange(this.gradientColor);
+      return null;
+    };
+    let negative = this.querySelector(".gradient-negative");
+    negative.innerText = Z4MessageFactory.get("NEGATIVE");
+    negative.onclick = (event) => {
+      this.setZ4GradientColor(this.gradientColor.negative());
+      this.onchange(this.gradientColor);
+      return null;
+    };
     this.canvas.style.border = "1px dashed gray";
     this.canvas.style.width = Z4GradientColorUI.WIDTH + "px";
     this.canvas.style.height = Z4GradientColorUI.HEIGHT + "px";
-    // this.gradientColor.addOrUpdateColor(0.75,128<<24|255<<16);
-    let sliders = this.querySelector(".sliders");
-    this.gradientColor.getComponents().forEach((z4StopColor, index, array) => {
-      let position = z4StopColor.getPosition();
-      let left = Z4GradientColorUI.WIDTH * position - (index * 16);
-      let input = document.createElement("input");
-      input.setAttribute("class", "form-check-input");
-      input.setAttribute("type", "radio");
-      input.setAttribute("name", "colors");
-      input.setAttribute("value", "" + position);
-      input.setAttribute("style", "position:relative;left:" + left + "px");
-      sliders.appendChild(input);
-    });
     this.querySelector(".ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
     this.querySelector(".mirrored-label").innerText = Z4MessageFactory.get("MIRRORED");
     this.mirroredCheck.onchange = (event) => {
       this.gradientColor.setMirrored(this.mirroredCheck.checked);
+      this.configureSliders();
       this.drawCanvas();
       this.onchange(this.gradientColor);
       return null;
@@ -1733,41 +1737,14 @@ class Z4GradientColorUI extends Z4ComponentUI {
       this.onchange(this.gradientColor);
       return null;
     };
-    this.drawCanvas();
-  }
-
-  /**
-   * Sets the token of the gradient color label
-   *
-   * @param token The token of the gradient color label
-   * @return This Z4GradientColorUI
-   */
-   setGradientColorLabel(token) {
-    this.gradientColorLabel.setAttribute("data-token-lang", token);
-    this.gradientColorLabel.innerText = Z4MessageFactory.get(token);
-    return this;
-  }
-
-  /**
-   * Sets the Z4Color
-   *
-   * @param color The Z4Color
-   * @return This Z4GradientColorUI
-   */
-  // public Z4GradientColorUI setZ4Color(Z4Color color) {
-  // this.color.value = color.getHEX().substring(0, 7);
-  // this.formRange.valueAsNumber = color.getComponents().$get(0);
-  // this.formRangeLabel.innerText = this.formRange.value;
-  // return this;
-  // }
-  // 
-  /**
-   * Returns the Z4GradientColor
-   *
-   * @return The Z4GradientColor
-   */
-   getZ4GradientColor() {
-    return this.gradientColor;
+    this.z4ColorUI.appendTo(this.querySelector(".canvas-container"));
+    this.z4ColorUI.onchange = (z4Color) => {
+      let input = this.querySelector(".sliders .form-check-input:checked");
+      this.gradientColor.addOrUpdateColor(parseFloat(input.value), z4Color.getARGB());
+      this.drawCanvas();
+      this.onchange(this.gradientColor);
+    };
+    this.setZ4GradientColor(this.gradientColor);
   }
 
    initDevicePixelRatio() {
@@ -1784,6 +1761,78 @@ class Z4GradientColorUI extends Z4ComponentUI {
     let options = new Object();
     options["once"] = true;
     window.matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
+  }
+
+  /**
+   * Sets the token of the gradient color label
+   *
+   * @param token The token of the gradient color label
+   * @return This Z4GradientColorUI
+   */
+   setGradientColorLabel(token) {
+    this.gradientColorLabel.setAttribute("data-token-lang", token);
+    this.gradientColorLabel.innerText = Z4MessageFactory.get(token);
+    return this;
+  }
+
+  /**
+   * Sets the token of the color label
+   *
+   * @param token The token of the color label
+   * @return This Z4GradientColorUI
+   */
+   setColorLabel(token) {
+    this.z4ColorUI.setColorLabel(token);
+    return this;
+  }
+
+  /**
+   * Returns the Z4GradientColor
+   *
+   * @return The Z4GradientColor
+   */
+   getZ4GradientColor() {
+    return this.gradientColor;
+  }
+
+  /**
+   * Sets the Z4GradientColor
+   *
+   * @param color The Z4GradientColor
+   * @return This Z4GradientColorUI
+   */
+   setZ4GradientColor(color) {
+    this.gradientColor = color;
+    this.mirroredCheck.checked = this.gradientColor.isMirrored();
+    this.formRange.valueAsNumber = this.gradientColor.getRipple();
+    this.configureSliders();
+    this.drawCanvas();
+    return this;
+  }
+
+   configureSliders() {
+    let width = Z4GradientColorUI.WIDTH / (this.gradientColor.isMirrored() ? 2 : 1);
+    let sliders = this.querySelector(".sliders");
+    sliders.innerHTML = "";
+    this.gradientColor.getComponents().forEach((z4StopColor, index, array) => {
+      let position = z4StopColor.getPosition();
+      let left = width * position - (index * 16);
+      let input = document.createElement("input");
+      input.setAttribute("class", "form-check-input");
+      input.setAttribute("type", "radio");
+      input.setAttribute("name", "colors");
+      input.setAttribute("value", "" + position);
+      input.setAttribute("style", "position:relative;left:" + left + "px");
+      input.onchange = (event) => {
+        this.z4ColorUI.setZ4Color(this.gradientColor.getComponents().find((color, idx, arr) => index === idx));
+        return null;
+      };
+      if (index === 0) {
+        input.setAttribute("checked", "");
+        this.z4ColorUI.setZ4Color(z4StopColor);
+      }
+      sliders.appendChild(input);
+    });
   }
 
    drawCanvas() {
