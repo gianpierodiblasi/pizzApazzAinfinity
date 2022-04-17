@@ -1,5 +1,6 @@
 package giada.pizzapazza.color.ui;
 
+import giada.pizzapazza.color.Z4AbstractColor;
 import giada.pizzapazza.color.Z4Color;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.ui.Z4ComponentUI;
@@ -26,7 +27,7 @@ public class Z4ColorUI extends Z4ComponentUI<Z4Color> {
     super(Z4ColorUI.UI);
 
     this.colorLabel.innerText = Z4MessageFactory.get("COLOR");
-    
+
     $HTMLElement gray = this.querySelector(".gray");
     gray.innerText = Z4MessageFactory.get("GRAY");
     gray.onclick = (event) -> {
@@ -34,7 +35,7 @@ public class Z4ColorUI extends Z4ComponentUI<Z4Color> {
       this.onchange.$apply(this.getZ4Color());
       return null;
     };
-    
+
     $HTMLElement negative = this.querySelector(".negative");
     negative.innerText = Z4MessageFactory.get("NEGATIVE");
     negative.onclick = (event) -> {
@@ -42,7 +43,7 @@ public class Z4ColorUI extends Z4ComponentUI<Z4Color> {
       this.onchange.$apply(this.getZ4Color());
       return null;
     };
-    
+
     this.querySelector(".opacity-color-label").innerText = Z4MessageFactory.get("OPACITY");
 
     this.color.onchange = (event) -> {
@@ -75,7 +76,7 @@ public class Z4ColorUI extends Z4ComponentUI<Z4Color> {
    * @param color The Z4Color
    * @return This Z4ColorUI
    */
-  public Z4ColorUI setZ4Color(Z4Color color) {
+  public Z4ColorUI setZ4Color(Z4AbstractColor<?> color) {
     this.color.value = color.getHEX().substring(0, 7);
     this.formRange.valueAsNumber = color.getComponents().$get(0);
     this.formRangeLabel.innerText = this.formRange.value;
