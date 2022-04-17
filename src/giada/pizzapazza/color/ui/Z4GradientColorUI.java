@@ -2,6 +2,7 @@ package giada.pizzapazza.color.ui;
 
 import def.dom.CanvasGradient;
 import def.dom.CanvasPattern;
+import def.dom.HTMLElement;
 import giada.pizzapazza.color.Z4GradientColor;
 import giada.pizzapazza.setting.Z4ImageFactory;
 import giada.pizzapazza.setting.Z4MessageFactory;
@@ -13,6 +14,7 @@ import simulation.dom.$HTMLElement;
 import simulation.dom.$OffscreenCanvas;
 import simulation.js.$Apply_0_Void;
 import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.window;
 import simulation.js.$Object;
 
@@ -49,6 +51,22 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
     this.canvas.style.border = "1px dashed gray";
     this.canvas.style.width = Z4GradientColorUI.WIDTH + "px";
     this.canvas.style.height = Z4GradientColorUI.HEIGHT + "px";
+
+//    this.gradientColor.addOrUpdateColor(0.75,128<<24|255<<16);
+    $HTMLElement sliders = this.querySelector(".sliders");
+    this.gradientColor.getComponents().forEach((z4StopColor, index, array) -> {
+      double position = z4StopColor.getPosition();
+      double left = Z4GradientColorUI.WIDTH * position - (index * 16);
+      
+      HTMLElement input = document.createElement("input");
+      input.setAttribute("class", "form-check-input");
+      input.setAttribute("type", "radio");
+      input.setAttribute("name", "colors");
+      input.setAttribute("value", "" + position);
+      input.setAttribute("style", "position:relative;left:" + left + "px");
+
+      sliders.appendChild(input);
+    });
 
     this.querySelector(".ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
     this.querySelector(".mirrored-label").innerText = Z4MessageFactory.get("MIRRORED");

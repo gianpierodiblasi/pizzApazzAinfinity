@@ -1691,6 +1691,20 @@ class Z4GradientColorUI extends Z4ComponentUI {
     this.canvas.style.border = "1px dashed gray";
     this.canvas.style.width = Z4GradientColorUI.WIDTH + "px";
     this.canvas.style.height = Z4GradientColorUI.HEIGHT + "px";
+    // this.gradientColor.addOrUpdateColor(0.75,128<<24|255<<16);
+    let sliders = this.querySelector(".sliders");
+    this.gradientColor.getComponents().forEach((z4StopColor, index, array) => {
+      let position = z4StopColor.getPosition();
+      let left = Z4GradientColorUI.WIDTH * position - (index * 16);
+      let input = document.createElement("input");
+      input.setAttribute("class", "form-check-input");
+      input.setAttribute("type", "radio");
+      input.setAttribute("name", "colors");
+      input.setAttribute("value", "" + position);
+      input.setAttribute("style", "position:relative;left:" + left + "px");
+      sliders.appendChild(input);
+    });
+    // style=""/><input class="form-check-input" type="radio" name="radioNoLabel" value="0.5" style="position:relative;left:234px"/><input class="form-check-input" type="radio" name="radioNoLabel" value="1" style="position:relative;left:468px"/>
     this.querySelector(".ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
     this.querySelector(".mirrored-label").innerText = Z4MessageFactory.get("MIRRORED");
     this.mirroredCheck.onchange = (event) => {
