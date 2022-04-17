@@ -63,12 +63,6 @@ public class test_color2 {
     test_color2.fillCanvas("canvas11", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative().inverted(), 3);
   }
 
-  private static void setCanvas(String id) {
-    $Canvas canvas = ($Canvas) document.getElementById(id);
-    canvas.width = document.body.clientWidth / 2 - 100;
-    canvas.height = 100;
-  }
-
   private static void drawCanvas(String id, Z4GradientColor color) {
     $Canvas canvas = ($Canvas) document.getElementById(id);
     canvas.width = document.body.clientWidth / 2 - 100;

@@ -1673,15 +1673,24 @@ class Z4GradientColorUI extends Z4ComponentUI {
 
    gradientColor = new Z4GradientColor();
 
+   devicePixelRatioListener = null;
+
   static  UI = Z4ComponentUI.loadHTML("giada/pizzapazza/color/ui/Z4GradientColorUI.html");
+
+  static  WIDTH = 500;
+
+  static  HEIGHT = 50;
 
   /**
    * Creates a Z4ColorUI
    */
   constructor() {
     super(Z4GradientColorUI.UI);
+    this.initDevicePixelRatio();
     this.gradientColorLabel.innerText = Z4MessageFactory.get("GRADIENT_COLOR");
     this.canvas.style.border = "1px dashed gray";
+    this.canvas.style.width = Z4GradientColorUI.WIDTH + "px";
+    this.canvas.style.height = Z4GradientColorUI.HEIGHT + "px";
     this.querySelector(".ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
     this.querySelector(".mirrored-label").innerText = Z4MessageFactory.get("MIRRORED");
     this.mirroredCheck.onchange = (event) => {
@@ -1724,6 +1733,7 @@ class Z4GradientColorUI extends Z4ComponentUI {
   // this.formRangeLabel.innerText = this.formRange.value;
   // return this;
   // }
+  // 
   /**
    * Returns the Z4GradientColor
    *
@@ -1733,15 +1743,36 @@ class Z4GradientColorUI extends Z4ComponentUI {
     return this.gradientColor;
   }
 
-   drawCanvas() {
-    let offscreen = new OffscreenCanvas(this.canvas.width, this.canvas.height);
-    let offscreenCtx = offscreen.getContext("2d");
-    for (let x = 0; x < this.canvas.width; x++) {
-      offscreenCtx.fillStyle = this.gradientColor.getZ4ColorAt(x / this.canvas.width, true, true).getHEX();
-      offscreenCtx.fillRect(x, 0, 1, this.canvas.height);
+   initDevicePixelRatio() {
+    if (window.matchMedia) {
+      this.devicePixelRatioListener = () => {
+        this.drawCanvas();
+        this.addDevicePixelRatioListener();
+      };
+      this.addDevicePixelRatioListener();
     }
+  }
+
+   addDevicePixelRatioListener() {
+    let options = new Object();
+    options["once"] = true;
+    window.matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
+  }
+
+   drawCanvas() {
+    this.canvas.width = Math.floor(Z4GradientColorUI.WIDTH * window.devicePixelRatio);
+    this.canvas.height = Math.floor(Z4GradientColorUI.HEIGHT * window.devicePixelRatio);
+    let offscreen = new OffscreenCanvas(Z4GradientColorUI.WIDTH, Z4GradientColorUI.HEIGHT);
+    let offscreenCtx = offscreen.getContext("2d");
+    for (let x = 0; x < Z4GradientColorUI.WIDTH; x++) {
+      offscreenCtx.fillStyle = this.gradientColor.getZ4ColorAt(x / Z4GradientColorUI.WIDTH, true, true).getHEX();
+      offscreenCtx.fillRect(x, 0, 1, Z4GradientColorUI.HEIGHT);
+    }
+    this.ctx.save();
+    this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
     this.ctx.fillStyle = this.chessboard;
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.fillRect(0, 0, Z4GradientColorUI.WIDTH, Z4GradientColorUI.HEIGHT);
     this.ctx.drawImage(offscreen, 0, 0);
+    this.ctx.restore();
   }
 }

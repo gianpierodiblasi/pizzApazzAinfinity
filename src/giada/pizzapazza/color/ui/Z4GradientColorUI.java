@@ -11,6 +11,10 @@ import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$HTMLElement;
 import simulation.dom.$OffscreenCanvas;
+import simulation.js.$Apply_0_Void;
+import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.window;
+import simulation.js.$Object;
 
 /**
  * The component to show a color
@@ -28,16 +32,23 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
   private final $HTMLElement formRange = this.querySelector(".form-range");
 
   private Z4GradientColor gradientColor = new Z4GradientColor();
+  private $Apply_0_Void devicePixelRatioListener;
+
   private final static String UI = Z4ComponentUI.loadHTML("giada/pizzapazza/color/ui/Z4GradientColorUI.html");
+  private final static int WIDTH = 500;
+  private final static int HEIGHT = 50;
 
   /**
    * Creates a Z4ColorUI
    */
   public Z4GradientColorUI() {
     super(Z4GradientColorUI.UI);
+    this.initDevicePixelRatio();
 
     this.gradientColorLabel.innerText = Z4MessageFactory.get("GRADIENT_COLOR");
     this.canvas.style.border = "1px dashed gray";
+    this.canvas.style.width = Z4GradientColorUI.WIDTH + "px";
+    this.canvas.style.height = Z4GradientColorUI.HEIGHT + "px";
 
     this.querySelector(".ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
     this.querySelector(".mirrored-label").innerText = Z4MessageFactory.get("MIRRORED");
@@ -84,6 +95,7 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
 //    this.formRangeLabel.innerText = this.formRange.value;
 //    return this;
 //  }
+//  
   /**
    * Returns the Z4GradientColor
    *
@@ -93,16 +105,38 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
     return this.gradientColor;
   }
 
+  private void initDevicePixelRatio() {
+    if ($exists(window.matchMedia)) {
+      this.devicePixelRatioListener = () -> {
+        this.drawCanvas();
+        this.addDevicePixelRatioListener();
+      };
+      this.addDevicePixelRatioListener();
+    }
+  }
+
+  private void addDevicePixelRatioListener() {
+    $Object options = new $Object();
+    options.$set("once", true);
+    window.$matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
+  }
+
   private void drawCanvas() {
-    $OffscreenCanvas offscreen = new $OffscreenCanvas(this.canvas.width, this.canvas.height);
+    this.canvas.width = Math.floor(Z4GradientColorUI.WIDTH * window.devicePixelRatio);
+    this.canvas.height = Math.floor(Z4GradientColorUI.HEIGHT * window.devicePixelRatio);
+
+    $OffscreenCanvas offscreen = new $OffscreenCanvas(Z4GradientColorUI.WIDTH, Z4GradientColorUI.HEIGHT);
     $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
-    for (int x = 0; x < this.canvas.width; x++) {
-      offscreenCtx.fillStyle = this.gradientColor.getZ4ColorAt(x / this.canvas.width, true, true).$getHEX();
-      offscreenCtx.fillRect(x, 0, 1, this.canvas.height);
+    for (int x = 0; x < Z4GradientColorUI.WIDTH; x++) {
+      offscreenCtx.fillStyle = this.gradientColor.getZ4ColorAt(x / Z4GradientColorUI.WIDTH, true, true).$getHEX();
+      offscreenCtx.fillRect(x, 0, 1, Z4GradientColorUI.HEIGHT);
     }
 
+    this.ctx.save();
+    this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
     this.ctx.fillStyle = this.chessboard;
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.fillRect(0, 0, Z4GradientColorUI.WIDTH, Z4GradientColorUI.HEIGHT);
     this.ctx.drawImage(offscreen, 0, 0);
+    this.ctx.restore();
   }
 }
