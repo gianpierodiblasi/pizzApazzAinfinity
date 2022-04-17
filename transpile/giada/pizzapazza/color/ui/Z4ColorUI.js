@@ -23,6 +23,20 @@ class Z4ColorUI extends Z4ComponentUI {
   constructor() {
     super(Z4ColorUI.UI);
     this.colorLabel.innerText = Z4MessageFactory.get("COLOR");
+    let gray = this.querySelector(".gray");
+    gray.innerText = Z4MessageFactory.get("GRAY");
+    gray.onclick = (event) => {
+      this.setZ4Color(this.getZ4Color().gray());
+      this.onchange(this.getZ4Color());
+      return null;
+    };
+    let negative = this.querySelector(".negative");
+    negative.innerText = Z4MessageFactory.get("NEGATIVE");
+    negative.onclick = (event) => {
+      this.setZ4Color(this.getZ4Color().negative());
+      this.onchange(this.getZ4Color());
+      return null;
+    };
     this.querySelector(".opacity-color-label").innerText = Z4MessageFactory.get("OPACITY");
     this.color.onchange = (event) => {
       this.onchange(this.getZ4Color());

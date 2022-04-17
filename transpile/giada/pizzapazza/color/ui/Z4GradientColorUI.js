@@ -54,7 +54,6 @@ class Z4GradientColorUI extends Z4ComponentUI {
       input.setAttribute("style", "position:relative;left:" + left + "px");
       sliders.appendChild(input);
     });
-    // style=""/><input class="form-check-input" type="radio" name="radioNoLabel" value="0.5" style="position:relative;left:234px"/><input class="form-check-input" type="radio" name="radioNoLabel" value="1" style="position:relative;left:468px"/>
     this.querySelector(".ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
     this.querySelector(".mirrored-label").innerText = Z4MessageFactory.get("MIRRORED");
     this.mirroredCheck.onchange = (event) => {
