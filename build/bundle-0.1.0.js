@@ -1679,11 +1679,15 @@ class Z4GradientColorUI extends Z4ComponentUI {
 
    chessboard = this.ctx.createPattern(Z4ImageFactory.get("CHESSBOARD"), "repeat");
 
+   sliders = this.querySelector(".sliders");
+
    formRangeLabel = this.querySelector(".form-range-label");
 
    mirroredCheck = this.querySelector(".mirrored-check");
 
    formRange = this.querySelector(".form-range");
+
+   del = document.createElement("button");
 
    z4ColorUI = new Z4ColorUI();
 
@@ -1721,6 +1725,12 @@ class Z4GradientColorUI extends Z4ComponentUI {
     this.canvas.style.border = "1px dashed gray";
     this.canvas.style.width = Z4GradientColorUI.WIDTH + "px";
     this.canvas.style.height = Z4GradientColorUI.HEIGHT + "px";
+    this.sliders.onmousemove = (event) => {
+      let x = event.clientX - this.sliders.getBoundingClientRect().left;
+      let width = Z4GradientColorUI.WIDTH / (this.gradientColor.isMirrored() ? 2 : 1);
+      this.sliders.style.cursor = x < width ? "pointer" : "default";
+      return null;
+    };
     this.querySelector(".ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
     this.querySelector(".mirrored-label").innerText = Z4MessageFactory.get("MIRRORED");
     this.mirroredCheck.onchange = (event) => {
@@ -1744,6 +1754,14 @@ class Z4GradientColorUI extends Z4ComponentUI {
       this.drawCanvas();
       this.onchange(this.gradientColor);
     };
+    this.del.setAttribute("class", "dropdown-item delete-color");
+    this.del.setAttribute("type", "button");
+    this.del.setAttribute("data-token-lang-inner_text", "DELETE");
+    this.del.innerText = "Delete";
+    this.del.onclick = (event) => {
+      return null;
+    };
+    this.querySelector(".negative").parentElement.appendChild(document.createElement("li")).appendChild(this.del);
     this.setZ4GradientColor(this.gradientColor);
   }
 
@@ -1812,8 +1830,7 @@ class Z4GradientColorUI extends Z4ComponentUI {
 
    configureSliders() {
     let width = Z4GradientColorUI.WIDTH / (this.gradientColor.isMirrored() ? 2 : 1);
-    let sliders = this.querySelector(".sliders");
-    sliders.innerHTML = "";
+    this.sliders.innerHTML = "";
     this.gradientColor.getComponents().forEach((z4StopColor, index, array) => {
       let position = z4StopColor.getPosition();
       let left = width * position - (index * 16);
@@ -1825,13 +1842,19 @@ class Z4GradientColorUI extends Z4ComponentUI {
       input.setAttribute("style", "position:relative;left:" + left + "px");
       input.onchange = (event) => {
         this.z4ColorUI.setZ4Color(this.gradientColor.getComponents().find((color, idx, arr) => index === idx));
+        if (index === 0 || index === 1) {
+          this.del.setAttribute("disabled", "");
+        } else {
+          this.del.removeAttribute("disabled");
+        }
         return null;
       };
       if (index === 0) {
         input.setAttribute("checked", "");
         this.z4ColorUI.setZ4Color(z4StopColor);
+        this.del.setAttribute("disabled", "");
       }
-      sliders.appendChild(input);
+      this.sliders.appendChild(input);
     });
   }
 
