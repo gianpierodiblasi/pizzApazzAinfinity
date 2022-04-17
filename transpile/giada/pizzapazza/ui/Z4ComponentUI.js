@@ -1,4 +1,4 @@
-/* global Date, Math, URLSearchParams, XMLHttpRequest, parseInt */
+/* global Date, Math, XMLHttpRequest, parseInt */
 
 /**
  * The abstract class of all UI components
@@ -23,8 +23,7 @@ class Z4ComponentUI {
    * @return The HTML file
    */
   static  loadHTML(html) {
-    let urlParams = new URLSearchParams(window.location.search);
-    let path = Z4Loader.UP + (urlParams.get("allFiles") ? "src/" : "build/html/");
+    let path = Z4Loader.UP + (Z4Loader.allFiles ? "src/" : "build/html/");
     let client = new XMLHttpRequest();
     client.open("GET", path + html, false);
     client.send();

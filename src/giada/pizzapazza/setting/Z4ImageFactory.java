@@ -1,13 +1,11 @@
 package giada.pizzapazza.setting;
 
-import static def.dom.Globals.window;
 import def.dom.XMLHttpRequest;
 import def.js.Array;
 import giada.pizzapazza.Z4Loader;
 import simulation.dom.$Image;
 import static simulation.js.$Globals.$exists;
 import simulation.js.$String;
-import simulation.js.$URLSearchParams;
 
 /**
  * The message factory
@@ -30,8 +28,7 @@ public class Z4ImageFactory {
 
   private static Array<$Image> initImages() {
     Array<$Image> array = new Array<>();
-    $URLSearchParams urlParams = new $URLSearchParams(window.location.search);
-    String path = Z4Loader.UP + (urlParams.get("allFiles") ? "src/image/" : "build/image/");
+    String path = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
 
     XMLHttpRequest client = new XMLHttpRequest();
     client.open("GET", Z4Loader.UP + "image_list.properties", false);

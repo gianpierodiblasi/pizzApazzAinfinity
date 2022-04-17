@@ -7,19 +7,11 @@
  */
 class Z4Setting {
 
-  static  PATH = Z4Setting.initPath();
-
   static  language = Z4Setting.initLanguage();
 
   static  darkMode = Z4Setting.initDarkMode();
 
   static  mode = Z4Setting.initMode();
-
-  static  initPath() {
-    let start = window.location.href.indexOf('/', 10);
-    let end = window.location.href.indexOf('/', start + 1);
-    return window.location.href.substring(start, end);
-  }
 
   static  initLanguage() {
     let decodedCookies = decodeURIComponent(document.cookie).split(";");
@@ -71,7 +63,7 @@ class Z4Setting {
   static  setLanguage(language) {
     let date = new Date();
     date.setTime(date.getTime() + 365 * 24 * 60 * 60 * 1000);
-    document.cookie = "z4language=" + language + ";expires=" + date.toUTCString() + ";path=" + Z4Setting.PATH;
+    document.cookie = "z4language=" + language + ";expires=" + date.toUTCString() + ";path=" + Z4Loader.path;
     Z4Setting.language = language;
   }
 
@@ -102,7 +94,7 @@ class Z4Setting {
     Z4Setting.mode = mode;
     let date = new Date();
     date.setTime(date.getTime() + 365 * 24 * 60 * 60 * 1000);
-    document.cookie = "z4mode=" + mode + ";expires=" + date.toUTCString() + ";path=" + Z4Setting.PATH;
+    document.cookie = "z4mode=" + mode + ";expires=" + date.toUTCString() + ";path=" + Z4Loader.path;
   }
 
   /**

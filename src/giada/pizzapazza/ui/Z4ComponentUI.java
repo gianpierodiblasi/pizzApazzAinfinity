@@ -9,8 +9,6 @@ import simulation.dom.$HTMLElement;
 import simulation.js.$Apply_1_Void;
 import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.parseInt;
-import static simulation.js.$Globals.window;
-import simulation.js.$URLSearchParams;
 
 /**
  * The abstract class of all UI components
@@ -35,8 +33,7 @@ public abstract class Z4ComponentUI<T> {
    * @return The HTML file
    */
   protected static String loadHTML(String html) {
-    $URLSearchParams urlParams = new $URLSearchParams(window.location.search);
-    String path = Z4Loader.UP + (urlParams.get("allFiles") ? "src/" : "build/html/");
+    String path = Z4Loader.UP + (Z4Loader.allFiles ? "src/" : "build/html/");
 
     XMLHttpRequest client = new XMLHttpRequest();
     client.open("GET", path + html, false);

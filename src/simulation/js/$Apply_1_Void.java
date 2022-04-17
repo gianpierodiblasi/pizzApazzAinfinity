@@ -4,6 +4,7 @@ package simulation.js;
  * The simulation of a functional interface with ONE parameter and VOID return
  * value
  *
+ * @param <T>
  * @author gianpiero.di.blasi
  */
 @FunctionalInterface

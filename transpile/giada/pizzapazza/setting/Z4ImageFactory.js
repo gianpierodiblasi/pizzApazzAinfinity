@@ -1,4 +1,4 @@
-/* global Array, Image, String, URLSearchParams, XMLHttpRequest, Z4ImageFactory */
+/* global Array, Image, String, XMLHttpRequest, Z4ImageFactory */
 
 /**
  * The message factory
@@ -21,8 +21,7 @@ class Z4ImageFactory {
 
   static  initImages() {
     let array = new Array();
-    let urlParams = new URLSearchParams(window.location.search);
-    let path = Z4Loader.UP + (urlParams.get("allFiles") ? "src/image/" : "build/image/");
+    let path = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
     let client = new XMLHttpRequest();
     client.open("GET", Z4Loader.UP + "image_list.properties", false);
     client.send();

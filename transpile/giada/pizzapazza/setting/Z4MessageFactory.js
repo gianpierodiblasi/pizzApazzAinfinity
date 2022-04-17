@@ -1,4 +1,4 @@
-/* global Array, Object, String, URLSearchParams, XMLHttpRequest, Z4MessageFactory, Z4Setting */
+/* global Array, Object, String, XMLHttpRequest, Z4MessageFactory, Z4Setting */
 
 /**
  * The message factory
@@ -29,8 +29,7 @@ class Z4MessageFactory {
 
   static  initMessages() {
     let array = new Array();
-    let urlParams = new URLSearchParams(window.location.search);
-    let path = Z4Loader.UP + (urlParams.get("allFiles") ? "src/message/" : "build/message/");
+    let path = Z4Loader.UP + (Z4Loader.allFiles ? "src/message/" : "build/message/");
     let file = "message-" + Z4Setting.getLanguage() + ".properties";
     let client = new XMLHttpRequest();
     client.open("GET", path + file, false);

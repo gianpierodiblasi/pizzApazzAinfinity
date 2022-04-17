@@ -13,19 +13,33 @@ class Z4Loader {
   static  UP = null;
 
   /**
+   * true if the allFiles query parameter is present, false otherwise
+   */
+  static  allFiles = false;
+
+  /**
+   * The application path
+   */
+  static  path = null;
+
+  /**
    * The onLoad method
    *
    * @param level The level where the onLoad starts
    */
   static  onLoad(level) {
-    Z4Loader.UP = "";
-    for (let i = 0; i < level; i++) {
-      Z4Loader.UP += "../";
-    }
     window.onload = (event) => {
-      let jsFile = window.location.href.substring(window.location.href.lastIndexOf('/') + 1).replace(".html", ".js");
+      Z4Loader.UP = "";
+      for (let i = 0; i < level; i++) {
+        Z4Loader.UP += "../";
+      }
       let urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get("allFiles")) {
+      Z4Loader.allFiles = urlParams.get("allFiles");
+      let start = window.location.href.indexOf('/', 10);
+      let end = window.location.href.indexOf('/', start + 1);
+      Z4Loader.path = window.location.href.substring(start, end);
+      let jsFile = window.location.href.substring(window.location.href.lastIndexOf('/') + 1).replace(".html", ".js");
+      if (Z4Loader.allFiles) {
         let client = new XMLHttpRequest();
         client.open("GET", Z4Loader.UP + "css_list.properties", false);
         client.send();
@@ -42,12 +56,16 @@ class Z4Loader {
         let scripts = new String(client.responseText).split("\n");
         Z4Loader.loadScripts(scripts, jsFile.substring(0, jsFile.lastIndexOf('?')));
       } else {
+        let client = new XMLHttpRequest();
+        client.open("GET", Z4Loader.UP + "version.properties", false);
+        client.send();
+        let version = client.responseText;
         let cssBundle = document.createElement("link");
         cssBundle.setAttribute("rel", "stylesheet");
-        cssBundle.setAttribute("href", Z4Loader.UP + "build/bundle.min.css");
+        cssBundle.setAttribute("href", Z4Loader.UP + "build/bundle-" + version + ".min.css");
         document.querySelector("head").appendChild(cssBundle);
         let scriptBundle = document.createElement("script");
-        scriptBundle.setAttribute("src", Z4Loader.UP + "build/bundle.min.js");
+        scriptBundle.setAttribute("src", Z4Loader.UP + "build/bundle-" + version + ".min.js");
         scriptBundle.setAttribute("type", "text/javascript");
         scriptBundle.setAttribute("async", "false");
         scriptBundle.addEventListener("load", (event2) => Z4Loader.loadScript(jsFile));

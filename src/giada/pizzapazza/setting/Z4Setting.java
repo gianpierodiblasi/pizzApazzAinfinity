@@ -4,6 +4,7 @@ import static def.dom.Globals.document;
 import def.dom.MediaQueryList;
 import def.js.Date;
 import static def.js.Globals.decodeURIComponent;
+import giada.pizzapazza.Z4Loader;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.navigator;
 import static simulation.js.$Globals.window;
@@ -15,16 +16,9 @@ import static simulation.js.$Globals.window;
  */
 public class Z4Setting {
 
-  private final static String PATH = Z4Setting.initPath();
   private static String language = Z4Setting.initLanguage();
   private static boolean darkMode = Z4Setting.initDarkMode();
   private static String mode = Z4Setting.initMode();
-  
-  private static String initPath() {
-    int start = window.location.href.indexOf('/', 10);
-    int end = window.location.href.indexOf('/', start + 1);
-    return window.location.href.substring(start, end);
-  }
 
   @SuppressWarnings("ForLoopReplaceableByForEach")
   private static String initLanguage() {
@@ -81,7 +75,7 @@ public class Z4Setting {
   public static void setLanguage(String language) {
     Date date = new Date();
     date.setTime(date.getTime() + 365 * 24 * 60 * 60 * 1000);
-    document.cookie = "z4language=" + language + ";expires=" + date.toUTCString() + ";path=" + Z4Setting.PATH;
+    document.cookie = "z4language=" + language + ";expires=" + date.toUTCString() + ";path=" + Z4Loader.path;
 
     Z4Setting.language = language;
   }
@@ -114,7 +108,7 @@ public class Z4Setting {
 
     Date date = new Date();
     date.setTime(date.getTime() + 365 * 24 * 60 * 60 * 1000);
-    document.cookie = "z4mode=" + mode + ";expires=" + date.toUTCString() + ";path=" + Z4Setting.PATH;
+    document.cookie = "z4mode=" + mode + ";expires=" + date.toUTCString() + ";path=" + Z4Loader.path;
   }
 
   /**

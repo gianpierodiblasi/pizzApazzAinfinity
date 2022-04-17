@@ -1,6 +1,5 @@
 package giada.pizzapazza.setting;
 
-import static def.dom.Globals.window;
 import def.dom.HTMLElement;
 import def.dom.XMLHttpRequest;
 import def.js.Array;
@@ -9,7 +8,6 @@ import giada.pizzapazza.Z4Loader;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.document;
 import simulation.js.$String;
-import simulation.js.$URLSearchParams;
 
 /**
  * The message factory
@@ -40,8 +38,7 @@ public class Z4MessageFactory {
 
   private static Array<def.js.String> initMessages() {
     Array<def.js.String> array = new Array<>();
-    $URLSearchParams urlParams = new $URLSearchParams(window.location.search);
-    String path = Z4Loader.UP + (urlParams.get("allFiles") ? "src/message/" : "build/message/");
+    String path = Z4Loader.UP + (Z4Loader.allFiles ? "src/message/" : "build/message/");
     String file = "message-" + Z4Setting.getLanguage() + ".properties";
 
     XMLHttpRequest client = new XMLHttpRequest();

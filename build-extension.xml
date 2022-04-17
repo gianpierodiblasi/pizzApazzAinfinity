@@ -38,6 +38,10 @@
     </java>
   </target>
   
+  <target name="version">
+    <loadfile property="version" srcFile="${basedir}/version.properties"/>
+  </target>
+  
   <target name="js_source_list_comma">
     <loadfile property="js_source_list_comma" srcFile="${basedir}/js_list.properties">
       <filterchain>
@@ -86,8 +90,8 @@
     </loadfile>
   </target>
   
-  <target name="build_js" depends="js_source_list_comma">
-    <concat destfile="${build.dir}/bundle.js" fixlastline="yes">
+  <target name="build_js" depends="version, js_source_list_comma">
+    <concat destfile="${build.dir}/bundle-${version}.js" fixlastline="yes">
       <filterchain>
         <linecontainsregexp negate="true">
           <regexp pattern="/* global .* */"/>
@@ -98,37 +102,37 @@
     </concat>
   </target>
   
-  <target name="build_css" depends="css_source_list_comma">
-    <concat destfile="${build.dir}/bundle.css" fixlastline="yes">
+  <target name="build_css" depends="version,css_source_list_comma">
+    <concat destfile="${build.dir}/bundle-${version}.css" fixlastline="yes">
       <filelist dir="${basedir}" files="${css_source_list_comma}"/>
     </concat>
   </target>
   
-  <target name="build_js_min" depends="js_source_list_space">
+  <target name="build_js_min" depends="version,js_source_list_space">
     <exec executable="cmd">
       <arg value="/c"/>
       <arg value="terser"/>
       <arg line="${js_source_list_space}"/>
-      <arg line="--output ${build.dir}/bundle.min.js"/>
+      <arg line="--output ${build.dir}/bundle-${version}.min.js"/>
       <arg value="--compress"/>
       <arg value="--mangle"/>
-      <arg line="--source-map &quot;url='bundle.min.js.map'&quot;"/>
+      <arg line="--source-map &quot;url='bundle-${version}.min.js.map'&quot;"/>
     </exec>
     
-    <replace file="${build.dir}/bundle.min.js.map" token="transpile/" value="../transpile/"/>
+    <replace file="${build.dir}/bundle-${version}.min.js.map" token="transpile/" value="../transpile/"/>
   </target>
   
-  <target name="build_css_min" depends="css_source_list_space">
+  <target name="build_css_min" depends="version,css_source_list_space">
     <exec executable="cmd">
       <arg value="/c"/>
       <arg value="cleancss"/>
       <arg line="--source-map"/>
       <arg line="-O2"/>
-      <arg line="-o ${build.dir}/bundle.min.css"/>
+      <arg line="-o ${build.dir}/bundle-${version}.min.css"/>
       <arg line="${css_source_list_space}"/>
     </exec>
     
-    <replace file="${build.dir}/bundle.min.css.map" token="src\\css\\" value="../src/css/"/>
+    <replace file="${build.dir}/bundle-${version}.min.css.map" token="src\\css\\" value="../src/css/"/>
   </target>
   
   <target name="copy_images">
