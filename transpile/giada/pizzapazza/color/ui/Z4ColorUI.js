@@ -38,10 +38,12 @@ class Z4ColorUI extends Z4ComponentUI {
       return null;
     };
     this.querySelector(".opacity-color-label").innerText = Z4MessageFactory.get("OPACITY");
-    this.color.oninput = (event) => {
+    let colorEvent = (event) => {
       this.onchange(this.getZ4Color());
       return null;
     };
+    this.color.oninput = colorEvent;
+    this.color.onchange = colorEvent;
     this.formRange.oninput = (event) => {
       this.formRangeLabel.innerText = this.formRange.value;
       this.onchange(this.getZ4Color());
