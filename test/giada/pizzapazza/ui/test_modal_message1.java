@@ -1,6 +1,8 @@
 package giada.pizzapazza.ui;
 
 import def.dom.HTMLElement;
+import giada.pizzapazza.setting.Z4MessageFactory;
+import giada.pizzapazza.setting.Z4Setting;
 import static simulation.js.$Globals.document;
 
 /**
@@ -10,6 +12,13 @@ import static simulation.js.$Globals.document;
 public class test_modal_message1 {
 
   public static void onLoad() {
+    document.$getElementById("language").value = Z4Setting.getLanguage();
+    document.$getElementById("language").onchange = (event) -> {
+      Z4Setting.setLanguage(document.$getElementById("language").value);
+      Z4MessageFactory.changingLanguage();
+      return null;
+    };
+
     ((HTMLElement) document.querySelector(".test-info")).onclick = (event) -> {
       Z4ModalMessageUI.showInfo("pizzApazzA", "This is an information message", () -> {
       });

@@ -1,4 +1,4 @@
-/* global Z4ModalMessageUI */
+/* global Z4MessageFactory, Z4ModalMessageUI, Z4Setting */
 
 /**
  * @author gianpiero.di.blasi
@@ -6,6 +6,12 @@
 class test_modal_message1 {
 
   static  onLoad() {
+    document.getElementById("language").value = Z4Setting.getLanguage();
+    document.getElementById("language").onchange = (event) => {
+      Z4Setting.setLanguage(document.getElementById("language").value);
+      Z4MessageFactory.changingLanguage();
+      return null;
+    };
     (document.querySelector(".test-info")).onclick = (event) => {
       Z4ModalMessageUI.showInfo("pizzApazzA", "This is an information message", () => {
       });
