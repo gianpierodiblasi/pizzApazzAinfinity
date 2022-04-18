@@ -1742,7 +1742,7 @@ class Z4ColorUI extends Z4ComponentUI {
       return null;
     };
     this.querySelector(".opacity-color-label").innerText = Z4MessageFactory.get("OPACITY");
-    this.color.onchange = (event) => {
+    this.color.oninput = (event) => {
       this.onchange(this.getZ4Color());
       return null;
     };
@@ -1998,7 +1998,7 @@ class Z4GradientColorUI extends Z4ComponentUI {
       input.setAttribute("type", "radio");
       input.setAttribute("name", "colors");
       input.setAttribute("value", "" + position);
-      input.setAttribute("style", "position:relative;left:" + left + "px");
+      input.setAttribute("style", (index !== 0 && index !== 1 ? "cursor:ew-resize;" : "") + "position:relative;left:" + left + "px");
       input.onchange = (event) => {
         this.z4ColorUI.setZ4Color(this.gradientColor.getComponents().find((color, idx, arr) => index === idx));
         if (index === 0 || index === 1) {
@@ -2050,7 +2050,7 @@ class Z4GradientColorUI extends Z4ComponentUI {
       if (this.gradientColor.getComponents().every((color, index, array) => index === idx || Math.abs(position - color.getPosition()) > 0.05)) {
         let oldPosition = parseFloat(input.value);
         input.setAttribute("value", "" + position);
-        input.setAttribute("style", "position:relative;left:" + left + "px");
+        input.setAttribute("style", "cursor:ew-resize;position:relative;left:" + left + "px");
         this.gradientColor.move(oldPosition, position);
         this.drawCanvas();
         this.onchange(this.gradientColor);

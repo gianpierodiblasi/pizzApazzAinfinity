@@ -240,7 +240,7 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
       input.setAttribute("type", "radio");
       input.setAttribute("name", "colors");
       input.setAttribute("value", "" + position);
-      input.setAttribute("style", "position:relative;left:" + left + "px");
+      input.setAttribute("style", (index != 0 && index != 1 ? "cursor:ew-resize;" : "") + "position:relative;left:" + left + "px");
 
       input.onchange = (event) -> {
         this.z4ColorUI.setZ4Color(this.gradientColor.getComponents().find((color, idx, arr) -> index == idx));
@@ -300,7 +300,7 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
         double oldPosition = parseFloat(input.value);
 
         input.setAttribute("value", "" + position);
-        input.setAttribute("style", "position:relative;left:" + left + "px");
+        input.setAttribute("style", "cursor:ew-resize;position:relative;left:" + left + "px");
         this.gradientColor.move(oldPosition, position);
         this.drawCanvas();
         this.onchange.$apply(this.gradientColor);

@@ -38,7 +38,7 @@ class Z4ColorUI extends Z4ComponentUI {
       return null;
     };
     this.querySelector(".opacity-color-label").innerText = Z4MessageFactory.get("OPACITY");
-    this.color.onchange = (event) => {
+    this.color.oninput = (event) => {
       this.onchange(this.getZ4Color());
       return null;
     };
