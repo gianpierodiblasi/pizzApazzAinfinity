@@ -1819,6 +1819,8 @@ class Z4GradientColorUI extends Z4ComponentUI {
 
    devicePixelRatioListener = null;
 
+   mouseDown = false;
+
   static  UI = Z4ComponentUI.loadHTML("giada/pizzapazza/color/ui/Z4GradientColorUI.html");
 
   static  WIDTH = 500;
@@ -2007,15 +2009,15 @@ class Z4GradientColorUI extends Z4ComponentUI {
         return null;
       };
       if (Z4Loader.touch) {
-        input.ontouchstart = (event) => {
-          event.stopPropagation();
-          return null;
-        };
+        input.ontouchstart = (event) => this.manageEvent(event, true, false, index, input, event.changedTouches[0].clientX);
+        input.ontouchmove = (event) => this.manageEvent(event, this.mouseDown, true, index, input, event.changedTouches[0].clientX);
+        input.ontouchend = (event) => this.manageEvent(event, false, false, index, input, event.changedTouches[0].clientX);
+        input.ontouchcancel = (event) => this.manageEvent(event, false, false, index, input, event.changedTouches[0].clientX);
       } else {
-        input.onmousedown = (event) => {
-          event.stopPropagation();
-          return null;
-        };
+        input.onmousedown = (event) => this.manageEvent(event, true, false, index, input, event.clientX);
+        input.onmousemove = (event) => this.manageEvent(event, this.mouseDown, true, index, input, event.clientX);
+        input.onmouseup = (event) => this.manageEvent(event, false, false, index, input, event.clientX);
+        input.onmouseleave = (event) => this.manageEvent(event, false, false, index, input, event.clientX);
       }
       if (selected !== -1 && index === selected) {
         input.setAttribute("checked", "");
@@ -2028,6 +2030,32 @@ class Z4GradientColorUI extends Z4ComponentUI {
       }
       this.sliders.appendChild(input);
     });
+  }
+
+   manageEvent(event, mouseDown, check, index, input, x) {
+    event.stopPropagation();
+    this.mouseDown = mouseDown;
+    if (check && this.mouseDown && index !== 0 && index !== 1) {
+      this.moveColor(input, index, x);
+    }
+    return null;
+  }
+
+   moveColor(input, idx, x) {
+    x -= this.sliders.getBoundingClientRect().left + 8;
+    let width = Z4GradientColorUI.WIDTH / (this.gradientColor.isMirrored() ? 2 : 1);
+    if (x < width) {
+      let position = x / width;
+      let left = width * position - (idx * 16);
+      if (this.gradientColor.getComponents().every((color, index, array) => index === idx || Math.abs(position - color.getPosition()) > 0.05)) {
+        let oldPosition = parseFloat(input.value);
+        input.setAttribute("value", "" + position);
+        input.setAttribute("style", "position:relative;left:" + left + "px");
+        this.gradientColor.move(oldPosition, position);
+        this.drawCanvas();
+        this.onchange(this.gradientColor);
+      }
+    }
   }
 
    drawCanvas() {

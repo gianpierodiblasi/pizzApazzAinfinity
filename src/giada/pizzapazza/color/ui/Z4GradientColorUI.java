@@ -3,6 +3,7 @@ package giada.pizzapazza.color.ui;
 import def.dom.CanvasGradient;
 import def.dom.CanvasPattern;
 import def.dom.HTMLElement;
+import def.dom.UIEvent;
 import static def.js.Globals.parseFloat;
 import giada.pizzapazza.Z4Loader;
 import giada.pizzapazza.color.Z4GradientColor;
@@ -42,6 +43,7 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
 
   private Z4GradientColor gradientColor = new Z4GradientColor();
   private $Apply_0_Void devicePixelRatioListener;
+  private boolean mouseDown;
 
   private final static String UI = Z4ComponentUI.loadHTML("giada/pizzapazza/color/ui/Z4GradientColorUI.html");
   private final static int WIDTH = 500;
@@ -233,7 +235,7 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
       double position = z4StopColor.getPosition();
       double left = width * position - (index * 16);
 
-      HTMLElement input = document.createElement("input");
+      $HTMLElement input = ($HTMLElement) document.createElement("input");
       input.setAttribute("class", "form-check-input");
       input.setAttribute("type", "radio");
       input.setAttribute("name", "colors");
@@ -250,16 +252,17 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
         }
         return null;
       };
+
       if (Z4Loader.touch) {
-        input.ontouchstart = (event) -> {
-          event.stopPropagation();
-          return null;
-        };
+        input.ontouchstart = (event) -> this.manageEvent(event, true, false, index, input, event.changedTouches.$get(0).clientX);
+        input.ontouchmove = (event) -> this.manageEvent(event, this.mouseDown, true, index, input, event.changedTouches.$get(0).clientX);
+        input.ontouchend = (event) -> this.manageEvent(event, false, false, index, input, event.changedTouches.$get(0).clientX);
+        input.ontouchcancel = (event) -> this.manageEvent(event, false, false, index, input, event.changedTouches.$get(0).clientX);
       } else {
-        input.onmousedown = (event) -> {
-          event.stopPropagation();
-          return null;
-        };
+        input.onmousedown = (event) -> this.manageEvent(event, true, false, index, input, event.clientX);
+        input.onmousemove = (event) -> this.manageEvent(event, this.mouseDown, true, index, input, event.clientX);
+        input.onmouseup = (event) -> this.manageEvent(event, false, false, index, input, event.clientX);
+        input.onmouseleave = (event) -> this.manageEvent(event, false, false, index, input, event.clientX);
       }
 
       if (selected != -1 && index == selected) {
@@ -274,6 +277,35 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
 
       this.sliders.appendChild(input);
     });
+  }
+
+  private Object manageEvent(UIEvent event, boolean mouseDown, boolean check, int index, $HTMLElement input, double x) {
+    event.stopPropagation();
+    this.mouseDown = mouseDown;
+    if (check && this.mouseDown && index != 0 && index != 1) {
+      this.moveColor(input, index, x);
+    }
+
+    return null;
+  }
+
+  private void moveColor($HTMLElement input, int idx, double x) {
+    x -= this.sliders.getBoundingClientRect().left + 8;
+    double width = Z4GradientColorUI.WIDTH / (this.gradientColor.isMirrored() ? 2 : 1);
+
+    if (x < width) {
+      double position = x / width;
+      double left = width * position - (idx * 16);
+      if (this.gradientColor.getComponents().every((color, index, array) -> index == idx || Math.abs(position - color.getPosition()) > 0.05)) {
+        double oldPosition = parseFloat(input.value);
+
+        input.setAttribute("value", "" + position);
+        input.setAttribute("style", "position:relative;left:" + left + "px");
+        this.gradientColor.move(oldPosition, position);
+        this.drawCanvas();
+        this.onchange.$apply(this.gradientColor);
+      }
+    }
   }
 
   private void drawCanvas() {
