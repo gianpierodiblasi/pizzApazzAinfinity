@@ -6,6 +6,7 @@ import def.dom.HTMLElement;
 import def.dom.XMLHttpRequest;
 import def.js.Array;
 import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.$typeof;
 import simulation.js.$String;
 import simulation.js.$URLSearchParams;
 
@@ -32,6 +33,11 @@ public class Z4Loader {
   public static String path;
 
   /**
+   * true if the device has touch display, false otherwise
+   */
+  public static boolean touch;
+  
+  /**
    * The onLoad method
    *
    * @param level The level where the onLoad starts
@@ -50,6 +56,8 @@ public class Z4Loader {
       int end = window.location.href.indexOf('/', start + 1);
       Z4Loader.path = window.location.href.substring(start, end);
 
+      Z4Loader.touch = $typeof(document.documentElement.ontouchstart, "object");
+      
       String jsFile = window.location.href.substring(window.location.href.lastIndexOf('/') + 1).replace(".html", ".js");
 
       if (Z4Loader.allFiles) {

@@ -23,6 +23,11 @@ class Z4Loader {
   static  path = null;
 
   /**
+   * true if the device has touch display, false otherwise
+   */
+  static  touch = false;
+
+  /**
    * The onLoad method
    *
    * @param level The level where the onLoad starts
@@ -38,6 +43,7 @@ class Z4Loader {
       let start = window.location.href.indexOf('/', 10);
       let end = window.location.href.indexOf('/', start + 1);
       Z4Loader.path = window.location.href.substring(start, end);
+      Z4Loader.touch = typeof document.documentElement.ontouchstart === "object";
       let jsFile = window.location.href.substring(window.location.href.lastIndexOf('/') + 1).replace(".html", ".js");
       if (Z4Loader.allFiles) {
         let client = new XMLHttpRequest();

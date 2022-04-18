@@ -2,9 +2,9 @@ package giada.pizzapazza.color.ui;
 
 import def.dom.CanvasGradient;
 import def.dom.CanvasPattern;
-import def.dom.ClientRect;
 import def.dom.HTMLElement;
 import static def.js.Globals.parseFloat;
+import giada.pizzapazza.Z4Loader;
 import giada.pizzapazza.color.Z4GradientColor;
 import giada.pizzapazza.setting.Z4ImageFactory;
 import giada.pizzapazza.setting.Z4MessageFactory;
@@ -83,12 +83,24 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
       return null;
     };
 
+    if (Z4Loader.touch) {
+      this.sliders.ontouchstart = (event) -> {
+        this.addColor(event.changedTouches.$get(0).clientX);
+        return null;
+      };
+    } else {
+      this.sliders.onmousedown = (event) -> {
+        this.addColor(event.clientX);
+        return null;
+      };
+    }
+
     this.querySelector(".ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
     this.querySelector(".mirrored-label").innerText = Z4MessageFactory.get("MIRRORED");
 
     this.mirroredCheck.onchange = (event) -> {
       this.gradientColor.setMirrored(this.mirroredCheck.checked);
-      this.configureSliders();
+      this.configureSliders(-1);
       this.drawCanvas();
       this.onchange.$apply(this.gradientColor);
       return null;
@@ -116,6 +128,11 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
     this.del.setAttribute("data-token-lang-inner_text", "DELETE");
     this.del.innerText = "Delete";
     this.del.onclick = (event) -> {
+      $HTMLElement input = this.querySelector(".sliders .form-check-input:checked");
+      this.gradientColor.removeColor(parseFloat(input.value));
+      this.configureSliders(-1);
+      this.drawCanvas();
+      this.onchange.$apply(this.gradientColor);
       return null;
     };
     this.querySelector(".negative").parentElement.appendChild(document.createElement("li")).appendChild(this.del);
@@ -137,6 +154,21 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
     $Object options = new $Object();
     options.$set("once", true);
     window.$matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
+  }
+
+  private void addColor(double x) {
+    x -= this.sliders.getBoundingClientRect().left + 8;
+    double width = Z4GradientColorUI.WIDTH / (this.gradientColor.isMirrored() ? 2 : 1);
+    if (x < width) {
+      double position = x / width;
+
+      if (this.gradientColor.getComponents().every((color, index, array) -> Math.abs(position - color.getPosition()) > 0.05)) {
+        this.gradientColor.generateColor(position);
+        this.configureSliders(this.gradientColor.getComponents().length - 1);
+        this.drawCanvas();
+        this.onchange.$apply(this.gradientColor);
+      }
+    }
   }
 
   /**
@@ -182,13 +214,13 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
     this.mirroredCheck.checked = this.gradientColor.isMirrored();
     this.formRange.valueAsNumber = this.gradientColor.getRipple();
 
-    this.configureSliders();
+    this.configureSliders(-1);
     this.drawCanvas();
 
     return this;
   }
 
-  private void configureSliders() {
+  private void configureSliders(int selected) {
     double width = Z4GradientColorUI.WIDTH / (this.gradientColor.isMirrored() ? 2 : 1);
 
     this.sliders.innerHTML = "";
@@ -213,8 +245,23 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
         }
         return null;
       };
+      if (Z4Loader.touch) {
+        input.ontouchstart = (event) -> {
+          event.stopPropagation();
+          return null;
+        };
+      } else {
+        input.onmousedown = (event) -> {
+          event.stopPropagation();
+          return null;
+        };
+      }
 
-      if (index == 0) {
+      if (selected != -1 && index == selected) {
+        input.setAttribute("checked", "");
+        this.z4ColorUI.setZ4Color(z4StopColor);
+        this.del.removeAttribute("disabled");
+      } else if (selected == -1 && index == 0) {
         input.setAttribute("checked", "");
         this.z4ColorUI.setZ4Color(z4StopColor);
         this.del.setAttribute("disabled", "");

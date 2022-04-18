@@ -1731,11 +1731,22 @@ class Z4GradientColorUI extends Z4ComponentUI {
       this.sliders.style.cursor = x < width ? "pointer" : "default";
       return null;
     };
+    if (Z4Loader.touch) {
+      this.sliders.ontouchstart = (event) => {
+        this.addColor(event.changedTouches[0].clientX);
+        return null;
+      };
+    } else {
+      this.sliders.onmousedown = (event) => {
+        this.addColor(event.clientX);
+        return null;
+      };
+    }
     this.querySelector(".ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
     this.querySelector(".mirrored-label").innerText = Z4MessageFactory.get("MIRRORED");
     this.mirroredCheck.onchange = (event) => {
       this.gradientColor.setMirrored(this.mirroredCheck.checked);
-      this.configureSliders();
+      this.configureSliders(-1);
       this.drawCanvas();
       this.onchange(this.gradientColor);
       return null;
@@ -1759,6 +1770,11 @@ class Z4GradientColorUI extends Z4ComponentUI {
     this.del.setAttribute("data-token-lang-inner_text", "DELETE");
     this.del.innerText = "Delete";
     this.del.onclick = (event) => {
+      let input = this.querySelector(".sliders .form-check-input:checked");
+      this.gradientColor.removeColor(parseFloat(input.value));
+      this.configureSliders(-1);
+      this.drawCanvas();
+      this.onchange(this.gradientColor);
       return null;
     };
     this.querySelector(".negative").parentElement.appendChild(document.createElement("li")).appendChild(this.del);
@@ -1779,6 +1795,20 @@ class Z4GradientColorUI extends Z4ComponentUI {
     let options = new Object();
     options["once"] = true;
     window.matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
+  }
+
+   addColor(x) {
+    x -= this.sliders.getBoundingClientRect().left + 8;
+    let width = Z4GradientColorUI.WIDTH / (this.gradientColor.isMirrored() ? 2 : 1);
+    if (x < width) {
+      let position = x / width;
+      if (this.gradientColor.getComponents().every((color, index, array) => Math.abs(position - color.getPosition()) > 0.05)) {
+        this.gradientColor.generateColor(position);
+        this.configureSliders(this.gradientColor.getComponents().length - 1);
+        this.drawCanvas();
+        this.onchange(this.gradientColor);
+      }
+    }
   }
 
   /**
@@ -1823,12 +1853,12 @@ class Z4GradientColorUI extends Z4ComponentUI {
     this.gradientColor = color;
     this.mirroredCheck.checked = this.gradientColor.isMirrored();
     this.formRange.valueAsNumber = this.gradientColor.getRipple();
-    this.configureSliders();
+    this.configureSliders(-1);
     this.drawCanvas();
     return this;
   }
 
-   configureSliders() {
+   configureSliders(selected) {
     let width = Z4GradientColorUI.WIDTH / (this.gradientColor.isMirrored() ? 2 : 1);
     this.sliders.innerHTML = "";
     this.gradientColor.getComponents().forEach((z4StopColor, index, array) => {
@@ -1849,7 +1879,22 @@ class Z4GradientColorUI extends Z4ComponentUI {
         }
         return null;
       };
-      if (index === 0) {
+      if (Z4Loader.touch) {
+        input.ontouchstart = (event) => {
+          event.stopPropagation();
+          return null;
+        };
+      } else {
+        input.onmousedown = (event) => {
+          event.stopPropagation();
+          return null;
+        };
+      }
+      if (selected !== -1 && index === selected) {
+        input.setAttribute("checked", "");
+        this.z4ColorUI.setZ4Color(z4StopColor);
+        this.del.removeAttribute("disabled");
+      } else if (selected === -1 && index === 0) {
         input.setAttribute("checked", "");
         this.z4ColorUI.setZ4Color(z4StopColor);
         this.del.setAttribute("disabled", "");
