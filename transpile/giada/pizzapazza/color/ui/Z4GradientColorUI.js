@@ -1,4 +1,4 @@
-/* global Math, Object, OffscreenCanvas, Z4ColorUI, Z4ComponentUI, Z4GradientColor, Z4ImageFactory, Z4MessageFactory, parseFloat */
+/* global Math, Object, OffscreenCanvas, Z4ColorUI, Z4ComponentUI, Z4GradientColor, Z4ImageFactory, Z4MessageFactory, Z4ModalMessageUI, parseFloat */
 
 /**
  * The component to show a color
@@ -104,13 +104,16 @@ class Z4GradientColorUI extends Z4ComponentUI {
     this.del.setAttribute("class", "dropdown-item delete-color");
     this.del.setAttribute("type", "button");
     this.del.setAttribute("data-token-lang-inner_text", "DELETE");
-    this.del.innerText = "Delete";
+    this.del.innerText = Z4MessageFactory.get("DELETE");
     this.del.onclick = (event) => {
-      let input = this.querySelector(".sliders .form-check-input:checked");
-      this.gradientColor.removeColor(parseFloat(input.value));
-      this.configureSliders(-1);
-      this.drawCanvas();
-      this.onchange(this.gradientColor);
+      Z4ModalMessageUI.showQuestion(Z4MessageFactory.get("TITLE"), Z4MessageFactory.get("DELETE_COLOR_MESSAGE"), () => {
+        let input = this.querySelector(".sliders .form-check-input:checked");
+        this.gradientColor.removeColor(parseFloat(input.value));
+        this.configureSliders(-1);
+        this.drawCanvas();
+        this.onchange(this.gradientColor);
+      }, () => {
+      }, null, null);
       return null;
     };
     this.querySelector(".negative").parentElement.appendChild(document.createElement("li")).appendChild(this.del);

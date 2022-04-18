@@ -9,6 +9,7 @@ import giada.pizzapazza.color.Z4GradientColor;
 import giada.pizzapazza.setting.Z4ImageFactory;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.ui.Z4ComponentUI;
+import giada.pizzapazza.ui.Z4ModalMessageUI;
 import jsweet.util.union.Union4;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
@@ -126,13 +127,17 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
     this.del.setAttribute("class", "dropdown-item delete-color");
     this.del.setAttribute("type", "button");
     this.del.setAttribute("data-token-lang-inner_text", "DELETE");
-    this.del.innerText = "Delete";
+    this.del.innerText = Z4MessageFactory.get("DELETE");
     this.del.onclick = (event) -> {
-      $HTMLElement input = this.querySelector(".sliders .form-check-input:checked");
-      this.gradientColor.removeColor(parseFloat(input.value));
-      this.configureSliders(-1);
-      this.drawCanvas();
-      this.onchange.$apply(this.gradientColor);
+      Z4ModalMessageUI.showQuestion(Z4MessageFactory.get("TITLE"), Z4MessageFactory.get("DELETE_COLOR_MESSAGE"), () -> {
+        $HTMLElement input = this.querySelector(".sliders .form-check-input:checked");
+        this.gradientColor.removeColor(parseFloat(input.value));
+        this.configureSliders(-1);
+        this.drawCanvas();
+        this.onchange.$apply(this.gradientColor);
+      }, () -> {
+      }, null, null);
+
       return null;
     };
     this.querySelector(".negative").parentElement.appendChild(document.createElement("li")).appendChild(this.del);

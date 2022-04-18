@@ -1,4 +1,4 @@
-/* global Date, Math, Modal, XMLHttpRequest, Z4MessageFactory, Z4ModalMessageUI, parseInt */
+/* global Date, Math, Modal, XMLHttpRequest, Z4MessageFactory, Z4ModalMessageUI, onButton, parseInt */
 
 /**
  * The class of all UI messages
@@ -114,7 +114,7 @@ class Z4ModalMessageUI {
     button.className = className;
     button.innerText = text;
     button.onclick = (event) => {
-      ;
+      onButton();
       return null;
     };
     footer.appendChild(button);
