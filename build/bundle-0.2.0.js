@@ -89,7 +89,7 @@ class Z4Setting {
     Z4Setting.theme = theme;
     let date = new Date();
     date.setTime(date.getTime() + 365 * 24 * 60 * 60 * 1000);
-    document.cookie = "z4theme=" + mode + ";expires=" + date.toUTCString() + ";path=" + Z4Loader.path;
+    document.cookie = "z4theme=" + theme + ";expires=" + date.toUTCString() + ";path=" + Z4Loader.path;
     switch(Z4Setting.theme) {
       case "auto":
         if (!window.matchMedia) {
