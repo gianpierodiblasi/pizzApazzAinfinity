@@ -4,8 +4,6 @@ import static def.dom.Globals.document;
 import def.js.Date;
 import static def.js.Globals.decodeURIComponent;
 import giada.pizzapazza.Z4Loader;
-import simulation.dom.$MediaQueryList;
-import simulation.js.$Apply_0_Void;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.navigator;
 import static simulation.js.$Globals.window;
@@ -21,9 +19,6 @@ public class Z4Setting {
   private static String language = Z4Setting.initLanguage();
   private static String theme = Z4Setting.initTheme();
   private static String mode = Z4Setting.initMode();
-
-  private static $MediaQueryList darkModeMediaQueryList;
-  private static $Apply_0_Void darkModeListener;
 
   @SuppressWarnings("ForLoopReplaceableByForEach")
   private static String initLanguage() {
@@ -113,30 +108,25 @@ public class Z4Setting {
         if (!$exists(window.matchMedia)) {
           document.body.className = "";
         } else {
-          Z4Setting.darkModeListener = () -> Z4Setting.addDarkModeListener();
           Z4Setting.addDarkModeListener();
         }
         break;
       case "light":
       case "dark":
-        if ($exists(Z4Setting.darkModeMediaQueryList)) {
-          Z4Setting.darkModeMediaQueryList.removeEventListener("change", Z4Setting.darkModeListener);
-        }
         document.body.className = Z4Setting.theme == "dark" ? "z4-dark" : ""; // JS equality for strings
         break;
     }
   }
 
+  @SuppressWarnings("StringEquality")
   private static void addDarkModeListener() {
-    if (!$exists(Z4Setting.darkModeMediaQueryList)) {
-      Z4Setting.darkModeMediaQueryList = window.$matchMedia("(prefers-color-scheme: dark)");
+    if (Z4Setting.theme == "auto") { // JS equality for strings
+      document.body.className = window.$matchMedia("(prefers-color-scheme: dark)").matches ? "z4dark" : "";
+
+      $Object options = new $Object();
+      options.$set("once", true);
+      window.$matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () -> Z4Setting.addDarkModeListener(), options);
     }
-
-    document.body.className = Z4Setting.darkModeMediaQueryList.matches ? "z4dark" : "";
-
-    $Object options = new $Object();
-    options.$set("once", true);
-    Z4Setting.darkModeMediaQueryList.addEventListener("change", Z4Setting.darkModeListener, options);
   }
 
   /**
