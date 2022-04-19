@@ -12,6 +12,11 @@ class test_modal_message1 {
       Z4MessageFactory.changingLanguage();
       return null;
     };
+    document.getElementById("theme").value = Z4Setting.getTheme();
+    document.getElementById("theme").onchange = (event) => {
+      Z4Setting.setTheme(document.getElementById("theme").value);
+      return null;
+    };
     (document.querySelector(".test-info")).onclick = (event) => {
       Z4ModalMessageUI.showInfo("pizzApazzA", "This is an information message", () => {
       });

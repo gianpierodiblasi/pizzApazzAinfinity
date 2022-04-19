@@ -24,6 +24,12 @@ public class test_color1 {
       return null;
     };
 
+    document.$getElementById("theme").value = Z4Setting.getTheme();
+    document.$getElementById("theme").onchange = (event) -> {
+      Z4Setting.setTheme(document.$getElementById("theme").value);
+      return null;
+    };
+    
     document.getElementById("test1").textContent = "new Z4Color(0,0,0,0) => " + test_color1.stringify(new Z4Color(0, 0, 0, 0));
     document.getElementById("test2").textContent = "new Z4Color(0,255,0,0) => " + test_color1.stringify(new Z4Color(0, 255, 0, 0));
     document.getElementById("test3").textContent = "new Z4Color(255,255,255,255) => " + test_color1.stringify(new Z4Color(255, 255, 255, 255));

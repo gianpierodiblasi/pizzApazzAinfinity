@@ -27,6 +27,12 @@ public class test_color2 {
       return null;
     };
 
+    document.$getElementById("theme").value = Z4Setting.getTheme();
+    document.$getElementById("theme").onchange = (event) -> {
+      Z4Setting.setTheme(document.$getElementById("theme").value);
+      return null;
+    };
+    
     document.$getElementById("mode").value = Z4Setting.getMode();
     document.$getElementById("mode").onchange = (event) -> {
       Z4Setting.setMode(document.$getElementById("mode").value);

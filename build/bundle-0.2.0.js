@@ -8,9 +8,13 @@ class Z4Setting {
 
   static  language = Z4Setting.initLanguage();
 
-  static  darkMode = Z4Setting.initDarkMode();
+  static  theme = Z4Setting.initTheme();
 
   static  mode = Z4Setting.initMode();
+
+  static  darkModeMediaQueryList = null;
+
+  static  darkModeListener = null;
 
   static  initLanguage() {
     let decodedCookies = decodeURIComponent(document.cookie).split(";");
@@ -31,16 +35,17 @@ class Z4Setting {
     }
   }
 
-  static  initDarkMode() {
-    if (window.matchMedia) {
-      let matchMedia = window.matchMedia("(prefers-color-scheme: dark)");
-      matchMedia.addListener(event => {
-        Z4Setting.darkMode = event.matches;
-      });
-      return matchMedia.matches;
-    } else {
-      return false;
+  static  initTheme() {
+    Z4Setting.theme = "auto";
+    let decodedCookies = decodeURIComponent(document.cookie).split(";");
+    for (let index = 0; index < decodedCookies.length; index++) {
+      let row = decodedCookies[index].trim();
+      if (row.startsWith("z4theme")) {
+        Z4Setting.theme = row.substring(8);
+      }
     }
+    Z4Setting.setTheme(Z4Setting.theme);
+    return Z4Setting.theme;
   }
 
   static  initMode() {
@@ -76,12 +81,52 @@ class Z4Setting {
   }
 
   /**
-   * Returns true if the OS is in dark mode
+   * Sets the theme
    *
-   * @return true if the OS is in dark mode, false otherwise
+   * @param theme The theme ("auto", "light", "dark")
    */
-  static  isDarkMode() {
-    return Z4Setting.darkMode;
+  static  setTheme(theme) {
+    Z4Setting.theme = theme;
+    let date = new Date();
+    date.setTime(date.getTime() + 365 * 24 * 60 * 60 * 1000);
+    document.cookie = "z4theme=" + mode + ";expires=" + date.toUTCString() + ";path=" + Z4Loader.path;
+    switch(Z4Setting.theme) {
+      case "auto":
+        if (!window.matchMedia) {
+          document.body.className = "";
+        } else {
+          Z4Setting.darkModeListener = () => Z4Setting.addDarkModeListener();
+          Z4Setting.addDarkModeListener();
+        }
+        break;
+      case "light":
+      case "dark":
+        if (Z4Setting.darkModeMediaQueryList) {
+          Z4Setting.darkModeMediaQueryList.removeEventListener("change", Z4Setting.darkModeListener);
+        }
+        // JS equality for strings
+        document.body.className = Z4Setting.theme === "dark" ? "z4-dark" : "";
+        break;
+    }
+  }
+
+  static  addDarkModeListener() {
+    if (!Z4Setting.darkModeMediaQueryList) {
+      Z4Setting.darkModeMediaQueryList = window.matchMedia("(prefers-color-scheme: dark)");
+    }
+    document.body.className = Z4Setting.darkModeMediaQueryList.matches ? "z4dark" : "";
+    let options = new Object();
+    options["once"] = true;
+    Z4Setting.darkModeMediaQueryList.addEventListener("change", Z4Setting.darkModeListener, options);
+  }
+
+  /**
+   * Returns the theme
+   *
+   * @return The theme ("auto", "light", "dark")
+   */
+  static  getTheme() {
+    return Z4Setting.theme;
   }
 
   /**
@@ -1742,10 +1787,12 @@ class Z4ColorUI extends Z4ComponentUI {
       return null;
     };
     this.querySelector(".opacity-color-label").innerText = Z4MessageFactory.get("OPACITY");
-    this.color.oninput = (event) => {
+    let colorEvent = (event) => {
       this.onchange(this.getZ4Color());
       return null;
     };
+    this.color.oninput = colorEvent;
+    this.color.onchange = colorEvent;
     this.formRange.oninput = (event) => {
       this.formRangeLabel.innerText = this.formRange.value;
       this.onchange(this.getZ4Color());

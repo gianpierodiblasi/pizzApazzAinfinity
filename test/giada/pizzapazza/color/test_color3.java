@@ -28,13 +28,19 @@ public class test_color3 {
       return null;
     };
 
+    document.$getElementById("theme").value = Z4Setting.getTheme();
+    document.$getElementById("theme").onchange = (event) -> {
+      Z4Setting.setTheme(document.$getElementById("theme").value);
+      return null;
+    };
+
     document.$getElementById("mode").value = Z4Setting.getMode();
     document.$getElementById("mode").onchange = (event) -> {
       Z4Setting.setMode(document.$getElementById("mode").value);
       test_color3.drawAll();
       return null;
     };
-    
+
     document.getElementById("test1").textContent = "new Z4TemporalColor() => " + test_color3.stringify(new Z4TemporalColor());
     document.getElementById("test2").textContent = "new Z4TemporalColor().addOrUpdateColor(0,0,65535) => " + test_color3.stringify(new Z4TemporalColor().addOrUpdateColor(0, 0, 65535));
     document.getElementById("test3").textContent = "new Z4TemporalColor().addOrUpdateColor(0.3,0.2,65535).move(0.3,0.4,-1,-1) => " + test_color3.stringify(new Z4TemporalColor().addOrUpdateColor(0.3, 0.2, 65535).move(0.3, 0.4, -1, -1));

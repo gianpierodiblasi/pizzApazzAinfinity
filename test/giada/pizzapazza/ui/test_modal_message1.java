@@ -19,6 +19,12 @@ public class test_modal_message1 {
       return null;
     };
 
+    document.$getElementById("theme").value = Z4Setting.getTheme();
+    document.$getElementById("theme").onchange = (event) -> {
+      Z4Setting.setTheme(document.$getElementById("theme").value);
+      return null;
+    };
+
     ((HTMLElement) document.querySelector(".test-info")).onclick = (event) -> {
       Z4ModalMessageUI.showInfo("pizzApazzA", "This is an information message", () -> {
       });
