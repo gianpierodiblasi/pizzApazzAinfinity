@@ -12,10 +12,6 @@ class Z4Setting {
 
   static  mode = Z4Setting.initMode();
 
-  static  darkModeMediaQueryList = null;
-
-  static  darkModeListener = null;
-
   static  initLanguage() {
     let decodedCookies = decodeURIComponent(document.cookie).split(";");
     for (let index = 0; index < decodedCookies.length; index++) {
@@ -95,15 +91,11 @@ class Z4Setting {
         if (!window.matchMedia) {
           document.body.className = "";
         } else {
-          Z4Setting.darkModeListener = () => Z4Setting.addDarkModeListener();
           Z4Setting.addDarkModeListener();
         }
         break;
       case "light":
       case "dark":
-        if (Z4Setting.darkModeMediaQueryList) {
-          Z4Setting.darkModeMediaQueryList.removeEventListener("change", Z4Setting.darkModeListener);
-        }
         // JS equality for strings
         document.body.className = Z4Setting.theme === "dark" ? "z4-dark" : "";
         break;
@@ -111,13 +103,13 @@ class Z4Setting {
   }
 
   static  addDarkModeListener() {
-    if (!Z4Setting.darkModeMediaQueryList) {
-      Z4Setting.darkModeMediaQueryList = window.matchMedia("(prefers-color-scheme: dark)");
+    if (Z4Setting.theme === "auto") {
+      // JS equality for strings
+      document.body.className = window.matchMedia("(prefers-color-scheme: dark)").matches ? "z4dark" : "";
+      let options = new Object();
+      options["once"] = true;
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => Z4Setting.addDarkModeListener(), options);
     }
-    document.body.className = Z4Setting.darkModeMediaQueryList.matches ? "z4dark" : "";
-    let options = new Object();
-    options["once"] = true;
-    Z4Setting.darkModeMediaQueryList.addEventListener("change", Z4Setting.darkModeListener, options);
   }
 
   /**
@@ -1862,6 +1854,8 @@ class Z4GradientColorUI extends Z4ComponentUI {
 
    z4ColorUI = new Z4ColorUI();
 
+   key = new Date().getTime() + "-" + parseInt(1000 * Math.random());
+
    gradientColor = new Z4GradientColor();
 
    devicePixelRatioListener = null;
@@ -2043,7 +2037,7 @@ class Z4GradientColorUI extends Z4ComponentUI {
       let input = document.createElement("input");
       input.setAttribute("class", "form-check-input");
       input.setAttribute("type", "radio");
-      input.setAttribute("name", "colors");
+      input.setAttribute("name", "colors_" + this.key);
       input.setAttribute("value", "" + position);
       input.setAttribute("style", (index !== 0 && index !== 1 ? "cursor:ew-resize;" : "") + "position:relative;left:" + left + "px");
       input.onchange = (event) => {

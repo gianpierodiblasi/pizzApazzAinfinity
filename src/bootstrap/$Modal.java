@@ -3,7 +3,7 @@ package bootstrap;
 import def.dom.HTMLElement;
 
 /**
- * The simulation of the Bootstrap $Modal Object
+ * The simulation of the Bootstrap Modal Object
  *
  * @author gianpiero.di.blasi
  */

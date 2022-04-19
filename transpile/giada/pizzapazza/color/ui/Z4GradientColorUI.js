@@ -1,4 +1,4 @@
-/* global Math, Object, OffscreenCanvas, Z4ColorUI, Z4ComponentUI, Z4GradientColor, Z4ImageFactory, Z4MessageFactory, Z4ModalMessageUI, parseFloat */
+/* global Date, Math, Object, OffscreenCanvas, Z4ColorUI, Z4ComponentUI, Z4GradientColor, Z4ImageFactory, Z4MessageFactory, Z4ModalMessageUI, parseFloat, parseInt */
 
 /**
  * The component to show a color
@@ -26,6 +26,8 @@ class Z4GradientColorUI extends Z4ComponentUI {
    del = document.createElement("button");
 
    z4ColorUI = new Z4ColorUI();
+
+   key = new Date().getTime() + "-" + parseInt(1000 * Math.random());
 
    gradientColor = new Z4GradientColor();
 
@@ -208,7 +210,7 @@ class Z4GradientColorUI extends Z4ComponentUI {
       let input = document.createElement("input");
       input.setAttribute("class", "form-check-input");
       input.setAttribute("type", "radio");
-      input.setAttribute("name", "colors");
+      input.setAttribute("name", "colors_" + this.key);
       input.setAttribute("value", "" + position);
       input.setAttribute("style", (index !== 0 && index !== 1 ? "cursor:ew-resize;" : "") + "position:relative;left:" + left + "px");
       input.onchange = (event) => {

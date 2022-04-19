@@ -26,7 +26,7 @@ public class $Globals {
   public static int parseInt(double v) {
     return 0;
   }
-  
+
   public static int parseInt(java.lang.String str, double v) {
     return 0;
   }
