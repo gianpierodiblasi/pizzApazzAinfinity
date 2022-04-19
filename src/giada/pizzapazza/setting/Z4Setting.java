@@ -1,13 +1,15 @@
 package giada.pizzapazza.setting;
 
 import static def.dom.Globals.document;
-import def.dom.MediaQueryList;
 import def.js.Date;
 import static def.js.Globals.decodeURIComponent;
 import giada.pizzapazza.Z4Loader;
+import simulation.dom.$MediaQueryList;
+import simulation.js.$Apply_0_Void;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.navigator;
 import static simulation.js.$Globals.window;
+import simulation.js.$Object;
 
 /**
  * The environment settings
@@ -17,8 +19,11 @@ import static simulation.js.$Globals.window;
 public class Z4Setting {
 
   private static String language = Z4Setting.initLanguage();
-  private static boolean darkMode = Z4Setting.initDarkMode();
+  private static String theme = Z4Setting.initTheme();
   private static String mode = Z4Setting.initMode();
+
+  private static $MediaQueryList darkModeMediaQueryList;
+  private static $Apply_0_Void darkModeListener;
 
   @SuppressWarnings("ForLoopReplaceableByForEach")
   private static String initLanguage() {
@@ -41,18 +46,19 @@ public class Z4Setting {
     }
   }
 
-  private static boolean initDarkMode() {
-    if ($exists(window.matchMedia)) {
-      MediaQueryList matchMedia = window.matchMedia("(prefers-color-scheme: dark)");
-
-      matchMedia.addListener(event -> {
-        Z4Setting.darkMode = event.matches;
-      });
-
-      return matchMedia.matches;
-    } else {
-      return false;
+  @SuppressWarnings("ForLoopReplaceableByForEach")
+  private static String initTheme() {
+    Z4Setting.theme = "auto";
+    String[] decodedCookies = decodeURIComponent(document.cookie).split(";");
+    for (int index = 0; index < decodedCookies.length; index++) {
+      String row = decodedCookies[index].trim();
+      if (row.startsWith("z4theme")) {
+        Z4Setting.theme = row.substring(8);
+      }
     }
+
+    Z4Setting.setTheme(Z4Setting.theme);
+    return Z4Setting.theme;
   }
 
   @SuppressWarnings("ForLoopReplaceableByForEach")
@@ -90,12 +96,56 @@ public class Z4Setting {
   }
 
   /**
-   * Returns true if the OS is in dark mode
+   * Sets the theme
    *
-   * @return true if the OS is in dark mode, false otherwise
+   * @param theme The theme ("auto", "light", "dark")
    */
-  public static boolean isDarkMode() {
-    return Z4Setting.darkMode;
+  @SuppressWarnings("StringEquality")
+  public static void setTheme(String theme) {
+    Z4Setting.theme = theme;
+
+    Date date = new Date();
+    date.setTime(date.getTime() + 365 * 24 * 60 * 60 * 1000);
+    document.cookie = "z4theme=" + mode + ";expires=" + date.toUTCString() + ";path=" + Z4Loader.path;
+
+    switch (Z4Setting.theme) {
+      case "auto":
+        if (!$exists(window.matchMedia)) {
+          document.body.className = "";
+        } else {
+          Z4Setting.darkModeListener = () -> Z4Setting.addDarkModeListener();
+          Z4Setting.addDarkModeListener();
+        }
+        break;
+      case "light":
+      case "dark":
+        if ($exists(Z4Setting.darkModeMediaQueryList)) {
+          Z4Setting.darkModeMediaQueryList.removeEventListener("change", Z4Setting.darkModeListener);
+        }
+        document.body.className = Z4Setting.theme == "dark" ? "z4-dark" : ""; // JS equality for strings
+        break;
+    }
+  }
+
+  private static void addDarkModeListener() {
+    if (!$exists(Z4Setting.darkModeMediaQueryList)) {
+      Z4Setting.darkModeMediaQueryList = window.$matchMedia("(prefers-color-scheme: dark)");
+    }
+
+    document.body.className = Z4Setting.darkModeMediaQueryList.matches ? "z4dark" : "";
+
+    $Object options = new $Object();
+    options.$set("once", true);
+    Z4Setting.darkModeMediaQueryList.addEventListener("change", Z4Setting.darkModeListener, options);
+  }
+
+  /**
+   * Returns the theme
+   *
+   * @return The theme ("auto", "light", "dark")
+   */
+  public static String getTheme() {
+    return Z4Setting.theme;
   }
 
   /**
