@@ -2,12 +2,14 @@ package giada.pizzapazza.color.ui;
 
 import def.dom.CanvasGradient;
 import def.dom.CanvasPattern;
+import def.dom.Event;
 import def.js.Date;
 import giada.pizzapazza.color.Z4AbstractGradientColor;
 import giada.pizzapazza.color.Z4TemporalColor;
 import giada.pizzapazza.setting.Z4ImageFactory;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.ui.Z4ComponentUI;
+import java.util.function.Function;
 import jsweet.util.union.Union4;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
@@ -31,11 +33,14 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
   private final Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> chessboard = this.ctx.createPattern(Z4ImageFactory.get("CHESSBOARD"), "repeat");
 //  private final $HTMLElement sliders = this.querySelector(".sliders");
-//  private final $HTMLElement formRangeLabel = this.querySelector(".form-range-label");
-//  private final $HTMLElement mirroredCheck = this.querySelector(".mirrored-check");
-//  private final $HTMLElement formRange = this.querySelector(".form-range");
+  private final $HTMLElement temporalFormRangeLabel = this.querySelector(".temporal-form-range-label");
+  private final $HTMLElement spatialFormRangeLabel = this.querySelector(".spatial-form-range-label");
+  private final $HTMLElement temporalMirroredCheck = this.querySelector(".temporal-mirrored-check");
+  private final $HTMLElement spatialMirroredCheck = this.querySelector(".spatial-mirrored-check");
+  private final $HTMLElement temporalFormRange = this.querySelector(".form-range-temporal");
+  private final $HTMLElement spatialFormRange = this.querySelector(".form-range-spatial");
 //  private final HTMLElement del = document.createElement("button");
-//  private final Z4ColorUI z4ColorUI = new Z4ColorUI();
+  private final Z4ColorUI z4ColorUI = new Z4ColorUI();
 //  
   private final String key = new Date().getTime() + "-" + parseInt(1000 * Math.random());
   private Z4TemporalColor temporalColor = new Z4TemporalColor();
@@ -52,25 +57,24 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
   public Z4TemporalColorUI() {
     super(Z4TemporalColorUI.UI);
     this.initDevicePixelRatio();
-    
+
     this.temporalColorLabel.innerText = Z4MessageFactory.get("TEMPORAL_COLOR");
-    
-//    $HTMLElement inverted = this.querySelector(".gradient-inverted");
-//    inverted.innerText = Z4MessageFactory.get("INVERTED");
-//    inverted.onclick = (event) -> {
-//      this.setZ4GradientColor(this.gradientColor.inverted());
-//      this.onchange.$apply(this.gradientColor);
-//      return null;
-//    };
-//    
-//    $HTMLElement negative = this.querySelector(".gradient-negative");
-//    negative.innerText = Z4MessageFactory.get("NEGATIVE");
-//    negative.onclick = (event) -> {
-//      this.setZ4GradientColor(this.gradientColor.negative());
-//      this.onchange.$apply(this.gradientColor);
-//      return null;
-//    };
-//    
+
+    $HTMLElement temporalInverted = this.querySelector(".temporal-inverted");
+    temporalInverted.innerText = Z4MessageFactory.get("TEMPORAL_INVERTED");
+    temporalInverted.onclick = (event) -> this.inverted(true, false);
+    $HTMLElement spatialInverted = this.querySelector(".spatial-inverted");
+    spatialInverted.innerText = Z4MessageFactory.get("SPATIAL_INVERTED");
+    spatialInverted.onclick = (event) -> this.inverted(false, true);
+
+    $HTMLElement negative = this.querySelector(".temporal-negative");
+    negative.innerText = Z4MessageFactory.get("NEGATIVE");
+    negative.onclick = (event) -> {
+      this.setZ4TemporalColor(this.temporalColor.negative());
+      this.onchange.$apply(this.temporalColor);
+      return null;
+    };
+
     this.canvas.style.border = "1px dashed gray";
     this.canvas.style.width = Z4TemporalColorUI.WIDTH + "px";
     this.canvas.style.height = Z4TemporalColorUI.HEIGHT + "px";
@@ -95,33 +99,34 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
 //      };
 //    }
 //    
-//    this.querySelector(".ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
-//    this.querySelector(".mirrored-label").innerText = Z4MessageFactory.get("MIRRORED");
-//    
-//    this.mirroredCheck.onchange = (event) -> {
-//      this.gradientColor.setMirrored(this.mirroredCheck.checked);
+    this.querySelector(".temporal-ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
+    this.querySelector(".spatial-ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
+    this.querySelector(".temporal-mirrored-label").innerText = Z4MessageFactory.get("MIRRORED");
+    this.querySelector(".spatial-mirrored-label").innerText = Z4MessageFactory.get("MIRRORED");
+
+    Function<Event, Object> mirror = (event) -> {
+      this.temporalColor.setMirrored(this.temporalMirroredCheck.checked, this.spatialMirroredCheck.checked);
 //      this.configureSliders(-1);
-//      this.drawCanvas();
-//      this.onchange.$apply(this.gradientColor);
-//      return null;
-//    };
-//    
-//    this.formRange.oninput = (event) -> {
-//      this.formRangeLabel.innerText = this.formRange.value;
-//      this.gradientColor.setRipple(this.formRange.valueAsNumber);
-//      this.drawCanvas();
-//      this.onchange.$apply(this.gradientColor);
-//      return null;
-//    };
-//    
-//    this.z4ColorUI.appendTo(this.querySelector(".canvas-container"));
-//    this.z4ColorUI.onchange = (z4Color) -> {
+      this.drawCanvas(1);
+      this.onchange.$apply(this.temporalColor);
+      return null;
+    };
+    this.temporalMirroredCheck.onchange = mirror;
+    this.spatialMirroredCheck.onchange = mirror;
+
+    this.temporalFormRange.oninput = (event) -> this.setRipple(5);
+    this.spatialFormRange.oninput = (event) -> this.setRipple(5);
+    this.temporalFormRange.onchange = (event) -> this.setRipple(1);
+    this.spatialFormRange.onchange = (event) -> this.setRipple(1);
+
+    this.z4ColorUI.appendTo(this.querySelector(".canvas-container"));
+    this.z4ColorUI.onchange = (z4Color) -> {
 //      $HTMLElement input = this.querySelector(".sliders .form-check-input:checked");
 //      this.gradientColor.addOrUpdateColor(parseFloat(input.value), z4Color.getARGB());
 //      
-//      this.drawCanvas();
-//      this.onchange.$apply(this.gradientColor);
-//    };
+      this.drawCanvas(1);
+      this.onchange.$apply(this.temporalColor);
+    };
 //    
 //    this.del.setAttribute("class", "dropdown-item delete-color");
 //    this.del.setAttribute("type", "button");
@@ -147,7 +152,7 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
   private void initDevicePixelRatio() {
     if ($exists(window.matchMedia)) {
       this.devicePixelRatioListener = () -> {
-        this.drawCanvas();
+        this.drawCanvas(1);
         this.addDevicePixelRatioListener();
       };
       this.addDevicePixelRatioListener();
@@ -174,27 +179,46 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
 //    }
 //  }
 
+  private Object setRipple(int step) {
+    this.temporalFormRangeLabel.innerText = this.temporalFormRange.value;
+    this.spatialFormRangeLabel.innerText = this.spatialFormRange.value;
+    this.temporalColor.setRipple(this.temporalFormRange.valueAsNumber, this.spatialFormRange.valueAsNumber);
+    this.drawCanvas(step);
+    this.onchange.$apply(this.temporalColor);
+
+    return null;
+  }
+
+  private Object inverted(boolean temporal, boolean spatial) {
+    this.setZ4TemporalColor(this.temporalColor.inverted(temporal, spatial));
+    this.onchange.$apply(this.temporalColor);
+
+    return null;
+  }
+
   /**
-   * Sets the token of the gradient color label
+   * Sets the token of the temporal color label
    *
-   * @param token The token of the gradient color label
-   * @return This Z4GradientColorUI
+   * @param token The token of the temporal color label
+   * @return This Z4TemporalColorUI
    */
-//  public Z4TemporalColorUI setGradientColorLabel(String token) {
-//    this.gradientColorLabel.setAttribute("data-token-lang", token);
-//    this.gradientColorLabel.innerText = Z4MessageFactory.get(token);
-//    return this;
-//  }
+  public Z4TemporalColorUI setTemporalColorLabel(String token) {
+    this.temporalColorLabel.setAttribute("data-token-lang", token);
+    this.temporalColorLabel.innerText = Z4MessageFactory.get(token);
+    return this;
+  }
+
   /**
    * Sets the token of the color label
    *
    * @param token The token of the color label
-   * @return This Z4GradientColorUI
+   * @return This Z4TemporalColorUI
    */
-//  public Z4TemporalColorUI setColorLabel(String token) {
-//    this.z4ColorUI.setColorLabel(token);
-//    return this;
-//  }
+  public Z4TemporalColorUI setColorLabel(String token) {
+    this.z4ColorUI.setColorLabel(token);
+    return this;
+  }
+
   /**
    * Returns the Z4TemporalColor
    *
@@ -216,7 +240,7 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
 //    this.formRange.valueAsNumber = this.temporalColor.getRipple();
 
 //    this.configureSliders(-1);
-    this.drawCanvas();
+    this.drawCanvas(1);
 
     return this;
   }
@@ -299,18 +323,18 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
 //    }
 //  }
 
-  private void drawCanvas() {
+  private void drawCanvas(int step) {
     this.canvas.width = Math.floor(Z4TemporalColorUI.WIDTH * window.devicePixelRatio);
     this.canvas.height = Math.floor(Z4TemporalColorUI.HEIGHT * window.devicePixelRatio);
 
     $OffscreenCanvas offscreen = new $OffscreenCanvas(Z4TemporalColorUI.WIDTH, Z4TemporalColorUI.HEIGHT);
     $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
-    for (int x = 0; x < Z4TemporalColorUI.WIDTH; x++) {
+    for (int x = 0; x < Z4TemporalColorUI.WIDTH; x += step) {
       Z4AbstractGradientColor<?> z4GradientColor = this.temporalColor.getZ4GradientColorAt(x / Z4TemporalColorUI.WIDTH, true, true);
 
-      for (int y = 0; y < Z4TemporalColorUI.HEIGHT; y++) {
+      for (int y = 0; y < Z4TemporalColorUI.HEIGHT; y += step) {
         offscreenCtx.fillStyle = z4GradientColor.getZ4ColorAt(y / Z4TemporalColorUI.HEIGHT, true, true).$getHEX();
-        offscreenCtx.fillRect(x, Z4TemporalColorUI.HEIGHT - y - 1, 1, 1);
+        offscreenCtx.fillRect(x, Z4TemporalColorUI.HEIGHT - y - step, step, step);
       }
     }
 

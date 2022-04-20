@@ -1,31 +1,45 @@
 <div class="canvas-container" style="display:flex">
   <div style="flex:1">
     <label class="form-label temporal-color-label" data-token-lang-inner_text="TEMPORAL_COLOR">Temporal Color</label>
-<!--    <div class="btn-group">
+    <div class="btn-group">
       <button class="btn btn-outline-secondary btn-sm dropdown-toggle z4-dropdown-toggle-three-dots" type="button" data-bs-toggle="dropdown">
         <i class="bi bi-three-dots"></i>
       </button>
 
       <ul class="dropdown-menu">
-        <li><button class="dropdown-item temporal-inverted" type="button" data-token-lang-inner_text="INVERTED">Inverted</button></li>
+        <li><button class="dropdown-item temporal-inverted" type="button" data-token-lang-inner_text="TEMPORAL_INVERTED">Temporal Inverted</button></li>
+        <li><button class="dropdown-item spatial-inverted" type="button" data-token-lang-inner_text="SPATIAL_INVERTED">Spatial Inverted</button></li>
         <li><button class="dropdown-item temporal-negative" type="button" data-token-lang-inner_text="NEGATIVE">Negative</button></li>
       </ul>
-    </div>-->
+    </div>
 
-    <canvas class="canvas" style="margin-left:8px;display:block"></canvas>
+    <div>
+      <div style="float:left;transform-origin:right top;transform:translate(-60px,0) rotate(-90deg); width:200px;margin-left:-140px;">
+        <label class="form-label spatial-ripple-color-label" data-token-lang-inner_text="RIPPLE">Ripple</label>
+        <label class="form-label spatial-form-range-label">0</label>
+
+        <div class="form-check form-switch" style="float:right">
+          <input class="form-check-input spatial-mirrored-check" type="checkbox" role="switch" id="mirrored"/>
+          <label class="form-check-label spatial-mirrored-label" for="mirrored" data-token-lang-inner_text="MIRRORED">Mirrored</label>
+        </div>
+
+        <input type="range" class="form-range form-range-spatial" value="0" min="0" max="1" step="0.01"/>  
+      </div>
+
+      <canvas class="canvas"></canvas>
+    </div>
     <!--<div class="sliders"></div>-->
   </div>
 </div>
 
-
-<!--<div>
-  <label class="form-label ripple-color-label" data-token-lang-inner_text="RIPPLE">Ripple</label>
-  <label class="form-label form-range-label">0</label>
+<div>
+  <label class="form-label temporal-ripple-color-label" data-token-lang-inner_text="RIPPLE">Ripple</label>
+  <label class="form-label temporal-form-range-label">0</label>
 
   <div class="form-check form-switch" style="float:right">
-    <input class="form-check-input mirrored-check" type="checkbox" role="switch" id="mirrored"/>
-    <label class="form-check-label mirrored-label" for="mirrored" data-token-lang-inner_text="MIRRORED">Mirrored</label>
+    <input class="form-check-input temporal-mirrored-check" type="checkbox" role="switch" id="mirrored"/>
+    <label class="form-check-label temporal-mirrored-label" for="mirrored" data-token-lang-inner_text="MIRRORED">Mirrored</label>
   </div>
 
-  <input type="range" class="form-range" value="0" min="0" max="1" step="0.01"/>  
-</div>-->
+  <input type="range" class="form-range form-range-temporal" value="0" min="0" max="1" step="0.01"/>  
+</div>
