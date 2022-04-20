@@ -1,7 +1,7 @@
 /* global Date, Math, Object, OffscreenCanvas, Z4ColorUI, Z4ComponentUI, Z4GradientColor, Z4ImageFactory, Z4MessageFactory, Z4ModalMessageUI, parseFloat, parseInt */
 
 /**
- * The component to show a color
+ * The component to show a gradient color
  *
  * @author gianpiero.di.blasi
  */
@@ -42,7 +42,7 @@ class Z4GradientColorUI extends Z4ComponentUI {
   static  HEIGHT = 50;
 
   /**
-   * Creates a Z4ColorUI
+   * Creates a Z4GradientColorUI
    */
   constructor() {
     super(Z4GradientColorUI.UI);

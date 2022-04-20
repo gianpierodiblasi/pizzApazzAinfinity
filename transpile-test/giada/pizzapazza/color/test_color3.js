@@ -1,4 +1,4 @@
-/* global Array, JSON, OffscreenCanvas, Z4MessageFactory, Z4Setting, Z4TemporalColor */
+/* global Array, JSON, OffscreenCanvas, Z4MessageFactory, Z4Setting, Z4TemporalColor, Z4TemporalColorUI */
 
 /**
  * @author gianpiero.di.blasi
@@ -30,27 +30,22 @@ class test_color3 {
     document.getElementById("test5").textContent = "new Z4TemporalColor().getZ4ColorAt(0.5,0.5,false,false) => " + test_color3.stringify(new Z4TemporalColor().getZ4ColorAt(0.5, 0.5, false, false));
     document.getElementById("test6").textContent = "new Z4TemporalColor().setRipple(0.2,0.3).getZ4ColorAt(0.75,0.3,true,false) => " + test_color3.stringify(new Z4TemporalColor().setRipple(0.2, 0.3).getZ4ColorAt(0.75, 0.3, true, false));
     test_color3.drawAll();
+    let ui = new Z4TemporalColorUI();
+    ui.appendTo(document.querySelector("#test7")).onchange = (z4TemporalColor) => document.getElementById("test8").textContent = test_color3.stringify(z4TemporalColor);
+    document.getElementById("test8").textContent = test_color3.stringify(ui.getZ4TemporalColor());
   }
 
   static  drawAll() {
-    test_color3.drawCanvas("canvas1", new Z4TemporalColor());
-    test_color3.drawCanvas("canvas2", new Z4TemporalColor().setRipple(0.2, 0));
-    test_color3.drawCanvas("canvas3", new Z4TemporalColor().setRipple(0, 0.2));
-    test_color3.drawCanvas("canvas4", new Z4TemporalColor().setRipple(0.4, 0).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16));
-    test_color3.drawCanvas("canvas5", new Z4TemporalColor().addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8));
-    test_color3.drawCanvas("canvas6", new Z4TemporalColor().setRipple(1, 0).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8));
-    test_color3.drawCanvas("canvas7", new Z4TemporalColor().addOrUpdateColor(0, 0, 255 << 24 | 255 << 8 | 255).addOrUpdateColor(0.25, 0.5, 255 << 24 | 255).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8).addOrUpdateColor(1, 1, 255 << 24 | 255 << 16 | 255));
-    test_color3.drawCanvas("canvas8", new Z4TemporalColor().addOrUpdateColor(0, 0, 255 << 24 | 255 << 8 | 255).addOrUpdateColor(0.25, 0.5, 255 << 24 | 255).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8).addOrUpdateColor(1, 1, 255 << 24 | 255 << 16 | 255).negative());
-    test_color3.drawCanvas("canvas9", new Z4TemporalColor().addOrUpdateColor(0, 0, 255 << 24 | 255 << 8 | 255).addOrUpdateColor(0.25, 0.5, 255 << 24 | 255).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8).addOrUpdateColor(1, 1, 255 << 24 | 255 << 16 | 255).negative().inverted(true, true));
-    test_color3.drawCanvas("canvas10", new Z4TemporalColor().addOrUpdateColor(0, 0, 255 << 24 | 255 << 8 | 255).addOrUpdateColor(0.25, 0.5, 255 << 24 | 255).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8).addOrUpdateColor(1, 1, 255 << 24 | 255 << 16 | 255).negative().inverted(true, true).setMirrored(true, true));
-    test_color3.drawCanvas2("canvas11", "slider1", "slider2", new Z4TemporalColor().addOrUpdateColor(0, 0, 255 << 24 | 255 << 16).addOrUpdateColor(1, 1, 255 << 24 | 255));
-    test_color3.setCanvas("canvas12");
-  }
-
-  static  setCanvas(id) {
-    let canvas = document.getElementById(id);
-    canvas.width = document.body.clientWidth / 2 - 100;
-    canvas.height = 100;
+    // test_color3.drawCanvas("canvas1", new Z4TemporalColor());
+    // test_color3.drawCanvas("canvas2", new Z4TemporalColor().setRipple(0.2, 0));
+    // test_color3.drawCanvas("canvas3", new Z4TemporalColor().setRipple(0, 0.2));
+    // test_color3.drawCanvas("canvas4", new Z4TemporalColor().setRipple(0.4, 0).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16));
+    // test_color3.drawCanvas("canvas5", new Z4TemporalColor().addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8));
+    // test_color3.drawCanvas("canvas6", new Z4TemporalColor().setRipple(1, 0).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8));
+    // test_color3.drawCanvas("canvas7", new Z4TemporalColor().addOrUpdateColor(0, 0, 255 << 24 | 255 << 8 | 255).addOrUpdateColor(0.25, 0.5, 255 << 24 | 255).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8).addOrUpdateColor(1, 1, 255 << 24 | 255 << 16 | 255));
+    // test_color3.drawCanvas("canvas8", new Z4TemporalColor().addOrUpdateColor(0, 0, 255 << 24 | 255 << 8 | 255).addOrUpdateColor(0.25, 0.5, 255 << 24 | 255).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8).addOrUpdateColor(1, 1, 255 << 24 | 255 << 16 | 255).negative());
+    // test_color3.drawCanvas("canvas9", new Z4TemporalColor().addOrUpdateColor(0, 0, 255 << 24 | 255 << 8 | 255).addOrUpdateColor(0.25, 0.5, 255 << 24 | 255).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8).addOrUpdateColor(1, 1, 255 << 24 | 255 << 16 | 255).negative().inverted(true, true));
+    // test_color3.drawCanvas("canvas10", new Z4TemporalColor().addOrUpdateColor(0, 0, 255 << 24 | 255 << 8 | 255).addOrUpdateColor(0.25, 0.5, 255 << 24 | 255).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8).addOrUpdateColor(1, 1, 255 << 24 | 255 << 16 | 255).negative().inverted(true, true).setMirrored(true, true));
   }
 
   static  drawCanvas(id, color) {
@@ -68,17 +63,6 @@ class test_color3 {
     }
     let ctx = canvas.getContext("2d");
     ctx.drawImage(offscreen, 0, 0);
-  }
-
-  static  drawCanvas2(canvas, slider1, slider2, color) {
-    test_color3.drawCanvas(canvas, color);
-    let oninput = (event) => {
-      color.setRipple(document.getElementById(slider1).valueAsNumber, document.getElementById(slider2).valueAsNumber);
-      test_color3.drawCanvas(canvas, color);
-      return null;
-    };
-    document.getElementById(slider1).oninput = oninput;
-    document.getElementById(slider2).oninput = oninput;
   }
 
   static  stringify(object) {

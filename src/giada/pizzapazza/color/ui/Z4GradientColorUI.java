@@ -25,12 +25,12 @@ import static simulation.js.$Globals.window;
 import simulation.js.$Object;
 
 /**
- * The component to show a color
+ * The component to show a gradient color
  *
  * @author gianpiero.di.blasi
  */
 public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
-  
+
   private final $HTMLElement gradientColorLabel = this.querySelector(".gradient-color-label");
   private final $Canvas canvas = ($Canvas) this.querySelector(".canvas");
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
@@ -40,27 +40,27 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
   private final $HTMLElement mirroredCheck = this.querySelector(".mirrored-check");
   private final $HTMLElement formRange = this.querySelector(".form-range");
   private final HTMLElement del = document.createElement("button");
-  
+
   private final Z4ColorUI z4ColorUI = new Z4ColorUI();
-  
+
   private final String key = new Date().getTime() + "-" + parseInt(1000 * Math.random());
   private Z4GradientColor gradientColor = new Z4GradientColor();
   private $Apply_0_Void devicePixelRatioListener;
   private boolean mouseDown;
-  
+
   private final static String UI = Z4ComponentUI.loadHTML("giada/pizzapazza/color/ui/Z4GradientColorUI.html");
   private final static int WIDTH = 500;
   private final static int HEIGHT = 50;
 
   /**
-   * Creates a Z4ColorUI
+   * Creates a Z4GradientColorUI
    */
   public Z4GradientColorUI() {
     super(Z4GradientColorUI.UI);
     this.initDevicePixelRatio();
-    
+
     this.gradientColorLabel.innerText = Z4MessageFactory.get("GRADIENT_COLOR");
-    
+
     $HTMLElement inverted = this.querySelector(".gradient-inverted");
     inverted.innerText = Z4MessageFactory.get("INVERTED");
     inverted.onclick = (event) -> {
@@ -68,7 +68,7 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
       this.onchange.$apply(this.gradientColor);
       return null;
     };
-    
+
     $HTMLElement negative = this.querySelector(".gradient-negative");
     negative.innerText = Z4MessageFactory.get("NEGATIVE");
     negative.onclick = (event) -> {
@@ -76,19 +76,19 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
       this.onchange.$apply(this.gradientColor);
       return null;
     };
-    
+
     this.canvas.style.border = "1px dashed gray";
     this.canvas.style.width = Z4GradientColorUI.WIDTH + "px";
     this.canvas.style.height = Z4GradientColorUI.HEIGHT + "px";
-    
+
     this.sliders.onmousemove = (event) -> {
       double x = event.clientX - this.sliders.getBoundingClientRect().left;
       double width = Z4GradientColorUI.WIDTH / (this.gradientColor.isMirrored() ? 2 : 1);
       this.sliders.style.cursor = x < width ? "pointer" : "default";
-      
+
       return null;
     };
-    
+
     if (Z4Loader.touch) {
       this.sliders.ontouchstart = (event) -> {
         this.addColor(event.changedTouches.$get(0).clientX);
@@ -100,10 +100,10 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
         return null;
       };
     }
-    
+
     this.querySelector(".ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
     this.querySelector(".mirrored-label").innerText = Z4MessageFactory.get("MIRRORED");
-    
+
     this.mirroredCheck.onchange = (event) -> {
       this.gradientColor.setMirrored(this.mirroredCheck.checked);
       this.configureSliders(-1);
@@ -111,7 +111,7 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
       this.onchange.$apply(this.gradientColor);
       return null;
     };
-    
+
     this.formRange.oninput = (event) -> {
       this.formRangeLabel.innerText = this.formRange.value;
       this.gradientColor.setRipple(this.formRange.valueAsNumber);
@@ -119,16 +119,16 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
       this.onchange.$apply(this.gradientColor);
       return null;
     };
-    
+
     this.z4ColorUI.appendTo(this.querySelector(".canvas-container"));
     this.z4ColorUI.onchange = (z4Color) -> {
       $HTMLElement input = this.querySelector(".sliders .form-check-input:checked");
       this.gradientColor.addOrUpdateColor(parseFloat(input.value), z4Color.getARGB());
-      
+
       this.drawCanvas();
       this.onchange.$apply(this.gradientColor);
     };
-    
+
     this.del.setAttribute("class", "dropdown-item delete-color");
     this.del.setAttribute("type", "button");
     this.del.setAttribute("data-token-lang-inner_text", "DELETE");
@@ -142,14 +142,14 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
         this.onchange.$apply(this.gradientColor);
       }, () -> {
       }, null, null);
-      
+
       return null;
     };
     this.querySelector(".negative").parentElement.appendChild(document.createElement("li")).appendChild(this.del);
-    
+
     this.setZ4GradientColor(this.gradientColor);
   }
-  
+
   private void initDevicePixelRatio() {
     if ($exists(window.matchMedia)) {
       this.devicePixelRatioListener = () -> {
@@ -159,19 +159,19 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
       this.addDevicePixelRatioListener();
     }
   }
-  
+
   private void addDevicePixelRatioListener() {
     $Object options = new $Object();
     options.$set("once", true);
     window.$matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
   }
-  
+
   private void addColor(double x) {
     x -= this.sliders.getBoundingClientRect().left + 8;
     double width = Z4GradientColorUI.WIDTH / (this.gradientColor.isMirrored() ? 2 : 1);
     if (x < width) {
       double position = x / width;
-      
+
       if (this.gradientColor.getComponents().every((color, index, array) -> Math.abs(position - color.getPosition()) > 0.05)) {
         this.gradientColor.generateColor(position);
         this.configureSliders(this.gradientColor.getComponents().length - 1);
@@ -223,31 +223,31 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
     this.gradientColor = color;
     this.mirroredCheck.checked = this.gradientColor.isMirrored();
     this.formRange.valueAsNumber = this.gradientColor.getRipple();
-    
+
     this.configureSliders(-1);
     this.drawCanvas();
-    
+
     return this;
   }
-  
+
   private void configureSliders(int selected) {
     double width = Z4GradientColorUI.WIDTH / (this.gradientColor.isMirrored() ? 2 : 1);
-    
+
     this.sliders.innerHTML = "";
     this.gradientColor.getComponents().forEach((z4StopColor, index, array) -> {
       double position = z4StopColor.getPosition();
       double left = width * position - (index * 16);
-      
+
       $HTMLElement input = ($HTMLElement) document.createElement("input");
       input.setAttribute("class", "form-check-input");
       input.setAttribute("type", "radio");
       input.setAttribute("name", "colors_" + this.key);
       input.setAttribute("value", "" + position);
       input.setAttribute("style", (index != 0 && index != 1 ? "cursor:ew-resize;" : "") + "position:relative;left:" + left + "px");
-      
+
       input.onchange = (event) -> {
         this.z4ColorUI.setZ4Color(this.gradientColor.getComponents().find((color, idx, arr) -> index == idx));
-        
+
         if (index == 0 || index == 1) {
           this.del.setAttribute("disabled", "");
         } else {
@@ -255,7 +255,7 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
         }
         return null;
       };
-      
+
       if (Z4Loader.touch) {
         input.ontouchstart = (event) -> this.manageEvent(event, true, false, index, input, event.changedTouches.$get(0).clientX);
         input.ontouchmove = (event) -> this.manageEvent(event, this.mouseDown, true, index, input, event.changedTouches.$get(0).clientX);
@@ -267,7 +267,7 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
         input.onmouseup = (event) -> this.manageEvent(event, false, false, index, input, event.clientX);
         input.onmouseleave = (event) -> this.manageEvent(event, false, false, index, input, event.clientX);
       }
-      
+
       if (selected != -1 && index == selected) {
         input.setAttribute("checked", "");
         this.z4ColorUI.setZ4Color(z4StopColor);
@@ -277,31 +277,31 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
         this.z4ColorUI.setZ4Color(z4StopColor);
         this.del.setAttribute("disabled", "");
       }
-      
+
       this.sliders.appendChild(input);
     });
   }
-  
+
   private Object manageEvent(UIEvent event, boolean mouseDown, boolean check, int index, $HTMLElement input, double x) {
     event.stopPropagation();
     this.mouseDown = mouseDown;
     if (check && this.mouseDown && index != 0 && index != 1) {
       this.moveColor(input, index, x);
     }
-    
+
     return null;
   }
-  
+
   private void moveColor($HTMLElement input, int idx, double x) {
     x -= this.sliders.getBoundingClientRect().left + 8;
     double width = Z4GradientColorUI.WIDTH / (this.gradientColor.isMirrored() ? 2 : 1);
-    
+
     if (x < width) {
       double position = x / width;
       double left = width * position - (idx * 16);
       if (this.gradientColor.getComponents().every((color, index, array) -> index == idx || Math.abs(position - color.getPosition()) > 0.05)) {
         double oldPosition = parseFloat(input.value);
-        
+
         input.setAttribute("value", "" + position);
         input.setAttribute("style", "cursor:ew-resize;position:relative;left:" + left + "px");
         this.gradientColor.move(oldPosition, position);
@@ -310,18 +310,18 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
       }
     }
   }
-  
+
   private void drawCanvas() {
     this.canvas.width = Math.floor(Z4GradientColorUI.WIDTH * window.devicePixelRatio);
     this.canvas.height = Math.floor(Z4GradientColorUI.HEIGHT * window.devicePixelRatio);
-    
+
     $OffscreenCanvas offscreen = new $OffscreenCanvas(Z4GradientColorUI.WIDTH, Z4GradientColorUI.HEIGHT);
     $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
     for (int x = 0; x < Z4GradientColorUI.WIDTH; x++) {
       offscreenCtx.fillStyle = this.gradientColor.getZ4ColorAt(x / Z4GradientColorUI.WIDTH, true, true).$getHEX();
       offscreenCtx.fillRect(x, 0, 1, Z4GradientColorUI.HEIGHT);
     }
-    
+
     this.ctx.save();
     this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
     this.ctx.fillStyle = this.chessboard;
@@ -329,4 +329,4 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
     this.ctx.drawImage(offscreen, 0, 0);
     this.ctx.restore();
   }
-  }
+}
