@@ -1,4 +1,4 @@
-/* global Date, Math, Object, OffscreenCanvas, Z4ColorUI, Z4ComponentUI, Z4GradientColor, Z4ImageFactory, Z4MessageFactory, Z4ModalMessageUI, parseFloat, parseInt */
+/* global Date, Math, Object, OffscreenCanvas, Z4ColorUI, Z4ComponentUI, Z4GradientColor, Z4GradientColorGuidedTourUI, Z4ImageFactory, Z4MessageFactory, Z4ModalMessageUI, parseFloat, parseInt */
 
 /**
  * The component to show a gradient color
@@ -60,6 +60,12 @@ class Z4GradientColorUI extends Z4ComponentUI {
     negative.onclick = (event) => {
       this.setZ4GradientColor(this.gradientColor.negative());
       this.onchange(this.gradientColor);
+      return null;
+    };
+    let guidedTour = this.querySelector(".gradient-guided-tour");
+    guidedTour.innerText = Z4MessageFactory.get("GUIDED_TOUR");
+    guidedTour.onclick = (event) => {
+      Z4GradientColorGuidedTourUI.show();
       return null;
     };
     this.canvas.style.border = "1px dashed gray";

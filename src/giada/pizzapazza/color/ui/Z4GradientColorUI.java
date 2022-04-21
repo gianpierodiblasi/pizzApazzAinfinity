@@ -77,6 +77,13 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
       return null;
     };
 
+    $HTMLElement guidedTour = this.querySelector(".gradient-guided-tour");
+    guidedTour.innerText = Z4MessageFactory.get("GUIDED_TOUR");
+    guidedTour.onclick = (event) -> {
+      Z4GradientColorGuidedTourUI.show();
+      return null;
+    };
+
     this.canvas.style.border = "1px dashed gray";
     this.canvas.style.width = Z4GradientColorUI.WIDTH + "px";
     this.canvas.style.height = Z4GradientColorUI.HEIGHT + "px";
