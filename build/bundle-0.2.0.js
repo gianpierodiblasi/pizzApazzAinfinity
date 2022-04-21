@@ -2201,13 +2201,13 @@ class Z4GradientColorGuidedTourUI extends Z4GradientColorUI {
         this.message = Z4MessageFactory.get("GUIDED_TOUR_GRADIENT_MOVE");
         break;
       case 6:
-        this.element1 = this.querySelector(".bi-three-dots");
+        this.element1 = this.querySelector(".z4-dropdown-toggle-three-dots");
         this.element2 = this.querySelector(".gradient-inverted");
         this.event = "click";
         this.message = Z4MessageFactory.get("GUIDED_TOUR_GRADIENT_INVERT");
         break;
       case 7:
-        this.element1 = this.querySelector(".bi-three-dots");
+        this.element1 = this.querySelector(".z4-dropdown-toggle-three-dots");
         this.element2 = this.querySelector(".gradient-negative");
         this.event = "click";
         this.message = Z4MessageFactory.get("GUIDED_TOUR_GRADIENT_NEGATIVIZE");
