@@ -31,7 +31,9 @@ class test_color3 {
     document.getElementById("test6").textContent = "new Z4TemporalColor().setRipple(0.2,0.3).getZ4ColorAt(0.75,0.3,true,false) => " + test_color3.stringify(new Z4TemporalColor().setRipple(0.2, 0.3).getZ4ColorAt(0.75, 0.3, true, false));
     test_color3.drawAll();
     let ui = new Z4TemporalColorUI();
-    ui.appendTo(document.querySelector("#test7")).onchange = (z4TemporalColor) => document.getElementById("test8").textContent = test_color3.stringify(z4TemporalColor);
+    ui.appendTo(document.querySelector("#test7"));
+    ui.oninput = (z4TemporalColor) => document.getElementById("test8").textContent = "ONINPUT " + test_color3.stringify(z4TemporalColor);
+    ui.onchange = (z4TemporalColor) => document.getElementById("test8").textContent = "ONCHANGE " + test_color3.stringify(z4TemporalColor);
     document.getElementById("test8").textContent = test_color3.stringify(ui.getZ4TemporalColor());
   }
 

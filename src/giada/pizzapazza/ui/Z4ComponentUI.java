@@ -27,6 +27,12 @@ public abstract class Z4ComponentUI<T> {
   };
 
   /**
+   * The oninput function
+   */
+  public $Apply_1_Void<T> oninput = element -> {
+  };
+  
+  /**
    * Loads an HTML file
    *
    * @param html The HTML file

@@ -1,11 +1,9 @@
 package giada.pizzapazza.color.ui;
 
-import def.dom.Event;
 import giada.pizzapazza.color.Z4AbstractColor;
 import giada.pizzapazza.color.Z4Color;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.ui.Z4ComponentUI;
-import java.util.function.Function;
 import simulation.dom.$HTMLElement;
 
 /**
@@ -48,14 +46,21 @@ public class Z4ColorUI extends Z4ComponentUI<Z4Color> {
 
     this.querySelector(".opacity-color-label").innerText = Z4MessageFactory.get("OPACITY");
 
-    Function<Event, Object> colorEvent = (event) -> {
+    this.color.oninput = (event) -> {
+      this.oninput.$apply(this.getZ4Color());
+      return null;
+    };
+    this.color.onchange = (event) -> {
       this.onchange.$apply(this.getZ4Color());
       return null;
     };
-    this.color.oninput = colorEvent;
-    this.color.onchange = colorEvent;
 
     this.formRange.oninput = (event) -> {
+      this.formRangeLabel.innerText = this.formRange.value;
+      this.oninput.$apply(this.getZ4Color());
+      return null;
+    };
+    this.formRange.onchange = (event) -> {
       this.formRangeLabel.innerText = this.formRange.value;
       this.onchange.$apply(this.getZ4Color());
       return null;

@@ -101,10 +101,23 @@ class Z4GradientColorUI extends Z4ComponentUI {
       this.formRangeLabel.innerText = this.formRange.value;
       this.gradientColor.setRipple(this.formRange.valueAsNumber);
       this.drawCanvas();
+      this.oninput(this.gradientColor);
+      return null;
+    };
+    this.formRange.onchange = (event) => {
+      this.formRangeLabel.innerText = this.formRange.value;
+      this.gradientColor.setRipple(this.formRange.valueAsNumber);
+      this.drawCanvas();
       this.onchange(this.gradientColor);
       return null;
     };
     this.z4ColorUI.appendTo(this.querySelector(".canvas-container"));
+    this.z4ColorUI.oninput = (z4Color) => {
+      let input = this.querySelector(".sliders .form-check-input:checked");
+      this.gradientColor.addOrUpdateColor(parseFloat(input.value), z4Color.getARGB());
+      this.drawCanvas();
+      this.oninput(this.gradientColor);
+    };
     this.z4ColorUI.onchange = (z4Color) => {
       let input = this.querySelector(".sliders .form-check-input:checked");
       this.gradientColor.addOrUpdateColor(parseFloat(input.value), z4Color.getARGB());
@@ -254,6 +267,9 @@ class Z4GradientColorUI extends Z4ComponentUI {
 
    manageEvent(event, mouseDown, check, index, input, x) {
     event.stopPropagation();
+    if (this.mouseDown && !mouseDown) {
+      this.onchange(this.gradientColor);
+    }
     this.mouseDown = mouseDown;
     if (check && this.mouseDown && index !== 0 && index !== 1) {
       this.moveColor(input, index, x);
@@ -273,7 +289,7 @@ class Z4GradientColorUI extends Z4ComponentUI {
         input.setAttribute("style", "cursor:ew-resize;position:relative;left:" + left + "px");
         this.gradientColor.move(oldPosition, position);
         this.drawCanvas();
-        this.onchange(this.gradientColor);
+        this.oninput(this.gradientColor);
       }
     }
   }

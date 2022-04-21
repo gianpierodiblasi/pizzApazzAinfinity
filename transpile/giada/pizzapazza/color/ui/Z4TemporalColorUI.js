@@ -108,6 +108,13 @@ class Z4TemporalColorUI extends Z4ComponentUI {
     this.temporalFormRange.onchange = (event) => this.setRipple(1);
     this.spatialFormRange.onchange = (event) => this.setRipple(1);
     this.z4ColorUI.appendTo(this.querySelector(".canvas-container"));
+    this.z4ColorUI.oninput = (z4Color) => {
+      // $HTMLElement input = this.querySelector(".sliders .form-check-input:checked");
+      // this.gradientColor.addOrUpdateColor(parseFloat(input.value), z4Color.getARGB());
+      // 
+      this.drawCanvas(5);
+      this.oninput(this.temporalColor);
+    };
     this.z4ColorUI.onchange = (z4Color) => {
       // $HTMLElement input = this.querySelector(".sliders .form-check-input:checked");
       // this.gradientColor.addOrUpdateColor(parseFloat(input.value), z4Color.getARGB());
@@ -171,7 +178,11 @@ class Z4TemporalColorUI extends Z4ComponentUI {
     this.spatialFormRangeLabel.innerText = this.spatialFormRange.value;
     this.temporalColor.setRipple(this.temporalFormRange.valueAsNumber, this.spatialFormRange.valueAsNumber);
     this.drawCanvas(step);
-    this.onchange(this.temporalColor);
+    if (step === 1) {
+      this.onchange(this.temporalColor);
+    } else {
+      this.oninput(this.temporalColor);
+    }
     return null;
   }
 

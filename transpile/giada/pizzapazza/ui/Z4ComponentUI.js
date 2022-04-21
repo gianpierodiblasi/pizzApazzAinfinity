@@ -17,6 +17,12 @@ class Z4ComponentUI {
   };
 
   /**
+   * The oninput function
+   */
+   oninput = element => {
+  };
+
+  /**
    * Loads an HTML file
    *
    * @param html The HTML file

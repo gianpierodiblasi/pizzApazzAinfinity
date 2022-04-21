@@ -123,11 +123,25 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
       this.formRangeLabel.innerText = this.formRange.value;
       this.gradientColor.setRipple(this.formRange.valueAsNumber);
       this.drawCanvas();
+      this.oninput.$apply(this.gradientColor);
+      return null;
+    };
+    this.formRange.onchange = (event) -> {
+      this.formRangeLabel.innerText = this.formRange.value;
+      this.gradientColor.setRipple(this.formRange.valueAsNumber);
+      this.drawCanvas();
       this.onchange.$apply(this.gradientColor);
       return null;
     };
 
     this.z4ColorUI.appendTo(this.querySelector(".canvas-container"));
+    this.z4ColorUI.oninput = (z4Color) -> {
+      $HTMLElement input = this.querySelector(".sliders .form-check-input:checked");
+      this.gradientColor.addOrUpdateColor(parseFloat(input.value), z4Color.getARGB());
+
+      this.drawCanvas();
+      this.oninput.$apply(this.gradientColor);
+    };
     this.z4ColorUI.onchange = (z4Color) -> {
       $HTMLElement input = this.querySelector(".sliders .form-check-input:checked");
       this.gradientColor.addOrUpdateColor(parseFloat(input.value), z4Color.getARGB());
@@ -291,6 +305,10 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
 
   private Object manageEvent(UIEvent event, boolean mouseDown, boolean check, int index, $HTMLElement input, double x) {
     event.stopPropagation();
+    if (this.mouseDown && !mouseDown) {
+      this.onchange.$apply(this.gradientColor);
+    }
+
     this.mouseDown = mouseDown;
     if (check && this.mouseDown && index != 0 && index != 1) {
       this.moveColor(input, index, x);
@@ -313,7 +331,7 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
         input.setAttribute("style", "cursor:ew-resize;position:relative;left:" + left + "px");
         this.gradientColor.move(oldPosition, position);
         this.drawCanvas();
-        this.onchange.$apply(this.gradientColor);
+        this.oninput.$apply(this.gradientColor);
       }
     }
   }

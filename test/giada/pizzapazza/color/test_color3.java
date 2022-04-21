@@ -50,7 +50,9 @@ public class test_color3 {
     test_color3.drawAll();
 
     Z4TemporalColorUI ui = new Z4TemporalColorUI();
-    ui.appendTo(document.querySelector("#test7")).onchange = (z4TemporalColor) -> document.getElementById("test8").textContent = test_color3.stringify(z4TemporalColor);
+    ui.appendTo(document.querySelector("#test7"));
+    ui.oninput = (z4TemporalColor) -> document.getElementById("test8").textContent = "ONINPUT " + test_color3.stringify(z4TemporalColor);
+    ui.onchange = (z4TemporalColor) -> document.getElementById("test8").textContent = "ONCHANGE " + test_color3.stringify(z4TemporalColor);
     document.getElementById("test8").textContent = test_color3.stringify(ui.getZ4TemporalColor());
   }
 

@@ -297,6 +297,12 @@ class Z4ComponentUI {
   };
 
   /**
+   * The oninput function
+   */
+   oninput = element => {
+  };
+
+  /**
    * Loads an HTML file
    *
    * @param html The HTML file
@@ -1779,13 +1785,20 @@ class Z4ColorUI extends Z4ComponentUI {
       return null;
     };
     this.querySelector(".opacity-color-label").innerText = Z4MessageFactory.get("OPACITY");
-    let colorEvent = (event) => {
+    this.color.oninput = (event) => {
+      this.oninput(this.getZ4Color());
+      return null;
+    };
+    this.color.onchange = (event) => {
       this.onchange(this.getZ4Color());
       return null;
     };
-    this.color.oninput = colorEvent;
-    this.color.onchange = colorEvent;
     this.formRange.oninput = (event) => {
+      this.formRangeLabel.innerText = this.formRange.value;
+      this.oninput(this.getZ4Color());
+      return null;
+    };
+    this.formRange.onchange = (event) => {
       this.formRangeLabel.innerText = this.formRange.value;
       this.onchange(this.getZ4Color());
       return null;
@@ -1928,10 +1941,23 @@ class Z4GradientColorUI extends Z4ComponentUI {
       this.formRangeLabel.innerText = this.formRange.value;
       this.gradientColor.setRipple(this.formRange.valueAsNumber);
       this.drawCanvas();
+      this.oninput(this.gradientColor);
+      return null;
+    };
+    this.formRange.onchange = (event) => {
+      this.formRangeLabel.innerText = this.formRange.value;
+      this.gradientColor.setRipple(this.formRange.valueAsNumber);
+      this.drawCanvas();
       this.onchange(this.gradientColor);
       return null;
     };
     this.z4ColorUI.appendTo(this.querySelector(".canvas-container"));
+    this.z4ColorUI.oninput = (z4Color) => {
+      let input = this.querySelector(".sliders .form-check-input:checked");
+      this.gradientColor.addOrUpdateColor(parseFloat(input.value), z4Color.getARGB());
+      this.drawCanvas();
+      this.oninput(this.gradientColor);
+    };
     this.z4ColorUI.onchange = (z4Color) => {
       let input = this.querySelector(".sliders .form-check-input:checked");
       this.gradientColor.addOrUpdateColor(parseFloat(input.value), z4Color.getARGB());
@@ -2081,6 +2107,9 @@ class Z4GradientColorUI extends Z4ComponentUI {
 
    manageEvent(event, mouseDown, check, index, input, x) {
     event.stopPropagation();
+    if (this.mouseDown && !mouseDown) {
+      this.onchange(this.gradientColor);
+    }
     this.mouseDown = mouseDown;
     if (check && this.mouseDown && index !== 0 && index !== 1) {
       this.moveColor(input, index, x);
@@ -2100,7 +2129,7 @@ class Z4GradientColorUI extends Z4ComponentUI {
         input.setAttribute("style", "cursor:ew-resize;position:relative;left:" + left + "px");
         this.gradientColor.move(oldPosition, position);
         this.drawCanvas();
-        this.onchange(this.gradientColor);
+        this.oninput(this.gradientColor);
       }
     }
   }
@@ -2354,6 +2383,13 @@ class Z4TemporalColorUI extends Z4ComponentUI {
     this.temporalFormRange.onchange = (event) => this.setRipple(1);
     this.spatialFormRange.onchange = (event) => this.setRipple(1);
     this.z4ColorUI.appendTo(this.querySelector(".canvas-container"));
+    this.z4ColorUI.oninput = (z4Color) => {
+      // $HTMLElement input = this.querySelector(".sliders .form-check-input:checked");
+      // this.gradientColor.addOrUpdateColor(parseFloat(input.value), z4Color.getARGB());
+      // 
+      this.drawCanvas(5);
+      this.oninput(this.temporalColor);
+    };
     this.z4ColorUI.onchange = (z4Color) => {
       // $HTMLElement input = this.querySelector(".sliders .form-check-input:checked");
       // this.gradientColor.addOrUpdateColor(parseFloat(input.value), z4Color.getARGB());
@@ -2417,7 +2453,11 @@ class Z4TemporalColorUI extends Z4ComponentUI {
     this.spatialFormRangeLabel.innerText = this.spatialFormRange.value;
     this.temporalColor.setRipple(this.temporalFormRange.valueAsNumber, this.spatialFormRange.valueAsNumber);
     this.drawCanvas(step);
-    this.onchange(this.temporalColor);
+    if (step === 1) {
+      this.onchange(this.temporalColor);
+    } else {
+      this.oninput(this.temporalColor);
+    }
     return null;
   }
 
