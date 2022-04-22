@@ -38,16 +38,16 @@ class test_color3 {
   }
 
   static  drawAll() {
-    // test_color3.drawCanvas("canvas1", new Z4TemporalColor());
-    // test_color3.drawCanvas("canvas2", new Z4TemporalColor().setRipple(0.2, 0));
-    // test_color3.drawCanvas("canvas3", new Z4TemporalColor().setRipple(0, 0.2));
-    // test_color3.drawCanvas("canvas4", new Z4TemporalColor().setRipple(0.4, 0).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16));
-    // test_color3.drawCanvas("canvas5", new Z4TemporalColor().addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8));
-    // test_color3.drawCanvas("canvas6", new Z4TemporalColor().setRipple(1, 0).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8));
-    // test_color3.drawCanvas("canvas7", new Z4TemporalColor().addOrUpdateColor(0, 0, 255 << 24 | 255 << 8 | 255).addOrUpdateColor(0.25, 0.5, 255 << 24 | 255).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8).addOrUpdateColor(1, 1, 255 << 24 | 255 << 16 | 255));
-    // test_color3.drawCanvas("canvas8", new Z4TemporalColor().addOrUpdateColor(0, 0, 255 << 24 | 255 << 8 | 255).addOrUpdateColor(0.25, 0.5, 255 << 24 | 255).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8).addOrUpdateColor(1, 1, 255 << 24 | 255 << 16 | 255).negative());
-    // test_color3.drawCanvas("canvas9", new Z4TemporalColor().addOrUpdateColor(0, 0, 255 << 24 | 255 << 8 | 255).addOrUpdateColor(0.25, 0.5, 255 << 24 | 255).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8).addOrUpdateColor(1, 1, 255 << 24 | 255 << 16 | 255).negative().inverted(true, true));
-    // test_color3.drawCanvas("canvas10", new Z4TemporalColor().addOrUpdateColor(0, 0, 255 << 24 | 255 << 8 | 255).addOrUpdateColor(0.25, 0.5, 255 << 24 | 255).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8).addOrUpdateColor(1, 1, 255 << 24 | 255 << 16 | 255).negative().inverted(true, true).setMirrored(true, true));
+    test_color3.drawCanvas("canvas1", new Z4TemporalColor());
+    test_color3.drawCanvas("canvas2", new Z4TemporalColor().setRipple(0.2, 0));
+    test_color3.drawCanvas("canvas3", new Z4TemporalColor().setRipple(0, 0.2));
+    test_color3.drawCanvas("canvas4", new Z4TemporalColor().setRipple(0.4, 0).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16));
+    test_color3.drawCanvas("canvas5", new Z4TemporalColor().addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8));
+    test_color3.drawCanvas("canvas6", new Z4TemporalColor().setRipple(1, 0).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8));
+    test_color3.drawCanvas("canvas7", new Z4TemporalColor().addOrUpdateColor(0, 0, 255 << 24 | 255 << 8 | 255).addOrUpdateColor(0.25, 0.5, 255 << 24 | 255).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8).addOrUpdateColor(1, 1, 255 << 24 | 255 << 16 | 255));
+    test_color3.drawCanvas("canvas8", new Z4TemporalColor().addOrUpdateColor(0, 0, 255 << 24 | 255 << 8 | 255).addOrUpdateColor(0.25, 0.5, 255 << 24 | 255).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8).addOrUpdateColor(1, 1, 255 << 24 | 255 << 16 | 255).negative());
+    test_color3.drawCanvas("canvas9", new Z4TemporalColor().addOrUpdateColor(0, 0, 255 << 24 | 255 << 8 | 255).addOrUpdateColor(0.25, 0.5, 255 << 24 | 255).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8).addOrUpdateColor(1, 1, 255 << 24 | 255 << 16 | 255).negative().inverted(true, true));
+    test_color3.drawCanvas("canvas10", new Z4TemporalColor().addOrUpdateColor(0, 0, 255 << 24 | 255 << 8 | 255).addOrUpdateColor(0.25, 0.5, 255 << 24 | 255).addOrUpdateColor(0.5, 0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 0.5, 255 << 24 | 255 << 8).addOrUpdateColor(1, 1, 255 << 24 | 255 << 16 | 255).negative().inverted(true, true).setMirrored(true, true));
   }
 
   static  drawCanvas(id, color) {

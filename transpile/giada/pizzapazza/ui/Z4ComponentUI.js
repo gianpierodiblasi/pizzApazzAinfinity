@@ -63,6 +63,16 @@ class Z4ComponentUI {
   }
 
   /**
+   * Selects all children of this component
+   *
+   * @param selector The selector
+   * @return All children of this component
+   */
+   querySelectorAll(selector) {
+    return this.html.querySelectorAll(selector);
+  }
+
+  /**
    * Appends this Z4ComponentUI to its parent
    *
    * @param parent The parent

@@ -310,6 +310,7 @@ class Z4TemporalColorUI extends Z4ComponentUI {
    manageEvent(event, mouseDown, check, indexT, indexS, input, x, y) {
     event.stopPropagation();
     if (this.mouseDown && !mouseDown) {
+      this.drawCanvas(1);
       this.onchange(this.temporalColor);
     }
     this.mouseDown = mouseDown;
@@ -325,25 +326,61 @@ class Z4TemporalColorUI extends Z4ComponentUI {
     let width = Z4TemporalColorUI.WIDTH / (this.temporalColor.isTemporalyMirrored() ? 2 : 1);
     let height = Z4TemporalColorUI.HEIGHT / (this.temporalColor.isSpatialyMirrored() ? 2 : 1);
     let gap = this.temporalColor.isSpatialyMirrored() ? Z4TemporalColorUI.HEIGHT / 2 : 0;
-    if (x < width && gap < y && y < gap + height) {
-      let positionT = x / width;
-      let positionS = (height - y + gap) / height;
-      let okT = this.temporalColor.getComponents().every((color, indexT, array) => indexT === idxT || Math.abs(positionT - color.getPosition()) > 0.05);
-      let okS = this.temporalColor.getComponents()[0].getComponents().every((color, indexS, array) => indexS === idxS || Math.abs(positionS - color.getPosition()) > 0.05);
-      if (okT && okS) {
-        let oldPositionT = parseFloat(input.getAttribute("T"));
-        let oldPositionS = parseFloat(input.getAttribute("S"));
-        let left = -8 + width * positionT;
-        let top = gap - 8 + height * (1 - positionS) - ((idxS + this.temporalColor.getComponents()[0].getComponents().length * idxT) * 16);
-        input.setAttribute("T", "" + positionT);
-        input.setAttribute("S", "" + positionS);
-        input.style.left = left + "px";
-        input.style.top = top + "px";
-        this.temporalColor.move(oldPositionT, positionT, oldPositionS, positionS);
-        this.drawCanvas(5);
-        this.oninput(this.temporalColor);
-      }
+    let free = idxT !== 0 && idxT !== 1 && idxS !== 0 && idxS !== 1 && x < width && gap < y && y < gap + height;
+    let temporal = idxT !== 0 && idxT !== 1 && x < width;
+    let spatial = idxS !== 0 && idxS !== 1 && gap < y && y < gap + height;
+    let positionT = x / width;
+    let positionS = (height - y + gap) / height;
+    let okT = this.temporalColor.getComponents().every((color, indexT, array) => indexT === idxT || Math.abs(positionT - color.getPosition()) > 0.05);
+    let okS = this.temporalColor.getComponents()[0].getComponents().every((color, indexS, array) => indexS === idxS || Math.abs(positionS - color.getPosition()) > 0.05);
+    let oldPositionT = parseFloat(input.getAttribute("T"));
+    let oldPositionS = parseFloat(input.getAttribute("S"));
+    let left = -8 + width * positionT;
+    let top = gap - 8 + height * (1 - positionS) - ((idxS + this.temporalColor.getComponents()[0].getComponents().length * idxT) * 16);
+    if (free && okT && okS) {
+      this.move(input, oldPositionT, oldPositionS, positionT, positionS, left, top, gap, height);
+      this.temporalColor.move(oldPositionT, positionT, oldPositionS, positionS);
+      this.drawCanvas(5);
+      this.oninput(this.temporalColor);
+    } else if (temporal && okT) {
+      this.move(input, oldPositionT, oldPositionS, positionT, oldPositionS, left, parseFloat(input.style.top.replace("px", "")), gap, height);
+      this.temporalColor.move(oldPositionT, positionT, -1, -1);
+      this.drawCanvas(5);
+      this.oninput(this.temporalColor);
+    } else if (spatial && okS) {
+      this.move(input, oldPositionT, oldPositionS, oldPositionT, positionS, parseFloat(input.style.left.replace("px", "")), top, gap, height);
+      this.temporalColor.move(oldPositionT, positionT, oldPositionS, positionS);
+      this.drawCanvas(5);
+      this.oninput(this.temporalColor);
     }
+  }
+
+   move(input, oldPositionT, oldPositionS, positionT, positionS, left, top, gap, height) {
+    this.temporalColor.getComponents().forEach((z4StopGradientColor, indexT, arrayT) => {
+      let brotherPositionT = z4StopGradientColor.getPosition();
+      z4StopGradientColor.getComponents().forEach((z4StopColor, indexS, arrayS) => {
+        let brotherPositionS = z4StopColor.getPosition();
+        if (brotherPositionT === oldPositionT || brotherPositionS === oldPositionS) {
+          let brother = this.querySelector(".sliders input[value='" + brotherPositionT + "-" + brotherPositionS + "']");
+          if (brotherPositionT !== 0 && brotherPositionT !== 1 && brotherPositionT === oldPositionT) {
+            brother.setAttribute("value", positionT + "-" + brotherPositionS);
+            brother.setAttribute("T", "" + positionT);
+            brother.style.left = left + "px";
+          }
+          if (brotherPositionS !== 0 && brotherPositionS !== 1 && brotherPositionS === oldPositionS) {
+            let brotherTop = gap - 8 + height * (1 - positionS) - ((indexS + arrayS.length * indexT) * 16);
+            brother.setAttribute("value", brotherPositionT + "-" + positionS);
+            brother.setAttribute("S", "" + positionS);
+            brother.style.top = brotherTop + "px";
+          }
+        }
+      });
+    });
+    input.setAttribute("value", positionT + "-" + positionS);
+    input.setAttribute("T", "" + positionT);
+    input.setAttribute("S", "" + positionS);
+    input.style.left = left + "px";
+    input.style.top = top + "px";
   }
 
    drawCanvas(step) {

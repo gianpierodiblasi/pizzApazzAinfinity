@@ -354,6 +354,7 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
   private Object manageEvent(UIEvent event, boolean mouseDown, boolean check, int indexT, int indexS, $HTMLElement input, double x, double y) {
     event.stopPropagation();
     if (this.mouseDown && !mouseDown) {
+      this.drawCanvas(1);
       this.onchange.$apply(this.temporalColor);
     }
 
@@ -372,28 +373,72 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
     double height = Z4TemporalColorUI.HEIGHT / (this.temporalColor.isSpatialyMirrored() ? 2 : 1);
     double gap = this.temporalColor.isSpatialyMirrored() ? Z4TemporalColorUI.HEIGHT / 2 : 0;
 
-    if (x < width && gap < y && y < gap + height) {
-      double positionT = x / width;
-      double positionS = (height - y + gap) / height;
+    boolean free = idxT != 0 && idxT != 1 && idxS != 0 && idxS != 1 && x < width && gap < y && y < gap + height;
+    boolean temporal = idxT != 0 && idxT != 1 && x < width;
+    boolean spatial = idxS != 0 && idxS != 1 && gap < y && y < gap + height;
+    double positionT = x / width;
+    double positionS = (height - y + gap) / height;
 
-      boolean okT = this.temporalColor.getComponents().every((color, indexT, array) -> indexT == idxT || Math.abs(positionT - color.getPosition()) > 0.05);
-      boolean okS = this.temporalColor.getComponents().$get(0).getComponents().every((color, indexS, array) -> indexS == idxS || Math.abs(positionS - color.getPosition()) > 0.05);
-      if (okT && okS) {
-        double oldPositionT = parseFloat(input.getAttribute("T"));
-        double oldPositionS = parseFloat(input.getAttribute("S"));
-        double left = -8 + width * positionT;
-        double top = gap - 8 + height * (1 - positionS) - ((idxS + this.temporalColor.getComponents().$get(0).getComponents().length * idxT) * 16);
+    boolean okT = this.temporalColor.getComponents().every((color, indexT, array) -> indexT == idxT || Math.abs(positionT - color.getPosition()) > 0.05);
+    boolean okS = this.temporalColor.getComponents().$get(0).getComponents().every((color, indexS, array) -> indexS == idxS || Math.abs(positionS - color.getPosition()) > 0.05);
 
-        input.setAttribute("T", "" + positionT);
-        input.setAttribute("S", "" + positionS);
-        input.style.left = left + "px";
-        input.style.top = top + "px";
+    double oldPositionT = parseFloat(input.getAttribute("T"));
+    double oldPositionS = parseFloat(input.getAttribute("S"));
+    double left = -8 + width * positionT;
+    double top = gap - 8 + height * (1 - positionS) - ((idxS + this.temporalColor.getComponents().$get(0).getComponents().length * idxT) * 16);
 
-        this.temporalColor.move(oldPositionT, positionT, oldPositionS, positionS);
-        this.drawCanvas(5);
-        this.oninput.$apply(this.temporalColor);
-      }
+    if (free && okT && okS) {
+      this.move(input, oldPositionT, oldPositionS, positionT, positionS, left, top, gap, height);
+
+      this.temporalColor.move(oldPositionT, positionT, oldPositionS, positionS);
+      this.drawCanvas(5);
+      this.oninput.$apply(this.temporalColor);
+    } else if (temporal && okT) {
+      this.move(input, oldPositionT, oldPositionS, positionT, oldPositionS, left, parseFloat(input.style.top.replace("px", "")), gap, height);
+
+      this.temporalColor.move(oldPositionT, positionT, -1, -1);
+      this.drawCanvas(5);
+      this.oninput.$apply(this.temporalColor);
+    } else if (spatial && okS) {
+      this.move(input, oldPositionT, oldPositionS, oldPositionT, positionS, parseFloat(input.style.left.replace("px", "")), top, gap, height);
+
+      this.temporalColor.move(oldPositionT, positionT, oldPositionS, positionS);
+      this.drawCanvas(5);
+      this.oninput.$apply(this.temporalColor);
     }
+  }
+
+  private void move(HTMLElement input, double oldPositionT, double oldPositionS, double positionT, double positionS, double left, double top, double gap, double height) {
+    this.temporalColor.getComponents().forEach((z4StopGradientColor, indexT, arrayT) -> {
+      double brotherPositionT = z4StopGradientColor.getPosition();
+
+      z4StopGradientColor.getComponents().forEach((z4StopColor, indexS, arrayS) -> {
+        double brotherPositionS = z4StopColor.getPosition();
+        if (brotherPositionT == oldPositionT || brotherPositionS == oldPositionS) {
+          HTMLElement brother = this.querySelector(".sliders input[value='" + brotherPositionT + "-" + brotherPositionS + "']");
+
+          if (brotherPositionT != 0 && brotherPositionT != 1 && brotherPositionT == oldPositionT) {
+            brother.setAttribute("value", positionT + "-" + brotherPositionS);
+            brother.setAttribute("T", "" + positionT);
+            brother.style.left = left + "px";
+          }
+
+          if (brotherPositionS != 0 && brotherPositionS != 1 && brotherPositionS == oldPositionS) {
+            double brotherTop = gap - 8 + height * (1 - positionS) - ((indexS + arrayS.length * indexT) * 16);
+
+            brother.setAttribute("value", brotherPositionT + "-" + positionS);
+            brother.setAttribute("S", "" + positionS);
+            brother.style.top = brotherTop + "px";
+          }
+        }
+      });
+    });
+
+    input.setAttribute("value", positionT + "-" + positionS);
+    input.setAttribute("T", "" + positionT);
+    input.setAttribute("S", "" + positionS);
+    input.style.left = left + "px";
+    input.style.top = top + "px";
   }
 
   private void drawCanvas(int step) {

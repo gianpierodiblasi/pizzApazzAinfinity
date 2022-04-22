@@ -78,6 +78,16 @@ public abstract class Z4ComponentUI<T> {
   }
 
   /**
+   * Selects all children of this component
+   *
+   * @param selector The selector
+   * @return All children of this component
+   */
+  protected NodeList querySelectorAll(String selector) {
+    return this.html.querySelectorAll(selector);
+  }
+
+  /**
    * Appends this Z4ComponentUI to its parent
    *
    * @param parent The parent
