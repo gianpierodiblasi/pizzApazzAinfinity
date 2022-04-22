@@ -130,6 +130,24 @@ class Z4TemporalColor {
   }
 
   /**
+   * Returns the temporal ripple
+   *
+   * @return The temporal ripple (in the range [0,1])
+   */
+   getTemporalRipple() {
+    return this.ripple;
+  }
+
+  /**
+   * Returns the spatial ripple
+   *
+   * @return The spatial ripple (in the range [0,1])
+   */
+   getSpatialRipple() {
+    return this.z4StopGradientColors[0].getRipple();
+  }
+
+  /**
    * Sets the mirrored
    *
    * @param temporal true if the color is temporaly mirrored, false otherwise

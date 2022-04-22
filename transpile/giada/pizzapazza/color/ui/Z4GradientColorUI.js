@@ -206,6 +206,7 @@ class Z4GradientColorUI extends Z4ComponentUI {
     this.gradientColor = color;
     this.mirroredCheck.checked = this.gradientColor.isMirrored();
     this.formRange.valueAsNumber = this.gradientColor.getRipple();
+    this.formRangeLabel.innerText = this.formRange.value;
     this.configureSliders(-1);
     this.drawCanvas();
     return this;

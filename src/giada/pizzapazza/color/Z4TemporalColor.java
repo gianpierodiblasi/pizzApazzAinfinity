@@ -32,7 +32,7 @@ public class Z4TemporalColor {
   public Array<Z4StopGradientColor> getComponents() {
     return this.z4StopGradientColors;
   }
-  
+
   /**
    * Adds or updates a color
    *
@@ -133,6 +133,24 @@ public class Z4TemporalColor {
     this.ripple = temporal;
     this.z4StopGradientColors.forEach(z4StopGradientColor -> z4StopGradientColor.setRipple(spatial));
     return this;
+  }
+
+  /**
+   * Returns the temporal ripple
+   *
+   * @return The temporal ripple (in the range [0,1])
+   */
+  public double getTemporalRipple() {
+    return this.ripple;
+  }
+
+  /**
+   * Returns the spatial ripple
+   *
+   * @return The spatial ripple (in the range [0,1])
+   */
+  public double getSpatialRipple() {
+    return this.z4StopGradientColors.$get(0).getRipple();
   }
 
   /**
