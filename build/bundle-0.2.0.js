@@ -323,8 +323,13 @@ class Z4ComponentUI {
    */
   constructor(ui) {
     this.html = document.createElement("div");
-    this.html.setAttribute("id", new Date().getTime() + "-" + parseInt(1000 * Math.random()));
+    this.html.setAttribute("id", "id" + new Date().getTime() + "_" + parseInt(1000 * Math.random()));
     this.html.innerHTML = ui;
+    let list = this.html.querySelectorAll("#" + this.html.id + " [data-token-lang-inner_text]");
+    for (let index = 0; index < list.length; index++) {
+      let element = list.item(index);
+      element.innerText = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text"));
+    }
   }
 
   /**
@@ -1769,22 +1774,16 @@ class Z4ColorUI extends Z4ComponentUI {
    */
   constructor() {
     super(Z4ColorUI.UI);
-    this.colorLabel.innerText = Z4MessageFactory.get("COLOR");
-    let gray = this.querySelector(".gray");
-    gray.innerText = Z4MessageFactory.get("GRAY");
-    gray.onclick = (event) => {
+    this.querySelector(".gray").onclick = (event) => {
       this.setZ4Color(this.getZ4Color().gray());
       this.onchange(this.getZ4Color());
       return null;
     };
-    let negative = this.querySelector(".negative");
-    negative.innerText = Z4MessageFactory.get("NEGATIVE");
-    negative.onclick = (event) => {
+    this.querySelector(".negative").onclick = (event) => {
       this.setZ4Color(this.getZ4Color().negative());
       this.onchange(this.getZ4Color());
       return null;
     };
-    this.querySelector(".opacity-color-label").innerText = Z4MessageFactory.get("OPACITY");
     this.color.oninput = (event) => {
       this.oninput(this.getZ4Color());
       return null;
@@ -1887,24 +1886,17 @@ class Z4GradientColorUI extends Z4ComponentUI {
   constructor() {
     super(Z4GradientColorUI.UI);
     this.initDevicePixelRatio();
-    this.gradientColorLabel.innerText = Z4MessageFactory.get("GRADIENT_COLOR");
-    let inverted = this.querySelector(".gradient-inverted");
-    inverted.innerText = Z4MessageFactory.get("INVERTED");
-    inverted.onclick = (event) => {
+    this.querySelector(".gradient-inverted").onclick = (event) => {
       this.setZ4GradientColor(this.gradientColor.inverted());
       this.onchange(this.gradientColor);
       return null;
     };
-    let negative = this.querySelector(".gradient-negative");
-    negative.innerText = Z4MessageFactory.get("NEGATIVE");
-    negative.onclick = (event) => {
+    this.querySelector(".gradient-negative").onclick = (event) => {
       this.setZ4GradientColor(this.gradientColor.negative());
       this.onchange(this.gradientColor);
       return null;
     };
-    let guidedTour = this.querySelector(".gradient-guided-tour");
-    guidedTour.innerText = Z4MessageFactory.get("GUIDED_TOUR");
-    guidedTour.onclick = (event) => {
+    this.querySelector(".gradient-guided-tour").onclick = (event) => {
       Z4GradientColorGuidedTourUI.show();
       return null;
     };
@@ -1928,8 +1920,6 @@ class Z4GradientColorUI extends Z4ComponentUI {
         return null;
       };
     }
-    this.querySelector(".ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
-    this.querySelector(".mirrored-label").innerText = Z4MessageFactory.get("MIRRORED");
     this.mirroredCheck.onchange = (event) => {
       this.gradientColor.setMirrored(this.mirroredCheck.checked);
       this.configureSliders(-1);
@@ -2327,16 +2317,9 @@ class Z4TemporalColorUI extends Z4ComponentUI {
   constructor() {
     super(Z4TemporalColorUI.UI);
     this.initDevicePixelRatio();
-    this.temporalColorLabel.innerText = Z4MessageFactory.get("TEMPORAL_COLOR");
-    let temporalInverted = this.querySelector(".temporal-inverted");
-    temporalInverted.innerText = Z4MessageFactory.get("TEMPORAL_INVERTED");
-    temporalInverted.onclick = (event) => this.inverted(true, false);
-    let spatialInverted = this.querySelector(".spatial-inverted");
-    spatialInverted.innerText = Z4MessageFactory.get("SPATIAL_INVERTED");
-    spatialInverted.onclick = (event) => this.inverted(false, true);
-    let negative = this.querySelector(".temporal-negative");
-    negative.innerText = Z4MessageFactory.get("NEGATIVE");
-    negative.onclick = (event) => {
+    this.querySelector(".temporal-inverted").onclick = (event) => this.inverted(true, false);
+    this.querySelector(".spatial-inverted").onclick = (event) => this.inverted(false, true);
+    this.querySelector(".temporal-negative").onclick = (event) => {
       this.setZ4TemporalColor(this.temporalColor.negative());
       this.onchange(this.temporalColor);
       return null;
@@ -2365,10 +2348,6 @@ class Z4TemporalColorUI extends Z4ComponentUI {
     // };
     // }
     // 
-    this.querySelector(".temporal-ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
-    this.querySelector(".spatial-ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
-    this.querySelector(".temporal-mirrored-label").innerText = Z4MessageFactory.get("MIRRORED");
-    this.querySelector(".spatial-mirrored-label").innerText = Z4MessageFactory.get("MIRRORED");
     let mirror = (event) => {
       this.temporalColor.setMirrored(this.temporalMirroredCheck.checked, this.spatialMirroredCheck.checked);
       // this.configureSliders(-1);

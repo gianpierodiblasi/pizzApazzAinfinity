@@ -59,27 +59,19 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
     super(Z4GradientColorUI.UI);
     this.initDevicePixelRatio();
 
-    this.gradientColorLabel.innerText = Z4MessageFactory.get("GRADIENT_COLOR");
-
-    $HTMLElement inverted = this.querySelector(".gradient-inverted");
-    inverted.innerText = Z4MessageFactory.get("INVERTED");
-    inverted.onclick = (event) -> {
+    this.querySelector(".gradient-inverted").onclick = (event) -> {
       this.setZ4GradientColor(this.gradientColor.inverted());
       this.onchange.$apply(this.gradientColor);
       return null;
     };
 
-    $HTMLElement negative = this.querySelector(".gradient-negative");
-    negative.innerText = Z4MessageFactory.get("NEGATIVE");
-    negative.onclick = (event) -> {
+    this.querySelector(".gradient-negative").onclick = (event) -> {
       this.setZ4GradientColor(this.gradientColor.negative());
       this.onchange.$apply(this.gradientColor);
       return null;
     };
 
-    $HTMLElement guidedTour = this.querySelector(".gradient-guided-tour");
-    guidedTour.innerText = Z4MessageFactory.get("GUIDED_TOUR");
-    guidedTour.onclick = (event) -> {
+    this.querySelector(".gradient-guided-tour").onclick = (event) -> {
       Z4GradientColorGuidedTourUI.show();
       return null;
     };
@@ -107,9 +99,6 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
         return null;
       };
     }
-
-    this.querySelector(".ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
-    this.querySelector(".mirrored-label").innerText = Z4MessageFactory.get("MIRRORED");
 
     this.mirroredCheck.onchange = (event) -> {
       this.gradientColor.setMirrored(this.mirroredCheck.checked);

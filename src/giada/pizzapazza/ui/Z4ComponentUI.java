@@ -2,9 +2,11 @@ package giada.pizzapazza.ui;
 
 import def.dom.Element;
 import def.dom.HTMLElement;
+import def.dom.NodeList;
 import def.dom.XMLHttpRequest;
 import def.js.Date;
 import giada.pizzapazza.Z4Loader;
+import giada.pizzapazza.setting.Z4MessageFactory;
 import simulation.dom.$HTMLElement;
 import simulation.js.$Apply_1_Void;
 import static simulation.js.$Globals.document;
@@ -31,7 +33,7 @@ public abstract class Z4ComponentUI<T> {
    */
   public $Apply_1_Void<T> oninput = element -> {
   };
-  
+
   /**
    * Loads an HTML file
    *
@@ -55,8 +57,14 @@ public abstract class Z4ComponentUI<T> {
    */
   protected Z4ComponentUI(String ui) {
     this.html = document.createElement("div");
-    this.html.setAttribute("id", new Date().getTime() + "-" + parseInt(1000 * Math.random()));
+    this.html.setAttribute("id", "id" + new Date().getTime() + "_" + parseInt(1000 * Math.random()));
     this.html.innerHTML = ui;
+
+    NodeList list = this.html.querySelectorAll("#" + this.html.id + " [data-token-lang-inner_text]");
+    for (int index = 0; index < list.length; index++) {
+      HTMLElement element = (HTMLElement) list.item(index);
+      element.innerText = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text"));
+    }
   }
 
   /**

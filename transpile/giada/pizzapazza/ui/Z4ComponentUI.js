@@ -1,4 +1,4 @@
-/* global Date, Math, XMLHttpRequest, parseInt */
+/* global Date, Math, XMLHttpRequest, Z4MessageFactory, parseInt */
 
 /**
  * The abstract class of all UI components
@@ -43,8 +43,13 @@ class Z4ComponentUI {
    */
   constructor(ui) {
     this.html = document.createElement("div");
-    this.html.setAttribute("id", new Date().getTime() + "-" + parseInt(1000 * Math.random()));
+    this.html.setAttribute("id", "id" + new Date().getTime() + "_" + parseInt(1000 * Math.random()));
     this.html.innerHTML = ui;
+    let list = this.html.querySelectorAll("#" + this.html.id + " [data-token-lang-inner_text]");
+    for (let index = 0; index < list.length; index++) {
+      let element = list.item(index);
+      element.innerText = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text"));
+    }
   }
 
   /**

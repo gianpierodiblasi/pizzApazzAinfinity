@@ -26,25 +26,17 @@ public class Z4ColorUI extends Z4ComponentUI<Z4Color> {
   public Z4ColorUI() {
     super(Z4ColorUI.UI);
 
-    this.colorLabel.innerText = Z4MessageFactory.get("COLOR");
-
-    $HTMLElement gray = this.querySelector(".gray");
-    gray.innerText = Z4MessageFactory.get("GRAY");
-    gray.onclick = (event) -> {
+    this.querySelector(".gray").onclick = (event) -> {
       this.setZ4Color(this.getZ4Color().gray());
       this.onchange.$apply(this.getZ4Color());
       return null;
     };
 
-    $HTMLElement negative = this.querySelector(".negative");
-    negative.innerText = Z4MessageFactory.get("NEGATIVE");
-    negative.onclick = (event) -> {
+    this.querySelector(".negative").onclick = (event) -> {
       this.setZ4Color(this.getZ4Color().negative());
       this.onchange.$apply(this.getZ4Color());
       return null;
     };
-
-    this.querySelector(".opacity-color-label").innerText = Z4MessageFactory.get("OPACITY");
 
     this.color.oninput = (event) -> {
       this.oninput.$apply(this.getZ4Color());

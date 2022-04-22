@@ -58,18 +58,10 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
     super(Z4TemporalColorUI.UI);
     this.initDevicePixelRatio();
 
-    this.temporalColorLabel.innerText = Z4MessageFactory.get("TEMPORAL_COLOR");
+    this.querySelector(".temporal-inverted").onclick = (event) -> this.inverted(true, false);
+    this.querySelector(".spatial-inverted").onclick = (event) -> this.inverted(false, true);
 
-    $HTMLElement temporalInverted = this.querySelector(".temporal-inverted");
-    temporalInverted.innerText = Z4MessageFactory.get("TEMPORAL_INVERTED");
-    temporalInverted.onclick = (event) -> this.inverted(true, false);
-    $HTMLElement spatialInverted = this.querySelector(".spatial-inverted");
-    spatialInverted.innerText = Z4MessageFactory.get("SPATIAL_INVERTED");
-    spatialInverted.onclick = (event) -> this.inverted(false, true);
-
-    $HTMLElement negative = this.querySelector(".temporal-negative");
-    negative.innerText = Z4MessageFactory.get("NEGATIVE");
-    negative.onclick = (event) -> {
+    this.querySelector(".temporal-negative").onclick = (event) -> {
       this.setZ4TemporalColor(this.temporalColor.negative());
       this.onchange.$apply(this.temporalColor);
       return null;
@@ -99,11 +91,6 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
 //      };
 //    }
 //    
-    this.querySelector(".temporal-ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
-    this.querySelector(".spatial-ripple-color-label").innerText = Z4MessageFactory.get("RIPPLE");
-    this.querySelector(".temporal-mirrored-label").innerText = Z4MessageFactory.get("MIRRORED");
-    this.querySelector(".spatial-mirrored-label").innerText = Z4MessageFactory.get("MIRRORED");
-
     Function<Event, Object> mirror = (event) -> {
       this.temporalColor.setMirrored(this.temporalMirroredCheck.checked, this.spatialMirroredCheck.checked);
 //      this.configureSliders(-1);
