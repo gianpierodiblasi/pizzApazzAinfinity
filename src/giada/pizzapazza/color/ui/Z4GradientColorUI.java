@@ -43,7 +43,7 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
 
   private final Z4ColorUI z4ColorUI = new Z4ColorUI();
 
-  private final String key = new Date().getTime() + "-" + parseInt(1000 * Math.random());
+  private final String key = new Date().getTime() + "_" + parseInt(1000 * Math.random());
   private Z4GradientColor gradientColor = new Z4GradientColor();
   private $Apply_0_Void devicePixelRatioListener;
   private boolean mouseDown;
@@ -256,7 +256,7 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
       input.setAttribute("style", (index != 0 && index != 1 ? "cursor:ew-resize;" : "") + "position:relative;left:" + left + "px");
 
       input.onchange = (event) -> {
-        this.z4ColorUI.setZ4Color(this.gradientColor.getComponents().find((color, idx, arr) -> index == idx));
+        this.z4ColorUI.setZ4Color(z4StopColor);
 
         if (index == 0 || index == 1) {
           this.del.setAttribute("disabled", "");

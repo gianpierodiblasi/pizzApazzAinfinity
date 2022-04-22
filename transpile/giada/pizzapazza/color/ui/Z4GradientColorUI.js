@@ -27,7 +27,7 @@ class Z4GradientColorUI extends Z4ComponentUI {
 
    z4ColorUI = new Z4ColorUI();
 
-   key = new Date().getTime() + "-" + parseInt(1000 * Math.random());
+   key = new Date().getTime() + "_" + parseInt(1000 * Math.random());
 
    gradientColor = new Z4GradientColor();
 
@@ -224,7 +224,7 @@ class Z4GradientColorUI extends Z4ComponentUI {
       input.setAttribute("value", "" + position);
       input.setAttribute("style", (index !== 0 && index !== 1 ? "cursor:ew-resize;" : "") + "position:relative;left:" + left + "px");
       input.onchange = (event) => {
-        this.z4ColorUI.setZ4Color(this.gradientColor.getComponents().find((color, idx, arr) => index === idx));
+        this.z4ColorUI.setZ4Color(z4StopColor);
         if (index === 0 || index === 1) {
           this.del.setAttribute("disabled", "");
         } else {

@@ -25,6 +25,15 @@ public class Z4TemporalColor {
   }
 
   /**
+   * Returns the components of this Z4TemporalColor
+   *
+   * @return The components of this Z4TemporalColor
+   */
+  public Array<Z4StopGradientColor> getComponents() {
+    return this.z4StopGradientColors;
+  }
+  
+  /**
    * Adds or updates a color
    *
    * @param temporal The position in the sequence (in the range [0,1]), if there
@@ -137,6 +146,24 @@ public class Z4TemporalColor {
     this.mirrored = temporal;
     this.z4StopGradientColors.forEach(z4StopGradientColor -> z4StopGradientColor.setMirrored(spatial));
     return this;
+  }
+
+  /**
+   * Returns if the color is temporaly mirrored
+   *
+   * @return true if the color is temporaly mirrored, false otherwise
+   */
+  public boolean isTemporalyMirrored() {
+    return this.mirrored;
+  }
+
+  /**
+   * Returns if the color is spatialy mirrored
+   *
+   * @return true if the color is spatialy mirrored, false otherwise
+   */
+  public boolean isSpatialyMirrored() {
+    return this.z4StopGradientColors.$get(0).isMirrored();
   }
 
   /**

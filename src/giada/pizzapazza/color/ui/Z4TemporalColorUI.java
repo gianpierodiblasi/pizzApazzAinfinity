@@ -3,12 +3,16 @@ package giada.pizzapazza.color.ui;
 import def.dom.CanvasGradient;
 import def.dom.CanvasPattern;
 import def.dom.Event;
+import def.dom.HTMLElement;
 import def.js.Date;
+import static def.js.Globals.parseFloat;
+import giada.pizzapazza.Z4Loader;
 import giada.pizzapazza.color.Z4AbstractGradientColor;
 import giada.pizzapazza.color.Z4TemporalColor;
 import giada.pizzapazza.setting.Z4ImageFactory;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.ui.Z4ComponentUI;
+import giada.pizzapazza.ui.Z4ModalMessageUI;
 import java.util.function.Function;
 import jsweet.util.union.Union4;
 import simulation.dom.$Canvas;
@@ -17,6 +21,7 @@ import simulation.dom.$HTMLElement;
 import simulation.dom.$OffscreenCanvas;
 import simulation.js.$Apply_0_Void;
 import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.parseInt;
 import static simulation.js.$Globals.window;
 import simulation.js.$Object;
@@ -32,17 +37,17 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
   private final $Canvas canvas = ($Canvas) this.querySelector(".canvas");
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
   private final Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> chessboard = this.ctx.createPattern(Z4ImageFactory.get("CHESSBOARD"), "repeat");
-//  private final $HTMLElement sliders = this.querySelector(".sliders");
+  private final $HTMLElement sliders = this.querySelector(".sliders");
   private final $HTMLElement temporalFormRangeLabel = this.querySelector(".temporal-form-range-label");
   private final $HTMLElement spatialFormRangeLabel = this.querySelector(".spatial-form-range-label");
   private final $HTMLElement temporalMirroredCheck = this.querySelector(".temporal-mirrored-check");
   private final $HTMLElement spatialMirroredCheck = this.querySelector(".spatial-mirrored-check");
   private final $HTMLElement temporalFormRange = this.querySelector(".form-range-temporal");
   private final $HTMLElement spatialFormRange = this.querySelector(".form-range-spatial");
-//  private final HTMLElement del = document.createElement("button");
+  private final HTMLElement del = document.createElement("button");
   private final Z4ColorUI z4ColorUI = new Z4ColorUI();
-//  
-  private final String key = new Date().getTime() + "-" + parseInt(1000 * Math.random());
+  
+  private final String key = new Date().getTime() + "_" + parseInt(1000 * Math.random());
   private Z4TemporalColor temporalColor = new Z4TemporalColor();
   private $Apply_0_Void devicePixelRatioListener;
 //  private boolean mouseDown;
@@ -70,27 +75,25 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
     this.canvas.style.border = "1px dashed gray";
     this.canvas.style.width = Z4TemporalColorUI.WIDTH + "px";
     this.canvas.style.height = Z4TemporalColorUI.HEIGHT + "px";
-//    
-//    this.sliders.onmousemove = (event) -> {
-//      double x = event.clientX - this.sliders.getBoundingClientRect().left;
-//      double width = Z4TemporalColorUI.WIDTH / (this.gradientColor.isMirrored() ? 2 : 1);
+
+//    this.slidersTemporal.onmousemove = (event) -> {
+//      double x = event.clientX - this.slidersTemporal.getBoundingClientRect().left;
+//      double width = Z4TemporalColorUI.WIDTH / (this.temporalColor.isMirrored() ? 2 : 1);
 //      this.sliders.style.cursor = x < width ? "pointer" : "default";
-//      
 //      return null;
 //    };
-//    
-//    if (Z4Loader.touch) {
+    if (Z4Loader.touch) {
 //      this.sliders.ontouchstart = (event) -> {
 //        this.addColor(event.changedTouches.$get(0).clientX);
 //        return null;
 //      };
-//    } else {
+    } else {
 //      this.sliders.onmousedown = (event) -> {
 //        this.addColor(event.clientX);
 //        return null;
 //      };
-//    }
-//    
+    }
+
     Function<Event, Object> mirror = (event) -> {
       this.temporalColor.setMirrored(this.temporalMirroredCheck.checked, this.spatialMirroredCheck.checked);
 //      this.configureSliders(-1);
@@ -108,37 +111,37 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
 
     this.z4ColorUI.appendTo(this.querySelector(".canvas-container"));
     this.z4ColorUI.oninput = (z4Color) -> {
-//      $HTMLElement input = this.querySelector(".sliders .form-check-input:checked");
-//      this.gradientColor.addOrUpdateColor(parseFloat(input.value), z4Color.getARGB());
-//      
+      $HTMLElement input = this.querySelector(".sliders .form-check-input:checked");
+      this.temporalColor.addOrUpdateColor(parseFloat(input.getAttribute("T")), parseFloat(input.getAttribute("S")), z4Color.getARGB());
+
       this.drawCanvas(5);
       this.oninput.$apply(this.temporalColor);
     };
     this.z4ColorUI.onchange = (z4Color) -> {
-//      $HTMLElement input = this.querySelector(".sliders .form-check-input:checked");
-//      this.gradientColor.addOrUpdateColor(parseFloat(input.value), z4Color.getARGB());
-//      
+      $HTMLElement input = this.querySelector(".sliders .form-check-input:checked");
+      this.temporalColor.addOrUpdateColor(parseFloat(input.getAttribute("T")), parseFloat(input.getAttribute("S")), z4Color.getARGB());
+
       this.drawCanvas(1);
       this.onchange.$apply(this.temporalColor);
     };
-//    
-//    this.del.setAttribute("class", "dropdown-item delete-color");
-//    this.del.setAttribute("type", "button");
-//    this.del.setAttribute("data-token-lang-inner_text", "DELETE");
-//    this.del.innerText = Z4MessageFactory.get("DELETE");
-//    this.del.onclick = (event) -> {
-//      Z4ModalMessageUI.showQuestion(Z4MessageFactory.get("TITLE"), Z4MessageFactory.get("DELETE_COLOR_MESSAGE"), () -> {
+
+    this.del.setAttribute("class", "dropdown-item delete-color");
+    this.del.setAttribute("type", "button");
+    this.del.setAttribute("data-token-lang-inner_text", "DELETE");
+    this.del.innerText = Z4MessageFactory.get("DELETE");
+    this.del.onclick = (event) -> {
+      Z4ModalMessageUI.showQuestion(Z4MessageFactory.get("TITLE"), Z4MessageFactory.get("DELETE_COLOR_MESSAGE"), () -> {
 //        $HTMLElement input = this.querySelector(".sliders .form-check-input:checked");
 //        this.gradientColor.removeColor(parseFloat(input.value));
 //        this.configureSliders(-1);
 //        this.drawCanvas();
 //        this.onchange.$apply(this.gradientColor);
-//      }, () -> {
-//      }, null, null);
-//      
-//      return null;
-//    };
-//    this.querySelector(".negative").parentElement.appendChild(document.createElement("li")).appendChild(this.del);
+      }, () -> {
+      }, null, null);
+
+      return null;
+    };
+    this.querySelector(".negative").parentElement.appendChild(document.createElement("li")).appendChild(this.del);
 
     this.setZ4TemporalColor(this.temporalColor);
   }
@@ -237,36 +240,44 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
 //    this.mirroredCheck.checked = this.temporalColor.isMirrored();
 //    this.formRange.valueAsNumber = this.temporalColor.getRipple();
 
-//    this.configureSliders(-1);
+    this.configureSliders(-1, -1);
     this.drawCanvas(1);
 
     return this;
   }
-//  private void configureSliders(int selected) {
-//    double width = Z4TemporalColorUI.WIDTH / (this.gradientColor.isMirrored() ? 2 : 1);
-//    
-//    this.sliders.innerHTML = "";
-//    this.gradientColor.getComponents().forEach((z4StopColor, index, array) -> {
-//      double position = z4StopColor.getPosition();
-//      double left = width * position - (index * 16);
-//      
-//      $HTMLElement input = ($HTMLElement) document.createElement("input");
-//      input.setAttribute("class", "form-check-input");
-//      input.setAttribute("type", "radio");
-//      input.setAttribute("name", "colors_" + this.key);
-//      input.setAttribute("value", "" + position);
-//      input.setAttribute("style", (index != 0 && index != 1 ? "cursor:ew-resize;" : "") + "position:relative;left:" + left + "px");
-//      
-//      input.onchange = (event) -> {
-//        this.z4ColorUI.setZ4Color(this.gradientColor.getComponents().find((color, idx, arr) -> index == idx));
+
+  private void configureSliders(int selectedT, int selectedS) {
+    double width = Z4TemporalColorUI.WIDTH / (this.temporalColor.isTemporalyMirrored() ? 2 : 1);
+    double height = Z4TemporalColorUI.HEIGHT / (this.temporalColor.isSpatialyMirrored() ? 2 : 1);
+
+    this.sliders.innerHTML = "";
+    this.temporalColor.getComponents().forEach((z4StopGradientColor, indexT, arrayT) -> {
+      double positionT = z4StopGradientColor.getPosition();
+      double left = -8 + width * positionT;
+
+      z4StopGradientColor.getComponents().forEach((z4StopColor, indexS, arrayS) -> {
+        double positionS = z4StopColor.getPosition();
+        double top = -8 + height * (1 - positionS) - ((indexS + arrayS.length * indexT) * 16);
+
+        $HTMLElement input = ($HTMLElement) document.createElement("input");
+        input.setAttribute("class", "form-check-input");
+        input.setAttribute("type", "radio");
+        input.setAttribute("name", "colors_" + this.key);
+        input.setAttribute("value", positionT + "-" + positionS);
+        input.setAttribute("T", "" + positionT);
+        input.setAttribute("S", "" + positionS);
+        input.setAttribute("style", ((indexT != 0 && indexT != 1) || (indexS != 0 && indexS != 1) ? "cursor:ew-resize;" : "") + "margin-top:0px;position:relative;left:" + left + "px;top:" + top + "px");
+
+        input.onchange = (event) -> {
+          this.z4ColorUI.setZ4Color(z4StopColor);
 //        
 //        if (index == 0 || index == 1) {
 //          this.del.setAttribute("disabled", "");
 //        } else {
 //          this.del.removeAttribute("disabled");
 //        }
-//        return null;
-//      };
+          return null;
+        };
 //      
 //      if (Z4Loader.touch) {
 //        input.ontouchstart = (event) -> this.manageEvent(event, true, false, index, input, event.changedTouches.$get(0).clientX);
@@ -280,19 +291,21 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
 //        input.onmouseleave = (event) -> this.manageEvent(event, false, false, index, input, event.clientX);
 //      }
 //      
-//      if (selected != -1 && index == selected) {
-//        input.setAttribute("checked", "");
-//        this.z4ColorUI.setZ4Color(z4StopColor);
-//        this.del.removeAttribute("disabled");
-//      } else if (selected == -1 && index == 0) {
-//        input.setAttribute("checked", "");
-//        this.z4ColorUI.setZ4Color(z4StopColor);
-//        this.del.setAttribute("disabled", "");
-//      }
+        if (selectedT != -1 && selectedS != -1 && indexT == selectedT && indexS == selectedS) {
+          input.setAttribute("checked", "");
+          this.z4ColorUI.setZ4Color(z4StopColor);
+          this.del.removeAttribute("disabled");
+        } else if (selectedT == -1 && selectedS == -1 && indexT == 0 && indexS == 0) {
+          input.setAttribute("checked", "");
+          this.z4ColorUI.setZ4Color(z4StopColor);
+          this.del.setAttribute("disabled", "");
+        }
 //      
-//      this.sliders.appendChild(input);
-//    });
-//  }
+        this.sliders.appendChild(input);
+      });
+    });
+  }
+
 //  private Object manageEvent(UIEvent event, boolean mouseDown, boolean check, int index, $HTMLElement input, double x) {
 //    event.stopPropagation();
 //    this.mouseDown = mouseDown;
@@ -320,7 +333,7 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
 //      }
 //    }
 //  }
-
+//  
   private void drawCanvas(int step) {
     this.canvas.width = Math.floor(Z4TemporalColorUI.WIDTH * window.devicePixelRatio);
     this.canvas.height = Math.floor(Z4TemporalColorUI.HEIGHT * window.devicePixelRatio);
