@@ -179,6 +179,7 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
   private void addColor(double x) {
     x -= this.sliders.getBoundingClientRect().left + 8;
     double width = Z4GradientColorUI.WIDTH / (this.gradientColor.isMirrored() ? 2 : 1);
+    
     if (x < width) {
       double position = x / width;
 

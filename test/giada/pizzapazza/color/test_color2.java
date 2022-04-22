@@ -112,7 +112,6 @@ public class test_color2 {
   }
 
   private static String stringify(Object object) {
-
     BiFunction<String, Object, Object> replacer = (k, v) -> {
       if (!$exists(k)) {
         return v;

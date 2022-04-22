@@ -91,8 +91,12 @@ class Z4TemporalColor {
    * @return This Z4TemporalColor
    */
    removeColor(temporal, spatial) {
-    this.z4StopGradientColors = this.z4StopGradientColors.filter((z4StopGradientColor, index, array) => z4StopGradientColor.getPosition() !== temporal);
-    this.z4StopGradientColors.forEach(z4StopGradientColor => z4StopGradientColor.removeColor(spatial));
+    if (temporal !== 0 && temporal !== 1) {
+      this.z4StopGradientColors = this.z4StopGradientColors.filter((z4StopGradientColor, index, array) => z4StopGradientColor.getPosition() !== temporal);
+    }
+    if (spatial !== 0 && spatial !== 1) {
+      this.z4StopGradientColors.forEach(z4StopGradientColor => z4StopGradientColor.removeColor(spatial));
+    }
     return this;
   }
 

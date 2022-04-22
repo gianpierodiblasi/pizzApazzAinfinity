@@ -77,6 +77,8 @@ class test_color3 {
         return v;
       } else if (Array.isArray(v)) {
         return v;
+      } else if (v instanceof Z4StopGradientColor) {
+        return v;
       } else {
         return JSON.stringify(v).replaceAll("\"", "").replaceAll("\n", "");
       }

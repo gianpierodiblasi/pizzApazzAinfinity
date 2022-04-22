@@ -90,7 +90,6 @@ public class test_color3 {
   }
 
   private static String stringify(Object object) {
-
     BiFunction<String, Object, Object> replacer = (k, v) -> {
       if (!$exists(k)) {
         return v;
@@ -99,6 +98,8 @@ public class test_color3 {
       } else if ($typeof(v, "boolean")) {
         return v;
       } else if (Array.isArray(v)) {
+        return v;
+      } else if (v instanceof Z4StopGradientColor) {
         return v;
       } else {
         return JSON.stringify(v).replaceAll("\"", "").replaceAll("\n", "");
