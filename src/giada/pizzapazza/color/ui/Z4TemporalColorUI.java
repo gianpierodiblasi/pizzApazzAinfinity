@@ -51,8 +51,8 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
   private final String key = new Date().getTime() + "_" + parseInt(1000 * Math.random());
   private Z4TemporalColor temporalColor = new Z4TemporalColor();
   private $Apply_0_Void devicePixelRatioListener;
-//  private boolean mouseDown;
-//  
+  private boolean mouseDown;
+
   private final static String UI = Z4ComponentUI.loadHTML("giada/pizzapazza/color/ui/Z4TemporalColorUI.html");
   private final static int WIDTH = 500;
   private final static int HEIGHT = 200;
@@ -323,17 +323,17 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
           }
           return null;
         };
-//      
+
         if (Z4Loader.touch) {
-//        input.ontouchstart = (event) -> this.manageEvent(event, true, false, index, input, event.changedTouches.$get(0).clientX);
-//        input.ontouchmove = (event) -> this.manageEvent(event, this.mouseDown, true, index, input, event.changedTouches.$get(0).clientX);
-//        input.ontouchend = (event) -> this.manageEvent(event, false, false, index, input, event.changedTouches.$get(0).clientX);
-//        input.ontouchcancel = (event) -> this.manageEvent(event, false, false, index, input, event.changedTouches.$get(0).clientX);
+          input.ontouchstart = (event) -> this.manageEvent(event, true, false, indexT, indexS, input, event.changedTouches.$get(0).clientX, event.changedTouches.$get(0).clientY);
+          input.ontouchmove = (event) -> this.manageEvent(event, this.mouseDown, true, indexT, indexS, input, event.changedTouches.$get(0).clientX, event.changedTouches.$get(0).clientY);
+          input.ontouchend = (event) -> this.manageEvent(event, false, false, indexT, indexS, input, event.changedTouches.$get(0).clientX, event.changedTouches.$get(0).clientY);
+          input.ontouchcancel = (event) -> this.manageEvent(event, false, false, indexT, indexS, input, event.changedTouches.$get(0).clientX, event.changedTouches.$get(0).clientY);
         } else {
-//        input.onmousedown = (event) -> this.manageEvent(event, true, false, index, input, event.clientX);
-//        input.onmousemove = (event) -> this.manageEvent(event, this.mouseDown, true, index, input, event.clientX);
-//        input.onmouseup = (event) -> this.manageEvent(event, false, false, index, input, event.clientX);
-//        input.onmouseleave = (event) -> this.manageEvent(event, false, false, index, input, event.clientX);
+          input.onmousedown = (event) -> this.manageEvent(event, true, false, indexT, indexS, input, event.clientX, event.clientY);
+          input.onmousemove = (event) -> this.manageEvent(event, this.mouseDown, true, indexT, indexS, input, event.clientX, event.clientY);
+          input.onmouseup = (event) -> this.manageEvent(event, false, false, indexT, indexS, input, event.clientX, event.clientY);
+          input.onmouseleave = (event) -> this.manageEvent(event, false, false, indexT, indexS, input, event.clientX, event.clientY);
         }
 
         if (selectedT != -1 && selectedS != -1 && indexT == selectedT && indexS == selectedS) {
@@ -351,33 +351,49 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
     });
   }
 
-  private Object manageEvent(UIEvent event, boolean mouseDown, boolean check, int index, $HTMLElement input, double x) {
-//    event.stopPropagation();
-//    this.mouseDown = mouseDown;
-//    if (check && this.mouseDown && index != 0 && index != 1) {
-//      this.moveColor(input, index, x);
-//    }
-//    
+  private Object manageEvent(UIEvent event, boolean mouseDown, boolean check, int indexT, int indexS, $HTMLElement input, double x, double y) {
+    event.stopPropagation();
+    if (this.mouseDown && !mouseDown) {
+      this.onchange.$apply(this.temporalColor);
+    }
+
+    this.mouseDown = mouseDown;
+    if (check && this.mouseDown && ((indexT != 0 && indexT != 1) || (indexS != 0 && indexS != 1))) {
+      this.moveColor(input, indexT, indexS, x, y);
+    }
+
     return null;
   }
 
-  private void moveColor($HTMLElement input, int idx, double x) {
-//    x -= this.sliders.getBoundingClientRect().left + 8;
-//    double width = Z4TemporalColorUI.WIDTH / (this.gradientColor.isMirrored() ? 2 : 1);
-//    
-//    if (x < width) {
-//      double position = x / width;
-//      double left = width * position - (idx * 16);
-//      if (this.gradientColor.getComponents().every((color, index, array) -> index == idx || Math.abs(position - color.getPosition()) > 0.05)) {
-//        double oldPosition = parseFloat(input.value);
-//        
-//        input.setAttribute("value", "" + position);
-//        input.setAttribute("style", "cursor:ew-resize;position:relative;left:" + left + "px");
-//        this.gradientColor.move(oldPosition, position);
-//        this.drawCanvas();
-//        this.onchange.$apply(this.gradientColor);
-//      }
-//    }
+  private void moveColor($HTMLElement input, int idxT, int idxS, double x, double y) {
+    x -= this.canvas.getBoundingClientRect().left;
+    y -= this.canvas.getBoundingClientRect().top;
+    double width = Z4TemporalColorUI.WIDTH / (this.temporalColor.isTemporalyMirrored() ? 2 : 1);
+    double height = Z4TemporalColorUI.HEIGHT / (this.temporalColor.isSpatialyMirrored() ? 2 : 1);
+    double gap = this.temporalColor.isSpatialyMirrored() ? Z4TemporalColorUI.HEIGHT / 2 : 0;
+
+    if (x < width && gap < y && y < gap + height) {
+      double positionT = x / width;
+      double positionS = (height - y + gap) / height;
+
+      boolean okT = this.temporalColor.getComponents().every((color, indexT, array) -> indexT == idxT || Math.abs(positionT - color.getPosition()) > 0.05);
+      boolean okS = this.temporalColor.getComponents().$get(0).getComponents().every((color, indexS, array) -> indexS == idxS || Math.abs(positionS - color.getPosition()) > 0.05);
+      if (okT && okS) {
+        double oldPositionT = parseFloat(input.getAttribute("T"));
+        double oldPositionS = parseFloat(input.getAttribute("S"));
+        double left = -8 + width * positionT;
+        double top = gap - 8 + height * (1 - positionS) - ((idxS + this.temporalColor.getComponents().$get(0).getComponents().length * idxT) * 16);
+
+        input.setAttribute("T", "" + positionT);
+        input.setAttribute("S", "" + positionS);
+        input.style.left = left + "px";
+        input.style.top = top + "px";
+
+        this.temporalColor.move(oldPositionT, positionT, oldPositionS, positionS);
+        this.drawCanvas(5);
+        this.oninput.$apply(this.temporalColor);
+      }
+    }
   }
 
   private void drawCanvas(int step) {

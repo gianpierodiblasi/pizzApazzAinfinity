@@ -179,7 +179,7 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
   private void addColor(double x) {
     x -= this.sliders.getBoundingClientRect().left + 8;
     double width = Z4GradientColorUI.WIDTH / (this.gradientColor.isMirrored() ? 2 : 1);
-    
+
     if (x < width) {
       double position = x / width;
 
@@ -235,7 +235,7 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
     this.mirroredCheck.checked = this.gradientColor.isMirrored();
     this.formRange.valueAsNumber = this.gradientColor.getRipple();
     this.formRangeLabel.innerText = this.formRange.value;
-    
+
     this.configureSliders(-1);
     this.drawCanvas();
 
@@ -314,12 +314,14 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
 
     if (x < width) {
       double position = x / width;
-      double left = width * position - (idx * 16);
+
       if (this.gradientColor.getComponents().every((color, index, array) -> index == idx || Math.abs(position - color.getPosition()) > 0.05)) {
         double oldPosition = parseFloat(input.value);
+        double left = width * position - (idx * 16);
 
         input.setAttribute("value", "" + position);
-        input.setAttribute("style", "cursor:ew-resize;position:relative;left:" + left + "px");
+        input.style.left = left + "px";
+        
         this.gradientColor.move(oldPosition, position);
         this.drawCanvas();
         this.oninput.$apply(this.gradientColor);

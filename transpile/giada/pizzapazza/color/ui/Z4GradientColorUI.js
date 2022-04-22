@@ -274,11 +274,11 @@ class Z4GradientColorUI extends Z4ComponentUI {
     let width = Z4GradientColorUI.WIDTH / (this.gradientColor.isMirrored() ? 2 : 1);
     if (x < width) {
       let position = x / width;
-      let left = width * position - (idx * 16);
       if (this.gradientColor.getComponents().every((color, index, array) => index === idx || Math.abs(position - color.getPosition()) > 0.05)) {
         let oldPosition = parseFloat(input.value);
+        let left = width * position - (idx * 16);
         input.setAttribute("value", "" + position);
-        input.setAttribute("style", "cursor:ew-resize;position:relative;left:" + left + "px");
+        input.style.left = left + "px";
         this.gradientColor.move(oldPosition, position);
         this.drawCanvas();
         this.oninput(this.gradientColor);
