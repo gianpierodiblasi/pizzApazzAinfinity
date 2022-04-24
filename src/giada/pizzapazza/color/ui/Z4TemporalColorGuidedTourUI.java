@@ -23,7 +23,7 @@ public class Z4TemporalColorGuidedTourUI extends Z4TemporalColorUI {
   private String event;
   private String message;
 
-  private HTMLElement i = document.createElement("i");
+  private final HTMLElement i = document.createElement("i");
 
   /**
    * Creates a Z4TemporalColorGuidedTourUI
@@ -113,20 +113,30 @@ public class Z4TemporalColorGuidedTourUI extends Z4TemporalColorUI {
         this.message = Z4MessageFactory.get("GUIDED_TOUR_TEMPORAL_INVERT_TEMPORAL");
         break;
       case 8:
-//        this.element1 = this.querySelector(".z4-dropdown-toggle-three-dots");
-//        this.element2 = this.querySelector(".temporal-negative");
-//        this.event = "click";
-//        this.message = Z4MessageFactory.get("GUIDED_TOUR_TEMPORAL_NEGATIVIZE");
+        this.element1 = this.querySelector(".z4-dropdown-toggle-three-dots");
+        this.element2 = this.querySelector(".temporal-negative");
+        this.event = "click";
+        this.message = Z4MessageFactory.get("GUIDED_TOUR_TEMPORAL_NEGATIVIZE");
         break;
       case 9:
-//        this.element1 = this.element2 = this.querySelector(".mirrored-check");
-//        this.event = "change";
-//        this.message = Z4MessageFactory.get("GUIDED_TOUR_TEMPORAL_MIRROR");
+        this.element1 = this.element2 = this.querySelector(".temporal-mirrored-check");
+        this.event = "change";
+        this.message = Z4MessageFactory.get("GUIDED_TOUR_TEMPORAL_MIRROR_TEMPORAL");
         break;
       case 10:
-//        this.element1 = this.element2 = this.querySelector(".form-range[step='0.01']");
-//        this.event = "input";
-//        this.message = Z4MessageFactory.get("GUIDED_TOUR_TEMPORAL_ADD_RIPPLE");
+        this.element1 = this.element2 = this.querySelector(".spatial-mirrored-check");
+        this.event = "change";
+        this.message = Z4MessageFactory.get("GUIDED_TOUR_TEMPORAL_MIRROR_SPATIAL");
+        break;
+      case 11:
+        this.element1 = this.element2 = this.querySelector(".form-range-spatial");
+        this.event = "input";
+        this.message = Z4MessageFactory.get("GUIDED_TOUR_TEMPORAL_ADD_RIPPLE_SPATIAL");
+        break;
+      case 12:
+        this.element1 = this.element2 = this.querySelector(".form-range-temporal");
+        this.event = "input";
+        this.message = Z4MessageFactory.get("GUIDED_TOUR_TEMPORAL_ADD_RIPPLE_TEMPORAL");
         break;
       default:
         this.element1 = null;
