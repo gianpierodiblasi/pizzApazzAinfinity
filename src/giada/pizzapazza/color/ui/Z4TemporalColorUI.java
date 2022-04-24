@@ -74,7 +74,7 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
     };
 
     this.querySelector(".temporal-guided-tour").onclick = (event) -> {
-//      Z4GradientColorGuidedTourUI.show();
+      Z4TemporalColorGuidedTourUI.show();
       return null;
     };
 

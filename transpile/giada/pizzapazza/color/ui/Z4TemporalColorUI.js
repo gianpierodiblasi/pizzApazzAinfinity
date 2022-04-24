@@ -1,4 +1,4 @@
-/* global Date, Math, Object, OffscreenCanvas, Z4ColorUI, Z4ComponentUI, Z4ImageFactory, Z4MessageFactory, Z4ModalMessageUI, Z4TemporalColor, parseFloat, parseInt */
+/* global Date, Math, Object, OffscreenCanvas, Z4ColorUI, Z4ComponentUI, Z4ImageFactory, Z4MessageFactory, Z4ModalMessageUI, Z4TemporalColor, Z4TemporalColorGuidedTourUI, parseFloat, parseInt */
 
 /**
  * The component to show a temporal color
@@ -61,7 +61,7 @@ class Z4TemporalColorUI extends Z4ComponentUI {
       return null;
     };
     this.querySelector(".temporal-guided-tour").onclick = (event) => {
-      // Z4GradientColorGuidedTourUI.show();
+      Z4TemporalColorGuidedTourUI.show();
       return null;
     };
     this.canvas.style.border = "1px dashed gray";
