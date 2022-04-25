@@ -1,4 +1,4 @@
-/* global Array, Image, String, XMLHttpRequest, Z4ImageFactory */
+/* global Array, Image, String, XMLHttpRequest, Z4ImageFactory, Z4Loader */
 
 /**
  * The message factory

@@ -1,4 +1,4 @@
-/* global Object, Z4MessageFactory, Z4ModalMessageUI, Z4TemporalColorGuidedTourUI */
+/* global Object, Z4Loader, Z4MessageFactory, Z4ModalMessageUI, Z4TemporalColorGuidedTourUI */
 
 /**
  * The guided tour for the Z4TemporalColorUI

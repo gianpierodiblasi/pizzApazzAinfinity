@@ -1,4 +1,4 @@
-/* global Date, Math, Object, OffscreenCanvas, Z4ColorUI, Z4ComponentUI, Z4GradientColor, Z4GradientColorGuidedTourUI, Z4ImageFactory, Z4MessageFactory, Z4ModalMessageUI, parseFloat, parseInt */
+/* global Date, Math, Object, OffscreenCanvas, Z4ColorUI, Z4ComponentUI, Z4GradientColor, Z4GradientColorGuidedTourUI, Z4GradientColorUI, Z4ImageFactory, Z4Loader, Z4MessageFactory, Z4ModalMessageUI, parseFloat, parseInt */
 
 /**
  * The component to show a gradient color

@@ -1,4 +1,4 @@
-/* global Z4Color, Z4ComponentUI, Z4MessageFactory */
+/* global Z4Color, Z4ColorUI, Z4ComponentUI, Z4MessageFactory */
 
 /**
  * The component to show a color
