@@ -96,7 +96,7 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
         double positionS = (height - y + gap) / height;
 
         boolean okT = this.temporalColor.getComponents().every((color, index, array) -> Math.abs(positionT - color.getPosition()) > 0.05);
-        boolean okS = this.temporalColor.getComponents().$get(0).getComponents().every((color, index, array) -> Math.abs(positionS - color.getPosition()) > 0.05);
+        boolean okS = this.temporalColor.getComponents().$get(0).getComponents().every((color, index, array) -> Math.abs(positionS - color.getPosition()) > 0.1);
         if (okT && okS) {
           this.canvas.style.cursor = "pointer";
         }
@@ -198,7 +198,7 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
       double positionS = (height - y + gap) / height;
 
       boolean okT = this.temporalColor.getComponents().every((color, index, array) -> Math.abs(positionT - color.getPosition()) > 0.05);
-      boolean okS = this.temporalColor.getComponents().$get(0).getComponents().every((color, index, array) -> Math.abs(positionS - color.getPosition()) > 0.05);
+      boolean okS = this.temporalColor.getComponents().$get(0).getComponents().every((color, index, array) -> Math.abs(positionS - color.getPosition()) > 0.1);
       if (okT && okS) {
         this.temporalColor.generateColor(positionT, positionS);
         this.configureSliders(this.temporalColor.getComponents().length - 1, this.temporalColor.getComponents().$get(0).getComponents().length - 1);
@@ -380,31 +380,37 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
     double positionS = (height - y + gap) / height;
 
     boolean okT = this.temporalColor.getComponents().every((color, indexT, array) -> indexT == idxT || Math.abs(positionT - color.getPosition()) > 0.05);
-    boolean okS = this.temporalColor.getComponents().$get(0).getComponents().every((color, indexS, array) -> indexS == idxS || Math.abs(positionS - color.getPosition()) > 0.05);
+    boolean okS = this.temporalColor.getComponents().$get(0).getComponents().every((color, indexS, array) -> indexS == idxS || Math.abs(positionS - color.getPosition()) > 0.1);
 
     double oldPositionT = parseFloat(input.getAttribute("T"));
     double oldPositionS = parseFloat(input.getAttribute("S"));
     double left = -8 + width * positionT;
     double top = gap - 8 + height * (1 - positionS) - ((idxS + this.temporalColor.getComponents().$get(0).getComponents().length * idxT) * 16);
 
-    if (free && okT && okS) {
-      this.move(input, oldPositionT, oldPositionS, positionT, positionS, left, top, gap, height);
+    if (free) {
+      if (okT && okS) {
+        this.move(input, oldPositionT, oldPositionS, positionT, positionS, left, top, gap, height);
 
-      this.temporalColor.move(oldPositionT, positionT, oldPositionS, positionS);
-      this.drawCanvas(5);
-      this.oninput.$apply(this.temporalColor);
-    } else if (temporal && okT) {
-      this.move(input, oldPositionT, oldPositionS, positionT, oldPositionS, left, parseFloat(input.style.top.replace("px", "")), gap, height);
+        this.temporalColor.move(oldPositionT, positionT, oldPositionS, positionS);
+        this.drawCanvas(5);
+        this.oninput.$apply(this.temporalColor);
+      }
+    } else if (temporal) {
+      if (okT) {
+        this.move(input, oldPositionT, oldPositionS, positionT, oldPositionS, left, parseFloat(input.style.top.replace("px", "")), gap, height);
 
-      this.temporalColor.move(oldPositionT, positionT, -1, -1);
-      this.drawCanvas(5);
-      this.oninput.$apply(this.temporalColor);
-    } else if (spatial && okS) {
-      this.move(input, oldPositionT, oldPositionS, oldPositionT, positionS, parseFloat(input.style.left.replace("px", "")), top, gap, height);
+        this.temporalColor.move(oldPositionT, positionT, -1, -1);
+        this.drawCanvas(5);
+        this.oninput.$apply(this.temporalColor);
+      }
+    } else if (spatial) {
+      if (okS) {
+        this.move(input, oldPositionT, oldPositionS, oldPositionT, positionS, parseFloat(input.style.left.replace("px", "")), top, gap, height);
 
-      this.temporalColor.move(oldPositionT, positionT, oldPositionS, positionS);
-      this.drawCanvas(5);
-      this.oninput.$apply(this.temporalColor);
+        this.temporalColor.move(oldPositionT, positionT, oldPositionS, positionS);
+        this.drawCanvas(5);
+        this.oninput.$apply(this.temporalColor);
+      }
     }
   }
 
