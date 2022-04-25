@@ -57,6 +57,15 @@ class Z4Vector extends Cloneable {
   }
 
   /**
+   * Returns the module
+   *
+   * @return The module
+   */
+   getModule() {
+    return module;
+  }
+
+  /**
    * Returns the direction in which this vector rotates on another Z4Vector
    *
    * @param vector The other vector

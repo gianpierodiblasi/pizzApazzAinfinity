@@ -32,6 +32,23 @@ class Z4Point extends Cloneable {
   }
 
   /**
+   * Returns the Z4Vector
+   * @return The Z4Vector
+   */
+   getZ4Vector() {
+    return z4Vector;
+  }
+
+  /**
+   * Returns the intensity
+   *
+   * @return The intensity
+   */
+   getIntensity() {
+    return intensity;
+  }
+
+  /**
    * Sets the side
    *
    * @param side the side

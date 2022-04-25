@@ -4,6 +4,7 @@ import def.dom.CanvasGradient;
 import def.dom.CanvasPattern;
 import def.dom.CanvasRenderingContext2D;
 import jsweet.util.union.Union4;
+import simulation.js.$Path2D;
 
 /**
  * The simulation of the CanvasRenderingContext2D object
@@ -11,6 +12,9 @@ import jsweet.util.union.Union4;
  * @author gianpiero.di.blasi
  */
 public class $CanvasRenderingContext2D extends CanvasRenderingContext2D {
+
+  public void stroke($Path2D path) {
+  }
 
   public void drawImage($OffscreenCanvas canvas, double x, double y) {
   }

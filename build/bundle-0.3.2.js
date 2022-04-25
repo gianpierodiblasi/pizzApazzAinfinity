@@ -1020,6 +1020,15 @@ class Z4Vector extends Cloneable {
   }
 
   /**
+   * Returns the module
+   *
+   * @return The module
+   */
+   getModule() {
+    return module;
+  }
+
+  /**
    * Returns the direction in which this vector rotates on another Z4Vector
    *
    * @param vector The other vector
@@ -1064,6 +1073,23 @@ class Z4Point extends Cloneable {
     clone.side = this.side;
     clone.useVectorModuleAsSize = this.useVectorModuleAsSize;
     return clone;
+  }
+
+  /**
+   * Returns the Z4Vector
+   * @return The Z4Vector
+   */
+   getZ4Vector() {
+    return z4Vector;
+  }
+
+  /**
+   * Returns the intensity
+   *
+   * @return The intensity
+   */
+   getIntensity() {
+    return intensity;
   }
 
   /**
@@ -3102,7 +3128,25 @@ class Z4Painter {
 class Z4ArrowPainter extends Z4Painter {
 
    draw(context, point, gradientColor) {
+    let x = point.getIntensity() * point.getZ4Vector().getModule();
+    context.save();
+    context.lineWidth = 1;
+    context.strokeStyle = this.getColor("white");
+    context.moveTo(0, 0);
+    context.lineTo(x, 0);
+    context.lineTo(x - 5, -3);
+    context.lineTo(x - 5, +3);
+    context.lineTo(x, 0);
+    context.stroke();
+    context.strokeStyle = this.getColor("black");
+    context.translate(1, 1);
+    context.stroke();
+    context.restore();
     return this;
+  }
+
+   getColor(color) {
+    return color;
   }
 }
 /**

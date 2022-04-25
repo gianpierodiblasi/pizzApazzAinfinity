@@ -55,6 +55,15 @@ public class Z4Vector implements Cloneable {
   }
 
   /**
+   * Returns the module
+   *
+   * @return The module
+   */
+  public double getModule() {
+    return module;
+  }
+
+  /**
    * Returns the direction in which this vector rotates on another Z4Vector
    *
    * @param vector The other vector
