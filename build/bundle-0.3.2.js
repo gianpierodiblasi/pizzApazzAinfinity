@@ -869,6 +869,215 @@ class Z4FancifulValue {
   }
 }
 /**
+ * The geometric shapes
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4Shape2D {
+
+  /**
+   * A circular geometric shape
+   */
+  static  CIRCLE = new Z4Shape2D(0);
+
+  /**
+   * A triangular geometric shape
+   */
+  static  TRIANGLE = new Z4Shape2D(3);
+
+  /**
+   * A squared geometric shape
+   */
+  static  SQUARE = new Z4Shape2D(-4);
+
+  /**
+   * A diamond geometric shape
+   */
+  static  DIAMOND = new Z4Shape2D(4);
+
+  /**
+   * A five sided geometric shape
+   */
+  static  PENTAGON = new Z4Shape2D(5);
+
+  /**
+   * A six sided geometric shape
+   */
+  static  HEXAGON = new Z4Shape2D(6);
+
+  /**
+   * A seven sided geometric shape
+   */
+  static  SEPTAGON = new Z4Shape2D(7);
+
+  /**
+   * A eight sided geometric shape
+   */
+  static  HEPTAGON = new Z4Shape2D(8);
+
+  /**
+   * A star geometric shape
+   */
+  static  STAR = new Z4Shape2D(-5);
+
+   path = new Path2D();
+
+  constructor(sides) {
+    let size = 1;
+    let halfSize = 0.5;
+    let val = 0.0;
+    let angle = 0.0;
+    switch(sides) {
+      case 0:
+        this.path.arc(0, 0, halfSize, 0, Z4Math.TWO_PI);
+        break;
+      case -4:
+        this.path.rect(-halfSize, -halfSize, size, size);
+        break;
+      case -5:
+        val = -Z4Math.HALF_PI;
+        angle = Z4Math.TWO_PI / 5;
+        let halfSizeGold = halfSize / Z4Math.SQUARE_GOLD_SECTION;
+        this.path.moveTo(Math.cos(val) * halfSize, Math.sin(val) * halfSize);
+        val = angle * 3 + Z4Math.HALF_PI;
+        this.path.lineTo(Math.cos(val) * halfSizeGold, Math.sin(val) * halfSizeGold);
+        for (let i = 1; i < 5; i++) {
+          val = angle * i - Z4Math.HALF_PI;
+          this.path.lineTo(Math.cos(val) * halfSize, Math.sin(val) * halfSize);
+          val = angle * (i + 3) + Z4Math.HALF_PI;
+          this.path.lineTo(Math.cos(val) * halfSizeGold, Math.sin(val) * halfSizeGold);
+        }
+        break;
+      default:
+        val = -Z4Math.HALF_PI;
+        angle = Z4Math.TWO_PI / sides;
+        this.path.moveTo(Math.cos(val) * halfSize, Math.sin(val) * halfSize);
+        for (let i = 1; i < sides; i++) {
+          val = angle * i - Z4Math.HALF_PI;
+          this.path.lineTo(Math.cos(val) * halfSize, Math.sin(val) * halfSize);
+        }
+        break;
+    }
+    this.path.closePath();
+  }
+}
+/**
+ * The vector
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4Vector extends Cloneable {
+
+   x0 = 0.0;
+
+   y0 = 0.0;
+
+   x = 0.0;
+
+   y = 0.0;
+
+   module = 0.0;
+
+   phase = 0.0;
+
+  constructor(x0, y0, x, y, module, phase) {
+    this.x0 = x0;
+    this.y0 = y0;
+    this.x = x;
+    this.y = y;
+    this.module = module;
+    this.phase = phase;
+  }
+
+  /**
+   * Creates a Z4Vector from points
+   *
+   * @param x0 The x-axis coordinate of the start point
+   * @param y0 The y-axis coordinate of the start point
+   * @param x The x-axis coordinate of the end point
+   * @param y The y-axis coordinate of the end point
+   * @return The Z4Vector
+   */
+  static  fromPoints(x0, y0, x, y) {
+    return new Z4Vector(x0, y0, x, y, Z4Math.distance(x0, y0, x, y), Z4Math.atan(x0, y0, x, y));
+  }
+
+  /**
+   * Creates a Z4Vector from a vector
+   *
+   * @param x0 The x-axis coordinate of the start point
+   * @param y0 The y-axis coordinate of the start point
+   * @param module The module
+   * @param phase The phase (in radians)
+   * @return The Z4Vector
+   */
+  static  fromVector(x0, y0, module, phase) {
+    return new Z4Vector(x0, y0, x0 + module * Math.cos(phase), y0 + module * Math.sin(phase), module, phase);
+  }
+
+   clone() {
+    return new Z4Vector(this.x0, this.y0, this.x, this.y, this.module, this.phase);
+  }
+
+  /**
+   * Returns the direction in which this vector rotates on another Z4Vector
+   *
+   * @param vector The other vector
+   * @return The direction in which this vector rotates on another Z4Vector
+   */
+   direction(vector) {
+    let x1 = this.x - this.x0;
+    let y1 = this.y - this.y0;
+    let x2 = vector.x - vector.x0;
+    let y2 = vector.y - vector.y0;
+    return Math.atan2(x1 * y2 - y1 * x2, x1 * x2 + y1 * y2) >= 0 ? Z4Sign.POSITIVE : Z4Sign.NEGATIVE;
+  }
+}
+/**
+ * The point where to perform a drawing
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4Point extends Cloneable {
+
+   z4Vector = Z4Vector.fromPoints(0, 0, 1, 1);
+
+   intensity = 1;
+
+   lighting = Z4Lighting.NONE;
+
+   colorPosition = -1;
+
+   drawBounds = false;
+
+   side = Z4Sign.RANDOM;
+
+   useVectorModuleAsSize = false;
+
+   clone() {
+    let clone = new Z4Point();
+    clone.z4Vector = this.z4Vector.clone();
+    clone.intensity = this.intensity;
+    clone.lighting = this.lighting;
+    clone.colorPosition = this.colorPosition;
+    clone.drawBounds = this.drawBounds;
+    clone.side = this.side;
+    clone.useVectorModuleAsSize = this.useVectorModuleAsSize;
+    return clone;
+  }
+
+  /**
+   * Sets the side
+   *
+   * @param side the side
+   * @return This Z4Point
+   */
+   setSide(side) {
+    this.side = side;
+    return this;
+  }
+}
+/**
  * The lighting of a color
  *
  * @author gianpiero.di.blasi
@@ -2865,5 +3074,78 @@ class Z4TemporalColorGuidedTourUI extends Z4TemporalColorUI {
     } else {
       console.log(this.message);
     }
+  }
+}
+/**
+ * The common parent of all painters
+ *
+ * @param <T>
+ * @author gianpiero.di.blasi
+ */
+class Z4Painter {
+
+  /**
+   * Performs a drawing
+   * @param context The context to perform the drawing
+   * @param point The point where to perform the drawing
+   * @param gradientColor The color to use to perform the drawing
+   * @return This Z4Painter
+   */
+   draw(context, point, gradientColor) {
+  }
+}
+/**
+ * The painter of arrows, used only for testing purpose
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4ArrowPainter extends Z4Painter {
+
+   draw(context, point, gradientColor) {
+    return this;
+  }
+}
+/**
+ * The classic painter
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4ClassicPainter extends Z4Painter {
+
+   draw(context, point, gradientColor) {
+    return this;
+  }
+}
+/**
+ * The painter of 2D shapes
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4Shape2DPainter extends Z4Painter {
+
+   draw(context, point, gradientColor) {
+    return this;
+  }
+}
+/**
+ * The painter of natural figures
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4NaturalFigurePainter extends Z4Painter {
+
+   draw(context, point, gradientColor) {
+    return this;
+  }
+}
+/**
+ * The painter of centered figures
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4CenteredFigurePainter extends Z4Painter {
+
+   draw(context, point, gradientColor) {
+    return this;
   }
 }
