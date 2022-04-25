@@ -1,5 +1,3 @@
-/* global Object, Z4GradientColorGuidedTourUI, Z4Loader, Z4MessageFactory, Z4ModalMessageUI */
-
 /**
  * The guided tour for the Z4GradientColorUI
  *

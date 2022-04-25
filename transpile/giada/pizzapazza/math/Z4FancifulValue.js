@@ -1,5 +1,3 @@
-/* global Z4RandomValue, Z4Setting, Z4Sign */
-
 /**
  * The fanciful value
  *

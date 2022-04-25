@@ -1,5 +1,3 @@
-/* global Z4Progression */
-
 /**
  * The progression of a color
  *

@@ -1,4 +1,3 @@
-
 /**
  * The environment settings
  *
@@ -175,7 +174,6 @@ class Z4Setting {
   constructor() {
   }
 }
-
 /**
  * The message factory
  *
@@ -234,7 +232,6 @@ class Z4MessageFactory {
   constructor() {
   }
 }
-
 /**
  * The message factory
  *
@@ -279,7 +276,6 @@ class Z4ImageFactory {
   constructor() {
   }
 }
-
 /**
  * The abstract class of all UI components
  *
@@ -363,7 +359,6 @@ class Z4ComponentUI {
     return this;
   }
 }
-
 /**
  * The class of all UI messages
  *
@@ -487,7 +482,6 @@ class Z4ModalMessageUI {
   constructor() {
   }
 }
-
 /**
  * The utility library for math
  *
@@ -593,7 +587,6 @@ class Z4Math {
   constructor() {
   }
 }
-
 /**
  * The signs of a value
  *
@@ -651,7 +644,6 @@ class Z4Sign {
     return new Z4Sign(-2);
   }
 }
-
 /**
  * The random value
  *
@@ -776,7 +768,6 @@ class Z4RandomValue {
     return new Z4RandomValue(value, 3, length);
   }
 }
-
 /**
  * The fanciful value
  *
@@ -877,7 +868,6 @@ class Z4FancifulValue {
     }
   }
 }
-
 /**
  * The lighting of a color
  *
@@ -903,7 +893,6 @@ class Z4Lighting {
   constructor() {
   }
 }
-
 /**
  * The progression of a color
  *
@@ -934,7 +923,6 @@ class Z4Progression {
   constructor() {
   }
 }
-
 /**
  * The abstract color
  *
@@ -1073,7 +1061,6 @@ class Z4AbstractColor {
     return this.init();
   }
 }
-
 /**
  * The color
  *
@@ -1140,7 +1127,6 @@ class Z4Color extends Z4AbstractColor {
     return new Z4Color(parseInt((cAfter[0] - cBefore[0]) * div + cBefore[0]), parseInt((cAfter[1] - cBefore[1]) * div + cBefore[1]), parseInt((cAfter[2] - cBefore[2]) * div + cBefore[2]), parseInt((cAfter[3] - cBefore[3]) * div + cBefore[3]));
   }
 }
-
 /**
  * The stop color in a sequence
  *
@@ -1219,7 +1205,6 @@ class Z4StopColor extends Z4AbstractColor {
     return Z4StopColor.fromARGB(color.getARGB(), position);
   }
 }
-
 /**
  * The abstract gradient color (a sequence of Z4StopColor)
  *
@@ -1447,7 +1432,6 @@ class Z4AbstractGradientColor {
     return gradient;
   }
 }
-
 /**
  * The gradient color (a sequence of Z4StopColor)
  *
@@ -1493,7 +1477,6 @@ class Z4GradientColor extends Z4AbstractGradientColor {
     return z4GradientColor.setRipple(before.getRipple()).setMirrored(before.isMirrored());
   }
 }
-
 /**
  * The stop gradient color in a sequence
  *
@@ -1546,7 +1529,6 @@ class Z4StopGradientColor extends Z4AbstractGradientColor {
     return z4StopGradientColor.setRipple(color.getRipple()).setMirrored(color.isMirrored());
   }
 }
-
 /**
  * The temporal color (a sequence of Z4StopGradientColor)
  *
@@ -1810,7 +1792,6 @@ class Z4TemporalColor {
     }
   }
 }
-
 /**
  * The component to show a color
  *
@@ -1897,7 +1878,6 @@ class Z4ColorUI extends Z4ComponentUI {
     return Z4Color.fromHEX(this.color.value, this.formRange.valueAsNumber);
   }
 }
-
 /**
  * The component to show a gradient color
  *
@@ -2207,7 +2187,6 @@ class Z4GradientColorUI extends Z4ComponentUI {
     this.ctx.restore();
   }
 }
-
 /**
  * The guided tour for the Z4GradientColorUI
  *
@@ -2330,7 +2309,6 @@ class Z4GradientColorGuidedTourUI extends Z4GradientColorUI {
     }
   }
 }
-
 /**
  * The component to show a temporal color
  *
@@ -2740,7 +2718,6 @@ class Z4TemporalColorUI extends Z4ComponentUI {
     this.ctx.restore();
   }
 }
-
 /**
  * The guided tour for the Z4TemporalColorUI
  *

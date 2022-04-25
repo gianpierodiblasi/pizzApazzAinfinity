@@ -1,5 +1,3 @@
-/* global Date, Math, XMLHttpRequest, Z4Loader, Z4MessageFactory, parseInt */
-
 /**
  * The abstract class of all UI components
  *

@@ -1,5 +1,3 @@
-/* global Array, Z4Color, Z4Math, Z4Setting, Z4StopColor */
-
 /**
  * The abstract gradient color (a sequence of Z4StopColor)
  *

@@ -1,5 +1,3 @@
-/* global Array, JSON, Z4Color, Z4ColorUI, Z4MessageFactory, Z4Setting */
-
 /**
  * @author gianpiero.di.blasi
  */

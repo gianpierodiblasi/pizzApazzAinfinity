@@ -1,5 +1,3 @@
-/* global Array, Z4GradientColor, Z4Math, Z4Setting, Z4StopGradientColor */
-
 /**
  * The temporal color (a sequence of Z4StopGradientColor)
  *

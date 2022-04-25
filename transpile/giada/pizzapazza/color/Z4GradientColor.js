@@ -1,5 +1,3 @@
-/* global Z4Color, Z4GradientColor */
-
 /**
  * The gradient color (a sequence of Z4StopColor)
  *

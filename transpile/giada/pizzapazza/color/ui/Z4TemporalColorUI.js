@@ -1,5 +1,3 @@
-/* global Date, Math, Object, OffscreenCanvas, Z4ColorUI, Z4ComponentUI, Z4ImageFactory, Z4Loader, Z4MessageFactory, Z4ModalMessageUI, Z4TemporalColor, Z4TemporalColorGuidedTourUI, Z4TemporalColorUI, parseFloat, parseInt */
-
 /**
  * The component to show a temporal color
  *

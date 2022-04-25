@@ -1,5 +1,3 @@
-/* global Array, JSON, OffscreenCanvas, Z4MessageFactory, Z4Setting, Z4TemporalColor, Z4TemporalColorUI */
-
 /**
  * @author gianpiero.di.blasi
  */

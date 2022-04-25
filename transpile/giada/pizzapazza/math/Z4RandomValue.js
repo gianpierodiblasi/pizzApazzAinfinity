@@ -1,5 +1,3 @@
-/* global Bezier, Math, Z4RandomValue */
-
 /**
  * The random value
  *

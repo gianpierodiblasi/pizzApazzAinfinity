@@ -1,5 +1,3 @@
-/* global Array, Number, parseInt */
-
 /**
  * The abstract color
  *

@@ -1,5 +1,3 @@
-/* global Z4Lighting */
-
 /**
  * The lighting of a color
  *

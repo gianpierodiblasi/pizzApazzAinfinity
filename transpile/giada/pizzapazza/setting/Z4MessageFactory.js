@@ -1,5 +1,3 @@
-/* global Array, Object, String, XMLHttpRequest, Z4Loader, Z4MessageFactory, Z4Setting */
-
 /**
  * The message factory
  *

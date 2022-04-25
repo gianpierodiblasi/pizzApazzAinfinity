@@ -1,5 +1,3 @@
-/* global Z4MessageFactory, Z4ModalMessageUI, Z4Setting */
-
 /**
  * @author gianpiero.di.blasi
  */

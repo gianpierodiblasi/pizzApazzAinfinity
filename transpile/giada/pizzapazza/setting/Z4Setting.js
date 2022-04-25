@@ -1,5 +1,3 @@
-/* global Date, Object, Z4Loader, Z4Setting, decodeURIComponent */
-
 /**
  * The environment settings
  *

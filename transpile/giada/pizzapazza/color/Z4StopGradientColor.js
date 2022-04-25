@@ -1,5 +1,3 @@
-/* global Z4StopGradientColor */
-
 /**
  * The stop gradient color in a sequence
  *

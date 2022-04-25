@@ -1,5 +1,3 @@
-/* global String, URLSearchParams, XMLHttpRequest, Z4Loader */
-
 /**
  * The loader
  *

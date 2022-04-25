@@ -1,5 +1,3 @@
-/* global Math, Z4Math */
-
 /**
  * The utility library for math
  *

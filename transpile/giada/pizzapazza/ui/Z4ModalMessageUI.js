@@ -1,5 +1,3 @@
-/* global Date, Math, Modal, XMLHttpRequest, Z4Loader, Z4MessageFactory, Z4ModalMessageUI, onButton, parseInt */
-
 /**
  * The class of all UI messages
  *
