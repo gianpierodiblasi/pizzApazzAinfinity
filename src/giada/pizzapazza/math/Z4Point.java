@@ -32,6 +32,7 @@ public class Z4Point implements Cloneable {
 
   /**
    * Returns the Z4Vector
+   *
    * @return The Z4Vector
    */
   public Z4Vector getZ4Vector() {
@@ -48,6 +49,33 @@ public class Z4Point implements Cloneable {
   }
 
   /**
+   * Returns the lighting
+   * @return The lighting
+   */
+  public Z4Lighting getLighting() {
+    return lighting;
+  }
+
+  /**
+   * Returns the color position
+   *
+   * @return The color position (in the range [0,1]), -1 if this point has no
+   * color position
+   */
+  public double getColorPosition() {
+    return colorPosition;
+  }
+
+  /**
+   * Checks if this point has to be used to draw bounds or real objects
+   *
+   * @return true if this point has to be used to draw bounds, false otherwise
+   */
+  public boolean isDrawBounds() {
+    return drawBounds;
+  }
+
+  /**
    * Sets the side
    *
    * @param side the side
@@ -56,5 +84,15 @@ public class Z4Point implements Cloneable {
   public Z4Point setSide(Z4Sign side) {
     this.side = side;
     return this;
+  }
+
+  /**
+   * Checks if the vector module of this point has to be used has size
+   *
+   * @return true if the vector module of this point has to be used has size,
+   * false otherwise
+   */
+  public boolean isUseVectorModuleAsSize() {
+    return useVectorModuleAsSize;
   }
 }

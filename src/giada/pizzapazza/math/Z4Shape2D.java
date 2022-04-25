@@ -92,4 +92,13 @@ public class Z4Shape2D {
 
     this.path.closePath();
   }
+
+  /**
+   * Returns the path
+   *
+   * @return The path
+   */
+  public $Path2D getPath() {
+    return path;
+  }
 }

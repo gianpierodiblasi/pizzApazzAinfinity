@@ -88,8 +88,7 @@ public abstract class Z4AbstractColor<T extends Z4AbstractColor<T>> {
    * @return NOTHING
    */
   public Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getHEX() {
-    return new Union4<String, CanvasGradient, CanvasPattern, Object>() {
-    };
+    return null;
   }
 
   /**

@@ -9,7 +9,7 @@ import simulation.dom.$CanvasRenderingContext2D;
  *
  * @author gianpiero.di.blasi
  */
-public class Z4ClassicPainter implements Z4Painter<Z4ClassicPainter> {
+public class Z4ClassicPainter extends Z4Painter<Z4ClassicPainter> {
 
   @Override
   public Z4ClassicPainter draw($CanvasRenderingContext2D context, Z4Point point, Z4GradientColor gradientColor) {

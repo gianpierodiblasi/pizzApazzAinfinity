@@ -33,6 +33,15 @@ class Z4FancifulValue {
   }
 
   /**
+   * Returns the constant value
+   *
+   * @return The constant value
+   */
+   getConstantValue() {
+    return constantValue;
+  }
+
+  /**
    * Sets the random component
    *
    * @param randomSign The sign of the random component

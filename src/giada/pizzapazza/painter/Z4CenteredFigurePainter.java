@@ -9,7 +9,7 @@ import simulation.dom.$CanvasRenderingContext2D;
  *
  * @author gianpiero.di.blasi
  */
-public class Z4CenteredFigurePainter implements Z4Painter<Z4CenteredFigurePainter> {
+public class Z4CenteredFigurePainter extends Z4Painter<Z4CenteredFigurePainter> {
 
   @Override
   public Z4CenteredFigurePainter draw($CanvasRenderingContext2D context, Z4Point point, Z4GradientColor gradientColor) {

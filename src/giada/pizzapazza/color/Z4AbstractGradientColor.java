@@ -229,8 +229,7 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
    * @return NOTHING
    */
   public Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getLinearGradient($CanvasRenderingContext2D context, double x1, double y1, double x2, double y2) {
-    return new Union4<String, CanvasGradient, CanvasPattern, Object>() {
-    };
+    return null;
   }
 
   /**
@@ -264,8 +263,7 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
    * @return NOTHING
    */
   public Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getRadialGradient($CanvasRenderingContext2D context, double x1, double y1, double r1, double x2, double y2, double r2) {
-    return new Union4<String, CanvasGradient, CanvasPattern, Object>() {
-    };
+    return null;
   }
 
   /**
@@ -293,7 +291,6 @@ public abstract class Z4AbstractGradientColor<T extends Z4AbstractGradientColor<
    * @return NOTHING
    */
   public Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getConicGradient($CanvasRenderingContext2D context, double x, double y, double angle) {
-    return new Union4<String, CanvasGradient, CanvasPattern, Object>() {
-    };
+    return null;
   }
 }

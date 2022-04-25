@@ -22,8 +22,4 @@ class Z4ArrowPainter extends Z4Painter {
     context.restore();
     return this;
   }
-
-   getColor(color) {
-    return color;
-  }
 }
