@@ -65,9 +65,15 @@ class Z4GradientColorUI extends Z4ComponentUI {
     this.canvas.style.width = Z4GradientColorUI.WIDTH + "px";
     this.canvas.style.height = Z4GradientColorUI.HEIGHT + "px";
     this.sliders.onmousemove = (event) => {
-      let x = event.clientX - this.sliders.getBoundingClientRect().left;
+      this.sliders.style.cursor = "default";
+      let x = event.clientX - this.sliders.getBoundingClientRect().left - 8;
       let width = Z4GradientColorUI.WIDTH / (this.gradientColor.isMirrored() ? 2 : 1);
-      this.sliders.style.cursor = x < width ? "pointer" : "default";
+      if (x < width) {
+        let position = x / width;
+        if (this.gradientColor.getComponents().every((color, index, array) => Math.abs(position - color.getPosition()) > 0.05)) {
+          this.sliders.style.cursor = "pointer";
+        }
+      }
       return null;
     };
     if (Z4Loader.touch) {

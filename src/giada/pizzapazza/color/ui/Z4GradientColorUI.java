@@ -81,9 +81,17 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
     this.canvas.style.height = Z4GradientColorUI.HEIGHT + "px";
 
     this.sliders.onmousemove = (event) -> {
-      double x = event.clientX - this.sliders.getBoundingClientRect().left;
+      this.sliders.style.cursor = "default";
+      double x = event.clientX - this.sliders.getBoundingClientRect().left - 8;
       double width = Z4GradientColorUI.WIDTH / (this.gradientColor.isMirrored() ? 2 : 1);
-      this.sliders.style.cursor = x < width ? "pointer" : "default";
+
+      if (x < width) {
+        double position = x / width;
+
+        if (this.gradientColor.getComponents().every((color, index, array) -> Math.abs(position - color.getPosition()) > 0.05)) {
+          this.sliders.style.cursor = "pointer";
+        }
+      }
 
       return null;
     };
@@ -321,7 +329,7 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
 
         input.setAttribute("value", "" + position);
         input.style.left = left + "px";
-        
+
         this.gradientColor.move(oldPosition, position);
         this.drawCanvas();
         this.oninput.$apply(this.gradientColor);
