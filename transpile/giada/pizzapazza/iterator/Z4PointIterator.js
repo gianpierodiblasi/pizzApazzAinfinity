@@ -67,6 +67,19 @@ class Z4PointIterator {
   }
 
   /**
+   * Sets the rotation
+   *
+   * @param rotation The rotation
+   * @param rotationMode The rotation mode
+   * @return This Z4PointIterator
+   */
+   setRotation(rotation, rotationMode) {
+    this.rotation = rotation;
+    this.rotationMode = rotationMode;
+    return this;
+  }
+
+  /**
    * Performs a drawing action
    *
    * @param action The action
@@ -129,5 +142,15 @@ class Z4PointIterator {
     } else if (this.rotationMode === Z4Rotation.RELATIVE_TO_PATH) {
       z4Point.setSide(vector ? vector.direction(z4Point.getZ4Vector()) : Z4Sign.RANDOM);
     }
+  }
+
+  /**
+   * Returns the color parameter
+   *
+   * @param color The color
+   * @return The color
+   */
+   getColor(color) {
+    return color;
   }
 }

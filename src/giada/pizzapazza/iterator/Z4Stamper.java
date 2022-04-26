@@ -5,6 +5,7 @@ import giada.pizzapazza.color.Z4GradientColor;
 import giada.pizzapazza.color.Z4Lighting;
 import giada.pizzapazza.color.Z4Progression;
 import giada.pizzapazza.math.Z4FancifulValue;
+import giada.pizzapazza.math.Z4Math;
 import giada.pizzapazza.math.Z4Point;
 import giada.pizzapazza.math.Z4Sign;
 import giada.pizzapazza.math.Z4Vector;
@@ -52,11 +53,11 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
       return null;
     } else {
       this.currentMultiplicityCounter++;
-      this.hasNext = this.currentMultiplicityCounter == this.currentMultiplicityTotal;
+      this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
 
       double angle = this.nextRotation(0);
-      if ($exists(currentPush)) {
-        Z4Vector pushed = Z4Vector.fromVector(this.P.$get("x"), this.P.$get("y"), currentPush, angle);
+      if ($exists(this.currentPush)) {
+        Z4Vector pushed = Z4Vector.fromVector(this.P.$get("x"), this.P.$get("y"), this.currentPush, angle);
         this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), this.intensity.next(0), angle));
       } else {
         this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P.$get("x"), this.P.$get("y"), this.intensity.next(0), angle));
@@ -86,30 +87,47 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
 
   @Override
   public void drawDemo($CanvasRenderingContext2D context, double width, double height) {
+    this.multiplicity.setConstant(Z4Sign.POSITIVE, 3);
+    this.push.setConstant(Z4Sign.POSITIVE, 25);
+
     Z4ArrowPainter arrowPainter = new Z4ArrowPainter();
     Z4GradientColor gradientColor = new Z4GradientColor();
 
     this.initDraw(width, height).forEach(point -> {
       this.draw(Z4Action.START, point.$get("x"), point.$get("y"));
-      Z4Point next = this.next();
-      Z4Vector vector = next.getZ4Vector();
 
-      context.save();
-      context.translate(vector.getX0(), vector.getY0());
-      context.rotate(vector.getPhase());
-      arrowPainter.draw(context, next, gradientColor);
-      context.restore();
+      if ($exists(this.currentPush) && !$exists(this.currentMultiplicityCounter)) {
+        context.save();
+        context.lineWidth = 1;
+        context.fillStyle = this.$getColor("black");
+        context.beginPath();
+        context.arc(this.P.$get("x"), this.P.$get("y"), 2, 0, Z4Math.TWO_PI);
+        context.fill();
+        context.restore();
+      }
+
+      Z4Point next;
+      while ((next = this.next()) != null) {
+        Z4Vector vector = next.getZ4Vector();
+
+        context.save();
+        context.translate(vector.getX0(), vector.getY0());
+        context.rotate(vector.getPhase());
+        arrowPainter.draw(context, next, gradientColor);
+        context.restore();
+      }
     });
   }
 
   private Array<$Object> initDraw(double w, double h) {
-    int size = parseInt(0.0005 * w * h);
     Array<$Object> array = new Array<>();
-    for (int i = 0; i < size; i++) {
-      $Object point = new $Object();
-      point.$set("x", 10 + (w - 20) * Math.random());
-      point.$set("y", 10 + (h - 20) * Math.random());
-      array.push(point);
+    for (int x = 50; x <= w - 50; x += 100) {
+      for (int y = 50; y <= h - 50; y += 100) {
+        $Object point = new $Object();
+        point.$set("x", x);
+        point.$set("y", y);
+        array.push(point);
+      }
     }
     return array;
   }

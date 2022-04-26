@@ -1,5 +1,8 @@
 package giada.pizzapazza.iterator;
 
+import giada.pizzapazza.math.Z4FancifulValue;
+import giada.pizzapazza.math.Z4RandomValue;
+import giada.pizzapazza.math.Z4Sign;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.setting.Z4Setting;
 import simulation.dom.$Canvas;
@@ -40,6 +43,7 @@ public class test_stamper1 {
     $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
 
     Z4Stamper stamper = new Z4Stamper();
+    stamper.setRotation(new Z4FancifulValue().setRandom(Z4Sign.RANDOM, Z4RandomValue.classic(45)), Z4Rotation.FIXED);
     stamper.drawDemo(offscreenCtx, canvas.width, canvas.height);
 
     canvasCtx.clearRect(0, 0, canvas.width, canvas.height);

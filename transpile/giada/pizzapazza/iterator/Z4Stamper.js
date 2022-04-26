@@ -11,8 +11,17 @@ class Z4Stamper extends Z4PointIterator {
 
    push = new Z4FancifulValue();
 
+   currentMultiplicityCounter = 0;
+
+   currentMultiplicityTotal = 0;
+
+   currentPush = 0.0;
+
    draw(action, x, y) {
     if (action === Z4Action.START) {
+      this.currentMultiplicityCounter = 0;
+      this.currentMultiplicityTotal = parseInt(this.multiplicity.next(0));
+      this.currentPush = this.push.next(0);
       this.P["x"] = x;
       this.P["y"] = y;
       this.hasNext = true;
@@ -26,9 +35,15 @@ class Z4Stamper extends Z4PointIterator {
     if (!this.hasNext) {
       return null;
     } else {
-      this.hasNext = false;
+      this.currentMultiplicityCounter++;
+      this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
       let angle = this.nextRotation(0);
-      this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P["x"], this.P["y"], this.intensity.next(0), angle));
+      if (this.currentPush) {
+        let pushed = Z4Vector.fromVector(this.P["x"], this.P["y"], this.currentPush, angle);
+        this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), this.intensity.next(0), angle));
+      } else {
+        this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P["x"], this.P["y"], this.intensity.next(0), angle));
+      }
       this.nextSide(this.z4Point, null);
       if (this.progression === Z4Progression.TEMPORAL) {
         this.z4Point.setLighting(this.lighting);
@@ -50,28 +65,42 @@ class Z4Stamper extends Z4PointIterator {
   }
 
    drawDemo(context, width, height) {
+    this.multiplicity.setConstant(Z4Sign.POSITIVE, 3);
+    this.push.setConstant(Z4Sign.POSITIVE, 25);
     let arrowPainter = new Z4ArrowPainter();
     let gradientColor = new Z4GradientColor();
     this.initDraw(width, height).forEach(point => {
       this.draw(Z4Action.START, point["x"], point["y"]);
-      let next = this.next();
-      let vector = next.getZ4Vector();
-      context.save();
-      context.translate(vector.getX0(), vector.getY0());
-      context.rotate(vector.getPhase());
-      arrowPainter.draw(context, next, gradientColor);
-      context.restore();
+      if (this.currentPush && !this.currentMultiplicityCounter) {
+        context.save();
+        context.lineWidth = 1;
+        context.fillStyle = this.getColor("black");
+        context.beginPath();
+        context.arc(this.P["x"], this.P["y"], 2, 0, Z4Math.TWO_PI);
+        context.fill();
+        context.restore();
+      }
+      let next = null;
+      while ((next = this.next()) !== null) {
+        let vector = next.getZ4Vector();
+        context.save();
+        context.translate(vector.getX0(), vector.getY0());
+        context.rotate(vector.getPhase());
+        arrowPainter.draw(context, next, gradientColor);
+        context.restore();
+      }
     });
   }
 
    initDraw(w, h) {
-    let size = parseInt(0.0005 * w * h);
     let array = new Array();
-    for (let i = 0; i < size; i++) {
-      let point = new Object();
-      point["x"] = 10 + (w - 20) * Math.random();
-      point["y"] = 10 + (h - 20) * Math.random();
-      array.push(point);
+    for (let x = 50; x <= w - 50; x += 100) {
+      for (let y = 50; y <= h - 50; y += 100) {
+        let point = new Object();
+        point["x"] = x;
+        point["y"] = y;
+        array.push(point);
+      }
     }
     return array;
   }

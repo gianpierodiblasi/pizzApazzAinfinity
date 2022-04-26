@@ -1,5 +1,7 @@
 package giada.pizzapazza.iterator;
 
+import def.dom.CanvasGradient;
+import def.dom.CanvasPattern;
 import giada.pizzapazza.color.Z4Lighting;
 import giada.pizzapazza.color.Z4Progression;
 import giada.pizzapazza.math.Z4FancifulValue;
@@ -7,6 +9,7 @@ import giada.pizzapazza.math.Z4Math;
 import giada.pizzapazza.math.Z4Point;
 import giada.pizzapazza.math.Z4Sign;
 import giada.pizzapazza.math.Z4Vector;
+import jsweet.util.union.Union4;
 import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
 import simulation.js.$Object;
@@ -34,8 +37,8 @@ public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
    */
   protected Z4Lighting lighting = Z4Lighting.NONE;
 
-  private final Z4FancifulValue rotation = new Z4FancifulValue();
-  private final Z4Rotation rotationMode = Z4Rotation.FIXED;
+  private Z4FancifulValue rotation = new Z4FancifulValue();
+  private Z4Rotation rotationMode = Z4Rotation.FIXED;
 
   /**
    * The current Z4Point
@@ -75,6 +78,20 @@ public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
     this.progression = progression;
     this.temporalStepProgression = temporalStepProgression;
     this.lighting = lighting;
+    return (T) this;
+  }
+
+  /**
+   * Sets the rotation
+   *
+   * @param rotation The rotation
+   * @param rotationMode The rotation mode
+   * @return This Z4PointIterator
+   */
+  @SuppressWarnings("unchecked")
+  public T setRotation(Z4FancifulValue rotation, Z4Rotation rotationMode) {
+    this.rotation = rotation;
+    this.rotationMode = rotationMode;
     return (T) this;
   }
 
@@ -139,5 +156,25 @@ public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
     } else if (this.rotationMode == Z4Rotation.RELATIVE_TO_PATH) {
       z4Point.setSide($exists(vector) ? vector.direction(z4Point.getZ4Vector()) : Z4Sign.RANDOM);
     }
+  }
+
+  /**
+   * Returns the color parameter
+   *
+   * @param color The color
+   * @return The color
+   */
+  protected String getColor(String color) {
+    return color;
+  }
+
+  /**
+   * Utility method to simulate the fill style of a canvas
+   *
+   * @param color The color
+   * @return NOTHING
+   */
+  protected Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getColor(String color) {
+    return null;
   }
 }

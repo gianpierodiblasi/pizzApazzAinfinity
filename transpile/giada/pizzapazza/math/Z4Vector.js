@@ -75,6 +75,24 @@ class Z4Vector {
   }
 
   /**
+   * Return the x-axis coordinate of the end point
+   *
+   * @return The x-axis coordinate of the end point
+   */
+   getX() {
+    return this.x;
+  }
+
+  /**
+   * Return the y-axis coordinate of the end point
+   *
+   * @return The y-axis coordinate of the end point
+   */
+   getY() {
+    return this.y;
+  }
+
+  /**
    * Returns the module
    *
    * @return The module
