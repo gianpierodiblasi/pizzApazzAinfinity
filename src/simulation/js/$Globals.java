@@ -39,7 +39,7 @@ public class $Globals {
     return 0;
   }
 
-  public static void setTimeout($Apply_0_Void function, int milliseconds) {
+  public static void setTimeout($Apply_0_Void function, double milliseconds) {
   }
 
   private $Globals() {

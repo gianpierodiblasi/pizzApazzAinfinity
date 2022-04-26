@@ -1254,6 +1254,12 @@ class Z4NumberUI extends Z4ComponentUI {
 
    value = this.querySelector(".form-control");
 
+   spinner = this.querySelector(".form-range");
+
+   applySpin = () => this.spin();
+
+   isApplySpin = false;
+
   static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
 
   static  UI = Z4ComponentUI.loadHTML("giada/pizzapazza/math/ui/Z4NumberUI.html");
@@ -1291,6 +1297,36 @@ class Z4NumberUI extends Z4ComponentUI {
       this.value.select();
       return null;
     };
+    if (Z4Loader.touch) {
+    } else {
+      this.spinner.onmousedown = (event) => {
+        this.isApplySpin = true;
+        this.applySpin();
+        return null;
+      };
+      this.spinner.onmouseup = (event) => {
+        this.isApplySpin = false;
+        this.spinner.value = "0";
+        return null;
+      };
+    }
+  }
+
+   spin() {
+    let v = this.spinner.valueAsNumber;
+    let abs = Math.abs(v);
+    if (v) {
+      v = Math.max(0, this.value.valueAsNumber + v / abs);
+      this.value.value = "" + v;
+      this.oninput(null);
+    } else {
+      abs = 1;
+    }
+    if (this.isApplySpin) {
+      setTimeout(this.applySpin, 500 / abs);
+    } else {
+      this.onchange(null);
+    }
   }
 
   /**

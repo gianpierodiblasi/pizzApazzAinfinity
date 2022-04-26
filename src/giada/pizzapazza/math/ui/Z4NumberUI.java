@@ -7,6 +7,9 @@ import giada.pizzapazza.math.Z4Sign;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.ui.Z4ComponentUI;
 import simulation.dom.$HTMLElement;
+import simulation.js.$Apply_0_Void;
+import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.setTimeout;
 
 /**
  * The component to edit a numeric value
@@ -19,6 +22,10 @@ public class Z4NumberUI extends Z4ComponentUI<Object> {
   private final HTMLElement toggle = this.querySelector(".dropdown-toggle");
   private final HTMLElement toggleImg = this.querySelector(".dropdown-toggle img");
   private final $HTMLElement value = this.querySelector(".form-control");
+  private final $HTMLElement spinner = this.querySelector(".form-range");
+
+  private final $Apply_0_Void applySpin = () -> this.spin();
+  private boolean isApplySpin = false;
 
   private final static String PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
   private final static String UI = Z4ComponentUI.loadHTML("giada/pizzapazza/math/ui/Z4NumberUI.html");
@@ -60,6 +67,42 @@ public class Z4NumberUI extends Z4ComponentUI<Object> {
       this.value.select();
       return null;
     };
+
+    if (Z4Loader.touch) {
+
+    } else {
+      this.spinner.onmousedown = (event) -> {
+        this.isApplySpin = true;
+        this.applySpin.$apply();
+        return null;
+      };
+
+      this.spinner.onmouseup = (event) -> {
+        this.isApplySpin = false;
+        this.spinner.value = "0";
+        return null;
+      };
+    }
+  }
+
+  private void spin() {
+    double v = this.spinner.valueAsNumber;
+    double abs = Math.abs(v);
+
+    if ($exists(v)) {
+      v = Math.max(0, this.value.valueAsNumber + v / abs);
+
+      this.value.value = "" + v;
+      this.oninput.$apply(null);
+    } else {
+      abs = 1;
+    }
+
+    if (this.isApplySpin) {
+      setTimeout(this.applySpin, 500 / abs);
+    } else {
+      this.onchange.$apply(null);
+    }
   }
 
   /**
