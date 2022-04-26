@@ -37,7 +37,18 @@ class Z4Point extends Cloneable {
    * @return The Z4Vector
    */
    getZ4Vector() {
-    return z4Vector;
+    return this.z4Vector;
+  }
+
+  /**
+   * Sets the Z4Vector
+   *
+   * @param z4Vector The Z4Vector
+   * @return This Z4Point
+   */
+   setZ4Vector(z4Vector) {
+    this.z4Vector = z4Vector;
+    return this;
   }
 
   /**
@@ -46,15 +57,27 @@ class Z4Point extends Cloneable {
    * @return The intensity
    */
    getIntensity() {
-    return intensity;
+    return this.intensity;
   }
 
   /**
    * Returns the lighting
+   *
    * @return The lighting
    */
    getLighting() {
-    return lighting;
+    return this.lighting;
+  }
+
+  /**
+   * Sets the lighting
+   *
+   * @param lighting The lighting
+   * @return This Z4Point
+   */
+   setLighting(lighting) {
+    this.lighting = lighting;
+    return this;
   }
 
   /**
@@ -64,7 +87,19 @@ class Z4Point extends Cloneable {
    * color position
    */
    getColorPosition() {
-    return colorPosition;
+    return this.colorPosition;
+  }
+
+  /**
+   * Sets the color position
+   *
+   * @param colorPosition The color position (in the range [0,1]), -1 if this
+   * point has no color position
+   * @return This Z4Point
+   */
+   setColorPosition(colorPosition) {
+    this.colorPosition = colorPosition;
+    return this;
   }
 
   /**
@@ -73,7 +108,7 @@ class Z4Point extends Cloneable {
    * @return true if this point has to be used to draw bounds, false otherwise
    */
    isDrawBounds() {
-    return drawBounds;
+    return this.drawBounds;
   }
 
   /**
@@ -94,6 +129,6 @@ class Z4Point extends Cloneable {
    * false otherwise
    */
    isUseVectorModuleAsSize() {
-    return useVectorModuleAsSize;
+    return this.useVectorModuleAsSize;
   }
 }
