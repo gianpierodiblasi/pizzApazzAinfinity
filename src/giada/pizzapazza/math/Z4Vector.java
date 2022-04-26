@@ -74,6 +74,24 @@ public class Z4Vector {
   }
 
   /**
+   * Return the x-axis coordinate of the end point
+   *
+   * @return The x-axis coordinate of the end point
+   */
+  public double getX() {
+    return this.x0;
+  }
+
+  /**
+   * Return the y-axis coordinate of the end point
+   *
+   * @return The y-axis coordinate of the end point
+   */
+  public double getY() {
+    return this.y0;
+  }
+  
+  /**
    * Returns the module
    *
    * @return The module
