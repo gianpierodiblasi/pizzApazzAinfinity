@@ -99,12 +99,13 @@ public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
 
   /**
    * Draws a demo of this Z4PointIterator
+   *
    * @param context The context where to draw the demo
    * @param width The width
    * @param height The height
    */
   public abstract void drawDemo($CanvasRenderingContext2D context, double width, double height);
-  
+
   /**
    * Computes the next rotation
    *

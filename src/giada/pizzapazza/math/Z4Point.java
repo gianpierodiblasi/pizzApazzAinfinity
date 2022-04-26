@@ -18,6 +18,7 @@ public class Z4Point {
   private boolean useVectorModuleAsSize = false;
 
   @Override
+  @SuppressWarnings("CloneInNonCloneableClass")
   public Z4Point clone() throws CloneNotSupportedException {
     Z4Point clone = new Z4Point();
     clone.z4Vector = this.z4Vector.clone();

@@ -89,6 +89,7 @@ class Z4PointIterator {
 
   /**
    * Draws a demo of this Z4PointIterator
+   *
    * @param context The context where to draw the demo
    * @param width The width
    * @param height The height

@@ -5,6 +5,12 @@
  */
 class Z4Stamper extends Z4PointIterator {
 
+   intensity = new Z4FancifulValue().setConstant(Z4Sign.POSITIVE, 15);
+
+   multiplicity = new Z4FancifulValue().setConstant(Z4Sign.POSITIVE, 1);
+
+   push = new Z4FancifulValue();
+
    draw(action, x, y) {
     if (action === Z4Action.START) {
       this.P["x"] = x;
@@ -22,7 +28,7 @@ class Z4Stamper extends Z4PointIterator {
     } else {
       this.hasNext = false;
       let angle = this.nextRotation(0);
-      this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P["x"], this.P["y"], 1, angle));
+      this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P["x"], this.P["y"], this.intensity.next(0), angle));
       this.nextSide(this.z4Point, null);
       if (this.progression === Z4Progression.TEMPORAL) {
         this.z4Point.setLighting(this.lighting);
@@ -50,7 +56,6 @@ class Z4Stamper extends Z4PointIterator {
       this.draw(Z4Action.START, point["x"], point["y"]);
       let next = this.next();
       let vector = next.getZ4Vector();
-      next.setZ4Vector(Z4Vector.fromVector(vector.getX0(), vector.getY0(), 15, vector.getPhase()));
       context.save();
       context.translate(vector.getX0(), vector.getY0());
       context.rotate(vector.getPhase());
