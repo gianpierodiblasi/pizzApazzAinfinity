@@ -46,9 +46,7 @@ class Z4AbstractColor {
    * @return The six components of this Z4AbstractColor
    */
    getComponents() {
-    let components = new Array();
-    components.push(this.a, this.r, this.g, this.b);
-    return components;
+    return new Array(this.a, this.r, this.g, this.b);
   }
 
   /**

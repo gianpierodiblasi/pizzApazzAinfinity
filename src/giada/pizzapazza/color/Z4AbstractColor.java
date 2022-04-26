@@ -59,9 +59,7 @@ public abstract class Z4AbstractColor<T extends Z4AbstractColor<T>> {
    * @return The six components of this Z4AbstractColor
    */
   public Array<Integer> getComponents() {
-    Array<Integer> components = new Array<>();
-    components.push(this.a, this.r, this.g, this.b);
-    return components;
+    return new Array<>(this.a, this.r, this.g, this.b);
   }
 
   /**
