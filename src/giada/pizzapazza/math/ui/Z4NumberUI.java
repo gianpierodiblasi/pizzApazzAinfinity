@@ -69,20 +69,24 @@ public class Z4NumberUI extends Z4ComponentUI<Object> {
     };
 
     if (Z4Loader.touch) {
-
+      this.spinner.ontouchstart = (event) -> this.startSpin();
+      this.spinner.ontouchend = (event) -> this.stopSpin();
     } else {
-      this.spinner.onmousedown = (event) -> {
-        this.isApplySpin = true;
-        this.applySpin.$apply();
-        return null;
-      };
-
-      this.spinner.onmouseup = (event) -> {
-        this.isApplySpin = false;
-        this.spinner.value = "0";
-        return null;
-      };
+      this.spinner.onmousedown = (event) -> this.startSpin();
+      this.spinner.onmouseup = (event) -> this.stopSpin();
     }
+  }
+
+  private Object startSpin() {
+    this.isApplySpin = true;
+    this.applySpin.$apply();
+    return null;
+  }
+
+  private Object stopSpin() {
+    this.isApplySpin = false;
+    this.spinner.value = "0";
+    return null;
   }
 
   private void spin() {

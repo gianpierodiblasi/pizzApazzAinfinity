@@ -57,18 +57,24 @@ class Z4NumberUI extends Z4ComponentUI {
       return null;
     };
     if (Z4Loader.touch) {
+      this.spinner.ontouchstart = (event) => this.startSpin();
+      this.spinner.ontouchend = (event) => this.stopSpin();
     } else {
-      this.spinner.onmousedown = (event) => {
-        this.isApplySpin = true;
-        this.applySpin();
-        return null;
-      };
-      this.spinner.onmouseup = (event) => {
-        this.isApplySpin = false;
-        this.spinner.value = "0";
-        return null;
-      };
+      this.spinner.onmousedown = (event) => this.startSpin();
+      this.spinner.onmouseup = (event) => this.stopSpin();
     }
+  }
+
+   startSpin() {
+    this.isApplySpin = true;
+    this.applySpin();
+    return null;
+  }
+
+   stopSpin() {
+    this.isApplySpin = false;
+    this.spinner.value = "0";
+    return null;
   }
 
    spin() {
