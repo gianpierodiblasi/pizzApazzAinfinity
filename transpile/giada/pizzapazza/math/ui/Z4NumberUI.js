@@ -21,7 +21,7 @@ class Z4NumberUI extends Z4ComponentUI {
 
   static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
 
-  static  UI = Z4ComponentUI.loadHTML("giada/pizzapazza/math/ui/Z4NumberUI.html");
+  static  UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4NumberUI.html");
 
   /**
    * Creates a Z4ColorUI

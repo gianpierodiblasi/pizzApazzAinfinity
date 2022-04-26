@@ -5,6 +5,7 @@ import def.dom.NodeList;
 import static def.js.Globals.parseFloat;
 import giada.pizzapazza.Z4Loader;
 import giada.pizzapazza.math.Z4Sign;
+import giada.pizzapazza.setting.Z4HTMLFactory;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.ui.Z4ComponentUI;
 import simulation.dom.$HTMLElement;
@@ -29,7 +30,7 @@ public class Z4NumberUI extends Z4ComponentUI<Object> {
   private boolean isApplySpin = false;
 
   private final static String PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
-  private final static String UI = Z4ComponentUI.loadHTML("giada/pizzapazza/math/ui/Z4NumberUI.html");
+  private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4NumberUI.html");
 
   /**
    * Creates a Z4ColorUI

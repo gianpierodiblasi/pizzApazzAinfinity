@@ -35,7 +35,7 @@ public class Z4HTMLFactory {
 
       new $String(client.responseText).split("\n").forEach(row -> {
         if ($exists(row) && !row.startsWith("#")) {
-          client.open("GET", Z4Loader.UP + row, false);
+          client.open("GET", Z4Loader.UP + "src/" + row, false);
           client.send();
           array.$set(row, client.responseText);
         }
@@ -57,7 +57,7 @@ public class Z4HTMLFactory {
 
   private static void readHTMLs(Array<def.js.String> array, String responseText) {
     new $String(responseText).split("\n").forEach(row -> {
-      if ($exists(row) && !row.startsWith("#")) {
+      if ($exists(row)) {
         Array<def.js.String> keyValue = row.split("=");
         array.$set(keyValue.$get(0).trim(), keyValue.$get(1).trim());
       }

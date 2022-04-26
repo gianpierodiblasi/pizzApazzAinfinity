@@ -201,7 +201,7 @@ class Z4HTMLFactory {
       client.send();
       new String(client.responseText).split("\n").forEach(row => {
         if (row && !row.startsWith("#")) {
-          client.open("GET", Z4Loader.UP + row, false);
+          client.open("GET", Z4Loader.UP + "src/" + row, false);
           client.send();
           array[row] = client.responseText;
         }
@@ -220,7 +220,7 @@ class Z4HTMLFactory {
 
   static  readHTMLs(array, responseText) {
     new String(responseText).split("\n").forEach(row => {
-      if (row && !row.startsWith("#")) {
+      if (row) {
         let keyValue = row.split("=");
         array[keyValue[0].trim()] = keyValue[1].trim();
       }
@@ -355,20 +355,6 @@ class Z4ComponentUI {
   };
 
   /**
-   * Loads an HTML file
-   *
-   * @param html The HTML file
-   * @return The HTML file
-   */
-  static  loadHTML(html) {
-    let path = Z4Loader.UP + (Z4Loader.allFiles ? "src/" : "build/html/");
-    let client = new XMLHttpRequest();
-    client.open("GET", path + html, false);
-    client.send();
-    return client.responseText;
-  }
-
-  /**
    * Creates a Z4ComponentUI
    *
    * @param ui The HTML
@@ -427,10 +413,6 @@ class Z4ModalMessageUI {
   static  modal = new bootstrap.Modal(Z4ModalMessageUI.html);
 
   static  loadHTML() {
-    let path = Z4Loader.UP + (Z4Loader.allFiles ? "src/" : "build/html/");
-    let client = new XMLHttpRequest();
-    client.open("GET", path + "giada/pizzapazza/ui/Z4ModalMessageUI.html", false);
-    client.send();
     let parent = document.createElement("div");
     parent.setAttribute("id", new Date().getTime() + "-" + parseInt(1000 * Math.random()));
     parent.setAttribute("data-bs-backdrop", "static");
@@ -438,7 +420,7 @@ class Z4ModalMessageUI {
     parent.setAttribute("tabindex", "-1");
     parent.setAttribute("style", "display:none");
     parent.className = "modal modal-dialog-centered fade";
-    parent.innerHTML = client.responseText;
+    parent.innerHTML = Z4HTMLFactory.get("giada/pizzapazza/ui/Z4ModalMessageUI.html");
     document.body.appendChild(parent);
     return parent;
   }
@@ -1318,7 +1300,7 @@ class Z4NumberUI extends Z4ComponentUI {
 
   static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
 
-  static  UI = Z4ComponentUI.loadHTML("giada/pizzapazza/math/ui/Z4NumberUI.html");
+  static  UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4NumberUI.html");
 
   /**
    * Creates a Z4ColorUI
@@ -2416,7 +2398,7 @@ class Z4ColorUI extends Z4ComponentUI {
 
    formRange = this.querySelector(".form-range");
 
-  static  UI = Z4ComponentUI.loadHTML("giada/pizzapazza/color/ui/Z4ColorUI.html");
+  static  UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4ColorUI.html");
 
   /**
    * Creates a Z4ColorUI
@@ -2522,7 +2504,7 @@ class Z4GradientColorUI extends Z4ComponentUI {
 
    mouseDown = false;
 
-  static  UI = Z4ComponentUI.loadHTML("giada/pizzapazza/color/ui/Z4GradientColorUI.html");
+  static  UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4GradientColorUI.html");
 
   static  WIDTH = 500;
 
@@ -2959,7 +2941,7 @@ class Z4TemporalColorUI extends Z4ComponentUI {
 
    mouseDown = false;
 
-  static  UI = Z4ComponentUI.loadHTML("giada/pizzapazza/color/ui/Z4TemporalColorUI.html");
+  static  UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4TemporalColorUI.html");
 
   static  WIDTH = 500;
 

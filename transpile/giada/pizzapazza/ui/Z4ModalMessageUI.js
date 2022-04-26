@@ -10,10 +10,6 @@ class Z4ModalMessageUI {
   static  modal = new bootstrap.Modal(Z4ModalMessageUI.html);
 
   static  loadHTML() {
-    let path = Z4Loader.UP + (Z4Loader.allFiles ? "src/" : "build/html/");
-    let client = new XMLHttpRequest();
-    client.open("GET", path + "giada/pizzapazza/ui/Z4ModalMessageUI.html", false);
-    client.send();
     let parent = document.createElement("div");
     parent.setAttribute("id", new Date().getTime() + "-" + parseInt(1000 * Math.random()));
     parent.setAttribute("data-bs-backdrop", "static");
@@ -21,7 +17,7 @@ class Z4ModalMessageUI {
     parent.setAttribute("tabindex", "-1");
     parent.setAttribute("style", "display:none");
     parent.className = "modal modal-dialog-centered fade";
-    parent.innerHTML = client.responseText;
+    parent.innerHTML = Z4HTMLFactory.get("giada/pizzapazza/ui/Z4ModalMessageUI.html");
     document.body.appendChild(parent);
     return parent;
   }

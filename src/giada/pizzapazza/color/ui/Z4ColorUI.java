@@ -2,6 +2,7 @@ package giada.pizzapazza.color.ui;
 
 import giada.pizzapazza.color.Z4AbstractColor;
 import giada.pizzapazza.color.Z4Color;
+import giada.pizzapazza.setting.Z4HTMLFactory;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.ui.Z4ComponentUI;
 import simulation.dom.$HTMLElement;
@@ -18,7 +19,7 @@ public class Z4ColorUI extends Z4ComponentUI<Z4Color> {
   private final $HTMLElement formRangeLabel = this.querySelector(".form-range-label");
   private final $HTMLElement formRange = this.querySelector(".form-range");
 
-  private final static String UI = Z4ComponentUI.loadHTML("giada/pizzapazza/color/ui/Z4ColorUI.html");
+  private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4ColorUI.html");
 
   /**
    * Creates a Z4ColorUI

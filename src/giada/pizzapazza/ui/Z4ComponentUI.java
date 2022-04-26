@@ -3,9 +3,7 @@ package giada.pizzapazza.ui;
 import def.dom.Element;
 import def.dom.HTMLElement;
 import def.dom.NodeList;
-import def.dom.XMLHttpRequest;
 import def.js.Date;
-import giada.pizzapazza.Z4Loader;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import simulation.dom.$HTMLElement;
 import simulation.js.$Apply_1_Void;
@@ -33,22 +31,6 @@ public abstract class Z4ComponentUI<T> {
    */
   public $Apply_1_Void<T> oninput = element -> {
   };
-
-  /**
-   * Loads an HTML file
-   *
-   * @param html The HTML file
-   * @return The HTML file
-   */
-  protected static String loadHTML(String html) {
-    String path = Z4Loader.UP + (Z4Loader.allFiles ? "src/" : "build/html/");
-
-    XMLHttpRequest client = new XMLHttpRequest();
-    client.open("GET", path + html, false);
-    client.send();
-
-    return client.responseText;
-  }
 
   /**
    * Creates a Z4ComponentUI

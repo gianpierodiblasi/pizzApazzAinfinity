@@ -10,6 +10,7 @@ import static def.js.Globals.parseFloat;
 import giada.pizzapazza.Z4Loader;
 import giada.pizzapazza.color.Z4AbstractGradientColor;
 import giada.pizzapazza.color.Z4TemporalColor;
+import giada.pizzapazza.setting.Z4HTMLFactory;
 import giada.pizzapazza.setting.Z4ImageFactory;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.ui.Z4ComponentUI;
@@ -53,7 +54,7 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
   private $Apply_0_Void devicePixelRatioListener;
   private boolean mouseDown;
 
-  private final static String UI = Z4ComponentUI.loadHTML("giada/pizzapazza/color/ui/Z4TemporalColorUI.html");
+  private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4TemporalColorUI.html");
   private final static int WIDTH = 500;
   private final static int HEIGHT = 200;
 

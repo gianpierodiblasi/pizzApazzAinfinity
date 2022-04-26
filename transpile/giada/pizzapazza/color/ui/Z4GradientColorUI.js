@@ -33,7 +33,7 @@ class Z4GradientColorUI extends Z4ComponentUI {
 
    mouseDown = false;
 
-  static  UI = Z4ComponentUI.loadHTML("giada/pizzapazza/color/ui/Z4GradientColorUI.html");
+  static  UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4GradientColorUI.html");
 
   static  WIDTH = 500;
 

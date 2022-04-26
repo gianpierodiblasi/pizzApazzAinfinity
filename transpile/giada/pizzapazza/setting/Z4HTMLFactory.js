@@ -25,7 +25,7 @@ class Z4HTMLFactory {
       client.send();
       new String(client.responseText).split("\n").forEach(row => {
         if (row && !row.startsWith("#")) {
-          client.open("GET", Z4Loader.UP + row, false);
+          client.open("GET", Z4Loader.UP + "src/" + row, false);
           client.send();
           array[row] = client.responseText;
         }
@@ -44,7 +44,7 @@ class Z4HTMLFactory {
 
   static  readHTMLs(array, responseText) {
     new String(responseText).split("\n").forEach(row => {
-      if (row && !row.startsWith("#")) {
+      if (row) {
         let keyValue = row.split("=");
         array[keyValue[0].trim()] = keyValue[1].trim();
       }

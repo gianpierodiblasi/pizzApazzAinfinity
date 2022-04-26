@@ -1,9 +1,8 @@
 package giada.pizzapazza.ui;
 
 import def.dom.HTMLElement;
-import def.dom.XMLHttpRequest;
 import def.js.Date;
-import giada.pizzapazza.Z4Loader;
+import giada.pizzapazza.setting.Z4HTMLFactory;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import simulation.dom.$HTMLElement;
 import simulation.js.$Apply_0_Void;
@@ -22,12 +21,6 @@ public class Z4ModalMessageUI {
   private final static bootstrap.$Modal modal = new bootstrap.$Modal(Z4ModalMessageUI.html);
 
   private static HTMLElement loadHTML() {
-    String path = Z4Loader.UP + (Z4Loader.allFiles ? "src/" : "build/html/");
-
-    XMLHttpRequest client = new XMLHttpRequest();
-    client.open("GET", path + "giada/pizzapazza/ui/Z4ModalMessageUI.html", false);
-    client.send();
-
     HTMLElement parent = document.createElement("div");
     parent.setAttribute("id", new Date().getTime() + "-" + parseInt(1000 * Math.random()));
     parent.setAttribute("data-bs-backdrop", "static");
@@ -35,7 +28,7 @@ public class Z4ModalMessageUI {
     parent.setAttribute("tabindex", "-1");
     parent.setAttribute("style", "display:none");
     parent.className = "modal modal-dialog-centered fade";
-    parent.innerHTML = client.responseText;
+    parent.innerHTML = Z4HTMLFactory.get("giada/pizzapazza/ui/Z4ModalMessageUI.html");
 
     document.body.appendChild(parent);
     return parent;

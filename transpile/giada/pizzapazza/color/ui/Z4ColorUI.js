@@ -13,7 +13,7 @@ class Z4ColorUI extends Z4ComponentUI {
 
    formRange = this.querySelector(".form-range");
 
-  static  UI = Z4ComponentUI.loadHTML("giada/pizzapazza/color/ui/Z4ColorUI.html");
+  static  UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4ColorUI.html");
 
   /**
    * Creates a Z4ColorUI

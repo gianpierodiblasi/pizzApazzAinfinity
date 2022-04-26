@@ -39,7 +39,7 @@ class Z4TemporalColorUI extends Z4ComponentUI {
 
    mouseDown = false;
 
-  static  UI = Z4ComponentUI.loadHTML("giada/pizzapazza/color/ui/Z4TemporalColorUI.html");
+  static  UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4TemporalColorUI.html");
 
   static  WIDTH = 500;
 

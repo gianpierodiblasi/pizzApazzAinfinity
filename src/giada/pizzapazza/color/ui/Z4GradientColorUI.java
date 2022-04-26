@@ -8,6 +8,7 @@ import def.js.Date;
 import static def.js.Globals.parseFloat;
 import giada.pizzapazza.Z4Loader;
 import giada.pizzapazza.color.Z4GradientColor;
+import giada.pizzapazza.setting.Z4HTMLFactory;
 import giada.pizzapazza.setting.Z4ImageFactory;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.ui.Z4ComponentUI;
@@ -48,7 +49,7 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
   private $Apply_0_Void devicePixelRatioListener;
   private boolean mouseDown;
 
-  private final static String UI = Z4ComponentUI.loadHTML("giada/pizzapazza/color/ui/Z4GradientColorUI.html");
+  private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4GradientColorUI.html");
   private final static int WIDTH = 500;
   private final static int HEIGHT = 50;
 

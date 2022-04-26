@@ -21,20 +21,6 @@ class Z4ComponentUI {
   };
 
   /**
-   * Loads an HTML file
-   *
-   * @param html The HTML file
-   * @return The HTML file
-   */
-  static  loadHTML(html) {
-    let path = Z4Loader.UP + (Z4Loader.allFiles ? "src/" : "build/html/");
-    let client = new XMLHttpRequest();
-    client.open("GET", path + html, false);
-    client.send();
-    return client.responseText;
-  }
-
-  /**
    * Creates a Z4ComponentUI
    *
    * @param ui The HTML
