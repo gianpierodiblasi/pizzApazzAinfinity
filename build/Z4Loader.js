@@ -26,6 +26,11 @@ class Z4Loader {
   static  touch = false;
 
   /**
+   * The version
+   */
+  static  version = null;
+
+  /**
    * The onLoad method
    *
    * @param level The level where the onLoad starts
@@ -43,8 +48,8 @@ class Z4Loader {
       Z4Loader.path = window.location.href.substring(start, end);
       Z4Loader.touch = typeof document.documentElement.ontouchstart === "object";
       let jsFile = window.location.href.substring(window.location.href.lastIndexOf('/') + 1).replace(".html", ".js");
+      let client = new XMLHttpRequest();
       if (Z4Loader.allFiles) {
-        let client = new XMLHttpRequest();
         client.open("GET", Z4Loader.UP + "css_list.properties", false);
         client.send();
         new String(client.responseText).split("\n").forEach(row => {
@@ -60,16 +65,15 @@ class Z4Loader {
         let scripts = new String(client.responseText).split("\n");
         Z4Loader.loadScripts(scripts, jsFile.substring(0, jsFile.lastIndexOf('?')));
       } else {
-        let client = new XMLHttpRequest();
         client.open("GET", Z4Loader.UP + "version.properties?random=" + Math.random(), false);
         client.send();
-        let version = client.responseText;
+        Z4Loader.version = client.responseText;
         let cssBundle = document.createElement("link");
         cssBundle.setAttribute("rel", "stylesheet");
-        cssBundle.setAttribute("href", Z4Loader.UP + "build/bundle-" + version + ".min.css");
+        cssBundle.setAttribute("href", Z4Loader.UP + "build/bundle-" + Z4Loader.version + ".min.css");
         document.querySelector("head").appendChild(cssBundle);
         let scriptBundle = document.createElement("script");
-        scriptBundle.setAttribute("src", Z4Loader.UP + "build/bundle-" + version + ".min.js");
+        scriptBundle.setAttribute("src", Z4Loader.UP + "build/bundle-" + Z4Loader.version + ".min.js");
         scriptBundle.setAttribute("type", "text/javascript");
         scriptBundle.setAttribute("async", "false");
         scriptBundle.addEventListener("load", (event2) => Z4Loader.loadScript(jsFile));

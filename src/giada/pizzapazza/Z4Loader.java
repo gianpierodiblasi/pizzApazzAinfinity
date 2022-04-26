@@ -38,6 +38,11 @@ public class Z4Loader {
   public static boolean touch;
 
   /**
+   * The version
+   */
+  public static String version;
+
+  /**
    * The onLoad method
    *
    * @param level The level where the onLoad starts
@@ -60,8 +65,8 @@ public class Z4Loader {
 
       String jsFile = window.location.href.substring(window.location.href.lastIndexOf('/') + 1).replace(".html", ".js");
 
+      XMLHttpRequest client = new XMLHttpRequest();
       if (Z4Loader.allFiles) {
-        XMLHttpRequest client = new XMLHttpRequest();
         client.open("GET", Z4Loader.UP + "css_list.properties", false);
         client.send();
 
@@ -79,19 +84,17 @@ public class Z4Loader {
         Array<def.js.String> scripts = new $String(client.responseText).split("\n");
         Z4Loader.loadScripts(scripts, jsFile.substring(0, jsFile.lastIndexOf('?')));
       } else {
-        XMLHttpRequest client = new XMLHttpRequest();
         client.open("GET", Z4Loader.UP + "version.properties?random=" + Math.random(), false);
         client.send();
-
-        String version = client.responseText;
+        Z4Loader.version = client.responseText;
 
         HTMLElement cssBundle = document.createElement("link");
         cssBundle.setAttribute("rel", "stylesheet");
-        cssBundle.setAttribute("href", Z4Loader.UP + "build/bundle-" + version + ".min.css");
+        cssBundle.setAttribute("href", Z4Loader.UP + "build/bundle-" + Z4Loader.version + ".min.css");
         document.querySelector("head").appendChild(cssBundle);
 
         HTMLElement scriptBundle = document.createElement("script");
-        scriptBundle.setAttribute("src", Z4Loader.UP + "build/bundle-" + version + ".min.js");
+        scriptBundle.setAttribute("src", Z4Loader.UP + "build/bundle-" + Z4Loader.version + ".min.js");
         scriptBundle.setAttribute("type", "text/javascript");
         scriptBundle.setAttribute("async", "false");
         scriptBundle.addEventListener("load", (event2) -> Z4Loader.loadScript(jsFile));

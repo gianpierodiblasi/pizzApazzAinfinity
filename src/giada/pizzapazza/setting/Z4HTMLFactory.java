@@ -28,8 +28,8 @@ public class Z4HTMLFactory {
   private static Array<def.js.String> initHTML() {
     Array<def.js.String> array = new Array<>();
 
+    XMLHttpRequest client = new XMLHttpRequest();
     if (Z4Loader.allFiles) {
-      XMLHttpRequest client = new XMLHttpRequest();
       client.open("GET", Z4Loader.UP + "html_list.properties", false);
       client.send();
 
@@ -41,13 +41,7 @@ public class Z4HTMLFactory {
         }
       });
     } else {
-      XMLHttpRequest client = new XMLHttpRequest();
-      client.open("GET", Z4Loader.UP + "version.properties?random=" + Math.random(), false);
-      client.send();
-
-      String version = client.responseText;
-
-      client.open("GET", Z4Loader.UP + "build/bundle-" + version + ".html", false);
+      client.open("GET", Z4Loader.UP + "build/bundle-" + Z4Loader.version + ".html", false);
       client.send();
       Z4HTMLFactory.readHTMLs(array, client.responseText);
     }

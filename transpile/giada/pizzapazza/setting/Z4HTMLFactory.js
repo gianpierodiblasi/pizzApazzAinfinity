@@ -19,8 +19,8 @@ class Z4HTMLFactory {
 
   static  initHTML() {
     let array = new Array();
+    let client = new XMLHttpRequest();
     if (Z4Loader.allFiles) {
-      let client = new XMLHttpRequest();
       client.open("GET", Z4Loader.UP + "html_list.properties", false);
       client.send();
       new String(client.responseText).split("\n").forEach(row => {
@@ -31,11 +31,7 @@ class Z4HTMLFactory {
         }
       });
     } else {
-      let client = new XMLHttpRequest();
-      client.open("GET", Z4Loader.UP + "version.properties?random=" + Math.random(), false);
-      client.send();
-      let version = client.responseText;
-      client.open("GET", Z4Loader.UP + "build/bundle-" + version + ".html", false);
+      client.open("GET", Z4Loader.UP + "build/bundle-" + Z4Loader.version + ".html", false);
       client.send();
       Z4HTMLFactory.readHTMLs(array, client.responseText);
     }

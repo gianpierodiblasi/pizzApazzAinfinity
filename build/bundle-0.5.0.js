@@ -195,8 +195,8 @@ class Z4HTMLFactory {
 
   static  initHTML() {
     let array = new Array();
+    let client = new XMLHttpRequest();
     if (Z4Loader.allFiles) {
-      let client = new XMLHttpRequest();
       client.open("GET", Z4Loader.UP + "html_list.properties", false);
       client.send();
       new String(client.responseText).split("\n").forEach(row => {
@@ -207,11 +207,7 @@ class Z4HTMLFactory {
         }
       });
     } else {
-      let client = new XMLHttpRequest();
-      client.open("GET", Z4Loader.UP + "version.properties?random=" + Math.random(), false);
-      client.send();
-      let version = client.responseText;
-      client.open("GET", Z4Loader.UP + "build/bundle-" + version + ".html", false);
+      client.open("GET", Z4Loader.UP + "build/bundle-" + Z4Loader.version + ".html", false);
       client.send();
       Z4HTMLFactory.readHTMLs(array, client.responseText);
     }
@@ -260,14 +256,14 @@ class Z4MessageFactory {
   static  initMessages() {
     let array = new Array();
     let path = Z4Loader.UP + (Z4Loader.allFiles ? "src/message/" : "build/message/");
-    let file = "message-" + Z4Setting.getLanguage() + ".properties?random=" + Math.random();
+    let file = "message-" + Z4Setting.getLanguage() + (Z4Loader.allFiles ? "" : "-" + Z4Loader.version) + ".properties";
     let client = new XMLHttpRequest();
     client.open("GET", path + file, false);
     client.send();
     Z4MessageFactory.readMessages(array, client.responseText);
     if (Object.keys(array).length === 0) {
       Z4Setting.setLanguage("en");
-      file = "message-en.properties?random=" + Math.random();
+      file = "message-en" + (Z4Loader.allFiles ? "" : "-" + Z4Loader.version) + ".properties";
       let clientEN = new XMLHttpRequest();
       clientEN.open("GET", path + file, false);
       clientEN.send();

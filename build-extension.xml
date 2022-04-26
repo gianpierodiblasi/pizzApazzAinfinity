@@ -192,6 +192,7 @@
   <target name="copy_messages">
     <copy todir="${build.dir}/message">
       <fileset dir="${src.dir}/message"/>
+      <globmapper from="*.properties" to="*-${version}.properties"/>
     </copy>
   </target>
   
