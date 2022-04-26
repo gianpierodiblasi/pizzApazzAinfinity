@@ -3,7 +3,7 @@
  *
  * @author gianpiero.di.blasi
  */
-class Z4Vector extends Cloneable {
+class Z4Vector {
 
    x0 = 0.0;
 
@@ -57,12 +57,39 @@ class Z4Vector extends Cloneable {
   }
 
   /**
+   * Return the x-axis coordinate of the start point
+   *
+   * @return The x-axis coordinate of the start point
+   */
+   getX0() {
+    return this.x0;
+  }
+
+  /**
+   * Return the y-axis coordinate of the start point
+   *
+   * @return The y-axis coordinate of the start point
+   */
+   getY0() {
+    return this.y0;
+  }
+
+  /**
    * Returns the module
    *
    * @return The module
    */
    getModule() {
-    return module;
+    return this.module;
+  }
+
+  /**
+   * Return the phase (in radians)
+   *
+   * @return The phase (in radians)
+   */
+   getPhase() {
+    return this.phase;
   }
 
   /**

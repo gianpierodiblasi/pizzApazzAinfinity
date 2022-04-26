@@ -1,9 +1,15 @@
 package giada.pizzapazza.iterator;
 
+import def.js.Array;
+import giada.pizzapazza.color.Z4GradientColor;
 import giada.pizzapazza.color.Z4Lighting;
 import giada.pizzapazza.color.Z4Progression;
 import giada.pizzapazza.math.Z4Point;
 import giada.pizzapazza.math.Z4Vector;
+import giada.pizzapazza.painter.Z4ArrowPainter;
+import simulation.dom.$CanvasRenderingContext2D;
+import static simulation.js.$Globals.parseInt;
+import simulation.js.$Object;
 
 /**
  * The stamper
@@ -54,5 +60,36 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
 
       return this.z4Point;
     }
+  }
+
+  @Override
+  public void drawDemo($CanvasRenderingContext2D context, double width, double height) {
+    Z4ArrowPainter arrowPainter = new Z4ArrowPainter();
+    Z4GradientColor gradientColor = new Z4GradientColor();
+
+    this.initDraw(width, height).forEach(point -> {
+      this.draw(Z4Action.START, point.$get("x"), point.$get("y"));
+      Z4Point next = this.next();
+      Z4Vector vector = next.getZ4Vector();
+      next.setZ4Vector(Z4Vector.fromVector(vector.getX0(), vector.getY0(), 15, vector.getPhase()));
+
+      context.save();
+      context.translate(vector.getX0(), vector.getY0());
+      context.rotate(vector.getPhase());
+      arrowPainter.draw(context, next, gradientColor);
+      context.restore();
+    });
+  }
+
+  private Array<$Object> initDraw(double w, double h) {
+    int size = parseInt(0.0005 * w * h);
+    Array<$Object> array = new Array<>();
+    for (int i = 0; i < size; i++) {
+      $Object point = new $Object();
+      point.$set("x", 10 + (w - 20) * Math.random());
+      point.$set("y", 10 + (h - 20) * Math.random());
+      array.push(point);
+    }
+    return array;
   }
 }

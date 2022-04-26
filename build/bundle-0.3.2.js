@@ -693,7 +693,7 @@ class Z4RandomValue {
     switch(this.type) {
       case 0:
       default:
-        return value * Math.random();
+        return this.value * Math.random();
       case 1:
         if (this.step === this.length) {
           this.step = 0;
@@ -984,7 +984,7 @@ class Z4Shape2D {
  *
  * @author gianpiero.di.blasi
  */
-class Z4Vector extends Cloneable {
+class Z4Vector {
 
    x0 = 0.0;
 
@@ -1038,12 +1038,39 @@ class Z4Vector extends Cloneable {
   }
 
   /**
+   * Return the x-axis coordinate of the start point
+   *
+   * @return The x-axis coordinate of the start point
+   */
+   getX0() {
+    return this.x0;
+  }
+
+  /**
+   * Return the y-axis coordinate of the start point
+   *
+   * @return The y-axis coordinate of the start point
+   */
+   getY0() {
+    return this.y0;
+  }
+
+  /**
    * Returns the module
    *
    * @return The module
    */
    getModule() {
-    return module;
+    return this.module;
+  }
+
+  /**
+   * Return the phase (in radians)
+   *
+   * @return The phase (in radians)
+   */
+   getPhase() {
+    return this.phase;
   }
 
   /**
@@ -1065,7 +1092,7 @@ class Z4Vector extends Cloneable {
  *
  * @author gianpiero.di.blasi
  */
-class Z4Point extends Cloneable {
+class Z4Point {
 
    z4Vector = Z4Vector.fromPoints(0, 0, 1, 1);
 
@@ -3233,7 +3260,7 @@ class Z4ArrowPainter extends Z4Painter {
     let x = point.getIntensity() * point.getZ4Vector().getModule();
     context.save();
     context.lineWidth = 1;
-    context.strokeStyle = this.getColor("white");
+    context.strokeStyle = this.getColor("gray");
     context.moveTo(0, 0);
     context.lineTo(x, 0);
     context.lineTo(x - 5, -3);
@@ -3403,7 +3430,7 @@ class Z4Shape2DPainter extends Z4Painter {
     context.save();
     context.scale(scale, scale);
     context.lineWidth = 1 / scale;
-    context.strokeStyle = this.getColor("white");
+    context.strokeStyle = this.getColor("gray");
     context.stroke(this.shape.getPath());
     context.strokeStyle = this.getColor("black");
     context.translate(1 / scale, 1 / scale);
@@ -3431,6 +3458,56 @@ class Z4CenteredFigurePainter extends Z4Painter {
 
    draw(context, point, gradientColor) {
     return this;
+  }
+}
+/**
+ * The drawing action of a Z4PointIterator
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4Action {
+
+  /**
+   * The start
+   */
+  static  START = new Z4Action();
+
+  /**
+   * The continue
+   */
+  static  CONTINUE = new Z4Action();
+
+  /**
+   * The spirograph
+   */
+  static  STOP = new Z4Action();
+
+  constructor() {
+  }
+}
+/**
+ * The rotation of a Z4PointIterator
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4Rotation {
+
+  /**
+   * Next rotation is computed on a fixed value
+   */
+  static  FIXED = new Z4Rotation();
+
+  /**
+   * Next rotation is computed by cumulating previous rotation
+   */
+  static  CUMULATIVE = new Z4Rotation();
+
+  /**
+   * Next rotation is computed relative to a path
+   */
+  static  RELATIVE_TO_PATH = new Z4Rotation();
+
+  constructor() {
   }
 }
 /**
@@ -3523,6 +3600,15 @@ class Z4PointIterator {
   }
 
   /**
+   * Draws a demo of this Z4PointIterator
+   * @param context The context where to draw the demo
+   * @param width The width
+   * @param height The height
+   */
+   drawDemo(context, width, height) {
+  }
+
+  /**
    * Computes the next rotation
    *
    * @param tangentAngle The tangent angle
@@ -3554,5 +3640,78 @@ class Z4PointIterator {
     } else if (this.rotationMode === Z4Rotation.RELATIVE_TO_PATH) {
       z4Point.setSide(vector ? vector.direction(z4Point.getZ4Vector()) : Z4Sign.RANDOM);
     }
+  }
+}
+/**
+ * The stamper
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4Stamper extends Z4PointIterator {
+
+   draw(action, x, y) {
+    if (action === Z4Action.START) {
+      this.P["x"] = x;
+      this.P["y"] = y;
+      this.hasNext = true;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+   next() {
+    if (!this.hasNext) {
+      return null;
+    } else {
+      this.hasNext = false;
+      let angle = this.nextRotation(0);
+      this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P["x"], this.P["y"], 1, angle));
+      this.nextSide(this.z4Point, null);
+      if (this.progression === Z4Progression.TEMPORAL) {
+        this.z4Point.setLighting(this.lighting);
+        let colorPosition = this.z4Point.getColorPosition();
+        colorPosition = colorPosition === -1 ? 0 : colorPosition + this.temporalStepProgression;
+        if (colorPosition > 1) {
+          colorPosition -= 1;
+        }
+        this.z4Point.setColorPosition(colorPosition);
+      } else if (this.progression === Z4Progression.SPATIAL) {
+        this.z4Point.setLighting(Z4Lighting.NONE);
+        this.z4Point.setColorPosition(-1);
+      } else if (this.progression === Z4Progression.RELATIVE_TO_PATH || this.progression === Z4Progression.RANDOM) {
+        this.z4Point.setLighting(this.lighting);
+        this.z4Point.setColorPosition(Math.random());
+      }
+      return this.z4Point;
+    }
+  }
+
+   drawDemo(context, width, height) {
+    let arrowPainter = new Z4ArrowPainter();
+    let gradientColor = new Z4GradientColor();
+    this.initDraw(width, height).forEach(point => {
+      this.draw(Z4Action.START, point["x"], point["y"]);
+      let next = this.next();
+      let vector = next.getZ4Vector();
+      next.setZ4Vector(Z4Vector.fromVector(vector.getX0(), vector.getY0(), 15, vector.getPhase()));
+      context.save();
+      context.translate(vector.getX0(), vector.getY0());
+      context.rotate(vector.getPhase());
+      arrowPainter.draw(context, next, gradientColor);
+      context.restore();
+    });
+  }
+
+   initDraw(w, h) {
+    let size = parseInt(0.0005 * w * h);
+    let array = new Array();
+    for (let i = 0; i < size; i++) {
+      let point = new Object();
+      point["x"] = 10 + (w - 20) * Math.random();
+      point["y"] = 10 + (h - 20) * Math.random();
+      array.push(point);
+    }
+    return array;
   }
 }

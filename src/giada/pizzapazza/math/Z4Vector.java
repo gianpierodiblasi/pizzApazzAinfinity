@@ -5,7 +5,7 @@ package giada.pizzapazza.math;
  *
  * @author gianpiero.di.blasi
  */
-public class Z4Vector implements Cloneable {
+public class Z4Vector {
 
   private final double x0;
   private final double y0;
@@ -50,8 +50,27 @@ public class Z4Vector implements Cloneable {
   }
 
   @Override
+  @SuppressWarnings("CloneInNonCloneableClass")
   public Z4Vector clone() throws CloneNotSupportedException {
     return new Z4Vector(this.x0, this.y0, this.x, this.y, this.module, this.phase);
+  }
+
+  /**
+   * Return the x-axis coordinate of the start point
+   *
+   * @return The x-axis coordinate of the start point
+   */
+  public double getX0() {
+    return this.x0;
+  }
+
+  /**
+   * Return the y-axis coordinate of the start point
+   *
+   * @return The y-axis coordinate of the start point
+   */
+  public double getY0() {
+    return this.y0;
   }
 
   /**
@@ -60,7 +79,16 @@ public class Z4Vector implements Cloneable {
    * @return The module
    */
   public double getModule() {
-    return module;
+    return this.module;
+  }
+
+  /**
+   * Return the phase (in radians)
+   *
+   * @return The phase (in radians)
+   */
+  public double getPhase() {
+    return this.phase;
   }
 
   /**

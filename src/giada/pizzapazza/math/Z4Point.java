@@ -7,7 +7,7 @@ import giada.pizzapazza.color.Z4Lighting;
  *
  * @author gianpiero.di.blasi
  */
-public class Z4Point implements Cloneable {
+public class Z4Point {
 
   private Z4Vector z4Vector = Z4Vector.fromPoints(0, 0, 1, 1);
   private double intensity = 1;

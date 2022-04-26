@@ -3,7 +3,7 @@
  *
  * @author gianpiero.di.blasi
  */
-class Z4Point extends Cloneable {
+class Z4Point {
 
    z4Vector = Z4Vector.fromPoints(0, 0, 1, 1);
 

@@ -42,4 +42,32 @@ class Z4Stamper extends Z4PointIterator {
       return this.z4Point;
     }
   }
+
+   drawDemo(context, width, height) {
+    let arrowPainter = new Z4ArrowPainter();
+    let gradientColor = new Z4GradientColor();
+    this.initDraw(width, height).forEach(point => {
+      this.draw(Z4Action.START, point["x"], point["y"]);
+      let next = this.next();
+      let vector = next.getZ4Vector();
+      next.setZ4Vector(Z4Vector.fromVector(vector.getX0(), vector.getY0(), 15, vector.getPhase()));
+      context.save();
+      context.translate(vector.getX0(), vector.getY0());
+      context.rotate(vector.getPhase());
+      arrowPainter.draw(context, next, gradientColor);
+      context.restore();
+    });
+  }
+
+   initDraw(w, h) {
+    let size = parseInt(0.0005 * w * h);
+    let array = new Array();
+    for (let i = 0; i < size; i++) {
+      let point = new Object();
+      point["x"] = 10 + (w - 20) * Math.random();
+      point["y"] = 10 + (h - 20) * Math.random();
+      array.push(point);
+    }
+    return array;
+  }
 }

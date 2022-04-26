@@ -47,7 +47,7 @@ class Z4RandomValue {
     switch(this.type) {
       case 0:
       default:
-        return value * Math.random();
+        return this.value * Math.random();
       case 1:
         if (this.step === this.length) {
           this.step = 0;

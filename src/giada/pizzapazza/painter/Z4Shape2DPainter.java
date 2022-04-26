@@ -160,7 +160,7 @@ public class Z4Shape2DPainter extends Z4Painter<Z4Shape2DPainter> {
     context.scale(scale, scale);
     context.lineWidth = 1 / scale;
 
-    context.strokeStyle = this.$getColor("white");
+    context.strokeStyle = this.$getColor("gray");
     context.stroke(this.shape.getPath());
 
     context.strokeStyle = this.$getColor("black");

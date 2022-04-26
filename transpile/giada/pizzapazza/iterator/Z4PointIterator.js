@@ -88,6 +88,15 @@ class Z4PointIterator {
   }
 
   /**
+   * Draws a demo of this Z4PointIterator
+   * @param context The context where to draw the demo
+   * @param width The width
+   * @param height The height
+   */
+   drawDemo(context, width, height) {
+  }
+
+  /**
    * Computes the next rotation
    *
    * @param tangentAngle The tangent angle

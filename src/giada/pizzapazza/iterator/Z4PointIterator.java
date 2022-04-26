@@ -7,6 +7,7 @@ import giada.pizzapazza.math.Z4Math;
 import giada.pizzapazza.math.Z4Point;
 import giada.pizzapazza.math.Z4Sign;
 import giada.pizzapazza.math.Z4Vector;
+import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
 import simulation.js.$Object;
 
@@ -96,6 +97,14 @@ public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
    */
   public abstract Z4Point next();
 
+  /**
+   * Draws a demo of this Z4PointIterator
+   * @param context The context where to draw the demo
+   * @param width The width
+   * @param height The height
+   */
+  public abstract void drawDemo($CanvasRenderingContext2D context, double width, double height);
+  
   /**
    * Computes the next rotation
    *
