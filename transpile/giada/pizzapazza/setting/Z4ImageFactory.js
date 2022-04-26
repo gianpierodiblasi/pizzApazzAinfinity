@@ -21,7 +21,7 @@ class Z4ImageFactory {
     let array = new Array();
     let path = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
     let client = new XMLHttpRequest();
-    client.open("GET", Z4Loader.UP + "image_list.properties", false);
+    client.open("GET", Z4Loader.UP + "image_list.properties?random=" + Math.random(), false);
     client.send();
     Z4ImageFactory.readImages(path, array, new String(client.responseText).split("\n"));
     return array;

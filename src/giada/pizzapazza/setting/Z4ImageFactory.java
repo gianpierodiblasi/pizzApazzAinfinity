@@ -31,7 +31,7 @@ public class Z4ImageFactory {
     String path = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
 
     XMLHttpRequest client = new XMLHttpRequest();
-    client.open("GET", Z4Loader.UP + "image_list.properties", false);
+    client.open("GET", Z4Loader.UP + "image_list.properties?random=" + Math.random(), false);
     client.send();
     Z4ImageFactory.readImages(path, array, new $String(client.responseText).split("\n"));
 

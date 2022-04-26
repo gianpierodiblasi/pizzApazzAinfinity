@@ -28,14 +28,14 @@ class Z4MessageFactory {
   static  initMessages() {
     let array = new Array();
     let path = Z4Loader.UP + (Z4Loader.allFiles ? "src/message/" : "build/message/");
-    let file = "message-" + Z4Setting.getLanguage() + ".properties";
+    let file = "message-" + Z4Setting.getLanguage() + ".properties?random=" + Math.random();
     let client = new XMLHttpRequest();
     client.open("GET", path + file, false);
     client.send();
     Z4MessageFactory.readMessages(array, client.responseText);
     if (Object.keys(array).length === 0) {
       Z4Setting.setLanguage("en");
-      file = "message-en.properties";
+      file = "message-en.properties?random=" + Math.random();
       let clientEN = new XMLHttpRequest();
       clientEN.open("GET", path + file, false);
       clientEN.send();

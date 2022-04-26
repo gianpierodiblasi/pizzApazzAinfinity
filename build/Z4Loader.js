@@ -61,7 +61,7 @@ class Z4Loader {
         Z4Loader.loadScripts(scripts, jsFile.substring(0, jsFile.lastIndexOf('?')));
       } else {
         let client = new XMLHttpRequest();
-        client.open("GET", Z4Loader.UP + "version.properties", false);
+        client.open("GET", Z4Loader.UP + "version.properties?random=" + Math.random(), false);
         client.send();
         let version = client.responseText;
         let cssBundle = document.createElement("link");

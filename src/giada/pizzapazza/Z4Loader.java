@@ -36,7 +36,7 @@ public class Z4Loader {
    * true if the device has touch display, false otherwise
    */
   public static boolean touch;
-  
+
   /**
    * The onLoad method
    *
@@ -57,7 +57,7 @@ public class Z4Loader {
       Z4Loader.path = window.location.href.substring(start, end);
 
       Z4Loader.touch = $typeof(document.documentElement.ontouchstart, "object");
-      
+
       String jsFile = window.location.href.substring(window.location.href.lastIndexOf('/') + 1).replace(".html", ".js");
 
       if (Z4Loader.allFiles) {
@@ -80,7 +80,7 @@ public class Z4Loader {
         Z4Loader.loadScripts(scripts, jsFile.substring(0, jsFile.lastIndexOf('?')));
       } else {
         XMLHttpRequest client = new XMLHttpRequest();
-        client.open("GET", Z4Loader.UP + "version.properties", false);
+        client.open("GET", Z4Loader.UP + "version.properties?random=" + Math.random(), false);
         client.send();
 
         String version = client.responseText;

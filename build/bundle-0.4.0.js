@@ -175,6 +175,62 @@ class Z4Setting {
   }
 }
 /**
+ * The html factory
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4HTMLFactory {
+
+  static  HTML = Z4HTMLFactory.initHTML();
+
+  /**
+   * Returns a message
+   *
+   * @param key The html key
+   * @return The html value
+   */
+  static  get(key) {
+    return Z4HTMLFactory.HTML[key];
+  }
+
+  static  initHTML() {
+    let array = new Array();
+    if (Z4Loader.allFiles) {
+      let client = new XMLHttpRequest();
+      client.open("GET", Z4Loader.UP + "html_list.properties", false);
+      client.send();
+      new String(client.responseText).split("\n").forEach(row => {
+        if (row && !row.startsWith("#")) {
+          client.open("GET", Z4Loader.UP + row, false);
+          client.send();
+          array[row] = client.responseText;
+        }
+      });
+    } else {
+      let client = new XMLHttpRequest();
+      client.open("GET", Z4Loader.UP + "version.properties?random=" + Math.random(), false);
+      client.send();
+      let version = client.responseText;
+      client.open("GET", Z4Loader.UP + "build/bundle-" + version + ".html", false);
+      client.send();
+      Z4HTMLFactory.readHTMLs(array, client.responseText);
+    }
+    return array;
+  }
+
+  static  readHTMLs(array, responseText) {
+    new String(responseText).split("\n").forEach(row => {
+      if (row && !row.startsWith("#")) {
+        let keyValue = row.split("=");
+        array[keyValue[0].trim()] = keyValue[1].trim();
+      }
+    });
+  }
+
+  constructor() {
+  }
+}
+/**
  * The message factory
  *
  * @author gianpiero.di.blasi
@@ -204,14 +260,14 @@ class Z4MessageFactory {
   static  initMessages() {
     let array = new Array();
     let path = Z4Loader.UP + (Z4Loader.allFiles ? "src/message/" : "build/message/");
-    let file = "message-" + Z4Setting.getLanguage() + ".properties";
+    let file = "message-" + Z4Setting.getLanguage() + ".properties?random=" + Math.random();
     let client = new XMLHttpRequest();
     client.open("GET", path + file, false);
     client.send();
     Z4MessageFactory.readMessages(array, client.responseText);
     if (Object.keys(array).length === 0) {
       Z4Setting.setLanguage("en");
-      file = "message-en.properties";
+      file = "message-en.properties?random=" + Math.random();
       let clientEN = new XMLHttpRequest();
       clientEN.open("GET", path + file, false);
       clientEN.send();
@@ -255,7 +311,7 @@ class Z4ImageFactory {
     let array = new Array();
     let path = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
     let client = new XMLHttpRequest();
-    client.open("GET", Z4Loader.UP + "image_list.properties", false);
+    client.open("GET", Z4Loader.UP + "image_list.properties?random=" + Math.random(), false);
     client.send();
     Z4ImageFactory.readImages(path, array, new String(client.responseText).split("\n"));
     return array;
