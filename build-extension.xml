@@ -126,7 +126,7 @@
   <target name="build_html" depends="version, html_source_list_comma">
     <for list="${html_source_list_comma}" param="file">
       <sequential>
-        <concat destfile="${build.dir}/bundle-${version}.html" append="true">@{file} = </concat>
+        <concat destfile="${build.dir}/bundle-${version}.html" append="true">@{file} := </concat>
         <concat destfile="${build.dir}/bundle-${version}.html" append="true">
           <fileset file="${src.dir}/@{file}"/>
           <filterchain>

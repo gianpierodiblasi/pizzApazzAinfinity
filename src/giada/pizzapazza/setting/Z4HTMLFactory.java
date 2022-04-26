@@ -58,7 +58,7 @@ public class Z4HTMLFactory {
   private static void readHTMLs(Array<def.js.String> array, String responseText) {
     new $String(responseText).split("\n").forEach(row -> {
       if ($exists(row)) {
-        Array<def.js.String> keyValue = row.split("=");
+        Array<def.js.String> keyValue = row.split(":=");
         array.$set(keyValue.$get(0).trim(), keyValue.$get(1).trim());
       }
     });

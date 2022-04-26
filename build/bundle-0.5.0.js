@@ -221,7 +221,7 @@ class Z4HTMLFactory {
   static  readHTMLs(array, responseText) {
     new String(responseText).split("\n").forEach(row => {
       if (row) {
-        let keyValue = row.split("=");
+        let keyValue = row.split(":=");
         array[keyValue[0].trim()] = keyValue[1].trim();
       }
     });
