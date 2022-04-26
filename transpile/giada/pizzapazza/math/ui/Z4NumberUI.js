@@ -46,6 +46,10 @@ class Z4NumberUI extends Z4ComponentUI {
       this.onchange(null);
       return null;
     };
+    this.value.onfocus = (event) => {
+      this.value.select();
+      return null;
+    };
   }
 
   /**

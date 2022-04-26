@@ -17,4 +17,7 @@ public class $HTMLElement extends HTMLElement {
 
   public void addEventListener(String event, EventListener listener, $Object options) {
   }
+
+  public void select() {
+  }
 }
