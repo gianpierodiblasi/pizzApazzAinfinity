@@ -42,11 +42,30 @@
     <loadfile property="version" srcFile="${basedir}/version.properties"/>
   </target>
   
+  <target name="html_source_list_comma">
+    <loadfile property="html_source_list_comma" srcFile="${basedir}/html_list.properties">
+      <filterchain>
+        <linecontainsregexp negate="true">
+          <regexp pattern="#.*"/>
+        </linecontainsregexp>
+        <linecontainsregexp>
+          <regexp pattern="[^ \n\t\r]+"/>
+        </linecontainsregexp>
+        <suffixlines suffix=", "/>
+        <striplinebreaks/>
+      </filterchain>     
+    </loadfile>
+    <echo>${html_source_list_comma}</echo>
+  </target>
+  
   <target name="js_source_list_comma">
     <loadfile property="js_source_list_comma" srcFile="${basedir}/js_list.properties">
       <filterchain>
         <linecontainsregexp negate="true">
           <regexp pattern="#.*"/>
+        </linecontainsregexp>
+        <linecontainsregexp>
+          <regexp pattern="[^ \n\t\r]+"/>
         </linecontainsregexp>
         <suffixlines suffix=", "/>
         <striplinebreaks/>
@@ -60,6 +79,9 @@
         <linecontainsregexp negate="true">
           <regexp pattern="#.*"/>
         </linecontainsregexp>
+        <linecontainsregexp>
+          <regexp pattern="[^ \n\t\r]+"/>
+        </linecontainsregexp>
         <suffixlines suffix=" "/>
         <striplinebreaks/>
       </filterchain>
@@ -71,6 +93,9 @@
       <filterchain>
         <linecontainsregexp negate="true">
           <regexp pattern="#.*"/>
+        </linecontainsregexp>
+        <linecontainsregexp>
+          <regexp pattern="[^ \n\t\r]+"/>
         </linecontainsregexp>
         <suffixlines suffix=", "/>
         <striplinebreaks/>
@@ -84,10 +109,23 @@
         <linecontainsregexp negate="true">
           <regexp pattern="#.*"/>
         </linecontainsregexp>
+        <linecontainsregexp>
+          <regexp pattern="[^ \n\t\r]+"/>
+        </linecontainsregexp>
         <suffixlines suffix=" "/>
         <striplinebreaks/>
       </filterchain>
     </loadfile>
+  </target>
+  
+  <target name="build_html" depends="version, html_source_list_comma">
+    <concat destfile="${build.dir}/bundle-${version}.html" fixlastline="yes">
+      <filelist dir="${basedir}" files="${html_source_list_comma}"/>
+      
+      <filterchain>
+        <striplinebreaks/>
+      </filterchain>
+    </concat>
   </target>
   
   <target name="build_js" depends="version, js_source_list_comma">
