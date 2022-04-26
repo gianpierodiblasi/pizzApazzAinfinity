@@ -6,8 +6,14 @@
 class Z4Stamper extends Z4PointIterator {
 
    draw(action, x, y) {
-    // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    throw new UnsupportedOperationException("Not supported yet.");
+    if (action === Z4Action.START) {
+      this.P["x"] = x;
+      this.P["y"] = y;
+      this.hasNext = true;
+      return true;
+    } else {
+      return false;
+    }
   }
 
    next() {

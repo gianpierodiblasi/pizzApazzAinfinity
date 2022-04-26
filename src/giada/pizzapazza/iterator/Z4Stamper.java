@@ -14,7 +14,15 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
 
   @Override
   public boolean draw(Z4Action action, double x, double y) {
-    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    if (action == Z4Action.START) {
+      this.P.$set("x", x);
+      this.P.$set("y", y);
+      this.hasNext = true;
+
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @Override
