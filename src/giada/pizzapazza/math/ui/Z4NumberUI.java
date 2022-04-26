@@ -2,6 +2,7 @@ package giada.pizzapazza.math.ui;
 
 import def.dom.HTMLElement;
 import def.dom.NodeList;
+import static def.js.Globals.parseFloat;
 import giada.pizzapazza.Z4Loader;
 import giada.pizzapazza.math.Z4Sign;
 import giada.pizzapazza.setting.Z4MessageFactory;
@@ -90,16 +91,18 @@ public class Z4NumberUI extends Z4ComponentUI<Object> {
   }
 
   private void spin() {
+    double min = parseFloat(this.value.getAttribute("min"));
+    double max = parseFloat(this.value.getAttribute("max"));
+
     double v = this.spinner.valueAsNumber;
-    double abs = Math.abs(v);
+    double abs = 1;
 
     if ($exists(v)) {
-      v = Math.max(0, this.value.valueAsNumber + v / abs);
+      v = Math.max(min, this.value.valueAsNumber + (v > 0 ? 1 : -1));
+      v = Math.min(v, max);
 
       this.value.value = "" + v;
       this.oninput.$apply(null);
-    } else {
-      abs = 1;
     }
 
     if (this.isApplySpin) {
@@ -107,6 +110,19 @@ public class Z4NumberUI extends Z4ComponentUI<Object> {
     } else {
       this.onchange.$apply(null);
     }
+  }
+
+  /**
+   * Sets the range of this Z4NumberUI
+   *
+   * @param min The minumum value
+   * @param max The maximum value
+   * @return This Z4NumberUI
+   */
+  public Z4NumberUI setRange(int min, int max) {
+    this.value.setAttribute("min", "" + min);
+    this.value.setAttribute("max", "" + max);
+    return this;
   }
 
   /**

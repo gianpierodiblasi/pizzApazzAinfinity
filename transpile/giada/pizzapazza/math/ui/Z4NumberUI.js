@@ -78,20 +78,34 @@ class Z4NumberUI extends Z4ComponentUI {
   }
 
    spin() {
+    let min = parseFloat(this.value.getAttribute("min"));
+    let max = parseFloat(this.value.getAttribute("max"));
     let v = this.spinner.valueAsNumber;
-    let abs = Math.abs(v);
+    let abs = 1;
     if (v) {
-      v = Math.max(0, this.value.valueAsNumber + v / abs);
+      v = Math.max(min, this.value.valueAsNumber + (v > 0 ? 1 : -1));
+      v = Math.min(v, max);
       this.value.value = "" + v;
       this.oninput(null);
-    } else {
-      abs = 1;
     }
     if (this.isApplySpin) {
       setTimeout(this.applySpin, 500 / abs);
     } else {
       this.onchange(null);
     }
+  }
+
+  /**
+   * Sets the range of this Z4NumberUI
+   *
+   * @param min The minumum value
+   * @param max The maximum value
+   * @return This Z4NumberUI
+   */
+   setRange(min, max) {
+    this.value.setAttribute("min", "" + min);
+    this.value.setAttribute("max", "" + max);
+    return this;
   }
 
   /**
