@@ -14,7 +14,6 @@ import simulation.dom.$HTMLElement;
  */
 public class Z4ColorUI extends Z4ComponentUI<Z4Color> {
 
-  private final $HTMLElement colorLabel = this.querySelector(".color-label");
   private final $HTMLElement color = this.querySelector(".form-control-color");
   private final $HTMLElement formRangeLabel = this.querySelector(".form-range-label");
   private final $HTMLElement formRange = this.querySelector(".form-range");
@@ -67,8 +66,9 @@ public class Z4ColorUI extends Z4ComponentUI<Z4Color> {
    * @return This Z4ColorUI
    */
   public Z4ColorUI setColorLabel(String token) {
-    this.colorLabel.setAttribute("data-token-lang", token);
-    this.colorLabel.innerText = Z4MessageFactory.get(token);
+    $HTMLElement colorLabel = this.querySelector(".color-label");
+    colorLabel.setAttribute("data-token-lang", token);
+    colorLabel.innerText = Z4MessageFactory.get(token);
     return this;
   }
 

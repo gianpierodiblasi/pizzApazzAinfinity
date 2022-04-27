@@ -19,16 +19,15 @@ import static simulation.js.$Globals.setTimeout;
  * @author gianpiero.di.blasi
  */
 public class Z4NumberUI extends Z4ComponentUI<Object> {
-
-  private final $HTMLElement valueLabel = this.querySelector(".value-label");
+  
   private final HTMLElement toggle = this.querySelector(".dropdown-toggle");
   private final HTMLElement toggleImg = this.querySelector(".dropdown-toggle img");
   private final $HTMLElement value = this.querySelector(".form-control");
   private final $HTMLElement spinner = this.querySelector(".form-range");
-
+  
   private final $Apply_0_Void applySpin = () -> this.spin();
   private boolean isApplySpin = false;
-
+  
   private final static String PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
   private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4NumberUI.html");
 
@@ -37,15 +36,15 @@ public class Z4NumberUI extends Z4ComponentUI<Object> {
    */
   public Z4NumberUI() {
     super(Z4NumberUI.UI);
-
+    
     this.toggleImg.setAttribute("src", Z4NumberUI.PATH + "z4sign_" + this.toggle.getAttribute("data-value") + "-sm.png");
-
+    
     NodeList imgs = this.querySelectorAll(".dropdown-menu img");
     for (int i = 0; i < imgs.length; i++) {
       HTMLElement img = (HTMLElement) imgs.item(i);
       img.setAttribute("src", Z4NumberUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".png");
     }
-
+    
     NodeList buttons = this.querySelectorAll(".dropdown-item");
     for (int i = 0; i < buttons.length; i++) {
       HTMLElement button = (HTMLElement) buttons.item(i);
@@ -56,7 +55,7 @@ public class Z4NumberUI extends Z4ComponentUI<Object> {
         return null;
       };
     }
-
+    
     this.value.oninput = (event) -> {
       this.oninput.$apply(null);
       return null;
@@ -69,7 +68,7 @@ public class Z4NumberUI extends Z4ComponentUI<Object> {
       this.value.select();
       return null;
     };
-
+    
     if (Z4Loader.touch) {
       this.spinner.ontouchstart = (event) -> this.startSpin();
       this.spinner.ontouchend = (event) -> this.stopSpin();
@@ -78,34 +77,36 @@ public class Z4NumberUI extends Z4ComponentUI<Object> {
       this.spinner.onmouseup = (event) -> this.stopSpin();
     }
   }
-
+  
   private Object startSpin() {
     this.isApplySpin = true;
     this.applySpin.$apply();
     return null;
   }
-
+  
   private Object stopSpin() {
     this.isApplySpin = false;
     this.spinner.value = "0";
     return null;
   }
-
+  
   private void spin() {
     double min = parseFloat(this.value.getAttribute("min"));
     double max = parseFloat(this.value.getAttribute("max"));
-
+    
     double v = this.spinner.valueAsNumber;
     double abs = 1;
-
+    
     if ($exists(v)) {
+      abs = Math.abs(v);
+      
       v = Math.max(min, this.value.valueAsNumber + (v > 0 ? 1 : -1));
       v = Math.min(v, max);
-
+      
       this.value.value = "" + v;
       this.oninput.$apply(null);
     }
-
+    
     if (this.isApplySpin) {
       setTimeout(this.applySpin, 500 / abs);
     } else {
@@ -127,14 +128,34 @@ public class Z4NumberUI extends Z4ComponentUI<Object> {
   }
 
   /**
+   * Sets the visibility of the sign
+   *
+   * @param visible true to make the sign visible, false otherwise
+   * @return This Z4NumberUI
+   */
+  public Z4NumberUI setSignVisible(boolean visible) {
+    this.querySelector(".sign-label").style.display = visible ? "inline-block" : "none";
+    this.toggle.style.display = visible ? "inline-block" : "none";
+    
+    if (visible) {
+      this.querySelector(".number-group").classList.add("input-group");
+    } else {
+      this.querySelector(".number-group").classList.remove("input-group");
+    }
+    
+    return this;
+  }
+
+  /**
    * Sets the token of the value label
    *
    * @param token The token of the value label
    * @return This Z4NumberUI
    */
   public Z4NumberUI setValueLabel(String token) {
-    this.valueLabel.setAttribute("data-token-lang", token);
-    this.valueLabel.innerText = Z4MessageFactory.get(token);
+    $HTMLElement valueLabel = this.querySelector(".value-label");
+    valueLabel.setAttribute("data-token-lang", token);
+    valueLabel.innerText = Z4MessageFactory.get(token);
     return this;
   }
 
@@ -146,7 +167,7 @@ public class Z4NumberUI extends Z4ComponentUI<Object> {
    */
   public Z4NumberUI setSign(Z4Sign sign) {
     String str;
-
+    
     if (sign == Z4Sign.POSITIVE) {
       str = "positive";
     } else if (sign == Z4Sign.NEGATIVE) {
@@ -156,10 +177,10 @@ public class Z4NumberUI extends Z4ComponentUI<Object> {
     } else {
       str = "alternate";
     }
-
+    
     this.toggle.setAttribute("data-value", str);
     this.toggleImg.setAttribute("src", Z4NumberUI.PATH + "z4sign_" + str + "-sm.png");
-
+    
     return this;
   }
 

@@ -35,7 +35,6 @@ import simulation.js.$Object;
  */
 public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
 
-  private final $HTMLElement temporalColorLabel = this.querySelector(".temporal-color-label");
   private final $Canvas canvas = ($Canvas) this.querySelector(".canvas");
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
   private final Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> chessboard = this.ctx.createPattern(Z4ImageFactory.get("CHESSBOARD"), "repeat");
@@ -237,8 +236,9 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
    * @return This Z4TemporalColorUI
    */
   public Z4TemporalColorUI setTemporalColorLabel(String token) {
-    this.temporalColorLabel.setAttribute("data-token-lang", token);
-    this.temporalColorLabel.innerText = Z4MessageFactory.get(token);
+    $HTMLElement temporalColorLabel = this.querySelector(".temporal-color-label");
+    temporalColorLabel.setAttribute("data-token-lang", token);
+    temporalColorLabel.innerText = Z4MessageFactory.get(token);
     return this;
   }
 

@@ -32,7 +32,6 @@ import simulation.js.$Object;
  */
 public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
 
-  private final $HTMLElement gradientColorLabel = this.querySelector(".gradient-color-label");
   private final $Canvas canvas = ($Canvas) this.querySelector(".canvas");
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
   private final Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> chessboard = this.ctx.createPattern(Z4ImageFactory.get("CHESSBOARD"), "repeat");
@@ -208,8 +207,9 @@ public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
    * @return This Z4GradientColorUI
    */
   public Z4GradientColorUI setGradientColorLabel(String token) {
-    this.gradientColorLabel.setAttribute("data-token-lang", token);
-    this.gradientColorLabel.innerText = Z4MessageFactory.get(token);
+    $HTMLElement gradientColorLabel = this.querySelector(".gradient-color-label");
+    gradientColorLabel.setAttribute("data-token-lang", token);
+    gradientColorLabel.innerText = Z4MessageFactory.get(token);
     return this;
   }
 

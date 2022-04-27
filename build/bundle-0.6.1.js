@@ -1281,8 +1281,6 @@ class Z4Point {
  */
 class Z4NumberUI extends Z4ComponentUI {
 
-   valueLabel = this.querySelector(".value-label");
-
    toggle = this.querySelector(".dropdown-toggle");
 
    toggleImg = this.querySelector(".dropdown-toggle img");
@@ -1359,6 +1357,7 @@ class Z4NumberUI extends Z4ComponentUI {
     let v = this.spinner.valueAsNumber;
     let abs = 1;
     if (v) {
+      abs = Math.abs(v);
       v = Math.max(min, this.value.valueAsNumber + (v > 0 ? 1 : -1));
       v = Math.min(v, max);
       this.value.value = "" + v;
@@ -1385,14 +1384,32 @@ class Z4NumberUI extends Z4ComponentUI {
   }
 
   /**
+   * Sets the visibility of the sign
+   *
+   * @param visible true to make the sign visible, false otherwise
+   * @return This Z4NumberUI
+   */
+   setSignVisible(visible) {
+    this.querySelector(".sign-label").style.display = visible ? "inline-block" : "none";
+    this.toggle.style.display = visible ? "inline-block" : "none";
+    if (visible) {
+      this.querySelector(".number-group").classList.add("input-group");
+    } else {
+      this.querySelector(".number-group").classList.remove("input-group");
+    }
+    return this;
+  }
+
+  /**
    * Sets the token of the value label
    *
    * @param token The token of the value label
    * @return This Z4NumberUI
    */
    setValueLabel(token) {
-    this.valueLabel.setAttribute("data-token-lang", token);
-    this.valueLabel.innerText = Z4MessageFactory.get(token);
+    let valueLabel = this.querySelector(".value-label");
+    valueLabel.setAttribute("data-token-lang", token);
+    valueLabel.innerText = Z4MessageFactory.get(token);
     return this;
   }
 
@@ -2387,8 +2404,6 @@ class Z4TemporalColor {
  */
 class Z4ColorUI extends Z4ComponentUI {
 
-   colorLabel = this.querySelector(".color-label");
-
    color = this.querySelector(".form-control-color");
 
    formRangeLabel = this.querySelector(".form-range-label");
@@ -2439,8 +2454,9 @@ class Z4ColorUI extends Z4ComponentUI {
    * @return This Z4ColorUI
    */
    setColorLabel(token) {
-    this.colorLabel.setAttribute("data-token-lang", token);
-    this.colorLabel.innerText = Z4MessageFactory.get(token);
+    let colorLabel = this.querySelector(".color-label");
+    colorLabel.setAttribute("data-token-lang", token);
+    colorLabel.innerText = Z4MessageFactory.get(token);
     return this;
   }
 
@@ -2472,8 +2488,6 @@ class Z4ColorUI extends Z4ComponentUI {
  * @author gianpiero.di.blasi
  */
 class Z4GradientColorUI extends Z4ComponentUI {
-
-   gradientColorLabel = this.querySelector(".gradient-color-label");
 
    canvas = this.querySelector(".canvas");
 
@@ -2643,8 +2657,9 @@ class Z4GradientColorUI extends Z4ComponentUI {
    * @return This Z4GradientColorUI
    */
    setGradientColorLabel(token) {
-    this.gradientColorLabel.setAttribute("data-token-lang", token);
-    this.gradientColorLabel.innerText = Z4MessageFactory.get(token);
+    let gradientColorLabel = this.querySelector(".gradient-color-label");
+    gradientColorLabel.setAttribute("data-token-lang", token);
+    gradientColorLabel.innerText = Z4MessageFactory.get(token);
     return this;
   }
 
@@ -2904,8 +2919,6 @@ class Z4GradientColorGuidedTourUI extends Z4GradientColorUI {
  */
 class Z4TemporalColorUI extends Z4ComponentUI {
 
-   temporalColorLabel = this.querySelector(".temporal-color-label");
-
    canvas = this.querySelector(".canvas");
 
    ctx = this.canvas.getContext("2d");
@@ -3100,8 +3113,9 @@ class Z4TemporalColorUI extends Z4ComponentUI {
    * @return This Z4TemporalColorUI
    */
    setTemporalColorLabel(token) {
-    this.temporalColorLabel.setAttribute("data-token-lang", token);
-    this.temporalColorLabel.innerText = Z4MessageFactory.get(token);
+    let temporalColorLabel = this.querySelector(".temporal-color-label");
+    temporalColorLabel.setAttribute("data-token-lang", token);
+    temporalColorLabel.innerText = Z4MessageFactory.get(token);
     return this;
   }
 

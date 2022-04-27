@@ -5,8 +5,6 @@
  */
 class Z4ColorUI extends Z4ComponentUI {
 
-   colorLabel = this.querySelector(".color-label");
-
    color = this.querySelector(".form-control-color");
 
    formRangeLabel = this.querySelector(".form-range-label");
@@ -57,8 +55,9 @@ class Z4ColorUI extends Z4ComponentUI {
    * @return This Z4ColorUI
    */
    setColorLabel(token) {
-    this.colorLabel.setAttribute("data-token-lang", token);
-    this.colorLabel.innerText = Z4MessageFactory.get(token);
+    let colorLabel = this.querySelector(".color-label");
+    colorLabel.setAttribute("data-token-lang", token);
+    colorLabel.innerText = Z4MessageFactory.get(token);
     return this;
   }
 

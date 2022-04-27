@@ -5,8 +5,6 @@
  */
 class Z4NumberUI extends Z4ComponentUI {
 
-   valueLabel = this.querySelector(".value-label");
-
    toggle = this.querySelector(".dropdown-toggle");
 
    toggleImg = this.querySelector(".dropdown-toggle img");
@@ -83,6 +81,7 @@ class Z4NumberUI extends Z4ComponentUI {
     let v = this.spinner.valueAsNumber;
     let abs = 1;
     if (v) {
+      abs = Math.abs(v);
       v = Math.max(min, this.value.valueAsNumber + (v > 0 ? 1 : -1));
       v = Math.min(v, max);
       this.value.value = "" + v;
@@ -109,14 +108,32 @@ class Z4NumberUI extends Z4ComponentUI {
   }
 
   /**
+   * Sets the visibility of the sign
+   *
+   * @param visible true to make the sign visible, false otherwise
+   * @return This Z4NumberUI
+   */
+   setSignVisible(visible) {
+    this.querySelector(".sign-label").style.display = visible ? "inline-block" : "none";
+    this.toggle.style.display = visible ? "inline-block" : "none";
+    if (visible) {
+      this.querySelector(".number-group").classList.add("input-group");
+    } else {
+      this.querySelector(".number-group").classList.remove("input-group");
+    }
+    return this;
+  }
+
+  /**
    * Sets the token of the value label
    *
    * @param token The token of the value label
    * @return This Z4NumberUI
    */
    setValueLabel(token) {
-    this.valueLabel.setAttribute("data-token-lang", token);
-    this.valueLabel.innerText = Z4MessageFactory.get(token);
+    let valueLabel = this.querySelector(".value-label");
+    valueLabel.setAttribute("data-token-lang", token);
+    valueLabel.innerText = Z4MessageFactory.get(token);
     return this;
   }
 

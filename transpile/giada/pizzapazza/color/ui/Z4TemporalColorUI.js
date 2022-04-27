@@ -5,8 +5,6 @@
  */
 class Z4TemporalColorUI extends Z4ComponentUI {
 
-   temporalColorLabel = this.querySelector(".temporal-color-label");
-
    canvas = this.querySelector(".canvas");
 
    ctx = this.canvas.getContext("2d");
@@ -201,8 +199,9 @@ class Z4TemporalColorUI extends Z4ComponentUI {
    * @return This Z4TemporalColorUI
    */
    setTemporalColorLabel(token) {
-    this.temporalColorLabel.setAttribute("data-token-lang", token);
-    this.temporalColorLabel.innerText = Z4MessageFactory.get(token);
+    let temporalColorLabel = this.querySelector(".temporal-color-label");
+    temporalColorLabel.setAttribute("data-token-lang", token);
+    temporalColorLabel.innerText = Z4MessageFactory.get(token);
     return this;
   }
 

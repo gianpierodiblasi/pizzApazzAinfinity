@@ -5,8 +5,6 @@
  */
 class Z4GradientColorUI extends Z4ComponentUI {
 
-   gradientColorLabel = this.querySelector(".gradient-color-label");
-
    canvas = this.querySelector(".canvas");
 
    ctx = this.canvas.getContext("2d");
@@ -175,8 +173,9 @@ class Z4GradientColorUI extends Z4ComponentUI {
    * @return This Z4GradientColorUI
    */
    setGradientColorLabel(token) {
-    this.gradientColorLabel.setAttribute("data-token-lang", token);
-    this.gradientColorLabel.innerText = Z4MessageFactory.get(token);
+    let gradientColorLabel = this.querySelector(".gradient-color-label");
+    gradientColorLabel.setAttribute("data-token-lang", token);
+    gradientColorLabel.innerText = Z4MessageFactory.get(token);
     return this;
   }
 

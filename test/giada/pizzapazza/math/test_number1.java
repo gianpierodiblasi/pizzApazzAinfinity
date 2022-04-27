@@ -32,11 +32,17 @@ public class test_number1 {
       return null;
     };
 
-    Z4NumberUI ui = new Z4NumberUI();
-    ui.appendTo(document.querySelector("#test1"));
-    ui.oninput = (Object) -> document.getElementById("test2").textContent = "ONINPUT " + ui.getValue() + " " + JSON.stringify(ui.getSign());
-    ui.onchange = (Object) -> document.getElementById("test2").textContent = "ONCHANGE " + ui.getValue() + " " + JSON.stringify(ui.getSign());
-    document.getElementById("test2").textContent = ui.getValue() + " " + JSON.stringify(ui.getSign());
+    Z4NumberUI ui1 = new Z4NumberUI();
+    ui1.appendTo(document.querySelector("#test1"));
+    ui1.oninput = (Object) -> document.getElementById("test2").textContent = "ONINPUT " + ui1.getValue() + " " + JSON.stringify(ui1.getSign());
+    ui1.onchange = (Object) -> document.getElementById("test2").textContent = "ONCHANGE " + ui1.getValue() + " " + JSON.stringify(ui1.getSign());
+    document.getElementById("test2").textContent = ui1.getValue() + " " + JSON.stringify(ui1.getSign());
+    
+    Z4NumberUI ui2 = new Z4NumberUI().setRange(-30, 80).setSignVisible(false);
+    ui2.appendTo(document.querySelector("#test3"));
+    ui2.oninput = (Object) -> document.getElementById("test4").textContent = "ONINPUT " + ui2.getValue() + " " + JSON.stringify(ui2.getSign());
+    ui2.onchange = (Object) -> document.getElementById("test4").textContent = "ONCHANGE " + ui2.getValue() + " " + JSON.stringify(ui2.getSign());
+    document.getElementById("test4").textContent = ui2.getValue() + " " + JSON.stringify(ui2.getSign());
   }
 
   private test_number1() {
