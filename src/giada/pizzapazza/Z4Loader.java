@@ -67,7 +67,7 @@ public class Z4Loader {
 
       XMLHttpRequest client = new XMLHttpRequest();
       if (Z4Loader.allFiles) {
-        client.open("GET", Z4Loader.UP + "css_list.properties", false);
+        client.open("GET", Z4Loader.UP + "src/css/css_list.properties?random=" + Math.random(), false);
         client.send();
 
         new $String(client.responseText).split("\n").forEach(row -> {
@@ -79,12 +79,12 @@ public class Z4Loader {
           }
         });
 
-        client.open("GET", Z4Loader.UP + "js_list.properties", false);
+        client.open("GET", Z4Loader.UP + "transpile/giada/js_list.properties?random=" + Math.random(), false);
         client.send();
         Array<def.js.String> scripts = new $String(client.responseText).split("\n");
         Z4Loader.loadScripts(scripts, jsFile.substring(0, jsFile.lastIndexOf('?')));
       } else {
-        client.open("GET", Z4Loader.UP + "version.properties?random=" + Math.random(), false);
+        client.open("GET", Z4Loader.UP + "build/version.properties?random=" + Math.random(), false);
         client.send();
         Z4Loader.version = client.responseText;
 

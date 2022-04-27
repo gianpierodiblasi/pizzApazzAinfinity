@@ -30,7 +30,7 @@ public class Z4HTMLFactory {
 
     XMLHttpRequest client = new XMLHttpRequest();
     if (Z4Loader.allFiles) {
-      client.open("GET", Z4Loader.UP + "html_list.properties", false);
+      client.open("GET", Z4Loader.UP + "src/giada/html_list.properties?random=" + Math.random(), false);
       client.send();
 
       new $String(client.responseText).split("\n").forEach(row -> {

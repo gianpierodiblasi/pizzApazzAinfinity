@@ -39,7 +39,9 @@ public class Z4MessageFactory {
   private static Array<def.js.String> initMessages() {
     Array<def.js.String> array = new Array<>();
     String path = Z4Loader.UP + (Z4Loader.allFiles ? "src/message/" : "build/message/");
-    String file = "message-" + Z4Setting.getLanguage() + (Z4Loader.allFiles ? "" : "-" + Z4Loader.version) + ".properties";
+    String file = Z4Loader.allFiles
+            ? "message-" + Z4Setting.getLanguage() + ".properties?random=" + Math.random()
+            : "message-" + Z4Setting.getLanguage() + "-" + Z4Loader.version + ".properties";
 
     XMLHttpRequest client = new XMLHttpRequest();
     client.open("GET", path + file, false);
@@ -48,7 +50,9 @@ public class Z4MessageFactory {
 
     if (Object.keys(array).length == 0) {
       Z4Setting.setLanguage("en");
-      file = "message-en" + (Z4Loader.allFiles ? "" : "-" + Z4Loader.version) + ".properties";
+      file = Z4Loader.allFiles
+              ? "message-en.properties?random=" + Math.random()
+              : "message-en-" + Z4Loader.version + ".properties";
 
       XMLHttpRequest clientEN = new XMLHttpRequest();
       clientEN.open("GET", path + file, false);
