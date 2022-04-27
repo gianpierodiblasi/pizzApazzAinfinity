@@ -73,8 +73,11 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Object> {
 //      this.spinner.onmouseup = (event) -> this.stopSpin();
 //    }
     this.constantUI.appendTo(this.querySelector(".fanciful-costant"));
+    this.constantUI.setValueLabel("CONSTANT");
     this.randomUI.appendTo(this.querySelector(".fanciful-random"));
+    this.randomUI.setValueLabel("RANDOM");
     this.proportionalUI.appendTo(this.querySelector(".fanciful-proportional"));
+    this.proportionalUI.setValueLabel("PROPORTIONAL");
   }
 
   /**
