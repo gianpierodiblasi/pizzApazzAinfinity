@@ -34,7 +34,7 @@ public class Z4ImageFactory {
             : "image_list-" + Z4Loader.version + ".properties";
 
     XMLHttpRequest client = new XMLHttpRequest();
-    client.open("GET", Z4Loader.UP + path + file, false);
+    client.open("GET", path + file, false);
     client.send();
     Z4ImageFactory.readImages(path, array, new $String(client.responseText).split("\n"));
 
