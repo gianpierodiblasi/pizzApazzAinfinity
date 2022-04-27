@@ -154,7 +154,7 @@ public class Z4NumberUI extends Z4ComponentUI<Object> {
    */
   public Z4NumberUI setValueLabel(String token) {
     $HTMLElement valueLabel = this.querySelector(".value-label");
-    valueLabel.setAttribute("data-token-lang", token);
+    valueLabel.setAttribute("data-token-lang-inner_text", token);
     valueLabel.innerText = Z4MessageFactory.get(token);
     return this;
   }

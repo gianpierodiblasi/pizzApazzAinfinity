@@ -55,7 +55,7 @@ public abstract class Z4ComponentUI<T> {
    * @param selector The selector
    * @return The child of this component
    */
-  protected $HTMLElement querySelector(String selector) {
+  public $HTMLElement querySelector(String selector) {
     return ($HTMLElement) this.html.querySelector(selector);
   }
 
@@ -65,7 +65,7 @@ public abstract class Z4ComponentUI<T> {
    * @param selector The selector
    * @return All children of this component
    */
-  protected NodeList querySelectorAll(String selector) {
+  public NodeList querySelectorAll(String selector) {
     return this.html.querySelectorAll(selector);
   }
 

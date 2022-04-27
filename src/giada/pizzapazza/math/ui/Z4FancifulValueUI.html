@@ -1,36 +1,64 @@
 <label class="form-label fanciful-label" data-token-lang-inner_text="VALUE">Value</label>
-<div class="fanciful-container" style="display:flex">
-  <div class="fanciful-costant" style="flex:1;padding:0px 2px">
+<div class="fanciful-container fanciful-container-horizontal" style="display:flex">
+  <div class="uniform-container" style="align-self:flex-start;display:none">
+    <label class="form-label sign-label" style="margin-left:25px;font-size:smaller;margin-bottom:2px;margin-top:10px" data-token-lang-inner_text="SIGN">Sign</label>
 
+    <button class="btn btn-outline-secondary toggle-uniform dropdown-toggle" style="display:block" type="button" data-bs-toggle="dropdown" data-value="positive">
+      <img data-icon="positive" class="z4-dark-img-negative"/>
+    </button>
+    <ul class="toggle-uniform-dropdown-menu dropdown-menu">
+      <li>
+        <button class="dropdown-item" type="button" data-value="positive">
+          <img data-icon="positive" class="z4-dark-img-negative"/><span data-token-lang-inner_text="POSITIVE">Positive</span>
+        </button>
+      </li>
+      <li>
+        <button class="dropdown-item" type="button" data-value="negative">
+          <img data-icon="negative" class="z4-dark-img-negative"/><span data-token-lang-inner_text="NEGATIVE">Negative</span>
+        </button>
+      </li>
+      <li>
+        <button class="dropdown-item" type="button" data-value="random">
+          <img data-icon="random" class="z4-dark-img-negative"/><span data-token-lang-inner_text="RANDOM">Random</span>
+        </button>
+      </li>
+      <li>
+        <button class="dropdown-item" type="button" data-value="alternate">
+          <img data-icon="alternate" class="z4-dark-img-negative"/><span data-token-lang-inner_text="ALTERNATE">Alternate</span>
+        </button>
+      </li>
+    </ul>
   </div>
-  <div class="fanciful-random" style="flex:1;padding:0px 2px">
-<!--      <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" data-value="positive">
-        <img data-icon="positive" class="z4-dark-img-negative"/>
+
+  <div class="fanciful-costant" style="flex:1"></div>
+
+  <button class="btn btn-outline-secondary toggle-random dropdown-toggle fanciful-random" type="button" data-bs-toggle="dropdown" data-value="classic">
+    <img data-icon="classic" class="z4-dark-img-negative"/>
+  </button>
+  <ul class="toggle-random-dropdown-menu dropdown-menu">
+    <li>
+      <button class="dropdown-item" type="button" data-value="classic">
+        <img data-icon="classic" class="z4-dark-img-negative"/><span data-token-lang-inner_text="CLASSIC">Classic</span>
       </button>
-      <ul class="dropdown-menu">
-        <li>
-          <button class="dropdown-item" type="button" data-value="positive">
-            <img data-icon="positive" class="z4-dark-img-negative"/><span data-token-lang-inner_text="POSITIVE">Positive</span>
-          </button>
-        </li>
-        <li>
-          <button class="dropdown-item" type="button" data-value="negative">
-            <img data-icon="negative" class="z4-dark-img-negative"/><span data-token-lang-inner_text="NEGATIVE">Negative</span>
-          </button>
-        </li>
-        <li>
-          <button class="dropdown-item" type="button" data-value="random">
-            <img data-icon="random" class="z4-dark-img-negative"/><span data-token-lang-inner_text="RANDOM">Random</span>
-          </button>
-        </li>
-        <li>
-          <button class="dropdown-item" type="button" data-value="alternate">
-            <img data-icon="alternate" class="z4-dark-img-negative"/><span data-token-lang-inner_text="ALTERNATE">Alternate</span>
-          </button>
-        </li>
-      </ul>-->
-  </div>
-  <div class="fanciful-proportional" style="flex:1;padding:0px 2px">
+    </li>
+    <li>
+      <button class="dropdown-item" type="button" data-value="step">
+        <img data-icon="step" class="z4-dark-img-negative"/><span data-token-lang-inner_text="STEP">Step</span>
+      </button>
+    </li>
+    <li>
+      <button class="dropdown-item" type="button" data-value="polyline">
+        <img data-icon="polyline" class="z4-dark-img-negative"/><span data-token-lang-inner_text="POLYLINE">Polyline</span>
+      </button>
+    </li>
+    <li>
+      <button class="dropdown-item" type="button" data-value="bezier">
+        <img data-icon="bezier" class="z4-dark-img-negative"/><span data-token-lang-inner_text="BEZIER">Bezier</span>
+      </button>
+    </li>
+  </ul>
 
-  </div>
+  <div class="fanciful-random" style="flex:1"></div>
+
+  <div class="fanciful-proportional" style="flex:1"></div>
 </div>

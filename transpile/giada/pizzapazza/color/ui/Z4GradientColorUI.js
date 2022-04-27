@@ -174,7 +174,7 @@ class Z4GradientColorUI extends Z4ComponentUI {
    */
    setGradientColorLabel(token) {
     let gradientColorLabel = this.querySelector(".gradient-color-label");
-    gradientColorLabel.setAttribute("data-token-lang", token);
+    gradientColorLabel.setAttribute("data-token-lang-inner_text", token);
     gradientColorLabel.innerText = Z4MessageFactory.get(token);
     return this;
   }

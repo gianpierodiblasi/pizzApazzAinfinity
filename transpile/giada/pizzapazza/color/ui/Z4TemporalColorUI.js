@@ -200,7 +200,7 @@ class Z4TemporalColorUI extends Z4ComponentUI {
    */
    setTemporalColorLabel(token) {
     let temporalColorLabel = this.querySelector(".temporal-color-label");
-    temporalColorLabel.setAttribute("data-token-lang", token);
+    temporalColorLabel.setAttribute("data-token-lang-inner_text", token);
     temporalColorLabel.innerText = Z4MessageFactory.get(token);
     return this;
   }

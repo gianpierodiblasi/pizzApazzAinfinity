@@ -237,7 +237,7 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
    */
   public Z4TemporalColorUI setTemporalColorLabel(String token) {
     $HTMLElement temporalColorLabel = this.querySelector(".temporal-color-label");
-    temporalColorLabel.setAttribute("data-token-lang", token);
+    temporalColorLabel.setAttribute("data-token-lang-inner_text", token);
     temporalColorLabel.innerText = Z4MessageFactory.get(token);
     return this;
   }

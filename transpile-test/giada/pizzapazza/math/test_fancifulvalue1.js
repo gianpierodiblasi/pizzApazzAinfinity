@@ -22,6 +22,8 @@ class test_fancifulvalue1 {
     };
     let ui1 = new Z4FancifulValueUI();
     ui1.appendTo(document.querySelector("#test1"));
+    let ui2 = new Z4FancifulValueUI().setVertical();
+    ui2.appendTo(document.querySelector("#test3"));
     // ui1.oninput = (Object) -> document.getElementById("test2").textContent = "ONINPUT " + ui1.getValue() + " " + JSON.stringify(ui1.getSign());
     // ui1.onchange = (Object) -> document.getElementById("test2").textContent = "ONCHANGE " + ui1.getValue() + " " + JSON.stringify(ui1.getSign());
     // document.getElementById("test2").textContent = ui1.getValue() + " " + JSON.stringify(ui1.getSign());

@@ -58,14 +58,17 @@ public class Z4Setting {
 
   @SuppressWarnings("ForLoopReplaceableByForEach")
   private static String initMode() {
+    Z4Setting.mode = "standard";
     String[] decodedCookies = decodeURIComponent(document.cookie).split(";");
     for (int index = 0; index < decodedCookies.length; index++) {
       String row = decodedCookies[index].trim();
       if (row.startsWith("z4mode")) {
-        return row.substring(7);
+        Z4Setting.mode = row.substring(7);
       }
     }
-    return "standard";
+
+    Z4Setting.setMode(Z4Setting.mode);
+    return Z4Setting.mode;
   }
 
   /**
@@ -106,14 +109,16 @@ public class Z4Setting {
     switch (Z4Setting.theme) {
       case "auto":
         if (!$exists(window.matchMedia)) {
-          document.body.className = "";
+          document.body.classList.remove("z4-dark");
         } else {
           Z4Setting.addDarkModeListener();
         }
         break;
       case "light":
+        document.body.classList.remove("z4-dark");
+        break;
       case "dark":
-        document.body.className = Z4Setting.theme == "dark" ? "z4-dark" : ""; // JS equality for strings
+        document.body.classList.add("z4-dark");
         break;
     }
   }
@@ -121,7 +126,11 @@ public class Z4Setting {
   @SuppressWarnings("StringEquality")
   private static void addDarkModeListener() {
     if (Z4Setting.theme == "auto") { // JS equality for strings
-      document.body.className = window.$matchMedia("(prefers-color-scheme: dark)").matches ? "z4dark" : "";
+      if (window.$matchMedia("(prefers-color-scheme: dark)").matches) {
+        document.body.classList.add("z4-dark");
+      } else {
+        document.body.classList.remove("z4-dark");
+      }
 
       $Object options = new $Object();
       options.$set("once", true);
@@ -145,6 +154,10 @@ public class Z4Setting {
    */
   public static void setMode(String mode) {
     Z4Setting.mode = mode;
+    document.body.classList.remove("z4-lite");
+    document.body.classList.remove("z4-standard");
+    document.body.classList.remove("z4-pro");
+    document.body.classList.add("z4-" + mode);
 
     Date date = new Date();
     date.setTime(date.getTime() + 365 * 24 * 60 * 60 * 1000);

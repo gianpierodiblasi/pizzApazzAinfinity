@@ -1,4 +1,4 @@
-/*GENERAL*/
+/* DARK MODE */
 .z4-dark {
   background: #121212;
   color: rgba(255,255,255,.87);
@@ -55,6 +55,18 @@
   filter: invert(1);
 }
 
+/* PRO MODE */
+
+/* STANDARD MODE */
+.z4-standard .fanciful-proportional {
+  display: none;
+}
+
+/* LITE MODE */
+.z4-lite .fanciful-random, .z4-lite .fanciful-proportional {
+  display: none;
+}
+
 /* GUIDED TOUR */
 .z4-guided-tour {
   animation: z4-guided-tour-blinking 2s infinite;
@@ -73,7 +85,7 @@ label.z4-guided-tour {
   padding: 6px;
 }
 
-/*DROP DOWN*/
+/* DROP DOWN */
 .z4-dropdown-toggle-three-dots {
   padding-top: 0px;
   padding-bottom: 0px;
@@ -81,4 +93,17 @@ label.z4-guided-tour {
 }
 .z4-dropdown-toggle-three-dots::after {
   content: none;
+}
+
+/* FANCIFUL VALUE */
+.fanciful-container-horizontal {
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+}
+.fanciful-container-vertical {
+  flex-direction: column;
+}
+.fanciful-container-vertical > div {
+  width: 100%;
 }

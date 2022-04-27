@@ -132,7 +132,7 @@ class Z4NumberUI extends Z4ComponentUI {
    */
    setValueLabel(token) {
     let valueLabel = this.querySelector(".value-label");
-    valueLabel.setAttribute("data-token-lang", token);
+    valueLabel.setAttribute("data-token-lang-inner_text", token);
     valueLabel.innerText = Z4MessageFactory.get(token);
     return this;
   }

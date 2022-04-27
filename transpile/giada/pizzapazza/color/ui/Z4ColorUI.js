@@ -56,7 +56,7 @@ class Z4ColorUI extends Z4ComponentUI {
    */
    setColorLabel(token) {
     let colorLabel = this.querySelector(".color-label");
-    colorLabel.setAttribute("data-token-lang", token);
+    colorLabel.setAttribute("data-token-lang-inner_text", token);
     colorLabel.innerText = Z4MessageFactory.get(token);
     return this;
   }

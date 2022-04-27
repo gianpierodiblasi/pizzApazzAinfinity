@@ -2,27 +2,31 @@ package giada.pizzapazza.math.ui;
 
 import def.dom.HTMLElement;
 import def.dom.NodeList;
-import static def.js.Globals.parseFloat;
 import giada.pizzapazza.Z4Loader;
-import giada.pizzapazza.math.Z4Sign;
+import giada.pizzapazza.math.Z4FancifulValue;
 import giada.pizzapazza.setting.Z4HTMLFactory;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.ui.Z4ComponentUI;
 import simulation.dom.$HTMLElement;
-import simulation.js.$Apply_0_Void;
-import static simulation.js.$Globals.$exists;
-import static simulation.js.$Globals.setTimeout;
 
 /**
  * The component to edit a numeric value
  *
  * @author gianpiero.di.blasi
  */
-public class Z4FancifulValueUI extends Z4ComponentUI<Object> {
+public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
+
+  private final HTMLElement toggleUniform = this.querySelector(".toggle-uniform");
+  private final HTMLElement toggleUniformImg = this.querySelector(".toggle-uniform img");
 
   private final Z4NumberUI constantUI = new Z4NumberUI();
   private final Z4NumberUI randomUI = new Z4NumberUI();
   private final Z4NumberUI proportionalUI = new Z4NumberUI();
+
+  private final HTMLElement toggleRandom = this.querySelector(".toggle-random");
+  private final HTMLElement toggleRandomImg = this.querySelector(".toggle-random img");
+
+  private Z4FancifulValue fancifulValue = new Z4FancifulValue();
 
   private final static String PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
   private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4FancifulValueUI.html");
@@ -33,51 +37,71 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Object> {
   public Z4FancifulValueUI() {
     super(Z4FancifulValueUI.UI);
 
-//    this.toggleImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + this.toggle.getAttribute("data-value") + "-sm.png");
-//    
-//    NodeList imgs = this.querySelectorAll(".dropdown-menu img");
-//    for (int i = 0; i < imgs.length; i++) {
-//      HTMLElement img = (HTMLElement) imgs.item(i);
-//      img.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".png");
-//    }
-//    
-//    NodeList buttons = this.querySelectorAll(".dropdown-item");
-//    for (int i = 0; i < buttons.length; i++) {
-//      HTMLElement button = (HTMLElement) buttons.item(i);
-//      button.onclick = (event) -> {
-//        this.toggle.setAttribute("data-value", button.getAttribute("data-value"));
-//        this.toggleImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + button.getAttribute("data-value") + "-sm.png");
-//        this.onchange.$apply(null);
-//        return null;
-//      };
-//    }
-//    
-//    this.value.oninput = (event) -> {
-//      this.oninput.$apply(null);
-//      return null;
-//    };
-//    this.value.onchange = (event) -> {
-//      this.onchange.$apply(null);
-//      return null;
-//    };
-//    this.value.onfocus = (event) -> {
-//      this.value.select();
-//      return null;
-//    };
-//    
-//    if (Z4Loader.touch) {
-//      this.spinner.ontouchstart = (event) -> this.startSpin();
-//      this.spinner.ontouchend = (event) -> this.stopSpin();
-//    } else {
-//      this.spinner.onmousedown = (event) -> this.startSpin();
-//      this.spinner.onmouseup = (event) -> this.stopSpin();
-//    }
+    this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + this.toggleUniform.getAttribute("data-value") + "-sm.png");
+
+    NodeList imgs = this.querySelectorAll(".toggle-uniform-dropdown-menu img");
+    for (int i = 0; i < imgs.length; i++) {
+      HTMLElement img = (HTMLElement) imgs.item(i);
+      img.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".png");
+    }
+
+    NodeList buttons = this.querySelectorAll(".toggle-uniform-dropdown-menu .dropdown-item");
+    for (int i = 0; i < buttons.length; i++) {
+      HTMLElement button = (HTMLElement) buttons.item(i);
+      button.onclick = (event) -> {
+        this.toggleUniform.setAttribute("data-value", button.getAttribute("data-value"));
+        this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + button.getAttribute("data-value") + "-sm.png");
+        this.onchange.$apply(null);
+        return null;
+      };
+    }
+
+    this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + this.toggleRandom.getAttribute("data-value") + "-sm.png");
+
+    imgs = this.querySelectorAll(".toggle-random-dropdown-menu img");
+    for (int i = 0; i < imgs.length; i++) {
+      HTMLElement img = (HTMLElement) imgs.item(i);
+      img.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + img.getAttribute("data-icon") + ".png");
+    }
+
+    buttons = this.querySelectorAll(".toggle-random-dropdown-menu .dropdown-item");
+    for (int i = 0; i < buttons.length; i++) {
+      HTMLElement button = (HTMLElement) buttons.item(i);
+      button.onclick = (event) -> {
+        this.toggleRandom.setAttribute("data-value", button.getAttribute("data-value"));
+        this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + button.getAttribute("data-value") + "-sm.png");
+        this.onchange.$apply(fancifulValue);
+        return null;
+      };
+    }
+
+    this.randomUI.querySelector(".number-group").prepend(this.querySelector(".toggle-random-dropdown-menu"));
+    this.randomUI.querySelector(".number-group").prepend(this.toggleRandom);
+    this.randomUI.querySelector(".sign-label").style.marginLeft = "89px";
+
+    this.constantUI.oninput = (event) -> this.onInput();
+    this.randomUI.oninput = (event) -> this.onInput();
+    this.proportionalUI.oninput = (event) -> this.onInput();
+    this.constantUI.onchange = (event) -> this.onChange();
+    this.randomUI.onchange = (event) -> this.onChange();
+    this.proportionalUI.onchange = (event) -> this.onChange();
+
     this.constantUI.appendTo(this.querySelector(".fanciful-costant"));
     this.constantUI.setValueLabel("CONSTANT");
-    this.randomUI.appendTo(this.querySelector(".fanciful-random"));
+    this.randomUI.appendTo(this.querySelector("div.fanciful-random"));
     this.randomUI.setValueLabel("RANDOM");
     this.proportionalUI.appendTo(this.querySelector(".fanciful-proportional"));
     this.proportionalUI.setValueLabel("PROPORTIONAL");
+  }
+
+  private Object onInput() {
+    this.oninput.$apply(fancifulValue);
+    return null;
+  }
+
+  private Object onChange() {
+    this.onchange.$apply(fancifulValue);
+    return null;
   }
 
   /**
@@ -116,12 +140,37 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Object> {
    * @param token The token of the value label
    * @return This Z4NumberUI
    */
-//  public Z4FancifulValueUI setValueLabel(String token) {
-//    $HTMLElement valueLabel = this.querySelector(".value-label");
-//    valueLabel.setAttribute("data-token-lang", token);
-//    valueLabel.innerText = Z4MessageFactory.get(token);
-//    return this;
-//  }
+  public Z4FancifulValueUI setValueLabel(String token) {
+    $HTMLElement valueLabel = this.querySelector(".fanciful-label");
+    valueLabel.setAttribute("data-token-lang-inner_text", token);
+    valueLabel.innerText = Z4MessageFactory.get(token);
+    return this;
+  }
+
+  /**
+   * Sets the horizontal orientation
+   *
+   * @return This Z4FancifulValueUI
+   */
+  public Z4FancifulValueUI setHorizontal() {
+    $HTMLElement element = this.querySelector(".fanciful-container");
+    element.classList.remove("fanciful-container-vertical");
+    element.classList.add("fanciful-container-horizontal");
+    return this;
+  }
+
+  /**
+   * Sets the vertical orientation
+   *
+   * @return This Z4FancifulValueUI
+   */
+  public Z4FancifulValueUI setVertical() {
+    $HTMLElement element = this.querySelector(".fanciful-container");
+    element.classList.add("fanciful-container-vertical");
+    element.classList.remove("fanciful-container-horizontal");
+    return this;
+  }
+
   /**
    * Sets the Z4Sign
    *
@@ -171,8 +220,9 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Object> {
    * @param value The value
    * @return This Z4NumberUI
    */
-//  public Z4FancifulValueUI setValue(int value) {
-//    this.value.value = "" + value;
+//  public Z4FancifulValueUI setValue(Z4FancifulValue value) {
+//    this.fancifulValue = value;
+//    
 //    return this;
 //  }
   /**
@@ -180,7 +230,7 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Object> {
    *
    * @return The value
    */
-//  public Double getValue() {
-//    return this.value.valueAsNumber;
-//  }
+  public Z4FancifulValue getValue() {
+    return fancifulValue;
+  }
 }

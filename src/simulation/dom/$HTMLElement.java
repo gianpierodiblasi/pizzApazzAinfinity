@@ -2,6 +2,7 @@ package simulation.dom;
 
 import def.dom.EventListener;
 import def.dom.HTMLElement;
+import def.dom.Node;
 import simulation.js.$Object;
 
 /**
@@ -19,5 +20,8 @@ public class $HTMLElement extends HTMLElement {
   }
 
   public void select() {
+  }
+  
+  public void prepend(Node node) {
   }
 }

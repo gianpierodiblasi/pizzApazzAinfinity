@@ -5,11 +5,21 @@
  */
 class Z4FancifulValueUI extends Z4ComponentUI {
 
+   toggleUniform = this.querySelector(".toggle-uniform");
+
+   toggleUniformImg = this.querySelector(".toggle-uniform img");
+
    constantUI = new Z4NumberUI();
 
    randomUI = new Z4NumberUI();
 
    proportionalUI = new Z4NumberUI();
+
+   toggleRandom = this.querySelector(".toggle-random");
+
+   toggleRandomImg = this.querySelector(".toggle-random img");
+
+   fancifulValue = new Z4FancifulValue();
 
   static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
 
@@ -20,52 +30,65 @@ class Z4FancifulValueUI extends Z4ComponentUI {
    */
   constructor() {
     super(Z4FancifulValueUI.UI);
-    // this.toggleImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + this.toggle.getAttribute("data-value") + "-sm.png");
-    // 
-    // NodeList imgs = this.querySelectorAll(".dropdown-menu img");
-    // for (int i = 0; i < imgs.length; i++) {
-    // HTMLElement img = (HTMLElement) imgs.item(i);
-    // img.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".png");
-    // }
-    // 
-    // NodeList buttons = this.querySelectorAll(".dropdown-item");
-    // for (int i = 0; i < buttons.length; i++) {
-    // HTMLElement button = (HTMLElement) buttons.item(i);
-    // button.onclick = (event) -> {
-    // this.toggle.setAttribute("data-value", button.getAttribute("data-value"));
-    // this.toggleImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + button.getAttribute("data-value") + "-sm.png");
-    // this.onchange.$apply(null);
-    // return null;
-    // };
-    // }
-    // 
-    // this.value.oninput = (event) -> {
-    // this.oninput.$apply(null);
-    // return null;
-    // };
-    // this.value.onchange = (event) -> {
-    // this.onchange.$apply(null);
-    // return null;
-    // };
-    // this.value.onfocus = (event) -> {
-    // this.value.select();
-    // return null;
-    // };
-    // 
-    // if (Z4Loader.touch) {
-    // this.spinner.ontouchstart = (event) -> this.startSpin();
-    // this.spinner.ontouchend = (event) -> this.stopSpin();
-    // } else {
-    // this.spinner.onmousedown = (event) -> this.startSpin();
-    // this.spinner.onmouseup = (event) -> this.stopSpin();
-    // }
+    this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + this.toggleUniform.getAttribute("data-value") + "-sm.png");
+    let imgs = this.querySelectorAll(".toggle-uniform-dropdown-menu img");
+    for (let i = 0; i < imgs.length; i++) {
+      let img = imgs.item(i);
+      img.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".png");
+    }
+    let buttons = this.querySelectorAll(".toggle-uniform-dropdown-menu .dropdown-item");
+    for (let i = 0; i < buttons.length; i++) {
+      let button = buttons.item(i);
+      button.onclick = (event) => {
+        this.toggleUniform.setAttribute("data-value", button.getAttribute("data-value"));
+        this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + button.getAttribute("data-value") + "-sm.png");
+        this.onchange(null);
+        return null;
+      };
+    }
+    this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + this.toggleRandom.getAttribute("data-value") + "-sm.png");
+    imgs = this.querySelectorAll(".toggle-random-dropdown-menu img");
+    for (let i = 0; i < imgs.length; i++) {
+      let img = imgs.item(i);
+      img.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + img.getAttribute("data-icon") + ".png");
+    }
+    buttons = this.querySelectorAll(".toggle-random-dropdown-menu .dropdown-item");
+    for (let i = 0; i < buttons.length; i++) {
+      let button = buttons.item(i);
+      button.onclick = (event) => {
+        this.toggleRandom.setAttribute("data-value", button.getAttribute("data-value"));
+        this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + button.getAttribute("data-value") + "-sm.png");
+        this.onchange(fancifulValue);
+        return null;
+      };
+    }
+    this.randomUI.querySelector(".number-group").prepend(this.querySelector(".toggle-random-dropdown-menu"));
+    this.randomUI.querySelector(".number-group").prepend(this.toggleRandom);
+    this.randomUI.querySelector(".sign-label").style.marginLeft = "89px";
+    this.constantUI.oninput = (event) => this.onInput();
+    this.randomUI.oninput = (event) => this.onInput();
+    this.proportionalUI.oninput = (event) => this.onInput();
+    this.constantUI.onchange = (event) => this.onChange();
+    this.randomUI.onchange = (event) => this.onChange();
+    this.proportionalUI.onchange = (event) => this.onChange();
     this.constantUI.appendTo(this.querySelector(".fanciful-costant"));
     this.constantUI.setValueLabel("CONSTANT");
-    this.randomUI.appendTo(this.querySelector(".fanciful-random"));
+    this.randomUI.appendTo(this.querySelector("div.fanciful-random"));
     this.randomUI.setValueLabel("RANDOM");
     this.proportionalUI.appendTo(this.querySelector(".fanciful-proportional"));
     this.proportionalUI.setValueLabel("PROPORTIONAL");
   }
+
+   onInput() {
+    this.oninput(fancifulValue);
+    return null;
+  }
+
+   onChange() {
+    this.onchange(fancifulValue);
+    return null;
+  }
+
   /**
    * Sets the range of this Z4NumberUI
    *
@@ -102,12 +125,37 @@ class Z4FancifulValueUI extends Z4ComponentUI {
    * @param token The token of the value label
    * @return This Z4NumberUI
    */
-  // public Z4FancifulValueUI setValueLabel(String token) {
-  // $HTMLElement valueLabel = this.querySelector(".value-label");
-  // valueLabel.setAttribute("data-token-lang", token);
-  // valueLabel.innerText = Z4MessageFactory.get(token);
-  // return this;
-  // }
+   setValueLabel(token) {
+    let valueLabel = this.querySelector(".fanciful-label");
+    valueLabel.setAttribute("data-token-lang-inner_text", token);
+    valueLabel.innerText = Z4MessageFactory.get(token);
+    return this;
+  }
+
+  /**
+   * Sets the horizontal orientation
+   *
+   * @return This Z4FancifulValueUI
+   */
+   setHorizontal() {
+    let element = this.querySelector(".fanciful-container");
+    element.classList.remove("fanciful-container-vertical");
+    element.classList.add("fanciful-container-horizontal");
+    return this;
+  }
+
+  /**
+   * Sets the vertical orientation
+   *
+   * @return This Z4FancifulValueUI
+   */
+   setVertical() {
+    let element = this.querySelector(".fanciful-container");
+    element.classList.add("fanciful-container-vertical");
+    element.classList.remove("fanciful-container-horizontal");
+    return this;
+  }
+
   /**
    * Sets the Z4Sign
    *
@@ -157,8 +205,9 @@ class Z4FancifulValueUI extends Z4ComponentUI {
    * @param value The value
    * @return This Z4NumberUI
    */
-  // public Z4FancifulValueUI setValue(int value) {
-  // this.value.value = "" + value;
+  // public Z4FancifulValueUI setValue(Z4FancifulValue value) {
+  // this.fancifulValue = value;
+  // 
   // return this;
   // }
   /**
@@ -166,7 +215,7 @@ class Z4FancifulValueUI extends Z4ComponentUI {
    *
    * @return The value
    */
-  // public Double getValue() {
-  // return this.value.valueAsNumber;
-  // }
+   getValue() {
+    return fancifulValue;
+  }
 }

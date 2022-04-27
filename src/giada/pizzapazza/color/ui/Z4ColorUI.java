@@ -67,7 +67,7 @@ public class Z4ColorUI extends Z4ComponentUI<Z4Color> {
    */
   public Z4ColorUI setColorLabel(String token) {
     $HTMLElement colorLabel = this.querySelector(".color-label");
-    colorLabel.setAttribute("data-token-lang", token);
+    colorLabel.setAttribute("data-token-lang-inner_text", token);
     colorLabel.innerText = Z4MessageFactory.get(token);
     return this;
   }
