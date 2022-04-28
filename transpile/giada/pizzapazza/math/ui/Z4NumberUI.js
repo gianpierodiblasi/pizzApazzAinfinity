@@ -116,12 +116,12 @@ class Z4NumberUI extends Z4ComponentUI {
    setSignVisible(visible) {
     if (visible) {
       this.querySelector(".number-group").classList.add("input-group");
-      this.querySelector(".sign-label").classList.remove("sign-not-visible");
-      this.toggle.classList.remove("sign-not-visible");
+      this.querySelector(".sign-label").classList.remove("sign-label-not-visible");
+      this.toggle.classList.remove("sign-toggle-not-visible");
     } else {
       this.querySelector(".number-group").classList.remove("input-group");
-      this.querySelector(".sign-label").classList.add("sign-not-visible");
-      this.toggle.classList.add("sign-not-visible");
+      this.querySelector(".sign-label").classList.add("sign-label-not-visible");
+      this.toggle.classList.add("sign-toggle-not-visible");
     }
     return this;
   }

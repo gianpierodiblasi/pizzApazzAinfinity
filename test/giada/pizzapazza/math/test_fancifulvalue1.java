@@ -6,6 +6,7 @@ import giada.pizzapazza.math.ui.Z4FancifulValueUI;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.setting.Z4Setting;
 import java.util.function.BiFunction;
+import simulation.dom.$HTMLElement;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.$typeof;
 import static simulation.js.$Globals.document;
@@ -55,6 +56,18 @@ public class test_fancifulvalue1 {
     ui2.oninput = (value) -> document.getElementById("test4").textContent = "ONINPUT " + test_fancifulvalue1.stringify(value);
     ui2.onchange = (value) -> document.getElementById("test4").textContent = "ONCHANGE " + test_fancifulvalue1.stringify(value);
     document.getElementById("test4").textContent = test_fancifulvalue1.stringify(ui2.getValue());
+
+    document.getElementById("random-visible").onchange = (event) -> {
+      ui1.setRandomVisible((($HTMLElement) document.getElementById("random-visible")).checked);
+      ui2.setRandomVisible((($HTMLElement) document.getElementById("random-visible")).checked);
+      return null;
+    };
+
+    document.getElementById("proportional-visible").onchange = (event) -> {
+      ui1.setProportionalVisible((($HTMLElement) document.getElementById("proportional-visible")).checked);
+      ui2.setProportionalVisible((($HTMLElement) document.getElementById("proportional-visible")).checked);
+      return null;
+    };
   }
 
   private static String stringify(Object object) {

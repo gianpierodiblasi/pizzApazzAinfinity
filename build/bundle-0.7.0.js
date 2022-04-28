@@ -1517,12 +1517,12 @@ class Z4NumberUI extends Z4ComponentUI {
    setSignVisible(visible) {
     if (visible) {
       this.querySelector(".number-group").classList.add("input-group");
-      this.querySelector(".sign-label").classList.remove("sign-not-visible");
-      this.toggle.classList.remove("sign-not-visible");
+      this.querySelector(".sign-label").classList.remove("sign-label-not-visible");
+      this.toggle.classList.remove("sign-toggle-not-visible");
     } else {
       this.querySelector(".number-group").classList.remove("input-group");
-      this.querySelector(".sign-label").classList.add("sign-not-visible");
-      this.toggle.classList.add("sign-not-visible");
+      this.querySelector(".sign-label").classList.add("sign-label-not-visible");
+      this.toggle.classList.add("sign-toggle-not-visible");
     }
     return this;
   }
@@ -1808,6 +1808,22 @@ class Z4FancifulValueUI extends Z4ComponentUI {
   }
 
   /**
+   * Sets the visibility of the random component
+   *
+   * @param visible true to make the random component visible, false otherwise
+   * @return This Z4FancifulValueUI
+   */
+   setRandomVisible(visible) {
+    if (visible) {
+      this.querySelector(".fanciful-random").classList.remove("fanciful-random-not-visible");
+    } else {
+      this.querySelector(".fanciful-random").classList.add("fanciful-random-not-visible");
+    }
+    this.setUniform(this.fancifulValue.isUniformSign());
+    return this;
+  }
+
+  /**
    * Sets the range of the proportional component
    *
    * @param min The minumum value
@@ -1816,6 +1832,23 @@ class Z4FancifulValueUI extends Z4ComponentUI {
    */
    setProportionalRange(min, max) {
     this.proportionalUI.setRange(min, max);
+    return this;
+  }
+
+  /**
+   * Sets the visibility of the proportional component
+   *
+   * @param visible true to make the proportional component visible, false
+   * otherwise
+   * @return This Z4FancifulValueUI
+   */
+   setProportionalVisible(visible) {
+    if (visible) {
+      this.querySelector(".fanciful-proportional").classList.remove("fanciful-proportional-not-visible");
+    } else {
+      this.querySelector(".fanciful-proportional").classList.add("fanciful-proportional-not-visible");
+    }
+    this.setUniform(this.fancifulValue.isUniformSign());
     return this;
   }
 
@@ -1890,14 +1923,22 @@ class Z4FancifulValueUI extends Z4ComponentUI {
 
    setUniform(uniform) {
     this.uniformCheck.checked = uniform;
-    this.constantUI.setSignVisible(!this.uniformCheck.checked);
+    let b = this.querySelector(".fanciful-random").classList.contains("fanciful-random-not-visible") && this.querySelector(".fanciful-proportional").classList.contains("fanciful-proportional-not-visible");
+    this.constantUI.setSignVisible(!this.uniformCheck.checked || b);
     this.randomUI.setSignVisible(!this.uniformCheck.checked);
     this.randomUI.querySelector(".number-group").classList.add("input-group");
     this.proportionalUI.setSignVisible(!this.uniformCheck.checked);
-    if (this.uniformCheck.checked) {
-      this.querySelector(".uniform-container").classList.remove("uniform-not-visible");
+    if (!this.uniformCheck.checked || b) {
+      this.querySelector(".uniform-container").classList.add("uniform-container-not-visible");
     } else {
-      this.querySelector(".uniform-container").classList.add("uniform-not-visible");
+      this.querySelector(".uniform-container").classList.remove("uniform-container-not-visible");
+    }
+    if (b) {
+      this.querySelector(".uniform-label").classList.add("uniform-label-not-visible");
+      this.uniformCheck.classList.add("uniform-check-not-visible");
+    } else {
+      this.querySelector(".uniform-label").classList.remove("uniform-label-not-visible");
+      this.uniformCheck.classList.remove("uniform-check-not-visible");
     }
   }
 

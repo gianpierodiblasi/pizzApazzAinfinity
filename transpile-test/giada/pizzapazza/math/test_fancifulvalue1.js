@@ -31,6 +31,16 @@ class test_fancifulvalue1 {
     ui2.oninput = (value) => document.getElementById("test4").textContent = "ONINPUT " + test_fancifulvalue1.stringify(value);
     ui2.onchange = (value) => document.getElementById("test4").textContent = "ONCHANGE " + test_fancifulvalue1.stringify(value);
     document.getElementById("test4").textContent = test_fancifulvalue1.stringify(ui2.getValue());
+    document.getElementById("random-visible").onchange = (event) => {
+      ui1.setRandomVisible((document.getElementById("random-visible")).checked);
+      ui2.setRandomVisible((document.getElementById("random-visible")).checked);
+      return null;
+    };
+    document.getElementById("proportional-visible").onchange = (event) => {
+      ui1.setProportionalVisible((document.getElementById("proportional-visible")).checked);
+      ui2.setProportionalVisible((document.getElementById("proportional-visible")).checked);
+      return null;
+    };
   }
 
   static  stringify(object) {
