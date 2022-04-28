@@ -81,6 +81,17 @@ class Z4FancifulValue {
   }
 
   /**
+   * Checks if the computed sign has to be equals for all components; if true
+   * then the constant sign is used
+   *
+   * @return true if the computed sign has to be equals for all components,
+   * false otherwise
+   */
+   isUniformSign() {
+    return uniformSign;
+  }
+
+  /**
    * Returns the next "fanciful" value
    *
    * @param sensibility The sensibility value to apply to the proportional

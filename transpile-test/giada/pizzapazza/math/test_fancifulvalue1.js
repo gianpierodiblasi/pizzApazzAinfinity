@@ -24,14 +24,31 @@ class test_fancifulvalue1 {
     ui1.appendTo(document.querySelector("#test1"));
     let ui2 = new Z4FancifulValueUI().setVertical();
     ui2.appendTo(document.querySelector("#test3"));
-    // ui1.oninput = (Object) -> document.getElementById("test2").textContent = "ONINPUT " + ui1.getValue() + " " + JSON.stringify(ui1.getSign());
-    // ui1.onchange = (Object) -> document.getElementById("test2").textContent = "ONCHANGE " + ui1.getValue() + " " + JSON.stringify(ui1.getSign());
-    // document.getElementById("test2").textContent = ui1.getValue() + " " + JSON.stringify(ui1.getSign());
-    // Z4NumberUI ui2 = new Z4NumberUI().setRange(-30, 80).setSignVisible(false);
-    // ui2.appendTo(document.querySelector("#test3"));
-    // ui2.oninput = (Object) -> document.getElementById("test4").textContent = "ONINPUT " + ui2.getValue() + " " + JSON.stringify(ui2.getSign());
-    // ui2.onchange = (Object) -> document.getElementById("test4").textContent = "ONCHANGE " + ui2.getValue() + " " + JSON.stringify(ui2.getSign());
-    // document.getElementById("test4").textContent = ui2.getValue() + " " + JSON.stringify(ui2.getSign());
+    ui1.oninput = (value) => document.getElementById("test2").textContent = "ONINPUT " + test_fancifulvalue1.stringify(value);
+    ui1.onchange = (value) => document.getElementById("test2").textContent = "ONCHANGE " + test_fancifulvalue1.stringify(value);
+    document.getElementById("test2").textContent = test_fancifulvalue1.stringify(ui1.getValue());
+    ui2.oninput = (value) => document.getElementById("test4").textContent = "ONINPUT " + test_fancifulvalue1.stringify(value);
+    ui2.onchange = (value) => document.getElementById("test4").textContent = "ONCHANGE " + test_fancifulvalue1.stringify(value);
+    document.getElementById("test4").textContent = test_fancifulvalue1.stringify(ui2.getValue());
+  }
+
+  static  stringify(object) {
+    let replacer = (k, v) => {
+      if (!k) {
+        return v;
+      } else if (typeof v === "number") {
+        return v;
+      } else if (typeof v === "boolean") {
+        return v;
+      } else if (Array.isArray(v)) {
+        return v;
+      } else if (v instanceof Z4RandomValue) {
+        return v;
+      } else {
+        return JSON.stringify(v).replaceAll("\"", "").replaceAll("\n", "");
+      }
+    };
+    return JSON.stringify(object, replacer, "\t").replaceAll("\"", "");
   }
 
   constructor() {

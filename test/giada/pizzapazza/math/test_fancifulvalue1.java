@@ -1,10 +1,13 @@
 package giada.pizzapazza.math;
 
+import def.js.Array;
 import def.js.JSON;
 import giada.pizzapazza.math.ui.Z4FancifulValueUI;
-import giada.pizzapazza.math.ui.Z4NumberUI;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.setting.Z4Setting;
+import java.util.function.BiFunction;
+import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.$typeof;
 import static simulation.js.$Globals.document;
 
 /**
@@ -35,19 +38,37 @@ public class test_fancifulvalue1 {
 
     Z4FancifulValueUI ui1 = new Z4FancifulValueUI();
     ui1.appendTo(document.querySelector("#test1"));
-    
+
     Z4FancifulValueUI ui2 = new Z4FancifulValueUI().setVertical();
     ui2.appendTo(document.querySelector("#test3"));
-    
-//    ui1.oninput = (Object) -> document.getElementById("test2").textContent = "ONINPUT " + ui1.getValue() + " " + JSON.stringify(ui1.getSign());
-//    ui1.onchange = (Object) -> document.getElementById("test2").textContent = "ONCHANGE " + ui1.getValue() + " " + JSON.stringify(ui1.getSign());
-//    document.getElementById("test2").textContent = ui1.getValue() + " " + JSON.stringify(ui1.getSign());
-    
-//    Z4NumberUI ui2 = new Z4NumberUI().setRange(-30, 80).setSignVisible(false);
-//    ui2.appendTo(document.querySelector("#test3"));
-//    ui2.oninput = (Object) -> document.getElementById("test4").textContent = "ONINPUT " + ui2.getValue() + " " + JSON.stringify(ui2.getSign());
-//    ui2.onchange = (Object) -> document.getElementById("test4").textContent = "ONCHANGE " + ui2.getValue() + " " + JSON.stringify(ui2.getSign());
-//    document.getElementById("test4").textContent = ui2.getValue() + " " + JSON.stringify(ui2.getSign());
+
+    ui1.oninput = (value) -> document.getElementById("test2").textContent = "ONINPUT " + test_fancifulvalue1.stringify(value);
+    ui1.onchange = (value) -> document.getElementById("test2").textContent = "ONCHANGE " + test_fancifulvalue1.stringify(value);
+    document.getElementById("test2").textContent = test_fancifulvalue1.stringify(ui1.getValue());
+
+    ui2.oninput = (value) -> document.getElementById("test4").textContent = "ONINPUT " + test_fancifulvalue1.stringify(value);
+    ui2.onchange = (value) -> document.getElementById("test4").textContent = "ONCHANGE " + test_fancifulvalue1.stringify(value);
+    document.getElementById("test4").textContent = test_fancifulvalue1.stringify(ui2.getValue());
+  }
+
+  private static String stringify(Object object) {
+    BiFunction<String, Object, Object> replacer = (k, v) -> {
+      if (!$exists(k)) {
+        return v;
+      } else if ($typeof(v, "number")) {
+        return v;
+      } else if ($typeof(v, "boolean")) {
+        return v;
+      } else if (Array.isArray(v)) {
+        return v;
+      } else if (v instanceof Z4RandomValue) {
+        return v;
+      } else {
+        return JSON.stringify(v).replaceAll("\"", "").replaceAll("\n", "");
+      }
+    };
+
+    return JSON.stringify(object, replacer, "\t").replaceAll("\"", "");
   }
 
   private test_fancifulvalue1() {

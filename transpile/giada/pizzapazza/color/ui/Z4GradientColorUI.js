@@ -83,6 +83,8 @@ class Z4GradientColorUI extends Z4ComponentUI {
         return null;
       };
     }
+    this.mirroredCheck.id = "mirrored_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
+    this.querySelector(".mirrored-label").setAttribute("for", this.mirroredCheck.id);
     this.mirroredCheck.onchange = (event) => {
       this.gradientColor.setMirrored(this.mirroredCheck.checked);
       this.configureSliders(-1);

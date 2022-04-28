@@ -127,6 +127,11 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
     this.temporalMirroredCheck.onchange = mirror;
     this.spatialMirroredCheck.onchange = mirror;
 
+    this.temporalMirroredCheck.id = "mirrored_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
+    this.querySelector(".temporal-mirrored-label").setAttribute("for", this.temporalMirroredCheck.id);
+    this.spatialMirroredCheck.id = "mirrored_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
+    this.querySelector(".spatial-mirrored-label").setAttribute("for", this.spatialMirroredCheck.id);
+    
     this.temporalFormRange.oninput = (event) -> this.setRipple(5);
     this.spatialFormRange.oninput = (event) -> this.setRipple(5);
     this.temporalFormRange.onchange = (event) -> this.setRipple(1);
