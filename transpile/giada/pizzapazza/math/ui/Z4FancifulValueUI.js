@@ -180,18 +180,41 @@ class Z4FancifulValueUI extends Z4ComponentUI {
   }
 
   /**
-   * Sets the range of this Z4NumberUI
+   * Sets the range of the constant component
    *
    * @param min The minumum value
    * @param max The maximum value
-   * @return This Z4NumberUI
+   * @return This Z4FancifulValueUI
    */
-  // public Z4FancifulValueUI setRange(int min, int max) {
-  // this.value.setAttribute("min", "" + min);
-  // this.value.setAttribute("max", "" + max);
-  // return this;
-  // }
-  // 
+   setConstantRange(min, max) {
+    this.constantUI.setRange(min, max);
+    return this;
+  }
+
+  /**
+   * Sets the range of the random component
+   *
+   * @param min The minumum value
+   * @param max The maximum value
+   * @return This Z4FancifulValueUI
+   */
+   setRandomRange(min, max) {
+    this.randomUI.setRange(min, max);
+    return this;
+  }
+
+  /**
+   * Sets the range of the proportional component
+   *
+   * @param min The minumum value
+   * @param max The maximum value
+   * @return This Z4FancifulValueUI
+   */
+   setProportionalRange(min, max) {
+    this.proportionalUI.setRange(min, max);
+    return this;
+  }
+
   /**
    * Sets the token of the value label
    *
@@ -254,7 +277,11 @@ class Z4FancifulValueUI extends Z4ComponentUI {
     this.randomUI.setSignVisible(!this.uniformCheck.checked);
     this.randomUI.querySelector(".number-group").classList.add("input-group");
     this.proportionalUI.setSignVisible(!this.uniformCheck.checked);
-    this.querySelector(".uniform-container").style.display = this.uniformCheck.checked ? "block" : "none";
+    if (this.uniformCheck.checked) {
+      this.querySelector(".uniform-container").classList.remove("uniform-not-visible");
+    } else {
+      this.querySelector(".uniform-container").classList.add("uniform-not-visible");
+    }
   }
 
    setUniformSign(sign) {
