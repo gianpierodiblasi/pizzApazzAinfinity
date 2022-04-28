@@ -1,3 +1,37 @@
-.z4-standard .fanciful-proportional {
+.z4-standard .fanciful-proportional,
+.z4-standard .uniform-container-force-not-visible,
+.z4-standard .uniform-check-force-not-visible, .z4-standard .uniform-label-force-not-visible {
   display: none;
+}
+
+.z4-standard .fanciful-costant .sign-label-force-visible, .z4-standard .fanciful-costant .sign-toggle-force-visible {
+  display: inline-block;
+}
+
+.z4-standard .fanciful-costant .number-group {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  width: 100%;
+}
+.z4-standard .fanciful-costant .number-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n+3),
+.z4-standard .fanciful-costant .number-group:not(.has-validation)>:not(:last-child):not(.dropdown-toggle):not(.dropdown-menu) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.z4-standard .fanciful-costant .number-group .btn {
+  position: relative;
+  z-index: 2;
+}
+.z4-standard .fanciful-costant .number-group>:not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+  margin-left: -1px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.z4-standard .fanciful-costant .number-group>.form-control, .z4-lite .fanciful-costant .number-group>.form-select {
+  position: relative;
+  flex: 1 1 auto;
+  width: 1%;
+  min-width: 0;
 }

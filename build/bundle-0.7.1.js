@@ -1923,22 +1923,36 @@ class Z4FancifulValueUI extends Z4ComponentUI {
 
    setUniform(uniform) {
     this.uniformCheck.checked = uniform;
-    let b = this.querySelector(".fanciful-random").classList.contains("fanciful-random-not-visible") && this.querySelector(".fanciful-proportional").classList.contains("fanciful-proportional-not-visible");
-    this.constantUI.setSignVisible(!this.uniformCheck.checked || b);
+    let bR = this.querySelector(".fanciful-random").classList.contains("fanciful-random-not-visible");
+    let bP = this.querySelector(".fanciful-proportional").classList.contains("fanciful-proportional-not-visible");
+    this.constantUI.setSignVisible(!this.uniformCheck.checked || (bR && bP));
     this.randomUI.setSignVisible(!this.uniformCheck.checked);
     this.randomUI.querySelector(".number-group").classList.add("input-group");
     this.proportionalUI.setSignVisible(!this.uniformCheck.checked);
-    if (!this.uniformCheck.checked || b) {
+    if (!this.uniformCheck.checked || (bR && bP)) {
       this.querySelector(".uniform-container").classList.add("uniform-container-not-visible");
     } else {
       this.querySelector(".uniform-container").classList.remove("uniform-container-not-visible");
     }
-    if (b) {
+    if (bR && bP) {
       this.querySelector(".uniform-label").classList.add("uniform-label-not-visible");
       this.uniformCheck.classList.add("uniform-check-not-visible");
     } else {
       this.querySelector(".uniform-label").classList.remove("uniform-label-not-visible");
       this.uniformCheck.classList.remove("uniform-check-not-visible");
+    }
+    if (bR) {
+      this.constantUI.querySelector(".sign-label").classList.add("sign-label-force-visible");
+      this.constantUI.querySelector(".dropdown-toggle").classList.add("sign-toggle-force-visible");
+      this.querySelector(".uniform-container").classList.add("uniform-container-force-not-visible");
+      this.querySelector(".uniform-label").classList.add("uniform-label-force-not-visible");
+      this.uniformCheck.classList.add("uniform-check-force-not-visible");
+    } else {
+      this.constantUI.querySelector(".sign-label").classList.remove("sign-label-force-visible");
+      this.constantUI.querySelector(".dropdown-toggle").classList.remove("sign-toggle-force-visible");
+      this.querySelector(".uniform-container").classList.remove("uniform-container-force-not-visible");
+      this.querySelector(".uniform-label").classList.remove("uniform-label-force-not-visible");
+      this.uniformCheck.classList.remove("uniform-check-force-not-visible");
     }
   }
 
