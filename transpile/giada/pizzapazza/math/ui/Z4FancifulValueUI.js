@@ -74,21 +74,22 @@ class Z4FancifulValueUI extends Z4ComponentUI {
         return null;
       };
     }
-    this.randomUI.querySelector(".number-group").prepend(this.querySelector(".toggle-random-dropdown-menu"));
-    this.randomUI.querySelector(".number-group").prepend(this.toggleRandom);
-    this.randomUI.querySelector(".sign-label").style.marginLeft = "89px";
-    this.constantUI.oninput = (event) => this.onInput();
-    this.randomUI.oninput = (event) => this.onInput();
-    this.proportionalUI.oninput = (event) => this.onInput();
-    this.constantUI.onchange = (event) => this.onChange();
-    this.randomUI.onchange = (event) => this.onChange();
-    this.proportionalUI.onchange = (event) => this.onChange();
     this.constantUI.appendTo(this.querySelector(".fanciful-costant"));
     this.constantUI.setValueLabel("CONSTANT");
     this.randomUI.appendTo(this.querySelector("div.fanciful-random"));
     this.randomUI.setValueLabel("RANDOM");
     this.proportionalUI.appendTo(this.querySelector(".fanciful-proportional"));
     this.proportionalUI.setValueLabel("PROPORTIONAL");
+    this.querySelector(".fanciful-random > div").prepend(this.querySelector(".random-type-label"));
+    this.randomUI.querySelector(".number-group").prepend(this.querySelector(".toggle-random-dropdown-menu"));
+    this.randomUI.querySelector(".number-group").prepend(this.toggleRandom);
+    this.randomUI.querySelector(".sign-label").style.width = "64px";
+    this.constantUI.oninput = (event) => this.onInput();
+    this.randomUI.oninput = (event) => this.onInput();
+    this.proportionalUI.oninput = (event) => this.onInput();
+    this.constantUI.onchange = (event) => this.onChange();
+    this.randomUI.onchange = (event) => this.onChange();
+    this.proportionalUI.onchange = (event) => this.onChange();
   }
 
    onInput() {
@@ -230,6 +231,7 @@ class Z4FancifulValueUI extends Z4ComponentUI {
     }
     this.toggleRandom.setAttribute("data-value", str);
     this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + str + "-sm.png");
+    this.randomUI.setValue(random.getValue());
   }
 
    getRandom() {

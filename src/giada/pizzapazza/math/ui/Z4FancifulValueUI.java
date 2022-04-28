@@ -93,9 +93,17 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
       };
     }
 
+    this.constantUI.appendTo(this.querySelector(".fanciful-costant"));
+    this.constantUI.setValueLabel("CONSTANT");
+    this.randomUI.appendTo(this.querySelector("div.fanciful-random"));
+    this.randomUI.setValueLabel("RANDOM");
+    this.proportionalUI.appendTo(this.querySelector(".fanciful-proportional"));
+    this.proportionalUI.setValueLabel("PROPORTIONAL");
+
+    this.querySelector(".fanciful-random > div").prepend(this.querySelector(".random-type-label"));
     this.randomUI.querySelector(".number-group").prepend(this.querySelector(".toggle-random-dropdown-menu"));
     this.randomUI.querySelector(".number-group").prepend(this.toggleRandom);
-    this.randomUI.querySelector(".sign-label").style.marginLeft = "89px";
+    this.randomUI.querySelector(".sign-label").style.width = "64px";
 
     this.constantUI.oninput = (event) -> this.onInput();
     this.randomUI.oninput = (event) -> this.onInput();
@@ -103,13 +111,6 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
     this.constantUI.onchange = (event) -> this.onChange();
     this.randomUI.onchange = (event) -> this.onChange();
     this.proportionalUI.onchange = (event) -> this.onChange();
-
-    this.constantUI.appendTo(this.querySelector(".fanciful-costant"));
-    this.constantUI.setValueLabel("CONSTANT");
-    this.randomUI.appendTo(this.querySelector("div.fanciful-random"));
-    this.randomUI.setValueLabel("RANDOM");
-    this.proportionalUI.appendTo(this.querySelector(".fanciful-proportional"));
-    this.proportionalUI.setValueLabel("PROPORTIONAL");
   }
 
   private Object onInput() {
@@ -263,6 +264,8 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
 
     this.toggleRandom.setAttribute("data-value", str);
     this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + str + "-sm.png");
+
+    this.randomUI.setValue(random.getValue());
   }
 
   private Z4RandomValue getRandom() {

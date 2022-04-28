@@ -80,6 +80,24 @@ public class Z4RandomValue {
   }
 
   /**
+   * Returns the value
+   *
+   * @return The value
+   */
+  public double getValue() {
+    return this.value;
+  }
+
+  /**
+   * Returns the length
+   *
+   * @return The length
+   */
+  public int getLength() {
+    return this.length;
+  }
+
+  /**
    * Returns the next random value
    *
    * @return The next random value (in the range [0,value[)

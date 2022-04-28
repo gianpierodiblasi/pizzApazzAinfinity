@@ -79,6 +79,24 @@ class Z4RandomValue {
   }
 
   /**
+   * Returns the value
+   *
+   * @return The value
+   */
+   getValue() {
+    return this.value;
+  }
+
+  /**
+   * Returns the length
+   *
+   * @return The length
+   */
+   getLength() {
+    return this.length;
+  }
+
+  /**
    * Returns the next random value
    *
    * @return The next random value (in the range [0,value[)
