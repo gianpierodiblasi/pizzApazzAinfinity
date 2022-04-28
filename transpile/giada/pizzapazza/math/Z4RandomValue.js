@@ -144,7 +144,7 @@ class Z4RandomValue {
    * @return The Z4RandomValue
    */
   static  classic(value) {
-    return new Z4RandomValue(value, 0, 0);
+    return new Z4RandomValue(value, 0, 1);
   }
 
   /**

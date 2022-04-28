@@ -3,6 +3,7 @@ package giada.pizzapazza.math.ui;
 import def.dom.HTMLElement;
 import def.dom.NodeList;
 import def.js.Date;
+import static def.js.Globals.parseFloat;
 import giada.pizzapazza.Z4Loader;
 import giada.pizzapazza.math.Z4FancifulValue;
 import giada.pizzapazza.math.Z4RandomValue;
@@ -11,7 +12,10 @@ import giada.pizzapazza.setting.Z4HTMLFactory;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.ui.Z4ComponentUI;
 import simulation.dom.$HTMLElement;
+import simulation.js.$Apply_0_Void;
+import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
+import static simulation.js.$Globals.setTimeout;
 
 /**
  * The component to edit a numeric value
@@ -31,7 +35,12 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
   private final HTMLElement toggleRandom = this.querySelector(".toggle-random");
   private final HTMLElement toggleRandomImg = this.querySelector(".toggle-random img");
 
+  private final $HTMLElement valueLength = this.querySelector(".random-length");
+  private final $HTMLElement spinnerLength = this.querySelector(".random-length-spinner");
+
   private Z4FancifulValue fancifulValue = new Z4FancifulValue();
+  private final $Apply_0_Void applySpin = () -> this.spin();
+  private boolean isApplySpin = false;
 
   private final static String PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
   private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4FancifulValueUI.html");
@@ -93,6 +102,28 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
       };
     }
 
+    this.valueLength.setAttribute("min", "1");
+    this.valueLength.setAttribute("value", "1");
+    this.valueLength.oninput = (event) -> {
+//      this.oninput.$apply(null);
+      return null;
+    };
+    this.valueLength.onchange = (event) -> {
+//      this.onchange.$apply(null);
+      return null;
+    };
+    this.valueLength.onfocus = (event) -> {
+      this.valueLength.select();
+      return null;
+    };
+    if (Z4Loader.touch) {
+      this.spinnerLength.ontouchstart = (event) -> this.startSpin();
+      this.spinnerLength.ontouchend = (event) -> this.stopSpin();
+    } else {
+      this.spinnerLength.onmousedown = (event) -> this.startSpin();
+      this.spinnerLength.onmouseup = (event) -> this.stopSpin();
+    }
+
     this.constantUI.appendTo(this.querySelector(".fanciful-costant"));
     this.constantUI.setValueLabel("CONSTANT");
     this.randomUI.appendTo(this.querySelector("div.fanciful-random"));
@@ -133,6 +164,42 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
 
     this.onchange.$apply(this.fancifulValue);
     return null;
+  }
+
+  private Object startSpin() {
+    this.isApplySpin = true;
+    this.applySpin.$apply();
+    return null;
+  }
+
+  private Object stopSpin() {
+    this.isApplySpin = false;
+    this.spinnerLength.value = "0";
+    return null;
+  }
+
+  private void spin() {
+    double min = parseFloat(this.valueLength.getAttribute("min"));
+    double max = parseFloat(this.valueLength.getAttribute("max"));
+
+    double v = this.spinnerLength.valueAsNumber;
+    double abs = 1;
+
+    if ($exists(v)) {
+      abs = Math.abs(v);
+
+      v = Math.max(min, this.valueLength.valueAsNumber + (v > 0 ? 1 : -1));
+      v = Math.min(v, max);
+
+      this.valueLength.value = "" + v;
+//      this.oninput.$apply(null);
+    }
+
+    if (this.isApplySpin) {
+      setTimeout(this.applySpin, 500 / abs);
+    } else {
+//      this.onchange.$apply(null);
+    }
   }
 
   /**

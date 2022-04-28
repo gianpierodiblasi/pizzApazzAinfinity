@@ -21,7 +21,15 @@ class Z4FancifulValueUI extends Z4ComponentUI {
 
    toggleRandomImg = this.querySelector(".toggle-random img");
 
+   valueLength = this.querySelector(".random-length");
+
+   spinnerLength = this.querySelector(".random-length-spinner");
+
    fancifulValue = new Z4FancifulValue();
+
+   applySpin = () => this.spin();
+
+   isApplySpin = false;
 
   static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
 
@@ -74,6 +82,27 @@ class Z4FancifulValueUI extends Z4ComponentUI {
         return null;
       };
     }
+    this.valueLength.setAttribute("min", "1");
+    this.valueLength.setAttribute("value", "1");
+    this.valueLength.oninput = (event) => {
+      // this.oninput.$apply(null);
+      return null;
+    };
+    this.valueLength.onchange = (event) => {
+      // this.onchange.$apply(null);
+      return null;
+    };
+    this.valueLength.onfocus = (event) => {
+      this.valueLength.select();
+      return null;
+    };
+    if (Z4Loader.touch) {
+      this.spinnerLength.ontouchstart = (event) => this.startSpin();
+      this.spinnerLength.ontouchend = (event) => this.stopSpin();
+    } else {
+      this.spinnerLength.onmousedown = (event) => this.startSpin();
+      this.spinnerLength.onmouseup = (event) => this.stopSpin();
+    }
     this.constantUI.appendTo(this.querySelector(".fanciful-costant"));
     this.constantUI.setValueLabel("CONSTANT");
     this.randomUI.appendTo(this.querySelector("div.fanciful-random"));
@@ -108,6 +137,37 @@ class Z4FancifulValueUI extends Z4ComponentUI {
     this.fancifulValue.setProportional(this.proportionalUI.getSign(), this.proportionalUI.getValue());
     this.onchange(this.fancifulValue);
     return null;
+  }
+
+   startSpin() {
+    this.isApplySpin = true;
+    this.applySpin();
+    return null;
+  }
+
+   stopSpin() {
+    this.isApplySpin = false;
+    this.spinnerLength.value = "0";
+    return null;
+  }
+
+   spin() {
+    let min = parseFloat(this.valueLength.getAttribute("min"));
+    let max = parseFloat(this.valueLength.getAttribute("max"));
+    let v = this.spinnerLength.valueAsNumber;
+    let abs = 1;
+    if (v) {
+      abs = Math.abs(v);
+      v = Math.max(min, this.valueLength.valueAsNumber + (v > 0 ? 1 : -1));
+      v = Math.min(v, max);
+      this.valueLength.value = "" + v;
+      // this.oninput.$apply(null);
+    }
+    if (this.isApplySpin) {
+      setTimeout(this.applySpin, 500 / abs);
+    } else {
+      // this.onchange.$apply(null);
+    }
   }
 
   /**

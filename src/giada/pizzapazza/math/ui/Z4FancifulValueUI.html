@@ -38,7 +38,7 @@
   <div class="fanciful-costant" style="flex:1"></div>
 
   <label class="form-label random-type-label" style="width:60px;text-align:right;font-size:smaller;margin-bottom:2px;margin-top:10px" data-token-lang-inner_text="TYPE">Type</label>
-  
+
   <button class="btn btn-outline-secondary toggle-random dropdown-toggle fanciful-random" type="button" data-bs-toggle="dropdown" data-value="classic">
     <img data-icon="classic" class="z4-dark-img-negative"/>
   </button>
@@ -62,6 +62,18 @@
       <button class="dropdown-item" type="button" data-value="bezier">
         <img data-icon="bezier" class="z4-dark-img-negative"/><span data-token-lang-inner_text="BEZIER">Bezier</span>
       </button>
+    </li>
+    <li><hr class="dropdown-divider"></li>
+    <li>
+      <div class="mx-1">
+        <label class="form-label length-label" style="float:right" data-token-lang-inner_text="LENGTH">Length</label>
+        <input type="number" class="form-control random-length" value="0" min="0" step="1" max="999999999" style="text-align: right"/>
+        <div style="display:flex;align-items:center">
+          <label class="form-label" style="font-size:larger;margin-bottom:4px">&ll;</label>
+          <input type="range" class="form-range random-length-spinner" style="flex:1" value="0" min="-50" max="50" step="1"/>  
+          <label class="form-label" style="font-size:larger;margin-bottom:4px">&gg;</label>
+        </div>
+      </div>
     </li>
   </ul>
 

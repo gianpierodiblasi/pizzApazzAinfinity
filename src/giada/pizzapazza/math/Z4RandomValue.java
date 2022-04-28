@@ -149,7 +149,7 @@ public class Z4RandomValue {
    * @return The Z4RandomValue
    */
   public static Z4RandomValue classic(double value) {
-    return new Z4RandomValue(value, 0, 0);
+    return new Z4RandomValue(value, 0, 1);
   }
 
   /**
