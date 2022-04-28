@@ -107,3 +107,7 @@ label.z4-guided-tour {
 .fanciful-container-vertical > div {
   width: 100%;
 }
+
+.toggle-uniform::after {
+  vertical-align: 0.254em;
+}

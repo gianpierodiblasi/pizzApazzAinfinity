@@ -697,11 +697,11 @@ class Z4Sign {
  */
 class Z4RandomValue {
 
-   value = 0;
+   value = 0.0;
 
    type = 0;
 
-   length = 0;
+   length = 0.0;
 
    step = 0;
 
@@ -728,6 +728,64 @@ class Z4RandomValue {
 
    createBezierCurve() {
     this.bezierCurve = new Bezier(0, this.prevRandom, this.length / 2, this.controlRandom, 1, this.nextRandom);
+  }
+
+  /**
+   * Returns if this Z4RandomValue generates "classic "random values
+   *
+   * @return true if this Z4RandomValue generates "classic "random values, false
+   * otherwise
+   */
+   isClassic() {
+    return this.type === 0;
+  }
+
+  /**
+   * Returns if this Z4RandomValue generates random values on a bezier curve
+   *
+   * @return true if this Z4RandomValue generates random values on a bezier
+   * curve, false otherwise
+   */
+   isBezier() {
+    return this.type === 1;
+  }
+
+  /**
+   * Returns if this Z4RandomValue generates random values on a polyline
+   *
+   * @return true if this Z4RandomValue generates random values on a polyline,
+   * false otherwise
+   */
+   isPolyline() {
+    return this.type === 2;
+  }
+
+  /**
+   * Returns if this Z4RandomValue generates random values on a stepped line
+   *
+   * @return true if this Z4RandomValue generates random values on a stepped
+   * line, false otherwise
+   */
+   isStepped() {
+    return this.type === 3;
+  }
+
+  /**
+   * Returns the value
+   *
+   * @return The value
+   */
+   getValue() {
+    return this.value;
+  }
+
+  /**
+   * Returns the length
+   *
+   * @return The length
+   */
+   getLength() {
+    return this.length;
   }
 
   /**
@@ -778,7 +836,7 @@ class Z4RandomValue {
    * @return The Z4RandomValue
    */
   static  classic(value) {
-    return new Z4RandomValue(value, 0, 0);
+    return new Z4RandomValue(value, 0, 1);
   }
 
   /**
@@ -849,12 +907,21 @@ class Z4FancifulValue {
   }
 
   /**
-   * Returns the constant value
+   * Returns the sign of the constant component
    *
-   * @return The constant value
+   * @return The sign of the constant component
+   */
+   getConstantSign() {
+    return this.constantSign;
+  }
+
+  /**
+   * Returns the value of the constant component
+   *
+   * @return The value of the constant component
    */
    getConstantValue() {
-    return constantValue;
+    return this.constantValue;
   }
 
   /**
@@ -871,6 +938,24 @@ class Z4FancifulValue {
   }
 
   /**
+   * Returns the sign of the random component
+   *
+   * @return The sign of the random component
+   */
+   getRandomSign() {
+    return this.randomSign;
+  }
+
+  /**
+   * Returns the value of the random component
+   *
+   * @return The value of the random component
+   */
+   getRandomValue() {
+    return this.randomValue;
+  }
+
+  /**
    * Sets the proportional component
    *
    * @param proportionalSign The sign of the proportional component
@@ -884,6 +969,24 @@ class Z4FancifulValue {
   }
 
   /**
+   * Returns the sign of the proportional component
+   *
+   * @return The sign of the proportional component
+   */
+   getProportionalSign() {
+    return this.proportionalSign;
+  }
+
+  /**
+   * Returns the value of the proportional component
+   *
+   * @return The value of the proportional component
+   */
+   getProportionalValue() {
+    return this.proportionalValue;
+  }
+
+  /**
    * Sets if the computed sign has to be equals for all components; if true then
    * the constant sign is used
    *
@@ -894,6 +997,17 @@ class Z4FancifulValue {
    setUniformSign(uniformSign) {
     this.uniformSign = uniformSign;
     return this;
+  }
+
+  /**
+   * Checks if the computed sign has to be equals for all components; if true
+   * then the constant sign is used
+   *
+   * @return true if the computed sign has to be equals for all components,
+   * false otherwise
+   */
+   isUniformSign() {
+    return this.uniformSign;
   }
 
   /**
@@ -1493,6 +1607,8 @@ class Z4NumberUI extends Z4ComponentUI {
  */
 class Z4FancifulValueUI extends Z4ComponentUI {
 
+   uniformCheck = this.querySelector(".uniform-check");
+
    toggleUniform = this.querySelector(".toggle-uniform");
 
    toggleUniformImg = this.querySelector(".toggle-uniform img");
@@ -1507,7 +1623,15 @@ class Z4FancifulValueUI extends Z4ComponentUI {
 
    toggleRandomImg = this.querySelector(".toggle-random img");
 
+   valueLength = this.querySelector(".random-length");
+
+   spinnerLength = this.querySelector(".random-length-spinner");
+
    fancifulValue = new Z4FancifulValue();
+
+   applySpin = () => this.spin();
+
+   isApplySpin = false;
 
   static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
 
@@ -1518,6 +1642,13 @@ class Z4FancifulValueUI extends Z4ComponentUI {
    */
   constructor() {
     super(Z4FancifulValueUI.UI);
+    this.uniformCheck.id = "uniform_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
+    this.querySelector(".uniform-label").setAttribute("for", this.uniformCheck.id);
+    this.uniformCheck.onchange = (event) => {
+      this.setUniform(this.uniformCheck.checked);
+      this.onchange(this.fancifulValue.setUniformSign(this.uniformCheck.checked));
+      return null;
+    };
     this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + this.toggleUniform.getAttribute("data-value") + "-sm.png");
     let imgs = this.querySelectorAll(".toggle-uniform-dropdown-menu img");
     for (let i = 0; i < imgs.length; i++) {
@@ -1530,7 +1661,9 @@ class Z4FancifulValueUI extends Z4ComponentUI {
       button.onclick = (event) => {
         this.toggleUniform.setAttribute("data-value", button.getAttribute("data-value"));
         this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + button.getAttribute("data-value") + "-sm.png");
-        this.onchange(null);
+        this.fancifulValue.setConstant(this.getUniformSign(), this.constantUI.getValue());
+        this.constantUI.setSign(this.getUniformSign());
+        this.onchange(this.fancifulValue);
         return null;
       };
     }
@@ -1544,37 +1677,108 @@ class Z4FancifulValueUI extends Z4ComponentUI {
     for (let i = 0; i < buttons.length; i++) {
       let button = buttons.item(i);
       button.onclick = (event) => {
-        this.toggleRandom.setAttribute("data-value", button.getAttribute("data-value"));
-        this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + button.getAttribute("data-value") + "-sm.png");
-        this.onchange(fancifulValue);
+        let str = button.getAttribute("data-value");
+        this.toggleRandom.setAttribute("data-value", str);
+        this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + str + "-sm.png");
+        // JS equality for strings
+        this.querySelector(".divider-length").style.display = str === "classic" ? "none" : "block";
+        // JS equality for strings
+        this.querySelector(".container-length").style.display = str === "classic" ? "none" : "block";
+        this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
+        this.onchange(this.fancifulValue);
         return null;
       };
     }
-    this.randomUI.querySelector(".number-group").prepend(this.querySelector(".toggle-random-dropdown-menu"));
-    this.randomUI.querySelector(".number-group").prepend(this.toggleRandom);
-    this.randomUI.querySelector(".sign-label").style.marginLeft = "89px";
-    this.constantUI.oninput = (event) => this.onInput();
-    this.randomUI.oninput = (event) => this.onInput();
-    this.proportionalUI.oninput = (event) => this.onInput();
-    this.constantUI.onchange = (event) => this.onChange();
-    this.randomUI.onchange = (event) => this.onChange();
-    this.proportionalUI.onchange = (event) => this.onChange();
+    this.valueLength.setAttribute("min", "1");
+    this.valueLength.setAttribute("value", "1");
+    this.valueLength.oninput = (event) => {
+      this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
+      this.oninput(this.fancifulValue);
+      return null;
+    };
+    this.valueLength.onchange = (event) => {
+      this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
+      this.onchange(this.fancifulValue);
+      return null;
+    };
+    this.valueLength.onfocus = (event) => {
+      this.valueLength.select();
+      return null;
+    };
+    if (Z4Loader.touch) {
+      this.spinnerLength.ontouchstart = (event) => this.startSpin();
+      this.spinnerLength.ontouchend = (event) => this.stopSpin();
+    } else {
+      this.spinnerLength.onmousedown = (event) => this.startSpin();
+      this.spinnerLength.onmouseup = (event) => this.stopSpin();
+    }
     this.constantUI.appendTo(this.querySelector(".fanciful-costant"));
     this.constantUI.setValueLabel("CONSTANT");
     this.randomUI.appendTo(this.querySelector("div.fanciful-random"));
     this.randomUI.setValueLabel("RANDOM");
     this.proportionalUI.appendTo(this.querySelector(".fanciful-proportional"));
     this.proportionalUI.setValueLabel("PROPORTIONAL");
+    this.querySelector(".fanciful-random > div").prepend(this.querySelector(".random-type-label"));
+    this.randomUI.querySelector(".number-group").prepend(this.querySelector(".toggle-random-dropdown-menu"));
+    this.randomUI.querySelector(".number-group").prepend(this.toggleRandom);
+    this.randomUI.querySelector(".sign-label").style.width = "64px";
+    this.constantUI.oninput = (event) => this.onInput();
+    this.randomUI.oninput = (event) => this.onInput();
+    this.proportionalUI.oninput = (event) => this.onInput();
+    this.constantUI.onchange = (event) => this.onChange();
+    this.randomUI.onchange = (event) => this.onChange();
+    this.proportionalUI.onchange = (event) => this.onChange();
   }
 
    onInput() {
-    this.oninput(fancifulValue);
+    this.setUniformSign(this.constantUI.getSign());
+    this.fancifulValue.setConstant(this.constantUI.getSign(), this.constantUI.getValue());
+    this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
+    this.fancifulValue.setProportional(this.proportionalUI.getSign(), this.proportionalUI.getValue());
+    this.oninput(this.fancifulValue);
     return null;
   }
 
    onChange() {
-    this.onchange(fancifulValue);
+    this.setUniformSign(this.constantUI.getSign());
+    this.fancifulValue.setConstant(this.constantUI.getSign(), this.constantUI.getValue());
+    this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
+    this.fancifulValue.setProportional(this.proportionalUI.getSign(), this.proportionalUI.getValue());
+    this.onchange(this.fancifulValue);
     return null;
+  }
+
+   startSpin() {
+    this.isApplySpin = true;
+    this.applySpin();
+    return null;
+  }
+
+   stopSpin() {
+    this.isApplySpin = false;
+    this.spinnerLength.value = "0";
+    return null;
+  }
+
+   spin() {
+    let min = parseFloat(this.valueLength.getAttribute("min"));
+    let max = parseFloat(this.valueLength.getAttribute("max"));
+    let v = this.spinnerLength.valueAsNumber;
+    let abs = 1;
+    if (v) {
+      abs = Math.abs(v);
+      v = Math.max(min, this.valueLength.valueAsNumber + (v > 0 ? 1 : -1));
+      v = Math.min(v, max);
+      this.valueLength.value = "" + v;
+      this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
+      this.oninput(this.fancifulValue);
+    }
+    if (this.isApplySpin) {
+      setTimeout(this.applySpin, 500 / abs);
+    } else {
+      this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
+      this.onchange(this.fancifulValue);
+    }
   }
 
   /**
@@ -1589,24 +1793,7 @@ class Z4FancifulValueUI extends Z4ComponentUI {
   // this.value.setAttribute("max", "" + max);
   // return this;
   // }
-  /**
-   * Sets the visibility of the sign
-   *
-   * @param visible true to make the sign visible, false otherwise
-   * @return This Z4NumberUI
-   */
-  // public Z4FancifulValueUI setSignVisible(boolean visible) {
-  // this.querySelector(".sign-label").style.display = visible ? "inline-block" : "none";
-  // this.toggle.style.display = visible ? "inline-block" : "none";
   // 
-  // if (visible) {
-  // this.querySelector(".number-group").classList.add("input-group");
-  // } else {
-  // this.querySelector(".number-group").classList.remove("input-group");
-  // }
-  // 
-  // return this;
-  // }
   /**
    * Sets the token of the value label
    *
@@ -1645,66 +1832,106 @@ class Z4FancifulValueUI extends Z4ComponentUI {
   }
 
   /**
-   * Sets the Z4Sign
-   *
-   * @param sign The Z4Sign
-   * @return This Z4NumberUI
-   */
-  // public Z4FancifulValueUI setSign(Z4Sign sign) {
-  // String str;
-  // 
-  // if (sign == Z4Sign.POSITIVE) {
-  // str = "positive";
-  // } else if (sign == Z4Sign.NEGATIVE) {
-  // str = "negative";
-  // } else if (sign == Z4Sign.RANDOM) {
-  // str = "random";
-  // } else {
-  // str = "alternate";
-  // }
-  // 
-  // this.toggle.setAttribute("data-value", str);
-  // this.toggleImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + str + "-sm.png");
-  // 
-  // return this;
-  // }
-  /**
-   * Returns the sign
-   *
-   * @return The sign
-   */
-  // public Z4Sign getSign() {
-  // switch (this.toggle.getAttribute("data-value")) {
-  // case "positive":
-  // return Z4Sign.POSITIVE;
-  // case "negative":
-  // return Z4Sign.NEGATIVE;
-  // case "random":
-  // return Z4Sign.RANDOM;
-  // case "alternate":
-  // return Z4Sign.alternate();
-  // default:
-  // return null;
-  // }
-  // }
-  /**
    * Sets the value
    *
    * @param value The value
    * @return This Z4NumberUI
    */
-  // public Z4FancifulValueUI setValue(Z4FancifulValue value) {
-  // this.fancifulValue = value;
-  // 
-  // return this;
-  // }
+   setValue(value) {
+    this.fancifulValue = value;
+    this.setUniform(this.fancifulValue.isUniformSign());
+    this.constantUI.setSign(this.fancifulValue.getConstantSign());
+    this.constantUI.setValue(this.fancifulValue.getConstantValue());
+    this.setUniformSign(this.fancifulValue.getConstantSign());
+    this.randomUI.setSign(this.fancifulValue.getRandomSign());
+    this.setRandom(this.fancifulValue.getRandomValue());
+    this.proportionalUI.setSign(this.fancifulValue.getProportionalSign());
+    this.proportionalUI.setValue(this.fancifulValue.getProportionalValue());
+    return this;
+  }
+
+   setUniform(uniform) {
+    this.uniformCheck.checked = uniform;
+    this.constantUI.setSignVisible(!this.uniformCheck.checked);
+    this.randomUI.setSignVisible(!this.uniformCheck.checked);
+    this.randomUI.querySelector(".number-group").classList.add("input-group");
+    this.proportionalUI.setSignVisible(!this.uniformCheck.checked);
+    this.querySelector(".uniform-container").style.display = this.uniformCheck.checked ? "block" : "none";
+  }
+
+   setUniformSign(sign) {
+    let str = null;
+    if (sign === Z4Sign.POSITIVE) {
+      str = "positive";
+    } else if (sign === Z4Sign.NEGATIVE) {
+      str = "negative";
+    } else if (sign === Z4Sign.RANDOM) {
+      str = "random";
+    } else {
+      str = "alternate";
+    }
+    this.toggleUniform.setAttribute("data-value", str);
+    this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + str + "-sm.png");
+  }
+
+   getUniformSign() {
+    switch(this.toggleUniform.getAttribute("data-value")) {
+      case "positive":
+        return Z4Sign.POSITIVE;
+      case "negative":
+        return Z4Sign.NEGATIVE;
+      case "random":
+        return Z4Sign.RANDOM;
+      case "alternate":
+        return Z4Sign.alternate();
+      default:
+        return null;
+    }
+  }
+
+   setRandom(random) {
+    let str = null;
+    if (random.isClassic()) {
+      str = "classic";
+    } else if (random.isBezier()) {
+      str = "bezier";
+    } else if (random.isPolyline()) {
+      str = "polyline";
+    } else if (random.isStepped()) {
+      str = "stepped";
+    }
+    this.toggleRandom.setAttribute("data-value", str);
+    this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + str + "-sm.png");
+    this.randomUI.setValue(random.getValue());
+    // JS equality for strings
+    this.querySelector(".divider-length").style.display = str === "classic" ? "none" : "block";
+    // JS equality for strings
+    this.querySelector(".container-length").style.display = str === "classic" ? "none" : "block";
+    this.valueLength.value = "" + random.getLength();
+  }
+
+   getRandom() {
+    switch(this.toggleRandom.getAttribute("data-value")) {
+      case "classic":
+        return Z4RandomValue.classic(this.randomUI.getValue());
+      case "bezier":
+        return Z4RandomValue.bezier(this.randomUI.getValue(), this.valueLength.valueAsNumber);
+      case "polyline":
+        return Z4RandomValue.polyline(this.randomUI.getValue(), this.valueLength.valueAsNumber);
+      case "stepped":
+        return Z4RandomValue.stepped(this.randomUI.getValue(), this.valueLength.valueAsNumber);
+      default:
+        return null;
+    }
+  }
+
   /**
    * Returns the value
    *
    * @return The value
    */
    getValue() {
-    return fancifulValue;
+    return this.fancifulValue;
   }
 }
 /**
@@ -2799,6 +3026,8 @@ class Z4GradientColorUI extends Z4ComponentUI {
         return null;
       };
     }
+    this.mirroredCheck.id = "mirrored_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
+    this.querySelector(".mirrored-label").setAttribute("for", this.mirroredCheck.id);
     this.mirroredCheck.onchange = (event) => {
       this.gradientColor.setMirrored(this.mirroredCheck.checked);
       this.configureSliders(-1);
@@ -3247,6 +3476,10 @@ class Z4TemporalColorUI extends Z4ComponentUI {
     };
     this.temporalMirroredCheck.onchange = mirror;
     this.spatialMirroredCheck.onchange = mirror;
+    this.temporalMirroredCheck.id = "mirrored_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
+    this.querySelector(".temporal-mirrored-label").setAttribute("for", this.temporalMirroredCheck.id);
+    this.spatialMirroredCheck.id = "mirrored_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
+    this.querySelector(".spatial-mirrored-label").setAttribute("for", this.spatialMirroredCheck.id);
     this.temporalFormRange.oninput = (event) => this.setRipple(5);
     this.spatialFormRange.oninput = (event) => this.setRipple(5);
     this.temporalFormRange.onchange = (event) => this.setRipple(1);

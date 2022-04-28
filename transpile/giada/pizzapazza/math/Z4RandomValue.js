@@ -9,7 +9,7 @@ class Z4RandomValue {
 
    type = 0;
 
-   length = 0;
+   length = 0.0;
 
    step = 0;
 

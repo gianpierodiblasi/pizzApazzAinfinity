@@ -48,6 +48,7 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
   /**
    * Creates a Z4ColorUI
    */
+  @SuppressWarnings("StringEquality")
   public Z4FancifulValueUI() {
     super(Z4FancifulValueUI.UI);
 
@@ -93,8 +94,12 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
     for (int i = 0; i < buttons.length; i++) {
       HTMLElement button = (HTMLElement) buttons.item(i);
       button.onclick = (event) -> {
-        this.toggleRandom.setAttribute("data-value", button.getAttribute("data-value"));
-        this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + button.getAttribute("data-value") + "-sm.png");
+        String str = button.getAttribute("data-value");
+        this.toggleRandom.setAttribute("data-value", str);
+        this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + str + "-sm.png");
+
+        this.querySelector(".divider-length").style.display = str == "classic" ? "none" : "block"; // JS equality for strings
+        this.querySelector(".container-length").style.display = str == "classic" ? "none" : "block"; // JS equality for strings
 
         this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
         this.onchange.$apply(this.fancifulValue);
@@ -105,11 +110,13 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
     this.valueLength.setAttribute("min", "1");
     this.valueLength.setAttribute("value", "1");
     this.valueLength.oninput = (event) -> {
-//      this.oninput.$apply(null);
+      this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
+      this.oninput.$apply(this.fancifulValue);
       return null;
     };
     this.valueLength.onchange = (event) -> {
-//      this.onchange.$apply(null);
+      this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
+      this.onchange.$apply(this.fancifulValue);
       return null;
     };
     this.valueLength.onfocus = (event) -> {
@@ -192,13 +199,15 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
       v = Math.min(v, max);
 
       this.valueLength.value = "" + v;
-//      this.oninput.$apply(null);
+      this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
+      this.oninput.$apply(this.fancifulValue);
     }
 
     if (this.isApplySpin) {
       setTimeout(this.applySpin, 500 / abs);
     } else {
-//      this.onchange.$apply(null);
+      this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
+      this.onchange.$apply(this.fancifulValue);
     }
   }
 
@@ -317,6 +326,7 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
     }
   }
 
+  @SuppressWarnings("StringEquality")
   private void setRandom(Z4RandomValue random) {
     String str = null;
     if (random.isClassic()) {
@@ -333,6 +343,10 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
     this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + str + "-sm.png");
 
     this.randomUI.setValue(random.getValue());
+
+    this.querySelector(".divider-length").style.display = str == "classic" ? "none" : "block"; // JS equality for strings
+    this.querySelector(".container-length").style.display = str == "classic" ? "none" : "block"; // JS equality for strings
+    this.valueLength.value = "" + random.getLength();
   }
 
   private Z4RandomValue getRandom() {
@@ -340,11 +354,11 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
       case "classic":
         return Z4RandomValue.classic(this.randomUI.getValue());
       case "bezier":
-        return Z4RandomValue.bezier(this.randomUI.getValue(), 0);
+        return Z4RandomValue.bezier(this.randomUI.getValue(), this.valueLength.valueAsNumber);
       case "polyline":
-        return Z4RandomValue.polyline(this.randomUI.getValue(), 0);
+        return Z4RandomValue.polyline(this.randomUI.getValue(), this.valueLength.valueAsNumber);
       case "stepped":
-        return Z4RandomValue.stepped(this.randomUI.getValue(), 0);
+        return Z4RandomValue.stepped(this.randomUI.getValue(), this.valueLength.valueAsNumber);
       default:
         return null;
     }
