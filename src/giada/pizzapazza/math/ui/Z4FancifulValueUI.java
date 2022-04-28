@@ -45,12 +45,7 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
     this.uniformCheck.id = "uniform_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
     this.querySelector(".uniform-label").setAttribute("for", this.uniformCheck.id);
     this.uniformCheck.onchange = (event) -> {
-      this.constantUI.setSignVisible(!this.uniformCheck.checked);
-      this.randomUI.setSignVisible(!this.uniformCheck.checked);
-      this.randomUI.querySelector(".number-group").classList.add("input-group");
-      this.proportionalUI.setSignVisible(!this.uniformCheck.checked);
-      this.querySelector(".uniform-container").style.display = this.uniformCheck.checked ? "block" : "none";
-
+      this.setUniform(this.uniformCheck.checked);
       this.onchange.$apply(this.fancifulValue.setUniformSign(this.uniformCheck.checked));
       return null;
     };
@@ -198,10 +193,7 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
   public Z4FancifulValueUI setValue(Z4FancifulValue value) {
     this.fancifulValue = value;
 
-    this.constantUI.setSignVisible(this.fancifulValue.isUniformSign());
-    this.randomUI.setSignVisible(this.fancifulValue.isUniformSign());
-    this.proportionalUI.setSignVisible(this.fancifulValue.isUniformSign());
-    this.querySelector(".uniform-container").style.display = this.fancifulValue.isUniformSign() ? "block" : "none";
+    this.setUniform(this.fancifulValue.isUniformSign());
 
     this.constantUI.setSign(this.fancifulValue.getConstantSign());
     this.constantUI.setValue(this.fancifulValue.getConstantValue());
@@ -214,6 +206,15 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
     this.proportionalUI.setValue(this.fancifulValue.getProportionalValue());
 
     return this;
+  }
+
+  private void setUniform(boolean uniform) {
+    this.uniformCheck.checked = uniform;
+    this.constantUI.setSignVisible(!this.uniformCheck.checked);
+    this.randomUI.setSignVisible(!this.uniformCheck.checked);
+    this.randomUI.querySelector(".number-group").classList.add("input-group");
+    this.proportionalUI.setSignVisible(!this.uniformCheck.checked);
+    this.querySelector(".uniform-container").style.display = this.uniformCheck.checked ? "block" : "none";
   }
 
   private void setUniformSign(Z4Sign sign) {
@@ -261,7 +262,7 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
     }
 
     this.toggleRandom.setAttribute("data-value", str);
-    this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + str + "-sm.png");
+    this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + str + "-sm.png");
   }
 
   private Z4RandomValue getRandom() {
