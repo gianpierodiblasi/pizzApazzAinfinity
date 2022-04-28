@@ -40,6 +40,46 @@ public class Z4RandomValue {
   }
 
   /**
+   * Returns if this Z4RandomValue generates "classic "random values
+   *
+   * @return true if this Z4RandomValue generates "classic "random values, false
+   * otherwise
+   */
+  public boolean isClassic() {
+    return this.type == 0;
+  }
+
+  /**
+   * Returns if this Z4RandomValue generates random values on a bezier curve
+   *
+   * @return true if this Z4RandomValue generates random values on a bezier
+   * curve, false otherwise
+   */
+  public boolean isBezier() {
+    return this.type == 1;
+  }
+
+  /**
+   * Returns if this Z4RandomValue generates random values on a polyline
+   *
+   * @return true if this Z4RandomValue generates random values on a polyline,
+   * false otherwise
+   */
+  public boolean isPolyline() {
+    return this.type == 2;
+  }
+
+  /**
+   * Returns if this Z4RandomValue generates random values on a stepped line
+   *
+   * @return true if this Z4RandomValue generates random values on a stepped
+   * line, false otherwise
+   */
+  public boolean isStepped() {
+    return this.type == 3;
+  }
+
+  /**
    * Returns the next random value
    *
    * @return The next random value (in the range [0,value[)

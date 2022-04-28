@@ -36,7 +36,7 @@ public class Z4FancifulValue {
    * @return The sign of the constant component
    */
   public Z4Sign getConstantSign() {
-    return constantSign;
+    return this.constantSign;
   }
 
   /**
@@ -45,7 +45,7 @@ public class Z4FancifulValue {
    * @return The value of the constant component
    */
   public double getConstantValue() {
-    return constantValue;
+    return this.constantValue;
   }
 
   /**
@@ -62,6 +62,24 @@ public class Z4FancifulValue {
   }
 
   /**
+   * Returns the sign of the random component
+   *
+   * @return The sign of the random component
+   */
+  public Z4Sign getRandomSign() {
+    return this.randomSign;
+  }
+
+  /**
+   * Returns the value of the random component
+   *
+   * @return The value of the random component
+   */
+  public Z4RandomValue getRandomValue() {
+    return this.randomValue;
+  }
+
+  /**
    * Sets the proportional component
    *
    * @param proportionalSign The sign of the proportional component
@@ -72,6 +90,24 @@ public class Z4FancifulValue {
     this.proportionalSign = proportionalSign;
     this.proportionalValue = proportionalValue;
     return this;
+  }
+
+  /**
+   * Returns the sign of the proportional component
+   *
+   * @return The sign of the proportional component
+   */
+  public Z4Sign getProportionalSign() {
+    return this.proportionalSign;
+  }
+
+  /**
+   * Returns the value of the proportional component
+   *
+   * @return The value of the proportional component
+   */
+  public double getProportionalValue() {
+    return this.proportionalValue;
   }
 
   /**
@@ -95,7 +131,7 @@ public class Z4FancifulValue {
    * false otherwise
    */
   public boolean isUniformSign() {
-    return uniformSign;
+    return this.uniformSign;
   }
 
   /**

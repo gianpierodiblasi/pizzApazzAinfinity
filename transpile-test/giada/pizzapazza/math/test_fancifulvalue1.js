@@ -36,6 +36,9 @@ class test_fancifulvalue1 {
     let replacer = (k, v) => {
       if (!k) {
         return v;
+      } else if (k === "bezierCurve") {
+        // JS equality for strings
+        return null;
       } else if (typeof v === "number") {
         return v;
       } else if (typeof v === "boolean") {

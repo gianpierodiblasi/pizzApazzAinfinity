@@ -73,6 +73,7 @@ class Z4FancifulValueUI extends Z4ComponentUI {
       button.onclick = (event) => {
         this.toggleRandom.setAttribute("data-value", button.getAttribute("data-value"));
         this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + button.getAttribute("data-value") + "-sm.png");
+        this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
         this.onchange(this.fancifulValue);
         return null;
       };
@@ -97,7 +98,7 @@ class Z4FancifulValueUI extends Z4ComponentUI {
    onInput() {
     this.setUniformSign(this.constantUI.getSign());
     this.fancifulValue.setConstant(this.constantUI.getSign(), this.constantUI.getValue());
-    // this.fancifulValue.setRandom(this.randomUI.getSign(), this.constantUI.getValue());
+    this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
     this.fancifulValue.setProportional(this.proportionalUI.getSign(), this.proportionalUI.getValue());
     this.oninput(this.fancifulValue);
     return null;
@@ -106,7 +107,7 @@ class Z4FancifulValueUI extends Z4ComponentUI {
    onChange() {
     this.setUniformSign(this.constantUI.getSign());
     this.fancifulValue.setConstant(this.constantUI.getSign(), this.constantUI.getValue());
-    // this.fancifulValue.setRandom(this.randomUI.getSign(), this.constantUI.getValue());
+    this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
     this.fancifulValue.setProportional(this.proportionalUI.getSign(), this.proportionalUI.getValue());
     this.onchange(this.fancifulValue);
     return null;
@@ -122,25 +123,6 @@ class Z4FancifulValueUI extends Z4ComponentUI {
   // public Z4FancifulValueUI setRange(int min, int max) {
   // this.value.setAttribute("min", "" + min);
   // this.value.setAttribute("max", "" + max);
-  // return this;
-  // }
-  // 
-  /**
-   * Sets the visibility of the sign
-   *
-   * @param visible true to make the sign visible, false otherwise
-   * @return This Z4NumberUI
-   */
-  // public Z4FancifulValueUI setSignVisible(boolean visible) {
-  // this.querySelector(".sign-label").style.display = visible ? "inline-block" : "none";
-  // this.toggle.style.display = visible ? "inline-block" : "none";
-  // 
-  // if (visible) {
-  // this.querySelector(".number-group").classList.add("input-group");
-  // } else {
-  // this.querySelector(".number-group").classList.remove("input-group");
-  // }
-  // 
   // return this;
   // }
   // 
@@ -182,51 +164,6 @@ class Z4FancifulValueUI extends Z4ComponentUI {
   }
 
   /**
-   * Sets the Z4Sign
-   *
-   * @param sign The Z4Sign
-   * @return This Z4NumberUI
-   */
-  // public Z4FancifulValueUI setSign(Z4Sign sign) {
-  // String str;
-  // 
-  // if (sign == Z4Sign.POSITIVE) {
-  // str = "positive";
-  // } else if (sign == Z4Sign.NEGATIVE) {
-  // str = "negative";
-  // } else if (sign == Z4Sign.RANDOM) {
-  // str = "random";
-  // } else {
-  // str = "alternate";
-  // }
-  // 
-  // this.toggle.setAttribute("data-value", str);
-  // this.toggleImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + str + "-sm.png");
-  // 
-  // return this;
-  // }
-  // 
-  /**
-   * Returns the sign
-   *
-   * @return The sign
-   */
-  // public Z4Sign getSign() {
-  // switch (this.toggle.getAttribute("data-value")) {
-  // case "positive":
-  // return Z4Sign.POSITIVE;
-  // case "negative":
-  // return Z4Sign.NEGATIVE;
-  // case "random":
-  // return Z4Sign.RANDOM;
-  // case "alternate":
-  // return Z4Sign.alternate();
-  // default:
-  // return null;
-  // }
-  // }
-  // 
-  /**
    * Sets the value
    *
    * @param value The value
@@ -241,6 +178,10 @@ class Z4FancifulValueUI extends Z4ComponentUI {
     this.constantUI.setSign(this.fancifulValue.getConstantSign());
     this.constantUI.setValue(this.fancifulValue.getConstantValue());
     this.setUniformSign(this.fancifulValue.getConstantSign());
+    this.randomUI.setSign(this.fancifulValue.getRandomSign());
+    this.setRandom(this.fancifulValue.getRandomValue());
+    this.proportionalUI.setSign(this.fancifulValue.getProportionalSign());
+    this.proportionalUI.setValue(this.fancifulValue.getProportionalValue());
     return this;
   }
 
@@ -269,6 +210,36 @@ class Z4FancifulValueUI extends Z4ComponentUI {
         return Z4Sign.RANDOM;
       case "alternate":
         return Z4Sign.alternate();
+      default:
+        return null;
+    }
+  }
+
+   setRandom(random) {
+    let str = null;
+    if (random.isClassic()) {
+      str = "classic";
+    } else if (random.isBezier()) {
+      str = "bezier";
+    } else if (random.isPolyline()) {
+      str = "polyline";
+    } else if (random.isStepped()) {
+      str = "stepped";
+    }
+    this.toggleRandom.setAttribute("data-value", str);
+    this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + str + "-sm.png");
+  }
+
+   getRandom() {
+    switch(this.toggleRandom.getAttribute("data-value")) {
+      case "classic":
+        return Z4RandomValue.classic(this.randomUI.getValue());
+      case "bezier":
+        return Z4RandomValue.bezier(this.randomUI.getValue(), 0);
+      case "polyline":
+        return Z4RandomValue.polyline(this.randomUI.getValue(), 0);
+      case "stepped":
+        return Z4RandomValue.stepped(this.randomUI.getValue(), 0);
       default:
         return null;
     }
