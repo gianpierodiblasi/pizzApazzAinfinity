@@ -66,6 +66,42 @@
 .z4-lite .fanciful-random, .z4-lite .fanciful-proportional {
   display: none;
 }
+.z4-lite .uniform-check, .z4-lite .uniform-label {
+  display: none;
+}
+.z4-lite .uniform-container {
+  display: none;
+}
+.z4-lite .fanciful-costant .sign-label.sign-not-visible, .z4-lite .fanciful-costant .dropdown-toggle.sign-not-visible {
+  display: inline-block;
+}
+.z4-lite .fanciful-costant .number-group {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  width: 100%;
+}
+.z4-lite .fanciful-costant .number-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n+3),
+.z4-lite .fanciful-costant .number-group:not(.has-validation)>:not(:last-child):not(.dropdown-toggle):not(.dropdown-menu) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.z4-lite .fanciful-costant .number-group .btn {
+  position: relative;
+  z-index: 2;
+}
+.z4-lite .fanciful-costant .number-group>:not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+  margin-left: -1px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.z4-lite .fanciful-costant .number-group>.form-control, .z4-lite .fanciful-costant .number-group>.form-select {
+  position: relative;
+  flex: 1 1 auto;
+  width: 1%;
+  min-width: 0;
+}
 
 /* GUIDED TOUR */
 .z4-guided-tour {
@@ -95,6 +131,11 @@ label.z4-guided-tour {
   content: none;
 }
 
+/* NUMBER */
+.sign-label.sign-not-visible, .dropdown-toggle.sign-not-visible {
+  display: none;
+}
+
 /* FANCIFUL VALUE */
 .fanciful-container-horizontal {
   flex-direction: row;
@@ -108,6 +149,9 @@ label.z4-guided-tour {
   width: 100%;
 }
 
+.uniform-container.uniform-not-visible {
+  display: none;
+}
 .toggle-uniform::after {
   vertical-align: 0.254em;
 }

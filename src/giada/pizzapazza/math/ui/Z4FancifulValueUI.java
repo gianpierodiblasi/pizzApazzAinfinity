@@ -248,6 +248,19 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
   }
 
   /**
+   * Sets the range of the random length
+   *
+   * @param min The minumum value
+   * @param max The maximum value
+   * @return This Z4FancifulValueUI
+   */
+  public Z4FancifulValueUI setRandomLengthRange(int min, int max) {
+    this.valueLength.setAttribute("min", "" + min);
+    this.valueLength.setAttribute("max", "" + max);
+    return this;
+  }
+
+  /**
    * Sets the token of the value label
    *
    * @param token The token of the value label
@@ -315,7 +328,7 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
     this.randomUI.setSignVisible(!this.uniformCheck.checked);
     this.randomUI.querySelector(".number-group").classList.add("input-group");
     this.proportionalUI.setSignVisible(!this.uniformCheck.checked);
-    
+
     if (this.uniformCheck.checked) {
       this.querySelector(".uniform-container").classList.remove("uniform-not-visible");
     } else {

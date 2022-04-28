@@ -216,6 +216,19 @@ class Z4FancifulValueUI extends Z4ComponentUI {
   }
 
   /**
+   * Sets the range of the random length
+   *
+   * @param min The minumum value
+   * @param max The maximum value
+   * @return This Z4FancifulValueUI
+   */
+   setRandomLengthRange(min, max) {
+    this.valueLength.setAttribute("min", "" + min);
+    this.valueLength.setAttribute("max", "" + max);
+    return this;
+  }
+
+  /**
    * Sets the token of the value label
    *
    * @param token The token of the value label
