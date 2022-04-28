@@ -55,6 +55,8 @@ class Z4FancifulValueUI extends Z4ComponentUI {
       button.onclick = (event) => {
         this.toggleUniform.setAttribute("data-value", button.getAttribute("data-value"));
         this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + button.getAttribute("data-value") + "-sm.png");
+        this.fancifulValue.setConstant(this.getUniformSign(), this.constantUI.getValue());
+        this.constantUI.setSign(this.getUniformSign());
         this.onchange(this.fancifulValue);
         return null;
       };
@@ -93,11 +95,19 @@ class Z4FancifulValueUI extends Z4ComponentUI {
   }
 
    onInput() {
+    this.setUniformSign(this.constantUI.getSign());
+    this.fancifulValue.setConstant(this.constantUI.getSign(), this.constantUI.getValue());
+    // this.fancifulValue.setRandom(this.randomUI.getSign(), this.constantUI.getValue());
+    this.fancifulValue.setProportional(this.proportionalUI.getSign(), this.proportionalUI.getValue());
     this.oninput(this.fancifulValue);
     return null;
   }
 
    onChange() {
+    this.setUniformSign(this.constantUI.getSign());
+    this.fancifulValue.setConstant(this.constantUI.getSign(), this.constantUI.getValue());
+    // this.fancifulValue.setRandom(this.randomUI.getSign(), this.constantUI.getValue());
+    this.fancifulValue.setProportional(this.proportionalUI.getSign(), this.proportionalUI.getValue());
     this.onchange(this.fancifulValue);
     return null;
   }
@@ -228,7 +238,40 @@ class Z4FancifulValueUI extends Z4ComponentUI {
     this.randomUI.setSignVisible(this.fancifulValue.isUniformSign());
     this.proportionalUI.setSignVisible(this.fancifulValue.isUniformSign());
     this.querySelector(".uniform-container").style.display = this.fancifulValue.isUniformSign() ? "block" : "none";
+    this.constantUI.setSign(this.fancifulValue.getConstantSign());
+    this.constantUI.setValue(this.fancifulValue.getConstantValue());
+    this.setUniformSign(this.fancifulValue.getConstantSign());
     return this;
+  }
+
+   setUniformSign(sign) {
+    let str = null;
+    if (sign === Z4Sign.POSITIVE) {
+      str = "positive";
+    } else if (sign === Z4Sign.NEGATIVE) {
+      str = "negative";
+    } else if (sign === Z4Sign.RANDOM) {
+      str = "random";
+    } else {
+      str = "alternate";
+    }
+    this.toggleUniform.setAttribute("data-value", str);
+    this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + str + "-sm.png");
+  }
+
+   getUniformSign() {
+    switch(this.toggleUniform.getAttribute("data-value")) {
+      case "positive":
+        return Z4Sign.POSITIVE;
+      case "negative":
+        return Z4Sign.NEGATIVE;
+      case "random":
+        return Z4Sign.RANDOM;
+      case "alternate":
+        return Z4Sign.alternate();
+      default:
+        return null;
+    }
   }
 
   /**

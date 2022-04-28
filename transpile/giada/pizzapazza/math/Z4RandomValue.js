@@ -5,7 +5,7 @@
  */
 class Z4RandomValue {
 
-   value = 0;
+   value = 0.0;
 
    type = 0;
 

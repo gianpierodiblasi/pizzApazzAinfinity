@@ -33,9 +33,18 @@ class Z4FancifulValue {
   }
 
   /**
-   * Returns the constant value
+   * Returns the sign of the constant component
    *
-   * @return The constant value
+   * @return The sign of the constant component
+   */
+   getConstantSign() {
+    return constantSign;
+  }
+
+  /**
+   * Returns the value of the constant component
+   *
+   * @return The value of the constant component
    */
    getConstantValue() {
     return constantValue;

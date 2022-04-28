@@ -10,7 +10,7 @@ import simulation.bezier.$Bezier;
  */
 public class Z4RandomValue {
 
-  private final int value;
+  private final double value;
   private final int type;
   private final int length;
 
@@ -20,7 +20,7 @@ public class Z4RandomValue {
   private double nextRandom;
   private $Bezier bezierCurve;
 
-  private Z4RandomValue(int value, int type, int length) {
+  private Z4RandomValue(double value, int type, int length) {
     this.value = value;
     this.type = type;
     this.length = length;
@@ -90,7 +90,7 @@ public class Z4RandomValue {
    * @param value The value
    * @return The Z4RandomValue
    */
-  public static Z4RandomValue classic(int value) {
+  public static Z4RandomValue classic(double value) {
     return new Z4RandomValue(value, 0, 0);
   }
 
@@ -101,7 +101,7 @@ public class Z4RandomValue {
    * @param length The curve length
    * @return The Z4RandomValue
    */
-  public static Z4RandomValue bezier(int value, int length) {
+  public static Z4RandomValue bezier(double value, int length) {
     return new Z4RandomValue(value, 1, length);
   }
 
@@ -112,7 +112,7 @@ public class Z4RandomValue {
    * @param length The polyline length
    * @return The Z4RandomValue
    */
-  public static Z4RandomValue polyline(int value, int length) {
+  public static Z4RandomValue polyline(double value, int length) {
     return new Z4RandomValue(value, 2, length);
   }
 
@@ -123,7 +123,7 @@ public class Z4RandomValue {
    * @param length The step length
    * @return The Z4RandomValue
    */
-  public static Z4RandomValue stepped(int value, int length) {
+  public static Z4RandomValue stepped(double value, int length) {
     return new Z4RandomValue(value, 3, length);
   }
 }

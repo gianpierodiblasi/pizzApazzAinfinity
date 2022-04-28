@@ -5,6 +5,7 @@ import def.dom.NodeList;
 import def.js.Date;
 import giada.pizzapazza.Z4Loader;
 import giada.pizzapazza.math.Z4FancifulValue;
+import giada.pizzapazza.math.Z4Sign;
 import giada.pizzapazza.setting.Z4HTMLFactory;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.ui.Z4ComponentUI;
@@ -67,6 +68,9 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
       button.onclick = (event) -> {
         this.toggleUniform.setAttribute("data-value", button.getAttribute("data-value"));
         this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + button.getAttribute("data-value") + "-sm.png");
+        
+        this.fancifulValue.setConstant(this.getUniformSign(), this.constantUI.getValue());
+        this.constantUI.setSign(this.getUniformSign());
         this.onchange.$apply(this.fancifulValue);
         return null;
       };
@@ -111,11 +115,23 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
   }
 
   private Object onInput() {
+    this.setUniformSign(this.constantUI.getSign());
+
+    this.fancifulValue.setConstant(this.constantUI.getSign(), this.constantUI.getValue());
+//    this.fancifulValue.setRandom(this.randomUI.getSign(), this.constantUI.getValue());
+    this.fancifulValue.setProportional(this.proportionalUI.getSign(), this.proportionalUI.getValue());
+
     this.oninput.$apply(this.fancifulValue);
     return null;
   }
 
   private Object onChange() {
+    this.setUniformSign(this.constantUI.getSign());
+
+    this.fancifulValue.setConstant(this.constantUI.getSign(), this.constantUI.getValue());
+//    this.fancifulValue.setRandom(this.randomUI.getSign(), this.constantUI.getValue());
+    this.fancifulValue.setProportional(this.proportionalUI.getSign(), this.proportionalUI.getValue());
+
     this.onchange.$apply(this.fancifulValue);
     return null;
   }
@@ -248,9 +264,45 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
     this.proportionalUI.setSignVisible(this.fancifulValue.isUniformSign());
     this.querySelector(".uniform-container").style.display = this.fancifulValue.isUniformSign() ? "block" : "none";
 
+    this.constantUI.setSign(this.fancifulValue.getConstantSign());
+    this.constantUI.setValue(this.fancifulValue.getConstantValue());
+    this.setUniformSign(this.fancifulValue.getConstantSign());
+
     return this;
   }
 
+  private void setUniformSign(Z4Sign sign) {
+    String str;
+
+    if (sign == Z4Sign.POSITIVE) {
+      str = "positive";
+    } else if (sign == Z4Sign.NEGATIVE) {
+      str = "negative";
+    } else if (sign == Z4Sign.RANDOM) {
+      str = "random";
+    } else {
+      str = "alternate";
+    }
+
+    this.toggleUniform.setAttribute("data-value", str);
+    this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + str + "-sm.png");
+  }
+
+  public Z4Sign getUniformSign() {
+    switch (this.toggleUniform.getAttribute("data-value")) {
+      case "positive":
+        return Z4Sign.POSITIVE;
+      case "negative":
+        return Z4Sign.NEGATIVE;
+      case "random":
+        return Z4Sign.RANDOM;
+      case "alternate":
+        return Z4Sign.alternate();
+      default:
+        return null;
+    }
+  }
+  
   /**
    * Returns the value
    *

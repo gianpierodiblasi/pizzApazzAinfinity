@@ -210,7 +210,7 @@ public class Z4NumberUI extends Z4ComponentUI<Object> {
    * @param value The value
    * @return This Z4NumberUI
    */
-  public Z4NumberUI setValue(int value) {
+  public Z4NumberUI setValue(double value) {
     this.value.value = "" + value;
     return this;
   }
@@ -220,7 +220,7 @@ public class Z4NumberUI extends Z4ComponentUI<Object> {
    *
    * @return The value
    */
-  public Double getValue() {
+  public double getValue() {
     return this.value.valueAsNumber;
   }
 }

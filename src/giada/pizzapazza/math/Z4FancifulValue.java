@@ -10,11 +10,11 @@ import giada.pizzapazza.setting.Z4Setting;
 public class Z4FancifulValue {
 
   private Z4Sign constantSign = Z4Sign.RANDOM;
-  private int constantValue = 0;
+  private double constantValue = 0;
   private Z4Sign randomSign = Z4Sign.RANDOM;
   private Z4RandomValue randomValue = Z4RandomValue.classic(0);
   private Z4Sign proportionalSign = Z4Sign.RANDOM;
-  private int proportionalValue = 0;
+  private double proportionalValue = 0;
   private boolean uniformSign;
 
   /**
@@ -24,18 +24,27 @@ public class Z4FancifulValue {
    * @param constantValue The value of the constant component
    * @return This Z4FancifulValue
    */
-  public Z4FancifulValue setConstant(Z4Sign constantSign, int constantValue) {
+  public Z4FancifulValue setConstant(Z4Sign constantSign, double constantValue) {
     this.constantSign = constantSign;
     this.constantValue = constantValue;
     return this;
   }
 
   /**
-   * Returns the constant value
+   * Returns the sign of the constant component
    *
-   * @return The constant value
+   * @return The sign of the constant component
    */
-  public int getConstantValue() {
+  public Z4Sign getConstantSign() {
+    return constantSign;
+  }
+
+  /**
+   * Returns the value of the constant component
+   *
+   * @return The value of the constant component
+   */
+  public double getConstantValue() {
     return constantValue;
   }
 
@@ -59,7 +68,7 @@ public class Z4FancifulValue {
    * @param proportionalValue The value of the proportional component
    * @return This Z4FancifulValue
    */
-  public Z4FancifulValue setProportional(Z4Sign proportionalSign, int proportionalValue) {
+  public Z4FancifulValue setProportional(Z4Sign proportionalSign, double proportionalValue) {
     this.proportionalSign = proportionalSign;
     this.proportionalValue = proportionalValue;
     return this;
