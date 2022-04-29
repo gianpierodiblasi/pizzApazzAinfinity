@@ -1,22 +1,19 @@
 <?xml version="1.0"?>
 <svg width="96" height="96" xmlns="http://www.w3.org/2000/svg">
- <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
-
- <g>
-  <title>Layer 1</title>
-  <line stroke="#ff0000" fill="none" stroke-width="5" x1="38.589038" y1="45.095888" x2="38.417805" y2="7.424655" id="svg_8"/>
-  <line fill="none" stroke="#000000" stroke-width="5" x1="0.232874" y1="48.000001" x2="95.609584" y2="48.000001" id="svg_1"/>
-  <line stroke="#ff0000" fill="none" stroke-width="5" x1="3.143833" y1="45.095887" x2="2.9726" y2="13.589039" id="svg_2"/>
-  <line stroke="#ff0000" fill="none" stroke-width="5" x1="24.37671" y1="45.095888" x2="24.205477" y2="12.390407" id="svg_6"/>
-  <line stroke="#ff0000" fill="none" stroke-width="5" x1="31.56849" y1="45.095886" x2="31.397257" y2="39.273969" id="svg_9"/>
-  <line stroke="#ff0000" id="svg_4" fill="none" stroke-width="5" x1="52.287666" y1="45.095888" x2="52.116433" y2="0.917806"/>
-  <line stroke="#ff0000" id="svg_5" fill="none" stroke-width="5" x1="80.54109" y1="45.09589" x2="80.369857" y2="35.849315"/>
-  <line stroke="#ff0000" id="svg_10" fill="none" stroke-width="5" x1="45.267118" y1="45.095887" x2="45.095885" y2="25.746575"/>
-  <line stroke="#ff0000" id="svg_16" fill="none" stroke-width="5" x1="10.164382" y1="45.095887" x2="9.993149" y2="1.602735"/>
-  <line stroke="#ff0000" id="svg_17" fill="none" stroke-width="5" x1="17.356162" y1="45.095887" x2="17.184929" y2="27.630134"/>
-  <line stroke="#ff0000" id="svg_18" fill="none" stroke-width="5" x1="59.479447" y1="45.095889" x2="59.308214" y2="18.554794"/>
-  <line stroke="#ff0000" id="svg_19" fill="none" stroke-width="5" x1="66.671228" y1="45.09589" x2="66.499995" y2="38.417804"/>
-  <line stroke="#ff0000" id="svg_20" fill="none" stroke-width="5" x1="73.863008" y1="45.09589" x2="73.691775" y2="13.246573"/>
-  <line stroke="#ff0000" id="svg_21" fill="none" stroke-width="5" x1="87.219172" y1="45.095889" x2="87.047939" y2="21.465753"/>
- </g>
+  <g>
+    <line stroke="#ff0000" fill="none" stroke-width="5" x1="38.589038" y1="45.095888" x2="38.417805" y2="7.424655"/>
+    <line fill="none" stroke="#000000" stroke-width="5" x1="0.232874" y1="48.000001" x2="95.609584" y2="48.000001"/>
+    <line stroke="#ff0000" fill="none" stroke-width="5" x1="3.143833" y1="45.095887" x2="2.9726" y2="13.589039"/>
+    <line stroke="#ff0000" fill="none" stroke-width="5" x1="24.37671" y1="45.095888" x2="24.205477" y2="12.390407"/>
+    <line stroke="#ff0000" fill="none" stroke-width="5" x1="31.56849" y1="45.095886" x2="31.397257" y2="39.273969"/>
+    <line stroke="#ff0000" fill="none" stroke-width="5" x1="52.287666" y1="45.095888" x2="52.116433" y2="0.917806"/>
+    <line stroke="#ff0000" fill="none" stroke-width="5" x1="80.54109" y1="45.09589" x2="80.369857" y2="35.849315"/>
+    <line stroke="#ff0000" fill="none" stroke-width="5" x1="45.267118" y1="45.095887" x2="45.095885" y2="25.746575"/>
+    <line stroke="#ff0000" fill="none" stroke-width="5" x1="10.164382" y1="45.095887" x2="9.993149" y2="1.602735"/>
+    <line stroke="#ff0000" fill="none" stroke-width="5" x1="17.356162" y1="45.095887" x2="17.184929" y2="27.630134"/>
+    <line stroke="#ff0000" fill="none" stroke-width="5" x1="59.479447" y1="45.095889" x2="59.308214" y2="18.554794"/>
+    <line stroke="#ff0000" fill="none" stroke-width="5" x1="66.671228" y1="45.09589" x2="66.499995" y2="38.417804"/>
+    <line stroke="#ff0000" fill="none" stroke-width="5" x1="73.863008" y1="45.09589" x2="73.691775" y2="13.246573"/>
+    <line stroke="#ff0000" fill="none" stroke-width="5" x1="87.219172" y1="45.095889" x2="87.047939" y2="21.465753"/>
+  </g>
 </svg>
