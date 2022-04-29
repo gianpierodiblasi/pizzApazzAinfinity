@@ -30,6 +30,9 @@ label.z4-guided-tour {
 .sign-label-not-visible, .sign-toggle-not-visible {
   display: none;
 }
+.sign-label-never-visible, .sign-toggle-never-visible {
+  display: none !important;
+}
 
 /* FANCIFUL VALUE */
 .fanciful-container-horizontal {

@@ -41,6 +41,14 @@ class test_fancifulvalue1 {
       ui2.setProportionalVisible((document.getElementById("proportional-visible")).checked);
       return null;
     };
+    let onSign = (event) => {
+      ui1.setSignsVisible((document.getElementById("constant-sign-visible")).checked, (document.getElementById("random-sign-visible")).checked, (document.getElementById("proportional-sign-visible")).checked);
+      ui2.setSignsVisible((document.getElementById("constant-sign-visible")).checked, (document.getElementById("random-sign-visible")).checked, (document.getElementById("proportional-sign-visible")).checked);
+      return null;
+    };
+    document.getElementById("constant-sign-visible").onchange = onSign;
+    document.getElementById("random-sign-visible").onchange = onSign;
+    document.getElementById("proportional-sign-visible").onchange = onSign;
   }
 
   static  stringify(object) {

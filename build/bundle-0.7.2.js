@@ -1558,7 +1558,7 @@ class Z4NumberUI extends Z4ComponentUI {
       str = "alternate";
     }
     this.toggle.setAttribute("data-value", str);
-    this.toggleImg.setAttribute("src", Z4NumberUI.PATH + "z4sign_" + str + "-sm.png");
+    this.toggleImg.setAttribute("src", Z4NumberUI.PATH + "z4sign_" + str + ".svg");
     return this;
   }
 
@@ -1736,6 +1736,7 @@ class Z4FancifulValueUI extends Z4ComponentUI {
     this.constantUI.onchange = (event) => this.onChange();
     this.randomUI.onchange = (event) => this.onChange();
     this.proportionalUI.onchange = (event) => this.onChange();
+    this.setValue(this.fancifulValue);
   }
 
    onInput() {
@@ -1791,9 +1792,11 @@ class Z4FancifulValueUI extends Z4ComponentUI {
 
   /**
    * Sets the visibility of the signs
+   *
    * @param constant true to make the constant sign visible, false otherwise
    * @param random true to make the random sign visible, false otherwise
-   * @param proportional true to make the proportional sign visible, false otherwise
+   * @param proportional true to make the proportional sign visible, false
+   * otherwise
    * @return
    */
    setSignsVisible(constant, random, proportional) {
@@ -1947,22 +1950,43 @@ class Z4FancifulValueUI extends Z4ComponentUI {
     let bR = this.querySelector(".fanciful-random").classList.contains("fanciful-random-not-visible");
     let bP = this.querySelector(".fanciful-proportional").classList.contains("fanciful-proportional-not-visible");
     this.constantUI.setSignVisible(!this.uniformCheck.checked || (bR && bP));
-    this.randomUI.setSignVisible(!this.uniformCheck.checked);
+    this.randomUI.setSignVisible(!this.constantSignVisible || !this.uniformCheck.checked);
     this.randomUI.querySelector(".number-group").classList.add("input-group");
-    this.proportionalUI.setSignVisible(!this.uniformCheck.checked);
-    if (!this.uniformCheck.checked || (bR && bP)) {
+    this.proportionalUI.setSignVisible(!this.constantSignVisible || !this.uniformCheck.checked);
+    if (this.constantSignVisible) {
+      this.constantUI.querySelector(".sign-label").classList.remove("sign-label-never-visible");
+      this.constantUI.querySelector(".dropdown-toggle").classList.remove("sign-toggle-never-visible");
+    } else {
+      this.constantUI.querySelector(".sign-label").classList.add("sign-label-never-visible");
+      this.constantUI.querySelector(".dropdown-toggle").classList.add("sign-toggle-never-visible");
+    }
+    if (this.randomSignVisible) {
+      this.randomUI.querySelector(".sign-label").classList.remove("sign-label-never-visible");
+      this.randomUI.querySelector(".dropdown-toggle").classList.remove("sign-toggle-never-visible");
+    } else {
+      this.randomUI.querySelector(".sign-label").classList.add("sign-label-never-visible");
+      this.randomUI.querySelector(".dropdown-toggle").classList.add("sign-toggle-never-visible");
+    }
+    if (this.proportionalSignVisible) {
+      this.proportionalUI.querySelector(".sign-label").classList.remove("sign-label-never-visible");
+      this.proportionalUI.querySelector(".dropdown-toggle").classList.remove("sign-toggle-never-visible");
+    } else {
+      this.proportionalUI.querySelector(".sign-label").classList.add("sign-label-never-visible");
+      this.proportionalUI.querySelector(".dropdown-toggle").classList.add("sign-toggle-never-visible");
+    }
+    if (!this.constantSignVisible || !this.uniformCheck.checked || (bR && bP)) {
       this.querySelector(".uniform-container").classList.add("uniform-container-not-visible");
     } else {
       this.querySelector(".uniform-container").classList.remove("uniform-container-not-visible");
     }
-    if (bR && bP) {
+    if (!this.constantSignVisible || (bR && bP)) {
       this.querySelector(".uniform-label").classList.add("uniform-label-not-visible");
       this.uniformCheck.classList.add("uniform-check-not-visible");
     } else {
       this.querySelector(".uniform-label").classList.remove("uniform-label-not-visible");
       this.uniformCheck.classList.remove("uniform-check-not-visible");
     }
-    if (bR) {
+    if (this.constantSignVisible && bR) {
       this.constantUI.querySelector(".sign-label").classList.add("sign-label-force-visible");
       this.constantUI.querySelector(".dropdown-toggle").classList.add("sign-toggle-force-visible");
       this.querySelector(".uniform-container").classList.add("uniform-container-force-not-visible");

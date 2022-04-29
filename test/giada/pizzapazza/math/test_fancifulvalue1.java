@@ -1,11 +1,13 @@
 package giada.pizzapazza.math;
 
+import def.dom.Event;
 import def.js.Array;
 import def.js.JSON;
 import giada.pizzapazza.math.ui.Z4FancifulValueUI;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.setting.Z4Setting;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import simulation.dom.$HTMLElement;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.$typeof;
@@ -68,6 +70,23 @@ public class test_fancifulvalue1 {
       ui2.setProportionalVisible((($HTMLElement) document.getElementById("proportional-visible")).checked);
       return null;
     };
+
+    Function<Event, Object> onSign = (event) -> {
+      ui1.setSignsVisible(
+              (($HTMLElement) document.getElementById("constant-sign-visible")).checked,
+              (($HTMLElement) document.getElementById("random-sign-visible")).checked,
+              (($HTMLElement) document.getElementById("proportional-sign-visible")).checked
+      );
+      ui2.setSignsVisible(
+              (($HTMLElement) document.getElementById("constant-sign-visible")).checked,
+              (($HTMLElement) document.getElementById("random-sign-visible")).checked,
+              (($HTMLElement) document.getElementById("proportional-sign-visible")).checked
+      );
+      return null;
+    };
+    document.getElementById("constant-sign-visible").onchange = onSign;
+    document.getElementById("random-sign-visible").onchange = onSign;
+    document.getElementById("proportional-sign-visible").onchange = onSign;
   }
 
   private static String stringify(Object object) {
