@@ -1,3 +1,14 @@
+/* GENERAL */
+.with-borded-children > div {
+  border: solid rgba(128,128,128,0.5) 1px;
+  border-radius: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.with-borded-children > div:not(:first-child) {
+  border-top: none;
+}
+
 /* GUIDED TOUR */
 .z4-guided-tour {
   animation: z4-guided-tour-blinking 2s infinite;
@@ -32,6 +43,9 @@ label.z4-guided-tour {
 }
 .sign-label-never-visible, .sign-toggle-never-visible {
   display: none !important;
+}
+.with-sing-not-visible {
+  border-radius: 0.25rem !important;
 }
 
 /* FANCIFUL VALUE */

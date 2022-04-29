@@ -391,23 +391,29 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue, Z4Fanciful
     if (this.constantSignVisible) {
       this.constantUI.querySelector(".sign-label").classList.remove("sign-label-never-visible");
       this.constantUI.querySelector(".dropdown-toggle").classList.remove("sign-toggle-never-visible");
+//      this.constantUI.querySelector(".form-control").classList.remove("with-sing-not-visible");
     } else {
       this.constantUI.querySelector(".sign-label").classList.add("sign-label-never-visible");
       this.constantUI.querySelector(".dropdown-toggle").classList.add("sign-toggle-never-visible");
+//      this.constantUI.querySelector(".form-control").classList.add("with-sing-not-visible");
     }
     if (this.randomSignVisible) {
       this.randomUI.querySelector(".sign-label").classList.remove("sign-label-never-visible");
       this.randomUI.querySelector(".dropdown-toggle").classList.remove("sign-toggle-never-visible");
+//      this.randomUI.querySelector(".form-control").classList.remove("with-sing-not-visible");
     } else {
       this.randomUI.querySelector(".sign-label").classList.add("sign-label-never-visible");
       this.randomUI.querySelector(".dropdown-toggle").classList.add("sign-toggle-never-visible");
+//      this.randomUI.querySelector(".form-control").classList.add("with-sing-not-visible");
     }
     if (this.proportionalSignVisible) {
       this.proportionalUI.querySelector(".sign-label").classList.remove("sign-label-never-visible");
       this.proportionalUI.querySelector(".dropdown-toggle").classList.remove("sign-toggle-never-visible");
+//      this.proportionalUI.querySelector(".form-control").classList.remove("with-sing-not-visible");
     } else {
       this.proportionalUI.querySelector(".sign-label").classList.add("sign-label-never-visible");
       this.proportionalUI.querySelector(".dropdown-toggle").classList.add("sign-toggle-never-visible");
+//      this.proportionalUI.querySelector(".form-control").classList.add("with-sing-not-visible");
     }
 
     if (!this.constantSignVisible || !this.uniformCheck.checked || (bR && bP)) {
