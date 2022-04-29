@@ -1,11 +1,11 @@
 /* GENERAL */
-.with-borded-children > div {
+.with-borded-children-vertical > div {
   border: solid rgba(128,128,128,0.5) 1px;
   border-radius: 10px;
   padding-left: 5px;
   padding-right: 5px;
 }
-.with-borded-children > div:not(:first-child) {
+.with-borded-children-vertical > div:not(:first-child) {
   border-top: none;
 }
 
@@ -41,12 +41,6 @@ label.z4-guided-tour {
 .sign-label-not-visible, .sign-toggle-not-visible {
   display: none;
 }
-/*.sign-label-never-visible, .sign-toggle-never-visible {
-  display: none !important;
-}*/
-/*.with-sing-not-visible {
-  border-radius: 0.25rem !important;
-}*/
 
 /* FANCIFUL VALUE */
 .fanciful-container-horizontal {
@@ -64,9 +58,3 @@ label.z4-guided-tour {
 .toggle-uniform::after {
   vertical-align: 0.254em;
 }
-
-/*.uniform-container-not-visible,
-.uniform-check-not-visible, .uniform-label-not-visible,
-.fanciful-random-not-visible , .fanciful-proportional-not-visible {
-  display: none;
-}*/

@@ -5,11 +5,11 @@
  */
 class Z4StamperUI extends Z4ComponentUI {
 
-   intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY").setProportionalVisible(false).setSignsVisible(false, true, true).appendTo(this.querySelector(".stamper-container"));
+   intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY").setComponentsVisible(true, true, false).setSignsVisible(false, true, true).appendTo(this.querySelector(".stamper-container"));
 
-   multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY").setProportionalVisible(false).setSignsVisible(false, true, true).setConstantRange(1, 999999999).appendTo(this.querySelector(".stamper-container"));
+   multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY").setComponentsVisible(true, true, false).setSignsVisible(false, true, true).setConstantRange(1, 999999999).appendTo(this.querySelector(".stamper-container"));
 
-   push = new Z4FancifulValueUI().setValueLabel("PUSH").setProportionalVisible(false).setSignsVisible(false, true, true).appendTo(this.querySelector(".stamper-container"));
+   push = new Z4FancifulValueUI().setValueLabel("PUSH").setComponentsVisible(true, true, false).setSignsVisible(false, true, true).appendTo(this.querySelector(".stamper-container"));
 
    stamper = new Z4Stamper();
 

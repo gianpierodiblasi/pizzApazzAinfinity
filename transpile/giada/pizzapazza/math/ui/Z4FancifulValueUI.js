@@ -39,6 +39,8 @@ class Z4FancifulValueUI extends Z4ComponentUI {
 
    proportionalVisible = true;
 
+   selector = new Array();
+
    applySpin = () => this.spin();
 
    isApplySpin = false;
@@ -319,79 +321,15 @@ class Z4FancifulValueUI extends Z4ComponentUI {
   }
 
    setUI() {
-    // if (visible) {
-    // this.querySelector(".fanciful-random").classList.remove("fanciful-random-not-visible");
-    // } else {
-    // this.querySelector(".fanciful-random").classList.add("fanciful-random-not-visible");
-    // }
-    // if (visible) {
-    // this.querySelector(".fanciful-proportional").classList.remove("fanciful-proportional-not-visible");
-    // } else {
-    // this.querySelector(".fanciful-proportional").classList.add("fanciful-proportional-not-visible");
-    // }
-    // boolean bR = this.querySelector(".fanciful-random").classList.contains("fanciful-random-not-visible");
-    // boolean bP = this.querySelector(".fanciful-proportional").classList.contains("fanciful-proportional-not-visible");
-    // 
-    // this.constantUI.setSignVisible(!this.uniformCheck.checked || (bR && bP));
-    // this.randomUI.setSignVisible(!this.constantSignVisible || !this.uniformCheck.checked);
-    // this.randomUI.querySelector(".number-group").classList.add("input-group");
-    // this.proportionalUI.setSignVisible(!this.constantSignVisible || !this.uniformCheck.checked);
-    // 
-    // if (this.constantSignVisible) {
-    // this.constantUI.querySelector(".sign-label").classList.remove("sign-label-never-visible");
-    // this.constantUI.querySelector(".dropdown-toggle").classList.remove("sign-toggle-never-visible");
-    // //      this.constantUI.querySelector(".form-control").classList.remove("with-sing-not-visible");
-    // } else {
-    // this.constantUI.querySelector(".sign-label").classList.add("sign-label-never-visible");
-    // this.constantUI.querySelector(".dropdown-toggle").classList.add("sign-toggle-never-visible");
-    // //      this.constantUI.querySelector(".form-control").classList.add("with-sing-not-visible");
-    // }
-    // if (this.randomSignVisible) {
-    // this.randomUI.querySelector(".sign-label").classList.remove("sign-label-never-visible");
-    // this.randomUI.querySelector(".dropdown-toggle").classList.remove("sign-toggle-never-visible");
-    // //      this.randomUI.querySelector(".form-control").classList.remove("with-sing-not-visible");
-    // } else {
-    // this.randomUI.querySelector(".sign-label").classList.add("sign-label-never-visible");
-    // this.randomUI.querySelector(".dropdown-toggle").classList.add("sign-toggle-never-visible");
-    // //      this.randomUI.querySelector(".form-control").classList.add("with-sing-not-visible");
-    // }
-    // if (this.proportionalSignVisible) {
-    // this.proportionalUI.querySelector(".sign-label").classList.remove("sign-label-never-visible");
-    // this.proportionalUI.querySelector(".dropdown-toggle").classList.remove("sign-toggle-never-visible");
-    // //      this.proportionalUI.querySelector(".form-control").classList.remove("with-sing-not-visible");
-    // } else {
-    // this.proportionalUI.querySelector(".sign-label").classList.add("sign-label-never-visible");
-    // this.proportionalUI.querySelector(".dropdown-toggle").classList.add("sign-toggle-never-visible");
-    // //      this.proportionalUI.querySelector(".form-control").classList.add("with-sing-not-visible");
-    // }
-    // 
-    // if (!this.constantSignVisible || !this.uniformCheck.checked || (bR && bP)) {
-    // this.querySelector(".uniform-container").classList.add("uniform-container-not-visible");
-    // } else {
-    // this.querySelector(".uniform-container").classList.remove("uniform-container-not-visible");
-    // }
-    // 
-    // if (!this.constantSignVisible || (bR && bP)) {
-    // this.querySelector(".uniform-label").classList.add("uniform-label-not-visible");
-    // this.uniformCheck.classList.add("uniform-check-not-visible");
-    // } else {
-    // this.querySelector(".uniform-label").classList.remove("uniform-label-not-visible");
-    // this.uniformCheck.classList.remove("uniform-check-not-visible");
-    // }
-    // 
-    // if (this.constantSignVisible && bR) {
-    // this.constantUI.querySelector(".sign-label").classList.add("sign-label-force-visible");
-    // this.constantUI.querySelector(".dropdown-toggle").classList.add("sign-toggle-force-visible");
-    // this.querySelector(".uniform-container").classList.add("uniform-container-force-not-visible");
-    // this.querySelector(".uniform-label").classList.add("uniform-label-force-not-visible");
-    // this.uniformCheck.classList.add("uniform-check-force-not-visible");
-    // } else {
-    // this.constantUI.querySelector(".sign-label").classList.remove("sign-label-force-visible");
-    // this.constantUI.querySelector(".dropdown-toggle").classList.remove("sign-toggle-force-visible");
-    // this.querySelector(".uniform-container").classList.remove("uniform-container-force-not-visible");
-    // this.querySelector(".uniform-label").classList.remove("uniform-label-force-not-visible");
-    // this.uniformCheck.classList.remove("uniform-check-force-not-visible");
-    // }
+    this.selector.forEach(sel => {
+      this.querySelector(".form-check").classList.remove(sel);
+      this.querySelector(".fanciful-container").classList.remove(sel);
+    });
+    this.selector = new Array("cv-" + this.constantVisible, "rv-" + this.randomVisible, "pv-" + this.proportionalVisible, "csv-" + this.constantSignVisible, "rsv-" + this.randomSignVisible, "psv-" + this.proportionalSignVisible, "u-" + this.uniformCheck.checked);
+    this.selector.forEach(sel => {
+      this.querySelector(".form-check").classList.add(sel);
+      this.querySelector(".fanciful-container").classList.add(sel);
+    });
   }
 
    setUniformSign(sign) {
