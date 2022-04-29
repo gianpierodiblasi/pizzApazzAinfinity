@@ -4,6 +4,7 @@ import def.js.JSON;
 import giada.pizzapazza.math.ui.Z4NumberUI;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.setting.Z4Setting;
+import simulation.dom.$HTMLElement;
 import static simulation.js.$Globals.document;
 
 /**
@@ -37,12 +38,18 @@ public class test_number1 {
     ui1.oninput = (Object) -> document.getElementById("test2").textContent = "ONINPUT " + ui1.getValue() + " " + JSON.stringify(ui1.getSign());
     ui1.onchange = (Object) -> document.getElementById("test2").textContent = "ONCHANGE " + ui1.getValue() + " " + JSON.stringify(ui1.getSign());
     document.getElementById("test2").textContent = ui1.getValue() + " " + JSON.stringify(ui1.getSign());
-    
-    Z4NumberUI ui2 = new Z4NumberUI().setRange(-30, 80).setSignVisible(false);
+
+    Z4NumberUI ui2 = new Z4NumberUI().setRange(-30, 80);
     ui2.appendTo(document.querySelector("#test3"));
     ui2.oninput = (Object) -> document.getElementById("test4").textContent = "ONINPUT " + ui2.getValue() + " " + JSON.stringify(ui2.getSign());
     ui2.onchange = (Object) -> document.getElementById("test4").textContent = "ONCHANGE " + ui2.getValue() + " " + JSON.stringify(ui2.getSign());
     document.getElementById("test4").textContent = ui2.getValue() + " " + JSON.stringify(ui2.getSign());
+
+    document.getElementById("sign-visible").onchange = (event) -> {
+      ui1.setSignVisible((($HTMLElement) document.getElementById("sign-visible")).checked);
+      ui2.setSignVisible((($HTMLElement) document.getElementById("sign-visible")).checked);
+      return null;
+    };
   }
 
   private test_number1() {

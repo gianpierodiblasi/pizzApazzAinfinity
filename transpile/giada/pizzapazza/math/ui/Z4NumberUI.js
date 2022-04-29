@@ -5,13 +5,13 @@
  */
 class Z4NumberUI extends Z4ComponentUI {
 
-   toggle = this.querySelector(".dropdown-toggle");
+   toggle = this.querySelector(".sign-button");
 
-   toggleImg = this.querySelector(".dropdown-toggle img");
+   toggleImg = this.querySelector(".sign-button img");
 
-   value = this.querySelector(".form-control");
+   value = this.querySelector(".value");
 
-   spinner = this.querySelector(".form-range");
+   spinner = this.querySelector(".spinner");
 
    applySpin = () => this.spin();
 
@@ -118,12 +118,10 @@ class Z4NumberUI extends Z4ComponentUI {
       this.querySelector(".number-group").classList.add("input-group");
       this.querySelector(".sign-label").classList.remove("sign-label-not-visible");
       this.toggle.classList.remove("sign-toggle-not-visible");
-      // this.value.classList.remove("with-sing-not-visible");
     } else {
       this.querySelector(".number-group").classList.remove("input-group");
       this.querySelector(".sign-label").classList.add("sign-label-not-visible");
       this.toggle.classList.add("sign-toggle-not-visible");
-      // this.value.classList.add("with-sing-not-visible");
     }
     return this;
   }

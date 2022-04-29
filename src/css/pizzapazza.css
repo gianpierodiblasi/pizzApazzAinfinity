@@ -41,12 +41,12 @@ label.z4-guided-tour {
 .sign-label-not-visible, .sign-toggle-not-visible {
   display: none;
 }
-.sign-label-never-visible, .sign-toggle-never-visible {
+/*.sign-label-never-visible, .sign-toggle-never-visible {
   display: none !important;
-}
-.with-sing-not-visible {
+}*/
+/*.with-sing-not-visible {
   border-radius: 0.25rem !important;
-}
+}*/
 
 /* FANCIFUL VALUE */
 .fanciful-container-horizontal {
@@ -65,8 +65,8 @@ label.z4-guided-tour {
   vertical-align: 0.254em;
 }
 
-.uniform-container-not-visible,
+/*.uniform-container-not-visible,
 .uniform-check-not-visible, .uniform-label-not-visible,
 .fanciful-random-not-visible , .fanciful-proportional-not-visible {
   display: none;
-}
+}*/

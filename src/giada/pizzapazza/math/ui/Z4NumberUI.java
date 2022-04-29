@@ -20,10 +20,10 @@ import static simulation.js.$Globals.setTimeout;
  */
 public class Z4NumberUI extends Z4ComponentUI<Object, Z4NumberUI> {
 
-  private final HTMLElement toggle = this.querySelector(".dropdown-toggle");
-  private final HTMLElement toggleImg = this.querySelector(".dropdown-toggle img");
-  private final $HTMLElement value = this.querySelector(".form-control");
-  private final $HTMLElement spinner = this.querySelector(".form-range");
+  private final HTMLElement toggle = this.querySelector(".sign-button");
+  private final HTMLElement toggleImg = this.querySelector(".sign-button img");
+  private final $HTMLElement value = this.querySelector(".value");
+  private final $HTMLElement spinner = this.querySelector(".spinner");
 
   private final $Apply_0_Void applySpin = () -> this.spin();
   private boolean isApplySpin = false;
@@ -139,15 +139,11 @@ public class Z4NumberUI extends Z4ComponentUI<Object, Z4NumberUI> {
 
       this.querySelector(".sign-label").classList.remove("sign-label-not-visible");
       this.toggle.classList.remove("sign-toggle-not-visible");
-
-//      this.value.classList.remove("with-sing-not-visible");
     } else {
       this.querySelector(".number-group").classList.remove("input-group");
 
       this.querySelector(".sign-label").classList.add("sign-label-not-visible");
       this.toggle.classList.add("sign-toggle-not-visible");
-
-//      this.value.classList.add("with-sing-not-visible");
     }
 
     return this;
