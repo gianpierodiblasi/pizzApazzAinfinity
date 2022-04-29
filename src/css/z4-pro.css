@@ -154,15 +154,25 @@
   border-radius: 0.25rem !important;
 }
 
-
-
-
-
-.z4-pro .cv-true.rv-false.pv-true.csv-true.psv-true.u-true {
+.z4-pro .cv-true.rv-false.pv-true.csv-true.psv-true.u-true .sign-label,
+.z4-pro .cv-true.rv-false.pv-true.csv-true.psv-true.u-true .sign-button,
+.z4-pro .cv-true.rv-false.pv-true.csv-true.psv-true.u-true .fanciful-random {
+  display: none;
 }
-.z4-pro .cv-true.rv-false.pv-true.csv-true.psv-true.u-false {
+.z4-pro .cv-true.rv-false.pv-true.csv-true.psv-true.u-true .fanciful-costant input,
+.z4-pro .cv-true.rv-false.pv-true.csv-true.psv-true.u-true .fanciful-proportional input {
+  border-radius: 0.25rem !important;
 }
-.z4-pro .cv-true.rv-false.pv-true.csv-true.psv-false.u-true {
+
+.z4-pro .cv-true.rv-false.pv-true.csv-true.psv-true.u-false .uniform-container,
+.z4-pro .cv-true.rv-false.pv-true.csv-true.psv-true.u-false .fanciful-random {
+  display: none;
+}
+
+
+
+
+/*.z4-pro .cv-true.rv-false.pv-true.csv-true.psv-false.u-true {
 }
 .z4-pro .cv-true.rv-false.pv-true.csv-true.psv-false.u-false {
 }
@@ -191,7 +201,7 @@
 .z4-pro .cv-false.rv-false.pv-true.psv-true {
 }
 .z4-pro .cv-false.rv-false.pv-true.psv-false {
-}
+}*/
 
 .z4-pro .cv-false.rv-false.pv-false {
   display: none !important;
