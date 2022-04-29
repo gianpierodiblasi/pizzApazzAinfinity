@@ -181,9 +181,20 @@
   border-radius: 0.25rem !important;
 }
 
-/*
-.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-true {
+.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-true .uniform-check,
+.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-true .uniform-label,
+.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-true .uniform-container,
+.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-true .fanciful-costant .sign-label,
+.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-true .fanciful-costant .sign-button,
+.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-true .fanciful-random {
+  display: none;
 }
+.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-true .fanciful-costant input {
+  border-radius: 0.25rem !important;
+}
+
+/*
+
 .z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false {
 }
 .z4-pro .cv-true.rv-false.pv-false.csv-true.u-true {
