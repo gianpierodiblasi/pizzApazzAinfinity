@@ -1,5 +1,6 @@
 package giada.pizzapazza.iterator;
 
+import giada.pizzapazza.iterator.ui.Z4StamperUI;
 import giada.pizzapazza.math.Z4FancifulValue;
 import giada.pizzapazza.math.Z4RandomValue;
 import giada.pizzapazza.math.Z4Sign;
@@ -42,12 +43,15 @@ public class test_stamper1 {
     $OffscreenCanvas offscreen = new $OffscreenCanvas(canvas.width, canvas.height);
     $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
 
-    Z4Stamper stamper = new Z4Stamper();
-    stamper.setRotation(new Z4FancifulValue().setRandom(Z4Sign.RANDOM, Z4RandomValue.classic(45)), Z4Rotation.FIXED);
-    stamper.drawDemo(offscreenCtx, canvas.width, canvas.height);
-
-    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-    canvasCtx.drawImage(offscreen, 0, 0);
+//    Z4Stamper stamper = new Z4Stamper();
+//    stamper.setRotation(new Z4FancifulValue().setRandom(Z4Sign.RANDOM, Z4RandomValue.classic(45)), Z4Rotation.FIXED);
+//    stamper.drawDemo(offscreenCtx, canvas.width, canvas.height);
+//
+//    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+//    canvasCtx.drawImage(offscreen, 0, 0);
+//
+    Z4StamperUI ui = new Z4StamperUI();
+    ui.appendTo(document.getElementById("stamper"));
   }
 
   private test_stamper1() {

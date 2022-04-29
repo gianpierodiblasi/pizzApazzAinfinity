@@ -33,7 +33,7 @@ import simulation.js.$Object;
  *
  * @author gianpiero.di.blasi
  */
-public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
+public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor, Z4TemporalColorUI> {
 
   private final $Canvas canvas = ($Canvas) this.querySelector(".canvas");
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
@@ -131,7 +131,7 @@ public class Z4TemporalColorUI extends Z4ComponentUI<Z4TemporalColor> {
     this.querySelector(".temporal-mirrored-label").setAttribute("for", this.temporalMirroredCheck.id);
     this.spatialMirroredCheck.id = "mirrored_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
     this.querySelector(".spatial-mirrored-label").setAttribute("for", this.spatialMirroredCheck.id);
-    
+
     this.temporalFormRange.oninput = (event) -> this.setRipple(5);
     this.spatialFormRange.oninput = (event) -> this.setRipple(5);
     this.temporalFormRange.onchange = (event) -> this.setRipple(1);

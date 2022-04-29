@@ -22,7 +22,7 @@ import static simulation.js.$Globals.setTimeout;
  *
  * @author gianpiero.di.blasi
  */
-public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
+public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue, Z4FancifulValueUI> {
 
   private final $HTMLElement uniformCheck = this.querySelector(".uniform-check");
   private final HTMLElement toggleUniform = this.querySelector(".toggle-uniform");
@@ -50,7 +50,7 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
   private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4FancifulValueUI.html");
 
   /**
-   * Creates a Z4ColorUI
+   * Creates a Z4FancifulValueUI
    */
   @SuppressWarnings("StringEquality")
   public Z4FancifulValueUI() {
@@ -409,7 +409,7 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
       this.proportionalUI.querySelector(".sign-label").classList.add("sign-label-never-visible");
       this.proportionalUI.querySelector(".dropdown-toggle").classList.add("sign-toggle-never-visible");
     }
-    
+
     if (!this.constantSignVisible || !this.uniformCheck.checked || (bR && bP)) {
       this.querySelector(".uniform-container").classList.add("uniform-container-not-visible");
     } else {

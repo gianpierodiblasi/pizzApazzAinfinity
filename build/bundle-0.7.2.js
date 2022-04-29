@@ -344,6 +344,7 @@ class Z4ImageFactory {
  * The abstract class of all UI components
  *
  * @param <T>
+ * @param <S>
  * @author gianpiero.di.blasi
  */
 class Z4ComponentUI {
@@ -1423,7 +1424,7 @@ class Z4NumberUI extends Z4ComponentUI {
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4NumberUI.html");
 
   /**
-   * Creates a Z4ColorUI
+   * Creates a Z4NumberUI
    */
   constructor() {
     super(Z4NumberUI.UI);
@@ -1646,7 +1647,7 @@ class Z4FancifulValueUI extends Z4ComponentUI {
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4FancifulValueUI.html");
 
   /**
-   * Creates a Z4ColorUI
+   * Creates a Z4FancifulValueUI
    */
   constructor() {
     super(Z4FancifulValueUI.UI);
@@ -4538,7 +4539,7 @@ class Z4Stamper extends Z4PointIterator {
 
    multiplicity = new Z4FancifulValue().setConstant(Z4Sign.POSITIVE, 1);
 
-   push = new Z4FancifulValue();
+   push = new Z4FancifulValue().setConstant(Z4Sign.POSITIVE, 0);
 
    currentMultiplicityCounter = 0;
 
@@ -4558,6 +4559,33 @@ class Z4Stamper extends Z4PointIterator {
     } else {
       return false;
     }
+  }
+
+  /**
+   * Returns the intensity
+   *
+   * @return The intensity
+   */
+   getIntensity() {
+    return this.intensity;
+  }
+
+  /**
+   * Returns the multiplicity
+   *
+   * @return The multiplicity
+   */
+   getMultiplicity() {
+    return this.multiplicity;
+  }
+
+  /**
+   * Returns the push
+   *
+   * @return The push
+   */
+   getPush() {
+    return this.push;
   }
 
    next() {
@@ -4594,8 +4622,6 @@ class Z4Stamper extends Z4PointIterator {
   }
 
    drawDemo(context, width, height) {
-    this.multiplicity.setConstant(Z4Sign.POSITIVE, 3);
-    this.push.setConstant(Z4Sign.POSITIVE, 25);
     let arrowPainter = new Z4ArrowPainter();
     let gradientColor = new Z4GradientColor();
     this.initDraw(width, height).forEach(point => {
@@ -4632,5 +4658,53 @@ class Z4Stamper extends Z4PointIterator {
       }
     }
     return array;
+  }
+}
+/**
+ * The component to edit a numeric value
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4StamperUI extends Z4ComponentUI {
+
+   intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY").setProportionalVisible(false).setSignsVisible(false, true, true).appendTo(this.querySelector(".stamper-container"));
+
+   multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY").setProportionalVisible(false).setSignsVisible(false, true, true).setConstantRange(1, 999999999).appendTo(this.querySelector(".stamper-container"));
+
+   push = new Z4FancifulValueUI().setValueLabel("PUSH").setProportionalVisible(false).setSignsVisible(false, true, true).appendTo(this.querySelector(".stamper-container"));
+
+   stamper = new Z4Stamper();
+
+  static  UI = Z4HTMLFactory.get("giada/pizzapazza/iterator/ui/Z4StamperUI.html");
+
+  /**
+   * Creates a Z4StamperUI
+   */
+  constructor() {
+    super(Z4StamperUI.UI);
+    this.setValue(this.stamper);
+  }
+
+  /**
+   * Sets the value
+   *
+   * @param value The value
+   * @return This Z4StamperUI
+   */
+   setValue(value) {
+    this.stamper = value;
+    this.intensity.setValue(this.stamper.getIntensity());
+    this.multiplicity.setValue(this.stamper.getMultiplicity());
+    this.push.setValue(this.stamper.getPush());
+    return this;
+  }
+
+  /**
+   * Returns the value
+   *
+   * @return The value
+   */
+   getValue() {
+    return this.stamper;
   }
 }

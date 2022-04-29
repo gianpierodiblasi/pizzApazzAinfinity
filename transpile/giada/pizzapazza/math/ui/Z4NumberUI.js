@@ -22,7 +22,7 @@ class Z4NumberUI extends Z4ComponentUI {
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4NumberUI.html");
 
   /**
-   * Creates a Z4ColorUI
+   * Creates a Z4NumberUI
    */
   constructor() {
     super(Z4NumberUI.UI);

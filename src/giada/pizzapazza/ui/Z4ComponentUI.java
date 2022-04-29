@@ -14,9 +14,10 @@ import static simulation.js.$Globals.parseInt;
  * The abstract class of all UI components
  *
  * @param <T>
+ * @param <S>
  * @author gianpiero.di.blasi
  */
-public abstract class Z4ComponentUI<T> {
+public abstract class Z4ComponentUI<T, S extends Z4ComponentUI<T, S>> {
 
   private final HTMLElement html;
 
@@ -75,8 +76,9 @@ public abstract class Z4ComponentUI<T> {
    * @param parent The parent
    * @return This Z4ComponentUI
    */
-  public Z4ComponentUI<T> appendTo(Element parent) {
+  @SuppressWarnings("unchecked")
+  public S appendTo(Element parent) {
     parent.appendChild(this.html);
-    return this;
+    return (S) this;
   }
 }

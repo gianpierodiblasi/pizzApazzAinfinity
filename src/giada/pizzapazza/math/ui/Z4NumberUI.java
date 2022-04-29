@@ -18,7 +18,7 @@ import static simulation.js.$Globals.setTimeout;
  *
  * @author gianpiero.di.blasi
  */
-public class Z4NumberUI extends Z4ComponentUI<Object> {
+public class Z4NumberUI extends Z4ComponentUI<Object, Z4NumberUI> {
 
   private final HTMLElement toggle = this.querySelector(".dropdown-toggle");
   private final HTMLElement toggleImg = this.querySelector(".dropdown-toggle img");
@@ -32,7 +32,7 @@ public class Z4NumberUI extends Z4ComponentUI<Object> {
   private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4NumberUI.html");
 
   /**
-   * Creates a Z4ColorUI
+   * Creates a Z4NumberUI
    */
   public Z4NumberUI() {
     super(Z4NumberUI.UI);

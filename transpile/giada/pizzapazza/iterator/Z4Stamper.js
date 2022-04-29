@@ -9,7 +9,7 @@ class Z4Stamper extends Z4PointIterator {
 
    multiplicity = new Z4FancifulValue().setConstant(Z4Sign.POSITIVE, 1);
 
-   push = new Z4FancifulValue();
+   push = new Z4FancifulValue().setConstant(Z4Sign.POSITIVE, 0);
 
    currentMultiplicityCounter = 0;
 
@@ -29,6 +29,33 @@ class Z4Stamper extends Z4PointIterator {
     } else {
       return false;
     }
+  }
+
+  /**
+   * Returns the intensity
+   *
+   * @return The intensity
+   */
+   getIntensity() {
+    return this.intensity;
+  }
+
+  /**
+   * Returns the multiplicity
+   *
+   * @return The multiplicity
+   */
+   getMultiplicity() {
+    return this.multiplicity;
+  }
+
+  /**
+   * Returns the push
+   *
+   * @return The push
+   */
+   getPush() {
+    return this.push;
   }
 
    next() {
@@ -65,8 +92,6 @@ class Z4Stamper extends Z4PointIterator {
   }
 
    drawDemo(context, width, height) {
-    this.multiplicity.setConstant(Z4Sign.POSITIVE, 3);
-    this.push.setConstant(Z4Sign.POSITIVE, 25);
     let arrowPainter = new Z4ArrowPainter();
     let gradientColor = new Z4GradientColor();
     this.initDraw(width, height).forEach(point => {

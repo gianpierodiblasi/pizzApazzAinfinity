@@ -30,7 +30,7 @@ import simulation.js.$Object;
  *
  * @author gianpiero.di.blasi
  */
-public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor> {
+public class Z4GradientColorUI extends Z4ComponentUI<Z4GradientColor, Z4GradientColorUI> {
 
   private final $Canvas canvas = ($Canvas) this.querySelector(".canvas");
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");

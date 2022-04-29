@@ -1,14 +1,12 @@
 <?xml version="1.0"?>
 <svg width="96" height="96" xmlns="http://www.w3.org/2000/svg">
- <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
- <g>
-  <title>Layer 1</title>
-  <line id="svg_3" stroke="#ff0000" y2="0.746573" x2="9.993148" y1="45.095888" x1="10.164381" stroke-width="5" fill="none"/>
-  <line id="svg_1" y2="48.000001" x2="95.609584" y1="48.000001" x1="0.232874" stroke-width="5" stroke="#000000" fill="none"/>
-  <line stroke="#ff0000" id="svg_2" y2="0.746573" x2="2.9726" y1="45.095887" x1="3.143833" stroke-width="5" fill="none"/>
-  <line id="svg_6" stroke="#ff0000" y2="0.746573" x2="24.205477" y1="45.095888" x1="24.37671" stroke-width="5" fill="none"/>
-  <line id="svg_7" stroke="#ff0000" y2="0.746573" x2="17.184929" y1="45.095888" x1="17.356162" stroke-width="5" fill="none"/>
-  <line id="svg_8" stroke="#ff0000" y2="0.746574" x2="38.417805" y1="45.095888" x1="38.589038" stroke-width="5" fill="none"/>
-  <line id="svg_9" stroke="#ff0000" y2="0.746573" x2="31.397257" y1="45.095888" x1="31.56849" stroke-width="5" fill="none"/>
- </g>
+  <g>
+    <line stroke="#ff0000" y2="0.746573" x2="9.993148" y1="45.095888" x1="10.164381" stroke-width="5" fill="none"/>
+    <line y2="48.000001" x2="95.609584" y1="48.000001" x1="0.232874" stroke-width="5" stroke="#000000" fill="none"/>
+    <line stroke="#ff0000" y2="0.746573" x2="2.9726" y1="45.095887" x1="3.143833" stroke-width="5" fill="none"/>
+    <line stroke="#ff0000" y2="0.746573" x2="24.205477" y1="45.095888" x1="24.37671" stroke-width="5" fill="none"/>
+    <line stroke="#ff0000" y2="0.746573" x2="17.184929" y1="45.095888" x1="17.356162" stroke-width="5" fill="none"/>
+    <line stroke="#ff0000" y2="0.746574" x2="38.417805" y1="45.095888" x1="38.589038" stroke-width="5" fill="none"/>
+    <line stroke="#ff0000" y2="0.746573" x2="31.397257" y1="45.095888" x1="31.56849" stroke-width="5" fill="none"/>
+  </g>
 </svg>

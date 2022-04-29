@@ -12,7 +12,7 @@ import simulation.dom.$HTMLElement;
  *
  * @author gianpiero.di.blasi
  */
-public class Z4ColorUI extends Z4ComponentUI<Z4Color> {
+public class Z4ColorUI extends Z4ComponentUI<Z4Color, Z4ColorUI> {
 
   private final $HTMLElement color = this.querySelector(".form-control-color");
   private final $HTMLElement formRangeLabel = this.querySelector(".form-range-label");

@@ -24,11 +24,15 @@ class test_stamper1 {
     let canvasCtx = canvas.getContext("2d");
     let offscreen = new OffscreenCanvas(canvas.width, canvas.height);
     let offscreenCtx = offscreen.getContext("2d");
-    let stamper = new Z4Stamper();
-    stamper.setRotation(new Z4FancifulValue().setRandom(Z4Sign.RANDOM, Z4RandomValue.classic(45)), Z4Rotation.FIXED);
-    stamper.drawDemo(offscreenCtx, canvas.width, canvas.height);
-    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-    canvasCtx.drawImage(offscreen, 0, 0);
+    // Z4Stamper stamper = new Z4Stamper();
+    // stamper.setRotation(new Z4FancifulValue().setRandom(Z4Sign.RANDOM, Z4RandomValue.classic(45)), Z4Rotation.FIXED);
+    // stamper.drawDemo(offscreenCtx, canvas.width, canvas.height);
+    // 
+    // canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+    // canvasCtx.drawImage(offscreen, 0, 0);
+    // 
+    let ui = new Z4StamperUI();
+    ui.appendTo(document.getElementById("stamper"));
   }
 
   constructor() {

@@ -2,6 +2,7 @@
  * The abstract class of all UI components
  *
  * @param <T>
+ * @param <S>
  * @author gianpiero.di.blasi
  */
 class Z4ComponentUI {

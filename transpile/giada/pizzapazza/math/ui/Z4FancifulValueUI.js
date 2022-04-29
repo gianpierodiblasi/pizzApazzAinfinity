@@ -42,7 +42,7 @@ class Z4FancifulValueUI extends Z4ComponentUI {
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4FancifulValueUI.html");
 
   /**
-   * Creates a Z4ColorUI
+   * Creates a Z4FancifulValueUI
    */
   constructor() {
     super(Z4FancifulValueUI.UI);
