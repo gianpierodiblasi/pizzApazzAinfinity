@@ -187,6 +187,7 @@
     <copy todir="${build.dir}/image">
       <fileset dir="${src.dir}/image">
         <include name="**/*.png"/>
+        <include name="**/*.svg"/>
       </fileset>
     </copy>
     <copy file="${src.dir}/image/image_list.properties" tofile="${build.dir}/image/image_list-${version}.properties"/>

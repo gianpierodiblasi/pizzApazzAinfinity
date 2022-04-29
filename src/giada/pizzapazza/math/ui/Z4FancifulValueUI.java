@@ -39,6 +39,10 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
   private final $HTMLElement spinnerLength = this.querySelector(".random-length-spinner");
 
   private Z4FancifulValue fancifulValue = new Z4FancifulValue();
+  private boolean constantSignVisible = true;
+  private boolean randomSignVisible = true;
+  private boolean proportionalSignVisible = true;
+
   private final $Apply_0_Void applySpin = () -> this.spin();
   private boolean isApplySpin = false;
 
@@ -60,12 +64,12 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
       return null;
     };
 
-    this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + this.toggleUniform.getAttribute("data-value") + "-sm.png");
+    this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + this.toggleUniform.getAttribute("data-value") + ".svg");
 
     NodeList imgs = this.querySelectorAll(".toggle-uniform-dropdown-menu img");
     for (int i = 0; i < imgs.length; i++) {
       HTMLElement img = (HTMLElement) imgs.item(i);
-      img.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".png");
+      img.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".svg");
     }
 
     NodeList buttons = this.querySelectorAll(".toggle-uniform-dropdown-menu .dropdown-item");
@@ -73,7 +77,7 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
       HTMLElement button = (HTMLElement) buttons.item(i);
       button.onclick = (event) -> {
         this.toggleUniform.setAttribute("data-value", button.getAttribute("data-value"));
-        this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + button.getAttribute("data-value") + "-sm.png");
+        this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + button.getAttribute("data-value") + ".svg");
 
         this.fancifulValue.setConstant(this.getUniformSign(), this.constantUI.getValue());
         this.constantUI.setSign(this.getUniformSign());
@@ -82,12 +86,12 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
       };
     }
 
-    this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + this.toggleRandom.getAttribute("data-value") + "-sm.png");
+    this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + this.toggleRandom.getAttribute("data-value") + ".svg");
 
     imgs = this.querySelectorAll(".toggle-random-dropdown-menu img");
     for (int i = 0; i < imgs.length; i++) {
       HTMLElement img = (HTMLElement) imgs.item(i);
-      img.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + img.getAttribute("data-icon") + ".png");
+      img.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + img.getAttribute("data-icon") + ".svg");
     }
 
     buttons = this.querySelectorAll(".toggle-random-dropdown-menu .dropdown-item");
@@ -96,7 +100,7 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
       button.onclick = (event) -> {
         String str = button.getAttribute("data-value");
         this.toggleRandom.setAttribute("data-value", str);
-        this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + str + "-sm.png");
+        this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + str + ".svg");
 
         this.querySelector(".divider-length").style.display = str == "classic" ? "none" : "block"; // JS equality for strings
         this.querySelector(".container-length").style.display = str == "classic" ? "none" : "block"; // JS equality for strings
@@ -209,6 +213,22 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
       this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
       this.onchange.$apply(this.fancifulValue);
     }
+  }
+
+  /**
+   * Sets the visibility of the signs
+   * @param constant true to make the constant sign visible, false otherwise
+   * @param random true to make the random sign visible, false otherwise
+   * @param proportional true to make the proportional sign visible, false otherwise
+   * @return 
+   */
+  public Z4FancifulValueUI setSignsVisible(boolean constant, boolean random, boolean proportional) {
+    this.constantSignVisible = constant;
+    this.randomSignVisible = random;
+    this.proportionalSignVisible = proportional;
+
+    this.setUniform(this.fancifulValue.isUniformSign());
+    return this;
   }
 
   /**
@@ -407,7 +427,7 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
     }
 
     this.toggleUniform.setAttribute("data-value", str);
-    this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + str + "-sm.png");
+    this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + str + ".svg");
   }
 
   public Z4Sign getUniformSign() {
@@ -439,7 +459,7 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue> {
     }
 
     this.toggleRandom.setAttribute("data-value", str);
-    this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + str + "-sm.png");
+    this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + str + ".svg");
 
     this.randomUI.setValue(random.getValue());
 

@@ -37,12 +37,12 @@ public class Z4NumberUI extends Z4ComponentUI<Object> {
   public Z4NumberUI() {
     super(Z4NumberUI.UI);
 
-    this.toggleImg.setAttribute("src", Z4NumberUI.PATH + "z4sign_" + this.toggle.getAttribute("data-value") + "-sm.png");
+    this.toggleImg.setAttribute("src", Z4NumberUI.PATH + "z4sign_" + this.toggle.getAttribute("data-value") + ".svg");
 
     NodeList imgs = this.querySelectorAll(".dropdown-menu img");
     for (int i = 0; i < imgs.length; i++) {
       HTMLElement img = (HTMLElement) imgs.item(i);
-      img.setAttribute("src", Z4NumberUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".png");
+      img.setAttribute("src", Z4NumberUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".svg");
     }
 
     NodeList buttons = this.querySelectorAll(".dropdown-item");
@@ -50,7 +50,7 @@ public class Z4NumberUI extends Z4ComponentUI<Object> {
       HTMLElement button = (HTMLElement) buttons.item(i);
       button.onclick = (event) -> {
         this.toggle.setAttribute("data-value", button.getAttribute("data-value"));
-        this.toggleImg.setAttribute("src", Z4NumberUI.PATH + "z4sign_" + button.getAttribute("data-value") + "-sm.png");
+        this.toggleImg.setAttribute("src", Z4NumberUI.PATH + "z4sign_" + button.getAttribute("data-value") + ".svg");
         this.onchange.$apply(null);
         return null;
       };

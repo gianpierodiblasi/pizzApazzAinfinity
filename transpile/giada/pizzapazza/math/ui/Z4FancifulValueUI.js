@@ -27,6 +27,12 @@ class Z4FancifulValueUI extends Z4ComponentUI {
 
    fancifulValue = new Z4FancifulValue();
 
+   constantSignVisible = true;
+
+   randomSignVisible = true;
+
+   proportionalSignVisible = true;
+
    applySpin = () => this.spin();
 
    isApplySpin = false;
@@ -47,29 +53,29 @@ class Z4FancifulValueUI extends Z4ComponentUI {
       this.onchange(this.fancifulValue.setUniformSign(this.uniformCheck.checked));
       return null;
     };
-    this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + this.toggleUniform.getAttribute("data-value") + "-sm.png");
+    this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + this.toggleUniform.getAttribute("data-value") + ".svg");
     let imgs = this.querySelectorAll(".toggle-uniform-dropdown-menu img");
     for (let i = 0; i < imgs.length; i++) {
       let img = imgs.item(i);
-      img.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".png");
+      img.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".svg");
     }
     let buttons = this.querySelectorAll(".toggle-uniform-dropdown-menu .dropdown-item");
     for (let i = 0; i < buttons.length; i++) {
       let button = buttons.item(i);
       button.onclick = (event) => {
         this.toggleUniform.setAttribute("data-value", button.getAttribute("data-value"));
-        this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + button.getAttribute("data-value") + "-sm.png");
+        this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + button.getAttribute("data-value") + ".svg");
         this.fancifulValue.setConstant(this.getUniformSign(), this.constantUI.getValue());
         this.constantUI.setSign(this.getUniformSign());
         this.onchange(this.fancifulValue);
         return null;
       };
     }
-    this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + this.toggleRandom.getAttribute("data-value") + "-sm.png");
+    this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + this.toggleRandom.getAttribute("data-value") + ".svg");
     imgs = this.querySelectorAll(".toggle-random-dropdown-menu img");
     for (let i = 0; i < imgs.length; i++) {
       let img = imgs.item(i);
-      img.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + img.getAttribute("data-icon") + ".png");
+      img.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + img.getAttribute("data-icon") + ".svg");
     }
     buttons = this.querySelectorAll(".toggle-random-dropdown-menu .dropdown-item");
     for (let i = 0; i < buttons.length; i++) {
@@ -77,7 +83,7 @@ class Z4FancifulValueUI extends Z4ComponentUI {
       button.onclick = (event) => {
         let str = button.getAttribute("data-value");
         this.toggleRandom.setAttribute("data-value", str);
-        this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + str + "-sm.png");
+        this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + str + ".svg");
         // JS equality for strings
         this.querySelector(".divider-length").style.display = str === "classic" ? "none" : "block";
         // JS equality for strings
@@ -177,6 +183,21 @@ class Z4FancifulValueUI extends Z4ComponentUI {
       this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
       this.onchange(this.fancifulValue);
     }
+  }
+
+  /**
+   * Sets the visibility of the signs
+   * @param constant true to make the constant sign visible, false otherwise
+   * @param random true to make the random sign visible, false otherwise
+   * @param proportional true to make the proportional sign visible, false otherwise
+   * @return
+   */
+   setSignsVisible(constant, random, proportional) {
+    this.constantSignVisible = constant;
+    this.randomSignVisible = random;
+    this.proportionalSignVisible = proportional;
+    this.setUniform(this.fancifulValue.isUniformSign());
+    return this;
   }
 
   /**
@@ -364,7 +385,7 @@ class Z4FancifulValueUI extends Z4ComponentUI {
       str = "alternate";
     }
     this.toggleUniform.setAttribute("data-value", str);
-    this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + str + "-sm.png");
+    this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + str + ".svg");
   }
 
    getUniformSign() {
@@ -394,7 +415,7 @@ class Z4FancifulValueUI extends Z4ComponentUI {
       str = "stepped";
     }
     this.toggleRandom.setAttribute("data-value", str);
-    this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + str + "-sm.png");
+    this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + str + ".svg");
     this.randomUI.setValue(random.getValue());
     // JS equality for strings
     this.querySelector(".divider-length").style.display = str === "classic" ? "none" : "block";

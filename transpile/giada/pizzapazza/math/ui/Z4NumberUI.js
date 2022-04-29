@@ -26,18 +26,18 @@ class Z4NumberUI extends Z4ComponentUI {
    */
   constructor() {
     super(Z4NumberUI.UI);
-    this.toggleImg.setAttribute("src", Z4NumberUI.PATH + "z4sign_" + this.toggle.getAttribute("data-value") + "-sm.png");
+    this.toggleImg.setAttribute("src", Z4NumberUI.PATH + "z4sign_" + this.toggle.getAttribute("data-value") + ".svg");
     let imgs = this.querySelectorAll(".dropdown-menu img");
     for (let i = 0; i < imgs.length; i++) {
       let img = imgs.item(i);
-      img.setAttribute("src", Z4NumberUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".png");
+      img.setAttribute("src", Z4NumberUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".svg");
     }
     let buttons = this.querySelectorAll(".dropdown-item");
     for (let i = 0; i < buttons.length; i++) {
       let button = buttons.item(i);
       button.onclick = (event) => {
         this.toggle.setAttribute("data-value", button.getAttribute("data-value"));
-        this.toggleImg.setAttribute("src", Z4NumberUI.PATH + "z4sign_" + button.getAttribute("data-value") + "-sm.png");
+        this.toggleImg.setAttribute("src", Z4NumberUI.PATH + "z4sign_" + button.getAttribute("data-value") + ".svg");
         this.onchange(null);
         return null;
       };
