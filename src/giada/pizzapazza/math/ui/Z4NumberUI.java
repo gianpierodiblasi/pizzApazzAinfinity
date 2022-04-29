@@ -182,7 +182,7 @@ public class Z4NumberUI extends Z4ComponentUI<Object> {
     }
 
     this.toggle.setAttribute("data-value", str);
-    this.toggleImg.setAttribute("src", Z4NumberUI.PATH + "z4sign_" + str + "-sm.png");
+    this.toggleImg.setAttribute("src", Z4NumberUI.PATH + "z4sign_" + str + ".svg");
 
     return this;
   }
