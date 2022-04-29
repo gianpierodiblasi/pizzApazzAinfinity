@@ -45,8 +45,7 @@ public class test_fancifulvalue1 {
     Z4FancifulValue v = new Z4FancifulValue().
             setConstant(Z4Sign.NEGATIVE, 10).
             setRandom(Z4Sign.RANDOM, Z4RandomValue.bezier(20, 10)).
-            setProportional(Z4Sign.POSITIVE, 30).
-            setUniformSign(true);
+            setProportional(Z4Sign.POSITIVE, 30);
 
     Z4FancifulValueUI ui2 = new Z4FancifulValueUI().setVertical().setValue(v);
     ui2.appendTo(document.querySelector("#test3"));
@@ -59,17 +58,22 @@ public class test_fancifulvalue1 {
     ui2.onchange = (value) -> document.getElementById("test4").textContent = "ONCHANGE " + test_fancifulvalue1.stringify(value);
     document.getElementById("test4").textContent = test_fancifulvalue1.stringify(ui2.getValue());
 
-    document.getElementById("random-visible").onchange = (event) -> {
-      ui1.setRandomVisible((($HTMLElement) document.getElementById("random-visible")).checked);
-      ui2.setRandomVisible((($HTMLElement) document.getElementById("random-visible")).checked);
+    Function<Event, Object> onComponent = (event) -> {
+      ui1.setComponentsVisible(
+              (($HTMLElement) document.getElementById("constant-visible")).checked,
+              (($HTMLElement) document.getElementById("random-visible")).checked,
+              (($HTMLElement) document.getElementById("proportional-visible")).checked
+      );
+      ui2.setComponentsVisible(
+              (($HTMLElement) document.getElementById("constant-visible")).checked,
+              (($HTMLElement) document.getElementById("random-visible")).checked,
+              (($HTMLElement) document.getElementById("proportional-visible")).checked
+      );
       return null;
     };
-
-    document.getElementById("proportional-visible").onchange = (event) -> {
-      ui1.setProportionalVisible((($HTMLElement) document.getElementById("proportional-visible")).checked);
-      ui2.setProportionalVisible((($HTMLElement) document.getElementById("proportional-visible")).checked);
-      return null;
-    };
+    document.getElementById("constant-visible").onchange = onComponent;
+    document.getElementById("random-visible").onchange = onComponent;
+    document.getElementById("proportional-visible").onchange = onComponent;
 
     Function<Event, Object> onSign = (event) -> {
       ui1.setSignsVisible(

@@ -1,9 +1,10 @@
-/*.z4-lite .fanciful-random, .z4-lite .fanciful-proportional,
+.z4-lite .fanciful-random, .z4-lite .fanciful-proportional,
 .z4-lite .uniform-check, .z4-lite .uniform-label,
 .z4-lite .uniform-container {
   display: none;
 }
 
+/*
 .z4-lite .fanciful-costant .sign-label-not-visible, .z4-lite .fanciful-costant .sign-toggle-not-visible {
   display: inline-block;
 }

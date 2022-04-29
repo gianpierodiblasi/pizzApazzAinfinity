@@ -22,7 +22,7 @@ class test_fancifulvalue1 {
     };
     let ui1 = new Z4FancifulValueUI();
     ui1.appendTo(document.querySelector("#test1"));
-    let v = new Z4FancifulValue().setConstant(Z4Sign.NEGATIVE, 10).setRandom(Z4Sign.RANDOM, Z4RandomValue.bezier(20, 10)).setProportional(Z4Sign.POSITIVE, 30).setUniformSign(true);
+    let v = new Z4FancifulValue().setConstant(Z4Sign.NEGATIVE, 10).setRandom(Z4Sign.RANDOM, Z4RandomValue.bezier(20, 10)).setProportional(Z4Sign.POSITIVE, 30);
     let ui2 = new Z4FancifulValueUI().setVertical().setValue(v);
     ui2.appendTo(document.querySelector("#test3"));
     ui1.oninput = (value) => document.getElementById("test2").textContent = "ONINPUT " + test_fancifulvalue1.stringify(value);
@@ -31,16 +31,14 @@ class test_fancifulvalue1 {
     ui2.oninput = (value) => document.getElementById("test4").textContent = "ONINPUT " + test_fancifulvalue1.stringify(value);
     ui2.onchange = (value) => document.getElementById("test4").textContent = "ONCHANGE " + test_fancifulvalue1.stringify(value);
     document.getElementById("test4").textContent = test_fancifulvalue1.stringify(ui2.getValue());
-    document.getElementById("random-visible").onchange = (event) => {
-      ui1.setRandomVisible((document.getElementById("random-visible")).checked);
-      ui2.setRandomVisible((document.getElementById("random-visible")).checked);
+    let onComponent = (event) => {
+      ui1.setComponentsVisible((document.getElementById("constant-visible")).checked, (document.getElementById("random-visible")).checked, (document.getElementById("proportional-visible")).checked);
+      ui2.setComponentsVisible((document.getElementById("constant-visible")).checked, (document.getElementById("random-visible")).checked, (document.getElementById("proportional-visible")).checked);
       return null;
     };
-    document.getElementById("proportional-visible").onchange = (event) => {
-      ui1.setProportionalVisible((document.getElementById("proportional-visible")).checked);
-      ui2.setProportionalVisible((document.getElementById("proportional-visible")).checked);
-      return null;
-    };
+    document.getElementById("constant-visible").onchange = onComponent;
+    document.getElementById("random-visible").onchange = onComponent;
+    document.getElementById("proportional-visible").onchange = onComponent;
     let onSign = (event) => {
       ui1.setSignsVisible((document.getElementById("constant-sign-visible")).checked, (document.getElementById("random-sign-visible")).checked, (document.getElementById("proportional-sign-visible")).checked);
       ui2.setSignsVisible((document.getElementById("constant-sign-visible")).checked, (document.getElementById("random-sign-visible")).checked, (document.getElementById("proportional-sign-visible")).checked);

@@ -1,10 +1,10 @@
-/*.z4-standard .fanciful-proportional,
+.z4-standard .fanciful-proportional/*,
 .z4-standard .uniform-container-force-not-visible,
-.z4-standard .uniform-check-force-not-visible, .z4-standard .uniform-label-force-not-visible {
+.z4-standard .uniform-check-force-not-visible, .z4-standard .uniform-label-force-not-visible */{
   display: none;
 }
 
-.z4-standard .fanciful-costant .sign-label-force-visible, .z4-standard .fanciful-costant .sign-toggle-force-visible {
+/*.z4-standard .fanciful-costant .sign-label-force-visible, .z4-standard .fanciful-costant .sign-toggle-force-visible {
   display: inline-block;
 }
 

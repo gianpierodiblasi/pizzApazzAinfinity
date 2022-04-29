@@ -71,9 +71,8 @@ class Z4FancifulValueUI extends Z4ComponentUI {
       button.onclick = (event) => {
         this.toggleUniform.setAttribute("data-value", button.getAttribute("data-value"));
         this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + button.getAttribute("data-value") + ".svg");
-        this.fancifulValue.setConstant(this.getUniformSign(), this.constantUI.getValue());
         this.constantUI.setSign(this.getUniformSign());
-        this.onchange(this.fancifulValue);
+        this.onchange(this.fancifulValue.setConstant(this.getUniformSign(), this.constantUI.getValue()));
         return null;
       };
     }
@@ -94,19 +93,16 @@ class Z4FancifulValueUI extends Z4ComponentUI {
         this.querySelector(".divider-length").style.display = str === "classic" ? "none" : "block";
         // JS equality for strings
         this.querySelector(".container-length").style.display = str === "classic" ? "none" : "block";
-        this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
-        this.onchange(this.fancifulValue);
+        this.onchange(this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom()));
         return null;
       };
     }
     this.valueLength.oninput = (event) => {
-      this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
-      this.oninput(this.fancifulValue);
+      this.oninput(this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom()));
       return null;
     };
     this.valueLength.onchange = (event) => {
-      this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
-      this.onchange(this.fancifulValue);
+      this.onchange(this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom()));
       return null;
     };
     this.valueLength.onfocus = (event) => {
@@ -141,19 +137,13 @@ class Z4FancifulValueUI extends Z4ComponentUI {
 
    onInput() {
     this.setUniformSign(this.constantUI.getSign());
-    this.fancifulValue.setConstant(this.constantUI.getSign(), this.constantUI.getValue());
-    this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
-    this.fancifulValue.setProportional(this.proportionalUI.getSign(), this.proportionalUI.getValue());
-    this.oninput(this.fancifulValue);
+    this.oninput(this.fancifulValue.setConstant(this.constantUI.getSign(), this.constantUI.getValue()).setRandom(this.randomUI.getSign(), this.getRandom()).setProportional(this.proportionalUI.getSign(), this.proportionalUI.getValue()));
     return null;
   }
 
    onChange() {
     this.setUniformSign(this.constantUI.getSign());
-    this.fancifulValue.setConstant(this.constantUI.getSign(), this.constantUI.getValue());
-    this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
-    this.fancifulValue.setProportional(this.proportionalUI.getSign(), this.proportionalUI.getValue());
-    this.onchange(this.fancifulValue);
+    this.onchange(this.fancifulValue.setConstant(this.constantUI.getSign(), this.constantUI.getValue()).setRandom(this.randomUI.getSign(), this.getRandom()).setProportional(this.proportionalUI.getSign(), this.proportionalUI.getValue()));
     return null;
   }
 
@@ -179,14 +169,12 @@ class Z4FancifulValueUI extends Z4ComponentUI {
       v = Math.max(min, this.valueLength.valueAsNumber + (v > 0 ? 1 : -1));
       v = Math.min(v, max);
       this.valueLength.value = "" + v;
-      this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
-      this.oninput(this.fancifulValue);
+      this.oninput(this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom()));
     }
     if (this.isApplySpin) {
       setTimeout(this.applySpin, 500 / abs);
     } else {
-      this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
-      this.onchange(this.fancifulValue);
+      this.onchange(this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom()));
     }
   }
 
