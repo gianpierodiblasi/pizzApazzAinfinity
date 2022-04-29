@@ -42,6 +42,9 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue, Z4Fanciful
   private boolean constantSignVisible = true;
   private boolean randomSignVisible = true;
   private boolean proportionalSignVisible = true;
+  private boolean constantVisible = true;
+  private boolean randomVisible = true;
+  private boolean proportionalVisible = true;
 
   private final $Apply_0_Void applySpin = () -> this.spin();
   private boolean isApplySpin = false;
@@ -59,7 +62,7 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue, Z4Fanciful
     this.uniformCheck.id = "uniform_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
     this.querySelector(".uniform-label").setAttribute("for", this.uniformCheck.id);
     this.uniformCheck.onchange = (event) -> {
-      this.setUniform(this.uniformCheck.checked);
+      this.setUI();
       this.onchange.$apply(this.fancifulValue.setUniformSign(this.uniformCheck.checked));
       return null;
     };
@@ -111,8 +114,6 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue, Z4Fanciful
       };
     }
 
-    this.valueLength.setAttribute("min", "1");
-    this.valueLength.setAttribute("value", "1");
     this.valueLength.oninput = (event) -> {
       this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom());
       this.oninput.$apply(this.fancifulValue);
@@ -218,6 +219,24 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue, Z4Fanciful
   }
 
   /**
+   * Sets the visibility of the components
+   *
+   * @param constant true to make the constant component visible, false
+   * otherwise
+   * @param random true to make the random component visible, false otherwise
+   * @param proportional true to make the proportional component visible, false
+   * @return This Z4FancifulValueUI
+   */
+  public Z4FancifulValueUI setComponentsVisible(boolean constant, boolean random, boolean proportional) {
+    this.constantVisible = constant;
+    this.randomVisible = random;
+    this.proportionalVisible = proportional;
+    
+    this.setUI();
+    return this;
+  }
+
+  /**
    * Sets the visibility of the signs
    *
    * @param constant true to make the constant sign visible, false otherwise
@@ -231,7 +250,7 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue, Z4Fanciful
     this.randomSignVisible = random;
     this.proportionalSignVisible = proportional;
 
-    this.setUniform(this.fancifulValue.isUniformSign());
+    this.setUI();
     return this;
   }
 
@@ -260,22 +279,6 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue, Z4Fanciful
   }
 
   /**
-   * Sets the visibility of the random component
-   *
-   * @param visible true to make the random component visible, false otherwise
-   * @return This Z4FancifulValueUI
-   */
-  public Z4FancifulValueUI setRandomVisible(boolean visible) {
-//    if (visible) {
-//      this.querySelector(".fanciful-random").classList.remove("fanciful-random-not-visible");
-//    } else {
-//      this.querySelector(".fanciful-random").classList.add("fanciful-random-not-visible");
-//    }
-//    this.setUniform(this.fancifulValue.isUniformSign());
-    return this;
-  }
-
-  /**
    * Sets the range of the proportional component
    *
    * @param min The minumum value
@@ -284,23 +287,6 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue, Z4Fanciful
    */
   public Z4FancifulValueUI setProportionalRange(int min, int max) {
     this.proportionalUI.setRange(min, max);
-    return this;
-  }
-
-  /**
-   * Sets the visibility of the proportional component
-   *
-   * @param visible true to make the proportional component visible, false
-   * otherwise
-   * @return This Z4FancifulValueUI
-   */
-  public Z4FancifulValueUI setProportionalVisible(boolean visible) {
-//    if (visible) {
-//      this.querySelector(".fanciful-proportional").classList.remove("fanciful-proportional-not-visible");
-//    } else {
-//      this.querySelector(".fanciful-proportional").classList.add("fanciful-proportional-not-visible");
-//    }
-//    this.setUniform(this.fancifulValue.isUniformSign());
     return this;
   }
 
@@ -363,7 +349,7 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue, Z4Fanciful
   public Z4FancifulValueUI setValue(Z4FancifulValue value) {
     this.fancifulValue = value;
 
-    this.setUniform(this.fancifulValue.isUniformSign());
+    this.uniformCheck.checked = this.fancifulValue.isUniformSign();
 
     this.constantUI.setSign(this.fancifulValue.getConstantSign());
     this.constantUI.setValue(this.fancifulValue.getConstantValue());
@@ -375,11 +361,23 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue, Z4Fanciful
     this.proportionalUI.setSign(this.fancifulValue.getProportionalSign());
     this.proportionalUI.setValue(this.fancifulValue.getProportionalValue());
 
+    this.setUI();
     return this;
   }
 
-  private void setUniform(boolean uniform) {
-//    this.uniformCheck.checked = uniform;
+  private void setUI() {
+        //    if (visible) {
+//      this.querySelector(".fanciful-random").classList.remove("fanciful-random-not-visible");
+//    } else {
+//      this.querySelector(".fanciful-random").classList.add("fanciful-random-not-visible");
+//    }
+
+//    if (visible) {
+//      this.querySelector(".fanciful-proportional").classList.remove("fanciful-proportional-not-visible");
+//    } else {
+//      this.querySelector(".fanciful-proportional").classList.add("fanciful-proportional-not-visible");
+//    }
+
 //    boolean bR = this.querySelector(".fanciful-random").classList.contains("fanciful-random-not-visible");
 //    boolean bP = this.querySelector(".fanciful-proportional").classList.contains("fanciful-proportional-not-visible");
 //
