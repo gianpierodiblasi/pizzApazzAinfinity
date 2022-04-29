@@ -193,10 +193,20 @@
   border-radius: 0.25rem !important;
 }
 
-/*
-
-.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false {
+.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false .uniform-check,
+.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false .uniform-label,
+.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false .uniform-container,
+.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false .sign-label,
+.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false .sign-button,
+.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false .fanciful-random {
+  display: none;
 }
+.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false .fanciful-costant input,
+.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false .fanciful-proportional input{
+  border-radius: 0.25rem !important;
+}
+
+/*
 .z4-pro .cv-true.rv-false.pv-false.csv-true.u-true {
 }
 .z4-pro .cv-true.rv-false.pv-false.csv-true.u-false {
