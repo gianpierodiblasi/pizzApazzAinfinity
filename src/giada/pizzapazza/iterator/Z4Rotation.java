@@ -1,6 +1,6 @@
 package giada.pizzapazza.iterator;
 
-import giada.pizzapazza.math.Z4FancifulValue;
+import giada.pizzapazza.math.Z4AbstractFancifulValue;
 import giada.pizzapazza.math.Z4Math;
 import giada.pizzapazza.math.Z4Point;
 import giada.pizzapazza.math.Z4Sign;
@@ -13,7 +13,7 @@ import static simulation.js.$Globals.$exists;
  *
  * @author gianpiero.di.blasi
  */
-public class Z4Rotation extends Z4FancifulValue {
+public class Z4Rotation extends Z4AbstractFancifulValue<Z4Rotation> {
 
   private final int type;
   private double startAngle;
