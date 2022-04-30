@@ -322,11 +322,13 @@ class Z4FancifulValueUI extends Z4ComponentUI {
 
    setUI() {
     this.selector.forEach(sel => {
+      this.querySelector(".fanciful-label").classList.remove(sel);
       this.querySelector(".form-check").classList.remove(sel);
       this.querySelector(".fanciful-container").classList.remove(sel);
     });
     this.selector = new Array("cv-" + this.constantVisible, "rv-" + this.randomVisible, "pv-" + this.proportionalVisible, "csv-" + this.constantSignVisible, "rsv-" + this.randomSignVisible, "psv-" + this.proportionalSignVisible, "u-" + this.uniformCheck.checked);
     this.selector.forEach(sel => {
+      this.querySelector(".fanciful-label").classList.add(sel);
       this.querySelector(".form-check").classList.add(sel);
       this.querySelector(".fanciful-container").classList.add(sel);
     });

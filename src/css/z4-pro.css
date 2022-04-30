@@ -44,8 +44,7 @@
   display: none;
 }
 
-.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-false.psv-false .uniform-check,
-.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-false.psv-false .uniform-label,
+.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-false.psv-false.form-check,
 .z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-false.psv-false .uniform-container,
 .z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-false.psv-false .fanciful-random .sign-label,
 .z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-false.psv-false .fanciful-random .sign-button,
@@ -57,8 +56,7 @@
   border-radius: 0.25rem !important;
 }
 
-.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-true.psv-true .uniform-check,
-.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-true.psv-true .uniform-label,
+.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-true.psv-true.form-check,
 .z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-true.psv-true .uniform-container,
 .z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-true.psv-true .fanciful-costant .sign-label,
 .z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-true.psv-true .fanciful-costant .sign-button {
@@ -68,8 +66,7 @@
   border-radius: 0.25rem !important;
 }
 
-.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-true.psv-false .uniform-check,
-.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-true.psv-false .uniform-label,
+.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-true.psv-false.form-check,
 .z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-true.psv-false .uniform-container,
 .z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-true.psv-false .fanciful-costant .sign-label,
 .z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-true.psv-false .fanciful-costant .sign-button,
@@ -82,8 +79,7 @@
   border-radius: 0.25rem !important;
 }
 
-.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-true .uniform-check,
-.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-true .uniform-label,
+.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-true.form-check,
 .z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-true .uniform-container,
 .z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-true .fanciful-costant .sign-label,
 .z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-true .fanciful-costant .sign-button,
@@ -95,15 +91,14 @@
   border-radius: 0.25rem !important;
 }
 
-.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-false .uniform-check,
-.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-false .uniform-label,
+.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-false.form-check,
 .z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-false .uniform-container,
 .z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-false .sign-label,
 .z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-false .sign-button {
   display: none;
 }
 .z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-false .fanciful-costant input,
-.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-false .fanciful-proportional input{
+.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-false .fanciful-proportional input {
   border-radius: 0.25rem !important;
 }
 
@@ -121,8 +116,7 @@
   display: none;
 }
 
-.z4-pro .cv-true.rv-true.pv-false.csv-true.rsv-false .uniform-check,
-.z4-pro .cv-true.rv-true.pv-false.csv-true.rsv-false .uniform-label,
+.z4-pro .cv-true.rv-true.pv-false.csv-true.rsv-false.form-check,
 .z4-pro .cv-true.rv-true.pv-false.csv-true.rsv-false .uniform-container,
 .z4-pro .cv-true.rv-true.pv-false.csv-true.rsv-false .fanciful-random .sign-label,
 .z4-pro .cv-true.rv-true.pv-false.csv-true.rsv-false .fanciful-random .sign-button,
@@ -130,8 +124,7 @@
   display: none;
 }
 
-.z4-pro .cv-true.rv-true.pv-false.csv-false.rsv-true .uniform-check,
-.z4-pro .cv-true.rv-true.pv-false.csv-false.rsv-true .uniform-label,
+.z4-pro .cv-true.rv-true.pv-false.csv-false.rsv-true.form-check,
 .z4-pro .cv-true.rv-true.pv-false.csv-false.rsv-true .uniform-container,
 .z4-pro .cv-true.rv-true.pv-false.csv-false.rsv-true .fanciful-costant .sign-label,
 .z4-pro .cv-true.rv-true.pv-false.csv-false.rsv-true .fanciful-costant .sign-button,
@@ -142,8 +135,7 @@
   border-radius: 0.25rem !important;
 }
 
-.z4-pro .cv-true.rv-true.pv-false.csv-false.rsv-false .uniform-check,
-.z4-pro .cv-true.rv-true.pv-false.csv-false.rsv-false .uniform-label,
+.z4-pro .cv-true.rv-true.pv-false.csv-false.rsv-false.form-check,
 .z4-pro .cv-true.rv-true.pv-false.csv-false.rsv-false .uniform-container,
 .z4-pro .cv-true.rv-true.pv-false.csv-false.rsv-false .sign-label,
 .z4-pro .cv-true.rv-true.pv-false.csv-false.rsv-false .sign-button,
@@ -169,8 +161,7 @@
   display: none;
 }
 
-.z4-pro .cv-true.rv-false.pv-true.csv-true.psv-false .uniform-check,
-.z4-pro .cv-true.rv-false.pv-true.csv-true.psv-false .uniform-label,
+.z4-pro .cv-true.rv-false.pv-true.csv-true.psv-false.form-check,
 .z4-pro .cv-true.rv-false.pv-true.csv-true.psv-false .uniform-container,
 .z4-pro .cv-true.rv-false.pv-true.csv-true.psv-false .fanciful-proportional .sign-label,
 .z4-pro .cv-true.rv-false.pv-true.csv-true.psv-false .fanciful-proportional .sign-button,
@@ -181,8 +172,7 @@
   border-radius: 0.25rem !important;
 }
 
-.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-true .uniform-check,
-.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-true .uniform-label,
+.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-true.form-check,
 .z4-pro .cv-true.rv-false.pv-true.csv-false.psv-true .uniform-container,
 .z4-pro .cv-true.rv-false.pv-true.csv-false.psv-true .fanciful-costant .sign-label,
 .z4-pro .cv-true.rv-false.pv-true.csv-false.psv-true .fanciful-costant .sign-button,
@@ -193,8 +183,7 @@
   border-radius: 0.25rem !important;
 }
 
-.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false .uniform-check,
-.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false .uniform-label,
+.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false.form-check,
 .z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false .uniform-container,
 .z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false .sign-label,
 .z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false .sign-button,
@@ -202,49 +191,119 @@
   display: none;
 }
 .z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false .fanciful-costant input,
-.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false .fanciful-proportional input{
+.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false .fanciful-proportional input {
   border-radius: 0.25rem !important;
 }
 
-.z4-pro .cv-true.rv-false.pv-false.csv-true .uniform-check,
-.z4-pro .cv-true.rv-false.pv-false.csv-true .uniform-label,
+.z4-pro .cv-true.rv-false.pv-false.csv-true.form-check,
 .z4-pro .cv-true.rv-false.pv-false.csv-true .uniform-container,
+.z4-pro .cv-true.rv-false.pv-false.csv-true .fanciful-costant .value-label,
 .z4-pro .cv-true.rv-false.pv-false.csv-true .fanciful-random,
 .z4-pro .cv-true.rv-false.pv-false.csv-true .fanciful-proportional {
   display: none;
 }
+.z4-pro .cv-true.rv-false.pv-false.csv-true .fanciful-costant .sign-label {
+  margin-bottom: 2px !important;
+}
+.z4-pro .cv-true.rv-false.pv-false.csv-true.fanciful-label {
+  position: relative;
+  width: 100%;
+  text-align: right;
+  top: calc(24px + 0.5rem);
+}
 
-.z4-pro .cv-true.rv-false.pv-false.csv-false .uniform-check,
-.z4-pro .cv-true.rv-false.pv-false.csv-false .uniform-label,
+.z4-pro .cv-true.rv-false.pv-false.csv-false.form-check,
 .z4-pro .cv-true.rv-false.pv-false.csv-false .uniform-container,
+/*.z4-pro .cv-true.rv-false.pv-false.csv-false .fanciful-costant .value-label,*/
 .z4-pro .cv-true.rv-false.pv-false.csv-false .sign-label,
 .z4-pro .cv-true.rv-false.pv-false.csv-false .sign-button,
 .z4-pro .cv-true.rv-false.pv-false.csv-false .fanciful-random,
 .z4-pro .cv-true.rv-false.pv-false.csv-false .fanciful-proportional {
   display: none;
 }
+/*.z4-pro .cv-true.rv-false.pv-false.csv-false .fanciful-costant .sign-label {
+  margin-bottom: 2px !important;
+}
+.z4-pro .cv-true.rv-false.pv-false.csv-false.fanciful-label {
+  position: relative;
+  width: 100%;
+  text-align: right;
+  top: calc(24px + 0.5rem);
+}*/
 .z4-pro .cv-true.rv-false.pv-false.csv-false .fanciful-costant input {
   border-radius: 0.25rem !important;
 }
 
-/*
+.z4-pro .cv-false.rv-true.pv-true.rsv-true.psv-true.form-check,
+.z4-pro .cv-false.rv-true.pv-true.rsv-true.psv-true .uniform-container,
+.z4-pro .cv-false.rv-true.pv-true.rsv-true.psv-true .fanciful-costant {
+  display: none;
+}
 
-.z4-pro .cv-false.rv-true.pv-true.rsv-true.psv-true {
+.z4-pro .cv-false.rv-true.pv-true.rsv-true.psv-false.form-check,
+.z4-pro .cv-false.rv-true.pv-true.rsv-true.psv-false .uniform-container,
+.z4-pro .cv-false.rv-true.pv-true.rsv-true.psv-false .fanciful-costant,
+.z4-pro .cv-false.rv-true.pv-true.rsv-true.psv-false .fanciful-proportional .sign-label,
+.z4-pro .cv-false.rv-true.pv-true.rsv-true.psv-false .fanciful-proportional .sign-button {
+  display: none;
 }
-.z4-pro .cv-false.rv-true.pv-true.rsv-true.psv-false {
+.z4-pro .cv-false.rv-true.pv-true.rsv-true.psv-false .fanciful-proportional input {
+  border-radius: 0.25rem !important;
 }
-.z4-pro .cv-false.rv-true.pv-true.rsv-false.psv-true {
+
+.z4-pro .cv-false.rv-true.pv-true.rsv-false.psv-true.form-check,
+.z4-pro .cv-false.rv-true.pv-true.rsv-false.psv-true .uniform-container,
+.z4-pro .cv-false.rv-true.pv-true.rsv-false.psv-true .fanciful-costant,
+.z4-pro .cv-false.rv-true.pv-true.rsv-false.psv-true .fanciful-random .sign-label,
+.z4-pro .cv-false.rv-true.pv-true.rsv-false.psv-true .fanciful-random .sign-button {
+  display: none;
 }
-.z4-pro .cv-false.rv-true.pv-true.rsv-false.psv-false {
+
+.z4-pro .cv-false.rv-true.pv-true.rsv-false.psv-false.form-check,
+.z4-pro .cv-false.rv-true.pv-true.rsv-false.psv-false .uniform-container,
+.z4-pro .cv-false.rv-true.pv-true.rsv-false.psv-false .sign-label,
+.z4-pro .cv-false.rv-true.pv-true.rsv-false.psv-false .sign-button,
+.z4-pro .cv-false.rv-true.pv-true.rsv-false.psv-false .fanciful-costant {
+  display: none;
 }
-.z4-pro .cv-false.rv-true.pv-false.rsv-true {
+.z4-pro .cv-false.rv-true.pv-true.rsv-false.psv-false .fanciful-proportional input {
+  border-radius: 0.25rem !important;
 }
-.z4-pro .cv-false.rv-true.pv-false.rsv-false {
+
+.z4-pro .cv-false.rv-true.pv-false.rsv-true.form-check,
+.z4-pro .cv-false.rv-true.pv-false.rsv-true .uniform-container,
+.z4-pro .cv-false.rv-true.pv-false.rsv-true .fanciful-costant,
+.z4-pro .cv-false.rv-true.pv-false.rsv-true .fanciful-proportional {
+  display: none;
 }
-.z4-pro .cv-false.rv-false.pv-true.psv-true {
+
+.z4-pro .cv-false.rv-true.pv-false.rsv-false.form-check,
+.z4-pro .cv-false.rv-true.pv-false.rsv-false .uniform-container,
+.z4-pro .cv-false.rv-true.pv-false.rsv-false .sign-label,
+.z4-pro .cv-false.rv-true.pv-false.rsv-false .sign-button,
+.z4-pro .cv-false.rv-true.pv-false.rsv-false .fanciful-costant,
+.z4-pro .cv-false.rv-true.pv-false.rsv-false .fanciful-proportional {
+  display: none;
 }
-.z4-pro .cv-false.rv-false.pv-true.psv-false {
-}*/
+
+.z4-pro .cv-false.rv-false.pv-true.psv-true.form-check,
+.z4-pro .cv-false.rv-false.pv-true.psv-true .uniform-container,
+.z4-pro .cv-false.rv-false.pv-true.psv-true .fanciful-costant,
+.z4-pro .cv-false.rv-false.pv-true.psv-true .fanciful-random {
+  display: none;
+}
+
+.z4-pro .cv-false.rv-false.pv-true.psv-false.form-check,
+.z4-pro .cv-false.rv-false.pv-true.psv-false .uniform-container,
+.z4-pro .cv-false.rv-false.pv-true.psv-false .sign-label,
+.z4-pro .cv-false.rv-false.pv-true.psv-false .sign-button,
+.z4-pro .cv-false.rv-false.pv-true.psv-false .fanciful-costant,
+.z4-pro .cv-false.rv-false.pv-true.psv-false .fanciful-random {
+  display: none;
+}
+.z4-pro .cv-false.rv-false.pv-true.psv-false .fanciful-proportional input {
+  border-radius: 0.25rem !important;
+}
 
 .z4-pro .cv-false.rv-false.pv-false {
   display: none !important;

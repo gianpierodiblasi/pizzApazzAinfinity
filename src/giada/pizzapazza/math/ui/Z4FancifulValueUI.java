@@ -364,6 +364,7 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue, Z4Fanciful
 
   private void setUI() {
     this.selector.forEach(sel -> {
+      this.querySelector(".fanciful-label").classList.remove(sel);
       this.querySelector(".form-check").classList.remove(sel);
       this.querySelector(".fanciful-container").classList.remove(sel);
     });
@@ -379,6 +380,7 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue, Z4Fanciful
     );
 
     this.selector.forEach(sel -> {
+      this.querySelector(".fanciful-label").classList.add(sel);
       this.querySelector(".form-check").classList.add(sel);
       this.querySelector(".fanciful-container").classList.add(sel);
     });
