@@ -25,6 +25,8 @@ class Z4PointIterator {
 
    rotationMode = Z4Rotation.FIXED;
 
+   rotationNext = 0;
+
   /**
    * The current Z4Point
    */
@@ -39,8 +41,6 @@ class Z4PointIterator {
    * true if this Z4PointIterator has another point, false otherwise
    */
    hasNext = false;
-
-   rotationNext = 0;
 
   /**
    * Creates a Z4PointIterator
@@ -77,6 +77,15 @@ class Z4PointIterator {
     this.rotation = rotation;
     this.rotationMode = rotationMode;
     return this;
+  }
+
+  /**
+   * Returns the rotation
+   *
+   * @return The rotation
+   */
+   getRotation() {
+    return this.rotation;
   }
 
   /**

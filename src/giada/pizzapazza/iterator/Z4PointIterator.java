@@ -39,6 +39,7 @@ public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
 
   private Z4FancifulValue rotation = new Z4FancifulValue();
   private Z4Rotation rotationMode = Z4Rotation.FIXED;
+  private double rotationNext = 0;
 
   /**
    * The current Z4Point
@@ -54,7 +55,6 @@ public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
    * true if this Z4PointIterator has another point, false otherwise
    */
   protected boolean hasNext = false;
-  private double rotationNext = 0;
 
   /**
    * Creates a Z4PointIterator
@@ -93,6 +93,15 @@ public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
     this.rotation = rotation;
     this.rotationMode = rotationMode;
     return (T) this;
+  }
+
+  /**
+   * Returns the rotation
+   *
+   * @return The rotation
+   */
+  public Z4FancifulValue getRotation() {
+    return this.rotation;
   }
 
   /**

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<svg width="96" height="96" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
+ <g>
+  <title>Layer 1</title>
+  <line stroke="#000000" id="svg_2" y2="4.58252" x2="42.446604" y1="89.436893" x1="10.796118" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="null" stroke-width="5" fill="none"/>
+  <path id="svg_11" stroke="#0000bf" transform="rotate(60.037 54.8605 21.9702)" d="m49.523228,21.902046l5.337402,-28.2819l5.337299,28.2819l-2.668701,0l0,28.418106l-5.337299,0l0,-28.418106l-2.668701,0z" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="null" fill="#00ffff"/>
+  <path id="svg_12" stroke="#0000bf" transform="rotate(72.9493 47.2878 55.7566)" d="m41.950413,55.688454l5.337402,-28.281897l5.337299,28.281897l-2.668701,0l0,28.418106l-5.337299,0l0,-28.418106l-2.668701,0z" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="null" fill="#00ffff"/>
+  <path stroke="#0000bf" transform="rotate(89.6473 38.9476 88.267)" d="m33.610199,88.198898l5.337402,-28.281799l5.337399,28.281799l-2.6688,0l0,28.418098l-5.337299,0l0,-28.418098l-2.668701,0z" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="null" fill="#00ffff" id="svg_1"/>
+ </g>
+</svg>
