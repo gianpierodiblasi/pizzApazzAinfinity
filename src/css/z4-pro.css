@@ -208,6 +208,9 @@
 .z4-pro .cv-true.rv-false.pv-false.csv-true .fanciful-costant .sign-label {
   margin-bottom: 2px !important;
 }
+.z4-pro .cv-true.rv-false.pv-false.csv-true .fanciful-costant .spinner {
+  margin-top: -1px;
+}
 .z4-pro .cv-true.rv-false.pv-false.csv-true.fanciful-label {
   position: relative;
   width: 100%;

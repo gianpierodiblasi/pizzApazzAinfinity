@@ -1,53 +1,45 @@
-/*.z4-lite .fanciful-random, .z4-lite .fanciful-proportional,
-.z4-lite .uniform-check, .z4-lite .uniform-label,
-.z4-lite .uniform-container  {
+.z4-lite .fanciful-random,
+.z4-lite .fanciful-proportional {
   display: none;
-}*/
-
-/*.sign-label-never-visible, .sign-toggle-never-visible  {
-  display: none !important;
-}*/
-/*.with-sing-not-visible  {
-  border-radius: 0.25rem !important;
-}*/
-/*.uniform-container-not-visible,
-.uniform-check-not-visible, .uniform-label-not-visible,
-.fanciful-random-not-visible ,   {
-  
-}*/
-/*
-.fanciful-constant-not-visible, .fanciful-random-not-visible, .fanciful-proportional-not-visible  {
-  display: none;
-}*/
-
-/*
-.z4-lite .fanciful-costant .sign-label-not-visible, .z4-lite .fanciful-costant .sign-toggle-not-visible  {
-  display: inline-block;
 }
-.z4-lite .fanciful-costant .number-group  {
+
+.z4-lite .cv-true.csv-true.form-check,
+.z4-lite .cv-true.csv-true .uniform-container,
+.z4-lite .cv-true.csv-true .fanciful-costant .value-label {
+  display: none;
+}
+.z4-lite .cv-true.csv-true.fanciful-container {
+  margin-top: -31px;
+}
+.z4-lite .cv-true.csv-true .fanciful-costant .sign-label {
+  margin-bottom: 2px !important;
+}
+.z4-lite .cv-true.csv-true .fanciful-costant .spinner {
+  margin-top: -1px;
+}
+.z4-lite .cv-true.csv-true.fanciful-label {
   position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
   width: 100%;
+  text-align: right;
 }
-.z4-lite .fanciful-costant .number-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n+3),
-.z4-lite .fanciful-costant .number-group:not(.has-validation)>:not(:last-child):not(.dropdown-toggle):not(.dropdown-menu)  {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+
+.z4-lite .cv-true.csv-false.form-check,
+.z4-lite .cv-true.csv-false .uniform-container,
+.z4-lite .cv-true.csv-false .fanciful-costant .value-label,
+.z4-lite .cv-true.csv-false .sign-label,
+.z4-lite .cv-true.csv-false .sign-button {
+  display: none;
 }
-.z4-lite .fanciful-costant .number-group .btn  {
+.z4-lite .cv-true.csv-false.fanciful-label {
   position: relative;
-  z-index: 2;
+  width: 100%;
+  text-align: right;
+  margin-bottom: 9px;
 }
-.z4-lite .fanciful-costant .number-group>:not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback)  {
-  margin-left: -1px;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+.z4-lite .cv-true.csv-false .fanciful-costant input {
+  border-radius: 0.25rem !important;
 }
-.z4-lite .fanciful-costant .number-group>.form-control, .z4-lite .fanciful-costant .number-group>.form-select  {
-  position: relative;
-  flex: 1 1 auto;
-  width: 1%;
-  min-width: 0;
-}*/
+
+.z4-lite .cv-false {
+  display: none !important;
+}
