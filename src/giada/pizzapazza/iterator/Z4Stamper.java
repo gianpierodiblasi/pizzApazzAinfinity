@@ -82,14 +82,14 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
       this.currentMultiplicityCounter++;
       this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
 
-      double angle = this.nextRotation(0);
+      double angle = this.rotation.next(0);
       if ($exists(this.currentPush)) {
         Z4Vector pushed = Z4Vector.fromVector(this.P.$get("x"), this.P.$get("y"), this.currentPush, angle);
         this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), this.intensity.next(0), angle));
       } else {
         this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P.$get("x"), this.P.$get("y"), this.intensity.next(0), angle));
       }
-      this.nextSide(this.z4Point, null);
+      this.rotation.nextSide(this.z4Point, null);
 
       if (this.progression == Z4Progression.TEMPORAL) {
         this.z4Point.setLighting(this.lighting);

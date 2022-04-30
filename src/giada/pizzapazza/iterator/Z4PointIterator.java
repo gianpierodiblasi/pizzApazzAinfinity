@@ -5,13 +5,9 @@ import def.dom.CanvasPattern;
 import giada.pizzapazza.color.Z4Lighting;
 import giada.pizzapazza.color.Z4Progression;
 import giada.pizzapazza.math.Z4FancifulValue;
-import giada.pizzapazza.math.Z4Math;
 import giada.pizzapazza.math.Z4Point;
-import giada.pizzapazza.math.Z4Sign;
-import giada.pizzapazza.math.Z4Vector;
 import jsweet.util.union.Union4;
 import simulation.dom.$CanvasRenderingContext2D;
-import static simulation.js.$Globals.$exists;
 import simulation.js.$Object;
 
 /**
@@ -37,9 +33,10 @@ public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
    */
   protected Z4Lighting lighting = Z4Lighting.NONE;
 
-  private Z4FancifulValue rotation = new Z4FancifulValue();
-  private Z4Rotation rotationMode = Z4Rotation.FIXED;
-  private double rotationNext = 0;
+  /**
+   * The rotation
+   */
+  protected Z4Rotation rotation = Z4Rotation.fixed();
 
   /**
    * The current Z4Point
@@ -85,13 +82,11 @@ public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
    * Sets the rotation
    *
    * @param rotation The rotation
-   * @param rotationMode The rotation mode
    * @return This Z4PointIterator
    */
   @SuppressWarnings("unchecked")
-  public T setRotation(Z4FancifulValue rotation, Z4Rotation rotationMode) {
+  public T setRotation(Z4Rotation rotation) {
     this.rotation = rotation;
-    this.rotationMode = rotationMode;
     return (T) this;
   }
 
@@ -131,41 +126,6 @@ public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
    * @param height The height
    */
   public abstract void drawDemo($CanvasRenderingContext2D context, double width, double height);
-
-  /**
-   * Computes the next rotation
-   *
-   * @param tangentAngle The tangent angle
-   * @return The next rotation (in radians)
-   */
-  protected double nextRotation(double tangentAngle) {
-    double angle = Z4Math.deg2rad(this.rotation.next(0));
-
-    if (this.rotationMode == Z4Rotation.FIXED) {
-      return angle;
-    } else if (this.rotationMode == Z4Rotation.CUMULATIVE) {
-      this.rotationNext += angle;
-      return this.rotationNext;
-    } else if (this.rotationMode == Z4Rotation.RELATIVE_TO_PATH) {
-      return angle + tangentAngle;
-    } else {
-      return 0;
-    }
-  }
-
-  /**
-   * Computes the next side
-   *
-   * @param z4Point The current point
-   * @param vector The tangent vector
-   */
-  protected void nextSide(Z4Point z4Point, Z4Vector vector) {
-    if (this.rotationMode == Z4Rotation.FIXED || this.rotationMode == Z4Rotation.CUMULATIVE) {
-      z4Point.setSide(Z4Sign.POSITIVE);
-    } else if (this.rotationMode == Z4Rotation.RELATIVE_TO_PATH) {
-      z4Point.setSide($exists(vector) ? vector.direction(z4Point.getZ4Vector()) : Z4Sign.RANDOM);
-    }
-  }
 
   /**
    * Returns the color parameter
