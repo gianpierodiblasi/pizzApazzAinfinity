@@ -21,11 +21,10 @@ class Z4PointIterator {
    */
    lighting = Z4Lighting.NONE;
 
-   rotation = new Z4FancifulValue();
-
-   rotationMode = Z4Rotation.FIXED;
-
-   rotationNext = 0;
+  /**
+   * The rotation
+   */
+   rotation = Z4Rotation.fixed();
 
   /**
    * The current Z4Point
@@ -70,12 +69,10 @@ class Z4PointIterator {
    * Sets the rotation
    *
    * @param rotation The rotation
-   * @param rotationMode The rotation mode
    * @return This Z4PointIterator
    */
-   setRotation(rotation, rotationMode) {
+   setRotation(rotation) {
     this.rotation = rotation;
-    this.rotationMode = rotationMode;
     return this;
   }
 
@@ -117,40 +114,6 @@ class Z4PointIterator {
    * @param height The height
    */
    drawDemo(context, width, height) {
-  }
-
-  /**
-   * Computes the next rotation
-   *
-   * @param tangentAngle The tangent angle
-   * @return The next rotation (in radians)
-   */
-   nextRotation(tangentAngle) {
-    let angle = Z4Math.deg2rad(this.rotation.next(0));
-    if (this.rotationMode === Z4Rotation.FIXED) {
-      return angle;
-    } else if (this.rotationMode === Z4Rotation.CUMULATIVE) {
-      this.rotationNext += angle;
-      return this.rotationNext;
-    } else if (this.rotationMode === Z4Rotation.RELATIVE_TO_PATH) {
-      return angle + tangentAngle;
-    } else {
-      return 0;
-    }
-  }
-
-  /**
-   * Computes the next side
-   *
-   * @param z4Point The current point
-   * @param vector The tangent vector
-   */
-   nextSide(z4Point, vector) {
-    if (this.rotationMode === Z4Rotation.FIXED || this.rotationMode === Z4Rotation.CUMULATIVE) {
-      z4Point.setSide(Z4Sign.POSITIVE);
-    } else if (this.rotationMode === Z4Rotation.RELATIVE_TO_PATH) {
-      z4Point.setSide(vector ? vector.direction(z4Point.getZ4Vector()) : Z4Sign.RANDOM);
-    }
   }
 
   /**

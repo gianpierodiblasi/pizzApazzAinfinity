@@ -1,5 +1,5 @@
 /**
- * The component to edit a numeric value
+ * The component to edit a fanciful value
  *
  * @author gianpiero.di.blasi
  */

@@ -19,7 +19,7 @@ import static simulation.js.$Globals.parseInt;
 import static simulation.js.$Globals.setTimeout;
 
 /**
- * The component to edit a numeric value
+ * The component to edit a fanciful value
  *
  * @author gianpiero.di.blasi
  */

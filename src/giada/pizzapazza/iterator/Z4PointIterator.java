@@ -4,8 +4,8 @@ import def.dom.CanvasGradient;
 import def.dom.CanvasPattern;
 import giada.pizzapazza.color.Z4Lighting;
 import giada.pizzapazza.color.Z4Progression;
-import giada.pizzapazza.math.Z4FancifulValue;
 import giada.pizzapazza.math.Z4Point;
+import giada.pizzapazza.math.Z4Rotation;
 import jsweet.util.union.Union4;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.js.$Object;
@@ -95,7 +95,7 @@ public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
    *
    * @return The rotation
    */
-  public Z4FancifulValue getRotation() {
+  public Z4Rotation getRotation() {
     return this.rotation;
   }
 

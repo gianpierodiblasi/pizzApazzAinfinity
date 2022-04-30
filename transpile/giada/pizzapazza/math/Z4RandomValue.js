@@ -39,7 +39,7 @@ class Z4RandomValue {
   }
 
   /**
-   * Returns if this Z4RandomValue generates "classic "random values
+   * Checks if this Z4RandomValue generates "classic "random values
    *
    * @return true if this Z4RandomValue generates "classic "random values, false
    * otherwise
@@ -49,7 +49,7 @@ class Z4RandomValue {
   }
 
   /**
-   * Returns if this Z4RandomValue generates random values on a bezier curve
+   * Checks if this Z4RandomValue generates random values on a bezier curve
    *
    * @return true if this Z4RandomValue generates random values on a bezier
    * curve, false otherwise
@@ -59,7 +59,7 @@ class Z4RandomValue {
   }
 
   /**
-   * Returns if this Z4RandomValue generates random values on a polyline
+   * Checks if this Z4RandomValue generates random values on a polyline
    *
    * @return true if this Z4RandomValue generates random values on a polyline,
    * false otherwise

@@ -732,7 +732,7 @@ class Z4RandomValue {
   }
 
   /**
-   * Returns if this Z4RandomValue generates "classic "random values
+   * Checks if this Z4RandomValue generates "classic "random values
    *
    * @return true if this Z4RandomValue generates "classic "random values, false
    * otherwise
@@ -742,7 +742,7 @@ class Z4RandomValue {
   }
 
   /**
-   * Returns if this Z4RandomValue generates random values on a bezier curve
+   * Checks if this Z4RandomValue generates random values on a bezier curve
    *
    * @return true if this Z4RandomValue generates random values on a bezier
    * curve, false otherwise
@@ -752,7 +752,7 @@ class Z4RandomValue {
   }
 
   /**
-   * Returns if this Z4RandomValue generates random values on a polyline
+   * Checks if this Z4RandomValue generates random values on a polyline
    *
    * @return true if this Z4RandomValue generates random values on a polyline,
    * false otherwise
@@ -874,11 +874,12 @@ class Z4RandomValue {
   }
 }
 /**
- * The fanciful value
+ * The common parent of all fanciful values
  *
+ * @param <T>
  * @author gianpiero.di.blasi
  */
-class Z4FancifulValue {
+class Z4AbstractFancifulValue {
 
    constantSign = Z4Sign.RANDOM;
 
@@ -1036,6 +1037,172 @@ class Z4FancifulValue {
     } else {
       return 0;
     }
+  }
+}
+/**
+ * The fanciful value
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4FancifulValue extends Z4AbstractFancifulValue {
+}
+/**
+ * The rotation (angles parameters are computed in degrees,
+ * rotations are computed in radians)
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4Rotation extends Z4AbstractFancifulValue {
+
+   type = 0;
+
+   startAngle = 0.0;
+
+   delayed = false;
+
+   rotationNext = 0.0;
+
+  constructor(type) {
+    this.type = type;
+  }
+
+  /**
+   * Returns if the next rotation is computed on a fixed value
+   *
+   * @return true if the next rotation is computed on a fixed value, false
+   * otherwise
+   */
+   isFixed() {
+    return this.type === 0;
+  }
+
+  /**
+   * Returns if next rotation is computed by cumulating previous rotation
+   *
+   * @return true if next rotation is computed by cumulating previous rotation,
+   * false otherwise
+   */
+   isCumulative() {
+    return this.type === 1;
+  }
+
+  /**
+   * Checks if next rotation is computed relative to a path
+   *
+   * @return true if next rotation is computed relative to a path, false
+   * otherwise
+   */
+   isRelativeToPath() {
+    return this.type === 2;
+  }
+
+  /**
+   * Returns the initial angle of rotation (in degrees)
+   *
+   * @return The initial angle of rotation (in degrees)
+   */
+   getStartAngle() {
+    return this.startAngle;
+  }
+
+  /**
+   * Sets the initial angle of rotation (in degrees)
+   *
+   * @param startAngle The initial angle of rotation (in degrees)
+   * @return This Z4Rotation
+   */
+   setStartAngle(startAngle) {
+    this.startAngle = startAngle;
+    return this;
+  }
+
+  /**
+   * Returns if the rotation has to be delayed (rotated by a PI angle)
+   *
+   * @return true if the returned rotation has to be delayed (rotated by a PI
+   * angle), false otherwise
+   */
+   isDelayed() {
+    return this.delayed;
+  }
+
+  /**
+   * Sets if the rotation has to be delayed (rotated by a PI angle)
+   *
+   * @param delayed true if the rotation has to be delayed (rotated by a PI
+   * angle), false otherwise
+   * @return This Z4Rotation
+   */
+   setDelayed(delayed) {
+    this.delayed = delayed;
+    return this;
+  }
+
+  /**
+   * Returns the next rotation
+   *
+   * @param tangentAngle The tangent angle (in radians)
+   * @return The next rotation (in radians)
+   */
+   next(tangentAngle) {
+    let angle = Z4Math.deg2rad(this.startAngle + super.next(0));
+    switch(this.type) {
+      case 0:
+        return angle + (this.delayed ? Math.PI : 0);
+      case 1:
+        this.rotationNext += angle;
+        return this.rotationNext + (this.delayed ? Math.PI : 0);
+      case 2:
+        return angle + tangentAngle + (this.delayed ? Math.PI : 0);
+      default:
+        return 0;
+    }
+  }
+
+  /**
+   * Computes the next side
+   *
+   * @param z4Point The current point
+   * @param vector The tangent vector
+   */
+   nextSide(z4Point, vector) {
+    switch(this.type) {
+      case 0:
+      case 1:
+        z4Point.setSide(Z4Sign.POSITIVE);
+        break;
+      case 2:
+        z4Point.setSide(vector ? vector.direction(z4Point.getZ4Vector()) : Z4Sign.RANDOM);
+        break;
+    }
+  }
+
+  /**
+   * Returns a Z4Rotation with next rotation computed on a fixed value
+   *
+   * @return The Z4Rotation
+   */
+  static  fixed() {
+    return new Z4Rotation(0);
+  }
+
+  /**
+   * Returns a Z4Rotation with next rotation computed by cumulating previous
+   * rotation
+   *
+   * @return The Z4Rotation
+   */
+  static  cumulative() {
+    return new Z4Rotation(1);
+  }
+
+  /**
+   * Returns a Z4Rotation with next rotation computed relative to a path
+   *
+   * @return The Z4Rotation
+   */
+  static  relativeToPath() {
+    return new Z4Rotation(2);
   }
 }
 /**
@@ -1604,7 +1771,7 @@ class Z4NumberUI extends Z4ComponentUI {
   }
 }
 /**
- * The component to edit a numeric value
+ * The component to edit a fanciful value
  *
  * @author gianpiero.di.blasi
  */
@@ -2013,6 +2180,451 @@ class Z4FancifulValueUI extends Z4ComponentUI {
    getValue() {
     return this.fancifulValue;
   }
+}
+/**
+ * The component to edit a rotation
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4RotationUI extends Z4ComponentUI {
+
+  // private final $HTMLElement uniformCheck = this.querySelector(".uniform-check");
+  // private final HTMLElement toggleUniform = this.querySelector(".toggle-uniform");
+  // private final HTMLElement toggleUniformImg = this.querySelector(".toggle-uniform img");
+  // 
+  // private final Z4NumberUI constantUI = new Z4NumberUI();
+  // private final Z4NumberUI randomUI = new Z4NumberUI();
+  // private final Z4NumberUI proportionalUI = new Z4NumberUI();
+  // 
+  // private final HTMLElement toggleRandom = this.querySelector(".toggle-random");
+  // private final HTMLElement toggleRandomImg = this.querySelector(".toggle-random img");
+  // 
+  // private final $HTMLElement valueLength = this.querySelector(".random-length");
+  // private final $HTMLElement spinnerLength = this.querySelector(".random-length-spinner");
+  // 
+  // private Z4FancifulValue fancifulValue = new Z4FancifulValue();
+  // private boolean constantSignVisible = true;
+  // private boolean randomSignVisible = true;
+  // private boolean proportionalSignVisible = true;
+  // private boolean constantVisible = true;
+  // private boolean randomVisible = true;
+  // private boolean proportionalVisible = true;
+  // private Array<String> selector = new Array<>();
+  // 
+  // private final $Apply_0_Void applySpin = () -> this.spin();
+  // private boolean isApplySpin = false;
+  // 
+  static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
+
+  static  UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4RotationUI.html");
+
+  /**
+   * Creates a Z4RotationUI
+   */
+  constructor() {
+    super(Z4RotationUI.UI);
+    // this.uniformCheck.id = "uniform_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
+    // this.querySelector(".uniform-label").setAttribute("for", this.uniformCheck.id);
+    // this.uniformCheck.onchange = (event) -> {
+    // this.setUI();
+    // this.onchange.$apply(this.fancifulValue.setUniformSign(this.uniformCheck.checked));
+    // return null;
+    // };
+    // 
+    // this.toggleUniformImg.setAttribute("src", Z4RotationUI.PATH + "z4sign_" + this.toggleUniform.getAttribute("data-value") + ".svg");
+    // 
+    // NodeList imgs = this.querySelectorAll(".toggle-uniform-dropdown-menu img");
+    // for (int i = 0; i < imgs.length; i++) {
+    // HTMLElement img = (HTMLElement) imgs.item(i);
+    // img.setAttribute("src", Z4RotationUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".svg");
+    // }
+    // 
+    // NodeList buttons = this.querySelectorAll(".toggle-uniform-dropdown-menu .dropdown-item");
+    // for (int i = 0; i < buttons.length; i++) {
+    // HTMLElement button = (HTMLElement) buttons.item(i);
+    // button.onclick = (event) -> {
+    // this.toggleUniform.setAttribute("data-value", button.getAttribute("data-value"));
+    // this.toggleUniformImg.setAttribute("src", Z4RotationUI.PATH + "z4sign_" + button.getAttribute("data-value") + ".svg");
+    // 
+    // this.constantUI.setSign(this.getUniformSign());
+    // this.onchange.$apply(this.fancifulValue.setConstant(this.getUniformSign(), this.constantUI.getValue()));
+    // return null;
+    // };
+    // }
+    // 
+    // this.toggleRandomImg.setAttribute("src", Z4RotationUI.PATH + "z4randomvalue_" + this.toggleRandom.getAttribute("data-value") + ".svg");
+    // 
+    // imgs = this.querySelectorAll(".toggle-random-dropdown-menu img");
+    // for (int i = 0; i < imgs.length; i++) {
+    // HTMLElement img = (HTMLElement) imgs.item(i);
+    // img.setAttribute("src", Z4RotationUI.PATH + "z4randomvalue_" + img.getAttribute("data-icon") + ".svg");
+    // }
+    // 
+    // buttons = this.querySelectorAll(".toggle-random-dropdown-menu .dropdown-item");
+    // for (int i = 0; i < buttons.length; i++) {
+    // HTMLElement button = (HTMLElement) buttons.item(i);
+    // button.onclick = (event) -> {
+    // String str = button.getAttribute("data-value");
+    // this.toggleRandom.setAttribute("data-value", str);
+    // this.toggleRandomImg.setAttribute("src", Z4RotationUI.PATH + "z4randomvalue_" + str + ".svg");
+    // 
+    // this.querySelector(".divider-length").style.display = str == "classic" ? "none" : "block"; // JS equality for strings
+    // this.querySelector(".container-length").style.display = str == "classic" ? "none" : "block"; // JS equality for strings
+    // 
+    // this.onchange.$apply(this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom()));
+    // return null;
+    // };
+    // }
+    // 
+    // this.valueLength.oninput = (event) -> {
+    // this.oninput.$apply(this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom()));
+    // return null;
+    // };
+    // this.valueLength.onchange = (event) -> {
+    // this.onchange.$apply(this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom()));
+    // return null;
+    // };
+    // this.valueLength.onfocus = (event) -> {
+    // this.valueLength.select();
+    // return null;
+    // };
+    // if (Z4Loader.touch) {
+    // this.spinnerLength.ontouchstart = (event) -> this.startSpin();
+    // this.spinnerLength.ontouchend = (event) -> this.stopSpin();
+    // } else {
+    // this.spinnerLength.onmousedown = (event) -> this.startSpin();
+    // this.spinnerLength.onmouseup = (event) -> this.stopSpin();
+    // }
+    // 
+    // this.constantUI.appendTo(this.querySelector(".fanciful-costant"));
+    // this.constantUI.setValueLabel("CONSTANT");
+    // this.randomUI.appendTo(this.querySelector("div.fanciful-random"));
+    // this.randomUI.setValueLabel("RANDOM");
+    // this.proportionalUI.appendTo(this.querySelector(".fanciful-proportional"));
+    // this.proportionalUI.setValueLabel("PROPORTIONAL");
+    // 
+    // this.querySelector(".fanciful-random > div").prepend(this.querySelector(".random-type-label"));
+    // this.randomUI.querySelector(".number-group").prepend(this.querySelector(".toggle-random-dropdown-menu"));
+    // this.randomUI.querySelector(".number-group").prepend(this.toggleRandom);
+    // this.randomUI.querySelector(".sign-label").style.width = "64px";
+    // 
+    // this.constantUI.oninput = (event) -> this.onInput();
+    // this.randomUI.oninput = (event) -> this.onInput();
+    // this.proportionalUI.oninput = (event) -> this.onInput();
+    // this.constantUI.onchange = (event) -> this.onChange();
+    // this.randomUI.onchange = (event) -> this.onChange();
+    // this.proportionalUI.onchange = (event) -> this.onChange();
+    // 
+    // this.setValue(this.fancifulValue);
+  }
+  // private Object onInput() {
+  // this.setUniformSign(this.constantUI.getSign());
+  // 
+  // this.oninput.$apply(this.fancifulValue.
+  // setConstant(this.constantUI.getSign(), this.constantUI.getValue()).
+  // setRandom(this.randomUI.getSign(), this.getRandom()).
+  // setProportional(this.proportionalUI.getSign(), this.proportionalUI.getValue())
+  // );
+  // 
+  // return null;
+  // }
+  // 
+  // private Object onChange() {
+  // this.setUniformSign(this.constantUI.getSign());
+  // 
+  // this.onchange.$apply(this.fancifulValue.
+  // setConstant(this.constantUI.getSign(), this.constantUI.getValue()).
+  // setRandom(this.randomUI.getSign(), this.getRandom()).
+  // setProportional(this.proportionalUI.getSign(), this.proportionalUI.getValue()));
+  // 
+  // return null;
+  // }
+  // 
+  // private Object startSpin() {
+  // this.isApplySpin = true;
+  // this.applySpin.$apply();
+  // return null;
+  // }
+  // 
+  // private Object stopSpin() {
+  // this.isApplySpin = false;
+  // this.spinnerLength.value = "0";
+  // return null;
+  // }
+  // 
+  // private void spin() {
+  // double min = parseFloat(this.valueLength.getAttribute("min"));
+  // double max = parseFloat(this.valueLength.getAttribute("max"));
+  // 
+  // double v = this.spinnerLength.valueAsNumber;
+  // double abs = 1;
+  // 
+  // if ($exists(v)) {
+  // abs = Math.abs(v);
+  // 
+  // v = Math.max(min, this.valueLength.valueAsNumber + (v > 0 ? 1 : -1));
+  // v = Math.min(v, max);
+  // 
+  // this.valueLength.value = "" + v;
+  // this.oninput.$apply(this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom()));
+  // }
+  // 
+  // if (this.isApplySpin) {
+  // setTimeout(this.applySpin, 500 / abs);
+  // } else {
+  // this.onchange.$apply(this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom()));
+  // }
+  // }
+  // 
+  // /**
+  // * Sets the visibility of the components
+  // *
+  // * @param constant true to make the constant component visible, false
+  // * otherwise
+  // * @param random true to make the random component visible, false otherwise
+  // * @param proportional true to make the proportional component visible, false
+  // * @return This Z4RotationUI
+  // */
+  // public Z4RotationUI setComponentsVisible(boolean constant, boolean random, boolean proportional) {
+  // this.constantVisible = constant;
+  // this.randomVisible = random;
+  // this.proportionalVisible = proportional;
+  // 
+  // this.setUI();
+  // return this;
+  // }
+  // 
+  // /**
+  // * Sets the visibility of the signs
+  // *
+  // * @param constant true to make the constant sign visible, false otherwise
+  // * @param random true to make the random sign visible, false otherwise
+  // * @param proportional true to make the proportional sign visible, false
+  // * otherwise
+  // * @return
+  // */
+  // public Z4RotationUI setSignsVisible(boolean constant, boolean random, boolean proportional) {
+  // this.constantSignVisible = constant;
+  // this.randomSignVisible = random;
+  // this.proportionalSignVisible = proportional;
+  // 
+  // this.setUI();
+  // return this;
+  // }
+  // 
+  // /**
+  // * Sets the range of the constant component
+  // *
+  // * @param min The minumum value
+  // * @param max The maximum value
+  // * @return This Z4RotationUI
+  // */
+  // public Z4RotationUI setConstantRange(int min, int max) {
+  // this.constantUI.setRange(min, max);
+  // return this;
+  // }
+  // 
+  // /**
+  // * Sets the range of the random component
+  // *
+  // * @param min The minumum value
+  // * @param max The maximum value
+  // * @return This Z4RotationUI
+  // */
+  // public Z4RotationUI setRandomRange(int min, int max) {
+  // this.randomUI.setRange(min, max);
+  // return this;
+  // }
+  // 
+  // /**
+  // * Sets the range of the proportional component
+  // *
+  // * @param min The minumum value
+  // * @param max The maximum value
+  // * @return This Z4RotationUI
+  // */
+  // public Z4RotationUI setProportionalRange(int min, int max) {
+  // this.proportionalUI.setRange(min, max);
+  // return this;
+  // }
+  // 
+  // /**
+  // * Sets the range of the random length
+  // *
+  // * @param min The minumum value
+  // * @param max The maximum value
+  // * @return This Z4RotationUI
+  // */
+  // public Z4RotationUI setRandomLengthRange(int min, int max) {
+  // this.valueLength.setAttribute("min", "" + min);
+  // this.valueLength.setAttribute("max", "" + max);
+  // return this;
+  // }
+  // 
+  // /**
+  // * Sets the token of the value label
+  // *
+  // * @param token The token of the value label
+  // * @return This Z4NumberUI
+  // */
+  // public Z4RotationUI setValueLabel(String token) {
+  // $HTMLElement valueLabel = this.querySelector(".fanciful-label");
+  // valueLabel.setAttribute("data-token-lang-inner_text", token);
+  // valueLabel.innerText = Z4MessageFactory.get(token);
+  // return this;
+  // }
+  // 
+  // /**
+  // * Sets the horizontal orientation
+  // *
+  // * @return This Z4RotationUI
+  // */
+  // public Z4RotationUI setHorizontal() {
+  // $HTMLElement element = this.querySelector(".fanciful-container");
+  // element.classList.remove("fanciful-container-vertical");
+  // element.classList.add("fanciful-container-horizontal");
+  // return this;
+  // }
+  // 
+  // /**
+  // * Sets the vertical orientation
+  // *
+  // * @return This Z4RotationUI
+  // */
+  // public Z4RotationUI setVertical() {
+  // $HTMLElement element = this.querySelector(".fanciful-container");
+  // element.classList.add("fanciful-container-vertical");
+  // element.classList.remove("fanciful-container-horizontal");
+  // return this;
+  // }
+  // 
+  // /**
+  // * Sets the value
+  // *
+  // * @param value The value
+  // * @return This Z4NumberUI
+  // */
+  // public Z4RotationUI setValue(Z4FancifulValue value) {
+  // this.fancifulValue = value;
+  // 
+  // this.uniformCheck.checked = this.fancifulValue.isUniformSign();
+  // 
+  // this.constantUI.setSign(this.fancifulValue.getConstantSign());
+  // this.constantUI.setValue(this.fancifulValue.getConstantValue());
+  // this.setUniformSign(this.fancifulValue.getConstantSign());
+  // 
+  // this.randomUI.setSign(this.fancifulValue.getRandomSign());
+  // this.setRandom(this.fancifulValue.getRandomValue());
+  // 
+  // this.proportionalUI.setSign(this.fancifulValue.getProportionalSign());
+  // this.proportionalUI.setValue(this.fancifulValue.getProportionalValue());
+  // 
+  // this.setUI();
+  // return this;
+  // }
+  // 
+  // private void setUI() {
+  // this.selector.forEach(sel -> {
+  // this.querySelector(".fanciful-label").classList.remove(sel);
+  // this.querySelector(".form-check").classList.remove(sel);
+  // this.querySelector(".fanciful-container").classList.remove(sel);
+  // });
+  // 
+  // this.selector = new Array<>(
+  // "cv-" + this.constantVisible,
+  // "rv-" + this.randomVisible,
+  // "pv-" + this.proportionalVisible,
+  // "csv-" + this.constantSignVisible,
+  // "rsv-" + this.randomSignVisible,
+  // "psv-" + this.proportionalSignVisible,
+  // "u-" + this.uniformCheck.checked
+  // );
+  // 
+  // this.selector.forEach(sel -> {
+  // this.querySelector(".fanciful-label").classList.add(sel);
+  // this.querySelector(".form-check").classList.add(sel);
+  // this.querySelector(".fanciful-container").classList.add(sel);
+  // });
+  // }
+  // 
+  // private void setUniformSign(Z4Sign sign) {
+  // String str;
+  // 
+  // if (sign == Z4Sign.POSITIVE) {
+  // str = "positive";
+  // } else if (sign == Z4Sign.NEGATIVE) {
+  // str = "negative";
+  // } else if (sign == Z4Sign.RANDOM) {
+  // str = "random";
+  // } else {
+  // str = "alternate";
+  // }
+  // 
+  // this.toggleUniform.setAttribute("data-value", str);
+  // this.toggleUniformImg.setAttribute("src", Z4RotationUI.PATH + "z4sign_" + str + ".svg");
+  // }
+  // 
+  // public Z4Sign getUniformSign() {
+  // switch (this.toggleUniform.getAttribute("data-value")) {
+  // case "positive":
+  // return Z4Sign.POSITIVE;
+  // case "negative":
+  // return Z4Sign.NEGATIVE;
+  // case "random":
+  // return Z4Sign.RANDOM;
+  // case "alternate":
+  // return Z4Sign.alternate();
+  // default:
+  // return null;
+  // }
+  // }
+  // 
+  // @SuppressWarnings("StringEquality")
+  // private void setRandom(Z4RandomValue random) {
+  // String str = null;
+  // if (random.isClassic()) {
+  // str = "classic";
+  // } else if (random.isBezier()) {
+  // str = "bezier";
+  // } else if (random.isPolyline()) {
+  // str = "polyline";
+  // } else if (random.isStepped()) {
+  // str = "stepped";
+  // }
+  // 
+  // this.toggleRandom.setAttribute("data-value", str);
+  // this.toggleRandomImg.setAttribute("src", Z4RotationUI.PATH + "z4randomvalue_" + str + ".svg");
+  // 
+  // this.randomUI.setValue(random.getValue());
+  // 
+  // this.querySelector(".divider-length").style.display = str == "classic" ? "none" : "block"; // JS equality for strings
+  // this.querySelector(".container-length").style.display = str == "classic" ? "none" : "block"; // JS equality for strings
+  // this.valueLength.value = "" + random.getLength();
+  // }
+  // 
+  // private Z4RandomValue getRandom() {
+  // switch (this.toggleRandom.getAttribute("data-value")) {
+  // case "classic":
+  // return Z4RandomValue.classic(this.randomUI.getValue());
+  // case "bezier":
+  // return Z4RandomValue.bezier(this.randomUI.getValue(), this.valueLength.valueAsNumber);
+  // case "polyline":
+  // return Z4RandomValue.polyline(this.randomUI.getValue(), this.valueLength.valueAsNumber);
+  // case "stepped":
+  // return Z4RandomValue.stepped(this.randomUI.getValue(), this.valueLength.valueAsNumber);
+  // default:
+  // return null;
+  // }
+  // }
+  // 
+  // /**
+  // * Returns the value
+  // *
+  // * @return The value
+  // */
+  // public Z4FancifulValue getValue() {
+  // return this.fancifulValue;
+  // }
 }
 /**
  * The lighting of a color
@@ -4285,31 +4897,6 @@ class Z4Action {
   }
 }
 /**
- * The rotation of a Z4PointIterator
- *
- * @author gianpiero.di.blasi
- */
-class Z4Rotation {
-
-  /**
-   * Next rotation is computed on a fixed value
-   */
-  static  FIXED = new Z4Rotation();
-
-  /**
-   * Next rotation is computed by cumulating previous rotation
-   */
-  static  CUMULATIVE = new Z4Rotation();
-
-  /**
-   * Next rotation is computed relative to a path
-   */
-  static  RELATIVE_TO_PATH = new Z4Rotation();
-
-  constructor() {
-  }
-}
-/**
  * The common parent of all point iterators
  *
  * @param <T>
@@ -4332,9 +4919,10 @@ class Z4PointIterator {
    */
    lighting = Z4Lighting.NONE;
 
-   rotation = new Z4FancifulValue();
-
-   rotationMode = Z4Rotation.FIXED;
+  /**
+   * The rotation
+   */
+   rotation = Z4Rotation.fixed();
 
   /**
    * The current Z4Point
@@ -4350,8 +4938,6 @@ class Z4PointIterator {
    * true if this Z4PointIterator has another point, false otherwise
    */
    hasNext = false;
-
-   rotationNext = 0;
 
   /**
    * Creates a Z4PointIterator
@@ -4381,13 +4967,20 @@ class Z4PointIterator {
    * Sets the rotation
    *
    * @param rotation The rotation
-   * @param rotationMode The rotation mode
    * @return This Z4PointIterator
    */
-   setRotation(rotation, rotationMode) {
+   setRotation(rotation) {
     this.rotation = rotation;
-    this.rotationMode = rotationMode;
     return this;
+  }
+
+  /**
+   * Returns the rotation
+   *
+   * @return The rotation
+   */
+   getRotation() {
+    return this.rotation;
   }
 
   /**
@@ -4419,40 +5012,6 @@ class Z4PointIterator {
    * @param height The height
    */
    drawDemo(context, width, height) {
-  }
-
-  /**
-   * Computes the next rotation
-   *
-   * @param tangentAngle The tangent angle
-   * @return The next rotation (in radians)
-   */
-   nextRotation(tangentAngle) {
-    let angle = Z4Math.deg2rad(this.rotation.next(0));
-    if (this.rotationMode === Z4Rotation.FIXED) {
-      return angle;
-    } else if (this.rotationMode === Z4Rotation.CUMULATIVE) {
-      this.rotationNext += angle;
-      return this.rotationNext;
-    } else if (this.rotationMode === Z4Rotation.RELATIVE_TO_PATH) {
-      return angle + tangentAngle;
-    } else {
-      return 0;
-    }
-  }
-
-  /**
-   * Computes the next side
-   *
-   * @param z4Point The current point
-   * @param vector The tangent vector
-   */
-   nextSide(z4Point, vector) {
-    if (this.rotationMode === Z4Rotation.FIXED || this.rotationMode === Z4Rotation.CUMULATIVE) {
-      z4Point.setSide(Z4Sign.POSITIVE);
-    } else if (this.rotationMode === Z4Rotation.RELATIVE_TO_PATH) {
-      z4Point.setSide(vector ? vector.direction(z4Point.getZ4Vector()) : Z4Sign.RANDOM);
-    }
   }
 
   /**
@@ -4531,14 +5090,14 @@ class Z4Stamper extends Z4PointIterator {
     } else {
       this.currentMultiplicityCounter++;
       this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
-      let angle = this.nextRotation(0);
+      let angle = this.rotation.next(0);
       if (this.currentPush) {
         let pushed = Z4Vector.fromVector(this.P["x"], this.P["y"], this.currentPush, angle);
         this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), this.intensity.next(0), angle));
       } else {
         this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P["x"], this.P["y"], this.intensity.next(0), angle));
       }
-      this.nextSide(this.z4Point, null);
+      this.rotation.nextSide(this.z4Point, null);
       if (this.progression === Z4Progression.TEMPORAL) {
         this.z4Point.setLighting(this.lighting);
         let colorPosition = this.z4Point.getColorPosition();
@@ -4606,6 +5165,7 @@ class Z4StamperUI extends Z4ComponentUI {
 
    intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY").setComponentsVisible(true, true, false).setSignsVisible(false, true, true).appendTo(this.querySelector(".stamper-container"));
 
+  // private final Z4FancifulValueUI rotation = new Z4FancifulValueUI().setValueLabel("ROTATION").setComponentsVisible(true, true, false).setConstantRange(-180, 180).setRandomRange(-180, 180).appendTo(this.querySelector(".stamper-container"));
    multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY").setComponentsVisible(true, true, false).setSignsVisible(false, true, true).setConstantRange(1, 999999999).appendTo(this.querySelector(".stamper-container"));
 
    push = new Z4FancifulValueUI().setValueLabel("PUSH").setComponentsVisible(true, true, false).setSignsVisible(false, true, true).appendTo(this.querySelector(".stamper-container"));
@@ -4631,6 +5191,7 @@ class Z4StamperUI extends Z4ComponentUI {
    setValue(value) {
     this.stamper = value;
     this.intensity.setValue(this.stamper.getIntensity());
+    // this.rotation.setValue(this.stamper.getRotation());
     this.multiplicity.setValue(this.stamper.getMultiplicity());
     this.push.setValue(this.stamper.getPush());
     return this;

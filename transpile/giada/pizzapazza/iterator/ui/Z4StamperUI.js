@@ -7,8 +7,7 @@ class Z4StamperUI extends Z4ComponentUI {
 
    intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY").setComponentsVisible(true, true, false).setSignsVisible(false, true, true).appendTo(this.querySelector(".stamper-container"));
 
-   rotation = new Z4FancifulValueUI().setValueLabel("ROTATION").setComponentsVisible(true, true, false).setConstantRange(-180, 180).setRandomRange(-180, 180).appendTo(this.querySelector(".stamper-container"));
-
+  // private final Z4FancifulValueUI rotation = new Z4FancifulValueUI().setValueLabel("ROTATION").setComponentsVisible(true, true, false).setConstantRange(-180, 180).setRandomRange(-180, 180).appendTo(this.querySelector(".stamper-container"));
    multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY").setComponentsVisible(true, true, false).setSignsVisible(false, true, true).setConstantRange(1, 999999999).appendTo(this.querySelector(".stamper-container"));
 
    push = new Z4FancifulValueUI().setValueLabel("PUSH").setComponentsVisible(true, true, false).setSignsVisible(false, true, true).appendTo(this.querySelector(".stamper-container"));
@@ -34,7 +33,7 @@ class Z4StamperUI extends Z4ComponentUI {
    setValue(value) {
     this.stamper = value;
     this.intensity.setValue(this.stamper.getIntensity());
-    this.rotation.setValue(this.stamper.getRotation());
+    // this.rotation.setValue(this.stamper.getRotation());
     this.multiplicity.setValue(this.stamper.getMultiplicity());
     this.push.setValue(this.stamper.getPush());
     return this;
