@@ -202,6 +202,9 @@
 .z4-pro .cv-true.rv-false.pv-false.csv-true .fanciful-proportional {
   display: none;
 }
+.z4-pro .cv-true.rv-false.pv-false.csv-true.fanciful-container {
+  margin-top: -31px;
+}
 .z4-pro .cv-true.rv-false.pv-false.csv-true .fanciful-costant .sign-label {
   margin-bottom: 2px !important;
 }
@@ -209,27 +212,23 @@
   position: relative;
   width: 100%;
   text-align: right;
-  top: calc(24px + 0.5rem);
 }
 
 .z4-pro .cv-true.rv-false.pv-false.csv-false.form-check,
 .z4-pro .cv-true.rv-false.pv-false.csv-false .uniform-container,
-/*.z4-pro .cv-true.rv-false.pv-false.csv-false .fanciful-costant .value-label,*/
+.z4-pro .cv-true.rv-false.pv-false.csv-false .fanciful-costant .value-label,
 .z4-pro .cv-true.rv-false.pv-false.csv-false .sign-label,
 .z4-pro .cv-true.rv-false.pv-false.csv-false .sign-button,
 .z4-pro .cv-true.rv-false.pv-false.csv-false .fanciful-random,
 .z4-pro .cv-true.rv-false.pv-false.csv-false .fanciful-proportional {
   display: none;
 }
-/*.z4-pro .cv-true.rv-false.pv-false.csv-false .fanciful-costant .sign-label {
-  margin-bottom: 2px !important;
-}
 .z4-pro .cv-true.rv-false.pv-false.csv-false.fanciful-label {
   position: relative;
   width: 100%;
   text-align: right;
-  top: calc(24px + 0.5rem);
-}*/
+  margin-bottom: 9px;
+}
 .z4-pro .cv-true.rv-false.pv-false.csv-false .fanciful-costant input {
   border-radius: 0.25rem !important;
 }
