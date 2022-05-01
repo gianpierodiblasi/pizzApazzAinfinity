@@ -50,6 +50,11 @@
   color: #DEDAD6;
 }
 
+.z4-dark .input-group-text {
+  background: #202020;
+  color: #DEDAD6;
+}
+
 .z4-dark .z4-dark-img-negative {
   filter: invert(1);
 }

@@ -1269,7 +1269,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
    * Sets the range of this Z4SignedValueUI
    *
    * @param min The minumum value, a positive value
-   * @param max The maximum value, a positive value, 999999999 to show infinite
+   * @param max The maximum value, a positive value (999999999 to show infinite)
    * @return This Z4SignedValueUI
    */
    setRange(min, max) {
