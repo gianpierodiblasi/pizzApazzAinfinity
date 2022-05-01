@@ -25,6 +25,15 @@ class Z4AbstractComponentWithValueUI extends Z4AbstractComponentUI {
   };
 
   /**
+   * Creates a Z4AbstractComponentWithValueUI
+   *
+   * @param ui The HTML
+   */
+  constructor(ui) {
+    super(ui);
+  }
+
+  /**
    * Sets the value
    *
    * @param value The value

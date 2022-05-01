@@ -424,6 +424,15 @@ class Z4AbstractComponentWithValueUI extends Z4AbstractComponentUI {
   };
 
   /**
+   * Creates a Z4AbstractComponentWithValueUI
+   *
+   * @param ui The HTML
+   */
+  constructor(ui) {
+    super(ui);
+  }
+
+  /**
    * Sets the value
    *
    * @param value The value
@@ -725,11 +734,72 @@ class Z4Sign {
   }
 }
 /**
- * The random value
+ * A value with sign
  *
  * @author gianpiero.di.blasi
  */
-class Z4RandomValue {
+class Z4SignedValue {
+
+   sign = Z4Sign.RANDOM;
+
+   value = 0;
+
+  /**
+   * Returns the sign
+   *
+   * @return The sign
+   */
+   getSign() {
+    return this.sign;
+  }
+
+  /**
+   * Sets the sign
+   *
+   * @param sign The sign
+   * @return This Z4SignedValue
+   */
+   setSign(sign) {
+    this.sign = sign;
+    return this;
+  }
+
+  /**
+   * Returns the value
+   *
+   * @return The value
+   */
+   geValue() {
+    return this.value;
+  }
+
+  /**
+   * Sets the value
+   *
+   * @param value The value
+   * @return This Z4SignedValue
+   */
+   setValue(value) {
+    this.value = value;
+    return this;
+  }
+
+  /**
+   * Returns the next signed value
+   *
+   * @return The next signed value
+   */
+   next() {
+    return this.sign.next() * this.value;
+  }
+}
+/**
+ * The common parent of all random values
+ *
+ * @param <T>
+ * @author gianpiero.di.blasi
+ */
+class Z4AbstractRandomValue {
 
    value = 0.0;
 
@@ -747,6 +817,12 @@ class Z4RandomValue {
 
    bezierCurve = null;
 
+  /**
+   * Creates a Z4AbstractRandomValue
+   * @param value The value
+   * @param type The type
+   * @param length The length
+   */
   constructor(value, type, length) {
     this.value = value;
     this.type = type;
@@ -765,40 +841,42 @@ class Z4RandomValue {
   }
 
   /**
-   * Checks if this Z4RandomValue generates "classic "random values
+   * Checks if this Z4AbstractRandomValue generates "classic "random values
    *
-   * @return true if this Z4RandomValue generates "classic "random values, false
-   * otherwise
+   * @return true if this Z4AbstractRandomValue generates "classic "random
+   * values, false otherwise
    */
    isClassic() {
     return this.type === 0;
   }
 
   /**
-   * Checks if this Z4RandomValue generates random values on a bezier curve
+   * Checks if this Z4AbstractRandomValue generates random values on a bezier
+   * curve
    *
-   * @return true if this Z4RandomValue generates random values on a bezier
-   * curve, false otherwise
+   * @return true if this Z4AbstractRandomValue generates random values on a
+   * bezier curve, false otherwise
    */
    isBezier() {
     return this.type === 1;
   }
 
   /**
-   * Checks if this Z4RandomValue generates random values on a polyline
+   * Checks if this Z4AbstractRandomValue generates random values on a polyline
    *
-   * @return true if this Z4RandomValue generates random values on a polyline,
-   * false otherwise
+   * @return true if this Z4AbstractRandomValue generates random values on a
+   * polyline, false otherwise
    */
    isPolyline() {
     return this.type === 2;
   }
 
   /**
-   * Returns if this Z4RandomValue generates random values on a stepped line
+   * Returns if this Z4AbstractRandomValue generates random values on a stepped
+   * line
    *
-   * @return true if this Z4RandomValue generates random values on a stepped
-   * line, false otherwise
+   * @return true if this Z4AbstractRandomValue generates random values on a
+   * stepped line, false otherwise
    */
    isStepped() {
     return this.type === 3;
@@ -862,6 +940,17 @@ class Z4RandomValue {
         return value * this.prevRandom;
     }
   }
+}
+/**
+ * The random value
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4RandomValue extends Z4AbstractRandomValue {
+
+  constructor(value, type, length) {
+    super(value, type, length);
+  }
 
   /**
    * Returns a Z4RandomValue generating "classic "random values
@@ -907,6 +996,91 @@ class Z4RandomValue {
   }
 }
 /**
+ * The signed random value
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4SignedRandomValue extends Z4AbstractRandomValue {
+
+   sign = Z4Sign.RANDOM;
+
+  constructor(value, type, length) {
+    super(value, type, length);
+  }
+
+  /**
+   * Returns the sign
+   *
+   * @return The sign
+   */
+   getSign() {
+    return this.sign;
+  }
+
+  /**
+   * Sets the sign
+   *
+   * @param sign The sign
+   * @return This Z4SignedRandomValue
+   */
+   setSign(sign) {
+    this.sign = sign;
+    return this;
+  }
+
+  /**
+   * Returns the next signed random value
+   *
+   * @return The next random value (in the range [0,value[)
+   */
+   nextSigned() {
+    return this.sign.next() * this.next();
+  }
+
+  /**
+   * Returns a Z4SignedRandomValue generating "classic "random values
+   *
+   * @param value The value
+   * @return The Z4SignedRandomValue
+   */
+  static  classic(value) {
+    return new Z4SignedRandomValue(value, 0, 1);
+  }
+
+  /**
+   * Returns a Z4SignedRandomValue generating random values on a bezier curve
+   *
+   * @param value The value
+   * @param length The curve length
+   * @return The Z4SignedRandomValue
+   */
+  static  bezier(value, length) {
+    return new Z4SignedRandomValue(value, 1, length);
+  }
+
+  /**
+   * Returns a Z4SignedRandomValue generating random values on a polyline
+   *
+   * @param value The value
+   * @param length The polyline length
+   * @return The Z4SignedRandomValue
+   */
+  static  polyline(value, length) {
+    return new Z4SignedRandomValue(value, 2, length);
+  }
+
+  /**
+   * Returns a Z4SignedRandomValue generating random values on a stepped line
+   *
+   * @param value The value
+   * @param length The step length
+   * @return The Z4SignedRandomValue
+   */
+  static  stepped(value, length) {
+    return new Z4SignedRandomValue(value, 3, length);
+  }
+}
+/**
  * The common parent of all fanciful values
  *
  * @param <T>
@@ -914,111 +1088,72 @@ class Z4RandomValue {
  */
 class Z4AbstractFancifulValue {
 
-   constantSign = Z4Sign.RANDOM;
+   constant = new Z4SignedValue();
 
-   constantValue = 0;
+   random = Z4SignedRandomValue.classic(0);
 
-   randomSign = Z4Sign.RANDOM;
-
-   randomValue = Z4RandomValue.classic(0);
-
-   proportionalSign = Z4Sign.RANDOM;
-
-   proportionalValue = 0;
+   proportional = new Z4SignedValue();
 
    uniformSign = false;
 
   /**
    * Sets the constant component
    *
-   * @param constantSign The sign of the constant component
-   * @param constantValue The value of the constant component
-   * @return This Z4FancifulValue
+   * @param constant The constant component
+   * @return This Z4AbstractFancifulValue
    */
-   setConstant(constantSign, constantValue) {
-    this.constantSign = constantSign;
-    this.constantValue = constantValue;
+   setConstant(constant) {
+    this.constant = constant;
     return this;
   }
 
   /**
-   * Returns the sign of the constant component
+   * Returns the the constant component
    *
-   * @return The sign of the constant component
+   * @return The the constant component
    */
-   getConstantSign() {
-    return this.constantSign;
-  }
-
-  /**
-   * Returns the value of the constant component
-   *
-   * @return The value of the constant component
-   */
-   getConstantValue() {
-    return this.constantValue;
+   getConstant() {
+    return this.constant;
   }
 
   /**
    * Sets the random component
    *
-   * @param randomSign The sign of the random component
-   * @param randomValue The value of the random component
-   * @return This Z4FancifulValue
+   * @param random The random component
+   * @return This Z4AbstractFancifulValue
    */
-   setRandom(randomSign, randomValue) {
-    this.randomSign = randomSign;
-    this.randomValue = randomValue;
+   setRandom(random) {
+    this.random = random;
     return this;
   }
 
   /**
-   * Returns the sign of the random component
+   * Returns the random component
    *
-   * @return The sign of the random component
+   * @return The random component
    */
-   getRandomSign() {
-    return this.randomSign;
-  }
-
-  /**
-   * Returns the value of the random component
-   *
-   * @return The value of the random component
-   */
-   getRandomValue() {
-    return this.randomValue;
+   getRandom() {
+    return this.random;
   }
 
   /**
    * Sets the proportional component
    *
-   * @param proportionalSign The sign of the proportional component
-   * @param proportionalValue The value of the proportional component
-   * @return This Z4FancifulValue
+   * @param proportional The proportional component
+   * @return This Z4AbstractFancifulValue
    */
-   setProportional(proportionalSign, proportionalValue) {
-    this.proportionalSign = proportionalSign;
-    this.proportionalValue = proportionalValue;
+   setProportional(proportional) {
+    this.proportional = proportional;
     return this;
   }
 
   /**
-   * Returns the sign of the proportional component
+   * Returns the proportional component
    *
-   * @return The sign of the proportional component
+   * @return The proportional component
    */
-   getProportionalSign() {
-    return this.proportionalSign;
-  }
-
-  /**
-   * Returns the value of the proportional component
-   *
-   * @return The value of the proportional component
-   */
-   getProportionalValue() {
-    return this.proportionalValue;
+   getProportional() {
+    return this.proportional;
   }
 
   /**
@@ -1027,7 +1162,7 @@ class Z4AbstractFancifulValue {
    *
    * @param uniformSign true if the computed sign has to be equals for all
    * components, false otherwise
-   * @return This Z4FancifulValue
+   * @return This Z4AbstractFancifulValue
    */
    setUniformSign(uniformSign) {
     this.uniformSign = uniformSign;
@@ -1054,18 +1189,18 @@ class Z4AbstractFancifulValue {
    */
    next(sensibility) {
     if (Z4Setting.isLiteMode()) {
-      return this.constantSign.next() * this.constantValue;
+      return this.constant.next();
     } else if (Z4Setting.isStandardMode()) {
       if (this.uniformSign) {
-        return this.constantSign.next() * (this.constantValue + this.randomValue.next());
+        return this.constant.getSign().next() * (this.constant.geValue() + this.random.next());
       } else {
-        return this.constantSign.next() * this.constantValue + this.randomSign.next() * this.randomValue.next();
+        return this.constant.next() + this.random.nextSigned();
       }
     } else if (Z4Setting.isProMode()) {
       if (this.uniformSign) {
-        return this.constantSign.next() * (this.constantValue + this.randomValue.next() + sensibility * this.proportionalValue);
+        return this.constant.getSign().next() * (this.constant.geValue() + this.random.next() + sensibility * this.proportional.geValue());
       } else {
-        return this.constantSign.next() * this.constantValue + this.randomSign.next() * this.randomValue.next() + this.proportionalSign.next() * sensibility * this.proportionalValue;
+        return this.constant.next() + this.random.nextSigned() + sensibility * this.proportional.next();
       }
     } else {
       return 0;
@@ -1128,14 +1263,6 @@ class Z4Rotation extends Z4AbstractFancifulValue {
    */
    isRelativeToPath() {
     return this.type === 2;
-  }
-
-  /**
-   * Returns this Z4Rotation as a Z4FancifulValue
-   * @return This Z4Rotation as a Z4FancifulValue
-   */
-   asFancifulValue() {
-    return new Z4FancifulValue().setConstant(this.getConstantSign(), this.getConstantValue()).setRandom(this.getRandomSign(), this.getRandomValue()).setProportional(this.getProportionalSign(), this.getProportionalValue()).setUniformSign(this.isUniformSign());
   }
 
   /**
@@ -1607,6 +1734,183 @@ class Z4Point {
    */
    isUseVectorModuleAsSize() {
     return this.useVectorModuleAsSize;
+  }
+}
+/**
+ * The component to edit a numeric value
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
+
+   toggle = this.querySelector(".sign-button");
+
+   toggleImg = this.querySelector(".sign-button img");
+
+   text = this.querySelector(".value");
+
+   spinner = this.querySelector(".spinner");
+
+   applySpin = () => this.spin();
+
+   isApplySpin = false;
+
+  static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
+
+  static  UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4SignedValueUI.html");
+
+  /**
+   * Creates a Z4SignedValueUI
+   */
+  constructor() {
+    super(Z4SignedValueUI.UI);
+    this.toggleImg.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + this.toggle.getAttribute("data-value") + ".svg");
+    let imgs = this.querySelectorAll(".dropdown-menu img");
+    for (let i = 0; i < imgs.length; i++) {
+      let img = imgs.item(i);
+      img.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".svg");
+    }
+    let buttons = this.querySelectorAll(".dropdown-item");
+    for (let i = 0; i < buttons.length; i++) {
+      let button = buttons.item(i);
+      button.onclick = (event) => {
+        this.toggle.setAttribute("data-value", button.getAttribute("data-value"));
+        this.toggleImg.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + button.getAttribute("data-value") + ".svg");
+        switch(this.toggle.getAttribute("data-value")) {
+          case "positive":
+            this.onchange(this.value.setSign(Z4Sign.POSITIVE));
+            break;
+          case "negative":
+            this.onchange(this.value.setSign(Z4Sign.NEGATIVE));
+            break;
+          case "random":
+            this.onchange(this.value.setSign(Z4Sign.RANDOM));
+            break;
+          case "alternate":
+            this.onchange(this.value.setSign(Z4Sign.alternate()));
+            break;
+        }
+        return null;
+      };
+    }
+    this.text.oninput = (event) => {
+      this.oninput(this.value.setValue(this.text.valueAsNumber));
+      return null;
+    };
+    this.text.onchange = (event) => {
+      this.onchange(this.value.setValue(this.text.valueAsNumber));
+      return null;
+    };
+    this.text.onfocus = (event) => {
+      this.text.select();
+      return null;
+    };
+    if (Z4Loader.touch) {
+      this.spinner.ontouchstart = (event) => this.startSpin();
+      this.spinner.ontouchend = (event) => this.stopSpin();
+    } else {
+      this.spinner.onmousedown = (event) => this.startSpin();
+      this.spinner.onmouseup = (event) => this.stopSpin();
+    }
+    this.setValue(new Z4SignedValue());
+  }
+
+   startSpin() {
+    this.isApplySpin = true;
+    this.applySpin();
+    return null;
+  }
+
+   stopSpin() {
+    this.isApplySpin = false;
+    this.spinner.value = "0";
+    return null;
+  }
+
+   spin() {
+    let min = parseFloat(this.text.getAttribute("min"));
+    let max = parseFloat(this.text.getAttribute("max"));
+    let v = this.spinner.valueAsNumber;
+    let abs = 1;
+    if (v) {
+      abs = Math.abs(v);
+      v = Math.max(min, this.text.valueAsNumber + (v > 0 ? 1 : -1));
+      v = Math.min(v, max);
+      this.text.value = "" + v;
+      this.oninput(this.value.setValue(this.text.valueAsNumber));
+    }
+    if (this.isApplySpin) {
+      setTimeout(this.applySpin, 500 / abs);
+    } else {
+      this.onchange(this.value.setValue(this.text.valueAsNumber));
+    }
+  }
+
+  /**
+   * Sets the range of this Z4SignedValueUI
+   *
+   * @param min The minumum value
+   * @param max The maximum value
+   * @return This Z4SignedValueUI
+   */
+   setRange(min, max) {
+    this.text.setAttribute("min", "" + min);
+    this.text.setAttribute("max", "" + max);
+    return this;
+  }
+
+  /**
+   * Sets the visibility of the sign
+   *
+   * @param visible true to make the sign visible, false otherwise
+   * @return This Z4SignedValueUI
+   */
+   setSignVisible(visible) {
+    if (visible) {
+      this.querySelector(".number-group").classList.add("input-group");
+      this.querySelector(".sign-label").classList.remove("sign-label-not-visible");
+      this.toggle.classList.remove("sign-toggle-not-visible");
+    } else {
+      this.querySelector(".number-group").classList.remove("input-group");
+      this.querySelector(".sign-label").classList.add("sign-label-not-visible");
+      this.toggle.classList.add("sign-toggle-not-visible");
+    }
+    return this;
+  }
+
+  /**
+   * Sets the token of the value label
+   *
+   * @param token The token of the value label
+   * @param bold true for bold font, false otherwise
+   * @param italic true for italic font, false otherwise
+   * @return This Z4SignedValueUI
+   */
+   setValueLabel(token, bold, italic) {
+    let valueLabel = this.querySelector(".value-label");
+    valueLabel.setAttribute("data-token-lang-inner_text", token);
+    valueLabel.innerText = Z4MessageFactory.get(token);
+    valueLabel.style.fontWeight = (bold ? "700" : "400");
+    valueLabel.style.fontStyle = (italic ? "italic" : "normal");
+    return this;
+  }
+
+   setValue(value) {
+    super.setValue(value);
+    let str = null;
+    if (value.getSign() === Z4Sign.POSITIVE) {
+      str = "positive";
+    } else if (value.getSign() === Z4Sign.NEGATIVE) {
+      str = "negative";
+    } else if (value.getSign() === Z4Sign.RANDOM) {
+      str = "random";
+    } else {
+      str = "alternate";
+    }
+    this.toggle.setAttribute("data-value", str);
+    this.toggleImg.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + str + ".svg");
+    this.text.value = "" + value.geValue();
+    return this;
   }
 }
 /**
@@ -2532,155 +2836,6 @@ class Z4TemporalColor {
   }
 }
 /**
- * The guided tour for the Z4TemporalColorUI
- *
- * @author gianpiero.di.blasi
- */
-class Z4TemporalColorGuidedTourUI extends Z4TemporalColorUI {
-
-   options = new Object();
-
-   element1 = null;
-
-   element2 = null;
-
-   event = null;
-
-   message = null;
-
-   i = document.createElement("i");
-
-  /**
-   * Creates a Z4TemporalColorGuidedTourUI
-   */
-  constructor() {
-    super();
-    this.querySelector(".dropdown-divider").remove();
-    this.querySelector(".temporal-guided-tour").remove();
-    let div = document.createElement("div");
-    div.setAttribute("style", "float:right");
-    this.querySelector(".canvas-container div div:nth-child(3)").appendChild(div);
-    this.i.className = "bi bi-arrow-left-circle";
-    this.i.setAttribute("style", "font-size:30px;border-radius:48px;position:relative;top:50px;padding:0px 5px;visibility:hidden");
-    div.appendChild(this.i);
-    this.options["once"] = true;
-    this.doStep(0);
-  }
-
-  /**
-   * Shows the guided tour
-   */
-  static  show() {
-    Z4ModalMessageUI.showInfo(Z4MessageFactory.get("TITLE"), "", () => {
-      document.querySelector(".modal-dialog").classList.remove("modal-lg");
-      (document.querySelector(".modal-message")).innerHTML = "";
-      (document.querySelector(".modal-dialog .modal-footer")).innerHTML = "";
-    });
-    let label = document.createElement("label");
-    label.className = "z4-guided-tour";
-    document.querySelector(".modal-dialog").classList.add("modal-lg");
-    document.querySelector(".modal-dialog .modal-footer").insertBefore(label, document.querySelector(".modal-dialog .modal-footer button"));
-    new Z4TemporalColorGuidedTourUI().appendTo(document.querySelector(".modal-message"));
-  }
-
-   doStep(step) {
-    switch(step) {
-      case 0:
-        this.element1 = this.element2 = this.querySelector(".form-check-input[value='1-1']");
-        this.event = "change";
-        this.message = Z4MessageFactory.get("GUIDED_TOUR_TEMPORAL_SELECT_COLOR");
-        break;
-      case 1:
-        this.element1 = this.element2 = this.querySelector(".form-control-color");
-        this.event = "input";
-        this.message = Z4MessageFactory.get("GUIDED_TOUR_TEMPORAL_EDIT_COMPONENTS1");
-        break;
-      case 2:
-        this.element1 = this.querySelector(".dropdown-toggle-split");
-        this.element2 = this.querySelector(".dropdown-menu .form-range");
-        this.event = "input";
-        this.message = Z4MessageFactory.get("GUIDED_TOUR_TEMPORAL_EDIT_OPACITY");
-        break;
-      case 3:
-        this.i.style.visibility = "visible";
-        this.element1 = this.querySelector(".bi-arrow-left-circle");
-        this.element2 = this.querySelector(".canvas");
-        this.event = Z4Loader.touch ? "touchstart" : "mousedown";
-        this.message = Z4MessageFactory.get("GUIDED_TOUR_TEMPORAL_ADD_COLOR");
-        break;
-      case 4:
-        this.i.style.visibility = "hidden";
-        this.element1 = this.element2 = this.querySelector(".form-control-color");
-        this.event = "input";
-        this.message = Z4MessageFactory.get("GUIDED_TOUR_TEMPORAL_EDIT_COMPONENTS2");
-        break;
-      case 5:
-        this.element1 = this.element2 = this.querySelector(".form-check-input:nth-child(9)");
-        this.event = Z4Loader.touch ? "touchend" : "mouseup";
-        this.message = Z4MessageFactory.get("GUIDED_TOUR_TEMPORAL_MOVE");
-        break;
-      case 6:
-        this.element1 = this.querySelector(".z4-dropdown-toggle-three-dots");
-        this.element2 = this.querySelector(".spatial-inverted");
-        this.event = "click";
-        this.message = Z4MessageFactory.get("GUIDED_TOUR_TEMPORAL_INVERT_SPATIAL");
-        break;
-      case 7:
-        this.element1 = this.querySelector(".z4-dropdown-toggle-three-dots");
-        this.element2 = this.querySelector(".temporal-inverted");
-        this.event = "click";
-        this.message = Z4MessageFactory.get("GUIDED_TOUR_TEMPORAL_INVERT_TEMPORAL");
-        break;
-      case 8:
-        this.element1 = this.querySelector(".z4-dropdown-toggle-three-dots");
-        this.element2 = this.querySelector(".temporal-negative");
-        this.event = "click";
-        this.message = Z4MessageFactory.get("GUIDED_TOUR_TEMPORAL_NEGATIVIZE");
-        break;
-      case 9:
-        this.element1 = this.element2 = this.querySelector(".temporal-mirrored-check");
-        this.event = "change";
-        this.message = Z4MessageFactory.get("GUIDED_TOUR_TEMPORAL_MIRROR_TEMPORAL");
-        break;
-      case 10:
-        this.element1 = this.element2 = this.querySelector(".spatial-mirrored-check");
-        this.event = "change";
-        this.message = Z4MessageFactory.get("GUIDED_TOUR_TEMPORAL_MIRROR_SPATIAL");
-        break;
-      case 11:
-        this.element1 = this.element2 = this.querySelector(".form-range-spatial");
-        this.event = "input";
-        this.message = Z4MessageFactory.get("GUIDED_TOUR_TEMPORAL_ADD_RIPPLE_SPATIAL");
-        break;
-      case 12:
-        this.element1 = this.element2 = this.querySelector(".form-range-temporal");
-        this.event = "input";
-        this.message = Z4MessageFactory.get("GUIDED_TOUR_TEMPORAL_ADD_RIPPLE_TEMPORAL");
-        break;
-      default:
-        this.element1 = null;
-        this.message = Z4MessageFactory.get("GUIDED_TOUR_COMPLETED");
-    }
-    let label = document.querySelector(".modal-dialog .modal-footer label");
-    if (this.element1) {
-      this.element1.classList.add("z4-guided-tour");
-      this.element2.classList.add("z4-guided-tour");
-      this.element2.addEventListener(this.event, (evt) => {
-        this.element1.classList.remove("z4-guided-tour");
-        this.element2.classList.remove("z4-guided-tour");
-        this.doStep(step + 1);
-      }, this.options);
-    } else if (label) {
-      label.className = "";
-    }
-    if (label) {
-      label.innerText = this.message;
-    } else {
-      console.log(this.message);
-    }
-  }
-}
-/**
  * The common parent of all painters
  *
  * @param <T>
@@ -2748,159 +2903,6 @@ class Z4ClassicPainter extends Z4Painter {
 
    draw(context, point, gradientColor) {
     return this;
-  }
-}
-/**
- * The painter of 2D shapes
- *
- * @author gianpiero.di.blasi
- */
-class Z4Shape2DPainter extends Z4Painter {
-
-   shape = Z4Shape2D.SQUARE;
-
-   size = new Z4FancifulValue().setConstant(Z4Sign.POSITIVE, 50);
-
-   shadowShiftX = new Z4FancifulValue();
-
-   shadowShiftY = new Z4FancifulValue();
-
-   shadowColor = new Z4Color(255, 0, 0, 0);
-
-   borderSize = new Z4FancifulValue();
-
-   borderColor = new Z4Color(255, 0, 0, 0);
-
-  /**
-   * Sets the shape
-   *
-   * @param shape The shape
-   * @return This Z4Shape2DPainter
-   */
-   setShape2D(shape) {
-    this.shape = shape;
-    return this;
-  }
-
-  /**
-   * Sets the size
-   *
-   * @param {number} fixedComponent The fixed component of the size
-   * @param {number} randomComponent The random component of the size
-   * @param {Z4Sign} z4RandomComponentSign The sign of the random component
-   * @return {} This Z4Shape2DPainter
-   */
-  // setSize(fixedComponent, randomComponent, z4RandomComponentSign) {
-  // this.size = new Z4FancifulValue(fixedComponent, randomComponent, z4RandomComponentSign, Z4Sign.POSITIVE);
-  // return this;
-  // }
-  /**
-   * Sets the random component of the size
-   *
-   * @param {number} randomComponent The random component of the value
-   * @param {Z4RandomBehaviour} randomComponentBehaviour The behaviour of the
-   * random component
-   * @param {number} randomComponentStep The step of the random component
-   * @param {Z4Sign} z4RandomComponentSign The sign of the random component
-   * @return {} This Z4Shape2DPainter
-   */
-  // setRandomComponentSize(randomComponent, randomComponentBehaviour, randomComponentStep, z4RandomComponentSign) {
-  // this.size.setRandom(randomComponent, randomComponentBehaviour, randomComponentStep, z4RandomComponentSign);
-  // return this;
-  // }
-  /**
-   * Sets the shadow
-   *
-   * @param {number} fixedComponentX The fixed component of the X shadow shift
-   * @param {number} randomComponentX The random component of the X shadow shift
-   * @param {number} fixedComponentY The fixed component of the Y shadow shift
-   * @param {number} randomComponentY The random component of the Y shadow shift
-   * @param {Z4Sign} z4RandomComponentSign The sign of the random component
-   * @param {Z4Color} shadowColor The shadow color
-   * @return {} This Z4Shape2DPainter
-   */
-  // setShadow(fixedComponentX, randomComponentX, fixedComponentY, randomComponentY, z4RandomComponentSign, shadowColor) {
-  // this.shadowShiftX = new Z4FancifulValue(fixedComponentX, randomComponentX, z4RandomComponentSign, Z4Sign.POSITIVE);
-  // this.shadowShiftY = new Z4FancifulValue(fixedComponentY, randomComponentY, z4RandomComponentSign, Z4Sign.POSITIVE);
-  // this.shadowColor = shadowColor;
-  // return this;
-  // }
-  /**
-   * Sets the border
-   *
-   * @param {number} fixedComponent The fixed component of the border size
-   * @param {number} randomComponent The random component of the border size
-   * @param {Z4Sign} z4RandomComponentSign The sign of the random component
-   * @param {Z4Color} borderColor The border color
-   * @return {} This Z4Shape2DPainter
-   */
-  // setBorder(fixedComponent, randomComponent, z4RandomComponentSign, borderColor) {
-  // this.borderSize = new Z4FancifulValue(fixedComponent, randomComponent, z4RandomComponentSign, Z4Sign.POSITIVE);
-  // this.borderColor = borderColor;
-  // return this;
-  // }
-   draw(context, point, gradientColor) {
-    if (point.isDrawBounds()) {
-      this.drawBounds(context, point.getIntensity() * (point.isUseVectorModuleAsSize() ? 2 * point.getZ4Vector().getModule() : this.size.getConstantValue()));
-    } else {
-      let currentSize = point.getIntensity() * (point.isUseVectorModuleAsSize() ? 2 * point.getZ4Vector().getModule() : this.size.next(0));
-      if (currentSize <= 0) {
-        return this;
-      }
-      let currentShadowShiftX = point.getIntensity() * this.shadowShiftX.next(0);
-      let currentShadowShiftY = point.getIntensity() * this.shadowShiftY.next(0);
-      let currentBorderSize = point.getIntensity() * this.borderSize.next(0);
-      if (currentShadowShiftX || currentShadowShiftY) {
-        context.save();
-        context.translate(currentShadowShiftX, currentShadowShiftY);
-        this.drawPath(context, currentSize + (currentBorderSize > 0 ? currentBorderSize : 0), this.shadowColor);
-        context.restore();
-      }
-      if (currentBorderSize) {
-        context.save();
-        this.drawPath(context, currentSize + currentBorderSize, this.borderColor);
-        context.restore();
-      }
-      let position = point.getColorPosition();
-      let lighting = point.getLighting();
-      if (position === -1) {
-        for (let scale = currentSize; scale > 0; scale--) {
-          this.drawPath(context, scale, gradientColor.getZ4ColorAt(scale / currentSize, true, true));
-        }
-      } else if (lighting === Z4Lighting.NONE) {
-        this.drawPath(context, currentSize, gradientColor.getZ4ColorAt(position, true, true));
-      } else {
-        let newColor = gradientColor.getZ4ColorAt(position, true, true);
-        for (let scale = currentSize; scale > 0; scale--) {
-          if (lighting === Z4Lighting.LIGTHED) {
-            this.drawPath(context, scale, Z4Color.fromARGB(newColor.getARGB()).lighted(scale / currentSize));
-          } else if (lighting === Z4Lighting.DARKENED) {
-            this.drawPath(context, scale, Z4Color.fromARGB(newColor.getARGB()).darkened(scale / currentSize));
-          }
-        }
-      }
-    }
-    return this;
-  }
-
-   drawPath(context, scale, color) {
-    context.save();
-    context.scale(scale, scale);
-    context.fillStyle = color.getHEX();
-    context.fill(this.shape.getPath());
-    context.restore();
-  }
-
-   drawBounds(context, scale) {
-    context.save();
-    context.scale(scale, scale);
-    context.lineWidth = 1 / scale;
-    context.strokeStyle = this.getColor("gray");
-    context.stroke(this.shape.getPath());
-    context.strokeStyle = this.getColor("black");
-    context.translate(1 / scale, 1 / scale);
-    context.stroke(this.shape.getPath());
-    context.restore();
   }
 }
 /**
@@ -3076,137 +3078,5 @@ class Z4PointIterator {
    */
    getColor(color) {
     return color;
-  }
-}
-/**
- * The stamper
- *
- * @author gianpiero.di.blasi
- */
-class Z4Stamper extends Z4PointIterator {
-
-   intensity = new Z4FancifulValue().setConstant(Z4Sign.POSITIVE, 15);
-
-   multiplicity = new Z4FancifulValue().setConstant(Z4Sign.POSITIVE, 1);
-
-   push = new Z4FancifulValue().setConstant(Z4Sign.POSITIVE, 0);
-
-   currentMultiplicityCounter = 0;
-
-   currentMultiplicityTotal = 0;
-
-   currentPush = 0.0;
-
-   draw(action, x, y) {
-    if (action === Z4Action.START) {
-      this.currentMultiplicityCounter = 0;
-      this.currentMultiplicityTotal = parseInt(this.multiplicity.next(0));
-      this.currentPush = this.push.next(0);
-      this.P["x"] = x;
-      this.P["y"] = y;
-      this.hasNext = true;
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  /**
-   * Returns the intensity
-   *
-   * @return The intensity
-   */
-   getIntensity() {
-    return this.intensity;
-  }
-
-  /**
-   * Returns the multiplicity
-   *
-   * @return The multiplicity
-   */
-   getMultiplicity() {
-    return this.multiplicity;
-  }
-
-  /**
-   * Returns the push
-   *
-   * @return The push
-   */
-   getPush() {
-    return this.push;
-  }
-
-   next() {
-    if (!this.hasNext) {
-      return null;
-    } else {
-      this.currentMultiplicityCounter++;
-      this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
-      let angle = this.rotation.next(0);
-      if (this.currentPush) {
-        let pushed = Z4Vector.fromVector(this.P["x"], this.P["y"], this.currentPush, angle);
-        this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), this.intensity.next(0), angle));
-      } else {
-        this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P["x"], this.P["y"], this.intensity.next(0), angle));
-      }
-      this.rotation.nextSide(this.z4Point, null);
-      if (this.progression === Z4Progression.TEMPORAL) {
-        this.z4Point.setLighting(this.lighting);
-        let colorPosition = this.z4Point.getColorPosition();
-        colorPosition = colorPosition === -1 ? 0 : colorPosition + this.temporalStepProgression;
-        if (colorPosition > 1) {
-          colorPosition -= 1;
-        }
-        this.z4Point.setColorPosition(colorPosition);
-      } else if (this.progression === Z4Progression.SPATIAL) {
-        this.z4Point.setLighting(Z4Lighting.NONE);
-        this.z4Point.setColorPosition(-1);
-      } else if (this.progression === Z4Progression.RELATIVE_TO_PATH || this.progression === Z4Progression.RANDOM) {
-        this.z4Point.setLighting(this.lighting);
-        this.z4Point.setColorPosition(Math.random());
-      }
-      return this.z4Point;
-    }
-  }
-
-   drawDemo(context, width, height) {
-    let arrowPainter = new Z4ArrowPainter();
-    let gradientColor = new Z4GradientColor();
-    this.initDraw(width, height).forEach(point => {
-      this.draw(Z4Action.START, point["x"], point["y"]);
-      if (this.currentPush && !this.currentMultiplicityCounter) {
-        context.save();
-        context.lineWidth = 1;
-        context.fillStyle = this.getColor("black");
-        context.beginPath();
-        context.arc(this.P["x"], this.P["y"], 2, 0, Z4Math.TWO_PI);
-        context.fill();
-        context.restore();
-      }
-      let next = null;
-      while ((next = this.next()) !== null) {
-        let vector = next.getZ4Vector();
-        context.save();
-        context.translate(vector.getX0(), vector.getY0());
-        context.rotate(vector.getPhase());
-        arrowPainter.draw(context, next, gradientColor);
-        context.restore();
-      }
-    });
-  }
-
-   initDraw(w, h) {
-    let array = new Array();
-    for (let x = 50; x <= w - 50; x += 100) {
-      for (let y = 50; y <= h - 50; y += 100) {
-        let point = new Object();
-        point["x"] = x;
-        point["y"] = y;
-        array.push(point);
-      }
-    }
-    return array;
   }
 }

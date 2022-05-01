@@ -6,111 +6,72 @@
  */
 class Z4AbstractFancifulValue {
 
-   constantSign = Z4Sign.RANDOM;
+   constant = new Z4SignedValue();
 
-   constantValue = 0;
+   random = Z4SignedRandomValue.classic(0);
 
-   randomSign = Z4Sign.RANDOM;
-
-   randomValue = Z4RandomValue.classic(0);
-
-   proportionalSign = Z4Sign.RANDOM;
-
-   proportionalValue = 0;
+   proportional = new Z4SignedValue();
 
    uniformSign = false;
 
   /**
    * Sets the constant component
    *
-   * @param constantSign The sign of the constant component
-   * @param constantValue The value of the constant component
-   * @return This Z4FancifulValue
+   * @param constant The constant component
+   * @return This Z4AbstractFancifulValue
    */
-   setConstant(constantSign, constantValue) {
-    this.constantSign = constantSign;
-    this.constantValue = constantValue;
+   setConstant(constant) {
+    this.constant = constant;
     return this;
   }
 
   /**
-   * Returns the sign of the constant component
+   * Returns the the constant component
    *
-   * @return The sign of the constant component
+   * @return The the constant component
    */
-   getConstantSign() {
-    return this.constantSign;
-  }
-
-  /**
-   * Returns the value of the constant component
-   *
-   * @return The value of the constant component
-   */
-   getConstantValue() {
-    return this.constantValue;
+   getConstant() {
+    return this.constant;
   }
 
   /**
    * Sets the random component
    *
-   * @param randomSign The sign of the random component
-   * @param randomValue The value of the random component
-   * @return This Z4FancifulValue
+   * @param random The random component
+   * @return This Z4AbstractFancifulValue
    */
-   setRandom(randomSign, randomValue) {
-    this.randomSign = randomSign;
-    this.randomValue = randomValue;
+   setRandom(random) {
+    this.random = random;
     return this;
   }
 
   /**
-   * Returns the sign of the random component
+   * Returns the random component
    *
-   * @return The sign of the random component
+   * @return The random component
    */
-   getRandomSign() {
-    return this.randomSign;
-  }
-
-  /**
-   * Returns the value of the random component
-   *
-   * @return The value of the random component
-   */
-   getRandomValue() {
-    return this.randomValue;
+   getRandom() {
+    return this.random;
   }
 
   /**
    * Sets the proportional component
    *
-   * @param proportionalSign The sign of the proportional component
-   * @param proportionalValue The value of the proportional component
-   * @return This Z4FancifulValue
+   * @param proportional The proportional component
+   * @return This Z4AbstractFancifulValue
    */
-   setProportional(proportionalSign, proportionalValue) {
-    this.proportionalSign = proportionalSign;
-    this.proportionalValue = proportionalValue;
+   setProportional(proportional) {
+    this.proportional = proportional;
     return this;
   }
 
   /**
-   * Returns the sign of the proportional component
+   * Returns the proportional component
    *
-   * @return The sign of the proportional component
+   * @return The proportional component
    */
-   getProportionalSign() {
-    return this.proportionalSign;
-  }
-
-  /**
-   * Returns the value of the proportional component
-   *
-   * @return The value of the proportional component
-   */
-   getProportionalValue() {
-    return this.proportionalValue;
+   getProportional() {
+    return this.proportional;
   }
 
   /**
@@ -119,7 +80,7 @@ class Z4AbstractFancifulValue {
    *
    * @param uniformSign true if the computed sign has to be equals for all
    * components, false otherwise
-   * @return This Z4FancifulValue
+   * @return This Z4AbstractFancifulValue
    */
    setUniformSign(uniformSign) {
     this.uniformSign = uniformSign;
@@ -146,18 +107,18 @@ class Z4AbstractFancifulValue {
    */
    next(sensibility) {
     if (Z4Setting.isLiteMode()) {
-      return this.constantSign.next() * this.constantValue;
+      return this.constant.next();
     } else if (Z4Setting.isStandardMode()) {
       if (this.uniformSign) {
-        return this.constantSign.next() * (this.constantValue + this.randomValue.next());
+        return this.constant.getSign().next() * (this.constant.geValue() + this.random.next());
       } else {
-        return this.constantSign.next() * this.constantValue + this.randomSign.next() * this.randomValue.next();
+        return this.constant.next() + this.random.nextSigned();
       }
     } else if (Z4Setting.isProMode()) {
       if (this.uniformSign) {
-        return this.constantSign.next() * (this.constantValue + this.randomValue.next() + sensibility * this.proportionalValue);
+        return this.constant.getSign().next() * (this.constant.geValue() + this.random.next() + sensibility * this.proportional.geValue());
       } else {
-        return this.constantSign.next() * this.constantValue + this.randomSign.next() * this.randomValue.next() + this.proportionalSign.next() * sensibility * this.proportionalValue;
+        return this.constant.next() + this.random.nextSigned() + sensibility * this.proportional.next();
       }
     } else {
       return 0;
