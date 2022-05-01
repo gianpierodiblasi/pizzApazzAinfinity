@@ -92,6 +92,7 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
       this.spinner.onmousedown = (event) -> this.startSpin();
       this.spinner.onmouseup = (event) -> this.stopSpin();
     }
+
     this.setValue(new Z4SignedValue());
   }
 
@@ -170,12 +171,16 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
    * Sets the token of the value label
    *
    * @param token The token of the value label
+   * @param bold true for bold font, false otherwise
+   * @param italic true for italic font, false otherwise
    * @return This Z4SignedValueUI
    */
-  public Z4SignedValueUI setValueLabel(String token) {
+  public Z4SignedValueUI setValueLabel(String token, boolean bold, boolean italic) {
     $HTMLElement valueLabel = this.querySelector(".value-label");
     valueLabel.setAttribute("data-token-lang-inner_text", token);
     valueLabel.innerText = Z4MessageFactory.get(token);
+    valueLabel.style.fontWeight = (bold ? "700" : "400");
+    valueLabel.style.fontStyle = (italic ? "italic" : "normal");
     return this;
   }
 
