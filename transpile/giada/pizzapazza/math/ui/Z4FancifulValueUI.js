@@ -267,7 +267,7 @@ class Z4FancifulValueUI extends Z4ComponentUI {
    * Sets the token of the value label
    *
    * @param token The token of the value label
-   * @return This Z4NumberUI
+   * @return This Z4FancifulValueUI
    */
    setValueLabel(token) {
     let valueLabel = this.querySelector(".fanciful-label");
@@ -304,7 +304,7 @@ class Z4FancifulValueUI extends Z4ComponentUI {
    * Sets the value
    *
    * @param value The value
-   * @return This Z4NumberUI
+   * @return This Z4FancifulValueUI
    */
    setValue(value) {
     this.fancifulValue = value;

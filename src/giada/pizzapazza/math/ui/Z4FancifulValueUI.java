@@ -304,7 +304,7 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue, Z4Fanciful
    * Sets the token of the value label
    *
    * @param token The token of the value label
-   * @return This Z4NumberUI
+   * @return This Z4FancifulValueUI
    */
   public Z4FancifulValueUI setValueLabel(String token) {
     $HTMLElement valueLabel = this.querySelector(".fanciful-label");
@@ -341,7 +341,7 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue, Z4Fanciful
    * Sets the value
    *
    * @param value The value
-   * @return This Z4NumberUI
+   * @return This Z4FancifulValueUI
    */
   public Z4FancifulValueUI setValue(Z4FancifulValue value) {
     this.fancifulValue = value;

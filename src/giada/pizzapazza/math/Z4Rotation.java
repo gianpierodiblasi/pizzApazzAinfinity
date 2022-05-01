@@ -16,6 +16,7 @@ public class Z4Rotation extends Z4AbstractFancifulValue<Z4Rotation> {
   private double rotationNext;
 
   private Z4Rotation(int type) {
+    super();
     this.type = type;
   }
 

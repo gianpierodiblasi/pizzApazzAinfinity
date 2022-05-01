@@ -15,6 +15,7 @@ class Z4Rotation extends Z4AbstractFancifulValue {
    rotationNext = 0.0;
 
   constructor(type) {
+    super();
     this.type = type;
   }
 
