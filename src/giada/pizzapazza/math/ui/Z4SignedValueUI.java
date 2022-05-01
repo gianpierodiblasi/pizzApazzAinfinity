@@ -135,13 +135,15 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
   /**
    * Sets the range of this Z4SignedValueUI
    *
-   * @param min The minumum value
-   * @param max The maximum value
+   * @param min The minumum value, a positive value
+   * @param max The maximum value, a positive value (999999999 to show infinite)
    * @return This Z4SignedValueUI
    */
   public Z4SignedValueUI setRange(int min, int max) {
     this.text.setAttribute("min", "" + min);
     this.text.setAttribute("max", "" + max);
+    this.querySelector(".input-group-text").innerText = "[" + min + "," + (max == 999999999 ? "&infin;" : max) + "]";
+
     return this;
   }
 
@@ -153,13 +155,9 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
    */
   public Z4SignedValueUI setSignVisible(boolean visible) {
     if (visible) {
-      this.querySelector(".number-group").classList.add("input-group");
-
       this.querySelector(".sign-label").classList.remove("sign-label-not-visible");
       this.toggle.classList.remove("sign-toggle-not-visible");
     } else {
-      this.querySelector(".number-group").classList.remove("input-group");
-
       this.querySelector(".sign-label").classList.add("sign-label-not-visible");
       this.toggle.classList.add("sign-toggle-not-visible");
     }

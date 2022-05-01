@@ -37,9 +37,13 @@ label.z4-guided-tour {
   content: none;
 }
 
-/* NUMBER */
+/* SIGNED VALUE */
 .sign-label-not-visible, .sign-toggle-not-visible {
   display: none;
+}
+.sign-toggle-not-visible + span {
+  border-top-left-radius: 0.2rem !important;
+  border-bottom-left-radius: 0.2rem !important;
 }
 
 /* FANCIFUL VALUE */
