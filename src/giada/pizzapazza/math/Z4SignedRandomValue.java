@@ -39,7 +39,7 @@ public class Z4SignedRandomValue extends Z4AbstractRandomValue<Z4SignedRandomVal
    * @return The next random value (in the range [0,value[)
    */
   public double nextSigned() {
-    return this.sign.next() * super.next();
+    return this.sign.next() * this.next();
   }
 
   /**

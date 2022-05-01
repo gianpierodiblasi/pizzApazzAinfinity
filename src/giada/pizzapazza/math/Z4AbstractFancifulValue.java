@@ -11,8 +11,7 @@ import giada.pizzapazza.setting.Z4Setting;
 public class Z4AbstractFancifulValue<T extends Z4AbstractFancifulValue<T>> {
 
   private Z4SignedValue constant = new Z4SignedValue();
-  private Z4Sign randomSign = Z4Sign.RANDOM;
-  private Z4RandomValue randomValue = Z4RandomValue.classic(0);
+  private Z4SignedRandomValue random = Z4SignedRandomValue.classic(0);
   private Z4SignedValue proportional = new Z4SignedValue();
   private boolean uniformSign;
 
@@ -40,33 +39,22 @@ public class Z4AbstractFancifulValue<T extends Z4AbstractFancifulValue<T>> {
   /**
    * Sets the random component
    *
-   * @param randomSign The sign of the random component
-   * @param randomValue The value of the random component
+   * @param random The random component
    * @return This Z4AbstractFancifulValue
    */
   @SuppressWarnings("unchecked")
-  public T setRandom(Z4Sign randomSign, Z4RandomValue randomValue) {
-    this.randomSign = randomSign;
-    this.randomValue = randomValue;
+  public T setRandom(Z4SignedRandomValue random) {
+    this.random = random;
     return (T) this;
   }
 
   /**
-   * Returns the sign of the random component
+   * Returns the random component
    *
-   * @return The sign of the random component
+   * @return The random component
    */
-  public Z4Sign getRandomSign() {
-    return this.randomSign;
-  }
-
-  /**
-   * Returns the value of the random component
-   *
-   * @return The value of the random component
-   */
-  public Z4RandomValue getRandomValue() {
-    return this.randomValue;
+  public Z4SignedRandomValue getRandom() {
+    return this.random;
   }
 
   /**
@@ -124,18 +112,18 @@ public class Z4AbstractFancifulValue<T extends Z4AbstractFancifulValue<T>> {
    */
   public double next(double sensibility) {
     if (Z4Setting.isLiteMode()) {
-      return this.constantSign.next() * this.constantValue;
+      return this.constant.next();
     } else if (Z4Setting.isStandardMode()) {
       if (this.uniformSign) {
-        return this.constantSign.next() * (this.constantValue + this.randomValue.next());
+        return this.constant.getSign().next() * (this.constant.geValue() + this.random.next());
       } else {
-        return this.constantSign.next() * this.constantValue + this.randomSign.next() * this.randomValue.next();
+        return this.constant.next() + this.random.nextSigned();
       }
     } else if (Z4Setting.isProMode()) {
       if (this.uniformSign) {
-        return this.constantSign.next() * (this.constantValue + this.randomValue.next() + sensibility * this.proportionalValue);
+        return this.constant.getSign().next() * (this.constant.geValue() + this.random.next() + sensibility * this.proportional.geValue());
       } else {
-        return this.constantSign.next() * this.constantValue + this.randomSign.next() * this.randomValue.next() + this.proportionalSign.next() * sensibility * this.proportionalValue;
+        return this.constant.next() + this.random.nextSigned() + sensibility * this.proportional.next();
       }
     } else {
       return 0;
