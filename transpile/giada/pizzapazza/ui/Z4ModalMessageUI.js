@@ -63,7 +63,7 @@ class Z4ModalMessageUI {
     icon.style.color = color;
     let footer = Z4ModalMessageUI.html.querySelector(".modal-footer");
     footer.innerHTML = "";
-    Z4ModalMessageUI.appendButton(Z4MessageFactory.get("OK"), "btn btn-primary", onOK, footer);
+    Z4ModalMessageUI.appendButton(Z4MessageFactory.get("OK"), "btn btn-sm btn-primary", onOK, footer);
     Z4ModalMessageUI.modal.show();
   }
 
@@ -87,16 +87,16 @@ class Z4ModalMessageUI {
     let footer = Z4ModalMessageUI.html.querySelector(".modal-footer");
     footer.innerHTML = "";
     if (onYES) {
-      Z4ModalMessageUI.appendButton(Z4MessageFactory.get("YES"), "btn btn-primary", onYES, footer);
+      Z4ModalMessageUI.appendButton(Z4MessageFactory.get("YES"), "btn btn-sm btn-primary", onYES, footer);
     }
     if (onNO) {
-      Z4ModalMessageUI.appendButton(Z4MessageFactory.get("NO"), "btn btn-secondary", onNO, footer);
+      Z4ModalMessageUI.appendButton(Z4MessageFactory.get("NO"), "btn btn-sm btn-secondary", onNO, footer);
     }
     if (onOK) {
-      Z4ModalMessageUI.appendButton(Z4MessageFactory.get("OK"), "btn btn-primary", onOK, footer);
+      Z4ModalMessageUI.appendButton(Z4MessageFactory.get("OK"), "btn btn-sm btn-primary", onOK, footer);
     }
     if (onCANCEL) {
-      Z4ModalMessageUI.appendButton(Z4MessageFactory.get("CANCEL"), "btn btn-secondary", onCANCEL, footer);
+      Z4ModalMessageUI.appendButton(Z4MessageFactory.get("CANCEL"), "btn btn-sm btn-secondary", onCANCEL, footer);
     }
     Z4ModalMessageUI.modal.show();
   }
