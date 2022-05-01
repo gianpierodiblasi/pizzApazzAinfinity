@@ -10,44 +10,31 @@ import giada.pizzapazza.setting.Z4Setting;
  */
 public class Z4AbstractFancifulValue<T extends Z4AbstractFancifulValue<T>> {
 
-  private Z4Sign constantSign = Z4Sign.RANDOM;
-  private double constantValue = 0;
+  private Z4SignedValue constant = new Z4SignedValue();
   private Z4Sign randomSign = Z4Sign.RANDOM;
   private Z4RandomValue randomValue = Z4RandomValue.classic(0);
-  private Z4Sign proportionalSign = Z4Sign.RANDOM;
-  private double proportionalValue = 0;
+  private Z4SignedValue proportional = new Z4SignedValue();
   private boolean uniformSign;
 
   /**
    * Sets the constant component
    *
-   * @param constantSign The sign of the constant component
-   * @param constantValue The value of the constant component
-   * @return This Z4FancifulValue
+   * @param constant The constant component
+   * @return This Z4AbstractFancifulValue
    */
   @SuppressWarnings("unchecked")
-  public T setConstant(Z4Sign constantSign, double constantValue) {
-    this.constantSign = constantSign;
-    this.constantValue = constantValue;
+  public T setConstant(Z4SignedValue constant) {
+    this.constant = constant;
     return (T) this;
   }
 
   /**
-   * Returns the sign of the constant component
+   * Returns the the constant component
    *
-   * @return The sign of the constant component
+   * @return The the constant component
    */
-  public Z4Sign getConstantSign() {
-    return this.constantSign;
-  }
-
-  /**
-   * Returns the value of the constant component
-   *
-   * @return The value of the constant component
-   */
-  public double getConstantValue() {
-    return this.constantValue;
+  public Z4SignedValue getConstant() {
+    return this.constant;
   }
 
   /**
@@ -55,7 +42,7 @@ public class Z4AbstractFancifulValue<T extends Z4AbstractFancifulValue<T>> {
    *
    * @param randomSign The sign of the random component
    * @param randomValue The value of the random component
-   * @return This Z4FancifulValue
+   * @return This Z4AbstractFancifulValue
    */
   @SuppressWarnings("unchecked")
   public T setRandom(Z4Sign randomSign, Z4RandomValue randomValue) {
@@ -85,33 +72,22 @@ public class Z4AbstractFancifulValue<T extends Z4AbstractFancifulValue<T>> {
   /**
    * Sets the proportional component
    *
-   * @param proportionalSign The sign of the proportional component
-   * @param proportionalValue The value of the proportional component
-   * @return This Z4FancifulValue
+   * @param proportional The proportional component
+   * @return This Z4AbstractFancifulValue
    */
   @SuppressWarnings("unchecked")
-  public T setProportional(Z4Sign proportionalSign, double proportionalValue) {
-    this.proportionalSign = proportionalSign;
-    this.proportionalValue = proportionalValue;
+  public T setProportional(Z4SignedValue proportional) {
+    this.proportional = proportional;
     return (T) this;
   }
 
   /**
-   * Returns the sign of the proportional component
+   * Returns the proportional component
    *
-   * @return The sign of the proportional component
+   * @return The proportional component
    */
-  public Z4Sign getProportionalSign() {
-    return this.proportionalSign;
-  }
-
-  /**
-   * Returns the value of the proportional component
-   *
-   * @return The value of the proportional component
-   */
-  public double getProportionalValue() {
-    return this.proportionalValue;
+  public Z4SignedValue getProportional() {
+    return this.proportional;
   }
 
   /**
@@ -120,7 +96,7 @@ public class Z4AbstractFancifulValue<T extends Z4AbstractFancifulValue<T>> {
    *
    * @param uniformSign true if the computed sign has to be equals for all
    * components, false otherwise
-   * @return This Z4FancifulValue
+   * @return This Z4AbstractFancifulValue
    */
   @SuppressWarnings("unchecked")
   public T setUniformSign(boolean uniformSign) {
