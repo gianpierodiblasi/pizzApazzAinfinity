@@ -6,7 +6,6 @@ import def.dom.NodeList;
 import def.js.Date;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import simulation.dom.$HTMLElement;
-import simulation.js.$Apply_1_Void;
 import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.parseInt;
 
@@ -14,31 +13,18 @@ import static simulation.js.$Globals.parseInt;
  * The abstract class of all UI components
  *
  * @param <T>
- * @param <S>
  * @author gianpiero.di.blasi
  */
-public abstract class Z4ComponentUI<T, S extends Z4ComponentUI<T, S>> {
+public abstract class Z4AbstractComponentUI<T extends Z4AbstractComponentUI<T>> {
 
   private final HTMLElement html;
 
   /**
-   * The onchange function
-   */
-  public $Apply_1_Void<T> onchange = element -> {
-  };
-
-  /**
-   * The oninput function
-   */
-  public $Apply_1_Void<T> oninput = element -> {
-  };
-
-  /**
-   * Creates a Z4ComponentUI
+   * Creates a Z4AbstractComponentUI
    *
    * @param ui The HTML
    */
-  protected Z4ComponentUI(String ui) {
+  protected Z4AbstractComponentUI(String ui) {
     this.html = document.createElement("div");
     this.html.setAttribute("id", "id" + new Date().getTime() + "_" + parseInt(1000 * Math.random()));
     this.html.innerHTML = ui;
@@ -71,14 +57,14 @@ public abstract class Z4ComponentUI<T, S extends Z4ComponentUI<T, S>> {
   }
 
   /**
-   * Appends this Z4ComponentUI to its parent
+   * Appends this Z4AbstractComponentUI to its parent
    *
    * @param parent The parent
-   * @return This Z4ComponentUI
+   * @return This Z4AbstractComponentUI
    */
   @SuppressWarnings("unchecked")
-  public S appendTo(Element parent) {
+  public T appendTo(Element parent) {
     parent.appendChild(this.html);
-    return (S) this;
+    return (T) this;
   }
 }
