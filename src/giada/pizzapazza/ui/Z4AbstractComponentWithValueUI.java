@@ -19,14 +19,23 @@ public abstract class Z4AbstractComponentWithValueUI<S, T extends Z4AbstractComp
   /**
    * The onchange function
    */
-  public $Apply_1_Void<T> onchange = element -> {
+  public $Apply_1_Void<S> onchange = element -> {
   };
 
   /**
    * The oninput function
    */
-  public $Apply_1_Void<T> oninput = element -> {
+  public $Apply_1_Void<S> oninput = element -> {
   };
+
+  /**
+   * Creates a Z4AbstractComponentWithValueUI
+   *
+   * @param ui The HTML
+   */
+  protected Z4AbstractComponentWithValueUI(String ui) {
+    super(ui);
+  }
 
   /**
    * Sets the value
