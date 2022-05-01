@@ -3,8 +3,8 @@ package giada.pizzapazza.math;
 import static simulation.js.$Globals.$exists;
 
 /**
- * The rotation (angles parameters are computed in degrees,
- * rotations are computed in radians)
+ * The rotation (angles parameters are computed in degrees, rotations are
+ * computed in radians)
  *
  * @author gianpiero.di.blasi
  */
@@ -48,6 +48,18 @@ public class Z4Rotation extends Z4AbstractFancifulValue<Z4Rotation> {
    */
   public boolean isRelativeToPath() {
     return this.type == 2;
+  }
+
+  /**
+   * Returns this Z4Rotation as a Z4FancifulValue
+   * @return This Z4Rotation as a Z4FancifulValue
+   */
+  public Z4FancifulValue asFancifulValue() {
+    return new Z4FancifulValue().
+            setConstant(this.getConstantSign(), this.getConstantValue()).
+            setRandom(this.getRandomSign(), this.getRandomValue()).
+            setProportional(this.getProportionalSign(), this.getProportionalValue()).
+            setUniformSign(this.isUniformSign());
   }
 
   /**

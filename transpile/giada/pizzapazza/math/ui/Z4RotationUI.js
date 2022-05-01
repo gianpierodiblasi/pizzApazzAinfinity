@@ -39,7 +39,7 @@ class Z4RotationUI extends Z4ComponentUI {
         this.toggleType.setAttribute("data-value", button.getAttribute("data-value"));
         this.toggleTypeImg.setAttribute("src", Z4RotationUI.PATH + "z4rotation_" + button.getAttribute("data-value") + ".svg");
         let angleValue = this.angle.getValue();
-        this.rotation = this.getNewRotation().setConstant(angleValue.getConstantSign(), angleValue.getConstantValue()).setRandom(angleValue.getRandomSign(), angleValue.getRandomValue()).setUniformSign(angleValue.isUniformSign()).setStartAngle(this.startAngle.getValue()).setDelayed(this.delayedCheck.checked);
+        this.rotation = this.getRotation().setConstant(angleValue.getConstantSign(), angleValue.getConstantValue()).setRandom(angleValue.getRandomSign(), angleValue.getRandomValue()).setUniformSign(angleValue.isUniformSign()).setStartAngle(this.startAngle.getValue()).setDelayed(this.delayedCheck.checked);
         this.onchange(this.rotation);
         return null;
       };
@@ -110,104 +110,27 @@ class Z4RotationUI extends Z4ComponentUI {
    */
    setValue(value) {
     this.rotation = value;
-    // 
-    // this.delayedCheck.checked = this.fancifulValue.isUniformSign();
-    // 
-    // this.constantUI.setSign(this.fancifulValue.getConstantSign());
-    // this.constantUI.setValue(this.fancifulValue.getConstantValue());
-    // this.setUniformSign(this.fancifulValue.getConstantSign());
-    // 
-    // this.randomUI.setSign(this.fancifulValue.getRandomSign());
-    // this.setRandom(this.fancifulValue.getRandomValue());
-    // 
-    // this.proportionalUI.setSign(this.fancifulValue.getProportionalSign());
-    // this.proportionalUI.setValue(this.fancifulValue.getProportionalValue());
-    // 
-    // this.setUI();
+    this.setRotation(this.rotation);
+    this.delayedCheck.checked = this.rotation.isDelayed();
+    this.startAngle.setValue(this.rotation.getStartAngle());
+    this.angle.setValue(this.rotation.asFancifulValue());
     return this;
   }
 
-  // 
-  // private void setUI() {
-  // this.selector.forEach(sel -> {
-  // this.querySelector(".fanciful-label").classList.remove(sel);
-  // this.querySelector(".form-check").classList.remove(sel);
-  // this.querySelector(".fanciful-container").classList.remove(sel);
-  // });
-  // 
-  // this.selector = new Array<>(
-  // "cv-" + this.constantVisible,
-  // "rv-" + this.randomVisible,
-  // "pv-" + this.proportionalVisible,
-  // "csv-" + this.constantSignVisible,
-  // "rsv-" + this.randomSignVisible,
-  // "psv-" + this.proportionalSignVisible,
-  // "u-" + this.delayedCheck.checked
-  // );
-  // 
-  // this.selector.forEach(sel -> {
-  // this.querySelector(".fanciful-label").classList.add(sel);
-  // this.querySelector(".form-check").classList.add(sel);
-  // this.querySelector(".fanciful-container").classList.add(sel);
-  // });
-  // }
-  // 
-  // private void setUniformSign(Z4Sign sign) {
-  // String str;
-  // 
-  // if (sign == Z4Sign.POSITIVE) {
-  // str = "positive";
-  // } else if (sign == Z4Sign.NEGATIVE) {
-  // str = "negative";
-  // } else if (sign == Z4Sign.RANDOM) {
-  // str = "random";
-  // } else {
-  // str = "alternate";
-  // }
-  // 
-  // this.toggleUniform.setAttribute("data-value", str);
-  // this.toggleUniformImg.setAttribute("src", Z4RotationUI.PATH + "z4sign_" + str + ".svg");
-  // }
-  // 
-  // public Z4Rotation getUniformSign() {
-  // switch (this.toggleUniform.getAttribute("data-value")) {
-  // case "positive":
-  // return Z4Sign.POSITIVE;
-  // case "negative":
-  // return Z4Sign.NEGATIVE;
-  // case "random":
-  // return Z4Sign.RANDOM;
-  // case "alternate":
-  // return Z4Sign.alternate();
-  // default:
-  // return null;
-  // }
-  // }
-  // 
-  // @SuppressWarnings("StringEquality")
-  // private void setRandom(Z4RandomValue random) {
-  // String str = null;
-  // if (random.isClassic()) {
-  // str = "classic";
-  // } else if (random.isBezier()) {
-  // str = "bezier";
-  // } else if (random.isPolyline()) {
-  // str = "polyline";
-  // } else if (random.isStepped()) {
-  // str = "stepped";
-  // }
-  // 
-  // this.toggleRandom.setAttribute("data-value", str);
-  // this.toggleRandomImg.setAttribute("src", Z4RotationUI.PATH + "z4randomvalue_" + str + ".svg");
-  // 
-  // this.randomUI.setValue(random.getValue());
-  // 
-  // this.querySelector(".divider-length").style.display = str == "classic" ? "none" : "block"; // JS equality for strings
-  // this.querySelector(".container-length").style.display = str == "classic" ? "none" : "block"; // JS equality for strings
-  // this.valueLength.value = "" + random.getLength();
-  // }
-  // 
-   getNewRotation() {
+   setRotation(rotation) {
+    let str = null;
+    if (rotation.isFixed()) {
+      str = "fixed";
+    } else if (rotation.isCumulative()) {
+      str = "cumulative";
+    } else if (rotation.isRelativeToPath()) {
+      str = "relativetopath";
+    }
+    this.toggleType.setAttribute("data-value", str);
+    this.toggleTypeImg.setAttribute("src", Z4RotationUI.PATH + "z4rotation_" + str + ".svg");
+  }
+
+   getRotation() {
     switch(this.toggleType.getAttribute("data-value")) {
       case "fixed":
         return Z4Rotation.fixed();
