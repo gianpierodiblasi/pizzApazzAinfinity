@@ -7,6 +7,7 @@ import def.dom.UIEvent;
 import def.js.Date;
 import static def.js.Globals.parseFloat;
 import giada.pizzapazza.Z4Loader;
+import giada.pizzapazza.color.Z4Color;
 import giada.pizzapazza.color.Z4GradientColor;
 import giada.pizzapazza.setting.Z4HTMLFactory;
 import giada.pizzapazza.setting.Z4ImageFactory;
@@ -262,7 +263,7 @@ public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4Gradient
       input.setAttribute("style", (index != 0 && index != 1 ? "cursor:ew-resize;" : "") + "position:relative;left:" + left + "px");
 
       input.onchange = (event) -> {
-//        this.z4ColorUI.setZ4Color(z4StopColor);
+        this.z4ColorUI.setValue(Z4Color.fromARGB(z4StopColor.getARGB()));
 
         if (index == 0 || index == 1) {
           this.del.setAttribute("disabled", "");
@@ -286,11 +287,11 @@ public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4Gradient
 
       if (selected != -1 && index == selected) {
         input.setAttribute("checked", "");
-//        this.z4ColorUI.setZ4Color(z4StopColor);
+        this.z4ColorUI.setValue(Z4Color.fromARGB(z4StopColor.getARGB()));
         this.del.removeAttribute("disabled");
       } else if (selected == -1 && index == 0) {
         input.setAttribute("checked", "");
-//        this.z4ColorUI.setZ4Color(z4StopColor);
+        this.z4ColorUI.setValue(Z4Color.fromARGB(z4StopColor.getARGB()));
         this.del.setAttribute("disabled", "");
       }
 

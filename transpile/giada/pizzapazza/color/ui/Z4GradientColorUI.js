@@ -221,7 +221,7 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
       input.setAttribute("value", "" + position);
       input.setAttribute("style", (index !== 0 && index !== 1 ? "cursor:ew-resize;" : "") + "position:relative;left:" + left + "px");
       input.onchange = (event) => {
-        // this.z4ColorUI.setZ4Color(z4StopColor);
+        this.z4ColorUI.setValue(Z4Color.fromARGB(z4StopColor.getARGB()));
         if (index === 0 || index === 1) {
           this.del.setAttribute("disabled", "");
         } else {
@@ -242,11 +242,11 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
       }
       if (selected !== -1 && index === selected) {
         input.setAttribute("checked", "");
-        // this.z4ColorUI.setZ4Color(z4StopColor);
+        this.z4ColorUI.setValue(Z4Color.fromARGB(z4StopColor.getARGB()));
         this.del.removeAttribute("disabled");
       } else if (selected === -1 && index === 0) {
         input.setAttribute("checked", "");
-        // this.z4ColorUI.setZ4Color(z4StopColor);
+        this.z4ColorUI.setValue(Z4Color.fromARGB(z4StopColor.getARGB()));
         this.del.setAttribute("disabled", "");
       }
       this.sliders.appendChild(input);
