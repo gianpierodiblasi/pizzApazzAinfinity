@@ -8,7 +8,7 @@ package giada.pizzapazza.math;
 public class Z4SignedValue {
 
   private Z4Sign sign = Z4Sign.RANDOM;
-  private double value = 0;
+  private double value;
 
   /**
    * Returns the sign
@@ -31,9 +31,9 @@ public class Z4SignedValue {
   }
 
   /**
-   * Returns the value
+   * Returns the (positive) value
    *
-   * @return The value
+   * @return The (positive) value
    */
   public double geValue() {
     return this.value;
@@ -42,7 +42,7 @@ public class Z4SignedValue {
   /**
    * Sets the value
    *
-   * @param value The value
+   * @param value The (positive) value
    * @return This Z4SignedValue
    */
   public Z4SignedValue setValue(double value) {

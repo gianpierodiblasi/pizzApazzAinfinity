@@ -15,7 +15,7 @@ import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.setTimeout;
 
 /**
- * The component to edit a numeric value
+ * The component to edit a signed value
  *
  * @author gianpiero.di.blasi
  */
@@ -135,8 +135,8 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
   /**
    * Sets the range of this Z4SignedValueUI
    *
-   * @param min The minumum value, a positive value
-   * @param max The maximum value, a positive value (999999999 to show infinite)
+   * @param min The minumum (positive) value
+   * @param max The maximum (positive) value (999999999 to show infinite)
    * @return This Z4SignedValueUI
    */
   public Z4SignedValueUI setRange(int min, int max) {

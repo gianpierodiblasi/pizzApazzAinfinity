@@ -17,7 +17,10 @@ import static simulation.js.$Globals.parseInt;
  */
 public abstract class Z4AbstractComponentUI<T extends Z4AbstractComponentUI<T>> {
 
-  private final HTMLElement html;
+  /**
+   * The HTML root of this component
+   */
+  protected final HTMLElement root;
 
   /**
    * Creates a Z4AbstractComponentUI
@@ -25,11 +28,11 @@ public abstract class Z4AbstractComponentUI<T extends Z4AbstractComponentUI<T>> 
    * @param ui The HTML
    */
   protected Z4AbstractComponentUI(String ui) {
-    this.html = document.createElement("div");
-    this.html.setAttribute("id", "id" + new Date().getTime() + "_" + parseInt(1000 * Math.random()));
-    this.html.innerHTML = ui;
+    this.root = document.createElement("div");
+    this.root.setAttribute("id", "id" + new Date().getTime() + "_" + parseInt(1000 * Math.random()));
+    this.root.innerHTML = ui;
 
-    NodeList list = this.html.querySelectorAll("#" + this.html.id + " [data-token-lang-inner_text]");
+    NodeList list = this.root.querySelectorAll("#" + this.root.id + " [data-token-lang-inner_text]");
     for (int index = 0; index < list.length; index++) {
       HTMLElement element = (HTMLElement) list.item(index);
       element.innerText = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text"));
@@ -43,7 +46,7 @@ public abstract class Z4AbstractComponentUI<T extends Z4AbstractComponentUI<T>> 
    * @return The child of this component
    */
   public $HTMLElement querySelector(String selector) {
-    return ($HTMLElement) this.html.querySelector(selector);
+    return ($HTMLElement) this.root.querySelector(selector);
   }
 
   /**
@@ -53,7 +56,7 @@ public abstract class Z4AbstractComponentUI<T extends Z4AbstractComponentUI<T>> 
    * @return All children of this component
    */
   public NodeList querySelectorAll(String selector) {
-    return this.html.querySelectorAll(selector);
+    return this.root.querySelectorAll(selector);
   }
 
   /**
@@ -64,7 +67,7 @@ public abstract class Z4AbstractComponentUI<T extends Z4AbstractComponentUI<T>> 
    */
   @SuppressWarnings("unchecked")
   public T appendTo(Element parent) {
-    parent.appendChild(this.html);
+    parent.appendChild(this.root);
     return (T) this;
   }
 }
