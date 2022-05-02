@@ -1,5 +1,5 @@
 /**
- * The component to edit a numeric value
+ * The component to edit a signed value
  *
  * @author gianpiero.di.blasi
  */
@@ -36,9 +36,10 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
     for (let i = 0; i < buttons.length; i++) {
       let button = buttons.item(i);
       button.onclick = (event) => {
-        this.toggle.setAttribute("data-value", button.getAttribute("data-value"));
-        this.toggleImg.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + button.getAttribute("data-value") + ".svg");
-        switch(this.toggle.getAttribute("data-value")) {
+        let str = button.getAttribute("data-value");
+        this.toggle.setAttribute("data-value", str);
+        this.toggleImg.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + str + ".svg");
+        switch(str) {
           case "positive":
             this.onchange(this.value.setSign(Z4Sign.POSITIVE));
             break;
@@ -111,8 +112,8 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
   /**
    * Sets the range of this Z4SignedValueUI
    *
-   * @param min The minumum value, a positive value
-   * @param max The maximum value, a positive value (999999999 to show infinite)
+   * @param min The minumum (positive) value
+   * @param max The maximum (positive) value (999999999 to show infinite)
    * @return This Z4SignedValueUI
    */
    setRange(min, max) {
@@ -170,7 +171,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
     }
     this.toggle.setAttribute("data-value", str);
     this.toggleImg.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + str + ".svg");
-    this.text.value = "" + value.geValue();
+    this.text.value = "" + value.getValue();
     return this;
   }
 }

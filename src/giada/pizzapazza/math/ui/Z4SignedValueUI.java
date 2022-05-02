@@ -50,10 +50,11 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
     for (int i = 0; i < buttons.length; i++) {
       HTMLElement button = (HTMLElement) buttons.item(i);
       button.onclick = (event) -> {
-        this.toggle.setAttribute("data-value", button.getAttribute("data-value"));
-        this.toggleImg.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + button.getAttribute("data-value") + ".svg");
+        String str = button.getAttribute("data-value");
+        this.toggle.setAttribute("data-value", str);
+        this.toggleImg.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + str + ".svg");
 
-        switch (this.toggle.getAttribute("data-value")) {
+        switch (str) {
           case "positive":
             this.onchange.$apply(this.value.setSign(Z4Sign.POSITIVE));
             break;
@@ -200,7 +201,7 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
     this.toggle.setAttribute("data-value", str);
     this.toggleImg.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + str + ".svg");
 
-    this.text.value = "" + value.geValue();
+    this.text.value = "" + value.getValue();
     return this;
   }
 }
