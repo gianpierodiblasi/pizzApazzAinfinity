@@ -1,17 +1,16 @@
+package giada.pizzapazza.math;
+
 /**
  * The fanciful value
  *
  * @author gianpiero.di.blasi
  */
-class Z4FancifulValue {
+public class Z4FancifulValue {
 
-   constant = new Z4SignedValue();
-
-   random = Z4SignedRandomValue.classic(0);
-
-   proportional = new Z4SignedValue();
-
-   uniformSign = false;
+  private Z4SignedValue constant = new Z4SignedValue();
+  private Z4SignedRandomValue random = Z4SignedRandomValue.classic(0);
+  private Z4SignedValue proportional = new Z4SignedValue();
+  private boolean uniformSign;
 
   /**
    * Sets the constant component
@@ -19,7 +18,7 @@ class Z4FancifulValue {
    * @param constant The constant component
    * @return This Z4FancifulValue
    */
-   setConstant(constant) {
+  public Z4FancifulValue setConstant(Z4SignedValue constant) {
     this.constant = constant;
     return this;
   }
@@ -29,7 +28,7 @@ class Z4FancifulValue {
    *
    * @return The the constant component
    */
-   getConstant() {
+  public Z4SignedValue getConstant() {
     return this.constant;
   }
 
@@ -39,7 +38,7 @@ class Z4FancifulValue {
    * @param random The random component
    * @return This Z4FancifulValue
    */
-   setRandom(random) {
+  public Z4FancifulValue setRandom(Z4SignedRandomValue random) {
     this.random = random;
     return this;
   }
@@ -49,7 +48,7 @@ class Z4FancifulValue {
    *
    * @return The random component
    */
-   getRandom() {
+  public Z4SignedRandomValue getRandom() {
     return this.random;
   }
 }
