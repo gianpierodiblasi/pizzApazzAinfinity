@@ -137,7 +137,7 @@ public class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI<Z4Temporal
     this.temporalFormRange.onchange = (event) -> this.setRipple(1);
     this.spatialFormRange.onchange = (event) -> this.setRipple(1);
 
-    this.z4ColorUI.appendTo(this.querySelector(".canvas-container"));
+    this.z4ColorUI.appendToElement(this.querySelector(".canvas-container"));
     this.z4ColorUI.oninput = (z4Color) -> {
       $HTMLElement input = this.querySelector(".sliders .form-check-input:checked");
       this.value.addOrUpdateColor(parseFloat(input.getAttribute("T")), parseFloat(input.getAttribute("S")), z4Color.getARGB());

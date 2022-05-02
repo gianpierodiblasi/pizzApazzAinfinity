@@ -133,7 +133,7 @@ public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4Gradient
       return null;
     };
 
-    this.z4ColorUI.appendTo(this.querySelector(".canvas-container"));
+    this.z4ColorUI.appendToElement(this.querySelector(".canvas-container"));
     this.z4ColorUI.oninput = (z4Color) -> {
       $HTMLElement input = this.querySelector(".sliders .form-check-input:checked");
       this.value.addOrUpdateColor(parseFloat(input.value), z4Color.getARGB());

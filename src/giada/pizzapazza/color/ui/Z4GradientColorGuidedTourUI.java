@@ -51,7 +51,7 @@ public class Z4GradientColorGuidedTourUI extends Z4GradientColorUI {
     document.querySelector(".modal-dialog").classList.add("modal-lg");
     document.querySelector(".modal-dialog .modal-footer").insertBefore(label, document.querySelector(".modal-dialog .modal-footer button"));
 
-    new Z4GradientColorGuidedTourUI().appendTo(document.querySelector(".modal-message"));
+    new Z4GradientColorGuidedTourUI().appendToElement(document.querySelector(".modal-message"));
   }
 
   private void doStep(int step) {

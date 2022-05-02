@@ -21,9 +21,9 @@ public class Z4RotationUI extends Z4AbstractComponentWithValueUI<Z4Rotation> {
 
   private final HTMLElement toggleType = this.querySelector(".toggle-type-rotation");
   private final HTMLElement toggleTypeImg = this.querySelector(".toggle-type-rotation img");
-  private final Z4SignedValueUI startAngle = new Z4SignedValueUI().setRange(0, 360).setValueLabel("START_ANGLE", true, false).setSignVisible(false).appendTo(this.querySelector(".start-angle-container"));
+  private final Z4SignedValueUI startAngle = new Z4SignedValueUI().setRange(0, 360).setValueLabel("START_ANGLE", true, false).setSignVisible(false).appendToElement(this.querySelector(".start-angle-container"));
   private final $HTMLElement delayedCheck = this.querySelector(".delayed-check");
-  private final Z4FancifulValueUI angle = new Z4FancifulValueUI().setValueLabel("ANGLE", true, false).setComponentsVisible(true, true, false).setConstantRange(0, 180).setRandomRange(0, 180).appendTo(this.root);
+  private final Z4FancifulValueUI angle = new Z4FancifulValueUI().setValueLabel("ANGLE", true, false).setComponentsVisible(true, true, false).setConstantRange(0, 180).setRandomRange(0, 180).appendToComponent(this);
 
   private final static String PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
   private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4RotationUI.html");

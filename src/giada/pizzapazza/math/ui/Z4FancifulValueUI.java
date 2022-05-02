@@ -75,11 +75,11 @@ public class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI<Z4Fanciful
       };
     }
 
-    this.constantUI.appendTo(this.querySelector(".fanciful-costant"));
+    this.constantUI.appendToElement(this.querySelector(".fanciful-costant"));
     this.constantUI.setValueLabel("CONSTANT", false, true);
-    this.randomUI.appendTo(this.querySelector("div.fanciful-random"));
+    this.randomUI.appendToElement(this.querySelector("div.fanciful-random"));
     this.randomUI.setValueLabel("RANDOM", false, true);
-    this.proportionalUI.appendTo(this.querySelector(".fanciful-proportional"));
+    this.proportionalUI.appendToElement(this.querySelector(".fanciful-proportional"));
     this.proportionalUI.setValueLabel("PROPORTIONAL", false, true);
 
     this.constantUI.oninput = (event) -> this.onInput();

@@ -16,10 +16,7 @@ import static simulation.js.$Globals.parseInt;
  */
 public abstract class Z4AbstractComponentUI {
 
-  /**
-   * The HTML root of this component
-   */
-  public final $HTMLElement root;
+  private final $HTMLElement root;
 
   /**
    * Creates a Z4AbstractComponentUI
@@ -66,8 +63,34 @@ public abstract class Z4AbstractComponentUI {
    * @return This Z4AbstractComponentUI
    */
   @SuppressWarnings("unchecked")
-  public <T extends Z4AbstractComponentUI> T appendTo(Element parent) {
+  public <T extends Z4AbstractComponentUI> T appendToElement(Element parent) {
     parent.appendChild(this.root);
+    return (T) this;
+  }
+
+  /**
+   * Appends this Z4AbstractComponentUI to its parent
+   *
+   * @param <T>
+   * @param parent The parent
+   * @return This Z4AbstractComponentUI
+   */
+  @SuppressWarnings("unchecked")
+  public <T extends Z4AbstractComponentUI> T appendToComponent(Z4AbstractComponentUI parent) {
+    parent.root.appendChild(this.root);
+    return (T) this;
+  }
+  
+  /**
+   * Prepends this Z4AbstractComponentUI to its parent
+   *
+   * @param <T>
+   * @param parent The parent
+   * @return This Z4AbstractComponentUI
+   */
+  @SuppressWarnings("unchecked")
+  public <T extends Z4AbstractComponentUI> T prependToElement($HTMLElement parent) {
+    parent.prepend(this.root);
     return (T) this;
   }
 }

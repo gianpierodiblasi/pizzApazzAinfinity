@@ -37,7 +37,7 @@ public class test_rotation1 {
     };
 
     Z4RotationUI ui1 = new Z4RotationUI();
-    ui1.appendTo(document.querySelector("#test1"));
+    ui1.appendToElement(document.querySelector("#test1"));
 
     Z4Rotation v = Z4Rotation.cumulative().setStartAngle(35).setDelayed(true).setAngle(new Z4FancifulValue().
             setConstant(new Z4SignedValue().setValue(10).setSign(Z4Sign.NEGATIVE)).
@@ -45,7 +45,7 @@ public class test_rotation1 {
             setProportional(new Z4SignedValue().setValue(30).setSign(Z4Sign.POSITIVE)));
 
     Z4RotationUI ui2 = new Z4RotationUI().setVertical().setValue(v);
-    ui2.appendTo(document.querySelector("#test3"));
+    ui2.appendToElement(document.querySelector("#test3"));
 
     ui1.oninput = (value) -> document.getElementById("test2").textContent = "ONINPUT " + test_rotation1.stringify(value);
     ui1.onchange = (value) -> document.getElementById("test2").textContent = "ONCHANGE " + test_rotation1.stringify(value);

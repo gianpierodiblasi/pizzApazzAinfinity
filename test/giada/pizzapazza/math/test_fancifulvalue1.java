@@ -40,7 +40,7 @@ public class test_fancifulvalue1 {
     };
 
     Z4FancifulValueUI ui1 = new Z4FancifulValueUI();
-    ui1.appendTo(document.querySelector("#test1"));
+    ui1.appendToElement(document.querySelector("#test1"));
 
     Z4FancifulValue v = new Z4FancifulValue().
             setConstant(new Z4SignedValue().setValue(10).setSign(Z4Sign.NEGATIVE)).
@@ -48,7 +48,7 @@ public class test_fancifulvalue1 {
             setProportional(new Z4SignedValue().setValue(30).setSign(Z4Sign.POSITIVE));
 
     Z4FancifulValueUI ui2 = new Z4FancifulValueUI().setVertical().setValue(v);
-    ui2.appendTo(document.querySelector("#test3"));
+    ui2.appendToElement(document.querySelector("#test3"));
 
     ui1.oninput = (value) -> document.getElementById("test2").textContent = "ONINPUT " + test_fancifulvalue1.stringify(value);
     ui1.onchange = (value) -> document.getElementById("test2").textContent = "ONCHANGE " + test_fancifulvalue1.stringify(value);

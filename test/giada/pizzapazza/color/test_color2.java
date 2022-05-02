@@ -50,7 +50,7 @@ public class test_color2 {
     test_color2.drawAll();
 
     Z4GradientColorUI ui = new Z4GradientColorUI();
-    ui.appendTo(document.querySelector("#test7"));
+    ui.appendToElement(document.querySelector("#test7"));
     ui.oninput = (z4GradientColor) -> document.getElementById("test8").textContent = "ONINPUT " + test_color2.stringify(z4GradientColor);
     ui.onchange = (z4GradientColor) -> document.getElementById("test8").textContent = "ONCHANGE " + test_color2.stringify(z4GradientColor);
     document.getElementById("test8").textContent = test_color2.stringify(ui.getValue());
