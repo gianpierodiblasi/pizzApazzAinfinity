@@ -68,26 +68,26 @@ class Z4AbstractComponentUI {
   }
 
   /**
-   * Prepends this Z4AbstractComponentUI to its parent
+   * Prepends an element to this Z4AbstractComponentUI
    *
    * @param <T>
-   * @param parent The parent
+   * @param element The element
    * @return This Z4AbstractComponentUI
    */
-   prependToElement(parent) {
-    parent.prepend(this.root);
+   prependElement(element) {
+    this.root.prepend(element);
     return this;
   }
 
   /**
-   * Prepends this Z4AbstractComponentUI to its parent
+   * Prepends an element to this Z4AbstractComponentUI
    *
    * @param <T>
-   * @param parent The parent
+   * @param element The element
    * @return This Z4AbstractComponentUI
    */
-   prependToComponent(parent) {
-    parent.root.prepend(this.root);
+   prependComponent(element) {
+    this.root.prepend(element.root);
     return this;
   }
 }

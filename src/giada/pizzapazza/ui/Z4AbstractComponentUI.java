@@ -82,28 +82,28 @@ public abstract class Z4AbstractComponentUI {
   }
 
   /**
-   * Prepends this Z4AbstractComponentUI to its parent
+   * Prepends an element to this Z4AbstractComponentUI
    *
    * @param <T>
-   * @param parent The parent
+   * @param element The element
    * @return This Z4AbstractComponentUI
    */
   @SuppressWarnings("unchecked")
-  public <T extends Z4AbstractComponentUI> T prependToElement($HTMLElement parent) {
-    parent.prepend(this.root);
+  public <T extends Z4AbstractComponentUI> T prependElement(Element element) {
+    this.root.prepend(element);
     return (T) this;
   }
 
   /**
-   * Prepends this Z4AbstractComponentUI to its parent
+   * Prepends an element to this Z4AbstractComponentUI
    *
    * @param <T>
-   * @param parent The parent
+   * @param element The element
    * @return This Z4AbstractComponentUI
    */
   @SuppressWarnings("unchecked")
-  public <T extends Z4AbstractComponentUI> T prependToComponent(Z4AbstractComponentUI parent) {
-    parent.root.prepend(this.root);
+  public <T extends Z4AbstractComponentUI> T prependComponent(Z4AbstractComponentUI element) {
+    this.root.prepend(element.root);
     return (T) this;
   }
 }

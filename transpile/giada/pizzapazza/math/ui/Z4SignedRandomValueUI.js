@@ -71,7 +71,7 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
       this.spinnerLength.onmousedown = (event) => this.startSpin();
       this.spinnerLength.onmouseup = (event) => this.stopSpin();
     }
-    this.signedValueUI.prependToElement(this.querySelector(".type-label"));
+    this.signedValueUI.prependElement(this.querySelector(".type-label"));
     this.querySelector(".number-group").prepend(this.querySelector(".toggle-type-dropdown-menu"));
     this.querySelector(".number-group").prepend(this.toggleType);
     this.querySelector(".sign-label").style.width = "50px";
