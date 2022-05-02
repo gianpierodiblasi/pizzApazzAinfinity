@@ -35,7 +35,7 @@ public class Z4SignedValue {
    *
    * @return The (positive) value
    */
-  public double geValue() {
+  public double getValue() {
     return this.value;
   }
 
