@@ -75,6 +75,7 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
     this.querySelector(".number-group").prepend(this.querySelector(".toggle-type-dropdown-menu"));
     this.querySelector(".number-group").prepend(this.toggleType);
     this.querySelector(".sign-label").style.width = "50px";
+    this.querySelector(".range-label").classList.add("signed-random-value");
     this.setValue(Z4SignedRandomValue.classic(0));
   }
 
