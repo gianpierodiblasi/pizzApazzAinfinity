@@ -39,7 +39,7 @@ public class test_rotation1 {
     Z4RotationUI ui1 = new Z4RotationUI();
     ui1.appendTo(document.querySelector("#test1"));
 
-    Z4Rotation v = Z4Rotation.fixed().setAngle(new Z4FancifulValue().
+    Z4Rotation v = Z4Rotation.cumulative().setStartAngle(35).setDelayed(true).setAngle(new Z4FancifulValue().
             setConstant(new Z4SignedValue().setValue(10).setSign(Z4Sign.NEGATIVE)).
             setRandom(Z4SignedRandomValue.bezier(20, 10).setSign(Z4Sign.RANDOM)).
             setProportional(new Z4SignedValue().setValue(30).setSign(Z4Sign.POSITIVE)));

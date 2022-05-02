@@ -5,9 +5,12 @@
  */
 class Z4RotationUI extends Z4AbstractComponentWithValueUI {
 
-  // private final HTMLElement toggleType = this.querySelector(".toggle-type");
-  // private final HTMLElement toggleTypeImg = this.querySelector(".toggle-type img");
-  // private final Z4NumberUI startAngle = new Z4NumberUI().setRange(-180, 180).setValueLabel("START_ANGLE").setSignVisible(false).appendTo(this.querySelector(".start-angle-container"));
+   toggleType = this.querySelector(".toggle-type-rotation");
+
+   toggleTypeImg = this.querySelector(".toggle-type-rotation img");
+
+   startAngle = new Z4SignedValueUI().setRange(0, 360).setValueLabel("START_ANGLE", true, false).setSignVisible(false).appendTo(this.querySelector(".start-angle-container"));
+
    delayedCheck = this.querySelector(".delayed-check");
 
    angle = new Z4FancifulValueUI().setValueLabel("ANGLE", true, false).setComponentsVisible(true, true, false).setConstantRange(0, 180).setRandomRange(0, 180).appendTo(this.root);
@@ -21,52 +24,44 @@ class Z4RotationUI extends Z4AbstractComponentWithValueUI {
    */
   constructor() {
     super(Z4RotationUI.UI);
-    // this.toggleTypeImg.setAttribute("src", Z4RotationUI.PATH + "z4rotation_" + this.toggleType.getAttribute("data-value") + ".svg");
-    let imgs = this.querySelectorAll(".toggle-type-dropdown-menu img");
+    this.toggleTypeImg.setAttribute("src", Z4RotationUI.PATH + "z4rotation_" + this.toggleType.getAttribute("data-value") + ".svg");
+    let imgs = this.querySelectorAll(".toggle-type-rotation-dropdown-menu img");
     for (let i = 0; i < imgs.length; i++) {
       let img = imgs.item(i);
       img.setAttribute("src", Z4RotationUI.PATH + "z4rotation_" + img.getAttribute("data-icon") + ".svg");
     }
-    let buttons = this.querySelectorAll(".toggle-type-dropdown-menu .dropdown-item");
+    let buttons = this.querySelectorAll(".toggle-type-rotation-dropdown-menu .dropdown-item");
     for (let i = 0; i < buttons.length; i++) {
       let button = buttons.item(i);
       button.onclick = (event) => {
-        // this.toggleType.setAttribute("data-value", button.getAttribute("data-value"));
-        // this.toggleTypeImg.setAttribute("src", Z4RotationUI.PATH + "z4rotation_" + button.getAttribute("data-value") + ".svg");
-        // 
-        // Z4FancifulValue angleValue = this.angle.getValue();
-        // this.rotation = this.getRotation().
-        // setConstant(angleValue.getConstantSign(), angleValue.getConstantValue()).
-        // setRandom(angleValue.getRandomSign(), angleValue.getRandomValue()).
-        // setUniformSign(angleValue.isUniformSign()).
-        // setStartAngle(this.startAngle.getValue()).
-        // setDelayed(this.delayedCheck.checked);
-        // 
-        // this.onchange.$apply(this.rotation);
+        let str = button.getAttribute("data-value");
+        this.toggleType.setAttribute("data-value", str);
+        this.toggleTypeImg.setAttribute("src", Z4RotationUI.PATH + "z4rotation_" + str + ".svg");
+        switch(str) {
+          case "fixed":
+            this.value = Z4Rotation.fixed();
+            break;
+          case "cumulative":
+            this.value = Z4Rotation.cumulative();
+            break;
+          case "relativetopath":
+            this.value = Z4Rotation.relativeToPath();
+            break;
+        }
+        this.onchange(this.value.setAngle(this.angle.getValue()).setStartAngle(this.startAngle.getValue().getValue()).setDelayed(this.delayedCheck.checked));
         return null;
       };
     }
     this.delayedCheck.id = "uniform_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
     this.querySelector(".delayed-label").setAttribute("for", this.delayedCheck.id);
     this.delayedCheck.onchange = (event) => {
-      // this.onchange.$apply(this.rotation.setDelayed(this.delayedCheck.checked));
+      this.onchange(this.value.setDelayed(this.delayedCheck.checked));
       return null;
     };
-    // 
-    // this.startAngle.oninput = (value) -> this.oninput.$apply(this.rotation.setStartAngle(this.startAngle.getValue()));
-    // this.startAngle.onchange = (value) -> this.onchange.$apply(this.rotation.setStartAngle(this.startAngle.getValue()));
-    // 
-    // this.angle.oninput = (value) -> this.oninput.$apply(this.rotation.
-    // setConstant(value.getConstantSign(), value.getConstantValue()).
-    // setRandom(value.getRandomSign(), value.getRandomValue()).
-    // setUniformSign(value.isUniformSign())
-    // );
-    // this.angle.onchange = (value) -> this.onchange.$apply(this.rotation.
-    // setConstant(value.getConstantSign(), value.getConstantValue()).
-    // setRandom(value.getRandomSign(), value.getRandomValue()).
-    // setUniformSign(value.isUniformSign())
-    // );
-    // 
+    this.startAngle.oninput = (start) => this.oninput(this.value.setStartAngle(start.getValue()));
+    this.startAngle.onchange = (start) => this.onchange(this.value.setStartAngle(start.getValue()));
+    this.angle.oninput = (a) => this.oninput(this.value.setAngle(a));
+    this.angle.onchange = (a) => this.onchange(this.value.setAngle(a));
     this.setValue(Z4Rotation.fixed());
   }
 
@@ -77,11 +72,11 @@ class Z4RotationUI extends Z4AbstractComponentWithValueUI {
    * @param max The maximum value
    * @return This Z4RotationUI
    */
-  // public Z4RotationUI setRandomLengthRange(int min, int max) {
-  // this.angle.setRandomLengthRange(min, max);
-  // return this;
-  // }
-  // 
+   setRandomLengthRange(min, max) {
+    this.angle.setRandomLengthRange(min, max);
+    return this;
+  }
+
   /**
    * Sets the token of the value label
    *
@@ -121,39 +116,19 @@ class Z4RotationUI extends Z4AbstractComponentWithValueUI {
 
    setValue(value) {
     super.setValue(value);
-    // 
-    // this.setRotation(this.rotation);
-    // this.delayedCheck.checked = this.rotation.isDelayed();
-    // this.startAngle.setValue(this.rotation.getStartAngle());
-    // this.angle.setValue(this.rotation.asFancifulValue());
+    let str = null;
+    if (this.value.isFixed()) {
+      str = "fixed";
+    } else if (this.value.isCumulative()) {
+      str = "cumulative";
+    } else if (this.value.isRelativeToPath()) {
+      str = "relativetopath";
+    }
+    this.toggleType.setAttribute("data-value", str);
+    this.toggleTypeImg.setAttribute("src", Z4RotationUI.PATH + "z4rotation_" + str + ".svg");
+    this.delayedCheck.checked = this.value.isDelayed();
+    this.startAngle.setValue(new Z4SignedValue().setValue(this.value.getStartAngle()));
+    this.angle.setValue(this.value.getAngle());
     return this;
   }
-  // 
-  // @SuppressWarnings("StringEquality")
-  // private void setRotation(Z4Rotation rotation) {
-  // String str = null;
-  // if (rotation.isFixed()) {
-  // str = "fixed";
-  // } else if (rotation.isCumulative()) {
-  // str = "cumulative";
-  // } else if (rotation.isRelativeToPath()) {
-  // str = "relativetopath";
-  // }
-  // 
-  // this.toggleType.setAttribute("data-value", str);
-  // this.toggleTypeImg.setAttribute("src", Z4RotationUI.PATH + "z4rotation_" + str + ".svg");
-  // }
-  // 
-  // private Z4Rotation getRotation() {
-  // switch (this.toggleType.getAttribute("data-value")) {
-  // case "fixed":
-  // return Z4Rotation.fixed();
-  // case "cumulative":
-  // return Z4Rotation.cumulative();
-  // case "relativetopath":
-  // return Z4Rotation.relativeToPath();
-  // default:
-  // return null;
-  // }
-  // }
 }

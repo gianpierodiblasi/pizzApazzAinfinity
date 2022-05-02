@@ -22,7 +22,7 @@ class test_rotation1 {
     };
     let ui1 = new Z4RotationUI();
     ui1.appendTo(document.querySelector("#test1"));
-    let v = Z4Rotation.fixed().setAngle(new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(10).setSign(Z4Sign.NEGATIVE)).setRandom(Z4SignedRandomValue.bezier(20, 10).setSign(Z4Sign.RANDOM)).setProportional(new Z4SignedValue().setValue(30).setSign(Z4Sign.POSITIVE)));
+    let v = Z4Rotation.cumulative().setStartAngle(35).setDelayed(true).setAngle(new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(10).setSign(Z4Sign.NEGATIVE)).setRandom(Z4SignedRandomValue.bezier(20, 10).setSign(Z4Sign.RANDOM)).setProportional(new Z4SignedValue().setValue(30).setSign(Z4Sign.POSITIVE)));
     let ui2 = new Z4RotationUI().setVertical().setValue(v);
     ui2.appendTo(document.querySelector("#test3"));
     ui1.oninput = (value) => document.getElementById("test2").textContent = "ONINPUT " + test_rotation1.stringify(value);
