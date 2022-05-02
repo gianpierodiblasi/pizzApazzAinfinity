@@ -4855,13 +4855,13 @@ class Z4Stamper extends Z4PointIterator {
  */
 class Z4StamperUI extends Z4AbstractComponentWithValueUI {
 
-   intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", false, false).setComponentsVisible(true, true, false).setSignsVisible(false, true, true).appendToElement(this.querySelector(".stamper-container"));
+   intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setComponentsVisible(true, true, false).setSignsVisible(false, true, true).appendToElement(this.querySelector(".stamper-container"));
 
-   rotation = new Z4RotationUI().setValueLabel("ROTATION", false, false).appendToElement(this.querySelector(".stamper-container"));
+   rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".stamper-container"));
 
-   multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", false, false).setComponentsVisible(true, true, false).setSignsVisible(false, true, true).setConstantRange(1, 999999999).appendToElement(this.querySelector(".stamper-container"));
+   multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setComponentsVisible(true, true, false).setSignsVisible(false, true, true).setConstantRange(1, 999999999).appendToElement(this.querySelector(".stamper-container"));
 
-   push = new Z4FancifulValueUI().setValueLabel("PUSH", false, false).setComponentsVisible(true, true, false).setSignsVisible(false, true, true).appendToElement(this.querySelector(".stamper-container"));
+   push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setComponentsVisible(true, true, false).setSignsVisible(false, true, true).appendToElement(this.querySelector(".stamper-container"));
 
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/iterator/ui/Z4StamperUI.html");
 
