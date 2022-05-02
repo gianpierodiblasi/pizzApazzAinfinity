@@ -7,7 +7,7 @@ class Z4SignedValue {
 
    sign = Z4Sign.RANDOM;
 
-   value = 0;
+   value = 0.0;
 
   /**
    * Returns the sign
@@ -30,18 +30,18 @@ class Z4SignedValue {
   }
 
   /**
-   * Returns the value
+   * Returns the (positive) value
    *
-   * @return The value
+   * @return The (positive) value
    */
-   geValue() {
+   getValue() {
     return this.value;
   }
 
   /**
    * Sets the value
    *
-   * @param value The value
+   * @param value The (positive) value
    * @return This Z4SignedValue
    */
    setValue(value) {

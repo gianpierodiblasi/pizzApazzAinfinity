@@ -33,12 +33,6 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue, Z4Fanciful
   private final Z4NumberUI randomUI = new Z4NumberUI();
   private final Z4NumberUI proportionalUI = new Z4NumberUI();
 
-  private final HTMLElement toggleRandom = this.querySelector(".toggle-random");
-  private final HTMLElement toggleRandomImg = this.querySelector(".toggle-random img");
-
-  private final $HTMLElement valueLength = this.querySelector(".random-length");
-  private final $HTMLElement spinnerLength = this.querySelector(".random-length-spinner");
-
   private Z4FancifulValue fancifulValue = new Z4FancifulValue();
   private boolean constantSignVisible = true;
   private boolean randomSignVisible = true;
@@ -47,9 +41,6 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue, Z4Fanciful
   private boolean randomVisible = true;
   private boolean proportionalVisible = true;
   private Array<String> selector = new Array<>();
-
-  private final $Apply_0_Void applySpin = () -> this.spin();
-  private boolean isApplySpin = false;
 
   private final static String PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
   private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4FancifulValueUI.html");
@@ -90,49 +81,7 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue, Z4Fanciful
       };
     }
 
-    this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + this.toggleRandom.getAttribute("data-value") + ".svg");
-
-    imgs = this.querySelectorAll(".toggle-random-dropdown-menu img");
-    for (int i = 0; i < imgs.length; i++) {
-      HTMLElement img = (HTMLElement) imgs.item(i);
-      img.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + img.getAttribute("data-icon") + ".svg");
-    }
-
-    buttons = this.querySelectorAll(".toggle-random-dropdown-menu .dropdown-item");
-    for (int i = 0; i < buttons.length; i++) {
-      HTMLElement button = (HTMLElement) buttons.item(i);
-      button.onclick = (event) -> {
-        String str = button.getAttribute("data-value");
-        this.toggleRandom.setAttribute("data-value", str);
-        this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + str + ".svg");
-
-        this.querySelector(".divider-length").style.display = str == "classic" ? "none" : "block"; // JS equality for strings
-        this.querySelector(".container-length").style.display = str == "classic" ? "none" : "block"; // JS equality for strings
-
-        this.onchange.$apply(this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom()));
-        return null;
-      };
-    }
-
-    this.valueLength.oninput = (event) -> {
-      this.oninput.$apply(this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom()));
-      return null;
-    };
-    this.valueLength.onchange = (event) -> {
-      this.onchange.$apply(this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom()));
-      return null;
-    };
-    this.valueLength.onfocus = (event) -> {
-      this.valueLength.select();
-      return null;
-    };
-    if (Z4Loader.touch) {
-      this.spinnerLength.ontouchstart = (event) -> this.startSpin();
-      this.spinnerLength.ontouchend = (event) -> this.stopSpin();
-    } else {
-      this.spinnerLength.onmousedown = (event) -> this.startSpin();
-      this.spinnerLength.onmouseup = (event) -> this.stopSpin();
-    }
+    
 
     this.constantUI.appendTo(this.querySelector(".fanciful-costant"));
     this.constantUI.setValueLabel("CONSTANT");
@@ -140,11 +89,6 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue, Z4Fanciful
     this.randomUI.setValueLabel("RANDOM");
     this.proportionalUI.appendTo(this.querySelector(".fanciful-proportional"));
     this.proportionalUI.setValueLabel("PROPORTIONAL");
-
-    this.querySelector(".fanciful-random > div").prepend(this.querySelector(".random-type-label"));
-    this.randomUI.querySelector(".number-group").prepend(this.querySelector(".toggle-random-dropdown-menu"));
-    this.randomUI.querySelector(".number-group").prepend(this.toggleRandom);
-    this.randomUI.querySelector(".sign-label").style.width = "64px";
 
     this.constantUI.oninput = (event) -> this.onInput();
     this.randomUI.oninput = (event) -> this.onInput();
@@ -177,42 +121,6 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue, Z4Fanciful
             setProportional(this.proportionalUI.getSign(), this.proportionalUI.getValue()));
 
     return null;
-  }
-
-  private Object startSpin() {
-    this.isApplySpin = true;
-    this.applySpin.$apply();
-    return null;
-  }
-
-  private Object stopSpin() {
-    this.isApplySpin = false;
-    this.spinnerLength.value = "0";
-    return null;
-  }
-
-  private void spin() {
-    double min = parseFloat(this.valueLength.getAttribute("min"));
-    double max = parseFloat(this.valueLength.getAttribute("max"));
-
-    double v = this.spinnerLength.valueAsNumber;
-    double abs = 1;
-
-    if ($exists(v)) {
-      abs = Math.abs(v);
-
-      v = Math.max(min, this.valueLength.valueAsNumber + (v > 0 ? 1 : -1));
-      v = Math.min(v, max);
-
-      this.valueLength.value = "" + v;
-      this.oninput.$apply(this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom()));
-    }
-
-    if (this.isApplySpin) {
-      setTimeout(this.applySpin, 500 / abs);
-    } else {
-      this.onchange.$apply(this.fancifulValue.setRandom(this.randomUI.getSign(), this.getRandom()));
-    }
   }
 
   /**
@@ -442,18 +350,7 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue, Z4Fanciful
   }
 
   private Z4RandomValue getRandom() {
-    switch (this.toggleRandom.getAttribute("data-value")) {
-      case "classic":
-        return Z4RandomValue.classic(this.randomUI.getValue());
-      case "bezier":
-        return Z4RandomValue.bezier(this.randomUI.getValue(), this.valueLength.valueAsNumber);
-      case "polyline":
-        return Z4RandomValue.polyline(this.randomUI.getValue(), this.valueLength.valueAsNumber);
-      case "stepped":
-        return Z4RandomValue.stepped(this.randomUI.getValue(), this.valueLength.valueAsNumber);
-      default:
-        return null;
-    }
+    
   }
 
   /**
