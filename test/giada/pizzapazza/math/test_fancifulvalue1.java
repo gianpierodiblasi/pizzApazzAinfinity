@@ -57,40 +57,40 @@ public class test_fancifulvalue1 {
     ui2.oninput = (value) -> document.getElementById("test4").textContent = "ONINPUT " + test_fancifulvalue1.stringify(value);
     ui2.onchange = (value) -> document.getElementById("test4").textContent = "ONCHANGE " + test_fancifulvalue1.stringify(value);
     document.getElementById("test4").textContent = test_fancifulvalue1.stringify(ui2.getValue());
-//    
-//    Function<Event, Object> onComponent = (event) -> {
-//      ui1.setComponentsVisible(
-//              (($HTMLElement) document.getElementById("constant-visible")).checked,
-//              (($HTMLElement) document.getElementById("random-visible")).checked,
-//              (($HTMLElement) document.getElementById("proportional-visible")).checked
-//      );
-//      ui2.setComponentsVisible(
-//              (($HTMLElement) document.getElementById("constant-visible")).checked,
-//              (($HTMLElement) document.getElementById("random-visible")).checked,
-//              (($HTMLElement) document.getElementById("proportional-visible")).checked
-//      );
-//      return null;
-//    };
-//    document.getElementById("constant-visible").onchange = onComponent;
-//    document.getElementById("random-visible").onchange = onComponent;
-//    document.getElementById("proportional-visible").onchange = onComponent;
-//
-//    Function<Event, Object> onSign = (event) -> {
-//      ui1.setSignsVisible(
-//              (($HTMLElement) document.getElementById("constant-sign-visible")).checked,
-//              (($HTMLElement) document.getElementById("random-sign-visible")).checked,
-//              (($HTMLElement) document.getElementById("proportional-sign-visible")).checked
-//      );
-//      ui2.setSignsVisible(
-//              (($HTMLElement) document.getElementById("constant-sign-visible")).checked,
-//              (($HTMLElement) document.getElementById("random-sign-visible")).checked,
-//              (($HTMLElement) document.getElementById("proportional-sign-visible")).checked
-//      );
-//      return null;
-//    };
-//    document.getElementById("constant-sign-visible").onchange = onSign;
-//    document.getElementById("random-sign-visible").onchange = onSign;
-//    document.getElementById("proportional-sign-visible").onchange = onSign;
+
+    Function<Event, Object> onComponent = (event) -> {
+      ui1.setComponentsVisible(
+              (($HTMLElement) document.getElementById("constant-visible")).checked,
+              (($HTMLElement) document.getElementById("random-visible")).checked,
+              (($HTMLElement) document.getElementById("proportional-visible")).checked
+      );
+      ui2.setComponentsVisible(
+              (($HTMLElement) document.getElementById("constant-visible")).checked,
+              (($HTMLElement) document.getElementById("random-visible")).checked,
+              (($HTMLElement) document.getElementById("proportional-visible")).checked
+      );
+      return null;
+    };
+    document.getElementById("constant-visible").onchange = onComponent;
+    document.getElementById("random-visible").onchange = onComponent;
+    document.getElementById("proportional-visible").onchange = onComponent;
+
+    Function<Event, Object> onSign = (event) -> {
+      ui1.setSignsVisible(
+              (($HTMLElement) document.getElementById("constant-sign-visible")).checked,
+              (($HTMLElement) document.getElementById("random-sign-visible")).checked,
+              (($HTMLElement) document.getElementById("proportional-sign-visible")).checked
+      );
+      ui2.setSignsVisible(
+              (($HTMLElement) document.getElementById("constant-sign-visible")).checked,
+              (($HTMLElement) document.getElementById("random-sign-visible")).checked,
+              (($HTMLElement) document.getElementById("proportional-sign-visible")).checked
+      );
+      return null;
+    };
+    document.getElementById("constant-sign-visible").onchange = onSign;
+    document.getElementById("random-sign-visible").onchange = onSign;
+    document.getElementById("proportional-sign-visible").onchange = onSign;
   }
 
   private static String stringify(Object object) {

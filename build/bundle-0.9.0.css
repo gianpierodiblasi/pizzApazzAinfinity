@@ -138,8 +138,8 @@ label.z4-guided-tour {
 .z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-true.psv-true.u-true .sign-button {
   display: none;
 }
-.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-true.psv-true.u-true .fanciful-costant input,
-.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-true.psv-true.u-true .fanciful-proportional input{
+.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-true.psv-true.u-true .fanciful-costant .input-group-text,
+.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-true.psv-true.u-true .fanciful-proportional .input-group-text{
   border-radius: 0.25rem !important;
 }
 
@@ -151,8 +151,8 @@ label.z4-guided-tour {
 .z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-true.psv-false.u-true .sign-button {
   display: none;
 }
-.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-true.psv-false.u-true .fanciful-costant input,
-.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-true.psv-false.u-true .fanciful-proportional input {
+.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-true.psv-false.u-true .fanciful-costant .input-group-text,
+.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-true.psv-false.u-true .fanciful-proportional .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -161,7 +161,7 @@ label.z4-guided-tour {
 .z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-true.psv-false.u-false .fanciful-proportional .sign-button {
   display: none;
 }
-.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-true.psv-false.u-false .fanciful-proportional input {
+.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-true.psv-false.u-false .fanciful-proportional .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -169,8 +169,8 @@ label.z4-guided-tour {
 .z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-false.psv-true.u-true .sign-button {
   display: none;
 }
-.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-false.psv-true.u-true .fanciful-costant input,
-.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-false.psv-true.u-true .fanciful-proportional input {
+.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-false.psv-true.u-true .fanciful-costant .input-group-text,
+.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-false.psv-true.u-true .fanciful-proportional .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -188,7 +188,7 @@ label.z4-guided-tour {
 .z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-false.psv-false .fanciful-proportional .sign-button {
   display: none;
 }
-.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-false.psv-false .fanciful-proportional input {
+.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-false.psv-false .fanciful-proportional .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -198,7 +198,7 @@ label.z4-guided-tour {
 .z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-true.psv-true .fanciful-costant .sign-button {
   display: none;
 }
-.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-true.psv-true .fanciful-costant input {
+.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-true.psv-true .fanciful-costant .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -210,8 +210,8 @@ label.z4-guided-tour {
 .z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-true.psv-false .fanciful-proportional .sign-button {
   display: none;
 }
-.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-true.psv-false .fanciful-costant input,
-.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-true.psv-false .fanciful-proportional input {
+.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-true.psv-false .fanciful-costant .input-group-text,
+.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-true.psv-false .fanciful-proportional .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -223,7 +223,7 @@ label.z4-guided-tour {
 .z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-true .fanciful-random .sign-button {
   display: none;
 }
-.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-true .fanciful-costant input {
+.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-true .fanciful-costant .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -233,8 +233,8 @@ label.z4-guided-tour {
 .z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-false .sign-button {
   display: none;
 }
-.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-false .fanciful-costant input,
-.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-false .fanciful-proportional input {
+.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-false .fanciful-costant .input-group-text,
+.z4-pro .cv-true.rv-true.pv-true.csv-false.rsv-false.psv-false .fanciful-proportional .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -243,7 +243,7 @@ label.z4-guided-tour {
 .z4-pro .cv-true.rv-true.pv-false.csv-true.rsv-true.u-true .fanciful-proportional {
   display: none;
 }
-.z4-pro .cv-true.rv-true.pv-false.csv-true.rsv-true.u-true .fanciful-costant input {
+.z4-pro .cv-true.rv-true.pv-false.csv-true.rsv-true.u-true .fanciful-costant .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -267,7 +267,7 @@ label.z4-guided-tour {
 .z4-pro .cv-true.rv-true.pv-false.csv-false.rsv-true .fanciful-proportional {
   display: none;
 }
-.z4-pro .cv-true.rv-true.pv-false.csv-false.rsv-true .fanciful-costant input {
+.z4-pro .cv-true.rv-true.pv-false.csv-false.rsv-true .fanciful-costant .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -278,7 +278,7 @@ label.z4-guided-tour {
 .z4-pro .cv-true.rv-true.pv-false.csv-false.rsv-false .fanciful-proportional {
   display: none;
 }
-.z4-pro .cv-true.rv-true.pv-false.csv-false.rsv-false .fanciful-costant input {
+.z4-pro .cv-true.rv-true.pv-false.csv-false.rsv-false .fanciful-costant .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -287,8 +287,8 @@ label.z4-guided-tour {
 .z4-pro .cv-true.rv-false.pv-true.csv-true.psv-true.u-true .fanciful-random {
   display: none;
 }
-.z4-pro .cv-true.rv-false.pv-true.csv-true.psv-true.u-true .fanciful-costant input,
-.z4-pro .cv-true.rv-false.pv-true.csv-true.psv-true.u-true .fanciful-proportional input {
+.z4-pro .cv-true.rv-false.pv-true.csv-true.psv-true.u-true .fanciful-costant .input-group-text,
+.z4-pro .cv-true.rv-false.pv-true.csv-true.psv-true.u-true .fanciful-proportional .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -304,7 +304,7 @@ label.z4-guided-tour {
 .z4-pro .cv-true.rv-false.pv-true.csv-true.psv-false .fanciful-random {
   display: none;
 }
-.z4-pro .cv-true.rv-false.pv-true.csv-true.psv-false .fanciful-proportional input {
+.z4-pro .cv-true.rv-false.pv-true.csv-true.psv-false .fanciful-proportional .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -315,7 +315,7 @@ label.z4-guided-tour {
 .z4-pro .cv-true.rv-false.pv-true.csv-false.psv-true .fanciful-random {
   display: none;
 }
-.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-true .fanciful-costant input {
+.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-true .fanciful-costant .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -326,8 +326,8 @@ label.z4-guided-tour {
 .z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false .fanciful-random {
   display: none;
 }
-.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false .fanciful-costant input,
-.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false .fanciful-proportional input {
+.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false .fanciful-costant .input-group-text,
+.z4-pro .cv-true.rv-false.pv-true.csv-false.psv-false .fanciful-proportional .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -368,7 +368,7 @@ label.z4-guided-tour {
   text-align: right;
   margin-bottom: 9px;
 }
-.z4-pro .cv-true.rv-false.pv-false.csv-false .fanciful-costant input {
+.z4-pro .cv-true.rv-false.pv-false.csv-false .fanciful-costant .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -385,7 +385,7 @@ label.z4-guided-tour {
 .z4-pro .cv-false.rv-true.pv-true.rsv-true.psv-false .fanciful-proportional .sign-button {
   display: none;
 }
-.z4-pro .cv-false.rv-true.pv-true.rsv-true.psv-false .fanciful-proportional input {
+.z4-pro .cv-false.rv-true.pv-true.rsv-true.psv-false .fanciful-proportional .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -404,7 +404,7 @@ label.z4-guided-tour {
 .z4-pro .cv-false.rv-true.pv-true.rsv-false.psv-false .fanciful-costant {
   display: none;
 }
-.z4-pro .cv-false.rv-true.pv-true.rsv-false.psv-false .fanciful-proportional input {
+.z4-pro .cv-false.rv-true.pv-true.rsv-false.psv-false .fanciful-proportional .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -439,7 +439,7 @@ label.z4-guided-tour {
 .z4-pro .cv-false.rv-false.pv-true.psv-false .fanciful-random {
   display: none;
 }
-.z4-pro .cv-false.rv-false.pv-true.psv-false .fanciful-proportional input {
+.z4-pro .cv-false.rv-false.pv-true.psv-false .fanciful-proportional .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -454,7 +454,7 @@ label.z4-guided-tour {
 .z4-standard .cv-true.rv-true.csv-true.rsv-true.u-true .sign-button {
   display: none;
 }
-.z4-standard .cv-true.rv-true.csv-true.rsv-true.u-true .fanciful-costant input {
+.z4-standard .cv-true.rv-true.csv-true.rsv-true.u-true .fanciful-costant .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -475,7 +475,7 @@ label.z4-guided-tour {
 .z4-standard .cv-true.rv-true.csv-false.rsv-true .fanciful-costant .sign-button {
   display: none;
 }
-.z4-standard .cv-true.rv-true.csv-false.rsv-true .fanciful-costant input {
+.z4-standard .cv-true.rv-true.csv-false.rsv-true .fanciful-costant .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -485,7 +485,7 @@ label.z4-guided-tour {
 .z4-standard .cv-true.rv-true.csv-false.rsv-false .sign-button {
   display: none;
 }
-.z4-standard .cv-true.rv-true.csv-false.rsv-false .fanciful-costant input {
+.z4-standard .cv-true.rv-true.csv-false.rsv-false .fanciful-costant .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -524,7 +524,7 @@ label.z4-guided-tour {
   text-align: right;
   margin-bottom: 9px;
 }
-.z4-standard .cv-true.rv-false.csv-false .fanciful-costant input {
+.z4-standard .cv-true.rv-false.csv-false .fanciful-costant .input-group-text {
   border-radius: 0.25rem !important;
 }
 
@@ -583,7 +583,7 @@ label.z4-guided-tour {
   text-align: right;
   margin-bottom: 9px;
 }
-.z4-lite .cv-true.csv-false .fanciful-costant input {
+.z4-lite .cv-true.csv-false .fanciful-costant .input-group-text {
   border-radius: 0.25rem !important;
 }
 

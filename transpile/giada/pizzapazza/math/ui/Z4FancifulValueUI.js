@@ -81,21 +81,14 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
   }
 
    onInput() {
-    // this.setUniformSign(this.constantUI.getSign());
-    // this.oninput.$apply(this.fancifulValue.
-    // setConstant(this.constantUI.getSign(), this.constantUI.getValue()).
-    // setRandom(this.randomUI.getSign(), this.getRandom()).
-    // setProportional(this.proportionalUI.getSign(), this.proportionalUI.getValue())
-    // );
+    this.setUniformSign(this.constantUI.getValue().getSign());
+    this.oninput(this.value.setConstant(this.constantUI.getValue()).setRandom(this.randomUI.getValue()).setProportional(this.proportionalUI.getValue()));
     return null;
   }
 
    onChange() {
-    // this.setUniformSign(this.constantUI.getSign());
-    // this.onchange.$apply(this.fancifulValue.
-    // setConstant(this.constantUI.getSign(), this.constantUI.getValue()).
-    // setRandom(this.randomUI.getSign(), this.getRandom()).
-    // setProportional(this.proportionalUI.getSign(), this.proportionalUI.getValue()));
+    this.setUniformSign(this.constantUI.getValue().getSign());
+    this.onchange(this.value.setConstant(this.constantUI.getValue()).setRandom(this.randomUI.getValue()).setProportional(this.proportionalUI.getValue()));
     return null;
   }
 
@@ -113,6 +106,88 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
     this.randomVisible = random;
     this.proportionalVisible = proportional;
     this.setUI();
+    return this;
+  }
+
+  /**
+   * Sets the visibility of the signs
+   *
+   * @param constant true to make the constant sign visible, false otherwise
+   * @param random true to make the random sign visible, false otherwise
+   * @param proportional true to make the proportional sign visible, false
+   * otherwise
+   * @return
+   */
+   setSignsVisible(constant, random, proportional) {
+    this.constantSignVisible = constant;
+    this.randomSignVisible = random;
+    this.proportionalSignVisible = proportional;
+    this.setUI();
+    return this;
+  }
+
+  /**
+   * Sets the range of the constant component
+   *
+   * @param min The minumum value
+   * @param max The maximum value
+   * @return This Z4FancifulValueUI
+   */
+   setConstantRange(min, max) {
+    this.constantUI.setRange(min, max);
+    return this;
+  }
+
+  /**
+   * Sets the range of the random component
+   *
+   * @param min The minumum value
+   * @param max The maximum value
+   * @return This Z4FancifulValueUI
+   */
+   setRandomRange(min, max) {
+    this.randomUI.setRange(min, max);
+    return this;
+  }
+
+  /**
+   * Sets the range of the random length
+   *
+   * @param min The minumum value
+   * @param max The maximum value
+   * @return This Z4FancifulValueUI
+   */
+   setRandomLengthRange(min, max) {
+    this.randomUI.setLengthRange(min, max);
+    return this;
+  }
+
+  /**
+   * Sets the range of the proportional component
+   *
+   * @param min The minumum value
+   * @param max The maximum value
+   * @return This Z4FancifulValueUI
+   */
+   setProportionalRange(min, max) {
+    this.proportionalUI.setRange(min, max);
+    return this;
+  }
+
+  /**
+   * Sets the token of the value label
+   *
+   * @param token The token of the value label
+   * @param bold true for bold font, false otherwise
+   * @param italic true for italic font, false otherwise
+   * @return This Z4FancifulValueUI
+   */
+   setValueLabel(token, bold, italic) {
+    let valueLabel = this.querySelector(".fanciful-label");
+    valueLabel.setAttribute("data-token-lang-inner_text", token);
+    valueLabel.innerText = Z4MessageFactory.get(token);
+    valueLabel.style.fontWeight = (bold ? "700" : "400");
+    valueLabel.style.fontStyle = (italic ? "italic" : "normal");
     return this;
   }
 
@@ -142,6 +217,11 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
 
    setValue(value) {
     super.setValue(value);
+    this.uniformCheck.checked = this.value.isUniformSign();
+    this.constantUI.setValue(this.value.getConstant());
+    this.setUniformSign(this.value.getConstant().getSign());
+    this.randomUI.setValue(this.value.getRandom());
+    this.proportionalUI.setValue(this.value.getProportional());
     this.setUI();
     return this;
   }
@@ -158,6 +238,21 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
       this.querySelector(".form-check").classList.add(sel);
       this.querySelector(".fanciful-container").classList.add(sel);
     });
+  }
+
+   setUniformSign(sign) {
+    let str = null;
+    if (sign === Z4Sign.POSITIVE) {
+      str = "positive";
+    } else if (sign === Z4Sign.NEGATIVE) {
+      str = "negative";
+    } else if (sign === Z4Sign.RANDOM) {
+      str = "random";
+    } else {
+      str = "alternate";
+    }
+    this.toggleUniform.setAttribute("data-value", str);
+    this.toggleUniformImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4sign_" + str + ".svg");
   }
 
    getUniformSign(str) {
