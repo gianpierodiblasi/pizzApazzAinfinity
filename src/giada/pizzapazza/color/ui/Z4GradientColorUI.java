@@ -263,7 +263,7 @@ public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4Gradient
       input.setAttribute("style", (index != 0 && index != 1 ? "cursor:ew-resize;" : "") + "position:relative;left:" + left + "px");
 
       input.onchange = (event) -> {
-        this.z4ColorUI.setValue(Z4Color.fromARGB(z4StopColor.getARGB()));
+        this.z4ColorUI.setValue(Z4Color.fromZ4AbstractColor(z4StopColor));
 
         if (index == 0 || index == 1) {
           this.del.setAttribute("disabled", "");
@@ -287,11 +287,11 @@ public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4Gradient
 
       if (selected != -1 && index == selected) {
         input.setAttribute("checked", "");
-        this.z4ColorUI.setValue(Z4Color.fromARGB(z4StopColor.getARGB()));
+        this.z4ColorUI.setValue(Z4Color.fromZ4AbstractColor(z4StopColor));
         this.del.removeAttribute("disabled");
       } else if (selected == -1 && index == 0) {
         input.setAttribute("checked", "");
-        this.z4ColorUI.setValue(Z4Color.fromARGB(z4StopColor.getARGB()));
+        this.z4ColorUI.setValue(Z4Color.fromZ4AbstractColor(z4StopColor));
         this.del.setAttribute("disabled", "");
       }
 
