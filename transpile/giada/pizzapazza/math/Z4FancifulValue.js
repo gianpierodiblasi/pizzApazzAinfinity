@@ -52,4 +52,75 @@ class Z4FancifulValue {
    getRandom() {
     return this.random;
   }
+
+  /**
+   * Sets the proportional component
+   *
+   * @param proportional The proportional component
+   * @return This Z4FancifulValue
+   */
+   setProportional(proportional) {
+    this.proportional = proportional;
+    return this;
+  }
+
+  /**
+   * Returns the proportional component
+   *
+   * @return The proportional component
+   */
+   getProportional() {
+    return this.proportional;
+  }
+
+  /**
+   * Sets if the computed sign has to be equals for all components; if true then
+   * the constant sign is used
+   *
+   * @param uniformSign true if the computed sign has to be equals for all
+   * components, false otherwise
+   * @return This Z4FancifulValue
+   */
+   setUniformSign(uniformSign) {
+    this.uniformSign = uniformSign;
+    return this;
+  }
+
+  /**
+   * Checks if the computed sign has to be equals for all components; if true
+   * then the constant sign is used
+   *
+   * @return true if the computed sign has to be equals for all components,
+   * false otherwise
+   */
+   isUniformSign() {
+    return this.uniformSign;
+  }
+
+  /**
+   * Returns the next "fanciful" value
+   *
+   * @param sensibility The sensibility value to apply to the proportional
+   * component
+   * @return The next "fanciful" value
+   */
+   next(sensibility) {
+    if (Z4Setting.isLiteMode()) {
+      return this.constant.next();
+    } else if (Z4Setting.isStandardMode()) {
+      if (this.uniformSign) {
+        return this.constant.getSign().next() * (this.constant.getValue() + this.random.nextUnsigned());
+      } else {
+        return this.constant.next() + this.random.nextSigned();
+      }
+    } else if (Z4Setting.isProMode()) {
+      if (this.uniformSign) {
+        return this.constant.getSign().next() * (this.constant.getValue() + this.random.nextUnsigned() + sensibility * this.proportional.getValue());
+      } else {
+        return this.constant.next() + this.random.nextSigned() + sensibility * this.proportional.next();
+      }
+    } else {
+      return 0;
+    }
+  }
 }
