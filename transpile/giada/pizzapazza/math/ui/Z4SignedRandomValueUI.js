@@ -29,6 +29,8 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
   constructor() {
     super(Z4SignedRandomValueUI.UI);
     this.signedValueUI.appendTo(this.root);
+    this.signedValueUI.oninput = (signedValue) => this.oninput(this.createSignedRandomValue(this.toggleType.getAttribute("data-value")));
+    this.signedValueUI.onchange = (signedValue) => this.onchange(this.createSignedRandomValue(this.toggleType.getAttribute("data-value")));
     this.toggleTypeImg.setAttribute("src", Z4SignedRandomValueUI.PATH + "z4randomvalue_" + this.toggleType.getAttribute("data-value") + ".svg");
     let imgs = this.querySelectorAll(".toggle-type-dropdown-menu img");
     for (let i = 0; i < imgs.length; i++) {
@@ -105,6 +107,79 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
     } else {
       this.onchange(this.createSignedRandomValue(this.toggleType.getAttribute("data-value")));
     }
+  }
+
+  /**
+   * Sets the range of this Z4SignedRandomValueUI
+   *
+   * @param min The minumum (positive) value
+   * @param max The maximum (positive) value (999999999 to show infinite)
+   * @return This Z4SignedRandomValueUI
+   */
+   setRange(min, max) {
+    this.signedValueUI.setRange(min, max);
+    return this;
+  }
+
+  /**
+   * Sets the visibility of the sign
+   *
+   * @param visible true to make the sign visible, false otherwise
+   * @return This Z4SignedRandomValueUI
+   */
+   setSignVisible(visible) {
+    this.signedValueUI.setSignVisible(visible);
+    return this;
+  }
+
+  /**
+   * Sets the range of the length
+   *
+   * @param min The minumum (positive) value
+   * @param max The maximum (positive) value (999999999 to show infinite)
+   * @return This Z4SignedRandomValueUI
+   */
+   setLengthRange(min, max) {
+    this.valueLength.setAttribute("min", "" + min);
+    this.valueLength.setAttribute("max", "" + max);
+    this.querySelector(".range-length-label").innerText = "[" + min + "," + (max === 999999999 ? "&infin;" : max) + "]";
+    return this;
+  }
+
+  /**
+   * Sets the token of the value label
+   *
+   * @param token The token of the value label
+   * @param bold true for bold font, false otherwise
+   * @param italic true for italic font, false otherwise
+   * @return This Z4SignedRandomValueUI
+   */
+   setValueLabel(token, bold, italic) {
+    this.signedValueUI.setValueLabel(token, bold, italic);
+    return this;
+  }
+
+   setValue(value) {
+    super.setValue(value);
+    let str = null;
+    if (this.value.isClassic()) {
+      str = "classic";
+    } else if (this.value.isBezier()) {
+      str = "bezier";
+    } else if (this.value.isPolyline()) {
+      str = "polyline";
+    } else if (this.value.isStepped()) {
+      str = "stepped";
+    }
+    this.toggleType.setAttribute("data-value", str);
+    this.toggleTypeImg.setAttribute("src", Z4SignedRandomValueUI.PATH + "z4randomvalue_" + str + ".svg");
+    this.signedValueUI.setValue(new Z4SignedValue().setValue(this.value.getValue()).setSign(this.value.getSign()));
+    // JS equality for strings
+    this.querySelector(".divider-length").style.display = str === "classic" ? "none" : "block";
+    // JS equality for strings
+    this.querySelector(".container-length").style.display = str === "classic" ? "none" : "block";
+    this.valueLength.value = "" + this.getValue().getLength();
+    return this;
   }
 
    createSignedRandomValue(str) {

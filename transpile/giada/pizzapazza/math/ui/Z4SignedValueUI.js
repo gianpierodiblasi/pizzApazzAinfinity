@@ -119,7 +119,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
    setRange(min, max) {
     this.text.setAttribute("min", "" + min);
     this.text.setAttribute("max", "" + max);
-    this.querySelector(".input-group-text").innerText = "[" + min + "," + (max === 999999999 ? "&infin;" : max) + "]";
+    this.querySelector(".range-label").innerText = "[" + min + "," + (max === 999999999 ? "&infin;" : max) + "]";
     return this;
   }
 

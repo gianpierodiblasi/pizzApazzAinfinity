@@ -22,17 +22,17 @@ class test_signedrandomvalue1 {
     };
     let ui1 = new Z4SignedRandomValueUI();
     ui1.appendTo(document.querySelector("#test1"));
-    // Z4SignedRandomValueUI ui2 = new Z4SignedRandomValueUI().setRange(30, 80).setValueLabel("RANDOM", true, true).setValue(new Z4SignedRandomValue().setSign(Z4Sign.NEGATIVE).setValue(50));
-    // ui2.appendTo(document.querySelector("#test3"));
+    let ui2 = new Z4SignedRandomValueUI().setRange(30, 80).setValueLabel("RANDOM", true, true).setValue(Z4SignedRandomValue.bezier(40, 10).setSign(Z4Sign.NEGATIVE));
+    ui2.appendTo(document.querySelector("#test3"));
     ui1.oninput = (value) => document.getElementById("test2").textContent = "ONINPUT " + test_signedrandomvalue1.stringify(value);
     ui1.onchange = (value) => document.getElementById("test2").textContent = "ONCHANGE " + test_signedrandomvalue1.stringify(value);
     document.getElementById("test2").textContent = test_signedrandomvalue1.stringify(ui1.getValue());
-    // ui2.oninput = (value) -> document.getElementById("test4").textContent = "ONINPUT " + test_signedrandomvalue1.stringify(value);
-    // ui2.onchange = (value) -> document.getElementById("test4").textContent = "ONCHANGE " + test_signedrandomvalue1.stringify(value);
-    // document.getElementById("test4").textContent = test_signedrandomvalue1.stringify(ui2.getValue());
+    ui2.oninput = (value) => document.getElementById("test4").textContent = "ONINPUT " + test_signedrandomvalue1.stringify(value);
+    ui2.onchange = (value) => document.getElementById("test4").textContent = "ONCHANGE " + test_signedrandomvalue1.stringify(value);
+    document.getElementById("test4").textContent = test_signedrandomvalue1.stringify(ui2.getValue());
     document.getElementById("sign-visible").onchange = (event) => {
-      // ui1.setSignVisible((($HTMLElement) document.getElementById("sign-visible")).checked);
-      // ui2.setSignVisible((($HTMLElement) document.getElementById("sign-visible")).checked);
+      ui1.setSignVisible((document.getElementById("sign-visible")).checked);
+      ui2.setSignVisible((document.getElementById("sign-visible")).checked);
       return null;
     };
   }

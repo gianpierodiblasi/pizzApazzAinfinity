@@ -326,33 +326,6 @@ public class Z4FancifulValueUI extends Z4ComponentUI<Z4FancifulValue, Z4Fanciful
     }
   }
 
-  @SuppressWarnings("StringEquality")
-  private void setRandom(Z4RandomValue random) {
-    String str = null;
-    if (random.isClassic()) {
-      str = "classic";
-    } else if (random.isBezier()) {
-      str = "bezier";
-    } else if (random.isPolyline()) {
-      str = "polyline";
-    } else if (random.isStepped()) {
-      str = "stepped";
-    }
-
-    this.toggleRandom.setAttribute("data-value", str);
-    this.toggleRandomImg.setAttribute("src", Z4FancifulValueUI.PATH + "z4randomvalue_" + str + ".svg");
-
-    this.randomUI.setValue(random.getValue());
-
-    this.querySelector(".divider-length").style.display = str == "classic" ? "none" : "block"; // JS equality for strings
-    this.querySelector(".container-length").style.display = str == "classic" ? "none" : "block"; // JS equality for strings
-    this.valueLength.value = "" + random.getLength();
-  }
-
-  private Z4RandomValue getRandom() {
-    
-  }
-
   /**
    * Returns the value
    *
