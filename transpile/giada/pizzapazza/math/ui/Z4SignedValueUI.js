@@ -152,8 +152,8 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
     let valueLabel = this.querySelector(".value-label");
     valueLabel.setAttribute("data-token-lang-inner_text", token);
     valueLabel.innerText = Z4MessageFactory.get(token);
-    valueLabel.style.fontWeight = (bold ? "700" : "400");
-    valueLabel.style.fontStyle = (italic ? "italic" : "normal");
+    valueLabel.style.fontWeight = bold ? "700" : "400";
+    valueLabel.style.fontStyle = italic ? "italic" : "normal";
     return this;
   }
 
