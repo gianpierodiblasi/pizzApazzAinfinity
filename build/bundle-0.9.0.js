@@ -343,7 +343,6 @@ class Z4ImageFactory {
 /**
  * The abstract class of all UI components
  *
- * @param <T>
  * @author gianpiero.di.blasi
  */
 class Z4AbstractComponentUI {
@@ -392,6 +391,7 @@ class Z4AbstractComponentUI {
   /**
    * Appends this Z4AbstractComponentUI to its parent
    *
+   * @param <T>
    * @param parent The parent
    * @return This Z4AbstractComponentUI
    */
@@ -404,7 +404,6 @@ class Z4AbstractComponentUI {
  * The abstract class of all UI components providing a value
  *
  * @param <S>
- * @param <T>
  * @author gianpiero.di.blasi
  */
 class Z4AbstractComponentWithValueUI extends Z4AbstractComponentUI {
@@ -438,6 +437,7 @@ class Z4AbstractComponentWithValueUI extends Z4AbstractComponentUI {
   /**
    * Sets the value
    *
+   * @param <T>
    * @param value The value
    * @return This Z4AbstractComponentWithValueUI
    */

@@ -12,10 +12,9 @@ import static simulation.js.$Globals.parseInt;
 /**
  * The abstract class of all UI components
  *
- * @param <T>
  * @author gianpiero.di.blasi
  */
-public abstract class Z4AbstractComponentUI<T extends Z4AbstractComponentUI<T>> {
+public abstract class Z4AbstractComponentUI {
 
   /**
    * The HTML root of this component
@@ -62,11 +61,12 @@ public abstract class Z4AbstractComponentUI<T extends Z4AbstractComponentUI<T>> 
   /**
    * Appends this Z4AbstractComponentUI to its parent
    *
+   * @param <T>
    * @param parent The parent
    * @return This Z4AbstractComponentUI
    */
   @SuppressWarnings("unchecked")
-  public T appendTo(Element parent) {
+  public <T extends Z4AbstractComponentUI> T appendTo(Element parent) {
     parent.appendChild(this.root);
     return (T) this;
   }

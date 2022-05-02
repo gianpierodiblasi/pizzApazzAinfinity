@@ -18,7 +18,7 @@ import static simulation.js.$Globals.setTimeout;
  *
  * @author gianpiero.di.blasi
  */
-public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4SignedRandomValue, Z4SignedRandomValueUI> {
+public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4SignedRandomValue> {
 
   private final HTMLElement toggleType = this.querySelector(".toggle-type");
   private final HTMLElement toggleTypeImg = this.querySelector(".toggle-type img");
@@ -182,8 +182,8 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
   }
 
   @Override
-  @SuppressWarnings("StringEquality")
-  public Z4SignedRandomValueUI setValue(Z4SignedRandomValue value) {
+  @SuppressWarnings({"StringEquality", "unchecked"})
+  public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4SignedRandomValue value) {
     super.setValue(value);
 
     String str = null;
@@ -205,7 +205,7 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
     this.querySelector(".divider-length").style.display = str == "classic" ? "none" : "block"; // JS equality for strings
     this.querySelector(".container-length").style.display = str == "classic" ? "none" : "block"; // JS equality for strings
     this.valueLength.value = "" + this.getValue().getLength();
-    return this;
+    return (T) this;
   }
 
   private Z4SignedRandomValue createSignedRandomValue(String str) {

@@ -19,7 +19,7 @@ import static simulation.js.$Globals.setTimeout;
  *
  * @author gianpiero.di.blasi
  */
-public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValue, Z4SignedValueUI> {
+public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValue> {
 
   private final HTMLElement toggle = this.querySelector(".sign-button");
   private final HTMLElement toggleImg = this.querySelector(".sign-button img");
@@ -184,7 +184,8 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
   }
 
   @Override
-  public Z4SignedValueUI setValue(Z4SignedValue value) {
+  @SuppressWarnings("unchecked")
+  public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4SignedValue value) {
     super.setValue(value);
 
     String str;
@@ -202,6 +203,6 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
     this.toggleImg.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + str + ".svg");
 
     this.text.value = "" + value.getValue();
-    return this;
+    return (T) this;
   }
 }

@@ -18,7 +18,7 @@ import static simulation.js.$Globals.parseInt;
  *
  * @author gianpiero.di.blasi
  */
-public class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI<Z4FancifulValue, Z4FancifulValueUI> {
+public class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI<Z4FancifulValue> {
 
   private final $HTMLElement uniformCheck = this.querySelector(".uniform-check");
   private final HTMLElement toggleUniform = this.querySelector(".toggle-uniform");
@@ -240,7 +240,8 @@ public class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI<Z4Fanciful
   }
 
   @Override
-  public Z4FancifulValueUI setValue(Z4FancifulValue value) {
+  @SuppressWarnings("unchecked")
+  public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4FancifulValue value) {
     super.setValue(value);
 
     this.uniformCheck.checked = this.value.isUniformSign();
@@ -251,7 +252,7 @@ public class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI<Z4Fanciful
     this.proportionalUI.setValue(this.value.getProportional());
 
     this.setUI();
-    return this;
+    return (T) this;
   }
 
   private void setUI() {

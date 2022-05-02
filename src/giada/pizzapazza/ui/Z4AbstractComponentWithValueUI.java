@@ -6,10 +6,9 @@ import simulation.js.$Apply_1_Void;
  * The abstract class of all UI components providing a value
  *
  * @param <S>
- * @param <T>
  * @author gianpiero.di.blasi
  */
-public abstract class Z4AbstractComponentWithValueUI<S, T extends Z4AbstractComponentWithValueUI<S, T>> extends Z4AbstractComponentUI<Z4AbstractComponentWithValueUI<S, T>> {
+public abstract class Z4AbstractComponentWithValueUI<S> extends Z4AbstractComponentUI {
 
   /**
    * The provided value
@@ -40,11 +39,12 @@ public abstract class Z4AbstractComponentWithValueUI<S, T extends Z4AbstractComp
   /**
    * Sets the value
    *
+   * @param <T>
    * @param value The value
    * @return This Z4AbstractComponentWithValueUI
    */
   @SuppressWarnings("unchecked")
-  public T setValue(S value) {
+  public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(S value) {
     this.value = value;
     return (T) this;
   }
