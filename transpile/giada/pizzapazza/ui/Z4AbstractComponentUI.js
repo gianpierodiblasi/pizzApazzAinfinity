@@ -6,7 +6,10 @@
  */
 class Z4AbstractComponentUI {
 
-   html = null;
+  /**
+   * The HTML root of this component
+   */
+   root = null;
 
   /**
    * Creates a Z4AbstractComponentUI
@@ -14,10 +17,10 @@ class Z4AbstractComponentUI {
    * @param ui The HTML
    */
   constructor(ui) {
-    this.html = document.createElement("div");
-    this.html.setAttribute("id", "id" + new Date().getTime() + "_" + parseInt(1000 * Math.random()));
-    this.html.innerHTML = ui;
-    let list = this.html.querySelectorAll("#" + this.html.id + " [data-token-lang-inner_text]");
+    this.root = document.createElement("div");
+    this.root.setAttribute("id", "id" + new Date().getTime() + "_" + parseInt(1000 * Math.random()));
+    this.root.innerHTML = ui;
+    let list = this.root.querySelectorAll("#" + this.root.id + " [data-token-lang-inner_text]");
     for (let index = 0; index < list.length; index++) {
       let element = list.item(index);
       element.innerText = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text"));
@@ -31,7 +34,7 @@ class Z4AbstractComponentUI {
    * @return The child of this component
    */
    querySelector(selector) {
-    return this.html.querySelector(selector);
+    return this.root.querySelector(selector);
   }
 
   /**
@@ -41,7 +44,7 @@ class Z4AbstractComponentUI {
    * @return All children of this component
    */
    querySelectorAll(selector) {
-    return this.html.querySelectorAll(selector);
+    return this.root.querySelectorAll(selector);
   }
 
   /**
@@ -51,7 +54,7 @@ class Z4AbstractComponentUI {
    * @return This Z4AbstractComponentUI
    */
    appendTo(parent) {
-    parent.appendChild(this.html);
+    parent.appendChild(this.root);
     return this;
   }
 }

@@ -20,7 +20,7 @@ public abstract class Z4AbstractComponentUI<T extends Z4AbstractComponentUI<T>> 
   /**
    * The HTML root of this component
    */
-  protected final HTMLElement root;
+  public final $HTMLElement root;
 
   /**
    * Creates a Z4AbstractComponentUI
@@ -28,7 +28,7 @@ public abstract class Z4AbstractComponentUI<T extends Z4AbstractComponentUI<T>> 
    * @param ui The HTML
    */
   protected Z4AbstractComponentUI(String ui) {
-    this.root = document.createElement("div");
+    this.root = ($HTMLElement) document.createElement("div");
     this.root.setAttribute("id", "id" + new Date().getTime() + "_" + parseInt(1000 * Math.random()));
     this.root.innerHTML = ui;
 
