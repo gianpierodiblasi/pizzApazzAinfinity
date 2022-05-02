@@ -21,10 +21,10 @@ class test_fancifulvalue1 {
       return null;
     };
     let ui1 = new Z4FancifulValueUI();
-    ui1.appendTo(document.querySelector("#test1"));
+    ui1.appendToElement(document.querySelector("#test1"));
     let v = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(10).setSign(Z4Sign.NEGATIVE)).setRandom(Z4SignedRandomValue.bezier(20, 10).setSign(Z4Sign.RANDOM)).setProportional(new Z4SignedValue().setValue(30).setSign(Z4Sign.POSITIVE));
     let ui2 = new Z4FancifulValueUI().setVertical().setValue(v);
-    ui2.appendTo(document.querySelector("#test3"));
+    ui2.appendToElement(document.querySelector("#test3"));
     ui1.oninput = (value) => document.getElementById("test2").textContent = "ONINPUT " + test_fancifulvalue1.stringify(value);
     ui1.onchange = (value) => document.getElementById("test2").textContent = "ONCHANGE " + test_fancifulvalue1.stringify(value);
     document.getElementById("test2").textContent = test_fancifulvalue1.stringify(ui1.getValue());

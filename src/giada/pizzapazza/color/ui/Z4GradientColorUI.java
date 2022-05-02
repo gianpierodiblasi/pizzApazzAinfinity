@@ -235,7 +235,7 @@ public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4Gradient
   @Override
   @SuppressWarnings("unchecked")
   public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4GradientColor value) {
-    super.setValue(value);
+    this.value = value;
 
     this.mirroredCheck.checked = this.value.isMirrored();
     this.formRange.valueAsNumber = this.value.getRipple();

@@ -104,7 +104,7 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
       this.onchange(this.value);
       return null;
     };
-    this.z4ColorUI.appendTo(this.querySelector(".canvas-container"));
+    this.z4ColorUI.appendToElement(this.querySelector(".canvas-container"));
     this.z4ColorUI.oninput = (z4Color) => {
       let input = this.querySelector(".sliders .form-check-input:checked");
       this.value.addOrUpdateColor(parseFloat(input.value), z4Color.getARGB());
@@ -197,7 +197,7 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
   }
 
    setValue(value) {
-    super.setValue(value);
+    this.value = value;
     this.mirroredCheck.checked = this.value.isMirrored();
     this.formRange.valueAsNumber = this.value.getRipple();
     this.formRangeLabel.innerText = this.formRange.value;

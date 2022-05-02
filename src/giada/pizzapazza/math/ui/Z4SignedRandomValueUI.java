@@ -184,7 +184,7 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
   @Override
   @SuppressWarnings({"StringEquality", "unchecked"})
   public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4SignedRandomValue value) {
-    super.setValue(value);
+    this.value = value;
 
     String str = null;
     if (this.value.isClassic()) {

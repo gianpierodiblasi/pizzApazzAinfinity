@@ -107,7 +107,7 @@ class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI {
     this.spatialFormRange.oninput = (event) => this.setRipple(5);
     this.temporalFormRange.onchange = (event) => this.setRipple(1);
     this.spatialFormRange.onchange = (event) => this.setRipple(1);
-    this.z4ColorUI.appendTo(this.querySelector(".canvas-container"));
+    this.z4ColorUI.appendToElement(this.querySelector(".canvas-container"));
     this.z4ColorUI.oninput = (z4Color) => {
       let input = this.querySelector(".sliders .form-check-input:checked");
       this.value.addOrUpdateColor(parseFloat(input.getAttribute("T")), parseFloat(input.getAttribute("S")), z4Color.getARGB());
@@ -225,7 +225,7 @@ class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI {
   }
 
    setValue(value) {
-    super.setValue(value);
+    this.value = value;
     this.temporalMirroredCheck.checked = this.value.isTemporalyMirrored();
     this.spatialMirroredCheck.checked = this.value.isSpatialyMirrored();
     this.temporalFormRange.valueAsNumber = this.value.getTemporalRipple();

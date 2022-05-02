@@ -21,9 +21,9 @@ class test_signedrandomvalue1 {
       return null;
     };
     let ui1 = new Z4SignedRandomValueUI();
-    ui1.appendTo(document.querySelector("#test1"));
+    ui1.appendToElement(document.querySelector("#test1"));
     let ui2 = new Z4SignedRandomValueUI().setRange(30, 80).setValueLabel("RANDOM", true, true).setValue(Z4SignedRandomValue.bezier(40, 10).setSign(Z4Sign.NEGATIVE));
-    ui2.appendTo(document.querySelector("#test3"));
+    ui2.appendToElement(document.querySelector("#test3"));
     ui1.oninput = (value) => document.getElementById("test2").textContent = "ONINPUT " + test_signedrandomvalue1.stringify(value);
     ui1.onchange = (value) => document.getElementById("test2").textContent = "ONCHANGE " + test_signedrandomvalue1.stringify(value);
     document.getElementById("test2").textContent = test_signedrandomvalue1.stringify(ui1.getValue());

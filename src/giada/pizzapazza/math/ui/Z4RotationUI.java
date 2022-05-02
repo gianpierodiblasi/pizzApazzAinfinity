@@ -134,7 +134,7 @@ public class Z4RotationUI extends Z4AbstractComponentWithValueUI<Z4Rotation> {
   @Override
   @SuppressWarnings("unchecked")
   public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4Rotation value) {
-    super.setValue(value);
+    this.value = value;
 
     String str = null;
     if (this.value.isFixed()) {

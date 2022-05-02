@@ -158,7 +158,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
   }
 
    setValue(value) {
-    super.setValue(value);
+    this.value = value;
     let str = null;
     if (value.getSign() === Z4Sign.POSITIVE) {
       str = "positive";

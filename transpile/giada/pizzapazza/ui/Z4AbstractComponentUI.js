@@ -5,9 +5,6 @@
  */
 class Z4AbstractComponentUI {
 
-  /**
-   * The HTML root of this component
-   */
    root = null;
 
   /**
@@ -53,8 +50,44 @@ class Z4AbstractComponentUI {
    * @param parent The parent
    * @return This Z4AbstractComponentUI
    */
-   appendTo(parent) {
+   appendToElement(parent) {
     parent.appendChild(this.root);
+    return this;
+  }
+
+  /**
+   * Appends this Z4AbstractComponentUI to its parent
+   *
+   * @param <T>
+   * @param parent The parent
+   * @return This Z4AbstractComponentUI
+   */
+   appendToComponent(parent) {
+    parent.root.appendChild(this.root);
+    return this;
+  }
+
+  /**
+   * Prepends this Z4AbstractComponentUI to its parent
+   *
+   * @param <T>
+   * @param parent The parent
+   * @return This Z4AbstractComponentUI
+   */
+   prependToElement(parent) {
+    parent.prepend(this.root);
+    return this;
+  }
+
+  /**
+   * Prepends this Z4AbstractComponentUI to its parent
+   *
+   * @param <T>
+   * @param parent The parent
+   * @return This Z4AbstractComponentUI
+   */
+   prependToComponent(parent) {
+    parent.root.prepend(this.root);
     return this;
   }
 }

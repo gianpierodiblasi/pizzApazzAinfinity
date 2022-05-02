@@ -47,7 +47,7 @@ class Z4TemporalColorGuidedTourUI extends Z4TemporalColorUI {
     label.className = "z4-guided-tour";
     document.querySelector(".modal-dialog").classList.add("modal-lg");
     document.querySelector(".modal-dialog .modal-footer").insertBefore(label, document.querySelector(".modal-dialog .modal-footer button"));
-    new Z4TemporalColorGuidedTourUI().appendTo(document.querySelector(".modal-message"));
+    new Z4TemporalColorGuidedTourUI().appendToElement(document.querySelector(".modal-message"));
   }
 
    doStep(step) {

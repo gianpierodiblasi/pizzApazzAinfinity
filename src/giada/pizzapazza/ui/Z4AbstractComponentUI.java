@@ -80,7 +80,7 @@ public abstract class Z4AbstractComponentUI {
     parent.root.appendChild(this.root);
     return (T) this;
   }
-  
+
   /**
    * Prepends this Z4AbstractComponentUI to its parent
    *
@@ -91,6 +91,19 @@ public abstract class Z4AbstractComponentUI {
   @SuppressWarnings("unchecked")
   public <T extends Z4AbstractComponentUI> T prependToElement($HTMLElement parent) {
     parent.prepend(this.root);
+    return (T) this;
+  }
+
+  /**
+   * Prepends this Z4AbstractComponentUI to its parent
+   *
+   * @param <T>
+   * @param parent The parent
+   * @return This Z4AbstractComponentUI
+   */
+  @SuppressWarnings("unchecked")
+  public <T extends Z4AbstractComponentUI> T prependToComponent(Z4AbstractComponentUI parent) {
+    parent.root.prepend(this.root);
     return (T) this;
   }
 }

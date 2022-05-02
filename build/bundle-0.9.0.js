@@ -347,9 +347,6 @@ class Z4ImageFactory {
  */
 class Z4AbstractComponentUI {
 
-  /**
-   * The HTML root of this component
-   */
    root = null;
 
   /**
@@ -395,8 +392,44 @@ class Z4AbstractComponentUI {
    * @param parent The parent
    * @return This Z4AbstractComponentUI
    */
-   appendTo(parent) {
+   appendToElement(parent) {
     parent.appendChild(this.root);
+    return this;
+  }
+
+  /**
+   * Appends this Z4AbstractComponentUI to its parent
+   *
+   * @param <T>
+   * @param parent The parent
+   * @return This Z4AbstractComponentUI
+   */
+   appendToComponent(parent) {
+    parent.root.appendChild(this.root);
+    return this;
+  }
+
+  /**
+   * Prepends this Z4AbstractComponentUI to its parent
+   *
+   * @param <T>
+   * @param parent The parent
+   * @return This Z4AbstractComponentUI
+   */
+   prependToElement(parent) {
+    parent.prepend(this.root);
+    return this;
+  }
+
+  /**
+   * Prepends this Z4AbstractComponentUI to its parent
+   *
+   * @param <T>
+   * @param parent The parent
+   * @return This Z4AbstractComponentUI
+   */
+   prependToComponent(parent) {
+    parent.root.prepend(this.root);
     return this;
   }
 }
@@ -442,8 +475,6 @@ class Z4AbstractComponentWithValueUI extends Z4AbstractComponentUI {
    * @return This Z4AbstractComponentWithValueUI
    */
    setValue(value) {
-    this.value = value;
-    return this;
   }
 
   /**
@@ -1840,7 +1871,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
   }
 
    setValue(value) {
-    super.setValue(value);
+    this.value = value;
     let str = null;
     if (value.getSign() === Z4Sign.POSITIVE) {
       str = "positive";
@@ -1887,7 +1918,7 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
    */
   constructor() {
     super(Z4SignedRandomValueUI.UI);
-    this.signedValueUI.appendTo(this.root);
+    this.signedValueUI.appendToComponent(this);
     this.signedValueUI.oninput = (signedValue) => this.oninput(this.createSignedRandomValue(this.toggleType.getAttribute("data-value")));
     this.signedValueUI.onchange = (signedValue) => this.onchange(this.createSignedRandomValue(this.toggleType.getAttribute("data-value")));
     this.toggleTypeImg.setAttribute("src", Z4SignedRandomValueUI.PATH + "z4randomvalue_" + this.toggleType.getAttribute("data-value") + ".svg");
@@ -1930,7 +1961,7 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
       this.spinnerLength.onmousedown = (event) => this.startSpin();
       this.spinnerLength.onmouseup = (event) => this.stopSpin();
     }
-    this.signedValueUI.root.prepend(this.querySelector(".type-label"));
+    this.signedValueUI.prependToElement(this.querySelector(".type-label"));
     this.querySelector(".number-group").prepend(this.querySelector(".toggle-type-dropdown-menu"));
     this.querySelector(".number-group").prepend(this.toggleType);
     this.querySelector(".sign-label").style.width = "50px";
@@ -2020,7 +2051,7 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
   }
 
    setValue(value) {
-    super.setValue(value);
+    this.value = value;
     let str = null;
     if (this.value.isClassic()) {
       str = "classic";
@@ -2128,11 +2159,11 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
         return null;
       };
     }
-    this.constantUI.appendTo(this.querySelector(".fanciful-costant"));
+    this.constantUI.appendToElement(this.querySelector(".fanciful-costant"));
     this.constantUI.setValueLabel("CONSTANT", false, true);
-    this.randomUI.appendTo(this.querySelector("div.fanciful-random"));
+    this.randomUI.appendToElement(this.querySelector("div.fanciful-random"));
     this.randomUI.setValueLabel("RANDOM", false, true);
-    this.proportionalUI.appendTo(this.querySelector(".fanciful-proportional"));
+    this.proportionalUI.appendToElement(this.querySelector(".fanciful-proportional"));
     this.proportionalUI.setValueLabel("PROPORTIONAL", false, true);
     this.constantUI.oninput = (event) => this.onInput();
     this.randomUI.oninput = (event) => this.onInput();
@@ -2279,7 +2310,7 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
   }
 
    setValue(value) {
-    super.setValue(value);
+    this.value = value;
     this.uniformCheck.checked = this.value.isUniformSign();
     this.constantUI.setValue(this.value.getConstant());
     this.setUniformSign(this.value.getConstant().getSign());
@@ -2344,11 +2375,11 @@ class Z4RotationUI extends Z4AbstractComponentWithValueUI {
 
    toggleTypeImg = this.querySelector(".toggle-type-rotation img");
 
-   startAngle = new Z4SignedValueUI().setRange(0, 360).setValueLabel("START_ANGLE", true, false).setSignVisible(false).appendTo(this.querySelector(".start-angle-container"));
+   startAngle = new Z4SignedValueUI().setRange(0, 360).setValueLabel("START_ANGLE", true, false).setSignVisible(false).appendToElement(this.querySelector(".start-angle-container"));
 
    delayedCheck = this.querySelector(".delayed-check");
 
-   angle = new Z4FancifulValueUI().setValueLabel("ANGLE", true, false).setComponentsVisible(true, true, false).setConstantRange(0, 180).setRandomRange(0, 180).appendTo(this.root);
+   angle = new Z4FancifulValueUI().setValueLabel("ANGLE", true, false).setComponentsVisible(true, true, false).setConstantRange(0, 180).setRandomRange(0, 180).appendToComponent(this);
 
   static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
 
@@ -2450,7 +2481,7 @@ class Z4RotationUI extends Z4AbstractComponentWithValueUI {
   }
 
    setValue(value) {
-    super.setValue(value);
+    this.value = value;
     let str = null;
     if (this.value.isFixed()) {
       str = "fixed";
@@ -3462,7 +3493,7 @@ class Z4ColorUI extends Z4AbstractComponentWithValueUI {
   }
 
    setValue(value) {
-    super.setValue(value);
+    this.value = value;
     this.color.value = this.value.getHEX().substring(0, 7);
     this.formRange.valueAsNumber = this.value.getComponents()[0];
     this.formRangeLabel.innerText = this.formRange.value;
@@ -3575,7 +3606,7 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
       this.onchange(this.value);
       return null;
     };
-    this.z4ColorUI.appendTo(this.querySelector(".canvas-container"));
+    this.z4ColorUI.appendToElement(this.querySelector(".canvas-container"));
     this.z4ColorUI.oninput = (z4Color) => {
       let input = this.querySelector(".sliders .form-check-input:checked");
       this.value.addOrUpdateColor(parseFloat(input.value), z4Color.getARGB());
@@ -3668,7 +3699,7 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
   }
 
    setValue(value) {
-    super.setValue(value);
+    this.value = value;
     this.mirroredCheck.checked = this.value.isMirrored();
     this.formRange.valueAsNumber = this.value.getRipple();
     this.formRangeLabel.innerText = this.formRange.value;
@@ -3809,7 +3840,7 @@ class Z4GradientColorGuidedTourUI extends Z4GradientColorUI {
     label.className = "z4-guided-tour";
     document.querySelector(".modal-dialog").classList.add("modal-lg");
     document.querySelector(".modal-dialog .modal-footer").insertBefore(label, document.querySelector(".modal-dialog .modal-footer button"));
-    new Z4GradientColorGuidedTourUI().appendTo(document.querySelector(".modal-message"));
+    new Z4GradientColorGuidedTourUI().appendToElement(document.querySelector(".modal-message"));
   }
 
    doStep(step) {
@@ -3999,7 +4030,7 @@ class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI {
     this.spatialFormRange.oninput = (event) => this.setRipple(5);
     this.temporalFormRange.onchange = (event) => this.setRipple(1);
     this.spatialFormRange.onchange = (event) => this.setRipple(1);
-    this.z4ColorUI.appendTo(this.querySelector(".canvas-container"));
+    this.z4ColorUI.appendToElement(this.querySelector(".canvas-container"));
     this.z4ColorUI.oninput = (z4Color) => {
       let input = this.querySelector(".sliders .form-check-input:checked");
       this.value.addOrUpdateColor(parseFloat(input.getAttribute("T")), parseFloat(input.getAttribute("S")), z4Color.getARGB());
@@ -4117,7 +4148,7 @@ class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI {
   }
 
    setValue(value) {
-    super.setValue(value);
+    this.value = value;
     this.temporalMirroredCheck.checked = this.value.isTemporalyMirrored();
     this.spatialMirroredCheck.checked = this.value.isSpatialyMirrored();
     this.temporalFormRange.valueAsNumber = this.value.getTemporalRipple();
@@ -4340,7 +4371,7 @@ class Z4TemporalColorGuidedTourUI extends Z4TemporalColorUI {
     label.className = "z4-guided-tour";
     document.querySelector(".modal-dialog").classList.add("modal-lg");
     document.querySelector(".modal-dialog .modal-footer").insertBefore(label, document.querySelector(".modal-dialog .modal-footer button"));
-    new Z4TemporalColorGuidedTourUI().appendTo(document.querySelector(".modal-message"));
+    new Z4TemporalColorGuidedTourUI().appendToElement(document.querySelector(".modal-message"));
   }
 
    doStep(step) {

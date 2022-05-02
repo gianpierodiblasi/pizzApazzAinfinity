@@ -242,7 +242,7 @@ public class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI<Z4Fanciful
   @Override
   @SuppressWarnings("unchecked")
   public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4FancifulValue value) {
-    super.setValue(value);
+    this.value = value;
 
     this.uniformCheck.checked = this.value.isUniformSign();
 

@@ -40,8 +40,6 @@ class Z4AbstractComponentWithValueUI extends Z4AbstractComponentUI {
    * @return This Z4AbstractComponentWithValueUI
    */
    setValue(value) {
-    this.value = value;
-    return this;
   }
 
   /**

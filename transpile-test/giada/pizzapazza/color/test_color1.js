@@ -25,12 +25,12 @@ class test_color1 {
     document.getElementById("test8").textContent = "Z4Color.fromColor(65535).lighted(0.3) => " + test_color1.stringify(Z4Color.fromARGB(65535).lighted(0.3));
     document.getElementById("test9").textContent = "Z4Color.fromColor(65535).darkened(0.3) => " + test_color1.stringify(Z4Color.fromARGB(65535).darkened(0.3));
     let ui = new Z4ColorUI();
-    ui.appendTo(document.querySelector("#test10"));
+    ui.appendToElement(document.querySelector("#test10"));
     ui.oninput = (z4Color) => document.getElementById("test11").textContent = "ONINPUT " + test_color1.stringify(z4Color);
     ui.onchange = (z4Color) => document.getElementById("test11").textContent = "ONCHANGE " + test_color1.stringify(z4Color);
     document.getElementById("test11").textContent = test_color1.stringify(ui.getValue());
     ui = new Z4ColorUI().setValue(new Z4Color(120, 60, 20, 70));
-    ui.appendTo(document.querySelector("#test13"));
+    ui.appendToElement(document.querySelector("#test13"));
     ui.oninput = (z4Color) => document.getElementById("test14").textContent = "ONINPUT " + test_color1.stringify(z4Color);
     ui.onchange = (z4Color) => document.getElementById("test14").textContent = "ONCHANGE " + test_color1.stringify(z4Color);
     document.getElementById("test14").textContent = test_color1.stringify(ui.getValue());

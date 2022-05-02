@@ -84,7 +84,7 @@ public class Z4ColorUI extends Z4AbstractComponentWithValueUI<Z4Color> {
   @Override
   @SuppressWarnings("unchecked")
   public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4Color value) {
-    super.setValue(value);
+    this.value = value;
 
     this.color.value = this.value.getHEX().substring(0, 7);
     this.formRange.valueAsNumber = this.value.getComponents().$get(0);

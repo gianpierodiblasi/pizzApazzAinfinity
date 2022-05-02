@@ -43,11 +43,7 @@ public abstract class Z4AbstractComponentWithValueUI<S> extends Z4AbstractCompon
    * @param value The value
    * @return This Z4AbstractComponentWithValueUI
    */
-  @SuppressWarnings("unchecked")
-  public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(S value) {
-    this.value = value;
-    return (T) this;
-  }
+  public abstract <T extends Z4AbstractComponentWithValueUI<?>> T setValue(S value);
 
   /**
    * Returns the value

@@ -9,11 +9,11 @@ class Z4RotationUI extends Z4AbstractComponentWithValueUI {
 
    toggleTypeImg = this.querySelector(".toggle-type-rotation img");
 
-   startAngle = new Z4SignedValueUI().setRange(0, 360).setValueLabel("START_ANGLE", true, false).setSignVisible(false).appendTo(this.querySelector(".start-angle-container"));
+   startAngle = new Z4SignedValueUI().setRange(0, 360).setValueLabel("START_ANGLE", true, false).setSignVisible(false).appendToElement(this.querySelector(".start-angle-container"));
 
    delayedCheck = this.querySelector(".delayed-check");
 
-   angle = new Z4FancifulValueUI().setValueLabel("ANGLE", true, false).setComponentsVisible(true, true, false).setConstantRange(0, 180).setRandomRange(0, 180).appendTo(this.root);
+   angle = new Z4FancifulValueUI().setValueLabel("ANGLE", true, false).setComponentsVisible(true, true, false).setConstantRange(0, 180).setRandomRange(0, 180).appendToComponent(this);
 
   static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
 
@@ -115,7 +115,7 @@ class Z4RotationUI extends Z4AbstractComponentWithValueUI {
   }
 
    setValue(value) {
-    super.setValue(value);
+    this.value = value;
     let str = null;
     if (this.value.isFixed()) {
       str = "fixed";

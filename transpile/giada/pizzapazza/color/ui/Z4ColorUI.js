@@ -71,7 +71,7 @@ class Z4ColorUI extends Z4AbstractComponentWithValueUI {
   }
 
    setValue(value) {
-    super.setValue(value);
+    this.value = value;
     this.color.value = this.value.getHEX().substring(0, 7);
     this.formRange.valueAsNumber = this.value.getComponents()[0];
     this.formRangeLabel.innerText = this.formRange.value;

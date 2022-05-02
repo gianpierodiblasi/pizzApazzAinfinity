@@ -267,7 +267,7 @@ public class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI<Z4Temporal
   @Override
   @SuppressWarnings("unchecked")
   public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4TemporalColor value) {
-    super.setValue(value);
+    this.value = value;
 
     this.temporalMirroredCheck.checked = this.value.isTemporalyMirrored();
     this.spatialMirroredCheck.checked = this.value.isSpatialyMirrored();

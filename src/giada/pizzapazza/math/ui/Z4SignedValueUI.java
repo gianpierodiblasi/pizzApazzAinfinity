@@ -186,7 +186,7 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
   @Override
   @SuppressWarnings("unchecked")
   public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4SignedValue value) {
-    super.setValue(value);
+    this.value = value;
 
     String str;
     if (value.getSign() == Z4Sign.POSITIVE) {

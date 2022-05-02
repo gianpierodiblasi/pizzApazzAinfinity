@@ -28,7 +28,7 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
    */
   constructor() {
     super(Z4SignedRandomValueUI.UI);
-    this.signedValueUI.appendTo(this.root);
+    this.signedValueUI.appendToComponent(this);
     this.signedValueUI.oninput = (signedValue) => this.oninput(this.createSignedRandomValue(this.toggleType.getAttribute("data-value")));
     this.signedValueUI.onchange = (signedValue) => this.onchange(this.createSignedRandomValue(this.toggleType.getAttribute("data-value")));
     this.toggleTypeImg.setAttribute("src", Z4SignedRandomValueUI.PATH + "z4randomvalue_" + this.toggleType.getAttribute("data-value") + ".svg");
@@ -71,7 +71,7 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
       this.spinnerLength.onmousedown = (event) => this.startSpin();
       this.spinnerLength.onmouseup = (event) => this.stopSpin();
     }
-    this.signedValueUI.root.prepend(this.querySelector(".type-label"));
+    this.signedValueUI.prependToElement(this.querySelector(".type-label"));
     this.querySelector(".number-group").prepend(this.querySelector(".toggle-type-dropdown-menu"));
     this.querySelector(".number-group").prepend(this.toggleType);
     this.querySelector(".sign-label").style.width = "50px";
@@ -161,7 +161,7 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
   }
 
    setValue(value) {
-    super.setValue(value);
+    this.value = value;
     let str = null;
     if (this.value.isClassic()) {
       str = "classic";
