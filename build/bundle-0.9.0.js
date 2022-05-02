@@ -348,7 +348,10 @@ class Z4ImageFactory {
  */
 class Z4AbstractComponentUI {
 
-   html = null;
+  /**
+   * The HTML root of this component
+   */
+   root = null;
 
   /**
    * Creates a Z4AbstractComponentUI
@@ -356,10 +359,10 @@ class Z4AbstractComponentUI {
    * @param ui The HTML
    */
   constructor(ui) {
-    this.html = document.createElement("div");
-    this.html.setAttribute("id", "id" + new Date().getTime() + "_" + parseInt(1000 * Math.random()));
-    this.html.innerHTML = ui;
-    let list = this.html.querySelectorAll("#" + this.html.id + " [data-token-lang-inner_text]");
+    this.root = document.createElement("div");
+    this.root.setAttribute("id", "id" + new Date().getTime() + "_" + parseInt(1000 * Math.random()));
+    this.root.innerHTML = ui;
+    let list = this.root.querySelectorAll("#" + this.root.id + " [data-token-lang-inner_text]");
     for (let index = 0; index < list.length; index++) {
       let element = list.item(index);
       element.innerText = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text"));
@@ -373,7 +376,7 @@ class Z4AbstractComponentUI {
    * @return The child of this component
    */
    querySelector(selector) {
-    return this.html.querySelector(selector);
+    return this.root.querySelector(selector);
   }
 
   /**
@@ -383,7 +386,7 @@ class Z4AbstractComponentUI {
    * @return All children of this component
    */
    querySelectorAll(selector) {
-    return this.html.querySelectorAll(selector);
+    return this.root.querySelectorAll(selector);
   }
 
   /**
@@ -393,7 +396,7 @@ class Z4AbstractComponentUI {
    * @return This Z4AbstractComponentUI
    */
    appendTo(parent) {
-    parent.appendChild(this.html);
+    parent.appendChild(this.root);
     return this;
   }
 }
@@ -742,7 +745,7 @@ class Z4SignedValue {
 
    sign = Z4Sign.RANDOM;
 
-   value = 0;
+   value = 0.0;
 
   /**
    * Returns the sign
@@ -765,18 +768,18 @@ class Z4SignedValue {
   }
 
   /**
-   * Returns the value
+   * Returns the (positive) value
    *
-   * @return The value
+   * @return The (positive) value
    */
-   geValue() {
+   getValue() {
     return this.value;
   }
 
   /**
    * Sets the value
    *
-   * @param value The value
+   * @param value The (positive) value
    * @return This Z4SignedValue
    */
    setValue(value) {
@@ -791,6 +794,221 @@ class Z4SignedValue {
    */
    next() {
     return this.sign.next() * this.value;
+  }
+}
+/**
+ * A random value with sign
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4SignedRandomValue {
+
+   sign = Z4Sign.RANDOM;
+
+   value = 0.0;
+
+   type = 0;
+
+   length = 0.0;
+
+   step = 0;
+
+   prevRandom = 0.0;
+
+   controlRandom = 0.0;
+
+   nextRandom = 0.0;
+
+   bezierCurve = null;
+
+  constructor(value, type, length) {
+    this.value = value;
+    this.type = type;
+    this.length = length;
+    this.step = 0;
+    this.prevRandom = Math.random();
+    this.controlRandom = 1;
+    this.nextRandom = Math.random();
+    if (this.type === 1) {
+      this.createBezierCurve();
+    }
+  }
+
+   createBezierCurve() {
+    this.bezierCurve = new Bezier(0, this.prevRandom, this.length / 2, this.controlRandom, 1, this.nextRandom);
+  }
+
+  /**
+   * Checks if this Z4SignedRandomValue generates "classic "random values
+   *
+   * @return true if this Z4SignedRandomValue generates "classic "random values,
+   * false otherwise
+   */
+   isClassic() {
+    return this.type === 0;
+  }
+
+  /**
+   * Checks if this Z4SignedRandomValue generates random values on a bezier
+   * curve
+   *
+   * @return true if this Z4SignedRandomValue generates random values on a
+   * bezier curve, false otherwise
+   */
+   isBezier() {
+    return this.type === 1;
+  }
+
+  /**
+   * Checks if this Z4SignedRandomValue generates random values on a polyline
+   *
+   * @return true if this Z4SignedRandomValue generates random values on a
+   * polyline, false otherwise
+   */
+   isPolyline() {
+    return this.type === 2;
+  }
+
+  /**
+   * Returns if this Z4SignedRandomValue generates random values on a stepped
+   * line
+   *
+   * @return true if this Z4SignedRandomValue generates random values on a
+   * stepped line, false otherwise
+   */
+   isStepped() {
+    return this.type === 3;
+  }
+
+  /**
+   * Returns the sign
+   *
+   * @return The sign
+   */
+   getSign() {
+    return this.sign;
+  }
+
+  /**
+   * Sets the sign
+   *
+   * @param sign The sign
+   * @return This Z4SignedRandomValue
+   */
+   setSign(sign) {
+    this.sign = sign;
+    return this;
+  }
+
+  /**
+   * Returns the value
+   *
+   * @return The (positive) value
+   */
+   getValue() {
+    return this.value;
+  }
+
+  /**
+   * Returns the length
+   *
+   * @return The length
+   */
+   getLength() {
+    return this.length;
+  }
+
+  /**
+   * Returns the next unsigned random value
+   *
+   * @return The next unsigned random value (in the range [0,value[)
+   */
+   nextUnsigned() {
+    switch(this.type) {
+      case 0:
+      default:
+        return this.value * Math.random();
+      case 1:
+        if (this.step === this.length) {
+          this.step = 0;
+          this.prevRandom = this.nextRandom;
+          this.controlRandom = this.controlRandom === 1 ? 0 : 1;
+          this.nextRandom = Math.random();
+          this.createBezierCurve();
+        } else {
+          this.step++;
+        }
+        return value * this.bezierCurve.get(this.step / this.length).y;
+      case 2:
+        if (this.step === this.length) {
+          this.step = 0;
+          this.prevRandom = this.nextRandom;
+          this.nextRandom = Math.random();
+        } else {
+          this.step++;
+        }
+        return value * ((this.nextRandom - this.prevRandom) * this.step / this.length + this.prevRandom);
+      case 3:
+        if (this.step === this.length) {
+          this.step = 0;
+          this.prevRandom = Math.random();
+        } else {
+          this.step++;
+        }
+        return value * this.prevRandom;
+    }
+  }
+
+  /**
+   * Returns the next signed random value
+   *
+   * @return The next signed random value (in the range ]-value,value[)
+   */
+   nextSigned() {
+    return this.sign.next() * this.nextUnsigned();
+  }
+
+  /**
+   * Returns a Z4SignedRandomValue generating "classic "random values
+   *
+   * @param value The (positive) value
+   * @return The Z4SignedRandomValue
+   */
+  static  classic(value) {
+    return new Z4SignedRandomValue(value, 0, 1);
+  }
+
+  /**
+   * Returns a Z4SignedRandomValue generating random values on a bezier curve
+   *
+   * @param value The (positive) value
+   * @param length The curve length
+   * @return The Z4SignedRandomValue
+   */
+  static  bezier(value, length) {
+    return new Z4SignedRandomValue(value, 1, length);
+  }
+
+  /**
+   * Returns a Z4SignedRandomValue generating random values on a polyline
+   *
+   * @param value The (positive) value
+   * @param length The polyline length
+   * @return The Z4SignedRandomValue
+   */
+  static  polyline(value, length) {
+    return new Z4SignedRandomValue(value, 2, length);
+  }
+
+  /**
+   * Returns a Z4SignedRandomValue generating random values on a stepped line
+   *
+   * @param value The (positive) value
+   * @param length The step length
+   * @return The Z4SignedRandomValue
+   */
+  static  stepped(value, length) {
+    return new Z4SignedRandomValue(value, 3, length);
   }
 }
 /**
@@ -1156,7 +1374,7 @@ class Z4Point {
   }
 }
 /**
- * The component to edit a numeric value
+ * The component to edit a signed value
  *
  * @author gianpiero.di.blasi
  */
@@ -1193,9 +1411,10 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
     for (let i = 0; i < buttons.length; i++) {
       let button = buttons.item(i);
       button.onclick = (event) => {
-        this.toggle.setAttribute("data-value", button.getAttribute("data-value"));
-        this.toggleImg.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + button.getAttribute("data-value") + ".svg");
-        switch(this.toggle.getAttribute("data-value")) {
+        let str = button.getAttribute("data-value");
+        this.toggle.setAttribute("data-value", str);
+        this.toggleImg.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + str + ".svg");
+        switch(str) {
           case "positive":
             this.onchange(this.value.setSign(Z4Sign.POSITIVE));
             break;
@@ -1268,8 +1487,8 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
   /**
    * Sets the range of this Z4SignedValueUI
    *
-   * @param min The minumum value, a positive value
-   * @param max The maximum value, a positive value (999999999 to show infinite)
+   * @param min The minumum (positive) value
+   * @param max The maximum (positive) value (999999999 to show infinite)
    * @return This Z4SignedValueUI
    */
    setRange(min, max) {
@@ -1327,8 +1546,74 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
     }
     this.toggle.setAttribute("data-value", str);
     this.toggleImg.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + str + ".svg");
-    this.text.value = "" + value.geValue();
+    this.text.value = "" + value.getValue();
     return this;
+  }
+}
+/**
+ * The component to edit a signed random value
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
+
+   toggleType = this.querySelector(".toggle-type");
+
+   toggleTypeImg = this.querySelector(".toggle-type img");
+
+   valueLength = this.querySelector(".type-length");
+
+   spinnerLength = this.querySelector(".type-length-spinner");
+
+   signedValueUI = new Z4SignedValueUI();
+
+  static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
+
+  static  UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4SignedRandomValueUI.html");
+
+  /**
+   * Creates a Z4SignedRandomValueUI
+   */
+  constructor() {
+    super(Z4SignedRandomValueUI.UI);
+    this.toggleTypeImg.setAttribute("src", Z4SignedRandomValueUI.PATH + "z4randomvalue_" + this.toggleType.getAttribute("data-value") + ".svg");
+    let imgs = this.querySelectorAll(".toggle-type-dropdown-menu img");
+    for (let i = 0; i < imgs.length; i++) {
+      let img = imgs.item(i);
+      img.setAttribute("src", Z4SignedRandomValueUI.PATH + "z4randomvalue_" + img.getAttribute("data-icon") + ".svg");
+    }
+    let buttons = this.querySelectorAll(".toggle-random-dropdown-menu .dropdown-item");
+    for (let i = 0; i < buttons.length; i++) {
+      let button = buttons.item(i);
+      button.onclick = (event) => {
+        let str = button.getAttribute("data-value");
+        this.toggleType.setAttribute("data-value", str);
+        this.toggleTypeImg.setAttribute("src", Z4SignedRandomValueUI.PATH + "z4randomvalue_" + str + ".svg");
+        // JS equality for strings
+        this.querySelector(".divider-length").style.display = str === "classic" ? "none" : "block";
+        // JS equality for strings
+        this.querySelector(".container-length").style.display = str === "classic" ? "none" : "block";
+        let signedValue = this.signedValueUI.getValue();
+        switch(str) {
+          case "classic":
+            this.value = Z4SignedRandomValue.classic(signedValue.getValue()).setSign(signedValue.getSign());
+            break;
+          case "bezier":
+            this.value = Z4SignedRandomValue.bezier(signedValue.getValue(), this.valueLength.valueAsNumber).setSign(signedValue.getSign());
+            break;
+          case "polyline":
+            this.value = Z4SignedRandomValue.polyline(signedValue.getValue(), this.valueLength.valueAsNumber).setSign(signedValue.getSign());
+            break;
+          case "stepped":
+            this.value = Z4SignedRandomValue.stepped(signedValue.getValue(), this.valueLength.valueAsNumber).setSign(signedValue.getSign());
+            break;
+        }
+        this.onchange(this.value);
+        return null;
+      };
+    }
+    this.signedValueUI.appendTo(this.root);
+    this.setValue(Z4SignedRandomValue.classic(0));
   }
 }
 /**
