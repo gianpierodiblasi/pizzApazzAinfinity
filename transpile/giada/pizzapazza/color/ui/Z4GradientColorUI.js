@@ -51,12 +51,10 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
       this.onchange(this.value);
       return null;
     };
-    // 
-    // this.querySelector(".gradient-guided-tour").onclick = (event) -> {
-    // Z4GradientColorGuidedTourUI.show();
-    // return null;
-    // };
-    // 
+    this.querySelector(".gradient-guided-tour").onclick = (event) => {
+      Z4GradientColorGuidedTourUI.show();
+      return null;
+    };
     this.canvas.style.border = "1px dashed gray";
     this.canvas.style.width = Z4GradientColorUI.WIDTH + "px";
     this.canvas.style.height = Z4GradientColorUI.HEIGHT + "px";
