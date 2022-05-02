@@ -88,7 +88,7 @@ class Z4RotationUI extends Z4AbstractComponentWithValueUI {
    setValueLabel(token, bold, italic) {
     let valueLabel = this.querySelector(".rotation-label");
     valueLabel.setAttribute("data-token-lang-inner_text", token);
-    valueLabel.innerText = Z4MessageFactory.get(token);
+    valueLabel.innerHTML = Z4MessageFactory.get(token);
     valueLabel.style.fontWeight = bold ? "700" : "400";
     valueLabel.style.fontStyle = italic ? "italic" : "normal";
     return this;

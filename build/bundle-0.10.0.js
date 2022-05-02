@@ -261,7 +261,7 @@ class Z4MessageFactory {
    */
   static  changingLanguage() {
     Z4MessageFactory.MESSAGE = Z4MessageFactory.initMessages();
-    document.querySelectorAll("[data-token-lang-inner_text]").forEach(element => (element).innerText = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text")));
+    document.querySelectorAll("[data-token-lang-inner_text]").forEach(element => (element).innerHTML = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text")));
   }
 
   static  initMessages() {
@@ -361,7 +361,7 @@ class Z4AbstractComponentUI {
     let list = this.root.querySelectorAll("#" + this.root.id + " [data-token-lang-inner_text]");
     for (let index = 0; index < list.length; index++) {
       let element = list.item(index);
-      element.innerText = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text"));
+      element.innerHTML = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text"));
     }
   }
 
@@ -544,8 +544,8 @@ class Z4ModalMessageUI {
   }
 
   static  showOneButton(title, message, onOK, className, color) {
-    (Z4ModalMessageUI.html.querySelector(".modal-title")).innerText = title;
-    (Z4ModalMessageUI.html.querySelector(".modal-message")).innerText = message;
+    (Z4ModalMessageUI.html.querySelector(".modal-title")).innerHTML = title;
+    (Z4ModalMessageUI.html.querySelector(".modal-message")).innerHTML = message;
     let icon = Z4ModalMessageUI.html.querySelector(".modal-icon i");
     icon.className = className;
     icon.style.color = color;
@@ -567,8 +567,8 @@ class Z4ModalMessageUI {
    * button
    */
   static  showQuestion(title, message, onYES, onNO, onOK, onCANCEL) {
-    (Z4ModalMessageUI.html.querySelector(".modal-title")).innerText = title;
-    (Z4ModalMessageUI.html.querySelector(".modal-message")).innerText = message;
+    (Z4ModalMessageUI.html.querySelector(".modal-title")).innerHTML = title;
+    (Z4ModalMessageUI.html.querySelector(".modal-message")).innerHTML = message;
     let icon = Z4ModalMessageUI.html.querySelector(".modal-icon i");
     icon.className = "bi bi-question-circle-fill";
     icon.style.color = "#6c757d";
@@ -594,7 +594,7 @@ class Z4ModalMessageUI {
     button.setAttribute("type", "button");
     button.setAttribute("data-bs-dismiss", "modal");
     button.className = className;
-    button.innerText = text;
+    button.innerHTML = text;
     button.onclick = (event) => {
       onButton();
       return null;
@@ -1832,7 +1832,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
    setRange(min, max) {
     this.text.setAttribute("min", "" + min);
     this.text.setAttribute("max", "" + max);
-    this.querySelector(".range-label").innerText = "[" + min + "," + (max === 999999999 ? "&infin;" : max) + "]";
+    this.querySelector(".range-label").innerHTML = "[" + min + "," + (max === 999999999 ? "&infin;" : max) + "]";
     return this;
   }
 
@@ -1864,7 +1864,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
    setValueLabel(token, bold, italic) {
     let valueLabel = this.querySelector(".value-label");
     valueLabel.setAttribute("data-token-lang-inner_text", token);
-    valueLabel.innerText = Z4MessageFactory.get(token);
+    valueLabel.innerHTML = Z4MessageFactory.get(token);
     valueLabel.style.fontWeight = bold ? "700" : "400";
     valueLabel.style.fontStyle = italic ? "italic" : "normal";
     return this;
@@ -2033,7 +2033,7 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
    setLengthRange(min, max) {
     this.valueLength.setAttribute("min", "" + min);
     this.valueLength.setAttribute("max", "" + max);
-    this.querySelector(".range-length-label").innerText = "[" + min + "," + (max === 999999999 ? "&infin;" : max) + "]";
+    this.querySelector(".range-length-label").innerHTML = "[" + min + "," + (max === 999999999 ? "&infin;" : max) + "]";
     return this;
   }
 
@@ -2279,7 +2279,7 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
    setValueLabel(token, bold, italic) {
     let valueLabel = this.querySelector(".fanciful-label");
     valueLabel.setAttribute("data-token-lang-inner_text", token);
-    valueLabel.innerText = Z4MessageFactory.get(token);
+    valueLabel.innerHTML = Z4MessageFactory.get(token);
     valueLabel.style.fontWeight = bold ? "700" : "400";
     valueLabel.style.fontStyle = italic ? "italic" : "normal";
     return this;
@@ -2454,7 +2454,7 @@ class Z4RotationUI extends Z4AbstractComponentWithValueUI {
    setValueLabel(token, bold, italic) {
     let valueLabel = this.querySelector(".rotation-label");
     valueLabel.setAttribute("data-token-lang-inner_text", token);
-    valueLabel.innerText = Z4MessageFactory.get(token);
+    valueLabel.innerHTML = Z4MessageFactory.get(token);
     valueLabel.style.fontWeight = bold ? "700" : "400";
     valueLabel.style.fontStyle = italic ? "italic" : "normal";
     return this;
@@ -3486,7 +3486,7 @@ class Z4ColorUI extends Z4AbstractComponentWithValueUI {
    setColorLabel(token, bold, italic) {
     let colorLabel = this.querySelector(".color-label");
     colorLabel.setAttribute("data-token-lang-inner_text", token);
-    colorLabel.innerText = Z4MessageFactory.get(token);
+    colorLabel.innerHTML = Z4MessageFactory.get(token);
     colorLabel.style.fontWeight = bold ? "700" : "400";
     colorLabel.style.fontStyle = italic ? "italic" : "normal";
     return this;
@@ -3622,7 +3622,7 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
     this.del.setAttribute("class", "dropdown-item delete-color");
     this.del.setAttribute("type", "button");
     this.del.setAttribute("data-token-lang-inner_text", "DELETE");
-    this.del.innerText = Z4MessageFactory.get("DELETE");
+    this.del.innerHTML = Z4MessageFactory.get("DELETE");
     this.del.onclick = (event) => {
       Z4ModalMessageUI.showQuestion(Z4MessageFactory.get("TITLE"), Z4MessageFactory.get("DELETE_COLOR_MESSAGE"), () => {
         let input = this.querySelector(".sliders .form-check-input:checked");
@@ -3679,7 +3679,7 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
    setGradientColorLabel(token, bold, italic) {
     let gradientColorLabel = this.querySelector(".gradient-color-label");
     gradientColorLabel.setAttribute("data-token-lang-inner_text", token);
-    gradientColorLabel.innerText = Z4MessageFactory.get(token);
+    gradientColorLabel.innerHTML = Z4MessageFactory.get(token);
     gradientColorLabel.style.fontWeight = bold ? "700" : "400";
     gradientColorLabel.style.fontStyle = italic ? "italic" : "normal";
     return this;
@@ -3915,7 +3915,7 @@ class Z4GradientColorGuidedTourUI extends Z4GradientColorUI {
       label.className = "";
     }
     if (label) {
-      label.innerText = this.message;
+      label.innerHTML = this.message;
     } else {
       console.log(this.message);
     }
@@ -4046,7 +4046,7 @@ class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI {
     this.del.setAttribute("class", "dropdown-item delete-color");
     this.del.setAttribute("type", "button");
     this.del.setAttribute("data-token-lang-inner_text", "DELETE");
-    this.del.innerText = Z4MessageFactory.get("DELETE");
+    this.del.innerHTML = Z4MessageFactory.get("DELETE");
     this.del.onclick = (event) => {
       Z4ModalMessageUI.showQuestion(Z4MessageFactory.get("TITLE"), Z4MessageFactory.get("DELETE_COLOR_MESSAGE"), () => {
         let input = this.querySelector(".sliders .form-check-input:checked");
@@ -4128,7 +4128,7 @@ class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI {
    setTemporalColorLabel(token, bold, italic) {
     let temporalColorLabel = this.querySelector(".temporal-color-label");
     temporalColorLabel.setAttribute("data-token-lang-inner_text", token);
-    temporalColorLabel.innerText = Z4MessageFactory.get(token);
+    temporalColorLabel.innerHTML = Z4MessageFactory.get(token);
     temporalColorLabel.style.fontWeight = bold ? "700" : "400";
     temporalColorLabel.style.fontStyle = italic ? "italic" : "normal";
     return this;
@@ -4465,7 +4465,7 @@ class Z4TemporalColorGuidedTourUI extends Z4TemporalColorUI {
       label.className = "";
     }
     if (label) {
-      label.innerText = this.message;
+      label.innerHTML = this.message;
     } else {
       console.log(this.message);
     }
@@ -4539,6 +4539,159 @@ class Z4ClassicPainter extends Z4Painter {
 
    draw(context, point, gradientColor) {
     return this;
+  }
+}
+/**
+ * The painter of 2D shapes
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4Shape2DPainter extends Z4Painter {
+
+   shape = Z4Shape2D.SQUARE;
+
+   size = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(50).setSign(Z4Sign.POSITIVE));
+
+   shadowShiftX = new Z4FancifulValue();
+
+   shadowShiftY = new Z4FancifulValue();
+
+   shadowColor = new Z4Color(255, 0, 0, 0);
+
+   borderSize = new Z4FancifulValue();
+
+   borderColor = new Z4Color(255, 0, 0, 0);
+
+  /**
+   * Sets the shape
+   *
+   * @param shape The shape
+   * @return This Z4Shape2DPainter
+   */
+   setShape2D(shape) {
+    this.shape = shape;
+    return this;
+  }
+
+  /**
+   * Sets the size
+   *
+   * @param {number} fixedComponent The fixed component of the size
+   * @param {number} randomComponent The random component of the size
+   * @param {Z4Sign} z4RandomComponentSign The sign of the random component
+   * @return {} This Z4Shape2DPainter
+   */
+  // setSize(fixedComponent, randomComponent, z4RandomComponentSign) {
+  // this.size = new Z4FancifulValue(fixedComponent, randomComponent, z4RandomComponentSign, Z4Sign.POSITIVE);
+  // return this;
+  // }
+  /**
+   * Sets the random component of the size
+   *
+   * @param {number} randomComponent The random component of the value
+   * @param {Z4RandomBehaviour} randomComponentBehaviour The behaviour of the
+   * random component
+   * @param {number} randomComponentStep The step of the random component
+   * @param {Z4Sign} z4RandomComponentSign The sign of the random component
+   * @return {} This Z4Shape2DPainter
+   */
+  // setRandomComponentSize(randomComponent, randomComponentBehaviour, randomComponentStep, z4RandomComponentSign) {
+  // this.size.setRandom(randomComponent, randomComponentBehaviour, randomComponentStep, z4RandomComponentSign);
+  // return this;
+  // }
+  /**
+   * Sets the shadow
+   *
+   * @param {number} fixedComponentX The fixed component of the X shadow shift
+   * @param {number} randomComponentX The random component of the X shadow shift
+   * @param {number} fixedComponentY The fixed component of the Y shadow shift
+   * @param {number} randomComponentY The random component of the Y shadow shift
+   * @param {Z4Sign} z4RandomComponentSign The sign of the random component
+   * @param {Z4Color} shadowColor The shadow color
+   * @return {} This Z4Shape2DPainter
+   */
+  // setShadow(fixedComponentX, randomComponentX, fixedComponentY, randomComponentY, z4RandomComponentSign, shadowColor) {
+  // this.shadowShiftX = new Z4FancifulValue(fixedComponentX, randomComponentX, z4RandomComponentSign, Z4Sign.POSITIVE);
+  // this.shadowShiftY = new Z4FancifulValue(fixedComponentY, randomComponentY, z4RandomComponentSign, Z4Sign.POSITIVE);
+  // this.shadowColor = shadowColor;
+  // return this;
+  // }
+  /**
+   * Sets the border
+   *
+   * @param {number} fixedComponent The fixed component of the border size
+   * @param {number} randomComponent The random component of the border size
+   * @param {Z4Sign} z4RandomComponentSign The sign of the random component
+   * @param {Z4Color} borderColor The border color
+   * @return {} This Z4Shape2DPainter
+   */
+  // setBorder(fixedComponent, randomComponent, z4RandomComponentSign, borderColor) {
+  // this.borderSize = new Z4FancifulValue(fixedComponent, randomComponent, z4RandomComponentSign, Z4Sign.POSITIVE);
+  // this.borderColor = borderColor;
+  // return this;
+  // }
+   draw(context, point, gradientColor) {
+    if (point.isDrawBounds()) {
+      this.drawBounds(context, point.getIntensity() * (point.isUseVectorModuleAsSize() ? 2 * point.getZ4Vector().getModule() : this.size.getConstant().getValue()));
+    } else {
+      let currentSize = point.getIntensity() * (point.isUseVectorModuleAsSize() ? 2 * point.getZ4Vector().getModule() : this.size.next(0));
+      if (currentSize <= 0) {
+        return this;
+      }
+      let currentShadowShiftX = point.getIntensity() * this.shadowShiftX.next(0);
+      let currentShadowShiftY = point.getIntensity() * this.shadowShiftY.next(0);
+      let currentBorderSize = point.getIntensity() * this.borderSize.next(0);
+      if (currentShadowShiftX || currentShadowShiftY) {
+        context.save();
+        context.translate(currentShadowShiftX, currentShadowShiftY);
+        this.drawPath(context, currentSize + (currentBorderSize > 0 ? currentBorderSize : 0), this.shadowColor);
+        context.restore();
+      }
+      if (currentBorderSize) {
+        context.save();
+        this.drawPath(context, currentSize + currentBorderSize, this.borderColor);
+        context.restore();
+      }
+      let position = point.getColorPosition();
+      let lighting = point.getLighting();
+      if (position === -1) {
+        for (let scale = currentSize; scale > 0; scale--) {
+          this.drawPath(context, scale, gradientColor.getZ4ColorAt(scale / currentSize, true, true));
+        }
+      } else if (lighting === Z4Lighting.NONE) {
+        this.drawPath(context, currentSize, gradientColor.getZ4ColorAt(position, true, true));
+      } else {
+        let newColor = gradientColor.getZ4ColorAt(position, true, true);
+        for (let scale = currentSize; scale > 0; scale--) {
+          if (lighting === Z4Lighting.LIGTHED) {
+            this.drawPath(context, scale, Z4Color.fromARGB(newColor.getARGB()).lighted(scale / currentSize));
+          } else if (lighting === Z4Lighting.DARKENED) {
+            this.drawPath(context, scale, Z4Color.fromARGB(newColor.getARGB()).darkened(scale / currentSize));
+          }
+        }
+      }
+    }
+    return this;
+  }
+
+   drawPath(context, scale, color) {
+    context.save();
+    context.scale(scale, scale);
+    context.fillStyle = color.getHEX();
+    context.fill(this.shape.getPath());
+    context.restore();
+  }
+
+   drawBounds(context, scale) {
+    context.save();
+    context.scale(scale, scale);
+    context.lineWidth = 1 / scale;
+    context.strokeStyle = this.getColor("gray");
+    context.stroke(this.shape.getPath());
+    context.strokeStyle = this.getColor("black");
+    context.translate(1 / scale, 1 / scale);
+    context.stroke(this.shape.getPath());
+    context.restore();
   }
 }
 /**

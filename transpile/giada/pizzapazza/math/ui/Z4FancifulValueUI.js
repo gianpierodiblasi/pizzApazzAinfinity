@@ -185,7 +185,7 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
    setValueLabel(token, bold, italic) {
     let valueLabel = this.querySelector(".fanciful-label");
     valueLabel.setAttribute("data-token-lang-inner_text", token);
-    valueLabel.innerText = Z4MessageFactory.get(token);
+    valueLabel.innerHTML = Z4MessageFactory.get(token);
     valueLabel.style.fontWeight = bold ? "700" : "400";
     valueLabel.style.fontStyle = italic ? "italic" : "normal";
     return this;

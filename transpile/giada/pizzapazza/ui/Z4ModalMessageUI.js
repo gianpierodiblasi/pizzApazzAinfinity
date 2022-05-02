@@ -56,8 +56,8 @@ class Z4ModalMessageUI {
   }
 
   static  showOneButton(title, message, onOK, className, color) {
-    (Z4ModalMessageUI.html.querySelector(".modal-title")).innerText = title;
-    (Z4ModalMessageUI.html.querySelector(".modal-message")).innerText = message;
+    (Z4ModalMessageUI.html.querySelector(".modal-title")).innerHTML = title;
+    (Z4ModalMessageUI.html.querySelector(".modal-message")).innerHTML = message;
     let icon = Z4ModalMessageUI.html.querySelector(".modal-icon i");
     icon.className = className;
     icon.style.color = color;
@@ -79,8 +79,8 @@ class Z4ModalMessageUI {
    * button
    */
   static  showQuestion(title, message, onYES, onNO, onOK, onCANCEL) {
-    (Z4ModalMessageUI.html.querySelector(".modal-title")).innerText = title;
-    (Z4ModalMessageUI.html.querySelector(".modal-message")).innerText = message;
+    (Z4ModalMessageUI.html.querySelector(".modal-title")).innerHTML = title;
+    (Z4ModalMessageUI.html.querySelector(".modal-message")).innerHTML = message;
     let icon = Z4ModalMessageUI.html.querySelector(".modal-icon i");
     icon.className = "bi bi-question-circle-fill";
     icon.style.color = "#6c757d";
@@ -106,7 +106,7 @@ class Z4ModalMessageUI {
     button.setAttribute("type", "button");
     button.setAttribute("data-bs-dismiss", "modal");
     button.className = className;
-    button.innerText = text;
+    button.innerHTML = text;
     button.onclick = (event) => {
       onButton();
       return null;

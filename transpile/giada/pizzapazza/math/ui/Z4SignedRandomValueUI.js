@@ -143,7 +143,7 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
    setLengthRange(min, max) {
     this.valueLength.setAttribute("min", "" + min);
     this.valueLength.setAttribute("max", "" + max);
-    this.querySelector(".range-length-label").innerText = "[" + min + "," + (max === 999999999 ? "&infin;" : max) + "]";
+    this.querySelector(".range-length-label").innerHTML = "[" + min + "," + (max === 999999999 ? "&infin;" : max) + "]";
     return this;
   }
 

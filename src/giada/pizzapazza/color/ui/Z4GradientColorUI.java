@@ -152,7 +152,7 @@ public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4Gradient
     this.del.setAttribute("class", "dropdown-item delete-color");
     this.del.setAttribute("type", "button");
     this.del.setAttribute("data-token-lang-inner_text", "DELETE");
-    this.del.innerText = Z4MessageFactory.get("DELETE");
+    this.del.innerHTML = Z4MessageFactory.get("DELETE");
     this.del.onclick = (event) -> {
       Z4ModalMessageUI.showQuestion(Z4MessageFactory.get("TITLE"), Z4MessageFactory.get("DELETE_COLOR_MESSAGE"), () -> {
         $HTMLElement input = this.querySelector(".sliders .form-check-input:checked");
@@ -213,7 +213,7 @@ public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4Gradient
   public Z4GradientColorUI setGradientColorLabel(String token, boolean bold, boolean italic) {
     $HTMLElement gradientColorLabel = this.querySelector(".gradient-color-label");
     gradientColorLabel.setAttribute("data-token-lang-inner_text", token);
-    gradientColorLabel.innerText = Z4MessageFactory.get(token);
+    gradientColorLabel.innerHTML = Z4MessageFactory.get(token);
     gradientColorLabel.style.fontWeight = bold ? "700" : "400";
     gradientColorLabel.style.fontStyle = italic ? "italic" : "normal";
     return this;

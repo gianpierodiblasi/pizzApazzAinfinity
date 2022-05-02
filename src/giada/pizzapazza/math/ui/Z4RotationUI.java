@@ -105,7 +105,7 @@ public class Z4RotationUI extends Z4AbstractComponentWithValueUI<Z4Rotation> {
   public Z4RotationUI setValueLabel(String token, boolean bold, boolean italic) {
     $HTMLElement valueLabel = this.querySelector(".rotation-label");
     valueLabel.setAttribute("data-token-lang-inner_text", token);
-    valueLabel.innerText = Z4MessageFactory.get(token);
+    valueLabel.innerHTML = Z4MessageFactory.get(token);
     valueLabel.style.fontWeight = bold ? "700" : "400";
     valueLabel.style.fontStyle = italic ? "italic" : "normal";
     return this;

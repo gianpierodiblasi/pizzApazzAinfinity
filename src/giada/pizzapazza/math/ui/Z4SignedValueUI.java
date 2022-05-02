@@ -143,7 +143,7 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
   public Z4SignedValueUI setRange(int min, int max) {
     this.text.setAttribute("min", "" + min);
     this.text.setAttribute("max", "" + max);
-    this.querySelector(".range-label").innerText = "[" + min + "," + (max == 999999999 ? "&infin;" : max) + "]";
+    this.querySelector(".range-label").innerHTML = "[" + min + "," + (max == 999999999 ? "&infin;" : max) + "]";
 
     return this;
   }
@@ -177,7 +177,7 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
   public Z4SignedValueUI setValueLabel(String token, boolean bold, boolean italic) {
     $HTMLElement valueLabel = this.querySelector(".value-label");
     valueLabel.setAttribute("data-token-lang-inner_text", token);
-    valueLabel.innerText = Z4MessageFactory.get(token);
+    valueLabel.innerHTML = Z4MessageFactory.get(token);
     valueLabel.style.fontWeight = bold ? "700" : "400";
     valueLabel.style.fontStyle = italic ? "italic" : "normal";
     return this;

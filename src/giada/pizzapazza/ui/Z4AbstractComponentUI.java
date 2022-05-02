@@ -31,7 +31,7 @@ public abstract class Z4AbstractComponentUI {
     NodeList list = this.root.querySelectorAll("#" + this.root.id + " [data-token-lang-inner_text]");
     for (int index = 0; index < list.length; index++) {
       HTMLElement element = (HTMLElement) list.item(index);
-      element.innerText = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text"));
+      element.innerHTML = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text"));
     }
   }
 

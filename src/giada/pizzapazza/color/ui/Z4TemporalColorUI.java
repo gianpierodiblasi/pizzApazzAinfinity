@@ -156,7 +156,7 @@ public class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI<Z4Temporal
     this.del.setAttribute("class", "dropdown-item delete-color");
     this.del.setAttribute("type", "button");
     this.del.setAttribute("data-token-lang-inner_text", "DELETE");
-    this.del.innerText = Z4MessageFactory.get("DELETE");
+    this.del.innerHTML = Z4MessageFactory.get("DELETE");
     this.del.onclick = (event) -> {
       Z4ModalMessageUI.showQuestion(Z4MessageFactory.get("TITLE"), Z4MessageFactory.get("DELETE_COLOR_MESSAGE"), () -> {
         $HTMLElement input = this.querySelector(".sliders .form-check-input:checked");
@@ -245,7 +245,7 @@ public class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI<Z4Temporal
   public Z4TemporalColorUI setTemporalColorLabel(String token, boolean bold, boolean italic) {
     $HTMLElement temporalColorLabel = this.querySelector(".temporal-color-label");
     temporalColorLabel.setAttribute("data-token-lang-inner_text", token);
-    temporalColorLabel.innerText = Z4MessageFactory.get(token);
+    temporalColorLabel.innerHTML = Z4MessageFactory.get(token);
     temporalColorLabel.style.fontWeight = bold ? "700" : "400";
     temporalColorLabel.style.fontStyle = italic ? "italic" : "normal";
     return this;

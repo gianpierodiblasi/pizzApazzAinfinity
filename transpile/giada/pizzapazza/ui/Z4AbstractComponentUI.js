@@ -19,7 +19,7 @@ class Z4AbstractComponentUI {
     let list = this.root.querySelectorAll("#" + this.root.id + " [data-token-lang-inner_text]");
     for (let index = 0; index < list.length; index++) {
       let element = list.item(index);
-      element.innerText = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text"));
+      element.innerHTML = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text"));
     }
   }
 

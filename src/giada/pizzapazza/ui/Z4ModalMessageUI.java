@@ -68,8 +68,8 @@ public class Z4ModalMessageUI {
   }
 
   private static void showOneButton(String title, String message, $Apply_0_Void onOK, String className, String color) {
-    ((HTMLElement) Z4ModalMessageUI.html.querySelector(".modal-title")).innerText = title;
-    ((HTMLElement) Z4ModalMessageUI.html.querySelector(".modal-message")).innerText = message;
+    ((HTMLElement) Z4ModalMessageUI.html.querySelector(".modal-title")).innerHTML = title;
+    ((HTMLElement) Z4ModalMessageUI.html.querySelector(".modal-message")).innerHTML = message;
 
     HTMLElement icon = (HTMLElement) Z4ModalMessageUI.html.querySelector(".modal-icon i");
     icon.className = className;
@@ -94,8 +94,8 @@ public class Z4ModalMessageUI {
    * button
    */
   public static void showQuestion(String title, String message, $Apply_0_Void onYES, $Apply_0_Void onNO, $Apply_0_Void onOK, $Apply_0_Void onCANCEL) {
-    ((HTMLElement) Z4ModalMessageUI.html.querySelector(".modal-title")).innerText = title;
-    ((HTMLElement) Z4ModalMessageUI.html.querySelector(".modal-message")).innerText = message;
+    ((HTMLElement) Z4ModalMessageUI.html.querySelector(".modal-title")).innerHTML = title;
+    ((HTMLElement) Z4ModalMessageUI.html.querySelector(".modal-message")).innerHTML = message;
 
     HTMLElement icon = (HTMLElement) Z4ModalMessageUI.html.querySelector(".modal-icon i");
     icon.className = "bi bi-question-circle-fill";
@@ -125,7 +125,7 @@ public class Z4ModalMessageUI {
     button.setAttribute("type", "button");
     button.setAttribute("data-bs-dismiss", "modal");
     button.className = className;
-    button.innerText = text;
+    button.innerHTML = text;
     button.onclick = (event) -> {
       onButton.$apply();
       return null;

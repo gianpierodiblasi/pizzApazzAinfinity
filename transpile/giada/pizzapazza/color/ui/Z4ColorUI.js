@@ -64,7 +64,7 @@ class Z4ColorUI extends Z4AbstractComponentWithValueUI {
    setColorLabel(token, bold, italic) {
     let colorLabel = this.querySelector(".color-label");
     colorLabel.setAttribute("data-token-lang-inner_text", token);
-    colorLabel.innerText = Z4MessageFactory.get(token);
+    colorLabel.innerHTML = Z4MessageFactory.get(token);
     colorLabel.style.fontWeight = bold ? "700" : "400";
     colorLabel.style.fontStyle = italic ? "italic" : "normal";
     return this;

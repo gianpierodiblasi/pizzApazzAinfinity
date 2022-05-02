@@ -130,7 +130,7 @@ public class Z4GradientColorGuidedTourUI extends Z4GradientColorUI {
     }
 
     if ($exists(label)) {
-      label.innerText = this.message;
+      label.innerHTML = this.message;
     } else {
       console.log(this.message);
     }

@@ -114,7 +114,7 @@ class Z4GradientColorGuidedTourUI extends Z4GradientColorUI {
       label.className = "";
     }
     if (label) {
-      label.innerText = this.message;
+      label.innerHTML = this.message;
     } else {
       console.log(this.message);
     }

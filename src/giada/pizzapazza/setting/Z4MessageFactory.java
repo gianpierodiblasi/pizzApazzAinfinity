@@ -33,7 +33,7 @@ public class Z4MessageFactory {
    */
   public static void changingLanguage() {
     Z4MessageFactory.MESSAGE = Z4MessageFactory.initMessages();
-    document.querySelectorAll("[data-token-lang-inner_text]").forEach(element -> ((HTMLElement) element).innerText = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text")));
+    document.querySelectorAll("[data-token-lang-inner_text]").forEach(element -> ((HTMLElement) element).innerHTML = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text")));
   }
 
   private static Array<def.js.String> initMessages() {
