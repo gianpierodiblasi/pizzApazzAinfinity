@@ -42,17 +42,20 @@ public class Z4TemporalColorGuidedTourUI extends Z4TemporalColorUI {
     div.appendChild(this.i);
 
     this.options.$set("once", true);
-    this.doStep(0);
   }
 
   /**
    * Shows the guided tour
    */
   public static void show() {
+    Z4TemporalColorGuidedTourUI tour = new Z4TemporalColorGuidedTourUI();
+
     Z4ModalMessageUI.showInfo(Z4MessageFactory.get("TITLE"), "", () -> {
       document.querySelector(".modal-dialog").classList.remove("modal-lg");
       ((HTMLElement) document.querySelector(".modal-message")).innerHTML = "";
       ((HTMLElement) document.querySelector(".modal-dialog .modal-footer")).innerHTML = "";
+
+      tour.dispose();
     });
 
     HTMLElement label = document.createElement("label");
@@ -61,7 +64,8 @@ public class Z4TemporalColorGuidedTourUI extends Z4TemporalColorUI {
     document.querySelector(".modal-dialog").classList.add("modal-lg");
     document.querySelector(".modal-dialog .modal-footer").insertBefore(label, document.querySelector(".modal-dialog .modal-footer button"));
 
-    new Z4TemporalColorGuidedTourUI().appendToElement(document.querySelector(".modal-message"));
+    tour.appendToElement(document.querySelector(".modal-message"));
+    tour.doStep(0);
   }
 
   private void doStep(int step) {

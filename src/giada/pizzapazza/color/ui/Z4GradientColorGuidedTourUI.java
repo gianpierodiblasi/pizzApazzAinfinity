@@ -32,17 +32,20 @@ public class Z4GradientColorGuidedTourUI extends Z4GradientColorUI {
     this.querySelector(".gradient-guided-tour").remove();
 
     this.options.$set("once", true);
-    this.doStep(0);
   }
 
   /**
    * Shows the guided tour
    */
   public static void show() {
+    Z4GradientColorGuidedTourUI tour = new Z4GradientColorGuidedTourUI();
+
     Z4ModalMessageUI.showInfo(Z4MessageFactory.get("TITLE"), "", () -> {
       document.querySelector(".modal-dialog").classList.remove("modal-lg");
       ((HTMLElement) document.querySelector(".modal-message")).innerHTML = "";
       ((HTMLElement) document.querySelector(".modal-dialog .modal-footer")).innerHTML = "";
+
+      tour.dispose();
     });
 
     HTMLElement label = document.createElement("label");
@@ -51,7 +54,8 @@ public class Z4GradientColorGuidedTourUI extends Z4GradientColorUI {
     document.querySelector(".modal-dialog").classList.add("modal-lg");
     document.querySelector(".modal-dialog .modal-footer").insertBefore(label, document.querySelector(".modal-dialog .modal-footer button"));
 
-    new Z4GradientColorGuidedTourUI().appendToElement(document.querySelector(".modal-message"));
+    tour.appendToElement(document.querySelector(".modal-message"));
+    tour.doStep(0);
   }
 
   private void doStep(int step) {
