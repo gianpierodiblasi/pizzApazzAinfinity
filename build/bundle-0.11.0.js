@@ -349,6 +349,8 @@ class Z4AbstractComponentUI {
 
    root = null;
 
+   devicePixelRatioListener = null;
+
   /**
    * Creates a Z4AbstractComponentUI
    *
@@ -363,6 +365,28 @@ class Z4AbstractComponentUI {
       let element = list.item(index);
       element.innerHTML = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text"));
     }
+  }
+
+  /**
+   * Inizializes the monitoring of the device pixel ratio changes
+   *
+   * @param onDevicePixelRatioChange The method called on device pixel ratio
+   * changes
+   */
+   initDevicePixelRatio(onDevicePixelRatioChange) {
+    if (window.matchMedia) {
+      this.devicePixelRatioListener = () => {
+        onDevicePixelRatioChange();
+        this.addDevicePixelRatioListener();
+      };
+      this.addDevicePixelRatioListener();
+    }
+  }
+
+   addDevicePixelRatioListener() {
+    let options = new Object();
+    options["once"] = true;
+    window.matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
   }
 
   /**
@@ -969,7 +993,7 @@ class Z4SignedRandomValue {
         } else {
           this.step++;
         }
-        return value * this.bezierCurve.get(this.step / this.length).y;
+        return this.value * this.bezierCurve.get(this.step / this.length).y;
       case 2:
         if (this.step === this.length) {
           this.step = 0;
@@ -978,7 +1002,7 @@ class Z4SignedRandomValue {
         } else {
           this.step++;
         }
-        return value * ((this.nextRandom - this.prevRandom) * this.step / this.length + this.prevRandom);
+        return this.value * ((this.nextRandom - this.prevRandom) * this.step / this.length + this.prevRandom);
       case 3:
         if (this.step === this.length) {
           this.step = 0;
@@ -986,7 +1010,7 @@ class Z4SignedRandomValue {
         } else {
           this.step++;
         }
-        return value * this.prevRandom;
+        return this.value * this.prevRandom;
     }
   }
 
@@ -1637,6 +1661,17 @@ class Z4Point {
    */
    getIntensity() {
     return this.intensity;
+  }
+
+  /**
+   * Sets the intensity
+   *
+   * @param intensity The intensity
+   * @return This Z4Point
+   */
+   setIntensity(intensity) {
+    this.intensity = intensity;
+    return this;
   }
 
   /**
@@ -3527,8 +3562,6 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
 
    key = new Date().getTime() + "_" + parseInt(1000 * Math.random());
 
-   devicePixelRatioListener = null;
-
    mouseDown = false;
 
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4GradientColorUI.html");
@@ -3542,7 +3575,7 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
    */
   constructor() {
     super(Z4GradientColorUI.UI);
-    this.initDevicePixelRatio();
+    this.initDevicePixelRatio(() => this.drawCanvas());
     this.querySelector(".gradient-inverted").onclick = (event) => {
       this.setValue(this.value.inverted());
       this.onchange(this.value);
@@ -3636,22 +3669,6 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
     };
     this.querySelector(".negative").parentElement.appendChild(document.createElement("li")).appendChild(this.del);
     this.setValue(new Z4GradientColor());
-  }
-
-   initDevicePixelRatio() {
-    if (window.matchMedia) {
-      this.devicePixelRatioListener = () => {
-        this.drawCanvas();
-        this.addDevicePixelRatioListener();
-      };
-      this.addDevicePixelRatioListener();
-    }
-  }
-
-   addDevicePixelRatioListener() {
-    let options = new Object();
-    options["once"] = true;
-    window.matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
   }
 
    addColor(x) {
@@ -3954,8 +3971,6 @@ class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI {
 
    key = new Date().getTime() + "_" + parseInt(1000 * Math.random());
 
-   devicePixelRatioListener = null;
-
    mouseDown = false;
 
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4TemporalColorUI.html");
@@ -3969,7 +3984,7 @@ class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI {
    */
   constructor() {
     super(Z4TemporalColorUI.UI);
-    this.initDevicePixelRatio();
+    this.initDevicePixelRatio(() => this.drawCanvas(1));
     this.querySelector(".temporal-inverted").onclick = (event) => this.inverted(true, false);
     this.querySelector(".spatial-inverted").onclick = (event) => this.inverted(false, true);
     this.querySelector(".temporal-negative").onclick = (event) => {
@@ -4060,22 +4075,6 @@ class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI {
     };
     this.querySelector(".negative").parentElement.appendChild(document.createElement("li")).appendChild(this.del);
     this.setValue(new Z4TemporalColor());
-  }
-
-   initDevicePixelRatio() {
-    if (window.matchMedia) {
-      this.devicePixelRatioListener = () => {
-        this.drawCanvas(1);
-        this.addDevicePixelRatioListener();
-      };
-      this.addDevicePixelRatioListener();
-    }
-  }
-
-   addDevicePixelRatioListener() {
-    let options = new Object();
-    options["once"] = true;
-    window.matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
   }
 
    addColor(x, y) {
@@ -4912,12 +4911,34 @@ class Z4Stamper extends Z4PointIterator {
   }
 
   /**
+   * Sets the intensity
+   *
+   * @param intensity The intensity
+   * @return This Z4Stamper
+   */
+   setIntensity(intensity) {
+    this.intensity = intensity;
+    return this;
+  }
+
+  /**
    * Returns the multiplicity
    *
    * @return The multiplicity
    */
    getMultiplicity() {
     return this.multiplicity;
+  }
+
+  /**
+   * Sets the multiplicity
+   *
+   * @param multiplicity The multiplicity
+   * @return This Z4Stamper
+   */
+   setMultiplicity(multiplicity) {
+    this.multiplicity = multiplicity;
+    return this;
   }
 
   /**
@@ -4929,6 +4950,17 @@ class Z4Stamper extends Z4PointIterator {
     return this.push;
   }
 
+  /**
+   * Sets the push
+   *
+   * @param push The push
+   * @return This Z4Stamper
+   */
+   setPush(push) {
+    this.push = push;
+    return this;
+  }
+
    next() {
     if (!this.hasNext) {
       return null;
@@ -4938,9 +4970,9 @@ class Z4Stamper extends Z4PointIterator {
       let angle = this.rotation.next(0);
       if (this.currentPush) {
         let pushed = Z4Vector.fromVector(this.P["x"], this.P["y"], this.currentPush, angle);
-        this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), this.intensity.next(0), angle));
+        this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), 1, angle));
       } else {
-        this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P["x"], this.P["y"], this.intensity.next(0), angle));
+        this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P["x"], this.P["y"], 1, angle));
       }
       this.rotation.nextSide(this.z4Point, null);
       if (this.progression === Z4Progression.TEMPORAL) {
@@ -4958,7 +4990,7 @@ class Z4Stamper extends Z4PointIterator {
         this.z4Point.setLighting(this.lighting);
         this.z4Point.setColorPosition(Math.random());
       }
-      return this.z4Point;
+      return this.z4Point.setIntensity(this.intensity.next(0));
     }
   }
 
@@ -5008,6 +5040,10 @@ class Z4Stamper extends Z4PointIterator {
  */
 class Z4StamperUI extends Z4AbstractComponentWithValueUI {
 
+   canvas = this.querySelector(".canvas");
+
+   ctx = this.canvas.getContext("2d");
+
    intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setComponentsVisible(true, true, false).setSignsVisible(false, true, true).appendToElement(this.querySelector(".stamper-container"));
 
    rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".stamper-container"));
@@ -5018,12 +5054,49 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
 
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/iterator/ui/Z4StamperUI.html");
 
+  static  WIDTH = 500;
+
+  static  HEIGHT = 300;
+
   /**
    * Creates a Z4StamperUI
    */
   constructor() {
     super(Z4StamperUI.UI);
+    this.initDevicePixelRatio(() => this.drawCanvas());
+    this.canvas.style.border = "1px dashed gray";
+    this.canvas.style.width = Z4StamperUI.WIDTH + "px";
+    this.canvas.style.height = Z4StamperUI.HEIGHT + "px";
+    this.intensity.oninput = (v) => this.set(v, null, null, null, false);
+    this.intensity.onchange = (v) => this.set(v, null, null, null, true);
+    this.rotation.oninput = (v) => this.set(null, v, null, null, false);
+    this.rotation.onchange = (v) => this.set(null, v, null, null, true);
+    this.multiplicity.oninput = (v) => this.set(null, null, v, null, false);
+    this.multiplicity.onchange = (v) => this.set(null, null, v, null, true);
+    this.push.oninput = (v) => this.set(null, null, null, v, false);
+    this.push.onchange = (v) => this.set(null, null, null, v, true);
     this.setValue(new Z4Stamper());
+  }
+
+   set(intensity, rotation, multiplicity, push, onchange) {
+    if (intensity) {
+      this.value.setIntensity(intensity);
+    }
+    if (rotation) {
+      this.value.setRotation(rotation);
+    }
+    if (multiplicity) {
+      this.value.setMultiplicity(multiplicity);
+    }
+    if (push) {
+      this.value.setMultiplicity(push);
+    }
+    this.drawCanvas();
+    if (onchange) {
+      this.onchange(this.value);
+    } else {
+      this.oninput(this.value);
+    }
   }
 
    setValue(value) {
@@ -5032,6 +5105,20 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
     this.rotation.setValue(this.value.getRotation());
     this.multiplicity.setValue(this.value.getMultiplicity());
     this.push.setValue(this.value.getPush());
+    this.drawCanvas();
     return this;
+  }
+
+   drawCanvas() {
+    this.canvas.width = Math.floor(Z4StamperUI.WIDTH * window.devicePixelRatio);
+    this.canvas.height = Math.floor(Z4StamperUI.HEIGHT * window.devicePixelRatio);
+    let offscreen = new OffscreenCanvas(Z4StamperUI.WIDTH, Z4StamperUI.HEIGHT);
+    let offscreenCtx = offscreen.getContext("2d");
+    this.value.drawDemo(offscreenCtx, Z4StamperUI.WIDTH, Z4StamperUI.HEIGHT);
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.save();
+    this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    this.ctx.drawImage(offscreen, 0, 0);
+    this.ctx.restore();
   }
 }
