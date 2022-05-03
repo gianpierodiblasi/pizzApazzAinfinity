@@ -131,4 +131,7 @@ class Z4RotationUI extends Z4AbstractComponentWithValueUI {
     this.angle.setValue(this.value.getAngle());
     return this;
   }
+
+   dispose() {
+  }
 }

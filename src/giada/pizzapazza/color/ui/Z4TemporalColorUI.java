@@ -449,4 +449,9 @@ public class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI<Z4Temporal
     this.ctx.drawImage(offscreen, 0, 0);
     this.ctx.restore();
   }
+  
+  @Override
+  public void dispose() {
+    this.disposeDevicePixelRatio();
+  }
 }

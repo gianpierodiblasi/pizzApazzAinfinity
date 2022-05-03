@@ -205,4 +205,8 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
     this.text.value = "" + value.getValue();
     return (T) this;
   }
+
+  @Override
+  public void dispose() {
+  }
 }

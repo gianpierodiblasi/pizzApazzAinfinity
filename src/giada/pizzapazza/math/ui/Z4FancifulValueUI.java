@@ -310,4 +310,8 @@ public class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI<Z4Fanciful
         return null;
     }
   }
+  
+  @Override
+  public void dispose() {
+  }
 }

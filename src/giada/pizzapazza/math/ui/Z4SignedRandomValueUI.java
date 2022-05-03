@@ -226,4 +226,8 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
     }
     return this.value;
   }
+
+  @Override
+  public void dispose() {
+  }
 }

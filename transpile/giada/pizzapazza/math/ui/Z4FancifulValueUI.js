@@ -269,4 +269,7 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
         return null;
     }
   }
+
+   dispose() {
+  }
 }

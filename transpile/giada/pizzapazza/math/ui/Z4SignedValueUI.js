@@ -174,4 +174,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
     this.text.value = "" + value.getValue();
     return this;
   }
+
+   dispose() {
+  }
 }

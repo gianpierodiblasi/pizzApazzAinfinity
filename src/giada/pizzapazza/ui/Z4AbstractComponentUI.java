@@ -56,12 +56,26 @@ public abstract class Z4AbstractComponentUI {
     }
   }
 
+  /**
+   * Disposes the monitoring of the device pixel ratio changes
+   */
+  protected void disposeDevicePixelRatio() {
+    if ($exists(window.matchMedia)) {
+      window.$matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").removeEventListener("change", this.devicePixelRatioListener);
+    }
+  }
+
   private void addDevicePixelRatioListener() {
     $Object options = new $Object();
     options.$set("once", true);
     window.$matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
   }
 
+  /**
+   * Disposes the component
+   */
+  public abstract void dispose();
+  
   /**
    * Selects a child of this component
    *

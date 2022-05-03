@@ -92,4 +92,8 @@ public class Z4ColorUI extends Z4AbstractComponentWithValueUI<Z4Color> {
 
     return (T) this;
   }
+  
+  @Override
+  public void dispose() {
+  }
 }

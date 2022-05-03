@@ -383,10 +383,25 @@ class Z4AbstractComponentUI {
     }
   }
 
+  /**
+   * Disposes the monitoring of the device pixel ratio changes
+   */
+   disposeDevicePixelRatio() {
+    if (window.matchMedia) {
+      window.matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").removeEventListener("change", this.devicePixelRatioListener);
+    }
+  }
+
    addDevicePixelRatioListener() {
     let options = new Object();
     options["once"] = true;
     window.matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
+  }
+
+  /**
+   * Disposes the component
+   */
+   dispose() {
   }
 
   /**
@@ -1922,6 +1937,9 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
     this.text.value = "" + value.getValue();
     return this;
   }
+
+   dispose() {
+  }
 }
 /**
  * The component to edit a signed random value
@@ -2125,6 +2143,9 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
         break;
     }
     return this.value;
+  }
+
+   dispose() {
   }
 }
 /**
@@ -2398,6 +2419,9 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
         return null;
     }
   }
+
+   dispose() {
+  }
 }
 /**
  * The component to edit a rotation
@@ -2531,6 +2555,9 @@ class Z4RotationUI extends Z4AbstractComponentWithValueUI {
     this.startAngle.setValue(new Z4SignedValue().setValue(this.value.getStartAngle()));
     this.angle.setValue(this.value.getAngle());
     return this;
+  }
+
+   dispose() {
   }
 }
 /**
@@ -3534,6 +3561,9 @@ class Z4ColorUI extends Z4AbstractComponentWithValueUI {
     this.formRangeLabel.innerText = this.formRange.value;
     return this;
   }
+
+   dispose() {
+  }
 }
 /**
  * The component to show a gradient color
@@ -3814,6 +3844,10 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
     this.ctx.fillRect(0, 0, Z4GradientColorUI.WIDTH, Z4GradientColorUI.HEIGHT);
     this.ctx.drawImage(offscreen, 0, 0);
     this.ctx.restore();
+  }
+
+   dispose() {
+    this.disposeDevicePixelRatio();
   }
 }
 /**
@@ -4319,6 +4353,10 @@ class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI {
     this.ctx.fillRect(0, 0, Z4TemporalColorUI.WIDTH, Z4TemporalColorUI.HEIGHT);
     this.ctx.drawImage(offscreen, 0, 0);
     this.ctx.restore();
+  }
+
+   dispose() {
+    this.disposeDevicePixelRatio();
   }
 }
 /**
@@ -5120,5 +5158,9 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
     this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
     this.ctx.drawImage(offscreen, 0, 0);
     this.ctx.restore();
+  }
+
+   dispose() {
+    this.disposeDevicePixelRatio();
   }
 }

@@ -77,4 +77,7 @@ class Z4ColorUI extends Z4AbstractComponentWithValueUI {
     this.formRangeLabel.innerText = this.formRange.value;
     return this;
   }
+
+   dispose() {
+  }
 }

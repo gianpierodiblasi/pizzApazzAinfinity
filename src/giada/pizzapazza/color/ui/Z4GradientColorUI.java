@@ -335,4 +335,9 @@ public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4Gradient
     this.ctx.drawImage(offscreen, 0, 0);
     this.ctx.restore();
   }
+  
+  @Override
+  public void dispose() {
+    this.disposeDevicePixelRatio();
+  }
 }

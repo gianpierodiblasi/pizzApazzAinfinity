@@ -201,4 +201,7 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
     }
     return this.value;
   }
+
+   dispose() {
+  }
 }
