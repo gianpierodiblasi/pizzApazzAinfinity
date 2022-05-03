@@ -23,9 +23,9 @@ import simulation.js.$Object;
  */
 public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
 
-  private final Z4FancifulValue intensity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(15).setSign(Z4Sign.POSITIVE));
-  private final Z4FancifulValue multiplicity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(1).setSign(Z4Sign.POSITIVE));
-  private final Z4FancifulValue push = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE));
+  private Z4FancifulValue intensity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(15).setSign(Z4Sign.POSITIVE));
+  private Z4FancifulValue multiplicity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(1).setSign(Z4Sign.POSITIVE));
+  private Z4FancifulValue push = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE));
 
   private int currentMultiplicityCounter;
   private int currentMultiplicityTotal;
@@ -58,6 +58,17 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
   }
 
   /**
+   * Sets the intensity
+   *
+   * @param intensity The intensity
+   * @return This Z4Stamper
+   */
+  public Z4Stamper setIntensity(Z4FancifulValue intensity) {
+    this.intensity = intensity;
+    return this;
+  }
+
+  /**
    * Returns the multiplicity
    *
    * @return The multiplicity
@@ -67,12 +78,34 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
   }
 
   /**
+   * Sets the multiplicity
+   *
+   * @param multiplicity The multiplicity
+   * @return This Z4Stamper
+   */
+  public Z4Stamper setMultiplicity(Z4FancifulValue multiplicity) {
+    this.multiplicity = multiplicity;
+    return this;
+  }
+
+  /**
    * Returns the push
    *
    * @return The push
    */
   public Z4FancifulValue getPush() {
     return this.push;
+  }
+
+  /**
+   * Sets the push
+   *
+   * @param push The push
+   * @return This Z4Stamper
+   */
+  public Z4Stamper setPush(Z4FancifulValue push) {
+    this.push = push;
+    return this;
   }
 
   @Override

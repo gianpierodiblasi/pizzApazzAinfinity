@@ -31,8 +31,6 @@ class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI {
 
    key = new Date().getTime() + "_" + parseInt(1000 * Math.random());
 
-   devicePixelRatioListener = null;
-
    mouseDown = false;
 
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4TemporalColorUI.html");
@@ -46,7 +44,7 @@ class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI {
    */
   constructor() {
     super(Z4TemporalColorUI.UI);
-    this.initDevicePixelRatio();
+    this.initDevicePixelRatio(() => this.drawCanvas(1));
     this.querySelector(".temporal-inverted").onclick = (event) => this.inverted(true, false);
     this.querySelector(".spatial-inverted").onclick = (event) => this.inverted(false, true);
     this.querySelector(".temporal-negative").onclick = (event) => {
@@ -137,22 +135,6 @@ class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI {
     };
     this.querySelector(".negative").parentElement.appendChild(document.createElement("li")).appendChild(this.del);
     this.setValue(new Z4TemporalColor());
-  }
-
-   initDevicePixelRatio() {
-    if (window.matchMedia) {
-      this.devicePixelRatioListener = () => {
-        this.drawCanvas(1);
-        this.addDevicePixelRatioListener();
-      };
-      this.addDevicePixelRatioListener();
-    }
-  }
-
-   addDevicePixelRatioListener() {
-    let options = new Object();
-    options["once"] = true;
-    window.matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
   }
 
    addColor(x, y) {

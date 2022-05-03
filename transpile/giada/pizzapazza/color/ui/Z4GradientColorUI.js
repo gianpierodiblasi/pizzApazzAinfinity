@@ -25,8 +25,6 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
 
    key = new Date().getTime() + "_" + parseInt(1000 * Math.random());
 
-   devicePixelRatioListener = null;
-
    mouseDown = false;
 
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4GradientColorUI.html");
@@ -40,7 +38,7 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
    */
   constructor() {
     super(Z4GradientColorUI.UI);
-    this.initDevicePixelRatio();
+    this.initDevicePixelRatio(() => this.drawCanvas());
     this.querySelector(".gradient-inverted").onclick = (event) => {
       this.setValue(this.value.inverted());
       this.onchange(this.value);
@@ -134,22 +132,6 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
     };
     this.querySelector(".negative").parentElement.appendChild(document.createElement("li")).appendChild(this.del);
     this.setValue(new Z4GradientColor());
-  }
-
-   initDevicePixelRatio() {
-    if (window.matchMedia) {
-      this.devicePixelRatioListener = () => {
-        this.drawCanvas();
-        this.addDevicePixelRatioListener();
-      };
-      this.addDevicePixelRatioListener();
-    }
-  }
-
-   addDevicePixelRatioListener() {
-    let options = new Object();
-    options["once"] = true;
-    window.matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
   }
 
    addColor(x) {

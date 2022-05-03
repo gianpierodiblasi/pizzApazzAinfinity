@@ -7,6 +7,8 @@ class Z4AbstractComponentUI {
 
    root = null;
 
+   devicePixelRatioListener = null;
+
   /**
    * Creates a Z4AbstractComponentUI
    *
@@ -21,6 +23,28 @@ class Z4AbstractComponentUI {
       let element = list.item(index);
       element.innerHTML = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text"));
     }
+  }
+
+  /**
+   * Inizializes the monitoring of the device pixel ratio changes
+   *
+   * @param onDevicePixelRatioChange The method called on device pixel ratio
+   * changes
+   */
+   initDevicePixelRatio(onDevicePixelRatioChange) {
+    if (window.matchMedia) {
+      this.devicePixelRatioListener = () => {
+        onDevicePixelRatioChange();
+        this.addDevicePixelRatioListener();
+      };
+      this.addDevicePixelRatioListener();
+    }
+  }
+
+   addDevicePixelRatioListener() {
+    let options = new Object();
+    options["once"] = true;
+    window.matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
   }
 
   /**

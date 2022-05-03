@@ -6,8 +6,12 @@ import def.dom.NodeList;
 import def.js.Date;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import simulation.dom.$HTMLElement;
+import simulation.js.$Apply_0_Void;
+import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.parseInt;
+import static simulation.js.$Globals.window;
+import simulation.js.$Object;
 
 /**
  * The abstract class of all UI components
@@ -17,6 +21,7 @@ import static simulation.js.$Globals.parseInt;
 public abstract class Z4AbstractComponentUI {
 
   private final $HTMLElement root;
+  private $Apply_0_Void devicePixelRatioListener;
 
   /**
    * Creates a Z4AbstractComponentUI
@@ -33,6 +38,28 @@ public abstract class Z4AbstractComponentUI {
       HTMLElement element = (HTMLElement) list.item(index);
       element.innerHTML = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text"));
     }
+  }
+
+  /**
+   * Inizializes the monitoring of the device pixel ratio changes
+   *
+   * @param onDevicePixelRatioChange The method called on device pixel ratio
+   * changes
+   */
+  protected void initDevicePixelRatio($Apply_0_Void onDevicePixelRatioChange) {
+    if ($exists(window.matchMedia)) {
+      this.devicePixelRatioListener = () -> {
+        onDevicePixelRatioChange.$apply();
+        this.addDevicePixelRatioListener();
+      };
+      this.addDevicePixelRatioListener();
+    }
+  }
+
+  private void addDevicePixelRatioListener() {
+    $Object options = new $Object();
+    options.$set("once", true);
+    window.$matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
   }
 
   /**

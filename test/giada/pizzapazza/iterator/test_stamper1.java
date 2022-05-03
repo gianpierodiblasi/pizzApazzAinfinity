@@ -1,11 +1,20 @@
 package giada.pizzapazza.iterator;
 
+import def.js.Array;
+import def.js.JSON;
 import giada.pizzapazza.iterator.ui.Z4StamperUI;
+import giada.pizzapazza.math.Z4FancifulValue;
+import giada.pizzapazza.math.Z4Point;
+import giada.pizzapazza.math.Z4Rotation;
+import giada.pizzapazza.math.Z4SignedRandomValue;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.setting.Z4Setting;
+import java.util.function.BiFunction;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$OffscreenCanvas;
+import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.$typeof;
 import static simulation.js.$Globals.document;
 
 /**
@@ -48,7 +57,39 @@ public class test_stamper1 {
 //    canvasCtx.drawImage(offscreen, 0, 0);
 //
     Z4StamperUI ui = new Z4StamperUI();
-    ui.appendToElement(document.getElementById("stamper"));
+    ui.appendToElement(document.getElementById("test1"));
+    ui.oninput = (value) -> document.getElementById("test2").textContent = "ONINPUT " + test_stamper1.stringify(value);
+    ui.onchange = (value) -> document.getElementById("test2").textContent = "ONCHANGE " + test_stamper1.stringify(value);
+    document.getElementById("test2").textContent = test_stamper1.stringify(ui.getValue());
+  }
+
+  private static String stringify(Object object) {
+    @SuppressWarnings("StringEquality")
+    BiFunction<String, Object, Object> replacer = (k, v) -> {
+      if (!$exists(k)) {
+        return v;
+      } else if (k == "bezierCurve") { // JS equality for strings
+        return null;
+      } else if ($typeof(v, "number")) {
+        return v;
+      } else if ($typeof(v, "boolean")) {
+        return v;
+      } else if (Array.isArray(v)) {
+        return v;
+      } else if (v instanceof Z4Rotation) {
+        return v;
+      } else if (v instanceof Z4FancifulValue) {
+        return v;
+      } else if (v instanceof Z4SignedRandomValue) {
+        return v;
+      } else if (v instanceof Z4Point) {
+        return v;
+      } else {
+        return JSON.stringify(v).replaceAll("\"", "").replaceAll("\n", "");
+      }
+    };
+
+    return JSON.stringify(object, replacer, "\t").replaceAll("\"", "");
   }
 
   private test_stamper1() {

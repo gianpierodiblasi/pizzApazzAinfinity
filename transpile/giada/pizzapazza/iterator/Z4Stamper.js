@@ -41,6 +41,17 @@ class Z4Stamper extends Z4PointIterator {
   }
 
   /**
+   * Sets the intensity
+   *
+   * @param intensity The intensity
+   * @return This Z4Stamper
+   */
+   setIntensity(intensity) {
+    this.intensity = intensity;
+    return this;
+  }
+
+  /**
    * Returns the multiplicity
    *
    * @return The multiplicity
@@ -50,12 +61,34 @@ class Z4Stamper extends Z4PointIterator {
   }
 
   /**
+   * Sets the multiplicity
+   *
+   * @param multiplicity The multiplicity
+   * @return This Z4Stamper
+   */
+   setMultiplicity(multiplicity) {
+    this.multiplicity = multiplicity;
+    return this;
+  }
+
+  /**
    * Returns the push
    *
    * @return The push
    */
    getPush() {
     return this.push;
+  }
+
+  /**
+   * Sets the push
+   *
+   * @param push The push
+   * @return This Z4Stamper
+   */
+   setPush(push) {
+    this.push = push;
+    return this;
   }
 
    next() {

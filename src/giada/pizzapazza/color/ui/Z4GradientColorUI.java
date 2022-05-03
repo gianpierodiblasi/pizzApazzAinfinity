@@ -44,7 +44,6 @@ public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4Gradient
   private final Z4ColorUI z4ColorUI = new Z4ColorUI();
 
   private final String key = new Date().getTime() + "_" + parseInt(1000 * Math.random());
-  private $Apply_0_Void devicePixelRatioListener;
   private boolean mouseDown;
 
   private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4GradientColorUI.html");
@@ -56,7 +55,7 @@ public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4Gradient
    */
   public Z4GradientColorUI() {
     super(Z4GradientColorUI.UI);
-    this.initDevicePixelRatio();
+    this.initDevicePixelRatio(() -> this.drawCanvas());
 
     this.querySelector(".gradient-inverted").onclick = (event) -> {
       this.setValue(this.value.inverted());
@@ -168,22 +167,6 @@ public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4Gradient
     this.querySelector(".negative").parentElement.appendChild(document.createElement("li")).appendChild(this.del);
 
     this.setValue(new Z4GradientColor());
-  }
-
-  private void initDevicePixelRatio() {
-    if ($exists(window.matchMedia)) {
-      this.devicePixelRatioListener = () -> {
-        this.drawCanvas();
-        this.addDevicePixelRatioListener();
-      };
-      this.addDevicePixelRatioListener();
-    }
-  }
-
-  private void addDevicePixelRatioListener() {
-    $Object options = new $Object();
-    options.$set("once", true);
-    window.$matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
   }
 
   private void addColor(double x) {

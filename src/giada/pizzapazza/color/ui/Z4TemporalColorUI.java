@@ -22,12 +22,9 @@ import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$HTMLElement;
 import simulation.dom.$OffscreenCanvas;
-import simulation.js.$Apply_0_Void;
-import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.parseInt;
 import static simulation.js.$Globals.window;
-import simulation.js.$Object;
 
 /**
  * The component to show a temporal color
@@ -50,7 +47,6 @@ public class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI<Z4Temporal
   private final Z4ColorUI z4ColorUI = new Z4ColorUI();
 
   private final String key = new Date().getTime() + "_" + parseInt(1000 * Math.random());
-  private $Apply_0_Void devicePixelRatioListener;
   private boolean mouseDown;
 
   private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4TemporalColorUI.html");
@@ -62,7 +58,7 @@ public class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI<Z4Temporal
    */
   public Z4TemporalColorUI() {
     super(Z4TemporalColorUI.UI);
-    this.initDevicePixelRatio();
+    this.initDevicePixelRatio(() -> this.drawCanvas(1));
 
     this.querySelector(".temporal-inverted").onclick = (event) -> this.inverted(true, false);
     this.querySelector(".spatial-inverted").onclick = (event) -> this.inverted(false, true);
@@ -173,22 +169,6 @@ public class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI<Z4Temporal
     this.querySelector(".negative").parentElement.appendChild(document.createElement("li")).appendChild(this.del);
 
     this.setValue(new Z4TemporalColor());
-  }
-
-  private void initDevicePixelRatio() {
-    if ($exists(window.matchMedia)) {
-      this.devicePixelRatioListener = () -> {
-        this.drawCanvas(1);
-        this.addDevicePixelRatioListener();
-      };
-      this.addDevicePixelRatioListener();
-    }
-  }
-
-  private void addDevicePixelRatioListener() {
-    $Object options = new $Object();
-    options.$set("once", true);
-    window.$matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
   }
 
   private void addColor(double x, double y) {
