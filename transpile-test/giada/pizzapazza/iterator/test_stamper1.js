@@ -20,17 +20,6 @@ class test_stamper1 {
       Z4Setting.setMode(document.getElementById("mode").value);
       return null;
     };
-    let canvas = document.getElementById("canvas");
-    let canvasCtx = canvas.getContext("2d");
-    let offscreen = new OffscreenCanvas(canvas.width, canvas.height);
-    let offscreenCtx = offscreen.getContext("2d");
-    // Z4Stamper stamper = new Z4Stamper();
-    // stamper.setRotation(new Z4FancifulValue().setRandom(Z4Sign.RANDOM, Z4RandomValue.classic(45)), Z4Rotation.FIXED);
-    // stamper.drawDemo(offscreenCtx, canvas.width, canvas.height);
-    // 
-    // canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-    // canvasCtx.drawImage(offscreen, 0, 0);
-    // 
     let ui = new Z4StamperUI();
     ui.appendToElement(document.getElementById("test1"));
     ui.oninput = (value) => document.getElementById("test2").textContent = "ONINPUT " + test_stamper1.stringify(value);

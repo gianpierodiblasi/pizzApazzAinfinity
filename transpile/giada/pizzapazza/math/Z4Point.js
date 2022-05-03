@@ -61,6 +61,17 @@ class Z4Point {
   }
 
   /**
+   * Sets the intensity
+   *
+   * @param intensity The intensity
+   * @return This Z4Point
+   */
+   setIntensity(intensity) {
+    this.intensity = intensity;
+    return this;
+  }
+
+  /**
    * Returns the lighting
    *
    * @return The lighting

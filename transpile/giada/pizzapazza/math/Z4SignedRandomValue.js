@@ -140,7 +140,7 @@ class Z4SignedRandomValue {
         } else {
           this.step++;
         }
-        return value * this.bezierCurve.get(this.step / this.length).y;
+        return this.value * this.bezierCurve.get(this.step / this.length).y;
       case 2:
         if (this.step === this.length) {
           this.step = 0;
@@ -149,7 +149,7 @@ class Z4SignedRandomValue {
         } else {
           this.step++;
         }
-        return value * ((this.nextRandom - this.prevRandom) * this.step / this.length + this.prevRandom);
+        return this.value * ((this.nextRandom - this.prevRandom) * this.step / this.length + this.prevRandom);
       case 3:
         if (this.step === this.length) {
           this.step = 0;
@@ -157,7 +157,7 @@ class Z4SignedRandomValue {
         } else {
           this.step++;
         }
-        return value * this.prevRandom;
+        return this.value * this.prevRandom;
     }
   }
 

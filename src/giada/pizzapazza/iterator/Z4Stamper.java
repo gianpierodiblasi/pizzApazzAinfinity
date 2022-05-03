@@ -22,26 +22,26 @@ import simulation.js.$Object;
  * @author gianpiero.di.blasi
  */
 public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
-
+  
   private Z4FancifulValue intensity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(15).setSign(Z4Sign.POSITIVE));
   private Z4FancifulValue multiplicity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(1).setSign(Z4Sign.POSITIVE));
   private Z4FancifulValue push = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE));
-
+  
   private int currentMultiplicityCounter;
   private int currentMultiplicityTotal;
   private double currentPush;
-
+  
   @Override
   public boolean draw(Z4Action action, double x, double y) {
     if (action == Z4Action.START) {
       this.currentMultiplicityCounter = 0;
       this.currentMultiplicityTotal = parseInt(this.multiplicity.next(0));
       this.currentPush = this.push.next(0);
-
+      
       this.P.$set("x", x);
       this.P.$set("y", y);
       this.hasNext = true;
-
+      
       return true;
     } else {
       return false;
@@ -107,7 +107,7 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
     this.push = push;
     return this;
   }
-
+  
   @Override
   public Z4Point next() {
     if (!this.hasNext) {
@@ -115,19 +115,19 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
     } else {
       this.currentMultiplicityCounter++;
       this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
-
+      
       double angle = this.rotation.next(0);
       if ($exists(this.currentPush)) {
         Z4Vector pushed = Z4Vector.fromVector(this.P.$get("x"), this.P.$get("y"), this.currentPush, angle);
-        this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), this.intensity.next(0), angle));
+        this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), 1, angle));
       } else {
-        this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P.$get("x"), this.P.$get("y"), this.intensity.next(0), angle));
+        this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P.$get("x"), this.P.$get("y"), 1, angle));
       }
       this.rotation.nextSide(this.z4Point, null);
-
+      
       if (this.progression == Z4Progression.TEMPORAL) {
         this.z4Point.setLighting(this.lighting);
-
+        
         double colorPosition = this.z4Point.getColorPosition();
         colorPosition = colorPosition == -1 ? 0 : colorPosition + this.temporalStepProgression;
         if (colorPosition > 1) {
@@ -141,19 +141,19 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
         this.z4Point.setLighting(this.lighting);
         this.z4Point.setColorPosition(Math.random());
       }
-
-      return this.z4Point;
+      
+      return this.z4Point.setIntensity(this.intensity.next(0));
     }
   }
-
+  
   @Override
   public void drawDemo($CanvasRenderingContext2D context, double width, double height) {
     Z4ArrowPainter arrowPainter = new Z4ArrowPainter();
     Z4GradientColor gradientColor = new Z4GradientColor();
-
+    
     this.initDraw(width, height).forEach(point -> {
       this.draw(Z4Action.START, point.$get("x"), point.$get("y"));
-
+      
       if ($exists(this.currentPush) && !$exists(this.currentMultiplicityCounter)) {
         context.save();
         context.lineWidth = 1;
@@ -163,11 +163,11 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
         context.fill();
         context.restore();
       }
-
+      
       Z4Point next;
       while ((next = this.next()) != null) {
         Z4Vector vector = next.getZ4Vector();
-
+        
         context.save();
         context.translate(vector.getX0(), vector.getY0());
         context.rotate(vector.getPhase());
@@ -176,7 +176,7 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
       }
     });
   }
-
+  
   private Array<$Object> initDraw(double w, double h) {
     Array<$Object> array = new Array<>();
     for (int x = 50; x <= w - 50; x += 100) {

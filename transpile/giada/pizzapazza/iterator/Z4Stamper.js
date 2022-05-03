@@ -100,9 +100,9 @@ class Z4Stamper extends Z4PointIterator {
       let angle = this.rotation.next(0);
       if (this.currentPush) {
         let pushed = Z4Vector.fromVector(this.P["x"], this.P["y"], this.currentPush, angle);
-        this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), this.intensity.next(0), angle));
+        this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), 1, angle));
       } else {
-        this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P["x"], this.P["y"], this.intensity.next(0), angle));
+        this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P["x"], this.P["y"], 1, angle));
       }
       this.rotation.nextSide(this.z4Point, null);
       if (this.progression === Z4Progression.TEMPORAL) {
@@ -120,7 +120,7 @@ class Z4Stamper extends Z4PointIterator {
         this.z4Point.setLighting(this.lighting);
         this.z4Point.setColorPosition(Math.random());
       }
-      return this.z4Point;
+      return this.z4Point.setIntensity(this.intensity.next(0));
     }
   }
 
