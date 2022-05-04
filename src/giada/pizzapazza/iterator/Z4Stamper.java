@@ -1,6 +1,7 @@
 package giada.pizzapazza.iterator;
 
 import def.js.Array;
+import giada.pizzapazza.color.Z4AbstractColor;
 import giada.pizzapazza.color.Z4GradientColor;
 import giada.pizzapazza.color.Z4Lighting;
 import giada.pizzapazza.color.Z4Progression;
@@ -157,7 +158,7 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
       if ($exists(this.currentPush) && !$exists(this.currentMultiplicityCounter)) {
         context.save();
         context.lineWidth = 1;
-        context.fillStyle = this.$getColor("black");
+        context.fillStyle = Z4AbstractColor.$getFillStyle("black");
         context.beginPath();
         context.arc(this.P.$get("x"), this.P.$get("y"), 2, 0, Z4Math.TWO_PI);
         context.fill();

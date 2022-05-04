@@ -1,12 +1,9 @@
 package giada.pizzapazza.iterator;
 
-import def.dom.CanvasGradient;
-import def.dom.CanvasPattern;
 import giada.pizzapazza.color.Z4Lighting;
 import giada.pizzapazza.color.Z4Progression;
 import giada.pizzapazza.math.Z4Point;
 import giada.pizzapazza.math.Z4Rotation;
-import jsweet.util.union.Union4;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.js.$Object;
 
@@ -126,24 +123,4 @@ public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
    * @param height The height
    */
   public abstract void drawDemo($CanvasRenderingContext2D context, double width, double height);
-
-  /**
-   * Returns the color parameter
-   *
-   * @param color The color
-   * @return The color
-   */
-  protected String getColor(String color) {
-    return color;
-  }
-
-  /**
-   * Utility method to simulate the fill style of a canvas
-   *
-   * @param color The color
-   * @return NOTHING
-   */
-  protected Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getColor(String color) {
-    return null;
-  }
 }

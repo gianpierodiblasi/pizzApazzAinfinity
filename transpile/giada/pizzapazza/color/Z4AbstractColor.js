@@ -133,4 +133,14 @@ class Z4AbstractColor {
     this.b = parseInt(darkeningFactor * this.b);
     return this.init();
   }
+
+  /**
+   * Returns the color parameter
+   *
+   * @param color The color
+   * @return The color
+   */
+  static  getFillStyle(color) {
+    return color;
+  }
 }

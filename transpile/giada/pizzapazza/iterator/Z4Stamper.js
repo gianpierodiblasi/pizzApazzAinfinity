@@ -132,7 +132,7 @@ class Z4Stamper extends Z4PointIterator {
       if (this.currentPush && !this.currentMultiplicityCounter) {
         context.save();
         context.lineWidth = 1;
-        context.fillStyle = this.getColor("black");
+        context.fillStyle = Z4AbstractColor.getFillStyle("black");
         context.beginPath();
         context.arc(this.P["x"], this.P["y"], 2, 0, Z4Math.TWO_PI);
         context.fill();

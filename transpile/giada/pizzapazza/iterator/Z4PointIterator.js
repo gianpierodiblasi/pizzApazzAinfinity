@@ -115,14 +115,4 @@ class Z4PointIterator {
    */
    drawDemo(context, width, height) {
   }
-
-  /**
-   * Returns the color parameter
-   *
-   * @param color The color
-   * @return The color
-   */
-   getColor(color) {
-    return color;
-  }
 }

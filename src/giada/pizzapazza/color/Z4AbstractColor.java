@@ -163,4 +163,24 @@ public abstract class Z4AbstractColor<T extends Z4AbstractColor<T>> {
 
     return this.init();
   }
+
+  /**
+   * Returns the color parameter
+   *
+   * @param color The color
+   * @return The color
+   */
+  public static String getFillStyle(String color) {
+    return color;
+  }
+
+  /**
+   * Utility method to simulate the fill style of a canvas
+   *
+   * @param color The color
+   * @return NOTHING
+   */
+  public static Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getFillStyle(String color) {
+    return null;
+  }
 }
