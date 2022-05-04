@@ -41,6 +41,12 @@ class Z4AbstractComponentUI {
     }
   }
 
+   addDevicePixelRatioListener() {
+    let options = new Object();
+    options["once"] = true;
+    window.matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
+  }
+
   /**
    * Disposes the monitoring of the device pixel ratio changes
    */
@@ -48,12 +54,6 @@ class Z4AbstractComponentUI {
     if (window.matchMedia) {
       window.matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").removeEventListener("change", this.devicePixelRatioListener);
     }
-  }
-
-   addDevicePixelRatioListener() {
-    let options = new Object();
-    options["once"] = true;
-    window.matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
   }
 
   /**

@@ -3,6 +3,7 @@ package giada.pizzapazza.color.ui;
 import def.dom.CanvasGradient;
 import def.dom.CanvasPattern;
 import def.dom.HTMLElement;
+import def.dom.UIEvent;
 import def.js.Date;
 import giada.pizzapazza.Z4Loader;
 import giada.pizzapazza.color.Z4AbstractColor;
@@ -45,6 +46,7 @@ public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4Gradient
   private int selectedIndex;
   private double selectedPosition;
   private boolean mouseDown;
+  private boolean dataChanged;
 
   private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4GradientColorUI.html");
 
@@ -73,13 +75,15 @@ public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4Gradient
     };
 
     if (Z4Loader.touch) {
-      this.canvas.ontouchstart = (event) -> this.onMouseDown(event.changedTouches.$get(0).clientX - this.canvas.getBoundingClientRect().left, event.changedTouches.$get(0).clientY - this.canvas.getBoundingClientRect().top);
-      this.canvas.ontouchmove = (event) -> this.onMouseMove(event.changedTouches.$get(0).clientX - this.canvas.getBoundingClientRect().left, event.changedTouches.$get(0).clientY - this.canvas.getBoundingClientRect().top);
-      this.canvas.ontouchend = (event) -> this.onMouseUp();
+      this.canvas.ontouchstart = (event) -> this.onMouseDown(event, event.changedTouches.$get(0).clientX - this.canvas.getBoundingClientRect().left, event.changedTouches.$get(0).clientY - this.canvas.getBoundingClientRect().top);
+      this.canvas.ontouchmove = (event) -> this.onMouseMove(event, event.changedTouches.$get(0).clientX - this.canvas.getBoundingClientRect().left, event.changedTouches.$get(0).clientY - this.canvas.getBoundingClientRect().top);
+      this.canvas.ontouchend = (event) -> this.onMouseUp(event);
+      this.canvas.ontouchcancel = (event) -> this.onMouseUp(event);
     } else {
-      this.canvas.onmousedown = (event) -> this.onMouseDown(event.clientX - this.canvas.getBoundingClientRect().left, event.clientY - this.canvas.getBoundingClientRect().top);
-      this.canvas.onmousemove = (event) -> this.onMouseMove(event.clientX - this.canvas.getBoundingClientRect().left, event.clientY - this.canvas.getBoundingClientRect().top);
-      this.canvas.onmouseup = (event) -> this.onMouseUp();
+      this.canvas.onmousedown = (event) -> this.onMouseDown(event, event.clientX - this.canvas.getBoundingClientRect().left, event.clientY - this.canvas.getBoundingClientRect().top);
+      this.canvas.onmousemove = (event) -> this.onMouseMove(event, event.clientX - this.canvas.getBoundingClientRect().left, event.clientY - this.canvas.getBoundingClientRect().top);
+      this.canvas.onmouseup = (event) -> this.onMouseUp(event);
+      this.canvas.onmouseleave = (event) -> this.onMouseUp(event);
     }
 
     this.mirroredCheck.id = "mirrored_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
@@ -141,15 +145,20 @@ public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4Gradient
     this.setValue(new Z4GradientColor());
   }
 
-  private Object onMouseMove(double x, double y) {
+  private Object onMouseMove(UIEvent event, double x, double y) {
+    event.stopPropagation();
+
     if (this.mouseDown) {
       double width = this.canvas.clientWidth / (this.value.isMirrored() ? 2 : 1);
 
       if (x < width) {
         double position = x / width;
 
-        if (this.value.getComponents().every((color, index, array) -> Math.abs(position - color.getPosition()) > 0.05)) {
-          ////////////////
+        if (this.value.getComponents().every((color, index, array) -> index == this.selectedIndex || Math.abs(position - color.getPosition()) > 0.05)) {
+          this.dataChanged = true;
+          this.value.move(this.selectedPosition, position);
+          this.drawCanvas(this.selectedIndex);
+          this.oninput.$apply(this.value);
         }
       }
     } else {
@@ -173,57 +182,9 @@ public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4Gradient
 
     return null;
   }
-  
-  //  private void configureSliders(int selected) {
-//      if (Z4Loader.touch) {
-//        input.ontouchstart = (event) -> this.manageEvent(event, true, false, index, input, event.changedTouches.$get(0).clientX);
-//        input.ontouchmove = (event) -> this.manageEvent(event, this.mouseDown, true, index, input, event.changedTouches.$get(0).clientX);
-//        input.ontouchend = (event) -> this.manageEvent(event, false, false, index, input, event.changedTouches.$get(0).clientX);
-//        input.ontouchcancel = (event) -> this.manageEvent(event, false, false, index, input, event.changedTouches.$get(0).clientX);
-//      } else {
-//        input.onmousedown = (event) -> this.manageEvent(event, true, false, index, input, event.clientX);
-//        input.onmousemove = (event) -> this.manageEvent(event, this.mouseDown, true, index, input, event.clientX);
-//        input.onmouseup = (event) -> this.manageEvent(event, false, false, index, input, event.clientX);
-//        input.onmouseleave = (event) -> this.manageEvent(event, false, false, index, input, event.clientX);
-//      }
-//
-//    });
-//  }
-//  private Object manageEvent(UIEvent event, boolean mouseDown, boolean check, int index, $HTMLElement input, double x) {
-//    event.stopPropagation();
-//    if (this.mouseDown && !mouseDown) {
-//      this.onchange.$apply(this.value);
-//    }
-//
-//    this.mouseDown = mouseDown;
-//    if (check && this.mouseDown && index != 0 && index != 1) {
-//      this.moveColor(input, index, x);
-//    }
-//
-//    return null;
-//  }
-//  private void moveColor($HTMLElement input, int idx, double x) {
-//    x -= this.sliders.getBoundingClientRect().left + 8;
-//    double width = this.canvas.clientWidth / (this.value.isMirrored() ? 2 : 1);
-//
-//    if (x < width) {
-//      double position = x / width;
-//
-//      if (this.value.getComponents().every((color, index, array) -> index == idx || Math.abs(position - color.getPosition()) > 0.05)) {
-//        double oldPosition = parseFloat(input.value);
-//        double left = width * position - this.getShift(idx);
-//
-//        input.setAttribute("value", "" + position);
-//        input.style.left = left + "px";
-//
-//        this.value.move(oldPosition, position);
-//        this.drawCanvas();
-//        this.oninput.$apply(this.value);
-//      }
-//    }
-//  }
 
-  private Object onMouseDown(double x, double y) {
+  private Object onMouseDown(UIEvent event, double x, double y) {
+    event.stopPropagation();
     double width = this.canvas.clientWidth / (this.value.isMirrored() ? 2 : 1);
 
     if (x < width) {
@@ -231,6 +192,7 @@ public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4Gradient
 
       if (this.value.getComponents().every((color, index, array) -> Math.abs(position - color.getPosition()) > 0.05)) {
         this.value.generateColor(position);
+        this.canvas.style.cursor = "ew-resize";
         this.drawCanvas(this.value.getComponents().length - 1);
         this.onchange.$apply(this.value);
       } else {
@@ -246,8 +208,13 @@ public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4Gradient
     return null;
   }
 
-  private Object onMouseUp() {
+  private Object onMouseUp(UIEvent event) {
+    event.stopPropagation();
+    if (this.dataChanged) {
+      this.onchange.$apply(this.value);
+    }
     this.mouseDown = false;
+    this.dataChanged = false;
     return null;
   }
 

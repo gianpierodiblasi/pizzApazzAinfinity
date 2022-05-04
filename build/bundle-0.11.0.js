@@ -383,6 +383,12 @@ class Z4AbstractComponentUI {
     }
   }
 
+   addDevicePixelRatioListener() {
+    let options = new Object();
+    options["once"] = true;
+    window.matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
+  }
+
   /**
    * Disposes the monitoring of the device pixel ratio changes
    */
@@ -390,12 +396,6 @@ class Z4AbstractComponentUI {
     if (window.matchMedia) {
       window.matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").removeEventListener("change", this.devicePixelRatioListener);
     }
-  }
-
-   addDevicePixelRatioListener() {
-    let options = new Object();
-    options["once"] = true;
-    window.matchMedia("(resolution: " + window.devicePixelRatio + "dppx)").addEventListener("change", this.devicePixelRatioListener, options);
   }
 
   /**
@@ -2750,6 +2750,16 @@ class Z4AbstractColor {
     this.b = parseInt(darkeningFactor * this.b);
     return this.init();
   }
+
+  /**
+   * Returns the color parameter
+   *
+   * @param color The color
+   * @return The color
+   */
+  static  getFillStyle(color) {
+    return color;
+  }
 }
 /**
  * The color
@@ -3578,8 +3588,6 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
 
    chessboard = this.ctx.createPattern(Z4ImageFactory.get("CHESSBOARD"), "repeat");
 
-   sliders = this.querySelector(".sliders");
-
    formRangeLabel = this.querySelector(".form-range-label");
 
    mirroredCheck = this.querySelector(".mirrored-check");
@@ -3590,22 +3598,24 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
 
    z4ColorUI = new Z4ColorUI();
 
-   key = new Date().getTime() + "_" + parseInt(1000 * Math.random());
+   resizeObserver = new ResizeObserver(() => this.drawCanvas(this.selectedIndex));
+
+   selectedIndex = 0;
+
+   selectedPosition = 0.0;
 
    mouseDown = false;
 
+   dataChanged = false;
+
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4GradientColorUI.html");
-
-  static  WIDTH = 500;
-
-  static  HEIGHT = 50;
 
   /**
    * Creates a Z4GradientColorUI
    */
   constructor() {
     super(Z4GradientColorUI.UI);
-    this.initDevicePixelRatio(() => this.drawCanvas());
+    this.initDevicePixelRatio(() => this.drawCanvas(this.selectedIndex));
     this.querySelector(".gradient-inverted").onclick = (event) => {
       this.setValue(this.value.inverted());
       this.onchange(this.value);
@@ -3620,66 +3630,48 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
       Z4GradientColorGuidedTourUI.show();
       return null;
     };
-    this.canvas.style.border = "1px dashed gray";
-    this.canvas.style.width = Z4GradientColorUI.WIDTH + "px";
-    this.canvas.style.height = Z4GradientColorUI.HEIGHT + "px";
-    this.sliders.onmousemove = (event) => {
-      this.sliders.style.cursor = "default";
-      let x = event.clientX - this.sliders.getBoundingClientRect().left - 8;
-      let width = Z4GradientColorUI.WIDTH / (this.value.isMirrored() ? 2 : 1);
-      if (x < width) {
-        let position = x / width;
-        if (this.value.getComponents().every((color, index, array) => Math.abs(position - color.getPosition()) > 0.05)) {
-          this.sliders.style.cursor = "pointer";
-        }
-      }
-      return null;
-    };
     if (Z4Loader.touch) {
-      this.sliders.ontouchstart = (event) => {
-        this.addColor(event.changedTouches[0].clientX);
-        return null;
-      };
+      this.canvas.ontouchstart = (event) => this.onMouseDown(event, event.changedTouches[0].clientX - this.canvas.getBoundingClientRect().left, event.changedTouches[0].clientY - this.canvas.getBoundingClientRect().top);
+      this.canvas.ontouchmove = (event) => this.onMouseMove(event, event.changedTouches[0].clientX - this.canvas.getBoundingClientRect().left, event.changedTouches[0].clientY - this.canvas.getBoundingClientRect().top);
+      this.canvas.ontouchend = (event) => this.onMouseUp(event);
+      this.canvas.ontouchcancel = (event) => this.onMouseUp(event);
     } else {
-      this.sliders.onmousedown = (event) => {
-        this.addColor(event.clientX);
-        return null;
-      };
+      this.canvas.onmousedown = (event) => this.onMouseDown(event, event.clientX - this.canvas.getBoundingClientRect().left, event.clientY - this.canvas.getBoundingClientRect().top);
+      this.canvas.onmousemove = (event) => this.onMouseMove(event, event.clientX - this.canvas.getBoundingClientRect().left, event.clientY - this.canvas.getBoundingClientRect().top);
+      this.canvas.onmouseup = (event) => this.onMouseUp(event);
+      this.canvas.onmouseleave = (event) => this.onMouseUp(event);
     }
     this.mirroredCheck.id = "mirrored_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
     this.querySelector(".mirrored-label").setAttribute("for", this.mirroredCheck.id);
     this.mirroredCheck.onchange = (event) => {
       this.value.setMirrored(this.mirroredCheck.checked);
-      this.configureSliders(-1);
-      this.drawCanvas();
+      this.drawCanvas(this.selectedIndex);
       this.onchange(this.value);
       return null;
     };
     this.formRange.oninput = (event) => {
       this.formRangeLabel.innerText = this.formRange.value;
       this.value.setRipple(this.formRange.valueAsNumber);
-      this.drawCanvas();
+      this.drawCanvas(this.selectedIndex);
       this.oninput(this.value);
       return null;
     };
     this.formRange.onchange = (event) => {
       this.formRangeLabel.innerText = this.formRange.value;
       this.value.setRipple(this.formRange.valueAsNumber);
-      this.drawCanvas();
+      this.drawCanvas(this.selectedIndex);
       this.onchange(this.value);
       return null;
     };
     this.z4ColorUI.appendToElement(this.querySelector(".canvas-container"));
     this.z4ColorUI.oninput = (z4Color) => {
-      let input = this.querySelector(".sliders .form-check-input:checked");
-      this.value.addOrUpdateColor(parseFloat(input.value), z4Color.getARGB());
-      this.drawCanvas();
+      this.value.addOrUpdateColor(this.selectedPosition, z4Color.getARGB());
+      this.drawCanvas(this.selectedIndex);
       this.oninput(this.value);
     };
     this.z4ColorUI.onchange = (z4Color) => {
-      let input = this.querySelector(".sliders .form-check-input:checked");
-      this.value.addOrUpdateColor(parseFloat(input.value), z4Color.getARGB());
-      this.drawCanvas();
+      this.value.addOrUpdateColor(this.selectedPosition, z4Color.getARGB());
+      this.drawCanvas(this.selectedIndex);
       this.onchange(this.value);
     };
     this.del.setAttribute("class", "dropdown-item delete-color");
@@ -3688,31 +3680,80 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
     this.del.innerHTML = Z4MessageFactory.get("DELETE");
     this.del.onclick = (event) => {
       Z4ModalMessageUI.showQuestion(Z4MessageFactory.get("TITLE"), Z4MessageFactory.get("DELETE_COLOR_MESSAGE"), () => {
-        let input = this.querySelector(".sliders .form-check-input:checked");
-        this.value.removeColor(parseFloat(input.value));
-        this.configureSliders(-1);
-        this.drawCanvas();
+        this.value.removeColor(this.selectedPosition);
+        this.drawCanvas(0);
         this.onchange(this.value);
       }, () => {
       }, null, null);
       return null;
     };
     this.querySelector(".negative").parentElement.appendChild(document.createElement("li")).appendChild(this.del);
+    this.resizeObserver.observe(this.canvas);
     this.setValue(new Z4GradientColor());
   }
 
-   addColor(x) {
-    x -= this.sliders.getBoundingClientRect().left + 8;
-    let width = Z4GradientColorUI.WIDTH / (this.value.isMirrored() ? 2 : 1);
+   onMouseMove(event, x, y) {
+    event.stopPropagation();
+    if (this.mouseDown) {
+      let width = this.canvas.clientWidth / (this.value.isMirrored() ? 2 : 1);
+      if (x < width) {
+        let position = x / width;
+        if (this.value.getComponents().every((color, index, array) => index === this.selectedIndex || Math.abs(position - color.getPosition()) > 0.05)) {
+          this.dataChanged = true;
+          this.value.move(this.selectedPosition, position);
+          this.drawCanvas(this.selectedIndex);
+          this.oninput(this.value);
+        }
+      }
+    } else {
+      this.canvas.style.cursor = "default";
+      let width = this.canvas.clientWidth / (this.value.isMirrored() ? 2 : 1);
+      if (x < width) {
+        let position = x / width;
+        if (this.value.getComponents().every((color, index, array) => Math.abs(position - color.getPosition()) > 0.05)) {
+          this.canvas.style.cursor = "pointer";
+        } else {
+          this.value.getComponents().forEach((color, index, array) => {
+            if (index !== 0 && index !== 1 && Z4Math.distance(x, y, color.getPosition() * width, this.canvas.clientHeight / 2) < 8) {
+              this.canvas.style.cursor = "ew-resize";
+            }
+          });
+        }
+      }
+    }
+    return null;
+  }
+
+   onMouseDown(event, x, y) {
+    event.stopPropagation();
+    let width = this.canvas.clientWidth / (this.value.isMirrored() ? 2 : 1);
     if (x < width) {
       let position = x / width;
       if (this.value.getComponents().every((color, index, array) => Math.abs(position - color.getPosition()) > 0.05)) {
         this.value.generateColor(position);
-        this.configureSliders(this.value.getComponents().length - 1);
-        this.drawCanvas();
+        this.canvas.style.cursor = "ew-resize";
+        this.drawCanvas(this.value.getComponents().length - 1);
         this.onchange(this.value);
+      } else {
+        this.value.getComponents().forEach((color, index, array) => {
+          if (Z4Math.distance(x, y, color.getPosition() * width, this.canvas.clientHeight / 2) < 8) {
+            this.mouseDown = true;
+            this.drawCanvas(index);
+          }
+        });
       }
     }
+    return null;
+  }
+
+   onMouseUp(event) {
+    event.stopPropagation();
+    if (this.dataChanged) {
+      this.onchange(this.value);
+    }
+    this.mouseDown = false;
+    this.dataChanged = false;
+    return null;
   }
 
   /**
@@ -3750,104 +3791,60 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
     this.mirroredCheck.checked = this.value.isMirrored();
     this.formRange.valueAsNumber = this.value.getRipple();
     this.formRangeLabel.innerText = this.formRange.value;
-    this.configureSliders(-1);
-    this.drawCanvas();
+    this.drawCanvas(0);
     return this;
   }
 
-   configureSliders(selected) {
-    let width = Z4GradientColorUI.WIDTH / (this.value.isMirrored() ? 2 : 1);
-    this.sliders.innerHTML = "";
-    this.value.getComponents().forEach((z4StopColor, index, array) => {
-      let position = z4StopColor.getPosition();
-      let left = width * position - (index * 16);
-      let input = document.createElement("input");
-      input.setAttribute("class", "form-check-input");
-      input.setAttribute("type", "radio");
-      input.setAttribute("name", "colors_" + this.key);
-      input.setAttribute("value", "" + position);
-      input.setAttribute("style", (index !== 0 && index !== 1 ? "cursor:ew-resize;" : "") + "position:relative;left:" + left + "px");
-      input.onchange = (event) => {
-        this.z4ColorUI.setValue(Z4Color.fromZ4AbstractColor(z4StopColor));
-        if (index === 0 || index === 1) {
-          this.del.setAttribute("disabled", "");
-        } else {
-          this.del.removeAttribute("disabled");
+   drawCanvas(selected) {
+    this.selectedIndex = selected;
+    if (this.canvas.clientWidth) {
+      this.canvas.width = Math.floor(this.canvas.clientWidth * window.devicePixelRatio);
+      this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
+      let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
+      let offscreenCtx = offscreen.getContext("2d");
+      for (let x = 0; x < this.canvas.clientWidth; x++) {
+        offscreenCtx.fillStyle = this.value.getZ4ColorAt(x / this.canvas.clientWidth, true, true).getHEX();
+        offscreenCtx.fillRect(x, 0, 1, this.canvas.clientHeight);
+      }
+      let width = this.canvas.clientWidth / (this.value.isMirrored() ? 2 : 1);
+      this.value.getComponents().forEach((z4StopColor, index, array) => {
+        let position = z4StopColor.getPosition();
+        offscreenCtx.save();
+        offscreenCtx.translate(position * width, this.canvas.clientHeight / 2);
+        offscreenCtx.beginPath();
+        offscreenCtx.arc(0, 0, 8, 0, Z4Math.TWO_PI);
+        offscreenCtx.fillStyle = Z4AbstractColor.getFillStyle("white");
+        offscreenCtx.strokeStyle = Z4AbstractColor.getFillStyle("lightgray");
+        offscreenCtx.fill();
+        offscreenCtx.stroke();
+        if (this.selectedIndex === index) {
+          this.selectedPosition = position;
+          offscreenCtx.beginPath();
+          offscreenCtx.arc(0, 0, 8, 0, Z4Math.TWO_PI, false);
+          offscreenCtx.arc(0, 0, 4, 0, Z4Math.TWO_PI, true);
+          offscreenCtx.fillStyle = Z4AbstractColor.getFillStyle("#0d6efd");
+          offscreenCtx.fill();
+          this.z4ColorUI.setValue(Z4Color.fromZ4AbstractColor(z4StopColor));
         }
-        return null;
-      };
-      if (Z4Loader.touch) {
-        input.ontouchstart = (event) => this.manageEvent(event, true, false, index, input, event.changedTouches[0].clientX);
-        input.ontouchmove = (event) => this.manageEvent(event, this.mouseDown, true, index, input, event.changedTouches[0].clientX);
-        input.ontouchend = (event) => this.manageEvent(event, false, false, index, input, event.changedTouches[0].clientX);
-        input.ontouchcancel = (event) => this.manageEvent(event, false, false, index, input, event.changedTouches[0].clientX);
-      } else {
-        input.onmousedown = (event) => this.manageEvent(event, true, false, index, input, event.clientX);
-        input.onmousemove = (event) => this.manageEvent(event, this.mouseDown, true, index, input, event.clientX);
-        input.onmouseup = (event) => this.manageEvent(event, false, false, index, input, event.clientX);
-        input.onmouseleave = (event) => this.manageEvent(event, false, false, index, input, event.clientX);
-      }
-      if (selected !== -1 && index === selected) {
-        input.setAttribute("checked", "");
-        this.z4ColorUI.setValue(Z4Color.fromZ4AbstractColor(z4StopColor));
-        this.del.removeAttribute("disabled");
-      } else if (selected === -1 && index === 0) {
-        input.setAttribute("checked", "");
-        this.z4ColorUI.setValue(Z4Color.fromZ4AbstractColor(z4StopColor));
+        offscreenCtx.restore();
+      });
+      this.ctx.save();
+      this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      this.ctx.fillStyle = this.chessboard;
+      this.ctx.fillRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.ctx.drawImage(offscreen, 0, 0);
+      this.ctx.restore();
+      if (this.selectedIndex === 0 || this.selectedIndex === 1) {
         this.del.setAttribute("disabled", "");
-      }
-      this.sliders.appendChild(input);
-    });
-  }
-
-   manageEvent(event, mouseDown, check, index, input, x) {
-    event.stopPropagation();
-    if (this.mouseDown && !mouseDown) {
-      this.onchange(this.value);
-    }
-    this.mouseDown = mouseDown;
-    if (check && this.mouseDown && index !== 0 && index !== 1) {
-      this.moveColor(input, index, x);
-    }
-    return null;
-  }
-
-   moveColor(input, idx, x) {
-    x -= this.sliders.getBoundingClientRect().left + 8;
-    let width = Z4GradientColorUI.WIDTH / (this.value.isMirrored() ? 2 : 1);
-    if (x < width) {
-      let position = x / width;
-      if (this.value.getComponents().every((color, index, array) => index === idx || Math.abs(position - color.getPosition()) > 0.05)) {
-        let oldPosition = parseFloat(input.value);
-        let left = width * position - (idx * 16);
-        input.setAttribute("value", "" + position);
-        input.style.left = left + "px";
-        this.value.move(oldPosition, position);
-        this.drawCanvas();
-        this.oninput(this.value);
+      } else {
+        this.del.removeAttribute("disabled");
       }
     }
-  }
-
-   drawCanvas() {
-    this.canvas.width = Math.floor(Z4GradientColorUI.WIDTH * window.devicePixelRatio);
-    this.canvas.height = Math.floor(Z4GradientColorUI.HEIGHT * window.devicePixelRatio);
-    let offscreen = new OffscreenCanvas(Z4GradientColorUI.WIDTH, Z4GradientColorUI.HEIGHT);
-    let offscreenCtx = offscreen.getContext("2d");
-    for (let x = 0; x < Z4GradientColorUI.WIDTH; x++) {
-      offscreenCtx.fillStyle = this.value.getZ4ColorAt(x / Z4GradientColorUI.WIDTH, true, true).getHEX();
-      offscreenCtx.fillRect(x, 0, 1, Z4GradientColorUI.HEIGHT);
-    }
-    this.ctx.save();
-    this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    this.ctx.fillStyle = this.chessboard;
-    this.ctx.fillRect(0, 0, Z4GradientColorUI.WIDTH, Z4GradientColorUI.HEIGHT);
-    this.ctx.drawImage(offscreen, 0, 0);
-    this.ctx.restore();
   }
 
    dispose() {
     this.disposeDevicePixelRatio();
+    this.resizeObserver.unobserve(this.canvas);
   }
 }
 /**
@@ -3883,14 +3880,12 @@ class Z4GradientColorGuidedTourUI extends Z4GradientColorUI {
   static  show() {
     let tour = new Z4GradientColorGuidedTourUI();
     Z4ModalMessageUI.showInfo(Z4MessageFactory.get("TITLE"), "", () => {
-      document.querySelector(".modal-dialog").classList.remove("modal-lg");
       (document.querySelector(".modal-message")).innerHTML = "";
       (document.querySelector(".modal-dialog .modal-footer")).innerHTML = "";
       tour.dispose();
     });
     let label = document.createElement("label");
     label.className = "z4-guided-tour";
-    document.querySelector(".modal-dialog").classList.add("modal-lg");
     document.querySelector(".modal-dialog .modal-footer").insertBefore(label, document.querySelector(".modal-dialog .modal-footer button"));
     tour.appendToElement(document.querySelector(".modal-message"));
     tour.doStep(0);
@@ -4899,16 +4894,6 @@ class Z4PointIterator {
    */
    drawDemo(context, width, height) {
   }
-
-  /**
-   * Returns the color parameter
-   *
-   * @param color The color
-   * @return The color
-   */
-   getColor(color) {
-    return color;
-  }
 }
 /**
  * The stamper
@@ -5044,7 +5029,7 @@ class Z4Stamper extends Z4PointIterator {
       if (this.currentPush && !this.currentMultiplicityCounter) {
         context.save();
         context.lineWidth = 1;
-        context.fillStyle = this.getColor("black");
+        context.fillStyle = Z4AbstractColor.getFillStyle("black");
         context.beginPath();
         context.arc(this.P["x"], this.P["y"], 2, 0, Z4Math.TWO_PI);
         context.fill();

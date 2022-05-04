@@ -41,7 +41,6 @@ public class Z4GradientColorGuidedTourUI extends Z4GradientColorUI {
     Z4GradientColorGuidedTourUI tour = new Z4GradientColorGuidedTourUI();
 
     Z4ModalMessageUI.showInfo(Z4MessageFactory.get("TITLE"), "", () -> {
-      document.querySelector(".modal-dialog").classList.remove("modal-lg");
       ((HTMLElement) document.querySelector(".modal-message")).innerHTML = "";
       ((HTMLElement) document.querySelector(".modal-dialog .modal-footer")).innerHTML = "";
 
@@ -51,7 +50,6 @@ public class Z4GradientColorGuidedTourUI extends Z4GradientColorUI {
     HTMLElement label = document.createElement("label");
     label.className = "z4-guided-tour";
 
-    document.querySelector(".modal-dialog").classList.add("modal-lg");
     document.querySelector(".modal-dialog .modal-footer").insertBefore(label, document.querySelector(".modal-dialog .modal-footer button"));
 
     tour.appendToElement(document.querySelector(".modal-message"));
