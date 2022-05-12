@@ -26,20 +26,19 @@
         <input type="range" class="form-range form-range-spatial" style="border-radius:16px" value="0" min="0" max="1" step="0.01"/>  
       </div>
 
-      <canvas class="canvas"></canvas>
-      <div class="sliders" style="float:left;width:0px;height:0px;line-height:0px"></div>
+      <canvas class="canvas" height="200" style="width:calc(100% - 70px);height:200px"></canvas>
+
+      <div style="margin-left:50px">
+        <label class="form-label temporal-ripple-color-label" style="margin-left:8px;margin-bottom:0px" data-token-lang-inner_text="RIPPLE">Ripple</label>
+        <label class="form-label temporal-form-range-label" style="margin-bottom:0px">0</label>
+
+        <div class="form-check form-switch" style="float:right;margin-bottom:0px">
+          <input class="form-check-input temporal-mirrored-check" type="checkbox" role="switch"/>
+          <label class="form-check-label temporal-mirrored-label" data-token-lang-inner_text="MIRRORED">Mirrored</label>
+        </div>
+
+        <input type="range" class="form-range form-range-temporal" style="border-radius:16px" value="0" min="0" max="1" step="0.01"/>  
+      </div>
     </div>
   </div>
-</div>
-
-<div style="margin-left:50px;width:516px">
-  <label class="form-label temporal-ripple-color-label" style="margin-left:8px;margin-bottom:0px" data-token-lang-inner_text="RIPPLE">Ripple</label>
-  <label class="form-label temporal-form-range-label" style="margin-bottom:0px">0</label>
-
-  <div class="form-check form-switch" style="float:right;margin-bottom:0px">
-    <input class="form-check-input temporal-mirrored-check" type="checkbox" role="switch"/>
-    <label class="form-check-label temporal-mirrored-label" data-token-lang-inner_text="MIRRORED">Mirrored</label>
-  </div>
-
-  <input type="range" class="form-range form-range-temporal" style="border-radius:16px" value="0" min="0" max="1" step="0.01"/>  
 </div>
