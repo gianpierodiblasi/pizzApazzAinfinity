@@ -142,25 +142,22 @@ public class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI<Z4Temporal
 //      this.drawCanvas(1);
 //      this.onchange.$apply(this.value);
     };
-//
-//    this.del.setAttribute("class", "dropdown-item delete-color");
-//    this.del.setAttribute("type", "button");
-//    this.del.setAttribute("data-token-lang-inner_text", "DELETE");
-//    this.del.innerHTML = Z4MessageFactory.get("DELETE");
-//    this.del.onclick = (event) -> {
-//      Z4ModalMessageUI.showQuestion(Z4MessageFactory.get("TITLE"), Z4MessageFactory.get("DELETE_COLOR_MESSAGE"), () -> {
-//        $HTMLElement input = this.querySelector(".sliders .form-check-input:checked");
-//        this.value.removeColor(parseFloat(input.getAttribute("T")), parseFloat(input.getAttribute("S")));
-//
-//        this.configureSliders(-1, -1);
-//        this.drawCanvas(1);
-//        this.onchange.$apply(this.value);
-//      }, () -> {
-//      }, null, null);
-//
-//      return null;
-//    };
-//    this.querySelector(".negative").parentElement.appendChild(document.createElement("li")).appendChild(this.del);
+
+    this.del.setAttribute("class", "dropdown-item delete-color");
+    this.del.setAttribute("type", "button");
+    this.del.setAttribute("data-token-lang-inner_text", "DELETE");
+    this.del.innerHTML = Z4MessageFactory.get("DELETE");
+    this.del.onclick = (event) -> {
+      Z4ModalMessageUI.showQuestion(Z4MessageFactory.get("TITLE"), Z4MessageFactory.get("DELETE_COLOR_MESSAGE"), () -> {
+        this.value.removeColor(this.selectedPositionT, this.selectedIndexS);
+        this.drawCanvas(0, 0, 1);
+        this.onchange.$apply(this.value);
+      }, () -> {
+      }, null, null);
+
+      return null;
+    };
+    this.querySelector(".negative").parentElement.appendChild(document.createElement("li")).appendChild(this.del);
 
     this.resizeObserver.observe(this.canvas);
     this.setValue(new Z4TemporalColor());
