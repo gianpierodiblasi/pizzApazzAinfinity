@@ -69,11 +69,6 @@ public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4Gradient
       return null;
     };
 
-    this.querySelector(".gradient-guided-tour").onclick = (event) -> {
-      Z4GradientColorGuidedTourUI.show();
-      return null;
-    };
-
     if (Z4Loader.touch) {
       this.canvas.ontouchstart = (event) -> this.onMouseDown(event, event.changedTouches.$get(0).clientX - this.canvas.getBoundingClientRect().left, event.changedTouches.$get(0).clientY - this.canvas.getBoundingClientRect().top);
       this.canvas.ontouchmove = (event) -> this.onMouseMove(event, event.changedTouches.$get(0).clientX - this.canvas.getBoundingClientRect().left, event.changedTouches.$get(0).clientY - this.canvas.getBoundingClientRect().top);

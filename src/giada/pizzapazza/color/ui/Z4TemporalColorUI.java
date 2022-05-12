@@ -69,11 +69,6 @@ public class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI<Z4Temporal
       return null;
     };
 
-    this.querySelector(".temporal-guided-tour").onclick = (event) -> {
-      Z4TemporalColorGuidedTourUI.show();
-      return null;
-    };
-
     this.canvas.style.border = "1px dashed gray";
     this.canvas.style.width = Z4TemporalColorUI.WIDTH + "px";
     this.canvas.style.height = Z4TemporalColorUI.HEIGHT + "px";
