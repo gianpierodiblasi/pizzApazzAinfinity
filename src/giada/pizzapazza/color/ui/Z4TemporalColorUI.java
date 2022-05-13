@@ -124,12 +124,20 @@ public class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI<Z4Temporal
     this.del.setAttribute("data-token-lang-inner_text", "DELETE");
     this.del.innerHTML = Z4MessageFactory.get("DELETE");
     this.del.onclick = (event) -> {
-      Z4ModalMessageUI.showQuestion(Z4MessageFactory.get("TITLE"), Z4MessageFactory.get("DELETE_COLOR_MESSAGE"), () -> {
-        this.value.removeColor(this.selectedPositionT, this.selectedIndexS);
+      Z4ModalMessageUI.showOpenQuestion(Z4MessageFactory.get("TITLE"), Z4MessageFactory.get("DELETE_COLOR_MESSAGE2"), Z4MessageFactory.get("DELETE_COLOR_BOTH"), () -> {
+        this.value.removeColor(this.selectedPositionT, this.selectedPositionS);
         this.drawCanvas(0, 0, 1);
         this.onchange.$apply(this.value);
-      }, () -> {
-      }, null, null);
+      }, Z4MessageFactory.get("DELETE_COLOR_TEMPORAL"), () -> {
+        this.value.removeColor(this.selectedPositionT, -1);
+        this.drawCanvas(0, 0, 1);
+        this.onchange.$apply(this.value);
+      }, Z4MessageFactory.get("DELETE_COLOR_SPATIAL"), () -> {
+        this.value.removeColor(-1, this.selectedPositionS);
+        this.drawCanvas(0, 0, 1);
+        this.onchange.$apply(this.value);
+      }, Z4MessageFactory.get("CANCEL"), () -> {
+      });
 
       return null;
     };
@@ -188,7 +196,7 @@ public class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI<Z4Temporal
 
         boolean okT = this.value.getComponents().every((color, index, array) -> Math.abs(positionT - color.getPosition()) > 0.05);
         boolean okS = this.value.getComponents().$get(0).getComponents().every((color, index, array) -> Math.abs(positionS - color.getPosition()) > 0.1);
-        if (okT && okS) {
+        if (okT || okS) {
           this.canvas.style.cursor = "pointer";
         } else {
           this.value.getComponents().forEach((z4StopGradientColor, indexT, arrayT) -> {
@@ -224,6 +232,16 @@ public class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI<Z4Temporal
       boolean okS = this.value.getComponents().$get(0).getComponents().every((color, index, array) -> Math.abs(positionS - color.getPosition()) > 0.1);
       if (okT && okS) {
         this.value.generateColor(positionT, positionS);
+        this.canvas.style.cursor = "move";
+        this.drawCanvas(this.value.getComponents().length - 1, this.value.getComponents().$get(0).getComponents().length - 1, 1);
+        this.onchange.$apply(this.value);
+      } else if (okT) {
+        this.value.generateColor(positionT, this.selectedPositionS);
+        this.canvas.style.cursor = "move";
+        this.drawCanvas(this.value.getComponents().length - 1, this.value.getComponents().$get(0).getComponents().length - 1, 1);
+        this.onchange.$apply(this.value);
+      } else if (okS) {
+        this.value.generateColor(this.selectedPositionT, positionS);
         this.canvas.style.cursor = "move";
         this.drawCanvas(this.value.getComponents().length - 1, this.value.getComponents().$get(0).getComponents().length - 1, 1);
         this.onchange.$apply(this.value);

@@ -120,6 +120,48 @@ public class Z4ModalMessageUI {
     Z4ModalMessageUI.modal.show();
   }
 
+  /**
+   * Shows a question message with open answer
+   *
+   * @param title The title
+   * @param message The message
+   * @param optionStr1 The option1 message
+   * @param onOption1 The callback to call on option1
+   * @param optionStr2 The option2 message
+   * @param onOption2 The callback to call on option2
+   * @param optionStr3 The option3 message
+   * @param onOption3 The callback to call on option3
+   * @param optionStr4 The option4 message
+   * @param onOption4 The callback to call on option4
+   *
+   */
+  public static void showOpenQuestion(String title, String message, String optionStr1, $Apply_0_Void onOption1, String optionStr2, $Apply_0_Void onOption2, String optionStr3, $Apply_0_Void onOption3, String optionStr4, $Apply_0_Void onOption4) {
+    ((HTMLElement) Z4ModalMessageUI.html.querySelector(".modal-title")).innerHTML = title;
+    ((HTMLElement) Z4ModalMessageUI.html.querySelector(".modal-message")).innerHTML = message;
+
+    HTMLElement icon = (HTMLElement) Z4ModalMessageUI.html.querySelector(".modal-icon i");
+    icon.className = "bi bi-question-circle-fill";
+    icon.style.color = "#6c757d";
+
+    $HTMLElement footer = ($HTMLElement) Z4ModalMessageUI.html.querySelector(".modal-footer");
+    footer.innerHTML = "";
+
+    if ($exists(optionStr1)) {
+      Z4ModalMessageUI.appendButton(optionStr1, "btn btn-sm btn-secondary", onOption1, footer);
+    }
+    if ($exists(optionStr2)) {
+      Z4ModalMessageUI.appendButton(optionStr2, "btn btn-sm btn-secondary", onOption2, footer);
+    }
+    if ($exists(optionStr3)) {
+      Z4ModalMessageUI.appendButton(optionStr3, "btn btn-sm btn-secondary", onOption3, footer);
+    }
+    if ($exists(optionStr4)) {
+      Z4ModalMessageUI.appendButton(optionStr4, "btn btn-sm btn-secondary", onOption4, footer);
+    }
+
+    Z4ModalMessageUI.modal.show();
+  }
+
   private static void appendButton(String text, String className, $Apply_0_Void onButton, $HTMLElement footer) {
     HTMLElement button = document.createElement("button");
     button.setAttribute("type", "button");

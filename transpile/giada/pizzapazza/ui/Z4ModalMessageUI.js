@@ -101,6 +101,43 @@ class Z4ModalMessageUI {
     Z4ModalMessageUI.modal.show();
   }
 
+  /**
+   * Shows a question message with open answer
+   *
+   * @param title The title
+   * @param message The message
+   * @param optionStr1 The option1 message
+   * @param onOption1 The callback to call on option1
+   * @param optionStr2 The option2 message
+   * @param onOption2 The callback to call on option2
+   * @param optionStr3 The option3 message
+   * @param onOption3 The callback to call on option3
+   * @param optionStr4 The option4 message
+   * @param onOption4 The callback to call on option4
+   */
+  static  showOpenQuestion(title, message, optionStr1, onOption1, optionStr2, onOption2, optionStr3, onOption3, optionStr4, onOption4) {
+    (Z4ModalMessageUI.html.querySelector(".modal-title")).innerHTML = title;
+    (Z4ModalMessageUI.html.querySelector(".modal-message")).innerHTML = message;
+    let icon = Z4ModalMessageUI.html.querySelector(".modal-icon i");
+    icon.className = "bi bi-question-circle-fill";
+    icon.style.color = "#6c757d";
+    let footer = Z4ModalMessageUI.html.querySelector(".modal-footer");
+    footer.innerHTML = "";
+    if (optionStr1) {
+      Z4ModalMessageUI.appendButton(optionStr1, "btn btn-sm btn-secondary", onOption1, footer);
+    }
+    if (optionStr2) {
+      Z4ModalMessageUI.appendButton(optionStr2, "btn btn-sm btn-secondary", onOption2, footer);
+    }
+    if (optionStr3) {
+      Z4ModalMessageUI.appendButton(optionStr3, "btn btn-sm btn-secondary", onOption3, footer);
+    }
+    if (optionStr4) {
+      Z4ModalMessageUI.appendButton(optionStr4, "btn btn-sm btn-secondary", onOption4, footer);
+    }
+    Z4ModalMessageUI.modal.show();
+  }
+
   static  appendButton(text, className, onButton, footer) {
     let button = document.createElement("button");
     button.setAttribute("type", "button");
