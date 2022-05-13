@@ -142,10 +142,9 @@ public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4Gradient
 
   private Object onMouseMove(UIEvent event, double x, double y) {
     event.stopPropagation();
+    double width = this.canvas.clientWidth / (this.value.isMirrored() ? 2 : 1);
 
     if (this.mouseDown) {
-      double width = this.canvas.clientWidth / (this.value.isMirrored() ? 2 : 1);
-
       if (x < width) {
         double position = x / width;
 
@@ -158,7 +157,6 @@ public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4Gradient
       }
     } else {
       this.canvas.style.cursor = "default";
-      double width = this.canvas.clientWidth / (this.value.isMirrored() ? 2 : 1);
 
       if (x < width) {
         double position = x / width;
@@ -285,6 +283,7 @@ public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4Gradient
 
         if (this.selectedIndex == index) {
           this.selectedPosition = position;
+
           offscreenCtx.beginPath();
           offscreenCtx.arc(0, 0, 8, 0, Z4Math.TWO_PI, false);
           offscreenCtx.arc(0, 0, 4, 0, Z4Math.TWO_PI, true);

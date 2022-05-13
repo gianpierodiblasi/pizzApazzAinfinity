@@ -113,8 +113,8 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
 
    onMouseMove(event, x, y) {
     event.stopPropagation();
+    let width = this.canvas.clientWidth / (this.value.isMirrored() ? 2 : 1);
     if (this.mouseDown) {
-      let width = this.canvas.clientWidth / (this.value.isMirrored() ? 2 : 1);
       if (x < width) {
         let position = x / width;
         if (this.value.getComponents().every((color, index, array) => index === this.selectedIndex || Math.abs(position - color.getPosition()) > 0.05)) {
@@ -126,7 +126,6 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
       }
     } else {
       this.canvas.style.cursor = "default";
-      let width = this.canvas.clientWidth / (this.value.isMirrored() ? 2 : 1);
       if (x < width) {
         let position = x / width;
         if (this.value.getComponents().every((color, index, array) => Math.abs(position - color.getPosition()) > 0.05)) {
