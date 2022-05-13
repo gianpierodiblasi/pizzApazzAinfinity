@@ -628,6 +628,43 @@ class Z4ModalMessageUI {
     Z4ModalMessageUI.modal.show();
   }
 
+  /**
+   * Shows a question message with open answer
+   *
+   * @param title The title
+   * @param message The message
+   * @param optionStr1 The option1 message
+   * @param onOption1 The callback to call on option1
+   * @param optionStr2 The option2 message
+   * @param onOption2 The callback to call on option2
+   * @param optionStr3 The option3 message
+   * @param onOption3 The callback to call on option3
+   * @param optionStr4 The option4 message
+   * @param onOption4 The callback to call on option4
+   */
+  static  showOpenQuestion(title, message, optionStr1, onOption1, optionStr2, onOption2, optionStr3, onOption3, optionStr4, onOption4) {
+    (Z4ModalMessageUI.html.querySelector(".modal-title")).innerHTML = title;
+    (Z4ModalMessageUI.html.querySelector(".modal-message")).innerHTML = message;
+    let icon = Z4ModalMessageUI.html.querySelector(".modal-icon i");
+    icon.className = "bi bi-question-circle-fill";
+    icon.style.color = "#6c757d";
+    let footer = Z4ModalMessageUI.html.querySelector(".modal-footer");
+    footer.innerHTML = "";
+    if (optionStr1) {
+      Z4ModalMessageUI.appendButton(optionStr1, "btn btn-sm btn-secondary", onOption1, footer);
+    }
+    if (optionStr2) {
+      Z4ModalMessageUI.appendButton(optionStr2, "btn btn-sm btn-secondary", onOption2, footer);
+    }
+    if (optionStr3) {
+      Z4ModalMessageUI.appendButton(optionStr3, "btn btn-sm btn-secondary", onOption3, footer);
+    }
+    if (optionStr4) {
+      Z4ModalMessageUI.appendButton(optionStr4, "btn btn-sm btn-secondary", onOption4, footer);
+    }
+    Z4ModalMessageUI.modal.show();
+  }
+
   static  appendButton(text, className, onButton, footer) {
     let button = document.createElement("button");
     button.setAttribute("type", "button");
@@ -3690,8 +3727,8 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
 
    onMouseMove(event, x, y) {
     event.stopPropagation();
+    let width = this.canvas.clientWidth / (this.value.isMirrored() ? 2 : 1);
     if (this.mouseDown) {
-      let width = this.canvas.clientWidth / (this.value.isMirrored() ? 2 : 1);
       if (x < width) {
         let position = x / width;
         if (this.value.getComponents().every((color, index, array) => index === this.selectedIndex || Math.abs(position - color.getPosition()) > 0.05)) {
@@ -3703,7 +3740,6 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
       }
     } else {
       this.canvas.style.cursor = "default";
-      let width = this.canvas.clientWidth / (this.value.isMirrored() ? 2 : 1);
       if (x < width) {
         let position = x / width;
         if (this.value.getComponents().every((color, index, array) => Math.abs(position - color.getPosition()) > 0.05)) {
@@ -3856,8 +3892,6 @@ class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI {
 
    chessboard = this.ctx.createPattern(Z4ImageFactory.get("CHESSBOARD"), "repeat");
 
-   sliders = this.querySelector(".sliders");
-
    temporalFormRangeLabel = this.querySelector(".temporal-form-range-label");
 
    spatialFormRangeLabel = this.querySelector(".spatial-form-range-label");
@@ -3874,22 +3908,28 @@ class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI {
 
    z4ColorUI = new Z4ColorUI();
 
-   key = new Date().getTime() + "_" + parseInt(1000 * Math.random());
+   resizeObserver = new ResizeObserver(() => this.drawCanvas(this.selectedIndexT, this.selectedIndexS, 1));
+
+   selectedIndexT = 0;
+
+   selectedIndexS = 0;
+
+   selectedPositionT = 0.0;
+
+   selectedPositionS = 0.0;
 
    mouseDown = false;
 
+   dataChanged = false;
+
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4TemporalColorUI.html");
-
-  static  WIDTH = 500;
-
-  static  HEIGHT = 200;
 
   /**
    * Creates a Z4TemporalColorUI
    */
   constructor() {
     super(Z4TemporalColorUI.UI);
-    this.initDevicePixelRatio(() => this.drawCanvas(1));
+    this.initDevicePixelRatio(() => this.drawCanvas(this.selectedIndexT, this.selectedIndexS, 1));
     this.querySelector(".temporal-inverted").onclick = (event) => this.inverted(true, false);
     this.querySelector(".spatial-inverted").onclick = (event) => this.inverted(false, true);
     this.querySelector(".temporal-negative").onclick = (event) => {
@@ -3897,42 +3937,20 @@ class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI {
       this.onchange(this.value);
       return null;
     };
-    this.canvas.style.border = "1px dashed gray";
-    this.canvas.style.width = Z4TemporalColorUI.WIDTH + "px";
-    this.canvas.style.height = Z4TemporalColorUI.HEIGHT + "px";
-    this.canvas.onmousemove = (event) => {
-      this.canvas.style.cursor = "default";
-      let width = Z4TemporalColorUI.WIDTH / (this.value.isTemporalyMirrored() ? 2 : 1);
-      let height = Z4TemporalColorUI.HEIGHT / (this.value.isSpatialyMirrored() ? 2 : 1);
-      let gap = this.value.isSpatialyMirrored() ? Z4TemporalColorUI.HEIGHT / 2 : 0;
-      let x = event.clientX - this.canvas.getBoundingClientRect().left;
-      let y = event.clientY - this.canvas.getBoundingClientRect().top;
-      if (x < width && gap < y && y < gap + height) {
-        let positionT = x / width;
-        let positionS = (height - y + gap) / height;
-        let okT = this.value.getComponents().every((color, index, array) => Math.abs(positionT - color.getPosition()) > 0.05);
-        let okS = this.value.getComponents()[0].getComponents().every((color, index, array) => Math.abs(positionS - color.getPosition()) > 0.1);
-        if (okT && okS) {
-          this.canvas.style.cursor = "pointer";
-        }
-      }
-      return null;
-    };
     if (Z4Loader.touch) {
-      this.canvas.ontouchstart = (event) => {
-        this.addColor(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
-        return null;
-      };
+      this.canvas.ontouchstart = (event) => this.onMouseDown(event, event.changedTouches[0].clientX - this.canvas.getBoundingClientRect().left, event.changedTouches[0].clientY - this.canvas.getBoundingClientRect().top);
+      this.canvas.ontouchmove = (event) => this.onMouseMove(event, event.changedTouches[0].clientX - this.canvas.getBoundingClientRect().left, event.changedTouches[0].clientY - this.canvas.getBoundingClientRect().top);
+      this.canvas.ontouchend = (event) => this.onMouseUp(event);
+      this.canvas.ontouchcancel = (event) => this.onMouseUp(event);
     } else {
-      this.canvas.onmousedown = (event) => {
-        this.addColor(event.clientX, event.clientY);
-        return null;
-      };
+      this.canvas.onmousedown = (event) => this.onMouseDown(event, event.clientX - this.canvas.getBoundingClientRect().left, event.clientY - this.canvas.getBoundingClientRect().top);
+      this.canvas.onmousemove = (event) => this.onMouseMove(event, event.clientX - this.canvas.getBoundingClientRect().left, event.clientY - this.canvas.getBoundingClientRect().top);
+      this.canvas.onmouseup = (event) => this.onMouseUp(event);
+      this.canvas.onmouseleave = (event) => this.onMouseUp(event);
     }
     let mirror = (event) => {
       this.value.setMirrored(this.temporalMirroredCheck.checked, this.spatialMirroredCheck.checked);
-      this.configureSliders(-1, -1);
-      this.drawCanvas(1);
+      this.drawCanvas(this.selectedIndexT, this.selectedIndexS, 1);
       this.onchange(this.value);
       return null;
     };
@@ -3942,21 +3960,19 @@ class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI {
     this.querySelector(".temporal-mirrored-label").setAttribute("for", this.temporalMirroredCheck.id);
     this.spatialMirroredCheck.id = "mirrored_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
     this.querySelector(".spatial-mirrored-label").setAttribute("for", this.spatialMirroredCheck.id);
-    this.temporalFormRange.oninput = (event) => this.setRipple(5);
-    this.spatialFormRange.oninput = (event) => this.setRipple(5);
+    this.temporalFormRange.oninput = (event) => this.setRipple(this.getStep());
+    this.spatialFormRange.oninput = (event) => this.setRipple(this.getStep());
     this.temporalFormRange.onchange = (event) => this.setRipple(1);
     this.spatialFormRange.onchange = (event) => this.setRipple(1);
     this.z4ColorUI.appendToElement(this.querySelector(".canvas-container"));
     this.z4ColorUI.oninput = (z4Color) => {
-      let input = this.querySelector(".sliders .form-check-input:checked");
-      this.value.addOrUpdateColor(parseFloat(input.getAttribute("T")), parseFloat(input.getAttribute("S")), z4Color.getARGB());
-      this.drawCanvas(5);
+      this.value.addOrUpdateColor(this.selectedPositionT, this.selectedPositionS, z4Color.getARGB());
+      this.drawCanvas(this.selectedIndexT, this.selectedIndexS, this.getStep());
       this.oninput(this.value);
     };
     this.z4ColorUI.onchange = (z4Color) => {
-      let input = this.querySelector(".sliders .form-check-input:checked");
-      this.value.addOrUpdateColor(parseFloat(input.getAttribute("T")), parseFloat(input.getAttribute("S")), z4Color.getARGB());
-      this.drawCanvas(1);
+      this.value.addOrUpdateColor(this.selectedPositionT, this.selectedPositionS, z4Color.getARGB());
+      this.drawCanvas(this.selectedIndexT, this.selectedIndexS, 1);
       this.onchange(this.value);
     };
     this.del.setAttribute("class", "dropdown-item delete-color");
@@ -3964,26 +3980,97 @@ class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI {
     this.del.setAttribute("data-token-lang-inner_text", "DELETE");
     this.del.innerHTML = Z4MessageFactory.get("DELETE");
     this.del.onclick = (event) => {
-      Z4ModalMessageUI.showQuestion(Z4MessageFactory.get("TITLE"), Z4MessageFactory.get("DELETE_COLOR_MESSAGE"), () => {
-        let input = this.querySelector(".sliders .form-check-input:checked");
-        this.value.removeColor(parseFloat(input.getAttribute("T")), parseFloat(input.getAttribute("S")));
-        this.configureSliders(-1, -1);
-        this.drawCanvas(1);
+      Z4ModalMessageUI.showOpenQuestion(Z4MessageFactory.get("TITLE"), Z4MessageFactory.get("DELETE_COLOR_MESSAGE2"), Z4MessageFactory.get("DELETE_COLOR_BOTH"), () => {
+        this.value.removeColor(this.selectedPositionT, this.selectedPositionS);
+        this.drawCanvas(0, 0, 1);
         this.onchange(this.value);
-      }, () => {
-      }, null, null);
+      }, Z4MessageFactory.get("DELETE_COLOR_TEMPORAL"), () => {
+        this.value.removeColor(this.selectedPositionT, -1);
+        this.drawCanvas(0, 0, 1);
+        this.onchange(this.value);
+      }, Z4MessageFactory.get("DELETE_COLOR_SPATIAL"), () => {
+        this.value.removeColor(-1, this.selectedPositionS);
+        this.drawCanvas(0, 0, 1);
+        this.onchange(this.value);
+      }, Z4MessageFactory.get("CANCEL"), () => {
+      });
       return null;
     };
     this.querySelector(".negative").parentElement.appendChild(document.createElement("li")).appendChild(this.del);
+    this.resizeObserver.observe(this.canvas);
     this.setValue(new Z4TemporalColor());
   }
 
-   addColor(x, y) {
-    x -= this.canvas.getBoundingClientRect().left;
-    y -= this.canvas.getBoundingClientRect().top;
-    let width = Z4TemporalColorUI.WIDTH / (this.value.isTemporalyMirrored() ? 2 : 1);
-    let height = Z4TemporalColorUI.HEIGHT / (this.value.isSpatialyMirrored() ? 2 : 1);
-    let gap = this.value.isSpatialyMirrored() ? Z4TemporalColorUI.HEIGHT / 2 : 0;
+   onMouseMove(event, x, y) {
+    event.stopPropagation();
+    let width = this.canvas.clientWidth / (this.value.isTemporalyMirrored() ? 2 : 1);
+    let height = this.canvas.clientHeight / (this.value.isSpatialyMirrored() ? 2 : 1);
+    let gap = this.value.isSpatialyMirrored() ? this.canvas.clientHeight / 2 : 0;
+    if (this.mouseDown) {
+      if (x < width && gap < y && y < gap + height) {
+        let positionT = x / width;
+        let positionS = (height - y + gap) / height;
+        let free = this.selectedIndexT !== 0 && this.selectedIndexT !== 1 && this.selectedIndexS !== 0 && this.selectedIndexS !== 1 && x < width && gap < y && y < gap + height;
+        let temporal = this.selectedIndexT !== 0 && this.selectedIndexT !== 1 && x < width;
+        let spatial = this.selectedIndexS !== 0 && this.selectedIndexS !== 1 && gap < y && y < gap + height;
+        let okT = this.value.getComponents().every((color, indexT, array) => indexT === this.selectedIndexT || Math.abs(positionT - color.getPosition()) > 0.05);
+        let okS = this.value.getComponents()[0].getComponents().every((color, indexS, array) => indexS === this.selectedIndexS || Math.abs(positionS - color.getPosition()) > 0.1);
+        if (free) {
+          if (okT && okS) {
+            this.dataChanged = true;
+            this.value.move(this.selectedPositionT, positionT, this.selectedPositionS, positionS);
+            this.drawCanvas(this.selectedIndexT, this.selectedIndexS, this.getStep());
+            this.oninput(this.value);
+          }
+        } else if (temporal) {
+          if (okT) {
+            this.dataChanged = true;
+            this.value.move(this.selectedPositionT, positionT, -1, -1);
+            this.drawCanvas(this.selectedIndexT, this.selectedIndexS, this.getStep());
+            this.oninput(this.value);
+          }
+        } else if (spatial) {
+          if (okS) {
+            this.dataChanged = true;
+            this.value.move(this.selectedPositionT, positionT, this.selectedPositionS, positionS);
+            this.drawCanvas(this.selectedIndexT, this.selectedIndexS, this.getStep());
+            this.oninput(this.value);
+          }
+        }
+      }
+    } else {
+      this.canvas.style.cursor = "default";
+      if (x < width && gap < y && y < gap + height) {
+        let positionT = x / width;
+        let positionS = (height - y + gap) / height;
+        let okT = this.value.getComponents().every((color, index, array) => Math.abs(positionT - color.getPosition()) > 0.05);
+        let okS = this.value.getComponents()[0].getComponents().every((color, index, array) => Math.abs(positionS - color.getPosition()) > 0.1);
+        if (okT || okS) {
+          this.canvas.style.cursor = "pointer";
+        } else {
+          this.value.getComponents().forEach((z4StopGradientColor, indexT, arrayT) => {
+            z4StopGradientColor.getComponents().forEach((z4StopColor, indexS, arrayS) => {
+              if (Z4Math.distance(x, y, z4StopGradientColor.getPosition() * width, (1 - z4StopColor.getPosition()) * height + gap) >= 8) {
+              } else if (indexT !== 0 && indexT !== 1 && indexS !== 0 && indexS !== 1) {
+                this.canvas.style.cursor = "move";
+              } else if (indexT !== 0 && indexT !== 1) {
+                this.canvas.style.cursor = "ew-resize";
+              } else if (indexS !== 0 && indexS !== 1) {
+                this.canvas.style.cursor = "ns-resize";
+              }
+            });
+          });
+        }
+      }
+    }
+    return null;
+  }
+
+   onMouseDown(event, x, y) {
+    event.stopPropagation();
+    let width = this.canvas.clientWidth / (this.value.isTemporalyMirrored() ? 2 : 1);
+    let height = this.canvas.clientHeight / (this.value.isSpatialyMirrored() ? 2 : 1);
+    let gap = this.value.isSpatialyMirrored() ? this.canvas.clientHeight / 2 : 0;
     if (x < width && gap < y && y < gap + height) {
       let positionT = x / width;
       let positionS = (height - y + gap) / height;
@@ -3991,18 +4078,49 @@ class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI {
       let okS = this.value.getComponents()[0].getComponents().every((color, index, array) => Math.abs(positionS - color.getPosition()) > 0.1);
       if (okT && okS) {
         this.value.generateColor(positionT, positionS);
-        this.configureSliders(this.value.getComponents().length - 1, this.value.getComponents()[0].getComponents().length - 1);
-        this.drawCanvas(1);
+        this.canvas.style.cursor = "move";
+        this.drawCanvas(this.value.getComponents().length - 1, this.value.getComponents()[0].getComponents().length - 1, 1);
         this.onchange(this.value);
+      } else if (okT) {
+        this.value.generateColor(positionT, this.selectedPositionS);
+        this.canvas.style.cursor = "move";
+        this.drawCanvas(this.value.getComponents().length - 1, this.value.getComponents()[0].getComponents().length - 1, 1);
+        this.onchange(this.value);
+      } else if (okS) {
+        this.value.generateColor(this.selectedPositionT, positionS);
+        this.canvas.style.cursor = "move";
+        this.drawCanvas(this.value.getComponents().length - 1, this.value.getComponents()[0].getComponents().length - 1, 1);
+        this.onchange(this.value);
+      } else {
+        this.value.getComponents().forEach((z4StopGradientColor, indexT, arrayT) => {
+          z4StopGradientColor.getComponents().forEach((z4StopColor, indexS, arrayS) => {
+            if (Z4Math.distance(x, y, z4StopGradientColor.getPosition() * width, (1 - z4StopColor.getPosition()) * height + gap) < 8) {
+              this.mouseDown = true;
+              this.drawCanvas(indexT, indexS, 1);
+            }
+          });
+        });
       }
     }
+    return null;
+  }
+
+   onMouseUp(event) {
+    event.stopPropagation();
+    if (this.dataChanged) {
+      this.drawCanvas(this.selectedIndexT, this.selectedIndexS, 1);
+      this.onchange(this.value);
+    }
+    this.mouseDown = false;
+    this.dataChanged = false;
+    return null;
   }
 
    setRipple(step) {
     this.temporalFormRangeLabel.innerText = this.temporalFormRange.value;
     this.spatialFormRangeLabel.innerText = this.spatialFormRange.value;
     this.value.setRipple(this.temporalFormRange.valueAsNumber, this.spatialFormRange.valueAsNumber);
-    this.drawCanvas(step);
+    this.drawCanvas(this.selectedIndexT, this.selectedIndexS, step);
     if (step === 1) {
       this.onchange(this.value);
     } else {
@@ -4055,175 +4173,69 @@ class Z4TemporalColorUI extends Z4AbstractComponentWithValueUI {
     this.temporalFormRangeLabel.innerText = this.temporalFormRange.value;
     this.spatialFormRange.valueAsNumber = this.value.getSpatialRipple();
     this.spatialFormRangeLabel.innerText = this.spatialFormRange.value;
-    this.configureSliders(-1, -1);
-    this.drawCanvas(1);
+    this.drawCanvas(0, 0, 1);
     return this;
   }
 
-   configureSliders(selectedT, selectedS) {
-    let width = Z4TemporalColorUI.WIDTH / (this.value.isTemporalyMirrored() ? 2 : 1);
-    let height = Z4TemporalColorUI.HEIGHT / (this.value.isSpatialyMirrored() ? 2 : 1);
-    let gap = this.value.isSpatialyMirrored() ? Z4TemporalColorUI.HEIGHT / 2 : 0;
-    this.sliders.innerHTML = "";
-    this.value.getComponents().forEach((z4StopGradientColor, indexT, arrayT) => {
-      let positionT = z4StopGradientColor.getPosition();
-      let left = -8 + width * positionT;
-      z4StopGradientColor.getComponents().forEach((z4StopColor, indexS, arrayS) => {
-        let positionS = z4StopColor.getPosition();
-        let top = gap - 8 + height * (1 - positionS) - ((indexS + arrayS.length * indexT) * 16);
-        let input = document.createElement("input");
-        input.setAttribute("class", "form-check-input");
-        input.setAttribute("type", "radio");
-        input.setAttribute("name", "colors_" + this.key);
-        input.setAttribute("value", positionT + "-" + positionS);
-        input.setAttribute("T", "" + positionT);
-        input.setAttribute("S", "" + positionS);
-        input.setAttribute("style", "margin-top:0px;position:relative;left:" + left + "px;top:" + top + "px");
-        if (indexT !== 0 && indexT !== 1 && indexS !== 0 && indexS !== 1) {
-          input.style.cursor = "move";
-        } else if (indexT !== 0 && indexT !== 1) {
-          input.style.cursor = "ew-resize";
-        } else if (indexS !== 0 && indexS !== 1) {
-          input.style.cursor = "ns-resize";
+   getStep() {
+    return Math.max(2, parseInt(this.canvas.width / 100));
+  }
+
+   drawCanvas(selectedIndexT, selectedIndexS, step) {
+    this.selectedIndexT = selectedIndexT;
+    this.selectedIndexS = selectedIndexS;
+    if (this.canvas.clientWidth) {
+      this.canvas.width = Math.floor(this.canvas.clientWidth * window.devicePixelRatio);
+      this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
+      let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
+      let offscreenCtx = offscreen.getContext("2d");
+      for (let x = 0; x < this.canvas.clientWidth; x += step) {
+        let z4GradientColor = this.value.getZ4GradientColorAt(x / this.canvas.clientWidth, true, true);
+        for (let y = 0; y < this.canvas.clientHeight; y += step) {
+          offscreenCtx.fillStyle = z4GradientColor.getZ4ColorAt(y / this.canvas.clientHeight, true, true).getHEX();
+          offscreenCtx.fillRect(x, this.canvas.clientHeight - y - step, step, step);
         }
-        input.onchange = (event) => {
-          this.z4ColorUI.setValue(Z4Color.fromZ4AbstractColor(z4StopColor));
-          if ((indexT !== 0 && indexT !== 1) || (indexS !== 0 && indexS !== 1)) {
-            this.del.removeAttribute("disabled");
-          } else {
-            this.del.setAttribute("disabled", "");
+      }
+      let width = this.canvas.clientWidth / (this.value.isTemporalyMirrored() ? 2 : 1);
+      let height = this.canvas.clientHeight / (this.value.isSpatialyMirrored() ? 2 : 1);
+      let gap = this.value.isSpatialyMirrored() ? this.canvas.clientHeight / 2 : 0;
+      this.value.getComponents().forEach((z4StopGradientColor, indexT, arrayT) => {
+        let positionT = z4StopGradientColor.getPosition();
+        z4StopGradientColor.getComponents().forEach((z4StopColor, indexS, arrayS) => {
+          let positionS = z4StopColor.getPosition();
+          offscreenCtx.save();
+          offscreenCtx.translate(positionT * width, (1 - positionS) * height + gap);
+          offscreenCtx.beginPath();
+          offscreenCtx.arc(0, 0, 8, 0, Z4Math.TWO_PI);
+          offscreenCtx.fillStyle = Z4AbstractColor.getFillStyle("white");
+          offscreenCtx.strokeStyle = Z4AbstractColor.getFillStyle("lightgray");
+          offscreenCtx.fill();
+          offscreenCtx.stroke();
+          if (this.selectedIndexT === indexT && this.selectedIndexS === indexS) {
+            this.selectedPositionT = positionT;
+            this.selectedPositionS = positionS;
+            offscreenCtx.beginPath();
+            offscreenCtx.arc(0, 0, 8, 0, Z4Math.TWO_PI, false);
+            offscreenCtx.arc(0, 0, 4, 0, Z4Math.TWO_PI, true);
+            offscreenCtx.fillStyle = Z4AbstractColor.getFillStyle("#0d6efd");
+            offscreenCtx.fill();
+            this.z4ColorUI.setValue(Z4Color.fromZ4AbstractColor(z4StopColor));
           }
-          return null;
-        };
-        if (Z4Loader.touch) {
-          input.ontouchstart = (event) => this.manageEvent(event, true, false, indexT, indexS, input, event.changedTouches[0].clientX, event.changedTouches[0].clientY);
-          input.ontouchmove = (event) => this.manageEvent(event, this.mouseDown, true, indexT, indexS, input, event.changedTouches[0].clientX, event.changedTouches[0].clientY);
-          input.ontouchend = (event) => this.manageEvent(event, false, false, indexT, indexS, input, event.changedTouches[0].clientX, event.changedTouches[0].clientY);
-          input.ontouchcancel = (event) => this.manageEvent(event, false, false, indexT, indexS, input, event.changedTouches[0].clientX, event.changedTouches[0].clientY);
-        } else {
-          input.onmousedown = (event) => this.manageEvent(event, true, false, indexT, indexS, input, event.clientX, event.clientY);
-          input.onmousemove = (event) => this.manageEvent(event, this.mouseDown, true, indexT, indexS, input, event.clientX, event.clientY);
-          input.onmouseup = (event) => this.manageEvent(event, false, false, indexT, indexS, input, event.clientX, event.clientY);
-          input.onmouseleave = (event) => this.manageEvent(event, false, false, indexT, indexS, input, event.clientX, event.clientY);
-        }
-        if (selectedT !== -1 && selectedS !== -1 && indexT === selectedT && indexS === selectedS) {
-          input.setAttribute("checked", "");
-          this.z4ColorUI.setValue(Z4Color.fromZ4AbstractColor(z4StopColor));
-          this.del.removeAttribute("disabled");
-        } else if (selectedT === -1 && selectedS === -1 && indexT === 0 && indexS === 0) {
-          input.setAttribute("checked", "");
-          this.z4ColorUI.setValue(Z4Color.fromZ4AbstractColor(z4StopColor));
-          this.del.setAttribute("disabled", "");
-        }
-        this.sliders.appendChild(input);
+          offscreenCtx.restore();
+        });
       });
-    });
-  }
-
-   manageEvent(event, mouseDown, check, indexT, indexS, input, x, y) {
-    event.stopPropagation();
-    if (this.mouseDown && !mouseDown) {
-      this.drawCanvas(1);
-      this.onchange(this.value);
+      this.ctx.save();
+      this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      this.ctx.fillStyle = this.chessboard;
+      this.ctx.fillRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.ctx.drawImage(offscreen, 0, 0);
+      this.ctx.restore();
     }
-    this.mouseDown = mouseDown;
-    if (check && this.mouseDown && ((indexT !== 0 && indexT !== 1) || (indexS !== 0 && indexS !== 1))) {
-      this.moveColor(input, indexT, indexS, x, y);
-    }
-    return null;
-  }
-
-   moveColor(input, idxT, idxS, x, y) {
-    x -= this.canvas.getBoundingClientRect().left;
-    y -= this.canvas.getBoundingClientRect().top;
-    let width = Z4TemporalColorUI.WIDTH / (this.value.isTemporalyMirrored() ? 2 : 1);
-    let height = Z4TemporalColorUI.HEIGHT / (this.value.isSpatialyMirrored() ? 2 : 1);
-    let gap = this.value.isSpatialyMirrored() ? Z4TemporalColorUI.HEIGHT / 2 : 0;
-    let free = idxT !== 0 && idxT !== 1 && idxS !== 0 && idxS !== 1 && x < width && gap < y && y < gap + height;
-    let temporal = idxT !== 0 && idxT !== 1 && x < width;
-    let spatial = idxS !== 0 && idxS !== 1 && gap < y && y < gap + height;
-    let positionT = x / width;
-    let positionS = (height - y + gap) / height;
-    let okT = this.value.getComponents().every((color, indexT, array) => indexT === idxT || Math.abs(positionT - color.getPosition()) > 0.05);
-    let okS = this.value.getComponents()[0].getComponents().every((color, indexS, array) => indexS === idxS || Math.abs(positionS - color.getPosition()) > 0.1);
-    let oldPositionT = parseFloat(input.getAttribute("T"));
-    let oldPositionS = parseFloat(input.getAttribute("S"));
-    let left = -8 + width * positionT;
-    let top = gap - 8 + height * (1 - positionS) - ((idxS + this.value.getComponents()[0].getComponents().length * idxT) * 16);
-    if (free) {
-      if (okT && okS) {
-        this.move(input, oldPositionT, oldPositionS, positionT, positionS, left, top, gap, height);
-        this.value.move(oldPositionT, positionT, oldPositionS, positionS);
-        this.drawCanvas(5);
-        this.oninput(this.value);
-      }
-    } else if (temporal) {
-      if (okT) {
-        this.move(input, oldPositionT, oldPositionS, positionT, oldPositionS, left, parseFloat(input.style.top.replace("px", "")), gap, height);
-        this.value.move(oldPositionT, positionT, -1, -1);
-        this.drawCanvas(5);
-        this.oninput(this.value);
-      }
-    } else if (spatial) {
-      if (okS) {
-        this.move(input, oldPositionT, oldPositionS, oldPositionT, positionS, parseFloat(input.style.left.replace("px", "")), top, gap, height);
-        this.value.move(oldPositionT, positionT, oldPositionS, positionS);
-        this.drawCanvas(5);
-        this.oninput(this.value);
-      }
-    }
-  }
-
-   move(input, oldPositionT, oldPositionS, positionT, positionS, left, top, gap, height) {
-    this.value.getComponents().forEach((z4StopGradientColor, indexT, arrayT) => {
-      let brotherPositionT = z4StopGradientColor.getPosition();
-      z4StopGradientColor.getComponents().forEach((z4StopColor, indexS, arrayS) => {
-        let brotherPositionS = z4StopColor.getPosition();
-        if (brotherPositionT === oldPositionT || brotherPositionS === oldPositionS) {
-          let brother = this.querySelector(".sliders input[value='" + brotherPositionT + "-" + brotherPositionS + "']");
-          if (brotherPositionT !== 0 && brotherPositionT !== 1 && brotherPositionT === oldPositionT) {
-            brother.setAttribute("value", positionT + "-" + brotherPositionS);
-            brother.setAttribute("T", "" + positionT);
-            brother.style.left = left + "px";
-          }
-          if (brotherPositionS !== 0 && brotherPositionS !== 1 && brotherPositionS === oldPositionS) {
-            let brotherTop = gap - 8 + height * (1 - positionS) - ((indexS + arrayS.length * indexT) * 16);
-            brother.setAttribute("value", brotherPositionT + "-" + positionS);
-            brother.setAttribute("S", "" + positionS);
-            brother.style.top = brotherTop + "px";
-          }
-        }
-      });
-    });
-    input.setAttribute("value", positionT + "-" + positionS);
-    input.setAttribute("T", "" + positionT);
-    input.setAttribute("S", "" + positionS);
-    input.style.left = left + "px";
-    input.style.top = top + "px";
-  }
-
-   drawCanvas(step) {
-    this.canvas.width = Math.floor(Z4TemporalColorUI.WIDTH * window.devicePixelRatio);
-    this.canvas.height = Math.floor(Z4TemporalColorUI.HEIGHT * window.devicePixelRatio);
-    let offscreen = new OffscreenCanvas(Z4TemporalColorUI.WIDTH, Z4TemporalColorUI.HEIGHT);
-    let offscreenCtx = offscreen.getContext("2d");
-    for (let x = 0; x < Z4TemporalColorUI.WIDTH; x += step) {
-      let z4GradientColor = this.value.getZ4GradientColorAt(x / Z4TemporalColorUI.WIDTH, true, true);
-      for (let y = 0; y < Z4TemporalColorUI.HEIGHT; y += step) {
-        offscreenCtx.fillStyle = z4GradientColor.getZ4ColorAt(y / Z4TemporalColorUI.HEIGHT, true, true).getHEX();
-        offscreenCtx.fillRect(x, Z4TemporalColorUI.HEIGHT - y - step, step, step);
-      }
-    }
-    this.ctx.save();
-    this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    this.ctx.fillStyle = this.chessboard;
-    this.ctx.fillRect(0, 0, Z4TemporalColorUI.WIDTH, Z4TemporalColorUI.HEIGHT);
-    this.ctx.drawImage(offscreen, 0, 0);
-    this.ctx.restore();
   }
 
    dispose() {
     this.disposeDevicePixelRatio();
+    this.resizeObserver.unobserve(this.canvas);
   }
 }
 /**
