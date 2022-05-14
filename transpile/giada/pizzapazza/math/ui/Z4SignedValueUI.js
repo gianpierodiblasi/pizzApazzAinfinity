@@ -26,12 +26,12 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
    */
   constructor() {
     super(Z4SignedValueUI.UI);
-    let imgs = this.querySelectorAll(".btn-group img");
+    let imgs = this.querySelectorAll(".btn-group-sign img");
     for (let i = 0; i < imgs.length; i++) {
       let img = imgs.item(i);
       img.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".svg");
     }
-    let buttons = this.querySelectorAll(".btn-group button");
+    let buttons = this.querySelectorAll(".btn-group-sign button");
     for (let i = 0; i < buttons.length; i++) {
       let button = buttons.item(i);
       button.onclick = (event) => {
@@ -147,9 +147,9 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
    setSignVisible(visible) {
     this.signVisible = visible;
     if (visible) {
-      this.querySelector(".btn-group").classList.remove("sign-not-visible");
+      this.querySelector(".btn-group-sign").classList.remove("sign-not-visible");
     } else {
-      this.querySelector(".btn-group").classList.add("sign-not-visible");
+      this.querySelector(".btn-group-sign").classList.add("sign-not-visible");
     }
     this.setSpan();
     return this;

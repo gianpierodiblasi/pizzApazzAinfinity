@@ -39,13 +39,13 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
   public Z4SignedValueUI() {
     super(Z4SignedValueUI.UI);
 
-    NodeList imgs = this.querySelectorAll(".btn-group img");
+    NodeList imgs = this.querySelectorAll(".btn-group-sign img");
     for (int i = 0; i < imgs.length; i++) {
       HTMLElement img = (HTMLElement) imgs.item(i);
       img.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".svg");
     }
 
-    NodeList buttons = this.querySelectorAll(".btn-group button");
+    NodeList buttons = this.querySelectorAll(".btn-group-sign button");
     for (int i = 0; i < buttons.length; i++) {
       HTMLElement button = (HTMLElement) buttons.item(i);
       button.onclick = (event) -> {
@@ -172,9 +172,9 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
   public Z4SignedValueUI setSignVisible(boolean visible) {
     this.signVisible = visible;
     if (visible) {
-      this.querySelector(".btn-group").classList.remove("sign-not-visible");
+      this.querySelector(".btn-group-sign").classList.remove("sign-not-visible");
     } else {
-      this.querySelector(".btn-group").classList.add("sign-not-visible");
+      this.querySelector(".btn-group-sign").classList.add("sign-not-visible");
     }
     this.setSpan();
 

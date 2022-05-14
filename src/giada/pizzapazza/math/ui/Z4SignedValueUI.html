@@ -9,28 +9,33 @@
 </div>
 
 <div class="form-expanded" style="display:flex;flex-direction:column;gap:2px;margin-top:2px">
-  <div class="btn-group" role="group">
-    <button class="btn btn-sm btn-outline-secondary" type="button" data-value="positive">
-      <img data-icon="positive" class="z4-dark-img-negative" width="20" height="20"/>
-      <span data-token-lang-inner_text="POSITIVE">Positive</span>
-    </button>
-    <button class="btn btn-sm btn-outline-secondary" type="button" data-value="negative">
-      <img data-icon="negative" class="z4-dark-img-negative" width="20" height="20"/>
-      <span data-token-lang-inner_text="NEGATIVE">Negative</span>
-    </button>
-    <button class="btn btn-sm btn-outline-secondary" type="button" data-value="random">
-      <img data-icon="random" class="z4-dark-img-negative" width="20" height="20"/>
-      <span data-token-lang-inner_text="RANDOM">Random</span>
-    </button>
-    <button class="btn btn-sm btn-outline-secondary" type="button" data-value="alternate">
-      <img data-icon="alternate" class="z4-dark-img-negative" width="20" height="20"/>
-      <span data-token-lang-inner_text="ALTERNATE">Alternate</span>
-    </button>
+  <div style="display:flex;align-items:center;gap:2px">
+    <label class="form-label value-label" style="font-size:smaller;margin-bottom:0px" data-token-lang-inner_text="SIGN">Sign</label>
+    <div class="btn-group btn-group-sign" style="flex:1" role="group">
+      <button class="btn btn-sm btn-outline-secondary" type="button" data-value="positive">
+        <img data-icon="positive" class="z4-dark-img-negative" width="20" height="20"/>
+        <span data-token-lang-inner_text="POSITIVE">Positive</span>
+      </button>
+      <button class="btn btn-sm btn-outline-secondary" type="button" data-value="negative">
+        <img data-icon="negative" class="z4-dark-img-negative" width="20" height="20"/>
+        <span data-token-lang-inner_text="NEGATIVE">Negative</span>
+      </button>
+      <button class="btn btn-sm btn-outline-secondary" type="button" data-value="random">
+        <img data-icon="random" class="z4-dark-img-negative" width="20" height="20"/>
+        <span data-token-lang-inner_text="RANDOM">Random</span>
+      </button>
+      <button class="btn btn-sm btn-outline-secondary" type="button" data-value="alternate">
+        <img data-icon="alternate" class="z4-dark-img-negative" width="20" height="20"/>
+        <span data-token-lang-inner_text="ALTERNATE">Alternate</span>
+      </button>
+    </div>
   </div>
+
   <div class="input-group">
     <span class="input-group-text range-label">[0,&infin;]</span>
     <input type="number" class="form-control form-control-sm value" value="0" min="0" step="1" max="999999999" style="text-align: right"/>
   </div>
+
   <div style="display:flex;align-items:center">
     <label class="form-label" style="font-size:larger;margin-bottom:4px">&ll;</label>
     <input type="range" class="form-range spinner" style="flex:1" value="0" min="-50" max="50" step="1"/>  
