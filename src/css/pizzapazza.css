@@ -32,12 +32,6 @@
   border-bottom-right-radius: 0.2rem !important;
 }
 
-/* SIGNED RANDOM VALUE*/
-.sign-toggle-not-visible + span.signed-random-value {
-  border-top-left-radius: 0px !important;
-  border-bottom-left-radius: 0px !important;
-}
-
 /* FANCIFUL VALUE */
 .fanciful-container-horizontal {
   flex-direction: row;
