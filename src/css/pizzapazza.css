@@ -27,7 +27,7 @@
 .sign-not-visible {
   display: none;
 }
-.not-compact {
+.signed-value-not-compact {
   border-top-right-radius: 0.2rem !important;
   border-bottom-right-radius: 0.2rem !important;
 }
