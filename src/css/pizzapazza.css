@@ -27,6 +27,10 @@
 .sign-not-visible {
   display: none;
 }
+.not-compact {
+  border-top-right-radius: 0.2rem !important;
+  border-bottom-right-radius: 0.2rem !important;
+}
 
 /* SIGNED RANDOM VALUE*/
 .sign-toggle-not-visible + span.signed-random-value {

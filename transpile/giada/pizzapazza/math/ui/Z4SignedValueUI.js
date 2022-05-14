@@ -112,6 +112,19 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
   }
 
   /**
+   * Sets the compact visualization
+   *
+   * @return This Z4SignedValueUI
+   */
+   compact() {
+    this.valueSpan.classList.remove("not-compact");
+    this.querySelector(".dropdown-toggle-split").style.display = "inline-block";
+    this.querySelector(".form-expanded").classList.add("mx-1");
+    this.querySelector(".dropdown-menu").appendChild(this.querySelector(".form-expanded"));
+    return this;
+  }
+
+  /**
    * Sets the range of this Z4SignedValueUI
    *
    * @param min The minumum (positive) value
