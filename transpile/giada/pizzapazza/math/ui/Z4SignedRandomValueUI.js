@@ -5,9 +5,13 @@
  */
 class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
 
-  // private final $HTMLElement valueLength = this.querySelector(".type-length");
-  // private final $HTMLElement spinnerLength = this.querySelector(".type-length-spinner");
+   valueLength = this.querySelector(".type-length");
+
+   spinnerLength = this.querySelector(".type-length-spinner");
+
    signedValueUI = new Z4SignedValueUI();
+
+   valueSpan = this.signedValueUI.querySelector(".value-span");
 
    applySpin = () => this.spin();
 
@@ -23,9 +27,8 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
   constructor() {
     super(Z4SignedRandomValueUI.UI);
     this.signedValueUI.appendToComponent(this);
-    // this.signedValueUI.oninput = (signedValue) -> this.oninput.$apply(this.createSignedRandomValue(this.toggleType.getAttribute("data-value")));
-    // this.signedValueUI.onchange = (signedValue) -> this.onchange.$apply(this.createSignedRandomValue(this.toggleType.getAttribute("data-value")));
-    // 
+    this.signedValueUI.oninput = (signedValue) => this.oninput(this.createSignedRandomValue(this.getType()));
+    this.signedValueUI.onchange = (signedValue) => this.onchange(this.createSignedRandomValue(this.getType()));
     this.signedValueUI.querySelector(".form-expanded").insertBefore(this.querySelector(".btn-group-type-container"), this.signedValueUI.querySelector(".form-expanded .input-group"));
     this.signedValueUI.querySelector(".form-expanded").insertBefore(this.querySelector(".container-length"), this.signedValueUI.querySelector(".form-expanded .input-group"));
     let imgs = this.querySelectorAll(".btn-group-type img");
@@ -37,72 +40,61 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
     for (let i = 0; i < buttons.length; i++) {
       let button = buttons.item(i);
       button.onclick = (event) => {
-        let str = button.getAttribute("data-value");
-        // this.querySelector(".divider-length").style.display = str == "classic" ? "none" : "block"; // JS equality for strings
-        // this.querySelector(".container-length").style.display = str == "classic" ? "none" : "block"; // JS equality for strings
-        // 
-        // this.onchange.$apply(this.createSignedRandomValue(str));
+        this.onchange(this.createSignedRandomValue(button.getAttribute("data-value")));
         return null;
       };
     }
-    // 
-    // this.valueLength.oninput = (event) -> {
-    // this.oninput.$apply(this.createSignedRandomValue(this.toggleType.getAttribute("data-value")));
-    // return null;
-    // };
-    // this.valueLength.onchange = (event) -> {
-    // this.onchange.$apply(this.createSignedRandomValue(this.toggleType.getAttribute("data-value")));
-    // return null;
-    // };
-    // this.valueLength.onfocus = (event) -> {
-    // this.valueLength.select();
-    // return null;
-    // };
-    // if (Z4Loader.touch) {
-    // this.spinnerLength.ontouchstart = (event) -> this.startSpin();
-    // this.spinnerLength.ontouchend = (event) -> this.stopSpin();
-    // } else {
-    // this.spinnerLength.onmousedown = (event) -> this.startSpin();
-    // this.spinnerLength.onmouseup = (event) -> this.stopSpin();
-    // }
-    // 
+    this.valueLength.oninput = (event) => {
+      this.oninput(this.createSignedRandomValue(this.getType()));
+      return null;
+    };
+    this.valueLength.onchange = (event) => {
+      this.onchange(this.createSignedRandomValue(this.getType()));
+      return null;
+    };
+    this.valueLength.onfocus = (event) => {
+      this.valueLength.select();
+      return null;
+    };
+    if (Z4Loader.touch) {
+      this.spinnerLength.ontouchstart = (event) => this.startSpin();
+      this.spinnerLength.ontouchend = (event) => this.stopSpin();
+    } else {
+      this.spinnerLength.onmousedown = (event) => this.startSpin();
+      this.spinnerLength.onmouseup = (event) => this.stopSpin();
+    }
     this.setValue(Z4SignedRandomValue.classic(0));
   }
 
    startSpin() {
-    // this.isApplySpin = true;
-    // this.applySpin.$apply();
+    this.isApplySpin = true;
+    this.applySpin();
     return null;
   }
 
    stopSpin() {
-    // this.isApplySpin = false;
-    // this.spinnerLength.value = "0";
+    this.isApplySpin = false;
+    this.spinnerLength.value = "0";
     return null;
   }
 
    spin() {
-    // double min = parseFloat(this.valueLength.getAttribute("min"));
-    // double max = parseFloat(this.valueLength.getAttribute("max"));
-    // 
-    // double v = this.spinnerLength.valueAsNumber;
-    // double abs = 1;
-    // 
-    // if ($exists(v)) {
-    // abs = Math.abs(v);
-    // 
-    // v = Math.max(min, this.valueLength.valueAsNumber + (v > 0 ? 1 : -1));
-    // v = Math.min(v, max);
-    // 
-    // this.valueLength.value = "" + v;
-    // this.oninput.$apply(this.createSignedRandomValue(this.toggleType.getAttribute("data-value")));
-    // }
-    // 
-    // if (this.isApplySpin) {
-    // setTimeout(this.applySpin, 500 / abs);
-    // } else {
-    // this.onchange.$apply(this.createSignedRandomValue(this.toggleType.getAttribute("data-value")));
-    // }
+    let min = parseFloat(this.valueLength.getAttribute("min"));
+    let max = parseFloat(this.valueLength.getAttribute("max"));
+    let v = this.spinnerLength.valueAsNumber;
+    let abs = 1;
+    if (v) {
+      abs = Math.abs(v);
+      v = Math.max(min, this.valueLength.valueAsNumber + (v > 0 ? 1 : -1));
+      v = Math.min(v, max);
+      this.valueLength.value = "" + v;
+      this.oninput(this.createSignedRandomValue(this.getType()));
+    }
+    if (this.isApplySpin) {
+      setTimeout(this.applySpin, 500 / abs);
+    } else {
+      this.onchange(this.createSignedRandomValue(this.getType()));
+    }
   }
 
   /**
@@ -146,9 +138,9 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
    * @return This Z4SignedRandomValueUI
    */
    setLengthRange(min, max) {
-    // this.valueLength.setAttribute("min", "" + min);
-    // this.valueLength.setAttribute("max", "" + max);
-    // this.querySelector(".range-length-label").innerHTML = "[" + min + "," + (max == 999999999 ? "&infin;" : max) + "]";
+    this.valueLength.setAttribute("min", "" + min);
+    this.valueLength.setAttribute("max", "" + max);
+    this.querySelector(".range-length-label").innerHTML = "[" + min + "," + (max === 999999999 ? "&infin;" : max) + "]";
     return this;
   }
 
@@ -167,42 +159,92 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
 
    setValue(value) {
     this.value = value;
-    let str = null;
-    if (this.value.isClassic()) {
-      str = "classic";
-    } else if (this.value.isBezier()) {
-      str = "bezier";
-    } else if (this.value.isPolyline()) {
-      str = "polyline";
-    } else if (this.value.isStepped()) {
-      str = "stepped";
-    }
     this.signedValueUI.setValue(new Z4SignedValue().setValue(this.value.getValue()).setSign(this.value.getSign()));
-    // 
-    // this.querySelector(".divider-length").style.display = str == "classic" ? "none" : "block"; // JS equality for strings
-    // this.querySelector(".container-length").style.display = str == "classic" ? "none" : "block"; // JS equality for strings
-    // this.valueLength.value = "" + this.getValue().getLength();
+    if (this.value.isClassic()) {
+      this.valueLength.setAttribute("disabled", "disabled");
+      this.spinnerLength.setAttribute("disabled", "disabled");
+    } else if (this.value.isBezier()) {
+      this.valueLength.removeAttribute("disabled");
+      this.spinnerLength.removeAttribute("disabled");
+    } else if (this.value.isPolyline()) {
+      this.valueLength.removeAttribute("disabled");
+      this.spinnerLength.removeAttribute("disabled");
+    } else if (this.value.isStepped()) {
+      this.valueLength.removeAttribute("disabled");
+      this.spinnerLength.removeAttribute("disabled");
+    }
+    this.valueLength.value = "" + this.getValue().getLength();
+    this.setSpan();
     return this;
   }
 
-  // private Z4SignedRandomValue createSignedRandomValue(String str) {
-  // Z4SignedValue signedValue = this.signedValueUI.getValue();
-  // switch (str) {
-  // case "classic":
-  // this.value = Z4SignedRandomValue.classic(signedValue.getValue()).setSign(signedValue.getSign());
-  // break;
-  // case "bezier":
-  // this.value = Z4SignedRandomValue.bezier(signedValue.getValue(), this.valueLength.valueAsNumber).setSign(signedValue.getSign());
-  // break;
-  // case "polyline":
-  // this.value = Z4SignedRandomValue.polyline(signedValue.getValue(), this.valueLength.valueAsNumber).setSign(signedValue.getSign());
-  // break;
-  // case "stepped":
-  // this.value = Z4SignedRandomValue.stepped(signedValue.getValue(), this.valueLength.valueAsNumber).setSign(signedValue.getSign());
-  // break;
-  // }
-  // return this.value;
-  // }
+   createSignedRandomValue(str) {
+    let signedValue = this.signedValueUI.getValue();
+    switch(str) {
+      case "classic":
+        this.value = Z4SignedRandomValue.classic(signedValue.getValue()).setSign(signedValue.getSign());
+        this.valueLength.setAttribute("disabled", "disabled");
+        this.spinnerLength.setAttribute("disabled", "disabled");
+        break;
+      case "bezier":
+        this.value = Z4SignedRandomValue.bezier(signedValue.getValue(), this.valueLength.valueAsNumber).setSign(signedValue.getSign());
+        this.valueLength.removeAttribute("disabled");
+        this.spinnerLength.removeAttribute("disabled");
+        break;
+      case "polyline":
+        this.value = Z4SignedRandomValue.polyline(signedValue.getValue(), this.valueLength.valueAsNumber).setSign(signedValue.getSign());
+        this.valueLength.removeAttribute("disabled");
+        this.spinnerLength.removeAttribute("disabled");
+        break;
+      case "stepped":
+        this.value = Z4SignedRandomValue.stepped(signedValue.getValue(), this.valueLength.valueAsNumber).setSign(signedValue.getSign());
+        this.valueLength.removeAttribute("disabled");
+        this.spinnerLength.removeAttribute("disabled");
+        break;
+    }
+    this.setSpan();
+    return this.value;
+  }
+
+   getType() {
+    if (this.value.isClassic()) {
+      return "classic";
+    } else if (this.value.isBezier()) {
+      return "bezier";
+    } else if (this.value.isPolyline()) {
+      return "polyline";
+    } else if (this.value.isStepped()) {
+      return "stepped";
+    } else {
+      return null;
+    }
+  }
+
+   setSpan() {
+    let sign = "";
+    if (!this.signedValueUI.isSignVisible()) {
+    } else if (this.value.getSign() === Z4Sign.POSITIVE) {
+      sign = "&plus;";
+    } else if (this.value.getSign() === Z4Sign.NEGATIVE) {
+      sign = "&minus;";
+    } else if (this.value.getSign() === Z4Sign.RANDOM) {
+      sign = "&plusmn;";
+    } else {
+      sign = "&plusmn;<sup>&UpArrowDownArrow;</sup>";
+    }
+    let rnd = "";
+    if (this.value.isClassic()) {
+      rnd = "rnd";
+    } else if (this.value.isBezier()) {
+      rnd = "rnd<sup>" + this.value.getLength() + "</sup>";
+    } else if (this.value.isPolyline()) {
+      rnd = "rnd<sup>" + this.value.getLength() + "</sup>";
+    } else if (this.value.isStepped()) {
+      rnd = "rnd<sup>" + this.value.getLength() + "</sup>";
+    }
+    this.valueSpan.innerHTML = sign + rnd + "(" + this.value.getValue() + ")";
+  }
+
    dispose() {
   }
 }

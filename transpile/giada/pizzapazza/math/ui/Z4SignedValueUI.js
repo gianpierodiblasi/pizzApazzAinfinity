@@ -38,30 +38,33 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
         let str = button.getAttribute("data-value");
         switch(str) {
           case "positive":
-            this.onchange(this.value.setSign(Z4Sign.POSITIVE));
+            this.value.setSign(Z4Sign.POSITIVE);
             break;
           case "negative":
-            this.onchange(this.value.setSign(Z4Sign.NEGATIVE));
+            this.value.setSign(Z4Sign.NEGATIVE);
             break;
           case "random":
-            this.onchange(this.value.setSign(Z4Sign.RANDOM));
+            this.value.setSign(Z4Sign.RANDOM);
             break;
           case "alternate":
-            this.onchange(this.value.setSign(Z4Sign.alternate()));
+            this.value.setSign(Z4Sign.alternate());
             break;
         }
         this.setSpan();
+        this.onchange(this.value);
         return null;
       };
     }
     this.text.oninput = (event) => {
-      this.oninput(this.value.setValue(this.text.valueAsNumber));
+      this.value.setValue(this.text.valueAsNumber);
       this.setSpan();
+      this.oninput(this.value);
       return null;
     };
     this.text.onchange = (event) => {
-      this.onchange(this.value.setValue(this.text.valueAsNumber));
+      this.value.setValue(this.text.valueAsNumber);
       this.setSpan();
+      this.onchange(this.value);
       return null;
     };
     this.text.onfocus = (event) => {
@@ -100,14 +103,16 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
       v = Math.max(min, this.text.valueAsNumber + (v > 0 ? 1 : -1));
       v = Math.min(v, max);
       this.text.value = "" + v;
-      this.oninput(this.value.setValue(this.text.valueAsNumber));
+      this.value.setValue(this.text.valueAsNumber);
       this.setSpan();
+      this.oninput(this.value);
     }
     if (this.isApplySpin) {
       setTimeout(this.applySpin, 500 / abs);
     } else {
-      this.onchange(this.value.setValue(this.text.valueAsNumber));
+      this.value.setValue(this.text.valueAsNumber);
       this.setSpan();
+      this.onchange(this.value);
     }
   }
 
@@ -153,6 +158,15 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
     }
     this.setSpan();
     return this;
+  }
+
+  /**
+   * Checks if the sign is visible
+   *
+   * @return true if the sign is visible, false otherwise
+   */
+   isSignVisible() {
+    return this.signVisible;
   }
 
   /**
