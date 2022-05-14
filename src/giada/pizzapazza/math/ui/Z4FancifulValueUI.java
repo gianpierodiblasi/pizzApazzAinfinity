@@ -215,30 +215,6 @@ public class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI<Z4Fanciful
     return this;
   }
 
-  /**
-   * Sets the horizontal orientation
-   *
-   * @return This Z4FancifulValueUI
-   */
-  public Z4FancifulValueUI setHorizontal() {
-    $HTMLElement element = this.querySelector(".fanciful-container");
-    element.classList.remove("fanciful-container-vertical");
-    element.classList.add("fanciful-container-horizontal");
-    return this;
-  }
-
-  /**
-   * Sets the vertical orientation
-   *
-   * @return This Z4FancifulValueUI
-   */
-  public Z4FancifulValueUI setVertical() {
-    $HTMLElement element = this.querySelector(".fanciful-container");
-    element.classList.add("fanciful-container-vertical");
-    element.classList.remove("fanciful-container-horizontal");
-    return this;
-  }
-
   @Override
   @SuppressWarnings("unchecked")
   public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4FancifulValue value) {

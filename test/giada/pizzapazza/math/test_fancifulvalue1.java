@@ -47,8 +47,11 @@ public class test_fancifulvalue1 {
             setRandom(Z4SignedRandomValue.bezier(20, 10).setSign(Z4Sign.RANDOM)).
             setProportional(new Z4SignedValue().setValue(30).setSign(Z4Sign.POSITIVE));
 
-    Z4FancifulValueUI ui2 = new Z4FancifulValueUI().setVertical().setValue(v);
+    Z4FancifulValueUI ui2 = new Z4FancifulValueUI().setValue(v);
     ui2.appendToElement(document.querySelector("#test3"));
+    
+    Z4FancifulValueUI ui3 = new Z4FancifulValueUI();
+    ui3.appendToElement(document.querySelector("#test5"));
 
     ui1.oninput = (value) -> document.getElementById("test2").textContent = "ONINPUT " + test_fancifulvalue1.stringify(value);
     ui1.onchange = (value) -> document.getElementById("test2").textContent = "ONCHANGE " + test_fancifulvalue1.stringify(value);
@@ -58,6 +61,10 @@ public class test_fancifulvalue1 {
     ui2.onchange = (value) -> document.getElementById("test4").textContent = "ONCHANGE " + test_fancifulvalue1.stringify(value);
     document.getElementById("test4").textContent = test_fancifulvalue1.stringify(ui2.getValue());
 
+    ui3.oninput = (value) -> document.getElementById("test6").textContent = "ONINPUT " + test_fancifulvalue1.stringify(value);
+    ui3.onchange = (value) -> document.getElementById("test6").textContent = "ONCHANGE " + test_fancifulvalue1.stringify(value);
+    document.getElementById("test6").textContent = test_fancifulvalue1.stringify(ui3.getValue());
+    
     Function<Event, Object> onComponent = (event) -> {
       ui1.setComponentsVisible(
               (($HTMLElement) document.getElementById("constant-visible")).checked,
@@ -65,6 +72,11 @@ public class test_fancifulvalue1 {
               (($HTMLElement) document.getElementById("proportional-visible")).checked
       );
       ui2.setComponentsVisible(
+              (($HTMLElement) document.getElementById("constant-visible")).checked,
+              (($HTMLElement) document.getElementById("random-visible")).checked,
+              (($HTMLElement) document.getElementById("proportional-visible")).checked
+      );
+      ui3.setComponentsVisible(
               (($HTMLElement) document.getElementById("constant-visible")).checked,
               (($HTMLElement) document.getElementById("random-visible")).checked,
               (($HTMLElement) document.getElementById("proportional-visible")).checked
@@ -82,6 +94,11 @@ public class test_fancifulvalue1 {
               (($HTMLElement) document.getElementById("proportional-sign-visible")).checked
       );
       ui2.setSignsVisible(
+              (($HTMLElement) document.getElementById("constant-sign-visible")).checked,
+              (($HTMLElement) document.getElementById("random-sign-visible")).checked,
+              (($HTMLElement) document.getElementById("proportional-sign-visible")).checked
+      );
+      ui3.setSignsVisible(
               (($HTMLElement) document.getElementById("constant-sign-visible")).checked,
               (($HTMLElement) document.getElementById("random-sign-visible")).checked,
               (($HTMLElement) document.getElementById("proportional-sign-visible")).checked

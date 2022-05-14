@@ -33,18 +33,6 @@
 }
 
 /* FANCIFUL VALUE */
-.fanciful-container-horizontal {
-  flex-direction: row;
-  align-items: center;
-  gap: 4px;
-}
-.fanciful-container-vertical {
-  flex-direction: column;
-}
-.fanciful-container-vertical > div {
-  width: 100%;
-}
-
 .toggle-uniform::after {
   vertical-align: 0.254em;
 }
