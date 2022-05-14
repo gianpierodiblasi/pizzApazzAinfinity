@@ -42,8 +42,8 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
     this.signedValueUI.oninput = (signedValue) -> this.oninput.$apply(this.createSignedRandomValue(this.getType()));
     this.signedValueUI.onchange = (signedValue) -> this.onchange.$apply(this.createSignedRandomValue(this.getType()));
 
-    this.signedValueUI.querySelector(".form-expanded").insertBefore(this.querySelector(".btn-group-type-container"), this.signedValueUI.querySelector(".form-expanded .input-group"));
-    this.signedValueUI.querySelector(".form-expanded").insertBefore(this.querySelector(".container-length"), this.signedValueUI.querySelector(".form-expanded .input-group"));
+    this.signedValueUI.querySelector(".form-expanded").insertBefore(this.querySelector(".btn-group-type-container"), this.signedValueUI.querySelector(".form-expanded .value-label-fixed"));
+    this.signedValueUI.querySelector(".form-expanded").insertBefore(this.querySelector(".container-length"), this.signedValueUI.querySelector(".form-expanded .value-label-fixed"));
 
     NodeList imgs = this.querySelectorAll(".btn-group-type img");
     for (int i = 0; i < imgs.length; i++) {
@@ -266,11 +266,11 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
     if (this.value.isClassic()) {
       rnd = "rnd";
     } else if (this.value.isBezier()) {
-      rnd = "rnd<sup>" + this.value.getLength() + "</sup>";
+      rnd = "rnd&#8767;<sup>" + this.value.getLength() + "</sup>";
     } else if (this.value.isPolyline()) {
-      rnd = "rnd<sup>" + this.value.getLength() + "</sup>";
+      rnd = "rnd&#8896;<sup>" + this.value.getLength() + "</sup>";
     } else if (this.value.isStepped()) {
-      rnd = "rnd<sup>" + this.value.getLength() + "</sup>";
+      rnd = "rnd&#8851;<sup>" + this.value.getLength() + "</sup>";
     }
 
     this.valueSpan.innerHTML = sign + rnd + "(" + this.value.getValue() + ")";

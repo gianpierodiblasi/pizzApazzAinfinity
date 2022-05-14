@@ -24,12 +24,12 @@
 }
 
 /* SIGNED VALUE */
-.sign-label-not-visible, .sign-toggle-not-visible {
+.sign-not-visible {
   display: none;
 }
-.sign-toggle-not-visible + span {
-  border-top-left-radius: 0.2rem !important;
-  border-bottom-left-radius: 0.2rem !important;
+.signed-value-not-compact {
+  border-top-right-radius: 0.2rem !important;
+  border-bottom-right-radius: 0.2rem !important;
 }
 
 /* SIGNED RANDOM VALUE*/

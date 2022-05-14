@@ -1805,9 +1805,7 @@ class Z4Point {
  */
 class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
 
-   toggle = this.querySelector(".sign-button");
-
-   toggleImg = this.querySelector(".sign-button img");
+   valueSpan = this.querySelector(".value-span");
 
    text = this.querySelector(".value");
 
@@ -1816,6 +1814,8 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
    applySpin = () => this.spin();
 
    isApplySpin = false;
+
+   signVisible = true;
 
   static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
 
@@ -1826,42 +1826,45 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
    */
   constructor() {
     super(Z4SignedValueUI.UI);
-    this.toggleImg.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + this.toggle.getAttribute("data-value") + ".svg");
-    let imgs = this.querySelectorAll(".dropdown-menu img");
+    let imgs = this.querySelectorAll(".btn-group-sign img");
     for (let i = 0; i < imgs.length; i++) {
       let img = imgs.item(i);
       img.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".svg");
     }
-    let buttons = this.querySelectorAll(".dropdown-item");
+    let buttons = this.querySelectorAll(".btn-group-sign button");
     for (let i = 0; i < buttons.length; i++) {
       let button = buttons.item(i);
       button.onclick = (event) => {
         let str = button.getAttribute("data-value");
-        this.toggle.setAttribute("data-value", str);
-        this.toggleImg.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + str + ".svg");
         switch(str) {
           case "positive":
-            this.onchange(this.value.setSign(Z4Sign.POSITIVE));
+            this.value.setSign(Z4Sign.POSITIVE);
             break;
           case "negative":
-            this.onchange(this.value.setSign(Z4Sign.NEGATIVE));
+            this.value.setSign(Z4Sign.NEGATIVE);
             break;
           case "random":
-            this.onchange(this.value.setSign(Z4Sign.RANDOM));
+            this.value.setSign(Z4Sign.RANDOM);
             break;
           case "alternate":
-            this.onchange(this.value.setSign(Z4Sign.alternate()));
+            this.value.setSign(Z4Sign.alternate());
             break;
         }
+        this.setSpan();
+        this.onchange(this.value);
         return null;
       };
     }
     this.text.oninput = (event) => {
-      this.oninput(this.value.setValue(this.text.valueAsNumber));
+      this.value.setValue(this.text.valueAsNumber);
+      this.setSpan();
+      this.oninput(this.value);
       return null;
     };
     this.text.onchange = (event) => {
-      this.onchange(this.value.setValue(this.text.valueAsNumber));
+      this.value.setValue(this.text.valueAsNumber);
+      this.setSpan();
+      this.onchange(this.value);
       return null;
     };
     this.text.onfocus = (event) => {
@@ -1900,13 +1903,30 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
       v = Math.max(min, this.text.valueAsNumber + (v > 0 ? 1 : -1));
       v = Math.min(v, max);
       this.text.value = "" + v;
-      this.oninput(this.value.setValue(this.text.valueAsNumber));
+      this.value.setValue(this.text.valueAsNumber);
+      this.setSpan();
+      this.oninput(this.value);
     }
     if (this.isApplySpin) {
       setTimeout(this.applySpin, 500 / abs);
     } else {
-      this.onchange(this.value.setValue(this.text.valueAsNumber));
+      this.value.setValue(this.text.valueAsNumber);
+      this.setSpan();
+      this.onchange(this.value);
     }
+  }
+
+  /**
+   * Sets the compact visualization
+   *
+   * @return This Z4SignedValueUI
+   */
+   compact() {
+    this.valueSpan.classList.remove("signed-value-not-compact");
+    this.querySelector(".dropdown-toggle-split").style.display = "inline-block";
+    this.querySelector(".form-expanded").classList.add("mx-1");
+    this.querySelector(".dropdown-menu").appendChild(this.querySelector(".form-expanded"));
+    return this;
   }
 
   /**
@@ -1930,14 +1950,25 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
    * @return This Z4SignedValueUI
    */
    setSignVisible(visible) {
+    this.signVisible = visible;
     if (visible) {
-      this.querySelector(".sign-label").classList.remove("sign-label-not-visible");
-      this.toggle.classList.remove("sign-toggle-not-visible");
+      this.querySelector(".sign-label").classList.remove("sign-not-visible");
+      this.querySelector(".btn-group-sign").classList.remove("sign-not-visible");
     } else {
-      this.querySelector(".sign-label").classList.add("sign-label-not-visible");
-      this.toggle.classList.add("sign-toggle-not-visible");
+      this.querySelector(".sign-label").classList.add("sign-not-visible");
+      this.querySelector(".btn-group-sign").classList.add("sign-not-visible");
     }
+    this.setSpan();
     return this;
+  }
+
+  /**
+   * Checks if the sign is visible
+   *
+   * @return true if the sign is visible, false otherwise
+   */
+   isSignVisible() {
+    return this.signVisible;
   }
 
   /**
@@ -1959,20 +1990,23 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
 
    setValue(value) {
     this.value = value;
-    let str = null;
-    if (value.getSign() === Z4Sign.POSITIVE) {
-      str = "positive";
-    } else if (value.getSign() === Z4Sign.NEGATIVE) {
-      str = "negative";
-    } else if (value.getSign() === Z4Sign.RANDOM) {
-      str = "random";
-    } else {
-      str = "alternate";
-    }
-    this.toggle.setAttribute("data-value", str);
-    this.toggleImg.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + str + ".svg");
     this.text.value = "" + value.getValue();
+    this.setSpan();
     return this;
+  }
+
+   setSpan() {
+    if (!this.signVisible) {
+      this.valueSpan.innerHTML = "" + this.value.getValue();
+    } else if (this.value.getSign() === Z4Sign.POSITIVE) {
+      this.valueSpan.innerHTML = "&plus;" + this.value.getValue();
+    } else if (this.value.getSign() === Z4Sign.NEGATIVE) {
+      this.valueSpan.innerHTML = "&minus;" + this.value.getValue();
+    } else if (this.value.getSign() === Z4Sign.RANDOM) {
+      this.valueSpan.innerHTML = "&plusmn;" + this.value.getValue();
+    } else {
+      this.valueSpan.innerHTML = "&plusmn;<sup>&UpArrowDownArrow;</sup>" + this.value.getValue();
+    }
   }
 
    dispose() {
@@ -1985,15 +2019,13 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
  */
 class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
 
-   toggleType = this.querySelector(".toggle-type");
-
-   toggleTypeImg = this.querySelector(".toggle-type img");
-
    valueLength = this.querySelector(".type-length");
 
    spinnerLength = this.querySelector(".type-length-spinner");
 
    signedValueUI = new Z4SignedValueUI();
+
+   valueSpan = this.signedValueUI.querySelector(".value-span");
 
    applySpin = () => this.spin();
 
@@ -2009,35 +2041,29 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
   constructor() {
     super(Z4SignedRandomValueUI.UI);
     this.signedValueUI.appendToComponent(this);
-    this.signedValueUI.oninput = (signedValue) => this.oninput(this.createSignedRandomValue(this.toggleType.getAttribute("data-value")));
-    this.signedValueUI.onchange = (signedValue) => this.onchange(this.createSignedRandomValue(this.toggleType.getAttribute("data-value")));
-    this.toggleTypeImg.setAttribute("src", Z4SignedRandomValueUI.PATH + "z4randomvalue_" + this.toggleType.getAttribute("data-value") + ".svg");
-    let imgs = this.querySelectorAll(".toggle-type-dropdown-menu img");
+    this.signedValueUI.oninput = (signedValue) => this.oninput(this.createSignedRandomValue(this.getType()));
+    this.signedValueUI.onchange = (signedValue) => this.onchange(this.createSignedRandomValue(this.getType()));
+    this.signedValueUI.querySelector(".form-expanded").insertBefore(this.querySelector(".btn-group-type-container"), this.signedValueUI.querySelector(".form-expanded .value-label-fixed"));
+    this.signedValueUI.querySelector(".form-expanded").insertBefore(this.querySelector(".container-length"), this.signedValueUI.querySelector(".form-expanded .value-label-fixed"));
+    let imgs = this.querySelectorAll(".btn-group-type img");
     for (let i = 0; i < imgs.length; i++) {
       let img = imgs.item(i);
       img.setAttribute("src", Z4SignedRandomValueUI.PATH + "z4randomvalue_" + img.getAttribute("data-icon") + ".svg");
     }
-    let buttons = this.querySelectorAll(".toggle-type-dropdown-menu .dropdown-item");
+    let buttons = this.querySelectorAll(".btn-group-type button");
     for (let i = 0; i < buttons.length; i++) {
       let button = buttons.item(i);
       button.onclick = (event) => {
-        let str = button.getAttribute("data-value");
-        this.toggleType.setAttribute("data-value", str);
-        this.toggleTypeImg.setAttribute("src", Z4SignedRandomValueUI.PATH + "z4randomvalue_" + str + ".svg");
-        // JS equality for strings
-        this.querySelector(".divider-length").style.display = str === "classic" ? "none" : "block";
-        // JS equality for strings
-        this.querySelector(".container-length").style.display = str === "classic" ? "none" : "block";
-        this.onchange(this.createSignedRandomValue(str));
+        this.onchange(this.createSignedRandomValue(button.getAttribute("data-value")));
         return null;
       };
     }
     this.valueLength.oninput = (event) => {
-      this.oninput(this.createSignedRandomValue(this.toggleType.getAttribute("data-value")));
+      this.oninput(this.createSignedRandomValue(this.getType()));
       return null;
     };
     this.valueLength.onchange = (event) => {
-      this.onchange(this.createSignedRandomValue(this.toggleType.getAttribute("data-value")));
+      this.onchange(this.createSignedRandomValue(this.getType()));
       return null;
     };
     this.valueLength.onfocus = (event) => {
@@ -2051,11 +2077,6 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
       this.spinnerLength.onmousedown = (event) => this.startSpin();
       this.spinnerLength.onmouseup = (event) => this.stopSpin();
     }
-    this.signedValueUI.prependElement(this.querySelector(".type-label"));
-    this.querySelector(".number-group").prepend(this.querySelector(".toggle-type-dropdown-menu"));
-    this.querySelector(".number-group").prepend(this.toggleType);
-    this.querySelector(".sign-label").style.width = "50px";
-    this.querySelector(".range-label").classList.add("signed-random-value");
     this.setValue(Z4SignedRandomValue.classic(0));
   }
 
@@ -2081,13 +2102,23 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
       v = Math.max(min, this.valueLength.valueAsNumber + (v > 0 ? 1 : -1));
       v = Math.min(v, max);
       this.valueLength.value = "" + v;
-      this.oninput(this.createSignedRandomValue(this.toggleType.getAttribute("data-value")));
+      this.oninput(this.createSignedRandomValue(this.getType()));
     }
     if (this.isApplySpin) {
       setTimeout(this.applySpin, 500 / abs);
     } else {
-      this.onchange(this.createSignedRandomValue(this.toggleType.getAttribute("data-value")));
+      this.onchange(this.createSignedRandomValue(this.getType()));
     }
+  }
+
+  /**
+   * Sets the compact visualization
+   *
+   * @return This Z4SignedRandomValueUI
+   */
+   compact() {
+    this.signedValueUI.compact();
+    return this;
   }
 
   /**
@@ -2142,24 +2173,22 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
 
    setValue(value) {
     this.value = value;
-    let str = null;
-    if (this.value.isClassic()) {
-      str = "classic";
-    } else if (this.value.isBezier()) {
-      str = "bezier";
-    } else if (this.value.isPolyline()) {
-      str = "polyline";
-    } else if (this.value.isStepped()) {
-      str = "stepped";
-    }
-    this.toggleType.setAttribute("data-value", str);
-    this.toggleTypeImg.setAttribute("src", Z4SignedRandomValueUI.PATH + "z4randomvalue_" + str + ".svg");
     this.signedValueUI.setValue(new Z4SignedValue().setValue(this.value.getValue()).setSign(this.value.getSign()));
-    // JS equality for strings
-    this.querySelector(".divider-length").style.display = str === "classic" ? "none" : "block";
-    // JS equality for strings
-    this.querySelector(".container-length").style.display = str === "classic" ? "none" : "block";
+    if (this.value.isClassic()) {
+      this.valueLength.setAttribute("disabled", "disabled");
+      this.spinnerLength.setAttribute("disabled", "disabled");
+    } else if (this.value.isBezier()) {
+      this.valueLength.removeAttribute("disabled");
+      this.spinnerLength.removeAttribute("disabled");
+    } else if (this.value.isPolyline()) {
+      this.valueLength.removeAttribute("disabled");
+      this.spinnerLength.removeAttribute("disabled");
+    } else if (this.value.isStepped()) {
+      this.valueLength.removeAttribute("disabled");
+      this.spinnerLength.removeAttribute("disabled");
+    }
     this.valueLength.value = "" + this.getValue().getLength();
+    this.setSpan();
     return this;
   }
 
@@ -2168,18 +2197,66 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
     switch(str) {
       case "classic":
         this.value = Z4SignedRandomValue.classic(signedValue.getValue()).setSign(signedValue.getSign());
+        this.valueLength.setAttribute("disabled", "disabled");
+        this.spinnerLength.setAttribute("disabled", "disabled");
         break;
       case "bezier":
         this.value = Z4SignedRandomValue.bezier(signedValue.getValue(), this.valueLength.valueAsNumber).setSign(signedValue.getSign());
+        this.valueLength.removeAttribute("disabled");
+        this.spinnerLength.removeAttribute("disabled");
         break;
       case "polyline":
         this.value = Z4SignedRandomValue.polyline(signedValue.getValue(), this.valueLength.valueAsNumber).setSign(signedValue.getSign());
+        this.valueLength.removeAttribute("disabled");
+        this.spinnerLength.removeAttribute("disabled");
         break;
       case "stepped":
         this.value = Z4SignedRandomValue.stepped(signedValue.getValue(), this.valueLength.valueAsNumber).setSign(signedValue.getSign());
+        this.valueLength.removeAttribute("disabled");
+        this.spinnerLength.removeAttribute("disabled");
         break;
     }
+    this.setSpan();
     return this.value;
+  }
+
+   getType() {
+    if (this.value.isClassic()) {
+      return "classic";
+    } else if (this.value.isBezier()) {
+      return "bezier";
+    } else if (this.value.isPolyline()) {
+      return "polyline";
+    } else if (this.value.isStepped()) {
+      return "stepped";
+    } else {
+      return null;
+    }
+  }
+
+   setSpan() {
+    let sign = "";
+    if (!this.signedValueUI.isSignVisible()) {
+    } else if (this.value.getSign() === Z4Sign.POSITIVE) {
+      sign = "&plus;";
+    } else if (this.value.getSign() === Z4Sign.NEGATIVE) {
+      sign = "&minus;";
+    } else if (this.value.getSign() === Z4Sign.RANDOM) {
+      sign = "&plusmn;";
+    } else {
+      sign = "&plusmn;<sup>&UpArrowDownArrow;</sup>";
+    }
+    let rnd = "";
+    if (this.value.isClassic()) {
+      rnd = "rnd";
+    } else if (this.value.isBezier()) {
+      rnd = "rnd&#8767;<sup>" + this.value.getLength() + "</sup>";
+    } else if (this.value.isPolyline()) {
+      rnd = "rnd&#8896;<sup>" + this.value.getLength() + "</sup>";
+    } else if (this.value.isStepped()) {
+      rnd = "rnd&#8851;<sup>" + this.value.getLength() + "</sup>";
+    }
+    this.valueSpan.innerHTML = sign + rnd + "(" + this.value.getValue() + ")";
   }
 
    dispose() {

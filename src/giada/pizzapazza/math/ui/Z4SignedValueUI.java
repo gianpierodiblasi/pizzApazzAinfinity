@@ -177,8 +177,10 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
   public Z4SignedValueUI setSignVisible(boolean visible) {
     this.signVisible = visible;
     if (visible) {
+      this.querySelector(".sign-label").classList.remove("sign-not-visible");
       this.querySelector(".btn-group-sign").classList.remove("sign-not-visible");
     } else {
+      this.querySelector(".sign-label").classList.add("sign-not-visible");
       this.querySelector(".btn-group-sign").classList.add("sign-not-visible");
     }
     this.setSpan();
