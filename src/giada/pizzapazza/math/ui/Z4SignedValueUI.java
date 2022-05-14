@@ -21,13 +21,14 @@ import static simulation.js.$Globals.setTimeout;
  */
 public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValue> {
 
-  private final HTMLElement toggle = this.querySelector(".sign-button");
-  private final HTMLElement toggleImg = this.querySelector(".sign-button img");
+  private final HTMLElement valueSpan = this.querySelector(".value-span");
   private final $HTMLElement text = this.querySelector(".value");
   private final $HTMLElement spinner = this.querySelector(".spinner");
 
   private final $Apply_0_Void applySpin = () -> this.spin();
   private boolean isApplySpin = false;
+
+  private boolean signVisible = true;
 
   private final static String PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
   private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4SignedValueUI.html");
@@ -38,21 +39,17 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
   public Z4SignedValueUI() {
     super(Z4SignedValueUI.UI);
 
-    this.toggleImg.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + this.toggle.getAttribute("data-value") + ".svg");
-
-    NodeList imgs = this.querySelectorAll(".dropdown-menu img");
+    NodeList imgs = this.querySelectorAll(".btn-group img");
     for (int i = 0; i < imgs.length; i++) {
       HTMLElement img = (HTMLElement) imgs.item(i);
       img.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".svg");
     }
 
-    NodeList buttons = this.querySelectorAll(".dropdown-item");
+    NodeList buttons = this.querySelectorAll(".btn-group button");
     for (int i = 0; i < buttons.length; i++) {
       HTMLElement button = (HTMLElement) buttons.item(i);
       button.onclick = (event) -> {
         String str = button.getAttribute("data-value");
-        this.toggle.setAttribute("data-value", str);
-        this.toggleImg.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + str + ".svg");
 
         switch (str) {
           case "positive":
@@ -69,16 +66,19 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
             break;
         }
 
+        this.setSpan();
         return null;
       };
     }
 
     this.text.oninput = (event) -> {
       this.oninput.$apply(this.value.setValue(this.text.valueAsNumber));
+      this.setSpan();
       return null;
     };
     this.text.onchange = (event) -> {
       this.onchange.$apply(this.value.setValue(this.text.valueAsNumber));
+      this.setSpan();
       return null;
     };
     this.text.onfocus = (event) -> {
@@ -124,12 +124,14 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
 
       this.text.value = "" + v;
       this.oninput.$apply(this.value.setValue(this.text.valueAsNumber));
+      this.setSpan();
     }
 
     if (this.isApplySpin) {
       setTimeout(this.applySpin, 500 / abs);
     } else {
       this.onchange.$apply(this.value.setValue(this.text.valueAsNumber));
+      this.setSpan();
     }
   }
 
@@ -155,13 +157,13 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
    * @return This Z4SignedValueUI
    */
   public Z4SignedValueUI setSignVisible(boolean visible) {
+    this.signVisible = visible;
     if (visible) {
-      this.querySelector(".sign-label").classList.remove("sign-label-not-visible");
-      this.toggle.classList.remove("sign-toggle-not-visible");
+      this.querySelector(".btn-group").classList.remove("sign-not-visible");
     } else {
-      this.querySelector(".sign-label").classList.add("sign-label-not-visible");
-      this.toggle.classList.add("sign-toggle-not-visible");
+      this.querySelector(".btn-group").classList.add("sign-not-visible");
     }
+    this.setSpan();
 
     return this;
   }
@@ -187,23 +189,24 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
   @SuppressWarnings("unchecked")
   public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4SignedValue value) {
     this.value = value;
-
-    String str;
-    if (value.getSign() == Z4Sign.POSITIVE) {
-      str = "positive";
-    } else if (value.getSign() == Z4Sign.NEGATIVE) {
-      str = "negative";
-    } else if (value.getSign() == Z4Sign.RANDOM) {
-      str = "random";
-    } else {
-      str = "alternate";
-    }
-
-    this.toggle.setAttribute("data-value", str);
-    this.toggleImg.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + str + ".svg");
-
     this.text.value = "" + value.getValue();
+    this.setSpan();
+
     return (T) this;
+  }
+
+  private void setSpan() {
+    if (!this.signVisible) {
+      this.valueSpan.innerHTML = "" + this.value.getValue();
+    } else if (this.value.getSign() == Z4Sign.POSITIVE) {
+      this.valueSpan.innerHTML = "&plus;" + this.value.getValue();
+    } else if (this.value.getSign() == Z4Sign.NEGATIVE) {
+      this.valueSpan.innerHTML = "&minus;" + this.value.getValue();
+    } else if (this.value.getSign() == Z4Sign.RANDOM) {
+      this.valueSpan.innerHTML = "&plusmn;" + this.value.getValue();
+    } else {
+      this.valueSpan.innerHTML = "&plusmn;<sup>&UpArrowDownArrow;</sup>" + this.value.getValue();
+    }
   }
 
   @Override

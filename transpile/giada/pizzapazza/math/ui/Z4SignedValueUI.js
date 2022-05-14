@@ -5,9 +5,7 @@
  */
 class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
 
-   toggle = this.querySelector(".sign-button");
-
-   toggleImg = this.querySelector(".sign-button img");
+   valueSpan = this.querySelector(".value-span");
 
    text = this.querySelector(".value");
 
@@ -16,6 +14,8 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
    applySpin = () => this.spin();
 
    isApplySpin = false;
+
+   signVisible = true;
 
   static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
 
@@ -26,19 +26,16 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
    */
   constructor() {
     super(Z4SignedValueUI.UI);
-    this.toggleImg.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + this.toggle.getAttribute("data-value") + ".svg");
-    let imgs = this.querySelectorAll(".dropdown-menu img");
+    let imgs = this.querySelectorAll(".btn-group img");
     for (let i = 0; i < imgs.length; i++) {
       let img = imgs.item(i);
       img.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".svg");
     }
-    let buttons = this.querySelectorAll(".dropdown-item");
+    let buttons = this.querySelectorAll(".btn-group button");
     for (let i = 0; i < buttons.length; i++) {
       let button = buttons.item(i);
       button.onclick = (event) => {
         let str = button.getAttribute("data-value");
-        this.toggle.setAttribute("data-value", str);
-        this.toggleImg.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + str + ".svg");
         switch(str) {
           case "positive":
             this.onchange(this.value.setSign(Z4Sign.POSITIVE));
@@ -53,15 +50,18 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
             this.onchange(this.value.setSign(Z4Sign.alternate()));
             break;
         }
+        this.setSpan();
         return null;
       };
     }
     this.text.oninput = (event) => {
       this.oninput(this.value.setValue(this.text.valueAsNumber));
+      this.setSpan();
       return null;
     };
     this.text.onchange = (event) => {
       this.onchange(this.value.setValue(this.text.valueAsNumber));
+      this.setSpan();
       return null;
     };
     this.text.onfocus = (event) => {
@@ -101,11 +101,13 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
       v = Math.min(v, max);
       this.text.value = "" + v;
       this.oninput(this.value.setValue(this.text.valueAsNumber));
+      this.setSpan();
     }
     if (this.isApplySpin) {
       setTimeout(this.applySpin, 500 / abs);
     } else {
       this.onchange(this.value.setValue(this.text.valueAsNumber));
+      this.setSpan();
     }
   }
 
@@ -130,13 +132,13 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
    * @return This Z4SignedValueUI
    */
    setSignVisible(visible) {
+    this.signVisible = visible;
     if (visible) {
-      this.querySelector(".sign-label").classList.remove("sign-label-not-visible");
-      this.toggle.classList.remove("sign-toggle-not-visible");
+      this.querySelector(".btn-group").classList.remove("sign-not-visible");
     } else {
-      this.querySelector(".sign-label").classList.add("sign-label-not-visible");
-      this.toggle.classList.add("sign-toggle-not-visible");
+      this.querySelector(".btn-group").classList.add("sign-not-visible");
     }
+    this.setSpan();
     return this;
   }
 
@@ -159,20 +161,23 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
 
    setValue(value) {
     this.value = value;
-    let str = null;
-    if (value.getSign() === Z4Sign.POSITIVE) {
-      str = "positive";
-    } else if (value.getSign() === Z4Sign.NEGATIVE) {
-      str = "negative";
-    } else if (value.getSign() === Z4Sign.RANDOM) {
-      str = "random";
-    } else {
-      str = "alternate";
-    }
-    this.toggle.setAttribute("data-value", str);
-    this.toggleImg.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + str + ".svg");
     this.text.value = "" + value.getValue();
+    this.setSpan();
     return this;
+  }
+
+   setSpan() {
+    if (!this.signVisible) {
+      this.valueSpan.innerHTML = "" + this.value.getValue();
+    } else if (this.value.getSign() === Z4Sign.POSITIVE) {
+      this.valueSpan.innerHTML = "&plus;" + this.value.getValue();
+    } else if (this.value.getSign() === Z4Sign.NEGATIVE) {
+      this.valueSpan.innerHTML = "&minus;" + this.value.getValue();
+    } else if (this.value.getSign() === Z4Sign.RANDOM) {
+      this.valueSpan.innerHTML = "&plusmn;" + this.value.getValue();
+    } else {
+      this.valueSpan.innerHTML = "&plusmn;<sup>&UpArrowDownArrow;</sup>" + this.value.getValue();
+    }
   }
 
    dispose() {
