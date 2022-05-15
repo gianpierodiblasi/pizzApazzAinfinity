@@ -94,26 +94,6 @@ class Z4RotationUI extends Z4AbstractComponentWithValueUI {
     return this;
   }
 
-  /**
-   * Sets the horizontal orientation
-   *
-   * @return This Z4RotationUI
-   */
-   setHorizontal() {
-    this.angle.setHorizontal();
-    return this;
-  }
-
-  /**
-   * Sets the vertical orientation
-   *
-   * @return This Z4RotationUI
-   */
-   setVertical() {
-    this.angle.setVertical();
-    return this;
-  }
-
    setValue(value) {
     this.value = value;
     let str = null;

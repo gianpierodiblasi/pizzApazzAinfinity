@@ -18,6 +18,8 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
    proportionalUI = new Z4SignedValueUI();
 
   // 
+   mutationObserver = new MutationObserver(() => this.setSpan());
+
   // private boolean constantSignVisible = true;
   // private boolean randomSignVisible = true;
   // private boolean proportionalSignVisible = true;
@@ -80,6 +82,11 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
     // this.randomUI.onchange = (event) -> this.onChange();
     // this.proportionalUI.onchange = (event) -> this.onChange();
     // 
+    let array = new Array("class");
+    let observerConfig = new Object();
+    observerConfig["attributes"] = true;
+    observerConfig["attributeFilter"] = array;
+    this.mutationObserver.observe(document.querySelector("body"), observerConfig);
     this.setValue(new Z4FancifulValue());
   }
 
@@ -305,9 +312,16 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
     // } else {
     // this.valueSpan.innerHTML = "&plusmn;<sup>&UpArrowDownArrow;</sup>" + this.value.getValue();
     // }
-    this.valueSpan.innerHTML = "10";
+    if (Z4Setting.isLiteMode()) {
+      this.valueSpan.innerHTML = "10 lite";
+    } else if (Z4Setting.isStandardMode()) {
+      this.valueSpan.innerHTML = "10 standard";
+    } else if (Z4Setting.isProMode()) {
+      this.valueSpan.innerHTML = "10 pro";
+    }
   }
 
    dispose() {
+    this.mutationObserver.unobserve(document.querySelector("body"));
   }
 }
