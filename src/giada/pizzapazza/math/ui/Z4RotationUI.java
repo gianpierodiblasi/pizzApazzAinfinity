@@ -111,26 +111,6 @@ public class Z4RotationUI extends Z4AbstractComponentWithValueUI<Z4Rotation> {
     return this;
   }
 
-  /**
-   * Sets the horizontal orientation
-   *
-   * @return This Z4RotationUI
-   */
-  public Z4RotationUI setHorizontal() {
-    this.angle.setHorizontal();
-    return this;
-  }
-
-  /**
-   * Sets the vertical orientation
-   *
-   * @return This Z4RotationUI
-   */
-  public Z4RotationUI setVertical() {
-    this.angle.setVertical();
-    return this;
-  }
-
   @Override
   @SuppressWarnings("unchecked")
   public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4Rotation value) {

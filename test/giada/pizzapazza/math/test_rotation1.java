@@ -44,7 +44,7 @@ public class test_rotation1 {
             setRandom(Z4SignedRandomValue.bezier(20, 10).setSign(Z4Sign.RANDOM)).
             setProportional(new Z4SignedValue().setValue(30).setSign(Z4Sign.POSITIVE)));
 
-    Z4RotationUI ui2 = new Z4RotationUI().setVertical().setValue(v);
+    Z4RotationUI ui2 = new Z4RotationUI().setValue(v);
     ui2.appendToElement(document.querySelector("#test3"));
 
     ui1.oninput = (value) -> document.getElementById("test2").textContent = "ONINPUT " + test_rotation1.stringify(value);

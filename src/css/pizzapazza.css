@@ -33,6 +33,11 @@
 }
 
 /* FANCIFUL VALUE */
+.fanciful-value-not-compact {
+  border-top-right-radius: 0.2rem !important;
+  border-bottom-right-radius: 0.2rem !important;
+}
+
 .toggle-uniform::after {
   vertical-align: 0.254em;
 }

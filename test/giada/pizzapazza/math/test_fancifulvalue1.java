@@ -50,7 +50,7 @@ public class test_fancifulvalue1 {
     Z4FancifulValueUI ui2 = new Z4FancifulValueUI().setValue(v);
     ui2.appendToElement(document.querySelector("#test3"));
     
-    Z4FancifulValueUI ui3 = new Z4FancifulValueUI();
+    Z4FancifulValueUI ui3 = new Z4FancifulValueUI().compact();
     ui3.appendToElement(document.querySelector("#test5"));
 
     ui1.oninput = (value) -> document.getElementById("test2").textContent = "ONINPUT " + test_fancifulvalue1.stringify(value);

@@ -23,17 +23,23 @@ class test_fancifulvalue1 {
     let ui1 = new Z4FancifulValueUI();
     ui1.appendToElement(document.querySelector("#test1"));
     let v = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(10).setSign(Z4Sign.NEGATIVE)).setRandom(Z4SignedRandomValue.bezier(20, 10).setSign(Z4Sign.RANDOM)).setProportional(new Z4SignedValue().setValue(30).setSign(Z4Sign.POSITIVE));
-    let ui2 = new Z4FancifulValueUI().setVertical().setValue(v);
+    let ui2 = new Z4FancifulValueUI().setValue(v);
     ui2.appendToElement(document.querySelector("#test3"));
+    let ui3 = new Z4FancifulValueUI().compact();
+    ui3.appendToElement(document.querySelector("#test5"));
     ui1.oninput = (value) => document.getElementById("test2").textContent = "ONINPUT " + test_fancifulvalue1.stringify(value);
     ui1.onchange = (value) => document.getElementById("test2").textContent = "ONCHANGE " + test_fancifulvalue1.stringify(value);
     document.getElementById("test2").textContent = test_fancifulvalue1.stringify(ui1.getValue());
     ui2.oninput = (value) => document.getElementById("test4").textContent = "ONINPUT " + test_fancifulvalue1.stringify(value);
     ui2.onchange = (value) => document.getElementById("test4").textContent = "ONCHANGE " + test_fancifulvalue1.stringify(value);
     document.getElementById("test4").textContent = test_fancifulvalue1.stringify(ui2.getValue());
+    ui3.oninput = (value) => document.getElementById("test6").textContent = "ONINPUT " + test_fancifulvalue1.stringify(value);
+    ui3.onchange = (value) => document.getElementById("test6").textContent = "ONCHANGE " + test_fancifulvalue1.stringify(value);
+    document.getElementById("test6").textContent = test_fancifulvalue1.stringify(ui3.getValue());
     let onComponent = (event) => {
       ui1.setComponentsVisible((document.getElementById("constant-visible")).checked, (document.getElementById("random-visible")).checked, (document.getElementById("proportional-visible")).checked);
       ui2.setComponentsVisible((document.getElementById("constant-visible")).checked, (document.getElementById("random-visible")).checked, (document.getElementById("proportional-visible")).checked);
+      ui3.setComponentsVisible((document.getElementById("constant-visible")).checked, (document.getElementById("random-visible")).checked, (document.getElementById("proportional-visible")).checked);
       return null;
     };
     document.getElementById("constant-visible").onchange = onComponent;
@@ -42,6 +48,7 @@ class test_fancifulvalue1 {
     let onSign = (event) => {
       ui1.setSignsVisible((document.getElementById("constant-sign-visible")).checked, (document.getElementById("random-sign-visible")).checked, (document.getElementById("proportional-sign-visible")).checked);
       ui2.setSignsVisible((document.getElementById("constant-sign-visible")).checked, (document.getElementById("random-sign-visible")).checked, (document.getElementById("proportional-sign-visible")).checked);
+      ui3.setSignsVisible((document.getElementById("constant-sign-visible")).checked, (document.getElementById("random-sign-visible")).checked, (document.getElementById("proportional-sign-visible")).checked);
       return null;
     };
     document.getElementById("constant-sign-visible").onchange = onSign;
