@@ -249,7 +249,6 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
   }
 
   private void setSpan() {
-
     String sign = "";
     if (!this.signedValueUI.isSignVisible()) {
     } else if (this.value.getSign() == Z4Sign.POSITIVE) {

@@ -1,15 +1,13 @@
-/*.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-true.psv-true.u-true .sign-label,
-.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-true.psv-true.u-true .sign-button {
+.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-true.psv-true.u-true .sign-label,
+.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-true.psv-true.u-true .btn-group-sign {
   display: none;
-}
-.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-true.psv-true.u-true .fanciful-costant .input-group-text,
-.z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-true.psv-true.u-true .fanciful-proportional .input-group-text{
-  border-radius: 0.25rem !important;
 }
 
 .z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-true.psv-true.u-false .uniform-container {
-  display: none;
+  display: none !important;
 }
+/*
+
 
 .z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-true.psv-false.u-true .sign-label,
 .z4-pro .cv-true.rv-true.pv-true.csv-true.rsv-true.psv-false.u-true .sign-button {
