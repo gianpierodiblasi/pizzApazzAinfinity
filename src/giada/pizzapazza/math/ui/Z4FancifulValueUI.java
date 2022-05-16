@@ -7,6 +7,7 @@ import def.js.Date;
 import giada.pizzapazza.Z4Loader;
 import giada.pizzapazza.math.Z4FancifulValue;
 import giada.pizzapazza.math.Z4Sign;
+import giada.pizzapazza.math.Z4SignedRandomValue;
 import giada.pizzapazza.setting.Z4HTMLFactory;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.setting.Z4Setting;
@@ -296,66 +297,91 @@ public class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI<Z4Fanciful
   }
 
   private void setSpan() {
-//    if (!this.signVisible) {
-//      this.valueSpan.innerHTML = "" + this.value.getValue();
-//    } else if (this.value.getSign() == Z4Sign.POSITIVE) {
-//      this.valueSpan.innerHTML = "&plus;" + this.value.getValue();
-//    } else if (this.value.getSign() == Z4Sign.NEGATIVE) {
-//      this.valueSpan.innerHTML = "&minus;" + this.value.getValue();
-//    } else if (this.value.getSign() == Z4Sign.RANDOM) {
-//      this.valueSpan.innerHTML = "&plusmn;" + this.value.getValue();
-//    } else {
-//      this.valueSpan.innerHTML = "&plusmn;<sup>&UpArrowDownArrow;</sup>" + this.value.getValue();
-//    }
     if (Z4Setting.isLiteMode()) {
       this.valueSpan.innerHTML = "10 lite";
     } else if (Z4Setting.isStandardMode()) {
       this.valueSpan.innerHTML = "10 standard";
     } else if (Z4Setting.isProMode()) {
-      this.valueSpan.innerHTML = "10 pro";
+      if (this.constantVisible && this.randomVisible && this.proportionalVisible && this.constantSignVisible && this.randomSignVisible && this.proportionalSignVisible && this.uniformCheck.checked) {
+        this.valueSpan.innerHTML
+                = this.decodeSign(this.constantUI.getValue().getSign())
+                + "["
+                + this.constantUI.getValue().getValue()
+                + "&plus;" + this.decodeRandom(this.randomUI.getValue()) + "(" + this.randomUI.getValue().getValue() + ")"
+                + "&plus;" + "prn(" + this.proportionalUI.getValue().getValue() + ")"
+                + "]";
+      } else if (this.constantVisible && this.randomVisible && this.proportionalVisible && this.constantSignVisible && this.randomSignVisible && this.proportionalSignVisible && !this.uniformCheck.checked) {
+        this.valueSpan.innerHTML
+                = this.decodeSign(this.constantUI.getValue().getSign()) + this.constantUI.getValue().getValue()
+                + this.decodeSign(this.randomUI.getValue().getSign()) + this.decodeRandom(this.randomUI.getValue()) + "(" + this.randomUI.getValue().getValue() + ")"
+                + this.decodeSign(this.proportionalUI.getValue().getSign()) + "prn(" + this.proportionalUI.getValue().getValue() + ")";
+      } else if (this.constantVisible && this.randomVisible && this.proportionalVisible && this.constantSignVisible && this.randomSignVisible && !this.proportionalSignVisible && this.uniformCheck.checked) {
+        this.valueSpan.innerHTML
+                = this.decodeSign(this.constantUI.getValue().getSign())
+                + "["
+                + this.constantUI.getValue().getValue()
+                + "&plus;" + this.decodeRandom(this.randomUI.getValue()) + "(" + this.randomUI.getValue().getValue() + ")"
+                + "&plus;" + "prn(" + this.proportionalUI.getValue().getValue() + ")"
+                + "]";
+      } else if (this.constantVisible && this.randomVisible && this.proportionalVisible && this.constantSignVisible && this.randomSignVisible && !this.proportionalSignVisible && !this.uniformCheck.checked) {
+        this.valueSpan.innerHTML
+                = this.decodeSign(this.constantUI.getValue().getSign()) + this.constantUI.getValue().getValue()
+                + this.decodeSign(this.randomUI.getValue().getSign()) + this.decodeRandom(this.randomUI.getValue()) + "(" + this.randomUI.getValue().getValue() + ")"
+                + "&plus;" + "prn(" + this.proportionalUI.getValue().getValue() + ")";
+      } else if (this.constantVisible && this.randomVisible && this.proportionalVisible && this.constantSignVisible && !this.randomSignVisible && this.proportionalSignVisible && this.uniformCheck.checked) {
+        this.valueSpan.innerHTML
+                = this.decodeSign(this.constantUI.getValue().getSign())
+                + "["
+                + this.constantUI.getValue().getValue()
+                + "&plus;" + this.decodeRandom(this.randomUI.getValue()) + "(" + this.randomUI.getValue().getValue() + ")"
+                + "&plus;" + "prn(" + this.proportionalUI.getValue().getValue() + ")"
+                + "]";
+      } else if (this.constantVisible && this.randomVisible && this.proportionalVisible && this.constantSignVisible && !this.randomSignVisible && this.proportionalSignVisible && !this.uniformCheck.checked) {
+        this.valueSpan.innerHTML
+                = this.decodeSign(this.constantUI.getValue().getSign()) + this.constantUI.getValue().getValue()
+                + "&plus;" + this.decodeRandom(this.randomUI.getValue()) + "(" + this.randomUI.getValue().getValue() + ")"
+                + this.decodeSign(this.proportionalUI.getValue().getSign()) + "prn(" + this.proportionalUI.getValue().getValue() + ")";
+      } else if (this.constantVisible && this.randomVisible && this.proportionalVisible && this.constantSignVisible && !this.randomSignVisible && !this.proportionalSignVisible) {
+        this.valueSpan.innerHTML
+                = this.decodeSign(this.constantUI.getValue().getSign())
+                + "["
+                + this.constantUI.getValue().getValue()
+                + "&plus;" + this.decodeRandom(this.randomUI.getValue()) + "(" + this.randomUI.getValue().getValue() + ")"
+                + "&plus;" + "prn(" + this.proportionalUI.getValue().getValue() + ")"
+                + "]";
+      } else if (this.constantVisible && this.randomVisible && this.proportionalVisible && !this.constantSignVisible && this.randomSignVisible && this.proportionalSignVisible) {
+        this.valueSpan.innerHTML
+                = "&plus;" + this.constantUI.getValue().getValue()
+                + this.decodeSign(this.randomUI.getValue().getSign()) + this.decodeRandom(this.randomUI.getValue()) + "(" + this.randomUI.getValue().getValue() + ")"
+                + this.decodeSign(this.proportionalUI.getValue().getSign()) + "prn(" + this.proportionalUI.getValue().getValue() + ")";
+      }
     }
+  }
 
-//    if (Z4Setting.isLiteMode()) {
-//      return this.constant.next();
-//    } else if (Z4Setting.isStandardMode()) {
-//      if (this.uniformSign) {
-//        return this.constant.getSign().next() * (this.constant.getValue() + this.random.nextUnsigned());
-//      } else {
-//        return this.constant.next() + this.random.nextSigned();
-//      }
-//    } else if (Z4Setting.isProMode()) {
-//      if (this.uniformSign) {
-//        return this.constant.getSign().next() * (this.constant.getValue() + this.random.nextUnsigned() + sensibility * this.proportional.getValue());
-//      } else {
-//        return this.constant.next() + this.random.nextSigned() + sensibility * this.proportional.next();
-//      }
-//    } else {
-//      return 0;
-//    }
-//String sign = "";
-//    if (!this.signedValueUI.isSignVisible()) {
-//    } else if (this.value.getSign() == Z4Sign.POSITIVE) {
-//      sign = "&plus;";
-//    } else if (this.value.getSign() == Z4Sign.NEGATIVE) {
-//      sign = "&minus;";
-//    } else if (this.value.getSign() == Z4Sign.RANDOM) {
-//      sign = "&plusmn;";
-//    } else {
-//      sign = "&plusmn;<sup>&UpArrowDownArrow;</sup>";
-//    }
-//
-//    String rnd = "";
-//    if (this.value.isClassic()) {
-//      rnd = "rnd";
-//    } else if (this.value.isBezier()) {
-//      rnd = "rnd&#8767;<sup>" + this.value.getLength() + "</sup>";
-//    } else if (this.value.isPolyline()) {
-//      rnd = "rnd&#8896;<sup>" + this.value.getLength() + "</sup>";
-//    } else if (this.value.isStepped()) {
-//      rnd = "rnd&#8851;<sup>" + this.value.getLength() + "</sup>";
-//    }
-//
-//    this.valueSpan.innerHTML = sign + rnd + "(" + this.value.getValue() + ")";
+  private String decodeSign(Z4Sign sign) {
+    if (sign == Z4Sign.POSITIVE) {
+      return "&plus;";
+    } else if (sign == Z4Sign.NEGATIVE) {
+      return "&minus;";
+    } else if (sign == Z4Sign.RANDOM) {
+      return "&plusmn;";
+    } else {
+      return "&plusmn;<sup>&UpArrowDownArrow;</sup>";
+    }
+  }
+
+  private String decodeRandom(Z4SignedRandomValue value) {
+    if (value.isClassic()) {
+      return "rnd";
+    } else if (value.isBezier()) {
+      return "rnd&#8767;<sup>" + value.getLength() + "</sup>";
+    } else if (value.isPolyline()) {
+      return "rnd&#8896;<sup>" + value.getLength() + "</sup>";
+    } else if (value.isStepped()) {
+      return "rnd&#8851;<sup>" + value.getLength() + "</sup>";
+    } else {
+      return "";
+    }
   }
 
   @Override
