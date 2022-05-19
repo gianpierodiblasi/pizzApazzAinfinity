@@ -3,7 +3,7 @@ package simulation.js;
 import def.dom.Element;
 
 /**
- * The simulation of the JavsScript MutationObserver object
+ * The simulation of the MutationObserver object
  *
  * @author gianpiero.di.blasi
  */

@@ -1,7 +1,7 @@
 package simulation.dom;
 
 /**
- * The simulation of a JavaScript $OffscreenCanvas Object
+ * The simulation of the OffscreenCanvas object
  *
  * @author gianpiero.di.blasi
  */

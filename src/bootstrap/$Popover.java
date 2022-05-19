@@ -4,7 +4,7 @@ import def.dom.HTMLElement;
 import simulation.js.$Object;
 
 /**
- * The simulation of the Bootstrap Popover Object
+ * The simulation of the Bootstrap Popover object
  *
  * @author gianpiero.di.blasi
  */

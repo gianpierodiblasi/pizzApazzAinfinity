@@ -1,7 +1,7 @@
 package simulation.js;
 
 /**
- * Simulation of JavaScript Path2D
+ * Simulation of the Path2D object
  *
  * @author gianpiero.di.blasi
  */

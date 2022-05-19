@@ -1,7 +1,7 @@
 package simulation.dom;
 
 /**
- * The simulation of a JavaScript Canvas Object
+ * The simulation of the Canvas object
  *
  * @author gianpiero.di.blasi
  */

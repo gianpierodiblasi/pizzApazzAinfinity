@@ -1,7 +1,7 @@
 package simulation.js;
 
 /**
- * The simulation of JavaScript URLSearchParams Object
+ * The simulation of the URLSearchParams object
  *
  * @author gianpiero.di.blasi
  */

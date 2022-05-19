@@ -4,7 +4,7 @@ import def.dom.MediaQueryList;
 import simulation.js.$Apply_0_Void;
 
 /**
- * The simulation of a JavaScript MediaQueryList Object
+ * The simulation of the MediaQueryList object
  *
  * @author gianpiero.di.blasi
  */

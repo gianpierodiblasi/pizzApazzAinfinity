@@ -3,7 +3,7 @@ package simulation.js;
 import def.dom.Element;
 
 /**
- * The simulation of the JavsScript ResizeObserver object
+ * The simulation of the ResizeObserver object
  *
  * @author gianpiero.di.blasi
  */

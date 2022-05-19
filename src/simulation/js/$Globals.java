@@ -5,7 +5,7 @@ import simulation.dom.$Navigator;
 import simulation.dom.$Window;
 
 /**
- * Simulation of global JavaScript functions
+ * Simulation of the global functions
  *
  * @author gianpiero.di.blasi
  */

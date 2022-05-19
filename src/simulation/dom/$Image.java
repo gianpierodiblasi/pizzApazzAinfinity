@@ -5,7 +5,7 @@ import def.dom.Image;
 import java.util.function.Consumer;
 
 /**
- * The simulation of a JavaScript Image Object
+ * The simulation of the Image object
  *
  * @author gianpiero.di.blasi
  */

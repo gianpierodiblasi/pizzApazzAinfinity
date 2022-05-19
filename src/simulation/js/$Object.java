@@ -1,7 +1,7 @@
 package simulation.js;
 
 /**
- * Simulation of JavaScript Object
+ * Simulation of the Object
  *
  * @author gianpiero.di.blasi
  */

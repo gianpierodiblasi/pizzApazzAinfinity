@@ -4,7 +4,7 @@ import def.dom.HTMLElement;
 import simulation.js.$Object;
 
 /**
- * The simulation of the Bootstrap Tooltip Object
+ * The simulation of the Bootstrap Tooltip object
  *
  * @author gianpiero.di.blasi
  */

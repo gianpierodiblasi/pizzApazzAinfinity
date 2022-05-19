@@ -1,7 +1,7 @@
 package simulation.js;
 
 /**
- * Simulation of JavaScript Number Object
+ * Simulation of the Number object
  *
  * @author gianpiero.di.blasi
  */
