@@ -1,5 +1,5 @@
 /* GENERAL */
-.input-group-text {
+/*.input-group-text {
   padding-top: 0px;
   padding-bottom: 0px;
   font-size: .875rem;
@@ -11,29 +11,29 @@
   padding-left: 5px;
   padding-right: 5px;
   width: 100%;
-}
+}*/
 
 /* DROP DOWN */
-.z4-dropdown-toggle-three-dots {
+/*.z4-dropdown-toggle-three-dots {
   padding-top: 0px;
   padding-bottom: 0px;
   border-color: transparent;
 }
 .z4-dropdown-toggle-three-dots::after {
   content: none;
-}
+}*/
 
 /* SIGNED VALUE */
-.sign-not-visible {
+/*.sign-not-visible {
   display: none;
 }
 .signed-value-not-compact {
   border-top-right-radius: 0.2rem !important;
   border-bottom-right-radius: 0.2rem !important;
-}
+}*/
 
 /* FANCIFUL VALUE */
-.fanciful-value-not-compact {
+/*.fanciful-value-not-compact {
   border-top-right-radius: 0.2rem !important;
   border-bottom-right-radius: 0.2rem !important;
-}
+}*/
