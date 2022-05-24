@@ -36,20 +36,20 @@ public class Z4Sign {
   public int next() {
     switch (this.sign) {
       case 1:
-      case - 1:
+      case -1:
         return this.sign;
       case 0:
       default:
         return Math.random() > 0.5 ? 1 : -1;
       case 2:
-      case - 2:
+      case -2:
         this.sign *= -1;
         return this.sign / 2;
     }
   }
 
   /**
-   * Creates a Z4Sign providing the following sequence 1, -1, 1, -1, ...
+   * Creates a Z4Sign providing the following sequence +1, -1, +1, -1, ...
    *
    * @return The Z4Sign
    */
