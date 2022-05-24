@@ -18,8 +18,7 @@ public class Z4Setting {
 
   private static String language = Z4Setting.initLanguage();
   private static String theme = Z4Setting.initTheme();
-  private static String mode = Z4Setting.initMode();
-
+  
   @SuppressWarnings("ForLoopReplaceableByForEach")
   private static String initLanguage() {
     String[] decodedCookies = decodeURIComponent(document.cookie).split(";");
@@ -54,21 +53,6 @@ public class Z4Setting {
 
     Z4Setting.setTheme(Z4Setting.theme);
     return Z4Setting.theme;
-  }
-
-  @SuppressWarnings("ForLoopReplaceableByForEach")
-  private static String initMode() {
-    Z4Setting.mode = "standard";
-    String[] decodedCookies = decodeURIComponent(document.cookie).split(";");
-    for (int index = 0; index < decodedCookies.length; index++) {
-      String row = decodedCookies[index].trim();
-      if (row.startsWith("z4mode")) {
-        Z4Setting.mode = row.substring(7);
-      }
-    }
-
-    Z4Setting.setMode(Z4Setting.mode);
-    return Z4Setting.mode;
   }
 
   /**
@@ -145,62 +129,6 @@ public class Z4Setting {
    */
   public static String getTheme() {
     return Z4Setting.theme;
-  }
-
-  /**
-   * Sets the mode
-   *
-   * @param mode The mode ("lite", "standard", "pro")
-   */
-  public static void setMode(String mode) {
-    Z4Setting.mode = mode;
-    document.body.classList.remove("z4-lite");
-    document.body.classList.remove("z4-standard");
-    document.body.classList.remove("z4-pro");
-    document.body.classList.add("z4-" + mode);
-
-    Date date = new Date();
-    date.setTime(date.getTime() + 365 * 24 * 60 * 60 * 1000);
-    document.cookie = "z4mode=" + mode + ";expires=" + date.toUTCString() + ";path=" + Z4Loader.path;
-  }
-
-  /**
-   * Returns the mode
-   *
-   * @return The mode ("lite", "standard", "pro")
-   */
-  public static String getMode() {
-    return Z4Setting.mode;
-  }
-
-  /**
-   * Returns true if the mode is "lite"
-   *
-   * @return true if the mode is "lite", false otherwise
-   */
-  @SuppressWarnings("StringEquality")
-  public static boolean isLiteMode() {
-    return Z4Setting.mode == "lite"; // JS equality for strings
-  }
-
-  /**
-   * Returns true if the mode is "standard"
-   *
-   * @return true if the mode is "standard", false otherwise
-   */
-  @SuppressWarnings("StringEquality")
-  public static boolean isStandardMode() {
-    return Z4Setting.mode == "standard"; // JS equality for strings
-  }
-
-  /**
-   * Returns true if the mode is "pro"
-   *
-   * @return true if the mode is "pro", false otherwise
-   */
-  @SuppressWarnings("StringEquality")
-  public static boolean isProMode() {
-    return Z4Setting.mode == "pro"; // JS equality for strings
   }
 
   private Z4Setting() {
