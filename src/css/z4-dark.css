@@ -1,4 +1,4 @@
-/*.z4-dark {
+.z4-dark {
   background: #121212;
   color: rgba(255,255,255,.87);
 }
@@ -10,7 +10,7 @@
   background-color: #666;
 }
 
-.z4-dark .table {
+/*.z4-dark .table {
   color: #DEDAD6;
 }
 
