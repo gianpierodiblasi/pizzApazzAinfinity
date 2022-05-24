@@ -9,8 +9,6 @@ class Z4Setting {
 
   static  theme = Z4Setting.initTheme();
 
-  static  mode = Z4Setting.initMode();
-
   static  initLanguage() {
     let decodedCookies = decodeURIComponent(document.cookie).split(";");
     for (let index = 0; index < decodedCookies.length; index++) {
@@ -41,19 +39,6 @@ class Z4Setting {
     }
     Z4Setting.setTheme(Z4Setting.theme);
     return Z4Setting.theme;
-  }
-
-  static  initMode() {
-    Z4Setting.mode = "standard";
-    let decodedCookies = decodeURIComponent(document.cookie).split(";");
-    for (let index = 0; index < decodedCookies.length; index++) {
-      let row = decodedCookies[index].trim();
-      if (row.startsWith("z4mode")) {
-        Z4Setting.mode = row.substring(7);
-      }
-    }
-    Z4Setting.setMode(Z4Setting.mode);
-    return Z4Setting.mode;
   }
 
   /**
@@ -125,61 +110,6 @@ class Z4Setting {
    */
   static  getTheme() {
     return Z4Setting.theme;
-  }
-
-  /**
-   * Sets the mode
-   *
-   * @param mode The mode ("lite", "standard", "pro")
-   */
-  static  setMode(mode) {
-    Z4Setting.mode = mode;
-    document.body.classList.remove("z4-lite");
-    document.body.classList.remove("z4-standard");
-    document.body.classList.remove("z4-pro");
-    document.body.classList.add("z4-" + mode);
-    let date = new Date();
-    date.setTime(date.getTime() + 365 * 24 * 60 * 60 * 1000);
-    document.cookie = "z4mode=" + mode + ";expires=" + date.toUTCString() + ";path=" + Z4Loader.path;
-  }
-
-  /**
-   * Returns the mode
-   *
-   * @return The mode ("lite", "standard", "pro")
-   */
-  static  getMode() {
-    return Z4Setting.mode;
-  }
-
-  /**
-   * Returns true if the mode is "lite"
-   *
-   * @return true if the mode is "lite", false otherwise
-   */
-  static  isLiteMode() {
-    // JS equality for strings
-    return Z4Setting.mode === "lite";
-  }
-
-  /**
-   * Returns true if the mode is "standard"
-   *
-   * @return true if the mode is "standard", false otherwise
-   */
-  static  isStandardMode() {
-    // JS equality for strings
-    return Z4Setting.mode === "standard";
-  }
-
-  /**
-   * Returns true if the mode is "pro"
-   *
-   * @return true if the mode is "pro", false otherwise
-   */
-  static  isProMode() {
-    // JS equality for strings
-    return Z4Setting.mode === "pro";
   }
 
   constructor() {

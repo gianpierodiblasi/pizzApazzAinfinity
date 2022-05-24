@@ -61,27 +61,24 @@ class Z4AbstractComponentUI {
    */
    dispose() {
   }
-
   /**
    * Selects a child of this component
    *
    * @param selector The selector
    * @return The child of this component
    */
-   querySelector(selector) {
-    return this.root.querySelector(selector);
-  }
-
+  // public $HTMLElement querySelector(String selector) {
+  // return ($HTMLElement) this.root.querySelector(selector);
+  // }
   /**
    * Selects all children of this component
    *
    * @param selector The selector
    * @return All children of this component
    */
-   querySelectorAll(selector) {
-    return this.root.querySelectorAll(selector);
-  }
-
+  // public NodeList querySelectorAll(String selector) {
+  // return this.root.querySelectorAll(selector);
+  // }
   /**
    * Appends this Z4AbstractComponentUI to its parent
    *
@@ -89,11 +86,11 @@ class Z4AbstractComponentUI {
    * @param parent The parent
    * @return This Z4AbstractComponentUI
    */
-   appendToElement(parent) {
-    parent.appendChild(this.root);
-    return this;
-  }
-
+  // @SuppressWarnings("unchecked")
+  // public <T extends Z4AbstractComponentUI> T appendToElement(Element parent) {
+  // parent.appendChild(this.root);
+  // return (T) this;
+  // }
   /**
    * Appends this Z4AbstractComponentUI to its parent
    *
@@ -101,11 +98,11 @@ class Z4AbstractComponentUI {
    * @param parent The parent
    * @return This Z4AbstractComponentUI
    */
-   appendToComponent(parent) {
-    parent.root.appendChild(this.root);
-    return this;
-  }
-
+  // @SuppressWarnings("unchecked")
+  // public <T extends Z4AbstractComponentUI> T appendToComponent(Z4AbstractComponentUI parent) {
+  // parent.root.appendChild(this.root);
+  // return (T) this;
+  // }
   /**
    * Prepends an element to this Z4AbstractComponentUI
    *
@@ -113,11 +110,11 @@ class Z4AbstractComponentUI {
    * @param element The element
    * @return This Z4AbstractComponentUI
    */
-   prependElement(element) {
-    this.root.prepend(element);
-    return this;
-  }
-
+  // @SuppressWarnings("unchecked")
+  // public <T extends Z4AbstractComponentUI> T prependElement(Element element) {
+  // this.root.prepend(element);
+  // return (T) this;
+  // }
   /**
    * Prepends an element to this Z4AbstractComponentUI
    *
@@ -125,8 +122,9 @@ class Z4AbstractComponentUI {
    * @param element The element
    * @return This Z4AbstractComponentUI
    */
-   prependComponent(element) {
-    this.root.prepend(element.root);
-    return this;
-  }
+  // @SuppressWarnings("unchecked")
+  // public <T extends Z4AbstractComponentUI> T prependComponent(Z4AbstractComponentUI element) {
+  // this.root.prepend(element.root);
+  // return (T) this;
+  // }
 }

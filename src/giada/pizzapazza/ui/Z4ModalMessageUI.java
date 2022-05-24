@@ -1,16 +1,28 @@
+package giada.pizzapazza.ui;
+
+import def.dom.HTMLElement;
+import def.js.Array;
+import def.js.Date;
+import giada.pizzapazza.setting.Z4HTMLFactory;
+import giada.pizzapazza.setting.Z4MessageFactory;
+import simulation.dom.$HTMLElement;
+import simulation.js.$Apply_0_Void;
+import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.document;
+import static simulation.js.$Globals.parseInt;
+
 /**
  * The class of all UI messages
  *
  * @author gianpiero.di.blasi
  */
-class Z4ModalMessageUI {
+public class Z4ModalMessageUI {
 
-  static  html = Z4ModalMessageUI.loadHTML();
+  private final static HTMLElement html = Z4ModalMessageUI.loadHTML();
+  private final static bootstrap.$Modal modal = new bootstrap.$Modal(Z4ModalMessageUI.html);
 
-  static  modal = new bootstrap.Modal(Z4ModalMessageUI.html);
-
-  static  loadHTML() {
-    let parent = document.createElement("div");
+  private static HTMLElement loadHTML() {
+    HTMLElement parent = document.createElement("div");
     parent.setAttribute("id", new Date().getTime() + "-" + parseInt(1000 * Math.random()));
     parent.setAttribute("data-bs-backdrop", "static");
     parent.setAttribute("data-bs-keyboard", "false");
@@ -18,6 +30,7 @@ class Z4ModalMessageUI {
     parent.setAttribute("style", "display:none");
     parent.className = "modal modal-dialog-centered fade";
     parent.innerHTML = Z4HTMLFactory.get("giada/pizzapazza/ui/Z4ModalMessageUI.html");
+
     document.body.appendChild(parent);
     return parent;
   }
@@ -29,7 +42,7 @@ class Z4ModalMessageUI {
    * @param message The message
    * @param onOK The callback to call on OK
    */
-  static  showInfo(title, message, onOK) {
+  public static void showInfo(String title, String message, $Apply_0_Void onOK) {
     Z4ModalMessageUI.showOneButton(title, message, onOK, "bi bi-info-circle-fill", "#0dcaf0");
   }
 
@@ -40,7 +53,7 @@ class Z4ModalMessageUI {
    * @param message The message
    * @param onOK The callback to call on OK
    */
-  static  showWarning(title, message, onOK) {
+  public static void showWarning(String title, String message, $Apply_0_Void onOK) {
     Z4ModalMessageUI.showOneButton(title, message, onOK, "bi bi-exclamation-triangle-fill", "#ffc107");
   }
 
@@ -51,18 +64,21 @@ class Z4ModalMessageUI {
    * @param message The message
    * @param onOK The callback to call on OK
    */
-  static  showError(title, message, onOK) {
+  public static void showError(String title, String message, $Apply_0_Void onOK) {
     Z4ModalMessageUI.showOneButton(title, message, onOK, "bi bi-exclamation-octagon-fill", "#dc3545");
   }
 
-  static  showOneButton(title, message, onOK, className, color) {
-    (Z4ModalMessageUI.html.querySelector(".modal-title")).innerHTML = title;
-    (Z4ModalMessageUI.html.querySelector(".modal-message")).innerHTML = message;
-    let icon = Z4ModalMessageUI.html.querySelector(".modal-icon i");
+  private static void showOneButton(String title, String message, $Apply_0_Void onOK, String className, String color) {
+    ((HTMLElement) Z4ModalMessageUI.html.querySelector(".modal-title")).innerHTML = title;
+    ((HTMLElement) Z4ModalMessageUI.html.querySelector(".modal-message")).innerHTML = message;
+
+    HTMLElement icon = (HTMLElement) Z4ModalMessageUI.html.querySelector(".modal-icon i");
     icon.className = className;
     icon.style.color = color;
-    let footer = Z4ModalMessageUI.html.querySelector(".modal-footer");
+
+    $HTMLElement footer = ($HTMLElement) Z4ModalMessageUI.html.querySelector(".modal-footer");
     footer.innerHTML = "";
+
     Z4ModalMessageUI.appendButton(Z4MessageFactory.get("OK"), "btn btn-primary", onOK, footer);
     Z4ModalMessageUI.modal.show();
   }
@@ -78,19 +94,21 @@ class Z4ModalMessageUI {
    * @param onCANCEL The callback to call on CANCEL, null to hide the CANCEL
    * button
    */
-  static  showQuestion(title, message, onYES, onNO, onOK, onCANCEL) {
-    let options = new Array();
-    let onOptions = new Array();
-    let isPrimary = new Array();
+  public static void showQuestion(String title, String message, $Apply_0_Void onYES, $Apply_0_Void onNO, $Apply_0_Void onOK, $Apply_0_Void onCANCEL) {
+    Array<String> options = new Array<>();
+    Array<$Apply_0_Void> onOptions = new Array<>();
+    Array<Boolean> isPrimary = new Array<>();
+
     Z4ModalMessageUI.push("YES", onYES, true, options, onOptions, isPrimary);
     Z4ModalMessageUI.push("NO", onNO, false, options, onOptions, isPrimary);
     Z4ModalMessageUI.push("OK", onOK, true, options, onOptions, isPrimary);
     Z4ModalMessageUI.push("CANCEL", onCANCEL, false, options, onOptions, isPrimary);
+
     Z4ModalMessageUI.showOpenQuestion(title, message, options, onOptions, isPrimary);
   }
 
-  static  push(token, onButton, primary, options, onOptions, isPrimary) {
-    if (onButton) {
+  private static void push(String token, $Apply_0_Void onButton, boolean primary, Array<String> options, Array<$Apply_0_Void> onOptions, Array<Boolean> isPrimary) {
+    if ($exists(onButton)) {
       options.push(Z4MessageFactory.get(token));
       onOptions.push(onButton);
       isPrimary.push(primary);
@@ -105,34 +123,40 @@ class Z4ModalMessageUI {
    * @param options The array of option messages
    * @param onOptions The array of callbacks to call
    * @param isPrimary The array of primary buttons
+   *
    */
-  static  showOpenQuestion(title, message, options, onOptions, isPrimary) {
-    (Z4ModalMessageUI.html.querySelector(".modal-title")).innerHTML = title;
-    (Z4ModalMessageUI.html.querySelector(".modal-message")).innerHTML = message;
-    let icon = Z4ModalMessageUI.html.querySelector(".modal-icon i");
+  public static void showOpenQuestion(String title, String message, Array<String> options, Array<$Apply_0_Void> onOptions, Array<Boolean> isPrimary) {
+    ((HTMLElement) Z4ModalMessageUI.html.querySelector(".modal-title")).innerHTML = title;
+    ((HTMLElement) Z4ModalMessageUI.html.querySelector(".modal-message")).innerHTML = message;
+
+    HTMLElement icon = (HTMLElement) Z4ModalMessageUI.html.querySelector(".modal-icon i");
     icon.className = "bi bi-question-circle-fill";
     icon.style.color = "#6c757d";
-    let footer = Z4ModalMessageUI.html.querySelector(".modal-footer");
+
+    $HTMLElement footer = ($HTMLElement) Z4ModalMessageUI.html.querySelector(".modal-footer");
     footer.innerHTML = "";
-    options.forEach((option, index, array) => {
-      Z4ModalMessageUI.appendButton(option, "btn " + (isPrimary[index] ? "btn-primary" : "btn-secondary"), onOptions[index], footer);
+
+    options.forEach((option, index, array) -> {
+      Z4ModalMessageUI.appendButton(option, "btn " + (isPrimary.$get(index) ? "btn-primary" : "btn-secondary"), onOptions.$get(index), footer);
     });
+
     Z4ModalMessageUI.modal.show();
   }
 
-  static  appendButton(text, className, onButton, footer) {
-    let button = document.createElement("button");
+  private static void appendButton(String text, String className, $Apply_0_Void onButton, $HTMLElement footer) {
+    HTMLElement button = document.createElement("button");
     button.setAttribute("type", "button");
     button.setAttribute("data-bs-dismiss", "modal");
     button.className = className;
     button.innerHTML = text;
-    button.onclick = (event) => {
-      onButton();
+    button.onclick = (event) -> {
+      onButton.$apply();
       return null;
     };
+
     footer.appendChild(button);
   }
 
-  constructor() {
+  private Z4ModalMessageUI() {
   }
 }
