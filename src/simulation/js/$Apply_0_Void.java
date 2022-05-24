@@ -9,5 +9,5 @@ package simulation.js;
 @FunctionalInterface
 public interface $Apply_0_Void {
 
-  void $apply();
+  public void $apply();
 }
