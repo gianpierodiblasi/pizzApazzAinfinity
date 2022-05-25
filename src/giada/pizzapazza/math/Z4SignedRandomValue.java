@@ -10,9 +10,9 @@ import simulation.bezier.$Bezier;
 public class Z4SignedRandomValue {
 
   private Z4Sign sign = Z4Sign.RANDOM;
-  private final double value;
+  private double value;
   private final int type;
-  private final double length;
+  private double length;
 
   private int step;
   private double prevRandom;
@@ -111,6 +111,17 @@ public class Z4SignedRandomValue {
   }
 
   /**
+   * Sets the value
+   *
+   * @param value The (positive) value
+   * @return This Z4SignedRandomValue
+   */
+  public Z4SignedRandomValue setValue(double value) {
+    this.value = value;
+    return this;
+  }
+  
+  /**
    * Returns the length
    *
    * @return The length
@@ -119,6 +130,17 @@ public class Z4SignedRandomValue {
     return this.length;
   }
 
+  /**
+   * Sets the length
+   *
+   * @param length The length
+   * @return This Z4SignedRandomValue
+   */
+  public Z4SignedRandomValue setLength(double length) {
+    this.length = length;
+    return this;
+  }
+  
   /**
    * Returns the next unsigned random value
    *
