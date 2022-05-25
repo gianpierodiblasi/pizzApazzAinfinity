@@ -3,6 +3,7 @@ package giada.pizzapazza.math.ui;
 import static def.dom.Globals.clearTimeout;
 import def.dom.HTMLElement;
 import def.dom.NodeList;
+import def.js.Date;
 import giada.pizzapazza.Z4Loader;
 import giada.pizzapazza.math.Z4Sign;
 import giada.pizzapazza.math.Z4SignedValue;
@@ -13,6 +14,7 @@ import simulation.dom.$HTMLElement;
 import simulation.js.$Apply_0_Void;
 import simulation.js.$Apply_2_Void;
 import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.parseInt;
 import static simulation.js.$Globals.setTimeout;
 
 /**
@@ -76,6 +78,7 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
       };
     }
 
+    this.checkSpinner.id = this.getUniqueID();
     this.checkSpinner.onchange = (event) -> {
       NodeList list = this.querySelectorAll(".signed-value-form-control .form-label");
       for (int i = 0; i < list.length; i++) {
@@ -92,6 +95,7 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
 
       return null;
     };
+    this.querySelector(".signed-value-check-spinner-label").setAttribute("for", this.checkSpinner.id);
 
     $HTMLElement minus = this.querySelector(".signed-value-range-minus");
     $HTMLElement plus = this.querySelector(".signed-value-range-plus");
@@ -283,11 +287,9 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
   public Z4SignedValueUI setSignVisible(boolean visible) {
     this.signVisible = visible;
     if (visible) {
-      this.querySelector(".signed-value-sign-button").classList.remove("sign-not-visible");
-      this.querySelector(".signed-value-form-control").classList.remove("sign-not-visible");
+      this.querySelector(".signed-value-input-group").classList.remove("sign-not-visible");
     } else {
-      this.querySelector(".signed-value-sign-button").classList.add("sign-not-visible");
-      this.querySelector(".signed-value-form-control").classList.add("sign-not-visible");
+      this.querySelector(".signed-value-input-group").classList.add("sign-not-visible");
     }
 
     return this;

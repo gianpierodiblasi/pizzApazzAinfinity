@@ -23,7 +23,7 @@ public class Z4ModalMessageUI {
 
   private static HTMLElement loadHTML() {
     HTMLElement parent = document.createElement("div");
-    parent.setAttribute("id", new Date().getTime() + "-" + parseInt(1000 * Math.random()));
+    parent.id = new Date().getTime() + "-" + parseInt(1000 * Math.random());
     parent.setAttribute("data-bs-backdrop", "static");
     parent.setAttribute("data-bs-keyboard", "false");
     parent.setAttribute("tabindex", "-1");

@@ -63,6 +63,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
         return null;
       };
     }
+    this.checkSpinner.id = "id" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
     this.checkSpinner.onchange = (event) => {
       let list = this.querySelectorAll(".signed-value-form-control .form-label");
       for (let i = 0; i < list.length; i++) {
@@ -77,6 +78,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
       }
       return null;
     };
+    this.querySelector(".signed-value-check-spinner-label").setAttribute("for", this.checkSpinner.id);
     let minus = this.querySelector(".signed-value-range-minus");
     let plus = this.querySelector(".signed-value-range-plus");
     if (Z4Loader.touch) {
@@ -256,11 +258,9 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
    setSignVisible(visible) {
     this.signVisible = visible;
     if (visible) {
-      this.querySelector(".signed-value-sign-button").classList.remove("sign-not-visible");
-      this.querySelector(".signed-value-form-control").classList.remove("sign-not-visible");
+      this.querySelector(".signed-value-input-group").classList.remove("sign-not-visible");
     } else {
-      this.querySelector(".signed-value-sign-button").classList.add("sign-not-visible");
-      this.querySelector(".signed-value-form-control").classList.add("sign-not-visible");
+      this.querySelector(".signed-value-input-group").classList.add("sign-not-visible");
     }
     return this;
   }

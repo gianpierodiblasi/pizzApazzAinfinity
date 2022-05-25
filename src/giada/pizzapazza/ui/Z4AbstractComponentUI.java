@@ -30,7 +30,7 @@ public abstract class Z4AbstractComponentUI {
    */
   protected Z4AbstractComponentUI(String ui) {
     this.root = ($HTMLElement) document.createElement("div");
-    this.root.setAttribute("id", "id" + new Date().getTime() + "_" + parseInt(1000 * Math.random()));
+    this.root.id = this.getUniqueID();
     this.root.innerHTML = ui;
 
     NodeList list = this.root.querySelectorAll("#" + this.root.id + " [data-token-lang-inner_text]");
@@ -38,6 +38,14 @@ public abstract class Z4AbstractComponentUI {
       HTMLElement element = (HTMLElement) list.item(index);
       element.innerHTML = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text"));
     }
+  }
+
+  /**
+   * Returns an unique ID
+   * @return 
+   */
+  protected String getUniqueID() {
+    return "id" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
   }
 
   /**
@@ -121,7 +129,6 @@ public abstract class Z4AbstractComponentUI {
 //    parent.root.appendChild(this.root);
 //    return (T) this;
 //  }
-
   /**
    * Prepends an element to this Z4AbstractComponentUI
    *
@@ -134,7 +141,6 @@ public abstract class Z4AbstractComponentUI {
 //    this.root.prepend(element);
 //    return (T) this;
 //  }
-
   /**
    * Prepends an element to this Z4AbstractComponentUI
    *

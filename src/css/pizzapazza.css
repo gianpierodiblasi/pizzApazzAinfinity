@@ -24,10 +24,10 @@
 }*/
 
 /* SIGNED VALUE */
-.signed-value-sign-button.sign-not-visible {
+.signed-value-input-group.sign-not-visible .signed-value-sign-button {
   display: none;
 }
-.signed-value-form-control.sign-not-visible {
+.signed-value-input-group.sign-not-visible .signed-value-range-minus {
   border-top-left-radius: 0.2rem !important;
   border-bottom-left-radius: 0.2rem !important;
 }
