@@ -288,13 +288,21 @@ class Z4AbstractComponentUI {
    */
   constructor(ui) {
     this.root = document.createElement("div");
-    this.root.setAttribute("id", "id" + new Date().getTime() + "_" + parseInt(1000 * Math.random()));
+    this.root.id = this.getUniqueID();
     this.root.innerHTML = ui;
     let list = this.root.querySelectorAll("#" + this.root.id + " [data-token-lang-inner_text]");
     for (let index = 0; index < list.length; index++) {
       let element = list.item(index);
       element.innerHTML = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text"));
     }
+  }
+
+  /**
+   * Returns an unique ID
+   * @return
+   */
+   getUniqueID() {
+    return "id" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
   }
 
   /**
@@ -468,7 +476,7 @@ class Z4ModalMessageUI {
 
   static  loadHTML() {
     let parent = document.createElement("div");
-    parent.setAttribute("id", new Date().getTime() + "-" + parseInt(1000 * Math.random()));
+    parent.id = new Date().getTime() + "-" + parseInt(1000 * Math.random());
     parent.setAttribute("data-bs-backdrop", "static");
     parent.setAttribute("data-bs-keyboard", "false");
     parent.setAttribute("tabindex", "-1");
@@ -880,6 +888,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
         return null;
       };
     }
+    this.checkSpinner.id = this.getUniqueID();
     this.checkSpinner.onchange = (event) => {
       let list = this.querySelectorAll(".signed-value-form-control .form-label");
       for (let i = 0; i < list.length; i++) {
@@ -894,6 +903,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
       }
       return null;
     };
+    this.querySelector(".signed-value-check-spinner-label").setAttribute("for", this.checkSpinner.id);
     let minus = this.querySelector(".signed-value-range-minus");
     let plus = this.querySelector(".signed-value-range-plus");
     if (Z4Loader.touch) {

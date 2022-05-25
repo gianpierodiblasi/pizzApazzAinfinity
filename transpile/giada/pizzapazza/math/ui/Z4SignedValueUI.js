@@ -63,7 +63,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
         return null;
       };
     }
-    this.checkSpinner.id = "id" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
+    this.checkSpinner.id = this.getUniqueID();
     this.checkSpinner.onchange = (event) => {
       let list = this.querySelectorAll(".signed-value-form-control .form-label");
       for (let i = 0; i < list.length; i++) {

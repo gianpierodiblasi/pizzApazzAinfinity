@@ -16,13 +16,21 @@ class Z4AbstractComponentUI {
    */
   constructor(ui) {
     this.root = document.createElement("div");
-    this.root.setAttribute("id", "id" + new Date().getTime() + "_" + parseInt(1000 * Math.random()));
+    this.root.id = this.getUniqueID();
     this.root.innerHTML = ui;
     let list = this.root.querySelectorAll("#" + this.root.id + " [data-token-lang-inner_text]");
     for (let index = 0; index < list.length; index++) {
       let element = list.item(index);
       element.innerHTML = Z4MessageFactory.get(element.getAttribute("data-token-lang-inner_text"));
     }
+  }
+
+  /**
+   * Returns an unique ID
+   * @return
+   */
+   getUniqueID() {
+    return "id" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
   }
 
   /**
