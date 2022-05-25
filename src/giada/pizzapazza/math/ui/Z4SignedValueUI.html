@@ -1,0 +1,48 @@
+<div style="display:flex;align-items:center;gap:5px">
+  <label class="form-label signed-value-label" style="margin-bottom:0px" data-token-lang-inner_text="VALUE">Value</label>
+  <label class="form-label signed-value-value-label" style="margin-bottom:0px">0</label>
+  <span class="signed-value-range-span z4-dark-span" style="flex:1;text-align:right">[0,&infin;]</span>
+  <div class="form-check form-switch signed-value-form-switch" style="margin-bottom:0px">
+    <input class="form-check-input uniform-check signed-value-check-spinner" type="checkbox" role="switch" checked />
+    <label class="form-check-label uniform-label" data-token-lang-inner_text="SPINNER">Spinner</label>
+  </div>
+</div>
+
+<div class="input-group">
+  <button class="btn btn-outline-secondary dropdown-toggle signed-value-sign-button" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+    <img data-icon="positive" class="z4-dark-img-negative" width="20" />
+    <span data-token-lang-inner_text="SIGN">Sign</span>
+  </button>
+  <ul class="dropdown-menu signed-value-sign-dropdown-menu">
+    <li>
+      <button class="dropdown-item" type="button" data-value="positive">
+        <img data-icon="positive" class="z4-dark-img-negative" width="20" />
+        <span data-token-lang-inner_text="POSITIVE">Positive</span>
+      </button>
+    </li>
+    <li>
+      <button class="dropdown-item" type="button" data-value="negative">
+        <img data-icon="negative" class="z4-dark-img-negative" width="20" />
+        <span data-token-lang-inner_text="NEGATIVE">Negative</span>
+      </button>
+    </li>
+    <li>
+      <button class="dropdown-item" type="button" data-value="random">
+        <img data-icon="random" class="z4-dark-img-negative" width="20" />
+        <span data-token-lang-inner_text="RANDOM">Random</span>
+      </button>
+    </li>
+    <li>
+      <button class="dropdown-item" type="button" data-value="alternate">
+        <img data-icon="alternate" class="z4-dark-img-negative" width="20" />
+        <span data-token-lang-inner_text="ALTERNATE">Alternate</span>
+      </button>
+    </li>
+  </ul>
+
+  <button class="btn btn-outline-secondary signed-value-range-minus" type="button">&ll;</button>
+  <div class="form-control signed-value-form-control" style="display:flex;align-items:center">
+    <input type="range" class="form-range signed-value-range-input" value="0" min="-50" max="50" step="1"/>  
+  </div>
+  <button class="btn btn-outline-secondary signed-value-range-plus" type="button">&gg;</button>
+</div>

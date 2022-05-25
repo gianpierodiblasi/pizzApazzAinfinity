@@ -333,24 +333,27 @@ class Z4AbstractComponentUI {
    */
    dispose() {
   }
+
   /**
    * Selects a child of this component
    *
    * @param selector The selector
    * @return The child of this component
    */
-  // public $HTMLElement querySelector(String selector) {
-  // return ($HTMLElement) this.root.querySelector(selector);
-  // }
+   querySelector(selector) {
+    return this.root.querySelector(selector);
+  }
+
   /**
    * Selects all children of this component
    *
    * @param selector The selector
    * @return All children of this component
    */
-  // public NodeList querySelectorAll(String selector) {
-  // return this.root.querySelectorAll(selector);
-  // }
+   querySelectorAll(selector) {
+    return this.root.querySelectorAll(selector);
+  }
+
   /**
    * Appends this Z4AbstractComponentUI to its parent
    *
@@ -358,11 +361,10 @@ class Z4AbstractComponentUI {
    * @param parent The parent
    * @return This Z4AbstractComponentUI
    */
-  // @SuppressWarnings("unchecked")
-  // public <T extends Z4AbstractComponentUI> T appendToElement(Element parent) {
-  // parent.appendChild(this.root);
-  // return (T) this;
-  // }
+   appendToElement(parent) {
+    parent.appendChild(this.root);
+    return this;
+  }
   /**
    * Appends this Z4AbstractComponentUI to its parent
    *
@@ -589,5 +591,446 @@ class Z4ModalMessageUI {
   }
 
   constructor() {
+  }
+}
+/**
+ * The utility library for math
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4Math {
+
+  /**
+   * 2*PI value
+   */
+  static  TWO_PI = 2 * Math.PI;
+
+  /**
+   * PI/2 value
+   */
+  static  HALF_PI = Math.PI / 2;
+
+  /**
+   * The gold section
+   */
+  static  GOLD_SECTION = (1 + Math.sqrt(5)) / 2;
+
+  /**
+   * The gold section square
+   */
+  static  SQUARE_GOLD_SECTION = Z4Math.GOLD_SECTION * Z4Math.GOLD_SECTION;
+
+  /**
+   * RAD to DEG conversion
+   */
+  static  RAD2DEG = 180 / Math.PI;
+
+  /**
+   * DEG to RAD conversion
+   */
+  static  DEG2RAD = Math.PI / 180;
+
+  /**
+   * Converts an angle from radiants to degrees
+   *
+   * @param radians The angle in radians
+   * @return The angle in degree
+   */
+  static  rad2deg(radians) {
+    return radians * Z4Math.RAD2DEG;
+  }
+
+  /**
+   * Converts an angle from degrees to radians
+   *
+   * @param degrees The angle in degrees
+   * @return The angle in radians
+   */
+  static  deg2rad(degrees) {
+    return degrees * Z4Math.DEG2RAD;
+  }
+
+  /**
+   * Returns the distance between two points
+   *
+   * @param x1 The x-axis coordinate of the first point
+   * @param y1 The y-axis coordinate of the first point
+   * @param x2 The x-axis coordinate of the second point
+   * @param y2 The y-axis coordinate of the second point
+   * @return The distance between two points
+   */
+  static  distance(x1, y1, x2, y2) {
+    let x = x1 - x2;
+    let y = y1 - y2;
+    return Math.sqrt(x * x + y * y);
+  }
+
+  /**
+   * Returns the theta component of a point or a vector, in polar coordinates.
+   * The value is normalized in the range [0,2*PI]
+   *
+   * @param x0 The x-axis coordinate of the start point
+   * @param y0 The y-axis coordinate of the start point
+   * @param x The x-axis coordinate of the end point
+   * @param y The y-axis coordinate of the end point
+   * @return The theta component of a point or a vector, in polar coordinates
+   */
+  static  atan(x0, y0, x, y) {
+    let a = Math.atan2(y - y0, x - x0);
+    return a < 0 ? a + Z4Math.TWO_PI : a;
+  }
+
+  /**
+   * Generates a ripple around a value
+   *
+   * @param value The value
+   * @param min The minimum allowed value
+   * @param max The maximum allowed value
+   * @param ripple The ripple (in the range [0,1])
+   * @return The rippled value
+   */
+  static  ripple(value, min, max, ripple) {
+    let rnd = (max - min) * ripple * Math.random();
+    value += Math.random() > 0.5 ? rnd : -rnd;
+    return value < min ? min : value > max ? max : value;
+  }
+
+  constructor() {
+  }
+}
+/**
+ * The signs of a value
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4Sign {
+
+  /**
+   * Positive sign
+   */
+  static  POSITIVE = new Z4Sign(1);
+
+  /**
+   * Negative sign
+   */
+  static  NEGATIVE = new Z4Sign(-1);
+
+  /**
+   * Random sign
+   */
+  static  RANDOM = new Z4Sign(0);
+
+   sign = 0;
+
+  constructor(sign) {
+    this.sign = sign;
+  }
+
+  /**
+   * Returns the next sign
+   *
+   * @return The next sign
+   */
+   next() {
+    switch(this.sign) {
+      case 1:
+      case -1:
+        return this.sign;
+      case 0:
+      default:
+        return Math.random() > 0.5 ? 1 : -1;
+      case 2:
+      case -2:
+        this.sign *= -1;
+        return this.sign / 2;
+    }
+  }
+
+  /**
+   * Creates a Z4Sign providing the following sequence +1, -1, +1, -1, ...
+   *
+   * @return The Z4Sign
+   */
+  static  alternate() {
+    return new Z4Sign(-2);
+  }
+}
+/**
+ * A value with sign
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4SignedValue {
+
+   sign = Z4Sign.RANDOM;
+
+   value = 0.0;
+
+  /**
+   * Returns the sign
+   *
+   * @return The sign
+   */
+   getSign() {
+    return this.sign;
+  }
+
+  /**
+   * Sets the sign
+   *
+   * @param sign The sign
+   * @return This Z4SignedValue
+   */
+   setSign(sign) {
+    this.sign = sign;
+    return this;
+  }
+
+  /**
+   * Returns the (positive) value
+   *
+   * @return The (positive) value
+   */
+   getValue() {
+    return this.value;
+  }
+
+  /**
+   * Sets the value
+   *
+   * @param value The (positive) value
+   * @return This Z4SignedValue
+   */
+   setValue(value) {
+    this.value = value;
+    return this;
+  }
+
+  /**
+   * Returns the next signed value
+   *
+   * @return The next signed value
+   */
+   next() {
+    return this.sign.next() * this.value;
+  }
+}
+/**
+ * The component to edit a signed value
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
+
+  // private final HTMLElement valueSpan = this.querySelector(".value-span");
+  // private final $HTMLElement text = this.querySelector(".value");
+  // private final $HTMLElement spinner = this.querySelector(".spinner");
+  // private final $Apply_0_Void applySpin = () -> this.spin();
+  // private boolean isApplySpin = false;
+   signVisible = true;
+
+  static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
+
+  static  UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4SignedValueUI.html");
+
+  /**
+   * Creates a Z4SignedValueUI
+   */
+  constructor() {
+    super(Z4SignedValueUI.UI);
+    let imgs = this.querySelectorAll(".signed-value-sign-dropdown-menu img");
+    for (let i = 0; i < imgs.length; i++) {
+      let img = imgs.item(i);
+      img.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".svg");
+    }
+    // 
+    // NodeList buttons = this.querySelectorAll(".btn-group-sign button");
+    // for (int i = 0; i < buttons.length; i++) {
+    // HTMLElement button = (HTMLElement) buttons.item(i);
+    // button.onclick = (event) -> {
+    // String str = button.getAttribute("data-value");
+    // 
+    // switch (str) {
+    // case "positive":
+    // this.value.setSign(Z4Sign.POSITIVE);
+    // break;
+    // case "negative":
+    // this.value.setSign(Z4Sign.NEGATIVE);
+    // break;
+    // case "random":
+    // this.value.setSign(Z4Sign.RANDOM);
+    // break;
+    // case "alternate":
+    // this.value.setSign(Z4Sign.alternate());
+    // break;
+    // }
+    // 
+    // this.setSpan();
+    // this.onchange.$apply(this.value);
+    // return null;
+    // };
+    // }
+    // 
+    // this.text.oninput = (event) -> {
+    // this.value.setValue(this.text.valueAsNumber);
+    // this.setSpan();
+    // this.oninput.$apply(this.value);
+    // return null;
+    // };
+    // this.text.onchange = (event) -> {
+    // this.value.setValue(this.text.valueAsNumber);
+    // this.setSpan();
+    // this.onchange.$apply(this.value);
+    // return null;
+    // };
+    // this.text.onfocus = (event) -> {
+    // this.text.select();
+    // return null;
+    // };
+    // 
+    // if (Z4Loader.touch) {
+    // this.spinner.ontouchstart = (event) -> this.startSpin();
+    // this.spinner.ontouchend = (event) -> this.stopSpin();
+    // } else {
+    // this.spinner.onmousedown = (event) -> this.startSpin();
+    // this.spinner.onmouseup = (event) -> this.stopSpin();
+    // }
+    this.setValue(new Z4SignedValue());
+  }
+
+   startSpin() {
+    // this.isApplySpin = true;
+    // this.applySpin.$apply();
+    return null;
+  }
+
+   stopSpin() {
+    // this.isApplySpin = false;
+    // this.spinner.value = "0";
+    return null;
+  }
+
+   spin() {
+    // double min = parseFloat(this.text.getAttribute("min"));
+    // double max = parseFloat(this.text.getAttribute("max"));
+    // 
+    // double v = this.spinner.valueAsNumber;
+    // double abs = 1;
+    // 
+    // if ($exists(v)) {
+    // abs = Math.abs(v);
+    // 
+    // v = Math.max(min, this.text.valueAsNumber + (v > 0 ? 1 : -1));
+    // v = Math.min(v, max);
+    // 
+    // this.text.value = "" + v;
+    // this.value.setValue(this.text.valueAsNumber);
+    // this.setSpan();
+    // this.oninput.$apply(this.value);
+    // }
+    // 
+    // if (this.isApplySpin) {
+    // setTimeout(this.applySpin, 500 / abs);
+    // } else {
+    // this.value.setValue(this.text.valueAsNumber);
+    // this.setSpan();
+    // this.onchange.$apply(this.value);
+    // }
+  }
+
+  /**
+   * Sets the compact visualization
+   *
+   * @return This Z4SignedValueUI
+   */
+   compact() {
+    // this.valueSpan.classList.remove("signed-value-not-compact");
+    // this.querySelector(".dropdown-toggle-split").style.display = "inline-block";
+    // this.querySelector(".form-expanded").classList.add("mx-1");
+    // this.querySelector(".dropdown-menu").appendChild(this.querySelector(".form-expanded"));
+    return this;
+  }
+
+  /**
+   * Sets the range of this Z4SignedValueUI
+   *
+   * @param min The minumum (positive) value
+   * @param max The maximum (positive) value (999999999 to show infinite)
+   * @return This Z4SignedValueUI
+   */
+   setRange(min, max) {
+    // this.text.setAttribute("min", "" + min);
+    // this.text.setAttribute("max", "" + max);
+    // this.querySelector(".range-label").innerHTML = "[" + min + "," + (max == 999999999 ? "&infin;" : max) + "]";
+    return this;
+  }
+
+  /**
+   * Sets the visibility of the sign
+   *
+   * @param visible true to make the sign visible, false otherwise
+   * @return This Z4SignedValueUI
+   */
+   setSignVisible(visible) {
+    // this.signVisible = visible;
+    // if (visible) {
+    // this.querySelector(".sign-label").classList.remove("sign-not-visible");
+    // this.querySelector(".btn-group-sign").classList.remove("sign-not-visible");
+    // } else {
+    // this.querySelector(".sign-label").classList.add("sign-not-visible");
+    // this.querySelector(".btn-group-sign").classList.add("sign-not-visible");
+    // }
+    // this.setSpan();
+    return this;
+  }
+
+  /**
+   * Checks if the sign is visible
+   *
+   * @return true if the sign is visible, false otherwise
+   */
+   isSignVisible() {
+    return this.signVisible;
+  }
+
+  /**
+   * Sets the token of the value label
+   *
+   * @param token The token of the value label
+   * @param bold true for bold font, false otherwise
+   * @param italic true for italic font, false otherwise
+   * @return This Z4SignedValueUI
+   */
+   setValueLabel(token, bold, italic) {
+    // $HTMLElement valueLabel = this.querySelector(".value-label");
+    // valueLabel.setAttribute("data-token-lang-inner_text", token);
+    // valueLabel.innerHTML = Z4MessageFactory.get(token);
+    // valueLabel.style.fontWeight = bold ? "700" : "400";
+    // valueLabel.style.fontStyle = italic ? "italic" : "normal";
+    return this;
+  }
+
+   setValue(value) {
+    this.value = value;
+    // this.text.value = "" + value.getValue();
+    // this.setSpan();
+    return this;
+  }
+
+   setSpan() {
+    // if (!this.signVisible) {
+    // this.valueSpan.innerHTML = "" + this.value.getValue();
+    // } else if (this.value.getSign() == Z4Sign.POSITIVE) {
+    // this.valueSpan.innerHTML = "&plus;" + this.value.getValue();
+    // } else if (this.value.getSign() == Z4Sign.NEGATIVE) {
+    // this.valueSpan.innerHTML = "&minus;" + this.value.getValue();
+    // } else if (this.value.getSign() == Z4Sign.RANDOM) {
+    // this.valueSpan.innerHTML = "&plusmn;" + this.value.getValue();
+    // } else {
+    // this.valueSpan.innerHTML = "&plusmn;<sup>&UpArrowDownArrow;</sup>" + this.value.getValue();
+    // }
+  }
+
+   dispose() {
   }
 }

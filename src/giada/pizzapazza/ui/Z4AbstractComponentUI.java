@@ -82,9 +82,9 @@ public abstract class Z4AbstractComponentUI {
    * @param selector The selector
    * @return The child of this component
    */
-//  public $HTMLElement querySelector(String selector) {
-//    return ($HTMLElement) this.root.querySelector(selector);
-//  }
+  public $HTMLElement querySelector(String selector) {
+    return ($HTMLElement) this.root.querySelector(selector);
+  }
 
   /**
    * Selects all children of this component
@@ -92,9 +92,9 @@ public abstract class Z4AbstractComponentUI {
    * @param selector The selector
    * @return All children of this component
    */
-//  public NodeList querySelectorAll(String selector) {
-//    return this.root.querySelectorAll(selector);
-//  }
+  public NodeList querySelectorAll(String selector) {
+    return this.root.querySelectorAll(selector);
+  }
 
   /**
    * Appends this Z4AbstractComponentUI to its parent
@@ -103,11 +103,11 @@ public abstract class Z4AbstractComponentUI {
    * @param parent The parent
    * @return This Z4AbstractComponentUI
    */
-//  @SuppressWarnings("unchecked")
-//  public <T extends Z4AbstractComponentUI> T appendToElement(Element parent) {
-//    parent.appendChild(this.root);
-//    return (T) this;
-//  }
+  @SuppressWarnings("unchecked")
+  public <T extends Z4AbstractComponentUI> T appendToElement(Element parent) {
+    parent.appendChild(this.root);
+    return (T) this;
+  }
 
   /**
    * Appends this Z4AbstractComponentUI to its parent

@@ -24,13 +24,13 @@
 }*/
 
 /* SIGNED VALUE */
-/*.sign-not-visible {
+.signed-value-sign-button.sign-not-visible {
   display: none;
 }
-.signed-value-not-compact {
-  border-top-right-radius: 0.2rem !important;
-  border-bottom-right-radius: 0.2rem !important;
-}*/
+.signed-value-form-control.sign-not-visible {
+  border-top-left-radius: 0.2rem !important;
+  border-bottom-left-radius: 0.2rem !important;
+}
 
 /* FANCIFUL VALUE */
 /*.fanciful-value-not-compact {
