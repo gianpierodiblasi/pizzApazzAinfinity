@@ -27,10 +27,20 @@ class Z4AbstractComponentUI {
 
   /**
    * Returns an unique ID
-   * @return
+   *
+   * @return The unique ID
    */
    getUniqueID() {
     return "id" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
+  }
+
+  /**
+   * Returns an unique name
+   *
+   * @return The unique name
+   */
+   getUniqueName() {
+    return "name" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
   }
 
   /**
@@ -101,6 +111,7 @@ class Z4AbstractComponentUI {
     parent.appendChild(this.root);
     return this;
   }
+
   /**
    * Appends this Z4AbstractComponentUI to its parent
    *
@@ -108,11 +119,10 @@ class Z4AbstractComponentUI {
    * @param parent The parent
    * @return This Z4AbstractComponentUI
    */
-  // @SuppressWarnings("unchecked")
-  // public <T extends Z4AbstractComponentUI> T appendToComponent(Z4AbstractComponentUI parent) {
-  // parent.root.appendChild(this.root);
-  // return (T) this;
-  // }
+   appendToComponent(parent) {
+    parent.root.appendChild(this.root);
+    return this;
+  }
   /**
    * Prepends an element to this Z4AbstractComponentUI
    *

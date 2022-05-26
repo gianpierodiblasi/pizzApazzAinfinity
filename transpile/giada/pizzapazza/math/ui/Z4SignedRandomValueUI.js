@@ -1,73 +1,58 @@
-package giada.pizzapazza.math.ui;
-
-import def.dom.HTMLElement;
-import def.dom.NodeList;
-import giada.pizzapazza.Z4Loader;
-import giada.pizzapazza.math.Z4SignedRandomValue;
-import giada.pizzapazza.math.Z4SignedValue;
-import giada.pizzapazza.setting.Z4HTMLFactory;
-import giada.pizzapazza.ui.Z4AbstractComponentWithValueUI;
-import simulation.dom.$HTMLElement;
-
 /**
  * The component to edit a signed random value
  *
  * @author gianpiero.di.blasi
  */
-public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4SignedRandomValue> {
+class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
 
-  private final Z4SignedValueUI signedValueUI = new Z4SignedValueUI();
-  private final Z4SignedValueUI lengthUI = new Z4SignedValueUI();
-  private final $HTMLElement lengthBadge = this.querySelector(".signed-random-value-length-badge");
+   signedValueUI = new Z4SignedValueUI();
 
-  private final static String PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
-  private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4SignedRandomValueUI.html");
+   lengthUI = new Z4SignedValueUI();
+
+   lengthBadge = this.querySelector(".signed-random-value-length-badge");
+
+  static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
+
+  static  UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4SignedRandomValueUI.html");
 
   /**
    * Creates a Z4SignedRandomValueUI
    */
-  @SuppressWarnings("StringEquality")
-  public Z4SignedRandomValueUI() {
+  constructor() {
     super(Z4SignedRandomValueUI.UI);
-
     this.signedValueUI.appendToComponent(this);
-    this.signedValueUI.oninput = (signedValue) -> this.oninput.$apply(this.createSignedRandomValue(this.getType()));
-    this.signedValueUI.onchange = (signedValue) -> this.onchange.$apply(this.createSignedRandomValue(this.getType()));
-
+    this.signedValueUI.oninput = (signedValue) => this.oninput(this.createSignedRandomValue(this.getType()));
+    this.signedValueUI.onchange = (signedValue) => this.onchange(this.createSignedRandomValue(this.getType()));
     this.signedValueUI.querySelector(".signed-value-input-group").appendChild(this.querySelector(".signed-random-value-type-button"));
     this.signedValueUI.querySelector(".signed-value-input-group").appendChild(this.querySelector(".signed-random-value-type-dropdown-menu"));
-
-    NodeList imgs = this.querySelectorAll(".signed-random-value-type-dropdown-menu img");
-    for (int i = 0; i < imgs.length; i++) {
-      HTMLElement img = (HTMLElement) imgs.item(i);
+    let imgs = this.querySelectorAll(".signed-random-value-type-dropdown-menu img");
+    for (let i = 0; i < imgs.length; i++) {
+      let img = imgs.item(i);
       img.setAttribute("src", Z4SignedRandomValueUI.PATH + "z4randomvalue_" + img.getAttribute("data-icon") + ".svg");
     }
-
-    NodeList buttons = this.querySelectorAll(".signed-random-value-type-dropdown-menu button");
-    for (int i = 0; i < buttons.length; i++) {
-      HTMLElement button = (HTMLElement) buttons.item(i);
-      button.onclick = (event) -> {
+    let buttons = this.querySelectorAll(".signed-random-value-type-dropdown-menu button");
+    for (let i = 0; i < buttons.length; i++) {
+      let button = buttons.item(i);
+      button.onclick = (event) => {
         this.querySelector(".signed-random-value-type-button img").setAttribute("src", button.querySelector("img").getAttribute("src"));
-        this.onchange.$apply(this.createSignedRandomValue(button.getAttribute("data-value")));
+        this.onchange(this.createSignedRandomValue(button.getAttribute("data-value")));
         this.lengthUI.setEnabled(!this.value.isClassic());
         this.lengthBadge.style.display = this.value.isClassic() ? "none" : "inline-block";
         return null;
       };
     }
-
     this.lengthUI.setSignVisible(false);
     this.lengthUI.setValueLabel("LENGTH", false, false);
     this.lengthUI.setRange(1, 1000000000);
     this.lengthUI.appendToElement(this.querySelector(".signed-random-value-length-ui"));
-    this.lengthUI.oninput = (signedValue) -> {
-      this.oninput.$apply(this.createSignedRandomValue(this.getType()));
+    this.lengthUI.oninput = (signedValue) => {
+      this.oninput(this.createSignedRandomValue(this.getType()));
       this.lengthBadge.innerText = "" + this.value.getLength();
     };
-    this.lengthUI.onchange = (signedValue) -> {
-      this.onchange.$apply(this.createSignedRandomValue(this.getType()));
+    this.lengthUI.onchange = (signedValue) => {
+      this.onchange(this.createSignedRandomValue(this.getType()));
       this.lengthBadge.innerText = "" + this.value.getLength();
     };
-
     this.setValue(Z4SignedRandomValue.classic(0));
   }
 
@@ -78,7 +63,7 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
    * @param max The maximum (positive) value (999999999 to show infinite)
    * @return This Z4SignedRandomValueUI
    */
-  public Z4SignedRandomValueUI setRange(int min, int max) {
+   setRange(min, max) {
     this.signedValueUI.setRange(min, max);
     return this;
   }
@@ -89,7 +74,7 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
    * @param visible true to make the sign visible, false otherwise
    * @return This Z4SignedRandomValueUI
    */
-  public Z4SignedRandomValueUI setSignVisible(boolean visible) {
+   setSignVisible(visible) {
     this.signedValueUI.setSignVisible(visible);
     return this;
   }
@@ -101,7 +86,7 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
    * @param max The maximum (positive) value (999999999 to show infinite)
    * @return This Z4SignedRandomValueUI
    */
-  public Z4SignedRandomValueUI setLengthRange(int min, int max) {
+   setLengthRange(min, max) {
     this.lengthUI.setRange(min, max);
     return this;
   }
@@ -114,18 +99,14 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
    * @param italic true for italic font, false otherwise
    * @return This Z4SignedRandomValueUI
    */
-  public Z4SignedRandomValueUI setValueLabel(String token, boolean bold, boolean italic) {
+   setValueLabel(token, bold, italic) {
     this.signedValueUI.setValueLabel(token, bold, italic);
     return this;
   }
 
-  @Override
-  @SuppressWarnings({"StringEquality", "unchecked"})
-  public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4SignedRandomValue value) {
+   setValue(value) {
     this.value = value;
-
     this.signedValueUI.setValue(new Z4SignedValue().setValue(this.value.getValue()).setSign(this.value.getSign()));
-
     if (this.value.isClassic()) {
       this.querySelector(".signed-random-value-type-button img").setAttribute("src", this.querySelector(".signed-random-value-type-dropdown-menu img[data-icon='classic']").getAttribute("src"));
     } else if (this.value.isBezier()) {
@@ -135,20 +116,16 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
     } else if (this.value.isStepped()) {
       this.querySelector(".signed-random-value-type-button img").setAttribute("src", this.querySelector(".signed-random-value-type-dropdown-menu img[data-icon='stepped']").getAttribute("src"));
     }
-
     this.lengthUI.setEnabled(!this.value.isClassic());
     this.lengthUI.setValue(new Z4SignedValue().setValue(this.value.getLength()));
-
     this.lengthBadge.style.display = this.value.isClassic() ? "none" : "inline-block";
     this.lengthBadge.innerText = "" + this.value.getLength();
-
-    return (T) this;
+    return this;
   }
 
-  private Z4SignedRandomValue createSignedRandomValue(String str) {
-    Z4SignedValue signedValue = this.signedValueUI.getValue();
-
-    switch (str) {
+   createSignedRandomValue(str) {
+    let signedValue = this.signedValueUI.getValue();
+    switch(str) {
       case "classic":
         this.value = Z4SignedRandomValue.classic(signedValue.getValue()).setSign(signedValue.getSign());
         break;
@@ -162,11 +139,10 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
         this.value = Z4SignedRandomValue.stepped(signedValue.getValue(), this.lengthUI.getValue().getValue()).setSign(signedValue.getSign());
         break;
     }
-
     return this.value;
   }
 
-  private String getType() {
+   getType() {
     if (this.value.isClassic()) {
       return "classic";
     } else if (this.value.isBezier()) {
@@ -180,7 +156,6 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
     }
   }
 
-  @Override
-  public void dispose() {
+   dispose() {
   }
 }

@@ -7,7 +7,9 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
 
    valueLabel = this.querySelector(".signed-value-value-label");
 
-   checkSpinner = this.querySelector(".signed-value-check-spinner");
+   radioSpinner = this.querySelector(".signed-value-radio-spinner");
+
+   radioRange = this.querySelector(".signed-value-radio-range");
 
    spinner = this.querySelector(".signed-value-range-input");
 
@@ -63,22 +65,23 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
         return null;
       };
     }
-    this.checkSpinner.id = this.getUniqueID();
-    this.checkSpinner.onchange = (event) => {
-      let list = this.querySelectorAll(".signed-value-form-control .form-label");
-      for (let i = 0; i < list.length; i++) {
-        (list.item(i)).style.display = this.checkSpinner.checked ? "inline-block" : "none";
-      }
-      if (this.checkSpinner.checked) {
-        this.spinner.setAttribute("min", "-50");
-        this.spinner.setAttribute("max", "50");
-        this.spinner.value = "0";
-      } else {
-        this.configureRange();
-      }
+    let name = this.getUniqueName();
+    this.radioSpinner.id = this.getUniqueID();
+    this.radioSpinner.setAttribute("name", name);
+    this.radioSpinner.onchange = (event) => {
+      this.spinner.setAttribute("min", "-50");
+      this.spinner.setAttribute("max", "50");
+      this.spinner.value = "0";
       return null;
     };
-    this.querySelector(".signed-value-check-spinner-label").setAttribute("for", this.checkSpinner.id);
+    this.querySelector(".signed-value-radio-spinner-label").setAttribute("for", this.radioSpinner.id);
+    this.radioRange.id = this.getUniqueID();
+    this.radioRange.setAttribute("name", name);
+    this.radioRange.onchange = (event) => {
+      this.configureRange();
+      return null;
+    };
+    this.querySelector(".signed-value-radio-range-label").setAttribute("for", this.radioRange.id);
     let minus = this.querySelector(".signed-value-range-minus");
     let plus = this.querySelector(".signed-value-range-plus");
     if (Z4Loader.touch) {
@@ -99,7 +102,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
       plus.onmouseleave = (event) => this.minusPlus(0);
     }
     this.spinner.oninput = (event) => {
-      if (!this.checkSpinner.checked) {
+      if (this.radioRange.checked) {
         let v = this.getReversedValue(this.spinner.valueAsNumber);
         this.valueLabel.innerText = "" + v;
         this.oninput(this.value.setValue(v));
@@ -107,7 +110,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
       return null;
     };
     this.spinner.onchange = (event) => {
-      if (!this.checkSpinner.checked) {
+      if (this.radioRange.checked) {
         let v = this.getReversedValue(this.spinner.valueAsNumber);
         this.valueLabel.innerText = "" + v;
         this.onchange(this.value.setValue(v));
@@ -118,7 +121,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
   }
 
    startSpin() {
-    if (this.checkSpinner.checked) {
+    if (this.radioSpinner.checked) {
       this.isApplySpin = true;
       this.applySpin();
     }
@@ -126,7 +129,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
   }
 
    stopSpin() {
-    if (this.checkSpinner.checked) {
+    if (this.radioSpinner.checked) {
       this.isApplySpin = false;
       this.spinner.value = "0";
       this.onchange(this.value);
@@ -164,7 +167,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
     rangedValue = Math.min(rangedValue, rangedMax);
     let reversedValue = this.getReversedValue(rangedValue);
     this.valueLabel.innerText = "" + reversedValue;
-    if (!this.checkSpinner.checked) {
+    if (this.radioRange.checked) {
       this.spinner.value = "" + rangedValue;
     }
     this.oninput(this.value.setValue(reversedValue));
@@ -185,7 +188,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
     this.min = min;
     this.max = max;
     this.querySelector(".signed-value-range-span").innerHTML = "[" + min + "," + (max === 1000000000 ? "&infin;" : max) + "]";
-    if (!this.checkSpinner.checked) {
+    if (this.radioRange.checked) {
       this.configureRange();
     }
     return this;
@@ -247,6 +250,31 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
       }
     }
     return counter;
+  }
+
+  /**
+   * Enables this Z4SignedValueUI
+   *
+   * @param b true to enable this Z4SignedValueUI, false otherwise
+   * @return This Z4SignedValueUI
+   */
+   setEnabled(b) {
+    if (b) {
+      this.querySelector(".signed-value-radio-spinner").removeAttribute("disabled");
+      this.querySelector(".signed-value-radio-range").removeAttribute("disabled");
+      this.querySelector(".signed-value-sign-button").removeAttribute("disabled");
+      this.querySelector(".signed-value-range-minus").removeAttribute("disabled");
+      this.querySelector(".signed-value-range-input").removeAttribute("disabled");
+      this.querySelector(".signed-value-range-plus").removeAttribute("disabled");
+    } else {
+      this.querySelector(".signed-value-radio-spinner").setAttribute("disabled", "disabled");
+      this.querySelector(".signed-value-radio-range").setAttribute("disabled", "disabled");
+      this.querySelector(".signed-value-sign-button").setAttribute("disabled", "disabled");
+      this.querySelector(".signed-value-range-minus").setAttribute("disabled", "disabled");
+      this.querySelector(".signed-value-range-input").setAttribute("disabled", "disabled");
+      this.querySelector(".signed-value-range-plus").setAttribute("disabled", "disabled");
+    }
+    return this;
   }
 
   /**

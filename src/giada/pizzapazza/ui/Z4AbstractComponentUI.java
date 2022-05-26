@@ -42,12 +42,22 @@ public abstract class Z4AbstractComponentUI {
 
   /**
    * Returns an unique ID
-   * @return 
+   *
+   * @return The unique ID
    */
   protected String getUniqueID() {
     return "id" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
   }
 
+  /**
+   * Returns an unique name
+   *
+   * @return The unique name
+   */
+  protected String getUniqueName() {
+    return "name" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
+  }
+  
   /**
    * Inizializes the monitoring of the device pixel ratio changes
    *
@@ -124,11 +134,12 @@ public abstract class Z4AbstractComponentUI {
    * @param parent The parent
    * @return This Z4AbstractComponentUI
    */
-//  @SuppressWarnings("unchecked")
-//  public <T extends Z4AbstractComponentUI> T appendToComponent(Z4AbstractComponentUI parent) {
-//    parent.root.appendChild(this.root);
-//    return (T) this;
-//  }
+  @SuppressWarnings("unchecked")
+  public <T extends Z4AbstractComponentUI> T appendToComponent(Z4AbstractComponentUI parent) {
+    parent.root.appendChild(this.root);
+    return (T) this;
+  }
+
   /**
    * Prepends an element to this Z4AbstractComponentUI
    *

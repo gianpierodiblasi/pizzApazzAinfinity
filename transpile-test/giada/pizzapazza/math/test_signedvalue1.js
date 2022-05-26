@@ -33,6 +33,12 @@ class test_signedvalue1 {
       ui3.setSignVisible((document.getElementById("sign-visible")).checked);
       return null;
     };
+    document.getElementById("enabled").onchange = (event) => {
+      ui1.setEnabled((document.getElementById("enabled")).checked);
+      ui2.setEnabled((document.getElementById("enabled")).checked);
+      ui3.setEnabled((document.getElementById("enabled")).checked);
+      return null;
+    };
   }
 
   static  stringify(object) {

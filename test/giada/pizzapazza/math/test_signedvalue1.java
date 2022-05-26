@@ -53,6 +53,13 @@ public class test_signedvalue1 {
       ui3.setSignVisible((($HTMLElement) document.getElementById("sign-visible")).checked);
       return null;
     };
+    
+    document.getElementById("enabled").onchange = (event) -> {
+      ui1.setEnabled((($HTMLElement) document.getElementById("enabled")).checked);
+      ui2.setEnabled((($HTMLElement) document.getElementById("enabled")).checked);
+      ui3.setEnabled((($HTMLElement) document.getElementById("enabled")).checked);
+      return null;
+    };
   }
   
   private static String stringify(Object object) {

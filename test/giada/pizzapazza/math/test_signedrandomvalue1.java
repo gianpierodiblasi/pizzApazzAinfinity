@@ -31,20 +31,9 @@ public class test_signedrandomvalue1 {
       return null;
     };
 
-    document.$getElementById("mode").value = Z4Setting.getMode();
-    document.$getElementById("mode").onchange = (event) -> {
-      Z4Setting.setMode(document.$getElementById("mode").value);
-      return null;
-    };
-
-    Z4SignedRandomValueUI ui1 = new Z4SignedRandomValueUI();
-    ui1.appendToElement(document.querySelector("#test1"));
-
-    Z4SignedRandomValueUI ui2 = new Z4SignedRandomValueUI().setRange(30, 80).setValueLabel("INTENSITY", true, true).setValue(Z4SignedRandomValue.bezier(40, 10).setSign(Z4Sign.NEGATIVE));
-    ui2.appendToElement(document.querySelector("#test3"));
-
-    Z4SignedRandomValueUI ui3 = new Z4SignedRandomValueUI().setRange(30, 80).setValueLabel("INTENSITY", true, true).compact().setValue(Z4SignedRandomValue.bezier(40, 10).setSign(Z4Sign.NEGATIVE));
-    ui3.appendToElement(document.querySelector("#test5"));
+    Z4SignedRandomValueUI ui1 = new Z4SignedRandomValueUI().appendToElement(document.querySelector("#test1"));
+    Z4SignedRandomValueUI ui2 = new Z4SignedRandomValueUI().setRange(30, 80).setValueLabel("INTENSITY", true, true).setValue(Z4SignedRandomValue.bezier(40, 10).setSign(Z4Sign.NEGATIVE)).appendToElement(document.querySelector("#test3"));
+    Z4SignedRandomValueUI ui3 = new Z4SignedRandomValueUI().setRange(0, 1000).setValueLabel("INTENSITY", true, true).setValue(Z4SignedRandomValue.bezier(40, 10).setSign(Z4Sign.NEGATIVE)).appendToElement(document.querySelector("#test5"));
 
     ui1.oninput = (value) -> document.getElementById("test2").textContent = "ONINPUT " + test_signedrandomvalue1.stringify(value);
     ui1.onchange = (value) -> document.getElementById("test2").textContent = "ONCHANGE " + test_signedrandomvalue1.stringify(value);
