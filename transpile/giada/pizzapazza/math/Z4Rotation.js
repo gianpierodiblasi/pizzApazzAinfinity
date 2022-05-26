@@ -1,22 +1,22 @@
-package giada.pizzapazza.math;
-
-import static simulation.js.$Globals.$exists;
-
 /**
- * The rotation (angles parameters are computed in degrees, rotations are
+ * The rotation (angles parameters have to be provided in degrees, rotations are
  * computed in radians)
  *
  * @author gianpiero.di.blasi
  */
-public class Z4Rotation {
+class Z4Rotation {
 
-  private final int type;
-  private double startAngle;
-  private Z4FancifulValue angle = new Z4FancifulValue();
-  private boolean delayed;
-  private double rotationNext;
+   type = 0;
 
-  private Z4Rotation(int type) {
+   startAngle = 0.0;
+
+   angle = new Z4FancifulValue();
+
+   delayed = false;
+
+   rotationNext = 0.0;
+
+  constructor(type) {
     this.type = type;
   }
 
@@ -26,8 +26,8 @@ public class Z4Rotation {
    * @return true if the next rotation is computed on a fixed value, false
    * otherwise
    */
-  public boolean isFixed() {
-    return this.type == 0;
+   isFixed() {
+    return this.type === 0;
   }
 
   /**
@@ -36,8 +36,8 @@ public class Z4Rotation {
    * @return true if next rotation is computed by cumulating previous rotation,
    * false otherwise
    */
-  public boolean isCumulative() {
-    return this.type == 1;
+   isCumulative() {
+    return this.type === 1;
   }
 
   /**
@@ -46,8 +46,8 @@ public class Z4Rotation {
    * @return true if next rotation is computed relative to a path, false
    * otherwise
    */
-  public boolean isRelativeToPath() {
-    return this.type == 2;
+   isRelativeToPath() {
+    return this.type === 2;
   }
 
   /**
@@ -55,7 +55,7 @@ public class Z4Rotation {
    *
    * @return The initial angle of rotation (in degrees)
    */
-  public double getStartAngle() {
+   getStartAngle() {
     return this.startAngle;
   }
 
@@ -65,7 +65,7 @@ public class Z4Rotation {
    * @param startAngle The initial angle of rotation (in degrees)
    * @return This Z4Rotation
    */
-  public Z4Rotation setStartAngle(double startAngle) {
+   setStartAngle(startAngle) {
     this.startAngle = startAngle;
     return this;
   }
@@ -75,7 +75,7 @@ public class Z4Rotation {
    *
    * @return The angle (in degrees)
    */
-  public Z4FancifulValue getAngle() {
+   getAngle() {
     return this.angle;
   }
 
@@ -85,7 +85,7 @@ public class Z4Rotation {
    * @param angle The angle (in degrees)
    * @return This Z4Rotation
    */
-  public Z4Rotation setAngle(Z4FancifulValue angle) {
+   setAngle(angle) {
     this.angle = angle;
     return this;
   }
@@ -96,7 +96,7 @@ public class Z4Rotation {
    * @return true if the returned rotation has to be delayed (rotated by a PI
    * angle), false otherwise
    */
-  public boolean isDelayed() {
+   isDelayed() {
     return this.delayed;
   }
 
@@ -107,7 +107,7 @@ public class Z4Rotation {
    * angle), false otherwise
    * @return This Z4Rotation
    */
-  public Z4Rotation setDelayed(boolean delayed) {
+   setDelayed(delayed) {
     this.delayed = delayed;
     return this;
   }
@@ -118,10 +118,9 @@ public class Z4Rotation {
    * @param tangentAngle The tangent angle (in radians)
    * @return The next rotation (in radians)
    */
-  public double next(double tangentAngle) {
-    double nextAngle = Z4Math.deg2rad(this.startAngle + this.angle.next(0));
-
-    switch (this.type) {
+   next(tangentAngle) {
+    let nextAngle = Z4Math.deg2rad(this.startAngle + this.angle.next());
+    switch(this.type) {
       case 0:
         return nextAngle + (this.delayed ? Math.PI : 0);
       case 1:
@@ -140,14 +139,14 @@ public class Z4Rotation {
    * @param z4Point The current point
    * @param vector The tangent vector
    */
-  public void nextSide(Z4Point z4Point, Z4Vector vector) {
-    switch (this.type) {
+   nextSide(z4Point, vector) {
+    switch(this.type) {
       case 0:
       case 1:
         z4Point.setSide(Z4Sign.POSITIVE);
         break;
       case 2:
-        z4Point.setSide($exists(vector) ? vector.direction(z4Point.getZ4Vector()) : Z4Sign.RANDOM);
+        z4Point.setSide(vector ? vector.direction(z4Point.getZ4Vector()) : Z4Sign.RANDOM);
         break;
     }
   }
@@ -157,7 +156,7 @@ public class Z4Rotation {
    *
    * @return The Z4Rotation
    */
-  public static Z4Rotation fixed() {
+  static  fixed() {
     return new Z4Rotation(0);
   }
 
@@ -167,7 +166,7 @@ public class Z4Rotation {
    *
    * @return The Z4Rotation
    */
-  public static Z4Rotation cumulative() {
+  static  cumulative() {
     return new Z4Rotation(1);
   }
 
@@ -176,7 +175,7 @@ public class Z4Rotation {
    *
    * @return The Z4Rotation
    */
-  public static Z4Rotation relativeToPath() {
+  static  relativeToPath() {
     return new Z4Rotation(2);
   }
 }
