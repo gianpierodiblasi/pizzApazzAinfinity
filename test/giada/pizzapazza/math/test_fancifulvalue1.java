@@ -54,41 +54,12 @@ public class test_fancifulvalue1 {
     ui3.onchange = (value) -> document.getElementById("test6").textContent = "ONCHANGE " + test_fancifulvalue1.stringify(value);
     document.getElementById("test6").textContent = test_fancifulvalue1.stringify(ui3.getValue());
 
-    Function<Event, Object> onComponent = (event) -> {
-      ui1.setComponentsVisible(
-              (($HTMLElement) document.getElementById("constant-visible")).checked,
-              (($HTMLElement) document.getElementById("random-visible")).checked
-      );
-      ui2.setComponentsVisible(
-              (($HTMLElement) document.getElementById("constant-visible")).checked,
-              (($HTMLElement) document.getElementById("random-visible")).checked
-      );
-      ui3.setComponentsVisible(
-              (($HTMLElement) document.getElementById("constant-visible")).checked,
-              (($HTMLElement) document.getElementById("random-visible")).checked
-      );
+    document.getElementById("sign-visible").onchange = (event) -> {
+      ui1.setSignsVisible((($HTMLElement) document.getElementById("sign-visible")).checked);
+      ui2.setSignsVisible((($HTMLElement) document.getElementById("sign-visible")).checked);
+      ui3.setSignsVisible((($HTMLElement) document.getElementById("sign-visible")).checked);
       return null;
     };
-    document.getElementById("constant-visible").onchange = onComponent;
-    document.getElementById("random-visible").onchange = onComponent;
-
-    Function<Event, Object> onSign = (event) -> {
-      ui1.setSignsVisible(
-              (($HTMLElement) document.getElementById("constant-sign-visible")).checked,
-              (($HTMLElement) document.getElementById("random-sign-visible")).checked
-      );
-      ui2.setSignsVisible(
-              (($HTMLElement) document.getElementById("constant-sign-visible")).checked,
-              (($HTMLElement) document.getElementById("random-sign-visible")).checked
-      );
-      ui3.setSignsVisible(
-              (($HTMLElement) document.getElementById("constant-sign-visible")).checked,
-              (($HTMLElement) document.getElementById("random-sign-visible")).checked
-      );
-      return null;
-    };
-    document.getElementById("constant-sign-visible").onchange = onSign;
-    document.getElementById("random-sign-visible").onchange = onSign;
   }
 
   private static String stringify(Object object) {

@@ -1,42 +1,6 @@
-<label class="form-label fanciful-label" style="margin-bottom:0px" data-token-lang-inner_text="VALUE">Value</label>
-
-<div class="form-compact">
-  <div class="input-group">
-    <span class="input-group-text fanciful-value-span fanciful-value-not-compact"></span>
-    <button class="btn btn-outline-secondary btn-sm dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" data-bs-auto-close="outside" style="display:none"></button>
-    <div class="dropdown-menu"></div>
-  </div>
+<label class="form-label fanciful-value-label" style="margin-bottom:0px" data-token-lang-inner_text="VALUE">Value</label>
+<div class="form-check form-switch" style="margin-bottom:0px;float:right">
+  <input class="form-check-input fanciful-value-uniform-check" type="checkbox" role="switch"/>
+  <label class="form-check-label fanciful-value-uniform-label" data-token-lang-inner_text="UNIFORM_SIGN">Uniform Sign</label>
 </div>
-
-<div class="form-expanded fanciful-container" style="display:flex;flex-direction:column">
-  <div class="form-check form-switch" style="margin-bottom:0px;align-self:end">
-    <input class="form-check-input uniform-check" type="checkbox" role="switch"/>
-    <label class="form-check-label uniform-label" data-token-lang-inner_text="UNIFORM_SIGN">Uniform Sign</label>
-  </div>
-
-  <div class="uniform-container" style="display:flex;align-items:center;gap:2px">
-    <label class="form-label label-uniform" style="font-size:smaller;margin-bottom:0px" data-token-lang-inner_text="SIGN">Sign</label>
-    <div class="btn-group btn-group-uniform" style="flex:1" role="group">
-      <button class="btn btn-sm btn-outline-secondary" type="button" data-value="positive">
-        <img data-icon="positive" class="z4-dark-img-negative" width="20" height="20"/>
-        <span data-token-lang-inner_text="POSITIVE">Positive</span>
-      </button>
-      <button class="btn btn-sm btn-outline-secondary" type="button" data-value="negative">
-        <img data-icon="negative" class="z4-dark-img-negative" width="20" height="20"/>
-        <span data-token-lang-inner_text="NEGATIVE">Negative</span>
-      </button>
-      <button class="btn btn-sm btn-outline-secondary" type="button" data-value="random">
-        <img data-icon="random" class="z4-dark-img-negative" width="20" height="20"/>
-        <span data-token-lang-inner_text="RANDOM">Random</span>
-      </button>
-      <button class="btn btn-sm btn-outline-secondary" type="button" data-value="alternate">
-        <img data-icon="alternate" class="z4-dark-img-negative" width="20" height="20"/>
-        <span data-token-lang-inner_text="ALTERNATE">Alternate</span>
-      </button>
-    </div>
-  </div>
-
-  <div class="fanciful-costant"></div>
-  <div class="fanciful-random"></div>
-  <div class="fanciful-proportional"></div>
-</div>
+<div class="fanciful-value-container" style="display:flex;gap:2px"></div>
