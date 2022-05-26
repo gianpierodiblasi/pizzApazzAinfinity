@@ -64,10 +64,6 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
    setCompact() {
     this.signedValueUI.setCompact();
     this.querySelector(".signed-random-value-type-button img").setAttribute("width", "20");
-    let imgs = this.querySelectorAll(".signed-random-value-type-dropdown-menu img");
-    for (let i = 0; i < imgs.length; i++) {
-      (imgs.item(i)).setAttribute("width", "20");
-    }
     return this;
   }
 

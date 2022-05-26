@@ -66,11 +66,6 @@
   background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='rgb(222,218,214)' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/></svg>")
 }
 
-/*.z4-dark .input-group-text {
-  background: #202020;
-  color: #DEDAD6;
-}
-*/
 .z4-dark .z4-dark-img-negative {
   filter: invert(1);
 }

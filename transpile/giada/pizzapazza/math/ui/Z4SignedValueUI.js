@@ -263,10 +263,6 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
     this.querySelector(".signed-value-compact-dropdown-menu li").appendChild(this.querySelector(".signed-value-form-control"));
     this.querySelector(".signed-value-compact-dropdown-menu li").appendChild(this.querySelector(".signed-value-range-plus"));
     this.querySelector(".signed-value-sign-button img").setAttribute("width", "20");
-    let imgs = this.querySelectorAll(".signed-value-sign-dropdown-menu img");
-    for (let i = 0; i < imgs.length; i++) {
-      (imgs.item(i)).setAttribute("width", "20");
-    }
     return this;
   }
 

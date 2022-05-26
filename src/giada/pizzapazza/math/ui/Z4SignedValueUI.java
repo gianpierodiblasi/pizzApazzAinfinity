@@ -1,6 +1,5 @@
 package giada.pizzapazza.math.ui;
 
-import def.dom.Element;
 import static def.dom.Globals.clearTimeout;
 import def.dom.HTMLElement;
 import def.dom.NodeList;
@@ -292,11 +291,7 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
     this.querySelector(".signed-value-compact-dropdown-menu li").appendChild(this.querySelector(".signed-value-range-plus"));
 
     this.querySelector(".signed-value-sign-button img").setAttribute("width", "20");
-    NodeList imgs = this.querySelectorAll(".signed-value-sign-dropdown-menu img");
-    for (int i = 0; i < imgs.length; i++) {
-      ((Element) imgs.item(i)).setAttribute("width", "20");
-    }
-
+    
     return this;
   }
 
