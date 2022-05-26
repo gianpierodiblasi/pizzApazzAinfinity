@@ -57,6 +57,21 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
   }
 
   /**
+   * Sets the compact mode
+   *
+   * @return This Z4SignedRandomValueUI
+   */
+   setCompact() {
+    this.signedValueUI.setCompact();
+    this.querySelector(".signed-random-value-type-button img").setAttribute("width", "20");
+    let imgs = this.querySelectorAll(".signed-random-value-type-dropdown-menu img");
+    for (let i = 0; i < imgs.length; i++) {
+      (imgs.item(i)).setAttribute("width", "20");
+    }
+    return this;
+  }
+
+  /**
    * Sets the range of this Z4SignedRandomValueUI
    *
    * @param min The minumum (positive) value

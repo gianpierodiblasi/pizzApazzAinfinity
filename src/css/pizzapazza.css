@@ -31,6 +31,10 @@
   border-top-left-radius: 0.2rem !important;
   border-bottom-left-radius: 0.2rem !important;
 }
+.signed-value-input-group.sign-not-visible .signed-value-compact-button {
+  border-top-left-radius: 0.2rem !important;
+  border-bottom-left-radius: 0.2rem !important;
+}
 
 /* FANCIFUL VALUE */
 /*.fanciful-value-not-compact {

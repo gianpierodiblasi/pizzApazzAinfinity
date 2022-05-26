@@ -17,7 +17,7 @@ class test_signedrandomvalue1 {
     };
     let ui1 = new Z4SignedRandomValueUI().appendToElement(document.querySelector("#test1"));
     let ui2 = new Z4SignedRandomValueUI().setRange(30, 80).setValueLabel("INTENSITY", true, true).setValue(Z4SignedRandomValue.bezier(40, 10).setSign(Z4Sign.NEGATIVE)).appendToElement(document.querySelector("#test3"));
-    let ui3 = new Z4SignedRandomValueUI().setRange(0, 1000).setValueLabel("INTENSITY", true, true).setValue(Z4SignedRandomValue.bezier(40, 10).setSign(Z4Sign.NEGATIVE)).appendToElement(document.querySelector("#test5"));
+    let ui3 = new Z4SignedRandomValueUI().setCompact().setRange(0, 1000).setValueLabel("INTENSITY", true, true).setValue(Z4SignedRandomValue.bezier(40, 10).setSign(Z4Sign.NEGATIVE)).appendToElement(document.querySelector("#test5"));
     ui1.oninput = (value) => document.getElementById("test2").textContent = "ONINPUT " + test_signedrandomvalue1.stringify(value);
     ui1.onchange = (value) => document.getElementById("test2").textContent = "ONCHANGE " + test_signedrandomvalue1.stringify(value);
     document.getElementById("test2").textContent = test_signedrandomvalue1.stringify(ui1.getValue());

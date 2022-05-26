@@ -1,5 +1,6 @@
 package giada.pizzapazza.math.ui;
 
+import def.dom.Element;
 import static def.dom.Globals.clearTimeout;
 import def.dom.HTMLElement;
 import def.dom.NodeList;
@@ -279,6 +280,27 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
   }
 
   /**
+   * Sets the compact mode
+   *
+   * @return This Z4SignedValueUI
+   */
+  public Z4SignedValueUI setCompact() {
+    this.querySelector(".signed-value-compact-button").style.display = "inline-block";
+
+    this.querySelector(".signed-value-compact-dropdown-menu li").appendChild(this.querySelector(".signed-value-range-minus"));
+    this.querySelector(".signed-value-compact-dropdown-menu li").appendChild(this.querySelector(".signed-value-form-control"));
+    this.querySelector(".signed-value-compact-dropdown-menu li").appendChild(this.querySelector(".signed-value-range-plus"));
+
+    this.querySelector(".signed-value-sign-button img").setAttribute("width", "20");
+    NodeList imgs = this.querySelectorAll(".signed-value-sign-dropdown-menu img");
+    for (int i = 0; i < imgs.length; i++) {
+      ((Element) imgs.item(i)).setAttribute("width", "20");
+    }
+
+    return this;
+  }
+
+  /**
    * Enables this Z4SignedValueUI
    *
    * @param b true to enable this Z4SignedValueUI, false otherwise
@@ -289,6 +311,7 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
       this.querySelector(".signed-value-radio-spinner").removeAttribute("disabled");
       this.querySelector(".signed-value-radio-range").removeAttribute("disabled");
       this.querySelector(".signed-value-sign-button").removeAttribute("disabled");
+      this.querySelector(".signed-value-compact-button").removeAttribute("disabled");
       this.querySelector(".signed-value-range-minus").removeAttribute("disabled");
       this.querySelector(".signed-value-range-input").removeAttribute("disabled");
       this.querySelector(".signed-value-range-plus").removeAttribute("disabled");
@@ -296,6 +319,7 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
       this.querySelector(".signed-value-radio-spinner").setAttribute("disabled", "disabled");
       this.querySelector(".signed-value-radio-range").setAttribute("disabled", "disabled");
       this.querySelector(".signed-value-sign-button").setAttribute("disabled", "disabled");
+      this.querySelector(".signed-value-compact-button").setAttribute("disabled", "disabled");
       this.querySelector(".signed-value-range-minus").setAttribute("disabled", "disabled");
       this.querySelector(".signed-value-range-input").setAttribute("disabled", "disabled");
       this.querySelector(".signed-value-range-plus").setAttribute("disabled", "disabled");

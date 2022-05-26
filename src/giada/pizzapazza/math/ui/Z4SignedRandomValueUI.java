@@ -1,5 +1,6 @@
 package giada.pizzapazza.math.ui;
 
+import def.dom.Element;
 import def.dom.HTMLElement;
 import def.dom.NodeList;
 import giada.pizzapazza.Z4Loader;
@@ -69,6 +70,23 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
     };
 
     this.setValue(Z4SignedRandomValue.classic(0));
+  }
+
+  /**
+   * Sets the compact mode
+   *
+   * @return This Z4SignedRandomValueUI
+   */
+  public Z4SignedRandomValueUI setCompact() {
+    this.signedValueUI.setCompact();
+
+    this.querySelector(".signed-random-value-type-button img").setAttribute("width", "20");
+    NodeList imgs = this.querySelectorAll(".signed-random-value-type-dropdown-menu img");
+    for (int i = 0; i < imgs.length; i++) {
+      ((Element) imgs.item(i)).setAttribute("width", "20");
+    }
+    
+    return this;
   }
 
   /**
