@@ -30,8 +30,8 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
   public Z4SignedRandomValueUI() {
     super(Z4SignedRandomValueUI.UI);
 
-    this.signedValueUI.oninput = (signedValue) -> this.oninput.$apply(this.createSignedRandomValue(this.getType()));
-    this.signedValueUI.onchange = (signedValue) -> this.onchange.$apply(this.createSignedRandomValue(this.getType()));
+    this.signedValueUI.oninput = (signedValue) -> this.oninput.$apply(this.value.setValue(signedValue.getValue()).setSign(signedValue.getSign()));
+    this.signedValueUI.onchange = (signedValue) -> this.onchange.$apply(this.value.setValue(signedValue.getValue()).setSign(signedValue.getSign()));
 
     this.signedValueUI.querySelector(".signed-value-input-group").appendChild(this.querySelector(".signed-random-value-type-button"));
     this.signedValueUI.querySelector(".signed-value-input-group").appendChild(this.querySelector(".signed-random-value-type-dropdown-menu"));
@@ -47,20 +47,38 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
       HTMLElement button = (HTMLElement) buttons.item(i);
       button.onclick = (event) -> {
         this.querySelector(".signed-random-value-type-button img").setAttribute("src", button.querySelector("img").getAttribute("src"));
-        this.onchange.$apply(this.createSignedRandomValue(button.getAttribute("data-value")));
+
+        Z4SignedValue signedValue = this.signedValueUI.getValue();
+        switch (button.getAttribute("data-value")) {
+          case "classic":
+            this.value = Z4SignedRandomValue.classic(signedValue.getValue()).setSign(signedValue.getSign());
+            break;
+          case "bezier":
+            this.value = Z4SignedRandomValue.bezier(signedValue.getValue(), this.lengthUI.getValue().getValue());
+            break;
+          case "polyline":
+            this.value = Z4SignedRandomValue.polyline(signedValue.getValue(), this.lengthUI.getValue().getValue());
+            break;
+          case "stepped":
+            this.value = Z4SignedRandomValue.stepped(signedValue.getValue(), this.lengthUI.getValue().getValue());
+            break;
+        }
+
         this.lengthUI.setEnabled(!this.value.isClassic());
         this.lengthBadge.style.display = this.value.isClassic() ? "none" : "inline-block";
+        
+        this.onchange.$apply(this.value.setSign(signedValue.getSign()));        
         return null;
       };
     }
 
     this.lengthUI.oninput = (signedValue) -> {
-      this.oninput.$apply(this.createSignedRandomValue(this.getType()));
-      this.lengthBadge.innerText = "" + this.value.getLength();
+      this.lengthBadge.innerText = "" + signedValue.getValue();
+      this.oninput.$apply(this.value.setLength(signedValue.getValue()));
     };
     this.lengthUI.onchange = (signedValue) -> {
-      this.onchange.$apply(this.createSignedRandomValue(this.getType()));
-      this.lengthBadge.innerText = "" + this.value.getLength();
+      this.lengthBadge.innerText = "" + signedValue.getValue();
+      this.onchange.$apply(this.value.setLength(signedValue.getValue()));
     };
 
     this.setValue(Z4SignedRandomValue.classic(0));
@@ -149,41 +167,6 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
     this.lengthBadge.innerText = "" + this.value.getLength();
 
     return (T) this;
-  }
-
-  private Z4SignedRandomValue createSignedRandomValue(String str) {
-    Z4SignedValue signedValue = this.signedValueUI.getValue();
-
-    switch (str) {
-      case "classic":
-        this.value = Z4SignedRandomValue.classic(signedValue.getValue()).setSign(signedValue.getSign());
-        break;
-      case "bezier":
-        this.value = Z4SignedRandomValue.bezier(signedValue.getValue(), this.lengthUI.getValue().getValue()).setSign(signedValue.getSign());
-        break;
-      case "polyline":
-        this.value = Z4SignedRandomValue.polyline(signedValue.getValue(), this.lengthUI.getValue().getValue()).setSign(signedValue.getSign());
-        break;
-      case "stepped":
-        this.value = Z4SignedRandomValue.stepped(signedValue.getValue(), this.lengthUI.getValue().getValue()).setSign(signedValue.getSign());
-        break;
-    }
-
-    return this.value;
-  }
-
-  private String getType() {
-    if (this.value.isClassic()) {
-      return "classic";
-    } else if (this.value.isBezier()) {
-      return "bezier";
-    } else if (this.value.isPolyline()) {
-      return "polyline";
-    } else if (this.value.isStepped()) {
-      return "stepped";
-    } else {
-      return null;
-    }
   }
 
   @Override
