@@ -1,10 +1,12 @@
 package giada.pizzapazza.math.ui;
 
+import def.dom.HTMLElement;
 import giada.pizzapazza.math.Z4FancifulValue;
 import giada.pizzapazza.setting.Z4HTMLFactory;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.ui.Z4AbstractComponentWithValueUI;
 import simulation.dom.$HTMLElement;
+import static simulation.js.$Globals.document;
 
 /**
  * The component to edit a fanciful value
@@ -32,6 +34,17 @@ public class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI<Z4Fanciful
       this.onchange.$apply(this.value.setUniformSign(this.uniformCheck.checked));
       return null;
     };
+
+    HTMLElement hr = document.createElement("li");
+    hr.className = "dropdown-divider";
+    HTMLElement li = document.createElement("li");
+    li.appendChild(hr);
+    this.querySelector(".signed-value-sign-dropdown-menu").appendChild(li);
+
+    li = document.createElement("li");
+    li.className = "mx-1";
+    li.appendChild(this.querySelector(".fanciful-value-uniform-form-switch"));
+    this.querySelector(".signed-value-sign-dropdown-menu").appendChild(li);
 
     this.constantUI.oninput = (event) -> this.onInput();
     this.randomUI.oninput = (event) -> this.onInput();

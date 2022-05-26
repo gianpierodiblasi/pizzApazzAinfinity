@@ -25,6 +25,15 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
       this.onchange(this.value.setUniformSign(this.uniformCheck.checked));
       return null;
     };
+    let hr = document.createElement("li");
+    hr.className = "dropdown-divider";
+    let li = document.createElement("li");
+    li.appendChild(hr);
+    this.querySelector(".signed-value-sign-dropdown-menu").appendChild(li);
+    li = document.createElement("li");
+    li.className = "mx-1";
+    li.appendChild(this.querySelector(".fanciful-value-uniform-form-switch"));
+    this.querySelector(".signed-value-sign-dropdown-menu").appendChild(li);
     this.constantUI.oninput = (event) => this.onInput();
     this.randomUI.oninput = (event) => this.onInput();
     this.constantUI.onchange = (event) => this.onChange();
