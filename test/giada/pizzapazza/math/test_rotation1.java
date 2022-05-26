@@ -30,22 +30,13 @@ public class test_rotation1 {
       return null;
     };
 
-    document.$getElementById("mode").value = Z4Setting.getMode();
-    document.$getElementById("mode").onchange = (event) -> {
-      Z4Setting.setMode(document.$getElementById("mode").value);
-      return null;
-    };
-
-    Z4RotationUI ui1 = new Z4RotationUI();
-    ui1.appendToElement(document.querySelector("#test1"));
+    Z4RotationUI ui1 = new Z4RotationUI().appendToElement(document.querySelector("#test1"));
 
     Z4Rotation v = Z4Rotation.cumulative().setStartAngle(35).setDelayed(true).setAngle(new Z4FancifulValue().
             setConstant(new Z4SignedValue().setValue(10).setSign(Z4Sign.NEGATIVE)).
-            setRandom(Z4SignedRandomValue.bezier(20, 10).setSign(Z4Sign.RANDOM)).
-            setProportional(new Z4SignedValue().setValue(30).setSign(Z4Sign.POSITIVE)));
+            setRandom(Z4SignedRandomValue.bezier(20, 10).setSign(Z4Sign.RANDOM)));
 
-    Z4RotationUI ui2 = new Z4RotationUI().setValue(v);
-    ui2.appendToElement(document.querySelector("#test3"));
+    Z4RotationUI ui2 = new Z4RotationUI().setValue(v).appendToElement(document.querySelector("#test3"));
 
     ui1.oninput = (value) -> document.getElementById("test2").textContent = "ONINPUT " + test_rotation1.stringify(value);
     ui1.onchange = (value) -> document.getElementById("test2").textContent = "ONCHANGE " + test_rotation1.stringify(value);
