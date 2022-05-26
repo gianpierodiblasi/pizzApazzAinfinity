@@ -33,25 +33,14 @@ public class test_fancifulvalue1 {
       return null;
     };
 
-    document.$getElementById("mode").value = Z4Setting.getMode();
-    document.$getElementById("mode").onchange = (event) -> {
-      Z4Setting.setMode(document.$getElementById("mode").value);
-      return null;
-    };
-
-    Z4FancifulValueUI ui1 = new Z4FancifulValueUI();
-    ui1.appendToElement(document.querySelector("#test1"));
+    Z4FancifulValueUI ui1 = new Z4FancifulValueUI().appendToElement(document.querySelector("#test1"));
 
     Z4FancifulValue v = new Z4FancifulValue().
             setConstant(new Z4SignedValue().setValue(10).setSign(Z4Sign.NEGATIVE)).
-            setRandom(Z4SignedRandomValue.bezier(20, 10).setSign(Z4Sign.RANDOM)).
-            setProportional(new Z4SignedValue().setValue(30).setSign(Z4Sign.POSITIVE));
+            setRandom(Z4SignedRandomValue.bezier(20, 10).setSign(Z4Sign.RANDOM));
 
-    Z4FancifulValueUI ui2 = new Z4FancifulValueUI().setValue(v);
-    ui2.appendToElement(document.querySelector("#test3"));
-    
-    Z4FancifulValueUI ui3 = new Z4FancifulValueUI().compact();
-    ui3.appendToElement(document.querySelector("#test5"));
+    Z4FancifulValueUI ui2 = new Z4FancifulValueUI().setValue(v).appendToElement(document.querySelector("#test3"));
+    Z4FancifulValueUI ui3 = new Z4FancifulValueUI().appendToElement(document.querySelector("#test5"));
 
     ui1.oninput = (value) -> document.getElementById("test2").textContent = "ONINPUT " + test_fancifulvalue1.stringify(value);
     ui1.onchange = (value) -> document.getElementById("test2").textContent = "ONCHANGE " + test_fancifulvalue1.stringify(value);
@@ -64,50 +53,42 @@ public class test_fancifulvalue1 {
     ui3.oninput = (value) -> document.getElementById("test6").textContent = "ONINPUT " + test_fancifulvalue1.stringify(value);
     ui3.onchange = (value) -> document.getElementById("test6").textContent = "ONCHANGE " + test_fancifulvalue1.stringify(value);
     document.getElementById("test6").textContent = test_fancifulvalue1.stringify(ui3.getValue());
-    
+
     Function<Event, Object> onComponent = (event) -> {
       ui1.setComponentsVisible(
               (($HTMLElement) document.getElementById("constant-visible")).checked,
-              (($HTMLElement) document.getElementById("random-visible")).checked,
-              (($HTMLElement) document.getElementById("proportional-visible")).checked
+              (($HTMLElement) document.getElementById("random-visible")).checked
       );
       ui2.setComponentsVisible(
               (($HTMLElement) document.getElementById("constant-visible")).checked,
-              (($HTMLElement) document.getElementById("random-visible")).checked,
-              (($HTMLElement) document.getElementById("proportional-visible")).checked
+              (($HTMLElement) document.getElementById("random-visible")).checked
       );
       ui3.setComponentsVisible(
               (($HTMLElement) document.getElementById("constant-visible")).checked,
-              (($HTMLElement) document.getElementById("random-visible")).checked,
-              (($HTMLElement) document.getElementById("proportional-visible")).checked
+              (($HTMLElement) document.getElementById("random-visible")).checked
       );
       return null;
     };
     document.getElementById("constant-visible").onchange = onComponent;
     document.getElementById("random-visible").onchange = onComponent;
-    document.getElementById("proportional-visible").onchange = onComponent;
 
     Function<Event, Object> onSign = (event) -> {
       ui1.setSignsVisible(
               (($HTMLElement) document.getElementById("constant-sign-visible")).checked,
-              (($HTMLElement) document.getElementById("random-sign-visible")).checked,
-              (($HTMLElement) document.getElementById("proportional-sign-visible")).checked
+              (($HTMLElement) document.getElementById("random-sign-visible")).checked
       );
       ui2.setSignsVisible(
               (($HTMLElement) document.getElementById("constant-sign-visible")).checked,
-              (($HTMLElement) document.getElementById("random-sign-visible")).checked,
-              (($HTMLElement) document.getElementById("proportional-sign-visible")).checked
+              (($HTMLElement) document.getElementById("random-sign-visible")).checked
       );
       ui3.setSignsVisible(
               (($HTMLElement) document.getElementById("constant-sign-visible")).checked,
-              (($HTMLElement) document.getElementById("random-sign-visible")).checked,
-              (($HTMLElement) document.getElementById("proportional-sign-visible")).checked
+              (($HTMLElement) document.getElementById("random-sign-visible")).checked
       );
       return null;
     };
     document.getElementById("constant-sign-visible").onchange = onSign;
     document.getElementById("random-sign-visible").onchange = onSign;
-    document.getElementById("proportional-sign-visible").onchange = onSign;
   }
 
   private static String stringify(Object object) {

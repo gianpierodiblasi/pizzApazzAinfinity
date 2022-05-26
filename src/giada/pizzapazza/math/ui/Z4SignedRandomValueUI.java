@@ -16,8 +16,8 @@ import simulation.dom.$HTMLElement;
  */
 public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4SignedRandomValue> {
 
-  private final Z4SignedValueUI signedValueUI = new Z4SignedValueUI();
-  private final Z4SignedValueUI lengthUI = new Z4SignedValueUI();
+  private final Z4SignedValueUI signedValueUI = new Z4SignedValueUI().appendToComponent(this);
+  private final Z4SignedValueUI lengthUI = new Z4SignedValueUI().setSignVisible(false).setValueLabel("LENGTH", false, false).setRange(1, 1000000000).appendToElement(this.querySelector(".signed-random-value-length-ui"));
   private final $HTMLElement lengthBadge = this.querySelector(".signed-random-value-length-badge");
 
   private final static String PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
@@ -30,7 +30,6 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
   public Z4SignedRandomValueUI() {
     super(Z4SignedRandomValueUI.UI);
 
-    this.signedValueUI.appendToComponent(this);
     this.signedValueUI.oninput = (signedValue) -> this.oninput.$apply(this.createSignedRandomValue(this.getType()));
     this.signedValueUI.onchange = (signedValue) -> this.onchange.$apply(this.createSignedRandomValue(this.getType()));
 
@@ -55,10 +54,6 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
       };
     }
 
-    this.lengthUI.setSignVisible(false);
-    this.lengthUI.setValueLabel("LENGTH", false, false);
-    this.lengthUI.setRange(1, 1000000000);
-    this.lengthUI.appendToElement(this.querySelector(".signed-random-value-length-ui"));
     this.lengthUI.oninput = (signedValue) -> {
       this.oninput.$apply(this.createSignedRandomValue(this.getType()));
       this.lengthBadge.innerText = "" + this.value.getLength();

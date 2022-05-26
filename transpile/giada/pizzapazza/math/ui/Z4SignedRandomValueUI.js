@@ -5,9 +5,9 @@
  */
 class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
 
-   signedValueUI = new Z4SignedValueUI();
+   signedValueUI = new Z4SignedValueUI().appendToComponent(this);
 
-   lengthUI = new Z4SignedValueUI();
+   lengthUI = new Z4SignedValueUI().setSignVisible(false).setValueLabel("LENGTH", false, false).setRange(1, 1000000000).appendToElement(this.querySelector(".signed-random-value-length-ui"));
 
    lengthBadge = this.querySelector(".signed-random-value-length-badge");
 
@@ -20,7 +20,6 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
    */
   constructor() {
     super(Z4SignedRandomValueUI.UI);
-    this.signedValueUI.appendToComponent(this);
     this.signedValueUI.oninput = (signedValue) => this.oninput(this.createSignedRandomValue(this.getType()));
     this.signedValueUI.onchange = (signedValue) => this.onchange(this.createSignedRandomValue(this.getType()));
     this.signedValueUI.querySelector(".signed-value-input-group").appendChild(this.querySelector(".signed-random-value-type-button"));
@@ -41,10 +40,6 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
         return null;
       };
     }
-    this.lengthUI.setSignVisible(false);
-    this.lengthUI.setValueLabel("LENGTH", false, false);
-    this.lengthUI.setRange(1, 1000000000);
-    this.lengthUI.appendToElement(this.querySelector(".signed-random-value-length-ui"));
     this.lengthUI.oninput = (signedValue) => {
       this.oninput(this.createSignedRandomValue(this.getType()));
       this.lengthBadge.innerText = "" + this.value.getLength();
