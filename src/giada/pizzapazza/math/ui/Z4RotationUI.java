@@ -67,7 +67,11 @@ public class Z4RotationUI extends Z4AbstractComponentWithValueUI<Z4Rotation> {
       return null;
     };
 
-    this.startAngle.querySelector(".signed-value-value-label").style.display = "block";
+    HTMLElement element = this.startAngle.querySelector(".signed-value-compact-button span");
+    element.innerHTML = element.innerText;
+    for (int i = 0; i < 20; i++) {
+      element.innerHTML += "&nbsp";
+    }
     this.startAngle.oninput = (start) -> this.oninput.$apply(this.value.setStartAngle(start.getValue()));
     this.startAngle.onchange = (start) -> this.onchange.$apply(this.value.setStartAngle(start.getValue()));
     this.angle.oninput = (a) -> this.oninput.$apply(this.value.setAngle(a));
@@ -83,7 +87,7 @@ public class Z4RotationUI extends Z4AbstractComponentWithValueUI<Z4Rotation> {
    * @return This Z4RotationUI
    */
   public Z4RotationUI setRandomLengthRange(int min, int max) {
-//    this.angle.setRandomLengthRange(min, max);
+    this.angle.setRandomLengthRange(min, max);
     return this;
   }
 

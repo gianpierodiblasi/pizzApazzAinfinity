@@ -1,10 +1,5 @@
 /* GENERAL */
-/*.input-group-text {
-  padding-top: 0px;
-  padding-bottom: 0px;
-  font-size: .875rem;
-}
-
+/*
 .with-borded-children-vertical > div {
   border: solid rgba(128,128,128,0.5) 1px;
   border-radius: 10px;
@@ -28,6 +23,10 @@
   display: none;
 }
 .signed-value-input-group.sign-not-visible .signed-value-range-minus {
+  border-top-left-radius: 0.2rem !important;
+  border-bottom-left-radius: 0.2rem !important;
+}
+.signed-value-input-group.sign-not-visible .signed-value-compact-button {
   border-top-left-radius: 0.2rem !important;
   border-bottom-left-radius: 0.2rem !important;
 }
@@ -105,11 +104,6 @@
   background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='rgb(222,218,214)' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/></svg>")
 }
 
-/*.z4-dark .input-group-text {
-  background: #202020;
-  color: #DEDAD6;
-}
-*/
 .z4-dark .z4-dark-img-negative {
   filter: invert(1);
 }
