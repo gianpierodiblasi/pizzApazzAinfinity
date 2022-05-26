@@ -3,7 +3,6 @@ package giada.pizzapazza.math.ui;
 import static def.dom.Globals.clearTimeout;
 import def.dom.HTMLElement;
 import def.dom.NodeList;
-import def.js.Date;
 import giada.pizzapazza.Z4Loader;
 import giada.pizzapazza.math.Z4Sign;
 import giada.pizzapazza.math.Z4SignedValue;
@@ -14,7 +13,6 @@ import simulation.dom.$HTMLElement;
 import simulation.js.$Apply_0_Void;
 import simulation.js.$Apply_2_Void;
 import static simulation.js.$Globals.$exists;
-import static simulation.js.$Globals.parseInt;
 import static simulation.js.$Globals.setTimeout;
 
 /**
