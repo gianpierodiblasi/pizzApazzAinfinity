@@ -1,22 +1,10 @@
 package giada.pizzapazza.math.ui;
 
-import def.dom.HTMLElement;
-import def.dom.NodeList;
-import def.js.Array;
-import def.js.Date;
-import giada.pizzapazza.Z4Loader;
 import giada.pizzapazza.math.Z4FancifulValue;
-import giada.pizzapazza.math.Z4Sign;
-import giada.pizzapazza.math.Z4SignedRandomValue;
 import giada.pizzapazza.setting.Z4HTMLFactory;
 import giada.pizzapazza.setting.Z4MessageFactory;
-import giada.pizzapazza.setting.Z4Setting;
 import giada.pizzapazza.ui.Z4AbstractComponentWithValueUI;
 import simulation.dom.$HTMLElement;
-import static simulation.js.$Globals.document;
-import static simulation.js.$Globals.parseInt;
-import simulation.js.$MutationObserver;
-import simulation.js.$Object;
 
 /**
  * The component to edit a fanciful value
@@ -29,7 +17,6 @@ public class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI<Z4Fanciful
   private final Z4SignedValueUI constantUI = new Z4SignedValueUI().setCompact().setValueLabel("CONSTANT", false, true).appendToElement(this.querySelector(".fanciful-value-container"));
   private final Z4SignedRandomValueUI randomUI = new Z4SignedRandomValueUI().setCompact().setValueLabel("RANDOM", false, true).appendToElement(this.querySelector(".fanciful-value-container"));
 
-  private final static String PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
   private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4FancifulValueUI.html");
 
   /**
@@ -85,7 +72,7 @@ public class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI<Z4Fanciful
    * @return This Z4FancifulValueUI
    */
   public Z4FancifulValueUI setConstantRange(int min, int max) {
-//    this.constantUI.setRange(min, max);
+    this.constantUI.setRange(min, max);
     return this;
   }
 
@@ -97,7 +84,7 @@ public class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI<Z4Fanciful
    * @return This Z4FancifulValueUI
    */
   public Z4FancifulValueUI setRandomRange(int min, int max) {
-//    this.randomUI.setRange(min, max);
+    this.randomUI.setRange(min, max);
     return this;
   }
 
@@ -109,7 +96,7 @@ public class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI<Z4Fanciful
    * @return This Z4FancifulValueUI
    */
   public Z4FancifulValueUI setRandomLengthRange(int min, int max) {
-//    this.randomUI.setLengthRange(min, max);
+    this.randomUI.setLengthRange(min, max);
     return this;
   }
 
@@ -122,11 +109,11 @@ public class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI<Z4Fanciful
    * @return This Z4FancifulValueUI
    */
   public Z4FancifulValueUI setValueLabel(String token, boolean bold, boolean italic) {
-//    $HTMLElement valueLabel = this.querySelector(".fanciful-label");
-//    valueLabel.setAttribute("data-token-lang-inner_text", token);
-//    valueLabel.innerHTML = Z4MessageFactory.get(token);
-//    valueLabel.style.fontWeight = bold ? "700" : "400";
-//    valueLabel.style.fontStyle = italic ? "italic" : "normal";
+    $HTMLElement valueLabel = this.querySelector(".fanciful-value-label");
+    valueLabel.setAttribute("data-token-lang-inner_text", token);
+    valueLabel.innerHTML = Z4MessageFactory.get(token);
+    valueLabel.style.fontWeight = bold ? "700" : "400";
+    valueLabel.style.fontStyle = italic ? "italic" : "normal";
     return this;
   }
 
@@ -135,57 +122,15 @@ public class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI<Z4Fanciful
   public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4FancifulValue value) {
     this.value = value;
 
-//    this.uniformCheck.checked = this.value.isUniformSign();
-//    this.constantUI.setValue(this.value.getConstant());
-//    this.randomUI.setValue(this.value.getRandom());
-//
-//    this.setUI();
-//    this.setSpan();
+    this.uniformCheck.checked = this.value.isUniformSign();
+    this.setSignsVisible(this.constantUI.isSignVisible());
+
+    this.constantUI.setValue(this.value.getConstant());
+    this.randomUI.setValue(this.value.getRandom());
+
     return (T) this;
   }
 
-  private void setUI() {
-//    this.selector.forEach(sel -> {
-//      this.querySelector(".fanciful-container").classList.remove(sel);
-//    });
-//
-//    this.selector = new Array<>(
-//            "cv-" + this.constantVisible,
-//            "rv-" + this.randomVisible,
-//            "csv-" + this.constantSignVisible,
-//            "rsv-" + this.randomSignVisible,
-//            "u-" + this.uniformCheck.checked
-//    );
-//
-//    this.selector.forEach(sel -> {
-//      this.querySelector(".fanciful-container").classList.add(sel);
-//    });
-  }
-
-//  private String decodeSign(Z4Sign sign) {
-//    if (sign == Z4Sign.POSITIVE) {
-//      return "&plus;";
-//    } else if (sign == Z4Sign.NEGATIVE) {
-//      return "&minus;";
-//    } else if (sign == Z4Sign.RANDOM) {
-//      return "&plusmn;";
-//    } else {
-//      return "&plusmn;<sup>&UpArrowDownArrow;</sup>";
-//    }
-//  }
-//  private String decodeRandom(Z4SignedRandomValue value) {
-//    if (value.isClassic()) {
-//      return "rnd";
-//    } else if (value.isBezier()) {
-//      return "rnd&#8767;<sup>" + value.getLength() + "</sup>";
-//    } else if (value.isPolyline()) {
-//      return "rnd&#8896;<sup>" + value.getLength() + "</sup>";
-//    } else if (value.isStepped()) {
-//      return "rnd&#8851;<sup>" + value.getLength() + "</sup>";
-//    } else {
-//      return "";
-//    }
-//  }
   @Override
   public void dispose() {
   }

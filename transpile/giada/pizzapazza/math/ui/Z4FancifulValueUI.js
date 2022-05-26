@@ -11,8 +11,6 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
 
    randomUI = new Z4SignedRandomValueUI().setCompact().setValueLabel("RANDOM", false, true).appendToElement(this.querySelector(".fanciful-value-container"));
 
-  static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
-
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4FancifulValueUI.html");
 
   /**
@@ -64,7 +62,7 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
    * @return This Z4FancifulValueUI
    */
    setConstantRange(min, max) {
-    // this.constantUI.setRange(min, max);
+    this.constantUI.setRange(min, max);
     return this;
   }
 
@@ -76,7 +74,7 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
    * @return This Z4FancifulValueUI
    */
    setRandomRange(min, max) {
-    // this.randomUI.setRange(min, max);
+    this.randomUI.setRange(min, max);
     return this;
   }
 
@@ -88,7 +86,7 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
    * @return This Z4FancifulValueUI
    */
    setRandomLengthRange(min, max) {
-    // this.randomUI.setLengthRange(min, max);
+    this.randomUI.setLengthRange(min, max);
     return this;
   }
 
@@ -101,67 +99,23 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
    * @return This Z4FancifulValueUI
    */
    setValueLabel(token, bold, italic) {
-    // $HTMLElement valueLabel = this.querySelector(".fanciful-label");
-    // valueLabel.setAttribute("data-token-lang-inner_text", token);
-    // valueLabel.innerHTML = Z4MessageFactory.get(token);
-    // valueLabel.style.fontWeight = bold ? "700" : "400";
-    // valueLabel.style.fontStyle = italic ? "italic" : "normal";
+    let valueLabel = this.querySelector(".fanciful-value-label");
+    valueLabel.setAttribute("data-token-lang-inner_text", token);
+    valueLabel.innerHTML = Z4MessageFactory.get(token);
+    valueLabel.style.fontWeight = bold ? "700" : "400";
+    valueLabel.style.fontStyle = italic ? "italic" : "normal";
     return this;
   }
 
    setValue(value) {
     this.value = value;
-    // this.uniformCheck.checked = this.value.isUniformSign();
-    // this.constantUI.setValue(this.value.getConstant());
-    // this.randomUI.setValue(this.value.getRandom());
-    // 
-    // this.setUI();
-    // this.setSpan();
+    this.uniformCheck.checked = this.value.isUniformSign();
+    this.setSignsVisible(this.constantUI.isSignVisible());
+    this.constantUI.setValue(this.value.getConstant());
+    this.randomUI.setValue(this.value.getRandom());
     return this;
   }
 
-   setUI() {
-    // this.selector.forEach(sel -> {
-    // this.querySelector(".fanciful-container").classList.remove(sel);
-    // });
-    // 
-    // this.selector = new Array<>(
-    // "cv-" + this.constantVisible,
-    // "rv-" + this.randomVisible,
-    // "csv-" + this.constantSignVisible,
-    // "rsv-" + this.randomSignVisible,
-    // "u-" + this.uniformCheck.checked
-    // );
-    // 
-    // this.selector.forEach(sel -> {
-    // this.querySelector(".fanciful-container").classList.add(sel);
-    // });
-  }
-
-  // private String decodeSign(Z4Sign sign) {
-  // if (sign == Z4Sign.POSITIVE) {
-  // return "&plus;";
-  // } else if (sign == Z4Sign.NEGATIVE) {
-  // return "&minus;";
-  // } else if (sign == Z4Sign.RANDOM) {
-  // return "&plusmn;";
-  // } else {
-  // return "&plusmn;<sup>&UpArrowDownArrow;</sup>";
-  // }
-  // }
-  // private String decodeRandom(Z4SignedRandomValue value) {
-  // if (value.isClassic()) {
-  // return "rnd";
-  // } else if (value.isBezier()) {
-  // return "rnd&#8767;<sup>" + value.getLength() + "</sup>";
-  // } else if (value.isPolyline()) {
-  // return "rnd&#8896;<sup>" + value.getLength() + "</sup>";
-  // } else if (value.isStepped()) {
-  // return "rnd&#8851;<sup>" + value.getLength() + "</sup>";
-  // } else {
-  // return "";
-  // }
-  // }
    dispose() {
   }
 }
