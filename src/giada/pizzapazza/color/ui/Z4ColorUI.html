@@ -1,26 +1,16 @@
-<div>
-  <label class="form-label color-label" style="margin-bottom:0px" data-token-lang-inner_text="COLOR">Color</label>
+<label class="form-label color-label" style="margin-bottom:0px" data-token-lang-inner_text="COLOR">Color</label>
+<div class="input-group">
+  <input type="color" class="btn btn-outline-secondary form-control-color color-input" value="#000000">
 
-  <div class="btn-group">
-    <button class="btn btn-sm btn-outline-secondary btn-sm dropdown-toggle z4-dropdown-toggle-three-dots" type="button" data-bs-toggle="dropdown">
-      <i class="bi bi-three-dots"></i>
-    </button>
-
-    <ul class="dropdown-menu">
-      <li><button class="dropdown-item gray" type="button" data-token-lang-inner_text="GRAY">Gray</button></li>
-      <li><button class="dropdown-item negative" type="button" data-token-lang-inner_text="NEGATIVE">Negative</button></li>
-    </ul>
-  </div>
-</div>
-
-<div class="btn-group">
-  <input type="color" class="btn btn-sm btn-outline-secondary form-control-color" value="#000000">
-
-  <button class="btn btn-outline-secondary btn-sm dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown"></button>
-
-  <div class="dropdown-menu">
-    <label class="form-label opacity-color-label" style="margin-bottom:0px;font-size:smaller" data-token-lang-inner_text="OPACITY">Opacity</label>
-    <label class="form-label form-range-label" style="margin-bottom:0px;font-size:smaller">255</label>
-    <input type="range" class="form-range" style="border-radius:16px" value="255" min="0" max="255" step="1" />
-  </div>
+  <button class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"></button>
+  <ul class="dropdown-menu">
+    <li><button class="dropdown-item color-gray" type="button" data-token-lang-inner_text="GRAY">Gray</button></li>
+    <li><button class="dropdown-item color-negative" type="button" data-token-lang-inner_text="NEGATIVE">Negative</button></li>
+    <li><hr class="dropdown-divider"/></li>
+    <li class="mx-1" style="width:500px">
+      <label class="form-label" style="margin-bottom:0px" data-token-lang-inner_text="OPACITY">Opacity</label>
+      <label class="form-label color-opacity-range-label" style="margin-bottom:0px">255</label>
+      <input type="range" class="form-range color-opacity-range" value="255" min="0" max="255" step="1" />
+    </li>
+  </ul>
 </div>
