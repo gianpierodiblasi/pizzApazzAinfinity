@@ -261,7 +261,7 @@ public class Z4GradientColor {
    * colors (in the range [0,1], 0=start, 1=stop)
    * @return The Z4GradientColor
    */
-  public static Z4GradientColor fromZ4GradientColors2(Z4GradientColor before, Z4GradientColor after, double div) {
+  public static Z4GradientColor fromStartStopZ4GradientColors(Z4GradientColor before, Z4GradientColor after, double div) {
     return new Z4GradientColor().
             setStartColor(before.getZ4ColorAt(div, false, false).getARGB()).
             setStopColor(after.getZ4ColorAt(div, false, false).getARGB()).

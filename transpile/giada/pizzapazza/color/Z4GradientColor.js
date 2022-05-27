@@ -206,7 +206,7 @@ class Z4GradientColor {
    * colors (in the range [0,1], 0=start, 1=stop)
    * @return The Z4GradientColor
    */
-  static  fromZ4GradientColors2(before, after, div) {
+  static  fromStartStopZ4GradientColors(before, after, div) {
     return new Z4GradientColor().setStartColor(before.getZ4ColorAt(div, false, false).getARGB()).setStopColor(after.getZ4ColorAt(div, false, false).getARGB()).setRipple(before.getRipple()).setMirrored(before.isMirrored());
   }
 }
