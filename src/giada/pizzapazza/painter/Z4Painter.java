@@ -18,7 +18,7 @@ public abstract class Z4Painter<T extends Z4Painter<T>> {
   /**
    * Performs a drawing
    *
-   * @param context The context to perform the drawing
+   * @param context The context to use to perform the drawing
    * @param point The point where to perform the drawing
    * @param gradientColor The color to use to perform the drawing
    * @return This Z4Painter
