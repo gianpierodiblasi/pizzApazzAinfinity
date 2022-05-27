@@ -395,6 +395,7 @@ class Z4AbstractComponentUI {
     parent.root.appendChild(this.root);
     return this;
   }
+
   /**
    * Prepends an element to this Z4AbstractComponentUI
    *
@@ -402,11 +403,11 @@ class Z4AbstractComponentUI {
    * @param element The element
    * @return This Z4AbstractComponentUI
    */
-  // @SuppressWarnings("unchecked")
-  // public <T extends Z4AbstractComponentUI> T prependElement(Element element) {
-  // this.root.prepend(element);
-  // return (T) this;
-  // }
+   prependElement(element) {
+    this.root.prepend(element);
+    return this;
+  }
+
   /**
    * Prepends an element to this Z4AbstractComponentUI
    *
@@ -414,11 +415,10 @@ class Z4AbstractComponentUI {
    * @param element The element
    * @return This Z4AbstractComponentUI
    */
-  // @SuppressWarnings("unchecked")
-  // public <T extends Z4AbstractComponentUI> T prependComponent(Z4AbstractComponentUI element) {
-  // this.root.prepend(element.root);
-  // return (T) this;
-  // }
+   prependComponent(element) {
+    this.root.prepend(element.root);
+    return this;
+  }
 }
 /**
  * The abstract class of all UI components providing a value
@@ -2383,5 +2383,630 @@ class Z4Lighting {
   static  DARKENED = new Z4Lighting();
 
   constructor() {
+  }
+}
+/**
+ * The color
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4Color {
+
+   a = 0;
+
+   r = 0;
+
+   g = 0;
+
+   b = 0;
+
+   argb = 0;
+
+   hex = null;
+
+  /**
+   * Creates a Z4Color
+   *
+   * @param a The transparency component
+   * @param r The red component
+   * @param g The green component
+   * @param b The blue component
+   */
+  constructor(a, r, g, b) {
+    this.a = a;
+    this.r = r;
+    this.g = g;
+    this.b = b;
+    this.init();
+  }
+
+   init() {
+    this.argb = this.a << 24 | this.r << 16 | this.g << 8 | this.b;
+    this.hex = "#" + new Number(this.r).toString(16).padStart(2, "0") + new Number(this.g).toString(16).padStart(2, "0") + new Number(this.b).toString(16).padStart(2, "0") + new Number(this.a).toString(16).padStart(2, "0");
+    return this;
+  }
+
+  /**
+   * Sets this Z4Color from an ARGB integer color
+   *
+   * @param color The color
+   * @return This Z4Color
+   */
+   set(color) {
+    this.a = color >>> 24 & 0xff;
+    this.r = color >>> 16 & 0xff;
+    this.g = color >>> 8 & 0xff;
+    this.b = color & 0xff;
+    return this.init();
+  }
+
+  /**
+   * In place converts this Z4Color to gray scaled, the transparency is not
+   * changed
+   *
+   * @return This gray scaled Z4Color
+   */
+   gray() {
+    let gray = parseInt(0.21 * this.r + 0.71 * this.g + 0.08 * this.b);
+    this.r = gray;
+    this.g = gray;
+    this.b = gray;
+    return this.init();
+  }
+
+  /**
+   * In place converts this Z4Color to negative, the transparency is not changed
+   *
+   * @return This negativized Z4Color
+   */
+   negative() {
+    this.r = 255 - this.r;
+    this.g = 255 - this.g;
+    this.b = 255 - this.b;
+    return this.init();
+  }
+
+  /**
+   * In place lights up this Z4Color, the transparency is not changed
+   *
+   * @param lightingFactor The lighting factor (in the range [0,1])
+   * @return This lighted Z4Color
+   */
+   lighted(lightingFactor) {
+    this.r = parseInt((255 - this.r) * lightingFactor + this.r);
+    this.g = parseInt((255 - this.g) * lightingFactor + this.g);
+    this.b = parseInt((255 - this.b) * lightingFactor + this.b);
+    return this.init();
+  }
+
+  /**
+   * In place darkens this Z4Color, the transparency is not changed
+   *
+   * @param darkeningFactor The darkening factor (in the range [0,1])
+   * @return This darkened Z4Color
+   */
+   darkened(darkeningFactor) {
+    darkeningFactor = 1 - darkeningFactor;
+    this.r = parseInt(darkeningFactor * this.r);
+    this.g = parseInt(darkeningFactor * this.g);
+    this.b = parseInt(darkeningFactor * this.b);
+    return this.init();
+  }
+
+  /**
+   * Returns the components of this Z4Color (a, r, g, b)
+   *
+   * @return The six components of this Z4Color
+   */
+   getComponents() {
+    return new Array(this.a, this.r, this.g, this.b);
+  }
+
+  /**
+   * Returns the ARGB integer representing this Z4Color
+   *
+   * @return The ARGB integer representing this Z4Color
+   */
+   getARGB() {
+    return this.argb;
+  }
+
+  /**
+   * Returns the RGB hex string representing this Z4Color
+   *
+   * @return The RGB hex string representing this Z4Color
+   */
+   getHEX() {
+    return this.hex;
+  }
+  /**
+   * Creates a Z4Color from an ARGB integer color
+   *
+   * @param color The color
+   * @return The Z4Color
+   */
+  static  fromARGB(color) {
+    return new Z4Color(color >>> 24 & 0xff, color >>> 16 & 0xff, color >>> 8 & 0xff, color & 0xff);
+  }
+
+  /**
+   * Creates a Z4Color from an RGB hex string
+   *
+   * @param color The color
+   * @param a The transparency component
+   * @return The Z4Color
+   */
+  static  fromHEX(color, a) {
+    let result = new RegExp("^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$", "i").exec(color);
+    return new Z4Color(a, parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16));
+  }
+
+  /**
+   * Returns the color parameter
+   *
+   * @param color The color
+   * @return The color
+   */
+  static  getFillStyle(color) {
+    return color;
+  }
+  /**
+   * Creates a Z4Color from two Z4Color
+   *
+   * @param before The color before
+   * @param after The color after
+   * @param div The percentage between before and after (in the range [0,1],
+   * 0=before, 1=after)
+   * @return The Z4Color
+   */
+  static  fromZ4Colors(before, after, div) {
+    let cBefore = before.getComponents();
+    let cAfter = after.getComponents();
+    return new Z4Color(parseInt((cAfter[0] - cBefore[0]) * div + cBefore[0]), parseInt((cAfter[1] - cBefore[1]) * div + cBefore[1]), parseInt((cAfter[2] - cBefore[2]) * div + cBefore[2]), parseInt((cAfter[3] - cBefore[3]) * div + cBefore[3]));
+  }
+}
+/**
+ * The gradient color (a gradient between two colors)
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4GradientColor {
+
+   start = new Z4Color(255, 255, 255, 255);
+
+   stop = new Z4Color(255, 0, 0, 0);
+
+   ripple = 0.0;
+
+   mirrored = false;
+
+  /**
+   * Sets the start color from an ARGB integer color
+   *
+   * @param color The color
+   * @return This Z4GradientColor
+   */
+   setStartColor(color) {
+    this.start.set(color);
+    return this;
+  }
+
+  /**
+   * Returns the start color
+   *
+   * @return The start color
+   */
+   getStartColor() {
+    return this.start;
+  }
+
+  /**
+   * Sets the stop color from an ARGB integer color
+   *
+   * @param color The color
+   * @return This Z4GradientColor
+   */
+   setStopColor(color) {
+    this.stop.set(color);
+    return this;
+  }
+
+  /**
+   * Returns the stop color
+   *
+   * @return The stop color
+   */
+   getStopColor() {
+    return this.stop;
+  }
+
+  /**
+   * Sets the ripple
+   *
+   * @param ripple The ripple (in the range [0,1])
+   * @return This Z4GradientColor
+   */
+   setRipple(ripple) {
+    this.ripple = ripple;
+    return this;
+  }
+
+  /**
+   * Returns the ripple
+   *
+   * @return The ripple (in the range [0,1])
+   */
+   getRipple() {
+    return this.ripple;
+  }
+
+  /**
+   * Sets the mirrored
+   *
+   * @param mirrored true if the color is mirrored, false otherwise
+   * @return This Z4GradientColor
+   */
+   setMirrored(mirrored) {
+    this.mirrored = mirrored;
+    return this;
+  }
+
+  /**
+   * Returns if the color is mirrored
+   *
+   * @return true if the color is mirrored, false otherwise
+   */
+   isMirrored() {
+    return this.mirrored;
+  }
+
+  /**
+   * In place converts this Z4GradientColor to negative, the transparency is not
+   * changed
+   *
+   * @return This negativized Z4GradientColor
+   */
+   negative() {
+    this.start.negative();
+    this.stop.negative();
+    return this;
+  }
+
+  /**
+   * In place inverts this Z4GradientColor
+   *
+   * @return This inverted Z4GradientColor
+   */
+   inverted() {
+    let argbStart = this.start.getARGB();
+    this.start.set(this.stop.getARGB());
+    this.stop.set(argbStart);
+    return this;
+  }
+
+  /**
+   * Returns a Z4Color in a position
+   *
+   * @param position The color position (in the range [0,1])
+   * @param useRipple true to use ripple, false otherwise
+   * @param useMirrored true to use mirrored, false otherwise
+   * @return The Z4Color
+   */
+   getZ4ColorAt(position, useRipple, useMirrored) {
+    if (useMirrored && this.mirrored) {
+      position = 2 * (position < 0.5 ? position : 1 - position);
+    }
+    if (useRipple && this.ripple !== 0) {
+      position = Z4Math.ripple(position, 0, 1, this.ripple);
+    }
+    return Z4Color.fromZ4Colors(this.start, this.stop, position);
+  }
+
+  /**
+   * Returns a linear gradient (without ripple and mirroring)
+   *
+   * @param context The context to create the gradient
+   * @param x1 The x-axis coordinate of the start point
+   * @param y1 The y-axis coordinate of the start point
+   * @param x2 The x-axis coordinate of the end point
+   * @param y2 The y-axis coordinate of the end point
+   * @return The linear gradient
+   */
+   getLinearGradient(context, x1, y1, x2, y2) {
+    let gradient = context.createLinearGradient(x1, y1, x2, y2);
+    gradient.addColorStop(0, this.start.getHEX());
+    gradient.addColorStop(1, this.stop.getHEX());
+    return gradient;
+  }
+  /**
+   * Returns a radial gradient (without ripple and mirroring)
+   *
+   * @param context The context to create the gradient
+   * @param x1 The x-axis coordinate of the start circle
+   * @param y1 The y-axis coordinate of the start circle
+   * @param r1 The radius of the start circle
+   * @param x2 The x-axis coordinate of the end circle
+   * @param y2 The y-axis coordinate of the end circle
+   * @param r2 The radius of the end circle
+   * @return The radial gradient
+   */
+   getRadialGradient(context, x1, y1, r1, x2, y2, r2) {
+    let gradient = context.createRadialGradient(x1, y1, r1, x2, y2, r2);
+    gradient.addColorStop(0, this.start.getHEX());
+    gradient.addColorStop(1, this.stop.getHEX());
+    return gradient;
+  }
+  /**
+   * Returns a conic gradient (without ripple and mirroring)
+   *
+   * @param context The context to create the gradient
+   * @param x The x-axis coordinate of the centre of the gradient
+   * @param y The y-axis coordinate of the centre of the gradient
+   * @param angle The angle at which to begin the gradient, in radians
+   * @return The conic gradient
+   */
+   getConicGradient(context, x, y, angle) {
+    let gradient = context.createConicGradient(angle, x, y);
+    gradient.addColorStop(0, this.start.getHEX());
+    gradient.addColorStop(1, this.stop.getHEX());
+    return gradient;
+  }
+  /**
+   * Creates a Z4GradientColor from two Z4GradientColor
+   *
+   * @param before The color before
+   * @param after The color after
+   * @param div The percentage between before and after (in the range [0,1],
+   * 0=before, 1=after)
+   * @return The Z4GradientColor
+   */
+  static  fromZ4GradientColors(before, after, div) {
+    return new Z4GradientColor().setStartColor(Z4Color.fromZ4Colors(before.getStartColor(), after.getStartColor(), div).getARGB()).setStopColor(Z4Color.fromZ4Colors(before.getStopColor(), after.getStopColor(), div).getARGB()).setRipple(before.getRipple()).setMirrored(before.isMirrored());
+  }
+
+  /**
+   * Creates a Z4GradientColor from two Z4GradientColor
+   *
+   * @param before The color before
+   * @param after The color after
+   * @param div The percentage between start and stop in the before and after
+   * colors (in the range [0,1], 0=start, 1=stop)
+   * @return The Z4GradientColor
+   */
+  static  fromStartStopZ4GradientColors(before, after, div) {
+    return new Z4GradientColor().setStartColor(before.getZ4ColorAt(div, false, false).getARGB()).setStopColor(after.getZ4ColorAt(div, false, false).getARGB()).setRipple(before.getRipple()).setMirrored(before.isMirrored());
+  }
+}
+/**
+ * The component to show a color
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4ColorUI extends Z4AbstractComponentWithValueUI {
+
+   color = this.querySelector(".color-input");
+
+   opacityLabel = this.querySelector(".color-opacity-range-label");
+
+   opacityRange = this.querySelector(".color-opacity-range");
+
+   opacityBadge = this.querySelector(".color-opacity-badge");
+
+  static  UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4ColorUI.html");
+
+  /**
+   * Creates a Z4ColorUI
+   */
+  constructor() {
+    super(Z4ColorUI.UI);
+    this.querySelector(".color-gray").onclick = (event) => {
+      this.setValue(this.value.gray());
+      this.onchange(this.value);
+      return null;
+    };
+    this.querySelector(".color-negative").onclick = (event) => {
+      this.setValue(this.value.negative());
+      this.onchange(this.value);
+      return null;
+    };
+    this.color.oninput = (event) => {
+      this.value = Z4Color.fromHEX(this.color.value, this.opacityRange.valueAsNumber);
+      this.oninput(this.value);
+      return null;
+    };
+    this.color.onchange = (event) => {
+      this.value = Z4Color.fromHEX(this.color.value, this.opacityRange.valueAsNumber);
+      this.onchange(this.value);
+      return null;
+    };
+    this.opacityRange.oninput = (event) => {
+      this.opacityLabel.innerText = this.opacityRange.value;
+      this.opacityBadge.innerText = this.opacityRange.value;
+      this.value = Z4Color.fromHEX(this.color.value, this.opacityRange.valueAsNumber);
+      this.oninput(this.value);
+      return null;
+    };
+    this.opacityRange.onchange = (event) => {
+      this.opacityLabel.innerText = this.opacityRange.value;
+      this.opacityBadge.innerText = this.opacityRange.value;
+      this.value = Z4Color.fromHEX(this.color.value, this.opacityRange.valueAsNumber);
+      this.onchange(this.value);
+      return null;
+    };
+    this.setValue(new Z4Color(255, 0, 0, 0));
+  }
+
+  /**
+   * Sets the token of the color label
+   *
+   * @param token The token of the color label
+   * @param bold true for bold font, false otherwise
+   * @param italic true for italic font, false otherwise
+   * @return This Z4ColorUI
+   */
+   setColorLabel(token, bold, italic) {
+    let colorLabel = this.querySelector(".color-label");
+    colorLabel.setAttribute("data-token-lang-inner_text", token);
+    colorLabel.innerHTML = Z4MessageFactory.get(token);
+    colorLabel.style.fontWeight = bold ? "700" : "400";
+    colorLabel.style.fontStyle = italic ? "italic" : "normal";
+    return this;
+  }
+
+  /**
+   * Sets the visibility of the opacity badge
+   *
+   * @param visible true to make the opacity badge visible, false otherwise
+   * @return This Z4ColorUI
+   */
+   setOpacityBadgeVisible(visible) {
+    this.opacityBadge.style.display = visible ? "inline-block" : "none";
+    return this;
+  }
+
+   setValue(value) {
+    this.value = value;
+    this.color.value = this.value.getHEX().substring(0, 7);
+    this.opacityRange.valueAsNumber = this.value.getComponents()[0];
+    this.opacityLabel.innerText = this.opacityRange.value;
+    this.opacityBadge.innerText = this.opacityRange.value;
+    return this;
+  }
+
+   dispose() {
+  }
+}
+/**
+ * The component to show a gradient color
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
+
+   startColorUI = new Z4ColorUI().setColorLabel("START", false, true).setOpacityBadgeVisible(false).appendToElement(this.querySelector(".gradient-color-start-container"));
+
+   canvas = this.querySelector(".gradient-color-canvas");
+
+   stopColorUI = new Z4ColorUI().setColorLabel("STOP", false, true).setOpacityBadgeVisible(false).appendToElement(this.querySelector(".gradient-color-stop-container"));
+
+   ctx = this.canvas.getContext("2d");
+
+   chessboard = this.ctx.createPattern(Z4ImageFactory.get("CHESSBOARD"), "repeat");
+
+   mirroredCheck = this.querySelector(".gradient-color-mirrored-check");
+
+   rippleLabel = this.querySelector(".gradient-color-ripple-label");
+
+   rippleRange = this.querySelector(".gradient-color-ripple-range");
+
+   resizeObserver = new ResizeObserver(() => this.drawCanvas());
+
+  static  UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4GradientColorUI.html");
+
+  /**
+   * Creates a Z4GradientColorUI
+   */
+  constructor() {
+    super(Z4GradientColorUI.UI);
+    this.initDevicePixelRatio(() => this.drawCanvas());
+    this.resizeObserver.observe(this.canvas);
+    this.querySelector(".gradient-color-inverted").onclick = (event) => {
+      this.setValue(this.value.inverted());
+      this.onchange(this.value);
+      return null;
+    };
+    this.querySelector(".gradient-color-negative").onclick = (event) => {
+      this.setValue(this.value.negative());
+      this.onchange(this.value);
+      return null;
+    };
+    this.mirroredCheck.id = this.getUniqueID();
+    this.querySelector(".gradient-color-mirrored-label").setAttribute("for", this.mirroredCheck.id);
+    this.mirroredCheck.onchange = (event) => {
+      this.onchange(this.value.setMirrored(this.mirroredCheck.checked));
+      this.drawCanvas();
+      return null;
+    };
+    this.rippleRange.oninput = (event) => {
+      this.rippleLabel.innerText = this.rippleRange.value;
+      this.oninput(this.value.setRipple(this.rippleRange.valueAsNumber));
+      this.drawCanvas();
+      return null;
+    };
+    this.rippleRange.onchange = (event) => {
+      this.rippleLabel.innerText = this.rippleRange.value;
+      this.onchange(this.value.setRipple(this.rippleRange.valueAsNumber));
+      this.drawCanvas();
+      return null;
+    };
+    this.startColorUI.oninput = (z4Color) => {
+      this.oninput(this.value.setStartColor(z4Color.getARGB()));
+      this.drawCanvas();
+    };
+    this.startColorUI.onchange = (z4Color) => {
+      this.onchange(this.value.setStartColor(z4Color.getARGB()));
+      this.drawCanvas();
+    };
+    this.stopColorUI.oninput = (z4Color) => {
+      this.oninput(this.value.setStopColor(z4Color.getARGB()));
+      this.drawCanvas();
+    };
+    this.stopColorUI.onchange = (z4Color) => {
+      this.onchange(this.value.setStopColor(z4Color.getARGB()));
+      this.drawCanvas();
+    };
+    this.setValue(new Z4GradientColor());
+  }
+
+  /**
+   * Sets the token of the gradient color label
+   *
+   * @param token The token of the gradient color label
+   * @param bold true for bold font, false otherwise
+   * @param italic true for italic font, false otherwise
+   * @return This Z4GradientColorUI
+   */
+   setGradientColorLabel(token, bold, italic) {
+    let gradientColorLabel = this.querySelector(".gradient-color-label");
+    gradientColorLabel.setAttribute("data-token-lang-inner_text", token);
+    gradientColorLabel.innerHTML = Z4MessageFactory.get(token);
+    gradientColorLabel.style.fontWeight = bold ? "700" : "400";
+    gradientColorLabel.style.fontStyle = italic ? "italic" : "normal";
+    return this;
+  }
+
+   setValue(value) {
+    this.value = value;
+    this.mirroredCheck.checked = this.value.isMirrored();
+    this.rippleRange.valueAsNumber = this.value.getRipple();
+    this.rippleLabel.innerText = this.rippleRange.value;
+    this.startColorUI.setValue(this.value.getStartColor());
+    this.stopColorUI.setValue(this.value.getStopColor());
+    this.drawCanvas();
+    return this;
+  }
+
+   drawCanvas() {
+    if (this.canvas.clientWidth) {
+      this.canvas.width = Math.floor(this.canvas.clientWidth * window.devicePixelRatio);
+      this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
+      let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
+      let offscreenCtx = offscreen.getContext("2d");
+      for (let x = 0; x < this.canvas.clientWidth; x++) {
+        offscreenCtx.fillStyle = this.value.getZ4ColorAt(x / this.canvas.clientWidth, true, true).getHEX();
+        offscreenCtx.fillRect(x, 0, 1, this.canvas.clientHeight);
+      }
+      this.ctx.save();
+      this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      this.ctx.fillStyle = this.chessboard;
+      this.ctx.fillRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.ctx.drawImage(offscreen, 0, 0);
+      this.ctx.restore();
+    }
+  }
+
+   dispose() {
+    this.disposeDevicePixelRatio();
+    this.resizeObserver.unobserve(this.canvas);
   }
 }

@@ -16,7 +16,7 @@ public class Z4Action {
    */
   public final static Z4Action CONTINUE = new Z4Action();
   /**
-   * The spirograph
+   * The stop
    */
   public final static Z4Action STOP = new Z4Action();
 

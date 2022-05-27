@@ -8,16 +8,6 @@
   width: 100%;
 }*/
 
-/* DROP DOWN */
-/*.z4-dropdown-toggle-three-dots {
-  padding-top: 0px;
-  padding-bottom: 0px;
-  border-color: transparent;
-}
-.z4-dropdown-toggle-three-dots::after {
-  content: none;
-}*/
-
 /* SIGNED VALUE */
 .signed-value-input-group.sign-not-visible .signed-value-sign-button {
   display: none;
@@ -30,12 +20,6 @@
   border-top-left-radius: 0.2rem !important;
   border-bottom-left-radius: 0.2rem !important;
 }
-
-/* FANCIFUL VALUE */
-/*.fanciful-value-not-compact {
-  border-top-right-radius: 0.2rem !important;
-  border-bottom-right-radius: 0.2rem !important;
-}*/
 .z4-dark {
   background: #121212;
   color: rgba(255,255,255,.87);
