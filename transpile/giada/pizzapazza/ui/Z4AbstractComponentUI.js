@@ -123,6 +123,7 @@ class Z4AbstractComponentUI {
     parent.root.appendChild(this.root);
     return this;
   }
+
   /**
    * Prepends an element to this Z4AbstractComponentUI
    *
@@ -130,11 +131,11 @@ class Z4AbstractComponentUI {
    * @param element The element
    * @return This Z4AbstractComponentUI
    */
-  // @SuppressWarnings("unchecked")
-  // public <T extends Z4AbstractComponentUI> T prependElement(Element element) {
-  // this.root.prepend(element);
-  // return (T) this;
-  // }
+   prependElement(element) {
+    this.root.prepend(element);
+    return this;
+  }
+
   /**
    * Prepends an element to this Z4AbstractComponentUI
    *
@@ -142,9 +143,8 @@ class Z4AbstractComponentUI {
    * @param element The element
    * @return This Z4AbstractComponentUI
    */
-  // @SuppressWarnings("unchecked")
-  // public <T extends Z4AbstractComponentUI> T prependComponent(Z4AbstractComponentUI element) {
-  // this.root.prepend(element.root);
-  // return (T) this;
-  // }
+   prependComponent(element) {
+    this.root.prepend(element.root);
+    return this;
+  }
 }

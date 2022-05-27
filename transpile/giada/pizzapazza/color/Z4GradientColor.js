@@ -5,7 +5,7 @@
  */
 class Z4GradientColor {
 
-   start = new Z4Color(255, 255, 255, 0);
+   start = new Z4Color(255, 255, 255, 255);
 
    stop = new Z4Color(255, 0, 0, 0);
 

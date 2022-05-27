@@ -57,7 +57,7 @@ public abstract class Z4AbstractComponentUI {
   protected String getUniqueName() {
     return "name" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
   }
-  
+
   /**
    * Inizializes the monitoring of the device pixel ratio changes
    *
@@ -147,11 +147,12 @@ public abstract class Z4AbstractComponentUI {
    * @param element The element
    * @return This Z4AbstractComponentUI
    */
-//  @SuppressWarnings("unchecked")
-//  public <T extends Z4AbstractComponentUI> T prependElement(Element element) {
-//    this.root.prepend(element);
-//    return (T) this;
-//  }
+  @SuppressWarnings("unchecked")
+  public <T extends Z4AbstractComponentUI> T prependElement(Element element) {
+    this.root.prepend(element);
+    return (T) this;
+  }
+
   /**
    * Prepends an element to this Z4AbstractComponentUI
    *
@@ -159,9 +160,9 @@ public abstract class Z4AbstractComponentUI {
    * @param element The element
    * @return This Z4AbstractComponentUI
    */
-//  @SuppressWarnings("unchecked")
-//  public <T extends Z4AbstractComponentUI> T prependComponent(Z4AbstractComponentUI element) {
-//    this.root.prepend(element.root);
-//    return (T) this;
-//  }
+  @SuppressWarnings("unchecked")
+  public <T extends Z4AbstractComponentUI> T prependComponent(Z4AbstractComponentUI element) {
+    this.root.prepend(element.root);
+    return (T) this;
+  }
 }

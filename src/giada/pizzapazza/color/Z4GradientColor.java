@@ -13,7 +13,7 @@ import simulation.dom.$CanvasRenderingContext2D;
  */
 public class Z4GradientColor {
 
-  private final Z4Color start = new Z4Color(255, 255, 255, 0);
+  private final Z4Color start = new Z4Color(255, 255, 255, 255);
   private final Z4Color stop = new Z4Color(255, 0, 0, 0);
   private double ripple;
   private boolean mirrored;

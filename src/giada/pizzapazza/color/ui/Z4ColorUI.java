@@ -16,6 +16,7 @@ public class Z4ColorUI extends Z4AbstractComponentWithValueUI<Z4Color> {
   private final $HTMLElement color = this.querySelector(".color-input");
   private final $HTMLElement opacityLabel = this.querySelector(".color-opacity-range-label");
   private final $HTMLElement opacityRange = this.querySelector(".color-opacity-range");
+  private final $HTMLElement opacityBadge = this.querySelector(".color-opacity-badge");
 
   private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4ColorUI.html");
 
@@ -50,17 +51,19 @@ public class Z4ColorUI extends Z4AbstractComponentWithValueUI<Z4Color> {
 
     this.opacityRange.oninput = (event) -> {
       this.opacityLabel.innerText = this.opacityRange.value;
+      this.opacityBadge.innerText = this.opacityRange.value;
       this.value = Z4Color.fromHEX(this.color.value, (int) this.opacityRange.valueAsNumber);
       this.oninput.$apply(this.value);
       return null;
     };
     this.opacityRange.onchange = (event) -> {
       this.opacityLabel.innerText = this.opacityRange.value;
+      this.opacityBadge.innerText = this.opacityRange.value;
       this.value = Z4Color.fromHEX(this.color.value, (int) this.opacityRange.valueAsNumber);
       this.onchange.$apply(this.value);
       return null;
     };
-    
+
     this.setValue(new Z4Color(255, 0, 0, 0));
   }
 
@@ -81,6 +84,17 @@ public class Z4ColorUI extends Z4AbstractComponentWithValueUI<Z4Color> {
     return this;
   }
 
+  /**
+   * Sets the visibility of the opacity badge
+   *
+   * @param visible true to make the opacity badge visible, false otherwise
+   * @return This Z4ColorUI
+   */
+  public Z4ColorUI setOpacityBadgeVisible(boolean visible) {
+    this.opacityBadge.style.display = visible ? "inline-block" : "none";
+    return this;
+  }
+
   @Override
   @SuppressWarnings("unchecked")
   public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4Color value) {
@@ -89,6 +103,7 @@ public class Z4ColorUI extends Z4AbstractComponentWithValueUI<Z4Color> {
     this.color.value = this.value.getHEX().substring(0, 7);
     this.opacityRange.valueAsNumber = this.value.getComponents().$get(0);
     this.opacityLabel.innerText = this.opacityRange.value;
+    this.opacityBadge.innerText = this.opacityRange.value;
 
     return (T) this;
   }

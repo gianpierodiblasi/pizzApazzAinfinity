@@ -11,6 +11,8 @@ class Z4ColorUI extends Z4AbstractComponentWithValueUI {
 
    opacityRange = this.querySelector(".color-opacity-range");
 
+   opacityBadge = this.querySelector(".color-opacity-badge");
+
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4ColorUI.html");
 
   /**
@@ -40,12 +42,14 @@ class Z4ColorUI extends Z4AbstractComponentWithValueUI {
     };
     this.opacityRange.oninput = (event) => {
       this.opacityLabel.innerText = this.opacityRange.value;
+      this.opacityBadge.innerText = this.opacityRange.value;
       this.value = Z4Color.fromHEX(this.color.value, this.opacityRange.valueAsNumber);
       this.oninput(this.value);
       return null;
     };
     this.opacityRange.onchange = (event) => {
       this.opacityLabel.innerText = this.opacityRange.value;
+      this.opacityBadge.innerText = this.opacityRange.value;
       this.value = Z4Color.fromHEX(this.color.value, this.opacityRange.valueAsNumber);
       this.onchange(this.value);
       return null;
@@ -70,11 +74,23 @@ class Z4ColorUI extends Z4AbstractComponentWithValueUI {
     return this;
   }
 
+  /**
+   * Sets the visibility of the opacity badge
+   *
+   * @param visible true to make the opacity badge visible, false otherwise
+   * @return This Z4ColorUI
+   */
+   setOpacityBadgeVisible(visible) {
+    this.opacityBadge.style.display = visible ? "inline-block" : "none";
+    return this;
+  }
+
    setValue(value) {
     this.value = value;
     this.color.value = this.value.getHEX().substring(0, 7);
     this.opacityRange.valueAsNumber = this.value.getComponents()[0];
     this.opacityLabel.innerText = this.opacityRange.value;
+    this.opacityBadge.innerText = this.opacityRange.value;
     return this;
   }
 

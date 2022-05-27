@@ -33,24 +33,15 @@ public class test_color2 {
       return null;
     };
 
-    document.$getElementById("mode").value = Z4Setting.getMode();
-    document.$getElementById("mode").onchange = (event) -> {
-      Z4Setting.setMode(document.$getElementById("mode").value);
-      test_color2.drawAll();
-      return null;
-    };
-
     document.getElementById("test1").textContent = "new Z4GradientColor() => " + test_color2.stringify(new Z4GradientColor());
-    document.getElementById("test2").textContent = "new Z4GradientColor().addOrUpdateColor(0,65535) => " + test_color2.stringify(new Z4GradientColor().addOrUpdateColor(0, 65535));
-    document.getElementById("test3").textContent = "new Z4GradientColor().addOrUpdateColor(0.3,65535).move(0.3,0.4) => " + test_color2.stringify(new Z4GradientColor().addOrUpdateColor(0.3, 65535).move(0.3, 0.4));
-    document.getElementById("test4").textContent = "new Z4GradientColor().setRipple(0.2) => " + test_color2.stringify(new Z4GradientColor().setRipple(0.2));
-    document.getElementById("test5").textContent = "new Z4GradientColor().getZ4ColorAt(0.5,false,false) => " + test_color2.stringify(new Z4GradientColor().getZ4ColorAt(0.5, false, false));
-    document.getElementById("test6").textContent = "new Z4GradientColor().setRipple(0.2).getZ4ColorAt(0.75,true,false) => " + test_color2.stringify(new Z4GradientColor().setRipple(0.2).getZ4ColorAt(0.75, true, false));
+    document.getElementById("test2").textContent = "new Z4GradientColor().setStartColor(0,65535) => " + test_color2.stringify(new Z4GradientColor().setStartColor(65535));
+    document.getElementById("test3").textContent = "new Z4GradientColor().setRipple(0.2) => " + test_color2.stringify(new Z4GradientColor().setRipple(0.2));
+    document.getElementById("test4").textContent = "new Z4GradientColor().getZ4ColorAt(0.5,false,false) => " + test_color2.stringify(new Z4GradientColor().getZ4ColorAt(0.5, false, false));
+    document.getElementById("test5").textContent = "new Z4GradientColor().setRipple(0.2).getZ4ColorAt(0.75,true,false) => " + test_color2.stringify(new Z4GradientColor().setRipple(0.2).getZ4ColorAt(0.75, true, false));
 
     test_color2.drawAll();
 
-    Z4GradientColorUI ui = new Z4GradientColorUI();
-    ui.appendToElement(document.querySelector("#test7"));
+    Z4GradientColorUI ui = new Z4GradientColorUI().appendToElement(document.querySelector("#test7"));
     ui.oninput = (z4GradientColor) -> document.getElementById("test8").textContent = "ONINPUT " + test_color2.stringify(z4GradientColor);
     ui.onchange = (z4GradientColor) -> document.getElementById("test8").textContent = "ONCHANGE " + test_color2.stringify(z4GradientColor);
     document.getElementById("test8").textContent = test_color2.stringify(ui.getValue());
@@ -59,16 +50,15 @@ public class test_color2 {
   private static void drawAll() {
     test_color2.drawCanvas("canvas1", new Z4GradientColor());
     test_color2.drawCanvas("canvas2", new Z4GradientColor().setRipple(0.2));
-    test_color2.drawCanvas("canvas3", new Z4GradientColor().setRipple(0.4).addOrUpdateColor(0.5, 255 << 24 | 255 << 16));
-    test_color2.drawCanvas("canvas4", new Z4GradientColor().setRipple(1).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8));
-    test_color2.drawCanvas("canvas5", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8));
-    test_color2.drawCanvas("canvas6", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative());
-    test_color2.drawCanvas("canvas7", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative().inverted());
-    test_color2.drawCanvas("canvas8", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative().inverted().setMirrored(true));
+    test_color2.drawCanvas("canvas3", new Z4GradientColor().setRipple(0.4).setStartColor(255 << 24 | 255 << 16));
+    test_color2.drawCanvas("canvas4", new Z4GradientColor().setRipple(1).setStartColor(255 << 24 | 255 << 16).setStopColor(255 << 24 | 255 << 8));
+    test_color2.drawCanvas("canvas5", new Z4GradientColor().setStartColor(255 << 24 | 255).setStopColor(255 << 24 | 255 << 16).negative());
+    test_color2.drawCanvas("canvas6", new Z4GradientColor().setStartColor(255 << 24 | 255).setStopColor(255 << 24 | 255 << 16).negative().inverted());
+    test_color2.drawCanvas("canvas7", new Z4GradientColor().setStartColor(255 << 24 | 255).setStopColor(255 << 24 | 255 << 16).negative().inverted().setMirrored(true));
 
-    test_color2.fillCanvas("canvas9", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative().inverted(), 1);
-    test_color2.fillCanvas("canvas10", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative().inverted(), 2);
-    test_color2.fillCanvas("canvas11", new Z4GradientColor().addOrUpdateColor(0.25, 255 << 24 | 255).addOrUpdateColor(0.5, 255 << 24 | 255 << 16).addOrUpdateColor(0.75, 255 << 24 | 255 << 8).negative().inverted(), 3);
+    test_color2.fillCanvas("canvas8", new Z4GradientColor().setStartColor(255 << 24 | 255).setStopColor(255 << 24 | 255 << 16).negative().inverted(), 1);
+    test_color2.fillCanvas("canvas9", new Z4GradientColor().setStartColor(255 << 24 | 255).setStopColor(255 << 24 | 255 << 16).negative().inverted(), 2);
+    test_color2.fillCanvas("canvas10", new Z4GradientColor().setStartColor(255 << 24 | 255).setStopColor(255 << 24 | 255 << 16).negative().inverted(), 3);
   }
 
   private static void drawCanvas(String id, Z4GradientColor color) {
