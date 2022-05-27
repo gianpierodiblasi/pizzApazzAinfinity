@@ -34,14 +34,7 @@ public class test_stamper1 {
       return null;
     };
 
-    document.$getElementById("mode").value = Z4Setting.getMode();
-    document.$getElementById("mode").onchange = (event) -> {
-      Z4Setting.setMode(document.$getElementById("mode").value);
-      return null;
-    };
-
-    Z4StamperUI ui = new Z4StamperUI();
-    ui.appendToElement(document.getElementById("test1"));
+    Z4StamperUI ui = new Z4StamperUI().appendToElement(document.getElementById("test1"));
     ui.oninput = (value) -> document.getElementById("test2").textContent = "ONINPUT " + test_stamper1.stringify(value);
     ui.onchange = (value) -> document.getElementById("test2").textContent = "ONCHANGE " + test_stamper1.stringify(value);
     document.getElementById("test2").textContent = test_stamper1.stringify(ui.getValue());

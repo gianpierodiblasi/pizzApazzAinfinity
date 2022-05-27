@@ -3010,3 +3010,465 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
     this.resizeObserver.unobserve(this.canvas);
   }
 }
+/**
+ * The common parent of all painters
+ *
+ * @param <T>
+ * @author gianpiero.di.blasi
+ */
+class Z4Painter {
+
+  /**
+   * Performs a drawing
+   *
+   * @param context The context to use to perform the drawing
+   * @param point The point where to perform the drawing
+   * @param gradientColor The color to use to perform the drawing
+   * @return This Z4Painter
+   */
+   draw(context, point, gradientColor) {
+  }
+
+  /**
+   * Returns the color parameter
+   *
+   * @param color The color
+   * @return The color
+   */
+   getColor(color) {
+    return color;
+  }
+}
+/**
+ * The painter of arrows, used only for testing purpose
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4ArrowPainter extends Z4Painter {
+
+   bool = false;
+
+   draw(context, point, gradientColor) {
+    this.bool = !this.bool;
+    let x = point.getIntensity() * point.getZ4Vector().getModule();
+    context.save();
+    context.lineWidth = 1;
+    context.strokeStyle = this.getColor("black");
+    context.beginPath();
+    context.arc(0, 0, 2, 0, Z4Math.TWO_PI);
+    context.stroke();
+    context.strokeStyle = this.getColor(this.bool ? "blue" : "red");
+    context.beginPath();
+    context.moveTo(0, 0);
+    context.lineTo(x, 0);
+    context.lineTo(x - 5, -2.5);
+    context.lineTo(x - 5, +2.5);
+    context.lineTo(x, 0);
+    context.stroke();
+    context.restore();
+    return this;
+  }
+}
+/**
+ * The drawing action of a Z4PointIterator
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4Action {
+
+  /**
+   * The start
+   */
+  static  START = new Z4Action();
+
+  /**
+   * The continue
+   */
+  static  CONTINUE = new Z4Action();
+
+  /**
+   * The stop
+   */
+  static  STOP = new Z4Action();
+
+  constructor() {
+  }
+}
+/**
+ * The common parent of all point iterators
+ *
+ * @param <T>
+ * @author gianpiero.di.blasi
+ */
+class Z4PointIterator {
+
+  /**
+   * The color progression
+   */
+   progression = Z4Progression.SPATIAL;
+
+  /**
+   * The step for temporal progression (in the range [0,1])
+   */
+   temporalStepProgression = 0.1;
+
+  /**
+   * The color lighting
+   */
+   lighting = Z4Lighting.NONE;
+
+  /**
+   * The rotation
+   */
+   rotation = Z4Rotation.fixed();
+
+  /**
+   * The current Z4Point
+   */
+   z4Point = new Z4Point();
+
+  /**
+   * The current "utility" point
+   */
+   P = new Object();
+
+  /**
+   * true if this Z4PointIterator has another point, false otherwise
+   */
+   hasNext = false;
+
+  /**
+   * Creates a Z4PointIterator
+   */
+  constructor() {
+    this.P["x"] = 0;
+    this.P["y"] = 0;
+  }
+
+  /**
+   * Sets the color progression
+   *
+   * @param progression The color progression
+   * @param temporalStepProgression The step for temporal progression (in the
+   * range [0,1])
+   * @param lighting The color lighting
+   * @return This Z4PointIterator
+   */
+   seProgression(progression, temporalStepProgression, lighting) {
+    this.progression = progression;
+    this.temporalStepProgression = temporalStepProgression;
+    this.lighting = lighting;
+    return this;
+  }
+
+  /**
+   * Sets the rotation
+   *
+   * @param rotation The rotation
+   * @return This Z4PointIterator
+   */
+   setRotation(rotation) {
+    this.rotation = rotation;
+    return this;
+  }
+
+  /**
+   * Returns the rotation
+   *
+   * @return The rotation
+   */
+   getRotation() {
+    return this.rotation;
+  }
+
+  /**
+   * Performs a drawing action
+   *
+   * @param action The action
+   * @param x The x-axis coordinate of the drawing action
+   * @param y The y-axis coordinate of the drawing action
+   * @return true if the painting is modified by the drawing action, false
+   * otherwise
+   */
+   draw(action, x, y) {
+  }
+
+  /**
+   * Returns the next point of the iterator
+   *
+   * @return The next point of the iterator, null if the iterator has no more
+   * points
+   */
+   next() {
+  }
+
+  /**
+   * Draws a demo of this Z4PointIterator
+   *
+   * @param context The context where to draw the demo
+   * @param width The width
+   * @param height The height
+   */
+   drawDemo(context, width, height) {
+  }
+}
+/**
+ * The stamper
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4Stamper extends Z4PointIterator {
+
+   intensity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(15).setSign(Z4Sign.POSITIVE));
+
+   multiplicity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(1).setSign(Z4Sign.POSITIVE));
+
+   push = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE));
+
+   currentMultiplicityCounter = 0;
+
+   currentMultiplicityTotal = 0;
+
+   currentPush = 0.0;
+
+   draw(action, x, y) {
+    if (action === Z4Action.START) {
+      this.currentMultiplicityCounter = 0;
+      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
+      this.currentPush = this.push.next();
+      this.P["x"] = x;
+      this.P["y"] = y;
+      this.hasNext = true;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+   next() {
+    if (!this.hasNext) {
+      return null;
+    } else {
+      this.currentMultiplicityCounter++;
+      this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
+      let angle = this.rotation.next(0);
+      if (this.currentPush) {
+        let pushed = Z4Vector.fromVector(this.P["x"], this.P["y"], this.currentPush, angle);
+        this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), 1, angle));
+      } else {
+        this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P["x"], this.P["y"], 1, angle));
+      }
+      this.rotation.nextSide(this.z4Point, null);
+      if (this.progression === Z4Progression.TEMPORAL) {
+        this.z4Point.setLighting(this.lighting);
+        let colorPosition = this.z4Point.getColorPosition();
+        colorPosition = colorPosition === -1 ? 0 : colorPosition + this.temporalStepProgression;
+        if (colorPosition > 1) {
+          colorPosition -= 1;
+        }
+        this.z4Point.setColorPosition(colorPosition);
+      } else if (this.progression === Z4Progression.SPATIAL) {
+        this.z4Point.setLighting(Z4Lighting.NONE);
+        this.z4Point.setColorPosition(-1);
+      } else if (this.progression === Z4Progression.RELATIVE_TO_PATH || this.progression === Z4Progression.RANDOM) {
+        this.z4Point.setLighting(this.lighting);
+        this.z4Point.setColorPosition(Math.random());
+      }
+      return this.z4Point.setIntensity(this.intensity.next());
+    }
+  }
+
+   drawDemo(context, width, height) {
+    let arrowPainter = new Z4ArrowPainter();
+    let gradientColor = new Z4GradientColor();
+    this.initDraw(width, height).forEach(point => {
+      this.draw(Z4Action.START, point["x"], point["y"]);
+      if (this.currentPush && !this.currentMultiplicityCounter) {
+        context.save();
+        context.lineWidth = 1;
+        context.fillStyle = Z4Color.getFillStyle("black");
+        context.beginPath();
+        context.arc(this.P["x"], this.P["y"], 2, 0, Z4Math.TWO_PI);
+        context.fill();
+        context.restore();
+      }
+      let next = null;
+      while ((next = this.next()) !== null) {
+        let vector = next.getZ4Vector();
+        context.save();
+        context.translate(vector.getX0(), vector.getY0());
+        context.rotate(vector.getPhase());
+        arrowPainter.draw(context, next, gradientColor);
+        context.restore();
+      }
+    });
+  }
+
+   initDraw(w, h) {
+    let array = new Array();
+    for (let x = 50; x <= w - 50; x += 100) {
+      for (let y = 50; y <= h - 50; y += 100) {
+        let point = new Object();
+        point["x"] = x;
+        point["y"] = y;
+        array.push(point);
+      }
+    }
+    return array;
+  }
+
+  /**
+   * Returns the intensity
+   *
+   * @return The intensity
+   */
+   getIntensity() {
+    return this.intensity;
+  }
+
+  /**
+   * Sets the intensity
+   *
+   * @param intensity The intensity
+   * @return This Z4Stamper
+   */
+   setIntensity(intensity) {
+    this.intensity = intensity;
+    return this;
+  }
+
+  /**
+   * Returns the multiplicity
+   *
+   * @return The multiplicity
+   */
+   getMultiplicity() {
+    return this.multiplicity;
+  }
+
+  /**
+   * Sets the multiplicity
+   *
+   * @param multiplicity The multiplicity
+   * @return This Z4Stamper
+   */
+   setMultiplicity(multiplicity) {
+    this.multiplicity = multiplicity;
+    return this;
+  }
+
+  /**
+   * Returns the push
+   *
+   * @return The push
+   */
+   getPush() {
+    return this.push;
+  }
+
+  /**
+   * Sets the push
+   *
+   * @param push The push
+   * @return This Z4Stamper
+   */
+   setPush(push) {
+    this.push = push;
+    return this;
+  }
+}
+/**
+ * The component to edit a numeric value
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4StamperUI extends Z4AbstractComponentWithValueUI {
+
+  // private final $Canvas canvas = ($Canvas) this.querySelector(".canvas");
+  // private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
+  // 
+  // private final Z4FancifulValueUI intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setComponentsVisible(true, true, false).setSignsVisible(false, true, true).appendToElement(this.querySelector(".stamper-container"));
+  // private final Z4RotationUI rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".stamper-container"));
+  // private final Z4FancifulValueUI multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setComponentsVisible(true, true, false).setSignsVisible(false, true, true).setConstantRange(1, 999999999).appendToElement(this.querySelector(".stamper-container"));
+  // private final Z4FancifulValueUI push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setComponentsVisible(true, true, false).setSignsVisible(false, true, true).appendToElement(this.querySelector(".stamper-container"));
+  static  UI = Z4HTMLFactory.get("giada/pizzapazza/iterator/ui/Z4StamperUI.html");
+
+  static  WIDTH = 500;
+
+  static  HEIGHT = 300;
+
+  /**
+   * Creates a Z4StamperUI
+   */
+  constructor() {
+    super(Z4StamperUI.UI);
+    // this.initDevicePixelRatio(() -> this.drawCanvas());
+    // 
+    // this.canvas.style.border = "1px dashed gray";
+    // this.canvas.style.width = Z4StamperUI.WIDTH + "px";
+    // this.canvas.style.height = Z4StamperUI.HEIGHT + "px";
+    // 
+    // this.intensity.oninput = (v) -> this.set(v, null, null, null, false);
+    // this.intensity.onchange = (v) -> this.set(v, null, null, null, true);
+    // this.rotation.oninput = (v) -> this.set(null, v, null, null, false);
+    // this.rotation.onchange = (v) -> this.set(null, v, null, null, true);
+    // this.multiplicity.oninput = (v) -> this.set(null, null, v, null, false);
+    // this.multiplicity.onchange = (v) -> this.set(null, null, v, null, true);
+    // this.push.oninput = (v) -> this.set(null, null, null, v, false);
+    // this.push.onchange = (v) -> this.set(null, null, null, v, true);
+    this.setValue(new Z4Stamper());
+  }
+
+   set(intensity, rotation, multiplicity, push, onchange) {
+    // if ($exists(intensity)) {
+    // this.value.setIntensity(intensity);
+    // }
+    // if ($exists(rotation)) {
+    // this.value.setRotation(rotation);
+    // }
+    // if ($exists(multiplicity)) {
+    // this.value.setMultiplicity(multiplicity);
+    // }
+    // if ($exists(push)) {
+    // this.value.setMultiplicity(push);
+    // }
+    // 
+    // this.drawCanvas();
+    // 
+    // if (onchange) {
+    // this.onchange.$apply(this.value);
+    // } else {
+    // this.oninput.$apply(this.value);
+    // }
+  }
+
+   setValue(value) {
+    this.value = value;
+    // this.intensity.setValue(this.value.getIntensity());
+    // this.rotation.setValue(this.value.getRotation());
+    // this.multiplicity.setValue(this.value.getMultiplicity());
+    // this.push.setValue(this.value.getPush());
+    this.drawCanvas();
+    return this;
+  }
+
+   drawCanvas() {
+    // this.canvas.width = Math.floor(Z4StamperUI.WIDTH * window.devicePixelRatio);
+    // this.canvas.height = Math.floor(Z4StamperUI.HEIGHT * window.devicePixelRatio);
+    // 
+    // $OffscreenCanvas offscreen = new $OffscreenCanvas(Z4StamperUI.WIDTH, Z4StamperUI.HEIGHT);
+    // $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
+    // this.value.drawDemo(offscreenCtx, Z4StamperUI.WIDTH, Z4StamperUI.HEIGHT);
+    // 
+    // this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    // 
+    // this.ctx.save();
+    // this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    // this.ctx.drawImage(offscreen, 0, 0);
+    // this.ctx.restore();
+  }
+
+   dispose() {
+    this.disposeDevicePixelRatio();
+  }
+}
