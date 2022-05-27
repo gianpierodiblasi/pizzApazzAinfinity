@@ -128,6 +128,19 @@ public abstract class Z4AbstractComponentUI {
   }
 
   /**
+   * Inserts this Z4AbstractComponentUI before another element
+   *
+   * @param <T>
+   * @param element The element
+   * @return This Z4AbstractComponentUI
+   */
+  @SuppressWarnings("unchecked")
+  public <T extends Z4AbstractComponentUI> T insertBeforeElement(Element element) {
+    element.parentElement.insertBefore(this.root, element);
+    return (T) this;
+  }
+
+  /**
    * Appends this Z4AbstractComponentUI to its parent
    *
    * @param <T>

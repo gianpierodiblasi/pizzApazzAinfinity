@@ -23,11 +23,11 @@ public class Z4StamperUI extends Z4AbstractComponentWithValueUI<Z4Stamper> {
 
   private final $Canvas canvas = ($Canvas) this.querySelector(".stamper-canvas");
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
-//
-//  private final Z4FancifulValueUI intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setComponentsVisible(true, true, false).setSignsVisible(false, true, true).appendToElement(this.querySelector(".stamper-container"));
-//  private final Z4RotationUI rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".stamper-container"));
-//  private final Z4FancifulValueUI multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setComponentsVisible(true, true, false).setSignsVisible(false, true, true).setConstantRange(1, 999999999).appendToElement(this.querySelector(".stamper-container"));
-//  private final Z4FancifulValueUI push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setComponentsVisible(true, true, false).setSignsVisible(false, true, true).appendToElement(this.querySelector(".stamper-container"));
+
+  private final Z4FancifulValueUI intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
+  private final Z4RotationUI rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".stamper-container"));
+  private final Z4FancifulValueUI multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setSignsVisible(false).setConstantRange(1, 1000000000).appendToElement(this.querySelector(".stamper-container-first-row"));
+  private final Z4FancifulValueUI push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
 
   private final $ResizeObserver resizeObserver = new $ResizeObserver(() -> this.drawCanvas());
 
@@ -41,39 +41,39 @@ public class Z4StamperUI extends Z4AbstractComponentWithValueUI<Z4Stamper> {
 
     this.initDevicePixelRatio(() -> this.drawCanvas());
     this.resizeObserver.observe(this.canvas);
-//
-//    this.intensity.oninput = (v) -> this.set(v, null, null, null, false);
-//    this.intensity.onchange = (v) -> this.set(v, null, null, null, true);
-//    this.rotation.oninput = (v) -> this.set(null, v, null, null, false);
-//    this.rotation.onchange = (v) -> this.set(null, v, null, null, true);
-//    this.multiplicity.oninput = (v) -> this.set(null, null, v, null, false);
-//    this.multiplicity.onchange = (v) -> this.set(null, null, v, null, true);
-//    this.push.oninput = (v) -> this.set(null, null, null, v, false);
-//    this.push.onchange = (v) -> this.set(null, null, null, v, true);
+
+    this.intensity.oninput = (v) -> this.set(v, null, null, null, false);
+    this.intensity.onchange = (v) -> this.set(v, null, null, null, true);
+    this.rotation.oninput = (v) -> this.set(null, v, null, null, false);
+    this.rotation.onchange = (v) -> this.set(null, v, null, null, true);
+    this.multiplicity.oninput = (v) -> this.set(null, null, v, null, false);
+    this.multiplicity.onchange = (v) -> this.set(null, null, v, null, true);
+    this.push.oninput = (v) -> this.set(null, null, null, v, false);
+    this.push.onchange = (v) -> this.set(null, null, null, v, true);
     this.setValue(new Z4Stamper());
   }
 
   private void set(Z4FancifulValue intensity, Z4Rotation rotation, Z4FancifulValue multiplicity, Z4FancifulValue push, boolean onchange) {
-//    if ($exists(intensity)) {
-//      this.value.setIntensity(intensity);
-//    }
-//    if ($exists(rotation)) {
-//      this.value.setRotation(rotation);
-//    }
-//    if ($exists(multiplicity)) {
-//      this.value.setMultiplicity(multiplicity);
-//    }
-//    if ($exists(push)) {
-//      this.value.setMultiplicity(push);
-//    }
-//
-//    this.drawCanvas();
-//
-//    if (onchange) {
-//      this.onchange.$apply(this.value);
-//    } else {
-//      this.oninput.$apply(this.value);
-//    }
+    if ($exists(intensity)) {
+      this.value.setIntensity(intensity);
+    }
+    if ($exists(rotation)) {
+      this.value.setRotation(rotation);
+    }
+    if ($exists(multiplicity)) {
+      this.value.setMultiplicity(multiplicity);
+    }
+    if ($exists(push)) {
+      this.value.setMultiplicity(push);
+    }
+
+    this.drawCanvas();
+
+    if (onchange) {
+      this.onchange.$apply(this.value);
+    } else {
+      this.oninput.$apply(this.value);
+    }
   }
 
   @Override
@@ -81,10 +81,10 @@ public class Z4StamperUI extends Z4AbstractComponentWithValueUI<Z4Stamper> {
   public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4Stamper value) {
     this.value = value;
 
-//    this.intensity.setValue(this.value.getIntensity());
-//    this.rotation.setValue(this.value.getRotation());
-//    this.multiplicity.setValue(this.value.getMultiplicity());
-//    this.push.setValue(this.value.getPush());
+    this.intensity.setValue(this.value.getIntensity());
+    this.rotation.setValue(this.value.getRotation());
+    this.multiplicity.setValue(this.value.getMultiplicity());
+    this.push.setValue(this.value.getPush());
     this.drawCanvas();
 
     return (T) this;

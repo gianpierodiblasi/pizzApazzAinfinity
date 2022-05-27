@@ -9,6 +9,7 @@ import giada.pizzapazza.math.Z4FancifulValue;
 import giada.pizzapazza.math.Z4Math;
 import giada.pizzapazza.math.Z4Point;
 import giada.pizzapazza.math.Z4Sign;
+import giada.pizzapazza.math.Z4SignedRandomValue;
 import giada.pizzapazza.math.Z4SignedValue;
 import giada.pizzapazza.math.Z4Vector;
 import giada.pizzapazza.painter.Z4ArrowPainter;
@@ -24,9 +25,9 @@ import simulation.js.$Object;
  */
 public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
 
-  private Z4FancifulValue intensity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(15).setSign(Z4Sign.POSITIVE));
-  private Z4FancifulValue multiplicity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(1).setSign(Z4Sign.POSITIVE));
-  private Z4FancifulValue push = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE));
+  private Z4FancifulValue intensity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(15).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
+  private Z4FancifulValue multiplicity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(1).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
+  private Z4FancifulValue push = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
   private int currentMultiplicityCounter;
   private int currentMultiplicityTotal;

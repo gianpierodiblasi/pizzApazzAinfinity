@@ -17,9 +17,9 @@ import simulation.dom.$HTMLElement;
  */
 public class Z4RotationUI extends Z4AbstractComponentWithValueUI<Z4Rotation> {
 
-  private final Z4SignedValueUI startAngle = new Z4SignedValueUI().setCompact().setRange(0, 360).setValueLabel("START_ANGLE", true, false).setSignVisible(false).appendToElement(this.querySelector(".rotation-container"));
+  private final Z4SignedValueUI startAngle = new Z4SignedValueUI().setCompact().setRange(0, 360).setValueLabel("START_ANGLE", true, false).setSignVisible(false).insertBeforeElement(this.querySelector(".rotation-type-button"));
   private final $HTMLElement delayedCheck = this.querySelector(".rotation-delayed-check");
-  private final Z4FancifulValueUI angle = new Z4FancifulValueUI().setValueLabel("ANGLE", true, false).setConstantRange(0, 180).setRandomRange(0, 180).appendToElement(this.querySelector(".rotation-container"));
+  private final Z4FancifulValueUI angle = new Z4FancifulValueUI().setValueLabel("ANGLE", true, false).setConstantRange(0, 180).setRandomRange(0, 180).insertBeforeElement(this.querySelector(".rotation-type-button"));
 
   private final static String PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
   private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4RotationUI.html");
@@ -67,15 +67,18 @@ public class Z4RotationUI extends Z4AbstractComponentWithValueUI<Z4Rotation> {
       return null;
     };
 
+    this.startAngle.querySelector(".signed-value-value-label").style.display = "block";
     HTMLElement element = this.startAngle.querySelector(".signed-value-compact-button span");
     element.innerHTML = element.innerText;
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 10; i++) {
       element.innerHTML += "&nbsp";
     }
+    
     this.startAngle.oninput = (start) -> this.oninput.$apply(this.value.setStartAngle(start.getValue()));
     this.startAngle.onchange = (start) -> this.onchange.$apply(this.value.setStartAngle(start.getValue()));
     this.angle.oninput = (a) -> this.oninput.$apply(this.value.setAngle(a));
     this.angle.onchange = (a) -> this.onchange.$apply(this.value.setAngle(a));
+    
     this.setValue(Z4Rotation.fixed());
   }
 

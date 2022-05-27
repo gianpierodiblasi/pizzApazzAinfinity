@@ -9,11 +9,14 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
 
    ctx = this.canvas.getContext("2d");
 
-  // 
-  // private final Z4FancifulValueUI intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setComponentsVisible(true, true, false).setSignsVisible(false, true, true).appendToElement(this.querySelector(".stamper-container"));
-  // private final Z4RotationUI rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".stamper-container"));
-  // private final Z4FancifulValueUI multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setComponentsVisible(true, true, false).setSignsVisible(false, true, true).setConstantRange(1, 999999999).appendToElement(this.querySelector(".stamper-container"));
-  // private final Z4FancifulValueUI push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setComponentsVisible(true, true, false).setSignsVisible(false, true, true).appendToElement(this.querySelector(".stamper-container"));
+   intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
+
+   rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".stamper-container"));
+
+   multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setSignsVisible(false).setConstantRange(1, 1000000000).appendToElement(this.querySelector(".stamper-container-first-row"));
+
+   push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
+
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/iterator/ui/Z4StamperUI.html");
@@ -25,47 +28,44 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
     super(Z4StamperUI.UI);
     this.initDevicePixelRatio(() => this.drawCanvas());
     this.resizeObserver.observe(this.canvas);
-    // 
-    // this.intensity.oninput = (v) -> this.set(v, null, null, null, false);
-    // this.intensity.onchange = (v) -> this.set(v, null, null, null, true);
-    // this.rotation.oninput = (v) -> this.set(null, v, null, null, false);
-    // this.rotation.onchange = (v) -> this.set(null, v, null, null, true);
-    // this.multiplicity.oninput = (v) -> this.set(null, null, v, null, false);
-    // this.multiplicity.onchange = (v) -> this.set(null, null, v, null, true);
-    // this.push.oninput = (v) -> this.set(null, null, null, v, false);
-    // this.push.onchange = (v) -> this.set(null, null, null, v, true);
+    this.intensity.oninput = (v) => this.set(v, null, null, null, false);
+    this.intensity.onchange = (v) => this.set(v, null, null, null, true);
+    this.rotation.oninput = (v) => this.set(null, v, null, null, false);
+    this.rotation.onchange = (v) => this.set(null, v, null, null, true);
+    this.multiplicity.oninput = (v) => this.set(null, null, v, null, false);
+    this.multiplicity.onchange = (v) => this.set(null, null, v, null, true);
+    this.push.oninput = (v) => this.set(null, null, null, v, false);
+    this.push.onchange = (v) => this.set(null, null, null, v, true);
     this.setValue(new Z4Stamper());
   }
 
    set(intensity, rotation, multiplicity, push, onchange) {
-    // if ($exists(intensity)) {
-    // this.value.setIntensity(intensity);
-    // }
-    // if ($exists(rotation)) {
-    // this.value.setRotation(rotation);
-    // }
-    // if ($exists(multiplicity)) {
-    // this.value.setMultiplicity(multiplicity);
-    // }
-    // if ($exists(push)) {
-    // this.value.setMultiplicity(push);
-    // }
-    // 
-    // this.drawCanvas();
-    // 
-    // if (onchange) {
-    // this.onchange.$apply(this.value);
-    // } else {
-    // this.oninput.$apply(this.value);
-    // }
+    if (intensity) {
+      this.value.setIntensity(intensity);
+    }
+    if (rotation) {
+      this.value.setRotation(rotation);
+    }
+    if (multiplicity) {
+      this.value.setMultiplicity(multiplicity);
+    }
+    if (push) {
+      this.value.setMultiplicity(push);
+    }
+    this.drawCanvas();
+    if (onchange) {
+      this.onchange(this.value);
+    } else {
+      this.oninput(this.value);
+    }
   }
 
    setValue(value) {
     this.value = value;
-    // this.intensity.setValue(this.value.getIntensity());
-    // this.rotation.setValue(this.value.getRotation());
-    // this.multiplicity.setValue(this.value.getMultiplicity());
-    // this.push.setValue(this.value.getPush());
+    this.intensity.setValue(this.value.getIntensity());
+    this.rotation.setValue(this.value.getRotation());
+    this.multiplicity.setValue(this.value.getMultiplicity());
+    this.push.setValue(this.value.getPush());
     this.drawCanvas();
     return this;
   }

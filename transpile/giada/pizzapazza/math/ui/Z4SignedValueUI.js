@@ -118,6 +118,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
       return null;
     };
     this.setValue(new Z4SignedValue());
+    this.configureRange();
   }
 
    startSpin() {

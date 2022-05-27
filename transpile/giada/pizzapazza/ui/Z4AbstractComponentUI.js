@@ -113,6 +113,18 @@ class Z4AbstractComponentUI {
   }
 
   /**
+   * Inserts this Z4AbstractComponentUI before another element
+   *
+   * @param <T>
+   * @param element The element
+   * @return This Z4AbstractComponentUI
+   */
+   insertBeforeElement(element) {
+    element.parentElement.insertBefore(this.root, element);
+    return this;
+  }
+
+  /**
    * Appends this Z4AbstractComponentUI to its parent
    *
    * @param <T>

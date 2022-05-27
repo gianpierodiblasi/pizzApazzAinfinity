@@ -5,11 +5,11 @@
  */
 class Z4RotationUI extends Z4AbstractComponentWithValueUI {
 
-   startAngle = new Z4SignedValueUI().setCompact().setRange(0, 360).setValueLabel("START_ANGLE", true, false).setSignVisible(false).appendToElement(this.querySelector(".rotation-container"));
+   startAngle = new Z4SignedValueUI().setCompact().setRange(0, 360).setValueLabel("START_ANGLE", true, false).setSignVisible(false).insertBeforeElement(this.querySelector(".rotation-type-button"));
 
    delayedCheck = this.querySelector(".rotation-delayed-check");
 
-   angle = new Z4FancifulValueUI().setValueLabel("ANGLE", true, false).setConstantRange(0, 180).setRandomRange(0, 180).appendToElement(this.querySelector(".rotation-container"));
+   angle = new Z4FancifulValueUI().setValueLabel("ANGLE", true, false).setConstantRange(0, 180).setRandomRange(0, 180).insertBeforeElement(this.querySelector(".rotation-type-button"));
 
   static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
 
@@ -52,9 +52,10 @@ class Z4RotationUI extends Z4AbstractComponentWithValueUI {
       this.onchange(this.value.setDelayed(this.delayedCheck.checked));
       return null;
     };
+    this.startAngle.querySelector(".signed-value-value-label").style.display = "block";
     let element = this.startAngle.querySelector(".signed-value-compact-button span");
     element.innerHTML = element.innerText;
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 10; i++) {
       element.innerHTML += "&nbsp";
     }
     this.startAngle.oninput = (start) => this.oninput(this.value.setStartAngle(start.getValue()));
