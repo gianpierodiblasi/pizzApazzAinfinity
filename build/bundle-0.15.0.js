@@ -385,6 +385,18 @@ class Z4AbstractComponentUI {
   }
 
   /**
+   * Inserts this Z4AbstractComponentUI before another element
+   *
+   * @param <T>
+   * @param element The element
+   * @return This Z4AbstractComponentUI
+   */
+   insertBeforeElement(element) {
+    element.parentElement.insertBefore(this.root, element);
+    return this;
+  }
+
+  /**
    * Appends this Z4AbstractComponentUI to its parent
    *
    * @param <T>
@@ -862,7 +874,7 @@ class Z4SignedRandomValue {
     this.value = value;
     this.type = type;
     this.length = length;
-    this.step = 0;
+    this.step = 1;
     this.prevRandom = Math.random();
     this.controlRandom = 1;
     this.nextRandom = Math.random();
@@ -988,8 +1000,8 @@ class Z4SignedRandomValue {
       default:
         return this.value * Math.random();
       case 1:
-        if (this.step === this.length) {
-          this.step = 0;
+        if (this.step >= this.length) {
+          this.step = 1;
           this.prevRandom = this.nextRandom;
           this.controlRandom = this.controlRandom === 1 ? 0 : 1;
           this.nextRandom = Math.random();
@@ -999,8 +1011,8 @@ class Z4SignedRandomValue {
         }
         return this.value * this.bezierCurve.get(this.step / this.length).y;
       case 2:
-        if (this.step === this.length) {
-          this.step = 0;
+        if (this.step >= this.length) {
+          this.step = 1;
           this.prevRandom = this.nextRandom;
           this.nextRandom = Math.random();
         } else {
@@ -1008,8 +1020,8 @@ class Z4SignedRandomValue {
         }
         return this.value * ((this.nextRandom - this.prevRandom) * this.step / this.length + this.prevRandom);
       case 3:
-        if (this.step === this.length) {
-          this.step = 0;
+        if (this.step >= this.length) {
+          this.step = 1;
           this.prevRandom = Math.random();
         } else {
           this.step++;
@@ -1767,7 +1779,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
     if (sign) {
       this.isApplyMinusPlus = true;
       this.applyMinusPlus(sign, 1.0);
-    } else {
+    } else if (this.isApplyMinusPlus) {
       this.isApplyMinusPlus = false;
       clearTimeout(this.timeoutID);
       this.onchange(this.value);
@@ -1961,6 +1973,9 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
     } else {
       this.querySelector(".signed-value-sign-button img").setAttribute("src", this.querySelector(".signed-value-sign-dropdown-menu img[data-icon='alternate']").getAttribute("src"));
     }
+    if (this.radioRange.checked) {
+      this.configureRange();
+    }
     return this;
   }
 
@@ -1998,7 +2013,7 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
       let img = imgs.item(i);
       img.setAttribute("src", Z4SignedRandomValueUI.PATH + "z4randomvalue_" + img.getAttribute("data-icon") + ".svg");
     }
-    let buttons = this.querySelectorAll(".signed-random-value-type-dropdown-menu button");
+    let buttons = this.querySelectorAll(".signed-random-value-type-dropdown-menu button[class='dropdown-item']");
     for (let i = 0; i < buttons.length; i++) {
       let button = buttons.item(i);
       button.onclick = (event) => {
@@ -2177,7 +2192,9 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
    */
    setSignsVisible(visible) {
     this.constantUI.setSignVisible(visible);
+    this.constantUI.setValueLabel(visible ? "CONSTANT" : "CONSTANT_SHORT", false, true);
     this.randomUI.setSignVisible(!this.uniformCheck.checked && visible);
+    this.randomUI.setValueLabel(!this.uniformCheck.checked && visible ? "RANDOM" : "RANDOM_SHORT", false, true);
     return this;
   }
 
@@ -2253,11 +2270,11 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
  */
 class Z4RotationUI extends Z4AbstractComponentWithValueUI {
 
-   startAngle = new Z4SignedValueUI().setCompact().setRange(0, 360).setValueLabel("START_ANGLE", true, false).setSignVisible(false).appendToElement(this.querySelector(".rotation-container"));
+   startAngle = new Z4SignedValueUI().setCompact().setRange(0, 360).setValueLabel("START_ANGLE", true, false).setSignVisible(false).insertBeforeElement(this.querySelector(".rotation-type-button"));
 
    delayedCheck = this.querySelector(".rotation-delayed-check");
 
-   angle = new Z4FancifulValueUI().setValueLabel("ANGLE", true, false).setConstantRange(0, 180).setRandomRange(0, 180).appendToElement(this.querySelector(".rotation-container"));
+   angle = new Z4FancifulValueUI().setValueLabel("ANGLE", true, false).setConstantRange(0, 180).setRandomRange(0, 180).insertBeforeElement(this.querySelector(".rotation-type-button"));
 
   static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
 
@@ -2300,11 +2317,13 @@ class Z4RotationUI extends Z4AbstractComponentWithValueUI {
       this.onchange(this.value.setDelayed(this.delayedCheck.checked));
       return null;
     };
-    let element = this.startAngle.querySelector(".signed-value-compact-button span");
-    element.innerHTML = element.innerText;
-    for (let i = 0; i < 20; i++) {
-      element.innerHTML += "&nbsp";
+    this.startAngle.querySelector(".signed-value-value-label").style.display = "block";
+    let button = this.startAngle.querySelector(".signed-value-compact-button");
+    let span = document.createElement("span");
+    for (let i = 0; i < 10; i++) {
+      span.innerHTML += "&nbsp";
     }
+    button.appendChild(span);
     this.startAngle.oninput = (start) => this.oninput(this.value.setStartAngle(start.getValue()));
     this.startAngle.onchange = (start) => this.onchange(this.value.setStartAngle(start.getValue()));
     this.angle.oninput = (a) => this.oninput(this.value.setAngle(a));
@@ -2381,6 +2400,36 @@ class Z4Lighting {
    * darkening
    */
   static  DARKENED = new Z4Lighting();
+
+  constructor() {
+  }
+}
+/**
+ * The progression of a color
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4Progression {
+
+  /**
+   * The spatial progression
+   */
+  static  SPATIAL = new Z4Progression();
+
+  /**
+   * The temporal progression
+   */
+  static  TEMPORAL = new Z4Progression();
+
+  /**
+   * The progression relative to a path
+   */
+  static  RELATIVE_TO_PATH = new Z4Progression();
+
+  /**
+   * The random progression
+   */
+  static  RANDOM = new Z4Progression();
 
   constructor() {
   }
@@ -3053,7 +3102,7 @@ class Z4ArrowPainter extends Z4Painter {
     let x = point.getIntensity() * point.getZ4Vector().getModule();
     context.save();
     context.lineWidth = 1;
-    context.strokeStyle = this.getColor("black");
+    context.strokeStyle = this.getColor(document.body.classList.contains("z4-dark") ? "white" : "black");
     context.beginPath();
     context.arc(0, 0, 2, 0, Z4Math.TWO_PI);
     context.stroke();
@@ -3219,23 +3268,20 @@ class Z4PointIterator {
  */
 class Z4Stamper extends Z4PointIterator {
 
-   intensity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(15).setSign(Z4Sign.POSITIVE));
+   intensity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(15).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
-   multiplicity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(1).setSign(Z4Sign.POSITIVE));
+   multiplicity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(1).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
-   push = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE));
+   push = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
    currentMultiplicityCounter = 0;
 
    currentMultiplicityTotal = 0;
 
-   currentPush = 0.0;
-
    draw(action, x, y) {
     if (action === Z4Action.START) {
       this.currentMultiplicityCounter = 0;
       this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
-      this.currentPush = this.push.next();
       this.P["x"] = x;
       this.P["y"] = y;
       this.hasNext = true;
@@ -3252,8 +3298,9 @@ class Z4Stamper extends Z4PointIterator {
       this.currentMultiplicityCounter++;
       this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
       let angle = this.rotation.next(0);
-      if (this.currentPush) {
-        let pushed = Z4Vector.fromVector(this.P["x"], this.P["y"], this.currentPush, angle);
+      let currentPush = this.push.next();
+      if (currentPush) {
+        let pushed = Z4Vector.fromVector(this.P["x"], this.P["y"], currentPush, angle);
         this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), 1, angle));
       } else {
         this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P["x"], this.P["y"], 1, angle));
@@ -3281,17 +3328,16 @@ class Z4Stamper extends Z4PointIterator {
    drawDemo(context, width, height) {
     let arrowPainter = new Z4ArrowPainter();
     let gradientColor = new Z4GradientColor();
+    let fillStyle = document.body.classList.contains("z4-dark") ? "white" : "black";
     this.initDraw(width, height).forEach(point => {
       this.draw(Z4Action.START, point["x"], point["y"]);
-      if (this.currentPush && !this.currentMultiplicityCounter) {
-        context.save();
-        context.lineWidth = 1;
-        context.fillStyle = Z4Color.getFillStyle("black");
-        context.beginPath();
-        context.arc(this.P["x"], this.P["y"], 2, 0, Z4Math.TWO_PI);
-        context.fill();
-        context.restore();
-      }
+      context.save();
+      context.lineWidth = 1;
+      context.fillStyle = Z4Color.getFillStyle(fillStyle);
+      context.beginPath();
+      context.arc(this.P["x"], this.P["y"], 2, 0, Z4Math.TWO_PI);
+      context.fill();
+      context.restore();
       let next = null;
       while ((next = this.next()) !== null) {
         let vector = next.getZ4Vector();
@@ -3306,8 +3352,8 @@ class Z4Stamper extends Z4PointIterator {
 
    initDraw(w, h) {
     let array = new Array();
-    for (let x = 50; x <= w - 50; x += 100) {
-      for (let y = 50; y <= h - 50; y += 100) {
+    for (let x = 50; x <= w; x += 100) {
+      for (let y = 50; y <= h; y += 100) {
         let point = new Object();
         point["x"] = x;
         point["y"] = y;
@@ -3384,91 +3430,94 @@ class Z4Stamper extends Z4PointIterator {
  */
 class Z4StamperUI extends Z4AbstractComponentWithValueUI {
 
-  // private final $Canvas canvas = ($Canvas) this.querySelector(".canvas");
-  // private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
-  // 
-  // private final Z4FancifulValueUI intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setComponentsVisible(true, true, false).setSignsVisible(false, true, true).appendToElement(this.querySelector(".stamper-container"));
-  // private final Z4RotationUI rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".stamper-container"));
-  // private final Z4FancifulValueUI multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setComponentsVisible(true, true, false).setSignsVisible(false, true, true).setConstantRange(1, 999999999).appendToElement(this.querySelector(".stamper-container"));
-  // private final Z4FancifulValueUI push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setComponentsVisible(true, true, false).setSignsVisible(false, true, true).appendToElement(this.querySelector(".stamper-container"));
+   canvas = this.querySelector(".stamper-canvas");
+
+   ctx = this.canvas.getContext("2d");
+
+   intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setRandomLengthRange(1, 100).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
+
+   rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".stamper-container"));
+
+   multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50).setRandomRange(0, 50).setRandomLengthRange(1, 100).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
+
+   push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setRandomLengthRange(1, 100).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
+
+   resizeObserver = new ResizeObserver(() => this.drawCanvas());
+
+   mutationObserver = new MutationObserver(() => this.drawCanvas());
+
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/iterator/ui/Z4StamperUI.html");
-
-  static  WIDTH = 500;
-
-  static  HEIGHT = 300;
 
   /**
    * Creates a Z4StamperUI
    */
   constructor() {
     super(Z4StamperUI.UI);
-    // this.initDevicePixelRatio(() -> this.drawCanvas());
-    // 
-    // this.canvas.style.border = "1px dashed gray";
-    // this.canvas.style.width = Z4StamperUI.WIDTH + "px";
-    // this.canvas.style.height = Z4StamperUI.HEIGHT + "px";
-    // 
-    // this.intensity.oninput = (v) -> this.set(v, null, null, null, false);
-    // this.intensity.onchange = (v) -> this.set(v, null, null, null, true);
-    // this.rotation.oninput = (v) -> this.set(null, v, null, null, false);
-    // this.rotation.onchange = (v) -> this.set(null, v, null, null, true);
-    // this.multiplicity.oninput = (v) -> this.set(null, null, v, null, false);
-    // this.multiplicity.onchange = (v) -> this.set(null, null, v, null, true);
-    // this.push.oninput = (v) -> this.set(null, null, null, v, false);
-    // this.push.onchange = (v) -> this.set(null, null, null, v, true);
+    this.initDevicePixelRatio(() => this.drawCanvas());
+    this.resizeObserver.observe(this.canvas);
+    let config = new Object();
+    config["attributeFilter"] = new Array("class");
+    this.mutationObserver.observe(document.body, config);
+    this.intensity.oninput = (v) => this.set(v, null, null, null, false);
+    this.intensity.onchange = (v) => this.set(v, null, null, null, true);
+    this.rotation.oninput = (v) => this.set(null, v, null, null, false);
+    this.rotation.onchange = (v) => this.set(null, v, null, null, true);
+    this.multiplicity.oninput = (v) => this.set(null, null, v, null, false);
+    this.multiplicity.onchange = (v) => this.set(null, null, v, null, true);
+    this.push.oninput = (v) => this.set(null, null, null, v, false);
+    this.push.onchange = (v) => this.set(null, null, null, v, true);
     this.setValue(new Z4Stamper());
   }
 
    set(intensity, rotation, multiplicity, push, onchange) {
-    // if ($exists(intensity)) {
-    // this.value.setIntensity(intensity);
-    // }
-    // if ($exists(rotation)) {
-    // this.value.setRotation(rotation);
-    // }
-    // if ($exists(multiplicity)) {
-    // this.value.setMultiplicity(multiplicity);
-    // }
-    // if ($exists(push)) {
-    // this.value.setMultiplicity(push);
-    // }
-    // 
-    // this.drawCanvas();
-    // 
-    // if (onchange) {
-    // this.onchange.$apply(this.value);
-    // } else {
-    // this.oninput.$apply(this.value);
-    // }
+    if (intensity) {
+      this.value.setIntensity(intensity);
+    }
+    if (rotation) {
+      this.value.setRotation(rotation);
+    }
+    if (multiplicity) {
+      this.value.setMultiplicity(multiplicity);
+    }
+    if (push) {
+      this.value.setPush(push);
+    }
+    this.drawCanvas();
+    if (onchange) {
+      this.onchange(this.value);
+    } else {
+      this.oninput(this.value);
+    }
   }
 
    setValue(value) {
     this.value = value;
-    // this.intensity.setValue(this.value.getIntensity());
-    // this.rotation.setValue(this.value.getRotation());
-    // this.multiplicity.setValue(this.value.getMultiplicity());
-    // this.push.setValue(this.value.getPush());
+    this.intensity.setValue(this.value.getIntensity());
+    this.rotation.setValue(this.value.getRotation());
+    this.multiplicity.setValue(this.value.getMultiplicity());
+    this.push.setValue(this.value.getPush());
     this.drawCanvas();
     return this;
   }
 
    drawCanvas() {
-    // this.canvas.width = Math.floor(Z4StamperUI.WIDTH * window.devicePixelRatio);
-    // this.canvas.height = Math.floor(Z4StamperUI.HEIGHT * window.devicePixelRatio);
-    // 
-    // $OffscreenCanvas offscreen = new $OffscreenCanvas(Z4StamperUI.WIDTH, Z4StamperUI.HEIGHT);
-    // $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
-    // this.value.drawDemo(offscreenCtx, Z4StamperUI.WIDTH, Z4StamperUI.HEIGHT);
-    // 
-    // this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    // 
-    // this.ctx.save();
-    // this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    // this.ctx.drawImage(offscreen, 0, 0);
-    // this.ctx.restore();
+    if (this.canvas.clientWidth) {
+      this.canvas.width = Math.floor(this.canvas.clientWidth * window.devicePixelRatio);
+      this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
+      let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
+      let offscreenCtx = offscreen.getContext("2d");
+      this.value.drawDemo(offscreenCtx, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.save();
+      this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      this.ctx.drawImage(offscreen, 0, 0);
+      this.ctx.restore();
+    }
   }
 
    dispose() {
     this.disposeDevicePixelRatio();
+    this.resizeObserver.unobserve(this.canvas);
+    this.mutationObserver.unobserve(document.body);
   }
 }

@@ -93,7 +93,7 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
     Z4ArrowPainter arrowPainter = new Z4ArrowPainter();
     Z4GradientColor gradientColor = new Z4GradientColor();
 
-    String fillStyle = document.body.classList.contains("z4-dark") ? "white" : "black"
+    String fillStyle = document.body.classList.contains("z4-dark") ? "white" : "black";
     this.initDraw(width, height).forEach(point -> {
       this.draw(Z4Action.START, point.$get("x"), point.$get("y"));
 
