@@ -1,12 +1,4 @@
 /* GENERAL */
-/*
-.with-borded-children-vertical > div {
-  border: solid rgba(128,128,128,0.5) 1px;
-  border-radius: 10px;
-  padding-left: 5px;
-  padding-right: 5px;
-  width: 100%;
-}*/
 
 /* SIGNED VALUE */
 .signed-value-input-group.sign-not-visible .signed-value-sign-button {
