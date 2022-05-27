@@ -15,6 +15,7 @@ import giada.pizzapazza.math.Z4Vector;
 import giada.pizzapazza.painter.Z4ArrowPainter;
 import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.parseInt;
 import simulation.js.$Object;
 
@@ -31,14 +32,12 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
 
   private int currentMultiplicityCounter;
   private int currentMultiplicityTotal;
-  private double currentPush;
 
   @Override
   public boolean draw(Z4Action action, double x, double y) {
     if (action == Z4Action.START) {
       this.currentMultiplicityCounter = 0;
       this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
-      this.currentPush = this.push.next();
 
       this.P.$set("x", x);
       this.P.$set("y", y);
@@ -59,8 +58,9 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
       this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
 
       double angle = this.rotation.next(0);
-      if ($exists(this.currentPush)) {
-        Z4Vector pushed = Z4Vector.fromVector(this.P.$get("x"), this.P.$get("y"), this.currentPush, angle);
+      double currentPush = this.push.next();
+      if ($exists(currentPush)) {
+        Z4Vector pushed = Z4Vector.fromVector(this.P.$get("x"), this.P.$get("y"), currentPush, angle);
         this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), 1, angle));
       } else {
         this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P.$get("x"), this.P.$get("y"), 1, angle));
@@ -93,18 +93,17 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
     Z4ArrowPainter arrowPainter = new Z4ArrowPainter();
     Z4GradientColor gradientColor = new Z4GradientColor();
 
+    String fillStyle = document.body.classList.contains("z4-dark") ? "white" : "black"
     this.initDraw(width, height).forEach(point -> {
       this.draw(Z4Action.START, point.$get("x"), point.$get("y"));
 
-      if ($exists(this.currentPush) && !$exists(this.currentMultiplicityCounter)) {
-        context.save();
-        context.lineWidth = 1;
-        context.fillStyle = Z4Color.$getFillStyle("black");
-        context.beginPath();
-        context.arc(this.P.$get("x"), this.P.$get("y"), 2, 0, Z4Math.TWO_PI);
-        context.fill();
-        context.restore();
-      }
+      context.save();
+      context.lineWidth = 1;
+      context.fillStyle = Z4Color.$getFillStyle(fillStyle);
+      context.beginPath();
+      context.arc(this.P.$get("x"), this.P.$get("y"), 2, 0, Z4Math.TWO_PI);
+      context.fill();
+      context.restore();
 
       Z4Point next;
       while ((next = this.next()) != null) {

@@ -134,9 +134,8 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
       }
       return null;
     };
-        
+
     this.setValue(new Z4SignedValue());
-    this.configureRange();
   }
 
   private Object startSpin() {
@@ -173,7 +172,7 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
     if ($exists(sign)) {
       this.isApplyMinusPlus = true;
       this.applyMinusPlus.$apply(sign, 1.0);
-    } else {
+    } else if (this.isApplyMinusPlus) {
       this.isApplyMinusPlus = false;
       clearTimeout(this.timeoutID);
       this.onchange.$apply(this.value);
@@ -292,7 +291,7 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
     this.querySelector(".signed-value-compact-dropdown-menu li").appendChild(this.querySelector(".signed-value-range-plus"));
 
     this.querySelector(".signed-value-sign-button img").setAttribute("width", "20");
-    
+
     return this;
   }
 
@@ -382,6 +381,10 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
       this.querySelector(".signed-value-sign-button img").setAttribute("src", this.querySelector(".signed-value-sign-dropdown-menu img[data-icon='random']").getAttribute("src"));
     } else {
       this.querySelector(".signed-value-sign-button img").setAttribute("src", this.querySelector(".signed-value-sign-dropdown-menu img[data-icon='alternate']").getAttribute("src"));
+    }
+
+    if (this.radioRange.checked) {
+      this.configureRange();
     }
 
     return (T) this;

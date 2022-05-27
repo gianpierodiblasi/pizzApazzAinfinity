@@ -53,11 +53,12 @@ class Z4RotationUI extends Z4AbstractComponentWithValueUI {
       return null;
     };
     this.startAngle.querySelector(".signed-value-value-label").style.display = "block";
-    let element = this.startAngle.querySelector(".signed-value-compact-button span");
-    element.innerHTML = element.innerText;
+    let button = this.startAngle.querySelector(".signed-value-compact-button");
+    let span = document.createElement("span");
     for (let i = 0; i < 10; i++) {
-      element.innerHTML += "&nbsp";
+      span.innerHTML += "&nbsp";
     }
+    button.appendChild(span);
     this.startAngle.oninput = (start) => this.oninput(this.value.setStartAngle(start.getValue()));
     this.startAngle.onchange = (start) => this.onchange(this.value.setStartAngle(start.getValue()));
     this.angle.oninput = (a) => this.oninput(this.value.setAngle(a));

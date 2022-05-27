@@ -118,7 +118,6 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
       return null;
     };
     this.setValue(new Z4SignedValue());
-    this.configureRange();
   }
 
    startSpin() {
@@ -154,7 +153,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
     if (sign) {
       this.isApplyMinusPlus = true;
       this.applyMinusPlus(sign, 1.0);
-    } else {
+    } else if (this.isApplyMinusPlus) {
       this.isApplyMinusPlus = false;
       clearTimeout(this.timeoutID);
       this.onchange(this.value);
@@ -347,6 +346,9 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
       this.querySelector(".signed-value-sign-button img").setAttribute("src", this.querySelector(".signed-value-sign-dropdown-menu img[data-icon='random']").getAttribute("src"));
     } else {
       this.querySelector(".signed-value-sign-button img").setAttribute("src", this.querySelector(".signed-value-sign-dropdown-menu img[data-icon='alternate']").getAttribute("src"));
+    }
+    if (this.radioRange.checked) {
+      this.configureRange();
     }
     return this;
   }

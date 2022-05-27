@@ -9,15 +9,17 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
 
    ctx = this.canvas.getContext("2d");
 
-   intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
+   intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setRandomLengthRange(1, 100).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
 
    rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".stamper-container"));
 
-   multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setSignsVisible(false).setConstantRange(1, 1000000000).appendToElement(this.querySelector(".stamper-container-first-row"));
+   multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50).setRandomRange(0, 50).setRandomLengthRange(1, 100).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
 
-   push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
+   push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setRandomLengthRange(1, 100).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
 
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
+
+   mutationObserver = new MutationObserver(() => this.drawCanvas());
 
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/iterator/ui/Z4StamperUI.html");
 
@@ -28,6 +30,9 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
     super(Z4StamperUI.UI);
     this.initDevicePixelRatio(() => this.drawCanvas());
     this.resizeObserver.observe(this.canvas);
+    let config = new Object();
+    config["attributeFilter"] = new Array("class");
+    this.mutationObserver.observe(document.body, config);
     this.intensity.oninput = (v) => this.set(v, null, null, null, false);
     this.intensity.onchange = (v) => this.set(v, null, null, null, true);
     this.rotation.oninput = (v) => this.set(null, v, null, null, false);
@@ -50,7 +55,7 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
       this.value.setMultiplicity(multiplicity);
     }
     if (push) {
-      this.value.setMultiplicity(push);
+      this.value.setPush(push);
     }
     this.drawCanvas();
     if (onchange) {
@@ -87,5 +92,7 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
 
    dispose() {
     this.disposeDevicePixelRatio();
+    this.resizeObserver.unobserve(this.canvas);
+    this.mutationObserver.unobserve(document.body);
   }
 }

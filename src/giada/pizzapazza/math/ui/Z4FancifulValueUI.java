@@ -72,7 +72,9 @@ public class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI<Z4Fanciful
    */
   public Z4FancifulValueUI setSignsVisible(boolean visible) {
     this.constantUI.setSignVisible(visible);
+    this.constantUI.setValueLabel(visible ? "CONSTANT" : "CONSTANT_SHORT", false, true);
     this.randomUI.setSignVisible(!this.uniformCheck.checked && visible);
+    this.randomUI.setValueLabel(!this.uniformCheck.checked && visible ? "RANDOM" : "RANDOM_SHORT", false, true);
 
     return this;
   }

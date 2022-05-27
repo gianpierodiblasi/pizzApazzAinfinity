@@ -9,6 +9,7 @@ import giada.pizzapazza.setting.Z4HTMLFactory;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.ui.Z4AbstractComponentWithValueUI;
 import simulation.dom.$HTMLElement;
+import static simulation.js.$Globals.document;
 
 /**
  * The component to edit a rotation
@@ -68,17 +69,18 @@ public class Z4RotationUI extends Z4AbstractComponentWithValueUI<Z4Rotation> {
     };
 
     this.startAngle.querySelector(".signed-value-value-label").style.display = "block";
-    HTMLElement element = this.startAngle.querySelector(".signed-value-compact-button span");
-    element.innerHTML = element.innerText;
+    HTMLElement button = this.startAngle.querySelector(".signed-value-compact-button");
+    HTMLElement span = document.createElement("span");
     for (int i = 0; i < 10; i++) {
-      element.innerHTML += "&nbsp";
+      span.innerHTML += "&nbsp";
     }
-    
+    button.appendChild(span);
+
     this.startAngle.oninput = (start) -> this.oninput.$apply(this.value.setStartAngle(start.getValue()));
     this.startAngle.onchange = (start) -> this.onchange.$apply(this.value.setStartAngle(start.getValue()));
     this.angle.oninput = (a) -> this.oninput.$apply(this.value.setAngle(a));
     this.angle.onchange = (a) -> this.onchange.$apply(this.value.setAngle(a));
-    
+
     this.setValue(Z4Rotation.fixed());
   }
 

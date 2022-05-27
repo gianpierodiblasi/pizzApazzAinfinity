@@ -15,13 +15,10 @@ class Z4Stamper extends Z4PointIterator {
 
    currentMultiplicityTotal = 0;
 
-   currentPush = 0.0;
-
    draw(action, x, y) {
     if (action === Z4Action.START) {
       this.currentMultiplicityCounter = 0;
       this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
-      this.currentPush = this.push.next();
       this.P["x"] = x;
       this.P["y"] = y;
       this.hasNext = true;
@@ -38,8 +35,9 @@ class Z4Stamper extends Z4PointIterator {
       this.currentMultiplicityCounter++;
       this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
       let angle = this.rotation.next(0);
-      if (this.currentPush) {
-        let pushed = Z4Vector.fromVector(this.P["x"], this.P["y"], this.currentPush, angle);
+      let currentPush = this.push.next();
+      if (currentPush) {
+        let pushed = Z4Vector.fromVector(this.P["x"], this.P["y"], currentPush, angle);
         this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), 1, angle));
       } else {
         this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P["x"], this.P["y"], 1, angle));
@@ -67,17 +65,16 @@ class Z4Stamper extends Z4PointIterator {
    drawDemo(context, width, height) {
     let arrowPainter = new Z4ArrowPainter();
     let gradientColor = new Z4GradientColor();
+    let isDark = document.body.classList.contains("z4-dark");
     this.initDraw(width, height).forEach(point => {
       this.draw(Z4Action.START, point["x"], point["y"]);
-      if (this.currentPush && !this.currentMultiplicityCounter) {
-        context.save();
-        context.lineWidth = 1;
-        context.fillStyle = Z4Color.getFillStyle("black");
-        context.beginPath();
-        context.arc(this.P["x"], this.P["y"], 2, 0, Z4Math.TWO_PI);
-        context.fill();
-        context.restore();
-      }
+      context.save();
+      context.lineWidth = 1;
+      context.fillStyle = Z4Color.getFillStyle(isDark ? "white" : "black");
+      context.beginPath();
+      context.arc(this.P["x"], this.P["y"], 2, 0, Z4Math.TWO_PI);
+      context.fill();
+      context.restore();
       let next = null;
       while ((next = this.next()) !== null) {
         let vector = next.getZ4Vector();

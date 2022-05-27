@@ -27,7 +27,7 @@ class Z4SignedRandomValue {
     this.value = value;
     this.type = type;
     this.length = length;
-    this.step = 0;
+    this.step = 1;
     this.prevRandom = Math.random();
     this.controlRandom = 1;
     this.nextRandom = Math.random();
@@ -153,8 +153,8 @@ class Z4SignedRandomValue {
       default:
         return this.value * Math.random();
       case 1:
-        if (this.step === this.length) {
-          this.step = 0;
+        if (this.step >= this.length) {
+          this.step = 1;
           this.prevRandom = this.nextRandom;
           this.controlRandom = this.controlRandom === 1 ? 0 : 1;
           this.nextRandom = Math.random();
@@ -164,8 +164,8 @@ class Z4SignedRandomValue {
         }
         return this.value * this.bezierCurve.get(this.step / this.length).y;
       case 2:
-        if (this.step === this.length) {
-          this.step = 0;
+        if (this.step >= this.length) {
+          this.step = 1;
           this.prevRandom = this.nextRandom;
           this.nextRandom = Math.random();
         } else {
@@ -173,8 +173,8 @@ class Z4SignedRandomValue {
         }
         return this.value * ((this.nextRandom - this.prevRandom) * this.step / this.length + this.prevRandom);
       case 3:
-        if (this.step === this.length) {
-          this.step = 0;
+        if (this.step >= this.length) {
+          this.step = 1;
           this.prevRandom = Math.random();
         } else {
           this.step++;

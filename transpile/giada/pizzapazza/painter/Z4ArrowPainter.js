@@ -12,7 +12,7 @@ class Z4ArrowPainter extends Z4Painter {
     let x = point.getIntensity() * point.getZ4Vector().getModule();
     context.save();
     context.lineWidth = 1;
-    context.strokeStyle = this.getColor("black");
+    context.strokeStyle = this.getColor(document.body.classList.contains("z4-dark") ? "white" : "black");
     context.beginPath();
     context.arc(0, 0, 2, 0, Z4Math.TWO_PI);
     context.stroke();

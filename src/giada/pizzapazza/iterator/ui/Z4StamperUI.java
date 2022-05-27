@@ -1,5 +1,6 @@
 package giada.pizzapazza.iterator.ui;
 
+import def.js.Array;
 import giada.pizzapazza.iterator.Z4Stamper;
 import giada.pizzapazza.math.Z4FancifulValue;
 import giada.pizzapazza.math.Z4Rotation;
@@ -11,7 +12,10 @@ import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$OffscreenCanvas;
 import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.window;
+import simulation.js.$MutationObserver;
+import simulation.js.$Object;
 import simulation.js.$ResizeObserver;
 
 /**
@@ -24,12 +28,13 @@ public class Z4StamperUI extends Z4AbstractComponentWithValueUI<Z4Stamper> {
   private final $Canvas canvas = ($Canvas) this.querySelector(".stamper-canvas");
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
 
-  private final Z4FancifulValueUI intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
+  private final Z4FancifulValueUI intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setRandomLengthRange(1, 100).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
   private final Z4RotationUI rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".stamper-container"));
-  private final Z4FancifulValueUI multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setSignsVisible(false).setConstantRange(1, 1000000000).appendToElement(this.querySelector(".stamper-container-first-row"));
-  private final Z4FancifulValueUI push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
+  private final Z4FancifulValueUI multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50).setRandomRange(0, 50).setRandomLengthRange(1, 100).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
+  private final Z4FancifulValueUI push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setRandomLengthRange(1, 100).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
 
   private final $ResizeObserver resizeObserver = new $ResizeObserver(() -> this.drawCanvas());
+  private final $MutationObserver mutationObserver = new $MutationObserver(() -> this.drawCanvas());
 
   private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/iterator/ui/Z4StamperUI.html");
 
@@ -41,6 +46,10 @@ public class Z4StamperUI extends Z4AbstractComponentWithValueUI<Z4Stamper> {
 
     this.initDevicePixelRatio(() -> this.drawCanvas());
     this.resizeObserver.observe(this.canvas);
+
+    $Object config = new $Object();
+    config.$set("attributeFilter", new Array<>("class"));
+    this.mutationObserver.observe(document.body, config);
 
     this.intensity.oninput = (v) -> this.set(v, null, null, null, false);
     this.intensity.onchange = (v) -> this.set(v, null, null, null, true);
@@ -64,7 +73,7 @@ public class Z4StamperUI extends Z4AbstractComponentWithValueUI<Z4Stamper> {
       this.value.setMultiplicity(multiplicity);
     }
     if ($exists(push)) {
-      this.value.setMultiplicity(push);
+      this.value.setPush(push);
     }
 
     this.drawCanvas();
@@ -111,5 +120,7 @@ public class Z4StamperUI extends Z4AbstractComponentWithValueUI<Z4Stamper> {
   @Override
   public void dispose() {
     this.disposeDevicePixelRatio();
+    this.resizeObserver.unobserve(this.canvas);
+    this.mutationObserver.unobserve(document.body);
   }
 }

@@ -29,7 +29,7 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
       let img = imgs.item(i);
       img.setAttribute("src", Z4SignedRandomValueUI.PATH + "z4randomvalue_" + img.getAttribute("data-icon") + ".svg");
     }
-    let buttons = this.querySelectorAll(".signed-random-value-type-dropdown-menu button");
+    let buttons = this.querySelectorAll(".signed-random-value-type-dropdown-menu button[class='dropdown-item']");
     for (let i = 0; i < buttons.length; i++) {
       let button = buttons.item(i);
       button.onclick = (event) => {
