@@ -136,6 +136,7 @@
         <concat destfile="${build.dir}/bundle-${version}.html" append="true">${line.separator}</concat>
       </sequential>
     </for>
+    <replace file="${build.dir}/bundle-${version}.html" token="&gt;&lt;" value="&gt; &lt;"/>
   </target>
   
   <target name="build_js" depends="version, js_source_list_comma">
