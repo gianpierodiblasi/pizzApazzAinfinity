@@ -20,16 +20,16 @@ class Z4RotationUI extends Z4AbstractComponentWithValueUI {
    */
   constructor() {
     super(Z4RotationUI.UI);
-    let imgs = this.querySelectorAll(".rotation-type-dropdown-menu img");
+    let imgs = this.querySelectorAll(".rotation-type-dropdown-menu img[data-type='rotation']");
     for (let i = 0; i < imgs.length; i++) {
       let img = imgs.item(i);
       img.setAttribute("src", Z4RotationUI.PATH + "z4rotation_" + img.getAttribute("data-icon") + ".svg");
     }
-    let buttons = this.querySelectorAll(".rotation-type-dropdown-menu .dropdown-item");
+    let buttons = this.querySelectorAll(".rotation-type-dropdown-menu button[data-type='rotation']");
     for (let i = 0; i < buttons.length; i++) {
       let button = buttons.item(i);
       button.onclick = (event) => {
-        this.querySelector(".rotation-type-button img").setAttribute("src", button.querySelector("img").getAttribute("src"));
+        this.querySelector(".rotation-type-button img[data-type='rotation']").setAttribute("src", button.querySelector("img").getAttribute("src"));
         switch(button.getAttribute("data-value")) {
           case "fixed":
             this.value = Z4Rotation.fixed();

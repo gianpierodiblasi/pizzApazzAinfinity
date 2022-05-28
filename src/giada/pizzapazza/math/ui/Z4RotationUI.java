@@ -31,17 +31,17 @@ public class Z4RotationUI extends Z4AbstractComponentWithValueUI<Z4Rotation> {
   public Z4RotationUI() {
     super(Z4RotationUI.UI);
 
-    NodeList imgs = this.querySelectorAll(".rotation-type-dropdown-menu img");
+    NodeList imgs = this.querySelectorAll(".rotation-type-dropdown-menu img[data-type='rotation']");
     for (int i = 0; i < imgs.length; i++) {
       HTMLElement img = (HTMLElement) imgs.item(i);
       img.setAttribute("src", Z4RotationUI.PATH + "z4rotation_" + img.getAttribute("data-icon") + ".svg");
     }
 
-    NodeList buttons = this.querySelectorAll(".rotation-type-dropdown-menu .dropdown-item");
+    NodeList buttons = this.querySelectorAll(".rotation-type-dropdown-menu button[data-type='rotation']");
     for (int i = 0; i < buttons.length; i++) {
       HTMLElement button = (HTMLElement) buttons.item(i);
       button.onclick = (event) -> {
-        this.querySelector(".rotation-type-button img").setAttribute("src", button.querySelector("img").getAttribute("src"));
+        this.querySelector(".rotation-type-button img[data-type='rotation']").setAttribute("src", button.querySelector("img").getAttribute("src"));
 
         switch (button.getAttribute("data-value")) {
           case "fixed":

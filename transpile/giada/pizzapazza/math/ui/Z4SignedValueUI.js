@@ -38,16 +38,16 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
    */
   constructor() {
     super(Z4SignedValueUI.UI);
-    let imgs = this.querySelectorAll(".signed-value-sign-dropdown-menu img");
+    let imgs = this.querySelectorAll(".signed-value-sign-dropdown-menu img[data-type='signed-value']");
     for (let i = 0; i < imgs.length; i++) {
       let img = imgs.item(i);
       img.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".svg");
     }
-    let buttons = this.querySelectorAll(".signed-value-sign-dropdown-menu button");
+    let buttons = this.querySelectorAll(".signed-value-sign-dropdown-menu button[data-type='signed-value']");
     for (let i = 0; i < buttons.length; i++) {
       let button = buttons.item(i);
       button.onclick = (event) => {
-        this.querySelector(".signed-value-sign-button img").setAttribute("src", button.querySelector("img").getAttribute("src"));
+        this.querySelector(".signed-value-sign-button img[data-type='signed-value']").setAttribute("src", button.querySelector("img").getAttribute("src"));
         switch(button.getAttribute("data-value")) {
           case "positive":
             this.onchange(this.value.setSign(Z4Sign.POSITIVE));

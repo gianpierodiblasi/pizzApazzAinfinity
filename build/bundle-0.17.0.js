@@ -1664,16 +1664,16 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
    */
   constructor() {
     super(Z4SignedValueUI.UI);
-    let imgs = this.querySelectorAll(".signed-value-sign-dropdown-menu img");
+    let imgs = this.querySelectorAll(".signed-value-sign-dropdown-menu img[data-type='signed-value']");
     for (let i = 0; i < imgs.length; i++) {
       let img = imgs.item(i);
       img.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".svg");
     }
-    let buttons = this.querySelectorAll(".signed-value-sign-dropdown-menu button");
+    let buttons = this.querySelectorAll(".signed-value-sign-dropdown-menu button[data-type='signed-value']");
     for (let i = 0; i < buttons.length; i++) {
       let button = buttons.item(i);
       button.onclick = (event) => {
-        this.querySelector(".signed-value-sign-button img").setAttribute("src", button.querySelector("img").getAttribute("src"));
+        this.querySelector(".signed-value-sign-button img[data-type='signed-value']").setAttribute("src", button.querySelector("img").getAttribute("src"));
         switch(button.getAttribute("data-value")) {
           case "positive":
             this.onchange(this.value.setSign(Z4Sign.POSITIVE));
@@ -2008,16 +2008,16 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
     this.signedValueUI.onchange = (signedValue) => this.onchange(this.value.setValue(signedValue.getValue()).setSign(signedValue.getSign()));
     this.signedValueUI.querySelector(".signed-value-input-group").appendChild(this.querySelector(".signed-random-value-type-button"));
     this.signedValueUI.querySelector(".signed-value-input-group").appendChild(this.querySelector(".signed-random-value-type-dropdown-menu"));
-    let imgs = this.querySelectorAll(".signed-random-value-type-dropdown-menu img");
+    let imgs = this.querySelectorAll(".signed-random-value-type-dropdown-menu img[data-type='signed-random-value']");
     for (let i = 0; i < imgs.length; i++) {
       let img = imgs.item(i);
       img.setAttribute("src", Z4SignedRandomValueUI.PATH + "z4randomvalue_" + img.getAttribute("data-icon") + ".svg");
     }
-    let buttons = this.querySelectorAll(".signed-random-value-type-dropdown-menu button[class='dropdown-item']");
+    let buttons = this.querySelectorAll(".signed-random-value-type-dropdown-menu button[data-type='signed-random-value']");
     for (let i = 0; i < buttons.length; i++) {
       let button = buttons.item(i);
       button.onclick = (event) => {
-        this.querySelector(".signed-random-value-type-button img").setAttribute("src", button.querySelector("img").getAttribute("src"));
+        this.querySelector(".signed-random-value-type-button img[data-type='signed-random-value']").setAttribute("src", button.querySelector("img").getAttribute("src"));
         let signedValue = this.signedValueUI.getValue();
         switch(button.getAttribute("data-value")) {
           case "classic":
@@ -2285,16 +2285,16 @@ class Z4RotationUI extends Z4AbstractComponentWithValueUI {
    */
   constructor() {
     super(Z4RotationUI.UI);
-    let imgs = this.querySelectorAll(".rotation-type-dropdown-menu img");
+    let imgs = this.querySelectorAll(".rotation-type-dropdown-menu img[data-type='rotation']");
     for (let i = 0; i < imgs.length; i++) {
       let img = imgs.item(i);
       img.setAttribute("src", Z4RotationUI.PATH + "z4rotation_" + img.getAttribute("data-icon") + ".svg");
     }
-    let buttons = this.querySelectorAll(".rotation-type-dropdown-menu .dropdown-item");
+    let buttons = this.querySelectorAll(".rotation-type-dropdown-menu button[data-type='rotation']");
     for (let i = 0; i < buttons.length; i++) {
       let button = buttons.item(i);
       button.onclick = (event) => {
-        this.querySelector(".rotation-type-button img").setAttribute("src", button.querySelector("img").getAttribute("src"));
+        this.querySelector(".rotation-type-button img[data-type='rotation']").setAttribute("src", button.querySelector("img").getAttribute("src"));
         switch(button.getAttribute("data-value")) {
           case "fixed":
             this.value = Z4Rotation.fixed();

@@ -36,17 +36,17 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
     this.signedValueUI.querySelector(".signed-value-input-group").appendChild(this.querySelector(".signed-random-value-type-button"));
     this.signedValueUI.querySelector(".signed-value-input-group").appendChild(this.querySelector(".signed-random-value-type-dropdown-menu"));
 
-    NodeList imgs = this.querySelectorAll(".signed-random-value-type-dropdown-menu img");
+    NodeList imgs = this.querySelectorAll(".signed-random-value-type-dropdown-menu img[data-type='signed-random-value']");
     for (int i = 0; i < imgs.length; i++) {
       HTMLElement img = (HTMLElement) imgs.item(i);
       img.setAttribute("src", Z4SignedRandomValueUI.PATH + "z4randomvalue_" + img.getAttribute("data-icon") + ".svg");
     }
 
-    NodeList buttons = this.querySelectorAll(".signed-random-value-type-dropdown-menu button[class='dropdown-item']");
+    NodeList buttons = this.querySelectorAll(".signed-random-value-type-dropdown-menu button[data-type='signed-random-value']");
     for (int i = 0; i < buttons.length; i++) {
       HTMLElement button = (HTMLElement) buttons.item(i);
       button.onclick = (event) -> {
-        this.querySelector(".signed-random-value-type-button img").setAttribute("src", button.querySelector("img").getAttribute("src"));
+        this.querySelector(".signed-random-value-type-button img[data-type='signed-random-value']").setAttribute("src", button.querySelector("img").getAttribute("src"));
 
         Z4SignedValue signedValue = this.signedValueUI.getValue();
         switch (button.getAttribute("data-value")) {
