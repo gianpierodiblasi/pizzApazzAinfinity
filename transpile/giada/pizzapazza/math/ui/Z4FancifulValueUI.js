@@ -52,6 +52,18 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
   }
 
   /**
+   * Enables this Z4FancifulValueUI
+   *
+   * @param b true to enable this Z4FancifulValueUI, false otherwise
+   * @return This Z4FancifulValueUI
+   */
+   setEnabled(b) {
+    this.constantUI.setEnabled(b);
+    this.randomUI.setEnabled(b);
+    return this;
+  }
+
+  /**
    * Sets the visibility of the signs
    *
    * @param visible true to make the signs visible, false otherwise

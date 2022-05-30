@@ -10,6 +10,7 @@ import giada.pizzapazza.setting.Z4HTMLFactory;
 import giada.pizzapazza.ui.Z4AbstractComponentWithValueUI;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
+import simulation.dom.$HTMLElement;
 import simulation.dom.$OffscreenCanvas;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.document;
@@ -29,9 +30,17 @@ public class Z4TracerUI extends Z4AbstractComponentWithValueUI<Z4Tracer> {
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
 
   private final Z4FancifulValueUI intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
-  private final Z4RotationUI rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".tracer-container"));
+  private final Z4RotationUI rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).insertBeforeElement(this.querySelector(".tracer-container-second-row"));
   private final Z4FancifulValueUI multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
   private final Z4FancifulValueUI push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
+
+  private final Z4FancifulValueUI attack = new Z4FancifulValueUI().setValueLabel("ATTACK", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-second-row"));
+  private final Z4FancifulValueUI sustain = new Z4FancifulValueUI().setValueLabel("SUSTAIN", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-second-row"));
+  private final Z4FancifulValueUI release = new Z4FancifulValueUI().setValueLabel("RELEASE", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-second-row"));
+
+  private final $HTMLElement endlessSustainCheck = this.querySelector(".tracer-endless-sustain-check");
+
+  private final Z4FancifulValueUI step = new Z4FancifulValueUI().setValueLabel("STEP", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-third-row"));
 
   private final $ResizeObserver resizeObserver = new $ResizeObserver(() -> this.drawCanvas());
   private final $MutationObserver mutationObserver = new $MutationObserver(() -> this.drawCanvas());
@@ -51,18 +60,41 @@ public class Z4TracerUI extends Z4AbstractComponentWithValueUI<Z4Tracer> {
     config.$set("attributeFilter", new Array<>("class"));
     this.mutationObserver.observe(document.body, config);
 
-    this.intensity.oninput = (v) -> this.set(v, null, null, null, false);
-    this.intensity.onchange = (v) -> this.set(v, null, null, null, true);
-    this.rotation.oninput = (v) -> this.set(null, v, null, null, false);
-    this.rotation.onchange = (v) -> this.set(null, v, null, null, true);
-    this.multiplicity.oninput = (v) -> this.set(null, null, v, null, false);
-    this.multiplicity.onchange = (v) -> this.set(null, null, v, null, true);
-    this.push.oninput = (v) -> this.set(null, null, null, v, false);
-    this.push.onchange = (v) -> this.set(null, null, null, v, true);
+    this.intensity.oninput = (v) -> this.set(v, null, null, null, null, false);
+    this.intensity.onchange = (v) -> this.set(v, null, null, null, null, true);
+    this.rotation.oninput = (v) -> this.set(null, v, null, null, null, false);
+    this.rotation.onchange = (v) -> this.set(null, v, null, null, null, true);
+    this.multiplicity.oninput = (v) -> this.set(null, null, v, null, null, false);
+    this.multiplicity.onchange = (v) -> this.set(null, null, v, null, null, true);
+    this.push.oninput = (v) -> this.set(null, null, null, v, null, false);
+    this.push.onchange = (v) -> this.set(null, null, null, v, null, true);
+    this.step.oninput = (v) -> this.set(null, null, null, null, v, false);
+    this.step.onchange = (v) -> this.set(null, null, null, null, v, true);
+
+    this.attack.oninput = (v) -> this.setEnvelope(false);
+    this.attack.onchange = (v) -> this.setEnvelope(true);
+    this.sustain.oninput = (v) -> this.setEnvelope(false);
+    this.sustain.onchange = (v) -> this.setEnvelope(true);
+    this.release.oninput = (v) -> this.setEnvelope(false);
+    this.release.onchange = (v) -> this.setEnvelope(true);
+
+    this.endlessSustainCheck.id = this.getUniqueID();
+    this.querySelector(".tracer-endless-sustain-label").setAttribute("for", this.endlessSustainCheck.id);
+    this.endlessSustainCheck.onchange = (event) -> {
+      this.sustain.setEnabled(!this.endlessSustainCheck.checked);
+      this.release.setEnabled(!this.endlessSustainCheck.checked);
+
+      this.value.setEnvelope(this.attack.getValue(), this.sustain.getValue(), this.release.getValue(), this.endlessSustainCheck.checked);
+      this.drawCanvas();
+      this.onchange.$apply(this.value);
+      return null;
+    };
+    this.sustain.querySelector(".fanciful-value-label").parentElement.insertBefore(this.querySelector(".tracer-endless-sustain-switch"), this.sustain.querySelector(".fanciful-value-container"));
+
     this.setValue(new Z4Tracer());
   }
 
-  private void set(Z4FancifulValue intensity, Z4Rotation rotation, Z4FancifulValue multiplicity, Z4FancifulValue push, boolean onchange) {
+  private void set(Z4FancifulValue intensity, Z4Rotation rotation, Z4FancifulValue multiplicity, Z4FancifulValue push, Z4FancifulValue step, boolean onchange) {
     if ($exists(intensity)) {
       this.value.setIntensity(intensity);
     }
@@ -75,6 +107,21 @@ public class Z4TracerUI extends Z4AbstractComponentWithValueUI<Z4Tracer> {
     if ($exists(push)) {
       this.value.setPush(push);
     }
+    if ($exists(step)) {
+      this.value.setStep(step);
+    }
+
+    this.drawCanvas();
+
+    if (onchange) {
+      this.onchange.$apply(this.value);
+    } else {
+      this.oninput.$apply(this.value);
+    }
+  }
+
+  private void setEnvelope(boolean onchange) {
+    this.value.setEnvelope(this.attack.getValue(), this.sustain.getValue(), this.release.getValue(), this.endlessSustainCheck.checked);
 
     this.drawCanvas();
 
@@ -94,6 +141,16 @@ public class Z4TracerUI extends Z4AbstractComponentWithValueUI<Z4Tracer> {
     this.rotation.setValue(this.value.getRotation());
     this.multiplicity.setValue(this.value.getMultiplicity());
     this.push.setValue(this.value.getPush());
+    this.step.setValue(this.value.getStep());
+
+    this.attack.setValue(this.value.getAttack());
+    this.sustain.setValue(this.value.getSustain());
+    this.release.setValue(this.value.getRelease());
+    this.endlessSustainCheck.checked = this.value.isEndlessSustain();
+
+    this.sustain.setEnabled(!this.endlessSustainCheck.checked);
+    this.release.setEnabled(!this.endlessSustainCheck.checked);
+
     this.drawCanvas();
 
     return (T) this;

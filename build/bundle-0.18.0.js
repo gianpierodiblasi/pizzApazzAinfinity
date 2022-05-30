@@ -1354,6 +1354,108 @@ class Z4Rotation {
   }
 }
 /**
+ * The geometric shapes
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4Shape2D {
+
+  /**
+   * A circular geometric shape
+   */
+  static  CIRCLE = new Z4Shape2D(0);
+
+  /**
+   * A triangular geometric shape
+   */
+  static  TRIANGLE = new Z4Shape2D(3);
+
+  /**
+   * A squared geometric shape
+   */
+  static  SQUARE = new Z4Shape2D(-4);
+
+  /**
+   * A diamond geometric shape
+   */
+  static  DIAMOND = new Z4Shape2D(4);
+
+  /**
+   * A five sided geometric shape
+   */
+  static  PENTAGON = new Z4Shape2D(5);
+
+  /**
+   * A six sided geometric shape
+   */
+  static  HEXAGON = new Z4Shape2D(6);
+
+  /**
+   * A seven sided geometric shape
+   */
+  static  SEPTAGON = new Z4Shape2D(7);
+
+  /**
+   * A eight sided geometric shape
+   */
+  static  HEPTAGON = new Z4Shape2D(8);
+
+  /**
+   * A star geometric shape
+   */
+  static  STAR = new Z4Shape2D(-5);
+
+   path = new Path2D();
+
+  constructor(sides) {
+    let size = 1;
+    let halfSize = 0.5;
+    let val = 0.0;
+    let angle = 0.0;
+    switch(sides) {
+      case 0:
+        this.path.arc(0, 0, halfSize, 0, Z4Math.TWO_PI);
+        break;
+      case -4:
+        this.path.rect(-halfSize, -halfSize, size, size);
+        break;
+      case -5:
+        val = -Z4Math.HALF_PI;
+        angle = Z4Math.TWO_PI / 5;
+        let halfSizeGold = halfSize / Z4Math.SQUARE_GOLD_SECTION;
+        this.path.moveTo(Math.cos(val) * halfSize, Math.sin(val) * halfSize);
+        val = angle * 3 + Z4Math.HALF_PI;
+        this.path.lineTo(Math.cos(val) * halfSizeGold, Math.sin(val) * halfSizeGold);
+        for (let i = 1; i < 5; i++) {
+          val = angle * i - Z4Math.HALF_PI;
+          this.path.lineTo(Math.cos(val) * halfSize, Math.sin(val) * halfSize);
+          val = angle * (i + 3) + Z4Math.HALF_PI;
+          this.path.lineTo(Math.cos(val) * halfSizeGold, Math.sin(val) * halfSizeGold);
+        }
+        break;
+      default:
+        val = -Z4Math.HALF_PI;
+        angle = Z4Math.TWO_PI / sides;
+        this.path.moveTo(Math.cos(val) * halfSize, Math.sin(val) * halfSize);
+        for (let i = 1; i < sides; i++) {
+          val = angle * i - Z4Math.HALF_PI;
+          this.path.lineTo(Math.cos(val) * halfSize, Math.sin(val) * halfSize);
+        }
+        break;
+    }
+    this.path.closePath();
+  }
+
+  /**
+   * Returns the path
+   *
+   * @return The path
+   */
+   getPath() {
+    return path;
+  }
+}
+/**
  * The vector
  *
  * @author gianpiero.di.blasi
@@ -1477,6 +1579,180 @@ class Z4Vector {
     let x2 = vector.x - vector.x0;
     let y2 = vector.y - vector.y0;
     return Math.atan2(x1 * y2 - y1 * x2, x1 * x2 + y1 * y2) >= 0 ? Z4Sign.POSITIVE : Z4Sign.NEGATIVE;
+  }
+}
+/**
+ * The path for a Z4Tracer
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4TracerPath {
+
+   surplus = 0.0;
+
+   step = 0.0;
+
+   x1 = 0.0;
+
+   y1 = 0.0;
+
+   x2 = 0.0;
+
+   y2 = 0.0;
+
+   x3 = 0.0;
+
+   y3 = 0.0;
+
+   bezierCurve = null;
+
+   bezierCurveLength = 0.0;
+
+   length = 0.0;
+
+   position = 0.0;
+
+  /**
+   * Creates a Z4TracerPath from a line
+   *
+   * @param x1 The x-axis coordinate of the start point
+   * @param y1 The y-axis coordinate of the start point
+   * @param x2 The x-axis coordinate of the end point
+   * @param y2 The y-axis coordinate of the end point
+   * @param surplus The surplus from a previous path
+   * @param step The step
+   * @return The Z4TracerPath
+   */
+  static  fromLine(x1, y1, x2, y2, surplus, step) {
+    let path = new Z4TracerPath();
+    path.x1 = x1;
+    path.y1 = y1;
+    path.x2 = x2;
+    path.y2 = y2;
+    return path.init(surplus, step);
+  }
+
+  /**
+   * Creates a Z4TracerPath from a quadric Bezier curve followed by a line
+   *
+   * @param x1 The x-axis coordinate of the start point of the curve
+   * @param y1 The y-axis coordinate of the start point of the curve
+   * @param ctrlx The x-axis coordinate of the control point of the curve
+   * @param ctrly The y-axis coordinate of the control point of the curve
+   * @param x2 The x-axis coordinate of the end point of the curve (the start
+   * point of the line)
+   * @param y2 The y-axis coordinate of the end point of the curve (the start
+   * point of the line)
+   * @param x3 The x-axis coordinate of the end point of the line
+   * @param y3 The y-axis coordinate of the end point of the line
+   * @param surplus The surplus from a previous path
+   * @param step The step
+   * @return The Z4TracerPath
+   */
+  static  fromQuadAndLine(x1, y1, ctrlx, ctrly, x2, y2, x3, y3, surplus, step) {
+    let path = new Z4TracerPath();
+    path.bezierCurve = new Bezier(x1, y1, ctrlx, ctrly, x2, y2);
+    path.bezierCurveLength = path.bezierCurve.length();
+    path.x2 = x2;
+    path.y2 = y2;
+    path.x3 = x3;
+    path.y3 = y3;
+    return path.init(surplus, step);
+  }
+
+   init(surplus, step) {
+    this.surplus = surplus;
+    this.step = step;
+    this.length = this.bezierCurve ? this.bezierCurveLength + Z4Math.distance(this.x2, this.y2, this.x3, this.y3) : Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
+    this.position = surplus;
+    return this;
+  }
+
+  /**
+   * Checks if this path has more points
+   *
+   * @return true if this path has more points, false otherwise
+   */
+   hasNext() {
+    return this.length > this.position;
+  }
+
+  /**
+   * Returns the next tangent vector
+   *
+   * @return The next tangent vector, null if the path has no more points
+   */
+   next() {
+    if (!this.hasNext()) {
+      return null;
+    } else if (!this.bezierCurve) {
+      let t = this.position / this.length;
+      let x = (this.x2 - this.x1) * t + this.x1;
+      let y = (this.y2 - this.y1) * t + this.y1;
+      this.position += this.step;
+      return Z4Vector.fromVector(x, y, 1, Z4Math.atan(this.x1, this.y1, this.x2, this.y2));
+    } else if (this.position < this.bezierCurveLength) {
+      let t = this.position / this.bezierCurveLength;
+      let point = this.bezierCurve.get(t);
+      let derivative = this.bezierCurve.derivative(t);
+      this.position += this.step;
+      return Z4Vector.fromPoints(point.x, point.y, point.x + derivative.x, point.y + derivative.y);
+    } else {
+      let t = (this.position - this.bezierCurveLength) / (this.length - this.bezierCurveLength);
+      let x = (this.x3 - this.x2) * t + this.x2;
+      let y = (this.y3 - this.y2) * t + this.y2;
+      this.position += this.step;
+      return Z4Vector.fromVector(x, y, 1, Z4Math.atan(this.x2, this.y2, this.x3, this.y3));
+    }
+  }
+
+  /**
+   * Returns the tangent vector in a position
+   *
+   * @param position The position (in the range [0,1])
+   * @return The tangent vector
+   */
+   getTangentAt(position) {
+    // let tangent = this._gPath.tangentAt(position);
+    // return Z4Vector.fromPoints(tangent.start.x, tangent.start.y, tangent.end.x, tangent.end.y);
+    return null;
+  }
+
+  /**
+   * Restarts the path
+   *
+   * @return This Z4TracerPath
+   */
+   restart() {
+    this.position = this.surplus;
+    return this;
+  }
+
+  /**
+   * Returns the path length
+   *
+   * @return The path length
+   */
+   getLength() {
+    return this.length;
+  }
+
+  /**
+   * Returns the new surplus for the next path
+   *
+   * @return The new surplus for the next path
+   */
+   getNewSurplus() {
+    return this.position - this.length;
+  }
+
+  /**
+   * Returns the number of available points in the path
+   *
+   * @return The number of available points in the path
+   */
+   getPointCount() {
+    return parseInt((this.length - this.surplus) / this.step);
   }
 }
 /**
@@ -1604,6 +1880,18 @@ class Z4Point {
   }
 
   /**
+   * Sets if this point has to be used to draw bounds or real objects
+   *
+   * @param drawBounds true if this point has to be used to draw bounds, false
+   * otherwise
+   * @return This Z4Point
+   */
+   setDrawBounds(drawBounds) {
+    this.drawBounds = drawBounds;
+    return this;
+  }
+
+  /**
    * Sets the side
    *
    * @param side the side
@@ -1611,6 +1899,18 @@ class Z4Point {
    */
    setSide(side) {
     this.side = side;
+    return this;
+  }
+
+  /**
+   * Sets if the vector module of this point has to be used has size
+   *
+   * @param useVectorModuleAsSize true if the vector module of this point has to
+   * be used has size, false otherwise
+   * @return This Z4Point
+   */
+   setUseVectorModuleAsSize(useVectorModuleAsSize) {
+    this.useVectorModuleAsSize = useVectorModuleAsSize;
     return this;
   }
 
@@ -1654,6 +1954,8 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
    min = 0;
 
    max = 1000000000;
+
+   tenMultiplier = true;
 
   static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
 
@@ -1808,11 +2110,14 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
    *
    * @param min The minumum (positive) value
    * @param max The maximum (positive) value (1000000000 to show infinite)
+   * @param tenMultiplier true to use the ten multiplier for range spinner,
+   * false otherwise
    * @return This Z4SignedValueUI
    */
-   setRange(min, max) {
+   setRange(min, max, tenMultiplier) {
     this.min = min;
     this.max = max;
+    this.tenMultiplier = tenMultiplier;
     this.querySelector(".signed-value-range-span").innerHTML = "[" + min + "," + (max === 1000000000 ? "&infin;" : max) + "]";
     if (this.radioRange.checked) {
       this.configureRange();
@@ -1827,55 +2132,63 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
   }
 
    getRangedValue(limit) {
-    let count = 0;
-    let counter = this.min;
-    while (counter < limit) {
-      count++;
-      if (counter < 100) {
-        counter++;
-      } else if (counter < 1000) {
-        counter += 10;
-      } else if (counter < 10000) {
-        counter += 100;
-      } else if (counter < 100000) {
-        counter += 1000;
-      } else if (counter < 1000000) {
-        counter += 10000;
-      } else if (counter < 10000000) {
-        counter += 100000;
-      } else if (counter < 100000000) {
-        counter += 1000000;
-      } else if (counter < 1000000000) {
-        counter += 10000000;
+    if (this.tenMultiplier) {
+      let count = 0;
+      let counter = this.min;
+      while (counter < limit) {
+        count++;
+        if (counter < 100) {
+          counter++;
+        } else if (counter < 1000) {
+          counter += 10;
+        } else if (counter < 10000) {
+          counter += 100;
+        } else if (counter < 100000) {
+          counter += 1000;
+        } else if (counter < 1000000) {
+          counter += 10000;
+        } else if (counter < 10000000) {
+          counter += 100000;
+        } else if (counter < 100000000) {
+          counter += 1000000;
+        } else if (counter < 1000000000) {
+          counter += 10000000;
+        }
       }
+      return count;
+    } else {
+      return limit;
     }
-    return count;
   }
 
    getReversedValue(limit) {
-    let count = 0;
-    let counter = this.min;
-    while (count < limit) {
-      count++;
-      if (counter < 100) {
-        counter++;
-      } else if (counter < 1000) {
-        counter += 10;
-      } else if (counter < 10000) {
-        counter += 100;
-      } else if (counter < 100000) {
-        counter += 1000;
-      } else if (counter < 1000000) {
-        counter += 10000;
-      } else if (counter < 10000000) {
-        counter += 100000;
-      } else if (counter < 100000000) {
-        counter += 1000000;
-      } else if (counter < 1000000000) {
-        counter += 10000000;
+    if (this.tenMultiplier) {
+      let count = 0;
+      let counter = this.min;
+      while (count < limit) {
+        count++;
+        if (counter < 100) {
+          counter++;
+        } else if (counter < 1000) {
+          counter += 10;
+        } else if (counter < 10000) {
+          counter += 100;
+        } else if (counter < 100000) {
+          counter += 1000;
+        } else if (counter < 1000000) {
+          counter += 10000;
+        } else if (counter < 10000000) {
+          counter += 100000;
+        } else if (counter < 100000000) {
+          counter += 1000000;
+        } else if (counter < 1000000000) {
+          counter += 10000000;
+        }
       }
+      return counter;
+    } else {
+      return limit;
     }
-    return counter;
   }
 
   /**
@@ -1991,7 +2304,7 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
 
    signedValueUI = new Z4SignedValueUI().appendToComponent(this);
 
-   lengthUI = new Z4SignedValueUI().setSignVisible(false).setValueLabel("LENGTH", false, false).setRange(1, 1000000000).appendToElement(this.querySelector(".signed-random-value-length-ui"));
+   lengthUI = new Z4SignedValueUI().setSignVisible(false).setValueLabel("LENGTH", false, false).setRange(1, 1000000000, true).appendToElement(this.querySelector(".signed-random-value-length-ui"));
 
    lengthBadge = this.querySelector(".signed-random-value-length-badge");
 
@@ -2062,14 +2375,32 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
   }
 
   /**
+   * Enables this Z4SignedRandomValueUI
+   *
+   * @param b true to enable this Z4SignedRandomValueUI, false otherwise
+   * @return This Z4SignedRandomValueUI
+   */
+   setEnabled(b) {
+    this.signedValueUI.setEnabled(b);
+    if (b) {
+      this.querySelector(".signed-random-value-type-button").removeAttribute("disabled");
+    } else {
+      this.querySelector(".signed-random-value-type-button").setAttribute("disabled", "disabled");
+    }
+    return this;
+  }
+
+  /**
    * Sets the range of this Z4SignedRandomValueUI
    *
    * @param min The minumum (positive) value
    * @param max The maximum (positive) value (999999999 to show infinite)
+   * @param tenMultiplier true to use the ten multiplier for range spinner,
+   * false otherwise
    * @return This Z4SignedRandomValueUI
    */
-   setRange(min, max) {
-    this.signedValueUI.setRange(min, max);
+   setRange(min, max, tenMultiplier) {
+    this.signedValueUI.setRange(min, max, tenMultiplier);
     return this;
   }
 
@@ -2089,10 +2420,12 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
    *
    * @param min The minumum (positive) value
    * @param max The maximum (positive) value (999999999 to show infinite)
+   * @param tenMultiplier true to use the ten multiplier for range spinner,
+   * false otherwise
    * @return This Z4SignedRandomValueUI
    */
-   setLengthRange(min, max) {
-    this.lengthUI.setRange(min, max);
+   setLengthRange(min, max, tenMultiplier) {
+    this.lengthUI.setRange(min, max, tenMultiplier);
     return this;
   }
 
@@ -2185,6 +2518,18 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
   }
 
   /**
+   * Enables this Z4FancifulValueUI
+   *
+   * @param b true to enable this Z4FancifulValueUI, false otherwise
+   * @return This Z4FancifulValueUI
+   */
+   setEnabled(b) {
+    this.constantUI.setEnabled(b);
+    this.randomUI.setEnabled(b);
+    return this;
+  }
+
+  /**
    * Sets the visibility of the signs
    *
    * @param visible true to make the signs visible, false otherwise
@@ -2203,10 +2548,12 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
    *
    * @param min The minumum value
    * @param max The maximum value
+   * @param tenMultiplier true to use the ten multiplier for range spinner,
+   * false otherwise
    * @return This Z4FancifulValueUI
    */
-   setConstantRange(min, max) {
-    this.constantUI.setRange(min, max);
+   setConstantRange(min, max, tenMultiplier) {
+    this.constantUI.setRange(min, max, tenMultiplier);
     return this;
   }
 
@@ -2215,10 +2562,12 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
    *
    * @param min The minumum value
    * @param max The maximum value
+   * @param tenMultiplier true to use the ten multiplier for range spinner,
+   * false otherwise
    * @return This Z4FancifulValueUI
    */
-   setRandomRange(min, max) {
-    this.randomUI.setRange(min, max);
+   setRandomRange(min, max, tenMultiplier) {
+    this.randomUI.setRange(min, max, tenMultiplier);
     return this;
   }
 
@@ -2227,10 +2576,12 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
    *
    * @param min The minumum value
    * @param max The maximum value
+   * @param tenMultiplier true to use the ten multiplier for range spinner,
+   * false otherwise
    * @return This Z4FancifulValueUI
    */
-   setRandomLengthRange(min, max) {
-    this.randomUI.setLengthRange(min, max);
+   setRandomLengthRange(min, max, tenMultiplier) {
+    this.randomUI.setLengthRange(min, max, tenMultiplier);
     return this;
   }
 
@@ -2270,11 +2621,11 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
  */
 class Z4RotationUI extends Z4AbstractComponentWithValueUI {
 
-   startAngle = new Z4SignedValueUI().setCompact().setRange(0, 360).setValueLabel("START_ANGLE", true, false).setSignVisible(false).insertBeforeElement(this.querySelector(".rotation-type-button"));
+   startAngle = new Z4SignedValueUI().setCompact().setRange(0, 360, false).setValueLabel("START_ANGLE", true, false).setSignVisible(false).insertBeforeElement(this.querySelector(".rotation-type-button"));
 
    delayedCheck = this.querySelector(".rotation-delayed-check");
 
-   angle = new Z4FancifulValueUI().setValueLabel("ANGLE", true, false).setConstantRange(0, 180).setRandomRange(0, 180).insertBeforeElement(this.querySelector(".rotation-type-button"));
+   angle = new Z4FancifulValueUI().setValueLabel("ANGLE", true, false).setConstantRange(0, 180, false).setRandomRange(0, 180, false).insertBeforeElement(this.querySelector(".rotation-type-button"));
 
   static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
 
@@ -2336,10 +2687,12 @@ class Z4RotationUI extends Z4AbstractComponentWithValueUI {
    *
    * @param min The minumum value
    * @param max The maximum value
+   * @param tenMultiplier true to use the ten multiplier for range spinner,
+   * false otherwise
    * @return This Z4RotationUI
    */
-   setRandomLengthRange(min, max) {
-    this.angle.setRandomLengthRange(min, max);
+   setRandomLengthRange(min, max, tenMultiplier) {
+    this.angle.setRandomLengthRange(min, max, tenMultiplier);
     return this;
   }
 
@@ -3153,6 +3506,183 @@ class Z4ArrowPainter extends Z4Painter {
   }
 }
 /**
+ * The classic painter
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4ClassicPainter extends Z4Painter {
+
+   draw(context, point, gradientColor) {
+    return this;
+  }
+}
+/**
+ * The painter of 2D shapes
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4Shape2DPainter extends Z4Painter {
+
+   shape = Z4Shape2D.SQUARE;
+
+   size = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(50).setSign(Z4Sign.POSITIVE));
+
+   shadowShiftX = new Z4FancifulValue();
+
+   shadowShiftY = new Z4FancifulValue();
+
+   shadowColor = new Z4Color(255, 0, 0, 0);
+
+   borderSize = new Z4FancifulValue();
+
+   borderColor = new Z4Color(255, 0, 0, 0);
+
+  /**
+   * Sets the shape
+   *
+   * @param shape The shape
+   * @return This Z4Shape2DPainter
+   */
+   setShape2D(shape) {
+    this.shape = shape;
+    return this;
+  }
+
+  /**
+   * Sets the size
+   *
+   * @param size The size
+   * @return This Z4Shape2DPainter
+   */
+   setSize(size) {
+    this.size = size;
+    return this;
+  }
+
+  /**
+   * Returns the size
+   *
+   * @return The size
+   */
+   getSize() {
+    return this.size;
+  }
+
+  /**
+   * Sets the shadow
+   *
+   * @param shadowShiftX The X shadow shift
+   * @param shadowShiftY The Y shadow shift
+   * @param shadowColor The shadow color
+   * @return This Z4Shape2DPainter
+   */
+   setShadow(shadowShiftX, shadowShiftY, shadowColor) {
+    this.shadowShiftX = shadowShiftX;
+    this.shadowShiftY = shadowShiftY;
+    this.shadowColor = shadowColor;
+    return this;
+  }
+
+  /**
+   * Sets the border
+   *
+   * @param borderSize The border size
+   * @param borderColor The border color
+   * @return This Z4Shape2DPainter
+   */
+   setBorder(borderSize, borderColor) {
+    this.borderSize = borderSize;
+    this.borderColor = borderColor;
+    return this;
+  }
+
+   draw(context, point, gradientColor) {
+    if (point.isDrawBounds()) {
+      this.drawBounds(context, point.getIntensity() * (point.isUseVectorModuleAsSize() ? 2 * point.getZ4Vector().getModule() : this.size.getConstant().getValue()));
+    } else {
+      let currentSize = point.getIntensity() * (point.isUseVectorModuleAsSize() ? 2 * point.getZ4Vector().getModule() : this.size.next());
+      if (currentSize <= 0) {
+        return this;
+      }
+      let currentShadowShiftX = point.getIntensity() * this.shadowShiftX.next();
+      let currentShadowShiftY = point.getIntensity() * this.shadowShiftY.next();
+      let currentBorderSize = point.getIntensity() * this.borderSize.next();
+      if (currentShadowShiftX || currentShadowShiftY) {
+        context.save();
+        context.translate(currentShadowShiftX, currentShadowShiftY);
+        this.drawPath(context, currentSize + (currentBorderSize > 0 ? currentBorderSize : 0), this.shadowColor);
+        context.restore();
+      }
+      if (currentBorderSize) {
+        context.save();
+        this.drawPath(context, currentSize + currentBorderSize, this.borderColor);
+        context.restore();
+      }
+      let position = point.getColorPosition();
+      let lighting = point.getLighting();
+      if (position === -1) {
+        for (let scale = currentSize; scale > 0; scale--) {
+          this.drawPath(context, scale, gradientColor.getZ4ColorAt(scale / currentSize, true, true));
+        }
+      } else if (lighting === Z4Lighting.NONE) {
+        this.drawPath(context, currentSize, gradientColor.getZ4ColorAt(position, true, true));
+      } else {
+        let newColor = gradientColor.getZ4ColorAt(position, true, true);
+        for (let scale = currentSize; scale > 0; scale--) {
+          if (lighting === Z4Lighting.LIGTHED) {
+            this.drawPath(context, scale, Z4Color.fromARGB(newColor.getARGB()).lighted(scale / currentSize));
+          } else if (lighting === Z4Lighting.DARKENED) {
+            this.drawPath(context, scale, Z4Color.fromARGB(newColor.getARGB()).darkened(scale / currentSize));
+          }
+        }
+      }
+    }
+    return this;
+  }
+
+   drawPath(context, scale, color) {
+    context.save();
+    context.scale(scale, scale);
+    context.fillStyle = color.getHEX();
+    context.fill(this.shape.getPath());
+    context.restore();
+  }
+
+   drawBounds(context, scale) {
+    context.save();
+    context.scale(scale, scale);
+    context.lineWidth = 1 / scale;
+    context.strokeStyle = this.getColor("gray");
+    context.stroke(this.shape.getPath());
+    context.strokeStyle = this.getColor("black");
+    context.translate(1 / scale, 1 / scale);
+    context.stroke(this.shape.getPath());
+    context.restore();
+  }
+}
+/**
+ * The painter of natural figures
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4NaturalFigurePainter extends Z4Painter {
+
+   draw(context, point, gradientColor) {
+    return this;
+  }
+}
+/**
+ * The painter of centered figures
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4CenteredFigurePainter extends Z4Painter {
+
+   draw(context, point, gradientColor) {
+    return this;
+  }
+}
+/**
  * The drawing action of a Z4PointIterator
  *
  * @author gianpiero.di.blasi
@@ -3264,6 +3794,15 @@ class Z4PointIterator {
     return this.rotation;
   }
 
+   nextColorPosition() {
+    let colorPosition = this.z4Point.getColorPosition();
+    colorPosition = colorPosition === -1 ? 0 : colorPosition + this.temporalStepProgression;
+    if (colorPosition > 1) {
+      colorPosition -= 1;
+    }
+    this.z4Point.setColorPosition(colorPosition);
+  }
+
   /**
    * Performs a drawing action
    *
@@ -3342,12 +3881,7 @@ class Z4Stamper extends Z4PointIterator {
       this.rotation.nextSide(this.z4Point, null);
       if (this.progression === Z4Progression.TEMPORAL) {
         this.z4Point.setLighting(this.lighting);
-        let colorPosition = this.z4Point.getColorPosition();
-        colorPosition = colorPosition === -1 ? 0 : colorPosition + this.temporalStepProgression;
-        if (colorPosition > 1) {
-          colorPosition -= 1;
-        }
-        this.z4Point.setColorPosition(colorPosition);
+        this.nextColorPosition();
       } else if (this.progression === Z4Progression.SPATIAL) {
         this.z4Point.setLighting(Z4Lighting.NONE);
         this.z4Point.setColorPosition(-1);
@@ -3458,7 +3992,475 @@ class Z4Stamper extends Z4PointIterator {
   }
 }
 /**
- * The component to edit a numeric value
+ * The tracer
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4Tracer extends Z4PointIterator {
+
+   intensity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(15).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
+
+   multiplicity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(1).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
+
+   push = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
+
+   attack = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
+
+   sustain = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
+
+   release = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
+
+   endlessSustain = true;
+
+   step = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(10).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
+
+   path = null;
+
+   before = new Object();
+
+   envelopeA = 0.0;
+
+   envelopeS = 0.0;
+
+   envelopeR = 0.0;
+
+   envelopeAS = 0.0;
+
+   envelopeASR = 0.0;
+
+   envelopePosition = 0.0;
+
+   envelopeStep = 0.0;
+
+   clones = new Array();
+
+   clonePos = 0;
+
+   fromClones = false;
+
+   surplus = 0.0;
+
+   connect = false;
+
+   currentVector = null;
+
+   currentMultiplicityCounter = 0;
+
+   currentMultiplicityTotal = 0;
+
+  /**
+   * Creates a Z4Tracer
+   */
+  constructor() {
+    super();
+    this.before["x"] = 0;
+    this.before["y"] = 0;
+  }
+
+   draw(action, x, y) {
+    if (action === Z4Action.START) {
+      this.P["x"] = x;
+      this.P["y"] = y;
+      this.hasNext = false;
+      this.path = null;
+      this.envelopeA = this.attack.next();
+      this.envelopeS = this.sustain.next();
+      this.envelopeR = this.release.next();
+      this.envelopeAS = this.envelopeA + this.envelopeS;
+      this.envelopeASR = this.envelopeA + this.envelopeS + this.envelopeR;
+      this.envelopePosition = 0;
+      this.envelopeStep = this.step.next();
+      this.clones = new Array();
+      this.fromClones = false;
+      this.surplus = 0;
+      this.connect = false;
+      return false;
+    } else if (action === Z4Action.CONTINUE) {
+      this.currentMultiplicityCounter = 0;
+      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
+      let distance = Z4Math.distance(this.P["x"], this.P["y"], x, y);
+      if (distance >= 10) {
+        let angle = Z4Math.atan(this.P["x"], this.P["y"], x, y);
+        let vector = Z4Vector.fromVector(this.P["x"], this.P["y"], 2 * distance / 3, angle);
+        let end = new Object();
+        end["x"] = vector.getX();
+        end["y"] = vector.getY();
+        if (this.connect) {
+          vector = Z4Vector.fromVector(this.P["x"], this.P["y"], distance / 3, angle);
+          this.path = Z4TracerPath.fromQuadAndLine(this.before["x"], this.before["y"], this.P["x"], this.P["y"], vector.getX(), vector.getY(), end["x"], end["y"], this.surplus, this.envelopeStep);
+        } else {
+          this.path = Z4TracerPath.fromLine(this.P["x"], this.P["y"], vector.getX(), vector.getY(), this.surplus, this.envelopeStep);
+        }
+        this.connect = true;
+        this.before = end;
+        this.P["x"] = x;
+        this.P["y"] = y;
+        this.hasNext = this.path.hasNext();
+        if (!this.hasNext) {
+          this.surplus = this.path.getNewSurplus();
+        }
+      } else {
+        this.hasNext = false;
+      }
+      return true;
+    } else if (action === Z4Action.STOP) {
+      this.fromClones = true;
+      this.clonePos = 0;
+      this.hasNext = this.clonePos < this.clones.length;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+   next() {
+    if (!this.hasNext) {
+      return null;
+    } else if (this.fromClones) {
+      let clone = this.clones[this.clonePos];
+      clone.setColorPosition(this.clonePos / this.clones.length);
+      clone.setDrawBounds(false);
+      this.clonePos++;
+      this.hasNext = this.clonePos < this.clones.length;
+      return clone;
+    } else {
+      if (!this.currentMultiplicityCounter) {
+        this.currentVector = this.path.next();
+      }
+      let angle = this.rotation.next(this.currentVector.getPhase());
+      let currentPush = this.push.next();
+      if (currentPush) {
+        let pushed = Z4Vector.fromVector(this.currentVector.getX0(), this.currentVector.getY0(), currentPush, angle);
+        this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), 1, angle));
+      } else {
+        this.z4Point.setZ4Vector(Z4Vector.fromVector(this.currentVector.getX0(), this.currentVector.getY0(), 1, angle));
+      }
+      this.z4Point.setIntensity(this.nextEnvelope() * this.intensity.next());
+      this.rotation.nextSide(this.z4Point, this.currentVector);
+      if (this.progression === Z4Progression.TEMPORAL) {
+        this.z4Point.setLighting(this.lighting);
+        this.z4Point.setDrawBounds(false);
+        this.nextColorPosition();
+      } else if (this.progression === Z4Progression.SPATIAL) {
+        this.z4Point.setLighting(Z4Lighting.NONE);
+        this.z4Point.setDrawBounds(false);
+        this.z4Point.setColorPosition(-1);
+      } else if (this.progression === Z4Progression.RELATIVE_TO_PATH) {
+        this.z4Point.setLighting(this.lighting);
+        this.z4Point.setDrawBounds(true);
+        this.z4Point.setColorPosition(-1);
+      } else if (this.progression === Z4Progression.RANDOM) {
+        this.z4Point.setLighting(this.lighting);
+        this.z4Point.setDrawBounds(false);
+        this.z4Point.setColorPosition(Math.random());
+      }
+      if (this.z4Point.isDrawBounds() && this.z4Point.getIntensity() > 0) {
+        this.clones.push(this.z4Point.clone());
+      }
+      this.currentMultiplicityCounter++;
+      if (this.currentMultiplicityCounter >= this.currentMultiplicityTotal) {
+        this.currentMultiplicityCounter = 0;
+        this.hasNext = this.path.hasNext();
+        if (!this.hasNext) {
+          this.surplus = this.path.getNewSurplus();
+        }
+      }
+      return this.z4Point;
+    }
+  }
+
+   nextEnvelope() {
+    if (this.envelopePosition < this.envelopeA) {
+      this.envelopePosition++;
+      return this.envelopePosition / this.envelopeA;
+    } else if (this.envelopePosition < this.envelopeAS || this.endlessSustain) {
+      this.envelopePosition++;
+      return 1;
+    } else if (this.envelopePosition < this.envelopeASR) {
+      this.envelopePosition++;
+      return 1 - (this.envelopePosition - this.envelopeAS) / this.envelopeR;
+    } else {
+      return 0;
+    }
+  }
+
+   drawDemo(context, width, height) {
+    let arrowPainter = new Z4ArrowPainter();
+    let gradientColor = new Z4GradientColor();
+    let fillStyle = document.body.classList.contains("z4-dark") ? "white" : "black";
+    let bezier = width > height ? new Bezier(width / 10, height / 3, width / 2, 3 * height / 2, width / 2, -height / 2, 9 * width / 10, height / 2) : new Bezier(width / 3, 9 * height / 10, 3 * width / 2, height / 2, -width / 2, height / 2, width / 2, height / 10);
+    let p = bezier.get(0);
+    this.draw(Z4Action.START, p.x, p.y);
+    for (let s = 0.1; s < 1; s += 0.1) {
+      p = bezier.get(s);
+      this.draw(Z4Action.CONTINUE, p.x, p.y);
+      this.drawDemoPoint(context, p, arrowPainter, gradientColor, fillStyle);
+    }
+    p = bezier.get(1);
+    this.draw(Z4Action.CONTINUE, p.x, p.y);
+    this.drawDemoPoint(context, p, arrowPainter, gradientColor, fillStyle);
+    this.draw(Z4Action.STOP, p.x, p.y);
+    this.drawDemoPoint(context, p, arrowPainter, gradientColor, fillStyle);
+  }
+
+   drawDemoPoint(context, p, arrowPainter, gradientColor, fillStyle) {
+    context.save();
+    context.lineWidth = 1;
+    context.fillStyle = Z4Color.getFillStyle(fillStyle);
+    context.beginPath();
+    context.arc(p.x, p.y, 2, 0, Z4Math.TWO_PI);
+    context.fill();
+    context.restore();
+    let next = null;
+    while ((next = this.next()) !== null) {
+      let vector = next.getZ4Vector();
+      context.save();
+      context.translate(vector.getX0(), vector.getY0());
+      context.rotate(vector.getPhase());
+      arrowPainter.draw(context, next, gradientColor);
+      context.restore();
+    }
+  }
+
+  /**
+   * Returns the intensity
+   *
+   * @return The intensity
+   */
+   getIntensity() {
+    return this.intensity;
+  }
+
+  /**
+   * Sets the intensity
+   *
+   * @param intensity The intensity
+   * @return This Z4Tracer
+   */
+   setIntensity(intensity) {
+    this.intensity = intensity;
+    return this;
+  }
+
+  /**
+   * Returns the multiplicity
+   *
+   * @return The multiplicity
+   */
+   getMultiplicity() {
+    return this.multiplicity;
+  }
+
+  /**
+   * Sets the multiplicity
+   *
+   * @param multiplicity The multiplicity
+   * @return This Z4Tracer
+   */
+   setMultiplicity(multiplicity) {
+    this.multiplicity = multiplicity;
+    return this;
+  }
+
+  /**
+   * Returns the push
+   *
+   * @return The push
+   */
+   getPush() {
+    return this.push;
+  }
+
+  /**
+   * Sets the push
+   *
+   * @param push The push
+   * @return This Z4Tracer
+   */
+   setPush(push) {
+    this.push = push;
+    return this;
+  }
+
+  /**
+   * Sets the envelope
+   *
+   * @param attack The attack
+   * @param sustain The sustain
+   * @param release The release
+   * @param endlessSustain true for an endless sustain, false otherwise
+   * @return This Z4Tracer
+   */
+   setEnvelope(attack, sustain, release, endlessSustain) {
+    this.attack = attack;
+    this.sustain = sustain;
+    this.release = release;
+    this.endlessSustain = endlessSustain;
+    return this;
+  }
+
+  /**
+   * Returns the attack
+   *
+   * @return The attack
+   */
+   getAttack() {
+    return this.attack;
+  }
+
+  /**
+   * Returns the release
+   *
+   * @return The release
+   */
+   getRelease() {
+    return this.release;
+  }
+
+  /**
+   * Returns the sustain
+   *
+   * @return The sustain
+   */
+   getSustain() {
+    return this.sustain;
+  }
+
+  /**
+   * Checks if the sustain is endless
+   *
+   * @return true for an endless sustain, false otherwise
+   */
+   isEndlessSustain() {
+    return this.endlessSustain;
+  }
+
+  /**
+   * Sets the step
+   *
+   * @param step The step
+   * @return This Z4Tracer
+   */
+   setStep(step) {
+    this.step = step;
+    return this;
+  }
+
+  /**
+   * Returns the step
+   *
+   * @return The step
+   */
+   getStep() {
+    return this.step;
+  }
+}
+/**
+ * The spirograph
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4Spirograph extends Z4PointIterator {
+
+   center = new Object();
+
+   clones = new Array();
+
+   clonePos = 0;
+
+   fromClones = false;
+
+  /**
+   * Creates a Z4Spirograph
+   */
+  constructor() {
+    super();
+    this.z4Point.setUseVectorModuleAsSize(true);
+    this.P["x"] = 0;
+    this.P["y"] = 0;
+  }
+
+   draw(action, x, y) {
+    if (action === Z4Action.START) {
+      this.center["x"] = x;
+      this.center["y"] = y;
+      this.hasNext = false;
+      this.clones = new Array();
+      this.fromClones = false;
+      return false;
+    } else if (action === Z4Action.CONTINUE) {
+      this.P["x"] = x;
+      this.P["y"] = y;
+      this.hasNext = true;
+      return true;
+    } else if (action === Z4Action.STOP) {
+      this.fromClones = true;
+      this.clonePos = this.clones.length - 1;
+      this.hasNext = this.clonePos !== -1;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+   next() {
+    if (!this.hasNext) {
+      return null;
+    } else if (this.fromClones) {
+      let clone = this.clones[this.clonePos];
+      clone.setColorPosition(this.clonePos / this.clones.length);
+      clone.setDrawBounds(false);
+      this.clonePos--;
+      this.hasNext = this.clonePos !== -1;
+      return clone;
+    } else {
+      let vector = Z4Vector.fromPoints(this.center["x"], this.center["y"], this.P["x"], this.P["y"]);
+      let angle = this.rotation.next(vector.getPhase());
+      this.z4Point.setZ4Vector(Z4Vector.fromVector(this.center["x"], this.center["y"], vector.getModule(), angle));
+      this.rotation.nextSide(this.z4Point, vector);
+      if (this.progression === Z4Progression.TEMPORAL) {
+        this.z4Point.setLighting(this.lighting);
+        this.z4Point.setDrawBounds(false);
+        this.nextColorPosition();
+      } else if (this.progression === Z4Progression.SPATIAL) {
+        this.z4Point.setLighting(Z4Lighting.NONE);
+        this.z4Point.setDrawBounds(false);
+        this.z4Point.setColorPosition(-1);
+      } else if (this.progression === Z4Progression.RELATIVE_TO_PATH) {
+        this.z4Point.setLighting(this.lighting);
+        this.z4Point.setDrawBounds(true);
+        this.z4Point.setColorPosition(-1);
+      } else if (this.progression === Z4Progression.RANDOM) {
+        this.z4Point.setLighting(this.lighting);
+        this.z4Point.setDrawBounds(false);
+        this.z4Point.setColorPosition(Math.random());
+      }
+      if (this.z4Point.isDrawBounds()) {
+        this.clones.push(this.z4Point.clone());
+      }
+      this.hasNext = false;
+      return this.z4Point;
+    }
+  }
+
+   drawDemo(context, width, height) {
+    let arrowPainter = new Z4ArrowPainter();
+    let gradientColor = new Z4GradientColor();
+    this.draw(Z4Action.START, width / 2, height / 2);
+    this.draw(Z4Action.CONTINUE, 3 * width / 4, 3 * height / 4);
+    let next = null;
+    while ((next = this.next()) !== null) {
+      let vector = next.getZ4Vector();
+      context.save();
+      context.translate(vector.getX0(), vector.getY0());
+      context.rotate(vector.getPhase());
+      arrowPainter.draw(context, next, gradientColor);
+      context.restore();
+    }
+  }
+}
+/**
+ * The component to edit a Z4Stamper
  *
  * @author gianpiero.di.blasi
  */
@@ -3468,13 +4470,13 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
 
    ctx = this.canvas.getContext("2d");
 
-   intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setRandomLengthRange(1, 100).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
+   intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
 
    rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".stamper-container"));
 
-   multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50).setRandomRange(0, 50).setRandomLengthRange(1, 100).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
+   multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
 
-   push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setRandomLengthRange(1, 100).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
+   push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
 
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
@@ -3530,6 +4532,221 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
     this.rotation.setValue(this.value.getRotation());
     this.multiplicity.setValue(this.value.getMultiplicity());
     this.push.setValue(this.value.getPush());
+    this.drawCanvas();
+    return this;
+  }
+
+   drawCanvas() {
+    if (this.canvas.clientWidth) {
+      this.canvas.width = Math.floor(this.canvas.clientWidth * window.devicePixelRatio);
+      this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
+      let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
+      let offscreenCtx = offscreen.getContext("2d");
+      this.value.drawDemo(offscreenCtx, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.save();
+      this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      this.ctx.drawImage(offscreen, 0, 0);
+      this.ctx.restore();
+    }
+  }
+
+   dispose() {
+    this.disposeDevicePixelRatio();
+    this.resizeObserver.unobserve(this.canvas);
+    this.mutationObserver.unobserve(document.body);
+  }
+}
+/**
+ * The component to edit a Z4Tracer
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4TracerUI extends Z4AbstractComponentWithValueUI {
+
+   canvas = this.querySelector(".tracer-canvas");
+
+   ctx = this.canvas.getContext("2d");
+
+   intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
+
+   rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).insertBeforeElement(this.querySelector(".tracer-container-second-row"));
+
+   multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
+
+   push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
+
+   attack = new Z4FancifulValueUI().setValueLabel("ATTACK", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-second-row"));
+
+   sustain = new Z4FancifulValueUI().setValueLabel("SUSTAIN", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-second-row"));
+
+   release = new Z4FancifulValueUI().setValueLabel("RELEASE", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-second-row"));
+
+   endlessSustainCheck = this.querySelector(".tracer-endless-sustain-check");
+
+   step = new Z4FancifulValueUI().setValueLabel("STEP", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-third-row"));
+
+   resizeObserver = new ResizeObserver(() => this.drawCanvas());
+
+   mutationObserver = new MutationObserver(() => this.drawCanvas());
+
+  static  UI = Z4HTMLFactory.get("giada/pizzapazza/iterator/ui/Z4TracerUI.html");
+
+  /**
+   * Creates a Z4TracerUI
+   */
+  constructor() {
+    super(Z4TracerUI.UI);
+    this.initDevicePixelRatio(() => this.drawCanvas());
+    this.resizeObserver.observe(this.canvas);
+    let config = new Object();
+    config["attributeFilter"] = new Array("class");
+    this.mutationObserver.observe(document.body, config);
+    this.intensity.oninput = (v) => this.set(v, null, null, null, null, false);
+    this.intensity.onchange = (v) => this.set(v, null, null, null, null, true);
+    this.rotation.oninput = (v) => this.set(null, v, null, null, null, false);
+    this.rotation.onchange = (v) => this.set(null, v, null, null, null, true);
+    this.multiplicity.oninput = (v) => this.set(null, null, v, null, null, false);
+    this.multiplicity.onchange = (v) => this.set(null, null, v, null, null, true);
+    this.push.oninput = (v) => this.set(null, null, null, v, null, false);
+    this.push.onchange = (v) => this.set(null, null, null, v, null, true);
+    this.step.oninput = (v) => this.set(null, null, null, null, v, false);
+    this.step.onchange = (v) => this.set(null, null, null, null, v, true);
+    this.attack.oninput = (v) => this.setEnvelope(false);
+    this.attack.onchange = (v) => this.setEnvelope(true);
+    this.sustain.oninput = (v) => this.setEnvelope(false);
+    this.sustain.onchange = (v) => this.setEnvelope(true);
+    this.release.oninput = (v) => this.setEnvelope(false);
+    this.release.onchange = (v) => this.setEnvelope(true);
+    this.endlessSustainCheck.id = this.getUniqueID();
+    this.querySelector(".tracer-endless-sustain-label").setAttribute("for", this.endlessSustainCheck.id);
+    this.endlessSustainCheck.onchange = (event) => {
+      this.sustain.setEnabled(!this.endlessSustainCheck.checked);
+      this.release.setEnabled(!this.endlessSustainCheck.checked);
+      this.value.setEnvelope(this.attack.getValue(), this.sustain.getValue(), this.release.getValue(), this.endlessSustainCheck.checked);
+      this.drawCanvas();
+      this.onchange(this.value);
+      return null;
+    };
+    this.sustain.querySelector(".fanciful-value-label").parentElement.insertBefore(this.querySelector(".tracer-endless-sustain-switch"), this.sustain.querySelector(".fanciful-value-container"));
+    this.setValue(new Z4Tracer());
+  }
+
+   set(intensity, rotation, multiplicity, push, step, onchange) {
+    if (intensity) {
+      this.value.setIntensity(intensity);
+    }
+    if (rotation) {
+      this.value.setRotation(rotation);
+    }
+    if (multiplicity) {
+      this.value.setMultiplicity(multiplicity);
+    }
+    if (push) {
+      this.value.setPush(push);
+    }
+    if (step) {
+      this.value.setStep(step);
+    }
+    this.drawCanvas();
+    if (onchange) {
+      this.onchange(this.value);
+    } else {
+      this.oninput(this.value);
+    }
+  }
+
+   setEnvelope(onchange) {
+    this.value.setEnvelope(this.attack.getValue(), this.sustain.getValue(), this.release.getValue(), this.endlessSustainCheck.checked);
+    this.drawCanvas();
+    if (onchange) {
+      this.onchange(this.value);
+    } else {
+      this.oninput(this.value);
+    }
+  }
+
+   setValue(value) {
+    this.value = value;
+    this.intensity.setValue(this.value.getIntensity());
+    this.rotation.setValue(this.value.getRotation());
+    this.multiplicity.setValue(this.value.getMultiplicity());
+    this.push.setValue(this.value.getPush());
+    this.step.setValue(this.value.getStep());
+    this.attack.setValue(this.value.getAttack());
+    this.sustain.setValue(this.value.getSustain());
+    this.release.setValue(this.value.getRelease());
+    this.endlessSustainCheck.checked = this.value.isEndlessSustain();
+    this.sustain.setEnabled(!this.endlessSustainCheck.checked);
+    this.release.setEnabled(!this.endlessSustainCheck.checked);
+    this.drawCanvas();
+    return this;
+  }
+
+   drawCanvas() {
+    if (this.canvas.clientWidth) {
+      this.canvas.width = Math.floor(this.canvas.clientWidth * window.devicePixelRatio);
+      this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
+      let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
+      let offscreenCtx = offscreen.getContext("2d");
+      this.value.drawDemo(offscreenCtx, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.save();
+      this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      this.ctx.drawImage(offscreen, 0, 0);
+      this.ctx.restore();
+    }
+  }
+
+   dispose() {
+    this.disposeDevicePixelRatio();
+    this.resizeObserver.unobserve(this.canvas);
+    this.mutationObserver.unobserve(document.body);
+  }
+}
+/**
+ * The component to edit a Z4Spirograph
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4SpirographUI extends Z4AbstractComponentWithValueUI {
+
+   canvas = this.querySelector(".spirograph-canvas");
+
+   ctx = this.canvas.getContext("2d");
+
+   rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".spirograph-container"));
+
+   resizeObserver = new ResizeObserver(() => this.drawCanvas());
+
+   mutationObserver = new MutationObserver(() => this.drawCanvas());
+
+  static  UI = Z4HTMLFactory.get("giada/pizzapazza/iterator/ui/Z4SpirographUI.html");
+
+  /**
+   * Creates a Z4SpirographUI
+   */
+  constructor() {
+    super(Z4SpirographUI.UI);
+    this.initDevicePixelRatio(() => this.drawCanvas());
+    this.resizeObserver.observe(this.canvas);
+    let config = new Object();
+    config["attributeFilter"] = new Array("class");
+    this.mutationObserver.observe(document.body, config);
+    this.rotation.oninput = (v) => {
+      this.oninput(this.value.setRotation(v));
+      this.drawCanvas();
+    };
+    this.rotation.onchange = (v) => {
+      this.onchange(this.value.setRotation(v));
+      this.drawCanvas();
+    };
+    this.setValue(new Z4Spirograph());
+  }
+
+   setValue(value) {
+    this.value = value;
+    this.rotation.setValue(this.value.getRotation());
     this.drawCanvas();
     return this;
   }

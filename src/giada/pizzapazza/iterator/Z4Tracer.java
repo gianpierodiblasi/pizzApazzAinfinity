@@ -17,7 +17,9 @@ import giada.pizzapazza.painter.Z4ArrowPainter;
 import simulation.bezier.$Bezier;
 import simulation.bezier.$BezierPoint;
 import simulation.dom.$CanvasRenderingContext2D;
+import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.document;
+import static simulation.js.$Globals.parseInt;
 import simulation.js.$Object;
 
 /**
@@ -31,12 +33,12 @@ public class Z4Tracer extends Z4PointIterator<Z4Tracer> {
   private Z4FancifulValue multiplicity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(1).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
   private Z4FancifulValue push = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
-  private Z4FancifulValue attack = new Z4FancifulValue();
-  private Z4FancifulValue sustain = new Z4FancifulValue();
-  private Z4FancifulValue release = new Z4FancifulValue();
+  private Z4FancifulValue attack = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
+  private Z4FancifulValue sustain = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
+  private Z4FancifulValue release = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
   private boolean endlessSustain = true;
 
-  private Z4FancifulValue step = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(10).setSign(Z4Sign.POSITIVE));
+  private Z4FancifulValue step = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(10).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
   private Z4TracerPath path;
   private $Object before = new $Object();
@@ -51,12 +53,18 @@ public class Z4Tracer extends Z4PointIterator<Z4Tracer> {
 
   private Array<Z4Point> clones = new Array<>();
   private int clonePos;
-  private int cloneSize;
   private boolean fromClones;
 
   private double surplus;
   private boolean connect;
 
+  private Z4Vector currentVector;
+  private int currentMultiplicityCounter;
+  private int currentMultiplicityTotal;
+
+  /**
+   * Creates a Z4Tracer
+   */
   public Z4Tracer() {
     super();
 
@@ -88,6 +96,9 @@ public class Z4Tracer extends Z4PointIterator<Z4Tracer> {
 
       return false;
     } else if (action == Z4Action.CONTINUE) {
+      this.currentMultiplicityCounter = 0;
+      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
+
       double distance = Z4Math.distance(this.P.$get("x"), this.P.$get("y"), x, y);
       if (distance >= 10) {
         double angle = Z4Math.atan(this.P.$get("x"), this.P.$get("y"), x, y);
@@ -141,11 +152,19 @@ public class Z4Tracer extends Z4PointIterator<Z4Tracer> {
       this.hasNext = this.clonePos < this.clones.length;
       return clone;
     } else {
-      Z4Vector vector = this.path.next();
-      double angle = this.rotation.next(vector.getPhase());
-      this.z4Point.setZ4Vector(Z4Vector.fromVector(vector.getX0(), vector.getY0(), 1, angle));
+      if (!$exists(this.currentMultiplicityCounter)) {
+        this.currentVector = this.path.next();
+      }
+      double angle = this.rotation.next(this.currentVector.getPhase());
+      double currentPush = this.push.next();
+      if ($exists(currentPush)) {
+        Z4Vector pushed = Z4Vector.fromVector(this.currentVector.getX0(), this.currentVector.getY0(), currentPush, angle);
+        this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), 1, angle));
+      } else {
+        this.z4Point.setZ4Vector(Z4Vector.fromVector(this.currentVector.getX0(), this.currentVector.getY0(), 1, angle));
+      }
       this.z4Point.setIntensity(this.nextEnvelope() * this.intensity.next());
-      this.rotation.nextSide(this.z4Point, vector);
+      this.rotation.nextSide(this.z4Point, this.currentVector);
 
       if (this.progression == Z4Progression.TEMPORAL) {
         this.z4Point.setLighting(this.lighting);
@@ -169,9 +188,13 @@ public class Z4Tracer extends Z4PointIterator<Z4Tracer> {
         this.clones.push(this.z4Point.clone());
       }
 
-      this.hasNext = this.path.hasNext();
-      if (!this.hasNext) {
-        this.surplus = this.path.getNewSurplus();
+      this.currentMultiplicityCounter++;
+      if (this.currentMultiplicityCounter >= this.currentMultiplicityTotal) {
+        this.currentMultiplicityCounter = 0;
+        this.hasNext = this.path.hasNext();
+        if (!this.hasNext) {
+          this.surplus = this.path.getNewSurplus();
+        }
       }
 
       return this.z4Point;

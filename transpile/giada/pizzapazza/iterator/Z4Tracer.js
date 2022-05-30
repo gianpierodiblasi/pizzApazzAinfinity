@@ -11,15 +11,15 @@ class Z4Tracer extends Z4PointIterator {
 
    push = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
-   attack = new Z4FancifulValue();
+   attack = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
-   sustain = new Z4FancifulValue();
+   sustain = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
-   release = new Z4FancifulValue();
+   release = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
    endlessSustain = true;
 
-   step = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(10).setSign(Z4Sign.POSITIVE));
+   step = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(10).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
    path = null;
 
@@ -43,14 +43,21 @@ class Z4Tracer extends Z4PointIterator {
 
    clonePos = 0;
 
-   cloneSize = 0;
-
    fromClones = false;
 
    surplus = 0.0;
 
    connect = false;
 
+   currentVector = null;
+
+   currentMultiplicityCounter = 0;
+
+   currentMultiplicityTotal = 0;
+
+  /**
+   * Creates a Z4Tracer
+   */
   constructor() {
     super();
     this.before["x"] = 0;
@@ -76,6 +83,8 @@ class Z4Tracer extends Z4PointIterator {
       this.connect = false;
       return false;
     } else if (action === Z4Action.CONTINUE) {
+      this.currentMultiplicityCounter = 0;
+      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
       let distance = Z4Math.distance(this.P["x"], this.P["y"], x, y);
       if (distance >= 10) {
         let angle = Z4Math.atan(this.P["x"], this.P["y"], x, y);
@@ -122,11 +131,19 @@ class Z4Tracer extends Z4PointIterator {
       this.hasNext = this.clonePos < this.clones.length;
       return clone;
     } else {
-      let vector = this.path.next();
-      let angle = this.rotation.next(vector.getPhase());
-      this.z4Point.setZ4Vector(Z4Vector.fromVector(vector.getX0(), vector.getY0(), 1, angle));
+      if (!this.currentMultiplicityCounter) {
+        this.currentVector = this.path.next();
+      }
+      let angle = this.rotation.next(this.currentVector.getPhase());
+      let currentPush = this.push.next();
+      if (currentPush) {
+        let pushed = Z4Vector.fromVector(this.currentVector.getX0(), this.currentVector.getY0(), currentPush, angle);
+        this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), 1, angle));
+      } else {
+        this.z4Point.setZ4Vector(Z4Vector.fromVector(this.currentVector.getX0(), this.currentVector.getY0(), 1, angle));
+      }
       this.z4Point.setIntensity(this.nextEnvelope() * this.intensity.next());
-      this.rotation.nextSide(this.z4Point, vector);
+      this.rotation.nextSide(this.z4Point, this.currentVector);
       if (this.progression === Z4Progression.TEMPORAL) {
         this.z4Point.setLighting(this.lighting);
         this.z4Point.setDrawBounds(false);
@@ -147,9 +164,13 @@ class Z4Tracer extends Z4PointIterator {
       if (this.z4Point.isDrawBounds() && this.z4Point.getIntensity() > 0) {
         this.clones.push(this.z4Point.clone());
       }
-      this.hasNext = this.path.hasNext();
-      if (!this.hasNext) {
-        this.surplus = this.path.getNewSurplus();
+      this.currentMultiplicityCounter++;
+      if (this.currentMultiplicityCounter >= this.currentMultiplicityTotal) {
+        this.currentMultiplicityCounter = 0;
+        this.hasNext = this.path.hasNext();
+        if (!this.hasNext) {
+          this.surplus = this.path.getNewSurplus();
+        }
       }
       return this.z4Point;
     }

@@ -96,6 +96,24 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
   }
 
   /**
+   * Enables this Z4SignedRandomValueUI
+   *
+   * @param b true to enable this Z4SignedRandomValueUI, false otherwise
+   * @return This Z4SignedRandomValueUI
+   */
+  public Z4SignedRandomValueUI setEnabled(boolean b) {
+    this.signedValueUI.setEnabled(b);
+
+    if (b) {
+      this.querySelector(".signed-random-value-type-button").removeAttribute("disabled");
+    } else {
+      this.querySelector(".signed-random-value-type-button").setAttribute("disabled", "disabled");
+    }
+
+    return this;
+  }
+
+  /**
    * Sets the range of this Z4SignedRandomValueUI
    *
    * @param min The minumum (positive) value
