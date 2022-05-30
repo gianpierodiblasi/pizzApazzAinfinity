@@ -171,21 +171,41 @@ class Z4Tracer extends Z4PointIterator {
   }
 
    drawDemo(context, width, height) {
-    // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    throw new UnsupportedOperationException("Not supported yet.");
+    let arrowPainter = new Z4ArrowPainter();
+    let gradientColor = new Z4GradientColor();
+    let fillStyle = document.body.classList.contains("z4-dark") ? "white" : "black";
+    let bezier = width > height ? new Bezier(width / 10, height / 3, width / 2, 3 * height / 2, width / 2, -height / 2, 9 * width / 10, height / 2) : new Bezier(width / 3, 9 * height / 10, 3 * width / 2, height / 2, -width / 2, height / 2, width / 2, height / 10);
+    let p = bezier.get(0);
+    this.draw(Z4Action.START, p.x, p.y);
+    for (let s = 0.1; s < 1; s += 0.1) {
+      p = bezier.get(s);
+      this.draw(Z4Action.CONTINUE, p.x, p.y);
+      this.drawDemoPoint(context, p, arrowPainter, gradientColor, fillStyle);
+    }
+    p = bezier.get(1);
+    this.draw(Z4Action.CONTINUE, p.x, p.y);
+    this.drawDemoPoint(context, p, arrowPainter, gradientColor, fillStyle);
+    this.draw(Z4Action.STOP, p.x, p.y);
+    this.drawDemoPoint(context, p, arrowPainter, gradientColor, fillStyle);
   }
 
-   initDraw(w, h) {
-    let array = new Array();
-    let bezier = w > h ? new Bezier(w / 10, h / 3, w / 2, 3 * h / 2, w / 2, -h / 2, 9 * w / 10, h / 2) : new Bezier(w / 3, 9 * h / 10, 3 * w / 2, h / 2, -w / 2, h / 2, w / 2, h / 10);
-    for (let t = 0; t < bezier.length(); t++) {
-      let p = bezier.get(t);
-      let point = new Object();
-      point["x"] = p.x;
-      point["y"] = p.y;
-      array.push(point);
+   drawDemoPoint(context, p, arrowPainter, gradientColor, fillStyle) {
+    context.save();
+    context.lineWidth = 1;
+    context.fillStyle = Z4Color.getFillStyle(fillStyle);
+    context.beginPath();
+    context.arc(p.x, p.y, 2, 0, Z4Math.TWO_PI);
+    context.fill();
+    context.restore();
+    let next = null;
+    while ((next = this.next()) !== null) {
+      let vector = next.getZ4Vector();
+      context.save();
+      context.translate(vector.getX0(), vector.getY0());
+      context.rotate(vector.getPhase());
+      arrowPainter.draw(context, next, gradientColor);
+      context.restore();
     }
-    return array;
   }
 
   /**

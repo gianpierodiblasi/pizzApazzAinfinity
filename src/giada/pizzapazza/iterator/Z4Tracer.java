@@ -1,6 +1,8 @@
 package giada.pizzapazza.iterator;
 
 import def.js.Array;
+import giada.pizzapazza.color.Z4Color;
+import giada.pizzapazza.color.Z4GradientColor;
 import giada.pizzapazza.color.Z4Lighting;
 import giada.pizzapazza.color.Z4Progression;
 import giada.pizzapazza.math.Z4FancifulValue;
@@ -11,9 +13,11 @@ import giada.pizzapazza.math.Z4SignedRandomValue;
 import giada.pizzapazza.math.Z4SignedValue;
 import giada.pizzapazza.math.Z4TracerPath;
 import giada.pizzapazza.math.Z4Vector;
+import giada.pizzapazza.painter.Z4ArrowPainter;
 import simulation.bezier.$Bezier;
 import simulation.bezier.$BezierPoint;
 import simulation.dom.$CanvasRenderingContext2D;
+import static simulation.js.$Globals.document;
 import simulation.js.$Object;
 
 /**
@@ -191,24 +195,50 @@ public class Z4Tracer extends Z4PointIterator<Z4Tracer> {
 
   @Override
   public void drawDemo($CanvasRenderingContext2D context, double width, double height) {
-    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    Z4ArrowPainter arrowPainter = new Z4ArrowPainter();
+    Z4GradientColor gradientColor = new Z4GradientColor();
+
+    String fillStyle = document.body.classList.contains("z4-dark") ? "white" : "black";
+
+    $Bezier bezier = width > height
+            ? new $Bezier(width / 10, height / 3, width / 2, 3 * height / 2, width / 2, -height / 2, 9 * width / 10, height / 2)
+            : new $Bezier(width / 3, 9 * height / 10, 3 * width / 2, height / 2, -width / 2, height / 2, width / 2, height / 10);
+
+    $BezierPoint p = bezier.get(0);
+    this.draw(Z4Action.START, p.x, p.y);
+
+    for (double s = 0.1; s < 1; s += 0.1) {
+      p = bezier.get(s);
+      this.draw(Z4Action.CONTINUE, p.x, p.y);
+      this.drawDemoPoint(context, p, arrowPainter, gradientColor, fillStyle);
+    }
+
+    p = bezier.get(1);
+    this.draw(Z4Action.CONTINUE, p.x, p.y);
+    this.drawDemoPoint(context, p, arrowPainter, gradientColor, fillStyle);
+    this.draw(Z4Action.STOP, p.x, p.y);
+    this.drawDemoPoint(context, p, arrowPainter, gradientColor, fillStyle);
   }
 
-  private Array<$Object> initDraw(double w, double h) {
-    Array<$Object> array = new Array<>();
+  private void drawDemoPoint($CanvasRenderingContext2D context, $BezierPoint p, Z4ArrowPainter arrowPainter, Z4GradientColor gradientColor, String fillStyle) {
+    context.save();
+    context.lineWidth = 1;
+    context.fillStyle = Z4Color.$getFillStyle(fillStyle);
+    context.beginPath();
+    context.arc(p.x, p.y, 2, 0, Z4Math.TWO_PI);
+    context.fill();
+    context.restore();
 
-    $Bezier bezier = w > h
-            ? new $Bezier(w / 10, h / 3, w / 2, 3 * h / 2, w / 2, -h / 2, 9 * w / 10, h / 2)
-            : new $Bezier(w / 3, 9 * h / 10, 3 * w / 2, h / 2, -w / 2, h / 2, w / 2, h / 10);
+    Z4Point next;
+    while ((next = this.next()) != null) {
+      Z4Vector vector = next.getZ4Vector();
 
-    for (int t = 0; t < bezier.length(); t++) {
-      $BezierPoint p = bezier.get(t);
-      $Object point = new $Object();
-      point.$set("x", p.x);
-      point.$set("y", p.y);
-      array.push(point);
+      context.save();
+      context.translate(vector.getX0(), vector.getY0());
+      context.rotate(vector.getPhase());
+      arrowPainter.draw(context, next, gradientColor);
+      context.restore();
     }
-    return array;
   }
 
   /**
