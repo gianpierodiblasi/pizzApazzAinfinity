@@ -25,6 +25,10 @@ class test_color2 {
     ui.oninput = (z4GradientColor) => document.getElementById("test8").textContent = "ONINPUT " + test_color2.stringify(z4GradientColor);
     ui.onchange = (z4GradientColor) => document.getElementById("test8").textContent = "ONCHANGE " + test_color2.stringify(z4GradientColor);
     document.getElementById("test8").textContent = test_color2.stringify(ui.getValue());
+    ui = new Z4GradientColorUI().setVertical().appendToElement(document.querySelector("#test9"));
+    ui.oninput = (z4GradientColor) => document.getElementById("test10").textContent = "ONINPUT " + test_color2.stringify(z4GradientColor);
+    ui.onchange = (z4GradientColor) => document.getElementById("test10").textContent = "ONCHANGE " + test_color2.stringify(z4GradientColor);
+    document.getElementById("test10").textContent = test_color2.stringify(ui.getValue());
   }
 
   static  drawAll() {

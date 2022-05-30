@@ -23,6 +23,8 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
 
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
+   horizontal = true;
+
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4GradientColorUI.html");
 
   /**
@@ -80,6 +82,31 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
     this.setValue(new Z4GradientColor());
   }
 
+   setVertical() {
+    this.horizontal = false;
+    let gradientColorContainer = this.querySelector(".gradient-color-container");
+    gradientColorContainer.parentElement.style.height = "100%";
+    gradientColorContainer.style.flexDirection = "column";
+    gradientColorContainer.style.alignItems = "start";
+    gradientColorContainer.style.height = "calc(100% - 24px)";
+    this.startColorUI.querySelector(".input-group").classList.add("dropend");
+    this.stopColorUI.querySelector(".input-group").classList.add("dropend");
+    this.querySelector(".gradient-color-input-group-canvas").style.flexDirection = "column";
+    this.querySelector(".gradient-color-input-group-canvas").classList.add("dropend");
+    this.canvas.removeAttribute("height");
+    this.canvas.style.removeProperty("height");
+    this.canvas.width = 71.8;
+    this.canvas.style.width = "71.8px";
+    this.canvas.style.borderTopRightRadius = "0.25rem";
+    this.canvas.style.borderBottomLeftRadius = "0";
+    let button = this.querySelector(".gradient-color-canvas-button");
+    button.style.width = "71.8px";
+    button.style.marginLeft = "0.25px";
+    button.style.borderTopRightRadius = "0";
+    button.style.borderBottomLeftRadius = "0.25rem";
+    return this;
+  }
+
   /**
    * Sets the token of the gradient color label
    *
@@ -114,9 +141,16 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
       this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
       let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
       let offscreenCtx = offscreen.getContext("2d");
-      for (let x = 0; x < this.canvas.clientWidth; x++) {
-        offscreenCtx.fillStyle = this.value.getZ4ColorAt(x / this.canvas.clientWidth, true, true).getHEX();
-        offscreenCtx.fillRect(x, 0, 1, this.canvas.clientHeight);
+      if (this.horizontal) {
+        for (let x = 0; x < this.canvas.clientWidth; x++) {
+          offscreenCtx.fillStyle = this.value.getZ4ColorAt(x / this.canvas.clientWidth, true, true).getHEX();
+          offscreenCtx.fillRect(x, 0, 1, this.canvas.clientHeight);
+        }
+      } else {
+        for (let y = 0; y < this.canvas.clientHeight; y++) {
+          offscreenCtx.fillStyle = this.value.getZ4ColorAt(y / this.canvas.clientHeight, true, true).getHEX();
+          offscreenCtx.fillRect(0, y, this.canvas.clientWidth, 1);
+        }
       }
       this.ctx.save();
       this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
