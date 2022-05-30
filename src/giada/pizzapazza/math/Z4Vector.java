@@ -50,8 +50,8 @@ public class Z4Vector {
   }
 
   @Override
-  @SuppressWarnings("CloneInNonCloneableClass")
-  public Z4Vector clone() throws CloneNotSupportedException {
+  @SuppressWarnings({"CloneInNonCloneableClass", "CloneDeclaresCloneNotSupported"})
+  public Z4Vector clone() {
     return new Z4Vector(this.x0, this.y0, this.x, this.y, this.module, this.phase);
   }
 

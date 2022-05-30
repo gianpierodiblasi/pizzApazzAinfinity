@@ -23,7 +23,7 @@ public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
   /**
    * The step for temporal progression (in the range [0,1])
    */
-  protected double temporalStepProgression = 0.1;
+  private double temporalStepProgression = 0.1;
 
   /**
    * The color lighting
@@ -94,6 +94,15 @@ public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
    */
   public Z4Rotation getRotation() {
     return this.rotation;
+  }
+
+  protected void nextColorPosition() {
+    double colorPosition = this.z4Point.getColorPosition();
+    colorPosition = colorPosition == -1 ? 0 : colorPosition + this.temporalStepProgression;
+    if (colorPosition > 1) {
+      colorPosition -= 1;
+    }
+    this.z4Point.setColorPosition(colorPosition);
   }
 
   /**

@@ -45,12 +45,7 @@ class Z4Stamper extends Z4PointIterator {
       this.rotation.nextSide(this.z4Point, null);
       if (this.progression === Z4Progression.TEMPORAL) {
         this.z4Point.setLighting(this.lighting);
-        let colorPosition = this.z4Point.getColorPosition();
-        colorPosition = colorPosition === -1 ? 0 : colorPosition + this.temporalStepProgression;
-        if (colorPosition > 1) {
-          colorPosition -= 1;
-        }
-        this.z4Point.setColorPosition(colorPosition);
+        this.nextColorPosition();
       } else if (this.progression === Z4Progression.SPATIAL) {
         this.z4Point.setLighting(Z4Lighting.NONE);
         this.z4Point.setColorPosition(-1);

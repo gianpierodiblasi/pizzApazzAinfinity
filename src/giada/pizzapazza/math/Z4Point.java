@@ -18,8 +18,8 @@ public class Z4Point {
   private boolean useVectorModuleAsSize = false;
 
   @Override
-  @SuppressWarnings("CloneInNonCloneableClass")
-  public Z4Point clone() throws CloneNotSupportedException {
+  @SuppressWarnings({"CloneInNonCloneableClass", "CloneDeclaresCloneNotSupported"})
+  public Z4Point clone() {
     Z4Point clone = new Z4Point();
     clone.z4Vector = this.z4Vector.clone();
     clone.intensity = this.intensity;
@@ -123,6 +123,18 @@ public class Z4Point {
   }
 
   /**
+   * Sets if this point has to be used to draw bounds or real objects
+   *
+   * @param drawBounds true if this point has to be used to draw bounds, false
+   * otherwise
+   * @return This Z4Point
+   */
+  public Z4Point setDrawBounds(boolean drawBounds) {
+    this.drawBounds = drawBounds;
+    return this;
+  }
+
+  /**
    * Sets the side
    *
    * @param side the side
@@ -130,6 +142,18 @@ public class Z4Point {
    */
   public Z4Point setSide(Z4Sign side) {
     this.side = side;
+    return this;
+  }
+
+  /**
+   * Sets if the vector module of this point has to be used has size
+   *
+   * @param useVectorModuleAsSize true if the vector module of this point has to
+   * be used has size, false otherwise
+   * @return This Z4Point
+   */
+  public Z4Point setUseVectorModuleAsSize(boolean useVectorModuleAsSize) {
+    this.useVectorModuleAsSize = useVectorModuleAsSize;
     return this;
   }
 

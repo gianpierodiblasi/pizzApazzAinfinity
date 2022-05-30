@@ -123,6 +123,18 @@ class Z4Point {
   }
 
   /**
+   * Sets if this point has to be used to draw bounds or real objects
+   *
+   * @param drawBounds true if this point has to be used to draw bounds, false
+   * otherwise
+   * @return This Z4Point
+   */
+   setDrawBounds(drawBounds) {
+    this.drawBounds = drawBounds;
+    return this;
+  }
+
+  /**
    * Sets the side
    *
    * @param side the side
@@ -130,6 +142,18 @@ class Z4Point {
    */
    setSide(side) {
     this.side = side;
+    return this;
+  }
+
+  /**
+   * Sets if the vector module of this point has to be used has size
+   *
+   * @param useVectorModuleAsSize true if the vector module of this point has to
+   * be used has size, false otherwise
+   * @return This Z4Point
+   */
+   setUseVectorModuleAsSize(useVectorModuleAsSize) {
+    this.useVectorModuleAsSize = useVectorModuleAsSize;
     return this;
   }
 
