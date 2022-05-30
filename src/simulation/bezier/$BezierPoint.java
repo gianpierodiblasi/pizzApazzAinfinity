@@ -7,5 +7,6 @@ package simulation.bezier;
  */
 public class $BezierPoint {
 
+  public double x;
   public double y;
 }
