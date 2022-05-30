@@ -9,13 +9,13 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
 
    ctx = this.canvas.getContext("2d");
 
-   intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setRandomLengthRange(1, 100).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
+   intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
 
    rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".stamper-container"));
 
-   multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50).setRandomRange(0, 50).setRandomLengthRange(1, 100).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
+   multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
 
-   push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setRandomLengthRange(1, 100).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
+   push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
 
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 

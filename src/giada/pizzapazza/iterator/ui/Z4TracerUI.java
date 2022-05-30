@@ -28,10 +28,10 @@ public class Z4TracerUI extends Z4AbstractComponentWithValueUI<Z4Tracer> {
   private final $Canvas canvas = ($Canvas) this.querySelector(".tracer-canvas");
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
 
-  private final Z4FancifulValueUI intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setRandomLengthRange(1, 100).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
+  private final Z4FancifulValueUI intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
   private final Z4RotationUI rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".tracer-container"));
-  private final Z4FancifulValueUI multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50).setRandomRange(0, 50).setRandomLengthRange(1, 100).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
-  private final Z4FancifulValueUI push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50).setRandomRange(0, 50).setRandomLengthRange(1, 100).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
+  private final Z4FancifulValueUI multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
+  private final Z4FancifulValueUI push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
 
   private final $ResizeObserver resizeObserver = new $ResizeObserver(() -> this.drawCanvas());
   private final $MutationObserver mutationObserver = new $MutationObserver(() -> this.drawCanvas());

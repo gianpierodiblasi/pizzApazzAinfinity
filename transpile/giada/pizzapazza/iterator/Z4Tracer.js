@@ -125,7 +125,7 @@ class Z4Tracer extends Z4PointIterator {
       let vector = this.path.next();
       let angle = this.rotation.next(vector.getPhase());
       this.z4Point.setZ4Vector(Z4Vector.fromVector(vector.getX0(), vector.getY0(), 1, angle));
-      this.z4Point.setIntensity(this.nextEnvelope());
+      this.z4Point.setIntensity(this.nextEnvelope() * this.intensity.next());
       this.rotation.nextSide(this.z4Point, vector);
       if (this.progression === Z4Progression.TEMPORAL) {
         this.z4Point.setLighting(this.lighting);

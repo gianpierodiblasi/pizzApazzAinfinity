@@ -36,6 +36,7 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
   private boolean signVisible = true;
   private int min = 0;
   private int max = 1000000000;
+  private boolean tenMultiplier = true;
 
   private final static String PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
   private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4SignedValueUI.html");
@@ -120,7 +121,7 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
 
     this.spinner.oninput = (event) -> {
       if (this.radioRange.checked) {
-        int v = this.getReversedValue(this.spinner.valueAsNumber);
+        double v = this.getReversedValue(this.spinner.valueAsNumber);
         this.valueLabel.innerText = "" + v;
         this.oninput.$apply(this.value.setValue(v));
       }
@@ -128,7 +129,7 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
     };
     this.spinner.onchange = (event) -> {
       if (this.radioRange.checked) {
-        int v = this.getReversedValue(this.spinner.valueAsNumber);
+        double v = this.getReversedValue(this.spinner.valueAsNumber);
         this.valueLabel.innerText = "" + v;
         this.onchange.$apply(this.value.setValue(v));
       }
@@ -181,10 +182,10 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
   }
 
   private void doMinusPlus(int sign, double speed, boolean isApply, $Apply_0_Void apply) {
-    int rangedMax = this.getRangedValue(this.max);
-    int rangedValue = Math.max(0, this.getRangedValue(this.value.getValue()) + sign);
+    double rangedMax = this.getRangedValue(this.max);
+    double rangedValue = Math.max(0, this.getRangedValue(this.value.getValue()) + sign);
     rangedValue = Math.min(rangedValue, rangedMax);
-    int reversedValue = this.getReversedValue(rangedValue);
+    double reversedValue = this.getReversedValue(rangedValue);
 
     this.valueLabel.innerText = "" + reversedValue;
     if (this.radioRange.checked) {
@@ -203,11 +204,14 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
    *
    * @param min The minumum (positive) value
    * @param max The maximum (positive) value (1000000000 to show infinite)
+   * @param tenMultiplier true to use the ten multiplier for range spinner,
+   * false otherwise
    * @return This Z4SignedValueUI
    */
-  public Z4SignedValueUI setRange(int min, int max) {
+  public Z4SignedValueUI setRange(int min, int max, boolean tenMultiplier) {
     this.min = min;
     this.max = max;
+    this.tenMultiplier = tenMultiplier;
 
     this.querySelector(".signed-value-range-span").innerHTML = "[" + min + "," + (max == 1000000000 ? "&infin;" : max) + "]";
     if (this.radioRange.checked) {
@@ -222,60 +226,68 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
     this.spinner.value = "" + this.getRangedValue(this.value.getValue());
   }
 
-  private int getRangedValue(double limit) {
-    int count = 0;
-    int counter = this.min;
-    while (counter < limit) {
-      count++;
+  private double getRangedValue(double limit) {
+    if (this.tenMultiplier) {
+      int count = 0;
+      int counter = this.min;
+      while (counter < limit) {
+        count++;
 
-      if (counter < 100) {
-        counter++;
-      } else if (counter < 1000) {
-        counter += 10;
-      } else if (counter < 10000) {
-        counter += 100;
-      } else if (counter < 100000) {
-        counter += 1000;
-      } else if (counter < 1000000) {
-        counter += 10000;
-      } else if (counter < 10000000) {
-        counter += 100000;
-      } else if (counter < 100000000) {
-        counter += 1000000;
-      } else if (counter < 1000000000) {
-        counter += 10000000;
+        if (counter < 100) {
+          counter++;
+        } else if (counter < 1000) {
+          counter += 10;
+        } else if (counter < 10000) {
+          counter += 100;
+        } else if (counter < 100000) {
+          counter += 1000;
+        } else if (counter < 1000000) {
+          counter += 10000;
+        } else if (counter < 10000000) {
+          counter += 100000;
+        } else if (counter < 100000000) {
+          counter += 1000000;
+        } else if (counter < 1000000000) {
+          counter += 10000000;
+        }
       }
-    }
 
-    return count;
+      return count;
+    } else {
+      return limit;
+    }
   }
 
-  private int getReversedValue(double limit) {
-    int count = 0;
-    int counter = this.min;
-    while (count < limit) {
-      count++;
+  private double getReversedValue(double limit) {
+    if (this.tenMultiplier) {
+      int count = 0;
+      int counter = this.min;
+      while (count < limit) {
+        count++;
 
-      if (counter < 100) {
-        counter++;
-      } else if (counter < 1000) {
-        counter += 10;
-      } else if (counter < 10000) {
-        counter += 100;
-      } else if (counter < 100000) {
-        counter += 1000;
-      } else if (counter < 1000000) {
-        counter += 10000;
-      } else if (counter < 10000000) {
-        counter += 100000;
-      } else if (counter < 100000000) {
-        counter += 1000000;
-      } else if (counter < 1000000000) {
-        counter += 10000000;
+        if (counter < 100) {
+          counter++;
+        } else if (counter < 1000) {
+          counter += 10;
+        } else if (counter < 10000) {
+          counter += 100;
+        } else if (counter < 100000) {
+          counter += 1000;
+        } else if (counter < 1000000) {
+          counter += 10000;
+        } else if (counter < 10000000) {
+          counter += 100000;
+        } else if (counter < 100000000) {
+          counter += 1000000;
+        } else if (counter < 1000000000) {
+          counter += 10000000;
+        }
       }
-    }
 
-    return counter;
+      return counter;
+    } else {
+      return limit;
+    }
   }
 
   /**

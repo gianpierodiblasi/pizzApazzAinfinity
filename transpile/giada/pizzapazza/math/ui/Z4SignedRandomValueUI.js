@@ -7,7 +7,7 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
 
    signedValueUI = new Z4SignedValueUI().appendToComponent(this);
 
-   lengthUI = new Z4SignedValueUI().setSignVisible(false).setValueLabel("LENGTH", false, false).setRange(1, 1000000000).appendToElement(this.querySelector(".signed-random-value-length-ui"));
+   lengthUI = new Z4SignedValueUI().setSignVisible(false).setValueLabel("LENGTH", false, false).setRange(1, 1000000000, true).appendToElement(this.querySelector(".signed-random-value-length-ui"));
 
    lengthBadge = this.querySelector(".signed-random-value-length-badge");
 
@@ -82,10 +82,12 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
    *
    * @param min The minumum (positive) value
    * @param max The maximum (positive) value (999999999 to show infinite)
+   * @param tenMultiplier true to use the ten multiplier for range spinner,
+   * false otherwise
    * @return This Z4SignedRandomValueUI
    */
-   setRange(min, max) {
-    this.signedValueUI.setRange(min, max);
+   setRange(min, max, tenMultiplier) {
+    this.signedValueUI.setRange(min, max, tenMultiplier);
     return this;
   }
 
@@ -105,10 +107,12 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
    *
    * @param min The minumum (positive) value
    * @param max The maximum (positive) value (999999999 to show infinite)
+   * @param tenMultiplier true to use the ten multiplier for range spinner,
+   * false otherwise
    * @return This Z4SignedRandomValueUI
    */
-   setLengthRange(min, max) {
-    this.lengthUI.setRange(min, max);
+   setLengthRange(min, max, tenMultiplier) {
+    this.lengthUI.setRange(min, max, tenMultiplier);
     return this;
   }
 

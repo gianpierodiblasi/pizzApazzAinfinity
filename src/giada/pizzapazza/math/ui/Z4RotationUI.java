@@ -18,9 +18,9 @@ import static simulation.js.$Globals.document;
  */
 public class Z4RotationUI extends Z4AbstractComponentWithValueUI<Z4Rotation> {
 
-  private final Z4SignedValueUI startAngle = new Z4SignedValueUI().setCompact().setRange(0, 360).setValueLabel("START_ANGLE", true, false).setSignVisible(false).insertBeforeElement(this.querySelector(".rotation-type-button"));
+  private final Z4SignedValueUI startAngle = new Z4SignedValueUI().setCompact().setRange(0, 360, false).setValueLabel("START_ANGLE", true, false).setSignVisible(false).insertBeforeElement(this.querySelector(".rotation-type-button"));
   private final $HTMLElement delayedCheck = this.querySelector(".rotation-delayed-check");
-  private final Z4FancifulValueUI angle = new Z4FancifulValueUI().setValueLabel("ANGLE", true, false).setConstantRange(0, 180).setRandomRange(0, 180).insertBeforeElement(this.querySelector(".rotation-type-button"));
+  private final Z4FancifulValueUI angle = new Z4FancifulValueUI().setValueLabel("ANGLE", true, false).setConstantRange(0, 180, false).setRandomRange(0, 180, false).insertBeforeElement(this.querySelector(".rotation-type-button"));
 
   private final static String PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
   private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4RotationUI.html");
@@ -89,10 +89,12 @@ public class Z4RotationUI extends Z4AbstractComponentWithValueUI<Z4Rotation> {
    *
    * @param min The minumum value
    * @param max The maximum value
+   * @param tenMultiplier true to use the ten multiplier for range spinner,
+   * false otherwise
    * @return This Z4RotationUI
    */
-  public Z4RotationUI setRandomLengthRange(int min, int max) {
-    this.angle.setRandomLengthRange(min, max);
+  public Z4RotationUI setRandomLengthRange(int min, int max, boolean tenMultiplier) {
+    this.angle.setRandomLengthRange(min, max, tenMultiplier);
     return this;
   }
 

@@ -29,6 +29,8 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
 
    max = 1000000000;
 
+   tenMultiplier = true;
+
   static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
 
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4SignedValueUI.html");
@@ -182,11 +184,14 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
    *
    * @param min The minumum (positive) value
    * @param max The maximum (positive) value (1000000000 to show infinite)
+   * @param tenMultiplier true to use the ten multiplier for range spinner,
+   * false otherwise
    * @return This Z4SignedValueUI
    */
-   setRange(min, max) {
+   setRange(min, max, tenMultiplier) {
     this.min = min;
     this.max = max;
+    this.tenMultiplier = tenMultiplier;
     this.querySelector(".signed-value-range-span").innerHTML = "[" + min + "," + (max === 1000000000 ? "&infin;" : max) + "]";
     if (this.radioRange.checked) {
       this.configureRange();
@@ -201,55 +206,63 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
   }
 
    getRangedValue(limit) {
-    let count = 0;
-    let counter = this.min;
-    while (counter < limit) {
-      count++;
-      if (counter < 100) {
-        counter++;
-      } else if (counter < 1000) {
-        counter += 10;
-      } else if (counter < 10000) {
-        counter += 100;
-      } else if (counter < 100000) {
-        counter += 1000;
-      } else if (counter < 1000000) {
-        counter += 10000;
-      } else if (counter < 10000000) {
-        counter += 100000;
-      } else if (counter < 100000000) {
-        counter += 1000000;
-      } else if (counter < 1000000000) {
-        counter += 10000000;
+    if (this.tenMultiplier) {
+      let count = 0;
+      let counter = this.min;
+      while (counter < limit) {
+        count++;
+        if (counter < 100) {
+          counter++;
+        } else if (counter < 1000) {
+          counter += 10;
+        } else if (counter < 10000) {
+          counter += 100;
+        } else if (counter < 100000) {
+          counter += 1000;
+        } else if (counter < 1000000) {
+          counter += 10000;
+        } else if (counter < 10000000) {
+          counter += 100000;
+        } else if (counter < 100000000) {
+          counter += 1000000;
+        } else if (counter < 1000000000) {
+          counter += 10000000;
+        }
       }
+      return count;
+    } else {
+      return limit;
     }
-    return count;
   }
 
    getReversedValue(limit) {
-    let count = 0;
-    let counter = this.min;
-    while (count < limit) {
-      count++;
-      if (counter < 100) {
-        counter++;
-      } else if (counter < 1000) {
-        counter += 10;
-      } else if (counter < 10000) {
-        counter += 100;
-      } else if (counter < 100000) {
-        counter += 1000;
-      } else if (counter < 1000000) {
-        counter += 10000;
-      } else if (counter < 10000000) {
-        counter += 100000;
-      } else if (counter < 100000000) {
-        counter += 1000000;
-      } else if (counter < 1000000000) {
-        counter += 10000000;
+    if (this.tenMultiplier) {
+      let count = 0;
+      let counter = this.min;
+      while (count < limit) {
+        count++;
+        if (counter < 100) {
+          counter++;
+        } else if (counter < 1000) {
+          counter += 10;
+        } else if (counter < 10000) {
+          counter += 100;
+        } else if (counter < 100000) {
+          counter += 1000;
+        } else if (counter < 1000000) {
+          counter += 10000;
+        } else if (counter < 10000000) {
+          counter += 100000;
+        } else if (counter < 100000000) {
+          counter += 1000000;
+        } else if (counter < 1000000000) {
+          counter += 10000000;
+        }
       }
+      return counter;
+    } else {
+      return limit;
     }
-    return counter;
   }
 
   /**

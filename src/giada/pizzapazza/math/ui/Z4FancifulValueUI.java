@@ -84,10 +84,12 @@ public class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI<Z4Fanciful
    *
    * @param min The minumum value
    * @param max The maximum value
+   * @param tenMultiplier true to use the ten multiplier for range spinner,
+   * false otherwise
    * @return This Z4FancifulValueUI
    */
-  public Z4FancifulValueUI setConstantRange(int min, int max) {
-    this.constantUI.setRange(min, max);
+  public Z4FancifulValueUI setConstantRange(int min, int max, boolean tenMultiplier) {
+    this.constantUI.setRange(min, max, tenMultiplier);
     return this;
   }
 
@@ -96,10 +98,12 @@ public class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI<Z4Fanciful
    *
    * @param min The minumum value
    * @param max The maximum value
+   * @param tenMultiplier true to use the ten multiplier for range spinner,
+   * false otherwise
    * @return This Z4FancifulValueUI
    */
-  public Z4FancifulValueUI setRandomRange(int min, int max) {
-    this.randomUI.setRange(min, max);
+  public Z4FancifulValueUI setRandomRange(int min, int max, boolean tenMultiplier) {
+    this.randomUI.setRange(min, max, tenMultiplier);
     return this;
   }
 
@@ -108,10 +112,12 @@ public class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI<Z4Fanciful
    *
    * @param min The minumum value
    * @param max The maximum value
+   * @param tenMultiplier true to use the ten multiplier for range spinner,
+   * false otherwise
    * @return This Z4FancifulValueUI
    */
-  public Z4FancifulValueUI setRandomLengthRange(int min, int max) {
-    this.randomUI.setLengthRange(min, max);
+  public Z4FancifulValueUI setRandomLengthRange(int min, int max, boolean tenMultiplier) {
+    this.randomUI.setLengthRange(min, max, tenMultiplier);
     return this;
   }
 

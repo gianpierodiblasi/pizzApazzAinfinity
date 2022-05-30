@@ -70,10 +70,12 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
    *
    * @param min The minumum value
    * @param max The maximum value
+   * @param tenMultiplier true to use the ten multiplier for range spinner,
+   * false otherwise
    * @return This Z4FancifulValueUI
    */
-   setConstantRange(min, max) {
-    this.constantUI.setRange(min, max);
+   setConstantRange(min, max, tenMultiplier) {
+    this.constantUI.setRange(min, max, tenMultiplier);
     return this;
   }
 
@@ -82,10 +84,12 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
    *
    * @param min The minumum value
    * @param max The maximum value
+   * @param tenMultiplier true to use the ten multiplier for range spinner,
+   * false otherwise
    * @return This Z4FancifulValueUI
    */
-   setRandomRange(min, max) {
-    this.randomUI.setRange(min, max);
+   setRandomRange(min, max, tenMultiplier) {
+    this.randomUI.setRange(min, max, tenMultiplier);
     return this;
   }
 
@@ -94,10 +98,12 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
    *
    * @param min The minumum value
    * @param max The maximum value
+   * @param tenMultiplier true to use the ten multiplier for range spinner,
+   * false otherwise
    * @return This Z4FancifulValueUI
    */
-   setRandomLengthRange(min, max) {
-    this.randomUI.setLengthRange(min, max);
+   setRandomLengthRange(min, max, tenMultiplier) {
+    this.randomUI.setLengthRange(min, max, tenMultiplier);
     return this;
   }
 

@@ -17,7 +17,7 @@ import simulation.dom.$HTMLElement;
 public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4SignedRandomValue> {
 
   private final Z4SignedValueUI signedValueUI = new Z4SignedValueUI().appendToComponent(this);
-  private final Z4SignedValueUI lengthUI = new Z4SignedValueUI().setSignVisible(false).setValueLabel("LENGTH", false, false).setRange(1, 1000000000).appendToElement(this.querySelector(".signed-random-value-length-ui"));
+  private final Z4SignedValueUI lengthUI = new Z4SignedValueUI().setSignVisible(false).setValueLabel("LENGTH", false, false).setRange(1, 1000000000, true).appendToElement(this.querySelector(".signed-random-value-length-ui"));
   private final $HTMLElement lengthBadge = this.querySelector(".signed-random-value-length-badge");
 
   private final static String PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
@@ -66,8 +66,8 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
 
         this.lengthUI.setEnabled(!this.value.isClassic());
         this.lengthBadge.style.display = this.value.isClassic() ? "none" : "inline-block";
-        
-        this.onchange.$apply(this.value.setSign(signedValue.getSign()));        
+
+        this.onchange.$apply(this.value.setSign(signedValue.getSign()));
         return null;
       };
     }
@@ -100,10 +100,12 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
    *
    * @param min The minumum (positive) value
    * @param max The maximum (positive) value (999999999 to show infinite)
+   * @param tenMultiplier true to use the ten multiplier for range spinner,
+   * false otherwise
    * @return This Z4SignedRandomValueUI
    */
-  public Z4SignedRandomValueUI setRange(int min, int max) {
-    this.signedValueUI.setRange(min, max);
+  public Z4SignedRandomValueUI setRange(int min, int max, boolean tenMultiplier) {
+    this.signedValueUI.setRange(min, max, tenMultiplier);
     return this;
   }
 
@@ -123,10 +125,12 @@ public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4Sign
    *
    * @param min The minumum (positive) value
    * @param max The maximum (positive) value (999999999 to show infinite)
+   * @param tenMultiplier true to use the ten multiplier for range spinner,
+   * false otherwise
    * @return This Z4SignedRandomValueUI
    */
-  public Z4SignedRandomValueUI setLengthRange(int min, int max) {
-    this.lengthUI.setRange(min, max);
+  public Z4SignedRandomValueUI setLengthRange(int min, int max, boolean tenMultiplier) {
+    this.lengthUI.setRange(min, max, tenMultiplier);
     return this;
   }
 

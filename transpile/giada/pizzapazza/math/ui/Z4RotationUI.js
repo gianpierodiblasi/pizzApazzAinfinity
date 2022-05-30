@@ -5,11 +5,11 @@
  */
 class Z4RotationUI extends Z4AbstractComponentWithValueUI {
 
-   startAngle = new Z4SignedValueUI().setCompact().setRange(0, 360).setValueLabel("START_ANGLE", true, false).setSignVisible(false).insertBeforeElement(this.querySelector(".rotation-type-button"));
+   startAngle = new Z4SignedValueUI().setCompact().setRange(0, 360, false).setValueLabel("START_ANGLE", true, false).setSignVisible(false).insertBeforeElement(this.querySelector(".rotation-type-button"));
 
    delayedCheck = this.querySelector(".rotation-delayed-check");
 
-   angle = new Z4FancifulValueUI().setValueLabel("ANGLE", true, false).setConstantRange(0, 180).setRandomRange(0, 180).insertBeforeElement(this.querySelector(".rotation-type-button"));
+   angle = new Z4FancifulValueUI().setValueLabel("ANGLE", true, false).setConstantRange(0, 180, false).setRandomRange(0, 180, false).insertBeforeElement(this.querySelector(".rotation-type-button"));
 
   static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
 
@@ -71,10 +71,12 @@ class Z4RotationUI extends Z4AbstractComponentWithValueUI {
    *
    * @param min The minumum value
    * @param max The maximum value
+   * @param tenMultiplier true to use the ten multiplier for range spinner,
+   * false otherwise
    * @return This Z4RotationUI
    */
-   setRandomLengthRange(min, max) {
-    this.angle.setRandomLengthRange(min, max);
+   setRandomLengthRange(min, max, tenMultiplier) {
+    this.angle.setRandomLengthRange(min, max, tenMultiplier);
     return this;
   }
 
