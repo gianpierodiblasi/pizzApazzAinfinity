@@ -26,6 +26,7 @@ public class Z4Spirograph extends Z4PointIterator<Z4Spirograph> {
    * Creates a Z4Spirograph
    */
   public Z4Spirograph() {
+    super();
     this.z4Point.setUseVectorModuleAsSize(true);
 
     this.P.$set("x", 0);
@@ -111,7 +112,7 @@ public class Z4Spirograph extends Z4PointIterator<Z4Spirograph> {
     Z4GradientColor gradientColor = new Z4GradientColor();
 
     this.draw(Z4Action.START, width / 2, height / 2);
-    this.draw(Z4Action.CONTINUE, width, height);
+    this.draw(Z4Action.CONTINUE, 3 * width / 4, 3 * height / 4);
 
     Z4Point next;
     while ((next = this.next()) != null) {

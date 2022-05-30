@@ -1,5 +1,5 @@
 /**
- * The component to edit a numeric value
+ * The component to edit a Z4Stamper
  *
  * @author gianpiero.di.blasi
  */

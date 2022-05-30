@@ -17,6 +17,7 @@ class Z4Spirograph extends Z4PointIterator {
    * Creates a Z4Spirograph
    */
   constructor() {
+    super();
     this.z4Point.setUseVectorModuleAsSize(true);
     this.P["x"] = 0;
     this.P["y"] = 0;
@@ -89,7 +90,7 @@ class Z4Spirograph extends Z4PointIterator {
     let arrowPainter = new Z4ArrowPainter();
     let gradientColor = new Z4GradientColor();
     this.draw(Z4Action.START, width / 2, height / 2);
-    this.draw(Z4Action.CONTINUE, width, height);
+    this.draw(Z4Action.CONTINUE, 3 * width / 4, 3 * height / 4);
     let next = null;
     while ((next = this.next()) !== null) {
       let vector = next.getZ4Vector();
