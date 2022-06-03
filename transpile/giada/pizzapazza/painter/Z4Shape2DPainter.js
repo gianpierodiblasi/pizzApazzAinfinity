@@ -31,6 +31,15 @@ class Z4Shape2DPainter extends Z4Painter {
   }
 
   /**
+   * Returns the shape
+   *
+   * @return The shape
+   */
+   getShape() {
+    return this.shape;
+  }
+
+  /**
    * Sets the size
    *
    * @param size The size
