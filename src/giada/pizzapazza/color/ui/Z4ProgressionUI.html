@@ -1,18 +1,66 @@
 <label class="form-label progression-label" style="margin-bottom:0px" data-token-lang-inner_text="FILLING">Filling</label>
-<!--
-<div class="input-group">
-  
-  <button class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside">
-    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary color-opacity-badge" style="border:1px solid white"></span>
+<div class="input-group progression-input-group">
+  <button class="btn btn-outline-secondary dropdown-toggle progression-type-button" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+    <img class="z4-dark-img-negative" data-type="progression" width="20" />
+    <span data-token-lang-inner_text="TYPE">Type</span>
+
+    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary progression-step-badge" style="border:1px solid white"></span>
   </button>
-  <ul class="dropdown-menu">
-    <li><button class="dropdown-item color-gray" type="button" data-token-lang-inner_text="GRAY">Gray</button></li>
-    <li><button class="dropdown-item color-negative" type="button" data-token-lang-inner_text="NEGATIVE">Negative</button></li>
+  <ul class="dropdown-menu progression-type-dropdown-menu">
+    <li>
+      <button class="dropdown-item" data-type="progression" type="button" data-value="spatial">
+        <img data-icon="spatial" data-type="progression" class="z4-dark-img-negative" width="36" />
+        <span data-token-lang-inner_text="SPATIAL">Spatial</span>
+      </button>
+    </li>
+    <li>
+      <button class="dropdown-item" data-type="progression" type="button" data-value="temporal">
+        <img data-icon="temporal" data-type="progression" class="z4-dark-img-negative" width="36" />
+        <span data-token-lang-inner_text="TEMPORAL">Temporal</span>
+      </button>
+    </li>
+    <li>
+      <button class="dropdown-item" data-type="progression" type="button" data-value="relativetopath">
+        <img data-icon="relativetopath" data-type="progression" class="z4-dark-img-negative" width="36" />
+        <span data-token-lang-inner_text="RELATIVE_TO_PATH">Relative to Path</span>
+      </button>
+    </li>
+    <li>
+      <button class="dropdown-item" data-type="progression" type="button" data-value="random">
+        <img data-icon="random" data-type="progression" class="z4-dark-img-negative" width="36" />
+        <span data-token-lang-inner_text="RANDOM">Random</span>
+      </button>
+    </li>    
     <li><hr class="dropdown-divider"/></li>
     <li class="mx-1" style="width:500px">
-      <label class="form-label" style="margin-bottom:0px" data-token-lang-inner_text="OPACITY">Opacity</label>
-      <label class="form-label color-opacity-range-label" style="margin-bottom:0px">255</label>
-      <input type="range" class="form-range color-opacity-range" value="255" min="0" max="255" step="1" />
+      <label class="form-label" style="margin-bottom:0px" data-token-lang-inner_text="STEP">Step</label>
+      <label class="form-label progression-step-range-label" style="margin-bottom:0px">0.1</label>
+      <input type="range" class="form-range progression-step-range" value="0.1" min="0" max="1" step="0.01" disabled />
     </li>
   </ul>
-</div>-->
+
+  <button class="btn btn-outline-secondary dropdown-toggle progression-lighting-button" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" style="z-index:  0">
+    <img class="z4-dark-img-negative" data-type="lighting" width="20" />
+    <span data-token-lang-inner_text="LIGHTING">Lighting</span>
+  </button>
+  <ul class="dropdown-menu progression-lighting-dropdown-menu">
+    <li>
+      <button class="dropdown-item" data-type="lighting" type="button" data-value="none">
+        <img data-icon="none" data-type="lighting" class="z4-dark-img-negative" width="36" />
+        <span data-token-lang-inner_text="NONE_HER">None</span>
+      </button>
+    </li>
+    <li>
+      <button class="dropdown-item" data-type="lighting" type="button" data-value="lighted">
+        <img data-icon="lighted" data-type="lighting" class="z4-dark-img-negative" width="36" />
+        <span data-token-lang-inner_text="LIGHTED">Lighted</span>
+      </button>
+    </li>
+    <li>
+      <button class="dropdown-item" data-type="lighting" type="button" data-value="darkened">
+        <img data-icon="darkened" data-type="lighting" class="z4-dark-img-negative" width="36" />
+        <span data-token-lang-inner_text="DARKENED">Darkened</span>
+      </button>
+    </li>
+  </ul>
+</div>

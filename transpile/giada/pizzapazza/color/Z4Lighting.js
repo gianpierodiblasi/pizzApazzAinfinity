@@ -13,7 +13,7 @@ class Z4Lighting {
   /**
    * lighting
    */
-  static  LIGTHED = new Z4Lighting();
+  static  LIGHTED = new Z4Lighting();
 
   /**
    * darkening

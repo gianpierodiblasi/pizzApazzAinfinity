@@ -16,7 +16,7 @@ class test_color3 {
       return null;
     };
     let ui1 = new Z4ProgressionUI().appendToElement(document.querySelector("#test1"));
-    let ui2 = new Z4ProgressionUI().setProgressionLabel("INTENSITY", true, true).setValue(Z4Progression.temporal(0.3, Z4Lighting.LIGTHED)).appendToElement(document.querySelector("#test3"));
+    let ui2 = new Z4ProgressionUI().setProgressionLabel("INTENSITY", true, true).setValue(Z4Progression.temporal(0.3, Z4Lighting.LIGHTED)).appendToElement(document.querySelector("#test3"));
     ui1.oninput = (value) => document.getElementById("test2").textContent = "ONINPUT " + test_color3.stringify(value);
     ui1.onchange = (value) => document.getElementById("test2").textContent = "ONCHANGE " + test_color3.stringify(value);
     document.getElementById("test2").textContent = test_color3.stringify(ui1.getValue());

@@ -111,7 +111,7 @@ class Z4Shape2DPainter extends Z4Painter {
       } else {
         let newColor = gradientColor.getZ4ColorAt(position, true, true);
         for (let scale = currentSize; scale > 0; scale--) {
-          if (lighting === Z4Lighting.LIGTHED) {
+          if (lighting === Z4Lighting.LIGHTED) {
             this.drawPath(context, scale, Z4Color.fromARGB(newColor.getARGB()).lighted(scale / currentSize));
           } else if (lighting === Z4Lighting.DARKENED) {
             this.drawPath(context, scale, Z4Color.fromARGB(newColor.getARGB()).darkened(scale / currentSize));

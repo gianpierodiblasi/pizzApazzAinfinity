@@ -2747,7 +2747,7 @@ class Z4Lighting {
   /**
    * lighting
    */
-  static  LIGTHED = new Z4Lighting();
+  static  LIGHTED = new Z4Lighting();
 
   /**
    * darkening
@@ -2764,27 +2764,168 @@ class Z4Lighting {
  */
 class Z4Progression {
 
-  /**
-   * The spatial progression
-   */
-  static  SPATIAL = new Z4Progression();
+   type = 0;
+
+   temporalStepProgression = 0.1;
+
+   lighting = Z4Lighting.NONE;
+
+  constructor(temporalStepProgression, lighting, type) {
+    this.temporalStepProgression = temporalStepProgression;
+    this.lighting = lighting;
+    this.type = type;
+  }
 
   /**
-   * The temporal progression
+   * Checks if this Z4Progression is a spatial progression
+   *
+   * @return true if this Z4Progression is a spatial progression, false
+   * otherwise
    */
-  static  TEMPORAL = new Z4Progression();
+   isSpatial() {
+    return this.type === 0;
+  }
 
   /**
-   * The progression relative to a path
+   * Checks if this Z4Progression is a temporal progression
+   *
+   * @return true if this Z4Progression is a temporal progression, false
+   * otherwise
    */
-  static  RELATIVE_TO_PATH = new Z4Progression();
+   isTemporal() {
+    return this.type === 1;
+  }
 
   /**
-   * The random progression
+   * Checks if this Z4Progression is a progression relative to a path
+   *
+   * @return true if this Z4Progression is a progression relative to a path,
+   * false otherwise
    */
-  static  RANDOM = new Z4Progression();
+   isRelativeToPath() {
+    return this.type === 2;
+  }
 
-  constructor() {
+  /**
+   * Checks if this Z4Progression is a random progression
+   *
+   * @return true if this Z4Progression is a random progression, false otherwise
+   */
+   isRandom() {
+    return this.type === 3;
+  }
+
+  /**
+   * Sets the step for temporal progression (in the range [0,1])
+   *
+   * @param temporalStepProgression The step for temporal progression (in the
+   * range [0,1])
+   * @return This Z4Progression
+   */
+   setTemporalStepProgression(temporalStepProgression) {
+    this.temporalStepProgression = temporalStepProgression;
+    return this;
+  }
+
+  /**
+   * Returns the step for temporal progression (in the range [0,1])
+   *
+   * @return The step for temporal progression (in the range [0,1])
+   */
+   getTemporalStepProgression() {
+    return this.temporalStepProgression;
+  }
+
+  /**
+   * Sets the color lighting
+   *
+   * @param lighting The color lighting
+   * @return This Z4Progression
+   */
+   setLighting(lighting) {
+    this.lighting = lighting;
+    return this;
+  }
+
+  /**
+   * Returns the color lighting
+   *
+   * @return The color lighting
+   */
+   getLighting() {
+    return this.lighting;
+  }
+
+  /**
+   * Sets the next color position in a point
+   *
+   * @param z4Point The point
+   */
+   next(z4Point) {
+    if (this.isTemporal()) {
+      z4Point.setLighting(this.lighting);
+      z4Point.setDrawBounds(false);
+      let colorPosition = z4Point.getColorPosition();
+      colorPosition = colorPosition === -1 ? 0 : colorPosition + this.temporalStepProgression;
+      if (colorPosition > 1) {
+        colorPosition -= 1;
+      }
+      z4Point.setColorPosition(colorPosition);
+    } else if (this.isSpatial()) {
+      z4Point.setLighting(Z4Lighting.NONE);
+      z4Point.setDrawBounds(false);
+      z4Point.setColorPosition(-1);
+    } else if (this.isRelativeToPath()) {
+      z4Point.setLighting(this.lighting);
+      z4Point.setDrawBounds(true);
+      z4Point.setColorPosition(-1);
+    } else if (this.isRandom()) {
+      z4Point.setLighting(this.lighting);
+      z4Point.setDrawBounds(false);
+      z4Point.setColorPosition(Math.random());
+    }
+  }
+
+  /**
+   * Returns a spatial progression
+   *
+   * @param lighting The color lighting
+   * @return The Z4Progression
+   */
+  static  spatial(lighting) {
+    return new Z4Progression(0, lighting, 0);
+  }
+
+  /**
+   * Returns a temporal progression
+   *
+   * @param temporalStepProgression The step for temporal progression (in the
+   * range [0,1])
+   * @param lighting The color lighting
+   * @return The Z4Progression
+   */
+  static  temporal(temporalStepProgression, lighting) {
+    return new Z4Progression(temporalStepProgression, lighting, 1);
+  }
+
+  /**
+   * Returns a progression relative to a path
+   *
+   * @param lighting The color lighting
+   * @return The Z4Progression
+   */
+  static  relativeToPath(lighting) {
+    return new Z4Progression(0, lighting, 2);
+  }
+
+  /**
+   * Returns a random progression
+   *
+   * @param lighting The color lighting
+   * @return The Z4Progression
+   */
+  static  random(lighting) {
+    return new Z4Progression(0, lighting, 3);
   }
 }
 /**
@@ -3177,6 +3318,151 @@ class Z4GradientColor {
    */
   static  fromStartStopZ4GradientColors(before, after, div) {
     return new Z4GradientColor().setStartColor(before.getZ4ColorAt(div, false, false).getARGB()).setStopColor(after.getZ4ColorAt(div, false, false).getARGB()).setRipple(before.getRipple()).setMirrored(before.isMirrored());
+  }
+}
+/**
+ * The component to show a color progression
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4ProgressionUI extends Z4AbstractComponentWithValueUI {
+
+   stepLabel = this.querySelector(".progression-step-range-label");
+
+   stepRange = this.querySelector(".progression-step-range");
+
+   stepBadge = this.querySelector(".progression-step-badge");
+
+  static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
+
+  static  UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4ProgressionUI.html");
+
+  /**
+   * Creates a Z4ProgressionUI
+   */
+  constructor() {
+    super(Z4ProgressionUI.UI);
+    let imgs = this.querySelectorAll(".progression-type-dropdown-menu img[data-type='progression']");
+    for (let i = 0; i < imgs.length; i++) {
+      let img = imgs.item(i);
+      img.setAttribute("src", Z4ProgressionUI.PATH + "z4progression_" + img.getAttribute("data-icon") + ".svg");
+    }
+    let buttons = this.querySelectorAll(".progression-type-dropdown-menu button[data-type='progression']");
+    for (let i = 0; i < buttons.length; i++) {
+      let button = buttons.item(i);
+      button.onclick = (event) => {
+        this.querySelector(".progression-type-button img[data-type='progression']").setAttribute("src", button.querySelector("img").getAttribute("src"));
+        switch(button.getAttribute("data-value")) {
+          case "spatial":
+            this.value = Z4Progression.spatial(this.value.getLighting());
+            break;
+          case "temporal":
+            this.value = Z4Progression.temporal(this.value.getTemporalStepProgression(), this.value.getLighting());
+            break;
+          case "relativetopath":
+            this.value = Z4Progression.relativeToPath(this.value.getLighting());
+            break;
+          case "random":
+            this.value = Z4Progression.random(this.value.getLighting());
+            break;
+        }
+        if (this.value.isTemporal()) {
+          this.stepRange.removeAttribute("disabled");
+        } else {
+          this.stepRange.setAttribute("disabled", "disabled");
+        }
+        this.stepBadge.style.display = this.value.isTemporal() ? "inline-block" : "none";
+        this.onchange(this.value);
+        return null;
+      };
+    }
+    this.stepRange.oninput = (event) => {
+      this.stepLabel.innerText = this.stepRange.value;
+      this.stepBadge.innerText = this.stepRange.value;
+      this.oninput(this.value.setTemporalStepProgression(this.stepRange.valueAsNumber));
+      return null;
+    };
+    this.stepRange.onchange = (event) => {
+      this.stepLabel.innerText = this.stepRange.value;
+      this.stepBadge.innerText = this.stepRange.value;
+      this.onchange(this.value.setTemporalStepProgression(this.stepRange.valueAsNumber));
+      return null;
+    };
+    imgs = this.querySelectorAll(".progression-lighting-dropdown-menu img[data-type='lighting']");
+    for (let i = 0; i < imgs.length; i++) {
+      let img = imgs.item(i);
+      img.setAttribute("src", Z4ProgressionUI.PATH + "z4lighting_" + img.getAttribute("data-icon") + ".svg");
+    }
+    buttons = this.querySelectorAll(".progression-lighting-dropdown-menu button[data-type='lighting']");
+    for (let i = 0; i < buttons.length; i++) {
+      let button = buttons.item(i);
+      button.onclick = (event) => {
+        this.querySelector(".progression-lighting-button img[data-type='lighting']").setAttribute("src", button.querySelector("img").getAttribute("src"));
+        switch(button.getAttribute("data-value")) {
+          case "none":
+            this.onchange(this.value.setLighting(Z4Lighting.NONE));
+            break;
+          case "lighted":
+            this.onchange(this.value.setLighting(Z4Lighting.LIGHTED));
+            break;
+          case "darkened":
+            this.onchange(this.value.setLighting(Z4Lighting.DARKENED));
+            break;
+        }
+        return null;
+      };
+    }
+    this.setValue(Z4Progression.spatial(Z4Lighting.NONE));
+  }
+
+  /**
+   * Sets the token of the progression label
+   *
+   * @param token The token of the progression label
+   * @param bold true for bold font, false otherwise
+   * @param italic true for italic font, false otherwise
+   * @return This Z4ProgressionUI
+   */
+   setProgressionLabel(token, bold, italic) {
+    let progressionLabel = this.querySelector(".progression-label");
+    progressionLabel.setAttribute("data-token-lang-inner_text", token);
+    progressionLabel.innerHTML = Z4MessageFactory.get(token);
+    progressionLabel.style.fontWeight = bold ? "700" : "400";
+    progressionLabel.style.fontStyle = italic ? "italic" : "normal";
+    return this;
+  }
+
+   setValue(value) {
+    this.value = value;
+    if (this.value.isSpatial()) {
+      this.querySelector(".progression-type-button img").setAttribute("src", this.querySelector(".progression-type-dropdown-menu img[data-icon='spatial']").getAttribute("src"));
+    } else if (this.value.isTemporal()) {
+      this.querySelector(".progression-type-button img").setAttribute("src", this.querySelector(".progression-type-dropdown-menu img[data-icon='temporal']").getAttribute("src"));
+    } else if (this.value.isRelativeToPath()) {
+      this.querySelector(".progression-type-button img").setAttribute("src", this.querySelector(".progression-type-dropdown-menu img[data-icon='relativetopath']").getAttribute("src"));
+    } else if (this.value.isRandom()) {
+      this.querySelector(".progression-type-button img").setAttribute("src", this.querySelector(".progression-type-dropdown-menu img[data-icon='random']").getAttribute("src"));
+    }
+    this.stepRange.valueAsNumber = this.value.getTemporalStepProgression();
+    this.stepLabel.innerText = this.stepRange.value;
+    if (this.value.isTemporal()) {
+      this.stepRange.removeAttribute("disabled");
+    } else {
+      this.stepRange.setAttribute("disabled", "disabled");
+    }
+    this.stepBadge.style.display = this.value.isTemporal() ? "inline-block" : "none";
+    this.stepBadge.innerText = "" + this.value.getTemporalStepProgression();
+    if (this.value.getLighting() === Z4Lighting.NONE) {
+      this.querySelector(".progression-lighting-button img").setAttribute("src", this.querySelector(".progression-lighting-dropdown-menu img[data-icon='none']").getAttribute("src"));
+    } else if (this.value.getLighting() === Z4Lighting.LIGHTED) {
+      this.querySelector(".progression-lighting-button img").setAttribute("src", this.querySelector(".progression-lighting-dropdown-menu img[data-icon='lighted']").getAttribute("src"));
+    } else if (this.value.getLighting() === Z4Lighting.DARKENED) {
+      this.querySelector(".progression-lighting-button img").setAttribute("src", this.querySelector(".progression-lighting-dropdown-menu img[data-icon='darkened']").getAttribute("src"));
+    }
+    return this;
+  }
+
+   dispose() {
   }
 }
 /**
@@ -3629,7 +3915,7 @@ class Z4Shape2DPainter extends Z4Painter {
       } else {
         let newColor = gradientColor.getZ4ColorAt(position, true, true);
         for (let scale = currentSize; scale > 0; scale--) {
-          if (lighting === Z4Lighting.LIGTHED) {
+          if (lighting === Z4Lighting.LIGHTED) {
             this.drawPath(context, scale, Z4Color.fromARGB(newColor.getARGB()).lighted(scale / currentSize));
           } else if (lighting === Z4Lighting.DARKENED) {
             this.drawPath(context, scale, Z4Color.fromARGB(newColor.getARGB()).darkened(scale / currentSize));
@@ -3718,17 +4004,7 @@ class Z4PointIterator {
   /**
    * The color progression
    */
-   progression = Z4Progression.SPATIAL;
-
-  /**
-   * The step for temporal progression (in the range [0,1])
-   */
-   temporalStepProgression = 0.1;
-
-  /**
-   * The color lighting
-   */
-   lighting = Z4Lighting.NONE;
+   progression = Z4Progression.spatial(Z4Lighting.NONE);
 
   /**
    * The rotation
@@ -3762,15 +4038,10 @@ class Z4PointIterator {
    * Sets the color progression
    *
    * @param progression The color progression
-   * @param temporalStepProgression The step for temporal progression (in the
-   * range [0,1])
-   * @param lighting The color lighting
    * @return This Z4PointIterator
    */
-   seProgression(progression, temporalStepProgression, lighting) {
+   seProgression(progression) {
     this.progression = progression;
-    this.temporalStepProgression = temporalStepProgression;
-    this.lighting = lighting;
     return this;
   }
 
@@ -3792,15 +4063,6 @@ class Z4PointIterator {
    */
    getRotation() {
     return this.rotation;
-  }
-
-   nextColorPosition() {
-    let colorPosition = this.z4Point.getColorPosition();
-    colorPosition = colorPosition === -1 ? 0 : colorPosition + this.temporalStepProgression;
-    if (colorPosition > 1) {
-      colorPosition -= 1;
-    }
-    this.z4Point.setColorPosition(colorPosition);
   }
 
   /**
@@ -3879,14 +4141,9 @@ class Z4Stamper extends Z4PointIterator {
         this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P["x"], this.P["y"], 1, angle));
       }
       this.rotation.nextSide(this.z4Point, null);
-      if (this.progression === Z4Progression.TEMPORAL) {
-        this.z4Point.setLighting(this.lighting);
-        this.nextColorPosition();
-      } else if (this.progression === Z4Progression.SPATIAL) {
-        this.z4Point.setLighting(Z4Lighting.NONE);
-        this.z4Point.setColorPosition(-1);
-      } else if (this.progression === Z4Progression.RELATIVE_TO_PATH || this.progression === Z4Progression.RANDOM) {
-        this.z4Point.setLighting(this.lighting);
+      this.progression.next(this.z4Point);
+      if (this.progression.isRelativeToPath()) {
+        this.z4Point.setDrawBounds(false);
         this.z4Point.setColorPosition(Math.random());
       }
       return this.z4Point.setIntensity(this.intensity.next());
@@ -4137,23 +4394,7 @@ class Z4Tracer extends Z4PointIterator {
       }
       this.z4Point.setIntensity(this.nextEnvelope() * this.intensity.next());
       this.rotation.nextSide(this.z4Point, this.currentVector);
-      if (this.progression === Z4Progression.TEMPORAL) {
-        this.z4Point.setLighting(this.lighting);
-        this.z4Point.setDrawBounds(false);
-        this.nextColorPosition();
-      } else if (this.progression === Z4Progression.SPATIAL) {
-        this.z4Point.setLighting(Z4Lighting.NONE);
-        this.z4Point.setDrawBounds(false);
-        this.z4Point.setColorPosition(-1);
-      } else if (this.progression === Z4Progression.RELATIVE_TO_PATH) {
-        this.z4Point.setLighting(this.lighting);
-        this.z4Point.setDrawBounds(true);
-        this.z4Point.setColorPosition(-1);
-      } else if (this.progression === Z4Progression.RANDOM) {
-        this.z4Point.setLighting(this.lighting);
-        this.z4Point.setDrawBounds(false);
-        this.z4Point.setColorPosition(Math.random());
-      }
+      this.progression.next(this.z4Point);
       if (this.z4Point.isDrawBounds() && this.z4Point.getIntensity() > 0) {
         this.clones.push(this.z4Point.clone());
       }
@@ -4418,23 +4659,7 @@ class Z4Spirograph extends Z4PointIterator {
       let angle = this.rotation.next(vector.getPhase());
       this.z4Point.setZ4Vector(Z4Vector.fromVector(this.center["x"], this.center["y"], vector.getModule(), angle));
       this.rotation.nextSide(this.z4Point, vector);
-      if (this.progression === Z4Progression.TEMPORAL) {
-        this.z4Point.setLighting(this.lighting);
-        this.z4Point.setDrawBounds(false);
-        this.nextColorPosition();
-      } else if (this.progression === Z4Progression.SPATIAL) {
-        this.z4Point.setLighting(Z4Lighting.NONE);
-        this.z4Point.setDrawBounds(false);
-        this.z4Point.setColorPosition(-1);
-      } else if (this.progression === Z4Progression.RELATIVE_TO_PATH) {
-        this.z4Point.setLighting(this.lighting);
-        this.z4Point.setDrawBounds(true);
-        this.z4Point.setColorPosition(-1);
-      } else if (this.progression === Z4Progression.RANDOM) {
-        this.z4Point.setLighting(this.lighting);
-        this.z4Point.setDrawBounds(false);
-        this.z4Point.setColorPosition(Math.random());
-      }
+      this.progression.next(this.z4Point);
       if (this.z4Point.isDrawBounds()) {
         this.clones.push(this.z4Point.clone());
       }

@@ -14,7 +14,7 @@ public class Z4Lighting {
   /**
    * lighting
    */
-  public static final Z4Lighting LIGTHED = new Z4Lighting();
+  public static final Z4Lighting LIGHTED = new Z4Lighting();
   /**
    * darkening
    */

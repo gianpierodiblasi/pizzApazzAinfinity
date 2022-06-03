@@ -96,7 +96,7 @@ public class Z4Progression {
    * @return The color lighting
    */
   public Z4Lighting getLighting() {
-    return lighting;
+    return this.lighting;
   }
 
   /**

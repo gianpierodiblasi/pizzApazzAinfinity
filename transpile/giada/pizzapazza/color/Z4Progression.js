@@ -94,7 +94,7 @@ class Z4Progression {
    * @return The color lighting
    */
    getLighting() {
-    return lighting;
+    return this.lighting;
   }
 
   /**

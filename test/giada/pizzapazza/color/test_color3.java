@@ -31,7 +31,7 @@ public class test_color3 {
     };
 
     Z4ProgressionUI ui1 = new Z4ProgressionUI().appendToElement(document.querySelector("#test1"));
-    Z4ProgressionUI ui2 = new Z4ProgressionUI().setProgressionLabel("INTENSITY", true, true).setValue(Z4Progression.temporal(0.3, Z4Lighting.LIGTHED)).appendToElement(document.querySelector("#test3"));
+    Z4ProgressionUI ui2 = new Z4ProgressionUI().setProgressionLabel("INTENSITY", true, true).setValue(Z4Progression.temporal(0.3, Z4Lighting.LIGHTED)).appendToElement(document.querySelector("#test3"));
 
     ui1.oninput = (value) -> document.getElementById("test2").textContent = "ONINPUT " + test_color3.stringify(value);
     ui1.onchange = (value) -> document.getElementById("test2").textContent = "ONCHANGE " + test_color3.stringify(value);
