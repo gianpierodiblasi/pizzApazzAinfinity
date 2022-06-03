@@ -45,9 +45,18 @@ class Z4PointIterator {
    * @param progression The color progression
    * @return This Z4PointIterator
    */
-   seProgression(progression) {
+   setProgression(progression) {
     this.progression = progression;
     return this;
+  }
+
+  /**
+   * Returns the color progression
+   *
+   * @return The color progression
+   */
+   getProgression() {
+    return this.progression;
   }
 
   /**

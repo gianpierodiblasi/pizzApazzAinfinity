@@ -11,6 +11,8 @@ class Z4SpirographUI extends Z4AbstractComponentWithValueUI {
 
    rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".spirograph-container"));
 
+   progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".spirograph-container"));
+
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
    mutationObserver = new MutationObserver(() => this.drawCanvas());
@@ -35,12 +37,21 @@ class Z4SpirographUI extends Z4AbstractComponentWithValueUI {
       this.onchange(this.value.setRotation(v));
       this.drawCanvas();
     };
+    this.progression.oninput = (v) => {
+      this.oninput(this.value.setProgression(v));
+      this.drawCanvas();
+    };
+    this.progression.onchange = (v) => {
+      this.onchange(this.value.setProgression(v));
+      this.drawCanvas();
+    };
     this.setValue(new Z4Spirograph());
   }
 
    setValue(value) {
     this.value = value;
     this.rotation.setValue(this.value.getRotation());
+    this.progression.setValue(this.value.getProgression());
     this.drawCanvas();
     return this;
   }

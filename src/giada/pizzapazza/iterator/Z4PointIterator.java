@@ -55,9 +55,18 @@ public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
    * @return This Z4PointIterator
    */
   @SuppressWarnings("unchecked")
-  public T seProgression(Z4Progression progression) {
+  public T setProgression(Z4Progression progression) {
     this.progression = progression;
     return (T) this;
+  }
+
+  /**
+   * Returns the color progression
+   *
+   * @return The color progression
+   */
+  public Z4Progression getProgression() {
+    return this.progression;
   }
 
   /**

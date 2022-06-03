@@ -17,6 +17,8 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
 
    push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
 
+   progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".tracer-container"));
+
    attack = new Z4FancifulValueUI().setValueLabel("ATTACK", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-second-row"));
 
    sustain = new Z4FancifulValueUI().setValueLabel("SUSTAIN", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-second-row"));
@@ -43,16 +45,18 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
     let config = new Object();
     config["attributeFilter"] = new Array("class");
     this.mutationObserver.observe(document.body, config);
-    this.intensity.oninput = (v) => this.set(v, null, null, null, null, false);
-    this.intensity.onchange = (v) => this.set(v, null, null, null, null, true);
-    this.rotation.oninput = (v) => this.set(null, v, null, null, null, false);
-    this.rotation.onchange = (v) => this.set(null, v, null, null, null, true);
-    this.multiplicity.oninput = (v) => this.set(null, null, v, null, null, false);
-    this.multiplicity.onchange = (v) => this.set(null, null, v, null, null, true);
-    this.push.oninput = (v) => this.set(null, null, null, v, null, false);
-    this.push.onchange = (v) => this.set(null, null, null, v, null, true);
-    this.step.oninput = (v) => this.set(null, null, null, null, v, false);
-    this.step.onchange = (v) => this.set(null, null, null, null, v, true);
+    this.intensity.oninput = (v) => this.set(v, null, null, null, null, null, false);
+    this.intensity.onchange = (v) => this.set(v, null, null, null, null, null, true);
+    this.rotation.oninput = (v) => this.set(null, v, null, null, null, null, false);
+    this.rotation.onchange = (v) => this.set(null, v, null, null, null, null, true);
+    this.multiplicity.oninput = (v) => this.set(null, null, v, null, null, null, false);
+    this.multiplicity.onchange = (v) => this.set(null, null, v, null, null, null, true);
+    this.push.oninput = (v) => this.set(null, null, null, v, null, null, false);
+    this.push.onchange = (v) => this.set(null, null, null, v, null, null, true);
+    this.step.oninput = (v) => this.set(null, null, null, null, v, null, false);
+    this.step.onchange = (v) => this.set(null, null, null, null, v, null, true);
+    this.progression.oninput = (v) => this.set(null, null, null, null, null, v, false);
+    this.progression.onchange = (v) => this.set(null, null, null, null, null, v, true);
     this.attack.oninput = (v) => this.setEnvelope(false);
     this.attack.onchange = (v) => this.setEnvelope(true);
     this.sustain.oninput = (v) => this.setEnvelope(false);
@@ -73,7 +77,7 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
     this.setValue(new Z4Tracer());
   }
 
-   set(intensity, rotation, multiplicity, push, step, onchange) {
+   set(intensity, rotation, multiplicity, push, step, progression, onchange) {
     if (intensity) {
       this.value.setIntensity(intensity);
     }
@@ -88,6 +92,9 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
     }
     if (step) {
       this.value.setStep(step);
+    }
+    if (progression) {
+      this.value.setProgression(progression);
     }
     this.drawCanvas();
     if (onchange) {
@@ -114,6 +121,7 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
     this.multiplicity.setValue(this.value.getMultiplicity());
     this.push.setValue(this.value.getPush());
     this.step.setValue(this.value.getStep());
+    this.progression.setValue(this.value.getProgression());
     this.attack.setValue(this.value.getAttack());
     this.sustain.setValue(this.value.getSustain());
     this.release.setValue(this.value.getRelease());

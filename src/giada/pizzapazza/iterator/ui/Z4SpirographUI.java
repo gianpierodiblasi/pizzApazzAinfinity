@@ -1,6 +1,7 @@
 package giada.pizzapazza.iterator.ui;
 
 import def.js.Array;
+import giada.pizzapazza.color.ui.Z4ProgressionUI;
 import giada.pizzapazza.iterator.Z4Spirograph;
 import giada.pizzapazza.math.ui.Z4RotationUI;
 import giada.pizzapazza.setting.Z4HTMLFactory;
@@ -26,7 +27,8 @@ public class Z4SpirographUI extends Z4AbstractComponentWithValueUI<Z4Spirograph>
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
 
   private final Z4RotationUI rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".spirograph-container"));
-
+  private final Z4ProgressionUI progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".spirograph-container"));
+  
   private final $ResizeObserver resizeObserver = new $ResizeObserver(() -> this.drawCanvas());
   private final $MutationObserver mutationObserver = new $MutationObserver(() -> this.drawCanvas());
 
@@ -53,6 +55,16 @@ public class Z4SpirographUI extends Z4AbstractComponentWithValueUI<Z4Spirograph>
       this.onchange.$apply(this.value.setRotation(v));
       this.drawCanvas();
     };
+    
+    this.progression.oninput = (v) -> {
+      this.oninput.$apply(this.value.setProgression(v));
+      this.drawCanvas();
+    };
+    this.progression.onchange = (v) -> {
+      this.onchange.$apply(this.value.setProgression(v));
+      this.drawCanvas();
+    };
+    
     this.setValue(new Z4Spirograph());
   }
 
@@ -62,6 +74,7 @@ public class Z4SpirographUI extends Z4AbstractComponentWithValueUI<Z4Spirograph>
     this.value = value;
 
     this.rotation.setValue(this.value.getRotation());
+    this.progression.setValue(this.value.getProgression());
     this.drawCanvas();
 
     return (T) this;

@@ -1,6 +1,8 @@
 package giada.pizzapazza.iterator.ui;
 
 import def.js.Array;
+import giada.pizzapazza.color.Z4Progression;
+import giada.pizzapazza.color.ui.Z4ProgressionUI;
 import giada.pizzapazza.iterator.Z4Stamper;
 import giada.pizzapazza.math.Z4FancifulValue;
 import giada.pizzapazza.math.Z4Rotation;
@@ -32,7 +34,8 @@ public class Z4StamperUI extends Z4AbstractComponentWithValueUI<Z4Stamper> {
   private final Z4RotationUI rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".stamper-container"));
   private final Z4FancifulValueUI multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
   private final Z4FancifulValueUI push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
-
+  private final Z4ProgressionUI progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".stamper-container"));
+  
   private final $ResizeObserver resizeObserver = new $ResizeObserver(() -> this.drawCanvas());
   private final $MutationObserver mutationObserver = new $MutationObserver(() -> this.drawCanvas());
 
@@ -51,18 +54,21 @@ public class Z4StamperUI extends Z4AbstractComponentWithValueUI<Z4Stamper> {
     config.$set("attributeFilter", new Array<>("class"));
     this.mutationObserver.observe(document.body, config);
 
-    this.intensity.oninput = (v) -> this.set(v, null, null, null, false);
-    this.intensity.onchange = (v) -> this.set(v, null, null, null, true);
-    this.rotation.oninput = (v) -> this.set(null, v, null, null, false);
-    this.rotation.onchange = (v) -> this.set(null, v, null, null, true);
-    this.multiplicity.oninput = (v) -> this.set(null, null, v, null, false);
-    this.multiplicity.onchange = (v) -> this.set(null, null, v, null, true);
-    this.push.oninput = (v) -> this.set(null, null, null, v, false);
-    this.push.onchange = (v) -> this.set(null, null, null, v, true);
+    this.intensity.oninput = (v) -> this.set(v, null, null, null, null, false);
+    this.intensity.onchange = (v) -> this.set(v, null, null, null, null, true);
+    this.rotation.oninput = (v) -> this.set(null, v, null, null, null, false);
+    this.rotation.onchange = (v) -> this.set(null, v, null, null, null, true);
+    this.multiplicity.oninput = (v) -> this.set(null, null, v, null, null, false);
+    this.multiplicity.onchange = (v) -> this.set(null, null, v, null, null, true);
+    this.push.oninput = (v) -> this.set(null, null, null, v, null, false);
+    this.push.onchange = (v) -> this.set(null, null, null, v, null, true);
+    this.progression.oninput = (v) -> this.set(null, null, null, null, v, false);
+    this.progression.onchange = (v) -> this.set(null, null, null, null, v, true);
+
     this.setValue(new Z4Stamper());
   }
 
-  private void set(Z4FancifulValue intensity, Z4Rotation rotation, Z4FancifulValue multiplicity, Z4FancifulValue push, boolean onchange) {
+  private void set(Z4FancifulValue intensity, Z4Rotation rotation, Z4FancifulValue multiplicity, Z4FancifulValue push, Z4Progression progression, boolean onchange) {
     if ($exists(intensity)) {
       this.value.setIntensity(intensity);
     }
@@ -74,6 +80,9 @@ public class Z4StamperUI extends Z4AbstractComponentWithValueUI<Z4Stamper> {
     }
     if ($exists(push)) {
       this.value.setPush(push);
+    }
+    if ($exists(progression)) {
+      this.value.setProgression(progression);
     }
 
     this.drawCanvas();
@@ -94,6 +103,8 @@ public class Z4StamperUI extends Z4AbstractComponentWithValueUI<Z4Stamper> {
     this.rotation.setValue(this.value.getRotation());
     this.multiplicity.setValue(this.value.getMultiplicity());
     this.push.setValue(this.value.getPush());
+    this.progression.setValue(this.value.getProgression());
+    
     this.drawCanvas();
 
     return (T) this;
