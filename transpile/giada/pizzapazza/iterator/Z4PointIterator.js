@@ -9,17 +9,7 @@ class Z4PointIterator {
   /**
    * The color progression
    */
-   progression = Z4Progression.SPATIAL;
-
-  /**
-   * The step for temporal progression (in the range [0,1])
-   */
-   temporalStepProgression = 0.1;
-
-  /**
-   * The color lighting
-   */
-   lighting = Z4Lighting.NONE;
+   progression = Z4Progression.spatial(Z4Lighting.NONE);
 
   /**
    * The rotation
@@ -53,15 +43,10 @@ class Z4PointIterator {
    * Sets the color progression
    *
    * @param progression The color progression
-   * @param temporalStepProgression The step for temporal progression (in the
-   * range [0,1])
-   * @param lighting The color lighting
    * @return This Z4PointIterator
    */
-   seProgression(progression, temporalStepProgression, lighting) {
+   seProgression(progression) {
     this.progression = progression;
-    this.temporalStepProgression = temporalStepProgression;
-    this.lighting = lighting;
     return this;
   }
 
@@ -83,15 +68,6 @@ class Z4PointIterator {
    */
    getRotation() {
     return this.rotation;
-  }
-
-   nextColorPosition() {
-    let colorPosition = this.z4Point.getColorPosition();
-    colorPosition = colorPosition === -1 ? 0 : colorPosition + this.temporalStepProgression;
-    if (colorPosition > 1) {
-      colorPosition -= 1;
-    }
-    this.z4Point.setColorPosition(colorPosition);
   }
 
   /**

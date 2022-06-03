@@ -3,8 +3,6 @@ package giada.pizzapazza.iterator;
 import def.js.Array;
 import giada.pizzapazza.color.Z4Color;
 import giada.pizzapazza.color.Z4GradientColor;
-import giada.pizzapazza.color.Z4Lighting;
-import giada.pizzapazza.color.Z4Progression;
 import giada.pizzapazza.math.Z4FancifulValue;
 import giada.pizzapazza.math.Z4Math;
 import giada.pizzapazza.math.Z4Point;
@@ -165,24 +163,7 @@ public class Z4Tracer extends Z4PointIterator<Z4Tracer> {
       }
       this.z4Point.setIntensity(this.nextEnvelope() * this.intensity.next());
       this.rotation.nextSide(this.z4Point, this.currentVector);
-
-      if (this.progression == Z4Progression.TEMPORAL) {
-        this.z4Point.setLighting(this.lighting);
-        this.z4Point.setDrawBounds(false);
-        this.nextColorPosition();
-      } else if (this.progression == Z4Progression.SPATIAL) {
-        this.z4Point.setLighting(Z4Lighting.NONE);
-        this.z4Point.setDrawBounds(false);
-        this.z4Point.setColorPosition(-1);
-      } else if (this.progression == Z4Progression.RELATIVE_TO_PATH) {
-        this.z4Point.setLighting(this.lighting);
-        this.z4Point.setDrawBounds(true);
-        this.z4Point.setColorPosition(-1);
-      } else if (this.progression == Z4Progression.RANDOM) {
-        this.z4Point.setLighting(this.lighting);
-        this.z4Point.setDrawBounds(false);
-        this.z4Point.setColorPosition(Math.random());
-      }
+      this.progression.next(this.z4Point);
 
       if (this.z4Point.isDrawBounds() && this.z4Point.getIntensity() > 0) {
         this.clones.push(this.z4Point.clone());

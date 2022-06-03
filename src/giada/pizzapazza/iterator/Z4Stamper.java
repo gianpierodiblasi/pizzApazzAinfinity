@@ -3,8 +3,6 @@ package giada.pizzapazza.iterator;
 import def.js.Array;
 import giada.pizzapazza.color.Z4Color;
 import giada.pizzapazza.color.Z4GradientColor;
-import giada.pizzapazza.color.Z4Lighting;
-import giada.pizzapazza.color.Z4Progression;
 import giada.pizzapazza.math.Z4FancifulValue;
 import giada.pizzapazza.math.Z4Math;
 import giada.pizzapazza.math.Z4Point;
@@ -66,15 +64,10 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
         this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P.$get("x"), this.P.$get("y"), 1, angle));
       }
       this.rotation.nextSide(this.z4Point, null);
+      this.progression.next(this.z4Point);
 
-      if (this.progression == Z4Progression.TEMPORAL) {
-        this.z4Point.setLighting(this.lighting);
-        this.nextColorPosition();
-      } else if (this.progression == Z4Progression.SPATIAL) {
-        this.z4Point.setLighting(Z4Lighting.NONE);
-        this.z4Point.setColorPosition(-1);
-      } else if (this.progression == Z4Progression.RELATIVE_TO_PATH || this.progression == Z4Progression.RANDOM) {
-        this.z4Point.setLighting(this.lighting);
+      if (this.progression.isRelativeToPath()) {
+        this.z4Point.setDrawBounds(false);
         this.z4Point.setColorPosition(Math.random());
       }
 

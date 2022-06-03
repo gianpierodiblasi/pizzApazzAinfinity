@@ -61,23 +61,7 @@ class Z4Spirograph extends Z4PointIterator {
       let angle = this.rotation.next(vector.getPhase());
       this.z4Point.setZ4Vector(Z4Vector.fromVector(this.center["x"], this.center["y"], vector.getModule(), angle));
       this.rotation.nextSide(this.z4Point, vector);
-      if (this.progression === Z4Progression.TEMPORAL) {
-        this.z4Point.setLighting(this.lighting);
-        this.z4Point.setDrawBounds(false);
-        this.nextColorPosition();
-      } else if (this.progression === Z4Progression.SPATIAL) {
-        this.z4Point.setLighting(Z4Lighting.NONE);
-        this.z4Point.setDrawBounds(false);
-        this.z4Point.setColorPosition(-1);
-      } else if (this.progression === Z4Progression.RELATIVE_TO_PATH) {
-        this.z4Point.setLighting(this.lighting);
-        this.z4Point.setDrawBounds(true);
-        this.z4Point.setColorPosition(-1);
-      } else if (this.progression === Z4Progression.RANDOM) {
-        this.z4Point.setLighting(this.lighting);
-        this.z4Point.setDrawBounds(false);
-        this.z4Point.setColorPosition(Math.random());
-      }
+      this.progression.next(this.z4Point);
       if (this.z4Point.isDrawBounds()) {
         this.clones.push(this.z4Point.clone());
       }
