@@ -9,10 +9,8 @@ class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI {
 
    ctx = this.canvas.getContext("2d");
 
-  // 
-  // private final Z4RotationUI rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".shape2d-painter-container"));
-  // private final Z4ProgressionUI progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".shape2d-painter-container"));
-  // 
+   size = new Z4FancifulValueUI().setValueLabel("SIZE", true, true).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".shape2d-painter-container-first-row"));
+
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
    mutationObserver = new MutationObserver(() => this.drawCanvas());
@@ -74,24 +72,14 @@ class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI {
         return null;
       };
     }
-    // this.rotation.oninput = (v) -> {
-    // this.oninput.$apply(this.value.setRotation(v));
-    // this.drawCanvas();
-    // };
-    // this.rotation.onchange = (v) -> {
-    // this.onchange.$apply(this.value.setRotation(v));
-    // this.drawCanvas();
-    // };
-    // 
-    // this.progression.oninput = (v) -> {
-    // this.oninput.$apply(this.value.setProgression(v));
-    // this.drawCanvas();
-    // };
-    // this.progression.onchange = (v) -> {
-    // this.onchange.$apply(this.value.setProgression(v));
-    // this.drawCanvas();
-    // };
-    // 
+    this.size.oninput = (v) => {
+      this.oninput(this.value.setSize(v));
+      this.drawCanvas();
+    };
+    this.size.onchange = (v) => {
+      this.onchange(this.value.setSize(v));
+      this.drawCanvas();
+    };
     this.setValue(new Z4Shape2DPainter());
   }
 
@@ -116,8 +104,7 @@ class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI {
     } else if (this.value.getShape() === Z4Shape2D.STAR) {
       this.querySelector(".shape2d-painter-shape-button img").setAttribute("src", this.querySelector(".shape2d-painter-shape-dropdown-menu img[data-icon='star']").getAttribute("src"));
     }
-    // this.rotation.setValue(this.value.getRotation());
-    // this.progression.setValue(this.value.getProgression());
+    this.size.setValue(this.value.getSize());
     this.drawCanvas();
     return this;
   }

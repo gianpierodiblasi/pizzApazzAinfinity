@@ -4,18 +4,15 @@ import def.dom.HTMLElement;
 import def.dom.NodeList;
 import def.js.Array;
 import giada.pizzapazza.Z4Loader;
-import giada.pizzapazza.color.ui.Z4ProgressionUI;
 import giada.pizzapazza.math.Z4Shape2D;
-import giada.pizzapazza.math.ui.Z4RotationUI;
+import giada.pizzapazza.math.ui.Z4FancifulValueUI;
 import giada.pizzapazza.painter.Z4Shape2DPainter;
 import giada.pizzapazza.setting.Z4HTMLFactory;
 import giada.pizzapazza.ui.Z4AbstractComponentWithValueUI;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
-import simulation.dom.$OffscreenCanvas;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.document;
-import static simulation.js.$Globals.window;
 import simulation.js.$MutationObserver;
 import simulation.js.$Object;
 import simulation.js.$ResizeObserver;
@@ -29,10 +26,9 @@ public class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI<Z4Shape2D
 
   private final $Canvas canvas = ($Canvas) this.querySelector(".shape2d-painter-canvas");
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
-//
-//  private final Z4RotationUI rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".shape2d-painter-container"));
-//  private final Z4ProgressionUI progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".shape2d-painter-container"));
-//  
+
+  private final Z4FancifulValueUI size = new Z4FancifulValueUI().setValueLabel("SIZE", true, true).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".shape2d-painter-container-first-row"));
+
   private final $ResizeObserver resizeObserver = new $ResizeObserver(() -> this.drawCanvas());
   private final $MutationObserver mutationObserver = new $MutationObserver(() -> this.drawCanvas());
 
@@ -99,24 +95,15 @@ public class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI<Z4Shape2D
       };
     }
 
-//    this.rotation.oninput = (v) -> {
-//      this.oninput.$apply(this.value.setRotation(v));
-//      this.drawCanvas();
-//    };
-//    this.rotation.onchange = (v) -> {
-//      this.onchange.$apply(this.value.setRotation(v));
-//      this.drawCanvas();
-//    };
-//    
-//    this.progression.oninput = (v) -> {
-//      this.oninput.$apply(this.value.setProgression(v));
-//      this.drawCanvas();
-//    };
-//    this.progression.onchange = (v) -> {
-//      this.onchange.$apply(this.value.setProgression(v));
-//      this.drawCanvas();
-//    };
-//    
+    this.size.oninput = (v) -> {
+      this.oninput.$apply(this.value.setSize(v));
+      this.drawCanvas();
+    };
+    this.size.onchange = (v) -> {
+      this.onchange.$apply(this.value.setSize(v));
+      this.drawCanvas();
+    };
+
     this.setValue(new Z4Shape2DPainter());
   }
 
@@ -145,8 +132,7 @@ public class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI<Z4Shape2D
       this.querySelector(".shape2d-painter-shape-button img").setAttribute("src", this.querySelector(".shape2d-painter-shape-dropdown-menu img[data-icon='star']").getAttribute("src"));
     }
 
-//    this.rotation.setValue(this.value.getRotation());
-//    this.progression.setValue(this.value.getProgression());
+    this.size.setValue(this.value.getSize());
     this.drawCanvas();
 
     return (T) this;
