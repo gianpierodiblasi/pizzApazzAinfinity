@@ -4040,9 +4040,18 @@ class Z4PointIterator {
    * @param progression The color progression
    * @return This Z4PointIterator
    */
-   seProgression(progression) {
+   setProgression(progression) {
     this.progression = progression;
     return this;
+  }
+
+  /**
+   * Returns the color progression
+   *
+   * @return The color progression
+   */
+   getProgression() {
+    return this.progression;
   }
 
   /**
@@ -4671,8 +4680,35 @@ class Z4Spirograph extends Z4PointIterator {
    drawDemo(context, width, height) {
     let arrowPainter = new Z4ArrowPainter();
     let gradientColor = new Z4GradientColor();
-    this.draw(Z4Action.START, width / 2, height / 2);
-    this.draw(Z4Action.CONTINUE, 3 * width / 4, 3 * height / 4);
+    let points = this.initDraw(width, height);
+    let start = points[0];
+    this.draw(Z4Action.START, start["x"], start["y"]);
+    points.slice(1).forEach(point => {
+      this.draw(Z4Action.CONTINUE, point["x"], point["y"]);
+      this.drawDemoPoint(context, arrowPainter, gradientColor);
+    });
+    let stop = points[points.length - 1];
+    this.draw(Z4Action.STOP, stop["x"], stop["y"]);
+    this.drawDemoPoint(context, arrowPainter, gradientColor);
+  }
+
+   initDraw(w, h) {
+    let w2 = w / 2;
+    let h2 = h / 2;
+    let wh8 = Math.min(w, h) / 16;
+    let array = new Array();
+    let size = parseInt(w * h / (100 * 100));
+    for (let i = 0; i < size; i++) {
+      let theta = Z4Math.TWO_PI * i / size;
+      let point = new Object();
+      point["x"] = w2 + wh8 * theta * Math.cos(theta);
+      point["y"] = h2 + wh8 * theta * Math.sin(theta);
+      array.push(point);
+    }
+    return array;
+  }
+
+   drawDemoPoint(context, arrowPainter, gradientColor) {
     let next = null;
     while ((next = this.next()) !== null) {
       let vector = next.getZ4Vector();
@@ -4703,6 +4739,8 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
 
    push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
 
+   progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".stamper-container"));
+
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
    mutationObserver = new MutationObserver(() => this.drawCanvas());
@@ -4719,18 +4757,20 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
     let config = new Object();
     config["attributeFilter"] = new Array("class");
     this.mutationObserver.observe(document.body, config);
-    this.intensity.oninput = (v) => this.set(v, null, null, null, false);
-    this.intensity.onchange = (v) => this.set(v, null, null, null, true);
-    this.rotation.oninput = (v) => this.set(null, v, null, null, false);
-    this.rotation.onchange = (v) => this.set(null, v, null, null, true);
-    this.multiplicity.oninput = (v) => this.set(null, null, v, null, false);
-    this.multiplicity.onchange = (v) => this.set(null, null, v, null, true);
-    this.push.oninput = (v) => this.set(null, null, null, v, false);
-    this.push.onchange = (v) => this.set(null, null, null, v, true);
+    this.intensity.oninput = (v) => this.set(v, null, null, null, null, false);
+    this.intensity.onchange = (v) => this.set(v, null, null, null, null, true);
+    this.rotation.oninput = (v) => this.set(null, v, null, null, null, false);
+    this.rotation.onchange = (v) => this.set(null, v, null, null, null, true);
+    this.multiplicity.oninput = (v) => this.set(null, null, v, null, null, false);
+    this.multiplicity.onchange = (v) => this.set(null, null, v, null, null, true);
+    this.push.oninput = (v) => this.set(null, null, null, v, null, false);
+    this.push.onchange = (v) => this.set(null, null, null, v, null, true);
+    this.progression.oninput = (v) => this.set(null, null, null, null, v, false);
+    this.progression.onchange = (v) => this.set(null, null, null, null, v, true);
     this.setValue(new Z4Stamper());
   }
 
-   set(intensity, rotation, multiplicity, push, onchange) {
+   set(intensity, rotation, multiplicity, push, progression, onchange) {
     if (intensity) {
       this.value.setIntensity(intensity);
     }
@@ -4742,6 +4782,9 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
     }
     if (push) {
       this.value.setPush(push);
+    }
+    if (progression) {
+      this.value.setProgression(progression);
     }
     this.drawCanvas();
     if (onchange) {
@@ -4757,6 +4800,7 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
     this.rotation.setValue(this.value.getRotation());
     this.multiplicity.setValue(this.value.getMultiplicity());
     this.push.setValue(this.value.getPush());
+    this.progression.setValue(this.value.getProgression());
     this.drawCanvas();
     return this;
   }
@@ -4801,6 +4845,8 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
 
    push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
 
+   progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".tracer-container"));
+
    attack = new Z4FancifulValueUI().setValueLabel("ATTACK", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-second-row"));
 
    sustain = new Z4FancifulValueUI().setValueLabel("SUSTAIN", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-second-row"));
@@ -4827,16 +4873,18 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
     let config = new Object();
     config["attributeFilter"] = new Array("class");
     this.mutationObserver.observe(document.body, config);
-    this.intensity.oninput = (v) => this.set(v, null, null, null, null, false);
-    this.intensity.onchange = (v) => this.set(v, null, null, null, null, true);
-    this.rotation.oninput = (v) => this.set(null, v, null, null, null, false);
-    this.rotation.onchange = (v) => this.set(null, v, null, null, null, true);
-    this.multiplicity.oninput = (v) => this.set(null, null, v, null, null, false);
-    this.multiplicity.onchange = (v) => this.set(null, null, v, null, null, true);
-    this.push.oninput = (v) => this.set(null, null, null, v, null, false);
-    this.push.onchange = (v) => this.set(null, null, null, v, null, true);
-    this.step.oninput = (v) => this.set(null, null, null, null, v, false);
-    this.step.onchange = (v) => this.set(null, null, null, null, v, true);
+    this.intensity.oninput = (v) => this.set(v, null, null, null, null, null, false);
+    this.intensity.onchange = (v) => this.set(v, null, null, null, null, null, true);
+    this.rotation.oninput = (v) => this.set(null, v, null, null, null, null, false);
+    this.rotation.onchange = (v) => this.set(null, v, null, null, null, null, true);
+    this.multiplicity.oninput = (v) => this.set(null, null, v, null, null, null, false);
+    this.multiplicity.onchange = (v) => this.set(null, null, v, null, null, null, true);
+    this.push.oninput = (v) => this.set(null, null, null, v, null, null, false);
+    this.push.onchange = (v) => this.set(null, null, null, v, null, null, true);
+    this.step.oninput = (v) => this.set(null, null, null, null, v, null, false);
+    this.step.onchange = (v) => this.set(null, null, null, null, v, null, true);
+    this.progression.oninput = (v) => this.set(null, null, null, null, null, v, false);
+    this.progression.onchange = (v) => this.set(null, null, null, null, null, v, true);
     this.attack.oninput = (v) => this.setEnvelope(false);
     this.attack.onchange = (v) => this.setEnvelope(true);
     this.sustain.oninput = (v) => this.setEnvelope(false);
@@ -4857,7 +4905,7 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
     this.setValue(new Z4Tracer());
   }
 
-   set(intensity, rotation, multiplicity, push, step, onchange) {
+   set(intensity, rotation, multiplicity, push, step, progression, onchange) {
     if (intensity) {
       this.value.setIntensity(intensity);
     }
@@ -4872,6 +4920,9 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
     }
     if (step) {
       this.value.setStep(step);
+    }
+    if (progression) {
+      this.value.setProgression(progression);
     }
     this.drawCanvas();
     if (onchange) {
@@ -4898,6 +4949,7 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
     this.multiplicity.setValue(this.value.getMultiplicity());
     this.push.setValue(this.value.getPush());
     this.step.setValue(this.value.getStep());
+    this.progression.setValue(this.value.getProgression());
     this.attack.setValue(this.value.getAttack());
     this.sustain.setValue(this.value.getSustain());
     this.release.setValue(this.value.getRelease());
@@ -4942,6 +4994,8 @@ class Z4SpirographUI extends Z4AbstractComponentWithValueUI {
 
    rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".spirograph-container"));
 
+   progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".spirograph-container"));
+
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
    mutationObserver = new MutationObserver(() => this.drawCanvas());
@@ -4966,12 +5020,21 @@ class Z4SpirographUI extends Z4AbstractComponentWithValueUI {
       this.onchange(this.value.setRotation(v));
       this.drawCanvas();
     };
+    this.progression.oninput = (v) => {
+      this.oninput(this.value.setProgression(v));
+      this.drawCanvas();
+    };
+    this.progression.onchange = (v) => {
+      this.onchange(this.value.setProgression(v));
+      this.drawCanvas();
+    };
     this.setValue(new Z4Spirograph());
   }
 
    setValue(value) {
     this.value = value;
     this.rotation.setValue(this.value.getRotation());
+    this.progression.setValue(this.value.getProgression());
     this.drawCanvas();
     return this;
   }

@@ -2,10 +2,12 @@ package giada.pizzapazza.iterator;
 
 import def.js.Array;
 import giada.pizzapazza.color.Z4GradientColor;
+import giada.pizzapazza.math.Z4Math;
 import giada.pizzapazza.math.Z4Point;
 import giada.pizzapazza.math.Z4Vector;
 import giada.pizzapazza.painter.Z4ArrowPainter;
 import simulation.dom.$CanvasRenderingContext2D;
+import static simulation.js.$Globals.parseInt;
 import simulation.js.$Object;
 
 /**
@@ -92,9 +94,39 @@ public class Z4Spirograph extends Z4PointIterator<Z4Spirograph> {
     Z4ArrowPainter arrowPainter = new Z4ArrowPainter();
     Z4GradientColor gradientColor = new Z4GradientColor();
 
-    this.draw(Z4Action.START, width / 2, height / 2);
-    this.draw(Z4Action.CONTINUE, 3 * width / 4, 3 * height / 4);
+    Array<$Object> points = this.initDraw(width, height);
+    $Object start = points.$get(0);
+    this.draw(Z4Action.START, start.$get("x"), start.$get("y"));
 
+    points.slice(1).forEach(point -> {
+      this.draw(Z4Action.CONTINUE, point.$get("x"), point.$get("y"));
+      this.drawDemoPoint(context, arrowPainter, gradientColor);
+    });
+
+    $Object stop = points.$get(points.length - 1);
+    this.draw(Z4Action.STOP, stop.$get("x"), stop.$get("y"));
+    this.drawDemoPoint(context, arrowPainter, gradientColor);
+  }
+
+  private Array<$Object> initDraw(double w, double h) {
+    double w2 = w / 2;
+    double h2 = h / 2;
+    double wh8 = Math.min(w, h) / 16;
+    Array<$Object> array = new Array<>();
+    int size = parseInt(w * h / (100 * 100));
+
+    for (int i = 0; i < size; i++) {
+      double theta = Z4Math.TWO_PI * i / size;
+      $Object point = new $Object();
+      point.$set("x", w2 + wh8 * theta * Math.cos(theta));
+      point.$set("y", h2 + wh8 * theta * Math.sin(theta));
+      array.push(point);
+    }
+
+    return array;
+  }
+
+  private void drawDemoPoint($CanvasRenderingContext2D context, Z4ArrowPainter arrowPainter, Z4GradientColor gradientColor) {
     Z4Point next;
     while ((next = this.next()) != null) {
       Z4Vector vector = next.getZ4Vector();
