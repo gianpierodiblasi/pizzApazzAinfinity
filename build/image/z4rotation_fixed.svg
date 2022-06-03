@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <svg width="96" height="96" xmlns="http://www.w3.org/2000/svg">
   <g>
-    <line stroke="#000000"  y2="4.58252" x2="42.446604" y1="89.436893" x1="10.796118" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="null" stroke-width="5" fill="none"/>
-    <path  stroke="#0000bf" transform="rotate(89.6473 57.6975 35.5538)" d="m52.360165,35.485657l5.337372,-28.281857l5.337353,28.281857l-2.668762,0l0,28.418167l-5.337265,0l0,-28.418167l-2.668697,0z" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="null" fill="#00ffff"/>
-    <path  stroke="#0000bf" transform="rotate(89.6473 47.2121 63.9033)" d="m41.874729,63.835171l5.337368,-28.281857l5.337353,28.281857l-2.668762,0l0,28.418171l-5.337261,0l0,-28.418171l-2.668697,0z" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="null" fill="#00ffff"/>
-    <path stroke="#0000bf" transform="rotate(89.6473 38.9476 88.2671)" d="m33.610199,88.198898l5.337402,-28.281799l5.337399,28.281799l-2.6688,0l0,28.418098l-5.337299,0l0,-28.418098l-2.668701,0z" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="null" fill="#00ffff" />
+    <line stroke="#000000"  y2="4.58252" x2="42.446604" y1="89.436893" x1="10.796118" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" fill="none"/>
+    <path  stroke="#0000bf" transform="rotate(89.6473 57.6975 35.5538)" d="m52.360165,35.485657l5.337372,-28.281857l5.337353,28.281857l-2.668762,0l0,28.418167l-5.337265,0l0,-28.418167l-2.668697,0z" stroke-linecap="round" stroke-linejoin="round" fill="#00ffff"/>
+    <path  stroke="#0000bf" transform="rotate(89.6473 47.2121 63.9033)" d="m41.874729,63.835171l5.337368,-28.281857l5.337353,28.281857l-2.668762,0l0,28.418171l-5.337261,0l0,-28.418171l-2.668697,0z" stroke-linecap="round" stroke-linejoin="round" fill="#00ffff"/>
+    <path stroke="#0000bf" transform="rotate(89.6473 38.9476 88.2671)" d="m33.610199,88.198898l5.337402,-28.281799l5.337399,28.281799l-2.6688,0l0,28.418098l-5.337299,0l0,-28.418098l-2.668701,0z" stroke-linecap="round" stroke-linejoin="round" fill="#00ffff" />
   </g>
 </svg>

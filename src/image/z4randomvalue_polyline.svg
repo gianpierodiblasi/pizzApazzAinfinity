@@ -15,6 +15,6 @@
     <line stroke="#ff0000" fill="none" stroke-width="5" x1="66.671228" y1="45.09589" x2="66.499995" y2="14.958902"/>
     <line stroke="#ff0000" fill="none" stroke-width="5" x1="73.863008" y1="45.09589" x2="73.691775" y2="16.842463"/>
     <line stroke="#ff0000" fill="none" stroke-width="5" x1="87.219172" y1="45.095889" x2="87.047939" y2="20.267122"/>
-    <path d="m2.63013,14.1027l29.21917,11.411l28.424698,-14.897301c9.360699,3.8813 18.721401,7.7626 28.082203,11.6439" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="null" stroke-width="5" stroke="#007fff" fill="none"/>
+    <path d="m2.63013,14.1027l29.21917,11.411l28.424698,-14.897301c9.360699,3.8813 18.721401,7.7626 28.082203,11.6439" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" stroke="#007fff" fill="none"/>
   </g>
 </svg>
