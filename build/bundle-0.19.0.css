@@ -1,4 +1,8 @@
 /* GENERAL */
+.dropdown-multicol .dropdown-multicol-row .dropdown-item {
+  display:inline-block;
+  width: 32%;
+}
 
 /* SIGNED VALUE */
 .signed-value-input-group.sign-not-visible .signed-value-sign-button {
