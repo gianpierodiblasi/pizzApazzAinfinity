@@ -9,7 +9,11 @@ class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI {
 
    ctx = this.canvas.getContext("2d");
 
-   size = new Z4FancifulValueUI().setValueLabel("SIZE", true, true).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".shape2d-painter-container-first-row"));
+   width = new Z4FancifulValueUI().setValueLabel("WIDTH", true, true).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".shape2d-painter-container-first-row"));
+
+   height = new Z4FancifulValueUI().setValueLabel("HEIGHT", true, true).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".shape2d-painter-container-first-row"));
+
+   regularCheck = this.querySelector(".shape2d-painter-regular-check");
 
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
@@ -72,15 +76,27 @@ class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI {
         return null;
       };
     }
-    this.size.oninput = (v) => {
-      this.oninput(this.value.setSize(v));
-      this.drawCanvas();
+    this.regularCheck.id = this.getUniqueID();
+    this.querySelector(".shape2d-painter-regular-label").setAttribute("for", this.regularCheck.id);
+    this.regularCheck.onchange = (event) => {
+      this.setSize(true);
+      return null;
     };
-    this.size.onchange = (v) => {
-      this.onchange(this.value.setSize(v));
-      this.drawCanvas();
-    };
+    this.width.oninput = (v) => this.setSize(false);
+    this.width.onchange = (v) => this.setSize(true);
+    this.height.oninput = (v) => this.setSize(false);
+    this.height.onchange = (v) => this.setSize(true);
     this.setValue(new Z4Shape2DPainter());
+  }
+
+   setSize(onChange) {
+    if (onChange) {
+      this.onchange(this.value.setSize(this.width.getValue(), this.height.getValue(), this.regularCheck.checked));
+    } else {
+      this.oninput(this.value.setSize(this.width.getValue(), this.height.getValue(), this.regularCheck.checked));
+    }
+    this.height.setEnabled(!this.regularCheck.checked);
+    this.drawCanvas();
   }
 
    setValue(value) {
@@ -104,7 +120,10 @@ class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI {
     } else if (this.value.getShape() === Z4Shape2D.STAR) {
       this.querySelector(".shape2d-painter-shape-button img").setAttribute("src", this.querySelector(".shape2d-painter-shape-dropdown-menu img[data-icon='star']").getAttribute("src"));
     }
-    this.size.setValue(this.value.getSize());
+    this.regularCheck.checked = this.value.isRegular();
+    this.width.setValue(this.value.getWidth());
+    this.height.setValue(this.value.getHeight());
+    this.height.setEnabled(!this.regularCheck.checked);
     this.drawCanvas();
     return this;
   }

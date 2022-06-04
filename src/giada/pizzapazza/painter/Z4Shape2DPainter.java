@@ -19,7 +19,9 @@ import static simulation.js.$Globals.$exists;
 public class Z4Shape2DPainter extends Z4Painter<Z4Shape2DPainter> {
 
   private Z4Shape2D shape = Z4Shape2D.SQUARE;
-  private Z4FancifulValue size = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(50).setSign(Z4Sign.POSITIVE));
+  private Z4FancifulValue width = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(50).setSign(Z4Sign.POSITIVE));
+  private Z4FancifulValue height = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(50).setSign(Z4Sign.POSITIVE));
+  private boolean regular;
 
   private Z4FancifulValue shadowShiftX = new Z4FancifulValue();
   private Z4FancifulValue shadowShiftY = new Z4FancifulValue();
@@ -51,21 +53,44 @@ public class Z4Shape2DPainter extends Z4Painter<Z4Shape2DPainter> {
   /**
    * Sets the size
    *
-   * @param size The size
+   * @param width The width
+   * @param height The height
+   * @param regular true if the shape is regular (width = height), false
+   * otherwise
    * @return This Z4Shape2DPainter
    */
-  public Z4Shape2DPainter setSize(Z4FancifulValue size) {
-    this.size = size;
+  public Z4Shape2DPainter setSize(Z4FancifulValue width, Z4FancifulValue height, boolean regular) {
+    this.width = width;
+    this.height = height;
+    this.regular = regular;
     return this;
   }
 
   /**
-   * Returns the size
+   * Returns the width
    *
-   * @return The size
+   * @return The width
    */
-  public Z4FancifulValue getSize() {
-    return this.size;
+  public Z4FancifulValue getWidth() {
+    return this.width;
+  }
+
+  /**
+   * Returns the height
+   *
+   * @return The height
+   */
+  public Z4FancifulValue getHeight() {
+    return this.height;
+  }
+
+  /**
+   * Checks if the shape is regular (width = height)
+   *
+   * @return true if the shape is regular (width = height), false otherwise
+   */
+  public boolean isRegular() {
+    return this.regular;
   }
 
   /**
@@ -99,10 +124,13 @@ public class Z4Shape2DPainter extends Z4Painter<Z4Shape2DPainter> {
   @Override
   public Z4Shape2DPainter draw($CanvasRenderingContext2D context, Z4Point point, Z4GradientColor gradientColor) {
     if (point.isDrawBounds()) {
-      this.drawBounds(context, point.getIntensity() * (point.isUseVectorModuleAsSize() ? 2 * point.getZ4Vector().getModule() : this.size.getConstant().getValue()));
+      double scaleW = point.getIntensity() * (point.isUseVectorModuleAsSize() ? 2 * point.getZ4Vector().getModule() : this.width.getConstant().getValue());
+      double scaleH = this.regular ? scaleW : point.getIntensity() * (point.isUseVectorModuleAsSize() ? 2 * point.getZ4Vector().getModule() : this.height.getConstant().getValue());
+      this.drawBounds(context, scaleW, scaleH);
     } else {
-      double currentSize = point.getIntensity() * (point.isUseVectorModuleAsSize() ? 2 * point.getZ4Vector().getModule() : this.size.next());
-      if (currentSize <= 0) {
+      double currentWidth = point.getIntensity() * (point.isUseVectorModuleAsSize() ? 2 * point.getZ4Vector().getModule() : this.width.next());
+      double currentHeight = this.regular ? currentWidth : point.getIntensity() * (point.isUseVectorModuleAsSize() ? 2 * point.getZ4Vector().getModule() : this.height.next());
+      if (currentWidth <= 0 || currentHeight <= 0) {
         return this;
       }
 
@@ -113,32 +141,35 @@ public class Z4Shape2DPainter extends Z4Painter<Z4Shape2DPainter> {
       if ($exists(currentShadowShiftX) || $exists(currentShadowShiftY)) {
         context.save();
         context.translate(currentShadowShiftX, currentShadowShiftY);
-        this.drawPath(context, currentSize + (currentBorderSize > 0 ? currentBorderSize : 0), this.shadowColor);
+        this.drawPath(context, currentWidth + (currentBorderSize > 0 ? currentBorderSize : 0), currentHeight + (currentBorderSize > 0 ? currentBorderSize : 0), this.shadowColor);
         context.restore();
       }
 
       if ($exists(currentBorderSize)) {
         context.save();
-        this.drawPath(context, currentSize + currentBorderSize, this.borderColor);
+        this.drawPath(context, currentWidth + currentBorderSize, currentHeight + currentBorderSize, this.borderColor);
         context.restore();
       }
 
       double position = point.getColorPosition();
       Z4Lighting lighting = point.getLighting();
       if (position == -1) {
+        double currentSize = Math.max(currentWidth, currentHeight);
+
         for (double scale = currentSize; scale > 0; scale--) {
-          this.drawPath(context, scale, gradientColor.getZ4ColorAt(scale / currentSize, true, true));
+          this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, gradientColor.getZ4ColorAt(scale / currentSize, true, true));
         }
       } else if (lighting == Z4Lighting.NONE) {
-        this.drawPath(context, currentSize, gradientColor.getZ4ColorAt(position, true, true));
+        this.drawPath(context, currentWidth, currentHeight, gradientColor.getZ4ColorAt(position, true, true));
       } else {
+        double currentSize = Math.max(currentWidth, currentHeight);
         Z4Color newColor = gradientColor.getZ4ColorAt(position, true, true);
 
         for (double scale = currentSize; scale > 0; scale--) {
           if (lighting == Z4Lighting.LIGHTED) {
-            this.drawPath(context, scale, Z4Color.fromARGB(newColor.getARGB()).lighted(scale / currentSize));
+            this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, Z4Color.fromARGB(newColor.getARGB()).lighted(scale / currentSize));
           } else if (lighting == Z4Lighting.DARKENED) {
-            this.drawPath(context, scale, Z4Color.fromARGB(newColor.getARGB()).darkened(scale / currentSize));
+            this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, Z4Color.fromARGB(newColor.getARGB()).darkened(scale / currentSize));
           }
         }
       }
@@ -147,24 +178,24 @@ public class Z4Shape2DPainter extends Z4Painter<Z4Shape2DPainter> {
     return this;
   }
 
-  private void drawPath($CanvasRenderingContext2D context, double scale, Z4Color color) {
+  private void drawPath($CanvasRenderingContext2D context, double scaleH, double scaleW, Z4Color color) {
     context.save();
-    context.scale(scale, scale);
+    context.scale(scaleW, scaleH);
     context.fillStyle = color.$getHEX();
     context.fill(this.shape.getPath());
     context.restore();
   }
 
-  private void drawBounds($CanvasRenderingContext2D context, double scale) {
+  private void drawBounds($CanvasRenderingContext2D context, double scaleW, double scaleH) {
     context.save();
-    context.scale(scale, scale);
-    context.lineWidth = 1 / scale;
+    context.scale(scaleW, scaleH);
+    context.lineWidth = 1 / Math.min(scaleW, scaleH);
 
     context.strokeStyle = this.$getColor("gray");
     context.stroke(this.shape.getPath());
 
     context.strokeStyle = this.$getColor("black");
-    context.translate(1 / scale, 1 / scale);
+    context.translate(1 / scaleW, 1 / scaleH);
     context.stroke(this.shape.getPath());
 
     context.restore();

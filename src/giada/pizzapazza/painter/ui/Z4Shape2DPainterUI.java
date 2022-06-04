@@ -11,6 +11,7 @@ import giada.pizzapazza.setting.Z4HTMLFactory;
 import giada.pizzapazza.ui.Z4AbstractComponentWithValueUI;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
+import simulation.dom.$HTMLElement;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.document;
 import simulation.js.$MutationObserver;
@@ -27,7 +28,9 @@ public class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI<Z4Shape2D
   private final $Canvas canvas = ($Canvas) this.querySelector(".shape2d-painter-canvas");
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
 
-  private final Z4FancifulValueUI size = new Z4FancifulValueUI().setValueLabel("SIZE", true, true).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".shape2d-painter-container-first-row"));
+  private final Z4FancifulValueUI width = new Z4FancifulValueUI().setValueLabel("WIDTH", true, true).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".shape2d-painter-container-first-row"));
+  private final Z4FancifulValueUI height = new Z4FancifulValueUI().setValueLabel("HEIGHT", true, true).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".shape2d-painter-container-first-row"));
+  private final $HTMLElement regularCheck = this.querySelector(".shape2d-painter-regular-check");
 
   private final $ResizeObserver resizeObserver = new $ResizeObserver(() -> this.drawCanvas());
   private final $MutationObserver mutationObserver = new $MutationObserver(() -> this.drawCanvas());
@@ -95,16 +98,29 @@ public class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI<Z4Shape2D
       };
     }
 
-    this.size.oninput = (v) -> {
-      this.oninput.$apply(this.value.setSize(v));
-      this.drawCanvas();
+    this.regularCheck.id = this.getUniqueID();
+    this.querySelector(".shape2d-painter-regular-label").setAttribute("for", this.regularCheck.id);
+    this.regularCheck.onchange = (event) -> {
+      this.setSize(true);
+      return null;
     };
-    this.size.onchange = (v) -> {
-      this.onchange.$apply(this.value.setSize(v));
-      this.drawCanvas();
-    };
+    
+    this.width.oninput = (v) -> this.setSize(false);
+    this.width.onchange = (v) -> this.setSize(true);
+    this.height.oninput = (v) -> this.setSize(false);
+    this.height.onchange = (v) -> this.setSize(true);
 
     this.setValue(new Z4Shape2DPainter());
+  }
+
+  private void setSize(boolean onChange) {
+    if (onChange) {
+      this.onchange.$apply(this.value.setSize(this.width.getValue(), this.height.getValue(), this.regularCheck.checked));
+    } else {
+      this.oninput.$apply(this.value.setSize(this.width.getValue(), this.height.getValue(), this.regularCheck.checked));
+    }
+    this.height.setEnabled(!this.regularCheck.checked);
+    this.drawCanvas();
   }
 
   @Override
@@ -131,8 +147,13 @@ public class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI<Z4Shape2D
     } else if (this.value.getShape() == Z4Shape2D.STAR) {
       this.querySelector(".shape2d-painter-shape-button img").setAttribute("src", this.querySelector(".shape2d-painter-shape-dropdown-menu img[data-icon='star']").getAttribute("src"));
     }
-
-    this.size.setValue(this.value.getSize());
+    
+    this.regularCheck.checked = this.value.isRegular();
+    
+    this.width.setValue(this.value.getWidth());
+    this.height.setValue(this.value.getHeight());
+    this.height.setEnabled(!this.regularCheck.checked);
+    
     this.drawCanvas();
 
     return (T) this;
