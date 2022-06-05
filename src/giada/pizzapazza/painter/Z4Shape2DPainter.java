@@ -9,7 +9,6 @@ import giada.pizzapazza.math.Z4Shape2D;
 import giada.pizzapazza.math.Z4Sign;
 import giada.pizzapazza.math.Z4SignedValue;
 import simulation.dom.$CanvasRenderingContext2D;
-import static simulation.js.$Globals.$exists;
 
 /**
  * The painter of 2D shapes
@@ -27,7 +26,8 @@ public class Z4Shape2DPainter extends Z4Painter<Z4Shape2DPainter> {
   private Z4FancifulValue shadowShiftY = new Z4FancifulValue();
   private Z4Color shadowColor = new Z4Color(255, 0, 0, 0);
 
-  private Z4FancifulValue borderSize = new Z4FancifulValue();
+  private Z4FancifulValue borderWidth = new Z4FancifulValue();
+  private Z4FancifulValue borderHeight = new Z4FancifulValue();
   private Z4Color borderColor = new Z4Color(255, 0, 0, 0);
 
   /**
@@ -109,16 +109,72 @@ public class Z4Shape2DPainter extends Z4Painter<Z4Shape2DPainter> {
   }
 
   /**
+   * Returns the X shadow shift
+   *
+   * @return The X shadow shift
+   */
+  public Z4FancifulValue getShadowShiftX() {
+    return this.shadowShiftX;
+  }
+
+  /**
+   * Returns the Y shadow shift
+   *
+   * @return The Y shadow shift
+   */
+  public Z4FancifulValue getShadowShiftY() {
+    return this.shadowShiftY;
+  }
+
+  /**
+   * Returns the shadow color
+   *
+   * @return The shadow color
+   */
+  public Z4Color getShadowColor() {
+    return this.shadowColor;
+  }
+
+  /**
    * Sets the border
    *
-   * @param borderSize The border size
+   * @param borderWidth The border width
+   * @param borderHeight The border height
    * @param borderColor The border color
    * @return This Z4Shape2DPainter
    */
-  public Z4Shape2DPainter setBorder(Z4FancifulValue borderSize, Z4Color borderColor) {
-    this.borderSize = borderSize;
+  public Z4Shape2DPainter setBorder(Z4FancifulValue borderWidth, Z4FancifulValue borderHeight, Z4Color borderColor) {
+    this.borderWidth = borderWidth;
+    this.borderHeight = borderHeight;
     this.borderColor = borderColor;
     return this;
+  }
+
+  /**
+   * Returns the border width
+   *
+   * @return The border width
+   */
+  public Z4FancifulValue getBorderWidth() {
+    return this.borderWidth;
+  }
+
+  /**
+   * Returns the border height
+   *
+   * @return The border height
+   */
+  public Z4FancifulValue getBorderHeight() {
+    return this.borderHeight;
+  }
+
+  /**
+   * Returns the border color
+   *
+   * @return The border color
+   */
+  public Z4Color getBorderColor() {
+    return this.borderColor;
   }
 
   @Override
@@ -136,18 +192,19 @@ public class Z4Shape2DPainter extends Z4Painter<Z4Shape2DPainter> {
 
       double currentShadowShiftX = point.getIntensity() * this.shadowShiftX.next();
       double currentShadowShiftY = point.getIntensity() * this.shadowShiftY.next();
-      double currentBorderSize = point.getIntensity() * this.borderSize.next();
+      double currentBorderWidth = point.getIntensity() * this.borderWidth.next();
+      double currentBorderHeight = point.getIntensity() * this.borderHeight.next();
 
-      if ($exists(currentShadowShiftX) || $exists(currentShadowShiftY)) {
+      if (currentShadowShiftX > 0 || currentShadowShiftY > 0) {
         context.save();
         context.translate(currentShadowShiftX, currentShadowShiftY);
-        this.drawPath(context, currentWidth + (currentBorderSize > 0 ? currentBorderSize : 0), currentHeight + (currentBorderSize > 0 ? currentBorderSize : 0), this.shadowColor);
+        this.drawPath(context, currentWidth + (currentBorderWidth > 0 ? currentBorderWidth : 0), currentHeight + (currentBorderHeight > 0 ? currentBorderHeight : 0), this.shadowColor);
         context.restore();
       }
 
-      if ($exists(currentBorderSize)) {
+      if (currentBorderWidth > 0 || currentBorderHeight > 0) {
         context.save();
-        this.drawPath(context, currentWidth + currentBorderSize, currentHeight + currentBorderSize, this.borderColor);
+        this.drawPath(context, currentWidth + currentBorderWidth, currentHeight + currentBorderHeight, this.borderColor);
         context.restore();
       }
 

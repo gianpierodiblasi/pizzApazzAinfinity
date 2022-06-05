@@ -3823,7 +3823,9 @@ class Z4Shape2DPainter extends Z4Painter {
 
    shadowColor = new Z4Color(255, 0, 0, 0);
 
-   borderSize = new Z4FancifulValue();
+   borderWidth = new Z4FancifulValue();
+
+   borderHeight = new Z4FancifulValue();
 
    borderColor = new Z4Color(255, 0, 0, 0);
 
@@ -3906,16 +3908,72 @@ class Z4Shape2DPainter extends Z4Painter {
   }
 
   /**
+   * Returns the X shadow shift
+   *
+   * @return The X shadow shift
+   */
+   getShadowShiftX() {
+    return this.shadowShiftX;
+  }
+
+  /**
+   * Returns the Y shadow shift
+   *
+   * @return The Y shadow shift
+   */
+   getShadowShiftY() {
+    return this.shadowShiftY;
+  }
+
+  /**
+   * Returns the shadow color
+   *
+   * @return The shadow color
+   */
+   getShadowColor() {
+    return this.shadowColor;
+  }
+
+  /**
    * Sets the border
    *
-   * @param borderSize The border size
+   * @param borderWidth The border width
+   * @param borderHeight The border height
    * @param borderColor The border color
    * @return This Z4Shape2DPainter
    */
-   setBorder(borderSize, borderColor) {
-    this.borderSize = borderSize;
+   setBorder(borderWidth, borderHeight, borderColor) {
+    this.borderWidth = borderWidth;
+    this.borderHeight = borderHeight;
     this.borderColor = borderColor;
     return this;
+  }
+
+  /**
+   * Returns the border width
+   *
+   * @return The border width
+   */
+   getBorderWidth() {
+    return this.borderWidth;
+  }
+
+  /**
+   * Returns the border height
+   *
+   * @return The border height
+   */
+   getBorderHeight() {
+    return this.borderHeight;
+  }
+
+  /**
+   * Returns the border color
+   *
+   * @return The border color
+   */
+   getBorderColor() {
+    return this.borderColor;
   }
 
    draw(context, point, gradientColor) {
@@ -3931,16 +3989,17 @@ class Z4Shape2DPainter extends Z4Painter {
       }
       let currentShadowShiftX = point.getIntensity() * this.shadowShiftX.next();
       let currentShadowShiftY = point.getIntensity() * this.shadowShiftY.next();
-      let currentBorderSize = point.getIntensity() * this.borderSize.next();
-      if (currentShadowShiftX || currentShadowShiftY) {
+      let currentBorderWidth = point.getIntensity() * this.borderWidth.next();
+      let currentBorderHeight = point.getIntensity() * this.borderHeight.next();
+      if (currentShadowShiftX > 0 || currentShadowShiftY > 0) {
         context.save();
         context.translate(currentShadowShiftX, currentShadowShiftY);
-        this.drawPath(context, currentWidth + (currentBorderSize > 0 ? currentBorderSize : 0), currentHeight + (currentBorderSize > 0 ? currentBorderSize : 0), this.shadowColor);
+        this.drawPath(context, currentWidth + (currentBorderWidth > 0 ? currentBorderWidth : 0), currentHeight + (currentBorderHeight > 0 ? currentBorderHeight : 0), this.shadowColor);
         context.restore();
       }
-      if (currentBorderSize) {
+      if (currentBorderWidth > 0 || currentBorderHeight > 0) {
         context.save();
-        this.drawPath(context, currentWidth + currentBorderSize, currentHeight + currentBorderSize, this.borderColor);
+        this.drawPath(context, currentWidth + currentBorderWidth, currentHeight + currentBorderHeight, this.borderColor);
         context.restore();
       }
       let position = point.getColorPosition();
@@ -4026,6 +4085,18 @@ class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI {
 
    regularCheck = this.querySelector(".shape2d-painter-regular-check");
 
+   shadowShiftX = new Z4FancifulValueUI().setValueLabel("DELTA_X", true, false).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".shape2d-painter-container-second-row"));
+
+   shadowShiftY = new Z4FancifulValueUI().setValueLabel("DELTA_Y", true, false).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".shape2d-painter-container-second-row"));
+
+   shadowColor = new Z4ColorUI().setColorLabel("COLOR", true, false).appendToElement(this.querySelector(".shape2d-painter-container-second-row"));
+
+   borderWidth = new Z4FancifulValueUI().setValueLabel("WIDTH", true, false).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".shape2d-painter-container-third-row"));
+
+   borderHeight = new Z4FancifulValueUI().setValueLabel("HEIGHT", true, false).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".shape2d-painter-container-third-row"));
+
+   borderColor = new Z4ColorUI().setColorLabel("COLOR", true, false).appendToElement(this.querySelector(".shape2d-painter-container-third-row"));
+
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
    mutationObserver = new MutationObserver(() => this.drawCanvas());
@@ -4097,6 +4168,18 @@ class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI {
     this.width.onchange = (v) => this.setSize(true);
     this.height.oninput = (v) => this.setSize(false);
     this.height.onchange = (v) => this.setSize(true);
+    this.shadowShiftX.oninput = (v) => this.setShadow(false);
+    this.shadowShiftX.onchange = (v) => this.setShadow(true);
+    this.shadowShiftY.oninput = (v) => this.setShadow(false);
+    this.shadowShiftY.onchange = (v) => this.setShadow(true);
+    this.shadowColor.oninput = (v) => this.setShadow(false);
+    this.shadowColor.onchange = (v) => this.setShadow(true);
+    this.borderWidth.oninput = (v) => this.setBorder(false);
+    this.borderWidth.onchange = (v) => this.setBorder(true);
+    this.borderHeight.oninput = (v) => this.setBorder(false);
+    this.borderHeight.onchange = (v) => this.setBorder(true);
+    this.borderColor.oninput = (v) => this.setBorder(false);
+    this.borderColor.onchange = (v) => this.setBorder(true);
     this.setValue(new Z4Shape2DPainter());
   }
 
@@ -4107,6 +4190,24 @@ class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI {
       this.oninput(this.value.setSize(this.width.getValue(), this.height.getValue(), this.regularCheck.checked));
     }
     this.height.setEnabled(!this.regularCheck.checked);
+    this.drawCanvas();
+  }
+
+   setShadow(onChange) {
+    if (onChange) {
+      this.onchange(this.value.setShadow(this.shadowShiftX.getValue(), this.shadowShiftY.getValue(), this.shadowColor.getValue()));
+    } else {
+      this.oninput(this.value.setShadow(this.shadowShiftX.getValue(), this.shadowShiftY.getValue(), this.shadowColor.getValue()));
+    }
+    this.drawCanvas();
+  }
+
+   setBorder(onChange) {
+    if (onChange) {
+      this.onchange(this.value.setBorder(this.borderWidth.getValue(), this.borderHeight.getValue(), this.borderColor.getValue()));
+    } else {
+      this.oninput(this.value.setBorder(this.borderWidth.getValue(), this.borderHeight.getValue(), this.borderColor.getValue()));
+    }
     this.drawCanvas();
   }
 
@@ -4135,6 +4236,12 @@ class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI {
     this.width.setValue(this.value.getWidth());
     this.height.setValue(this.value.getHeight());
     this.height.setEnabled(!this.regularCheck.checked);
+    this.shadowShiftX.setValue(this.value.getShadowShiftX());
+    this.shadowShiftY.setValue(this.value.getShadowShiftY());
+    this.shadowColor.setValue(this.value.getShadowColor());
+    this.borderWidth.setValue(this.value.getBorderWidth());
+    this.borderHeight.setValue(this.value.getBorderHeight());
+    this.borderColor.setValue(this.value.getBorderColor());
     this.drawCanvas();
     return this;
   }

@@ -19,7 +19,9 @@ class Z4Shape2DPainter extends Z4Painter {
 
    shadowColor = new Z4Color(255, 0, 0, 0);
 
-   borderSize = new Z4FancifulValue();
+   borderWidth = new Z4FancifulValue();
+
+   borderHeight = new Z4FancifulValue();
 
    borderColor = new Z4Color(255, 0, 0, 0);
 
@@ -102,16 +104,72 @@ class Z4Shape2DPainter extends Z4Painter {
   }
 
   /**
+   * Returns the X shadow shift
+   *
+   * @return The X shadow shift
+   */
+   getShadowShiftX() {
+    return this.shadowShiftX;
+  }
+
+  /**
+   * Returns the Y shadow shift
+   *
+   * @return The Y shadow shift
+   */
+   getShadowShiftY() {
+    return this.shadowShiftY;
+  }
+
+  /**
+   * Returns the shadow color
+   *
+   * @return The shadow color
+   */
+   getShadowColor() {
+    return this.shadowColor;
+  }
+
+  /**
    * Sets the border
    *
-   * @param borderSize The border size
+   * @param borderWidth The border width
+   * @param borderHeight The border height
    * @param borderColor The border color
    * @return This Z4Shape2DPainter
    */
-   setBorder(borderSize, borderColor) {
-    this.borderSize = borderSize;
+   setBorder(borderWidth, borderHeight, borderColor) {
+    this.borderWidth = borderWidth;
+    this.borderHeight = borderHeight;
     this.borderColor = borderColor;
     return this;
+  }
+
+  /**
+   * Returns the border width
+   *
+   * @return The border width
+   */
+   getBorderWidth() {
+    return this.borderWidth;
+  }
+
+  /**
+   * Returns the border height
+   *
+   * @return The border height
+   */
+   getBorderHeight() {
+    return this.borderHeight;
+  }
+
+  /**
+   * Returns the border color
+   *
+   * @return The border color
+   */
+   getBorderColor() {
+    return this.borderColor;
   }
 
    draw(context, point, gradientColor) {
@@ -127,16 +185,17 @@ class Z4Shape2DPainter extends Z4Painter {
       }
       let currentShadowShiftX = point.getIntensity() * this.shadowShiftX.next();
       let currentShadowShiftY = point.getIntensity() * this.shadowShiftY.next();
-      let currentBorderSize = point.getIntensity() * this.borderSize.next();
-      if (currentShadowShiftX || currentShadowShiftY) {
+      let currentBorderWidth = point.getIntensity() * this.borderWidth.next();
+      let currentBorderHeight = point.getIntensity() * this.borderHeight.next();
+      if (currentShadowShiftX > 0 || currentShadowShiftY > 0) {
         context.save();
         context.translate(currentShadowShiftX, currentShadowShiftY);
-        this.drawPath(context, currentWidth + (currentBorderSize > 0 ? currentBorderSize : 0), currentHeight + (currentBorderSize > 0 ? currentBorderSize : 0), this.shadowColor);
+        this.drawPath(context, currentWidth + (currentBorderWidth > 0 ? currentBorderWidth : 0), currentHeight + (currentBorderHeight > 0 ? currentBorderHeight : 0), this.shadowColor);
         context.restore();
       }
-      if (currentBorderSize) {
+      if (currentBorderWidth > 0 || currentBorderHeight > 0) {
         context.save();
-        this.drawPath(context, currentWidth + currentBorderSize, currentHeight + currentBorderSize, this.borderColor);
+        this.drawPath(context, currentWidth + currentBorderWidth, currentHeight + currentBorderHeight, this.borderColor);
         context.restore();
       }
       let position = point.getColorPosition();
