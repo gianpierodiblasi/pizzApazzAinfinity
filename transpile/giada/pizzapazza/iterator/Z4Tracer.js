@@ -175,9 +175,9 @@ class Z4Tracer extends Z4PointIterator {
     }
   }
 
-   drawDemo(context, width, height) {
-    let arrowPainter = new Z4ArrowPainter();
-    let gradientColor = new Z4GradientColor();
+   drawDemo(context, painter, gradientColor, width, height) {
+    painter = painter ? painter : new Z4ArrowPainter();
+    gradientColor = gradientColor ? gradientColor : new Z4GradientColor();
     let fillStyle = document.body.classList.contains("z4-dark") ? "white" : "black";
     let bezier = width > height ? new Bezier(width / 10, height / 3, width / 2, 3 * height / 2, width / 2, -height / 2, 9 * width / 10, height / 2) : new Bezier(width / 3, 9 * height / 10, 3 * width / 2, height / 2, -width / 2, height / 2, width / 2, height / 10);
     let p = bezier.get(0);
@@ -185,16 +185,16 @@ class Z4Tracer extends Z4PointIterator {
     for (let s = 0.1; s < 1; s += 0.1) {
       p = bezier.get(s);
       this.draw(Z4Action.CONTINUE, p.x, p.y);
-      this.drawDemoPoint(context, p, arrowPainter, gradientColor, fillStyle);
+      this.drawDemoPoint(context, p, painter, gradientColor, fillStyle);
     }
     p = bezier.get(1);
     this.draw(Z4Action.CONTINUE, p.x, p.y);
-    this.drawDemoPoint(context, p, arrowPainter, gradientColor, fillStyle);
+    this.drawDemoPoint(context, p, painter, gradientColor, fillStyle);
     this.draw(Z4Action.STOP, p.x, p.y);
-    this.drawDemoPoint(context, p, arrowPainter, gradientColor, fillStyle);
+    this.drawDemoPoint(context, p, painter, gradientColor, fillStyle);
   }
 
-   drawDemoPoint(context, p, arrowPainter, gradientColor, fillStyle) {
+   drawDemoPoint(context, p, painter, gradientColor, fillStyle) {
     context.save();
     context.lineWidth = 1;
     context.fillStyle = Z4Color.getFillStyle(fillStyle);
@@ -208,7 +208,7 @@ class Z4Tracer extends Z4PointIterator {
       context.save();
       context.translate(vector.getX0(), vector.getY0());
       context.rotate(vector.getPhase());
-      arrowPainter.draw(context, next, gradientColor);
+      painter.draw(context, next, gradientColor);
       context.restore();
     }
   }

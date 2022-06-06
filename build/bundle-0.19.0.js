@@ -4401,10 +4401,12 @@ class Z4PointIterator {
    * Draws a demo of this Z4PointIterator
    *
    * @param context The context where to draw the demo
+   * @param painter The painter to use, it can be null
+   * @param gradientColor The color to use, it can be null
    * @param width The width
    * @param height The height
    */
-   drawDemo(context, width, height) {
+   drawDemo(context, painter, gradientColor, width, height) {
   }
 }
 /**
@@ -4461,9 +4463,9 @@ class Z4Stamper extends Z4PointIterator {
     }
   }
 
-   drawDemo(context, width, height) {
-    let arrowPainter = new Z4ArrowPainter();
-    let gradientColor = new Z4GradientColor();
+   drawDemo(context, painter, gradientColor, width, height) {
+    let finalPainter = painter ? painter : new Z4ArrowPainter();
+    let finalGradientColor = gradientColor ? gradientColor : new Z4GradientColor();
     let fillStyle = document.body.classList.contains("z4-dark") ? "white" : "black";
     this.initDraw(width, height).forEach(point => {
       this.draw(Z4Action.START, point["x"], point["y"]);
@@ -4480,7 +4482,7 @@ class Z4Stamper extends Z4PointIterator {
         context.save();
         context.translate(vector.getX0(), vector.getY0());
         context.rotate(vector.getPhase());
-        arrowPainter.draw(context, next, gradientColor);
+        finalPainter.draw(context, next, finalGradientColor);
         context.restore();
       }
     });
@@ -4736,9 +4738,9 @@ class Z4Tracer extends Z4PointIterator {
     }
   }
 
-   drawDemo(context, width, height) {
-    let arrowPainter = new Z4ArrowPainter();
-    let gradientColor = new Z4GradientColor();
+   drawDemo(context, painter, gradientColor, width, height) {
+    painter = painter ? painter : new Z4ArrowPainter();
+    gradientColor = gradientColor ? gradientColor : new Z4GradientColor();
     let fillStyle = document.body.classList.contains("z4-dark") ? "white" : "black";
     let bezier = width > height ? new Bezier(width / 10, height / 3, width / 2, 3 * height / 2, width / 2, -height / 2, 9 * width / 10, height / 2) : new Bezier(width / 3, 9 * height / 10, 3 * width / 2, height / 2, -width / 2, height / 2, width / 2, height / 10);
     let p = bezier.get(0);
@@ -4746,16 +4748,16 @@ class Z4Tracer extends Z4PointIterator {
     for (let s = 0.1; s < 1; s += 0.1) {
       p = bezier.get(s);
       this.draw(Z4Action.CONTINUE, p.x, p.y);
-      this.drawDemoPoint(context, p, arrowPainter, gradientColor, fillStyle);
+      this.drawDemoPoint(context, p, painter, gradientColor, fillStyle);
     }
     p = bezier.get(1);
     this.draw(Z4Action.CONTINUE, p.x, p.y);
-    this.drawDemoPoint(context, p, arrowPainter, gradientColor, fillStyle);
+    this.drawDemoPoint(context, p, painter, gradientColor, fillStyle);
     this.draw(Z4Action.STOP, p.x, p.y);
-    this.drawDemoPoint(context, p, arrowPainter, gradientColor, fillStyle);
+    this.drawDemoPoint(context, p, painter, gradientColor, fillStyle);
   }
 
-   drawDemoPoint(context, p, arrowPainter, gradientColor, fillStyle) {
+   drawDemoPoint(context, p, painter, gradientColor, fillStyle) {
     context.save();
     context.lineWidth = 1;
     context.fillStyle = Z4Color.getFillStyle(fillStyle);
@@ -4769,7 +4771,7 @@ class Z4Tracer extends Z4PointIterator {
       context.save();
       context.translate(vector.getX0(), vector.getY0());
       context.rotate(vector.getPhase());
-      arrowPainter.draw(context, next, gradientColor);
+      painter.draw(context, next, gradientColor);
       context.restore();
     }
   }
@@ -4979,19 +4981,19 @@ class Z4Spirograph extends Z4PointIterator {
     }
   }
 
-   drawDemo(context, width, height) {
-    let arrowPainter = new Z4ArrowPainter();
-    let gradientColor = new Z4GradientColor();
+   drawDemo(context, painter, gradientColor, width, height) {
+    let finalPainter = painter ? painter : new Z4ArrowPainter();
+    let finalGradientColor = gradientColor ? gradientColor : new Z4GradientColor();
     let points = this.initDraw(width, height);
     let start = points[0];
     this.draw(Z4Action.START, start["x"], start["y"]);
     points.slice(1).forEach(point => {
       this.draw(Z4Action.CONTINUE, point["x"], point["y"]);
-      this.drawDemoPoint(context, arrowPainter, gradientColor);
+      this.drawDemoPoint(context, finalPainter, finalGradientColor);
     });
     let stop = points[points.length - 1];
     this.draw(Z4Action.STOP, stop["x"], stop["y"]);
-    this.drawDemoPoint(context, arrowPainter, gradientColor);
+    this.drawDemoPoint(context, finalPainter, finalGradientColor);
   }
 
    initDraw(w, h) {
@@ -5113,7 +5115,7 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
       this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
       let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
       let offscreenCtx = offscreen.getContext("2d");
-      this.value.drawDemo(offscreenCtx, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.value.drawDemo(offscreenCtx, null, null, this.canvas.clientWidth, this.canvas.clientHeight);
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.save();
       this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
@@ -5268,7 +5270,7 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
       this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
       let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
       let offscreenCtx = offscreen.getContext("2d");
-      this.value.drawDemo(offscreenCtx, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.value.drawDemo(offscreenCtx, null, null, this.canvas.clientWidth, this.canvas.clientHeight);
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.save();
       this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
@@ -5347,7 +5349,7 @@ class Z4SpirographUI extends Z4AbstractComponentWithValueUI {
       this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
       let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
       let offscreenCtx = offscreen.getContext("2d");
-      this.value.drawDemo(offscreenCtx, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.value.drawDemo(offscreenCtx, null, null, this.canvas.clientWidth, this.canvas.clientHeight);
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.save();
       this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);

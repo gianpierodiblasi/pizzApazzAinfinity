@@ -70,19 +70,19 @@ class Z4Spirograph extends Z4PointIterator {
     }
   }
 
-   drawDemo(context, width, height) {
-    let arrowPainter = new Z4ArrowPainter();
-    let gradientColor = new Z4GradientColor();
+   drawDemo(context, painter, gradientColor, width, height) {
+    let finalPainter = painter ? painter : new Z4ArrowPainter();
+    let finalGradientColor = gradientColor ? gradientColor : new Z4GradientColor();
     let points = this.initDraw(width, height);
     let start = points[0];
     this.draw(Z4Action.START, start["x"], start["y"]);
     points.slice(1).forEach(point => {
       this.draw(Z4Action.CONTINUE, point["x"], point["y"]);
-      this.drawDemoPoint(context, arrowPainter, gradientColor);
+      this.drawDemoPoint(context, finalPainter, finalGradientColor);
     });
     let stop = points[points.length - 1];
     this.draw(Z4Action.STOP, stop["x"], stop["y"]);
-    this.drawDemoPoint(context, arrowPainter, gradientColor);
+    this.drawDemoPoint(context, finalPainter, finalGradientColor);
   }
 
    initDraw(w, h) {

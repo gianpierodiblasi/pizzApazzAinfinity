@@ -6,7 +6,9 @@ import giada.pizzapazza.math.Z4Math;
 import giada.pizzapazza.math.Z4Point;
 import giada.pizzapazza.math.Z4Vector;
 import giada.pizzapazza.painter.Z4ArrowPainter;
+import giada.pizzapazza.painter.Z4Painter;
 import simulation.dom.$CanvasRenderingContext2D;
+import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
 import simulation.js.$Object;
 
@@ -90,9 +92,9 @@ public class Z4Spirograph extends Z4PointIterator<Z4Spirograph> {
   }
 
   @Override
-  public void drawDemo($CanvasRenderingContext2D context, double width, double height) {
-    Z4ArrowPainter arrowPainter = new Z4ArrowPainter();
-    Z4GradientColor gradientColor = new Z4GradientColor();
+  public void drawDemo($CanvasRenderingContext2D context, Z4Painter<?> painter, Z4GradientColor gradientColor, double width, double height) {
+    Z4Painter<?> finalPainter = $exists(painter) ? painter : new Z4ArrowPainter();
+    Z4GradientColor finalGradientColor = $exists(gradientColor) ? gradientColor : new Z4GradientColor();
 
     Array<$Object> points = this.initDraw(width, height);
     $Object start = points.$get(0);
@@ -100,12 +102,12 @@ public class Z4Spirograph extends Z4PointIterator<Z4Spirograph> {
 
     points.slice(1).forEach(point -> {
       this.draw(Z4Action.CONTINUE, point.$get("x"), point.$get("y"));
-      this.drawDemoPoint(context, arrowPainter, gradientColor);
+      this.drawDemoPoint(context, finalPainter, finalGradientColor);
     });
 
     $Object stop = points.$get(points.length - 1);
     this.draw(Z4Action.STOP, stop.$get("x"), stop.$get("y"));
-    this.drawDemoPoint(context, arrowPainter, gradientColor);
+    this.drawDemoPoint(context, finalPainter, finalGradientColor);
   }
 
   private Array<$Object> initDraw(double w, double h) {
@@ -126,7 +128,7 @@ public class Z4Spirograph extends Z4PointIterator<Z4Spirograph> {
     return array;
   }
 
-  private void drawDemoPoint($CanvasRenderingContext2D context, Z4ArrowPainter arrowPainter, Z4GradientColor gradientColor) {
+  private void drawDemoPoint($CanvasRenderingContext2D context, Z4Painter<?> arrowPainter, Z4GradientColor gradientColor) {
     Z4Point next;
     while ((next = this.next()) != null) {
       Z4Vector vector = next.getZ4Vector();

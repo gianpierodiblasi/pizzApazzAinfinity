@@ -151,7 +151,7 @@ public class Z4TracerUI extends Z4AbstractComponentWithValueUI<Z4Tracer> {
     this.push.setValue(this.value.getPush());
     this.step.setValue(this.value.getStep());
     this.progression.setValue(this.value.getProgression());
-    
+
     this.attack.setValue(this.value.getAttack());
     this.sustain.setValue(this.value.getSustain());
     this.release.setValue(this.value.getRelease());
@@ -172,7 +172,7 @@ public class Z4TracerUI extends Z4AbstractComponentWithValueUI<Z4Tracer> {
 
       $OffscreenCanvas offscreen = new $OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
       $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
-      this.value.drawDemo(offscreenCtx, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.value.drawDemo(offscreenCtx, null, null, this.canvas.clientWidth, this.canvas.clientHeight);
 
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 

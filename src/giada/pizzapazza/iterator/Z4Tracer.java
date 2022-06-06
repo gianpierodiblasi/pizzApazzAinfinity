@@ -12,6 +12,7 @@ import giada.pizzapazza.math.Z4SignedValue;
 import giada.pizzapazza.math.Z4TracerPath;
 import giada.pizzapazza.math.Z4Vector;
 import giada.pizzapazza.painter.Z4ArrowPainter;
+import giada.pizzapazza.painter.Z4Painter;
 import simulation.bezier.$Bezier;
 import simulation.bezier.$BezierPoint;
 import simulation.dom.$CanvasRenderingContext2D;
@@ -198,9 +199,9 @@ public class Z4Tracer extends Z4PointIterator<Z4Tracer> {
   }
 
   @Override
-  public void drawDemo($CanvasRenderingContext2D context, double width, double height) {
-    Z4ArrowPainter arrowPainter = new Z4ArrowPainter();
-    Z4GradientColor gradientColor = new Z4GradientColor();
+  public void drawDemo($CanvasRenderingContext2D context, Z4Painter<?> painter, Z4GradientColor gradientColor, double width, double height) {
+    painter = $exists(painter) ? painter : new Z4ArrowPainter();
+    gradientColor = $exists(gradientColor) ? gradientColor : new Z4GradientColor();
 
     String fillStyle = document.body.classList.contains("z4-dark") ? "white" : "black";
 
@@ -214,17 +215,17 @@ public class Z4Tracer extends Z4PointIterator<Z4Tracer> {
     for (double s = 0.1; s < 1; s += 0.1) {
       p = bezier.get(s);
       this.draw(Z4Action.CONTINUE, p.x, p.y);
-      this.drawDemoPoint(context, p, arrowPainter, gradientColor, fillStyle);
+      this.drawDemoPoint(context, p, painter, gradientColor, fillStyle);
     }
 
     p = bezier.get(1);
     this.draw(Z4Action.CONTINUE, p.x, p.y);
-    this.drawDemoPoint(context, p, arrowPainter, gradientColor, fillStyle);
+    this.drawDemoPoint(context, p, painter, gradientColor, fillStyle);
     this.draw(Z4Action.STOP, p.x, p.y);
-    this.drawDemoPoint(context, p, arrowPainter, gradientColor, fillStyle);
+    this.drawDemoPoint(context, p, painter, gradientColor, fillStyle);
   }
 
-  private void drawDemoPoint($CanvasRenderingContext2D context, $BezierPoint p, Z4ArrowPainter arrowPainter, Z4GradientColor gradientColor, String fillStyle) {
+  private void drawDemoPoint($CanvasRenderingContext2D context, $BezierPoint p, Z4Painter<?> painter, Z4GradientColor gradientColor, String fillStyle) {
     context.save();
     context.lineWidth = 1;
     context.fillStyle = Z4Color.$getFillStyle(fillStyle);
@@ -240,7 +241,7 @@ public class Z4Tracer extends Z4PointIterator<Z4Tracer> {
       context.save();
       context.translate(vector.getX0(), vector.getY0());
       context.rotate(vector.getPhase());
-      arrowPainter.draw(context, next, gradientColor);
+      painter.draw(context, next, gradientColor);
       context.restore();
     }
   }

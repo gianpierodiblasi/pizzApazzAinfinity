@@ -11,6 +11,7 @@ import giada.pizzapazza.math.Z4SignedRandomValue;
 import giada.pizzapazza.math.Z4SignedValue;
 import giada.pizzapazza.math.Z4Vector;
 import giada.pizzapazza.painter.Z4ArrowPainter;
+import giada.pizzapazza.painter.Z4Painter;
 import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.document;
@@ -76,9 +77,9 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
   }
 
   @Override
-  public void drawDemo($CanvasRenderingContext2D context, double width, double height) {
-    Z4ArrowPainter arrowPainter = new Z4ArrowPainter();
-    Z4GradientColor gradientColor = new Z4GradientColor();
+  public void drawDemo($CanvasRenderingContext2D context, Z4Painter<?> painter, Z4GradientColor gradientColor, double width, double height) {
+    Z4Painter<?> finalPainter = $exists(painter) ? painter : new Z4ArrowPainter();
+    Z4GradientColor finalGradientColor = $exists(gradientColor) ? gradientColor : new Z4GradientColor();
 
     String fillStyle = document.body.classList.contains("z4-dark") ? "white" : "black";
     this.initDraw(width, height).forEach(point -> {
@@ -99,7 +100,7 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
         context.save();
         context.translate(vector.getX0(), vector.getY0());
         context.rotate(vector.getPhase());
-        arrowPainter.draw(context, next, gradientColor);
+        finalPainter.draw(context, next, finalGradientColor);
         context.restore();
       }
     });
