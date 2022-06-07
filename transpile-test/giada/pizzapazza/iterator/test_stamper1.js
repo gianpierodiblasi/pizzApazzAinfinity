@@ -53,6 +53,8 @@ class test_stamper1 {
         return v;
       } else if (v instanceof Z4Point) {
         return v;
+      } else if (v instanceof Z4Vector) {
+        return v;
       } else {
         return JSON.stringify(v).replaceAll("\"", "").replaceAll("\n", "");
       }
