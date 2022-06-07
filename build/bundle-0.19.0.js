@@ -197,14 +197,14 @@ class Z4MessageFactory {
   static  initMessages() {
     let array = new Array();
     let path = Z4Loader.UP + (Z4Loader.allFiles ? "src/message/" : "build/message/");
-    let file = Z4Loader.allFiles ? "message-" + Z4Setting.getLanguage() + ".properties?random=" + Math.random() : "message-" + Z4Setting.getLanguage() + "-" + Z4Loader.version + ".properties";
+    let file = Z4Loader.allFiles ? "message-" + Z4Setting.getLanguage() + ".txt?random=" + Math.random() : "message-" + Z4Setting.getLanguage() + "-" + Z4Loader.version + ".txt";
     let client = new XMLHttpRequest();
     client.open("GET", path + file, false);
     client.send();
     Z4MessageFactory.readMessages(array, client.responseText);
     if (Object.keys(array).length === 0) {
       Z4Setting.setLanguage("en");
-      file = Z4Loader.allFiles ? "message-en.properties?random=" + Math.random() : "message-en-" + Z4Loader.version + ".properties";
+      file = Z4Loader.allFiles ? "message-en.txt?random=" + Math.random() : "message-en-" + Z4Loader.version + ".txt";
       let clientEN = new XMLHttpRequest();
       clientEN.open("GET", path + file, false);
       clientEN.send();
@@ -1452,7 +1452,7 @@ class Z4Shape2D {
    * @return The path
    */
    getPath() {
-    return path;
+    return this.path;
   }
 }
 /**
@@ -4026,7 +4026,7 @@ class Z4Shape2DPainter extends Z4Painter {
     return this;
   }
 
-   drawPath(context, scaleH, scaleW, color) {
+   drawPath(context, scaleW, scaleH, color) {
     context.save();
     context.scale(scaleW, scaleH);
     context.fillStyle = color.getHEX();
@@ -4096,6 +4096,8 @@ class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI {
    borderHeight = new Z4FancifulValueUI().setValueLabel("HEIGHT", true, false).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".shape2d-painter-container-third-row"));
 
    borderColor = new Z4ColorUI().setColorLabel("COLOR", true, false).appendToElement(this.querySelector(".shape2d-painter-container-third-row"));
+
+   pointIterator = new Z4Stamper();
 
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
@@ -4211,6 +4213,17 @@ class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI {
     this.drawCanvas();
   }
 
+  /**
+   * Sets the Z4PointIterator to draw the demo
+   *
+   * @param pointIterator The Z4PointIterator
+   * @return This Z4Shape2DPainterUI
+   */
+   setPointIterator(pointIterator) {
+    this.pointIterator = pointIterator;
+    return this;
+  }
+
    setValue(value) {
     this.value = value;
     if (this.value.getShape() === Z4Shape2D.CIRCLE) {
@@ -4248,19 +4261,16 @@ class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI {
 
    drawCanvas() {
     if (this.canvas.clientWidth) {
-      // this.canvas.width = Math.floor(this.canvas.clientWidth * window.devicePixelRatio);
-      // this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
-      // 
-      // $OffscreenCanvas offscreen = new $OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
-      // $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
-      // this.value.drawDemo(offscreenCtx, this.canvas.clientWidth, this.canvas.clientHeight);
-      // 
-      // this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      // 
-      // this.ctx.save();
-      // this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-      // this.ctx.drawImage(offscreen, 0, 0);
-      // this.ctx.restore();
+      this.canvas.width = Math.floor(this.canvas.clientWidth * window.devicePixelRatio);
+      this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
+      let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
+      let offscreenCtx = offscreen.getContext("2d");
+      this.pointIterator.drawDemo(offscreenCtx, this.value, null, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.save();
+      this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      this.ctx.drawImage(offscreen, 0, 0);
+      this.ctx.restore();
     }
   }
 
@@ -4416,7 +4426,7 @@ class Z4PointIterator {
  */
 class Z4Stamper extends Z4PointIterator {
 
-   intensity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(15).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
+   intensity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(1).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
    multiplicity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(1).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
@@ -4568,7 +4578,7 @@ class Z4Stamper extends Z4PointIterator {
  */
 class Z4Tracer extends Z4PointIterator {
 
-   intensity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(15).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
+   intensity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(1).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
    multiplicity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(1).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 

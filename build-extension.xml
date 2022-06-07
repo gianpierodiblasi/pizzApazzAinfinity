@@ -195,9 +195,9 @@
   </target>
   
   <target name="copy_messages">
-    <copy todir="${build.dir}/message">
+    <copy todir="${build.dir}/message" encoding="UTF-8" outputencoding="UTF-8">
       <fileset dir="${src.dir}/message"/>
-      <globmapper from="*.properties" to="*-${version}.properties"/>
+      <globmapper from="*.txt" to="*-${version}.txt"/>
     </copy>
   </target>
   
