@@ -202,12 +202,14 @@ class Z4Tracer extends Z4PointIterator {
     context.restore();
     let next = null;
     while ((next = this.next()) !== null) {
-      let vector = next.getZ4Vector();
-      context.save();
-      context.translate(vector.getX0(), vector.getY0());
-      context.rotate(vector.getPhase());
-      painter.draw(context, next, gradientColor);
-      context.restore();
+      if (!next.isDrawBounds()) {
+        let vector = next.getZ4Vector();
+        context.save();
+        context.translate(vector.getX0(), vector.getY0());
+        context.rotate(vector.getPhase());
+        painter.draw(context, next, gradientColor);
+        context.restore();
+      }
     }
   }
 

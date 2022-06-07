@@ -235,13 +235,15 @@ public class Z4Tracer extends Z4PointIterator<Z4Tracer> {
 
     Z4Point next;
     while ((next = this.next()) != null) {
-      Z4Vector vector = next.getZ4Vector();
+      if (!next.isDrawBounds()) {
+        Z4Vector vector = next.getZ4Vector();
 
-      context.save();
-      context.translate(vector.getX0(), vector.getY0());
-      context.rotate(vector.getPhase());
-      painter.draw(context, next, gradientColor);
-      context.restore();
+        context.save();
+        context.translate(vector.getX0(), vector.getY0());
+        context.rotate(vector.getPhase());
+        painter.draw(context, next, gradientColor);
+        context.restore();
+      }
     }
   }
 

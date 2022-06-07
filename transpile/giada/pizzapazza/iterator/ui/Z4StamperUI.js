@@ -83,7 +83,7 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
    * Sets the Z4Painter to draw the demo
    *
    * @param painter The Z4Painter, it can be null
-   * @return This Z4Shape2DPainterUI
+   * @return This Z4StamperUI
    */
    setPainter(painter) {
     this.painter = painter;

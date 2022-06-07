@@ -2766,7 +2766,7 @@ class Z4Progression {
 
    type = 0;
 
-   temporalStepProgression = 0.1;
+   temporalStepProgression = 0.0;
 
    lighting = Z4Lighting.NONE;
 
@@ -2893,7 +2893,7 @@ class Z4Progression {
    * @return The Z4Progression
    */
   static  spatial(lighting) {
-    return new Z4Progression(0, lighting, 0);
+    return new Z4Progression(0.1, lighting, 0);
   }
 
   /**
@@ -2915,7 +2915,7 @@ class Z4Progression {
    * @return The Z4Progression
    */
   static  relativeToPath(lighting) {
-    return new Z4Progression(0, lighting, 2);
+    return new Z4Progression(0.1, lighting, 2);
   }
 
   /**
@@ -2925,7 +2925,7 @@ class Z4Progression {
    * @return The Z4Progression
    */
   static  random(lighting) {
-    return new Z4Progression(0, lighting, 3);
+    return new Z4Progression(0.1, lighting, 3);
   }
 }
 /**
@@ -4776,12 +4776,14 @@ class Z4Tracer extends Z4PointIterator {
     context.restore();
     let next = null;
     while ((next = this.next()) !== null) {
-      let vector = next.getZ4Vector();
-      context.save();
-      context.translate(vector.getX0(), vector.getY0());
-      context.rotate(vector.getPhase());
-      painter.draw(context, next, gradientColor);
-      context.restore();
+      if (!next.isDrawBounds()) {
+        let vector = next.getZ4Vector();
+        context.save();
+        context.translate(vector.getX0(), vector.getY0());
+        context.rotate(vector.getPhase());
+        painter.draw(context, next, gradientColor);
+        context.restore();
+      }
     }
   }
 
@@ -5098,10 +5100,11 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
    * Sets the Z4Painter to draw the demo
    *
    * @param painter The Z4Painter, it can be null
-   * @return This Z4Shape2DPainterUI
+   * @return This Z4StamperUI
    */
    setPainter(painter) {
     this.painter = painter;
+    this.querySelector(".stamper-arrow-module-container").style.display = this.painter ? "none" : "flex";
     this.drawCanvas();
     return this;
   }
@@ -5169,6 +5172,8 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
    arrowModule = this.querySelector(".stamper-arrow-module-range");
 
    arrowPainter = new Z4ArrowPainter();
+
+   painter = null;
 
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
@@ -5258,6 +5263,19 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
     return null;
   }
 
+  /**
+   * Sets the Z4Painter to draw the demo
+   *
+   * @param painter The Z4Painter, it can be null
+   * @return This Z4TracerUI
+   */
+   setPainter(painter) {
+    this.painter = painter;
+    this.querySelector(".tracer-arrow-module-container").style.display = this.painter ? "none" : "flex";
+    this.drawCanvas();
+    return this;
+  }
+
    setValue(value) {
     this.value = value;
     this.rotation.setValue(this.value.getRotation());
@@ -5281,7 +5299,7 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
       this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
       let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
       let offscreenCtx = offscreen.getContext("2d");
-      this.value.drawDemo(offscreenCtx, this.arrowPainter, null, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.value.drawDemo(offscreenCtx, this.painter ? this.painter : this.arrowPainter, null, this.canvas.clientWidth, this.canvas.clientHeight);
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.save();
       this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
@@ -5310,6 +5328,8 @@ class Z4SpirographUI extends Z4AbstractComponentWithValueUI {
    rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".spirograph-container"));
 
    progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".spirograph-container"));
+
+   painter = null;
 
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
@@ -5346,6 +5366,18 @@ class Z4SpirographUI extends Z4AbstractComponentWithValueUI {
     this.setValue(new Z4Spirograph());
   }
 
+  /**
+   * Sets the Z4Painter to draw the demo
+   *
+   * @param painter The Z4Painter, it can be null
+   * @return This Z4SpirographUI
+   */
+   setPainter(painter) {
+    this.painter = painter;
+    this.drawCanvas();
+    return this;
+  }
+
    setValue(value) {
     this.value = value;
     this.rotation.setValue(this.value.getRotation());
@@ -5360,7 +5392,7 @@ class Z4SpirographUI extends Z4AbstractComponentWithValueUI {
       this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
       let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
       let offscreenCtx = offscreen.getContext("2d");
-      this.value.drawDemo(offscreenCtx, null, null, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.value.drawDemo(offscreenCtx, this.painter, null, this.canvas.clientWidth, this.canvas.clientHeight);
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.save();
       this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);

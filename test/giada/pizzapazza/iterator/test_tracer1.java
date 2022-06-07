@@ -7,6 +7,9 @@ import giada.pizzapazza.math.Z4FancifulValue;
 import giada.pizzapazza.math.Z4Point;
 import giada.pizzapazza.math.Z4Rotation;
 import giada.pizzapazza.math.Z4SignedRandomValue;
+import giada.pizzapazza.math.Z4TracerPath;
+import giada.pizzapazza.math.Z4Vector;
+import giada.pizzapazza.painter.Z4Shape2DPainter;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.setting.Z4Setting;
 import java.util.function.BiFunction;
@@ -38,6 +41,18 @@ public class test_tracer1 {
     ui.oninput = (value) -> document.getElementById("test2").textContent = "ONINPUT " + test_tracer1.stringify(value);
     ui.onchange = (value) -> document.getElementById("test2").textContent = "ONCHANGE " + test_tracer1.stringify(value);
     document.getElementById("test2").textContent = test_tracer1.stringify(ui.getValue());
+
+    document.$getElementById("painter").onchange = (event) -> {
+      switch (document.$getElementById("painter").value) {
+        case "none":
+          ui.setPainter(null);
+          break;
+        case "shape2d":
+          ui.setPainter(new Z4Shape2DPainter());
+          break;
+      }
+      return null;
+    };
   }
 
   private static String stringify(Object object) {
@@ -60,6 +75,10 @@ public class test_tracer1 {
       } else if (v instanceof Z4SignedRandomValue) {
         return v;
       } else if (v instanceof Z4Point) {
+        return v;
+      } else if (v instanceof Z4Vector) {
+        return v;
+      } else if (v instanceof Z4TracerPath) {
         return v;
       } else {
         return JSON.stringify(v).replaceAll("\"", "").replaceAll("\n", "");

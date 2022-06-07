@@ -7,6 +7,7 @@ import giada.pizzapazza.math.Z4FancifulValue;
 import giada.pizzapazza.math.Z4Point;
 import giada.pizzapazza.math.Z4Rotation;
 import giada.pizzapazza.math.Z4SignedRandomValue;
+import giada.pizzapazza.painter.Z4Shape2DPainter;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.setting.Z4Setting;
 import java.util.function.BiFunction;
@@ -38,6 +39,18 @@ public class test_spirograph1 {
     ui.oninput = (value) -> document.getElementById("test2").textContent = "ONINPUT " + test_spirograph1.stringify(value);
     ui.onchange = (value) -> document.getElementById("test2").textContent = "ONCHANGE " + test_spirograph1.stringify(value);
     document.getElementById("test2").textContent = test_spirograph1.stringify(ui.getValue());
+    
+    document.$getElementById("painter").onchange = (event) -> {
+      switch (document.$getElementById("painter").value) {
+        case "none":
+          ui.setPainter(null);
+          break;
+        case "shape2d":
+          ui.setPainter(new Z4Shape2DPainter());
+          break;
+      }
+      return null;
+    };
   }
 
   private static String stringify(Object object) {

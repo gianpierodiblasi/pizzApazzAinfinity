@@ -9,6 +9,7 @@ import giada.pizzapazza.math.Z4Rotation;
 import giada.pizzapazza.math.ui.Z4FancifulValueUI;
 import giada.pizzapazza.math.ui.Z4RotationUI;
 import giada.pizzapazza.painter.Z4ArrowPainter;
+import giada.pizzapazza.painter.Z4Painter;
 import giada.pizzapazza.setting.Z4HTMLFactory;
 import giada.pizzapazza.ui.Z4AbstractComponentWithValueUI;
 import simulation.dom.$Canvas;
@@ -46,6 +47,7 @@ public class Z4TracerUI extends Z4AbstractComponentWithValueUI<Z4Tracer> {
 
   private final $HTMLElement arrowModule = this.querySelector(".stamper-arrow-module-range");
   private final Z4ArrowPainter arrowPainter = new Z4ArrowPainter();
+  private Z4Painter<?> painter;
 
   private final $ResizeObserver resizeObserver = new $ResizeObserver(() -> this.drawCanvas());
   private final $MutationObserver mutationObserver = new $MutationObserver(() -> this.drawCanvas());
@@ -146,6 +148,19 @@ public class Z4TracerUI extends Z4AbstractComponentWithValueUI<Z4Tracer> {
     return null;
   }
 
+  /**
+   * Sets the Z4Painter to draw the demo
+   *
+   * @param painter The Z4Painter, it can be null
+   * @return This Z4TracerUI
+   */
+  public Z4TracerUI setPainter(Z4Painter<?> painter) {
+    this.painter = painter;
+    this.querySelector(".tracer-arrow-module-container").style.display = $exists(this.painter) ? "none" : "flex";
+    this.drawCanvas();
+    return this;
+  }
+
   @Override
   @SuppressWarnings("unchecked")
   public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4Tracer value) {
@@ -177,7 +192,7 @@ public class Z4TracerUI extends Z4AbstractComponentWithValueUI<Z4Tracer> {
 
       $OffscreenCanvas offscreen = new $OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
       $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
-      this.value.drawDemo(offscreenCtx, this.arrowPainter, null, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.value.drawDemo(offscreenCtx, $exists(this.painter) ? this.painter : this.arrowPainter, null, this.canvas.clientWidth, this.canvas.clientHeight);
 
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 

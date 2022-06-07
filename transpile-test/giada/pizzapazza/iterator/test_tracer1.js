@@ -19,6 +19,17 @@ class test_tracer1 {
     ui.oninput = (value) => document.getElementById("test2").textContent = "ONINPUT " + test_tracer1.stringify(value);
     ui.onchange = (value) => document.getElementById("test2").textContent = "ONCHANGE " + test_tracer1.stringify(value);
     document.getElementById("test2").textContent = test_tracer1.stringify(ui.getValue());
+    document.getElementById("painter").onchange = (event) => {
+      switch(document.getElementById("painter").value) {
+        case "none":
+          ui.setPainter(null);
+          break;
+        case "shape2d":
+          ui.setPainter(new Z4Shape2DPainter());
+          break;
+      }
+      return null;
+    };
   }
 
   static  stringify(object) {
@@ -41,6 +52,10 @@ class test_tracer1 {
       } else if (v instanceof Z4SignedRandomValue) {
         return v;
       } else if (v instanceof Z4Point) {
+        return v;
+      } else if (v instanceof Z4Vector) {
+        return v;
+      } else if (v instanceof Z4TracerPath) {
         return v;
       } else {
         return JSON.stringify(v).replaceAll("\"", "").replaceAll("\n", "");

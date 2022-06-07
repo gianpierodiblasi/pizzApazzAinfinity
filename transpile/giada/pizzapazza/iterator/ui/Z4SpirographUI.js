@@ -13,6 +13,8 @@ class Z4SpirographUI extends Z4AbstractComponentWithValueUI {
 
    progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".spirograph-container"));
 
+   painter = null;
+
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
    mutationObserver = new MutationObserver(() => this.drawCanvas());
@@ -48,6 +50,18 @@ class Z4SpirographUI extends Z4AbstractComponentWithValueUI {
     this.setValue(new Z4Spirograph());
   }
 
+  /**
+   * Sets the Z4Painter to draw the demo
+   *
+   * @param painter The Z4Painter, it can be null
+   * @return This Z4SpirographUI
+   */
+   setPainter(painter) {
+    this.painter = painter;
+    this.drawCanvas();
+    return this;
+  }
+
    setValue(value) {
     this.value = value;
     this.rotation.setValue(this.value.getRotation());
@@ -62,7 +76,7 @@ class Z4SpirographUI extends Z4AbstractComponentWithValueUI {
       this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
       let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
       let offscreenCtx = offscreen.getContext("2d");
-      this.value.drawDemo(offscreenCtx, null, null, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.value.drawDemo(offscreenCtx, this.painter, null, this.canvas.clientWidth, this.canvas.clientHeight);
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.save();
       this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);

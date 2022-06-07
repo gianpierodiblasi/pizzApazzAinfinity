@@ -4,6 +4,7 @@ import def.js.Array;
 import giada.pizzapazza.color.ui.Z4ProgressionUI;
 import giada.pizzapazza.iterator.Z4Spirograph;
 import giada.pizzapazza.math.ui.Z4RotationUI;
+import giada.pizzapazza.painter.Z4Painter;
 import giada.pizzapazza.setting.Z4HTMLFactory;
 import giada.pizzapazza.ui.Z4AbstractComponentWithValueUI;
 import simulation.dom.$Canvas;
@@ -28,6 +29,8 @@ public class Z4SpirographUI extends Z4AbstractComponentWithValueUI<Z4Spirograph>
 
   private final Z4RotationUI rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".spirograph-container"));
   private final Z4ProgressionUI progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".spirograph-container"));
+  
+  private Z4Painter<?> painter;
   
   private final $ResizeObserver resizeObserver = new $ResizeObserver(() -> this.drawCanvas());
   private final $MutationObserver mutationObserver = new $MutationObserver(() -> this.drawCanvas());
@@ -68,6 +71,18 @@ public class Z4SpirographUI extends Z4AbstractComponentWithValueUI<Z4Spirograph>
     this.setValue(new Z4Spirograph());
   }
 
+  /**
+   * Sets the Z4Painter to draw the demo
+   *
+   * @param painter The Z4Painter, it can be null
+   * @return This Z4SpirographUI
+   */
+  public Z4SpirographUI setPainter(Z4Painter<?> painter) {
+    this.painter = painter;
+    this.drawCanvas();
+    return this;
+  }
+  
   @Override
   @SuppressWarnings("unchecked")
   public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4Spirograph value) {
@@ -87,7 +102,7 @@ public class Z4SpirographUI extends Z4AbstractComponentWithValueUI<Z4Spirograph>
 
       $OffscreenCanvas offscreen = new $OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
       $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
-      this.value.drawDemo(offscreenCtx, null, null, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.value.drawDemo(offscreenCtx, this.painter, null, this.canvas.clientWidth, this.canvas.clientHeight);
 
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
