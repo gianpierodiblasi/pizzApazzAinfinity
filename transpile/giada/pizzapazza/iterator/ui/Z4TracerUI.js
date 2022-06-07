@@ -74,8 +74,8 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
       return null;
     };
     this.sustain.querySelector(".fanciful-value-label").parentElement.insertBefore(this.querySelector(".tracer-endless-sustain-switch"), this.sustain.querySelector(".fanciful-value-container"));
-    this.arrowModule.oninput = (v) => this.setModule();
-    this.arrowModule.onchange = (v) => this.setModule();
+    this.arrowModule.oninput = (event) => this.setModule();
+    this.arrowModule.onchange = (event) => this.setModule();
     this.setValue(new Z4Tracer());
   }
 

@@ -10,7 +10,7 @@ import giada.pizzapazza.math.Z4Point;
 public class Z4Progression {
 
   private final int type;
-  private double temporalStepProgression = 0.1;
+  private double temporalStepProgression;
   private Z4Lighting lighting = Z4Lighting.NONE;
 
   private Z4Progression(double temporalStepProgression, Z4Lighting lighting, int type) {
@@ -137,7 +137,7 @@ public class Z4Progression {
    * @return The Z4Progression
    */
   public static Z4Progression spatial(Z4Lighting lighting) {
-    return new Z4Progression(0, lighting, 0);
+    return new Z4Progression(0.1, lighting, 0);
   }
 
   /**
@@ -159,7 +159,7 @@ public class Z4Progression {
    * @return The Z4Progression
    */
   public static Z4Progression relativeToPath(Z4Lighting lighting) {
-    return new Z4Progression(0, lighting, 2);
+    return new Z4Progression(0.1, lighting, 2);
   }
 
   /**
@@ -169,6 +169,6 @@ public class Z4Progression {
    * @return The Z4Progression
    */
   public static Z4Progression random(Z4Lighting lighting) {
-    return new Z4Progression(0, lighting, 3);
+    return new Z4Progression(0.1, lighting, 3);
   }
 }

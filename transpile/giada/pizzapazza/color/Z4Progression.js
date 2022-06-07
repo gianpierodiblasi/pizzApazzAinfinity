@@ -7,7 +7,7 @@ class Z4Progression {
 
    type = 0;
 
-   temporalStepProgression = 0.1;
+   temporalStepProgression = 0.0;
 
    lighting = Z4Lighting.NONE;
 
@@ -134,7 +134,7 @@ class Z4Progression {
    * @return The Z4Progression
    */
   static  spatial(lighting) {
-    return new Z4Progression(0, lighting, 0);
+    return new Z4Progression(0.1, lighting, 0);
   }
 
   /**
@@ -156,7 +156,7 @@ class Z4Progression {
    * @return The Z4Progression
    */
   static  relativeToPath(lighting) {
-    return new Z4Progression(0, lighting, 2);
+    return new Z4Progression(0.1, lighting, 2);
   }
 
   /**
@@ -166,6 +166,6 @@ class Z4Progression {
    * @return The Z4Progression
    */
   static  random(lighting) {
-    return new Z4Progression(0, lighting, 3);
+    return new Z4Progression(0.1, lighting, 3);
   }
 }

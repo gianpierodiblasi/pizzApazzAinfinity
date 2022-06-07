@@ -5036,6 +5036,8 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
 
    arrowPainter = new Z4ArrowPainter();
 
+   painter = null;
+
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
    mutationObserver = new MutationObserver(() => this.drawCanvas());
@@ -5060,8 +5062,8 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
     this.push.onchange = (v) => this.set(null, null, v, null, true);
     this.progression.oninput = (v) => this.set(null, null, null, v, false);
     this.progression.onchange = (v) => this.set(null, null, null, v, true);
-    this.arrowModule.oninput = (v) => this.setModule();
-    this.arrowModule.onchange = (v) => this.setModule();
+    this.arrowModule.oninput = (event) => this.setModule();
+    this.arrowModule.onchange = (event) => this.setModule();
     this.setValue(new Z4Stamper());
   }
 
@@ -5092,6 +5094,18 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
     return null;
   }
 
+  /**
+   * Sets the Z4Painter to draw the demo
+   *
+   * @param painter The Z4Painter, it can be null
+   * @return This Z4Shape2DPainterUI
+   */
+   setPainter(painter) {
+    this.painter = painter;
+    this.drawCanvas();
+    return this;
+  }
+
    setValue(value) {
     this.value = value;
     this.rotation.setValue(this.value.getRotation());
@@ -5108,7 +5122,7 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
       this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
       let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
       let offscreenCtx = offscreen.getContext("2d");
-      this.value.drawDemo(offscreenCtx, this.arrowPainter, null, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.value.drawDemo(offscreenCtx, this.painter ? this.painter : this.arrowPainter, null, this.canvas.clientWidth, this.canvas.clientHeight);
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.save();
       this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
@@ -5199,8 +5213,8 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
       return null;
     };
     this.sustain.querySelector(".fanciful-value-label").parentElement.insertBefore(this.querySelector(".tracer-endless-sustain-switch"), this.sustain.querySelector(".fanciful-value-container"));
-    this.arrowModule.oninput = (v) => this.setModule();
-    this.arrowModule.onchange = (v) => this.setModule();
+    this.arrowModule.oninput = (event) => this.setModule();
+    this.arrowModule.onchange = (event) => this.setModule();
     this.setValue(new Z4Tracer());
   }
 
