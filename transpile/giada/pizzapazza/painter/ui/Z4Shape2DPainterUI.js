@@ -15,9 +15,9 @@ class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI {
 
    regularCheck = this.querySelector(".shape2d-painter-regular-check");
 
-   shadowShiftX = new Z4FancifulValueUI().setValueLabel("DELTA_X", true, false).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".shape2d-painter-container-second-row"));
+   shadowShiftX = new Z4FancifulValueUI().setValueLabel("DELTA_X", true, false).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).appendToElement(this.querySelector(".shape2d-painter-container-second-row"));
 
-   shadowShiftY = new Z4FancifulValueUI().setValueLabel("DELTA_Y", true, false).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".shape2d-painter-container-second-row"));
+   shadowShiftY = new Z4FancifulValueUI().setValueLabel("DELTA_Y", true, false).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).appendToElement(this.querySelector(".shape2d-painter-container-second-row"));
 
    shadowColor = new Z4ColorUI().setColorLabel("COLOR", true, false).appendToElement(this.querySelector(".shape2d-painter-container-second-row"));
 
@@ -151,6 +151,7 @@ class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI {
    */
    setPointIterator(pointIterator) {
     this.pointIterator = pointIterator;
+    this.drawCanvas();
     return this;
   }
 

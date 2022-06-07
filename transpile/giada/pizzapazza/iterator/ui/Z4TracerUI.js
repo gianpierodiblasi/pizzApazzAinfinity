@@ -15,6 +15,8 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
 
    push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
 
+   step = new Z4FancifulValueUI().setValueLabel("STEP", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
+
    progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".tracer-container"));
 
    attack = new Z4FancifulValueUI().setValueLabel("ATTACK", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-second-row"));
@@ -25,7 +27,9 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
 
    endlessSustainCheck = this.querySelector(".tracer-endless-sustain-check");
 
-   step = new Z4FancifulValueUI().setValueLabel("STEP", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-third-row"));
+   arrowModule = this.querySelector(".stamper-arrow-module-range");
+
+   arrowPainter = new Z4ArrowPainter();
 
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
@@ -70,6 +74,8 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
       return null;
     };
     this.sustain.querySelector(".fanciful-value-label").parentElement.insertBefore(this.querySelector(".tracer-endless-sustain-switch"), this.sustain.querySelector(".fanciful-value-container"));
+    this.arrowModule.oninput = (v) => this.setModule();
+    this.arrowModule.onchange = (v) => this.setModule();
     this.setValue(new Z4Tracer());
   }
 
@@ -107,6 +113,12 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
     }
   }
 
+   setModule() {
+    this.arrowPainter.setModule(this.arrowModule.valueAsNumber);
+    this.drawCanvas();
+    return null;
+  }
+
    setValue(value) {
     this.value = value;
     this.rotation.setValue(this.value.getRotation());
@@ -130,7 +142,7 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
       this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
       let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
       let offscreenCtx = offscreen.getContext("2d");
-      this.value.drawDemo(offscreenCtx, null, null, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.value.drawDemo(offscreenCtx, this.arrowPainter, null, this.canvas.clientWidth, this.canvas.clientHeight);
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.save();
       this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);

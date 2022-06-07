@@ -8,10 +8,12 @@ import giada.pizzapazza.math.Z4FancifulValue;
 import giada.pizzapazza.math.Z4Rotation;
 import giada.pizzapazza.math.ui.Z4FancifulValueUI;
 import giada.pizzapazza.math.ui.Z4RotationUI;
+import giada.pizzapazza.painter.Z4ArrowPainter;
 import giada.pizzapazza.setting.Z4HTMLFactory;
 import giada.pizzapazza.ui.Z4AbstractComponentWithValueUI;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
+import simulation.dom.$HTMLElement;
 import simulation.dom.$OffscreenCanvas;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.document;
@@ -34,6 +36,9 @@ public class Z4StamperUI extends Z4AbstractComponentWithValueUI<Z4Stamper> {
   private final Z4FancifulValueUI multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
   private final Z4FancifulValueUI push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
   private final Z4ProgressionUI progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".stamper-container"));
+
+  private final $HTMLElement arrowModule = this.querySelector(".stamper-arrow-module-range");
+  private final Z4ArrowPainter arrowPainter = new Z4ArrowPainter();
 
   private final $ResizeObserver resizeObserver = new $ResizeObserver(() -> this.drawCanvas());
   private final $MutationObserver mutationObserver = new $MutationObserver(() -> this.drawCanvas());
@@ -62,6 +67,9 @@ public class Z4StamperUI extends Z4AbstractComponentWithValueUI<Z4Stamper> {
     this.progression.oninput = (v) -> this.set(null, null, null, v, false);
     this.progression.onchange = (v) -> this.set(null, null, null, v, true);
 
+    this.arrowModule.oninput = (v) -> this.setModule();
+    this.arrowModule.onchange = (v) -> this.setModule();
+
     this.setValue(new Z4Stamper());
   }
 
@@ -88,6 +96,12 @@ public class Z4StamperUI extends Z4AbstractComponentWithValueUI<Z4Stamper> {
     }
   }
 
+  private Object setModule() {
+    this.arrowPainter.setModule(this.arrowModule.valueAsNumber);
+    this.drawCanvas();
+    return null;
+  }
+
   @Override
   @SuppressWarnings("unchecked")
   public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4Stamper value) {
@@ -110,7 +124,7 @@ public class Z4StamperUI extends Z4AbstractComponentWithValueUI<Z4Stamper> {
 
       $OffscreenCanvas offscreen = new $OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
       $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
-      this.value.drawDemo(offscreenCtx, null, null, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.value.drawDemo(offscreenCtx, this.arrowPainter, null, this.canvas.clientWidth, this.canvas.clientHeight);
 
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 

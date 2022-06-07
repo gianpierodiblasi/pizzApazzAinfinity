@@ -8,6 +8,7 @@ import giada.pizzapazza.math.Z4FancifulValue;
 import giada.pizzapazza.math.Z4Rotation;
 import giada.pizzapazza.math.ui.Z4FancifulValueUI;
 import giada.pizzapazza.math.ui.Z4RotationUI;
+import giada.pizzapazza.painter.Z4ArrowPainter;
 import giada.pizzapazza.setting.Z4HTMLFactory;
 import giada.pizzapazza.ui.Z4AbstractComponentWithValueUI;
 import simulation.dom.$Canvas;
@@ -34,6 +35,7 @@ public class Z4TracerUI extends Z4AbstractComponentWithValueUI<Z4Tracer> {
   private final Z4RotationUI rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".tracer-container"));
   private final Z4FancifulValueUI multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
   private final Z4FancifulValueUI push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
+  private final Z4FancifulValueUI step = new Z4FancifulValueUI().setValueLabel("STEP", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
   private final Z4ProgressionUI progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".tracer-container"));
 
   private final Z4FancifulValueUI attack = new Z4FancifulValueUI().setValueLabel("ATTACK", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-second-row"));
@@ -42,7 +44,8 @@ public class Z4TracerUI extends Z4AbstractComponentWithValueUI<Z4Tracer> {
 
   private final $HTMLElement endlessSustainCheck = this.querySelector(".tracer-endless-sustain-check");
 
-  private final Z4FancifulValueUI step = new Z4FancifulValueUI().setValueLabel("STEP", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-third-row"));
+  private final $HTMLElement arrowModule = this.querySelector(".stamper-arrow-module-range");
+  private final Z4ArrowPainter arrowPainter = new Z4ArrowPainter();
 
   private final $ResizeObserver resizeObserver = new $ResizeObserver(() -> this.drawCanvas());
   private final $MutationObserver mutationObserver = new $MutationObserver(() -> this.drawCanvas());
@@ -93,6 +96,9 @@ public class Z4TracerUI extends Z4AbstractComponentWithValueUI<Z4Tracer> {
     };
     this.sustain.querySelector(".fanciful-value-label").parentElement.insertBefore(this.querySelector(".tracer-endless-sustain-switch"), this.sustain.querySelector(".fanciful-value-container"));
 
+    this.arrowModule.oninput = (v) -> this.setModule();
+    this.arrowModule.onchange = (v) -> this.setModule();
+
     this.setValue(new Z4Tracer());
   }
 
@@ -134,6 +140,12 @@ public class Z4TracerUI extends Z4AbstractComponentWithValueUI<Z4Tracer> {
     }
   }
 
+  private Object setModule() {
+    this.arrowPainter.setModule(this.arrowModule.valueAsNumber);
+    this.drawCanvas();
+    return null;
+  }
+
   @Override
   @SuppressWarnings("unchecked")
   public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4Tracer value) {
@@ -165,7 +177,7 @@ public class Z4TracerUI extends Z4AbstractComponentWithValueUI<Z4Tracer> {
 
       $OffscreenCanvas offscreen = new $OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
       $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
-      this.value.drawDemo(offscreenCtx, null, null, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.value.drawDemo(offscreenCtx, this.arrowPainter, null, this.canvas.clientWidth, this.canvas.clientHeight);
 
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 

@@ -13,12 +13,33 @@ import static simulation.js.$Globals.document;
  */
 public class Z4ArrowPainter extends Z4Painter<Z4ArrowPainter> {
 
+  private double module = 15;
   private boolean bool;
+
+  /**
+   * Sets the module
+   *
+   * @param module The module
+   * @return This Z4ArrowPainter
+   */
+  public Z4ArrowPainter setModule(double module) {
+    this.module = module;
+    return this;
+  }
+
+  /**
+   * Returns the module
+   *
+   * @return The module
+   */
+  public double getModule() {
+    return this.module;
+  }
 
   @Override
   public Z4ArrowPainter draw($CanvasRenderingContext2D context, Z4Point point, Z4GradientColor gradientColor) {
     this.bool = !this.bool;
-    double x = point.getIntensity() * (point.isUseVectorModuleAsSize() ? point.getZ4Vector().getModule() : 15);
+    double x = point.getIntensity() * (point.isUseVectorModuleAsSize() ? point.getZ4Vector().getModule() : this.module);
 
     context.save();
     context.lineWidth = 1;

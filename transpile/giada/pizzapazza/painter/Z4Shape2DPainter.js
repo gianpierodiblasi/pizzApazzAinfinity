@@ -7,9 +7,9 @@ class Z4Shape2DPainter extends Z4Painter {
 
    shape = Z4Shape2D.SQUARE;
 
-   width = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(50).setSign(Z4Sign.POSITIVE));
+   width = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(50).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
-   height = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(50).setSign(Z4Sign.POSITIVE));
+   height = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(50).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
    regular = false;
 
@@ -19,9 +19,9 @@ class Z4Shape2DPainter extends Z4Painter {
 
    shadowColor = new Z4Color(255, 0, 0, 0);
 
-   borderWidth = new Z4FancifulValue();
+   borderWidth = new Z4FancifulValue().setConstant(new Z4SignedValue().setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
-   borderHeight = new Z4FancifulValue();
+   borderHeight = new Z4FancifulValue().setConstant(new Z4SignedValue().setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
    borderColor = new Z4Color(255, 0, 0, 0);
 
@@ -183,11 +183,11 @@ class Z4Shape2DPainter extends Z4Painter {
       if (currentWidth <= 0 || currentHeight <= 0) {
         return this;
       }
-      let currentShadowShiftX = point.getIntensity() * this.shadowShiftX.next();
-      let currentShadowShiftY = point.getIntensity() * this.shadowShiftY.next();
-      let currentBorderWidth = point.getIntensity() * this.borderWidth.next();
-      let currentBorderHeight = point.getIntensity() * this.borderHeight.next();
-      if (currentShadowShiftX > 0 || currentShadowShiftY > 0) {
+      let currentShadowShiftX = this.shadowShiftX.next();
+      let currentShadowShiftY = this.shadowShiftY.next();
+      let currentBorderWidth = this.borderWidth.next();
+      let currentBorderHeight = this.borderHeight.next();
+      if (currentShadowShiftX || currentShadowShiftY) {
         context.save();
         context.translate(currentShadowShiftX, currentShadowShiftY);
         this.drawPath(context, currentWidth + (currentBorderWidth > 0 ? currentBorderWidth : 0), currentHeight + (currentBorderHeight > 0 ? currentBorderHeight : 0), this.shadowColor);

@@ -3768,11 +3768,33 @@ class Z4Painter {
  */
 class Z4ArrowPainter extends Z4Painter {
 
+   module = 15;
+
    bool = false;
+
+  /**
+   * Sets the module
+   *
+   * @param module The module
+   * @return This Z4ArrowPainter
+   */
+   setModule(module) {
+    this.module = module;
+    return this;
+  }
+
+  /**
+   * Returns the module
+   *
+   * @return The module
+   */
+   getModule() {
+    return this.module;
+  }
 
    draw(context, point, gradientColor) {
     this.bool = !this.bool;
-    let x = point.getIntensity() * point.getZ4Vector().getModule();
+    let x = point.getIntensity() * (point.isUseVectorModuleAsSize() ? point.getZ4Vector().getModule() : this.module);
     context.save();
     context.lineWidth = 1;
     context.strokeStyle = this.getColor(document.body.classList.contains("z4-dark") ? "white" : "black");
@@ -3811,9 +3833,9 @@ class Z4Shape2DPainter extends Z4Painter {
 
    shape = Z4Shape2D.SQUARE;
 
-   width = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(50).setSign(Z4Sign.POSITIVE));
+   width = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(50).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
-   height = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(50).setSign(Z4Sign.POSITIVE));
+   height = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(50).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
    regular = false;
 
@@ -3823,9 +3845,9 @@ class Z4Shape2DPainter extends Z4Painter {
 
    shadowColor = new Z4Color(255, 0, 0, 0);
 
-   borderWidth = new Z4FancifulValue();
+   borderWidth = new Z4FancifulValue().setConstant(new Z4SignedValue().setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
-   borderHeight = new Z4FancifulValue();
+   borderHeight = new Z4FancifulValue().setConstant(new Z4SignedValue().setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
    borderColor = new Z4Color(255, 0, 0, 0);
 
@@ -3987,11 +4009,11 @@ class Z4Shape2DPainter extends Z4Painter {
       if (currentWidth <= 0 || currentHeight <= 0) {
         return this;
       }
-      let currentShadowShiftX = point.getIntensity() * this.shadowShiftX.next();
-      let currentShadowShiftY = point.getIntensity() * this.shadowShiftY.next();
-      let currentBorderWidth = point.getIntensity() * this.borderWidth.next();
-      let currentBorderHeight = point.getIntensity() * this.borderHeight.next();
-      if (currentShadowShiftX > 0 || currentShadowShiftY > 0) {
+      let currentShadowShiftX = this.shadowShiftX.next();
+      let currentShadowShiftY = this.shadowShiftY.next();
+      let currentBorderWidth = this.borderWidth.next();
+      let currentBorderHeight = this.borderHeight.next();
+      if (currentShadowShiftX || currentShadowShiftY) {
         context.save();
         context.translate(currentShadowShiftX, currentShadowShiftY);
         this.drawPath(context, currentWidth + (currentBorderWidth > 0 ? currentBorderWidth : 0), currentHeight + (currentBorderHeight > 0 ? currentBorderHeight : 0), this.shadowColor);
@@ -4085,9 +4107,9 @@ class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI {
 
    regularCheck = this.querySelector(".shape2d-painter-regular-check");
 
-   shadowShiftX = new Z4FancifulValueUI().setValueLabel("DELTA_X", true, false).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".shape2d-painter-container-second-row"));
+   shadowShiftX = new Z4FancifulValueUI().setValueLabel("DELTA_X", true, false).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).appendToElement(this.querySelector(".shape2d-painter-container-second-row"));
 
-   shadowShiftY = new Z4FancifulValueUI().setValueLabel("DELTA_Y", true, false).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".shape2d-painter-container-second-row"));
+   shadowShiftY = new Z4FancifulValueUI().setValueLabel("DELTA_Y", true, false).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).appendToElement(this.querySelector(".shape2d-painter-container-second-row"));
 
    shadowColor = new Z4ColorUI().setColorLabel("COLOR", true, false).appendToElement(this.querySelector(".shape2d-painter-container-second-row"));
 
@@ -4221,6 +4243,7 @@ class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI {
    */
    setPointIterator(pointIterator) {
     this.pointIterator = pointIterator;
+    this.drawCanvas();
     return this;
   }
 
@@ -4467,7 +4490,7 @@ class Z4Stamper extends Z4PointIterator {
         this.z4Point.setDrawBounds(false);
         this.z4Point.setColorPosition(Math.random());
       }
-      return this.z4Point.setIntensity(1);
+      return this.z4Point;
     }
   }
 
@@ -5009,6 +5032,10 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
 
    progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".stamper-container"));
 
+   arrowModule = this.querySelector(".stamper-arrow-module-range");
+
+   arrowPainter = new Z4ArrowPainter();
+
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
    mutationObserver = new MutationObserver(() => this.drawCanvas());
@@ -5033,6 +5060,8 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
     this.push.onchange = (v) => this.set(null, null, v, null, true);
     this.progression.oninput = (v) => this.set(null, null, null, v, false);
     this.progression.onchange = (v) => this.set(null, null, null, v, true);
+    this.arrowModule.oninput = (v) => this.setModule();
+    this.arrowModule.onchange = (v) => this.setModule();
     this.setValue(new Z4Stamper());
   }
 
@@ -5057,6 +5086,12 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
     }
   }
 
+   setModule() {
+    this.arrowPainter.setModule(this.arrowModule.valueAsNumber);
+    this.drawCanvas();
+    return null;
+  }
+
    setValue(value) {
     this.value = value;
     this.rotation.setValue(this.value.getRotation());
@@ -5073,7 +5108,7 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
       this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
       let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
       let offscreenCtx = offscreen.getContext("2d");
-      this.value.drawDemo(offscreenCtx, null, null, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.value.drawDemo(offscreenCtx, this.arrowPainter, null, this.canvas.clientWidth, this.canvas.clientHeight);
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.save();
       this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
@@ -5105,6 +5140,8 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
 
    push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
 
+   step = new Z4FancifulValueUI().setValueLabel("STEP", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
+
    progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".tracer-container"));
 
    attack = new Z4FancifulValueUI().setValueLabel("ATTACK", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-second-row"));
@@ -5115,7 +5152,9 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
 
    endlessSustainCheck = this.querySelector(".tracer-endless-sustain-check");
 
-   step = new Z4FancifulValueUI().setValueLabel("STEP", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-third-row"));
+   arrowModule = this.querySelector(".stamper-arrow-module-range");
+
+   arrowPainter = new Z4ArrowPainter();
 
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
@@ -5160,6 +5199,8 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
       return null;
     };
     this.sustain.querySelector(".fanciful-value-label").parentElement.insertBefore(this.querySelector(".tracer-endless-sustain-switch"), this.sustain.querySelector(".fanciful-value-container"));
+    this.arrowModule.oninput = (v) => this.setModule();
+    this.arrowModule.onchange = (v) => this.setModule();
     this.setValue(new Z4Tracer());
   }
 
@@ -5197,6 +5238,12 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
     }
   }
 
+   setModule() {
+    this.arrowPainter.setModule(this.arrowModule.valueAsNumber);
+    this.drawCanvas();
+    return null;
+  }
+
    setValue(value) {
     this.value = value;
     this.rotation.setValue(this.value.getRotation());
@@ -5220,7 +5267,7 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
       this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
       let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
       let offscreenCtx = offscreen.getContext("2d");
-      this.value.drawDemo(offscreenCtx, null, null, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.value.drawDemo(offscreenCtx, this.arrowPainter, null, this.canvas.clientWidth, this.canvas.clientHeight);
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.save();
       this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);

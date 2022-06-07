@@ -37,8 +37,8 @@ public class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI<Z4Shape2D
   private final Z4FancifulValueUI height = new Z4FancifulValueUI().setValueLabel("HEIGHT", true, true).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".shape2d-painter-container-first-row"));
   private final $HTMLElement regularCheck = this.querySelector(".shape2d-painter-regular-check");
 
-  private final Z4FancifulValueUI shadowShiftX = new Z4FancifulValueUI().setValueLabel("DELTA_X", true, false).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".shape2d-painter-container-second-row"));
-  private final Z4FancifulValueUI shadowShiftY = new Z4FancifulValueUI().setValueLabel("DELTA_Y", true, false).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".shape2d-painter-container-second-row"));
+  private final Z4FancifulValueUI shadowShiftX = new Z4FancifulValueUI().setValueLabel("DELTA_X", true, false).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).appendToElement(this.querySelector(".shape2d-painter-container-second-row"));
+  private final Z4FancifulValueUI shadowShiftY = new Z4FancifulValueUI().setValueLabel("DELTA_Y", true, false).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).appendToElement(this.querySelector(".shape2d-painter-container-second-row"));
   private final Z4ColorUI shadowColor = new Z4ColorUI().setColorLabel("COLOR", true, false).appendToElement(this.querySelector(".shape2d-painter-container-second-row"));
 
   private final Z4FancifulValueUI borderWidth = new Z4FancifulValueUI().setValueLabel("WIDTH", true, false).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".shape2d-painter-container-third-row"));
@@ -178,6 +178,7 @@ public class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI<Z4Shape2D
    */
   public Z4Shape2DPainterUI setPointIterator(Z4PointIterator<?> pointIterator) {
     this.pointIterator = pointIterator;
+    this.drawCanvas();
     return this;
   }
 

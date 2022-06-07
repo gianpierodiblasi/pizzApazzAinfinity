@@ -1,8 +1,14 @@
 <div class="tracer-container" style="display:flex;flex-direction:column;gap:10px">
-  <canvas class="tracer-canvas" height="300" style="border-radius:10px;border:1px dashed gray;height:300px"></canvas>
+  <div style="border-radius:10px;border:1px dashed gray">
+    <div style="display:flex;gap:2px;margin:0px 5px">
+      <label class="form-label" style="margin-bottom:0px" data-token-lang-inner_text="ARROW_MODULE">ARROW_MODULE</label>
+      <input type="range" class="form-range stamper-arrow-module-range" style="flex:1" value="15" min="1" max="100" step="1" />
+    </div>
+    <canvas class="tracer-canvas" height="300" style="height:300px;width:100%"></canvas>
+  </div>
+
   <div class="tracer-container-first-row" style="display:flex;gap:2px"></div>
   <div class="tracer-container-second-row" style="display:flex;gap:2px"></div>
-  <div class="tracer-container-third-row" style="display:flex;gap:2px"></div>
 </div>
 
 <div class="tracer-endless-sustain-switch" style="display:inline-block">

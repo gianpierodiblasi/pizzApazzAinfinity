@@ -7,8 +7,10 @@ import giada.pizzapazza.math.Z4FancifulValue;
 import giada.pizzapazza.math.Z4Point;
 import giada.pizzapazza.math.Z4Shape2D;
 import giada.pizzapazza.math.Z4Sign;
+import giada.pizzapazza.math.Z4SignedRandomValue;
 import giada.pizzapazza.math.Z4SignedValue;
 import simulation.dom.$CanvasRenderingContext2D;
+import static simulation.js.$Globals.$exists;
 
 /**
  * The painter of 2D shapes
@@ -18,16 +20,16 @@ import simulation.dom.$CanvasRenderingContext2D;
 public class Z4Shape2DPainter extends Z4Painter<Z4Shape2DPainter> {
 
   private Z4Shape2D shape = Z4Shape2D.SQUARE;
-  private Z4FancifulValue width = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(50).setSign(Z4Sign.POSITIVE));
-  private Z4FancifulValue height = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(50).setSign(Z4Sign.POSITIVE));
+  private Z4FancifulValue width = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(50).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
+  private Z4FancifulValue height = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(50).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
   private boolean regular;
 
   private Z4FancifulValue shadowShiftX = new Z4FancifulValue();
   private Z4FancifulValue shadowShiftY = new Z4FancifulValue();
   private Z4Color shadowColor = new Z4Color(255, 0, 0, 0);
 
-  private Z4FancifulValue borderWidth = new Z4FancifulValue();
-  private Z4FancifulValue borderHeight = new Z4FancifulValue();
+  private Z4FancifulValue borderWidth = new Z4FancifulValue().setConstant(new Z4SignedValue().setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
+  private Z4FancifulValue borderHeight = new Z4FancifulValue().setConstant(new Z4SignedValue().setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
   private Z4Color borderColor = new Z4Color(255, 0, 0, 0);
 
   /**
@@ -190,12 +192,12 @@ public class Z4Shape2DPainter extends Z4Painter<Z4Shape2DPainter> {
         return this;
       }
 
-      double currentShadowShiftX = point.getIntensity() * this.shadowShiftX.next();
-      double currentShadowShiftY = point.getIntensity() * this.shadowShiftY.next();
-      double currentBorderWidth = point.getIntensity() * this.borderWidth.next();
-      double currentBorderHeight = point.getIntensity() * this.borderHeight.next();
+      double currentShadowShiftX = this.shadowShiftX.next();
+      double currentShadowShiftY = this.shadowShiftY.next();
+      double currentBorderWidth = this.borderWidth.next();
+      double currentBorderHeight = this.borderHeight.next();
 
-      if (currentShadowShiftX > 0 || currentShadowShiftY > 0) {
+      if ($exists(currentShadowShiftX) || $exists(currentShadowShiftY)) {
         context.save();
         context.translate(currentShadowShiftX, currentShadowShiftY);
         this.drawPath(context, currentWidth + (currentBorderWidth > 0 ? currentBorderWidth : 0), currentHeight + (currentBorderHeight > 0 ? currentBorderHeight : 0), this.shadowColor);

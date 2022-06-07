@@ -17,6 +17,10 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
 
    progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".stamper-container"));
 
+   arrowModule = this.querySelector(".stamper-arrow-module-range");
+
+   arrowPainter = new Z4ArrowPainter();
+
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
    mutationObserver = new MutationObserver(() => this.drawCanvas());
@@ -41,6 +45,8 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
     this.push.onchange = (v) => this.set(null, null, v, null, true);
     this.progression.oninput = (v) => this.set(null, null, null, v, false);
     this.progression.onchange = (v) => this.set(null, null, null, v, true);
+    this.arrowModule.oninput = (v) => this.setModule();
+    this.arrowModule.onchange = (v) => this.setModule();
     this.setValue(new Z4Stamper());
   }
 
@@ -65,6 +71,12 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
     }
   }
 
+   setModule() {
+    this.arrowPainter.setModule(this.arrowModule.valueAsNumber);
+    this.drawCanvas();
+    return null;
+  }
+
    setValue(value) {
     this.value = value;
     this.rotation.setValue(this.value.getRotation());
@@ -81,7 +93,7 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
       this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
       let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
       let offscreenCtx = offscreen.getContext("2d");
-      this.value.drawDemo(offscreenCtx, null, null, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.value.drawDemo(offscreenCtx, this.arrowPainter, null, this.canvas.clientWidth, this.canvas.clientHeight);
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.save();
       this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);

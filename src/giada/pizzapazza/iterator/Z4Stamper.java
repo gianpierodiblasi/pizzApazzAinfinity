@@ -71,7 +71,7 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
         this.z4Point.setColorPosition(Math.random());
       }
 
-      return this.z4Point.setIntensity(1);
+      return this.z4Point;
     }
   }
 

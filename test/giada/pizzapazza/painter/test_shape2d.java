@@ -2,6 +2,9 @@ package giada.pizzapazza.painter;
 
 import def.js.Array;
 import def.js.JSON;
+import giada.pizzapazza.iterator.Z4Spirograph;
+import giada.pizzapazza.iterator.Z4Stamper;
+import giada.pizzapazza.iterator.Z4Tracer;
 import giada.pizzapazza.math.Z4FancifulValue;
 import giada.pizzapazza.math.Z4Point;
 import giada.pizzapazza.math.Z4Rotation;
@@ -38,6 +41,21 @@ public class test_shape2d {
     ui.oninput = (value) -> document.getElementById("test2").textContent = "ONINPUT " + test_shape2d.stringify(value);
     ui.onchange = (value) -> document.getElementById("test2").textContent = "ONCHANGE " + test_shape2d.stringify(value);
     document.getElementById("test2").textContent = test_shape2d.stringify(ui.getValue());
+
+    document.$getElementById("point-iterator").onchange = (event) -> {
+      switch (document.$getElementById("point-iterator").value) {
+        case "stamper":
+          ui.setPointIterator(new Z4Stamper());
+          break;
+        case "tracer":
+          ui.setPointIterator(new Z4Tracer());
+          break;
+        case "spirograph":
+          ui.setPointIterator(new Z4Spirograph().setRotation(Z4Rotation.relativeToPath()));
+          break;
+      }
+      return null;
+    };
   }
 
   private static String stringify(Object object) {

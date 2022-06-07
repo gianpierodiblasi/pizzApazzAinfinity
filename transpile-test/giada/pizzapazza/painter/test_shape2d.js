@@ -19,6 +19,20 @@ class test_shape2d {
     ui.oninput = (value) => document.getElementById("test2").textContent = "ONINPUT " + test_shape2d.stringify(value);
     ui.onchange = (value) => document.getElementById("test2").textContent = "ONCHANGE " + test_shape2d.stringify(value);
     document.getElementById("test2").textContent = test_shape2d.stringify(ui.getValue());
+    document.getElementById("point-iterator").onchange = (event) => {
+      switch(document.getElementById("point-iterator").value) {
+        case "stamper":
+          ui.setPointIterator(new Z4Stamper());
+          break;
+        case "tracer":
+          ui.setPointIterator(new Z4Tracer());
+          break;
+        case "spirograph":
+          ui.setPointIterator(new Z4Spirograph().setRotation(Z4Rotation.relativeToPath()));
+          break;
+      }
+      return null;
+    };
   }
 
   static  stringify(object) {
