@@ -104,12 +104,14 @@ class Z4Spirograph extends Z4PointIterator {
    drawDemoPoint(context, arrowPainter, gradientColor) {
     let next = null;
     while ((next = this.next()) !== null) {
-      let vector = next.getZ4Vector();
-      context.save();
-      context.translate(vector.getX0(), vector.getY0());
-      context.rotate(vector.getPhase());
-      arrowPainter.draw(context, next, gradientColor);
-      context.restore();
+      if (!next.isDrawBounds()) {
+        let vector = next.getZ4Vector();
+        context.save();
+        context.translate(vector.getX0(), vector.getY0());
+        context.rotate(vector.getPhase());
+        arrowPainter.draw(context, next, gradientColor);
+        context.restore();
+      }
     }
   }
 }

@@ -131,13 +131,15 @@ public class Z4Spirograph extends Z4PointIterator<Z4Spirograph> {
   private void drawDemoPoint($CanvasRenderingContext2D context, Z4Painter<?> arrowPainter, Z4GradientColor gradientColor) {
     Z4Point next;
     while ((next = this.next()) != null) {
-      Z4Vector vector = next.getZ4Vector();
+      if (!next.isDrawBounds()) {
+        Z4Vector vector = next.getZ4Vector();
 
-      context.save();
-      context.translate(vector.getX0(), vector.getY0());
-      context.rotate(vector.getPhase());
-      arrowPainter.draw(context, next, gradientColor);
-      context.restore();
+        context.save();
+        context.translate(vector.getX0(), vector.getY0());
+        context.rotate(vector.getPhase());
+        arrowPainter.draw(context, next, gradientColor);
+        context.restore();
+      }
     }
   }
 }

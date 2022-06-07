@@ -112,7 +112,6 @@ public abstract class Z4PointIteratorUI<S extends Z4PointIterator<S>> extends Z4
     this.progression.setValue(this.value.getProgression());
 
     this.drawCanvas();
-
     return (T) this;
   }
 

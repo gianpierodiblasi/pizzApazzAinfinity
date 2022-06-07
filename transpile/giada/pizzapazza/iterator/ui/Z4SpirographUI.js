@@ -3,21 +3,7 @@
  *
  * @author gianpiero.di.blasi
  */
-class Z4SpirographUI extends Z4AbstractComponentWithValueUI {
-
-   canvas = this.querySelector(".spirograph-canvas");
-
-   ctx = this.canvas.getContext("2d");
-
-   rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".spirograph-container"));
-
-   progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".spirograph-container"));
-
-   painter = null;
-
-   resizeObserver = new ResizeObserver(() => this.drawCanvas());
-
-   mutationObserver = new MutationObserver(() => this.drawCanvas());
+class Z4SpirographUI extends Z4PointIteratorUI {
 
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/iterator/ui/Z4SpirographUI.html");
 
@@ -26,68 +12,13 @@ class Z4SpirographUI extends Z4AbstractComponentWithValueUI {
    */
   constructor() {
     super(Z4SpirographUI.UI);
-    this.initDevicePixelRatio(() => this.drawCanvas());
-    this.resizeObserver.observe(this.canvas);
-    let config = new Object();
-    config["attributeFilter"] = new Array("class");
-    this.mutationObserver.observe(document.body, config);
-    this.rotation.oninput = (v) => {
-      this.oninput(this.value.setRotation(v));
-      this.drawCanvas();
-    };
-    this.rotation.onchange = (v) => {
-      this.onchange(this.value.setRotation(v));
-      this.drawCanvas();
-    };
-    this.progression.oninput = (v) => {
-      this.oninput(this.value.setProgression(v));
-      this.drawCanvas();
-    };
-    this.progression.onchange = (v) => {
-      this.onchange(this.value.setProgression(v));
-      this.drawCanvas();
-    };
+    this.querySelector(".point-iterator-arrow-module-container").style.display = "none";
     this.setValue(new Z4Spirograph());
   }
 
-  /**
-   * Sets the Z4Painter to draw the demo
-   *
-   * @param painter The Z4Painter, it can be null
-   * @return This Z4SpirographUI
-   */
    setPainter(painter) {
-    this.painter = painter;
-    this.drawCanvas();
+    super.setPainter(painter);
+    this.querySelector(".point-iterator-arrow-module-container").style.display = "none";
     return this;
-  }
-
-   setValue(value) {
-    this.value = value;
-    this.rotation.setValue(this.value.getRotation());
-    this.progression.setValue(this.value.getProgression());
-    this.drawCanvas();
-    return this;
-  }
-
-   drawCanvas() {
-    if (this.canvas.clientWidth) {
-      this.canvas.width = Math.floor(this.canvas.clientWidth * window.devicePixelRatio);
-      this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
-      let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
-      let offscreenCtx = offscreen.getContext("2d");
-      this.value.drawDemo(offscreenCtx, this.painter, null, this.canvas.clientWidth, this.canvas.clientHeight);
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.ctx.save();
-      this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-      this.ctx.drawImage(offscreen, 0, 0);
-      this.ctx.restore();
-    }
-  }
-
-   dispose() {
-    this.disposeDevicePixelRatio();
-    this.resizeObserver.unobserve(this.canvas);
-    this.mutationObserver.unobserve(document.body);
   }
 }

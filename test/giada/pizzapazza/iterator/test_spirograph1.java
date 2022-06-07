@@ -7,6 +7,7 @@ import giada.pizzapazza.math.Z4FancifulValue;
 import giada.pizzapazza.math.Z4Point;
 import giada.pizzapazza.math.Z4Rotation;
 import giada.pizzapazza.math.Z4SignedRandomValue;
+import giada.pizzapazza.math.Z4Vector;
 import giada.pizzapazza.painter.Z4Shape2DPainter;
 import giada.pizzapazza.setting.Z4MessageFactory;
 import giada.pizzapazza.setting.Z4Setting;
@@ -39,7 +40,7 @@ public class test_spirograph1 {
     ui.oninput = (value) -> document.getElementById("test2").textContent = "ONINPUT " + test_spirograph1.stringify(value);
     ui.onchange = (value) -> document.getElementById("test2").textContent = "ONCHANGE " + test_spirograph1.stringify(value);
     document.getElementById("test2").textContent = test_spirograph1.stringify(ui.getValue());
-    
+
     document.$getElementById("painter").onchange = (event) -> {
       switch (document.$getElementById("painter").value) {
         case "none":
@@ -73,6 +74,8 @@ public class test_spirograph1 {
       } else if (v instanceof Z4SignedRandomValue) {
         return v;
       } else if (v instanceof Z4Point) {
+        return v;
+      } else if (v instanceof Z4Vector) {
         return v;
       } else {
         return JSON.stringify(v).replaceAll("\"", "").replaceAll("\n", "");

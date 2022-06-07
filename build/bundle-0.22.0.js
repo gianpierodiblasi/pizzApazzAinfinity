@@ -5006,12 +5006,14 @@ class Z4Spirograph extends Z4PointIterator {
    drawDemoPoint(context, arrowPainter, gradientColor) {
     let next = null;
     while ((next = this.next()) !== null) {
-      let vector = next.getZ4Vector();
-      context.save();
-      context.translate(vector.getX0(), vector.getY0());
-      context.rotate(vector.getPhase());
-      arrowPainter.draw(context, next, gradientColor);
-      context.restore();
+      if (!next.isDrawBounds()) {
+        let vector = next.getZ4Vector();
+        context.save();
+        context.translate(vector.getX0(), vector.getY0());
+        context.rotate(vector.getPhase());
+        arrowPainter.draw(context, next, gradientColor);
+        context.restore();
+      }
     }
   }
 }
@@ -5019,17 +5021,19 @@ class Z4Spirograph extends Z4PointIterator {
  * The abstract component to edit a Z4PointIterator
  *
  * @author gianpiero.di.blasi
- * @param <T>
+ * @param <S>
  */
 class Z4PointIteratorUI extends Z4AbstractComponentWithValueUI {
 
-   canvas = this.querySelector(".spirograph-canvas");
+   canvas = this.querySelector(".point-iterator-canvas");
 
    ctx = this.canvas.getContext("2d");
 
-   rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".spirograph-container"));
+   rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".point-iterator-container"));
 
-   progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".spirograph-container"));
+   progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".point-iterator-container"));
+
+   arrowModule = this.querySelector(".point-iterator-arrow-module-range");
 
    arrowPainter = new Z4ArrowPainter();
 
@@ -5051,6 +5055,55 @@ class Z4PointIteratorUI extends Z4AbstractComponentWithValueUI {
     let config = new Object();
     config["attributeFilter"] = new Array("class");
     this.mutationObserver.observe(document.body, config);
+    this.rotation.oninput = (v) => this.setRP(v, null, false);
+    this.rotation.onchange = (v) => this.setRP(v, null, true);
+    this.progression.oninput = (v) => this.setRP(null, v, false);
+    this.progression.onchange = (v) => this.setRP(null, v, true);
+    this.arrowModule.oninput = (event) => this.setModule();
+    this.arrowModule.onchange = (event) => this.setModule();
+  }
+
+   setRP(rotation, progression, onchange) {
+    if (rotation) {
+      this.value.setRotation(rotation);
+    }
+    if (progression) {
+      this.value.setProgression(progression);
+    }
+    this.drawCanvas();
+    if (onchange) {
+      this.onchange(this.value);
+    } else {
+      this.oninput(this.value);
+    }
+  }
+
+   setModule() {
+    this.arrowPainter.setModule(this.arrowModule.valueAsNumber);
+    this.drawCanvas();
+    return null;
+  }
+
+  /**
+   * Sets the Z4Painter to draw the demo
+   *
+   * @param <T>
+   * @param painter The Z4Painter, it can be null
+   * @return This Z4StamperUI
+   */
+   setPainter(painter) {
+    this.painter = painter;
+    this.querySelector(".point-iterator-arrow-module-container").style.display = this.painter ? "none" : "flex";
+    this.drawCanvas();
+    return this;
+  }
+
+   setValue(value) {
+    this.value = value;
+    this.rotation.setValue(this.value.getRotation());
+    this.progression.setValue(this.value.getProgression());
+    this.drawCanvas();
+    return this;
   }
 
   /**
@@ -5082,29 +5135,11 @@ class Z4PointIteratorUI extends Z4AbstractComponentWithValueUI {
  *
  * @author gianpiero.di.blasi
  */
-class Z4StamperUI extends Z4AbstractComponentWithValueUI {
-
-   canvas = this.querySelector(".stamper-canvas");
-
-   ctx = this.canvas.getContext("2d");
-
-   rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".stamper-container"));
+class Z4StamperUI extends Z4PointIteratorUI {
 
    multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
 
    push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
-
-   progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".stamper-container"));
-
-   arrowModule = this.querySelector(".stamper-arrow-module-range");
-
-   arrowPainter = new Z4ArrowPainter();
-
-   painter = null;
-
-   resizeObserver = new ResizeObserver(() => this.drawCanvas());
-
-   mutationObserver = new MutationObserver(() => this.drawCanvas());
 
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/iterator/ui/Z4StamperUI.html");
 
@@ -5113,36 +5148,19 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
    */
   constructor() {
     super(Z4StamperUI.UI);
-    this.initDevicePixelRatio(() => this.drawCanvas());
-    this.resizeObserver.observe(this.canvas);
-    let config = new Object();
-    config["attributeFilter"] = new Array("class");
-    this.mutationObserver.observe(document.body, config);
-    this.rotation.oninput = (v) => this.set(v, null, null, null, false);
-    this.rotation.onchange = (v) => this.set(v, null, null, null, true);
-    this.multiplicity.oninput = (v) => this.set(null, v, null, null, false);
-    this.multiplicity.onchange = (v) => this.set(null, v, null, null, true);
-    this.push.oninput = (v) => this.set(null, null, v, null, false);
-    this.push.onchange = (v) => this.set(null, null, v, null, true);
-    this.progression.oninput = (v) => this.set(null, null, null, v, false);
-    this.progression.onchange = (v) => this.set(null, null, null, v, true);
-    this.arrowModule.oninput = (event) => this.setModule();
-    this.arrowModule.onchange = (event) => this.setModule();
+    this.multiplicity.oninput = (v) => this.setMP(v, null, false);
+    this.multiplicity.onchange = (v) => this.setMP(v, null, true);
+    this.push.oninput = (v) => this.setMP(null, v, false);
+    this.push.onchange = (v) => this.setMP(null, v, true);
     this.setValue(new Z4Stamper());
   }
 
-   set(rotation, multiplicity, push, progression, onchange) {
-    if (rotation) {
-      this.value.setRotation(rotation);
-    }
+   setMP(multiplicity, push, onchange) {
     if (multiplicity) {
       this.value.setMultiplicity(multiplicity);
     }
     if (push) {
       this.value.setPush(push);
-    }
-    if (progression) {
-      this.value.setProgression(progression);
     }
     this.drawCanvas();
     if (onchange) {
@@ -5152,54 +5170,10 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
     }
   }
 
-   setModule() {
-    this.arrowPainter.setModule(this.arrowModule.valueAsNumber);
-    this.drawCanvas();
-    return null;
-  }
-
-  /**
-   * Sets the Z4Painter to draw the demo
-   *
-   * @param painter The Z4Painter, it can be null
-   * @return This Z4StamperUI
-   */
-   setPainter(painter) {
-    this.painter = painter;
-    this.querySelector(".stamper-arrow-module-container").style.display = this.painter ? "none" : "flex";
-    this.drawCanvas();
-    return this;
-  }
-
    setValue(value) {
-    this.value = value;
-    this.rotation.setValue(this.value.getRotation());
-    this.multiplicity.setValue(this.value.getMultiplicity());
-    this.push.setValue(this.value.getPush());
-    this.progression.setValue(this.value.getProgression());
-    this.drawCanvas();
-    return this;
-  }
-
-   drawCanvas() {
-    if (this.canvas.clientWidth) {
-      this.canvas.width = Math.floor(this.canvas.clientWidth * window.devicePixelRatio);
-      this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
-      let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
-      let offscreenCtx = offscreen.getContext("2d");
-      this.value.drawDemo(offscreenCtx, this.painter ? this.painter : this.arrowPainter, null, this.canvas.clientWidth, this.canvas.clientHeight);
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.ctx.save();
-      this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-      this.ctx.drawImage(offscreen, 0, 0);
-      this.ctx.restore();
-    }
-  }
-
-   dispose() {
-    this.disposeDevicePixelRatio();
-    this.resizeObserver.unobserve(this.canvas);
-    this.mutationObserver.unobserve(document.body);
+    this.multiplicity.setValue(value.getMultiplicity());
+    this.push.setValue(value.getPush());
+    return super.setValue(value);
   }
 }
 /**
@@ -5207,21 +5181,13 @@ class Z4StamperUI extends Z4AbstractComponentWithValueUI {
  *
  * @author gianpiero.di.blasi
  */
-class Z4TracerUI extends Z4AbstractComponentWithValueUI {
-
-   canvas = this.querySelector(".tracer-canvas");
-
-   ctx = this.canvas.getContext("2d");
-
-   rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".tracer-container"));
+class Z4TracerUI extends Z4PointIteratorUI {
 
    multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
 
    push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
 
    step = new Z4FancifulValueUI().setValueLabel("STEP", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
-
-   progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".tracer-container"));
 
    attack = new Z4FancifulValueUI().setValueLabel("ATTACK", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-second-row"));
 
@@ -5231,16 +5197,6 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
 
    endlessSustainCheck = this.querySelector(".tracer-endless-sustain-check");
 
-   arrowModule = this.querySelector(".stamper-arrow-module-range");
-
-   arrowPainter = new Z4ArrowPainter();
-
-   painter = null;
-
-   resizeObserver = new ResizeObserver(() => this.drawCanvas());
-
-   mutationObserver = new MutationObserver(() => this.drawCanvas());
-
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/iterator/ui/Z4TracerUI.html");
 
   /**
@@ -5248,21 +5204,12 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
    */
   constructor() {
     super(Z4TracerUI.UI);
-    this.initDevicePixelRatio(() => this.drawCanvas());
-    this.resizeObserver.observe(this.canvas);
-    let config = new Object();
-    config["attributeFilter"] = new Array("class");
-    this.mutationObserver.observe(document.body, config);
-    this.rotation.oninput = (v) => this.set(v, null, null, null, null, false);
-    this.rotation.onchange = (v) => this.set(v, null, null, null, null, true);
-    this.multiplicity.oninput = (v) => this.set(null, v, null, null, null, false);
-    this.multiplicity.onchange = (v) => this.set(null, v, null, null, null, true);
-    this.push.oninput = (v) => this.set(null, null, v, null, null, false);
-    this.push.onchange = (v) => this.set(null, null, v, null, null, true);
-    this.step.oninput = (v) => this.set(null, null, null, v, null, false);
-    this.step.onchange = (v) => this.set(null, null, null, v, null, true);
-    this.progression.oninput = (v) => this.set(null, null, null, null, v, false);
-    this.progression.onchange = (v) => this.set(null, null, null, null, v, true);
+    this.multiplicity.oninput = (v) => this.setMPS(v, null, null, false);
+    this.multiplicity.onchange = (v) => this.setMPS(v, null, null, true);
+    this.push.oninput = (v) => this.setMPS(null, v, null, false);
+    this.push.onchange = (v) => this.setMPS(null, v, null, true);
+    this.step.oninput = (v) => this.setMPS(null, null, v, false);
+    this.step.onchange = (v) => this.setMPS(null, null, v, true);
     this.attack.oninput = (v) => this.setEnvelope(false);
     this.attack.onchange = (v) => this.setEnvelope(true);
     this.sustain.oninput = (v) => this.setEnvelope(false);
@@ -5280,15 +5227,10 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
       return null;
     };
     this.sustain.querySelector(".fanciful-value-label").parentElement.insertBefore(this.querySelector(".tracer-endless-sustain-switch"), this.sustain.querySelector(".fanciful-value-container"));
-    this.arrowModule.oninput = (event) => this.setModule();
-    this.arrowModule.onchange = (event) => this.setModule();
     this.setValue(new Z4Tracer());
   }
 
-   set(rotation, multiplicity, push, step, progression, onchange) {
-    if (rotation) {
-      this.value.setRotation(rotation);
-    }
+   setMPS(multiplicity, push, step, onchange) {
     if (multiplicity) {
       this.value.setMultiplicity(multiplicity);
     }
@@ -5297,9 +5239,6 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
     }
     if (step) {
       this.value.setStep(step);
-    }
-    if (progression) {
-      this.value.setProgression(progression);
     }
     this.drawCanvas();
     if (onchange) {
@@ -5319,61 +5258,17 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
     }
   }
 
-   setModule() {
-    this.arrowPainter.setModule(this.arrowModule.valueAsNumber);
-    this.drawCanvas();
-    return null;
-  }
-
-  /**
-   * Sets the Z4Painter to draw the demo
-   *
-   * @param painter The Z4Painter, it can be null
-   * @return This Z4TracerUI
-   */
-   setPainter(painter) {
-    this.painter = painter;
-    this.querySelector(".tracer-arrow-module-container").style.display = this.painter ? "none" : "flex";
-    this.drawCanvas();
-    return this;
-  }
-
    setValue(value) {
-    this.value = value;
-    this.rotation.setValue(this.value.getRotation());
-    this.multiplicity.setValue(this.value.getMultiplicity());
-    this.push.setValue(this.value.getPush());
-    this.step.setValue(this.value.getStep());
-    this.progression.setValue(this.value.getProgression());
-    this.attack.setValue(this.value.getAttack());
-    this.sustain.setValue(this.value.getSustain());
-    this.release.setValue(this.value.getRelease());
-    this.endlessSustainCheck.checked = this.value.isEndlessSustain();
+    this.multiplicity.setValue(value.getMultiplicity());
+    this.push.setValue(value.getPush());
+    this.step.setValue(value.getStep());
+    this.attack.setValue(value.getAttack());
+    this.sustain.setValue(value.getSustain());
+    this.release.setValue(value.getRelease());
+    this.endlessSustainCheck.checked = value.isEndlessSustain();
     this.sustain.setEnabled(!this.endlessSustainCheck.checked);
     this.release.setEnabled(!this.endlessSustainCheck.checked);
-    this.drawCanvas();
-    return this;
-  }
-
-   drawCanvas() {
-    if (this.canvas.clientWidth) {
-      this.canvas.width = Math.floor(this.canvas.clientWidth * window.devicePixelRatio);
-      this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
-      let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
-      let offscreenCtx = offscreen.getContext("2d");
-      this.value.drawDemo(offscreenCtx, this.painter ? this.painter : this.arrowPainter, null, this.canvas.clientWidth, this.canvas.clientHeight);
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.ctx.save();
-      this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-      this.ctx.drawImage(offscreen, 0, 0);
-      this.ctx.restore();
-    }
-  }
-
-   dispose() {
-    this.disposeDevicePixelRatio();
-    this.resizeObserver.unobserve(this.canvas);
-    this.mutationObserver.unobserve(document.body);
+    return super.setValue(value);
   }
 }
 /**
@@ -5381,21 +5276,7 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
  *
  * @author gianpiero.di.blasi
  */
-class Z4SpirographUI extends Z4AbstractComponentWithValueUI {
-
-   canvas = this.querySelector(".spirograph-canvas");
-
-   ctx = this.canvas.getContext("2d");
-
-   rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".spirograph-container"));
-
-   progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".spirograph-container"));
-
-   painter = null;
-
-   resizeObserver = new ResizeObserver(() => this.drawCanvas());
-
-   mutationObserver = new MutationObserver(() => this.drawCanvas());
+class Z4SpirographUI extends Z4PointIteratorUI {
 
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/iterator/ui/Z4SpirographUI.html");
 
@@ -5404,68 +5285,13 @@ class Z4SpirographUI extends Z4AbstractComponentWithValueUI {
    */
   constructor() {
     super(Z4SpirographUI.UI);
-    this.initDevicePixelRatio(() => this.drawCanvas());
-    this.resizeObserver.observe(this.canvas);
-    let config = new Object();
-    config["attributeFilter"] = new Array("class");
-    this.mutationObserver.observe(document.body, config);
-    this.rotation.oninput = (v) => {
-      this.oninput(this.value.setRotation(v));
-      this.drawCanvas();
-    };
-    this.rotation.onchange = (v) => {
-      this.onchange(this.value.setRotation(v));
-      this.drawCanvas();
-    };
-    this.progression.oninput = (v) => {
-      this.oninput(this.value.setProgression(v));
-      this.drawCanvas();
-    };
-    this.progression.onchange = (v) => {
-      this.onchange(this.value.setProgression(v));
-      this.drawCanvas();
-    };
+    this.querySelector(".point-iterator-arrow-module-container").style.display = "none";
     this.setValue(new Z4Spirograph());
   }
 
-  /**
-   * Sets the Z4Painter to draw the demo
-   *
-   * @param painter The Z4Painter, it can be null
-   * @return This Z4SpirographUI
-   */
    setPainter(painter) {
-    this.painter = painter;
-    this.drawCanvas();
+    super.setPainter(painter);
+    this.querySelector(".point-iterator-arrow-module-container").style.display = "none";
     return this;
-  }
-
-   setValue(value) {
-    this.value = value;
-    this.rotation.setValue(this.value.getRotation());
-    this.progression.setValue(this.value.getProgression());
-    this.drawCanvas();
-    return this;
-  }
-
-   drawCanvas() {
-    if (this.canvas.clientWidth) {
-      this.canvas.width = Math.floor(this.canvas.clientWidth * window.devicePixelRatio);
-      this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
-      let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
-      let offscreenCtx = offscreen.getContext("2d");
-      this.value.drawDemo(offscreenCtx, this.painter, null, this.canvas.clientWidth, this.canvas.clientHeight);
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.ctx.save();
-      this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-      this.ctx.drawImage(offscreen, 0, 0);
-      this.ctx.restore();
-    }
-  }
-
-   dispose() {
-    this.disposeDevicePixelRatio();
-    this.resizeObserver.unobserve(this.canvas);
-    this.mutationObserver.unobserve(document.body);
   }
 }
