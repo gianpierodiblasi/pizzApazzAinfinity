@@ -28,7 +28,6 @@ import simulation.js.$Object;
  */
 public class Z4Tracer extends Z4PointIterator<Z4Tracer> {
 
-  private Z4FancifulValue intensity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(1).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
   private Z4FancifulValue multiplicity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(1).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
   private Z4FancifulValue push = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
@@ -162,7 +161,7 @@ public class Z4Tracer extends Z4PointIterator<Z4Tracer> {
       } else {
         this.z4Point.setZ4Vector(Z4Vector.fromVector(this.currentVector.getX0(), this.currentVector.getY0(), 1, angle));
       }
-      this.z4Point.setIntensity(this.nextEnvelope() * this.intensity.next());
+      this.z4Point.setIntensity(this.nextEnvelope());
       this.rotation.nextSide(this.z4Point, this.currentVector);
       this.progression.next(this.z4Point);
 
@@ -244,26 +243,6 @@ public class Z4Tracer extends Z4PointIterator<Z4Tracer> {
       painter.draw(context, next, gradientColor);
       context.restore();
     }
-  }
-
-  /**
-   * Returns the intensity
-   *
-   * @return The intensity
-   */
-  public Z4FancifulValue getIntensity() {
-    return this.intensity;
-  }
-
-  /**
-   * Sets the intensity
-   *
-   * @param intensity The intensity
-   * @return This Z4Tracer
-   */
-  public Z4Tracer setIntensity(Z4FancifulValue intensity) {
-    this.intensity = intensity;
-    return this;
   }
 
   /**

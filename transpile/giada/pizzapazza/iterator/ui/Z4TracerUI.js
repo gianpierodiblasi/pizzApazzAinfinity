@@ -9,8 +9,6 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
 
    ctx = this.canvas.getContext("2d");
 
-   intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
-
    rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".tracer-container"));
 
    multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
@@ -45,18 +43,16 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
     let config = new Object();
     config["attributeFilter"] = new Array("class");
     this.mutationObserver.observe(document.body, config);
-    this.intensity.oninput = (v) => this.set(v, null, null, null, null, null, false);
-    this.intensity.onchange = (v) => this.set(v, null, null, null, null, null, true);
-    this.rotation.oninput = (v) => this.set(null, v, null, null, null, null, false);
-    this.rotation.onchange = (v) => this.set(null, v, null, null, null, null, true);
-    this.multiplicity.oninput = (v) => this.set(null, null, v, null, null, null, false);
-    this.multiplicity.onchange = (v) => this.set(null, null, v, null, null, null, true);
-    this.push.oninput = (v) => this.set(null, null, null, v, null, null, false);
-    this.push.onchange = (v) => this.set(null, null, null, v, null, null, true);
-    this.step.oninput = (v) => this.set(null, null, null, null, v, null, false);
-    this.step.onchange = (v) => this.set(null, null, null, null, v, null, true);
-    this.progression.oninput = (v) => this.set(null, null, null, null, null, v, false);
-    this.progression.onchange = (v) => this.set(null, null, null, null, null, v, true);
+    this.rotation.oninput = (v) => this.set(v, null, null, null, null, false);
+    this.rotation.onchange = (v) => this.set(v, null, null, null, null, true);
+    this.multiplicity.oninput = (v) => this.set(null, v, null, null, null, false);
+    this.multiplicity.onchange = (v) => this.set(null, v, null, null, null, true);
+    this.push.oninput = (v) => this.set(null, null, v, null, null, false);
+    this.push.onchange = (v) => this.set(null, null, v, null, null, true);
+    this.step.oninput = (v) => this.set(null, null, null, v, null, false);
+    this.step.onchange = (v) => this.set(null, null, null, v, null, true);
+    this.progression.oninput = (v) => this.set(null, null, null, null, v, false);
+    this.progression.onchange = (v) => this.set(null, null, null, null, v, true);
     this.attack.oninput = (v) => this.setEnvelope(false);
     this.attack.onchange = (v) => this.setEnvelope(true);
     this.sustain.oninput = (v) => this.setEnvelope(false);
@@ -77,10 +73,7 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
     this.setValue(new Z4Tracer());
   }
 
-   set(intensity, rotation, multiplicity, push, step, progression, onchange) {
-    if (intensity) {
-      this.value.setIntensity(intensity);
-    }
+   set(rotation, multiplicity, push, step, progression, onchange) {
     if (rotation) {
       this.value.setRotation(rotation);
     }
@@ -116,7 +109,6 @@ class Z4TracerUI extends Z4AbstractComponentWithValueUI {
 
    setValue(value) {
     this.value = value;
-    this.intensity.setValue(this.value.getIntensity());
     this.rotation.setValue(this.value.getRotation());
     this.multiplicity.setValue(this.value.getMultiplicity());
     this.push.setValue(this.value.getPush());

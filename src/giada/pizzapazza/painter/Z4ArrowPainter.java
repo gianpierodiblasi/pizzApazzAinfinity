@@ -18,7 +18,7 @@ public class Z4ArrowPainter extends Z4Painter<Z4ArrowPainter> {
   @Override
   public Z4ArrowPainter draw($CanvasRenderingContext2D context, Z4Point point, Z4GradientColor gradientColor) {
     this.bool = !this.bool;
-    double x = point.getIntensity() * point.getZ4Vector().getModule();
+    double x = point.getIntensity() * (point.isUseVectorModuleAsSize() ? point.getZ4Vector().getModule() : 15);
 
     context.save();
     context.lineWidth = 1;

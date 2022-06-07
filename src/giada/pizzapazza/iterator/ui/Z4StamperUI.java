@@ -30,12 +30,11 @@ public class Z4StamperUI extends Z4AbstractComponentWithValueUI<Z4Stamper> {
   private final $Canvas canvas = ($Canvas) this.querySelector(".stamper-canvas");
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
 
-  private final Z4FancifulValueUI intensity = new Z4FancifulValueUI().setValueLabel("INTENSITY", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
   private final Z4RotationUI rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".stamper-container"));
   private final Z4FancifulValueUI multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
   private final Z4FancifulValueUI push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
   private final Z4ProgressionUI progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".stamper-container"));
-  
+
   private final $ResizeObserver resizeObserver = new $ResizeObserver(() -> this.drawCanvas());
   private final $MutationObserver mutationObserver = new $MutationObserver(() -> this.drawCanvas());
 
@@ -54,24 +53,19 @@ public class Z4StamperUI extends Z4AbstractComponentWithValueUI<Z4Stamper> {
     config.$set("attributeFilter", new Array<>("class"));
     this.mutationObserver.observe(document.body, config);
 
-    this.intensity.oninput = (v) -> this.set(v, null, null, null, null, false);
-    this.intensity.onchange = (v) -> this.set(v, null, null, null, null, true);
-    this.rotation.oninput = (v) -> this.set(null, v, null, null, null, false);
-    this.rotation.onchange = (v) -> this.set(null, v, null, null, null, true);
-    this.multiplicity.oninput = (v) -> this.set(null, null, v, null, null, false);
-    this.multiplicity.onchange = (v) -> this.set(null, null, v, null, null, true);
-    this.push.oninput = (v) -> this.set(null, null, null, v, null, false);
-    this.push.onchange = (v) -> this.set(null, null, null, v, null, true);
-    this.progression.oninput = (v) -> this.set(null, null, null, null, v, false);
-    this.progression.onchange = (v) -> this.set(null, null, null, null, v, true);
+    this.rotation.oninput = (v) -> this.set(v, null, null, null, false);
+    this.rotation.onchange = (v) -> this.set(v, null, null, null, true);
+    this.multiplicity.oninput = (v) -> this.set(null, v, null, null, false);
+    this.multiplicity.onchange = (v) -> this.set(null, v, null, null, true);
+    this.push.oninput = (v) -> this.set(null, null, v, null, false);
+    this.push.onchange = (v) -> this.set(null, null, v, null, true);
+    this.progression.oninput = (v) -> this.set(null, null, null, v, false);
+    this.progression.onchange = (v) -> this.set(null, null, null, v, true);
 
     this.setValue(new Z4Stamper());
   }
 
-  private void set(Z4FancifulValue intensity, Z4Rotation rotation, Z4FancifulValue multiplicity, Z4FancifulValue push, Z4Progression progression, boolean onchange) {
-    if ($exists(intensity)) {
-      this.value.setIntensity(intensity);
-    }
+  private void set(Z4Rotation rotation, Z4FancifulValue multiplicity, Z4FancifulValue push, Z4Progression progression, boolean onchange) {
     if ($exists(rotation)) {
       this.value.setRotation(rotation);
     }
@@ -99,12 +93,11 @@ public class Z4StamperUI extends Z4AbstractComponentWithValueUI<Z4Stamper> {
   public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4Stamper value) {
     this.value = value;
 
-    this.intensity.setValue(this.value.getIntensity());
     this.rotation.setValue(this.value.getRotation());
     this.multiplicity.setValue(this.value.getMultiplicity());
     this.push.setValue(this.value.getPush());
     this.progression.setValue(this.value.getProgression());
-    
+
     this.drawCanvas();
 
     return (T) this;

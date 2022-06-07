@@ -9,7 +9,7 @@ class Z4ArrowPainter extends Z4Painter {
 
    draw(context, point, gradientColor) {
     this.bool = !this.bool;
-    let x = point.getIntensity() * point.getZ4Vector().getModule();
+    let x = point.getIntensity() * (point.isUseVectorModuleAsSize() ? point.getZ4Vector().getModule() : 15);
     context.save();
     context.lineWidth = 1;
     context.strokeStyle = this.getColor(document.body.classList.contains("z4-dark") ? "white" : "black");

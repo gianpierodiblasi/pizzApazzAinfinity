@@ -25,7 +25,6 @@ import simulation.js.$Object;
  */
 public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
 
-  private Z4FancifulValue intensity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(1).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
   private Z4FancifulValue multiplicity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(1).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
   private Z4FancifulValue push = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
@@ -72,7 +71,7 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
         this.z4Point.setColorPosition(Math.random());
       }
 
-      return this.z4Point.setIntensity(this.intensity.next());
+      return this.z4Point.setIntensity(1);
     }
   }
 
@@ -117,26 +116,6 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
       }
     }
     return array;
-  }
-
-  /**
-   * Returns the intensity
-   *
-   * @return The intensity
-   */
-  public Z4FancifulValue getIntensity() {
-    return this.intensity;
-  }
-
-  /**
-   * Sets the intensity
-   *
-   * @param intensity The intensity
-   * @return This Z4Stamper
-   */
-  public Z4Stamper setIntensity(Z4FancifulValue intensity) {
-    this.intensity = intensity;
-    return this;
   }
 
   /**

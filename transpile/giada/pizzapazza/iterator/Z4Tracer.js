@@ -5,8 +5,6 @@
  */
 class Z4Tracer extends Z4PointIterator {
 
-   intensity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(1).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
-
    multiplicity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(1).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
 
    push = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
@@ -142,7 +140,7 @@ class Z4Tracer extends Z4PointIterator {
       } else {
         this.z4Point.setZ4Vector(Z4Vector.fromVector(this.currentVector.getX0(), this.currentVector.getY0(), 1, angle));
       }
-      this.z4Point.setIntensity(this.nextEnvelope() * this.intensity.next());
+      this.z4Point.setIntensity(this.nextEnvelope());
       this.rotation.nextSide(this.z4Point, this.currentVector);
       this.progression.next(this.z4Point);
       if (this.z4Point.isDrawBounds() && this.z4Point.getIntensity() > 0) {
@@ -211,26 +209,6 @@ class Z4Tracer extends Z4PointIterator {
       painter.draw(context, next, gradientColor);
       context.restore();
     }
-  }
-
-  /**
-   * Returns the intensity
-   *
-   * @return The intensity
-   */
-   getIntensity() {
-    return this.intensity;
-  }
-
-  /**
-   * Sets the intensity
-   *
-   * @param intensity The intensity
-   * @return This Z4Tracer
-   */
-   setIntensity(intensity) {
-    this.intensity = intensity;
-    return this;
   }
 
   /**
