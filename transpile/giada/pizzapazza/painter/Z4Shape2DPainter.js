@@ -222,7 +222,7 @@ class Z4Shape2DPainter extends Z4Painter {
     return this;
   }
 
-   drawPath(context, scaleH, scaleW, color) {
+   drawPath(context, scaleW, scaleH, color) {
     context.save();
     context.scale(scaleW, scaleH);
     context.fillStyle = color.getHEX();

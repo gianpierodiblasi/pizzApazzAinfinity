@@ -27,6 +27,8 @@ class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI {
 
    borderColor = new Z4ColorUI().setColorLabel("COLOR", true, false).appendToElement(this.querySelector(".shape2d-painter-container-third-row"));
 
+   pointIterator = new Z4Stamper();
+
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
    mutationObserver = new MutationObserver(() => this.drawCanvas());
@@ -141,6 +143,17 @@ class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI {
     this.drawCanvas();
   }
 
+  /**
+   * Sets the Z4PointIterator to draw the demo
+   *
+   * @param pointIterator The Z4PointIterator
+   * @return This Z4Shape2DPainterUI
+   */
+   setPointIterator(pointIterator) {
+    this.pointIterator = pointIterator;
+    return this;
+  }
+
    setValue(value) {
     this.value = value;
     if (this.value.getShape() === Z4Shape2D.CIRCLE) {
@@ -178,19 +191,16 @@ class Z4Shape2DPainterUI extends Z4AbstractComponentWithValueUI {
 
    drawCanvas() {
     if (this.canvas.clientWidth) {
-      // this.canvas.width = Math.floor(this.canvas.clientWidth * window.devicePixelRatio);
-      // this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
-      // 
-      // $OffscreenCanvas offscreen = new $OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
-      // $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
-      // this.value.drawDemo(offscreenCtx, this.canvas.clientWidth, this.canvas.clientHeight);
-      // 
-      // this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      // 
-      // this.ctx.save();
-      // this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-      // this.ctx.drawImage(offscreen, 0, 0);
-      // this.ctx.restore();
+      this.canvas.width = Math.floor(this.canvas.clientWidth * window.devicePixelRatio);
+      this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
+      let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
+      let offscreenCtx = offscreen.getContext("2d");
+      this.pointIterator.drawDemo(offscreenCtx, this.value, null, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.save();
+      this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      this.ctx.drawImage(offscreen, 0, 0);
+      this.ctx.restore();
     }
   }
 

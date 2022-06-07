@@ -235,7 +235,7 @@ public class Z4Shape2DPainter extends Z4Painter<Z4Shape2DPainter> {
     return this;
   }
 
-  private void drawPath($CanvasRenderingContext2D context, double scaleH, double scaleW, Z4Color color) {
+  private void drawPath($CanvasRenderingContext2D context, double scaleW, double scaleH, Z4Color color) {
     context.save();
     context.scale(scaleW, scaleH);
     context.fillStyle = color.$getHEX();

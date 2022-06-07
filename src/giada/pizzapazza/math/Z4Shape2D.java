@@ -99,6 +99,6 @@ public class Z4Shape2D {
    * @return The path
    */
   public $Path2D getPath() {
-    return path;
+    return this.path;
   }
 }

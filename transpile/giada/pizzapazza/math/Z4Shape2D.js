@@ -97,6 +97,6 @@ class Z4Shape2D {
    * @return The path
    */
    getPath() {
-    return path;
+    return this.path;
   }
 }
