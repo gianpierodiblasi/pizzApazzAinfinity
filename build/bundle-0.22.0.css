@@ -87,3 +87,7 @@
 .z4-dark .z4-dark-img-negative {
   filter: invert(1);
 }
+
+.z4-dark .nav-tabs .nav-link.active {
+  background-color: #121212;
+}
