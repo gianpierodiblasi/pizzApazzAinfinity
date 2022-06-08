@@ -1,6 +1,7 @@
 package giada.pizzapazza.painter.ui;
 
 import def.js.Array;
+import giada.pizzapazza.color.Z4GradientColor;
 import giada.pizzapazza.iterator.Z4PointIterator;
 import giada.pizzapazza.iterator.Z4Stamper;
 import giada.pizzapazza.painter.Z4Painter;
@@ -27,6 +28,7 @@ public abstract class Z4PainterUI<S extends Z4Painter<S>> extends Z4AbstractComp
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
 
   private Z4PointIterator<?> pointIterator = new Z4Stamper();
+  private Z4GradientColor gradientColor = new Z4GradientColor();
 
   private final $ResizeObserver resizeObserver = new $ResizeObserver(() -> this.drawCanvas());
   private final $MutationObserver mutationObserver = new $MutationObserver(() -> this.drawCanvas());
@@ -62,6 +64,20 @@ public abstract class Z4PainterUI<S extends Z4Painter<S>> extends Z4AbstractComp
   }
 
   /**
+   * Sets the Z4GradientColor to draw the demo
+   *
+   * @param <T>
+   * @param gradientColor The Z4GradientColor
+   * @return This Z4PainterUI
+   */
+  @SuppressWarnings("unchecked")
+  public <T extends Z4PainterUI<?>> T setGradientColor(Z4GradientColor gradientColor) {
+    this.gradientColor = gradientColor;
+    this.drawCanvas();
+    return (T) this;
+  }
+
+  /**
    * Draws the demo canvas
    */
   protected void drawCanvas() {
@@ -71,7 +87,7 @@ public abstract class Z4PainterUI<S extends Z4Painter<S>> extends Z4AbstractComp
 
       $OffscreenCanvas offscreen = new $OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
       $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
-      this.pointIterator.drawDemo(offscreenCtx, this.value, null, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.pointIterator.drawDemo(offscreenCtx, this.value, this.gradientColor, this.canvas.clientWidth, this.canvas.clientHeight);
 
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 

@@ -2,6 +2,7 @@ package giada.pizzapazza.painter;
 
 import def.js.Array;
 import def.js.JSON;
+import giada.pizzapazza.color.ui.Z4GradientColorUI;
 import giada.pizzapazza.iterator.Z4Spirograph;
 import giada.pizzapazza.iterator.Z4Stamper;
 import giada.pizzapazza.iterator.Z4Tracer;
@@ -56,6 +57,10 @@ public class test_shape2d {
       }
       return null;
     };
+
+    Z4GradientColorUI ui2 = new Z4GradientColorUI().appendToElement(document.querySelector("#color"));
+    ui2.oninput = (value) -> ui.setGradientColor(value);
+    ui2.onchange = (value) -> ui.setGradientColor(value);
   }
 
   private static String stringify(Object object) {

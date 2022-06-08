@@ -1,6 +1,7 @@
 package giada.pizzapazza.iterator.ui;
 
 import def.js.Array;
+import giada.pizzapazza.color.Z4GradientColor;
 import giada.pizzapazza.color.Z4Progression;
 import giada.pizzapazza.color.ui.Z4ProgressionUI;
 import giada.pizzapazza.iterator.Z4PointIterator;
@@ -37,6 +38,7 @@ public abstract class Z4PointIteratorUI<S extends Z4PointIterator<S>> extends Z4
   private final $HTMLElement arrowModule = this.querySelector(".point-iterator-arrow-module-range");
   private final Z4ArrowPainter arrowPainter = new Z4ArrowPainter();
   private Z4Painter<?> painter;
+  private Z4GradientColor gradientColor = new Z4GradientColor();
 
   private final $ResizeObserver resizeObserver = new $ResizeObserver(() -> this.drawCanvas());
   private final $MutationObserver mutationObserver = new $MutationObserver(() -> this.drawCanvas());
@@ -103,6 +105,20 @@ public abstract class Z4PointIteratorUI<S extends Z4PointIterator<S>> extends Z4
     return (T) this;
   }
 
+  /**
+   * Sets the Z4GradientColor to draw the demo
+   *
+   * @param <T>
+   * @param gradientColor The Z4GradientColor
+   * @return This Z4PointIteratorUI
+   */
+  @SuppressWarnings("unchecked")
+  public <T extends Z4PointIteratorUI<?>> T setGradientColor(Z4GradientColor gradientColor) {
+    this.gradientColor = gradientColor;
+    this.drawCanvas();
+    return (T) this;
+  }
+
   @Override
   @SuppressWarnings("unchecked")
   public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(S value) {
@@ -125,7 +141,7 @@ public abstract class Z4PointIteratorUI<S extends Z4PointIterator<S>> extends Z4
 
       $OffscreenCanvas offscreen = new $OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
       $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
-      this.value.drawDemo(offscreenCtx, $exists(this.painter) ? this.painter : this.arrowPainter, null, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.value.drawDemo(offscreenCtx, $exists(this.painter) ? this.painter : this.arrowPainter, this.gradientColor, this.canvas.clientWidth, this.canvas.clientHeight);
 
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 

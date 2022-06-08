@@ -20,6 +20,8 @@ class Z4PointIteratorUI extends Z4AbstractComponentWithValueUI {
 
    painter = null;
 
+   gradientColor = new Z4GradientColor();
+
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
    mutationObserver = new MutationObserver(() => this.drawCanvas());
@@ -79,6 +81,19 @@ class Z4PointIteratorUI extends Z4AbstractComponentWithValueUI {
     return this;
   }
 
+  /**
+   * Sets the Z4GradientColor to draw the demo
+   *
+   * @param <T>
+   * @param gradientColor The Z4GradientColor
+   * @return This Z4PointIteratorUI
+   */
+   setGradientColor(gradientColor) {
+    this.gradientColor = gradientColor;
+    this.drawCanvas();
+    return this;
+  }
+
    setValue(value) {
     this.value = value;
     this.rotation.setValue(this.value.getRotation());
@@ -96,7 +111,7 @@ class Z4PointIteratorUI extends Z4AbstractComponentWithValueUI {
       this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
       let offscreen = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
       let offscreenCtx = offscreen.getContext("2d");
-      this.value.drawDemo(offscreenCtx, this.painter ? this.painter : this.arrowPainter, null, this.canvas.clientWidth, this.canvas.clientHeight);
+      this.value.drawDemo(offscreenCtx, this.painter ? this.painter : this.arrowPainter, this.gradientColor, this.canvas.clientWidth, this.canvas.clientHeight);
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.save();
       this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
