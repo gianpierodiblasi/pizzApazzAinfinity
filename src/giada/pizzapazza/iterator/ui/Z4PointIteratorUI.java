@@ -93,7 +93,7 @@ public abstract class Z4PointIteratorUI<S extends Z4PointIterator<S>> extends Z4
    *
    * @param <T>
    * @param painter The Z4Painter, it can be null
-   * @return This Z4StamperUI
+   * @return This Z4PointIteratorUI
    */
   @SuppressWarnings("unchecked")
   public <T extends Z4PointIteratorUI<?>> T setPainter(Z4Painter<?> painter) {

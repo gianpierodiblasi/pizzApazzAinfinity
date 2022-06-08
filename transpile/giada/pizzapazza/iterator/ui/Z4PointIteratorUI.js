@@ -70,7 +70,7 @@ class Z4PointIteratorUI extends Z4AbstractComponentWithValueUI {
    *
    * @param <T>
    * @param painter The Z4Painter, it can be null
-   * @return This Z4StamperUI
+   * @return This Z4PointIteratorUI
    */
    setPainter(painter) {
     this.painter = painter;
