@@ -4,9 +4,15 @@ import def.dom.Element;
 import def.dom.HTMLElement;
 import def.dom.NodeList;
 import giada.pizzapazza.Z4Loader;
+import giada.pizzapazza.color.Z4GradientColor;
+import giada.pizzapazza.color.ui.Z4GradientColorUI;
+import giada.pizzapazza.iterator.Z4PointIterator;
+import giada.pizzapazza.iterator.ui.Z4PointIteratorUI;
 import giada.pizzapazza.iterator.ui.Z4SpirographUI;
 import giada.pizzapazza.iterator.ui.Z4StamperUI;
 import giada.pizzapazza.iterator.ui.Z4TracerUI;
+import giada.pizzapazza.painter.Z4Painter;
+import giada.pizzapazza.painter.ui.Z4PainterUI;
 import giada.pizzapazza.painter.ui.Z4Shape2DPainterUI;
 import giada.pizzapazza.setting.Z4HTMLFactory;
 
@@ -22,6 +28,11 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
   private final Z4SpirographUI spirographUI = new Z4SpirographUI().appendToElement(this.querySelector(".tool-composer-container-point-iterator"));
 
   private final Z4Shape2DPainterUI shape2DPainterUI = new Z4Shape2DPainterUI().appendToElement(this.querySelector(".tool-composer-container-painter"));
+  private final Z4GradientColorUI gradientColorUI = new Z4GradientColorUI().setVertical();
+
+  private Z4PointIterator<?> pointIterator;
+  private Z4Painter<?> painter;
+  private Z4GradientColor gradientColor;
 
   private final static String PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
   private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/ui/Z4ToolComposerUI.html");
@@ -35,6 +46,33 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
     this.configTabs();
     this.configPointIterators();
     this.configPointPainters();
+
+    this.pointIterator = this.stamperUI.getValue();
+    this.painter = this.shape2DPainterUI.getValue();
+    this.gradientColor = this.gradientColorUI.getValue();
+
+    this.setPointIteratorUI(this.stamperUI);
+    this.setPointIteratorUI(this.tracerUI);
+    this.setPointIteratorUI(this.spirographUI);
+
+    this.setPainterUI(this.shape2DPainterUI);
+
+    this.gradientColorUI.oninput = (v) -> {
+      this.gradientColor = v;
+      this.stamperUI.setGradientColor(v);
+      this.tracerUI.setGradientColor(v);
+      this.spirographUI.setGradientColor(v);
+
+      this.shape2DPainterUI.setGradientColor(v);
+    };
+    this.gradientColorUI.onchange = (v) -> {
+      this.gradientColor = v;
+      this.stamperUI.setGradientColor(v);
+      this.tracerUI.setGradientColor(v);
+      this.spirographUI.setGradientColor(v);
+
+      this.shape2DPainterUI.setGradientColor(v);
+    };
   }
 
   private void configTabs() {
@@ -105,17 +143,26 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
         switch (dataValue) {
           case "stamper":
             this.querySelector(".tool-composer-container-point-iterator > div:nth-child(2)").style.display = "block";
+            this.pointIterator = this.stamperUI.getValue();
             break;
           case "tracer":
             this.querySelector(".tool-composer-container-point-iterator > div:nth-child(3)").style.display = "block";
+            this.pointIterator = this.tracerUI.getValue();
             break;
           case "spirograph":
             this.querySelector(".tool-composer-container-point-iterator > div:nth-child(4)").style.display = "block";
+            this.pointIterator = this.spirographUI.getValue();
             break;
         }
+
+        this.shape2DPainterUI.setPointIterator(this.pointIterator);
+
         return null;
       };
     }
+
+    this.querySelector(".tool-composer-container-point-iterator > div:nth-child(3)").style.display = "none";
+    this.querySelector(".tool-composer-container-point-iterator > div:nth-child(4)").style.display = "none";
   }
 
   private void configPointPainters() {
@@ -144,11 +191,47 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
         switch (dataValue) {
           case "shape2d":
             this.querySelector(".tool-composer-container-painter > div:nth-child(2)").style.display = "block";
+            this.painter = this.shape2DPainterUI.getValue();
             break;
         }
+
+        this.stamperUI.setPainter(this.painter);
+        this.tracerUI.setPainter(this.painter);
+        this.spirographUI.setPainter(this.painter);
+
         return null;
       };
     }
+  }
+
+  private void setPointIteratorUI(Z4PointIteratorUI<?> pointIteratorUI) {
+    pointIteratorUI.setPainter(this.painter);
+    pointIteratorUI.setGradientColor(this.gradientColor);
+    pointIteratorUI.oninput = (v) -> {
+      this.pointIterator = v;
+      this.shape2DPainterUI.setPointIterator(v);
+    };
+    pointIteratorUI.onchange = (v) -> {
+      this.pointIterator = v;
+      this.shape2DPainterUI.setPointIterator(v);
+    };
+  }
+
+  private void setPainterUI(Z4PainterUI<?> painterUI) {
+    painterUI.setPointIterator(this.pointIterator);
+    painterUI.setGradientColor(this.gradientColor);
+    painterUI.oninput = (v) -> {
+      this.painter = v;
+      this.stamperUI.setPainter(v);
+      this.tracerUI.setPainter(v);
+      this.spirographUI.setPainter(v);
+    };
+    painterUI.onchange = (v) -> {
+      this.painter = v;
+      this.stamperUI.setPainter(v);
+      this.tracerUI.setPainter(v);
+      this.spirographUI.setPainter(v);
+    };
   }
 
   @Override

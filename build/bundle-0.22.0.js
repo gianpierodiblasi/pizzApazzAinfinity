@@ -638,6 +638,14 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
 
    shape2DPainterUI = new Z4Shape2DPainterUI().appendToElement(this.querySelector(".tool-composer-container-painter"));
 
+   gradientColorUI = new Z4GradientColorUI().setVertical();
+
+   pointIterator = null;
+
+   painter = null;
+
+   gradientColor = null;
+
   static  PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
 
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/ui/Z4ToolComposerUI.html");
@@ -650,6 +658,27 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
     this.configTabs();
     this.configPointIterators();
     this.configPointPainters();
+    this.pointIterator = this.stamperUI.getValue();
+    this.painter = this.shape2DPainterUI.getValue();
+    this.gradientColor = this.gradientColorUI.getValue();
+    this.setPointIteratorUI(this.stamperUI);
+    this.setPointIteratorUI(this.tracerUI);
+    this.setPointIteratorUI(this.spirographUI);
+    this.setPainterUI(this.shape2DPainterUI);
+    this.gradientColorUI.oninput = (v) => {
+      this.gradientColor = v;
+      this.stamperUI.setGradientColor(v);
+      this.tracerUI.setGradientColor(v);
+      this.spirographUI.setGradientColor(v);
+      this.shape2DPainterUI.setGradientColor(v);
+    };
+    this.gradientColorUI.onchange = (v) => {
+      this.gradientColor = v;
+      this.stamperUI.setGradientColor(v);
+      this.tracerUI.setGradientColor(v);
+      this.spirographUI.setGradientColor(v);
+      this.shape2DPainterUI.setGradientColor(v);
+    };
   }
 
    configTabs() {
@@ -713,17 +742,23 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
         switch(dataValue) {
           case "stamper":
             this.querySelector(".tool-composer-container-point-iterator > div:nth-child(2)").style.display = "block";
+            this.pointIterator = this.stamperUI.getValue();
             break;
           case "tracer":
             this.querySelector(".tool-composer-container-point-iterator > div:nth-child(3)").style.display = "block";
+            this.pointIterator = this.tracerUI.getValue();
             break;
           case "spirograph":
             this.querySelector(".tool-composer-container-point-iterator > div:nth-child(4)").style.display = "block";
+            this.pointIterator = this.spirographUI.getValue();
             break;
         }
+        this.shape2DPainterUI.setPointIterator(this.pointIterator);
         return null;
       };
     }
+    this.querySelector(".tool-composer-container-point-iterator > div:nth-child(3)").style.display = "none";
+    this.querySelector(".tool-composer-container-point-iterator > div:nth-child(4)").style.display = "none";
   }
 
    configPointPainters() {
@@ -748,11 +783,45 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
         switch(dataValue) {
           case "shape2d":
             this.querySelector(".tool-composer-container-painter > div:nth-child(2)").style.display = "block";
+            this.painter = this.shape2DPainterUI.getValue();
             break;
         }
+        this.stamperUI.setPainter(this.painter);
+        this.tracerUI.setPainter(this.painter);
+        this.spirographUI.setPainter(this.painter);
         return null;
       };
     }
+  }
+
+   setPointIteratorUI(pointIteratorUI) {
+    pointIteratorUI.setPainter(this.painter);
+    pointIteratorUI.setGradientColor(this.gradientColor);
+    pointIteratorUI.oninput = (v) => {
+      this.pointIterator = v;
+      this.shape2DPainterUI.setPointIterator(v);
+    };
+    pointIteratorUI.onchange = (v) => {
+      this.pointIterator = v;
+      this.shape2DPainterUI.setPointIterator(v);
+    };
+  }
+
+   setPainterUI(painterUI) {
+    painterUI.setPointIterator(this.pointIterator);
+    painterUI.setGradientColor(this.gradientColor);
+    painterUI.oninput = (v) => {
+      this.painter = v;
+      this.stamperUI.setPainter(v);
+      this.tracerUI.setPainter(v);
+      this.spirographUI.setPainter(v);
+    };
+    painterUI.onchange = (v) => {
+      this.painter = v;
+      this.stamperUI.setPainter(v);
+      this.tracerUI.setPainter(v);
+      this.spirographUI.setPainter(v);
+    };
   }
 
    dispose() {
