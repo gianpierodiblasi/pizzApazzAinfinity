@@ -1,27 +1,12 @@
 package giada.pizzapazza.iterator.ui;
 
-import def.js.Array;
-import giada.pizzapazza.color.Z4Progression;
-import giada.pizzapazza.color.ui.Z4ProgressionUI;
 import giada.pizzapazza.iterator.Z4Tracer;
 import giada.pizzapazza.math.Z4FancifulValue;
-import giada.pizzapazza.math.Z4Rotation;
 import giada.pizzapazza.math.ui.Z4FancifulValueUI;
-import giada.pizzapazza.math.ui.Z4RotationUI;
-import giada.pizzapazza.painter.Z4ArrowPainter;
-import giada.pizzapazza.painter.Z4Painter;
 import giada.pizzapazza.setting.Z4HTMLFactory;
 import giada.pizzapazza.ui.Z4AbstractComponentWithValueUI;
-import simulation.dom.$Canvas;
-import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$HTMLElement;
-import simulation.dom.$OffscreenCanvas;
 import static simulation.js.$Globals.$exists;
-import static simulation.js.$Globals.document;
-import static simulation.js.$Globals.window;
-import simulation.js.$MutationObserver;
-import simulation.js.$Object;
-import simulation.js.$ResizeObserver;
 
 /**
  * The component to edit a Z4Tracer

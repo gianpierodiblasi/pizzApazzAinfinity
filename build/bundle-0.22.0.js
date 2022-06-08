@@ -624,6 +624,25 @@ class Z4ModalMessageUI {
   }
 }
 /**
+ * The composer of a tool
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4ToolComposerUI extends Z4AbstractComponentUI {
+
+  static  UI = Z4HTMLFactory.get("giada/pizzapazza/iterator/ui/Z4ToolComposerUI.html");
+
+  /**
+   * Creates a Z4ToolComposerUI
+   */
+  constructor() {
+    super(Z4ToolComposerUI.UI);
+  }
+
+   dispose() {
+  }
+}
+/**
  * The utility library for math
  *
  * @author gianpiero.di.blasi

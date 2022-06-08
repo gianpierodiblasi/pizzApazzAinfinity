@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<svg width="96" height="96" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient y2="0" x2="1" y1="0" x1="0" id="svg_2">
+      <stop offset="0" stop-color="#00ff1b"/>
+      <stop offset="1" stop-opacity="0.992188" stop-color="#00bbff"/>
+    </linearGradient>
+    <radialGradient r="0.623065" cy="0.265625" cx="0.738281" spreadMethod="pad" id="svg_5">
+      <stop offset="0" stop-opacity="0.996094" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#ff0000"/>
+    </radialGradient>
+    <linearGradient y1="0.636719" x1="0" id="svg_6">
+      <stop offset="0" stop-opacity="0.996094" stop-color="#007bff"/>
+      <stop offset="0.476563" stop-opacity="0.996094" stop-color="#ffd800"/>
+      <stop offset="1" stop-opacity="0.996094" stop-color="#d400ff"/>
+    </linearGradient>
+  </defs>
+  <g>
+    <path stroke-width="0"  d="m95.757607,49.515175a31.50337,29.9214 0 1 1 -63.006741,0a31.50337,29.9214 0 1 1 63.006741,0z" stroke="#000000" fill="#828282"/>
+    <rect stroke-width="2" width="53.466984" height="49.140995" x="2.515152" y="2.325758" stroke="#000000" fill-rule="evenodd" fill="url(#svg_6)"/>
+    <path stroke-width="2" d="m93.863647,47.05304a31.50337,29.9214 0 1 1 -63.006752,0a31.50337,29.9214 0 1 1 63.006752,0z" stroke="#000000" fill="url(#svg_5)"/>
+    <path stroke-width="2" d="m67.354103,79.67659l-23.173172,-3.621025l-16.167221,16.739906l-3.662769,-22.815201l-21.167981,-9.963951l20.90948,-10.479591l3.08466,-22.897894l16.58552,16.338461l23.07444,-4.187778l-10.659058,20.577351l11.176102,20.309723z" stroke="#000000" fill="url(#svg_2)"/>
+  </g>
+</svg>
