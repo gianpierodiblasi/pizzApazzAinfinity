@@ -4,6 +4,7 @@ import def.dom.Element;
 import def.dom.HTMLElement;
 import def.dom.NodeList;
 import giada.pizzapazza.Z4Loader;
+import giada.pizzapazza.color.Z4Color;
 import giada.pizzapazza.color.Z4GradientColor;
 import giada.pizzapazza.color.ui.Z4GradientColorUI;
 import giada.pizzapazza.iterator.Z4PointIterator;
@@ -15,6 +16,8 @@ import giada.pizzapazza.painter.Z4Painter;
 import giada.pizzapazza.painter.ui.Z4PainterUI;
 import giada.pizzapazza.painter.ui.Z4Shape2DPainterUI;
 import giada.pizzapazza.setting.Z4HTMLFactory;
+import simulation.dom.$HTMLElement;
+import static simulation.js.$Globals.document;
 
 /**
  * The composer of a tool
@@ -46,6 +49,7 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
     this.configTabs();
     this.configPointIterators();
     this.configPointPainters();
+    this.configTryMe();
 
     this.pointIterator = this.stamperUI.getValue();
     this.painter = this.shape2DPainterUI.getValue();
@@ -235,6 +239,24 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
       this.tracerUI.setPainter(v);
       this.spirographUI.setPainter(v);
     };
+  }
+
+  private void configTryMe() {
+    $HTMLElement standardColorButtons = this.querySelector(".tool-composer-btn-group-try-me");
+
+    Z4Color.STANDARD_COLOR.forEach(color -> {
+      HTMLElement button = document.createElement("button");
+      button.setAttribute("type", "button");
+      button.className = "btn btn-outline-secondary";
+      button.style.width = "38px";
+      button.style.height = "38px";
+      button.style.background = color;
+      button.onclick = (event) -> {
+        return null;
+      };
+
+      standardColorButtons.appendChild(button);
+    });
   }
 
   @Override

@@ -5,6 +5,23 @@
  */
 class Z4Color {
 
+  /**
+   * The standard colors
+   */
+  static  STANDARD_COLOR = new Array(// white
+  "#FFFFFF", // light gray
+  "#CCCCCC", // gray
+  "#888888", // dark gray
+  "#444444", // black
+  "#000000", // orange
+  "#FF6600", // red
+  "#FF0000", // green
+  "#00FF00", // blue
+  "#0000FF", // cyan
+  "#00FFFF", // magenta
+  "#FF00FF", // yellow
+  "#FFFF00");
+
    a = 0;
 
    r = 0;

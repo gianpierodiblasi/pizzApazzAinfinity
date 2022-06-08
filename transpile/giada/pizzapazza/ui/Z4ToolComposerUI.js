@@ -33,6 +33,7 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
     this.configTabs();
     this.configPointIterators();
     this.configPointPainters();
+    this.configTryMe();
     this.pointIterator = this.stamperUI.getValue();
     this.painter = this.shape2DPainterUI.getValue();
     this.gradientColor = this.gradientColorUI.getValue();
@@ -200,6 +201,22 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
       this.tracerUI.setPainter(v);
       this.spirographUI.setPainter(v);
     };
+  }
+
+   configTryMe() {
+    let standardColorButtons = this.querySelector(".tool-composer-btn-group-try-me");
+    Z4Color.STANDARD_COLOR.forEach(color => {
+      let button = document.createElement("button");
+      button.setAttribute("type", "button");
+      button.className = "btn btn-outline-secondary";
+      button.style.width = "38px";
+      button.style.height = "38px";
+      button.style.background = color;
+      button.onclick = (event) => {
+        return null;
+      };
+      standardColorButtons.appendChild(button);
+    });
   }
 
    dispose() {

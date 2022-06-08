@@ -16,6 +16,24 @@ import simulation.js.$Number;
  */
 public class Z4Color {
 
+  /**
+   * The standard colors
+   */
+  public static Array<String> STANDARD_COLOR = new Array<>(
+          "#FFFFFF", // white
+          "#CCCCCC", // light gray
+          "#888888", // gray
+          "#444444", // dark gray
+          "#000000", // black
+          "#FF6600", // orange    
+          "#FF0000", // red
+          "#00FF00", // green
+          "#0000FF", // blue
+          "#00FFFF", // cyan
+          "#FF00FF", // magenta
+          "#FFFF00" // yellow
+  );
+
   private int a;
   private int r;
   private int g;
