@@ -13,7 +13,7 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
 
    shape2DPainterUI = new Z4Shape2DPainterUI().appendToElement(this.querySelector(".tool-composer-container-painter"));
 
-   gradientColorUI = new Z4GradientColorUI().setVertical();
+   gradientColorUI = new Z4GradientColorUI().setGradientColorLabel("COLOR", true, true).setVertical().appendToElement(this.querySelector(".tool-composer-container-gradient-color"));
 
    pointIterator = null;
 
@@ -78,12 +78,15 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
           case "tracer":
           case "spirograph":
             this.querySelector(".tool-composer-container-point-iterator").style.display = "flex";
+            this.querySelector(".tool-composer-container-gradient-color").style.display = "block";
             break;
           case "shape2d":
             this.querySelector(".tool-composer-container-painter").style.display = "flex";
+            this.querySelector(".tool-composer-container-gradient-color").style.display = "block";
             break;
           case "tryme":
             this.querySelector(".tool-composer-container-try-me").style.display = "flex";
+            this.querySelector(".tool-composer-container-gradient-color").style.display = "none";
             break;
         }
         return null;
