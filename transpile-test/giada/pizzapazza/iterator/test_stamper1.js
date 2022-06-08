@@ -30,6 +30,9 @@ class test_stamper1 {
       }
       return null;
     };
+    let ui2 = new Z4GradientColorUI().appendToElement(document.querySelector("#color"));
+    ui2.oninput = (value) => ui.setGradientColor(value);
+    ui2.onchange = (value) => ui.setGradientColor(value);
   }
 
   static  stringify(object) {
