@@ -52,7 +52,7 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
   private $OffscreenCanvas offscreenCanvas;
   private $CanvasRenderingContext2D offscreenCtx;
   private boolean offscreenCreated;
-  private String background;
+  private String background = "white";
   private boolean mouseDown;
 
   private Z4PointIterator<?> pointIterator;
@@ -111,6 +111,7 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
       this.canvas.onmousedown = (event) -> this.manageStart(event);
       this.canvas.onmousemove = (event) -> this.manageContinue(event);
       this.canvas.onmouseup = (event) -> this.manageStop(event);
+      this.canvas.onmouseleave = (event) -> this.manageStop(event);
     }
   }
 
@@ -310,7 +311,7 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
 
       this.canvasRect = this.canvas.getBoundingClientRect();
 
-      this.fillCanvas("white");
+      this.fillCanvas(this.background);
     }
   }
 
@@ -350,15 +351,17 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
   }
 
   private Object manageStop(Event event) {
-    this.mouseDown = false;
-    this.manage(true, event, Z4Action.STOP);
+    if (this.mouseDown) {
+      this.mouseDown = false;
+      this.manage(true, event, Z4Action.STOP);
+    }
     return null;
   }
 
   private void convertCoordinates(Event event) {
     if ($exists(((TouchEvent) event).changedTouches)) {
-      event.$set("clientX", ((TouchEvent) event).changedTouches.$get(0).clientX);
-      event.$set("clientY", ((TouchEvent) event).changedTouches.$get(0).clientY);
+      event.$set("pageX", ((TouchEvent) event).changedTouches.$get(0).pageX);
+      event.$set("pageY", ((TouchEvent) event).changedTouches.$get(0).pageY);
     }
     event.preventDefault();
   }
@@ -366,7 +369,7 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
   private void manage(boolean doIt, Event event, Z4Action action) {
     this.convertCoordinates(event);
 
-    if (doIt && this.pointIterator.draw(action, (Double) event.$get("clientX") - this.canvasRect.left, (Double) event.$get("clientY") - this.canvasRect.top)) {
+    if (doIt && this.pointIterator.draw(action, (Double) event.$get("pageX") - this.canvasRect.left, (Double) event.$get("pageY") - this.canvasRect.top)) {
       Z4Point next;
       while ((next = this.pointIterator.next()) != null) {
         Z4Vector vector = next.getZ4Vector();

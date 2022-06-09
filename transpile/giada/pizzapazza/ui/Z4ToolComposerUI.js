@@ -29,7 +29,7 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
 
    offscreenCreated = false;
 
-   background = null;
+   background = "white";
 
    mouseDown = false;
 
@@ -83,6 +83,7 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
       this.canvas.onmousedown = (event) => this.manageStart(event);
       this.canvas.onmousemove = (event) => this.manageContinue(event);
       this.canvas.onmouseup = (event) => this.manageStop(event);
+      this.canvas.onmouseleave = (event) => this.manageStop(event);
     }
   }
 
@@ -260,7 +261,7 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
       this.offscreenCanvas = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
       this.offscreenCtx = this.offscreenCanvas.getContext("2d");
       this.canvasRect = this.canvas.getBoundingClientRect();
-      this.fillCanvas("white");
+      this.fillCanvas(this.background);
     }
   }
 
@@ -295,22 +296,24 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
   }
 
    manageStop(event) {
-    this.mouseDown = false;
-    this.manage(true, event, Z4Action.STOP);
+    if (this.mouseDown) {
+      this.mouseDown = false;
+      this.manage(true, event, Z4Action.STOP);
+    }
     return null;
   }
 
    convertCoordinates(event) {
     if ((event).changedTouches) {
-      event["clientX"] = (event).changedTouches[0].clientX;
-      event["clientY"] = (event).changedTouches[0].clientY;
+      event["pageX"] = (event).changedTouches[0].pageX;
+      event["pageY"] = (event).changedTouches[0].pageY;
     }
     event.preventDefault();
   }
 
    manage(doIt, event, action) {
     this.convertCoordinates(event);
-    if (doIt && this.pointIterator.draw(action, event["clientX"] - this.canvasRect.left, event["clientY"] - this.canvasRect.top)) {
+    if (doIt && this.pointIterator.draw(action, event["pageX"] - this.canvasRect.left, event["pageY"] - this.canvasRect.top)) {
       let next = null;
       while ((next = this.pointIterator.next()) !== null) {
         let vector = next.getZ4Vector();

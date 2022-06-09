@@ -640,6 +640,24 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
 
    gradientColorUI = new Z4GradientColorUI().setGradientColorLabel("COLOR", true, true).setVertical().appendToElement(this.querySelector(".tool-composer-container-gradient-color"));
 
+   canvas = this.querySelector(".tool-composer-canvas-try-me");
+
+   canvasCtx = this.canvas.getContext("2d");
+
+   resizeObserver = new ResizeObserver(() => this.createOffscreen());
+
+   canvasRect = null;
+
+   offscreenCanvas = null;
+
+   offscreenCtx = null;
+
+   offscreenCreated = false;
+
+   background = "white";
+
+   mouseDown = false;
+
    pointIterator = null;
 
    painter = null;
@@ -655,9 +673,12 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
    */
   constructor() {
     super(Z4ToolComposerUI.UI);
+    this.initDevicePixelRatio(() => this.createOffscreen());
+    this.resizeObserver.observe(this.canvas);
     this.configTabs();
     this.configPointIterators();
     this.configPointPainters();
+    this.configTryMe();
     this.pointIterator = this.stamperUI.getValue();
     this.painter = this.shape2DPainterUI.getValue();
     this.gradientColor = this.gradientColorUI.getValue();
@@ -679,6 +700,16 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
       this.spirographUI.setGradientColor(v);
       this.shape2DPainterUI.setGradientColor(v);
     };
+    if (Z4Loader.touch) {
+      this.canvas.ontouchstart = (event) => this.manageStart(event);
+      this.canvas.ontouchmove = (event) => this.manageContinue(event);
+      this.canvas.ontouchend = (event) => this.manageStop(event);
+    } else {
+      this.canvas.onmousedown = (event) => this.manageStart(event);
+      this.canvas.onmousemove = (event) => this.manageContinue(event);
+      this.canvas.onmouseup = (event) => this.manageStop(event);
+      this.canvas.onmouseleave = (event) => this.manageStop(event);
+    }
   }
 
    configTabs() {
@@ -712,6 +743,10 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
           case "tryme":
             this.querySelector(".tool-composer-container-try-me").style.display = "flex";
             this.querySelector(".tool-composer-container-gradient-color").style.display = "none";
+            if (!this.offscreenCreated) {
+              this.offscreenCreated = true;
+              this.createOffscreen();
+            }
             break;
         }
         return null;
@@ -827,11 +862,100 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
     };
   }
 
+   configTryMe() {
+    let standardColorButtons = this.querySelector(".tool-composer-btn-group-try-me");
+    Z4Color.STANDARD_COLOR.forEach(color => {
+      let button = document.createElement("button");
+      button.setAttribute("type", "button");
+      button.className = "btn btn-outline-secondary";
+      button.style.width = "38px";
+      button.style.height = "38px";
+      button.style.background = color;
+      button.onclick = (event) => {
+        this.fillCanvas(color);
+        return null;
+      };
+      standardColorButtons.appendChild(button);
+    });
+  }
+
+   createOffscreen() {
+    if (this.canvas.clientWidth) {
+      this.canvas.width = Math.floor(this.canvas.clientWidth * window.devicePixelRatio);
+      this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
+      this.offscreenCanvas = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
+      this.offscreenCtx = this.offscreenCanvas.getContext("2d");
+      this.canvasRect = this.canvas.getBoundingClientRect();
+      this.fillCanvas(this.background);
+    }
+  }
+
+   fillCanvas(background) {
+    this.background = background;
+    this.offscreenCtx.fillStyle = Z4Color.getFillStyle(this.background);
+    this.offscreenCtx.fillRect(0, 0, this.canvas.clientWidth, this.canvas.clientWidth);
+    this.canvasCtx.save();
+    this.canvasCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    this.canvasCtx.drawImage(this.offscreenCanvas, 0, 0);
+    this.canvasCtx.restore();
+  }
+
    dispose() {
+    this.disposeDevicePixelRatio();
+    this.resizeObserver.unobserve(this.canvas);
     this.stamperUI.dispose();
     this.tracerUI.dispose();
     this.spirographUI.dispose();
     this.shape2DPainterUI.dispose();
+  }
+
+   manageStart(event) {
+    this.mouseDown = true;
+    this.manage(true, event, Z4Action.START);
+    return null;
+  }
+
+   manageContinue(event) {
+    this.manage(this.mouseDown, event, Z4Action.CONTINUE);
+    return null;
+  }
+
+   manageStop(event) {
+    if (this.mouseDown) {
+      this.mouseDown = false;
+      this.manage(true, event, Z4Action.STOP);
+    }
+    return null;
+  }
+
+   convertCoordinates(event) {
+    if ((event).changedTouches) {
+      event["pageX"] = (event).changedTouches[0].pageX;
+      event["pageY"] = (event).changedTouches[0].pageY;
+    }
+    event.preventDefault();
+  }
+
+   manage(doIt, event, action) {
+    this.convertCoordinates(event);
+    if (doIt && this.pointIterator.draw(action, event["pageX"] - this.canvasRect.left, event["pageY"] - this.canvasRect.top)) {
+      let next = null;
+      while ((next = this.pointIterator.next()) !== null) {
+        let vector = next.getZ4Vector();
+        let ctx = next.isDrawBounds() ? this.canvasCtx : this.offscreenCtx;
+        ctx.save();
+        ctx.translate(vector.getX0(), vector.getY0());
+        ctx.rotate(vector.getPhase());
+        this.painter.draw(ctx, next, this.gradientColor);
+        ctx.restore();
+        if (!next.isDrawBounds()) {
+          this.canvasCtx.save();
+          this.canvasCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+          this.canvasCtx.drawImage(this.offscreenCanvas, 0, 0);
+          this.canvasCtx.restore();
+        }
+      }
+    }
   }
 }
 /**
@@ -3145,6 +3269,23 @@ class Z4Progression {
  * @author gianpiero.di.blasi
  */
 class Z4Color {
+
+  /**
+   * The standard colors
+   */
+  static  STANDARD_COLOR = new Array(// white
+  "#FFFFFF", // light gray
+  "#CCCCCC", // gray
+  "#888888", // dark gray
+  "#444444", // black
+  "#000000", // orange
+  "#FF6600", // red
+  "#FF0000", // green
+  "#00FF00", // blue
+  "#0000FF", // cyan
+  "#00FFFF", // magenta
+  "#FF00FF", // yellow
+  "#FFFF00");
 
    a = 0;
 
