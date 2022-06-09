@@ -16,8 +16,12 @@ import giada.pizzapazza.painter.Z4Painter;
 import giada.pizzapazza.painter.ui.Z4PainterUI;
 import giada.pizzapazza.painter.ui.Z4Shape2DPainterUI;
 import giada.pizzapazza.setting.Z4HTMLFactory;
+import simulation.dom.$Canvas;
+import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$HTMLElement;
+import simulation.dom.$OffscreenCanvas;
 import static simulation.js.$Globals.document;
+import static simulation.js.$Globals.window;
 
 /**
  * The composer of a tool
@@ -33,6 +37,13 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
   private final Z4Shape2DPainterUI shape2DPainterUI = new Z4Shape2DPainterUI().appendToElement(this.querySelector(".tool-composer-container-painter"));
   private final Z4GradientColorUI gradientColorUI = new Z4GradientColorUI().setGradientColorLabel("COLOR", true, true).setVertical().appendToElement(this.querySelector(".tool-composer-container-gradient-color"));
 
+  private final $Canvas canvas = ($Canvas) this.querySelector(".tool-composer-canvas-try-me");
+  private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
+  private $OffscreenCanvas offscreenCanvas;
+  private $CanvasRenderingContext2D offscreenCtx;
+  private boolean offscreenCreated;
+  private String background;
+
   private Z4PointIterator<?> pointIterator;
   private Z4Painter<?> painter;
   private Z4GradientColor gradientColor;
@@ -45,6 +56,11 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
    */
   public Z4ToolComposerUI() {
     super(Z4ToolComposerUI.UI);
+
+    this.initDevicePixelRatio(() -> {
+      this.createOffscreen();
+      this.fillCanvas("white");
+    });
 
     this.configTabs();
     this.configPointIterators();
@@ -112,6 +128,12 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
           case "tryme":
             this.querySelector(".tool-composer-container-try-me").style.display = "flex";
             this.querySelector(".tool-composer-container-gradient-color").style.display = "none";
+
+            if (!this.offscreenCreated) {
+              this.offscreenCreated = true;
+              this.createOffscreen();
+              this.fillCanvas("white");
+            }
             break;
         }
         return null;
@@ -252,6 +274,7 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
       button.style.height = "38px";
       button.style.background = color;
       button.onclick = (event) -> {
+        this.fillCanvas(color);
         return null;
       };
 
@@ -259,8 +282,31 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
     });
   }
 
+  private void createOffscreen() {
+    this.canvas.width = Math.floor(this.canvas.clientWidth * window.devicePixelRatio);
+    this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
+
+    this.offscreenCanvas = new $OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
+    this.offscreenCtx = this.offscreenCanvas.getContext("2d");
+
+  }
+
+  private void fillCanvas(String background) {
+    this.background = background;
+
+    this.offscreenCtx.fillStyle = Z4Color.$getFillStyle(this.background);
+    this.offscreenCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+    this.ctx.save();
+    this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    this.ctx.drawImage(this.offscreenCanvas, 0, 0);
+    this.ctx.restore();
+  }
+
   @Override
   public void dispose() {
+    this.disposeDevicePixelRatio();
+
     this.stamperUI.dispose();
     this.tracerUI.dispose();
     this.spirographUI.dispose();

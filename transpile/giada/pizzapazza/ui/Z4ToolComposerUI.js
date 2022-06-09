@@ -15,6 +15,18 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
 
    gradientColorUI = new Z4GradientColorUI().setGradientColorLabel("COLOR", true, true).setVertical().appendToElement(this.querySelector(".tool-composer-container-gradient-color"));
 
+   canvas = this.querySelector(".tool-composer-canvas-try-me");
+
+   ctx = this.canvas.getContext("2d");
+
+   offscreenCanvas = null;
+
+   offscreenCtx = null;
+
+   offscreenCreated = false;
+
+   background = null;
+
    pointIterator = null;
 
    painter = null;
@@ -30,6 +42,10 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
    */
   constructor() {
     super(Z4ToolComposerUI.UI);
+    this.initDevicePixelRatio(() => {
+      this.createOffscreen();
+      this.fillCanvas("white");
+    });
     this.configTabs();
     this.configPointIterators();
     this.configPointPainters();
@@ -88,6 +104,11 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
           case "tryme":
             this.querySelector(".tool-composer-container-try-me").style.display = "flex";
             this.querySelector(".tool-composer-container-gradient-color").style.display = "none";
+            if (!this.offscreenCreated) {
+              this.offscreenCreated = true;
+              this.createOffscreen();
+              this.fillCanvas("white");
+            }
             break;
         }
         return null;
@@ -213,13 +234,32 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
       button.style.height = "38px";
       button.style.background = color;
       button.onclick = (event) => {
+        this.fillCanvas(color);
         return null;
       };
       standardColorButtons.appendChild(button);
     });
   }
 
+   createOffscreen() {
+    this.canvas.width = Math.floor(this.canvas.clientWidth * window.devicePixelRatio);
+    this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
+    this.offscreenCanvas = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
+    this.offscreenCtx = this.offscreenCanvas.getContext("2d");
+  }
+
+   fillCanvas(background) {
+    this.background = background;
+    this.offscreenCtx.fillStyle = Z4Color.getFillStyle(this.background);
+    this.offscreenCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.save();
+    this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    this.ctx.drawImage(this.offscreenCanvas, 0, 0);
+    this.ctx.restore();
+  }
+
    dispose() {
+    this.disposeDevicePixelRatio();
     this.stamperUI.dispose();
     this.tracerUI.dispose();
     this.spirographUI.dispose();
