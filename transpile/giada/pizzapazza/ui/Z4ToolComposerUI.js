@@ -17,7 +17,9 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
 
    canvas = this.querySelector(".tool-composer-canvas-try-me");
 
-   ctx = this.canvas.getContext("2d");
+   canvasCtx = this.canvas.getContext("2d");
+
+   canvasRect = null;
 
    offscreenCanvas = null;
 
@@ -26,6 +28,8 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
    offscreenCreated = false;
 
    background = null;
+
+   mouseDown = false;
 
    pointIterator = null;
 
@@ -71,6 +75,15 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
       this.spirographUI.setGradientColor(v);
       this.shape2DPainterUI.setGradientColor(v);
     };
+    if (Z4Loader.touch) {
+      this.canvas.ontouchstart = (event) => this.manageStart(event);
+      this.canvas.ontouchmove = (event) => this.manageContinue(event);
+      this.canvas.ontouchend = (event) => this.manageStop(event);
+    } else {
+      this.canvas.onmousedown = (event) => this.manageStart(event);
+      this.canvas.onmousemove = (event) => this.manageContinue(event);
+      this.canvas.onmouseup = (event) => this.manageStop(event);
+    }
   }
 
    configTabs() {
@@ -246,16 +259,17 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
     this.canvas.height = Math.floor(this.canvas.clientHeight * window.devicePixelRatio);
     this.offscreenCanvas = new OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
     this.offscreenCtx = this.offscreenCanvas.getContext("2d");
+    this.canvasRect = this.canvas.getBoundingClientRect();
   }
 
    fillCanvas(background) {
     this.background = background;
     this.offscreenCtx.fillStyle = Z4Color.getFillStyle(this.background);
     this.offscreenCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.save();
-    this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    this.ctx.drawImage(this.offscreenCanvas, 0, 0);
-    this.ctx.restore();
+    this.canvasCtx.save();
+    this.canvasCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    this.canvasCtx.drawImage(this.offscreenCanvas, 0, 0);
+    this.canvasCtx.restore();
   }
 
    dispose() {
@@ -264,5 +278,77 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
     this.tracerUI.dispose();
     this.spirographUI.dispose();
     this.shape2DPainterUI.dispose();
+  }
+
+   manageStart(event) {
+    this.mouseDown = true;
+    this.convertCoordinates(event);
+    if (this.pointIterator.draw(Z4Action.START, (event["clientX"] - this.canvasRect.left) * window.devicePixelRatio, (event["clientY"] - this.canvasRect.top) * window.devicePixelRatio)) {
+      let next = null;
+      while ((next = this.pointIterator.next()) !== null) {
+        let vector = next.getZ4Vector();
+        let ctx = next.isDrawBounds() ? this.canvasCtx : this.offscreenCtx;
+        ctx.save();
+        ctx.translate(vector.getX0(), vector.getY0());
+        ctx.rotate(vector.getPhase());
+        this.painter.draw(ctx, next, this.gradientColor);
+        ctx.restore();
+        if (!next.isDrawBounds()) {
+          this.canvasCtx.drawImage(this.offscreenCanvas, 0, 0);
+        }
+      }
+    }
+    return null;
+  }
+
+   manageContinue(event) {
+    this.convertCoordinates(event);
+    if (this.mouseDown) {
+      if (this.pointIterator.draw(Z4Action.CONTINUE, (event["clientX"] - this.canvasRect.left) * window.devicePixelRatio, (event["clientY"] - this.canvasRect.top) * window.devicePixelRatio)) {
+        let next = null;
+        while ((next = this.pointIterator.next()) !== null) {
+          let vector = next.getZ4Vector();
+          let ctx = next.isDrawBounds() ? this.canvasCtx : this.offscreenCtx;
+          ctx.save();
+          ctx.translate(vector.getX0(), vector.getY0());
+          ctx.rotate(vector.getPhase());
+          this.painter.draw(ctx, next, this.gradientColor);
+          ctx.restore();
+          if (!next.isDrawBounds()) {
+            this.canvasCtx.drawImage(this.offscreenCanvas, 0, 0);
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+   manageStop(event) {
+    this.mouseDown = false;
+    this.convertCoordinates(event);
+    if (this.pointIterator.draw(Z4Action.STOP, (event["clientX"] - this.canvasRect.left) * window.devicePixelRatio, (event["clientY"] - this.canvasRect.top) * window.devicePixelRatio)) {
+      let next = null;
+      while ((next = this.pointIterator.next()) !== null) {
+        let vector = next.getZ4Vector();
+        let ctx = next.isDrawBounds() ? this.canvasCtx : this.offscreenCtx;
+        ctx.save();
+        ctx.translate(vector.getX0(), vector.getY0());
+        ctx.rotate(vector.getPhase());
+        this.painter.draw(ctx, next, this.gradientColor);
+        ctx.restore();
+        if (!next.isDrawBounds()) {
+          this.canvasCtx.drawImage(this.offscreenCanvas, 0, 0);
+        }
+      }
+    }
+    return null;
+  }
+
+   convertCoordinates(event) {
+    if ((event).changedTouches) {
+      event["clientX"] = (event).changedTouches[0].clientX;
+      event["clientY"] = (event).changedTouches[0].clientY;
+    }
+    event.preventDefault();
   }
 }

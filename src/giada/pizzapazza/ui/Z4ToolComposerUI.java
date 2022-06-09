@@ -1,17 +1,23 @@
 package giada.pizzapazza.ui;
 
+import def.dom.ClientRect;
 import def.dom.Element;
+import def.dom.Event;
 import def.dom.HTMLElement;
 import def.dom.NodeList;
+import def.dom.TouchEvent;
 import giada.pizzapazza.Z4Loader;
 import giada.pizzapazza.color.Z4Color;
 import giada.pizzapazza.color.Z4GradientColor;
 import giada.pizzapazza.color.ui.Z4GradientColorUI;
+import giada.pizzapazza.iterator.Z4Action;
 import giada.pizzapazza.iterator.Z4PointIterator;
 import giada.pizzapazza.iterator.ui.Z4PointIteratorUI;
 import giada.pizzapazza.iterator.ui.Z4SpirographUI;
 import giada.pizzapazza.iterator.ui.Z4StamperUI;
 import giada.pizzapazza.iterator.ui.Z4TracerUI;
+import giada.pizzapazza.math.Z4Point;
+import giada.pizzapazza.math.Z4Vector;
 import giada.pizzapazza.painter.Z4Painter;
 import giada.pizzapazza.painter.ui.Z4PainterUI;
 import giada.pizzapazza.painter.ui.Z4Shape2DPainterUI;
@@ -20,6 +26,7 @@ import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$HTMLElement;
 import simulation.dom.$OffscreenCanvas;
+import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.window;
 
@@ -38,11 +45,13 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
   private final Z4GradientColorUI gradientColorUI = new Z4GradientColorUI().setGradientColorLabel("COLOR", true, true).setVertical().appendToElement(this.querySelector(".tool-composer-container-gradient-color"));
 
   private final $Canvas canvas = ($Canvas) this.querySelector(".tool-composer-canvas-try-me");
-  private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
+  private final $CanvasRenderingContext2D canvasCtx = this.canvas.getContext("2d");
+  private ClientRect canvasRect;
   private $OffscreenCanvas offscreenCanvas;
   private $CanvasRenderingContext2D offscreenCtx;
   private boolean offscreenCreated;
   private String background;
+  private boolean mouseDown;
 
   private Z4PointIterator<?> pointIterator;
   private Z4Painter<?> painter;
@@ -93,6 +102,16 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
 
       this.shape2DPainterUI.setGradientColor(v);
     };
+
+    if (Z4Loader.touch) {
+      this.canvas.ontouchstart = (event) -> this.manageStart(event);
+      this.canvas.ontouchmove = (event) -> this.manageContinue(event);
+      this.canvas.ontouchend = (event) -> this.manageStop(event);
+    } else {
+      this.canvas.onmousedown = (event) -> this.manageStart(event);
+      this.canvas.onmousemove = (event) -> this.manageContinue(event);
+      this.canvas.onmouseup = (event) -> this.manageStop(event);
+    }
   }
 
   private void configTabs() {
@@ -289,6 +308,7 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
     this.offscreenCanvas = new $OffscreenCanvas(this.canvas.clientWidth, this.canvas.clientHeight);
     this.offscreenCtx = this.offscreenCanvas.getContext("2d");
 
+    this.canvasRect = this.canvas.getBoundingClientRect();
   }
 
   private void fillCanvas(String background) {
@@ -297,10 +317,10 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
     this.offscreenCtx.fillStyle = Z4Color.$getFillStyle(this.background);
     this.offscreenCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-    this.ctx.save();
-    this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    this.ctx.drawImage(this.offscreenCanvas, 0, 0);
-    this.ctx.restore();
+    this.canvasCtx.save();
+    this.canvasCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    this.canvasCtx.drawImage(this.offscreenCanvas, 0, 0);
+    this.canvasCtx.restore();
   }
 
   @Override
@@ -312,5 +332,86 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
     this.spirographUI.dispose();
 
     this.shape2DPainterUI.dispose();
+  }
+
+  private Object manageStart(Event event) {
+    this.mouseDown = true;
+    this.convertCoordinates(event);
+
+    if (this.pointIterator.draw(Z4Action.START, ((Double) event.$get("clientX") - this.canvasRect.left) * window.devicePixelRatio, ((Double) event.$get("clientY") - this.canvasRect.top) * window.devicePixelRatio)) {
+      Z4Point next;
+      while ((next = this.pointIterator.next()) != null) {
+        Z4Vector vector = next.getZ4Vector();
+        $CanvasRenderingContext2D ctx = next.isDrawBounds() ? this.canvasCtx : this.offscreenCtx;
+
+        ctx.save();
+        ctx.translate(vector.getX0(), vector.getY0());
+        ctx.rotate(vector.getPhase());
+        this.painter.draw(ctx, next, this.gradientColor);
+        ctx.restore();
+
+        if (!next.isDrawBounds()) {
+          this.canvasCtx.drawImage(this.offscreenCanvas, 0, 0);
+        }
+      }
+    }
+    return null;
+  }
+
+  private Object manageContinue(Event event) {
+    this.convertCoordinates(event);
+
+    if (this.mouseDown) {
+      if (this.pointIterator.draw(Z4Action.CONTINUE, ((Double) event.$get("clientX") - this.canvasRect.left) * window.devicePixelRatio, ((Double) event.$get("clientY") - this.canvasRect.top) * window.devicePixelRatio)) {
+        Z4Point next;
+        while ((next = this.pointIterator.next()) != null) {
+          Z4Vector vector = next.getZ4Vector();
+          $CanvasRenderingContext2D ctx = next.isDrawBounds() ? this.canvasCtx : this.offscreenCtx;
+
+          ctx.save();
+          ctx.translate(vector.getX0(), vector.getY0());
+          ctx.rotate(vector.getPhase());
+          this.painter.draw(ctx, next, this.gradientColor);
+          ctx.restore();
+
+          if (!next.isDrawBounds()) {
+            this.canvasCtx.drawImage(this.offscreenCanvas, 0, 0);
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  private Object manageStop(Event event) {
+    this.mouseDown = false;
+    this.convertCoordinates(event);
+
+    if (this.pointIterator.draw(Z4Action.STOP, ((Double) event.$get("clientX") - this.canvasRect.left) * window.devicePixelRatio, ((Double) event.$get("clientY") - this.canvasRect.top) * window.devicePixelRatio)) {
+      Z4Point next;
+      while ((next = this.pointIterator.next()) != null) {
+        Z4Vector vector = next.getZ4Vector();
+        $CanvasRenderingContext2D ctx = next.isDrawBounds() ? this.canvasCtx : this.offscreenCtx;
+
+        ctx.save();
+        ctx.translate(vector.getX0(), vector.getY0());
+        ctx.rotate(vector.getPhase());
+        this.painter.draw(ctx, next, this.gradientColor);
+        ctx.restore();
+
+        if (!next.isDrawBounds()) {
+          this.canvasCtx.drawImage(this.offscreenCanvas, 0, 0);
+        }
+      }
+    }
+    return null;
+  }
+
+  private void convertCoordinates(Event event) {
+    if ($exists(((TouchEvent) event).changedTouches)) {
+      event.$set("clientX", ((TouchEvent) event).changedTouches.$get(0).clientX);
+      event.$set("clientY", ((TouchEvent) event).changedTouches.$get(0).clientY);
+    }
+    event.preventDefault();
   }
 }
