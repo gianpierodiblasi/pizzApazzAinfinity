@@ -107,6 +107,7 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
         switch(anchor.getAttribute("data-value")) {
           case "stamper":
           case "tracer":
+          case "airbrush":
           case "spirograph":
             this.querySelector(".tool-composer-container-point-iterator").style.display = "flex";
             this.querySelector(".tool-composer-container-gradient-color").style.display = "block";
@@ -160,6 +161,9 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
           case "tracer":
             this.querySelector(".tool-composer-container-point-iterator > div:nth-child(3)").style.display = "block";
             this.pointIterator = this.tracerUI.getValue();
+            break;
+          case "airbrush":
+            this.pointIterator = new Z4Airbrush();
             break;
           case "spirograph":
             this.querySelector(".tool-composer-container-point-iterator > div:nth-child(4)").style.display = "block";

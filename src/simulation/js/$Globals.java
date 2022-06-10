@@ -43,6 +43,10 @@ public class $Globals {
     return 0;
   }
 
+  public static int setInternal($Apply_0_Void function, double milliseconds) {
+    return 0;
+  }
+  
   private $Globals() {
   }
 }

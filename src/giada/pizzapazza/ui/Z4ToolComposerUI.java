@@ -11,6 +11,7 @@ import giada.pizzapazza.color.Z4Color;
 import giada.pizzapazza.color.Z4GradientColor;
 import giada.pizzapazza.color.ui.Z4GradientColorUI;
 import giada.pizzapazza.iterator.Z4Action;
+import giada.pizzapazza.iterator.Z4Airbrush;
 import giada.pizzapazza.iterator.Z4PointIterator;
 import giada.pizzapazza.iterator.ui.Z4PointIteratorUI;
 import giada.pizzapazza.iterator.ui.Z4SpirographUI;
@@ -137,6 +138,7 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
         switch (anchor.getAttribute("data-value")) {
           case "stamper":
           case "tracer":
+          case "airbrush":
           case "spirograph":
             this.querySelector(".tool-composer-container-point-iterator").style.display = "flex";
             this.querySelector(".tool-composer-container-gradient-color").style.display = "block";
@@ -196,6 +198,9 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
           case "tracer":
             this.querySelector(".tool-composer-container-point-iterator > div:nth-child(3)").style.display = "block";
             this.pointIterator = this.tracerUI.getValue();
+            break;
+          case "airbrush":
+            this.pointIterator = new Z4Airbrush();
             break;
           case "spirograph":
             this.querySelector(".tool-composer-container-point-iterator > div:nth-child(4)").style.display = "block";
