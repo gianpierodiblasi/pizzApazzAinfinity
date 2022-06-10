@@ -115,16 +115,23 @@ public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
    * Checks if this Z4PointIterator is an infinite point generator (for example
    * an airbrush)
    *
-   * @return true if this Z4PointIterator is an infinite point generator, false otherwise
+   * @return true if this Z4PointIterator is an infinite point generator, false
+   * otherwise
    */
   public boolean isInfinitePointGenerator() {
     return false;
   }
 
+  /**
+   * Returns the sleeping time between a point generation and the successive
+   *
+   * @return The sleeping time between a point generation and the successive (in
+   * milliseconds)
+   */
   public double getInfinitePointGeneratorSleep() {
     return 0;
   }
-  
+
   /**
    * Draws a demo of this Z4PointIterator
    *
