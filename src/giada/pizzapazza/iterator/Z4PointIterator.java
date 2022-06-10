@@ -121,6 +121,10 @@ public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
     return false;
   }
 
+  public double getInfinitePointGeneratorSleep() {
+    return 0;
+  }
+  
   /**
    * Draws a demo of this Z4PointIterator
    *

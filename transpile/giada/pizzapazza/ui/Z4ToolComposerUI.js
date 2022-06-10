@@ -331,9 +331,6 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
     this.convertCoordinates(event);
     if (doIt && this.pointIterator.draw(action, event["pageX"] - this.canvasRect.left, event["pageY"] - this.canvasRect.top)) {
       this.iteratePoint();
-      if (this.pointIterator.isInfinitePointGenerator() && this.mouseDown) {
-        setTimeout(() => this.iteratePoint(), 50);
-      }
     }
   }
 
@@ -353,6 +350,9 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
         this.canvasCtx.drawImage(this.offscreenCanvas, 0, 0);
         this.canvasCtx.restore();
       }
+    }
+    if (this.pointIterator.isInfinitePointGenerator() && this.mouseDown) {
+      setTimeout(() => this.iteratePoint(), this.pointIterator.getInfinitePointGeneratorSleep());
     }
   }
 }

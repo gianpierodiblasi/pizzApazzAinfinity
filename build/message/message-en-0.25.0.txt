@@ -72,3 +72,5 @@ DELTA_X = Delta X
 DELTA_Y = Delta Y
 BORDER = Border
 ARROW_MODULE = Arrow Module
+RADIUS = Radius
+SPEED = Speed

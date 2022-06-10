@@ -634,6 +634,8 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
 
    tracerUI = new Z4TracerUI().appendToElement(this.querySelector(".tool-composer-container-point-iterator"));
 
+   airbrushUI = new Z4AirbrushUI().appendToElement(this.querySelector(".tool-composer-container-point-iterator"));
+
    spirographUI = new Z4SpirographUI().appendToElement(this.querySelector(".tool-composer-container-point-iterator"));
 
    shape2DPainterUI = new Z4Shape2DPainterUI().appendToElement(this.querySelector(".tool-composer-container-painter"));
@@ -684,12 +686,14 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
     this.gradientColor = this.gradientColorUI.getValue();
     this.setPointIteratorUI(this.stamperUI);
     this.setPointIteratorUI(this.tracerUI);
+    this.setPointIteratorUI(this.airbrushUI);
     this.setPointIteratorUI(this.spirographUI);
     this.setPainterUI(this.shape2DPainterUI);
     this.gradientColorUI.oninput = (v) => {
       this.gradientColor = v;
       this.stamperUI.setGradientColor(v);
       this.tracerUI.setGradientColor(v);
+      this.airbrushUI.setGradientColor(v);
       this.spirographUI.setGradientColor(v);
       this.shape2DPainterUI.setGradientColor(v);
     };
@@ -697,6 +701,7 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
       this.gradientColor = v;
       this.stamperUI.setGradientColor(v);
       this.tracerUI.setGradientColor(v);
+      this.airbrushUI.setGradientColor(v);
       this.spirographUI.setGradientColor(v);
       this.shape2DPainterUI.setGradientColor(v);
     };
@@ -776,6 +781,7 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
         this.querySelector(".tool-composer-container-point-iterator > div:nth-child(2)").style.display = "none";
         this.querySelector(".tool-composer-container-point-iterator > div:nth-child(3)").style.display = "none";
         this.querySelector(".tool-composer-container-point-iterator > div:nth-child(4)").style.display = "none";
+        this.querySelector(".tool-composer-container-point-iterator > div:nth-child(5)").style.display = "none";
         this.querySelector(".tool-composer-nav .nav-link.active").setAttribute("data-value", dataValue);
         this.querySelector(".tool-composer-nav .nav-link.active img").setAttribute("src", Z4ToolComposerUI.PATH + "z4toolcomposer_" + dataValue + ".svg");
         switch(dataValue) {
@@ -788,10 +794,11 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
             this.pointIterator = this.tracerUI.getValue();
             break;
           case "airbrush":
-            this.pointIterator = new Z4Airbrush();
+            this.querySelector(".tool-composer-container-point-iterator > div:nth-child(4)").style.display = "block";
+            this.pointIterator = this.airbrushUI.getValue();
             break;
           case "spirograph":
-            this.querySelector(".tool-composer-container-point-iterator > div:nth-child(4)").style.display = "block";
+            this.querySelector(".tool-composer-container-point-iterator > div:nth-child(5)").style.display = "block";
             this.pointIterator = this.spirographUI.getValue();
             break;
         }
@@ -801,6 +808,7 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
     }
     this.querySelector(".tool-composer-container-point-iterator > div:nth-child(3)").style.display = "none";
     this.querySelector(".tool-composer-container-point-iterator > div:nth-child(4)").style.display = "none";
+    this.querySelector(".tool-composer-container-point-iterator > div:nth-child(5)").style.display = "none";
   }
 
    configPointPainters() {
@@ -830,6 +838,7 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
         }
         this.stamperUI.setPainter(this.painter);
         this.tracerUI.setPainter(this.painter);
+        this.airbrushUI.setPainter(this.painter);
         this.spirographUI.setPainter(this.painter);
         return null;
       };
@@ -856,12 +865,14 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
       this.painter = v;
       this.stamperUI.setPainter(v);
       this.tracerUI.setPainter(v);
+      this.airbrushUI.setPainter(v);
       this.spirographUI.setPainter(v);
     };
     painterUI.onchange = (v) => {
       this.painter = v;
       this.stamperUI.setPainter(v);
       this.tracerUI.setPainter(v);
+      this.airbrushUI.setPainter(v);
       this.spirographUI.setPainter(v);
     };
   }
@@ -909,6 +920,7 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
     this.resizeObserver.unobserve(this.canvas);
     this.stamperUI.dispose();
     this.tracerUI.dispose();
+    this.airbrushUI.dispose();
     this.spirographUI.dispose();
     this.shape2DPainterUI.dispose();
   }
@@ -943,22 +955,29 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
    manage(doIt, event, action) {
     this.convertCoordinates(event);
     if (doIt && this.pointIterator.draw(action, event["pageX"] - this.canvasRect.left, event["pageY"] - this.canvasRect.top)) {
-      let next = null;
-      while ((next = this.pointIterator.next()) !== null) {
-        let vector = next.getZ4Vector();
-        let ctx = next.isDrawBounds() ? this.canvasCtx : this.offscreenCtx;
-        ctx.save();
-        ctx.translate(vector.getX0(), vector.getY0());
-        ctx.rotate(vector.getPhase());
-        this.painter.draw(ctx, next, this.gradientColor);
-        ctx.restore();
-        if (!next.isDrawBounds()) {
-          this.canvasCtx.save();
-          this.canvasCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
-          this.canvasCtx.drawImage(this.offscreenCanvas, 0, 0);
-          this.canvasCtx.restore();
-        }
+      this.iteratePoint();
+    }
+  }
+
+   iteratePoint() {
+    let next = null;
+    while ((next = this.pointIterator.next()) !== null) {
+      let vector = next.getZ4Vector();
+      let ctx = next.isDrawBounds() ? this.canvasCtx : this.offscreenCtx;
+      ctx.save();
+      ctx.translate(vector.getX0(), vector.getY0());
+      ctx.rotate(vector.getPhase());
+      this.painter.draw(ctx, next, this.gradientColor);
+      ctx.restore();
+      if (!next.isDrawBounds()) {
+        this.canvasCtx.save();
+        this.canvasCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        this.canvasCtx.drawImage(this.offscreenCanvas, 0, 0);
+        this.canvasCtx.restore();
       }
+    }
+    if (this.pointIterator.isInfinitePointGenerator() && this.mouseDown) {
+      setTimeout(() => this.iteratePoint(), this.pointIterator.getInfinitePointGeneratorSleep());
     }
   }
 }
@@ -4153,7 +4172,7 @@ class Z4ArrowPainter extends Z4Painter {
     let x = point.getIntensity() * (point.isUseVectorModuleAsSize() ? point.getZ4Vector().getModule() : this.module);
     context.save();
     context.lineWidth = 1;
-    context.strokeStyle = this.getColor(document.body.classList.contains("z4-dark") ? "white" : "black");
+    context.strokeStyle = this.getColor("black");
     context.beginPath();
     context.arc(0, 0, 2, 0, Z4Math.TWO_PI);
     context.stroke();
@@ -4823,6 +4842,20 @@ class Z4PointIterator {
   }
 
   /**
+   * Checks if this Z4PointIterator is an infinite point generator (for example
+   * an airbrush)
+   *
+   * @return true if this Z4PointIterator is an infinite point generator, false otherwise
+   */
+   isInfinitePointGenerator() {
+    return false;
+  }
+
+   getInfinitePointGeneratorSleep() {
+    return 0;
+  }
+
+  /**
    * Draws a demo of this Z4PointIterator
    *
    * @param context The context where to draw the demo
@@ -4889,12 +4922,11 @@ class Z4Stamper extends Z4PointIterator {
    drawDemo(context, painter, gradientColor, width, height) {
     let finalPainter = painter ? painter : new Z4ArrowPainter();
     let finalGradientColor = gradientColor ? gradientColor : new Z4GradientColor();
-    let fillStyle = document.body.classList.contains("z4-dark") ? "white" : "black";
     this.initDraw(width, height).forEach(point => {
       this.draw(Z4Action.START, point["x"], point["y"]);
       context.save();
       context.lineWidth = 1;
-      context.fillStyle = Z4Color.getFillStyle(fillStyle);
+      context.fillStyle = Z4Color.getFillStyle("black");
       context.beginPath();
       context.arc(this.P["x"], this.P["y"], 2, 0, Z4Math.TWO_PI);
       context.fill();
@@ -5142,26 +5174,25 @@ class Z4Tracer extends Z4PointIterator {
    drawDemo(context, painter, gradientColor, width, height) {
     painter = painter ? painter : new Z4ArrowPainter();
     gradientColor = gradientColor ? gradientColor : new Z4GradientColor();
-    let fillStyle = document.body.classList.contains("z4-dark") ? "white" : "black";
     let bezier = width > height ? new Bezier(width / 10, height / 3, width / 2, 3 * height / 2, width / 2, -height / 2, 9 * width / 10, height / 2) : new Bezier(width / 3, 9 * height / 10, 3 * width / 2, height / 2, -width / 2, height / 2, width / 2, height / 10);
     let p = bezier.get(0);
     this.draw(Z4Action.START, p.x, p.y);
     for (let s = 0.1; s < 1; s += 0.1) {
       p = bezier.get(s);
       this.draw(Z4Action.CONTINUE, p.x, p.y);
-      this.drawDemoPoint(context, p, painter, gradientColor, fillStyle);
+      this.drawDemoPoint(context, p, painter, gradientColor);
     }
     p = bezier.get(1);
     this.draw(Z4Action.CONTINUE, p.x, p.y);
-    this.drawDemoPoint(context, p, painter, gradientColor, fillStyle);
+    this.drawDemoPoint(context, p, painter, gradientColor);
     this.draw(Z4Action.STOP, p.x, p.y);
-    this.drawDemoPoint(context, p, painter, gradientColor, fillStyle);
+    this.drawDemoPoint(context, p, painter, gradientColor);
   }
 
-   drawDemoPoint(context, p, painter, gradientColor, fillStyle) {
+   drawDemoPoint(context, p, painter, gradientColor) {
     context.save();
     context.lineWidth = 1;
-    context.fillStyle = Z4Color.getFillStyle(fillStyle);
+    context.fillStyle = Z4Color.getFillStyle("black");
     context.beginPath();
     context.arc(p.x, p.y, 2, 0, Z4Math.TWO_PI);
     context.fill();
@@ -5299,29 +5330,30 @@ class Z4Tracer extends Z4PointIterator {
  */
 class Z4Airbrush extends Z4PointIterator {
 
+   multiplicity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(50).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
+
    radius = 50;
 
-   speed = 50;
+   speed = 5;
 
-  // private int id;
-   currentSpeed = 0;
+   currentMultiplicityCounter = 0;
+
+   currentMultiplicityTotal = 0;
 
    draw(action, x, y) {
     if (action === Z4Action.START) {
       this.P["x"] = x;
       this.P["y"] = y;
-      this.currentSpeed = 0;
+      this.currentMultiplicityCounter = 0;
+      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
       this.hasNext = true;
-      // this.onPaint();
-      // this.id = setInternal(() -> this.onPaint(), 500 / this.speed.next());
       return true;
     } else if (action === Z4Action.CONTINUE) {
       this.P["x"] = x;
       this.P["y"] = y;
       this.hasNext = true;
-      return true;
+      return false;
     } else if (action === Z4Action.STOP) {
-      // clearInterval(this.id);
       this.hasNext = false;
       return false;
     } else {
@@ -5331,22 +5363,38 @@ class Z4Airbrush extends Z4PointIterator {
 
    next() {
     if (!this.hasNext) {
+      this.currentMultiplicityCounter = 0;
+      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
+      this.hasNext = true;
       return null;
     } else {
-      this.currentSpeed++;
-      this.hasNext = this.currentSpeed < this.speed;
+      this.currentMultiplicityCounter++;
+      this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
       let currentRadius = this.radius * Math.random();
       let currenAngle = Z4Math.TWO_PI * Math.random();
       let angle = this.rotation.next(currenAngle);
       this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P["x"] + currentRadius * Math.cos(currenAngle), this.P["y"] + currentRadius * Math.sin(currenAngle), 1, angle));
       this.rotation.nextSide(this.z4Point, null);
-      this.progression.next(this.z4Point);
+      if (!this.progression.isTemporal() || this.currentMultiplicityCounter === 1) {
+        this.progression.next(this.z4Point);
+      } else {
+        this.z4Point.setLighting(this.progression.getLighting());
+        this.z4Point.setDrawBounds(false);
+      }
       if (this.progression.isRelativeToPath()) {
         this.z4Point.setDrawBounds(false);
         this.z4Point.setColorPosition(currentRadius / this.radius);
       }
       return this.z4Point;
     }
+  }
+
+   isInfinitePointGenerator() {
+    return true;
+  }
+
+   getInfinitePointGeneratorSleep() {
+    return 250 / this.speed;
   }
 
    drawDemo(context, painter, gradientColor, width, height) {
@@ -5365,9 +5413,24 @@ class Z4Airbrush extends Z4PointIterator {
     this.draw(Z4Action.STOP, width / 2, height / 2);
   }
 
-  // private void onPaint() {
-  // }
-  // 
+  /**
+   * sets the multiplicity
+   * @param multiplicity The multiplicity
+   * @return This Z4Airbrush
+   */
+   setMultiplicity(multiplicity) {
+    this.multiplicity = multiplicity;
+    return this;
+  }
+
+  /**
+   * Returns the multiplicity
+   * @return The multiplicity
+   */
+   getMultiplicity() {
+    return this.multiplicity;
+  }
+
   /**
    * Sets the radius
    *
@@ -5385,7 +5448,7 @@ class Z4Airbrush extends Z4PointIterator {
    * @return The radius
    */
    getRadius() {
-    return radius;
+    return this.radius;
   }
 
   /**
@@ -5405,7 +5468,7 @@ class Z4Airbrush extends Z4PointIterator {
    * @return The speed
    */
    getSpeed() {
-    return speed;
+    return this.speed;
   }
 }
 /**
@@ -5660,7 +5723,7 @@ class Z4PointIteratorUI extends Z4AbstractComponentWithValueUI {
  */
 class Z4StamperUI extends Z4PointIteratorUI {
 
-   multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
+   multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50, true).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
 
    push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".stamper-container-first-row"));
 
@@ -5706,7 +5769,7 @@ class Z4StamperUI extends Z4PointIteratorUI {
  */
 class Z4TracerUI extends Z4PointIteratorUI {
 
-   multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
+   multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50, true).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
 
    push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".tracer-container-first-row"));
 
@@ -5801,9 +5864,12 @@ class Z4TracerUI extends Z4PointIteratorUI {
  */
 class Z4AirbrushUI extends Z4PointIteratorUI {
 
-  // private final Z4FancifulValueUI multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".airbrush-container-first-row"));
-  // private final Z4FancifulValueUI push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".airbrush-container-first-row"));
-  // 
+   multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 100, true).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".airbrush-container-first-row"));
+
+   radius = new Z4SignedValueUI().setValueLabel("RADIUS", true, true).setRange(1, 100, true).setSignVisible(false).setCompact().appendToElement(this.querySelector(".airbrush-container-first-row"));
+
+   speed = new Z4SignedValueUI().setValueLabel("SPEED", true, true).setRange(1, 10, true).setSignVisible(false).setCompact().appendToElement(this.querySelector(".airbrush-container-first-row"));
+
   static  UI = Z4HTMLFactory.get("giada/pizzapazza/iterator/ui/Z4AirbrushUI.html");
 
   /**
@@ -5811,32 +5877,37 @@ class Z4AirbrushUI extends Z4PointIteratorUI {
    */
   constructor() {
     super(Z4AirbrushUI.UI);
-    // this.multiplicity.oninput = (v) -> this.setMP(v, null, false);
-    // this.multiplicity.onchange = (v) -> this.setMP(v, null, true);
-    // this.push.oninput = (v) -> this.setMP(null, v, false);
-    // this.push.onchange = (v) -> this.setMP(null, v, true);
+    this.multiplicity.oninput = (v) => this.setMRS(v, null, null, false);
+    this.multiplicity.onchange = (v) => this.setMRS(v, null, null, true);
+    this.radius.oninput = (v) => this.setMRS(null, v, null, false);
+    this.radius.onchange = (v) => this.setMRS(null, v, null, true);
+    this.speed.oninput = (v) => this.setMRS(null, null, v, false);
+    this.speed.onchange = (v) => this.setMRS(null, null, v, true);
     this.setValue(new Z4Airbrush());
   }
 
-  // private void setMP(Z4FancifulValue multiplicity, Z4FancifulValue push, boolean onchange) {
-  // if ($exists(multiplicity)) {
-  // this.value.setMultiplicity(multiplicity);
-  // }
-  // if ($exists(push)) {
-  // this.value.setPush(push);
-  // }
-  // 
-  // this.drawCanvas();
-  // 
-  // if (onchange) {
-  // this.onchange.$apply(this.value);
-  // } else {
-  // this.oninput.$apply(this.value);
-  // }
-  // }
+   setMRS(multiplicity, radius, speed, onchange) {
+    if (multiplicity) {
+      this.value.setMultiplicity(multiplicity);
+    }
+    if (radius) {
+      this.value.setRadius(radius.getValue());
+    }
+    if (speed) {
+      this.value.setSpeed(speed.getValue());
+    }
+    this.drawCanvas();
+    if (onchange) {
+      this.onchange(this.value);
+    } else {
+      this.oninput(this.value);
+    }
+  }
+
    setValue(value) {
-    // this.multiplicity.setValue(value.getMultiplicity());
-    // this.push.setValue(value.getPush());
+    this.multiplicity.setValue(value.getMultiplicity());
+    this.radius.setValue(new Z4SignedValue().setValue(value.getRadius()));
+    this.speed.setValue(new Z4SignedValue().setValue(value.getSpeed()));
     return super.setValue(value);
   }
 }

@@ -110,6 +110,10 @@ class Z4PointIterator {
     return false;
   }
 
+   getInfinitePointGeneratorSleep() {
+    return 0;
+  }
+
   /**
    * Draws a demo of this Z4PointIterator
    *
