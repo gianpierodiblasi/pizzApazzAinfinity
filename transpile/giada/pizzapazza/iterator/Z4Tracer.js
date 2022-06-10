@@ -176,26 +176,25 @@ class Z4Tracer extends Z4PointIterator {
    drawDemo(context, painter, gradientColor, width, height) {
     painter = painter ? painter : new Z4ArrowPainter();
     gradientColor = gradientColor ? gradientColor : new Z4GradientColor();
-    let fillStyle = document.body.classList.contains("z4-dark") ? "white" : "black";
     let bezier = width > height ? new Bezier(width / 10, height / 3, width / 2, 3 * height / 2, width / 2, -height / 2, 9 * width / 10, height / 2) : new Bezier(width / 3, 9 * height / 10, 3 * width / 2, height / 2, -width / 2, height / 2, width / 2, height / 10);
     let p = bezier.get(0);
     this.draw(Z4Action.START, p.x, p.y);
     for (let s = 0.1; s < 1; s += 0.1) {
       p = bezier.get(s);
       this.draw(Z4Action.CONTINUE, p.x, p.y);
-      this.drawDemoPoint(context, p, painter, gradientColor, fillStyle);
+      this.drawDemoPoint(context, p, painter, gradientColor);
     }
     p = bezier.get(1);
     this.draw(Z4Action.CONTINUE, p.x, p.y);
-    this.drawDemoPoint(context, p, painter, gradientColor, fillStyle);
+    this.drawDemoPoint(context, p, painter, gradientColor);
     this.draw(Z4Action.STOP, p.x, p.y);
-    this.drawDemoPoint(context, p, painter, gradientColor, fillStyle);
+    this.drawDemoPoint(context, p, painter, gradientColor);
   }
 
-   drawDemoPoint(context, p, painter, gradientColor, fillStyle) {
+   drawDemoPoint(context, p, painter, gradientColor) {
     context.save();
     context.lineWidth = 1;
-    context.fillStyle = Z4Color.getFillStyle(fillStyle);
+    context.fillStyle = Z4Color.getFillStyle("black");
     context.beginPath();
     context.arc(p.x, p.y, 2, 0, Z4Math.TWO_PI);
     context.fill();

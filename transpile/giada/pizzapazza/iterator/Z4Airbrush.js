@@ -9,7 +9,6 @@ class Z4Airbrush extends Z4PointIterator {
 
    speed = 50;
 
-  // private int id;
    currentSpeed = 0;
 
    draw(action, x, y) {
@@ -18,16 +17,13 @@ class Z4Airbrush extends Z4PointIterator {
       this.P["y"] = y;
       this.currentSpeed = 0;
       this.hasNext = true;
-      // this.onPaint();
-      // this.id = setInternal(() -> this.onPaint(), 500 / this.speed.next());
       return true;
     } else if (action === Z4Action.CONTINUE) {
       this.P["x"] = x;
       this.P["y"] = y;
       this.hasNext = true;
-      return true;
+      return false;
     } else if (action === Z4Action.STOP) {
-      // clearInterval(this.id);
       this.hasNext = false;
       return false;
     } else {
@@ -55,8 +51,63 @@ class Z4Airbrush extends Z4PointIterator {
     }
   }
 
-   drawDemo(context, painter, gradientColor, width, height) {
+   isInfinitePointGenerator() {
+    return true;
   }
-  // private void onPaint() {
-  // }
+
+   drawDemo(context, painter, gradientColor, width, height) {
+    let finalPainter = painter ? painter : new Z4ArrowPainter();
+    let finalGradientColor = gradientColor ? gradientColor : new Z4GradientColor();
+    this.draw(Z4Action.START, width / 2, height / 2);
+    let next = null;
+    while ((next = this.next()) !== null) {
+      let vector = next.getZ4Vector();
+      context.save();
+      context.translate(vector.getX0(), vector.getY0());
+      context.rotate(vector.getPhase());
+      finalPainter.draw(context, next, finalGradientColor);
+      context.restore();
+    }
+    this.draw(Z4Action.STOP, width / 2, height / 2);
+  }
+
+  /**
+   * Sets the radius
+   *
+   * @param radius The radius
+   * @return This Z4Airbrush
+   */
+   setRadius(radius) {
+    this.radius = radius;
+    return this;
+  }
+
+  /**
+   * Returns the radius
+   *
+   * @return The radius
+   */
+   getRadius() {
+    return this.radius;
+  }
+
+  /**
+   * Sets the speed
+   *
+   * @param speed The speed
+   * @return This Z4Airbrush
+   */
+   setSpeed(speed) {
+    this.speed = speed;
+    return this;
+  }
+
+  /**
+   * Returns the speed
+   *
+   * @return The speed
+   */
+   getSpeed() {
+    return this.speed;
+  }
 }

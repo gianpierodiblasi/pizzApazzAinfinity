@@ -4,7 +4,6 @@ import giada.pizzapazza.color.Z4GradientColor;
 import giada.pizzapazza.math.Z4Math;
 import giada.pizzapazza.math.Z4Point;
 import simulation.dom.$CanvasRenderingContext2D;
-import static simulation.js.$Globals.document;
 
 /**
  * The painter of arrows, used only for testing purpose
@@ -44,7 +43,7 @@ public class Z4ArrowPainter extends Z4Painter<Z4ArrowPainter> {
     context.save();
     context.lineWidth = 1;
 
-    context.strokeStyle = this.$getColor(document.body.classList.contains("z4-dark") ? "white" : "black");
+    context.strokeStyle = this.$getColor("black");
     context.beginPath();
     context.arc(0, 0, 2, 0, Z4Math.TWO_PI);
     context.stroke();

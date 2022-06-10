@@ -72,3 +72,5 @@ DELTA_X = Delta X
 DELTA_Y = Delta Y
 BORDER = Bordo
 ARROW_MODULE = Modulo Freccia
+RADIUS = Raggio
+SPEED = Velocità

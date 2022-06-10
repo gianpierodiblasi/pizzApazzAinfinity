@@ -53,12 +53,11 @@ class Z4Stamper extends Z4PointIterator {
    drawDemo(context, painter, gradientColor, width, height) {
     let finalPainter = painter ? painter : new Z4ArrowPainter();
     let finalGradientColor = gradientColor ? gradientColor : new Z4GradientColor();
-    let fillStyle = document.body.classList.contains("z4-dark") ? "white" : "black";
     this.initDraw(width, height).forEach(point => {
       this.draw(Z4Action.START, point["x"], point["y"]);
       context.save();
       context.lineWidth = 1;
-      context.fillStyle = Z4Color.getFillStyle(fillStyle);
+      context.fillStyle = Z4Color.getFillStyle("black");
       context.beginPath();
       context.arc(this.P["x"], this.P["y"], 2, 0, Z4Math.TWO_PI);
       context.fill();

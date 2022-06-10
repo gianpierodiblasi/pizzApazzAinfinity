@@ -14,7 +14,6 @@ import giada.pizzapazza.painter.Z4ArrowPainter;
 import giada.pizzapazza.painter.Z4Painter;
 import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
-import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.parseInt;
 import simulation.js.$Object;
 
@@ -80,13 +79,12 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
     Z4Painter<?> finalPainter = $exists(painter) ? painter : new Z4ArrowPainter();
     Z4GradientColor finalGradientColor = $exists(gradientColor) ? gradientColor : new Z4GradientColor();
 
-    String fillStyle = document.body.classList.contains("z4-dark") ? "white" : "black";
     this.initDraw(width, height).forEach(point -> {
       this.draw(Z4Action.START, point.$get("x"), point.$get("y"));
 
       context.save();
       context.lineWidth = 1;
-      context.fillStyle = Z4Color.$getFillStyle(fillStyle);
+      context.fillStyle = Z4Color.$getFillStyle("black");
       context.beginPath();
       context.arc(this.P.$get("x"), this.P.$get("y"), 2, 0, Z4Math.TWO_PI);
       context.fill();

@@ -17,7 +17,6 @@ import simulation.bezier.$Bezier;
 import simulation.bezier.$BezierPoint;
 import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
-import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.parseInt;
 import simulation.js.$Object;
 
@@ -202,8 +201,6 @@ public class Z4Tracer extends Z4PointIterator<Z4Tracer> {
     painter = $exists(painter) ? painter : new Z4ArrowPainter();
     gradientColor = $exists(gradientColor) ? gradientColor : new Z4GradientColor();
 
-    String fillStyle = document.body.classList.contains("z4-dark") ? "white" : "black";
-
     $Bezier bezier = width > height
             ? new $Bezier(width / 10, height / 3, width / 2, 3 * height / 2, width / 2, -height / 2, 9 * width / 10, height / 2)
             : new $Bezier(width / 3, 9 * height / 10, 3 * width / 2, height / 2, -width / 2, height / 2, width / 2, height / 10);
@@ -214,20 +211,20 @@ public class Z4Tracer extends Z4PointIterator<Z4Tracer> {
     for (double s = 0.1; s < 1; s += 0.1) {
       p = bezier.get(s);
       this.draw(Z4Action.CONTINUE, p.x, p.y);
-      this.drawDemoPoint(context, p, painter, gradientColor, fillStyle);
+      this.drawDemoPoint(context, p, painter, gradientColor);
     }
 
     p = bezier.get(1);
     this.draw(Z4Action.CONTINUE, p.x, p.y);
-    this.drawDemoPoint(context, p, painter, gradientColor, fillStyle);
+    this.drawDemoPoint(context, p, painter, gradientColor);
     this.draw(Z4Action.STOP, p.x, p.y);
-    this.drawDemoPoint(context, p, painter, gradientColor, fillStyle);
+    this.drawDemoPoint(context, p, painter, gradientColor);
   }
 
-  private void drawDemoPoint($CanvasRenderingContext2D context, $BezierPoint p, Z4Painter<?> painter, Z4GradientColor gradientColor, String fillStyle) {
+  private void drawDemoPoint($CanvasRenderingContext2D context, $BezierPoint p, Z4Painter<?> painter, Z4GradientColor gradientColor) {
     context.save();
     context.lineWidth = 1;
-    context.fillStyle = Z4Color.$getFillStyle(fillStyle);
+    context.fillStyle = Z4Color.$getFillStyle("black");
     context.beginPath();
     context.arc(p.x, p.y, 2, 0, Z4Math.TWO_PI);
     context.fill();

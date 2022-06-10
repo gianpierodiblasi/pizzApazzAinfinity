@@ -112,6 +112,16 @@ public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
   public abstract Z4Point next();
 
   /**
+   * Checks if this Z4PointIterator is an infinite point generator (for example
+   * an airbrush)
+   *
+   * @return true if this Z4PointIterator is an infinite point generator, false otherwise
+   */
+  public boolean isInfinitePointGenerator() {
+    return false;
+  }
+
+  /**
    * Draws a demo of this Z4PointIterator
    *
    * @param context The context where to draw the demo

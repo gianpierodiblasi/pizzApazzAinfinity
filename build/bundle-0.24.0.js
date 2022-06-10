@@ -5350,9 +5350,63 @@ class Z4Airbrush extends Z4PointIterator {
   }
 
    drawDemo(context, painter, gradientColor, width, height) {
+    let finalPainter = painter ? painter : new Z4ArrowPainter();
+    let finalGradientColor = gradientColor ? gradientColor : new Z4GradientColor();
+    this.draw(Z4Action.START, width / 2, height / 2);
+    let next = null;
+    while ((next = this.next()) !== null) {
+      let vector = next.getZ4Vector();
+      context.save();
+      context.translate(vector.getX0(), vector.getY0());
+      context.rotate(vector.getPhase());
+      finalPainter.draw(context, next, finalGradientColor);
+      context.restore();
+    }
+    this.draw(Z4Action.STOP, width / 2, height / 2);
   }
+
   // private void onPaint() {
   // }
+  // 
+  /**
+   * Sets the radius
+   *
+   * @param radius The radius
+   * @return This Z4Airbrush
+   */
+   setRadius(radius) {
+    this.radius = radius;
+    return this;
+  }
+
+  /**
+   * Returns the radius
+   *
+   * @return The radius
+   */
+   getRadius() {
+    return radius;
+  }
+
+  /**
+   * Sets the speed
+   *
+   * @param speed The speed
+   * @return This Z4Airbrush
+   */
+   setSpeed(speed) {
+    this.speed = speed;
+    return this;
+  }
+
+  /**
+   * Returns the speed
+   *
+   * @return The speed
+   */
+   getSpeed() {
+    return speed;
+  }
 }
 /**
  * The spirograph
@@ -5737,6 +5791,52 @@ class Z4TracerUI extends Z4PointIteratorUI {
     this.endlessSustainCheck.checked = value.isEndlessSustain();
     this.sustain.setEnabled(!this.endlessSustainCheck.checked);
     this.release.setEnabled(!this.endlessSustainCheck.checked);
+    return super.setValue(value);
+  }
+}
+/**
+ * The component to edit a Z4Airbrush
+ *
+ * @author gianpiero.di.blasi
+ */
+class Z4AirbrushUI extends Z4PointIteratorUI {
+
+  // private final Z4FancifulValueUI multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".airbrush-container-first-row"));
+  // private final Z4FancifulValueUI push = new Z4FancifulValueUI().setValueLabel("PUSH", true, true).setConstantRange(0, 50, false).setRandomRange(0, 50, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".airbrush-container-first-row"));
+  // 
+  static  UI = Z4HTMLFactory.get("giada/pizzapazza/iterator/ui/Z4AirbrushUI.html");
+
+  /**
+   * Creates a Z4AirbrushUI
+   */
+  constructor() {
+    super(Z4AirbrushUI.UI);
+    // this.multiplicity.oninput = (v) -> this.setMP(v, null, false);
+    // this.multiplicity.onchange = (v) -> this.setMP(v, null, true);
+    // this.push.oninput = (v) -> this.setMP(null, v, false);
+    // this.push.onchange = (v) -> this.setMP(null, v, true);
+    this.setValue(new Z4Airbrush());
+  }
+
+  // private void setMP(Z4FancifulValue multiplicity, Z4FancifulValue push, boolean onchange) {
+  // if ($exists(multiplicity)) {
+  // this.value.setMultiplicity(multiplicity);
+  // }
+  // if ($exists(push)) {
+  // this.value.setPush(push);
+  // }
+  // 
+  // this.drawCanvas();
+  // 
+  // if (onchange) {
+  // this.onchange.$apply(this.value);
+  // } else {
+  // this.oninput.$apply(this.value);
+  // }
+  // }
+   setValue(value) {
+    // this.multiplicity.setValue(value.getMultiplicity());
+    // this.push.setValue(value.getPush());
     return super.setValue(value);
   }
 }

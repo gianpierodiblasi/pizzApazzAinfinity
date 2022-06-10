@@ -9,6 +9,8 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
 
    tracerUI = new Z4TracerUI().appendToElement(this.querySelector(".tool-composer-container-point-iterator"));
 
+   airbrushUI = new Z4AirbrushUI().appendToElement(this.querySelector(".tool-composer-container-point-iterator"));
+
    spirographUI = new Z4SpirographUI().appendToElement(this.querySelector(".tool-composer-container-point-iterator"));
 
    shape2DPainterUI = new Z4Shape2DPainterUI().appendToElement(this.querySelector(".tool-composer-container-painter"));
@@ -59,12 +61,14 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
     this.gradientColor = this.gradientColorUI.getValue();
     this.setPointIteratorUI(this.stamperUI);
     this.setPointIteratorUI(this.tracerUI);
+    this.setPointIteratorUI(this.airbrushUI);
     this.setPointIteratorUI(this.spirographUI);
     this.setPainterUI(this.shape2DPainterUI);
     this.gradientColorUI.oninput = (v) => {
       this.gradientColor = v;
       this.stamperUI.setGradientColor(v);
       this.tracerUI.setGradientColor(v);
+      this.airbrushUI.setGradientColor(v);
       this.spirographUI.setGradientColor(v);
       this.shape2DPainterUI.setGradientColor(v);
     };
@@ -72,6 +76,7 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
       this.gradientColor = v;
       this.stamperUI.setGradientColor(v);
       this.tracerUI.setGradientColor(v);
+      this.airbrushUI.setGradientColor(v);
       this.spirographUI.setGradientColor(v);
       this.shape2DPainterUI.setGradientColor(v);
     };
@@ -151,6 +156,7 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
         this.querySelector(".tool-composer-container-point-iterator > div:nth-child(2)").style.display = "none";
         this.querySelector(".tool-composer-container-point-iterator > div:nth-child(3)").style.display = "none";
         this.querySelector(".tool-composer-container-point-iterator > div:nth-child(4)").style.display = "none";
+        this.querySelector(".tool-composer-container-point-iterator > div:nth-child(5)").style.display = "none";
         this.querySelector(".tool-composer-nav .nav-link.active").setAttribute("data-value", dataValue);
         this.querySelector(".tool-composer-nav .nav-link.active img").setAttribute("src", Z4ToolComposerUI.PATH + "z4toolcomposer_" + dataValue + ".svg");
         switch(dataValue) {
@@ -163,10 +169,11 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
             this.pointIterator = this.tracerUI.getValue();
             break;
           case "airbrush":
-            this.pointIterator = new Z4Airbrush();
+            this.querySelector(".tool-composer-container-point-iterator > div:nth-child(4)").style.display = "block";
+            this.pointIterator = this.airbrushUI.getValue();
             break;
           case "spirograph":
-            this.querySelector(".tool-composer-container-point-iterator > div:nth-child(4)").style.display = "block";
+            this.querySelector(".tool-composer-container-point-iterator > div:nth-child(5)").style.display = "block";
             this.pointIterator = this.spirographUI.getValue();
             break;
         }
@@ -176,6 +183,7 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
     }
     this.querySelector(".tool-composer-container-point-iterator > div:nth-child(3)").style.display = "none";
     this.querySelector(".tool-composer-container-point-iterator > div:nth-child(4)").style.display = "none";
+    this.querySelector(".tool-composer-container-point-iterator > div:nth-child(5)").style.display = "none";
   }
 
    configPointPainters() {
@@ -205,6 +213,7 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
         }
         this.stamperUI.setPainter(this.painter);
         this.tracerUI.setPainter(this.painter);
+        this.airbrushUI.setPainter(this.painter);
         this.spirographUI.setPainter(this.painter);
         return null;
       };
@@ -231,12 +240,14 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
       this.painter = v;
       this.stamperUI.setPainter(v);
       this.tracerUI.setPainter(v);
+      this.airbrushUI.setPainter(v);
       this.spirographUI.setPainter(v);
     };
     painterUI.onchange = (v) => {
       this.painter = v;
       this.stamperUI.setPainter(v);
       this.tracerUI.setPainter(v);
+      this.airbrushUI.setPainter(v);
       this.spirographUI.setPainter(v);
     };
   }
@@ -284,6 +295,7 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
     this.resizeObserver.unobserve(this.canvas);
     this.stamperUI.dispose();
     this.tracerUI.dispose();
+    this.airbrushUI.dispose();
     this.spirographUI.dispose();
     this.shape2DPainterUI.dispose();
   }
@@ -318,21 +330,28 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
    manage(doIt, event, action) {
     this.convertCoordinates(event);
     if (doIt && this.pointIterator.draw(action, event["pageX"] - this.canvasRect.left, event["pageY"] - this.canvasRect.top)) {
-      let next = null;
-      while ((next = this.pointIterator.next()) !== null) {
-        let vector = next.getZ4Vector();
-        let ctx = next.isDrawBounds() ? this.canvasCtx : this.offscreenCtx;
-        ctx.save();
-        ctx.translate(vector.getX0(), vector.getY0());
-        ctx.rotate(vector.getPhase());
-        this.painter.draw(ctx, next, this.gradientColor);
-        ctx.restore();
-        if (!next.isDrawBounds()) {
-          this.canvasCtx.save();
-          this.canvasCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
-          this.canvasCtx.drawImage(this.offscreenCanvas, 0, 0);
-          this.canvasCtx.restore();
-        }
+      this.iteratePoint();
+      if (this.pointIterator.isInfinitePointGenerator() && this.mouseDown) {
+        setTimeout(() => this.iteratePoint(), 50);
+      }
+    }
+  }
+
+   iteratePoint() {
+    let next = null;
+    while ((next = this.pointIterator.next()) !== null) {
+      let vector = next.getZ4Vector();
+      let ctx = next.isDrawBounds() ? this.canvasCtx : this.offscreenCtx;
+      ctx.save();
+      ctx.translate(vector.getX0(), vector.getY0());
+      ctx.rotate(vector.getPhase());
+      this.painter.draw(ctx, next, this.gradientColor);
+      ctx.restore();
+      if (!next.isDrawBounds()) {
+        this.canvasCtx.save();
+        this.canvasCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        this.canvasCtx.drawImage(this.offscreenCanvas, 0, 0);
+        this.canvasCtx.restore();
       }
     }
   }
