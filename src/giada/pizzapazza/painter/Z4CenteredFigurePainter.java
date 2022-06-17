@@ -1,8 +1,10 @@
 package giada.pizzapazza.painter;
 
+import def.js.Array;
 import giada.pizzapazza.color.Z4Color;
 import giada.pizzapazza.color.Z4GradientColor;
 import giada.pizzapazza.math.Z4FancifulValue;
+import giada.pizzapazza.math.Z4Math;
 import giada.pizzapazza.math.Z4Point;
 import giada.pizzapazza.math.Z4Sign;
 import giada.pizzapazza.math.Z4SignedRandomValue;
@@ -10,6 +12,7 @@ import giada.pizzapazza.math.Z4SignedValue;
 import giada.pizzapazza.math.Z4Vector;
 import giada.pizzapazza.math.Z4Whirlpool;
 import simulation.dom.$CanvasRenderingContext2D;
+import simulation.js.$Object;
 
 /**
  * The painter of centered figures
@@ -148,31 +151,31 @@ public class Z4CenteredFigurePainter extends Z4Painter<Z4CenteredFigurePainter> 
 
   //One Bezier curve. Start and end point coincide in the fulcrum
   private void type0_1_2(Z4Point point, double currentCover) {
-//    Z4Math.butterfly(point.vector,Z4Math.deg2rad(angle1),c1e,c2e);
+
+    Array<$Object> ce = Z4Math.butterfly(point.getZ4Vector(), Z4Math.deg2rad(this.angle1.next()));
 //    pF[0]=point.vector[0];
 //    pF[1]=point.vector[1];
 //    
-//    switch (this.type)
-//    {
-//      //I punti di controllo collassano verso il fulcro
-//      case 0:
+    switch (this.type) {
+      // The control points collapse towards the fulcrum
+      case 0:
 //        this.findControlPointPath(path1e,c1e[0],c1e[1],point.vector[0],point.vector[1],currentCover);
 //        this.findControlPointPath(path2e,c2e[0],c2e[1],point.vector[0],point.vector[1],currentCover);
-//        break;
-//      //I punti di controllo collassano verso newPoint
-//      case 1:
+        break;
+      // The control points collapse towards newPoint
+      case 1:
 //        this.findControlPointPath(path1e,c1e[0],c1e[1],point.vector[2],point.vector[3],currentCover);
 //        this.findControlPointPath(path2e,c2e[0],c2e[1],point.vector[2],point.vector[3],currentCover);
-//        break;
-//      //I punti di controllo collassano verso il loro punto medio
-//      case 2:
+        break;
+      // The control points collapse towards their midpoint
+      case 2:
 //        float mx=(c1e[0]+c2e[0])/2;
 //        float my=(c1e[1]+c2e[1])/2;
 //        this.findControlPointPath(path1e,c1e[0],c1e[1],mx,my,currentCover);
 //        this.findControlPointPath(path2e,c2e[0],c2e[1],mx,my,currentCover);
-//        break;
-//    }
-
+        break;
+    }
+//    
 //    if (shadow||border)
 //    {
 //      pathForShadowBorderE.reset();
@@ -264,7 +267,7 @@ public class Z4CenteredFigurePainter extends Z4Painter<Z4CenteredFigurePainter> 
 //    context.fill(this.shape.getPath());
 //    context.restore();
   }
-  
+
   /**
    * Returns a Z4CenteredFigurePainter of type 0
    *

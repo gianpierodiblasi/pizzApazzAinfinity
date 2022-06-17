@@ -130,30 +130,30 @@ class Z4CenteredFigurePainter extends Z4Painter {
 
   // One Bezier curve. Start and end point coincide in the fulcrum
    type0_1_2(point, currentCover) {
-    // Z4Math.butterfly(point.vector,Z4Math.deg2rad(angle1),c1e,c2e);
+    let ce = Z4Math.butterfly(point.getZ4Vector(), Z4Math.deg2rad(this.angle1.next()));
     // pF[0]=point.vector[0];
     // pF[1]=point.vector[1];
     // 
-    // switch (this.type)
-    // {
-    // //I punti di controllo collassano verso il fulcro
-    // case 0:
-    // this.findControlPointPath(path1e,c1e[0],c1e[1],point.vector[0],point.vector[1],currentCover);
-    // this.findControlPointPath(path2e,c2e[0],c2e[1],point.vector[0],point.vector[1],currentCover);
-    // break;
-    // //I punti di controllo collassano verso newPoint
-    // case 1:
-    // this.findControlPointPath(path1e,c1e[0],c1e[1],point.vector[2],point.vector[3],currentCover);
-    // this.findControlPointPath(path2e,c2e[0],c2e[1],point.vector[2],point.vector[3],currentCover);
-    // break;
-    // //I punti di controllo collassano verso il loro punto medio
-    // case 2:
-    // float mx=(c1e[0]+c2e[0])/2;
-    // float my=(c1e[1]+c2e[1])/2;
-    // this.findControlPointPath(path1e,c1e[0],c1e[1],mx,my,currentCover);
-    // this.findControlPointPath(path2e,c2e[0],c2e[1],mx,my,currentCover);
-    // break;
-    // }
+    switch(this.type) {
+      // The control points collapse towards the fulcrum
+      case 0:
+        // this.findControlPointPath(path1e,c1e[0],c1e[1],point.vector[0],point.vector[1],currentCover);
+        // this.findControlPointPath(path2e,c2e[0],c2e[1],point.vector[0],point.vector[1],currentCover);
+        break;
+      // The control points collapse towards newPoint
+      case 1:
+        // this.findControlPointPath(path1e,c1e[0],c1e[1],point.vector[2],point.vector[3],currentCover);
+        // this.findControlPointPath(path2e,c2e[0],c2e[1],point.vector[2],point.vector[3],currentCover);
+        break;
+      // The control points collapse towards their midpoint
+      case 2:
+        // float mx=(c1e[0]+c2e[0])/2;
+        // float my=(c1e[1]+c2e[1])/2;
+        // this.findControlPointPath(path1e,c1e[0],c1e[1],mx,my,currentCover);
+        // this.findControlPointPath(path2e,c2e[0],c2e[1],mx,my,currentCover);
+        break;
+    }
+    // 
     // if (shadow||border)
     // {
     // pathForShadowBorderE.reset();
