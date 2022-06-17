@@ -1,5 +1,6 @@
 package giada.pizzapazza.painter;
 
+import giada.pizzapazza.color.Z4Color;
 import giada.pizzapazza.color.Z4GradientColor;
 import giada.pizzapazza.math.Z4Math;
 import giada.pizzapazza.math.Z4Point;
@@ -43,12 +44,12 @@ public class Z4ArrowPainter extends Z4Painter<Z4ArrowPainter> {
     context.save();
     context.lineWidth = 1;
 
-    context.strokeStyle = this.$getColor("black");
+    context.strokeStyle = Z4Color.$getFillStyle("black");
     context.beginPath();
     context.arc(0, 0, 2, 0, Z4Math.TWO_PI);
     context.stroke();
 
-    context.strokeStyle = this.$getColor(this.bool ? "blue" : "red");
+    context.strokeStyle = Z4Color.$getFillStyle(this.bool ? "blue" : "red");
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(x, 0);

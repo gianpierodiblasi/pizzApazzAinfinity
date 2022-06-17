@@ -1,10 +1,7 @@
 package giada.pizzapazza.painter;
 
-import def.dom.CanvasGradient;
-import def.dom.CanvasPattern;
 import giada.pizzapazza.color.Z4GradientColor;
 import giada.pizzapazza.math.Z4Point;
-import jsweet.util.union.Union4;
 import simulation.dom.$CanvasRenderingContext2D;
 
 /**
@@ -13,6 +10,7 @@ import simulation.dom.$CanvasRenderingContext2D;
  * @param <T>
  * @author gianpiero.di.blasi
  */
+@SuppressWarnings("ClassMayBeInterface")
 public abstract class Z4Painter<T extends Z4Painter<T>> {
 
   /**
@@ -24,24 +22,4 @@ public abstract class Z4Painter<T extends Z4Painter<T>> {
    * @return This Z4Painter
    */
   public abstract T draw($CanvasRenderingContext2D context, Z4Point point, Z4GradientColor gradientColor);
-
-  /**
-   * Returns the color parameter
-   *
-   * @param color The color
-   * @return The color
-   */
-  protected String getColor(String color) {
-    return color;
-  }
-
-  /**
-   * Utility method to simulate the fill style of a canvas
-   *
-   * @param color The color
-   * @return NOTHING
-   */
-  protected Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getColor(String color) {
-    return null;
-  }
 }
