@@ -156,23 +156,25 @@ public class Z4CenteredFigurePainter extends Z4Painter<Z4CenteredFigurePainter> 
 //    pF[0]=point.vector[0];
 //    pF[1]=point.vector[1];
 //    
+    $Object path1e = null;
+    $Object path2e = null;
     switch (this.type) {
       // The control points collapse towards the fulcrum
       case 0:
-//        this.findControlPointPath(path1e,c1e[0],c1e[1],point.vector[0],point.vector[1],currentCover);
-//        this.findControlPointPath(path2e,c2e[0],c2e[1],point.vector[0],point.vector[1],currentCover);
+        path1e = this.findControlPointPath(ce.$get(0).$get("x"), ce.$get(0).$get("y"), point.getZ4Vector().getX0(), point.getZ4Vector().getY0(), currentCover);
+        path2e = this.findControlPointPath(ce.$get(1).$get("x"), ce.$get(1).$get("y"), point.getZ4Vector().getX0(), point.getZ4Vector().getY0(), currentCover);
         break;
       // The control points collapse towards newPoint
       case 1:
-//        this.findControlPointPath(path1e,c1e[0],c1e[1],point.vector[2],point.vector[3],currentCover);
-//        this.findControlPointPath(path2e,c2e[0],c2e[1],point.vector[2],point.vector[3],currentCover);
+        path1e = this.findControlPointPath(ce.$get(0).$get("x"), ce.$get(0).$get("y"), point.getZ4Vector().getX(), point.getZ4Vector().getY(), currentCover);
+        path2e = this.findControlPointPath(ce.$get(1).$get("x"), ce.$get(1).$get("y"), point.getZ4Vector().getX(), point.getZ4Vector().getY(), currentCover);
         break;
       // The control points collapse towards their midpoint
       case 2:
-//        float mx=(c1e[0]+c2e[0])/2;
-//        float my=(c1e[1]+c2e[1])/2;
-//        this.findControlPointPath(path1e,c1e[0],c1e[1],mx,my,currentCover);
-//        this.findControlPointPath(path2e,c2e[0],c2e[1],mx,my,currentCover);
+        double mx = ((double) ce.$get(0).$get("x") + (double) ce.$get(1).$get("x")) / 2;
+        double my = ((double) ce.$get(0).$get("y") + (double) ce.$get(1).$get("y")) / 2;
+        path1e = this.findControlPointPath(ce.$get(0).$get("x"), ce.$get(0).$get("y"), mx, my, currentCover);
+        path2e = this.findControlPointPath(ce.$get(1).$get("x"), ce.$get(1).$get("y"), mx, my, currentCover);
         break;
     }
 //    
@@ -258,6 +260,16 @@ public class Z4CenteredFigurePainter extends Z4Painter<Z4CenteredFigurePainter> 
 //      pathForShadowBorderI.moveTo(point.vector[0],point.vector[1]);
 //      pathForShadowBorderI.cubicTo(c1i[0],c1i[1],c2i[0],c2i[1],point.vector[2],point.vector[3]);
 //    }
+  }
+
+  private $Object findControlPointPath(double p1x, double p1y, double p2x, double p2y, double currentCover) {
+    double module = Z4Math.distance(p1x, p1y, p2x, p2y);
+    double phase = Z4Math.atan(p1x, p1y, p2x, p2y);
+
+    $Object path = new $Object();
+    path.$set("x", module * currentCover * Math.cos(phase));
+    path.$set("y", module * currentCover * Math.sin(phase));
+    return path;
   }
 
   private void drawPath($CanvasRenderingContext2D context, double scaleW, double scaleH, Z4Color color) {
