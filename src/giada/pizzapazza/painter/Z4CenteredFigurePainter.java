@@ -60,16 +60,17 @@ public class Z4CenteredFigurePainter extends Z4Painter<Z4CenteredFigurePainter> 
       point.setZ4Vector(Z4Vector.fromVector(currentHole, 0, currentSize, 0));
 //      this.checkWhirlpool(point,currentHole);
 
+      $Object pF;
       switch (this.type) {
         case 0:
         case 1:
         case 2:
-          this.type0_1_2(point, currentCover);
+          pF = this.type0_1_2(point, currentCover);
           break;
         case 3:
         case 4:
         case 5:
-          this.type3_4_5(point, currentHole, currentCover);
+          pF = this.type3_4_5(point, currentHole, currentCover);
           break;
       }
 
@@ -150,12 +151,13 @@ public class Z4CenteredFigurePainter extends Z4Painter<Z4CenteredFigurePainter> 
   }
 
   //One Bezier curve. Start and end point coincide in the fulcrum
-  private void type0_1_2(Z4Point point, double currentCover) {
+  private $Object type0_1_2(Z4Point point, double currentCover) {
 
     Array<$Object> ce = Z4Math.butterfly(point.getZ4Vector(), Z4Math.deg2rad(this.angle1.next()));
-//    pF[0]=point.vector[0];
-//    pF[1]=point.vector[1];
-//    
+    $Object pF = new $Object();
+    pF.$set("x", point.getZ4Vector().getX0());
+    pF.$set("y", point.getZ4Vector().getY0());
+
     $Object path1e = null;
     $Object path2e = null;
     switch (this.type) {
@@ -184,17 +186,19 @@ public class Z4CenteredFigurePainter extends Z4Painter<Z4CenteredFigurePainter> 
 //      pathForShadowBorderE.moveTo(point.vector[0],point.vector[1]);
 //      pathForShadowBorderE.cubicTo(c1e[0],c1e[1],c2e[0],c2e[1],point.vector[0],point.vector[1]);
 //    }
+//
+    return pF;
   }
 
   //Two Bezier curves. Start point lies on the fulcrum, end point lies on newPoint
-  private void type3_4_5(Z4Point point, double currentHole, double currentCover) {
-//    pF[0]=point.vector[2];
-//    pF[1]=point.vector[3];
-//    
-//    switch (this.type)
-//    {
-//      //Un punto di controllo collassa verso il fulcro, l'altro punto verso newPoint
-//      case TYPE_3:
+  private $Object type3_4_5(Z4Point point, double currentHole, double currentCover) {
+    $Object pF = new $Object();
+    pF.$set("x", point.getZ4Vector().getX());
+    pF.$set("y", point.getZ4Vector().getY());
+
+    switch (this.type) {
+      // One control point collapses towards the fulcrum, the other one collapses towards newPoint
+      case 3:
 //        this.setControlPoint(c1e,currentHole,0,angle1,1,tension,point);
 //        this.setControlPoint(c1i,currentHole,0,angle1,-1,tension,point);
 //        this.setControlPoint(c2e,currentHole,-180,angle2,-1,tension,point);
@@ -209,9 +213,9 @@ public class Z4CenteredFigurePainter extends Z4Painter<Z4CenteredFigurePainter> 
 //        this.findControlPointPath(path2e,c2e[0],c2e[1],point.vector[2],point.vector[3],currentCover);
 //        this.findControlPointPath(path1i,c1i[0],c1i[1],point.vector[0],point.vector[1],currentCover);
 //        this.findControlPointPath(path2i,c2i[0],c2i[1],point.vector[2],point.vector[3],currentCover);
-//        break;
+        break;
 //      //Il secondo punto di controllo e' fisso sul fulcro, il primo punto collassa verso il fulcro
-//      case TYPE_4:
+      case 4:
 //        c2e[0]=point.vector[0];
 //        c2e[1]=point.vector[1];
 //        path2e[0]=0;
@@ -227,9 +231,9 @@ public class Z4CenteredFigurePainter extends Z4Painter<Z4CenteredFigurePainter> 
 //        this.checkWhirlpool(point,c1e,c1i,currentHole);
 //        this.findControlPointPath(path1e,c1e[0],c1e[1],point.vector[0],point.vector[1],currentCover);
 //        this.findControlPointPath(path1i,c1i[0],c1i[1],point.vector[0],point.vector[1],currentCover);
-//        break;
+        break;
 //      //Il primo punto di controllo e' fisso su newPoint, il secondo punto collassa verso newPoint
-//      case TYPE_5:
+      case 5:
 //        c1e[0]=point.vector[2];
 //        c1e[1]=point.vector[3];
 //        path1e[0]=0;
@@ -248,11 +252,10 @@ public class Z4CenteredFigurePainter extends Z4Painter<Z4CenteredFigurePainter> 
 //        this.checkWhirlpool(point,c2e,c2i,currentHole);
 //        this.findControlPointPath(path2e,c2e[0],c2e[1],point.vector[2],point.vector[3],currentCover);
 //        this.findControlPointPath(path2i,c2i[0],c2i[1],point.vector[2],point.vector[3],currentCover);
-//        break;
-//    }
-
-//    if (shadow||border)
-//    {
+        break;
+    }
+//    
+//    if (shadow || border) {
 //      pathForShadowBorderE.reset();
 //      pathForShadowBorderE.moveTo(point.vector[0],point.vector[1]);
 //      pathForShadowBorderE.cubicTo(c1e[0],c1e[1],c2e[0],c2e[1],point.vector[2],point.vector[3]);
@@ -260,6 +263,8 @@ public class Z4CenteredFigurePainter extends Z4Painter<Z4CenteredFigurePainter> 
 //      pathForShadowBorderI.moveTo(point.vector[0],point.vector[1]);
 //      pathForShadowBorderI.cubicTo(c1i[0],c1i[1],c2i[0],c2i[1],point.vector[2],point.vector[3]);
 //    }
+//
+    return pF;
   }
 
   private $Object findControlPointPath(double p1x, double p1y, double p2x, double p2y, double currentCover) {
