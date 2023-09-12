@@ -17,7 +17,7 @@ import simulation.js.$Object;
 /**
  * The painter of centered figures
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4CenteredFigurePainter extends Z4Painter<Z4CenteredFigurePainter> {
 

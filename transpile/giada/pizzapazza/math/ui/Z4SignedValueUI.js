@@ -1,7 +1,7 @@
 /**
  * The component to edit a signed value
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
 

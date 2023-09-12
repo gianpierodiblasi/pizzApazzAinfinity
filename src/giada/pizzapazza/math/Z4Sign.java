@@ -5,7 +5,7 @@ import def.js.Math;
 /**
  * The signs of a value
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4Sign {
 

@@ -19,7 +19,7 @@ import simulation.js.$ResizeObserver;
 /**
  * The abstract component to edit a Z4Painter
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  * @param <S>
  */
 public abstract class Z4PainterUI<S extends Z4Painter<S>> extends Z4AbstractComponentWithValueUI<S> {

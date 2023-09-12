@@ -5,7 +5,7 @@ import giada.pizzapazza.math.Z4Point;
 /**
  * The progression of a color
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4Progression {
 

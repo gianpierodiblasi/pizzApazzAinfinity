@@ -12,7 +12,7 @@ import simulation.js.$String;
 /**
  * The message factory
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4MessageFactory {
 

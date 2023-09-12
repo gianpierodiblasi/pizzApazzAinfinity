@@ -5,7 +5,7 @@ import def.dom.Navigator;
 /**
  * The simulation of the Navigator object
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class $Navigator extends Navigator {
 

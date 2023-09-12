@@ -2,7 +2,7 @@
  * The rotation (angles parameters have to be provided in degrees, rotations are
  * computed in radians)
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Rotation {
 

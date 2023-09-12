@@ -6,7 +6,7 @@ import simulation.js.$Apply_0_Void;
 /**
  * The simulation of the MediaQueryList object
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class $MediaQueryList extends MediaQueryList {
 

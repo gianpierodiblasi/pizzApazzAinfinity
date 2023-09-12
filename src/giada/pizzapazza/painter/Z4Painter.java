@@ -8,7 +8,7 @@ import simulation.dom.$CanvasRenderingContext2D;
  * The common parent of all painters
  *
  * @param <T>
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 @SuppressWarnings("ClassMayBeInterface")
 public abstract class Z4Painter<T extends Z4Painter<T>> {

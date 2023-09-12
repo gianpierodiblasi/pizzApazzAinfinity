@@ -1,7 +1,7 @@
 /**
  * The path for a Z4Tracer
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4TracerPath {
 

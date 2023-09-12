@@ -1,7 +1,7 @@
 /**
  * The abstract component to edit a Z4PointIterator
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  * @param <S>
  */
 class Z4PointIteratorUI extends Z4AbstractComponentWithValueUI {

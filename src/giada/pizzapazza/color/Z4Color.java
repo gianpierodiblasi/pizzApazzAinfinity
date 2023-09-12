@@ -12,7 +12,7 @@ import simulation.js.$Number;
 /**
  * The color
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4Color {
 

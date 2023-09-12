@@ -3,7 +3,7 @@ package giada.pizzapazza.iterator;
 /**
  * The drawing action of a Z4PointIterator
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4Action {
 

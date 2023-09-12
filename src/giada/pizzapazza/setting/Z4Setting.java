@@ -12,7 +12,7 @@ import simulation.js.$Object;
 /**
  * The environment settings
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4Setting {
 

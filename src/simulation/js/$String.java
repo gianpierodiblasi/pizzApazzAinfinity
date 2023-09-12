@@ -3,7 +3,7 @@ package simulation.js;
 /**
  * Simulation of the String object
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class $String extends def.js.String {
 

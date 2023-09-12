@@ -8,7 +8,7 @@ import static simulation.js.$Globals.parseInt;
 /**
  * The path for a Z4Tracer
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4TracerPath {
 

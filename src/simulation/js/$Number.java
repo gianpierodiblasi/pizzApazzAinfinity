@@ -3,7 +3,7 @@ package simulation.js;
 /**
  * Simulation of the Number object
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class $Number extends def.js.Number {
 

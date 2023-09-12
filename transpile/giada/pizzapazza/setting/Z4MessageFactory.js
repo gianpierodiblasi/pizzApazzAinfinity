@@ -1,7 +1,7 @@
 /**
  * The message factory
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4MessageFactory {
 

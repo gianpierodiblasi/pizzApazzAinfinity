@@ -1,7 +1,7 @@
 /**
  * The component to show a color progression
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4ProgressionUI extends Z4AbstractComponentWithValueUI {
 

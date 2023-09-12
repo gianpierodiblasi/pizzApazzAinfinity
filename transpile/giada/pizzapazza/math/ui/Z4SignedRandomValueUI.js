@@ -1,7 +1,7 @@
 /**
  * The component to edit a signed random value
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
 

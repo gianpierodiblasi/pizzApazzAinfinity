@@ -5,7 +5,7 @@ import def.dom.Window;
 /**
  * The simulation of the Window object
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class $Window extends Window {
 

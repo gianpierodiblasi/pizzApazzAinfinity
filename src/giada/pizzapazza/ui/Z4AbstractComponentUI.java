@@ -16,7 +16,7 @@ import simulation.js.$Object;
 /**
  * The abstract class of all UI components
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public abstract class Z4AbstractComponentUI {
 

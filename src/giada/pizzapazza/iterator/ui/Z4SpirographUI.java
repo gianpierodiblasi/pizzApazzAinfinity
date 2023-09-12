@@ -7,7 +7,7 @@ import giada.pizzapazza.setting.Z4HTMLFactory;
 /**
  * The component to edit a Z4Spirograph
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4SpirographUI extends Z4PointIteratorUI<Z4Spirograph> {
 

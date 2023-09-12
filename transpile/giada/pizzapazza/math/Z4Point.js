@@ -1,7 +1,7 @@
 /**
  * The point where to perform a drawing
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Point {
 

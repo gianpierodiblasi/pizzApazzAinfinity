@@ -1,7 +1,7 @@
 /**
  * The abstract component to edit a Z4Painter
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  * @param <S>
  */
 class Z4PainterUI extends Z4AbstractComponentWithValueUI {

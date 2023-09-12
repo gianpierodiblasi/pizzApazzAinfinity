@@ -3,7 +3,7 @@ package giada.pizzapazza.math;
 /**
  * The whirlpool
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4Whirlpool {
 

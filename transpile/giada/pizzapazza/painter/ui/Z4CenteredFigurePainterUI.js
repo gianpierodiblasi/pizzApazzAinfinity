@@ -1,7 +1,7 @@
 /**
  * The component to edit a Z4CenteredFigurePainter
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4CenteredFigurePainterUI extends Z4PainterUI {
 

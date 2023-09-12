@@ -9,7 +9,7 @@ import simulation.dom.$CanvasRenderingContext2D;
 /**
  * The painter of arrows, used only for testing purpose
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4ArrowPainter extends Z4Painter<Z4ArrowPainter> {
 

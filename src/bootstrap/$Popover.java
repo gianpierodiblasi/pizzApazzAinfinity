@@ -6,7 +6,7 @@ import simulation.js.$Object;
 /**
  * The simulation of the Bootstrap Popover object
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class $Popover {
 

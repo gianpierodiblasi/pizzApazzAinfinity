@@ -7,7 +7,7 @@ import simulation.dom.$Window;
 /**
  * Simulation of the global functions
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class $Globals {
 

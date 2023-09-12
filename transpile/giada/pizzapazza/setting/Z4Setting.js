@@ -1,7 +1,7 @@
 /**
  * The environment settings
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Setting {
 

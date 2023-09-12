@@ -1,7 +1,7 @@
 /**
  * The component to edit a Z4Airbrush
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4AirbrushUI extends Z4PointIteratorUI {
 

@@ -3,7 +3,7 @@ package simulation.js;
 /**
  * The simulation of the URLSearchParams object
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class $URLSearchParams {
 

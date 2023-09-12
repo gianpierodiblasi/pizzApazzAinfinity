@@ -24,7 +24,7 @@ import simulation.js.$ResizeObserver;
 /**
  * The abstract component to edit a Z4PointIterator
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  * @param <S>
  */
 public abstract class Z4PointIteratorUI<S extends Z4PointIterator<S>> extends Z4AbstractComponentWithValueUI<S> {

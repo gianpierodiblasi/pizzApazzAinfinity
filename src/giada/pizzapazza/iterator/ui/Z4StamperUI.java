@@ -10,7 +10,7 @@ import static simulation.js.$Globals.$exists;
 /**
  * The component to edit a Z4Stamper
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4StamperUI extends Z4PointIteratorUI<Z4Stamper> {
 

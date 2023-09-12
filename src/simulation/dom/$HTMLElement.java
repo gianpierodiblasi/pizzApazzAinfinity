@@ -8,7 +8,7 @@ import simulation.js.$Object;
 /**
  * The simulation of the HTMLElement object
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class $HTMLElement extends HTMLElement {
 

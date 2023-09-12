@@ -5,7 +5,7 @@ import def.dom.Document;
 /**
  * The simulation of the Document object
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class $Document extends Document {
 

@@ -1,7 +1,7 @@
 /**
  * The composer of a tool
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4ToolComposerUI extends Z4AbstractComponentUI {
 

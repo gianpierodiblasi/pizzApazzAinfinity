@@ -9,7 +9,7 @@ import simulation.js.$Path2D;
 /**
  * The simulation of the CanvasRenderingContext2D object
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class $CanvasRenderingContext2D extends CanvasRenderingContext2D {
 

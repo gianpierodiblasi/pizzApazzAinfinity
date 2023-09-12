@@ -1,7 +1,7 @@
 /**
  * The spirograph
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Spirograph extends Z4PointIterator {
 

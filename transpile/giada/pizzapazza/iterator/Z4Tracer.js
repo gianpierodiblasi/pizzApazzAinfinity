@@ -1,7 +1,7 @@
 /**
  * The tracer
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Tracer extends Z4PointIterator {
 

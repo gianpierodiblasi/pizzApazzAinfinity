@@ -1,7 +1,7 @@
 /**
  * The classic painter
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4ClassicPainter extends Z4Painter {
 

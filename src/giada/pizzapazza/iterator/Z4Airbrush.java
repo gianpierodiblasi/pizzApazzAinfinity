@@ -17,7 +17,7 @@ import static simulation.js.$Globals.parseInt;
 /**
  * The airbrush
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4Airbrush extends Z4PointIterator<Z4Airbrush> {
 

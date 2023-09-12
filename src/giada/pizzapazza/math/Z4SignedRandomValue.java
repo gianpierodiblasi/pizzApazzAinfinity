@@ -5,7 +5,7 @@ import simulation.bezier.$Bezier;
 /**
  * A random value with sign
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4SignedRandomValue {
 

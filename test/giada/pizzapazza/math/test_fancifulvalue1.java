@@ -13,7 +13,7 @@ import static simulation.js.$Globals.document;
 
 /**
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class test_fancifulvalue1 {
 

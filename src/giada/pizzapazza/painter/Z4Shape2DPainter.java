@@ -15,7 +15,7 @@ import static simulation.js.$Globals.$exists;
 /**
  * The painter of 2D shapes
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4Shape2DPainter extends Z4Painter<Z4Shape2DPainter> {
 

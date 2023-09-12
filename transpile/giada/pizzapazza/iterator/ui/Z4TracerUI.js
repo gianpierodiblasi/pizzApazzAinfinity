@@ -1,7 +1,7 @@
 /**
  * The component to edit a Z4Tracer
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4TracerUI extends Z4PointIteratorUI {
 

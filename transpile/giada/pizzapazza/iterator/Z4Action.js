@@ -1,7 +1,7 @@
 /**
  * The drawing action of a Z4PointIterator
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Action {
 

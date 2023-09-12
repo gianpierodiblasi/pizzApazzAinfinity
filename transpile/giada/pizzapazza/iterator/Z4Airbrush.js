@@ -1,7 +1,7 @@
 /**
  * The airbrush
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Airbrush extends Z4PointIterator {
 

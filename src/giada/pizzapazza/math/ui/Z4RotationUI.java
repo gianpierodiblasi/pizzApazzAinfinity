@@ -14,7 +14,7 @@ import static simulation.js.$Globals.document;
 /**
  * The component to edit a rotation
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4RotationUI extends Z4AbstractComponentWithValueUI<Z4Rotation> {
 

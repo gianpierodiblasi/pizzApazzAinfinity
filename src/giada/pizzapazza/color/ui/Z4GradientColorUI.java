@@ -20,7 +20,7 @@ import simulation.js.$ResizeObserver;
 /**
  * The component to show a gradient color
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4GradientColorUI extends Z4AbstractComponentWithValueUI<Z4GradientColor> {
 

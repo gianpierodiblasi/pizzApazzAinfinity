@@ -13,7 +13,7 @@ import simulation.dom.$HTMLElement;
 /**
  * The component to edit a Z4CenteredFigurePainter
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4CenteredFigurePainterUI extends Z4PainterUI<Z4CenteredFigurePainter> {
 

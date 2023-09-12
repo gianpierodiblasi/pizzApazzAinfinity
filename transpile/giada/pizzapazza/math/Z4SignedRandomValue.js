@@ -1,7 +1,7 @@
 /**
  * A random value with sign
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4SignedRandomValue {
 

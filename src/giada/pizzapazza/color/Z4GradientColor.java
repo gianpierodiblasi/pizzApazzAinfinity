@@ -9,7 +9,7 @@ import simulation.dom.$CanvasRenderingContext2D;
 /**
  * The gradient color (a gradient between two colors)
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4GradientColor {
 

@@ -13,7 +13,7 @@ import simulation.js.$Object;
  * The common parent of all point iterators
  *
  * @param <T>
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
 

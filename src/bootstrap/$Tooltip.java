@@ -6,7 +6,7 @@ import simulation.js.$Object;
 /**
  * The simulation of the Bootstrap Tooltip object
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class $Tooltip {
 

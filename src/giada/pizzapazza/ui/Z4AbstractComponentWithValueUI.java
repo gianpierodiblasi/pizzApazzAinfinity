@@ -6,7 +6,7 @@ import simulation.js.$Apply_1_Void;
  * The abstract class of all UI components providing a value
  *
  * @param <S>
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public abstract class Z4AbstractComponentWithValueUI<S> extends Z4AbstractComponentUI {
 

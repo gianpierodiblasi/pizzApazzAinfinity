@@ -1,5 +1,5 @@
 /**
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class test_spirograph1 {
 

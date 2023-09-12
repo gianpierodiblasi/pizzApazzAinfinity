@@ -12,7 +12,7 @@ import simulation.dom.$HTMLElement;
 /**
  * The component to edit a signed random value
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI<Z4SignedRandomValue> {
 

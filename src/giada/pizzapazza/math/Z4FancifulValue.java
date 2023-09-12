@@ -3,7 +3,7 @@ package giada.pizzapazza.math;
 /**
  * The fanciful value
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4FancifulValue {
 

@@ -2,7 +2,7 @@
  * The abstract class of all UI components providing a value
  *
  * @param <S>
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4AbstractComponentWithValueUI extends Z4AbstractComponentUI {
 

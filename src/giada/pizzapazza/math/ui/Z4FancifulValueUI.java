@@ -11,7 +11,7 @@ import static simulation.js.$Globals.document;
 /**
  * The component to edit a fanciful value
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI<Z4FancifulValue> {
 

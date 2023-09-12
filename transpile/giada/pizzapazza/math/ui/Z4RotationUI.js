@@ -1,7 +1,7 @@
 /**
  * The component to edit a rotation
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4RotationUI extends Z4AbstractComponentWithValueUI {
 

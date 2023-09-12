@@ -1,7 +1,7 @@
 /**
  * The component to edit a fanciful value
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
 

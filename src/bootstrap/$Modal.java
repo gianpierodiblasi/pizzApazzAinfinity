@@ -5,7 +5,7 @@ import def.dom.HTMLElement;
 /**
  * The simulation of the Bootstrap Modal object
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class $Modal {
 

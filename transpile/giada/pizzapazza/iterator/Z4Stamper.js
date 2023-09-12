@@ -1,7 +1,7 @@
 /**
  * The stamper
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Stamper extends Z4PointIterator {
 

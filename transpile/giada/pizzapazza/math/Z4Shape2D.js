@@ -1,7 +1,7 @@
 /**
  * The geometric shapes
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Shape2D {
 

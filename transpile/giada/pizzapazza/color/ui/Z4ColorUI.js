@@ -1,7 +1,7 @@
 /**
  * The component to show a color
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4ColorUI extends Z4AbstractComponentWithValueUI {
 

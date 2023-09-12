@@ -1,7 +1,7 @@
 /**
  * The painter of centered figures
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4CenteredFigurePainter extends Z4Painter {
 

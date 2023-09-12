@@ -1,7 +1,7 @@
 /**
  * The painter of natural figures
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4NaturalFigurePainter extends Z4Painter {
 

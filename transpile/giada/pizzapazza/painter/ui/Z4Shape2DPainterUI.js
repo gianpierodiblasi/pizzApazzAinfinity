@@ -1,7 +1,7 @@
 /**
  * The component to edit a Z4Shape2DPainter
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Shape2DPainterUI extends Z4PainterUI {
 

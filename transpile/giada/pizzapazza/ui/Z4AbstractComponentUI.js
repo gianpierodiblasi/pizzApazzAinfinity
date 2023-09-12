@@ -1,7 +1,7 @@
 /**
  * The abstract class of all UI components
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4AbstractComponentUI {
 

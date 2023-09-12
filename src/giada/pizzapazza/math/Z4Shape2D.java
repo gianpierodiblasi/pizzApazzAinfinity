@@ -5,7 +5,7 @@ import simulation.js.$Path2D;
 /**
  * The geometric shapes
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4Shape2D {
 

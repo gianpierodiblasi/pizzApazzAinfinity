@@ -5,7 +5,7 @@ import giada.pizzapazza.color.Z4Lighting;
 /**
  * The point where to perform a drawing
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4Point {
 

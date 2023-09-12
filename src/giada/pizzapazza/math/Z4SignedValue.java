@@ -3,7 +3,7 @@ package giada.pizzapazza.math;
 /**
  * A value with sign
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4SignedValue {
 

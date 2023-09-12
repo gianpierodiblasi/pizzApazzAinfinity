@@ -14,7 +14,7 @@ import simulation.dom.$HTMLElement;
 /**
  * The component to edit a Z4Shape2DPainter
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4Shape2DPainterUI extends Z4PainterUI<Z4Shape2DPainter> {
 

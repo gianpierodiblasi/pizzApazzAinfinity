@@ -36,7 +36,7 @@ import simulation.js.$ResizeObserver;
 /**
  * The composer of a tool
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4ToolComposerUI extends Z4AbstractComponentUI {
 

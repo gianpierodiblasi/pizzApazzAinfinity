@@ -15,7 +15,7 @@ import simulation.js.$Object;
 /**
  * The spirograph
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4Spirograph extends Z4PointIterator<Z4Spirograph> {
 

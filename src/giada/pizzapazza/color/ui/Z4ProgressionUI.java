@@ -13,7 +13,7 @@ import simulation.dom.$HTMLElement;
 /**
  * The component to show a color progression
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4ProgressionUI extends Z4AbstractComponentWithValueUI<Z4Progression> {
 

@@ -1,7 +1,7 @@
 /**
  * The painter of 2D shapes
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Shape2DPainter extends Z4Painter {
 

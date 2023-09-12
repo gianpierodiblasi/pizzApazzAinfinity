@@ -18,7 +18,7 @@ import static simulation.js.$Globals.setTimeout;
 /**
  * The component to edit a signed value
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValue> {
 

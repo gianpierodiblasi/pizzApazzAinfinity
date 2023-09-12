@@ -6,7 +6,7 @@ package simulation.js;
  *
  * @param <T>
  * @param <S>
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 @FunctionalInterface
 public interface $Apply_2_Void<T,S> {

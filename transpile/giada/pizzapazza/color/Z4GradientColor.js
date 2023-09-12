@@ -1,7 +1,7 @@
 /**
  * The gradient color (a gradient between two colors)
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4GradientColor {
 

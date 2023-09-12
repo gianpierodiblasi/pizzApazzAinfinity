@@ -5,7 +5,7 @@ import def.dom.Element;
 /**
  * The simulation of the ResizeObserver object
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class $ResizeObserver {
 

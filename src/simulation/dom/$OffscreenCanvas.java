@@ -3,7 +3,7 @@ package simulation.dom;
 /**
  * The simulation of the OffscreenCanvas object
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class $OffscreenCanvas {
 

@@ -20,7 +20,7 @@ import simulation.js.$Object;
 /**
  * The stamper
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
 

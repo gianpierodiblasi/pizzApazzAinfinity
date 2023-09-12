@@ -1,7 +1,7 @@
 /**
  * The component to edit a Z4Stamper
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4StamperUI extends Z4PointIteratorUI {
 

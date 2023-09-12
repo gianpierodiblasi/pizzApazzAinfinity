@@ -13,7 +13,7 @@ import simulation.js.$URLSearchParams;
 /**
  * The loader
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4Loader {
 

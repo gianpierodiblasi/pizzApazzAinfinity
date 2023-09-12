@@ -11,7 +11,7 @@ import static simulation.js.$Globals.$exists;
 /**
  * The component to edit a Z4Tracer
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4TracerUI extends Z4PointIteratorUI<Z4Tracer> {
 

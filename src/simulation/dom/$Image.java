@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 /**
  * The simulation of the Image object
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class $Image extends Image {
 

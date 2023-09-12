@@ -7,7 +7,7 @@ import simulation.dom.$CanvasRenderingContext2D;
 /**
  * The classic painter
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4ClassicPainter extends Z4Painter<Z4ClassicPainter> {
 

@@ -2,7 +2,7 @@
  * The common parent of all painters
  *
  * @param <T>
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Painter {
 

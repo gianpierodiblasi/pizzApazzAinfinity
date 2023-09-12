@@ -1,7 +1,7 @@
 /**
  * The progression of a color
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Progression {
 

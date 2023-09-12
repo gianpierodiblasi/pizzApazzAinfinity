@@ -23,7 +23,7 @@ import simulation.js.$Object;
 /**
  * The tracer
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4Tracer extends Z4PointIterator<Z4Tracer> {
 

@@ -9,7 +9,7 @@ import simulation.dom.$HTMLElement;
 /**
  * The component to show a color
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4ColorUI extends Z4AbstractComponentWithValueUI<Z4Color> {
 

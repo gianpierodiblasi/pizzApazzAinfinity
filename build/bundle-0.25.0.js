@@ -1,7 +1,7 @@
 /**
  * The environment settings
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Setting {
 
@@ -118,7 +118,7 @@ class Z4Setting {
 /**
  * The html factory
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4HTMLFactory {
 
@@ -170,7 +170,7 @@ class Z4HTMLFactory {
 /**
  * The message factory
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4MessageFactory {
 
@@ -228,7 +228,7 @@ class Z4MessageFactory {
 /**
  * The message factory
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4ImageFactory {
 
@@ -273,7 +273,7 @@ class Z4ImageFactory {
 /**
  * The abstract class of all UI components
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4AbstractComponentUI {
 
@@ -436,7 +436,7 @@ class Z4AbstractComponentUI {
  * The abstract class of all UI components providing a value
  *
  * @param <S>
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4AbstractComponentWithValueUI extends Z4AbstractComponentUI {
 
@@ -488,7 +488,7 @@ class Z4AbstractComponentWithValueUI extends Z4AbstractComponentUI {
 /**
  * The class of all UI messages
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4ModalMessageUI {
 
@@ -626,7 +626,7 @@ class Z4ModalMessageUI {
 /**
  * The composer of a tool
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4ToolComposerUI extends Z4AbstractComponentUI {
 
@@ -984,7 +984,7 @@ class Z4ToolComposerUI extends Z4AbstractComponentUI {
 /**
  * The utility library for math
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Math {
 
@@ -1089,7 +1089,7 @@ class Z4Math {
 /**
  * The signs of a value
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Sign {
 
@@ -1146,7 +1146,7 @@ class Z4Sign {
 /**
  * A value with sign
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4SignedValue {
 
@@ -1206,7 +1206,7 @@ class Z4SignedValue {
 /**
  * A random value with sign
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4SignedRandomValue {
 
@@ -1443,7 +1443,7 @@ class Z4SignedRandomValue {
 /**
  * The fanciful value
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4FancifulValue {
 
@@ -1534,7 +1534,7 @@ class Z4FancifulValue {
  * The rotation (angles parameters have to be provided in degrees, rotations are
  * computed in radians)
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Rotation {
 
@@ -1714,7 +1714,7 @@ class Z4Rotation {
 /**
  * The geometric shapes
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Shape2D {
 
@@ -1816,7 +1816,7 @@ class Z4Shape2D {
 /**
  * The vector
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Vector {
 
@@ -1942,7 +1942,7 @@ class Z4Vector {
 /**
  * The path for a Z4Tracer
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4TracerPath {
 
@@ -2116,7 +2116,7 @@ class Z4TracerPath {
 /**
  * The point where to perform a drawing
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Point {
 
@@ -2285,7 +2285,7 @@ class Z4Point {
 /**
  * The component to edit a signed value
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
 
@@ -2656,7 +2656,7 @@ class Z4SignedValueUI extends Z4AbstractComponentWithValueUI {
 /**
  * The component to edit a signed random value
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
 
@@ -2825,7 +2825,7 @@ class Z4SignedRandomValueUI extends Z4AbstractComponentWithValueUI {
 /**
  * The component to edit a fanciful value
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
 
@@ -2975,7 +2975,7 @@ class Z4FancifulValueUI extends Z4AbstractComponentWithValueUI {
 /**
  * The component to edit a rotation
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4RotationUI extends Z4AbstractComponentWithValueUI {
 
@@ -3093,7 +3093,7 @@ class Z4RotationUI extends Z4AbstractComponentWithValueUI {
 /**
  * The lighting of a color
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Lighting {
 
@@ -3118,7 +3118,7 @@ class Z4Lighting {
 /**
  * The progression of a color
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Progression {
 
@@ -3289,7 +3289,7 @@ class Z4Progression {
 /**
  * The color
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Color {
 
@@ -3486,7 +3486,7 @@ class Z4Color {
 /**
  * The gradient color (a gradient between two colors)
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4GradientColor {
 
@@ -3698,7 +3698,7 @@ class Z4GradientColor {
 /**
  * The component to show a color progression
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4ProgressionUI extends Z4AbstractComponentWithValueUI {
 
@@ -3843,7 +3843,7 @@ class Z4ProgressionUI extends Z4AbstractComponentWithValueUI {
 /**
  * The component to show a color
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4ColorUI extends Z4AbstractComponentWithValueUI {
 
@@ -3942,7 +3942,7 @@ class Z4ColorUI extends Z4AbstractComponentWithValueUI {
 /**
  * The component to show a gradient color
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
 
@@ -4111,7 +4111,7 @@ class Z4GradientColorUI extends Z4AbstractComponentWithValueUI {
  * The common parent of all painters
  *
  * @param <T>
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Painter {
 
@@ -4139,7 +4139,7 @@ class Z4Painter {
 /**
  * The painter of arrows, used only for testing purpose
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4ArrowPainter extends Z4Painter {
 
@@ -4191,7 +4191,7 @@ class Z4ArrowPainter extends Z4Painter {
 /**
  * The classic painter
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4ClassicPainter extends Z4Painter {
 
@@ -4202,7 +4202,7 @@ class Z4ClassicPainter extends Z4Painter {
 /**
  * The painter of 2D shapes
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Shape2DPainter extends Z4Painter {
 
@@ -4446,7 +4446,7 @@ class Z4Shape2DPainter extends Z4Painter {
 /**
  * The painter of natural figures
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4NaturalFigurePainter extends Z4Painter {
 
@@ -4457,7 +4457,7 @@ class Z4NaturalFigurePainter extends Z4Painter {
 /**
  * The painter of centered figures
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4CenteredFigurePainter extends Z4Painter {
 
@@ -4468,7 +4468,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
 /**
  * The abstract component to edit a Z4Painter
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  * @param <S>
  */
 class Z4PainterUI extends Z4AbstractComponentWithValueUI {
@@ -4552,7 +4552,7 @@ class Z4PainterUI extends Z4AbstractComponentWithValueUI {
 /**
  * The component to edit a Z4Shape2DPainter
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Shape2DPainterUI extends Z4PainterUI {
 
@@ -4717,7 +4717,7 @@ class Z4Shape2DPainterUI extends Z4PainterUI {
 /**
  * The component to edit a Z4CenteredFigurePainter
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4CenteredFigurePainterUI extends Z4PainterUI {
 
@@ -4887,7 +4887,7 @@ class Z4CenteredFigurePainterUI extends Z4PainterUI {
 /**
  * The drawing action of a Z4PointIterator
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Action {
 
@@ -4913,7 +4913,7 @@ class Z4Action {
  * The common parent of all point iterators
  *
  * @param <T>
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4PointIterator {
 
@@ -5047,7 +5047,7 @@ class Z4PointIterator {
 /**
  * The stamper
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Stamper extends Z4PointIterator {
 
@@ -5176,7 +5176,7 @@ class Z4Stamper extends Z4PointIterator {
 /**
  * The tracer
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Tracer extends Z4PointIterator {
 
@@ -5503,7 +5503,7 @@ class Z4Tracer extends Z4PointIterator {
 /**
  * The airbrush
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Airbrush extends Z4PointIterator {
 
@@ -5651,7 +5651,7 @@ class Z4Airbrush extends Z4PointIterator {
 /**
  * The spirograph
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Spirograph extends Z4PointIterator {
 
@@ -5768,7 +5768,7 @@ class Z4Spirograph extends Z4PointIterator {
 /**
  * The abstract component to edit a Z4PointIterator
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  * @param <S>
  */
 class Z4PointIteratorUI extends Z4AbstractComponentWithValueUI {
@@ -5896,7 +5896,7 @@ class Z4PointIteratorUI extends Z4AbstractComponentWithValueUI {
 /**
  * The component to edit a Z4Stamper
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4StamperUI extends Z4PointIteratorUI {
 
@@ -5942,7 +5942,7 @@ class Z4StamperUI extends Z4PointIteratorUI {
 /**
  * The component to edit a Z4Tracer
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4TracerUI extends Z4PointIteratorUI {
 
@@ -6037,7 +6037,7 @@ class Z4TracerUI extends Z4PointIteratorUI {
 /**
  * The component to edit a Z4Airbrush
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4AirbrushUI extends Z4PointIteratorUI {
 
@@ -6091,7 +6091,7 @@ class Z4AirbrushUI extends Z4PointIteratorUI {
 /**
  * The component to edit a Z4Spirograph
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4SpirographUI extends Z4PointIteratorUI {
 

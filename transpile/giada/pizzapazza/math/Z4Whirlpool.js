@@ -1,7 +1,7 @@
 /**
  * The whirlpool
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4Whirlpool {
 

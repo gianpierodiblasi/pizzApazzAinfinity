@@ -4,7 +4,7 @@ package simulation.js;
  * The simulation of a functional interface with ZERO parameters and VOID return
  * value
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 @FunctionalInterface
 public interface $Apply_0_Void {

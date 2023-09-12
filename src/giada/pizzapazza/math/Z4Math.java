@@ -7,7 +7,7 @@ import simulation.js.$Object;
 /**
  * The utility library for math
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4Math {
 

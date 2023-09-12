@@ -14,7 +14,7 @@ import static simulation.js.$Globals.parseInt;
 /**
  * The class of all UI messages
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4ModalMessageUI {
 

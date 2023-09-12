@@ -1,7 +1,7 @@
 /**
  * The painter of arrows, used only for testing purpose
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 class Z4ArrowPainter extends Z4Painter {
 

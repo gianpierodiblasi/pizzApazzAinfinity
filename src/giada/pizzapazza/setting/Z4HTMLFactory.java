@@ -9,7 +9,7 @@ import simulation.js.$String;
 /**
  * The html factory
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class Z4HTMLFactory {
 

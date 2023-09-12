@@ -3,7 +3,7 @@ package simulation.js;
 /**
  * Simulation of the Path2D object
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class $Path2D {
 

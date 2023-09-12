@@ -3,7 +3,7 @@ package simulation.bezier;
 /**
  * Ths simulation of Bezier.js https://pomax.github.io/bezierjs/
  *
- * @author gianpiero.di.blasi
+ * @author gianpiero.diblasi
  */
 public class $Bezier {
 
