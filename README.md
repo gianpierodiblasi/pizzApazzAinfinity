@@ -52,6 +52,7 @@ pizzApazzA is an idea, not the code to realize it.
 ## Dependencies
 - Bootstrap - [link](https://getbootstrap.com)
 - Bezier.js - [link](https://pomax.github.io/bezierjs/)
+- josetta - [link](https://github.com/gianpierodiblasi/josetta)
 
 ## Build
 pizzApazzA is developed in NetBeans as an ANT project. In order to perform a build the following tools are necessary:
