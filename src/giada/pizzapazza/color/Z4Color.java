@@ -148,7 +148,7 @@ public class Z4Color {
   /**
    * Returns the components of this Z4Color (a, r, g, b)
    *
-   * @return The six components of this Z4Color
+   * @return The four components of this Z4Color
    */
   public Array<Integer> getComponents() {
     return new Array<>(this.a, this.r, this.g, this.b);
