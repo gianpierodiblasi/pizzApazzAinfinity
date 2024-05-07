@@ -39,7 +39,8 @@ So, I decided to rewrite pizzApazzA in JavaScript (to be more precise in ES6).
 
 But... OMG! I can't live without strong typization! So what can I do? I can develop in Java and transpile in JavaScript. Well I need a
 transpiler and there are several Java to JavaScript transpiler; but I'm a Java developer! So why don't write a transpiler by myself? Yes,
-but this is [another history](https://github.com/gianpierodiblasi/josetta).
+but this is [another history](https://github.com/gianpierodiblasi/josetta). On the other hand it is very difficult for an old style Java
+Swing developer to project UI for the web. So, I could rewrite Java Swing in JavaScript, but this is again [another history](https://github.com/gianpierodiblasi/swingjs).
 
 Ok, so I was talking about JavaScript and the web. I want everyone from everywhere can use pizzApazzA, with a pc, a mac, a chromebook,
 a tablet and everything able to run a browser.
