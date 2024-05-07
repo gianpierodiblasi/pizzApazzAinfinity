@@ -2,7 +2,7 @@
 The project of my life.
 
 ## Description
-![pizzApazza.png](https://github.com/gianpierodiblasi/pizzApazzAinfinity/blob/master/pizzApazzA.png?raw=true)
+![pizzApazza.png](https://github.com/gianpierodiblasi/pizzApazzAinfinity/blob/master/readme/pizzApazzA.png?raw=true)
 
 pizzApazzA is the project of my life. pizzApazzA was born:
 - from the request of a baby to have a crazy graphics software

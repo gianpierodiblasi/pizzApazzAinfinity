@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <project name="pizzApazzAinfinity" basedir="." default="build"> 
  
-  <taskdef resource="net/sf/antcontrib/antlib.xml">
+<!--  <taskdef resource="net/sf/antcontrib/antlib.xml">
     <classpath>
       <pathelement location="${basedir}/lib/ant-contrib-1.0b3.jar"/>
     </classpath>
-  </taskdef>
+  </taskdef>-->
 
-  <property name="src.dir" value="${basedir}/src" /> 
+<!--  <property name="src.dir" value="${basedir}/src" /> 
   <property name="transpile.dir" value="${basedir}/transpile" /> 
   <property name="build.dir" value="${basedir}/build" /> 
   <property name="test.dir" value="${basedir}/test" /> 
   <property name="transpile-test.dir" value="${basedir}/transpile-test" /> 
-  <property name="josetta.jar" value="${basedir}/lib/josetta-1.8.5-jar-with-dependencies.jar" /> 
+  <property name="josetta.jar" value="${basedir}/lib/josetta-1.8.5-jar-with-dependencies.jar" /> -->
   
-  <target name="clean"> 
+<!--  <target name="clean"> 
     <delete>
       <fileset dir="${build.dir}"/>
     </delete> 
-  </target> 
+  </target> -->
   
-  <target name="transpile">
+<!--  <target name="transpile">
     <java classname="giada.josetta.Josetta">
       <arg value="-in"/>
       <arg value="${src.dir}"/>
@@ -30,9 +30,9 @@
         <pathelement path="${josetta.jar}"/>
       </classpath>
     </java>
-  </target>
+  </target>-->
   
-  <target name="transpile-test">
+<!--  <target name="transpile-test">
     <java classname="giada.josetta.Josetta">
       <arg value="-in"/>
       <arg value="${test.dir}"/>
@@ -42,13 +42,13 @@
         <pathelement path="${josetta.jar}"/>
       </classpath>
     </java>
-  </target>
+  </target>-->
   
-  <target name="version">
+<!--  <target name="version">
     <loadfile property="version" srcFile="${src.dir}/version.properties"/>
-  </target>
+  </target>-->
   
-  <target name="html_source_list_comma">
+<!--  <target name="html_source_list_comma">
     <loadfile property="html_source_list_comma" srcFile="${src.dir}/giada/html_list.properties">
       <filterchain>
         <linecontainsregexp negate="true">
@@ -61,9 +61,9 @@
         <striplinebreaks/>
       </filterchain>     
     </loadfile>
-  </target>
+  </target>-->
   
-  <target name="js_source_list_comma">
+<!--  <target name="js_source_list_comma">
     <loadfile property="js_source_list_comma" srcFile="${transpile.dir}/giada/js_list.properties">
       <filterchain>
         <linecontainsregexp negate="true">
@@ -76,9 +76,9 @@
         <striplinebreaks/>
       </filterchain>
     </loadfile>
-  </target>
+  </target>-->
   
-  <target name="js_source_list_space">
+<!--  <target name="js_source_list_space">
     <loadfile property="js_source_list_space" srcFile="${transpile.dir}/giada/js_list.properties">
       <filterchain>
         <linecontainsregexp negate="true">
@@ -91,9 +91,9 @@
         <striplinebreaks/>
       </filterchain>
     </loadfile>
-  </target>
+  </target>-->
   
-  <target name="css_source_list_comma">
+<!--  <target name="css_source_list_comma">
     <loadfile property="css_source_list_comma" srcFile="${src.dir}/css/css_list.properties">
       <filterchain>
         <linecontainsregexp negate="true">
@@ -106,9 +106,9 @@
         <striplinebreaks/>
       </filterchain>
     </loadfile>
-  </target>
+  </target>-->
   
-  <target name="css_source_list_space">
+<!--  <target name="css_source_list_space">
     <loadfile property="css_source_list_space" srcFile="${src.dir}/css/css_list.properties">
       <filterchain>
         <linecontainsregexp negate="true">
@@ -121,9 +121,9 @@
         <striplinebreaks/>
       </filterchain>
     </loadfile>
-  </target>
+  </target>-->
   
-  <target name="build_html" depends="version, html_source_list_comma">
+<!--  <target name="build_html" depends="version, html_source_list_comma">
     <for list="${html_source_list_comma}" param="file">
       <sequential>
         <concat destfile="${build.dir}/bundle-${version}.html" append="true">@{file} := </concat>
@@ -137,9 +137,9 @@
       </sequential>
     </for>
     <replace file="${build.dir}/bundle-${version}.html" token="&gt;&lt;" value="&gt; &lt;"/>
-  </target>
+  </target>-->
   
-  <target name="build_js" depends="version, js_source_list_comma">
+<!--  <target name="build_js" depends="version, js_source_list_comma">
     <concat destfile="${build.dir}/bundle-${version}.js" fixlastline="yes">
       <filterchain>
         <linecontainsregexp negate="true">
@@ -149,15 +149,15 @@
       
       <filelist dir="${basedir}" files="${js_source_list_comma}"/>
     </concat>
-  </target>
+  </target>-->
   
-  <target name="build_css" depends="version,css_source_list_comma">
+<!--  <target name="build_css" depends="version,css_source_list_comma">
     <concat destfile="${build.dir}/bundle-${version}.css" fixlastline="yes">
       <filelist dir="${basedir}" files="${css_source_list_comma}"/>
     </concat>
-  </target>
+  </target>-->
   
-  <target name="build_js_min" depends="version,js_source_list_space">
+<!--  <target name="build_js_min" depends="version,js_source_list_space">
     <exec executable="cmd">
       <arg value="/c"/>
       <arg value="terser"/>
@@ -169,9 +169,9 @@
     </exec>
     
     <replace file="${build.dir}/bundle-${version}.min.js.map" token="transpile/" value="../transpile/"/>
-  </target>
+  </target>-->
   
-  <target name="build_css_min" depends="version,css_source_list_space">
+<!--  <target name="build_css_min" depends="version,css_source_list_space">
     <exec executable="cmd">
       <arg value="/c"/>
       <arg value="cleancss"/>
@@ -182,9 +182,9 @@
     </exec>
     
     <replace file="${build.dir}/bundle-${version}.min.css.map" token="src\\css\\" value="../src/css/"/>
-  </target>
+  </target>-->
   
-  <target name="copy_images">
+<!--  <target name="copy_images">
     <copy todir="${build.dir}/image">
       <fileset dir="${src.dir}/image">
         <include name="**/*.png"/>
@@ -192,27 +192,27 @@
       </fileset>
     </copy>
     <copy file="${src.dir}/image/image_list.properties" tofile="${build.dir}/image/image_list-${version}.properties"/>
-  </target>
+  </target>-->
   
-  <target name="copy_messages">
+<!--  <target name="copy_messages">
     <copy todir="${build.dir}/message" encoding="UTF-8" outputencoding="UTF-8">
       <fileset dir="${src.dir}/message"/>
       <globmapper from="*.txt" to="*-${version}.txt"/>
     </copy>
-  </target>
+  </target>-->
   
-  <target name="copy_loader">
+<!--  <target name="copy_loader">
     <copy file="${transpile.dir}/giada/pizzapazza/Z4Loader.js" todir="${build.dir}/"/>
-  </target>
+  </target>-->
   
-  <target name="copy_version">
+<!--  <target name="copy_version">
     <copy file="${src.dir}/version.properties" todir="${build.dir}/"/>
-  </target>
+  </target>-->
   
-  <target name="build" depends="transpile,transpile-test,build_html,build_js,build_css,build_js_min,build_css_min,copy_images,copy_messages,copy_loader,copy_version">
-  </target>
+<!--  <target name="build" depends="transpile,transpile-test,build_html,build_js,build_css,build_js_min,build_css_min,copy_images,copy_messages,copy_loader,copy_version">
+  </target>-->
   
-  <target name="watch">
+<!--  <target name="watch">
     <java classname="giada.josetta.Josetta">
       <arg value="-in"/>
       <arg value="${src.dir}"/>
@@ -223,9 +223,9 @@
         <pathelement path="${josetta.jar}"/>
       </classpath>
     </java>
-  </target>
+  </target>-->
   
-  <target name="watch-test">
+<!--  <target name="watch-test">
     <java classname="giada.josetta.Josetta">
       <arg value="-in"/>
       <arg value="${test.dir}"/>
@@ -236,5 +236,5 @@
         <pathelement path="${josetta.jar}"/>
       </classpath>
     </java>
-  </target>
+  </target>-->
 </project>
