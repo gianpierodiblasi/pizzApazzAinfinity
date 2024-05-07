@@ -157,31 +157,20 @@
     </concat>
   </target>-->
   
-<!--  <target name="build_js_min" depends="version,js_source_list_space">
-    <exec executable="cmd">
-      <arg value="/c"/>
-      <arg value="terser"/>
-      <arg line="${js_source_list_space}"/>
-      <arg line="--output ${build.dir}/bundle-${version}.min.js"/>
-      <arg value="--compress"/>
-      <arg value="--mangle"/>
-      <arg line="--source-map &quot;url='bundle-${version}.min.js.map'&quot;"/>
-    </exec>
-    
-    <replace file="${build.dir}/bundle-${version}.min.js.map" token="transpile/" value="../transpile/"/>
+<!--  <target name="build_js_min" depends="build_js">
+    <java sourcefile="${tools.dir}/Minify.java">
+      <arg value="https://www.toptal.com/developers/javascript-minifier/api/raw"/>
+      <arg value="${build.dir}/swing-bundle-${version}.js"/>
+      <arg value="${build.dir}/swing-bundle-min-${version}.js"/>
+    </java>
   </target>-->
   
-<!--  <target name="build_css_min" depends="version,css_source_list_space">
-    <exec executable="cmd">
-      <arg value="/c"/>
-      <arg value="cleancss"/>
-      <arg line="--source-map"/>
-      <arg line="-O2"/>
-      <arg line="-o ${build.dir}/bundle-${version}.min.css"/>
-      <arg line="${css_source_list_space}"/>
-    </exec>
-    
-    <replace file="${build.dir}/bundle-${version}.min.css.map" token="src\\css\\" value="../src/css/"/>
+<!--  <target name="build_css_min" depends="build_css">
+    <java sourcefile="${tools.dir}/Minify.java">
+      <arg value="https://www.toptal.com/developers/cssminifier/api/raw"/>
+      <arg value="${build.dir}/swing-bundle-${version}.css"/>
+      <arg value="${build.dir}/swing-bundle-min-${version}.css"/>
+    </java>
   </target>-->
   
 <!--  <target name="copy_images">
