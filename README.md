@@ -50,22 +50,28 @@ done better (starting from the build system... why to use ANT for a JavaScript b
 improve my code I will be happy to do it, but... please don't focus your attention on technical details, focus your attention to the result:
 pizzApazzA is an idea, not the code to realize it.
 
+## Translations
+Currently only the English and Italian languages are managed.
+
+## Test
+pizzApazzA has been tested on:
+- desktop
+  - chrome 124
+  - edge 124
+  - firefox 125
+
 ## Dependencies
-- Bootstrap - [link](https://getbootstrap.com)
-- Bezier.js - [link](https://pomax.github.io/bezierjs/)
 - josetta - [link](https://github.com/gianpierodiblasi/josetta)
+- jsweet-core - [link](https://repository.jsweet.org/artifactory/libs-release-local/org/jsweet/jsweet-core/)
+- swing.js - [link](https://github.com/gianpierodiblasi/swing.js)
+- Bezier.js - [link](https://pomax.github.io/bezierjs/)
 
 ## Build
-pizzApazzA is developed in NetBeans as an ANT project. In order to perform a build the following tools are necessary:
-- NetBeans [link](https://netbeans.apache.org/) or ANT [link](https://ant.apache.org/)
-- node.js [link](https://nodejs.org/)
-- terser [link](https://github.com/terser/terser)
-- clean-css cli [link](https://github.com/clean-css/clean-css-cli)
+pizzApazzA is developed in NetBeans as an ANT project. In order to perform a build you can use [ANT](https://ant.apache.org/),
+[NetBeans](https://netbeans.apache.org/) or any IDE compatible with ANT.
 
 ## Run
-In order to run pizzApazzA locally you will need any basic web server, due to its simplicity I prefer the Chrome app
-[Web Server for Chrome](https://chrome.google.com/webstore/detail/web-server-for-chrome/ofhbbkphhbklhfoeikjpcbhemlocgigb),
-but you can use any other web server of your choice.
+In order to run pizzApazzA you only need to click this [link](https://gianpierodiblasi.github.io/pizzApazzAinfinity/).
 
 ## Donate
 If you would like to support the development of this and/or other projects, consider making a
