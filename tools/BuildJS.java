@@ -22,7 +22,7 @@ public class BuildJS {
   private final static List<String> toRename = List.of("Button", "CheckBox", "ComboBox", "Component", "Dialog", "Frame", "Label", "Panel", "ProgressBar", "RadioButton", "Slider", "Spinner", "TabbedPane", "TextField", "ToggleButton");
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr", "CallToPrintStackTrace", "MismatchedQueryAndUpdateOfCollection"})
-  private static void watch(File swingjs, File in, File out, boolean findParent, boolean rename) throws Exception {
+  private static void watch(File pizzApazzAjs, File in, File out, boolean findParent, boolean rename) throws Exception {
     System.out.println("watching " + in + " into " + out);
 
     Map<WatchKey, Path> map = new HashMap<>();
@@ -42,7 +42,7 @@ public class BuildJS {
 
       watchKey.pollEvents().forEach(event -> {
         try {
-          BuildJS.write(swingjs, in, out, findParent, rename);
+          BuildJS.write(pizzApazzAjs, in, out, findParent, rename);
         } catch (Exception ex) {
           ex.printStackTrace();
         }
@@ -53,7 +53,7 @@ public class BuildJS {
   }
 
   @SuppressWarnings("UseOfSystemOutOrSystemErr")
-  private static void write(File swingjs, File in, File out, boolean findParent, boolean rename) throws Exception {
+  private static void write(File pizzApazzAjs, File in, File out, boolean findParent, boolean rename) throws Exception {
     @SuppressWarnings({"CallToPrintStackTrace", "BroadCatchBlock", "TooBroadCatch", "UseSpecificCatch"})
     List<TreeNode> nodes = Files.find(in.toPath(), 999, (p, bfa) -> bfa.isRegularFile() && p.getFileName().toString().matches(".*\\.js")).map(path -> {
       try {
@@ -91,7 +91,7 @@ public class BuildJS {
     Path outPath = out.toPath();
 
     System.out.println("writing " + in + " into " + out);
-    Files.write(outPath, swingjs != null ? Files.readAllBytes(swingjs.toPath()) : new byte[0], StandardOpenOption.CREATE);
+    Files.write(outPath, pizzApazzAjs != null ? Files.readAllBytes(pizzApazzAjs.toPath()) : new byte[0], StandardOpenOption.CREATE);
     nodes.stream().filter(node -> node.parentName == null).forEach(node -> BuildJS.write(outPath, node));
   }
 

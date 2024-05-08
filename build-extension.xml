@@ -58,9 +58,9 @@
   <target name="build_js" depends="version,transpile">
     <java sourcefile="${tools.dir}/BuildJS.java">
       <arg value="b"/>
-      <arg value="${src.dir}/swing.js"/>
+      <arg value="${src.dir}/pizzApazzA.js"/>
       <arg value="${transpile.dir}"/>
-      <arg value="${build.dir}/swing-bundle-${version}.js"/>
+      <arg value="${build.dir}/pizzApazzA-bundle-${version}.js"/>
       <arg value="-find_parent"/>
       <arg value="-no_rename"/>
     </java>
@@ -71,7 +71,7 @@
       <arg value="b"/>
       <arg value="NOFILE"/>
       <arg value="${transpile-test.dir}"/>
-      <arg value="${html-test.dir}/swing-test.js"/>
+      <arg value="${html-test.dir}/pizzApazzA-test.js"/>
       <arg value="-no_find_parent"/>
       <arg value="-rename"/>
     </java>
@@ -81,33 +81,33 @@
     <java sourcefile="${tools.dir}/BuildCSS.java">
       <arg value="b"/>
       <arg value="${src.dir}/css"/>
-      <arg value="${build.dir}/swing-bundle-${version}.css"/>
+      <arg value="${build.dir}/pizzApazzA-bundle-${version}.css"/>
     </java>
   </target>
   
   <target name="build_jar" depends="build_java">
-    <jar destfile="${build.dir}/swing-bundle-${version}.jar" basedir="${class.dir}"/>
+    <jar destfile="${build.dir}/pizzApazzA-bundle-${version}.jar" basedir="${class.dir}"/>
   </target>
   
   <target name="build_js_min" depends="build_js">
     <java sourcefile="${tools.dir}/Minify.java">
       <arg value="https://www.toptal.com/developers/javascript-minifier/api/raw"/>
-      <arg value="${build.dir}/swing-bundle-${version}.js"/>
-      <arg value="${build.dir}/swing-bundle-min-${version}.js"/>
+      <arg value="${build.dir}/pizzApazzA-bundle-${version}.js"/>
+      <arg value="${build.dir}/pizzApazzA-bundle-min-${version}.js"/>
     </java>
   </target>
     
   <target name="build_css_min" depends="build_css">
     <java sourcefile="${tools.dir}/Minify.java">
       <arg value="https://www.toptal.com/developers/cssminifier/api/raw"/>
-      <arg value="${build.dir}/swing-bundle-${version}.css"/>
-      <arg value="${build.dir}/swing-bundle-min-${version}.css"/>
+      <arg value="${build.dir}/pizzApazzA-bundle-${version}.css"/>
+      <arg value="${build.dir}/pizzApazzA-bundle-min-${version}.css"/>
     </java>
   </target>
   
   <target name="javadoc">
     <javadoc sourcepath="${src.dir}" destdir="${doc.dir}" classpath="${basedir}/lib/jsweet-core-6.3.1.jar"
-             windowtitle="swing.js" overview="${src.dir}/overview.html"
+             windowtitle="pizzApazzA" overview="${src.dir}/overview.html"
              excludepackagenames="simulation.*" additionalparam="-notimestamp --frames">
     </javadoc>
   </target>
@@ -155,9 +155,9 @@
   <target name="watch-transpile" depends="version">
     <java sourcefile="${tools.dir}/BuildJS.java">
       <arg value="w"/>
-      <arg value="${src.dir}/swing.js"/>
+      <arg value="${src.dir}/pizzApazzA.js"/>
       <arg value="${transpile.dir}"/>
-      <arg value="${build.dir}/swing-bundle-${version}.js"/>
+      <arg value="${build.dir}/pizzApazzA-bundle-${version}.js"/>
       <arg value="-find_parent"/>
       <arg value="-no_rename"/>
     </java>
@@ -168,7 +168,7 @@
       <arg value="w"/>
       <arg value="NOFILE"/>
       <arg value="${transpile-test.dir}"/>
-      <arg value="${html-test.dir}/swing-test.js"/>
+      <arg value="${html-test.dir}/pizzApazzA-test.js"/>
       <arg value="-no_find_parent"/>
       <arg value="-rename"/>
     </java>
@@ -178,7 +178,7 @@
     <java sourcefile="${tools.dir}/BuildCSS.java">
       <arg value="w"/>
       <arg value="${src.dir}/css"/>
-      <arg value="${build.dir}/swing-bundle-${version}.css"/>
+      <arg value="${build.dir}/pizzApazzA-bundle-${version}.css"/>
     </java>
   </target>
 </project>

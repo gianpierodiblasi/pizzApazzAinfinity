@@ -1,0 +1,1 @@
+window.onload = event => new Z4Frame();
