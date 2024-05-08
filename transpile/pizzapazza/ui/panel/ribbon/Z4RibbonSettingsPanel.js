@@ -9,10 +9,6 @@ class Z4RibbonSettingsPanel extends JSPanel {
 
    theme = new JSComboBox();
 
-   languageModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer();
-
-   themeModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer();
-
   /**
    * Creates the object
    */
@@ -28,9 +24,10 @@ class Z4RibbonSettingsPanel extends JSPanel {
     constraints.anchor = GridBagConstraints.WEST;
     constraints.insets = new Insets(5, 5, 2, 0);
     this.add(label, constraints);
-    this.languageModelAndRenderer.addElement(new KeyValue("en", Z4Translations.LANGUAGE_ENGLISH_NATIVE));
-    this.languageModelAndRenderer.addElement(new KeyValue("it", Z4Translations.LANGUAGE_ITALIAN_NATIVE));
-    this.language.setModelAndRenderer(this.languageModelAndRenderer);
+    let languageModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer();
+    languageModelAndRenderer.addElement(new KeyValue("en", Z4Translations.LANGUAGE_ENGLISH_NATIVE));
+    languageModelAndRenderer.addElement(new KeyValue("it", Z4Translations.LANGUAGE_ITALIAN_NATIVE));
+    this.language.setModelAndRenderer(languageModelAndRenderer);
     this.language.setSelectedItem(Z4Translations.CURRENT_LANGUAGE);
     this.language.addActionListener(event => this.onchangeLanguage());
     constraints = new GridBagConstraints();
@@ -60,10 +57,11 @@ class Z4RibbonSettingsPanel extends JSPanel {
         selectedTheme = new KeyValue("auto", Z4Translations.THEME_AUTO);
         break;
     }
-    this.themeModelAndRenderer.addElement(new KeyValue("auto", Z4Translations.THEME_AUTO));
-    this.themeModelAndRenderer.addElement(new KeyValue("light", Z4Translations.THEME_LIGHT));
-    this.themeModelAndRenderer.addElement(new KeyValue("dark", Z4Translations.THEME_DARK));
-    this.theme.setModelAndRenderer(this.themeModelAndRenderer);
+    let themeModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer();
+    themeModelAndRenderer.addElement(new KeyValue("auto", Z4Translations.THEME_AUTO));
+    themeModelAndRenderer.addElement(new KeyValue("light", Z4Translations.THEME_LIGHT));
+    themeModelAndRenderer.addElement(new KeyValue("dark", Z4Translations.THEME_DARK));
+    this.theme.setModelAndRenderer(themeModelAndRenderer);
     this.theme.setSelectedItem(selectedTheme);
     this.theme.addActionListener(event => this.onchangeTheme());
     constraints = new GridBagConstraints();
@@ -76,7 +74,6 @@ class Z4RibbonSettingsPanel extends JSPanel {
     constraints = new GridBagConstraints();
     constraints.gridx = 2;
     constraints.gridy = 0;
-    constraints.gridheight = 2;
     constraints.fill = GridBagConstraints.BOTH;
     constraints.weightx = 1;
     this.add(label, constraints);

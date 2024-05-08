@@ -44,6 +44,77 @@ class Z4Frame extends JSFrame {
   }
 }
 /**
+ * The ribbon panel containing the file menus
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4RibbonFilePanel extends JSPanel {
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super();
+    this.setLayout(new GridBagLayout());
+    this.addLabel(Z4Translations.NEW, 0);
+    this.addButton(Z4Translations.CREATE, 0, 1, null);
+    this.addButton(Z4Translations.CREATE_FROM_CLIPBOARD, 0, 2, null);
+    this.addLabel(Z4Translations.OPEN, 1);
+    this.addButton(Z4Translations.OPEN_FROM_DEVICE, 1, 1, event => this.openFromDevice());
+    this.addButton(Z4Translations.OPEN_FROM_BROWSER, 1, 2, null);
+    this.addLabel(Z4Translations.SAVE, 2);
+    this.addButton(Z4Translations.SAVE, 2, 1, null);
+    this.addButton(Z4Translations.SAVE_AS, 2, 2, null);
+    let label = new JSLabel();
+    let constraints = new GridBagConstraints();
+    constraints.gridx = 3;
+    constraints.gridy = 0;
+    constraints.fill = GridBagConstraints.BOTH;
+    constraints.weightx = 1;
+    this.add(label, constraints);
+  }
+
+   addLabel(text, gridx) {
+    let label = new JSLabel();
+    label.setText(text);
+    let constraints = new GridBagConstraints();
+    constraints.gridx = gridx;
+    constraints.gridy = 0;
+    constraints.anchor = GridBagConstraints.WEST;
+    constraints.insets = new Insets(5, 5, 2, 0);
+    this.add(label, constraints);
+  }
+
+   addButton(text, gridx, gridy, listener) {
+    let button = new JSButton();
+    button.setText(text);
+    button.setContentAreaFilled(false);
+    button.addActionListener(listener);
+    let constraints = new GridBagConstraints();
+    constraints.gridx = gridx;
+    constraints.gridy = gridy;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.insets = new Insets(0, 5, 2, 0);
+    this.add(button, constraints);
+  }
+
+   openFromDevice() {
+    JSFileChooser.showOpenDialog(".gif,.png,.jpeg,.jpg,.z4i", JSFileChooser.SINGLE_SELECTION, 0, files => {
+      files.forEach(file => {
+        // FileReader fileReader = new FileReader();
+        // fileReader.onload = event -> {
+        // $Image img = ($Image) document.createElement("img");
+        // img.src = (String) fileReader.result;
+        // 
+        // document.querySelector(".center").appendChild(img);
+        // return null;
+        // };
+        // fileReader.readAsDataURL(file);
+      });
+    });
+  }
+}
+/**
  * The ribbon panel containing the settings
  *
  * @author gianpiero.diblasi
@@ -53,10 +124,6 @@ class Z4RibbonSettingsPanel extends JSPanel {
    language = new JSComboBox();
 
    theme = new JSComboBox();
-
-   languageModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer();
-
-   themeModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer();
 
   /**
    * Creates the object
@@ -73,9 +140,10 @@ class Z4RibbonSettingsPanel extends JSPanel {
     constraints.anchor = GridBagConstraints.WEST;
     constraints.insets = new Insets(5, 5, 2, 0);
     this.add(label, constraints);
-    this.languageModelAndRenderer.addElement(new KeyValue("en", Z4Translations.LANGUAGE_ENGLISH_NATIVE));
-    this.languageModelAndRenderer.addElement(new KeyValue("it", Z4Translations.LANGUAGE_ITALIAN_NATIVE));
-    this.language.setModelAndRenderer(this.languageModelAndRenderer);
+    let languageModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer();
+    languageModelAndRenderer.addElement(new KeyValue("en", Z4Translations.LANGUAGE_ENGLISH_NATIVE));
+    languageModelAndRenderer.addElement(new KeyValue("it", Z4Translations.LANGUAGE_ITALIAN_NATIVE));
+    this.language.setModelAndRenderer(languageModelAndRenderer);
     this.language.setSelectedItem(Z4Translations.CURRENT_LANGUAGE);
     this.language.addActionListener(event => this.onchangeLanguage());
     constraints = new GridBagConstraints();
@@ -105,10 +173,11 @@ class Z4RibbonSettingsPanel extends JSPanel {
         selectedTheme = new KeyValue("auto", Z4Translations.THEME_AUTO);
         break;
     }
-    this.themeModelAndRenderer.addElement(new KeyValue("auto", Z4Translations.THEME_AUTO));
-    this.themeModelAndRenderer.addElement(new KeyValue("light", Z4Translations.THEME_LIGHT));
-    this.themeModelAndRenderer.addElement(new KeyValue("dark", Z4Translations.THEME_DARK));
-    this.theme.setModelAndRenderer(this.themeModelAndRenderer);
+    let themeModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer();
+    themeModelAndRenderer.addElement(new KeyValue("auto", Z4Translations.THEME_AUTO));
+    themeModelAndRenderer.addElement(new KeyValue("light", Z4Translations.THEME_LIGHT));
+    themeModelAndRenderer.addElement(new KeyValue("dark", Z4Translations.THEME_DARK));
+    this.theme.setModelAndRenderer(themeModelAndRenderer);
     this.theme.setSelectedItem(selectedTheme);
     this.theme.addActionListener(event => this.onchangeTheme());
     constraints = new GridBagConstraints();
@@ -121,7 +190,6 @@ class Z4RibbonSettingsPanel extends JSPanel {
     constraints = new GridBagConstraints();
     constraints.gridx = 2;
     constraints.gridy = 0;
-    constraints.gridheight = 2;
     constraints.fill = GridBagConstraints.BOTH;
     constraints.weightx = 1;
     this.add(label, constraints);
@@ -144,15 +212,14 @@ class Z4RibbonSettingsPanel extends JSPanel {
  */
 class Z4Ribbon extends JSTabbedPane {
 
-   settingsPanel = new Z4RibbonSettingsPanel();
-
   /**
    * Creates the object
    */
   constructor() {
     super();
     this.cssAddClass("z4ribbon");
-    this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
+    this.addTab(Z4Translations.FILE, new Z4RibbonFilePanel());
+    this.addTab(Z4Translations.SETTINGS, new Z4RibbonSettingsPanel());
   }
 }
 /**
@@ -165,8 +232,26 @@ class Z4Translations {
 
   static  CURRENT_LANGUAGE = null;
 
-  static  REFRESH_PAGE_MESSAGE = "";
+  // Ribbon File
+  static  FILE = "";
 
+  static  NEW = "";
+
+  static  CREATE = "";
+
+  static  CREATE_FROM_CLIPBOARD = "";
+
+  static  OPEN = "";
+
+  static  OPEN_FROM_DEVICE = "";
+
+  static  OPEN_FROM_BROWSER = "";
+
+  static  SAVE = "";
+
+  static  SAVE_AS = "";
+
+  // Ribbon Settings
   static  SETTINGS = "";
 
   static  LANGUAGE = "";
@@ -182,6 +267,8 @@ class Z4Translations {
   static  THEME_LIGHT = "";
 
   static  THEME_DARK = "";
+
+  static  REFRESH_PAGE_MESSAGE = "";
 
   static {
     switch(navigator.language.substring(0, 2)) {
@@ -202,7 +289,17 @@ class Z4Translations {
    * Sets the English language
    */
   static  setEnglish() {
-    Z4Translations.REFRESH_PAGE_MESSAGE = "Refresh the page to make the changes";
+    // Ribbon File
+    Z4Translations.FILE = "File";
+    Z4Translations.NEW = "New";
+    Z4Translations.CREATE = "Create";
+    Z4Translations.CREATE_FROM_CLIPBOARD = "Create from Clipboard";
+    Z4Translations.OPEN = "Open";
+    Z4Translations.OPEN_FROM_DEVICE = "Open from Device";
+    Z4Translations.OPEN_FROM_BROWSER = "Open from Browser";
+    Z4Translations.SAVE = "Save";
+    Z4Translations.SAVE_AS = "Save As...";
+    // Ribbon Settings
     Z4Translations.SETTINGS = "Settings";
     Z4Translations.LANGUAGE = "Language";
     Z4Translations.LANGUAGE_ENGLISH_NATIVE = "English";
@@ -211,6 +308,7 @@ class Z4Translations {
     Z4Translations.THEME_AUTO = "Auto";
     Z4Translations.THEME_LIGHT = "Light";
     Z4Translations.THEME_DARK = "Dark";
+    Z4Translations.REFRESH_PAGE_MESSAGE = "Refresh the page to make the changes";
     Z4Translations.CURRENT_LANGUAGE = new KeyValue("en", Z4Translations.LANGUAGE_ENGLISH_NATIVE);
   }
 
@@ -218,7 +316,17 @@ class Z4Translations {
    * Sets the Italian language
    */
   static  setItalian() {
-    Z4Translations.REFRESH_PAGE_MESSAGE = "Aggiorna la pagina per eseguire le modifiche";
+    // Ribbon File
+    Z4Translations.FILE = "File";
+    Z4Translations.NEW = "Nuovo";
+    Z4Translations.CREATE = "Crea";
+    Z4Translations.CREATE_FROM_CLIPBOARD = "Crea dagli Appunti";
+    Z4Translations.OPEN = "Apri";
+    Z4Translations.OPEN_FROM_DEVICE = "Apri dal Dispositivo";
+    Z4Translations.OPEN_FROM_BROWSER = "Apri dal Browser";
+    Z4Translations.SAVE = "Salva";
+    Z4Translations.SAVE_AS = "Salva Come...";
+    // Ribbon Settings
     Z4Translations.SETTINGS = "Impostazioni";
     Z4Translations.LANGUAGE = "Lingua";
     Z4Translations.LANGUAGE_ENGLISH_NATIVE = "English";
@@ -227,6 +335,7 @@ class Z4Translations {
     Z4Translations.THEME_AUTO = "Auto";
     Z4Translations.THEME_LIGHT = "Chiaro";
     Z4Translations.THEME_DARK = "Scuro";
+    Z4Translations.REFRESH_PAGE_MESSAGE = "Aggiorna la pagina per eseguire le modifiche";
     Z4Translations.CURRENT_LANGUAGE = new KeyValue("it", Z4Translations.LANGUAGE_ITALIAN_NATIVE);
   }
 }

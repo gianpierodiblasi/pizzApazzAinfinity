@@ -5,14 +5,13 @@
  */
 class Z4Ribbon extends JSTabbedPane {
 
-   settingsPanel = new Z4RibbonSettingsPanel();
-
   /**
    * Creates the object
    */
   constructor() {
     super();
     this.cssAddClass("z4ribbon");
-    this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
+    this.addTab(Z4Translations.FILE, new Z4RibbonFilePanel());
+    this.addTab(Z4Translations.SETTINGS, new Z4RibbonSettingsPanel());
   }
 }
