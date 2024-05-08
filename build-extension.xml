@@ -12,11 +12,13 @@
   <property name="class.dir" value="${basedir}/class" /> 
   <property name="josetta.jar" value="${basedir}/lib/josetta-1.12.1-jar-with-dependencies.jar" /> 
   <property name="jsweet.jar" value="${basedir}/lib/jsweet-core-6.3.1.jar" /> 
-  <property name="swingjs.jar" value="${basedir}/lib/swing-bundle-1.0.0.jar" /> 
+  <property name="swingjs.jar" value="${basedir}/lib/swing-bundle-1.1.0.jar" /> 
   
   <target name="clean"> 
     <delete>
       <fileset dir="${build.dir}" includes="**/*-bundle-*.*"/>
+      <fileset dir="${transpile.dir}" includes="**/*.*"/>
+      <fileset dir="${transpile-test.dir}" includes="**/*.*"/>
     </delete> 
     <delete dir="${doc.dir}"/>
     <delete dir="${class.dir}"/>

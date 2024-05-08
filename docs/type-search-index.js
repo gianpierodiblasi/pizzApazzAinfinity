@@ -1,1 +1,1 @@
-typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"pizzapazza.ui.frame","l":"Z4Frame"},{"p":"pizzapazza.ui.tab","l":"Z4Ribbon"},{"p":"pizzapazza.ui.panel","l":"Z4RibbonSettingsPanel"}]
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"pizzapazza.ui.frame","l":"Z4Frame"},{"p":"pizzapazza.ui.tab","l":"Z4Ribbon"},{"p":"pizzapazza.ui.panel","l":"Z4RibbonSettingsPanel"},{"p":"pizzapazza.util","l":"Z4Translations"}]
