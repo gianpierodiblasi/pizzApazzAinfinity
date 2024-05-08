@@ -1,8 +1,7 @@
-/* global Translations, Z4Translations */
+/* global Translations, Z4Translations, SwingJS */
 
 window.onload = event => {
-  var language = localStorage.getItem("z4language");
-  switch (language) {
+  switch (localStorage.getItem("z4language")) {
     case "en":
       Translations.setEnglish();
       Z4Translations.setEnglish();
@@ -13,7 +12,17 @@ window.onload = event => {
       break;
   }
 
-  localStorage.getItem("z4darkmode");
-  
+  switch (localStorage.getItem("z4theme")) {
+    case "light":
+      break;
+    case "dark":
+      SwingJS.instance().darkMode(true).build();
+      break;
+    case "auto":
+    default:
+      SwingJS.instance().darkMode(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches).build();
+      break;
+  }
+
   new Z4Frame();
 };
