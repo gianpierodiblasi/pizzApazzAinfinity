@@ -6,6 +6,10 @@
  */
 class Z4Translations {
 
+  static  CURRENT_LANGUAGE = null;
+
+  static  REFRESH_PAGE_MESSAGE = "";
+
   static  SETTINGS = "";
 
   static  LANGUAGE = "";
@@ -41,6 +45,7 @@ class Z4Translations {
    * Sets the English language
    */
   static  setEnglish() {
+    Z4Translations.REFRESH_PAGE_MESSAGE = "Refresh the page to make the changes";
     Z4Translations.SETTINGS = "Settings";
     Z4Translations.LANGUAGE = "Language";
     Z4Translations.ENGLISH = "English";
@@ -49,12 +54,14 @@ class Z4Translations {
     Z4Translations.AUTO = "Auto";
     Z4Translations.LIGHT = "Light";
     Z4Translations.DARK = "Dark";
+    Z4Translations.CURRENT_LANGUAGE = new KeyValue("en", Z4Translations.ENGLISH);
   }
 
   /**
    * Sets the Italian language
    */
   static  setItalian() {
+    Z4Translations.REFRESH_PAGE_MESSAGE = "Aggiorna la pagina per eseguire le modifiche";
     Z4Translations.SETTINGS = "Impostazioni";
     Z4Translations.LANGUAGE = "Lingua";
     Z4Translations.ENGLISH = "English";
@@ -63,5 +70,6 @@ class Z4Translations {
     Z4Translations.AUTO = "Auto";
     Z4Translations.LIGHT = "Chiaro";
     Z4Translations.DARK = "Scuro";
+    Z4Translations.CURRENT_LANGUAGE = new KeyValue("it", Z4Translations.ITALIAN);
   }
 }

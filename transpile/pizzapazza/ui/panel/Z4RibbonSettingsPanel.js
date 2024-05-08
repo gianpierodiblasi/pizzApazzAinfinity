@@ -31,6 +31,8 @@ class Z4RibbonSettingsPanel extends JSPanel {
     this.languageModelAndRenderer.addElement(new KeyValue("en", Z4Translations.ENGLISH));
     this.languageModelAndRenderer.addElement(new KeyValue("it", Z4Translations.ITALIAN));
     this.language.setModelAndRenderer(this.languageModelAndRenderer);
+    this.language.setSelectedItem(Z4Translations.CURRENT_LANGUAGE);
+    this.language.addActionListener(event => this.onchangeLanguage());
     constraints = new GridBagConstraints();
     constraints.gridx = 0;
     constraints.gridy = 1;
@@ -63,5 +65,10 @@ class Z4RibbonSettingsPanel extends JSPanel {
     constraints.fill = GridBagConstraints.BOTH;
     constraints.weightx = 1;
     this.add(label, constraints);
+  }
+
+   onchangeLanguage() {
+    localStorage.setItem("z4language", (this.language.getSelectedItem()).key);
+    JSOptionPane.showMessageDialog(Z4Translations.REFRESH_PAGE_MESSAGE, Z4Translations.LANGUAGE, JSOptionPane.INFORMATION_MESSAGE, null);
   }
 }

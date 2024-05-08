@@ -1,12 +1,13 @@
 package pizzapazza.ui.panel;
 
+import static def.dom.Globals.localStorage;
 import javascript.awt.GridBagConstraints;
 import javascript.awt.GridBagLayout;
 import javascript.awt.Insets;
 import javascript.swing.JSComboBox;
 import javascript.swing.JSLabel;
+import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
-import javascript.swing.MnR.DefaultComboBoxModelAndRenderer;
 import javascript.swing.MnR.DefaultKeyValueComboBoxModelAndRenderer;
 import javascript.util.KeyValue;
 import pizzapazza.util.Z4Translations;
@@ -47,6 +48,8 @@ public class Z4RibbonSettingsPanel extends JSPanel {
     this.languageModelAndRenderer.addElement(new KeyValue<>("en", Z4Translations.ENGLISH));
     this.languageModelAndRenderer.addElement(new KeyValue<>("it", Z4Translations.ITALIAN));
     this.language.setModelAndRenderer(this.languageModelAndRenderer);
+    this.language.setSelectedItem(Z4Translations.CURRENT_LANGUAGE);
+    this.language.addActionListener(event -> this.onchangeLanguage());
 
     constraints = new GridBagConstraints();
     constraints.gridx = 0;
@@ -85,5 +88,11 @@ public class Z4RibbonSettingsPanel extends JSPanel {
     constraints.fill = GridBagConstraints.BOTH;
     constraints.weightx = 1;
     this.add(label, constraints);
+  }
+
+  @SuppressWarnings("unchecked")
+  private void onchangeLanguage() {
+    localStorage.setItem("z4language", ((KeyValue<String, String>) this.language.getSelectedItem()).key);
+    JSOptionPane.showMessageDialog(Z4Translations.REFRESH_PAGE_MESSAGE, Z4Translations.LANGUAGE, JSOptionPane.INFORMATION_MESSAGE, null);
   }
 }

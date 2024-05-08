@@ -67,6 +67,8 @@ class Z4RibbonSettingsPanel extends JSPanel {
     this.languageModelAndRenderer.addElement(new KeyValue("en", Z4Translations.ENGLISH));
     this.languageModelAndRenderer.addElement(new KeyValue("it", Z4Translations.ITALIAN));
     this.language.setModelAndRenderer(this.languageModelAndRenderer);
+    this.language.setSelectedItem(Z4Translations.CURRENT_LANGUAGE);
+    this.language.addActionListener(event => this.onchangeLanguage());
     constraints = new GridBagConstraints();
     constraints.gridx = 0;
     constraints.gridy = 1;
@@ -100,6 +102,11 @@ class Z4RibbonSettingsPanel extends JSPanel {
     constraints.weightx = 1;
     this.add(label, constraints);
   }
+
+   onchangeLanguage() {
+    localStorage.setItem("z4language", (this.language.getSelectedItem()).key);
+    JSOptionPane.showMessageDialog(Z4Translations.REFRESH_PAGE_MESSAGE, Z4Translations.LANGUAGE, JSOptionPane.INFORMATION_MESSAGE, null);
+  }
 }
 /**
  * The main ribbon of the application
@@ -126,6 +133,10 @@ class Z4Ribbon extends JSTabbedPane {
  * @author gianpiero.diblasi
  */
 class Z4Translations {
+
+  static  CURRENT_LANGUAGE = null;
+
+  static  REFRESH_PAGE_MESSAGE = "";
 
   static  SETTINGS = "";
 
@@ -162,6 +173,7 @@ class Z4Translations {
    * Sets the English language
    */
   static  setEnglish() {
+    Z4Translations.REFRESH_PAGE_MESSAGE = "Refresh the page to make the changes";
     Z4Translations.SETTINGS = "Settings";
     Z4Translations.LANGUAGE = "Language";
     Z4Translations.ENGLISH = "English";
@@ -170,12 +182,14 @@ class Z4Translations {
     Z4Translations.AUTO = "Auto";
     Z4Translations.LIGHT = "Light";
     Z4Translations.DARK = "Dark";
+    Z4Translations.CURRENT_LANGUAGE = new KeyValue("en", Z4Translations.ENGLISH);
   }
 
   /**
    * Sets the Italian language
    */
   static  setItalian() {
+    Z4Translations.REFRESH_PAGE_MESSAGE = "Aggiorna la pagina per eseguire le modifiche";
     Z4Translations.SETTINGS = "Impostazioni";
     Z4Translations.LANGUAGE = "Lingua";
     Z4Translations.ENGLISH = "English";
@@ -184,5 +198,6 @@ class Z4Translations {
     Z4Translations.AUTO = "Auto";
     Z4Translations.LIGHT = "Chiaro";
     Z4Translations.DARK = "Scuro";
+    Z4Translations.CURRENT_LANGUAGE = new KeyValue("it", Z4Translations.ITALIAN);
   }
 }
