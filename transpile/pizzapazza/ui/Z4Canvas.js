@@ -13,6 +13,12 @@ class Z4Canvas extends JSComponent {
 
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
+   paper = new Z4Paper();
+
+  static  WIDTH = 500;
+
+  static  HEIGHT = 500;
+
   /**
    * Creates the object
    */
@@ -20,9 +26,10 @@ class Z4Canvas extends JSComponent {
     super(document.createElement("div"));
     this.cssAddClass("z4canvas");
     this.resizeObserver.observe(this.canvas);
-    this.canvas.width = 500;
-    this.canvas.height = 500;
+    this.canvas.width = Z4Canvas.WIDTH;
+    this.canvas.height = Z4Canvas.HEIGHT;
     this.appendNodeChild(this.canvas);
+    this.addLayer(Z4Canvas.WIDTH, Z4Canvas.HEIGHT);
     let image = document.createElement("img");
     image.onload = event => {
       this.chessboard = this.ctx.createPattern(image, "repeat");
@@ -32,10 +39,22 @@ class Z4Canvas extends JSComponent {
     image.src = "image/chessboard.png";
   }
 
+  /**
+   * Adds a layer
+   *
+   * @param width The layer width
+   * @param height The layer height
+   */
+   addLayer(width, height) {
+    this.paper.addLayer(width, height);
+    this.drawCanvas();
+  }
+
    drawCanvas() {
     this.ctx.save();
     this.ctx.fillStyle = this.chessboard;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.restore();
+    this.paper.drawPaper(this.ctx);
   }
 }

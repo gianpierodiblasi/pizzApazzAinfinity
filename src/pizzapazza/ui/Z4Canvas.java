@@ -5,6 +5,7 @@ import def.dom.CanvasPattern;
 import static def.dom.Globals.document;
 import javascript.swing.JSComponent;
 import jsweet.util.union.Union4;
+import pizzapazza.Z4Paper;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
@@ -23,6 +24,11 @@ public class Z4Canvas extends JSComponent {
 
   private final $ResizeObserver resizeObserver = new $ResizeObserver(() -> this.drawCanvas());
 
+  private final Z4Paper paper = new Z4Paper();
+
+  private final static int WIDTH = 500;
+  private final static int HEIGHT = 500;
+
   /**
    * Creates the object
    */
@@ -32,9 +38,11 @@ public class Z4Canvas extends JSComponent {
 
     this.resizeObserver.observe(this.canvas);
 
-    this.canvas.width = 500;
-    this.canvas.height = 500;
+    this.canvas.width = Z4Canvas.WIDTH;
+    this.canvas.height = Z4Canvas.HEIGHT;
     this.appendNodeChild(this.canvas);
+
+    this.addLayer(Z4Canvas.WIDTH, Z4Canvas.HEIGHT);
 
     $Image image = ($Image) document.createElement("img");
     image.onload = event -> {
@@ -45,10 +53,23 @@ public class Z4Canvas extends JSComponent {
     image.src = "image/chessboard.png";
   }
 
+  /**
+   * Adds a layer
+   *
+   * @param width The layer width
+   * @param height The layer height
+   */
+  public void addLayer(int width, int height) {
+    this.paper.addLayer(width, height);
+    this.drawCanvas();
+  }
+  
   private void drawCanvas() {
     this.ctx.save();
     this.ctx.fillStyle = this.chessboard;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.restore();
+
+    this.paper.drawPaper(this.ctx);
   }
 }

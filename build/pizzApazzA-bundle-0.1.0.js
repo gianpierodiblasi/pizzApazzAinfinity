@@ -252,6 +252,12 @@ class Z4Canvas extends JSComponent {
 
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
+   paper = new Z4Paper();
+
+  static  WIDTH = 500;
+
+  static  HEIGHT = 500;
+
   /**
    * Creates the object
    */
@@ -259,9 +265,10 @@ class Z4Canvas extends JSComponent {
     super(document.createElement("div"));
     this.cssAddClass("z4canvas");
     this.resizeObserver.observe(this.canvas);
-    this.canvas.width = 500;
-    this.canvas.height = 500;
+    this.canvas.width = Z4Canvas.WIDTH;
+    this.canvas.height = Z4Canvas.HEIGHT;
     this.appendNodeChild(this.canvas);
+    this.addLayer(Z4Canvas.WIDTH, Z4Canvas.HEIGHT);
     let image = document.createElement("img");
     image.onload = event => {
       this.chessboard = this.ctx.createPattern(image, "repeat");
@@ -271,11 +278,23 @@ class Z4Canvas extends JSComponent {
     image.src = "image/chessboard.png";
   }
 
+  /**
+   * Adds a layer
+   *
+   * @param width The layer width
+   * @param height The layer height
+   */
+   addLayer(width, height) {
+    this.paper.addLayer(width, height);
+    this.drawCanvas();
+  }
+
    drawCanvas() {
     this.ctx.save();
     this.ctx.fillStyle = this.chessboard;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.restore();
+    this.paper.drawPaper(this.ctx);
   }
 }
 /**
@@ -393,5 +412,81 @@ class Z4Translations {
     Z4Translations.THEME_DARK = "Scuro";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Aggiorna la pagina per eseguire le modifiche";
     Z4Translations.CURRENT_LANGUAGE = new KeyValue("it", Z4Translations.LANGUAGE_ITALIAN_NATIVE);
+  }
+}
+/**
+ * The object representing a layer
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Layer {
+
+   offscreen = null;
+
+   offscreenCtx = null;
+
+   offsetX = 0;
+
+   offsetY = 0;
+
+  /**
+   * Creates the object
+   *
+   * @param width The layer width
+   * @param height The layer height
+   */
+  constructor(width, height) {
+    this.offscreen = new OffscreenCanvas(width, height);
+    this.offscreenCtx = this.offscreen.getContext("2d");
+  }
+
+  /**
+   * Shifts the layer
+   *
+   * @param offsetX The X offset from the upper left corner of the container
+   * paper
+   * @param offsetY The Y offset from the upper left corner of the container
+   * paper
+   */
+   shiftLayer(offsetX, offsetY) {
+    this.offsetX = offsetX;
+    this.offsetY = offsetY;
+  }
+
+  /**
+   * Draws this layer
+   *
+   * @param ctx The context used to draw the layer
+   */
+   drawLayer(ctx) {
+    ctx.drawImage(this.offscreen, this.offsetX, this.offsetY);
+  }
+}
+/**
+ * The object representing a paper
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Paper {
+
+   layers = new Array();
+
+  /**
+   * Adds a layer
+   *
+   * @param width The layer width
+   * @param height The layer height
+   */
+   addLayer(width, height) {
+    this.layers.push(new Z4Layer(width, height));
+  }
+
+  /**
+   * Draws this paper
+   *
+   * @param ctx The context used to draw the paper
+   */
+   drawPaper(ctx) {
+    this.layers.forEach(layer => layer.drawLayer(ctx));
   }
 }
