@@ -12,6 +12,7 @@
   <property name="class.dir" value="${basedir}/class" /> 
   <property name="josetta.jar" value="${basedir}/lib/josetta-1.12.1-jar-with-dependencies.jar" /> 
   <property name="jsweet.jar" value="${basedir}/lib/jsweet-core-6.3.1.jar" /> 
+  <property name="swingjs.jar" value="${basedir}/lib/swing-bundle-1.0.0.jar" /> 
   
   <target name="clean"> 
     <delete>
@@ -52,7 +53,7 @@
   
   <target name="build_java" depends="version">
     <mkdir dir="${class.dir}"/>
-    <javac srcdir="${src.dir}" destdir="${class.dir}" classpath="${jsweet.jar}" includeantruntime="false"/>
+    <javac srcdir="${src.dir}" destdir="${class.dir}" classpath="${jsweet.jar};${swingjs.jar}" includeantruntime="false"/>
   </target>
   
   <target name="build_js" depends="version,transpile">
@@ -61,7 +62,7 @@
       <arg value="${src.dir}/pizzApazzA.js"/>
       <arg value="${transpile.dir}"/>
       <arg value="${build.dir}/pizzApazzA-bundle-${version}.js"/>
-      <arg value="-find_parent"/>
+      <arg value="-no_find_parent"/>
       <arg value="-no_rename"/>
     </java>
   </target>
@@ -73,7 +74,7 @@
       <arg value="${transpile-test.dir}"/>
       <arg value="${html-test.dir}/pizzApazzA-test.js"/>
       <arg value="-no_find_parent"/>
-      <arg value="-rename"/>
+      <arg value="-no_rename"/>
     </java>
   </target>
   

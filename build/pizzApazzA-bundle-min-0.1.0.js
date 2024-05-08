@@ -1,0 +1,1 @@
+window.onload=s=>new Z4Frame;class Z4Frame extends JSFrame{constructor(){super(),this.cssAddClass("z4frame")}}

@@ -1,4 +1,4 @@
-window.onload = event => new Z4Frame();/**
+/**
  * The main frame of the application
  *
  * @author gianpiero.diblasi
