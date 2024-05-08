@@ -27,10 +27,8 @@ public class Z4RibbonSettingsPanel extends JSPanel {
    */
   public Z4RibbonSettingsPanel() {
     super();
-
-    this.cssAddClass("z4ribbonsettingspanel");
-
     this.setLayout(new GridBagLayout());
+    this.cssAddClass("z4ribbonsettingspanel");
 
     JSLabel label = new JSLabel();
     label.setText(Z4Translations.LANGUAGE);

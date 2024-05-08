@@ -17,7 +17,6 @@ public class Z4Ribbon extends JSTabbedPane {
    */
   public Z4Ribbon() {
     super();
-
     this.cssAddClass("z4ribbon");
 
     this.addTab(Z4Translations.FILE, new Z4RibbonFilePanel());

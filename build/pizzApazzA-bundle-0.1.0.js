@@ -34,13 +34,17 @@ class Z4Frame extends JSFrame {
 
    ribbon = new Z4Ribbon();
 
+   canvas = new Z4Canvas();
+
   /**
    * Creates the object
    */
   constructor() {
     super();
     this.cssAddClass("z4frame");
+    this.getContentPane().setLayout(new BorderLayout(5, 5));
     this.getContentPane().add(this.ribbon, BorderLayout.NORTH);
+    this.getContentPane().add(this.canvas, BorderLayout.CENTER);
   }
 }
 /**
@@ -56,6 +60,7 @@ class Z4RibbonFilePanel extends JSPanel {
   constructor() {
     super();
     this.setLayout(new GridBagLayout());
+    this.cssAddClass("z4ribbonfilepanel");
     this.addLabel(Z4Translations.NEW, 0);
     this.addButton(Z4Translations.CREATE, 0, 1, null);
     this.addButton(Z4Translations.CREATE_FROM_CLIPBOARD, 1, 1, null);
@@ -140,8 +145,8 @@ class Z4RibbonSettingsPanel extends JSPanel {
    */
   constructor() {
     super();
-    this.cssAddClass("z4ribbonsettingspanel");
     this.setLayout(new GridBagLayout());
+    this.cssAddClass("z4ribbonsettingspanel");
     let label = new JSLabel();
     label.setText(Z4Translations.LANGUAGE);
     let constraints = new GridBagConstraints();
@@ -230,6 +235,47 @@ class Z4Ribbon extends JSTabbedPane {
     this.cssAddClass("z4ribbon");
     this.addTab(Z4Translations.FILE, new Z4RibbonFilePanel());
     this.addTab(Z4Translations.SETTINGS, new Z4RibbonSettingsPanel());
+  }
+}
+/**
+ * The canvas
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Canvas extends JSComponent {
+
+   canvas = document.createElement("canvas");
+
+   ctx = this.canvas.getContext("2d");
+
+   chessboard = null;
+
+   resizeObserver = new ResizeObserver(() => this.drawCanvas());
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super(document.createElement("div"));
+    this.cssAddClass("z4canvas");
+    this.resizeObserver.observe(this.canvas);
+    this.canvas.width = 500;
+    this.canvas.height = 500;
+    this.appendNodeChild(this.canvas);
+    let image = document.createElement("img");
+    image.onload = event => {
+      this.chessboard = this.ctx.createPattern(image, "repeat");
+      this.drawCanvas();
+      return null;
+    };
+    image.src = "image/chessboard.png";
+  }
+
+   drawCanvas() {
+    this.ctx.save();
+    this.ctx.fillStyle = this.chessboard;
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.restore();
   }
 }
 /**

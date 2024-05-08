@@ -4,5 +4,16 @@
 .z4ribbon {
 }
 
+.z4ribbonfilepanel {
+}
+
 .z4ribbonsettingspanel {
+}
+
+.z4canvas {
+  overflow: scroll;
+  display: grid;
+  grid-template: "c";
+  place-items: center;
+  background: #DDDDDD;
 }

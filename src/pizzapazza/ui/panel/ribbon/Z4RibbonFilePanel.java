@@ -24,9 +24,9 @@ public class Z4RibbonFilePanel extends JSPanel {
    */
   public Z4RibbonFilePanel() {
     super();
-
     this.setLayout(new GridBagLayout());
-
+    this.cssAddClass("z4ribbonfilepanel");
+    
     this.addLabel(Z4Translations.NEW, 0);
     this.addButton(Z4Translations.CREATE, 0, 1, null);
     this.addButton(Z4Translations.CREATE_FROM_CLIPBOARD, 1, 1, null);
