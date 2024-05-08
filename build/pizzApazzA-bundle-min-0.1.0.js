@@ -1,1 +1,1 @@
-window.onload=s=>new Z4Frame;class Z4Frame extends JSFrame{constructor(){super(),this.cssAddClass("z4frame")}}
+window.onload=s=>new Z4Frame;class Z4Frame extends JSFrame{constructor(){super(),this.cssAddClass("z4frame")}}class Z4RibbonSettingsPanel extends JSPanel{constructor(){super(),this.cssAddClass("z4ribbonsettingspanel")}}class Z4Ribbon extends JSTabbedPane{constructor(){super(),this.cssAddClass("z4ribbon")}}

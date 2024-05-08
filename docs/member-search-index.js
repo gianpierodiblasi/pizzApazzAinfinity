@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"pizzapazza.ui.frame","c":"Z4Frame","l":"Z4Frame()","url":"%3Cinit%3E()"},{"p":"pizzapazza.ui.tab","c":"Z4Ribbon","l":"Z4Ribbon()","url":"%3Cinit%3E()"},{"p":"pizzapazza.ui.panel","c":"Z4RibbonSettingsPanel","l":"Z4RibbonSettingsPanel()","url":"%3Cinit%3E()"}]

@@ -107,7 +107,7 @@
   </target>
   
   <target name="javadoc">
-    <javadoc sourcepath="${src.dir}" destdir="${doc.dir}" classpath="${basedir}/lib/jsweet-core-6.3.1.jar"
+    <javadoc sourcepath="${src.dir}" destdir="${doc.dir}" classpath="${jsweet.jar};${swingjs.jar}"
              windowtitle="pizzApazzA" overview="${src.dir}/overview.html"
              excludepackagenames="simulation.*" additionalparam="-notimestamp --frames">
     </javadoc>
@@ -159,7 +159,7 @@
       <arg value="${src.dir}/pizzApazzA.js"/>
       <arg value="${transpile.dir}"/>
       <arg value="${build.dir}/pizzApazzA-bundle-${version}.js"/>
-      <arg value="-find_parent"/>
+      <arg value="-no_find_parent"/>
       <arg value="-no_rename"/>
     </java>
   </target>
@@ -171,7 +171,7 @@
       <arg value="${transpile-test.dir}"/>
       <arg value="${html-test.dir}/pizzApazzA-test.js"/>
       <arg value="-no_find_parent"/>
-      <arg value="-rename"/>
+      <arg value="-no_rename"/>
     </java>
   </target>
   
