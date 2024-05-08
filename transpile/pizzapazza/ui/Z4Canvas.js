@@ -13,6 +13,8 @@ class Z4Canvas extends JSComponent {
 
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
+   filename = null;
+
    paper = new Z4Paper();
 
   static  WIDTH = 500;
@@ -37,6 +39,34 @@ class Z4Canvas extends JSComponent {
       return null;
     };
     image.src = "image/chessboard.png";
+  }
+
+  /**
+   * Opens an image
+   *
+   * @param file The file
+   */
+   openFromDevice(file) {
+    this.filename = file.name;
+    let fileReader = new FileReader();
+    fileReader.onload = event => {
+      if (Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.indexOf(file.name.toLowerCase().substring(file.name.lastIndexOf('.'))) !== -1) {
+        let image = document.createElement("img");
+        image.onload = event2 => {
+          this.canvas.width = image.width;
+          this.canvas.height = image.height;
+          this.paper.reset();
+          this.paper.addLayerFromImage(image);
+          this.drawCanvas();
+          return null;
+        };
+        image.src = fileReader.result;
+      } else {
+        // Z4 IMAGE!!!
+      }
+      return null;
+    };
+    fileReader.readAsDataURL(file);
   }
 
   /**

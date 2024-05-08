@@ -18,6 +18,22 @@ class Z4Paper {
   }
 
   /**
+   * Adds a layer from an aimeg
+   *
+   * @param image The image
+   */
+   addLayerFromImage(image) {
+    this.layers.push(Z4Layer.fromImage(image));
+  }
+
+  /**
+   * Resets the paper
+   */
+   reset() {
+    this.layers.length = 0;
+  }
+
+  /**
    * Draws this paper
    *
    * @param ctx The context used to draw the paper

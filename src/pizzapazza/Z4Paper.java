@@ -2,6 +2,7 @@ package pizzapazza;
 
 import def.js.Array;
 import simulation.dom.$CanvasRenderingContext2D;
+import simulation.dom.$Image;
 
 /**
  * The object representing a paper
@@ -20,6 +21,22 @@ public class Z4Paper {
    */
   public void addLayer(int width, int height) {
     this.layers.push(new Z4Layer(width, height));
+  }
+
+  /**
+   * Adds a layer from an aimeg
+   *
+   * @param image The image
+   */
+  public void addLayerFromImage($Image image) {
+    this.layers.push(Z4Layer.fromImage(image));
+  }
+
+  /**
+   * Resets the paper
+   */
+  public void reset() {
+    this.layers.length = 0;
   }
 
   /**

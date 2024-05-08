@@ -18,7 +18,10 @@ public class $CanvasRenderingContext2D extends CanvasRenderingContext2D {
 
   public void fill($Path2D path) {
   }
-  
+
+  public void drawImage($Image image, double x, double y) {
+  }
+
   public void drawImage($OffscreenCanvas canvas, double x, double y) {
   }
 

@@ -43,6 +43,7 @@ class Z4Frame extends JSFrame {
     super();
     this.cssAddClass("z4frame");
     this.getContentPane().setLayout(new BorderLayout(5, 5));
+    this.ribbon.setCanvas(this.canvas);
     this.getContentPane().add(this.ribbon, BorderLayout.NORTH);
     this.getContentPane().add(this.canvas, BorderLayout.CENTER);
   }
@@ -54,6 +55,8 @@ class Z4Frame extends JSFrame {
  */
 class Z4RibbonFilePanel extends JSPanel {
 
+   canvas = null;
+
   /**
    * Creates the object
    */
@@ -62,17 +65,26 @@ class Z4RibbonFilePanel extends JSPanel {
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonfilepanel");
     this.addLabel(Z4Translations.NEW, 0);
-    this.addButton(Z4Translations.CREATE, 0, 1, null);
-    this.addButton(Z4Translations.CREATE_FROM_CLIPBOARD, 1, 1, null);
+    this.addButton(Z4Translations.CREATE, 0, 1, "left", null);
+    this.addButton(Z4Translations.CREATE_FROM_CLIPBOARD, 1, 1, "right", null);
     this.addVLine(2, 0);
     this.addLabel(Z4Translations.OPEN, 3);
-    this.addButton(Z4Translations.OPEN_FROM_DEVICE, 3, 1, event => this.openFromDevice());
-    this.addButton(Z4Translations.OPEN_FROM_BROWSER, 4, 1, null);
+    this.addButton(Z4Translations.OPEN_FROM_DEVICE, 3, 1, "left", event => this.openFromDevice());
+    this.addButton(Z4Translations.OPEN_FROM_BROWSER, 4, 1, "right", null);
     this.addVLine(5, 0);
     this.addLabel(Z4Translations.SAVE, 6);
-    this.addButton(Z4Translations.SAVE, 6, 1, null);
-    this.addButton(Z4Translations.SAVE_AS, 7, 1, null);
+    this.addButton(Z4Translations.SAVE, 6, 1, "left", null);
+    this.addButton(Z4Translations.SAVE_AS, 7, 1, "right", null);
     this.addVLine(8, 1);
+  }
+
+  /**
+   * Sets the canvas to manage
+   *
+   * @param canvas The canvas
+   */
+   setCanvas(canvas) {
+    this.canvas = canvas;
   }
 
    addLabel(text, gridx) {
@@ -86,7 +98,7 @@ class Z4RibbonFilePanel extends JSPanel {
     this.add(label, constraints);
   }
 
-   addButton(text, gridx, gridy, listener) {
+   addButton(text, gridx, gridy, border, listener) {
     let button = new JSButton();
     button.setText(text);
     button.setContentAreaFilled(false);
@@ -94,7 +106,26 @@ class Z4RibbonFilePanel extends JSPanel {
     let constraints = new GridBagConstraints();
     constraints.gridx = gridx;
     constraints.gridy = gridy;
-    constraints.insets = new Insets(0, 5, 0, 5);
+    switch(border) {
+      case "left":
+        constraints.insets = new Insets(0, 5, 0, 0);
+        button.getStyle().borderTopRightRadius = "0px";
+        button.getStyle().borderBottomRightRadius = "0px";
+        button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "both":
+        constraints.insets = new Insets(0, 5, 0, 5);
+        button.getStyle().borderRadius = "0px";
+        button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "right":
+        constraints.insets = new Insets(0, 0, 0, 5);
+        button.getStyle().borderTopLeftRadius = "0px";
+        button.getStyle().borderBottomLeftRadius = "0px";
+        button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        break;
+    }
     this.add(button, constraints);
   }
 
@@ -114,19 +145,7 @@ class Z4RibbonFilePanel extends JSPanel {
   }
 
    openFromDevice() {
-    JSFileChooser.showOpenDialog(".gif,.png,.jpeg,.jpg,.z4i", JSFileChooser.SINGLE_SELECTION, 0, files => {
-      files.forEach(file => {
-        // FileReader fileReader = new FileReader();
-        // fileReader.onload = event -> {
-        // $Image img = ($Image) document.createElement("img");
-        // img.src = (String) fileReader.result;
-        // 
-        // document.querySelector(".center").appendChild(img);
-        // return null;
-        // };
-        // fileReader.readAsDataURL(file);
-      });
-    });
+    JSFileChooser.showOpenDialog(Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(",") + ",.z4i", JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.openFromDevice(file)));
   }
 }
 /**
@@ -227,14 +246,27 @@ class Z4RibbonSettingsPanel extends JSPanel {
  */
 class Z4Ribbon extends JSTabbedPane {
 
+   filePanel = new Z4RibbonFilePanel();
+
+   settingsPanel = new Z4RibbonSettingsPanel();
+
   /**
    * Creates the object
    */
   constructor() {
     super();
     this.cssAddClass("z4ribbon");
-    this.addTab(Z4Translations.FILE, new Z4RibbonFilePanel());
-    this.addTab(Z4Translations.SETTINGS, new Z4RibbonSettingsPanel());
+    this.addTab(Z4Translations.FILE, this.filePanel);
+    this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
+  }
+
+  /**
+   * Sets the canvas to manage
+   *
+   * @param canvas The canvas
+   */
+   setCanvas(canvas) {
+    this.filePanel.setCanvas(canvas);
   }
 }
 /**
@@ -251,6 +283,8 @@ class Z4Canvas extends JSComponent {
    chessboard = null;
 
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
+
+   filename = null;
 
    paper = new Z4Paper();
 
@@ -276,6 +310,34 @@ class Z4Canvas extends JSComponent {
       return null;
     };
     image.src = "image/chessboard.png";
+  }
+
+  /**
+   * Opens an image
+   *
+   * @param file The file
+   */
+   openFromDevice(file) {
+    this.filename = file.name;
+    let fileReader = new FileReader();
+    fileReader.onload = event => {
+      if (Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.indexOf(file.name.toLowerCase().substring(file.name.lastIndexOf('.'))) !== -1) {
+        let image = document.createElement("img");
+        image.onload = event2 => {
+          this.canvas.width = image.width;
+          this.canvas.height = image.height;
+          this.paper.reset();
+          this.paper.addLayerFromImage(image);
+          this.drawCanvas();
+          return null;
+        };
+        image.src = fileReader.result;
+      } else {
+        // Z4 IMAGE!!!
+      }
+      return null;
+    };
+    fileReader.readAsDataURL(file);
   }
 
   /**
@@ -415,6 +477,18 @@ class Z4Translations {
   }
 }
 /**
+ * Constants of the applications
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Constants {
+
+  static  ACCEPTED_IMAGE_FILE_FORMAT = new Array(".gif", ".png", ".jpeg", ".jpg");
+
+  constructor() {
+  }
+}
+/**
  * The object representing a layer
  *
  * @author gianpiero.diblasi
@@ -438,6 +512,18 @@ class Z4Layer {
   constructor(width, height) {
     this.offscreen = new OffscreenCanvas(width, height);
     this.offscreenCtx = this.offscreen.getContext("2d");
+  }
+
+  /**
+   * Creates a Z4Layer from an image
+   *
+   * @param image The image
+   * @return The layer
+   */
+  static  fromImage(image) {
+    let layer = new Z4Layer(image.width, image.height);
+    layer.offscreenCtx.drawImage(image, 0, 0);
+    return layer;
   }
 
   /**
@@ -479,6 +565,22 @@ class Z4Paper {
    */
    addLayer(width, height) {
     this.layers.push(new Z4Layer(width, height));
+  }
+
+  /**
+   * Adds a layer from an aimeg
+   *
+   * @param image The image
+   */
+   addLayerFromImage(image) {
+    this.layers.push(Z4Layer.fromImage(image));
+  }
+
+  /**
+   * Resets the paper
+   */
+   reset() {
+    this.layers.length = 0;
   }
 
   /**

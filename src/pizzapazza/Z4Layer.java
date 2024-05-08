@@ -1,6 +1,7 @@
 package pizzapazza;
 
 import simulation.dom.$CanvasRenderingContext2D;
+import simulation.dom.$Image;
 import simulation.dom.$OffscreenCanvas;
 
 /**
@@ -25,6 +26,18 @@ public class Z4Layer {
   public Z4Layer(int width, int height) {
     this.offscreen = new $OffscreenCanvas(width, height);
     this.offscreenCtx = this.offscreen.getContext("2d");
+  }
+
+  /**
+   * Creates a Z4Layer from an image
+   *
+   * @param image The image
+   * @return The layer
+   */
+  public static Z4Layer fromImage($Image image) {
+    Z4Layer layer = new Z4Layer((int) image.width, (int) image.height);
+    layer.offscreenCtx.drawImage(image, 0, 0);
+    return layer;
   }
 
   /**

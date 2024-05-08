@@ -10,6 +10,8 @@ import javascript.swing.JSComponent;
 import javascript.swing.JSFileChooser;
 import javascript.swing.JSLabel;
 import javascript.swing.JSPanel;
+import pizzapazza.Z4Constants;
+import pizzapazza.ui.Z4Canvas;
 import pizzapazza.util.Z4Translations;
 
 /**
@@ -19,6 +21,8 @@ import pizzapazza.util.Z4Translations;
  */
 public class Z4RibbonFilePanel extends JSPanel {
 
+  private Z4Canvas canvas;
+
   /**
    * Creates the object
    */
@@ -26,21 +30,30 @@ public class Z4RibbonFilePanel extends JSPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonfilepanel");
-    
+
     this.addLabel(Z4Translations.NEW, 0);
-    this.addButton(Z4Translations.CREATE, 0, 1, null);
-    this.addButton(Z4Translations.CREATE_FROM_CLIPBOARD, 1, 1, null);
+    this.addButton(Z4Translations.CREATE, 0, 1, "left", null);
+    this.addButton(Z4Translations.CREATE_FROM_CLIPBOARD, 1, 1, "right", null);
     this.addVLine(2, 0);
 
     this.addLabel(Z4Translations.OPEN, 3);
-    this.addButton(Z4Translations.OPEN_FROM_DEVICE, 3, 1, event -> this.openFromDevice());
-    this.addButton(Z4Translations.OPEN_FROM_BROWSER, 4, 1, null);
+    this.addButton(Z4Translations.OPEN_FROM_DEVICE, 3, 1, "left", event -> this.openFromDevice());
+    this.addButton(Z4Translations.OPEN_FROM_BROWSER, 4, 1, "right", null);
     this.addVLine(5, 0);
 
     this.addLabel(Z4Translations.SAVE, 6);
-    this.addButton(Z4Translations.SAVE, 6, 1, null);
-    this.addButton(Z4Translations.SAVE_AS, 7, 1, null);
+    this.addButton(Z4Translations.SAVE, 6, 1, "left", null);
+    this.addButton(Z4Translations.SAVE_AS, 7, 1, "right", null);
     this.addVLine(8, 1);
+  }
+
+  /**
+   * Sets the canvas to manage
+   *
+   * @param canvas The canvas
+   */
+  public void setCanvas(Z4Canvas canvas) {
+    this.canvas = canvas;
   }
 
   private void addLabel(String text, int gridx) {
@@ -55,7 +68,7 @@ public class Z4RibbonFilePanel extends JSPanel {
     this.add(label, constraints);
   }
 
-  private void addButton(String text, int gridx, int gridy, ActionListener listener) {
+  private void addButton(String text, int gridx, int gridy, String border, ActionListener listener) {
     JSButton button = new JSButton();
     button.setText(text);
     button.setContentAreaFilled(false);
@@ -64,7 +77,27 @@ public class Z4RibbonFilePanel extends JSPanel {
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = gridx;
     constraints.gridy = gridy;
-    constraints.insets = new Insets(0, 5, 0, 5);
+    switch (border) {
+      case "left":
+        constraints.insets = new Insets(0, 5, 0, 0);
+        button.getStyle().borderTopRightRadius = "0px";
+        button.getStyle().borderBottomRightRadius = "0px";
+        button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "both":
+        constraints.insets = new Insets(0, 5, 0, 5);
+        button.getStyle().borderRadius = "0px";
+        button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "right":
+        constraints.insets = new Insets(0, 0, 0, 5);
+        button.getStyle().borderTopLeftRadius = "0px";
+        button.getStyle().borderBottomLeftRadius = "0px";
+        button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        break;
+    }
+
     this.add(button, constraints);
   }
 
@@ -85,18 +118,6 @@ public class Z4RibbonFilePanel extends JSPanel {
   }
 
   private void openFromDevice() {
-    JSFileChooser.showOpenDialog(".gif,.png,.jpeg,.jpg,.z4i", JSFileChooser.SINGLE_SELECTION, 0, files -> {
-      files.forEach(file -> {
-//        FileReader fileReader = new FileReader();
-//        fileReader.onload = event -> {
-//          $Image img = ($Image) document.createElement("img");
-//          img.src = (String) fileReader.result;
-//
-//          document.querySelector(".center").appendChild(img);
-//          return null;
-//        };
-//        fileReader.readAsDataURL(file);
-      });
-    });
+    JSFileChooser.showOpenDialog(Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(",") + ",.z4i", JSFileChooser.SINGLE_SELECTION, 0, files -> files.forEach(file -> this.canvas.openFromDevice(file)));
   }
 }

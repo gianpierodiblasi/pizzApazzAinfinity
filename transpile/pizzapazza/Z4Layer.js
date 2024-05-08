@@ -25,6 +25,18 @@ class Z4Layer {
   }
 
   /**
+   * Creates a Z4Layer from an image
+   *
+   * @param image The image
+   * @return The layer
+   */
+  static  fromImage(image) {
+    let layer = new Z4Layer(image.width, image.height);
+    layer.offscreenCtx.drawImage(image, 0, 0);
+    return layer;
+  }
+
+  /**
    * Shifts the layer
    *
    * @param offsetX The X offset from the upper left corner of the container
