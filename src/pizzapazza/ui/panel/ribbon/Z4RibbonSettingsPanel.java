@@ -54,7 +54,7 @@ public class Z4RibbonSettingsPanel extends JSPanel {
     constraints.gridx = 0;
     constraints.gridy = 1;
     constraints.fill = GridBagConstraints.HORIZONTAL;
-    constraints.insets = new Insets(0, 5, 0, 0);
+    constraints.insets = new Insets(0, 5, 0, 5);
     this.add(this.language, constraints);
 
     label = new JSLabel();
@@ -93,7 +93,7 @@ public class Z4RibbonSettingsPanel extends JSPanel {
     constraints.gridx = 1;
     constraints.gridy = 1;
     constraints.fill = GridBagConstraints.HORIZONTAL;
-    constraints.insets = new Insets(0, 5, 0, 0);
+    constraints.insets = new Insets(0, 5, 0, 5);
     this.add(this.theme, constraints);
 
     label = new JSLabel();

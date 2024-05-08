@@ -13,20 +13,16 @@ class Z4RibbonFilePanel extends JSPanel {
     this.setLayout(new GridBagLayout());
     this.addLabel(Z4Translations.NEW, 0);
     this.addButton(Z4Translations.CREATE, 0, 1, null);
-    this.addButton(Z4Translations.CREATE_FROM_CLIPBOARD, 0, 2, null);
-    this.addLabel(Z4Translations.OPEN, 1);
-    this.addButton(Z4Translations.OPEN_FROM_DEVICE, 1, 1, event => this.openFromDevice());
-    this.addButton(Z4Translations.OPEN_FROM_BROWSER, 1, 2, null);
-    this.addLabel(Z4Translations.SAVE, 2);
-    this.addButton(Z4Translations.SAVE, 2, 1, null);
-    this.addButton(Z4Translations.SAVE_AS, 2, 2, null);
-    let label = new JSLabel();
-    let constraints = new GridBagConstraints();
-    constraints.gridx = 3;
-    constraints.gridy = 0;
-    constraints.fill = GridBagConstraints.BOTH;
-    constraints.weightx = 1;
-    this.add(label, constraints);
+    this.addButton(Z4Translations.CREATE_FROM_CLIPBOARD, 1, 1, null);
+    this.addVLine(2, 0);
+    this.addLabel(Z4Translations.OPEN, 3);
+    this.addButton(Z4Translations.OPEN_FROM_DEVICE, 3, 1, event => this.openFromDevice());
+    this.addButton(Z4Translations.OPEN_FROM_BROWSER, 4, 1, null);
+    this.addVLine(5, 0);
+    this.addLabel(Z4Translations.SAVE, 6);
+    this.addButton(Z4Translations.SAVE, 6, 1, null);
+    this.addButton(Z4Translations.SAVE_AS, 7, 1, null);
+    this.addVLine(8, 1);
   }
 
    addLabel(text, gridx) {
@@ -48,9 +44,23 @@ class Z4RibbonFilePanel extends JSPanel {
     let constraints = new GridBagConstraints();
     constraints.gridx = gridx;
     constraints.gridy = gridy;
-    constraints.fill = GridBagConstraints.HORIZONTAL;
-    constraints.insets = new Insets(0, 5, 2, 0);
+    constraints.insets = new Insets(0, 5, 0, 5);
     this.add(button, constraints);
+  }
+
+   addVLine(gridx, weightx) {
+    let div = new JSComponent(document.createElement("div"));
+    div.getStyle().width = "1px";
+    div.getStyle().background = "var(--main-action-bgcolor";
+    let constraints = new GridBagConstraints();
+    constraints.gridx = gridx;
+    constraints.gridy = 0;
+    constraints.gridheight = 2;
+    constraints.fill = GridBagConstraints.VERTICAL;
+    constraints.weightx = weightx;
+    constraints.weighty = 1;
+    constraints.insets = new Insets(1, 2, 1, 2);
+    this.add(div, constraints);
   }
 
    openFromDevice() {
