@@ -126,7 +126,7 @@ public class Z4RibbonSettingsPanel extends JSPanel {
     reset.setText(Z4Translations.RESET);
     reset.setContentAreaFilled(false);
     reset.addActionListener(event -> this.onreset());
-    
+
     constraints = new GridBagConstraints();
     constraints.gridx = 3;
     constraints.gridy = 1;
@@ -163,7 +163,9 @@ public class Z4RibbonSettingsPanel extends JSPanel {
   }
 
   private void onreset() {
-    localStorage.clear();
+    localStorage.removeItem("z4language");
+    localStorage.removeItem("z4theme");
+    localStorage.removeItem("z4color");
     JSOptionPane.showMessageDialog(Z4Translations.REFRESH_PAGE_MESSAGE, Z4Translations.RESET, JSOptionPane.INFORMATION_MESSAGE, null);
   }
 }
