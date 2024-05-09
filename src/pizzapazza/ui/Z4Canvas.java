@@ -2,16 +2,20 @@ package pizzapazza.ui;
 
 import def.dom.CanvasGradient;
 import def.dom.CanvasPattern;
+import def.dom.Event;
 import def.dom.File;
 import def.dom.FileReader;
 import static def.dom.Globals.document;
+import def.dom.HTMLElement;
+import def.dom.URL;
 import javascript.swing.JSComponent;
 import jsweet.util.union.Union4;
-import pizzapazza.Z4Constants;
 import pizzapazza.Z4Paper;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
+import simulation.dom.$OffscreenCanvas;
+import simulation.js.$Object;
 import simulation.js.$ResizeObserver;
 
 /**
@@ -27,7 +31,7 @@ public class Z4Canvas extends JSComponent {
 
   private final $ResizeObserver resizeObserver = new $ResizeObserver(() -> this.drawCanvas());
 
-  private String filename;
+  private String projectName;
   private final Z4Paper paper = new Z4Paper();
 
   private final static int WIDTH = 500;
@@ -58,36 +62,64 @@ public class Z4Canvas extends JSComponent {
   }
 
   /**
-   * Opens an image
+   * Creates a new project from an image file
    *
    * @param file The file
    */
-  public void openFromDevice(File file) {
-    this.filename = file.name;
-
+  public void createFromFile(File file) {
     FileReader fileReader = new FileReader();
     fileReader.onload = event -> {
-      if (Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.indexOf(file.name.toLowerCase().substring(file.name.lastIndexOf('.'))) != -1) {
-        $Image image = ($Image) document.createElement("img");
 
-        image.onload = event2 -> {
-          this.canvas.width = image.width;
-          this.canvas.height = image.height;
+      $Image image = ($Image) document.createElement("img");
 
-          this.paper.reset();
-          this.paper.addLayerFromImage(image);
-          this.drawCanvas();
-          return null;
-        };
+      image.onload = event2 -> {
+        this.projectName = file.name.substring(0, file.name.lastIndexOf('.'));
 
-        image.src = (String) fileReader.result;
-      } else {
-        //Z4 IMAGE!!!
-      }
+        this.canvas.width = image.width;
+        this.canvas.height = image.height;
 
+        this.paper.reset();
+        this.paper.addLayerFromImage(image);
+        this.drawCanvas();
+        return null;
+      };
+
+      image.src = (String) fileReader.result;
       return null;
     };
     fileReader.readAsDataURL(file);
+  }
+
+  /**
+   * Exports this project to an image file
+   *
+   * @param filename The file name
+   * @param ext The file extension
+   * @param quality The quality
+   */
+  @SuppressWarnings({"StringEquality", "unchecked"})
+  public void exportToFile(String filename, String ext, double quality) {
+    $OffscreenCanvas offscreen = new $OffscreenCanvas(this.canvas.width, this.canvas.height);
+    $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
+    this.paper.drawPaper(offscreenCtx);
+
+    $Object options = new $Object();
+    options.$set("type", ext == ".png" ? "image/png" : "image/jpeg");
+    options.$set("quality", quality);
+
+    offscreen.convertToBlob(options).then(blob -> {
+      HTMLElement link = document.createElement("a");
+      link.setAttribute("href", URL.createObjectURL(blob));
+      link.setAttribute("download", filename + ext);
+
+      document.body.appendChild(link);
+
+      Event event = document.createEvent("MouseEvents");
+      event.initEvent("click", false, false);
+      link.dispatchEvent(event);
+
+      document.body.removeChild(link);
+    });
   }
 
   /**
@@ -99,6 +131,15 @@ public class Z4Canvas extends JSComponent {
   public void addLayer(int width, int height) {
     this.paper.addLayer(width, height);
     this.drawCanvas();
+  }
+
+  /**
+   * Returns the project name
+   *
+   * @return The project name
+   */
+  public String getProjectName() {
+    return this.projectName;
   }
 
   private void drawCanvas() {

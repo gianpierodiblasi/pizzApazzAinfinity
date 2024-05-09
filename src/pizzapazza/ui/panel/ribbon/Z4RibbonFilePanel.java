@@ -9,9 +9,11 @@ import javascript.swing.JSButton;
 import javascript.swing.JSComponent;
 import javascript.swing.JSFileChooser;
 import javascript.swing.JSLabel;
+import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
 import pizzapazza.Z4Constants;
 import pizzapazza.ui.Z4Canvas;
+import pizzapazza.ui.panel.Z4ExportToFilePanel;
 import pizzapazza.util.Z4Translations;
 
 /**
@@ -33,17 +35,18 @@ public class Z4RibbonFilePanel extends JSPanel {
 
     this.addLabel(Z4Translations.NEW, 0);
     this.addButton(Z4Translations.CREATE, 0, 1, "left", null);
-    this.addButton(Z4Translations.CREATE_FROM_CLIPBOARD, 1, 1, "right", null);
-    this.addVLine(2, 0);
+    this.addButton(Z4Translations.FROM_CLIPBOARD, 1, 1, "both", null);
+    this.addButton(Z4Translations.FROM_FILE, 2, 1, "right", event -> this.createFromFile());
+    this.addVLine(3, 0);
 
-    this.addLabel(Z4Translations.OPEN, 3);
-    this.addButton(Z4Translations.OPEN_FROM_DEVICE, 3, 1, "left", event -> this.openFromDevice());
-    this.addButton(Z4Translations.OPEN_FROM_BROWSER, 4, 1, "right", null);
+    this.addLabel(Z4Translations.OPEN, 4);
+
+    this.addButton(Z4Translations.OPEN_PROJECT, 4, 1, "", null);
     this.addVLine(5, 0);
 
     this.addLabel(Z4Translations.SAVE, 6);
-    this.addButton(Z4Translations.SAVE, 6, 1, "left", null);
-    this.addButton(Z4Translations.SAVE_AS, 7, 1, "right", null);
+    this.addButton(Z4Translations.SAVE_PROJECT, 6, 1, "left", null);
+    this.addButton(Z4Translations.EXPORT, 7, 1, "right", event -> this.exportToFile());
     this.addVLine(8, 1);
   }
 
@@ -85,7 +88,6 @@ public class Z4RibbonFilePanel extends JSPanel {
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
         break;
       case "both":
-        constraints.insets = new Insets(0, 5, 0, 5);
         button.getStyle().borderRadius = "0px";
         button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
@@ -117,7 +119,18 @@ public class Z4RibbonFilePanel extends JSPanel {
     this.add(div, constraints);
   }
 
-  private void openFromDevice() {
-    JSFileChooser.showOpenDialog(Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(",") + ",.z4i", JSFileChooser.SINGLE_SELECTION, 0, files -> files.forEach(file -> this.canvas.openFromDevice(file)));
+  private void createFromFile() {
+    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files -> files.forEach(file -> this.canvas.createFromFile(file)));
+  }
+
+  private void exportToFile() {
+    Z4ExportToFilePanel panel = new Z4ExportToFilePanel();
+    panel.setFilename(this.canvas.getProjectName());
+
+    JSOptionPane.showInputDialog(panel, Z4Translations.EXPORT, listener -> panel.addChangeListener(listener), () -> panel.isValid(), response -> {
+      if (response == JSOptionPane.OK_OPTION) {
+        this.canvas.exportToFile(panel.getFilename(), panel.getFileExtension(), panel.getQuality());
+      }
+    });
   }
 }

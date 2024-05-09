@@ -66,15 +66,15 @@ class Z4RibbonFilePanel extends JSPanel {
     this.cssAddClass("z4ribbonfilepanel");
     this.addLabel(Z4Translations.NEW, 0);
     this.addButton(Z4Translations.CREATE, 0, 1, "left", null);
-    this.addButton(Z4Translations.CREATE_FROM_CLIPBOARD, 1, 1, "right", null);
-    this.addVLine(2, 0);
-    this.addLabel(Z4Translations.OPEN, 3);
-    this.addButton(Z4Translations.OPEN_FROM_DEVICE, 3, 1, "left", event => this.openFromDevice());
-    this.addButton(Z4Translations.OPEN_FROM_BROWSER, 4, 1, "right", null);
+    this.addButton(Z4Translations.FROM_CLIPBOARD, 1, 1, "both", null);
+    this.addButton(Z4Translations.FROM_FILE, 2, 1, "right", event => this.createFromFile());
+    this.addVLine(3, 0);
+    this.addLabel(Z4Translations.OPEN, 4);
+    this.addButton(Z4Translations.OPEN_PROJECT, 4, 1, "", null);
     this.addVLine(5, 0);
     this.addLabel(Z4Translations.SAVE, 6);
-    this.addButton(Z4Translations.SAVE, 6, 1, "left", null);
-    this.addButton(Z4Translations.SAVE_AS, 7, 1, "right", null);
+    this.addButton(Z4Translations.SAVE_PROJECT, 6, 1, "left", null);
+    this.addButton(Z4Translations.EXPORT, 7, 1, "right", event => this.exportToFile());
     this.addVLine(8, 1);
   }
 
@@ -114,7 +114,6 @@ class Z4RibbonFilePanel extends JSPanel {
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
         break;
       case "both":
-        constraints.insets = new Insets(0, 5, 0, 5);
         button.getStyle().borderRadius = "0px";
         button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
@@ -144,8 +143,18 @@ class Z4RibbonFilePanel extends JSPanel {
     this.add(div, constraints);
   }
 
-   openFromDevice() {
-    JSFileChooser.showOpenDialog(Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(",") + ",.z4i", JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.openFromDevice(file)));
+   createFromFile() {
+    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.createFromFile(file)));
+  }
+
+   exportToFile() {
+    let panel = new Z4ExportToFilePanel();
+    panel.setFilename(this.canvas.getProjectName());
+    JSOptionPane.showInputDialog(panel, Z4Translations.EXPORT, listener => panel.addChangeListener(listener), () => panel.isValid(), response => {
+      if (response === JSOptionPane.OK_OPTION) {
+        this.canvas.exportToFile(panel.getFilename(), panel.getFileExtension(), panel.getQuality());
+      }
+    });
   }
 }
 /**
@@ -240,6 +249,159 @@ class Z4RibbonSettingsPanel extends JSPanel {
   }
 }
 /**
+ * The panel to configure the export to file
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4ExportToFilePanel extends JSPanel {
+
+   filename = new JSTextField();
+
+   png = new JSRadioButton();
+
+   jpg = new JSRadioButton();
+
+   qualitySlider = new JSSlider();
+
+   qualitySpinner = new JSSpinner();
+
+   listeners = new Array();
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super();
+    this.cssAddClass("z4exporttofilepanel");
+    this.setLayout(new GridBagLayout());
+    this.addLabel(Z4Translations.FILENAME, 0, 0);
+    this.filename.addActionListener(event => this.onchange());
+    let constraints = new GridBagConstraints();
+    constraints.gridx = 0;
+    constraints.gridy = 1;
+    constraints.gridwidth = 2;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.weightx = 1;
+    this.add(this.filename, constraints);
+    let group = new ButtonGroup();
+    group.add(this.png);
+    group.add(this.jpg);
+    this.addRadio(this.png, true, "PNG", 0);
+    this.addRadio(this.jpg, false, "JPG", 1);
+    this.addLabel(Z4Translations.QUALITY, 0, 3);
+    this.qualitySlider.setEnabled(false);
+    this.qualitySlider.setValue(100);
+    this.qualitySlider.addChangeListener(event => this.qualitySpinner.setValue(this.qualitySlider.getValue()));
+    constraints = new GridBagConstraints();
+    constraints.gridx = 0;
+    constraints.gridy = 4;
+    constraints.gridwidth = 2;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.weightx = 1;
+    this.add(this.qualitySlider, constraints);
+    this.qualitySpinner.setEnabled(false);
+    this.qualitySpinner.setModel(new SpinnerNumberModel(100, 0, 100, 1));
+    this.qualitySpinner.addChangeListener(event => this.qualitySlider.setValue(this.qualitySpinner.getValue()));
+    this.qualitySpinner.getStyle().minWidth = "3rem";
+    this.qualitySpinner.getChilStyleByQuery("input[type=number]").minWidth = "2.5rem";
+    this.qualitySpinner.getChilStyleByQuery("input[type=number]").width = "2.5rem";
+    constraints = new GridBagConstraints();
+    constraints.gridx = 1;
+    constraints.gridy = 3;
+    constraints.anchor = GridBagConstraints.EAST;
+    this.add(this.qualitySpinner, constraints);
+  }
+
+   addLabel(text, gridx, gridy) {
+    let label = new JSLabel();
+    label.setText(text);
+    let constraints = new GridBagConstraints();
+    constraints.gridx = gridx;
+    constraints.gridy = gridy;
+    constraints.anchor = GridBagConstraints.WEST;
+    this.add(label, constraints);
+  }
+
+   onchange() {
+    let event = new ChangeEvent();
+    this.listeners.forEach(listener => {
+      if (typeof listener === "function") {
+        listener(event);
+      } else {
+        listener.stateChanged(event);
+      }
+    });
+  }
+
+   addRadio(button, selected, text, gridx) {
+    button.setSelected(selected);
+    button.setText(text);
+    button.addActionListener(event => {
+      this.qualitySlider.setEnabled(!selected);
+      this.qualitySpinner.setEnabled(!selected);
+    });
+    let constraints = new GridBagConstraints();
+    constraints.gridx = gridx;
+    constraints.gridy = 2;
+    constraints.anchor = GridBagConstraints.WEST;
+    this.add(button, constraints);
+  }
+
+  /**
+   * Adds a change listener
+   *
+   * @param listener The listener
+   */
+   addChangeListener(listener) {
+    this.listeners.push(listener);
+  }
+
+  /**
+   * Check if this panel has a valid content
+   *
+   * @return true if this panel has a valid content, false otherwise
+   */
+   isValid() {
+    return !!(this.filename.getText());
+  }
+
+  /**
+   * Sets the file name
+   *
+   * @param filename The file name
+   */
+   setFilename(filename) {
+    this.filename.setText(filename);
+  }
+
+  /**
+   * Returns the file name
+   *
+   * @return The file name
+   */
+   getFilename() {
+    return this.filename.getText();
+  }
+
+  /**
+   * Returns the file extension
+   *
+   * @return The file extension
+   */
+   getFileExtension() {
+    return this.png.isSelected() ? ".png" : ".jpg";
+  }
+
+  /**
+   * Returns the quality in the range [0,1]
+   *
+   * @return The quality in the range [0,1]
+   */
+   getQuality() {
+    return this.qualitySpinner.getValue() / 100;
+  }
+}
+/**
  * The main ribbon of the application
  *
  * @author gianpiero.diblasi
@@ -284,7 +446,7 @@ class Z4Canvas extends JSComponent {
 
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
-   filename = null;
+   projectName = null;
 
    paper = new Z4Paper();
 
@@ -313,31 +475,53 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
-   * Opens an image
+   * Creates a new project from an image file
    *
    * @param file The file
    */
-   openFromDevice(file) {
-    this.filename = file.name;
+   createFromFile(file) {
     let fileReader = new FileReader();
     fileReader.onload = event => {
-      if (Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.indexOf(file.name.toLowerCase().substring(file.name.lastIndexOf('.'))) !== -1) {
-        let image = document.createElement("img");
-        image.onload = event2 => {
-          this.canvas.width = image.width;
-          this.canvas.height = image.height;
-          this.paper.reset();
-          this.paper.addLayerFromImage(image);
-          this.drawCanvas();
-          return null;
-        };
-        image.src = fileReader.result;
-      } else {
-        // Z4 IMAGE!!!
-      }
+      let image = document.createElement("img");
+      image.onload = event2 => {
+        this.projectName = file.name.substring(0, file.name.lastIndexOf('.'));
+        this.canvas.width = image.width;
+        this.canvas.height = image.height;
+        this.paper.reset();
+        this.paper.addLayerFromImage(image);
+        this.drawCanvas();
+        return null;
+      };
+      image.src = fileReader.result;
       return null;
     };
     fileReader.readAsDataURL(file);
+  }
+
+  /**
+   * Exports this project to an image file
+   *
+   * @param filename The file name
+   * @param ext The file extension
+   * @param quality The quality
+   */
+   exportToFile(filename, ext, quality) {
+    let offscreen = new OffscreenCanvas(this.canvas.width, this.canvas.height);
+    let offscreenCtx = offscreen.getContext("2d");
+    this.paper.drawPaper(offscreenCtx);
+    let options = new Object();
+    options["type"] = ext === ".png" ? "image/png" : "image/jpeg";
+    options["quality"] = quality;
+    offscreen.convertToBlob(options).then(blob => {
+      let link = document.createElement("a");
+      link.setAttribute("href", URL.createObjectURL(blob));
+      link.setAttribute("download", filename + ext);
+      document.body.appendChild(link);
+      let event = document.createEvent("MouseEvents");
+      event.initEvent("click", false, false);
+      link.dispatchEvent(event);
+      document.body.removeChild(link);
+    });
   }
 
   /**
@@ -349,6 +533,15 @@ class Z4Canvas extends JSComponent {
    addLayer(width, height) {
     this.paper.addLayer(width, height);
     this.drawCanvas();
+  }
+
+  /**
+   * Returns the project name
+   *
+   * @return The project name
+   */
+   getProjectName() {
+    return this.projectName;
   }
 
    drawCanvas() {
@@ -376,17 +569,19 @@ class Z4Translations {
 
   static  CREATE = "";
 
-  static  CREATE_FROM_CLIPBOARD = "";
+  static  FROM_CLIPBOARD = "";
+
+  static  FROM_FILE = "";
 
   static  OPEN = "";
 
-  static  OPEN_FROM_DEVICE = "";
-
-  static  OPEN_FROM_BROWSER = "";
+  static  OPEN_PROJECT = "";
 
   static  SAVE = "";
 
-  static  SAVE_AS = "";
+  static  SAVE_PROJECT = "";
+
+  static  EXPORT = "";
 
   // Ribbon Settings
   static  SETTINGS = "";
@@ -406,6 +601,11 @@ class Z4Translations {
   static  THEME_DARK = "";
 
   static  REFRESH_PAGE_MESSAGE = "";
+
+  // Other
+  static  FILENAME = "";
+
+  static  QUALITY = "";
 
   static {
     switch(navigator.language.substring(0, 2)) {
@@ -430,12 +630,13 @@ class Z4Translations {
     Z4Translations.FILE = "File";
     Z4Translations.NEW = "New";
     Z4Translations.CREATE = "Create";
-    Z4Translations.CREATE_FROM_CLIPBOARD = "Create from Clipboard";
+    Z4Translations.FROM_CLIPBOARD = "From Clipboard";
+    Z4Translations.FROM_FILE = "From File";
     Z4Translations.OPEN = "Open";
-    Z4Translations.OPEN_FROM_DEVICE = "Open from Device";
-    Z4Translations.OPEN_FROM_BROWSER = "Open from Browser";
+    Z4Translations.OPEN_PROJECT = "Open Project";
     Z4Translations.SAVE = "Save";
-    Z4Translations.SAVE_AS = "Save As...";
+    Z4Translations.SAVE_PROJECT = "Save Project";
+    Z4Translations.EXPORT = "Export";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Settings";
     Z4Translations.LANGUAGE = "Language";
@@ -446,6 +647,9 @@ class Z4Translations {
     Z4Translations.THEME_LIGHT = "Light";
     Z4Translations.THEME_DARK = "Dark";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Refresh the page to make the changes";
+    // Other
+    Z4Translations.FILENAME = "File Name";
+    Z4Translations.QUALITY = "Quality";
     Z4Translations.CURRENT_LANGUAGE = new KeyValue("en", Z4Translations.LANGUAGE_ENGLISH_NATIVE);
   }
 
@@ -457,12 +661,13 @@ class Z4Translations {
     Z4Translations.FILE = "File";
     Z4Translations.NEW = "Nuovo";
     Z4Translations.CREATE = "Crea";
-    Z4Translations.CREATE_FROM_CLIPBOARD = "Crea dagli Appunti";
+    Z4Translations.FROM_CLIPBOARD = "Dagli Appunti";
+    Z4Translations.FROM_FILE = "Da File";
     Z4Translations.OPEN = "Apri";
-    Z4Translations.OPEN_FROM_DEVICE = "Apri dal Dispositivo";
-    Z4Translations.OPEN_FROM_BROWSER = "Apri dal Browser";
+    Z4Translations.OPEN_PROJECT = "Apri Progetto";
     Z4Translations.SAVE = "Salva";
-    Z4Translations.SAVE_AS = "Salva Come...";
+    Z4Translations.SAVE_PROJECT = "Salva Progetto";
+    Z4Translations.EXPORT = "Esporta";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Impostazioni";
     Z4Translations.LANGUAGE = "Lingua";
@@ -473,6 +678,9 @@ class Z4Translations {
     Z4Translations.THEME_LIGHT = "Chiaro";
     Z4Translations.THEME_DARK = "Scuro";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Aggiorna la pagina per eseguire le modifiche";
+    // Other
+    Z4Translations.FILENAME = "Nome File";
+    Z4Translations.QUALITY = "Qualit\u00E0";
     Z4Translations.CURRENT_LANGUAGE = new KeyValue("it", Z4Translations.LANGUAGE_ITALIAN_NATIVE);
   }
 }

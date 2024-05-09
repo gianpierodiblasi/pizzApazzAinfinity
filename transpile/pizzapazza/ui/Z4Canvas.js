@@ -13,7 +13,7 @@ class Z4Canvas extends JSComponent {
 
    resizeObserver = new ResizeObserver(() => this.drawCanvas());
 
-   filename = null;
+   projectName = null;
 
    paper = new Z4Paper();
 
@@ -42,31 +42,53 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
-   * Opens an image
+   * Creates a new project from an image file
    *
    * @param file The file
    */
-   openFromDevice(file) {
-    this.filename = file.name;
+   createFromFile(file) {
     let fileReader = new FileReader();
     fileReader.onload = event => {
-      if (Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.indexOf(file.name.toLowerCase().substring(file.name.lastIndexOf('.'))) !== -1) {
-        let image = document.createElement("img");
-        image.onload = event2 => {
-          this.canvas.width = image.width;
-          this.canvas.height = image.height;
-          this.paper.reset();
-          this.paper.addLayerFromImage(image);
-          this.drawCanvas();
-          return null;
-        };
-        image.src = fileReader.result;
-      } else {
-        // Z4 IMAGE!!!
-      }
+      let image = document.createElement("img");
+      image.onload = event2 => {
+        this.projectName = file.name.substring(0, file.name.lastIndexOf('.'));
+        this.canvas.width = image.width;
+        this.canvas.height = image.height;
+        this.paper.reset();
+        this.paper.addLayerFromImage(image);
+        this.drawCanvas();
+        return null;
+      };
+      image.src = fileReader.result;
       return null;
     };
     fileReader.readAsDataURL(file);
+  }
+
+  /**
+   * Exports this project to an image file
+   *
+   * @param filename The file name
+   * @param ext The file extension
+   * @param quality The quality
+   */
+   exportToFile(filename, ext, quality) {
+    let offscreen = new OffscreenCanvas(this.canvas.width, this.canvas.height);
+    let offscreenCtx = offscreen.getContext("2d");
+    this.paper.drawPaper(offscreenCtx);
+    let options = new Object();
+    options["type"] = ext === ".png" ? "image/png" : "image/jpeg";
+    options["quality"] = quality;
+    offscreen.convertToBlob(options).then(blob => {
+      let link = document.createElement("a");
+      link.setAttribute("href", URL.createObjectURL(blob));
+      link.setAttribute("download", filename + ext);
+      document.body.appendChild(link);
+      let event = document.createEvent("MouseEvents");
+      event.initEvent("click", false, false);
+      link.dispatchEvent(event);
+      document.body.removeChild(link);
+    });
   }
 
   /**
@@ -78,6 +100,15 @@ class Z4Canvas extends JSComponent {
    addLayer(width, height) {
     this.paper.addLayer(width, height);
     this.drawCanvas();
+  }
+
+  /**
+   * Returns the project name
+   *
+   * @return The project name
+   */
+   getProjectName() {
+    return this.projectName;
   }
 
    drawCanvas() {
