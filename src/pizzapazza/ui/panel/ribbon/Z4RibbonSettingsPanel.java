@@ -166,6 +166,7 @@ public class Z4RibbonSettingsPanel extends JSPanel {
     localStorage.removeItem("z4language");
     localStorage.removeItem("z4theme");
     localStorage.removeItem("z4color");
+    
     JSOptionPane.showMessageDialog(Z4Translations.REFRESH_PAGE_MESSAGE, Z4Translations.RESET, JSOptionPane.INFORMATION_MESSAGE, null);
   }
 }
