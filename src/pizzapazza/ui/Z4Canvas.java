@@ -11,6 +11,7 @@ import def.dom.URL;
 import javascript.awt.Dimension;
 import javascript.swing.JSComponent;
 import jsweet.util.union.Union4;
+import pizzapazza.Z4Constants;
 import pizzapazza.Z4Paper;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
@@ -36,9 +37,6 @@ public class Z4Canvas extends JSComponent {
   private String projectName;
   private final Z4Paper paper = new Z4Paper();
 
-  private final static int WIDTH = 500;
-  private final static int HEIGHT = 500;
-
   /**
    * Creates the object
    */
@@ -48,11 +46,11 @@ public class Z4Canvas extends JSComponent {
 
     this.resizeObserver.observe(this.canvas);
 
-    this.canvas.width = Z4Canvas.WIDTH;
-    this.canvas.height = Z4Canvas.HEIGHT;
+    this.canvas.width = Z4Constants.DEFAULT_IMAGE_SIZE;
+    this.canvas.height = Z4Constants.DEFAULT_IMAGE_SIZE;
     this.appendNodeChild(this.canvas);
 
-    this.addLayer(Z4Canvas.WIDTH, Z4Canvas.HEIGHT);
+    this.addLayer(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE);
 
     $Image image = ($Image) document.createElement("img");
     image.onload = event -> {
