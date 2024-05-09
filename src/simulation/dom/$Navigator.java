@@ -10,4 +10,5 @@ import def.dom.Navigator;
 public class $Navigator extends Navigator {
 
   public String[] languages;
+  public $Clipboard clipboard;
 }

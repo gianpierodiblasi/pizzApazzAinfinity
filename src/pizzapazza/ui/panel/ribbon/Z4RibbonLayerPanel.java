@@ -9,11 +9,9 @@ import javascript.swing.JSButton;
 import javascript.swing.JSComponent;
 import javascript.swing.JSFileChooser;
 import javascript.swing.JSLabel;
-import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
 import pizzapazza.Z4Constants;
 import pizzapazza.ui.Z4Canvas;
-import pizzapazza.ui.panel.Z4ExportToFilePanel;
 import pizzapazza.util.Z4Translations;
 
 /**
@@ -35,7 +33,7 @@ public class Z4RibbonLayerPanel extends JSPanel {
 
     this.addLabel(Z4Translations.NEW, 0);
     this.addButton(Z4Translations.CREATE, 0, 1, "left", null);
-    this.addButton(Z4Translations.FROM_CLIPBOARD, 1, 1, "both", null);
+    this.addButton(Z4Translations.FROM_CLIPBOARD, 1, 1, "both", event -> this.addFromClipboard());
     this.addButton(Z4Translations.FROM_FILE, 2, 1, "right", event -> this.addFromFile());
     this.addVLine(3, 1);
   }
@@ -111,5 +109,9 @@ public class Z4RibbonLayerPanel extends JSPanel {
 
   private void addFromFile() {
     JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files -> files.forEach(file -> this.canvas.addLayerFromFile(file)));
+  }
+
+  private void addFromClipboard() {
+    this.canvas.addLayerFromClipboard();
   }
 }

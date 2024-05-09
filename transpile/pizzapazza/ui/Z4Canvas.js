@@ -66,6 +66,31 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Creates a new project from an image in the clipboard
+   */
+   createFromClipboard() {
+    navigator.clipboard.read().then(items => {
+      items.forEach(item => {
+        let imageType = item.types.find((type, index, array) => type.startsWith("image/"));
+        item.getType(imageType).then(blob => {
+          let image = document.createElement("img");
+          image.onload = event => {
+            this.projectName = "";
+            this.canvas.width = image.width;
+            this.canvas.height = image.height;
+            this.paper.reset();
+            this.paper.addLayerFromImage(image);
+            this.drawCanvas();
+            return null;
+          };
+          image.src = URL.createObjectURL(blob);
+          return null;
+        });
+      });
+    });
+  }
+
+  /**
    * Exports this project to an image file
    *
    * @param filename The file name
@@ -120,6 +145,27 @@ class Z4Canvas extends JSComponent {
       return null;
     };
     fileReader.readAsDataURL(file);
+  }
+
+  /**
+   * Adds a layer from an image in the clipboard
+   */
+   addLayerFromClipboard() {
+    navigator.clipboard.read().then(items => {
+      items.forEach(item => {
+        let imageType = item.types.find((type, index, array) => type.startsWith("image/"));
+        item.getType(imageType).then(blob => {
+          let image = document.createElement("img");
+          image.onload = event => {
+            this.paper.addLayerFromImage(image);
+            this.drawCanvas();
+            return null;
+          };
+          image.src = URL.createObjectURL(blob);
+          return null;
+        });
+      });
+    });
   }
 
   /**

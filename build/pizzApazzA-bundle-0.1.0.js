@@ -71,7 +71,7 @@ class Z4RibbonFilePanel extends JSPanel {
     this.cssAddClass("z4ribbonfilepanel");
     this.addLabel(Z4Translations.NEW, 0);
     this.addButton(Z4Translations.CREATE, 0, 1, "left", null);
-    this.addButton(Z4Translations.FROM_CLIPBOARD, 1, 1, "both", null);
+    this.addButton(Z4Translations.FROM_CLIPBOARD, 1, 1, "both", event => this.createFromClipboard());
     this.addButton(Z4Translations.FROM_FILE, 2, 1, "right", event => this.createFromFile());
     this.addVLine(3, 0);
     this.addLabel(Z4Translations.OPEN, 4);
@@ -152,6 +152,10 @@ class Z4RibbonFilePanel extends JSPanel {
     JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.createFromFile(file)));
   }
 
+   createFromClipboard() {
+    this.canvas.createFromClipboard();
+  }
+
    exportToFile() {
     let panel = new Z4ExportToFilePanel();
     panel.setFilename(this.canvas.getProjectName());
@@ -180,7 +184,7 @@ class Z4RibbonLayerPanel extends JSPanel {
     this.cssAddClass("z4ribbonlayerpanel");
     this.addLabel(Z4Translations.NEW, 0);
     this.addButton(Z4Translations.CREATE, 0, 1, "left", null);
-    this.addButton(Z4Translations.FROM_CLIPBOARD, 1, 1, "both", null);
+    this.addButton(Z4Translations.FROM_CLIPBOARD, 1, 1, "both", event => this.addFromClipboard());
     this.addButton(Z4Translations.FROM_FILE, 2, 1, "right", event => this.addFromFile());
     this.addVLine(3, 1);
   }
@@ -252,6 +256,10 @@ class Z4RibbonLayerPanel extends JSPanel {
 
    addFromFile() {
     JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.addLayerFromFile(file)));
+  }
+
+   addFromClipboard() {
+    this.canvas.addLayerFromClipboard();
   }
 }
 /**
@@ -644,6 +652,31 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Creates a new project from an image in the clipboard
+   */
+   createFromClipboard() {
+    navigator.clipboard.read().then(items => {
+      items.forEach(item => {
+        let imageType = item.types.find((type, index, array) => type.startsWith("image/"));
+        item.getType(imageType).then(blob => {
+          let image = document.createElement("img");
+          image.onload = event => {
+            this.projectName = "";
+            this.canvas.width = image.width;
+            this.canvas.height = image.height;
+            this.paper.reset();
+            this.paper.addLayerFromImage(image);
+            this.drawCanvas();
+            return null;
+          };
+          image.src = URL.createObjectURL(blob);
+          return null;
+        });
+      });
+    });
+  }
+
+  /**
    * Exports this project to an image file
    *
    * @param filename The file name
@@ -698,6 +731,27 @@ class Z4Canvas extends JSComponent {
       return null;
     };
     fileReader.readAsDataURL(file);
+  }
+
+  /**
+   * Adds a layer from an image in the clipboard
+   */
+   addLayerFromClipboard() {
+    navigator.clipboard.read().then(items => {
+      items.forEach(item => {
+        let imageType = item.types.find((type, index, array) => type.startsWith("image/"));
+        item.getType(imageType).then(blob => {
+          let image = document.createElement("img");
+          image.onload = event => {
+            this.paper.addLayerFromImage(image);
+            this.drawCanvas();
+            return null;
+          };
+          image.src = URL.createObjectURL(blob);
+          return null;
+        });
+      });
+    });
   }
 
   /**

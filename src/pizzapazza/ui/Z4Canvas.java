@@ -15,6 +15,7 @@ import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
 import simulation.dom.$OffscreenCanvas;
+import static simulation.js.$Globals.navigator;
 import simulation.js.$Object;
 import simulation.js.$ResizeObserver;
 
@@ -68,7 +69,7 @@ public class Z4Canvas extends JSComponent {
    */
   public void createFromFile(File file) {
     FileReader fileReader = new FileReader();
-    
+
     fileReader.onload = event -> {
       $Image image = ($Image) document.createElement("img");
 
@@ -87,8 +88,38 @@ public class Z4Canvas extends JSComponent {
       image.src = (String) fileReader.result;
       return null;
     };
-    
+
     fileReader.readAsDataURL(file);
+  }
+
+  /**
+   * Creates a new project from an image in the clipboard
+   */
+  public void createFromClipboard() {
+    navigator.clipboard.read().then(items -> {
+      items.forEach(item -> {
+        String imageType = item.types.find((type, index, array) -> type.startsWith("image/"));
+        
+        item.getType(imageType).then(blob -> {
+          $Image image = ($Image) document.createElement("img");
+
+          image.onload = event -> {
+            this.projectName = "";
+
+            this.canvas.width = image.width;
+            this.canvas.height = image.height;
+
+            this.paper.reset();
+            this.paper.addLayerFromImage(image);
+            this.drawCanvas();
+            return null;
+          };
+
+          image.src = URL.createObjectURL(blob);
+          return null;
+        });
+      });
+    });
   }
 
   /**
@@ -98,7 +129,7 @@ public class Z4Canvas extends JSComponent {
    * @param ext The file extension
    * @param quality The quality
    */
-  @SuppressWarnings({"StringEquality", "unchecked"})
+  @SuppressWarnings("StringEquality")
   public void exportToFile(String filename, String ext, double quality) {
     $OffscreenCanvas offscreen = new $OffscreenCanvas(this.canvas.width, this.canvas.height);
     $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
@@ -141,7 +172,7 @@ public class Z4Canvas extends JSComponent {
    */
   public void addLayerFromFile(File file) {
     FileReader fileReader = new FileReader();
-    
+
     fileReader.onload = event -> {
       $Image image = ($Image) document.createElement("img");
 
@@ -154,10 +185,34 @@ public class Z4Canvas extends JSComponent {
       image.src = (String) fileReader.result;
       return null;
     };
-    
+
     fileReader.readAsDataURL(file);
   }
 
+  /**
+   * Adds a layer from an image in the clipboard
+   */
+  public void addLayerFromClipboard() {
+    navigator.clipboard.read().then(items -> {
+      items.forEach(item -> {
+        String imageType = item.types.find((type, index, array) -> type.startsWith("image/"));
+        
+        item.getType(imageType).then(blob -> {
+          $Image image = ($Image) document.createElement("img");
+
+          image.onload = event -> {
+            this.paper.addLayerFromImage(image);
+            this.drawCanvas();
+            return null;
+          };
+
+          image.src = URL.createObjectURL(blob);
+          return null;
+        });
+      });
+    });
+  }
+  
   /**
    * Returns the project name
    *

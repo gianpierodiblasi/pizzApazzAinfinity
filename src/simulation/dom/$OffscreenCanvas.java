@@ -1,5 +1,6 @@
 package simulation.dom;
 
+import def.dom.Blob;
 import def.js.Promise;
 
 /**
@@ -16,7 +17,7 @@ public class $OffscreenCanvas {
     return null;
   }
 
-  public Promise convertToBlob(Object options) {
+  public Promise<Blob> convertToBlob(Object options) {
     return null;
   }
 }
