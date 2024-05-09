@@ -15,9 +15,9 @@ class Z4RibbonLayerPanel extends JSPanel {
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonlayerpanel");
     this.addLabel(Z4Translations.NEW, 0);
-    this.addButton(Z4Translations.CREATE, 0, 1, "left", null);
-    this.addButton(Z4Translations.FROM_CLIPBOARD, 1, 1, "both", event => this.addFromClipboard());
-    this.addButton(Z4Translations.FROM_FILE, 2, 1, "right", event => this.addFromFile());
+    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", null);
+    this.addButton(Z4Translations.FROM_CLIPBOARD, typeof navigator.clipboard["read"] === "function", 1, 1, "both", event => this.addFromClipboard());
+    this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event => this.addFromFile());
     this.addVLine(3, 1);
   }
 
@@ -41,9 +41,10 @@ class Z4RibbonLayerPanel extends JSPanel {
     this.add(label, constraints);
   }
 
-   addButton(text, gridx, gridy, border, listener) {
+   addButton(text, enabled, gridx, gridy, border, listener) {
     let button = new JSButton();
     button.setText(text);
+    button.setEnabled(enabled);
     button.setContentAreaFilled(false);
     button.addActionListener(listener);
     let constraints = new GridBagConstraints();

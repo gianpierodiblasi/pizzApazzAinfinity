@@ -13,4 +13,8 @@ public class $Clipboard {
   public Promise<Array<$ClipboardItem>> read() {
     return null;
   }
+
+  public String $get(String str) {
+    return null;
+  }
 }

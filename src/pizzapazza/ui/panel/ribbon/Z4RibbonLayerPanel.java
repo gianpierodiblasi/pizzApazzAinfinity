@@ -13,6 +13,8 @@ import javascript.swing.JSPanel;
 import pizzapazza.Z4Constants;
 import pizzapazza.ui.Z4Canvas;
 import pizzapazza.util.Z4Translations;
+import static simulation.js.$Globals.$typeof;
+import static simulation.js.$Globals.navigator;
 
 /**
  * The ribbon panel containing the layer menus
@@ -32,9 +34,9 @@ public class Z4RibbonLayerPanel extends JSPanel {
     this.cssAddClass("z4ribbonlayerpanel");
 
     this.addLabel(Z4Translations.NEW, 0);
-    this.addButton(Z4Translations.CREATE, 0, 1, "left", null);
-    this.addButton(Z4Translations.FROM_CLIPBOARD, 1, 1, "both", event -> this.addFromClipboard());
-    this.addButton(Z4Translations.FROM_FILE, 2, 1, "right", event -> this.addFromFile());
+    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", null);
+    this.addButton(Z4Translations.FROM_CLIPBOARD, $typeof(navigator.clipboard.$get("read"), "function"), 1, 1, "both", event -> this.addFromClipboard());
+    this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event -> this.addFromFile());
     this.addVLine(3, 1);
   }
 
@@ -59,9 +61,10 @@ public class Z4RibbonLayerPanel extends JSPanel {
     this.add(label, constraints);
   }
 
-  private void addButton(String text, int gridx, int gridy, String border, ActionListener listener) {
+  private void addButton(String text, boolean enabled, int gridx, int gridy, String border, ActionListener listener) {
     JSButton button = new JSButton();
     button.setText(text);
+    button.setEnabled(enabled);
     button.setContentAreaFilled(false);
     button.addActionListener(listener);
 
