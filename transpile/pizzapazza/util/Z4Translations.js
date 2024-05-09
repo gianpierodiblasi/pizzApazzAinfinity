@@ -29,6 +29,9 @@ class Z4Translations {
 
   static  EXPORT = "";
 
+  // Ribbon Layer
+  static  LAYER = "";
+
   // Ribbon Settings
   static  SETTINGS = "";
 
@@ -46,12 +49,16 @@ class Z4Translations {
 
   static  THEME_DARK = "";
 
+  static  THEME_COLOR = "";
+
   static  REFRESH_PAGE_MESSAGE = "";
 
   // Other
   static  FILENAME = "";
 
   static  QUALITY = "";
+
+  static  RESET = "";
 
   static {
     switch(navigator.language.substring(0, 2)) {
@@ -83,6 +90,8 @@ class Z4Translations {
     Z4Translations.SAVE = "Save";
     Z4Translations.SAVE_PROJECT = "Save Project";
     Z4Translations.EXPORT = "Export";
+    // Ribbon Layer
+    Z4Translations.LAYER = "Layer";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Settings";
     Z4Translations.LANGUAGE = "Language";
@@ -92,10 +101,12 @@ class Z4Translations {
     Z4Translations.THEME_AUTO = "Auto";
     Z4Translations.THEME_LIGHT = "Light";
     Z4Translations.THEME_DARK = "Dark";
+    Z4Translations.THEME_COLOR = "Color";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Refresh the page to make the changes";
     // Other
     Z4Translations.FILENAME = "File Name";
     Z4Translations.QUALITY = "Quality";
+    Z4Translations.RESET = "Reset";
     Z4Translations.CURRENT_LANGUAGE = new KeyValue("en", Z4Translations.LANGUAGE_ENGLISH_NATIVE);
   }
 
@@ -114,6 +125,8 @@ class Z4Translations {
     Z4Translations.SAVE = "Salva";
     Z4Translations.SAVE_PROJECT = "Salva Progetto";
     Z4Translations.EXPORT = "Esporta";
+    // Ribbon Layer
+    Z4Translations.LAYER = "Livello";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Impostazioni";
     Z4Translations.LANGUAGE = "Lingua";
@@ -123,10 +136,12 @@ class Z4Translations {
     Z4Translations.THEME_AUTO = "Auto";
     Z4Translations.THEME_LIGHT = "Chiaro";
     Z4Translations.THEME_DARK = "Scuro";
+    Z4Translations.THEME_COLOR = "Colore";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Aggiorna la pagina per eseguire le modifiche";
     // Other
     Z4Translations.FILENAME = "Nome File";
     Z4Translations.QUALITY = "Qualit\u00E0";
+    Z4Translations.RESET = "Ripristina";
     Z4Translations.CURRENT_LANGUAGE = new KeyValue("it", Z4Translations.LANGUAGE_ITALIAN_NATIVE);
   }
 }

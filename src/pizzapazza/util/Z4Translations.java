@@ -26,6 +26,9 @@ public class Z4Translations {
   public static String SAVE_PROJECT = "";
   public static String EXPORT = "";
 
+  // Ribbon Layer
+  public static String LAYER = "";
+
   // Ribbon Settings
   public static String SETTINGS = "";
   public static String LANGUAGE = "";
@@ -35,11 +38,13 @@ public class Z4Translations {
   public static String THEME_AUTO = "";
   public static String THEME_LIGHT = "";
   public static String THEME_DARK = "";
+  public static String THEME_COLOR = "";
   public static String REFRESH_PAGE_MESSAGE = "";
 
   // Other
   public static String FILENAME = "";
   public static String QUALITY = "";
+  public static String RESET = "";
 
   static {
     switch (navigator.language.substring(0, 2)) {
@@ -72,6 +77,9 @@ public class Z4Translations {
     Z4Translations.SAVE_PROJECT = "Save Project";
     Z4Translations.EXPORT = "Export";
 
+    // Ribbon Layer
+    Z4Translations.LAYER = "Layer";
+
     // Ribbon Settings
     Z4Translations.SETTINGS = "Settings";
     Z4Translations.LANGUAGE = "Language";
@@ -81,11 +89,13 @@ public class Z4Translations {
     Z4Translations.THEME_AUTO = "Auto";
     Z4Translations.THEME_LIGHT = "Light";
     Z4Translations.THEME_DARK = "Dark";
+    Z4Translations.THEME_COLOR = "Color";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Refresh the page to make the changes";
 
     // Other
     Z4Translations.FILENAME = "File Name";
     Z4Translations.QUALITY = "Quality";
+    Z4Translations.RESET = "Reset";
 
     Z4Translations.CURRENT_LANGUAGE = new KeyValue<>("en", Z4Translations.LANGUAGE_ENGLISH_NATIVE);
   }
@@ -106,6 +116,9 @@ public class Z4Translations {
     Z4Translations.SAVE_PROJECT = "Salva Progetto";
     Z4Translations.EXPORT = "Esporta";
 
+    // Ribbon Layer
+    Z4Translations.LAYER = "Livello";
+
     // Ribbon Settings
     Z4Translations.SETTINGS = "Impostazioni";
     Z4Translations.LANGUAGE = "Lingua";
@@ -115,11 +128,13 @@ public class Z4Translations {
     Z4Translations.THEME_AUTO = "Auto";
     Z4Translations.THEME_LIGHT = "Chiaro";
     Z4Translations.THEME_DARK = "Scuro";
+    Z4Translations.THEME_COLOR = "Colore";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Aggiorna la pagina per eseguire le modifiche";
 
     // Other
     Z4Translations.FILENAME = "Nome File";
     Z4Translations.QUALITY = "Qualit\u00E0";
+    Z4Translations.RESET = "Ripristina";
 
     Z4Translations.CURRENT_LANGUAGE = new KeyValue<>("it", Z4Translations.LANGUAGE_ITALIAN_NATIVE);
   }

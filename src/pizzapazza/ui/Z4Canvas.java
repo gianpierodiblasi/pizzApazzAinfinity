@@ -68,8 +68,8 @@ public class Z4Canvas extends JSComponent {
    */
   public void createFromFile(File file) {
     FileReader fileReader = new FileReader();
+    
     fileReader.onload = event -> {
-
       $Image image = ($Image) document.createElement("img");
 
       image.onload = event2 -> {
@@ -87,6 +87,7 @@ public class Z4Canvas extends JSComponent {
       image.src = (String) fileReader.result;
       return null;
     };
+    
     fileReader.readAsDataURL(file);
   }
 
@@ -131,6 +132,30 @@ public class Z4Canvas extends JSComponent {
   public void addLayer(int width, int height) {
     this.paper.addLayer(width, height);
     this.drawCanvas();
+  }
+
+  /**
+   * Adds a layer from an image file
+   *
+   * @param file The file
+   */
+  public void addLayerFromFile(File file) {
+    FileReader fileReader = new FileReader();
+    
+    fileReader.onload = event -> {
+      $Image image = ($Image) document.createElement("img");
+
+      image.onload = event2 -> {
+        this.paper.addLayerFromImage(image);
+        this.drawCanvas();
+        return null;
+      };
+
+      image.src = (String) fileReader.result;
+      return null;
+    };
+    
+    fileReader.readAsDataURL(file);
   }
 
   /**

@@ -103,6 +103,26 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Adds a layer from an image file
+   *
+   * @param file The file
+   */
+   addLayerFromFile(file) {
+    let fileReader = new FileReader();
+    fileReader.onload = event => {
+      let image = document.createElement("img");
+      image.onload = event2 => {
+        this.paper.addLayerFromImage(image);
+        this.drawCanvas();
+        return null;
+      };
+      image.src = fileReader.result;
+      return null;
+    };
+    fileReader.readAsDataURL(file);
+  }
+
+  /**
    * Returns the project name
    *
    * @return The project name

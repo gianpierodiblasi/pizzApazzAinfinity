@@ -9,6 +9,8 @@ class Z4RibbonSettingsPanel extends JSPanel {
 
    theme = new JSComboBox();
 
+   color = new JSColorChooser();
+
   /**
    * Creates the object
    */
@@ -71,8 +73,36 @@ class Z4RibbonSettingsPanel extends JSPanel {
     constraints.insets = new Insets(0, 5, 0, 5);
     this.add(this.theme, constraints);
     label = new JSLabel();
+    label.setText(Z4Translations.THEME_COLOR);
     constraints = new GridBagConstraints();
     constraints.gridx = 2;
+    constraints.gridy = 0;
+    constraints.anchor = GridBagConstraints.WEST;
+    constraints.insets = new Insets(5, 5, 2, 0);
+    this.add(label, constraints);
+    let themeColor = localStorage.getItem("z4color");
+    this.color.setSelectedColor(Color.fromRGB_HEX(themeColor ? themeColor : "#0d6efd"));
+    this.color.setOpacityVisible(false);
+    this.color.addChangeListener(event => this.onchangeColor());
+    constraints = new GridBagConstraints();
+    constraints.gridx = 2;
+    constraints.gridy = 1;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.insets = new Insets(0, 5, 0, 5);
+    this.add(this.color, constraints);
+    let reset = new JSButton();
+    reset.setText(Z4Translations.RESET);
+    reset.setContentAreaFilled(false);
+    reset.addActionListener(event => this.onreset());
+    constraints = new GridBagConstraints();
+    constraints.gridx = 3;
+    constraints.gridy = 1;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.insets = new Insets(0, 5, 0, 5);
+    this.add(reset, constraints);
+    label = new JSLabel();
+    constraints = new GridBagConstraints();
+    constraints.gridx = 4;
     constraints.gridy = 0;
     constraints.fill = GridBagConstraints.BOTH;
     constraints.weightx = 1;
@@ -87,5 +117,17 @@ class Z4RibbonSettingsPanel extends JSPanel {
    onchangeTheme() {
     localStorage.setItem("z4theme", (this.theme.getSelectedItem()).key);
     JSOptionPane.showMessageDialog(Z4Translations.REFRESH_PAGE_MESSAGE, Z4Translations.THEME, JSOptionPane.INFORMATION_MESSAGE, null);
+  }
+
+   onchangeColor() {
+    if (!this.color.getValueIsAdjusting()) {
+      localStorage.setItem("z4color", this.color.getSelectedColor().getRGB_HEX());
+      JSOptionPane.showMessageDialog(Z4Translations.REFRESH_PAGE_MESSAGE, Z4Translations.THEME_COLOR, JSOptionPane.INFORMATION_MESSAGE, null);
+    }
+  }
+
+   onreset() {
+    localStorage.clear();
+    JSOptionPane.showMessageDialog(Z4Translations.REFRESH_PAGE_MESSAGE, Z4Translations.RESET, JSOptionPane.INFORMATION_MESSAGE, null);
   }
 }

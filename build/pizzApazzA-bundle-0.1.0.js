@@ -24,6 +24,11 @@ window.onload = event => {
       break;
   }
 
+  let color = localStorage.getItem("z4color");
+  if (color) {
+    SwingJS.instance().mainActionBGColor(color).build();
+  }
+  
   new Z4Frame();
 };/**
  * The main frame of the application
@@ -158,6 +163,98 @@ class Z4RibbonFilePanel extends JSPanel {
   }
 }
 /**
+ * The ribbon panel containing the layer menus
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4RibbonLayerPanel extends JSPanel {
+
+   canvas = null;
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super();
+    this.setLayout(new GridBagLayout());
+    this.cssAddClass("z4ribbonlayerpanel");
+    this.addLabel(Z4Translations.NEW, 0);
+    this.addButton(Z4Translations.CREATE, 0, 1, "left", null);
+    this.addButton(Z4Translations.FROM_CLIPBOARD, 1, 1, "both", null);
+    this.addButton(Z4Translations.FROM_FILE, 2, 1, "right", event => this.addFromFile());
+    this.addVLine(3, 1);
+  }
+
+  /**
+   * Sets the canvas to manage
+   *
+   * @param canvas The canvas
+   */
+   setCanvas(canvas) {
+    this.canvas = canvas;
+  }
+
+   addLabel(text, gridx) {
+    let label = new JSLabel();
+    label.setText(text);
+    let constraints = new GridBagConstraints();
+    constraints.gridx = gridx;
+    constraints.gridy = 0;
+    constraints.anchor = GridBagConstraints.WEST;
+    constraints.insets = new Insets(5, 5, 2, 0);
+    this.add(label, constraints);
+  }
+
+   addButton(text, gridx, gridy, border, listener) {
+    let button = new JSButton();
+    button.setText(text);
+    button.setContentAreaFilled(false);
+    button.addActionListener(listener);
+    let constraints = new GridBagConstraints();
+    constraints.gridx = gridx;
+    constraints.gridy = gridy;
+    switch(border) {
+      case "left":
+        constraints.insets = new Insets(0, 5, 0, 0);
+        button.getStyle().borderTopRightRadius = "0px";
+        button.getStyle().borderBottomRightRadius = "0px";
+        button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "both":
+        button.getStyle().borderRadius = "0px";
+        button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "right":
+        constraints.insets = new Insets(0, 0, 0, 5);
+        button.getStyle().borderTopLeftRadius = "0px";
+        button.getStyle().borderBottomLeftRadius = "0px";
+        button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        break;
+    }
+    this.add(button, constraints);
+  }
+
+   addVLine(gridx, weightx) {
+    let div = new JSComponent(document.createElement("div"));
+    div.getStyle().width = "1px";
+    div.getStyle().background = "var(--main-action-bgcolor";
+    let constraints = new GridBagConstraints();
+    constraints.gridx = gridx;
+    constraints.gridy = 0;
+    constraints.gridheight = 2;
+    constraints.fill = GridBagConstraints.VERTICAL;
+    constraints.weightx = weightx;
+    constraints.weighty = 1;
+    constraints.insets = new Insets(1, 2, 1, 2);
+    this.add(div, constraints);
+  }
+
+   addFromFile() {
+    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.addLayerFromFile(file)));
+  }
+}
+/**
  * The ribbon panel containing the settings
  *
  * @author gianpiero.diblasi
@@ -167,6 +264,8 @@ class Z4RibbonSettingsPanel extends JSPanel {
    language = new JSComboBox();
 
    theme = new JSComboBox();
+
+   color = new JSColorChooser();
 
   /**
    * Creates the object
@@ -230,8 +329,36 @@ class Z4RibbonSettingsPanel extends JSPanel {
     constraints.insets = new Insets(0, 5, 0, 5);
     this.add(this.theme, constraints);
     label = new JSLabel();
+    label.setText(Z4Translations.THEME_COLOR);
     constraints = new GridBagConstraints();
     constraints.gridx = 2;
+    constraints.gridy = 0;
+    constraints.anchor = GridBagConstraints.WEST;
+    constraints.insets = new Insets(5, 5, 2, 0);
+    this.add(label, constraints);
+    let themeColor = localStorage.getItem("z4color");
+    this.color.setSelectedColor(Color.fromRGB_HEX(themeColor ? themeColor : "#0d6efd"));
+    this.color.setOpacityVisible(false);
+    this.color.addChangeListener(event => this.onchangeColor());
+    constraints = new GridBagConstraints();
+    constraints.gridx = 2;
+    constraints.gridy = 1;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.insets = new Insets(0, 5, 0, 5);
+    this.add(this.color, constraints);
+    let reset = new JSButton();
+    reset.setText(Z4Translations.RESET);
+    reset.setContentAreaFilled(false);
+    reset.addActionListener(event => this.onreset());
+    constraints = new GridBagConstraints();
+    constraints.gridx = 3;
+    constraints.gridy = 1;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.insets = new Insets(0, 5, 0, 5);
+    this.add(reset, constraints);
+    label = new JSLabel();
+    constraints = new GridBagConstraints();
+    constraints.gridx = 4;
     constraints.gridy = 0;
     constraints.fill = GridBagConstraints.BOTH;
     constraints.weightx = 1;
@@ -246,6 +373,18 @@ class Z4RibbonSettingsPanel extends JSPanel {
    onchangeTheme() {
     localStorage.setItem("z4theme", (this.theme.getSelectedItem()).key);
     JSOptionPane.showMessageDialog(Z4Translations.REFRESH_PAGE_MESSAGE, Z4Translations.THEME, JSOptionPane.INFORMATION_MESSAGE, null);
+  }
+
+   onchangeColor() {
+    if (!this.color.getValueIsAdjusting()) {
+      localStorage.setItem("z4color", this.color.getSelectedColor().getRGB_HEX());
+      JSOptionPane.showMessageDialog(Z4Translations.REFRESH_PAGE_MESSAGE, Z4Translations.THEME_COLOR, JSOptionPane.INFORMATION_MESSAGE, null);
+    }
+  }
+
+   onreset() {
+    localStorage.clear();
+    JSOptionPane.showMessageDialog(Z4Translations.REFRESH_PAGE_MESSAGE, Z4Translations.RESET, JSOptionPane.INFORMATION_MESSAGE, null);
   }
 }
 /**
@@ -410,6 +549,8 @@ class Z4Ribbon extends JSTabbedPane {
 
    filePanel = new Z4RibbonFilePanel();
 
+   layerPanel = new Z4RibbonLayerPanel();
+
    settingsPanel = new Z4RibbonSettingsPanel();
 
   /**
@@ -419,6 +560,7 @@ class Z4Ribbon extends JSTabbedPane {
     super();
     this.cssAddClass("z4ribbon");
     this.addTab(Z4Translations.FILE, this.filePanel);
+    this.addTab(Z4Translations.LAYER, this.layerPanel);
     this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
   }
 
@@ -429,6 +571,7 @@ class Z4Ribbon extends JSTabbedPane {
    */
    setCanvas(canvas) {
     this.filePanel.setCanvas(canvas);
+    this.layerPanel.setCanvas(canvas);
   }
 }
 /**
@@ -536,6 +679,26 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Adds a layer from an image file
+   *
+   * @param file The file
+   */
+   addLayerFromFile(file) {
+    let fileReader = new FileReader();
+    fileReader.onload = event => {
+      let image = document.createElement("img");
+      image.onload = event2 => {
+        this.paper.addLayerFromImage(image);
+        this.drawCanvas();
+        return null;
+      };
+      image.src = fileReader.result;
+      return null;
+    };
+    fileReader.readAsDataURL(file);
+  }
+
+  /**
    * Returns the project name
    *
    * @return The project name
@@ -583,6 +746,9 @@ class Z4Translations {
 
   static  EXPORT = "";
 
+  // Ribbon Layer
+  static  LAYER = "";
+
   // Ribbon Settings
   static  SETTINGS = "";
 
@@ -600,12 +766,16 @@ class Z4Translations {
 
   static  THEME_DARK = "";
 
+  static  THEME_COLOR = "";
+
   static  REFRESH_PAGE_MESSAGE = "";
 
   // Other
   static  FILENAME = "";
 
   static  QUALITY = "";
+
+  static  RESET = "";
 
   static {
     switch(navigator.language.substring(0, 2)) {
@@ -637,6 +807,8 @@ class Z4Translations {
     Z4Translations.SAVE = "Save";
     Z4Translations.SAVE_PROJECT = "Save Project";
     Z4Translations.EXPORT = "Export";
+    // Ribbon Layer
+    Z4Translations.LAYER = "Layer";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Settings";
     Z4Translations.LANGUAGE = "Language";
@@ -646,10 +818,12 @@ class Z4Translations {
     Z4Translations.THEME_AUTO = "Auto";
     Z4Translations.THEME_LIGHT = "Light";
     Z4Translations.THEME_DARK = "Dark";
+    Z4Translations.THEME_COLOR = "Color";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Refresh the page to make the changes";
     // Other
     Z4Translations.FILENAME = "File Name";
     Z4Translations.QUALITY = "Quality";
+    Z4Translations.RESET = "Reset";
     Z4Translations.CURRENT_LANGUAGE = new KeyValue("en", Z4Translations.LANGUAGE_ENGLISH_NATIVE);
   }
 
@@ -668,6 +842,8 @@ class Z4Translations {
     Z4Translations.SAVE = "Salva";
     Z4Translations.SAVE_PROJECT = "Salva Progetto";
     Z4Translations.EXPORT = "Esporta";
+    // Ribbon Layer
+    Z4Translations.LAYER = "Livello";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Impostazioni";
     Z4Translations.LANGUAGE = "Lingua";
@@ -677,10 +853,12 @@ class Z4Translations {
     Z4Translations.THEME_AUTO = "Auto";
     Z4Translations.THEME_LIGHT = "Chiaro";
     Z4Translations.THEME_DARK = "Scuro";
+    Z4Translations.THEME_COLOR = "Colore";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Aggiorna la pagina per eseguire le modifiche";
     // Other
     Z4Translations.FILENAME = "Nome File";
     Z4Translations.QUALITY = "Qualit\u00E0";
+    Z4Translations.RESET = "Ripristina";
     Z4Translations.CURRENT_LANGUAGE = new KeyValue("it", Z4Translations.LANGUAGE_ITALIAN_NATIVE);
   }
 }

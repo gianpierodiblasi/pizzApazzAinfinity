@@ -24,5 +24,10 @@ window.onload = event => {
       break;
   }
 
+  let color = localStorage.getItem("z4color");
+  if (color) {
+    SwingJS.instance().mainActionBGColor(color).build();
+  }
+  
   new Z4Frame();
 };

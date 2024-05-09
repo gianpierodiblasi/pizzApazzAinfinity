@@ -7,6 +7,8 @@ class Z4Ribbon extends JSTabbedPane {
 
    filePanel = new Z4RibbonFilePanel();
 
+   layerPanel = new Z4RibbonLayerPanel();
+
    settingsPanel = new Z4RibbonSettingsPanel();
 
   /**
@@ -16,6 +18,7 @@ class Z4Ribbon extends JSTabbedPane {
     super();
     this.cssAddClass("z4ribbon");
     this.addTab(Z4Translations.FILE, this.filePanel);
+    this.addTab(Z4Translations.LAYER, this.layerPanel);
     this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
   }
 
@@ -26,5 +29,6 @@ class Z4Ribbon extends JSTabbedPane {
    */
    setCanvas(canvas) {
     this.filePanel.setCanvas(canvas);
+    this.layerPanel.setCanvas(canvas);
   }
 }
