@@ -8,6 +8,7 @@ import def.dom.FileReader;
 import static def.dom.Globals.document;
 import def.dom.HTMLElement;
 import def.dom.URL;
+import javascript.awt.Dimension;
 import javascript.swing.JSComponent;
 import jsweet.util.union.Union4;
 import pizzapazza.Z4Paper;
@@ -69,26 +70,7 @@ public class Z4Canvas extends JSComponent {
    */
   public void createFromFile(File file) {
     FileReader fileReader = new FileReader();
-
-    fileReader.onload = event -> {
-      $Image image = ($Image) document.createElement("img");
-
-      image.onload = event2 -> {
-        this.projectName = file.name.substring(0, file.name.lastIndexOf('.'));
-
-        this.canvas.width = image.width;
-        this.canvas.height = image.height;
-
-        this.paper.reset();
-        this.paper.addLayerFromImage(image);
-        this.drawCanvas();
-        return null;
-      };
-
-      image.src = (String) fileReader.result;
-      return null;
-    };
-
+    fileReader.onload = event -> this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), (String) fileReader.result);
     fileReader.readAsDataURL(file);
   }
 
@@ -99,27 +81,34 @@ public class Z4Canvas extends JSComponent {
     navigator.clipboard.read().then(items -> {
       items.forEach(item -> {
         String imageType = item.types.find((type, index, array) -> type.startsWith("image/"));
-        
+
         item.getType(imageType).then(blob -> {
-          $Image image = ($Image) document.createElement("img");
-
-          image.onload = event -> {
-            this.projectName = "";
-
-            this.canvas.width = image.width;
-            this.canvas.height = image.height;
-
-            this.paper.reset();
-            this.paper.addLayerFromImage(image);
-            this.drawCanvas();
-            return null;
-          };
-
-          image.src = URL.createObjectURL(blob);
-          return null;
+          this.createFromURL("", URL.createObjectURL(blob));
         });
       });
     });
+  }
+
+  private Object createFromURL(String projectName, String url) {
+    $Image image = ($Image) document.createElement("img");
+
+    image.onload = event -> {
+      this.paper.reset();
+      this.paper.addLayerFromImage(image, (int) image.width, (int) image.height);
+      this.afterCreate(projectName, image.width, image.height);
+      this.drawCanvas();
+      return null;
+    };
+
+    image.src = url;
+    return null;
+  }
+
+  private void afterCreate(String projectName, double width, double height) {
+    this.projectName = projectName;
+
+    this.canvas.width = width;
+    this.canvas.height = height;
   }
 
   /**
@@ -133,7 +122,7 @@ public class Z4Canvas extends JSComponent {
   public void exportToFile(String filename, String ext, double quality) {
     $OffscreenCanvas offscreen = new $OffscreenCanvas(this.canvas.width, this.canvas.height);
     $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
-    this.paper.drawPaper(offscreenCtx);
+    this.paper.draw(offscreenCtx);
 
     $Object options = new $Object();
     options.$set("type", ext == ".png" ? "image/png" : "image/jpeg");
@@ -161,7 +150,8 @@ public class Z4Canvas extends JSComponent {
    * @param height The layer height
    */
   public void addLayer(int width, int height) {
-    this.paper.addLayer(width, height);
+    this.paper.addLayer(width, height, (int) this.canvas.width, (int) this.canvas.height);
+    this.afterAddLayer();
     this.drawCanvas();
   }
 
@@ -172,20 +162,7 @@ public class Z4Canvas extends JSComponent {
    */
   public void addLayerFromFile(File file) {
     FileReader fileReader = new FileReader();
-
-    fileReader.onload = event -> {
-      $Image image = ($Image) document.createElement("img");
-
-      image.onload = event2 -> {
-        this.paper.addLayerFromImage(image);
-        this.drawCanvas();
-        return null;
-      };
-
-      image.src = (String) fileReader.result;
-      return null;
-    };
-
+    fileReader.onload = event -> this.addLayerFromURL((String) fileReader.result);
     fileReader.readAsDataURL(file);
   }
 
@@ -196,23 +173,38 @@ public class Z4Canvas extends JSComponent {
     navigator.clipboard.read().then(items -> {
       items.forEach(item -> {
         String imageType = item.types.find((type, index, array) -> type.startsWith("image/"));
-        
+
         item.getType(imageType).then(blob -> {
-          $Image image = ($Image) document.createElement("img");
-
-          image.onload = event -> {
-            this.paper.addLayerFromImage(image);
-            this.drawCanvas();
-            return null;
-          };
-
-          image.src = URL.createObjectURL(blob);
-          return null;
+          this.addLayerFromURL(URL.createObjectURL(blob));
         });
       });
     });
   }
-  
+
+  private Object addLayerFromURL(String url) {
+    $Image image = ($Image) document.createElement("img");
+
+    image.onload = event -> {
+      this.paper.addLayerFromImage(image, (int) this.canvas.width, (int) this.canvas.height);
+      this.afterAddLayer();
+      this.drawCanvas();
+      return null;
+    };
+
+    image.src = url;
+    return null;
+  }
+
+  private void afterAddLayer() {
+    Dimension dimension = this.paper.getSize();
+    int shiftX = (int) (dimension.width - this.canvas.width) / 2;
+    int shiftY = (int) (dimension.height - this.canvas.height) / 2;
+    this.paper.shift(shiftX, shiftY);
+
+    this.canvas.width = dimension.width;
+    this.canvas.height = dimension.height;
+  }
+
   /**
    * Returns the project name
    *
@@ -228,6 +220,6 @@ public class Z4Canvas extends JSComponent {
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.restore();
 
-    this.paper.drawPaper(this.ctx);
+    this.paper.draw(this.ctx);
   }
 }

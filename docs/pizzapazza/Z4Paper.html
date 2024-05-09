@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -185,17 +185,64 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addLayer(int,int)">addLayer</a></span>&#8203;(int&nbsp;width,
-        int&nbsp;height)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addLayer(int,int,int,int)">addLayer</a></span>&#8203;(int&nbsp;width,
+        int&nbsp;height,
+        int&nbsp;containerWidth,
+        int&nbsp;containerHeight)</code></th>
 <td class="colLast">
 <div class="block">Adds a layer</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#drawPaper(simulation.dom.$CanvasRenderingContext2D)">drawPaper</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addLayerFromImage(simulation.dom.$Image,int,int)">addLayerFromImage</a></span>&#8203;(simulation.dom.$Image&nbsp;image,
+                 int&nbsp;containerWidth,
+                 int&nbsp;containerHeight)</code></th>
+<td class="colLast">
+<div class="block">Adds a layer from an aimeg</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#draw(simulation.dom.$CanvasRenderingContext2D)">draw</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx)</code></th>
 <td class="colLast">
 <div class="block">Draws this paper</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="Z4Layer.html" title="class in pizzapazza">Z4Layer</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLayerAt(int)">getLayerAt</a></span>&#8203;(int&nbsp;index)</code></th>
+<td class="colLast">
+<div class="block">Returns a layer</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLayersCount()">getLayersCount</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the layers count</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>javascript.awt.Dimension</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSize()">getSize</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the paper size, given by the max width and max height of the layers</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#reset()">reset</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Resets the paper</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shift(int,int)">shift</a></span>&#8203;(int&nbsp;shiftX,
+     int&nbsp;shiftY)</code></th>
+<td class="colLast">
+<div class="block">Shifts all the layers</div>
 </td>
 </tr>
 </table>
@@ -241,29 +288,121 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="addLayer(int,int)">
+<a id="getLayersCount()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLayersCount</h4>
+<pre class="methodSignature">public&nbsp;int&nbsp;getLayersCount()</pre>
+<div class="block">Returns the layers count</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The layers count</dd>
+</dl>
+</li>
+</ul>
+<a id="getLayerAt(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLayerAt</h4>
+<pre class="methodSignature">public&nbsp;<a href="Z4Layer.html" title="class in pizzapazza">Z4Layer</a>&nbsp;getLayerAt&#8203;(int&nbsp;index)</pre>
+<div class="block">Returns a layer</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>index</code> - The index layer</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The layer</dd>
+</dl>
+</li>
+</ul>
+<a id="addLayer(int,int,int,int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>addLayer</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;addLayer&#8203;(int&nbsp;width,
-                     int&nbsp;height)</pre>
+                     int&nbsp;height,
+                     int&nbsp;containerWidth,
+                     int&nbsp;containerHeight)</pre>
 <div class="block">Adds a layer</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>width</code> - The layer width</dd>
 <dd><code>height</code> - The layer height</dd>
+<dd><code>containerWidth</code> - The container width</dd>
+<dd><code>containerHeight</code> - The container height</dd>
 </dl>
 </li>
 </ul>
-<a id="drawPaper(simulation.dom.$CanvasRenderingContext2D)">
+<a id="addLayerFromImage(simulation.dom.$Image,int,int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addLayerFromImage</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;addLayerFromImage&#8203;(simulation.dom.$Image&nbsp;image,
+                              int&nbsp;containerWidth,
+                              int&nbsp;containerHeight)</pre>
+<div class="block">Adds a layer from an aimeg</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>image</code> - The image</dd>
+<dd><code>containerWidth</code> - The container width</dd>
+<dd><code>containerHeight</code> - The container height</dd>
+</dl>
+</li>
+</ul>
+<a id="reset()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>reset</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;reset()</pre>
+<div class="block">Resets the paper</div>
+</li>
+</ul>
+<a id="shift(int,int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>shift</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;shift&#8203;(int&nbsp;shiftX,
+                  int&nbsp;shiftY)</pre>
+<div class="block">Shifts all the layers</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>shiftX</code> - The X shift</dd>
+<dd><code>shiftY</code> - The Y shift</dd>
+</dl>
+</li>
+</ul>
+<a id="getSize()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSize</h4>
+<pre class="methodSignature">public&nbsp;javascript.awt.Dimension&nbsp;getSize()</pre>
+<div class="block">Returns the paper size, given by the max width and max height of the layers</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The paper size</dd>
+</dl>
+</li>
+</ul>
+<a id="draw(simulation.dom.$CanvasRenderingContext2D)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>drawPaper</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;drawPaper&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx)</pre>
+<h4>draw</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;draw&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx)</pre>
 <div class="block">Draws this paper</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
