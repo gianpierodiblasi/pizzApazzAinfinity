@@ -37,11 +37,11 @@ public class Z4NewImagePanel extends JSPanel {
     this.cssAddClass("z4newimagepanel");
     this.setLayout(new GridBagLayout());
 
-    this.addLabel(Z4Translations.WIDTH, 0, 0, 1, 0);
+    this.addLabel(Z4Translations.WIDTH + " (px)", 0, 0, 1, 0);
     this.addSpinner(this.width, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 0, 1);
-    this.addLabel(Z4Translations.HEIGHT, 1, 0, 1, 0);
+    this.addLabel(Z4Translations.HEIGHT + " (px)", 1, 0, 1, 0);
     this.addSpinner(this.height, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 1, 1);
-    this.addLabel(Z4Translations.RESOLUTION, 2, 0, 1, 0);
+    this.addLabel(Z4Translations.RESOLUTION + " (dpi)", 2, 0, 1, 0);
     this.addSpinner(this.resolution, Z4Constants.DEFAULT_DPI, Z4Constants.MAX_DPI, 2, 1);
     this.addDimension(this.dimensionMM, 3);
     this.addDimension(this.dimensionIN, 4);
@@ -53,6 +53,7 @@ public class Z4NewImagePanel extends JSPanel {
     constraints.gridy = 6;
     constraints.gridwidth = 2;
     constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.insets = new Insets(0, 5, 0, 5);
     this.add(this.colorPreview, constraints);
 
     JSButton button = new JSButton();
@@ -68,7 +69,7 @@ public class Z4NewImagePanel extends JSPanel {
     constraints.gridx = 2;
     constraints.gridy = 6;
     constraints.gridwidth = 1;
-    constraints.anchor = GridBagConstraints.EAST;
+    constraints.anchor = GridBagConstraints.WEST;
     this.add(button, constraints);
 
     this.setDimensions();
@@ -89,15 +90,15 @@ public class Z4NewImagePanel extends JSPanel {
 
   private void addSpinner(JSSpinner spinner, double value, double max, int gridx, int gridy) {
     spinner.setModel(new SpinnerNumberModel(value, 1, max, 1));
-    spinner.getStyle().minWidth = "4rem";
-    spinner.getChilStyleByQuery("input[type=number]").minWidth = "3.5rem";
-    spinner.getChilStyleByQuery("input[type=number]").width = "3.5rem";
+    spinner.getStyle().minWidth = "6.6rem";
+    spinner.getChilStyleByQuery("input[type=number]").minWidth = "5.5rem";
+    spinner.getChilStyleByQuery("input[type=number]").width = "5.5rem";
     spinner.addChangeListener(event -> this.setDimensions());
 
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = gridx;
     constraints.gridy = gridy;
-    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.anchor = GridBagConstraints.WEST;
     constraints.insets = new Insets(0, 5, 0, 5);
     this.add(spinner, constraints);
   }
