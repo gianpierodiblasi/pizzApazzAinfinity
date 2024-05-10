@@ -78,6 +78,8 @@ class Z4Frame extends JSFrame {
 
    canvas = new Z4Canvas();
 
+   statusPanel = new Z4StatusPanel();
+
   /**
    * Creates the object
    */
@@ -86,8 +88,10 @@ class Z4Frame extends JSFrame {
     this.cssAddClass("z4frame");
     this.getContentPane().setLayout(new BorderLayout(5, 5));
     this.ribbon.setCanvas(this.canvas);
+    this.ribbon.setStatusPanel(this.statusPanel);
     this.getContentPane().add(this.ribbon, BorderLayout.NORTH);
     this.getContentPane().add(this.canvas, BorderLayout.CENTER);
+    this.getContentPane().add(this.statusPanel, BorderLayout.SOUTH);
   }
 }
 /**
@@ -98,6 +102,8 @@ class Z4Frame extends JSFrame {
 class Z4RibbonFilePanel extends JSPanel {
 
    canvas = null;
+
+   statusPanel = null;
 
   /**
    * Creates the object
@@ -128,6 +134,15 @@ class Z4RibbonFilePanel extends JSPanel {
    */
    setCanvas(canvas) {
     this.canvas = canvas;
+  }
+
+  /**
+   * Sets the status panel
+   *
+   * @param statusPanel The status panel
+   */
+   setStatusPanel(statusPanel) {
+    this.statusPanel = statusPanel;
   }
 
    addLabel(text, gridx, gridwidth) {
@@ -211,17 +226,17 @@ class Z4RibbonFilePanel extends JSPanel {
     }, () => true, response => {
       if (response === JSOptionPane.OK_OPTION) {
         let size = panel.getSelectedSize();
-        this.canvas.create(size.width, size.height, panel.getSelectedColor());
+        this.canvas.create(size.width, size.height, panel.getSelectedColor(), this.statusPanel);
       }
     });
   }
 
    createFromFile() {
-    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.createFromFile(file)));
+    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.createFromFile(file, this.statusPanel)));
   }
 
    createFromClipboard() {
-    this.canvas.createFromClipboard();
+    this.canvas.createFromClipboard(this.statusPanel);
   }
 
    saveProject(apply) {
@@ -235,7 +250,7 @@ class Z4RibbonFilePanel extends JSPanel {
     panel.add(projectName, BorderLayout.CENTER);
     JSOptionPane.showInputDialog(panel, Z4Translations.SAVE, listener => projectName.addActionListener(event => listener(new ChangeEvent())), () => !!(projectName.getText()), response => {
       if (response === JSOptionPane.OK_OPTION) {
-        this.canvas.saveProject(projectName.getText(), apply);
+        this.canvas.saveProject(projectName.getText(), this.statusPanel, apply);
       }
     });
   }
@@ -770,6 +785,64 @@ class Z4NewImagePanel extends JSPanel {
   }
 }
 /**
+ * The status panel
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4StatusPanel extends JSPanel {
+
+   projectName = new JSLabel();
+
+   progressBar = new JSProgressBar();
+
+  constructor() {
+    super();
+    this.cssAddClass("z4statuspanel");
+    this.setLayout(new GridBagLayout());
+    this.projectName.setText(Z4Translations.PROJECT_NAME + ": ");
+    this.setLabel(this.projectName, 0);
+    this.addPipe(1);
+    this.progressBar.setStringPainted(true);
+    let constraints = new GridBagConstraints();
+    constraints.gridx = 2;
+    constraints.gridy = 0;
+    constraints.weightx = 1;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    this.add(this.progressBar, constraints);
+  }
+
+   addPipe(gridx) {
+    let pipe = new JSLabel();
+    pipe.setText("|");
+    this.setLabel(pipe, gridx);
+  }
+
+   setLabel(label, gridx) {
+    let constraints = new GridBagConstraints();
+    constraints.gridx = gridx;
+    constraints.gridy = 0;
+    this.add(label, constraints);
+  }
+
+  /**
+   * Sets the project name
+   *
+   * @param projectName The project name
+   */
+   setProjectName(projectName) {
+    this.projectName.setText(Z4Translations.PROJECT_NAME + ": " + projectName);
+  }
+
+  /**
+   * Sets the progress bar value
+   *
+   * @param value The progress bar value
+   */
+   setProgressBarValue(value) {
+    this.progressBar.setValue(value);
+  }
+}
+/**
  * The main ribbon of the application
  *
  * @author gianpiero.diblasi
@@ -801,6 +874,15 @@ class Z4Ribbon extends JSTabbedPane {
    setCanvas(canvas) {
     this.filePanel.setCanvas(canvas);
     this.layerPanel.setCanvas(canvas);
+  }
+
+  /**
+   * Sets the status panel
+   *
+   * @param statusPanel The status panel
+   */
+   setStatusPanel(statusPanel) {
+    this.filePanel.setStatusPanel(statusPanel);
   }
 }
 /**
@@ -853,11 +935,12 @@ class Z4Canvas extends JSComponent {
    * @param width The image width
    * @param height The image height
    * @param color The filling color
+   * @param statusPanel The status panel to show the progress
    */
-   create(width, height, color) {
+   create(width, height, color, statusPanel) {
     this.paper.reset();
     this.paper.addLayer(width, height, color, width, height);
-    this.afterCreate("", width, height);
+    this.afterCreate("", width, height, statusPanel);
     this.drawCanvas();
   }
 
@@ -865,33 +948,36 @@ class Z4Canvas extends JSComponent {
    * Creates a new project from an image file
    *
    * @param file The file
+   * @param statusPanel The status panel to show the progress
    */
-   createFromFile(file) {
+   createFromFile(file, statusPanel) {
     let fileReader = new FileReader();
-    fileReader.onload = event => this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), fileReader.result);
+    fileReader.onload = event => this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), fileReader.result, statusPanel);
     fileReader.readAsDataURL(file);
   }
 
   /**
    * Creates a new project from an image in the clipboard
+   *
+   * @param statusPanel The status panel to show the progress
    */
-   createFromClipboard() {
+   createFromClipboard(statusPanel) {
     navigator.clipboard.read().then(items => {
       items.forEach(item => {
         let imageType = item.types.find((type, index, array) => type.startsWith("image/"));
         item.getType(imageType).then(blob => {
-          this.createFromURL("", URL.createObjectURL(blob));
+          this.createFromURL("", URL.createObjectURL(blob), statusPanel);
         });
       });
     });
   }
 
-   createFromURL(projectName, url) {
+   createFromURL(projectName, url, statusPanel) {
     let image = document.createElement("img");
     image.onload = event => {
       this.paper.reset();
       this.paper.addLayerFromImage(image, image.width, image.height);
-      this.afterCreate(projectName, image.width, image.height);
+      this.afterCreate(projectName, image.width, image.height, statusPanel);
       this.drawCanvas();
       return null;
     };
@@ -899,8 +985,9 @@ class Z4Canvas extends JSComponent {
     return null;
   }
 
-   afterCreate(projectName, width, height) {
+   afterCreate(projectName, width, height, statusPanel) {
     this.projectName = projectName;
+    statusPanel.setProjectName(projectName);
     this.saved = true;
     this.canvas.width = width;
     this.canvas.height = height;
@@ -910,11 +997,13 @@ class Z4Canvas extends JSComponent {
    * Saves the project
    *
    * @param projectName The project name
+   * @param statusPanel The status panel to show the progress
    * @param apply The function to call after saving
    */
-   saveProject(projectName, apply) {
+   saveProject(projectName, statusPanel, apply) {
     let zip = new JSZip();
     this.projectName = projectName;
+    statusPanel.setProjectName(projectName);
     this.savingCounter = 0;
     let layers = new Array();
     for (let index = 0; index < this.paper.getLayersCount(); index++) {
@@ -930,8 +1019,15 @@ class Z4Canvas extends JSComponent {
           zip.file("manifest.json", manifest, null);
           let options = new Object();
           options["type"] = "blob";
-          zip.generateAsync(options).then(zipped => {
+          options["compression"] = "DEFLATE";
+          options["streamFiles"] = true;
+          let compressionOptions = new Object();
+          compressionOptions["level"] = 9;
+          options["compressionOptions"] = compressionOptions;
+          zip.generateAsync(options, metadata => statusPanel.setProgressBarValue(metadata["percent"])).then(zipped => {
             saveAs(zipped, this.projectName + ".z4i");
+            statusPanel.setProgressBarValue(0);
+            this.saved = true;
             if (apply) {
               apply();
             }
@@ -1036,13 +1132,12 @@ class Z4Canvas extends JSComponent {
     return this.projectName;
   }
 
-  /**
-   * Sets this canvas as saved
-   */
-   setSaved() {
-    this.saved = true;
-  }
-
+  // /**
+  // * Sets this canvas as saved
+  // */
+  // public void setSaved() {
+  // this.saved = true;
+  // }
   /**
    * Checks if this canvas is saved
    *

@@ -48,11 +48,12 @@ class Z4Canvas extends JSComponent {
    * @param width The image width
    * @param height The image height
    * @param color The filling color
+   * @param statusPanel The status panel to show the progress
    */
-   create(width, height, color) {
+   create(width, height, color, statusPanel) {
     this.paper.reset();
     this.paper.addLayer(width, height, color, width, height);
-    this.afterCreate("", width, height);
+    this.afterCreate("", width, height, statusPanel);
     this.drawCanvas();
   }
 
@@ -60,33 +61,36 @@ class Z4Canvas extends JSComponent {
    * Creates a new project from an image file
    *
    * @param file The file
+   * @param statusPanel The status panel to show the progress
    */
-   createFromFile(file) {
+   createFromFile(file, statusPanel) {
     let fileReader = new FileReader();
-    fileReader.onload = event => this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), fileReader.result);
+    fileReader.onload = event => this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), fileReader.result, statusPanel);
     fileReader.readAsDataURL(file);
   }
 
   /**
    * Creates a new project from an image in the clipboard
+   *
+   * @param statusPanel The status panel to show the progress
    */
-   createFromClipboard() {
+   createFromClipboard(statusPanel) {
     navigator.clipboard.read().then(items => {
       items.forEach(item => {
         let imageType = item.types.find((type, index, array) => type.startsWith("image/"));
         item.getType(imageType).then(blob => {
-          this.createFromURL("", URL.createObjectURL(blob));
+          this.createFromURL("", URL.createObjectURL(blob), statusPanel);
         });
       });
     });
   }
 
-   createFromURL(projectName, url) {
+   createFromURL(projectName, url, statusPanel) {
     let image = document.createElement("img");
     image.onload = event => {
       this.paper.reset();
       this.paper.addLayerFromImage(image, image.width, image.height);
-      this.afterCreate(projectName, image.width, image.height);
+      this.afterCreate(projectName, image.width, image.height, statusPanel);
       this.drawCanvas();
       return null;
     };
@@ -94,8 +98,9 @@ class Z4Canvas extends JSComponent {
     return null;
   }
 
-   afterCreate(projectName, width, height) {
+   afterCreate(projectName, width, height, statusPanel) {
     this.projectName = projectName;
+    statusPanel.setProjectName(projectName);
     this.saved = true;
     this.canvas.width = width;
     this.canvas.height = height;
@@ -105,11 +110,13 @@ class Z4Canvas extends JSComponent {
    * Saves the project
    *
    * @param projectName The project name
+   * @param statusPanel The status panel to show the progress
    * @param apply The function to call after saving
    */
-   saveProject(projectName, apply) {
+   saveProject(projectName, statusPanel, apply) {
     let zip = new JSZip();
     this.projectName = projectName;
+    statusPanel.setProjectName(projectName);
     this.savingCounter = 0;
     let layers = new Array();
     for (let index = 0; index < this.paper.getLayersCount(); index++) {
@@ -125,8 +132,15 @@ class Z4Canvas extends JSComponent {
           zip.file("manifest.json", manifest, null);
           let options = new Object();
           options["type"] = "blob";
-          zip.generateAsync(options).then(zipped => {
+          options["compression"] = "DEFLATE";
+          options["streamFiles"] = true;
+          let compressionOptions = new Object();
+          compressionOptions["level"] = 9;
+          options["compressionOptions"] = compressionOptions;
+          zip.generateAsync(options, metadata => statusPanel.setProgressBarValue(metadata["percent"])).then(zipped => {
             saveAs(zipped, this.projectName + ".z4i");
+            statusPanel.setProgressBarValue(0);
+            this.saved = true;
             if (apply) {
               apply();
             }
@@ -231,13 +245,12 @@ class Z4Canvas extends JSComponent {
     return this.projectName;
   }
 
-  /**
-   * Sets this canvas as saved
-   */
-   setSaved() {
-    this.saved = true;
-  }
-
+  // /**
+  // * Sets this canvas as saved
+  // */
+  // public void setSaved() {
+  // this.saved = true;
+  // }
   /**
    * Checks if this canvas is saved
    *

@@ -1,6 +1,7 @@
 package simulation.jszip;
 
 import def.js.Promise;
+import simulation.js.$Apply_1_Void;
 import simulation.js.$Object;
 
 /**
@@ -21,7 +22,7 @@ public class $JSZip {
     return this;
   }
   
-  public Promise<?> generateAsync($Object options) {
+  public Promise<?> generateAsync($Object options, $Apply_1_Void<$Object> onUpdate) {
     return null;
   }
 }

@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -215,23 +215,25 @@ extends javascript.swing.JSComponent</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#create(int,int,javascript.awt.Color)">create</a></span>&#8203;(int&nbsp;width,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#create(int,int,javascript.awt.Color,pizzapazza.ui.panel.Z4StatusPanel)">create</a></span>&#8203;(int&nbsp;width,
       int&nbsp;height,
-      javascript.awt.Color&nbsp;color)</code></th>
+      javascript.awt.Color&nbsp;color,
+      <a href="panel/Z4StatusPanel.html" title="class in pizzapazza.ui.panel">Z4StatusPanel</a>&nbsp;statusPanel)</code></th>
 <td class="colLast">
 <div class="block">Creates a new project</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFromClipboard()">createFromClipboard</a></span>()</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFromClipboard(pizzapazza.ui.panel.Z4StatusPanel)">createFromClipboard</a></span>&#8203;(<a href="panel/Z4StatusPanel.html" title="class in pizzapazza.ui.panel">Z4StatusPanel</a>&nbsp;statusPanel)</code></th>
 <td class="colLast">
 <div class="block">Creates a new project from an image in the clipboard</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFromFile(def.dom.File)">createFromFile</a></span>&#8203;(def.dom.File&nbsp;file)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFromFile(def.dom.File,pizzapazza.ui.panel.Z4StatusPanel)">createFromFile</a></span>&#8203;(def.dom.File&nbsp;file,
+              <a href="panel/Z4StatusPanel.html" title="class in pizzapazza.ui.panel">Z4StatusPanel</a>&nbsp;statusPanel)</code></th>
 <td class="colLast">
 <div class="block">Creates a new project from an image file</div>
 </td>
@@ -261,17 +263,11 @@ extends javascript.swing.JSComponent</pre>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveProject(java.lang.String,simulation.js.$Apply_0_Void)">saveProject</a></span>&#8203;(java.lang.String&nbsp;projectName,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveProject(java.lang.String,pizzapazza.ui.panel.Z4StatusPanel,simulation.js.$Apply_0_Void)">saveProject</a></span>&#8203;(java.lang.String&nbsp;projectName,
+           <a href="panel/Z4StatusPanel.html" title="class in pizzapazza.ui.panel">Z4StatusPanel</a>&nbsp;statusPanel,
            simulation.js.$Apply_0_Void&nbsp;apply)</code></th>
 <td class="colLast">
 <div class="block">Saves the project</div>
-</td>
-</tr>
-<tr id="i10" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSaved()">setSaved</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Sets this canvas as saved</div>
 </td>
 </tr>
 </table>
@@ -325,7 +321,7 @@ extends javascript.swing.JSComponent</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="create(int,int,javascript.awt.Color)">
+<a id="create(int,int,javascript.awt.Color,pizzapazza.ui.panel.Z4StatusPanel)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -333,52 +329,62 @@ extends javascript.swing.JSComponent</pre>
 <h4>create</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;create&#8203;(int&nbsp;width,
                    int&nbsp;height,
-                   javascript.awt.Color&nbsp;color)</pre>
+                   javascript.awt.Color&nbsp;color,
+                   <a href="panel/Z4StatusPanel.html" title="class in pizzapazza.ui.panel">Z4StatusPanel</a>&nbsp;statusPanel)</pre>
 <div class="block">Creates a new project</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>width</code> - The image width</dd>
 <dd><code>height</code> - The image height</dd>
 <dd><code>color</code> - The filling color</dd>
+<dd><code>statusPanel</code> - The status panel to show the progress</dd>
 </dl>
 </li>
 </ul>
-<a id="createFromFile(def.dom.File)">
+<a id="createFromFile(def.dom.File,pizzapazza.ui.panel.Z4StatusPanel)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createFromFile</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;createFromFile&#8203;(def.dom.File&nbsp;file)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;createFromFile&#8203;(def.dom.File&nbsp;file,
+                           <a href="panel/Z4StatusPanel.html" title="class in pizzapazza.ui.panel">Z4StatusPanel</a>&nbsp;statusPanel)</pre>
 <div class="block">Creates a new project from an image file</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>file</code> - The file</dd>
+<dd><code>statusPanel</code> - The status panel to show the progress</dd>
 </dl>
 </li>
 </ul>
-<a id="createFromClipboard()">
+<a id="createFromClipboard(pizzapazza.ui.panel.Z4StatusPanel)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createFromClipboard</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;createFromClipboard()</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;createFromClipboard&#8203;(<a href="panel/Z4StatusPanel.html" title="class in pizzapazza.ui.panel">Z4StatusPanel</a>&nbsp;statusPanel)</pre>
 <div class="block">Creates a new project from an image in the clipboard</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>statusPanel</code> - The status panel to show the progress</dd>
+</dl>
 </li>
 </ul>
-<a id="saveProject(java.lang.String,simulation.js.$Apply_0_Void)">
+<a id="saveProject(java.lang.String,pizzapazza.ui.panel.Z4StatusPanel,simulation.js.$Apply_0_Void)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>saveProject</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;saveProject&#8203;(java.lang.String&nbsp;projectName,
+                        <a href="panel/Z4StatusPanel.html" title="class in pizzapazza.ui.panel">Z4StatusPanel</a>&nbsp;statusPanel,
                         simulation.js.$Apply_0_Void&nbsp;apply)</pre>
 <div class="block">Saves the project</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>projectName</code> - The project name</dd>
+<dd><code>statusPanel</code> - The status panel to show the progress</dd>
 <dd><code>apply</code> - The function to call after saving</dd>
 </dl>
 </li>
@@ -455,16 +461,6 @@ extends javascript.swing.JSComponent</pre>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The project name</dd>
 </dl>
-</li>
-</ul>
-<a id="setSaved()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setSaved</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setSaved()</pre>
-<div class="block">Sets this canvas as saved</div>
 </li>
 </ul>
 <a id="isSaved()">

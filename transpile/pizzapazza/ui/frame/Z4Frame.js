@@ -9,6 +9,8 @@ class Z4Frame extends JSFrame {
 
    canvas = new Z4Canvas();
 
+   statusPanel = new Z4StatusPanel();
+
   /**
    * Creates the object
    */
@@ -17,7 +19,9 @@ class Z4Frame extends JSFrame {
     this.cssAddClass("z4frame");
     this.getContentPane().setLayout(new BorderLayout(5, 5));
     this.ribbon.setCanvas(this.canvas);
+    this.ribbon.setStatusPanel(this.statusPanel);
     this.getContentPane().add(this.ribbon, BorderLayout.NORTH);
     this.getContentPane().add(this.canvas, BorderLayout.CENTER);
+    this.getContentPane().add(this.statusPanel, BorderLayout.SOUTH);
   }
 }

@@ -19,6 +19,7 @@ import pizzapazza.Z4Constants;
 import pizzapazza.ui.Z4Canvas;
 import pizzapazza.ui.panel.Z4ExportToFilePanel;
 import pizzapazza.ui.panel.Z4NewImagePanel;
+import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.util.Z4Translations;
 import simulation.js.$Apply_0_Void;
 import static simulation.js.$Globals.$exists;
@@ -33,6 +34,7 @@ import static simulation.js.$Globals.navigator;
 public class Z4RibbonFilePanel extends JSPanel {
 
   private Z4Canvas canvas;
+  private Z4StatusPanel statusPanel;
 
   /**
    * Creates the object
@@ -67,6 +69,15 @@ public class Z4RibbonFilePanel extends JSPanel {
    */
   public void setCanvas(Z4Canvas canvas) {
     this.canvas = canvas;
+  }
+
+  /**
+   * Sets the status panel
+   *
+   * @param statusPanel The status panel
+   */
+  public void setStatusPanel(Z4StatusPanel statusPanel) {
+    this.statusPanel = statusPanel;
   }
 
   private void addLabel(String text, int gridx, int gridwidth) {
@@ -155,17 +166,17 @@ public class Z4RibbonFilePanel extends JSPanel {
     }, () -> true, response -> {
       if (response == JSOptionPane.OK_OPTION) {
         Dimension size = panel.getSelectedSize();
-        this.canvas.create(size.width, size.height, panel.getSelectedColor());
+        this.canvas.create(size.width, size.height, panel.getSelectedColor(), this.statusPanel);
       }
     });
   }
 
   private void createFromFile() {
-    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files -> files.forEach(file -> this.canvas.createFromFile(file)));
+    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files -> files.forEach(file -> this.canvas.createFromFile(file, this.statusPanel)));
   }
 
   private void createFromClipboard() {
-    this.canvas.createFromClipboard();
+    this.canvas.createFromClipboard(this.statusPanel);
   }
 
   private void saveProject($Apply_0_Void apply) {
@@ -182,7 +193,7 @@ public class Z4RibbonFilePanel extends JSPanel {
 
     JSOptionPane.showInputDialog(panel, Z4Translations.SAVE, listener -> projectName.addActionListener(event -> listener.$apply(new ChangeEvent())), () -> $exists(projectName.getText()), response -> {
       if (response == JSOptionPane.OK_OPTION) {
-        this.canvas.saveProject(projectName.getText(), apply);
+        this.canvas.saveProject(projectName.getText(), this.statusPanel, apply);
       }
     });
   }

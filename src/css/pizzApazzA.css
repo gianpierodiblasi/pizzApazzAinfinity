@@ -19,6 +19,9 @@
 .z4ribbonsettingspanel {
 }
 
+.z4statuspanel {
+}
+
 .z4canvas {
   overflow: scroll;
   display: grid;

@@ -2,6 +2,7 @@ package pizzapazza.ui.tab;
 
 import javascript.swing.JSTabbedPane;
 import pizzapazza.ui.Z4Canvas;
+import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonFilePanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonSettingsPanel;
@@ -38,5 +39,14 @@ public class Z4Ribbon extends JSTabbedPane {
   public void setCanvas(Z4Canvas canvas) {
     this.filePanel.setCanvas(canvas);
     this.layerPanel.setCanvas(canvas);
+  }
+
+  /**
+   * Sets the status panel
+   *
+   * @param statusPanel The status panel
+   */
+  public void setStatusPanel(Z4StatusPanel statusPanel) {
+    this.filePanel.setStatusPanel(statusPanel);
   }
 }

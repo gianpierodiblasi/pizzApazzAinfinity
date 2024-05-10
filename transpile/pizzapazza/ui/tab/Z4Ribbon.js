@@ -31,4 +31,13 @@ class Z4Ribbon extends JSTabbedPane {
     this.filePanel.setCanvas(canvas);
     this.layerPanel.setCanvas(canvas);
   }
+
+  /**
+   * Sets the status panel
+   *
+   * @param statusPanel The status panel
+   */
+   setStatusPanel(statusPanel) {
+    this.filePanel.setStatusPanel(statusPanel);
+  }
 }
