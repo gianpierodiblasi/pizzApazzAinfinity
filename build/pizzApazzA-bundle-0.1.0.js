@@ -116,7 +116,7 @@ class Z4RibbonFilePanel extends JSPanel {
     }));
     this.addVLine(5, 0);
     this.addLabel(Z4Translations.SAVE, 6, 2);
-    this.addButton(Z4Translations.SAVE_PROJECT, true, 6, 1, "left", null);
+    this.addButton(Z4Translations.SAVE_PROJECT, true, 6, 1, "left", event => this.saveProject(null));
     this.addButton(Z4Translations.EXPORT, true, 7, 1, "right", event => this.exportToFile());
     this.addVLine(8, 1);
   }
@@ -195,7 +195,7 @@ class Z4RibbonFilePanel extends JSPanel {
       JSOptionPane.showConfirmDialog(Z4Translations.PROJECT_NOT_SAVED_MESSAGE, title, JSOptionPane.YES_NO_CANCEL_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
         switch(response) {
           case JSOptionPane.YES_OPTION:
-            // SALVA E FAI apply.$apply();
+            this.saveProject(apply);
             break;
           case JSOptionPane.NO_OPTION:
             apply();
@@ -222,6 +222,22 @@ class Z4RibbonFilePanel extends JSPanel {
 
    createFromClipboard() {
     this.canvas.createFromClipboard();
+  }
+
+   saveProject(apply) {
+    let panel = new JSPanel();
+    panel.setLayout(new BorderLayout(0, 0));
+    let label = new JSLabel();
+    label.setText(Z4Translations.PROJECT_NAME);
+    panel.add(label, BorderLayout.NORTH);
+    let projectName = new JSTextField();
+    projectName.setText(this.canvas.getProjectName());
+    panel.add(projectName, BorderLayout.CENTER);
+    JSOptionPane.showInputDialog(panel, Z4Translations.SAVE, listener => projectName.addActionListener(event => listener.stateChanged(new ChangeEvent())), () => !!(projectName.getText()), response => {
+      if (response === JSOptionPane.OK_OPTION) {
+        this.canvas.saveProject(projectName.getText(), apply);
+      }
+    });
   }
 
    exportToFile() {
@@ -806,6 +822,8 @@ class Z4Canvas extends JSComponent {
 
    saved = true;
 
+   savingCounter = 0;
+
    paper = new Z4Paper();
 
   /**
@@ -886,6 +904,41 @@ class Z4Canvas extends JSComponent {
     this.saved = true;
     this.canvas.width = width;
     this.canvas.height = height;
+  }
+
+  /**
+   * Saves the project
+   *
+   * @param projectName The project name
+   * @param apply The function to call after saving
+   */
+   saveProject(projectName, apply) {
+    let zip = new JSZip();
+    this.projectName = projectName;
+    this.savingCounter = 0;
+    let layers = new Array();
+    for (let index = 0; index < this.paper.getLayersCount(); index++) {
+      let idx = index;
+      let layer = this.paper.getLayerAt(idx);
+      layer.convertToBlob(blob => {
+        let offset = layer.getOffset();
+        layers.push("{" + "\"offsetX\": " + offset.x + "," + "\"offsetY\": " + offset.y + "}");
+        zip.file("layers/layer" + idx + ".png", blob, null);
+        this.savingCounter++;
+        if (this.savingCounter === this.paper.getLayersCount()) {
+          let manifest = "{" + "\"project\": \"" + this.projectName + "\",\n" + "\"layerCount\": " + this.paper.getLayersCount() + ",\n" + "\"layers\": [" + layers.join(",") + "]" + "}";
+          zip.file("manifest.json", manifest, null);
+          let options = new Object();
+          options["type"] = "blob";
+          zip.generateAsync(options).then(zipped => {
+            saveAs(zipped, this.projectName + ".z4i");
+            if (apply) {
+              apply();
+            }
+          });
+        }
+      });
+    }
   }
 
   /**
@@ -1067,6 +1120,8 @@ class Z4Translations {
   static  REFRESH_PAGE_MESSAGE = "";
 
   // Other
+  static  PROJECT_NAME = "";
+
   static  FILENAME = "";
 
   static  QUALITY = "";
@@ -1129,6 +1184,7 @@ class Z4Translations {
     Z4Translations.THEME_COLOR = "Color";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Refresh the page to make the changes";
     // Other
+    Z4Translations.PROJECT_NAME = "Project Name";
     Z4Translations.FILENAME = "File Name";
     Z4Translations.QUALITY = "Quality";
     Z4Translations.RESET = "Reset";
@@ -1171,6 +1227,7 @@ class Z4Translations {
     Z4Translations.THEME_COLOR = "Colore";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Aggiorna la pagina per eseguire le modifiche";
     // Other
+    Z4Translations.PROJECT_NAME = "Nome Progetto";
     Z4Translations.FILENAME = "Nome File";
     Z4Translations.QUALITY = "Qualit\u00E0";
     Z4Translations.RESET = "Ripristina";
@@ -1274,6 +1331,19 @@ class Z4Layer {
   }
 
   /**
+   * Converts this layer to a blob
+   *
+   * @param apply The function to call on conversion
+   */
+   convertToBlob(apply) {
+    let options = new Object();
+    options["type"] = "image/png";
+    this.offscreen.convertToBlob(options).then(blob => {
+      apply(blob);
+    });
+  }
+
+  /**
    * Shifts the layer
    *
    * @param shiftX The X shift
@@ -1293,6 +1363,15 @@ class Z4Layer {
    move(offsetX, offsetY) {
     this.offsetX = offsetX;
     this.offsetY = offsetY;
+  }
+
+  /**
+   * Returns the layer offset
+   *
+   * @return The layer offset
+   */
+   getOffset() {
+    return new Point(this.offsetX, this.offsetY);
   }
 
   /**

@@ -17,6 +17,8 @@ class Z4Canvas extends JSComponent {
 
    saved = true;
 
+   savingCounter = 0;
+
    paper = new Z4Paper();
 
   /**
@@ -97,6 +99,41 @@ class Z4Canvas extends JSComponent {
     this.saved = true;
     this.canvas.width = width;
     this.canvas.height = height;
+  }
+
+  /**
+   * Saves the project
+   *
+   * @param projectName The project name
+   * @param apply The function to call after saving
+   */
+   saveProject(projectName, apply) {
+    let zip = new JSZip();
+    this.projectName = projectName;
+    this.savingCounter = 0;
+    let layers = new Array();
+    for (let index = 0; index < this.paper.getLayersCount(); index++) {
+      let idx = index;
+      let layer = this.paper.getLayerAt(idx);
+      layer.convertToBlob(blob => {
+        let offset = layer.getOffset();
+        layers.push("{" + "\"offsetX\": " + offset.x + "," + "\"offsetY\": " + offset.y + "}");
+        zip.file("layers/layer" + idx + ".png", blob, null);
+        this.savingCounter++;
+        if (this.savingCounter === this.paper.getLayersCount()) {
+          let manifest = "{" + "\"project\": \"" + this.projectName + "\",\n" + "\"layerCount\": " + this.paper.getLayersCount() + ",\n" + "\"layers\": [" + layers.join(",") + "]" + "}";
+          zip.file("manifest.json", manifest, null);
+          let options = new Object();
+          options["type"] = "blob";
+          zip.generateAsync(options).then(zipped => {
+            saveAs(zipped, this.projectName + ".z4i");
+            if (apply) {
+              apply();
+            }
+          });
+        }
+      });
+    }
   }
 
   /**

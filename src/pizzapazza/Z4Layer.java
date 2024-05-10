@@ -1,13 +1,17 @@
 package pizzapazza;
 
+import def.dom.Blob;
 import def.dom.CanvasGradient;
 import def.dom.CanvasPattern;
 import javascript.awt.Color;
 import javascript.awt.Dimension;
+import javascript.awt.Point;
 import jsweet.util.union.Union4;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
 import simulation.dom.$OffscreenCanvas;
+import simulation.js.$Apply_1_Void;
+import simulation.js.$Object;
 
 /**
  * The object representing a layer
@@ -35,11 +39,11 @@ public class Z4Layer {
    */
   public Z4Layer(int width, int height, Color color, int containerWidth, int containerHeight) {
     this.offscreen = new $OffscreenCanvas(width, height);
-    
+
     this.offscreenCtx = this.offscreen.getContext("2d");
     this.offscreenCtx.fillStyle = this.$getFillStyle(color.getRGBA_HEX());
     this.offscreenCtx.fillRect(0, 0, width, height);
-    
+
     this.offsetX = (containerWidth - width) / 2;
     this.offsetY = (containerHeight - height) / 2;
     this.width = width;
@@ -69,6 +73,20 @@ public class Z4Layer {
   }
 
   /**
+   * Converts this layer to a blob
+   *
+   * @param apply The function to call on conversion
+   */
+  public void convertToBlob($Apply_1_Void<Blob> apply) {
+    $Object options = new $Object();
+    options.$set("type", "image/png");
+
+    this.offscreen.convertToBlob(options).then(blob -> {
+      apply.$apply(blob);
+    });
+  }
+
+  /**
    * Shifts the layer
    *
    * @param shiftX The X shift
@@ -88,6 +106,15 @@ public class Z4Layer {
   public void move(int offsetX, int offsetY) {
     this.offsetX = offsetX;
     this.offsetY = offsetY;
+  }
+
+  /**
+   * Returns the layer offset
+   *
+   * @return The layer offset
+   */
+  public Point getOffset() {
+    return new Point(this.offsetX, this.offsetY);
   }
 
   /**

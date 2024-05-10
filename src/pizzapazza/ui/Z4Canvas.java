@@ -8,19 +8,26 @@ import def.dom.FileReader;
 import static def.dom.Globals.document;
 import def.dom.HTMLElement;
 import def.dom.URL;
+import def.js.Array;
 import javascript.awt.Color;
 import javascript.awt.Dimension;
+import javascript.awt.Point;
 import javascript.swing.JSComponent;
 import jsweet.util.union.Union4;
 import pizzapazza.Z4Constants;
+import pizzapazza.Z4Layer;
 import pizzapazza.Z4Paper;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
 import simulation.dom.$OffscreenCanvas;
+import static simulation.filesaver.$FileSaver.saveAs;
+import simulation.js.$Apply_0_Void;
+import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.navigator;
 import simulation.js.$Object;
 import simulation.js.$ResizeObserver;
+import simulation.jszip.$JSZip;
 
 /**
  * The canvas
@@ -37,6 +44,8 @@ public class Z4Canvas extends JSComponent {
 
   private String projectName;
   private boolean saved = true;
+  private int savingCounter = 0;
+
   private final Z4Paper paper = new Z4Paper();
 
   /**
@@ -125,6 +134,58 @@ public class Z4Canvas extends JSComponent {
 
     this.canvas.width = width;
     this.canvas.height = height;
+  }
+
+  /**
+   * Saves the project
+   *
+   * @param projectName The project name
+   * @param apply The function to call after saving
+   */
+  public void saveProject(String projectName, $Apply_0_Void apply) {
+    $JSZip zip = new $JSZip();
+
+    this.projectName = projectName;
+    this.savingCounter = 0;
+
+    final Array<String> layers = new Array<>();
+    for (int index = 0; index < this.paper.getLayersCount(); index++) {
+      final int idx = index;
+      final Z4Layer layer = this.paper.getLayerAt(idx);
+
+      layer.convertToBlob(blob -> {
+        Point offset = layer.getOffset();
+        layers.push(
+                "{"
+                + "\"offsetX\": " + offset.x + ","
+                + "\"offsetY\": " + offset.y
+                + "}"
+        );
+
+        zip.file("layers/layer" + idx + ".png", blob, null);
+        this.savingCounter++;
+
+        if (this.savingCounter == this.paper.getLayersCount()) {
+          String manifest
+                  = "{"
+                  + "\"projectName\": \"" + this.projectName + "\",\n"
+                  + "\"layers\": [" + layers.join(",") + "]"
+                  + "}";
+          zip.file("manifest.json", manifest, null);
+
+          $Object options = new $Object();
+          options.$set("type", "blob");
+
+          zip.generateAsync(options).then(zipped -> {
+            saveAs(zipped, this.projectName + ".z4i");
+
+            if ($exists(apply)) {
+              apply.$apply();
+            }
+          });
+        }
+      });
+    }
   }
 
   /**

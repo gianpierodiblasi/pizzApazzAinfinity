@@ -24,7 +24,7 @@ class Z4RibbonFilePanel extends JSPanel {
     }));
     this.addVLine(5, 0);
     this.addLabel(Z4Translations.SAVE, 6, 2);
-    this.addButton(Z4Translations.SAVE_PROJECT, true, 6, 1, "left", null);
+    this.addButton(Z4Translations.SAVE_PROJECT, true, 6, 1, "left", event => this.saveProject(null));
     this.addButton(Z4Translations.EXPORT, true, 7, 1, "right", event => this.exportToFile());
     this.addVLine(8, 1);
   }
@@ -103,7 +103,7 @@ class Z4RibbonFilePanel extends JSPanel {
       JSOptionPane.showConfirmDialog(Z4Translations.PROJECT_NOT_SAVED_MESSAGE, title, JSOptionPane.YES_NO_CANCEL_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
         switch(response) {
           case JSOptionPane.YES_OPTION:
-            // SALVA E FAI apply.$apply();
+            this.saveProject(apply);
             break;
           case JSOptionPane.NO_OPTION:
             apply();
@@ -130,6 +130,22 @@ class Z4RibbonFilePanel extends JSPanel {
 
    createFromClipboard() {
     this.canvas.createFromClipboard();
+  }
+
+   saveProject(apply) {
+    let panel = new JSPanel();
+    panel.setLayout(new BorderLayout(0, 0));
+    let label = new JSLabel();
+    label.setText(Z4Translations.PROJECT_NAME);
+    panel.add(label, BorderLayout.NORTH);
+    let projectName = new JSTextField();
+    projectName.setText(this.canvas.getProjectName());
+    panel.add(projectName, BorderLayout.CENTER);
+    JSOptionPane.showInputDialog(panel, Z4Translations.SAVE, listener => projectName.addActionListener(event => listener.stateChanged(new ChangeEvent())), () => !!(projectName.getText()), response => {
+      if (response === JSOptionPane.OK_OPTION) {
+        this.canvas.saveProject(projectName.getText(), apply);
+      }
+    });
   }
 
    exportToFile() {

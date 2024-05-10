@@ -44,6 +44,7 @@ public class Z4Translations {
   public static String REFRESH_PAGE_MESSAGE = "";
 
   // Other
+  public static String PROJECT_NAME = "";
   public static String FILENAME = "";
   public static String QUALITY = "";
   public static String RESET = "";
@@ -102,6 +103,7 @@ public class Z4Translations {
     Z4Translations.REFRESH_PAGE_MESSAGE = "Refresh the page to make the changes";
 
     // Other
+    Z4Translations.PROJECT_NAME = "Project Name";
     Z4Translations.FILENAME = "File Name";
     Z4Translations.QUALITY = "Quality";
     Z4Translations.RESET = "Reset";
@@ -148,6 +150,7 @@ public class Z4Translations {
     Z4Translations.REFRESH_PAGE_MESSAGE = "Aggiorna la pagina per eseguire le modifiche";
 
     // Other
+    Z4Translations.PROJECT_NAME = "Nome Progetto";
     Z4Translations.FILENAME = "Nome File";
     Z4Translations.QUALITY = "Qualit\u00E0";
     Z4Translations.RESET = "Ripristina";

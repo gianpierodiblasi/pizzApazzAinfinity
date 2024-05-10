@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":10};
+var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -191,12 +191,19 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#convertToBlob(simulation.js.$Apply_1_Void)">convertToBlob</a></span>&#8203;(simulation.js.$Apply_1_Void&lt;def.dom.Blob&gt;&nbsp;apply)</code></th>
+<td class="colLast">
+<div class="block">Converts this layer to a blob</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#draw(simulation.dom.$CanvasRenderingContext2D)">draw</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx)</code></th>
 <td class="colLast">
 <div class="block">Draws this layer</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static <a href="Z4Layer.html" title="class in pizzapazza">Z4Layer</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromImage(simulation.dom.$Image,int,int)">fromImage</a></span>&#8203;(simulation.dom.$Image&nbsp;image,
          int&nbsp;containerWidth,
@@ -205,14 +212,21 @@ extends java.lang.Object</pre>
 <div class="block">Creates a Z4Layer from an image</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>javascript.awt.Point</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOffset()">getOffset</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the layer offset</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>javascript.awt.Dimension</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSize()">getSize</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the layer size</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#move(int,int)">move</a></span>&#8203;(int&nbsp;offsetX,
     int&nbsp;offsetY)</code></th>
@@ -220,7 +234,7 @@ extends java.lang.Object</pre>
 <div class="block">Moves a layer</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shift(int,int)">shift</a></span>&#8203;(int&nbsp;shiftX,
      int&nbsp;shiftY)</code></th>
@@ -304,6 +318,20 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
+<a id="convertToBlob(simulation.js.$Apply_1_Void)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>convertToBlob</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;convertToBlob&#8203;(simulation.js.$Apply_1_Void&lt;def.dom.Blob&gt;&nbsp;apply)</pre>
+<div class="block">Converts this layer to a blob</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>apply</code> - The function to call on conversion</dd>
+</dl>
+</li>
+</ul>
 <a id="shift(int,int)">
 <!--   -->
 </a>
@@ -333,6 +361,20 @@ extends java.lang.Object</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>offsetX</code> - The X offset</dd>
 <dd><code>offsetY</code> - The Y offset</dd>
+</dl>
+</li>
+</ul>
+<a id="getOffset()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getOffset</h4>
+<pre class="methodSignature">public&nbsp;javascript.awt.Point&nbsp;getOffset()</pre>
+<div class="block">Returns the layer offset</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The layer offset</dd>
 </dl>
 </li>
 </ul>

@@ -58,6 +58,8 @@ class Z4Translations {
   static  REFRESH_PAGE_MESSAGE = "";
 
   // Other
+  static  PROJECT_NAME = "";
+
   static  FILENAME = "";
 
   static  QUALITY = "";
@@ -120,6 +122,7 @@ class Z4Translations {
     Z4Translations.THEME_COLOR = "Color";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Refresh the page to make the changes";
     // Other
+    Z4Translations.PROJECT_NAME = "Project Name";
     Z4Translations.FILENAME = "File Name";
     Z4Translations.QUALITY = "Quality";
     Z4Translations.RESET = "Reset";
@@ -162,6 +165,7 @@ class Z4Translations {
     Z4Translations.THEME_COLOR = "Colore";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Aggiorna la pagina per eseguire le modifiche";
     // Other
+    Z4Translations.PROJECT_NAME = "Nome Progetto";
     Z4Translations.FILENAME = "Nome File";
     Z4Translations.QUALITY = "Qualit\u00E0";
     Z4Translations.RESET = "Ripristina";

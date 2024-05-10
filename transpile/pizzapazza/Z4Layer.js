@@ -55,6 +55,19 @@ class Z4Layer {
   }
 
   /**
+   * Converts this layer to a blob
+   *
+   * @param apply The function to call on conversion
+   */
+   convertToBlob(apply) {
+    let options = new Object();
+    options["type"] = "image/png";
+    this.offscreen.convertToBlob(options).then(blob => {
+      apply(blob);
+    });
+  }
+
+  /**
    * Shifts the layer
    *
    * @param shiftX The X shift
@@ -74,6 +87,15 @@ class Z4Layer {
    move(offsetX, offsetY) {
     this.offsetX = offsetX;
     this.offsetY = offsetY;
+  }
+
+  /**
+   * Returns the layer offset
+   *
+   * @return The layer offset
+   */
+   getOffset() {
+    return new Point(this.offsetX, this.offsetY);
   }
 
   /**
