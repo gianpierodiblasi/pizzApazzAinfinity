@@ -926,7 +926,7 @@ class Z4Canvas extends JSComponent {
         zip.file("layers/layer" + idx + ".png", blob, null);
         this.savingCounter++;
         if (this.savingCounter === this.paper.getLayersCount()) {
-          let manifest = "{" + "\"project\": \"" + this.projectName + "\",\n" + "\"layerCount\": " + this.paper.getLayersCount() + ",\n" + "\"layers\": [" + layers.join(",") + "]" + "}";
+          let manifest = "{" + "\"projectName\": \"" + this.projectName + "\",\n" + "\"layers\": [" + layers.join(",") + "]" + "}";
           zip.file("manifest.json", manifest, null);
           let options = new Object();
           options["type"] = "blob";
