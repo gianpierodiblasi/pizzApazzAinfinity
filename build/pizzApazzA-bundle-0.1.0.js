@@ -233,7 +233,7 @@ class Z4RibbonFilePanel extends JSPanel {
     let projectName = new JSTextField();
     projectName.setText(this.canvas.getProjectName());
     panel.add(projectName, BorderLayout.CENTER);
-    JSOptionPane.showInputDialog(panel, Z4Translations.SAVE, listener => projectName.addActionListener(event => listener.stateChanged(new ChangeEvent())), () => !!(projectName.getText()), response => {
+    JSOptionPane.showInputDialog(panel, Z4Translations.SAVE, listener => projectName.addActionListener(event => listener(new ChangeEvent())), () => !!(projectName.getText()), response => {
       if (response === JSOptionPane.OK_OPTION) {
         this.canvas.saveProject(projectName.getText(), apply);
       }

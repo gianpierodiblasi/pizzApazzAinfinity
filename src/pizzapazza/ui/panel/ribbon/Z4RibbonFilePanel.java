@@ -180,7 +180,7 @@ public class Z4RibbonFilePanel extends JSPanel {
     projectName.setText(this.canvas.getProjectName());
     panel.add(projectName, BorderLayout.CENTER);
 
-    JSOptionPane.showInputDialog(panel, Z4Translations.SAVE, listener -> projectName.addActionListener(event -> listener.stateChanged(new ChangeEvent())), () -> $exists(projectName.getText()), response -> {
+    JSOptionPane.showInputDialog(panel, Z4Translations.SAVE, listener -> projectName.addActionListener(event -> listener.$apply(new ChangeEvent())), () -> $exists(projectName.getText()), response -> {
       if (response == JSOptionPane.OK_OPTION) {
         this.canvas.saveProject(projectName.getText(), apply);
       }
