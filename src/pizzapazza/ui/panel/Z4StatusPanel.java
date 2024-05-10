@@ -38,7 +38,7 @@ public class Z4StatusPanel extends JSPanel {
 
   private void addPipe(int gridx) {
     JSLabel pipe = new JSLabel();
-    pipe.setText("|");
+    pipe.setText(" | ");
     this.setLabel(pipe, gridx);
   }
 
