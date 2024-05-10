@@ -1,6 +1,7 @@
 package pizzapazza.ui.panel.ribbon;
 
 import static def.dom.Globals.document;
+import javascript.awt.Dimension;
 import javascript.awt.GridBagConstraints;
 import javascript.awt.GridBagLayout;
 import javascript.awt.Insets;
@@ -9,9 +10,11 @@ import javascript.swing.JSButton;
 import javascript.swing.JSComponent;
 import javascript.swing.JSFileChooser;
 import javascript.swing.JSLabel;
+import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
 import pizzapazza.Z4Constants;
 import pizzapazza.ui.Z4Canvas;
+import pizzapazza.ui.panel.Z4NewImagePanel;
 import pizzapazza.util.Z4Translations;
 import static simulation.js.$Globals.$typeof;
 import static simulation.js.$Globals.navigator;
@@ -34,7 +37,7 @@ public class Z4RibbonLayerPanel extends JSPanel {
     this.cssAddClass("z4ribbonlayerpanel");
 
     this.addLabel(Z4Translations.NEW, 0);
-    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", null);
+    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", event -> this.addFromColor());
     this.addButton(Z4Translations.FROM_CLIPBOARD, $typeof(navigator.clipboard.$get("read"), "function"), 1, 1, "both", event -> this.addFromClipboard());
     this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event -> this.addFromFile());
     this.addVLine(3, 1);
@@ -108,6 +111,18 @@ public class Z4RibbonLayerPanel extends JSPanel {
     constraints.weighty = 1;
     constraints.insets = new Insets(1, 2, 1, 2);
     this.add(div, constraints);
+  }
+
+  private void addFromColor() {
+    Z4NewImagePanel panel = new Z4NewImagePanel();
+
+    JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener -> {
+    }, () -> true, response -> {
+      if (response == JSOptionPane.OK_OPTION) {
+        Dimension size = panel.getSelectedSize();
+        this.canvas.addLayer(size.width, size.height, panel.getSelectedColor());
+      }
+    });
   }
 
   private void addFromFile() {

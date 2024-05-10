@@ -15,7 +15,7 @@ class Z4RibbonLayerPanel extends JSPanel {
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonlayerpanel");
     this.addLabel(Z4Translations.NEW, 0);
-    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", null);
+    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", event => this.addFromColor());
     this.addButton(Z4Translations.FROM_CLIPBOARD, typeof navigator.clipboard["read"] === "function", 1, 1, "both", event => this.addFromClipboard());
     this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event => this.addFromFile());
     this.addVLine(3, 1);
@@ -85,6 +85,17 @@ class Z4RibbonLayerPanel extends JSPanel {
     constraints.weighty = 1;
     constraints.insets = new Insets(1, 2, 1, 2);
     this.add(div, constraints);
+  }
+
+   addFromColor() {
+    let panel = new Z4NewImagePanel();
+    JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => {
+    }, () => true, response => {
+      if (response === JSOptionPane.OK_OPTION) {
+        let size = panel.getSelectedSize();
+        this.canvas.addLayer(size.width, size.height, panel.getSelectedColor());
+      }
+    });
   }
 
    addFromFile() {

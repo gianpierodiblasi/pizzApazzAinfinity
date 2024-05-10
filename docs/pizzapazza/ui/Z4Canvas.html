@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -192,8 +192,9 @@ extends javascript.swing.JSComponent</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addLayer(int,int)">addLayer</a></span>&#8203;(int&nbsp;width,
-        int&nbsp;height)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addLayer(int,int,javascript.awt.Color)">addLayer</a></span>&#8203;(int&nbsp;width,
+        int&nbsp;height,
+        javascript.awt.Color&nbsp;color)</code></th>
 <td class="colLast">
 <div class="block">Adds a layer</div>
 </td>
@@ -214,19 +215,28 @@ extends javascript.swing.JSComponent</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#create(int,int,javascript.awt.Color)">create</a></span>&#8203;(int&nbsp;width,
+      int&nbsp;height,
+      javascript.awt.Color&nbsp;color)</code></th>
+<td class="colLast">
+<div class="block">Creates a new project</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFromClipboard()">createFromClipboard</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Creates a new project from an image in the clipboard</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFromFile(def.dom.File)">createFromFile</a></span>&#8203;(def.dom.File&nbsp;file)</code></th>
 <td class="colLast">
 <div class="block">Creates a new project from an image file</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#exportToFile(java.lang.String,java.lang.String,double)">exportToFile</a></span>&#8203;(java.lang.String&nbsp;filename,
             java.lang.String&nbsp;ext,
@@ -235,7 +245,7 @@ extends javascript.swing.JSComponent</pre>
 <div class="block">Exports this project to an image file</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getProjectName()">getProjectName</a></span>()</code></th>
 <td class="colLast">
@@ -293,6 +303,24 @@ extends javascript.swing.JSComponent</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="create(int,int,javascript.awt.Color)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>create</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;create&#8203;(int&nbsp;width,
+                   int&nbsp;height,
+                   javascript.awt.Color&nbsp;color)</pre>
+<div class="block">Creates a new project</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>width</code> - The image width</dd>
+<dd><code>height</code> - The image height</dd>
+<dd><code>color</code> - The filling color</dd>
+</dl>
+</li>
+</ul>
 <a id="createFromFile(def.dom.File)">
 <!--   -->
 </a>
@@ -335,19 +363,21 @@ extends javascript.swing.JSComponent</pre>
 </dl>
 </li>
 </ul>
-<a id="addLayer(int,int)">
+<a id="addLayer(int,int,javascript.awt.Color)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>addLayer</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;addLayer&#8203;(int&nbsp;width,
-                     int&nbsp;height)</pre>
+                     int&nbsp;height,
+                     javascript.awt.Color&nbsp;color)</pre>
 <div class="block">Adds a layer</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>width</code> - The layer width</dd>
 <dd><code>height</code> - The layer height</dd>
+<dd><code>color</code> - The filling color</dd>
 </dl>
 </li>
 </ul>

@@ -15,7 +15,7 @@ class Z4RibbonFilePanel extends JSPanel {
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonfilepanel");
     this.addLabel(Z4Translations.NEW, 0);
-    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", event => this.create());
+    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", event => this.createFromColor());
     this.addButton(Z4Translations.FROM_CLIPBOARD, typeof navigator.clipboard["read"] === "function", 1, 1, "both", event => this.createFromClipboard());
     this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event => this.createFromFile());
     this.addVLine(3, 0);
@@ -94,7 +94,7 @@ class Z4RibbonFilePanel extends JSPanel {
     this.add(div, constraints);
   }
 
-   create() {
+   createFromColor() {
     let panel = new Z4NewImagePanel();
     JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => {
     }, () => true, response => {
