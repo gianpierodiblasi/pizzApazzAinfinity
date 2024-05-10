@@ -36,6 +36,7 @@ public class Z4Canvas extends JSComponent {
   private final $ResizeObserver resizeObserver = new $ResizeObserver(() -> this.drawCanvas());
 
   private String projectName;
+  private boolean saved = true;
   private final Z4Paper paper = new Z4Paper();
 
   /**
@@ -52,6 +53,7 @@ public class Z4Canvas extends JSComponent {
     this.appendNodeChild(this.canvas);
 
     this.addLayer(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, new Color(0, 0, 0, 0));
+    this.saved = true;
 
     $Image image = ($Image) document.createElement("img");
     image.onload = event -> {
@@ -119,6 +121,7 @@ public class Z4Canvas extends JSComponent {
 
   private void afterCreate(String projectName, double width, double height) {
     this.projectName = projectName;
+    this.saved = true;
 
     this.canvas.width = width;
     this.canvas.height = height;
@@ -215,6 +218,8 @@ public class Z4Canvas extends JSComponent {
     int shiftY = (int) (dimension.height - this.canvas.height) / 2;
     this.paper.shift(shiftX, shiftY);
 
+    this.saved = false;
+
     this.canvas.width = dimension.width;
     this.canvas.height = dimension.height;
   }
@@ -226,6 +231,22 @@ public class Z4Canvas extends JSComponent {
    */
   public String getProjectName() {
     return this.projectName;
+  }
+
+  /**
+   * Sets this canvas as saved
+   */
+  public void setSaved() {
+    this.saved = true;
+  }
+
+  /**
+   * Checks if this canvas is saved
+   *
+   * @return true if this canvas is saved, false otherwise
+   */
+  public boolean isSaved() {
+    return this.saved;
   }
 
   private void drawCanvas() {

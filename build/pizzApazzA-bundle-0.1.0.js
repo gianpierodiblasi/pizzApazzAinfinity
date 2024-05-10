@@ -107,12 +107,13 @@ class Z4RibbonFilePanel extends JSPanel {
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonfilepanel");
     this.addLabel(Z4Translations.NEW_PROJECT, 0, 3);
-    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", event => this.createFromColor());
-    this.addButton(Z4Translations.FROM_CLIPBOARD, typeof navigator.clipboard["read"] === "function", 1, 1, "both", event => this.createFromClipboard());
-    this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event => this.createFromFile());
+    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", event => this.checkSaved(Z4Translations.CREATE, () => this.createFromColor()));
+    this.addButton(Z4Translations.FROM_CLIPBOARD, typeof navigator.clipboard["read"] === "function", 1, 1, "both", event => this.checkSaved(Z4Translations.FROM_CLIPBOARD, () => this.createFromClipboard()));
+    this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event => this.checkSaved(Z4Translations.FROM_FILE, () => this.createFromFile()));
     this.addVLine(3, 0);
     this.addLabel(Z4Translations.OPEN, 4, 1);
-    this.addButton(Z4Translations.OPEN_PROJECT, true, 4, 1, "", null);
+    this.addButton(Z4Translations.OPEN_PROJECT, true, 4, 1, "", event => this.checkSaved(Z4Translations.OPEN_PROJECT, () => {
+    }));
     this.addVLine(5, 0);
     this.addLabel(Z4Translations.SAVE, 6, 2);
     this.addButton(Z4Translations.SAVE_PROJECT, true, 6, 1, "left", null);
@@ -185,6 +186,23 @@ class Z4RibbonFilePanel extends JSPanel {
     constraints.weighty = 1;
     constraints.insets = new Insets(1, 2, 1, 2);
     this.add(div, constraints);
+  }
+
+   checkSaved(title, apply) {
+    if (this.canvas.isSaved()) {
+      apply();
+    } else {
+      JSOptionPane.showConfirmDialog(Z4Translations.PROJECT_NOT_SAVED_MESSAGE, title, JSOptionPane.YES_NO_CANCEL_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
+        switch(response) {
+          case JSOptionPane.YES_OPTION:
+            // SALVA E FAI apply.$apply();
+            break;
+          case JSOptionPane.NO_OPTION:
+            apply();
+            break;
+        }
+      });
+    }
   }
 
    createFromColor() {
@@ -786,6 +804,8 @@ class Z4Canvas extends JSComponent {
 
    projectName = null;
 
+   saved = true;
+
    paper = new Z4Paper();
 
   /**
@@ -799,6 +819,7 @@ class Z4Canvas extends JSComponent {
     this.canvas.height = Z4Constants.DEFAULT_IMAGE_SIZE;
     this.appendNodeChild(this.canvas);
     this.addLayer(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, new Color(0, 0, 0, 0));
+    this.saved = true;
     let image = document.createElement("img");
     image.onload = event => {
       this.chessboard = this.ctx.createPattern(image, "repeat");
@@ -862,6 +883,7 @@ class Z4Canvas extends JSComponent {
 
    afterCreate(projectName, width, height) {
     this.projectName = projectName;
+    this.saved = true;
     this.canvas.width = width;
     this.canvas.height = height;
   }
@@ -947,6 +969,7 @@ class Z4Canvas extends JSComponent {
     let shiftX = (dimension.width - this.canvas.width) / 2;
     let shiftY = (dimension.height - this.canvas.height) / 2;
     this.paper.shift(shiftX, shiftY);
+    this.saved = false;
     this.canvas.width = dimension.width;
     this.canvas.height = dimension.height;
   }
@@ -958,6 +981,22 @@ class Z4Canvas extends JSComponent {
    */
    getProjectName() {
     return this.projectName;
+  }
+
+  /**
+   * Sets this canvas as saved
+   */
+   setSaved() {
+    this.saved = true;
+  }
+
+  /**
+   * Checks if this canvas is saved
+   *
+   * @return true if this canvas is saved, false otherwise
+   */
+   isSaved() {
+    return this.saved;
   }
 
    drawCanvas() {
@@ -998,6 +1037,8 @@ class Z4Translations {
   static  SAVE_PROJECT = "";
 
   static  EXPORT = "";
+
+  static  PROJECT_NOT_SAVED_MESSAGE = "";
 
   // Ribbon Layer
   static  LAYER = "";
@@ -1072,6 +1113,7 @@ class Z4Translations {
     Z4Translations.SAVE = "Save";
     Z4Translations.SAVE_PROJECT = "Save Project";
     Z4Translations.EXPORT = "Export";
+    Z4Translations.PROJECT_NOT_SAVED_MESSAGE = "Project not saved, do you want to save your changes?";
     // Ribbon Layer
     Z4Translations.LAYER = "Layer";
     Z4Translations.NEW_LAYER = "New Layer";
@@ -1116,6 +1158,7 @@ class Z4Translations {
     // Ribbon Layer
     Z4Translations.LAYER = "Livello";
     Z4Translations.NEW_LAYER = "Nuovo Livello";
+    Z4Translations.PROJECT_NOT_SAVED_MESSAGE = "Progetto non salvato, vuoi salvare le modifiche?";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Impostazioni";
     Z4Translations.LANGUAGE = "Lingua";

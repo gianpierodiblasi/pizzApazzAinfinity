@@ -17,6 +17,7 @@ import pizzapazza.ui.Z4Canvas;
 import pizzapazza.ui.panel.Z4ExportToFilePanel;
 import pizzapazza.ui.panel.Z4NewImagePanel;
 import pizzapazza.util.Z4Translations;
+import simulation.js.$Apply_0_Void;
 import static simulation.js.$Globals.$typeof;
 import static simulation.js.$Globals.navigator;
 
@@ -38,14 +39,14 @@ public class Z4RibbonFilePanel extends JSPanel {
     this.cssAddClass("z4ribbonfilepanel");
 
     this.addLabel(Z4Translations.NEW_PROJECT, 0, 3);
-    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", event -> this.createFromColor());
-    this.addButton(Z4Translations.FROM_CLIPBOARD, $typeof(navigator.clipboard.$get("read"), "function"), 1, 1, "both", event -> this.createFromClipboard());
-    this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event -> this.createFromFile());
+    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", event -> this.checkSaved(Z4Translations.CREATE, () -> this.createFromColor()));
+    this.addButton(Z4Translations.FROM_CLIPBOARD, $typeof(navigator.clipboard.$get("read"), "function"), 1, 1, "both", event -> this.checkSaved(Z4Translations.FROM_CLIPBOARD, () -> this.createFromClipboard()));
+    this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event -> this.checkSaved(Z4Translations.FROM_FILE, () -> this.createFromFile()));
     this.addVLine(3, 0);
 
     this.addLabel(Z4Translations.OPEN, 4, 1);
 
-    this.addButton(Z4Translations.OPEN_PROJECT, true, 4, 1, "", null);
+    this.addButton(Z4Translations.OPEN_PROJECT, true, 4, 1, "", event -> this.checkSaved(Z4Translations.OPEN_PROJECT, () -> {}));
     this.addVLine(5, 0);
 
     this.addLabel(Z4Translations.SAVE, 6, 2);
@@ -123,6 +124,23 @@ public class Z4RibbonFilePanel extends JSPanel {
     constraints.weighty = 1;
     constraints.insets = new Insets(1, 2, 1, 2);
     this.add(div, constraints);
+  }
+
+  private void checkSaved(String title, $Apply_0_Void apply) {
+    if (this.canvas.isSaved()) {
+      apply.$apply();
+    } else {
+      JSOptionPane.showConfirmDialog(Z4Translations.PROJECT_NOT_SAVED_MESSAGE, title, JSOptionPane.YES_NO_CANCEL_OPTION, JSOptionPane.QUESTION_MESSAGE, response -> {
+        switch (response) {
+          case JSOptionPane.YES_OPTION:
+            // SALVA E FAI apply.$apply();
+            break;
+          case JSOptionPane.NO_OPTION:
+            apply.$apply();
+            break;
+        }
+      });
+    }
   }
 
   private void createFromColor() {

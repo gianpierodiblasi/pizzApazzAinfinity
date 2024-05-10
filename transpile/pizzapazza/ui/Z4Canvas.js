@@ -15,6 +15,8 @@ class Z4Canvas extends JSComponent {
 
    projectName = null;
 
+   saved = true;
+
    paper = new Z4Paper();
 
   /**
@@ -28,6 +30,7 @@ class Z4Canvas extends JSComponent {
     this.canvas.height = Z4Constants.DEFAULT_IMAGE_SIZE;
     this.appendNodeChild(this.canvas);
     this.addLayer(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, new Color(0, 0, 0, 0));
+    this.saved = true;
     let image = document.createElement("img");
     image.onload = event => {
       this.chessboard = this.ctx.createPattern(image, "repeat");
@@ -91,6 +94,7 @@ class Z4Canvas extends JSComponent {
 
    afterCreate(projectName, width, height) {
     this.projectName = projectName;
+    this.saved = true;
     this.canvas.width = width;
     this.canvas.height = height;
   }
@@ -176,6 +180,7 @@ class Z4Canvas extends JSComponent {
     let shiftX = (dimension.width - this.canvas.width) / 2;
     let shiftY = (dimension.height - this.canvas.height) / 2;
     this.paper.shift(shiftX, shiftY);
+    this.saved = false;
     this.canvas.width = dimension.width;
     this.canvas.height = dimension.height;
   }
@@ -187,6 +192,22 @@ class Z4Canvas extends JSComponent {
    */
    getProjectName() {
     return this.projectName;
+  }
+
+  /**
+   * Sets this canvas as saved
+   */
+   setSaved() {
+    this.saved = true;
+  }
+
+  /**
+   * Checks if this canvas is saved
+   *
+   * @return true if this canvas is saved, false otherwise
+   */
+   isSaved() {
+    return this.saved;
   }
 
    drawCanvas() {
