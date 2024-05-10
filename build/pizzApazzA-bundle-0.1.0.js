@@ -106,15 +106,15 @@ class Z4RibbonFilePanel extends JSPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonfilepanel");
-    this.addLabel(Z4Translations.NEW, 0);
+    this.addLabel(Z4Translations.NEW_PROJECT, 0, 3);
     this.addButton(Z4Translations.CREATE, true, 0, 1, "left", event => this.createFromColor());
     this.addButton(Z4Translations.FROM_CLIPBOARD, typeof navigator.clipboard["read"] === "function", 1, 1, "both", event => this.createFromClipboard());
     this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event => this.createFromFile());
     this.addVLine(3, 0);
-    this.addLabel(Z4Translations.OPEN, 4);
+    this.addLabel(Z4Translations.OPEN, 4, 1);
     this.addButton(Z4Translations.OPEN_PROJECT, true, 4, 1, "", null);
     this.addVLine(5, 0);
-    this.addLabel(Z4Translations.SAVE, 6);
+    this.addLabel(Z4Translations.SAVE, 6, 2);
     this.addButton(Z4Translations.SAVE_PROJECT, true, 6, 1, "left", null);
     this.addButton(Z4Translations.EXPORT, true, 7, 1, "right", event => this.exportToFile());
     this.addVLine(8, 1);
@@ -129,12 +129,13 @@ class Z4RibbonFilePanel extends JSPanel {
     this.canvas = canvas;
   }
 
-   addLabel(text, gridx) {
+   addLabel(text, gridx, gridwidth) {
     let label = new JSLabel();
     label.setText(text);
     let constraints = new GridBagConstraints();
     constraints.gridx = gridx;
     constraints.gridy = 0;
+    constraints.gridwidth = gridwidth;
     constraints.anchor = GridBagConstraints.WEST;
     constraints.insets = new Insets(5, 5, 2, 0);
     this.add(label, constraints);
@@ -231,7 +232,7 @@ class Z4RibbonLayerPanel extends JSPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonlayerpanel");
-    this.addLabel(Z4Translations.NEW, 0);
+    this.addLabel(Z4Translations.NEW_LAYER, 0);
     this.addButton(Z4Translations.CREATE, true, 0, 1, "left", event => this.addFromColor());
     this.addButton(Z4Translations.FROM_CLIPBOARD, typeof navigator.clipboard["read"] === "function", 1, 1, "both", event => this.addFromClipboard());
     this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event => this.addFromFile());
@@ -253,6 +254,7 @@ class Z4RibbonLayerPanel extends JSPanel {
     let constraints = new GridBagConstraints();
     constraints.gridx = gridx;
     constraints.gridy = 0;
+    constraints.gridwidth = 3;
     constraints.anchor = GridBagConstraints.WEST;
     constraints.insets = new Insets(5, 5, 2, 0);
     this.add(label, constraints);
@@ -979,7 +981,7 @@ class Z4Translations {
   // Ribbon File
   static  FILE = "";
 
-  static  NEW = "";
+  static  NEW_PROJECT = "";
 
   static  CREATE = "";
 
@@ -999,6 +1001,8 @@ class Z4Translations {
 
   // Ribbon Layer
   static  LAYER = "";
+
+  static  NEW_LAYER = "";
 
   // Ribbon Settings
   static  SETTINGS = "";
@@ -1059,7 +1063,7 @@ class Z4Translations {
   static  setEnglish() {
     // Ribbon File
     Z4Translations.FILE = "File";
-    Z4Translations.NEW = "New";
+    Z4Translations.NEW_PROJECT = "New Project";
     Z4Translations.CREATE = "Create";
     Z4Translations.FROM_CLIPBOARD = "From Clipboard";
     Z4Translations.FROM_FILE = "From File";
@@ -1070,6 +1074,7 @@ class Z4Translations {
     Z4Translations.EXPORT = "Export";
     // Ribbon Layer
     Z4Translations.LAYER = "Layer";
+    Z4Translations.NEW_LAYER = "New Layer";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Settings";
     Z4Translations.LANGUAGE = "Language";
@@ -1099,7 +1104,7 @@ class Z4Translations {
   static  setItalian() {
     // Ribbon File
     Z4Translations.FILE = "File";
-    Z4Translations.NEW = "Nuovo";
+    Z4Translations.NEW_PROJECT = "Nuovo Progetto";
     Z4Translations.CREATE = "Crea";
     Z4Translations.FROM_CLIPBOARD = "Dagli Appunti";
     Z4Translations.FROM_FILE = "Da File";
@@ -1110,6 +1115,7 @@ class Z4Translations {
     Z4Translations.EXPORT = "Esporta";
     // Ribbon Layer
     Z4Translations.LAYER = "Livello";
+    Z4Translations.NEW_LAYER = "Nuovo Livello";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Impostazioni";
     Z4Translations.LANGUAGE = "Lingua";

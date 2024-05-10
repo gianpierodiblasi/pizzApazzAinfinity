@@ -16,7 +16,7 @@ public class Z4Translations {
 
   // Ribbon File
   public static String FILE = "";
-  public static String NEW = "";
+  public static String NEW_PROJECT = "";
   public static String CREATE = "";
   public static String FROM_CLIPBOARD = "";
   public static String FROM_FILE = "";
@@ -28,6 +28,7 @@ public class Z4Translations {
 
   // Ribbon Layer
   public static String LAYER = "";
+  public static String NEW_LAYER = "";
 
   // Ribbon Settings
   public static String SETTINGS = "";
@@ -72,7 +73,7 @@ public class Z4Translations {
   public static void setEnglish() {
     // Ribbon File
     Z4Translations.FILE = "File";
-    Z4Translations.NEW = "New";
+    Z4Translations.NEW_PROJECT = "New Project";
     Z4Translations.CREATE = "Create";
     Z4Translations.FROM_CLIPBOARD = "From Clipboard";
     Z4Translations.FROM_FILE = "From File";
@@ -84,6 +85,7 @@ public class Z4Translations {
 
     // Ribbon Layer
     Z4Translations.LAYER = "Layer";
+    Z4Translations.NEW_LAYER = "New Layer";
 
     // Ribbon Settings
     Z4Translations.SETTINGS = "Settings";
@@ -116,7 +118,7 @@ public class Z4Translations {
   public static void setItalian() {
     // Ribbon File
     Z4Translations.FILE = "File";
-    Z4Translations.NEW = "Nuovo";
+    Z4Translations.NEW_PROJECT = "Nuovo Progetto";
     Z4Translations.CREATE = "Crea";
     Z4Translations.FROM_CLIPBOARD = "Dagli Appunti";
     Z4Translations.FROM_FILE = "Da File";
@@ -128,6 +130,7 @@ public class Z4Translations {
 
     // Ribbon Layer
     Z4Translations.LAYER = "Livello";
+    Z4Translations.NEW_LAYER = "Nuovo Livello";
 
     // Ribbon Settings
     Z4Translations.SETTINGS = "Impostazioni";

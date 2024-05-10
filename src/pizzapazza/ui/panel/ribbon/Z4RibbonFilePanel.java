@@ -37,18 +37,18 @@ public class Z4RibbonFilePanel extends JSPanel {
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonfilepanel");
 
-    this.addLabel(Z4Translations.NEW, 0);
+    this.addLabel(Z4Translations.NEW_PROJECT, 0, 3);
     this.addButton(Z4Translations.CREATE, true, 0, 1, "left", event -> this.createFromColor());
     this.addButton(Z4Translations.FROM_CLIPBOARD, $typeof(navigator.clipboard.$get("read"), "function"), 1, 1, "both", event -> this.createFromClipboard());
     this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event -> this.createFromFile());
     this.addVLine(3, 0);
 
-    this.addLabel(Z4Translations.OPEN, 4);
+    this.addLabel(Z4Translations.OPEN, 4, 1);
 
     this.addButton(Z4Translations.OPEN_PROJECT, true, 4, 1, "", null);
     this.addVLine(5, 0);
 
-    this.addLabel(Z4Translations.SAVE, 6);
+    this.addLabel(Z4Translations.SAVE, 6, 2);
     this.addButton(Z4Translations.SAVE_PROJECT, true, 6, 1, "left", null);
     this.addButton(Z4Translations.EXPORT, true, 7, 1, "right", event -> this.exportToFile());
     this.addVLine(8, 1);
@@ -63,13 +63,14 @@ public class Z4RibbonFilePanel extends JSPanel {
     this.canvas = canvas;
   }
 
-  private void addLabel(String text, int gridx) {
+  private void addLabel(String text, int gridx, int gridwidth) {
     JSLabel label = new JSLabel();
     label.setText(text);
 
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = gridx;
     constraints.gridy = 0;
+    constraints.gridwidth = gridwidth;
     constraints.anchor = GridBagConstraints.WEST;
     constraints.insets = new Insets(5, 5, 2, 0);
     this.add(label, constraints);

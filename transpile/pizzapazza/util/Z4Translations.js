@@ -11,7 +11,7 @@ class Z4Translations {
   // Ribbon File
   static  FILE = "";
 
-  static  NEW = "";
+  static  NEW_PROJECT = "";
 
   static  CREATE = "";
 
@@ -31,6 +31,8 @@ class Z4Translations {
 
   // Ribbon Layer
   static  LAYER = "";
+
+  static  NEW_LAYER = "";
 
   // Ribbon Settings
   static  SETTINGS = "";
@@ -91,7 +93,7 @@ class Z4Translations {
   static  setEnglish() {
     // Ribbon File
     Z4Translations.FILE = "File";
-    Z4Translations.NEW = "New";
+    Z4Translations.NEW_PROJECT = "New Project";
     Z4Translations.CREATE = "Create";
     Z4Translations.FROM_CLIPBOARD = "From Clipboard";
     Z4Translations.FROM_FILE = "From File";
@@ -102,6 +104,7 @@ class Z4Translations {
     Z4Translations.EXPORT = "Export";
     // Ribbon Layer
     Z4Translations.LAYER = "Layer";
+    Z4Translations.NEW_LAYER = "New Layer";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Settings";
     Z4Translations.LANGUAGE = "Language";
@@ -131,7 +134,7 @@ class Z4Translations {
   static  setItalian() {
     // Ribbon File
     Z4Translations.FILE = "File";
-    Z4Translations.NEW = "Nuovo";
+    Z4Translations.NEW_PROJECT = "Nuovo Progetto";
     Z4Translations.CREATE = "Crea";
     Z4Translations.FROM_CLIPBOARD = "Dagli Appunti";
     Z4Translations.FROM_FILE = "Da File";
@@ -142,6 +145,7 @@ class Z4Translations {
     Z4Translations.EXPORT = "Esporta";
     // Ribbon Layer
     Z4Translations.LAYER = "Livello";
+    Z4Translations.NEW_LAYER = "Nuovo Livello";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Impostazioni";
     Z4Translations.LANGUAGE = "Lingua";
