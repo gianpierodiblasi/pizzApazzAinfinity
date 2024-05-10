@@ -22,18 +22,24 @@ class Z4Layer {
    *
    * @param width The layer width
    * @param height The layer height
+   * @param color The filling color
    * @param containerWidth The container width
    * @param containerHeight The container height
    */
-  constructor(width, height, containerWidth, containerHeight) {
+  constructor(width, height, color, containerWidth, containerHeight) {
     this.offscreen = new OffscreenCanvas(width, height);
     this.offscreenCtx = this.offscreen.getContext("2d");
+    this.offscreenCtx.fillStyle = this.getFillStyle(color.getRGBA_HEX());
+    this.offscreenCtx.fillRect(0, 0, width, height);
     this.offsetX = (containerWidth - width) / 2;
     this.offsetY = (containerHeight - height) / 2;
     this.width = width;
     this.height = height;
   }
 
+   getFillStyle(style) {
+    return style;
+  }
   /**
    * Creates a Z4Layer from an image
    *
@@ -43,7 +49,7 @@ class Z4Layer {
    * @return The layer
    */
   static  fromImage(image, containerWidth, containerHeight) {
-    let layer = new Z4Layer(image.width, image.height, containerWidth, containerHeight);
+    let layer = new Z4Layer(image.width, image.height, new Color(0, 0, 0, 0), containerWidth, containerHeight);
     layer.offscreenCtx.drawImage(image, 0, 0);
     return layer;
   }

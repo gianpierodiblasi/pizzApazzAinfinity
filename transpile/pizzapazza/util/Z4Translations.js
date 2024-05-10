@@ -60,6 +60,16 @@ class Z4Translations {
 
   static  RESET = "";
 
+  static  WIDTH = "";
+
+  static  HEIGHT = "";
+
+  static  RESOLUTION = "";
+
+  static  FILLING_COLOR = "";
+
+  static  EDIT = "";
+
   static {
     switch(navigator.language.substring(0, 2)) {
       case "en":
@@ -107,6 +117,11 @@ class Z4Translations {
     Z4Translations.FILENAME = "File Name";
     Z4Translations.QUALITY = "Quality";
     Z4Translations.RESET = "Reset";
+    Z4Translations.WIDTH = "Width";
+    Z4Translations.HEIGHT = "Height";
+    Z4Translations.RESOLUTION = "Resolution";
+    Z4Translations.FILLING_COLOR = "Filling Color";
+    Z4Translations.EDIT = "Edit";
     Z4Translations.CURRENT_LANGUAGE = new KeyValue("en", Z4Translations.LANGUAGE_ENGLISH_NATIVE);
   }
 
@@ -142,6 +157,11 @@ class Z4Translations {
     Z4Translations.FILENAME = "Nome File";
     Z4Translations.QUALITY = "Qualit\u00E0";
     Z4Translations.RESET = "Ripristina";
+    Z4Translations.WIDTH = "Larghezza";
+    Z4Translations.HEIGHT = "Altezza";
+    Z4Translations.RESOLUTION = "Risoluzione";
+    Z4Translations.FILLING_COLOR = "Colore di Riempimento";
+    Z4Translations.EDIT = "Modifica";
     Z4Translations.CURRENT_LANGUAGE = new KeyValue("it", Z4Translations.LANGUAGE_ITALIAN_NATIVE);
   }
 }

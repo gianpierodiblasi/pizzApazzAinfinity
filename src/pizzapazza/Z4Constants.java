@@ -24,6 +24,16 @@ public class Z4Constants {
    */
   public final static int MAX_IMAGE_SIZE = 3000;
 
+  /**
+   * The default DPI
+   */
+  public final static int DEFAULT_DPI = 150;
+
+  /**
+   * The max DPI
+   */
+  public final static int MAX_DPI = 1500;
+
   private Z4Constants() {
   }
 }

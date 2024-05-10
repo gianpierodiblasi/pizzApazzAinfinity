@@ -31,15 +31,16 @@ class Z4Paper {
    *
    * @param width The layer width
    * @param height The layer height
+   * @param color The filling color
    * @param containerWidth The container width
    * @param containerHeight The container height
    */
-   addLayer(width, height, containerWidth, containerHeight) {
-    this.layers.push(new Z4Layer(width, height, containerWidth, containerHeight));
+   addLayer(width, height, color, containerWidth, containerHeight) {
+    this.layers.push(new Z4Layer(width, height, color, containerWidth, containerHeight));
   }
 
   /**
-   * Adds a layer from an aimeg
+   * Adds a layer from an image
    *
    * @param image The image
    * @param containerWidth The container width

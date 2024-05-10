@@ -31,6 +31,43 @@ window.onload = event => {
   
   new Z4Frame();
 };/**
+ * The component to preview a color
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4ColorPreview extends JSComponent {
+
+   component = new JSComponent(document.createElement("div"));
+
+   componentOpacity = new JSComponent(document.createElement("div"));
+
+  constructor() {
+    super(document.createElement("div"));
+    this.cssAddClass("z4colorpreview");
+    this.component.cssAddClass("z4colorpreview-opaque");
+    this.appendChild(this.component);
+    this.componentOpacity.cssAddClass("z4colorpreview-transparent");
+    this.appendChild(this.componentOpacity);
+    this.setColor(new Color(0, 0, 0, 255));
+  }
+
+  /**
+   * Sets the color to preview
+   * @param color The color
+   */
+   setColor(color) {
+    this.component.getStyle().backgroundColor = color.getRGB_String();
+    this.componentOpacity.getStyle().backgroundColor = color.getRGBA_String();
+    let rgb = new Array();
+    let hsl = new Array();
+    rgb[0] = color.red;
+    rgb[1] = color.green;
+    rgb[2] = color.blue;
+    Color.RGBtoHSL(rgb, hsl);
+    this.getStyle().border = "1px solid " + (hsl[2] > 0.5 ? color.darkened(0.1).getRGB_HEX() : color.lighted(0.1).getRGB_HEX());
+  }
+}
+/**
  * The main frame of the application
  *
  * @author gianpiero.diblasi
@@ -70,7 +107,7 @@ class Z4RibbonFilePanel extends JSPanel {
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonfilepanel");
     this.addLabel(Z4Translations.NEW, 0);
-    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", null);
+    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", event => this.create());
     this.addButton(Z4Translations.FROM_CLIPBOARD, typeof navigator.clipboard["read"] === "function", 1, 1, "both", event => this.createFromClipboard());
     this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event => this.createFromFile());
     this.addVLine(3, 0);
@@ -147,6 +184,17 @@ class Z4RibbonFilePanel extends JSPanel {
     constraints.weighty = 1;
     constraints.insets = new Insets(1, 2, 1, 2);
     this.add(div, constraints);
+  }
+
+   create() {
+    let panel = new Z4NewImagePanel();
+    JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => {
+    }, () => true, response => {
+      if (response === JSOptionPane.OK_OPTION) {
+        let size = panel.getSelectedSize();
+        this.canvas.create(size.width, size.height, panel.getSelectedColor());
+      }
+    });
   }
 
    createFromFile() {
@@ -553,6 +601,127 @@ class Z4ExportToFilePanel extends JSPanel {
   }
 }
 /**
+ * The panel to create a new image
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4NewImagePanel extends JSPanel {
+
+   width = new JSSpinner();
+
+   height = new JSSpinner();
+
+   resolution = new JSSpinner();
+
+   dimensionMM = new JSLabel();
+
+   dimensionIN = new JSLabel();
+
+   colorPreview = new Z4ColorPreview();
+
+   selectedColor = new Color(255, 255, 255, 255);
+
+  constructor() {
+    super();
+    this.cssAddClass("z4newimagepanel");
+    this.setLayout(new GridBagLayout());
+    this.addLabel(Z4Translations.WIDTH, 0, 0, 1, 0);
+    this.addSpinner(this.width, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 0, 1);
+    this.addLabel(Z4Translations.HEIGHT, 1, 0, 1, 0);
+    this.addSpinner(this.height, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 1, 1);
+    this.addLabel(Z4Translations.RESOLUTION, 2, 0, 1, 0);
+    this.addSpinner(this.resolution, Z4Constants.DEFAULT_DPI, Z4Constants.MAX_DPI, 2, 1);
+    this.addDimension(this.dimensionMM, 3);
+    this.addDimension(this.dimensionIN, 4);
+    this.addLabel(Z4Translations.FILLING_COLOR, 0, 5, 3, 10);
+    this.colorPreview.setColor(this.selectedColor);
+    let constraints = new GridBagConstraints();
+    constraints.gridx = 0;
+    constraints.gridy = 6;
+    constraints.gridwidth = 2;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    this.add(this.colorPreview, constraints);
+    let button = new JSButton();
+    button.setText(Z4Translations.EDIT);
+    button.addActionListener(event => {
+      JSColorChooser.showDialog(Z4Translations.FILLING_COLOR, this.selectedColor, true, null, color => {
+        this.selectedColor = color;
+        this.colorPreview.setColor(color);
+      });
+    });
+    constraints = new GridBagConstraints();
+    constraints.gridx = 2;
+    constraints.gridy = 6;
+    constraints.gridwidth = 1;
+    constraints.anchor = GridBagConstraints.EAST;
+    this.add(button, constraints);
+    this.setDimensions();
+  }
+
+   addLabel(text, gridx, gridy, gridwidth, top) {
+    let label = new JSLabel();
+    label.setText(text);
+    let constraints = new GridBagConstraints();
+    constraints.gridx = gridx;
+    constraints.gridy = gridy;
+    constraints.gridwidth = gridwidth;
+    constraints.anchor = GridBagConstraints.WEST;
+    constraints.insets = new Insets(top, 5, 0, 5);
+    this.add(label, constraints);
+  }
+
+   addSpinner(spinner, value, max, gridx, gridy) {
+    spinner.setModel(new SpinnerNumberModel(value, 1, max, 1));
+    spinner.getStyle().minWidth = "4rem";
+    spinner.getChilStyleByQuery("input[type=number]").minWidth = "3.5rem";
+    spinner.getChilStyleByQuery("input[type=number]").width = "3.5rem";
+    spinner.addChangeListener(event => this.setDimensions());
+    let constraints = new GridBagConstraints();
+    constraints.gridx = gridx;
+    constraints.gridy = gridy;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.insets = new Insets(0, 5, 0, 5);
+    this.add(spinner, constraints);
+  }
+
+   addDimension(label, gridy) {
+    let constraints = new GridBagConstraints();
+    constraints.gridy = gridy;
+    constraints.gridwidth = 3;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.insets = new Insets(2, 5, 0, 0);
+    this.add(label, constraints);
+  }
+
+   setDimensions() {
+    let w = this.width.getValue();
+    let h = this.height.getValue();
+    let res = this.resolution.getValue();
+    let dimWIN = w / res;
+    let dimHIN = h / res;
+    this.dimensionMM.setText(new Number(dimWIN * 25.4).toFixed(2) + " \u2716 " + new Number(dimHIN * 25.4).toFixed(2) + " mm");
+    this.dimensionIN.setText(new Number(dimWIN).toFixed(2) + " \u2716 " + new Number(dimHIN).toFixed(2) + " inch");
+  }
+
+  /**
+   * Returns the selected size
+   *
+   * @return The selected size
+   */
+   getSelectedSize() {
+    return new Dimension(this.width.getValue(), this.height.getValue());
+  }
+
+  /**
+   * Returns the selected color
+   *
+   * @return The selected color
+   */
+   getSelectedColor() {
+    return this.selectedColor;
+  }
+}
+/**
  * The main ribbon of the application
  *
  * @author gianpiero.diblasi
@@ -605,10 +774,6 @@ class Z4Canvas extends JSComponent {
 
    paper = new Z4Paper();
 
-  static  WIDTH = 500;
-
-  static  HEIGHT = 500;
-
   /**
    * Creates the object
    */
@@ -616,10 +781,10 @@ class Z4Canvas extends JSComponent {
     super(document.createElement("div"));
     this.cssAddClass("z4canvas");
     this.resizeObserver.observe(this.canvas);
-    this.canvas.width = Z4Canvas.WIDTH;
-    this.canvas.height = Z4Canvas.HEIGHT;
+    this.canvas.width = Z4Constants.DEFAULT_IMAGE_SIZE;
+    this.canvas.height = Z4Constants.DEFAULT_IMAGE_SIZE;
     this.appendNodeChild(this.canvas);
-    this.addLayer(Z4Canvas.WIDTH, Z4Canvas.HEIGHT);
+    this.addLayer(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, new Color(0, 0, 0, 0));
     let image = document.createElement("img");
     image.onload = event => {
       this.chessboard = this.ctx.createPattern(image, "repeat");
@@ -627,6 +792,20 @@ class Z4Canvas extends JSComponent {
       return null;
     };
     image.src = "image/chessboard.png";
+  }
+
+  /**
+   * Creates a new project
+   *
+   * @param width The image width
+   * @param height The image height
+   * @param color The filling color
+   */
+   create(width, height, color) {
+    this.paper.reset();
+    this.paper.addLayer(width, height, color, width, height);
+    this.afterCreate("", width, height);
+    this.drawCanvas();
   }
 
   /**
@@ -704,9 +883,10 @@ class Z4Canvas extends JSComponent {
    *
    * @param width The layer width
    * @param height The layer height
+   * @param color The filling color
    */
-   addLayer(width, height) {
-    this.paper.addLayer(width, height, this.canvas.width, this.canvas.height);
+   addLayer(width, height, color) {
+    this.paper.addLayer(width, height, color, this.canvas.width, this.canvas.height);
     this.afterAddLayer();
     this.drawCanvas();
   }
@@ -836,6 +1016,16 @@ class Z4Translations {
 
   static  RESET = "";
 
+  static  WIDTH = "";
+
+  static  HEIGHT = "";
+
+  static  RESOLUTION = "";
+
+  static  FILLING_COLOR = "";
+
+  static  EDIT = "";
+
   static {
     switch(navigator.language.substring(0, 2)) {
       case "en":
@@ -883,6 +1073,11 @@ class Z4Translations {
     Z4Translations.FILENAME = "File Name";
     Z4Translations.QUALITY = "Quality";
     Z4Translations.RESET = "Reset";
+    Z4Translations.WIDTH = "Width";
+    Z4Translations.HEIGHT = "Height";
+    Z4Translations.RESOLUTION = "Resolution";
+    Z4Translations.FILLING_COLOR = "Filling Color";
+    Z4Translations.EDIT = "Edit";
     Z4Translations.CURRENT_LANGUAGE = new KeyValue("en", Z4Translations.LANGUAGE_ENGLISH_NATIVE);
   }
 
@@ -918,6 +1113,11 @@ class Z4Translations {
     Z4Translations.FILENAME = "Nome File";
     Z4Translations.QUALITY = "Qualit\u00E0";
     Z4Translations.RESET = "Ripristina";
+    Z4Translations.WIDTH = "Larghezza";
+    Z4Translations.HEIGHT = "Altezza";
+    Z4Translations.RESOLUTION = "Risoluzione";
+    Z4Translations.FILLING_COLOR = "Colore di Riempimento";
+    Z4Translations.EDIT = "Modifica";
     Z4Translations.CURRENT_LANGUAGE = new KeyValue("it", Z4Translations.LANGUAGE_ITALIAN_NATIVE);
   }
 }
@@ -928,7 +1128,30 @@ class Z4Translations {
  */
 class Z4Constants {
 
+  /**
+   * The array of accepted image file formats
+   */
   static  ACCEPTED_IMAGE_FILE_FORMAT = new Array(".gif", ".png", ".jpeg", ".jpg");
+
+  /**
+   * The default image size
+   */
+  static  DEFAULT_IMAGE_SIZE = 500;
+
+  /**
+   * The maximum image size
+   */
+  static  MAX_IMAGE_SIZE = 3000;
+
+  /**
+   * The default DPI
+   */
+  static  DEFAULT_DPI = 150;
+
+  /**
+   * The max DPI
+   */
+  static  MAX_DPI = 1500;
 
   constructor() {
   }
@@ -957,18 +1180,24 @@ class Z4Layer {
    *
    * @param width The layer width
    * @param height The layer height
+   * @param color The filling color
    * @param containerWidth The container width
    * @param containerHeight The container height
    */
-  constructor(width, height, containerWidth, containerHeight) {
+  constructor(width, height, color, containerWidth, containerHeight) {
     this.offscreen = new OffscreenCanvas(width, height);
     this.offscreenCtx = this.offscreen.getContext("2d");
+    this.offscreenCtx.fillStyle = this.getFillStyle(color.getRGBA_HEX());
+    this.offscreenCtx.fillRect(0, 0, width, height);
     this.offsetX = (containerWidth - width) / 2;
     this.offsetY = (containerHeight - height) / 2;
     this.width = width;
     this.height = height;
   }
 
+   getFillStyle(style) {
+    return style;
+  }
   /**
    * Creates a Z4Layer from an image
    *
@@ -978,7 +1207,7 @@ class Z4Layer {
    * @return The layer
    */
   static  fromImage(image, containerWidth, containerHeight) {
-    let layer = new Z4Layer(image.width, image.height, containerWidth, containerHeight);
+    let layer = new Z4Layer(image.width, image.height, new Color(0, 0, 0, 0), containerWidth, containerHeight);
     layer.offscreenCtx.drawImage(image, 0, 0);
     return layer;
   }
@@ -1056,15 +1285,16 @@ class Z4Paper {
    *
    * @param width The layer width
    * @param height The layer height
+   * @param color The filling color
    * @param containerWidth The container width
    * @param containerHeight The container height
    */
-   addLayer(width, height, containerWidth, containerHeight) {
-    this.layers.push(new Z4Layer(width, height, containerWidth, containerHeight));
+   addLayer(width, height, color, containerWidth, containerHeight) {
+    this.layers.push(new Z4Layer(width, height, color, containerWidth, containerHeight));
   }
 
   /**
-   * Adds a layer from an aimeg
+   * Adds a layer from an image
    *
    * @param image The image
    * @param containerWidth The container width

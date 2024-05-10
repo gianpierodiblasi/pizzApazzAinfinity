@@ -8,6 +8,7 @@ import def.dom.FileReader;
 import static def.dom.Globals.document;
 import def.dom.HTMLElement;
 import def.dom.URL;
+import javascript.awt.Color;
 import javascript.awt.Dimension;
 import javascript.swing.JSComponent;
 import jsweet.util.union.Union4;
@@ -50,7 +51,7 @@ public class Z4Canvas extends JSComponent {
     this.canvas.height = Z4Constants.DEFAULT_IMAGE_SIZE;
     this.appendNodeChild(this.canvas);
 
-    this.addLayer(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE);
+    this.addLayer(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, new Color(0, 0, 0, 0));
 
     $Image image = ($Image) document.createElement("img");
     image.onload = event -> {
@@ -59,6 +60,20 @@ public class Z4Canvas extends JSComponent {
       return null;
     };
     image.src = "image/chessboard.png";
+  }
+
+  /**
+   * Creates a new project
+   *
+   * @param width The image width
+   * @param height The image height
+   * @param color The filling color
+   */
+  public void create(int width, int height, Color color) {
+    this.paper.reset();
+    this.paper.addLayer(width, height, color, width, height);
+    this.afterCreate("", width, height);
+    this.drawCanvas();
   }
 
   /**
@@ -146,9 +161,10 @@ public class Z4Canvas extends JSComponent {
    *
    * @param width The layer width
    * @param height The layer height
+   * @param color The filling color
    */
-  public void addLayer(int width, int height) {
-    this.paper.addLayer(width, height, (int) this.canvas.width, (int) this.canvas.height);
+  public void addLayer(int width, int height, Color color) {
+    this.paper.addLayer(width, height, color, (int) this.canvas.width, (int) this.canvas.height);
     this.afterAddLayer();
     this.drawCanvas();
   }

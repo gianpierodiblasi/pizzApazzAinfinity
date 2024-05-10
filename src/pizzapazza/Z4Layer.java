@@ -1,6 +1,10 @@
 package pizzapazza;
 
+import def.dom.CanvasGradient;
+import def.dom.CanvasPattern;
+import javascript.awt.Color;
 import javascript.awt.Dimension;
+import jsweet.util.union.Union4;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
 import simulation.dom.$OffscreenCanvas;
@@ -25,17 +29,29 @@ public class Z4Layer {
    *
    * @param width The layer width
    * @param height The layer height
+   * @param color The filling color
    * @param containerWidth The container width
    * @param containerHeight The container height
    */
-  public Z4Layer(int width, int height, int containerWidth, int containerHeight) {
+  public Z4Layer(int width, int height, Color color, int containerWidth, int containerHeight) {
     this.offscreen = new $OffscreenCanvas(width, height);
+    
     this.offscreenCtx = this.offscreen.getContext("2d");
-
+    this.offscreenCtx.fillStyle = this.$getFillStyle(color.getRGBA_HEX());
+    this.offscreenCtx.fillRect(0, 0, width, height);
+    
     this.offsetX = (containerWidth - width) / 2;
     this.offsetY = (containerHeight - height) / 2;
     this.width = width;
     this.height = height;
+  }
+
+  private String getFillStyle(String style) {
+    return style;
+  }
+
+  private Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getFillStyle(String style) {
+    return null;
   }
 
   /**
@@ -47,7 +63,7 @@ public class Z4Layer {
    * @return The layer
    */
   public static Z4Layer fromImage($Image image, int containerWidth, int containerHeight) {
-    Z4Layer layer = new Z4Layer((int) image.width, (int) image.height, containerWidth, containerHeight);
+    Z4Layer layer = new Z4Layer((int) image.width, (int) image.height, new Color(0, 0, 0, 0), containerWidth, containerHeight);
     layer.offscreenCtx.drawImage(image, 0, 0);
     return layer;
   }
