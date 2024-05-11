@@ -9,6 +9,8 @@ class Z4StatusPanel extends JSPanel {
 
    projectName = new JSLabel();
 
+   zoom = new JSComboBox();
+
    progressBar = new JSProgressBar();
 
   constructor() {
@@ -18,12 +20,25 @@ class Z4StatusPanel extends JSPanel {
     this.projectName.setText(Z4Translations.PROJECT_NAME + ": ");
     this.setLabel(this.projectName, 0);
     this.addPipe(1);
-    this.progressBar.setStringPainted(true);
+    let zoomModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer();
+    Z4Constants.ZOOM_LEVEL.forEach(level => zoomModelAndRenderer.addElement(new KeyValue("" + level, parseInt(100 * level) + "%")));
+    zoomModelAndRenderer.addElement(new KeyValue("FIT", Z4Translations.FIT));
+    this.zoom.setModelAndRenderer(zoomModelAndRenderer);
+    this.zoom.getStyle().minWidth = "5rem";
+    this.zoom.getChilStyleByQuery("ul").minWidth = "5rem";
+    this.zoom.setSelectedItem(new KeyValue("1", ""));
+    this.zoom.addActionListener(event => this.onZoom());
     let constraints = new GridBagConstraints();
     constraints.gridx = 2;
     constraints.gridy = 0;
+    this.add(this.zoom, constraints);
+    this.addPipe(3);
+    this.progressBar.setStringPainted(true);
+    constraints = new GridBagConstraints();
+    constraints.gridx = 4;
+    constraints.gridy = 0;
     constraints.weightx = 1;
-    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.fill = GridBagConstraints.BOTH;
     this.add(this.progressBar, constraints);
   }
 
@@ -65,5 +80,23 @@ class Z4StatusPanel extends JSPanel {
    */
    setProgressBarValue(value) {
     this.progressBar.setValue(value);
+  }
+
+  /**
+   * Sets the zoom
+   *
+   * @param zoom The zoom
+   */
+   setZoom(zoom) {
+    this.zoom.setSelectedItem(new KeyValue("" + zoom, ""));
+  }
+
+   onZoom() {
+    let key = (this.zoom.getSelectedItem()).key;
+    if (key === "FIT") {
+      this.canvas.fitZoom();
+    } else {
+      this.canvas.setZoom(parseFloat(key));
+    }
   }
 }

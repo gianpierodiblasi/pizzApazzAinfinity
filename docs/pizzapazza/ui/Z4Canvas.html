@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -246,27 +246,34 @@ extends javascript.swing.JSComponent</pre>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fitZoom()">fitZoom</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Sets the zoom to fit the available space</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getProjectName()">getProjectName</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the project name</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSaved()">isSaved</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Checks if this canvas is saved</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openProject(def.dom.File)">openProject</a></span>&#8203;(def.dom.File&nbsp;file)</code></th>
 <td class="colLast">
 <div class="block">Opens a project</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveProject(java.lang.String,simulation.js.$Apply_0_Void)">saveProject</a></span>&#8203;(java.lang.String&nbsp;projectName,
            simulation.js.$Apply_0_Void&nbsp;apply)</code></th>
@@ -274,11 +281,18 @@ extends javascript.swing.JSComponent</pre>
 <div class="block">Saves the project</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStatusPanel(pizzapazza.ui.panel.Z4StatusPanel)">setStatusPanel</a></span>&#8203;(<a href="panel/Z4StatusPanel.html" title="class in pizzapazza.ui.panel">Z4StatusPanel</a>&nbsp;statusPanel)</code></th>
 <td class="colLast">
 <div class="block">Sets the status panel</div>
+</td>
+</tr>
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setZoom(double)">setZoom</a></span>&#8203;(double&nbsp;zoom)</code></th>
+<td class="colLast">
+<div class="block">Sets the zoom</div>
 </td>
 </tr>
 </table>
@@ -495,7 +509,7 @@ extends javascript.swing.JSComponent</pre>
 <a id="isSaved()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>isSaved</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isSaved()</pre>
@@ -504,6 +518,30 @@ extends javascript.swing.JSComponent</pre>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if this canvas is saved, false otherwise</dd>
 </dl>
+</li>
+</ul>
+<a id="setZoom(double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setZoom</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setZoom&#8203;(double&nbsp;zoom)</pre>
+<div class="block">Sets the zoom</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>zoom</code> - The zoom</dd>
+</dl>
+</li>
+</ul>
+<a id="fitZoom()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>fitZoom</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;fitZoom()</pre>
+<div class="block">Sets the zoom to fit the available space</div>
 </li>
 </ul>
 </li>

@@ -813,6 +813,8 @@ class Z4StatusPanel extends JSPanel {
 
    projectName = new JSLabel();
 
+   zoom = new JSComboBox();
+
    progressBar = new JSProgressBar();
 
   constructor() {
@@ -822,12 +824,25 @@ class Z4StatusPanel extends JSPanel {
     this.projectName.setText(Z4Translations.PROJECT_NAME + ": ");
     this.setLabel(this.projectName, 0);
     this.addPipe(1);
-    this.progressBar.setStringPainted(true);
+    let zoomModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer();
+    Z4Constants.ZOOM_LEVEL.forEach(level => zoomModelAndRenderer.addElement(new KeyValue("" + level, parseInt(100 * level) + "%")));
+    zoomModelAndRenderer.addElement(new KeyValue("FIT", Z4Translations.FIT));
+    this.zoom.setModelAndRenderer(zoomModelAndRenderer);
+    this.zoom.getStyle().minWidth = "5rem";
+    this.zoom.getChilStyleByQuery("ul").minWidth = "5rem";
+    this.zoom.setSelectedItem(new KeyValue("1", ""));
+    this.zoom.addActionListener(event => this.onZoom());
     let constraints = new GridBagConstraints();
     constraints.gridx = 2;
     constraints.gridy = 0;
+    this.add(this.zoom, constraints);
+    this.addPipe(3);
+    this.progressBar.setStringPainted(true);
+    constraints = new GridBagConstraints();
+    constraints.gridx = 4;
+    constraints.gridy = 0;
     constraints.weightx = 1;
-    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.fill = GridBagConstraints.BOTH;
     this.add(this.progressBar, constraints);
   }
 
@@ -869,6 +884,24 @@ class Z4StatusPanel extends JSPanel {
    */
    setProgressBarValue(value) {
     this.progressBar.setValue(value);
+  }
+
+  /**
+   * Sets the zoom
+   *
+   * @param zoom The zoom
+   */
+   setZoom(zoom) {
+    this.zoom.setSelectedItem(new KeyValue("" + zoom, ""));
+  }
+
+   onZoom() {
+    let key = (this.zoom.getSelectedItem()).key;
+    if (key === "FIT") {
+      this.canvas.fitZoom();
+    } else {
+      this.canvas.setZoom(parseFloat(key));
+    }
   }
 }
 /**
@@ -1045,6 +1078,7 @@ class Z4Canvas extends JSComponent {
     this.projectName = projectName;
     if (this.statusPanel) {
       this.statusPanel.setProjectName(projectName);
+      this.statusPanel.setZoom(1);
     }
     this.width = width;
     this.height = height;
@@ -1228,6 +1262,25 @@ class Z4Canvas extends JSComponent {
     return this.saved;
   }
 
+  /**
+   * Sets the zoom
+   *
+   * @param zoom The zoom
+   */
+   setZoom(zoom) {
+    this.zoom = zoom;
+    this.canvas.width = this.width * zoom;
+    this.canvas.height = this.height * zoom;
+    this.drawCanvas();
+  }
+
+  /**
+   * Sets the zoom to fit the available space
+   */
+   fitZoom() {
+    this.setZoom(Math.min((this.canvas.parentElement.clientWidth - 20) / this.width, (this.canvas.parentElement.clientHeight - 20) / this.height));
+  }
+
    zoomIn() {
     if (this.zooming) {
     } else {
@@ -1237,6 +1290,7 @@ class Z4Canvas extends JSComponent {
         this.zoom = newZoom;
         this.canvas.width = this.width * newZoom;
         this.canvas.height = this.height * newZoom;
+        this.statusPanel.setZoom(this.zoom);
         this.drawCanvas();
       }
       this.zooming = false;
@@ -1252,6 +1306,7 @@ class Z4Canvas extends JSComponent {
         this.zoom = newZoom;
         this.canvas.width = this.width * newZoom;
         this.canvas.height = this.height * newZoom;
+        this.statusPanel.setZoom(this.zoom);
         this.drawCanvas();
       }
       this.zooming = false;
@@ -1260,9 +1315,11 @@ class Z4Canvas extends JSComponent {
 
    drawCanvas() {
     this.ctx.save();
-    this.ctx.scale(this.zoom, this.zoom);
     this.ctx.fillStyle = this.chessboard;
-    this.ctx.fillRect(0, 0, this.width, this.height);
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.restore();
+    this.ctx.save();
+    this.ctx.scale(this.zoom, this.zoom);
     this.paper.draw(this.ctx);
     this.ctx.restore();
   }
@@ -1345,6 +1402,8 @@ class Z4Translations {
 
   static  EDIT = "";
 
+  static  FIT = "";
+
   static {
     switch(navigator.language.substring(0, 2)) {
       case "en":
@@ -1400,6 +1459,7 @@ class Z4Translations {
     Z4Translations.RESOLUTION = "Resolution";
     Z4Translations.FILLING_COLOR = "Filling Color";
     Z4Translations.EDIT = "Edit";
+    Z4Translations.FIT = "Fit";
     Z4Translations.CURRENT_LANGUAGE = new KeyValue("en", Z4Translations.LANGUAGE_ENGLISH_NATIVE);
   }
 
@@ -1443,6 +1503,7 @@ class Z4Translations {
     Z4Translations.RESOLUTION = "Risoluzione";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";
     Z4Translations.EDIT = "Modifica";
+    Z4Translations.FIT = "Adatta";
     Z4Translations.CURRENT_LANGUAGE = new KeyValue("it", Z4Translations.LANGUAGE_ITALIAN_NATIVE);
   }
 }
@@ -1458,7 +1519,7 @@ class Z4Constants {
    */
   static  ACCEPTED_IMAGE_FILE_FORMAT = new Array(".gif", ".png", ".jpeg", ".jpg");
 
-  static  ZOOM_LEVEL = new Array(0.25, 0.5, 1.0, 2.0, 4.0);
+  static  ZOOM_LEVEL = new Array(0.25, 0.33, 0.5, 0.66, 1.0, 1.5, 2.0, 3.0, 4.0);
 
   /**
    * The default image size

@@ -10,7 +10,7 @@ class Z4Constants {
    */
   static  ACCEPTED_IMAGE_FILE_FORMAT = new Array(".gif", ".png", ".jpeg", ".jpg");
 
-  static  ZOOM_LEVEL = new Array(0.25, 0.5, 1.0, 2.0, 4.0);
+  static  ZOOM_LEVEL = new Array(0.25, 0.33, 0.5, 0.66, 1.0, 1.5, 2.0, 3.0, 4.0);
 
   /**
    * The default image size

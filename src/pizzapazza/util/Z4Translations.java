@@ -53,6 +53,7 @@ public class Z4Translations {
   public static String RESOLUTION = "";
   public static String FILLING_COLOR = "";
   public static String EDIT = "";
+  public static String FIT = "";
 
   static {
     switch (navigator.language.substring(0, 2)) {
@@ -112,6 +113,7 @@ public class Z4Translations {
     Z4Translations.RESOLUTION = "Resolution";
     Z4Translations.FILLING_COLOR = "Filling Color";
     Z4Translations.EDIT = "Edit";
+    Z4Translations.FIT = "Fit";
 
     Z4Translations.CURRENT_LANGUAGE = new KeyValue<>("en", Z4Translations.LANGUAGE_ENGLISH_NATIVE);
   }
@@ -159,6 +161,7 @@ public class Z4Translations {
     Z4Translations.RESOLUTION = "Risoluzione";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";
     Z4Translations.EDIT = "Modifica";
+    Z4Translations.FIT = "Adatta";
 
     Z4Translations.CURRENT_LANGUAGE = new KeyValue<>("it", Z4Translations.LANGUAGE_ITALIAN_NATIVE);
   }

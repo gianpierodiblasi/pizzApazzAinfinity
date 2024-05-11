@@ -129,6 +129,7 @@ class Z4Canvas extends JSComponent {
     this.projectName = projectName;
     if (this.statusPanel) {
       this.statusPanel.setProjectName(projectName);
+      this.statusPanel.setZoom(1);
     }
     this.width = width;
     this.height = height;
@@ -312,6 +313,25 @@ class Z4Canvas extends JSComponent {
     return this.saved;
   }
 
+  /**
+   * Sets the zoom
+   *
+   * @param zoom The zoom
+   */
+   setZoom(zoom) {
+    this.zoom = zoom;
+    this.canvas.width = this.width * zoom;
+    this.canvas.height = this.height * zoom;
+    this.drawCanvas();
+  }
+
+  /**
+   * Sets the zoom to fit the available space
+   */
+   fitZoom() {
+    this.setZoom(Math.min((this.canvas.parentElement.clientWidth - 20) / this.width, (this.canvas.parentElement.clientHeight - 20) / this.height));
+  }
+
    zoomIn() {
     if (this.zooming) {
     } else {
@@ -321,6 +341,7 @@ class Z4Canvas extends JSComponent {
         this.zoom = newZoom;
         this.canvas.width = this.width * newZoom;
         this.canvas.height = this.height * newZoom;
+        this.statusPanel.setZoom(this.zoom);
         this.drawCanvas();
       }
       this.zooming = false;
@@ -336,6 +357,7 @@ class Z4Canvas extends JSComponent {
         this.zoom = newZoom;
         this.canvas.width = this.width * newZoom;
         this.canvas.height = this.height * newZoom;
+        this.statusPanel.setZoom(this.zoom);
         this.drawCanvas();
       }
       this.zooming = false;
@@ -344,9 +366,11 @@ class Z4Canvas extends JSComponent {
 
    drawCanvas() {
     this.ctx.save();
-    this.ctx.scale(this.zoom, this.zoom);
     this.ctx.fillStyle = this.chessboard;
-    this.ctx.fillRect(0, 0, this.width, this.height);
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.restore();
+    this.ctx.save();
+    this.ctx.scale(this.zoom, this.zoom);
     this.paper.draw(this.ctx);
     this.ctx.restore();
   }
