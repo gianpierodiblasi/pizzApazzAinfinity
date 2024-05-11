@@ -166,8 +166,7 @@ public class Z4Canvas extends JSComponent {
 
       image.onload = event -> {
         this.paper.addLayerFromImage(image, (int) image.width, (int) image.height);
-        Z4Layer layer = this.paper.getLayerAt(index);
-        layer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
+        this.paper.getLayerAt(index).move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
 
         if (index + 1 == layers.length) {
           this.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"), statusPanel);
@@ -200,6 +199,8 @@ public class Z4Canvas extends JSComponent {
     Z4Layer layer = this.paper.getLayerAt(index);
 
     layer.convertToBlob(blob -> {
+      zip.file("layers/layer" + index + ".png", blob, null);
+
       Point offset = layer.getOffset();
       layers.$set(index,
               "{"
@@ -207,8 +208,6 @@ public class Z4Canvas extends JSComponent {
               + "\"offsetY\": " + offset.y
               + "}"
       );
-
-      zip.file("layers/layer" + index + ".png", blob, null);
 
       if (index + 1 == this.paper.getLayersCount()) {
         String manifest
