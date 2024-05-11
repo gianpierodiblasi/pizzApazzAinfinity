@@ -11,6 +11,8 @@ class Z4Canvas extends JSComponent {
 
    chessboard = null;
 
+   statusPanel = null;
+
    projectName = null;
 
    width = 0;
@@ -18,6 +20,8 @@ class Z4Canvas extends JSComponent {
    height = 0;
 
    zoom = 1;
+
+   zooming = false;
 
    saved = true;
 
@@ -32,18 +36,25 @@ class Z4Canvas extends JSComponent {
     this.appendNodeChild(this.canvas);
     this.addEventListener("wheel", event => {
       let evt = event;
-      if (evt.ctrlKey) {
-        console.log(evt.deltaX + " " + evt.deltaY + " " + evt.deltaZ + " " + evt.deltaMode);
+      if (!evt.ctrlKey) {
+      } else if (evt.deltaY < 0) {
+        this.zoomIn();
+      } else if (evt.ctrlKey && evt.deltaY > 0) {
+        this.zoomOut();
       }
     });
     this.addEventListener("keydown", event => {
       let evt = event;
-      if (evt.ctrlKey && (evt.key === "+" || evt.key === "-")) {
+      if (!evt.ctrlKey) {
+      } else if (evt.key === "+") {
         evt.stopPropagation();
-        console.log(evt.key);
+        this.zoomIn();
+      } else if (evt.key === "-") {
+        evt.stopPropagation();
+        this.zoomOut();
       }
     });
-    this.create(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, new Color(0, 0, 0, 0), null);
+    this.create(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, new Color(0, 0, 0, 0));
     let image = document.createElement("img");
     image.onload = event => {
       this.chessboard = this.ctx.createPattern(image, "repeat");
@@ -54,17 +65,25 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Sets the status panel
+   *
+   * @param statusPanel The status panel
+   */
+   setStatusPanel(statusPanel) {
+    this.statusPanel = statusPanel;
+  }
+
+  /**
    * Creates a new project
    *
    * @param width The image width
    * @param height The image height
    * @param color The filling color
-   * @param statusPanel The status panel to show the progress
    */
-   create(width, height, color, statusPanel) {
+   create(width, height, color) {
     this.paper.reset();
     this.paper.addLayer(width, height, color, width, height);
-    this.afterCreate("", width, height, statusPanel);
+    this.afterCreate("", width, height);
     this.drawCanvas();
   }
 
@@ -72,36 +91,33 @@ class Z4Canvas extends JSComponent {
    * Creates a new project from an image file
    *
    * @param file The file
-   * @param statusPanel The status panel to show the progress
    */
-   createFromFile(file, statusPanel) {
+   createFromFile(file) {
     let fileReader = new FileReader();
-    fileReader.onload = event => this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), fileReader.result, statusPanel);
+    fileReader.onload = event => this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), fileReader.result);
     fileReader.readAsDataURL(file);
   }
 
   /**
    * Creates a new project from an image in the clipboard
-   *
-   * @param statusPanel The status panel to show the progress
    */
-   createFromClipboard(statusPanel) {
+   createFromClipboard() {
     navigator.clipboard.read().then(items => {
       items.forEach(item => {
         let imageType = item.types.find((type, index, array) => type.startsWith("image/"));
         item.getType(imageType).then(blob => {
-          this.createFromURL("", URL.createObjectURL(blob), statusPanel);
+          this.createFromURL("", URL.createObjectURL(blob));
         });
       });
     });
   }
 
-   createFromURL(projectName, url, statusPanel) {
+   createFromURL(projectName, url) {
     let image = document.createElement("img");
     image.onload = event => {
       this.paper.reset();
       this.paper.addLayerFromImage(image, image.width, image.height);
-      this.afterCreate(projectName, image.width, image.height, statusPanel);
+      this.afterCreate(projectName, image.width, image.height);
       this.drawCanvas();
       return null;
     };
@@ -109,10 +125,10 @@ class Z4Canvas extends JSComponent {
     return null;
   }
 
-   afterCreate(projectName, width, height, statusPanel) {
+   afterCreate(projectName, width, height) {
     this.projectName = projectName;
-    if (statusPanel) {
-      statusPanel.setProjectName(projectName);
+    if (this.statusPanel) {
+      this.statusPanel.setProjectName(projectName);
     }
     this.width = width;
     this.height = height;
@@ -126,30 +142,29 @@ class Z4Canvas extends JSComponent {
    * Opens a project
    *
    * @param file The file
-   * @param statusPanel The status panel to show the progress
    */
-   openProject(file, statusPanel) {
+   openProject(file) {
     new JSZip().loadAsync(file).then(zip => {
       zip.file("manifest.json").async("string", null).then(str => {
         this.paper.reset();
         let json = JSON.parse("" + str);
-        this.openLayer(zip, json, json["layers"], 0, statusPanel);
+        this.openLayer(zip, json, json["layers"], 0);
       });
     });
   }
 
-   openLayer(zip, json, layers, index, statusPanel) {
-    zip.file("layers/layer" + index + ".png").async("blob", metadata => statusPanel.setProgressBarValue(metadata["percent"])).then(blob => {
+   openLayer(zip, json, layers, index) {
+    zip.file("layers/layer" + index + ".png").async("blob", metadata => this.statusPanel.setProgressBarValue(metadata["percent"])).then(blob => {
       let image = document.createElement("img");
-      statusPanel.setProgressBarValue(0);
+      this.statusPanel.setProgressBarValue(0);
       image.onload = event => {
         this.paper.addLayerFromImage(image, image.width, image.height);
         this.paper.getLayerAt(index).move(layers[index]["offsetX"], layers[index]["offsetY"]);
         if (index + 1 === layers.length) {
-          this.afterCreate(json["projectName"], json["width"], json["height"], statusPanel);
+          this.afterCreate(json["projectName"], json["width"], json["height"]);
           this.drawCanvas();
         } else {
-          this.openLayer(zip, json, layers, index + 1, statusPanel);
+          this.openLayer(zip, json, layers, index + 1);
         }
         return null;
       };
@@ -161,16 +176,15 @@ class Z4Canvas extends JSComponent {
    * Saves the project
    *
    * @param projectName The project name
-   * @param statusPanel The status panel to show the progress
    * @param apply The function to call after saving
    */
-   saveProject(projectName, statusPanel, apply) {
+   saveProject(projectName, apply) {
     this.projectName = projectName;
-    statusPanel.setProjectName(projectName);
-    this.saveLayer(new JSZip(), new Array(), 0, statusPanel, apply);
+    this.statusPanel.setProjectName(projectName);
+    this.saveLayer(new JSZip(), new Array(), 0, apply);
   }
 
-   saveLayer(zip, layers, index, statusPanel, apply) {
+   saveLayer(zip, layers, index, apply) {
     let layer = this.paper.getLayerAt(index);
     layer.convertToBlob(blob => {
       zip.file("layers/layer" + index + ".png", blob, null);
@@ -186,16 +200,16 @@ class Z4Canvas extends JSComponent {
         let compressionOptions = new Object();
         compressionOptions["level"] = 9;
         options["compressionOptions"] = compressionOptions;
-        zip.generateAsync(options, metadata => statusPanel.setProgressBarValue(metadata["percent"])).then(zipped => {
+        zip.generateAsync(options, metadata => this.statusPanel.setProgressBarValue(metadata["percent"])).then(zipped => {
           saveAs(zipped, this.projectName + ".z4i");
-          statusPanel.setProgressBarValue(0);
+          this.statusPanel.setProgressBarValue(0);
           this.saved = true;
           if (apply) {
             apply();
           }
         });
       } else {
-        this.saveLayer(zip, layers, index + 1, statusPanel, apply);
+        this.saveLayer(zip, layers, index + 1, apply);
       }
     });
   }
@@ -296,6 +310,36 @@ class Z4Canvas extends JSComponent {
    */
    isSaved() {
     return this.saved;
+  }
+
+   zoomIn() {
+    if (this.zooming) {
+    } else {
+      this.zooming = true;
+      let newZoom = Z4Constants.ZOOM_LEVEL.find(level => level > this.zoom, null);
+      if (newZoom) {
+        this.zoom = newZoom;
+        this.canvas.width = this.width * newZoom;
+        this.canvas.height = this.height * newZoom;
+        this.drawCanvas();
+      }
+      this.zooming = false;
+    }
+  }
+
+   zoomOut() {
+    if (this.zooming) {
+    } else {
+      this.zooming = true;
+      let newZoom = Z4Constants.ZOOM_LEVEL.filter(level => level < this.zoom).pop();
+      if (newZoom) {
+        this.zoom = newZoom;
+        this.canvas.width = this.width * newZoom;
+        this.canvas.height = this.height * newZoom;
+        this.drawCanvas();
+      }
+      this.zooming = false;
+    }
   }
 
    drawCanvas() {

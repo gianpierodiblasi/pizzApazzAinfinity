@@ -129,21 +129,21 @@ class Z4RibbonFilePanel extends JSPanel {
     }, () => true, response => {
       if (response === JSOptionPane.OK_OPTION) {
         let size = panel.getSelectedSize();
-        this.canvas.create(size.width, size.height, panel.getSelectedColor(), this.statusPanel);
+        this.canvas.create(size.width, size.height, panel.getSelectedColor());
       }
     });
   }
 
    createFromFile() {
-    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.createFromFile(file, this.statusPanel)));
+    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.createFromFile(file)));
   }
 
    createFromClipboard() {
-    this.canvas.createFromClipboard(this.statusPanel);
+    this.canvas.createFromClipboard();
   }
 
    openProject() {
-    JSFileChooser.showOpenDialog(".z4i", JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.openProject(file, this.statusPanel)));
+    JSFileChooser.showOpenDialog(".z4i", JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.openProject(file)));
   }
 
    saveProject(apply) {
@@ -157,7 +157,7 @@ class Z4RibbonFilePanel extends JSPanel {
     panel.add(projectName, BorderLayout.CENTER);
     JSOptionPane.showInputDialog(panel, Z4Translations.SAVE, listener => projectName.addActionListener(event => listener(new ChangeEvent())), () => !!(projectName.getText()), response => {
       if (response === JSOptionPane.OK_OPTION) {
-        this.canvas.saveProject(projectName.getText(), this.statusPanel, apply);
+        this.canvas.saveProject(projectName.getText(), apply);
       }
     });
   }

@@ -5,6 +5,8 @@
  */
 class Z4StatusPanel extends JSPanel {
 
+   canvas = null;
+
    projectName = new JSLabel();
 
    progressBar = new JSProgressBar();
@@ -36,6 +38,15 @@ class Z4StatusPanel extends JSPanel {
     constraints.gridx = gridx;
     constraints.gridy = 0;
     this.add(label, constraints);
+  }
+
+  /**
+   * Sets the canvas to manage
+   *
+   * @param canvas The canvas
+   */
+   setCanvas(canvas) {
+    this.canvas = canvas;
   }
 
   /**

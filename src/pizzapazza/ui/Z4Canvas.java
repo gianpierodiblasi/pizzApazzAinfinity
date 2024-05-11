@@ -5,7 +5,6 @@ import def.dom.CanvasPattern;
 import def.dom.Event;
 import def.dom.File;
 import def.dom.FileReader;
-import static def.dom.Globals.console;
 import static def.dom.Globals.document;
 import def.dom.HTMLElement;
 import def.dom.KeyboardEvent;
@@ -49,6 +48,7 @@ public class Z4Canvas extends JSComponent {
   private int width;
   private int height;
   private double zoom = 1;
+  private boolean zooming;
   private boolean saved = true;
 
   private final Z4Paper paper = new Z4Paper();
@@ -64,15 +64,22 @@ public class Z4Canvas extends JSComponent {
 
     this.addEventListener("wheel", event -> {
       WheelEvent evt = (WheelEvent) event;
-      if (evt.ctrlKey) {
-        console.log(evt.deltaX + " " + evt.deltaY + " " + evt.deltaZ + " " + evt.deltaMode);
+      if (!evt.ctrlKey) {
+      } else if (evt.deltaY < 0) {
+        this.zoomIn();
+      } else if (evt.ctrlKey && evt.deltaY > 0) {
+        this.zoomOut();
       }
     });
     this.addEventListener("keydown", event -> {
       KeyboardEvent evt = (KeyboardEvent) event;
-      if (evt.ctrlKey && (evt.key == "+" || evt.key == "-")) {
+      if (!evt.ctrlKey) {
+      } else if (evt.key == "+") {
         evt.stopPropagation();
-        console.log(evt.key);
+        this.zoomIn();
+      } else if (evt.key == "-") {
+        evt.stopPropagation();
+        this.zoomOut();
       }
     });
 
@@ -369,6 +376,36 @@ public class Z4Canvas extends JSComponent {
    */
   public boolean isSaved() {
     return this.saved;
+  }
+
+  private void zoomIn() {
+    if (this.zooming) {
+    } else {
+      this.zooming = true;
+      double newZoom = Z4Constants.ZOOM_LEVEL.find(level -> level > this.zoom, null);
+      if ($exists(newZoom)) {
+        this.zoom = newZoom;
+        this.canvas.width = this.width * newZoom;
+        this.canvas.height = this.height * newZoom;
+        this.drawCanvas();
+      }
+      this.zooming = false;
+    }
+  }
+
+  private void zoomOut() {
+    if (this.zooming) {
+    } else {
+      this.zooming = true;
+      double newZoom = Z4Constants.ZOOM_LEVEL.filter(level -> level < this.zoom).pop();
+      if ($exists(newZoom)) {
+        this.zoom = newZoom;
+        this.canvas.width = this.width * newZoom;
+        this.canvas.height = this.height * newZoom;
+        this.drawCanvas();
+      }
+      this.zooming = false;
+    }
   }
 
   private void drawCanvas() {
