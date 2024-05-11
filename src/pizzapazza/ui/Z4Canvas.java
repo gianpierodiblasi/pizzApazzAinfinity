@@ -43,6 +43,8 @@ public class Z4Canvas extends JSComponent {
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
   private Union4<String, CanvasGradient, CanvasPattern, Object> chessboard;
 
+  private Z4StatusPanel statusPanel;
+
   private String projectName;
   private int width;
   private int height;
@@ -74,7 +76,7 @@ public class Z4Canvas extends JSComponent {
       }
     });
 
-    this.create(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, new Color(0, 0, 0, 0), null);
+    this.create(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, new Color(0, 0, 0, 0));
 
     $Image image = ($Image) document.createElement("img");
     image.onload = event -> {
@@ -86,17 +88,25 @@ public class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Sets the status panel
+   *
+   * @param statusPanel The status panel
+   */
+  public void setStatusPanel(Z4StatusPanel statusPanel) {
+    this.statusPanel = statusPanel;
+  }
+
+  /**
    * Creates a new project
    *
    * @param width The image width
    * @param height The image height
    * @param color The filling color
-   * @param statusPanel The status panel to show the progress
    */
-  public void create(int width, int height, Color color, Z4StatusPanel statusPanel) {
+  public void create(int width, int height, Color color) {
     this.paper.reset();
     this.paper.addLayer(width, height, color, width, height);
-    this.afterCreate("", width, height, statusPanel);
+    this.afterCreate("", width, height);
     this.drawCanvas();
   }
 
@@ -104,38 +114,35 @@ public class Z4Canvas extends JSComponent {
    * Creates a new project from an image file
    *
    * @param file The file
-   * @param statusPanel The status panel to show the progress
    */
-  public void createFromFile(File file, Z4StatusPanel statusPanel) {
+  public void createFromFile(File file) {
     FileReader fileReader = new FileReader();
-    fileReader.onload = event -> this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), (String) fileReader.result, statusPanel);
+    fileReader.onload = event -> this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), (String) fileReader.result);
     fileReader.readAsDataURL(file);
   }
 
   /**
    * Creates a new project from an image in the clipboard
-   *
-   * @param statusPanel The status panel to show the progress
    */
-  public void createFromClipboard(Z4StatusPanel statusPanel) {
+  public void createFromClipboard() {
     navigator.clipboard.read().then(items -> {
       items.forEach(item -> {
         String imageType = item.types.find((type, index, array) -> type.startsWith("image/"));
 
         item.getType(imageType).then(blob -> {
-          this.createFromURL("", URL.createObjectURL(blob), statusPanel);
+          this.createFromURL("", URL.createObjectURL(blob));
         });
       });
     });
   }
 
-  private Object createFromURL(String projectName, String url, Z4StatusPanel statusPanel) {
+  private Object createFromURL(String projectName, String url) {
     $Image image = ($Image) document.createElement("img");
 
     image.onload = event -> {
       this.paper.reset();
       this.paper.addLayerFromImage(image, (int) image.width, (int) image.height);
-      this.afterCreate(projectName, (int) image.width, (int) image.height, statusPanel);
+      this.afterCreate(projectName, (int) image.width, (int) image.height);
       this.drawCanvas();
       return null;
     };
@@ -144,10 +151,10 @@ public class Z4Canvas extends JSComponent {
     return null;
   }
 
-  private void afterCreate(String projectName, int width, int height, Z4StatusPanel statusPanel) {
+  private void afterCreate(String projectName, int width, int height) {
     this.projectName = projectName;
-    if ($exists(statusPanel)) {
-      statusPanel.setProjectName(projectName);
+    if ($exists(this.statusPanel)) {
+      this.statusPanel.setProjectName(projectName);
     }
     this.width = width;
     this.height = height;
@@ -162,33 +169,32 @@ public class Z4Canvas extends JSComponent {
    * Opens a project
    *
    * @param file The file
-   * @param statusPanel The status panel to show the progress
    */
-  public void openProject(File file, Z4StatusPanel statusPanel) {
+  public void openProject(File file) {
     new $JSZip().loadAsync(file).then(zip -> {
       zip.file("manifest.json").async("string", null).then(str -> {
         this.paper.reset();
 
         $Object json = ($Object) JSON.parse("" + str);
-        this.openLayer(zip, json, json.$get("layers"), 0, statusPanel);
+        this.openLayer(zip, json, json.$get("layers"), 0);
       });
     });
   }
 
-  private void openLayer($JSZip zip, $Object json, Array<$Object> layers, int index, Z4StatusPanel statusPanel) {
-    zip.file("layers/layer" + index + ".png").async("blob", metadata -> statusPanel.setProgressBarValue(metadata.$get("percent"))).then(blob -> {
+  private void openLayer($JSZip zip, $Object json, Array<$Object> layers, int index) {
+    zip.file("layers/layer" + index + ".png").async("blob", metadata -> this.statusPanel.setProgressBarValue(metadata.$get("percent"))).then(blob -> {
       $Image image = ($Image) document.createElement("img");
-      statusPanel.setProgressBarValue(0);
+      this.statusPanel.setProgressBarValue(0);
 
       image.onload = event -> {
         this.paper.addLayerFromImage(image, (int) image.width, (int) image.height);
         this.paper.getLayerAt(index).move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
 
         if (index + 1 == layers.length) {
-          this.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"), statusPanel);
+          this.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
           this.drawCanvas();
         } else {
-          this.openLayer(zip, json, layers, index + 1, statusPanel);
+          this.openLayer(zip, json, layers, index + 1);
         }
         return null;
       };
@@ -201,17 +207,16 @@ public class Z4Canvas extends JSComponent {
    * Saves the project
    *
    * @param projectName The project name
-   * @param statusPanel The status panel to show the progress
    * @param apply The function to call after saving
    */
-  public void saveProject(String projectName, Z4StatusPanel statusPanel, $Apply_0_Void apply) {
+  public void saveProject(String projectName, $Apply_0_Void apply) {
     this.projectName = projectName;
-    statusPanel.setProjectName(projectName);
+    this.statusPanel.setProjectName(projectName);
 
-    this.saveLayer(new $JSZip(), new Array<>(), 0, statusPanel, apply);
+    this.saveLayer(new $JSZip(), new Array<>(), 0, apply);
   }
 
-  private void saveLayer($JSZip zip, Array<String> layers, int index, Z4StatusPanel statusPanel, $Apply_0_Void apply) {
+  private void saveLayer($JSZip zip, Array<String> layers, int index, $Apply_0_Void apply) {
     Z4Layer layer = this.paper.getLayerAt(index);
 
     layer.convertToBlob(blob -> {
@@ -244,9 +249,9 @@ public class Z4Canvas extends JSComponent {
         compressionOptions.$set("level", 9);
         options.$set("compressionOptions", compressionOptions);
 
-        zip.generateAsync(options, metadata -> statusPanel.setProgressBarValue(metadata.$get("percent"))).then(zipped -> {
+        zip.generateAsync(options, metadata -> this.statusPanel.setProgressBarValue(metadata.$get("percent"))).then(zipped -> {
           saveAs(zipped, this.projectName + ".z4i");
-          statusPanel.setProgressBarValue(0);
+          this.statusPanel.setProgressBarValue(0);
           this.saved = true;
 
           if ($exists(apply)) {
@@ -254,7 +259,7 @@ public class Z4Canvas extends JSComponent {
           }
         });
       } else {
-        this.saveLayer(zip, layers, index + 1, statusPanel, apply);
+        this.saveLayer(zip, layers, index + 1, apply);
       }
     });
   }

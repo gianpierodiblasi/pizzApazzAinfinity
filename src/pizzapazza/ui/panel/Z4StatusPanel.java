@@ -5,6 +5,7 @@ import javascript.awt.GridBagLayout;
 import javascript.swing.JSLabel;
 import javascript.swing.JSPanel;
 import javascript.swing.JSProgressBar;
+import pizzapazza.ui.Z4Canvas;
 import pizzapazza.util.Z4Translations;
 
 /**
@@ -14,6 +15,8 @@ import pizzapazza.util.Z4Translations;
  */
 public class Z4StatusPanel extends JSPanel {
 
+  private Z4Canvas canvas;
+  
   private final JSLabel projectName = new JSLabel();
   private final JSProgressBar progressBar = new JSProgressBar();
 
@@ -49,6 +52,15 @@ public class Z4StatusPanel extends JSPanel {
     this.add(label, constraints);
   }
 
+  /**
+   * Sets the canvas to manage
+   *
+   * @param canvas The canvas
+   */
+  public void setCanvas(Z4Canvas canvas) {
+    this.canvas = canvas;
+  }
+  
   /**
    * Sets the project name
    *

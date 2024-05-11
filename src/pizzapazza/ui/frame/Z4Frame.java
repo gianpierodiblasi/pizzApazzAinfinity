@@ -27,6 +27,8 @@ public class Z4Frame extends JSFrame {
 
     this.ribbon.setCanvas(this.canvas);
     this.ribbon.setStatusPanel(this.statusPanel);
+    this.canvas.setStatusPanel(this.statusPanel);
+    this.statusPanel.setCanvas(canvas);
 
     this.getContentPane().add(this.ribbon, BorderLayout.NORTH);
     this.getContentPane().add(this.canvas, BorderLayout.CENTER);
