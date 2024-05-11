@@ -9,6 +9,7 @@ import static def.dom.Globals.document;
 import def.dom.HTMLElement;
 import def.dom.URL;
 import def.js.Array;
+import def.js.JSON;
 import javascript.awt.Color;
 import javascript.awt.Dimension;
 import javascript.awt.Point;
@@ -45,7 +46,6 @@ public class Z4Canvas extends JSComponent {
 
   private String projectName;
   private boolean saved = true;
-  private int savingCounter = 0;
 
   private final Z4Paper paper = new Z4Paper();
 
@@ -143,6 +143,46 @@ public class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Opens a project
+   *
+   * @param file The file
+   * @param statusPanel The status panel to show the progress
+   */
+  public void openProject(File file, Z4StatusPanel statusPanel) {
+    new $JSZip().loadAsync(file).then(zip -> {
+      zip.file("manifest.json").async("string", null).then(str -> {
+        this.paper.reset();
+
+        $Object json = ($Object) JSON.parse("" + str);
+        this.openLayer(zip, json, json.$get("layers"), 0, statusPanel);
+      });
+    });
+  }
+
+  private void openLayer($JSZip zip, $Object json, Array<$Object> layers, int index, Z4StatusPanel statusPanel) {
+    zip.file("layers/layer" + index + ".png").async("blob", metadata -> statusPanel.setProgressBarValue(metadata.$get("percent"))).then(blob -> {
+      $Image image = ($Image) document.createElement("img");
+      statusPanel.setProgressBarValue(0);
+
+      image.onload = event -> {
+        this.paper.addLayerFromImage(image, (int) image.width, (int) image.height);
+        Z4Layer layer = this.paper.getLayerAt(index);
+        layer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
+
+        if (index + 1 == layers.length) {
+          this.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"), statusPanel);
+          this.drawCanvas();
+        } else {
+          this.openLayer(zip, json, layers, index + 1, statusPanel);
+        }
+        return null;
+      };
+
+      image.src = URL.createObjectURL(blob);
+    });
+  }
+
+  /**
    * Saves the project
    *
    * @param projectName The project name
@@ -150,58 +190,58 @@ public class Z4Canvas extends JSComponent {
    * @param apply The function to call after saving
    */
   public void saveProject(String projectName, Z4StatusPanel statusPanel, $Apply_0_Void apply) {
-    $JSZip zip = new $JSZip();
-
     this.projectName = projectName;
     statusPanel.setProjectName(projectName);
-    this.savingCounter = 0;
 
-    final Array<String> layers = new Array<>();
-    for (int index = 0; index < this.paper.getLayersCount(); index++) {
-      final int idx = index;
-      final Z4Layer layer = this.paper.getLayerAt(idx);
+    this.saveLayer(new $JSZip(), new Array<>(), 0, statusPanel, apply);
+  }
 
-      layer.convertToBlob(blob -> {
-        Point offset = layer.getOffset();
-        layers.push(
-                "{"
-                + "\"offsetX\": " + offset.x + ","
-                + "\"offsetY\": " + offset.y
-                + "}"
-        );
+  private void saveLayer($JSZip zip, Array<String> layers, int index, Z4StatusPanel statusPanel, $Apply_0_Void apply) {
+    Z4Layer layer = this.paper.getLayerAt(index);
 
-        zip.file("layers/layer" + idx + ".png", blob, null);
-        this.savingCounter++;
+    layer.convertToBlob(blob -> {
+      Point offset = layer.getOffset();
+      layers.$set(index,
+              "{"
+              + "\"offsetX\": " + offset.x + ","
+              + "\"offsetY\": " + offset.y
+              + "}"
+      );
 
-        if (this.savingCounter == this.paper.getLayersCount()) {
-          String manifest
-                  = "{"
-                  + "\"projectName\": \"" + this.projectName + "\",\n"
-                  + "\"layers\": [" + layers.join(",") + "]"
-                  + "}";
-          zip.file("manifest.json", manifest, null);
+      zip.file("layers/layer" + index + ".png", blob, null);
 
-          $Object options = new $Object();
-          options.$set("type", "blob");
-          options.$set("compression", "DEFLATE");
-          options.$set("streamFiles", true);
+      if (index + 1 == this.paper.getLayersCount()) {
+        String manifest
+                = "{"
+                + "\"projectName\": \"" + this.projectName + "\",\n"
+                + "\"width\": " + this.canvas.width + ",\n"
+                + "\"height\": " + this.canvas.height + ",\n"
+                + "\"layers\": [" + layers.join(",") + "]"
+                + "}";
+        zip.file("manifest.json", manifest, null);
 
-          $Object compressionOptions = new $Object();
-          compressionOptions.$set("level", 9);
-          options.$set("compressionOptions", compressionOptions);
+        $Object options = new $Object();
+        options.$set("type", "blob");
+        options.$set("compression", "DEFLATE");
+        options.$set("streamFiles", true);
 
-          zip.generateAsync(options, metadata -> statusPanel.setProgressBarValue(metadata.$get("percent"))).then(zipped -> {
-            saveAs(zipped, this.projectName + ".z4i");
-            statusPanel.setProgressBarValue(0);
-            this.saved = true;
+        $Object compressionOptions = new $Object();
+        compressionOptions.$set("level", 9);
+        options.$set("compressionOptions", compressionOptions);
 
-            if ($exists(apply)) {
-              apply.$apply();
-            }
-          });
-        }
-      });
-    }
+        zip.generateAsync(options, metadata -> statusPanel.setProgressBarValue(metadata.$get("percent"))).then(zipped -> {
+          saveAs(zipped, this.projectName + ".z4i");
+          statusPanel.setProgressBarValue(0);
+          this.saved = true;
+
+          if ($exists(apply)) {
+            apply.$apply();
+          }
+        });
+      } else {
+        this.saveLayer(zip, layers, index + 1, statusPanel, apply);
+      }
+    });
   }
 
   /**

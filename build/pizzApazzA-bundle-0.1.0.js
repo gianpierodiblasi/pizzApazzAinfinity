@@ -118,8 +118,7 @@ class Z4RibbonFilePanel extends JSPanel {
     this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event => this.checkSaved(Z4Translations.FROM_FILE, () => this.createFromFile()));
     this.addVLine(3, 0);
     this.addLabel(Z4Translations.OPEN, 4, 1);
-    this.addButton(Z4Translations.OPEN_PROJECT, true, 4, 1, "", event => this.checkSaved(Z4Translations.OPEN_PROJECT, () => {
-    }));
+    this.addButton(Z4Translations.OPEN_PROJECT, true, 4, 1, "", event => this.checkSaved(Z4Translations.OPEN_PROJECT, () => this.openProject()));
     this.addVLine(5, 0);
     this.addLabel(Z4Translations.SAVE, 6, 2);
     this.addButton(Z4Translations.SAVE_PROJECT, true, 6, 1, "left", event => this.saveProject(null));
@@ -237,6 +236,10 @@ class Z4RibbonFilePanel extends JSPanel {
 
    createFromClipboard() {
     this.canvas.createFromClipboard(this.statusPanel);
+  }
+
+   openProject() {
+    JSFileChooser.showOpenDialog(".z4i", JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.openProject(file, this.statusPanel)));
   }
 
    saveProject(apply) {
@@ -813,7 +816,7 @@ class Z4StatusPanel extends JSPanel {
 
    addPipe(gridx) {
     let pipe = new JSLabel();
-    pipe.setText("|");
+    pipe.setText(" | ");
     this.setLabel(pipe, gridx);
   }
 
@@ -904,8 +907,6 @@ class Z4Canvas extends JSComponent {
 
    saved = true;
 
-   savingCounter = 0;
-
    paper = new Z4Paper();
 
   /**
@@ -994,6 +995,42 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Opens a project
+   *
+   * @param file The file
+   * @param statusPanel The status panel to show the progress
+   */
+   openProject(file, statusPanel) {
+    new JSZip().loadAsync(file).then(zip => {
+      zip.file("manifest.json").async("string", null).then(str => {
+        this.paper.reset();
+        let json = JSON.parse("" + str);
+        this.openLayer(zip, json, json["layers"], 0, statusPanel);
+      });
+    });
+  }
+
+   openLayer(zip, json, layers, index, statusPanel) {
+    zip.file("layers/layer" + index + ".png").async("blob", metadata => statusPanel.setProgressBarValue(metadata["percent"])).then(blob => {
+      let image = document.createElement("img");
+      statusPanel.setProgressBarValue(0);
+      image.onload = event => {
+        this.paper.addLayerFromImage(image, image.width, image.height);
+        let layer = this.paper.getLayerAt(index);
+        layer.move(layers[index]["offsetX"], layers[index]["offsetY"]);
+        if (index + 1 === layers.length) {
+          this.afterCreate(json["projectName"], json["width"], json["height"], statusPanel);
+          this.drawCanvas();
+        } else {
+          this.openLayer(zip, json, layers, index + 1, statusPanel);
+        }
+        return null;
+      };
+      image.src = URL.createObjectURL(blob);
+    });
+  }
+
+  /**
    * Saves the project
    *
    * @param projectName The project name
@@ -1001,40 +1038,39 @@ class Z4Canvas extends JSComponent {
    * @param apply The function to call after saving
    */
    saveProject(projectName, statusPanel, apply) {
-    let zip = new JSZip();
     this.projectName = projectName;
     statusPanel.setProjectName(projectName);
-    this.savingCounter = 0;
-    let layers = new Array();
-    for (let index = 0; index < this.paper.getLayersCount(); index++) {
-      let idx = index;
-      let layer = this.paper.getLayerAt(idx);
-      layer.convertToBlob(blob => {
-        let offset = layer.getOffset();
-        layers.push("{" + "\"offsetX\": " + offset.x + "," + "\"offsetY\": " + offset.y + "}");
-        zip.file("layers/layer" + idx + ".png", blob, null);
-        this.savingCounter++;
-        if (this.savingCounter === this.paper.getLayersCount()) {
-          let manifest = "{" + "\"projectName\": \"" + this.projectName + "\",\n" + "\"layers\": [" + layers.join(",") + "]" + "}";
-          zip.file("manifest.json", manifest, null);
-          let options = new Object();
-          options["type"] = "blob";
-          options["compression"] = "DEFLATE";
-          options["streamFiles"] = true;
-          let compressionOptions = new Object();
-          compressionOptions["level"] = 9;
-          options["compressionOptions"] = compressionOptions;
-          zip.generateAsync(options, metadata => statusPanel.setProgressBarValue(metadata["percent"])).then(zipped => {
-            saveAs(zipped, this.projectName + ".z4i");
-            statusPanel.setProgressBarValue(0);
-            this.saved = true;
-            if (apply) {
-              apply();
-            }
-          });
-        }
-      });
-    }
+    this.saveLayer(new JSZip(), new Array(), 0, statusPanel, apply);
+  }
+
+   saveLayer(zip, layers, index, statusPanel, apply) {
+    let layer = this.paper.getLayerAt(index);
+    layer.convertToBlob(blob => {
+      let offset = layer.getOffset();
+      layers[index] = "{" + "\"offsetX\": " + offset.x + "," + "\"offsetY\": " + offset.y + "}";
+      zip.file("layers/layer" + index + ".png", blob, null);
+      if (index + 1 === this.paper.getLayersCount()) {
+        let manifest = "{" + "\"projectName\": \"" + this.projectName + "\",\n" + "\"width\": " + this.canvas.width + ",\n" + "\"height\": " + this.canvas.height + ",\n" + "\"layers\": [" + layers.join(",") + "]" + "}";
+        zip.file("manifest.json", manifest, null);
+        let options = new Object();
+        options["type"] = "blob";
+        options["compression"] = "DEFLATE";
+        options["streamFiles"] = true;
+        let compressionOptions = new Object();
+        compressionOptions["level"] = 9;
+        options["compressionOptions"] = compressionOptions;
+        zip.generateAsync(options, metadata => statusPanel.setProgressBarValue(metadata["percent"])).then(zipped => {
+          saveAs(zipped, this.projectName + ".z4i");
+          statusPanel.setProgressBarValue(0);
+          this.saved = true;
+          if (apply) {
+            apply();
+          }
+        });
+      } else {
+        this.saveLayer(zip, layers, index + 1, statusPanel, apply);
+      }
+    });
   }
 
   /**

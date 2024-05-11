@@ -52,8 +52,7 @@ public class Z4RibbonFilePanel extends JSPanel {
 
     this.addLabel(Z4Translations.OPEN, 4, 1);
 
-    this.addButton(Z4Translations.OPEN_PROJECT, true, 4, 1, "", event -> this.checkSaved(Z4Translations.OPEN_PROJECT, () -> {
-    }));
+    this.addButton(Z4Translations.OPEN_PROJECT, true, 4, 1, "", event -> this.checkSaved(Z4Translations.OPEN_PROJECT, () -> this.openProject()));
     this.addVLine(5, 0);
 
     this.addLabel(Z4Translations.SAVE, 6, 2);
@@ -177,6 +176,10 @@ public class Z4RibbonFilePanel extends JSPanel {
 
   private void createFromClipboard() {
     this.canvas.createFromClipboard(this.statusPanel);
+  }
+
+  private void openProject() {
+    JSFileChooser.showOpenDialog(".z4i", JSFileChooser.SINGLE_SELECTION, 0, files -> files.forEach(file -> this.canvas.openProject(file, this.statusPanel)));
   }
 
   private void saveProject($Apply_0_Void apply) {
