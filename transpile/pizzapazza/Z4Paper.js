@@ -58,25 +58,6 @@ class Z4Paper {
   }
 
   /**
-   * Shifts all the layers
-   *
-   * @param shiftX The X shift
-   * @param shiftY The Y shift
-   */
-   shift(shiftX, shiftY) {
-    this.layers.forEach(layer => layer.shift(shiftX, shiftY));
-  }
-
-  /**
-   * Returns the paper size, given by the max width and max height of the layers
-   *
-   * @return The paper size
-   */
-   getSize() {
-    return this.layers.map(layer => layer.getSize()).reduce((accumulator, currentValue, index, array) => accumulator ? new Dimension(Math.max(accumulator.width, currentValue.width), Math.max(accumulator.height, currentValue.height)) : currentValue);
-  }
-
-  /**
    * Draws this paper
    *
    * @param ctx The context used to draw the paper

@@ -1,6 +1,19 @@
 /* global Translations, Z4Translations, SwingJS */
 
 window.onload = event => {
+  window.addEventListener("wheel", event => {
+    if (event.ctrlKey) {
+      event.preventDefault();
+    }
+  }, {passive: false});
+
+  window.addEventListener("keydown", event => {
+    if (event.ctrlKey && (event.key === "+" || event.key === "-")) {
+      event.preventDefault();
+      document.querySelector(".z4canvas").dispatchEvent(new event.constructor(event.type, event));
+    }
+  });
+
   switch (localStorage.getItem("z4language")) {
     case "en":
       Translations.setEnglish();
@@ -28,6 +41,6 @@ window.onload = event => {
   if (color) {
     SwingJS.instance().mainActionBGColor(color).build();
   }
-  
+
   new Z4Frame();
 };

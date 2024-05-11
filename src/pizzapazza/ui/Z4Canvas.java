@@ -5,13 +5,15 @@ import def.dom.CanvasPattern;
 import def.dom.Event;
 import def.dom.File;
 import def.dom.FileReader;
+import static def.dom.Globals.console;
 import static def.dom.Globals.document;
 import def.dom.HTMLElement;
+import def.dom.KeyboardEvent;
 import def.dom.URL;
+import def.dom.WheelEvent;
 import def.js.Array;
 import def.js.JSON;
 import javascript.awt.Color;
-import javascript.awt.Dimension;
 import javascript.awt.Point;
 import javascript.swing.JSComponent;
 import jsweet.util.union.Union4;
@@ -28,7 +30,6 @@ import simulation.js.$Apply_0_Void;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.navigator;
 import simulation.js.$Object;
-import simulation.js.$ResizeObserver;
 import simulation.jszip.$JSZip;
 
 /**
@@ -42,9 +43,10 @@ public class Z4Canvas extends JSComponent {
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
   private Union4<String, CanvasGradient, CanvasPattern, Object> chessboard;
 
-  private final $ResizeObserver resizeObserver = new $ResizeObserver(() -> this.drawCanvas());
-
   private String projectName;
+  private int width;
+  private int height;
+  private double zoom = 1;
   private boolean saved = true;
 
   private final Z4Paper paper = new Z4Paper();
@@ -52,18 +54,27 @@ public class Z4Canvas extends JSComponent {
   /**
    * Creates the object
    */
+  @SuppressWarnings("StringEquality")
   public Z4Canvas() {
     super(document.createElement("div"));
     this.cssAddClass("z4canvas");
-
-    this.resizeObserver.observe(this.canvas);
-
-    this.canvas.width = Z4Constants.DEFAULT_IMAGE_SIZE;
-    this.canvas.height = Z4Constants.DEFAULT_IMAGE_SIZE;
     this.appendNodeChild(this.canvas);
 
-    this.addLayer(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, new Color(0, 0, 0, 0));
-    this.saved = true;
+    this.addEventListener("wheel", event -> {
+      WheelEvent evt = (WheelEvent) event;
+      if (evt.ctrlKey) {
+        console.log(evt.deltaX + " " + evt.deltaY + " " + evt.deltaZ + " " + evt.deltaMode);
+      }
+    });
+    this.addEventListener("keydown", event -> {
+      KeyboardEvent evt = (KeyboardEvent) event;
+      if (evt.ctrlKey && (evt.key == "+" || evt.key == "-")) {
+        evt.stopPropagation();
+        console.log(evt.key);
+      }
+    });
+
+    this.create(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, new Color(0, 0, 0, 0), null);
 
     $Image image = ($Image) document.createElement("img");
     image.onload = event -> {
@@ -124,7 +135,7 @@ public class Z4Canvas extends JSComponent {
     image.onload = event -> {
       this.paper.reset();
       this.paper.addLayerFromImage(image, (int) image.width, (int) image.height);
-      this.afterCreate(projectName, image.width, image.height, statusPanel);
+      this.afterCreate(projectName, (int) image.width, (int) image.height, statusPanel);
       this.drawCanvas();
       return null;
     };
@@ -133,9 +144,14 @@ public class Z4Canvas extends JSComponent {
     return null;
   }
 
-  private void afterCreate(String projectName, double width, double height, Z4StatusPanel statusPanel) {
+  private void afterCreate(String projectName, int width, int height, Z4StatusPanel statusPanel) {
     this.projectName = projectName;
-    statusPanel.setProjectName(projectName);
+    if ($exists(statusPanel)) {
+      statusPanel.setProjectName(projectName);
+    }
+    this.width = width;
+    this.height = height;
+    this.zoom = 1;
     this.saved = true;
 
     this.canvas.width = width;
@@ -213,8 +229,8 @@ public class Z4Canvas extends JSComponent {
         String manifest
                 = "{"
                 + "\"projectName\": \"" + this.projectName + "\",\n"
-                + "\"width\": " + this.canvas.width + ",\n"
-                + "\"height\": " + this.canvas.height + ",\n"
+                + "\"width\": " + this.width + ",\n"
+                + "\"height\": " + this.height + ",\n"
                 + "\"layers\": [" + layers.join(",") + "]"
                 + "}";
         zip.file("manifest.json", manifest, null);
@@ -252,7 +268,7 @@ public class Z4Canvas extends JSComponent {
    */
   @SuppressWarnings("StringEquality")
   public void exportToFile(String filename, String ext, double quality) {
-    $OffscreenCanvas offscreen = new $OffscreenCanvas(this.canvas.width, this.canvas.height);
+    $OffscreenCanvas offscreen = new $OffscreenCanvas(this.width, this.height);
     $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
     this.paper.draw(offscreenCtx);
 
@@ -283,7 +299,7 @@ public class Z4Canvas extends JSComponent {
    * @param color The filling color
    */
   public void addLayer(int width, int height, Color color) {
-    this.paper.addLayer(width, height, color, (int) this.canvas.width, (int) this.canvas.height);
+    this.paper.addLayer(width, height, color, this.width, this.height);
     this.afterAddLayer();
     this.drawCanvas();
   }
@@ -318,7 +334,7 @@ public class Z4Canvas extends JSComponent {
     $Image image = ($Image) document.createElement("img");
 
     image.onload = event -> {
-      this.paper.addLayerFromImage(image, (int) this.canvas.width, (int) this.canvas.height);
+      this.paper.addLayerFromImage(image, this.width, this.height);
       this.afterAddLayer();
       this.drawCanvas();
       return null;
@@ -329,15 +345,7 @@ public class Z4Canvas extends JSComponent {
   }
 
   private void afterAddLayer() {
-    Dimension dimension = this.paper.getSize();
-    int shiftX = (int) (dimension.width - this.canvas.width) / 2;
-    int shiftY = (int) (dimension.height - this.canvas.height) / 2;
-    this.paper.shift(shiftX, shiftY);
-
     this.saved = false;
-
-    this.canvas.width = dimension.width;
-    this.canvas.height = dimension.height;
   }
 
   /**
@@ -349,12 +357,6 @@ public class Z4Canvas extends JSComponent {
     return this.projectName;
   }
 
-//  /**
-//   * Sets this canvas as saved
-//   */
-//  public void setSaved() {
-//    this.saved = true;
-//  }
   /**
    * Checks if this canvas is saved
    *
@@ -366,10 +368,10 @@ public class Z4Canvas extends JSComponent {
 
   private void drawCanvas() {
     this.ctx.save();
+    this.ctx.scale(this.zoom, this.zoom);
     this.ctx.fillStyle = this.chessboard;
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.restore();
-
+    this.ctx.fillRect(0, 0, this.width, this.height);
     this.paper.draw(this.ctx);
+    this.ctx.restore();
   }
 }

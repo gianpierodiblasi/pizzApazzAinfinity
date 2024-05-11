@@ -11,9 +11,13 @@ class Z4Canvas extends JSComponent {
 
    chessboard = null;
 
-   resizeObserver = new ResizeObserver(() => this.drawCanvas());
-
    projectName = null;
+
+   width = 0;
+
+   height = 0;
+
+   zoom = 1;
 
    saved = true;
 
@@ -25,12 +29,21 @@ class Z4Canvas extends JSComponent {
   constructor() {
     super(document.createElement("div"));
     this.cssAddClass("z4canvas");
-    this.resizeObserver.observe(this.canvas);
-    this.canvas.width = Z4Constants.DEFAULT_IMAGE_SIZE;
-    this.canvas.height = Z4Constants.DEFAULT_IMAGE_SIZE;
     this.appendNodeChild(this.canvas);
-    this.addLayer(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, new Color(0, 0, 0, 0));
-    this.saved = true;
+    this.addEventListener("wheel", event => {
+      let evt = event;
+      if (evt.ctrlKey) {
+        console.log(evt.deltaX + " " + evt.deltaY + " " + evt.deltaZ + " " + evt.deltaMode);
+      }
+    });
+    this.addEventListener("keydown", event => {
+      let evt = event;
+      if (evt.ctrlKey && (evt.key === "+" || evt.key === "-")) {
+        evt.stopPropagation();
+        console.log(evt.key);
+      }
+    });
+    this.create(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, new Color(0, 0, 0, 0), null);
     let image = document.createElement("img");
     image.onload = event => {
       this.chessboard = this.ctx.createPattern(image, "repeat");
@@ -98,7 +111,12 @@ class Z4Canvas extends JSComponent {
 
    afterCreate(projectName, width, height, statusPanel) {
     this.projectName = projectName;
-    statusPanel.setProjectName(projectName);
+    if (statusPanel) {
+      statusPanel.setProjectName(projectName);
+    }
+    this.width = width;
+    this.height = height;
+    this.zoom = 1;
     this.saved = true;
     this.canvas.width = width;
     this.canvas.height = height;
@@ -126,8 +144,7 @@ class Z4Canvas extends JSComponent {
       statusPanel.setProgressBarValue(0);
       image.onload = event => {
         this.paper.addLayerFromImage(image, image.width, image.height);
-        let layer = this.paper.getLayerAt(index);
-        layer.move(layers[index]["offsetX"], layers[index]["offsetY"]);
+        this.paper.getLayerAt(index).move(layers[index]["offsetX"], layers[index]["offsetY"]);
         if (index + 1 === layers.length) {
           this.afterCreate(json["projectName"], json["width"], json["height"], statusPanel);
           this.drawCanvas();
@@ -156,11 +173,11 @@ class Z4Canvas extends JSComponent {
    saveLayer(zip, layers, index, statusPanel, apply) {
     let layer = this.paper.getLayerAt(index);
     layer.convertToBlob(blob => {
+      zip.file("layers/layer" + index + ".png", blob, null);
       let offset = layer.getOffset();
       layers[index] = "{" + "\"offsetX\": " + offset.x + "," + "\"offsetY\": " + offset.y + "}";
-      zip.file("layers/layer" + index + ".png", blob, null);
       if (index + 1 === this.paper.getLayersCount()) {
-        let manifest = "{" + "\"projectName\": \"" + this.projectName + "\",\n" + "\"width\": " + this.canvas.width + ",\n" + "\"height\": " + this.canvas.height + ",\n" + "\"layers\": [" + layers.join(",") + "]" + "}";
+        let manifest = "{" + "\"projectName\": \"" + this.projectName + "\",\n" + "\"width\": " + this.width + ",\n" + "\"height\": " + this.height + ",\n" + "\"layers\": [" + layers.join(",") + "]" + "}";
         zip.file("manifest.json", manifest, null);
         let options = new Object();
         options["type"] = "blob";
@@ -191,7 +208,7 @@ class Z4Canvas extends JSComponent {
    * @param quality The quality
    */
    exportToFile(filename, ext, quality) {
-    let offscreen = new OffscreenCanvas(this.canvas.width, this.canvas.height);
+    let offscreen = new OffscreenCanvas(this.width, this.height);
     let offscreenCtx = offscreen.getContext("2d");
     this.paper.draw(offscreenCtx);
     let options = new Object();
@@ -217,7 +234,7 @@ class Z4Canvas extends JSComponent {
    * @param color The filling color
    */
    addLayer(width, height, color) {
-    this.paper.addLayer(width, height, color, this.canvas.width, this.canvas.height);
+    this.paper.addLayer(width, height, color, this.width, this.height);
     this.afterAddLayer();
     this.drawCanvas();
   }
@@ -250,7 +267,7 @@ class Z4Canvas extends JSComponent {
    addLayerFromURL(url) {
     let image = document.createElement("img");
     image.onload = event => {
-      this.paper.addLayerFromImage(image, this.canvas.width, this.canvas.height);
+      this.paper.addLayerFromImage(image, this.width, this.height);
       this.afterAddLayer();
       this.drawCanvas();
       return null;
@@ -260,13 +277,7 @@ class Z4Canvas extends JSComponent {
   }
 
    afterAddLayer() {
-    let dimension = this.paper.getSize();
-    let shiftX = (dimension.width - this.canvas.width) / 2;
-    let shiftY = (dimension.height - this.canvas.height) / 2;
-    this.paper.shift(shiftX, shiftY);
     this.saved = false;
-    this.canvas.width = dimension.width;
-    this.canvas.height = dimension.height;
   }
 
   /**
@@ -278,12 +289,6 @@ class Z4Canvas extends JSComponent {
     return this.projectName;
   }
 
-  // /**
-  // * Sets this canvas as saved
-  // */
-  // public void setSaved() {
-  // this.saved = true;
-  // }
   /**
    * Checks if this canvas is saved
    *
@@ -295,9 +300,10 @@ class Z4Canvas extends JSComponent {
 
    drawCanvas() {
     this.ctx.save();
+    this.ctx.scale(this.zoom, this.zoom);
     this.ctx.fillStyle = this.chessboard;
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.restore();
+    this.ctx.fillRect(0, 0, this.width, this.height);
     this.paper.draw(this.ctx);
+    this.ctx.restore();
   }
 }
