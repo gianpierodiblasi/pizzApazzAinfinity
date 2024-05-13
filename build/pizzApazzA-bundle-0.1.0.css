@@ -116,3 +116,7 @@
     top: 0px;
     left: 0px;
 }
+
+.z4layerpreview .z4layerpreview-editor[offset=true], .z4layerpreview .z4layerpreview-editor[offset=true] * {
+  background: transparent;
+}
