@@ -9,6 +9,8 @@ class Z4Layer {
 
    offscreenCtx = null;
 
+   name = null;
+
    offsetX = 0;
 
    offsetY = 0;
@@ -20,13 +22,15 @@ class Z4Layer {
   /**
    * Creates the object
    *
+   * @param name The layer name
    * @param width The layer width
    * @param height The layer height
    * @param color The filling color
    * @param containerWidth The container width
    * @param containerHeight The container height
    */
-  constructor(width, height, color, containerWidth, containerHeight) {
+  constructor(name, width, height, color, containerWidth, containerHeight) {
+    this.name = name;
     this.offscreen = new OffscreenCanvas(width, height);
     this.offscreenCtx = this.offscreen.getContext("2d");
     this.offscreenCtx.fillStyle = this.getFillStyle(color.getRGBA_HEX());
@@ -43,13 +47,14 @@ class Z4Layer {
   /**
    * Creates a Z4Layer from an image
    *
+   * @param name The layer name
    * @param image The image
    * @param containerWidth The container width
    * @param containerHeight The container height
    * @return The layer
    */
-  static  fromImage(image, containerWidth, containerHeight) {
-    let layer = new Z4Layer(image.width, image.height, new Color(0, 0, 0, 0), containerWidth, containerHeight);
+  static  fromImage(name, image, containerWidth, containerHeight) {
+    let layer = new Z4Layer(name, image.width, image.height, new Color(0, 0, 0, 0), containerWidth, containerHeight);
     layer.offscreenCtx.drawImage(image, 0, 0);
     return layer;
   }
@@ -87,6 +92,15 @@ class Z4Layer {
    move(offsetX, offsetY) {
     this.offsetX = offsetX;
     this.offsetY = offsetY;
+  }
+
+  /**
+   * Returns the layer name
+   *
+   * @return The layer name
+   */
+   getName() {
+    return this.name;
   }
 
   /**

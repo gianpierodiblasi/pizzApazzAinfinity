@@ -23,6 +23,7 @@ public class Z4Layer {
   private final $OffscreenCanvas offscreen;
   private final $CanvasRenderingContext2D offscreenCtx;
 
+  private String name;
   private int offsetX = 0;
   private int offsetY = 0;
   private final int width;
@@ -31,13 +32,15 @@ public class Z4Layer {
   /**
    * Creates the object
    *
+   * @param name The layer name
    * @param width The layer width
    * @param height The layer height
    * @param color The filling color
    * @param containerWidth The container width
    * @param containerHeight The container height
    */
-  public Z4Layer(int width, int height, Color color, int containerWidth, int containerHeight) {
+  public Z4Layer(String name, int width, int height, Color color, int containerWidth, int containerHeight) {
+    this.name = name;
     this.offscreen = new $OffscreenCanvas(width, height);
 
     this.offscreenCtx = this.offscreen.getContext("2d");
@@ -61,13 +64,14 @@ public class Z4Layer {
   /**
    * Creates a Z4Layer from an image
    *
+   * @param name The layer name
    * @param image The image
    * @param containerWidth The container width
    * @param containerHeight The container height
    * @return The layer
    */
-  public static Z4Layer fromImage($Image image, int containerWidth, int containerHeight) {
-    Z4Layer layer = new Z4Layer((int) image.width, (int) image.height, new Color(0, 0, 0, 0), containerWidth, containerHeight);
+  public static Z4Layer fromImage(String name, $Image image, int containerWidth, int containerHeight) {
+    Z4Layer layer = new Z4Layer(name, (int) image.width, (int) image.height, new Color(0, 0, 0, 0), containerWidth, containerHeight);
     layer.offscreenCtx.drawImage(image, 0, 0);
     return layer;
   }
@@ -106,6 +110,15 @@ public class Z4Layer {
   public void move(int offsetX, int offsetY) {
     this.offsetX = offsetX;
     this.offsetY = offsetY;
+  }
+
+  /**
+   * Returns the layer name
+   *
+   * @return The layer name
+   */
+  public String getName() {
+    return this.name;
   }
 
   /**

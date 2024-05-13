@@ -82,7 +82,7 @@ class Z4Canvas extends JSComponent {
    */
    create(width, height, color) {
     this.paper.reset();
-    this.paper.addLayer(width, height, color, width, height);
+    this.paper.addLayer(Z4Translations.BACKGROUND_LAYER, width, height, color, width, height);
     this.afterCreate("", width, height);
     this.drawCanvas();
   }
@@ -116,7 +116,7 @@ class Z4Canvas extends JSComponent {
     let image = document.createElement("img");
     image.onload = event => {
       this.paper.reset();
-      this.paper.addLayerFromImage(image, image.width, image.height);
+      this.paper.addLayerFromImage(Z4Translations.BACKGROUND_LAYER, image, image.width, image.height);
       this.afterCreate(projectName, image.width, image.height);
       this.drawCanvas();
       return null;
@@ -159,7 +159,7 @@ class Z4Canvas extends JSComponent {
       let image = document.createElement("img");
       this.statusPanel.setProgressBarValue(0);
       image.onload = event => {
-        this.paper.addLayerFromImage(image, image.width, image.height);
+        this.paper.addLayerFromImage(layers[index]["name"], image, image.width, image.height);
         this.paper.getLayerAt(index).move(layers[index]["offsetX"], layers[index]["offsetY"]);
         if (index + 1 === layers.length) {
           this.afterCreate(json["projectName"], json["width"], json["height"]);
@@ -190,7 +190,7 @@ class Z4Canvas extends JSComponent {
     layer.convertToBlob(blob => {
       zip.file("layers/layer" + index + ".png", blob, null);
       let offset = layer.getOffset();
-      layers[index] = "{" + "\"offsetX\": " + offset.x + "," + "\"offsetY\": " + offset.y + "}";
+      layers[index] = "{" + "\"name\": \"" + layer.getName() + "\"," + "\"offsetX\": " + offset.x + "," + "\"offsetY\": " + offset.y + "}";
       if (index + 1 === this.paper.getLayersCount()) {
         let manifest = "{" + "\"projectName\": \"" + this.projectName + "\",\n" + "\"width\": " + this.width + ",\n" + "\"height\": " + this.height + ",\n" + "\"layers\": [" + layers.join(",") + "]" + "}";
         zip.file("manifest.json", manifest, null);
@@ -249,7 +249,7 @@ class Z4Canvas extends JSComponent {
    * @param color The filling color
    */
    addLayer(width, height, color) {
-    this.paper.addLayer(width, height, color, this.width, this.height);
+    this.paper.addLayer(this.findLayerName(), width, height, color, this.width, this.height);
     this.afterAddLayer();
     this.drawCanvas();
   }
@@ -260,8 +260,9 @@ class Z4Canvas extends JSComponent {
    * @param file The file
    */
    addLayerFromFile(file) {
+    let name = file.name.substring(0, file.name.lastIndexOf('.'));
     let fileReader = new FileReader();
-    fileReader.onload = event => this.addLayerFromURL(fileReader.result);
+    fileReader.onload = event => this.addLayerFromURL(name, fileReader.result);
     fileReader.readAsDataURL(file);
   }
 
@@ -273,16 +274,31 @@ class Z4Canvas extends JSComponent {
       items.forEach(item => {
         let imageType = item.types.find((type, index, array) => type.startsWith("image/"));
         item.getType(imageType).then(blob => {
-          this.addLayerFromURL(URL.createObjectURL(blob));
+          this.addLayerFromURL(this.findLayerName(), URL.createObjectURL(blob));
         });
       });
     });
   }
 
-   addLayerFromURL(url) {
+   findLayerName() {
+    let counter = 0;
+    let found = "";
+    while (!found) {
+      found = Z4Translations.LAYER + "_" + counter;
+      for (let index = 0; index < this.paper.getLayersCount(); index++) {
+        if (found === this.paper.getLayerAt(index).getName()) {
+          found = "";
+        }
+      }
+      counter++;
+    }
+    return found;
+  }
+
+   addLayerFromURL(name, url) {
     let image = document.createElement("img");
     image.onload = event => {
-      this.paper.addLayerFromImage(image, this.width, this.height);
+      this.paper.addLayerFromImage(name, image, this.width, this.height);
       this.afterAddLayer();
       this.drawCanvas();
       return null;

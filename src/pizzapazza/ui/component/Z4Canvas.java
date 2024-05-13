@@ -20,6 +20,7 @@ import pizzapazza.Z4Constants;
 import pizzapazza.Z4Layer;
 import pizzapazza.Z4Paper;
 import pizzapazza.ui.panel.Z4StatusPanel;
+import pizzapazza.util.Z4Translations;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
@@ -112,7 +113,7 @@ public class Z4Canvas extends JSComponent {
    */
   public void create(int width, int height, Color color) {
     this.paper.reset();
-    this.paper.addLayer(width, height, color, width, height);
+    this.paper.addLayer(Z4Translations.BACKGROUND_LAYER, width, height, color, width, height);
     this.afterCreate("", width, height);
     this.drawCanvas();
   }
@@ -148,7 +149,7 @@ public class Z4Canvas extends JSComponent {
 
     image.onload = event -> {
       this.paper.reset();
-      this.paper.addLayerFromImage(image, (int) image.width, (int) image.height);
+      this.paper.addLayerFromImage(Z4Translations.BACKGROUND_LAYER, image, (int) image.width, (int) image.height);
       this.afterCreate(projectName, (int) image.width, (int) image.height);
       this.drawCanvas();
       return null;
@@ -195,7 +196,7 @@ public class Z4Canvas extends JSComponent {
       this.statusPanel.setProgressBarValue(0);
 
       image.onload = event -> {
-        this.paper.addLayerFromImage(image, (int) image.width, (int) image.height);
+        this.paper.addLayerFromImage(layers.$get(index).$get("name"), image, (int) image.width, (int) image.height);
         this.paper.getLayerAt(index).move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
 
         if (index + 1 == layers.length) {
@@ -233,6 +234,7 @@ public class Z4Canvas extends JSComponent {
       Point offset = layer.getOffset();
       layers.$set(index,
               "{"
+              + "\"name\": \"" + layer.getName() + "\","
               + "\"offsetX\": " + offset.x + ","
               + "\"offsetY\": " + offset.y
               + "}"
@@ -312,7 +314,7 @@ public class Z4Canvas extends JSComponent {
    * @param color The filling color
    */
   public void addLayer(int width, int height, Color color) {
-    this.paper.addLayer(width, height, color, this.width, this.height);
+    this.paper.addLayer(this.findLayerName(), width, height, color, this.width, this.height);
     this.afterAddLayer();
     this.drawCanvas();
   }
@@ -323,8 +325,10 @@ public class Z4Canvas extends JSComponent {
    * @param file The file
    */
   public void addLayerFromFile(File file) {
+    String name = file.name.substring(0, file.name.lastIndexOf('.'));
+
     FileReader fileReader = new FileReader();
-    fileReader.onload = event -> this.addLayerFromURL((String) fileReader.result);
+    fileReader.onload = event -> this.addLayerFromURL(name, (String) fileReader.result);
     fileReader.readAsDataURL(file);
   }
 
@@ -337,17 +341,33 @@ public class Z4Canvas extends JSComponent {
         String imageType = item.types.find((type, index, array) -> type.startsWith("image/"));
 
         item.getType(imageType).then(blob -> {
-          this.addLayerFromURL(URL.createObjectURL(blob));
+          this.addLayerFromURL(this.findLayerName(), URL.createObjectURL(blob));
         });
       });
     });
   }
 
-  private Object addLayerFromURL(String url) {
+  @SuppressWarnings("StringEquality")
+  private String findLayerName() {
+    int counter = 0;
+    String found = "";
+    while (!$exists(found)) {
+      found = Z4Translations.LAYER + "_" + counter;
+      for (int index = 0; index < this.paper.getLayersCount(); index++) {
+        if (found == this.paper.getLayerAt(index).getName()) {
+          found = "";
+        }
+      }
+      counter++;
+    }
+    return found;
+  }
+
+  private Object addLayerFromURL(String name, String url) {
     $Image image = ($Image) document.createElement("img");
 
     image.onload = event -> {
-      this.paper.addLayerFromImage(image, this.width, this.height);
+      this.paper.addLayerFromImage(name, image, this.width, this.height);
       this.afterAddLayer();
       this.drawCanvas();
       return null;

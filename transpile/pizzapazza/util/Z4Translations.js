@@ -36,6 +36,8 @@ class Z4Translations {
 
   static  NEW_LAYER = "";
 
+  static  BACKGROUND_LAYER = "";
+
   // Ribbon Settings
   static  SETTINGS = "";
 
@@ -112,6 +114,7 @@ class Z4Translations {
     // Ribbon Layer
     Z4Translations.LAYER = "Layer";
     Z4Translations.NEW_LAYER = "New Layer";
+    Z4Translations.BACKGROUND_LAYER = "Background Layer";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Settings";
     Z4Translations.LANGUAGE = "Language";
@@ -152,10 +155,11 @@ class Z4Translations {
     Z4Translations.SAVE = "Salva";
     Z4Translations.SAVE_PROJECT = "Salva Progetto";
     Z4Translations.EXPORT = "Esporta";
+    Z4Translations.PROJECT_NOT_SAVED_MESSAGE = "Progetto non salvato, vuoi salvare le modifiche?";
     // Ribbon Layer
     Z4Translations.LAYER = "Livello";
     Z4Translations.NEW_LAYER = "Nuovo Livello";
-    Z4Translations.PROJECT_NOT_SAVED_MESSAGE = "Progetto non salvato, vuoi salvare le modifiche?";
+    Z4Translations.BACKGROUND_LAYER = "Livello di Sfondo";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Impostazioni";
     Z4Translations.LANGUAGE = "Lingua";

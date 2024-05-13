@@ -127,7 +127,7 @@ class Z4Canvas extends JSComponent {
    */
    create(width, height, color) {
     this.paper.reset();
-    this.paper.addLayer(width, height, color, width, height);
+    this.paper.addLayer(Z4Translations.BACKGROUND_LAYER, width, height, color, width, height);
     this.afterCreate("", width, height);
     this.drawCanvas();
   }
@@ -161,7 +161,7 @@ class Z4Canvas extends JSComponent {
     let image = document.createElement("img");
     image.onload = event => {
       this.paper.reset();
-      this.paper.addLayerFromImage(image, image.width, image.height);
+      this.paper.addLayerFromImage(Z4Translations.BACKGROUND_LAYER, image, image.width, image.height);
       this.afterCreate(projectName, image.width, image.height);
       this.drawCanvas();
       return null;
@@ -204,7 +204,7 @@ class Z4Canvas extends JSComponent {
       let image = document.createElement("img");
       this.statusPanel.setProgressBarValue(0);
       image.onload = event => {
-        this.paper.addLayerFromImage(image, image.width, image.height);
+        this.paper.addLayerFromImage(layers[index]["name"], image, image.width, image.height);
         this.paper.getLayerAt(index).move(layers[index]["offsetX"], layers[index]["offsetY"]);
         if (index + 1 === layers.length) {
           this.afterCreate(json["projectName"], json["width"], json["height"]);
@@ -235,7 +235,7 @@ class Z4Canvas extends JSComponent {
     layer.convertToBlob(blob => {
       zip.file("layers/layer" + index + ".png", blob, null);
       let offset = layer.getOffset();
-      layers[index] = "{" + "\"offsetX\": " + offset.x + "," + "\"offsetY\": " + offset.y + "}";
+      layers[index] = "{" + "\"name\": \"" + layer.getName() + "\"," + "\"offsetX\": " + offset.x + "," + "\"offsetY\": " + offset.y + "}";
       if (index + 1 === this.paper.getLayersCount()) {
         let manifest = "{" + "\"projectName\": \"" + this.projectName + "\",\n" + "\"width\": " + this.width + ",\n" + "\"height\": " + this.height + ",\n" + "\"layers\": [" + layers.join(",") + "]" + "}";
         zip.file("manifest.json", manifest, null);
@@ -294,7 +294,7 @@ class Z4Canvas extends JSComponent {
    * @param color The filling color
    */
    addLayer(width, height, color) {
-    this.paper.addLayer(width, height, color, this.width, this.height);
+    this.paper.addLayer(this.findLayerName(), width, height, color, this.width, this.height);
     this.afterAddLayer();
     this.drawCanvas();
   }
@@ -305,8 +305,9 @@ class Z4Canvas extends JSComponent {
    * @param file The file
    */
    addLayerFromFile(file) {
+    let name = file.name.substring(0, file.name.lastIndexOf('.'));
     let fileReader = new FileReader();
-    fileReader.onload = event => this.addLayerFromURL(fileReader.result);
+    fileReader.onload = event => this.addLayerFromURL(name, fileReader.result);
     fileReader.readAsDataURL(file);
   }
 
@@ -318,16 +319,31 @@ class Z4Canvas extends JSComponent {
       items.forEach(item => {
         let imageType = item.types.find((type, index, array) => type.startsWith("image/"));
         item.getType(imageType).then(blob => {
-          this.addLayerFromURL(URL.createObjectURL(blob));
+          this.addLayerFromURL(this.findLayerName(), URL.createObjectURL(blob));
         });
       });
     });
   }
 
-   addLayerFromURL(url) {
+   findLayerName() {
+    let counter = 0;
+    let found = "";
+    while (!found) {
+      found = Z4Translations.LAYER + "_" + counter;
+      for (let index = 0; index < this.paper.getLayersCount(); index++) {
+        if (found === this.paper.getLayerAt(index).getName()) {
+          found = "";
+        }
+      }
+      counter++;
+    }
+    return found;
+  }
+
+   addLayerFromURL(name, url) {
     let image = document.createElement("img");
     image.onload = event => {
-      this.paper.addLayerFromImage(image, this.width, this.height);
+      this.paper.addLayerFromImage(name, image, this.width, this.height);
       this.afterAddLayer();
       this.drawCanvas();
       return null;
@@ -455,6 +471,81 @@ class Z4ColorPreview extends JSComponent {
     rgb[2] = color.blue;
     Color.RGBtoHSL(rgb, hsl);
     this.getStyle().border = "1px solid " + (hsl[2] > 0.5 ? color.darkened(0.1).getRGB_HEX() : color.lighted(0.1).getRGB_HEX());
+  }
+}
+/**
+ * The layer preview
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4LayerPreview extends JSComponent {
+
+   canvas = document.createElement("canvas");
+
+   ctx = this.canvas.getContext("2d");
+
+   chessboard = null;
+
+   layer = null;
+
+  constructor() {
+    super(document.createElement("details"));
+    this.cssAddClass("z4layerpreview");
+    this.addEventListener("toggle", event => {
+      if ("" + this.getProperty("open") === "true") {
+        // this.getChilStyleByQuery(".jscolorpanel").visibility = "visible";
+        // 
+        // $DOMRect rect = this.invokeInTree(".jscolorpanel", "getBoundingClientRect()");
+        // $DOMRect rectSummary = this.invokeInTree("summary", "getBoundingClientRect()");
+        // 
+        // if (rectSummary.left + rect.width < document.body.scrollWidth) {
+        // this.getChilStyleByQuery(".jscolorpanel").left = rectSummary.left + "px";
+        // } else if (rectSummary.right - rect.width > 0) {
+        // this.getChilStyleByQuery(".jscolorpanel").left = (rectSummary.right - rect.width) + "px";
+        // } else {
+        // this.getChilStyleByQuery(".jscolorpanel").left = "auto";
+        // this.getChilStyleByQuery(".jscolorpanel").right = "5px";
+        // }
+        // 
+        // if (rectSummary.bottom + rect.height < document.body.scrollHeight) {
+        // this.getChilStyleByQuery(".jscolorpanel").top = rectSummary.bottom + "px";
+        // } else if (rectSummary.top - rect.height > 0) {
+        // this.getChilStyleByQuery(".jscolorpanel").top = "calc(" + (rectSummary.top - rect.height) + "px - 1rem)";
+        // } else {
+        // this.getChilStyleByQuery(".jscolorpanel").top = "auto";
+        // this.getChilStyleByQuery(".jscolorpanel").bottom = "5px";
+        // }
+      } else {
+        // this.getChilStyleByQuery(".jscolorpanel").removeProperty("visibility");
+        // this.getChilStyleByQuery(".jscolorpanel").removeProperty("top");
+        // this.getChilStyleByQuery(".jscolorpanel").removeProperty("bottom");
+        // this.getChilStyleByQuery(".jscolorpanel").removeProperty("left");
+        // this.getChilStyleByQuery(".jscolorpanel").removeProperty("right");
+      }
+    });
+    let image = document.createElement("img");
+    image.onload = event => {
+      this.chessboard = this.ctx.createPattern(image, "repeat");
+      this.drawLayer();
+      return null;
+    };
+    image.src = "image/chessboard.png";
+  }
+
+   setLayer(layer) {
+    this.layer = layer;
+    this.drawLayer();
+  }
+
+   drawLayer() {
+    this.ctx.save();
+    this.ctx.fillStyle = this.chessboard;
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.restore();
+    this.ctx.save();
+    // this.ctx.scale(this.zoom, this.zoom);
+    // this.paper.draw(this.ctx);
+    this.ctx.restore();
   }
 }
 /**
@@ -1362,6 +1453,8 @@ class Z4Translations {
 
   static  NEW_LAYER = "";
 
+  static  BACKGROUND_LAYER = "";
+
   // Ribbon Settings
   static  SETTINGS = "";
 
@@ -1438,6 +1531,7 @@ class Z4Translations {
     // Ribbon Layer
     Z4Translations.LAYER = "Layer";
     Z4Translations.NEW_LAYER = "New Layer";
+    Z4Translations.BACKGROUND_LAYER = "Background Layer";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Settings";
     Z4Translations.LANGUAGE = "Language";
@@ -1478,10 +1572,11 @@ class Z4Translations {
     Z4Translations.SAVE = "Salva";
     Z4Translations.SAVE_PROJECT = "Salva Progetto";
     Z4Translations.EXPORT = "Esporta";
+    Z4Translations.PROJECT_NOT_SAVED_MESSAGE = "Progetto non salvato, vuoi salvare le modifiche?";
     // Ribbon Layer
     Z4Translations.LAYER = "Livello";
     Z4Translations.NEW_LAYER = "Nuovo Livello";
-    Z4Translations.PROJECT_NOT_SAVED_MESSAGE = "Progetto non salvato, vuoi salvare le modifiche?";
+    Z4Translations.BACKGROUND_LAYER = "Livello di Sfondo";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Impostazioni";
     Z4Translations.LANGUAGE = "Lingua";
@@ -1555,6 +1650,8 @@ class Z4Layer {
 
    offscreenCtx = null;
 
+   name = null;
+
    offsetX = 0;
 
    offsetY = 0;
@@ -1566,13 +1663,15 @@ class Z4Layer {
   /**
    * Creates the object
    *
+   * @param name The layer name
    * @param width The layer width
    * @param height The layer height
    * @param color The filling color
    * @param containerWidth The container width
    * @param containerHeight The container height
    */
-  constructor(width, height, color, containerWidth, containerHeight) {
+  constructor(name, width, height, color, containerWidth, containerHeight) {
+    this.name = name;
     this.offscreen = new OffscreenCanvas(width, height);
     this.offscreenCtx = this.offscreen.getContext("2d");
     this.offscreenCtx.fillStyle = this.getFillStyle(color.getRGBA_HEX());
@@ -1589,13 +1688,14 @@ class Z4Layer {
   /**
    * Creates a Z4Layer from an image
    *
+   * @param name The layer name
    * @param image The image
    * @param containerWidth The container width
    * @param containerHeight The container height
    * @return The layer
    */
-  static  fromImage(image, containerWidth, containerHeight) {
-    let layer = new Z4Layer(image.width, image.height, new Color(0, 0, 0, 0), containerWidth, containerHeight);
+  static  fromImage(name, image, containerWidth, containerHeight) {
+    let layer = new Z4Layer(name, image.width, image.height, new Color(0, 0, 0, 0), containerWidth, containerHeight);
     layer.offscreenCtx.drawImage(image, 0, 0);
     return layer;
   }
@@ -1633,6 +1733,15 @@ class Z4Layer {
    move(offsetX, offsetY) {
     this.offsetX = offsetX;
     this.offsetY = offsetY;
+  }
+
+  /**
+   * Returns the layer name
+   *
+   * @return The layer name
+   */
+   getName() {
+    return this.name;
   }
 
   /**
@@ -1693,25 +1802,27 @@ class Z4Paper {
   /**
    * Adds a layer
    *
+   * @param name The layer name
    * @param width The layer width
    * @param height The layer height
    * @param color The filling color
    * @param containerWidth The container width
    * @param containerHeight The container height
    */
-   addLayer(width, height, color, containerWidth, containerHeight) {
-    this.layers.push(new Z4Layer(width, height, color, containerWidth, containerHeight));
+   addLayer(name, width, height, color, containerWidth, containerHeight) {
+    this.layers.push(new Z4Layer(name, width, height, color, containerWidth, containerHeight));
   }
 
   /**
    * Adds a layer from an image
    *
+   * @param name The layer name
    * @param image The image
    * @param containerWidth The container width
    * @param containerHeight The container height
    */
-   addLayerFromImage(image, containerWidth, containerHeight) {
-    this.layers.push(Z4Layer.fromImage(image, containerWidth, containerHeight));
+   addLayerFromImage(name, image, containerWidth, containerHeight) {
+    this.layers.push(Z4Layer.fromImage(name, image, containerWidth, containerHeight));
   }
 
   /**

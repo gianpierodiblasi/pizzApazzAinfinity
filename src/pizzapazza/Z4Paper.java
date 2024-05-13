@@ -36,25 +36,27 @@ public class Z4Paper {
   /**
    * Adds a layer
    *
+   * @param name The layer name
    * @param width The layer width
    * @param height The layer height
    * @param color The filling color
    * @param containerWidth The container width
    * @param containerHeight The container height
    */
-  public void addLayer(int width, int height, Color color, int containerWidth, int containerHeight) {
-    this.layers.push(new Z4Layer(width, height, color, containerWidth, containerHeight));
+  public void addLayer(String name, int width, int height, Color color, int containerWidth, int containerHeight) {
+    this.layers.push(new Z4Layer(name, width, height, color, containerWidth, containerHeight));
   }
 
   /**
    * Adds a layer from an image
    *
+   * @param name The layer name
    * @param image The image
    * @param containerWidth The container width
    * @param containerHeight The container height
    */
-  public void addLayerFromImage($Image image, int containerWidth, int containerHeight) {
-    this.layers.push(Z4Layer.fromImage(image, containerWidth, containerHeight));
+  public void addLayerFromImage(String name, $Image image, int containerWidth, int containerHeight) {
+    this.layers.push(Z4Layer.fromImage(name, image, containerWidth, containerHeight));
   }
 
   /**
