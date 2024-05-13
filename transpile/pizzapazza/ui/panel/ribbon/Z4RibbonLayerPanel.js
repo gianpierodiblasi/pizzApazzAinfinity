@@ -5,6 +5,8 @@
  */
 class Z4RibbonLayerPanel extends JSPanel {
 
+   layersPreview = new JSPanel();
+
    canvas = null;
 
   /**
@@ -18,7 +20,16 @@ class Z4RibbonLayerPanel extends JSPanel {
     this.addButton(Z4Translations.CREATE, true, 0, 1, "left", event => this.addFromColor());
     this.addButton(Z4Translations.FROM_CLIPBOARD, typeof navigator.clipboard["read"] === "function", 1, 1, "both", event => this.addFromClipboard());
     this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event => this.addFromFile());
-    this.addVLine(3, 1);
+    this.addVLine(3);
+    this.layersPreview.setLayout(new BoxLayout(this.layersPreview, BoxLayout.X_AXIS));
+    this.layersPreview.getStyle().overflowX = "scroll";
+    let constraints = new GridBagConstraints();
+    constraints.gridx = 4;
+    constraints.gridy = 0;
+    constraints.gridheight = 2;
+    constraints.weightx = 1;
+    constraints.fill = GridBagConstraints.BOTH;
+    this.add(this.layersPreview, constraints);
   }
 
   /**
@@ -73,7 +84,7 @@ class Z4RibbonLayerPanel extends JSPanel {
     this.add(button, constraints);
   }
 
-   addVLine(gridx, weightx) {
+   addVLine(gridx) {
     let div = new JSComponent(document.createElement("div"));
     div.getStyle().width = "1px";
     div.getStyle().background = "var(--main-action-bgcolor";
@@ -82,7 +93,6 @@ class Z4RibbonLayerPanel extends JSPanel {
     constraints.gridy = 0;
     constraints.gridheight = 2;
     constraints.fill = GridBagConstraints.VERTICAL;
-    constraints.weightx = weightx;
     constraints.weighty = 1;
     constraints.insets = new Insets(1, 2, 1, 2);
     this.add(div, constraints);
@@ -105,5 +115,23 @@ class Z4RibbonLayerPanel extends JSPanel {
 
    addFromClipboard() {
     this.canvas.addLayerFromClipboard();
+  }
+
+  /**
+   * Resets the layers preview
+   */
+   reset() {
+    this.layersPreview.setProperty("innerHTML", "");
+  }
+
+  /**
+   * Adds a new layer preview
+   *
+   * @param layer The layer
+   */
+   addLayerPreview(layer) {
+    let preview = new Z4LayerPreview();
+    preview.setLayer(layer);
+    this.layersPreview.add(preview, null);
   }
 }

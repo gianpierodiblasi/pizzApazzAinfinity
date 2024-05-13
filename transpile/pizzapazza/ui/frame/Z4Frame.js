@@ -25,5 +25,6 @@ class Z4Frame extends JSFrame {
     this.getContentPane().add(this.ribbon, BorderLayout.NORTH);
     this.getContentPane().add(this.canvas, BorderLayout.CENTER);
     this.getContentPane().add(this.statusPanel, BorderLayout.SOUTH);
+    this.canvas.create(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, new Color(0, 0, 0, 0));
   }
 }

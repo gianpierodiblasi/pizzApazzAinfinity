@@ -56,6 +56,8 @@ class Z4Canvas extends JSComponent {
 
    chessboard = null;
 
+   ribbonLayerPanel = null;
+
    statusPanel = null;
 
    projectName = null;
@@ -99,7 +101,6 @@ class Z4Canvas extends JSComponent {
         this.zoomOut();
       }
     });
-    this.create(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, new Color(0, 0, 0, 0));
     let image = document.createElement("img");
     image.onload = event => {
       this.chessboard = this.ctx.createPattern(image, "repeat");
@@ -107,6 +108,15 @@ class Z4Canvas extends JSComponent {
       return null;
     };
     image.src = "image/chessboard.png";
+  }
+
+  /**
+   * Sets the ribbon layer panel
+   *
+   * @param ribbonLayerPanel The ribbon layer panel
+   */
+   setRibbonLayerPanel(ribbonLayerPanel) {
+    this.ribbonLayerPanel = ribbonLayerPanel;
   }
 
   /**
@@ -128,6 +138,8 @@ class Z4Canvas extends JSComponent {
    create(width, height, color) {
     this.paper.reset();
     this.paper.addLayer(Z4Translations.BACKGROUND_LAYER, width, height, color, width, height);
+    this.ribbonLayerPanel.reset();
+    this.ribbonLayerPanel.addLayerPreview(this.paper.getLayerAt(this.paper.getLayersCount() - 1));
     this.afterCreate("", width, height);
     this.drawCanvas();
   }
@@ -542,10 +554,12 @@ class Z4LayerPreview extends JSComponent {
     this.ctx.fillStyle = this.chessboard;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.restore();
-    this.ctx.save();
-    // this.ctx.scale(this.zoom, this.zoom);
-    // this.paper.draw(this.ctx);
-    this.ctx.restore();
+    if (this.layer) {
+      this.ctx.save();
+      // this.ctx.scale(this.zoom, this.zoom);
+      this.layer.draw(this.ctx);
+      this.ctx.restore();
+    }
   }
 }
 /**
@@ -575,6 +589,7 @@ class Z4Frame extends JSFrame {
     this.getContentPane().add(this.ribbon, BorderLayout.NORTH);
     this.getContentPane().add(this.canvas, BorderLayout.CENTER);
     this.getContentPane().add(this.statusPanel, BorderLayout.SOUTH);
+    this.canvas.create(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, new Color(0, 0, 0, 0));
   }
 }
 /**
@@ -758,6 +773,8 @@ class Z4RibbonFilePanel extends JSPanel {
  */
 class Z4RibbonLayerPanel extends JSPanel {
 
+   layersPreview = new JSPanel();
+
    canvas = null;
 
   /**
@@ -771,7 +788,16 @@ class Z4RibbonLayerPanel extends JSPanel {
     this.addButton(Z4Translations.CREATE, true, 0, 1, "left", event => this.addFromColor());
     this.addButton(Z4Translations.FROM_CLIPBOARD, typeof navigator.clipboard["read"] === "function", 1, 1, "both", event => this.addFromClipboard());
     this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event => this.addFromFile());
-    this.addVLine(3, 1);
+    this.addVLine(3);
+    this.layersPreview.setLayout(new BoxLayout(this.layersPreview, BoxLayout.X_AXIS));
+    this.layersPreview.getStyle().overflowX = "scroll";
+    let constraints = new GridBagConstraints();
+    constraints.gridx = 4;
+    constraints.gridy = 0;
+    constraints.gridheight = 2;
+    constraints.weightx = 1;
+    constraints.fill = GridBagConstraints.BOTH;
+    this.add(this.layersPreview, constraints);
   }
 
   /**
@@ -826,7 +852,7 @@ class Z4RibbonLayerPanel extends JSPanel {
     this.add(button, constraints);
   }
 
-   addVLine(gridx, weightx) {
+   addVLine(gridx) {
     let div = new JSComponent(document.createElement("div"));
     div.getStyle().width = "1px";
     div.getStyle().background = "var(--main-action-bgcolor";
@@ -835,7 +861,6 @@ class Z4RibbonLayerPanel extends JSPanel {
     constraints.gridy = 0;
     constraints.gridheight = 2;
     constraints.fill = GridBagConstraints.VERTICAL;
-    constraints.weightx = weightx;
     constraints.weighty = 1;
     constraints.insets = new Insets(1, 2, 1, 2);
     this.add(div, constraints);
@@ -858,6 +883,24 @@ class Z4RibbonLayerPanel extends JSPanel {
 
    addFromClipboard() {
     this.canvas.addLayerFromClipboard();
+  }
+
+  /**
+   * Resets the layers preview
+   */
+   reset() {
+    this.layersPreview.setProperty("innerHTML", "");
+  }
+
+  /**
+   * Adds a new layer preview
+   *
+   * @param layer The layer
+   */
+   addLayerPreview(layer) {
+    let preview = new Z4LayerPreview();
+    preview.setLayer(layer);
+    this.layersPreview.add(preview, null);
   }
 }
 /**
@@ -1316,7 +1359,9 @@ class Z4StatusPanel extends JSPanel {
 
    addPipe(gridx) {
     let pipe = new JSLabel();
-    pipe.setText(" | ");
+    pipe.setText("|");
+    pipe.getStyle().minWidth = "2rem";
+    pipe.getStyle().textAlign = "center";
     this.setLabel(pipe, gridx);
   }
 
@@ -1404,6 +1449,7 @@ class Z4Ribbon extends JSTabbedPane {
    setCanvas(canvas) {
     this.filePanel.setCanvas(canvas);
     this.layerPanel.setCanvas(canvas);
+    canvas.setRibbonLayerPanel(this.layerPanel);
   }
 
   /**

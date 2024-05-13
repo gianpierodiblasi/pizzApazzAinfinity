@@ -11,6 +11,8 @@ class Z4Canvas extends JSComponent {
 
    chessboard = null;
 
+   ribbonLayerPanel = null;
+
    statusPanel = null;
 
    projectName = null;
@@ -54,7 +56,6 @@ class Z4Canvas extends JSComponent {
         this.zoomOut();
       }
     });
-    this.create(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, new Color(0, 0, 0, 0));
     let image = document.createElement("img");
     image.onload = event => {
       this.chessboard = this.ctx.createPattern(image, "repeat");
@@ -62,6 +63,15 @@ class Z4Canvas extends JSComponent {
       return null;
     };
     image.src = "image/chessboard.png";
+  }
+
+  /**
+   * Sets the ribbon layer panel
+   *
+   * @param ribbonLayerPanel The ribbon layer panel
+   */
+   setRibbonLayerPanel(ribbonLayerPanel) {
+    this.ribbonLayerPanel = ribbonLayerPanel;
   }
 
   /**
@@ -83,6 +93,8 @@ class Z4Canvas extends JSComponent {
    create(width, height, color) {
     this.paper.reset();
     this.paper.addLayer(Z4Translations.BACKGROUND_LAYER, width, height, color, width, height);
+    this.ribbonLayerPanel.reset();
+    this.ribbonLayerPanel.addLayerPreview(this.paper.getLayerAt(this.paper.getLayersCount() - 1));
     this.afterCreate("", width, height);
     this.drawCanvas();
   }

@@ -1,0 +1,22 @@
+.z4colorpreview {
+  height: 2rem;
+  display: grid;
+  grid-template: "c1 c2";
+  border-radius: calc(var(--roundness) + 0.1rem);
+  background-position: 0 0, 0 1rem;
+  background-repeat: repeat-x;
+  background-size: 2rem 1rem, 2rem 1rem;
+  background-image: linear-gradient(90deg, #DDD 1rem, white 1rem), linear-gradient(90deg, white 1rem, #DDD 1rem);
+}
+
+.z4colorpreview-opaque {
+  grid-area: c1;
+  border-top-left-radius: var(--roundness);
+  border-bottom-left-radius: var(--roundness);
+}
+
+.z4colorpreview-transparent {
+  grid-area: c2;
+  border-top-right-radius: var(--roundness);
+  border-bottom-right-radius: var(--roundness);
+}

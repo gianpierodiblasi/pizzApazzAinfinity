@@ -1,6 +1,7 @@
 package pizzapazza.ui.panel.ribbon;
 
 import static def.dom.Globals.document;
+import javascript.awt.BoxLayout;
 import javascript.awt.Dimension;
 import javascript.awt.GridBagConstraints;
 import javascript.awt.GridBagLayout;
@@ -13,7 +14,9 @@ import javascript.swing.JSLabel;
 import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
 import pizzapazza.Z4Constants;
+import pizzapazza.Z4Layer;
 import pizzapazza.ui.component.Z4Canvas;
+import pizzapazza.ui.component.Z4LayerPreview;
 import pizzapazza.ui.panel.Z4NewImagePanel;
 import pizzapazza.util.Z4Translations;
 import static simulation.js.$Globals.$typeof;
@@ -25,6 +28,8 @@ import static simulation.js.$Globals.navigator;
  * @author gianpiero.diblasi
  */
 public class Z4RibbonLayerPanel extends JSPanel {
+
+  private final JSPanel layersPreview = new JSPanel();
 
   private Z4Canvas canvas;
 
@@ -40,7 +45,18 @@ public class Z4RibbonLayerPanel extends JSPanel {
     this.addButton(Z4Translations.CREATE, true, 0, 1, "left", event -> this.addFromColor());
     this.addButton(Z4Translations.FROM_CLIPBOARD, $typeof(navigator.clipboard.$get("read"), "function"), 1, 1, "both", event -> this.addFromClipboard());
     this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event -> this.addFromFile());
-    this.addVLine(3, 1);
+    this.addVLine(3);
+
+    this.layersPreview.setLayout(new BoxLayout(this.layersPreview, BoxLayout.X_AXIS));
+    this.layersPreview.getStyle().overflowX = "scroll";
+
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.gridx = 4;
+    constraints.gridy = 0;
+    constraints.gridheight = 2;
+    constraints.weightx = 1;
+    constraints.fill = GridBagConstraints.BOTH;
+    this.add(this.layersPreview, constraints);
   }
 
   /**
@@ -98,7 +114,7 @@ public class Z4RibbonLayerPanel extends JSPanel {
     this.add(button, constraints);
   }
 
-  private void addVLine(int gridx, double weightx) {
+  private void addVLine(int gridx) {
     JSComponent div = new JSComponent(document.createElement("div"));
     div.getStyle().width = "1px";
     div.getStyle().background = "var(--main-action-bgcolor";
@@ -108,7 +124,6 @@ public class Z4RibbonLayerPanel extends JSPanel {
     constraints.gridy = 0;
     constraints.gridheight = 2;
     constraints.fill = GridBagConstraints.VERTICAL;
-    constraints.weightx = weightx;
     constraints.weighty = 1;
     constraints.insets = new Insets(1, 2, 1, 2);
     this.add(div, constraints);
@@ -132,5 +147,24 @@ public class Z4RibbonLayerPanel extends JSPanel {
 
   private void addFromClipboard() {
     this.canvas.addLayerFromClipboard();
+  }
+
+  /**
+   * Resets the layers preview
+   */
+  public void reset() {
+    this.layersPreview.setProperty("innerHTML", "");
+  }
+
+  /**
+   * Adds a new layer preview
+   *
+   * @param layer The layer
+   */
+  public void addLayerPreview(Z4Layer layer) {
+    Z4LayerPreview preview = new Z4LayerPreview();
+    preview.setLayer(layer);
+
+    this.layersPreview.add(preview, null);
   }
 }

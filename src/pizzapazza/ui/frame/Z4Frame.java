@@ -1,7 +1,9 @@
 package pizzapazza.ui.frame;
 
 import javascript.awt.BorderLayout;
+import javascript.awt.Color;
 import javascript.swing.JSFrame;
+import pizzapazza.Z4Constants;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.tab.Z4Ribbon;
@@ -33,5 +35,7 @@ public class Z4Frame extends JSFrame {
     this.getContentPane().add(this.ribbon, BorderLayout.NORTH);
     this.getContentPane().add(this.canvas, BorderLayout.CENTER);
     this.getContentPane().add(this.statusPanel, BorderLayout.SOUTH);
+
+    this.canvas.create(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, new Color(0, 0, 0, 0));
   }
 }

@@ -14,7 +14,7 @@ import pizzapazza.util.Z4Translations;
  * @author gianpiero.diblasi
  */
 public class Z4Ribbon extends JSTabbedPane {
-
+  
   private final Z4RibbonFilePanel filePanel = new Z4RibbonFilePanel();
   private final Z4RibbonLayerPanel layerPanel = new Z4RibbonLayerPanel();
   private final Z4RibbonSettingsPanel settingsPanel = new Z4RibbonSettingsPanel();
@@ -25,7 +25,7 @@ public class Z4Ribbon extends JSTabbedPane {
   public Z4Ribbon() {
     super();
     this.cssAddClass("z4ribbon");
-
+    
     this.addTab(Z4Translations.FILE, this.filePanel);
     this.addTab(Z4Translations.LAYER, this.layerPanel);
     this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
@@ -39,6 +39,8 @@ public class Z4Ribbon extends JSTabbedPane {
   public void setCanvas(Z4Canvas canvas) {
     this.filePanel.setCanvas(canvas);
     this.layerPanel.setCanvas(canvas);
+    
+    canvas.setRibbonLayerPanel(this.layerPanel);
   }
 
   /**

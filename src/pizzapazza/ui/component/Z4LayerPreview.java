@@ -9,6 +9,7 @@ import pizzapazza.Z4Layer;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
+import static simulation.js.$Globals.$exists;
 
 /**
  * The layer preview
@@ -81,9 +82,11 @@ public class Z4LayerPreview extends JSComponent {
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.restore();
 
-    this.ctx.save();
-//    this.ctx.scale(this.zoom, this.zoom);
-//    this.paper.draw(this.ctx);
-    this.ctx.restore();
+    if ($exists(this.layer)) {
+      this.ctx.save();
+      //    this.ctx.scale(this.zoom, this.zoom);
+      this.layer.draw(this.ctx);
+      this.ctx.restore();
+    }
   }
 }

@@ -30,6 +30,7 @@ class Z4Ribbon extends JSTabbedPane {
    setCanvas(canvas) {
     this.filePanel.setCanvas(canvas);
     this.layerPanel.setCanvas(canvas);
+    canvas.setRibbonLayerPanel(this.layerPanel);
   }
 
   /**

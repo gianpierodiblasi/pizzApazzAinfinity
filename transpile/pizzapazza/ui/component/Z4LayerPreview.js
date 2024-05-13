@@ -67,9 +67,11 @@ class Z4LayerPreview extends JSComponent {
     this.ctx.fillStyle = this.chessboard;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.restore();
-    this.ctx.save();
-    // this.ctx.scale(this.zoom, this.zoom);
-    // this.paper.draw(this.ctx);
-    this.ctx.restore();
+    if (this.layer) {
+      this.ctx.save();
+      // this.ctx.scale(this.zoom, this.zoom);
+      this.layer.draw(this.ctx);
+      this.ctx.restore();
+    }
   }
 }
