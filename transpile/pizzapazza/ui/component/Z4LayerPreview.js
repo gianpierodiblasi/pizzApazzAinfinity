@@ -5,13 +5,21 @@
  */
 class Z4LayerPreview extends JSComponent {
 
-   canvas = document.createElement("canvas");
+   summary = new JSPanel();
 
-   ctx = this.canvas.getContext("2d");
+   name = new JSLabel();
+
+   canvas = new JSComponent(document.createElement("canvas"));
+
+   ctx = this.canvas.invoke("getContext('2d')");
 
    chessboard = null;
 
    layer = null;
+
+   zoom = 1;
+
+  static  PREVIEW_SIZE = 50;
 
   constructor() {
     super(document.createElement("details"));
@@ -55,21 +63,43 @@ class Z4LayerPreview extends JSComponent {
       return null;
     };
     image.src = "image/chessboard.png";
+    this.name.getStyle().width = Z4LayerPreview.PREVIEW_SIZE + "px";
+    this.canvas.setAttribute("width", "" + Z4LayerPreview.PREVIEW_SIZE);
+    this.canvas.setAttribute("height", "" + Z4LayerPreview.PREVIEW_SIZE);
+    this.canvas.getStyle().width = Z4LayerPreview.PREVIEW_SIZE + "px";
+    this.canvas.getStyle().height = Z4LayerPreview.PREVIEW_SIZE + "px";
+    this.summary.setLayout(new BorderLayout(0, 0));
+    this.summary.add(this.name, BorderLayout.NORTH);
+    this.summary.add(this.canvas, BorderLayout.CENTER);
+    this.appendNodeChild(document.createElement("summary"));
+    this.appendChildInTree("summary", this.summary);
   }
 
    setLayer(layer) {
     this.layer = layer;
+    this.name.setText(this.layer.getName());
+    let d = layer.getSize();
+    let ratio = d.width / d.height;
+    if (ratio > 1) {
+      this.canvas.setAttribute("width", "" + Z4LayerPreview.PREVIEW_SIZE);
+      this.canvas.setAttribute("height", "" + (Z4LayerPreview.PREVIEW_SIZE / ratio));
+      this.zoom = Math.min(Z4LayerPreview.PREVIEW_SIZE / d.width, Z4LayerPreview.PREVIEW_SIZE / ratio / d.height);
+    } else {
+      this.canvas.setAttribute("width", "" + (Z4LayerPreview.PREVIEW_SIZE / ratio));
+      this.canvas.setAttribute("height", "" + Z4LayerPreview.PREVIEW_SIZE);
+      this.zoom = Math.min(Z4LayerPreview.PREVIEW_SIZE / ratio / d.width, Z4LayerPreview.PREVIEW_SIZE / d.height);
+    }
     this.drawLayer();
   }
 
    drawLayer() {
     this.ctx.save();
     this.ctx.fillStyle = this.chessboard;
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.fillRect(0, 0, parseInt(this.canvas.getAttribute("width")), parseInt(this.canvas.getAttribute("height")));
     this.ctx.restore();
     if (this.layer) {
       this.ctx.save();
-      // this.ctx.scale(this.zoom, this.zoom);
+      this.ctx.scale(this.zoom, this.zoom);
       this.layer.draw(this.ctx);
       this.ctx.restore();
     }

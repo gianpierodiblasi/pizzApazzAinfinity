@@ -137,7 +137,7 @@ class Z4Canvas extends JSComponent {
    */
    create(width, height, color) {
     this.paper.reset();
-    this.paper.addLayer(Z4Translations.BACKGROUND_LAYER, width, height, color, width, height);
+    this.paper.addLayer(Z4Translations.BACKGROUND, width, height, color, width, height);
     this.ribbonLayerPanel.reset();
     this.ribbonLayerPanel.addLayerPreview(this.paper.getLayerAt(this.paper.getLayersCount() - 1));
     this.afterCreate("", width, height);
@@ -173,7 +173,7 @@ class Z4Canvas extends JSComponent {
     let image = document.createElement("img");
     image.onload = event => {
       this.paper.reset();
-      this.paper.addLayerFromImage(Z4Translations.BACKGROUND_LAYER, image, image.width, image.height);
+      this.paper.addLayerFromImage(Z4Translations.BACKGROUND, image, image.width, image.height);
       this.afterCreate(projectName, image.width, image.height);
       this.drawCanvas();
       return null;
@@ -492,13 +492,21 @@ class Z4ColorPreview extends JSComponent {
  */
 class Z4LayerPreview extends JSComponent {
 
-   canvas = document.createElement("canvas");
+   summary = new JSPanel();
 
-   ctx = this.canvas.getContext("2d");
+   name = new JSLabel();
+
+   canvas = new JSComponent(document.createElement("canvas"));
+
+   ctx = this.canvas.invoke("getContext('2d')");
 
    chessboard = null;
 
    layer = null;
+
+   zoom = 1;
+
+  static  PREVIEW_SIZE = 50;
 
   constructor() {
     super(document.createElement("details"));
@@ -542,21 +550,43 @@ class Z4LayerPreview extends JSComponent {
       return null;
     };
     image.src = "image/chessboard.png";
+    this.name.getStyle().width = Z4LayerPreview.PREVIEW_SIZE + "px";
+    this.canvas.setAttribute("width", "" + Z4LayerPreview.PREVIEW_SIZE);
+    this.canvas.setAttribute("height", "" + Z4LayerPreview.PREVIEW_SIZE);
+    this.canvas.getStyle().width = Z4LayerPreview.PREVIEW_SIZE + "px";
+    this.canvas.getStyle().height = Z4LayerPreview.PREVIEW_SIZE + "px";
+    this.summary.setLayout(new BorderLayout(0, 0));
+    this.summary.add(this.name, BorderLayout.NORTH);
+    this.summary.add(this.canvas, BorderLayout.CENTER);
+    this.appendNodeChild(document.createElement("summary"));
+    this.appendChildInTree("summary", this.summary);
   }
 
    setLayer(layer) {
     this.layer = layer;
+    this.name.setText(this.layer.getName());
+    let d = layer.getSize();
+    let ratio = d.width / d.height;
+    if (ratio > 1) {
+      this.canvas.setAttribute("width", "" + Z4LayerPreview.PREVIEW_SIZE);
+      this.canvas.setAttribute("height", "" + (Z4LayerPreview.PREVIEW_SIZE / ratio));
+      this.zoom = Math.min(Z4LayerPreview.PREVIEW_SIZE / d.width, Z4LayerPreview.PREVIEW_SIZE / ratio / d.height);
+    } else {
+      this.canvas.setAttribute("width", "" + (Z4LayerPreview.PREVIEW_SIZE / ratio));
+      this.canvas.setAttribute("height", "" + Z4LayerPreview.PREVIEW_SIZE);
+      this.zoom = Math.min(Z4LayerPreview.PREVIEW_SIZE / ratio / d.width, Z4LayerPreview.PREVIEW_SIZE / d.height);
+    }
     this.drawLayer();
   }
 
    drawLayer() {
     this.ctx.save();
     this.ctx.fillStyle = this.chessboard;
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.fillRect(0, 0, parseInt(this.canvas.getAttribute("width")), parseInt(this.canvas.getAttribute("height")));
     this.ctx.restore();
     if (this.layer) {
       this.ctx.save();
-      // this.ctx.scale(this.zoom, this.zoom);
+      this.ctx.scale(this.zoom, this.zoom);
       this.layer.draw(this.ctx);
       this.ctx.restore();
     }
@@ -663,6 +693,7 @@ class Z4RibbonFilePanel extends JSPanel {
     let constraints = new GridBagConstraints();
     constraints.gridx = gridx;
     constraints.gridy = gridy;
+    constraints.anchor = GridBagConstraints.NORTH;
     switch(border) {
       case "left":
         constraints.insets = new Insets(0, 5, 0, 0);
@@ -830,6 +861,7 @@ class Z4RibbonLayerPanel extends JSPanel {
     let constraints = new GridBagConstraints();
     constraints.gridx = gridx;
     constraints.gridy = gridy;
+    constraints.anchor = GridBagConstraints.NORTH;
     switch(border) {
       case "left":
         constraints.insets = new Insets(0, 5, 0, 0);
@@ -1499,8 +1531,6 @@ class Z4Translations {
 
   static  NEW_LAYER = "";
 
-  static  BACKGROUND_LAYER = "";
-
   // Ribbon Settings
   static  SETTINGS = "";
 
@@ -1543,6 +1573,8 @@ class Z4Translations {
 
   static  FIT = "";
 
+  static  BACKGROUND = "";
+
   static {
     switch(navigator.language.substring(0, 2)) {
       case "en":
@@ -1577,7 +1609,6 @@ class Z4Translations {
     // Ribbon Layer
     Z4Translations.LAYER = "Layer";
     Z4Translations.NEW_LAYER = "New Layer";
-    Z4Translations.BACKGROUND_LAYER = "Background Layer";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Settings";
     Z4Translations.LANGUAGE = "Language";
@@ -1600,6 +1631,7 @@ class Z4Translations {
     Z4Translations.FILLING_COLOR = "Filling Color";
     Z4Translations.EDIT = "Edit";
     Z4Translations.FIT = "Fit";
+    Z4Translations.BACKGROUND = "Background";
     Z4Translations.CURRENT_LANGUAGE = new KeyValue("en", Z4Translations.LANGUAGE_ENGLISH_NATIVE);
   }
 
@@ -1622,7 +1654,6 @@ class Z4Translations {
     // Ribbon Layer
     Z4Translations.LAYER = "Livello";
     Z4Translations.NEW_LAYER = "Nuovo Livello";
-    Z4Translations.BACKGROUND_LAYER = "Livello di Sfondo";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Impostazioni";
     Z4Translations.LANGUAGE = "Lingua";
@@ -1645,6 +1676,7 @@ class Z4Translations {
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";
     Z4Translations.EDIT = "Modifica";
     Z4Translations.FIT = "Adatta";
+    Z4Translations.BACKGROUND = "Sfondo";
     Z4Translations.CURRENT_LANGUAGE = new KeyValue("it", Z4Translations.LANGUAGE_ITALIAN_NATIVE);
   }
 }

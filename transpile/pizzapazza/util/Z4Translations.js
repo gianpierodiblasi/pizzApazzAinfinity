@@ -36,8 +36,6 @@ class Z4Translations {
 
   static  NEW_LAYER = "";
 
-  static  BACKGROUND_LAYER = "";
-
   // Ribbon Settings
   static  SETTINGS = "";
 
@@ -80,6 +78,8 @@ class Z4Translations {
 
   static  FIT = "";
 
+  static  BACKGROUND = "";
+
   static {
     switch(navigator.language.substring(0, 2)) {
       case "en":
@@ -114,7 +114,6 @@ class Z4Translations {
     // Ribbon Layer
     Z4Translations.LAYER = "Layer";
     Z4Translations.NEW_LAYER = "New Layer";
-    Z4Translations.BACKGROUND_LAYER = "Background Layer";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Settings";
     Z4Translations.LANGUAGE = "Language";
@@ -137,6 +136,7 @@ class Z4Translations {
     Z4Translations.FILLING_COLOR = "Filling Color";
     Z4Translations.EDIT = "Edit";
     Z4Translations.FIT = "Fit";
+    Z4Translations.BACKGROUND = "Background";
     Z4Translations.CURRENT_LANGUAGE = new KeyValue("en", Z4Translations.LANGUAGE_ENGLISH_NATIVE);
   }
 
@@ -159,7 +159,6 @@ class Z4Translations {
     // Ribbon Layer
     Z4Translations.LAYER = "Livello";
     Z4Translations.NEW_LAYER = "Nuovo Livello";
-    Z4Translations.BACKGROUND_LAYER = "Livello di Sfondo";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Impostazioni";
     Z4Translations.LANGUAGE = "Lingua";
@@ -182,6 +181,7 @@ class Z4Translations {
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";
     Z4Translations.EDIT = "Modifica";
     Z4Translations.FIT = "Adatta";
+    Z4Translations.BACKGROUND = "Sfondo";
     Z4Translations.CURRENT_LANGUAGE = new KeyValue("it", Z4Translations.LANGUAGE_ITALIAN_NATIVE);
   }
 }

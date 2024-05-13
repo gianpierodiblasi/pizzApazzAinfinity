@@ -122,7 +122,7 @@ public class Z4Canvas extends JSComponent {
    */
   public void create(int width, int height, Color color) {
     this.paper.reset();
-    this.paper.addLayer(Z4Translations.BACKGROUND_LAYER, width, height, color, width, height);
+    this.paper.addLayer(Z4Translations.BACKGROUND, width, height, color, width, height);
     
     this.ribbonLayerPanel.reset();
     this.ribbonLayerPanel.addLayerPreview(this.paper.getLayerAt(this.paper.getLayersCount() - 1));
@@ -162,7 +162,7 @@ public class Z4Canvas extends JSComponent {
     
     image.onload = event -> {
       this.paper.reset();
-      this.paper.addLayerFromImage(Z4Translations.BACKGROUND_LAYER, image, (int) image.width, (int) image.height);
+      this.paper.addLayerFromImage(Z4Translations.BACKGROUND, image, (int) image.width, (int) image.height);
       this.afterCreate(projectName, (int) image.width, (int) image.height);
       this.drawCanvas();
       return null;

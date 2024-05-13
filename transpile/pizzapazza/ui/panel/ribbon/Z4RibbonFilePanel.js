@@ -69,6 +69,7 @@ class Z4RibbonFilePanel extends JSPanel {
     let constraints = new GridBagConstraints();
     constraints.gridx = gridx;
     constraints.gridy = gridy;
+    constraints.anchor = GridBagConstraints.NORTH;
     switch(border) {
       case "left":
         constraints.insets = new Insets(0, 5, 0, 0);
