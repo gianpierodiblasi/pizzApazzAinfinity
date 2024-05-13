@@ -19,6 +19,14 @@ class Z4LayerPreview extends JSComponent {
 
    editName = new JSTextField();
 
+   offsetXSlider = new JSSlider();
+
+   offsetXSpinner = new JSSpinner();
+
+   offsetYSlider = new JSSlider();
+
+   offsetYSpinner = new JSSpinner();
+
    canvas = null;
 
    layer = null;
@@ -84,13 +92,48 @@ class Z4LayerPreview extends JSComponent {
         this.layer.setName(newName);
       }
     });
-    let constraints = new GridBagConstraints();
-    constraints.gridx = 0;
-    constraints.gridy = 0;
-    constraints.gridwidth = 2;
-    constraints.fill = GridBagConstraints.HORIZONTAL;
-    this.editor.add(this.editName, constraints);
+    this.addComponent(this.editName, 0, 0, 2, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 5, 0));
+    this.addLabel(Z4Translations.OFFSET_X, 0, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    this.offsetXSpinner.getStyle().minWidth = "4rem";
+    this.offsetXSpinner.getChilStyleByQuery("input[type=number]").minWidth = "3.5rem";
+    this.offsetXSpinner.getChilStyleByQuery("input[type=number]").width = "3.5rem";
+    this.offsetXSpinner.addChangeListener(event => this.onChange(true, this.offsetXSpinner, this.offsetXSlider));
+    this.addComponent(this.offsetXSpinner, 1, 1, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    this.offsetXSlider.addChangeListener(event => this.onChange(false, this.offsetXSpinner, this.offsetXSlider));
+    this.offsetXSlider.getStyle().minWidth = "25rem";
+    this.addComponent(this.offsetXSlider, 0, 2, 2, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
     this.appendChild(this.editor);
+  }
+
+   addLabel(text, gridx, gridy, gridwidth, gridheight, anchor, fill) {
+    let label = new JSLabel();
+    label.setText(text);
+    this.addComponent(label, gridx, gridy, gridwidth, gridheight, anchor, fill, null);
+  }
+
+   addComponent(component, gridx, gridy, gridwidth, gridheight, anchor, fill, insets) {
+    let constraints = new GridBagConstraints();
+    constraints.gridx = gridx;
+    constraints.gridy = gridy;
+    constraints.gridwidth = gridwidth;
+    constraints.gridheight = gridheight;
+    constraints.anchor = anchor;
+    constraints.fill = fill;
+    if (insets) {
+      constraints.insets = insets;
+    }
+    this.editor.add(component, constraints);
+  }
+
+   onChange(spTosl, spinner, slider) {
+    this.canvas.setSaved(false);
+    if (spTosl) {
+      slider.setValue(spinner.getValue());
+    } else {
+      spinner.setValue(slider.getValue());
+    }
+    this.layer.move(this.offsetXSlider.getValue(), this.offsetYSlider.getValue());
+    this.canvas.drawCanvas();
   }
 
   /**
@@ -123,6 +166,16 @@ class Z4LayerPreview extends JSComponent {
     this.preview.getStyle().marginBottom = (Z4LayerPreview.PREVIEW_SIZE - h - 1) / 2 + "px";
     this.preview.getStyle().marginLeft = (Z4LayerPreview.PREVIEW_SIZE - w - 1) / 2 + "px";
     this.preview.getStyle().marginRight = (Z4LayerPreview.PREVIEW_SIZE - w - 1) / 2 + "px";
+    let p = layer.getOffset();
+    let dC = this.canvas.getSize();
+    this.offsetXSlider.setMinimum(-d.width);
+    this.offsetXSlider.setMaximum(dC.width);
+    this.offsetXSlider.setValue(p.x);
+    this.offsetXSpinner.setModel(new SpinnerNumberModel(p.x, -d.width, dC.width, 1));
+    this.offsetYSlider.setMinimum(-d.height);
+    this.offsetYSlider.setMaximum(dC.height);
+    this.offsetYSlider.setValue(p.y);
+    this.offsetYSpinner.setModel(new SpinnerNumberModel(p.y, -d.height, dC.height, 1));
     this.drawLayer();
   }
 

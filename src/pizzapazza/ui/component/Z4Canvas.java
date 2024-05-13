@@ -13,6 +13,7 @@ import def.dom.WheelEvent;
 import def.js.Array;
 import def.js.JSON;
 import javascript.awt.Color;
+import javascript.awt.Dimension;
 import javascript.awt.Point;
 import javascript.swing.JSComponent;
 import jsweet.util.union.Union4;
@@ -411,6 +412,15 @@ public class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Returns the size
+   *
+   * @return The size
+   */
+  public Dimension getSize() {
+    return new Dimension(this.width, this.height);
+  }
+
+  /**
    * Checks if this canvas is saved
    *
    * @return true if this canvas is saved, false otherwise
@@ -479,7 +489,10 @@ public class Z4Canvas extends JSComponent {
     }
   }
 
-  private void drawCanvas() {
+  /**
+   * Draws this canvas
+   */
+  public void drawCanvas() {
     this.ctx.save();
     this.ctx.fillStyle = this.chessboard;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);

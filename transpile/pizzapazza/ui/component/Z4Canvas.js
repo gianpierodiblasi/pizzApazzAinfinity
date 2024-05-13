@@ -335,6 +335,15 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Returns the size
+   *
+   * @return The size
+   */
+   getSize() {
+    return new Dimension(this.width, this.height);
+  }
+
+  /**
    * Checks if this canvas is saved
    *
    * @return true if this canvas is saved, false otherwise
@@ -403,6 +412,9 @@ class Z4Canvas extends JSComponent {
     }
   }
 
+  /**
+   * Draws this canvas
+   */
    drawCanvas() {
     this.ctx.save();
     this.ctx.fillStyle = this.chessboard;

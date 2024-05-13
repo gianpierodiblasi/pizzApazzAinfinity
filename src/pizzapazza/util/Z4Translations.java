@@ -55,6 +55,8 @@ public class Z4Translations {
   public static String FILLING_COLOR = "";
   public static String EDIT = "";
   public static String FIT = "";
+  public static String OFFSET_X = "";
+  public static String OFFSET_Y = "";
 
   static {
     switch (navigator.language.substring(0, 2)) {
@@ -116,6 +118,8 @@ public class Z4Translations {
     Z4Translations.FILLING_COLOR = "Filling Color";
     Z4Translations.EDIT = "Edit";
     Z4Translations.FIT = "Fit";
+    Z4Translations.OFFSET_X = "Offset X";
+    Z4Translations.OFFSET_Y = "Offset Y";
 
     Z4Translations.CURRENT_LANGUAGE = new KeyValue<>("en", Z4Translations.LANGUAGE_ENGLISH_NATIVE);
   }
@@ -140,6 +144,7 @@ public class Z4Translations {
     // Ribbon Layer
     Z4Translations.LAYER = "Livello";
     Z4Translations.NEW_LAYER = "Nuovo Livello";
+    Z4Translations.BACKGROUND_LAYER = "Sfondo";
 
     // Ribbon Settings
     Z4Translations.SETTINGS = "Impostazioni";
@@ -164,7 +169,8 @@ public class Z4Translations {
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";
     Z4Translations.EDIT = "Modifica";
     Z4Translations.FIT = "Adatta";
-    Z4Translations.BACKGROUND_LAYER = "Sfondo";
+    Z4Translations.OFFSET_X = "Offset X";
+    Z4Translations.OFFSET_Y = "Offset Y";
 
     Z4Translations.CURRENT_LANGUAGE = new KeyValue<>("it", Z4Translations.LANGUAGE_ITALIAN_NATIVE);
   }
