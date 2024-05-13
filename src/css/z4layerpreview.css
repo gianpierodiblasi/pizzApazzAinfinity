@@ -6,13 +6,8 @@
   border: 2px solid var(--main-action-bgcolor);
   border-radius: var(--roundness);
 }
-.z4layerpreview:hover:not([disabled]), .z4layerpreview:has(summary:focus) {
+.z4layerpreview:has(summary:focus) {
   box-shadow: .15rem .15rem .15rem var(--main-action-bgcolor);
-}
-.z4layerpreview[disabled] {
-  filter: opacity(0.5);
-  cursor: default;
-  pointer-events: none;
 }
 
 .z4layerpreview summary {
