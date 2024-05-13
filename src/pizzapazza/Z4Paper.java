@@ -70,8 +70,9 @@ public class Z4Paper {
    * Draws this paper
    *
    * @param ctx The context used to draw the paper
+   * @param noOffset true to not use the offset, false otherwise
    */
-  public void draw($CanvasRenderingContext2D ctx) {
-    this.layers.forEach(layer -> layer.draw(ctx));
+  public void draw($CanvasRenderingContext2D ctx, boolean noOffset) {
+    this.layers.forEach(layer -> layer.draw(ctx, noOffset));
   }
 }

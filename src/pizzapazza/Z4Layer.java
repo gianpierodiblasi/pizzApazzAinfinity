@@ -143,8 +143,9 @@ public class Z4Layer {
    * Draws this layer
    *
    * @param ctx The context used to draw the layer
+   * @param noOffset true to not use the offset, false otherwise
    */
-  public void draw($CanvasRenderingContext2D ctx) {
-    ctx.drawImage(this.offscreen, this.offsetX, this.offsetY);
+  public void draw($CanvasRenderingContext2D ctx, boolean noOffset) {
+    ctx.drawImage(this.offscreen, noOffset ? 0 : this.offsetX, noOffset ? 0 : this.offsetY);
   }
 }

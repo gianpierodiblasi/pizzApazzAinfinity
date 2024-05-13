@@ -2,7 +2,7 @@
 }
 
 .z4ribbon {
-  min-height: 10rem;
+  min-height: 10.5rem;
 }
 
 .z4ribbonfilepanel {
@@ -93,10 +93,15 @@
 }
 
 .z4layerpreview summary label {
-  font-size: small;
+  font-size: calc(var(--font-size) - 0.15rem);
   text-wrap: nowrap;
+  text-align: center;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.z4layerpreview summary canvas {
+  border: 1px solid var(--main-action-bgcolor);
 }
 
 .z4layerpreview .jscolorpanel {

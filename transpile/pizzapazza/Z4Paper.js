@@ -63,8 +63,9 @@ class Z4Paper {
    * Draws this paper
    *
    * @param ctx The context used to draw the paper
+   * @param noOffset true to not use the offset, false otherwise
    */
-   draw(ctx) {
-    this.layers.forEach(layer => layer.draw(ctx));
+   draw(ctx, noOffset) {
+    this.layers.forEach(layer => layer.draw(ctx, noOffset));
   }
 }

@@ -125,8 +125,9 @@ class Z4Layer {
    * Draws this layer
    *
    * @param ctx The context used to draw the layer
+   * @param noOffset true to not use the offset, false otherwise
    */
-   draw(ctx) {
-    ctx.drawImage(this.offscreen, this.offsetX, this.offsetY);
+   draw(ctx, noOffset) {
+    ctx.drawImage(this.offscreen, noOffset ? 0 : this.offsetX, noOffset ? 0 : this.offsetY);
   }
 }

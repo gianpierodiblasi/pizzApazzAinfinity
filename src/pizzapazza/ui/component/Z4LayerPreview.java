@@ -3,7 +3,7 @@ package pizzapazza.ui.component;
 import def.dom.CanvasGradient;
 import def.dom.CanvasPattern;
 import static def.dom.Globals.document;
-import static def.dom.Globals.parseInt;
+import static def.js.Globals.parseFloat;
 import javascript.awt.BorderLayout;
 import javascript.awt.Dimension;
 import javascript.swing.JSComponent;
@@ -83,8 +83,6 @@ public class Z4LayerPreview extends JSComponent {
 
     this.canvas.setAttribute("width", "" + Z4LayerPreview.PREVIEW_SIZE);
     this.canvas.setAttribute("height", "" + Z4LayerPreview.PREVIEW_SIZE);
-    this.canvas.getStyle().width = Z4LayerPreview.PREVIEW_SIZE + "px";
-    this.canvas.getStyle().height = Z4LayerPreview.PREVIEW_SIZE + "px";
 
     this.summary.setLayout(new BorderLayout(0, 0));
     this.summary.add(this.name, BorderLayout.NORTH);
@@ -94,21 +92,34 @@ public class Z4LayerPreview extends JSComponent {
     this.appendChildInTree("summary", this.summary);
   }
 
+  /**
+   * Sets the layer
+   * @param layer The layer
+   */
   public void setLayer(Z4Layer layer) {
     this.layer = layer;
     this.name.setText(this.layer.getName());
-
+    this.setChildAttributeByQuery("summary", "title", this.layer.getName());
+    
     Dimension d = layer.getSize();
     double ratio = d.width / d.height;
+    double w;
+    double h;
     if (ratio > 1) {
-      this.canvas.setAttribute("width", "" + Z4LayerPreview.PREVIEW_SIZE);
-      this.canvas.setAttribute("height", "" + (Z4LayerPreview.PREVIEW_SIZE / ratio));
-      this.zoom = Math.min(Z4LayerPreview.PREVIEW_SIZE / d.width, Z4LayerPreview.PREVIEW_SIZE / ratio / d.height);
+      w = Z4LayerPreview.PREVIEW_SIZE;
+      h = Z4LayerPreview.PREVIEW_SIZE / ratio;
     } else {
-      this.canvas.setAttribute("width", "" + (Z4LayerPreview.PREVIEW_SIZE / ratio));
-      this.canvas.setAttribute("height", "" + Z4LayerPreview.PREVIEW_SIZE);
-      this.zoom = Math.min(Z4LayerPreview.PREVIEW_SIZE / ratio / d.width, Z4LayerPreview.PREVIEW_SIZE / d.height);
+      w = Z4LayerPreview.PREVIEW_SIZE * ratio;
+      h = Z4LayerPreview.PREVIEW_SIZE;
     }
+    this.zoom = Math.min(w / d.width, h / d.height);
+
+    this.canvas.setAttribute("width", "" + w);
+    this.canvas.setAttribute("height", "" + h);
+    this.canvas.getStyle().marginTop = (Z4LayerPreview.PREVIEW_SIZE - h - 1) / 2 + "px";
+    this.canvas.getStyle().marginBottom = (Z4LayerPreview.PREVIEW_SIZE - h - 1) / 2 + "px";
+    this.canvas.getStyle().marginLeft = (Z4LayerPreview.PREVIEW_SIZE - w - 1) / 2 + "px";
+    this.canvas.getStyle().marginRight = (Z4LayerPreview.PREVIEW_SIZE - w - 1) / 2 + "px";
 
     this.drawLayer();
   }
@@ -116,13 +127,13 @@ public class Z4LayerPreview extends JSComponent {
   private void drawLayer() {
     this.ctx.save();
     this.ctx.fillStyle = this.chessboard;
-    this.ctx.fillRect(0, 0, parseInt(this.canvas.getAttribute("width")), parseInt(this.canvas.getAttribute("height")));
+    this.ctx.fillRect(0, 0, parseFloat(this.canvas.getAttribute("width")), parseFloat(this.canvas.getAttribute("height")));
     this.ctx.restore();
 
     if ($exists(this.layer)) {
       this.ctx.save();
       this.ctx.scale(this.zoom, this.zoom);
-      this.layer.draw(this.ctx);
+      this.layer.draw(this.ctx, true);
       this.ctx.restore();
     }
   }
