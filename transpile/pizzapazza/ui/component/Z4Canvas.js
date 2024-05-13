@@ -344,6 +344,15 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Sets the saved status of the canvae
+   *
+   * @param saved true to set the canvas as saved, false otherwise
+   */
+   setSaved(saved) {
+    this.saved = saved;
+  }
+
+  /**
    * Sets the zoom
    *
    * @param zoom The zoom

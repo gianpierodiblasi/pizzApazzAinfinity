@@ -95,6 +95,15 @@ class Z4Layer {
   }
 
   /**
+   * Sets the layer name
+   *
+   * @param name The layer name
+   */
+   setName(name) {
+    this.name = name;
+  }
+
+  /**
    * Returns the layer name
    *
    * @return The layer name

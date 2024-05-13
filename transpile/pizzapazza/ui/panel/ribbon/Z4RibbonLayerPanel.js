@@ -132,7 +132,7 @@ class Z4RibbonLayerPanel extends JSPanel {
    */
    addLayerPreview(layer) {
     let preview = new Z4LayerPreview();
-    preview.setLayer(layer);
+    preview.setLayer(this.canvas, layer);
     this.layersPreview.add(preview, null);
   }
 }

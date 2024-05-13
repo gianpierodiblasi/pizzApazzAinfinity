@@ -420,6 +420,15 @@ public class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Sets the saved status of the canvae
+   *
+   * @param saved true to set the canvas as saved, false otherwise
+   */
+  public void setSaved(boolean saved) {
+    this.saved = saved;
+  }
+
+  /**
    * Sets the zoom
    *
    * @param zoom The zoom

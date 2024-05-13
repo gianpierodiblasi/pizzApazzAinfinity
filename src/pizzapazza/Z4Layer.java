@@ -113,6 +113,15 @@ public class Z4Layer {
   }
 
   /**
+   * Sets the layer name
+   *
+   * @param name The layer name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
    * Returns the layer name
    *
    * @return The layer name
