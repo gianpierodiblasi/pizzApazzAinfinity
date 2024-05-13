@@ -1,7 +1,7 @@
 package pizzapazza.ui.tab;
 
 import javascript.swing.JSTabbedPane;
-import pizzapazza.ui.Z4Canvas;
+import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonFilePanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;

@@ -2,7 +2,7 @@ package pizzapazza.ui.frame;
 
 import javascript.awt.BorderLayout;
 import javascript.swing.JSFrame;
-import pizzapazza.ui.Z4Canvas;
+import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.tab.Z4Ribbon;
 

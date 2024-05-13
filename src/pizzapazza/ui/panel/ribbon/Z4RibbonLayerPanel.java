@@ -13,7 +13,7 @@ import javascript.swing.JSLabel;
 import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
 import pizzapazza.Z4Constants;
-import pizzapazza.ui.Z4Canvas;
+import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.panel.Z4NewImagePanel;
 import pizzapazza.util.Z4Translations;
 import static simulation.js.$Globals.$typeof;

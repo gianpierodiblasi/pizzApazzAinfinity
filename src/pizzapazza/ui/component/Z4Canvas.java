@@ -1,4 +1,4 @@
-package pizzapazza.ui;
+package pizzapazza.ui.component;
 
 import def.dom.CanvasGradient;
 import def.dom.CanvasPattern;

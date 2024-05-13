@@ -16,7 +16,7 @@ import javascript.swing.JSPanel;
 import javascript.swing.JSTextField;
 import javascript.swing.event.ChangeEvent;
 import pizzapazza.Z4Constants;
-import pizzapazza.ui.Z4Canvas;
+import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.panel.Z4ExportToFilePanel;
 import pizzapazza.ui.panel.Z4NewImagePanel;
 import pizzapazza.ui.panel.Z4StatusPanel;
