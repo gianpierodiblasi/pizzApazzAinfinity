@@ -1,5 +1,6 @@
 package pizzapazza.ui.panel.ribbon;
 
+import def.dom.DragEvent;
 import static def.dom.Globals.document;
 import javascript.awt.BoxLayout;
 import javascript.awt.Dimension;
@@ -19,8 +20,10 @@ import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.component.Z4LayerPreview;
 import pizzapazza.ui.panel.Z4NewImagePanel;
 import pizzapazza.util.Z4Translations;
+import simulation.dom.$DOMRect;
 import static simulation.js.$Globals.$typeof;
 import static simulation.js.$Globals.navigator;
+import static simulation.js.$Globals.parseInt;
 
 /**
  * The ribbon panel containing the layer menus
@@ -32,6 +35,8 @@ public class Z4RibbonLayerPanel extends JSPanel {
   private final JSPanel layersPreview = new JSPanel();
 
   private Z4Canvas canvas;
+  private Z4Layer layerDnD;
+  private Z4LayerPreview previewDnD;
 
   /**
    * Creates the object
@@ -49,6 +54,25 @@ public class Z4RibbonLayerPanel extends JSPanel {
 
     this.layersPreview.setLayout(new BoxLayout(this.layersPreview, BoxLayout.X_AXIS));
     this.layersPreview.getStyle().overflowX = "scroll";
+    this.layersPreview.addEventListener("dragenter", event -> event.preventDefault());
+    this.layersPreview.addEventListener("dragover", event -> event.preventDefault());
+    this.layersPreview.addEventListener("dragleave", event -> event.preventDefault());
+    this.layersPreview.addEventListener("drop", event -> {
+      event.preventDefault();
+
+      DragEvent evt = (DragEvent) event;
+      $DOMRect rect = this.previewDnD.invoke("getBoundingClientRect()");
+      $DOMRect rectLayers = this.layersPreview.invoke("getBoundingClientRect()");
+
+      int index = parseInt((evt.clientX - rectLayers.left) / rect.width);
+      if (!this.canvas.moveLayer(this.layerDnD, index)) {
+      } else if (index < this.canvas.getLayersCount()) {
+        index = Math.min(this.canvas.getLayersCount(), index + 1);
+        this.layersPreview.insertBefore(this.previewDnD, "details:nth-child(" + index + ")");
+      } else {
+        this.layersPreview.add(this.previewDnD, null);
+      }
+    });
 
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = 4;
@@ -165,6 +189,12 @@ public class Z4RibbonLayerPanel extends JSPanel {
   public void addLayerPreview(Z4Layer layer) {
     Z4LayerPreview preview = new Z4LayerPreview();
     preview.setLayer(this.canvas, layer);
+    preview.setChildAttributeByQuery("summary", "draggable", "true");
+    preview.addEventListener("dragstart", event -> {
+      ((DragEvent) event).dataTransfer.effectAllowed = "move";
+      this.layerDnD = layer;
+      this.previewDnD = preview;
+    });
 
     this.layersPreview.add(preview, null);
   }

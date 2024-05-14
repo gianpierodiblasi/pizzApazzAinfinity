@@ -403,6 +403,32 @@ public class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Moves a layer to a position
+   *
+   * @param layer The layer
+   * @param position The new position
+   * @return true if the move has been performed, false otherwise
+   */
+  public boolean moveLayer(Z4Layer layer, int position) {
+    if (this.paper.moveLayer(layer, position)) {
+      this.saved = false;
+      this.drawCanvas();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Returns the layers count
+   *
+   * @return The layers count
+   */
+  public int getLayersCount() {
+    return this.paper.getLayersCount();
+  }
+
+  /**
    * Returns the project name
    *
    * @return The project name

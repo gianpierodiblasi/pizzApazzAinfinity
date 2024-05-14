@@ -371,6 +371,32 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Moves a layer to a position
+   *
+   * @param layer The layer
+   * @param position The new position
+   * @return true if the move has been performed, false otherwise
+   */
+   moveLayer(layer, position) {
+    if (this.paper.moveLayer(layer, position)) {
+      this.saved = false;
+      this.drawCanvas();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Returns the layers count
+   *
+   * @return The layers count
+   */
+   getLayersCount() {
+    return this.paper.getLayersCount();
+  }
+
+  /**
    * Returns the project name
    *
    * @return The project name
@@ -943,6 +969,10 @@ class Z4RibbonLayerPanel extends JSPanel {
 
    canvas = null;
 
+   layerDnD = null;
+
+   previewDnD = null;
+
   /**
    * Creates the object
    */
@@ -957,6 +987,23 @@ class Z4RibbonLayerPanel extends JSPanel {
     this.addVLine(3);
     this.layersPreview.setLayout(new BoxLayout(this.layersPreview, BoxLayout.X_AXIS));
     this.layersPreview.getStyle().overflowX = "scroll";
+    this.layersPreview.addEventListener("dragenter", event => event.preventDefault());
+    this.layersPreview.addEventListener("dragover", event => event.preventDefault());
+    this.layersPreview.addEventListener("dragleave", event => event.preventDefault());
+    this.layersPreview.addEventListener("drop", event => {
+      event.preventDefault();
+      let evt = event;
+      let rect = this.previewDnD.invoke("getBoundingClientRect()");
+      let rectLayers = this.layersPreview.invoke("getBoundingClientRect()");
+      let index = parseInt((evt.clientX - rectLayers.left) / rect.width);
+      if (!this.canvas.moveLayer(this.layerDnD, index)) {
+      } else if (index < this.canvas.getLayersCount()) {
+        index = Math.min(this.canvas.getLayersCount(), index + 1);
+        this.layersPreview.insertBefore(this.previewDnD, "details:nth-child(" + index + ")");
+      } else {
+        this.layersPreview.add(this.previewDnD, null);
+      }
+    });
     let constraints = new GridBagConstraints();
     constraints.gridx = 4;
     constraints.gridy = 0;
@@ -1067,6 +1114,12 @@ class Z4RibbonLayerPanel extends JSPanel {
    addLayerPreview(layer) {
     let preview = new Z4LayerPreview();
     preview.setLayer(this.canvas, layer);
+    preview.setChildAttributeByQuery("summary", "draggable", "true");
+    preview.addEventListener("dragstart", event => {
+      (event).dataTransfer.effectAllowed = "move";
+      this.layerDnD = layer;
+      this.previewDnD = preview;
+    });
     this.layersPreview.add(preview, null);
   }
 }
@@ -1108,6 +1161,8 @@ class Z4RibbonSettingsPanel extends JSPanel {
     constraints.gridx = 0;
     constraints.gridy = 1;
     constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.anchor = GridBagConstraints.NORTH;
+    constraints.weighty = 1;
     constraints.insets = new Insets(0, 5, 0, 5);
     this.add(this.language, constraints);
     label = new JSLabel();
@@ -1142,6 +1197,8 @@ class Z4RibbonSettingsPanel extends JSPanel {
     constraints.gridx = 1;
     constraints.gridy = 1;
     constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.anchor = GridBagConstraints.NORTH;
+    constraints.weighty = 1;
     constraints.insets = new Insets(0, 5, 0, 5);
     this.add(this.theme, constraints);
     label = new JSLabel();
@@ -1160,6 +1217,8 @@ class Z4RibbonSettingsPanel extends JSPanel {
     constraints.gridx = 2;
     constraints.gridy = 1;
     constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.anchor = GridBagConstraints.NORTH;
+    constraints.weighty = 1;
     constraints.insets = new Insets(0, 5, 0, 5);
     this.add(this.color, constraints);
     let reset = new JSButton();
@@ -1170,6 +1229,8 @@ class Z4RibbonSettingsPanel extends JSPanel {
     constraints.gridx = 3;
     constraints.gridy = 1;
     constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.anchor = GridBagConstraints.NORTH;
+    constraints.weighty = 1;
     constraints.insets = new Insets(0, 5, 0, 5);
     this.add(reset, constraints);
     label = new JSLabel();
@@ -2054,6 +2115,28 @@ class Z4Paper {
    */
    addLayerFromImage(name, image, containerWidth, containerHeight) {
     this.layers.push(Z4Layer.fromImage(name, image, containerWidth, containerHeight));
+  }
+
+  /**
+   * Moves a layer to a position
+   *
+   * @param layer The layer
+   * @param position The new position
+   * @return true if the move has been performed, false otherwise
+   */
+   moveLayer(layer, position) {
+    let newPosition = Math.min(this.layers.length, position);
+    let currentPosition = this.layers.indexOf(layer);
+    if (newPosition < currentPosition) {
+      this.layers.splice(newPosition, 0, this.layers.splice(currentPosition, 1)[0]);
+      return true;
+    } else if (newPosition > currentPosition) {
+      this.layers.splice(newPosition, 0, this.layers[currentPosition]);
+      this.layers.splice(currentPosition, 1);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /**

@@ -53,6 +53,28 @@ class Z4Paper {
   }
 
   /**
+   * Moves a layer to a position
+   *
+   * @param layer The layer
+   * @param position The new position
+   * @return true if the move has been performed, false otherwise
+   */
+   moveLayer(layer, position) {
+    let newPosition = Math.min(this.layers.length, position);
+    let currentPosition = this.layers.indexOf(layer);
+    if (newPosition < currentPosition) {
+      this.layers.splice(newPosition, 0, this.layers.splice(currentPosition, 1)[0]);
+      return true;
+    } else if (newPosition > currentPosition) {
+      this.layers.splice(newPosition, 0, this.layers[currentPosition]);
+      this.layers.splice(currentPosition, 1);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
    * Resets the paper
    */
    reset() {

@@ -36,6 +36,8 @@ class Z4RibbonSettingsPanel extends JSPanel {
     constraints.gridx = 0;
     constraints.gridy = 1;
     constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.anchor = GridBagConstraints.NORTH;
+    constraints.weighty = 1;
     constraints.insets = new Insets(0, 5, 0, 5);
     this.add(this.language, constraints);
     label = new JSLabel();
@@ -70,6 +72,8 @@ class Z4RibbonSettingsPanel extends JSPanel {
     constraints.gridx = 1;
     constraints.gridy = 1;
     constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.anchor = GridBagConstraints.NORTH;
+    constraints.weighty = 1;
     constraints.insets = new Insets(0, 5, 0, 5);
     this.add(this.theme, constraints);
     label = new JSLabel();
@@ -88,6 +92,8 @@ class Z4RibbonSettingsPanel extends JSPanel {
     constraints.gridx = 2;
     constraints.gridy = 1;
     constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.anchor = GridBagConstraints.NORTH;
+    constraints.weighty = 1;
     constraints.insets = new Insets(0, 5, 0, 5);
     this.add(this.color, constraints);
     let reset = new JSButton();
@@ -98,6 +104,8 @@ class Z4RibbonSettingsPanel extends JSPanel {
     constraints.gridx = 3;
     constraints.gridy = 1;
     constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.anchor = GridBagConstraints.NORTH;
+    constraints.weighty = 1;
     constraints.insets = new Insets(0, 5, 0, 5);
     this.add(reset, constraints);
     label = new JSLabel();

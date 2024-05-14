@@ -60,6 +60,29 @@ public class Z4Paper {
   }
 
   /**
+   * Moves a layer to a position
+   *
+   * @param layer The layer
+   * @param position The new position
+   * @return true if the move has been performed, false otherwise
+   */
+  public boolean moveLayer(Z4Layer layer, int position) {
+    int newPosition = Math.min(this.layers.length, position);
+    int currentPosition = this.layers.indexOf(layer);
+
+    if (newPosition < currentPosition) {
+      this.layers.splice(newPosition, 0, this.layers.splice(currentPosition, 1).$get(0));
+      return true;
+    } else if (newPosition > currentPosition) {
+      this.layers.splice(newPosition, 0, this.layers.$get(currentPosition));
+      this.layers.splice(currentPosition, 1);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
    * Resets the paper
    */
   public void reset() {

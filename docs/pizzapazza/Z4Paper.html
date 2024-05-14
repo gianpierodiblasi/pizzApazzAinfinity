@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -185,7 +185,8 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addLayer(int,int,javascript.awt.Color,int,int)">addLayer</a></span>&#8203;(int&nbsp;width,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addLayer(java.lang.String,int,int,javascript.awt.Color,int,int)">addLayer</a></span>&#8203;(java.lang.String&nbsp;name,
+        int&nbsp;width,
         int&nbsp;height,
         javascript.awt.Color&nbsp;color,
         int&nbsp;containerWidth,
@@ -196,7 +197,8 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addLayerFromImage(simulation.dom.$Image,int,int)">addLayerFromImage</a></span>&#8203;(simulation.dom.$Image&nbsp;image,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addLayerFromImage(java.lang.String,simulation.dom.$Image,int,int)">addLayerFromImage</a></span>&#8203;(java.lang.String&nbsp;name,
+                 simulation.dom.$Image&nbsp;image,
                  int&nbsp;containerWidth,
                  int&nbsp;containerHeight)</code></th>
 <td class="colLast">
@@ -205,7 +207,8 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#draw(simulation.dom.$CanvasRenderingContext2D)">draw</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#draw(simulation.dom.$CanvasRenderingContext2D,boolean)">draw</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx,
+    boolean&nbsp;noOffset)</code></th>
 <td class="colLast">
 <div class="block">Draws this paper</div>
 </td>
@@ -225,6 +228,14 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#moveLayer(pizzapazza.Z4Layer,int)">moveLayer</a></span>&#8203;(<a href="Z4Layer.html" title="class in pizzapazza">Z4Layer</a>&nbsp;layer,
+         int&nbsp;position)</code></th>
+<td class="colLast">
+<div class="block">Moves a layer to a position</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#reset()">reset</a></span>()</code></th>
 <td class="colLast">
@@ -304,13 +315,14 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a id="addLayer(int,int,javascript.awt.Color,int,int)">
+<a id="addLayer(java.lang.String,int,int,javascript.awt.Color,int,int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>addLayer</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;addLayer&#8203;(int&nbsp;width,
+<pre class="methodSignature">public&nbsp;void&nbsp;addLayer&#8203;(java.lang.String&nbsp;name,
+                     int&nbsp;width,
                      int&nbsp;height,
                      javascript.awt.Color&nbsp;color,
                      int&nbsp;containerWidth,
@@ -318,6 +330,7 @@ extends java.lang.Object</pre>
 <div class="block">Adds a layer</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>name</code> - The layer name</dd>
 <dd><code>width</code> - The layer width</dd>
 <dd><code>height</code> - The layer height</dd>
 <dd><code>color</code> - The filling color</dd>
@@ -326,21 +339,41 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a id="addLayerFromImage(simulation.dom.$Image,int,int)">
+<a id="addLayerFromImage(java.lang.String,simulation.dom.$Image,int,int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>addLayerFromImage</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;addLayerFromImage&#8203;(simulation.dom.$Image&nbsp;image,
+<pre class="methodSignature">public&nbsp;void&nbsp;addLayerFromImage&#8203;(java.lang.String&nbsp;name,
+                              simulation.dom.$Image&nbsp;image,
                               int&nbsp;containerWidth,
                               int&nbsp;containerHeight)</pre>
 <div class="block">Adds a layer from an image</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>name</code> - The layer name</dd>
 <dd><code>image</code> - The image</dd>
 <dd><code>containerWidth</code> - The container width</dd>
 <dd><code>containerHeight</code> - The container height</dd>
+</dl>
+</li>
+</ul>
+<a id="moveLayer(pizzapazza.Z4Layer,int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>moveLayer</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;moveLayer&#8203;(<a href="Z4Layer.html" title="class in pizzapazza">Z4Layer</a>&nbsp;layer,
+                         int&nbsp;position)</pre>
+<div class="block">Moves a layer to a position</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>layer</code> - The layer</dd>
+<dd><code>position</code> - The new position</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the move has been performed, false otherwise</dd>
 </dl>
 </li>
 </ul>
@@ -354,17 +387,19 @@ extends java.lang.Object</pre>
 <div class="block">Resets the paper</div>
 </li>
 </ul>
-<a id="draw(simulation.dom.$CanvasRenderingContext2D)">
+<a id="draw(simulation.dom.$CanvasRenderingContext2D,boolean)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>draw</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;draw&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;draw&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx,
+                 boolean&nbsp;noOffset)</pre>
 <div class="block">Draws this paper</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>ctx</code> - The context used to draw the paper</dd>
+<dd><code>noOffset</code> - true to not use the offset, false otherwise</dd>
 </dl>
 </li>
 </ul>
