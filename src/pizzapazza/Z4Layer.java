@@ -27,6 +27,7 @@ public class Z4Layer {
   private int offsetX = 0;
   private int offsetY = 0;
   private double opacity = 1;
+  private String compositeOperation = "source-over";
   private final int width;
   private final int height;
 
@@ -113,12 +114,31 @@ public class Z4Layer {
 
   /**
    * Returns the opacity
+   *
    * @return The opacity
    */
   public double getOpacity() {
     return this.opacity;
   }
-  
+
+  /**
+   * Sets the composite operation
+   *
+   * @param compositeOperation The composite operation
+   */
+  public void setCompositeOperation(String compositeOperation) {
+    this.compositeOperation = compositeOperation;
+  }
+
+  /**
+   * Returns the composite operation
+   *
+   * @return The composite operation
+   */
+  public String getCompositeOperation() {
+    return this.compositeOperation;
+  }
+
   /**
    * Moves a layer
    *
@@ -175,6 +195,7 @@ public class Z4Layer {
   public void draw($CanvasRenderingContext2D ctx, boolean noOffset) {
     ctx.save();
     ctx.globalAlpha = this.opacity;
+    ctx.globalCompositeOperation = this.compositeOperation;
     ctx.drawImage(this.offscreen, noOffset ? 0 : this.offsetX, noOffset ? 0 : this.offsetY);
     ctx.restore();
   }
