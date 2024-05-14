@@ -1,7 +1,5 @@
 package pizzapazza.ui.component;
 
-import def.dom.CanvasGradient;
-import def.dom.CanvasPattern;
 import def.dom.Event;
 import def.dom.File;
 import def.dom.FileReader;
@@ -16,7 +14,6 @@ import javascript.awt.Color;
 import javascript.awt.Dimension;
 import javascript.awt.Point;
 import javascript.swing.JSComponent;
-import jsweet.util.union.Union4;
 import pizzapazza.Z4Constants;
 import pizzapazza.Z4Layer;
 import pizzapazza.Z4Paper;
@@ -43,7 +40,6 @@ public class Z4Canvas extends JSComponent {
 
   private final $Canvas canvas = ($Canvas) document.createElement("canvas");
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
-  private Union4<String, CanvasGradient, CanvasPattern, Object> chessboard;
 
   private Z4RibbonLayerPanel ribbonLayerPanel;
   private Z4StatusPanel statusPanel;
@@ -86,14 +82,6 @@ public class Z4Canvas extends JSComponent {
         this.zoomOut();
       }
     });
-
-    $Image image = ($Image) document.createElement("img");
-    image.onload = event -> {
-      this.chessboard = this.ctx.createPattern(image, "repeat");
-      this.drawCanvas();
-      return null;
-    };
-    image.src = "image/chessboard.png";
   }
 
   /**
@@ -523,11 +511,6 @@ public class Z4Canvas extends JSComponent {
    * Draws this canvas
    */
   public void drawCanvas() {
-    this.ctx.save();
-    this.ctx.fillStyle = this.chessboard;
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.restore();
-
     this.ctx.save();
     this.ctx.scale(this.zoom, this.zoom);
     this.paper.draw(this.ctx, false);

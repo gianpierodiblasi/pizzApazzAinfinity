@@ -9,8 +9,6 @@ class Z4Canvas extends JSComponent {
 
    ctx = this.canvas.getContext("2d");
 
-   chessboard = null;
-
    ribbonLayerPanel = null;
 
    statusPanel = null;
@@ -56,13 +54,6 @@ class Z4Canvas extends JSComponent {
         this.zoomOut();
       }
     });
-    let image = document.createElement("img");
-    image.onload = event => {
-      this.chessboard = this.ctx.createPattern(image, "repeat");
-      this.drawCanvas();
-      return null;
-    };
-    image.src = "image/chessboard.png";
   }
 
   /**
@@ -174,6 +165,7 @@ class Z4Canvas extends JSComponent {
         this.paper.addLayerFromImage(layers[index]["name"], image, image.width, image.height);
         let layer = this.paper.getLayerAt(index);
         layer.setOpacity(layers[index]["opacity"]);
+        layer.setCompositeOperation(layers[index]["compositeOperation"]);
         layer.move(layers[index]["offsetX"], layers[index]["offsetY"]);
         this.ribbonLayerPanel.addLayerPreview(layer);
         if (index + 1 === layers.length) {
@@ -204,7 +196,7 @@ class Z4Canvas extends JSComponent {
     layer.convertToBlob(blob => {
       zip.file("layers/layer" + index + ".png", blob, null);
       let offset = layer.getOffset();
-      layers[index] = "{" + "\"name\": \"" + layer.getName() + "\"," + "\"opacity\": " + layer.getOpacity() + "," + "\"offsetX\": " + offset.x + "," + "\"offsetY\": " + offset.y + "}";
+      layers[index] = "{" + "\"name\": \"" + layer.getName() + "\"," + "\"opacity\": " + layer.getOpacity() + "," + "\"compositeOperation\": " + layer.getCompositeOperation() + "," + "\"offsetX\": " + offset.x + "," + "\"offsetY\": " + offset.y + "}";
       if (index + 1 === this.paper.getLayersCount()) {
         let manifest = "{" + "\"projectName\": \"" + this.projectName + "\",\n" + "\"width\": " + this.width + ",\n" + "\"height\": " + this.height + ",\n" + "\"layers\": [" + layers.join(",") + "]" + "}";
         zip.file("manifest.json", manifest, null);
@@ -443,10 +435,6 @@ class Z4Canvas extends JSComponent {
    * Draws this canvas
    */
    drawCanvas() {
-    this.ctx.save();
-    this.ctx.fillStyle = this.chessboard;
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.restore();
     this.ctx.save();
     this.ctx.scale(this.zoom, this.zoom);
     this.paper.draw(this.ctx, false);

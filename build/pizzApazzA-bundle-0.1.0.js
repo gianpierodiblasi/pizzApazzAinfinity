@@ -54,8 +54,6 @@ class Z4Canvas extends JSComponent {
 
    ctx = this.canvas.getContext("2d");
 
-   chessboard = null;
-
    ribbonLayerPanel = null;
 
    statusPanel = null;
@@ -101,13 +99,6 @@ class Z4Canvas extends JSComponent {
         this.zoomOut();
       }
     });
-    let image = document.createElement("img");
-    image.onload = event => {
-      this.chessboard = this.ctx.createPattern(image, "repeat");
-      this.drawCanvas();
-      return null;
-    };
-    image.src = "image/chessboard.png";
   }
 
   /**
@@ -219,6 +210,7 @@ class Z4Canvas extends JSComponent {
         this.paper.addLayerFromImage(layers[index]["name"], image, image.width, image.height);
         let layer = this.paper.getLayerAt(index);
         layer.setOpacity(layers[index]["opacity"]);
+        layer.setCompositeOperation(layers[index]["compositeOperation"]);
         layer.move(layers[index]["offsetX"], layers[index]["offsetY"]);
         this.ribbonLayerPanel.addLayerPreview(layer);
         if (index + 1 === layers.length) {
@@ -249,7 +241,7 @@ class Z4Canvas extends JSComponent {
     layer.convertToBlob(blob => {
       zip.file("layers/layer" + index + ".png", blob, null);
       let offset = layer.getOffset();
-      layers[index] = "{" + "\"name\": \"" + layer.getName() + "\"," + "\"opacity\": " + layer.getOpacity() + "," + "\"offsetX\": " + offset.x + "," + "\"offsetY\": " + offset.y + "}";
+      layers[index] = "{" + "\"name\": \"" + layer.getName() + "\"," + "\"opacity\": " + layer.getOpacity() + "," + "\"compositeOperation\": " + layer.getCompositeOperation() + "," + "\"offsetX\": " + offset.x + "," + "\"offsetY\": " + offset.y + "}";
       if (index + 1 === this.paper.getLayersCount()) {
         let manifest = "{" + "\"projectName\": \"" + this.projectName + "\",\n" + "\"width\": " + this.width + ",\n" + "\"height\": " + this.height + ",\n" + "\"layers\": [" + layers.join(",") + "]" + "}";
         zip.file("manifest.json", manifest, null);
@@ -489,10 +481,6 @@ class Z4Canvas extends JSComponent {
    */
    drawCanvas() {
     this.ctx.save();
-    this.ctx.fillStyle = this.chessboard;
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.restore();
-    this.ctx.save();
     this.ctx.scale(this.zoom, this.zoom);
     this.paper.draw(this.ctx, false);
     this.ctx.restore();
@@ -550,9 +538,7 @@ class Z4LayerPreview extends JSComponent {
 
    ctx = this.preview.invoke("getContext('2d')");
 
-   chessboard = null;
-
-   editor = new JSPanel();
+   editor = new JSTabbedPane();
 
    editName = new JSTextField();
 
@@ -567,6 +553,10 @@ class Z4LayerPreview extends JSComponent {
    opacitySlider = new JSSlider();
 
    opacitySpinner = new JSSpinner();
+
+   compositeOperations = new Array();
+
+   compositeOperationsGroup = new ButtonGroup();
 
    canvas = null;
 
@@ -608,13 +598,6 @@ class Z4LayerPreview extends JSComponent {
         this.getChilStyleByQuery(".z4layerpreview-editor").removeProperty("right");
       }
     });
-    let image = document.createElement("img");
-    image.onload = event => {
-      this.chessboard = this.ctx.createPattern(image, "repeat");
-      this.drawLayer();
-      return null;
-    };
-    image.src = "image/chessboard.png";
     this.name.getStyle().width = Z4LayerPreview.PREVIEW_SIZE + "px";
     this.preview.setAttribute("width", "" + Z4LayerPreview.PREVIEW_SIZE);
     this.preview.setAttribute("height", "" + Z4LayerPreview.PREVIEW_SIZE);
@@ -624,7 +607,8 @@ class Z4LayerPreview extends JSComponent {
     this.appendNodeChild(document.createElement("summary"));
     this.appendChildInTree("summary", this.summary);
     this.editor.cssAddClass("z4layerpreview-editor");
-    this.editor.setLayout(new GridBagLayout());
+    let panel = new JSPanel();
+    panel.setLayout(new GridBagLayout());
     this.editName.addActionListener(event => {
       let newName = this.editName.getText();
       if (newName) {
@@ -633,63 +617,72 @@ class Z4LayerPreview extends JSComponent {
         this.layer.setName(newName);
       }
     });
-    this.addComponent(this.editName, 0, 0, 3, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 5, 0));
-    this.addLabel(Z4Translations.OFFSET_X, 0, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    this.addLabel(panel, Z4Translations.LAYER_NAME, 0, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    this.addComponent(panel, this.editName, 0, 1, 2, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 5, 0));
+    this.addLabel(panel, Z4Translations.OFFSET_X, 0, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
     this.offsetXSpinner.getStyle().minWidth = "4rem";
     this.offsetXSpinner.getChilStyleByQuery("input[type=number]").minWidth = "3.5rem";
     this.offsetXSpinner.getChilStyleByQuery("input[type=number]").width = "3.5rem";
     this.offsetXSpinner.addChangeListener(event => this.onChange(true, this.offsetXSpinner.getValueIsAdjusting(), this.offsetXSpinner, this.offsetXSlider));
-    this.addComponent(this.offsetXSpinner, 1, 1, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    this.addComponent(panel, this.offsetXSpinner, 1, 2, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
     this.offsetXSlider.addChangeListener(event => this.onChange(false, this.offsetXSlider.getValueIsAdjusting(), this.offsetXSpinner, this.offsetXSlider));
     this.offsetXSlider.getStyle().minWidth = "25rem";
-    this.addComponent(this.offsetXSlider, 0, 2, 2, 1, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
-    this.addLabel(Translations.JSColorChooser_OPACITY, 0, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    this.addComponent(panel, this.offsetXSlider, 0, 3, 2, 1, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
+    this.addLabel(panel, Translations.JSColorChooser_OPACITY, 0, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
     this.opacitySpinner.getStyle().minWidth = "4rem";
     this.opacitySpinner.getChilStyleByQuery("input[type=number]").minWidth = "3.5rem";
     this.opacitySpinner.getChilStyleByQuery("input[type=number]").width = "3.5rem";
     this.opacitySpinner.addChangeListener(event => this.onChange(true, this.opacitySpinner.getValueIsAdjusting(), this.opacitySpinner, this.opacitySlider));
-    this.addComponent(this.opacitySpinner, 1, 3, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    this.addComponent(panel, this.opacitySpinner, 1, 4, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
     this.opacitySlider.addChangeListener(event => this.onChange(false, this.opacitySlider.getValueIsAdjusting(), this.opacitySpinner, this.opacitySlider));
     this.opacitySlider.getStyle().minWidth = "25rem";
-    this.addComponent(this.opacitySlider, 0, 4, 2, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
-    let constraints = new GridBagConstraints();
-    constraints.gridx = 0;
-    constraints.gridy = 5;
-    constraints.gridwidth = 2;
-    constraints.gridheight = 1;
-    constraints.weightx = 1;
-    constraints.weighty = 1;
-    constraints.fill = GridBagConstraints.BOTH;
-    this.editor.add(new JSLabel(), constraints);
-    this.addVLine(2, 1, 1, 5, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL);
-    this.addLabel(Z4Translations.OFFSET_Y, 3, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    this.addComponent(panel, this.opacitySlider, 0, 5, 2, 1, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
+    this.addVLine(panel, 2, 2, 1, 5, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL);
+    this.addLabel(panel, Z4Translations.OFFSET_Y, 3, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
     this.offsetYSpinner.getStyle().minWidth = "4rem";
     this.offsetYSpinner.getChilStyleByQuery("input[type=number]").minWidth = "3.5rem";
     this.offsetYSpinner.getChilStyleByQuery("input[type=number]").width = "3.5rem";
     this.offsetYSpinner.addChangeListener(event => this.onChange(true, this.offsetYSpinner.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
-    this.addComponent(this.offsetYSpinner, 3, 2, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 5, 0));
+    this.addComponent(panel, this.offsetYSpinner, 4, 2, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 2, 0, 0));
     this.offsetYSlider.setOrientation(JSSlider.VERTICAL);
     this.offsetYSlider.setInverted(true);
     this.offsetYSlider.addChangeListener(event => this.onChange(false, this.offsetYSlider.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
     this.offsetYSlider.getStyle().minHeight = "25rem";
-    this.addComponent(this.offsetYSlider, 3, 3, 1, 3, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    this.addComponent(panel, this.offsetYSlider, 3, 3, 1, 4, GridBagConstraints.NORTH, GridBagConstraints.NONE, null);
+    this.editor.addTab(Z4Translations.BASIC, panel);
+    let finalPanel = new JSPanel();
+    finalPanel.setLayout(new GridBagLayout());
+    this.addLabel(finalPanel, Z4Translations.COMPOSITE_OPERATION, 0, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    Z4Constants.COMPOSITE_OPERATION.forEach((array, index, parent) => {
+      array.forEach((element, index2, array2) => {
+        let button = new JSRadioButton();
+        button.setContentAreaFilled(false);
+        button.setToggle();
+        button.setText(element);
+        button.addActionListener(event => this.onAction(element));
+        this.compositeOperations.push(button);
+        this.compositeOperationsGroup.add(button);
+        this.addComponent(finalPanel, button, index2, index + 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(1, 1, 1, 1));
+      });
+    });
+    this.editor.addTab(Z4Translations.ADVANCED, finalPanel);
     this.appendChild(this.editor);
   }
 
-   addLabel(text, gridx, gridy, gridwidth, gridheight, anchor, fill) {
+   addLabel(panel, text, gridx, gridy, gridwidth, gridheight, anchor, fill) {
     let label = new JSLabel();
     label.setText(text);
-    this.addComponent(label, gridx, gridy, gridwidth, gridheight, anchor, fill, null);
+    this.addComponent(panel, label, gridx, gridy, gridwidth, gridheight, anchor, fill, null);
   }
 
-   addVLine(gridx, gridy, gridwidth, gridheight, anchor, fill) {
+   addVLine(panel, gridx, gridy, gridwidth, gridheight, anchor, fill) {
     let div = new JSComponent(document.createElement("div"));
     div.getStyle().width = "1px";
     div.getStyle().background = "var(--main-action-bgcolor";
-    this.addComponent(div, gridx, gridy, gridwidth, gridheight, anchor, fill, new Insets(1, 2, 1, 2));
+    this.addComponent(panel, div, gridx, gridy, gridwidth, gridheight, anchor, fill, new Insets(1, 2, 1, 2));
   }
 
-   addComponent(component, gridx, gridy, gridwidth, gridheight, anchor, fill, insets) {
+   addComponent(panel, component, gridx, gridy, gridwidth, gridheight, anchor, fill, insets) {
     let constraints = new GridBagConstraints();
     constraints.gridx = gridx;
     constraints.gridy = gridy;
@@ -700,7 +693,7 @@ class Z4LayerPreview extends JSComponent {
     if (insets) {
       constraints.insets = insets;
     }
-    this.editor.add(component, constraints);
+    panel.add(component, constraints);
   }
 
    onChange(spTosl, adjusting, spinner, slider) {
@@ -717,6 +710,12 @@ class Z4LayerPreview extends JSComponent {
     }
     this.layer.setOpacity(this.opacitySpinner.getValue() / 100);
     this.layer.move(this.offsetXSlider.getValue(), this.offsetYSlider.getValue());
+    this.canvas.drawCanvas();
+  }
+
+   onAction(text) {
+    this.canvas.setSaved(false);
+    this.layer.setCompositeOperation(text);
     this.canvas.drawCanvas();
   }
 
@@ -762,14 +761,11 @@ class Z4LayerPreview extends JSComponent {
     this.offsetYSpinner.setModel(new SpinnerNumberModel(p.y, -d.height, dC.height, 1));
     this.opacitySlider.setValue(parseInt(100 * layer.getOpacity()));
     this.opacitySpinner.setModel(new SpinnerNumberModel(parseInt(100 * layer.getOpacity()), 0, 100, 1));
+    this.compositeOperations.forEach(button => button.setSelected(button.getText() === layer.getCompositeOperation()));
     this.drawLayer();
   }
 
    drawLayer() {
-    this.ctx.save();
-    this.ctx.fillStyle = this.chessboard;
-    this.ctx.fillRect(0, 0, parseFloat(this.preview.getAttribute("width")), parseFloat(this.preview.getAttribute("height")));
-    this.ctx.restore();
     if (this.layer) {
       this.ctx.save();
       this.ctx.scale(this.zoom, this.zoom);
@@ -1750,6 +1746,8 @@ class Z4Translations {
   // Ribbon Layer
   static  LAYER = "";
 
+  static  LAYER_NAME = "";
+
   static  NEW_LAYER = "";
 
   static  BACKGROUND_LAYER = "";
@@ -1800,6 +1798,65 @@ class Z4Translations {
 
   static  OFFSET_Y = "";
 
+  static  BASIC = "";
+
+  static  ADVANCED = "";
+
+  // Composite Operation
+  static  COMPOSITE_OPERATION = "";
+
+  static  COMPOSITE_OPERATION_SOURCE_OVER = "";
+
+  static  COMPOSITE_OPERATION_SOURCE_IN = "";
+
+  static  COMPOSITE_OPERATION_SOURCE_OUT = "";
+
+  static  COMPOSITE_OPERATION_SOURCE_ATOP = "";
+
+  static  COMPOSITE_OPERATION_DESTINATION_OVER = "";
+
+  static  COMPOSITE_OPERATION_DESTINATION_IN = "";
+
+  static  COMPOSITE_OPERATION_DESTINATION_OUT = "";
+
+  static  COMPOSITE_OPERATION_DESTINATION_ATOP = "";
+
+  static  COMPOSITE_OPERATION_LIGHTER = "";
+
+  static  COMPOSITE_OPERATION_COPY = "";
+
+  static  COMPOSITE_OPERATION_XOR = "";
+
+  static  COMPOSITE_OPERATION_MULTIPLY = "";
+
+  static  COMPOSITE_OPERATION_SCREEN = "";
+
+  static  COMPOSITE_OPERATION_OVERLAY = "";
+
+  static  COMPOSITE_OPERATION_DARKEN = "";
+
+  static  COMPOSITE_OPERATION_LIGHTEN = "";
+
+  static  COMPOSITE_OPERATION_COLOR_DODGE = "";
+
+  static  COMPOSITE_OPERATION_COLOR_BURN = "";
+
+  static  COMPOSITE_OPERATION_HARD_LIGHT = "";
+
+  static  COMPOSITE_OPERATION_SOFT_LIGHT = "";
+
+  static  COMPOSITE_OPERATION_DIFFERENCE = "";
+
+  static  COMPOSITE_OPERATION_EXCLUSION = "";
+
+  static  COMPOSITE_OPERATION_HUE = "";
+
+  static  COMPOSITE_OPERATION_SATURATION = "";
+
+  static  COMPOSITE_OPERATION_COLOR = "";
+
+  static  COMPOSITE_OPERATION_LUMINOSITY = "";
+
   static {
     switch(navigator.language.substring(0, 2)) {
       case "en":
@@ -1814,7 +1871,6 @@ class Z4Translations {
 
   constructor() {
   }
-
   /**
    * Sets the English language
    */
@@ -1833,6 +1889,7 @@ class Z4Translations {
     Z4Translations.PROJECT_NOT_SAVED_MESSAGE = "Project not saved, do you want to save your changes?";
     // Ribbon Layer
     Z4Translations.LAYER = "Layer";
+    Z4Translations.LAYER_NAME = "Layer Name";
     Z4Translations.NEW_LAYER = "New Layer";
     Z4Translations.BACKGROUND_LAYER = "Bkgrd";
     // Ribbon Settings
@@ -1859,6 +1916,36 @@ class Z4Translations {
     Z4Translations.FIT = "Fit";
     Z4Translations.OFFSET_X = "Offset X";
     Z4Translations.OFFSET_Y = "Offset Y";
+    Z4Translations.BASIC = "Basic";
+    Z4Translations.ADVANCED = "Advanced";
+    // Composite Operation
+    Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
+    Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "default, layer drawn on top of content";
+    Z4Translations.COMPOSITE_OPERATION_SOURCE_IN = "layer drawn only where overlap with content, transparent everything else";
+    Z4Translations.COMPOSITE_OPERATION_SOURCE_OUT = "layer drawn where it doesn't overlap content";
+    Z4Translations.COMPOSITE_OPERATION_SOURCE_ATOP = "layer drawn only where it overlaps content";
+    Z4Translations.COMPOSITE_OPERATION_DESTINATION_OVER = "layer drawn behind content";
+    Z4Translations.COMPOSITE_OPERATION_DESTINATION_IN = "content kept where layer and content overlap, transparent everything else";
+    Z4Translations.COMPOSITE_OPERATION_DESTINATION_OUT = "content kept where it doesn't overlap layer";
+    Z4Translations.COMPOSITE_OPERATION_DESTINATION_ATOP = "content kept only where it overlaps layer, layer drawn behind content";
+    Z4Translations.COMPOSITE_OPERATION_LIGHTER = "where both elements overlap the color is determined by adding color values";
+    Z4Translations.COMPOSITE_OPERATION_COPY = "only layer shown";
+    Z4Translations.COMPOSITE_OPERATION_XOR = "layer and content made transparent where both overlap and drawn normal everywhere else";
+    Z4Translations.COMPOSITE_OPERATION_MULTIPLY = "multiply layer pixels with corresponding content pixel: darker picture";
+    Z4Translations.COMPOSITE_OPERATION_SCREEN = "pixels inverted, multiplied, inverted again: lighter picture, opposite of multiply";
+    Z4Translations.COMPOSITE_OPERATION_OVERLAY = "multiply-screen combination: content dark parts become darker, light parts become lighter";
+    Z4Translations.COMPOSITE_OPERATION_DARKEN = "retain darkest pixels of both";
+    Z4Translations.COMPOSITE_OPERATION_LIGHTEN = "retain lightest pixels of both";
+    Z4Translations.COMPOSITE_OPERATION_COLOR_DODGE = "divide content by inverted layer";
+    Z4Translations.COMPOSITE_OPERATION_COLOR_BURN = "divide inverted content by layer and inverts the result";
+    Z4Translations.COMPOSITE_OPERATION_HARD_LIGHT = "multiply-screen combination like overlay, with layer and content swapped";
+    Z4Translations.COMPOSITE_OPERATION_SOFT_LIGHT = "hard-light softer version (Pure black or white does not result in pure black or white)";
+    Z4Translations.COMPOSITE_OPERATION_DIFFERENCE = "subtract content from layer and round to always get positive values";
+    Z4Translations.COMPOSITE_OPERATION_EXCLUSION = "like difference, but with lower contrast";
+    Z4Translations.COMPOSITE_OPERATION_HUE = "preserve content luma and chroma, adopt layer hue";
+    Z4Translations.COMPOSITE_OPERATION_SATURATION = "preserve content luma and hue, adopt layer chroma";
+    Z4Translations.COMPOSITE_OPERATION_COLOR = "preserve content luma, adopt layer hue and chroma";
+    Z4Translations.COMPOSITE_OPERATION_LUMINOSITY = "preserve content hue and chroma, adopt layer luma";
     Z4Translations.CURRENT_LANGUAGE = new KeyValue("en", Z4Translations.LANGUAGE_ENGLISH_NATIVE);
   }
 
@@ -1880,6 +1967,7 @@ class Z4Translations {
     Z4Translations.PROJECT_NOT_SAVED_MESSAGE = "Progetto non salvato, vuoi salvare le modifiche?";
     // Ribbon Layer
     Z4Translations.LAYER = "Livello";
+    Z4Translations.LAYER_NAME = "Nome Livello";
     Z4Translations.NEW_LAYER = "Nuovo Livello";
     Z4Translations.BACKGROUND_LAYER = "Sfondo";
     // Ribbon Settings
@@ -1906,6 +1994,36 @@ class Z4Translations {
     Z4Translations.FIT = "Adatta";
     Z4Translations.OFFSET_X = "Offset X";
     Z4Translations.OFFSET_Y = "Offset Y";
+    Z4Translations.BASIC = "Base";
+    Z4Translations.ADVANCED = "Avanzato";
+    // Composite Operation
+    Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";
+    Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "default, livello disegnato sopra contenuto";
+    Z4Translations.COMPOSITE_OPERATION_SOURCE_IN = "livello disegnato solo dove sovrapposto con contenuto, trasparente altrove";
+    Z4Translations.COMPOSITE_OPERATION_SOURCE_OUT = "livello disegnato dove non sovrapposto al contenuto";
+    Z4Translations.COMPOSITE_OPERATION_SOURCE_ATOP = "livello disegnato solo dove sovrapposto con contenuto";
+    Z4Translations.COMPOSITE_OPERATION_DESTINATION_OVER = "livello disegnato dietro contenuto";
+    Z4Translations.COMPOSITE_OPERATION_DESTINATION_IN = "contenuto mantenuto dove livello e contenuto sovrapposti, trasparente altrove";
+    Z4Translations.COMPOSITE_OPERATION_DESTINATION_OUT = "contenuto mantenuto dove non sovrapposto al livello";
+    Z4Translations.COMPOSITE_OPERATION_DESTINATION_ATOP = "contenuto mantenuto solo dove sovrapposto al livello, livello disegnato dietro contenuto";
+    Z4Translations.COMPOSITE_OPERATION_LIGHTER = "dove entrambi elementi sovrapposti colore determinato sommando i colori";
+    Z4Translations.COMPOSITE_OPERATION_COPY = "mostrato solo il livello";
+    Z4Translations.COMPOSITE_OPERATION_XOR = "livello e contenuto resi trasparenti dove sovrapposti e disegnato normale altrove";
+    Z4Translations.COMPOSITE_OPERATION_MULTIPLY = "multiply: moltiplica pixel livello con corrispondente pixel contenuto: immagine scurita";
+    Z4Translations.COMPOSITE_OPERATION_SCREEN = "screen: pixel invertiti, moltiplicati, invertiti ancora: immagine schiarita, opposto di multiply";
+    Z4Translations.COMPOSITE_OPERATION_OVERLAY = "overlay: combinazione multiply-screen: parti scure del contenuto scuriscono, parti chiare schiariscono";
+    Z4Translations.COMPOSITE_OPERATION_DARKEN = "conserva pixel pi\u00F9 scuri di entrambi";
+    Z4Translations.COMPOSITE_OPERATION_LIGHTEN = "conserva pixel pi\u00F9 chiari di entrambi";
+    Z4Translations.COMPOSITE_OPERATION_COLOR_DODGE = "divide contenuto per l'inverso del livello";
+    Z4Translations.COMPOSITE_OPERATION_COLOR_BURN = "divide l'inverso del contenuto per il livello ed inverte il risultato";
+    Z4Translations.COMPOSITE_OPERATION_HARD_LIGHT = "combinazione multiply-screen come overlay, con livello e contenuto scambiati";
+    Z4Translations.COMPOSITE_OPERATION_SOFT_LIGHT = "versione soft di hard-light (neri e bianchi puri non diventano neri e bianchi puri)";
+    Z4Translations.COMPOSITE_OPERATION_DIFFERENCE = "sottrae contenuto da livello ed arrotonda per avere sempre un valore positivo";
+    Z4Translations.COMPOSITE_OPERATION_EXCLUSION = "come difference, ma con costrasto minore";
+    Z4Translations.COMPOSITE_OPERATION_HUE = "preserva luminanza e crominanza del contenuto, usa tinta del livello";
+    Z4Translations.COMPOSITE_OPERATION_SATURATION = "preserva luminanza e tinta del contenuto, usa crominanza del livello";
+    Z4Translations.COMPOSITE_OPERATION_COLOR = "preserva luminanza del contenuto, usa tinta e crominanza del livello";
+    Z4Translations.COMPOSITE_OPERATION_LUMINOSITY = "preserva tinta e crominanza del contenuto, usa luminanza del livello";
     Z4Translations.CURRENT_LANGUAGE = new KeyValue("it", Z4Translations.LANGUAGE_ITALIAN_NATIVE);
   }
 }
@@ -1921,7 +2039,16 @@ class Z4Constants {
    */
   static  ACCEPTED_IMAGE_FILE_FORMAT = new Array(".gif", ".png", ".apng", ".jpeg", ".jpg", ".jfif", ".pjpeg", ".pjp", ".bmp", ".svg", ".webp", ".avif");
 
+  /**
+   * The zoom levels
+   */
   static  ZOOM_LEVEL = new Array(0.25, 0.33, 0.5, 0.66, 1.0, 1.5, 2.0, 3.0, 4.0);
+
+  /**
+   * The available composite operations
+   */
+
+  static  COMPOSITE_OPERATION = new Array(new Array("source-over", "source-in", "source-out", "source-atop"), new Array("destination-over", "destination-in", "destination-out", "destination-atop"), new Array("lighter"), new Array("copy"), new Array("xor"), new Array("multiply", "screen", "overlay"), new Array("darken", "lighten"), new Array("color-dodge", "color-burn"), new Array("hard-light", "soft-light"), new Array("difference", "exclusion"), new Array("hue", "saturation", "color", "luminosity"));
 
   /**
    * The default image size
@@ -1964,6 +2091,8 @@ class Z4Layer {
    offsetY = 0;
 
    opacity = 1;
+
+   compositeOperation = "source-over";
 
    width = 0;
 
@@ -2044,10 +2173,29 @@ class Z4Layer {
 
   /**
    * Returns the opacity
+   *
    * @return The opacity
    */
    getOpacity() {
     return this.opacity;
+  }
+
+  /**
+   * Sets the composite operation
+   *
+   * @param compositeOperation The composite operation
+   */
+   setCompositeOperation(compositeOperation) {
+    this.compositeOperation = compositeOperation;
+  }
+
+  /**
+   * Returns the composite operation
+   *
+   * @return The composite operation
+   */
+   getCompositeOperation() {
+    return this.compositeOperation;
   }
 
   /**
@@ -2106,6 +2254,7 @@ class Z4Layer {
    draw(ctx, noOffset) {
     ctx.save();
     ctx.globalAlpha = this.opacity;
+    ctx.globalCompositeOperation = this.compositeOperation;
     ctx.drawImage(this.offscreen, noOffset ? 0 : this.offsetX, noOffset ? 0 : this.offsetY);
     ctx.restore();
   }

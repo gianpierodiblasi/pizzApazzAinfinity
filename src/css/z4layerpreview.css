@@ -43,19 +43,20 @@
 
 .z4layerpreview summary canvas {
   border: 1px solid var(--main-action-bgcolor);
+  background-image: url(../image/chessboard.png);
 }
 
 .z4layerpreview .z4layerpreview-editor {
-    z-index: 100;
-    position: absolute;
-    margin: .5rem 0 0 0;
-    padding: .5rem;
-    box-shadow: 0 0 .5rem var(--main-action-bgcolor);
-    border-radius: .5rem;
-    background: var(--main-bgcolor);
-    visibility: hidden;
-    top: 0px;
-    left: 0px;
+  z-index: 100;
+  position: absolute;
+  margin: .5rem 0 0 0;
+  padding: .5rem;
+  box-shadow: 0 0 .5rem var(--main-action-bgcolor);
+  border-radius: .5rem;
+  background: var(--main-bgcolor);
+  visibility: hidden;
+  top: 0px;
+  left: 0px;
 }
 
 .z4layerpreview .z4layerpreview-editor[offset=true], .z4layerpreview .z4layerpreview-editor[offset=true] * {

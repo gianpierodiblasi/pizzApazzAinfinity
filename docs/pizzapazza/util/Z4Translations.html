@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9};
+var data = {"i0":9,"i1":9,"i2":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -170,180 +170,315 @@ extends java.lang.Object</pre>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#CREATE">CREATE</a></span></code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION">COMPOSITE_OPERATION</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_COLOR">COMPOSITE_OPERATION_COLOR</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_COLOR_BURN">COMPOSITE_OPERATION_COLOR_BURN</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_COLOR_DODGE">COMPOSITE_OPERATION_COLOR_DODGE</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_COPY">COMPOSITE_OPERATION_COPY</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_DARKEN">COMPOSITE_OPERATION_DARKEN</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_DESTINATION_ATOP">COMPOSITE_OPERATION_DESTINATION_ATOP</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_DESTINATION_IN">COMPOSITE_OPERATION_DESTINATION_IN</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_DESTINATION_OUT">COMPOSITE_OPERATION_DESTINATION_OUT</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_DESTINATION_OVER">COMPOSITE_OPERATION_DESTINATION_OVER</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_DIFFERENCE">COMPOSITE_OPERATION_DIFFERENCE</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_EXCLUSION">COMPOSITE_OPERATION_EXCLUSION</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_HARD_LIGHT">COMPOSITE_OPERATION_HARD_LIGHT</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_HUE">COMPOSITE_OPERATION_HUE</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_LIGHTEN">COMPOSITE_OPERATION_LIGHTEN</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_LIGHTER">COMPOSITE_OPERATION_LIGHTER</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_LUMINOSITY">COMPOSITE_OPERATION_LUMINOSITY</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_MULTIPLY">COMPOSITE_OPERATION_MULTIPLY</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_OVERLAY">COMPOSITE_OPERATION_OVERLAY</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_SATURATION">COMPOSITE_OPERATION_SATURATION</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_SCREEN">COMPOSITE_OPERATION_SCREEN</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_SOFT_LIGHT">COMPOSITE_OPERATION_SOFT_LIGHT</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_SOURCE_ATOP">COMPOSITE_OPERATION_SOURCE_ATOP</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_SOURCE_IN">COMPOSITE_OPERATION_SOURCE_IN</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_SOURCE_OUT">COMPOSITE_OPERATION_SOURCE_OUT</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_SOURCE_OVER">COMPOSITE_OPERATION_SOURCE_OVER</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COMPOSITE_OPERATION_XOR">COMPOSITE_OPERATION_XOR</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#CREATE">CREATE</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static javascript.util.KeyValue&lt;java.lang.String,&#8203;java.lang.String&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#CURRENT_LANGUAGE">CURRENT_LANGUAGE</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#EDIT">EDIT</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#EXPORT">EXPORT</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#FILE">FILE</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#FILENAME">FILENAME</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#FILLING_COLOR">FILLING_COLOR</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#FIT">FIT</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#FROM_CLIPBOARD">FROM_CLIPBOARD</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#FROM_FILE">FROM_FILE</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#HEIGHT">HEIGHT</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#LANGUAGE">LANGUAGE</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#LANGUAGE_ENGLISH_NATIVE">LANGUAGE_ENGLISH_NATIVE</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#LANGUAGE_ITALIAN_NATIVE">LANGUAGE_ITALIAN_NATIVE</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#LAYER">LAYER</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#NEW_LAYER">NEW_LAYER</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#NEW_PROJECT">NEW_PROJECT</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#OFFSET_X">OFFSET_X</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#OFFSET_Y">OFFSET_Y</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#OPEN">OPEN</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#OPEN_PROJECT">OPEN_PROJECT</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#PROJECT_NAME">PROJECT_NAME</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#PROJECT_NOT_SAVED_MESSAGE">PROJECT_NOT_SAVED_MESSAGE</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#QUALITY">QUALITY</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#REFRESH_PAGE_MESSAGE">REFRESH_PAGE_MESSAGE</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#RESET">RESET</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#RESOLUTION">RESOLUTION</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#SAVE">SAVE</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#SAVE_PROJECT">SAVE_PROJECT</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#SETTINGS">SETTINGS</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#THEME">THEME</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#THEME_AUTO">THEME_AUTO</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#THEME_COLOR">THEME_COLOR</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#THEME_DARK">THEME_DARK</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#THEME_LIGHT">THEME_LIGHT</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#WIDTH">WIDTH</a></span></code></th>
 <td class="colLast">&nbsp;</td>
@@ -367,13 +502,18 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#$get(java.lang.String)">$get</a></span>&#8203;(java.lang.String&nbsp;key)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEnglish()">setEnglish</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Sets the English language</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setItalian()">setItalian</a></span>()</code></th>
 <td class="colLast">
@@ -731,10 +871,253 @@ extends java.lang.Object</pre>
 <a id="OFFSET_Y">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>OFFSET_Y</h4>
 <pre>public static&nbsp;java.lang.String OFFSET_Y</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_SOURCE_OVER">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_SOURCE_OVER</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_SOURCE_OVER</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_SOURCE_IN">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_SOURCE_IN</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_SOURCE_IN</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_SOURCE_OUT">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_SOURCE_OUT</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_SOURCE_OUT</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_SOURCE_ATOP">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_SOURCE_ATOP</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_SOURCE_ATOP</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_DESTINATION_OVER">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_DESTINATION_OVER</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_DESTINATION_OVER</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_DESTINATION_IN">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_DESTINATION_IN</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_DESTINATION_IN</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_DESTINATION_OUT">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_DESTINATION_OUT</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_DESTINATION_OUT</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_DESTINATION_ATOP">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_DESTINATION_ATOP</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_DESTINATION_ATOP</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_LIGHTER">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_LIGHTER</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_LIGHTER</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_COPY">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_COPY</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_COPY</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_XOR">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_XOR</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_XOR</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_MULTIPLY">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_MULTIPLY</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_MULTIPLY</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_SCREEN">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_SCREEN</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_SCREEN</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_OVERLAY">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_OVERLAY</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_OVERLAY</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_DARKEN">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_DARKEN</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_DARKEN</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_LIGHTEN">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_LIGHTEN</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_LIGHTEN</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_COLOR_DODGE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_COLOR_DODGE</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_COLOR_DODGE</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_COLOR_BURN">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_COLOR_BURN</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_COLOR_BURN</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_HARD_LIGHT">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_HARD_LIGHT</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_HARD_LIGHT</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_SOFT_LIGHT">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_SOFT_LIGHT</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_SOFT_LIGHT</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_DIFFERENCE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_DIFFERENCE</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_DIFFERENCE</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_EXCLUSION">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_EXCLUSION</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_EXCLUSION</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_HUE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_HUE</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_HUE</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_SATURATION">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_SATURATION</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_SATURATION</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_COLOR">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_COLOR</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_COLOR</pre>
+</li>
+</ul>
+<a id="COMPOSITE_OPERATION_LUMINOSITY">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>COMPOSITE_OPERATION_LUMINOSITY</h4>
+<pre>public static&nbsp;java.lang.String COMPOSITE_OPERATION_LUMINOSITY</pre>
 </li>
 </ul>
 </li>
@@ -747,6 +1130,15 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="$get(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>$get</h4>
+<pre class="methodSignature">public static&nbsp;java.lang.String&nbsp;$get&#8203;(java.lang.String&nbsp;key)</pre>
+</li>
+</ul>
 <a id="setEnglish()">
 <!--   -->
 </a>

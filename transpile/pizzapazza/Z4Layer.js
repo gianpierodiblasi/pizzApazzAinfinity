@@ -17,6 +17,8 @@ class Z4Layer {
 
    opacity = 1;
 
+   compositeOperation = "source-over";
+
    width = 0;
 
    height = 0;
@@ -96,10 +98,29 @@ class Z4Layer {
 
   /**
    * Returns the opacity
+   *
    * @return The opacity
    */
    getOpacity() {
     return this.opacity;
+  }
+
+  /**
+   * Sets the composite operation
+   *
+   * @param compositeOperation The composite operation
+   */
+   setCompositeOperation(compositeOperation) {
+    this.compositeOperation = compositeOperation;
+  }
+
+  /**
+   * Returns the composite operation
+   *
+   * @return The composite operation
+   */
+   getCompositeOperation() {
+    return this.compositeOperation;
   }
 
   /**
@@ -158,6 +179,7 @@ class Z4Layer {
    draw(ctx, noOffset) {
     ctx.save();
     ctx.globalAlpha = this.opacity;
+    ctx.globalCompositeOperation = this.compositeOperation;
     ctx.drawImage(this.offscreen, noOffset ? 0 : this.offsetX, noOffset ? 0 : this.offsetY);
     ctx.restore();
   }

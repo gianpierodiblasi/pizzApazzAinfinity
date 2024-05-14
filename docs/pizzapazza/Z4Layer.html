@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
+var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -217,26 +217,40 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCompositeOperation()">getCompositeOperation</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the composite operation</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getName()">getName</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the layer name</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>javascript.awt.Point</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOffset()">getOffset</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the layer offset</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOpacity()">getOpacity</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the opacity</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>javascript.awt.Dimension</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSize()">getSize</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the layer size</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#move(int,int)">move</a></span>&#8203;(int&nbsp;offsetX,
     int&nbsp;offsetY)</code></th>
@@ -244,14 +258,28 @@ extends java.lang.Object</pre>
 <div class="block">Moves a layer</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCompositeOperation(java.lang.String)">setCompositeOperation</a></span>&#8203;(java.lang.String&nbsp;compositeOperation)</code></th>
+<td class="colLast">
+<div class="block">Sets the composite operation</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setName(java.lang.String)">setName</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
 <td class="colLast">
 <div class="block">Sets the layer name</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setOpacity(double)">setOpacity</a></span>&#8203;(double&nbsp;opacity)</code></th>
+<td class="colLast">
+<div class="block">Sets the opacity</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shift(int,int)">shift</a></span>&#8203;(int&nbsp;shiftX,
      int&nbsp;shiftY)</code></th>
@@ -366,6 +394,62 @@ extends java.lang.Object</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>shiftX</code> - The X shift</dd>
 <dd><code>shiftY</code> - The Y shift</dd>
+</dl>
+</li>
+</ul>
+<a id="setOpacity(double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setOpacity</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setOpacity&#8203;(double&nbsp;opacity)</pre>
+<div class="block">Sets the opacity</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>opacity</code> - The opacity</dd>
+</dl>
+</li>
+</ul>
+<a id="getOpacity()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getOpacity</h4>
+<pre class="methodSignature">public&nbsp;double&nbsp;getOpacity()</pre>
+<div class="block">Returns the opacity</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The opacity</dd>
+</dl>
+</li>
+</ul>
+<a id="setCompositeOperation(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setCompositeOperation</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setCompositeOperation&#8203;(java.lang.String&nbsp;compositeOperation)</pre>
+<div class="block">Sets the composite operation</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>compositeOperation</code> - The composite operation</dd>
+</dl>
+</li>
+</ul>
+<a id="getCompositeOperation()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCompositeOperation</h4>
+<pre class="methodSignature">public&nbsp;java.lang.String&nbsp;getCompositeOperation()</pre>
+<div class="block">Returns the composite operation</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The composite operation</dd>
 </dl>
 </li>
 </ul>

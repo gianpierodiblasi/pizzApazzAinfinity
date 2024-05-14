@@ -30,19 +30,19 @@ public class Z4Constants {
   /**
    * The available composite operations
    */
-  public static final Array<String> COMPOSITE_OPERATION = new Array<>(
-          "source-over", "source-in", "source-out", "source-atop",
-          "destination-over", "destination-in", "destination-out", "destination-atop",
-          "lighter",
-          "copy",
-          "xor",
-          "multiply", "screen",
-          "overlay",
-          "darken", "lighten",
-          "color-dodge", "color-burn",
-          "hard-light", "soft-light",
-          "difference", "exclusion",
-          "hue", "saturation", "color", "luminosity"
+  @SuppressWarnings("unchecked")
+  public static final Array<Array<String>> COMPOSITE_OPERATION = new Array<>(
+          new Array<>("source-over", "source-in", "source-out", "source-atop"),
+          new Array<>("destination-over", "destination-in", "destination-out", "destination-atop"),
+          new Array<>("lighter"),
+          new Array<>("copy"),
+          new Array<>("xor"),
+          new Array<>("multiply", "screen", "overlay"),
+          new Array<>("darken", "lighten"),
+          new Array<>("color-dodge", "color-burn"),
+          new Array<>("hard-light", "soft-light"),
+          new Array<>("difference", "exclusion"),
+          new Array<>("hue", "saturation", "color", "luminosity")
   );
 
   /**
