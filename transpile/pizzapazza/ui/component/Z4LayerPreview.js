@@ -134,6 +134,7 @@ class Z4LayerPreview extends JSComponent {
         button.setContentAreaFilled(false);
         button.setToggle();
         button.setText(element);
+        button.setTooltip(Z4Translations["COMPOSITE_OPERATION_" + element.toUpperCase().replace("-", "_")]);
         button.addActionListener(event => this.onAction(element));
         this.compositeOperations.push(button);
         this.compositeOperationsGroup.add(button);

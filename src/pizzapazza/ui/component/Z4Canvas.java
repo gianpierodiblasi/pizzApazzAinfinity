@@ -245,7 +245,7 @@ public class Z4Canvas extends JSComponent {
               "{"
               + "\"name\": \"" + layer.getName() + "\","
               + "\"opacity\": " + layer.getOpacity() + ","
-              + "\"compositeOperation\": " + layer.getCompositeOperation() + ","
+              + "\"compositeOperation\": \"" + layer.getCompositeOperation() + "\","
               + "\"offsetX\": " + offset.x + ","
               + "\"offsetY\": " + offset.y
               + "}"
