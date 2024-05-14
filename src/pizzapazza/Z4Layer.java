@@ -26,6 +26,7 @@ public class Z4Layer {
   private String name;
   private int offsetX = 0;
   private int offsetY = 0;
+  private double opacity = 1;
   private final int width;
   private final int height;
 
@@ -102,6 +103,23 @@ public class Z4Layer {
   }
 
   /**
+   * Sets the opacity
+   *
+   * @param opacity The opacity
+   */
+  public void setOpacity(double opacity) {
+    this.opacity = opacity;
+  }
+
+  /**
+   * Returns the opacity
+   * @return The opacity
+   */
+  public double getOpacity() {
+    return this.opacity;
+  }
+  
+  /**
    * Moves a layer
    *
    * @param offsetX The X offset
@@ -155,6 +173,9 @@ public class Z4Layer {
    * @param noOffset true to not use the offset, false otherwise
    */
   public void draw($CanvasRenderingContext2D ctx, boolean noOffset) {
+    ctx.save();
+    ctx.globalAlpha = this.opacity;
     ctx.drawImage(this.offscreen, noOffset ? 0 : this.offsetX, noOffset ? 0 : this.offsetY);
+    ctx.restore();
   }
 }

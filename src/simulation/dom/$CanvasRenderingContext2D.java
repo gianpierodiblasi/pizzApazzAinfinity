@@ -13,6 +13,8 @@ import simulation.js.$Path2D;
  */
 public class $CanvasRenderingContext2D extends CanvasRenderingContext2D {
 
+  public boolean imageSmoothingEnabled;
+  
   public void stroke($Path2D path) {
   }
 

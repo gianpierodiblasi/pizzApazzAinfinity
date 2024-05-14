@@ -173,6 +173,7 @@ class Z4Canvas extends JSComponent {
       image.onload = event => {
         this.paper.addLayerFromImage(layers[index]["name"], image, image.width, image.height);
         let layer = this.paper.getLayerAt(index);
+        layer.setOpacity(layers[index]["opacity"]);
         layer.move(layers[index]["offsetX"], layers[index]["offsetY"]);
         this.ribbonLayerPanel.addLayerPreview(layer);
         if (index + 1 === layers.length) {
@@ -203,7 +204,7 @@ class Z4Canvas extends JSComponent {
     layer.convertToBlob(blob => {
       zip.file("layers/layer" + index + ".png", blob, null);
       let offset = layer.getOffset();
-      layers[index] = "{" + "\"name\": \"" + layer.getName() + "\"," + "\"offsetX\": " + offset.x + "," + "\"offsetY\": " + offset.y + "}";
+      layers[index] = "{" + "\"name\": \"" + layer.getName() + "\"," + "\"opacity\": " + layer.getOpacity() + "," + "\"offsetX\": " + offset.x + "," + "\"offsetY\": " + offset.y + "}";
       if (index + 1 === this.paper.getLayersCount()) {
         let manifest = "{" + "\"projectName\": \"" + this.projectName + "\",\n" + "\"width\": " + this.width + ",\n" + "\"height\": " + this.height + ",\n" + "\"layers\": [" + layers.join(",") + "]" + "}";
         zip.file("manifest.json", manifest, null);

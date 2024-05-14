@@ -216,6 +216,7 @@ public class Z4Canvas extends JSComponent {
       image.onload = event -> {
         this.paper.addLayerFromImage(layers.$get(index).$get("name"), image, (int) image.width, (int) image.height);
         Z4Layer layer = this.paper.getLayerAt(index);
+        layer.setOpacity(layers.$get(index).$get("opacity"));
         layer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
         this.ribbonLayerPanel.addLayerPreview(layer);
 
@@ -254,6 +255,7 @@ public class Z4Canvas extends JSComponent {
       layers.$set(index,
               "{"
               + "\"name\": \"" + layer.getName() + "\","
+              + "\"opacity\": " + layer.getOpacity() + ","
               + "\"offsetX\": " + offset.x + ","
               + "\"offsetY\": " + offset.y
               + "}"

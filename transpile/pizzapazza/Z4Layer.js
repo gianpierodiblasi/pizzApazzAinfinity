@@ -15,6 +15,8 @@ class Z4Layer {
 
    offsetY = 0;
 
+   opacity = 1;
+
    width = 0;
 
    height = 0;
@@ -84,6 +86,23 @@ class Z4Layer {
   }
 
   /**
+   * Sets the opacity
+   *
+   * @param opacity The opacity
+   */
+   setOpacity(opacity) {
+    this.opacity = opacity;
+  }
+
+  /**
+   * Returns the opacity
+   * @return The opacity
+   */
+   getOpacity() {
+    return this.opacity;
+  }
+
+  /**
    * Moves a layer
    *
    * @param offsetX The X offset
@@ -137,6 +156,9 @@ class Z4Layer {
    * @param noOffset true to not use the offset, false otherwise
    */
    draw(ctx, noOffset) {
+    ctx.save();
+    ctx.globalAlpha = this.opacity;
     ctx.drawImage(this.offscreen, noOffset ? 0 : this.offsetX, noOffset ? 0 : this.offsetY);
+    ctx.restore();
   }
 }
