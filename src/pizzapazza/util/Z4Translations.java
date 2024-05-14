@@ -101,6 +101,10 @@ public class Z4Translations {
   private Z4Translations() {
   }
 
+  public static String $get(String key) {
+    return "";
+  }
+
   /**
    * Sets the English language
    */
@@ -150,32 +154,32 @@ public class Z4Translations {
     Z4Translations.OFFSET_Y = "Offset Y";
 
     // Composite Operation
-    Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER			= "SOURCE-OVER			: default, layer drawn on top of current content";
-    Z4Translations.COMPOSITE_OPERATION_SOURCE_IN				= "SOURCE-IN				: layer drawn only where both layer and current content overlap, everything else is made transparent";
-    Z4Translations.COMPOSITE_OPERATION_SOURCE_OUT				= "SOURCE-OUT				: layer drawn where it doesn't overlap current content";
-    Z4Translations.COMPOSITE_OPERATION_SOURCE_ATOP			= "SOURCE-ATOP			: layer drawn only where it overlaps current content";
-    Z4Translations.COMPOSITE_OPERATION_DESTINATION_OVER	= "DESTINATION-OVER	: layer drawn behind current content";
-    Z4Translations.COMPOSITE_OPERATION_DESTINATION_IN		= "DESTINATION-IN		: current content kept where both layer and current content overlap, everything else is made transparent";
-    Z4Translations.COMPOSITE_OPERATION_DESTINATION_OUT	= "DESTINATION-OUT	: current content kept where it doesn't overlap layer";
-    Z4Translations.COMPOSITE_OPERATION_DESTINATION_ATOP	= "DESTINATION-ATOP	: current content kept only where it overlaps layer, layer drawn behind current content";
-    Z4Translations.COMPOSITE_OPERATION_LIGHTER					= "LIGHTER					: where both elements overlap the color is determined by adding color values";
-    Z4Translations.COMPOSITE_OPERATION_COPY							= "COPY							: only layer shown";
-    Z4Translations.COMPOSITE_OPERATION_XOR							= "XOR							: layer and current content made transparent where both overlap and drawn normal everywhere else";
-    Z4Translations.COMPOSITE_OPERATION_MULTIPLY					= "MULTIPLY					: layer pixels are multiplied with the corresponding current content pixel (a darker picture is the result)";
-    Z4Translations.COMPOSITE_OPERATION_SCREEN						= "SCREEN						: pixels are inverted, multiplied, and inverted again (a lighter picture is the result, opposite of multiply)";
-    Z4Translations.COMPOSITE_OPERATION_OVERLAY					= "OVERLAY					: a combination of multiply and screen (dark parts on current content become darker, and light parts become lighter)";
-    Z4Translations.COMPOSITE_OPERATION_DARKEN						= "DARKEN						: retains darkest pixels of both";
-    Z4Translations.COMPOSITE_OPERATION_LIGHTEN					= "LIGHTEN					: retains lightest pixels of both";
-    Z4Translations.COMPOSITE_OPERATION_COLOR_DODGE			= "COLOR-DODGE			: divides current content by inverted layer";
-    Z4Translations.COMPOSITE_OPERATION_COLOR_BURN				= "COLOR-BURN				: divides inverted current content by layer, and then inverts the result";
-    Z4Translations.COMPOSITE_OPERATION_HARD_LIGHT				= "HARD-LIGHT				: combination of multiply and screen like overlay, but with layer and current content swapped";
-    Z4Translations.COMPOSITE_OPERATION_SOFT_LIGHT				= "SOFT-LIGHT				: softer version of hard-light (Pure black or white does not result in pure black or white)";
-    Z4Translations.COMPOSITE_OPERATION_DIFFERENCE				= "DIFFERENCE				: subtracts current content from layer or the other way round to always get positive values";
-    Z4Translations.COMPOSITE_OPERATION_EXCLUSION				= "EXCLUSION				: like difference, but with lower contrast";
-    Z4Translations.COMPOSITE_OPERATION_HUE							= "HUE							: preserve current content luma and chroma, while adopting layer hue";
-    Z4Translations.COMPOSITE_OPERATION_SATURATION				= "SATURATION				: preserve current content luma and hue, while adopting layer chroma";
-    Z4Translations.COMPOSITE_OPERATION_COLOR						= "COLOR						: preserve current content luma, while adopting layer hue and chroma";
-    Z4Translations.COMPOSITE_OPERATION_LUMINOSITY				= "LUMINOSITY				: preserve current content hue and chroma, while adopting layer luma";
+    Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER =      "source-over			: default, layer drawn on top of content";
+    Z4Translations.COMPOSITE_OPERATION_SOURCE_IN =        "source-in				: layer drawn only where both layer and content overlap, transparent everything else";
+    Z4Translations.COMPOSITE_OPERATION_SOURCE_OUT =       "source-out				: layer drawn where it doesn't overlap content";
+    Z4Translations.COMPOSITE_OPERATION_SOURCE_ATOP =      "source-atop			: layer drawn only where it overlaps content";
+    Z4Translations.COMPOSITE_OPERATION_DESTINATION_OVER = "destination-over	: layer drawn behind content";
+    Z4Translations.COMPOSITE_OPERATION_DESTINATION_IN =   "destination-in		: content kept where both layer and content overlap, transparent everything else";
+    Z4Translations.COMPOSITE_OPERATION_DESTINATION_OUT =  "destination-out	: content kept where it doesn't overlap layer";
+    Z4Translations.COMPOSITE_OPERATION_DESTINATION_ATOP = "destination-atop	: content kept only where it overlaps layer, layer drawn behind content";
+    Z4Translations.COMPOSITE_OPERATION_LIGHTER =          "lighter					: where both elements overlap the color is determined by adding color values";
+    Z4Translations.COMPOSITE_OPERATION_COPY =             "copy							: only layer shown";
+    Z4Translations.COMPOSITE_OPERATION_XOR =              "xor							: layer and content made transparent where both overlap and drawn normal everywhere else";
+    Z4Translations.COMPOSITE_OPERATION_MULTIPLY =         "multiply					: multiply layer pixels with corresponding content pixel: darker picture";
+    Z4Translations.COMPOSITE_OPERATION_SCREEN =           "screen						: pixels inverted, multiplied, inverted again: lighter picture, opposite of multiply";
+    Z4Translations.COMPOSITE_OPERATION_OVERLAY =          "overlay					: multiply-screen combination: content dark parts become darker, light parts become lighter";
+    Z4Translations.COMPOSITE_OPERATION_DARKEN =           "darken						: retain darkest pixels of both";
+    Z4Translations.COMPOSITE_OPERATION_LIGHTEN =          "lighten					: retain lightest pixels of both";
+    Z4Translations.COMPOSITE_OPERATION_COLOR_DODGE =      "color-dodge			: divide content by inverted layer";
+    Z4Translations.COMPOSITE_OPERATION_COLOR_BURN =       "color-burn				: divide inverted content by layer and inverts the result";
+    Z4Translations.COMPOSITE_OPERATION_HARD_LIGHT =       "hard-light				: multiply-screen combination like overlay, with layer and content swapped";
+    Z4Translations.COMPOSITE_OPERATION_SOFT_LIGHT =       "soft-light				: hard-light softer version (Pure black or white does not result in pure black or white)";
+    Z4Translations.COMPOSITE_OPERATION_DIFFERENCE =       "difference				: subtract content from layer and round to always get positive values";
+    Z4Translations.COMPOSITE_OPERATION_EXCLUSION =        "exclusion				: like difference, but with lower contrast";
+    Z4Translations.COMPOSITE_OPERATION_HUE =              "hue							: preserve content luma and chroma, adopt layer hue";
+    Z4Translations.COMPOSITE_OPERATION_SATURATION =       "saturation				: preserve content luma and hue, adopt layer chroma";
+    Z4Translations.COMPOSITE_OPERATION_COLOR =            "color						: preserve content luma, adopt layer hue and chroma";
+    Z4Translations.COMPOSITE_OPERATION_LUMINOSITY =       "luminosity				: preserve content hue and chroma, adopt layer luma";
 
     Z4Translations.CURRENT_LANGUAGE = new KeyValue<>("en", Z4Translations.LANGUAGE_ENGLISH_NATIVE);
   }
