@@ -7,9 +7,6 @@
  */
 class Z4AbstractFiller {
 
-  /**
-   * The color used to fill
-   */
    gradientColor = null;
 
   /**
@@ -27,5 +24,20 @@ class Z4AbstractFiller {
    * @param imageData The image data
    */
    fill(imageData) {
+  }
+
+  /**
+   * Sets a value in a data array
+   *
+   * @param data The data array
+   * @param position The color posiiton
+   * @param index The data index
+   */
+   setValue(data, position, index) {
+    let color = this.gradientColor.getColorAt(position, true);
+    data[index] = color.red;
+    data[index + 1] = color.green;
+    data[index + 2] = color.blue;
+    data[index + 3] = color.alpha;
   }
 }

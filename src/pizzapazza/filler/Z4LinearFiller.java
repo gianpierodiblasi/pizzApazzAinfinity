@@ -1,7 +1,6 @@
 package pizzapazza.filler;
 
 import def.dom.ImageData;
-import javascript.awt.Color;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.util.Z4Math;
 import static simulation.js.$Globals.$exists;
@@ -66,7 +65,6 @@ public class Z4LinearFiller extends Z4AbstractFiller {
 
   @Override
   public void fill(ImageData imageData) {
-
     double angle = Z4Math.atan(this.p1x, this.p1y, this.p2x, this.p2y) + Z4Math.HALF_PI;
     double distance = Z4Math.distance(this.p1x, this.p1y, this.p2x, this.p2y);
 
@@ -81,54 +79,45 @@ public class Z4LinearFiller extends Z4AbstractFiller {
       double yy = y / imageData.height;
 
       for (int x = 0; x < imageData.width; x++) {
-        int pos = (y * imageData.width + x) * 4;
+        int index = (y * imageData.width + x) * 4;
 
         double xx = x / imageData.width;
         double d1 = Z4Math.ptLineDist(this.p1x, this.p1y, line1x, line1y, xx, yy) / distance;
         double d2 = Z4Math.ptLineDist(this.p2x, this.p2y, line2x, line2y, xx, yy) / distance;
 
         if (d1 <= 1 && d2 <= 1) {
-          this.setData(data, d1, pos);
+          this.setValue(data, d1, index);
         } else if (this.boundaryBehavior == Z4LinearFiller.STOP_AT_BOUNDARY) {
         } else if (this.boundaryBehavior == Z4LinearFiller.FILL_AT_BOUNDARY) {
-          this.setData(data, d1 < d2 ? 0 : 1, pos);
+          this.setValue(data, d1 < d2 ? 0 : 1, index);
         } else if (this.boundaryBehavior == Z4LinearFiller.SYMMETRIC_AT_BOUNDARY) {
-          double d = d1 < d2 ? d1 : d2;
-          int step = (int) Math.floor(d);
-          d -= step;
+          double position = d1 < d2 ? d1 : d2;
+          int step = (int) Math.floor(position);
+          position -= step;
 
           if (d1 < d2) {
             if ($exists((step % 2))) {
-              d = 1 - d;
+              position = 1 - position;
             }
           } else {
             if (!$exists((step % 2))) {
-              d = 1 - d;
+              position = 1 - position;
             }
           }
 
-          this.setData(data, d, pos);
+          this.setValue(data, position, index);
         } else if (this.boundaryBehavior == Z4LinearFiller.REPEAT_AT_BOUNDARY) {
-          double d = d1 < d2 ? d1 : d2;
-          int step = (int) Math.floor(d);
-          d -= step;
+          double position = d1 < d2 ? d1 : d2;
+          int step = (int) Math.floor(position);
+          position -= step;
 
           if (d1 < d2) {
-            d = 1 - d;
+            position = 1 - position;
           }
 
-          this.setData(data, d, pos);
+          this.setValue(data, position, index);
         }
       }
     }
-  }
-
-  private void setData($Uint8Array data, double d, int pos) {
-    Color color = this.gradientColor.getColorAt(d, true);
-
-    data.$set(pos, color.red);
-    data.$set(pos + 1, color.green);
-    data.$set(pos + 2, color.blue);
-    data.$set(pos + 3, color.alpha);
   }
 }

@@ -69,47 +69,39 @@ class Z4LinearFiller extends Z4AbstractFiller {
     for (let y = 0; y < imageData.height; y++) {
       let yy = y / imageData.height;
       for (let x = 0; x < imageData.width; x++) {
-        let pos = (y * imageData.width + x) * 4;
+        let index = (y * imageData.width + x) * 4;
         let xx = x / imageData.width;
         let d1 = Z4Math.ptLineDist(this.p1x, this.p1y, line1x, line1y, xx, yy) / distance;
         let d2 = Z4Math.ptLineDist(this.p2x, this.p2y, line2x, line2y, xx, yy) / distance;
         if (d1 <= 1 && d2 <= 1) {
-          this.setData(data, d1, pos);
+          this.setValue(data, d1, index);
         } else if (this.boundaryBehavior === Z4LinearFiller.STOP_AT_BOUNDARY) {
         } else if (this.boundaryBehavior === Z4LinearFiller.FILL_AT_BOUNDARY) {
-          this.setData(data, d1 < d2 ? 0 : 1, pos);
+          this.setValue(data, d1 < d2 ? 0 : 1, index);
         } else if (this.boundaryBehavior === Z4LinearFiller.SYMMETRIC_AT_BOUNDARY) {
-          let d = d1 < d2 ? d1 : d2;
-          let step = Math.floor(d);
-          d -= step;
+          let position = d1 < d2 ? d1 : d2;
+          let step = Math.floor(position);
+          position -= step;
           if (d1 < d2) {
             if ((step % 2)) {
-              d = 1 - d;
+              position = 1 - position;
             }
           } else {
             if (!(step % 2)) {
-              d = 1 - d;
+              position = 1 - position;
             }
           }
-          this.setData(data, d, pos);
+          this.setValue(data, position, index);
         } else if (this.boundaryBehavior === Z4LinearFiller.REPEAT_AT_BOUNDARY) {
-          let d = d1 < d2 ? d1 : d2;
-          let step = Math.floor(d);
-          d -= step;
+          let position = d1 < d2 ? d1 : d2;
+          let step = Math.floor(position);
+          position -= step;
           if (d1 < d2) {
-            d = 1 - d;
+            position = 1 - position;
           }
-          this.setData(data, d, pos);
+          this.setValue(data, position, index);
         }
       }
     }
-  }
-
-   setData(data, d, pos) {
-    let color = this.gradientColor.getColorAt(d, true);
-    data[pos] = color.red;
-    data[pos + 1] = color.green;
-    data[pos + 2] = color.blue;
-    data[pos + 3] = color.alpha;
   }
 }
