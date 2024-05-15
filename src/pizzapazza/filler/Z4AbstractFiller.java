@@ -30,21 +30,33 @@ public abstract class Z4AbstractFiller {
    *
    * @param imageData The image data
    */
-  public abstract void fill(ImageData imageData);
+  public void fill(ImageData imageData) {
+    $Uint8Array data = ($Uint8Array) imageData.data;
+
+    for (int y = 0; y < imageData.height; y++) {
+      for (int x = 0; x < imageData.width; x++) {
+        double position = this.getColorPositionAt(x / imageData.width, y / imageData.height);
+        if (position != -1) {
+          Color color = this.gradientColor.getColorAt(position, true);
+
+          int index = (y * imageData.width + x) * 4;
+          data.$set(index, color.red);
+          data.$set(index + 1, color.green);
+          data.$set(index + 2, color.blue);
+          data.$set(index + 3, color.alpha);
+        }
+      }
+    }
+  }
 
   /**
-   * Sets a value in a data array
+   * Returns the color position to use for a pixel
    *
-   * @param data The data array
-   * @param position The color posiiton
-   * @param index The data index
+   * @param x The x-axis coordinate of the pixel in relative size (in the range
+   * [0,1])
+   * @param y The y-axis coordinate of the pixel in relative size (in the range
+   * [0,1])
+   * @return The color position, -1 if no position is available
    */
-  protected void setValue($Uint8Array data, double position, int index) {
-    Color color = this.gradientColor.getColorAt(position, true);
-
-    data.$set(index, color.red);
-    data.$set(index + 1, color.green);
-    data.$set(index + 2, color.blue);
-    data.$set(index + 3, color.alpha);
-  }
+  protected abstract double getColorPositionAt(double x, double y);
 }

@@ -123,6 +123,23 @@ class Z4Math {
   }
 
   /**
+   * Rotates a point by an angle
+   *
+   * @param x The x-axis coordinate of the point
+   * @param y The y-axis coordinate of the point
+   * @param angle The angle (in radians)
+   * @return The rotated point
+   */
+  static  rotate(x, y, angle) {
+    let cos = Math.cos(angle);
+    let sin = Math.sin(angle);
+    let rotated = new Object();
+    rotated["x"] = x * cos + y * sin;
+    rotated["y"] = x * sin - y * cos;
+    return rotated;
+  }
+
+  /**
    * Generates a ripple around a value
    *
    * @param value The value

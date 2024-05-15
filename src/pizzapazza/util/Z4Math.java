@@ -1,6 +1,7 @@
 package pizzapazza.util;
 
 import def.js.Math;
+import simulation.js.$Object;
 
 /**
  * The utility library for math
@@ -126,6 +127,24 @@ public class Z4Math {
   public static double atan(double x0, double y0, double x, double y) {
     double a = Math.atan2(y - y0, x - x0);
     return a < 0 ? a + Z4Math.TWO_PI : a;
+  }
+
+  /**
+   * Rotates a point by an angle
+   *
+   * @param x The x-axis coordinate of the point
+   * @param y The y-axis coordinate of the point
+   * @param angle The angle (in radians)
+   * @return The rotated point
+   */
+  public static $Object rotate(double x, double y, double angle) {
+    double cos = Math.cos(angle);
+    double sin = Math.sin(angle);
+
+    $Object rotated = new $Object();
+    rotated.$set("x", x * cos + y * sin);
+    rotated.$set("y", x * sin - y * cos);
+    return rotated;
   }
 
   /**
