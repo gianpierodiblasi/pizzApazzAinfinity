@@ -5,6 +5,7 @@ import javascript.awt.Color;
 import pizzapazza.util.Z4Math;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
+import simulation.js.$Object;
 
 /**
  * The gradient color (a gradient between two or more colors)
@@ -163,5 +164,42 @@ public class Z4GradientColor {
               parseInt((this.colors.$get(index).alpha - this.colors.$get(index - 1).alpha) * div + this.colors.$get(index - 1).alpha)
       );
     }
+  }
+
+  /**
+   * Returns this Z4GradientColor as a JSON object
+   *
+   * @return This Z4GradientColor as a JSON object
+   */
+  public $Object toJSON() {
+    $Object json = new $Object();
+
+    json.$set("ripple", this.ripple);
+
+    json.$set("colorsAndPositions", this.colors.map((color, index, array) -> {
+      $Object jsonColor = new $Object();
+      jsonColor.$set("red", color.red);
+      jsonColor.$set("green", color.green);
+      jsonColor.$set("blue", color.blue);
+      jsonColor.$set("alpha", color.alpha);
+      jsonColor.$set("position", this.colorPositions.$get(index));
+      return jsonColor;
+    }));
+
+    return json;
+  }
+
+  /**
+   * Creates a Z4GradientColor from a JSON object
+   *
+   * @param json The JSON object
+   * @return the color
+   */
+  @SuppressWarnings("unchecked")
+  public static Z4GradientColor fromJSON($Object json) {
+    Z4GradientColor gradientColor = new Z4GradientColor();
+    gradientColor.setRipple(json.$get("ripple"));
+    ((Iterable<$Object>) json.$get("colorsAndPositions")).forEach(colorAndPosition -> gradientColor.addColor(new Color(colorAndPosition.$get("red"), colorAndPosition.$get("green"), colorAndPosition.$get("blue"), colorAndPosition.$get("alpha")), colorAndPosition.$get("position")));
+    return gradientColor;
   }
 }

@@ -17,19 +17,6 @@ import static simulation.js.$Globals.document;
 public class test_color1 {
 
   public static void onLoad() {
-    document.$getElementById("language").value = Z4Setting.getLanguage();
-    document.$getElementById("language").onchange = (event) -> {
-      Z4Setting.setLanguage(document.$getElementById("language").value);
-      Z4MessageFactory.changingLanguage();
-      return null;
-    };
-
-    document.$getElementById("theme").value = Z4Setting.getTheme();
-    document.$getElementById("theme").onchange = (event) -> {
-      Z4Setting.setTheme(document.$getElementById("theme").value);
-      return null;
-    };
-
     document.getElementById("test1").textContent = "new Z4Color(0,0,0,0) => " + test_color1.stringify(new Z4Color(0, 0, 0, 0));
     document.getElementById("test2").textContent = "new Z4Color(0,255,0,0) => " + test_color1.stringify(new Z4Color(0, 255, 0, 0));
     document.getElementById("test3").textContent = "new Z4Color(255,255,255,255) => " + test_color1.stringify(new Z4Color(255, 255, 255, 255));
@@ -52,26 +39,5 @@ public class test_color1 {
     ui.oninput = (z4Color) -> document.getElementById("test14").textContent = "ONINPUT " + test_color1.stringify(z4Color);
     ui.onchange = (z4Color) -> document.getElementById("test14").textContent = "ONCHANGE " + test_color1.stringify(z4Color);
     document.getElementById("test14").textContent = test_color1.stringify(ui.getValue());
-  }
-
-  private static String stringify(Object object) {
-    BiFunction<String, Object, Object> replacer = (k, v) -> {
-      if (!$exists(k)) {
-        return v;
-      } else if ($typeof(v, "number")) {
-        return v;
-      } else if ($typeof(v, "boolean")) {
-        return v;
-      } else if (Array.isArray(v)) {
-        return v;
-      } else {
-        return JSON.stringify(v).replaceAll("\"", "").replaceAll("\n", "");
-      }
-    };
-
-    return JSON.stringify(object, replacer, "\t").replaceAll("\"", "");
-  }
-
-  private test_color1() {
   }
 }
