@@ -14,7 +14,7 @@ import javascript.swing.JSFileChooser;
 import javascript.swing.JSLabel;
 import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
-import pizzapazza.Z4Constants;
+import pizzapazza.util.Z4Constants;
 import pizzapazza.Z4Layer;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.component.Z4LayerPreview;

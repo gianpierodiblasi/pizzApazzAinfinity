@@ -9,7 +9,7 @@ import javascript.swing.JSPanel;
 import javascript.swing.JSProgressBar;
 import javascript.swing.MnR.DefaultKeyValueComboBoxModelAndRenderer;
 import javascript.util.KeyValue;
-import pizzapazza.Z4Constants;
+import pizzapazza.util.Z4Constants;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.util.Z4Translations;
 import static simulation.js.$Globals.parseInt;

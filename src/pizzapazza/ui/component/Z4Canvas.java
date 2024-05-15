@@ -14,7 +14,7 @@ import javascript.awt.Color;
 import javascript.awt.Dimension;
 import javascript.awt.Point;
 import javascript.swing.JSComponent;
-import pizzapazza.Z4Constants;
+import pizzapazza.util.Z4Constants;
 import pizzapazza.Z4Layer;
 import pizzapazza.Z4Paper;
 import pizzapazza.ui.panel.Z4StatusPanel;

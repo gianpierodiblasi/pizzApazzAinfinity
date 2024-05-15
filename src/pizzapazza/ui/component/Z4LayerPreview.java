@@ -19,7 +19,7 @@ import javascript.swing.JSTabbedPane;
 import javascript.swing.JSTextField;
 import javascript.swing.SpinnerNumberModel;
 import javascript.util.Translations;
-import pizzapazza.Z4Constants;
+import pizzapazza.util.Z4Constants;
 import pizzapazza.Z4Layer;
 import pizzapazza.util.Z4Translations;
 import simulation.dom.$CanvasRenderingContext2D;
