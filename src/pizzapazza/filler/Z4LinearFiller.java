@@ -93,14 +93,8 @@ public class Z4LinearFiller extends Z4AbstractFiller {
       int step = (int) Math.floor(position);
       position -= step;
 
-      if (d1 < d2) {
-        if ($exists((step % 2))) {
-          position = 1 - position;
-        }
-      } else {
-        if (!$exists((step % 2))) {
-          position = 1 - position;
-        }
+      if ((d1 < d2 && $exists((step % 2))) || (d1 > d2 && !$exists((step % 2)))) {
+        position = 1 - position;
       }
 
       return position;

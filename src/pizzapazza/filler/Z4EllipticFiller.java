@@ -1,11 +1,9 @@
 package pizzapazza.filler;
 
-import def.dom.ImageData;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.util.Z4Math;
 import static simulation.js.$Globals.$exists;
 import simulation.js.$Object;
-import simulation.js.$Uint8Array;
 
 /**
  * A (multi) elliptic filler
@@ -66,37 +64,29 @@ public class Z4EllipticFiller extends Z4AbstractFiller {
   }
 
   @Override
-  public void fill(ImageData imageData) {
-    $Uint8Array data = ($Uint8Array) imageData.data;
+  protected double getColorPositionAt(double x, double y) {
+    $Object rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
+    double d = Math.hypot((double) rotated.$get("x") / this.rx, (double) rotated.$get("y") / this.ry);
 
-    for (int y = 0; y < imageData.height; y++) {
-      double yy = y / imageData.height - this.cy;
+    if (d <= 1) {
+      return d;
+    } else if (this.boundaryBehavior == Z4EllipticFiller.STOP_AT_BOUNDARY) {
+      return -1;
+    } else if (this.boundaryBehavior == Z4EllipticFiller.FILL_AT_BOUNDARY) {
+      return 1;
+    } else if (this.boundaryBehavior == Z4EllipticFiller.SYMMETRIC_AT_BOUNDARY) {
+      int step = (int) Math.floor(d);
+      d -= step;
 
-      for (int x = 0; x < imageData.width; x++) {
-        int index = (y * imageData.width + x) * 4;
-
-        double xx = x / imageData.width - this.cx;
-        $Object rotated = Z4Math.rotate(xx, yy, this.angle);
-        double d = Math.hypot((double) rotated.$get("x") / this.rx, (double) rotated.$get("y") / this.ry);
-
-        if (d <= 1) {
-          this.setValue(data, d, index);
-        } else if (this.boundaryBehavior == Z4EllipticFiller.STOP_AT_BOUNDARY) {
-        } else if (this.boundaryBehavior == Z4EllipticFiller.FILL_AT_BOUNDARY) {
-          this.setValue(data, 1, index);
-        } else if (this.boundaryBehavior == Z4EllipticFiller.SYMMETRIC_AT_BOUNDARY) {
-          int step = (int) Math.floor(d);
-          d -= step;
-
-          if ($exists((step % 2))) {
-            d = 1 - d;
-          }
-
-          this.setValue(data, d, index);
-        } else if (this.boundaryBehavior == Z4EllipticFiller.REPEAT_AT_BOUNDARY) {
-          this.setValue(data, d - (int) Math.floor(d), index);
-        }
+      if ($exists((step % 2))) {
+        d = 1 - d;
       }
+
+      return d;
+    } else if (this.boundaryBehavior == Z4EllipticFiller.REPEAT_AT_BOUNDARY) {
+      return d - (int) Math.floor(d);
+    } else {
+      return -1;
     }
   }
 }

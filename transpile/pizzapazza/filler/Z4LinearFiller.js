@@ -89,14 +89,8 @@ class Z4LinearFiller extends Z4AbstractFiller {
       let position = d1 < d2 ? d1 : d2;
       let step = Math.floor(position);
       position -= step;
-      if (d1 < d2) {
-        if ((step % 2)) {
-          position = 1 - position;
-        }
-      } else {
-        if (!(step % 2)) {
-          position = 1 - position;
-        }
+      if ((d1 < d2 && (step % 2)) || (d1 > d2 && !(step % 2))) {
+        position = 1 - position;
       }
       return position;
     } else if (this.boundaryBehavior === Z4LinearFiller.REPEAT_AT_BOUNDARY) {

@@ -36,6 +36,7 @@ public abstract class Z4AbstractFiller {
     for (int y = 0; y < imageData.height; y++) {
       for (int x = 0; x < imageData.width; x++) {
         double position = this.getColorPositionAt(x / imageData.width, y / imageData.height);
+        
         if (position != -1) {
           Color color = this.gradientColor.getColorAt(position, true);
 
