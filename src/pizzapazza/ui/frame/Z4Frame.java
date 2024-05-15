@@ -3,10 +3,10 @@ package pizzapazza.ui.frame;
 import javascript.awt.BorderLayout;
 import javascript.awt.Color;
 import javascript.swing.JSFrame;
-import pizzapazza.util.Z4Constants;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.tab.Z4Ribbon;
+import pizzapazza.util.Z4Constants;
 
 /**
  * The main frame of the application

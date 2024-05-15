@@ -12,8 +12,8 @@ import javascript.swing.JSLabel;
 import javascript.swing.JSPanel;
 import javascript.swing.JSSpinner;
 import javascript.swing.SpinnerNumberModel;
-import pizzapazza.util.Z4Constants;
 import pizzapazza.ui.component.Z4ColorPreview;
+import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
 
 /**
