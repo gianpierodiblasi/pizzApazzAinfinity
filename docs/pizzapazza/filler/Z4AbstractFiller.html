@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":10};
+var data = {"i0":10,"i1":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -192,19 +192,18 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>abstract void</code></td>
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fill(def.dom.ImageData)">fill</a></span>&#8203;(def.dom.ImageData&nbsp;imageData)</code></th>
 <td class="colLast">
 <div class="block">Fills an image</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setValue(simulation.js.$Uint8Array,double,int)">setValue</a></span>&#8203;(simulation.js.$Uint8Array&nbsp;data,
-        double&nbsp;position,
-        int&nbsp;index)</code></th>
+<td class="colFirst"><code>protected abstract double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getColorPositionAt(double,double)">getColorPositionAt</a></span>&#8203;(double&nbsp;x,
+                  double&nbsp;y)</code></th>
 <td class="colLast">
-<div class="block">Sets a value in a data array</div>
+<div class="block">Returns the color position to use for a pixel</div>
 </td>
 </tr>
 </table>
@@ -261,7 +260,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>fill</h4>
-<pre class="methodSignature">public abstract&nbsp;void&nbsp;fill&#8203;(def.dom.ImageData&nbsp;imageData)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;fill&#8203;(def.dom.ImageData&nbsp;imageData)</pre>
 <div class="block">Fills an image</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -269,21 +268,23 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a id="setValue(simulation.js.$Uint8Array,double,int)">
+<a id="getColorPositionAt(double,double)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>setValue</h4>
-<pre class="methodSignature">protected&nbsp;void&nbsp;setValue&#8203;(simulation.js.$Uint8Array&nbsp;data,
-                        double&nbsp;position,
-                        int&nbsp;index)</pre>
-<div class="block">Sets a value in a data array</div>
+<h4>getColorPositionAt</h4>
+<pre class="methodSignature">protected abstract&nbsp;double&nbsp;getColorPositionAt&#8203;(double&nbsp;x,
+                                             double&nbsp;y)</pre>
+<div class="block">Returns the color position to use for a pixel</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>data</code> - The data array</dd>
-<dd><code>position</code> - The color posiiton</dd>
-<dd><code>index</code> - The data index</dd>
+<dd><code>x</code> - The x-axis coordinate of the pixel in relative size (in the range
+ [0,1])</dd>
+<dd><code>y</code> - The y-axis coordinate of the pixel in relative size (in the range
+ [0,1])</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The color position, -1 if no position is available</dd>
 </dl>
 </li>
 </ul>
