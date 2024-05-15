@@ -20,19 +20,6 @@ import static simulation.js.$Globals.document;
 public class test_color2 {
 
   public static void onLoad() {
-    document.$getElementById("language").value = Z4Setting.getLanguage();
-    document.$getElementById("language").onchange = (event) -> {
-      Z4Setting.setLanguage(document.$getElementById("language").value);
-      Z4MessageFactory.changingLanguage();
-      return null;
-    };
-
-    document.$getElementById("theme").value = Z4Setting.getTheme();
-    document.$getElementById("theme").onchange = (event) -> {
-      Z4Setting.setTheme(document.$getElementById("theme").value);
-      return null;
-    };
-
     document.getElementById("test1").textContent = "new Z4GradientColor() => " + test_color2.stringify(new Z4GradientColor());
     document.getElementById("test2").textContent = "new Z4GradientColor().setStartColor(0,65535) => " + test_color2.stringify(new Z4GradientColor().setStartColor(65535));
     document.getElementById("test3").textContent = "new Z4GradientColor().setRipple(0.2) => " + test_color2.stringify(new Z4GradientColor().setRipple(0.2));

@@ -43,7 +43,332 @@ window.onload = event => {
   }
 
   new Z4Frame();
-};/**
+};
+/**
+ * The gradient color (a gradient between two or more colors)
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4GradientColor {
+
+   colors = new Array();
+
+   colorPositions = new Array();
+
+   ripple = 0.0;
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    this.addColor(new Color(255, 255, 255, 255), 0);
+    this.addColor(new Color(0, 0, 0, 255), 1);
+  }
+
+  /**
+   * Adds a color in a position, if the position is already occupied then
+   * replaces the color
+   *
+   * @param color The color
+   * @param position The position (in the range [0,1])
+   */
+   addColor(color, position) {
+    let index = this.colorPositions.indexOf(position);
+    if (index !== -1) {
+      this.colors[index] = color;
+    } else {
+      index = this.colorPositions.findIndex(pos => pos > position);
+      if (index !== -1) {
+        this.colors.splice(index, 0, color);
+        this.colorPositions.splice(index, 0, position);
+      } else {
+        this.colors.push(color);
+        this.colorPositions.push(position);
+      }
+    }
+  }
+
+  /**
+   * Removes a color by position, if the position is not occupied then no color
+   * is removed
+   *
+   * @param position The position (in the range [0,1])
+   */
+   removeColor(position) {
+    let index = this.colorPositions.indexOf(position);
+    if (index !== -1) {
+      this.colors.splice(index, 1);
+      this.colorPositions.splice(index, 1);
+    }
+  }
+
+  /**
+   * Checks if a position is occupied
+   *
+   * @param position The position (in the range [0,1])
+   * @param tolerance The accepted tolerance around the position (a very small
+   * value, for example 0.01)
+   * @return true if the position is occupied, false otherwise
+   */
+   isPositionOccupied(position, tolerance) {
+    return !!(this.colorPositions.filter(pos => Math.abs(pos - position) <= tolerance).length);
+  }
+
+  /**
+   * Returns a position based on another position and a tolerance
+   *
+   * @param position The position (in the range [0,1])
+   * @param tolerance The accepted tolerance around the position (a very small
+   * value, for example 0.01)
+   * @return The position, -1 if there is no valid position
+   */
+   getPosition(position, tolerance) {
+    let positions = this.colorPositions.filter(pos => Math.abs(pos - position) <= tolerance);
+    return positions.length ? positions[0] : -1;
+  }
+
+  /**
+   * Mirrors this Z4GradientColor
+   */
+   mirror() {
+    this.colors.slice().splice(this.colors.length - 1, 1).reverse().forEach(color => this.colors.push(color));
+    for (let index = 0; index < this.colorPositions.length; index++) {
+      this.colorPositions[index] = this.colorPositions[index] / 2;
+    }
+    this.colorPositions.slice().splice(this.colorPositions.length - 1, 1).reverse().map(position => 1 - position).forEach(position => this.colorPositions.push(position));
+  }
+
+  /**
+   * Reverses this Z4GradientColor
+   */
+   reverse() {
+    this.colors.reverse();
+    for (let index = 1; index < this.colorPositions.length - 1; index++) {
+      this.colorPositions[index] = 1 - this.colorPositions[index];
+    }
+  }
+
+  /**
+   * Sets the ripple
+   *
+   * @param ripple The ripple (in the range [0,1])
+   */
+   setRipple(ripple) {
+    this.ripple = ripple;
+  }
+
+  /**
+   * Returns the ripple
+   *
+   * @return The ripple (in the range [0,1])
+   */
+   getRipple() {
+    return this.ripple;
+  }
+
+  /**
+   * Returns a Color in a position
+   *
+   * @param position The color position (in the range [0,1])
+   * @param useRipple true to use ripple, false otherwise
+   * @return The Color
+   */
+   getColorAt(position, useRipple) {
+    if (useRipple && this.ripple) {
+      position = Z4Math.ripple(position, 0, 1, this.ripple);
+    }
+    let finalPos = position;
+    let index = this.colorPositions.findIndex(pos => pos >= finalPos, null);
+    if (this.colorPositions[index] === position) {
+      return this.colors[index];
+    } else if (this.colorPositions[index - 1] === position) {
+      return this.colors[index - 1];
+    } else {
+      let div = (position - this.colorPositions[index - 1]) / (this.colorPositions[index] - this.colorPositions[index - 1]);
+      return new Color(parseInt((this.colors[index].red - this.colors[index - 1].red) * div + this.colors[index - 1].red), parseInt((this.colors[index].green - this.colors[index - 1].green) * div + this.colors[index - 1].green), parseInt((this.colors[index].blue - this.colors[index - 1].blue) * div + this.colors[index - 1].blue), parseInt((this.colors[index].alpha - this.colors[index - 1].alpha) * div + this.colors[index - 1].alpha));
+    }
+  }
+
+  /**
+   * Returns this Z4GradientColor as a JSON object
+   *
+   * @return This Z4GradientColor as a JSON object
+   */
+   toJSON() {
+    let json = new Object();
+    json["ripple"] = this.ripple;
+    json["colorsAndPositions"] = this.colors.map((color, index, array) => {
+      let jsonColor = new Object();
+      jsonColor["red"] = color.red;
+      jsonColor["green"] = color.green;
+      jsonColor["blue"] = color.blue;
+      jsonColor["alpha"] = color.alpha;
+      jsonColor["position"] = this.colorPositions[index];
+      return jsonColor;
+    });
+    return json;
+  }
+
+  /**
+   * Creates a Z4GradientColor from a JSON object
+   *
+   * @param json The JSON object
+   * @return the color
+   */
+  static  fromJSON(json) {
+    let gradientColor = new Z4GradientColor();
+    gradientColor.setRipple(json["ripple"]);
+    (json["colorsAndPositions"]).forEach(colorAndPosition => gradientColor.addColor(new Color(colorAndPosition["red"], colorAndPosition["green"], colorAndPosition["blue"], colorAndPosition["alpha"]), colorAndPosition["position"]));
+    return gradientColor;
+  }
+}
+/**
+ * The common abstract object for all fillers; each instance of
+ * <i>Z4AbstractFiller</i> provides a different painting style (radial, conic,
+ * elliptic, ect.)
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4AbstractFiller {
+
+  /**
+   * The color used to fill
+   */
+   gradientColor = null;
+
+  /**
+   * Creates the object
+   *
+   * @param gradientColor The color used to fill
+   */
+  constructor(gradientColor) {
+    this.gradientColor = gradientColor;
+  }
+
+  /**
+   * Fills an image
+   *
+   * @param imageData The image data
+   */
+   fill(imageData) {
+  }
+}
+/**
+ * A (multi) linear filler
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4LinearFiller extends Z4AbstractFiller {
+
+   p1x = 0.0;
+
+   p1y = 0.0;
+
+   p2x = 0.0;
+
+   p2y = 0.0;
+
+   boundaryBehavior = 0;
+
+  /**
+   * The filler does nothing outside the boundary
+   */
+  static  STOP_AT_BOUNDARY = 0;
+
+  /**
+   * The filler uses the last color outside the boundary
+   */
+  static  FILL_AT_BOUNDARY = 1;
+
+  /**
+   * The filler symmetrically repeats the color outside the boundary
+   */
+  static  SYMMETRIC_AT_BOUNDARY = 2;
+
+  /**
+   * The filler restarts the color outside the boundary
+   */
+  static  REPEAT_AT_BOUNDARY = 3;
+
+  /**
+   * Creates the object
+   *
+   * @param gradientColor The color used to fill
+   * @param x1 The x-axis coordinate of the start point of the line in relative
+   * size (in the range [0,1])
+   * @param y1 The y-axis coordinate of the start point of the line in relative
+   * size (in the range [0,1])
+   * @param x2 The x-axis coordinate of the end point of the line in relative
+   * size (in the range [0,1])
+   * @param y2 The y-axis coordinate of the end point of the line in relative
+   * size (in the range [0,1])
+   * @param boundaryBehavior The boundary behavior
+   */
+  constructor(gradientColor, x1, y1, x2, y2, boundaryBehavior) {
+    super(gradientColor);
+    this.p1x = x1;
+    this.p1y = y1;
+    this.p2x = x2;
+    this.p2y = y2;
+    this.boundaryBehavior = boundaryBehavior;
+  }
+
+   fill(imageData) {
+    let angle = Z4Math.atan(this.p1x, this.p1y, this.p2x, this.p2y) + Z4Math.HALF_PI;
+    let distance = Z4Math.distance(this.p1x, this.p1y, this.p2x, this.p2y);
+    let line1x = this.p1x + Math.cos(angle);
+    let line1y = this.p1y + Math.sin(angle);
+    let line2x = this.p2x + Math.cos(angle);
+    let line2y = this.p2y + Math.sin(angle);
+    let data = imageData.data;
+    for (let y = 0; y < imageData.height; y++) {
+      let yy = y / imageData.height;
+      for (let x = 0; x < imageData.width; x++) {
+        let pos = (y * imageData.width + x) * 4;
+        let xx = x / imageData.width;
+        let d1 = Z4Math.ptLineDist(this.p1x, this.p1y, line1x, line1y, xx, yy) / distance;
+        let d2 = Z4Math.ptLineDist(this.p2x, this.p2y, line2x, line2y, xx, yy) / distance;
+        if (d1 <= 1 && d2 <= 1) {
+          this.setData(data, d1, pos);
+        } else if (this.boundaryBehavior === Z4LinearFiller.STOP_AT_BOUNDARY) {
+        } else if (this.boundaryBehavior === Z4LinearFiller.FILL_AT_BOUNDARY) {
+          this.setData(data, d1 < d2 ? 0 : 1, pos);
+        } else if (this.boundaryBehavior === Z4LinearFiller.SYMMETRIC_AT_BOUNDARY) {
+          let d = d1 < d2 ? d1 : d2;
+          let step = Math.floor(d);
+          d -= step;
+          if (d1 < d2) {
+            if ((step % 2)) {
+              d = 1 - d;
+            }
+          } else {
+            if (!(step % 2)) {
+              d = 1 - d;
+            }
+          }
+          this.setData(data, d, pos);
+        } else if (this.boundaryBehavior === Z4LinearFiller.REPEAT_AT_BOUNDARY) {
+          let d = d1 < d2 ? d1 : d2;
+          let step = Math.floor(d);
+          d -= step;
+          if (d1 < d2) {
+            d = 1 - d;
+          }
+          this.setData(data, d, pos);
+        }
+      }
+    }
+  }
+
+   setData(data, d, pos) {
+    let color = this.gradientColor.getColorAt(d, true);
+    data[pos] = color.red;
+    data[pos + 1] = color.green;
+    data[pos + 2] = color.blue;
+    data[pos + 3] = color.alpha;
+  }
+}
+/**
  * The canvas
  *
  * @author gianpiero.diblasi
@@ -1827,6 +2152,43 @@ class Z4Math {
     let x = x1 - x2;
     let y = y1 - y2;
     return Math.sqrt(x * x + y * y);
+  }
+
+  /**
+   * Returns the distance from a point to a line
+   *
+   * @param x1 The x-axis coordinate of the start point of the line
+   * @param y1 The y-axis coordinate of the start point of the line
+   * @param x2 The x-axis coordinate of the end point of the line
+   * @param y2 The y-axis coordinate of the end point of the line
+   * @param px The x-axis coordinate of the point
+   * @param py The y-axis coordinate of the point
+   * @return The distance
+   */
+  static  ptLineDist(x1, y1, x2, y2, px, py) {
+    return Math.sqrt(Z4Math.ptLineDistSq(x1, y1, x2, y2, px, py));
+  }
+
+  /**
+   * Returns the square of the distance from a point to a line
+   *
+   * @param x1 The x-axis coordinate of the start point of the line
+   * @param y1 The y-axis coordinate of the start point of the line
+   * @param x2 The x-axis coordinate of the end point of the line
+   * @param y2 The y-axis coordinate of the end point of the line
+   * @param px The x-axis coordinate of the point
+   * @param py The y-axis coordinate of the point
+   * @return The square of the distance
+   */
+  static  ptLineDistSq(x1, y1, x2, y2, px, py) {
+    x2 -= x1;
+    y2 -= y1;
+    px -= x1;
+    py -= y1;
+    let dotprod = px * x2 + py * y2;
+    let projlenSq = dotprod * dotprod / (x2 * x2 + y2 * y2);
+    let lenSq = px * px + py * py - projlenSq;
+    return lenSq < 0 ? 0 : lenSq;
   }
 
   /**

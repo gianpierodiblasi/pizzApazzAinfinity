@@ -71,6 +71,43 @@ class Z4Math {
   }
 
   /**
+   * Returns the distance from a point to a line
+   *
+   * @param x1 The x-axis coordinate of the start point of the line
+   * @param y1 The y-axis coordinate of the start point of the line
+   * @param x2 The x-axis coordinate of the end point of the line
+   * @param y2 The y-axis coordinate of the end point of the line
+   * @param px The x-axis coordinate of the point
+   * @param py The y-axis coordinate of the point
+   * @return The distance
+   */
+  static  ptLineDist(x1, y1, x2, y2, px, py) {
+    return Math.sqrt(Z4Math.ptLineDistSq(x1, y1, x2, y2, px, py));
+  }
+
+  /**
+   * Returns the square of the distance from a point to a line
+   *
+   * @param x1 The x-axis coordinate of the start point of the line
+   * @param y1 The y-axis coordinate of the start point of the line
+   * @param x2 The x-axis coordinate of the end point of the line
+   * @param y2 The y-axis coordinate of the end point of the line
+   * @param px The x-axis coordinate of the point
+   * @param py The y-axis coordinate of the point
+   * @return The square of the distance
+   */
+  static  ptLineDistSq(x1, y1, x2, y2, px, py) {
+    x2 -= x1;
+    y2 -= y1;
+    px -= x1;
+    py -= y1;
+    let dotprod = px * x2 + py * y2;
+    let projlenSq = dotprod * dotprod / (x2 * x2 + y2 * y2);
+    let lenSq = px * px + py * py - projlenSq;
+    return lenSq < 0 ? 0 : lenSq;
+  }
+
+  /**
    * Returns the theta component of a point or a vector, in polar coordinates.
    * The value is normalized in the range [0,2*PI]
    *
