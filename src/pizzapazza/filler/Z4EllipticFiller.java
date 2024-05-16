@@ -10,34 +10,13 @@ import simulation.js.$Object;
  *
  * @author gianpiero.diblasi
  */
-public class Z4EllipticFiller extends Z4AbstractFiller {
+public class Z4EllipticFiller extends Z4AbstractBoundaryBehaviorFiller {
 
   private final int cx;
   private final int cy;
   private final int rx;
   private final int ry;
   private final double angle;
-  private final int boundaryBehavior;
-
-  /**
-   * The filler does nothing outside the boundary
-   */
-  public final static int STOP_AT_BOUNDARY = 0;
-
-  /**
-   * The filler uses the last color outside the boundary
-   */
-  public final static int FILL_AT_BOUNDARY = 1;
-
-  /**
-   * The filler symmetrically repeats the color outside the boundary
-   */
-  public final static int SYMMETRIC_AT_BOUNDARY = 2;
-
-  /**
-   * The filler restarts the color outside the boundary
-   */
-  public final static int REPEAT_AT_BOUNDARY = 3;
 
   /**
    * Creates the object
@@ -51,14 +30,13 @@ public class Z4EllipticFiller extends Z4AbstractFiller {
    * @param boundaryBehavior The boundary behavior
    */
   public Z4EllipticFiller(Z4GradientColor gradientColor, int cx, int cy, int rx, int ry, double angle, int boundaryBehavior) {
-    super(gradientColor);
+    super(gradientColor, boundaryBehavior);
 
     this.cx = cx;
     this.cy = cy;
     this.rx = rx;
     this.ry = ry;
     this.angle = angle;
-    this.boundaryBehavior = boundaryBehavior;
   }
 
   @Override

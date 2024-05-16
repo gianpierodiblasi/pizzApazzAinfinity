@@ -9,13 +9,12 @@ import static simulation.js.$Globals.$exists;
  *
  * @author gianpiero.diblasi
  */
-public class Z4LinearFiller extends Z4AbstractFiller {
+public class Z4LinearFiller extends Z4AbstractBoundaryBehaviorFiller {
 
   private final int p1x;
   private final int p1y;
   private final int p2x;
   private final int p2y;
-  private final int boundaryBehavior;
 
   private final double angle;
   private final double distance;
@@ -24,26 +23,6 @@ public class Z4LinearFiller extends Z4AbstractFiller {
   private final double line1y;
   private final double line2x;
   private final double line2y;
-
-  /**
-   * The filler does nothing outside the boundary
-   */
-  public final static int STOP_AT_BOUNDARY = 0;
-
-  /**
-   * The filler uses the last color outside the boundary
-   */
-  public final static int FILL_AT_BOUNDARY = 1;
-
-  /**
-   * The filler symmetrically repeats the color outside the boundary
-   */
-  public final static int SYMMETRIC_AT_BOUNDARY = 2;
-
-  /**
-   * The filler restarts the color outside the boundary
-   */
-  public final static int REPEAT_AT_BOUNDARY = 3;
 
   /**
    * Creates the object
@@ -56,13 +35,12 @@ public class Z4LinearFiller extends Z4AbstractFiller {
    * @param boundaryBehavior The boundary behavior
    */
   public Z4LinearFiller(Z4GradientColor gradientColor, int x1, int y1, int x2, int y2, int boundaryBehavior) {
-    super(gradientColor);
+    super(gradientColor, boundaryBehavior);
 
     this.p1x = x1;
     this.p1y = y1;
     this.p2x = x2;
     this.p2y = y2;
-    this.boundaryBehavior = boundaryBehavior;
 
     this.angle = Z4Math.atan(this.p1x, this.p1y, this.p2x, this.p2y) + Z4Math.HALF_PI;
     this.distance = Z4Math.distance(this.p1x, this.p1y, this.p2x, this.p2y);

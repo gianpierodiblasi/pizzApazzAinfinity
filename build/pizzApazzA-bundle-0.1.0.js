@@ -275,6 +275,397 @@ class Z4AbstractFiller {
   }
 }
 /**
+ * A Filler with a boundary behavior
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4AbstractBoundaryBehaviorFiller extends Z4AbstractFiller {
+
+  /**
+   * The filler does nothing outside the boundary
+   */
+  static  STOP_AT_BOUNDARY = 0;
+
+  /**
+   * The filler uses the last color outside the boundary
+   */
+  static  FILL_AT_BOUNDARY = 1;
+
+  /**
+   * The filler symmetrically repeats the color outside the boundary
+   */
+  static  SYMMETRIC_AT_BOUNDARY = 2;
+
+  /**
+   * The filler restarts the color outside the boundary
+   */
+  static  REPEAT_AT_BOUNDARY = 3;
+
+  /**
+   * The boundary behavior
+   */
+   boundaryBehavior = 0;
+
+  /**
+   * Creates the object
+   *
+   * @param gradientColor The color used to fill
+   * @param boundaryBehavior The boundary behavior
+   */
+  constructor(gradientColor, boundaryBehavior) {
+    super(gradientColor);
+    this.boundaryBehavior = boundaryBehavior;
+  }
+}
+/**
+ * A Filler which can be inscribed in an ellipse
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4AbstractEllipseInscribedFiller extends Z4AbstractBoundaryBehaviorFiller {
+
+   cx = 0;
+
+   cy = 0;
+
+   rx = 0;
+
+   ry = 0;
+
+   angle = 0.0;
+
+  /**
+   * The number of vertices of the polygon
+   */
+   vertexCount = 0;
+
+   edges = null;
+
+   d00 = 0.0;
+
+   ctx = new OffscreenCanvas(1, 1).getContext("2d");
+
+  /**
+   * Creates the object
+   *
+   * @param gradientColor The color used to fill
+   * @param cx The x-axis coordinate of the center point of the inscribing
+   * ellipse
+   * @param cy The y-axis coordinate of the center point of the inscribing
+   * ellipse
+   * @param rx The x-radius of the inscribing ellipse
+   * @param ry The y-radius of the inscribing ellipse
+   * @param angle The rotation angle of the inscribing ellipse
+   * @param vertexCount The number of vertices of the polygon
+   * @param boundaryBehavior The boundary behavior
+   */
+  constructor(gradientColor, cx, cy, rx, ry, angle, vertexCount, boundaryBehavior) {
+    super(gradientColor, boundaryBehavior);
+    this.cx = cx;
+    this.cy = cy;
+    this.rx = rx;
+    this.ry = ry;
+    this.angle = angle;
+    this.vertexCount = vertexCount;
+    this.edges = this.createEdges(this.vertexCount);
+    this.ctx.beginPath();
+    this.edges.forEach((edge, index, array) => {
+      if (index === 0) {
+        this.ctx.moveTo(edge["p1x"], edge["p1y"]);
+      } else {
+        this.ctx.lineTo(edge["p1x"], edge["p1y"]);
+      }
+    });
+    this.ctx.closePath();
+    this.d00 = this.edges.map(line => Z4Math.ptSegDist(line["p1x"], line["p1y"], line["p2x"], line["p2y"], 0, 0)).reduce((accumulator, current, index, array) => def.js.Math.min(accumulator, current));
+  }
+
+  /**
+   * Creates the polygon edges
+   *
+   * @param vertexCount The number of vertices of the polygon
+   * @return The edges
+   */
+   createEdges(vertexCount) {
+  }
+
+   getColorPositionAt(x, y) {
+    let rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
+    let xx = rotated["x"] / this.rx;
+    let yy = rotated["y"] / this.ry;
+    switch(this.boundaryBehavior) {
+      case Z4StarFiller.STOP_AT_BOUNDARY:
+      case Z4StarFiller.FILL_AT_BOUNDARY:
+        return this.ctx.isPointInPath(xx, yy) ? 1 - this.getDistance(xx, yy, 1) : this.boundaryBehavior === Z4StarFiller.STOP_AT_BOUNDARY ? -1 : 1;
+      case Z4StarFiller.SYMMETRIC_AT_BOUNDARY:
+      case Z4StarFiller.REPEAT_AT_BOUNDARY:
+        let divider = 1;
+        let xxx = xx / divider;
+        let yyy = yy / divider;
+        let distance = this.getDistance(xxx, yyy, divider);
+        while (distance > 1 || !this.ctx.isPointInPath(xxx, yyy)) {
+          divider++;
+          xxx = xx / divider;
+          yyy = yy / divider;
+          distance = this.getDistance(xxx, yyy, divider);
+        }
+        return this.boundaryBehavior === Z4StarFiller.REPEAT_AT_BOUNDARY ? 1 - distance : divider % 2 ? 1 - distance : distance;
+      default:
+        return -1;
+    }
+  }
+
+   getDistance(x, y, divider) {
+    return this.edges.map(line => Z4Math.ptSegDist(line["p1x"], line["p1y"], line["p2x"], line["p2y"], x, y)).reduce((accumulator, current, index, array) => def.js.Math.min(accumulator, current)) / (this.d00 / divider);
+  }
+}
+/**
+ * A (multi) polygon filler
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4PolygonFiller extends Z4AbstractEllipseInscribedFiller {
+
+  /**
+   * Creates the object
+   *
+   * @param gradientColor The color used to fill
+   * @param cx The x-axis coordinate of the center point of the ellipse
+   * containing the (regular) polygon
+   * @param cy The y-axis coordinate of the center point of the ellipse
+   * containing the (regular) polygon
+   * @param rx The x-radius of the ellipse containing the (regular) polygon
+   * @param ry The y-radius of the ellipse containing the (regular) polygon
+   * @param angle The rotation angle of the ellipse containing the (regular)
+   * polygon (in radians)
+   * @param vertexCount The number of vertices of the polygon
+   * @param boundaryBehavior The boundary behavior
+   */
+  constructor(gradientColor, cx, cy, rx, ry, angle, vertexCount, boundaryBehavior) {
+    super(gradientColor, cx, cy, rx, ry, angle, vertexCount, boundaryBehavior);
+  }
+
+   createEdges(vertexCount) {
+    let edges = new Array();
+    for (let index = 0; index < vertexCount - 1; index++) {
+      let line = new Object();
+      line["p1x"] = Math.cos(index * Z4Math.TWO_PI / vertexCount);
+      line["p1y"] = Math.sin(index * Z4Math.TWO_PI / vertexCount);
+      line["p2x"] = Math.cos((index + 1) * Z4Math.TWO_PI / vertexCount);
+      line["p2y"] = Math.sin((index + 1) * Z4Math.TWO_PI / vertexCount);
+      edges.push(line);
+    }
+    let line = new Object();
+    line["p1x"] = Math.cos((vertexCount - 1) * Z4Math.TWO_PI / vertexCount);
+    line["p1y"] = Math.sin((vertexCount - 1) * Z4Math.TWO_PI / vertexCount);
+    line["p2x"] = Math.cos(0);
+    line["p2y"] = Math.sin(0);
+    edges.push(line);
+    return edges;
+  }
+}
+/**
+ * A (multi) star filler
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4StarFiller extends Z4AbstractEllipseInscribedFiller {
+
+  /**
+   * Creates the object
+   *
+   * @param gradientColor The color used to fill
+   * @param cx The x-axis coordinate of the center point of the ellipse
+   * containing the (regular) star
+   * @param cy The y-axis coordinate of the center point of the ellipse
+   * containing the (regular) star
+   * @param rx The x-radius of the ellipse containing the (regular) star
+   * @param ry The y-radius of the ellipse containing the (regular) star
+   * @param angle The rotation angle of the ellipse containing the (regular)
+   * star (in radians)
+   * @param boundaryBehavior The boundary behavior
+   */
+  constructor(gradientColor, cx, cy, rx, ry, angle, boundaryBehavior) {
+    super(gradientColor, cx, cy, rx, ry, angle, 5, boundaryBehavior);
+  }
+
+   createEdges(vertexCount) {
+    let points = new Array();
+    let point = new Object();
+    let val = Z4Math.TWO_PI / vertexCount * 3 + Math.PI;
+    point["x"] = Math.cos(val) / Z4Math.SQUARE_GOLD_SECTION;
+    point["y"] = Math.sin(val) / Z4Math.SQUARE_GOLD_SECTION;
+    points[0] = point;
+    for (let index = 1; index < vertexCount; index++) {
+      point = new Object();
+      val = Z4Math.TWO_PI / vertexCount * index;
+      point["x"] = Math.cos(val);
+      point["y"] = Math.sin(val);
+      points[index * 2 - 1] = point;
+      point = new Object();
+      val = Z4Math.TWO_PI / vertexCount * (index + 3) + Math.PI;
+      point["x"] = Math.cos(val) / Z4Math.SQUARE_GOLD_SECTION;
+      point["y"] = Math.sin(val) / Z4Math.SQUARE_GOLD_SECTION;
+      points[index * 2] = point;
+    }
+    point = new Object();
+    point["x"] = Math.cos(0);
+    point["y"] = Math.sin(0);
+    points.splice(0, 0, point);
+    points.push(point);
+    let edges = new Array();
+    for (let index = 0; index < points.length - 1; index++) {
+      let line = new Object();
+      line["p1x"] = points[index]["x"];
+      line["p1y"] = points[index]["y"];
+      line["p2x"] = points[index + 1]["x"];
+      line["p2y"] = points[index + 1]["y"];
+      edges.push(line);
+    }
+    return edges;
+  }
+}
+/**
+ * A (multi) elliptic filler
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4EllipticFiller extends Z4AbstractBoundaryBehaviorFiller {
+
+   cx = 0;
+
+   cy = 0;
+
+   rx = 0;
+
+   ry = 0;
+
+   angle = 0.0;
+
+  /**
+   * Creates the object
+   *
+   * @param gradientColor The color used to fill
+   * @param cx The x-axis coordinate of the center point
+   * @param cy The y-axis coordinate of the center point
+   * @param rx The x-radius
+   * @param ry The y-radius
+   * @param angle The rotation angle of the ellipse (in radians)
+   * @param boundaryBehavior The boundary behavior
+   */
+  constructor(gradientColor, cx, cy, rx, ry, angle, boundaryBehavior) {
+    super(gradientColor, boundaryBehavior);
+    this.cx = cx;
+    this.cy = cy;
+    this.rx = rx;
+    this.ry = ry;
+    this.angle = angle;
+  }
+
+   getColorPositionAt(x, y) {
+    let rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
+    let d = Math.hypot(rotated["x"] / this.rx, rotated["y"] / this.ry);
+    if (d <= 1) {
+      return d;
+    } else if (this.boundaryBehavior === Z4EllipticFiller.STOP_AT_BOUNDARY) {
+      return -1;
+    } else if (this.boundaryBehavior === Z4EllipticFiller.FILL_AT_BOUNDARY) {
+      return 1;
+    } else if (this.boundaryBehavior === Z4EllipticFiller.SYMMETRIC_AT_BOUNDARY) {
+      let step = Math.floor(d);
+      d -= step;
+      if ((step % 2)) {
+        d = 1 - d;
+      }
+      return d;
+    } else if (this.boundaryBehavior === Z4EllipticFiller.REPEAT_AT_BOUNDARY) {
+      return d - Math.floor(d);
+    } else {
+      return -1;
+    }
+  }
+}
+/**
+ * A (multi) linear filler
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4LinearFiller extends Z4AbstractBoundaryBehaviorFiller {
+
+   p1x = 0;
+
+   p1y = 0;
+
+   p2x = 0;
+
+   p2y = 0;
+
+   angle = 0.0;
+
+   distance = 0.0;
+
+   line1x = 0.0;
+
+   line1y = 0.0;
+
+   line2x = 0.0;
+
+   line2y = 0.0;
+
+  /**
+   * Creates the object
+   *
+   * @param gradientColor The color used to fill
+   * @param x1 The x-axis coordinate of the start point of the line
+   * @param y1 The y-axis coordinate of the start point of the line
+   * @param x2 The x-axis coordinate of the end point of the line
+   * @param y2 The y-axis coordinate of the end point of the line
+   * @param boundaryBehavior The boundary behavior
+   */
+  constructor(gradientColor, x1, y1, x2, y2, boundaryBehavior) {
+    super(gradientColor, boundaryBehavior);
+    this.p1x = x1;
+    this.p1y = y1;
+    this.p2x = x2;
+    this.p2y = y2;
+    this.angle = Z4Math.atan(this.p1x, this.p1y, this.p2x, this.p2y) + Z4Math.HALF_PI;
+    this.distance = Z4Math.distance(this.p1x, this.p1y, this.p2x, this.p2y);
+    this.line1x = this.p1x + Math.cos(this.angle);
+    this.line1y = this.p1y + Math.sin(this.angle);
+    this.line2x = this.p2x + Math.cos(this.angle);
+    this.line2y = this.p2y + Math.sin(this.angle);
+  }
+
+   getColorPositionAt(x, y) {
+    let d1 = Z4Math.ptLineDist(this.p1x, this.p1y, this.line1x, this.line1y, x, y) / this.distance;
+    let d2 = Z4Math.ptLineDist(this.p2x, this.p2y, this.line2x, this.line2y, x, y) / this.distance;
+    if (d1 <= 1 && d2 <= 1) {
+      return d1;
+    } else if (this.boundaryBehavior === Z4LinearFiller.STOP_AT_BOUNDARY) {
+      return -1;
+    } else if (this.boundaryBehavior === Z4LinearFiller.FILL_AT_BOUNDARY) {
+      return d1 < d2 ? 0 : 1;
+    } else if (this.boundaryBehavior === Z4LinearFiller.SYMMETRIC_AT_BOUNDARY) {
+      let position = d1 < d2 ? d1 : d2;
+      let step = Math.floor(position);
+      position -= step;
+      if ((d1 < d2 && (step % 2)) || (d1 > d2 && !(step % 2))) {
+        position = 1 - position;
+      }
+      return position;
+    } else if (this.boundaryBehavior === Z4LinearFiller.REPEAT_AT_BOUNDARY) {
+      let position = d1 < d2 ? d1 : d2;
+      position -= Math.floor(position);
+      if (d1 < d2) {
+        position = 1 - position;
+      }
+      return position;
+    } else {
+      return -1;
+    }
+  }
+}
+/**
  * A (multi) conic filler
  *
  * @author gianpiero.diblasi
@@ -317,322 +708,6 @@ class Z4ConicFiller extends Z4AbstractFiller {
     } else {
       return position;
     }
-  }
-}
-/**
- * A (multi) elliptic filler
- *
- * @author gianpiero.diblasi
- */
-class Z4EllipticFiller extends Z4AbstractFiller {
-
-   cx = 0;
-
-   cy = 0;
-
-   rx = 0;
-
-   ry = 0;
-
-   angle = 0.0;
-
-   boundaryBehavior = 0;
-
-  /**
-   * The filler does nothing outside the boundary
-   */
-  static  STOP_AT_BOUNDARY = 0;
-
-  /**
-   * The filler uses the last color outside the boundary
-   */
-  static  FILL_AT_BOUNDARY = 1;
-
-  /**
-   * The filler symmetrically repeats the color outside the boundary
-   */
-  static  SYMMETRIC_AT_BOUNDARY = 2;
-
-  /**
-   * The filler restarts the color outside the boundary
-   */
-  static  REPEAT_AT_BOUNDARY = 3;
-
-  /**
-   * Creates the object
-   *
-   * @param gradientColor The color used to fill
-   * @param cx The x-axis coordinate of the center point
-   * @param cy The y-axis coordinate of the center point
-   * @param rx The x-radius
-   * @param ry The y-radius
-   * @param angle The rotation angle of the ellipse (in radians)
-   * @param boundaryBehavior The boundary behavior
-   */
-  constructor(gradientColor, cx, cy, rx, ry, angle, boundaryBehavior) {
-    super(gradientColor);
-    this.cx = cx;
-    this.cy = cy;
-    this.rx = rx;
-    this.ry = ry;
-    this.angle = angle;
-    this.boundaryBehavior = boundaryBehavior;
-  }
-
-   getColorPositionAt(x, y) {
-    let rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
-    let d = Math.hypot(rotated["x"] / this.rx, rotated["y"] / this.ry);
-    if (d <= 1) {
-      return d;
-    } else if (this.boundaryBehavior === Z4EllipticFiller.STOP_AT_BOUNDARY) {
-      return -1;
-    } else if (this.boundaryBehavior === Z4EllipticFiller.FILL_AT_BOUNDARY) {
-      return 1;
-    } else if (this.boundaryBehavior === Z4EllipticFiller.SYMMETRIC_AT_BOUNDARY) {
-      let step = Math.floor(d);
-      d -= step;
-      if ((step % 2)) {
-        d = 1 - d;
-      }
-      return d;
-    } else if (this.boundaryBehavior === Z4EllipticFiller.REPEAT_AT_BOUNDARY) {
-      return d - Math.floor(d);
-    } else {
-      return -1;
-    }
-  }
-}
-/**
- * A (multi) linear filler
- *
- * @author gianpiero.diblasi
- */
-class Z4LinearFiller extends Z4AbstractFiller {
-
-   p1x = 0;
-
-   p1y = 0;
-
-   p2x = 0;
-
-   p2y = 0;
-
-   boundaryBehavior = 0;
-
-   angle = 0.0;
-
-   distance = 0.0;
-
-   line1x = 0.0;
-
-   line1y = 0.0;
-
-   line2x = 0.0;
-
-   line2y = 0.0;
-
-  /**
-   * The filler does nothing outside the boundary
-   */
-  static  STOP_AT_BOUNDARY = 0;
-
-  /**
-   * The filler uses the last color outside the boundary
-   */
-  static  FILL_AT_BOUNDARY = 1;
-
-  /**
-   * The filler symmetrically repeats the color outside the boundary
-   */
-  static  SYMMETRIC_AT_BOUNDARY = 2;
-
-  /**
-   * The filler restarts the color outside the boundary
-   */
-  static  REPEAT_AT_BOUNDARY = 3;
-
-  /**
-   * Creates the object
-   *
-   * @param gradientColor The color used to fill
-   * @param x1 The x-axis coordinate of the start point of the line
-   * @param y1 The y-axis coordinate of the start point of the line
-   * @param x2 The x-axis coordinate of the end point of the line
-   * @param y2 The y-axis coordinate of the end point of the line
-   * @param boundaryBehavior The boundary behavior
-   */
-  constructor(gradientColor, x1, y1, x2, y2, boundaryBehavior) {
-    super(gradientColor);
-    this.p1x = x1;
-    this.p1y = y1;
-    this.p2x = x2;
-    this.p2y = y2;
-    this.boundaryBehavior = boundaryBehavior;
-    this.angle = Z4Math.atan(this.p1x, this.p1y, this.p2x, this.p2y) + Z4Math.HALF_PI;
-    this.distance = Z4Math.distance(this.p1x, this.p1y, this.p2x, this.p2y);
-    this.line1x = this.p1x + Math.cos(this.angle);
-    this.line1y = this.p1y + Math.sin(this.angle);
-    this.line2x = this.p2x + Math.cos(this.angle);
-    this.line2y = this.p2y + Math.sin(this.angle);
-  }
-
-   getColorPositionAt(x, y) {
-    let d1 = Z4Math.ptLineDist(this.p1x, this.p1y, this.line1x, this.line1y, x, y) / this.distance;
-    let d2 = Z4Math.ptLineDist(this.p2x, this.p2y, this.line2x, this.line2y, x, y) / this.distance;
-    if (d1 <= 1 && d2 <= 1) {
-      return d1;
-    } else if (this.boundaryBehavior === Z4LinearFiller.STOP_AT_BOUNDARY) {
-      return -1;
-    } else if (this.boundaryBehavior === Z4LinearFiller.FILL_AT_BOUNDARY) {
-      return d1 < d2 ? 0 : 1;
-    } else if (this.boundaryBehavior === Z4LinearFiller.SYMMETRIC_AT_BOUNDARY) {
-      let position = d1 < d2 ? d1 : d2;
-      let step = Math.floor(position);
-      position -= step;
-      if ((d1 < d2 && (step % 2)) || (d1 > d2 && !(step % 2))) {
-        position = 1 - position;
-      }
-      return position;
-    } else if (this.boundaryBehavior === Z4LinearFiller.REPEAT_AT_BOUNDARY) {
-      let position = d1 < d2 ? d1 : d2;
-      position -= Math.floor(position);
-      if (d1 < d2) {
-        position = 1 - position;
-      }
-      return position;
-    } else {
-      return -1;
-    }
-  }
-}
-/**
- * A (multi) polygon filler
- *
- * @author gianpiero.diblasi
- */
-class Z4PolygonFiller extends Z4AbstractFiller {
-
-   cx = 0;
-
-   cy = 0;
-
-   rx = 0;
-
-   ry = 0;
-
-   angle = 0.0;
-
-   vertexCount = 0;
-
-   boundaryBehavior = 0;
-
-   lines = new Array();
-
-   d00 = 0.0;
-
-   ctx = new OffscreenCanvas(1, 1).getContext("2d");
-
-  /**
-   * The filler does nothing outside the boundary
-   */
-  static  STOP_AT_BOUNDARY = 0;
-
-  /**
-   * The filler uses the last color outside the boundary
-   */
-  static  FILL_AT_BOUNDARY = 1;
-
-  /**
-   * The filler symmetrically repeats the color outside the boundary
-   */
-  static  SYMMETRIC_AT_BOUNDARY = 2;
-
-  /**
-   * The filler restarts the color outside the boundary
-   */
-  static  REPEAT_AT_BOUNDARY = 3;
-
-  /**
-   * Creates the object
-   *
-   * @param gradientColor The color used to fill
-   * @param cx The x-axis coordinate of the center point of the ellipse
-   * containing the (regular) polygon
-   * @param cy The y-axis coordinate of the center point of the ellipse
-   * containing the (regular) polygon
-   * @param rx The x-radius of the ellipse containing the (regular) polygon
-   * @param ry The y-radius of the ellipse containing the (regular) polygon
-   * @param angle The rotation angle of the ellipse containing the (regular)
-   * polygon (in radians)
-   * @param vertexCount The number of vertices of the polygon
-   * @param boundaryBehavior The boundary behavior
-   */
-  constructor(gradientColor, cx, cy, rx, ry, angle, vertexCount, boundaryBehavior) {
-    super(gradientColor);
-    this.cx = cx;
-    this.cy = cy;
-    this.rx = rx;
-    this.ry = ry;
-    this.angle = angle;
-    this.vertexCount = vertexCount;
-    this.boundaryBehavior = boundaryBehavior;
-    this.createLines();
-    this.d00 = this.lines.map(line => Z4Math.ptSegDist(line["p1x"], line["p1y"], line["p2x"], line["p2y"], 0, 0)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
-  }
-
-   createLines() {
-    this.ctx.beginPath();
-    for (let index = 0; index < this.vertexCount - 1; index++) {
-      let line = new Object();
-      line["p1x"] = Math.cos(index * Z4Math.TWO_PI / this.vertexCount);
-      line["p1y"] = Math.sin(index * Z4Math.TWO_PI / this.vertexCount);
-      line["p2x"] = Math.cos((index + 1) * Z4Math.TWO_PI / this.vertexCount);
-      line["p2y"] = Math.sin((index + 1) * Z4Math.TWO_PI / this.vertexCount);
-      this.lines.push(line);
-      if (index === 0) {
-        this.ctx.moveTo(Math.cos(index * Z4Math.TWO_PI / this.vertexCount), Math.sin(index * Z4Math.TWO_PI / this.vertexCount));
-      } else {
-        this.ctx.lineTo(Math.cos(index * Z4Math.TWO_PI / this.vertexCount), Math.sin(index * Z4Math.TWO_PI / this.vertexCount));
-      }
-    }
-    let line = new Object();
-    line["p1x"] = Math.cos((this.vertexCount - 1) * Z4Math.TWO_PI / this.vertexCount);
-    line["p1y"] = Math.sin((this.vertexCount - 1) * Z4Math.TWO_PI / this.vertexCount);
-    line["p2x"] = Math.cos(0);
-    line["p2y"] = Math.sin(0);
-    this.lines.push(line);
-    this.ctx.lineTo(Math.cos((this.vertexCount - 1) * Z4Math.TWO_PI / this.vertexCount), Math.sin((this.vertexCount - 1) * Z4Math.TWO_PI / this.vertexCount));
-    this.ctx.closePath();
-  }
-
-   getColorPositionAt(x, y) {
-    let rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
-    let xx = rotated["x"] / this.rx;
-    let yy = rotated["y"] / this.ry;
-    switch(this.boundaryBehavior) {
-      case Z4PolygonFiller.STOP_AT_BOUNDARY:
-      case Z4PolygonFiller.FILL_AT_BOUNDARY:
-        return this.ctx.isPointInPath(xx, yy) ? 1 - this.getDistance(xx, yy, 1) : this.boundaryBehavior === Z4PolygonFiller.STOP_AT_BOUNDARY ? -1 : 1;
-      case Z4PolygonFiller.SYMMETRIC_AT_BOUNDARY:
-      case Z4PolygonFiller.REPEAT_AT_BOUNDARY:
-        let divider = 1;
-        let xxx = xx / divider;
-        let yyy = yy / divider;
-        let distance = this.getDistance(xxx, yyy, divider);
-        while (distance > 1 || !this.ctx.isPointInPath(xxx, yyy)) {
-          divider++;
-          xxx = xx / divider;
-          yyy = yy / divider;
-          distance = this.getDistance(xxx, yyy, divider);
-        }
-        return this.boundaryBehavior === Z4PolygonFiller.REPEAT_AT_BOUNDARY ? 1 - distance : divider % 2 ? 1 - distance : distance;
-      default:
-        return -1;
-    }
-  }
-
-   getDistance(x, y, divider) {
-    return this.lines.map(line => Z4Math.ptSegDist(line["p1x"], line["p1y"], line["p2x"], line["p2y"], x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current)) / (this.d00 / divider);
   }
 }
 /**

@@ -3,7 +3,7 @@
  *
  * @author gianpiero.diblasi
  */
-class Z4LinearFiller extends Z4AbstractFiller {
+class Z4LinearFiller extends Z4AbstractBoundaryBehaviorFiller {
 
    p1x = 0;
 
@@ -12,8 +12,6 @@ class Z4LinearFiller extends Z4AbstractFiller {
    p2x = 0;
 
    p2y = 0;
-
-   boundaryBehavior = 0;
 
    angle = 0.0;
 
@@ -28,26 +26,6 @@ class Z4LinearFiller extends Z4AbstractFiller {
    line2y = 0.0;
 
   /**
-   * The filler does nothing outside the boundary
-   */
-  static  STOP_AT_BOUNDARY = 0;
-
-  /**
-   * The filler uses the last color outside the boundary
-   */
-  static  FILL_AT_BOUNDARY = 1;
-
-  /**
-   * The filler symmetrically repeats the color outside the boundary
-   */
-  static  SYMMETRIC_AT_BOUNDARY = 2;
-
-  /**
-   * The filler restarts the color outside the boundary
-   */
-  static  REPEAT_AT_BOUNDARY = 3;
-
-  /**
    * Creates the object
    *
    * @param gradientColor The color used to fill
@@ -58,12 +36,11 @@ class Z4LinearFiller extends Z4AbstractFiller {
    * @param boundaryBehavior The boundary behavior
    */
   constructor(gradientColor, x1, y1, x2, y2, boundaryBehavior) {
-    super(gradientColor);
+    super(gradientColor, boundaryBehavior);
     this.p1x = x1;
     this.p1y = y1;
     this.p2x = x2;
     this.p2y = y2;
-    this.boundaryBehavior = boundaryBehavior;
     this.angle = Z4Math.atan(this.p1x, this.p1y, this.p2x, this.p2y) + Z4Math.HALF_PI;
     this.distance = Z4Math.distance(this.p1x, this.p1y, this.p2x, this.p2y);
     this.line1x = this.p1x + Math.cos(this.angle);
