@@ -29,10 +29,7 @@ public abstract class Z4AbstractBoundaryBehaviorFiller extends Z4AbstractFiller 
    */
   public final static int REPEAT_AT_BOUNDARY = 3;
 
-  /**
-   * The boundary behavior
-   */
-  protected final int boundaryBehavior;
+  private final int boundaryBehavior;
 
   /**
    * Creates the object
@@ -45,4 +42,19 @@ public abstract class Z4AbstractBoundaryBehaviorFiller extends Z4AbstractFiller 
 
     this.boundaryBehavior = boundaryBehavior;
   }
+
+  @Override
+  protected double getColorPositionAt(int x, int y) {
+    return this.getColorPositionAtWithBoundaryBehavior(x, y, this.boundaryBehavior);
+  }
+
+  /**
+   * Returns the color position to use for a pixel
+   *
+   * @param x The x-axis coordinate of the pixel
+   * @param y The y-axis coordinate of the pixel
+   * @param boundaryBehavior The boundary behavior
+   * @return The color position, -1 if no position is available
+   */
+  protected abstract double getColorPositionAtWithBoundaryBehavior(int x, int y, int boundaryBehavior);
 }

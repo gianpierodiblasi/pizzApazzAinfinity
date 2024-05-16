@@ -20,11 +20,7 @@ public abstract class Z4AbstractEllipseInscribedFiller extends Z4AbstractBoundar
   private final int rx;
   private final int ry;
   private final double angle;
-
-  /**
-   * The number of vertices of the polygon
-   */
-  protected final int vertexCount;
+  private final int vertexCount;
 
   private final Array<$Object> edges;
   private final double d00;
@@ -55,7 +51,7 @@ public abstract class Z4AbstractEllipseInscribedFiller extends Z4AbstractBoundar
     this.vertexCount = vertexCount;
 
     this.edges = this.createEdges(this.vertexCount);
-    
+
     this.ctx.beginPath();
     this.edges.forEach((edge, index, array) -> {
       if (index == 0) {

@@ -15,9 +15,6 @@ class Z4AbstractEllipseInscribedFiller extends Z4AbstractBoundaryBehaviorFiller 
 
    angle = 0.0;
 
-  /**
-   * The number of vertices of the polygon
-   */
    vertexCount = 0;
 
    edges = null;

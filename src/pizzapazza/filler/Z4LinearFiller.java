@@ -52,17 +52,17 @@ public class Z4LinearFiller extends Z4AbstractBoundaryBehaviorFiller {
   }
 
   @Override
-  protected double getColorPositionAt(int x, int y) {
+  protected double getColorPositionAtWithBoundaryBehavior(int x, int y, int boundaryBehavior) {
     double d1 = Z4Math.ptLineDist(this.p1x, this.p1y, this.line1x, this.line1y, x, y) / this.distance;
     double d2 = Z4Math.ptLineDist(this.p2x, this.p2y, this.line2x, this.line2y, x, y) / this.distance;
 
     if (d1 <= 1 && d2 <= 1) {
       return d1;
-    } else if (this.boundaryBehavior == Z4LinearFiller.STOP_AT_BOUNDARY) {
+    } else if (boundaryBehavior == Z4LinearFiller.STOP_AT_BOUNDARY) {
       return -1;
-    } else if (this.boundaryBehavior == Z4LinearFiller.FILL_AT_BOUNDARY) {
+    } else if (boundaryBehavior == Z4LinearFiller.FILL_AT_BOUNDARY) {
       return d1 < d2 ? 0 : 1;
-    } else if (this.boundaryBehavior == Z4LinearFiller.SYMMETRIC_AT_BOUNDARY) {
+    } else if (boundaryBehavior == Z4LinearFiller.SYMMETRIC_AT_BOUNDARY) {
       double position = d1 < d2 ? d1 : d2;
       int step = (int) Math.floor(position);
       position -= step;
@@ -72,7 +72,7 @@ public class Z4LinearFiller extends Z4AbstractBoundaryBehaviorFiller {
       }
 
       return position;
-    } else if (this.boundaryBehavior == Z4LinearFiller.REPEAT_AT_BOUNDARY) {
+    } else if (boundaryBehavior == Z4LinearFiller.REPEAT_AT_BOUNDARY) {
       double position = d1 < d2 ? d1 : d2;
       position -= (int) Math.floor(position);
 
