@@ -11,7 +11,7 @@ import javascript.swing.JSFrame;
 import javascript.swing.JSPanel;
 import jsweet.util.union.Union4;
 import pizzapazza.color.Z4GradientColor;
-import pizzapazza.util.Z4Math;
+import pizzapazza.math.Z4Math;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
 

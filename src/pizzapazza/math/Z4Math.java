@@ -1,39 +1,43 @@
+package pizzapazza.math;
+
+import def.js.Math;
+
 /**
  * The utility library for math
  *
  * @author gianpiero.diblasi
  */
-class Z4Math {
+public class Z4Math {
 
   /**
    * 2*PI value
    */
-  static  TWO_PI = 2 * Math.PI;
+  public final static double TWO_PI = 2 * Math.PI;
 
   /**
    * PI/2 value
    */
-  static  HALF_PI = Math.PI / 2;
+  public final static double HALF_PI = Math.PI / 2;
 
   /**
    * The gold section
    */
-  static  GOLD_SECTION = (1 + Math.sqrt(5)) / 2;
+  public final static double GOLD_SECTION = (1 + Math.sqrt(5)) / 2;
 
   /**
    * The gold section square
    */
-  static  SQUARE_GOLD_SECTION = Z4Math.GOLD_SECTION * Z4Math.GOLD_SECTION;
+  public final static double SQUARE_GOLD_SECTION = Z4Math.GOLD_SECTION * Z4Math.GOLD_SECTION;
 
   /**
    * RAD to DEG conversion
    */
-  static  RAD2DEG = 180 / Math.PI;
+  public final static double RAD2DEG = 180 / Math.PI;
 
   /**
    * DEG to RAD conversion
    */
-  static  DEG2RAD = Math.PI / 180;
+  public final static double DEG2RAD = Math.PI / 180;
 
   /**
    * Converts an angle from radiants to degrees
@@ -41,7 +45,7 @@ class Z4Math {
    * @param radians The angle in radians
    * @return The angle in degree
    */
-  static  rad2deg(radians) {
+  public static double rad2deg(double radians) {
     return radians * Z4Math.RAD2DEG;
   }
 
@@ -51,7 +55,7 @@ class Z4Math {
    * @param degrees The angle in degrees
    * @return The angle in radians
    */
-  static  deg2rad(degrees) {
+  public static double deg2rad(double degrees) {
     return degrees * Z4Math.DEG2RAD;
   }
 
@@ -64,9 +68,9 @@ class Z4Math {
    * @param y2 The y-axis coordinate of the second point
    * @return The distance between two points
    */
-  static  distance(x1, y1, x2, y2) {
-    let x = x1 - x2;
-    let y = y1 - y2;
+  public static double distance(double x1, double y1, double x2, double y2) {
+    double x = x1 - x2;
+    double y = y1 - y2;
     return Math.sqrt(x * x + y * y);
   }
 
@@ -81,7 +85,7 @@ class Z4Math {
    * @param py The y-axis coordinate of the point
    * @return The distance
    */
-  static  ptLineDist(x1, y1, x2, y2, px, py) {
+  public static double ptLineDist(double x1, double y1, double x2, double y2, double px, double py) {
     return Math.sqrt(Z4Math.ptLineDistSq(x1, y1, x2, y2, px, py));
   }
 
@@ -96,14 +100,15 @@ class Z4Math {
    * @param py The y-axis coordinate of the point
    * @return The square of the distance
    */
-  static  ptLineDistSq(x1, y1, x2, y2, px, py) {
+  public static double ptLineDistSq(double x1, double y1, double x2, double y2, double px, double py) {
     x2 -= x1;
     y2 -= y1;
     px -= x1;
     py -= y1;
-    let dotprod = px * x2 + py * y2;
-    let projlenSq = dotprod * dotprod / (x2 * x2 + y2 * y2);
-    let lenSq = px * px + py * py - projlenSq;
+
+    double dotprod = px * x2 + py * y2;
+    double projlenSq = dotprod * dotprod / (x2 * x2 + y2 * y2);
+    double lenSq = px * px + py * py - projlenSq;
     return lenSq < 0 ? 0 : lenSq;
   }
 
@@ -118,7 +123,7 @@ class Z4Math {
    * @param py The y-axis coordinate of the point
    * @return The distance
    */
-  static  ptSegDist(x1, y1, x2, y2, px, py) {
+  public static double ptSegDist(double x1, double y1, double x2, double y2, double px, double py) {
     return Math.sqrt(Z4Math.ptSegDistSq(x1, y1, x2, y2, px, py));
   }
 
@@ -133,13 +138,14 @@ class Z4Math {
    * @param py The y-axis coordinate of the point
    * @return The square of the distance
    */
-  static  ptSegDistSq(x1, y1, x2, y2, px, py) {
+  public static double ptSegDistSq(double x1, double y1, double x2, double y2, double px, double py) {
     x2 -= x1;
     y2 -= y1;
     px -= x1;
     py -= y1;
-    let dotprod = px * x2 + py * y2;
-    let projlenSq = 0.0;
+
+    double dotprod = px * x2 + py * y2;
+    double projlenSq;
     if (dotprod <= 0.0) {
       projlenSq = 0.0;
     } else {
@@ -152,7 +158,8 @@ class Z4Math {
         projlenSq = dotprod * dotprod / (x2 * x2 + y2 * y2);
       }
     }
-    let lenSq = px * px + py * py - projlenSq;
+
+    double lenSq = px * px + py * py - projlenSq;
     return lenSq < 0 ? 0 : lenSq;
   }
 
@@ -166,8 +173,8 @@ class Z4Math {
    * @param y The y-axis coordinate of the end point
    * @return The theta component of a point or a vector, in polar coordinates
    */
-  static  atan(x0, y0, x, y) {
-    let a = Math.atan2(y - y0, x - x0);
+  public static double atan(double x0, double y0, double x, double y) {
+    double a = Math.atan2(y - y0, x - x0);
     return a < 0 ? a + Z4Math.TWO_PI : a;
   }
 
@@ -179,13 +186,10 @@ class Z4Math {
    * @param angle The angle (in radians)
    * @return The rotated point
    */
-  static  rotate(x, y, angle) {
-    let cos = Math.cos(angle);
-    let sin = Math.sin(angle);
-    let rotated = new Object();
-    rotated["x"] = x * cos + y * sin;
-    rotated["y"] = x * sin - y * cos;
-    return rotated;
+  public static Z4Point rotate(double x, double y, double angle) {
+    double cos = Math.cos(angle);
+    double sin = Math.sin(angle);
+    return new Z4Point(x * cos + y * sin, x * sin - y * cos);
   }
 
   /**
@@ -197,12 +201,12 @@ class Z4Math {
    * @param ripple The ripple (in the range [0,1])
    * @return The rippled value
    */
-  static  ripple(value, min, max, ripple) {
-    let rnd = (max - min) * ripple * Math.random();
+  public static double ripple(double value, double min, double max, double ripple) {
+    double rnd = (max - min) * ripple * Math.random();
     value += Math.random() > 0.5 ? rnd : -rnd;
     return value < min ? min : value > max ? max : value;
   }
 
-  constructor() {
+  private Z4Math() {
   }
 }

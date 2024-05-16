@@ -27,19 +27,9 @@ class Z4PolygonFiller extends Z4AbstractEllipseInscribedFiller {
    createEdges(vertexCount) {
     let edges = new Array();
     for (let index = 0; index < vertexCount - 1; index++) {
-      let line = new Object();
-      line["p1x"] = Math.cos(index * Z4Math.TWO_PI / vertexCount);
-      line["p1y"] = Math.sin(index * Z4Math.TWO_PI / vertexCount);
-      line["p2x"] = Math.cos((index + 1) * Z4Math.TWO_PI / vertexCount);
-      line["p2y"] = Math.sin((index + 1) * Z4Math.TWO_PI / vertexCount);
-      edges.push(line);
+      edges.push(new Z4Line(Math.cos(index * Z4Math.TWO_PI / vertexCount), Math.sin(index * Z4Math.TWO_PI / vertexCount), Math.cos((index + 1) * Z4Math.TWO_PI / vertexCount), Math.sin((index + 1) * Z4Math.TWO_PI / vertexCount)));
     }
-    let line = new Object();
-    line["p1x"] = Math.cos((vertexCount - 1) * Z4Math.TWO_PI / vertexCount);
-    line["p1y"] = Math.sin((vertexCount - 1) * Z4Math.TWO_PI / vertexCount);
-    line["p2x"] = Math.cos(0);
-    line["p2y"] = Math.sin(0);
-    edges.push(line);
+    edges.push(new Z4Line(Math.cos((vertexCount - 1) * Z4Math.TWO_PI / vertexCount), Math.sin((vertexCount - 1) * Z4Math.TWO_PI / vertexCount), Math.cos(0), Math.sin(0)));
     return edges;
   }
 }

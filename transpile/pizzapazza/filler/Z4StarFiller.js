@@ -25,36 +25,19 @@ class Z4StarFiller extends Z4AbstractEllipseInscribedFiller {
 
    createEdges(vertexCount) {
     let points = new Array();
-    let point = new Object();
     let val = Z4Math.TWO_PI / vertexCount * 3 + Math.PI;
-    point["x"] = Math.cos(val) / Z4Math.SQUARE_GOLD_SECTION;
-    point["y"] = Math.sin(val) / Z4Math.SQUARE_GOLD_SECTION;
-    points[0] = point;
+    points[0] = new Z4Point(Math.cos(val) / Z4Math.SQUARE_GOLD_SECTION, Math.sin(val) / Z4Math.SQUARE_GOLD_SECTION);
     for (let index = 1; index < vertexCount; index++) {
-      point = new Object();
       val = Z4Math.TWO_PI / vertexCount * index;
-      point["x"] = Math.cos(val);
-      point["y"] = Math.sin(val);
-      points[index * 2 - 1] = point;
-      point = new Object();
+      points[index * 2 - 1] = new Z4Point(Math.cos(val), Math.sin(val));
       val = Z4Math.TWO_PI / vertexCount * (index + 3) + Math.PI;
-      point["x"] = Math.cos(val) / Z4Math.SQUARE_GOLD_SECTION;
-      point["y"] = Math.sin(val) / Z4Math.SQUARE_GOLD_SECTION;
-      points[index * 2] = point;
+      points[index * 2] = new Z4Point(Math.cos(val) / Z4Math.SQUARE_GOLD_SECTION, Math.sin(val) / Z4Math.SQUARE_GOLD_SECTION);
     }
-    point = new Object();
-    point["x"] = Math.cos(0);
-    point["y"] = Math.sin(0);
-    points.splice(0, 0, point);
-    points.push(point);
+    points.splice(0, 0, new Z4Point(Math.cos(0), Math.sin(0)));
+    points.push(new Z4Point(Math.cos(0), Math.sin(0)));
     let edges = new Array();
     for (let index = 0; index < points.length - 1; index++) {
-      let line = new Object();
-      line["p1x"] = points[index]["x"];
-      line["p1y"] = points[index]["y"];
-      line["p2x"] = points[index + 1]["x"];
-      line["p2y"] = points[index + 1]["y"];
-      edges.push(line);
+      edges.push(new Z4Line(points[index].x, points[index].y, points[index + 1].x, points[index + 1].y));
     }
     return edges;
   }

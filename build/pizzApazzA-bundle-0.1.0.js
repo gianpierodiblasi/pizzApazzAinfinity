@@ -380,13 +380,13 @@ class Z4AbstractEllipseInscribedFiller extends Z4AbstractBoundaryBehaviorFiller 
     this.ctx.beginPath();
     this.edges.forEach((edge, index, array) => {
       if (index === 0) {
-        this.ctx.moveTo(edge["p1x"], edge["p1y"]);
+        this.ctx.moveTo(edge.x1, edge.y1);
       } else {
-        this.ctx.lineTo(edge["p1x"], edge["p1y"]);
+        this.ctx.lineTo(edge.x1, edge.y1);
       }
     });
     this.ctx.closePath();
-    this.d00 = this.edges.map(line => Z4Math.ptSegDist(line["p1x"], line["p1y"], line["p2x"], line["p2y"], 0, 0)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
+    this.d00 = this.edges.map(edge => Z4Math.ptSegDist(edge.x1, edge.y1, edge.x2, edge.y2, 0, 0)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
   }
 
   /**
@@ -400,8 +400,8 @@ class Z4AbstractEllipseInscribedFiller extends Z4AbstractBoundaryBehaviorFiller 
 
    getColorPositionAtWithBoundaryBehavior(x, y, boundaryBehavior) {
     let rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
-    let xx = rotated["x"] / this.rx;
-    let yy = rotated["y"] / this.ry;
+    let xx = rotated.x / this.rx;
+    let yy = rotated.y / this.ry;
     switch(boundaryBehavior) {
       case Z4StarFiller.STOP_AT_BOUNDARY:
       case Z4StarFiller.FILL_AT_BOUNDARY:
@@ -425,7 +425,7 @@ class Z4AbstractEllipseInscribedFiller extends Z4AbstractBoundaryBehaviorFiller 
   }
 
    getDistance(x, y, divider) {
-    return this.edges.map(line => Z4Math.ptSegDist(line["p1x"], line["p1y"], line["p2x"], line["p2y"], x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current)) / (this.d00 / divider);
+    return this.edges.map(edge => Z4Math.ptSegDist(edge.x1, edge.y1, edge.x2, edge.y2, x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current)) / (this.d00 / divider);
   }
 }
 /**
@@ -457,19 +457,9 @@ class Z4PolygonFiller extends Z4AbstractEllipseInscribedFiller {
    createEdges(vertexCount) {
     let edges = new Array();
     for (let index = 0; index < vertexCount - 1; index++) {
-      let line = new Object();
-      line["p1x"] = Math.cos(index * Z4Math.TWO_PI / vertexCount);
-      line["p1y"] = Math.sin(index * Z4Math.TWO_PI / vertexCount);
-      line["p2x"] = Math.cos((index + 1) * Z4Math.TWO_PI / vertexCount);
-      line["p2y"] = Math.sin((index + 1) * Z4Math.TWO_PI / vertexCount);
-      edges.push(line);
+      edges.push(new Z4Line(Math.cos(index * Z4Math.TWO_PI / vertexCount), Math.sin(index * Z4Math.TWO_PI / vertexCount), Math.cos((index + 1) * Z4Math.TWO_PI / vertexCount), Math.sin((index + 1) * Z4Math.TWO_PI / vertexCount)));
     }
-    let line = new Object();
-    line["p1x"] = Math.cos((vertexCount - 1) * Z4Math.TWO_PI / vertexCount);
-    line["p1y"] = Math.sin((vertexCount - 1) * Z4Math.TWO_PI / vertexCount);
-    line["p2x"] = Math.cos(0);
-    line["p2y"] = Math.sin(0);
-    edges.push(line);
+    edges.push(new Z4Line(Math.cos((vertexCount - 1) * Z4Math.TWO_PI / vertexCount), Math.sin((vertexCount - 1) * Z4Math.TWO_PI / vertexCount), Math.cos(0), Math.sin(0)));
     return edges;
   }
 }
@@ -500,36 +490,19 @@ class Z4StarFiller extends Z4AbstractEllipseInscribedFiller {
 
    createEdges(vertexCount) {
     let points = new Array();
-    let point = new Object();
     let val = Z4Math.TWO_PI / vertexCount * 3 + Math.PI;
-    point["x"] = Math.cos(val) / Z4Math.SQUARE_GOLD_SECTION;
-    point["y"] = Math.sin(val) / Z4Math.SQUARE_GOLD_SECTION;
-    points[0] = point;
+    points[0] = new Z4Point(Math.cos(val) / Z4Math.SQUARE_GOLD_SECTION, Math.sin(val) / Z4Math.SQUARE_GOLD_SECTION);
     for (let index = 1; index < vertexCount; index++) {
-      point = new Object();
       val = Z4Math.TWO_PI / vertexCount * index;
-      point["x"] = Math.cos(val);
-      point["y"] = Math.sin(val);
-      points[index * 2 - 1] = point;
-      point = new Object();
+      points[index * 2 - 1] = new Z4Point(Math.cos(val), Math.sin(val));
       val = Z4Math.TWO_PI / vertexCount * (index + 3) + Math.PI;
-      point["x"] = Math.cos(val) / Z4Math.SQUARE_GOLD_SECTION;
-      point["y"] = Math.sin(val) / Z4Math.SQUARE_GOLD_SECTION;
-      points[index * 2] = point;
+      points[index * 2] = new Z4Point(Math.cos(val) / Z4Math.SQUARE_GOLD_SECTION, Math.sin(val) / Z4Math.SQUARE_GOLD_SECTION);
     }
-    point = new Object();
-    point["x"] = Math.cos(0);
-    point["y"] = Math.sin(0);
-    points.splice(0, 0, point);
-    points.push(point);
+    points.splice(0, 0, new Z4Point(Math.cos(0), Math.sin(0)));
+    points.push(new Z4Point(Math.cos(0), Math.sin(0)));
     let edges = new Array();
     for (let index = 0; index < points.length - 1; index++) {
-      let line = new Object();
-      line["p1x"] = points[index]["x"];
-      line["p1y"] = points[index]["y"];
-      line["p2x"] = points[index + 1]["x"];
-      line["p2y"] = points[index + 1]["y"];
-      edges.push(line);
+      edges.push(new Z4Line(points[index].x, points[index].y, points[index + 1].x, points[index + 1].y));
     }
     return edges;
   }
@@ -573,7 +546,7 @@ class Z4EllipticFiller extends Z4AbstractBoundaryBehaviorFiller {
 
    getColorPositionAtWithBoundaryBehavior(x, y, boundaryBehavior) {
     let rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
-    let d = Math.hypot(rotated["x"] / this.rx, rotated["y"] / this.ry);
+    let d = Math.hypot(rotated.x / this.rx, rotated.y / this.ry);
     if (d <= 1) {
       return d;
     } else if (boundaryBehavior === Z4EllipticFiller.STOP_AT_BOUNDARY) {
@@ -708,7 +681,7 @@ class Z4ConicFiller extends Z4AbstractFiller {
 
    getColorPositionAt(x, y) {
     let rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
-    let position = Math.atan2(rotated["y"], rotated["x"]) / Z4Math.TWO_PI;
+    let position = Math.atan2(rotated.y, rotated.x) / Z4Math.TWO_PI;
     if (position < 0) {
       position += 1;
     }
@@ -757,12 +730,269 @@ class Z4SpiralFiller extends Z4AbstractFiller {
 
    getColorPositionAt(x, y) {
     let rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
-    let distance = Math.hypot(rotated["x"], rotated["y"]);
+    let distance = Math.hypot(rotated.x, rotated.y);
     let currentAngle = Z4Math.TWO_PI * (this.logarithmic ? Math.log(distance / this.radius) : distance / this.radius);
     let xSpiral = distance * Math.cos(currentAngle);
     let ySpiral = distance * Math.sin(currentAngle);
-    distance = Z4Math.distance(rotated["x"], rotated["y"], xSpiral, ySpiral) / (2 * distance);
+    distance = Z4Math.distance(rotated.x, rotated.y, xSpiral, ySpiral) / (2 * distance);
     return isNaN(distance) ? 0 : distance;
+  }
+}
+/**
+ * The line
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Line {
+
+   x1 = 0.0;
+
+   y1 = 0.0;
+
+   x2 = 0.0;
+
+   y2 = 0.0;
+
+  /**
+   * Creates the object
+   *
+   * @param x1 The x-axis coordinate of the start point of the line
+   * @param y1 The y-axis coordinate of the start point of the line
+   * @param x2 The x-axis coordinate of the end point of the line
+   * @param y2 The y-axis coordinate of the end point of the line
+   */
+  constructor(x1, y1, x2, y2) {
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2;
+  }
+}
+/**
+ * The utility library for math
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Math {
+
+  /**
+   * 2*PI value
+   */
+  static  TWO_PI = 2 * Math.PI;
+
+  /**
+   * PI/2 value
+   */
+  static  HALF_PI = Math.PI / 2;
+
+  /**
+   * The gold section
+   */
+  static  GOLD_SECTION = (1 + Math.sqrt(5)) / 2;
+
+  /**
+   * The gold section square
+   */
+  static  SQUARE_GOLD_SECTION = Z4Math.GOLD_SECTION * Z4Math.GOLD_SECTION;
+
+  /**
+   * RAD to DEG conversion
+   */
+  static  RAD2DEG = 180 / Math.PI;
+
+  /**
+   * DEG to RAD conversion
+   */
+  static  DEG2RAD = Math.PI / 180;
+
+  /**
+   * Converts an angle from radiants to degrees
+   *
+   * @param radians The angle in radians
+   * @return The angle in degree
+   */
+  static  rad2deg(radians) {
+    return radians * Z4Math.RAD2DEG;
+  }
+
+  /**
+   * Converts an angle from degrees to radians
+   *
+   * @param degrees The angle in degrees
+   * @return The angle in radians
+   */
+  static  deg2rad(degrees) {
+    return degrees * Z4Math.DEG2RAD;
+  }
+
+  /**
+   * Returns the distance between two points
+   *
+   * @param x1 The x-axis coordinate of the first point
+   * @param y1 The y-axis coordinate of the first point
+   * @param x2 The x-axis coordinate of the second point
+   * @param y2 The y-axis coordinate of the second point
+   * @return The distance between two points
+   */
+  static  distance(x1, y1, x2, y2) {
+    let x = x1 - x2;
+    let y = y1 - y2;
+    return Math.sqrt(x * x + y * y);
+  }
+
+  /**
+   * Returns the distance from a point to a (infinite) line
+   *
+   * @param x1 The x-axis coordinate of the start point of the line
+   * @param y1 The y-axis coordinate of the start point of the line
+   * @param x2 The x-axis coordinate of the end point of the line
+   * @param y2 The y-axis coordinate of the end point of the line
+   * @param px The x-axis coordinate of the point
+   * @param py The y-axis coordinate of the point
+   * @return The distance
+   */
+  static  ptLineDist(x1, y1, x2, y2, px, py) {
+    return Math.sqrt(Z4Math.ptLineDistSq(x1, y1, x2, y2, px, py));
+  }
+
+  /**
+   * Returns the square of the distance from a point to a (infinite) line
+   *
+   * @param x1 The x-axis coordinate of the start point of the line
+   * @param y1 The y-axis coordinate of the start point of the line
+   * @param x2 The x-axis coordinate of the end point of the line
+   * @param y2 The y-axis coordinate of the end point of the line
+   * @param px The x-axis coordinate of the point
+   * @param py The y-axis coordinate of the point
+   * @return The square of the distance
+   */
+  static  ptLineDistSq(x1, y1, x2, y2, px, py) {
+    x2 -= x1;
+    y2 -= y1;
+    px -= x1;
+    py -= y1;
+    let dotprod = px * x2 + py * y2;
+    let projlenSq = dotprod * dotprod / (x2 * x2 + y2 * y2);
+    let lenSq = px * px + py * py - projlenSq;
+    return lenSq < 0 ? 0 : lenSq;
+  }
+
+  /**
+   * Returns the distance from a point to a line segment
+   *
+   * @param x1 The x-axis coordinate of the start point of the line
+   * @param y1 The y-axis coordinate of the start point of the line
+   * @param x2 The x-axis coordinate of the end point of the line
+   * @param y2 The y-axis coordinate of the end point of the line
+   * @param px The x-axis coordinate of the point
+   * @param py The y-axis coordinate of the point
+   * @return The distance
+   */
+  static  ptSegDist(x1, y1, x2, y2, px, py) {
+    return Math.sqrt(Z4Math.ptSegDistSq(x1, y1, x2, y2, px, py));
+  }
+
+  /**
+   * Returns the square of the distance from a point to a line segment
+   *
+   * @param x1 The x-axis coordinate of the start point of the line
+   * @param y1 The y-axis coordinate of the start point of the line
+   * @param x2 The x-axis coordinate of the end point of the line
+   * @param y2 The y-axis coordinate of the end point of the line
+   * @param px The x-axis coordinate of the point
+   * @param py The y-axis coordinate of the point
+   * @return The square of the distance
+   */
+  static  ptSegDistSq(x1, y1, x2, y2, px, py) {
+    x2 -= x1;
+    y2 -= y1;
+    px -= x1;
+    py -= y1;
+    let dotprod = px * x2 + py * y2;
+    let projlenSq = 0.0;
+    if (dotprod <= 0.0) {
+      projlenSq = 0.0;
+    } else {
+      px = x2 - px;
+      py = y2 - py;
+      dotprod = px * x2 + py * y2;
+      if (dotprod <= 0.0) {
+        projlenSq = 0.0;
+      } else {
+        projlenSq = dotprod * dotprod / (x2 * x2 + y2 * y2);
+      }
+    }
+    let lenSq = px * px + py * py - projlenSq;
+    return lenSq < 0 ? 0 : lenSq;
+  }
+
+  /**
+   * Returns the theta component of a point or a vector, in polar coordinates.
+   * The value is normalized in the range [0,2*PI]
+   *
+   * @param x0 The x-axis coordinate of the start point
+   * @param y0 The y-axis coordinate of the start point
+   * @param x The x-axis coordinate of the end point
+   * @param y The y-axis coordinate of the end point
+   * @return The theta component of a point or a vector, in polar coordinates
+   */
+  static  atan(x0, y0, x, y) {
+    let a = Math.atan2(y - y0, x - x0);
+    return a < 0 ? a + Z4Math.TWO_PI : a;
+  }
+
+  /**
+   * Rotates a point by an angle
+   *
+   * @param x The x-axis coordinate of the point
+   * @param y The y-axis coordinate of the point
+   * @param angle The angle (in radians)
+   * @return The rotated point
+   */
+  static  rotate(x, y, angle) {
+    let cos = Math.cos(angle);
+    let sin = Math.sin(angle);
+    return new Z4Point(x * cos + y * sin, x * sin - y * cos);
+  }
+
+  /**
+   * Generates a ripple around a value
+   *
+   * @param value The value
+   * @param min The minimum allowed value
+   * @param max The maximum allowed value
+   * @param ripple The ripple (in the range [0,1])
+   * @return The rippled value
+   */
+  static  ripple(value, min, max, ripple) {
+    let rnd = (max - min) * ripple * Math.random();
+    value += Math.random() > 0.5 ? rnd : -rnd;
+    return value < min ? min : value > max ? max : value;
+  }
+
+  constructor() {
+  }
+}
+/**
+ * The point
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Point {
+
+   x = 0.0;
+
+   y = 0.0;
+
+  /**
+   * Creates the object
+   *
+   * @param x The x-axis coordinate
+   * @param y The y-axis coordinate
+   */
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
   }
 }
 /**
@@ -2475,214 +2705,6 @@ class Z4Constants {
    * The max DPI
    */
   static  MAX_DPI = 1500;
-
-  constructor() {
-  }
-}
-/**
- * The utility library for math
- *
- * @author gianpiero.diblasi
- */
-class Z4Math {
-
-  /**
-   * 2*PI value
-   */
-  static  TWO_PI = 2 * Math.PI;
-
-  /**
-   * PI/2 value
-   */
-  static  HALF_PI = Math.PI / 2;
-
-  /**
-   * The gold section
-   */
-  static  GOLD_SECTION = (1 + Math.sqrt(5)) / 2;
-
-  /**
-   * The gold section square
-   */
-  static  SQUARE_GOLD_SECTION = Z4Math.GOLD_SECTION * Z4Math.GOLD_SECTION;
-
-  /**
-   * RAD to DEG conversion
-   */
-  static  RAD2DEG = 180 / Math.PI;
-
-  /**
-   * DEG to RAD conversion
-   */
-  static  DEG2RAD = Math.PI / 180;
-
-  /**
-   * Converts an angle from radiants to degrees
-   *
-   * @param radians The angle in radians
-   * @return The angle in degree
-   */
-  static  rad2deg(radians) {
-    return radians * Z4Math.RAD2DEG;
-  }
-
-  /**
-   * Converts an angle from degrees to radians
-   *
-   * @param degrees The angle in degrees
-   * @return The angle in radians
-   */
-  static  deg2rad(degrees) {
-    return degrees * Z4Math.DEG2RAD;
-  }
-
-  /**
-   * Returns the distance between two points
-   *
-   * @param x1 The x-axis coordinate of the first point
-   * @param y1 The y-axis coordinate of the first point
-   * @param x2 The x-axis coordinate of the second point
-   * @param y2 The y-axis coordinate of the second point
-   * @return The distance between two points
-   */
-  static  distance(x1, y1, x2, y2) {
-    let x = x1 - x2;
-    let y = y1 - y2;
-    return Math.sqrt(x * x + y * y);
-  }
-
-  /**
-   * Returns the distance from a point to a (infinite) line
-   *
-   * @param x1 The x-axis coordinate of the start point of the line
-   * @param y1 The y-axis coordinate of the start point of the line
-   * @param x2 The x-axis coordinate of the end point of the line
-   * @param y2 The y-axis coordinate of the end point of the line
-   * @param px The x-axis coordinate of the point
-   * @param py The y-axis coordinate of the point
-   * @return The distance
-   */
-  static  ptLineDist(x1, y1, x2, y2, px, py) {
-    return Math.sqrt(Z4Math.ptLineDistSq(x1, y1, x2, y2, px, py));
-  }
-
-  /**
-   * Returns the square of the distance from a point to a (infinite) line
-   *
-   * @param x1 The x-axis coordinate of the start point of the line
-   * @param y1 The y-axis coordinate of the start point of the line
-   * @param x2 The x-axis coordinate of the end point of the line
-   * @param y2 The y-axis coordinate of the end point of the line
-   * @param px The x-axis coordinate of the point
-   * @param py The y-axis coordinate of the point
-   * @return The square of the distance
-   */
-  static  ptLineDistSq(x1, y1, x2, y2, px, py) {
-    x2 -= x1;
-    y2 -= y1;
-    px -= x1;
-    py -= y1;
-    let dotprod = px * x2 + py * y2;
-    let projlenSq = dotprod * dotprod / (x2 * x2 + y2 * y2);
-    let lenSq = px * px + py * py - projlenSq;
-    return lenSq < 0 ? 0 : lenSq;
-  }
-
-  /**
-   * Returns the distance from a point to a line segment
-   *
-   * @param x1 The x-axis coordinate of the start point of the line
-   * @param y1 The y-axis coordinate of the start point of the line
-   * @param x2 The x-axis coordinate of the end point of the line
-   * @param y2 The y-axis coordinate of the end point of the line
-   * @param px The x-axis coordinate of the point
-   * @param py The y-axis coordinate of the point
-   * @return The distance
-   */
-  static  ptSegDist(x1, y1, x2, y2, px, py) {
-    return Math.sqrt(Z4Math.ptSegDistSq(x1, y1, x2, y2, px, py));
-  }
-
-  /**
-   * Returns the square of the distance from a point to a line segment
-   *
-   * @param x1 The x-axis coordinate of the start point of the line
-   * @param y1 The y-axis coordinate of the start point of the line
-   * @param x2 The x-axis coordinate of the end point of the line
-   * @param y2 The y-axis coordinate of the end point of the line
-   * @param px The x-axis coordinate of the point
-   * @param py The y-axis coordinate of the point
-   * @return The square of the distance
-   */
-  static  ptSegDistSq(x1, y1, x2, y2, px, py) {
-    x2 -= x1;
-    y2 -= y1;
-    px -= x1;
-    py -= y1;
-    let dotprod = px * x2 + py * y2;
-    let projlenSq = 0.0;
-    if (dotprod <= 0.0) {
-      projlenSq = 0.0;
-    } else {
-      px = x2 - px;
-      py = y2 - py;
-      dotprod = px * x2 + py * y2;
-      if (dotprod <= 0.0) {
-        projlenSq = 0.0;
-      } else {
-        projlenSq = dotprod * dotprod / (x2 * x2 + y2 * y2);
-      }
-    }
-    let lenSq = px * px + py * py - projlenSq;
-    return lenSq < 0 ? 0 : lenSq;
-  }
-
-  /**
-   * Returns the theta component of a point or a vector, in polar coordinates.
-   * The value is normalized in the range [0,2*PI]
-   *
-   * @param x0 The x-axis coordinate of the start point
-   * @param y0 The y-axis coordinate of the start point
-   * @param x The x-axis coordinate of the end point
-   * @param y The y-axis coordinate of the end point
-   * @return The theta component of a point or a vector, in polar coordinates
-   */
-  static  atan(x0, y0, x, y) {
-    let a = Math.atan2(y - y0, x - x0);
-    return a < 0 ? a + Z4Math.TWO_PI : a;
-  }
-
-  /**
-   * Rotates a point by an angle
-   *
-   * @param x The x-axis coordinate of the point
-   * @param y The y-axis coordinate of the point
-   * @param angle The angle (in radians)
-   * @return The rotated point
-   */
-  static  rotate(x, y, angle) {
-    let cos = Math.cos(angle);
-    let sin = Math.sin(angle);
-    let rotated = new Object();
-    rotated["x"] = x * cos + y * sin;
-    rotated["y"] = x * sin - y * cos;
-    return rotated;
-  }
-
-  /**
-   * Generates a ripple around a value
-   *
-   * @param value The value
-   * @param min The minimum allowed value
-   * @param max The maximum allowed value
-   * @param ripple The ripple (in the range [0,1])
-   * @return The rippled value
-   */
-  static  ripple(value, min, max, ripple) {
-    let rnd = (max - min) * ripple * Math.random();
-    value += Math.random() > 0.5 ? rnd : -rnd;
-    return value < min ? min : value > max ? max : value;
-  }
 
   constructor() {
   }

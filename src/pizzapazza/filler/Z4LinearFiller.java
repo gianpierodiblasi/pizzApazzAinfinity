@@ -1,7 +1,7 @@
 package pizzapazza.filler;
 
 import pizzapazza.color.Z4GradientColor;
-import pizzapazza.util.Z4Math;
+import pizzapazza.math.Z4Math;
 import static simulation.js.$Globals.$exists;
 
 /**

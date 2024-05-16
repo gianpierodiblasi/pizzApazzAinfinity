@@ -49,13 +49,13 @@ class Z4AbstractEllipseInscribedFiller extends Z4AbstractBoundaryBehaviorFiller 
     this.ctx.beginPath();
     this.edges.forEach((edge, index, array) => {
       if (index === 0) {
-        this.ctx.moveTo(edge["p1x"], edge["p1y"]);
+        this.ctx.moveTo(edge.x1, edge.y1);
       } else {
-        this.ctx.lineTo(edge["p1x"], edge["p1y"]);
+        this.ctx.lineTo(edge.x1, edge.y1);
       }
     });
     this.ctx.closePath();
-    this.d00 = this.edges.map(line => Z4Math.ptSegDist(line["p1x"], line["p1y"], line["p2x"], line["p2y"], 0, 0)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
+    this.d00 = this.edges.map(edge => Z4Math.ptSegDist(edge.x1, edge.y1, edge.x2, edge.y2, 0, 0)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
   }
 
   /**
@@ -69,8 +69,8 @@ class Z4AbstractEllipseInscribedFiller extends Z4AbstractBoundaryBehaviorFiller 
 
    getColorPositionAtWithBoundaryBehavior(x, y, boundaryBehavior) {
     let rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
-    let xx = rotated["x"] / this.rx;
-    let yy = rotated["y"] / this.ry;
+    let xx = rotated.x / this.rx;
+    let yy = rotated.y / this.ry;
     switch(boundaryBehavior) {
       case Z4StarFiller.STOP_AT_BOUNDARY:
       case Z4StarFiller.FILL_AT_BOUNDARY:
@@ -94,6 +94,6 @@ class Z4AbstractEllipseInscribedFiller extends Z4AbstractBoundaryBehaviorFiller 
   }
 
    getDistance(x, y, divider) {
-    return this.edges.map(line => Z4Math.ptSegDist(line["p1x"], line["p1y"], line["p2x"], line["p2y"], x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current)) / (this.d00 / divider);
+    return this.edges.map(edge => Z4Math.ptSegDist(edge.x1, edge.y1, edge.x2, edge.y2, x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current)) / (this.d00 / divider);
   }
 }

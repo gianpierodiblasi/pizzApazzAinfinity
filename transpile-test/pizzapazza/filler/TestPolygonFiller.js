@@ -60,7 +60,7 @@ class TestPolygonFiller extends JSFrame {
       let x = rx * Math.cos(index * Z4Math.TWO_PI / vertex);
       let y = ry * Math.sin(index * Z4Math.TWO_PI / vertex);
       let rotated = Z4Math.rotate(x, y, angle);
-      this.ctx.fillRect(cx + rotated["x"] - 2, cy + rotated["y"] - 2, 4, 4);
+      this.ctx.fillRect(cx + rotated.x - 2, cy + rotated.y - 2, 4, 4);
     }
     this.ctx.strokeStyle = this.getFillStyle("red");
     this.ctx.beginPath();

@@ -3,8 +3,8 @@ package pizzapazza.filler;
 import def.js.Array;
 import def.js.Math;
 import pizzapazza.color.Z4GradientColor;
-import pizzapazza.util.Z4Math;
-import simulation.js.$Object;
+import pizzapazza.math.Z4Line;
+import pizzapazza.math.Z4Math;
 
 /**
  * A (multi) polygon filler
@@ -34,24 +34,24 @@ public class Z4PolygonFiller extends Z4AbstractEllipseInscribedFiller {
   }
 
   @Override
-  protected Array<$Object> createEdges(int vertexCount) {
-    Array<$Object> edges = new Array<>();
+  protected Array<Z4Line> createEdges(int vertexCount) {
+    Array<Z4Line> edges = new Array<>();
 
     for (int index = 0; index < vertexCount - 1; index++) {
-      $Object line = new $Object();
-      line.$set("p1x", Math.cos(index * Z4Math.TWO_PI / vertexCount));
-      line.$set("p1y", Math.sin(index * Z4Math.TWO_PI / vertexCount));
-      line.$set("p2x", Math.cos((index + 1) * Z4Math.TWO_PI / vertexCount));
-      line.$set("p2y", Math.sin((index + 1) * Z4Math.TWO_PI / vertexCount));
-      edges.push(line);
+      edges.push(new Z4Line(
+              Math.cos(index * Z4Math.TWO_PI / vertexCount),
+              Math.sin(index * Z4Math.TWO_PI / vertexCount),
+              Math.cos((index + 1) * Z4Math.TWO_PI / vertexCount),
+              Math.sin((index + 1) * Z4Math.TWO_PI / vertexCount)
+      ));
     }
 
-    $Object line = new $Object();
-    line.$set("p1x", Math.cos((vertexCount - 1) * Z4Math.TWO_PI / vertexCount));
-    line.$set("p1y", Math.sin((vertexCount - 1) * Z4Math.TWO_PI / vertexCount));
-    line.$set("p2x", Math.cos(0));
-    line.$set("p2y", Math.sin(0));
-    edges.push(line);
+    edges.push(new Z4Line(
+            Math.cos((vertexCount - 1) * Z4Math.TWO_PI / vertexCount),
+            Math.sin((vertexCount - 1) * Z4Math.TWO_PI / vertexCount),
+            Math.cos(0),
+            Math.sin(0)
+    ));
 
     return edges;
   }

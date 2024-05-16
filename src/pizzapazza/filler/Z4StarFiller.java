@@ -3,8 +3,9 @@ package pizzapazza.filler;
 import def.js.Array;
 import def.js.Math;
 import pizzapazza.color.Z4GradientColor;
-import pizzapazza.util.Z4Math;
-import simulation.js.$Object;
+import pizzapazza.math.Z4Line;
+import pizzapazza.math.Z4Math;
+import pizzapazza.math.Z4Point;
 
 /**
  * A (multi) star filler
@@ -32,43 +33,26 @@ public class Z4StarFiller extends Z4AbstractEllipseInscribedFiller {
   }
 
   @Override
-  protected Array<$Object> createEdges(int vertexCount) {
-    Array<$Object> points = new Array<>();
+  protected Array<Z4Line> createEdges(int vertexCount) {
+    Array<Z4Point> points = new Array<>();
 
-    $Object point = new $Object();
     double val = Z4Math.TWO_PI / vertexCount * 3 + Math.PI;
-    point.$set("x", Math.cos(val) / Z4Math.SQUARE_GOLD_SECTION);
-    point.$set("y", Math.sin(val) / Z4Math.SQUARE_GOLD_SECTION);
-    points.$set(0, point);
+    points.$set(0, new Z4Point(Math.cos(val) / Z4Math.SQUARE_GOLD_SECTION, Math.sin(val) / Z4Math.SQUARE_GOLD_SECTION));
 
     for (int index = 1; index < vertexCount; index++) {
-      point = new $Object();
       val = Z4Math.TWO_PI / vertexCount * index;
-      point.$set("x", Math.cos(val));
-      point.$set("y", Math.sin(val));
-      points.$set(index * 2 - 1, point);
+      points.$set(index * 2 - 1, new Z4Point(Math.cos(val), Math.sin(val)));
 
-      point = new $Object();
       val = Z4Math.TWO_PI / vertexCount * (index + 3) + Math.PI;
-      point.$set("x", Math.cos(val) / Z4Math.SQUARE_GOLD_SECTION);
-      point.$set("y", Math.sin(val) / Z4Math.SQUARE_GOLD_SECTION);
-      points.$set(index * 2, point);
+      points.$set(index * 2, new Z4Point(Math.cos(val) / Z4Math.SQUARE_GOLD_SECTION, Math.sin(val) / Z4Math.SQUARE_GOLD_SECTION));
     }
 
-    point = new $Object();
-    point.$set("x", Math.cos(0));
-    point.$set("y", Math.sin(0));
-    points.splice(0, 0, point);
-    points.push(point);
+    points.splice(0, 0, new Z4Point(Math.cos(0), Math.sin(0)));
+    points.push(new Z4Point(Math.cos(0), Math.sin(0)));
 
-    Array<$Object> edges = new Array<>();
+    Array<Z4Line> edges = new Array<>();
     for (int index = 0; index < points.length - 1; index++) {
-      $Object line = new $Object();
-      line.$set("p1x", points.$get(index).$get("x"));
-      line.$set("p1y", points.$get(index).$get("y"));
-      line.$set("p2x", points.$get(index + 1).$get("x"));
-      line.$set("p2y", points.$get(index + 1).$get("y"));
-      edges.push(line);
+      edges.push(new Z4Line(points.$get(index).x, points.$get(index).y, points.$get(index + 1).x, points.$get(index + 1).y));
     }
     return edges;
   }

@@ -1,9 +1,9 @@
 package pizzapazza.filler;
 
 import pizzapazza.color.Z4GradientColor;
-import pizzapazza.util.Z4Math;
+import pizzapazza.math.Z4Math;
+import pizzapazza.math.Z4Point;
 import static simulation.js.$Globals.$exists;
-import simulation.js.$Object;
 
 /**
  * A (multi) elliptic filler
@@ -41,8 +41,8 @@ public class Z4EllipticFiller extends Z4AbstractBoundaryBehaviorFiller {
 
   @Override
   protected double getColorPositionAtWithBoundaryBehavior(int x, int y, int boundaryBehavior) {
-    $Object rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
-    double d = Math.hypot((double) rotated.$get("x") / this.rx, (double) rotated.$get("y") / this.ry);
+    Z4Point rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
+    double d = Math.hypot(rotated.x / this.rx, rotated.y / this.ry);
 
     if (d <= 1) {
       return d;

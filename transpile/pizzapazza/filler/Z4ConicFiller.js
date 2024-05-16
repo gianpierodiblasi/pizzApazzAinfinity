@@ -32,7 +32,7 @@ class Z4ConicFiller extends Z4AbstractFiller {
 
    getColorPositionAt(x, y) {
     let rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
-    let position = Math.atan2(rotated["y"], rotated["x"]) / Z4Math.TWO_PI;
+    let position = Math.atan2(rotated.y, rotated.x) / Z4Math.TWO_PI;
     if (position < 0) {
       position += 1;
     }

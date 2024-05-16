@@ -2,7 +2,7 @@ package pizzapazza.color;
 
 import def.js.Array;
 import javascript.awt.Color;
-import pizzapazza.util.Z4Math;
+import pizzapazza.math.Z4Math;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
 import simulation.js.$Object;

@@ -36,11 +36,11 @@ class Z4SpiralFiller extends Z4AbstractFiller {
 
    getColorPositionAt(x, y) {
     let rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
-    let distance = Math.hypot(rotated["x"], rotated["y"]);
+    let distance = Math.hypot(rotated.x, rotated.y);
     let currentAngle = Z4Math.TWO_PI * (this.logarithmic ? Math.log(distance / this.radius) : distance / this.radius);
     let xSpiral = distance * Math.cos(currentAngle);
     let ySpiral = distance * Math.sin(currentAngle);
-    distance = Z4Math.distance(rotated["x"], rotated["y"], xSpiral, ySpiral) / (2 * distance);
+    distance = Z4Math.distance(rotated.x, rotated.y, xSpiral, ySpiral) / (2 * distance);
     return isNaN(distance) ? 0 : distance;
   }
 }

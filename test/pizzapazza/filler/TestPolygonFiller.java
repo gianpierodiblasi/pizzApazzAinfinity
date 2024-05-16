@@ -13,10 +13,10 @@ import javascript.swing.JSFrame;
 import javascript.swing.JSPanel;
 import jsweet.util.union.Union4;
 import pizzapazza.color.Z4GradientColor;
-import pizzapazza.util.Z4Math;
+import pizzapazza.math.Z4Math;
+import pizzapazza.math.Z4Point;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
-import simulation.js.$Object;
 
 /**
  *
@@ -91,8 +91,8 @@ public class TestPolygonFiller extends JSFrame {
     for (int index = 0; index < vertex; index++) {
       double x = rx * Math.cos(index * Z4Math.TWO_PI / vertex);
       double y = ry * Math.sin(index * Z4Math.TWO_PI / vertex);
-      $Object rotated = Z4Math.rotate(x, y, angle);
-      this.ctx.fillRect(cx + (double) rotated.$get("x") - 2, cy + (double) rotated.$get("y") - 2, 4, 4);
+      Z4Point rotated = Z4Math.rotate(x, y, angle);
+      this.ctx.fillRect(cx + rotated.x - 2, cy + rotated.y - 2, 4, 4);
     }
 
     this.ctx.strokeStyle = this.$getFillStyle("red");

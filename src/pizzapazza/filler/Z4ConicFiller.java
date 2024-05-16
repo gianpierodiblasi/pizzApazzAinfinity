@@ -1,8 +1,8 @@
 package pizzapazza.filler;
 
 import pizzapazza.color.Z4GradientColor;
-import pizzapazza.util.Z4Math;
-import simulation.js.$Object;
+import pizzapazza.math.Z4Math;
+import pizzapazza.math.Z4Point;
 
 /**
  * A (multi) conic filler
@@ -36,8 +36,8 @@ public class Z4ConicFiller extends Z4AbstractFiller {
 
   @Override
   protected double getColorPositionAt(int x, int y) {
-    $Object rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
-    double position = Math.atan2((double) rotated.$get("y"), (double) rotated.$get("x")) / Z4Math.TWO_PI;
+    Z4Point rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
+    double position = Math.atan2(rotated.y, rotated.x) / Z4Math.TWO_PI;
 
     if (position < 0) {
       position += 1;

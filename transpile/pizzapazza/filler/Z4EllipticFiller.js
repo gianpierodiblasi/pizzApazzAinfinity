@@ -37,7 +37,7 @@ class Z4EllipticFiller extends Z4AbstractBoundaryBehaviorFiller {
 
    getColorPositionAtWithBoundaryBehavior(x, y, boundaryBehavior) {
     let rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
-    let d = Math.hypot(rotated["x"] / this.rx, rotated["y"] / this.ry);
+    let d = Math.hypot(rotated.x / this.rx, rotated.y / this.ry);
     if (d <= 1) {
       return d;
     } else if (boundaryBehavior === Z4EllipticFiller.STOP_AT_BOUNDARY) {
