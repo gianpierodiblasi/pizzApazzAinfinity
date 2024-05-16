@@ -55,7 +55,7 @@ class Z4AbstractEllipseInscribedFiller extends Z4AbstractBoundaryBehaviorFiller 
       }
     });
     this.ctx.closePath();
-    this.d00 = this.edges.map(line => Z4Math.ptSegDist(line["p1x"], line["p1y"], line["p2x"], line["p2y"], 0, 0)).reduce((accumulator, current, index, array) => def.js.Math.min(accumulator, current));
+    this.d00 = this.edges.map(line => Z4Math.ptSegDist(line["p1x"], line["p1y"], line["p2x"], line["p2y"], 0, 0)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
   }
 
   /**
@@ -67,14 +67,14 @@ class Z4AbstractEllipseInscribedFiller extends Z4AbstractBoundaryBehaviorFiller 
    createEdges(vertexCount) {
   }
 
-   getColorPositionAt(x, y) {
+   getColorPositionAtWithBoundaryBehavior(x, y, boundaryBehavior) {
     let rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
     let xx = rotated["x"] / this.rx;
     let yy = rotated["y"] / this.ry;
-    switch(this.boundaryBehavior) {
+    switch(boundaryBehavior) {
       case Z4StarFiller.STOP_AT_BOUNDARY:
       case Z4StarFiller.FILL_AT_BOUNDARY:
-        return this.ctx.isPointInPath(xx, yy) ? 1 - this.getDistance(xx, yy, 1) : this.boundaryBehavior === Z4StarFiller.STOP_AT_BOUNDARY ? -1 : 1;
+        return this.ctx.isPointInPath(xx, yy) ? 1 - this.getDistance(xx, yy, 1) : boundaryBehavior === Z4StarFiller.STOP_AT_BOUNDARY ? -1 : 1;
       case Z4StarFiller.SYMMETRIC_AT_BOUNDARY:
       case Z4StarFiller.REPEAT_AT_BOUNDARY:
         let divider = 1;
@@ -87,13 +87,13 @@ class Z4AbstractEllipseInscribedFiller extends Z4AbstractBoundaryBehaviorFiller 
           yyy = yy / divider;
           distance = this.getDistance(xxx, yyy, divider);
         }
-        return this.boundaryBehavior === Z4StarFiller.REPEAT_AT_BOUNDARY ? 1 - distance : divider % 2 ? 1 - distance : distance;
+        return boundaryBehavior === Z4StarFiller.REPEAT_AT_BOUNDARY ? 1 - distance : divider % 2 ? 1 - distance : distance;
       default:
         return -1;
     }
   }
 
    getDistance(x, y, divider) {
-    return this.edges.map(line => Z4Math.ptSegDist(line["p1x"], line["p1y"], line["p2x"], line["p2y"], x, y)).reduce((accumulator, current, index, array) => def.js.Math.min(accumulator, current)) / (this.d00 / divider);
+    return this.edges.map(line => Z4Math.ptSegDist(line["p1x"], line["p1y"], line["p2x"], line["p2y"], x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current)) / (this.d00 / divider);
   }
 }

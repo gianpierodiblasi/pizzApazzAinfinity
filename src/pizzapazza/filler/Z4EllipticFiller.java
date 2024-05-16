@@ -40,17 +40,17 @@ public class Z4EllipticFiller extends Z4AbstractBoundaryBehaviorFiller {
   }
 
   @Override
-  protected double getColorPositionAt(int x, int y) {
+  protected double getColorPositionAtWithBoundaryBehavior(int x, int y, int boundaryBehavior) {
     $Object rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
     double d = Math.hypot((double) rotated.$get("x") / this.rx, (double) rotated.$get("y") / this.ry);
 
     if (d <= 1) {
       return d;
-    } else if (this.boundaryBehavior == Z4EllipticFiller.STOP_AT_BOUNDARY) {
+    } else if (boundaryBehavior == Z4EllipticFiller.STOP_AT_BOUNDARY) {
       return -1;
-    } else if (this.boundaryBehavior == Z4EllipticFiller.FILL_AT_BOUNDARY) {
+    } else if (boundaryBehavior == Z4EllipticFiller.FILL_AT_BOUNDARY) {
       return 1;
-    } else if (this.boundaryBehavior == Z4EllipticFiller.SYMMETRIC_AT_BOUNDARY) {
+    } else if (boundaryBehavior == Z4EllipticFiller.SYMMETRIC_AT_BOUNDARY) {
       int step = (int) Math.floor(d);
       d -= step;
 
@@ -59,7 +59,7 @@ public class Z4EllipticFiller extends Z4AbstractBoundaryBehaviorFiller {
       }
 
       return d;
-    } else if (this.boundaryBehavior == Z4EllipticFiller.REPEAT_AT_BOUNDARY) {
+    } else if (boundaryBehavior == Z4EllipticFiller.REPEAT_AT_BOUNDARY) {
       return d - (int) Math.floor(d);
     } else {
       return -1;

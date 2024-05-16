@@ -62,7 +62,7 @@ public abstract class Z4AbstractEllipseInscribedFiller extends Z4AbstractBoundar
     });
     this.ctx.closePath();
 
-    this.d00 = this.edges.map(line -> Z4Math.ptSegDist(line.$get("p1x"), line.$get("p1y"), line.$get("p2x"), line.$get("p2y"), 0, 0)).reduce((accumulator, current, index, array) -> def.js.Math.min(accumulator, current));
+    this.d00 = this.edges.map(line -> Z4Math.ptSegDist(line.$get("p1x"), line.$get("p1y"), line.$get("p2x"), line.$get("p2y"), 0, 0)).reduce((accumulator, current, index, array) -> Math.min(accumulator, current));
   }
 
   /**
@@ -74,15 +74,15 @@ public abstract class Z4AbstractEllipseInscribedFiller extends Z4AbstractBoundar
   protected abstract Array<$Object> createEdges(int vertexCount);
 
   @Override
-  protected double getColorPositionAt(int x, int y) {
+  protected double getColorPositionAtWithBoundaryBehavior(int x, int y, int boundaryBehavior) {
     $Object rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
     double xx = (double) rotated.$get("x") / this.rx;
     double yy = (double) rotated.$get("y") / this.ry;
 
-    switch (this.boundaryBehavior) {
+    switch (boundaryBehavior) {
       case Z4StarFiller.STOP_AT_BOUNDARY:
       case Z4StarFiller.FILL_AT_BOUNDARY:
-        return this.ctx.isPointInPath(xx, yy) ? 1 - this.getDistance(xx, yy, 1) : this.boundaryBehavior == Z4StarFiller.STOP_AT_BOUNDARY ? -1 : 1;
+        return this.ctx.isPointInPath(xx, yy) ? 1 - this.getDistance(xx, yy, 1) : boundaryBehavior == Z4StarFiller.STOP_AT_BOUNDARY ? -1 : 1;
       case Z4StarFiller.SYMMETRIC_AT_BOUNDARY:
       case Z4StarFiller.REPEAT_AT_BOUNDARY:
         int divider = 1;
@@ -97,7 +97,7 @@ public abstract class Z4AbstractEllipseInscribedFiller extends Z4AbstractBoundar
           distance = this.getDistance(xxx, yyy, divider);
         }
 
-        return this.boundaryBehavior == Z4StarFiller.REPEAT_AT_BOUNDARY ? 1 - distance : $exists(divider % 2) ? 1 - distance : distance;
+        return boundaryBehavior == Z4StarFiller.REPEAT_AT_BOUNDARY ? 1 - distance : $exists(divider % 2) ? 1 - distance : distance;
       default:
         return -1;
     }
@@ -106,6 +106,6 @@ public abstract class Z4AbstractEllipseInscribedFiller extends Z4AbstractBoundar
   private double getDistance(double x, double y, int divider) {
     return this.edges.
             map(line -> Z4Math.ptSegDist(line.$get("p1x"), line.$get("p1y"), line.$get("p2x"), line.$get("p2y"), x, y)).
-            reduce((accumulator, current, index, array) -> def.js.Math.min(accumulator, current)) / (this.d00 / divider);
+            reduce((accumulator, current, index, array) -> Math.min(accumulator, current)) / (this.d00 / divider);
   }
 }
