@@ -147,7 +147,7 @@ public class Z4GradientColor {
       position = Z4Math.ripple(position, 0, 1, this.ripple);
     }
 
-    final double finalPos = position;
+    double finalPos = position;
     int index = this.colorPositions.findIndex(pos -> pos >= finalPos, null);
 
     if (this.colorPositions.$get(index) == position) {

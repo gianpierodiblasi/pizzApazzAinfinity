@@ -37,20 +37,16 @@ class TestLinearFiller extends JSFrame {
   }
 
    fill(bb) {
-    let p1x = 0.42;
-    let p1y = 0.5;
-    let p2x = 0.5;
-    let p2y = 0.6;
+    let p1x = 210;
+    let p1y = 250;
+    let p2x = 250;
+    let p2y = 300;
     let imageData = this.ctx.createImageData(500, 500);
     new Z4LinearFiller(new Z4GradientColor(), p1x, p1y, p2x, p2y, bb).fill(imageData);
     this.ctx.putImageData(imageData, 0, 0);
-    p1x *= 500;
-    p1y *= 500;
-    p2x *= 500;
-    p2y *= 500;
-    this.ctx.strokeStyle = this.getFillStyle("black");
     this.ctx.fillRect(p1x - 2, p1y - 2, 4, 4);
     this.ctx.fillRect(p2x - 2, p2y - 2, 4, 4);
+    this.ctx.strokeStyle = this.getFillStyle("black");
     this.ctx.beginPath();
     this.ctx.moveTo(p1x, p1y);
     this.ctx.lineTo(p2x, p2y);

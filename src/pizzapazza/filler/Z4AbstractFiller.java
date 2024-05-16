@@ -35,8 +35,8 @@ public abstract class Z4AbstractFiller {
 
     for (int y = 0; y < imageData.height; y++) {
       for (int x = 0; x < imageData.width; x++) {
-        double position = this.getColorPositionAt(x / imageData.width, y / imageData.height);
-        
+        double position = this.getColorPositionAt(x, y);
+
         if (position != -1) {
           Color color = this.gradientColor.getColorAt(position, true);
 
@@ -53,11 +53,9 @@ public abstract class Z4AbstractFiller {
   /**
    * Returns the color position to use for a pixel
    *
-   * @param x The x-axis coordinate of the pixel in relative size (in the range
-   * [0,1])
-   * @param y The y-axis coordinate of the pixel in relative size (in the range
-   * [0,1])
+   * @param x The x-axis coordinate of the pixel
+   * @param y The y-axis coordinate of the pixel
    * @return The color position, -1 if no position is available
    */
-  protected abstract double getColorPositionAt(double x, double y);
+  protected abstract double getColorPositionAt(int x, int y);
 }

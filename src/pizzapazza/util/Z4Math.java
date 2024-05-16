@@ -76,7 +76,7 @@ public class Z4Math {
   }
 
   /**
-   * Returns the distance from a point to a line
+   * Returns the distance from a point to a (infinite) line
    *
    * @param x1 The x-axis coordinate of the start point of the line
    * @param y1 The y-axis coordinate of the start point of the line
@@ -91,7 +91,7 @@ public class Z4Math {
   }
 
   /**
-   * Returns the square of the distance from a point to a line
+   * Returns the square of the distance from a point to a (infinite) line
    *
    * @param x1 The x-axis coordinate of the start point of the line
    * @param y1 The y-axis coordinate of the start point of the line
@@ -110,7 +110,57 @@ public class Z4Math {
     double dotprod = px * x2 + py * y2;
     double projlenSq = dotprod * dotprod / (x2 * x2 + y2 * y2);
     double lenSq = px * px + py * py - projlenSq;
+    return lenSq < 0 ? 0 : lenSq;
+  }
 
+  /**
+   * Returns the distance from a point to a line segment
+   *
+   * @param x1 The x-axis coordinate of the start point of the line
+   * @param y1 The y-axis coordinate of the start point of the line
+   * @param x2 The x-axis coordinate of the end point of the line
+   * @param y2 The y-axis coordinate of the end point of the line
+   * @param px The x-axis coordinate of the point
+   * @param py The y-axis coordinate of the point
+   * @return The distance
+   */
+  public static double ptSegDist(double x1, double y1, double x2, double y2, double px, double py) {
+    return Math.sqrt(Z4Math.ptSegDistSq(x1, y1, x2, y2, px, py));
+  }
+
+  /**
+   * Returns the square of the distance from a point to a line segment
+   *
+   * @param x1 The x-axis coordinate of the start point of the line
+   * @param y1 The y-axis coordinate of the start point of the line
+   * @param x2 The x-axis coordinate of the end point of the line
+   * @param y2 The y-axis coordinate of the end point of the line
+   * @param px The x-axis coordinate of the point
+   * @param py The y-axis coordinate of the point
+   * @return The square of the distance
+   */
+  public static double ptSegDistSq(double x1, double y1, double x2, double y2, double px, double py) {
+    x2 -= x1;
+    y2 -= y1;
+    px -= x1;
+    py -= y1;
+
+    double dotprod = px * x2 + py * y2;
+    double projlenSq;
+    if (dotprod <= 0.0) {
+      projlenSq = 0.0;
+    } else {
+      px = x2 - px;
+      py = y2 - py;
+      dotprod = px * x2 + py * y2;
+      if (dotprod <= 0.0) {
+        projlenSq = 0.0;
+      } else {
+        projlenSq = dotprod * dotprod / (x2 * x2 + y2 * y2);
+      }
+    }
+
+    double lenSq = px * px + py * py - projlenSq;
     return lenSq < 0 ? 0 : lenSq;
   }
 

@@ -1,7 +1,7 @@
 /**
  * @author gianpiero.diblasi
  */
-class TestConicFiller extends JSFrame {
+class TestSpiralFiller extends JSFrame {
 
    panel = new JSComponent(document.createElement("div"));
 
@@ -18,11 +18,11 @@ class TestConicFiller extends JSFrame {
     this.canvas.style.background = "gray";
     let buttons = new JSPanel();
     let button = new JSButton();
-    button.setText("NO SYMMETRIC");
+    button.setText("GEOMETRIC");
     button.addActionListener(event => this.fill(false));
     buttons.add(button, null);
     button = new JSButton();
-    button.setText("SYMMETRIC");
+    button.setText("LOGARITHMIC");
     button.addActionListener(event => this.fill(true));
     buttons.add(button, null);
     this.getContentPane().add(buttons, BorderLayout.NORTH);
@@ -31,12 +31,13 @@ class TestConicFiller extends JSFrame {
    fill(b) {
     let cx = 200;
     let cy = 250;
+    let radius = 100;
     let angle = Math.PI / 3;
     let imageData = this.ctx.createImageData(500, 500);
-    new Z4ConicFiller(new Z4GradientColor(), cx, cy, angle, b).fill(imageData);
+    new Z4SpiralFiller(new Z4GradientColor(), cx, cy, radius, angle, b).fill(imageData);
     this.ctx.putImageData(imageData, 0, 0);
-    let px = cx + 50 * Math.cos(angle);
-    let py = cy + 50 * Math.sin(angle);
+    let px = cx + radius * Math.cos(angle);
+    let py = cy + radius * Math.sin(angle);
     this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
     this.ctx.fillRect(px - 2, py - 2, 4, 4);
     this.ctx.strokeStyle = this.getFillStyle("red");

@@ -11,10 +11,10 @@ import static simulation.js.$Globals.$exists;
  */
 public class Z4LinearFiller extends Z4AbstractFiller {
 
-  private final double p1x;
-  private final double p1y;
-  private final double p2x;
-  private final double p2y;
+  private final int p1x;
+  private final int p1y;
+  private final int p2x;
+  private final int p2y;
   private final int boundaryBehavior;
 
   private final double angle;
@@ -49,17 +49,13 @@ public class Z4LinearFiller extends Z4AbstractFiller {
    * Creates the object
    *
    * @param gradientColor The color used to fill
-   * @param x1 The x-axis coordinate of the start point of the line in relative
-   * size (in the range [0,1])
-   * @param y1 The y-axis coordinate of the start point of the line in relative
-   * size (in the range [0,1])
-   * @param x2 The x-axis coordinate of the end point of the line in relative
-   * size (in the range [0,1])
-   * @param y2 The y-axis coordinate of the end point of the line in relative
-   * size (in the range [0,1])
+   * @param x1 The x-axis coordinate of the start point of the line
+   * @param y1 The y-axis coordinate of the start point of the line
+   * @param x2 The x-axis coordinate of the end point of the line
+   * @param y2 The y-axis coordinate of the end point of the line
    * @param boundaryBehavior The boundary behavior
    */
-  public Z4LinearFiller(Z4GradientColor gradientColor, double x1, double y1, double x2, double y2, int boundaryBehavior) {
+  public Z4LinearFiller(Z4GradientColor gradientColor, int x1, int y1, int x2, int y2, int boundaryBehavior) {
     super(gradientColor);
 
     this.p1x = x1;
@@ -78,7 +74,7 @@ public class Z4LinearFiller extends Z4AbstractFiller {
   }
 
   @Override
-  protected double getColorPositionAt(double x, double y) {
+  protected double getColorPositionAt(int x, int y) {
     double d1 = Z4Math.ptLineDist(this.p1x, this.p1y, this.line1x, this.line1y, x, y) / this.distance;
     double d2 = Z4Math.ptLineDist(this.p2x, this.p2y, this.line2x, this.line2y, x, y) / this.distance;
 

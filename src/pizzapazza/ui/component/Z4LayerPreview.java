@@ -165,7 +165,7 @@ public class Z4LayerPreview extends JSComponent {
     
     this.editor.addTab(Z4Translations.BASIC, panel);
     
-    final JSPanel finalPanel = new JSPanel();
+    JSPanel finalPanel = new JSPanel();
     finalPanel.setLayout(new GridBagLayout());
     
     this.addLabel(finalPanel, Z4Translations.COMPOSITE_OPERATION, 0, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);

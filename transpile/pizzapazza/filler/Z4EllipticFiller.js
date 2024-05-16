@@ -5,13 +5,13 @@
  */
 class Z4EllipticFiller extends Z4AbstractFiller {
 
-   cx = 0.0;
+   cx = 0;
 
-   cy = 0.0;
+   cy = 0;
 
-   rx = 0.0;
+   rx = 0;
 
-   ry = 0.0;
+   ry = 0;
 
    angle = 0.0;
 
@@ -41,12 +41,10 @@ class Z4EllipticFiller extends Z4AbstractFiller {
    * Creates the object
    *
    * @param gradientColor The color used to fill
-   * @param cx The x-axis coordinate of the center point in relative size (in
-   * the range [0,1])
-   * @param cy The y-axis coordinate of the center point in relative size (in
-   * the range [0,1])
-   * @param rx The x-radius in relative size (in the range [0,1])
-   * @param ry The y-radius in relative size (in the range [0,1])
+   * @param cx The x-axis coordinate of the center point
+   * @param cy The y-axis coordinate of the center point
+   * @param rx The x-radius
+   * @param ry The y-radius
    * @param angle The rotation angle of the ellipse (in radians)
    * @param boundaryBehavior The boundary behavior
    */

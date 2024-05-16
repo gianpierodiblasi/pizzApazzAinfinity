@@ -61,20 +61,15 @@ public class TestEllipticFiller extends JSFrame {
   }
 
   private void fill(int bb) {
-    double cx = 0.4;
-    double cy = 0.5;
-    double rx = 0.1;
-    double ry = 0.2;
+    int cx = 200;
+    int cy = 250;
+    int rx = 50;
+    int ry = 100;
     double angle = Math.PI / 3;
 
     ImageData imageData = this.ctx.createImageData(500, 500);
     new Z4EllipticFiller(new Z4GradientColor(), cx, cy, rx, ry, angle, bb).fill(imageData);
     this.ctx.putImageData(imageData, 0, 0);
-
-    cx *= 500;
-    cy *= 500;
-    rx *= 500;
-    ry *= 500;
 
     double p1x = cx + rx * Math.cos(angle);
     double p1y = cy + rx * Math.sin(angle);
@@ -82,11 +77,11 @@ public class TestEllipticFiller extends JSFrame {
     double p2x = cx + ry * Math.cos(angle + Z4Math.HALF_PI);
     double p2y = cy + ry * Math.sin(angle + Z4Math.HALF_PI);
 
-    this.ctx.strokeStyle = this.$getFillStyle("red");
     this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
     this.ctx.fillRect(p1x - 2, p1y - 2, 4, 4);
     this.ctx.fillRect(p2x - 2, p2y - 2, 4, 4);
 
+    this.ctx.strokeStyle = this.$getFillStyle("red");
     this.ctx.beginPath();
     this.ctx.moveTo(cx, cy);
     this.ctx.lineTo(p1x, p1y);

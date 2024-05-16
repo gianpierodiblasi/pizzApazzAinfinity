@@ -12,10 +12,10 @@ import simulation.js.$Object;
  */
 public class Z4EllipticFiller extends Z4AbstractFiller {
 
-  private final double cx;
-  private final double cy;
-  private final double rx;
-  private final double ry;
+  private final int cx;
+  private final int cy;
+  private final int rx;
+  private final int ry;
   private final double angle;
   private final int boundaryBehavior;
 
@@ -43,16 +43,14 @@ public class Z4EllipticFiller extends Z4AbstractFiller {
    * Creates the object
    *
    * @param gradientColor The color used to fill
-   * @param cx The x-axis coordinate of the center point in relative size (in
-   * the range [0,1])
-   * @param cy The y-axis coordinate of the center point in relative size (in
-   * the range [0,1])
-   * @param rx The x-radius in relative size (in the range [0,1])
-   * @param ry The y-radius in relative size (in the range [0,1])
+   * @param cx The x-axis coordinate of the center point
+   * @param cy The y-axis coordinate of the center point
+   * @param rx The x-radius
+   * @param ry The y-radius
    * @param angle The rotation angle of the ellipse (in radians)
    * @param boundaryBehavior The boundary behavior
    */
-  public Z4EllipticFiller(Z4GradientColor gradientColor, double cx, double cy, double rx, double ry, double angle, int boundaryBehavior) {
+  public Z4EllipticFiller(Z4GradientColor gradientColor, int cx, int cy, int rx, int ry, double angle, int boundaryBehavior) {
     super(gradientColor);
 
     this.cx = cx;
@@ -64,7 +62,7 @@ public class Z4EllipticFiller extends Z4AbstractFiller {
   }
 
   @Override
-  protected double getColorPositionAt(double x, double y) {
+  protected double getColorPositionAt(int x, int y) {
     $Object rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
     double d = Math.hypot((double) rotated.$get("x") / this.rx, (double) rotated.$get("y") / this.ry);
 

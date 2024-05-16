@@ -251,7 +251,7 @@ class Z4AbstractFiller {
     let data = imageData.data;
     for (let y = 0; y < imageData.height; y++) {
       for (let x = 0; x < imageData.width; x++) {
-        let position = this.getColorPositionAt(x / imageData.width, y / imageData.height);
+        let position = this.getColorPositionAt(x, y);
         if (position !== -1) {
           let color = this.gradientColor.getColorAt(position, true);
           let index = (y * imageData.width + x) * 4;
@@ -267,10 +267,8 @@ class Z4AbstractFiller {
   /**
    * Returns the color position to use for a pixel
    *
-   * @param x The x-axis coordinate of the pixel in relative size (in the range
-   * [0,1])
-   * @param y The y-axis coordinate of the pixel in relative size (in the range
-   * [0,1])
+   * @param x The x-axis coordinate of the pixel
+   * @param y The y-axis coordinate of the pixel
    * @return The color position, -1 if no position is available
    */
    getColorPositionAt(x, y) {
@@ -283,9 +281,9 @@ class Z4AbstractFiller {
  */
 class Z4ConicFiller extends Z4AbstractFiller {
 
-   cx = 0.0;
+   cx = 0;
 
-   cy = 0.0;
+   cy = 0;
 
    angle = 0.0;
 
@@ -295,10 +293,8 @@ class Z4ConicFiller extends Z4AbstractFiller {
    * Creates the object
    *
    * @param gradientColor The color used to fill
-   * @param cx The x-axis coordinate of the center point in relative size (in
-   * the range [0,1])
-   * @param cy The y-axis coordinate of the center point in relative size (in
-   * the range [0,1])
+   * @param cx The x-axis coordinate of the center point
+   * @param cy The y-axis coordinate of the center point
    * @param angle The rotation angle of the cone (in radians)
    * @param symmetric true for symmetric cone, false otherwise
    */
@@ -330,13 +326,13 @@ class Z4ConicFiller extends Z4AbstractFiller {
  */
 class Z4EllipticFiller extends Z4AbstractFiller {
 
-   cx = 0.0;
+   cx = 0;
 
-   cy = 0.0;
+   cy = 0;
 
-   rx = 0.0;
+   rx = 0;
 
-   ry = 0.0;
+   ry = 0;
 
    angle = 0.0;
 
@@ -366,12 +362,10 @@ class Z4EllipticFiller extends Z4AbstractFiller {
    * Creates the object
    *
    * @param gradientColor The color used to fill
-   * @param cx The x-axis coordinate of the center point in relative size (in
-   * the range [0,1])
-   * @param cy The y-axis coordinate of the center point in relative size (in
-   * the range [0,1])
-   * @param rx The x-radius in relative size (in the range [0,1])
-   * @param ry The y-radius in relative size (in the range [0,1])
+   * @param cx The x-axis coordinate of the center point
+   * @param cy The y-axis coordinate of the center point
+   * @param rx The x-radius
+   * @param ry The y-radius
    * @param angle The rotation angle of the ellipse (in radians)
    * @param boundaryBehavior The boundary behavior
    */
@@ -415,13 +409,13 @@ class Z4EllipticFiller extends Z4AbstractFiller {
  */
 class Z4LinearFiller extends Z4AbstractFiller {
 
-   p1x = 0.0;
+   p1x = 0;
 
-   p1y = 0.0;
+   p1y = 0;
 
-   p2x = 0.0;
+   p2x = 0;
 
-   p2y = 0.0;
+   p2y = 0;
 
    boundaryBehavior = 0;
 
@@ -461,14 +455,10 @@ class Z4LinearFiller extends Z4AbstractFiller {
    * Creates the object
    *
    * @param gradientColor The color used to fill
-   * @param x1 The x-axis coordinate of the start point of the line in relative
-   * size (in the range [0,1])
-   * @param y1 The y-axis coordinate of the start point of the line in relative
-   * size (in the range [0,1])
-   * @param x2 The x-axis coordinate of the end point of the line in relative
-   * size (in the range [0,1])
-   * @param y2 The y-axis coordinate of the end point of the line in relative
-   * size (in the range [0,1])
+   * @param x1 The x-axis coordinate of the start point of the line
+   * @param y1 The y-axis coordinate of the start point of the line
+   * @param x2 The x-axis coordinate of the end point of the line
+   * @param y2 The y-axis coordinate of the end point of the line
    * @param boundaryBehavior The boundary behavior
    */
   constructor(gradientColor, x1, y1, x2, y2, boundaryBehavior) {
@@ -513,6 +503,182 @@ class Z4LinearFiller extends Z4AbstractFiller {
     } else {
       return -1;
     }
+  }
+}
+/**
+ * A (multi) polygon filler
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4PolygonFiller extends Z4AbstractFiller {
+
+   cx = 0;
+
+   cy = 0;
+
+   rx = 0;
+
+   ry = 0;
+
+   angle = 0.0;
+
+   vertexCount = 0;
+
+   boundaryBehavior = 0;
+
+   lines = new Array();
+
+   d00 = 0.0;
+
+   ctx = new OffscreenCanvas(1, 1).getContext("2d");
+
+  /**
+   * The filler does nothing outside the boundary
+   */
+  static  STOP_AT_BOUNDARY = 0;
+
+  /**
+   * The filler uses the last color outside the boundary
+   */
+  static  FILL_AT_BOUNDARY = 1;
+
+  /**
+   * The filler symmetrically repeats the color outside the boundary
+   */
+  static  SYMMETRIC_AT_BOUNDARY = 2;
+
+  /**
+   * The filler restarts the color outside the boundary
+   */
+  static  REPEAT_AT_BOUNDARY = 3;
+
+  /**
+   * Creates the object
+   *
+   * @param gradientColor The color used to fill
+   * @param cx The x-axis coordinate of the center point of the ellipse
+   * containing the (regular) polygon
+   * @param cy The y-axis coordinate of the center point of the ellipse
+   * containing the (regular) polygon
+   * @param rx The x-radius of the ellipse containing the (regular) polygon
+   * @param ry The y-radius of the ellipse containing the (regular) polygon
+   * @param angle The rotation angle of the ellipse containing the (regular)
+   * polygon (in radians)
+   * @param vertexCount The number of vertices of the polygon
+   * @param boundaryBehavior The boundary behavior
+   */
+  constructor(gradientColor, cx, cy, rx, ry, angle, vertexCount, boundaryBehavior) {
+    super(gradientColor);
+    this.cx = cx;
+    this.cy = cy;
+    this.rx = rx;
+    this.ry = ry;
+    this.angle = angle;
+    this.vertexCount = vertexCount;
+    this.boundaryBehavior = boundaryBehavior;
+    this.createLines();
+    this.d00 = this.lines.map(line => Z4Math.ptSegDist(line["p1x"], line["p1y"], line["p2x"], line["p2y"], 0, 0)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
+  }
+
+   createLines() {
+    this.ctx.beginPath();
+    for (let index = 0; index < this.vertexCount - 1; index++) {
+      let line = new Object();
+      line["p1x"] = Math.cos(index * Z4Math.TWO_PI / this.vertexCount);
+      line["p1y"] = Math.sin(index * Z4Math.TWO_PI / this.vertexCount);
+      line["p2x"] = Math.cos((index + 1) * Z4Math.TWO_PI / this.vertexCount);
+      line["p2y"] = Math.sin((index + 1) * Z4Math.TWO_PI / this.vertexCount);
+      this.lines.push(line);
+      if (index === 0) {
+        this.ctx.moveTo(Math.cos(index * Z4Math.TWO_PI / this.vertexCount), Math.sin(index * Z4Math.TWO_PI / this.vertexCount));
+      } else {
+        this.ctx.lineTo(Math.cos(index * Z4Math.TWO_PI / this.vertexCount), Math.sin(index * Z4Math.TWO_PI / this.vertexCount));
+      }
+    }
+    let line = new Object();
+    line["p1x"] = Math.cos((this.vertexCount - 1) * Z4Math.TWO_PI / this.vertexCount);
+    line["p1y"] = Math.sin((this.vertexCount - 1) * Z4Math.TWO_PI / this.vertexCount);
+    line["p2x"] = Math.cos(0);
+    line["p2y"] = Math.sin(0);
+    this.lines.push(line);
+    this.ctx.lineTo(Math.cos((this.vertexCount - 1) * Z4Math.TWO_PI / this.vertexCount), Math.sin((this.vertexCount - 1) * Z4Math.TWO_PI / this.vertexCount));
+    this.ctx.closePath();
+  }
+
+   getColorPositionAt(x, y) {
+    let rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
+    let xx = rotated["x"] / this.rx;
+    let yy = rotated["y"] / this.ry;
+    switch(this.boundaryBehavior) {
+      case Z4PolygonFiller.STOP_AT_BOUNDARY:
+      case Z4PolygonFiller.FILL_AT_BOUNDARY:
+        return this.ctx.isPointInPath(xx, yy) ? 1 - this.getDistance(xx, yy, 1) : this.boundaryBehavior === Z4PolygonFiller.STOP_AT_BOUNDARY ? -1 : 1;
+      case Z4PolygonFiller.SYMMETRIC_AT_BOUNDARY:
+      case Z4PolygonFiller.REPEAT_AT_BOUNDARY:
+        let divider = 1;
+        let xxx = xx / divider;
+        let yyy = yy / divider;
+        let distance = this.getDistance(xxx, yyy, divider);
+        while (distance > 1 || !this.ctx.isPointInPath(xxx, yyy)) {
+          divider++;
+          xxx = xx / divider;
+          yyy = yy / divider;
+          distance = this.getDistance(xxx, yyy, divider);
+        }
+        return this.boundaryBehavior === Z4PolygonFiller.REPEAT_AT_BOUNDARY ? 1 - distance : divider % 2 ? 1 - distance : distance;
+      default:
+        return -1;
+    }
+  }
+
+   getDistance(x, y, divider) {
+    return this.lines.map(line => Z4Math.ptSegDist(line["p1x"], line["p1y"], line["p2x"], line["p2y"], x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current)) / (this.d00 / divider);
+  }
+}
+/**
+ * A (multi) spiral filler
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4SpiralFiller extends Z4AbstractFiller {
+
+   cx = 0;
+
+   cy = 0;
+
+   radius = 0.0;
+
+   angle = 0.0;
+
+   logarithmic = false;
+
+  /**
+   * Creates the object
+   *
+   * @param gradientColor The color used to fill
+   * @param cx The x-axis coordinate of the center point
+   * @param cy The y-axis coordinate of the center point
+   * @param radius The radius of the spiral
+   * @param angle The start angle of the spiral (in radians)
+   * @param logarithmic true for a logarithmic spiral, false otherwise
+   */
+  constructor(gradientColor, cx, cy, radius, angle, logarithmic) {
+    super(gradientColor);
+    this.cx = cx;
+    this.cy = cy;
+    this.radius = radius;
+    this.angle = angle;
+    this.logarithmic = logarithmic;
+  }
+
+   getColorPositionAt(x, y) {
+    let rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
+    let distance = Math.hypot(rotated["x"], rotated["y"]);
+    let currentAngle = Z4Math.TWO_PI * (this.logarithmic ? Math.log(distance / this.radius) : distance / this.radius);
+    let xSpiral = distance * Math.cos(currentAngle);
+    let ySpiral = distance * Math.sin(currentAngle);
+    distance = Z4Math.distance(rotated["x"], rotated["y"], xSpiral, ySpiral) / (2 * distance);
+    return isNaN(distance) ? 0 : distance;
   }
 }
 /**
@@ -2302,7 +2468,7 @@ class Z4Math {
   }
 
   /**
-   * Returns the distance from a point to a line
+   * Returns the distance from a point to a (infinite) line
    *
    * @param x1 The x-axis coordinate of the start point of the line
    * @param y1 The y-axis coordinate of the start point of the line
@@ -2317,7 +2483,7 @@ class Z4Math {
   }
 
   /**
-   * Returns the square of the distance from a point to a line
+   * Returns the square of the distance from a point to a (infinite) line
    *
    * @param x1 The x-axis coordinate of the start point of the line
    * @param y1 The y-axis coordinate of the start point of the line
@@ -2334,6 +2500,55 @@ class Z4Math {
     py -= y1;
     let dotprod = px * x2 + py * y2;
     let projlenSq = dotprod * dotprod / (x2 * x2 + y2 * y2);
+    let lenSq = px * px + py * py - projlenSq;
+    return lenSq < 0 ? 0 : lenSq;
+  }
+
+  /**
+   * Returns the distance from a point to a line segment
+   *
+   * @param x1 The x-axis coordinate of the start point of the line
+   * @param y1 The y-axis coordinate of the start point of the line
+   * @param x2 The x-axis coordinate of the end point of the line
+   * @param y2 The y-axis coordinate of the end point of the line
+   * @param px The x-axis coordinate of the point
+   * @param py The y-axis coordinate of the point
+   * @return The distance
+   */
+  static  ptSegDist(x1, y1, x2, y2, px, py) {
+    return Math.sqrt(Z4Math.ptSegDistSq(x1, y1, x2, y2, px, py));
+  }
+
+  /**
+   * Returns the square of the distance from a point to a line segment
+   *
+   * @param x1 The x-axis coordinate of the start point of the line
+   * @param y1 The y-axis coordinate of the start point of the line
+   * @param x2 The x-axis coordinate of the end point of the line
+   * @param y2 The y-axis coordinate of the end point of the line
+   * @param px The x-axis coordinate of the point
+   * @param py The y-axis coordinate of the point
+   * @return The square of the distance
+   */
+  static  ptSegDistSq(x1, y1, x2, y2, px, py) {
+    x2 -= x1;
+    y2 -= y1;
+    px -= x1;
+    py -= y1;
+    let dotprod = px * x2 + py * y2;
+    let projlenSq = 0.0;
+    if (dotprod <= 0.0) {
+      projlenSq = 0.0;
+    } else {
+      px = x2 - px;
+      py = y2 - py;
+      dotprod = px * x2 + py * y2;
+      if (dotprod <= 0.0) {
+        projlenSq = 0.0;
+      } else {
+        projlenSq = dotprod * dotprod / (x2 * x2 + y2 * y2);
+      }
+    }
     let lenSq = px * px + py * py - projlenSq;
     return lenSq < 0 ? 0 : lenSq;
   }

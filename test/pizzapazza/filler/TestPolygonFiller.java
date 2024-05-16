@@ -2,8 +2,10 @@ package pizzapazza.filler;
 
 import def.dom.CanvasGradient;
 import def.dom.CanvasPattern;
+import static def.dom.Globals.console;
 import static def.dom.Globals.document;
 import def.dom.ImageData;
+import def.js.Date;
 import java.awt.BorderLayout;
 import javascript.swing.JSButton;
 import javascript.swing.JSComponent;
@@ -14,18 +16,19 @@ import pizzapazza.color.Z4GradientColor;
 import pizzapazza.util.Z4Math;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
+import simulation.js.$Object;
 
 /**
  *
  * @author gianpiero.diblasi
  */
-public class TestLinearFiller extends JSFrame {
+public class TestPolygonFiller extends JSFrame {
 
   private final JSComponent panel = new JSComponent(document.createElement("div"));
   private final $Canvas canvas = ($Canvas) document.createElement("canvas");
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
 
-  public TestLinearFiller() {
+  public TestPolygonFiller() {
     super();
 
     this.panel.appendNodeChild(this.canvas);
@@ -39,57 +42,68 @@ public class TestLinearFiller extends JSFrame {
 
     JSButton button = new JSButton();
     button.setText("STOP_AT_BOUNDARY");
-    button.addActionListener(event -> this.fill(Z4LinearFiller.STOP_AT_BOUNDARY));
+    button.addActionListener(event -> this.fill(Z4PolygonFiller.STOP_AT_BOUNDARY));
     buttons.add(button, null);
 
     button = new JSButton();
     button.setText("FILL_AT_BOUNDARY");
-    button.addActionListener(event -> this.fill(Z4LinearFiller.FILL_AT_BOUNDARY));
+    button.addActionListener(event -> this.fill(Z4PolygonFiller.FILL_AT_BOUNDARY));
     buttons.add(button, null);
 
     button = new JSButton();
     button.setText("SYMMETRIC_AT_BOUNDARY");
-    button.addActionListener(event -> this.fill(Z4LinearFiller.SYMMETRIC_AT_BOUNDARY));
+    button.addActionListener(event -> this.fill(Z4PolygonFiller.SYMMETRIC_AT_BOUNDARY));
     buttons.add(button, null);
 
     button = new JSButton();
     button.setText("REPEAT_AT_BOUNDARY");
-    button.addActionListener(event -> this.fill(Z4LinearFiller.REPEAT_AT_BOUNDARY));
+    button.addActionListener(event -> this.fill(Z4PolygonFiller.REPEAT_AT_BOUNDARY));
     buttons.add(button, null);
 
     this.getContentPane().add(buttons, BorderLayout.NORTH);
   }
 
   private void fill(int bb) {
-    int p1x = 210;
-    int p1y = 250;
-    int p2x = 250;
-    int p2y = 300;
+    int cx = 200;
+    int cy = 250;
+    int rx = 50;
+    int ry = 100;
+    double angle = Math.PI / 3;
+    int vertex = 5;
 
     ImageData imageData = this.ctx.createImageData(500, 500);
-    new Z4LinearFiller(new Z4GradientColor(), p1x, p1y, p2x, p2y, bb).fill(imageData);
+    Date start = new Date();
+    new Z4PolygonFiller(new Z4GradientColor(), cx, cy, rx, ry, angle, vertex, bb).fill(imageData);
+    Date stop = new Date();
+    console.log(stop.getTime() - start.getTime());
     this.ctx.putImageData(imageData, 0, 0);
 
+    double p1x = cx + rx * Math.cos(angle);
+    double p1y = cy + rx * Math.sin(angle);
+
+    double p2x = cx + ry * Math.cos(angle + Z4Math.HALF_PI);
+    double p2y = cy + ry * Math.sin(angle + Z4Math.HALF_PI);
+
+    this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
     this.ctx.fillRect(p1x - 2, p1y - 2, 4, 4);
     this.ctx.fillRect(p2x - 2, p2y - 2, 4, 4);
 
-    this.ctx.strokeStyle = this.$getFillStyle("black");
-    this.ctx.beginPath();
-    this.ctx.moveTo(p1x, p1y);
-    this.ctx.lineTo(p2x, p2y);
-    this.ctx.stroke();
-
-    double angle = Z4Math.atan(p1x, p1y, p2x, p2y) + Z4Math.HALF_PI;
-
-    double line1x = (p1x + p2x) / 2;
-    double line1y = (p1y + p2y) / 2;
-    double line2x = line1x + 500 * Math.cos(angle);
-    double line2y = line1y + 500 * Math.sin(angle);
+    for (int index = 0; index < vertex; index++) {
+      double x = rx * Math.cos(index * Z4Math.TWO_PI / vertex);
+      double y = ry * Math.sin(index * Z4Math.TWO_PI / vertex);
+      $Object rotated = Z4Math.rotate(x, y, angle);
+      this.ctx.fillRect(cx + (double) rotated.$get("x") - 2, cy + (double) rotated.$get("y") - 2, 4, 4);
+    }
 
     this.ctx.strokeStyle = this.$getFillStyle("red");
     this.ctx.beginPath();
-    this.ctx.moveTo(line1x, line1y);
-    this.ctx.lineTo(line2x, line2y);
+    this.ctx.moveTo(cx, cy);
+    this.ctx.lineTo(p1x, p1y);
+    this.ctx.stroke();
+
+    this.ctx.beginPath();
+    this.ctx.moveTo(cx, cy);
+    this.ctx.lineTo(p2x, p2y);
     this.ctx.stroke();
   }
 

@@ -5,13 +5,13 @@
  */
 class Z4LinearFiller extends Z4AbstractFiller {
 
-   p1x = 0.0;
+   p1x = 0;
 
-   p1y = 0.0;
+   p1y = 0;
 
-   p2x = 0.0;
+   p2x = 0;
 
-   p2y = 0.0;
+   p2y = 0;
 
    boundaryBehavior = 0;
 
@@ -51,14 +51,10 @@ class Z4LinearFiller extends Z4AbstractFiller {
    * Creates the object
    *
    * @param gradientColor The color used to fill
-   * @param x1 The x-axis coordinate of the start point of the line in relative
-   * size (in the range [0,1])
-   * @param y1 The y-axis coordinate of the start point of the line in relative
-   * size (in the range [0,1])
-   * @param x2 The x-axis coordinate of the end point of the line in relative
-   * size (in the range [0,1])
-   * @param y2 The y-axis coordinate of the end point of the line in relative
-   * size (in the range [0,1])
+   * @param x1 The x-axis coordinate of the start point of the line
+   * @param y1 The y-axis coordinate of the start point of the line
+   * @param x2 The x-axis coordinate of the end point of the line
+   * @param y2 The y-axis coordinate of the end point of the line
    * @param boundaryBehavior The boundary behavior
    */
   constructor(gradientColor, x1, y1, x2, y2, boundaryBehavior) {

@@ -27,7 +27,7 @@ class Z4AbstractFiller {
     let data = imageData.data;
     for (let y = 0; y < imageData.height; y++) {
       for (let x = 0; x < imageData.width; x++) {
-        let position = this.getColorPositionAt(x / imageData.width, y / imageData.height);
+        let position = this.getColorPositionAt(x, y);
         if (position !== -1) {
           let color = this.gradientColor.getColorAt(position, true);
           let index = (y * imageData.width + x) * 4;
@@ -43,10 +43,8 @@ class Z4AbstractFiller {
   /**
    * Returns the color position to use for a pixel
    *
-   * @param x The x-axis coordinate of the pixel in relative size (in the range
-   * [0,1])
-   * @param y The y-axis coordinate of the pixel in relative size (in the range
-   * [0,1])
+   * @param x The x-axis coordinate of the pixel
+   * @param y The y-axis coordinate of the pixel
    * @return The color position, -1 if no position is available
    */
    getColorPositionAt(x, y) {
