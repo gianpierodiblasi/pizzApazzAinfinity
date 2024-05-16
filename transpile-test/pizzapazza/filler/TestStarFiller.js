@@ -42,9 +42,10 @@ class TestStarFiller extends JSFrame {
     let rx = 50;
     let ry = 100;
     let angle = Math.PI / 3;
+    let vertexCount = 7;
     let imageData = this.ctx.createImageData(500, 500);
     let start = new Date();
-    new Z4StarFiller(new Z4GradientColor(), cx, cy, rx, ry, angle, bb).fill(imageData);
+    new Z4StarFiller(new Z4GradientColor(), cx, cy, rx, ry, angle, vertexCount, bb).fill(imageData);
     let stop = new Date();
     console.log(stop.getTime() - start.getTime());
     this.ctx.putImageData(imageData, 0, 0);

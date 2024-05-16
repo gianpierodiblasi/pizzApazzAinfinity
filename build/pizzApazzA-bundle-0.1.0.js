@@ -482,23 +482,21 @@ class Z4StarFiller extends Z4AbstractEllipseInscribedFiller {
    * @param ry The y-radius of the ellipse containing the (regular) star
    * @param angle The rotation angle of the ellipse containing the (regular)
    * star (in radians)
+   * @param vertexCount The number of vertices of the star
    * @param boundaryBehavior The boundary behavior
    */
-  constructor(gradientColor, cx, cy, rx, ry, angle, boundaryBehavior) {
-    super(gradientColor, cx, cy, rx, ry, angle, 5, boundaryBehavior);
+  constructor(gradientColor, cx, cy, rx, ry, angle, vertexCount, boundaryBehavior) {
+    super(gradientColor, cx, cy, rx, ry, angle, vertexCount, boundaryBehavior);
   }
 
    createEdges(vertexCount) {
     let points = new Array();
-    let val = Z4Math.TWO_PI / vertexCount * 3 + Math.PI;
-    points[0] = new Z4Point(Math.cos(val) / Z4Math.SQUARE_GOLD_SECTION, Math.sin(val) / Z4Math.SQUARE_GOLD_SECTION);
-    for (let index = 1; index < vertexCount; index++) {
-      val = Z4Math.TWO_PI / vertexCount * index;
-      points[index * 2 - 1] = new Z4Point(Math.cos(val), Math.sin(val));
-      val = Z4Math.TWO_PI / vertexCount * (index + 3) + Math.PI;
-      points[index * 2] = new Z4Point(Math.cos(val) / Z4Math.SQUARE_GOLD_SECTION, Math.sin(val) / Z4Math.SQUARE_GOLD_SECTION);
+    for (let index = 0; index < vertexCount; index++) {
+      let val = index * Z4Math.TWO_PI / vertexCount;
+      points.push(new Z4Point(Math.cos(val), Math.sin(val)));
+      val = (index * Z4Math.TWO_PI + Math.PI) / vertexCount;
+      points.push(new Z4Point(Math.cos(val) / Z4Math.SQUARE_GOLD_SECTION, Math.sin(val) / Z4Math.SQUARE_GOLD_SECTION));
     }
-    points.splice(0, 0, new Z4Point(Math.cos(0), Math.sin(0)));
     points.push(new Z4Point(Math.cos(0), Math.sin(0)));
     let edges = new Array();
     for (let index = 0; index < points.length - 1; index++) {
