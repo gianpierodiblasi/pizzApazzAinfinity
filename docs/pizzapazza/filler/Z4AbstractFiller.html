@@ -136,7 +136,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><code><a href="Z4EllipticFiller.html" title="class in pizzapazza.filler">Z4EllipticFiller</a></code>, <code><a href="Z4LinearFiller.html" title="class in pizzapazza.filler">Z4LinearFiller</a></code></dd>
+<dd><code><a href="Z4AbstractBoundaryBehaviorFiller.html" title="class in pizzapazza.filler">Z4AbstractBoundaryBehaviorFiller</a></code>, <code><a href="Z4ConicFiller.html" title="class in pizzapazza.filler">Z4ConicFiller</a></code>, <code><a href="Z4SpiralFiller.html" title="class in pizzapazza.filler">Z4SpiralFiller</a></code></dd>
 </dl>
 <hr>
 <pre>public abstract class <span class="typeNameLabel">Z4AbstractFiller</span>
@@ -200,8 +200,8 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected abstract double</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getColorPositionAt(double,double)">getColorPositionAt</a></span>&#8203;(double&nbsp;x,
-                  double&nbsp;y)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getColorPositionAt(int,int)">getColorPositionAt</a></span>&#8203;(int&nbsp;x,
+                  int&nbsp;y)</code></th>
 <td class="colLast">
 <div class="block">Returns the color position to use for a pixel</div>
 </td>
@@ -268,21 +268,19 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a id="getColorPositionAt(double,double)">
+<a id="getColorPositionAt(int,int)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getColorPositionAt</h4>
-<pre class="methodSignature">protected abstract&nbsp;double&nbsp;getColorPositionAt&#8203;(double&nbsp;x,
-                                             double&nbsp;y)</pre>
+<pre class="methodSignature">protected abstract&nbsp;double&nbsp;getColorPositionAt&#8203;(int&nbsp;x,
+                                             int&nbsp;y)</pre>
 <div class="block">Returns the color position to use for a pixel</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - The x-axis coordinate of the pixel in relative size (in the range
- [0,1])</dd>
-<dd><code>y</code> - The y-axis coordinate of the pixel in relative size (in the range
- [0,1])</dd>
+<dd><code>x</code> - The x-axis coordinate of the pixel</dd>
+<dd><code>y</code> - The y-axis coordinate of the pixel</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The color position, -1 if no position is available</dd>
 </dl>

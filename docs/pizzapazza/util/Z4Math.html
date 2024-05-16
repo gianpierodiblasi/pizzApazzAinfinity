@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -258,7 +258,7 @@ extends java.lang.Object</pre>
           double&nbsp;px,
           double&nbsp;py)</code></th>
 <td class="colLast">
-<div class="block">Returns the distance from a point to a line</div>
+<div class="block">Returns the distance from a point to a (infinite) line</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -270,17 +270,41 @@ extends java.lang.Object</pre>
             double&nbsp;px,
             double&nbsp;py)</code></th>
 <td class="colLast">
-<div class="block">Returns the square of the distance from a point to a line</div>
+<div class="block">Returns the square of the distance from a point to a (infinite) line</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>static double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#ptSegDist(double,double,double,double,double,double)">ptSegDist</a></span>&#8203;(double&nbsp;x1,
+         double&nbsp;y1,
+         double&nbsp;x2,
+         double&nbsp;y2,
+         double&nbsp;px,
+         double&nbsp;py)</code></th>
+<td class="colLast">
+<div class="block">Returns the distance from a point to a line segment</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>static double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#ptSegDistSq(double,double,double,double,double,double)">ptSegDistSq</a></span>&#8203;(double&nbsp;x1,
+           double&nbsp;y1,
+           double&nbsp;x2,
+           double&nbsp;y2,
+           double&nbsp;px,
+           double&nbsp;py)</code></th>
+<td class="colLast">
+<div class="block">Returns the square of the distance from a point to a line segment</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rad2deg(double)">rad2deg</a></span>&#8203;(double&nbsp;radians)</code></th>
 <td class="colLast">
 <div class="block">Converts an angle from radiants to degrees</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#ripple(double,double,double,double)">ripple</a></span>&#8203;(double&nbsp;value,
       double&nbsp;min,
@@ -290,7 +314,7 @@ extends java.lang.Object</pre>
 <div class="block">Generates a ripple around a value</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static simulation.js.$Object</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rotate(double,double,double)">rotate</a></span>&#8203;(double&nbsp;x,
       double&nbsp;y,
@@ -459,7 +483,7 @@ extends java.lang.Object</pre>
                                 double&nbsp;y2,
                                 double&nbsp;px,
                                 double&nbsp;py)</pre>
-<div class="block">Returns the distance from a point to a line</div>
+<div class="block">Returns the distance from a point to a (infinite) line</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>x1</code> - The x-axis coordinate of the start point of the line</dd>
@@ -485,7 +509,59 @@ extends java.lang.Object</pre>
                                   double&nbsp;y2,
                                   double&nbsp;px,
                                   double&nbsp;py)</pre>
-<div class="block">Returns the square of the distance from a point to a line</div>
+<div class="block">Returns the square of the distance from a point to a (infinite) line</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>x1</code> - The x-axis coordinate of the start point of the line</dd>
+<dd><code>y1</code> - The y-axis coordinate of the start point of the line</dd>
+<dd><code>x2</code> - The x-axis coordinate of the end point of the line</dd>
+<dd><code>y2</code> - The y-axis coordinate of the end point of the line</dd>
+<dd><code>px</code> - The x-axis coordinate of the point</dd>
+<dd><code>py</code> - The y-axis coordinate of the point</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The square of the distance</dd>
+</dl>
+</li>
+</ul>
+<a id="ptSegDist(double,double,double,double,double,double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ptSegDist</h4>
+<pre class="methodSignature">public static&nbsp;double&nbsp;ptSegDist&#8203;(double&nbsp;x1,
+                               double&nbsp;y1,
+                               double&nbsp;x2,
+                               double&nbsp;y2,
+                               double&nbsp;px,
+                               double&nbsp;py)</pre>
+<div class="block">Returns the distance from a point to a line segment</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>x1</code> - The x-axis coordinate of the start point of the line</dd>
+<dd><code>y1</code> - The y-axis coordinate of the start point of the line</dd>
+<dd><code>x2</code> - The x-axis coordinate of the end point of the line</dd>
+<dd><code>y2</code> - The y-axis coordinate of the end point of the line</dd>
+<dd><code>px</code> - The x-axis coordinate of the point</dd>
+<dd><code>py</code> - The y-axis coordinate of the point</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The distance</dd>
+</dl>
+</li>
+</ul>
+<a id="ptSegDistSq(double,double,double,double,double,double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ptSegDistSq</h4>
+<pre class="methodSignature">public static&nbsp;double&nbsp;ptSegDistSq&#8203;(double&nbsp;x1,
+                                 double&nbsp;y1,
+                                 double&nbsp;x2,
+                                 double&nbsp;y2,
+                                 double&nbsp;px,
+                                 double&nbsp;py)</pre>
+<div class="block">Returns the square of the distance from a point to a line segment</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>x1</code> - The x-axis coordinate of the start point of the line</dd>
