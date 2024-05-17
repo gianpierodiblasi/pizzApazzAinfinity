@@ -55,7 +55,7 @@ class Z4BezierFiller extends Z4AbstractBoundaryBehaviorFiller {
     this.x2 = x2;
     this.y2 = y2;
     this.radius = radius;
-    this.bezier = new Bezier(x1, y1, ctrlx1, ctrly1, ctrlx2, ctrly2, x2, y2);
+    this.bezier = new Bezier(this.x1, this.y1, this.ctrlx1, this.ctrly1, this.ctrlx2, this.ctrly2, this.x2, this.y2);
   }
 
    getColorPositionAtWithBoundaryBehavior(x, y, boundaryBehavior) {
