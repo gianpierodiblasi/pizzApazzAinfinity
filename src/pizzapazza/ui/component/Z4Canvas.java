@@ -113,6 +113,9 @@ public class Z4Canvas extends JSComponent {
     this.paper.reset();
     this.paper.addLayer(Z4Translations.BACKGROUND_LAYER, width, height, color, width, height);
 
+    this.width = width;
+    this.height = height;
+
     this.ribbonLayerPanel.reset();
     this.ribbonLayerPanel.addLayerPreview(this.paper.getLayerAt(this.paper.getLayersCount() - 1));
 
@@ -152,6 +155,9 @@ public class Z4Canvas extends JSComponent {
       this.paper.reset();
       this.paper.addLayerFromImage(Z4Translations.BACKGROUND_LAYER, image, (int) image.width, (int) image.height);
 
+      this.width = (int) image.width;
+      this.height = (int) image.height;
+
       this.ribbonLayerPanel.reset();
       this.ribbonLayerPanel.addLayerPreview(this.paper.getLayerAt(this.paper.getLayersCount() - 1));
 
@@ -168,8 +174,6 @@ public class Z4Canvas extends JSComponent {
     this.statusPanel.setProjectName(projectName);
     this.statusPanel.setZoom(1);
 
-    this.width = width;
-    this.height = height;
     this.zoom = 1;
     this.saved = true;
 
@@ -191,6 +195,9 @@ public class Z4Canvas extends JSComponent {
         this.ribbonLayerPanel.reset();
 
         $Object json = ($Object) JSON.parse("" + str);
+        this.width = json.$get("width");
+        this.height = json.$get("height");
+
         this.openLayer(zip, json, json.$get("layers"), 0);
       });
     });
@@ -511,6 +518,8 @@ public class Z4Canvas extends JSComponent {
    * Draws this canvas
    */
   public void drawCanvas() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
     this.ctx.save();
     this.ctx.scale(this.zoom, this.zoom);
     this.paper.draw(this.ctx, false);

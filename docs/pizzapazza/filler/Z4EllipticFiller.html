@@ -133,7 +133,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="Z4AbstractBoundaryBehaviorFiller.html" title="class in pizzapazza.filler">pizzapazza.filler.Z4AbstractBoundaryBehaviorFiller</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="Z4AbstractDistanceBasedBoundaryBehaviorFiller.html" title="class in pizzapazza.filler">pizzapazza.filler.Z4AbstractDistanceBasedBoundaryBehaviorFiller</a></li>
+<li>
+<ul class="inheritance">
 <li>pizzapazza.filler.Z4EllipticFiller</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -146,7 +151,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <hr>
 <pre>public class <span class="typeNameLabel">Z4EllipticFiller</span>
-extends <a href="Z4AbstractBoundaryBehaviorFiller.html" title="class in pizzapazza.filler">Z4AbstractBoundaryBehaviorFiller</a></pre>
+extends <a href="Z4AbstractDistanceBasedBoundaryBehaviorFiller.html" title="class in pizzapazza.filler">Z4AbstractDistanceBasedBoundaryBehaviorFiller</a></pre>
 <div class="block">A (multi) elliptic filler</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
@@ -220,14 +225,20 @@ extends <a href="Z4AbstractBoundaryBehaviorFiller.html" title="class in pizzapaz
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected double</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getColorPositionAtWithBoundaryBehavior(int,int,int)">getColorPositionAtWithBoundaryBehavior</a></span>&#8203;(int&nbsp;x,
-                                      int&nbsp;y,
-                                      int&nbsp;boundaryBehavior)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDistance(int,int)">getDistance</a></span>&#8203;(int&nbsp;x,
+           int&nbsp;y)</code></th>
 <td class="colLast">
-<div class="block">Returns the color position to use for a pixel</div>
+<div class="block">Returns the distance of a point</div>
 </td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.pizzapazza.filler.Z4AbstractDistanceBasedBoundaryBehaviorFiller">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;pizzapazza.filler.<a href="Z4AbstractDistanceBasedBoundaryBehaviorFiller.html" title="class in pizzapazza.filler">Z4AbstractDistanceBasedBoundaryBehaviorFiller</a></h3>
+<code><a href="Z4AbstractDistanceBasedBoundaryBehaviorFiller.html#getColorPositionAtWithBoundaryBehavior(int,int,int)">getColorPositionAtWithBoundaryBehavior</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.pizzapazza.filler.Z4AbstractBoundaryBehaviorFiller">
 <!--   -->
@@ -301,26 +312,24 @@ extends <a href="Z4AbstractBoundaryBehaviorFiller.html" title="class in pizzapaz
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="getColorPositionAtWithBoundaryBehavior(int,int,int)">
+<a id="getDistance(int,int)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>getColorPositionAtWithBoundaryBehavior</h4>
-<pre class="methodSignature">protected&nbsp;double&nbsp;getColorPositionAtWithBoundaryBehavior&#8203;(int&nbsp;x,
-                                                        int&nbsp;y,
-                                                        int&nbsp;boundaryBehavior)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Z4AbstractBoundaryBehaviorFiller.html#getColorPositionAtWithBoundaryBehavior(int,int,int)">Z4AbstractBoundaryBehaviorFiller</a></code></span></div>
-<div class="block">Returns the color position to use for a pixel</div>
+<h4>getDistance</h4>
+<pre class="methodSignature">protected&nbsp;double&nbsp;getDistance&#8203;(int&nbsp;x,
+                             int&nbsp;y)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Z4AbstractDistanceBasedBoundaryBehaviorFiller.html#getDistance(int,int)">Z4AbstractDistanceBasedBoundaryBehaviorFiller</a></code></span></div>
+<div class="block">Returns the distance of a point</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Z4AbstractBoundaryBehaviorFiller.html#getColorPositionAtWithBoundaryBehavior(int,int,int)">getColorPositionAtWithBoundaryBehavior</a></code>&nbsp;in class&nbsp;<code><a href="Z4AbstractBoundaryBehaviorFiller.html" title="class in pizzapazza.filler">Z4AbstractBoundaryBehaviorFiller</a></code></dd>
+<dd><code><a href="Z4AbstractDistanceBasedBoundaryBehaviorFiller.html#getDistance(int,int)">getDistance</a></code>&nbsp;in class&nbsp;<code><a href="Z4AbstractDistanceBasedBoundaryBehaviorFiller.html" title="class in pizzapazza.filler">Z4AbstractDistanceBasedBoundaryBehaviorFiller</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - The x-axis coordinate of the pixel</dd>
-<dd><code>y</code> - The y-axis coordinate of the pixel</dd>
-<dd><code>boundaryBehavior</code> - The boundary behavior</dd>
+<dd><code>x</code> - The x-axis coordinate of the point</dd>
+<dd><code>y</code> - The y-axis coordinate of the point</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>The color position, -1 if no position is available</dd>
+<dd>The distance</dd>
 </dl>
 </li>
 </ul>

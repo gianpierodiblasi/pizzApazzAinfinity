@@ -132,8 +132,8 @@ public class Z4LayerPreview extends JSComponent {
     this.offsetXSpinner.addChangeListener(event -> this.onChange(true, this.offsetXSpinner.getValueIsAdjusting(), this.offsetXSpinner, this.offsetXSlider));
     this.addComponent(panel, this.offsetXSpinner, 1, 2, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
     
-    this.offsetXSlider.addChangeListener(event -> this.onChange(false, this.offsetXSlider.getValueIsAdjusting(), this.offsetXSpinner, this.offsetXSlider));
     this.offsetXSlider.getStyle().minWidth = "25rem";
+    this.offsetXSlider.addChangeListener(event -> this.onChange(false, this.offsetXSlider.getValueIsAdjusting(), this.offsetXSpinner, this.offsetXSlider));
     this.addComponent(panel, this.offsetXSlider, 0, 3, 2, 1, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
     
     this.addLabel(panel, Translations.JSColorChooser_OPACITY, 0, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
@@ -159,8 +159,8 @@ public class Z4LayerPreview extends JSComponent {
     
     this.offsetYSlider.setOrientation(JSSlider.VERTICAL);
     this.offsetYSlider.setInverted(true);
-    this.offsetYSlider.addChangeListener(event -> this.onChange(false, this.offsetYSlider.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
     this.offsetYSlider.getStyle().minHeight = "25rem";
+    this.offsetYSlider.addChangeListener(event -> this.onChange(false, this.offsetYSlider.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
     this.addComponent(panel, this.offsetYSlider, 3, 3, 1, 4, GridBagConstraints.NORTH, GridBagConstraints.NONE, null);
     
     this.editor.addTab(Z4Translations.BASIC, panel);

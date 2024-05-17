@@ -33,7 +33,11 @@
 .z4canvas canvas {
   background-image: url(../image/chessboard.png);
 }
-.z4colorpreview {
+
+.z4abstractfillerpanel canvas {
+  border: 1px solid var(--main-action-bgcolor);
+  background-image: url(../image/chessboard.png);
+}.z4colorpreview {
   height: 2rem;
   display: grid;
   grid-template: "c1 c2";
