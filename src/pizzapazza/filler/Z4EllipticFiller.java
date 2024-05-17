@@ -3,14 +3,13 @@ package pizzapazza.filler;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
-import static simulation.js.$Globals.$exists;
 
 /**
  * A (multi) elliptic filler
  *
  * @author gianpiero.diblasi
  */
-public class Z4EllipticFiller extends Z4AbstractBoundaryBehaviorFiller {
+public class Z4EllipticFiller extends Z4AbstractDistanceBasedBoundaryBehaviorFiller {
 
   private final int cx;
   private final int cy;
@@ -40,29 +39,8 @@ public class Z4EllipticFiller extends Z4AbstractBoundaryBehaviorFiller {
   }
 
   @Override
-  protected double getColorPositionAtWithBoundaryBehavior(int x, int y, int boundaryBehavior) {
+  protected double getDistance(int x, int y) {
     Z4Point rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
-    double d = Math.hypot(rotated.x / this.rx, rotated.y / this.ry);
-
-    if (d <= 1) {
-      return d;
-    } else if (boundaryBehavior == Z4EllipticFiller.STOP_AT_BOUNDARY) {
-      return -1;
-    } else if (boundaryBehavior == Z4EllipticFiller.FILL_AT_BOUNDARY) {
-      return 1;
-    } else if (boundaryBehavior == Z4EllipticFiller.SYMMETRIC_AT_BOUNDARY) {
-      int step = (int) Math.floor(d);
-      d -= step;
-
-      if ($exists((step % 2))) {
-        d = 1 - d;
-      }
-
-      return d;
-    } else if (boundaryBehavior == Z4EllipticFiller.REPEAT_AT_BOUNDARY) {
-      return d - (int) Math.floor(d);
-    } else {
-      return -1;
-    }
+    return Math.hypot(rotated.x / this.rx, rotated.y / this.ry);
   }
 }

@@ -3,7 +3,7 @@
  *
  * @author gianpiero.diblasi
  */
-class Z4BezierFiller extends Z4AbstractBoundaryBehaviorFiller {
+class Z4BezierFiller extends Z4AbstractDistanceBasedBoundaryBehaviorFiller {
 
    x1 = 0;
 
@@ -58,26 +58,8 @@ class Z4BezierFiller extends Z4AbstractBoundaryBehaviorFiller {
     this.bezier = new Bezier(this.x1, this.y1, this.ctrlx1, this.ctrly1, this.ctrlx2, this.ctrly2, this.x2, this.y2);
   }
 
-   getColorPositionAtWithBoundaryBehavior(x, y, boundaryBehavior) {
+   getDistance(x, y) {
     let point = this.bezier.project(new Z4Point(x, y));
-    let d = Z4Math.distance(point.x, point.y, x, y) / this.radius;
-    if (d <= 1) {
-      return d;
-    } else if (boundaryBehavior === Z4BezierFiller.STOP_AT_BOUNDARY) {
-      return -1;
-    } else if (boundaryBehavior === Z4BezierFiller.FILL_AT_BOUNDARY) {
-      return 1;
-    } else if (boundaryBehavior === Z4BezierFiller.SYMMETRIC_AT_BOUNDARY) {
-      let step = Math.floor(d);
-      d -= step;
-      if ((step % 2)) {
-        d = 1 - d;
-      }
-      return d;
-    } else if (boundaryBehavior === Z4BezierFiller.REPEAT_AT_BOUNDARY) {
-      return d - Math.floor(d);
-    } else {
-      return -1;
-    }
+    return Z4Math.distance(point.x, point.y, x, y) / this.radius;
   }
 }

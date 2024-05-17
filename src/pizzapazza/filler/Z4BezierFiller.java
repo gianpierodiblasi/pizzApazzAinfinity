@@ -4,14 +4,13 @@ import pizzapazza.color.Z4GradientColor;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import simulation.bezier.$Bezier;
-import static simulation.js.$Globals.$exists;
 
 /**
  * A (multi) cubic bezier filler
  *
  * @author gianpiero.diblasi
  */
-public class Z4BezierFiller extends Z4AbstractBoundaryBehaviorFiller {
+public class Z4BezierFiller extends Z4AbstractDistanceBasedBoundaryBehaviorFiller {
 
   private final int x1;
   private final int y1;
@@ -61,29 +60,8 @@ public class Z4BezierFiller extends Z4AbstractBoundaryBehaviorFiller {
   }
 
   @Override
-  protected double getColorPositionAtWithBoundaryBehavior(int x, int y, int boundaryBehavior) {
+  protected double getDistance(int x, int y) {
     Z4Point point = this.bezier.project(new Z4Point(x, y));
-    double d = Z4Math.distance(point.x, point.y, x, y) / this.radius;
-
-    if (d <= 1) {
-      return d;
-    } else if (boundaryBehavior == Z4BezierFiller.STOP_AT_BOUNDARY) {
-      return -1;
-    } else if (boundaryBehavior == Z4BezierFiller.FILL_AT_BOUNDARY) {
-      return 1;
-    } else if (boundaryBehavior == Z4BezierFiller.SYMMETRIC_AT_BOUNDARY) {
-      int step = (int) Math.floor(d);
-      d -= step;
-
-      if ($exists((step % 2))) {
-        d = 1 - d;
-      }
-
-      return d;
-    } else if (boundaryBehavior == Z4BezierFiller.REPEAT_AT_BOUNDARY) {
-      return d - (int) Math.floor(d);
-    } else {
-      return -1;
-    }
+    return Z4Math.distance(point.x, point.y, x, y) / this.radius;
   }
 }

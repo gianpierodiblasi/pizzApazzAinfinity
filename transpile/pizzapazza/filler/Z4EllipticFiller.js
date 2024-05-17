@@ -3,7 +3,7 @@
  *
  * @author gianpiero.diblasi
  */
-class Z4EllipticFiller extends Z4AbstractBoundaryBehaviorFiller {
+class Z4EllipticFiller extends Z4AbstractDistanceBasedBoundaryBehaviorFiller {
 
    cx = 0;
 
@@ -35,26 +35,8 @@ class Z4EllipticFiller extends Z4AbstractBoundaryBehaviorFiller {
     this.angle = angle;
   }
 
-   getColorPositionAtWithBoundaryBehavior(x, y, boundaryBehavior) {
+   getDistance(x, y) {
     let rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
-    let d = Math.hypot(rotated.x / this.rx, rotated.y / this.ry);
-    if (d <= 1) {
-      return d;
-    } else if (boundaryBehavior === Z4EllipticFiller.STOP_AT_BOUNDARY) {
-      return -1;
-    } else if (boundaryBehavior === Z4EllipticFiller.FILL_AT_BOUNDARY) {
-      return 1;
-    } else if (boundaryBehavior === Z4EllipticFiller.SYMMETRIC_AT_BOUNDARY) {
-      let step = Math.floor(d);
-      d -= step;
-      if ((step % 2)) {
-        d = 1 - d;
-      }
-      return d;
-    } else if (boundaryBehavior === Z4EllipticFiller.REPEAT_AT_BOUNDARY) {
-      return d - Math.floor(d);
-    } else {
-      return -1;
-    }
+    return Math.hypot(rotated.x / this.rx, rotated.y / this.ry);
   }
 }

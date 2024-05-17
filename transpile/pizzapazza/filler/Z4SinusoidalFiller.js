@@ -3,7 +3,7 @@
  *
  * @author gianpiero.diblasi
  */
-class Z4SinusoidalFiller extends Z4AbstractBoundaryBehaviorFiller {
+class Z4SinusoidalFiller extends Z4AbstractDistanceBasedBoundaryBehaviorFiller {
 
    x = 0;
 
@@ -42,26 +42,8 @@ class Z4SinusoidalFiller extends Z4AbstractBoundaryBehaviorFiller {
     this.two_PI_over_period = Z4Math.TWO_PI / this.period;
   }
 
-   getColorPositionAtWithBoundaryBehavior(x, y, boundaryBehavior) {
+   getDistance(x, y) {
     let rotated = Z4Math.rotate(x - this.x, y - this.y, this.angle);
-    let d = Math.abs(rotated.y - this.amplitude * Math.sin(rotated.x * this.two_PI_over_period)) / this.waveLength;
-    if (d <= 1) {
-      return d;
-    } else if (boundaryBehavior === Z4SinusoidalFiller.STOP_AT_BOUNDARY) {
-      return -1;
-    } else if (boundaryBehavior === Z4SinusoidalFiller.FILL_AT_BOUNDARY) {
-      return 1;
-    } else if (boundaryBehavior === Z4SinusoidalFiller.SYMMETRIC_AT_BOUNDARY) {
-      let step = Math.floor(d);
-      d -= step;
-      if ((step % 2)) {
-        d = 1 - d;
-      }
-      return d;
-    } else if (boundaryBehavior === Z4SinusoidalFiller.REPEAT_AT_BOUNDARY) {
-      return d - Math.floor(d);
-    } else {
-      return -1;
-    }
+    return Math.abs(rotated.y - this.amplitude * Math.sin(rotated.x * this.two_PI_over_period)) / this.waveLength;
   }
 }

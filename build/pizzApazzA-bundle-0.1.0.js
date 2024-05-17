@@ -330,6 +330,211 @@ class Z4AbstractBoundaryBehaviorFiller extends Z4AbstractFiller {
   }
 }
 /**
+ * A Filler with a boundary behavior based on a distance
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4AbstractDistanceBasedBoundaryBehaviorFiller extends Z4AbstractBoundaryBehaviorFiller {
+
+  /**
+   * Creates the object
+   *
+   * @param gradientColor The color used to fill
+   * @param boundaryBehavior The boundary behavior
+   */
+  constructor(gradientColor, boundaryBehavior) {
+    super(gradientColor, boundaryBehavior);
+  }
+
+  /**
+   * Returns the distance of a point
+   *
+   * @param x The x-axis coordinate of the point
+   * @param y The y-axis coordinate of the point
+   * @return The distance
+   */
+   getDistance(x, y) {
+  }
+
+   getColorPositionAtWithBoundaryBehavior(x, y, boundaryBehavior) {
+    let d = this.getDistance(x, y);
+    if (d <= 1) {
+      return d;
+    } else if (boundaryBehavior === Z4AbstractDistanceBasedBoundaryBehaviorFiller.STOP_AT_BOUNDARY) {
+      return -1;
+    } else if (boundaryBehavior === Z4AbstractDistanceBasedBoundaryBehaviorFiller.FILL_AT_BOUNDARY) {
+      return 1;
+    } else if (boundaryBehavior === Z4AbstractDistanceBasedBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY) {
+      let step = Math.floor(d);
+      d -= step;
+      if ((step % 2)) {
+        d = 1 - d;
+      }
+      return d;
+    } else if (boundaryBehavior === Z4AbstractDistanceBasedBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY) {
+      return d - Math.floor(d);
+    } else {
+      return -1;
+    }
+  }
+}
+/**
+ * A (multi) cubic bezier filler
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4BezierFiller extends Z4AbstractDistanceBasedBoundaryBehaviorFiller {
+
+   x1 = 0;
+
+   y1 = 0;
+
+   ctrlx1 = 0;
+
+   ctrly1 = 0;
+
+   ctrlx2 = 0;
+
+   ctrly2 = 0;
+
+   x2 = 0;
+
+   y2 = 0;
+
+   radius = 0;
+
+   bezier = null;
+
+  /**
+   * Creates the object
+   *
+   * @param gradientColor The color used to fill
+   * @param x1 The x-axis coordinate of the start point of the curve
+   * @param y1 The y-axis coordinate of the start point of the curve
+   * @param ctrlx1 The x-axis coordinate of the first control point of the curve
+   * @param ctrly1 The y-axis coordinate of the first control point of the curve
+   * @param ctrlx2 The x-axis coordinate of the second control point of the
+   * curve
+   * @param ctrly2 The y-axis coordinate of the second control point of the
+   * curve
+   * @param x2 The x-axis coordinate of the end point of the curve (the start
+   * point of the line)
+   * @param y2 The y-axis coordinate of the end point of the curve (the start
+   * point of the line)
+   * @param radius The radius
+   * @param boundaryBehavior The boundary behavior
+   */
+  constructor(gradientColor, x1, y1, ctrlx1, ctrly1, ctrlx2, ctrly2, x2, y2, radius, boundaryBehavior) {
+    super(gradientColor, boundaryBehavior);
+    this.x1 = x1;
+    this.y1 = y1;
+    this.ctrlx1 = ctrlx1;
+    this.ctrly1 = ctrly1;
+    this.ctrlx2 = ctrlx2;
+    this.ctrly2 = ctrly2;
+    this.x2 = x2;
+    this.y2 = y2;
+    this.radius = radius;
+    this.bezier = new Bezier(this.x1, this.y1, this.ctrlx1, this.ctrly1, this.ctrlx2, this.ctrly2, this.x2, this.y2);
+  }
+
+   getDistance(x, y) {
+    let point = this.bezier.project(new Z4Point(x, y));
+    return Z4Math.distance(point.x, point.y, x, y) / this.radius;
+  }
+}
+/**
+ * A (multi) elliptic filler
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4EllipticFiller extends Z4AbstractDistanceBasedBoundaryBehaviorFiller {
+
+   cx = 0;
+
+   cy = 0;
+
+   rx = 0;
+
+   ry = 0;
+
+   angle = 0.0;
+
+  /**
+   * Creates the object
+   *
+   * @param gradientColor The color used to fill
+   * @param cx The x-axis coordinate of the center point
+   * @param cy The y-axis coordinate of the center point
+   * @param rx The x-radius
+   * @param ry The y-radius
+   * @param angle The rotation angle of the ellipse (in radians)
+   * @param boundaryBehavior The boundary behavior
+   */
+  constructor(gradientColor, cx, cy, rx, ry, angle, boundaryBehavior) {
+    super(gradientColor, boundaryBehavior);
+    this.cx = cx;
+    this.cy = cy;
+    this.rx = rx;
+    this.ry = ry;
+    this.angle = angle;
+  }
+
+   getDistance(x, y) {
+    let rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
+    return Math.hypot(rotated.x / this.rx, rotated.y / this.ry);
+  }
+}
+/**
+ * A (multi) sinusoidal filler
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4SinusoidalFiller extends Z4AbstractDistanceBasedBoundaryBehaviorFiller {
+
+   x = 0;
+
+   y = 0;
+
+   waveLength = 0.0;
+
+   period = 0.0;
+
+   amplitude = 0.0;
+
+   angle = 0.0;
+
+   two_PI_over_period = 0.0;
+
+  /**
+   * Creates the object
+   *
+   * @param gradientColor The color used to fill
+   * @param x The x-axis coordinate of the start point of the sinusoid
+   * @param y The y-axis coordinate of the start point of the sinusoid
+   * @param waveLength The wave lenght of the sinusoid
+   * @param period The period of the sinusoid
+   * @param amplitude The amplitude of the sinusoid
+   * @param angle The rotation angle of the sinusoid
+   * @param boundaryBehavior The boundary behavior
+   */
+  constructor(gradientColor, x, y, waveLength, period, amplitude, angle, boundaryBehavior) {
+    super(gradientColor, boundaryBehavior);
+    this.x = x;
+    this.y = y;
+    this.waveLength = waveLength;
+    this.period = period;
+    this.amplitude = amplitude;
+    this.angle = angle;
+    this.two_PI_over_period = Z4Math.TWO_PI / this.period;
+  }
+
+   getDistance(x, y) {
+    let rotated = Z4Math.rotate(x - this.x, y - this.y, this.angle);
+    return Math.abs(rotated.y - this.amplitude * Math.sin(rotated.x * this.two_PI_over_period)) / this.waveLength;
+  }
+}
+/**
  * A Filler which can be inscribed in an ellipse
  *
  * @author gianpiero.diblasi
@@ -506,149 +711,6 @@ class Z4StarFiller extends Z4AbstractEllipseInscribedFiller {
   }
 }
 /**
- * A (multi) cubic bezier filler
- *
- * @author gianpiero.diblasi
- */
-class Z4BezierFiller extends Z4AbstractBoundaryBehaviorFiller {
-
-   x1 = 0;
-
-   y1 = 0;
-
-   ctrlx1 = 0;
-
-   ctrly1 = 0;
-
-   ctrlx2 = 0;
-
-   ctrly2 = 0;
-
-   x2 = 0;
-
-   y2 = 0;
-
-   radius = 0;
-
-   bezier = null;
-
-  /**
-   * Creates the object
-   *
-   * @param gradientColor The color used to fill
-   * @param x1 The x-axis coordinate of the start point of the curve
-   * @param y1 The y-axis coordinate of the start point of the curve
-   * @param ctrlx1 The x-axis coordinate of the first control point of the curve
-   * @param ctrly1 The y-axis coordinate of the first control point of the curve
-   * @param ctrlx2 The x-axis coordinate of the second control point of the
-   * curve
-   * @param ctrly2 The y-axis coordinate of the second control point of the
-   * curve
-   * @param x2 The x-axis coordinate of the end point of the curve (the start
-   * point of the line)
-   * @param y2 The y-axis coordinate of the end point of the curve (the start
-   * point of the line)
-   * @param radius The radius
-   * @param boundaryBehavior The boundary behavior
-   */
-  constructor(gradientColor, x1, y1, ctrlx1, ctrly1, ctrlx2, ctrly2, x2, y2, radius, boundaryBehavior) {
-    super(gradientColor, boundaryBehavior);
-    this.x1 = x1;
-    this.y1 = y1;
-    this.ctrlx1 = ctrlx1;
-    this.ctrly1 = ctrly1;
-    this.ctrlx2 = ctrlx2;
-    this.ctrly2 = ctrly2;
-    this.x2 = x2;
-    this.y2 = y2;
-    this.radius = radius;
-    this.bezier = new Bezier(this.x1, this.y1, this.ctrlx1, this.ctrly1, this.ctrlx2, this.ctrly2, this.x2, this.y2);
-  }
-
-   getColorPositionAtWithBoundaryBehavior(x, y, boundaryBehavior) {
-    let point = this.bezier.project(new Z4Point(x, y));
-    let d = Z4Math.distance(point.x, point.y, x, y) / this.radius;
-    if (d <= 1) {
-      return d;
-    } else if (boundaryBehavior === Z4BezierFiller.STOP_AT_BOUNDARY) {
-      return -1;
-    } else if (boundaryBehavior === Z4BezierFiller.FILL_AT_BOUNDARY) {
-      return 1;
-    } else if (boundaryBehavior === Z4BezierFiller.SYMMETRIC_AT_BOUNDARY) {
-      let step = Math.floor(d);
-      d -= step;
-      if ((step % 2)) {
-        d = 1 - d;
-      }
-      return d;
-    } else if (boundaryBehavior === Z4BezierFiller.REPEAT_AT_BOUNDARY) {
-      return d - Math.floor(d);
-    } else {
-      return -1;
-    }
-  }
-}
-/**
- * A (multi) elliptic filler
- *
- * @author gianpiero.diblasi
- */
-class Z4EllipticFiller extends Z4AbstractBoundaryBehaviorFiller {
-
-   cx = 0;
-
-   cy = 0;
-
-   rx = 0;
-
-   ry = 0;
-
-   angle = 0.0;
-
-  /**
-   * Creates the object
-   *
-   * @param gradientColor The color used to fill
-   * @param cx The x-axis coordinate of the center point
-   * @param cy The y-axis coordinate of the center point
-   * @param rx The x-radius
-   * @param ry The y-radius
-   * @param angle The rotation angle of the ellipse (in radians)
-   * @param boundaryBehavior The boundary behavior
-   */
-  constructor(gradientColor, cx, cy, rx, ry, angle, boundaryBehavior) {
-    super(gradientColor, boundaryBehavior);
-    this.cx = cx;
-    this.cy = cy;
-    this.rx = rx;
-    this.ry = ry;
-    this.angle = angle;
-  }
-
-   getColorPositionAtWithBoundaryBehavior(x, y, boundaryBehavior) {
-    let rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
-    let d = Math.hypot(rotated.x / this.rx, rotated.y / this.ry);
-    if (d <= 1) {
-      return d;
-    } else if (boundaryBehavior === Z4EllipticFiller.STOP_AT_BOUNDARY) {
-      return -1;
-    } else if (boundaryBehavior === Z4EllipticFiller.FILL_AT_BOUNDARY) {
-      return 1;
-    } else if (boundaryBehavior === Z4EllipticFiller.SYMMETRIC_AT_BOUNDARY) {
-      let step = Math.floor(d);
-      d -= step;
-      if ((step % 2)) {
-        d = 1 - d;
-      }
-      return d;
-    } else if (boundaryBehavior === Z4EllipticFiller.REPEAT_AT_BOUNDARY) {
-      return d - Math.floor(d);
-    } else {
-      return -1;
-    }
-  }
-}
-/**
  * A (multi) linear filler
  *
  * @author gianpiero.diblasi
@@ -723,73 +785,6 @@ class Z4LinearFiller extends Z4AbstractBoundaryBehaviorFiller {
         position = 1 - position;
       }
       return position;
-    } else {
-      return -1;
-    }
-  }
-}
-/**
- * A (multi) sinusoidal filler
- *
- * @author gianpiero.diblasi
- */
-class Z4SinusoidalFiller extends Z4AbstractBoundaryBehaviorFiller {
-
-   x = 0;
-
-   y = 0;
-
-   waveLength = 0.0;
-
-   period = 0.0;
-
-   amplitude = 0.0;
-
-   angle = 0.0;
-
-   two_PI_over_period = 0.0;
-
-  /**
-   * Creates the object
-   *
-   * @param gradientColor The color used to fill
-   * @param x The x-axis coordinate of the start point of the sinusoid
-   * @param y The y-axis coordinate of the start point of the sinusoid
-   * @param waveLength The wave lenght of the sinusoid
-   * @param period The period of the sinusoid
-   * @param amplitude The amplitude of the sinusoid
-   * @param angle The rotation angle of the sinusoid
-   * @param boundaryBehavior The boundary behavior
-   */
-  constructor(gradientColor, x, y, waveLength, period, amplitude, angle, boundaryBehavior) {
-    super(gradientColor, boundaryBehavior);
-    this.x = x;
-    this.y = y;
-    this.waveLength = waveLength;
-    this.period = period;
-    this.amplitude = amplitude;
-    this.angle = angle;
-    this.two_PI_over_period = Z4Math.TWO_PI / this.period;
-  }
-
-   getColorPositionAtWithBoundaryBehavior(x, y, boundaryBehavior) {
-    let rotated = Z4Math.rotate(x - this.x, y - this.y, this.angle);
-    let d = Math.abs(rotated.y - this.amplitude * Math.sin(rotated.x * this.two_PI_over_period)) / this.waveLength;
-    if (d <= 1) {
-      return d;
-    } else if (boundaryBehavior === Z4SinusoidalFiller.STOP_AT_BOUNDARY) {
-      return -1;
-    } else if (boundaryBehavior === Z4SinusoidalFiller.FILL_AT_BOUNDARY) {
-      return 1;
-    } else if (boundaryBehavior === Z4SinusoidalFiller.SYMMETRIC_AT_BOUNDARY) {
-      let step = Math.floor(d);
-      d -= step;
-      if ((step % 2)) {
-        d = 1 - d;
-      }
-      return d;
-    } else if (boundaryBehavior === Z4SinusoidalFiller.REPEAT_AT_BOUNDARY) {
-      return d - Math.floor(d);
     } else {
       return -1;
     }
