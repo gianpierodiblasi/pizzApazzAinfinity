@@ -88,8 +88,8 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
         let offsetX = points[0].x - x;
         let offsetY = points[0].y - y;
         points[0] = new Point(x, y);
-        points[1] = new Point(points[1].x - offsetX, points[1].y - offsetY);
-        points[2] = new Point(points[2].x - offsetX, points[2].y - offsetY);
+        points[1] = new Point(Math.max(0, Math.min(points[1].x - offsetX, width)), Math.max(0, Math.min(points[1].y - offsetY, height)));
+        points[2] = new Point(Math.max(0, Math.min(points[2].x - offsetX, width)), Math.max(0, Math.min(points[2].y - offsetY, height)));
         break;
       case 1:
         let ry = Z4Math.distance(points[0].x, points[0].y, points[2].x, points[2].y);
@@ -110,6 +110,25 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
     }
   }
 
+   pushPointPositions(points, width, height) {
+    points.push(new Point(width / 2, height / 2));
+    points.push(new Point(width, height / 2));
+    points.push(new Point(width / 2, 0));
+  }
+
+   needsRescale(option) {
+    switch(option) {
+      case Z4AbstractBoundaryBehaviorFiller.STOP_AT_BOUNDARY:
+      case Z4AbstractBoundaryBehaviorFiller.FILL_AT_BOUNDARY:
+        return false;
+      case Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY:
+      case Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY:
+        return this.vertexCounter.getValue() !== 7;
+      default:
+        return true;
+    }
+  }
+
    getFiller(gradientColor, points, option) {
     let rx = Z4Math.distance(points[0].x, points[0].y, points[1].x, points[1].y);
     let ry = Z4Math.distance(points[0].x, points[0].y, points[2].x, points[2].y);
@@ -122,12 +141,6 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
     } else {
       return new Z4PolygonFiller(gradientColor, points[0].x, points[0].y, rx, ry, angle, vertex + 3, option);
     }
-  }
-
-   pushPointPositions(points, width, height) {
-    points.push(new Point(width / 2, height / 2));
-    points.push(new Point(width, height / 2));
-    points.push(new Point(width / 2, 0));
   }
 
    drawObjects(ctx, mappedPoints) {

@@ -26,6 +26,7 @@ import pizzapazza.filler.Z4AbstractFiller;
 import pizzapazza.math.Z4Math;
 import pizzapazza.util.Z4Constants;
 import simulation.dom.$CanvasRenderingContext2D;
+import simulation.dom.$OffscreenCanvas;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
 
@@ -38,6 +39,9 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
 
   private final JSComponent preview = new JSComponent(document.createElement("canvas"));
   private final $CanvasRenderingContext2D ctx = this.preview.invoke("getContext('2d')");
+
+  private $OffscreenCanvas offscreenCanvas = new $OffscreenCanvas(Z4AbstractFillerPanel.SIZE / Z4AbstractFillerPanel.RESCALE, Z4AbstractFillerPanel.SIZE / Z4AbstractFillerPanel.RESCALE);
+  private $CanvasRenderingContext2D offscreenCtx = this.offscreenCanvas.getContext("2d");
 
   private final JSPanel panelOptions = new JSPanel();
 
@@ -62,6 +66,7 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
 
   private static final int SIZE = 180;
   private static final int SELECTOR_RADIUS = 7;
+  private static final int RESCALE = 3;
 
   /**
    * Creates the object
@@ -189,18 +194,6 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
     this.drawPreview(adjusting);
   }
 
-  /**
-   * Sets the position of a point
-   *
-   * @param points The points
-   * @param selectedIndex The selected index of the point
-   * @param x The x-axis coordinate of the point
-   * @param y The y-axis coordinate of the point
-   * @param width The preview width
-   * @param height The preview height
-   */
-  protected abstract void setPointPosition(Array<Point> points, int selectedIndex, int x, int y, int width, int height);
-
   private void onMouse(MouseEvent event, String type) {
     int w = parseInt(this.preview.getProperty("width"));
     int h = parseInt(this.preview.getProperty("height"));
@@ -239,23 +232,16 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
   }
 
   /**
-   * Returns the filler
-   *
-   * @param gradientColor The color used to fill
-   * @param points The points
-   * @param option The selected option
-   * @return The filler
-   */
-  protected abstract Z4AbstractFiller getFiller(Z4GradientColor gradientColor, Array<Point> points, Object option);
-
-  /**
-   * Pushes the point positions
+   * Sets the position of a point
    *
    * @param points The points
+   * @param selectedIndex The selected index of the point
+   * @param x The x-axis coordinate of the point
+   * @param y The y-axis coordinate of the point
    * @param width The preview width
    * @param height The preview height
    */
-  protected abstract void pushPointPositions(Array<Point> points, int width, int height);
+  protected abstract void setPointPosition(Array<Point> points, int selectedIndex, int x, int y, int width, int height);
 
   /**
    * Sets the preview size
@@ -279,8 +265,21 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
     double ratio = width / height;
     this.preview.setProperty("width", "" + parseInt(ratio > 1 ? Z4AbstractFillerPanel.SIZE : Z4AbstractFillerPanel.SIZE * ratio));
     this.preview.setProperty("height", "" + parseInt(ratio > 1 ? Z4AbstractFillerPanel.SIZE / ratio : Z4AbstractFillerPanel.SIZE));
+
+    this.offscreenCanvas = new $OffscreenCanvas(parseInt(this.preview.getProperty("width")) / Z4AbstractFillerPanel.RESCALE, parseInt(this.preview.getProperty("height")) / Z4AbstractFillerPanel.RESCALE);
+    this.offscreenCtx = this.offscreenCanvas.getContext("2d");
+
     this.drawPreview(false);
   }
+
+  /**
+   * Pushes the point positions
+   *
+   * @param points The points
+   * @param width The preview width
+   * @param height The preview height
+   */
+  protected abstract void pushPointPositions(Array<Point> points, int width, int height);
 
   private void setXY() {
     this.xSlider.setValue(this.points.$get(this.selectedIndex).x);
@@ -301,9 +300,17 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
     this.ctx.clearRect(0, 0, w, h);
 
     Array<Point> map = this.points.map(point -> new Point(w * point.x / this.width, h * point.y / this.height));
-    ImageData imageData = this.ctx.createImageData(w, h);
-    this.getFiller(this.color, map, this.selectedOption).fill(imageData);
-    this.ctx.putImageData(imageData, 0, 0);
+    if (adjusting && this.needsRescale(this.selectedOption)) {
+      ImageData imageData = this.offscreenCtx.createImageData(w / Z4AbstractFillerPanel.RESCALE, h / Z4AbstractFillerPanel.RESCALE);
+      this.getFiller(this.color, map.map(point -> new Point(point.x / Z4AbstractFillerPanel.RESCALE, point.y / Z4AbstractFillerPanel.RESCALE)), this.selectedOption).fill(imageData);
+      this.offscreenCtx.putImageData(imageData, 0, 0);
+
+      this.ctx.drawImage(this.offscreenCanvas, 0, 0, w, h);
+    } else {
+      ImageData imageData = this.ctx.createImageData(w, h);
+      this.getFiller(this.color, map, this.selectedOption).fill(imageData);
+      this.ctx.putImageData(imageData, 0, 0);
+    }
 
     this.ctx.save();
     map.forEach((point, index, array) -> this.drawCircle(point, index));
@@ -313,6 +320,23 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
     this.drawObjects(this.ctx, map);
     this.ctx.restore();
   }
+
+  /**
+   * Check if a rescale is needed during drawing
+   * @param option The selected option
+   * @return true if a rescale is needed during drawing, false otherwise
+   */
+  protected abstract boolean needsRescale(Object option);
+
+  /**
+   * Returns the filler
+   *
+   * @param gradientColor The color used to fill
+   * @param points The points
+   * @param option The selected option
+   * @return The filler
+   */
+  protected abstract Z4AbstractFiller getFiller(Z4GradientColor gradientColor, Array<Point> points, Object option);
 
   private void drawCircle(Point point, int index) {
     Array<Double> dash = new Array<>();

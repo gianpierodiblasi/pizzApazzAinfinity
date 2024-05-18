@@ -17,13 +17,17 @@ class Z4LinearFillerPanel extends Z4AbstractFillerPanel {
     points[selectedIndex] = new Point(x, y);
   }
 
-   getFiller(gradientColor, points, option) {
-    return new Z4LinearFiller(gradientColor, points[0].x, points[0].y, points[1].x, points[1].y, option);
-  }
-
    pushPointPositions(points, width, height) {
     points.push(new Point(0, height / 2));
     points.push(new Point(width, height / 2));
+  }
+
+   needsRescale(option) {
+    return false;
+  }
+
+   getFiller(gradientColor, points, option) {
+    return new Z4LinearFiller(gradientColor, points[0].x, points[0].y, points[1].x, points[1].y, option);
   }
 
    drawObjects(ctx, mappedPoints) {

@@ -30,7 +30,7 @@ public class Z4LinearFillerPanel extends Z4AbstractFillerPanel {
             new KeyValue<>(Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY, "./image/filler/linear_symmetric.png"),
             new KeyValue<>(Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY, "./image/filler/linear_repeat.png")
     ));
-    
+
     this.drawPreview(false);
   }
 
@@ -40,14 +40,19 @@ public class Z4LinearFillerPanel extends Z4AbstractFillerPanel {
   }
 
   @Override
-  protected Z4AbstractFiller getFiller(Z4GradientColor gradientColor, Array<Point> points, Object option) {
-    return new Z4LinearFiller(gradientColor, points.$get(0).x, points.$get(0).y, points.$get(1).x, points.$get(1).y, (int) option);
-  }
-
-  @Override
   protected void pushPointPositions(Array<Point> points, int width, int height) {
     points.push(new Point(0, height / 2));
     points.push(new Point(width, height / 2));
+  }
+
+  @Override
+  protected boolean needsRescale(Object option) {
+    return false;
+  }
+
+  @Override
+  protected Z4AbstractFiller getFiller(Z4GradientColor gradientColor, Array<Point> points, Object option) {
+    return new Z4LinearFiller(gradientColor, points.$get(0).x, points.$get(0).y, points.$get(1).x, points.$get(1).y, (int) option);
   }
 
   @Override

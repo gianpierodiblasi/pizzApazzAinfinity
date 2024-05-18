@@ -1916,6 +1916,10 @@ class Z4AbstractFillerPanel extends JSPanel {
 
    ctx = this.preview.invoke("getContext('2d')");
 
+   offscreenCanvas = new OffscreenCanvas(Z4AbstractFillerPanel.SIZE / Z4AbstractFillerPanel.RESCALE, Z4AbstractFillerPanel.SIZE / Z4AbstractFillerPanel.RESCALE);
+
+   offscreenCtx = this.offscreenCanvas.getContext("2d");
+
    panelOptions = new JSPanel();
 
    xSlider = new JSSlider();
@@ -1951,6 +1955,8 @@ class Z4AbstractFillerPanel extends JSPanel {
   static  SIZE = 180;
 
   static  SELECTOR_RADIUS = 7;
+
+  static  RESCALE = 3;
 
   /**
    * Creates the object
@@ -2061,19 +2067,6 @@ class Z4AbstractFillerPanel extends JSPanel {
     this.drawPreview(adjusting);
   }
 
-  /**
-   * Sets the position of a point
-   *
-   * @param points The points
-   * @param selectedIndex The selected index of the point
-   * @param x The x-axis coordinate of the point
-   * @param y The y-axis coordinate of the point
-   * @param width The preview width
-   * @param height The preview height
-   */
-   setPointPosition(points, selectedIndex, x, y, width, height) {
-  }
-
    onMouse(event, type) {
     let w = parseInt(this.preview.getProperty("width"));
     let h = parseInt(this.preview.getProperty("height"));
@@ -2111,24 +2104,16 @@ class Z4AbstractFillerPanel extends JSPanel {
   }
 
   /**
-   * Returns the filler
-   *
-   * @param gradientColor The color used to fill
-   * @param points The points
-   * @param option The selected option
-   * @return The filler
-   */
-   getFiller(gradientColor, points, option) {
-  }
-
-  /**
-   * Pushes the point positions
+   * Sets the position of a point
    *
    * @param points The points
+   * @param selectedIndex The selected index of the point
+   * @param x The x-axis coordinate of the point
+   * @param y The y-axis coordinate of the point
    * @param width The preview width
    * @param height The preview height
    */
-   pushPointPositions(points, width, height) {
+   setPointPosition(points, selectedIndex, x, y, width, height) {
   }
 
   /**
@@ -2150,7 +2135,19 @@ class Z4AbstractFillerPanel extends JSPanel {
     let ratio = width / height;
     this.preview.setProperty("width", "" + parseInt(ratio > 1 ? Z4AbstractFillerPanel.SIZE : Z4AbstractFillerPanel.SIZE * ratio));
     this.preview.setProperty("height", "" + parseInt(ratio > 1 ? Z4AbstractFillerPanel.SIZE / ratio : Z4AbstractFillerPanel.SIZE));
+    this.offscreenCanvas = new OffscreenCanvas(parseInt(this.preview.getProperty("width")) / Z4AbstractFillerPanel.RESCALE, parseInt(this.preview.getProperty("height")) / Z4AbstractFillerPanel.RESCALE);
+    this.offscreenCtx = this.offscreenCanvas.getContext("2d");
     this.drawPreview(false);
+  }
+
+  /**
+   * Pushes the point positions
+   *
+   * @param points The points
+   * @param width The preview width
+   * @param height The preview height
+   */
+   pushPointPositions(points, width, height) {
   }
 
    setXY() {
@@ -2170,15 +2167,41 @@ class Z4AbstractFillerPanel extends JSPanel {
     let h = parseInt(this.preview.getProperty("height"));
     this.ctx.clearRect(0, 0, w, h);
     let map = this.points.map(point => new Point(w * point.x / this.width, h * point.y / this.height));
-    let imageData = this.ctx.createImageData(w, h);
-    this.getFiller(this.color, map, this.selectedOption).fill(imageData);
-    this.ctx.putImageData(imageData, 0, 0);
+    if (adjusting && this.needsRescale(this.selectedOption)) {
+      let imageData = this.offscreenCtx.createImageData(w / Z4AbstractFillerPanel.RESCALE, h / Z4AbstractFillerPanel.RESCALE);
+      this.getFiller(this.color, map.map(point => new Point(point.x / Z4AbstractFillerPanel.RESCALE, point.y / Z4AbstractFillerPanel.RESCALE)), this.selectedOption).fill(imageData);
+      this.offscreenCtx.putImageData(imageData, 0, 0);
+      this.ctx.drawImage(this.offscreenCanvas, 0, 0, w, h);
+    } else {
+      let imageData = this.ctx.createImageData(w, h);
+      this.getFiller(this.color, map, this.selectedOption).fill(imageData);
+      this.ctx.putImageData(imageData, 0, 0);
+    }
     this.ctx.save();
     map.forEach((point, index, array) => this.drawCircle(point, index));
     this.ctx.restore();
     this.ctx.save();
     this.drawObjects(this.ctx, map);
     this.ctx.restore();
+  }
+
+  /**
+   * Check if a rescale is needed during drawing
+   * @param option The selected option
+   * @return true if a rescale is needed during drawing, false otherwise
+   */
+   needsRescale(option) {
+  }
+
+  /**
+   * Returns the filler
+   *
+   * @param gradientColor The color used to fill
+   * @param points The points
+   * @param option The selected option
+   * @return The filler
+   */
+   getFiller(gradientColor, points, option) {
   }
 
    drawCircle(point, index) {
@@ -2230,13 +2253,17 @@ class Z4LinearFillerPanel extends Z4AbstractFillerPanel {
     points[selectedIndex] = new Point(x, y);
   }
 
-   getFiller(gradientColor, points, option) {
-    return new Z4LinearFiller(gradientColor, points[0].x, points[0].y, points[1].x, points[1].y, option);
-  }
-
    pushPointPositions(points, width, height) {
     points.push(new Point(0, height / 2));
     points.push(new Point(width, height / 2));
+  }
+
+   needsRescale(option) {
+    return false;
+  }
+
+   getFiller(gradientColor, points, option) {
+    return new Z4LinearFiller(gradientColor, points[0].x, points[0].y, points[1].x, points[1].y, option);
   }
 
    drawObjects(ctx, mappedPoints) {
@@ -2350,8 +2377,8 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
         let offsetX = points[0].x - x;
         let offsetY = points[0].y - y;
         points[0] = new Point(x, y);
-        points[1] = new Point(points[1].x - offsetX, points[1].y - offsetY);
-        points[2] = new Point(points[2].x - offsetX, points[2].y - offsetY);
+        points[1] = new Point(Math.max(0, Math.min(points[1].x - offsetX, width)), Math.max(0, Math.min(points[1].y - offsetY, height)));
+        points[2] = new Point(Math.max(0, Math.min(points[2].x - offsetX, width)), Math.max(0, Math.min(points[2].y - offsetY, height)));
         break;
       case 1:
         let ry = Z4Math.distance(points[0].x, points[0].y, points[2].x, points[2].y);
@@ -2372,6 +2399,25 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
     }
   }
 
+   pushPointPositions(points, width, height) {
+    points.push(new Point(width / 2, height / 2));
+    points.push(new Point(width, height / 2));
+    points.push(new Point(width / 2, 0));
+  }
+
+   needsRescale(option) {
+    switch(option) {
+      case Z4AbstractBoundaryBehaviorFiller.STOP_AT_BOUNDARY:
+      case Z4AbstractBoundaryBehaviorFiller.FILL_AT_BOUNDARY:
+        return false;
+      case Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY:
+      case Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY:
+        return this.vertexCounter.getValue() !== 7;
+      default:
+        return true;
+    }
+  }
+
    getFiller(gradientColor, points, option) {
     let rx = Z4Math.distance(points[0].x, points[0].y, points[1].x, points[1].y);
     let ry = Z4Math.distance(points[0].x, points[0].y, points[2].x, points[2].y);
@@ -2384,12 +2430,6 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
     } else {
       return new Z4PolygonFiller(gradientColor, points[0].x, points[0].y, rx, ry, angle, vertex + 3, option);
     }
-  }
-
-   pushPointPositions(points, width, height) {
-    points.push(new Point(width / 2, height / 2));
-    points.push(new Point(width, height / 2));
-    points.push(new Point(width / 2, 0));
   }
 
    drawObjects(ctx, mappedPoints) {

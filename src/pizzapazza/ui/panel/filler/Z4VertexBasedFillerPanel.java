@@ -123,10 +123,10 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       case 0:
         int offsetX = points.$get(0).x - x;
         int offsetY = points.$get(0).y - y;
-        
+
         points.$set(0, new Point(x, y));
-        points.$set(1, new Point(points.$get(1).x - offsetX, points.$get(1).y - offsetY));
-        points.$set(2, new Point(points.$get(2).x - offsetX, points.$get(2).y - offsetY));
+        points.$set(1, new Point(Math.max(0, Math.min(points.$get(1).x - offsetX, width)), Math.max(0, Math.min(points.$get(1).y - offsetY, height))));
+        points.$set(2, new Point(Math.max(0, Math.min(points.$get(2).x - offsetX, width)), Math.max(0, Math.min(points.$get(2).y - offsetY, height))));
         break;
       case 1:
         int ry = (int) Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(2).x, points.$get(2).y);
@@ -152,6 +152,27 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
   }
 
   @Override
+  protected void pushPointPositions(Array<Point> points, int width, int height) {
+    points.push(new Point(width / 2, height / 2));
+    points.push(new Point(width, height / 2));
+    points.push(new Point(width / 2, 0));
+  }
+
+  @Override
+  protected boolean needsRescale(Object option) {
+    switch ((int) option) {
+      case Z4AbstractBoundaryBehaviorFiller.STOP_AT_BOUNDARY:
+      case Z4AbstractBoundaryBehaviorFiller.FILL_AT_BOUNDARY:
+        return false;
+      case Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY:
+      case Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY:
+        return this.vertexCounter.getValue() != 7;
+      default:
+        return true;
+    }
+  }
+
+  @Override
   protected Z4AbstractFiller getFiller(Z4GradientColor gradientColor, Array<Point> points, Object option) {
     int rx = (int) Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(1).x, points.$get(1).y);
     int ry = (int) Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(2).x, points.$get(2).y);
@@ -165,13 +186,6 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
     } else {
       return new Z4PolygonFiller(gradientColor, points.$get(0).x, points.$get(0).y, rx, ry, angle, vertex + 3, (int) option);
     }
-  }
-
-  @Override
-  protected void pushPointPositions(Array<Point> points, int width, int height) {
-    points.push(new Point(width / 2, height / 2));
-    points.push(new Point(width, height / 2));
-    points.push(new Point(width / 2, 0));
   }
 
   @Override

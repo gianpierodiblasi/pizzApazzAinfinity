@@ -28,6 +28,9 @@ public class $CanvasRenderingContext2D extends CanvasRenderingContext2D {
   public void drawImage($OffscreenCanvas canvas, double x, double y) {
   }
 
+  public void drawImage($OffscreenCanvas canvas, double x, double y, double w, double h) {
+  }
+  
   public void setLineDash(Array<Double> array) {
   }
   
