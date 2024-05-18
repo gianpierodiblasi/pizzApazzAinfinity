@@ -116,8 +116,39 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
   }
 
   @Override
-  protected void setPointPosition(Array<Point> points, int selectedIndex, int x, int y) {
-//    points.$set(selectedIndex, new Point(x, y));
+  protected void setPointPosition(Array<Point> points, int selectedIndex, int x, int y, int width, int height) {
+    double angle;
+
+    switch (selectedIndex) {
+      case 0:
+        int offsetX = points.$get(0).x - x;
+        int offsetY = points.$get(0).y - y;
+        
+        points.$set(0, new Point(x, y));
+        points.$set(1, new Point(points.$get(1).x - offsetX, points.$get(1).y - offsetY));
+        points.$set(2, new Point(points.$get(2).x - offsetX, points.$get(2).y - offsetY));
+        break;
+      case 1:
+        int ry = (int) Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(2).x, points.$get(2).y);
+        angle = Z4Math.atan(points.$get(0).x, points.$get(0).y, x, y) - Z4Math.HALF_PI;
+
+        int p2x = (int) Math.max(0, Math.min(Math.round(points.$get(0).x + ry * Math.cos(angle)), width));
+        int p2y = (int) Math.max(0, Math.min(Math.round(points.$get(0).y + ry * Math.sin(angle)), height));
+
+        points.$set(1, new Point(x, y));
+        points.$set(2, new Point(p2x, p2y));
+        break;
+      case 2:
+        int rx = (int) Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(1).x, points.$get(1).y);
+        angle = Z4Math.atan(points.$get(0).x, points.$get(0).y, x, y) + Z4Math.HALF_PI;
+
+        int p1x = (int) Math.max(0, Math.min(Math.round(points.$get(0).x + rx * Math.cos(angle)), width));
+        int p1y = (int) Math.max(0, Math.min(Math.round(points.$get(0).y + rx * Math.sin(angle)), height));
+
+        points.$set(1, new Point(p1x, p1y));
+        points.$set(2, new Point(x, y));
+        break;
+    }
   }
 
   @Override

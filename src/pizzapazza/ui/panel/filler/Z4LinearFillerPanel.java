@@ -35,7 +35,7 @@ public class Z4LinearFillerPanel extends Z4AbstractFillerPanel {
   }
 
   @Override
-  protected void setPointPosition(Array<Point> points, int selectedIndex, int x, int y) {
+  protected void setPointPosition(Array<Point> points, int selectedIndex, int x, int y, int width, int height) {
     points.$set(selectedIndex, new Point(x, y));
   }
 

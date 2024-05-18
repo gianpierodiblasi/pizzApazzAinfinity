@@ -13,7 +13,7 @@ class Z4LinearFillerPanel extends Z4AbstractFillerPanel {
     this.drawPreview();
   }
 
-   setPointPosition(points, selectedIndex, x, y) {
+   setPointPosition(points, selectedIndex, x, y, width, height) {
     points[selectedIndex] = new Point(x, y);
   }
 

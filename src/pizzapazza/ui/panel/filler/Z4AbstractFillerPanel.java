@@ -185,7 +185,7 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
       spinner.setValue(slider.getValue());
     }
 
-    this.setPointPosition(this.points, this.selectedIndex, isX ? slider.getValue() : this.points.$get(this.selectedIndex).x, !isX ? slider.getValue() : this.points.$get(this.selectedIndex).y);
+    this.setPointPosition(this.points, this.selectedIndex, isX ? slider.getValue() : this.points.$get(this.selectedIndex).x, !isX ? slider.getValue() : this.points.$get(this.selectedIndex).y, this.width, this.height);
     this.drawPreview();
   }
 
@@ -196,8 +196,10 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
    * @param selectedIndex The selected index of the point
    * @param x The x-axis coordinate of the point
    * @param y The y-axis coordinate of the point
+   * @param width The preview width
+   * @param height The preview height
    */
-  protected abstract void setPointPosition(Array<Point> points, int selectedIndex, int x, int y);
+  protected abstract void setPointPosition(Array<Point> points, int selectedIndex, int x, int y, int width, int height);
 
   private void onMouse(MouseEvent event, String type) {
     int w = parseInt(this.preview.getProperty("width"));
@@ -217,7 +219,7 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
         break;
       case "move":
         if (this.pressed) {
-          this.setPointPosition(this.points, this.selectedIndex, parseInt(this.width * event.offsetX / w), parseInt(this.height * event.offsetY / h));
+          this.setPointPosition(this.points, this.selectedIndex, parseInt(this.width * event.offsetX / w), parseInt(this.height * event.offsetY / h), this.width, this.height);
           this.setXY();
           this.drawPreview();
         } else {

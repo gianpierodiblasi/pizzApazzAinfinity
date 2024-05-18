@@ -150,7 +150,7 @@ class Z4AbstractFillerPanel extends JSPanel {
     } else {
       spinner.setValue(slider.getValue());
     }
-    this.setPointPosition(this.points, this.selectedIndex, isX ? slider.getValue() : this.points[this.selectedIndex].x, !isX ? slider.getValue() : this.points[this.selectedIndex].y);
+    this.setPointPosition(this.points, this.selectedIndex, isX ? slider.getValue() : this.points[this.selectedIndex].x, !isX ? slider.getValue() : this.points[this.selectedIndex].y, this.width, this.height);
     this.drawPreview();
   }
 
@@ -161,8 +161,10 @@ class Z4AbstractFillerPanel extends JSPanel {
    * @param selectedIndex The selected index of the point
    * @param x The x-axis coordinate of the point
    * @param y The y-axis coordinate of the point
+   * @param width The preview width
+   * @param height The preview height
    */
-   setPointPosition(points, selectedIndex, x, y) {
+   setPointPosition(points, selectedIndex, x, y, width, height) {
   }
 
    onMouse(event, type) {
@@ -182,7 +184,7 @@ class Z4AbstractFillerPanel extends JSPanel {
         break;
       case "move":
         if (this.pressed) {
-          this.setPointPosition(this.points, this.selectedIndex, parseInt(this.width * event.offsetX / w), parseInt(this.height * event.offsetY / h));
+          this.setPointPosition(this.points, this.selectedIndex, parseInt(this.width * event.offsetX / w), parseInt(this.height * event.offsetY / h), this.width, this.height);
           this.setXY();
           this.drawPreview();
         } else {

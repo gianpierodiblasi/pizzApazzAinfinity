@@ -2057,7 +2057,7 @@ class Z4AbstractFillerPanel extends JSPanel {
     } else {
       spinner.setValue(slider.getValue());
     }
-    this.setPointPosition(this.points, this.selectedIndex, isX ? slider.getValue() : this.points[this.selectedIndex].x, !isX ? slider.getValue() : this.points[this.selectedIndex].y);
+    this.setPointPosition(this.points, this.selectedIndex, isX ? slider.getValue() : this.points[this.selectedIndex].x, !isX ? slider.getValue() : this.points[this.selectedIndex].y, this.width, this.height);
     this.drawPreview();
   }
 
@@ -2068,8 +2068,10 @@ class Z4AbstractFillerPanel extends JSPanel {
    * @param selectedIndex The selected index of the point
    * @param x The x-axis coordinate of the point
    * @param y The y-axis coordinate of the point
+   * @param width The preview width
+   * @param height The preview height
    */
-   setPointPosition(points, selectedIndex, x, y) {
+   setPointPosition(points, selectedIndex, x, y, width, height) {
   }
 
    onMouse(event, type) {
@@ -2089,7 +2091,7 @@ class Z4AbstractFillerPanel extends JSPanel {
         break;
       case "move":
         if (this.pressed) {
-          this.setPointPosition(this.points, this.selectedIndex, parseInt(this.width * event.offsetX / w), parseInt(this.height * event.offsetY / h));
+          this.setPointPosition(this.points, this.selectedIndex, parseInt(this.width * event.offsetX / w), parseInt(this.height * event.offsetY / h), this.width, this.height);
           this.setXY();
           this.drawPreview();
         } else {
@@ -2221,7 +2223,7 @@ class Z4LinearFillerPanel extends Z4AbstractFillerPanel {
     this.drawPreview();
   }
 
-   setPointPosition(points, selectedIndex, x, y) {
+   setPointPosition(points, selectedIndex, x, y, width, height) {
     points[selectedIndex] = new Point(x, y);
   }
 
@@ -2338,8 +2340,33 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
     }
   }
 
-   setPointPosition(points, selectedIndex, x, y) {
-    // points.$set(selectedIndex, new Point(x, y));
+   setPointPosition(points, selectedIndex, x, y, width, height) {
+    let angle = 0.0;
+    switch(selectedIndex) {
+      case 0:
+        let offsetX = points[0].x - x;
+        let offsetY = points[0].y - y;
+        points[0] = new Point(x, y);
+        points[1] = new Point(points[1].x - offsetX, points[1].y - offsetY);
+        points[2] = new Point(points[2].x - offsetX, points[2].y - offsetY);
+        break;
+      case 1:
+        let ry = Z4Math.distance(points[0].x, points[0].y, points[2].x, points[2].y);
+        angle = Z4Math.atan(points[0].x, points[0].y, x, y) - Z4Math.HALF_PI;
+        let p2x = Math.max(0, Math.min(Math.round(points[0].x + ry * Math.cos(angle)), width));
+        let p2y = Math.max(0, Math.min(Math.round(points[0].y + ry * Math.sin(angle)), height));
+        points[1] = new Point(x, y);
+        points[2] = new Point(p2x, p2y);
+        break;
+      case 2:
+        let rx = Z4Math.distance(points[0].x, points[0].y, points[1].x, points[1].y);
+        angle = Z4Math.atan(points[0].x, points[0].y, x, y) + Z4Math.HALF_PI;
+        let p1x = Math.max(0, Math.min(Math.round(points[0].x + rx * Math.cos(angle)), width));
+        let p1y = Math.max(0, Math.min(Math.round(points[0].y + rx * Math.sin(angle)), height));
+        points[1] = new Point(p1x, p1y);
+        points[2] = new Point(x, y);
+        break;
+    }
   }
 
    getFiller(gradientColor, points, option) {
