@@ -61,6 +61,7 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
   private boolean pressed = false;
 
   private static final int SIZE = 180;
+  private static final int SELECTOR_RADIUS = 7;
 
   /**
    * Creates the object
@@ -121,6 +122,8 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
         radio.setToggle();
         radio.setSelected(index == 0);
         radio.setIcon(new DefaultHTMLImageProducer<>(option.key, option.value));
+        radio.setChildAttributeByQuery("img", "width", "50");
+        radio.setChildAttributeByQuery("img", "height", "50");
         radio.addActionListener(event -> {
           this.selectedOption = option.key;
           this.drawPreview();
@@ -146,8 +149,6 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
 
     this.pushPointPositions(this.points, this.width, this.height);
     this.setXY();
-
-    this.drawPreview();
   }
 
   private void addLabel(String text, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
@@ -184,10 +185,19 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
       spinner.setValue(slider.getValue());
     }
 
-    Point p = this.points.$get(this.selectedIndex);
-    this.points.$set(this.selectedIndex, new Point(isX ? slider.getValue() : p.x, !isX ? slider.getValue() : p.y));
+    this.setPointPosition(this.points, this.selectedIndex, isX ? slider.getValue() : this.points.$get(this.selectedIndex).x, !isX ? slider.getValue() : this.points.$get(this.selectedIndex).y);
     this.drawPreview();
   }
+
+  /**
+   * Sets the position of a point
+   *
+   * @param points The points
+   * @param selectedIndex The selected index of the point
+   * @param x The x-axis coordinate of the point
+   * @param y The y-axis coordinate of the point
+   */
+  protected abstract void setPointPosition(Array<Point> points, int selectedIndex, int x, int y);
 
   private void onMouse(MouseEvent event, String type) {
     int w = parseInt(this.preview.getProperty("width"));
@@ -196,7 +206,7 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
     switch (type) {
       case "down":
         this.points.map(point -> new Point(w * point.x / this.width, h * point.y / this.height)).forEach((point, index, array) -> {
-          if (Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) < 5) {
+          if (Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) <= Z4AbstractFillerPanel.SELECTOR_RADIUS) {
             this.pressed = true;
             this.selectedIndex = index;
             this.radios.$get(this.selectedIndex).setSelected(true);
@@ -207,13 +217,13 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
         break;
       case "move":
         if (this.pressed) {
-          this.points.$set(this.selectedIndex, new Point(parseInt(this.width * event.offsetX / w), parseInt(this.height * event.offsetY / h)));
+          this.setPointPosition(this.points, this.selectedIndex, parseInt(this.width * event.offsetX / w), parseInt(this.height * event.offsetY / h));
           this.setXY();
           this.drawPreview();
         } else {
           this.preview.getStyle().cursor = "default";
           this.points.map(point -> new Point(w * point.x / this.width, h * point.y / this.height)).forEach((point, index, array) -> {
-            if (Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) < 5) {
+            if (Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) <= Z4AbstractFillerPanel.SELECTOR_RADIUS) {
               this.preview.getStyle().cursor = "pointer";
             }
           });
@@ -276,7 +286,10 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
     this.ySpinner.setValue(this.points.$get(this.selectedIndex).y);
   }
 
-  private void drawPreview() {
+  /**
+   * Draws the preview
+   */
+  protected void drawPreview() {
     int w = parseInt(this.preview.getProperty("width"));
     int h = parseInt(this.preview.getProperty("height"));
 
@@ -300,7 +313,7 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
     Array<Double> dash = new Array<>();
 
     this.ctx.beginPath();
-    this.ctx.arc(point.x, point.y, 5, 0, 2 * Math.PI);
+    this.ctx.arc(point.x, point.y, Z4AbstractFillerPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
     this.ctx.closePath();
     this.ctx.strokeStyle = this.$getStrokeStyle(index == this.selectedIndex ? "red" : "black");
     this.ctx.setLineDash(dash);
@@ -309,7 +322,7 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
     dash.push(2.5, 2.5);
 
     this.ctx.beginPath();
-    this.ctx.arc(point.x, point.y, 5, 0, 2 * Math.PI);
+    this.ctx.arc(point.x, point.y, Z4AbstractFillerPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
     this.ctx.closePath();
     this.ctx.strokeStyle = this.$getStrokeStyle("white");
     this.ctx.setLineDash(dash);

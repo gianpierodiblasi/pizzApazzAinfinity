@@ -30,6 +30,13 @@ public class Z4LinearFillerPanel extends Z4AbstractFillerPanel {
             new KeyValue<>(Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY, "./image/filler/linear_symmetric.png"),
             new KeyValue<>(Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY, "./image/filler/linear_repeat.png")
     ));
+    
+    this.drawPreview();
+  }
+
+  @Override
+  protected void setPointPosition(Array<Point> points, int selectedIndex, int x, int y) {
+    points.$set(selectedIndex, new Point(x, y));
   }
 
   @Override

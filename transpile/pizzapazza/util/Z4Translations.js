@@ -90,6 +90,10 @@ class Z4Translations {
 
   static  ADVANCED = "";
 
+  static  STAR = "";
+
+  static  VERTICES = "";
+
   // Composite Operation
   static  COMPOSITE_OPERATION = "";
 
@@ -206,6 +210,8 @@ class Z4Translations {
     Z4Translations.OFFSET_Y = "Offset Y";
     Z4Translations.BASIC = "Basic";
     Z4Translations.ADVANCED = "Advanced";
+    Z4Translations.STAR = "Star";
+    Z4Translations.VERTICES = "Vertices";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "This is the default setting and draws the layer on top of the existing content";
@@ -284,6 +290,8 @@ class Z4Translations {
     Z4Translations.OFFSET_Y = "Offset Y";
     Z4Translations.BASIC = "Base";
     Z4Translations.ADVANCED = "Avanzato";
+    Z4Translations.STAR = "Stella";
+    Z4Translations.VERTICES = "Vertici";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "Questa \u00E8 l'impostazione predefinita e disegna il livello sopra il contenuto esistente";

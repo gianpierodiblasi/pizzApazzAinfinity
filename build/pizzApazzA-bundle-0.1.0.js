@@ -1950,6 +1950,8 @@ class Z4AbstractFillerPanel extends JSPanel {
 
   static  SIZE = 180;
 
+  static  SELECTOR_RADIUS = 7;
+
   /**
    * Creates the object
    *
@@ -1999,6 +2001,8 @@ class Z4AbstractFillerPanel extends JSPanel {
         radio.setToggle();
         radio.setSelected(index === 0);
         radio.setIcon(new DefaultHTMLImageProducer(option.key, option.value));
+        radio.setChildAttributeByQuery("img", "width", "50");
+        radio.setChildAttributeByQuery("img", "height", "50");
         radio.addActionListener(event => {
           this.selectedOption = option.key;
           this.drawPreview();
@@ -2019,7 +2023,6 @@ class Z4AbstractFillerPanel extends JSPanel {
     }
     this.pushPointPositions(this.points, this.width, this.height);
     this.setXY();
-    this.drawPreview();
   }
 
    addLabel(text, gridx, gridy, gridwidth, gridheight, anchor, fill) {
@@ -2054,9 +2057,19 @@ class Z4AbstractFillerPanel extends JSPanel {
     } else {
       spinner.setValue(slider.getValue());
     }
-    let p = this.points[this.selectedIndex];
-    this.points[this.selectedIndex] = new Point(isX ? slider.getValue() : p.x, !isX ? slider.getValue() : p.y);
+    this.setPointPosition(this.points, this.selectedIndex, isX ? slider.getValue() : this.points[this.selectedIndex].x, !isX ? slider.getValue() : this.points[this.selectedIndex].y);
     this.drawPreview();
+  }
+
+  /**
+   * Sets the position of a point
+   *
+   * @param points The points
+   * @param selectedIndex The selected index of the point
+   * @param x The x-axis coordinate of the point
+   * @param y The y-axis coordinate of the point
+   */
+   setPointPosition(points, selectedIndex, x, y) {
   }
 
    onMouse(event, type) {
@@ -2065,7 +2078,7 @@ class Z4AbstractFillerPanel extends JSPanel {
     switch(type) {
       case "down":
         this.points.map(point => new Point(w * point.x / this.width, h * point.y / this.height)).forEach((point, index, array) => {
-          if (Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) < 5) {
+          if (Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) <= Z4AbstractFillerPanel.SELECTOR_RADIUS) {
             this.pressed = true;
             this.selectedIndex = index;
             this.radios[this.selectedIndex].setSelected(true);
@@ -2076,13 +2089,13 @@ class Z4AbstractFillerPanel extends JSPanel {
         break;
       case "move":
         if (this.pressed) {
-          this.points[this.selectedIndex] = new Point(parseInt(this.width * event.offsetX / w), parseInt(this.height * event.offsetY / h));
+          this.setPointPosition(this.points, this.selectedIndex, parseInt(this.width * event.offsetX / w), parseInt(this.height * event.offsetY / h));
           this.setXY();
           this.drawPreview();
         } else {
           this.preview.getStyle().cursor = "default";
           this.points.map(point => new Point(w * point.x / this.width, h * point.y / this.height)).forEach((point, index, array) => {
-            if (Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) < 5) {
+            if (Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) <= Z4AbstractFillerPanel.SELECTOR_RADIUS) {
               this.preview.getStyle().cursor = "pointer";
             }
           });
@@ -2144,6 +2157,9 @@ class Z4AbstractFillerPanel extends JSPanel {
     this.ySpinner.setValue(this.points[this.selectedIndex].y);
   }
 
+  /**
+   * Draws the preview
+   */
    drawPreview() {
     let w = parseInt(this.preview.getProperty("width"));
     let h = parseInt(this.preview.getProperty("height"));
@@ -2163,14 +2179,14 @@ class Z4AbstractFillerPanel extends JSPanel {
    drawCircle(point, index) {
     let dash = new Array();
     this.ctx.beginPath();
-    this.ctx.arc(point.x, point.y, 5, 0, 2 * Math.PI);
+    this.ctx.arc(point.x, point.y, Z4AbstractFillerPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
     this.ctx.closePath();
     this.ctx.strokeStyle = this.getStrokeStyle(index === this.selectedIndex ? "red" : "black");
     this.ctx.setLineDash(dash);
     this.ctx.stroke();
     dash.push(2.5, 2.5);
     this.ctx.beginPath();
-    this.ctx.arc(point.x, point.y, 5, 0, 2 * Math.PI);
+    this.ctx.arc(point.x, point.y, Z4AbstractFillerPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
     this.ctx.closePath();
     this.ctx.strokeStyle = this.getStrokeStyle("white");
     this.ctx.setLineDash(dash);
@@ -2202,6 +2218,11 @@ class Z4LinearFillerPanel extends Z4AbstractFillerPanel {
    */
   constructor() {
     super(2, new Array(new KeyValue(Z4AbstractBoundaryBehaviorFiller.STOP_AT_BOUNDARY, "./image/filler/linear_stop.png"), new KeyValue(Z4AbstractBoundaryBehaviorFiller.FILL_AT_BOUNDARY, "./image/filler/linear_fill.png"), new KeyValue(Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY, "./image/filler/linear_symmetric.png"), new KeyValue(Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY, "./image/filler/linear_repeat.png")));
+    this.drawPreview();
+  }
+
+   setPointPosition(points, selectedIndex, x, y) {
+    points[selectedIndex] = new Point(x, y);
   }
 
    getFiller(gradientColor, points, option) {
@@ -2225,6 +2246,138 @@ class Z4LinearFillerPanel extends Z4AbstractFillerPanel {
     ctx.beginPath();
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
     ctx.lineTo(mappedPoints[1].x, mappedPoints[1].y);
+    ctx.strokeStyle = this.getStrokeStyle("white");
+    ctx.setLineDash(dash);
+    ctx.stroke();
+  }
+
+   getStrokeStyle(style) {
+    return style;
+  }
+}
+/**
+ * The panel to manage a (multi) (infinite-)vertex filler
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
+
+   star = new JSCheckBox();
+
+   vertexCounter = new JSSlider();
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super(3, new Array(new KeyValue(Z4AbstractBoundaryBehaviorFiller.STOP_AT_BOUNDARY, "image/filler/elliptic_stop.png"), new KeyValue(Z4AbstractBoundaryBehaviorFiller.FILL_AT_BOUNDARY, "image/filler/elliptic_fill.png"), new KeyValue(Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY, "image/filler/elliptic_symmetric.png"), new KeyValue(Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY, "image/filler/elliptic_repeat.png")));
+    let label = new JSLabel();
+    label.setText(Z4Translations.VERTICES);
+    let constraints = new GridBagConstraints();
+    constraints.gridx = 0;
+    constraints.gridy = 6;
+    constraints.gridwidth = 1;
+    constraints.gridheight = 1;
+    constraints.anchor = GridBagConstraints.WEST;
+    constraints.fill = GridBagConstraints.NONE;
+    this.add(label, constraints);
+    this.star.setText(Z4Translations.STAR);
+    this.star.setEnabled(false);
+    this.star.addActionListener(event => {
+      this.setIcons();
+      this.drawPreview();
+    });
+    constraints = new GridBagConstraints();
+    constraints.gridx = 1;
+    constraints.gridy = 6;
+    constraints.gridwidth = 2;
+    constraints.gridheight = 1;
+    constraints.anchor = GridBagConstraints.EAST;
+    constraints.fill = GridBagConstraints.NONE;
+    this.add(this.star, constraints);
+    let vertexModelAndRenderer = new DefaultSliderModelAndRenderer();
+    for (let vertex = 3; vertex < 10; vertex++) {
+      vertexModelAndRenderer.addElement("" + vertex);
+    }
+    vertexModelAndRenderer.addElement("\u221E");
+    this.vertexCounter.setModelAndRenderer(vertexModelAndRenderer);
+    this.vertexCounter.setValue(7);
+    this.vertexCounter.addChangeListener(event => {
+      this.star.setEnabled(this.vertexCounter.getValue() !== 7);
+      this.setIcons();
+      this.drawPreview();
+    });
+    constraints = new GridBagConstraints();
+    constraints.gridx = 0;
+    constraints.gridy = 7;
+    constraints.gridwidth = 3;
+    constraints.gridheight = 1;
+    constraints.anchor = GridBagConstraints.WEST;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    this.add(this.vertexCounter, constraints);
+    this.getChilStyleByQuery("*:nth-child(12) datalist option:nth-child(8)").fontSize = "larger";
+    this.drawPreview();
+  }
+
+   setIcons() {
+    if (this.vertexCounter.getValue() === 7) {
+      this.setChildAttributeByQuery("div label:nth-child(1) img", "src", "image/filler/elliptic_stop.png");
+      this.setChildAttributeByQuery("div label:nth-child(2) img", "src", "image/filler/elliptic_fill.png");
+      this.setChildAttributeByQuery("div label:nth-child(3) img", "src", "image/filler/elliptic_symmetric.png");
+      this.setChildAttributeByQuery("div label:nth-child(4) img", "src", "image/filler/elliptic_repeat.png");
+    } else if (this.star.isSelected()) {
+      this.setChildAttributeByQuery("div label:nth-child(1) img", "src", "image/filler/star_stop.png");
+      this.setChildAttributeByQuery("div label:nth-child(2) img", "src", "image/filler/star_fill.png");
+      this.setChildAttributeByQuery("div label:nth-child(3) img", "src", "image/filler/star_symmetric.png");
+      this.setChildAttributeByQuery("div label:nth-child(4) img", "src", "image/filler/star_repeat.png");
+    } else {
+      this.setChildAttributeByQuery("div label:nth-child(1) img", "src", "image/filler/polygon_stop.png");
+      this.setChildAttributeByQuery("div label:nth-child(2) img", "src", "image/filler/polygon_fill.png");
+      this.setChildAttributeByQuery("div label:nth-child(3) img", "src", "image/filler/polygon_symmetric.png");
+      this.setChildAttributeByQuery("div label:nth-child(4) img", "src", "image/filler/polygon_repeat.png");
+    }
+  }
+
+   setPointPosition(points, selectedIndex, x, y) {
+    // points.$set(selectedIndex, new Point(x, y));
+  }
+
+   getFiller(gradientColor, points, option) {
+    let rx = Z4Math.distance(points[0].x, points[0].y, points[1].x, points[1].y);
+    let ry = Z4Math.distance(points[0].x, points[0].y, points[2].x, points[2].y);
+    let angle = Z4Math.atan(points[0].x, points[0].y, points[1].x, points[1].y);
+    let vertex = this.vertexCounter.getValue();
+    if (vertex === 7) {
+      return new Z4EllipticFiller(gradientColor, points[0].x, points[0].y, rx, ry, angle, option);
+    } else if (this.star.isSelected()) {
+      return new Z4StarFiller(gradientColor, points[0].x, points[0].y, rx, ry, angle, vertex + 3, option);
+    } else {
+      return new Z4PolygonFiller(gradientColor, points[0].x, points[0].y, rx, ry, angle, vertex + 3, option);
+    }
+  }
+
+   pushPointPositions(points, width, height) {
+    points.push(new Point(width / 2, height / 2));
+    points.push(new Point(width, height / 2));
+    points.push(new Point(width / 2, 0));
+  }
+
+   drawObjects(ctx, mappedPoints) {
+    let dash = new Array();
+    ctx.beginPath();
+    ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
+    ctx.lineTo(mappedPoints[1].x, mappedPoints[1].y);
+    ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
+    ctx.lineTo(mappedPoints[2].x, mappedPoints[2].y);
+    ctx.strokeStyle = this.getStrokeStyle("black");
+    ctx.setLineDash(dash);
+    ctx.stroke();
+    dash.push(2.5, 2.5);
+    ctx.beginPath();
+    ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
+    ctx.lineTo(mappedPoints[1].x, mappedPoints[1].y);
+    ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
+    ctx.lineTo(mappedPoints[2].x, mappedPoints[2].y);
     ctx.strokeStyle = this.getStrokeStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();
@@ -3278,6 +3431,10 @@ class Z4Translations {
 
   static  ADVANCED = "";
 
+  static  STAR = "";
+
+  static  VERTICES = "";
+
   // Composite Operation
   static  COMPOSITE_OPERATION = "";
 
@@ -3394,6 +3551,8 @@ class Z4Translations {
     Z4Translations.OFFSET_Y = "Offset Y";
     Z4Translations.BASIC = "Basic";
     Z4Translations.ADVANCED = "Advanced";
+    Z4Translations.STAR = "Star";
+    Z4Translations.VERTICES = "Vertices";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "This is the default setting and draws the layer on top of the existing content";
@@ -3472,6 +3631,8 @@ class Z4Translations {
     Z4Translations.OFFSET_Y = "Offset Y";
     Z4Translations.BASIC = "Base";
     Z4Translations.ADVANCED = "Avanzato";
+    Z4Translations.STAR = "Stella";
+    Z4Translations.VERTICES = "Vertici";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "Questa \u00E8 l'impostazione predefinita e disegna il livello sopra il contenuto esistente";

@@ -43,6 +43,8 @@ class Z4AbstractFillerPanel extends JSPanel {
 
   static  SIZE = 180;
 
+  static  SELECTOR_RADIUS = 7;
+
   /**
    * Creates the object
    *
@@ -92,6 +94,8 @@ class Z4AbstractFillerPanel extends JSPanel {
         radio.setToggle();
         radio.setSelected(index === 0);
         radio.setIcon(new DefaultHTMLImageProducer(option.key, option.value));
+        radio.setChildAttributeByQuery("img", "width", "50");
+        radio.setChildAttributeByQuery("img", "height", "50");
         radio.addActionListener(event => {
           this.selectedOption = option.key;
           this.drawPreview();
@@ -112,7 +116,6 @@ class Z4AbstractFillerPanel extends JSPanel {
     }
     this.pushPointPositions(this.points, this.width, this.height);
     this.setXY();
-    this.drawPreview();
   }
 
    addLabel(text, gridx, gridy, gridwidth, gridheight, anchor, fill) {
@@ -147,9 +150,19 @@ class Z4AbstractFillerPanel extends JSPanel {
     } else {
       spinner.setValue(slider.getValue());
     }
-    let p = this.points[this.selectedIndex];
-    this.points[this.selectedIndex] = new Point(isX ? slider.getValue() : p.x, !isX ? slider.getValue() : p.y);
+    this.setPointPosition(this.points, this.selectedIndex, isX ? slider.getValue() : this.points[this.selectedIndex].x, !isX ? slider.getValue() : this.points[this.selectedIndex].y);
     this.drawPreview();
+  }
+
+  /**
+   * Sets the position of a point
+   *
+   * @param points The points
+   * @param selectedIndex The selected index of the point
+   * @param x The x-axis coordinate of the point
+   * @param y The y-axis coordinate of the point
+   */
+   setPointPosition(points, selectedIndex, x, y) {
   }
 
    onMouse(event, type) {
@@ -158,7 +171,7 @@ class Z4AbstractFillerPanel extends JSPanel {
     switch(type) {
       case "down":
         this.points.map(point => new Point(w * point.x / this.width, h * point.y / this.height)).forEach((point, index, array) => {
-          if (Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) < 5) {
+          if (Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) <= Z4AbstractFillerPanel.SELECTOR_RADIUS) {
             this.pressed = true;
             this.selectedIndex = index;
             this.radios[this.selectedIndex].setSelected(true);
@@ -169,13 +182,13 @@ class Z4AbstractFillerPanel extends JSPanel {
         break;
       case "move":
         if (this.pressed) {
-          this.points[this.selectedIndex] = new Point(parseInt(this.width * event.offsetX / w), parseInt(this.height * event.offsetY / h));
+          this.setPointPosition(this.points, this.selectedIndex, parseInt(this.width * event.offsetX / w), parseInt(this.height * event.offsetY / h));
           this.setXY();
           this.drawPreview();
         } else {
           this.preview.getStyle().cursor = "default";
           this.points.map(point => new Point(w * point.x / this.width, h * point.y / this.height)).forEach((point, index, array) => {
-            if (Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) < 5) {
+            if (Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) <= Z4AbstractFillerPanel.SELECTOR_RADIUS) {
               this.preview.getStyle().cursor = "pointer";
             }
           });
@@ -237,6 +250,9 @@ class Z4AbstractFillerPanel extends JSPanel {
     this.ySpinner.setValue(this.points[this.selectedIndex].y);
   }
 
+  /**
+   * Draws the preview
+   */
    drawPreview() {
     let w = parseInt(this.preview.getProperty("width"));
     let h = parseInt(this.preview.getProperty("height"));
@@ -256,14 +272,14 @@ class Z4AbstractFillerPanel extends JSPanel {
    drawCircle(point, index) {
     let dash = new Array();
     this.ctx.beginPath();
-    this.ctx.arc(point.x, point.y, 5, 0, 2 * Math.PI);
+    this.ctx.arc(point.x, point.y, Z4AbstractFillerPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
     this.ctx.closePath();
     this.ctx.strokeStyle = this.getStrokeStyle(index === this.selectedIndex ? "red" : "black");
     this.ctx.setLineDash(dash);
     this.ctx.stroke();
     dash.push(2.5, 2.5);
     this.ctx.beginPath();
-    this.ctx.arc(point.x, point.y, 5, 0, 2 * Math.PI);
+    this.ctx.arc(point.x, point.y, Z4AbstractFillerPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
     this.ctx.closePath();
     this.ctx.strokeStyle = this.getStrokeStyle("white");
     this.ctx.setLineDash(dash);
