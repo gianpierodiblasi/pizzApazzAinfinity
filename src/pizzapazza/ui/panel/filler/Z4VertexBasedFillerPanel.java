@@ -58,7 +58,7 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
     this.star.setEnabled(false);
     this.star.addActionListener(event -> {
       this.setIcons();
-      this.drawPreview();
+      this.drawPreview(false);
     });
 
     constraints = new GridBagConstraints();
@@ -80,7 +80,7 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
     this.vertexCounter.addChangeListener(event -> {
       this.star.setEnabled(this.vertexCounter.getValue() != 7);
       this.setIcons();
-      this.drawPreview();
+      this.drawPreview(false);
     });
 
     constraints = new GridBagConstraints();
@@ -93,7 +93,7 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
     this.add(this.vertexCounter, constraints);
     this.getChilStyleByQuery("*:nth-child(12) datalist option:nth-child(8)").fontSize = "larger";
 
-    this.drawPreview();
+    this.drawPreview(false);
   }
 
   private void setIcons() {

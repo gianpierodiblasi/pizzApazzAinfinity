@@ -98,7 +98,7 @@ class Z4AbstractFillerPanel extends JSPanel {
         radio.setChildAttributeByQuery("img", "height", "50");
         radio.addActionListener(event => {
           this.selectedOption = option.key;
-          this.drawPreview();
+          this.drawPreview(false);
         });
         this.buttonGroupOptions.add(radio);
         this.panelOptions.add(radio, null);
@@ -141,7 +141,7 @@ class Z4AbstractFillerPanel extends JSPanel {
    onRadio(index) {
     this.selectedIndex = index;
     this.setXY();
-    this.drawPreview();
+    this.drawPreview(false);
   }
 
    onChange(spTosl, adjusting, spinner, slider, isX) {
@@ -151,7 +151,7 @@ class Z4AbstractFillerPanel extends JSPanel {
       spinner.setValue(slider.getValue());
     }
     this.setPointPosition(this.points, this.selectedIndex, isX ? slider.getValue() : this.points[this.selectedIndex].x, !isX ? slider.getValue() : this.points[this.selectedIndex].y, this.width, this.height);
-    this.drawPreview();
+    this.drawPreview(adjusting);
   }
 
   /**
@@ -178,7 +178,7 @@ class Z4AbstractFillerPanel extends JSPanel {
             this.selectedIndex = index;
             this.radios[this.selectedIndex].setSelected(true);
             this.setXY();
-            this.drawPreview();
+            this.drawPreview(false);
           }
         });
         break;
@@ -186,7 +186,7 @@ class Z4AbstractFillerPanel extends JSPanel {
         if (this.pressed) {
           this.setPointPosition(this.points, this.selectedIndex, parseInt(this.width * event.offsetX / w), parseInt(this.height * event.offsetY / h), this.width, this.height);
           this.setXY();
-          this.drawPreview();
+          this.drawPreview(true);
         } else {
           this.preview.getStyle().cursor = "default";
           this.points.map(point => new Point(w * point.x / this.width, h * point.y / this.height)).forEach((point, index, array) => {
@@ -198,6 +198,7 @@ class Z4AbstractFillerPanel extends JSPanel {
         break;
       case "up":
         this.pressed = false;
+        this.drawPreview(false);
         break;
     }
   }
@@ -242,7 +243,7 @@ class Z4AbstractFillerPanel extends JSPanel {
     let ratio = width / height;
     this.preview.setProperty("width", "" + parseInt(ratio > 1 ? Z4AbstractFillerPanel.SIZE : Z4AbstractFillerPanel.SIZE * ratio));
     this.preview.setProperty("height", "" + parseInt(ratio > 1 ? Z4AbstractFillerPanel.SIZE / ratio : Z4AbstractFillerPanel.SIZE));
-    this.drawPreview();
+    this.drawPreview(false);
   }
 
    setXY() {
@@ -254,8 +255,10 @@ class Z4AbstractFillerPanel extends JSPanel {
 
   /**
    * Draws the preview
+   *
+   * @param adjusting true if the value is adjusting, false otherwise
    */
-   drawPreview() {
+   drawPreview(adjusting) {
     let w = parseInt(this.preview.getProperty("width"));
     let h = parseInt(this.preview.getProperty("height"));
     this.ctx.clearRect(0, 0, w, h);

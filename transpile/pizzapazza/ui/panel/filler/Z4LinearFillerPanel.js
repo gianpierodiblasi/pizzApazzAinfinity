@@ -10,7 +10,7 @@ class Z4LinearFillerPanel extends Z4AbstractFillerPanel {
    */
   constructor() {
     super(2, new Array(new KeyValue(Z4AbstractBoundaryBehaviorFiller.STOP_AT_BOUNDARY, "./image/filler/linear_stop.png"), new KeyValue(Z4AbstractBoundaryBehaviorFiller.FILL_AT_BOUNDARY, "./image/filler/linear_fill.png"), new KeyValue(Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY, "./image/filler/linear_symmetric.png"), new KeyValue(Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY, "./image/filler/linear_repeat.png")));
-    this.drawPreview();
+    this.drawPreview(false);
   }
 
    setPointPosition(points, selectedIndex, x, y, width, height) {

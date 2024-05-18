@@ -31,7 +31,7 @@ public class Z4LinearFillerPanel extends Z4AbstractFillerPanel {
             new KeyValue<>(Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY, "./image/filler/linear_repeat.png")
     ));
     
-    this.drawPreview();
+    this.drawPreview(false);
   }
 
   @Override
