@@ -41,6 +41,23 @@
   background-image: url(../image/chessboard.png);
 }
 
+.z4abstractfillerpanel .yspinner {
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  min-width: 0rem;
+  grid-template:
+    "num down" 1fr
+    "num up" 1fr /
+    1fr auto
+}
+.z4abstractfillerpanel .yspinner:has(input:focus), .z4abstractfillerpanel .yspinner:hover:not([disabled]) {
+    box-shadow: -.15rem -.15rem .15rem var(--main-action-bgcolor);
+}
+.z4abstractfillerpanel .yspinner input[type=number] {
+  min-width: 2.2rem;
+  width: 2.2rem;
+}
+
 .z4abstractfillerpanel.z4linearfillerpanel div label:nth-child(1) img {
   content: url(../image/filler/linear_stop.png);
 }

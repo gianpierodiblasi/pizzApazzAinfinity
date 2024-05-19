@@ -91,14 +91,10 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
     this.getChilStyleByQuery("label").writingMode = "vertical-lr";
     this.getChilStyleByQuery("label").transform = "rotate(180deg)";
 
+    this.ySpinner.cssAddClass("yspinner");
     this.ySpinner.setModel(new SpinnerNumberModel(0, 0, this.height, 1));
-    this.ySpinner.getStyle().writingMode = "vertical-lr";
-    this.ySpinner.getStyle().transform = "rotate(180deg)";
-    this.ySpinner.getStyle().minWidth = "0rem";
-    this.ySpinner.getChilStyleByQuery("input[type=number]").minWidth = "2.2rem";
-    this.ySpinner.getChilStyleByQuery("input[type=number]").width = "2.2rem";
-//    this.ySpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25C0");
-//    this.ySpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25B6");
+    this.ySpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
+    this.ySpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
 
     this.ySpinner.addChangeListener(event -> this.onChange(true, this.ySpinner.getValueIsAdjusting(), this.ySpinner, this.ySlider, false));
     this.addComponent(this.ySpinner, 2, 1, 1, 1, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, null);
@@ -111,7 +107,7 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
     this.addComponent(this.ySlider, 3, 1, 1, 2, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
 
     this.addHLine(0, 3, 4, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL);
-    
+
     this.addLabel("x", 0, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
 
     this.xSpinner.setModel(new SpinnerNumberModel(0, 0, this.width, 1));
