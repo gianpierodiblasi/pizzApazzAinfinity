@@ -152,7 +152,7 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
 
   private Z4Point getPoint(double cx, double cy, double x, double y, double radius, double angle, int width, int height) {
     while ((x < 0 || x > width || y < 0 || y > height) && radius > 0) {
-      radius = Math.max(0, radius - 0.1);
+      radius = Math.max(0, radius - 0.05);
       x = cx + radius * Math.cos(angle);
       y = cy + radius * Math.sin(angle);
     }
