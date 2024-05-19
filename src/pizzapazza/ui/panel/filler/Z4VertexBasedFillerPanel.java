@@ -43,7 +43,7 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
             Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY
     ));
 
-    this.addLabel(Z4Translations.VERTICES, 0, 6, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    this.addLabel(Z4Translations.VERTICES, 0, 7, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
 
     this.star.setText(Z4Translations.STAR);
     this.star.setEnabled(false);
@@ -52,7 +52,7 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       this.drawPreview(false);
     });
 
-    this.addComponent(this.star, 1, 6, 2, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    this.addComponent(this.star, 1, 7, 2, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
 
     DefaultSliderModelAndRenderer<String> vertexModelAndRenderer = new DefaultSliderModelAndRenderer<>();
     for (int vertex = 3; vertex < 10; vertex++) {
@@ -67,8 +67,8 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       this.drawPreview(false);
     });
 
-    this.addComponent(this.vertexCounter, 0, 7, 3, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
-    this.getChilStyleByQuery("*:nth-child(12) datalist option:nth-child(8)").fontSize = "larger";
+    this.addComponent(this.vertexCounter, 0, 8, 3, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    this.getChilStyleByQuery("*:nth-child(13) datalist option:nth-child(8)").fontSize = "larger";
 
     this.regular.setText(Z4Translations.REGULAR);
     this.regular.addActionListener(event -> {
@@ -76,7 +76,7 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       this.drawPreview(false);
     });
 
-    this.appendChildInTree("*:nth-child(9)", this.regular);
+    this.appendChildInTree("*:nth-child(10)", this.regular);
 
     this.cssAddClass("z4ellipticfillerpanel");
     this.drawPreview(false);

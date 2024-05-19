@@ -1968,38 +1968,45 @@ class Z4AbstractFillerPanel extends JSPanel {
     super();
     this.cssAddClass("z4abstractfillerpanel");
     this.setLayout(new GridBagLayout());
-    this.addComponent(this.panelOptions, 0, 0, 3, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    this.addComponent(this.panelOptions, 0, 0, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
     this.preview.setProperty("width", "" + Z4AbstractFillerPanel.SIZE);
     this.preview.setProperty("height", "" + Z4AbstractFillerPanel.SIZE);
     this.preview.addEventListener("mousedown", event => this.onMouse(event, "down"));
     this.preview.addEventListener("mousemove", event => this.onMouse(event, "move"));
     this.preview.addEventListener("mouseup", event => this.onMouse(event, "up"));
-    this.addComponent(this.preview, 0, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
-    this.addLabel("y", 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+    this.addComponent(this.preview, 0, 1, 2, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    this.addLabel("y", 2, 2, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE);
+    this.getChilStyleByQuery("label").writingMode = "vertical-lr";
+    this.getChilStyleByQuery("label").transform = "rotate(180deg)";
     this.ySpinner.setModel(new SpinnerNumberModel(0, 0, this.height, 1));
-    this.ySpinner.getStyle().minWidth = "4rem";
-    this.ySpinner.getChilStyleByQuery("input[type=number]").minWidth = "3.5rem";
-    this.ySpinner.getChilStyleByQuery("input[type=number]").width = "3.5rem";
+    this.ySpinner.getStyle().writingMode = "vertical-lr";
+    this.ySpinner.getStyle().transform = "rotate(180deg)";
+    this.ySpinner.getStyle().minWidth = "0rem";
+    this.ySpinner.getChilStyleByQuery("input[type=number]").minWidth = "2.2rem";
+    this.ySpinner.getChilStyleByQuery("input[type=number]").width = "2.2rem";
+    // this.ySpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25C0");
+    // this.ySpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25B6");
     this.ySpinner.addChangeListener(event => this.onChange(true, this.ySpinner.getValueIsAdjusting(), this.ySpinner, this.ySlider, false));
-    this.addComponent(this.ySpinner, 2, 1, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    this.addComponent(this.ySpinner, 2, 1, 1, 1, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, null);
     this.ySlider.setMaximum(this.height);
     this.ySlider.setOrientation(JSSlider.VERTICAL);
     this.ySlider.setInverted(true);
     this.ySlider.getStyle().minHeight = "20rem";
     this.ySlider.addChangeListener(event => this.onChange(false, this.ySlider.getValueIsAdjusting(), this.ySpinner, this.ySlider, false));
-    this.addComponent(this.ySlider, 1, 2, 1, 1, GridBagConstraints.NORTH, GridBagConstraints.NONE, null);
-    this.addLabel("x", 0, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    this.addComponent(this.ySlider, 3, 1, 1, 2, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    this.addHLine(0, 3, 4, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL);
+    this.addLabel("x", 0, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
     this.xSpinner.setModel(new SpinnerNumberModel(0, 0, this.width, 1));
     this.xSpinner.getStyle().minWidth = "4rem";
     this.xSpinner.getChilStyleByQuery("input[type=number]").minWidth = "3.5rem";
     this.xSpinner.getChilStyleByQuery("input[type=number]").width = "3.5rem";
     this.xSpinner.addChangeListener(event => this.onChange(true, this.xSpinner.getValueIsAdjusting(), this.xSpinner, this.xSlider, true));
-    this.addComponent(this.xSpinner, 2, 3, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    this.addComponent(this.xSpinner, 1, 4, 3, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
     this.xSlider.setMaximum(this.width);
     this.xSlider.getStyle().minWidth = "20rem";
     this.xSlider.addChangeListener(event => this.onChange(false, this.xSlider.getValueIsAdjusting(), this.xSpinner, this.xSlider, true));
-    this.addComponent(this.xSlider, 0, 4, 3, 1, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
-    this.addComponent(this.panelRadios, 0, 5, 3, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    this.addComponent(this.xSlider, 0, 5, 4, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
+    this.addComponent(this.panelRadios, 0, 6, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
     if (options) {
       options.forEach((option, index, array) => {
         let radio = new JSRadioButton();
@@ -2046,7 +2053,7 @@ class Z4AbstractFillerPanel extends JSPanel {
    addLabel(text, gridx, gridy, gridwidth, gridheight, anchor, fill) {
     let label = new JSLabel();
     label.setText(text);
-    this.addComponent(label, gridx, gridy, gridwidth, gridheight, anchor, fill, null);
+    this.addComponent(label, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, null);
   }
 
   /**
@@ -2057,22 +2064,33 @@ class Z4AbstractFillerPanel extends JSPanel {
    * @param gridy The grid y
    * @param gridwidth The grid width
    * @param gridheight The grid height
+   * @param weightx The weight x
+   * @param weighty The weight y
    * @param anchor The anchor
    * @param fill The fill
    * @param insets The insets
    */
-   addComponent(component, gridx, gridy, gridwidth, gridheight, anchor, fill, insets) {
+   addComponent(component, gridx, gridy, gridwidth, gridheight, weightx, weighty, anchor, fill, insets) {
     let constraints = new GridBagConstraints();
     constraints.gridx = gridx;
     constraints.gridy = gridy;
     constraints.gridwidth = gridwidth;
     constraints.gridheight = gridheight;
+    constraints.weightx = weightx;
+    constraints.weighty = weighty;
     constraints.anchor = anchor;
     constraints.fill = fill;
     if (insets) {
       constraints.insets = insets;
     }
     this.add(component, constraints);
+  }
+
+   addHLine(gridx, gridy, gridwidth, gridheight, anchor, fill) {
+    let div = new JSComponent(document.createElement("div"));
+    div.getStyle().height = "1px";
+    div.getStyle().background = "var(--main-action-bgcolor";
+    this.addComponent(div, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, new Insets(2, 1, 2, 1));
   }
 
    onRadio(index) {
@@ -2369,14 +2387,14 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
    */
   constructor() {
     super(3, new Array(Z4AbstractBoundaryBehaviorFiller.STOP_AT_BOUNDARY, Z4AbstractBoundaryBehaviorFiller.FILL_AT_BOUNDARY, Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY, Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY));
-    this.addLabel(Z4Translations.VERTICES, 0, 6, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    this.addLabel(Z4Translations.VERTICES, 0, 7, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
     this.star.setText(Z4Translations.STAR);
     this.star.setEnabled(false);
     this.star.addActionListener(event => {
       this.setIcons();
       this.drawPreview(false);
     });
-    this.addComponent(this.star, 1, 6, 2, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    this.addComponent(this.star, 1, 7, 2, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
     let vertexModelAndRenderer = new DefaultSliderModelAndRenderer();
     for (let vertex = 3; vertex < 10; vertex++) {
       vertexModelAndRenderer.addElement("" + vertex);
@@ -2389,14 +2407,14 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       this.setIcons();
       this.drawPreview(false);
     });
-    this.addComponent(this.vertexCounter, 0, 7, 3, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
-    this.getChilStyleByQuery("*:nth-child(12) datalist option:nth-child(8)").fontSize = "larger";
+    this.addComponent(this.vertexCounter, 0, 8, 3, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    this.getChilStyleByQuery("*:nth-child(13) datalist option:nth-child(8)").fontSize = "larger";
     this.regular.setText(Z4Translations.REGULAR);
     this.regular.addActionListener(event => {
       this.setPointsEnabled();
       this.drawPreview(false);
     });
-    this.appendChildInTree("*:nth-child(9)", this.regular);
+    this.appendChildInTree("*:nth-child(10)", this.regular);
     this.cssAddClass("z4ellipticfillerpanel");
     this.drawPreview(false);
   }

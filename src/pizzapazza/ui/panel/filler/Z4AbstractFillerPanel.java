@@ -78,46 +78,55 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
     this.cssAddClass("z4abstractfillerpanel");
     this.setLayout(new GridBagLayout());
 
-    this.addComponent(this.panelOptions, 0, 0, 3, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    this.addComponent(this.panelOptions, 0, 0, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
 
     this.preview.setProperty("width", "" + Z4AbstractFillerPanel.SIZE);
     this.preview.setProperty("height", "" + Z4AbstractFillerPanel.SIZE);
     this.preview.addEventListener("mousedown", event -> this.onMouse((MouseEvent) event, "down"));
     this.preview.addEventListener("mousemove", event -> this.onMouse((MouseEvent) event, "move"));
     this.preview.addEventListener("mouseup", event -> this.onMouse((MouseEvent) event, "up"));
-    this.addComponent(this.preview, 0, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    this.addComponent(this.preview, 0, 1, 2, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
 
-    this.addLabel("y", 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+    this.addLabel("y", 2, 2, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE);
+    this.getChilStyleByQuery("label").writingMode = "vertical-lr";
+    this.getChilStyleByQuery("label").transform = "rotate(180deg)";
 
     this.ySpinner.setModel(new SpinnerNumberModel(0, 0, this.height, 1));
-    this.ySpinner.getStyle().minWidth = "4rem";
-    this.ySpinner.getChilStyleByQuery("input[type=number]").minWidth = "3.5rem";
-    this.ySpinner.getChilStyleByQuery("input[type=number]").width = "3.5rem";
+    this.ySpinner.getStyle().writingMode = "vertical-lr";
+    this.ySpinner.getStyle().transform = "rotate(180deg)";
+    this.ySpinner.getStyle().minWidth = "0rem";
+    this.ySpinner.getChilStyleByQuery("input[type=number]").minWidth = "2.2rem";
+    this.ySpinner.getChilStyleByQuery("input[type=number]").width = "2.2rem";
+//    this.ySpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25C0");
+//    this.ySpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25B6");
+
     this.ySpinner.addChangeListener(event -> this.onChange(true, this.ySpinner.getValueIsAdjusting(), this.ySpinner, this.ySlider, false));
-    this.addComponent(this.ySpinner, 2, 1, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    this.addComponent(this.ySpinner, 2, 1, 1, 1, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, null);
 
     this.ySlider.setMaximum(this.height);
     this.ySlider.setOrientation(JSSlider.VERTICAL);
     this.ySlider.setInverted(true);
     this.ySlider.getStyle().minHeight = "20rem";
     this.ySlider.addChangeListener(event -> this.onChange(false, this.ySlider.getValueIsAdjusting(), this.ySpinner, this.ySlider, false));
-    this.addComponent(this.ySlider, 1, 2, 1, 1, GridBagConstraints.NORTH, GridBagConstraints.NONE, null);
+    this.addComponent(this.ySlider, 3, 1, 1, 2, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
 
-    this.addLabel("x", 0, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    this.addHLine(0, 3, 4, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL);
+    
+    this.addLabel("x", 0, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
 
     this.xSpinner.setModel(new SpinnerNumberModel(0, 0, this.width, 1));
     this.xSpinner.getStyle().minWidth = "4rem";
     this.xSpinner.getChilStyleByQuery("input[type=number]").minWidth = "3.5rem";
     this.xSpinner.getChilStyleByQuery("input[type=number]").width = "3.5rem";
     this.xSpinner.addChangeListener(event -> this.onChange(true, this.xSpinner.getValueIsAdjusting(), this.xSpinner, this.xSlider, true));
-    this.addComponent(this.xSpinner, 2, 3, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    this.addComponent(this.xSpinner, 1, 4, 3, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
 
     this.xSlider.setMaximum(this.width);
     this.xSlider.getStyle().minWidth = "20rem";
     this.xSlider.addChangeListener(event -> this.onChange(false, this.xSlider.getValueIsAdjusting(), this.xSpinner, this.xSlider, true));
-    this.addComponent(this.xSlider, 0, 4, 3, 1, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
+    this.addComponent(this.xSlider, 0, 5, 4, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
 
-    this.addComponent(this.panelRadios, 0, 5, 3, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    this.addComponent(this.panelRadios, 0, 6, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
 
     if ($exists(options)) {
       options.forEach((option, index, array) -> {
@@ -170,7 +179,7 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
   protected void addLabel(String text, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
     JSLabel label = new JSLabel();
     label.setText(text);
-    this.addComponent(label, gridx, gridy, gridwidth, gridheight, anchor, fill, null);
+    this.addComponent(label, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, null);
   }
 
   /**
@@ -181,23 +190,33 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
    * @param gridy The grid y
    * @param gridwidth The grid width
    * @param gridheight The grid height
+   * @param weightx The weight x
+   * @param weighty The weight y
    * @param anchor The anchor
    * @param fill The fill
    * @param insets The insets
    */
-  protected void addComponent(JSComponent component, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill, Insets insets) {
+  protected void addComponent(JSComponent component, int gridx, int gridy, int gridwidth, int gridheight, int weightx, int weighty, int anchor, int fill, Insets insets) {
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = gridx;
     constraints.gridy = gridy;
     constraints.gridwidth = gridwidth;
     constraints.gridheight = gridheight;
-
+    constraints.weightx = weightx;
+    constraints.weighty = weighty;
     constraints.anchor = anchor;
     constraints.fill = fill;
     if ($exists(insets)) {
       constraints.insets = insets;
     }
     this.add(component, constraints);
+  }
+
+  private void addHLine(int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
+    JSComponent div = new JSComponent(document.createElement("div"));
+    div.getStyle().height = "1px";
+    div.getStyle().background = "var(--main-action-bgcolor";
+    this.addComponent(div, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, new Insets(2, 1, 2, 1));
   }
 
   private void onRadio(int index) {
