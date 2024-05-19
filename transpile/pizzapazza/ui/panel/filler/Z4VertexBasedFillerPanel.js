@@ -64,66 +64,68 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
   }
 
    setPointPosition(points, selectedIndex, x, y, width, height) {
-    let angle = 0.0;
-    let p1x = 0.0;
-    let p1y = 0.0;
-    let p2x = 0.0;
-    let p2y = 0.0;
+    let angle1 = 0.0;
+    let radius1 = 0.0;
+    let point1 = null;
+    let angle2 = 0.0;
+    let radius2 = 0.0;
+    let point2 = null;
     switch(selectedIndex) {
       case 0:
         let offsetX = points[0].x - x;
         let offsetY = points[0].y - y;
-        p1x = points[1].x - offsetX;
-        p1y = points[1].y - offsetY;
-        p2x = points[2].x - offsetX;
-        p2y = points[2].y - offsetY;
+        radius1 = Z4Math.distance(points[0].x, points[0].y, points[1].x, points[1].y);
+        angle1 = Z4Math.atan(points[0].x, points[0].y, points[1].x, points[1].y);
+        radius2 = Z4Math.distance(points[0].x, points[0].y, points[2].x, points[2].y);
+        angle2 = Z4Math.atan(points[0].x, points[0].y, points[2].x, points[2].y);
         points[0] = new Point(x, y);
-        points[1] = new Point(Math.round(p1x), Math.round(p1y));
-        points[2] = new Point(Math.round(p2x), Math.round(p2y));
+        point1 = this.getPoint(points[0].x, points[0].y, points[1].x - offsetX, points[1].y - offsetY, radius1, angle1, width, height);
+        points[1] = new Point(Math.round(point1.x), Math.round(point1.y));
+        point2 = this.getPoint(points[0].x, points[0].y, points[2].x - offsetX, points[2].y - offsetY, radius2, angle2, width, height);
+        points[2] = new Point(Math.round(point2.x), Math.round(point2.y));
         break;
       case 1:
-        let ry = Z4Math.distance(points[0].x, points[0].y, points[2].x, points[2].y);
-        angle = Z4Math.atan(points[0].x, points[0].y, x, y) - Z4Math.HALF_PI;
-        p2x = points[0].x + ry * Math.cos(angle);
-        p2y = points[0].y + ry * Math.sin(angle);
-        while (p2x < 0 || p2x > width || p2y < 0 || p2y > height) {
-          ry = Math.max(0, ry - 0.5);
-          p2x = points[0].x + ry * Math.cos(angle);
-          p2y = points[0].y + ry * Math.sin(angle);
-        }
+        radius2 = Z4Math.distance(points[0].x, points[0].y, points[2].x, points[2].y);
+        angle2 = Z4Math.atan(points[0].x, points[0].y, x, y) - Z4Math.HALF_PI;
+        point2 = this.getPoint(points[0].x, points[0].y, points[0].x + radius2 * Math.cos(angle2), points[0].y + radius2 * Math.sin(angle2), radius2, angle2, width, height);
         points[1] = new Point(x, y);
-        points[2] = new Point(Math.round(p2x), Math.round(p2y));
+        points[2] = new Point(Math.round(point2.x), Math.round(point2.y));
         break;
       case 2:
-        let rx = Z4Math.distance(points[0].x, points[0].y, points[1].x, points[1].y);
-        angle = Z4Math.atan(points[0].x, points[0].y, x, y) + Z4Math.HALF_PI;
-        p1x = points[0].x + rx * Math.cos(angle);
-        p1y = points[0].y + rx * Math.sin(angle);
-        while (p1x < 0 || p1x > width || p1y < 0 || p1y > height) {
-          rx = Math.max(0, rx - 0.5);
-          p1x = points[0].x + rx * Math.cos(angle);
-          p1y = points[0].y + rx * Math.sin(angle);
-        }
-        points[1] = new Point(Math.round(p1x), Math.round(p1y));
+        radius1 = Z4Math.distance(points[0].x, points[0].y, points[1].x, points[1].y);
+        angle1 = Z4Math.atan(points[0].x, points[0].y, x, y) + Z4Math.HALF_PI;
+        point1 = this.getPoint(points[0].x, points[0].y, points[0].x + radius1 * Math.cos(angle1), points[0].y + radius1 * Math.sin(angle1), radius1, angle1, width, height);
+        points[1] = new Point(Math.round(point1.x), Math.round(point1.y));
         points[2] = new Point(x, y);
         break;
     }
-    if (this.regular.isSelected()) {
-      let rx = Z4Math.distance(points[0].x, points[0].y, points[1].x, points[1].y);
-      let ry = Z4Math.distance(points[0].x, points[0].y, points[2].x, points[2].y);
-      if (rx !== ry) {
-        switch(selectedIndex) {
-          case 0:
-          case 1:
-            angle = Z4Math.atan(points[0].x, points[0].y, x, y) - Z4Math.HALF_PI;
-            let p2x = Math.max(0, Math.min(Math.round(points[0].x + ry * Math.cos(angle)), width));
-            let p2y = Math.max(0, Math.min(Math.round(points[0].y + ry * Math.sin(angle)), height));
-            break;
-          case 2:
-            break;
-        }
-      }
+    // 
+    // if (this.regular.isSelected()) {
+    // int rx = (int) Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(1).x, points.$get(1).y);
+    // int ry = (int) Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(2).x, points.$get(2).y);
+    // 
+    // if (rx != ry) {
+    // switch (selectedIndex) {
+    // case 0:
+    // case 1:
+    // angle = Z4Math.atan(points.$get(0).x, points.$get(0).y, x, y) - Z4Math.HALF_PI;
+    // int p2x = (int) Math.max(0, Math.min(Math.round(points.$get(0).x + ry * Math.cos(angle)), width));
+    // int p2y = (int) Math.max(0, Math.min(Math.round(points.$get(0).y + ry * Math.sin(angle)), height));
+    // break;
+    // case 2:
+    // break;
+    // }
+    // }
+    // }
+  }
+
+   getPoint(cx, cy, x, y, radius, angle, width, height) {
+    while (x < 0 || x > width || y < 0 || y > height) {
+      radius = Math.max(0, radius - 0.5);
+      x = cx + radius * Math.cos(angle);
+      y = cy + radius * Math.sin(angle);
     }
+    return new Z4Point(x, y);
   }
 
    pushPointPositions(points, width, height) {
