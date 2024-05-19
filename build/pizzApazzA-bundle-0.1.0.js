@@ -2387,19 +2387,27 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
 
    setPointPosition(points, selectedIndex, x, y, width, height) {
     let angle = 0.0;
+    let p1x = 0.0;
+    let p1y = 0.0;
+    let p2x = 0.0;
+    let p2y = 0.0;
     switch(selectedIndex) {
       case 0:
         let offsetX = points[0].x - x;
         let offsetY = points[0].y - y;
+        p1x = points[1].x - offsetX;
+        p1y = points[1].y - offsetY;
+        p2x = points[2].x - offsetX;
+        p2y = points[2].y - offsetY;
         points[0] = new Point(x, y);
-        points[1] = new Point(Math.max(0, Math.min(points[1].x - offsetX, width)), Math.max(0, Math.min(points[1].y - offsetY, height)));
-        points[2] = new Point(Math.max(0, Math.min(points[2].x - offsetX, width)), Math.max(0, Math.min(points[2].y - offsetY, height)));
+        points[1] = new Point(Math.round(p1x), Math.round(p1y));
+        points[2] = new Point(Math.round(p2x), Math.round(p2y));
         break;
       case 1:
         let ry = Z4Math.distance(points[0].x, points[0].y, points[2].x, points[2].y);
         angle = Z4Math.atan(points[0].x, points[0].y, x, y) - Z4Math.HALF_PI;
-        let p2x = points[0].x + ry * Math.cos(angle);
-        let p2y = points[0].y + ry * Math.sin(angle);
+        p2x = points[0].x + ry * Math.cos(angle);
+        p2y = points[0].y + ry * Math.sin(angle);
         while (p2x < 0 || p2x > width || p2y < 0 || p2y > height) {
           ry = Math.max(0, ry - 0.5);
           p2x = points[0].x + ry * Math.cos(angle);
@@ -2411,8 +2419,8 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       case 2:
         let rx = Z4Math.distance(points[0].x, points[0].y, points[1].x, points[1].y);
         angle = Z4Math.atan(points[0].x, points[0].y, x, y) + Z4Math.HALF_PI;
-        let p1x = points[0].x + rx * Math.cos(angle);
-        let p1y = points[0].y + rx * Math.sin(angle);
+        p1x = points[0].x + rx * Math.cos(angle);
+        p1y = points[0].y + rx * Math.sin(angle);
         while (p1x < 0 || p1x > width || p1y < 0 || p1y > height) {
           rx = Math.max(0, rx - 0.5);
           p1x = points[0].x + rx * Math.cos(angle);

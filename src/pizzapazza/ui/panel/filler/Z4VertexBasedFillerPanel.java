@@ -100,22 +100,31 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
   @Override
   protected void setPointPosition(Array<Point> points, int selectedIndex, int x, int y, int width, int height) {
     double angle;
+    double p1x;
+    double p1y;
+    double p2x;
+    double p2y;
 
     switch (selectedIndex) {
       case 0:
         int offsetX = points.$get(0).x - x;
         int offsetY = points.$get(0).y - y;
 
+        p1x = points.$get(1).x - offsetX;
+        p1y = points.$get(1).y - offsetY;
+        p2x = points.$get(2).x - offsetX;
+        p2y = points.$get(2).y - offsetY;
+
         points.$set(0, new Point(x, y));
-        points.$set(1, new Point(Math.max(0, Math.min(points.$get(1).x - offsetX, width)), Math.max(0, Math.min(points.$get(1).y - offsetY, height))));
-        points.$set(2, new Point(Math.max(0, Math.min(points.$get(2).x - offsetX, width)), Math.max(0, Math.min(points.$get(2).y - offsetY, height))));
+        points.$set(1, new Point((int) Math.round(p1x), (int) Math.round(p1y)));
+        points.$set(2, new Point((int) Math.round(p2x), (int) Math.round(p2y)));
         break;
       case 1:
         double ry = Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(2).x, points.$get(2).y);
         angle = Z4Math.atan(points.$get(0).x, points.$get(0).y, x, y) - Z4Math.HALF_PI;
 
-        double p2x = points.$get(0).x + ry * Math.cos(angle);
-        double p2y = points.$get(0).y + ry * Math.sin(angle);
+        p2x = points.$get(0).x + ry * Math.cos(angle);
+        p2y = points.$get(0).y + ry * Math.sin(angle);
         while (p2x < 0 || p2x > width || p2y < 0 || p2y > height) {
           ry = Math.max(0, ry - 0.5);
           p2x = points.$get(0).x + ry * Math.cos(angle);
@@ -129,8 +138,8 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
         double rx = Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(1).x, points.$get(1).y);
         angle = Z4Math.atan(points.$get(0).x, points.$get(0).y, x, y) + Z4Math.HALF_PI;
 
-        double p1x = points.$get(0).x + rx * Math.cos(angle);
-        double p1y = points.$get(0).y + rx * Math.sin(angle);
+        p1x = points.$get(0).x + rx * Math.cos(angle);
+        p1y = points.$get(0).y + rx * Math.sin(angle);
         while (p1x < 0 || p1x > width || p1y < 0 || p1y > height) {
           rx = Math.max(0, rx - 0.5);
           p1x = points.$get(0).x + rx * Math.cos(angle);
