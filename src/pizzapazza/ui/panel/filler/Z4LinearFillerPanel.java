@@ -4,7 +4,6 @@ import def.dom.CanvasGradient;
 import def.dom.CanvasPattern;
 import def.js.Array;
 import javascript.awt.Point;
-import javascript.util.KeyValue;
 import jsweet.util.union.Union4;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.filler.Z4AbstractBoundaryBehaviorFiller;
@@ -25,12 +24,13 @@ public class Z4LinearFillerPanel extends Z4AbstractFillerPanel {
   @SuppressWarnings("unchecked")
   public Z4LinearFillerPanel() {
     super(2, new Array<>(
-            new KeyValue<>(Z4AbstractBoundaryBehaviorFiller.STOP_AT_BOUNDARY, "./image/filler/linear_stop.png"),
-            new KeyValue<>(Z4AbstractBoundaryBehaviorFiller.FILL_AT_BOUNDARY, "./image/filler/linear_fill.png"),
-            new KeyValue<>(Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY, "./image/filler/linear_symmetric.png"),
-            new KeyValue<>(Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY, "./image/filler/linear_repeat.png")
+            Z4AbstractBoundaryBehaviorFiller.STOP_AT_BOUNDARY,
+            Z4AbstractBoundaryBehaviorFiller.FILL_AT_BOUNDARY,
+            Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY,
+            Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY
     ));
 
+    this.cssAddClass("z4linearfillerpanel");
     this.drawPreview(false);
   }
 

@@ -13,7 +13,7 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
    * Creates the object
    */
   constructor() {
-    super(3, new Array(new KeyValue(Z4AbstractBoundaryBehaviorFiller.STOP_AT_BOUNDARY, "image/filler/elliptic_stop.png"), new KeyValue(Z4AbstractBoundaryBehaviorFiller.FILL_AT_BOUNDARY, "image/filler/elliptic_fill.png"), new KeyValue(Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY, "image/filler/elliptic_symmetric.png"), new KeyValue(Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY, "image/filler/elliptic_repeat.png")));
+    super(3, new Array(Z4AbstractBoundaryBehaviorFiller.STOP_AT_BOUNDARY, Z4AbstractBoundaryBehaviorFiller.FILL_AT_BOUNDARY, Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY, Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY));
     let label = new JSLabel();
     label.setText(Z4Translations.VERTICES);
     let constraints = new GridBagConstraints();
@@ -59,25 +59,20 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
     constraints.fill = GridBagConstraints.HORIZONTAL;
     this.add(this.vertexCounter, constraints);
     this.getChilStyleByQuery("*:nth-child(12) datalist option:nth-child(8)").fontSize = "larger";
+    this.cssAddClass("z4ellipticfillerpanel");
     this.drawPreview(false);
   }
 
    setIcons() {
+    this.cssRemoveClass("z4ellipticfillerpanel");
+    this.cssRemoveClass("z4starfillerpanel");
+    this.cssRemoveClass("z4polygonfillerpanel");
     if (this.vertexCounter.getValue() === 7) {
-      this.setChildAttributeByQuery("div label:nth-child(1) img", "src", "image/filler/elliptic_stop.png");
-      this.setChildAttributeByQuery("div label:nth-child(2) img", "src", "image/filler/elliptic_fill.png");
-      this.setChildAttributeByQuery("div label:nth-child(3) img", "src", "image/filler/elliptic_symmetric.png");
-      this.setChildAttributeByQuery("div label:nth-child(4) img", "src", "image/filler/elliptic_repeat.png");
+      this.cssAddClass("z4ellipticfillerpanel");
     } else if (this.star.isSelected()) {
-      this.setChildAttributeByQuery("div label:nth-child(1) img", "src", "image/filler/star_stop.png");
-      this.setChildAttributeByQuery("div label:nth-child(2) img", "src", "image/filler/star_fill.png");
-      this.setChildAttributeByQuery("div label:nth-child(3) img", "src", "image/filler/star_symmetric.png");
-      this.setChildAttributeByQuery("div label:nth-child(4) img", "src", "image/filler/star_repeat.png");
+      this.cssAddClass("z4starfillerpanel");
     } else {
-      this.setChildAttributeByQuery("div label:nth-child(1) img", "src", "image/filler/polygon_stop.png");
-      this.setChildAttributeByQuery("div label:nth-child(2) img", "src", "image/filler/polygon_fill.png");
-      this.setChildAttributeByQuery("div label:nth-child(3) img", "src", "image/filler/polygon_symmetric.png");
-      this.setChildAttributeByQuery("div label:nth-child(4) img", "src", "image/filler/polygon_repeat.png");
+      this.cssAddClass("z4polygonfillerpanel");
     }
   }
 

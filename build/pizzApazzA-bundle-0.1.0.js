@@ -1948,7 +1948,7 @@ class Z4AbstractFillerPanel extends JSPanel {
 
    selectedIndex = 0;
 
-   selectedOption = 0;
+   selectedOption = null;
 
    pressed = false;
 
@@ -2006,11 +2006,12 @@ class Z4AbstractFillerPanel extends JSPanel {
         radio.setContentAreaFilled(false);
         radio.setToggle();
         radio.setSelected(index === 0);
-        radio.setIcon(new DefaultHTMLImageProducer(option.key, option.value));
-        radio.setChildAttributeByQuery("img", "width", "50");
-        radio.setChildAttributeByQuery("img", "height", "50");
+        if (index === 0) {
+          this.selectedOption = option;
+        }
+        radio.setIcon(new Z4EmptyImageProducer(option));
         radio.addActionListener(event => {
-          this.selectedOption = option.key;
+          this.selectedOption = option;
           this.drawPreview(false);
         });
         this.buttonGroupOptions.add(radio);
@@ -2187,6 +2188,7 @@ class Z4AbstractFillerPanel extends JSPanel {
 
   /**
    * Check if a rescale is needed during drawing
+   *
    * @param option The selected option
    * @return true if a rescale is needed during drawing, false otherwise
    */
@@ -2245,7 +2247,8 @@ class Z4LinearFillerPanel extends Z4AbstractFillerPanel {
    * Creates the object
    */
   constructor() {
-    super(2, new Array(new KeyValue(Z4AbstractBoundaryBehaviorFiller.STOP_AT_BOUNDARY, "./image/filler/linear_stop.png"), new KeyValue(Z4AbstractBoundaryBehaviorFiller.FILL_AT_BOUNDARY, "./image/filler/linear_fill.png"), new KeyValue(Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY, "./image/filler/linear_symmetric.png"), new KeyValue(Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY, "./image/filler/linear_repeat.png")));
+    super(2, new Array(Z4AbstractBoundaryBehaviorFiller.STOP_AT_BOUNDARY, Z4AbstractBoundaryBehaviorFiller.FILL_AT_BOUNDARY, Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY, Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY));
+    this.cssAddClass("z4linearfillerpanel");
     this.drawPreview(false);
   }
 
@@ -2302,7 +2305,7 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
    * Creates the object
    */
   constructor() {
-    super(3, new Array(new KeyValue(Z4AbstractBoundaryBehaviorFiller.STOP_AT_BOUNDARY, "image/filler/elliptic_stop.png"), new KeyValue(Z4AbstractBoundaryBehaviorFiller.FILL_AT_BOUNDARY, "image/filler/elliptic_fill.png"), new KeyValue(Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY, "image/filler/elliptic_symmetric.png"), new KeyValue(Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY, "image/filler/elliptic_repeat.png")));
+    super(3, new Array(Z4AbstractBoundaryBehaviorFiller.STOP_AT_BOUNDARY, Z4AbstractBoundaryBehaviorFiller.FILL_AT_BOUNDARY, Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY, Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY));
     let label = new JSLabel();
     label.setText(Z4Translations.VERTICES);
     let constraints = new GridBagConstraints();
@@ -2348,25 +2351,20 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
     constraints.fill = GridBagConstraints.HORIZONTAL;
     this.add(this.vertexCounter, constraints);
     this.getChilStyleByQuery("*:nth-child(12) datalist option:nth-child(8)").fontSize = "larger";
+    this.cssAddClass("z4ellipticfillerpanel");
     this.drawPreview(false);
   }
 
    setIcons() {
+    this.cssRemoveClass("z4ellipticfillerpanel");
+    this.cssRemoveClass("z4starfillerpanel");
+    this.cssRemoveClass("z4polygonfillerpanel");
     if (this.vertexCounter.getValue() === 7) {
-      this.setChildAttributeByQuery("div label:nth-child(1) img", "src", "image/filler/elliptic_stop.png");
-      this.setChildAttributeByQuery("div label:nth-child(2) img", "src", "image/filler/elliptic_fill.png");
-      this.setChildAttributeByQuery("div label:nth-child(3) img", "src", "image/filler/elliptic_symmetric.png");
-      this.setChildAttributeByQuery("div label:nth-child(4) img", "src", "image/filler/elliptic_repeat.png");
+      this.cssAddClass("z4ellipticfillerpanel");
     } else if (this.star.isSelected()) {
-      this.setChildAttributeByQuery("div label:nth-child(1) img", "src", "image/filler/star_stop.png");
-      this.setChildAttributeByQuery("div label:nth-child(2) img", "src", "image/filler/star_fill.png");
-      this.setChildAttributeByQuery("div label:nth-child(3) img", "src", "image/filler/star_symmetric.png");
-      this.setChildAttributeByQuery("div label:nth-child(4) img", "src", "image/filler/star_repeat.png");
+      this.cssAddClass("z4starfillerpanel");
     } else {
-      this.setChildAttributeByQuery("div label:nth-child(1) img", "src", "image/filler/polygon_stop.png");
-      this.setChildAttributeByQuery("div label:nth-child(2) img", "src", "image/filler/polygon_fill.png");
-      this.setChildAttributeByQuery("div label:nth-child(3) img", "src", "image/filler/polygon_symmetric.png");
-      this.setChildAttributeByQuery("div label:nth-child(4) img", "src", "image/filler/polygon_repeat.png");
+      this.cssAddClass("z4polygonfillerpanel");
     }
   }
 
@@ -3407,6 +3405,27 @@ class Z4Constants {
   static  MAX_DPI = 1500;
 
   constructor() {
+  }
+}
+/**
+ * An implementation of the AbstractHTMLImageProducer providing an empty image
+ *
+ * @author gianpiero.diblasi
+ * @param <T> The value type
+ */
+class Z4EmptyImageProducer extends AbstractHTMLImageProducer {
+
+  /**
+   * Creates the object
+   *
+   * @param value The value
+   */
+  constructor(value) {
+    super(value);
+  }
+
+   produce() {
+    return document.createElement("img");
   }
 }
 /**

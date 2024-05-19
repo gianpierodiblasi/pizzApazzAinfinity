@@ -18,13 +18,12 @@ import javascript.swing.JSRadioButton;
 import javascript.swing.JSSlider;
 import javascript.swing.JSSpinner;
 import javascript.swing.SpinnerNumberModel;
-import javascript.util.DefaultHTMLImageProducer;
-import javascript.util.KeyValue;
 import jsweet.util.union.Union4;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.filler.Z4AbstractFiller;
 import pizzapazza.math.Z4Math;
 import pizzapazza.util.Z4Constants;
+import pizzapazza.util.Z4EmptyImageProducer;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$OffscreenCanvas;
 import static simulation.js.$Globals.$exists;
@@ -61,7 +60,7 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
   private int width = Z4Constants.DEFAULT_IMAGE_SIZE;
   private int height = Z4Constants.DEFAULT_IMAGE_SIZE;
   private int selectedIndex = 0;
-  private Object selectedOption = 0;
+  private Object selectedOption;
   private boolean pressed = false;
 
   private static final int SIZE = 180;
@@ -74,7 +73,7 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
    * @param count The number of points managed by this panel
    * @param options The available options
    */
-  public Z4AbstractFillerPanel(int count, Array<KeyValue<Integer, String>> options) {
+  public Z4AbstractFillerPanel(int count, Array<?> options) {
     super();
     this.cssAddClass("z4abstractfillerpanel");
     this.setLayout(new GridBagLayout());
@@ -126,11 +125,12 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
         radio.setContentAreaFilled(false);
         radio.setToggle();
         radio.setSelected(index == 0);
-        radio.setIcon(new DefaultHTMLImageProducer<>(option.key, option.value));
-        radio.setChildAttributeByQuery("img", "width", "50");
-        radio.setChildAttributeByQuery("img", "height", "50");
+        if (index == 0) {
+          this.selectedOption = option;
+        }
+        radio.setIcon(new Z4EmptyImageProducer<>(option));
         radio.addActionListener(event -> {
-          this.selectedOption = option.key;
+          this.selectedOption = option;
           this.drawPreview(false);
         });
 
@@ -323,6 +323,7 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
 
   /**
    * Check if a rescale is needed during drawing
+   *
    * @param option The selected option
    * @return true if a rescale is needed during drawing, false otherwise
    */

@@ -33,11 +33,66 @@
 .z4canvas canvas {
   background-image: url(../image/chessboard.png);
 }
-
 .z4abstractfillerpanel canvas {
   border: 1px solid var(--main-action-bgcolor);
   background-image: url(../image/chessboard.png);
-}.z4colorpreview {
+}
+.z4abstractfillerpanel img {
+  background-image: url(../image/chessboard.png);
+}
+
+.z4abstractfillerpanel.z4linearfillerpanel div label:nth-child(1) img {
+  content: url(../image/filler/linear_stop.png);
+}
+.z4abstractfillerpanel.z4linearfillerpanel div label:nth-child(2) img {
+  content: url(../image/filler/linear_fill.png);
+}
+.z4abstractfillerpanel.z4linearfillerpanel div label:nth-child(3) img {
+  content: url(../image/filler/linear_symmetric.png);
+}
+.z4abstractfillerpanel.z4linearfillerpanel div label:nth-child(4) img {
+  content: url(../image/filler/linear_repeat.png);
+}
+
+.z4abstractfillerpanel.z4ellipticfillerpanel div label:nth-child(1) img {
+  content: url(../image/filler/elliptic_stop.png);
+}
+.z4abstractfillerpanel.z4ellipticfillerpanel div label:nth-child(2) img {
+  content: url(../image/filler/elliptic_fill.png);
+}
+.z4abstractfillerpanel.z4ellipticfillerpanel div label:nth-child(3) img {
+  content: url(../image/filler/elliptic_symmetric.png);
+}
+.z4abstractfillerpanel.z4ellipticfillerpanel div label:nth-child(4) img {
+  content: url(../image/filler/elliptic_repeat.png);
+}
+
+.z4abstractfillerpanel.z4starfillerpanel div label:nth-child(1) img {
+  content: url(../image/filler/star_stop.png);
+}
+.z4abstractfillerpanel.z4starfillerpanel div label:nth-child(2) img {
+  content: url(../image/filler/star_fill.png);
+}
+.z4abstractfillerpanel.z4starfillerpanel div label:nth-child(3) img {
+  content: url(../image/filler/star_symmetric.png);
+}
+.z4abstractfillerpanel.z4starfillerpanel div label:nth-child(4) img {
+  content: url(../image/filler/star_repeat.png);
+}
+
+.z4abstractfillerpanel.z4polygonfillerpanel div label:nth-child(1) img {
+  content: url(../image/filler/polygon_stop.png);
+}
+.z4abstractfillerpanel.z4polygonfillerpanel div label:nth-child(2) img {
+  content: url(../image/filler/polygon_fill.png);
+}
+.z4abstractfillerpanel.z4polygonfillerpanel div label:nth-child(3) img {
+  content: url(../image/filler/polygon_symmetric.png);
+}
+.z4abstractfillerpanel.z4polygonfillerpanel div label:nth-child(4) img {
+  content: url(../image/filler/polygon_repeat.png);
+}
+.z4colorpreview {
   height: 2rem;
   display: grid;
   grid-template: "c1 c2";

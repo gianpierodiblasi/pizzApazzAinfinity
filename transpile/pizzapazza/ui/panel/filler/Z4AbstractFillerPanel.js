@@ -41,7 +41,7 @@ class Z4AbstractFillerPanel extends JSPanel {
 
    selectedIndex = 0;
 
-   selectedOption = 0;
+   selectedOption = null;
 
    pressed = false;
 
@@ -99,11 +99,12 @@ class Z4AbstractFillerPanel extends JSPanel {
         radio.setContentAreaFilled(false);
         radio.setToggle();
         radio.setSelected(index === 0);
-        radio.setIcon(new DefaultHTMLImageProducer(option.key, option.value));
-        radio.setChildAttributeByQuery("img", "width", "50");
-        radio.setChildAttributeByQuery("img", "height", "50");
+        if (index === 0) {
+          this.selectedOption = option;
+        }
+        radio.setIcon(new Z4EmptyImageProducer(option));
         radio.addActionListener(event => {
-          this.selectedOption = option.key;
+          this.selectedOption = option;
           this.drawPreview(false);
         });
         this.buttonGroupOptions.add(radio);
@@ -280,6 +281,7 @@ class Z4AbstractFillerPanel extends JSPanel {
 
   /**
    * Check if a rescale is needed during drawing
+   *
    * @param option The selected option
    * @return true if a rescale is needed during drawing, false otherwise
    */

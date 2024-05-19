@@ -22,8 +22,6 @@
       window.onload = event => {
         var name = new URLSearchParams(window.location.search).get("type");
         eval("new TestFillerPanel(new " + name.replace("Test", "Z4").replaceAll(" ", "") + "()).setTitle('" + name + "');");
-
-        setInterval(() => document.querySelectorAll(".z4abstractfillerpanel img").forEach(img => img.src = img.src.replace("html-test/pizzapazza/ui/panel/filler/", "")), 100);
       };
     </script>
   </head>
