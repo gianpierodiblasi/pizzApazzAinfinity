@@ -2032,12 +2032,35 @@ class Z4AbstractFillerPanel extends JSPanel {
     this.setXY();
   }
 
+  /**
+   * Adds a label
+   *
+   * @param text The text
+   * @param gridx The grid x
+   * @param gridy The grid y
+   * @param gridwidth The grid width
+   * @param gridheight The grid height
+   * @param anchor The anchor
+   * @param fill The fill
+   */
    addLabel(text, gridx, gridy, gridwidth, gridheight, anchor, fill) {
     let label = new JSLabel();
     label.setText(text);
     this.addComponent(label, gridx, gridy, gridwidth, gridheight, anchor, fill, null);
   }
 
+  /**
+   * Adds a component
+   *
+   * @param component The component
+   * @param gridx The grid x
+   * @param gridy The grid y
+   * @param gridwidth The grid width
+   * @param gridheight The grid height
+   * @param anchor The anchor
+   * @param fill The fill
+   * @param insets The insets
+   */
    addComponent(component, gridx, gridy, gridwidth, gridheight, anchor, fill, insets) {
     let constraints = new GridBagConstraints();
     constraints.gridx = gridx;
@@ -2115,6 +2138,13 @@ class Z4AbstractFillerPanel extends JSPanel {
    * @param height The preview height
    */
    setPointPosition(points, selectedIndex, x, y, width, height) {
+  }
+
+  /**
+   * Requests a call to the setPointPosition method
+   */
+   requestSetPointPosition() {
+    this.setPointPosition(this.points, this.selectedIndex, this.points[this.selectedIndex].x, this.points[this.selectedIndex].y, this.width, this.height);
   }
 
   /**
@@ -2301,35 +2331,21 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
 
    vertexCounter = new JSSlider();
 
+   regular = new JSCheckBox();
+
   /**
    * Creates the object
    */
   constructor() {
     super(3, new Array(Z4AbstractBoundaryBehaviorFiller.STOP_AT_BOUNDARY, Z4AbstractBoundaryBehaviorFiller.FILL_AT_BOUNDARY, Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY, Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY));
-    let label = new JSLabel();
-    label.setText(Z4Translations.VERTICES);
-    let constraints = new GridBagConstraints();
-    constraints.gridx = 0;
-    constraints.gridy = 6;
-    constraints.gridwidth = 1;
-    constraints.gridheight = 1;
-    constraints.anchor = GridBagConstraints.WEST;
-    constraints.fill = GridBagConstraints.NONE;
-    this.add(label, constraints);
+    this.addLabel(Z4Translations.VERTICES, 0, 6, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
     this.star.setText(Z4Translations.STAR);
     this.star.setEnabled(false);
     this.star.addActionListener(event => {
       this.setIcons();
       this.drawPreview(false);
     });
-    constraints = new GridBagConstraints();
-    constraints.gridx = 1;
-    constraints.gridy = 6;
-    constraints.gridwidth = 2;
-    constraints.gridheight = 1;
-    constraints.anchor = GridBagConstraints.EAST;
-    constraints.fill = GridBagConstraints.NONE;
-    this.add(this.star, constraints);
+    this.addComponent(this.star, 1, 6, 2, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
     let vertexModelAndRenderer = new DefaultSliderModelAndRenderer();
     for (let vertex = 3; vertex < 10; vertex++) {
       vertexModelAndRenderer.addElement("" + vertex);
@@ -2342,15 +2358,16 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       this.setIcons();
       this.drawPreview(false);
     });
-    constraints = new GridBagConstraints();
-    constraints.gridx = 0;
-    constraints.gridy = 7;
-    constraints.gridwidth = 3;
-    constraints.gridheight = 1;
-    constraints.anchor = GridBagConstraints.WEST;
-    constraints.fill = GridBagConstraints.HORIZONTAL;
-    this.add(this.vertexCounter, constraints);
+    this.addComponent(this.vertexCounter, 0, 7, 3, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
     this.getChilStyleByQuery("*:nth-child(12) datalist option:nth-child(8)").fontSize = "larger";
+    this.regular.setText(Z4Translations.REGULAR);
+    this.regular.addActionListener(event => {
+      if (this.regular.isSelected()) {
+        this.requestSetPointPosition();
+        this.drawPreview(false);
+      }
+    });
+    this.appendChildInTree("*:nth-child(9)", this.regular);
     this.cssAddClass("z4ellipticfillerpanel");
     this.drawPreview(false);
   }
@@ -2381,19 +2398,45 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       case 1:
         let ry = Z4Math.distance(points[0].x, points[0].y, points[2].x, points[2].y);
         angle = Z4Math.atan(points[0].x, points[0].y, x, y) - Z4Math.HALF_PI;
-        let p2x = Math.max(0, Math.min(Math.round(points[0].x + ry * Math.cos(angle)), width));
-        let p2y = Math.max(0, Math.min(Math.round(points[0].y + ry * Math.sin(angle)), height));
+        let p2x = points[0].x + ry * Math.cos(angle);
+        let p2y = points[0].y + ry * Math.sin(angle);
+        while (p2x < 0 || p2x > width || p2y < 0 || p2y > height) {
+          ry = Math.max(0, ry - 0.5);
+          p2x = points[0].x + ry * Math.cos(angle);
+          p2y = points[0].y + ry * Math.sin(angle);
+        }
         points[1] = new Point(x, y);
-        points[2] = new Point(p2x, p2y);
+        points[2] = new Point(Math.round(p2x), Math.round(p2y));
         break;
       case 2:
         let rx = Z4Math.distance(points[0].x, points[0].y, points[1].x, points[1].y);
         angle = Z4Math.atan(points[0].x, points[0].y, x, y) + Z4Math.HALF_PI;
-        let p1x = Math.max(0, Math.min(Math.round(points[0].x + rx * Math.cos(angle)), width));
-        let p1y = Math.max(0, Math.min(Math.round(points[0].y + rx * Math.sin(angle)), height));
-        points[1] = new Point(p1x, p1y);
+        let p1x = points[0].x + rx * Math.cos(angle);
+        let p1y = points[0].y + rx * Math.sin(angle);
+        while (p1x < 0 || p1x > width || p1y < 0 || p1y > height) {
+          rx = Math.max(0, rx - 0.5);
+          p1x = points[0].x + rx * Math.cos(angle);
+          p1y = points[0].y + rx * Math.sin(angle);
+        }
+        points[1] = new Point(Math.round(p1x), Math.round(p1y));
         points[2] = new Point(x, y);
         break;
+    }
+    if (this.regular.isSelected()) {
+      let rx = Z4Math.distance(points[0].x, points[0].y, points[1].x, points[1].y);
+      let ry = Z4Math.distance(points[0].x, points[0].y, points[2].x, points[2].y);
+      if (rx !== ry) {
+        switch(selectedIndex) {
+          case 0:
+          case 1:
+            angle = Z4Math.atan(points[0].x, points[0].y, x, y) - Z4Math.HALF_PI;
+            let p2x = Math.max(0, Math.min(Math.round(points[0].x + ry * Math.cos(angle)), width));
+            let p2y = Math.max(0, Math.min(Math.round(points[0].y + ry * Math.sin(angle)), height));
+            break;
+          case 2:
+            break;
+        }
+      }
     }
   }
 
@@ -3524,6 +3567,8 @@ class Z4Translations {
 
   static  VERTICES = "";
 
+  static  REGULAR = "";
+
   // Composite Operation
   static  COMPOSITE_OPERATION = "";
 
@@ -3642,6 +3687,7 @@ class Z4Translations {
     Z4Translations.ADVANCED = "Advanced";
     Z4Translations.STAR = "Star";
     Z4Translations.VERTICES = "Vertices";
+    Z4Translations.REGULAR = "Regular";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "This is the default setting and draws the layer on top of the existing content";
@@ -3722,6 +3768,7 @@ class Z4Translations {
     Z4Translations.ADVANCED = "Avanzato";
     Z4Translations.STAR = "Stella";
     Z4Translations.VERTICES = "Vertici";
+    Z4Translations.REGULAR = "Regolare";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "Questa \u00E8 l'impostazione predefinita e disegna il livello sopra il contenuto esistente";

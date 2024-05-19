@@ -62,6 +62,7 @@ public class Z4Translations {
   public static String ADVANCED = "";
   public static String STAR = "";
   public static String VERTICES = "";
+  public static String REGULAR = "";
 
   // Composite Operation
   public static String COMPOSITE_OPERATION = "";
@@ -163,6 +164,7 @@ public class Z4Translations {
     Z4Translations.ADVANCED = "Advanced";
     Z4Translations.STAR = "Star";
     Z4Translations.VERTICES = "Vertices";
+    Z4Translations.REGULAR = "Regular";
 
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
@@ -248,6 +250,7 @@ public class Z4Translations {
     Z4Translations.ADVANCED = "Avanzato";
     Z4Translations.STAR = "Stella";
     Z4Translations.VERTICES = "Vertici";
+    Z4Translations.REGULAR = "Regolare";
 
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";

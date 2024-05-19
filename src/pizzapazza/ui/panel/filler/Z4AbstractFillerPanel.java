@@ -156,13 +156,36 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
     this.setXY();
   }
 
-  private void addLabel(String text, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
+  /**
+   * Adds a label
+   *
+   * @param text The text
+   * @param gridx The grid x
+   * @param gridy The grid y
+   * @param gridwidth The grid width
+   * @param gridheight The grid height
+   * @param anchor The anchor
+   * @param fill The fill
+   */
+  protected void addLabel(String text, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
     JSLabel label = new JSLabel();
     label.setText(text);
     this.addComponent(label, gridx, gridy, gridwidth, gridheight, anchor, fill, null);
   }
 
-  private void addComponent(JSComponent component, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill, Insets insets) {
+  /**
+   * Adds a component
+   *
+   * @param component The component
+   * @param gridx The grid x
+   * @param gridy The grid y
+   * @param gridwidth The grid width
+   * @param gridheight The grid height
+   * @param anchor The anchor
+   * @param fill The fill
+   * @param insets The insets
+   */
+  protected void addComponent(JSComponent component, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill, Insets insets) {
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = gridx;
     constraints.gridy = gridy;
@@ -242,6 +265,13 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
    * @param height The preview height
    */
   protected abstract void setPointPosition(Array<Point> points, int selectedIndex, int x, int y, int width, int height);
+
+  /**
+   * Requests a call to the setPointPosition method
+   */
+  protected void requestSetPointPosition() {
+    this.setPointPosition(this.points, this.selectedIndex, this.points.$get(this.selectedIndex).x, this.points.$get(this.selectedIndex).y, this.width, this.height);
+  }
 
   /**
    * Sets the preview size

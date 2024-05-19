@@ -125,12 +125,35 @@ class Z4AbstractFillerPanel extends JSPanel {
     this.setXY();
   }
 
+  /**
+   * Adds a label
+   *
+   * @param text The text
+   * @param gridx The grid x
+   * @param gridy The grid y
+   * @param gridwidth The grid width
+   * @param gridheight The grid height
+   * @param anchor The anchor
+   * @param fill The fill
+   */
    addLabel(text, gridx, gridy, gridwidth, gridheight, anchor, fill) {
     let label = new JSLabel();
     label.setText(text);
     this.addComponent(label, gridx, gridy, gridwidth, gridheight, anchor, fill, null);
   }
 
+  /**
+   * Adds a component
+   *
+   * @param component The component
+   * @param gridx The grid x
+   * @param gridy The grid y
+   * @param gridwidth The grid width
+   * @param gridheight The grid height
+   * @param anchor The anchor
+   * @param fill The fill
+   * @param insets The insets
+   */
    addComponent(component, gridx, gridy, gridwidth, gridheight, anchor, fill, insets) {
     let constraints = new GridBagConstraints();
     constraints.gridx = gridx;
@@ -208,6 +231,13 @@ class Z4AbstractFillerPanel extends JSPanel {
    * @param height The preview height
    */
    setPointPosition(points, selectedIndex, x, y, width, height) {
+  }
+
+  /**
+   * Requests a call to the setPointPosition method
+   */
+   requestSetPointPosition() {
+    this.setPointPosition(this.points, this.selectedIndex, this.points[this.selectedIndex].x, this.points[this.selectedIndex].y, this.width, this.height);
   }
 
   /**

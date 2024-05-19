@@ -6,7 +6,6 @@ import def.js.Array;
 import javascript.awt.GridBagConstraints;
 import javascript.awt.Point;
 import javascript.swing.JSCheckBox;
-import javascript.swing.JSLabel;
 import javascript.swing.JSSlider;
 import javascript.swing.MnR.DefaultSliderModelAndRenderer;
 import jsweet.util.union.Union4;
@@ -29,6 +28,7 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
 
   private final JSCheckBox star = new JSCheckBox();
   private final JSSlider vertexCounter = new JSSlider();
+  private final JSCheckBox regular = new JSCheckBox();
 
   /**
    * Creates the object
@@ -42,16 +42,7 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
             Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY
     ));
 
-    JSLabel label = new JSLabel();
-    label.setText(Z4Translations.VERTICES);
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.gridx = 0;
-    constraints.gridy = 6;
-    constraints.gridwidth = 1;
-    constraints.gridheight = 1;
-    constraints.anchor = GridBagConstraints.WEST;
-    constraints.fill = GridBagConstraints.NONE;
-    this.add(label, constraints);
+    this.addLabel(Z4Translations.VERTICES, 0, 6, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
 
     this.star.setText(Z4Translations.STAR);
     this.star.setEnabled(false);
@@ -60,14 +51,7 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       this.drawPreview(false);
     });
 
-    constraints = new GridBagConstraints();
-    constraints.gridx = 1;
-    constraints.gridy = 6;
-    constraints.gridwidth = 2;
-    constraints.gridheight = 1;
-    constraints.anchor = GridBagConstraints.EAST;
-    constraints.fill = GridBagConstraints.NONE;
-    this.add(this.star, constraints);
+    this.addComponent(this.star, 1, 6, 2, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
 
     DefaultSliderModelAndRenderer<String> vertexModelAndRenderer = new DefaultSliderModelAndRenderer<>();
     for (int vertex = 3; vertex < 10; vertex++) {
@@ -82,15 +66,18 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       this.drawPreview(false);
     });
 
-    constraints = new GridBagConstraints();
-    constraints.gridx = 0;
-    constraints.gridy = 7;
-    constraints.gridwidth = 3;
-    constraints.gridheight = 1;
-    constraints.anchor = GridBagConstraints.WEST;
-    constraints.fill = GridBagConstraints.HORIZONTAL;
-    this.add(this.vertexCounter, constraints);
+    this.addComponent(this.vertexCounter, 0, 7, 3, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
     this.getChilStyleByQuery("*:nth-child(12) datalist option:nth-child(8)").fontSize = "larger";
+
+    this.regular.setText(Z4Translations.REGULAR);
+    this.regular.addActionListener(event -> {
+      if (this.regular.isSelected()) {
+        this.requestSetPointPosition();
+        this.drawPreview(false);
+      }
+    });
+
+    this.appendChildInTree("*:nth-child(9)", this.regular);
 
     this.cssAddClass("z4ellipticfillerpanel");
     this.drawPreview(false);
@@ -124,25 +111,53 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
         points.$set(2, new Point(Math.max(0, Math.min(points.$get(2).x - offsetX, width)), Math.max(0, Math.min(points.$get(2).y - offsetY, height))));
         break;
       case 1:
-        int ry = (int) Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(2).x, points.$get(2).y);
+        double ry = Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(2).x, points.$get(2).y);
         angle = Z4Math.atan(points.$get(0).x, points.$get(0).y, x, y) - Z4Math.HALF_PI;
 
-        int p2x = (int) Math.max(0, Math.min(Math.round(points.$get(0).x + ry * Math.cos(angle)), width));
-        int p2y = (int) Math.max(0, Math.min(Math.round(points.$get(0).y + ry * Math.sin(angle)), height));
+        double p2x = points.$get(0).x + ry * Math.cos(angle);
+        double p2y = points.$get(0).y + ry * Math.sin(angle);
+        while (p2x < 0 || p2x > width || p2y < 0 || p2y > height) {
+          ry = Math.max(0, ry - 0.5);
+          p2x = points.$get(0).x + ry * Math.cos(angle);
+          p2y = points.$get(0).y + ry * Math.sin(angle);
+        }
 
         points.$set(1, new Point(x, y));
-        points.$set(2, new Point(p2x, p2y));
+        points.$set(2, new Point((int) Math.round(p2x), (int) Math.round(p2y)));
         break;
       case 2:
-        int rx = (int) Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(1).x, points.$get(1).y);
+        double rx = Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(1).x, points.$get(1).y);
         angle = Z4Math.atan(points.$get(0).x, points.$get(0).y, x, y) + Z4Math.HALF_PI;
 
-        int p1x = (int) Math.max(0, Math.min(Math.round(points.$get(0).x + rx * Math.cos(angle)), width));
-        int p1y = (int) Math.max(0, Math.min(Math.round(points.$get(0).y + rx * Math.sin(angle)), height));
+        double p1x = points.$get(0).x + rx * Math.cos(angle);
+        double p1y = points.$get(0).y + rx * Math.sin(angle);
+        while (p1x < 0 || p1x > width || p1y < 0 || p1y > height) {
+          rx = Math.max(0, rx - 0.5);
+          p1x = points.$get(0).x + rx * Math.cos(angle);
+          p1y = points.$get(0).y + rx * Math.sin(angle);
+        }
 
-        points.$set(1, new Point(p1x, p1y));
+        points.$set(1, new Point((int) Math.round(p1x), (int) Math.round(p1y)));
         points.$set(2, new Point(x, y));
         break;
+    }
+
+    if (this.regular.isSelected()) {
+      int rx = (int) Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(1).x, points.$get(1).y);
+      int ry = (int) Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(2).x, points.$get(2).y);
+
+      if (rx != ry) {
+        switch (selectedIndex) {
+          case 0:
+          case 1:
+            angle = Z4Math.atan(points.$get(0).x, points.$get(0).y, x, y) - Z4Math.HALF_PI;
+            int p2x = (int) Math.max(0, Math.min(Math.round(points.$get(0).x + ry * Math.cos(angle)), width));
+            int p2y = (int) Math.max(0, Math.min(Math.round(points.$get(0).y + ry * Math.sin(angle)), height));
+            break;
+          case 2:
+            break;
+        }
+      }
     }
   }
 
