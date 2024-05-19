@@ -72,10 +72,8 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
 
     this.regular.setText(Z4Translations.REGULAR);
     this.regular.addActionListener(event -> {
-      if (this.regular.isSelected()) {
-        this.requestSetPointPosition();
-        this.drawPreview(false);
-      }
+      this.setPointsEnabled();
+      this.drawPreview(false);
     });
 
     this.appendChildInTree("*:nth-child(9)", this.regular);
@@ -150,29 +148,11 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
         points.$set(2, new Point(x, y));
         break;
     }
-//
-//    if (this.regular.isSelected()) {
-//      int rx = (int) Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(1).x, points.$get(1).y);
-//      int ry = (int) Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(2).x, points.$get(2).y);
-//
-//      if (rx != ry) {
-//        switch (selectedIndex) {
-//          case 0:
-//          case 1:
-//            angle = Z4Math.atan(points.$get(0).x, points.$get(0).y, x, y) - Z4Math.HALF_PI;
-//            int p2x = (int) Math.max(0, Math.min(Math.round(points.$get(0).x + ry * Math.cos(angle)), width));
-//            int p2y = (int) Math.max(0, Math.min(Math.round(points.$get(0).y + ry * Math.sin(angle)), height));
-//            break;
-//          case 2:
-//            break;
-//        }
-//      }
-//    }
   }
 
   private Z4Point getPoint(double cx, double cy, double x, double y, double radius, double angle, int width, int height) {
-    while (x < 0 || x > width || y < 0 || y > height) {
-      radius = Math.max(0, radius - 0.5);
+    while ((x < 0 || x > width || y < 0 || y > height) && radius > 0) {
+      radius = Math.max(0, radius - 0.1);
       x = cx + radius * Math.cos(angle);
       y = cy + radius * Math.sin(angle);
     }
@@ -208,12 +188,17 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
 
     int vertex = this.vertexCounter.getValue();
     if (vertex == 7) {
-      return new Z4EllipticFiller(gradientColor, points.$get(0).x, points.$get(0).y, rx, ry, angle, (int) option);
+      return new Z4EllipticFiller(gradientColor, points.$get(0).x, points.$get(0).y, rx, this.regular.isSelected() ? rx : ry, angle, (int) option);
     } else if (this.star.isSelected()) {
-      return new Z4StarFiller(gradientColor, points.$get(0).x, points.$get(0).y, rx, ry, angle, vertex + 3, (int) option);
+      return new Z4StarFiller(gradientColor, points.$get(0).x, points.$get(0).y, rx, this.regular.isSelected() ? rx : ry, angle, vertex + 3, (int) option);
     } else {
-      return new Z4PolygonFiller(gradientColor, points.$get(0).x, points.$get(0).y, rx, ry, angle, vertex + 3, (int) option);
+      return new Z4PolygonFiller(gradientColor, points.$get(0).x, points.$get(0).y, rx, this.regular.isSelected() ? rx : ry, angle, vertex + 3, (int) option);
     }
+  }
+
+  @Override
+  protected boolean isPointEnabled(int index) {
+    return index != 2 || !this.regular.isSelected();
   }
 
   @Override
@@ -223,8 +208,10 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
     ctx.beginPath();
     ctx.moveTo(mappedPoints.$get(0).x, mappedPoints.$get(0).y);
     ctx.lineTo(mappedPoints.$get(1).x, mappedPoints.$get(1).y);
-    ctx.moveTo(mappedPoints.$get(0).x, mappedPoints.$get(0).y);
-    ctx.lineTo(mappedPoints.$get(2).x, mappedPoints.$get(2).y);
+    if (!this.regular.isSelected()) {
+      ctx.moveTo(mappedPoints.$get(0).x, mappedPoints.$get(0).y);
+      ctx.lineTo(mappedPoints.$get(2).x, mappedPoints.$get(2).y);
+    }
     ctx.strokeStyle = this.$getStrokeStyle("black");
     ctx.setLineDash(dash);
     ctx.stroke();
@@ -234,8 +221,10 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
     ctx.beginPath();
     ctx.moveTo(mappedPoints.$get(0).x, mappedPoints.$get(0).y);
     ctx.lineTo(mappedPoints.$get(1).x, mappedPoints.$get(1).y);
-    ctx.moveTo(mappedPoints.$get(0).x, mappedPoints.$get(0).y);
-    ctx.lineTo(mappedPoints.$get(2).x, mappedPoints.$get(2).y);
+    if (!this.regular.isSelected()) {
+      ctx.moveTo(mappedPoints.$get(0).x, mappedPoints.$get(0).y);
+      ctx.lineTo(mappedPoints.$get(2).x, mappedPoints.$get(2).y);
+    }
     ctx.strokeStyle = this.$getStrokeStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();

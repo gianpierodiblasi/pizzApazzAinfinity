@@ -190,7 +190,7 @@ class Z4AbstractFillerPanel extends JSPanel {
     switch(type) {
       case "down":
         this.points.map(point => new Point(w * point.x / this.width, h * point.y / this.height)).forEach((point, index, array) => {
-          if (Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) <= Z4AbstractFillerPanel.SELECTOR_RADIUS) {
+          if (this.isPointEnabled(index) && Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) <= Z4AbstractFillerPanel.SELECTOR_RADIUS) {
             this.pressed = true;
             this.selectedIndex = index;
             this.radios[this.selectedIndex].setSelected(true);
@@ -207,7 +207,7 @@ class Z4AbstractFillerPanel extends JSPanel {
         } else {
           this.preview.getStyle().cursor = "default";
           this.points.map(point => new Point(w * point.x / this.width, h * point.y / this.height)).forEach((point, index, array) => {
-            if (Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) <= Z4AbstractFillerPanel.SELECTOR_RADIUS) {
+            if (this.isPointEnabled(index) && Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) <= Z4AbstractFillerPanel.SELECTOR_RADIUS) {
               this.preview.getStyle().cursor = "pointer";
             }
           });
@@ -282,6 +282,22 @@ class Z4AbstractFillerPanel extends JSPanel {
   }
 
   /**
+   * Sets the enabled property of all points
+   */
+   setPointsEnabled() {
+    this.radios.forEach((radio, index, array) => {
+      let b = this.isPointEnabled(index);
+      radio.setEnabled(b);
+      if (!b && radio.isSelected()) {
+        this.radios[0].setSelected(true);
+        this.selectedIndex = 0;
+        this.setXY();
+        this.drawPreview(false);
+      }
+    });
+  }
+
+  /**
    * Draws the preview
    *
    * @param adjusting true if the value is adjusting, false otherwise
@@ -330,20 +346,31 @@ class Z4AbstractFillerPanel extends JSPanel {
   }
 
    drawCircle(point, index) {
-    let dash = new Array();
-    this.ctx.beginPath();
-    this.ctx.arc(point.x, point.y, Z4AbstractFillerPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
-    this.ctx.closePath();
-    this.ctx.strokeStyle = this.getStrokeStyle(index === this.selectedIndex ? "red" : "black");
-    this.ctx.setLineDash(dash);
-    this.ctx.stroke();
-    dash.push(2.5, 2.5);
-    this.ctx.beginPath();
-    this.ctx.arc(point.x, point.y, Z4AbstractFillerPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
-    this.ctx.closePath();
-    this.ctx.strokeStyle = this.getStrokeStyle("white");
-    this.ctx.setLineDash(dash);
-    this.ctx.stroke();
+    if (this.isPointEnabled(index)) {
+      let dash = new Array();
+      this.ctx.beginPath();
+      this.ctx.arc(point.x, point.y, Z4AbstractFillerPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
+      this.ctx.closePath();
+      this.ctx.strokeStyle = this.getStrokeStyle(index === this.selectedIndex ? "red" : "black");
+      this.ctx.setLineDash(dash);
+      this.ctx.stroke();
+      dash.push(2.5, 2.5);
+      this.ctx.beginPath();
+      this.ctx.arc(point.x, point.y, Z4AbstractFillerPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
+      this.ctx.closePath();
+      this.ctx.strokeStyle = this.getStrokeStyle("white");
+      this.ctx.setLineDash(dash);
+      this.ctx.stroke();
+    }
+  }
+
+  /**
+   * Checks if a point is enabled
+   *
+   * @param index The index
+   * @return true if the point is enabled, false otherwise
+   */
+   isPointEnabled(index) {
   }
 
   /**

@@ -224,7 +224,7 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
     switch (type) {
       case "down":
         this.points.map(point -> new Point(w * point.x / this.width, h * point.y / this.height)).forEach((point, index, array) -> {
-          if (Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) <= Z4AbstractFillerPanel.SELECTOR_RADIUS) {
+          if (this.isPointEnabled(index) && Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) <= Z4AbstractFillerPanel.SELECTOR_RADIUS) {
             this.pressed = true;
             this.selectedIndex = index;
             this.radios.$get(this.selectedIndex).setSelected(true);
@@ -241,7 +241,7 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
         } else {
           this.preview.getStyle().cursor = "default";
           this.points.map(point -> new Point(w * point.x / this.width, h * point.y / this.height)).forEach((point, index, array) -> {
-            if (Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) <= Z4AbstractFillerPanel.SELECTOR_RADIUS) {
+            if (this.isPointEnabled(index) && Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) <= Z4AbstractFillerPanel.SELECTOR_RADIUS) {
               this.preview.getStyle().cursor = "pointer";
             }
           });
@@ -319,6 +319,23 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
   }
 
   /**
+   * Sets the enabled property of all points
+   */
+  protected void setPointsEnabled() {
+    this.radios.forEach((radio, index, array) -> {
+      boolean b = this.isPointEnabled(index);
+      radio.setEnabled(b);
+
+      if (!b && radio.isSelected()) {
+        this.radios.$get(0).setSelected(true);
+        this.selectedIndex = 0;
+        this.setXY();
+        this.drawPreview(false);
+      }
+    });
+  }
+
+  /**
    * Draws the preview
    *
    * @param adjusting true if the value is adjusting, false otherwise
@@ -370,24 +387,34 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
   protected abstract Z4AbstractFiller getFiller(Z4GradientColor gradientColor, Array<Point> points, Object option);
 
   private void drawCircle(Point point, int index) {
-    Array<Double> dash = new Array<>();
+    if (this.isPointEnabled(index)) {
+      Array<Double> dash = new Array<>();
 
-    this.ctx.beginPath();
-    this.ctx.arc(point.x, point.y, Z4AbstractFillerPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
-    this.ctx.closePath();
-    this.ctx.strokeStyle = this.$getStrokeStyle(index == this.selectedIndex ? "red" : "black");
-    this.ctx.setLineDash(dash);
-    this.ctx.stroke();
+      this.ctx.beginPath();
+      this.ctx.arc(point.x, point.y, Z4AbstractFillerPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
+      this.ctx.closePath();
+      this.ctx.strokeStyle = this.$getStrokeStyle(index == this.selectedIndex ? "red" : "black");
+      this.ctx.setLineDash(dash);
+      this.ctx.stroke();
 
-    dash.push(2.5, 2.5);
+      dash.push(2.5, 2.5);
 
-    this.ctx.beginPath();
-    this.ctx.arc(point.x, point.y, Z4AbstractFillerPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
-    this.ctx.closePath();
-    this.ctx.strokeStyle = this.$getStrokeStyle("white");
-    this.ctx.setLineDash(dash);
-    this.ctx.stroke();
+      this.ctx.beginPath();
+      this.ctx.arc(point.x, point.y, Z4AbstractFillerPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
+      this.ctx.closePath();
+      this.ctx.strokeStyle = this.$getStrokeStyle("white");
+      this.ctx.setLineDash(dash);
+      this.ctx.stroke();
+    }
   }
+
+  /**
+   * Checks if a point is enabled
+   *
+   * @param index The index
+   * @return true if the point is enabled, false otherwise
+   */
+  protected abstract boolean isPointEnabled(int index);
 
   /**
    * Draws other objects

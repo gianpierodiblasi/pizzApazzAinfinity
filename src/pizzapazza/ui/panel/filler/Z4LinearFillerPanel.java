@@ -56,6 +56,11 @@ public class Z4LinearFillerPanel extends Z4AbstractFillerPanel {
   }
 
   @Override
+  protected boolean isPointEnabled(int index) {
+    return true;
+  }
+
+  @Override
   protected void drawObjects($CanvasRenderingContext2D ctx, Array<Point> mappedPoints) {
     Array<Double> dash = new Array<>();
 

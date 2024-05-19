@@ -31,6 +31,10 @@ class Z4LinearFillerPanel extends Z4AbstractFillerPanel {
     return new Z4LinearFiller(gradientColor, points[0].x, points[0].y, points[1].x, points[1].y, option);
   }
 
+   isPointEnabled(index) {
+    return true;
+  }
+
    drawObjects(ctx, mappedPoints) {
     let dash = new Array();
     ctx.beginPath();
