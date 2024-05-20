@@ -17,26 +17,30 @@ class TestBezierFiller extends JSFrame {
     this.canvas.setAttribute("height", "500");
     this.canvas.style.background = "gray";
     let buttons = new JSPanel();
+    let checkBox = new JSCheckBox();
+    checkBox.setSelected(true);
+    checkBox.setText("Show Lines");
+    buttons.add(checkBox, null);
     let button = new JSButton();
     button.setText("STOP_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4EllipticFiller.STOP_AT_BOUNDARY));
+    button.addActionListener(event => this.fill(Z4EllipticFiller.STOP_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     button = new JSButton();
     button.setText("FILL_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4EllipticFiller.FILL_AT_BOUNDARY));
+    button.addActionListener(event => this.fill(Z4EllipticFiller.FILL_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     button = new JSButton();
     button.setText("SYMMETRIC_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4EllipticFiller.SYMMETRIC_AT_BOUNDARY));
+    button.addActionListener(event => this.fill(Z4EllipticFiller.SYMMETRIC_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     button = new JSButton();
     button.setText("REPEAT_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4EllipticFiller.REPEAT_AT_BOUNDARY));
+    button.addActionListener(event => this.fill(Z4EllipticFiller.REPEAT_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     this.getContentPane().add(buttons, BorderLayout.NORTH);
   }
 
-   fill(bb) {
+   fill(bb, showLines) {
     let x1 = 100;
     let y1 = 250;
     let ctrlx1 = 150;
@@ -52,15 +56,17 @@ class TestBezierFiller extends JSFrame {
     let stop = new Date();
     console.log(stop.getTime() - start.getTime());
     this.ctx.putImageData(imageData, 0, 0);
-    this.ctx.fillRect(x1 - 2, y1 - 2, 4, 4);
-    this.ctx.fillRect(ctrlx1 - 2, ctrly1 - 2, 4, 4);
-    this.ctx.fillRect(ctrlx2 - 2, ctrly2 - 2, 4, 4);
-    this.ctx.fillRect(x2 - 2, y2 - 2, 4, 4);
-    this.ctx.strokeStyle = this.getFillStyle("red");
-    this.ctx.beginPath();
-    this.ctx.moveTo(x1, y1);
-    this.ctx.bezierCurveTo(ctrlx1, ctrly1, ctrlx2, ctrly2, x2, y2);
-    this.ctx.stroke();
+    if (showLines) {
+      this.ctx.fillRect(x1 - 2, y1 - 2, 4, 4);
+      this.ctx.fillRect(ctrlx1 - 2, ctrly1 - 2, 4, 4);
+      this.ctx.fillRect(ctrlx2 - 2, ctrly2 - 2, 4, 4);
+      this.ctx.fillRect(x2 - 2, y2 - 2, 4, 4);
+      this.ctx.strokeStyle = this.getFillStyle("red");
+      this.ctx.beginPath();
+      this.ctx.moveTo(x1, y1);
+      this.ctx.bezierCurveTo(ctrlx1, ctrly1, ctrlx2, ctrly2, x2, y2);
+      this.ctx.stroke();
+    }
   }
 
    getFillStyle(style) {
@@ -86,33 +92,39 @@ class TestConicFiller extends JSFrame {
     this.canvas.setAttribute("height", "500");
     this.canvas.style.background = "gray";
     let buttons = new JSPanel();
+    let checkBox = new JSCheckBox();
+    checkBox.setSelected(true);
+    checkBox.setText("Show Lines");
+    buttons.add(checkBox, null);
     let button = new JSButton();
     button.setText("NO SYMMETRIC");
-    button.addActionListener(event => this.fill(false));
+    button.addActionListener(event => this.fill(false, checkBox.isSelected()));
     buttons.add(button, null);
     button = new JSButton();
     button.setText("SYMMETRIC");
-    button.addActionListener(event => this.fill(true));
+    button.addActionListener(event => this.fill(true, checkBox.isSelected()));
     buttons.add(button, null);
     this.getContentPane().add(buttons, BorderLayout.NORTH);
   }
 
-   fill(b) {
+   fill(b, showLines) {
     let cx = 200;
     let cy = 250;
     let angle = Math.PI / 3;
     let imageData = this.ctx.createImageData(500, 500);
     new Z4ConicFiller(new Z4GradientColor(), cx, cy, angle, b).fill(imageData);
     this.ctx.putImageData(imageData, 0, 0);
-    let px = cx + 50 * Math.cos(angle);
-    let py = cy + 50 * Math.sin(angle);
-    this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
-    this.ctx.fillRect(px - 2, py - 2, 4, 4);
-    this.ctx.strokeStyle = this.getFillStyle("red");
-    this.ctx.beginPath();
-    this.ctx.moveTo(cx, cy);
-    this.ctx.lineTo(px, py);
-    this.ctx.stroke();
+    if (showLines) {
+      let px = cx + 50 * Math.cos(angle);
+      let py = cy + 50 * Math.sin(angle);
+      this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
+      this.ctx.fillRect(px - 2, py - 2, 4, 4);
+      this.ctx.strokeStyle = this.getFillStyle("red");
+      this.ctx.beginPath();
+      this.ctx.moveTo(cx, cy);
+      this.ctx.lineTo(px, py);
+      this.ctx.stroke();
+    }
   }
 
    getFillStyle(style) {
@@ -138,26 +150,30 @@ class TestEllipticFiller extends JSFrame {
     this.canvas.setAttribute("height", "500");
     this.canvas.style.background = "gray";
     let buttons = new JSPanel();
+    let checkBox = new JSCheckBox();
+    checkBox.setSelected(true);
+    checkBox.setText("Show Lines");
+    buttons.add(checkBox, null);
     let button = new JSButton();
     button.setText("STOP_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4EllipticFiller.STOP_AT_BOUNDARY));
+    button.addActionListener(event => this.fill(Z4EllipticFiller.STOP_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     button = new JSButton();
     button.setText("FILL_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4EllipticFiller.FILL_AT_BOUNDARY));
+    button.addActionListener(event => this.fill(Z4EllipticFiller.FILL_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     button = new JSButton();
     button.setText("SYMMETRIC_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4EllipticFiller.SYMMETRIC_AT_BOUNDARY));
+    button.addActionListener(event => this.fill(Z4EllipticFiller.SYMMETRIC_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     button = new JSButton();
     button.setText("REPEAT_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4EllipticFiller.REPEAT_AT_BOUNDARY));
+    button.addActionListener(event => this.fill(Z4EllipticFiller.REPEAT_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     this.getContentPane().add(buttons, BorderLayout.NORTH);
   }
 
-   fill(bb) {
+   fill(bb, showLines) {
     let cx = 200;
     let cy = 250;
     let rx = 50;
@@ -166,22 +182,24 @@ class TestEllipticFiller extends JSFrame {
     let imageData = this.ctx.createImageData(500, 500);
     new Z4EllipticFiller(new Z4GradientColor(), cx, cy, rx, ry, angle, bb).fill(imageData);
     this.ctx.putImageData(imageData, 0, 0);
-    let p1x = cx + rx * Math.cos(angle);
-    let p1y = cy + rx * Math.sin(angle);
-    let p2x = cx + ry * Math.cos(angle + Z4Math.HALF_PI);
-    let p2y = cy + ry * Math.sin(angle + Z4Math.HALF_PI);
-    this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
-    this.ctx.fillRect(p1x - 2, p1y - 2, 4, 4);
-    this.ctx.fillRect(p2x - 2, p2y - 2, 4, 4);
-    this.ctx.strokeStyle = this.getFillStyle("red");
-    this.ctx.beginPath();
-    this.ctx.moveTo(cx, cy);
-    this.ctx.lineTo(p1x, p1y);
-    this.ctx.stroke();
-    this.ctx.beginPath();
-    this.ctx.moveTo(cx, cy);
-    this.ctx.lineTo(p2x, p2y);
-    this.ctx.stroke();
+    if (showLines) {
+      let p1x = cx + rx * Math.cos(angle);
+      let p1y = cy + rx * Math.sin(angle);
+      let p2x = cx + ry * Math.cos(angle + Z4Math.HALF_PI);
+      let p2y = cy + ry * Math.sin(angle + Z4Math.HALF_PI);
+      this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
+      this.ctx.fillRect(p1x - 2, p1y - 2, 4, 4);
+      this.ctx.fillRect(p2x - 2, p2y - 2, 4, 4);
+      this.ctx.strokeStyle = this.getFillStyle("red");
+      this.ctx.beginPath();
+      this.ctx.moveTo(cx, cy);
+      this.ctx.lineTo(p1x, p1y);
+      this.ctx.stroke();
+      this.ctx.beginPath();
+      this.ctx.moveTo(cx, cy);
+      this.ctx.lineTo(p2x, p2y);
+      this.ctx.stroke();
+    }
   }
 
    getFillStyle(style) {
@@ -282,26 +300,30 @@ class TestPolygonFiller extends JSFrame {
     this.canvas.setAttribute("height", "500");
     this.canvas.style.background = "gray";
     let buttons = new JSPanel();
+    let checkBox = new JSCheckBox();
+    checkBox.setSelected(true);
+    checkBox.setText("Show Lines");
+    buttons.add(checkBox, null);
     let button = new JSButton();
     button.setText("STOP_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4PolygonFiller.STOP_AT_BOUNDARY));
+    button.addActionListener(event => this.fill(Z4PolygonFiller.STOP_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     button = new JSButton();
     button.setText("FILL_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4PolygonFiller.FILL_AT_BOUNDARY));
+    button.addActionListener(event => this.fill(Z4PolygonFiller.FILL_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     button = new JSButton();
     button.setText("SYMMETRIC_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4PolygonFiller.SYMMETRIC_AT_BOUNDARY));
+    button.addActionListener(event => this.fill(Z4PolygonFiller.SYMMETRIC_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     button = new JSButton();
     button.setText("REPEAT_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4PolygonFiller.REPEAT_AT_BOUNDARY));
+    button.addActionListener(event => this.fill(Z4PolygonFiller.REPEAT_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     this.getContentPane().add(buttons, BorderLayout.NORTH);
   }
 
-   fill(bb) {
+   fill(bb, showLines) {
     let cx = 200;
     let cy = 250;
     let rx = 50;
@@ -314,28 +336,30 @@ class TestPolygonFiller extends JSFrame {
     let stop = new Date();
     console.log(stop.getTime() - start.getTime());
     this.ctx.putImageData(imageData, 0, 0);
-    let p1x = cx + rx * Math.cos(angle);
-    let p1y = cy + rx * Math.sin(angle);
-    let p2x = cx + ry * Math.cos(angle + Z4Math.HALF_PI);
-    let p2y = cy + ry * Math.sin(angle + Z4Math.HALF_PI);
-    this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
-    this.ctx.fillRect(p1x - 2, p1y - 2, 4, 4);
-    this.ctx.fillRect(p2x - 2, p2y - 2, 4, 4);
-    for (let index = 0; index < vertex; index++) {
-      let x = rx * Math.cos(index * Z4Math.TWO_PI / vertex);
-      let y = ry * Math.sin(index * Z4Math.TWO_PI / vertex);
-      let rotated = Z4Math.rotate(x, y, angle);
-      this.ctx.fillRect(cx + rotated.x - 2, cy + rotated.y - 2, 4, 4);
+    if (showLines) {
+      let p1x = cx + rx * Math.cos(angle);
+      let p1y = cy + rx * Math.sin(angle);
+      let p2x = cx + ry * Math.cos(angle + Z4Math.HALF_PI);
+      let p2y = cy + ry * Math.sin(angle + Z4Math.HALF_PI);
+      this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
+      this.ctx.fillRect(p1x - 2, p1y - 2, 4, 4);
+      this.ctx.fillRect(p2x - 2, p2y - 2, 4, 4);
+      for (let index = 0; index < vertex; index++) {
+        let x = rx * Math.cos(index * Z4Math.TWO_PI / vertex);
+        let y = ry * Math.sin(index * Z4Math.TWO_PI / vertex);
+        let rotated = Z4Math.rotate(x, y, angle);
+        this.ctx.fillRect(cx + rotated.x - 2, cy + rotated.y - 2, 4, 4);
+      }
+      this.ctx.strokeStyle = this.getFillStyle("red");
+      this.ctx.beginPath();
+      this.ctx.moveTo(cx, cy);
+      this.ctx.lineTo(p1x, p1y);
+      this.ctx.stroke();
+      this.ctx.beginPath();
+      this.ctx.moveTo(cx, cy);
+      this.ctx.lineTo(p2x, p2y);
+      this.ctx.stroke();
     }
-    this.ctx.strokeStyle = this.getFillStyle("red");
-    this.ctx.beginPath();
-    this.ctx.moveTo(cx, cy);
-    this.ctx.lineTo(p1x, p1y);
-    this.ctx.stroke();
-    this.ctx.beginPath();
-    this.ctx.moveTo(cx, cy);
-    this.ctx.lineTo(p2x, p2y);
-    this.ctx.stroke();
   }
 
    getFillStyle(style) {
@@ -361,26 +385,30 @@ class TestSinusoidalFiller extends JSFrame {
     this.canvas.setAttribute("height", "500");
     this.canvas.style.background = "gray";
     let buttons = new JSPanel();
+    let checkBox = new JSCheckBox();
+    checkBox.setSelected(true);
+    checkBox.setText("Show Lines");
+    buttons.add(checkBox, null);
     let button = new JSButton();
     button.setText("STOP_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4EllipticFiller.STOP_AT_BOUNDARY));
+    button.addActionListener(event => this.fill(Z4EllipticFiller.STOP_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     button = new JSButton();
     button.setText("FILL_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4EllipticFiller.FILL_AT_BOUNDARY));
+    button.addActionListener(event => this.fill(Z4EllipticFiller.FILL_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     button = new JSButton();
     button.setText("SYMMETRIC_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4EllipticFiller.SYMMETRIC_AT_BOUNDARY));
+    button.addActionListener(event => this.fill(Z4EllipticFiller.SYMMETRIC_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     button = new JSButton();
     button.setText("REPEAT_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4EllipticFiller.REPEAT_AT_BOUNDARY));
+    button.addActionListener(event => this.fill(Z4EllipticFiller.REPEAT_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     this.getContentPane().add(buttons, BorderLayout.NORTH);
   }
 
-   fill(bb) {
+   fill(bb, showLines) {
     let x = 200;
     let y = 250;
     let angle = Math.PI / 3;
@@ -390,22 +418,24 @@ class TestSinusoidalFiller extends JSFrame {
     let imageData = this.ctx.createImageData(500, 500);
     new Z4SinusoidalFiller(new Z4GradientColor(), x, y, waveLength, period, amplitude, angle, bb).fill(imageData);
     this.ctx.putImageData(imageData, 0, 0);
-    let px = x + period * Math.cos(angle);
-    let py = y + period * Math.sin(angle);
-    let ampx = x + amplitude * Math.cos(angle + Z4Math.HALF_PI);
-    let ampy = y + amplitude * Math.sin(angle + Z4Math.HALF_PI);
-    this.ctx.fillRect(x - 2, y - 2, 4, 4);
-    this.ctx.fillRect(px - 2, py - 2, 4, 4);
-    this.ctx.fillRect(ampx - 2, ampy - 2, 4, 4);
-    this.ctx.strokeStyle = this.getFillStyle("red");
-    this.ctx.beginPath();
-    this.ctx.moveTo(x, y);
-    this.ctx.lineTo(px, py);
-    this.ctx.stroke();
-    this.ctx.beginPath();
-    this.ctx.moveTo(x, y);
-    this.ctx.lineTo(ampx, ampy);
-    this.ctx.stroke();
+    if (showLines) {
+      let px = x + period * Math.cos(angle);
+      let py = y + period * Math.sin(angle);
+      let ampx = x + amplitude * Math.cos(angle + Z4Math.HALF_PI);
+      let ampy = y + amplitude * Math.sin(angle + Z4Math.HALF_PI);
+      this.ctx.fillRect(x - 2, y - 2, 4, 4);
+      this.ctx.fillRect(px - 2, py - 2, 4, 4);
+      this.ctx.fillRect(ampx - 2, ampy - 2, 4, 4);
+      this.ctx.strokeStyle = this.getFillStyle("red");
+      this.ctx.beginPath();
+      this.ctx.moveTo(x, y);
+      this.ctx.lineTo(px, py);
+      this.ctx.stroke();
+      this.ctx.beginPath();
+      this.ctx.moveTo(x, y);
+      this.ctx.lineTo(ampx, ampy);
+      this.ctx.stroke();
+    }
   }
 
    getFillStyle(style) {
@@ -431,18 +461,22 @@ class TestSpiralFiller extends JSFrame {
     this.canvas.setAttribute("height", "500");
     this.canvas.style.background = "gray";
     let buttons = new JSPanel();
+    let checkBox = new JSCheckBox();
+    checkBox.setSelected(true);
+    checkBox.setText("Show Lines");
+    buttons.add(checkBox, null);
     let button = new JSButton();
     button.setText("GEOMETRIC");
-    button.addActionListener(event => this.fill(false));
+    button.addActionListener(event => this.fill(false, checkBox.isSelected()));
     buttons.add(button, null);
     button = new JSButton();
     button.setText("LOGARITHMIC");
-    button.addActionListener(event => this.fill(true));
+    button.addActionListener(event => this.fill(true, checkBox.isSelected()));
     buttons.add(button, null);
     this.getContentPane().add(buttons, BorderLayout.NORTH);
   }
 
-   fill(b) {
+   fill(b, showLines) {
     let cx = 200;
     let cy = 250;
     let radius = 100;
@@ -450,15 +484,17 @@ class TestSpiralFiller extends JSFrame {
     let imageData = this.ctx.createImageData(500, 500);
     new Z4SpiralFiller(new Z4GradientColor(), cx, cy, radius, angle, b).fill(imageData);
     this.ctx.putImageData(imageData, 0, 0);
-    let px = cx + radius * Math.cos(angle);
-    let py = cy + radius * Math.sin(angle);
-    this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
-    this.ctx.fillRect(px - 2, py - 2, 4, 4);
-    this.ctx.strokeStyle = this.getFillStyle("red");
-    this.ctx.beginPath();
-    this.ctx.moveTo(cx, cy);
-    this.ctx.lineTo(px, py);
-    this.ctx.stroke();
+    if (showLines) {
+      let px = cx + radius * Math.cos(angle);
+      let py = cy + radius * Math.sin(angle);
+      this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
+      this.ctx.fillRect(px - 2, py - 2, 4, 4);
+      this.ctx.strokeStyle = this.getFillStyle("red");
+      this.ctx.beginPath();
+      this.ctx.moveTo(cx, cy);
+      this.ctx.lineTo(px, py);
+      this.ctx.stroke();
+    }
   }
 
    getFillStyle(style) {
@@ -484,26 +520,30 @@ class TestStarFiller extends JSFrame {
     this.canvas.setAttribute("height", "500");
     this.canvas.style.background = "gray";
     let buttons = new JSPanel();
+    let checkBox = new JSCheckBox();
+    checkBox.setSelected(true);
+    checkBox.setText("Show Lines");
+    buttons.add(checkBox, null);
     let button = new JSButton();
     button.setText("STOP_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4PolygonFiller.STOP_AT_BOUNDARY));
+    button.addActionListener(event => this.fill(Z4PolygonFiller.STOP_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     button = new JSButton();
     button.setText("FILL_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4PolygonFiller.FILL_AT_BOUNDARY));
+    button.addActionListener(event => this.fill(Z4PolygonFiller.FILL_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     button = new JSButton();
     button.setText("SYMMETRIC_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4PolygonFiller.SYMMETRIC_AT_BOUNDARY));
+    button.addActionListener(event => this.fill(Z4PolygonFiller.SYMMETRIC_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     button = new JSButton();
     button.setText("REPEAT_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4PolygonFiller.REPEAT_AT_BOUNDARY));
+    button.addActionListener(event => this.fill(Z4PolygonFiller.REPEAT_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     this.getContentPane().add(buttons, BorderLayout.NORTH);
   }
 
-   fill(bb) {
+   fill(bb, showLines) {
     let cx = 200;
     let cy = 250;
     let rx = 50;
@@ -516,22 +556,24 @@ class TestStarFiller extends JSFrame {
     let stop = new Date();
     console.log(stop.getTime() - start.getTime());
     this.ctx.putImageData(imageData, 0, 0);
-    let p1x = cx + rx * Math.cos(angle);
-    let p1y = cy + rx * Math.sin(angle);
-    let p2x = cx + ry * Math.cos(angle + Z4Math.HALF_PI);
-    let p2y = cy + ry * Math.sin(angle + Z4Math.HALF_PI);
-    this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
-    this.ctx.fillRect(p1x - 2, p1y - 2, 4, 4);
-    this.ctx.fillRect(p2x - 2, p2y - 2, 4, 4);
-    this.ctx.strokeStyle = this.getFillStyle("red");
-    this.ctx.beginPath();
-    this.ctx.moveTo(cx, cy);
-    this.ctx.lineTo(p1x, p1y);
-    this.ctx.stroke();
-    this.ctx.beginPath();
-    this.ctx.moveTo(cx, cy);
-    this.ctx.lineTo(p2x, p2y);
-    this.ctx.stroke();
+    if (showLines) {
+      let p1x = cx + rx * Math.cos(angle);
+      let p1y = cy + rx * Math.sin(angle);
+      let p2x = cx + ry * Math.cos(angle + Z4Math.HALF_PI);
+      let p2y = cy + ry * Math.sin(angle + Z4Math.HALF_PI);
+      this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
+      this.ctx.fillRect(p1x - 2, p1y - 2, 4, 4);
+      this.ctx.fillRect(p2x - 2, p2y - 2, 4, 4);
+      this.ctx.strokeStyle = this.getFillStyle("red");
+      this.ctx.beginPath();
+      this.ctx.moveTo(cx, cy);
+      this.ctx.lineTo(p1x, p1y);
+      this.ctx.stroke();
+      this.ctx.beginPath();
+      this.ctx.moveTo(cx, cy);
+      this.ctx.lineTo(p2x, p2y);
+      this.ctx.stroke();
+    }
   }
 
    getFillStyle(style) {

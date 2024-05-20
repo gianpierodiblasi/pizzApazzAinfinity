@@ -6,6 +6,7 @@ import static def.dom.Globals.document;
 import def.dom.ImageData;
 import java.awt.BorderLayout;
 import javascript.swing.JSButton;
+import javascript.swing.JSCheckBox;
 import javascript.swing.JSComponent;
 import javascript.swing.JSFrame;
 import javascript.swing.JSPanel;
@@ -37,30 +38,35 @@ public class TestSinusoidalFiller extends JSFrame {
 
     JSPanel buttons = new JSPanel();
 
+    JSCheckBox checkBox = new JSCheckBox();
+    checkBox.setSelected(true);
+    checkBox.setText("Show Lines");
+    buttons.add(checkBox, null);
+
     JSButton button = new JSButton();
     button.setText("STOP_AT_BOUNDARY");
-    button.addActionListener(event -> this.fill(Z4EllipticFiller.STOP_AT_BOUNDARY));
+    button.addActionListener(event -> this.fill(Z4EllipticFiller.STOP_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
 
     button = new JSButton();
     button.setText("FILL_AT_BOUNDARY");
-    button.addActionListener(event -> this.fill(Z4EllipticFiller.FILL_AT_BOUNDARY));
+    button.addActionListener(event -> this.fill(Z4EllipticFiller.FILL_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
 
     button = new JSButton();
     button.setText("SYMMETRIC_AT_BOUNDARY");
-    button.addActionListener(event -> this.fill(Z4EllipticFiller.SYMMETRIC_AT_BOUNDARY));
+    button.addActionListener(event -> this.fill(Z4EllipticFiller.SYMMETRIC_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
 
     button = new JSButton();
     button.setText("REPEAT_AT_BOUNDARY");
-    button.addActionListener(event -> this.fill(Z4EllipticFiller.REPEAT_AT_BOUNDARY));
+    button.addActionListener(event -> this.fill(Z4EllipticFiller.REPEAT_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
 
     this.getContentPane().add(buttons, BorderLayout.NORTH);
   }
 
-  private void fill(int bb) {
+  private void fill(int bb, boolean showLines) {
     int x = 200;
     int y = 250;
 
@@ -73,25 +79,27 @@ public class TestSinusoidalFiller extends JSFrame {
     new Z4SinusoidalFiller(new Z4GradientColor(), x, y, waveLength, period, amplitude, angle, bb).fill(imageData);
     this.ctx.putImageData(imageData, 0, 0);
 
-    double px = x + period * Math.cos(angle);
-    double py = y + period * Math.sin(angle);
-    double ampx = x + amplitude * Math.cos(angle + Z4Math.HALF_PI);
-    double ampy = y + amplitude * Math.sin(angle + Z4Math.HALF_PI);
+    if (showLines) {
+      double px = x + period * Math.cos(angle);
+      double py = y + period * Math.sin(angle);
+      double ampx = x + amplitude * Math.cos(angle + Z4Math.HALF_PI);
+      double ampy = y + amplitude * Math.sin(angle + Z4Math.HALF_PI);
 
-    this.ctx.fillRect(x - 2, y - 2, 4, 4);
-    this.ctx.fillRect(px - 2, py - 2, 4, 4);
-    this.ctx.fillRect(ampx - 2, ampy - 2, 4, 4);
+      this.ctx.fillRect(x - 2, y - 2, 4, 4);
+      this.ctx.fillRect(px - 2, py - 2, 4, 4);
+      this.ctx.fillRect(ampx - 2, ampy - 2, 4, 4);
 
-    this.ctx.strokeStyle = this.$getFillStyle("red");
-    this.ctx.beginPath();
-    this.ctx.moveTo(x, y);
-    this.ctx.lineTo(px, py);
-    this.ctx.stroke();
+      this.ctx.strokeStyle = this.$getFillStyle("red");
+      this.ctx.beginPath();
+      this.ctx.moveTo(x, y);
+      this.ctx.lineTo(px, py);
+      this.ctx.stroke();
 
-    this.ctx.beginPath();
-    this.ctx.moveTo(x, y);
-    this.ctx.lineTo(ampx, ampy);
-    this.ctx.stroke();
+      this.ctx.beginPath();
+      this.ctx.moveTo(x, y);
+      this.ctx.lineTo(ampx, ampy);
+      this.ctx.stroke();
+    }
   }
 
   private String getFillStyle(String style) {

@@ -8,6 +8,7 @@ import def.dom.ImageData;
 import def.js.Date;
 import java.awt.BorderLayout;
 import javascript.swing.JSButton;
+import javascript.swing.JSCheckBox;
 import javascript.swing.JSComponent;
 import javascript.swing.JSFrame;
 import javascript.swing.JSPanel;
@@ -38,30 +39,35 @@ public class TestBezierFiller extends JSFrame {
 
     JSPanel buttons = new JSPanel();
 
+    JSCheckBox checkBox = new JSCheckBox();
+    checkBox.setSelected(true);
+    checkBox.setText("Show Lines");
+    buttons.add(checkBox, null);
+
     JSButton button = new JSButton();
     button.setText("STOP_AT_BOUNDARY");
-    button.addActionListener(event -> this.fill(Z4EllipticFiller.STOP_AT_BOUNDARY));
+    button.addActionListener(event -> this.fill(Z4EllipticFiller.STOP_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
 
     button = new JSButton();
     button.setText("FILL_AT_BOUNDARY");
-    button.addActionListener(event -> this.fill(Z4EllipticFiller.FILL_AT_BOUNDARY));
+    button.addActionListener(event -> this.fill(Z4EllipticFiller.FILL_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
 
     button = new JSButton();
     button.setText("SYMMETRIC_AT_BOUNDARY");
-    button.addActionListener(event -> this.fill(Z4EllipticFiller.SYMMETRIC_AT_BOUNDARY));
+    button.addActionListener(event -> this.fill(Z4EllipticFiller.SYMMETRIC_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
 
     button = new JSButton();
     button.setText("REPEAT_AT_BOUNDARY");
-    button.addActionListener(event -> this.fill(Z4EllipticFiller.REPEAT_AT_BOUNDARY));
+    button.addActionListener(event -> this.fill(Z4EllipticFiller.REPEAT_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
 
     this.getContentPane().add(buttons, BorderLayout.NORTH);
   }
 
-  private void fill(int bb) {
+  private void fill(int bb, boolean showLines) {
     int x1 = 100;
     int y1 = 250;
     int ctrlx1 = 150;
@@ -79,16 +85,18 @@ public class TestBezierFiller extends JSFrame {
     console.log(stop.getTime() - start.getTime());
     this.ctx.putImageData(imageData, 0, 0);
 
-    this.ctx.fillRect(x1 - 2, y1 - 2, 4, 4);
-    this.ctx.fillRect(ctrlx1 - 2, ctrly1 - 2, 4, 4);
-    this.ctx.fillRect(ctrlx2 - 2, ctrly2 - 2, 4, 4);
-    this.ctx.fillRect(x2 - 2, y2 - 2, 4, 4);
+    if (showLines) {
+      this.ctx.fillRect(x1 - 2, y1 - 2, 4, 4);
+      this.ctx.fillRect(ctrlx1 - 2, ctrly1 - 2, 4, 4);
+      this.ctx.fillRect(ctrlx2 - 2, ctrly2 - 2, 4, 4);
+      this.ctx.fillRect(x2 - 2, y2 - 2, 4, 4);
 
-    this.ctx.strokeStyle = this.$getFillStyle("red");
-    this.ctx.beginPath();
-    this.ctx.moveTo(x1, y1);
-    this.ctx.bezierCurveTo(ctrlx1, ctrly1, ctrlx2, ctrly2, x2, y2);
-    this.ctx.stroke();
+      this.ctx.strokeStyle = this.$getFillStyle("red");
+      this.ctx.beginPath();
+      this.ctx.moveTo(x1, y1);
+      this.ctx.bezierCurveTo(ctrlx1, ctrly1, ctrlx2, ctrly2, x2, y2);
+      this.ctx.stroke();
+    }
   }
 
   private String getFillStyle(String style) {

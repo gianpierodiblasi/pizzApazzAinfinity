@@ -6,6 +6,7 @@ import static def.dom.Globals.document;
 import def.dom.ImageData;
 import java.awt.BorderLayout;
 import javascript.swing.JSButton;
+import javascript.swing.JSCheckBox;
 import javascript.swing.JSComponent;
 import javascript.swing.JSFrame;
 import javascript.swing.JSPanel;
@@ -36,20 +37,25 @@ public class TestSpiralFiller extends JSFrame {
 
     JSPanel buttons = new JSPanel();
 
+    JSCheckBox checkBox = new JSCheckBox();
+    checkBox.setSelected(true);
+    checkBox.setText("Show Lines");
+    buttons.add(checkBox, null);
+
     JSButton button = new JSButton();
     button.setText("GEOMETRIC");
-    button.addActionListener(event -> this.fill(false));
+    button.addActionListener(event -> this.fill(false, checkBox.isSelected()));
     buttons.add(button, null);
 
     button = new JSButton();
     button.setText("LOGARITHMIC");
-    button.addActionListener(event -> this.fill(true));
+    button.addActionListener(event -> this.fill(true, checkBox.isSelected()));
     buttons.add(button, null);
 
     this.getContentPane().add(buttons, BorderLayout.NORTH);
   }
 
-  private void fill(boolean b) {
+  private void fill(boolean b, boolean showLines) {
     int cx = 200;
     int cy = 250;
     double radius = 100;
@@ -59,17 +65,19 @@ public class TestSpiralFiller extends JSFrame {
     new Z4SpiralFiller(new Z4GradientColor(), cx, cy, radius, angle, b).fill(imageData);
     this.ctx.putImageData(imageData, 0, 0);
 
-    double px = cx + radius * Math.cos(angle);
-    double py = cy + radius * Math.sin(angle);
+    if (showLines) {
+      double px = cx + radius * Math.cos(angle);
+      double py = cy + radius * Math.sin(angle);
 
-    this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
-    this.ctx.fillRect(px - 2, py - 2, 4, 4);
+      this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
+      this.ctx.fillRect(px - 2, py - 2, 4, 4);
 
-    this.ctx.strokeStyle = this.$getFillStyle("red");
-    this.ctx.beginPath();
-    this.ctx.moveTo(cx, cy);
-    this.ctx.lineTo(px, py);
-    this.ctx.stroke();
+      this.ctx.strokeStyle = this.$getFillStyle("red");
+      this.ctx.beginPath();
+      this.ctx.moveTo(cx, cy);
+      this.ctx.lineTo(px, py);
+      this.ctx.stroke();
+    }
   }
 
   private String getFillStyle(String style) {
