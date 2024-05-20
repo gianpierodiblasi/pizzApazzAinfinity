@@ -1718,37 +1718,39 @@ class Z4LayerPreview extends JSComponent {
       }
     });
     this.addLabel(panel, Z4Translations.LAYER_NAME, 0, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
-    this.addComponent(panel, this.editName, 0, 1, 2, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 5, 0));
+    this.addComponent(panel, this.editName, 0, 1, 5, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 5, 0));
     this.addLabel(panel, Z4Translations.OFFSET_X, 0, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
     this.offsetXSpinner.getStyle().minWidth = "4rem";
     this.offsetXSpinner.getChilStyleByQuery("input[type=number]").minWidth = "3.5rem";
     this.offsetXSpinner.getChilStyleByQuery("input[type=number]").width = "3.5rem";
     this.offsetXSpinner.addChangeListener(event => this.onChange(true, this.offsetXSpinner.getValueIsAdjusting(), this.offsetXSpinner, this.offsetXSlider));
-    this.addComponent(panel, this.offsetXSpinner, 1, 2, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
-    this.offsetXSlider.getStyle().minWidth = "25rem";
+    this.addComponent(panel, this.offsetXSpinner, 1, 2, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    this.offsetXSlider.getStyle().minWidth = "20rem";
     this.offsetXSlider.addChangeListener(event => this.onChange(false, this.offsetXSlider.getValueIsAdjusting(), this.offsetXSpinner, this.offsetXSlider));
-    this.addComponent(panel, this.offsetXSlider, 0, 3, 2, 1, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
+    this.addComponent(panel, this.offsetXSlider, 0, 3, 2, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
     this.addLabel(panel, Translations.JSColorChooser_OPACITY, 0, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
     this.opacitySpinner.getStyle().minWidth = "4rem";
     this.opacitySpinner.getChilStyleByQuery("input[type=number]").minWidth = "3.5rem";
     this.opacitySpinner.getChilStyleByQuery("input[type=number]").width = "3.5rem";
     this.opacitySpinner.addChangeListener(event => this.onChange(true, this.opacitySpinner.getValueIsAdjusting(), this.opacitySpinner, this.opacitySlider));
-    this.addComponent(panel, this.opacitySpinner, 1, 4, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    this.addComponent(panel, this.opacitySpinner, 1, 4, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
     this.opacitySlider.addChangeListener(event => this.onChange(false, this.opacitySlider.getValueIsAdjusting(), this.opacitySpinner, this.opacitySlider));
-    this.opacitySlider.getStyle().minWidth = "25rem";
-    this.addComponent(panel, this.opacitySlider, 0, 5, 2, 1, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
+    this.opacitySlider.getStyle().minWidth = "20rem";
+    this.addComponent(panel, this.opacitySlider, 0, 5, 2, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
     this.addVLine(panel, 2, 2, 1, 5, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL);
-    this.addLabel(panel, Z4Translations.OFFSET_Y, 3, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
-    this.offsetYSpinner.getStyle().minWidth = "4rem";
-    this.offsetYSpinner.getChilStyleByQuery("input[type=number]").minWidth = "3.5rem";
-    this.offsetYSpinner.getChilStyleByQuery("input[type=number]").width = "3.5rem";
+    this.addLabel(panel, Z4Translations.OFFSET_Y, 3, 5, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE);
+    panel.getChilStyleByQuery("*:nth-child(10)").writingMode = "vertical-lr";
+    panel.getChilStyleByQuery("*:nth-child(10)").transform = "rotate(180deg)";
+    this.offsetYSpinner.cssAddClass("offsetyspinner");
+    this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
+    this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
     this.offsetYSpinner.addChangeListener(event => this.onChange(true, this.offsetYSpinner.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
-    this.addComponent(panel, this.offsetYSpinner, 4, 2, 1, 1, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 2, 0, 0));
+    this.addComponent(panel, this.offsetYSpinner, 3, 2, 1, 3, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.NONE, null);
     this.offsetYSlider.setOrientation(JSSlider.VERTICAL);
     this.offsetYSlider.setInverted(true);
-    this.offsetYSlider.getStyle().minHeight = "25rem";
+    this.offsetYSlider.getStyle().minHeight = "20rem";
     this.offsetYSlider.addChangeListener(event => this.onChange(false, this.offsetYSlider.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
-    this.addComponent(panel, this.offsetYSlider, 3, 3, 1, 4, GridBagConstraints.NORTH, GridBagConstraints.NONE, null);
+    this.addComponent(panel, this.offsetYSlider, 4, 2, 1, 4, 0, 1, GridBagConstraints.NORTH, GridBagConstraints.NONE, null);
     this.editor.addTab(Z4Translations.BASIC, panel);
     let finalPanel = new JSPanel();
     finalPanel.setLayout(new GridBagLayout());
@@ -1763,7 +1765,7 @@ class Z4LayerPreview extends JSComponent {
         button.addActionListener(event => this.onAction(element));
         this.compositeOperations.push(button);
         this.compositeOperationsGroup.add(button);
-        this.addComponent(finalPanel, button, index2, index + 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(1, 1, 1, 1));
+        this.addComponent(finalPanel, button, index2, index + 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(1, 1, 1, 1));
       });
     });
     this.editor.addTab(Z4Translations.ADVANCED, finalPanel);
@@ -1773,22 +1775,24 @@ class Z4LayerPreview extends JSComponent {
    addLabel(panel, text, gridx, gridy, gridwidth, gridheight, anchor, fill) {
     let label = new JSLabel();
     label.setText(text);
-    this.addComponent(panel, label, gridx, gridy, gridwidth, gridheight, anchor, fill, null);
+    this.addComponent(panel, label, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, null);
   }
 
    addVLine(panel, gridx, gridy, gridwidth, gridheight, anchor, fill) {
     let div = new JSComponent(document.createElement("div"));
     div.getStyle().width = "1px";
     div.getStyle().background = "var(--main-action-bgcolor";
-    this.addComponent(panel, div, gridx, gridy, gridwidth, gridheight, anchor, fill, new Insets(1, 2, 1, 2));
+    this.addComponent(panel, div, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, new Insets(1, 2, 1, 2));
   }
 
-   addComponent(panel, component, gridx, gridy, gridwidth, gridheight, anchor, fill, insets) {
+   addComponent(panel, component, gridx, gridy, gridwidth, gridheight, weightx, weighty, anchor, fill, insets) {
     let constraints = new GridBagConstraints();
     constraints.gridx = gridx;
     constraints.gridy = gridy;
     constraints.gridwidth = gridwidth;
     constraints.gridheight = gridheight;
+    constraints.weightx = weightx;
+    constraints.weighty = weighty;
     constraints.anchor = anchor;
     constraints.fill = fill;
     if (insets) {
@@ -2390,7 +2394,7 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       this.setIcons();
       this.drawPreview(false);
     });
-    this.addComponent(this.star, 1, 7, 2, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    this.addComponent(this.star, 1, 7, 3, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
     let vertexModelAndRenderer = new DefaultSliderModelAndRenderer();
     for (let vertex = 3; vertex < 10; vertex++) {
       vertexModelAndRenderer.addElement("" + vertex);
@@ -2403,7 +2407,7 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       this.setIcons();
       this.drawPreview(false);
     });
-    this.addComponent(this.vertexCounter, 0, 8, 3, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    this.addComponent(this.vertexCounter, 0, 8, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
     this.getChilStyleByQuery("*:nth-child(13) datalist option:nth-child(8)").fontSize = "larger";
     this.regular.setText(Z4Translations.REGULAR);
     this.regular.addActionListener(event => {

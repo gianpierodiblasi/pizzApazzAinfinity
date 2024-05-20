@@ -192,6 +192,23 @@
   left: 0px;
 }
 
+.z4layerpreview .z4layerpreview-editor .offsetyspinner {
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  min-width: 0rem;
+  grid-template:
+    "num down" 1fr
+    "num up" 1fr /
+    1fr auto
+}
+.z4layerpreview .z4layerpreview-editor .offsetyspinner:has(input:focus), .z4layerpreview .z4layerpreview-editor .offsetyspinner:hover:not([disabled]) {
+    box-shadow: -.15rem -.15rem .15rem var(--main-action-bgcolor);
+}
+.z4layerpreview .z4layerpreview-editor .offsetyspinner input[type=number] {
+  min-width: 2.2rem;
+  width: 2.2rem;
+}
+
 .z4layerpreview .z4layerpreview-editor[offset=true], .z4layerpreview .z4layerpreview-editor[offset=true] * {
   background: transparent;
 }

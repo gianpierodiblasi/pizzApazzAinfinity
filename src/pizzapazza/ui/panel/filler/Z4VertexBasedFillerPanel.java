@@ -52,7 +52,7 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       this.drawPreview(false);
     });
 
-    this.addComponent(this.star, 1, 7, 2, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    this.addComponent(this.star, 1, 7, 3, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
 
     DefaultSliderModelAndRenderer<String> vertexModelAndRenderer = new DefaultSliderModelAndRenderer<>();
     for (int vertex = 3; vertex < 10; vertex++) {
@@ -67,7 +67,7 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       this.drawPreview(false);
     });
 
-    this.addComponent(this.vertexCounter, 0, 8, 3, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    this.addComponent(this.vertexCounter, 0, 8, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
     this.getChilStyleByQuery("*:nth-child(13) datalist option:nth-child(8)").fontSize = "larger";
 
     this.regular.setText(Z4Translations.REGULAR);
