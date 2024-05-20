@@ -1,5 +1,5 @@
 /**
- * The panel to manage a (multi) linear filler
+ * The panel to manage a (multi) conic filler
  *
  * @author gianpiero.diblasi
  */

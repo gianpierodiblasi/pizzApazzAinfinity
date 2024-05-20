@@ -12,7 +12,7 @@ import pizzapazza.math.Z4Math;
 import simulation.dom.$CanvasRenderingContext2D;
 
 /**
- * The panel to manage a (multi) linear filler
+ * The panel to manage a (multi) conic filler
  *
  * @author gianpiero.diblasi
  */
