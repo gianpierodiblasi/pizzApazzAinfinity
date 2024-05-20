@@ -1,9 +1,6 @@
 package pizzapazza.filler;
 
 import def.dom.ImageData;
-import javascript.awt.Color;
-import pizzapazza.color.Z4GradientColor;
-import simulation.js.$Uint8Array;
 
 /**
  * The common interface for all fillers; each instance of
