@@ -223,13 +223,28 @@ class Z4GradientColor {
   }
 }
 /**
- * The common abstract object for all fillers; each instance of
+ * The common interface for all fillers; each instance of
  * <i>Z4AbstractFiller</i> provides a different painting style (radial, conic,
  * elliptic, ect.)
  *
  * @author gianpiero.diblasi
  */
 class Z4AbstractFiller {
+
+  /**
+   * Fills an image
+   *
+   * @param imageData The image data
+   */
+   fill(imageData) {
+  }
+}
+/**
+ * A Filler based on a gradient color
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4AbstractGradientColorFiller extends Z4AbstractFiller {
 
    gradientColor = null;
 
@@ -239,14 +254,10 @@ class Z4AbstractFiller {
    * @param gradientColor The color used to fill
    */
   constructor(gradientColor) {
+    super();
     this.gradientColor = gradientColor;
   }
 
-  /**
-   * Fills an image
-   *
-   * @param imageData The image data
-   */
    fill(imageData) {
     let data = imageData.data;
     for (let y = 0; y < imageData.height; y++) {
@@ -279,7 +290,7 @@ class Z4AbstractFiller {
  *
  * @author gianpiero.diblasi
  */
-class Z4AbstractBoundaryBehaviorFiller extends Z4AbstractFiller {
+class Z4AbstractBoundaryBehaviorFiller extends Z4AbstractGradientColorFiller {
 
   /**
    * The filler does nothing outside the boundary
@@ -795,7 +806,7 @@ class Z4LinearFiller extends Z4AbstractBoundaryBehaviorFiller {
  *
  * @author gianpiero.diblasi
  */
-class Z4ConicFiller extends Z4AbstractFiller {
+class Z4ConicFiller extends Z4AbstractGradientColorFiller {
 
    cx = 0;
 
@@ -840,7 +851,7 @@ class Z4ConicFiller extends Z4AbstractFiller {
  *
  * @author gianpiero.diblasi
  */
-class Z4SpiralFiller extends Z4AbstractFiller {
+class Z4SpiralFiller extends Z4AbstractGradientColorFiller {
 
    cx = 0;
 

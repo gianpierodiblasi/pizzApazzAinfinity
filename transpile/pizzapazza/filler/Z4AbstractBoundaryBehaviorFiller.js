@@ -3,7 +3,7 @@
  *
  * @author gianpiero.diblasi
  */
-class Z4AbstractBoundaryBehaviorFiller extends Z4AbstractFiller {
+class Z4AbstractBoundaryBehaviorFiller extends Z4AbstractGradientColorFiller {
 
   /**
    * The filler does nothing outside the boundary

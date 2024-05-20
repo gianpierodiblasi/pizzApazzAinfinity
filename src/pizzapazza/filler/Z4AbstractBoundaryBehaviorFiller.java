@@ -7,7 +7,7 @@ import pizzapazza.color.Z4GradientColor;
  *
  * @author gianpiero.diblasi
  */
-public abstract class Z4AbstractBoundaryBehaviorFiller extends Z4AbstractFiller {
+public abstract class Z4AbstractBoundaryBehaviorFiller extends Z4AbstractGradientColorFiller {
 
   /**
    * The filler does nothing outside the boundary

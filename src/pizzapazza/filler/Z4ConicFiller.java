@@ -9,7 +9,7 @@ import pizzapazza.math.Z4Point;
  *
  * @author gianpiero.diblasi
  */
-public class Z4ConicFiller extends Z4AbstractFiller {
+public class Z4ConicFiller extends Z4AbstractGradientColorFiller {
 
   private final int cx;
   private final int cy;

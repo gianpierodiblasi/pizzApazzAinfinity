@@ -3,7 +3,7 @@
  *
  * @author gianpiero.diblasi
  */
-class Z4ConicFiller extends Z4AbstractFiller {
+class Z4ConicFiller extends Z4AbstractGradientColorFiller {
 
    cx = 0;
 
