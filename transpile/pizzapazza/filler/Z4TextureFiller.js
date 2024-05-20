@@ -96,6 +96,9 @@ class Z4TextureFiller extends Z4AbstractFiller {
   }
 
    fill(imageData) {
+    if (!this.width || !this.height) {
+      return;
+    }
     let data = imageData.data;
     for (let y = 0; y < imageData.height; y++) {
       for (let x = 0; x < imageData.width; x++) {

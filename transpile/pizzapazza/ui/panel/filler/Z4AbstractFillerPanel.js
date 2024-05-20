@@ -29,7 +29,7 @@ class Z4AbstractFillerPanel extends JSPanel {
 
    buttonGroupRadios = new ButtonGroup();
 
-   color = new Z4GradientColor();
+   gradientColor = new Z4GradientColor();
 
    radios = new Array();
 
@@ -323,12 +323,12 @@ class Z4AbstractFillerPanel extends JSPanel {
     let map = this.points.map(point => new Point(w * point.x / this.width, h * point.y / this.height));
     if (adjusting && this.needsRescale(this.selectedOption)) {
       let imageData = this.offscreenCtx.createImageData(w / Z4AbstractFillerPanel.RESCALE, h / Z4AbstractFillerPanel.RESCALE);
-      this.getFiller(this.color, map.map(point => new Point(point.x / Z4AbstractFillerPanel.RESCALE, point.y / Z4AbstractFillerPanel.RESCALE)), this.selectedOption).fill(imageData);
+      this.getFiller(this.gradientColor, map.map(point => new Point(point.x / Z4AbstractFillerPanel.RESCALE, point.y / Z4AbstractFillerPanel.RESCALE)), this.selectedOption).fill(imageData);
       this.offscreenCtx.putImageData(imageData, 0, 0);
       this.ctx.drawImage(this.offscreenCanvas, 0, 0, w, h);
     } else {
       let imageData = this.ctx.createImageData(w, h);
-      this.getFiller(this.color, map, this.selectedOption).fill(imageData);
+      this.getFiller(this.gradientColor, map, this.selectedOption).fill(imageData);
       this.ctx.putImageData(imageData, 0, 0);
     }
     this.ctx.save();

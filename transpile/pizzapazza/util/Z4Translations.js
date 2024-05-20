@@ -78,6 +78,10 @@ class Z4Translations {
 
   static  FILLING_COLOR = "";
 
+  static  BACKGROUND_COLOR = "";
+
+  static  PATTERN = "";
+
   static  EDIT = "";
 
   static  FIT = "";
@@ -206,6 +210,8 @@ class Z4Translations {
     Z4Translations.HEIGHT = "Height";
     Z4Translations.RESOLUTION = "Resolution";
     Z4Translations.FILLING_COLOR = "Filling Color";
+    Z4Translations.BACKGROUND_COLOR = "Background Color";
+    Z4Translations.PATTERN = "Pattern";
     Z4Translations.EDIT = "Edit";
     Z4Translations.FIT = "Fit";
     Z4Translations.OFFSET_X = "Offset X";
@@ -287,6 +293,8 @@ class Z4Translations {
     Z4Translations.HEIGHT = "Altezza";
     Z4Translations.RESOLUTION = "Risoluzione";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";
+    Z4Translations.BACKGROUND_COLOR = "Colore di Sfondo";
+    Z4Translations.PATTERN = "Trama";
     Z4Translations.EDIT = "Modifica";
     Z4Translations.FIT = "Adatta";
     Z4Translations.OFFSET_X = "Offset X";

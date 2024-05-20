@@ -101,6 +101,10 @@ public class Z4TextureFiller implements Z4AbstractFiller {
 
   @Override
   public void fill(ImageData imageData) {
+    if (!$exists(this.width) || !$exists(this.height)) {
+      return;
+    }
+
     $Uint8Array data = ($Uint8Array) imageData.data;
 
     for (int y = 0; y < imageData.height; y++) {

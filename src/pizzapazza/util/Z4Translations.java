@@ -54,6 +54,8 @@ public class Z4Translations {
   public static String HEIGHT = "";
   public static String RESOLUTION = "";
   public static String FILLING_COLOR = "";
+  public static String BACKGROUND_COLOR = "";
+  public static String PATTERN = "";
   public static String EDIT = "";
   public static String FIT = "";
   public static String OFFSET_X = "";
@@ -156,6 +158,8 @@ public class Z4Translations {
     Z4Translations.HEIGHT = "Height";
     Z4Translations.RESOLUTION = "Resolution";
     Z4Translations.FILLING_COLOR = "Filling Color";
+    Z4Translations.BACKGROUND_COLOR = "Background Color";
+    Z4Translations.PATTERN = "Pattern";
     Z4Translations.EDIT = "Edit";
     Z4Translations.FIT = "Fit";
     Z4Translations.OFFSET_X = "Offset X";
@@ -242,6 +246,8 @@ public class Z4Translations {
     Z4Translations.HEIGHT = "Altezza";
     Z4Translations.RESOLUTION = "Risoluzione";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";
+    Z4Translations.BACKGROUND_COLOR = "Colore di Sfondo";
+    Z4Translations.PATTERN = "Trama";
     Z4Translations.EDIT = "Modifica";
     Z4Translations.FIT = "Adatta";
     Z4Translations.OFFSET_X = "Offset X";

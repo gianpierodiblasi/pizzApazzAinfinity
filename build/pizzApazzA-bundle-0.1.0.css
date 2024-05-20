@@ -149,6 +149,13 @@
 .z4abstractfillerpanel.z4sinusoidalfillerpanel div label:nth-child(4) img {
   content: url(../image/filler/sinusoidal_repeat.png);
 }
+
+.z4abstractfillerpanel.z4texturefillerpanel div label:nth-child(1) img {
+  content: url(../image/filler/texture_no_symmetric.png);
+}
+.z4abstractfillerpanel.z4texturefillerpanel div label:nth-child(2) img {
+  content: url(../image/filler/texture_symmetric.png);
+}
 .z4colorpreview {
   height: 2rem;
   display: grid;

@@ -990,6 +990,9 @@ class Z4TextureFiller extends Z4AbstractFiller {
   }
 
    fill(imageData) {
+    if (!this.width || !this.height) {
+      return;
+    }
     let data = imageData.data;
     for (let y = 0; y < imageData.height; y++) {
       for (let x = 0; x < imageData.width; x++) {
@@ -2096,7 +2099,7 @@ class Z4AbstractFillerPanel extends JSPanel {
 
    buttonGroupRadios = new ButtonGroup();
 
-   color = new Z4GradientColor();
+   gradientColor = new Z4GradientColor();
 
    radios = new Array();
 
@@ -2390,12 +2393,12 @@ class Z4AbstractFillerPanel extends JSPanel {
     let map = this.points.map(point => new Point(w * point.x / this.width, h * point.y / this.height));
     if (adjusting && this.needsRescale(this.selectedOption)) {
       let imageData = this.offscreenCtx.createImageData(w / Z4AbstractFillerPanel.RESCALE, h / Z4AbstractFillerPanel.RESCALE);
-      this.getFiller(this.color, map.map(point => new Point(point.x / Z4AbstractFillerPanel.RESCALE, point.y / Z4AbstractFillerPanel.RESCALE)), this.selectedOption).fill(imageData);
+      this.getFiller(this.gradientColor, map.map(point => new Point(point.x / Z4AbstractFillerPanel.RESCALE, point.y / Z4AbstractFillerPanel.RESCALE)), this.selectedOption).fill(imageData);
       this.offscreenCtx.putImageData(imageData, 0, 0);
       this.ctx.drawImage(this.offscreenCanvas, 0, 0, w, h);
     } else {
       let imageData = this.ctx.createImageData(w, h);
-      this.getFiller(this.color, map, this.selectedOption).fill(imageData);
+      this.getFiller(this.gradientColor, map, this.selectedOption).fill(imageData);
       this.ctx.putImageData(imageData, 0, 0);
     }
     this.ctx.save();
@@ -2841,6 +2844,101 @@ class Z4SpiralFillerPanel extends Z4AbstractFillerPanel {
     ctx.strokeStyle = this.getStrokeStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();
+  }
+
+   getStrokeStyle(style) {
+    return style;
+  }
+}
+/**
+ * The panel to manage a texture filler
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
+
+   colorPreview = new Z4ColorPreview();
+
+   imageData = new ImageData(Z4TextureFillerPanel.DEFAULT_SIZE, Z4TextureFillerPanel.DEFAULT_SIZE);
+
+   backgroundColor = new Color(0, 0, 0, 0);
+
+  static  DEFAULT_SIZE = 50;
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super(2, new Array(false, true));
+    this.addLabel(Z4Translations.BACKGROUND_COLOR, 0, 7, 4, 1, GridBagConstraints.EAST, GridBagConstraints.NONE);
+    let panel = new JSPanel();
+    panel.setLayout(new BorderLayout(5, 0));
+    this.addComponent(panel, 0, 8, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    this.colorPreview.getStyle().alignSelf = "center";
+    this.colorPreview.setColor(this.backgroundColor);
+    panel.add(this.colorPreview, BorderLayout.CENTER);
+    let button = new JSButton();
+    button.setText(Z4Translations.PATTERN);
+    button.getStyle().marginRight = "4rem";
+    button.addActionListener(event => this.selectPattern());
+    panel.add(button, BorderLayout.WEST);
+    button = new JSButton();
+    button.setText(Z4Translations.EDIT);
+    button.addActionListener(event => {
+      JSColorChooser.showDialog(Z4Translations.FILLING_COLOR, this.backgroundColor, true, null, c => {
+        this.backgroundColor = c;
+        this.colorPreview.setColor(c);
+        this.drawPreview(false);
+      });
+    });
+    panel.add(button, BorderLayout.EAST);
+    let data = this.imageData.data;
+    for (let y = 0; y < Z4TextureFillerPanel.DEFAULT_SIZE; y++) {
+      for (let x = 0; x < Z4TextureFillerPanel.DEFAULT_SIZE; x++) {
+        let index = (y * Z4TextureFillerPanel.DEFAULT_SIZE + x) * 4;
+        if (Z4Math.distance(x, y, Z4TextureFillerPanel.DEFAULT_SIZE / 2, Z4TextureFillerPanel.DEFAULT_SIZE / 2) > Z4TextureFillerPanel.DEFAULT_SIZE / 2) {
+        } else if (y < Z4TextureFillerPanel.DEFAULT_SIZE / 2) {
+          data[index] = 255;
+          data[index + 1] = 255;
+          data[index + 2] = 255;
+          data[index + 3] = 255;
+        } else {
+          data[index] = 0;
+          data[index + 1] = 0;
+          data[index + 2] = 0;
+          data[index + 3] = 255;
+        }
+      }
+    }
+    this.cssAddClass("z4texturefillerpanel");
+    this.drawPreview(false);
+  }
+
+   selectPattern() {
+  }
+
+   setPointPosition(points, selectedIndex, x, y, width, height) {
+    points[selectedIndex] = new Point(x, y);
+  }
+
+   pushPointPositions(points, width, height) {
+    points.push(new Point(0, 0));
+    points.push(new Point(Math.min(width, Z4TextureFillerPanel.DEFAULT_SIZE), Math.min(height, Z4TextureFillerPanel.DEFAULT_SIZE)));
+  }
+
+   needsRescale(option) {
+    return false;
+  }
+
+   getFiller(gradientColor, points, option) {
+    return new Z4TextureFiller(this.imageData, points[0].x, points[0].y, points[1].x, points[1].y, this.backgroundColor, option);
+  }
+
+   isPointEnabled(index) {
+    return true;
+  }
+
+   drawObjects(ctx, mappedPoints) {
   }
 
    getStrokeStyle(style) {
@@ -4076,6 +4174,10 @@ class Z4Translations {
 
   static  FILLING_COLOR = "";
 
+  static  BACKGROUND_COLOR = "";
+
+  static  PATTERN = "";
+
   static  EDIT = "";
 
   static  FIT = "";
@@ -4204,6 +4306,8 @@ class Z4Translations {
     Z4Translations.HEIGHT = "Height";
     Z4Translations.RESOLUTION = "Resolution";
     Z4Translations.FILLING_COLOR = "Filling Color";
+    Z4Translations.BACKGROUND_COLOR = "Background Color";
+    Z4Translations.PATTERN = "Pattern";
     Z4Translations.EDIT = "Edit";
     Z4Translations.FIT = "Fit";
     Z4Translations.OFFSET_X = "Offset X";
@@ -4285,6 +4389,8 @@ class Z4Translations {
     Z4Translations.HEIGHT = "Altezza";
     Z4Translations.RESOLUTION = "Risoluzione";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";
+    Z4Translations.BACKGROUND_COLOR = "Colore di Sfondo";
+    Z4Translations.PATTERN = "Trama";
     Z4Translations.EDIT = "Modifica";
     Z4Translations.FIT = "Adatta";
     Z4Translations.OFFSET_X = "Offset X";
