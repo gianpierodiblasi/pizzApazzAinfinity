@@ -100,6 +100,14 @@ class Z4Translations {
 
   static  REGULAR = "";
 
+  static  DIMENSION = "";
+
+  static  FREE = "";
+
+  static  LOCK_RATIO = "";
+
+  static  LOCK = "";
+
   // Composite Operation
   static  COMPOSITE_OPERATION = "";
 
@@ -221,6 +229,10 @@ class Z4Translations {
     Z4Translations.STAR = "Star";
     Z4Translations.VERTICES = "Vertices";
     Z4Translations.REGULAR = "Regular";
+    Z4Translations.DIMENSION = "Dimension";
+    Z4Translations.FREE = "Free";
+    Z4Translations.LOCK_RATIO = "Lock Ratio";
+    Z4Translations.LOCK = "Lock";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "This is the default setting and draws the layer on top of the existing content";
@@ -304,6 +316,10 @@ class Z4Translations {
     Z4Translations.STAR = "Stella";
     Z4Translations.VERTICES = "Vertici";
     Z4Translations.REGULAR = "Regolare";
+    Z4Translations.DIMENSION = "Dimensione";
+    Z4Translations.FREE = "Libero";
+    Z4Translations.LOCK_RATIO = "Blocca Rapporto";
+    Z4Translations.LOCK = "Blocca";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "Questa \u00E8 l'impostazione predefinita e disegna il livello sopra il contenuto esistente";

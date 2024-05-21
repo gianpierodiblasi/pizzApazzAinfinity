@@ -65,6 +65,10 @@ public class Z4Translations {
   public static String STAR = "";
   public static String VERTICES = "";
   public static String REGULAR = "";
+  public static String DIMENSION = "";
+  public static String FREE = "";
+  public static String LOCK_RATIO = "";
+  public static String LOCK = "";
 
   // Composite Operation
   public static String COMPOSITE_OPERATION = "";
@@ -169,6 +173,10 @@ public class Z4Translations {
     Z4Translations.STAR = "Star";
     Z4Translations.VERTICES = "Vertices";
     Z4Translations.REGULAR = "Regular";
+    Z4Translations.DIMENSION = "Dimension";
+    Z4Translations.FREE = "Free";
+    Z4Translations.LOCK_RATIO = "Lock Ratio";
+    Z4Translations.LOCK = "Lock";
 
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
@@ -257,6 +265,10 @@ public class Z4Translations {
     Z4Translations.STAR = "Stella";
     Z4Translations.VERTICES = "Vertici";
     Z4Translations.REGULAR = "Regolare";
+    Z4Translations.DIMENSION = "Dimensione";
+    Z4Translations.FREE = "Libero";
+    Z4Translations.LOCK_RATIO = "Blocca Rapporto";
+    Z4Translations.LOCK = "Blocca";
 
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";

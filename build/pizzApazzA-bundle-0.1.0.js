@@ -2859,9 +2859,19 @@ class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
 
    colorPreview = new Z4ColorPreview();
 
+   free = new JSRadioButton();
+
+   lockRatio = new JSRadioButton();
+
+   lock = new JSRadioButton();
+
+   group = new ButtonGroup();
+
    imageData = new ImageData(Z4TextureFillerPanel.DEFAULT_SIZE, Z4TextureFillerPanel.DEFAULT_SIZE);
 
    backgroundColor = new Color(0, 0, 0, 0);
+
+   newImage = true;
 
   static  DEFAULT_SIZE = 50;
 
@@ -2870,10 +2880,23 @@ class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
    */
   constructor() {
     super(2, new Array(false, true));
-    this.addLabel(Z4Translations.BACKGROUND_COLOR, 0, 7, 4, 1, GridBagConstraints.EAST, GridBagConstraints.NONE);
+    this.addLabel(Z4Translations.DIMENSION, 0, 7, 4, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
     let panel = new JSPanel();
-    panel.setLayout(new BorderLayout(5, 0));
     this.addComponent(panel, 0, 8, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    this.free.setText(Z4Translations.FREE);
+    this.free.setSelected(true);
+    this.group.add(this.free);
+    panel.add(this.free, null);
+    this.lockRatio.setText(Z4Translations.LOCK_RATIO);
+    this.group.add(this.lockRatio);
+    panel.add(this.lockRatio, null);
+    this.lock.setText(Z4Translations.LOCK);
+    this.group.add(this.lock);
+    panel.add(this.lock, null);
+    this.addLabel(Z4Translations.BACKGROUND_COLOR, 0, 9, 4, 1, GridBagConstraints.EAST, GridBagConstraints.NONE);
+    panel = new JSPanel();
+    panel.setLayout(new BorderLayout(5, 0));
+    this.addComponent(panel, 0, 10, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
     this.colorPreview.getStyle().alignSelf = "center";
     this.colorPreview.setColor(this.backgroundColor);
     panel.add(this.colorPreview, BorderLayout.CENTER);
@@ -2884,13 +2907,7 @@ class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
     panel.add(button, BorderLayout.WEST);
     button = new JSButton();
     button.setText(Z4Translations.EDIT);
-    button.addActionListener(event => {
-      JSColorChooser.showDialog(Z4Translations.FILLING_COLOR, this.backgroundColor, true, null, c => {
-        this.backgroundColor = c;
-        this.colorPreview.setColor(c);
-        this.drawPreview(false);
-      });
-    });
+    button.addActionListener(event => this.selectColor());
     panel.add(button, BorderLayout.EAST);
     let data = this.imageData.data;
     for (let y = 0; y < Z4TextureFillerPanel.DEFAULT_SIZE; y++) {
@@ -2915,10 +2932,56 @@ class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
   }
 
    selectPattern() {
+    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => {
+      let fileReader = new FileReader();
+      fileReader.onload = event => {
+        let image = document.createElement("img");
+        image.onload = event2 => {
+          let offscreen = new OffscreenCanvas(image.width, image.height);
+          let offscreenCtx = offscreen.getContext("2d");
+          offscreenCtx.drawImage(image, 0, 0);
+          this.imageData = offscreenCtx.getImageData(0, 0, image.width, image.height);
+          this.newImage = true;
+          this.requestSetPointPosition();
+          this.drawPreview(false);
+          return null;
+        };
+        image.src = fileReader.result;
+        return null;
+      };
+      fileReader.readAsDataURL(file);
+    }));
+  }
+
+   selectColor() {
+    JSColorChooser.showDialog(Z4Translations.FILLING_COLOR, this.backgroundColor, true, null, c => {
+      this.backgroundColor = c;
+      this.colorPreview.setColor(c);
+      this.drawPreview(false);
+    });
   }
 
    setPointPosition(points, selectedIndex, x, y, width, height) {
-    points[selectedIndex] = new Point(x, y);
+    if (this.newImage) {
+      points[0] = new Point(0, 0);
+      points[1] = new Point(Math.min(width, this.imageData.width), Math.min(height, this.imageData.height));
+    } else if (this.free.isSelected()) {
+      points[selectedIndex] = new Point(x, y);
+    } else if (this.lockRatio.isSelected()) {
+      let distance = Z4Math.distance(points[1 - selectedIndex].x, points[1 - selectedIndex].y, x, y);
+      let angle = Z4Math.atan(points[1 - selectedIndex].x, points[1 - selectedIndex].y, points[selectedIndex].x, points[selectedIndex].y);
+      points[selectedIndex] = new Point(Math.round(points[1 - selectedIndex].x + distance * Math.cos(angle)), Math.round(points[1 - selectedIndex].y + distance * Math.sin(angle)));
+    } else if (this.lock.isSelected()) {
+      let offsetX = points[selectedIndex].x - x;
+      let offsetY = points[selectedIndex].y - y;
+      let newX = points[1 - selectedIndex].x - offsetX;
+      let newY = points[1 - selectedIndex].y - offsetY;
+      if (0 <= newX && newX < width && 0 <= newY && newY < height) {
+        points[selectedIndex] = new Point(x, y);
+        points[1 - selectedIndex] = new Point(newX, newY);
+      }
+    }
+    this.newImage = false;
   }
 
    pushPointPositions(points, width, height) {
@@ -4196,6 +4259,14 @@ class Z4Translations {
 
   static  REGULAR = "";
 
+  static  DIMENSION = "";
+
+  static  FREE = "";
+
+  static  LOCK_RATIO = "";
+
+  static  LOCK = "";
+
   // Composite Operation
   static  COMPOSITE_OPERATION = "";
 
@@ -4317,6 +4388,10 @@ class Z4Translations {
     Z4Translations.STAR = "Star";
     Z4Translations.VERTICES = "Vertices";
     Z4Translations.REGULAR = "Regular";
+    Z4Translations.DIMENSION = "Dimension";
+    Z4Translations.FREE = "Free";
+    Z4Translations.LOCK_RATIO = "Lock Ratio";
+    Z4Translations.LOCK = "Lock";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "This is the default setting and draws the layer on top of the existing content";
@@ -4400,6 +4475,10 @@ class Z4Translations {
     Z4Translations.STAR = "Stella";
     Z4Translations.VERTICES = "Vertici";
     Z4Translations.REGULAR = "Regolare";
+    Z4Translations.DIMENSION = "Dimensione";
+    Z4Translations.FREE = "Libero";
+    Z4Translations.LOCK_RATIO = "Blocca Rapporto";
+    Z4Translations.LOCK = "Blocca";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "Questa \u00E8 l'impostazione predefinita e disegna il livello sopra il contenuto esistente";
