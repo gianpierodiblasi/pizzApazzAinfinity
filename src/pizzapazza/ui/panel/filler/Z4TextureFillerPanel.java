@@ -201,6 +201,23 @@ public class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
 
   @Override
   protected void drawObjects($CanvasRenderingContext2D ctx, Array<Point> mappedPoints) {
+    Array<Double> dash = new Array<>();
+
+    ctx.beginPath();
+    ctx.moveTo(mappedPoints.$get(0).x, mappedPoints.$get(0).y);
+    ctx.lineTo(mappedPoints.$get(1).x, mappedPoints.$get(1).y);
+    ctx.strokeStyle = this.$getStrokeStyle("black");
+    ctx.setLineDash(dash);
+    ctx.stroke();
+
+    dash.push(2.5, 2.5);
+
+    ctx.beginPath();
+    ctx.moveTo(mappedPoints.$get(0).x, mappedPoints.$get(0).y);
+    ctx.lineTo(mappedPoints.$get(1).x, mappedPoints.$get(1).y);
+    ctx.strokeStyle = this.$getStrokeStyle("white");
+    ctx.setLineDash(dash);
+    ctx.stroke();
   }
 
   private String getStrokeStyle(String style) {

@@ -3002,6 +3002,20 @@ class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
   }
 
    drawObjects(ctx, mappedPoints) {
+    let dash = new Array();
+    ctx.beginPath();
+    ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
+    ctx.lineTo(mappedPoints[1].x, mappedPoints[1].y);
+    ctx.strokeStyle = this.getStrokeStyle("black");
+    ctx.setLineDash(dash);
+    ctx.stroke();
+    dash.push(2.5, 2.5);
+    ctx.beginPath();
+    ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
+    ctx.lineTo(mappedPoints[1].x, mappedPoints[1].y);
+    ctx.strokeStyle = this.getStrokeStyle("white");
+    ctx.setLineDash(dash);
+    ctx.stroke();
   }
 
    getStrokeStyle(style) {
