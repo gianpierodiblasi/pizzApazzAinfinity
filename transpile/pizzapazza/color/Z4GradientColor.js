@@ -27,7 +27,7 @@ class Z4GradientColor {
    * @param position The position (in the range [0,1])
    */
    addColor(color, position) {
-    let index = this.colorPositions.indexOf(position);
+    let index = this.colorPositions.findIndex(pos => pos === position);
     if (index !== -1) {
       this.colors[index] = color;
     } else {
@@ -49,7 +49,7 @@ class Z4GradientColor {
    * @param position The position (in the range [0,1])
    */
    removeColor(position) {
-    let index = this.colorPositions.indexOf(position);
+    let index = this.colorPositions.findIndex(pos => pos === position);
     if (index !== -1) {
       this.colors.splice(index, 1);
       this.colorPositions.splice(index, 1);

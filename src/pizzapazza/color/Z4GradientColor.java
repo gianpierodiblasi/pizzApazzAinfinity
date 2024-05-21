@@ -35,7 +35,7 @@ public class Z4GradientColor {
    * @param position The position (in the range [0,1])
    */
   public void addColor(Color color, double position) {
-    int index = this.colorPositions.indexOf(position);
+    int index = this.colorPositions.findIndex(pos -> pos == position);
 
     if (index != -1) {
       this.colors.$set(index, color);
@@ -59,7 +59,7 @@ public class Z4GradientColor {
    * @param position The position (in the range [0,1])
    */
   public void removeColor(double position) {
-    int index = this.colorPositions.indexOf(position);
+    int index = this.colorPositions.findIndex(pos -> pos == position);
 
     if (index != -1) {
       this.colors.splice(index, 1);
