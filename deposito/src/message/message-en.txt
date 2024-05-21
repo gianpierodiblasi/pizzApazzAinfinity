@@ -1,9 +1,4 @@
 # General
-TITLE = pizzApazzA
-OK = Ok
-CANCEL = Cancel
-YES = Yes
-NO = No
 TYPE = Type
 START = Start
 STOP = Stop
