@@ -3374,6 +3374,51 @@ class Z4RibbonFilePanel extends JSPanel {
   }
 }
 /**
+ * The ribbon panel containing the help
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4RibbonHelpPanel extends JSPanel {
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super();
+    this.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+    this.cssAddClass("z4ribbonhelppanel");
+    let button = new JSButton();
+    button.setText(Z4Translations.ABOUT);
+    button.setContentAreaFilled(false);
+    button.addActionListener(event => this.showAbout());
+    this.add(button, null);
+  }
+
+   showAbout() {
+    let regExp = new RegExp("pizzApazzA-bundle-.*js");
+    document.querySelectorAll("script").forEach(script => {
+      let src = script.getAttribute("src");
+      if (regExp.test(src)) {
+        let start = src.indexOf("pizzApazzA-bundle-");
+        let end = src.indexOf(".js");
+        let version = src.substring(start + 18, end);
+        let panel = new JSPanel();
+        panel.cssAddClass("z4ribbonhelppanel-about");
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        let component = new JSComponent(document.createElement("img"));
+        component.cssAddClass("z4ribbonhelppanel-splash");
+        panel.add(component, null);
+        let label = new JSLabel();
+        label.setProperty("innerHTML", Z4Translations.BASED_ON.replace("$version$", version));
+        label.getStyle().marginTop = "5px";
+        label.getStyle().maxWidth = "500px";
+        panel.add(label, null);
+        JSOptionPane.showMessageDialog(panel, Z4Translations.ABOUT, JSOptionPane.INFORMATION_MESSAGE, null);
+      }
+    });
+  }
+}
+/**
  * The ribbon panel containing the layer menus
  *
  * @author gianpiero.diblasi
@@ -4073,6 +4118,8 @@ class Z4Ribbon extends JSTabbedPane {
 
    settingsPanel = new Z4RibbonSettingsPanel();
 
+   helpPanel = new Z4RibbonHelpPanel();
+
   /**
    * Creates the object
    */
@@ -4082,6 +4129,7 @@ class Z4Ribbon extends JSTabbedPane {
     this.addTab(Z4Translations.FILE, this.filePanel);
     this.addTab(Z4Translations.LAYER, this.layerPanel);
     this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
+    this.addTab(Z4Translations.HELP, this.helpPanel);
   }
 
   /**
@@ -4234,6 +4282,13 @@ class Z4Translations {
 
   static  REFRESH_PAGE_MESSAGE = "";
 
+  // Ribbon Help
+  static  HELP = "";
+
+  static  ABOUT = "";
+
+  static  BASED_ON = "";
+
   // Other
   static  PROJECT_NAME = "";
 
@@ -4382,6 +4437,10 @@ class Z4Translations {
     Z4Translations.THEME_DARK = "Dark";
     Z4Translations.THEME_COLOR = "Color";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Refresh the page to make the changes";
+    // Ribbon Help
+    Z4Translations.HELP = "Help";
+    Z4Translations.ABOUT = "About";
+    Z4Translations.BASED_ON = "<p>pizzApazzA<sup>&#8734;</sup> Version $version$ is based on pizzApazzA VB6 by Ettore Luzio and is licensed under <a href='https://unlicense.org/'>Unlicense license</a>.</p>" + "<p>Developed in Java by Gianpiero Di Blasi, transpilled in JavaScript by means of <a href='https://github.com/gianpierodiblasi/josetta' target='_blank'>Josetta</a> (<a href='https://github.com/gianpierodiblasi/pizzApazzAinfinity' target='_blank'>github repository</a>).</p>" + "<p>Dependencies:</p>" + "<ul>" + "<li><a href='https://repository.jsweet.org/artifactory/libs-release-local/org/jsweet/jsweet-core/' target='_blank'>jsweet-core</a></li>" + "<li><a href='https://github.com/gianpierodiblasi/swing.js' target='_blank'>swing.js</a></li>" + "<li><a href='https://pomax.github.io/bezierjs/' target='_blank'>Bezier.js</a></li>" + "</ul>";
     // Other
     Z4Translations.PROJECT_NAME = "Project Name";
     Z4Translations.FILENAME = "File Name";
@@ -4469,6 +4528,10 @@ class Z4Translations {
     Z4Translations.THEME_DARK = "Scuro";
     Z4Translations.THEME_COLOR = "Colore";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Aggiorna la pagina per eseguire le modifiche";
+    // Ribbon Help
+    Z4Translations.HELP = "Aiuto";
+    Z4Translations.ABOUT = "Informazioni su";
+    Z4Translations.BASED_ON = "<p>pizzApazzA<sup>&#8734;</sup> Versione $version$ \u00E8 basato su pizzApazzA VB6 di Ettore Luzio ed \u00E8 distribuito con <a href='https://unlicense.org/' target='_blank'>licenza Unlicense</a>.</p>" + "<p>Sviluppato in Java da Gianpiero Di Blasi, tradotto in JavaScript tramite <a href='https://github.com/gianpierodiblasi/josetta' target='_blank'>Josetta</a> (<a href='https://github.com/gianpierodiblasi/pizzApazzAinfinity' target='_blank'>repository github</a>).</p>" + "<p>Dipendenze:</p>" + "<ul>" + "<li><a href='https://repository.jsweet.org/artifactory/libs-release-local/org/jsweet/jsweet-core/' target='_blank'>jsweet-core</a></li>" + "<li><a href='https://github.com/gianpierodiblasi/swing.js' target='_blank'>swing.js</a></li>" + "<li><a href='https://pomax.github.io/bezierjs/' target='_blank'>Bezier.js</a></li>" + "</ul>";
     // Other
     Z4Translations.PROJECT_NAME = "Nome Progetto";
     Z4Translations.FILENAME = "Nome File";
