@@ -3399,9 +3399,14 @@ class Z4RibbonHelpPanel extends JSPanel {
     document.querySelectorAll("script").forEach(script => {
       let src = script.getAttribute("src");
       if (regExp.test(src)) {
-        let start = src.indexOf("pizzApazzA-bundle-");
+        let offset = 22;
+        let start = src.indexOf("pizzApazzA-bundle-min-");
+        if (start === -1) {
+          offset = 18;
+          start = src.indexOf("pizzApazzA-bundle-");
+        }
         let end = src.indexOf(".js");
-        let version = src.substring(start + 18, end);
+        let version = src.substring(start + offset, end);
         let panel = new JSPanel();
         panel.cssAddClass("z4ribbonhelppanel-about");
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));

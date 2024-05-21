@@ -38,9 +38,15 @@ public class Z4RibbonHelpPanel extends JSPanel {
     document.querySelectorAll("script").forEach(script -> {
       String src = script.getAttribute("src");
       if (regExp.test(src)) {
-        int start = src.indexOf("pizzApazzA-bundle-");
+        int offset = 22;
+        int start = src.indexOf("pizzApazzA-bundle-min-");
+        if (start == -1) {
+          offset = 18;
+          start = src.indexOf("pizzApazzA-bundle-");
+        }
+
         int end = src.indexOf(".js");
-        String version = src.substring(start + 18, end);
+        String version = src.substring(start + offset, end);
 
         JSPanel panel = new JSPanel();
         panel.cssAddClass("z4ribbonhelppanel-about");
