@@ -14,8 +14,6 @@ import simulation.js.$Object;
  */
 public class Z4BiGradientColor extends Z4AbstractGradientColor<Z4GradientColor> {
 
-  private double ripple;
-
   /**
    * Creates the object
    */
@@ -26,54 +24,28 @@ public class Z4BiGradientColor extends Z4AbstractGradientColor<Z4GradientColor> 
   }
 
   /**
-   * Mirrors this Z4GradientColor
-   */
-  public void mirror() {
-//    this.colors.slice().splice(this.colors.length - 1, 1).reverse().forEach(color -> this.colors.push(color));
-//
-//    for (int index = 0; index < this.colorPositions.length; index++) {
-//      this.colorPositions.$set(index, this.colorPositions.$get(index) / 2);
-//    }
-//    this.colorPositions.slice().splice(this.colorPositions.length - 1, 1).reverse().map(position -> 1 - position).forEach(position -> this.colorPositions.push(position));
-  }
-
-  /**
-   * Reverses this Z4GradientColor
-   *
-   */
-  public void reverse() {
-//    this.colors.reverse();
-//
-//    for (int index = 1; index < this.colorPositions.length - 1; index++) {
-//      this.colorPositions.$set(index, 1 - this.colorPositions.$get(index));
-//    }
-  }
-
-  /**
-   * Sets the ripple
+   * Sets the ripple of each gradient color
    *
    * @param rippleGradient The ripple of each gradient color (in the range
    * [0,1])
-   * @param rippleBiGradient The ripple (in the range [0,1])
    */
-  public void setRipple(double rippleGradient, double rippleBiGradient) {
+  public void setGradientRipple(double rippleGradient) {
     this.colors.forEach(gradientColor -> gradientColor.setRipple(rippleGradient));
-    this.ripple = rippleBiGradient;
   }
 
   /**
-   * Returns the ripple
+   * Returns the ripple of each gradient color
    *
-   * @return The ripple (in the range [0,1])
+   * @return The ripple of each gradient color (in the range [0,1])
    */
-  public double getRipple() {
-    return this.ripple;
+  public double getGradientRipple() {
+    return this.colors.$get(0).getRipple();
   }
 
   @Override
   public Z4GradientColor getColorAt(double position, boolean useRipple) {
-    if (useRipple && $exists(this.ripple)) {
-      position = Z4Math.ripple(position, 0, 1, this.ripple);
+    if (useRipple && $exists(this.getRipple())) {
+      position = Z4Math.ripple(position, 0, 1, this.getRipple());
     }
 
     double finalPos = position;
@@ -90,7 +62,7 @@ public class Z4BiGradientColor extends Z4AbstractGradientColor<Z4GradientColor> 
       Z4GradientColor after = this.colors.$get(index);
 
       Z4GradientColor gradientColor = new Z4GradientColor();
-      gradientColor.setRipple(before.getRipple());
+      gradientColor.setRipple(this.getGradientRipple());
 
       before.colors.forEach((beforeColor, idx, array) -> {
         double beforePosition = before.colorPositions.$get(idx);
@@ -123,7 +95,7 @@ public class Z4BiGradientColor extends Z4AbstractGradientColor<Z4GradientColor> 
   public $Object toJSON() {
     $Object json = new $Object();
 
-    json.$set("ripple", this.ripple);
+    json.$set("ripple", this.getRipple());
 
     json.$set("colorsAndPositions", this.colors.map((color, index, array) -> {
       $Object jsonColor = new $Object();
@@ -144,7 +116,7 @@ public class Z4BiGradientColor extends Z4AbstractGradientColor<Z4GradientColor> 
   @SuppressWarnings("unchecked")
   public static Z4BiGradientColor fromJSON($Object json) {
     Z4BiGradientColor gradientColor = new Z4BiGradientColor();
-    gradientColor.setRipple(json.$get("ripple"), 0);
+    gradientColor.setRipple(json.$get("ripple"));
     ((Iterable<$Object>) json.$get("colorsAndPositions")).forEach(colorAndPosition -> gradientColor.addColor(Z4GradientColor.fromJSON(colorAndPosition.$get("gradientColor")), colorAndPosition.$get("position")));
     return gradientColor;
   }

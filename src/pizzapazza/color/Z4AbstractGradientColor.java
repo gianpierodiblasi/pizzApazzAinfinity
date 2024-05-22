@@ -22,6 +22,8 @@ public abstract class Z4AbstractGradientColor<T> {
    */
   protected final Array<Double> colorPositions = new Array<>();
 
+  private double ripple;
+
   /**
    * Adds a color in a position, if the position is already occupied then
    * replaces the color
@@ -88,6 +90,50 @@ public abstract class Z4AbstractGradientColor<T> {
   public double getPosition(double position, double tolerance) {
     Array<Double> positions = this.colorPositions.filter(pos -> Math.abs(pos - position) <= tolerance);
     return $exists(positions.length) ? positions.$get(0) : -1;
+  }
+
+  /**
+   * Mirrors this color
+   */
+  @SuppressWarnings("unchecked")
+  public void mirror() {
+    this.colors.slice().splice(0, this.colors.length - 1).reverse().forEach(color -> this.colors.push(color));
+
+    for (int index = 0; index < this.colorPositions.length; index++) {
+      this.colorPositions.$set(index, this.colorPositions.$get(index) / 2);
+    }
+
+    this.colorPositions.slice().splice(0, this.colorPositions.length - 1).reverse().forEach(position -> this.colorPositions.push(1 - position));
+  }
+
+  /**
+   * Reverses this color
+   *
+   */
+  public void reverse() {
+    this.colors.reverse();
+
+    for (int index = 1; index < this.colorPositions.length - 1; index++) {
+      this.colorPositions.$set(index, 1 - this.colorPositions.$get(index));
+    }
+  }
+
+  /**
+   * Sets the ripple
+   *
+   * @param ripple The ripple (in the range [0,1])
+   */
+  public void setRipple(double ripple) {
+    this.ripple = ripple;
+  }
+
+  /**
+   * Returns the ripple
+   *
+   * @return The ripple (in the range [0,1])
+   */
+  public double getRipple() {
+    return this.ripple;
   }
 
   /**

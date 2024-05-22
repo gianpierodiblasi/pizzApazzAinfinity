@@ -11,9 +11,7 @@ import simulation.js.$Object;
  *
  * @author gianpiero.diblasi
  */
-public class Z4GradientColor extends Z4AbstractGradientColor<Color>{
-
-  private double ripple;
+public class Z4GradientColor extends Z4AbstractGradientColor<Color> {
 
   /**
    * Creates the object
@@ -24,52 +22,10 @@ public class Z4GradientColor extends Z4AbstractGradientColor<Color>{
     this.addColor(new Color(0, 0, 0, 255), 1);
   }
 
-  /**
-   * Mirrors this Z4GradientColor
-   */
-  public void mirror() {
-    this.colors.slice().splice(this.colors.length - 1, 1).reverse().forEach(color -> this.colors.push(color));
-
-    for (int index = 0; index < this.colorPositions.length; index++) {
-      this.colorPositions.$set(index, this.colorPositions.$get(index) / 2);
-    }
-    this.colorPositions.slice().splice(this.colorPositions.length - 1, 1).reverse().map(position -> 1 - position).forEach(position -> this.colorPositions.push(position));
-  }
-
-  /**
-   * Reverses this Z4GradientColor
-   *
-   */
-  public void reverse() {
-    this.colors.reverse();
-
-    for (int index = 1; index < this.colorPositions.length - 1; index++) {
-      this.colorPositions.$set(index, 1 - this.colorPositions.$get(index));
-    }
-  }
-
-  /**
-   * Sets the ripple
-   *
-   * @param ripple The ripple (in the range [0,1])
-   */
-  public void setRipple(double ripple) {
-    this.ripple = ripple;
-  }
-
-  /**
-   * Returns the ripple
-   *
-   * @return The ripple (in the range [0,1])
-   */
-  public double getRipple() {
-    return this.ripple;
-  }
-
   @Override
   public Color getColorAt(double position, boolean useRipple) {
-    if (useRipple && $exists(this.ripple)) {
-      position = Z4Math.ripple(position, 0, 1, this.ripple);
+    if (useRipple && $exists(this.getRipple())) {
+      position = Z4Math.ripple(position, 0, 1, this.getRipple());
     }
 
     double finalPos = position;
@@ -95,7 +51,7 @@ public class Z4GradientColor extends Z4AbstractGradientColor<Color>{
   public $Object toJSON() {
     $Object json = new $Object();
 
-    json.$set("ripple", this.ripple);
+    json.$set("ripple", this.getRipple());
 
     json.$set("colorsAndPositions", this.colors.map((color, index, array) -> {
       $Object jsonColor = new $Object();

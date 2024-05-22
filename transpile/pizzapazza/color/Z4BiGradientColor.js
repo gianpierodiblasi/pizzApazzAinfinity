@@ -6,8 +6,6 @@
  */
 class Z4BiGradientColor extends Z4AbstractGradientColor {
 
-   ripple = 0.0;
-
   /**
    * Creates the object
    */
@@ -18,52 +16,27 @@ class Z4BiGradientColor extends Z4AbstractGradientColor {
   }
 
   /**
-   * Mirrors this Z4GradientColor
-   */
-   mirror() {
-    // this.colors.slice().splice(this.colors.length - 1, 1).reverse().forEach(color -> this.colors.push(color));
-    // 
-    // for (int index = 0; index < this.colorPositions.length; index++) {
-    // this.colorPositions.$set(index, this.colorPositions.$get(index) / 2);
-    // }
-    // this.colorPositions.slice().splice(this.colorPositions.length - 1, 1).reverse().map(position -> 1 - position).forEach(position -> this.colorPositions.push(position));
-  }
-
-  /**
-   * Reverses this Z4GradientColor
-   */
-   reverse() {
-    // this.colors.reverse();
-    // 
-    // for (int index = 1; index < this.colorPositions.length - 1; index++) {
-    // this.colorPositions.$set(index, 1 - this.colorPositions.$get(index));
-    // }
-  }
-
-  /**
-   * Sets the ripple
+   * Sets the ripple of each gradient color
    *
    * @param rippleGradient The ripple of each gradient color (in the range
    * [0,1])
-   * @param rippleBiGradient The ripple (in the range [0,1])
    */
-   setRipple(rippleGradient, rippleBiGradient) {
+   setGradientRipple(rippleGradient) {
     this.colors.forEach(gradientColor => gradientColor.setRipple(rippleGradient));
-    this.ripple = rippleBiGradient;
   }
 
   /**
-   * Returns the ripple
+   * Returns the ripple of each gradient color
    *
-   * @return The ripple (in the range [0,1])
+   * @return The ripple of each gradient color (in the range [0,1])
    */
-   getRipple() {
-    return this.ripple;
+   getGradientRipple() {
+    return this.colors[0].getRipple();
   }
 
    getColorAt(position, useRipple) {
-    if (useRipple && this.ripple) {
-      position = Z4Math.ripple(position, 0, 1, this.ripple);
+    if (useRipple && this.getRipple()) {
+      position = Z4Math.ripple(position, 0, 1, this.getRipple());
     }
     let finalPos = position;
     let index = this.colorPositions.findIndex(pos => pos >= finalPos, null);
@@ -76,7 +49,7 @@ class Z4BiGradientColor extends Z4AbstractGradientColor {
       let before = this.colors[index - 1];
       let after = this.colors[index];
       let gradientColor = new Z4GradientColor();
-      gradientColor.setRipple(before.getRipple());
+      gradientColor.setRipple(this.getGradientRipple());
       before.colors.forEach((beforeColor, idx, array) => {
         let beforePosition = before.colorPositions[idx];
         let afterColor = after.getColorAt(beforePosition, false);
@@ -99,7 +72,7 @@ class Z4BiGradientColor extends Z4AbstractGradientColor {
 
    toJSON() {
     let json = new Object();
-    json["ripple"] = this.ripple;
+    json["ripple"] = this.getRipple();
     json["colorsAndPositions"] = this.colors.map((color, index, array) => {
       let jsonColor = new Object();
       jsonColor["gradientColor"] = color.toJSON();
@@ -117,7 +90,7 @@ class Z4BiGradientColor extends Z4AbstractGradientColor {
    */
   static  fromJSON(json) {
     let gradientColor = new Z4BiGradientColor();
-    gradientColor.setRipple(json["ripple"], 0);
+    gradientColor.setRipple(json["ripple"]);
     (json["colorsAndPositions"]).forEach(colorAndPosition => gradientColor.addColor(Z4GradientColor.fromJSON(colorAndPosition["gradientColor"]), colorAndPosition["position"]));
     return gradientColor;
   }

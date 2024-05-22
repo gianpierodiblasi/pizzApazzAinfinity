@@ -16,6 +16,8 @@ class Z4AbstractGradientColor {
    */
    colorPositions = new Array();
 
+   ripple = 0.0;
+
   /**
    * Adds a color in a position, if the position is already occupied then
    * replaces the color
@@ -76,6 +78,45 @@ class Z4AbstractGradientColor {
    getPosition(position, tolerance) {
     let positions = this.colorPositions.filter(pos => Math.abs(pos - position) <= tolerance);
     return positions.length ? positions[0] : -1;
+  }
+
+  /**
+   * Mirrors this color
+   */
+   mirror() {
+    this.colors.slice().splice(0, this.colors.length - 1).reverse().forEach(color => this.colors.push(color));
+    for (let index = 0; index < this.colorPositions.length; index++) {
+      this.colorPositions[index] = this.colorPositions[index] / 2;
+    }
+    this.colorPositions.slice().splice(0, this.colorPositions.length - 1).reverse().forEach(position => this.colorPositions.push(1 - position));
+  }
+
+  /**
+   * Reverses this color
+   */
+   reverse() {
+    this.colors.reverse();
+    for (let index = 1; index < this.colorPositions.length - 1; index++) {
+      this.colorPositions[index] = 1 - this.colorPositions[index];
+    }
+  }
+
+  /**
+   * Sets the ripple
+   *
+   * @param ripple The ripple (in the range [0,1])
+   */
+   setRipple(ripple) {
+    this.ripple = ripple;
+  }
+
+  /**
+   * Returns the ripple
+   *
+   * @return The ripple (in the range [0,1])
+   */
+   getRipple() {
+    return this.ripple;
   }
 
   /**
