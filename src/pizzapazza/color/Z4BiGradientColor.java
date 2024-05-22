@@ -29,6 +29,22 @@ public class Z4BiGradientColor extends Z4AbstractGradientColor<Z4GradientColor> 
   }
 
   /**
+   * Mirrors each gradient color
+   */
+  @SuppressWarnings("unchecked")
+  public void gradientMirror() {
+    this.colors.forEach(gradientColor -> gradientColor.mirror());
+  }
+
+  /**
+   * Reverses each gradient color
+   *
+   */
+  public void gradientReverse() {
+    this.colors.forEach(gradientColor -> gradientColor.reverse());
+  }
+
+  /**
    * Sets the ripple of each gradient color
    *
    * @param rippleGradient The ripple of each gradient color (in the range

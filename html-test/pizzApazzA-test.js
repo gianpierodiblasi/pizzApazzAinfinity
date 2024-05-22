@@ -63,6 +63,54 @@ class TestBiGradientColor extends JSFrame {
     });
     buttons.add(button, null);
     button = new JSButton();
+    button.setText("WHITE->BLACK/GREEN->RED TEMPORAL MIRROR");
+    button.addActionListener(event => {
+      let biGradientColor = new Z4BiGradientColor();
+      let greenRed = new Z4GradientColor();
+      greenRed.addColor(new Color(0, 255, 0, 255), 0);
+      greenRed.addColor(new Color(255, 0, 0, 255), 1);
+      biGradientColor.addColor(greenRed, 1);
+      biGradientColor.mirror();
+      this.fill(biGradientColor);
+    });
+    buttons.add(button, null);
+    button = new JSButton();
+    button.setText("WHITE->BLACK/GREEN->RED TEMPORAL REVERSE");
+    button.addActionListener(event => {
+      let biGradientColor = new Z4BiGradientColor();
+      let greenRed = new Z4GradientColor();
+      greenRed.addColor(new Color(0, 255, 0, 255), 0);
+      greenRed.addColor(new Color(255, 0, 0, 255), 1);
+      biGradientColor.addColor(greenRed, 1);
+      biGradientColor.reverse();
+      this.fill(biGradientColor);
+    });
+    buttons.add(button, null);
+    button = new JSButton();
+    button.setText("WHITE->BLACK/GREEN->RED SPACE MIRROR");
+    button.addActionListener(event => {
+      let biGradientColor = new Z4BiGradientColor();
+      let greenRed = new Z4GradientColor();
+      greenRed.addColor(new Color(0, 255, 0, 255), 0);
+      greenRed.addColor(new Color(255, 0, 0, 255), 1);
+      biGradientColor.addColor(greenRed, 1);
+      biGradientColor.gradientMirror();
+      this.fill(biGradientColor);
+    });
+    buttons.add(button, null);
+    button = new JSButton();
+    button.setText("WHITE->BLACK/GREEN->RED SPACE REVERSE");
+    button.addActionListener(event => {
+      let biGradientColor = new Z4BiGradientColor();
+      let greenRed = new Z4GradientColor();
+      greenRed.addColor(new Color(0, 255, 0, 255), 0);
+      greenRed.addColor(new Color(255, 0, 0, 255), 1);
+      biGradientColor.addColor(greenRed, 1);
+      biGradientColor.gradientReverse();
+      this.fill(biGradientColor);
+    });
+    buttons.add(button, null);
+    button = new JSButton();
     button.setText("WHITE->BLACK/GREEN->RED TEMPORAL RIPPLE");
     button.addActionListener(event => {
       let biGradientColor = new Z4BiGradientColor();
