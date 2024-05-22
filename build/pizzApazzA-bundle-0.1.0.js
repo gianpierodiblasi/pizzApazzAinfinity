@@ -127,12 +127,13 @@ class Z4AbstractGradientColor {
   }
 
   /**
-   * Returns the color positions
+   * Returns a color position in an index
    *
-   * @return The color positions
+   * @param index The index
+   * @return The color position
    */
-   getColorPositions() {
-    return this.colorPositions.slice();
+   getColorPositionAtIndex(index) {
+    return this.colorPositions[index];
   }
 
   /**
@@ -143,6 +144,15 @@ class Z4AbstractGradientColor {
    */
    getColorAtIndex(index) {
     return this.colors[index];
+  }
+
+  /**
+   * Returns the number of managed colors
+   *
+   * @return The number of managed colors
+   */
+   getColorCount() {
+    return this.colors.length;
   }
 
   /**
@@ -2245,15 +2255,25 @@ class Z4GradientColorPanel extends JSPanel {
 
    ctx = this.preview.invoke("getContext('2d')");
 
+   rippleSpinner = new JSSpinner();
+
    rippleSlider = new JSSlider();
+
+   colorPreview = new Z4ColorPreview();
+
+   delete = new JSButton();
 
    gradientColor = new Z4GradientColor();
 
    selectedIndex = 0;
 
+   pressed = false;
+
   static  SELECTOR_RADIUS = 7;
 
   static  HEIGHT = 50;
+
+  static  TOLLERANCE = 0.075;
 
   constructor() {
     super();
@@ -2263,18 +2283,56 @@ class Z4GradientColorPanel extends JSPanel {
     this.preview.addEventListener("mousedown", event => this.onMouse(event, "down"));
     this.preview.addEventListener("mousemove", event => this.onMouse(event, "move"));
     this.preview.addEventListener("mouseup", event => this.onMouse(event, "up"));
-    this.addComponent(this.preview, 0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, null);
-    this.addLabel(Z4Translations.RIPPLE, 0, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
-    this.rippleSlider.setMinimum(0);
-    this.rippleSlider.setMaximum(100);
+    this.addComponent(this.preview, 0, 0, 3, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 5, 0));
+    this.colorPreview.setColor(this.gradientColor.getColorAtIndex(0));
+    this.addComponent(this.colorPreview, 0, 1, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, null);
+    let button = new JSButton();
+    button.setText(Z4Translations.EDIT);
+    button.addActionListener(event => this.selectColor());
+    this.addComponent(button, 1, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
+    this.delete.setText(Z4Translations.DELETE);
+    this.delete.setEnabled(false);
+    this.delete.addActionListener(event => {
+      JSOptionPane.showConfirmDialog(Z4Translations.DELETE_COLOR_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
+        if (response === JSOptionPane.YES_OPTION) {
+          this.gradientColor.removeColor(this.gradientColor.getColorPositionAtIndex(this.selectedIndex));
+          this.selectedIndex = 0;
+          this.colorPreview.setColor(this.gradientColor.getColorAtIndex(0));
+          this.delete.setEnabled(false);
+          this.drawPreview(false);
+        }
+      });
+    });
+    this.addComponent(this.delete, 2, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
+    this.addLabel(Z4Translations.RIPPLE, 0, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    this.rippleSpinner.setModel(new SpinnerNumberModel(0, 0, 100, 1));
+    this.rippleSpinner.getStyle().minWidth = "4rem";
+    this.rippleSpinner.getChilStyleByQuery("input[type=number]").minWidth = "3.5rem";
+    this.rippleSpinner.getChilStyleByQuery("input[type=number]").width = "3.5rem";
+    this.rippleSpinner.addChangeListener(event => this.onChange(true, this.rippleSpinner.getValueIsAdjusting()));
+    this.addComponent(this.rippleSpinner, 1, 3, 2, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5, 0, 0, 0));
     this.rippleSlider.setValue(0);
     this.rippleSlider.getStyle().minWidth = "20rem";
-    this.rippleSlider.setPaintLabels(true);
-    this.rippleSlider.setPaintTicks(true);
-    this.rippleSlider.setPaintTrack(true);
-    this.rippleSlider.setMajorTickSpacing(10);
-    this.rippleSlider.addChangeListener(event => this.onChange());
-    this.addComponent(this.rippleSlider, 0, 5, 4, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
+    this.rippleSlider.addChangeListener(event => this.onChange(false, this.rippleSlider.getValueIsAdjusting()));
+    this.addComponent(this.rippleSlider, 0, 4, 3, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
+    let panel = new JSPanel();
+    this.addComponent(panel, 0, 5, 3, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
+    button = new JSButton();
+    button.setText(Z4Translations.MIRRORED);
+    button.addActionListener(event => {
+      this.gradientColor.mirror();
+      this.colorPreview.setColor(this.gradientColor.getColorAtIndex(this.selectedIndex));
+      this.delete.setEnabled(this.selectedIndex !== 0 && this.selectedIndex !== this.gradientColor.getColorCount() - 1);
+      this.drawPreview(false);
+    });
+    panel.add(button, null);
+    button = new JSButton();
+    button.setText(Z4Translations.INVERTED);
+    button.addActionListener(event => {
+      this.gradientColor.reverse();
+      this.drawPreview(false);
+    });
+    panel.add(button, null);
     this.drawPreview(false);
   }
 
@@ -2301,11 +2359,86 @@ class Z4GradientColorPanel extends JSPanel {
   }
 
    onMouse(event, type) {
+    let w = parseInt(this.preview.getProperty("width"));
+    let h = parseInt(this.preview.getProperty("height"));
+    switch(type) {
+      case "down":
+        for (let index = 0; index < this.gradientColor.getColorCount(); index++) {
+          let position = this.gradientColor.getColorPositionAtIndex(index);
+          if (Z4Math.distance(position * w, h / 2, event.offsetX, event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
+            this.pressed = true;
+            this.selectedIndex = index;
+            this.colorPreview.setColor(this.gradientColor.getColorAtIndex(this.selectedIndex));
+            this.delete.setEnabled(this.selectedIndex !== 0 && this.selectedIndex !== this.gradientColor.getColorCount() - 1);
+            this.drawPreview(false);
+          }
+        }
+        if (!this.pressed && !this.gradientColor.isPositionOccupied(event.offsetX / w, Z4GradientColorPanel.TOLLERANCE) && Math.abs(h / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
+          this.gradientColor.addColor(this.gradientColor.getColorAt(event.offsetX / w, false), event.offsetX / w);
+          this.pressed = true;
+          for (let index = 0; index < this.gradientColor.getColorCount(); index++) {
+            let position = this.gradientColor.getColorPositionAtIndex(index);
+            if (Z4Math.distance(position * w, h / 2, event.offsetX, event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
+              this.selectedIndex = index;
+              this.colorPreview.setColor(this.gradientColor.getColorAtIndex(this.selectedIndex));
+              this.delete.setEnabled(this.selectedIndex !== 0 && this.selectedIndex !== this.gradientColor.getColorCount() - 1);
+            }
+          }
+          this.preview.getStyle().cursor = "pointer";
+          this.drawPreview(false);
+        }
+        break;
+      case "move":
+        if (this.pressed) {
+          let position = this.gradientColor.getColorPositionAtIndex(this.selectedIndex);
+          let positionBefore = this.gradientColor.getColorPositionAtIndex(this.selectedIndex - 1);
+          let positionAfter = this.gradientColor.getColorPositionAtIndex(this.selectedIndex + 1);
+          let newPosition = event.offsetX / w;
+          if (this.selectedIndex !== 0 && this.selectedIndex !== this.gradientColor.getColorCount() - 1 && positionBefore < newPosition - Z4GradientColorPanel.TOLLERANCE && positionAfter > newPosition + Z4GradientColorPanel.TOLLERANCE) {
+            let color = this.gradientColor.getColorAtIndex(this.selectedIndex);
+            this.gradientColor.removeColor(position);
+            this.gradientColor.addColor(color, newPosition);
+            this.drawPreview(true);
+          }
+        } else {
+          this.preview.getStyle().cursor = "default";
+          for (let index = 0; index < this.gradientColor.getColorCount(); index++) {
+            let position = this.gradientColor.getColorPositionAtIndex(index);
+            if (Z4Math.distance(position * w, h / 2, event.offsetX, event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
+              this.preview.getStyle().cursor = "pointer";
+            }
+          }
+          if (this.preview.getStyle().cursor === "default") {
+            if (!this.gradientColor.isPositionOccupied(event.offsetX / w, Z4GradientColorPanel.TOLLERANCE) && Math.abs(h / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
+              this.preview.getStyle().cursor = "copy";
+            }
+          }
+        }
+        break;
+      case "up":
+        this.pressed = false;
+        this.drawPreview(false);
+        break;
+    }
   }
 
-   onChange() {
+   onChange(spTosl, adjusting) {
+    if (spTosl) {
+      this.rippleSlider.setValue(this.rippleSpinner.getValue());
+    } else {
+      this.rippleSpinner.setValue(this.rippleSlider.getValue());
+    }
     this.gradientColor.setRipple(this.rippleSlider.getValue() / 100);
-    this.drawPreview(this.rippleSlider.getValueIsAdjusting());
+    this.drawPreview(adjusting);
+  }
+
+   selectColor() {
+    JSColorChooser.showDialog(Z4Translations.COLOR, this.gradientColor.getColorAtIndex(this.selectedIndex), true, null, c => {
+      let position = this.gradientColor.getColorPositionAtIndex(this.selectedIndex);
+      this.gradientColor.addColor(c, position);
+      this.colorPreview.setColor(c);
+      this.drawPreview(false);
+    });
   }
 
    drawPreview(adjusting) {
@@ -2324,7 +2457,9 @@ class Z4GradientColorPanel extends JSPanel {
       }
     }
     this.ctx.putImageData(imageData, 0, 0);
-    this.gradientColor.getColorPositions().forEach((position, index, array) => this.drawCircle(w, h, position, index));
+    for (let index = 0; index < this.gradientColor.getColorCount(); index++) {
+      this.drawCircle(w, h, this.gradientColor.getColorPositionAtIndex(index), index);
+    }
   }
 
    drawCircle(w, h, position, index) {
@@ -3234,7 +3369,7 @@ class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
   }
 
    selectColor() {
-    JSColorChooser.showDialog(Z4Translations.FILLING_COLOR, this.backgroundColor, true, null, c => {
+    JSColorChooser.showDialog(Z4Translations.BACKGROUND_COLOR, this.backgroundColor, true, null, c => {
       this.backgroundColor = c;
       this.colorPreview.setColor(c);
       this.drawPreview(false);
@@ -4589,10 +4724,6 @@ class Z4Translations {
 
   static  RESOLUTION = "";
 
-  static  FILLING_COLOR = "";
-
-  static  BACKGROUND_COLOR = "";
-
   static  PATTERN = "";
 
   static  EDIT = "";
@@ -4622,6 +4753,21 @@ class Z4Translations {
   static  LOCK = "";
 
   static  RIPPLE = "";
+
+  static  DELETE = "";
+
+  // Color
+  static  COLOR = "";
+
+  static  FILLING_COLOR = "";
+
+  static  BACKGROUND_COLOR = "";
+
+  static  MIRRORED = "";
+
+  static  INVERTED = "";
+
+  static  DELETE_COLOR_MESSAGE = "";
 
   // Composite Operation
   static  COMPOSITE_OPERATION = "";
@@ -4736,8 +4882,6 @@ class Z4Translations {
     Z4Translations.WIDTH = "Width";
     Z4Translations.HEIGHT = "Height";
     Z4Translations.RESOLUTION = "Resolution";
-    Z4Translations.FILLING_COLOR = "Filling Color";
-    Z4Translations.BACKGROUND_COLOR = "Background Color";
     Z4Translations.PATTERN = "Pattern";
     Z4Translations.EDIT = "Edit";
     Z4Translations.FIT = "Fit";
@@ -4753,6 +4897,14 @@ class Z4Translations {
     Z4Translations.LOCK_RATIO = "Lock Ratio";
     Z4Translations.LOCK = "Lock";
     Z4Translations.RIPPLE = "Ripple";
+    Z4Translations.DELETE = "Delete";
+    // Color
+    Z4Translations.COLOR = "Color";
+    Z4Translations.FILLING_COLOR = "Filling Color";
+    Z4Translations.BACKGROUND_COLOR = "Background Color";
+    Z4Translations.MIRRORED = "Mirrored";
+    Z4Translations.INVERTED = "Inverted";
+    Z4Translations.DELETE_COLOR_MESSAGE = "Do you really want to delete the color?";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "This is the default setting and draws the layer on top of the existing content";
@@ -4828,8 +4980,6 @@ class Z4Translations {
     Z4Translations.WIDTH = "Larghezza";
     Z4Translations.HEIGHT = "Altezza";
     Z4Translations.RESOLUTION = "Risoluzione";
-    Z4Translations.FILLING_COLOR = "Colore di Riempimento";
-    Z4Translations.BACKGROUND_COLOR = "Colore di Sfondo";
     Z4Translations.PATTERN = "Trama";
     Z4Translations.EDIT = "Modifica";
     Z4Translations.FIT = "Adatta";
@@ -4845,6 +4995,14 @@ class Z4Translations {
     Z4Translations.LOCK_RATIO = "Blocca Rapporto";
     Z4Translations.LOCK = "Blocca";
     Z4Translations.RIPPLE = "Caoticit\u00E0";
+    Z4Translations.DELETE = "Elimina";
+    // Color
+    Z4Translations.COLOR = "Colore";
+    Z4Translations.FILLING_COLOR = "Colore di Riempimento";
+    Z4Translations.BACKGROUND_COLOR = "Colore di Sfondo";
+    Z4Translations.MIRRORED = "Riflesso";
+    Z4Translations.INVERTED = "Invertito";
+    Z4Translations.DELETE_COLOR_MESSAGE = "Vuoi davvero eliminare il colore?";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "Questa \u00E8 l'impostazione predefinita e disegna il livello sopra il contenuto esistente";

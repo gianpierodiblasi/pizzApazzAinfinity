@@ -58,8 +58,6 @@ public class Z4Translations {
   public static String WIDTH = "";
   public static String HEIGHT = "";
   public static String RESOLUTION = "";
-  public static String FILLING_COLOR = "";
-  public static String BACKGROUND_COLOR = "";
   public static String PATTERN = "";
   public static String EDIT = "";
   public static String FIT = "";
@@ -75,6 +73,15 @@ public class Z4Translations {
   public static String LOCK_RATIO = "";
   public static String LOCK = "";
   public static String RIPPLE = "";
+  public static String DELETE = "";
+
+  // Color
+  public static String COLOR = "";
+  public static String FILLING_COLOR = "";
+  public static String BACKGROUND_COLOR = "";
+  public static String MIRRORED = "";
+  public static String INVERTED = "";
+  public static String DELETE_COLOR_MESSAGE = "";
 
   // Composite Operation
   public static String COMPOSITE_OPERATION = "";
@@ -180,8 +187,6 @@ public class Z4Translations {
     Z4Translations.WIDTH = "Width";
     Z4Translations.HEIGHT = "Height";
     Z4Translations.RESOLUTION = "Resolution";
-    Z4Translations.FILLING_COLOR = "Filling Color";
-    Z4Translations.BACKGROUND_COLOR = "Background Color";
     Z4Translations.PATTERN = "Pattern";
     Z4Translations.EDIT = "Edit";
     Z4Translations.FIT = "Fit";
@@ -197,6 +202,15 @@ public class Z4Translations {
     Z4Translations.LOCK_RATIO = "Lock Ratio";
     Z4Translations.LOCK = "Lock";
     Z4Translations.RIPPLE = "Ripple";
+    Z4Translations.DELETE = "Delete";
+
+    // Color
+    Z4Translations.COLOR = "Color";
+    Z4Translations.FILLING_COLOR = "Filling Color";
+    Z4Translations.BACKGROUND_COLOR = "Background Color";
+    Z4Translations.MIRRORED = "Mirrored";
+    Z4Translations.INVERTED = "Inverted";
+    Z4Translations.DELETE_COLOR_MESSAGE = "Do you really want to delete the color?";
 
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
@@ -286,8 +300,6 @@ public class Z4Translations {
     Z4Translations.WIDTH = "Larghezza";
     Z4Translations.HEIGHT = "Altezza";
     Z4Translations.RESOLUTION = "Risoluzione";
-    Z4Translations.FILLING_COLOR = "Colore di Riempimento";
-    Z4Translations.BACKGROUND_COLOR = "Colore di Sfondo";
     Z4Translations.PATTERN = "Trama";
     Z4Translations.EDIT = "Modifica";
     Z4Translations.FIT = "Adatta";
@@ -303,6 +315,15 @@ public class Z4Translations {
     Z4Translations.LOCK_RATIO = "Blocca Rapporto";
     Z4Translations.LOCK = "Blocca";
     Z4Translations.RIPPLE = "Caoticit\u00E0";
+    Z4Translations.DELETE = "Elimina";
+
+    // Color
+    Z4Translations.COLOR = "Colore";
+    Z4Translations.FILLING_COLOR = "Colore di Riempimento";
+    Z4Translations.BACKGROUND_COLOR = "Colore di Sfondo";
+    Z4Translations.MIRRORED = "Riflesso";
+    Z4Translations.INVERTED = "Invertito";
+    Z4Translations.DELETE_COLOR_MESSAGE = "Vuoi davvero eliminare il colore?";
 
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";

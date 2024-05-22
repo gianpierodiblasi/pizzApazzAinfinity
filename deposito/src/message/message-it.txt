@@ -34,9 +34,8 @@ DELAYED = Ritardato
 COLOR = Colore
 OPACITY = Opacità
 GRADIENT_COLOR = Colore a Gradiente
-MIRRORED = Riflesso
 GRAY = Grigio
-INVERTED = Invertito
+
 FILLING = Riempimento
 LIGHTING = Illuminazione
 LIGHTED = Illuminato

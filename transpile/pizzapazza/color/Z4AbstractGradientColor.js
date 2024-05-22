@@ -81,12 +81,13 @@ class Z4AbstractGradientColor {
   }
 
   /**
-   * Returns the color positions
+   * Returns a color position in an index
    *
-   * @return The color positions
+   * @param index The index
+   * @return The color position
    */
-   getColorPositions() {
-    return this.colorPositions.slice();
+   getColorPositionAtIndex(index) {
+    return this.colorPositions[index];
   }
 
   /**
@@ -97,6 +98,15 @@ class Z4AbstractGradientColor {
    */
    getColorAtIndex(index) {
     return this.colors[index];
+  }
+
+  /**
+   * Returns the number of managed colors
+   *
+   * @return The number of managed colors
+   */
+   getColorCount() {
+    return this.colors.length;
   }
 
   /**

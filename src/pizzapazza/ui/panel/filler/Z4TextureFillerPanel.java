@@ -142,7 +142,7 @@ public class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
   }
 
   private void selectColor() {
-    JSColorChooser.showDialog(Z4Translations.FILLING_COLOR, this.backgroundColor, true, null, c -> {
+    JSColorChooser.showDialog(Z4Translations.BACKGROUND_COLOR, this.backgroundColor, true, null, c -> {
       this.backgroundColor = c;
       this.colorPreview.setColor(c);
       this.drawPreview(false);

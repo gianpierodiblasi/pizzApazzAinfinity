@@ -93,12 +93,13 @@ public abstract class Z4AbstractGradientColor<T> {
   }
 
   /**
-   * Returns the color positions
+   * Returns a color position in an index
    *
-   * @return The color positions
+   * @param index The index
+   * @return The color position
    */
-  public Array<Double> getColorPositions() {
-    return this.colorPositions.slice();
+  public double getColorPositionAtIndex(int index) {
+    return this.colorPositions.$get(index);
   }
 
   /**
@@ -109,6 +110,15 @@ public abstract class Z4AbstractGradientColor<T> {
    */
   public T getColorAtIndex(int index) {
     return this.colors.$get(index);
+  }
+
+  /**
+   * Returns the number of managed colors
+   *
+   * @return The number of managed colors
+   */
+  public int getColorCount() {
+    return this.colors.length;
   }
 
   /**

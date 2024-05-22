@@ -83,10 +83,6 @@ class Z4Translations {
 
   static  RESOLUTION = "";
 
-  static  FILLING_COLOR = "";
-
-  static  BACKGROUND_COLOR = "";
-
   static  PATTERN = "";
 
   static  EDIT = "";
@@ -116,6 +112,21 @@ class Z4Translations {
   static  LOCK = "";
 
   static  RIPPLE = "";
+
+  static  DELETE = "";
+
+  // Color
+  static  COLOR = "";
+
+  static  FILLING_COLOR = "";
+
+  static  BACKGROUND_COLOR = "";
+
+  static  MIRRORED = "";
+
+  static  INVERTED = "";
+
+  static  DELETE_COLOR_MESSAGE = "";
 
   // Composite Operation
   static  COMPOSITE_OPERATION = "";
@@ -230,8 +241,6 @@ class Z4Translations {
     Z4Translations.WIDTH = "Width";
     Z4Translations.HEIGHT = "Height";
     Z4Translations.RESOLUTION = "Resolution";
-    Z4Translations.FILLING_COLOR = "Filling Color";
-    Z4Translations.BACKGROUND_COLOR = "Background Color";
     Z4Translations.PATTERN = "Pattern";
     Z4Translations.EDIT = "Edit";
     Z4Translations.FIT = "Fit";
@@ -247,6 +256,14 @@ class Z4Translations {
     Z4Translations.LOCK_RATIO = "Lock Ratio";
     Z4Translations.LOCK = "Lock";
     Z4Translations.RIPPLE = "Ripple";
+    Z4Translations.DELETE = "Delete";
+    // Color
+    Z4Translations.COLOR = "Color";
+    Z4Translations.FILLING_COLOR = "Filling Color";
+    Z4Translations.BACKGROUND_COLOR = "Background Color";
+    Z4Translations.MIRRORED = "Mirrored";
+    Z4Translations.INVERTED = "Inverted";
+    Z4Translations.DELETE_COLOR_MESSAGE = "Do you really want to delete the color?";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "This is the default setting and draws the layer on top of the existing content";
@@ -322,8 +339,6 @@ class Z4Translations {
     Z4Translations.WIDTH = "Larghezza";
     Z4Translations.HEIGHT = "Altezza";
     Z4Translations.RESOLUTION = "Risoluzione";
-    Z4Translations.FILLING_COLOR = "Colore di Riempimento";
-    Z4Translations.BACKGROUND_COLOR = "Colore di Sfondo";
     Z4Translations.PATTERN = "Trama";
     Z4Translations.EDIT = "Modifica";
     Z4Translations.FIT = "Adatta";
@@ -339,6 +354,14 @@ class Z4Translations {
     Z4Translations.LOCK_RATIO = "Blocca Rapporto";
     Z4Translations.LOCK = "Blocca";
     Z4Translations.RIPPLE = "Caoticit\u00E0";
+    Z4Translations.DELETE = "Elimina";
+    // Color
+    Z4Translations.COLOR = "Colore";
+    Z4Translations.FILLING_COLOR = "Colore di Riempimento";
+    Z4Translations.BACKGROUND_COLOR = "Colore di Sfondo";
+    Z4Translations.MIRRORED = "Riflesso";
+    Z4Translations.INVERTED = "Invertito";
+    Z4Translations.DELETE_COLOR_MESSAGE = "Vuoi davvero eliminare il colore?";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "Questa \u00E8 l'impostazione predefinita e disegna il livello sopra il contenuto esistente";
