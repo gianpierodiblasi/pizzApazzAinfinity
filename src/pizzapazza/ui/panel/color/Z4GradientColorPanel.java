@@ -229,8 +229,7 @@ public class Z4GradientColorPanel extends JSPanel {
 
   private void selectColor() {
     JSColorChooser.showDialog(Z4Translations.COLOR, this.gradientColor.getColorAtIndex(this.selectedIndex), true, null, c -> {
-      double position = this.gradientColor.getColorPositionAtIndex(this.selectedIndex);
-      this.gradientColor.addColor(c, position);
+      this.gradientColor.addColor(c, this.gradientColor.getColorPositionAtIndex(this.selectedIndex));
       this.colorPreview.setColor(c);
       this.drawPreview(false);
     });
