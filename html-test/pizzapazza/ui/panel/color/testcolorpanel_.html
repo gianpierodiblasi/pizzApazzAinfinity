@@ -21,7 +21,7 @@
     <script>
       window.onload = event => {
         var name = new URLSearchParams(window.location.search).get("type");
-        eval("new " + name.replaceAll(" ", "") + "().setTitle('" + name + "');");
+        eval("new TestColorPanel(new " + name.replace("Test", "Z4").replaceAll(" ", "") + "()).setTitle('" + name + "');");
       };
     </script>
   </head>

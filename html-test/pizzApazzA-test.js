@@ -959,12 +959,12 @@ class TestTextureFiller extends JSFrame {
 /**
  * @author gianpiero.diblasi
  */
-class TestGradientColorPanel extends JSFrame {
+class TestColorPanel extends JSFrame {
 
-  constructor() {
+  constructor(panel) {
     super();
     let p = new JSPanel();
-    p.add(new Z4GradientColorPanel(), null);
+    p.add(panel, null);
     this.getContentPane().add(p, BorderLayout.NORTH);
   }
 }

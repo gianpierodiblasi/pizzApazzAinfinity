@@ -8,13 +8,13 @@ import javascript.swing.JSPanel;
  *
  * @author gianpiero.diblasi
  */
-public class TestGradientColorPanel extends JSFrame {
+public class TestColorPanel extends JSFrame {
 
-  public TestGradientColorPanel() {
+  public TestColorPanel(JSPanel panel) {
     super();
 
     JSPanel p = new JSPanel();
-    p.add(new Z4GradientColorPanel(), null);
+    p.add(panel, null);
     this.getContentPane().add(p, BorderLayout.NORTH);
   }
 }
