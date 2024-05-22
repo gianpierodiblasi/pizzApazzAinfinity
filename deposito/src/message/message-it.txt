@@ -34,7 +34,6 @@ DELAYED = Ritardato
 COLOR = Colore
 OPACITY = Opacità
 GRADIENT_COLOR = Colore a Gradiente
-RIPPLE = Caoticità
 MIRRORED = Riflesso
 GRAY = Grigio
 INVERTED = Invertito

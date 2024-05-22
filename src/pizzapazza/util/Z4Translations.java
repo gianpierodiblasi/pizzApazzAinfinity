@@ -74,6 +74,7 @@ public class Z4Translations {
   public static String FREE = "";
   public static String LOCK_RATIO = "";
   public static String LOCK = "";
+  public static String RIPPLE = "";
 
   // Composite Operation
   public static String COMPOSITE_OPERATION = "";
@@ -195,6 +196,7 @@ public class Z4Translations {
     Z4Translations.FREE = "Free";
     Z4Translations.LOCK_RATIO = "Lock Ratio";
     Z4Translations.LOCK = "Lock";
+    Z4Translations.RIPPLE = "Ripple";
 
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
@@ -300,6 +302,7 @@ public class Z4Translations {
     Z4Translations.FREE = "Libero";
     Z4Translations.LOCK_RATIO = "Blocca Rapporto";
     Z4Translations.LOCK = "Blocca";
+    Z4Translations.RIPPLE = "Caoticit\u00E0";
 
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";

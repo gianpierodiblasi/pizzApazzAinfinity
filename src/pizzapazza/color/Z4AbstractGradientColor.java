@@ -93,6 +93,25 @@ public abstract class Z4AbstractGradientColor<T> {
   }
 
   /**
+   * Returns the color positions
+   *
+   * @return The color positions
+   */
+  public Array<Double> getColorPositions() {
+    return this.colorPositions.slice();
+  }
+
+  /**
+   * Returns a color in an index
+   *
+   * @param index The index
+   * @return The color
+   */
+  public T getColorAtIndex(int index) {
+    return this.colors.$get(index);
+  }
+
+  /**
    * Mirrors this color
    */
   @SuppressWarnings("unchecked")
@@ -142,11 +161,11 @@ public abstract class Z4AbstractGradientColor<T> {
   }
 
   /**
-   * Returns a Color in a position
+   * Returns a color in a position
    *
    * @param position The color position (in the range [0,1])
    * @param useRipple true to use ripple, false otherwise
-   * @return The Color
+   * @return The color
    */
   public abstract T getColorAt(double position, boolean useRipple);
 

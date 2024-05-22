@@ -187,7 +187,10 @@
   border-top-right-radius: var(--roundness);
   border-bottom-right-radius: var(--roundness);
 }
-.z4layerpreview {
+.z4gradientcolorpanel canvas {
+  border: 1px solid var(--main-action-bgcolor);
+  background-image: url(../image/chessboard.png);
+}.z4layerpreview {
   font-family: var(--font-family);
   font-size: var(--font-size);
   color: var(--main-color);

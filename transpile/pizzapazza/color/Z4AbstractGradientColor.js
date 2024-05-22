@@ -81,6 +81,25 @@ class Z4AbstractGradientColor {
   }
 
   /**
+   * Returns the color positions
+   *
+   * @return The color positions
+   */
+   getColorPositions() {
+    return this.colorPositions.slice();
+  }
+
+  /**
+   * Returns a color in an index
+   *
+   * @param index The index
+   * @return The color
+   */
+   getColorAtIndex(index) {
+    return this.colors[index];
+  }
+
+  /**
    * Mirrors this color
    */
    mirror() {
@@ -127,11 +146,11 @@ class Z4AbstractGradientColor {
   }
 
   /**
-   * Returns a Color in a position
+   * Returns a color in a position
    *
    * @param position The color position (in the range [0,1])
    * @param useRipple true to use ripple, false otherwise
-   * @return The Color
+   * @return The color
    */
    getColorAt(position, useRipple) {
   }

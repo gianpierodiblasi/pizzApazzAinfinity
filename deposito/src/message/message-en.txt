@@ -34,7 +34,6 @@ DELAYED = Delayed
 COLOR = Color
 OPACITY = Opacity
 GRADIENT_COLOR = Gradient Color
-RIPPLE = Ripple
 MIRRORED = Mirrored
 GRAY = Gray
 INVERTED = Inverted
