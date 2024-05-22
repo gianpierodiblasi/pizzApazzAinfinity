@@ -56,13 +56,13 @@ class Z4BiGradientColorPanel extends JSPanel {
     this.biRippleSpinner.setModel(new SpinnerNumberModel(0, 0, 100, 1));
     this.biRippleSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
     this.biRippleSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
-    // this.biRippleSpinner.addChangeListener(event -> this.onChange(true, this.ySpinner.getValueIsAdjusting(), this.biRippleSpinner, this.biRippleSlider, false));
+    this.biRippleSpinner.addChangeListener(event => this.onChange(true, this.biRippleSpinner.getValueIsAdjusting(), this.biRippleSpinner, this.biRippleSlider, true));
     this.addComponent(this.biRippleSpinner, 2, 0, 1, 1, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
     this.biRippleSlider.setValue(0);
     this.biRippleSlider.setOrientation(JSSlider.VERTICAL);
     this.biRippleSlider.setInverted(true);
     this.biRippleSlider.getStyle().minHeight = "20rem";
-    // this.biRippleSlider.addChangeListener(event -> this.onChange(false, this.biRippleSlider.getValueIsAdjusting(), this.biRippleSpinner, this.biRippleSlider, false));
+    this.biRippleSlider.addChangeListener(event => this.onChange(false, this.biRippleSlider.getValueIsAdjusting(), this.biRippleSpinner, this.biRippleSlider, true));
     this.addComponent(this.biRippleSlider, 3, 0, 1, 2, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
     let panel = new JSPanel();
     panel.getStyle().writingMode = "vertical-lr";
@@ -124,11 +124,11 @@ class Z4BiGradientColorPanel extends JSPanel {
     this.rippleSpinner.getStyle().minWidth = "4rem";
     this.rippleSpinner.getChilStyleByQuery("input[type=number]").minWidth = "3.5rem";
     this.rippleSpinner.getChilStyleByQuery("input[type=number]").width = "3.5rem";
-    // this.rippleSpinner.addChangeListener(event -> this.onChange(true, this.rippleSpinner.getValueIsAdjusting()));
+    this.rippleSpinner.addChangeListener(event => this.onChange(true, this.rippleSpinner.getValueIsAdjusting(), this.rippleSpinner, this.rippleSlider, false));
     this.addComponent(this.rippleSpinner, 2, 4, 3, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5, 0, 0, 0));
     this.rippleSlider.setValue(0);
     this.rippleSlider.getStyle().minWidth = "20rem";
-    // this.rippleSlider.addChangeListener(event -> this.onChange(false, this.rippleSlider.getValueIsAdjusting()));
+    this.rippleSlider.addChangeListener(event => this.onChange(false, this.rippleSlider.getValueIsAdjusting(), this.rippleSpinner, this.rippleSlider, false));
     this.addComponent(this.rippleSlider, 0, 5, 5, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
     panel = new JSPanel();
     this.addComponent(panel, 0, 6, 5, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
@@ -183,16 +183,21 @@ class Z4BiGradientColorPanel extends JSPanel {
    onMouse(event, type) {
     switch(type) {
       case "down":
-        // for (int index = 0; index < this.gradientColor.getColorCount(); index++) {
-        // double position = this.gradientColor.getColorPositionAtIndex(index);
-        // if (Z4Math.distance(position * w, h / 2, event.offsetX, event.offsetY) <= Z4BiGradientColorPanel.SELECTOR_RADIUS) {
-        // this.pressed = true;
-        // this.selectedIndex = index;
-        // this.colorPreview.setColor(this.gradientColor.getColorAtIndex(this.selectedIndex));
-        // this.delete.setEnabled(this.selectedIndex != 0 && this.selectedIndex != this.gradientColor.getColorCount() - 1);
-        // this.drawPreview(false);
-        // }
-        // }
+        for (let biIndex = 0; biIndex < this.biGradientColor.getColorCount(); biIndex++) {
+          let biPosition = this.biGradientColor.getColorPositionAtIndex(biIndex);
+          let gradientColor = this.biGradientColor.getColorAtIndex(biIndex);
+          for (let index = 0; index < gradientColor.getColorCount(); index++) {
+            let position = gradientColor.getColorPositionAtIndex(index);
+            if (Z4Math.distance(position * Z4BiGradientColorPanel.WIDTH, biPosition * Z4BiGradientColorPanel.WIDTH, event.offsetX, event.offsetY) <= Z4BiGradientColorPanel.SELECTOR_RADIUS) {
+              this.pressed = true;
+              this.biSelectedIndex = biIndex;
+              this.selectedIndex = index;
+              this.colorPreview.setColor(this.biGradientColor.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
+              this.delete.setEnabled(this.selectedIndex !== 0 && this.selectedIndex !== gradientColor.getColorCount() - 1);
+              this.drawPreview(false);
+            }
+          }
+        }
         // 
         // if (!this.pressed && !this.gradientColor.isPositionOccupied(event.offsetX / w, Z4BiGradientColorPanel.TOLLERANCE) && Math.abs(h / 2 - event.offsetY) <= Z4BiGradientColorPanel.SELECTOR_RADIUS) {
         // this.gradientColor.addColor(this.gradientColor.getColorAt(event.offsetX / w, false), event.offsetX / w);
@@ -251,15 +256,18 @@ class Z4BiGradientColorPanel extends JSPanel {
     }
   }
 
-   onChange(spTosl, adjusting) {
-    // if (spTosl) {
-    // this.rippleSlider.setValue((int) this.rippleSpinner.getValue());
-    // } else {
-    // this.rippleSpinner.setValue(this.rippleSlider.getValue());
-    // }
-    // 
-    // this.gradientColor.setRipple(this.rippleSlider.getValue() / 100);
-    // this.drawPreview(adjusting);
+   onChange(spTosl, adjusting, spinner, slider, isBi) {
+    if (spTosl) {
+      slider.setValue(spinner.getValue());
+    } else {
+      spinner.setValue(slider.getValue());
+    }
+    if (isBi) {
+      this.biGradientColor.setRipple(slider.getValue() / 100);
+    } else {
+      this.biGradientColor.setGradientRipple(slider.getValue() / 100);
+    }
+    this.drawPreview(adjusting);
   }
 
    selectColor() {
