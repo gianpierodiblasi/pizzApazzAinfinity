@@ -25,6 +25,8 @@ class Z4GradientColorPanel extends JSPanel {
 
   static  SELECTOR_RADIUS = 7;
 
+  static  WIDTH = 200;
+
   static  HEIGHT = 50;
 
   static  TOLLERANCE = 0.075;
@@ -33,11 +35,12 @@ class Z4GradientColorPanel extends JSPanel {
     super();
     this.cssAddClass("z4gradientcolorpanel");
     this.setLayout(new GridBagLayout());
+    this.preview.setProperty("width", "" + Z4GradientColorPanel.WIDTH);
     this.preview.setProperty("height", "" + Z4GradientColorPanel.HEIGHT);
     this.preview.addEventListener("mousedown", event => this.onMouse(event, "down"));
     this.preview.addEventListener("mousemove", event => this.onMouse(event, "move"));
     this.preview.addEventListener("mouseup", event => this.onMouse(event, "up"));
-    this.addComponent(this.preview, 0, 0, 3, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 5, 0));
+    this.addComponent(this.preview, 0, 0, 3, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 5, 0));
     this.colorPreview.setColor(this.gradientColor.getColorAtIndex(0));
     this.addComponent(this.colorPreview, 0, 1, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, null);
     let button = new JSButton();
@@ -113,13 +116,11 @@ class Z4GradientColorPanel extends JSPanel {
   }
 
    onMouse(event, type) {
-    let w = parseInt(this.preview.getProperty("width"));
-    let h = parseInt(this.preview.getProperty("height"));
     switch(type) {
       case "down":
         for (let index = 0; index < this.gradientColor.getColorCount(); index++) {
           let position = this.gradientColor.getColorPositionAtIndex(index);
-          if (Z4Math.distance(position * w, h / 2, event.offsetX, event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
+          if (Z4Math.distance(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, event.offsetX, event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
             this.pressed = true;
             this.selectedIndex = index;
             this.colorPreview.setColor(this.gradientColor.getColorAtIndex(this.selectedIndex));
@@ -127,12 +128,12 @@ class Z4GradientColorPanel extends JSPanel {
             this.drawPreview(false);
           }
         }
-        if (!this.pressed && !this.gradientColor.isPositionOccupied(event.offsetX / w, Z4GradientColorPanel.TOLLERANCE) && Math.abs(h / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
-          this.gradientColor.addColor(this.gradientColor.getColorAt(event.offsetX / w, false), event.offsetX / w);
+        if (!this.pressed && !this.gradientColor.isPositionOccupied(event.offsetX / Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.TOLLERANCE) && Math.abs(Z4GradientColorPanel.HEIGHT / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
+          this.gradientColor.addColor(this.gradientColor.getColorAt(event.offsetX / Z4GradientColorPanel.WIDTH, false), event.offsetX / Z4GradientColorPanel.WIDTH);
           this.pressed = true;
           for (let index = 0; index < this.gradientColor.getColorCount(); index++) {
             let position = this.gradientColor.getColorPositionAtIndex(index);
-            if (Z4Math.distance(position * w, h / 2, event.offsetX, event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
+            if (Z4Math.distance(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, event.offsetX, event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
               this.selectedIndex = index;
               this.colorPreview.setColor(this.gradientColor.getColorAtIndex(this.selectedIndex));
               this.delete.setEnabled(this.selectedIndex !== 0 && this.selectedIndex !== this.gradientColor.getColorCount() - 1);
@@ -147,7 +148,7 @@ class Z4GradientColorPanel extends JSPanel {
           let position = this.gradientColor.getColorPositionAtIndex(this.selectedIndex);
           let positionBefore = this.gradientColor.getColorPositionAtIndex(this.selectedIndex - 1);
           let positionAfter = this.gradientColor.getColorPositionAtIndex(this.selectedIndex + 1);
-          let newPosition = event.offsetX / w;
+          let newPosition = event.offsetX / Z4GradientColorPanel.WIDTH;
           if (this.selectedIndex !== 0 && this.selectedIndex !== this.gradientColor.getColorCount() - 1 && positionBefore < newPosition - Z4GradientColorPanel.TOLLERANCE && positionAfter > newPosition + Z4GradientColorPanel.TOLLERANCE) {
             let color = this.gradientColor.getColorAtIndex(this.selectedIndex);
             this.gradientColor.removeColor(position);
@@ -158,12 +159,12 @@ class Z4GradientColorPanel extends JSPanel {
           this.preview.getStyle().cursor = "default";
           for (let index = 0; index < this.gradientColor.getColorCount(); index++) {
             let position = this.gradientColor.getColorPositionAtIndex(index);
-            if (Z4Math.distance(position * w, h / 2, event.offsetX, event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
+            if (Z4Math.distance(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, event.offsetX, event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
               this.preview.getStyle().cursor = "pointer";
             }
           }
           if (this.preview.getStyle().cursor === "default") {
-            if (!this.gradientColor.isPositionOccupied(event.offsetX / w, Z4GradientColorPanel.TOLLERANCE) && Math.abs(h / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
+            if (!this.gradientColor.isPositionOccupied(event.offsetX / Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.TOLLERANCE) && Math.abs(Z4GradientColorPanel.HEIGHT / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
               this.preview.getStyle().cursor = "copy";
             }
           }
@@ -196,14 +197,12 @@ class Z4GradientColorPanel extends JSPanel {
   }
 
    drawPreview(adjusting) {
-    let w = parseInt(this.preview.getProperty("width"));
-    let h = parseInt(this.preview.getProperty("height"));
-    let imageData = this.ctx.createImageData(w, h);
+    let imageData = this.ctx.createImageData(Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT);
     let data = imageData.data;
-    for (let x = 0; x < w; x++) {
-      let color = this.gradientColor.getColorAt(x / w, true);
-      for (let y = 0; y < h; y++) {
-        let index = (y * w + x) * 4;
+    for (let x = 0; x < Z4GradientColorPanel.WIDTH; x++) {
+      let color = this.gradientColor.getColorAt(x / Z4GradientColorPanel.WIDTH, true);
+      for (let y = 0; y < Z4GradientColorPanel.HEIGHT; y++) {
+        let index = (y * Z4GradientColorPanel.WIDTH + x) * 4;
         data[index] = color.red;
         data[index + 1] = color.green;
         data[index + 2] = color.blue;
@@ -212,21 +211,21 @@ class Z4GradientColorPanel extends JSPanel {
     }
     this.ctx.putImageData(imageData, 0, 0);
     for (let index = 0; index < this.gradientColor.getColorCount(); index++) {
-      this.drawCircle(w, h, this.gradientColor.getColorPositionAtIndex(index), index);
+      this.drawCircle(this.gradientColor.getColorPositionAtIndex(index), index);
     }
   }
 
-   drawCircle(w, h, position, index) {
+   drawCircle(position, index) {
     let dash = new Array();
     this.ctx.beginPath();
-    this.ctx.arc(position * w, h / 2, Z4GradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
+    this.ctx.arc(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, Z4GradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
     this.ctx.closePath();
     this.ctx.strokeStyle = this.getStrokeStyle(index === this.selectedIndex ? "red" : "black");
     this.ctx.setLineDash(dash);
     this.ctx.stroke();
     dash.push(2.5, 2.5);
     this.ctx.beginPath();
-    this.ctx.arc(position * w, h / 2, Z4GradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
+    this.ctx.arc(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, Z4GradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
     this.ctx.closePath();
     this.ctx.strokeStyle = this.getStrokeStyle("white");
     this.ctx.setLineDash(dash);

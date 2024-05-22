@@ -26,7 +26,6 @@ import pizzapazza.ui.component.Z4ColorPreview;
 import pizzapazza.util.Z4Translations;
 import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
-import static simulation.js.$Globals.parseInt;
 import simulation.js.$Uint8Array;
 
 /**
@@ -48,6 +47,7 @@ public class Z4GradientColorPanel extends JSPanel {
   private boolean pressed = false;
 
   private static final int SELECTOR_RADIUS = 7;
+  private static final int WIDTH = 200;
   private static final int HEIGHT = 50;
   private static final double TOLLERANCE = 0.075;
 
@@ -56,11 +56,12 @@ public class Z4GradientColorPanel extends JSPanel {
     this.cssAddClass("z4gradientcolorpanel");
     this.setLayout(new GridBagLayout());
 
+    this.preview.setProperty("width", "" + Z4GradientColorPanel.WIDTH);
     this.preview.setProperty("height", "" + Z4GradientColorPanel.HEIGHT);
     this.preview.addEventListener("mousedown", event -> this.onMouse((MouseEvent) event, "down"));
     this.preview.addEventListener("mousemove", event -> this.onMouse((MouseEvent) event, "move"));
     this.preview.addEventListener("mouseup", event -> this.onMouse((MouseEvent) event, "up"));
-    this.addComponent(this.preview, 0, 0, 3, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 5, 0));
+    this.addComponent(this.preview, 0, 0, 3, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 5, 0));
 
     this.colorPreview.setColor(this.gradientColor.getColorAtIndex(0));
     this.addComponent(this.colorPreview, 0, 1, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, null);
@@ -83,9 +84,9 @@ public class Z4GradientColorPanel extends JSPanel {
         }
       });
     });
-    
+
     this.addComponent(this.delete, 2, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
-    
+
     this.addLabel(Z4Translations.RIPPLE, 0, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
 
     this.rippleSpinner.setModel(new SpinnerNumberModel(0, 0, 100, 1));
@@ -148,14 +149,11 @@ public class Z4GradientColorPanel extends JSPanel {
 
   @SuppressWarnings("StringEquality")
   private void onMouse(MouseEvent event, String type) {
-    int w = parseInt(this.preview.getProperty("width"));
-    int h = parseInt(this.preview.getProperty("height"));
-
     switch (type) {
       case "down":
         for (int index = 0; index < this.gradientColor.getColorCount(); index++) {
           double position = this.gradientColor.getColorPositionAtIndex(index);
-          if (Z4Math.distance(position * w, h / 2, event.offsetX, event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
+          if (Z4Math.distance(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, event.offsetX, event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
             this.pressed = true;
             this.selectedIndex = index;
             this.colorPreview.setColor(this.gradientColor.getColorAtIndex(this.selectedIndex));
@@ -164,13 +162,13 @@ public class Z4GradientColorPanel extends JSPanel {
           }
         }
 
-        if (!this.pressed && !this.gradientColor.isPositionOccupied(event.offsetX / w, Z4GradientColorPanel.TOLLERANCE) && Math.abs(h / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
-          this.gradientColor.addColor(this.gradientColor.getColorAt(event.offsetX / w, false), event.offsetX / w);
+        if (!this.pressed && !this.gradientColor.isPositionOccupied(event.offsetX / Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.TOLLERANCE) && Math.abs(Z4GradientColorPanel.HEIGHT / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
+          this.gradientColor.addColor(this.gradientColor.getColorAt(event.offsetX / Z4GradientColorPanel.WIDTH, false), event.offsetX / Z4GradientColorPanel.WIDTH);
           this.pressed = true;
 
           for (int index = 0; index < this.gradientColor.getColorCount(); index++) {
             double position = this.gradientColor.getColorPositionAtIndex(index);
-            if (Z4Math.distance(position * w, h / 2, event.offsetX, event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
+            if (Z4Math.distance(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, event.offsetX, event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
               this.selectedIndex = index;
               this.colorPreview.setColor(this.gradientColor.getColorAtIndex(this.selectedIndex));
               this.delete.setEnabled(this.selectedIndex != 0 && this.selectedIndex != this.gradientColor.getColorCount() - 1);
@@ -186,7 +184,7 @@ public class Z4GradientColorPanel extends JSPanel {
           double position = this.gradientColor.getColorPositionAtIndex(this.selectedIndex);
           double positionBefore = this.gradientColor.getColorPositionAtIndex(this.selectedIndex - 1);
           double positionAfter = this.gradientColor.getColorPositionAtIndex(this.selectedIndex + 1);
-          double newPosition = event.offsetX / w;
+          double newPosition = event.offsetX / Z4GradientColorPanel.WIDTH;
 
           if (this.selectedIndex != 0 && this.selectedIndex != this.gradientColor.getColorCount() - 1
                   && positionBefore < newPosition - Z4GradientColorPanel.TOLLERANCE && positionAfter > newPosition + Z4GradientColorPanel.TOLLERANCE) {
@@ -199,13 +197,13 @@ public class Z4GradientColorPanel extends JSPanel {
           this.preview.getStyle().cursor = "default";
           for (int index = 0; index < this.gradientColor.getColorCount(); index++) {
             double position = this.gradientColor.getColorPositionAtIndex(index);
-            if (Z4Math.distance(position * w, h / 2, event.offsetX, event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
+            if (Z4Math.distance(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, event.offsetX, event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
               this.preview.getStyle().cursor = "pointer";
             }
           }
 
           if (this.preview.getStyle().cursor == "default") {
-            if (!this.gradientColor.isPositionOccupied(event.offsetX / w, Z4GradientColorPanel.TOLLERANCE) && Math.abs(h / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
+            if (!this.gradientColor.isPositionOccupied(event.offsetX / Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.TOLLERANCE) && Math.abs(Z4GradientColorPanel.HEIGHT / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
               this.preview.getStyle().cursor = "copy";
             }
 
@@ -240,16 +238,13 @@ public class Z4GradientColorPanel extends JSPanel {
   }
 
   private void drawPreview(boolean adjusting) {
-    int w = parseInt(this.preview.getProperty("width"));
-    int h = parseInt(this.preview.getProperty("height"));
-
-    ImageData imageData = this.ctx.createImageData(w, h);
+    ImageData imageData = this.ctx.createImageData(Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT);
     $Uint8Array data = ($Uint8Array) imageData.data;
 
-    for (int x = 0; x < w; x++) {
-      Color color = this.gradientColor.getColorAt(x / w, true);
-      for (int y = 0; y < h; y++) {
-        int index = (y * w + x) * 4;
+    for (int x = 0; x < Z4GradientColorPanel.WIDTH; x++) {
+      Color color = this.gradientColor.getColorAt(x / Z4GradientColorPanel.WIDTH, true);
+      for (int y = 0; y < Z4GradientColorPanel.HEIGHT; y++) {
+        int index = (y * Z4GradientColorPanel.WIDTH + x) * 4;
         data.$set(index, color.red);
         data.$set(index + 1, color.green);
         data.$set(index + 2, color.blue);
@@ -260,15 +255,15 @@ public class Z4GradientColorPanel extends JSPanel {
     this.ctx.putImageData(imageData, 0, 0);
 
     for (int index = 0; index < this.gradientColor.getColorCount(); index++) {
-      this.drawCircle(w, h, this.gradientColor.getColorPositionAtIndex(index), index);
+      this.drawCircle(this.gradientColor.getColorPositionAtIndex(index), index);
     }
   }
 
-  private void drawCircle(int w, int h, double position, int index) {
+  private void drawCircle(double position, int index) {
     Array<Double> dash = new Array<>();
 
     this.ctx.beginPath();
-    this.ctx.arc(position * w, h / 2, Z4GradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
+    this.ctx.arc(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, Z4GradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
     this.ctx.closePath();
     this.ctx.strokeStyle = this.$getStrokeStyle(index == this.selectedIndex ? "red" : "black");
     this.ctx.setLineDash(dash);
@@ -277,7 +272,7 @@ public class Z4GradientColorPanel extends JSPanel {
     dash.push(2.5, 2.5);
 
     this.ctx.beginPath();
-    this.ctx.arc(position * w, h / 2, Z4GradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
+    this.ctx.arc(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, Z4GradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
     this.ctx.closePath();
     this.ctx.strokeStyle = this.$getStrokeStyle("white");
     this.ctx.setLineDash(dash);
