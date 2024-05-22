@@ -2,6 +2,7 @@ package pizzapazza.color;
 
 import def.dom.CanvasGradient;
 import def.dom.CanvasPattern;
+import static def.dom.Globals.console;
 import static def.dom.Globals.document;
 import def.dom.ImageData;
 import java.awt.BorderLayout;
@@ -13,6 +14,7 @@ import javascript.swing.JSPanel;
 import jsweet.util.union.Union4;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
+import simulation.js.$Object;
 import simulation.js.$Uint8Array;
 
 /**
@@ -61,7 +63,7 @@ public class TestBiGradientColor extends JSFrame {
   }
 
   private void fill(int bb) {
-    Z4BiGradientColor gradientColor = new Z4BiGradientColor();
+    Z4BiGradientColor biGradientColor = new Z4BiGradientColor();
     switch (bb) {
       case 0:
         break;
@@ -80,13 +82,18 @@ public class TestBiGradientColor extends JSFrame {
         break;
     }
 
+    $Object json = biGradientColor.toJSON();
+    console.log(json);
+    biGradientColor = Z4BiGradientColor.fromJSON(json);
+
     ImageData imageData = this.ctx.createImageData(500, 500);
     $Uint8Array data = ($Uint8Array) imageData.data;
 
-    for (int x = 0; x < 500; x++) {
-      for (int y = 0; y < 500; y++) {
+    for (int y = 0; y < 500; y++) {
+      Z4GradientColor gradientColor = biGradientColor.getColorAt(y / 500, true);
+      for (int x = 0; x < 500; x++) {
         int index = (y * 500 + x) * 4;
-        Color color = gradientColor.getColorAt(x / 500, y / 500, true);
+        Color color = gradientColor.getColorAt(x / 500, true);
 
         data.$set(index, color.red);
         data.$set(index + 1, color.green);

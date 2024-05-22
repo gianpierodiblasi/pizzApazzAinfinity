@@ -37,7 +37,7 @@ class TestBiGradientColor extends JSFrame {
   }
 
    fill(bb) {
-    let gradientColor = new Z4BiGradientColor();
+    let biGradientColor = new Z4BiGradientColor();
     switch(bb) {
       case 0:
         break;
@@ -55,12 +55,16 @@ class TestBiGradientColor extends JSFrame {
         // gradientColor.addColor(new Color(255, 255, 0, 255), 1);
         break;
     }
+    let json = biGradientColor.toJSON();
+    console.log(json);
+    biGradientColor = Z4BiGradientColor.fromJSON(json);
     let imageData = this.ctx.createImageData(500, 500);
     let data = imageData.data;
-    for (let x = 0; x < 500; x++) {
-      for (let y = 0; y < 500; y++) {
+    for (let y = 0; y < 500; y++) {
+      let gradientColor = biGradientColor.getColorAt(y / 500, true);
+      for (let x = 0; x < 500; x++) {
         let index = (y * 500 + x) * 4;
-        let color = gradientColor.getColorAt(x / 500, y / 500, true);
+        let color = gradientColor.getColorAt(x / 500, true);
         data[index] = color.red;
         data[index + 1] = color.green;
         data[index + 2] = color.blue;

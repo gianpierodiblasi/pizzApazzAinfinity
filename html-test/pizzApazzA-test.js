@@ -37,7 +37,7 @@ class TestBiGradientColor extends JSFrame {
   }
 
    fill(bb) {
-    let gradientColor = new Z4BiGradientColor();
+    let biGradientColor = new Z4BiGradientColor();
     switch(bb) {
       case 0:
         break;
@@ -55,12 +55,16 @@ class TestBiGradientColor extends JSFrame {
         // gradientColor.addColor(new Color(255, 255, 0, 255), 1);
         break;
     }
+    let json = biGradientColor.toJSON();
+    console.log(json);
+    biGradientColor = Z4BiGradientColor.fromJSON(json);
     let imageData = this.ctx.createImageData(500, 500);
     let data = imageData.data;
-    for (let x = 0; x < 500; x++) {
-      for (let y = 0; y < 500; y++) {
+    for (let y = 0; y < 500; y++) {
+      let gradientColor = biGradientColor.getColorAt(y / 500, true);
+      for (let x = 0; x < 500; x++) {
         let index = (y * 500 + x) * 4;
-        let color = gradientColor.getColorAt(x / 500, y / 500, true);
+        let color = gradientColor.getColorAt(x / 500, true);
         data[index] = color.red;
         data[index + 1] = color.green;
         data[index + 2] = color.blue;
@@ -95,42 +99,67 @@ class TestGradientColor extends JSFrame {
     let buttons = new JSPanel();
     let button = new JSButton();
     button.setText("WHITE->BLACK");
-    button.addActionListener(event => this.fill(0));
+    button.addActionListener(event => this.fill(new Z4GradientColor()));
     buttons.add(button, null);
     button = new JSButton();
     button.setText("WHITE->BLACK RIPPLE");
-    button.addActionListener(event => this.fill(1));
+    button.addActionListener(event => {
+      let gradientColor = new Z4GradientColor();
+      gradientColor.setRipple(0.3);
+      this.fill(gradientColor);
+    });
     buttons.add(button, null);
     button = new JSButton();
     button.setText("RED-TRANS -> YELLOW");
-    button.addActionListener(event => this.fill(2));
+    button.addActionListener(event => {
+      let gradientColor = new Z4GradientColor();
+      gradientColor.addColor(new Color(255, 0, 0, 0), 0);
+      gradientColor.addColor(new Color(255, 255, 0, 255), 1);
+      this.fill(gradientColor);
+    });
     buttons.add(button, null);
     button = new JSButton();
     button.setText("COLORFUL");
-    button.addActionListener(event => this.fill(3));
+    button.addActionListener(event => {
+      let gradientColor = new Z4GradientColor();
+      gradientColor.addColor(new Color(255, 0, 0, 255), 0);
+      gradientColor.addColor(new Color(255, 0, 255, 255), 0.3);
+      gradientColor.addColor(new Color(0, 145, 255, 255), 0.7);
+      gradientColor.addColor(new Color(255, 255, 0, 255), 1);
+      this.fill(gradientColor);
+    });
+    buttons.add(button, null);
+    button = new JSButton();
+    button.setText("COLORFUL MIRROR");
+    button.addActionListener(event => {
+      let gradientColor = new Z4GradientColor();
+      gradientColor.addColor(new Color(255, 0, 0, 255), 0);
+      gradientColor.addColor(new Color(255, 0, 255, 255), 0.3);
+      gradientColor.addColor(new Color(0, 145, 255, 255), 0.7);
+      gradientColor.addColor(new Color(255, 255, 0, 255), 1);
+      gradientColor.mirror();
+      this.fill(gradientColor);
+    });
+    buttons.add(button, null);
+    button = new JSButton();
+    button.setText("COLORFUL REVERSE");
+    button.addActionListener(event => {
+      let gradientColor = new Z4GradientColor();
+      gradientColor.addColor(new Color(255, 0, 0, 255), 0);
+      gradientColor.addColor(new Color(255, 0, 255, 255), 0.3);
+      gradientColor.addColor(new Color(0, 145, 255, 255), 0.7);
+      gradientColor.addColor(new Color(255, 255, 0, 255), 1);
+      gradientColor.reverse();
+      this.fill(gradientColor);
+    });
     buttons.add(button, null);
     this.getContentPane().add(buttons, BorderLayout.NORTH);
   }
 
-   fill(bb) {
-    let gradientColor = new Z4GradientColor();
-    switch(bb) {
-      case 0:
-        break;
-      case 1:
-        gradientColor.setRipple(0.3);
-        break;
-      case 2:
-        gradientColor.addColor(new Color(255, 0, 0, 0), 0);
-        gradientColor.addColor(new Color(255, 255, 0, 255), 1);
-        break;
-      case 3:
-        gradientColor.addColor(new Color(255, 0, 0, 255), 0);
-        gradientColor.addColor(new Color(255, 0, 255, 255), 0.3);
-        gradientColor.addColor(new Color(0, 145, 255, 255), 0.7);
-        gradientColor.addColor(new Color(255, 255, 0, 255), 1);
-        break;
-    }
+   fill(gradientColor) {
+    let json = gradientColor.toJSON();
+    console.log(json);
+    gradientColor = Z4GradientColor.fromJSON(json);
     let imageData = this.ctx.createImageData(500, 100);
     let data = imageData.data;
     for (let x = 0; x < 500; x++) {

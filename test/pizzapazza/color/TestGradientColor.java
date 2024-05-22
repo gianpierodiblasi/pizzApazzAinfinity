@@ -2,6 +2,7 @@ package pizzapazza.color;
 
 import def.dom.CanvasGradient;
 import def.dom.CanvasPattern;
+import static def.dom.Globals.console;
 import static def.dom.Globals.document;
 import def.dom.ImageData;
 import java.awt.BorderLayout;
@@ -13,6 +14,7 @@ import javascript.swing.JSPanel;
 import jsweet.util.union.Union4;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
+import simulation.js.$Object;
 import simulation.js.$Uint8Array;
 
 /**
@@ -39,46 +41,73 @@ public class TestGradientColor extends JSFrame {
 
     JSButton button = new JSButton();
     button.setText("WHITE->BLACK");
-    button.addActionListener(event -> this.fill(0));
+    button.addActionListener(event -> this.fill(new Z4GradientColor()));
     buttons.add(button, null);
 
     button = new JSButton();
     button.setText("WHITE->BLACK RIPPLE");
-    button.addActionListener(event -> this.fill(1));
+    button.addActionListener(event -> {
+      Z4GradientColor gradientColor = new Z4GradientColor();
+      gradientColor.setRipple(0.3);
+      this.fill(gradientColor);
+    });
     buttons.add(button, null);
 
     button = new JSButton();
     button.setText("RED-TRANS -> YELLOW");
-    button.addActionListener(event -> this.fill(2));
+    button.addActionListener(event -> {
+      Z4GradientColor gradientColor = new Z4GradientColor();
+      gradientColor.addColor(new Color(255, 0, 0, 0), 0);
+      gradientColor.addColor(new Color(255, 255, 0, 255), 1);
+      this.fill(gradientColor);
+    });
     buttons.add(button, null);
 
     button = new JSButton();
     button.setText("COLORFUL");
-    button.addActionListener(event -> this.fill(3));
+    button.addActionListener(event -> {
+      Z4GradientColor gradientColor = new Z4GradientColor();
+      gradientColor.addColor(new Color(255, 0, 0, 255), 0);
+      gradientColor.addColor(new Color(255, 0, 255, 255), 0.3);
+      gradientColor.addColor(new Color(0, 145, 255, 255), 0.7);
+      gradientColor.addColor(new Color(255, 255, 0, 255), 1);
+      this.fill(gradientColor);
+    });
+    buttons.add(button, null);
+
+    button = new JSButton();
+    button.setText("COLORFUL MIRROR");
+    button.addActionListener(event -> {
+      Z4GradientColor gradientColor = new Z4GradientColor();
+      gradientColor.addColor(new Color(255, 0, 0, 255), 0);
+      gradientColor.addColor(new Color(255, 0, 255, 255), 0.3);
+      gradientColor.addColor(new Color(0, 145, 255, 255), 0.7);
+      gradientColor.addColor(new Color(255, 255, 0, 255), 1);
+      gradientColor.mirror();
+      this.fill(gradientColor);
+    });
+    buttons.add(button, null);
+
+    button = new JSButton();
+    button.setText("COLORFUL REVERSE");
+    button.addActionListener(event -> {
+      Z4GradientColor gradientColor = new Z4GradientColor();
+      gradientColor.addColor(new Color(255, 0, 0, 255), 0);
+      gradientColor.addColor(new Color(255, 0, 255, 255), 0.3);
+      gradientColor.addColor(new Color(0, 145, 255, 255), 0.7);
+      gradientColor.addColor(new Color(255, 255, 0, 255), 1);
+      gradientColor.reverse();
+      this.fill(gradientColor);
+    });
     buttons.add(button, null);
 
     this.getContentPane().add(buttons, BorderLayout.NORTH);
   }
 
-  private void fill(int bb) {
-    Z4GradientColor gradientColor = new Z4GradientColor();
-    switch (bb) {
-      case 0:
-        break;
-      case 1:
-        gradientColor.setRipple(0.3);
-        break;
-      case 2:
-        gradientColor.addColor(new Color(255, 0, 0, 0), 0);
-        gradientColor.addColor(new Color(255, 255, 0, 255), 1);
-        break;
-      case 3:
-        gradientColor.addColor(new Color(255, 0, 0, 255), 0);
-        gradientColor.addColor(new Color(255, 0, 255, 255), 0.3);
-        gradientColor.addColor(new Color(0, 145, 255, 255), 0.7);
-        gradientColor.addColor(new Color(255, 255, 0, 255), 1);
-        break;
-    }
+  private void fill(Z4GradientColor gradientColor) {
+    $Object json = gradientColor.toJSON();
+    console.log(json);
+    gradientColor = Z4GradientColor.fromJSON(json);
 
     ImageData imageData = this.ctx.createImageData(500, 100);
     $Uint8Array data = ($Uint8Array) imageData.data;
