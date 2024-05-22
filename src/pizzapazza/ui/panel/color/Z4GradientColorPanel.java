@@ -202,11 +202,10 @@ public class Z4GradientColorPanel extends JSPanel {
             }
           }
 
-          if (this.preview.getStyle().cursor == "default") {
-            if (!this.gradientColor.isPositionOccupied(event.offsetX / Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.TOLLERANCE) && Math.abs(Z4GradientColorPanel.HEIGHT / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
-              this.preview.getStyle().cursor = "copy";
-            }
-
+          if (this.preview.getStyle().cursor == "default"
+                  && !this.gradientColor.isPositionOccupied(event.offsetX / Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.TOLLERANCE)
+                  && Math.abs(Z4GradientColorPanel.HEIGHT / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
+            this.preview.getStyle().cursor = "copy";
           }
         }
         break;
