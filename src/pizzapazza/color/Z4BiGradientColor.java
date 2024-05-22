@@ -23,6 +23,11 @@ public class Z4BiGradientColor extends Z4AbstractGradientColor<Z4GradientColor> 
     this.addColor(new Z4GradientColor(), 1);
   }
 
+  @Override
+  protected Z4GradientColor cloneColor(Z4GradientColor color) {
+    return Z4GradientColor.fromJSON(color.toJSON());
+  }
+
   /**
    * Sets the ripple of each gradient color
    *

@@ -14,6 +14,10 @@ class Z4GradientColor extends Z4AbstractGradientColor {
     this.addColor(new Color(0, 0, 0, 255), 1);
   }
 
+   cloneColor(color) {
+    return new Color(color.red, color.green, color.blue, color.alpha);
+  }
+
    getColorAt(position, useRipple) {
     if (useRipple && this.getRipple()) {
       position = Z4Math.ripple(position, 0, 1, this.getRipple());

@@ -97,7 +97,7 @@ public abstract class Z4AbstractGradientColor<T> {
    */
   @SuppressWarnings("unchecked")
   public void mirror() {
-    this.colors.slice().splice(0, this.colors.length - 1).reverse().forEach(color -> this.colors.push(color));
+    this.colors.slice().splice(0, this.colors.length - 1).reverse().forEach(color -> this.colors.push(this.cloneColor(color)));
 
     for (int index = 0; index < this.colorPositions.length; index++) {
       this.colorPositions.$set(index, this.colorPositions.$get(index) / 2);
@@ -107,15 +107,20 @@ public abstract class Z4AbstractGradientColor<T> {
   }
 
   /**
+   * Clones a color
+   *
+   * @param color The color
+   * @return The cloned color
+   */
+  protected abstract T cloneColor(T color);
+
+  /**
    * Reverses this color
    *
    */
   public void reverse() {
     this.colors.reverse();
-
-    for (int index = 1; index < this.colorPositions.length - 1; index++) {
-      this.colorPositions.$set(index, 1 - this.colorPositions.$get(index));
-    }
+    this.colorPositions.reverse().forEach((position, index, array) -> this.colorPositions.$set(index, 1 - position));
   }
 
   /**

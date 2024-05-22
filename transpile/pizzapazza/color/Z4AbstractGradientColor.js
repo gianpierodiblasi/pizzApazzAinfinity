@@ -84,7 +84,7 @@ class Z4AbstractGradientColor {
    * Mirrors this color
    */
    mirror() {
-    this.colors.slice().splice(0, this.colors.length - 1).reverse().forEach(color => this.colors.push(color));
+    this.colors.slice().splice(0, this.colors.length - 1).reverse().forEach(color => this.colors.push(this.cloneColor(color)));
     for (let index = 0; index < this.colorPositions.length; index++) {
       this.colorPositions[index] = this.colorPositions[index] / 2;
     }
@@ -92,13 +92,20 @@ class Z4AbstractGradientColor {
   }
 
   /**
+   * Clones a color
+   *
+   * @param color The color
+   * @return The cloned color
+   */
+   cloneColor(color) {
+  }
+
+  /**
    * Reverses this color
    */
    reverse() {
     this.colors.reverse();
-    for (let index = 1; index < this.colorPositions.length - 1; index++) {
-      this.colorPositions[index] = 1 - this.colorPositions[index];
-    }
+    this.colorPositions.reverse().forEach((position, index, array) => this.colorPositions[index] = 1 - position);
   }
 
   /**

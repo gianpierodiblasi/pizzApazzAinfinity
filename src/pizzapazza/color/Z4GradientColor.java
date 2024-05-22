@@ -23,6 +23,11 @@ public class Z4GradientColor extends Z4AbstractGradientColor<Color> {
   }
 
   @Override
+  protected Color cloneColor(Color color) {
+    return new Color(color.red, color.green, color.blue, color.alpha);
+  }
+
+  @Override
   public Color getColorAt(double position, boolean useRipple) {
     if (useRipple && $exists(this.getRipple())) {
       position = Z4Math.ripple(position, 0, 1, this.getRipple());

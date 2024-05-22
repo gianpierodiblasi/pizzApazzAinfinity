@@ -15,6 +15,10 @@ class Z4BiGradientColor extends Z4AbstractGradientColor {
     this.addColor(new Z4GradientColor(), 1);
   }
 
+   cloneColor(color) {
+    return Z4GradientColor.fromJSON(color.toJSON());
+  }
+
   /**
    * Sets the ripple of each gradient color
    *

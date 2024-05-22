@@ -123,8 +123,8 @@ class TestGradientColor extends JSFrame {
     button.addActionListener(event => {
       let gradientColor = new Z4GradientColor();
       gradientColor.addColor(new Color(255, 0, 0, 255), 0);
-      gradientColor.addColor(new Color(255, 0, 255, 255), 0.3);
-      gradientColor.addColor(new Color(0, 145, 255, 255), 0.7);
+      gradientColor.addColor(new Color(255, 0, 255, 255), 0.1);
+      gradientColor.addColor(new Color(0, 145, 255, 255), 0.6);
       gradientColor.addColor(new Color(255, 255, 0, 255), 1);
       this.fill(gradientColor);
     });
@@ -134,8 +134,8 @@ class TestGradientColor extends JSFrame {
     button.addActionListener(event => {
       let gradientColor = new Z4GradientColor();
       gradientColor.addColor(new Color(255, 0, 0, 255), 0);
-      gradientColor.addColor(new Color(255, 0, 255, 255), 0.3);
-      gradientColor.addColor(new Color(0, 145, 255, 255), 0.7);
+      gradientColor.addColor(new Color(255, 0, 255, 255), 0.1);
+      gradientColor.addColor(new Color(0, 145, 255, 255), 0.6);
       gradientColor.addColor(new Color(255, 255, 0, 255), 1);
       gradientColor.mirror();
       this.fill(gradientColor);
@@ -146,8 +146,8 @@ class TestGradientColor extends JSFrame {
     button.addActionListener(event => {
       let gradientColor = new Z4GradientColor();
       gradientColor.addColor(new Color(255, 0, 0, 255), 0);
-      gradientColor.addColor(new Color(255, 0, 255, 255), 0.3);
-      gradientColor.addColor(new Color(0, 145, 255, 255), 0.7);
+      gradientColor.addColor(new Color(255, 0, 255, 255), 0.1);
+      gradientColor.addColor(new Color(0, 145, 255, 255), 0.6);
       gradientColor.addColor(new Color(255, 255, 0, 255), 1);
       gradientColor.reverse();
       this.fill(gradientColor);
