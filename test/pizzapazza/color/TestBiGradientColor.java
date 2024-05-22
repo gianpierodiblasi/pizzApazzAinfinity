@@ -41,47 +41,139 @@ public class TestBiGradientColor extends JSFrame {
 
     JSButton button = new JSButton();
     button.setText("WHITE->BLACK");
-    button.addActionListener(event -> this.fill(0));
+    button.addActionListener(event -> this.fill(new Z4BiGradientColor()));
     buttons.add(button, null);
 
     button = new JSButton();
-    button.setText("WHITE->BLACK RIPPLE");
-    button.addActionListener(event -> this.fill(1));
+    button.setText("WHITE->BLACK SPACE RIPPLE");
+    button.addActionListener(event -> {
+      Z4BiGradientColor biGradientColor = new Z4BiGradientColor();
+      biGradientColor.setGradientRipple(0.3);
+      this.fill(biGradientColor);
+    });
     buttons.add(button, null);
 
     button = new JSButton();
-    button.setText("RED-TRANS -> YELLOW");
-    button.addActionListener(event -> this.fill(2));
+    button.setText("WHITE->BLACK/WHITE->RED");
+    button.addActionListener(event -> {
+      Z4BiGradientColor biGradientColor = new Z4BiGradientColor();
+
+      Z4GradientColor whiteRed = new Z4GradientColor();
+      whiteRed.addColor(new Color(255, 0, 0, 255), 1);
+      biGradientColor.addColor(whiteRed, 1);
+
+      this.fill(biGradientColor);
+    });
     buttons.add(button, null);
 
     button = new JSButton();
-    button.setText("COLORFUL");
-    button.addActionListener(event -> this.fill(3));
+    button.setText("WHITE->BLACK/WHITE->RED TEMPORAL RIPPLE");
+    button.addActionListener(event -> {
+      Z4BiGradientColor biGradientColor = new Z4BiGradientColor();
+
+      Z4GradientColor whiteRed = new Z4GradientColor();
+      whiteRed.addColor(new Color(255, 0, 0, 255), 1);
+      biGradientColor.addColor(whiteRed, 1);
+
+      biGradientColor.setRipple(0.3);
+      this.fill(biGradientColor);
+    });
     buttons.add(button, null);
 
     this.getContentPane().add(buttons, BorderLayout.NORTH);
+
+    button = new JSButton();
+    button.setText("WHITE->BLACK/GREEN->RED");
+    button.addActionListener(event -> {
+      Z4BiGradientColor biGradientColor = new Z4BiGradientColor();
+
+      Z4GradientColor greenRed = new Z4GradientColor();
+      greenRed.addColor(new Color(0, 255, 0, 255), 0);
+      greenRed.addColor(new Color(255, 0, 0, 255), 1);
+      biGradientColor.addColor(greenRed, 1);
+
+      this.fill(biGradientColor);
+    });
+    buttons.add(button, null);
+    
+
+    button = new JSButton();
+    button.setText("WHITE->BLACK/GREEN->RED TEMPORAL RIPPLE");
+    button.addActionListener(event -> {
+      Z4BiGradientColor biGradientColor = new Z4BiGradientColor();
+
+      Z4GradientColor greenRed = new Z4GradientColor();
+      greenRed.addColor(new Color(0, 255, 0, 255), 0);
+      greenRed.addColor(new Color(255, 0, 0, 255), 1);
+      biGradientColor.addColor(greenRed, 1);
+
+      biGradientColor.setRipple(0.3);
+      this.fill(biGradientColor);
+    });
+    buttons.add(button, null);
+
+    button = new JSButton();
+    button.setText("WHITE->BLACK/GREEN->RED SPACE/TEMPORAL RIPPLE");
+    button.addActionListener(event -> {
+      Z4BiGradientColor biGradientColor = new Z4BiGradientColor();
+
+      Z4GradientColor greenRed = new Z4GradientColor();
+      greenRed.addColor(new Color(0, 255, 0, 255), 0);
+      greenRed.addColor(new Color(255, 0, 0, 255), 1);
+      biGradientColor.addColor(greenRed, 1);
+
+      biGradientColor.setRipple(0.3);
+      biGradientColor.setGradientRipple(0.1);
+      this.fill(biGradientColor);
+    });
+    buttons.add(button, null);
+
+    button = new JSButton();
+    button.setText("WHITE->BLACK/WHITE->BLUE->BLACK/GREEN->RED");
+    button.addActionListener(event -> {
+      Z4BiGradientColor biGradientColor = new Z4BiGradientColor();
+
+      Z4GradientColor whiteBlueBlack = new Z4GradientColor();
+      whiteBlueBlack.addColor(new Color(0, 0, 255, 255), 0.5);
+      biGradientColor.addColor(whiteBlueBlack, 0.5);
+
+      Z4GradientColor greenRed = new Z4GradientColor();
+      greenRed.addColor(new Color(0, 255, 0, 255), 0);
+      greenRed.addColor(new Color(255, 0, 0, 255), 1);
+      biGradientColor.addColor(greenRed, 1);
+
+      this.fill(biGradientColor);
+    });
+    buttons.add(button, null);
+    
+    button = new JSButton();
+    button.setText("COLORFUL");
+    button.addActionListener(event -> {
+      Z4BiGradientColor biGradientColor = new Z4BiGradientColor();
+
+      Z4GradientColor gc = new Z4GradientColor();
+      gc.addColor(new Color(0, 0, 255, 255), 0.5);
+      biGradientColor.addColor(gc, 0.5);
+
+      gc = new Z4GradientColor();
+      gc.addColor(new Color(0, 255, 0, 255), 0);
+      gc.addColor(new Color(255, 0, 0, 255), 1);
+      biGradientColor.addColor(gc, 1);
+
+      gc = new Z4GradientColor();
+      gc.addColor(new Color(0, 255, 255, 255), 0.7);
+      biGradientColor.addColor(gc, 0.3);
+      
+      gc = new Z4GradientColor();
+      gc.addColor(new Color(45, 55, 100, 255), 0.2);
+      biGradientColor.addColor(gc, 0.7);
+      
+      this.fill(biGradientColor);
+    });
+    buttons.add(button, null);
   }
 
-  private void fill(int bb) {
-    Z4BiGradientColor biGradientColor = new Z4BiGradientColor();
-    switch (bb) {
-      case 0:
-        break;
-      case 1:
-//        gradientColor.setRipple(0.3);
-        break;
-      case 2:
-//        gradientColor.addColor(new Color(255, 0, 0, 0), 0);
-//        gradientColor.addColor(new Color(255, 255, 0, 255), 1);
-        break;
-      case 3:
-//        gradientColor.addColor(new Color(255, 0, 0, 255), 0);
-//        gradientColor.addColor(new Color(255, 0, 255, 255), 0.3);
-//        gradientColor.addColor(new Color(0, 145, 255, 255), 0.7);
-//        gradientColor.addColor(new Color(255, 255, 0, 255), 1);
-        break;
-    }
-
+  private void fill(Z4BiGradientColor biGradientColor) {
     $Object json = biGradientColor.toJSON();
     console.log(json);
     biGradientColor = Z4BiGradientColor.fromJSON(json);
