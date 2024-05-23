@@ -2384,8 +2384,9 @@ class Z4BiGradientColorPanel extends JSPanel {
     button = new JSButton();
     button.setText(Z4Translations.INVERTED);
     button.addActionListener(event => {
-      // this.gradientColor.reverse();
-      // this.drawPreview(false);
+      let gradientColor = this.biGradientColor.getColorAtIndex(this.biSelectedIndex);
+      gradientColor.reverse();
+      this.afterOperation(gradientColor);
     });
     panel.add(button, null);
     this.drawPreview(false);
