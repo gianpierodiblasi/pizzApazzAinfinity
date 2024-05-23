@@ -49,7 +49,7 @@ public class Z4GradientColorPanel extends JSPanel {
   private static final int SELECTOR_RADIUS = 7;
   private static final int WIDTH = 200;
   private static final int HEIGHT = 50;
-  private static final double TOLLERANCE = 0.075;
+  private static final double TOLERANCE = 0.1;
 
   public Z4GradientColorPanel() {
     super();
@@ -157,7 +157,7 @@ public class Z4GradientColorPanel extends JSPanel {
         }
 
         if (!this.pressed
-                && !this.gradientColor.isPositionOccupied(event.offsetX / Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.TOLLERANCE)
+                && !this.gradientColor.isPositionOccupied(event.offsetX / Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.TOLERANCE)
                 && Math.abs(Z4GradientColorPanel.HEIGHT / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
           this.gradientColor.addColor(this.gradientColor.getColorAt(event.offsetX / Z4GradientColorPanel.WIDTH, false), event.offsetX / Z4GradientColorPanel.WIDTH);
           this.pressed = true;
@@ -181,7 +181,7 @@ public class Z4GradientColorPanel extends JSPanel {
           double newPosition = event.offsetX / Z4GradientColorPanel.WIDTH;
 
           if (this.selectedIndex != 0 && this.selectedIndex != this.gradientColor.getColorCount() - 1
-                  && positionBefore < newPosition - Z4GradientColorPanel.TOLLERANCE && positionAfter > newPosition + Z4GradientColorPanel.TOLLERANCE) {
+                  && positionBefore < newPosition - Z4GradientColorPanel.TOLERANCE && positionAfter > newPosition + Z4GradientColorPanel.TOLERANCE) {
             Color color = this.gradientColor.getColorAtIndex(this.selectedIndex);
             this.gradientColor.removeColor(position);
             this.gradientColor.addColor(color, newPosition);
@@ -197,7 +197,7 @@ public class Z4GradientColorPanel extends JSPanel {
           }
 
           if (this.preview.getStyle().cursor == "default"
-                  && !this.gradientColor.isPositionOccupied(event.offsetX / Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.TOLLERANCE)
+                  && !this.gradientColor.isPositionOccupied(event.offsetX / Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.TOLERANCE)
                   && Math.abs(Z4GradientColorPanel.HEIGHT / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
             this.preview.getStyle().cursor = "copy";
           }

@@ -386,6 +386,26 @@ class Z4GradientColor extends Z4AbstractGradientColor {
   }
 
   /**
+   * Merges overlapping colors based on a tolerance
+   *
+   * @param tolerance The accepted tolerance around the position (a very small
+   * value, for example 0.01)
+   */
+   mergeOverlapping(tolerance) {
+    for (let index = this.colorPositions.length - 1; index > 0; index--) {
+      let beforePosition = this.colorPositions[index - 1];
+      let afterPosition = this.colorPositions[index];
+      if (Math.abs(afterPosition - beforePosition) <= tolerance) {
+        let position = (beforePosition + afterPosition) / 2;
+        let color = this.getColorAt(position, false);
+        this.removeColor(beforePosition);
+        this.removeColor(afterPosition);
+        this.addColor(color, position);
+      }
+    }
+  }
+
+  /**
    * Creates a Z4GradientColor from a JSON object
    *
    * @param json The JSON object
@@ -2283,7 +2303,7 @@ class Z4BiGradientColorPanel extends JSPanel {
 
   static  HEIGHT = 200;
 
-  static  TOLLERANCE = 0.075;
+  static  TOLERANCE = 0.1;
 
   constructor() {
     super();
@@ -2437,15 +2457,20 @@ class Z4BiGradientColorPanel extends JSPanel {
             }
           }
         }
-        if (!this.pressed && !this.biGradientColor.isPositionOccupied(event.offsetY / Z4BiGradientColorPanel.HEIGHT, Z4BiGradientColorPanel.TOLLERANCE)) {
-          this.biGradientColor.addColor(this.biGradientColor.getColorAt(event.offsetY / Z4BiGradientColorPanel.HEIGHT, false), event.offsetY / Z4BiGradientColorPanel.HEIGHT);
+        if (!this.pressed && !this.biGradientColor.isPositionOccupied(event.offsetY / Z4BiGradientColorPanel.HEIGHT, Z4BiGradientColorPanel.TOLERANCE)) {
+          let gradientColor = this.biGradientColor.getColorAt(event.offsetY / Z4BiGradientColorPanel.HEIGHT, false);
+          if (!gradientColor.isPositionOccupied(event.offsetX / Z4BiGradientColorPanel.WIDTH, Z4BiGradientColorPanel.TOLERANCE)) {
+            gradientColor.addColor(gradientColor.getColorAt(event.offsetX / Z4BiGradientColorPanel.WIDTH, false), event.offsetX / Z4BiGradientColorPanel.WIDTH);
+          }
+          gradientColor.mergeOverlapping(Z4BiGradientColorPanel.TOLERANCE);
+          this.biGradientColor.addColor(gradientColor, event.offsetY / Z4BiGradientColorPanel.HEIGHT);
           this.pressed = true;
           this.setPointer(event, true);
         }
         if (!this.pressed) {
-          let biPosition = this.biGradientColor.getPosition(event.offsetY / Z4BiGradientColorPanel.HEIGHT, Z4BiGradientColorPanel.TOLLERANCE);
+          let biPosition = this.biGradientColor.getPosition(event.offsetY / Z4BiGradientColorPanel.HEIGHT, Z4BiGradientColorPanel.TOLERANCE);
           let gradientColor = this.biGradientColor.getColorAt(biPosition, false);
-          if (!gradientColor.isPositionOccupied(event.offsetX / Z4BiGradientColorPanel.WIDTH, Z4BiGradientColorPanel.TOLLERANCE)) {
+          if (!gradientColor.isPositionOccupied(event.offsetX / Z4BiGradientColorPanel.WIDTH, Z4BiGradientColorPanel.TOLERANCE)) {
             gradientColor.addColor(gradientColor.getColorAt(event.offsetX / Z4BiGradientColorPanel.WIDTH, false), event.offsetX / Z4BiGradientColorPanel.WIDTH);
             this.setPointer(event, true);
           }
@@ -2453,28 +2478,36 @@ class Z4BiGradientColorPanel extends JSPanel {
         break;
       case "move":
         if (this.pressed) {
-          // double position = this.gradientColor.getColorPositionAtIndex(this.selectedIndex);
-          // double positionBefore = this.gradientColor.getColorPositionAtIndex(this.selectedIndex - 1);
-          // double positionAfter = this.gradientColor.getColorPositionAtIndex(this.selectedIndex + 1);
-          // double newPosition = event.offsetX / w;
-          // 
-          // if (this.selectedIndex != 0 && this.selectedIndex != this.gradientColor.getColorCount() - 1
-          // && positionBefore < newPosition - Z4BiGradientColorPanel.TOLLERANCE && positionAfter > newPosition + Z4BiGradientColorPanel.TOLLERANCE) {
-          // Color color = this.gradientColor.getColorAtIndex(this.selectedIndex);
-          // this.gradientColor.removeColor(position);
-          // this.gradientColor.addColor(color, newPosition);
-          // this.drawPreview(true);
-          // }
+          let biPosition = this.biGradientColor.getColorPositionAtIndex(this.biSelectedIndex);
+          let biPositionBefore = this.biGradientColor.getColorPositionAtIndex(this.biSelectedIndex - 1);
+          let biPositionAfter = this.biGradientColor.getColorPositionAtIndex(this.biSelectedIndex + 1);
+          let newBiPosition = event.offsetY / Z4BiGradientColorPanel.HEIGHT;
+          let gradientColor = this.biGradientColor.getColorAtIndex(this.biSelectedIndex);
+          let position = gradientColor.getColorPositionAtIndex(this.selectedIndex);
+          let positionBefore = gradientColor.getColorPositionAtIndex(this.selectedIndex - 1);
+          let positionAfter = gradientColor.getColorPositionAtIndex(this.selectedIndex + 1);
+          let newPosition = event.offsetX / Z4BiGradientColorPanel.WIDTH;
+          if (this.biSelectedIndex !== 0 && this.biSelectedIndex !== this.biGradientColor.getColorCount() - 1 && biPositionBefore < newBiPosition - Z4BiGradientColorPanel.TOLERANCE && biPositionAfter > newBiPosition + Z4BiGradientColorPanel.TOLERANCE) {
+            this.biGradientColor.removeColor(biPosition);
+            this.biGradientColor.addColor(gradientColor, newBiPosition);
+            this.drawPreview(true);
+          }
+          if (this.selectedIndex !== 0 && this.selectedIndex !== gradientColor.getColorCount() - 1 && positionBefore < newPosition - Z4BiGradientColorPanel.TOLERANCE && positionAfter > newPosition + Z4BiGradientColorPanel.TOLERANCE) {
+            let color = gradientColor.getColorAtIndex(this.selectedIndex);
+            gradientColor.removeColor(position);
+            gradientColor.addColor(color, newPosition);
+            this.drawPreview(true);
+          }
         } else {
           this.preview.getStyle().cursor = "default";
           this.setPointer(event, false);
-          if (this.preview.getStyle().cursor === "default" && !this.biGradientColor.isPositionOccupied(event.offsetY / Z4BiGradientColorPanel.HEIGHT, Z4BiGradientColorPanel.TOLLERANCE)) {
+          if (this.preview.getStyle().cursor === "default" && !this.biGradientColor.isPositionOccupied(event.offsetY / Z4BiGradientColorPanel.HEIGHT, Z4BiGradientColorPanel.TOLERANCE)) {
             this.preview.getStyle().cursor = "copy";
           }
           if (this.preview.getStyle().cursor === "default") {
-            let biPosition = this.biGradientColor.getPosition(event.offsetY / Z4BiGradientColorPanel.HEIGHT, Z4BiGradientColorPanel.TOLLERANCE);
+            let biPosition = this.biGradientColor.getPosition(event.offsetY / Z4BiGradientColorPanel.HEIGHT, Z4BiGradientColorPanel.TOLERANCE);
             let gradientColor = this.biGradientColor.getColorAt(biPosition, false);
-            if (!gradientColor.isPositionOccupied(event.offsetX / Z4BiGradientColorPanel.WIDTH, Z4BiGradientColorPanel.TOLLERANCE)) {
+            if (!gradientColor.isPositionOccupied(event.offsetX / Z4BiGradientColorPanel.WIDTH, Z4BiGradientColorPanel.TOLERANCE)) {
               this.preview.getStyle().cursor = "copy";
             }
           }
@@ -2611,7 +2644,7 @@ class Z4GradientColorPanel extends JSPanel {
 
   static  HEIGHT = 50;
 
-  static  TOLLERANCE = 0.075;
+  static  TOLERANCE = 0.1;
 
   constructor() {
     super();
@@ -2704,7 +2737,7 @@ class Z4GradientColorPanel extends JSPanel {
             this.afterOperation();
           }
         }
-        if (!this.pressed && !this.gradientColor.isPositionOccupied(event.offsetX / Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.TOLLERANCE) && Math.abs(Z4GradientColorPanel.HEIGHT / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
+        if (!this.pressed && !this.gradientColor.isPositionOccupied(event.offsetX / Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.TOLERANCE) && Math.abs(Z4GradientColorPanel.HEIGHT / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
           this.gradientColor.addColor(this.gradientColor.getColorAt(event.offsetX / Z4GradientColorPanel.WIDTH, false), event.offsetX / Z4GradientColorPanel.WIDTH);
           this.pressed = true;
           for (let index = 0; index < this.gradientColor.getColorCount(); index++) {
@@ -2723,7 +2756,7 @@ class Z4GradientColorPanel extends JSPanel {
           let positionBefore = this.gradientColor.getColorPositionAtIndex(this.selectedIndex - 1);
           let positionAfter = this.gradientColor.getColorPositionAtIndex(this.selectedIndex + 1);
           let newPosition = event.offsetX / Z4GradientColorPanel.WIDTH;
-          if (this.selectedIndex !== 0 && this.selectedIndex !== this.gradientColor.getColorCount() - 1 && positionBefore < newPosition - Z4GradientColorPanel.TOLLERANCE && positionAfter > newPosition + Z4GradientColorPanel.TOLLERANCE) {
+          if (this.selectedIndex !== 0 && this.selectedIndex !== this.gradientColor.getColorCount() - 1 && positionBefore < newPosition - Z4GradientColorPanel.TOLERANCE && positionAfter > newPosition + Z4GradientColorPanel.TOLERANCE) {
             let color = this.gradientColor.getColorAtIndex(this.selectedIndex);
             this.gradientColor.removeColor(position);
             this.gradientColor.addColor(color, newPosition);
@@ -2737,7 +2770,7 @@ class Z4GradientColorPanel extends JSPanel {
               this.preview.getStyle().cursor = "pointer";
             }
           }
-          if (this.preview.getStyle().cursor === "default" && !this.gradientColor.isPositionOccupied(event.offsetX / Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.TOLLERANCE) && Math.abs(Z4GradientColorPanel.HEIGHT / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
+          if (this.preview.getStyle().cursor === "default" && !this.gradientColor.isPositionOccupied(event.offsetX / Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.TOLERANCE) && Math.abs(Z4GradientColorPanel.HEIGHT / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
             this.preview.getStyle().cursor = "copy";
           }
         }

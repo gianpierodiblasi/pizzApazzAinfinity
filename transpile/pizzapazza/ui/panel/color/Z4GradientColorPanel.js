@@ -29,7 +29,7 @@ class Z4GradientColorPanel extends JSPanel {
 
   static  HEIGHT = 50;
 
-  static  TOLLERANCE = 0.075;
+  static  TOLERANCE = 0.1;
 
   constructor() {
     super();
@@ -122,7 +122,7 @@ class Z4GradientColorPanel extends JSPanel {
             this.afterOperation();
           }
         }
-        if (!this.pressed && !this.gradientColor.isPositionOccupied(event.offsetX / Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.TOLLERANCE) && Math.abs(Z4GradientColorPanel.HEIGHT / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
+        if (!this.pressed && !this.gradientColor.isPositionOccupied(event.offsetX / Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.TOLERANCE) && Math.abs(Z4GradientColorPanel.HEIGHT / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
           this.gradientColor.addColor(this.gradientColor.getColorAt(event.offsetX / Z4GradientColorPanel.WIDTH, false), event.offsetX / Z4GradientColorPanel.WIDTH);
           this.pressed = true;
           for (let index = 0; index < this.gradientColor.getColorCount(); index++) {
@@ -141,7 +141,7 @@ class Z4GradientColorPanel extends JSPanel {
           let positionBefore = this.gradientColor.getColorPositionAtIndex(this.selectedIndex - 1);
           let positionAfter = this.gradientColor.getColorPositionAtIndex(this.selectedIndex + 1);
           let newPosition = event.offsetX / Z4GradientColorPanel.WIDTH;
-          if (this.selectedIndex !== 0 && this.selectedIndex !== this.gradientColor.getColorCount() - 1 && positionBefore < newPosition - Z4GradientColorPanel.TOLLERANCE && positionAfter > newPosition + Z4GradientColorPanel.TOLLERANCE) {
+          if (this.selectedIndex !== 0 && this.selectedIndex !== this.gradientColor.getColorCount() - 1 && positionBefore < newPosition - Z4GradientColorPanel.TOLERANCE && positionAfter > newPosition + Z4GradientColorPanel.TOLERANCE) {
             let color = this.gradientColor.getColorAtIndex(this.selectedIndex);
             this.gradientColor.removeColor(position);
             this.gradientColor.addColor(color, newPosition);
@@ -155,7 +155,7 @@ class Z4GradientColorPanel extends JSPanel {
               this.preview.getStyle().cursor = "pointer";
             }
           }
-          if (this.preview.getStyle().cursor === "default" && !this.gradientColor.isPositionOccupied(event.offsetX / Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.TOLLERANCE) && Math.abs(Z4GradientColorPanel.HEIGHT / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
+          if (this.preview.getStyle().cursor === "default" && !this.gradientColor.isPositionOccupied(event.offsetX / Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.TOLERANCE) && Math.abs(Z4GradientColorPanel.HEIGHT / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
             this.preview.getStyle().cursor = "copy";
           }
         }

@@ -72,6 +72,28 @@ public class Z4GradientColor extends Z4AbstractGradientColor<Color> {
   }
 
   /**
+   * Merges overlapping colors based on a tolerance
+   *
+   * @param tolerance The accepted tolerance around the position (a very small
+   * value, for example 0.01)
+   */
+  public void mergeOverlapping(double tolerance) {
+    for (int index = this.colorPositions.length - 1; index > 0; index--) {
+      double beforePosition = this.colorPositions.$get(index - 1);
+      double afterPosition = this.colorPositions.$get(index);
+
+      if (Math.abs(afterPosition - beforePosition) <= tolerance) {
+        double position = (beforePosition + afterPosition) / 2;
+        Color color = this.getColorAt(position, false);
+
+        this.removeColor(beforePosition);
+        this.removeColor(afterPosition);
+        this.addColor(color, position);
+      }
+    }
+  }
+
+  /**
    * Creates a Z4GradientColor from a JSON object
    *
    * @param json The JSON object

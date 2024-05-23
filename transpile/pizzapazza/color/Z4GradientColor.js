@@ -50,6 +50,26 @@ class Z4GradientColor extends Z4AbstractGradientColor {
   }
 
   /**
+   * Merges overlapping colors based on a tolerance
+   *
+   * @param tolerance The accepted tolerance around the position (a very small
+   * value, for example 0.01)
+   */
+   mergeOverlapping(tolerance) {
+    for (let index = this.colorPositions.length - 1; index > 0; index--) {
+      let beforePosition = this.colorPositions[index - 1];
+      let afterPosition = this.colorPositions[index];
+      if (Math.abs(afterPosition - beforePosition) <= tolerance) {
+        let position = (beforePosition + afterPosition) / 2;
+        let color = this.getColorAt(position, false);
+        this.removeColor(beforePosition);
+        this.removeColor(afterPosition);
+        this.addColor(color, position);
+      }
+    }
+  }
+
+  /**
    * Creates a Z4GradientColor from a JSON object
    *
    * @param json The JSON object
