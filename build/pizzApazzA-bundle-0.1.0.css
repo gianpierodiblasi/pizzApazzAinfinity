@@ -1,17 +1,30 @@
+/* frame */
 .z4frame {
 }
 
-.z4ribbon {
-  min-height: 10.5rem;
+/* panel */
+.z4exporttofilepanel {
 }
 
-.z4ribbonfilepanel {
+.z4fillingpanel {
+  
 }
 
 .z4newimagepanel {
 }
 
-.z4exporttofilepanel {
+.z4statuspanel {
+}
+
+/* panel/color */
+
+.z4gradientcolorpanel canvas {
+  border: 1px solid var(--main-action-bgcolor);
+  background-image: url(../image/chessboard.png);
+}
+
+/* panel/ribbon */
+.z4ribbonfilepanel {
 }
 
 .z4ribbonlayerpanel {
@@ -20,32 +33,9 @@
 .z4ribbonsettingspanel {
 }
 
-.z4ribbonhelppanel {
-}
-.z4ribbonhelppanel-about .z4ribbonhelppanel-splash {
-  content: url(../image/splash.png);
-}
-.z4ribbonhelppanel-about p, .z4ribbonhelppanel-about ul {
-  margin: 5px 0px 0px 0px;
-}
-
-.z4statuspanel {
-}
-
-.z4canvas {
-  overflow: scroll;
-  display: grid;
-  grid-template: "c";
-  place-items: center;
-  background: #DDDDDD;
-}
-.z4canvas canvas {
-  background-image: url(../image/chessboard.png);
-}
-
-.z4gradientcolorpanel canvas {
-  border: 1px solid var(--main-action-bgcolor);
-  background-image: url(../image/chessboard.png);
+/* tab */
+.z4ribbon {
+  min-height: 10.5rem;
 }
 .z4abstractfillerpanel canvas {
   border: 1px solid var(--main-action-bgcolor);
@@ -208,6 +198,15 @@
 .z4bigradientcolorpanel .bibutton:disabled {
   filter: opacity(0.5);
   cursor: default;
+}.z4canvas {
+  overflow: scroll;
+  display: grid;
+  grid-template: "c";
+  place-items: center;
+  background: #DDDDDD;
+}
+.z4canvas canvas {
+  background-image: url(../image/chessboard.png);
 }.z4colorpreview {
   height: 2rem;
   display: grid;
@@ -310,4 +309,11 @@
 
 .z4layerpreview .z4layerpreview-editor[offset=true], .z4layerpreview .z4layerpreview-editor[offset=true] * {
   background: transparent;
+}.z4ribbonhelppanel {
+}
+.z4ribbonhelppanel-about .z4ribbonhelppanel-splash {
+  content: url(../image/splash.png);
+}
+.z4ribbonhelppanel-about p, .z4ribbonhelppanel-about ul {
+  margin: 5px 0px 0px 0px;
 }

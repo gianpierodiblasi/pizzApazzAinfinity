@@ -1,0 +1,10 @@
+.z4canvas {
+  overflow: scroll;
+  display: grid;
+  grid-template: "c";
+  place-items: center;
+  background: #DDDDDD;
+}
+.z4canvas canvas {
+  background-image: url(../image/chessboard.png);
+}

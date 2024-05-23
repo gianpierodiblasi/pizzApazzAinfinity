@@ -1,0 +1,8 @@
+.z4ribbonhelppanel {
+}
+.z4ribbonhelppanel-about .z4ribbonhelppanel-splash {
+  content: url(../image/splash.png);
+}
+.z4ribbonhelppanel-about p, .z4ribbonhelppanel-about ul {
+  margin: 5px 0px 0px 0px;
+}
