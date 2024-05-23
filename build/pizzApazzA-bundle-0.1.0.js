@@ -2309,32 +2309,38 @@ class Z4BiGradientColorPanel extends JSPanel {
     super();
     this.cssAddClass("z4bigradientcolorpanel");
     this.setLayout(new GridBagLayout());
+    this.addComponent(new JSLabel(), 0, 0, 3, 1, 0, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    this.addLabel(Z4Translations.SPACE, 1, 1, 2, 1, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE);
+    let label = this.addLabel(Z4Translations.TIME, 0, 2, 3, 2, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE);
+    label.getStyle().writingMode = "vertical-lr";
+    label.getStyle().transform = "rotate(180deg)";
     this.preview.setProperty("width", "" + Z4BiGradientColorPanel.WIDTH);
     this.preview.setProperty("height", "" + Z4BiGradientColorPanel.HEIGHT);
     this.preview.addEventListener("mousedown", event => this.onMouse(event, "down"));
     this.preview.addEventListener("mousemove", event => this.onMouse(event, "move"));
     this.preview.addEventListener("mouseup", event => this.onMouse(event, "up"));
-    this.addComponent(this.preview, 0, 0, 2, 2, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
-    this.addLabel(Z4Translations.RIPPLE, 2, 1, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE);
-    this.getChilStyleByQuery("label").writingMode = "vertical-lr";
-    this.getChilStyleByQuery("label").transform = "rotate(180deg)";
+    this.addComponent(this.preview, 1, 2, 2, 2, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    label = this.addLabel(Z4Translations.RIPPLE, 3, 3, 1, 2, GridBagConstraints.SOUTH, GridBagConstraints.NONE);
+    label.getStyle().writingMode = "vertical-lr";
+    label.getStyle().transform = "rotate(180deg)";
     this.biRippleSpinner.cssAddClass("bispinner");
     this.biRippleSpinner.setModel(new SpinnerNumberModel(0, 0, 100, 1));
     this.biRippleSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
     this.biRippleSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
     this.biRippleSpinner.addChangeListener(event => this.onChange(true, this.biRippleSpinner.getValueIsAdjusting(), this.biRippleSpinner, this.biRippleSlider, true));
-    this.addComponent(this.biRippleSpinner, 2, 0, 1, 1, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
+    this.addComponent(this.biRippleSpinner, 3, 0, 1, 3, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
     this.biRippleSlider.setValue(0);
     this.biRippleSlider.setOrientation(JSSlider.VERTICAL);
     this.biRippleSlider.setInverted(true);
     this.biRippleSlider.getStyle().minHeight = "20rem";
     this.biRippleSlider.addChangeListener(event => this.onChange(false, this.biRippleSlider.getValueIsAdjusting(), this.biRippleSpinner, this.biRippleSlider, true));
-    this.addComponent(this.biRippleSlider, 3, 0, 1, 2, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    this.addComponent(this.biRippleSlider, 4, 0, 1, 5, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
     let panel = new JSPanel();
     panel.getStyle().writingMode = "vertical-lr";
     panel.getStyle().transform = "rotate(180deg)";
-    this.addComponent(panel, 4, 0, 1, 2, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.BOTH, null);
+    this.addComponent(panel, 5, 0, 1, 5, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.BOTH, null);
     let button = new JSButton();
+    button.cssAddClass("bibutton");
     button.setText(Z4Translations.MIRRORED);
     button.addActionListener(event => {
       this.biGradientColor.mirror();
@@ -2342,12 +2348,14 @@ class Z4BiGradientColorPanel extends JSPanel {
     });
     panel.add(button, null);
     button = new JSButton();
+    button.cssAddClass("bibutton");
     button.setText(Z4Translations.INVERTED);
     button.addActionListener(event => {
       this.biGradientColor.reverse();
       this.drawPreview(false);
     });
     panel.add(button, null);
+    this.biDelete.cssAddClass("bibutton");
     this.biDelete.setText(Z4Translations.DELETE);
     this.biDelete.setEnabled(false);
     this.biDelete.addActionListener(event => {
@@ -2360,13 +2368,14 @@ class Z4BiGradientColorPanel extends JSPanel {
       });
     });
     panel.add(this.biDelete, null);
-    this.addHLine(0, 2, 6, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL);
+    this.addComponent(new JSLabel(), 0, 4, 3, 1, 0, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    this.addHLine(0, 5, 6, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL);
     this.colorPreview.setColor(this.biGradientColor.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
-    this.addComponent(this.colorPreview, 0, 3, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, null);
+    this.addComponent(this.colorPreview, 0, 6, 2, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, null);
     button = new JSButton();
     button.setText(Z4Translations.EDIT);
     button.addActionListener(event => this.selectColor());
-    this.addComponent(button, 1, 3, 2, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
+    this.addComponent(button, 2, 6, 2, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
     this.delete.setText(Z4Translations.DELETE);
     this.delete.setEnabled(false);
     this.delete.addActionListener(event => {
@@ -2379,20 +2388,20 @@ class Z4BiGradientColorPanel extends JSPanel {
         }
       });
     });
-    this.addComponent(this.delete, 3, 3, 3, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
-    this.addLabel(Z4Translations.RIPPLE, 0, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    this.addComponent(this.delete, 4, 6, 2, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
+    this.addLabel(Z4Translations.RIPPLE, 0, 7, 2, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
     this.rippleSpinner.setModel(new SpinnerNumberModel(0, 0, 100, 1));
     this.rippleSpinner.getStyle().minWidth = "4rem";
     this.rippleSpinner.getChilStyleByQuery("input[type=number]").minWidth = "3.5rem";
     this.rippleSpinner.getChilStyleByQuery("input[type=number]").width = "3.5rem";
     this.rippleSpinner.addChangeListener(event => this.onChange(true, this.rippleSpinner.getValueIsAdjusting(), this.rippleSpinner, this.rippleSlider, false));
-    this.addComponent(this.rippleSpinner, 2, 4, 3, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5, 0, 0, 0));
+    this.addComponent(this.rippleSpinner, 3, 7, 3, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5, 0, 0, 0));
     this.rippleSlider.setValue(0);
     this.rippleSlider.getStyle().minWidth = "20rem";
     this.rippleSlider.addChangeListener(event => this.onChange(false, this.rippleSlider.getValueIsAdjusting(), this.rippleSpinner, this.rippleSlider, false));
-    this.addComponent(this.rippleSlider, 0, 5, 5, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
+    this.addComponent(this.rippleSlider, 0, 8, 6, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
     panel = new JSPanel();
-    this.addComponent(panel, 0, 6, 5, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
+    this.addComponent(panel, 0, 9, 6, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
     button = new JSButton();
     button.setText(Z4Translations.MIRRORED);
     button.addActionListener(event => {
@@ -2416,6 +2425,7 @@ class Z4BiGradientColorPanel extends JSPanel {
     let label = new JSLabel();
     label.setText(text);
     this.addComponent(label, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, null);
+    return label;
   }
 
    addHLine(gridx, gridy, gridwidth, gridheight, anchor, fill) {
@@ -5122,6 +5132,10 @@ class Z4Translations {
 
   static  DELETE = "";
 
+  static  SPACE = "";
+
+  static  TIME = "";
+
   // Color
   static  COLOR = "";
 
@@ -5264,6 +5278,8 @@ class Z4Translations {
     Z4Translations.LOCK = "Lock";
     Z4Translations.RIPPLE = "Ripple";
     Z4Translations.DELETE = "Delete";
+    Z4Translations.SPACE = "Space \u2192";
+    Z4Translations.TIME = "\u2190 Time";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -5362,6 +5378,8 @@ class Z4Translations {
     Z4Translations.LOCK = "Blocca";
     Z4Translations.RIPPLE = "Caoticit\u00E0";
     Z4Translations.DELETE = "Elimina";
+    Z4Translations.SPACE = "Spazio \u2192";
+    Z4Translations.TIME = "\u2190 Tempo";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";

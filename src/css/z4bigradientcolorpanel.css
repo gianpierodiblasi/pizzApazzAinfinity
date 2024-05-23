@@ -2,7 +2,6 @@
   border: 1px solid var(--main-action-bgcolor);
   background-image: url(../image/chessboard.png);
 }
-
 .z4bigradientcolorpanel .bispinner {
   writing-mode: vertical-lr;
   transform: rotate(180deg);
@@ -18,4 +17,15 @@
 .z4bigradientcolorpanel .bispinner input[type=number] {
   min-width: 2.2rem;
   width: 2.2rem;
+}
+
+.z4bigradientcolorpanel .bibutton:hover, .z4bigradientcolorpanel .bibutton:focus {
+  filter: drop-shadow(-.15rem -.15rem .15rem var(--main-action-bgcolor));
+}
+.z4bigradientcolorpanel .bibutton:active {
+  filter: saturate(0.5) drop-shadow(-.15rem -.15rem .15rem var(--main-action-bgcolor));
+}
+.z4bigradientcolorpanel .bibutton:disabled {
+  filter: opacity(0.5);
+  cursor: default;
 }
