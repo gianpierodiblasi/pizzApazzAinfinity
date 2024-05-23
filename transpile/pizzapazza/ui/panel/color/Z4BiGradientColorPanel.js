@@ -72,11 +72,7 @@ class Z4BiGradientColorPanel extends JSPanel {
     button.setText(Z4Translations.MIRRORED);
     button.addActionListener(event => {
       this.biGradientColor.mirror();
-      let gradientColor = this.biGradientColor.getColorAtIndex(this.biSelectedIndex);
-      this.colorPreview.setColor(this.biGradientColor.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
-      this.biDelete.setEnabled(this.biSelectedIndex !== 0 && this.biSelectedIndex !== this.biGradientColor.getColorCount() - 1);
-      this.delete.setEnabled(this.selectedIndex !== 0 && this.selectedIndex !== gradientColor.getColorCount() - 1);
-      this.drawPreview(false);
+      this.afterOperation(this.biGradientColor.getColorAtIndex(this.biSelectedIndex));
     });
     panel.add(button, null);
     button = new JSButton();
@@ -93,17 +89,13 @@ class Z4BiGradientColorPanel extends JSPanel {
         if (response === JSOptionPane.YES_OPTION) {
           this.biGradientColor.removeColor(this.biGradientColor.getColorPositionAtIndex(this.biSelectedIndex));
           this.biSelectedIndex = 0;
-          let gradientColor = this.biGradientColor.getColorAtIndex(this.biSelectedIndex);
-          this.colorPreview.setColor(this.biGradientColor.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
-          this.biDelete.setEnabled(this.biSelectedIndex !== 0 && this.biSelectedIndex !== this.biGradientColor.getColorCount() - 1);
-          this.delete.setEnabled(this.selectedIndex !== 0 && this.selectedIndex !== gradientColor.getColorCount() - 1);
-          this.drawPreview(false);
+          this.afterOperation(this.biGradientColor.getColorAtIndex(this.biSelectedIndex));
         }
       });
     });
     panel.add(this.biDelete, null);
     this.addHLine(0, 2, 6, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL);
-    this.colorPreview.setColor(this.biGradientColor.getColorAtIndex(0).getColorAtIndex(0));
+    this.colorPreview.setColor(this.biGradientColor.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
     this.addComponent(this.colorPreview, 0, 3, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, null);
     button = new JSButton();
     button.setText(Z4Translations.EDIT);
@@ -112,15 +104,14 @@ class Z4BiGradientColorPanel extends JSPanel {
     this.delete.setText(Z4Translations.DELETE);
     this.delete.setEnabled(false);
     this.delete.addActionListener(event => {
-      // JSOptionPane.showConfirmDialog(Z4Translations.DELETE_COLOR_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response -> {
-      // if (response == JSOptionPane.YES_OPTION) {
-      // this.gradientColor.removeColor(this.gradientColor.getColorPositionAtIndex(this.selectedIndex));
-      // this.selectedIndex = 0;
-      // this.colorPreview.setColor(this.gradientColor.getColorAtIndex(0));
-      // this.delete.setEnabled(false);
-      // this.drawPreview(false);
-      // }
-      // });
+      JSOptionPane.showConfirmDialog(Z4Translations.DELETE_COLOR_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
+        if (response === JSOptionPane.YES_OPTION) {
+          let gradientColor = this.biGradientColor.getColorAtIndex(this.biSelectedIndex);
+          gradientColor.removeColor(gradientColor.getColorPositionAtIndex(this.selectedIndex));
+          this.selectedIndex = 0;
+          this.afterOperation(gradientColor);
+        }
+      });
     });
     this.addComponent(this.delete, 3, 3, 3, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
     this.addLabel(Z4Translations.RIPPLE, 0, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
@@ -139,10 +130,9 @@ class Z4BiGradientColorPanel extends JSPanel {
     button = new JSButton();
     button.setText(Z4Translations.MIRRORED);
     button.addActionListener(event => {
-      // this.gradientColor.mirror();
-      // this.colorPreview.setColor(this.gradientColor.getColorAtIndex(this.selectedIndex));
-      // this.delete.setEnabled(this.selectedIndex != 0 && this.selectedIndex != this.gradientColor.getColorCount() - 1);
-      // this.drawPreview(false);
+      let gradientColor = this.biGradientColor.getColorAtIndex(this.biSelectedIndex);
+      gradientColor.mirror();
+      this.afterOperation(gradientColor);
     });
     panel.add(button, null);
     button = new JSButton();
@@ -196,10 +186,7 @@ class Z4BiGradientColorPanel extends JSPanel {
               this.pressed = true;
               this.biSelectedIndex = biIndex;
               this.selectedIndex = index;
-              this.colorPreview.setColor(this.biGradientColor.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
-              this.biDelete.setEnabled(this.biSelectedIndex !== 0 && this.biSelectedIndex !== this.biGradientColor.getColorCount() - 1);
-              this.delete.setEnabled(this.selectedIndex !== 0 && this.selectedIndex !== gradientColor.getColorCount() - 1);
-              this.drawPreview(false);
+              this.afterOperation(gradientColor);
             }
           }
         }
@@ -282,6 +269,13 @@ class Z4BiGradientColorPanel extends JSPanel {
       this.colorPreview.setColor(c);
       this.drawPreview(false);
     });
+  }
+
+   afterOperation(gradientColor) {
+    this.colorPreview.setColor(this.biGradientColor.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
+    this.biDelete.setEnabled(this.biSelectedIndex !== 0 && this.biSelectedIndex !== this.biGradientColor.getColorCount() - 1);
+    this.delete.setEnabled(this.selectedIndex !== 0 && this.selectedIndex !== gradientColor.getColorCount() - 1);
+    this.drawPreview(false);
   }
 
    drawPreview(adjusting) {

@@ -54,9 +54,7 @@ class Z4GradientColorPanel extends JSPanel {
         if (response === JSOptionPane.YES_OPTION) {
           this.gradientColor.removeColor(this.gradientColor.getColorPositionAtIndex(this.selectedIndex));
           this.selectedIndex = 0;
-          this.colorPreview.setColor(this.gradientColor.getColorAtIndex(this.selectedIndex));
-          this.delete.setEnabled(false);
-          this.drawPreview(false);
+          this.afterOperation();
         }
       });
     });
@@ -78,9 +76,7 @@ class Z4GradientColorPanel extends JSPanel {
     button.setText(Z4Translations.MIRRORED);
     button.addActionListener(event => {
       this.gradientColor.mirror();
-      this.colorPreview.setColor(this.gradientColor.getColorAtIndex(this.selectedIndex));
-      this.delete.setEnabled(this.selectedIndex !== 0 && this.selectedIndex !== this.gradientColor.getColorCount() - 1);
-      this.drawPreview(false);
+      this.afterOperation();
     });
     panel.add(button, null);
     button = new JSButton();
@@ -123,9 +119,7 @@ class Z4GradientColorPanel extends JSPanel {
           if (Z4Math.distance(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, event.offsetX, event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
             this.pressed = true;
             this.selectedIndex = index;
-            this.colorPreview.setColor(this.gradientColor.getColorAtIndex(this.selectedIndex));
-            this.delete.setEnabled(this.selectedIndex !== 0 && this.selectedIndex !== this.gradientColor.getColorCount() - 1);
-            this.drawPreview(false);
+            this.afterOperation();
           }
         }
         if (!this.pressed && !this.gradientColor.isPositionOccupied(event.offsetX / Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.TOLLERANCE) && Math.abs(Z4GradientColorPanel.HEIGHT / 2 - event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
@@ -135,12 +129,10 @@ class Z4GradientColorPanel extends JSPanel {
             let position = this.gradientColor.getColorPositionAtIndex(index);
             if (Z4Math.distance(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, event.offsetX, event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
               this.selectedIndex = index;
-              this.colorPreview.setColor(this.gradientColor.getColorAtIndex(this.selectedIndex));
-              this.delete.setEnabled(this.selectedIndex !== 0 && this.selectedIndex !== this.gradientColor.getColorCount() - 1);
+              this.afterOperation();
             }
           }
           this.preview.getStyle().cursor = "pointer";
-          this.drawPreview(false);
         }
         break;
       case "move":
@@ -191,6 +183,12 @@ class Z4GradientColorPanel extends JSPanel {
       this.colorPreview.setColor(c);
       this.drawPreview(false);
     });
+  }
+
+   afterOperation() {
+    this.colorPreview.setColor(this.gradientColor.getColorAtIndex(this.selectedIndex));
+    this.delete.setEnabled(this.selectedIndex !== 0 && this.selectedIndex !== this.gradientColor.getColorCount() - 1);
+    this.drawPreview(false);
   }
 
    drawPreview(adjusting) {
