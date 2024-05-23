@@ -41,7 +41,7 @@ class Z4GradientColorPanel extends JSPanel {
     this.preview.addEventListener("mousemove", event => this.onMouse(event, "move"));
     this.preview.addEventListener("mouseup", event => this.onMouse(event, "up"));
     this.addComponent(this.preview, 0, 0, 3, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 5, 0));
-    this.colorPreview.setColor(this.gradientColor.getColorAtIndex(0));
+    this.colorPreview.setColor(this.gradientColor.getColorAtIndex(this.selectedIndex));
     this.addComponent(this.colorPreview, 0, 1, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, null);
     let button = new JSButton();
     button.setText(Z4Translations.EDIT);
@@ -54,7 +54,7 @@ class Z4GradientColorPanel extends JSPanel {
         if (response === JSOptionPane.YES_OPTION) {
           this.gradientColor.removeColor(this.gradientColor.getColorPositionAtIndex(this.selectedIndex));
           this.selectedIndex = 0;
-          this.colorPreview.setColor(this.gradientColor.getColorAtIndex(0));
+          this.colorPreview.setColor(this.gradientColor.getColorAtIndex(this.selectedIndex));
           this.delete.setEnabled(false);
           this.drawPreview(false);
         }
