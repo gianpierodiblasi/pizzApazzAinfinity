@@ -61,12 +61,16 @@ class Z4BiGradientColorPanel extends JSPanel {
     this.biRippleSpinner.setModel(new SpinnerNumberModel(0, 0, 100, 1));
     this.biRippleSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
     this.biRippleSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
+    this.biRippleSpinner.getStyle().minHeight = "4rem";
+    this.biRippleSpinner.getChilStyleByQuery("input[type=number]").minHeight = "3.5rem";
+    this.biRippleSpinner.getChilStyleByQuery("input[type=number]").height = "3.5rem";
     this.biRippleSpinner.addChangeListener(event => this.onChange(true, this.biRippleSpinner.getValueIsAdjusting(), this.biRippleSpinner, this.biRippleSlider, true));
     this.addComponent(this.biRippleSpinner, 3, 0, 1, 3, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
     this.biRippleSlider.setValue(0);
     this.biRippleSlider.setOrientation(JSSlider.VERTICAL);
     this.biRippleSlider.setInverted(true);
     this.biRippleSlider.getStyle().minHeight = "20rem";
+    this.biRippleSlider.getStyle().minWidth = "1.5rem";
     this.biRippleSlider.addChangeListener(event => this.onChange(false, this.biRippleSlider.getValueIsAdjusting(), this.biRippleSpinner, this.biRippleSlider, true));
     this.addComponent(this.biRippleSlider, 4, 0, 1, 5, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
     let panel = new JSPanel();

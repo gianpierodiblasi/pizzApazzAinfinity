@@ -95,13 +95,17 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
     this.ySpinner.setModel(new SpinnerNumberModel(0, 0, this.height, 1));
     this.ySpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
     this.ySpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
+    this.ySpinner.getStyle().minHeight = "4rem";
+    this.ySpinner.getChilStyleByQuery("input[type=number]").minHeight = "3.5rem";
+    this.ySpinner.getChilStyleByQuery("input[type=number]").height = "3.5rem";
     this.ySpinner.addChangeListener(event -> this.onChange(true, this.ySpinner.getValueIsAdjusting(), this.ySpinner, this.ySlider, false));
-    this.addComponent(this.ySpinner, 2, 1, 1, 1, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, null);
+    this.addComponent(this.ySpinner, 2, 1, 1, 1, 0, 1, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, null);
 
     this.ySlider.setMaximum(this.height);
     this.ySlider.setOrientation(JSSlider.VERTICAL);
     this.ySlider.setInverted(true);
     this.ySlider.getStyle().minHeight = "20rem";
+    this.ySlider.getStyle().minWidth = "1.5rem";
     this.ySlider.addChangeListener(event -> this.onChange(false, this.ySlider.getValueIsAdjusting(), this.ySpinner, this.ySlider, false));
     this.addComponent(this.ySlider, 3, 1, 1, 2, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
 

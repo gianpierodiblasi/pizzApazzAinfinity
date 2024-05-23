@@ -156,12 +156,16 @@ public class Z4LayerPreview extends JSComponent {
     this.offsetYSpinner.cssAddClass("offsetyspinner");
     this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
     this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
+    this.offsetYSpinner.getStyle().minHeight = "4rem";
+    this.offsetYSpinner.getChilStyleByQuery("input[type=number]").minHeight = "3.5rem";
+    this.offsetYSpinner.getChilStyleByQuery("input[type=number]").height = "3.5rem";
     this.offsetYSpinner.addChangeListener(event -> this.onChange(true, this.offsetYSpinner.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
     this.addComponent(panel, this.offsetYSpinner, 3, 2, 1, 3, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.NONE, null);
 
     this.offsetYSlider.setOrientation(JSSlider.VERTICAL);
     this.offsetYSlider.setInverted(true);
     this.offsetYSlider.getStyle().minHeight = "20rem";
+    this.offsetYSlider.getStyle().minWidth = "1.5rem";
     this.offsetYSlider.addChangeListener(event -> this.onChange(false, this.offsetYSlider.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
     this.addComponent(panel, this.offsetYSlider, 4, 2, 1, 4, 0, 1, GridBagConstraints.NORTH, GridBagConstraints.NONE, null);
 
