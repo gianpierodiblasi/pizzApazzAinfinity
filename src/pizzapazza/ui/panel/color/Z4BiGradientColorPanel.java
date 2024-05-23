@@ -222,7 +222,7 @@ public class Z4BiGradientColorPanel extends JSPanel {
 
           for (int index = 0; index < gradientColor.getColorCount(); index++) {
             double position = gradientColor.getColorPositionAtIndex(index);
-            if (Z4Math.distance(position * Z4BiGradientColorPanel.WIDTH, biPosition * Z4BiGradientColorPanel.WIDTH, event.offsetX, event.offsetY) <= Z4BiGradientColorPanel.SELECTOR_RADIUS) {
+            if (Z4Math.distance(position * Z4BiGradientColorPanel.WIDTH, biPosition * Z4BiGradientColorPanel.HEIGHT, event.offsetX, event.offsetY) <= Z4BiGradientColorPanel.SELECTOR_RADIUS) {
               this.pressed = true;
               this.biSelectedIndex = biIndex;
               this.selectedIndex = index;
@@ -230,23 +230,23 @@ public class Z4BiGradientColorPanel extends JSPanel {
             }
           }
         }
-//
-//        if (!this.pressed && !this.gradientColor.isPositionOccupied(event.offsetX / w, Z4BiGradientColorPanel.TOLLERANCE) && Math.abs(h / 2 - event.offsetY) <= Z4BiGradientColorPanel.SELECTOR_RADIUS) {
-//          this.gradientColor.addColor(this.gradientColor.getColorAt(event.offsetX / w, false), event.offsetX / w);
-//          this.pressed = true;
-//
-//          for (int index = 0; index < this.gradientColor.getColorCount(); index++) {
-//            double position = this.gradientColor.getColorPositionAtIndex(index);
-//            if (Z4Math.distance(position * w, h / 2, event.offsetX, event.offsetY) <= Z4BiGradientColorPanel.SELECTOR_RADIUS) {
-//              this.selectedIndex = index;
-//              this.colorPreview.setColor(this.gradientColor.getColorAtIndex(this.selectedIndex));
-//              this.delete.setEnabled(this.selectedIndex != 0 && this.selectedIndex != this.gradientColor.getColorCount() - 1);
-//            }
-//          }
-//
-//          this.preview.getStyle().cursor = "pointer";
-//          this.drawPreview(false);
-//        }
+
+        if (!this.pressed
+                && !this.biGradientColor.isPositionOccupied(event.offsetY / Z4BiGradientColorPanel.HEIGHT, Z4BiGradientColorPanel.TOLLERANCE)) {
+          this.biGradientColor.addColor(this.biGradientColor.getColorAt(event.offsetY / Z4BiGradientColorPanel.HEIGHT, false), event.offsetY / Z4BiGradientColorPanel.HEIGHT);
+          this.pressed = true;
+          this.setPointer(event, true);
+        }
+
+        if (!this.pressed) {
+          double biPosition = this.biGradientColor.getPosition(event.offsetY / Z4BiGradientColorPanel.HEIGHT, Z4BiGradientColorPanel.TOLLERANCE);
+          Z4GradientColor gradientColor = this.biGradientColor.getColorAt(biPosition, false);
+
+          if (!gradientColor.isPositionOccupied(event.offsetX / Z4BiGradientColorPanel.WIDTH, Z4BiGradientColorPanel.TOLLERANCE)) {
+            gradientColor.addColor(gradientColor.getColorAt(event.offsetX / Z4BiGradientColorPanel.WIDTH, false), event.offsetX / Z4BiGradientColorPanel.WIDTH);
+            this.setPointer(event, true);
+          }
+        }
         break;
       case "move":
         if (this.pressed) {
@@ -264,22 +264,20 @@ public class Z4BiGradientColorPanel extends JSPanel {
 //          }
         } else {
           this.preview.getStyle().cursor = "default";
-          for (int biIndex = 0; biIndex < this.biGradientColor.getColorCount(); biIndex++) {
-            double biPosition = this.biGradientColor.getColorPositionAtIndex(biIndex);
-            Z4GradientColor gradientColor = this.biGradientColor.getColorAtIndex(biIndex);
+          this.setPointer(event, false);
 
-            for (int index = 0; index < gradientColor.getColorCount(); index++) {
-              double position = gradientColor.getColorPositionAtIndex(index);
-              if (Z4Math.distance(position * Z4BiGradientColorPanel.WIDTH, biPosition * Z4BiGradientColorPanel.WIDTH, event.offsetX, event.offsetY) <= Z4BiGradientColorPanel.SELECTOR_RADIUS) {
-                this.preview.getStyle().cursor = "pointer";
-              }
-            }
+          if (this.preview.getStyle().cursor == "default"
+                  && !this.biGradientColor.isPositionOccupied(event.offsetY / Z4BiGradientColorPanel.HEIGHT, Z4BiGradientColorPanel.TOLLERANCE)) {
+            this.preview.getStyle().cursor = "copy";
           }
 
           if (this.preview.getStyle().cursor == "default") {
-//            if (!this.gradientColor.isPositionOccupied(event.offsetX / w, Z4BiGradientColorPanel.TOLLERANCE) && Math.abs(h / 2 - event.offsetY) <= Z4BiGradientColorPanel.SELECTOR_RADIUS) {
-//              this.preview.getStyle().cursor = "copy";
-//            }
+            double biPosition = this.biGradientColor.getPosition(event.offsetY / Z4BiGradientColorPanel.HEIGHT, Z4BiGradientColorPanel.TOLLERANCE);
+            Z4GradientColor gradientColor = this.biGradientColor.getColorAt(biPosition, false);
+
+            if (!gradientColor.isPositionOccupied(event.offsetX / Z4BiGradientColorPanel.WIDTH, Z4BiGradientColorPanel.TOLLERANCE)) {
+              this.preview.getStyle().cursor = "copy";
+            }
           }
         }
         break;
@@ -287,6 +285,26 @@ public class Z4BiGradientColorPanel extends JSPanel {
         this.pressed = false;
         this.drawPreview(false);
         break;
+    }
+  }
+
+  private void setPointer(MouseEvent event, boolean setOther) {
+    for (int biIndex = 0; biIndex < this.biGradientColor.getColorCount(); biIndex++) {
+      double biPosition = this.biGradientColor.getColorPositionAtIndex(biIndex);
+      Z4GradientColor gradientColor = this.biGradientColor.getColorAtIndex(biIndex);
+
+      for (int index = 0; index < gradientColor.getColorCount(); index++) {
+        double position = gradientColor.getColorPositionAtIndex(index);
+        if (Z4Math.distance(position * Z4BiGradientColorPanel.WIDTH, biPosition * Z4BiGradientColorPanel.HEIGHT, event.offsetX, event.offsetY) <= Z4BiGradientColorPanel.SELECTOR_RADIUS) {
+          if (setOther) {
+            this.biSelectedIndex = biIndex;
+            this.selectedIndex = index;
+            this.afterOperation(gradientColor);
+          }
+
+          this.preview.getStyle().cursor = "pointer";
+        }
+      }
     }
   }
 
