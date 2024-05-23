@@ -193,6 +193,9 @@ class Z4BiGradientColorPanel extends JSPanel {
         }
         if (!this.pressed && !this.biGradientColor.isPositionOccupied(event.offsetY / Z4BiGradientColorPanel.HEIGHT, Z4BiGradientColorPanel.TOLERANCE)) {
           let gradientColor = this.biGradientColor.getColorAt(event.offsetY / Z4BiGradientColorPanel.HEIGHT, false);
+          while (gradientColor.getColorCount() > 2) {
+            gradientColor.removeColor(gradientColor.getColorPositionAtIndex(1));
+          }
           if (!gradientColor.isPositionOccupied(event.offsetX / Z4BiGradientColorPanel.WIDTH, Z4BiGradientColorPanel.TOLERANCE)) {
             gradientColor.addColor(gradientColor.getColorAt(event.offsetX / Z4BiGradientColorPanel.WIDTH, false), event.offsetX / Z4BiGradientColorPanel.WIDTH);
           }
