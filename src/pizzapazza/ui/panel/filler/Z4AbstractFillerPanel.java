@@ -47,7 +47,7 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
   private final JSSlider ySlider = new JSSlider();
   private final JSSpinner ySpinner = new JSSpinner();
 
-  private final Z4GradientColor gradientColor = new Z4GradientColor();
+  private Z4GradientColor gradientColor = new Z4GradientColor();
   private final Array<JSRadioButton> radios = new Array<>();
   private final Array<Point> points = new Array<>();
 
@@ -312,6 +312,16 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
     this.offscreenCanvas = new $OffscreenCanvas(parseInt(this.preview.getProperty("width")) / Z4AbstractFillerPanel.RESCALE, parseInt(this.preview.getProperty("height")) / Z4AbstractFillerPanel.RESCALE);
     this.offscreenCtx = this.offscreenCanvas.getContext("2d");
 
+    this.drawPreview(false);
+  }
+
+  /**
+   * Sets the gradient color to use
+   *
+   * @param gradientColor The gradient color
+   */
+  public void setGradientColor(Z4GradientColor gradientColor) {
+    this.gradientColor = gradientColor;
     this.drawPreview(false);
   }
 

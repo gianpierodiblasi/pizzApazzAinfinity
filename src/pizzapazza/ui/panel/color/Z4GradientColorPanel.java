@@ -19,6 +19,8 @@ import javascript.swing.JSPanel;
 import javascript.swing.JSSlider;
 import javascript.swing.JSSpinner;
 import javascript.swing.SpinnerNumberModel;
+import javascript.swing.event.ChangeEvent;
+import javascript.swing.event.ChangeListener;
 import jsweet.util.union.Union4;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.math.Z4Math;
@@ -26,6 +28,7 @@ import pizzapazza.ui.component.Z4ColorPreview;
 import pizzapazza.util.Z4Translations;
 import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.$typeof;
 import simulation.js.$Uint8Array;
 
 /**
@@ -46,11 +49,17 @@ public class Z4GradientColorPanel extends JSPanel {
   private int selectedIndex = 0;
   private boolean pressed = false;
 
+  private final Array<ChangeListener> listeners = new Array<>();
+  private boolean valueIsAdjusting;
+
   private static final int SELECTOR_RADIUS = 7;
   private static final int WIDTH = 200;
   private static final int HEIGHT = 50;
   private static final double TOLERANCE = 0.1;
 
+  /**
+   * Creates the object
+   */
   public Z4GradientColorPanel() {
     super();
     this.cssAddClass("z4gradientcolorpanel");
@@ -79,6 +88,7 @@ public class Z4GradientColorPanel extends JSPanel {
           this.gradientColor.removeColor(this.gradientColor.getColorPositionAtIndex(this.selectedIndex));
           this.selectedIndex = 0;
           this.afterOperation();
+          this.fireOnChange();
         }
       });
     });
@@ -105,6 +115,7 @@ public class Z4GradientColorPanel extends JSPanel {
     button.addActionListener(event -> {
       this.gradientColor.mirror();
       this.afterOperation();
+      this.fireOnChange();
     });
     panel.add(button, null);
 
@@ -113,6 +124,7 @@ public class Z4GradientColorPanel extends JSPanel {
     button.addActionListener(event -> {
       this.gradientColor.reverse();
       this.drawPreview(false);
+      this.fireOnChange();
     });
     panel.add(button, null);
 
@@ -165,6 +177,7 @@ public class Z4GradientColorPanel extends JSPanel {
             if (Z4Math.distance(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, event.offsetX, event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
               this.selectedIndex = index;
               this.afterOperation();
+              this.fireOnChange();
             }
           }
 
@@ -184,6 +197,8 @@ public class Z4GradientColorPanel extends JSPanel {
             this.gradientColor.removeColor(position);
             this.gradientColor.addColor(color, newPosition);
             this.drawPreview(true);
+            this.valueIsAdjusting = true;
+            this.fireOnChange();
           }
         } else {
           this.preview.getStyle().cursor = "default";
@@ -204,6 +219,8 @@ public class Z4GradientColorPanel extends JSPanel {
       case "up":
         this.pressed = false;
         this.drawPreview(false);
+        this.valueIsAdjusting = false;
+        this.fireOnChange();
         break;
     }
   }
@@ -217,6 +234,8 @@ public class Z4GradientColorPanel extends JSPanel {
 
     this.gradientColor.setRipple(this.rippleSlider.getValue() / 100);
     this.drawPreview(adjusting);
+    this.valueIsAdjusting = adjusting;
+    this.fireOnChange();
   }
 
   private void selectColor() {
@@ -224,6 +243,7 @@ public class Z4GradientColorPanel extends JSPanel {
       this.gradientColor.addColor(c, this.gradientColor.getColorPositionAtIndex(this.selectedIndex));
       this.colorPreview.setColor(c);
       this.drawPreview(false);
+      this.fireOnChange();
     });
   }
 
@@ -281,5 +301,35 @@ public class Z4GradientColorPanel extends JSPanel {
 
   private Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getStrokeStyle(String style) {
     return null;
+  }
+
+  /**
+   * Adds a change listener
+   *
+   * @param listener The listener
+   */
+  public void addChangeListener(ChangeListener listener) {
+    this.listeners.push(listener);
+  }
+
+  private void fireOnChange() {
+    ChangeEvent event = new ChangeEvent();
+
+    this.listeners.forEach(listener -> {
+      if ($typeof(listener, "function")) {
+        listener.$apply(event);
+      } else {
+        listener.stateChanged(event);
+      }
+    });
+  }
+
+  /**
+   * Returns if the value is adjusting
+   *
+   * @return true if the value is adjusting, false otherwise
+   */
+  public boolean getValueIsAdjusting() {
+    return this.valueIsAdjusting;
   }
 }

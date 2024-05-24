@@ -2660,6 +2660,10 @@ class Z4GradientColorPanel extends JSPanel {
 
    pressed = false;
 
+   listeners = new Array();
+
+   valueIsAdjusting = false;
+
   static  SELECTOR_RADIUS = 7;
 
   static  WIDTH = 200;
@@ -2668,6 +2672,9 @@ class Z4GradientColorPanel extends JSPanel {
 
   static  TOLERANCE = 0.1;
 
+  /**
+   * Creates the object
+   */
   constructor() {
     super();
     this.cssAddClass("z4gradientcolorpanel");
@@ -2692,6 +2699,7 @@ class Z4GradientColorPanel extends JSPanel {
           this.gradientColor.removeColor(this.gradientColor.getColorPositionAtIndex(this.selectedIndex));
           this.selectedIndex = 0;
           this.afterOperation();
+          this.fireOnChange();
         }
       });
     });
@@ -2712,6 +2720,7 @@ class Z4GradientColorPanel extends JSPanel {
     button.addActionListener(event => {
       this.gradientColor.mirror();
       this.afterOperation();
+      this.fireOnChange();
     });
     panel.add(button, null);
     button = new JSButton();
@@ -2719,6 +2728,7 @@ class Z4GradientColorPanel extends JSPanel {
     button.addActionListener(event => {
       this.gradientColor.reverse();
       this.drawPreview(false);
+      this.fireOnChange();
     });
     panel.add(button, null);
     this.drawPreview(false);
@@ -2765,6 +2775,7 @@ class Z4GradientColorPanel extends JSPanel {
             if (Z4Math.distance(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, event.offsetX, event.offsetY) <= Z4GradientColorPanel.SELECTOR_RADIUS) {
               this.selectedIndex = index;
               this.afterOperation();
+              this.fireOnChange();
             }
           }
           this.preview.getStyle().cursor = "pointer";
@@ -2781,6 +2792,8 @@ class Z4GradientColorPanel extends JSPanel {
             this.gradientColor.removeColor(position);
             this.gradientColor.addColor(color, newPosition);
             this.drawPreview(true);
+            this.valueIsAdjusting = true;
+            this.fireOnChange();
           }
         } else {
           this.preview.getStyle().cursor = "default";
@@ -2798,6 +2811,8 @@ class Z4GradientColorPanel extends JSPanel {
       case "up":
         this.pressed = false;
         this.drawPreview(false);
+        this.valueIsAdjusting = false;
+        this.fireOnChange();
         break;
     }
   }
@@ -2810,6 +2825,8 @@ class Z4GradientColorPanel extends JSPanel {
     }
     this.gradientColor.setRipple(this.rippleSlider.getValue() / 100);
     this.drawPreview(adjusting);
+    this.valueIsAdjusting = adjusting;
+    this.fireOnChange();
   }
 
    selectColor() {
@@ -2817,6 +2834,7 @@ class Z4GradientColorPanel extends JSPanel {
       this.gradientColor.addColor(c, this.gradientColor.getColorPositionAtIndex(this.selectedIndex));
       this.colorPreview.setColor(c);
       this.drawPreview(false);
+      this.fireOnChange();
     });
   }
 
@@ -2864,6 +2882,34 @@ class Z4GradientColorPanel extends JSPanel {
 
    getStrokeStyle(style) {
     return style;
+  }
+  /**
+   * Adds a change listener
+   *
+   * @param listener The listener
+   */
+   addChangeListener(listener) {
+    this.listeners.push(listener);
+  }
+
+   fireOnChange() {
+    let event = new ChangeEvent();
+    this.listeners.forEach(listener => {
+      if (typeof listener === "function") {
+        listener(event);
+      } else {
+        listener.stateChanged(event);
+      }
+    });
+  }
+
+  /**
+   * Returns if the value is adjusting
+   *
+   * @return true if the value is adjusting, false otherwise
+   */
+   getValueIsAdjusting() {
+    return this.valueIsAdjusting;
   }
 }
 /**
@@ -3139,6 +3185,16 @@ class Z4AbstractFillerPanel extends JSPanel {
     this.preview.setProperty("height", "" + parseInt(ratio > 1 ? Z4AbstractFillerPanel.SIZE / ratio : Z4AbstractFillerPanel.SIZE));
     this.offscreenCanvas = new OffscreenCanvas(parseInt(this.preview.getProperty("width")) / Z4AbstractFillerPanel.RESCALE, parseInt(this.preview.getProperty("height")) / Z4AbstractFillerPanel.RESCALE);
     this.offscreenCtx = this.offscreenCanvas.getContext("2d");
+    this.drawPreview(false);
+  }
+
+  /**
+   * Sets the gradient color to use
+   *
+   * @param gradientColor The gradient color
+   */
+   setGradientColor(gradientColor) {
+    this.gradientColor = gradientColor;
     this.drawPreview(false);
   }
 

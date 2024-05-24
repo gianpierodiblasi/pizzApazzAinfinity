@@ -275,6 +275,16 @@ class Z4AbstractFillerPanel extends JSPanel {
   }
 
   /**
+   * Sets the gradient color to use
+   *
+   * @param gradientColor The gradient color
+   */
+   setGradientColor(gradientColor) {
+    this.gradientColor = gradientColor;
+    this.drawPreview(false);
+  }
+
+  /**
    * Pushes the point positions
    *
    * @param points The points
