@@ -2914,7 +2914,7 @@ class Z4GradientColorPanel extends JSPanel {
   /**
    * Returns the managed gradient color
    *
-   * @return
+   * @return The managed gradient color
    */
    getGradientColor() {
     return this.gradientColor;
@@ -4806,20 +4806,23 @@ class Z4FillingPanel extends JSPanel {
    */
   constructor() {
     super();
-    this.setLayout(new GridBagLayout());
+    this.setLayout(new BorderLayout(0, 0));
     this.cssAddClass("z4fillingpanel");
     let panelRadio = new JSPanel();
-    this.addComponent(panelRadio, 0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    this.add(panelRadio, BorderLayout.NORTH);
+    let panelCenter = new JSPanel();
+    this.add(panelCenter, BorderLayout.CENTER);
     let panelFiller = new JSPanel();
     let cardFiller = new CardLayout(0, 0);
     panelFiller.setLayout(cardFiller);
-    this.addComponent(panelFiller, 0, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
-    let hline = this.addHLine(0, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL);
-    hline.getStyle().visibility = "hidden";
+    panelFiller.getStyle().display = "none";
+    panelCenter.add(panelFiller, null);
+    let vline = this.addVLine(panelCenter);
+    vline.getStyle().display = "none";
     let panelColor = new JSPanel();
     let cardColor = new CardLayout(0, 0);
     panelColor.setLayout(cardColor);
-    this.addComponent(panelColor, 0, 3, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    panelCenter.add(panelColor, null);
     let flatPanel = this.cardColorPanels[0];
     flatPanel.setLayout(new BorderLayout(5, 0));
     let label = new JSLabel();
@@ -4871,7 +4874,9 @@ class Z4FillingPanel extends JSPanel {
         switch(card) {
           case "FLAT":
             cardColor.show(panelColor, "FLAT");
-            hline.getStyle().visibility = "hidden";
+            panelFiller.getStyle().display = "none";
+            vline.getStyle().display = "none";
+            panelColor.getStyle().display = "block";
             break;
           case "LINEAR":
           case "VERTEX":
@@ -4880,16 +4885,22 @@ class Z4FillingPanel extends JSPanel {
           case "BEZIER":
           case "SINUSOIDAL":
             cardColor.show(panelColor, "GRADIENT");
-            hline.getStyle().visibility = "visible";
+            panelFiller.getStyle().display = "block";
+            vline.getStyle().display = "block";
+            panelColor.getStyle().display = "block";
             (this.selectedFillerPanel).drawPreview(false);
             break;
           case "TEXTURE":
             cardColor.show(panelColor, "NONE");
-            hline.getStyle().visibility = "hidden";
+            panelFiller.getStyle().display = "block";
+            vline.getStyle().display = "none";
+            panelColor.getStyle().display = "none";
             break;
           case "BIGRADIENT":
             cardColor.show(panelColor, "BIGRADIENT");
-            hline.getStyle().visibility = "hidden";
+            panelFiller.getStyle().display = "none";
+            vline.getStyle().display = "none";
+            panelColor.getStyle().display = "block";
             break;
         }
       });
@@ -4931,27 +4942,12 @@ class Z4FillingPanel extends JSPanel {
     });
   }
 
-   addComponent(component, gridx, gridy, gridwidth, gridheight, weightx, weighty, anchor, fill, insets) {
-    let constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = gridy;
-    constraints.gridwidth = gridwidth;
-    constraints.gridheight = gridheight;
-    constraints.weightx = weightx;
-    constraints.weighty = weighty;
-    constraints.anchor = anchor;
-    constraints.fill = fill;
-    if (insets) {
-      constraints.insets = insets;
-    }
-    this.add(component, constraints);
-  }
-
-   addHLine(gridx, gridy, gridwidth, gridheight, anchor, fill) {
+   addVLine(panel) {
     let div = new JSComponent(document.createElement("div"));
-    div.getStyle().height = "1px";
-    div.getStyle().background = "var(--main-action-bgcolor";
-    this.addComponent(div, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, new Insets(2, 1, 2, 1));
+    div.getStyle().width = "1px";
+    div.getStyle().height = "100%";
+    div.getStyle().background = "var(--main-action-bgcolor)";
+    panel.add(div, null);
     return div;
   }
 
@@ -5025,7 +5021,7 @@ class Z4FillingPanel extends JSPanel {
  *
  * @author gianpiero.diblasi
  */
-class Z4NewImagePanel extends JSPanel {
+class Z4NewImagePanel extends JSTabbedPane {
 
    width = new JSSpinner();
 
@@ -5037,23 +5033,28 @@ class Z4NewImagePanel extends JSPanel {
 
    dimensionIN = new JSLabel();
 
+   fillingPanel = new Z4FillingPanel();
+
   constructor() {
     super();
     this.cssAddClass("z4newimagepanel");
-    this.setLayout(new GridBagLayout());
-    this.addLabel(Z4Translations.WIDTH + " (px)", 0, 0, 1, 0);
-    this.addSpinner(this.width, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 0, 1);
-    this.addLabel(Z4Translations.HEIGHT + " (px)", 1, 0, 1, 0);
-    this.addSpinner(this.height, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 1, 1);
-    this.addLabel(Z4Translations.RESOLUTION + " (dpi)", 2, 0, 1, 0);
-    this.addSpinner(this.resolution, Z4Constants.DEFAULT_DPI, Z4Constants.MAX_DPI, 2, 1);
-    this.addDimension(this.dimensionMM, 3);
-    this.addDimension(this.dimensionIN, 4);
-    this.addLabel(Z4Translations.FILLING_COLOR, 0, 5, 3, 10);
+    this.getStyle().minWidth = "45rem";
+    let panel = new JSPanel();
+    panel.setLayout(new GridBagLayout());
+    this.addTab(Z4Translations.DIMENSION, panel);
+    this.addLabel(panel, Z4Translations.WIDTH + " (px)", 0, 0, 1, 0);
+    this.addSpinner(panel, this.width, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 0, 1);
+    this.addLabel(panel, Z4Translations.HEIGHT + " (px)", 1, 0, 1, 0);
+    this.addSpinner(panel, this.height, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 1, 1);
+    this.addLabel(panel, Z4Translations.RESOLUTION + " (dpi)", 2, 0, 1, 0);
+    this.addSpinner(panel, this.resolution, Z4Constants.DEFAULT_DPI, Z4Constants.MAX_DPI, 2, 1);
+    this.addDimension(panel, this.dimensionMM, 3);
+    this.addDimension(panel, this.dimensionIN, 4);
+    this.addTab(Z4Translations.FILLING, this.fillingPanel);
     this.setDimensions();
   }
 
-   addLabel(text, gridx, gridy, gridwidth, top) {
+   addLabel(panel, text, gridx, gridy, gridwidth, top) {
     let label = new JSLabel();
     label.setText(text);
     let constraints = new GridBagConstraints();
@@ -5062,10 +5063,10 @@ class Z4NewImagePanel extends JSPanel {
     constraints.gridwidth = gridwidth;
     constraints.anchor = GridBagConstraints.WEST;
     constraints.insets = new Insets(top, 5, 0, 5);
-    this.add(label, constraints);
+    panel.add(label, constraints);
   }
 
-   addSpinner(spinner, value, max, gridx, gridy) {
+   addSpinner(panel, spinner, value, max, gridx, gridy) {
     spinner.setModel(new SpinnerNumberModel(value, 1, max, 1));
     spinner.getStyle().minWidth = "6.6rem";
     spinner.getChilStyleByQuery("input[type=number]").minWidth = "5.5rem";
@@ -5076,16 +5077,16 @@ class Z4NewImagePanel extends JSPanel {
     constraints.gridy = gridy;
     constraints.anchor = GridBagConstraints.WEST;
     constraints.insets = new Insets(0, 5, 0, 5);
-    this.add(spinner, constraints);
+    panel.add(spinner, constraints);
   }
 
-   addDimension(label, gridy) {
+   addDimension(panel, label, gridy) {
     let constraints = new GridBagConstraints();
     constraints.gridy = gridy;
     constraints.gridwidth = 3;
     constraints.fill = GridBagConstraints.HORIZONTAL;
     constraints.insets = new Insets(2, 5, 0, 0);
-    this.add(label, constraints);
+    panel.add(label, constraints);
   }
 
    setDimensions() {
@@ -5457,6 +5458,8 @@ class Z4Translations {
 
   static  TIME = "";
 
+  static  FILLING = "";
+
   // Color
   static  COLOR = "";
 
@@ -5601,6 +5604,7 @@ class Z4Translations {
     Z4Translations.DELETE = "Delete";
     Z4Translations.SPACE = "Space \u2192";
     Z4Translations.TIME = "\u2190 Time";
+    Z4Translations.FILLING = "Filling";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -5701,6 +5705,7 @@ class Z4Translations {
     Z4Translations.DELETE = "Elimina";
     Z4Translations.SPACE = "Spazio \u2192";
     Z4Translations.TIME = "\u2190 Tempo";
+    Z4Translations.FILLING = "Riempimento";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";

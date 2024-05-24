@@ -76,6 +76,7 @@ public class Z4Translations {
   public static String DELETE = "";
   public static String SPACE = "";
   public static String TIME = "";
+  public static String FILLING = "";
 
   // Color
   public static String COLOR = "";
@@ -207,6 +208,7 @@ public class Z4Translations {
     Z4Translations.DELETE = "Delete";
     Z4Translations.SPACE = "Space \u2192";
     Z4Translations.TIME = "\u2190 Time";
+    Z4Translations.FILLING = "Filling";
 
     // Color
     Z4Translations.COLOR = "Color";
@@ -322,6 +324,7 @@ public class Z4Translations {
     Z4Translations.DELETE = "Elimina";
     Z4Translations.SPACE = "Spazio \u2192";
     Z4Translations.TIME = "\u2190 Tempo";
+    Z4Translations.FILLING = "Riempimento";
 
     // Color
     Z4Translations.COLOR = "Colore";

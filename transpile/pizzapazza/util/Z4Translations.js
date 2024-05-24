@@ -119,6 +119,8 @@ class Z4Translations {
 
   static  TIME = "";
 
+  static  FILLING = "";
+
   // Color
   static  COLOR = "";
 
@@ -263,6 +265,7 @@ class Z4Translations {
     Z4Translations.DELETE = "Delete";
     Z4Translations.SPACE = "Space \u2192";
     Z4Translations.TIME = "\u2190 Time";
+    Z4Translations.FILLING = "Filling";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -363,6 +366,7 @@ class Z4Translations {
     Z4Translations.DELETE = "Elimina";
     Z4Translations.SPACE = "Spazio \u2192";
     Z4Translations.TIME = "\u2190 Tempo";
+    Z4Translations.FILLING = "Riempimento";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";

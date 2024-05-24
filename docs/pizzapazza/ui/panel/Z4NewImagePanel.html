@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -133,7 +133,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li>javascript.swing.JSPanel</li>
 <li>
 <ul class="inheritance">
+<li>javascript.swing.JSTabbedPane</li>
+<li>
+<ul class="inheritance">
 <li>pizzapazza.ui.panel.Z4NewImagePanel</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -146,7 +151,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <hr>
 <pre>public class <span class="typeNameLabel">Z4NewImagePanel</span>
-extends javascript.swing.JSPanel</pre>
+extends javascript.swing.JSTabbedPane</pre>
 <div class="block">The panel to create a new image</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
@@ -158,6 +163,23 @@ extends javascript.swing.JSPanel</pre>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a id="fields.inherited.from.class.javascript.swing.JSTabbedPane">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;javascript.swing.JSTabbedPane</h3>
+<code>BOTTOM, CENTER, END, LEFT, RIGHT, START, TOP</code></li>
+</ul>
+</li>
+</ul>
+</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section role="region">
 <ul class="blockList">
@@ -194,10 +216,11 @@ extends javascript.swing.JSPanel</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>javascript.awt.Color</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSelectedColor()">getSelectedColor</a></span>()</code></th>
+<td class="colFirst"><code>java.lang.Object</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSelectedFilling()">getSelectedFilling</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Returns the selected color</div>
+<div class="block">Returns the selected filling (an instance of Color, Z4AbstractFiller or
+ Z4BiGradientColor)</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -208,6 +231,13 @@ extends javascript.swing.JSPanel</pre>
 </td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.javascript.swing.JSTabbedPane">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;javascript.swing.JSTabbedPane</h3>
+<code>addTab, getTabPlacement, setAlign, setTabPlacement</code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.javascript.swing.JSPanel">
 <!--   -->
@@ -278,17 +308,19 @@ extends javascript.swing.JSPanel</pre>
 </dl>
 </li>
 </ul>
-<a id="getSelectedColor()">
+<a id="getSelectedFilling()">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>getSelectedColor</h4>
-<pre class="methodSignature">public&nbsp;javascript.awt.Color&nbsp;getSelectedColor()</pre>
-<div class="block">Returns the selected color</div>
+<h4>getSelectedFilling</h4>
+<pre class="methodSignature">public&nbsp;java.lang.Object&nbsp;getSelectedFilling()</pre>
+<div class="block">Returns the selected filling (an instance of Color, Z4AbstractFiller or
+ Z4BiGradientColor)</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>The selected color</dd>
+<dd>The selected filling (an instance of Color, Z4AbstractFiller or
+ Z4BiGradientColor)</dd>
 </dl>
 </li>
 </ul>
@@ -348,7 +380,7 @@ extends javascript.swing.JSPanel</pre>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>

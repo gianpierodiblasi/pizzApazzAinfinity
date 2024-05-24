@@ -54,24 +54,28 @@ public class Z4FillingPanel extends JSPanel {
    */
   public Z4FillingPanel() {
     super();
-    this.setLayout(new GridBagLayout());
+    this.setLayout(new BorderLayout(0, 0));
     this.cssAddClass("z4fillingpanel");
 
     JSPanel panelRadio = new JSPanel();
-    this.addComponent(panelRadio, 0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    this.add(panelRadio, BorderLayout.NORTH);
+
+    JSPanel panelCenter = new JSPanel();
+    this.add(panelCenter, BorderLayout.CENTER);
 
     JSPanel panelFiller = new JSPanel();
     CardLayout cardFiller = new CardLayout(0, 0);
     panelFiller.setLayout(cardFiller);
-    this.addComponent(panelFiller, 0, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    panelFiller.getStyle().display = "none";
+    panelCenter.add(panelFiller, null);
 
-    JSComponent hline = this.addHLine(0, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL);
-    hline.getStyle().visibility = "hidden";
+    JSComponent vline = this.addVLine(panelCenter);
+    vline.getStyle().display = "none";
 
     JSPanel panelColor = new JSPanel();
     CardLayout cardColor = new CardLayout(0, 0);
     panelColor.setLayout(cardColor);
-    this.addComponent(panelColor, 0, 3, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    panelCenter.add(panelColor, null);
 
     JSPanel flatPanel = this.cardColorPanels.$get(0);
     flatPanel.setLayout(new BorderLayout(5, 0));
@@ -131,7 +135,10 @@ public class Z4FillingPanel extends JSPanel {
         switch (card) {
           case "FLAT":
             cardColor.show(panelColor, "FLAT");
-            hline.getStyle().visibility = "hidden";
+            
+            panelFiller.getStyle().display = "none";
+            vline.getStyle().display = "none";
+            panelColor.getStyle().display = "block";
             break;
           case "LINEAR":
           case "VERTEX":
@@ -140,16 +147,26 @@ public class Z4FillingPanel extends JSPanel {
           case "BEZIER":
           case "SINUSOIDAL":
             cardColor.show(panelColor, "GRADIENT");
-            hline.getStyle().visibility = "visible";
+            
+            panelFiller.getStyle().display = "block";
+            vline.getStyle().display = "block";
+            panelColor.getStyle().display = "block";
+            
             ((Z4AbstractFillerPanel) this.selectedFillerPanel).drawPreview(false);
             break;
           case "TEXTURE":
             cardColor.show(panelColor, "NONE");
-            hline.getStyle().visibility = "hidden";
+            
+            panelFiller.getStyle().display = "block";
+            vline.getStyle().display = "none";
+            panelColor.getStyle().display = "none";
             break;
           case "BIGRADIENT":
             cardColor.show(panelColor, "BIGRADIENT");
-            hline.getStyle().visibility = "hidden";
+            
+            panelFiller.getStyle().display = "none";
+            vline.getStyle().display = "none";
+            panelColor.getStyle().display = "block";
             break;
         }
       });
@@ -195,27 +212,12 @@ public class Z4FillingPanel extends JSPanel {
     });
   }
 
-  private void addComponent(JSComponent component, int gridx, int gridy, int gridwidth, int gridheight, int weightx, int weighty, int anchor, int fill, Insets insets) {
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = gridy;
-    constraints.gridwidth = gridwidth;
-    constraints.gridheight = gridheight;
-    constraints.weightx = weightx;
-    constraints.weighty = weighty;
-    constraints.anchor = anchor;
-    constraints.fill = fill;
-    if ($exists(insets)) {
-      constraints.insets = insets;
-    }
-    this.add(component, constraints);
-  }
-
-  private JSComponent addHLine(int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
+  private JSComponent addVLine(JSPanel panel) {
     JSComponent div = new JSComponent(document.createElement("div"));
-    div.getStyle().height = "1px";
-    div.getStyle().background = "var(--main-action-bgcolor";
-    this.addComponent(div, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, new Insets(2, 1, 2, 1));
+    div.getStyle().width = "1px";
+    div.getStyle().height = "100%";
+    div.getStyle().background = "var(--main-action-bgcolor)";
+    panel.add(div, null);
     return div;
   }
 
