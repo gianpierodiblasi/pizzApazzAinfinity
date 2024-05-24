@@ -33,8 +33,8 @@ public class Z4NewImagePanel extends JSTabbedPane {
   public Z4NewImagePanel() {
     super();
     this.cssAddClass("z4newimagepanel");
-    this.getStyle().minWidth = "46rem";
-    this.getStyle().minHeight = "49rem";
+    this.getStyle().minWidth = "58rem";
+    this.getStyle().minHeight = "46rem";
 
     JSPanel panel = new JSPanel();
     panel.setLayout(new GridBagLayout());

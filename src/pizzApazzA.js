@@ -42,5 +42,7 @@ window.onload = event => {
     SwingJS.instance().mainActionBGColor(color).build();
   }
 
+  SwingJS.instance().fontSize(12).build();
+  
   new Z4Frame();
 };

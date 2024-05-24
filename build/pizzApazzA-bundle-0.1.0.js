@@ -42,6 +42,8 @@ window.onload = event => {
     SwingJS.instance().mainActionBGColor(color).build();
   }
 
+  SwingJS.instance().fontSize(12).build();
+  
   new Z4Frame();
 };
 /**
@@ -4832,23 +4834,22 @@ class Z4FillingPanel extends JSPanel {
    */
   constructor() {
     super();
-    this.setLayout(new BorderLayout(0, 0));
+    this.setLayout(new GridBagLayout());
     this.cssAddClass("z4fillingpanel");
     let panelRadio = new JSPanel();
-    this.add(panelRadio, BorderLayout.NORTH);
-    let panelCenter = new JSPanel();
-    this.add(panelCenter, BorderLayout.CENTER);
+    panelRadio.setLayout(new BoxLayout(panelRadio, BoxLayout.Y_AXIS));
+    this.addComponent(panelRadio, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, 0, null);
+    this.addVLine(1);
+    let panelColor = new JSPanel();
+    let cardColor = new CardLayout(0, 0);
+    panelColor.setLayout(cardColor);
+    this.addComponent(panelColor, 2, GridBagConstraints.NORTH, GridBagConstraints.NONE, 1, new Insets(5, 0, 0, 0));
+    this.addVLine(3);
     let panelFiller = new JSPanel();
     let cardFiller = new CardLayout(0, 0);
     panelFiller.setLayout(cardFiller);
     panelFiller.getStyle().display = "none";
-    panelCenter.add(panelFiller, null);
-    let vline = this.addVLine(panelCenter);
-    vline.getStyle().display = "none";
-    let panelColor = new JSPanel();
-    let cardColor = new CardLayout(0, 0);
-    panelColor.setLayout(cardColor);
-    panelCenter.add(panelColor, null);
+    this.addComponent(panelFiller, 4, GridBagConstraints.NORTH, GridBagConstraints.NONE, 1, null);
     let flatPanel = this.cardColorPanels[0];
     flatPanel.setLayout(new BorderLayout(5, 0));
     let label = new JSLabel();
@@ -4901,7 +4902,6 @@ class Z4FillingPanel extends JSPanel {
           case "FLAT":
             cardColor.show(panelColor, "FLAT");
             panelFiller.getStyle().display = "none";
-            vline.getStyle().display = "none";
             panelColor.getStyle().display = "block";
             break;
           case "LINEAR":
@@ -4912,20 +4912,17 @@ class Z4FillingPanel extends JSPanel {
           case "SINUSOIDAL":
             cardColor.show(panelColor, "GRADIENT");
             panelFiller.getStyle().display = "block";
-            vline.getStyle().display = "block";
             panelColor.getStyle().display = "block";
             (this.selectedFillerPanel).drawPreview(false);
             break;
           case "TEXTURE":
             cardColor.show(panelColor, "NONE");
             panelFiller.getStyle().display = "block";
-            vline.getStyle().display = "none";
             panelColor.getStyle().display = "none";
             break;
           case "BIGRADIENT":
             cardColor.show(panelColor, "BIGRADIENT");
             panelFiller.getStyle().display = "none";
-            vline.getStyle().display = "none";
             panelColor.getStyle().display = "block";
             break;
         }
@@ -4968,13 +4965,27 @@ class Z4FillingPanel extends JSPanel {
     });
   }
 
-   addVLine(panel) {
+   addVLine(gridx) {
     let div = new JSComponent(document.createElement("div"));
     div.getStyle().width = "1px";
-    div.getStyle().height = "100%";
     div.getStyle().background = "var(--main-action-bgcolor)";
-    panel.add(div, null);
-    return div;
+    this.addComponent(div, gridx, GridBagConstraints.NORTH, GridBagConstraints.VERTICAL, 0, new Insets(1, 3, 1, 3));
+  }
+
+   addComponent(component, gridx, anchor, fill, weightx, insets) {
+    let constraints = new GridBagConstraints();
+    constraints.gridx = gridx;
+    constraints.gridy = 0;
+    constraints.gridwidth = 1;
+    constraints.gridheight = 1;
+    constraints.anchor = anchor;
+    constraints.fill = fill;
+    constraints.weightx = weightx;
+    constraints.weighty = 1;
+    if (insets) {
+      constraints.insets = insets;
+    }
+    this.add(component, constraints);
   }
 
   /**
@@ -5067,8 +5078,8 @@ class Z4NewImagePanel extends JSTabbedPane {
   constructor() {
     super();
     this.cssAddClass("z4newimagepanel");
-    this.getStyle().minWidth = "46rem";
-    this.getStyle().minHeight = "49rem";
+    this.getStyle().minWidth = "58rem";
+    this.getStyle().minHeight = "46rem";
     let panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
     this.addTab(Z4Translations.DIMENSION, panel);

@@ -1,8 +1,8 @@
 package pizzapazza.ui.panel;
 
-import static def.dom.Globals.document;
 import def.js.Array;
 import javascript.awt.BorderLayout;
+import javascript.awt.BoxLayout;
 import javascript.awt.CardLayout;
 import javascript.awt.Color;
 import javascript.awt.GridBagConstraints;
@@ -30,6 +30,7 @@ import pizzapazza.ui.panel.filler.Z4VertexBasedFillerPanel;
 import pizzapazza.util.Z4EmptyImageProducer;
 import pizzapazza.util.Z4Translations;
 import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.document;
 
 /**
  * The panel to manage a filling
@@ -54,28 +55,27 @@ public class Z4FillingPanel extends JSPanel {
    */
   public Z4FillingPanel() {
     super();
-    this.setLayout(new BorderLayout(0, 0));
+    this.setLayout(new GridBagLayout());
     this.cssAddClass("z4fillingpanel");
 
     JSPanel panelRadio = new JSPanel();
-    this.add(panelRadio, BorderLayout.NORTH);
+    panelRadio.setLayout(new BoxLayout(panelRadio, BoxLayout.Y_AXIS));
+    this.addComponent(panelRadio, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, 0, null);
 
-    JSPanel panelCenter = new JSPanel();
-    this.add(panelCenter, BorderLayout.CENTER);
+    this.addVLine(1);
+
+    JSPanel panelColor = new JSPanel();
+    CardLayout cardColor = new CardLayout(0, 0);
+    panelColor.setLayout(cardColor);
+    this.addComponent(panelColor, 2, GridBagConstraints.NORTH, GridBagConstraints.NONE, 1, new Insets(5, 0, 0, 0));
+
+    this.addVLine(3);
 
     JSPanel panelFiller = new JSPanel();
     CardLayout cardFiller = new CardLayout(0, 0);
     panelFiller.setLayout(cardFiller);
     panelFiller.getStyle().display = "none";
-    panelCenter.add(panelFiller, null);
-
-    JSComponent vline = this.addVLine(panelCenter);
-    vline.getStyle().display = "none";
-
-    JSPanel panelColor = new JSPanel();
-    CardLayout cardColor = new CardLayout(0, 0);
-    panelColor.setLayout(cardColor);
-    panelCenter.add(panelColor, null);
+    this.addComponent(panelFiller, 4, GridBagConstraints.NORTH, GridBagConstraints.NONE, 1, null);
 
     JSPanel flatPanel = this.cardColorPanels.$get(0);
     flatPanel.setLayout(new BorderLayout(5, 0));
@@ -135,9 +135,8 @@ public class Z4FillingPanel extends JSPanel {
         switch (card) {
           case "FLAT":
             cardColor.show(panelColor, "FLAT");
-            
+
             panelFiller.getStyle().display = "none";
-            vline.getStyle().display = "none";
             panelColor.getStyle().display = "block";
             break;
           case "LINEAR":
@@ -147,25 +146,22 @@ public class Z4FillingPanel extends JSPanel {
           case "BEZIER":
           case "SINUSOIDAL":
             cardColor.show(panelColor, "GRADIENT");
-            
+
             panelFiller.getStyle().display = "block";
-            vline.getStyle().display = "block";
             panelColor.getStyle().display = "block";
-            
+
             ((Z4AbstractFillerPanel) this.selectedFillerPanel).drawPreview(false);
             break;
           case "TEXTURE":
             cardColor.show(panelColor, "NONE");
-            
+
             panelFiller.getStyle().display = "block";
-            vline.getStyle().display = "none";
             panelColor.getStyle().display = "none";
             break;
           case "BIGRADIENT":
             cardColor.show(panelColor, "BIGRADIENT");
-            
+
             panelFiller.getStyle().display = "none";
-            vline.getStyle().display = "none";
             panelColor.getStyle().display = "block";
             break;
         }
@@ -212,13 +208,27 @@ public class Z4FillingPanel extends JSPanel {
     });
   }
 
-  private JSComponent addVLine(JSPanel panel) {
+  private void addVLine(int gridx) {
     JSComponent div = new JSComponent(document.createElement("div"));
     div.getStyle().width = "1px";
-    div.getStyle().height = "100%";
     div.getStyle().background = "var(--main-action-bgcolor)";
-    panel.add(div, null);
-    return div;
+    this.addComponent(div, gridx, GridBagConstraints.NORTH, GridBagConstraints.VERTICAL, 0, new Insets(1, 3, 1, 3));
+  }
+
+  private void addComponent(JSComponent component, int gridx, int anchor, int fill, double weightx, Insets insets) {
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.gridx = gridx;
+    constraints.gridy = 0;
+    constraints.gridwidth = 1;
+    constraints.gridheight = 1;
+    constraints.anchor = anchor;
+    constraints.fill = fill;
+    constraints.weightx = weightx;
+    constraints.weighty = 1;
+    if ($exists(insets)) {
+      constraints.insets = insets;
+    }
+    this.add(component, constraints);
   }
 
   /**
