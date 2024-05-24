@@ -6,6 +6,10 @@
   background-image: url(../image/chessboard.png);
 }
 
+.z4abstractfillerpanel div label img {
+  width: 25px;
+}
+
 .z4abstractfillerpanel.z4linearfillerpanel div label:nth-child(1) img {
   content: url(../image/filler/linear_stop.png);
 }

@@ -4969,7 +4969,7 @@ class Z4FillingPanel extends JSPanel {
     let div = new JSComponent(document.createElement("div"));
     div.getStyle().width = "1px";
     div.getStyle().background = "var(--main-action-bgcolor)";
-    this.addComponent(div, gridx, GridBagConstraints.NORTH, GridBagConstraints.VERTICAL, 0, new Insets(1, 3, 1, 3));
+    this.addComponent(div, gridx, GridBagConstraints.NORTH, GridBagConstraints.VERTICAL, 0, new Insets(1, 5, 1, 5));
   }
 
    addComponent(component, gridx, anchor, fill, weightx, insets) {
@@ -5078,8 +5078,8 @@ class Z4NewImagePanel extends JSTabbedPane {
   constructor() {
     super();
     this.cssAddClass("z4newimagepanel");
-    this.getStyle().minWidth = "58rem";
-    this.getStyle().minHeight = "46rem";
+    this.getStyle().minWidth = "60rem";
+    this.getStyle().minHeight = "44rem";
     let panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
     this.addTab(Z4Translations.DIMENSION, panel);

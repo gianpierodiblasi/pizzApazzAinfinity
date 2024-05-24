@@ -161,7 +161,7 @@ class Z4FillingPanel extends JSPanel {
     let div = new JSComponent(document.createElement("div"));
     div.getStyle().width = "1px";
     div.getStyle().background = "var(--main-action-bgcolor)";
-    this.addComponent(div, gridx, GridBagConstraints.NORTH, GridBagConstraints.VERTICAL, 0, new Insets(1, 3, 1, 3));
+    this.addComponent(div, gridx, GridBagConstraints.NORTH, GridBagConstraints.VERTICAL, 0, new Insets(1, 5, 1, 5));
   }
 
    addComponent(component, gridx, anchor, fill, weightx, insets) {
