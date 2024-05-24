@@ -2921,7 +2921,7 @@ class Z4AbstractFillerPanel extends JSPanel {
     this.addComponent(this.preview, 0, 1, 2, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
     this.addLabel("y", 2, 2, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE).cssAddClass("jslabel-vertical");
     this.ySpinner.cssAddClass("jsspinner-vertical");
-    this.ySpinner.cssAddClass("jsspinner_w_4rem");
+    this.ySpinner.cssAddClass("jsspinner_h_4rem");
     this.ySpinner.setModel(new SpinnerNumberModel(0, 0, this.height, 1));
     this.ySpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
     this.ySpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
