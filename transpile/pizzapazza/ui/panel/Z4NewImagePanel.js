@@ -17,21 +17,30 @@ class Z4NewImagePanel extends JSTabbedPane {
 
    fillingPanel = new Z4FillingPanel();
 
+  /**
+   * Creates the object
+   */
   constructor() {
     super();
     this.cssAddClass("z4newimagepanel");
-    this.getStyle().minWidth = "45rem";
+    this.getStyle().minWidth = "46rem";
+    this.getStyle().minHeight = "49rem";
     let panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
     this.addTab(Z4Translations.DIMENSION, panel);
-    this.addLabel(panel, Z4Translations.WIDTH + " (px)", 0, 0, 1, 0);
+    this.addLabel(panel, Z4Translations.WIDTH + " (px)", 0, 0, 1, 5);
     this.addSpinner(panel, this.width, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 0, 1);
-    this.addLabel(panel, Z4Translations.HEIGHT + " (px)", 1, 0, 1, 0);
+    this.addLabel(panel, Z4Translations.HEIGHT + " (px)", 1, 0, 1, 5);
     this.addSpinner(panel, this.height, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 1, 1);
-    this.addLabel(panel, Z4Translations.RESOLUTION + " (dpi)", 2, 0, 1, 0);
+    this.addLabel(panel, Z4Translations.RESOLUTION + " (dpi)", 2, 0, 1, 5);
     this.addSpinner(panel, this.resolution, Z4Constants.DEFAULT_DPI, Z4Constants.MAX_DPI, 2, 1);
     this.addDimension(panel, this.dimensionMM, 3);
     this.addDimension(panel, this.dimensionIN, 4);
+    let constraints = new GridBagConstraints();
+    constraints.gridx = 0;
+    constraints.gridy = 5;
+    constraints.weighty = 1;
+    panel.add(new JSLabel(), constraints);
     this.addTab(Z4Translations.FILLING, this.fillingPanel);
     this.setDimensions();
   }
@@ -79,6 +88,7 @@ class Z4NewImagePanel extends JSTabbedPane {
     let dimHIN = h / res;
     this.dimensionMM.setText(new Number(dimWIN * 25.4).toFixed(2) + " \u2716 " + new Number(dimHIN * 25.4).toFixed(2) + " mm");
     this.dimensionIN.setText(new Number(dimWIN).toFixed(2) + " \u2716 " + new Number(dimHIN).toFixed(2) + " inch");
+    this.fillingPanel.setSize(w, h);
   }
 
   /**
@@ -98,6 +108,6 @@ class Z4NewImagePanel extends JSTabbedPane {
    * Z4BiGradientColor)
    */
    getSelectedFilling() {
-    return null;
+    return this.fillingPanel.getSelectedFilling();
   }
 }
