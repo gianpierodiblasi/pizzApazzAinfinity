@@ -68,16 +68,12 @@ class Z4AbstractFillerPanel extends JSPanel {
     this.preview.addEventListener("mousemove", event => this.onMouse(event, "move"));
     this.preview.addEventListener("mouseup", event => this.onMouse(event, "up"));
     this.addComponent(this.preview, 0, 1, 2, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
-    this.addLabel("y", 2, 2, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE);
-    this.getChilStyleByQuery("label").writingMode = "vertical-lr";
-    this.getChilStyleByQuery("label").transform = "rotate(180deg)";
-    this.ySpinner.cssAddClass("yspinner");
+    this.addLabel("y", 2, 2, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE).cssAddClass("jslabel-vertical");
+    this.ySpinner.cssAddClass("jsspinner-vertical");
+    this.ySpinner.cssAddClass("jsspinner_w_4rem");
     this.ySpinner.setModel(new SpinnerNumberModel(0, 0, this.height, 1));
     this.ySpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
     this.ySpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
-    this.ySpinner.getStyle().minHeight = "4rem";
-    this.ySpinner.getChilStyleByQuery("input[type=number]").minHeight = "3.5rem";
-    this.ySpinner.getChilStyleByQuery("input[type=number]").height = "3.5rem";
     this.ySpinner.addChangeListener(event => this.onChange(true, this.ySpinner.getValueIsAdjusting(), this.ySpinner, this.ySlider, false));
     this.addComponent(this.ySpinner, 2, 1, 1, 1, 0, 1, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, null);
     this.ySlider.setMaximum(this.height);
@@ -90,9 +86,7 @@ class Z4AbstractFillerPanel extends JSPanel {
     this.addHLine(0, 3, 4, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL);
     this.addLabel("x", 0, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
     this.xSpinner.setModel(new SpinnerNumberModel(0, 0, this.width, 1));
-    this.xSpinner.getStyle().minWidth = "4rem";
-    this.xSpinner.getChilStyleByQuery("input[type=number]").minWidth = "3.5rem";
-    this.xSpinner.getChilStyleByQuery("input[type=number]").width = "3.5rem";
+    this.xSpinner.cssAddClass("jsspinner_w_4rem");
     this.xSpinner.addChangeListener(event => this.onChange(true, this.xSpinner.getValueIsAdjusting(), this.xSpinner, this.xSlider, true));
     this.addComponent(this.xSpinner, 1, 4, 3, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
     this.xSlider.setMaximum(this.width);
@@ -142,11 +136,13 @@ class Z4AbstractFillerPanel extends JSPanel {
    * @param gridheight The grid height
    * @param anchor The anchor
    * @param fill The fill
+   * @return The label
    */
    addLabel(text, gridx, gridy, gridwidth, gridheight, anchor, fill) {
     let label = new JSLabel();
     label.setText(text);
     this.addComponent(label, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, null);
+    return label;
   }
 
   /**

@@ -49,12 +49,10 @@ class Z4ExportToFilePanel extends JSPanel {
     constraints.fill = GridBagConstraints.HORIZONTAL;
     constraints.weightx = 1;
     this.add(this.qualitySlider, constraints);
+    this.qualitySpinner.cssAddClass("jsspinner_w_3rem");
     this.qualitySpinner.setEnabled(false);
     this.qualitySpinner.setModel(new SpinnerNumberModel(100, 0, 100, 1));
     this.qualitySpinner.addChangeListener(event => this.qualitySlider.setValue(this.qualitySpinner.getValue()));
-    this.qualitySpinner.getStyle().minWidth = "3rem";
-    this.qualitySpinner.getChilStyleByQuery("input[type=number]").minWidth = "2.5rem";
-    this.qualitySpinner.getChilStyleByQuery("input[type=number]").width = "2.5rem";
     constraints = new GridBagConstraints();
     constraints.gridx = 1;
     constraints.gridy = 3;

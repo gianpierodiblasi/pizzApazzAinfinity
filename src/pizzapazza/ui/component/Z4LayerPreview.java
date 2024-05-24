@@ -126,9 +126,7 @@ public class Z4LayerPreview extends JSComponent {
 
     this.addLabel(panel, Z4Translations.OFFSET_X, 0, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
 
-    this.offsetXSpinner.getStyle().minWidth = "4rem";
-    this.offsetXSpinner.getChilStyleByQuery("input[type=number]").minWidth = "3.5rem";
-    this.offsetXSpinner.getChilStyleByQuery("input[type=number]").width = "3.5rem";
+    this.offsetXSpinner.cssAddClass("jsspinner_w_4rem");
     this.offsetXSpinner.addChangeListener(event -> this.onChange(true, this.offsetXSpinner.getValueIsAdjusting(), this.offsetXSpinner, this.offsetXSlider));
     this.addComponent(panel, this.offsetXSpinner, 1, 2, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
 
@@ -138,9 +136,7 @@ public class Z4LayerPreview extends JSComponent {
 
     this.addLabel(panel, Translations.JSColorChooser_OPACITY, 0, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
 
-    this.opacitySpinner.getStyle().minWidth = "4rem";
-    this.opacitySpinner.getChilStyleByQuery("input[type=number]").minWidth = "3.5rem";
-    this.opacitySpinner.getChilStyleByQuery("input[type=number]").width = "3.5rem";
+    this.opacitySpinner.cssAddClass("jsspinner_w_4rem");
     this.opacitySpinner.addChangeListener(event -> this.onChange(true, this.opacitySpinner.getValueIsAdjusting(), this.opacitySpinner, this.opacitySlider));
     this.addComponent(panel, this.opacitySpinner, 1, 4, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
 
@@ -149,16 +145,12 @@ public class Z4LayerPreview extends JSComponent {
     this.addComponent(panel, this.opacitySlider, 0, 5, 2, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
 
     this.addVLine(panel, 2, 2, 1, 5, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL);
-    this.addLabel(panel, Z4Translations.OFFSET_Y, 3, 5, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE);
-    panel.getChilStyleByQuery("*:nth-child(10)").writingMode = "vertical-lr";
-    panel.getChilStyleByQuery("*:nth-child(10)").transform = "rotate(180deg)";
-
-    this.offsetYSpinner.cssAddClass("offsetyspinner");
+    this.addLabel(panel, Z4Translations.OFFSET_Y, 3, 5, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE).cssAddClass("jslabel-vertical");
+    
+    this.offsetYSpinner.cssAddClass("jsspinner-vertical");
+    this.offsetYSpinner.cssAddClass("jsspinner_h_4rem");
     this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
     this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
-    this.offsetYSpinner.getStyle().minHeight = "4rem";
-    this.offsetYSpinner.getChilStyleByQuery("input[type=number]").minHeight = "3.5rem";
-    this.offsetYSpinner.getChilStyleByQuery("input[type=number]").height = "3.5rem";
     this.offsetYSpinner.addChangeListener(event -> this.onChange(true, this.offsetYSpinner.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
     this.addComponent(panel, this.offsetYSpinner, 3, 2, 1, 3, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.NONE, null);
 
@@ -197,10 +189,11 @@ public class Z4LayerPreview extends JSComponent {
     this.appendChild(this.editor);
   }
 
-  private void addLabel(JSPanel panel, String text, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
+  private JSLabel addLabel(JSPanel panel, String text, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
     JSLabel label = new JSLabel();
     label.setText(text);
     this.addComponent(panel, label, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, null);
+    return label;
   }
 
   private void addVLine(JSPanel panel, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {

@@ -1,3 +1,77 @@
+/* general */
+.jsbutton.jsbutton-vertical:hover, .jsbutton.jsbutton-vertical:focus {
+  filter: drop-shadow(-.15rem -.15rem .15rem var(--main-action-bgcolor));
+}
+.jsbutton.jsbutton-vertical:active {
+  filter: saturate(0.5) drop-shadow(-.15rem -.15rem .15rem var(--main-action-bgcolor));
+}
+@supports (-moz-appearance:none) {
+  .jsbutton.jsbutton-vertical:hover, .jsbutton.jsbutton-vertical:focus {
+    filter: drop-shadow(.15rem .15rem .15rem var(--main-action-bgcolor));
+  }
+  .jsbutton.jsbutton-vertical:active {
+    filter: saturate(0.5) drop-shadow(.15rem .15rem .15rem var(--main-action-bgcolor));
+  }
+}
+.jsbutton.jsbutton-vertical:disabled {
+  filter: opacity(0.5);
+  cursor: default;
+}
+
+.jslabel.jslabel-vertical {
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+}
+
+.jspanel.jspanel-vertical {
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+}
+
+.jsspinner.jsspinner_w_4rem {
+  min-width: 4rem;
+
+}
+.jsspinner.jsspinner_w_4rem input[type=number] {
+  min-width: 3.5rem;
+  width: 3.5rem;
+}
+
+.jsspinner.jsspinner_w_3rem {
+  min-width: 3rem;
+
+}
+.jsspinner.jsspinner_w_3rem input[type=number] {
+  min-width: 2.5rem;
+  width: 2.5rem;
+}
+
+.jsspinner.jsspinner_h_4rem {
+  min-height: 4rem;
+
+}
+.jsspinner.jsspinner_h_4rem input[type=number] {
+  min-height: 3.5rem;
+  height: 3.5rem;
+}
+
+.jsspinner.jsspinner-vertical {
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  min-width: 0rem;
+  grid-template:
+    "num down" 1fr
+    "num up" 1fr /
+    1fr auto
+}
+.jsspinner.jsspinner-vertical:has(input:focus), .jsspinner.jsspinner-vertical:hover:not([disabled]) {
+  box-shadow: -.15rem -.15rem .15rem var(--main-action-bgcolor);
+}
+.jsspinner.jsspinner-vertical input[type=number] {
+  min-width: 2.2rem;
+  width: 2.2rem;
+}
+
 /* frame */
 .z4frame {
 }
@@ -7,7 +81,7 @@
 }
 
 .z4fillingpanel {
-  
+
 }
 
 .z4newimagepanel {
@@ -18,7 +92,7 @@
 
 /* panel/color */
 
-.z4gradientcolorpanel canvas {
+.z4bigradientcolorpanel canvas, .z4gradientcolorpanel canvas {
   border: 1px solid var(--main-action-bgcolor);
   background-image: url(../image/chessboard.png);
 }
@@ -43,23 +117,6 @@
 }
 .z4abstractfillerpanel img {
   background-image: url(../image/chessboard.png);
-}
-
-.z4abstractfillerpanel .yspinner {
-  writing-mode: vertical-lr;
-  transform: rotate(180deg);
-  min-width: 0rem;
-  grid-template:
-    "num down" 1fr
-    "num up" 1fr /
-    1fr auto
-}
-.z4abstractfillerpanel .yspinner:has(input:focus), .z4abstractfillerpanel .yspinner:hover:not([disabled]) {
-    box-shadow: -.15rem -.15rem .15rem var(--main-action-bgcolor);
-}
-.z4abstractfillerpanel .yspinner input[type=number] {
-  min-width: 2.2rem;
-  width: 2.2rem;
 }
 
 .z4abstractfillerpanel.z4linearfillerpanel div label:nth-child(1) img {
@@ -160,45 +217,7 @@
 .z4abstractfillerpanel.z4texturefillerpanel div label:nth-child(2) img {
   content: url(../image/filler/texture_symmetric.png);
 }
-.z4bigradientcolorpanel canvas {
-  border: 1px solid var(--main-action-bgcolor);
-  background-image: url(../image/chessboard.png);
-}
-.z4bigradientcolorpanel .bispinner {
-  writing-mode: vertical-lr;
-  transform: rotate(180deg);
-  min-width: 0rem;
-  grid-template:
-    "num down" 1fr
-    "num up" 1fr /
-    1fr auto
-}
-.z4bigradientcolorpanel .bispinner:has(input:focus), .z4bigradientcolorpanel .bispinner:hover:not([disabled]) {
-    box-shadow: -.15rem -.15rem .15rem var(--main-action-bgcolor);
-}
-.z4bigradientcolorpanel .bispinner input[type=number] {
-  min-width: 2.2rem;
-  width: 2.2rem;
-}
-
-.z4bigradientcolorpanel .bibutton:hover, .z4bigradientcolorpanel .bibutton:focus {
-  filter: drop-shadow(-.15rem -.15rem .15rem var(--main-action-bgcolor));
-}
-.z4bigradientcolorpanel .bibutton:active {
-  filter: saturate(0.5) drop-shadow(-.15rem -.15rem .15rem var(--main-action-bgcolor));
-}
-@supports (-moz-appearance:none) {
-  .z4bigradientcolorpanel .bibutton:hover, .z4bigradientcolorpanel .bibutton:focus {
-    filter: drop-shadow(.15rem .15rem .15rem var(--main-action-bgcolor));
-  }
-  .z4bigradientcolorpanel .bibutton:active {
-    filter: saturate(0.5) drop-shadow(.15rem .15rem .15rem var(--main-action-bgcolor));
-  }
-}
-.z4bigradientcolorpanel .bibutton:disabled {
-  filter: opacity(0.5);
-  cursor: default;
-}.z4canvas {
+.z4canvas {
   overflow: scroll;
   display: grid;
   grid-template: "c";
@@ -289,24 +308,6 @@
   top: 0px;
   left: 0px;
 }
-
-.z4layerpreview .z4layerpreview-editor .offsetyspinner {
-  writing-mode: vertical-lr;
-  transform: rotate(180deg);
-  min-width: 0rem;
-  grid-template:
-    "num down" 1fr
-    "num up" 1fr /
-    1fr auto
-}
-.z4layerpreview .z4layerpreview-editor .offsetyspinner:has(input:focus), .z4layerpreview .z4layerpreview-editor .offsetyspinner:hover:not([disabled]) {
-    box-shadow: -.15rem -.15rem .15rem var(--main-action-bgcolor);
-}
-.z4layerpreview .z4layerpreview-editor .offsetyspinner input[type=number] {
-  min-width: 2.2rem;
-  width: 2.2rem;
-}
-
 .z4layerpreview .z4layerpreview-editor[offset=true], .z4layerpreview .z4layerpreview-editor[offset=true] * {
   background: transparent;
 }.z4ribbonhelppanel {

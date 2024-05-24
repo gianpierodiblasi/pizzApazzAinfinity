@@ -60,10 +60,8 @@ class Z4GradientColorPanel extends JSPanel {
     });
     this.addComponent(this.delete, 2, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
     this.addLabel(Z4Translations.RIPPLE, 0, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    this.rippleSpinner.cssAddClass("jsspinner_w_4rem");
     this.rippleSpinner.setModel(new SpinnerNumberModel(0, 0, 100, 1));
-    this.rippleSpinner.getStyle().minWidth = "4rem";
-    this.rippleSpinner.getChilStyleByQuery("input[type=number]").minWidth = "3.5rem";
-    this.rippleSpinner.getChilStyleByQuery("input[type=number]").width = "3.5rem";
     this.rippleSpinner.addChangeListener(event => this.onChange(true, this.rippleSpinner.getValueIsAdjusting()));
     this.addComponent(this.rippleSpinner, 1, 3, 2, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5, 0, 0, 0));
     this.rippleSlider.setValue(0);

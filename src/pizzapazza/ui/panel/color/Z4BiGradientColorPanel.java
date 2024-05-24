@@ -64,9 +64,7 @@ public class Z4BiGradientColorPanel extends JSPanel {
     this.addComponent(new JSLabel(), 0, 0, 3, 1, 0, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
     this.addLabel(Z4Translations.SPACE, 1, 1, 2, 1, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE);
     
-    JSLabel label = this.addLabel(Z4Translations.TIME, 0, 2, 3, 2, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE);
-    label.getStyle().writingMode = "vertical-lr";
-    label.getStyle().transform = "rotate(180deg)";
+    this.addLabel(Z4Translations.TIME, 0, 2, 3, 2, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE).cssAddClass("jslabel-vertical");
     
     this.preview.setProperty("width", "" + Z4BiGradientColorPanel.WIDTH);
     this.preview.setProperty("height", "" + Z4BiGradientColorPanel.HEIGHT);
@@ -75,17 +73,13 @@ public class Z4BiGradientColorPanel extends JSPanel {
     this.preview.addEventListener("mouseup", event -> this.onMouse((MouseEvent) event, "up"));
     this.addComponent(this.preview, 1, 2, 2, 2, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
 
-    label = this.addLabel(Z4Translations.RIPPLE, 3, 3, 1, 2, GridBagConstraints.SOUTH, GridBagConstraints.NONE);
-    label.getStyle().writingMode = "vertical-lr";
-    label.getStyle().transform = "rotate(180deg)";
+    this.addLabel(Z4Translations.RIPPLE, 3, 3, 1, 2, GridBagConstraints.SOUTH, GridBagConstraints.NONE).cssAddClass("jslabel-vertical");
 
-    this.biRippleSpinner.cssAddClass("bispinner");
+    this.biRippleSpinner.cssAddClass("jsspinner-vertical");
+    this.biRippleSpinner.cssAddClass("jsspinner_h_4rem");
     this.biRippleSpinner.setModel(new SpinnerNumberModel(0, 0, 100, 1));
     this.biRippleSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
     this.biRippleSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
-    this.biRippleSpinner.getStyle().minHeight = "4rem";
-    this.biRippleSpinner.getChilStyleByQuery("input[type=number]").minHeight = "3.5rem";
-    this.biRippleSpinner.getChilStyleByQuery("input[type=number]").height = "3.5rem";
     this.biRippleSpinner.addChangeListener(event -> this.onChange(true, this.biRippleSpinner.getValueIsAdjusting(), this.biRippleSpinner, this.biRippleSlider, true));
     this.addComponent(this.biRippleSpinner, 3, 0, 1, 3, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
 
@@ -98,12 +92,11 @@ public class Z4BiGradientColorPanel extends JSPanel {
     this.addComponent(this.biRippleSlider, 4, 0, 1, 5, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
 
     JSPanel panel = new JSPanel();
-    panel.getStyle().writingMode = "vertical-lr";
-    panel.getStyle().transform = "rotate(180deg)";
+    panel.cssAddClass("jspanel-vertical");
     this.addComponent(panel, 5, 0, 1, 5, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.BOTH, null);
 
     JSButton button = new JSButton();
-    button.cssAddClass("bibutton");
+    button.cssAddClass("jsbutton-vertical");
     button.setText(Z4Translations.MIRRORED);
     button.addActionListener(event -> {
       this.biGradientColor.mirror();
@@ -112,7 +105,7 @@ public class Z4BiGradientColorPanel extends JSPanel {
     panel.add(button, null);
 
     button = new JSButton();
-    button.cssAddClass("bibutton");
+    button.cssAddClass("jsbutton-vertical");
     button.setText(Z4Translations.INVERTED);
     button.addActionListener(event -> {
       this.biGradientColor.reverse();
@@ -120,7 +113,7 @@ public class Z4BiGradientColorPanel extends JSPanel {
     });
     panel.add(button, null);
 
-    this.biDelete.cssAddClass("bibutton");
+    this.biDelete.cssAddClass("jsbutton-vertical");
     this.biDelete.setText(Z4Translations.DELETE);
     this.biDelete.setEnabled(false);
     this.biDelete.addActionListener(event -> {
@@ -163,9 +156,7 @@ public class Z4BiGradientColorPanel extends JSPanel {
     this.addLabel(Z4Translations.RIPPLE, 0, 7, 2, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
 
     this.rippleSpinner.setModel(new SpinnerNumberModel(0, 0, 100, 1));
-    this.rippleSpinner.getStyle().minWidth = "4rem";
-    this.rippleSpinner.getChilStyleByQuery("input[type=number]").minWidth = "3.5rem";
-    this.rippleSpinner.getChilStyleByQuery("input[type=number]").width = "3.5rem";
+    this.rippleSpinner.cssAddClass("jsspinner_w_4rem");
     this.rippleSpinner.addChangeListener(event -> this.onChange(true, this.rippleSpinner.getValueIsAdjusting(), this.rippleSpinner, this.rippleSlider, false));
     this.addComponent(this.rippleSpinner, 3, 7, 3, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5, 0, 0, 0));
 
