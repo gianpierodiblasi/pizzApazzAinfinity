@@ -105,6 +105,24 @@ public class Z4StatusPanel extends JSPanel {
   }
 
   /**
+   * Sets the progress bar as indeterminate
+   *
+   * @param b true to sets the progress bar as indeterminate, false otherwise
+   */
+  public void setProgressBarIndeterminate(boolean b) {
+    this.progressBar.setIndeterminate(b);
+  }
+
+  /**
+   * Sets the progress bar string
+   *
+   * @param string The string
+   */
+  public void setProgressBarString(String string) {
+    this.progressBar.setString(string);
+  }
+
+  /**
    * Sets the zoom
    *
    * @param zoom The zoom

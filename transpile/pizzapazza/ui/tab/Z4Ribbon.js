@@ -43,5 +43,6 @@ class Z4Ribbon extends JSTabbedPane {
    */
    setStatusPanel(statusPanel) {
     this.filePanel.setStatusPanel(statusPanel);
+    this.layerPanel.setStatusPanel(statusPanel);
   }
 }

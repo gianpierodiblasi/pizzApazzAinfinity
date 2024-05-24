@@ -25,6 +25,7 @@ import simulation.js.$Apply_0_Void;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.$typeof;
 import static simulation.js.$Globals.navigator;
+import static simulation.js.$Globals.setTimeout;
 
 /**
  * The ribbon panel containing the file menus
@@ -160,15 +161,20 @@ public class Z4RibbonFilePanel extends JSPanel {
   }
 
   private void createFromColor() {
-    Z4NewImagePanel panel = new Z4NewImagePanel();
+    this.statusPanel.setProgressBarString(Z4Translations.CREATE + "...");
 
-    JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener -> {
-    }, () -> true, response -> {
-      if (response == JSOptionPane.OK_OPTION) {
-        Dimension size = panel.getSelectedSize();
-        this.canvas.create(size.width, size.height, panel.getSelectedFilling());
-      }
-    });
+    setTimeout(() -> {
+      Z4NewImagePanel panel = new Z4NewImagePanel();
+      this.statusPanel.setProgressBarString("");
+
+      JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener -> {
+      }, () -> true, response -> {
+        if (response == JSOptionPane.OK_OPTION) {
+          Dimension size = panel.getSelectedSize();
+          this.canvas.create(size.width, size.height, panel.getSelectedFilling());
+        }
+      });
+    }, 0);
   }
 
   private void createFromFile() {

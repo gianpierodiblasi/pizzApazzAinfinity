@@ -7,6 +7,8 @@ class Z4RibbonLayerPanel extends JSPanel {
 
    layersPreview = new JSPanel();
 
+   statusPanel = null;
+
    canvas = null;
 
    layerDnD = null;
@@ -60,6 +62,15 @@ class Z4RibbonLayerPanel extends JSPanel {
    */
    setCanvas(canvas) {
     this.canvas = canvas;
+  }
+
+  /**
+   * Sets the status panel
+   *
+   * @param statusPanel The status panel
+   */
+   setStatusPanel(statusPanel) {
+    this.statusPanel = statusPanel;
   }
 
    addLabel(text, gridx) {
@@ -121,14 +132,18 @@ class Z4RibbonLayerPanel extends JSPanel {
   }
 
    addFromColor() {
-    let panel = new Z4NewImagePanel();
-    JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => {
-    }, () => true, response => {
-      if (response === JSOptionPane.OK_OPTION) {
-        let size = panel.getSelectedSize();
-        this.canvas.addLayer(size.width, size.height, panel.getSelectedFilling());
-      }
-    });
+    this.statusPanel.setProgressBarString(Z4Translations.CREATE + "...");
+    setTimeout(() => {
+      let panel = new Z4NewImagePanel();
+      this.statusPanel.setProgressBarString("");
+      JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => {
+      }, () => true, response => {
+        if (response === JSOptionPane.OK_OPTION) {
+          let size = panel.getSelectedSize();
+          this.canvas.addLayer(size.width, size.height, panel.getSelectedFilling());
+        }
+      });
+    }, 0);
   }
 
    addFromFile() {

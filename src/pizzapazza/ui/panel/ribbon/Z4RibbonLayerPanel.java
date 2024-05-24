@@ -18,12 +18,14 @@ import pizzapazza.Z4Layer;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.component.Z4LayerPreview;
 import pizzapazza.ui.panel.Z4NewImagePanel;
+import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
 import simulation.dom.$DOMRect;
 import static simulation.js.$Globals.$typeof;
 import static simulation.js.$Globals.navigator;
 import static simulation.js.$Globals.parseInt;
+import static simulation.js.$Globals.setTimeout;
 
 /**
  * The ribbon panel containing the layer menus
@@ -33,6 +35,7 @@ import static simulation.js.$Globals.parseInt;
 public class Z4RibbonLayerPanel extends JSPanel {
 
   private final JSPanel layersPreview = new JSPanel();
+  private Z4StatusPanel statusPanel;
 
   private Z4Canvas canvas;
   private Z4Layer layerDnD;
@@ -92,6 +95,15 @@ public class Z4RibbonLayerPanel extends JSPanel {
     this.canvas = canvas;
   }
 
+  /**
+   * Sets the status panel
+   *
+   * @param statusPanel The status panel
+   */
+  public void setStatusPanel(Z4StatusPanel statusPanel) {
+    this.statusPanel = statusPanel;
+  }
+  
   private void addLabel(String text, int gridx) {
     JSLabel label = new JSLabel();
     label.setText(text);
@@ -155,15 +167,20 @@ public class Z4RibbonLayerPanel extends JSPanel {
   }
 
   private void addFromColor() {
-    Z4NewImagePanel panel = new Z4NewImagePanel();
+    this.statusPanel.setProgressBarString(Z4Translations.CREATE + "...");
 
-    JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener -> {
-    }, () -> true, response -> {
-      if (response == JSOptionPane.OK_OPTION) {
-        Dimension size = panel.getSelectedSize();
-        this.canvas.addLayer(size.width, size.height, panel.getSelectedFilling());
-      }
-    });
+    setTimeout(() -> {
+      Z4NewImagePanel panel = new Z4NewImagePanel();
+      this.statusPanel.setProgressBarString("");
+
+      JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener -> {
+      }, () -> true, response -> {
+        if (response == JSOptionPane.OK_OPTION) {
+          Dimension size = panel.getSelectedSize();
+          this.canvas.addLayer(size.width, size.height, panel.getSelectedFilling());
+        }
+      });
+    }, 0);
   }
 
   private void addFromFile() {
