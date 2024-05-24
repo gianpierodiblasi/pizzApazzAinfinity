@@ -126,7 +126,7 @@ class Z4RibbonLayerPanel extends JSPanel {
     }, () => true, response => {
       if (response === JSOptionPane.OK_OPTION) {
         let size = panel.getSelectedSize();
-        this.canvas.addLayer(size.width, size.height, panel.getSelectedColor());
+        this.canvas.addLayer(size.width, size.height, panel.getSelectedFilling());
       }
     });
   }

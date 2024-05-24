@@ -166,7 +166,7 @@ public class Z4RibbonFilePanel extends JSPanel {
     }, () -> true, response -> {
       if (response == JSOptionPane.OK_OPTION) {
         Dimension size = panel.getSelectedSize();
-        this.canvas.create(size.width, size.height, panel.getSelectedColor());
+        this.canvas.create(size.width, size.height, panel.getSelectedFilling());
       }
     });
   }

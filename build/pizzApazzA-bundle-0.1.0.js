@@ -4226,7 +4226,7 @@ class Z4RibbonFilePanel extends JSPanel {
     }, () => true, response => {
       if (response === JSOptionPane.OK_OPTION) {
         let size = panel.getSelectedSize();
-        this.canvas.create(size.width, size.height, panel.getSelectedColor());
+        this.canvas.create(size.width, size.height, panel.getSelectedFilling());
       }
     });
   }
@@ -4447,7 +4447,7 @@ class Z4RibbonLayerPanel extends JSPanel {
     }, () => true, response => {
       if (response === JSOptionPane.OK_OPTION) {
         let size = panel.getSelectedSize();
-        this.canvas.addLayer(size.width, size.height, panel.getSelectedColor());
+        this.canvas.addLayer(size.width, size.height, panel.getSelectedFilling());
       }
     });
   }
@@ -5037,10 +5037,6 @@ class Z4NewImagePanel extends JSPanel {
 
    dimensionIN = new JSLabel();
 
-   colorPreview = new Z4ColorPreview();
-
-   selectedColor = new Color(255, 255, 255, 255);
-
   constructor() {
     super();
     this.cssAddClass("z4newimagepanel");
@@ -5054,28 +5050,6 @@ class Z4NewImagePanel extends JSPanel {
     this.addDimension(this.dimensionMM, 3);
     this.addDimension(this.dimensionIN, 4);
     this.addLabel(Z4Translations.FILLING_COLOR, 0, 5, 3, 10);
-    this.colorPreview.setColor(this.selectedColor);
-    let constraints = new GridBagConstraints();
-    constraints.gridx = 0;
-    constraints.gridy = 6;
-    constraints.gridwidth = 2;
-    constraints.fill = GridBagConstraints.HORIZONTAL;
-    constraints.insets = new Insets(0, 5, 0, 5);
-    this.add(this.colorPreview, constraints);
-    let button = new JSButton();
-    button.setText(Z4Translations.EDIT);
-    button.addActionListener(event => {
-      JSColorChooser.showDialog(Z4Translations.FILLING_COLOR, this.selectedColor, true, null, color => {
-        this.selectedColor = color;
-        this.colorPreview.setColor(color);
-      });
-    });
-    constraints = new GridBagConstraints();
-    constraints.gridx = 2;
-    constraints.gridy = 6;
-    constraints.gridwidth = 1;
-    constraints.anchor = GridBagConstraints.WEST;
-    this.add(button, constraints);
     this.setDimensions();
   }
 
@@ -5134,12 +5108,14 @@ class Z4NewImagePanel extends JSPanel {
   }
 
   /**
-   * Returns the selected color
+   * Returns the selected filling (an instance of Color, Z4AbstractFiller or
+   * Z4BiGradientColor)
    *
-   * @return The selected color
+   * @return The selected filling (an instance of Color, Z4AbstractFiller or
+   * Z4BiGradientColor)
    */
-   getSelectedColor() {
-    return this.selectedColor;
+   getSelectedFilling() {
+    return null;
   }
 }
 /**
