@@ -12,6 +12,7 @@ import javascript.util.KeyValue;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
+import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
 
 /**
@@ -51,8 +52,6 @@ public class Z4StatusPanel extends JSPanel {
     this.add(this.zoom, constraints);
 
     this.addPipe(3);
-
-    this.progressBar.setStringPainted(true);
 
     constraints = new GridBagConstraints();
     constraints.gridx = 4;
@@ -101,6 +100,7 @@ public class Z4StatusPanel extends JSPanel {
    * @param value The progress bar value
    */
   public void setProgressBarValue(int value) {
+    this.progressBar.setStringPainted($exists(value));
     this.progressBar.setValue(value);
   }
 
@@ -119,6 +119,7 @@ public class Z4StatusPanel extends JSPanel {
    * @param string The string
    */
   public void setProgressBarString(String string) {
+    this.progressBar.setStringPainted($exists(string));
     this.progressBar.setString(string);
   }
 

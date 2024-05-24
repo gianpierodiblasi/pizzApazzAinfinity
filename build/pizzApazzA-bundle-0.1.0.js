@@ -5190,7 +5190,6 @@ class Z4StatusPanel extends JSPanel {
     constraints.gridy = 0;
     this.add(this.zoom, constraints);
     this.addPipe(3);
-    this.progressBar.setStringPainted(true);
     constraints = new GridBagConstraints();
     constraints.gridx = 4;
     constraints.gridy = 0;
@@ -5238,6 +5237,7 @@ class Z4StatusPanel extends JSPanel {
    * @param value The progress bar value
    */
    setProgressBarValue(value) {
+    this.progressBar.setStringPainted(!!(value));
     this.progressBar.setValue(value);
   }
 
@@ -5256,6 +5256,7 @@ class Z4StatusPanel extends JSPanel {
    * @param string The string
    */
    setProgressBarString(string) {
+    this.progressBar.setStringPainted(!!(string));
     this.progressBar.setString(string);
   }
 
