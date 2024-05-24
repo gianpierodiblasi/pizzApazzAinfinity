@@ -103,7 +103,7 @@ public class Z4RibbonLayerPanel extends JSPanel {
   public void setStatusPanel(Z4StatusPanel statusPanel) {
     this.statusPanel = statusPanel;
   }
-  
+
   private void addLabel(String text, int gridx) {
     JSLabel label = new JSLabel();
     label.setText(text);
@@ -168,10 +168,12 @@ public class Z4RibbonLayerPanel extends JSPanel {
 
   private void addFromColor() {
     this.statusPanel.setProgressBarString(Z4Translations.CREATE + "...");
+    document.querySelector(".please-wait").classList.add("please-wait-visible");
 
     setTimeout(() -> {
       Z4NewImagePanel panel = new Z4NewImagePanel();
       this.statusPanel.setProgressBarString("");
+      document.querySelector(".please-wait").classList.remove("please-wait-visible");
 
       JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener -> {
       }, () -> true, response -> {

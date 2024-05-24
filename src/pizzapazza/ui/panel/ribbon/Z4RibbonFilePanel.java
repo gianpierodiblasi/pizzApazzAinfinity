@@ -162,10 +162,12 @@ public class Z4RibbonFilePanel extends JSPanel {
 
   private void createFromColor() {
     this.statusPanel.setProgressBarString(Z4Translations.CREATE + "...");
+    document.querySelector(".please-wait").classList.add("please-wait-visible");
 
     setTimeout(() -> {
       Z4NewImagePanel panel = new Z4NewImagePanel();
       this.statusPanel.setProgressBarString("");
+      document.querySelector(".please-wait").classList.remove("please-wait-visible");
 
       JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener -> {
       }, () -> true, response -> {

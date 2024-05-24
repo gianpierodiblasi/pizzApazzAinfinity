@@ -2252,6 +2252,9 @@ class Z4Frame extends JSFrame {
   constructor() {
     super();
     this.cssAddClass("z4frame");
+    let pleaseWait = document.createElement("div");
+    pleaseWait.classList.add("please-wait");
+    this.appendNodeChild(pleaseWait);
     this.getContentPane().setLayout(new BorderLayout(5, 5));
     this.ribbon.setCanvas(this.canvas);
     this.ribbon.setStatusPanel(this.statusPanel);
@@ -4222,9 +4225,11 @@ class Z4RibbonFilePanel extends JSPanel {
 
    createFromColor() {
     this.statusPanel.setProgressBarString(Z4Translations.CREATE + "...");
+    document.querySelector(".please-wait").classList.add("please-wait-visible");
     setTimeout(() => {
       let panel = new Z4NewImagePanel();
       this.statusPanel.setProgressBarString("");
+      document.querySelector(".please-wait").classList.remove("please-wait-visible");
       JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => {
       }, () => true, response => {
         if (response === JSOptionPane.OK_OPTION) {
@@ -4458,9 +4463,11 @@ class Z4RibbonLayerPanel extends JSPanel {
 
    addFromColor() {
     this.statusPanel.setProgressBarString(Z4Translations.CREATE + "...");
+    document.querySelector(".please-wait").classList.add("please-wait-visible");
     setTimeout(() => {
       let panel = new Z4NewImagePanel();
       this.statusPanel.setProgressBarString("");
+      document.querySelector(".please-wait").classList.remove("please-wait-visible");
       JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => {
       }, () => true, response => {
         if (response === JSOptionPane.OK_OPTION) {

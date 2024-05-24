@@ -1,5 +1,6 @@
 package pizzapazza.ui.frame;
 
+import def.dom.HTMLElement;
 import javascript.awt.BorderLayout;
 import javascript.awt.Color;
 import javascript.swing.JSFrame;
@@ -7,6 +8,7 @@ import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.tab.Z4Ribbon;
 import pizzapazza.util.Z4Constants;
+import static simulation.js.$Globals.document;
 
 /**
  * The main frame of the application
@@ -25,6 +27,11 @@ public class Z4Frame extends JSFrame {
   public Z4Frame() {
     super();
     this.cssAddClass("z4frame");
+    
+    HTMLElement pleaseWait = document.createElement("div");
+    pleaseWait.classList.add("please-wait");
+    this.appendNodeChild(pleaseWait);
+    
     this.getContentPane().setLayout(new BorderLayout(5, 5));
 
     this.ribbon.setCanvas(this.canvas);
