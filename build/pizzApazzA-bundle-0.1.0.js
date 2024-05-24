@@ -2286,6 +2286,10 @@ class Z4BiGradientColorPanel extends JSPanel {
 
    delete = new JSButton();
 
+   space = null;
+
+   time = null;
+
    biGradientColor = new Z4BiGradientColor();
 
    biSelectedIndex = 0;
@@ -2302,13 +2306,17 @@ class Z4BiGradientColorPanel extends JSPanel {
 
   static  TOLERANCE = 0.1;
 
+  /**
+   * Creates the object
+   */
   constructor() {
     super();
     this.cssAddClass("z4bigradientcolorpanel");
     this.setLayout(new GridBagLayout());
     this.addComponent(new JSLabel(), 0, 0, 3, 1, 0, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
-    this.addLabel(Z4Translations.SPACE, 1, 1, 2, 1, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE);
-    this.addLabel(Z4Translations.TIME, 0, 2, 3, 2, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE).cssAddClass("jslabel-vertical");
+    this.space = this.addLabel(Z4Translations.SPACE, 1, 1, 2, 1, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE);
+    this.time = this.addLabel(Z4Translations.TIME, 0, 2, 3, 2, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE);
+    this.time.cssAddClass("jslabel-vertical");
     this.preview.setProperty("width", "" + Z4BiGradientColorPanel.WIDTH);
     this.preview.setProperty("height", "" + Z4BiGradientColorPanel.HEIGHT);
     this.preview.addEventListener("mousedown", event => this.onMouse(event, "down"));
@@ -2617,6 +2625,15 @@ class Z4BiGradientColorPanel extends JSPanel {
    getStrokeStyle(style) {
     return style;
   }
+  /**
+   * Sets the visibility of the space and time labels
+   *
+   * @param b true to show the space and time labels, false otherwise
+   */
+   setSpaceTimeLabelsVisible(b) {
+    this.space.getStyle().visibility = b ? "visible" : "hidden";
+    this.time.getStyle().visibility = b ? "visible" : "hidden";
+  }
 }
 /**
  * The panel to manage a gradient color
@@ -2864,8 +2881,6 @@ class Z4AbstractFillerPanel extends JSPanel {
 
    offscreenCtx = this.offscreenCanvas.getContext("2d");
 
-   panelOptions = new JSPanel();
-
    xSlider = new JSSlider();
 
    xSpinner = new JSSpinner();
@@ -2873,12 +2888,6 @@ class Z4AbstractFillerPanel extends JSPanel {
    ySlider = new JSSlider();
 
    ySpinner = new JSSpinner();
-
-   panelRadios = new JSPanel();
-
-   buttonGroupOptions = new ButtonGroup();
-
-   buttonGroupRadios = new ButtonGroup();
 
    gradientColor = new Z4GradientColor();
 
@@ -2912,7 +2921,8 @@ class Z4AbstractFillerPanel extends JSPanel {
     super();
     this.cssAddClass("z4abstractfillerpanel");
     this.setLayout(new GridBagLayout());
-    this.addComponent(this.panelOptions, 0, 0, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    let panelOptions = new JSPanel();
+    this.addComponent(panelOptions, 0, 0, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
     this.preview.setProperty("width", "" + Z4AbstractFillerPanel.SIZE);
     this.preview.setProperty("height", "" + Z4AbstractFillerPanel.SIZE);
     this.preview.addEventListener("mousedown", event => this.onMouse(event, "down"));
@@ -2944,8 +2954,10 @@ class Z4AbstractFillerPanel extends JSPanel {
     this.xSlider.getStyle().minWidth = "20rem";
     this.xSlider.addChangeListener(event => this.onChange(false, this.xSlider.getValueIsAdjusting(), this.xSpinner, this.xSlider, true));
     this.addComponent(this.xSlider, 0, 5, 4, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
-    this.addComponent(this.panelRadios, 0, 6, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    let panelRadios = new JSPanel();
+    this.addComponent(panelRadios, 0, 6, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
     if (options) {
+      let buttonGroupOptions = new ButtonGroup();
       options.forEach((option, index, array) => {
         let radio = new JSRadioButton();
         radio.setContentAreaFilled(false);
@@ -2959,10 +2971,11 @@ class Z4AbstractFillerPanel extends JSPanel {
           this.selectedOption = option;
           this.drawPreview(false);
         });
-        this.buttonGroupOptions.add(radio);
-        this.panelOptions.add(radio, null);
+        buttonGroupOptions.add(radio);
+        panelOptions.add(radio, null);
       });
     }
+    let buttonGroupRadios = new ButtonGroup();
     for (let index = 0; index < count; index++) {
       let idx = index;
       let radio = new JSRadioButton();
@@ -2970,8 +2983,8 @@ class Z4AbstractFillerPanel extends JSPanel {
       radio.setSelected(index === 0);
       radio.addActionListener(event => this.onRadio(idx));
       this.radios.push(radio);
-      this.buttonGroupRadios.add(radio);
-      this.panelRadios.add(radio, null);
+      buttonGroupRadios.add(radio);
+      panelRadios.add(radio, null);
     }
     this.pushPointPositions(this.points, this.width, this.height);
     this.setXY();
@@ -4670,10 +4683,118 @@ class Z4ExportToFilePanel extends JSPanel {
  */
 class Z4FillingPanel extends JSPanel {
 
+   cardFillerSelectors = new Array("FLAT", "LINEAR", "VERTEX", "CONIC", "SPIRAL", "BEZIER", "SINUSOIDAL", "TEXTURE", "BIGRADIENT");
+
+   cardFillerPanels = new Array(new JSPanel(), new Z4LinearFillerPanel(), new Z4VertexBasedFillerPanel(), new Z4ConicFillerPanel(), new Z4SpiralFillerPanel(), new Z4BezierFillerPanel(), new Z4SinusoidalFillerPanel(), new Z4TextureFillerPanel(), new JSPanel());
+
+   cardColorSelectors = new Array("FLAT", "GRADIENT", "NONE", "BIGRADIENT");
+
+   cardColorPanels = new Array(new JSPanel(), new Z4GradientColorPanel(), new JSPanel(), new Z4BiGradientColorPanel());
+
+   colorPreview = new Z4ColorPreview();
+
+   selectedColor = new Color(255, 255, 255, 255);
+
+  /**
+   * Creates the object
+   */
   constructor() {
     super();
-    this.setLayout(new BorderLayout(0, 0));
+    this.setLayout(new GridBagLayout());
     this.cssAddClass("z4fillingpanel");
+    let panel = new JSPanel();
+    this.addComponent(panel, 0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    let panelFiller = new JSPanel();
+    let cardFiller = new CardLayout(0, 0);
+    panelFiller.setLayout(cardFiller);
+    this.addComponent(panelFiller, 0, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    let hline = this.addHLine(0, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL);
+    hline.getStyle().visibility = "hidden";
+    let panelColor = new JSPanel();
+    let cardColor = new CardLayout(0, 0);
+    panelColor.setLayout(cardColor);
+    this.addComponent(panelColor, 0, 3, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    let flatPanel = this.cardColorPanels[0];
+    flatPanel.setLayout(new BorderLayout(5, 0));
+    let label = new JSLabel();
+    label.setText(Z4Translations.FILLING_COLOR);
+    flatPanel.add(label, BorderLayout.NORTH);
+    this.colorPreview.setColor(this.selectedColor);
+    this.colorPreview.getStyle().alignSelf = "center";
+    this.colorPreview.getStyle().minWidth = "15rem";
+    flatPanel.add(this.colorPreview, BorderLayout.CENTER);
+    let button = new JSButton();
+    button.setText(Z4Translations.EDIT);
+    button.addActionListener(event => {
+      JSColorChooser.showDialog(Z4Translations.FILLING_COLOR, this.selectedColor, true, null, color => {
+        this.selectedColor = color;
+        this.colorPreview.setColor(color);
+      });
+    });
+    flatPanel.add(button, BorderLayout.EAST);
+    (this.cardColorPanels[3]).setSpaceTimeLabelsVisible(false);
+    let buttonGroup = new ButtonGroup();
+    this.cardFillerSelectors.forEach((card, index, array) => {
+      let radio = new JSRadioButton();
+      radio.setContentAreaFilled(false);
+      radio.setToggle();
+      radio.setSelected(index === 0);
+      radio.setIcon(new Z4EmptyImageProducer(index));
+      radio.addActionListener(event => {
+        cardFiller.show(panelFiller, card);
+        switch(card) {
+          case "FLAT":
+            cardColor.show(panelColor, "FLAT");
+            hline.getStyle().visibility = "hidden";
+            break;
+          case "LINEAR":
+          case "VERTEX":
+          case "CONIC":
+          case "SPIRAL":
+          case "BEZIER":
+          case "SINUSOIDAL":
+            cardColor.show(panelColor, "GRADIENT");
+            hline.getStyle().visibility = "visible";
+            break;
+          case "TEXTURE":
+            cardColor.show(panelColor, "NONE");
+            hline.getStyle().visibility = "hidden";
+            break;
+          case "BIGRADIENT":
+            cardColor.show(panelColor, "BIGRADIENT");
+            hline.getStyle().visibility = "hidden";
+            break;
+        }
+      });
+      buttonGroup.add(radio);
+      panel.add(radio, null);
+      panelFiller.add(this.cardFillerPanels[index], card);
+    });
+    this.cardColorSelectors.forEach((card, index, array) => panelColor.add(this.cardColorPanels[index], card));
+  }
+
+   addComponent(component, gridx, gridy, gridwidth, gridheight, weightx, weighty, anchor, fill, insets) {
+    let constraints = new GridBagConstraints();
+    constraints.gridx = gridx;
+    constraints.gridy = gridy;
+    constraints.gridwidth = gridwidth;
+    constraints.gridheight = gridheight;
+    constraints.weightx = weightx;
+    constraints.weighty = weighty;
+    constraints.anchor = anchor;
+    constraints.fill = fill;
+    if (insets) {
+      constraints.insets = insets;
+    }
+    this.add(component, constraints);
+  }
+
+   addHLine(gridx, gridy, gridwidth, gridheight, anchor, fill) {
+    let div = new JSComponent(document.createElement("div"));
+    div.getStyle().height = "1px";
+    div.getStyle().background = "var(--main-action-bgcolor";
+    this.addComponent(div, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, new Insets(2, 1, 2, 1));
+    return div;
   }
 }
 /**

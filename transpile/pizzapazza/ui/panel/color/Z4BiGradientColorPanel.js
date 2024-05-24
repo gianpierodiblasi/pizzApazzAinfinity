@@ -23,6 +23,10 @@ class Z4BiGradientColorPanel extends JSPanel {
 
    delete = new JSButton();
 
+   space = null;
+
+   time = null;
+
    biGradientColor = new Z4BiGradientColor();
 
    biSelectedIndex = 0;
@@ -39,13 +43,17 @@ class Z4BiGradientColorPanel extends JSPanel {
 
   static  TOLERANCE = 0.1;
 
+  /**
+   * Creates the object
+   */
   constructor() {
     super();
     this.cssAddClass("z4bigradientcolorpanel");
     this.setLayout(new GridBagLayout());
     this.addComponent(new JSLabel(), 0, 0, 3, 1, 0, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
-    this.addLabel(Z4Translations.SPACE, 1, 1, 2, 1, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE);
-    this.addLabel(Z4Translations.TIME, 0, 2, 3, 2, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE).cssAddClass("jslabel-vertical");
+    this.space = this.addLabel(Z4Translations.SPACE, 1, 1, 2, 1, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE);
+    this.time = this.addLabel(Z4Translations.TIME, 0, 2, 3, 2, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE);
+    this.time.cssAddClass("jslabel-vertical");
     this.preview.setProperty("width", "" + Z4BiGradientColorPanel.WIDTH);
     this.preview.setProperty("height", "" + Z4BiGradientColorPanel.HEIGHT);
     this.preview.addEventListener("mousedown", event => this.onMouse(event, "down"));
@@ -353,5 +361,14 @@ class Z4BiGradientColorPanel extends JSPanel {
 
    getStrokeStyle(style) {
     return style;
+  }
+  /**
+   * Sets the visibility of the space and time labels
+   *
+   * @param b true to show the space and time labels, false otherwise
+   */
+   setSpaceTimeLabelsVisible(b) {
+    this.space.getStyle().visibility = b ? "visible" : "hidden";
+    this.time.getStyle().visibility = b ? "visible" : "hidden";
   }
 }

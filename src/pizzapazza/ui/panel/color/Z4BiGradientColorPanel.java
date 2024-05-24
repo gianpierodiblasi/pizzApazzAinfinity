@@ -45,6 +45,8 @@ public class Z4BiGradientColorPanel extends JSPanel {
   private final Z4ColorPreview colorPreview = new Z4ColorPreview();
   private final JSButton biDelete = new JSButton();
   private final JSButton delete = new JSButton();
+  private final JSLabel space;
+  private final JSLabel time;
 
   private final Z4BiGradientColor biGradientColor = new Z4BiGradientColor();
   private int biSelectedIndex = 0;
@@ -56,16 +58,20 @@ public class Z4BiGradientColorPanel extends JSPanel {
   private static final int HEIGHT = 200;
   private static final double TOLERANCE = 0.1;
 
+  /**
+   * Creates the object
+   */
   public Z4BiGradientColorPanel() {
     super();
     this.cssAddClass("z4bigradientcolorpanel");
     this.setLayout(new GridBagLayout());
 
     this.addComponent(new JSLabel(), 0, 0, 3, 1, 0, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
-    this.addLabel(Z4Translations.SPACE, 1, 1, 2, 1, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE);
-    
-    this.addLabel(Z4Translations.TIME, 0, 2, 3, 2, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE).cssAddClass("jslabel-vertical");
-    
+    this.space = this.addLabel(Z4Translations.SPACE, 1, 1, 2, 1, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE);
+
+    this.time = this.addLabel(Z4Translations.TIME, 0, 2, 3, 2, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE);
+    this.time.cssAddClass("jslabel-vertical");
+
     this.preview.setProperty("width", "" + Z4BiGradientColorPanel.WIDTH);
     this.preview.setProperty("height", "" + Z4BiGradientColorPanel.HEIGHT);
     this.preview.addEventListener("mousedown", event -> this.onMouse((MouseEvent) event, "down"));
@@ -423,5 +429,15 @@ public class Z4BiGradientColorPanel extends JSPanel {
 
   private Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getStrokeStyle(String style) {
     return null;
+  }
+
+  /**
+   * Sets the visibility of the space and time labels
+   *
+   * @param b true to show the space and time labels, false otherwise
+   */
+  public void setSpaceTimeLabelsVisible(boolean b) {
+    this.space.getStyle().visibility = b ? "visible" : "hidden";
+    this.time.getStyle().visibility = b ? "visible" : "hidden";
   }
 }

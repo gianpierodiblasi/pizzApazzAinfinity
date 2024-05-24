@@ -1,0 +1,30 @@
+.z4fillingpanel {
+}
+
+.z4fillingpanel div label:nth-child(1) img {
+  content: url(../image/filling/fill_flat.gif);
+}
+.z4fillingpanel div label:nth-child(2) img {
+  content: url(../image/filling/fill_linear.gif);
+}
+.z4fillingpanel div label:nth-child(3) img {
+  content: url(../image/filling/fill_polygon.gif);
+}
+.z4fillingpanel div label:nth-child(4) img {
+  content: url(../image/filling/fill_conic.gif);
+}
+.z4fillingpanel div label:nth-child(5) img {
+  content: url(../image/filling/fill_spiral.gif);
+}
+.z4fillingpanel div label:nth-child(6) img {
+  content: url(../image/filling/fill_bezier.gif);
+}
+.z4fillingpanel div label:nth-child(7) img {
+  content: url(../image/filling/fill_sinusoidal.gif);
+}
+.z4fillingpanel div label:nth-child(8) img {
+  content: url(../image/filling/fill_texture.gif);
+}
+.z4fillingpanel div label:nth-child(9) img {
+  content: url(../image/filling/fill_bigradientcolor.gif);
+}

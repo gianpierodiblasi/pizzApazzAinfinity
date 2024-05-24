@@ -13,8 +13,6 @@ class Z4AbstractFillerPanel extends JSPanel {
 
    offscreenCtx = this.offscreenCanvas.getContext("2d");
 
-   panelOptions = new JSPanel();
-
    xSlider = new JSSlider();
 
    xSpinner = new JSSpinner();
@@ -22,12 +20,6 @@ class Z4AbstractFillerPanel extends JSPanel {
    ySlider = new JSSlider();
 
    ySpinner = new JSSpinner();
-
-   panelRadios = new JSPanel();
-
-   buttonGroupOptions = new ButtonGroup();
-
-   buttonGroupRadios = new ButtonGroup();
 
    gradientColor = new Z4GradientColor();
 
@@ -61,7 +53,8 @@ class Z4AbstractFillerPanel extends JSPanel {
     super();
     this.cssAddClass("z4abstractfillerpanel");
     this.setLayout(new GridBagLayout());
-    this.addComponent(this.panelOptions, 0, 0, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    let panelOptions = new JSPanel();
+    this.addComponent(panelOptions, 0, 0, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
     this.preview.setProperty("width", "" + Z4AbstractFillerPanel.SIZE);
     this.preview.setProperty("height", "" + Z4AbstractFillerPanel.SIZE);
     this.preview.addEventListener("mousedown", event => this.onMouse(event, "down"));
@@ -93,8 +86,10 @@ class Z4AbstractFillerPanel extends JSPanel {
     this.xSlider.getStyle().minWidth = "20rem";
     this.xSlider.addChangeListener(event => this.onChange(false, this.xSlider.getValueIsAdjusting(), this.xSpinner, this.xSlider, true));
     this.addComponent(this.xSlider, 0, 5, 4, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
-    this.addComponent(this.panelRadios, 0, 6, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    let panelRadios = new JSPanel();
+    this.addComponent(panelRadios, 0, 6, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
     if (options) {
+      let buttonGroupOptions = new ButtonGroup();
       options.forEach((option, index, array) => {
         let radio = new JSRadioButton();
         radio.setContentAreaFilled(false);
@@ -108,10 +103,11 @@ class Z4AbstractFillerPanel extends JSPanel {
           this.selectedOption = option;
           this.drawPreview(false);
         });
-        this.buttonGroupOptions.add(radio);
-        this.panelOptions.add(radio, null);
+        buttonGroupOptions.add(radio);
+        panelOptions.add(radio, null);
       });
     }
+    let buttonGroupRadios = new ButtonGroup();
     for (let index = 0; index < count; index++) {
       let idx = index;
       let radio = new JSRadioButton();
@@ -119,8 +115,8 @@ class Z4AbstractFillerPanel extends JSPanel {
       radio.setSelected(index === 0);
       radio.addActionListener(event => this.onRadio(idx));
       this.radios.push(radio);
-      this.buttonGroupRadios.add(radio);
-      this.panelRadios.add(radio, null);
+      buttonGroupRadios.add(radio);
+      panelRadios.add(radio, null);
     }
     this.pushPointPositions(this.points, this.width, this.height);
     this.setXY();
