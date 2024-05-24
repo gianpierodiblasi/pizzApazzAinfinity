@@ -363,7 +363,7 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
    *
    * @param adjusting true if the value is adjusting, false otherwise
    */
-  protected void drawPreview(boolean adjusting) {
+  public void drawPreview(boolean adjusting) {
     int w = parseInt(this.preview.getProperty("width"));
     int h = parseInt(this.preview.getProperty("height"));
 

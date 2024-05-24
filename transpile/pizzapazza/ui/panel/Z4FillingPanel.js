@@ -15,6 +15,10 @@ class Z4FillingPanel extends JSPanel {
 
    colorPreview = new Z4ColorPreview();
 
+   selectedFillerSelector = "FLAT";
+
+   selectedFillerPanel = this.cardFillerPanels[0];
+
    selectedColor = new Color(255, 255, 255, 255);
 
   /**
@@ -24,8 +28,8 @@ class Z4FillingPanel extends JSPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4fillingpanel");
-    let panel = new JSPanel();
-    this.addComponent(panel, 0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    let panelRadio = new JSPanel();
+    this.addComponent(panelRadio, 0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
     let panelFiller = new JSPanel();
     let cardFiller = new CardLayout(0, 0);
     panelFiller.setLayout(cardFiller);
@@ -54,6 +58,26 @@ class Z4FillingPanel extends JSPanel {
       });
     });
     flatPanel.add(button, BorderLayout.EAST);
+    let gradientColorPanel = this.cardColorPanels[1];
+    gradientColorPanel.addChangeListener(event => {
+      this.cardFillerSelectors.forEach((card2, index2, array2) => {
+        switch(card2) {
+          case "FLAT":
+            break;
+          case "LINEAR":
+          case "VERTEX":
+          case "CONIC":
+          case "SPIRAL":
+          case "BEZIER":
+          case "SINUSOIDAL":
+            (this.cardFillerPanels[index2]).drawPreview(gradientColorPanel.getValueIsAdjusting());
+            break;
+          case "TEXTURE":
+            break;
+          case "BIGRADIENT":
+        }
+      });
+    });
     (this.cardColorPanels[3]).setSpaceTimeLabelsVisible(false);
     let buttonGroup = new ButtonGroup();
     this.cardFillerSelectors.forEach((card, index, array) => {
@@ -89,10 +113,41 @@ class Z4FillingPanel extends JSPanel {
         }
       });
       buttonGroup.add(radio);
-      panel.add(radio, null);
+      panelRadio.add(radio, null);
       panelFiller.add(this.cardFillerPanels[index], card);
     });
-    this.cardColorSelectors.forEach((card, index, array) => panelColor.add(this.cardColorPanels[index], card));
+    this.cardColorSelectors.forEach((card, index, array) => {
+      let panel = this.cardColorPanels[index];
+      panelColor.add(panel, card);
+      switch(card) {
+        case "FLAT":
+          break;
+        case "GRADIENT":
+          let gradientColor = (panel).getGradientColor();
+          this.cardFillerSelectors.forEach((card2, index2, array2) => {
+            switch(card2) {
+              case "FLAT":
+                break;
+              case "LINEAR":
+              case "VERTEX":
+              case "CONIC":
+              case "SPIRAL":
+              case "BEZIER":
+              case "SINUSOIDAL":
+                (this.cardFillerPanels[index2]).setGradientColor(gradientColor);
+                break;
+              case "TEXTURE":
+                break;
+              case "BIGRADIENT":
+            }
+          });
+          break;
+        case "NONE":
+          break;
+        case "BIGRADIENT":
+          break;
+      }
+    });
   }
 
    addComponent(component, gridx, gridy, gridwidth, gridheight, weightx, weighty, anchor, fill, insets) {

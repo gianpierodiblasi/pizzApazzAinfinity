@@ -304,6 +304,15 @@ public class Z4GradientColorPanel extends JSPanel {
   }
 
   /**
+   * Returns the managed gradient color
+   *
+   * @return
+   */
+  public Z4GradientColor getGradientColor() {
+    return this.gradientColor;
+  }
+
+  /**
    * Adds a change listener
    *
    * @param listener The listener
