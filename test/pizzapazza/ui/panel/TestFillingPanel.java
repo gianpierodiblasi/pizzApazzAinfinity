@@ -3,7 +3,6 @@ package pizzapazza.ui.panel;
 import javascript.awt.BorderLayout;
 import javascript.swing.JSFrame;
 import javascript.swing.JSPanel;
-import pizzapazza.ui.panel.filler.Z4AbstractFillerPanel;
 
 /**
  *

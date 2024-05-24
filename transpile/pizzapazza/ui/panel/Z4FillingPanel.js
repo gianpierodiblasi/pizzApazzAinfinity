@@ -176,6 +176,32 @@ class Z4FillingPanel extends JSPanel {
   }
 
   /**
+   * Returns the selected filling (an instance of Color, Z4AbstractFiller or
+   * Z4BiGradientColor)
+   *
+   * @return The selected filling (an instance of Color, Z4AbstractFiller or
+   * Z4BiGradientColor)
+   */
+   getSelectedFilling() {
+    switch(this.selectedFillerSelector) {
+      case "FLAT":
+        return this.selectedColor;
+      case "LINEAR":
+      case "VERTEX":
+      case "CONIC":
+      case "SPIRAL":
+      case "BEZIER":
+      case "SINUSOIDAL":
+      case "TEXTURE":
+        return (this.selectedFillerPanel).getSelectedFiller();
+      case "BIGRADIENT":
+        return (this.cardColorPanels[3]).getSelectedBiGradientColor();
+      default:
+        return null;
+    }
+  }
+
+  /**
    * Sets the preview size
    *
    * @param width The width
@@ -196,6 +222,19 @@ class Z4FillingPanel extends JSPanel {
           (this.cardFillerPanels[index]).setSize(width, height);
           break;
         case "BIGRADIENT":
+          break;
+      }
+    });
+    this.cardColorSelectors.forEach((card, index, array) => {
+      switch(card) {
+        case "FLAT":
+          break;
+        case "GRADIENT":
+          break;
+        case "NONE":
+          break;
+        case "BIGRADIENT":
+          (this.cardColorPanels[index]).setSize(width, height);
           break;
       }
     });

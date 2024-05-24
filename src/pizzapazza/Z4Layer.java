@@ -7,6 +7,8 @@ import javascript.awt.Color;
 import javascript.awt.Dimension;
 import javascript.awt.Point;
 import jsweet.util.union.Union4;
+import pizzapazza.color.Z4BiGradientColor;
+import pizzapazza.filler.Z4AbstractFiller;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
 import simulation.dom.$OffscreenCanvas;
@@ -37,17 +39,23 @@ public class Z4Layer {
    * @param name The layer name
    * @param width The layer width
    * @param height The layer height
-   * @param color The filling color
+   * @param filling The filling (an instance of Color, Z4AbstractFiller or
+   * Z4BiGradientColor)
    * @param containerWidth The container width
    * @param containerHeight The container height
    */
-  public Z4Layer(String name, int width, int height, Color color, int containerWidth, int containerHeight) {
+  public Z4Layer(String name, int width, int height, Object filling, int containerWidth, int containerHeight) {
     this.name = name;
     this.offscreen = new $OffscreenCanvas(width, height);
 
     this.offscreenCtx = this.offscreen.getContext("2d");
-    this.offscreenCtx.fillStyle = this.$getFillStyle(color.getRGBA_HEX());
-    this.offscreenCtx.fillRect(0, 0, width, height);
+
+    if (filling instanceof Color) {
+      this.offscreenCtx.fillStyle = this.$getFillStyle(((Color) filling).getRGBA_HEX());
+      this.offscreenCtx.fillRect(0, 0, width, height);
+    } else if (filling instanceof Z4AbstractFiller) {
+    } else if (filling instanceof Z4BiGradientColor) {
+    }
 
     this.offsetX = (containerWidth - width) / 2;
     this.offsetY = (containerHeight - height) / 2;

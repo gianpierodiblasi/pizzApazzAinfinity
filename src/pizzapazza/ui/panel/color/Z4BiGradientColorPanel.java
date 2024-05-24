@@ -27,10 +27,11 @@ import pizzapazza.ui.component.Z4ColorPreview;
 import pizzapazza.util.Z4Translations;
 import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.parseInt;
 import simulation.js.$Uint8Array;
 
 /**
- * The panel to manage a gradient color
+ * The panel to manage a bigradient color
  *
  * @author gianpiero.diblasi
  */
@@ -52,10 +53,11 @@ public class Z4BiGradientColorPanel extends JSPanel {
   private int biSelectedIndex = 0;
   private int selectedIndex = 0;
   private boolean pressed = false;
+  private int width = Z4BiGradientColorPanel.SIZE;
+  private int height = Z4BiGradientColorPanel.SIZE;
 
   private static final int SELECTOR_RADIUS = 7;
-  private static final int WIDTH = 200;
-  private static final int HEIGHT = 200;
+  private static final int SIZE = 200;
   private static final double TOLERANCE = 0.1;
 
   /**
@@ -72,8 +74,8 @@ public class Z4BiGradientColorPanel extends JSPanel {
     this.time = this.addLabel(Z4Translations.TIME, 0, 2, 3, 2, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE);
     this.time.cssAddClass("jslabel-vertical");
 
-    this.preview.setProperty("width", "" + Z4BiGradientColorPanel.WIDTH);
-    this.preview.setProperty("height", "" + Z4BiGradientColorPanel.HEIGHT);
+    this.preview.setProperty("width", "" + this.width);
+    this.preview.setProperty("height", "" + this.height);
     this.preview.addEventListener("mousedown", event -> this.onMouse((MouseEvent) event, "down"));
     this.preview.addEventListener("mousemove", event -> this.onMouse((MouseEvent) event, "move"));
     this.preview.addEventListener("mouseup", event -> this.onMouse((MouseEvent) event, "up"));
@@ -235,7 +237,7 @@ public class Z4BiGradientColorPanel extends JSPanel {
 
           for (int index = 0; index < gradientColor.getColorCount(); index++) {
             double position = gradientColor.getColorPositionAtIndex(index);
-            if (Z4Math.distance(position * Z4BiGradientColorPanel.WIDTH, biPosition * Z4BiGradientColorPanel.HEIGHT, event.offsetX, event.offsetY) <= Z4BiGradientColorPanel.SELECTOR_RADIUS) {
+            if (Z4Math.distance(position * this.width, biPosition * this.height, event.offsetX, event.offsetY) <= Z4BiGradientColorPanel.SELECTOR_RADIUS) {
               this.pressed = true;
               this.biSelectedIndex = biIndex;
               this.selectedIndex = index;
@@ -245,27 +247,27 @@ public class Z4BiGradientColorPanel extends JSPanel {
         }
 
         if (!this.pressed
-                && !this.biGradientColor.isPositionOccupied(event.offsetY / Z4BiGradientColorPanel.HEIGHT, Z4BiGradientColorPanel.TOLERANCE)) {
-          Z4GradientColor gradientColor = this.biGradientColor.getColorAt(event.offsetY / Z4BiGradientColorPanel.HEIGHT, false);
+                && !this.biGradientColor.isPositionOccupied(event.offsetY / this.height, Z4BiGradientColorPanel.TOLERANCE)) {
+          Z4GradientColor gradientColor = this.biGradientColor.getColorAt(event.offsetY / this.height, false);
           while (gradientColor.getColorCount() > 2) {
             gradientColor.removeColor(gradientColor.getColorPositionAtIndex(1));
           }
-          if (!gradientColor.isPositionOccupied(event.offsetX / Z4BiGradientColorPanel.WIDTH, Z4BiGradientColorPanel.TOLERANCE)) {
-            gradientColor.addColor(gradientColor.getColorAt(event.offsetX / Z4BiGradientColorPanel.WIDTH, false), event.offsetX / Z4BiGradientColorPanel.WIDTH);
+          if (!gradientColor.isPositionOccupied(event.offsetX / this.width, Z4BiGradientColorPanel.TOLERANCE)) {
+            gradientColor.addColor(gradientColor.getColorAt(event.offsetX / this.width, false), event.offsetX / this.width);
           }
           gradientColor.mergeOverlapping(Z4BiGradientColorPanel.TOLERANCE);
 
-          this.biGradientColor.addColor(gradientColor, event.offsetY / Z4BiGradientColorPanel.HEIGHT);
+          this.biGradientColor.addColor(gradientColor, event.offsetY / this.height);
           this.pressed = true;
           this.setPointer(event, true);
         }
 
         if (!this.pressed) {
-          double biPosition = this.biGradientColor.getPosition(event.offsetY / Z4BiGradientColorPanel.HEIGHT, Z4BiGradientColorPanel.TOLERANCE);
+          double biPosition = this.biGradientColor.getPosition(event.offsetY / this.height, Z4BiGradientColorPanel.TOLERANCE);
           Z4GradientColor gradientColor = this.biGradientColor.getColorAt(biPosition, false);
 
-          if (!gradientColor.isPositionOccupied(event.offsetX / Z4BiGradientColorPanel.WIDTH, Z4BiGradientColorPanel.TOLERANCE)) {
-            gradientColor.addColor(gradientColor.getColorAt(event.offsetX / Z4BiGradientColorPanel.WIDTH, false), event.offsetX / Z4BiGradientColorPanel.WIDTH);
+          if (!gradientColor.isPositionOccupied(event.offsetX / this.width, Z4BiGradientColorPanel.TOLERANCE)) {
+            gradientColor.addColor(gradientColor.getColorAt(event.offsetX / this.width, false), event.offsetX / this.width);
             this.setPointer(event, true);
           }
         }
@@ -275,13 +277,13 @@ public class Z4BiGradientColorPanel extends JSPanel {
           double biPosition = this.biGradientColor.getColorPositionAtIndex(this.biSelectedIndex);
           double biPositionBefore = this.biGradientColor.getColorPositionAtIndex(this.biSelectedIndex - 1);
           double biPositionAfter = this.biGradientColor.getColorPositionAtIndex(this.biSelectedIndex + 1);
-          double newBiPosition = event.offsetY / Z4BiGradientColorPanel.HEIGHT;
+          double newBiPosition = event.offsetY / this.height;
 
           Z4GradientColor gradientColor = this.biGradientColor.getColorAtIndex(this.biSelectedIndex);
           double position = gradientColor.getColorPositionAtIndex(this.selectedIndex);
           double positionBefore = gradientColor.getColorPositionAtIndex(this.selectedIndex - 1);
           double positionAfter = gradientColor.getColorPositionAtIndex(this.selectedIndex + 1);
-          double newPosition = event.offsetX / Z4BiGradientColorPanel.WIDTH;
+          double newPosition = event.offsetX / this.width;
 
           if (this.biSelectedIndex != 0 && this.biSelectedIndex != this.biGradientColor.getColorCount() - 1
                   && biPositionBefore < newBiPosition - Z4BiGradientColorPanel.TOLERANCE && biPositionAfter > newBiPosition + Z4BiGradientColorPanel.TOLERANCE) {
@@ -302,15 +304,15 @@ public class Z4BiGradientColorPanel extends JSPanel {
           this.setPointer(event, false);
 
           if (this.preview.getStyle().cursor == "default"
-                  && !this.biGradientColor.isPositionOccupied(event.offsetY / Z4BiGradientColorPanel.HEIGHT, Z4BiGradientColorPanel.TOLERANCE)) {
+                  && !this.biGradientColor.isPositionOccupied(event.offsetY / this.height, Z4BiGradientColorPanel.TOLERANCE)) {
             this.preview.getStyle().cursor = "copy";
           }
 
           if (this.preview.getStyle().cursor == "default") {
-            double biPosition = this.biGradientColor.getPosition(event.offsetY / Z4BiGradientColorPanel.HEIGHT, Z4BiGradientColorPanel.TOLERANCE);
+            double biPosition = this.biGradientColor.getPosition(event.offsetY / this.height, Z4BiGradientColorPanel.TOLERANCE);
             Z4GradientColor gradientColor = this.biGradientColor.getColorAt(biPosition, false);
 
-            if (!gradientColor.isPositionOccupied(event.offsetX / Z4BiGradientColorPanel.WIDTH, Z4BiGradientColorPanel.TOLERANCE)) {
+            if (!gradientColor.isPositionOccupied(event.offsetX / this.width, Z4BiGradientColorPanel.TOLERANCE)) {
               this.preview.getStyle().cursor = "copy";
             }
           }
@@ -330,7 +332,7 @@ public class Z4BiGradientColorPanel extends JSPanel {
 
       for (int index = 0; index < gradientColor.getColorCount(); index++) {
         double position = gradientColor.getColorPositionAtIndex(index);
-        if (Z4Math.distance(position * Z4BiGradientColorPanel.WIDTH, biPosition * Z4BiGradientColorPanel.HEIGHT, event.offsetX, event.offsetY) <= Z4BiGradientColorPanel.SELECTOR_RADIUS) {
+        if (Z4Math.distance(position * this.width, biPosition * this.height, event.offsetX, event.offsetY) <= Z4BiGradientColorPanel.SELECTOR_RADIUS) {
           if (setOther) {
             this.biSelectedIndex = biIndex;
             this.selectedIndex = index;
@@ -375,15 +377,15 @@ public class Z4BiGradientColorPanel extends JSPanel {
   }
 
   private void drawPreview(boolean adjusting) {
-    ImageData imageData = this.ctx.createImageData(Z4BiGradientColorPanel.WIDTH, Z4BiGradientColorPanel.HEIGHT);
+    ImageData imageData = this.ctx.createImageData(this.width, this.height);
     $Uint8Array data = ($Uint8Array) imageData.data;
 
-    for (int y = 0; y < Z4BiGradientColorPanel.HEIGHT; y++) {
-      Z4GradientColor gradientColor = this.biGradientColor.getColorAt(y / Z4BiGradientColorPanel.HEIGHT, true);
-      for (int x = 0; x < Z4BiGradientColorPanel.WIDTH; x++) {
-        Color color = gradientColor.getColorAt(x / Z4BiGradientColorPanel.WIDTH, true);
+    for (int y = 0; y < this.height; y++) {
+      Z4GradientColor gradientColor = this.biGradientColor.getColorAt(y / this.height, true);
+      for (int x = 0; x < this.width; x++) {
+        Color color = gradientColor.getColorAt(x / this.width, true);
 
-        int index = (y * Z4BiGradientColorPanel.WIDTH + x) * 4;
+        int index = (y * this.width + x) * 4;
         data.$set(index, color.red);
         data.$set(index + 1, color.green);
         data.$set(index + 2, color.blue);
@@ -407,7 +409,7 @@ public class Z4BiGradientColorPanel extends JSPanel {
     Array<Double> dash = new Array<>();
 
     this.ctx.beginPath();
-    this.ctx.arc(position * Z4BiGradientColorPanel.WIDTH, biPosition * Z4BiGradientColorPanel.HEIGHT, Z4BiGradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
+    this.ctx.arc(position * this.width, biPosition * this.height, Z4BiGradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
     this.ctx.closePath();
     this.ctx.strokeStyle = this.$getStrokeStyle(biIndex == this.biSelectedIndex && index == this.selectedIndex ? "red" : "black");
     this.ctx.setLineDash(dash);
@@ -416,7 +418,7 @@ public class Z4BiGradientColorPanel extends JSPanel {
     dash.push(2.5, 2.5);
 
     this.ctx.beginPath();
-    this.ctx.arc(position * Z4BiGradientColorPanel.WIDTH, biPosition * Z4BiGradientColorPanel.HEIGHT, Z4BiGradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
+    this.ctx.arc(position * this.width, biPosition * this.height, Z4BiGradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
     this.ctx.closePath();
     this.ctx.strokeStyle = this.$getStrokeStyle("white");
     this.ctx.setLineDash(dash);
@@ -439,5 +441,31 @@ public class Z4BiGradientColorPanel extends JSPanel {
   public void setSpaceTimeLabelsVisible(boolean b) {
     this.space.getStyle().visibility = b ? "visible" : "hidden";
     this.time.getStyle().visibility = b ? "visible" : "hidden";
+  }
+
+  /**
+   * Sets the preview size
+   *
+   * @param width The width
+   * @param height The height
+   */
+  public void setSize(int width, int height) {
+    double ratio = width / height;
+    this.width = parseInt(ratio > 1 ? Z4BiGradientColorPanel.SIZE : Z4BiGradientColorPanel.SIZE * ratio);
+    this.height = parseInt(ratio > 1 ? Z4BiGradientColorPanel.SIZE / ratio : Z4BiGradientColorPanel.SIZE);
+
+    this.preview.setProperty("width", "" + this.width);
+    this.preview.setProperty("height", "" + this.height);
+
+    this.drawPreview(false);
+  }
+
+  /**
+   * Returns the selected bigradient color
+   *
+   * @return The selected bigradient color
+   */
+  public Z4BiGradientColor getSelectedBiGradientColor() {
+    return this.biGradientColor;
   }
 }

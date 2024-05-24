@@ -365,6 +365,15 @@ class Z4AbstractFillerPanel extends JSPanel {
    getFiller(gradientColor, points, option) {
   }
 
+  /**
+   * Returns the selected filler
+   *
+   * @return The selected filler
+   */
+   getSelectedFiller() {
+    return this.getFiller(this.gradientColor, this.points, this.selectedOption);
+  }
+
    drawCircle(point, index) {
     if (this.isPointEnabled(index)) {
       let dash = new Array();

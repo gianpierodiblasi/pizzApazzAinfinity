@@ -409,6 +409,15 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
    */
   protected abstract Z4AbstractFiller getFiller(Z4GradientColor gradientColor, Array<Point> points, Object option);
 
+  /**
+   * Returns the selected filler
+   *
+   * @return The selected filler
+   */
+  public Z4AbstractFiller getSelectedFiller() {
+    return this.getFiller(this.gradientColor, this.points, this.selectedOption);
+  }
+
   private void drawCircle(Point point, int index) {
     if (this.isPointEnabled(index)) {
       Array<Double> dash = new Array<>();

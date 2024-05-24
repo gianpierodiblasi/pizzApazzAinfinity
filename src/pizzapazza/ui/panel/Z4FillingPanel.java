@@ -37,16 +37,16 @@ import static simulation.js.$Globals.$exists;
  * @author gianpiero.diblasi
  */
 public class Z4FillingPanel extends JSPanel {
-  
+
   private final Array<String> cardFillerSelectors = new Array<>("FLAT", "LINEAR", "VERTEX", "CONIC", "SPIRAL", "BEZIER", "SINUSOIDAL", "TEXTURE", "BIGRADIENT");
   private final Array<JSPanel> cardFillerPanels = new Array<>(new JSPanel(), new Z4LinearFillerPanel(), new Z4VertexBasedFillerPanel(), new Z4ConicFillerPanel(), new Z4SpiralFillerPanel(), new Z4BezierFillerPanel(), new Z4SinusoidalFillerPanel(), new Z4TextureFillerPanel(), new JSPanel());
   private final Array<String> cardColorSelectors = new Array<>("FLAT", "GRADIENT", "NONE", "BIGRADIENT");
   private final Array<JSPanel> cardColorPanels = new Array<>(new JSPanel(), new Z4GradientColorPanel(), new JSPanel(), new Z4BiGradientColorPanel());
   private final Z4ColorPreview colorPreview = new Z4ColorPreview();
-  
+
   private String selectedFillerSelector = "FLAT";
   private JSPanel selectedFillerPanel = this.cardFillerPanels.$get(0);
-  
+
   private Color selectedColor = new Color(255, 255, 255, 255);
 
   /**
@@ -56,35 +56,35 @@ public class Z4FillingPanel extends JSPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4fillingpanel");
-    
+
     JSPanel panelRadio = new JSPanel();
     this.addComponent(panelRadio, 0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
-    
+
     JSPanel panelFiller = new JSPanel();
     CardLayout cardFiller = new CardLayout(0, 0);
     panelFiller.setLayout(cardFiller);
     this.addComponent(panelFiller, 0, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
-    
+
     JSComponent hline = this.addHLine(0, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL);
     hline.getStyle().visibility = "hidden";
-    
+
     JSPanel panelColor = new JSPanel();
     CardLayout cardColor = new CardLayout(0, 0);
     panelColor.setLayout(cardColor);
     this.addComponent(panelColor, 0, 3, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
-    
+
     JSPanel flatPanel = this.cardColorPanels.$get(0);
     flatPanel.setLayout(new BorderLayout(5, 0));
-    
+
     JSLabel label = new JSLabel();
     label.setText(Z4Translations.FILLING_COLOR);
     flatPanel.add(label, BorderLayout.NORTH);
-    
+
     this.colorPreview.setColor(this.selectedColor);
     this.colorPreview.getStyle().alignSelf = "center";
     this.colorPreview.getStyle().minWidth = "15rem";
     flatPanel.add(this.colorPreview, BorderLayout.CENTER);
-    
+
     JSButton button = new JSButton();
     button.setText(Z4Translations.EDIT);
     button.addActionListener(event -> {
@@ -94,7 +94,7 @@ public class Z4FillingPanel extends JSPanel {
       });
     });
     flatPanel.add(button, BorderLayout.EAST);
-    
+
     Z4GradientColorPanel gradientColorPanel = (Z4GradientColorPanel) this.cardColorPanels.$get(1);
     gradientColorPanel.addChangeListener(event -> {
       switch (this.selectedFillerSelector) {
@@ -113,9 +113,9 @@ public class Z4FillingPanel extends JSPanel {
         case "BIGRADIENT":
       }
     });
-    
+
     ((Z4BiGradientColorPanel) this.cardColorPanels.$get(3)).setSpaceTimeLabelsVisible(false);
-    
+
     ButtonGroup buttonGroup = new ButtonGroup();
     this.cardFillerSelectors.forEach((card, index, array) -> {
       JSRadioButton radio = new JSRadioButton();
@@ -127,7 +127,7 @@ public class Z4FillingPanel extends JSPanel {
         this.selectedFillerSelector = card;
         this.selectedFillerPanel = this.cardFillerPanels.$get(index);
         cardFiller.show(panelFiller, card);
-        
+
         switch (card) {
           case "FLAT":
             cardColor.show(panelColor, "FLAT");
@@ -153,17 +153,17 @@ public class Z4FillingPanel extends JSPanel {
             break;
         }
       });
-      
+
       buttonGroup.add(radio);
       panelRadio.add(radio, null);
-      
+
       panelFiller.add(this.cardFillerPanels.$get(index), card);
     });
-    
+
     this.cardColorSelectors.forEach((card, index, array) -> {
       JSPanel panel = this.cardColorPanels.$get(index);
       panelColor.add(panel, card);
-      
+
       switch (card) {
         case "FLAT":
           break;
@@ -194,7 +194,7 @@ public class Z4FillingPanel extends JSPanel {
       }
     });
   }
-  
+
   private void addComponent(JSComponent component, int gridx, int gridy, int gridwidth, int gridheight, int weightx, int weighty, int anchor, int fill, Insets insets) {
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = gridx;
@@ -210,13 +210,39 @@ public class Z4FillingPanel extends JSPanel {
     }
     this.add(component, constraints);
   }
-  
+
   private JSComponent addHLine(int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
     JSComponent div = new JSComponent(document.createElement("div"));
     div.getStyle().height = "1px";
     div.getStyle().background = "var(--main-action-bgcolor";
     this.addComponent(div, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, new Insets(2, 1, 2, 1));
     return div;
+  }
+
+  /**
+   * Returns the selected filling (an instance of Color, Z4AbstractFiller or
+   * Z4BiGradientColor)
+   *
+   * @return The selected filling (an instance of Color, Z4AbstractFiller or
+   * Z4BiGradientColor)
+   */
+  public Object getSelectedFilling() {
+    switch (this.selectedFillerSelector) {
+      case "FLAT":
+        return this.selectedColor;
+      case "LINEAR":
+      case "VERTEX":
+      case "CONIC":
+      case "SPIRAL":
+      case "BEZIER":
+      case "SINUSOIDAL":
+      case "TEXTURE":
+        return ((Z4AbstractFillerPanel) this.selectedFillerPanel).getSelectedFiller();
+      case "BIGRADIENT":
+        return ((Z4BiGradientColorPanel) this.cardColorPanels.$get(3)).getSelectedBiGradientColor();
+      default:
+        return null;
+    }
   }
 
   /**
@@ -240,6 +266,20 @@ public class Z4FillingPanel extends JSPanel {
           ((Z4AbstractFillerPanel) this.cardFillerPanels.$get(index)).setSize(width, height);
           break;
         case "BIGRADIENT":
+          break;
+      }
+    });
+
+    this.cardColorSelectors.forEach((card, index, array) -> {
+      switch (card) {
+        case "FLAT":
+          break;
+        case "GRADIENT":
+          break;
+        case "NONE":
+          break;
+        case "BIGRADIENT":
+          ((Z4BiGradientColorPanel) this.cardColorPanels.$get(index)).setSize(width, height);
           break;
       }
     });

@@ -29,16 +29,21 @@ class Z4Layer {
    * @param name The layer name
    * @param width The layer width
    * @param height The layer height
-   * @param color The filling color
+   * @param filling The filling (an instance of Color, Z4AbstractFiller or
+   * Z4BiGradientColor)
    * @param containerWidth The container width
    * @param containerHeight The container height
    */
-  constructor(name, width, height, color, containerWidth, containerHeight) {
+  constructor(name, width, height, filling, containerWidth, containerHeight) {
     this.name = name;
     this.offscreen = new OffscreenCanvas(width, height);
     this.offscreenCtx = this.offscreen.getContext("2d");
-    this.offscreenCtx.fillStyle = this.getFillStyle(color.getRGBA_HEX());
-    this.offscreenCtx.fillRect(0, 0, width, height);
+    if (filling instanceof Color) {
+      this.offscreenCtx.fillStyle = this.getFillStyle((filling).getRGBA_HEX());
+      this.offscreenCtx.fillRect(0, 0, width, height);
+    } else if (filling instanceof Z4AbstractFiller) {
+    } else if (filling instanceof Z4BiGradientColor) {
+    }
     this.offsetX = (containerWidth - width) / 2;
     this.offsetY = (containerHeight - height) / 2;
     this.width = width;
