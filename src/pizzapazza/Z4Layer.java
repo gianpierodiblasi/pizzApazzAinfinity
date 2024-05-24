@@ -3,17 +3,20 @@ package pizzapazza;
 import def.dom.Blob;
 import def.dom.CanvasGradient;
 import def.dom.CanvasPattern;
+import def.dom.ImageData;
 import javascript.awt.Color;
 import javascript.awt.Dimension;
 import javascript.awt.Point;
 import jsweet.util.union.Union4;
 import pizzapazza.color.Z4BiGradientColor;
+import pizzapazza.color.Z4GradientColor;
 import pizzapazza.filler.Z4AbstractFiller;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
 import simulation.dom.$OffscreenCanvas;
 import simulation.js.$Apply_1_Void;
 import simulation.js.$Object;
+import simulation.js.$Uint8Array;
 
 /**
  * The object representing a layer
@@ -47,14 +50,33 @@ public class Z4Layer {
   public Z4Layer(String name, int width, int height, Object filling, int containerWidth, int containerHeight) {
     this.name = name;
     this.offscreen = new $OffscreenCanvas(width, height);
-
     this.offscreenCtx = this.offscreen.getContext("2d");
 
     if (filling instanceof Color) {
       this.offscreenCtx.fillStyle = this.$getFillStyle(((Color) filling).getRGBA_HEX());
       this.offscreenCtx.fillRect(0, 0, width, height);
     } else if (filling instanceof Z4AbstractFiller) {
+      ImageData imageData = this.offscreenCtx.createImageData(width, height);
+      ((Z4AbstractFiller) filling).fill(imageData);
+      this.offscreenCtx.putImageData(imageData, 0, 0);
     } else if (filling instanceof Z4BiGradientColor) {
+      ImageData imageData = this.offscreenCtx.createImageData(width, height);
+      $Uint8Array data = ($Uint8Array) imageData.data;
+
+      for (int y = 0; y < height; y++) {
+        Z4GradientColor gradientColor = ((Z4BiGradientColor) filling).getColorAt(y / height, true);
+        for (int x = 0; x < width; x++) {
+          Color color = gradientColor.getColorAt(x / width, true);
+
+          int index = (y * width + x) * 4;
+          data.$set(index, color.red);
+          data.$set(index + 1, color.green);
+          data.$set(index + 2, color.blue);
+          data.$set(index + 3, color.alpha);
+        }
+      }
+
+      this.offscreenCtx.putImageData(imageData, 0, 0);
     }
 
     this.offsetX = (containerWidth - width) / 2;

@@ -318,6 +318,15 @@ class Z4AbstractFillerPanel extends JSPanel {
   }
 
   /**
+   * Returns the selected filler
+   *
+   * @return The selected filler
+   */
+   getSelectedFiller() {
+    return this.getFiller(this.gradientColor, this.points, this.selectedOption);
+  }
+
+  /**
    * Draws the preview
    *
    * @param adjusting true if the value is adjusting, false otherwise
@@ -363,15 +372,6 @@ class Z4AbstractFillerPanel extends JSPanel {
    * @return The filler
    */
    getFiller(gradientColor, points, option) {
-  }
-
-  /**
-   * Returns the selected filler
-   *
-   * @return The selected filler
-   */
-   getSelectedFiller() {
-    return this.getFiller(this.gradientColor, this.points, this.selectedOption);
   }
 
    drawCircle(point, index) {

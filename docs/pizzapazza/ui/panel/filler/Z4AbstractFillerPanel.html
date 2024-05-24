@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":6,"i3":10,"i4":6,"i5":6,"i6":6,"i7":6,"i8":10,"i9":6,"i10":10,"i11":10};
+var data = {"i0":10,"i1":10,"i2":6,"i3":10,"i4":6,"i5":10,"i6":6,"i7":6,"i8":6,"i9":10,"i10":10,"i11":6,"i12":10,"i13":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -217,7 +217,7 @@ extends javascript.swing.JSPanel</pre>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>protected void</code></td>
+<td class="colFirst"><code>protected javascript.swing.JSLabel</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addLabel(java.lang.String,int,int,int,int,int,int)">addLabel</a></span>&#8203;(java.lang.String&nbsp;text,
         int&nbsp;gridx,
         int&nbsp;gridy,
@@ -238,7 +238,7 @@ extends javascript.swing.JSPanel</pre>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>protected void</code></td>
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#drawPreview(boolean)">drawPreview</a></span>&#8203;(boolean&nbsp;adjusting)</code></th>
 <td class="colLast">
 <div class="block">Draws the preview</div>
@@ -254,20 +254,27 @@ extends javascript.swing.JSPanel</pre>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="../../../filler/Z4AbstractFiller.html" title="interface in pizzapazza.filler">Z4AbstractFiller</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSelectedFiller()">getSelectedFiller</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the selected filler</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>protected abstract boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isPointEnabled(int)">isPointEnabled</a></span>&#8203;(int&nbsp;index)</code></th>
 <td class="colLast">
 <div class="block">Checks if a point is enabled</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected abstract boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#needsRescale(java.lang.Object)">needsRescale</a></span>&#8203;(java.lang.Object&nbsp;option)</code></th>
 <td class="colLast">
 <div class="block">Check if a rescale is needed during drawing</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pushPointPositions(def.js.Array,int,int)">pushPointPositions</a></span>&#8203;(def.js.Array&lt;javascript.awt.Point&gt;&nbsp;points,
                   int&nbsp;width,
@@ -276,14 +283,21 @@ extends javascript.swing.JSPanel</pre>
 <div class="block">Pushes the point positions</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#requestSetPointPosition()">requestSetPointPosition</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Requests a call to the setPointPosition method</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setGradientColor(pizzapazza.color.Z4GradientColor)">setGradientColor</a></span>&#8203;(<a href="../../../color/Z4GradientColor.html" title="class in pizzapazza.color">Z4GradientColor</a>&nbsp;gradientColor)</code></th>
+<td class="colLast">
+<div class="block">Sets the gradient color to use</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPointPosition(def.js.Array,int,int,int,int,int)">setPointPosition</a></span>&#8203;(def.js.Array&lt;javascript.awt.Point&gt;&nbsp;points,
                 int&nbsp;selectedIndex,
@@ -295,14 +309,14 @@ extends javascript.swing.JSPanel</pre>
 <div class="block">Sets the position of a point</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPointsEnabled()">setPointsEnabled</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Sets the enabled property of all points</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSize(int,int)">setSize</a></span>&#8203;(int&nbsp;width,
        int&nbsp;height)</code></th>
@@ -380,13 +394,13 @@ extends javascript.swing.JSPanel</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>addLabel</h4>
-<pre class="methodSignature">protected&nbsp;void&nbsp;addLabel&#8203;(java.lang.String&nbsp;text,
-                        int&nbsp;gridx,
-                        int&nbsp;gridy,
-                        int&nbsp;gridwidth,
-                        int&nbsp;gridheight,
-                        int&nbsp;anchor,
-                        int&nbsp;fill)</pre>
+<pre class="methodSignature">protected&nbsp;javascript.swing.JSLabel&nbsp;addLabel&#8203;(java.lang.String&nbsp;text,
+                                            int&nbsp;gridx,
+                                            int&nbsp;gridy,
+                                            int&nbsp;gridwidth,
+                                            int&nbsp;gridheight,
+                                            int&nbsp;anchor,
+                                            int&nbsp;fill)</pre>
 <div class="block">Adds a label</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -397,6 +411,8 @@ extends javascript.swing.JSPanel</pre>
 <dd><code>gridheight</code> - The grid height</dd>
 <dd><code>anchor</code> - The anchor</dd>
 <dd><code>fill</code> - The fill</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The label</dd>
 </dl>
 </li>
 </ul>
@@ -482,6 +498,20 @@ extends javascript.swing.JSPanel</pre>
 </dl>
 </li>
 </ul>
+<a id="setGradientColor(pizzapazza.color.Z4GradientColor)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setGradientColor</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setGradientColor&#8203;(<a href="../../../color/Z4GradientColor.html" title="class in pizzapazza.color">Z4GradientColor</a>&nbsp;gradientColor)</pre>
+<div class="block">Sets the gradient color to use</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>gradientColor</code> - The gradient color</dd>
+</dl>
+</li>
+</ul>
 <a id="pushPointPositions(def.js.Array,int,int)">
 <!--   -->
 </a>
@@ -510,13 +540,27 @@ extends javascript.swing.JSPanel</pre>
 <div class="block">Sets the enabled property of all points</div>
 </li>
 </ul>
+<a id="getSelectedFiller()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSelectedFiller</h4>
+<pre class="methodSignature">public&nbsp;<a href="../../../filler/Z4AbstractFiller.html" title="interface in pizzapazza.filler">Z4AbstractFiller</a>&nbsp;getSelectedFiller()</pre>
+<div class="block">Returns the selected filler</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The selected filler</dd>
+</dl>
+</li>
+</ul>
 <a id="drawPreview(boolean)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>drawPreview</h4>
-<pre class="methodSignature">protected&nbsp;void&nbsp;drawPreview&#8203;(boolean&nbsp;adjusting)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;drawPreview&#8203;(boolean&nbsp;adjusting)</pre>
 <div class="block">Draws the preview</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

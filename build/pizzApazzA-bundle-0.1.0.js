@@ -1574,11 +1574,12 @@ class Z4Canvas extends JSComponent {
    *
    * @param width The image width
    * @param height The image height
-   * @param color The filling color
+   * @param filling The filling (an instance of Color, Z4AbstractFiller or
+   * Z4BiGradientColor)
    */
-   create(width, height, color) {
+   create(width, height, filling) {
     this.paper.reset();
-    this.paper.addLayer(Z4Translations.BACKGROUND_LAYER, width, height, color, width, height);
+    this.paper.addLayer(Z4Translations.BACKGROUND_LAYER, width, height, filling, width, height);
     this.width = width;
     this.height = height;
     this.ribbonLayerPanel.reset();
@@ -1751,10 +1752,11 @@ class Z4Canvas extends JSComponent {
    *
    * @param width The layer width
    * @param height The layer height
-   * @param color The filling color
+   * @param filling The filling (an instance of Color, Z4AbstractFiller or
+   * Z4BiGradientColor)
    */
-   addLayer(width, height, color) {
-    this.paper.addLayer(this.findLayerName(), width, height, color, this.width, this.height);
+   addLayer(width, height, filling) {
+    this.paper.addLayer(this.findLayerName(), width, height, filling, this.width, this.height);
     this.afterAddLayer();
     this.drawCanvas();
   }
@@ -3267,6 +3269,15 @@ class Z4AbstractFillerPanel extends JSPanel {
   }
 
   /**
+   * Returns the selected filler
+   *
+   * @return The selected filler
+   */
+   getSelectedFiller() {
+    return this.getFiller(this.gradientColor, this.points, this.selectedOption);
+  }
+
+  /**
    * Draws the preview
    *
    * @param adjusting true if the value is adjusting, false otherwise
@@ -3312,15 +3323,6 @@ class Z4AbstractFillerPanel extends JSPanel {
    * @return The filler
    */
    getFiller(gradientColor, points, option) {
-  }
-
-  /**
-   * Returns the selected filler
-   *
-   * @return The selected filler
-   */
-   getSelectedFiller() {
-    return this.getFiller(this.gradientColor, this.points, this.selectedOption);
   }
 
    drawCircle(point, index) {
@@ -5805,7 +5807,24 @@ class Z4Layer {
       this.offscreenCtx.fillStyle = this.getFillStyle((filling).getRGBA_HEX());
       this.offscreenCtx.fillRect(0, 0, width, height);
     } else if (filling instanceof Z4AbstractFiller) {
+      let imageData = this.offscreenCtx.createImageData(width, height);
+      (filling).fill(imageData);
+      this.offscreenCtx.putImageData(imageData, 0, 0);
     } else if (filling instanceof Z4BiGradientColor) {
+      let imageData = this.offscreenCtx.createImageData(width, height);
+      let data = imageData.data;
+      for (let y = 0; y < height; y++) {
+        let gradientColor = (filling).getColorAt(y / height, true);
+        for (let x = 0; x < width; x++) {
+          let color = gradientColor.getColorAt(x / width, true);
+          let index = (y * width + x) * 4;
+          data[index] = color.red;
+          data[index + 1] = color.green;
+          data[index + 2] = color.blue;
+          data[index + 3] = color.alpha;
+        }
+      }
+      this.offscreenCtx.putImageData(imageData, 0, 0);
     }
     this.offsetX = (containerWidth - width) / 2;
     this.offsetY = (containerHeight - height) / 2;
@@ -5986,12 +6005,13 @@ class Z4Paper {
    * @param name The layer name
    * @param width The layer width
    * @param height The layer height
-   * @param color The filling color
+   * @param filling The filling (an instance of Color, Z4AbstractFiller or
+   * Z4BiGradientColor)
    * @param containerWidth The container width
    * @param containerHeight The container height
    */
-   addLayer(name, width, height, color, containerWidth, containerHeight) {
-    this.layers.push(new Z4Layer(name, width, height, color, containerWidth, containerHeight));
+   addLayer(name, width, height, filling, containerWidth, containerHeight) {
+    this.layers.push(new Z4Layer(name, width, height, filling, containerWidth, containerHeight));
   }
 
   /**

@@ -42,7 +42,24 @@ class Z4Layer {
       this.offscreenCtx.fillStyle = this.getFillStyle((filling).getRGBA_HEX());
       this.offscreenCtx.fillRect(0, 0, width, height);
     } else if (filling instanceof Z4AbstractFiller) {
+      let imageData = this.offscreenCtx.createImageData(width, height);
+      (filling).fill(imageData);
+      this.offscreenCtx.putImageData(imageData, 0, 0);
     } else if (filling instanceof Z4BiGradientColor) {
+      let imageData = this.offscreenCtx.createImageData(width, height);
+      let data = imageData.data;
+      for (let y = 0; y < height; y++) {
+        let gradientColor = (filling).getColorAt(y / height, true);
+        for (let x = 0; x < width; x++) {
+          let color = gradientColor.getColorAt(x / width, true);
+          let index = (y * width + x) * 4;
+          data[index] = color.red;
+          data[index + 1] = color.green;
+          data[index + 2] = color.blue;
+          data[index + 3] = color.alpha;
+        }
+      }
+      this.offscreenCtx.putImageData(imageData, 0, 0);
     }
     this.offsetX = (containerWidth - width) / 2;
     this.offsetY = (containerHeight - height) / 2;

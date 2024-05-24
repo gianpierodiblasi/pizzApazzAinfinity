@@ -192,9 +192,9 @@ extends javascript.swing.JSComponent</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addLayer(int,int,javascript.awt.Color)">addLayer</a></span>&#8203;(int&nbsp;width,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addLayer(int,int,java.lang.Object)">addLayer</a></span>&#8203;(int&nbsp;width,
         int&nbsp;height,
-        javascript.awt.Color&nbsp;color)</code></th>
+        java.lang.Object&nbsp;filling)</code></th>
 <td class="colLast">
 <div class="block">Adds a layer</div>
 </td>
@@ -215,9 +215,9 @@ extends javascript.swing.JSComponent</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#create(int,int,javascript.awt.Color)">create</a></span>&#8203;(int&nbsp;width,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#create(int,int,java.lang.Object)">create</a></span>&#8203;(int&nbsp;width,
       int&nbsp;height,
-      javascript.awt.Color&nbsp;color)</code></th>
+      java.lang.Object&nbsp;filling)</code></th>
 <td class="colLast">
 <div class="block">Creates a new project</div>
 </td>
@@ -417,7 +417,7 @@ extends javascript.swing.JSComponent</pre>
 </dl>
 </li>
 </ul>
-<a id="create(int,int,javascript.awt.Color)">
+<a id="create(int,int,java.lang.Object)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -425,13 +425,14 @@ extends javascript.swing.JSComponent</pre>
 <h4>create</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;create&#8203;(int&nbsp;width,
                    int&nbsp;height,
-                   javascript.awt.Color&nbsp;color)</pre>
+                   java.lang.Object&nbsp;filling)</pre>
 <div class="block">Creates a new project</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>width</code> - The image width</dd>
 <dd><code>height</code> - The image height</dd>
-<dd><code>color</code> - The filling color</dd>
+<dd><code>filling</code> - The filling (an instance of Color, Z4AbstractFiller or
+ Z4BiGradientColor)</dd>
 </dl>
 </li>
 </ul>
@@ -507,7 +508,7 @@ extends javascript.swing.JSComponent</pre>
 </dl>
 </li>
 </ul>
-<a id="addLayer(int,int,javascript.awt.Color)">
+<a id="addLayer(int,int,java.lang.Object)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -515,13 +516,14 @@ extends javascript.swing.JSComponent</pre>
 <h4>addLayer</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;addLayer&#8203;(int&nbsp;width,
                      int&nbsp;height,
-                     javascript.awt.Color&nbsp;color)</pre>
+                     java.lang.Object&nbsp;filling)</pre>
 <div class="block">Adds a layer</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>width</code> - The layer width</dd>
 <dd><code>height</code> - The layer height</dd>
-<dd><code>color</code> - The filling color</dd>
+<dd><code>filling</code> - The filling (an instance of Color, Z4AbstractFiller or
+ Z4BiGradientColor)</dd>
 </dl>
 </li>
 </ul>

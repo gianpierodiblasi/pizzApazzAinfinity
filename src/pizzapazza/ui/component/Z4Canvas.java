@@ -107,11 +107,12 @@ public class Z4Canvas extends JSComponent {
    *
    * @param width The image width
    * @param height The image height
-   * @param color The filling color
+   * @param filling The filling (an instance of Color, Z4AbstractFiller or
+   * Z4BiGradientColor)
    */
-  public void create(int width, int height, Color color) {
+  public void create(int width, int height, Object filling) {
     this.paper.reset();
-    this.paper.addLayer(Z4Translations.BACKGROUND_LAYER, width, height, color, width, height);
+    this.paper.addLayer(Z4Translations.BACKGROUND_LAYER, width, height, filling, width, height);
 
     this.width = width;
     this.height = height;
@@ -329,10 +330,11 @@ public class Z4Canvas extends JSComponent {
    *
    * @param width The layer width
    * @param height The layer height
-   * @param color The filling color
+   * @param filling The filling (an instance of Color, Z4AbstractFiller or
+   * Z4BiGradientColor)
    */
-  public void addLayer(int width, int height, Color color) {
-    this.paper.addLayer(this.findLayerName(), width, height, color, this.width, this.height);
+  public void addLayer(int width, int height, Object filling) {
+    this.paper.addLayer(this.findLayerName(), width, height, filling, this.width, this.height);
     this.afterAddLayer();
     this.drawCanvas();
   }

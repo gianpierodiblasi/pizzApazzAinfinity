@@ -27,6 +27,12 @@
     catch(err) {
     }
 //-->
+var data = {"i0":10,"i1":10,"i2":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var altColor = "altColor";
+var rowColor = "rowColor";
+var tableTab = "tableTab";
+var activeTableTab = "activeTableTab";
 var pathtoroot = "../../../../";
 var useModuleDirectories = true;
 loadScripts(document, 'script');</script>
@@ -95,7 +101,7 @@ loadScripts(document, 'script');</script>
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a id="skip.navbar.top">
@@ -141,7 +147,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public class <span class="typeNameLabel">Z4BiGradientColorPanel</span>
 extends javascript.swing.JSPanel</pre>
-<div class="block">The panel to manage a gradient color</div>
+<div class="block">The panel to manage a bigradient color</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>gianpiero.diblasi</dd>
@@ -167,7 +173,9 @@ extends javascript.swing.JSPanel</pre>
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">Z4BiGradientColorPanel</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Creates the object</div>
+</td>
 </tr>
 </table>
 </li>
@@ -180,6 +188,36 @@ extends javascript.swing.JSPanel</pre>
 <!--   -->
 </a>
 <h3>Method Summary</h3>
+<table class="memberSummary">
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Method</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr id="i0" class="altColor">
+<td class="colFirst"><code><a href="../../../color/Z4BiGradientColor.html" title="class in pizzapazza.color">Z4BiGradientColor</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSelectedBiGradientColor()">getSelectedBiGradientColor</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the selected bigradient color</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSize(int,int)">setSize</a></span>&#8203;(int&nbsp;width,
+       int&nbsp;height)</code></th>
+<td class="colLast">
+<div class="block">Sets the preview size</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSpaceTimeLabelsVisible(boolean)">setSpaceTimeLabelsVisible</a></span>&#8203;(boolean&nbsp;b)</code></th>
+<td class="colLast">
+<div class="block">Sets the visibility of the space and time labels</div>
+</td>
+</tr>
+</table>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.javascript.swing.JSPanel">
 <!--   -->
@@ -224,6 +262,61 @@ extends javascript.swing.JSPanel</pre>
 <li class="blockList">
 <h4>Z4BiGradientColorPanel</h4>
 <pre>public&nbsp;Z4BiGradientColorPanel()</pre>
+<div class="block">Creates the object</div>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<!-- ============ METHOD DETAIL ========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="method.detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a id="setSpaceTimeLabelsVisible(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSpaceTimeLabelsVisible</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setSpaceTimeLabelsVisible&#8203;(boolean&nbsp;b)</pre>
+<div class="block">Sets the visibility of the space and time labels</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>b</code> - true to show the space and time labels, false otherwise</dd>
+</dl>
+</li>
+</ul>
+<a id="setSize(int,int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSize</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setSize&#8203;(int&nbsp;width,
+                    int&nbsp;height)</pre>
+<div class="block">Sets the preview size</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>width</code> - The width</dd>
+<dd><code>height</code> - The height</dd>
+</dl>
+</li>
+</ul>
+<a id="getSelectedBiGradientColor()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getSelectedBiGradientColor</h4>
+<pre class="methodSignature">public&nbsp;<a href="../../../color/Z4BiGradientColor.html" title="class in pizzapazza.color">Z4BiGradientColor</a>&nbsp;getSelectedBiGradientColor()</pre>
+<div class="block">Returns the selected bigradient color</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The selected bigradient color</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -290,7 +383,7 @@ extends javascript.swing.JSPanel</pre>
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a id="skip.navbar.bottom">

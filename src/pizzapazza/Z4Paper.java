@@ -39,12 +39,13 @@ public class Z4Paper {
    * @param name The layer name
    * @param width The layer width
    * @param height The layer height
-   * @param color The filling color
+   * @param filling The filling (an instance of Color, Z4AbstractFiller or
+   * Z4BiGradientColor)
    * @param containerWidth The container width
    * @param containerHeight The container height
    */
-  public void addLayer(String name, int width, int height, Color color, int containerWidth, int containerHeight) {
-    this.layers.push(new Z4Layer(name, width, height, color, containerWidth, containerHeight));
+  public void addLayer(String name, int width, int height, Object filling, int containerWidth, int containerHeight) {
+    this.layers.push(new Z4Layer(name, width, height, filling, containerWidth, containerHeight));
   }
 
   /**
