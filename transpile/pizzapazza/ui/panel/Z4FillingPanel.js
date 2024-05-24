@@ -60,23 +60,21 @@ class Z4FillingPanel extends JSPanel {
     flatPanel.add(button, BorderLayout.EAST);
     let gradientColorPanel = this.cardColorPanels[1];
     gradientColorPanel.addChangeListener(event => {
-      this.cardFillerSelectors.forEach((card2, index2, array2) => {
-        switch(card2) {
-          case "FLAT":
-            break;
-          case "LINEAR":
-          case "VERTEX":
-          case "CONIC":
-          case "SPIRAL":
-          case "BEZIER":
-          case "SINUSOIDAL":
-            (this.cardFillerPanels[index2]).drawPreview(gradientColorPanel.getValueIsAdjusting());
-            break;
-          case "TEXTURE":
-            break;
-          case "BIGRADIENT":
-        }
-      });
+      switch(this.selectedFillerSelector) {
+        case "FLAT":
+          break;
+        case "LINEAR":
+        case "VERTEX":
+        case "CONIC":
+        case "SPIRAL":
+        case "BEZIER":
+        case "SINUSOIDAL":
+          (this.selectedFillerPanel).drawPreview(gradientColorPanel.getValueIsAdjusting());
+          break;
+        case "TEXTURE":
+          break;
+        case "BIGRADIENT":
+      }
     });
     (this.cardColorPanels[3]).setSpaceTimeLabelsVisible(false);
     let buttonGroup = new ButtonGroup();
@@ -87,6 +85,8 @@ class Z4FillingPanel extends JSPanel {
       radio.setSelected(index === 0);
       radio.setIcon(new Z4EmptyImageProducer(index));
       radio.addActionListener(event => {
+        this.selectedFillerSelector = card;
+        this.selectedFillerPanel = this.cardFillerPanels[index];
         cardFiller.show(panelFiller, card);
         switch(card) {
           case "FLAT":
@@ -101,6 +101,7 @@ class Z4FillingPanel extends JSPanel {
           case "SINUSOIDAL":
             cardColor.show(panelColor, "GRADIENT");
             hline.getStyle().visibility = "visible";
+            (this.selectedFillerPanel).drawPreview(false);
             break;
           case "TEXTURE":
             cardColor.show(panelColor, "NONE");
@@ -172,5 +173,31 @@ class Z4FillingPanel extends JSPanel {
     div.getStyle().background = "var(--main-action-bgcolor";
     this.addComponent(div, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, new Insets(2, 1, 2, 1));
     return div;
+  }
+
+  /**
+   * Sets the preview size
+   *
+   * @param width The width
+   * @param height The height
+   */
+   setSize(width, height) {
+    this.cardFillerSelectors.forEach((card, index, array) => {
+      switch(card) {
+        case "FLAT":
+          break;
+        case "LINEAR":
+        case "VERTEX":
+        case "CONIC":
+        case "SPIRAL":
+        case "BEZIER":
+        case "SINUSOIDAL":
+        case "TEXTURE":
+          (this.cardFillerPanels[index]).setSize(width, height);
+          break;
+        case "BIGRADIENT":
+          break;
+      }
+    });
   }
 }
