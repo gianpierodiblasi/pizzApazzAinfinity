@@ -65,6 +65,7 @@ pizzApazzA has been tested on:
 - jsweet-core - [link](https://repository.jsweet.org/artifactory/libs-release-local/org/jsweet/jsweet-core/)
 - swing.js - [link](https://github.com/gianpierodiblasi/swing.js)
 - Bezier.js - [link](https://pomax.github.io/bezierjs/)
+- JSZip - [link](https://stuk.github.io/jszip/)
 
 ## Build
 pizzApazzA is developed in NetBeans as an ANT project. In order to perform a build you can use [ANT](https://ant.apache.org/),

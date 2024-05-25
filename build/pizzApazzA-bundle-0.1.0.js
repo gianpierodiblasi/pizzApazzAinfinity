@@ -1647,16 +1647,19 @@ class Z4Canvas extends JSComponent {
    * @param file The file
    */
    openProject(file) {
-    new JSZip().loadAsync(file).then(zip => {
-      zip.file("manifest.json").async("string", null).then(str => {
-        this.paper.reset();
-        this.ribbonLayerPanel.reset();
-        let json = JSON.parse("" + str);
-        this.width = json["width"];
-        this.height = json["height"];
-        this.openLayer(zip, json, json["layers"], 0);
+    Z4UI.pleaseWait(() => this.statusPanel.setProgressBarString(Z4Translations.OPEN_PROJECT + "..."), () => {
+      new JSZip().loadAsync(file).then(zip => {
+        zip.file("manifest.json").async("string", null).then(str => {
+          this.paper.reset();
+          this.ribbonLayerPanel.reset();
+          let json = JSON.parse("" + str);
+          this.width = json["width"];
+          this.height = json["height"];
+          this.openLayer(zip, json, json["layers"], 0);
+        });
       });
-    });
+      return null;
+    }, obj => this.statusPanel.setProgressBarString(""));
   }
 
    openLayer(zip, json, layers, index) {
@@ -1688,9 +1691,12 @@ class Z4Canvas extends JSComponent {
    * @param apply The function to call after saving
    */
    saveProject(projectName, apply) {
-    this.projectName = projectName;
-    this.statusPanel.setProjectName(projectName);
-    this.saveLayer(new JSZip(), new Array(), 0, apply);
+    Z4UI.pleaseWait(() => this.statusPanel.setProgressBarString(Z4Translations.SAVE_PROJECT + "..."), () => {
+      this.projectName = projectName;
+      this.statusPanel.setProjectName(projectName);
+      this.saveLayer(new JSZip(), new Array(), 0, apply);
+      return null;
+    }, obj => this.statusPanel.setProgressBarString(""));
   }
 
    saveLayer(zip, layers, index, apply) {
@@ -1731,22 +1737,25 @@ class Z4Canvas extends JSComponent {
    * @param quality The quality
    */
    exportToFile(filename, ext, quality) {
-    let offscreen = new OffscreenCanvas(this.width, this.height);
-    let offscreenCtx = offscreen.getContext("2d");
-    this.paper.draw(offscreenCtx, false);
-    let options = new Object();
-    options["type"] = ext === ".png" ? "image/png" : "image/jpeg";
-    options["quality"] = quality;
-    offscreen.convertToBlob(options).then(blob => {
-      let link = document.createElement("a");
-      link.setAttribute("href", URL.createObjectURL(blob));
-      link.setAttribute("download", filename + ext);
-      document.body.appendChild(link);
-      let event = document.createEvent("MouseEvents");
-      event.initEvent("click", false, false);
-      link.dispatchEvent(event);
-      document.body.removeChild(link);
-    });
+    Z4UI.pleaseWait(() => this.statusPanel.setProgressBarString(Z4Translations.EXPORT + "..."), () => {
+      let offscreen = new OffscreenCanvas(this.width, this.height);
+      let offscreenCtx = offscreen.getContext("2d");
+      this.paper.draw(offscreenCtx, false);
+      let options = new Object();
+      options["type"] = ext === ".png" ? "image/png" : "image/jpeg";
+      options["quality"] = quality;
+      offscreen.convertToBlob(options).then(blob => {
+        let link = document.createElement("a");
+        link.setAttribute("href", URL.createObjectURL(blob));
+        link.setAttribute("download", filename + ext);
+        document.body.appendChild(link);
+        let event = document.createEvent("MouseEvents");
+        event.initEvent("click", false, false);
+        link.dispatchEvent(event);
+        document.body.removeChild(link);
+      });
+      return null;
+    }, obj => this.statusPanel.setProgressBarString(""));
   }
 
   /**
@@ -4226,12 +4235,8 @@ class Z4RibbonFilePanel extends JSPanel {
   }
 
    createFromColor() {
-    this.statusPanel.setProgressBarString(Z4Translations.CREATE + "...");
-    document.querySelector(".please-wait").classList.add("please-wait-visible");
-    setTimeout(() => {
-      let panel = new Z4NewImagePanel();
+    Z4UI.pleaseWait(() => this.statusPanel.setProgressBarString(Z4Translations.CREATE + "..."), () => new Z4NewImagePanel(), panel => {
       this.statusPanel.setProgressBarString("");
-      document.querySelector(".please-wait").classList.remove("please-wait-visible");
       JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => {
       }, () => true, response => {
         if (response === JSOptionPane.OK_OPTION) {
@@ -4239,7 +4244,7 @@ class Z4RibbonFilePanel extends JSPanel {
           this.canvas.create(size.width, size.height, panel.getSelectedFilling());
         }
       });
-    }, 0);
+    });
   }
 
    createFromFile() {
@@ -4464,12 +4469,8 @@ class Z4RibbonLayerPanel extends JSPanel {
   }
 
    addFromColor() {
-    this.statusPanel.setProgressBarString(Z4Translations.CREATE + "...");
-    document.querySelector(".please-wait").classList.add("please-wait-visible");
-    setTimeout(() => {
-      let panel = new Z4NewImagePanel();
+    Z4UI.pleaseWait(() => this.statusPanel.setProgressBarString(Z4Translations.CREATE + "..."), () => new Z4NewImagePanel(), panel => {
       this.statusPanel.setProgressBarString("");
-      document.querySelector(".please-wait").classList.remove("please-wait-visible");
       JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => {
       }, () => true, response => {
         if (response === JSOptionPane.OK_OPTION) {
@@ -4477,7 +4478,7 @@ class Z4RibbonLayerPanel extends JSPanel {
           this.canvas.addLayer(size.width, size.height, panel.getSelectedFilling());
         }
       });
-    }, 0);
+    });
   }
 
    addFromFile() {
@@ -5644,7 +5645,7 @@ class Z4Translations {
     // Ribbon Help
     Z4Translations.HELP = "Help";
     Z4Translations.ABOUT = "About";
-    Z4Translations.BASED_ON = "<p>pizzApazzA<sup>&#8734;</sup> Version $version$ is based on pizzApazzA VB6 by Ettore Luzio and is licensed under <a href='https://unlicense.org/'>Unlicense license</a>.</p>" + "<p>Developed in Java by Gianpiero Di Blasi, transpilled in JavaScript by means of <a href='https://github.com/gianpierodiblasi/josetta' target='_blank'>Josetta</a> (<a href='https://github.com/gianpierodiblasi/pizzApazzAinfinity' target='_blank'>github repository</a>).</p>" + "<p>Dependencies:</p>" + "<ul>" + "<li><a href='https://repository.jsweet.org/artifactory/libs-release-local/org/jsweet/jsweet-core/' target='_blank'>jsweet-core</a></li>" + "<li><a href='https://github.com/gianpierodiblasi/swing.js' target='_blank'>swing.js</a></li>" + "<li><a href='https://pomax.github.io/bezierjs/' target='_blank'>Bezier.js</a></li>" + "</ul>";
+    Z4Translations.BASED_ON = "<p>pizzApazzA<sup>&#8734;</sup> Version $version$ is based on pizzApazzA VB6 by Ettore Luzio and is licensed under <a href='https://unlicense.org/'>Unlicense license</a>.</p>" + "<p>Developed in Java by Gianpiero Di Blasi, transpilled in JavaScript by means of <a href='https://github.com/gianpierodiblasi/josetta' target='_blank'>Josetta</a> (<a href='https://github.com/gianpierodiblasi/pizzApazzAinfinity' target='_blank'>github repository</a>).</p>" + "<p>Dependencies: " + "<a href='https://repository.jsweet.org/artifactory/libs-release-local/org/jsweet/jsweet-core/' target='_blank'>jsweet-core</a>, " + "<a href='https://github.com/gianpierodiblasi/swing.js' target='_blank'>swing.js</a>, " + "<a href='https://pomax.github.io/bezierjs/' target='_blank'>Bezier.js</a>, " + "<a href='https://stuk.github.io/jszip/' target='_blank'>JSZip</a>." + "</p>";
     // Other
     Z4Translations.PROJECT_NAME = "Project Name";
     Z4Translations.FILENAME = "File Name";
@@ -5745,7 +5746,7 @@ class Z4Translations {
     // Ribbon Help
     Z4Translations.HELP = "Aiuto";
     Z4Translations.ABOUT = "Informazioni su";
-    Z4Translations.BASED_ON = "<p>pizzApazzA<sup>&#8734;</sup> Versione $version$ \u00E8 basato su pizzApazzA VB6 di Ettore Luzio ed \u00E8 distribuito con <a href='https://unlicense.org/' target='_blank'>licenza Unlicense</a>.</p>" + "<p>Sviluppato in Java da Gianpiero Di Blasi, tradotto in JavaScript tramite <a href='https://github.com/gianpierodiblasi/josetta' target='_blank'>Josetta</a> (<a href='https://github.com/gianpierodiblasi/pizzApazzAinfinity' target='_blank'>repository github</a>).</p>" + "<p>Dipendenze:</p>" + "<ul>" + "<li><a href='https://repository.jsweet.org/artifactory/libs-release-local/org/jsweet/jsweet-core/' target='_blank'>jsweet-core</a></li>" + "<li><a href='https://github.com/gianpierodiblasi/swing.js' target='_blank'>swing.js</a></li>" + "<li><a href='https://pomax.github.io/bezierjs/' target='_blank'>Bezier.js</a></li>" + "</ul>";
+    Z4Translations.BASED_ON = "<p>pizzApazzA<sup>&#8734;</sup> Versione $version$ \u00E8 basato su pizzApazzA VB6 di Ettore Luzio ed \u00E8 distribuito con <a href='https://unlicense.org/' target='_blank'>licenza Unlicense</a>.</p>" + "<p>Sviluppato in Java da Gianpiero Di Blasi, tradotto in JavaScript tramite <a href='https://github.com/gianpierodiblasi/josetta' target='_blank'>Josetta</a> (<a href='https://github.com/gianpierodiblasi/pizzApazzAinfinity' target='_blank'>repository github</a>).</p>" + "<p>Dipendenze: " + "<a href='https://repository.jsweet.org/artifactory/libs-release-local/org/jsweet/jsweet-core/' target='_blank'>jsweet-core</a>, " + "<a href='https://github.com/gianpierodiblasi/swing.js' target='_blank'>swing.js</a>, " + "<a href='https://pomax.github.io/bezierjs/' target='_blank'>Bezier.js</a>, " + "<a href='https://stuk.github.io/jszip/' target='_blank'>JSZip.</a>" + "</p>";
     // Other
     Z4Translations.PROJECT_NAME = "Nome Progetto";
     Z4Translations.FILENAME = "Nome File";
@@ -5809,6 +5810,34 @@ class Z4Translations {
     Z4Translations.COMPOSITE_OPERATION_COLOR = "Preserva la luminanza del contenuto esistente, adottando la tonalit\u00E0 e la saturazione del livello";
     Z4Translations.COMPOSITE_OPERATION_LUMINOSITY = "Preserva la tonalit\u00E0 e il croma del contenuto esistente, adottando la luminanza del livello";
     Z4Translations.CURRENT_LANGUAGE = new KeyValue("it", Z4Translations.LANGUAGE_ITALIAN_NATIVE);
+  }
+}
+/**
+ * UI utilities
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4UI {
+
+  /**
+   * Waits for a process to complete
+   *
+   * @param <T> The object returned by the process
+   * @param beforeProcess The actions to do before the process
+   * @param process The process
+   * @param afterProcess The actions to do before the process
+   */
+  static  pleaseWait(beforeProcess, process, afterProcess) {
+    document.querySelector(".please-wait").classList.add("please-wait-visible");
+    beforeProcess();
+    setTimeout(() => {
+      let obj = process();
+      document.querySelector(".please-wait").classList.remove("please-wait-visible");
+      afterProcess(obj);
+    }, 0);
+  }
+
+  constructor() {
   }
 }
 /**

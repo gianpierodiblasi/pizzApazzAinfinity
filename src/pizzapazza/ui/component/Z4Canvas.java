@@ -10,7 +10,6 @@ import def.dom.URL;
 import def.dom.WheelEvent;
 import def.js.Array;
 import def.js.JSON;
-import javascript.awt.Color;
 import javascript.awt.Dimension;
 import javascript.awt.Point;
 import javascript.swing.JSComponent;
@@ -20,6 +19,7 @@ import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
+import pizzapazza.util.Z4UI;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
@@ -190,18 +190,22 @@ public class Z4Canvas extends JSComponent {
    * @param file The file
    */
   public void openProject(File file) {
-    new $JSZip().loadAsync(file).then(zip -> {
-      zip.file("manifest.json").async("string", null).then(str -> {
-        this.paper.reset();
-        this.ribbonLayerPanel.reset();
+    Z4UI.pleaseWait(() -> this.statusPanel.setProgressBarString(Z4Translations.OPEN_PROJECT + "..."), () -> {
+      new $JSZip().loadAsync(file).then(zip -> {
+        zip.file("manifest.json").async("string", null).then(str -> {
+          this.paper.reset();
+          this.ribbonLayerPanel.reset();
 
-        $Object json = ($Object) JSON.parse("" + str);
-        this.width = json.$get("width");
-        this.height = json.$get("height");
+          $Object json = ($Object) JSON.parse("" + str);
+          this.width = json.$get("width");
+          this.height = json.$get("height");
 
-        this.openLayer(zip, json, json.$get("layers"), 0);
+          this.openLayer(zip, json, json.$get("layers"), 0);
+        });
       });
-    });
+
+      return null;
+    }, obj -> this.statusPanel.setProgressBarString(""));
   }
 
   private void openLayer($JSZip zip, $Object json, Array<$Object> layers, int index) {
@@ -236,10 +240,14 @@ public class Z4Canvas extends JSComponent {
    * @param apply The function to call after saving
    */
   public void saveProject(String projectName, $Apply_0_Void apply) {
-    this.projectName = projectName;
-    this.statusPanel.setProjectName(projectName);
+    Z4UI.pleaseWait(() -> this.statusPanel.setProgressBarString(Z4Translations.SAVE_PROJECT + "..."), () -> {
+      this.projectName = projectName;
+      this.statusPanel.setProjectName(projectName);
 
-    this.saveLayer(new $JSZip(), new Array<>(), 0, apply);
+      this.saveLayer(new $JSZip(), new Array<>(), 0, apply);
+
+      return null;
+    }, obj -> this.statusPanel.setProgressBarString(""));
   }
 
   private void saveLayer($JSZip zip, Array<String> layers, int index, $Apply_0_Void apply) {
@@ -302,27 +310,31 @@ public class Z4Canvas extends JSComponent {
    */
   @SuppressWarnings("StringEquality")
   public void exportToFile(String filename, String ext, double quality) {
-    $OffscreenCanvas offscreen = new $OffscreenCanvas(this.width, this.height);
-    $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
-    this.paper.draw(offscreenCtx, false);
+    Z4UI.pleaseWait(() -> this.statusPanel.setProgressBarString(Z4Translations.EXPORT + "..."), () -> {
+      $OffscreenCanvas offscreen = new $OffscreenCanvas(this.width, this.height);
+      $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
+      this.paper.draw(offscreenCtx, false);
 
-    $Object options = new $Object();
-    options.$set("type", ext == ".png" ? "image/png" : "image/jpeg");
-    options.$set("quality", quality);
+      $Object options = new $Object();
+      options.$set("type", ext == ".png" ? "image/png" : "image/jpeg");
+      options.$set("quality", quality);
 
-    offscreen.convertToBlob(options).then(blob -> {
-      HTMLElement link = document.createElement("a");
-      link.setAttribute("href", URL.createObjectURL(blob));
-      link.setAttribute("download", filename + ext);
+      offscreen.convertToBlob(options).then(blob -> {
+        HTMLElement link = document.createElement("a");
+        link.setAttribute("href", URL.createObjectURL(blob));
+        link.setAttribute("download", filename + ext);
 
-      document.body.appendChild(link);
+        document.body.appendChild(link);
 
-      Event event = document.createEvent("MouseEvents");
-      event.initEvent("click", false, false);
-      link.dispatchEvent(event);
+        Event event = document.createEvent("MouseEvents");
+        event.initEvent("click", false, false);
+        link.dispatchEvent(event);
 
-      document.body.removeChild(link);
-    });
+        document.body.removeChild(link);
+      });
+
+      return null;
+    }, obj -> this.statusPanel.setProgressBarString(""));
   }
 
   /**

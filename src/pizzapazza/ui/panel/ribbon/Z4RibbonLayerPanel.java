@@ -21,11 +21,11 @@ import pizzapazza.ui.panel.Z4NewImagePanel;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
+import pizzapazza.util.Z4UI;
 import simulation.dom.$DOMRect;
 import static simulation.js.$Globals.$typeof;
 import static simulation.js.$Globals.navigator;
 import static simulation.js.$Globals.parseInt;
-import static simulation.js.$Globals.setTimeout;
 
 /**
  * The ribbon panel containing the layer menus
@@ -167,13 +167,8 @@ public class Z4RibbonLayerPanel extends JSPanel {
   }
 
   private void addFromColor() {
-    this.statusPanel.setProgressBarString(Z4Translations.CREATE + "...");
-    document.querySelector(".please-wait").classList.add("please-wait-visible");
-
-    setTimeout(() -> {
-      Z4NewImagePanel panel = new Z4NewImagePanel();
+    Z4UI.pleaseWait(() -> this.statusPanel.setProgressBarString(Z4Translations.CREATE + "..."), () -> new Z4NewImagePanel(), panel -> {
       this.statusPanel.setProgressBarString("");
-      document.querySelector(".please-wait").classList.remove("please-wait-visible");
 
       JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener -> {
       }, () -> true, response -> {
@@ -182,7 +177,7 @@ public class Z4RibbonLayerPanel extends JSPanel {
           this.canvas.addLayer(size.width, size.height, panel.getSelectedFilling());
         }
       });
-    }, 0);
+    });
   }
 
   private void addFromFile() {

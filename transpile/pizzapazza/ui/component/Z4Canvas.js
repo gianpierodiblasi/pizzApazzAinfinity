@@ -150,16 +150,19 @@ class Z4Canvas extends JSComponent {
    * @param file The file
    */
    openProject(file) {
-    new JSZip().loadAsync(file).then(zip => {
-      zip.file("manifest.json").async("string", null).then(str => {
-        this.paper.reset();
-        this.ribbonLayerPanel.reset();
-        let json = JSON.parse("" + str);
-        this.width = json["width"];
-        this.height = json["height"];
-        this.openLayer(zip, json, json["layers"], 0);
+    Z4UI.pleaseWait(() => this.statusPanel.setProgressBarString(Z4Translations.OPEN_PROJECT + "..."), () => {
+      new JSZip().loadAsync(file).then(zip => {
+        zip.file("manifest.json").async("string", null).then(str => {
+          this.paper.reset();
+          this.ribbonLayerPanel.reset();
+          let json = JSON.parse("" + str);
+          this.width = json["width"];
+          this.height = json["height"];
+          this.openLayer(zip, json, json["layers"], 0);
+        });
       });
-    });
+      return null;
+    }, obj => this.statusPanel.setProgressBarString(""));
   }
 
    openLayer(zip, json, layers, index) {
@@ -191,9 +194,12 @@ class Z4Canvas extends JSComponent {
    * @param apply The function to call after saving
    */
    saveProject(projectName, apply) {
-    this.projectName = projectName;
-    this.statusPanel.setProjectName(projectName);
-    this.saveLayer(new JSZip(), new Array(), 0, apply);
+    Z4UI.pleaseWait(() => this.statusPanel.setProgressBarString(Z4Translations.SAVE_PROJECT + "..."), () => {
+      this.projectName = projectName;
+      this.statusPanel.setProjectName(projectName);
+      this.saveLayer(new JSZip(), new Array(), 0, apply);
+      return null;
+    }, obj => this.statusPanel.setProgressBarString(""));
   }
 
    saveLayer(zip, layers, index, apply) {
@@ -234,22 +240,25 @@ class Z4Canvas extends JSComponent {
    * @param quality The quality
    */
    exportToFile(filename, ext, quality) {
-    let offscreen = new OffscreenCanvas(this.width, this.height);
-    let offscreenCtx = offscreen.getContext("2d");
-    this.paper.draw(offscreenCtx, false);
-    let options = new Object();
-    options["type"] = ext === ".png" ? "image/png" : "image/jpeg";
-    options["quality"] = quality;
-    offscreen.convertToBlob(options).then(blob => {
-      let link = document.createElement("a");
-      link.setAttribute("href", URL.createObjectURL(blob));
-      link.setAttribute("download", filename + ext);
-      document.body.appendChild(link);
-      let event = document.createEvent("MouseEvents");
-      event.initEvent("click", false, false);
-      link.dispatchEvent(event);
-      document.body.removeChild(link);
-    });
+    Z4UI.pleaseWait(() => this.statusPanel.setProgressBarString(Z4Translations.EXPORT + "..."), () => {
+      let offscreen = new OffscreenCanvas(this.width, this.height);
+      let offscreenCtx = offscreen.getContext("2d");
+      this.paper.draw(offscreenCtx, false);
+      let options = new Object();
+      options["type"] = ext === ".png" ? "image/png" : "image/jpeg";
+      options["quality"] = quality;
+      offscreen.convertToBlob(options).then(blob => {
+        let link = document.createElement("a");
+        link.setAttribute("href", URL.createObjectURL(blob));
+        link.setAttribute("download", filename + ext);
+        document.body.appendChild(link);
+        let event = document.createEvent("MouseEvents");
+        event.initEvent("click", false, false);
+        link.dispatchEvent(event);
+        document.body.removeChild(link);
+      });
+      return null;
+    }, obj => this.statusPanel.setProgressBarString(""));
   }
 
   /**
