@@ -23,6 +23,7 @@ import pizzapazza.ui.panel.filler.Z4AbstractFillerPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4EmptyImageProducer;
 import pizzapazza.util.Z4Translations;
+import pizzapazza.util.Z4UI;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.document;
 
@@ -51,6 +52,7 @@ public class Z4FillingPanel extends JSPanel {
   /**
    * Creates the object
    */
+  @SuppressWarnings("StringEquality")
   public Z4FillingPanel() {
     super();
     this.setLayout(new GridBagLayout());
@@ -128,51 +130,20 @@ public class Z4FillingPanel extends JSPanel {
       radio.addActionListener(event -> {
         this.selectedFillerSelector = card;
 
-        if (!$exists(this.cardFillerPanels.$get(index))) {
-          this.selectedFillerPanel = eval(this.cardFillerEvalPanels.$get(index));
-          ((Z4AbstractFillerPanel) this.selectedFillerPanel).setSize(this.width, this.height);
-          ((Z4AbstractFillerPanel) this.selectedFillerPanel).setGradientColor(gradientColorPanel.getGradientColor());
-
-          this.cardFillerPanels.$set(index, this.selectedFillerPanel);
-          panelFiller.add(this.selectedFillerPanel, card);
-        } else {
+        if ($exists(this.cardFillerPanels.$get(index))) {
           this.selectedFillerPanel = this.cardFillerPanels.$get(index);
-        }
-
-        cardFiller.show(panelFiller, card);
-
-        switch (card) {
-          case "FLAT":
-            cardColor.show(panelColor, "FLAT");
-
-            panelFiller.getStyle().display = "none";
-            panelColor.getStyle().display = "block";
-            break;
-          case "LINEAR":
-          case "VERTEX":
-          case "CONIC":
-          case "SPIRAL":
-          case "BEZIER":
-          case "SINUSOIDAL":
-            cardColor.show(panelColor, "GRADIENT");
-
-            panelFiller.getStyle().display = "block";
-            panelColor.getStyle().display = "block";
-
-            ((Z4AbstractFillerPanel) this.selectedFillerPanel).drawPreview(false);
-            break;
-          case "TEXTURE":
-            cardColor.show(panelColor, "NONE");
-
-            panelFiller.getStyle().display = "block";
-            panelColor.getStyle().display = "none";
-            break;
-          case "BIGRADIENT":
-            cardColor.show(panelColor, "BIGRADIENT");
-
-            panelFiller.getStyle().display = "none";
-            panelColor.getStyle().display = "block";
-            break;
+          this.afterSelection(panelFiller, cardFiller, card, panelColor, cardColor);
+        } else if (card == "BEZIER") {
+          Z4UI.pleaseWait(() -> {
+          }, () -> eval(this.cardFillerEvalPanels.$get(index)), (JSPanel panel) -> {
+            this.selectedFillerPanel = panel;
+            this.afterEval(panelFiller, card, index, gradientColorPanel);
+            this.afterSelection(panelFiller, cardFiller, card, panelColor, cardColor);
+          });
+        } else {
+          this.selectedFillerPanel = eval(this.cardFillerEvalPanels.$get(index));
+          this.afterEval(panelFiller, card, index, gradientColorPanel);
+          this.afterSelection(panelFiller, cardFiller, card, panelColor, cardColor);
         }
       });
 
@@ -221,6 +192,51 @@ public class Z4FillingPanel extends JSPanel {
       constraints.insets = insets;
     }
     this.add(component, constraints);
+  }
+
+  private void afterEval(JSPanel panelFiller, String card, int index, Z4GradientColorPanel gradientColorPanel) {
+    ((Z4AbstractFillerPanel) this.selectedFillerPanel).setSize(this.width, this.height);
+    ((Z4AbstractFillerPanel) this.selectedFillerPanel).setGradientColor(gradientColorPanel.getGradientColor());
+    this.cardFillerPanels.$set(index, this.selectedFillerPanel);
+    panelFiller.add(this.selectedFillerPanel, card);
+  }
+
+  private void afterSelection(JSPanel panelFiller, CardLayout cardFiller, String card, JSPanel panelColor, CardLayout cardColor) {
+    cardFiller.show(panelFiller, card);
+
+    switch (card) {
+      case "FLAT":
+        cardColor.show(panelColor, "FLAT");
+
+        panelFiller.getStyle().display = "none";
+        panelColor.getStyle().display = "block";
+        break;
+      case "LINEAR":
+      case "VERTEX":
+      case "CONIC":
+      case "SPIRAL":
+      case "BEZIER":
+      case "SINUSOIDAL":
+        cardColor.show(panelColor, "GRADIENT");
+
+        panelFiller.getStyle().display = "block";
+        panelColor.getStyle().display = "block";
+
+        ((Z4AbstractFillerPanel) this.selectedFillerPanel).drawPreview(false);
+        break;
+      case "TEXTURE":
+        cardColor.show(panelColor, "NONE");
+
+        panelFiller.getStyle().display = "block";
+        panelColor.getStyle().display = "none";
+        break;
+      case "BIGRADIENT":
+        cardColor.show(panelColor, "BIGRADIENT");
+
+        panelFiller.getStyle().display = "none";
+        panelColor.getStyle().display = "block";
+        break;
+    }
   }
 
   /**
