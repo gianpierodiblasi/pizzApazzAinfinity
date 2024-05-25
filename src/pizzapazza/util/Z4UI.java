@@ -1,9 +1,11 @@
 package pizzapazza.util;
 
 import static def.dom.Globals.document;
+import def.dom.HTMLElement;
 import simulation.js.$Apply_0_T;
 import simulation.js.$Apply_0_Void;
 import simulation.js.$Apply_1_Void;
+import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.setTimeout;
 
 /**
@@ -22,12 +24,20 @@ public class Z4UI {
    * @param afterProcess The actions to do before the process
    */
   public static <T extends Object> void pleaseWait($Apply_0_Void beforeProcess, $Apply_0_T<T> process, $Apply_1_Void<T> afterProcess) {
-    document.querySelector(".please-wait").classList.add("please-wait-visible");
+    document.querySelectorAll("dialog").forEach(dialog -> {
+      if (!$exists(dialog.querySelector(".please-wait"))) {
+        HTMLElement pleaseWait = document.createElement("div");
+        pleaseWait.classList.add("please-wait");
+        dialog.appendChild(pleaseWait);
+      }
+    });
+    document.querySelectorAll(".please-wait").forEach(element -> element.classList.add("please-wait-visible"));
+
     beforeProcess.$apply();
 
     setTimeout(() -> {
       T obj = process.$apply();
-      document.querySelector(".please-wait").classList.remove("please-wait-visible");
+      document.querySelectorAll(".please-wait").forEach(element -> element.classList.remove("please-wait-visible"));
       afterProcess.$apply(obj);
     }, 0);
   }

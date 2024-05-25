@@ -72,11 +72,11 @@
   width: 2.2rem;
 }
 
-/* frame */
+/* frame/dialog */
 .z4frame {
 }
 
-.z4frame .please-wait {
+.z4frame .please-wait, .jsdialog .please-wait {
   position: absolute;
   top: 0;
   left: 0;
@@ -87,7 +87,7 @@
   background: var(--main-action-bgcolor);
   opacity: .25;
 }
-.z4frame .please-wait.please-wait-visible {
+.z4frame .please-wait.please-wait-visible, .jsdialog .please-wait.please-wait-visible {
   display: block;
 }
 

@@ -14,11 +14,18 @@ class Z4UI {
    * @param afterProcess The actions to do before the process
    */
   static  pleaseWait(beforeProcess, process, afterProcess) {
-    document.querySelector(".please-wait").classList.add("please-wait-visible");
+    document.querySelectorAll("dialog").forEach(dialog => {
+      if (!dialog.querySelector(".please-wait")) {
+        let pleaseWait = document.createElement("div");
+        pleaseWait.classList.add("please-wait");
+        dialog.appendChild(pleaseWait);
+      }
+    });
+    document.querySelectorAll(".please-wait").forEach(element => element.classList.add("please-wait-visible"));
     beforeProcess();
     setTimeout(() => {
       let obj = process();
-      document.querySelector(".please-wait").classList.remove("please-wait-visible");
+      document.querySelectorAll(".please-wait").forEach(element => element.classList.remove("please-wait-visible"));
       afterProcess(obj);
     }, 0);
   }
