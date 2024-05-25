@@ -7,13 +7,19 @@ class Z4FillingPanel extends JSPanel {
 
    cardFillerSelectors = new Array("FLAT", "LINEAR", "VERTEX", "CONIC", "SPIRAL", "BEZIER", "SINUSOIDAL", "TEXTURE", "BIGRADIENT");
 
-   cardFillerPanels = new Array(new JSPanel(), new Z4LinearFillerPanel(), new Z4VertexBasedFillerPanel(), new Z4ConicFillerPanel(), new Z4SpiralFillerPanel(), new Z4BezierFillerPanel(), new Z4SinusoidalFillerPanel(), new Z4TextureFillerPanel(), new JSPanel());
+   cardFillerPanels = new Array(new JSPanel(), null, null, null, null, null, null, null, new JSPanel());
+
+   cardFillerEvalPanels = new Array("", "new Z4LinearFillerPanel()", "new Z4VertexBasedFillerPanel()", "new Z4ConicFillerPanel()", "new Z4SpiralFillerPanel()", "new Z4BezierFillerPanel()", "new Z4SinusoidalFillerPanel()", "new Z4TextureFillerPanel()", "");
 
    cardColorSelectors = new Array("FLAT", "GRADIENT", "NONE", "BIGRADIENT");
 
    cardColorPanels = new Array(new JSPanel(), new Z4GradientColorPanel(), new JSPanel(), new Z4BiGradientColorPanel());
 
    colorPreview = new Z4ColorPreview();
+
+   width = Z4Constants.DEFAULT_IMAGE_SIZE;
+
+   height = Z4Constants.DEFAULT_IMAGE_SIZE;
 
    selectedFillerSelector = "FLAT";
 
@@ -88,7 +94,15 @@ class Z4FillingPanel extends JSPanel {
       radio.setIcon(new Z4EmptyImageProducer(index));
       radio.addActionListener(event => {
         this.selectedFillerSelector = card;
-        this.selectedFillerPanel = this.cardFillerPanels[index];
+        if (!this.cardFillerPanels[index]) {
+          this.selectedFillerPanel = eval(this.cardFillerEvalPanels[index]);
+          (this.selectedFillerPanel).setSize(this.width, this.height);
+          (this.selectedFillerPanel).setGradientColor(gradientColorPanel.getGradientColor());
+          this.cardFillerPanels[index] = this.selectedFillerPanel;
+          panelFiller.add(this.selectedFillerPanel, card);
+        } else {
+          this.selectedFillerPanel = this.cardFillerPanels[index];
+        }
         cardFiller.show(panelFiller, card);
         switch(card) {
           case "FLAT":
@@ -121,40 +135,24 @@ class Z4FillingPanel extends JSPanel {
       });
       buttonGroup.add(radio);
       panelRadio.add(radio, null);
-      panelFiller.add(this.cardFillerPanels[index], card);
-    });
-    this.cardColorSelectors.forEach((card, index, array) => {
-      let panel = this.cardColorPanels[index];
-      panelColor.add(panel, card);
       switch(card) {
         case "FLAT":
+          panelFiller.add(this.cardFillerPanels[index], card);
           break;
-        case "GRADIENT":
-          let gradientColor = (panel).getGradientColor();
-          this.cardFillerSelectors.forEach((card2, index2, array2) => {
-            switch(card2) {
-              case "FLAT":
-                break;
-              case "LINEAR":
-              case "VERTEX":
-              case "CONIC":
-              case "SPIRAL":
-              case "BEZIER":
-              case "SINUSOIDAL":
-                (this.cardFillerPanels[index2]).setGradientColor(gradientColor);
-                break;
-              case "TEXTURE":
-                break;
-              case "BIGRADIENT":
-            }
-          });
-          break;
-        case "NONE":
+        case "LINEAR":
+        case "VERTEX":
+        case "CONIC":
+        case "SPIRAL":
+        case "BEZIER":
+        case "SINUSOIDAL":
+        case "TEXTURE":
           break;
         case "BIGRADIENT":
+          panelFiller.add(this.cardFillerPanels[index], card);
           break;
       }
     });
+    this.cardColorSelectors.forEach((card, index, array) => panelColor.add(this.cardColorPanels[index], card));
   }
 
    addVLine(gridx) {
@@ -213,6 +211,8 @@ class Z4FillingPanel extends JSPanel {
    * @param height The height
    */
    setSize(width, height) {
+    this.width = width;
+    this.height = height;
     this.cardFillerSelectors.forEach((card, index, array) => {
       switch(card) {
         case "FLAT":
@@ -224,7 +224,9 @@ class Z4FillingPanel extends JSPanel {
         case "BEZIER":
         case "SINUSOIDAL":
         case "TEXTURE":
-          (this.cardFillerPanels[index]).setSize(width, height);
+          if (this.cardFillerPanels[index]) {
+            (this.cardFillerPanels[index]).setSize(width, height);
+          }
           break;
         case "BIGRADIENT":
           break;

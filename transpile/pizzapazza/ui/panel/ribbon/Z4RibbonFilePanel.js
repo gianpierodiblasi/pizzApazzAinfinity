@@ -125,15 +125,13 @@ class Z4RibbonFilePanel extends JSPanel {
   }
 
    createFromColor() {
-    Z4UI.pleaseWait(() => this.statusPanel.setProgressBarString(Z4Translations.CREATE + "..."), () => new Z4NewImagePanel(), panel => {
-      this.statusPanel.setProgressBarString("");
-      JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => {
-      }, () => true, response => {
-        if (response === JSOptionPane.OK_OPTION) {
-          let size = panel.getSelectedSize();
-          this.canvas.create(size.width, size.height, panel.getSelectedFilling());
-        }
-      });
+    let panel = new Z4NewImagePanel();
+    JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => {
+    }, () => true, response => {
+      if (response === JSOptionPane.OK_OPTION) {
+        let size = panel.getSelectedSize();
+        this.canvas.create(size.width, size.height, panel.getSelectedFilling());
+      }
     });
   }
 

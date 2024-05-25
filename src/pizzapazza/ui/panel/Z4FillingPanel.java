@@ -1,6 +1,7 @@
 package pizzapazza.ui.panel;
 
 import def.js.Array;
+import static def.js.Globals.eval;
 import javascript.awt.BorderLayout;
 import javascript.awt.BoxLayout;
 import javascript.awt.CardLayout;
@@ -15,18 +16,11 @@ import javascript.swing.JSComponent;
 import javascript.swing.JSLabel;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
-import pizzapazza.color.Z4GradientColor;
 import pizzapazza.ui.component.Z4ColorPreview;
 import pizzapazza.ui.panel.color.Z4BiGradientColorPanel;
 import pizzapazza.ui.panel.color.Z4GradientColorPanel;
 import pizzapazza.ui.panel.filler.Z4AbstractFillerPanel;
-import pizzapazza.ui.panel.filler.Z4BezierFillerPanel;
-import pizzapazza.ui.panel.filler.Z4ConicFillerPanel;
-import pizzapazza.ui.panel.filler.Z4LinearFillerPanel;
-import pizzapazza.ui.panel.filler.Z4SinusoidalFillerPanel;
-import pizzapazza.ui.panel.filler.Z4SpiralFillerPanel;
-import pizzapazza.ui.panel.filler.Z4TextureFillerPanel;
-import pizzapazza.ui.panel.filler.Z4VertexBasedFillerPanel;
+import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4EmptyImageProducer;
 import pizzapazza.util.Z4Translations;
 import static simulation.js.$Globals.$exists;
@@ -40,10 +34,14 @@ import static simulation.js.$Globals.document;
 public class Z4FillingPanel extends JSPanel {
 
   private final Array<String> cardFillerSelectors = new Array<>("FLAT", "LINEAR", "VERTEX", "CONIC", "SPIRAL", "BEZIER", "SINUSOIDAL", "TEXTURE", "BIGRADIENT");
-  private final Array<JSPanel> cardFillerPanels = new Array<>(new JSPanel(), new Z4LinearFillerPanel(), new Z4VertexBasedFillerPanel(), new Z4ConicFillerPanel(), new Z4SpiralFillerPanel(), new Z4BezierFillerPanel(), new Z4SinusoidalFillerPanel(), new Z4TextureFillerPanel(), new JSPanel());
+  private final Array<JSPanel> cardFillerPanels = new Array<>(new JSPanel(), null, null, null, null, null, null, null, new JSPanel());
+  private final Array<String> cardFillerEvalPanels = new Array<>("", "new Z4LinearFillerPanel()", "new Z4VertexBasedFillerPanel()", "new Z4ConicFillerPanel()", "new Z4SpiralFillerPanel()", "new Z4BezierFillerPanel()", "new Z4SinusoidalFillerPanel()", "new Z4TextureFillerPanel()", "");
   private final Array<String> cardColorSelectors = new Array<>("FLAT", "GRADIENT", "NONE", "BIGRADIENT");
   private final Array<JSPanel> cardColorPanels = new Array<>(new JSPanel(), new Z4GradientColorPanel(), new JSPanel(), new Z4BiGradientColorPanel());
   private final Z4ColorPreview colorPreview = new Z4ColorPreview();
+
+  private int width = Z4Constants.DEFAULT_IMAGE_SIZE;
+  private int height = Z4Constants.DEFAULT_IMAGE_SIZE;
 
   private String selectedFillerSelector = "FLAT";
   private JSPanel selectedFillerPanel = this.cardFillerPanels.$get(0);
@@ -129,7 +127,18 @@ public class Z4FillingPanel extends JSPanel {
       radio.setIcon(new Z4EmptyImageProducer<>(index));
       radio.addActionListener(event -> {
         this.selectedFillerSelector = card;
-        this.selectedFillerPanel = this.cardFillerPanels.$get(index);
+
+        if (!$exists(this.cardFillerPanels.$get(index))) {
+          this.selectedFillerPanel = eval(this.cardFillerEvalPanels.$get(index));
+          ((Z4AbstractFillerPanel) this.selectedFillerPanel).setSize(this.width, this.height);
+          ((Z4AbstractFillerPanel) this.selectedFillerPanel).setGradientColor(gradientColorPanel.getGradientColor());
+
+          this.cardFillerPanels.$set(index, this.selectedFillerPanel);
+          panelFiller.add(this.selectedFillerPanel, card);
+        } else {
+          this.selectedFillerPanel = this.cardFillerPanels.$get(index);
+        }
+
         cardFiller.show(panelFiller, card);
 
         switch (card) {
@@ -170,42 +179,25 @@ public class Z4FillingPanel extends JSPanel {
       buttonGroup.add(radio);
       panelRadio.add(radio, null);
 
-      panelFiller.add(this.cardFillerPanels.$get(index), card);
-    });
-
-    this.cardColorSelectors.forEach((card, index, array) -> {
-      JSPanel panel = this.cardColorPanels.$get(index);
-      panelColor.add(panel, card);
-
       switch (card) {
         case "FLAT":
+          panelFiller.add(this.cardFillerPanels.$get(index), card);
           break;
-        case "GRADIENT":
-          Z4GradientColor gradientColor = ((Z4GradientColorPanel) panel).getGradientColor();
-          this.cardFillerSelectors.forEach((card2, index2, array2) -> {
-            switch (card2) {
-              case "FLAT":
-                break;
-              case "LINEAR":
-              case "VERTEX":
-              case "CONIC":
-              case "SPIRAL":
-              case "BEZIER":
-              case "SINUSOIDAL":
-                ((Z4AbstractFillerPanel) this.cardFillerPanels.$get(index2)).setGradientColor(gradientColor);
-                break;
-              case "TEXTURE":
-                break;
-              case "BIGRADIENT":
-            }
-          });
-          break;
-        case "NONE":
+        case "LINEAR":
+        case "VERTEX":
+        case "CONIC":
+        case "SPIRAL":
+        case "BEZIER":
+        case "SINUSOIDAL":
+        case "TEXTURE":
           break;
         case "BIGRADIENT":
+          panelFiller.add(this.cardFillerPanels.$get(index), card);
           break;
       }
     });
+
+    this.cardColorSelectors.forEach((card, index, array) -> panelColor.add(this.cardColorPanels.$get(index), card));
   }
 
   private void addVLine(int gridx) {
@@ -264,6 +256,9 @@ public class Z4FillingPanel extends JSPanel {
    * @param height The height
    */
   public void setSize(int width, int height) {
+    this.width = width;
+    this.height = height;
+
     this.cardFillerSelectors.forEach((card, index, array) -> {
       switch (card) {
         case "FLAT":
@@ -275,7 +270,9 @@ public class Z4FillingPanel extends JSPanel {
         case "BEZIER":
         case "SINUSOIDAL":
         case "TEXTURE":
-          ((Z4AbstractFillerPanel) this.cardFillerPanels.$get(index)).setSize(width, height);
+          if ($exists(this.cardFillerPanels.$get(index))) {
+            ((Z4AbstractFillerPanel) this.cardFillerPanels.$get(index)).setSize(width, height);
+          }
           break;
         case "BIGRADIENT":
           break;

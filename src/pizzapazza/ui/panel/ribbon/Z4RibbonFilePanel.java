@@ -161,16 +161,14 @@ public class Z4RibbonFilePanel extends JSPanel {
   }
 
   private void createFromColor() {
-    Z4UI.pleaseWait(() -> this.statusPanel.setProgressBarString(Z4Translations.CREATE + "..."), () -> new Z4NewImagePanel(), panel -> {
-      this.statusPanel.setProgressBarString("");
+    Z4NewImagePanel panel = new Z4NewImagePanel();
 
-      JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener -> {
-      }, () -> true, response -> {
-        if (response == JSOptionPane.OK_OPTION) {
-          Dimension size = panel.getSelectedSize();
-          this.canvas.create(size.width, size.height, panel.getSelectedFilling());
-        }
-      });
+    JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener -> {
+    }, () -> true, response -> {
+      if (response == JSOptionPane.OK_OPTION) {
+        Dimension size = panel.getSelectedSize();
+        this.canvas.create(size.width, size.height, panel.getSelectedFilling());
+      }
     });
   }
 
