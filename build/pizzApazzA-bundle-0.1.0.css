@@ -84,8 +84,6 @@
   right: 0;
   display: none;
   cursor: wait;
-  background: var(--main-bgcolor);
-  opacity: .25;
 }
 .jsframe .please-wait.please-wait-visible, .jsdialog .please-wait.please-wait-visible {
   display: grid;

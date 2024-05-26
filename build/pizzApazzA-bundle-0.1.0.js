@@ -5860,7 +5860,7 @@ class Z4UI {
   static {
     Z4UI.PLEASE_WAIT.cssAddClass("please-wait");
     Z4UI.PLEASE_WAIT.setLayout(new GridBagLayout());
-    Z4UI.PROGRESS_BAR.getStyle().visibility = "hidden";
+    Z4UI.PROGRESS_BAR.getStyle().display = "none";
     let constraints = new GridBagConstraints();
     constraints.gridx = 0;
     constraints.gridy = 0;
@@ -5880,7 +5880,9 @@ class Z4UI {
    * @param component The component requiring the process
    * @param async true if the process is async, false otherwise; an async
    * process needs to manually call the <i>pleaseWaitCompleted</i> method and
-   * cannot define an <i>afterProcess</i> parameter
+   * cannot define an <i>afterProcess</i> parameter; a "virtually" async process
+   * can "advance" the progress bar by calling the <i>pleaseWaitAdvanced</i>
+   * method
    * @param showProgressBar true to show the progress bar
    * @param progressBarIndeterminate true to sets the progress bar as
    * indeterminate, false otherwise
@@ -5892,13 +5894,20 @@ class Z4UI {
    * @param afterProcess The actions to do before the process
    */
   static  pleaseWait(component, async, showProgressBar, progressBarIndeterminate, progressBarStringPainted, progressBarString, beforeProcess, process, afterProcess) {
-    Z4UI.PROGRESS_BAR.getStyle().visibility = showProgressBar ? "visible" : "hidden";
+    Z4UI.PROGRESS_BAR.getStyle().display = showProgressBar ? "grid" : "none";
     if (showProgressBar) {
       Z4UI.PROGRESS_BAR.setIndeterminate(progressBarIndeterminate);
       Z4UI.PROGRESS_BAR.setStringPainted(progressBarStringPainted);
       Z4UI.PROGRESS_BAR.setValue(0);
       Z4UI.PROGRESS_BAR.setString(progressBarString);
+    } else {
+      Z4UI.PROGRESS_BAR.setIndeterminate(false);
+      Z4UI.PROGRESS_BAR.setStringPainted(false);
+      Z4UI.PROGRESS_BAR.setValue(0);
+      Z4UI.PROGRESS_BAR.setString("");
     }
+    let color = Color.fromRGB_HEX(window.getComputedStyle(document.body).getPropertyValue("--main-action-bgcolor"));
+    Z4UI.PLEASE_WAIT.getStyle().background = new Color(color.red, color.green, color.blue, 64).getRGBA_HEX();
     Z4UI.PLEASE_WAIT.appendInBody();
     component.cssAddClass("please-wait-request");
     let parentRequest = document.querySelector(".jsdialog:has(.please-wait-request)");
@@ -5916,6 +5925,15 @@ class Z4UI {
         afterProcess(obj);
       }
     }, 0);
+  }
+
+  /**
+   * Advances the please wait
+   *
+   * @param process The next process
+   */
+  static  pleaseWaitAdvanced(process) {
+    setTimeout(() => process(), 0);
   }
 
   /**

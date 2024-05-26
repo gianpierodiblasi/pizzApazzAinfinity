@@ -1,6 +1,7 @@
 package pizzapazza.util;
 
 import def.dom.Element;
+import javascript.awt.Color;
 import javascript.awt.GridBagConstraints;
 import javascript.awt.GridBagLayout;
 import javascript.awt.Insets;
@@ -13,6 +14,7 @@ import simulation.js.$Apply_1_Void;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.setTimeout;
+import static simulation.js.$Globals.window;
 
 /**
  * UI utilities
@@ -28,7 +30,7 @@ public class Z4UI {
     Z4UI.PLEASE_WAIT.cssAddClass("please-wait");
     Z4UI.PLEASE_WAIT.setLayout(new GridBagLayout());
 
-    Z4UI.PROGRESS_BAR.getStyle().visibility = "hidden";
+    Z4UI.PROGRESS_BAR.getStyle().display = "none";
 
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = 0;
@@ -49,7 +51,9 @@ public class Z4UI {
    * @param component The component requiring the process
    * @param async true if the process is async, false otherwise; an async
    * process needs to manually call the <i>pleaseWaitCompleted</i> method and
-   * cannot define an <i>afterProcess</i> parameter
+   * cannot define an <i>afterProcess</i> parameter; a "virtually" async process
+   * can "advance" the progress bar by calling the <i>pleaseWaitAdvanced</i>
+   * method
    * @param showProgressBar true to show the progress bar
    * @param progressBarIndeterminate true to sets the progress bar as
    * indeterminate, false otherwise
@@ -61,15 +65,22 @@ public class Z4UI {
    * @param afterProcess The actions to do before the process
    */
   public static <T extends Object> void pleaseWait(JSComponent component, boolean async, boolean showProgressBar, boolean progressBarIndeterminate, boolean progressBarStringPainted, String progressBarString, $Apply_0_Void beforeProcess, $Apply_0_T<T> process, $Apply_1_Void<T> afterProcess) {
-    Z4UI.PROGRESS_BAR.getStyle().visibility = showProgressBar ? "visible" : "hidden";
+    Z4UI.PROGRESS_BAR.getStyle().display = showProgressBar ? "grid" : "none";
 
     if (showProgressBar) {
       Z4UI.PROGRESS_BAR.setIndeterminate(progressBarIndeterminate);
       Z4UI.PROGRESS_BAR.setStringPainted(progressBarStringPainted);
       Z4UI.PROGRESS_BAR.setValue(0);
       Z4UI.PROGRESS_BAR.setString(progressBarString);
+    } else {
+      Z4UI.PROGRESS_BAR.setIndeterminate(false);
+      Z4UI.PROGRESS_BAR.setStringPainted(false);
+      Z4UI.PROGRESS_BAR.setValue(0);
+      Z4UI.PROGRESS_BAR.setString("");
     }
 
+    Color color = Color.fromRGB_HEX(window.getComputedStyle(document.body).getPropertyValue("--main-action-bgcolor"));
+    Z4UI.PLEASE_WAIT.getStyle().background = new Color(color.red, color.green, color.blue, 64).getRGBA_HEX();
     Z4UI.PLEASE_WAIT.appendInBody();
 
     component.cssAddClass("please-wait-request");
@@ -90,6 +101,15 @@ public class Z4UI {
         afterProcess.$apply(obj);
       }
     }, 0);
+  }
+
+  /**
+   * Advances the please wait
+   *
+   * @param process The next process
+   */
+  public static void pleaseWaitAdvanced($Apply_0_Void process) {
+    setTimeout(() -> process.$apply(), 0);
   }
 
   /**
