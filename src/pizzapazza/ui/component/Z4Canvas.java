@@ -6,6 +6,7 @@ import def.dom.FileReader;
 import static def.dom.Globals.document;
 import def.dom.HTMLElement;
 import def.dom.KeyboardEvent;
+import def.dom.MouseEvent;
 import def.dom.URL;
 import def.dom.WheelEvent;
 import def.js.Array;
@@ -28,6 +29,7 @@ import static simulation.filesaver.$FileSaver.saveAs;
 import simulation.js.$Apply_0_Void;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.navigator;
+import static simulation.js.$Globals.parseInt;
 import simulation.js.$Object;
 import simulation.jszip.$JSZip;
 
@@ -61,6 +63,10 @@ public class Z4Canvas extends JSComponent {
     super(document.createElement("div"));
     this.cssAddClass("z4canvas");
     this.appendNodeChild(this.canvas);
+
+    this.canvas.addEventListener("mousedown", event -> this.onMouse((MouseEvent) event, "down"));
+    this.canvas.addEventListener("mousemove", event -> this.onMouse((MouseEvent) event, "move"));
+    this.canvas.addEventListener("mouseup", event -> this.onMouse((MouseEvent) event, "up"));
 
     this.addEventListener("wheel", event -> {
       WheelEvent evt = (WheelEvent) event;
@@ -173,6 +179,7 @@ public class Z4Canvas extends JSComponent {
   private void afterCreate(String projectName, int width, int height) {
     this.projectName = projectName;
     this.statusPanel.setProjectName(projectName);
+    this.statusPanel.setProjectSize(width, height);
     this.statusPanel.setZoom(1);
 
     this.zoom = 1;
@@ -544,5 +551,17 @@ public class Z4Canvas extends JSComponent {
     this.ctx.scale(this.zoom, this.zoom);
     this.paper.draw(this.ctx, false);
     this.ctx.restore();
+  }
+
+  private void onMouse(MouseEvent event, String type) {
+    switch (type) {
+      case "down":
+        break;
+      case "move":
+        this.statusPanel.setMousePosition(parseInt(event.offsetX / this.zoom), parseInt(event.offsetY / this.zoom));
+        break;
+      case "up":
+        break;
+    }
   }
 }

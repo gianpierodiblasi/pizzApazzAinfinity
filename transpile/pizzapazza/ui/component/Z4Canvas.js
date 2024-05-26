@@ -34,6 +34,9 @@ class Z4Canvas extends JSComponent {
     super(document.createElement("div"));
     this.cssAddClass("z4canvas");
     this.appendNodeChild(this.canvas);
+    this.canvas.addEventListener("mousedown", event => this.onMouse(event, "down"));
+    this.canvas.addEventListener("mousemove", event => this.onMouse(event, "move"));
+    this.canvas.addEventListener("mouseup", event => this.onMouse(event, "up"));
     this.addEventListener("wheel", event => {
       let evt = event;
       if (!evt.ctrlKey) {
@@ -136,6 +139,7 @@ class Z4Canvas extends JSComponent {
    afterCreate(projectName, width, height) {
     this.projectName = projectName;
     this.statusPanel.setProjectName(projectName);
+    this.statusPanel.setProjectSize(width, height);
     this.statusPanel.setZoom(1);
     this.zoom = 1;
     this.saved = true;
@@ -461,5 +465,17 @@ class Z4Canvas extends JSComponent {
     this.ctx.scale(this.zoom, this.zoom);
     this.paper.draw(this.ctx, false);
     this.ctx.restore();
+  }
+
+   onMouse(event, type) {
+    switch(type) {
+      case "down":
+        break;
+      case "move":
+        this.statusPanel.setMousePosition(parseInt(event.offsetX / this.zoom), parseInt(event.offsetY / this.zoom));
+        break;
+      case "up":
+        break;
+    }
   }
 }

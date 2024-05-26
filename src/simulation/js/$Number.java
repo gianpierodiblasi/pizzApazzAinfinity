@@ -13,4 +13,8 @@ public class $Number extends def.js.Number {
   public $String toString(int radix) {
     return null;
   }
+  
+  public $String toFixed(int decimal) {
+    return null;
+  }
 }

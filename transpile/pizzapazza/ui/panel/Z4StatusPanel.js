@@ -35,6 +35,17 @@ class Z4StatusPanel extends JSPanel {
     constraints.gridy = 0;
     this.add(this.zoom, constraints);
     this.addPipe(3);
+    this.projectSize.setText(Z4Translations.DIMENSION + ": " + Z4Constants.DEFAULT_IMAGE_SIZE + " \u2716 " + Z4Constants.DEFAULT_IMAGE_SIZE);
+    this.setLabel(this.projectSize, 4);
+    this.addPipe(5);
+    this.mousePosition.getStyle().fontFamily = "monospace";
+    this.setMousePosition(0, 0);
+    this.setLabel(this.mousePosition, 6);
+    constraints = new GridBagConstraints();
+    constraints.gridx = 7;
+    constraints.gridy = 0;
+    constraints.weightx = 1;
+    this.add(new JSLabel(), constraints);
   }
 
    addPipe(gridx) {
@@ -49,6 +60,7 @@ class Z4StatusPanel extends JSPanel {
     let constraints = new GridBagConstraints();
     constraints.gridx = gridx;
     constraints.gridy = 0;
+    constraints.anchor = GridBagConstraints.CENTER;
     this.add(label, constraints);
   }
 
@@ -68,6 +80,26 @@ class Z4StatusPanel extends JSPanel {
    */
    setProjectName(projectName) {
     this.projectName.setText(Z4Translations.PROJECT_NAME + ": " + projectName);
+  }
+
+  /**
+   * Sets the project size
+   *
+   * @param width The width
+   * @param height The height
+   */
+   setProjectSize(width, height) {
+    this.projectSize.setText(Z4Translations.DIMENSION + ": " + width + " \u2716 " + height);
+  }
+
+  /**
+   * Sets the mouse position
+   *
+   * @param x The x-axis coordinate of the pixel
+   * @param y The y-axis coordinate of the pixel
+   */
+   setMousePosition(x, y) {
+    this.mousePosition.setText(new Number(x).toFixed(0).padStart(4, "\u00A0") + " \u2716 " + new Number(y).toFixed(0).padEnd(4, "\u00A0"));
   }
 
   /**

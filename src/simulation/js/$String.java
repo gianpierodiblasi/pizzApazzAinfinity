@@ -25,4 +25,16 @@ public class $String extends def.js.String {
   public $String padStart(int targetLength, def.js.String padString) {
     return null;
   }
+  
+  public $String padEnd(int targetLength, java.lang.String padString) {
+    return null;
+  }
+
+  public $String padEnd(int targetLength, $String padString) {
+    return null;
+  }
+
+  public $String padEnd(int targetLength, def.js.String padString) {
+    return null;
+  }
 }

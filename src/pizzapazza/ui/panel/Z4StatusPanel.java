@@ -12,6 +12,7 @@ import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
 import static simulation.js.$Globals.parseInt;
+import simulation.js.$Number;
 
 /**
  * The status panel
@@ -26,7 +27,7 @@ public class Z4StatusPanel extends JSPanel {
   private final JSLabel projectSize = new JSLabel();
   private final JSLabel mousePosition = new JSLabel();
   private final JSComboBox<KeyValue<String, String>> zoom = new JSComboBox<>();
-  
+
   public Z4StatusPanel() {
     super();
     this.cssAddClass("z4statuspanel");
@@ -34,6 +35,7 @@ public class Z4StatusPanel extends JSPanel {
 
     this.projectName.setText(Z4Translations.PROJECT_NAME + ": ");
     this.setLabel(this.projectName, 0);
+
     this.addPipe(1);
 
     DefaultKeyValueComboBoxModelAndRenderer<String, String> zoomModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer<>();
@@ -51,6 +53,21 @@ public class Z4StatusPanel extends JSPanel {
     this.add(this.zoom, constraints);
 
     this.addPipe(3);
+
+    this.projectSize.setText(Z4Translations.DIMENSION + ": " + Z4Constants.DEFAULT_IMAGE_SIZE + " \u2716 " + Z4Constants.DEFAULT_IMAGE_SIZE);
+    this.setLabel(this.projectSize, 4);
+
+    this.addPipe(5);
+
+    this.mousePosition.getStyle().fontFamily = "monospace";
+    this.setMousePosition(0, 0);
+    this.setLabel(this.mousePosition, 6);
+    
+    constraints = new GridBagConstraints();
+    constraints.gridx = 7;
+    constraints.gridy = 0;
+    constraints.weightx = 1;
+    this.add(new JSLabel(), constraints);
   }
 
   private void addPipe(int gridx) {
@@ -65,6 +82,7 @@ public class Z4StatusPanel extends JSPanel {
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = gridx;
     constraints.gridy = 0;
+    constraints.anchor = GridBagConstraints.CENTER;
     this.add(label, constraints);
   }
 
@@ -84,6 +102,26 @@ public class Z4StatusPanel extends JSPanel {
    */
   public void setProjectName(String projectName) {
     this.projectName.setText(Z4Translations.PROJECT_NAME + ": " + projectName);
+  }
+
+  /**
+   * Sets the project size
+   *
+   * @param width The width
+   * @param height The height
+   */
+  public void setProjectSize(int width, int height) {
+    this.projectSize.setText(Z4Translations.DIMENSION + ": " + width + " \u2716 " + height);
+  }
+
+  /**
+   * Sets the mouse position
+   *
+   * @param x The x-axis coordinate of the pixel
+   * @param y The y-axis coordinate of the pixel
+   */
+  public void setMousePosition(int x, int y) {
+    this.mousePosition.setText(new $Number(x).toFixed(0).padStart(4, "\u00A0") + " \u2716 " + new $Number(y).toFixed(0).padEnd(4, "\u00A0"));
   }
 
   /**
