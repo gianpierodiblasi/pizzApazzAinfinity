@@ -1006,14 +1006,7 @@ class TestPleaseWait extends JSFrame {
     super();
     let button = new JSButton();
     button.setText("TEST");
-    button.addActionListener(event => {
-      Z4UI.pleaseWait(button, true, true, false, true, "", () => {
-      }, () => {
-        this.iterate();
-        return null;
-      }, obj => {
-      });
-    });
+    button.addActionListener(event => Z4UI.pleaseWait(button, true, true, false, true, "", () => this.iterate()));
     let p = new JSPanel();
     p.add(button, null);
     this.getContentPane().add(p, BorderLayout.NORTH);

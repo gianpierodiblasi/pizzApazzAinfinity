@@ -8,9 +8,7 @@ import javascript.awt.Insets;
 import javascript.swing.JSComponent;
 import javascript.swing.JSPanel;
 import javascript.swing.JSProgressBar;
-import simulation.js.$Apply_0_T;
 import simulation.js.$Apply_0_Void;
-import simulation.js.$Apply_1_Void;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.setTimeout;
@@ -47,7 +45,6 @@ public class Z4UI {
   /**
    * Waits for a process to complete
    *
-   * @param <T> The object returned by the process
    * @param component The component requiring the process
    * @param async true if the process is async, false otherwise; an async
    * process needs to manually call the <i>pleaseWaitCompleted</i> method and
@@ -60,11 +57,9 @@ public class Z4UI {
    * @param progressBarStringPainted true to sets the string painted in progress
    * bar, false otherwise
    * @param progressBarString The string to paint in the progress bar
-   * @param beforeProcess The actions to do before the process
    * @param process The process
-   * @param afterProcess The actions to do before the process
    */
-  public static <T extends Object> void pleaseWait(JSComponent component, boolean async, boolean showProgressBar, boolean progressBarIndeterminate, boolean progressBarStringPainted, String progressBarString, $Apply_0_Void beforeProcess, $Apply_0_T<T> process, $Apply_1_Void<T> afterProcess) {
+  public static void pleaseWait(JSComponent component, boolean async, boolean showProgressBar, boolean progressBarIndeterminate, boolean progressBarStringPainted, String progressBarString, $Apply_0_Void process) {
     Z4UI.PROGRESS_BAR.getStyle().display = showProgressBar ? "grid" : "none";
 
     if (showProgressBar) {
@@ -82,6 +77,7 @@ public class Z4UI {
     Color color = Color.fromRGB_HEX(window.getComputedStyle(document.body).getPropertyValue("--main-action-bgcolor"));
     Z4UI.PLEASE_WAIT.getStyle().background = new Color(color.red, color.green, color.blue, 64).getRGBA_HEX();
     Z4UI.PLEASE_WAIT.appendInBody();
+    Z4UI.PLEASE_WAIT.cssAddClass("please-wait-visible");
 
     component.cssAddClass("please-wait-request");
     Element parentRequest = document.querySelector(".jsdialog:has(.please-wait-request)");
@@ -91,14 +87,11 @@ public class Z4UI {
     parentRequest.appendChild(document.querySelector(".please-wait"));
     component.cssRemoveClass("please-wait-request");
 
-    Z4UI.PLEASE_WAIT.cssAddClass("please-wait-visible");
-    beforeProcess.$apply();
-
     setTimeout(() -> {
-      T obj = process.$apply();
+      process.$apply();
+
       if (!async) {
         Z4UI.PLEASE_WAIT.cssRemoveClass("please-wait-visible");
-        afterProcess.$apply(obj);
       }
     }, 0);
   }

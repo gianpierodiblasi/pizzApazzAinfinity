@@ -28,7 +28,6 @@ class Z4UI {
   /**
    * Waits for a process to complete
    *
-   * @param <T> The object returned by the process
    * @param component The component requiring the process
    * @param async true if the process is async, false otherwise; an async
    * process needs to manually call the <i>pleaseWaitCompleted</i> method and
@@ -41,11 +40,9 @@ class Z4UI {
    * @param progressBarStringPainted true to sets the string painted in progress
    * bar, false otherwise
    * @param progressBarString The string to paint in the progress bar
-   * @param beforeProcess The actions to do before the process
    * @param process The process
-   * @param afterProcess The actions to do before the process
    */
-  static  pleaseWait(component, async, showProgressBar, progressBarIndeterminate, progressBarStringPainted, progressBarString, beforeProcess, process, afterProcess) {
+  static  pleaseWait(component, async, showProgressBar, progressBarIndeterminate, progressBarStringPainted, progressBarString, process) {
     Z4UI.PROGRESS_BAR.getStyle().display = showProgressBar ? "grid" : "none";
     if (showProgressBar) {
       Z4UI.PROGRESS_BAR.setIndeterminate(progressBarIndeterminate);
@@ -61,6 +58,7 @@ class Z4UI {
     let color = Color.fromRGB_HEX(window.getComputedStyle(document.body).getPropertyValue("--main-action-bgcolor"));
     Z4UI.PLEASE_WAIT.getStyle().background = new Color(color.red, color.green, color.blue, 64).getRGBA_HEX();
     Z4UI.PLEASE_WAIT.appendInBody();
+    Z4UI.PLEASE_WAIT.cssAddClass("please-wait-visible");
     component.cssAddClass("please-wait-request");
     let parentRequest = document.querySelector(".jsdialog:has(.please-wait-request)");
     if (!parentRequest) {
@@ -68,13 +66,10 @@ class Z4UI {
     }
     parentRequest.appendChild(document.querySelector(".please-wait"));
     component.cssRemoveClass("please-wait-request");
-    Z4UI.PLEASE_WAIT.cssAddClass("please-wait-visible");
-    beforeProcess();
     setTimeout(() => {
-      let obj = process();
+      process();
       if (!async) {
         Z4UI.PLEASE_WAIT.cssRemoveClass("please-wait-visible");
-        afterProcess(obj);
       }
     }, 0);
   }

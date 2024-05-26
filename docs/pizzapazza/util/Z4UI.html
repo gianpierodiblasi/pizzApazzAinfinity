@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -163,31 +163,44 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static &lt;T&gt;&nbsp;void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pleaseWait(javascript.swing.JSComponent,boolean,boolean,boolean,java.lang.String,simulation.js.$Apply_0_Void,simulation.js.$Apply_0_T,simulation.js.$Apply_1_Void)">pleaseWait</a></span>&#8203;(javascript.swing.JSComponent&nbsp;component,
+<td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pleaseWait(javascript.swing.JSComponent,boolean,boolean,boolean,boolean,java.lang.String,simulation.js.$Apply_0_Void)">pleaseWait</a></span>&#8203;(javascript.swing.JSComponent&nbsp;component,
+          boolean&nbsp;async,
           boolean&nbsp;showProgressBar,
           boolean&nbsp;progressBarIndeterminate,
           boolean&nbsp;progressBarStringPainted,
           java.lang.String&nbsp;progressBarString,
-          simulation.js.$Apply_0_Void&nbsp;beforeProcess,
-          simulation.js.$Apply_0_T&lt;T&gt;&nbsp;process,
-          simulation.js.$Apply_1_Void&lt;T&gt;&nbsp;afterProcess)</code></th>
+          simulation.js.$Apply_0_Void&nbsp;process)</code></th>
 <td class="colLast">
 <div class="block">Waits for a process to complete</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPleaseWaitProgressBarValue(int)">setPleaseWaitProgressBarValue</a></span>&#8203;(int&nbsp;value)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pleaseWaitAdvanced(simulation.js.$Apply_0_Void)">pleaseWaitAdvanced</a></span>&#8203;(simulation.js.$Apply_0_Void&nbsp;process)</code></th>
 <td class="colLast">
-<div class="block">Sets the progress bar value in the please wait</div>
+<div class="block">Advances the please wait</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setProgressBarString(java.lang.String)">setProgressBarString</a></span>&#8203;(java.lang.String&nbsp;string)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pleaseWaitCompleted()">pleaseWaitCompleted</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Completes the please wait</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPleaseWaitProgressBarString(java.lang.String)">setPleaseWaitProgressBarString</a></span>&#8203;(java.lang.String&nbsp;string)</code></th>
 <td class="colLast">
 <div class="block">Sets the progress bar string in the please wait</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPleaseWaitProgressBarValue(int)">setPleaseWaitProgressBarValue</a></span>&#8203;(int&nbsp;value)</code></th>
+<td class="colLast">
+<div class="block">Sets the progress bar value in the please wait</div>
 </td>
 </tr>
 </table>
@@ -214,36 +227,60 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="pleaseWait(javascript.swing.JSComponent,boolean,boolean,boolean,java.lang.String,simulation.js.$Apply_0_Void,simulation.js.$Apply_0_T,simulation.js.$Apply_1_Void)">
+<a id="pleaseWait(javascript.swing.JSComponent,boolean,boolean,boolean,boolean,java.lang.String,simulation.js.$Apply_0_Void)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>pleaseWait</h4>
-<pre class="methodSignature">public static&nbsp;&lt;T&gt;&nbsp;void&nbsp;pleaseWait&#8203;(javascript.swing.JSComponent&nbsp;component,
-                                  boolean&nbsp;showProgressBar,
-                                  boolean&nbsp;progressBarIndeterminate,
-                                  boolean&nbsp;progressBarStringPainted,
-                                  java.lang.String&nbsp;progressBarString,
-                                  simulation.js.$Apply_0_Void&nbsp;beforeProcess,
-                                  simulation.js.$Apply_0_T&lt;T&gt;&nbsp;process,
-                                  simulation.js.$Apply_1_Void&lt;T&gt;&nbsp;afterProcess)</pre>
+<pre class="methodSignature">public static&nbsp;void&nbsp;pleaseWait&#8203;(javascript.swing.JSComponent&nbsp;component,
+                              boolean&nbsp;async,
+                              boolean&nbsp;showProgressBar,
+                              boolean&nbsp;progressBarIndeterminate,
+                              boolean&nbsp;progressBarStringPainted,
+                              java.lang.String&nbsp;progressBarString,
+                              simulation.js.$Apply_0_Void&nbsp;process)</pre>
 <div class="block">Waits for a process to complete</div>
 <dl>
-<dt><span class="paramLabel">Type Parameters:</span></dt>
-<dd><code>T</code> - The object returned by the process</dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>component</code> - The component requiring the process</dd>
+<dd><code>async</code> - true if the process is async, false otherwise; an async
+ process needs to manually call the <i>pleaseWaitCompleted</i> method and
+ cannot define an <i>afterProcess</i> parameter; a "virtually" async process
+ can "advance" the progress bar by calling the <i>pleaseWaitAdvanced</i>
+ method</dd>
 <dd><code>showProgressBar</code> - true to show the progress bar</dd>
 <dd><code>progressBarIndeterminate</code> - true to sets the progress bar as
  indeterminate, false otherwise</dd>
 <dd><code>progressBarStringPainted</code> - true to sets the string painted in progress
  bar, false otherwise</dd>
 <dd><code>progressBarString</code> - The string to paint in the progress bar</dd>
-<dd><code>beforeProcess</code> - The actions to do before the process</dd>
 <dd><code>process</code> - The process</dd>
-<dd><code>afterProcess</code> - The actions to do before the process</dd>
 </dl>
+</li>
+</ul>
+<a id="pleaseWaitAdvanced(simulation.js.$Apply_0_Void)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>pleaseWaitAdvanced</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;pleaseWaitAdvanced&#8203;(simulation.js.$Apply_0_Void&nbsp;process)</pre>
+<div class="block">Advances the please wait</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>process</code> - The next process</dd>
+</dl>
+</li>
+</ul>
+<a id="pleaseWaitCompleted()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>pleaseWaitCompleted</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;pleaseWaitCompleted()</pre>
+<div class="block">Completes the please wait</div>
 </li>
 </ul>
 <a id="setPleaseWaitProgressBarValue(int)">
@@ -260,13 +297,13 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a id="setProgressBarString(java.lang.String)">
+<a id="setPleaseWaitProgressBarString(java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>setProgressBarString</h4>
-<pre class="methodSignature">public static&nbsp;void&nbsp;setProgressBarString&#8203;(java.lang.String&nbsp;string)</pre>
+<h4>setPleaseWaitProgressBarString</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;setPleaseWaitProgressBarString&#8203;(java.lang.String&nbsp;string)</pre>
 <div class="block">Sets the progress bar string in the please wait</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

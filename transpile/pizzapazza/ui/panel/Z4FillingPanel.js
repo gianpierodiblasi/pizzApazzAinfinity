@@ -99,8 +99,7 @@ class Z4FillingPanel extends JSPanel {
           this.afterSelection(panelFiller, cardFiller, card, panelColor, cardColor);
         } else if (card === "BEZIER") {
           Z4UI.pleaseWait(this, false, false, false, false, "", () => {
-          }, () => eval(this.cardFillerEvalPanels[index]), (panel) => {
-            this.selectedFillerPanel = panel;
+            this.selectedFillerPanel = eval(this.cardFillerEvalPanels[index]);
             this.afterEval(panelFiller, card, index, gradientColorPanel);
             this.afterSelection(panelFiller, cardFiller, card, panelColor, cardColor);
           });

@@ -88,6 +88,9 @@
 .jsframe .please-wait.please-wait-visible, .jsdialog .please-wait.please-wait-visible {
   display: grid;
 }
+.jsframe .please-wait *, .jsdialog .please-wait * {
+  cursor: wait;
+}
 
 /* panel */
 .z4exporttofilepanel {

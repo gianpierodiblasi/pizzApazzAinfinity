@@ -155,7 +155,6 @@ class Z4Canvas extends JSComponent {
    */
    openProject(file) {
     Z4UI.pleaseWait(this, true, true, false, true, "", () => {
-    }, () => {
       new JSZip().loadAsync(file).then(zip => {
         zip.file("manifest.json").async("string", null).then(str => {
           this.paper.reset();
@@ -166,8 +165,6 @@ class Z4Canvas extends JSComponent {
           this.openLayer(zip, json, json["layers"], 0);
         });
       });
-      return null;
-    }, obj => {
     });
   }
 
@@ -201,12 +198,9 @@ class Z4Canvas extends JSComponent {
    */
    saveProject(projectName, apply) {
     Z4UI.pleaseWait(this, true, true, false, true, "", () => {
-    }, () => {
       this.projectName = projectName;
       this.statusPanel.setProjectName(projectName);
       this.saveLayer(new JSZip(), new Array(), 0, apply);
-      return null;
-    }, obj => {
     });
   }
 
@@ -249,7 +243,6 @@ class Z4Canvas extends JSComponent {
    */
    exportToFile(filename, ext, quality) {
     Z4UI.pleaseWait(this, false, false, false, false, "", () => {
-    }, () => {
       let offscreen = new OffscreenCanvas(this.width, this.height);
       let offscreenCtx = offscreen.getContext("2d");
       this.paper.draw(offscreenCtx, false);
@@ -266,8 +259,6 @@ class Z4Canvas extends JSComponent {
         link.dispatchEvent(event);
         document.body.removeChild(link);
       });
-      return null;
-    }, obj => {
     });
   }
 
