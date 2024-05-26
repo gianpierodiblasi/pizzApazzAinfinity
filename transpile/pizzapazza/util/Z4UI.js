@@ -30,9 +30,9 @@ class Z4UI {
    *
    * @param component The component requiring the process
    * @param async true if the process is async, false otherwise; an async
-   * process needs to manually call the <i>pleaseWaitCompleted</i> method and
-   * cannot define an <i>afterProcess</i> parameter; a "virtually" async process
-   * can "advance" the progress bar by calling the <i>pleaseWaitAdvanced</i>
+   * process needs to manually call the <i>pleaseWaitCompleted</i> method; a
+   * "virtually" async process can "advance" the progress bar by calling the
+   * <i>pleaseWaitAdvanced</i>
    * method
    * @param showProgressBar true to show the progress bar
    * @param progressBarIndeterminate true to sets the progress bar as
@@ -69,7 +69,7 @@ class Z4UI {
     setTimeout(() => {
       process();
       if (!async) {
-        Z4UI.PLEASE_WAIT.cssRemoveClass("please-wait-visible");
+        Z4UI.pleaseWaitCompleted();
       }
     }, 0);
   }
