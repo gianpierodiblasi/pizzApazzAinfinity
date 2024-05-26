@@ -150,7 +150,8 @@ class Z4Canvas extends JSComponent {
    * @param file The file
    */
    openProject(file) {
-    Z4UI.pleaseWait(() => this.statusPanel.setProgressBarString(Z4Translations.OPEN_PROJECT + "..."), () => {
+    Z4UI.pleaseWait(this, true, true, false, true, "", () => {
+    }, () => {
       new JSZip().loadAsync(file).then(zip => {
         zip.file("manifest.json").async("string", null).then(str => {
           this.paper.reset();
@@ -162,13 +163,13 @@ class Z4Canvas extends JSComponent {
         });
       });
       return null;
-    }, obj => this.statusPanel.setProgressBarString(""));
+    }, obj => {
+    });
   }
 
    openLayer(zip, json, layers, index) {
-    zip.file("layers/layer" + index + ".png").async("blob", metadata => this.statusPanel.setProgressBarValue(metadata["percent"])).then(blob => {
+    zip.file("layers/layer" + index + ".png").async("blob", metadata => Z4UI.setPleaseWaitProgressBarValue(metadata["percent"])).then(blob => {
       let image = document.createElement("img");
-      this.statusPanel.setProgressBarValue(0);
       image.onload = event => {
         this.paper.addLayerFromImage(layers[index]["name"], image, image.width, image.height);
         let layer = this.paper.getLayerAt(index);
@@ -178,6 +179,7 @@ class Z4Canvas extends JSComponent {
         this.ribbonLayerPanel.addLayerPreview(layer);
         if (index + 1 === layers.length) {
           this.afterCreate(json["projectName"], json["width"], json["height"]);
+          Z4UI.pleaseWaitCompleted();
         } else {
           this.openLayer(zip, json, layers, index + 1);
         }
@@ -194,12 +196,14 @@ class Z4Canvas extends JSComponent {
    * @param apply The function to call after saving
    */
    saveProject(projectName, apply) {
-    Z4UI.pleaseWait(() => this.statusPanel.setProgressBarString(Z4Translations.SAVE_PROJECT + "..."), () => {
+    Z4UI.pleaseWait(this, true, true, false, true, "", () => {
+    }, () => {
       this.projectName = projectName;
       this.statusPanel.setProjectName(projectName);
       this.saveLayer(new JSZip(), new Array(), 0, apply);
       return null;
-    }, obj => this.statusPanel.setProgressBarString(""));
+    }, obj => {
+    });
   }
 
    saveLayer(zip, layers, index, apply) {
@@ -218,10 +222,10 @@ class Z4Canvas extends JSComponent {
         let compressionOptions = new Object();
         compressionOptions["level"] = 9;
         options["compressionOptions"] = compressionOptions;
-        zip.generateAsync(options, metadata => this.statusPanel.setProgressBarValue(metadata["percent"])).then(zipped => {
+        zip.generateAsync(options, metadata => Z4UI.setPleaseWaitProgressBarValue(metadata["percent"])).then(zipped => {
           saveAs(zipped, this.projectName + ".z4i");
-          this.statusPanel.setProgressBarValue(0);
           this.saved = true;
+          Z4UI.pleaseWaitCompleted();
           if (apply) {
             apply();
           }
@@ -240,7 +244,8 @@ class Z4Canvas extends JSComponent {
    * @param quality The quality
    */
    exportToFile(filename, ext, quality) {
-    Z4UI.pleaseWait(() => this.statusPanel.setProgressBarString(Z4Translations.EXPORT + "..."), () => {
+    Z4UI.pleaseWait(this, false, false, false, false, "", () => {
+    }, () => {
       let offscreen = new OffscreenCanvas(this.width, this.height);
       let offscreenCtx = offscreen.getContext("2d");
       this.paper.draw(offscreenCtx, false);
@@ -258,7 +263,8 @@ class Z4Canvas extends JSComponent {
         document.body.removeChild(link);
       });
       return null;
-    }, obj => this.statusPanel.setProgressBarString(""));
+    }, obj => {
+    });
   }
 
   /**

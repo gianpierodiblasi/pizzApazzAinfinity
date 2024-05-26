@@ -190,7 +190,8 @@ public class Z4Canvas extends JSComponent {
    * @param file The file
    */
   public void openProject(File file) {
-    Z4UI.pleaseWait(() -> this.statusPanel.setProgressBarString(Z4Translations.OPEN_PROJECT + "..."), () -> {
+    Z4UI.pleaseWait(this, true, true, false, true, "", () -> {
+    }, () -> {
       new $JSZip().loadAsync(file).then(zip -> {
         zip.file("manifest.json").async("string", null).then(str -> {
           this.paper.reset();
@@ -205,13 +206,13 @@ public class Z4Canvas extends JSComponent {
       });
 
       return null;
-    }, obj -> this.statusPanel.setProgressBarString(""));
+    }, obj -> {
+    });
   }
 
   private void openLayer($JSZip zip, $Object json, Array<$Object> layers, int index) {
-    zip.file("layers/layer" + index + ".png").async("blob", metadata -> this.statusPanel.setProgressBarValue(metadata.$get("percent"))).then(blob -> {
+    zip.file("layers/layer" + index + ".png").async("blob", metadata -> Z4UI.setPleaseWaitProgressBarValue(metadata.$get("percent"))).then(blob -> {
       $Image image = ($Image) document.createElement("img");
-      this.statusPanel.setProgressBarValue(0);
 
       image.onload = event -> {
         this.paper.addLayerFromImage(layers.$get(index).$get("name"), image, (int) image.width, (int) image.height);
@@ -223,6 +224,7 @@ public class Z4Canvas extends JSComponent {
 
         if (index + 1 == layers.length) {
           this.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
+          Z4UI.pleaseWaitCompleted();
         } else {
           this.openLayer(zip, json, layers, index + 1);
         }
@@ -240,14 +242,16 @@ public class Z4Canvas extends JSComponent {
    * @param apply The function to call after saving
    */
   public void saveProject(String projectName, $Apply_0_Void apply) {
-    Z4UI.pleaseWait(() -> this.statusPanel.setProgressBarString(Z4Translations.SAVE_PROJECT + "..."), () -> {
+    Z4UI.pleaseWait(this, true, true, false, true, "", () -> {
+    }, () -> {
       this.projectName = projectName;
       this.statusPanel.setProjectName(projectName);
 
       this.saveLayer(new $JSZip(), new Array<>(), 0, apply);
 
       return null;
-    }, obj -> this.statusPanel.setProgressBarString(""));
+    }, obj -> {
+    });
   }
 
   private void saveLayer($JSZip zip, Array<String> layers, int index, $Apply_0_Void apply) {
@@ -286,11 +290,11 @@ public class Z4Canvas extends JSComponent {
         compressionOptions.$set("level", 9);
         options.$set("compressionOptions", compressionOptions);
 
-        zip.generateAsync(options, metadata -> this.statusPanel.setProgressBarValue(metadata.$get("percent"))).then(zipped -> {
+        zip.generateAsync(options, metadata -> Z4UI.setPleaseWaitProgressBarValue(metadata.$get("percent"))).then(zipped -> {
           saveAs(zipped, this.projectName + ".z4i");
-          this.statusPanel.setProgressBarValue(0);
           this.saved = true;
 
+          Z4UI.pleaseWaitCompleted();
           if ($exists(apply)) {
             apply.$apply();
           }
@@ -310,7 +314,8 @@ public class Z4Canvas extends JSComponent {
    */
   @SuppressWarnings("StringEquality")
   public void exportToFile(String filename, String ext, double quality) {
-    Z4UI.pleaseWait(() -> this.statusPanel.setProgressBarString(Z4Translations.EXPORT + "..."), () -> {
+    Z4UI.pleaseWait(this, false, false, false, false, "", () -> {
+    }, () -> {
       $OffscreenCanvas offscreen = new $OffscreenCanvas(this.width, this.height);
       $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
       this.paper.draw(offscreenCtx, false);
@@ -334,7 +339,8 @@ public class Z4Canvas extends JSComponent {
       });
 
       return null;
-    }, obj -> this.statusPanel.setProgressBarString(""));
+    }, obj -> {
+    });
   }
 
   /**

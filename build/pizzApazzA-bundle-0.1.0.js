@@ -1647,7 +1647,8 @@ class Z4Canvas extends JSComponent {
    * @param file The file
    */
    openProject(file) {
-    Z4UI.pleaseWait(() => this.statusPanel.setProgressBarString(Z4Translations.OPEN_PROJECT + "..."), () => {
+    Z4UI.pleaseWait(this, true, true, false, true, "", () => {
+    }, () => {
       new JSZip().loadAsync(file).then(zip => {
         zip.file("manifest.json").async("string", null).then(str => {
           this.paper.reset();
@@ -1659,13 +1660,13 @@ class Z4Canvas extends JSComponent {
         });
       });
       return null;
-    }, obj => this.statusPanel.setProgressBarString(""));
+    }, obj => {
+    });
   }
 
    openLayer(zip, json, layers, index) {
-    zip.file("layers/layer" + index + ".png").async("blob", metadata => this.statusPanel.setProgressBarValue(metadata["percent"])).then(blob => {
+    zip.file("layers/layer" + index + ".png").async("blob", metadata => Z4UI.setPleaseWaitProgressBarValue(metadata["percent"])).then(blob => {
       let image = document.createElement("img");
-      this.statusPanel.setProgressBarValue(0);
       image.onload = event => {
         this.paper.addLayerFromImage(layers[index]["name"], image, image.width, image.height);
         let layer = this.paper.getLayerAt(index);
@@ -1675,6 +1676,7 @@ class Z4Canvas extends JSComponent {
         this.ribbonLayerPanel.addLayerPreview(layer);
         if (index + 1 === layers.length) {
           this.afterCreate(json["projectName"], json["width"], json["height"]);
+          Z4UI.pleaseWaitCompleted();
         } else {
           this.openLayer(zip, json, layers, index + 1);
         }
@@ -1691,12 +1693,14 @@ class Z4Canvas extends JSComponent {
    * @param apply The function to call after saving
    */
    saveProject(projectName, apply) {
-    Z4UI.pleaseWait(() => this.statusPanel.setProgressBarString(Z4Translations.SAVE_PROJECT + "..."), () => {
+    Z4UI.pleaseWait(this, true, true, false, true, "", () => {
+    }, () => {
       this.projectName = projectName;
       this.statusPanel.setProjectName(projectName);
       this.saveLayer(new JSZip(), new Array(), 0, apply);
       return null;
-    }, obj => this.statusPanel.setProgressBarString(""));
+    }, obj => {
+    });
   }
 
    saveLayer(zip, layers, index, apply) {
@@ -1715,10 +1719,10 @@ class Z4Canvas extends JSComponent {
         let compressionOptions = new Object();
         compressionOptions["level"] = 9;
         options["compressionOptions"] = compressionOptions;
-        zip.generateAsync(options, metadata => this.statusPanel.setProgressBarValue(metadata["percent"])).then(zipped => {
+        zip.generateAsync(options, metadata => Z4UI.setPleaseWaitProgressBarValue(metadata["percent"])).then(zipped => {
           saveAs(zipped, this.projectName + ".z4i");
-          this.statusPanel.setProgressBarValue(0);
           this.saved = true;
+          Z4UI.pleaseWaitCompleted();
           if (apply) {
             apply();
           }
@@ -1737,7 +1741,8 @@ class Z4Canvas extends JSComponent {
    * @param quality The quality
    */
    exportToFile(filename, ext, quality) {
-    Z4UI.pleaseWait(() => this.statusPanel.setProgressBarString(Z4Translations.EXPORT + "..."), () => {
+    Z4UI.pleaseWait(this, false, false, false, false, "", () => {
+    }, () => {
       let offscreen = new OffscreenCanvas(this.width, this.height);
       let offscreenCtx = offscreen.getContext("2d");
       this.paper.draw(offscreenCtx, false);
@@ -1755,7 +1760,8 @@ class Z4Canvas extends JSComponent {
         document.body.removeChild(link);
       });
       return null;
-    }, obj => this.statusPanel.setProgressBarString(""));
+    }, obj => {
+    });
   }
 
   /**
@@ -2263,9 +2269,6 @@ class Z4Frame extends JSFrame {
   constructor() {
     super();
     this.cssAddClass("z4frame");
-    let pleaseWait = document.createElement("div");
-    pleaseWait.classList.add("please-wait");
-    this.appendNodeChild(pleaseWait);
     this.getContentPane().setLayout(new BorderLayout(5, 5));
     this.ribbon.setCanvas(this.canvas);
     this.ribbon.setStatusPanel(this.statusPanel);
@@ -4903,7 +4906,7 @@ class Z4FillingPanel extends JSPanel {
           this.selectedFillerPanel = this.cardFillerPanels[index];
           this.afterSelection(panelFiller, cardFiller, card, panelColor, cardColor);
         } else if (card === "BEZIER") {
-          Z4UI.pleaseWait(() => {
+          Z4UI.pleaseWait(this, false, false, false, false, "", () => {
           }, () => eval(this.cardFillerEvalPanels[index]), (panel) => {
             this.selectedFillerPanel = panel;
             this.afterEval(panelFiller, card, index, gradientColorPanel);
@@ -5192,9 +5195,11 @@ class Z4StatusPanel extends JSPanel {
 
    projectName = new JSLabel();
 
-   zoom = new JSComboBox();
+   projectSize = new JSLabel();
 
-   progressBar = new JSProgressBar();
+   mousePosition = new JSLabel();
+
+   zoom = new JSComboBox();
 
   constructor() {
     super();
@@ -5216,12 +5221,6 @@ class Z4StatusPanel extends JSPanel {
     constraints.gridy = 0;
     this.add(this.zoom, constraints);
     this.addPipe(3);
-    constraints = new GridBagConstraints();
-    constraints.gridx = 4;
-    constraints.gridy = 0;
-    constraints.weightx = 1;
-    constraints.fill = GridBagConstraints.BOTH;
-    this.add(this.progressBar, constraints);
   }
 
    addPipe(gridx) {
@@ -5255,35 +5254,6 @@ class Z4StatusPanel extends JSPanel {
    */
    setProjectName(projectName) {
     this.projectName.setText(Z4Translations.PROJECT_NAME + ": " + projectName);
-  }
-
-  /**
-   * Sets the progress bar value
-   *
-   * @param value The progress bar value
-   */
-   setProgressBarValue(value) {
-    this.progressBar.setStringPainted(!!(value));
-    this.progressBar.setValue(value);
-  }
-
-  /**
-   * Sets the progress bar as indeterminate
-   *
-   * @param b true to sets the progress bar as indeterminate, false otherwise
-   */
-   setProgressBarIndeterminate(b) {
-    this.progressBar.setIndeterminate(b);
-  }
-
-  /**
-   * Sets the progress bar string
-   *
-   * @param string The string
-   */
-   setProgressBarString(string) {
-    this.progressBar.setStringPainted(!!(string));
-    this.progressBar.setString(string);
   }
 
   /**
@@ -5833,29 +5803,94 @@ class Z4Translations {
  */
 class Z4UI {
 
+  static  PLEASE_WAIT = new JSPanel();
+
+  static  PROGRESS_BAR = new JSProgressBar();
+
+  static {
+    Z4UI.PLEASE_WAIT.cssAddClass("please-wait");
+    Z4UI.PLEASE_WAIT.setLayout(new GridBagLayout());
+    Z4UI.PROGRESS_BAR.getStyle().visibility = "hidden";
+    let constraints = new GridBagConstraints();
+    constraints.gridx = 0;
+    constraints.gridy = 0;
+    constraints.gridwidth = 1;
+    constraints.gridheight = 1;
+    constraints.weightx = 1;
+    constraints.anchor = GridBagConstraints.CENTER;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.insets = new Insets(0, 25, 0, 25);
+    Z4UI.PLEASE_WAIT.add(Z4UI.PROGRESS_BAR, constraints);
+  }
+
   /**
    * Waits for a process to complete
    *
    * @param <T> The object returned by the process
+   * @param component The component requiring the process
+   * @param async true if the process is async, false otherwise; an async
+   * process needs to manually call the <i>pleaseWaitCompleted</i> method and
+   * cannot define an <i>afterProcess</i> parameter
+   * @param showProgressBar true to show the progress bar
+   * @param progressBarIndeterminate true to sets the progress bar as
+   * indeterminate, false otherwise
+   * @param progressBarStringPainted true to sets the string painted in progress
+   * bar, false otherwise
+   * @param progressBarString The string to paint in the progress bar
    * @param beforeProcess The actions to do before the process
    * @param process The process
    * @param afterProcess The actions to do before the process
    */
-  static  pleaseWait(beforeProcess, process, afterProcess) {
-    document.querySelectorAll("dialog").forEach(dialog => {
-      if (!dialog.querySelector(".please-wait")) {
-        let pleaseWait = document.createElement("div");
-        pleaseWait.classList.add("please-wait");
-        dialog.appendChild(pleaseWait);
-      }
-    });
-    document.querySelectorAll(".please-wait").forEach(element => element.classList.add("please-wait-visible"));
+  static  pleaseWait(component, async, showProgressBar, progressBarIndeterminate, progressBarStringPainted, progressBarString, beforeProcess, process, afterProcess) {
+    Z4UI.PROGRESS_BAR.getStyle().visibility = showProgressBar ? "visible" : "hidden";
+    if (showProgressBar) {
+      Z4UI.PROGRESS_BAR.setIndeterminate(progressBarIndeterminate);
+      Z4UI.PROGRESS_BAR.setStringPainted(progressBarStringPainted);
+      Z4UI.PROGRESS_BAR.setValue(0);
+      Z4UI.PROGRESS_BAR.setString(progressBarString);
+    }
+    Z4UI.PLEASE_WAIT.appendInBody();
+    component.cssAddClass("please-wait-request");
+    let parentRequest = document.querySelector(".jsdialog:has(.please-wait-request)");
+    if (!parentRequest) {
+      parentRequest = document.querySelector(".jsframe:has(.please-wait-request)");
+    }
+    parentRequest.appendChild(document.querySelector(".please-wait"));
+    component.cssRemoveClass("please-wait-request");
+    Z4UI.PLEASE_WAIT.cssAddClass("please-wait-visible");
     beforeProcess();
     setTimeout(() => {
       let obj = process();
-      document.querySelectorAll(".please-wait").forEach(element => element.classList.remove("please-wait-visible"));
-      afterProcess(obj);
+      if (!async) {
+        Z4UI.PLEASE_WAIT.cssRemoveClass("please-wait-visible");
+        afterProcess(obj);
+      }
     }, 0);
+  }
+
+  /**
+   * Completes the please wait
+   */
+  static  pleaseWaitCompleted() {
+    Z4UI.PLEASE_WAIT.cssRemoveClass("please-wait-visible");
+  }
+
+  /**
+   * Sets the progress bar value in the please wait
+   *
+   * @param value The progress bar value in the please wait
+   */
+  static  setPleaseWaitProgressBarValue(value) {
+    Z4UI.PROGRESS_BAR.setValue(value);
+  }
+
+  /**
+   * Sets the progress bar string in the please wait
+   *
+   * @param string The string in the please wait
+   */
+  static  setPleaseWaitProgressBarString(string) {
+    Z4UI.PROGRESS_BAR.setString(string);
   }
 
   constructor() {

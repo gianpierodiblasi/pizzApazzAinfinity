@@ -6,13 +6,11 @@ import javascript.awt.GridBagLayout;
 import javascript.swing.JSComboBox;
 import javascript.swing.JSLabel;
 import javascript.swing.JSPanel;
-import javascript.swing.JSProgressBar;
 import javascript.swing.MnR.DefaultKeyValueComboBoxModelAndRenderer;
 import javascript.util.KeyValue;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
-import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
 
 /**
@@ -25,9 +23,10 @@ public class Z4StatusPanel extends JSPanel {
   private Z4Canvas canvas;
 
   private final JSLabel projectName = new JSLabel();
+  private final JSLabel projectSize = new JSLabel();
+  private final JSLabel mousePosition = new JSLabel();
   private final JSComboBox<KeyValue<String, String>> zoom = new JSComboBox<>();
-  private final JSProgressBar progressBar = new JSProgressBar();
-
+  
   public Z4StatusPanel() {
     super();
     this.cssAddClass("z4statuspanel");
@@ -52,13 +51,6 @@ public class Z4StatusPanel extends JSPanel {
     this.add(this.zoom, constraints);
 
     this.addPipe(3);
-
-    constraints = new GridBagConstraints();
-    constraints.gridx = 4;
-    constraints.gridy = 0;
-    constraints.weightx = 1;
-    constraints.fill = GridBagConstraints.BOTH;
-    this.add(this.progressBar, constraints);
   }
 
   private void addPipe(int gridx) {
@@ -92,35 +84,6 @@ public class Z4StatusPanel extends JSPanel {
    */
   public void setProjectName(String projectName) {
     this.projectName.setText(Z4Translations.PROJECT_NAME + ": " + projectName);
-  }
-
-  /**
-   * Sets the progress bar value
-   *
-   * @param value The progress bar value
-   */
-  public void setProgressBarValue(int value) {
-    this.progressBar.setStringPainted($exists(value));
-    this.progressBar.setValue(value);
-  }
-
-  /**
-   * Sets the progress bar as indeterminate
-   *
-   * @param b true to sets the progress bar as indeterminate, false otherwise
-   */
-  public void setProgressBarIndeterminate(boolean b) {
-    this.progressBar.setIndeterminate(b);
-  }
-
-  /**
-   * Sets the progress bar string
-   *
-   * @param string The string
-   */
-  public void setProgressBarString(String string) {
-    this.progressBar.setStringPainted($exists(string));
-    this.progressBar.setString(string);
   }
 
   /**

@@ -9,9 +9,11 @@ class Z4StatusPanel extends JSPanel {
 
    projectName = new JSLabel();
 
-   zoom = new JSComboBox();
+   projectSize = new JSLabel();
 
-   progressBar = new JSProgressBar();
+   mousePosition = new JSLabel();
+
+   zoom = new JSComboBox();
 
   constructor() {
     super();
@@ -33,12 +35,6 @@ class Z4StatusPanel extends JSPanel {
     constraints.gridy = 0;
     this.add(this.zoom, constraints);
     this.addPipe(3);
-    constraints = new GridBagConstraints();
-    constraints.gridx = 4;
-    constraints.gridy = 0;
-    constraints.weightx = 1;
-    constraints.fill = GridBagConstraints.BOTH;
-    this.add(this.progressBar, constraints);
   }
 
    addPipe(gridx) {
@@ -72,35 +68,6 @@ class Z4StatusPanel extends JSPanel {
    */
    setProjectName(projectName) {
     this.projectName.setText(Z4Translations.PROJECT_NAME + ": " + projectName);
-  }
-
-  /**
-   * Sets the progress bar value
-   *
-   * @param value The progress bar value
-   */
-   setProgressBarValue(value) {
-    this.progressBar.setStringPainted(!!(value));
-    this.progressBar.setValue(value);
-  }
-
-  /**
-   * Sets the progress bar as indeterminate
-   *
-   * @param b true to sets the progress bar as indeterminate, false otherwise
-   */
-   setProgressBarIndeterminate(b) {
-    this.progressBar.setIndeterminate(b);
-  }
-
-  /**
-   * Sets the progress bar string
-   *
-   * @param string The string
-   */
-   setProgressBarString(string) {
-    this.progressBar.setStringPainted(!!(string));
-    this.progressBar.setString(string);
   }
 
   /**

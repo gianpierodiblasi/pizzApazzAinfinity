@@ -76,7 +76,7 @@
 .z4frame {
 }
 
-.z4frame .please-wait, .jsdialog .please-wait {
+.jsframe .please-wait, .jsdialog .please-wait {
   position: absolute;
   top: 0;
   left: 0;
@@ -84,11 +84,11 @@
   right: 0;
   display: none;
   cursor: wait;
-  background: var(--main-action-bgcolor);
+  background: var(--main-bgcolor);
   opacity: .25;
 }
-.z4frame .please-wait.please-wait-visible, .jsdialog .please-wait.please-wait-visible {
-  display: block;
+.jsframe .please-wait.please-wait-visible, .jsdialog .please-wait.please-wait-visible {
+  display: grid;
 }
 
 /* panel */

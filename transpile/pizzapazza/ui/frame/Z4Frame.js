@@ -17,9 +17,6 @@ class Z4Frame extends JSFrame {
   constructor() {
     super();
     this.cssAddClass("z4frame");
-    let pleaseWait = document.createElement("div");
-    pleaseWait.classList.add("please-wait");
-    this.appendNodeChild(pleaseWait);
     this.getContentPane().setLayout(new BorderLayout(5, 5));
     this.ribbon.setCanvas(this.canvas);
     this.ribbon.setStatusPanel(this.statusPanel);
