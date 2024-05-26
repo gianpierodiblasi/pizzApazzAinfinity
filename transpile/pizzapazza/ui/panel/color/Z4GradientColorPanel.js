@@ -56,16 +56,14 @@ class Z4GradientColorPanel extends JSPanel {
     this.addComponent(button, 1, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
     this.delete.setText(Z4Translations.DELETE);
     this.delete.setEnabled(false);
-    this.delete.addActionListener(event => {
-      JSOptionPane.showConfirmDialog(Z4Translations.DELETE_COLOR_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
-        if (response === JSOptionPane.YES_OPTION) {
-          this.gradientColor.removeColor(this.gradientColor.getColorPositionAtIndex(this.selectedIndex));
-          this.selectedIndex = 0;
-          this.afterOperation();
-          this.fireOnChange();
-        }
-      });
-    });
+    this.delete.addActionListener(event => JSOptionPane.showConfirmDialog(Z4Translations.DELETE_COLOR_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
+      if (response === JSOptionPane.YES_OPTION) {
+        this.gradientColor.removeColor(this.gradientColor.getColorPositionAtIndex(this.selectedIndex));
+        this.selectedIndex = 0;
+        this.afterOperation();
+        this.fireOnChange();
+      }
+    }));
     this.addComponent(this.delete, 2, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
     this.addLabel(Z4Translations.RIPPLE, 0, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
     this.rippleSpinner.cssAddClass("jsspinner_w_4rem");

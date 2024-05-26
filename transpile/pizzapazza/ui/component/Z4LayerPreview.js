@@ -33,6 +33,8 @@ class Z4LayerPreview extends JSComponent {
 
    compositeOperationsGroup = new ButtonGroup();
 
+   delete = new JSButton();
+
    canvas = null;
 
    layer = null;
@@ -65,6 +67,7 @@ class Z4LayerPreview extends JSComponent {
           this.getChilStyleByQuery(".z4layerpreview-editor").top = "auto";
           this.getChilStyleByQuery(".z4layerpreview-editor").bottom = "5px";
         }
+        this.delete.setEnabled(document.querySelectorAll(".z4layerpreview").length > 1);
       } else {
         this.getChilStyleByQuery(".z4layerpreview-editor").removeProperty("visibility");
         this.getChilStyleByQuery(".z4layerpreview-editor").removeProperty("top");
@@ -122,6 +125,12 @@ class Z4LayerPreview extends JSComponent {
     this.offsetYSlider.getStyle().minWidth = "1.5rem";
     this.offsetYSlider.addChangeListener(event => this.onChange(false, this.offsetYSlider.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
     this.addComponent(panel, this.offsetYSlider, 4, 2, 1, 4, 0, 1, GridBagConstraints.NORTH, GridBagConstraints.NONE, null);
+    this.delete.setText(Z4Translations.DELETE);
+    this.delete.addActionListener(event => JSOptionPane.showConfirmDialog(Z4Translations.DELETE_LAYER_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
+      if (response === JSOptionPane.YES_OPTION) {
+      }
+    }));
+    this.addComponent(panel, this.delete, 1, 6, 1, 1, 0, 0, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE, null);
     this.editor.addTab(Z4Translations.BASIC, panel);
     let finalPanel = new JSPanel();
     finalPanel.setLayout(new GridBagLayout());

@@ -9,8 +9,10 @@ import javascript.awt.GridBagLayout;
 import javascript.awt.Insets;
 import javascript.awt.Point;
 import javascript.swing.ButtonGroup;
+import javascript.swing.JSButton;
 import javascript.swing.JSComponent;
 import javascript.swing.JSLabel;
+import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
 import javascript.swing.JSSlider;
@@ -50,6 +52,7 @@ public class Z4LayerPreview extends JSComponent {
   private final JSSpinner opacitySpinner = new JSSpinner();
   private final Array<JSRadioButton> compositeOperations = new Array<>();
   private final ButtonGroup compositeOperationsGroup = new ButtonGroup();
+  private final JSButton delete = new JSButton();
 
   private Z4Canvas canvas;
   private Z4Layer layer;
@@ -86,6 +89,8 @@ public class Z4LayerPreview extends JSComponent {
           this.getChilStyleByQuery(".z4layerpreview-editor").top = "auto";
           this.getChilStyleByQuery(".z4layerpreview-editor").bottom = "5px";
         }
+
+        this.delete.setEnabled(document.querySelectorAll(".z4layerpreview").length > 1);
       } else {
         this.getChilStyleByQuery(".z4layerpreview-editor").removeProperty("visibility");
         this.getChilStyleByQuery(".z4layerpreview-editor").removeProperty("top");
@@ -146,7 +151,7 @@ public class Z4LayerPreview extends JSComponent {
 
     this.addVLine(panel, 2, 2, 1, 5, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL);
     this.addLabel(panel, Z4Translations.OFFSET_Y, 3, 5, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE).cssAddClass("jslabel-vertical");
-    
+
     this.offsetYSpinner.cssAddClass("jsspinner-vertical");
     this.offsetYSpinner.cssAddClass("jsspinner_h_4rem");
     this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
@@ -160,6 +165,15 @@ public class Z4LayerPreview extends JSComponent {
     this.offsetYSlider.getStyle().minWidth = "1.5rem";
     this.offsetYSlider.addChangeListener(event -> this.onChange(false, this.offsetYSlider.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
     this.addComponent(panel, this.offsetYSlider, 4, 2, 1, 4, 0, 1, GridBagConstraints.NORTH, GridBagConstraints.NONE, null);
+
+    this.delete.setText(Z4Translations.DELETE);
+    this.delete.addActionListener(event -> JSOptionPane.showConfirmDialog(Z4Translations.DELETE_LAYER_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response -> {
+      if (response == JSOptionPane.YES_OPTION) {
+
+      }
+    })
+    );
+    this.addComponent(panel, this.delete, 1, 6, 1, 1, 0, 0, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE, null);
 
     this.editor.addTab(Z4Translations.BASIC, panel);
 

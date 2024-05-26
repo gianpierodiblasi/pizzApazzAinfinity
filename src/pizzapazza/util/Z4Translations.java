@@ -32,6 +32,7 @@ public class Z4Translations {
   public static String LAYER_NAME = "";
   public static String NEW_LAYER = "";
   public static String BACKGROUND_LAYER = "";
+  public static String DELETE_LAYER_MESSAGE = "";
 
   // Ribbon Settings
   public static String SETTINGS = "";
@@ -156,6 +157,7 @@ public class Z4Translations {
     Z4Translations.LAYER_NAME = "Layer Name";
     Z4Translations.NEW_LAYER = "New Layer";
     Z4Translations.BACKGROUND_LAYER = "Bkgrd";
+    Z4Translations.DELETE_LAYER_MESSAGE = "Do you really want to delete the layer?";
 
     // Ribbon Settings
     Z4Translations.SETTINGS = "Settings";
@@ -272,6 +274,7 @@ public class Z4Translations {
     Z4Translations.LAYER_NAME = "Nome Livello";
     Z4Translations.NEW_LAYER = "Nuovo Livello";
     Z4Translations.BACKGROUND_LAYER = "Sfondo";
+    Z4Translations.DELETE_LAYER_MESSAGE = "Vuoi davvero eliminare il livello?";
 
     // Ribbon Settings
     Z4Translations.SETTINGS = "Impostazioni";

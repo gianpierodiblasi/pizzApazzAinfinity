@@ -40,6 +40,8 @@ class Z4Translations {
 
   static  BACKGROUND_LAYER = "";
 
+  static  DELETE_LAYER_MESSAGE = "";
+
   // Ribbon Settings
   static  SETTINGS = "";
 
@@ -224,6 +226,7 @@ class Z4Translations {
     Z4Translations.LAYER_NAME = "Layer Name";
     Z4Translations.NEW_LAYER = "New Layer";
     Z4Translations.BACKGROUND_LAYER = "Bkgrd";
+    Z4Translations.DELETE_LAYER_MESSAGE = "Do you really want to delete the layer?";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Settings";
     Z4Translations.LANGUAGE = "Language";
@@ -325,6 +328,7 @@ class Z4Translations {
     Z4Translations.LAYER_NAME = "Nome Livello";
     Z4Translations.NEW_LAYER = "Nuovo Livello";
     Z4Translations.BACKGROUND_LAYER = "Sfondo";
+    Z4Translations.DELETE_LAYER_MESSAGE = "Vuoi davvero eliminare il livello?";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Impostazioni";
     Z4Translations.LANGUAGE = "Lingua";
