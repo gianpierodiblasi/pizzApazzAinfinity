@@ -54,6 +54,18 @@ class Z4Paper {
   }
 
   /**
+   * Deletes a layer
+   *
+   * @param layer The layer
+   * @return The layer index
+   */
+   deleteLayer(layer) {
+    let index = this.layers.indexOf(layer);
+    this.layers.splice(index, 1);
+    return index;
+  }
+
+  /**
    * Moves a layer to a position
    *
    * @param layer The layer

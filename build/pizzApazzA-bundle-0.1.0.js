@@ -1832,6 +1832,19 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Deletes a layer
+   *
+   * @param layer The layer
+   * @return The layer index
+   */
+   deleteLayer(layer) {
+    let index = this.paper.deleteLayer(layer);
+    this.saved = false;
+    this.drawCanvas();
+    return index;
+  }
+
+  /**
    * Moves a layer to a position
    *
    * @param layer The layer
@@ -1960,7 +1973,7 @@ class Z4Canvas extends JSComponent {
       case "down":
         break;
       case "move":
-        this.statusPanel.setMousePosition(parseInt(event.offsetX / this.zoom), parseInt(event.offsetY / this.zoom));
+        this.statusPanel.setMousePosition(parseInt(Math.max(0, event.offsetX / this.zoom)), parseInt(Math.max(0, event.offsetY / this.zoom)));
         break;
       case "up":
         break;
@@ -2134,6 +2147,8 @@ class Z4LayerPreview extends JSComponent {
     this.delete.setText(Z4Translations.DELETE);
     this.delete.addActionListener(event => JSOptionPane.showConfirmDialog(Z4Translations.DELETE_LAYER_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
       if (response === JSOptionPane.YES_OPTION) {
+        let index = this.canvas.deleteLayer(this.layer);
+        document.querySelector(".z4layerpreview:nth-child(" + (index + 1) + ")").remove();
       }
     }));
     this.addComponent(panel, this.delete, 1, 6, 1, 1, 0, 0, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE, null);
@@ -6217,6 +6232,18 @@ class Z4Paper {
    */
    addLayerFromImage(name, image, containerWidth, containerHeight) {
     this.layers.push(Z4Layer.fromImage(name, image, containerWidth, containerHeight));
+  }
+
+  /**
+   * Deletes a layer
+   *
+   * @param layer The layer
+   * @return The layer index
+   */
+   deleteLayer(layer) {
+    let index = this.layers.indexOf(layer);
+    this.layers.splice(index, 1);
+    return index;
   }
 
   /**

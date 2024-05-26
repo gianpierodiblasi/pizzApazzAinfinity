@@ -335,6 +335,19 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Deletes a layer
+   *
+   * @param layer The layer
+   * @return The layer index
+   */
+   deleteLayer(layer) {
+    let index = this.paper.deleteLayer(layer);
+    this.saved = false;
+    this.drawCanvas();
+    return index;
+  }
+
+  /**
    * Moves a layer to a position
    *
    * @param layer The layer
@@ -463,7 +476,7 @@ class Z4Canvas extends JSComponent {
       case "down":
         break;
       case "move":
-        this.statusPanel.setMousePosition(parseInt(event.offsetX / this.zoom), parseInt(event.offsetY / this.zoom));
+        this.statusPanel.setMousePosition(parseInt(Math.max(0, event.offsetX / this.zoom)), parseInt(Math.max(0, event.offsetY / this.zoom)));
         break;
       case "up":
         break;

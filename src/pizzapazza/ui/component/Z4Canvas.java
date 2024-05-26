@@ -412,8 +412,20 @@ public class Z4Canvas extends JSComponent {
 
   private void afterAddLayer() {
     this.ribbonLayerPanel.addLayerPreview(this.paper.getLayerAt(this.paper.getLayersCount() - 1));
-
     this.saved = false;
+  }
+
+  /**
+   * Deletes a layer
+   *
+   * @param layer The layer
+   * @return The layer index
+   */
+  public int deleteLayer(Z4Layer layer) {
+    int index = this.paper.deleteLayer(layer);
+    this.saved = false;
+    this.drawCanvas();
+    return index;
   }
 
   /**
@@ -546,7 +558,7 @@ public class Z4Canvas extends JSComponent {
       case "down":
         break;
       case "move":
-        this.statusPanel.setMousePosition(parseInt(event.offsetX / this.zoom), parseInt(event.offsetY / this.zoom));
+        this.statusPanel.setMousePosition(parseInt(Math.max(0, event.offsetX / this.zoom)), parseInt(Math.max(0, event.offsetY / this.zoom)));
         break;
       case "up":
         break;

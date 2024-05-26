@@ -128,6 +128,8 @@ class Z4LayerPreview extends JSComponent {
     this.delete.setText(Z4Translations.DELETE);
     this.delete.addActionListener(event => JSOptionPane.showConfirmDialog(Z4Translations.DELETE_LAYER_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
       if (response === JSOptionPane.YES_OPTION) {
+        let index = this.canvas.deleteLayer(this.layer);
+        document.querySelector(".z4layerpreview:nth-child(" + (index + 1) + ")").remove();
       }
     }));
     this.addComponent(panel, this.delete, 1, 6, 1, 1, 0, 0, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE, null);
