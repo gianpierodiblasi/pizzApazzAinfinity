@@ -33,6 +33,7 @@ class Z4StatusPanel extends JSPanel {
     let constraints = new GridBagConstraints();
     constraints.gridx = 2;
     constraints.gridy = 0;
+    constraints.insets = new Insets(0, 5, 0, 5);
     this.add(this.zoom, constraints);
     this.addPipe(3);
     this.projectSize.setText(Z4Translations.DIMENSION + ": " + Z4Constants.DEFAULT_IMAGE_SIZE + " \u2716 " + Z4Constants.DEFAULT_IMAGE_SIZE);
@@ -51,7 +52,7 @@ class Z4StatusPanel extends JSPanel {
    addPipe(gridx) {
     let pipe = new JSLabel();
     pipe.setText("|");
-    pipe.getStyle().minWidth = "2rem";
+    pipe.getStyle().minWidth = "0.5rem";
     pipe.getStyle().textAlign = "center";
     this.setLabel(pipe, gridx);
   }
@@ -61,6 +62,7 @@ class Z4StatusPanel extends JSPanel {
     constraints.gridx = gridx;
     constraints.gridy = 0;
     constraints.anchor = GridBagConstraints.CENTER;
+    constraints.insets = new Insets(0, 5, 0, 5);
     this.add(label, constraints);
   }
 

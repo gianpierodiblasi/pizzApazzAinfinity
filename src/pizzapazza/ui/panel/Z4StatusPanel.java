@@ -3,6 +3,7 @@ package pizzapazza.ui.panel;
 import static def.js.Globals.parseFloat;
 import javascript.awt.GridBagConstraints;
 import javascript.awt.GridBagLayout;
+import javascript.awt.Insets;
 import javascript.swing.JSComboBox;
 import javascript.swing.JSLabel;
 import javascript.swing.JSPanel;
@@ -50,6 +51,7 @@ public class Z4StatusPanel extends JSPanel {
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = 2;
     constraints.gridy = 0;
+    constraints.insets = new Insets(0, 5, 0, 5);
     this.add(this.zoom, constraints);
 
     this.addPipe(3);
@@ -62,7 +64,7 @@ public class Z4StatusPanel extends JSPanel {
     this.mousePosition.getStyle().fontFamily = "monospace";
     this.setMousePosition(0, 0);
     this.setLabel(this.mousePosition, 6);
-    
+
     constraints = new GridBagConstraints();
     constraints.gridx = 7;
     constraints.gridy = 0;
@@ -73,7 +75,7 @@ public class Z4StatusPanel extends JSPanel {
   private void addPipe(int gridx) {
     JSLabel pipe = new JSLabel();
     pipe.setText("|");
-    pipe.getStyle().minWidth = "2rem";
+    pipe.getStyle().minWidth = "0.5rem";
     pipe.getStyle().textAlign = "center";
     this.setLabel(pipe, gridx);
   }
@@ -83,6 +85,7 @@ public class Z4StatusPanel extends JSPanel {
     constraints.gridx = gridx;
     constraints.gridy = 0;
     constraints.anchor = GridBagConstraints.CENTER;
+    constraints.insets = new Insets(0, 5, 0, 5);
     this.add(label, constraints);
   }
 
