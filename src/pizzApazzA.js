@@ -1,6 +1,6 @@
 /* global Translations, Z4Translations, SwingJS */
 
-window.onload = event => {
+window.onload = () => {
   window.addEventListener("wheel", event => {
     if (event.ctrlKey) {
       event.preventDefault();
