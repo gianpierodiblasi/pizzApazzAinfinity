@@ -38,7 +38,7 @@
     }],
   "file_handlers": [
     {
-      "action": "/",
+      "action": ".",
       "accept": {
         "image/gif": [".gif"],
         "image/png": [".png", ".apng"],
@@ -51,7 +51,7 @@
       "icons": [],
       "launch_type": "multiple-clients"
     }, {
-      "action": "/",
+      "action": ".",
       "accept": {
         "application/zip": [".z4i"]
       },
