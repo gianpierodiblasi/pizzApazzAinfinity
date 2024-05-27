@@ -93,9 +93,7 @@ window.onload = () => {
       document.querySelector(".z4ribbonhelppanel .z4check-install").style.display = "none";
     });
 
-    var installed = navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
-    document.querySelector(".z4ribbonhelppanel .z4check-install").style.display = installed ? "none" : "flex";
-    if (installed) {
+    if (navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
       document.head.title = "";
     }
   }
