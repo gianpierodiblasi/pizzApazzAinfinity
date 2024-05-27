@@ -1,6 +1,6 @@
 {
   "manifest_version": 1,
-  "version": "0.6.4",
+  "version": "0.7.0",
   "name": "pizzApazzA∞",
   "start_url": ".",
   "display": "standalone",
@@ -21,17 +21,21 @@
       "sizes": "96x96",
       "type": "image/png"
     }, {
-      "src": "image/app_icon_144.png",
-      "sizes": "144x144",
+      "src": "image/app_icon_114.png",
+      "sizes": "114x114",
+      "type": "image/png"
+    }, {
+      "src": "image/app_icon_512.png",
+      "sizes": "512x512",
       "type": "image/png"
     }],
   "screenshots": [{
-      "src": "image/splash.png",
+      "src": "image/splash/splash.png",
       "sizes": "500x375",
       "type": "image/png",
       "form_factor": "wide"
     }, {
-      "src": "image/splash2.bmp",
+      "src": "image/splash/splash2.bmp",
       "sizes": "500x375",
       "type": "image/bmp"
     }],
