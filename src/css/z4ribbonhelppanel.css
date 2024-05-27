@@ -7,6 +7,6 @@
   margin: 5px 0px 0px 0px;
 }
 
-.z4ribbonhelppanel .z4check-update {
+.z4ribbonhelppanel .z4check-install, .z4ribbonhelppanel .z4check-update {
   display: none;
 }

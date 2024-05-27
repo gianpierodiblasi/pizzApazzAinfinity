@@ -83,5 +83,16 @@ window.onload = () => {
         refreshing = true;
       }
     };
+
+    window.addEventListener('beforeinstallprompt', event => {
+      document.querySelector(".z4ribbonhelppanel .z4check-install").style.display = "flex";
+      document.querySelector(".z4ribbonhelppanel .z4check-install").onclick = () => event.prompt();
+    });
+
+    window.addEventListener('appinstalled', () => {
+      document.querySelector(".z4ribbonhelppanel .z4check-install").style.display = "none";
+    });
+
+    document.querySelector(".z4ribbonhelppanel .z4check-install").style.display = navigator.standalone || window.matchMedia('(display-mode: standalone)').matches ? "none" : "flex";
   }
 };
