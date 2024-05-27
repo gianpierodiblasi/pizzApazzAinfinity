@@ -1,4 +1,4 @@
-var cacheName = 'pizzApazzAinfinity-0.6.0';
+var cacheName = 'pizzApazzAinfinity-0.6.1';
 var filesToCache = [];
 
 self.oninstall = e => e.waitUntil(caches.open(cacheName).then(cache => cache.addAll(filesToCache)));
