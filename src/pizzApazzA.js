@@ -48,21 +48,17 @@ window.onload = () => {
 
   SwingJS.instance().fontSize(12).build();
 
-  new Z4Frame();
+  var frame = new Z4Frame();
 
   if ('launchQueue' in window && 'files' in LaunchParams.prototype) {
     launchQueue.setConsumer(launchParams => {
       if (launchParams.files[0]) {
-        console.log(launchParams.files[0].name);
-
         launchParams.files[0].getFile().then(file => {
-          var fileReader = new FileReader();
-          fileReader.onload = () => {
-            var image = document.createElement("img");
-            image.onload = () => document.body.appendChild(image);
-            image.src = fileReader.result;
-          };
-          fileReader.readAsDataURL(file);
+          if (file.name.toLowerCase().endsWith(".z4i")) {
+            frame.canvas.openProject(file);
+          } else {
+            frame.canvas.createFromFile(file);
+          }
         });
       }
     });
