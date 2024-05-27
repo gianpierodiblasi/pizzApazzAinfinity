@@ -33,8 +33,7 @@
     }, {
       "src": "image/splash2.bmp",
       "sizes": "500x375",
-      "type": "image/bmp",
-      "form_factor": ""
+      "type": "image/bmp"
     }],
   "file_handlers": [
     {
