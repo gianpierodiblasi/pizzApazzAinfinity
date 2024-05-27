@@ -367,3 +367,6 @@
 .z4ribbonhelppanel .z4check-install, .z4ribbonhelppanel .z4check-update {
   display: none;
 }
+.z4ribbonhelppanel .z4check-install span {
+  margin-top: -3px;
+}

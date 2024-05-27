@@ -57,8 +57,7 @@ public class Z4RibbonSettingsPanel extends JSPanel {
     constraints.gridx = 0;
     constraints.gridy = 1;
     constraints.fill = GridBagConstraints.HORIZONTAL;
-    constraints.anchor = GridBagConstraints.NORTH;
-    constraints.weighty = 1;
+    constraints.anchor = GridBagConstraints.CENTER;
     constraints.insets = new Insets(0, 5, 0, 5);
     this.add(this.language, constraints);
 
@@ -99,8 +98,7 @@ public class Z4RibbonSettingsPanel extends JSPanel {
     constraints.gridx = 1;
     constraints.gridy = 1;
     constraints.fill = GridBagConstraints.HORIZONTAL;
-    constraints.anchor = GridBagConstraints.NORTH;
-    constraints.weighty = 1;
+    constraints.anchor = GridBagConstraints.CENTER;
     constraints.insets = new Insets(0, 5, 0, 5);
     this.add(this.theme, constraints);
 
@@ -123,8 +121,7 @@ public class Z4RibbonSettingsPanel extends JSPanel {
     constraints.gridx = 2;
     constraints.gridy = 1;
     constraints.fill = GridBagConstraints.HORIZONTAL;
-    constraints.anchor = GridBagConstraints.NORTH;
-    constraints.weighty = 1;
+    constraints.anchor = GridBagConstraints.CENTER;
     constraints.insets = new Insets(0, 5, 0, 5);
     this.add(this.color, constraints);
 
@@ -136,9 +133,8 @@ public class Z4RibbonSettingsPanel extends JSPanel {
     constraints = new GridBagConstraints();
     constraints.gridx = 3;
     constraints.gridy = 1;
-    constraints.fill = GridBagConstraints.HORIZONTAL;
-    constraints.anchor = GridBagConstraints.NORTH;
-    constraints.weighty = 1;
+    constraints.fill = GridBagConstraints.BOTH;
+    constraints.anchor = GridBagConstraints.CENTER;
     constraints.insets = new Insets(0, 5, 0, 5);
     this.add(reset, constraints);
 
@@ -148,6 +144,14 @@ public class Z4RibbonSettingsPanel extends JSPanel {
     constraints.gridy = 0;
     constraints.fill = GridBagConstraints.BOTH;
     constraints.weightx = 1;
+    this.add(label, constraints);
+    
+    label = new JSLabel();
+    constraints = new GridBagConstraints();
+    constraints.gridx = 0;
+    constraints.gridy = 2;
+    constraints.fill = GridBagConstraints.BOTH;
+    constraints.weighty = 1;
     this.add(label, constraints);
   }
 
