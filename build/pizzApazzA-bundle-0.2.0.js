@@ -2,7 +2,7 @@
 
 window.onload = () => {
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register('service-worker.js');
+    navigator.serviceWorker.register("service-worker.js");
   }
 
   window.addEventListener("wheel", event => {
@@ -55,13 +55,15 @@ window.onload = () => {
       if (launchParams.files[0]) {
         console.log(launchParams.files[0].name);
 
-        var fileReader = new FileReader();
-        fileReader.onload = () => {
-          var image = document.createElement("img");
-          image.onload = () => document.body.appendChild(image);
-          image.src = fileReader.result;
-        };
-        fileReader.readAsDataURL(launchParams.files[0]);
+        launchParams.files[0].getFile().then(file => {
+          var fileReader = new FileReader();
+          fileReader.onload = () => {
+            var image = document.createElement("img");
+            image.onload = () => document.body.appendChild(image);
+            image.src = fileReader.result;
+          };
+          fileReader.readAsDataURL(file);
+        });
       }
     });
   }
