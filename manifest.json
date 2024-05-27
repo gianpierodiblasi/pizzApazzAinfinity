@@ -35,5 +35,32 @@
       "sizes": "500x375",
       "type": "image/png",
       "form_factor": "narrow"
-    }]
-}
+    }],
+  "file_handlers": [
+    {
+      "action": "/",
+      "accept": {
+        "image/gif": [".gif"],
+        "image/png": [".png", ".apng"],
+        "image/jpeg": [".jpeg", ".jpg", ".jfif", ".pjpeg", ".pjp"],
+        "image/bmp": [".bmp"],
+        "image/svg+xml": [".svg"],
+        "image/webp": [".webp"],
+        "image/avif": [".avif"]
+      },
+      "icons": [],
+      "launch_type": "multiple-clients"
+    }, {
+      "action": "/",
+      "accept": {
+        "application/zip": [".z4i"]
+      },
+      "icons": [{
+          "src": "image/app_icon_144.png",
+          "sizes": "144x144",
+          "type": "image/png"
+        }],
+      "launch_type": "multiple-clients"
+    }
+  ]    
+}  

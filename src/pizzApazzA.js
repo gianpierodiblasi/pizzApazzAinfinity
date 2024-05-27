@@ -1,4 +1,4 @@
-/* global Translations, Z4Translations, SwingJS */
+/* global Translations, Z4Translations, SwingJS, LaunchParams, launchQueue */
 
 window.onload = () => {
   if ("serviceWorker" in navigator) {
@@ -49,4 +49,20 @@ window.onload = () => {
   SwingJS.instance().fontSize(12).build();
 
   new Z4Frame();
+
+  if ('launchQueue' in window && 'files' in LaunchParams.prototype) {
+    launchQueue.setConsumer(launchParams => {
+      if (launchParams.files[0]) {
+        console.log(launchParams.files[0].name);
+
+        var fileReader = new FileReader();
+        fileReader.onload = () => {
+          var image = document.createElement("img");
+          image.onload = () => document.body.appendChild(image);
+          image.src = fileReader.result;
+        };
+        fileReader.readAsDataURL(launchParams.files[0]);
+      }
+    });
+  }
 };
