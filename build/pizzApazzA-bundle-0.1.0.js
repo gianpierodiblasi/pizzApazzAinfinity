@@ -1,6 +1,10 @@
 /* global Translations, Z4Translations, SwingJS */
 
 window.onload = () => {
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js");
+  }
+
   window.addEventListener("wheel", event => {
     if (event.ctrlKey) {
       event.preventDefault();
@@ -43,7 +47,7 @@ window.onload = () => {
   }
 
   SwingJS.instance().fontSize(12).build();
-  
+
   new Z4Frame();
 };
 /**

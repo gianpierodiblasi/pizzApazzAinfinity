@@ -1,0 +1,22 @@
+{
+  "manifest_version": 1,
+  "version": "0.1.0",
+  "name": "pizzApazzAinfinity",
+  "icons": [{
+      "src": "image/app_icon_36.png",
+      "sizes": "36x36",
+      "type": "image/png"
+    }, {
+      "src": "image/app_icon_48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    }, {
+      "src": "image/app_icon_36.png",
+      "sizes": "36x36",
+      "type": "image/png"
+    }, {
+      "src": "image/app_icon_36.png",
+      "sizes": "36x36",
+      "type": "image/png"
+    }]
+}
