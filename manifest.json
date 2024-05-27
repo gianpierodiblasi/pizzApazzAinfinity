@@ -28,11 +28,6 @@
   "screenshots": [{
       "src": "image/splash.png",
       "sizes": "500x375",
-      "type": "image/png",
-      "form_factor": "wide"
-    }, {
-      "src": "image/splash.png",
-      "sizes": "500x375",
       "type": "image/png"
     }]
 }
