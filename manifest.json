@@ -29,12 +29,12 @@
       "src": "image/splash.png",
       "sizes": "500x375",
       "type": "image/png",
-      "form_factor": "wide"
+      "form_factor": ""
     }, {
-      "src": "image/splash.png",
+      "src": "image/splash2.bmp",
       "sizes": "500x375",
-      "type": "image/png",
-      "form_factor": "narrow"
+      "type": "image/bmp",
+      "form_factor": "wide"
     }],
   "file_handlers": [
     {
