@@ -4386,7 +4386,7 @@ class Z4RibbonHelpPanel extends JSPanel {
     this.add(button, null);
     button = new JSButton();
     button.cssAddClass("z4check-install");
-    button.setText(Z4Translations.INSTALL);
+    button.setProperty("innerHTML", Z4Translations.INSTALL);
     button.setContentAreaFilled(false);
     this.add(button, null);
     button = new JSButton();
@@ -5759,7 +5759,7 @@ class Z4Translations {
     Z4Translations.HELP = "Help";
     Z4Translations.ABOUT = "About";
     Z4Translations.BASED_ON = "<p>pizzApazzA<sup>&#8734;</sup> Version $version$ is based on pizzApazzA VB6 by Ettore Luzio and is licensed under <a href='https://unlicense.org/'>Unlicense license</a>.</p>" + "<p>Developed in Java by Gianpiero Di Blasi, transpilled in JavaScript by means of <a href='https://github.com/gianpierodiblasi/josetta' target='_blank'>Josetta</a> (<a href='https://github.com/gianpierodiblasi/pizzApazzAinfinity' target='_blank'>github repository</a>).</p>" + "<p>Dependencies: " + "<a href='https://repository.jsweet.org/artifactory/libs-release-local/org/jsweet/jsweet-core/' target='_blank'>jsweet-core</a>, " + "<a href='https://github.com/gianpierodiblasi/swing.js' target='_blank'>swing.js</a>, " + "<a href='https://pomax.github.io/bezierjs/' target='_blank'>Bezier.js</a>, " + "<a href='https://stuk.github.io/jszip/' target='_blank'>JSZip</a>." + "</p>";
-    Z4Translations.INSTALL = "Install pizzApazzA&#8734;";
+    Z4Translations.INSTALL = "<span>Install pizzApazzA<sup>&#8734;</sup></span>";
     Z4Translations.CHECK_UPDATE = "Check for Updates";
     // Other
     Z4Translations.PROJECT_NAME = "Project Name";
@@ -5863,7 +5863,7 @@ class Z4Translations {
     Z4Translations.HELP = "Aiuto";
     Z4Translations.ABOUT = "Informazioni su";
     Z4Translations.BASED_ON = "<p>pizzApazzA<sup>&#8734;</sup> Versione $version$ \u00E8 basato su pizzApazzA VB6 di Ettore Luzio ed \u00E8 distribuito con <a href='https://unlicense.org/' target='_blank'>licenza Unlicense</a>.</p>" + "<p>Sviluppato in Java da Gianpiero Di Blasi, tradotto in JavaScript tramite <a href='https://github.com/gianpierodiblasi/josetta' target='_blank'>Josetta</a> (<a href='https://github.com/gianpierodiblasi/pizzApazzAinfinity' target='_blank'>repository github</a>).</p>" + "<p>Dipendenze: " + "<a href='https://repository.jsweet.org/artifactory/libs-release-local/org/jsweet/jsweet-core/' target='_blank'>jsweet-core</a>, " + "<a href='https://github.com/gianpierodiblasi/swing.js' target='_blank'>swing.js</a>, " + "<a href='https://pomax.github.io/bezierjs/' target='_blank'>Bezier.js</a>, " + "<a href='https://stuk.github.io/jszip/' target='_blank'>JSZip.</a>" + "</p>";
-    Z4Translations.INSTALL = "Installa pizzApazzA&#8734;";
+    Z4Translations.INSTALL = "<span>Installa pizzApazzA<sup>&#8734;</sup></span>";
     Z4Translations.CHECK_UPDATE = "Controlla gli Aggiornamenti";
     // Other
     Z4Translations.PROJECT_NAME = "Nome Progetto";

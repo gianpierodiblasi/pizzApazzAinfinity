@@ -185,7 +185,7 @@ public class Z4Translations {
             + "<a href='https://pomax.github.io/bezierjs/' target='_blank'>Bezier.js</a>, "
             + "<a href='https://stuk.github.io/jszip/' target='_blank'>JSZip</a>."
             + "</p>";
-    Z4Translations.INSTALL = "Install pizzApazzA&#8734;";
+    Z4Translations.INSTALL = "<span>Install pizzApazzA<sup>&#8734;</sup></span>";
     Z4Translations.CHECK_UPDATE = "Check for Updates";
 
     // Other
@@ -304,7 +304,7 @@ public class Z4Translations {
             + "<a href='https://pomax.github.io/bezierjs/' target='_blank'>Bezier.js</a>, "
             + "<a href='https://stuk.github.io/jszip/' target='_blank'>JSZip.</a>"
             + "</p>";
-    Z4Translations.INSTALL = "Installa pizzApazzA&#8734;";
+    Z4Translations.INSTALL = "<span>Installa pizzApazzA<sup>&#8734;</sup></span>";
     Z4Translations.CHECK_UPDATE = "Controlla gli Aggiornamenti";
 
     // Other

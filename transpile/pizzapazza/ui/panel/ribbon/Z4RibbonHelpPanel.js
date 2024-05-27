@@ -19,7 +19,7 @@ class Z4RibbonHelpPanel extends JSPanel {
     this.add(button, null);
     button = new JSButton();
     button.cssAddClass("z4check-install");
-    button.setText(Z4Translations.INSTALL);
+    button.setProperty("innerHTML", Z4Translations.INSTALL);
     button.setContentAreaFilled(false);
     this.add(button, null);
     button = new JSButton();
