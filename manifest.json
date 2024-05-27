@@ -28,8 +28,7 @@
   "screenshots": [{
       "src": "image/splash.png",
       "sizes": "500x375",
-      "type": "image/png",
-      "form_factor": ""
+      "type": "image/png"
     }, {
       "src": "image/splash2.bmp",
       "sizes": "500x375",
