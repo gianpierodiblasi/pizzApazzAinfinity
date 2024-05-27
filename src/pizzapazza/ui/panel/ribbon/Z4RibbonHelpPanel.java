@@ -31,6 +31,13 @@ public class Z4RibbonHelpPanel extends JSPanel {
     button.setContentAreaFilled(false);
     button.addActionListener(event -> this.showAbout());
     this.add(button, null);
+    
+    button = new JSButton();
+    button.cssAddClass("z4check-update");
+    button.setText(Z4Translations.CHECK_UPDATE);
+    button.setContentAreaFilled(false);
+    button.addActionListener(event -> this.showAbout());
+    this.add(button, null);
   }
 
   private void showAbout() {

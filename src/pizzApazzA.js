@@ -1,10 +1,6 @@
 /* global Translations, Z4Translations, SwingJS, LaunchParams, launchQueue */
 
 window.onload = () => {
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("service-worker.js");
-  }
-
   window.addEventListener("wheel", event => {
     if (event.ctrlKey) {
       event.preventDefault();
@@ -62,5 +58,30 @@ window.onload = () => {
         });
       }
     });
+  }
+
+  if ("serviceWorker" in navigator) {
+    let newWorker, refreshing;
+
+    navigator.serviceWorker.register('service-worker.js').then(reg => {
+      reg.onupdatefound = () => {
+        newWorker = reg.installing;
+
+        newWorker.onstatechange = () => {
+          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            document.querySelector(".z4ribbonhelppanel .z4check-update").style.display = "flex";
+            document.querySelector(".z4ribbonhelppanel .z4check-update").onclick = () => newWorker.postMessage({action: 'skipWaiting'});
+          }
+        };
+      };
+    });
+
+    navigator.serviceWorker.oncontrollerchange = () => {
+      if (!refreshing) {
+        caches.keys().then(keys => keys.forEach(key => caches.delete(key)));
+        window.location.reload();
+        refreshing = true;
+      }
+    };
   }
 };

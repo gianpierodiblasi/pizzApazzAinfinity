@@ -363,3 +363,7 @@
 .z4ribbonhelppanel-about p, .z4ribbonhelppanel-about ul {
   margin: 5px 0px 0px 0px;
 }
+
+.z4ribbonhelppanel .z4check-update {
+  display: none;
+}

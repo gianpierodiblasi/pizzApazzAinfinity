@@ -50,6 +50,7 @@ public class Z4Translations {
   public static String HELP = "";
   public static String ABOUT = "";
   public static String BASED_ON = "";
+  public static String CHECK_UPDATE = "";
 
   // Other
   public static String PROJECT_NAME = "";
@@ -183,6 +184,7 @@ public class Z4Translations {
             + "<a href='https://pomax.github.io/bezierjs/' target='_blank'>Bezier.js</a>, "
             + "<a href='https://stuk.github.io/jszip/' target='_blank'>JSZip</a>."
             + "</p>";
+    Z4Translations.CHECK_UPDATE = "Check for Updates";
 
     // Other
     Z4Translations.PROJECT_NAME = "Project Name";
@@ -300,6 +302,7 @@ public class Z4Translations {
             + "<a href='https://pomax.github.io/bezierjs/' target='_blank'>Bezier.js</a>, "
             + "<a href='https://stuk.github.io/jszip/' target='_blank'>JSZip.</a>"
             + "</p>";
+    Z4Translations.CHECK_UPDATE = "Controlla gli Aggiornamenti";
 
     // Other
     Z4Translations.PROJECT_NAME = "Nome Progetto";
