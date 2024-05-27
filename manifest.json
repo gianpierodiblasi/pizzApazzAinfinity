@@ -28,12 +28,13 @@
   "screenshots": [{
       "src": "image/splash.png",
       "sizes": "500x375",
-      "type": "image/png"
+      "type": "image/png",
+      "form_factor": "wide"
     }, {
       "src": "image/splash2.bmp",
       "sizes": "500x375",
       "type": "image/bmp",
-      "form_factor": "wide"
+      "form_factor": ""
     }],
   "file_handlers": [
     {
