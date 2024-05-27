@@ -12,7 +12,7 @@
   <property name="class.dir" value="${basedir}/class" /> 
   <property name="josetta.jar" value="${basedir}/lib/josetta-1.12.1-jar-with-dependencies.jar" /> 
   <property name="jsweet.jar" value="${basedir}/lib/jsweet-core-6.3.1.jar" /> 
-  <property name="swingjs.jar" value="${basedir}/lib/swing-bundle-1.5.6.jar" /> 
+  <property name="swingjs.jar" value="${basedir}/lib/swing-bundle-1.5.7.jar" /> 
   
   <target name="clean"> 
     <delete>
