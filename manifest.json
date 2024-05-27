@@ -2,6 +2,7 @@
   "manifest_version": 1,
   "version": "0.1.0",
   "name": "pizzApazzAinfinity",
+  "start_url": ".",
   "icons": [{
       "src": "image/app_icon_36.png",
       "sizes": "36x36",
