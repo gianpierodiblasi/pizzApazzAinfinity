@@ -25,16 +25,16 @@ import simulation.js.$Uint8Array;
  */
 public class Z4Layer {
 
-  private final $OffscreenCanvas offscreen;
-  private final $CanvasRenderingContext2D offscreenCtx;
+  private $OffscreenCanvas offscreen;
+  private $CanvasRenderingContext2D offscreenCtx;
 
   private String name;
   private int offsetX = 0;
   private int offsetY = 0;
   private double opacity = 1;
   private String compositeOperation = "source-over";
-  private final int width;
-  private final int height;
+  private int width;
+  private int height;
 
   /**
    * Creates the object
@@ -228,5 +228,96 @@ public class Z4Layer {
     ctx.globalCompositeOperation = this.compositeOperation;
     ctx.drawImage(this.offscreen, noOffset ? 0 : this.offsetX, noOffset ? 0 : this.offsetY);
     ctx.restore();
+  }
+
+  /**
+   * Horizontally flips the layer
+   */
+  public void flipHorizonal() {
+    ImageData imageData = this.offscreenCtx.getImageData(0, 0, this.width, this.height);
+    $Uint8Array data = ($Uint8Array) imageData.data;
+
+    for (int y = 0; y < this.height; y++) {
+      for (int x = 0; x < this.width / 2; x++) {
+        int indexFrom = (y * this.width + x) * 4;
+        int indexTo = (y * this.width + this.width - 1 - x) * 4;
+        this.flipValue(data, indexFrom, indexTo);
+      }
+    }
+
+    this.offscreenCtx.putImageData(imageData, 0, 0);
+  }
+
+  /**
+   * Vertically flips the layer
+   */
+  public void flipVertical() {
+    ImageData imageData = this.offscreenCtx.getImageData(0, 0, this.width, this.height);
+    $Uint8Array data = ($Uint8Array) imageData.data;
+
+    for (int y = 0; y < this.height / 2; y++) {
+      for (int x = 0; x < this.width; x++) {
+        int indexFrom = (y * this.width + x) * 4;
+        int indexTo = ((this.height - 1 - y) * this.width + x) * 4;
+        this.flipValue(data, indexFrom, indexTo);
+      }
+    }
+
+    this.offscreenCtx.putImageData(imageData, 0, 0);
+  }
+
+  private void flipValue($Uint8Array data, int indexFrom, int indexTo) {
+    double r = data.$get(indexFrom);
+    double g = data.$get(indexFrom + 1);
+    double b = data.$get(indexFrom + 2);
+    double a = data.$get(indexFrom + 3);
+
+    data.$set(indexFrom, data.$get(indexTo));
+    data.$set(indexFrom + 1, data.$get(indexTo + 1));
+    data.$set(indexFrom + 2, data.$get(indexTo + 2));
+    data.$set(indexFrom + 3, data.$get(indexTo + 3));
+
+    data.$set(indexTo, r);
+    data.$set(indexTo + 1, g);
+    data.$set(indexTo + 2, b);
+    data.$set(indexTo + 3, a);
+  }
+
+  /**
+   * Rotates the layer in clockwise
+   */
+  @SuppressWarnings("SuspiciousNameCombination")
+  public void rotatePlus90() {
+    $OffscreenCanvas rotatedOffscreen = new $OffscreenCanvas(this.height, this.width);
+    $CanvasRenderingContext2D rotatedOffscreenCtx = rotatedOffscreen.getContext("2d");
+
+    ImageData imageData = this.offscreenCtx.getImageData(0, 0, this.width, this.height);
+    $Uint8Array data = ($Uint8Array) imageData.data;
+
+    ImageData rotatedImageData = rotatedOffscreenCtx.createImageData(this.height, this.width);
+    $Uint8Array rotatedData = ($Uint8Array) rotatedImageData.data;
+
+    for (int y = 0; y < this.height; y++) {
+      for (int x = 0; x < this.width; x++) {
+        int index = (y * this.width + x) * 4;
+        int rotatedIndex = (x * this.height + this.height - 1 - y) * 4;
+
+        rotatedData.$set(rotatedIndex, data.$get(index));
+        rotatedData.$set(rotatedIndex + 1, data.$get(index + 1));
+        rotatedData.$set(rotatedIndex + 2, data.$get(index + 2));
+        rotatedData.$set(rotatedIndex + 3, data.$get(index + 3));
+      }
+    }
+
+    rotatedOffscreenCtx.putImageData(rotatedImageData, 0, 0);
+
+    this.offscreen = rotatedOffscreen;
+    this.offscreenCtx = rotatedOffscreenCtx;
+
+    this.offsetX = 0;
+    this.offsetY = 0;
+    int temp = this.width;
+    this.width = this.height;
+    this.height = temp;
   }
 }

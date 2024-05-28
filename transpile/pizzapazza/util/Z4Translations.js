@@ -123,6 +123,18 @@ class Z4Translations {
 
   static  DUPLICATE = "";
 
+  static  TRANSFORM = "";
+
+  static  FLIP_HORIZONTAL = "";
+
+  static  FLIP_VERTICAL = "";
+
+  static  ROTATE_PLUS_90 = "";
+
+  static  ROTATE_MINUS_90 = "";
+
+  static  ROTATE_180 = "";
+
   static  SPACE = "";
 
   static  TIME = "";
@@ -275,6 +287,12 @@ class Z4Translations {
     Z4Translations.RIPPLE = "Ripple";
     Z4Translations.DELETE = "Delete";
     Z4Translations.DUPLICATE = "Duplicate";
+    Z4Translations.TRANSFORM = "Transform";
+    Z4Translations.FLIP_HORIZONTAL = "Flip Horizontal";
+    Z4Translations.FLIP_VERTICAL = "Flip Vertical";
+    Z4Translations.ROTATE_PLUS_90 = "Rotate +90\u00B0";
+    Z4Translations.ROTATE_MINUS_90 = "Rotate -90\u00B0";
+    Z4Translations.ROTATE_180 = "Rotate 180\u00B0";
     Z4Translations.SPACE = "Space \u2192";
     Z4Translations.TIME = "\u2190 Time";
     Z4Translations.FILLING = "Filling";
@@ -380,6 +398,12 @@ class Z4Translations {
     Z4Translations.RIPPLE = "Caoticit\u00E0";
     Z4Translations.DELETE = "Elimina";
     Z4Translations.DUPLICATE = "Duplica";
+    Z4Translations.TRANSFORM = "Trasforma";
+    Z4Translations.FLIP_HORIZONTAL = "Rifletti Orizzontale";
+    Z4Translations.FLIP_VERTICAL = "Rifletti Verticale";
+    Z4Translations.ROTATE_PLUS_90 = "Ruota +90\u00B0";
+    Z4Translations.ROTATE_MINUS_90 = "Ruota -90\u00B0";
+    Z4Translations.ROTATE_180 = "Ruota 180\u00B0";
     Z4Translations.SPACE = "Spazio \u2192";
     Z4Translations.TIME = "\u2190 Tempo";
     Z4Translations.FILLING = "Riempimento";

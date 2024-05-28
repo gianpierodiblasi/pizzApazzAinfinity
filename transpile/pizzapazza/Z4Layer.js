@@ -205,4 +205,81 @@ class Z4Layer {
     ctx.drawImage(this.offscreen, noOffset ? 0 : this.offsetX, noOffset ? 0 : this.offsetY);
     ctx.restore();
   }
+
+  /**
+   * Horizontally flips the layer
+   */
+   flipHorizonal() {
+    let imageData = this.offscreenCtx.getImageData(0, 0, this.width, this.height);
+    let data = imageData.data;
+    for (let y = 0; y < this.height; y++) {
+      for (let x = 0; x < this.width / 2; x++) {
+        let indexFrom = (y * this.width + x) * 4;
+        let indexTo = (y * this.width + this.width - 1 - x) * 4;
+        this.flipValue(data, indexFrom, indexTo);
+      }
+    }
+    this.offscreenCtx.putImageData(imageData, 0, 0);
+  }
+
+  /**
+   * Vertically flips the layer
+   */
+   flipVertical() {
+    let imageData = this.offscreenCtx.getImageData(0, 0, this.width, this.height);
+    let data = imageData.data;
+    for (let y = 0; y < this.height / 2; y++) {
+      for (let x = 0; x < this.width; x++) {
+        let indexFrom = (y * this.width + x) * 4;
+        let indexTo = ((this.height - 1 - y) * this.width + x) * 4;
+        this.flipValue(data, indexFrom, indexTo);
+      }
+    }
+    this.offscreenCtx.putImageData(imageData, 0, 0);
+  }
+
+   flipValue(data, indexFrom, indexTo) {
+    let r = data[indexFrom];
+    let g = data[indexFrom + 1];
+    let b = data[indexFrom + 2];
+    let a = data[indexFrom + 3];
+    data[indexFrom] = data[indexTo];
+    data[indexFrom + 1] = data[indexTo + 1];
+    data[indexFrom + 2] = data[indexTo + 2];
+    data[indexFrom + 3] = data[indexTo + 3];
+    data[indexTo] = r;
+    data[indexTo + 1] = g;
+    data[indexTo + 2] = b;
+    data[indexTo + 3] = a;
+  }
+
+  /**
+   * Rotates the layer in clockwise
+   */
+   rotatePlus90() {
+    let rotatedOffscreen = new OffscreenCanvas(this.height, this.width);
+    let rotatedOffscreenCtx = rotatedOffscreen.getContext("2d");
+    let imageData = this.offscreenCtx.getImageData(0, 0, this.width, this.height);
+    let data = imageData.data;
+    let rotatedImageData = rotatedOffscreenCtx.createImageData(this.height, this.width);
+    let rotatedData = rotatedImageData.data;
+    for (let y = 0; y < this.height; y++) {
+      for (let x = 0; x < this.width; x++) {
+        let index = (y * this.width + x) * 4;
+        let rotatedIndex = (x * this.height + this.height - 1 - y) * 4;
+        rotatedData[rotatedIndex] = data[index];
+        rotatedData[rotatedIndex + 1] = data[index + 1];
+        rotatedData[rotatedIndex + 2] = data[index + 2];
+        rotatedData[rotatedIndex + 3] = data[index + 3];
+      }
+    }
+    rotatedOffscreenCtx.putImageData(rotatedImageData, 0, 0);
+    this.offscreen = rotatedOffscreen;
+    this.offscreenCtx = rotatedOffscreenCtx;
+    this.offsetX = 0;
+    this.offsetY = 0;
+    let temp = this.width;
+    this.width = this.height;
+    this.height = temp;
+  }
 }

@@ -2126,8 +2126,6 @@ class Z4LayerPreview extends JSComponent {
 
    compositeOperationsGroup = new ButtonGroup();
 
-   duplicate = new JSButton();
-
    delete = new JSButton();
 
    canvas = null;
@@ -2180,8 +2178,8 @@ class Z4LayerPreview extends JSComponent {
     this.appendNodeChild(document.createElement("summary"));
     this.appendChildInTree("summary", this.summary);
     this.editor.cssAddClass("z4layerpreview-editor");
-    let panel = new JSPanel();
-    panel.setLayout(new GridBagLayout());
+    let panelBasic = new JSPanel();
+    panelBasic.setLayout(new GridBagLayout());
     this.editName.addActionListener(event => {
       let newName = this.editName.getText();
       if (newName) {
@@ -2190,42 +2188,43 @@ class Z4LayerPreview extends JSComponent {
         this.layer.setName(newName);
       }
     });
-    this.addLabel(panel, Z4Translations.LAYER_NAME, 0, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
-    this.addComponent(panel, this.editName, 0, 1, 5, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 5, 0));
-    this.addLabel(panel, Z4Translations.OFFSET_X, 0, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    this.addLabel(panelBasic, Z4Translations.LAYER_NAME, 0, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    this.addComponent(panelBasic, this.editName, 0, 1, 5, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 5, 0));
+    this.addLabel(panelBasic, Z4Translations.OFFSET_X, 0, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
     this.offsetXSpinner.cssAddClass("jsspinner_w_4rem");
     this.offsetXSpinner.addChangeListener(event => this.onChange(true, this.offsetXSpinner.getValueIsAdjusting(), this.offsetXSpinner, this.offsetXSlider));
-    this.addComponent(panel, this.offsetXSpinner, 1, 2, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    this.addComponent(panelBasic, this.offsetXSpinner, 1, 2, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
     this.offsetXSlider.getStyle().minWidth = "20rem";
     this.offsetXSlider.addChangeListener(event => this.onChange(false, this.offsetXSlider.getValueIsAdjusting(), this.offsetXSpinner, this.offsetXSlider));
-    this.addComponent(panel, this.offsetXSlider, 0, 3, 2, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
-    this.addLabel(panel, Translations.JSColorChooser_OPACITY, 0, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    this.addComponent(panelBasic, this.offsetXSlider, 0, 3, 2, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
+    this.addLabel(panelBasic, Translations.JSColorChooser_OPACITY, 0, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
     this.opacitySpinner.cssAddClass("jsspinner_w_4rem");
     this.opacitySpinner.addChangeListener(event => this.onChange(true, this.opacitySpinner.getValueIsAdjusting(), this.opacitySpinner, this.opacitySlider));
-    this.addComponent(panel, this.opacitySpinner, 1, 4, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    this.addComponent(panelBasic, this.opacitySpinner, 1, 4, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
     this.opacitySlider.addChangeListener(event => this.onChange(false, this.opacitySlider.getValueIsAdjusting(), this.opacitySpinner, this.opacitySlider));
     this.opacitySlider.getStyle().minWidth = "20rem";
-    this.addComponent(panel, this.opacitySlider, 0, 5, 2, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
-    this.addVLine(panel, 2, 2, 1, 5, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL);
-    this.addLabel(panel, Z4Translations.OFFSET_Y, 3, 5, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE).cssAddClass("jslabel-vertical");
+    this.addComponent(panelBasic, this.opacitySlider, 0, 5, 2, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
+    this.addVLine(panelBasic, 2, 2, 1, 5, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL);
+    this.addLabel(panelBasic, Z4Translations.OFFSET_Y, 3, 5, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE).cssAddClass("jslabel-vertical");
     this.offsetYSpinner.cssAddClass("jsspinner-vertical");
     this.offsetYSpinner.cssAddClass("jsspinner_h_4rem");
     this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
     this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
     this.offsetYSpinner.addChangeListener(event => this.onChange(true, this.offsetYSpinner.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
-    this.addComponent(panel, this.offsetYSpinner, 3, 2, 1, 3, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.NONE, null);
+    this.addComponent(panelBasic, this.offsetYSpinner, 3, 2, 1, 3, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.NONE, null);
     this.offsetYSlider.setOrientation(JSSlider.VERTICAL);
     this.offsetYSlider.setInverted(true);
     this.offsetYSlider.getStyle().minHeight = "20rem";
     this.offsetYSlider.getStyle().minWidth = "1.5rem";
     this.offsetYSlider.addChangeListener(event => this.onChange(false, this.offsetYSlider.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
-    this.addComponent(panel, this.offsetYSlider, 4, 2, 1, 4, 0, 1, GridBagConstraints.NORTH, GridBagConstraints.NONE, null);
-    this.duplicate.setText(Z4Translations.DUPLICATE);
-    this.duplicate.addActionListener(event => {
+    this.addComponent(panelBasic, this.offsetYSlider, 4, 2, 1, 4, 0, 1, GridBagConstraints.NORTH, GridBagConstraints.NONE, null);
+    let button = new JSButton();
+    button.setText(Z4Translations.DUPLICATE);
+    button.addActionListener(event => {
       this.canvas.duplicateLayer(this.layer);
       this.removeAttribute("open");
     });
-    this.addComponent(panel, this.duplicate, 0, 6, 1, 1, 0, 0, GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE, null);
+    this.addComponent(panelBasic, button, 0, 6, 1, 1, 0, 0, GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE, null);
     this.delete.setText(Z4Translations.DELETE);
     this.delete.addActionListener(event => JSOptionPane.showConfirmDialog(Z4Translations.DELETE_LAYER_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
       if (response === JSOptionPane.YES_OPTION) {
@@ -2233,26 +2232,59 @@ class Z4LayerPreview extends JSComponent {
         document.querySelector(".z4layerpreview:nth-child(" + (index + 1) + ")").remove();
       }
     }));
-    this.addComponent(panel, this.delete, 1, 6, 1, 1, 0, 0, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE, null);
-    this.editor.addTab(Z4Translations.BASIC, panel);
-    let finalPanel = new JSPanel();
-    finalPanel.setLayout(new GridBagLayout());
-    this.addLabel(finalPanel, Z4Translations.COMPOSITE_OPERATION, 0, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    this.addComponent(panelBasic, this.delete, 1, 6, 1, 1, 0, 0, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE, null);
+    this.editor.addTab(Z4Translations.BASIC, panelBasic);
+    let panelAdvanced = new JSPanel();
+    panelAdvanced.setLayout(new GridBagLayout());
+    this.addLabel(panelAdvanced, Z4Translations.COMPOSITE_OPERATION, 0, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
     Z4Constants.COMPOSITE_OPERATION.forEach((array, index, parent) => {
       array.forEach((element, index2, array2) => {
-        let button = new JSRadioButton();
-        button.setContentAreaFilled(false);
-        button.setToggle();
-        button.setText(element);
-        button.setTooltip(Z4Translations["COMPOSITE_OPERATION_" + element.toUpperCase().replace("-", "_")]);
-        button.addActionListener(event => this.onAction(element));
-        this.compositeOperations.push(button);
-        this.compositeOperationsGroup.add(button);
-        this.addComponent(finalPanel, button, index2, index + 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(1, 1, 1, 1));
+        let radio = new JSRadioButton();
+        radio.setContentAreaFilled(false);
+        radio.setToggle();
+        radio.setText(element);
+        radio.setTooltip(Z4Translations["COMPOSITE_OPERATION_" + element.toUpperCase().replace("-", "_")]);
+        radio.addActionListener(event => this.onAction(element));
+        this.compositeOperations.push(radio);
+        this.compositeOperationsGroup.add(radio);
+        this.addComponent(panelAdvanced, radio, index2, index + 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(1, 1, 1, 1));
       });
     });
-    this.editor.addTab(Z4Translations.ADVANCED, finalPanel);
+    this.editor.addTab(Z4Translations.ADVANCED, panelAdvanced);
+    let panelTranform = new JSPanel();
+    panelTranform.setLayout(new GridBagLayout());
+    this.editor.addTab(Z4Translations.TRANSFORM, panelTranform);
+    this.addButton(panelTranform, Z4Translations.FLIP_HORIZONTAL, 0, 0, () => this.layer.flipHorizonal());
+    this.addButton(panelTranform, Z4Translations.FLIP_VERTICAL, 1, 0, () => this.layer.flipVertical());
+    this.addButton(panelTranform, Z4Translations.ROTATE_PLUS_90, 0, 1, () => {
+      this.layer.rotatePlus90();
+      this.setLayer(this.canvas, this.layer);
+    });
+    this.addButton(panelTranform, Z4Translations.ROTATE_MINUS_90, 1, 1, () => {
+      this.layer.rotatePlus90();
+      this.layer.rotatePlus90();
+      this.layer.rotatePlus90();
+      this.setLayer(this.canvas, this.layer);
+    });
+    this.addButton(panelTranform, Z4Translations.ROTATE_180, 0, 2, () => {
+      this.layer.rotatePlus90();
+      this.layer.rotatePlus90();
+      this.setLayer(this.canvas, this.layer);
+    });
     this.appendChild(this.editor);
+  }
+
+   addButton(panel, text, gridx, gridy, func) {
+    let button = new JSButton();
+    button.setText(text);
+    button.setContentAreaFilled(false);
+    button.addActionListener(event => {
+      func();
+      this.drawLayer();
+      this.canvas.setSaved(false);
+      this.canvas.drawCanvas();
+    });
+    this.addComponent(panel, button, gridx, gridy, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(1, 1, 1, 1));
   }
 
    addLabel(panel, text, gridx, gridy, gridwidth, gridheight, anchor, fill) {
@@ -5696,6 +5728,18 @@ class Z4Translations {
 
   static  DUPLICATE = "";
 
+  static  TRANSFORM = "";
+
+  static  FLIP_HORIZONTAL = "";
+
+  static  FLIP_VERTICAL = "";
+
+  static  ROTATE_PLUS_90 = "";
+
+  static  ROTATE_MINUS_90 = "";
+
+  static  ROTATE_180 = "";
+
   static  SPACE = "";
 
   static  TIME = "";
@@ -5848,6 +5892,12 @@ class Z4Translations {
     Z4Translations.RIPPLE = "Ripple";
     Z4Translations.DELETE = "Delete";
     Z4Translations.DUPLICATE = "Duplicate";
+    Z4Translations.TRANSFORM = "Transform";
+    Z4Translations.FLIP_HORIZONTAL = "Flip Horizontal";
+    Z4Translations.FLIP_VERTICAL = "Flip Vertical";
+    Z4Translations.ROTATE_PLUS_90 = "Rotate +90\u00B0";
+    Z4Translations.ROTATE_MINUS_90 = "Rotate -90\u00B0";
+    Z4Translations.ROTATE_180 = "Rotate 180\u00B0";
     Z4Translations.SPACE = "Space \u2192";
     Z4Translations.TIME = "\u2190 Time";
     Z4Translations.FILLING = "Filling";
@@ -5953,6 +6003,12 @@ class Z4Translations {
     Z4Translations.RIPPLE = "Caoticit\u00E0";
     Z4Translations.DELETE = "Elimina";
     Z4Translations.DUPLICATE = "Duplica";
+    Z4Translations.TRANSFORM = "Trasforma";
+    Z4Translations.FLIP_HORIZONTAL = "Rifletti Orizzontale";
+    Z4Translations.FLIP_VERTICAL = "Rifletti Verticale";
+    Z4Translations.ROTATE_PLUS_90 = "Ruota +90\u00B0";
+    Z4Translations.ROTATE_MINUS_90 = "Ruota -90\u00B0";
+    Z4Translations.ROTATE_180 = "Ruota 180\u00B0";
     Z4Translations.SPACE = "Spazio \u2192";
     Z4Translations.TIME = "\u2190 Tempo";
     Z4Translations.FILLING = "Riempimento";
@@ -6313,6 +6369,83 @@ class Z4Layer {
     ctx.globalCompositeOperation = this.compositeOperation;
     ctx.drawImage(this.offscreen, noOffset ? 0 : this.offsetX, noOffset ? 0 : this.offsetY);
     ctx.restore();
+  }
+
+  /**
+   * Horizontally flips the layer
+   */
+   flipHorizonal() {
+    let imageData = this.offscreenCtx.getImageData(0, 0, this.width, this.height);
+    let data = imageData.data;
+    for (let y = 0; y < this.height; y++) {
+      for (let x = 0; x < this.width / 2; x++) {
+        let indexFrom = (y * this.width + x) * 4;
+        let indexTo = (y * this.width + this.width - 1 - x) * 4;
+        this.flipValue(data, indexFrom, indexTo);
+      }
+    }
+    this.offscreenCtx.putImageData(imageData, 0, 0);
+  }
+
+  /**
+   * Vertically flips the layer
+   */
+   flipVertical() {
+    let imageData = this.offscreenCtx.getImageData(0, 0, this.width, this.height);
+    let data = imageData.data;
+    for (let y = 0; y < this.height / 2; y++) {
+      for (let x = 0; x < this.width; x++) {
+        let indexFrom = (y * this.width + x) * 4;
+        let indexTo = ((this.height - 1 - y) * this.width + x) * 4;
+        this.flipValue(data, indexFrom, indexTo);
+      }
+    }
+    this.offscreenCtx.putImageData(imageData, 0, 0);
+  }
+
+   flipValue(data, indexFrom, indexTo) {
+    let r = data[indexFrom];
+    let g = data[indexFrom + 1];
+    let b = data[indexFrom + 2];
+    let a = data[indexFrom + 3];
+    data[indexFrom] = data[indexTo];
+    data[indexFrom + 1] = data[indexTo + 1];
+    data[indexFrom + 2] = data[indexTo + 2];
+    data[indexFrom + 3] = data[indexTo + 3];
+    data[indexTo] = r;
+    data[indexTo + 1] = g;
+    data[indexTo + 2] = b;
+    data[indexTo + 3] = a;
+  }
+
+  /**
+   * Rotates the layer in clockwise
+   */
+   rotatePlus90() {
+    let rotatedOffscreen = new OffscreenCanvas(this.height, this.width);
+    let rotatedOffscreenCtx = rotatedOffscreen.getContext("2d");
+    let imageData = this.offscreenCtx.getImageData(0, 0, this.width, this.height);
+    let data = imageData.data;
+    let rotatedImageData = rotatedOffscreenCtx.createImageData(this.height, this.width);
+    let rotatedData = rotatedImageData.data;
+    for (let y = 0; y < this.height; y++) {
+      for (let x = 0; x < this.width; x++) {
+        let index = (y * this.width + x) * 4;
+        let rotatedIndex = (x * this.height + this.height - 1 - y) * 4;
+        rotatedData[rotatedIndex] = data[index];
+        rotatedData[rotatedIndex + 1] = data[index + 1];
+        rotatedData[rotatedIndex + 2] = data[index + 2];
+        rotatedData[rotatedIndex + 3] = data[index + 3];
+      }
+    }
+    rotatedOffscreenCtx.putImageData(rotatedImageData, 0, 0);
+    this.offscreen = rotatedOffscreen;
+    this.offscreenCtx = rotatedOffscreenCtx;
+    this.offsetX = 0;
+    this.offsetY = 0;
+    let temp = this.width;
+    this.width = this.height;
+    this.height = temp;
   }
 }
 /**
