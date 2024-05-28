@@ -4227,6 +4227,10 @@ class Z4RibbonFilePanel extends JSPanel {
    */
    setCanvas(canvas) {
     this.canvas = canvas;
+    this.canvas.addEventListener("dragenter", event => this.onDrop(event, false));
+    this.canvas.addEventListener("dragover", event => this.onDrop(event, false));
+    this.canvas.addEventListener("dragleave", event => this.onDrop(event, false));
+    this.canvas.addEventListener("drop", event => this.onDrop(event, true));
   }
 
   /**
@@ -4361,6 +4365,31 @@ class Z4RibbonFilePanel extends JSPanel {
         this.canvas.exportToFile(panel.getFilename(), panel.getFileExtension(), panel.getQuality());
       }
     });
+  }
+
+   onDrop(event, doUpload) {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "none";
+    let files = new Array();
+    if (event.dataTransfer.items) {
+      for (let i = 0; i < event.dataTransfer.items.length; i++) {
+        if (event.dataTransfer.items[i]["kind"] === "file") {
+          let file = (event.dataTransfer.items[i]).getAsFile();
+          files.push(file ? file : event.dataTransfer.items[i]);
+        }
+      }
+    } else {
+      event.dataTransfer.files.forEach(file => files.push(file));
+    }
+    if (files[0]) {
+      event.dataTransfer.dropEffect = "copy";
+      if (!doUpload) {
+      } else if (files[0].name.toLowerCase().endsWith(".z4i")) {
+        this.checkSaved(Z4Translations.OPEN_PROJECT, () => this.canvas.openProject(files[0]));
+      } else if (Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.some((format, index, array) => files[0].name.toLowerCase().endsWith(format))) {
+        this.checkSaved(Z4Translations.FROM_FILE, () => this.canvas.createFromFile(files[0]));
+      }
+    }
   }
 }
 /**

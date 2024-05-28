@@ -1,6 +1,9 @@
 package pizzapazza.ui.panel.ribbon;
 
+import def.dom.DragEvent;
+import def.dom.File;
 import static def.dom.Globals.document;
+import def.js.Array;
 import javascript.awt.BorderLayout;
 import javascript.awt.Dimension;
 import javascript.awt.GridBagConstraints;
@@ -21,8 +24,8 @@ import pizzapazza.ui.panel.Z4NewImagePanel;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
-import pizzapazza.util.Z4UI;
 import simulation.js.$Apply_0_Void;
+import simulation.js.$File;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.$typeof;
 import static simulation.js.$Globals.navigator;
@@ -69,6 +72,10 @@ public class Z4RibbonFilePanel extends JSPanel {
    */
   public void setCanvas(Z4Canvas canvas) {
     this.canvas = canvas;
+    this.canvas.addEventListener("dragenter", event -> this.onDrop((DragEvent) event, false));
+    this.canvas.addEventListener("dragover", event -> this.onDrop((DragEvent) event, false));
+    this.canvas.addEventListener("dragleave", event -> this.onDrop((DragEvent) event, false));
+    this.canvas.addEventListener("drop", event -> this.onDrop((DragEvent) event, true));
   }
 
   /**
@@ -212,5 +219,34 @@ public class Z4RibbonFilePanel extends JSPanel {
         this.canvas.exportToFile(panel.getFilename(), panel.getFileExtension(), panel.getQuality());
       }
     });
+  }
+
+  @SuppressWarnings("StringEquality")
+  private void onDrop(DragEvent event, boolean doUpload) {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "none";
+
+    Array<File> files = new Array<>();
+    if ($exists(event.dataTransfer.items)) {
+      for (int i = 0; i < event.dataTransfer.items.length; i++) {
+        if (event.dataTransfer.items.$get(i).$get("kind") == "file") {
+          File file = (($File) event.dataTransfer.items.$get(i)).getAsFile();
+          files.push($exists(file) ? file : event.dataTransfer.items.$get(i));
+        }
+      }
+    } else {
+      event.dataTransfer.files.forEach(file -> files.push(file));
+    }
+
+    if ($exists(files.$get(0))) {
+      event.dataTransfer.dropEffect = "copy";
+
+      if (!doUpload) {
+      } else if (files.$get(0).name.toLowerCase().endsWith(".z4i")) {
+        this.checkSaved(Z4Translations.OPEN_PROJECT, () -> this.canvas.openProject(files.$get(0)));
+      } else if (Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.some((format, index, array) -> files.$get(0).name.toLowerCase().endsWith(format))) {
+        this.checkSaved(Z4Translations.FROM_FILE, () -> this.canvas.createFromFile(files.$get(0)));
+      }
+    }
   }
 }
