@@ -5,6 +5,7 @@ import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonFilePanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHelpPanel;
+import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonSettingsPanel;
 import pizzapazza.util.Z4Translations;
@@ -18,6 +19,7 @@ public class Z4Ribbon extends JSTabbedPane {
 
   private final Z4RibbonFilePanel filePanel = new Z4RibbonFilePanel();
   private final Z4RibbonLayerPanel layerPanel = new Z4RibbonLayerPanel();
+  private final Z4RibbonHistoryPanel historyPanel = new Z4RibbonHistoryPanel();
   private final Z4RibbonSettingsPanel settingsPanel = new Z4RibbonSettingsPanel();
   private final Z4RibbonHelpPanel helpPanel = new Z4RibbonHelpPanel();
 
@@ -30,6 +32,7 @@ public class Z4Ribbon extends JSTabbedPane {
 
     this.addTab(Z4Translations.FILE, this.filePanel);
     this.addTab(Z4Translations.LAYER, this.layerPanel);
+    this.addTab(Z4Translations.HISTORY, this.historyPanel);
     this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
     this.addTab(Z4Translations.HELP, this.helpPanel);
   }

@@ -42,6 +42,15 @@ class Z4Translations {
 
   static  DELETE_LAYER_MESSAGE = "";
 
+  // Ribbon History
+  static  HISTORY = "";
+
+  static  UNDO = "";
+
+  static  REDO = "";
+
+  static  CONSOLIDATE = "";
+
   // Ribbon Settings
   static  SETTINGS = "";
 
@@ -245,6 +254,11 @@ class Z4Translations {
     Z4Translations.NEW_LAYER = "New Layer";
     Z4Translations.BACKGROUND_LAYER = "Bkgrd";
     Z4Translations.DELETE_LAYER_MESSAGE = "Do you really want to delete the layer?";
+    // Ribbon History
+    Z4Translations.HISTORY = "History";
+    Z4Translations.UNDO = "Undo";
+    Z4Translations.REDO = "Redo";
+    Z4Translations.CONSOLIDATE = "Consolidate";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Settings";
     Z4Translations.LANGUAGE = "Language";
@@ -356,6 +370,11 @@ class Z4Translations {
     Z4Translations.NEW_LAYER = "Nuovo Livello";
     Z4Translations.BACKGROUND_LAYER = "Sfondo";
     Z4Translations.DELETE_LAYER_MESSAGE = "Vuoi davvero eliminare il livello?";
+    // Ribbon History
+    Z4Translations.HISTORY = "Cronologia";
+    Z4Translations.UNDO = "Annulla";
+    Z4Translations.REDO = "Ripeti";
+    Z4Translations.CONSOLIDATE = "Consolida";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Impostazioni";
     Z4Translations.LANGUAGE = "Lingua";

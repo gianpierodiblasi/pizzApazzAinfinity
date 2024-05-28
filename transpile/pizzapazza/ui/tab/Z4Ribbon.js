@@ -9,6 +9,8 @@ class Z4Ribbon extends JSTabbedPane {
 
    layerPanel = new Z4RibbonLayerPanel();
 
+   historyPanel = new Z4RibbonHistoryPanel();
+
    settingsPanel = new Z4RibbonSettingsPanel();
 
    helpPanel = new Z4RibbonHelpPanel();
@@ -21,6 +23,7 @@ class Z4Ribbon extends JSTabbedPane {
     this.cssAddClass("z4ribbon");
     this.addTab(Z4Translations.FILE, this.filePanel);
     this.addTab(Z4Translations.LAYER, this.layerPanel);
+    this.addTab(Z4Translations.HISTORY, this.historyPanel);
     this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
     this.addTab(Z4Translations.HELP, this.helpPanel);
   }

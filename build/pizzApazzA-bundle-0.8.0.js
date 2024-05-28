@@ -4515,6 +4515,79 @@ class Z4RibbonHelpPanel extends JSPanel {
   }
 }
 /**
+ * The ribbon panel containing the history
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4RibbonHistoryPanel extends JSPanel {
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super();
+    this.setLayout(new GridBagLayout());
+    this.cssAddClass("z4ribbonhistorypanel");
+    this.addButton(Z4Translations.UNDO, false, 0, 0, "left", event => {
+    });
+    this.addButton(Z4Translations.REDO, false, 1, 0, "right", event => {
+    });
+    this.addButton(Z4Translations.CONSOLIDATE, false, 2, 0, "", event => {
+    });
+    this.addVLine(3, 1);
+  }
+
+   addButton(text, enabled, gridx, gridy, border, listener) {
+    let button = new JSButton();
+    button.setText(text);
+    button.setEnabled(enabled);
+    button.setContentAreaFilled(false);
+    button.addActionListener(listener);
+    let constraints = new GridBagConstraints();
+    constraints.gridx = gridx;
+    constraints.gridy = gridy;
+    constraints.anchor = GridBagConstraints.NORTH;
+    switch(border) {
+      case "left":
+        constraints.insets = new Insets(5, 5, 0, 0);
+        button.getStyle().borderTopRightRadius = "0px";
+        button.getStyle().borderBottomRightRadius = "0px";
+        button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "both":
+        constraints.insets = new Insets(5, 0, 0, 0);
+        button.getStyle().borderRadius = "0px";
+        button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "right":
+        constraints.insets = new Insets(5, 0, 0, 5);
+        button.getStyle().borderTopLeftRadius = "0px";
+        button.getStyle().borderBottomLeftRadius = "0px";
+        button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        break;
+      default:
+        constraints.insets = new Insets(5, 0, 0, 0);
+    }
+    this.add(button, constraints);
+  }
+
+   addVLine(gridx, weightx) {
+    let div = new JSComponent(document.createElement("div"));
+    div.getStyle().width = "1px";
+    div.getStyle().background = "var(--main-action-bgcolor";
+    let constraints = new GridBagConstraints();
+    constraints.gridx = gridx;
+    constraints.gridy = 0;
+    constraints.gridheight = 2;
+    constraints.fill = GridBagConstraints.VERTICAL;
+    constraints.weightx = weightx;
+    constraints.weighty = 1;
+    constraints.insets = new Insets(1, 2, 1, 2);
+    this.add(div, constraints);
+  }
+}
+/**
  * The ribbon panel containing the layer menus
  *
  * @author gianpiero.diblasi
@@ -5499,6 +5572,8 @@ class Z4Ribbon extends JSTabbedPane {
 
    layerPanel = new Z4RibbonLayerPanel();
 
+   historyPanel = new Z4RibbonHistoryPanel();
+
    settingsPanel = new Z4RibbonSettingsPanel();
 
    helpPanel = new Z4RibbonHelpPanel();
@@ -5511,6 +5586,7 @@ class Z4Ribbon extends JSTabbedPane {
     this.cssAddClass("z4ribbon");
     this.addTab(Z4Translations.FILE, this.filePanel);
     this.addTab(Z4Translations.LAYER, this.layerPanel);
+    this.addTab(Z4Translations.HISTORY, this.historyPanel);
     this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
     this.addTab(Z4Translations.HELP, this.helpPanel);
   }
@@ -5646,6 +5722,15 @@ class Z4Translations {
   static  BACKGROUND_LAYER = "";
 
   static  DELETE_LAYER_MESSAGE = "";
+
+  // Ribbon History
+  static  HISTORY = "";
+
+  static  UNDO = "";
+
+  static  REDO = "";
+
+  static  CONSOLIDATE = "";
 
   // Ribbon Settings
   static  SETTINGS = "";
@@ -5850,6 +5935,11 @@ class Z4Translations {
     Z4Translations.NEW_LAYER = "New Layer";
     Z4Translations.BACKGROUND_LAYER = "Bkgrd";
     Z4Translations.DELETE_LAYER_MESSAGE = "Do you really want to delete the layer?";
+    // Ribbon History
+    Z4Translations.HISTORY = "History";
+    Z4Translations.UNDO = "Undo";
+    Z4Translations.REDO = "Redo";
+    Z4Translations.CONSOLIDATE = "Consolidate";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Settings";
     Z4Translations.LANGUAGE = "Language";
@@ -5961,6 +6051,11 @@ class Z4Translations {
     Z4Translations.NEW_LAYER = "Nuovo Livello";
     Z4Translations.BACKGROUND_LAYER = "Sfondo";
     Z4Translations.DELETE_LAYER_MESSAGE = "Vuoi davvero eliminare il livello?";
+    // Ribbon History
+    Z4Translations.HISTORY = "Cronologia";
+    Z4Translations.UNDO = "Annulla";
+    Z4Translations.REDO = "Ripeti";
+    Z4Translations.CONSOLIDATE = "Consolida";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Impostazioni";
     Z4Translations.LANGUAGE = "Lingua";
