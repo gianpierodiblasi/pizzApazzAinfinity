@@ -89,9 +89,7 @@ window.onload = () => {
       document.querySelector(".z4ribbonhelppanel .z4check-install").onclick = () => event.prompt();
     });
 
-    window.addEventListener('appinstalled', () => {
-      document.querySelector(".z4ribbonhelppanel .z4check-install").style.display = "none";
-    });
+    window.addEventListener('appinstalled', () => document.querySelector(".z4ribbonhelppanel .z4check-install").style.display = "none");
 
     if (navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
       document.head.title = "";
@@ -1884,6 +1882,30 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Duplicates a layer
+   *
+   * @param layer The layer
+   */
+   duplicateLayer(layer) {
+    let offset = layer.getOffset();
+    layer.convertToBlob(blob => {
+      let image = document.createElement("img");
+      image.onload = event => {
+        this.paper.addLayerFromImage(this.findLayerName(), image, this.width, this.height);
+        let duplicate = this.paper.getLayerAt(this.paper.getLayersCount() - 1);
+        duplicate.setOpacity(layer.getOpacity());
+        duplicate.setCompositeOperation(layer.getCompositeOperation());
+        duplicate.move(offset.x, offset.y);
+        this.ribbonLayerPanel.addLayerPreview(duplicate);
+        this.saved = false;
+        this.drawCanvas();
+        return null;
+      };
+      image.src = URL.createObjectURL(blob);
+    });
+  }
+
+  /**
    * Deletes a layer
    *
    * @param layer The layer
@@ -2104,6 +2126,8 @@ class Z4LayerPreview extends JSComponent {
 
    compositeOperationsGroup = new ButtonGroup();
 
+   duplicate = new JSButton();
+
    delete = new JSButton();
 
    canvas = null;
@@ -2196,6 +2220,12 @@ class Z4LayerPreview extends JSComponent {
     this.offsetYSlider.getStyle().minWidth = "1.5rem";
     this.offsetYSlider.addChangeListener(event => this.onChange(false, this.offsetYSlider.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
     this.addComponent(panel, this.offsetYSlider, 4, 2, 1, 4, 0, 1, GridBagConstraints.NORTH, GridBagConstraints.NONE, null);
+    this.duplicate.setText(Z4Translations.DUPLICATE);
+    this.duplicate.addActionListener(event => {
+      this.canvas.duplicateLayer(this.layer);
+      this.removeAttribute("open");
+    });
+    this.addComponent(panel, this.duplicate, 0, 6, 1, 1, 0, 0, GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE, null);
     this.delete.setText(Z4Translations.DELETE);
     this.delete.addActionListener(event => JSOptionPane.showConfirmDialog(Z4Translations.DELETE_LAYER_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
       if (response === JSOptionPane.YES_OPTION) {
@@ -5664,6 +5694,8 @@ class Z4Translations {
 
   static  DELETE = "";
 
+  static  DUPLICATE = "";
+
   static  SPACE = "";
 
   static  TIME = "";
@@ -5815,6 +5847,7 @@ class Z4Translations {
     Z4Translations.LOCK = "Lock";
     Z4Translations.RIPPLE = "Ripple";
     Z4Translations.DELETE = "Delete";
+    Z4Translations.DUPLICATE = "Duplicate";
     Z4Translations.SPACE = "Space \u2192";
     Z4Translations.TIME = "\u2190 Time";
     Z4Translations.FILLING = "Filling";
@@ -5919,6 +5952,7 @@ class Z4Translations {
     Z4Translations.LOCK = "Blocca";
     Z4Translations.RIPPLE = "Caoticit\u00E0";
     Z4Translations.DELETE = "Elimina";
+    Z4Translations.DUPLICATE = "Duplica";
     Z4Translations.SPACE = "Spazio \u2192";
     Z4Translations.TIME = "\u2190 Tempo";
     Z4Translations.FILLING = "Riempimento";

@@ -121,6 +121,8 @@ class Z4Translations {
 
   static  DELETE = "";
 
+  static  DUPLICATE = "";
+
   static  SPACE = "";
 
   static  TIME = "";
@@ -272,6 +274,7 @@ class Z4Translations {
     Z4Translations.LOCK = "Lock";
     Z4Translations.RIPPLE = "Ripple";
     Z4Translations.DELETE = "Delete";
+    Z4Translations.DUPLICATE = "Duplicate";
     Z4Translations.SPACE = "Space \u2192";
     Z4Translations.TIME = "\u2190 Time";
     Z4Translations.FILLING = "Filling";
@@ -376,6 +379,7 @@ class Z4Translations {
     Z4Translations.LOCK = "Blocca";
     Z4Translations.RIPPLE = "Caoticit\u00E0";
     Z4Translations.DELETE = "Elimina";
+    Z4Translations.DUPLICATE = "Duplica";
     Z4Translations.SPACE = "Spazio \u2192";
     Z4Translations.TIME = "\u2190 Tempo";
     Z4Translations.FILLING = "Riempimento";

@@ -416,6 +416,34 @@ public class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Duplicates a layer
+   *
+   * @param layer The layer
+   */
+  public void duplicateLayer(Z4Layer layer) {
+    Point offset = layer.getOffset();
+    layer.convertToBlob(blob -> {
+      $Image image = ($Image) document.createElement("img");
+
+      image.onload = event -> {
+        this.paper.addLayerFromImage(this.findLayerName(), image, this.width, this.height);
+
+        Z4Layer duplicate = this.paper.getLayerAt(this.paper.getLayersCount() - 1);
+        duplicate.setOpacity(layer.getOpacity());
+        duplicate.setCompositeOperation(layer.getCompositeOperation());
+        duplicate.move(offset.x, offset.y);
+        this.ribbonLayerPanel.addLayerPreview(duplicate);
+
+        this.saved = false;
+        this.drawCanvas();
+        return null;
+      };
+
+      image.src = URL.createObjectURL(blob);
+    });
+  }
+
+  /**
    * Deletes a layer
    *
    * @param layer The layer

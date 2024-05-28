@@ -1,7 +1,6 @@
 package pizzapazza;
 
 import def.js.Array;
-import javascript.awt.Color;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
 

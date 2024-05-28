@@ -33,6 +33,8 @@ class Z4LayerPreview extends JSComponent {
 
    compositeOperationsGroup = new ButtonGroup();
 
+   duplicate = new JSButton();
+
    delete = new JSButton();
 
    canvas = null;
@@ -125,6 +127,12 @@ class Z4LayerPreview extends JSComponent {
     this.offsetYSlider.getStyle().minWidth = "1.5rem";
     this.offsetYSlider.addChangeListener(event => this.onChange(false, this.offsetYSlider.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
     this.addComponent(panel, this.offsetYSlider, 4, 2, 1, 4, 0, 1, GridBagConstraints.NORTH, GridBagConstraints.NONE, null);
+    this.duplicate.setText(Z4Translations.DUPLICATE);
+    this.duplicate.addActionListener(event => {
+      this.canvas.duplicateLayer(this.layer);
+      this.removeAttribute("open");
+    });
+    this.addComponent(panel, this.duplicate, 0, 6, 1, 1, 0, 0, GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE, null);
     this.delete.setText(Z4Translations.DELETE);
     this.delete.addActionListener(event => JSOptionPane.showConfirmDialog(Z4Translations.DELETE_LAYER_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
       if (response === JSOptionPane.YES_OPTION) {

@@ -89,9 +89,7 @@ window.onload = () => {
       document.querySelector(".z4ribbonhelppanel .z4check-install").onclick = () => event.prompt();
     });
 
-    window.addEventListener('appinstalled', () => {
-      document.querySelector(".z4ribbonhelppanel .z4check-install").style.display = "none";
-    });
+    window.addEventListener('appinstalled', () => document.querySelector(".z4ribbonhelppanel .z4check-install").style.display = "none");
 
     if (navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
       document.head.title = "";

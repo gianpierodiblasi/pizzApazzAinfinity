@@ -52,6 +52,7 @@ public class Z4LayerPreview extends JSComponent {
   private final JSSpinner opacitySpinner = new JSSpinner();
   private final Array<JSRadioButton> compositeOperations = new Array<>();
   private final ButtonGroup compositeOperationsGroup = new ButtonGroup();
+  private final JSButton duplicate = new JSButton();
   private final JSButton delete = new JSButton();
 
   private Z4Canvas canvas;
@@ -165,6 +166,13 @@ public class Z4LayerPreview extends JSComponent {
     this.offsetYSlider.getStyle().minWidth = "1.5rem";
     this.offsetYSlider.addChangeListener(event -> this.onChange(false, this.offsetYSlider.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
     this.addComponent(panel, this.offsetYSlider, 4, 2, 1, 4, 0, 1, GridBagConstraints.NORTH, GridBagConstraints.NONE, null);
+
+    this.duplicate.setText(Z4Translations.DUPLICATE);
+    this.duplicate.addActionListener(event -> {
+      this.canvas.duplicateLayer(this.layer);
+      this.removeAttribute("open");
+    });
+    this.addComponent(panel, this.duplicate, 0, 6, 1, 1, 0, 0, GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE, null);
 
     this.delete.setText(Z4Translations.DELETE);
     this.delete.addActionListener(event -> JSOptionPane.showConfirmDialog(Z4Translations.DELETE_LAYER_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response -> {

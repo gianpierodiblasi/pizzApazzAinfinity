@@ -5,6 +5,8 @@
 
   border: 2px solid var(--main-action-bgcolor);
   border-radius: var(--roundness);
+  
+  margin-right: 2px;
 }
 .z4layerpreview:has(summary:focus) {
   box-shadow: .15rem .15rem .15rem var(--main-action-bgcolor);
