@@ -300,8 +300,8 @@ class Z4Translations {
     Z4Translations.MANUAL_POLICY_DESCRIPTION = "The history is manually updated";
     Z4Translations.TOOL_POLICY = "On Drawing Tool Change";
     Z4Translations.TOOL_POLICY_DESCRIPTION = "The history is updated when the drawing tool is changed and at each \"global\" operation on the drawing";
-    Z4Translations.SAVING_INTERVAL = "Saving Interval (min)";
-    Z4Translations.SAVING_DELAY = "Saving Delay (ms)";
+    Z4Translations.SAVING_INTERVAL = "Saving Interval";
+    Z4Translations.SAVING_DELAY = "Saving Delay";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Refresh the page to make the changes";
     // Ribbon Help
     Z4Translations.HELP = "Help";
@@ -427,8 +427,8 @@ class Z4Translations {
     Z4Translations.MANUAL_POLICY_DESCRIPTION = "La cronologia viene aggiornata manualmente";
     Z4Translations.TOOL_POLICY = "Su Cambio Strumento di Disegno";
     Z4Translations.TOOL_POLICY_DESCRIPTION = "La cronologia viene aggiornata quando viene cambiato lo strumento di disegno ed ad ogni operazione \"globale\" sul disegno";
-    Z4Translations.SAVING_INTERVAL = "Intervallo di Salvataggio (min)";
-    Z4Translations.SAVING_DELAY = "Ritardo di Salvataggio (ms)";
+    Z4Translations.SAVING_INTERVAL = "Intervallo di Salvataggio";
+    Z4Translations.SAVING_DELAY = "Ritardo di Salvataggio";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Aggiorna la pagina per eseguire le modifiche";
     // Ribbon Help
     Z4Translations.HELP = "Aiuto";

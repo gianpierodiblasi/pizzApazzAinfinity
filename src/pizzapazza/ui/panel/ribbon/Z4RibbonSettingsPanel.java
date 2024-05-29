@@ -45,7 +45,7 @@ public class Z4RibbonSettingsPanel extends JSPanel {
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonsettingspanel");
 
-    this.addLabel(Z4Translations.LANGUAGE, 0, 1);
+    this.addLabel(Z4Translations.LANGUAGE, 0, 0, 1);
 
     DefaultKeyValueComboBoxModelAndRenderer<String, String> languageModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer<>();
     languageModelAndRenderer.addElement(new KeyValue<>("en", Z4Translations.LANGUAGE_ENGLISH_NATIVE));
@@ -57,7 +57,7 @@ public class Z4RibbonSettingsPanel extends JSPanel {
 
     this.addComponent(this.language, 0, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 5, 0, 5));
 
-    this.addLabel(Z4Translations.THEME, 1, 1);
+    this.addLabel(Z4Translations.THEME, 1, 0, 1);
 
     KeyValue<String, String> selectedTheme;
     String z4theme = (String) localStorage.getItem("z4theme");
@@ -83,7 +83,7 @@ public class Z4RibbonSettingsPanel extends JSPanel {
 
     this.addComponent(this.theme, 1, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 5, 0, 5));
 
-    this.addLabel(Z4Translations.THEME_COLOR, 2, 1);
+    this.addLabel(Z4Translations.THEME_COLOR, 2, 0, 1);
 
     String themeColor = (String) localStorage.getItem("z4color");
     this.color.setSelectedColor(Color.fromRGB_HEX($exists(themeColor) ? themeColor : "#0d6efd"));
@@ -94,7 +94,7 @@ public class Z4RibbonSettingsPanel extends JSPanel {
 
     this.addVLine(3, 0);
 
-    this.addLabel(Z4Translations.HISTORY_MANAGEMENT, 4, 1);
+    this.addLabel(Z4Translations.HISTORY_MANAGEMENT, 4, 0, 1);
 
     KeyValue<String, String> selectedHistoryManagement;
     String z4historyManagement = (String) localStorage.getItem("z4historymanagement");
@@ -123,38 +123,42 @@ public class Z4RibbonSettingsPanel extends JSPanel {
     this.addComponent(this.historyManagement, 4, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5));
 
     this.historyManagementDescription.setText(Z4Translations.$get(selectedHistoryManagement.key.toUpperCase() + "_POLICY_DESCRIPTION"));
-    this.addComponent(this.historyManagementDescription, 4, 2, 3, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    this.addComponent(this.historyManagementDescription, 4, 2, 5, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
 
-    this.addLabel(Z4Translations.SAVING_DELAY, 5, 1);
+    this.addLabel(Z4Translations.SAVING_DELAY, 5, 0, 2);
 
     int savingDelayValue = parseInt((String) localStorage.getItem("z4savingdelay"));
     this.savingDelay.cssAddClass("jsspinner_w_4rem");
     this.savingDelay.setModel(new SpinnerNumberModel($exists(savingDelayValue) ? savingDelayValue : Z4Constants.MAX_SAVING_DELAY, Z4Constants.MIN_SAVING_DELAY, Z4Constants.MAX_SAVING_DELAY, 10));
     this.savingDelay.addChangeListener(event -> this.onchangeSavingDelay());
-    this.addComponent(this.savingDelay, 5, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5));
+    this.addComponent(this.savingDelay, 5, 1, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(0, 5, 0, 0));
 
-    this.addLabel(Z4Translations.SAVING_INTERVAL, 6, 1);
+    this.addLabel("ms", 6, 1, 1);
+    
+    this.addLabel(Z4Translations.SAVING_INTERVAL, 7, 0, 2);
 
     int savingIntervalValue = parseInt((String) localStorage.getItem("z4savinginterval"));
     this.savingInterval.cssAddClass("jsspinner_w_4rem");
     this.savingInterval.setModel(new SpinnerNumberModel($exists(savingIntervalValue) ? savingIntervalValue : Z4Constants.MIN_SAVING_INTERVAL, Z4Constants.MIN_SAVING_INTERVAL, Z4Constants.MAX_SAVING_INTERVAL, 1));
     this.savingInterval.addChangeListener(event -> this.onchangeSavingInterval());
-    this.addComponent(this.savingInterval, 6, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5));
+    this.addComponent(this.savingInterval, 7, 1, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(0, 5, 0, 0));
     
-    this.addVLine(8, 1);
+    this.addLabel("min", 8, 1, 1);
+    
+    this.addVLine(9, 0);
 
     JSButton reset = new JSButton();
     reset.setText(Z4Translations.RESET);
     reset.setContentAreaFilled(false);
     reset.addActionListener(event -> this.onreset());
 
-    this.addComponent(reset, 9, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 5, 0, 5));
+    this.addComponent(reset, 10, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 5, 0, 5));
   }
 
-  private void addLabel(String text, int gridx, int gridwidth) {
+  private void addLabel(String text, int gridx, int gridy, int gridwidth) {
     JSLabel label = new JSLabel();
     label.setText(text);
-    this.addComponent(label, gridx, 0, gridwidth, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 2, 0));
+    this.addComponent(label, gridx, gridy, gridwidth, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 2, 0));
   }
 
   private void addVLine(int gridx, int weightx) {
