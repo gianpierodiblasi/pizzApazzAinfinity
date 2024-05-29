@@ -2,6 +2,8 @@ package pizzapazza.ui.panel.ribbon;
 
 import static def.dom.Globals.document;
 import static def.dom.Globals.localStorage;
+import def.dom.IDBDatabase;
+import def.js.Date;
 import javascript.awt.GridBagConstraints;
 import javascript.awt.GridBagLayout;
 import javascript.awt.Insets;
@@ -9,7 +11,12 @@ import javascript.awt.event.ActionListener;
 import javascript.swing.JSButton;
 import javascript.swing.JSComponent;
 import javascript.swing.JSPanel;
+import pizzapazza.ui.component.Z4Canvas;
+import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.util.Z4Translations;
+import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.window;
+import simulation.js.$Object;
 
 /**
  * The ribbon panel containing the history
@@ -22,6 +29,13 @@ public class Z4RibbonHistoryPanel extends JSPanel {
   private final JSButton redo = new JSButton();
   private final JSButton save = new JSButton();
   private final JSButton consolidate = new JSButton();
+
+  private Z4Canvas canvas;
+  private Z4StatusPanel statusPanel;
+
+  private String dbName;
+  private IDBDatabase database;
+  private int currentIndex;
 
   /**
    * Creates the object
@@ -41,6 +55,70 @@ public class Z4RibbonHistoryPanel extends JSPanel {
     });
 
     this.addVLine(4, 1);
+
+    window.onunload = event -> {
+      window.indexedDB.deleteDatabase(this.dbName);
+      return null;
+    };
+  }
+
+  /**
+   * Resets the history
+   */
+  public void resetHistory() {
+    if ($exists(this.dbName)) {
+      window.indexedDB.deleteDatabase(this.dbName);
+    }
+
+    this.dbName = "pizzapazza_" + new Date().getTime();
+    window.indexedDB.open(this.dbName, 1).onupgradeneeded = event -> {
+      this.database = (IDBDatabase) event.target.$get("result");
+
+      $Object options = new $Object();
+      options.$set("autoIncrement", true);
+      this.database.createObjectStore("history", options).transaction.oncomplete = event2 -> {
+        this.canvas.toHistory(json -> {
+          this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event3 -> {
+            this.currentIndex = event3.target.$get("result");
+            return null;
+          };
+        });
+        return null;
+      };
+      return null;
+    };
+  }
+
+  /**
+   * Saves the history
+   *
+   * @param policy The history management policy
+   */
+  public void saveHistory(/*String policy*/) {
+    this.canvas.toHistory(json -> {
+      this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event3 -> {
+        this.currentIndex = event3.target.$get("result");
+        return null;
+      };
+    });
+  }
+
+  /**
+   * Sets the canvas to manage
+   *
+   * @param canvas The canvas
+   */
+  public void setCanvas(Z4Canvas canvas) {
+    this.canvas = canvas;
+  }
+
+  /**
+   * Sets the status panel
+   *
+   * @param statusPanel The status panel
+   */
+  public void setStatusPanel(Z4StatusPanel statusPanel) {
+    this.statusPanel = statusPanel;
   }
 
   private void addButton(JSButton button, String text, boolean enabled, int gridx, int gridy, String border, ActionListener listener) {

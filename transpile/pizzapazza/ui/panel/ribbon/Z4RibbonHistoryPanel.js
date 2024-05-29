@@ -13,6 +13,16 @@ class Z4RibbonHistoryPanel extends JSPanel {
 
    consolidate = new JSButton();
 
+   canvas = null;
+
+   statusPanel = null;
+
+   dbName = null;
+
+   database = null;
+
+   currentIndex = 0;
+
   /**
    * Creates the object
    */
@@ -29,6 +39,68 @@ class Z4RibbonHistoryPanel extends JSPanel {
     this.addButton(this.consolidate, Z4Translations.CONSOLIDATE, false, 3, 0, "", event => {
     });
     this.addVLine(4, 1);
+    window.onunload = event => {
+      window.indexedDB.deleteDatabase(this.dbName);
+      return null;
+    };
+  }
+
+  /**
+   * Resets the history
+   */
+   resetHistory() {
+    if (this.dbName) {
+      window.indexedDB.deleteDatabase(this.dbName);
+    }
+    this.dbName = "pizzapazza_" + new Date().getTime();
+    window.indexedDB.open(this.dbName, 1).onupgradeneeded = event => {
+      this.database = event.target["result"];
+      let options = new Object();
+      options["autoIncrement"] = true;
+      this.database.createObjectStore("history", options).transaction.oncomplete = event2 => {
+        this.canvas.toHistory(json => {
+          this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event3 => {
+            this.currentIndex = event3.target["result"];
+            return null;
+          };
+        });
+        return null;
+      };
+      return null;
+    };
+  }
+
+  /**
+   * Saves the history
+   *
+   * @param policy The history management policy
+   */
+   saveHistory() /*String policy*/
+  {
+    this.canvas.toHistory(json => {
+      this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event3 => {
+        this.currentIndex = event3.target["result"];
+        return null;
+      };
+    });
+  }
+
+  /**
+   * Sets the canvas to manage
+   *
+   * @param canvas The canvas
+   */
+   setCanvas(canvas) {
+    this.canvas = canvas;
+  }
+
+  /**
+   * Sets the status panel
+   *
+   * @param statusPanel The status panel
+   */
+   setStatusPanel(statusPanel) {
+    this.statusPanel = statusPanel;
   }
 
    addButton(button, text, enabled, gridx, gridy, border, listener) {

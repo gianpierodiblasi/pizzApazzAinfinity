@@ -9,10 +9,6 @@ class Z4RibbonFilePanel extends JSPanel {
 
    statusPanel = null;
 
-   dbName = "pizzapazza_" + new Date().getTime();
-
-   database = null;
-
   /**
    * Creates the object
    */
@@ -32,23 +28,6 @@ class Z4RibbonFilePanel extends JSPanel {
     this.addButton(Z4Translations.SAVE_PROJECT, true, 6, 1, "left", event => this.saveProject(null));
     this.addButton(Z4Translations.EXPORT, true, 7, 1, "right", event => this.exportToFile());
     this.addVLine(8, 1);
-    window.indexedDB.open(this.dbName, 1).onsuccess = event => {
-      this.database = event.target["result"];
-      return null;
-    };
-    window.onbeforeunload = event => {
-      if (!this.canvas.isSaved()) {
-        event.preventDefault();
-        event.returnValue = Z4Translations.PROJECT_NOT_SAVED_MESSAGE;
-        return event.returnValue;
-      } else {
-        return null;
-      }
-    };
-    window.onunload = event => {
-      window.indexedDB.deleteDatabase(this.dbName);
-      return null;
-    };
   }
 
   /**

@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -197,26 +197,54 @@ extends javascript.swing.JSPanel</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resetHistory()">resetHistory</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Resets the history</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveHistory()">saveHistory</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Saves the history</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCanvas(pizzapazza.ui.component.Z4Canvas)">setCanvas</a></span>&#8203;(<a href="../../component/Z4Canvas.html" title="class in pizzapazza.ui.component">Z4Canvas</a>&nbsp;canvas)</code></th>
+<td class="colLast">
+<div class="block">Sets the canvas to manage</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setConsolidateEnabled(boolean)">setConsolidateEnabled</a></span>&#8203;(boolean&nbsp;b)</code></th>
 <td class="colLast">
 <div class="block">Enables the consolidate button</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setRedoEnabled(boolean)">setRedoEnabled</a></span>&#8203;(boolean&nbsp;b)</code></th>
 <td class="colLast">
 <div class="block">Enables the redo button</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSaveEnabled(boolean)">setSaveEnabled</a></span>&#8203;(boolean&nbsp;b)</code></th>
 <td class="colLast">
 <div class="block">Enables the save button</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStatusPanel(pizzapazza.ui.panel.Z4StatusPanel)">setStatusPanel</a></span>&#8203;(<a href="../Z4StatusPanel.html" title="class in pizzapazza.ui.panel">Z4StatusPanel</a>&nbsp;statusPanel)</code></th>
+<td class="colLast">
+<div class="block">Sets the status panel</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setUndoEnabled(boolean)">setUndoEnabled</a></span>&#8203;(boolean&nbsp;b)</code></th>
 <td class="colLast">
@@ -281,6 +309,58 @@ extends javascript.swing.JSPanel</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="resetHistory()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>resetHistory</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;resetHistory()</pre>
+<div class="block">Resets the history</div>
+</li>
+</ul>
+<a id="saveHistory()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveHistory</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;saveHistory()</pre>
+<div class="block">Saves the history</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>policy</code> - The history management policy</dd>
+</dl>
+</li>
+</ul>
+<a id="setCanvas(pizzapazza.ui.component.Z4Canvas)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setCanvas</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setCanvas&#8203;(<a href="../../component/Z4Canvas.html" title="class in pizzapazza.ui.component">Z4Canvas</a>&nbsp;canvas)</pre>
+<div class="block">Sets the canvas to manage</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>canvas</code> - The canvas</dd>
+</dl>
+</li>
+</ul>
+<a id="setStatusPanel(pizzapazza.ui.panel.Z4StatusPanel)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setStatusPanel</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setStatusPanel&#8203;(<a href="../Z4StatusPanel.html" title="class in pizzapazza.ui.panel">Z4StatusPanel</a>&nbsp;statusPanel)</pre>
+<div class="block">Sets the status panel</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>statusPanel</code> - The status panel</dd>
+</dl>
+</li>
+</ul>
 <a id="setUndoEnabled(boolean)">
 <!--   -->
 </a>

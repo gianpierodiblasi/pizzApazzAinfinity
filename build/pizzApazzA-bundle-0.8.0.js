@@ -1556,7 +1556,11 @@ class Z4Canvas extends JSComponent {
 
    ctx = this.canvas.getContext("2d");
 
+   ribbonFilePanel = null;
+
    ribbonLayerPanel = null;
+
+   ribbonHistoryPanel = null;
 
    statusPanel = null;
 
@@ -1607,12 +1611,19 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
-   * Sets the ribbon layer panel
+   * Sets the ribbon panels
    *
+   * @param ribbonFilePanel The ribbon file panel
    * @param ribbonLayerPanel The ribbon layer panel
+   * @param ribbonHistoryPanel The ribbon history panel
    */
-   setRibbonLayerPanel(ribbonLayerPanel) {
+   setRibbonPanels(ribbonFilePanel, ribbonLayerPanel, ribbonHistoryPanel) {
+    this.ribbonFilePanel = ribbonFilePanel;
+    this.ribbonHistoryPanel = ribbonHistoryPanel;
     this.ribbonLayerPanel = ribbonLayerPanel;
+    this.ribbonFilePanel.setCanvas(this);
+    this.ribbonHistoryPanel.setCanvas(this);
+    this.ribbonLayerPanel.setCanvas(this);
   }
 
   /**
@@ -1622,6 +1633,7 @@ class Z4Canvas extends JSComponent {
    */
    setStatusPanel(statusPanel) {
     this.statusPanel = statusPanel;
+    this.statusPanel.setCanvas(this);
   }
 
   /**
@@ -1685,6 +1697,7 @@ class Z4Canvas extends JSComponent {
 
    afterCreate(projectName, width, height) {
     this.projectName = projectName;
+    this.ribbonHistoryPanel.resetHistory();
     this.statusPanel.setProjectName(projectName);
     this.statusPanel.setProjectSize(width, height);
     this.statusPanel.setZoom(1);
@@ -1777,6 +1790,40 @@ class Z4Canvas extends JSComponent {
         });
       } else {
         this.saveLayer(zip, layers, index + 1, apply);
+      }
+    });
+  }
+
+  /**
+   * Prepare the project for the history
+   *
+   * @param apply The function to call after preparation
+   */
+   toHistory(apply) {
+    this.toHistoryLayer(new Array(), 0, apply);
+  }
+
+   toHistoryLayer(layers, index, apply) {
+    let layer = this.paper.getLayerAt(index);
+    layer.convertToBlob(blob => {
+      let offset = layer.getOffset();
+      let layerJSON = new Object();
+      layerJSON["data"] = blob;
+      layerJSON["name"] = layer.getName();
+      layerJSON["opacity"] = layer.getOpacity();
+      layerJSON["compositeOperation"] = layer.getCompositeOperation();
+      layerJSON["offsetX"] = offset.x;
+      layerJSON["offsetY"] = offset.y;
+      layers[index] = layerJSON;
+      if (index + 1 === this.paper.getLayersCount()) {
+        let JSON = new Object();
+        JSON["projectName"] = this.projectName;
+        JSON["width"] = this.width;
+        JSON["height"] = this.height;
+        JSON["layers"] = layers;
+        apply(JSON);
+      } else {
+        this.toHistoryLayer(layers, index + 1, apply);
       }
     });
   }
@@ -1877,6 +1924,7 @@ class Z4Canvas extends JSComponent {
   }
 
    afterAddLayer() {
+    this.ribbonHistoryPanel.saveHistory();
     this.ribbonLayerPanel.addLayerPreview(this.paper.getLayerAt(this.paper.getLayersCount() - 1));
     this.saved = false;
   }
@@ -1892,6 +1940,7 @@ class Z4Canvas extends JSComponent {
       let image = document.createElement("img");
       image.onload = event => {
         this.paper.addLayerFromImage(this.findLayerName(), image, this.width, this.height);
+        this.ribbonHistoryPanel.saveHistory();
         let duplicate = this.paper.getLayerAt(this.paper.getLayersCount() - 1);
         duplicate.setOpacity(layer.getOpacity());
         duplicate.setCompositeOperation(layer.getCompositeOperation());
@@ -1913,6 +1962,7 @@ class Z4Canvas extends JSComponent {
    */
    deleteLayer(layer) {
     let index = this.paper.deleteLayer(layer);
+    this.ribbonHistoryPanel.saveHistory();
     this.saved = false;
     this.drawCanvas();
     return index;
@@ -1927,6 +1977,7 @@ class Z4Canvas extends JSComponent {
    */
    moveLayer(layer, position) {
     if (this.paper.moveLayer(layer, position)) {
+      this.ribbonHistoryPanel.saveHistory();
       this.saved = false;
       this.drawCanvas();
       return true;
@@ -2418,11 +2469,19 @@ class Z4Frame extends JSFrame {
     this.ribbon.setCanvas(this.canvas);
     this.ribbon.setStatusPanel(this.statusPanel);
     this.canvas.setStatusPanel(this.statusPanel);
-    this.statusPanel.setCanvas(this.canvas);
     this.getContentPane().add(this.ribbon, BorderLayout.NORTH);
     this.getContentPane().add(this.canvas, BorderLayout.CENTER);
     this.getContentPane().add(this.statusPanel, BorderLayout.SOUTH);
     this.canvas.create(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, new Color(0, 0, 0, 0));
+    window.onbeforeunload = event => {
+      if (!this.canvas.isSaved()) {
+        event.preventDefault();
+        event.returnValue = Z4Translations.PROJECT_NOT_SAVED_MESSAGE;
+        return event.returnValue;
+      } else {
+        return null;
+      }
+    };
   }
 }
 /**
@@ -4261,10 +4320,6 @@ class Z4RibbonFilePanel extends JSPanel {
 
    statusPanel = null;
 
-   dbName = "pizzapazza_" + new Date().getTime();
-
-   database = null;
-
   /**
    * Creates the object
    */
@@ -4284,23 +4339,6 @@ class Z4RibbonFilePanel extends JSPanel {
     this.addButton(Z4Translations.SAVE_PROJECT, true, 6, 1, "left", event => this.saveProject(null));
     this.addButton(Z4Translations.EXPORT, true, 7, 1, "right", event => this.exportToFile());
     this.addVLine(8, 1);
-    window.indexedDB.open(this.dbName, 1).onsuccess = event => {
-      this.database = event.target["result"];
-      return null;
-    };
-    window.onbeforeunload = event => {
-      if (!this.canvas.isSaved()) {
-        event.preventDefault();
-        event.returnValue = Z4Translations.PROJECT_NOT_SAVED_MESSAGE;
-        return event.returnValue;
-      } else {
-        return null;
-      }
-    };
-    window.onunload = event => {
-      window.indexedDB.deleteDatabase(this.dbName);
-      return null;
-    };
   }
 
   /**
@@ -4550,6 +4588,16 @@ class Z4RibbonHistoryPanel extends JSPanel {
 
    consolidate = new JSButton();
 
+   canvas = null;
+
+   statusPanel = null;
+
+   dbName = null;
+
+   database = null;
+
+   currentIndex = 0;
+
   /**
    * Creates the object
    */
@@ -4566,6 +4614,68 @@ class Z4RibbonHistoryPanel extends JSPanel {
     this.addButton(this.consolidate, Z4Translations.CONSOLIDATE, false, 3, 0, "", event => {
     });
     this.addVLine(4, 1);
+    window.onunload = event => {
+      window.indexedDB.deleteDatabase(this.dbName);
+      return null;
+    };
+  }
+
+  /**
+   * Resets the history
+   */
+   resetHistory() {
+    if (this.dbName) {
+      window.indexedDB.deleteDatabase(this.dbName);
+    }
+    this.dbName = "pizzapazza_" + new Date().getTime();
+    window.indexedDB.open(this.dbName, 1).onupgradeneeded = event => {
+      this.database = event.target["result"];
+      let options = new Object();
+      options["autoIncrement"] = true;
+      this.database.createObjectStore("history", options).transaction.oncomplete = event2 => {
+        this.canvas.toHistory(json => {
+          this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event3 => {
+            this.currentIndex = event3.target["result"];
+            return null;
+          };
+        });
+        return null;
+      };
+      return null;
+    };
+  }
+
+  /**
+   * Saves the history
+   *
+   * @param policy The history management policy
+   */
+   saveHistory() /*String policy*/
+  {
+    this.canvas.toHistory(json => {
+      this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event3 => {
+        this.currentIndex = event3.target["result"];
+        return null;
+      };
+    });
+  }
+
+  /**
+   * Sets the canvas to manage
+   *
+   * @param canvas The canvas
+   */
+   setCanvas(canvas) {
+    this.canvas = canvas;
+  }
+
+  /**
+   * Sets the status panel
+   *
+   * @param statusPanel The status panel
+   */
+   setStatusPanel(statusPanel) {
+    this.statusPanel = statusPanel;
   }
 
    addButton(button, text, enabled, gridx, gridy, border, listener) {
@@ -5716,9 +5826,7 @@ class Z4Ribbon extends JSTabbedPane {
    * @param canvas The canvas
    */
    setCanvas(canvas) {
-    this.filePanel.setCanvas(canvas);
-    this.layerPanel.setCanvas(canvas);
-    canvas.setRibbonLayerPanel(this.layerPanel);
+    canvas.setRibbonPanels(this.filePanel, this.layerPanel, this.historyPanel);
   }
 
   /**
@@ -5729,6 +5837,7 @@ class Z4Ribbon extends JSTabbedPane {
    setStatusPanel(statusPanel) {
     this.filePanel.setStatusPanel(statusPanel);
     this.layerPanel.setStatusPanel(statusPanel);
+    this.historyPanel.setStatusPanel(statusPanel);
   }
 }
 /**

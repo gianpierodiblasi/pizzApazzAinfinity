@@ -16,7 +16,7 @@ import pizzapazza.util.Z4Translations;
  * @author gianpiero.diblasi
  */
 public class Z4Ribbon extends JSTabbedPane {
-  
+
   private final Z4RibbonFilePanel filePanel = new Z4RibbonFilePanel();
   private final Z4RibbonLayerPanel layerPanel = new Z4RibbonLayerPanel();
   private final Z4RibbonHistoryPanel historyPanel = new Z4RibbonHistoryPanel();
@@ -29,13 +29,13 @@ public class Z4Ribbon extends JSTabbedPane {
   public Z4Ribbon() {
     super();
     this.cssAddClass("z4ribbon");
-    
+
     this.addTab(Z4Translations.FILE, this.filePanel);
     this.addTab(Z4Translations.LAYER, this.layerPanel);
     this.addTab(Z4Translations.HISTORY, this.historyPanel);
     this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
     this.addTab(Z4Translations.HELP, this.helpPanel);
-    
+
     this.settingsPanel.setHistoryPanel(this.historyPanel);
   }
 
@@ -45,10 +45,7 @@ public class Z4Ribbon extends JSTabbedPane {
    * @param canvas The canvas
    */
   public void setCanvas(Z4Canvas canvas) {
-    this.filePanel.setCanvas(canvas);
-    this.layerPanel.setCanvas(canvas);
-    
-    canvas.setRibbonLayerPanel(this.layerPanel);
+    canvas.setRibbonPanels(this.filePanel, this.layerPanel, this.historyPanel);
   }
 
   /**
@@ -59,5 +56,6 @@ public class Z4Ribbon extends JSTabbedPane {
   public void setStatusPanel(Z4StatusPanel statusPanel) {
     this.filePanel.setStatusPanel(statusPanel);
     this.layerPanel.setStatusPanel(statusPanel);
+    this.historyPanel.setStatusPanel(statusPanel);
   }
 }
