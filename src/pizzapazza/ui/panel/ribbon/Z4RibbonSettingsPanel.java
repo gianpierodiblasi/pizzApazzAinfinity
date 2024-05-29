@@ -37,6 +37,8 @@ public class Z4RibbonSettingsPanel extends JSPanel {
   private final JSSpinner savingInterval = new JSSpinner();
   private final JSSpinner savingDelay = new JSSpinner();
 
+  private Z4RibbonHistoryPanel historyPanel;
+
   /**
    * Creates the object
    */
@@ -215,6 +217,7 @@ public class Z4RibbonSettingsPanel extends JSPanel {
 
     this.savingDelay.setEnabled(selectedHistoryManagement.key == "standard");
     this.savingInterval.setEnabled(selectedHistoryManagement.key == "timer");
+    this.historyPanel.setSaveEnabled(selectedHistoryManagement.key == "manual");
   }
 
   private void onchangeSavingDelay() {
@@ -234,5 +237,14 @@ public class Z4RibbonSettingsPanel extends JSPanel {
     localStorage.removeItem("z4savinginterval");
 
     JSOptionPane.showMessageDialog(Z4Translations.REFRESH_PAGE_MESSAGE, Z4Translations.RESET, JSOptionPane.INFORMATION_MESSAGE, null);
+  }
+
+  /**
+   * Sets the history panel
+   *
+   * @param historyPanel The history panel
+   */
+  public void setHistoryPanel(Z4RibbonHistoryPanel historyPanel) {
+    this.historyPanel = historyPanel;
   }
 }

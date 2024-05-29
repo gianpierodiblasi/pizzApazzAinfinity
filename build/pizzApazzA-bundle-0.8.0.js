@@ -4521,6 +4521,14 @@ class Z4RibbonHelpPanel extends JSPanel {
  */
 class Z4RibbonHistoryPanel extends JSPanel {
 
+   undo = new JSButton();
+
+   redo = new JSButton();
+
+   save = new JSButton();
+
+   consolidate = new JSButton();
+
   /**
    * Creates the object
    */
@@ -4528,17 +4536,18 @@ class Z4RibbonHistoryPanel extends JSPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonhistorypanel");
-    this.addButton(Z4Translations.UNDO, false, 0, 0, "left", event => {
+    this.addButton(this.undo, Z4Translations.UNDO, false, 0, 0, "left", event => {
     });
-    this.addButton(Z4Translations.REDO, false, 1, 0, "right", event => {
+    this.addButton(this.redo, Z4Translations.REDO, false, 1, 0, "right", event => {
     });
-    this.addButton(Z4Translations.CONSOLIDATE, false, 2, 0, "", event => {
+    this.addButton(this.save, Z4Translations.SAVE, localStorage.getItem("z4historymanagement") === "manual", 2, 0, "", event => {
     });
-    this.addVLine(3, 1);
+    this.addButton(this.consolidate, Z4Translations.CONSOLIDATE, false, 3, 0, "", event => {
+    });
+    this.addVLine(4, 1);
   }
 
-   addButton(text, enabled, gridx, gridy, border, listener) {
-    let button = new JSButton();
+   addButton(button, text, enabled, gridx, gridy, border, listener) {
     button.setText(text);
     button.setEnabled(enabled);
     button.setContentAreaFilled(false);
@@ -4567,7 +4576,7 @@ class Z4RibbonHistoryPanel extends JSPanel {
         button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
         break;
       default:
-        constraints.insets = new Insets(5, 0, 0, 0);
+        constraints.insets = new Insets(5, 0, 0, 5);
     }
     this.add(button, constraints);
   }
@@ -4585,6 +4594,42 @@ class Z4RibbonHistoryPanel extends JSPanel {
     constraints.weighty = 1;
     constraints.insets = new Insets(1, 2, 1, 2);
     this.add(div, constraints);
+  }
+
+  /**
+   * Enables the undo button
+   *
+   * @param b true to enable the button, false otherwise
+   */
+   setUndoEnabled(b) {
+    this.undo.setEnabled(b);
+  }
+
+  /**
+   * Enables the redo button
+   *
+   * @param b true to enable the button, false otherwise
+   */
+   setRedoEnabled(b) {
+    this.redo.setEnabled(b);
+  }
+
+  /**
+   * Enables the save button
+   *
+   * @param b true to enable the button, false otherwise
+   */
+   setSaveEnabled(b) {
+    this.save.setEnabled(b);
+  }
+
+  /**
+   * Enables the consolidate button
+   *
+   * @param b true to enable the button, false otherwise
+   */
+   setConsolidateEnabled(b) {
+    this.consolidate.setEnabled(b);
   }
 }
 /**
@@ -4784,6 +4829,8 @@ class Z4RibbonSettingsPanel extends JSPanel {
 
    savingDelay = new JSSpinner();
 
+   historyPanel = null;
+
   /**
    * Creates the object
    */
@@ -4929,6 +4976,7 @@ class Z4RibbonSettingsPanel extends JSPanel {
     this.historyManagementDescription.setText(Z4Translations[selectedHistoryManagement.key.toUpperCase() + "_POLICY_DESCRIPTION"]);
     this.savingDelay.setEnabled(selectedHistoryManagement.key === "standard");
     this.savingInterval.setEnabled(selectedHistoryManagement.key === "timer");
+    this.historyPanel.setSaveEnabled(selectedHistoryManagement.key === "manual");
   }
 
    onchangeSavingDelay() {
@@ -4947,6 +4995,15 @@ class Z4RibbonSettingsPanel extends JSPanel {
     localStorage.removeItem("z4savingdelay");
     localStorage.removeItem("z4savinginterval");
     JSOptionPane.showMessageDialog(Z4Translations.REFRESH_PAGE_MESSAGE, Z4Translations.RESET, JSOptionPane.INFORMATION_MESSAGE, null);
+  }
+
+  /**
+   * Sets the history panel
+   *
+   * @param historyPanel The history panel
+   */
+   setHistoryPanel(historyPanel) {
+    this.historyPanel = historyPanel;
   }
 }
 /**
@@ -5629,6 +5686,7 @@ class Z4Ribbon extends JSTabbedPane {
     this.addTab(Z4Translations.HISTORY, this.historyPanel);
     this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
     this.addTab(Z4Translations.HELP, this.helpPanel);
+    this.settingsPanel.setHistoryPanel(this.historyPanel);
   }
 
   /**

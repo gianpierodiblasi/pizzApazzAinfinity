@@ -26,6 +26,7 @@ class Z4Ribbon extends JSTabbedPane {
     this.addTab(Z4Translations.HISTORY, this.historyPanel);
     this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
     this.addTab(Z4Translations.HELP, this.helpPanel);
+    this.settingsPanel.setHistoryPanel(this.historyPanel);
   }
 
   /**
