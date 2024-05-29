@@ -4846,15 +4846,17 @@ class Z4RibbonSettingsPanel extends JSPanel {
     historyManagementModelAndRenderer.addElement(new KeyValue("timer", Z4Translations.TIMER_POLICY));
     historyManagementModelAndRenderer.addElement(new KeyValue("manual", Z4Translations.MANUAL_POLICY));
     historyManagementModelAndRenderer.addElement(new KeyValue("tool", Z4Translations.TOOL_POLICY));
+    this.historyManagement.getStyle().minWidth = "18rem";
     this.historyManagement.setModelAndRenderer(historyManagementModelAndRenderer);
     this.historyManagement.setSelectedItem(selectedHistoryManagement);
     this.historyManagement.addActionListener(event => this.onchangeHistoryManagement());
     this.addComponent(this.historyManagement, 4, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5));
     this.historyManagementDescription.setText(Z4Translations[selectedHistoryManagement.key.toUpperCase() + "_POLICY_DESCRIPTION"]);
-    this.addComponent(this.historyManagementDescription, 4, 2, 5, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    this.addComponent(this.historyManagementDescription, 4, 2, 5, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(5, 0, 0, 0));
     this.addLabel(Z4Translations.SAVING_DELAY, 5, 0, 2);
     let savingDelayValue = parseInt(localStorage.getItem("z4savingdelay"));
     this.savingDelay.cssAddClass("jsspinner_w_4rem");
+    this.savingDelay.setEnabled(selectedHistoryManagement.key === "standard");
     this.savingDelay.setModel(new SpinnerNumberModel(savingDelayValue ? savingDelayValue : Z4Constants.MAX_SAVING_DELAY, Z4Constants.MIN_SAVING_DELAY, Z4Constants.MAX_SAVING_DELAY, 10));
     this.savingDelay.addChangeListener(event => this.onchangeSavingDelay());
     this.addComponent(this.savingDelay, 5, 1, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(0, 5, 0, 0));
@@ -4862,6 +4864,7 @@ class Z4RibbonSettingsPanel extends JSPanel {
     this.addLabel(Z4Translations.SAVING_INTERVAL, 7, 0, 2);
     let savingIntervalValue = parseInt(localStorage.getItem("z4savinginterval"));
     this.savingInterval.cssAddClass("jsspinner_w_4rem");
+    this.savingInterval.setEnabled(selectedHistoryManagement.key === "timer");
     this.savingInterval.setModel(new SpinnerNumberModel(savingIntervalValue ? savingIntervalValue : Z4Constants.MIN_SAVING_INTERVAL, Z4Constants.MIN_SAVING_INTERVAL, Z4Constants.MAX_SAVING_INTERVAL, 1));
     this.savingInterval.addChangeListener(event => this.onchangeSavingInterval());
     this.addComponent(this.savingInterval, 7, 1, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(0, 5, 0, 0));
@@ -4924,6 +4927,8 @@ class Z4RibbonSettingsPanel extends JSPanel {
     let selectedHistoryManagement = this.historyManagement.getSelectedItem();
     localStorage.setItem("z4historymanagement", selectedHistoryManagement.key);
     this.historyManagementDescription.setText(Z4Translations[selectedHistoryManagement.key.toUpperCase() + "_POLICY_DESCRIPTION"]);
+    this.savingDelay.setEnabled(selectedHistoryManagement.key === "standard");
+    this.savingInterval.setEnabled(selectedHistoryManagement.key === "timer");
   }
 
    onchangeSavingDelay() {
