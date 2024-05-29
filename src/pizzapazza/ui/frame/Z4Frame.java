@@ -7,8 +7,6 @@ import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.tab.Z4Ribbon;
 import pizzapazza.util.Z4Constants;
-import pizzapazza.util.Z4Translations;
-import static simulation.js.$Globals.window;
 
 /**
  * The main frame of the application
@@ -40,15 +38,5 @@ public class Z4Frame extends JSFrame {
     this.getContentPane().add(this.statusPanel, BorderLayout.SOUTH);
 
     this.canvas.create(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, new Color(0, 0, 0, 0));
-
-    window.onbeforeunload = event -> {
-      if (!this.canvas.isSaved()) {
-        event.preventDefault();
-        event.returnValue = Z4Translations.PROJECT_NOT_SAVED_MESSAGE;
-        return event.returnValue;
-      } else {
-        return null;
-      }
-    };
   }
 }

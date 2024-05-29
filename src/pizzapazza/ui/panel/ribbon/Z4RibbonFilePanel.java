@@ -3,7 +3,9 @@ package pizzapazza.ui.panel.ribbon;
 import def.dom.DragEvent;
 import def.dom.File;
 import static def.dom.Globals.document;
+import def.dom.IDBDatabase;
 import def.js.Array;
+import def.js.Date;
 import javascript.awt.BorderLayout;
 import javascript.awt.Dimension;
 import javascript.awt.GridBagConstraints;
@@ -29,6 +31,7 @@ import simulation.js.$File;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.$typeof;
 import static simulation.js.$Globals.navigator;
+import static simulation.js.$Globals.window;
 
 /**
  * The ribbon panel containing the file menus
@@ -39,6 +42,9 @@ public class Z4RibbonFilePanel extends JSPanel {
 
   private Z4Canvas canvas;
   private Z4StatusPanel statusPanel;
+
+  private final String dbName = "pizzapazza_" + new Date().getTime();
+  private IDBDatabase database;
 
   /**
    * Creates the object
@@ -63,6 +69,26 @@ public class Z4RibbonFilePanel extends JSPanel {
     this.addButton(Z4Translations.SAVE_PROJECT, true, 6, 1, "left", event -> this.saveProject(null));
     this.addButton(Z4Translations.EXPORT, true, 7, 1, "right", event -> this.exportToFile());
     this.addVLine(8, 1);
+
+    window.indexedDB.open(this.dbName, 1).onsuccess = event -> {
+      this.database = (IDBDatabase) event.target.$get("result");
+      return null;
+    };
+
+    window.onbeforeunload = event -> {
+      if (!this.canvas.isSaved()) {
+        event.preventDefault();
+        event.returnValue = Z4Translations.PROJECT_NOT_SAVED_MESSAGE;
+        return event.returnValue;
+      } else {
+        return null;
+      }
+    };
+
+    window.onunload = event -> {
+      window.indexedDB.deleteDatabase(this.dbName);
+      return null;
+    };
   }
 
   /**
