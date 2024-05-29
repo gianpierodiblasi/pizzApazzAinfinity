@@ -15,6 +15,7 @@ import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
 import simulation.dom.$OffscreenCanvas;
 import simulation.js.$Apply_1_Void;
+import static simulation.js.$Globals.$exists;
 import simulation.js.$Object;
 import simulation.js.$Uint8Array;
 
@@ -28,6 +29,7 @@ public class Z4Layer {
   private $OffscreenCanvas offscreen;
   private $CanvasRenderingContext2D offscreenCtx;
 
+  private Blob blob;
   private String name;
   private int offsetX = 0;
   private int offsetY = 0;
@@ -114,12 +116,17 @@ public class Z4Layer {
    * @param apply The function to call on conversion
    */
   public void convertToBlob($Apply_1_Void<Blob> apply) {
-    $Object options = new $Object();
-    options.$set("type", "image/png");
+    if ($exists(this.blob)) {
+      apply.$apply(this.blob);
+    } else {
+      $Object options = new $Object();
+      options.$set("type", "image/png");
 
-    this.offscreen.convertToBlob(options).then(blob -> {
-      apply.$apply(blob);
-    });
+      this.offscreen.convertToBlob(options).then(converted -> {
+        this.blob = converted;
+        apply.$apply(this.blob);
+      });
+    }
   }
 
   /**
@@ -246,6 +253,7 @@ public class Z4Layer {
     }
 
     this.offscreenCtx.putImageData(imageData, 0, 0);
+    this.blob = null;
   }
 
   /**
@@ -264,6 +272,7 @@ public class Z4Layer {
     }
 
     this.offscreenCtx.putImageData(imageData, 0, 0);
+    this.blob = null;
   }
 
   private void flipValue($Uint8Array data, int indexFrom, int indexTo) {
@@ -319,5 +328,7 @@ public class Z4Layer {
     int temp = this.width;
     this.width = this.height;
     this.height = temp;
+    
+    this.blob = null;
   }
 }

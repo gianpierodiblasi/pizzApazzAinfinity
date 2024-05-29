@@ -6440,6 +6440,8 @@ class Z4Layer {
 
    offscreenCtx = null;
 
+   blob = null;
+
    name = null;
 
    offsetX = 0;
@@ -6522,11 +6524,16 @@ class Z4Layer {
    * @param apply The function to call on conversion
    */
    convertToBlob(apply) {
-    let options = new Object();
-    options["type"] = "image/png";
-    this.offscreen.convertToBlob(options).then(blob => {
-      apply(blob);
-    });
+    if (this.blob) {
+      apply(this.blob);
+    } else {
+      let options = new Object();
+      options["type"] = "image/png";
+      this.offscreen.convertToBlob(options).then(converted => {
+        this.blob = converted;
+        apply(this.blob);
+      });
+    }
   }
 
   /**
@@ -6651,6 +6658,7 @@ class Z4Layer {
       }
     }
     this.offscreenCtx.putImageData(imageData, 0, 0);
+    this.blob = null;
   }
 
   /**
@@ -6667,6 +6675,7 @@ class Z4Layer {
       }
     }
     this.offscreenCtx.putImageData(imageData, 0, 0);
+    this.blob = null;
   }
 
    flipValue(data, indexFrom, indexTo) {
@@ -6712,6 +6721,7 @@ class Z4Layer {
     let temp = this.width;
     this.width = this.height;
     this.height = temp;
+    this.blob = null;
   }
 }
 /**
