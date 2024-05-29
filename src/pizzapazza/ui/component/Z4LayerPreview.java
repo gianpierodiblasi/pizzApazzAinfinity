@@ -58,6 +58,7 @@ public class Z4LayerPreview extends JSComponent {
   private Z4Canvas canvas;
   private Z4Layer layer;
   private double zoom = 1;
+  private boolean changed;
 
   private final static int PREVIEW_SIZE = 50;
 
@@ -68,6 +69,7 @@ public class Z4LayerPreview extends JSComponent {
     this.cssAddClass("z4layerpreview");
     this.addEventListener("toggle", event -> {
       if ("" + this.getProperty("open") == "true") {
+        this.changed = false;
         this.getChilStyleByQuery(".z4layerpreview-editor").visibility = "visible";
 
         $DOMRect rect = this.invokeInTree(".z4layerpreview-editor", "getBoundingClientRect()");
@@ -93,6 +95,10 @@ public class Z4LayerPreview extends JSComponent {
 
         this.delete.setEnabled(document.querySelectorAll(".z4layerpreview").length > 1);
       } else {
+        if (this.changed) {
+          this.canvas.saveHistory();
+        }
+
         this.getChilStyleByQuery(".z4layerpreview-editor").removeProperty("visibility");
         this.getChilStyleByQuery(".z4layerpreview-editor").removeProperty("top");
         this.getChilStyleByQuery(".z4layerpreview-editor").removeProperty("bottom");
@@ -121,9 +127,11 @@ public class Z4LayerPreview extends JSComponent {
     this.editName.addActionListener(event -> {
       String newName = this.editName.getText();
       if ($exists(newName)) {
+        this.changed = true;
         this.canvas.setSaved(false);
         this.name.setText(newName);
         this.layer.setName(newName);
+        this.setChildAttributeByQuery("summary", "title", newName);
       }
     });
 
@@ -170,6 +178,7 @@ public class Z4LayerPreview extends JSComponent {
     JSButton button = new JSButton();
     button.setText(Z4Translations.DUPLICATE);
     button.addActionListener(event -> {
+      this.changed = true;
       this.canvas.duplicateLayer(this.layer);
       this.removeAttribute("open");
     });
@@ -178,6 +187,7 @@ public class Z4LayerPreview extends JSComponent {
     this.delete.setText(Z4Translations.DELETE);
     this.delete.addActionListener(event -> JSOptionPane.showConfirmDialog(Z4Translations.DELETE_LAYER_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response -> {
       if (response == JSOptionPane.YES_OPTION) {
+        this.changed = true;
         int index = this.canvas.deleteLayer(this.layer);
         document.querySelector(".z4layerpreview:nth-child(" + (index + 1) + ")").remove();
       }
@@ -239,6 +249,7 @@ public class Z4LayerPreview extends JSComponent {
     button.setText(text);
     button.setContentAreaFilled(false);
     button.addActionListener(event -> {
+      this.changed = true;
       func.$apply();
       this.drawLayer();
       this.canvas.setSaved(false);
@@ -279,6 +290,7 @@ public class Z4LayerPreview extends JSComponent {
   }
 
   private void onChange(boolean spTosl, boolean adjusting, JSSpinner spinner, JSSlider slider) {
+    this.changed = true;
     this.canvas.setSaved(false);
 
     if (spTosl) {
@@ -299,6 +311,7 @@ public class Z4LayerPreview extends JSComponent {
   }
 
   private void onAction(String text) {
+    this.changed = true;
     this.canvas.setSaved(false);
     this.layer.setCompositeOperation(text);
     this.canvas.drawCanvas();

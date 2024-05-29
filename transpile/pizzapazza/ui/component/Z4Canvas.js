@@ -248,6 +248,13 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Saves the history
+   */
+   saveHistory() {
+    this.ribbonHistoryPanel.saveHistory();
+  }
+
+  /**
    * Prepare the project for the history
    *
    * @param apply The function to call after preparation
