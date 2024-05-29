@@ -70,6 +70,28 @@ class Z4Translations {
 
   static  THEME_COLOR = "";
 
+  static  HISTORY_MANAGEMENT = "";
+
+  static  STANDARD_POLICY = "";
+
+  static  STANDARD_POLICY_DESCRIPTION = "";
+
+  static  TIMER_POLICY = "";
+
+  static  TIMER_POLICY_DESCRIPTION = "";
+
+  static  MANUAL_POLICY = "";
+
+  static  MANUAL_POLICY_DESCRIPTION = "";
+
+  static  TOOL_POLICY = "";
+
+  static  TOOL_POLICY_DESCRIPTION = "";
+
+  static  SAVING_INTERVAL = "";
+
+  static  SAVING_DELAY = "";
+
   static  REFRESH_PAGE_MESSAGE = "";
 
   // Ribbon Help
@@ -269,6 +291,17 @@ class Z4Translations {
     Z4Translations.THEME_LIGHT = "Light";
     Z4Translations.THEME_DARK = "Dark";
     Z4Translations.THEME_COLOR = "Color";
+    Z4Translations.HISTORY_MANAGEMENT = "History Management";
+    Z4Translations.STANDARD_POLICY = "Standard";
+    Z4Translations.STANDARD_POLICY_DESCRIPTION = "The history is updated at each conclusion of a drawing operation and at each \"global\" operation on the drawing";
+    Z4Translations.TIMER_POLICY = "Time Based";
+    Z4Translations.TIMER_POLICY_DESCRIPTION = "The history is updated at regular intervals (only if the drawing has been modified)";
+    Z4Translations.MANUAL_POLICY = "Manual";
+    Z4Translations.MANUAL_POLICY_DESCRIPTION = "The history is manually updated";
+    Z4Translations.TOOL_POLICY = "On Drawing Tool Change";
+    Z4Translations.TOOL_POLICY_DESCRIPTION = "The history is updated when the drawing tool is changed and at each \"global\" operation on the drawing";
+    Z4Translations.SAVING_INTERVAL = "Saving Interval (min)";
+    Z4Translations.SAVING_DELAY = "Saving Delay (ms)";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Refresh the page to make the changes";
     // Ribbon Help
     Z4Translations.HELP = "Help";
@@ -385,6 +418,17 @@ class Z4Translations {
     Z4Translations.THEME_LIGHT = "Chiaro";
     Z4Translations.THEME_DARK = "Scuro";
     Z4Translations.THEME_COLOR = "Colore";
+    Z4Translations.HISTORY_MANAGEMENT = "Gestione Cronologia";
+    Z4Translations.STANDARD_POLICY = "Standard";
+    Z4Translations.STANDARD_POLICY_DESCRIPTION = "La cronologia viene aggiornata ad ogni conclusione di un'operazione di disegno ed ad ogni operazione \"globale\" sul disegno";
+    Z4Translations.TIMER_POLICY = "A Tempo";
+    Z4Translations.TIMER_POLICY_DESCRIPTION = "La cronologia viene aggiornata ad intervalli regolari (solo se il disegno \u00E8 stato modificato)";
+    Z4Translations.MANUAL_POLICY = "Manuale";
+    Z4Translations.MANUAL_POLICY_DESCRIPTION = "La cronologia viene aggiornata manualmente";
+    Z4Translations.TOOL_POLICY = "Su Cambio Strumento di Disegno";
+    Z4Translations.TOOL_POLICY_DESCRIPTION = "La cronologia viene aggiornata quando viene cambiato lo strumento di disegno ed ad ogni operazione \"globale\" sul disegno";
+    Z4Translations.SAVING_INTERVAL = "Intervallo di Salvataggio (min)";
+    Z4Translations.SAVING_DELAY = "Ritardo di Salvataggio (ms)";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Aggiorna la pagina per eseguire le modifiche";
     // Ribbon Help
     Z4Translations.HELP = "Aiuto";

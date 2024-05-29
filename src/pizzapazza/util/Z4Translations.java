@@ -39,7 +39,7 @@ public class Z4Translations {
   public static String UNDO = "";
   public static String REDO = "";
   public static String CONSOLIDATE = "";
-  
+
   // Ribbon Settings
   public static String SETTINGS = "";
   public static String LANGUAGE = "";
@@ -50,6 +50,18 @@ public class Z4Translations {
   public static String THEME_LIGHT = "";
   public static String THEME_DARK = "";
   public static String THEME_COLOR = "";
+  public static String HISTORY_MANAGEMENT = "";
+  public static String STANDARD_POLICY = "";
+  public static String STANDARD_POLICY_DESCRIPTION = "";
+  public static String TIMER_POLICY = "";
+  public static String TIMER_POLICY_DESCRIPTION = "";
+  public static String MANUAL_POLICY = "";
+  public static String MANUAL_POLICY_DESCRIPTION = "";
+  public static String TOOL_POLICY = "";
+  public static String TOOL_POLICY_DESCRIPTION = "";
+  public static String SAVING_INTERVAL = "";
+  public static String SAVING_DELAY = "";
+
   public static String REFRESH_PAGE_MESSAGE = "";
 
   // Ribbon Help
@@ -179,7 +191,7 @@ public class Z4Translations {
     Z4Translations.UNDO = "Undo";
     Z4Translations.REDO = "Redo";
     Z4Translations.CONSOLIDATE = "Consolidate";
-  
+
     // Ribbon Settings
     Z4Translations.SETTINGS = "Settings";
     Z4Translations.LANGUAGE = "Language";
@@ -190,6 +202,17 @@ public class Z4Translations {
     Z4Translations.THEME_LIGHT = "Light";
     Z4Translations.THEME_DARK = "Dark";
     Z4Translations.THEME_COLOR = "Color";
+    Z4Translations.HISTORY_MANAGEMENT = "History Management";
+    Z4Translations.STANDARD_POLICY = "Standard";
+    Z4Translations.STANDARD_POLICY_DESCRIPTION = "The history is updated at each conclusion of a drawing operation and at each \"global\" operation on the drawing";
+    Z4Translations.TIMER_POLICY = "Time Based";
+    Z4Translations.TIMER_POLICY_DESCRIPTION = "The history is updated at regular intervals (only if the drawing has been modified)";
+    Z4Translations.MANUAL_POLICY = "Manual";
+    Z4Translations.MANUAL_POLICY_DESCRIPTION = "The history is manually updated";
+    Z4Translations.TOOL_POLICY = "On Drawing Tool Change";
+    Z4Translations.TOOL_POLICY_DESCRIPTION = "The history is updated when the drawing tool is changed and at each \"global\" operation on the drawing";
+    Z4Translations.SAVING_INTERVAL = "Saving Interval (min)";
+    Z4Translations.SAVING_DELAY = "Saving Delay (ms)";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Refresh the page to make the changes";
 
     // Ribbon Help
@@ -312,7 +335,7 @@ public class Z4Translations {
     Z4Translations.UNDO = "Annulla";
     Z4Translations.REDO = "Ripeti";
     Z4Translations.CONSOLIDATE = "Consolida";
-    
+
     // Ribbon Settings
     Z4Translations.SETTINGS = "Impostazioni";
     Z4Translations.LANGUAGE = "Lingua";
@@ -323,6 +346,17 @@ public class Z4Translations {
     Z4Translations.THEME_LIGHT = "Chiaro";
     Z4Translations.THEME_DARK = "Scuro";
     Z4Translations.THEME_COLOR = "Colore";
+    Z4Translations.HISTORY_MANAGEMENT = "Gestione Cronologia";
+    Z4Translations.STANDARD_POLICY = "Standard";
+    Z4Translations.STANDARD_POLICY_DESCRIPTION = "La cronologia viene aggiornata ad ogni conclusione di un'operazione di disegno ed ad ogni operazione \"globale\" sul disegno";
+    Z4Translations.TIMER_POLICY = "A Tempo";
+    Z4Translations.TIMER_POLICY_DESCRIPTION = "La cronologia viene aggiornata ad intervalli regolari (solo se il disegno \u00E8 stato modificato)";
+    Z4Translations.MANUAL_POLICY = "Manuale";
+    Z4Translations.MANUAL_POLICY_DESCRIPTION = "La cronologia viene aggiornata manualmente";
+    Z4Translations.TOOL_POLICY = "Su Cambio Strumento di Disegno";
+    Z4Translations.TOOL_POLICY_DESCRIPTION = "La cronologia viene aggiornata quando viene cambiato lo strumento di disegno ed ad ogni operazione \"globale\" sul disegno";
+    Z4Translations.SAVING_INTERVAL = "Intervallo di Salvataggio (min)";
+    Z4Translations.SAVING_DELAY = "Ritardo di Salvataggio (ms)";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Aggiorna la pagina per eseguire le modifiche";
 
     // Ribbon Help

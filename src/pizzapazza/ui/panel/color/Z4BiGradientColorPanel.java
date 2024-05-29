@@ -203,7 +203,7 @@ public class Z4BiGradientColorPanel extends JSPanel {
   private void addHLine(int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
     JSComponent div = new JSComponent(document.createElement("div"));
     div.getStyle().height = "1px";
-    div.getStyle().background = "var(--main-action-bgcolor";
+    div.getStyle().background = "var(--main-action-bgcolor)";
     this.addComponent(div, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, new Insets(2, 1, 2, 1));
   }
 

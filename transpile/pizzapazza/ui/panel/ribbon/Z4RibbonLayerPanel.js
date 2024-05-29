@@ -120,7 +120,7 @@ class Z4RibbonLayerPanel extends JSPanel {
    addVLine(gridx) {
     let div = new JSComponent(document.createElement("div"));
     div.getStyle().width = "1px";
-    div.getStyle().background = "var(--main-action-bgcolor";
+    div.getStyle().background = "var(--main-action-bgcolor)";
     let constraints = new GridBagConstraints();
     constraints.gridx = gridx;
     constraints.gridy = 0;

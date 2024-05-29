@@ -41,6 +41,26 @@ class Z4Constants {
    */
   static  MAX_DPI = 1500;
 
+  /**
+   * The minimum saving interval (min)
+   */
+  static  MIN_SAVING_INTERVAL = 1;
+
+  /**
+   * The maximum saving interval (min)
+   */
+  static  MAX_SAVING_INTERVAL = 10;
+
+  /**
+   * The minimum saving delay (ms)
+   */
+  static  MIN_SAVING_DELAY = 50;
+
+  /**
+   * The maximum saving delay (ms)
+   */
+  static  MAX_SAVING_DELAY = 1000;
+
   constructor() {
   }
 }

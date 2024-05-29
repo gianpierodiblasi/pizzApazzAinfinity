@@ -204,7 +204,7 @@ class Z4LayerPreview extends JSComponent {
    addVLine(panel, gridx, gridy, gridwidth, gridheight, anchor, fill) {
     let div = new JSComponent(document.createElement("div"));
     div.getStyle().width = "1px";
-    div.getStyle().background = "var(--main-action-bgcolor";
+    div.getStyle().background = "var(--main-action-bgcolor)";
     this.addComponent(panel, div, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, new Insets(1, 2, 1, 2));
   }
 
