@@ -123,32 +123,32 @@ public class Z4RibbonSettingsPanel extends JSPanel {
     this.addComponent(this.historyManagement, 4, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5));
 
     this.historyManagementDescription.setText(Z4Translations.$get(selectedHistoryManagement.key.toUpperCase() + "_POLICY_DESCRIPTION"));
-    this.addComponent(this.historyManagementDescription, 4, 2, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    this.addComponent(this.historyManagementDescription, 4, 2, 3, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
 
-//    this.addLabel(Z4Translations.SAVING_DELAY, 5, 1);
-//
-//    int savingDelayValue = parseInt((String) localStorage.getItem("z4savingdelay"));
-//    this.savingDelay.cssAddClass("jsspinner_w_4rem");
-//    this.savingDelay.setModel(new SpinnerNumberModel($exists(savingDelayValue) ? savingDelayValue : Z4Constants.MAX_SAVING_DELAY, Z4Constants.MIN_SAVING_DELAY, Z4Constants.MAX_SAVING_DELAY, 10));
-//    this.savingDelay.addChangeListener(event -> this.onchangeSavingDelay());
-//    this.addComponent(this.savingDelay, 5, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5));
-//
-//    this.addLabel(Z4Translations.SAVING_INTERVAL, 6, 1);
-//
-//    int savingIntervalValue = parseInt((String) localStorage.getItem("z4savinginterval"));
-//    this.savingInterval.cssAddClass("jsspinner_w_4rem");
-//    this.savingInterval.setModel(new SpinnerNumberModel($exists(savingIntervalValue) ? savingIntervalValue : Z4Constants.MIN_SAVING_INTERVAL, Z4Constants.MIN_SAVING_INTERVAL, Z4Constants.MAX_SAVING_INTERVAL, 1));
-//    this.savingInterval.addChangeListener(event -> this.onchangeSavingInterval());
-//    this.addComponent(this.savingInterval, 6, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5));
-//    
-//    this.addVLine(8, 1);
-//
-//    JSButton reset = new JSButton();
-//    reset.setText(Z4Translations.RESET);
-//    reset.setContentAreaFilled(false);
-//    reset.addActionListener(event -> this.onreset());
-//
-//    this.addComponent(reset, 9, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 5, 0, 5));
+    this.addLabel(Z4Translations.SAVING_DELAY, 5, 1);
+
+    int savingDelayValue = parseInt((String) localStorage.getItem("z4savingdelay"));
+    this.savingDelay.cssAddClass("jsspinner_w_4rem");
+    this.savingDelay.setModel(new SpinnerNumberModel($exists(savingDelayValue) ? savingDelayValue : Z4Constants.MAX_SAVING_DELAY, Z4Constants.MIN_SAVING_DELAY, Z4Constants.MAX_SAVING_DELAY, 10));
+    this.savingDelay.addChangeListener(event -> this.onchangeSavingDelay());
+    this.addComponent(this.savingDelay, 5, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5));
+
+    this.addLabel(Z4Translations.SAVING_INTERVAL, 6, 1);
+
+    int savingIntervalValue = parseInt((String) localStorage.getItem("z4savinginterval"));
+    this.savingInterval.cssAddClass("jsspinner_w_4rem");
+    this.savingInterval.setModel(new SpinnerNumberModel($exists(savingIntervalValue) ? savingIntervalValue : Z4Constants.MIN_SAVING_INTERVAL, Z4Constants.MIN_SAVING_INTERVAL, Z4Constants.MAX_SAVING_INTERVAL, 1));
+    this.savingInterval.addChangeListener(event -> this.onchangeSavingInterval());
+    this.addComponent(this.savingInterval, 6, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5));
+    
+    this.addVLine(8, 1);
+
+    JSButton reset = new JSButton();
+    reset.setText(Z4Translations.RESET);
+    reset.setContentAreaFilled(false);
+    reset.addActionListener(event -> this.onreset());
+
+    this.addComponent(reset, 9, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 5, 0, 5));
   }
 
   private void addLabel(String text, int gridx, int gridwidth) {
@@ -211,7 +211,7 @@ public class Z4RibbonSettingsPanel extends JSPanel {
   }
 
   private void onchangeSavingInterval() {
-    localStorage.setItem("z4savinginterval", "" + this.savingDelay.getValue());
+    localStorage.setItem("z4savinginterval", "" + this.savingInterval.getValue());
   }
 
   private void onreset() {
