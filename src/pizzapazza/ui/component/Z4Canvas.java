@@ -57,6 +57,7 @@ public class Z4Canvas extends JSComponent {
   private double zoom = 1;
   private boolean zooming;
   private boolean saved = true;
+  private boolean changed = false;
 
   private final Z4Paper paper = new Z4Paper();
 
@@ -202,6 +203,7 @@ public class Z4Canvas extends JSComponent {
 
     this.zoom = 1;
     this.saved = true;
+    this.changed = false;
 
     this.canvas.width = width;
     this.canvas.height = height;
@@ -325,8 +327,8 @@ public class Z4Canvas extends JSComponent {
   /**
    * Saves the history
    *
-   * @param policies A comma separated value of the history management policies
-   * which can save
+   * @param policies A comma-separated list of history management policies
+   * indicating which criteria should perform saving
    */
   public void saveHistory(String policies) {
     this.ribbonHistoryPanel.saveHistory(policies);
@@ -478,6 +480,7 @@ public class Z4Canvas extends JSComponent {
   }
 
   private void afterAddLayer() {
+    this.changed = true;
     this.ribbonHistoryPanel.saveHistory("standard,tool");
     this.ribbonLayerPanel.addLayerPreview(this.paper.getLayerAt(this.paper.getLayersCount() - 1));
     this.saved = false;
@@ -496,6 +499,7 @@ public class Z4Canvas extends JSComponent {
       image.onload = event -> {
         this.paper.addLayerFromImage(this.findLayerName(), image, this.width, this.height);
 
+        this.changed = true;
         this.ribbonHistoryPanel.saveHistory("standard,tool");
 
         Z4Layer duplicate = this.paper.getLayerAt(this.paper.getLayersCount() - 1);
@@ -522,6 +526,7 @@ public class Z4Canvas extends JSComponent {
   public int deleteLayer(Z4Layer layer) {
     int index = this.paper.deleteLayer(layer);
 
+    this.changed = true;
     this.ribbonHistoryPanel.saveHistory("standard,tool");
     this.saved = false;
     this.drawCanvas();
@@ -537,6 +542,7 @@ public class Z4Canvas extends JSComponent {
    */
   public boolean moveLayer(Z4Layer layer, int position) {
     if (this.paper.moveLayer(layer, position)) {
+      this.changed = true;
       this.ribbonHistoryPanel.saveHistory("standard,tool");
       this.saved = false;
       this.drawCanvas();
@@ -583,12 +589,30 @@ public class Z4Canvas extends JSComponent {
   }
 
   /**
-   * Sets the saved status of the canvae
+   * Sets the saved status of the canvas
    *
    * @param saved true to set the canvas as saved, false otherwise
    */
   public void setSaved(boolean saved) {
     this.saved = saved;
+  }
+
+  /**
+   * Checks if this canvas is changed
+   *
+   * @return true if this canvas is changed, false otherwise
+   */
+  public boolean isChanged() {
+    return this.changed;
+  }
+
+  /**
+   * Sets the changed status of the canvas
+   *
+   * @param changed true to set the canvas as changed, false otherwise
+   */
+  public void setChanged(boolean changed) {
+    this.changed = changed;
   }
 
   /**

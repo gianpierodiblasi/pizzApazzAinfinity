@@ -96,6 +96,7 @@ public class Z4LayerPreview extends JSComponent {
         this.delete.setEnabled(document.querySelectorAll(".z4layerpreview").length > 1);
       } else {
         if (this.changed) {
+          this.canvas.setChanged(true);
           this.canvas.saveHistory("standard,tool");
         }
 
@@ -191,8 +192,7 @@ public class Z4LayerPreview extends JSComponent {
         int index = this.canvas.deleteLayer(this.layer);
         document.querySelector(".z4layerpreview:nth-child(" + (index + 1) + ")").remove();
       }
-    })
-    );
+    }));
     this.addComponent(panelBasic, this.delete, 1, 6, 1, 1, 0, 0, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE, null);
 
     this.editor.addTab(Z4Translations.BASIC, panelBasic);

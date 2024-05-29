@@ -29,6 +29,8 @@ class Z4Canvas extends JSComponent {
 
    saved = true;
 
+   changed = false;
+
    paper = new Z4Paper();
 
   /**
@@ -156,6 +158,7 @@ class Z4Canvas extends JSComponent {
     this.statusPanel.setZoom(1);
     this.zoom = 1;
     this.saved = true;
+    this.changed = false;
     this.canvas.width = width;
     this.canvas.height = height;
     this.drawCanvas();
@@ -387,6 +390,7 @@ class Z4Canvas extends JSComponent {
   }
 
    afterAddLayer() {
+    this.changed = true;
     this.ribbonHistoryPanel.saveHistory("standard,tool");
     this.ribbonLayerPanel.addLayerPreview(this.paper.getLayerAt(this.paper.getLayersCount() - 1));
     this.saved = false;
@@ -403,6 +407,7 @@ class Z4Canvas extends JSComponent {
       let image = document.createElement("img");
       image.onload = event => {
         this.paper.addLayerFromImage(this.findLayerName(), image, this.width, this.height);
+        this.changed = true;
         this.ribbonHistoryPanel.saveHistory("standard,tool");
         let duplicate = this.paper.getLayerAt(this.paper.getLayersCount() - 1);
         duplicate.setOpacity(layer.getOpacity());
@@ -425,6 +430,7 @@ class Z4Canvas extends JSComponent {
    */
    deleteLayer(layer) {
     let index = this.paper.deleteLayer(layer);
+    this.changed = true;
     this.ribbonHistoryPanel.saveHistory("standard,tool");
     this.saved = false;
     this.drawCanvas();
@@ -440,6 +446,7 @@ class Z4Canvas extends JSComponent {
    */
    moveLayer(layer, position) {
     if (this.paper.moveLayer(layer, position)) {
+      this.changed = true;
       this.ribbonHistoryPanel.saveHistory("standard,tool");
       this.saved = false;
       this.drawCanvas();
@@ -486,12 +493,30 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
-   * Sets the saved status of the canvae
+   * Sets the saved status of the canvas
    *
    * @param saved true to set the canvas as saved, false otherwise
    */
    setSaved(saved) {
     this.saved = saved;
+  }
+
+  /**
+   * Checks if this canvas is changed
+   *
+   * @return true if this canvas is changed, false otherwise
+   */
+   isChanged() {
+    return this.changed;
+  }
+
+  /**
+   * Sets the changed status of the canvas
+   *
+   * @param changed true to set the canvas as changed, false otherwise
+   */
+   setChanged(changed) {
+    this.changed = changed;
   }
 
   /**

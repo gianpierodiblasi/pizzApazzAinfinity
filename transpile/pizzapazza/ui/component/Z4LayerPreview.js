@@ -73,6 +73,7 @@ class Z4LayerPreview extends JSComponent {
         this.delete.setEnabled(document.querySelectorAll(".z4layerpreview").length > 1);
       } else {
         if (this.changed) {
+          this.canvas.setChanged(true);
           this.canvas.saveHistory("standard,tool");
         }
         this.getChilStyleByQuery(".z4layerpreview-editor").removeProperty("visibility");

@@ -34,7 +34,11 @@ class Z4RibbonHistoryPanel extends JSPanel {
     });
     this.addButton(this.redo, Z4Translations.REDO, false, 1, 0, "right", event => {
     });
-    this.addButton(this.save, Z4Translations.SAVE, localStorage.getItem("z4historymanagement") === "manual", 2, 0, "", event => this.saveHistory("manual"));
+    this.addButton(this.save, Z4Translations.SAVE, localStorage.getItem("z4historymanagement") === "manual", 2, 0, "", event => {
+      if (this.canvas.isChanged()) {
+        this.saveHistory("manual");
+      }
+    });
     this.addButton(this.consolidate, Z4Translations.CONSOLIDATE, false, 3, 0, "", event => {
     });
     this.addVLine(4, 1);
@@ -83,6 +87,7 @@ class Z4RibbonHistoryPanel extends JSPanel {
     if (policies.indexOf(z4historyManagement) !== -1) {
       this.canvas.toHistory(json => {
         this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event3 => {
+          this.canvas.setChanged(false);
           this.currentIndex = event3.target["result"];
           return null;
         };

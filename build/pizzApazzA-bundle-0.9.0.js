@@ -1576,6 +1576,8 @@ class Z4Canvas extends JSComponent {
 
    saved = true;
 
+   changed = false;
+
    paper = new Z4Paper();
 
   /**
@@ -1703,6 +1705,7 @@ class Z4Canvas extends JSComponent {
     this.statusPanel.setZoom(1);
     this.zoom = 1;
     this.saved = true;
+    this.changed = false;
     this.canvas.width = width;
     this.canvas.height = height;
     this.drawCanvas();
@@ -1934,6 +1937,7 @@ class Z4Canvas extends JSComponent {
   }
 
    afterAddLayer() {
+    this.changed = true;
     this.ribbonHistoryPanel.saveHistory("standard,tool");
     this.ribbonLayerPanel.addLayerPreview(this.paper.getLayerAt(this.paper.getLayersCount() - 1));
     this.saved = false;
@@ -1950,6 +1954,7 @@ class Z4Canvas extends JSComponent {
       let image = document.createElement("img");
       image.onload = event => {
         this.paper.addLayerFromImage(this.findLayerName(), image, this.width, this.height);
+        this.changed = true;
         this.ribbonHistoryPanel.saveHistory("standard,tool");
         let duplicate = this.paper.getLayerAt(this.paper.getLayersCount() - 1);
         duplicate.setOpacity(layer.getOpacity());
@@ -1972,6 +1977,7 @@ class Z4Canvas extends JSComponent {
    */
    deleteLayer(layer) {
     let index = this.paper.deleteLayer(layer);
+    this.changed = true;
     this.ribbonHistoryPanel.saveHistory("standard,tool");
     this.saved = false;
     this.drawCanvas();
@@ -1987,6 +1993,7 @@ class Z4Canvas extends JSComponent {
    */
    moveLayer(layer, position) {
     if (this.paper.moveLayer(layer, position)) {
+      this.changed = true;
       this.ribbonHistoryPanel.saveHistory("standard,tool");
       this.saved = false;
       this.drawCanvas();
@@ -2033,12 +2040,30 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
-   * Sets the saved status of the canvae
+   * Sets the saved status of the canvas
    *
    * @param saved true to set the canvas as saved, false otherwise
    */
    setSaved(saved) {
     this.saved = saved;
+  }
+
+  /**
+   * Checks if this canvas is changed
+   *
+   * @return true if this canvas is changed, false otherwise
+   */
+   isChanged() {
+    return this.changed;
+  }
+
+  /**
+   * Sets the changed status of the canvas
+   *
+   * @param changed true to set the canvas as changed, false otherwise
+   */
+   setChanged(changed) {
+    this.changed = changed;
   }
 
   /**
@@ -2227,6 +2252,7 @@ class Z4LayerPreview extends JSComponent {
         this.delete.setEnabled(document.querySelectorAll(".z4layerpreview").length > 1);
       } else {
         if (this.changed) {
+          this.canvas.setChanged(true);
           this.canvas.saveHistory("standard,tool");
         }
         this.getChilStyleByQuery(".z4layerpreview-editor").removeProperty("visibility");
@@ -4632,7 +4658,11 @@ class Z4RibbonHistoryPanel extends JSPanel {
     });
     this.addButton(this.redo, Z4Translations.REDO, false, 1, 0, "right", event => {
     });
-    this.addButton(this.save, Z4Translations.SAVE, localStorage.getItem("z4historymanagement") === "manual", 2, 0, "", event => this.saveHistory("manual"));
+    this.addButton(this.save, Z4Translations.SAVE, localStorage.getItem("z4historymanagement") === "manual", 2, 0, "", event => {
+      if (this.canvas.isChanged()) {
+        this.saveHistory("manual");
+      }
+    });
     this.addButton(this.consolidate, Z4Translations.CONSOLIDATE, false, 3, 0, "", event => {
     });
     this.addVLine(4, 1);
@@ -4681,6 +4711,7 @@ class Z4RibbonHistoryPanel extends JSPanel {
     if (policies.indexOf(z4historyManagement) !== -1) {
       this.canvas.toHistory(json => {
         this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event3 => {
+          this.canvas.setChanged(false);
           this.currentIndex = event3.target["result"];
           return null;
         };
@@ -6254,9 +6285,9 @@ class Z4Translations {
     Z4Translations.TIMER_POLICY = "Time Based";
     Z4Translations.TIMER_POLICY_DESCRIPTION = "The history is updated at regular intervals (only if the drawing has been modified)";
     Z4Translations.MANUAL_POLICY = "Manual";
-    Z4Translations.MANUAL_POLICY_DESCRIPTION = "The history is manually updated";
+    Z4Translations.MANUAL_POLICY_DESCRIPTION = "The history is manually updated (only if the drawing has been modified)";
     Z4Translations.TOOL_POLICY = "On Drawing Tool Change";
-    Z4Translations.TOOL_POLICY_DESCRIPTION = "The history is updated when the drawing tool is changed and at each \"global\" operation on the drawing";
+    Z4Translations.TOOL_POLICY_DESCRIPTION = "The history is updated when the drawing tool is changed (only if the drawing has been modified) and at each \"global\" operation on the drawing";
     Z4Translations.SAVING_INTERVAL = "Saving Interval";
     Z4Translations.SAVING_DELAY = "Saving Delay";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Refresh the page to make the changes";
@@ -6381,9 +6412,9 @@ class Z4Translations {
     Z4Translations.TIMER_POLICY = "A Tempo";
     Z4Translations.TIMER_POLICY_DESCRIPTION = "La cronologia viene aggiornata ad intervalli regolari (solo se il disegno \u00E8 stato modificato)";
     Z4Translations.MANUAL_POLICY = "Manuale";
-    Z4Translations.MANUAL_POLICY_DESCRIPTION = "La cronologia viene aggiornata manualmente";
+    Z4Translations.MANUAL_POLICY_DESCRIPTION = "La cronologia viene aggiornata manualmente (solo se il disegno \u00E8 stato modificato)";
     Z4Translations.TOOL_POLICY = "Su Cambio Strumento di Disegno";
-    Z4Translations.TOOL_POLICY_DESCRIPTION = "La cronologia viene aggiornata quando viene cambiato lo strumento di disegno ed ad ogni operazione \"globale\" sul disegno";
+    Z4Translations.TOOL_POLICY_DESCRIPTION = "La cronologia viene aggiornata quando viene cambiato lo strumento di disegno (solo se il disegno \u00E8 stato modificato) ed ad ogni operazione \"globale\" sul disegno";
     Z4Translations.SAVING_INTERVAL = "Intervallo di Salvataggio";
     Z4Translations.SAVING_DELAY = "Ritardo di Salvataggio";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Aggiorna la pagina per eseguire le modifiche";

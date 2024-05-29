@@ -24,15 +24,15 @@ import simulation.js.$Object;
  * @author gianpiero.diblasi
  */
 public class Z4RibbonHistoryPanel extends JSPanel {
-  
+
   private final JSButton undo = new JSButton();
   private final JSButton redo = new JSButton();
   private final JSButton save = new JSButton();
   private final JSButton consolidate = new JSButton();
-  
+
   private Z4Canvas canvas;
   private Z4StatusPanel statusPanel;
-  
+
   private String dbName;
   private IDBDatabase database;
   private int currentIndex;
@@ -44,17 +44,21 @@ public class Z4RibbonHistoryPanel extends JSPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonhistorypanel");
-    
+
     this.addButton(this.undo, Z4Translations.UNDO, false, 0, 0, "left", event -> {
     });
     this.addButton(this.redo, Z4Translations.REDO, false, 1, 0, "right", event -> {
     });
-    this.addButton(this.save, Z4Translations.SAVE, localStorage.getItem("z4historymanagement") == "manual", 2, 0, "", event -> this.saveHistory("manual"));
+    this.addButton(this.save, Z4Translations.SAVE, localStorage.getItem("z4historymanagement") == "manual", 2, 0, "", event -> {
+      if (this.canvas.isChanged()) {
+        this.saveHistory("manual");
+      }
+    });
     this.addButton(this.consolidate, Z4Translations.CONSOLIDATE, false, 3, 0, "", event -> {
     });
-    
+
     this.addVLine(4, 1);
-    
+
     window.onunload = event -> {
       window.indexedDB.deleteDatabase(this.dbName);
       return null;
@@ -68,11 +72,11 @@ public class Z4RibbonHistoryPanel extends JSPanel {
     if ($exists(this.dbName)) {
       window.indexedDB.deleteDatabase(this.dbName);
     }
-    
+
     this.dbName = "pizzapazza_" + new Date().getTime();
     window.indexedDB.open(this.dbName, 1).onupgradeneeded = event -> {
       this.database = (IDBDatabase) event.target.$get("result");
-      
+
       $Object options = new $Object();
       options.$set("autoIncrement", true);
       this.database.createObjectStore("history", options).transaction.oncomplete = event2 -> {
@@ -91,8 +95,8 @@ public class Z4RibbonHistoryPanel extends JSPanel {
   /**
    * Saves the history
    *
-   * @param policies A comma separated value of the history management policies
-   * which can save
+   * @param policies A comma-separated list of history management policies
+   * indicating which criteria should perform saving
    */
   @SuppressWarnings("IndexOfReplaceableByContains")
   public void saveHistory(String policies) {
@@ -100,11 +104,12 @@ public class Z4RibbonHistoryPanel extends JSPanel {
     if (!$exists(z4historyManagement)) {
       z4historyManagement = "standard";
     }
-    
+
     if (policies.indexOf(z4historyManagement) != -1) {
       this.canvas.toHistory(json -> {
-        this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event3 -> {
-          this.currentIndex = event3.target.$get("result");
+        this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event -> {
+          this.canvas.setChanged(false);
+          this.currentIndex = event.target.$get("result");
           return null;
         };
       });
@@ -128,13 +133,13 @@ public class Z4RibbonHistoryPanel extends JSPanel {
   public void setStatusPanel(Z4StatusPanel statusPanel) {
     this.statusPanel = statusPanel;
   }
-  
+
   private void addButton(JSButton button, String text, boolean enabled, int gridx, int gridy, String border, ActionListener listener) {
     button.setText(text);
     button.setEnabled(enabled);
     button.setContentAreaFilled(false);
     button.addActionListener(listener);
-    
+
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = gridx;
     constraints.gridy = gridy;
@@ -161,15 +166,15 @@ public class Z4RibbonHistoryPanel extends JSPanel {
       default:
         constraints.insets = new Insets(5, 0, 0, 5);
     }
-    
+
     this.add(button, constraints);
   }
-  
+
   private void addVLine(int gridx, double weightx) {
     JSComponent div = new JSComponent(document.createElement("div"));
     div.getStyle().width = "1px";
     div.getStyle().background = "var(--main-action-bgcolor)";
-    
+
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = gridx;
     constraints.gridy = 0;

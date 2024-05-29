@@ -297,9 +297,9 @@ class Z4Translations {
     Z4Translations.TIMER_POLICY = "Time Based";
     Z4Translations.TIMER_POLICY_DESCRIPTION = "The history is updated at regular intervals (only if the drawing has been modified)";
     Z4Translations.MANUAL_POLICY = "Manual";
-    Z4Translations.MANUAL_POLICY_DESCRIPTION = "The history is manually updated";
+    Z4Translations.MANUAL_POLICY_DESCRIPTION = "The history is manually updated (only if the drawing has been modified)";
     Z4Translations.TOOL_POLICY = "On Drawing Tool Change";
-    Z4Translations.TOOL_POLICY_DESCRIPTION = "The history is updated when the drawing tool is changed and at each \"global\" operation on the drawing";
+    Z4Translations.TOOL_POLICY_DESCRIPTION = "The history is updated when the drawing tool is changed (only if the drawing has been modified) and at each \"global\" operation on the drawing";
     Z4Translations.SAVING_INTERVAL = "Saving Interval";
     Z4Translations.SAVING_DELAY = "Saving Delay";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Refresh the page to make the changes";
@@ -424,9 +424,9 @@ class Z4Translations {
     Z4Translations.TIMER_POLICY = "A Tempo";
     Z4Translations.TIMER_POLICY_DESCRIPTION = "La cronologia viene aggiornata ad intervalli regolari (solo se il disegno \u00E8 stato modificato)";
     Z4Translations.MANUAL_POLICY = "Manuale";
-    Z4Translations.MANUAL_POLICY_DESCRIPTION = "La cronologia viene aggiornata manualmente";
+    Z4Translations.MANUAL_POLICY_DESCRIPTION = "La cronologia viene aggiornata manualmente (solo se il disegno \u00E8 stato modificato)";
     Z4Translations.TOOL_POLICY = "Su Cambio Strumento di Disegno";
-    Z4Translations.TOOL_POLICY_DESCRIPTION = "La cronologia viene aggiornata quando viene cambiato lo strumento di disegno ed ad ogni operazione \"globale\" sul disegno";
+    Z4Translations.TOOL_POLICY_DESCRIPTION = "La cronologia viene aggiornata quando viene cambiato lo strumento di disegno (solo se il disegno \u00E8 stato modificato) ed ad ogni operazione \"globale\" sul disegno";
     Z4Translations.SAVING_INTERVAL = "Intervallo di Salvataggio";
     Z4Translations.SAVING_DELAY = "Ritardo di Salvataggio";
     Z4Translations.REFRESH_PAGE_MESSAGE = "Aggiorna la pagina per eseguire le modifiche";
