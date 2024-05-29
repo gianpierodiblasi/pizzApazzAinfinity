@@ -34,8 +34,7 @@ class Z4RibbonHistoryPanel extends JSPanel {
     });
     this.addButton(this.redo, Z4Translations.REDO, false, 1, 0, "right", event => {
     });
-    this.addButton(this.save, Z4Translations.SAVE, localStorage.getItem("z4historymanagement") === "manual", 2, 0, "", event => {
-    });
+    this.addButton(this.save, Z4Translations.SAVE, localStorage.getItem("z4historymanagement") === "manual", 2, 0, "", event => this.saveHistory("manual"));
     this.addButton(this.consolidate, Z4Translations.CONSOLIDATE, false, 3, 0, "", event => {
     });
     this.addVLine(4, 1);
@@ -73,16 +72,22 @@ class Z4RibbonHistoryPanel extends JSPanel {
   /**
    * Saves the history
    *
-   * @param policy The history management policy
+   * @param policies A comma separated value of the history management policies
+   * which can save
    */
-   saveHistory() /*String policy*/
-  {
-    this.canvas.toHistory(json => {
-      this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event3 => {
-        this.currentIndex = event3.target["result"];
-        return null;
-      };
-    });
+   saveHistory(policies) {
+    let z4historyManagement = localStorage.getItem("z4historymanagement");
+    if (!z4historyManagement) {
+      z4historyManagement = "standard";
+    }
+    if (policies.indexOf(z4historyManagement) !== -1) {
+      this.canvas.toHistory(json => {
+        this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event3 => {
+          this.currentIndex = event3.target["result"];
+          return null;
+        };
+      });
+    }
   }
 
   /**

@@ -324,9 +324,12 @@ public class Z4Canvas extends JSComponent {
 
   /**
    * Saves the history
+   *
+   * @param policies A comma separated value of the history management policies
+   * which can save
    */
-  public void saveHistory() {
-    this.ribbonHistoryPanel.saveHistory();
+  public void saveHistory(String policies) {
+    this.ribbonHistoryPanel.saveHistory(policies);
   }
 
   /**
@@ -475,7 +478,7 @@ public class Z4Canvas extends JSComponent {
   }
 
   private void afterAddLayer() {
-    this.ribbonHistoryPanel.saveHistory();
+    this.ribbonHistoryPanel.saveHistory("standard,tool");
     this.ribbonLayerPanel.addLayerPreview(this.paper.getLayerAt(this.paper.getLayersCount() - 1));
     this.saved = false;
   }
@@ -493,7 +496,7 @@ public class Z4Canvas extends JSComponent {
       image.onload = event -> {
         this.paper.addLayerFromImage(this.findLayerName(), image, this.width, this.height);
 
-        this.ribbonHistoryPanel.saveHistory();
+        this.ribbonHistoryPanel.saveHistory("standard,tool");
 
         Z4Layer duplicate = this.paper.getLayerAt(this.paper.getLayersCount() - 1);
         duplicate.setOpacity(layer.getOpacity());
@@ -519,7 +522,7 @@ public class Z4Canvas extends JSComponent {
   public int deleteLayer(Z4Layer layer) {
     int index = this.paper.deleteLayer(layer);
 
-    this.ribbonHistoryPanel.saveHistory();
+    this.ribbonHistoryPanel.saveHistory("standard,tool");
     this.saved = false;
     this.drawCanvas();
     return index;
@@ -534,7 +537,7 @@ public class Z4Canvas extends JSComponent {
    */
   public boolean moveLayer(Z4Layer layer, int position) {
     if (this.paper.moveLayer(layer, position)) {
-      this.ribbonHistoryPanel.saveHistory();
+      this.ribbonHistoryPanel.saveHistory("standard,tool");
       this.saved = false;
       this.drawCanvas();
       return true;

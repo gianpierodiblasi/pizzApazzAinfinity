@@ -1796,9 +1796,12 @@ class Z4Canvas extends JSComponent {
 
   /**
    * Saves the history
+   *
+   * @param policies A comma separated value of the history management policies
+   * which can save
    */
-   saveHistory() {
-    this.ribbonHistoryPanel.saveHistory();
+   saveHistory(policies) {
+    this.ribbonHistoryPanel.saveHistory(policies);
   }
 
   /**
@@ -1931,7 +1934,7 @@ class Z4Canvas extends JSComponent {
   }
 
    afterAddLayer() {
-    this.ribbonHistoryPanel.saveHistory();
+    this.ribbonHistoryPanel.saveHistory("standard,tool");
     this.ribbonLayerPanel.addLayerPreview(this.paper.getLayerAt(this.paper.getLayersCount() - 1));
     this.saved = false;
   }
@@ -1947,7 +1950,7 @@ class Z4Canvas extends JSComponent {
       let image = document.createElement("img");
       image.onload = event => {
         this.paper.addLayerFromImage(this.findLayerName(), image, this.width, this.height);
-        this.ribbonHistoryPanel.saveHistory();
+        this.ribbonHistoryPanel.saveHistory("standard,tool");
         let duplicate = this.paper.getLayerAt(this.paper.getLayersCount() - 1);
         duplicate.setOpacity(layer.getOpacity());
         duplicate.setCompositeOperation(layer.getCompositeOperation());
@@ -1969,7 +1972,7 @@ class Z4Canvas extends JSComponent {
    */
    deleteLayer(layer) {
     let index = this.paper.deleteLayer(layer);
-    this.ribbonHistoryPanel.saveHistory();
+    this.ribbonHistoryPanel.saveHistory("standard,tool");
     this.saved = false;
     this.drawCanvas();
     return index;
@@ -1984,7 +1987,7 @@ class Z4Canvas extends JSComponent {
    */
    moveLayer(layer, position) {
     if (this.paper.moveLayer(layer, position)) {
-      this.ribbonHistoryPanel.saveHistory();
+      this.ribbonHistoryPanel.saveHistory("standard,tool");
       this.saved = false;
       this.drawCanvas();
       return true;
@@ -2224,7 +2227,7 @@ class Z4LayerPreview extends JSComponent {
         this.delete.setEnabled(document.querySelectorAll(".z4layerpreview").length > 1);
       } else {
         if (this.changed) {
-          this.canvas.saveHistory();
+          this.canvas.saveHistory("standard,tool");
         }
         this.getChilStyleByQuery(".z4layerpreview-editor").removeProperty("visibility");
         this.getChilStyleByQuery(".z4layerpreview-editor").removeProperty("top");
@@ -4629,8 +4632,7 @@ class Z4RibbonHistoryPanel extends JSPanel {
     });
     this.addButton(this.redo, Z4Translations.REDO, false, 1, 0, "right", event => {
     });
-    this.addButton(this.save, Z4Translations.SAVE, localStorage.getItem("z4historymanagement") === "manual", 2, 0, "", event => {
-    });
+    this.addButton(this.save, Z4Translations.SAVE, localStorage.getItem("z4historymanagement") === "manual", 2, 0, "", event => this.saveHistory("manual"));
     this.addButton(this.consolidate, Z4Translations.CONSOLIDATE, false, 3, 0, "", event => {
     });
     this.addVLine(4, 1);
@@ -4668,16 +4670,22 @@ class Z4RibbonHistoryPanel extends JSPanel {
   /**
    * Saves the history
    *
-   * @param policy The history management policy
+   * @param policies A comma separated value of the history management policies
+   * which can save
    */
-   saveHistory() /*String policy*/
-  {
-    this.canvas.toHistory(json => {
-      this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event3 => {
-        this.currentIndex = event3.target["result"];
-        return null;
-      };
-    });
+   saveHistory(policies) {
+    let z4historyManagement = localStorage.getItem("z4historymanagement");
+    if (!z4historyManagement) {
+      z4historyManagement = "standard";
+    }
+    if (policies.indexOf(z4historyManagement) !== -1) {
+      this.canvas.toHistory(json => {
+        this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event3 => {
+          this.currentIndex = event3.target["result"];
+          return null;
+        };
+      });
+    }
   }
 
   /**
