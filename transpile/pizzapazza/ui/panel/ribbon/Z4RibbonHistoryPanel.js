@@ -105,6 +105,23 @@ class Z4RibbonHistoryPanel extends JSPanel {
   }
 
   /**
+   * Iterates over the history buffer
+   *
+   * @param apply The function to apply
+   */
+   iterateHistoryBuffer(apply) {
+    this.database.transaction("history").objectStore("history").openCursor().onsuccess = event => {
+      let cursor = event.target["result"];
+      if (cursor) {
+        apply(cursor.key, cursor["value"], () => cursor.continue());
+      } else {
+        apply(-1, null, null);
+      }
+      return null;
+    };
+  }
+
+  /**
    * Sets the canvas to manage
    *
    * @param canvas The canvas

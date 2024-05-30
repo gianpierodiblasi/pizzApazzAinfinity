@@ -210,31 +210,57 @@ class Z4Canvas extends JSComponent {
    * Saves the project
    *
    * @param projectName The project name
+   * @param saveHistory true to save the history, false otherwise
    * @param apply The function to call after saving
    */
-   saveProject(projectName, apply) {
+   saveProject(projectName, saveHistory, apply) {
     Z4UI.pleaseWait(this, true, true, false, true, "", () => {
       this.projectName = projectName;
       this.statusPanel.setProjectName(projectName);
       let zip = new JSZip();
       this.layerToJSON(zip, new Array(), 0, obj => {
-        zip.file("manifest.json", JSON.stringify(obj), null);
-        let options = new Object();
-        options["type"] = "blob";
-        options["compression"] = "DEFLATE";
-        options["streamFiles"] = true;
-        let compressionOptions = new Object();
-        compressionOptions["level"] = 9;
-        options["compressionOptions"] = compressionOptions;
-        zip.generateAsync(options, metadata => Z4UI.setPleaseWaitProgressBarValue(metadata["percent"])).then(zipped => {
-          saveAs(zipped, this.projectName + ".z4i");
-          this.saved = true;
-          Z4UI.pleaseWaitCompleted();
-          if (apply) {
-            apply();
-          }
-        });
+        let finish = () => {
+          zip.file("manifest.json", JSON.stringify(obj), null);
+          let options = new Object();
+          options["type"] = "blob";
+          options["compression"] = "DEFLATE";
+          options["streamFiles"] = true;
+          let compressionOptions = new Object();
+          compressionOptions["level"] = 9;
+          options["compressionOptions"] = compressionOptions;
+          zip.generateAsync(options, metadata => Z4UI.setPleaseWaitProgressBarValue(metadata["percent"])).then(zipped => {
+            saveAs(zipped, this.projectName + ".z4i");
+            this.saved = true;
+            Z4UI.pleaseWaitCompleted();
+            if (apply) {
+              apply();
+            }
+          });
+        };
+        if (saveHistory) {
+          obj["history"] = new Array();
+          this.historyToJSON(zip, obj, finish);
+        } else {
+          finish();
+        }
       });
+    });
+  }
+
+   historyToJSON(zip, obj, finish) {
+    this.ribbonHistoryPanel.iterateHistoryBuffer((key, value, apply) => {
+      if (key !== -1) {
+        (obj["history"]).push(key);
+        let folder = "history/history_" + key + "/";
+        let layers = value["layers"];
+        layers.forEach(layer => {
+          layer["data"] = null;
+        });
+        zip.file(folder + "manifest.json", JSON.stringify(value), null);
+        apply();
+      } else {
+        finish();
+      }
     });
   }
 

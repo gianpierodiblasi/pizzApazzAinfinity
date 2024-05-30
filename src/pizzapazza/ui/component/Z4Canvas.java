@@ -262,36 +262,67 @@ public class Z4Canvas extends JSComponent {
    * Saves the project
    *
    * @param projectName The project name
+   * @param saveHistory true to save the history, false otherwise
    * @param apply The function to call after saving
    */
-  public void saveProject(String projectName, $Apply_0_Void apply) {
+  public void saveProject(String projectName, boolean saveHistory, $Apply_0_Void apply) {
     Z4UI.pleaseWait(this, true, true, false, true, "", () -> {
       this.projectName = projectName;
       this.statusPanel.setProjectName(projectName);
 
       $JSZip zip = new $JSZip();
       this.layerToJSON(zip, new Array<>(), 0, obj -> {
-        zip.file("manifest.json", JSON.stringify(obj), null);
+        $Apply_0_Void finish = () -> {
+          zip.file("manifest.json", JSON.stringify(obj), null);
 
-        $Object options = new $Object();
-        options.$set("type", "blob");
-        options.$set("compression", "DEFLATE");
-        options.$set("streamFiles", true);
+          $Object options = new $Object();
+          options.$set("type", "blob");
+          options.$set("compression", "DEFLATE");
+          options.$set("streamFiles", true);
 
-        $Object compressionOptions = new $Object();
-        compressionOptions.$set("level", 9);
-        options.$set("compressionOptions", compressionOptions);
+          $Object compressionOptions = new $Object();
+          compressionOptions.$set("level", 9);
+          options.$set("compressionOptions", compressionOptions);
 
-        zip.generateAsync(options, metadata -> Z4UI.setPleaseWaitProgressBarValue(metadata.$get("percent"))).then(zipped -> {
-          saveAs(zipped, this.projectName + ".z4i");
-          this.saved = true;
+          zip.generateAsync(options, metadata -> Z4UI.setPleaseWaitProgressBarValue(metadata.$get("percent"))).then(zipped -> {
+            saveAs(zipped, this.projectName + ".z4i");
+            this.saved = true;
 
-          Z4UI.pleaseWaitCompleted();
-          if ($exists(apply)) {
-            apply.$apply();
-          }
-        });
+            Z4UI.pleaseWaitCompleted();
+            if ($exists(apply)) {
+              apply.$apply();
+            }
+          });
+        };
+
+        if (saveHistory) {
+          obj.$set("history", new Array<Integer>());
+          this.historyToJSON(zip, obj, finish);
+        } else {
+          finish.$apply();
+        }
       });
+    });
+  }
+
+  @SuppressWarnings("unchecked")
+  private void historyToJSON($JSZip zip, $Object obj, $Apply_0_Void finish) {
+    this.ribbonHistoryPanel.iterateHistoryBuffer((key, value, apply) -> {
+      if (key != -1) {
+        ((Array<Integer>) obj.$get("history")).push(key);
+        String folder = "history/history_" + key + "/";
+
+        Array<$Object> layers = value.$get("layers");
+        layers.forEach(layer -> {
+          layer.$set("data", null);
+        });
+
+        zip.file(folder + "manifest.json", JSON.stringify(value), null);
+
+        apply.$apply();
+      } else {
+        finish.$apply();
+      }
     });
   }
 

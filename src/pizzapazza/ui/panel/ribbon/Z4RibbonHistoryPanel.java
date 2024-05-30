@@ -13,10 +13,13 @@ import javascript.swing.JSPanel;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.util.Z4Translations;
+import simulation.js.$Apply_0_Void;
+import simulation.js.$Apply_3_Void;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.setInterval;
 import static simulation.js.$Globals.window;
+import simulation.js.$IDBCursor;
 import simulation.js.$Object;
 
 /**
@@ -123,6 +126,23 @@ public class Z4RibbonHistoryPanel extends JSPanel {
         });
       }
     }
+  }
+
+  /**
+   * Iterates over the history buffer
+   *
+   * @param apply The function to apply
+   */
+  public void iterateHistoryBuffer($Apply_3_Void<Integer, $Object, $Apply_0_Void> apply) {
+    this.database.transaction("history").objectStore("history").openCursor().onsuccess = event -> {
+      $IDBCursor cursor = ($IDBCursor) event.target.$get("result");
+      if ($exists(cursor)) {
+        apply.$apply((Integer) cursor.key, cursor.$get("value"), () -> cursor.$continue());
+      } else {
+        apply.$apply(-1, null, null);
+      }
+      return null;
+    };
   }
 
   /**

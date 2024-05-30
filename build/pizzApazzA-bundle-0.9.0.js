@@ -1757,31 +1757,57 @@ class Z4Canvas extends JSComponent {
    * Saves the project
    *
    * @param projectName The project name
+   * @param saveHistory true to save the history, false otherwise
    * @param apply The function to call after saving
    */
-   saveProject(projectName, apply) {
+   saveProject(projectName, saveHistory, apply) {
     Z4UI.pleaseWait(this, true, true, false, true, "", () => {
       this.projectName = projectName;
       this.statusPanel.setProjectName(projectName);
       let zip = new JSZip();
       this.layerToJSON(zip, new Array(), 0, obj => {
-        zip.file("manifest.json", JSON.stringify(obj), null);
-        let options = new Object();
-        options["type"] = "blob";
-        options["compression"] = "DEFLATE";
-        options["streamFiles"] = true;
-        let compressionOptions = new Object();
-        compressionOptions["level"] = 9;
-        options["compressionOptions"] = compressionOptions;
-        zip.generateAsync(options, metadata => Z4UI.setPleaseWaitProgressBarValue(metadata["percent"])).then(zipped => {
-          saveAs(zipped, this.projectName + ".z4i");
-          this.saved = true;
-          Z4UI.pleaseWaitCompleted();
-          if (apply) {
-            apply();
-          }
-        });
+        let finish = () => {
+          zip.file("manifest.json", JSON.stringify(obj), null);
+          let options = new Object();
+          options["type"] = "blob";
+          options["compression"] = "DEFLATE";
+          options["streamFiles"] = true;
+          let compressionOptions = new Object();
+          compressionOptions["level"] = 9;
+          options["compressionOptions"] = compressionOptions;
+          zip.generateAsync(options, metadata => Z4UI.setPleaseWaitProgressBarValue(metadata["percent"])).then(zipped => {
+            saveAs(zipped, this.projectName + ".z4i");
+            this.saved = true;
+            Z4UI.pleaseWaitCompleted();
+            if (apply) {
+              apply();
+            }
+          });
+        };
+        if (saveHistory) {
+          obj["history"] = new Array();
+          this.historyToJSON(zip, obj, finish);
+        } else {
+          finish();
+        }
       });
+    });
+  }
+
+   historyToJSON(zip, obj, finish) {
+    this.ribbonHistoryPanel.iterateHistoryBuffer((key, value, apply) => {
+      if (key !== -1) {
+        (obj["history"]).push(key);
+        let folder = "history/history_" + key + "/";
+        let layers = value["layers"];
+        layers.forEach(layer => {
+          layer["data"] = null;
+        });
+        zip.file(folder + "manifest.json", JSON.stringify(value), null);
+        apply();
+      } else {
+        finish();
+      }
     });
   }
 
@@ -4511,7 +4537,7 @@ class Z4RibbonFilePanel extends JSPanel {
     panel.add(projectName, BorderLayout.CENTER);
     JSOptionPane.showInputDialog(panel, Z4Translations.SAVE, listener => projectName.addActionListener(event => listener(new ChangeEvent())), () => !!(projectName.getText()), response => {
       if (response === JSOptionPane.OK_OPTION) {
-        this.canvas.saveProject(projectName.getText(), apply);
+        this.canvas.saveProject(projectName.getText(), true, apply);
       }
     });
   }
@@ -4715,6 +4741,23 @@ class Z4RibbonHistoryPanel extends JSPanel {
         });
       }
     }
+  }
+
+  /**
+   * Iterates over the history buffer
+   *
+   * @param apply The function to apply
+   */
+   iterateHistoryBuffer(apply) {
+    this.database.transaction("history").objectStore("history").openCursor().onsuccess = event => {
+      let cursor = event.target["result"];
+      if (cursor) {
+        apply(cursor.key, cursor["value"], () => cursor.continue());
+      } else {
+        apply(-1, null, null);
+      }
+      return null;
+    };
   }
 
   /**
@@ -7018,3 +7061,8 @@ class Z4Paper {
     this.layers.forEach(layer => layer.draw(ctx, noOffset));
   }
 }
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+
