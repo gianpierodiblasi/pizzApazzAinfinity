@@ -296,6 +296,7 @@ public class Z4Canvas extends JSComponent {
         };
 
         if (saveHistory) {
+          obj.$set("currentKeyHistory", this.ribbonHistoryPanel.getCurrentKey());
           obj.$set("history", new Array<Integer>());
           this.historyToJSON(zip, obj, finish);
         } else {

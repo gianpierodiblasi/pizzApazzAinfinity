@@ -39,7 +39,7 @@ public class Z4RibbonHistoryPanel extends JSPanel {
 
   private String dbName;
   private IDBDatabase database;
-  private int currentIndex;
+  private int currentKey;
 
   private String z4historyManagement;
   private int z4savingDelay;
@@ -94,7 +94,7 @@ public class Z4RibbonHistoryPanel extends JSPanel {
         this.canvas.toHistory(json -> {
           this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event3 -> {
             this.setIntervals();
-            this.currentIndex = event3.target.$get("result");
+            this.currentKey = event3.target.$get("result");
             return null;
           };
         });
@@ -120,7 +120,7 @@ public class Z4RibbonHistoryPanel extends JSPanel {
             this.consolidate.setEnabled(true);
 
             this.canvas.setChanged(false);
-            this.currentIndex = event.target.$get("result");
+            this.currentKey = event.target.$get("result");
             return null;
           };
         });
@@ -143,6 +143,15 @@ public class Z4RibbonHistoryPanel extends JSPanel {
       }
       return null;
     };
+  }
+
+  /**
+   * Returns the current key in the history buffer
+   *
+   * @return The current key in the history buffer
+   */
+  public int getCurrentKey() {
+    return this.currentKey;
   }
 
   /**
