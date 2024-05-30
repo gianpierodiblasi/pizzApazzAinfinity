@@ -65,26 +65,6 @@ public class Z4Constants {
    */
   public final static int MAX_DPI = 1500;
 
-  /**
-   * The minimum saving interval (min)
-   */
-  public final static int MIN_SAVING_INTERVAL = 1;
-
-  /**
-   * The maximum saving interval (min)
-   */
-  public final static int MAX_SAVING_INTERVAL = 10;
-
-  /**
-   * The minimum saving delay (ms)
-   */
-  public final static int MIN_SAVING_DELAY = 50;
-
-  /**
-   * The maximum saving delay (ms)
-   */
-  public final static int MAX_SAVING_DELAY = 1000;
-
   private Z4Constants() {
   }
 }

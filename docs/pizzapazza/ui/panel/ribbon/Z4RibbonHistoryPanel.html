@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -218,37 +218,18 @@ extends javascript.swing.JSPanel</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setConsolidateEnabled(boolean)">setConsolidateEnabled</a></span>&#8203;(boolean&nbsp;b)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setHistoryManagementSettings(java.lang.String,int,int)">setHistoryManagementSettings</a></span>&#8203;(java.lang.String&nbsp;z4historyManagement,
+                            int&nbsp;z4savingDelay,
+                            int&nbsp;z4savingInterval)</code></th>
 <td class="colLast">
-<div class="block">Enables the consolidate button</div>
+<div class="block">Sets the history management settings</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setRedoEnabled(boolean)">setRedoEnabled</a></span>&#8203;(boolean&nbsp;b)</code></th>
-<td class="colLast">
-<div class="block">Enables the redo button</div>
-</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSaveEnabled(boolean)">setSaveEnabled</a></span>&#8203;(boolean&nbsp;b)</code></th>
-<td class="colLast">
-<div class="block">Enables the save button</div>
-</td>
-</tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStatusPanel(pizzapazza.ui.panel.Z4StatusPanel)">setStatusPanel</a></span>&#8203;(<a href="../Z4StatusPanel.html" title="class in pizzapazza.ui.panel">Z4StatusPanel</a>&nbsp;statusPanel)</code></th>
 <td class="colLast">
 <div class="block">Sets the status panel</div>
-</td>
-</tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setUndoEnabled(boolean)">setUndoEnabled</a></span>&#8203;(boolean&nbsp;b)</code></th>
-<td class="colLast">
-<div class="block">Enables the undo button</div>
 </td>
 </tr>
 </table>
@@ -329,8 +310,8 @@ extends javascript.swing.JSPanel</pre>
 <div class="block">Saves the history</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>policies</code> - A comma separated value of the history management policies
- which can save</dd>
+<dd><code>policies</code> - A comma-separated list of history management policies
+ indicating which criteria should perform saving</dd>
 </dl>
 </li>
 </ul>
@@ -362,59 +343,23 @@ extends javascript.swing.JSPanel</pre>
 </dl>
 </li>
 </ul>
-<a id="setUndoEnabled(boolean)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setUndoEnabled</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setUndoEnabled&#8203;(boolean&nbsp;b)</pre>
-<div class="block">Enables the undo button</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>b</code> - true to enable the button, false otherwise</dd>
-</dl>
-</li>
-</ul>
-<a id="setRedoEnabled(boolean)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setRedoEnabled</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setRedoEnabled&#8203;(boolean&nbsp;b)</pre>
-<div class="block">Enables the redo button</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>b</code> - true to enable the button, false otherwise</dd>
-</dl>
-</li>
-</ul>
-<a id="setSaveEnabled(boolean)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setSaveEnabled</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setSaveEnabled&#8203;(boolean&nbsp;b)</pre>
-<div class="block">Enables the save button</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>b</code> - true to enable the button, false otherwise</dd>
-</dl>
-</li>
-</ul>
-<a id="setConsolidateEnabled(boolean)">
+<a id="setHistoryManagementSettings(java.lang.String,int,int)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>setConsolidateEnabled</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setConsolidateEnabled&#8203;(boolean&nbsp;b)</pre>
-<div class="block">Enables the consolidate button</div>
+<h4>setHistoryManagementSettings</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setHistoryManagementSettings&#8203;(java.lang.String&nbsp;z4historyManagement,
+                                         int&nbsp;z4savingDelay,
+                                         int&nbsp;z4savingInterval)</pre>
+<div class="block">Sets the history management settings</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>b</code> - true to enable the button, false otherwise</dd>
+<dd><code>z4historyManagement</code> - The history management policy</dd>
+<dd><code>z4savingDelay</code> - The saving delay (used if z4historyManagement =
+ standard)</dd>
+<dd><code>z4savingInterval</code> - The saving interval (used if z4historyManagement =
+ timer)</dd>
 </dl>
 </li>
 </ul>

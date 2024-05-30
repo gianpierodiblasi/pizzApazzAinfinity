@@ -23,6 +23,12 @@ class Z4RibbonHistoryPanel extends JSPanel {
 
    currentIndex = 0;
 
+   z4historyManagement = null;
+
+   z4savingDelay = 0;
+
+   z4savingInterval = 0;
+
   /**
    * Creates the object
    */
@@ -34,11 +40,7 @@ class Z4RibbonHistoryPanel extends JSPanel {
     });
     this.addButton(this.redo, Z4Translations.REDO, false, 1, 0, "right", event => {
     });
-    this.addButton(this.save, Z4Translations.SAVE, localStorage.getItem("z4historymanagement") === "manual", 2, 0, "", event => {
-      if (this.canvas.isChanged()) {
-        this.saveHistory("manual");
-      }
-    });
+    this.addButton(this.save, Z4Translations.SAVE, false, 2, 0, "", event => this.saveHistory("manual"));
     this.addButton(this.consolidate, Z4Translations.CONSOLIDATE, false, 3, 0, "", event => {
     });
     this.addVLine(4, 1);
@@ -76,22 +78,20 @@ class Z4RibbonHistoryPanel extends JSPanel {
   /**
    * Saves the history
    *
-   * @param policies A comma separated value of the history management policies
-   * which can save
+   * @param policies A comma-separated list of history management policies
+   * indicating which criteria should perform saving
    */
    saveHistory(policies) {
-    let z4historyManagement = localStorage.getItem("z4historymanagement");
-    if (!z4historyManagement) {
-      z4historyManagement = "standard";
-    }
-    if (policies.indexOf(z4historyManagement) !== -1) {
-      this.canvas.toHistory(json => {
-        this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event3 => {
-          this.canvas.setChanged(false);
-          this.currentIndex = event3.target["result"];
-          return null;
-        };
-      });
+    if (this.canvas.isChanged()) {
+      if (policies.indexOf(this.z4historyManagement) !== -1) {
+        this.canvas.toHistory(json => {
+          this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event => {
+            this.canvas.setChanged(false);
+            this.currentIndex = event.target["result"];
+            return null;
+          };
+        });
+      }
     }
   }
 
@@ -111,6 +111,22 @@ class Z4RibbonHistoryPanel extends JSPanel {
    */
    setStatusPanel(statusPanel) {
     this.statusPanel = statusPanel;
+  }
+
+  /**
+   * Sets the history management settings
+   *
+   * @param z4historyManagement The history management policy
+   * @param z4savingDelay The saving delay (used if z4historyManagement =
+   * standard)
+   * @param z4savingInterval The saving interval (used if z4historyManagement =
+   * timer)
+   */
+   setHistoryManagementSettings(z4historyManagement, z4savingDelay, z4savingInterval) {
+    this.z4historyManagement = z4historyManagement;
+    this.z4savingDelay = z4savingDelay;
+    this.z4savingInterval = z4savingInterval;
+    this.save.setEnabled(z4historyManagement === "manual");
   }
 
    addButton(button, text, enabled, gridx, gridy, border, listener) {
@@ -160,41 +176,5 @@ class Z4RibbonHistoryPanel extends JSPanel {
     constraints.weighty = 1;
     constraints.insets = new Insets(1, 2, 1, 2);
     this.add(div, constraints);
-  }
-
-  /**
-   * Enables the undo button
-   *
-   * @param b true to enable the button, false otherwise
-   */
-   setUndoEnabled(b) {
-    this.undo.setEnabled(b);
-  }
-
-  /**
-   * Enables the redo button
-   *
-   * @param b true to enable the button, false otherwise
-   */
-   setRedoEnabled(b) {
-    this.redo.setEnabled(b);
-  }
-
-  /**
-   * Enables the save button
-   *
-   * @param b true to enable the button, false otherwise
-   */
-   setSaveEnabled(b) {
-    this.save.setEnabled(b);
-  }
-
-  /**
-   * Enables the consolidate button
-   *
-   * @param b true to enable the button, false otherwise
-   */
-   setConsolidateEnabled(b) {
-    this.consolidate.setEnabled(b);
   }
 }

@@ -1768,40 +1768,61 @@ class Z4Canvas extends JSComponent {
   }
 
    saveLayer(zip, layers, index, apply) {
-    let layer = this.paper.getLayerAt(index);
-    layer.convertToBlob(blob => {
-      zip.file("layers/layer" + index + ".png", blob, null);
-      let offset = layer.getOffset();
-      layers[index] = "{" + "\"name\": \"" + layer.getName() + "\"," + "\"opacity\": " + layer.getOpacity() + "," + "\"compositeOperation\": \"" + layer.getCompositeOperation() + "\"," + "\"offsetX\": " + offset.x + "," + "\"offsetY\": " + offset.y + "}";
-      if (index + 1 === this.paper.getLayersCount()) {
-        let manifest = "{" + "\"projectName\": \"" + this.projectName + "\",\n" + "\"width\": " + this.width + ",\n" + "\"height\": " + this.height + ",\n" + "\"layers\": [" + layers.join(",") + "]" + "}";
-        zip.file("manifest.json", manifest, null);
-        let options = new Object();
-        options["type"] = "blob";
-        options["compression"] = "DEFLATE";
-        options["streamFiles"] = true;
-        let compressionOptions = new Object();
-        compressionOptions["level"] = 9;
-        options["compressionOptions"] = compressionOptions;
-        zip.generateAsync(options, metadata => Z4UI.setPleaseWaitProgressBarValue(metadata["percent"])).then(zipped => {
-          saveAs(zipped, this.projectName + ".z4i");
-          this.saved = true;
-          Z4UI.pleaseWaitCompleted();
-          if (apply) {
-            apply();
-          }
-        });
-      } else {
-        this.saveLayer(zip, layers, index + 1, apply);
-      }
-    });
+    // Z4Layer layer = this.paper.getLayerAt(index);
+    // 
+    // layer.convertToBlob(blob -> {
+    // zip.file("layers/layer" + index + ".png", blob, null);
+    // 
+    // Point offset = layer.getOffset();
+    // layers.$set(index,
+    // "{"
+    // + "\"name\": \"" + layer.getName() + "\","
+    // + "\"opacity\": " + layer.getOpacity() + ","
+    // + "\"compositeOperation\": \"" + layer.getCompositeOperation() + "\","
+    // + "\"offsetX\": " + offset.x + ","
+    // + "\"offsetY\": " + offset.y
+    // + "}"
+    // );
+    // 
+    // if (index + 1 == this.paper.getLayersCount()) {
+    // String manifest
+    // = "{"
+    // + "\"projectName\": \"" + this.projectName + "\",\n"
+    // + "\"width\": " + this.width + ",\n"
+    // + "\"height\": " + this.height + ",\n"
+    // + "\"layers\": [" + layers.join(",") + "]"
+    // + "}";
+    // zip.file("manifest.json", manifest, null);
+    // 
+    // $Object options = new $Object();
+    // options.$set("type", "blob");
+    // options.$set("compression", "DEFLATE");
+    // options.$set("streamFiles", true);
+    // 
+    // $Object compressionOptions = new $Object();
+    // compressionOptions.$set("level", 9);
+    // options.$set("compressionOptions", compressionOptions);
+    // 
+    // zip.generateAsync(options, metadata -> Z4UI.setPleaseWaitProgressBarValue(metadata.$get("percent"))).then(zipped -> {
+    // saveAs(zipped, this.projectName + ".z4i");
+    // this.saved = true;
+    // 
+    // Z4UI.pleaseWaitCompleted();
+    // if ($exists(apply)) {
+    // apply.$apply();
+    // }
+    // });
+    // } else {
+    // this.saveLayer(zip, layers, index + 1, apply);
+    // }
+    // });
   }
 
   /**
    * Saves the history
    *
-   * @param policies A comma separated value of the history management policies
-   * which can save
+   * @param policies A comma-separated list of history management policies
+   * indicating which criteria should perform saving
    */
    saveHistory(policies) {
     this.ribbonHistoryPanel.saveHistory(policies);
@@ -1817,27 +1838,61 @@ class Z4Canvas extends JSComponent {
   }
 
    toHistoryLayer(layers, index, apply) {
+    // Z4Layer layer = this.paper.getLayerAt(index);
+    // 
+    // layer.convertToBlob(blob -> {
+    // Point offset = layer.getOffset();
+    // 
+    // $Object layerJSON = new $Object();
+    // layerJSON.$set("data", blob);
+    // layerJSON.$set("name", layer.getName());
+    // layerJSON.$set("opacity", layer.getOpacity());
+    // layerJSON.$set("compositeOperation", layer.getCompositeOperation());
+    // layerJSON.$set("offsetX", offset.x);
+    // layerJSON.$set("offsetY", offset.y);
+    // 
+    // layers.$set(index, layerJSON);
+    // 
+    // if (index + 1 == this.paper.getLayersCount()) {
+    // $Object JSON = new $Object();
+    // JSON.$set("projectName", this.projectName);
+    // JSON.$set("width", this.width);
+    // JSON.$set("height", this.height);
+    // JSON.$set("layers", layers);
+    // 
+    // apply.$apply(JSON);
+    // } else {
+    // this.toHistoryLayer(layers, index + 1, apply);
+    // }
+    // });
+  }
+
+   layerToJSON(zip, layers, index, apply) {
     let layer = this.paper.getLayerAt(index);
     layer.convertToBlob(blob => {
-      let offset = layer.getOffset();
-      let layerJSON = new Object();
-      layerJSON["data"] = blob;
-      layerJSON["name"] = layer.getName();
-      layerJSON["opacity"] = layer.getOpacity();
-      layerJSON["compositeOperation"] = layer.getCompositeOperation();
-      layerJSON["offsetX"] = offset.x;
-      layerJSON["offsetY"] = offset.y;
-      layers[index] = layerJSON;
-      if (index + 1 === this.paper.getLayersCount()) {
-        let JSON = new Object();
-        JSON["projectName"] = this.projectName;
-        JSON["width"] = this.width;
-        JSON["height"] = this.height;
-        JSON["layers"] = layers;
-        apply(JSON);
-      } else {
-        this.toHistoryLayer(layers, index + 1, apply);
-      }
+      // Point offset = layer.getOffset();
+      // 
+      // $Object layerJSON = new $Object();
+      // layerJSON.$set("data", blob);
+      // layerJSON.$set("name", layer.getName());
+      // layerJSON.$set("opacity", layer.getOpacity());
+      // layerJSON.$set("compositeOperation", layer.getCompositeOperation());
+      // layerJSON.$set("offsetX", offset.x);
+      // layerJSON.$set("offsetY", offset.y);
+      // 
+      // layers.$set(index, layerJSON);
+      // 
+      // if (index + 1 == this.paper.getLayersCount()) {
+      // $Object JSON = new $Object();
+      // JSON.$set("projectName", this.projectName);
+      // JSON.$set("width", this.width);
+      // JSON.$set("height", this.height);
+      // JSON.$set("layers", layers);
+      // 
+      // apply.$apply(JSON);
+      // } else {
+      // this.toHistoryLayer(layers, index + 1, apply);
+      // }
     });
   }
 
@@ -1954,8 +2009,6 @@ class Z4Canvas extends JSComponent {
       let image = document.createElement("img");
       image.onload = event => {
         this.paper.addLayerFromImage(this.findLayerName(), image, this.width, this.height);
-        this.changed = true;
-        this.ribbonHistoryPanel.saveHistory("standard,tool");
         let duplicate = this.paper.getLayerAt(this.paper.getLayersCount() - 1);
         duplicate.setOpacity(layer.getOpacity());
         duplicate.setCompositeOperation(layer.getCompositeOperation());
@@ -1977,8 +2030,6 @@ class Z4Canvas extends JSComponent {
    */
    deleteLayer(layer) {
     let index = this.paper.deleteLayer(layer);
-    this.changed = true;
-    this.ribbonHistoryPanel.saveHistory("standard,tool");
     this.saved = false;
     this.drawCanvas();
     return index;
@@ -4647,6 +4698,12 @@ class Z4RibbonHistoryPanel extends JSPanel {
 
    currentIndex = 0;
 
+   z4historyManagement = null;
+
+   z4savingDelay = 0;
+
+   z4savingInterval = 0;
+
   /**
    * Creates the object
    */
@@ -4658,11 +4715,7 @@ class Z4RibbonHistoryPanel extends JSPanel {
     });
     this.addButton(this.redo, Z4Translations.REDO, false, 1, 0, "right", event => {
     });
-    this.addButton(this.save, Z4Translations.SAVE, localStorage.getItem("z4historymanagement") === "manual", 2, 0, "", event => {
-      if (this.canvas.isChanged()) {
-        this.saveHistory("manual");
-      }
-    });
+    this.addButton(this.save, Z4Translations.SAVE, false, 2, 0, "", event => this.saveHistory("manual"));
     this.addButton(this.consolidate, Z4Translations.CONSOLIDATE, false, 3, 0, "", event => {
     });
     this.addVLine(4, 1);
@@ -4700,22 +4753,20 @@ class Z4RibbonHistoryPanel extends JSPanel {
   /**
    * Saves the history
    *
-   * @param policies A comma separated value of the history management policies
-   * which can save
+   * @param policies A comma-separated list of history management policies
+   * indicating which criteria should perform saving
    */
    saveHistory(policies) {
-    let z4historyManagement = localStorage.getItem("z4historymanagement");
-    if (!z4historyManagement) {
-      z4historyManagement = "standard";
-    }
-    if (policies.indexOf(z4historyManagement) !== -1) {
-      this.canvas.toHistory(json => {
-        this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event3 => {
-          this.canvas.setChanged(false);
-          this.currentIndex = event3.target["result"];
-          return null;
-        };
-      });
+    if (this.canvas.isChanged()) {
+      if (policies.indexOf(this.z4historyManagement) !== -1) {
+        this.canvas.toHistory(json => {
+          this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event => {
+            this.canvas.setChanged(false);
+            this.currentIndex = event.target["result"];
+            return null;
+          };
+        });
+      }
     }
   }
 
@@ -4735,6 +4786,22 @@ class Z4RibbonHistoryPanel extends JSPanel {
    */
    setStatusPanel(statusPanel) {
     this.statusPanel = statusPanel;
+  }
+
+  /**
+   * Sets the history management settings
+   *
+   * @param z4historyManagement The history management policy
+   * @param z4savingDelay The saving delay (used if z4historyManagement =
+   * standard)
+   * @param z4savingInterval The saving interval (used if z4historyManagement =
+   * timer)
+   */
+   setHistoryManagementSettings(z4historyManagement, z4savingDelay, z4savingInterval) {
+    this.z4historyManagement = z4historyManagement;
+    this.z4savingDelay = z4savingDelay;
+    this.z4savingInterval = z4savingInterval;
+    this.save.setEnabled(z4historyManagement === "manual");
   }
 
    addButton(button, text, enabled, gridx, gridy, border, listener) {
@@ -4784,42 +4851,6 @@ class Z4RibbonHistoryPanel extends JSPanel {
     constraints.weighty = 1;
     constraints.insets = new Insets(1, 2, 1, 2);
     this.add(div, constraints);
-  }
-
-  /**
-   * Enables the undo button
-   *
-   * @param b true to enable the button, false otherwise
-   */
-   setUndoEnabled(b) {
-    this.undo.setEnabled(b);
-  }
-
-  /**
-   * Enables the redo button
-   *
-   * @param b true to enable the button, false otherwise
-   */
-   setRedoEnabled(b) {
-    this.redo.setEnabled(b);
-  }
-
-  /**
-   * Enables the save button
-   *
-   * @param b true to enable the button, false otherwise
-   */
-   setSaveEnabled(b) {
-    this.save.setEnabled(b);
-  }
-
-  /**
-   * Enables the consolidate button
-   *
-   * @param b true to enable the button, false otherwise
-   */
-   setConsolidateEnabled(b) {
-    this.consolidate.setEnabled(b);
   }
 }
 /**
@@ -5015,9 +5046,9 @@ class Z4RibbonSettingsPanel extends JSPanel {
 
    historyManagementDescription = new JSLabel();
 
-   savingInterval = new JSSpinner();
+   savingInterval = new JSComboBox();
 
-   savingDelay = new JSSpinner();
+   savingDelay = new JSComboBox();
 
    historyPanel = null;
 
@@ -5028,7 +5059,7 @@ class Z4RibbonSettingsPanel extends JSPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonsettingspanel");
-    this.addLabel(Z4Translations.LANGUAGE, 0, 0, 1);
+    this.addLabel(Z4Translations.LANGUAGE, 0);
     let languageModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer();
     languageModelAndRenderer.addElement(new KeyValue("en", Z4Translations.LANGUAGE_ENGLISH_NATIVE));
     languageModelAndRenderer.addElement(new KeyValue("it", Z4Translations.LANGUAGE_ITALIAN_NATIVE));
@@ -5036,7 +5067,7 @@ class Z4RibbonSettingsPanel extends JSPanel {
     this.language.setSelectedItem(Z4Translations.CURRENT_LANGUAGE);
     this.language.addActionListener(event => this.onchangeLanguage());
     this.addComponent(this.language, 0, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 5, 0, 5));
-    this.addLabel(Z4Translations.THEME, 1, 0, 1);
+    this.addLabel(Z4Translations.THEME, 1);
     let selectedTheme = null;
     let z4theme = localStorage.getItem("z4theme");
     switch(z4theme) {
@@ -5057,14 +5088,14 @@ class Z4RibbonSettingsPanel extends JSPanel {
     this.theme.setSelectedItem(selectedTheme);
     this.theme.addActionListener(event => this.onchangeTheme());
     this.addComponent(this.theme, 1, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 5, 0, 5));
-    this.addLabel(Z4Translations.THEME_COLOR, 2, 0, 1);
+    this.addLabel(Z4Translations.THEME_COLOR, 2);
     let themeColor = localStorage.getItem("z4color");
     this.color.setSelectedColor(Color.fromRGB_HEX(themeColor ? themeColor : "#0d6efd"));
     this.color.setOpacityVisible(false);
     this.color.addChangeListener(event => this.onchangeColor());
     this.addComponent(this.color, 2, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 5, 0, 5));
     this.addVLine(3, 0);
-    this.addLabel(Z4Translations.HISTORY_MANAGEMENT, 4, 0, 1);
+    this.addLabel(Z4Translations.HISTORY_MANAGEMENT, 4);
     let selectedHistoryManagement = null;
     let z4historyManagement = localStorage.getItem("z4historymanagement");
     switch(z4historyManagement) {
@@ -5086,38 +5117,58 @@ class Z4RibbonSettingsPanel extends JSPanel {
     this.historyManagement.getStyle().minWidth = "18rem";
     this.historyManagement.setModelAndRenderer(historyManagementModelAndRenderer);
     this.historyManagement.setSelectedItem(selectedHistoryManagement);
-    this.historyManagement.addActionListener(event => this.onchangeHistoryManagement());
+    this.historyManagement.addActionListener(event => this.onchangeHistoryManagementSettings());
     this.addComponent(this.historyManagement, 4, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5));
     this.historyManagementDescription.setText(Z4Translations[selectedHistoryManagement.key.toUpperCase() + "_POLICY_DESCRIPTION"]);
-    this.addComponent(this.historyManagementDescription, 4, 2, 5, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(5, 0, 0, 0));
-    this.addLabel(Z4Translations.SAVING_DELAY, 5, 0, 2);
+    this.addComponent(this.historyManagementDescription, 4, 2, 3, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(5, 0, 0, 0));
+    this.addLabel(Z4Translations.SAVING_DELAY, 5);
     let savingDelayValue = parseInt(localStorage.getItem("z4savingdelay"));
-    this.savingDelay.cssAddClass("jsspinner_w_4rem");
+    savingDelayValue = savingDelayValue ? savingDelayValue : 1000;
+    let savingDelayString = savingDelayValue < 1000 ? savingDelayValue + "ms" : (savingDelayValue / 1000 + "s");
+    let selectedSavingDelay = new KeyValue(savingDelayValue, savingDelayString);
+    let savingDelayModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer();
+    savingDelayModelAndRenderer.addElement(new KeyValue(100, "100ms"));
+    savingDelayModelAndRenderer.addElement(new KeyValue(200, "200ms"));
+    savingDelayModelAndRenderer.addElement(new KeyValue(500, "500ms"));
+    savingDelayModelAndRenderer.addElement(new KeyValue(1000, "1s"));
+    savingDelayModelAndRenderer.addElement(new KeyValue(2000, "2s"));
+    savingDelayModelAndRenderer.addElement(new KeyValue(5000, "5s"));
+    this.savingDelay.getStyle().minWidth = "6rem";
     this.savingDelay.setEnabled(selectedHistoryManagement.key === "standard");
-    this.savingDelay.setModel(new SpinnerNumberModel(savingDelayValue ? savingDelayValue : Z4Constants.MAX_SAVING_DELAY, Z4Constants.MIN_SAVING_DELAY, Z4Constants.MAX_SAVING_DELAY, 10));
-    this.savingDelay.addChangeListener(event => this.onchangeSavingDelay());
-    this.addComponent(this.savingDelay, 5, 1, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(0, 5, 0, 0));
-    this.addLabel("ms", 6, 1, 1);
-    this.addLabel(Z4Translations.SAVING_INTERVAL, 7, 0, 2);
+    this.savingDelay.setModelAndRenderer(savingDelayModelAndRenderer);
+    this.savingDelay.setSelectedItem(selectedSavingDelay);
+    this.savingDelay.addActionListener(event => this.onchangeHistoryManagementSettings());
+    this.addComponent(this.savingDelay, 5, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
+    this.addLabel(Z4Translations.SAVING_INTERVAL, 6);
     let savingIntervalValue = parseInt(localStorage.getItem("z4savinginterval"));
-    this.savingInterval.cssAddClass("jsspinner_w_4rem");
+    savingIntervalValue = savingIntervalValue ? savingIntervalValue : 60000;
+    let savingIntervalString = savingIntervalValue < 60000 ? savingIntervalValue / 1000 + "s" : (savingIntervalValue / 60000 + "min");
+    let selectedSavingInterval = new KeyValue(savingIntervalValue, savingIntervalString);
+    let savingIntervalModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer();
+    savingIntervalModelAndRenderer.addElement(new KeyValue(10000, "10s"));
+    savingIntervalModelAndRenderer.addElement(new KeyValue(30000, "30s"));
+    savingIntervalModelAndRenderer.addElement(new KeyValue(60000, "1m"));
+    savingIntervalModelAndRenderer.addElement(new KeyValue(60000 * 2, "2m"));
+    savingIntervalModelAndRenderer.addElement(new KeyValue(60000 * 3, "3m"));
+    savingIntervalModelAndRenderer.addElement(new KeyValue(60000 * 5, "5m"));
+    this.savingInterval.getStyle().minWidth = "6rem";
     this.savingInterval.setEnabled(selectedHistoryManagement.key === "timer");
-    this.savingInterval.setModel(new SpinnerNumberModel(savingIntervalValue ? savingIntervalValue : Z4Constants.MIN_SAVING_INTERVAL, Z4Constants.MIN_SAVING_INTERVAL, Z4Constants.MAX_SAVING_INTERVAL, 1));
-    this.savingInterval.addChangeListener(event => this.onchangeSavingInterval());
-    this.addComponent(this.savingInterval, 7, 1, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(0, 5, 0, 0));
-    this.addLabel("min", 8, 1, 1);
-    this.addVLine(9, 0);
+    this.savingInterval.setModelAndRenderer(savingIntervalModelAndRenderer);
+    this.savingInterval.setSelectedItem(selectedSavingInterval);
+    this.savingInterval.addActionListener(event => this.onchangeHistoryManagementSettings());
+    this.addComponent(this.savingInterval, 6, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
+    this.addVLine(7, 0);
     let reset = new JSButton();
     reset.setText(Z4Translations.RESET);
     reset.setContentAreaFilled(false);
     reset.addActionListener(event => this.onreset());
-    this.addComponent(reset, 10, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 5, 0, 5));
+    this.addComponent(reset, 8, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 5, 0, 5));
   }
 
-   addLabel(text, gridx, gridy, gridwidth) {
+   addLabel(text, gridx) {
     let label = new JSLabel();
     label.setText(text);
-    this.addComponent(label, gridx, gridy, gridwidth, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 2, 0));
+    this.addComponent(label, gridx, 0, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 2, 0));
   }
 
    addVLine(gridx, weightx) {
@@ -5160,21 +5211,17 @@ class Z4RibbonSettingsPanel extends JSPanel {
     }
   }
 
-   onchangeHistoryManagement() {
+   onchangeHistoryManagementSettings() {
     let selectedHistoryManagement = this.historyManagement.getSelectedItem();
     localStorage.setItem("z4historymanagement", selectedHistoryManagement.key);
     this.historyManagementDescription.setText(Z4Translations[selectedHistoryManagement.key.toUpperCase() + "_POLICY_DESCRIPTION"]);
+    let selectedSavingDelay = this.savingDelay.getSelectedItem();
+    localStorage.setItem("z4savingdelay", "" + selectedSavingDelay.key);
+    let selectedSavingInterval = this.savingInterval.getSelectedItem();
+    localStorage.setItem("z4savinginterval", "" + selectedSavingInterval.key);
     this.savingDelay.setEnabled(selectedHistoryManagement.key === "standard");
     this.savingInterval.setEnabled(selectedHistoryManagement.key === "timer");
-    this.historyPanel.setSaveEnabled(selectedHistoryManagement.key === "manual");
-  }
-
-   onchangeSavingDelay() {
-    localStorage.setItem("z4savingdelay", "" + this.savingDelay.getValue());
-  }
-
-   onchangeSavingInterval() {
-    localStorage.setItem("z4savinginterval", "" + this.savingInterval.getValue());
+    this.historyPanel.setHistoryManagementSettings(selectedHistoryManagement.key, selectedSavingDelay.key, selectedSavingInterval.key);
   }
 
    onreset() {
@@ -5184,6 +5231,13 @@ class Z4RibbonSettingsPanel extends JSPanel {
     localStorage.removeItem("z4historymanagement");
     localStorage.removeItem("z4savingdelay");
     localStorage.removeItem("z4savinginterval");
+    this.historyManagement.setSelectedItem(new KeyValue("standard", Z4Translations.STANDARD_POLICY));
+    this.historyManagementDescription.setText(Z4Translations.STANDARD_POLICY_DESCRIPTION);
+    this.savingDelay.setSelectedItem(new KeyValue(1000, "1s"));
+    this.savingDelay.setEnabled(true);
+    this.savingInterval.setSelectedItem(new KeyValue(60000, "1min"));
+    this.savingInterval.setEnabled(false);
+    this.historyPanel.setHistoryManagementSettings("standard", 1000, 60000);
     JSOptionPane.showMessageDialog(Z4Translations.REFRESH_PAGE_MESSAGE, Z4Translations.RESET, JSOptionPane.INFORMATION_MESSAGE, null);
   }
 
@@ -5194,6 +5248,10 @@ class Z4RibbonSettingsPanel extends JSPanel {
    */
    setHistoryPanel(historyPanel) {
     this.historyPanel = historyPanel;
+    let selectedHistoryManagement = this.historyManagement.getSelectedItem();
+    let selectedSavingDelay = this.savingDelay.getSelectedItem();
+    let selectedSavingInterval = this.savingInterval.getSelectedItem();
+    this.historyPanel.setHistoryManagementSettings(selectedHistoryManagement.key, selectedSavingDelay.key, selectedSavingInterval.key);
   }
 }
 /**
@@ -5941,26 +5999,6 @@ class Z4Constants {
    * The max DPI
    */
   static  MAX_DPI = 1500;
-
-  /**
-   * The minimum saving interval (min)
-   */
-  static  MIN_SAVING_INTERVAL = 1;
-
-  /**
-   * The maximum saving interval (min)
-   */
-  static  MAX_SAVING_INTERVAL = 10;
-
-  /**
-   * The minimum saving delay (ms)
-   */
-  static  MIN_SAVING_DELAY = 50;
-
-  /**
-   * The maximum saving delay (ms)
-   */
-  static  MAX_SAVING_DELAY = 1000;
 
   constructor() {
   }

@@ -13,11 +13,8 @@ import javascript.swing.JSComponent;
 import javascript.swing.JSLabel;
 import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
-import javascript.swing.JSSpinner;
 import javascript.swing.MnR.DefaultKeyValueComboBoxModelAndRenderer;
-import javascript.swing.SpinnerNumberModel;
 import javascript.util.KeyValue;
-import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
@@ -34,8 +31,8 @@ public class Z4RibbonSettingsPanel extends JSPanel {
   private final JSColorChooser color = new JSColorChooser();
   private final JSComboBox<KeyValue<String, String>> historyManagement = new JSComboBox<>();
   private final JSLabel historyManagementDescription = new JSLabel();
-  private final JSSpinner savingInterval = new JSSpinner();
-  private final JSSpinner savingDelay = new JSSpinner();
+  private final JSComboBox<KeyValue<Integer, String>> savingInterval = new JSComboBox<>();
+  private final JSComboBox<KeyValue<Integer, String>> savingDelay = new JSComboBox<>();
 
   private Z4RibbonHistoryPanel historyPanel;
 
@@ -48,7 +45,7 @@ public class Z4RibbonSettingsPanel extends JSPanel {
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonsettingspanel");
 
-    this.addLabel(Z4Translations.LANGUAGE, 0, 0, 1);
+    this.addLabel(Z4Translations.LANGUAGE, 0);
 
     DefaultKeyValueComboBoxModelAndRenderer<String, String> languageModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer<>();
     languageModelAndRenderer.addElement(new KeyValue<>("en", Z4Translations.LANGUAGE_ENGLISH_NATIVE));
@@ -60,7 +57,7 @@ public class Z4RibbonSettingsPanel extends JSPanel {
 
     this.addComponent(this.language, 0, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 5, 0, 5));
 
-    this.addLabel(Z4Translations.THEME, 1, 0, 1);
+    this.addLabel(Z4Translations.THEME, 1);
 
     KeyValue<String, String> selectedTheme;
     String z4theme = (String) localStorage.getItem("z4theme");
@@ -86,7 +83,7 @@ public class Z4RibbonSettingsPanel extends JSPanel {
 
     this.addComponent(this.theme, 1, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 5, 0, 5));
 
-    this.addLabel(Z4Translations.THEME_COLOR, 2, 0, 1);
+    this.addLabel(Z4Translations.THEME_COLOR, 2);
 
     String themeColor = (String) localStorage.getItem("z4color");
     this.color.setSelectedColor(Color.fromRGB_HEX($exists(themeColor) ? themeColor : "#0d6efd"));
@@ -97,7 +94,7 @@ public class Z4RibbonSettingsPanel extends JSPanel {
 
     this.addVLine(3, 0);
 
-    this.addLabel(Z4Translations.HISTORY_MANAGEMENT, 4, 0, 1);
+    this.addLabel(Z4Translations.HISTORY_MANAGEMENT, 4);
 
     KeyValue<String, String> selectedHistoryManagement;
     String z4historyManagement = (String) localStorage.getItem("z4historymanagement");
@@ -122,49 +119,71 @@ public class Z4RibbonSettingsPanel extends JSPanel {
     this.historyManagement.getStyle().minWidth = "18rem";
     this.historyManagement.setModelAndRenderer(historyManagementModelAndRenderer);
     this.historyManagement.setSelectedItem(selectedHistoryManagement);
-    this.historyManagement.addActionListener(event -> this.onchangeHistoryManagement());
+    this.historyManagement.addActionListener(event -> this.onchangeHistoryManagementSettings());
 
     this.addComponent(this.historyManagement, 4, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5));
 
     this.historyManagementDescription.setText(Z4Translations.$get(selectedHistoryManagement.key.toUpperCase() + "_POLICY_DESCRIPTION"));
-    this.addComponent(this.historyManagementDescription, 4, 2, 5, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(5, 0, 0, 0));
+    this.addComponent(this.historyManagementDescription, 4, 2, 3, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(5, 0, 0, 0));
 
-    this.addLabel(Z4Translations.SAVING_DELAY, 5, 0, 2);
+    this.addLabel(Z4Translations.SAVING_DELAY, 5);
 
     int savingDelayValue = parseInt((String) localStorage.getItem("z4savingdelay"));
-    this.savingDelay.cssAddClass("jsspinner_w_4rem");
+    savingDelayValue = $exists(savingDelayValue) ? savingDelayValue : 1000;
+    String savingDelayString = savingDelayValue < 1000 ? savingDelayValue + "ms" : (savingDelayValue / 1000 + "s");
+    KeyValue<Integer, String> selectedSavingDelay = new KeyValue<>(savingDelayValue, savingDelayString);
+
+    DefaultKeyValueComboBoxModelAndRenderer<Integer, String> savingDelayModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer<>();
+    savingDelayModelAndRenderer.addElement(new KeyValue<>(100, "100ms"));
+    savingDelayModelAndRenderer.addElement(new KeyValue<>(200, "200ms"));
+    savingDelayModelAndRenderer.addElement(new KeyValue<>(500, "500ms"));
+    savingDelayModelAndRenderer.addElement(new KeyValue<>(1000, "1s"));
+    savingDelayModelAndRenderer.addElement(new KeyValue<>(2000, "2s"));
+    savingDelayModelAndRenderer.addElement(new KeyValue<>(5000, "5s"));
+
+    this.savingDelay.getStyle().minWidth = "6rem";
     this.savingDelay.setEnabled(selectedHistoryManagement.key == "standard");
-    this.savingDelay.setModel(new SpinnerNumberModel($exists(savingDelayValue) ? savingDelayValue : Z4Constants.MAX_SAVING_DELAY, Z4Constants.MIN_SAVING_DELAY, Z4Constants.MAX_SAVING_DELAY, 10));
-    this.savingDelay.addChangeListener(event -> this.onchangeSavingDelay());
-    this.addComponent(this.savingDelay, 5, 1, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(0, 5, 0, 0));
+    this.savingDelay.setModelAndRenderer(savingDelayModelAndRenderer);
+    this.savingDelay.setSelectedItem(selectedSavingDelay);
+    this.savingDelay.addActionListener(event -> this.onchangeHistoryManagementSettings());
+    this.addComponent(this.savingDelay, 5, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
 
-    this.addLabel("ms", 6, 1, 1);
-
-    this.addLabel(Z4Translations.SAVING_INTERVAL, 7, 0, 2);
+    this.addLabel(Z4Translations.SAVING_INTERVAL, 6);
 
     int savingIntervalValue = parseInt((String) localStorage.getItem("z4savinginterval"));
-    this.savingInterval.cssAddClass("jsspinner_w_4rem");
+    savingIntervalValue = $exists(savingIntervalValue) ? savingIntervalValue : 60000;
+    String savingIntervalString = savingIntervalValue < 60000 ? savingIntervalValue / 1000 + "s" : (savingIntervalValue / 60000 + "min");
+    KeyValue<Integer, String> selectedSavingInterval = new KeyValue<>(savingIntervalValue, savingIntervalString);
+
+    DefaultKeyValueComboBoxModelAndRenderer<Integer, String> savingIntervalModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer<>();
+    savingIntervalModelAndRenderer.addElement(new KeyValue<>(10000, "10s"));
+    savingIntervalModelAndRenderer.addElement(new KeyValue<>(30000, "30s"));
+    savingIntervalModelAndRenderer.addElement(new KeyValue<>(60000, "1m"));
+    savingIntervalModelAndRenderer.addElement(new KeyValue<>(60000 * 2, "2m"));
+    savingIntervalModelAndRenderer.addElement(new KeyValue<>(60000 * 3, "3m"));
+    savingIntervalModelAndRenderer.addElement(new KeyValue<>(60000 * 5, "5m"));
+
+    this.savingInterval.getStyle().minWidth = "6rem";
     this.savingInterval.setEnabled(selectedHistoryManagement.key == "timer");
-    this.savingInterval.setModel(new SpinnerNumberModel($exists(savingIntervalValue) ? savingIntervalValue : Z4Constants.MIN_SAVING_INTERVAL, Z4Constants.MIN_SAVING_INTERVAL, Z4Constants.MAX_SAVING_INTERVAL, 1));
-    this.savingInterval.addChangeListener(event -> this.onchangeSavingInterval());
-    this.addComponent(this.savingInterval, 7, 1, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(0, 5, 0, 0));
+    this.savingInterval.setModelAndRenderer(savingIntervalModelAndRenderer);
+    this.savingInterval.setSelectedItem(selectedSavingInterval);
+    this.savingInterval.addActionListener(event -> this.onchangeHistoryManagementSettings());
+    this.addComponent(this.savingInterval, 6, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
 
-    this.addLabel("min", 8, 1, 1);
-
-    this.addVLine(9, 0);
+    this.addVLine(7, 0);
 
     JSButton reset = new JSButton();
     reset.setText(Z4Translations.RESET);
     reset.setContentAreaFilled(false);
     reset.addActionListener(event -> this.onreset());
 
-    this.addComponent(reset, 10, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 5, 0, 5));
+    this.addComponent(reset, 8, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 5, 0, 5));
   }
 
-  private void addLabel(String text, int gridx, int gridy, int gridwidth) {
+  private void addLabel(String text, int gridx) {
     JSLabel label = new JSLabel();
     label.setText(text);
-    this.addComponent(label, gridx, gridy, gridwidth, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 2, 0));
+    this.addComponent(label, gridx, 0, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 2, 0));
   }
 
   private void addVLine(int gridx, int weightx) {
@@ -210,22 +229,20 @@ public class Z4RibbonSettingsPanel extends JSPanel {
   }
 
   @SuppressWarnings({"unchecked", "StringEquality"})
-  private void onchangeHistoryManagement() {
+  private void onchangeHistoryManagementSettings() {
     KeyValue<String, String> selectedHistoryManagement = (KeyValue<String, String>) this.historyManagement.getSelectedItem();
     localStorage.setItem("z4historymanagement", selectedHistoryManagement.key);
     this.historyManagementDescription.setText(Z4Translations.$get(selectedHistoryManagement.key.toUpperCase() + "_POLICY_DESCRIPTION"));
 
+    KeyValue<Integer, String> selectedSavingDelay = (KeyValue<Integer, String>) this.savingDelay.getSelectedItem();
+    localStorage.setItem("z4savingdelay", "" + selectedSavingDelay.key);
+
+    KeyValue<Integer, String> selectedSavingInterval = (KeyValue<Integer, String>) this.savingInterval.getSelectedItem();
+    localStorage.setItem("z4savinginterval", "" + selectedSavingInterval.key);
+
     this.savingDelay.setEnabled(selectedHistoryManagement.key == "standard");
     this.savingInterval.setEnabled(selectedHistoryManagement.key == "timer");
-    this.historyPanel.setSaveEnabled(selectedHistoryManagement.key == "manual");
-  }
-
-  private void onchangeSavingDelay() {
-    localStorage.setItem("z4savingdelay", "" + this.savingDelay.getValue());
-  }
-
-  private void onchangeSavingInterval() {
-    localStorage.setItem("z4savinginterval", "" + this.savingInterval.getValue());
+    this.historyPanel.setHistoryManagementSettings(selectedHistoryManagement.key, selectedSavingDelay.key, selectedSavingInterval.key);
   }
 
   private void onreset() {
@@ -236,6 +253,14 @@ public class Z4RibbonSettingsPanel extends JSPanel {
     localStorage.removeItem("z4savingdelay");
     localStorage.removeItem("z4savinginterval");
 
+    this.historyManagement.setSelectedItem(new KeyValue<>("standard", Z4Translations.STANDARD_POLICY));
+    this.historyManagementDescription.setText(Z4Translations.STANDARD_POLICY_DESCRIPTION);
+    this.savingDelay.setSelectedItem(new KeyValue<>(1000, "1s"));
+    this.savingDelay.setEnabled(true);
+    this.savingInterval.setSelectedItem(new KeyValue<>(60000, "1min"));
+    this.savingInterval.setEnabled(false);
+
+    this.historyPanel.setHistoryManagementSettings("standard", 1000, 60000);
     JSOptionPane.showMessageDialog(Z4Translations.REFRESH_PAGE_MESSAGE, Z4Translations.RESET, JSOptionPane.INFORMATION_MESSAGE, null);
   }
 
@@ -244,7 +269,12 @@ public class Z4RibbonSettingsPanel extends JSPanel {
    *
    * @param historyPanel The history panel
    */
+  @SuppressWarnings("unchecked")
   public void setHistoryPanel(Z4RibbonHistoryPanel historyPanel) {
     this.historyPanel = historyPanel;
+    KeyValue<String, String> selectedHistoryManagement = (KeyValue<String, String>) this.historyManagement.getSelectedItem();
+    KeyValue<Integer, String> selectedSavingDelay = (KeyValue<Integer, String>) this.savingDelay.getSelectedItem();
+    KeyValue<Integer, String> selectedSavingInterval = (KeyValue<Integer, String>) this.savingInterval.getSelectedItem();
+    this.historyPanel.setHistoryManagementSettings(selectedHistoryManagement.key, selectedSavingDelay.key, selectedSavingInterval.key);
   }
 }

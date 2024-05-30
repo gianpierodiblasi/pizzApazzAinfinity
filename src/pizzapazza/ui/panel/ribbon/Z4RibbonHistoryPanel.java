@@ -1,7 +1,6 @@
 package pizzapazza.ui.panel.ribbon;
 
 import static def.dom.Globals.document;
-import static def.dom.Globals.localStorage;
 import def.dom.IDBDatabase;
 import def.js.Date;
 import javascript.awt.GridBagConstraints;
@@ -24,18 +23,22 @@ import simulation.js.$Object;
  * @author gianpiero.diblasi
  */
 public class Z4RibbonHistoryPanel extends JSPanel {
-
+  
   private final JSButton undo = new JSButton();
   private final JSButton redo = new JSButton();
   private final JSButton save = new JSButton();
   private final JSButton consolidate = new JSButton();
-
+  
   private Z4Canvas canvas;
   private Z4StatusPanel statusPanel;
-
+  
   private String dbName;
   private IDBDatabase database;
   private int currentIndex;
+  
+  private String z4historyManagement;
+  private int z4savingDelay;
+  private int z4savingInterval;
 
   /**
    * Creates the object
@@ -44,21 +47,17 @@ public class Z4RibbonHistoryPanel extends JSPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonhistorypanel");
-
+    
     this.addButton(this.undo, Z4Translations.UNDO, false, 0, 0, "left", event -> {
     });
     this.addButton(this.redo, Z4Translations.REDO, false, 1, 0, "right", event -> {
     });
-    this.addButton(this.save, Z4Translations.SAVE, localStorage.getItem("z4historymanagement") == "manual", 2, 0, "", event -> {
-      if (this.canvas.isChanged()) {
-        this.saveHistory("manual");
-      }
-    });
+    this.addButton(this.save, Z4Translations.SAVE, false, 2, 0, "", event -> this.saveHistory("manual"));
     this.addButton(this.consolidate, Z4Translations.CONSOLIDATE, false, 3, 0, "", event -> {
     });
-
+    
     this.addVLine(4, 1);
-
+    
     window.onunload = event -> {
       window.indexedDB.deleteDatabase(this.dbName);
       return null;
@@ -72,11 +71,11 @@ public class Z4RibbonHistoryPanel extends JSPanel {
     if ($exists(this.dbName)) {
       window.indexedDB.deleteDatabase(this.dbName);
     }
-
+    
     this.dbName = "pizzapazza_" + new Date().getTime();
     window.indexedDB.open(this.dbName, 1).onupgradeneeded = event -> {
       this.database = (IDBDatabase) event.target.$get("result");
-
+      
       $Object options = new $Object();
       options.$set("autoIncrement", true);
       this.database.createObjectStore("history", options).transaction.oncomplete = event2 -> {
@@ -100,19 +99,16 @@ public class Z4RibbonHistoryPanel extends JSPanel {
    */
   @SuppressWarnings("IndexOfReplaceableByContains")
   public void saveHistory(String policies) {
-    String z4historyManagement = (String) localStorage.getItem("z4historymanagement");
-    if (!$exists(z4historyManagement)) {
-      z4historyManagement = "standard";
-    }
-
-    if (policies.indexOf(z4historyManagement) != -1) {
-      this.canvas.toHistory(json -> {
-        this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event -> {
-          this.canvas.setChanged(false);
-          this.currentIndex = event.target.$get("result");
-          return null;
-        };
-      });
+    if (this.canvas.isChanged()) {
+      if (policies.indexOf(this.z4historyManagement) != -1) {
+        this.canvas.toHistory(json -> {
+          this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event -> {
+            this.canvas.setChanged(false);
+            this.currentIndex = event.target.$get("result");
+            return null;
+          };
+        });
+      }
     }
   }
 
@@ -134,12 +130,30 @@ public class Z4RibbonHistoryPanel extends JSPanel {
     this.statusPanel = statusPanel;
   }
 
+  /**
+   * Sets the history management settings
+   *
+   * @param z4historyManagement The history management policy
+   * @param z4savingDelay The saving delay (used if z4historyManagement =
+   * standard)
+   * @param z4savingInterval The saving interval (used if z4historyManagement =
+   * timer)
+   */
+  @SuppressWarnings("StringEquality")
+  public void setHistoryManagementSettings(String z4historyManagement, int z4savingDelay, int z4savingInterval) {
+    this.z4historyManagement = z4historyManagement;
+    this.z4savingDelay = z4savingDelay;
+    this.z4savingInterval = z4savingInterval;
+    
+    this.save.setEnabled(z4historyManagement == "manual");
+  }
+  
   private void addButton(JSButton button, String text, boolean enabled, int gridx, int gridy, String border, ActionListener listener) {
     button.setText(text);
     button.setEnabled(enabled);
     button.setContentAreaFilled(false);
     button.addActionListener(listener);
-
+    
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = gridx;
     constraints.gridy = gridy;
@@ -166,15 +180,15 @@ public class Z4RibbonHistoryPanel extends JSPanel {
       default:
         constraints.insets = new Insets(5, 0, 0, 5);
     }
-
+    
     this.add(button, constraints);
   }
-
+  
   private void addVLine(int gridx, double weightx) {
     JSComponent div = new JSComponent(document.createElement("div"));
     div.getStyle().width = "1px";
     div.getStyle().background = "var(--main-action-bgcolor)";
-
+    
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = gridx;
     constraints.gridy = 0;
@@ -184,41 +198,5 @@ public class Z4RibbonHistoryPanel extends JSPanel {
     constraints.weighty = 1;
     constraints.insets = new Insets(1, 2, 1, 2);
     this.add(div, constraints);
-  }
-
-  /**
-   * Enables the undo button
-   *
-   * @param b true to enable the button, false otherwise
-   */
-  public void setUndoEnabled(boolean b) {
-    this.undo.setEnabled(b);
-  }
-
-  /**
-   * Enables the redo button
-   *
-   * @param b true to enable the button, false otherwise
-   */
-  public void setRedoEnabled(boolean b) {
-    this.redo.setEnabled(b);
-  }
-
-  /**
-   * Enables the save button
-   *
-   * @param b true to enable the button, false otherwise
-   */
-  public void setSaveEnabled(boolean b) {
-    this.save.setEnabled(b);
-  }
-
-  /**
-   * Enables the consolidate button
-   *
-   * @param b true to enable the button, false otherwise
-   */
-  public void setConsolidateEnabled(boolean b) {
-    this.consolidate.setEnabled(b);
   }
 }
