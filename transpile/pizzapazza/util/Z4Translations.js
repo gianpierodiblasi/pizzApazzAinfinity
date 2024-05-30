@@ -53,6 +53,8 @@ class Z4Translations {
 
   static  CONSOLIDATE = "";
 
+  static  CONSOLIDATE_MESSAGE = "";
+
   // Ribbon Settings
   static  SETTINGS = "";
 
@@ -284,6 +286,7 @@ class Z4Translations {
     Z4Translations.UNDO = "Undo";
     Z4Translations.REDO = "Redo";
     Z4Translations.CONSOLIDATE = "Consolidate";
+    Z4Translations.CONSOLIDATE_MESSAGE = "Consolidation will remove all history, do you want to proceed?";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Settings";
     Z4Translations.LANGUAGE = "Language";
@@ -412,6 +415,7 @@ class Z4Translations {
     Z4Translations.UNDO = "Annulla";
     Z4Translations.REDO = "Ripeti";
     Z4Translations.CONSOLIDATE = "Consolida";
+    Z4Translations.CONSOLIDATE_MESSAGE = "La consolidazione rimuover\u00E0 tutta la cronologia, vuoi proseguire?";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Impostazioni";
     Z4Translations.LANGUAGE = "Lingua";

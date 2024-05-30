@@ -4732,8 +4732,12 @@ class Z4RibbonHistoryPanel extends JSPanel {
     this.addButton(this.redo, Z4Translations.REDO, 1, 0, "right", event => {
     });
     this.addButton(this.save, Z4Translations.SAVE, 2, 0, "", event => this.saveHistory("manual"));
-    this.addButton(this.consolidate, Z4Translations.CONSOLIDATE, 3, 0, "", event => {
-    });
+    this.addButton(this.consolidate, Z4Translations.CONSOLIDATE, 3, 0, "", event => JSOptionPane.showConfirmDialog(Z4Translations.CONSOLIDATE_MESSAGE, Z4Translations.CONSOLIDATE, JSOptionPane.YES_NO_OPTION, JSOptionPane.WARNING_MESSAGE, response => {
+      if (response === JSOptionPane.YES_OPTION) {
+        this.canvas.setChanged(false);
+        this.resetHistory(() => this.canvas.toHistory(json => this.addHistory(json, key => this.setCurrentKey(key), false)));
+      }
+    }));
     this.addVLine(4, 1);
     window.onunload = event => {
       window.indexedDB.deleteDatabase(this.dbName);
@@ -6233,6 +6237,8 @@ class Z4Translations {
 
   static  CONSOLIDATE = "";
 
+  static  CONSOLIDATE_MESSAGE = "";
+
   // Ribbon Settings
   static  SETTINGS = "";
 
@@ -6464,6 +6470,7 @@ class Z4Translations {
     Z4Translations.UNDO = "Undo";
     Z4Translations.REDO = "Redo";
     Z4Translations.CONSOLIDATE = "Consolidate";
+    Z4Translations.CONSOLIDATE_MESSAGE = "Consolidation will remove all history, do you want to proceed?";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Settings";
     Z4Translations.LANGUAGE = "Language";
@@ -6592,6 +6599,7 @@ class Z4Translations {
     Z4Translations.UNDO = "Annulla";
     Z4Translations.REDO = "Ripeti";
     Z4Translations.CONSOLIDATE = "Consolida";
+    Z4Translations.CONSOLIDATE_MESSAGE = "La consolidazione rimuover\u00E0 tutta la cronologia, vuoi proseguire?";
     // Ribbon Settings
     Z4Translations.SETTINGS = "Impostazioni";
     Z4Translations.LANGUAGE = "Lingua";

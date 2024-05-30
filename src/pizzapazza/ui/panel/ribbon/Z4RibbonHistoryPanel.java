@@ -10,6 +10,7 @@ import javascript.awt.Insets;
 import javascript.awt.event.ActionListener;
 import javascript.swing.JSButton;
 import javascript.swing.JSComponent;
+import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.panel.Z4StatusPanel;
@@ -62,8 +63,13 @@ public class Z4RibbonHistoryPanel extends JSPanel {
     this.addButton(this.redo, Z4Translations.REDO, 1, 0, "right", event -> {
     });
     this.addButton(this.save, Z4Translations.SAVE, 2, 0, "", event -> this.saveHistory("manual"));
-    this.addButton(this.consolidate, Z4Translations.CONSOLIDATE, 3, 0, "", event -> {
-    });
+    
+    this.addButton(this.consolidate, Z4Translations.CONSOLIDATE, 3, 0, "", event -> JSOptionPane.showConfirmDialog(Z4Translations.CONSOLIDATE_MESSAGE, Z4Translations.CONSOLIDATE, JSOptionPane.YES_NO_OPTION, JSOptionPane.WARNING_MESSAGE, response -> {
+      if (response == JSOptionPane.YES_OPTION) {
+        this.canvas.setChanged(false);
+        this.resetHistory(() -> this.canvas.toHistory(json -> this.addHistory(json, key -> this.setCurrentKey(key), false)));
+      }
+    }));
 
     this.addVLine(4, 1);
 
