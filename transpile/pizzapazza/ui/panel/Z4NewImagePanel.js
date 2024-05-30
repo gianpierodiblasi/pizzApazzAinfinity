@@ -17,6 +17,8 @@ class Z4NewImagePanel extends JSTabbedPane {
 
    fillingPanel = new Z4FillingPanel();
 
+   listeners = new Array();
+
   /**
    * Creates the object
    */
@@ -89,6 +91,7 @@ class Z4NewImagePanel extends JSTabbedPane {
     this.dimensionMM.setText(new Number(dimWIN * 25.4).toFixed(2) + " \u2716 " + new Number(dimHIN * 25.4).toFixed(2) + " mm");
     this.dimensionIN.setText(new Number(dimWIN).toFixed(2) + " \u2716 " + new Number(dimHIN).toFixed(2) + " inch");
     this.fillingPanel.setSize(w, h);
+    this.onchange();
   }
 
   /**
@@ -121,5 +124,25 @@ class Z4NewImagePanel extends JSTabbedPane {
    */
    getSelectedFilling() {
     return this.fillingPanel.getSelectedFilling();
+  }
+
+  /**
+   * Adds a change listener
+   *
+   * @param listener The listener
+   */
+   addChangeListener(listener) {
+    this.listeners.push(listener);
+  }
+
+   onchange() {
+    let event = new ChangeEvent();
+    this.listeners.forEach(listener => {
+      if (typeof listener === "function") {
+        listener(event);
+      } else {
+        listener.stateChanged(event);
+      }
+    });
   }
 }

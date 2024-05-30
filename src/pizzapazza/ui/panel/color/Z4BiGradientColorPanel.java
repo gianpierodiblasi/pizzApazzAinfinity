@@ -373,30 +373,32 @@ public class Z4BiGradientColorPanel extends JSPanel {
   }
 
   private void drawPreview(boolean adjusting) {
-    ImageData imageData = this.ctx.createImageData(this.width, this.height);
-    $Uint8Array data = ($Uint8Array) imageData.data;
+    if (this.width > 0 && this.height > 0) {
+      ImageData imageData = this.ctx.createImageData(this.width, this.height);
+      $Uint8Array data = ($Uint8Array) imageData.data;
 
-    for (int y = 0; y < this.height; y++) {
-      Z4GradientColor gradientColor = this.biGradientColor.getColorAt(y / this.height, true);
-      for (int x = 0; x < this.width; x++) {
-        Color color = gradientColor.getColorAt(x / this.width, true);
+      for (int y = 0; y < this.height; y++) {
+        Z4GradientColor gradientColor = this.biGradientColor.getColorAt(y / this.height, true);
+        for (int x = 0; x < this.width; x++) {
+          Color color = gradientColor.getColorAt(x / this.width, true);
 
-        int index = (y * this.width + x) * 4;
-        data.$set(index, color.red);
-        data.$set(index + 1, color.green);
-        data.$set(index + 2, color.blue);
-        data.$set(index + 3, color.alpha);
+          int index = (y * this.width + x) * 4;
+          data.$set(index, color.red);
+          data.$set(index + 1, color.green);
+          data.$set(index + 2, color.blue);
+          data.$set(index + 3, color.alpha);
+        }
       }
-    }
 
-    this.ctx.putImageData(imageData, 0, 0);
+      this.ctx.putImageData(imageData, 0, 0);
 
-    for (int biIndex = 0; biIndex < this.biGradientColor.getColorCount(); biIndex++) {
-      double biPosition = this.biGradientColor.getColorPositionAtIndex(biIndex);
-      Z4GradientColor gradientColor = this.biGradientColor.getColorAtIndex(biIndex);
+      for (int biIndex = 0; biIndex < this.biGradientColor.getColorCount(); biIndex++) {
+        double biPosition = this.biGradientColor.getColorPositionAtIndex(biIndex);
+        Z4GradientColor gradientColor = this.biGradientColor.getColorAtIndex(biIndex);
 
-      for (int index = 0; index < gradientColor.getColorCount(); index++) {
-        this.drawCircle(biPosition, gradientColor.getColorPositionAtIndex(index), biIndex, index);
+        for (int index = 0; index < gradientColor.getColorCount(); index++) {
+          this.drawCircle(biPosition, gradientColor.getColorPositionAtIndex(index), biIndex, index);
+        }
       }
     }
   }

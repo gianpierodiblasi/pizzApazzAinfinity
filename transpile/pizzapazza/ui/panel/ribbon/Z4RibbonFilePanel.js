@@ -130,8 +130,10 @@ class Z4RibbonFilePanel extends JSPanel {
 
    createFromColor() {
     let panel = new Z4NewImagePanel();
-    JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => {
-    }, () => true, response => {
+    JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => panel.addChangeListener(listener), () => {
+      let size = panel.getSelectedSize();
+      return size.width > 0 && size.height > 0;
+    }, response => {
       if (response === JSOptionPane.OK_OPTION) {
         let size = panel.getSelectedSize();
         this.canvas.create(size.width, size.height, panel.getSelectedFilling());

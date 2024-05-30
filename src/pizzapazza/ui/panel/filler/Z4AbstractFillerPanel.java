@@ -376,28 +376,30 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
     int w = parseInt(this.preview.getProperty("width"));
     int h = parseInt(this.preview.getProperty("height"));
 
-    this.ctx.clearRect(0, 0, w, h);
+    if (w > 0 && h > 0) {
+      this.ctx.clearRect(0, 0, w, h);
 
-    Array<Point> map = this.points.map(point -> new Point(w * point.x / this.width, h * point.y / this.height));
-    if (adjusting && this.needsRescale(this.selectedOption)) {
-      ImageData imageData = this.offscreenCtx.createImageData(w / Z4AbstractFillerPanel.RESCALE, h / Z4AbstractFillerPanel.RESCALE);
-      this.getFiller(this.gradientColor, map.map(point -> new Point(point.x / Z4AbstractFillerPanel.RESCALE, point.y / Z4AbstractFillerPanel.RESCALE)), this.selectedOption).fill(imageData);
-      this.offscreenCtx.putImageData(imageData, 0, 0);
+      Array<Point> map = this.points.map(point -> new Point(w * point.x / this.width, h * point.y / this.height));
+      if (adjusting && this.needsRescale(this.selectedOption)) {
+        ImageData imageData = this.offscreenCtx.createImageData(w / Z4AbstractFillerPanel.RESCALE, h / Z4AbstractFillerPanel.RESCALE);
+        this.getFiller(this.gradientColor, map.map(point -> new Point(point.x / Z4AbstractFillerPanel.RESCALE, point.y / Z4AbstractFillerPanel.RESCALE)), this.selectedOption).fill(imageData);
+        this.offscreenCtx.putImageData(imageData, 0, 0);
 
-      this.ctx.drawImage(this.offscreenCanvas, 0, 0, w, h);
-    } else {
-      ImageData imageData = this.ctx.createImageData(w, h);
-      this.getFiller(this.gradientColor, map, this.selectedOption).fill(imageData);
-      this.ctx.putImageData(imageData, 0, 0);
+        this.ctx.drawImage(this.offscreenCanvas, 0, 0, w, h);
+      } else {
+        ImageData imageData = this.ctx.createImageData(w, h);
+        this.getFiller(this.gradientColor, map, this.selectedOption).fill(imageData);
+        this.ctx.putImageData(imageData, 0, 0);
+      }
+
+      this.ctx.save();
+      map.forEach((point, index, array) -> this.drawCircle(point, index));
+      this.ctx.restore();
+
+      this.ctx.save();
+      this.drawObjects(this.ctx, map);
+      this.ctx.restore();
     }
-
-    this.ctx.save();
-    map.forEach((point, index, array) -> this.drawCircle(point, index));
-    this.ctx.restore();
-
-    this.ctx.save();
-    this.drawObjects(this.ctx, map);
-    this.ctx.restore();
   }
 
   /**

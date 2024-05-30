@@ -2908,25 +2908,27 @@ class Z4BiGradientColorPanel extends JSPanel {
   }
 
    drawPreview(adjusting) {
-    let imageData = this.ctx.createImageData(this.width, this.height);
-    let data = imageData.data;
-    for (let y = 0; y < this.height; y++) {
-      let gradientColor = this.biGradientColor.getColorAt(y / this.height, true);
-      for (let x = 0; x < this.width; x++) {
-        let color = gradientColor.getColorAt(x / this.width, true);
-        let index = (y * this.width + x) * 4;
-        data[index] = color.red;
-        data[index + 1] = color.green;
-        data[index + 2] = color.blue;
-        data[index + 3] = color.alpha;
+    if (this.width > 0 && this.height > 0) {
+      let imageData = this.ctx.createImageData(this.width, this.height);
+      let data = imageData.data;
+      for (let y = 0; y < this.height; y++) {
+        let gradientColor = this.biGradientColor.getColorAt(y / this.height, true);
+        for (let x = 0; x < this.width; x++) {
+          let color = gradientColor.getColorAt(x / this.width, true);
+          let index = (y * this.width + x) * 4;
+          data[index] = color.red;
+          data[index + 1] = color.green;
+          data[index + 2] = color.blue;
+          data[index + 3] = color.alpha;
+        }
       }
-    }
-    this.ctx.putImageData(imageData, 0, 0);
-    for (let biIndex = 0; biIndex < this.biGradientColor.getColorCount(); biIndex++) {
-      let biPosition = this.biGradientColor.getColorPositionAtIndex(biIndex);
-      let gradientColor = this.biGradientColor.getColorAtIndex(biIndex);
-      for (let index = 0; index < gradientColor.getColorCount(); index++) {
-        this.drawCircle(biPosition, gradientColor.getColorPositionAtIndex(index), biIndex, index);
+      this.ctx.putImageData(imageData, 0, 0);
+      for (let biIndex = 0; biIndex < this.biGradientColor.getColorCount(); biIndex++) {
+        let biPosition = this.biGradientColor.getColorPositionAtIndex(biIndex);
+        let gradientColor = this.biGradientColor.getColorAtIndex(biIndex);
+        for (let index = 0; index < gradientColor.getColorCount(); index++) {
+          this.drawCircle(biPosition, gradientColor.getColorPositionAtIndex(index), biIndex, index);
+        }
       }
     }
   }
@@ -3605,24 +3607,26 @@ class Z4AbstractFillerPanel extends JSPanel {
    drawPreview(adjusting) {
     let w = parseInt(this.preview.getProperty("width"));
     let h = parseInt(this.preview.getProperty("height"));
-    this.ctx.clearRect(0, 0, w, h);
-    let map = this.points.map(point => new Point(w * point.x / this.width, h * point.y / this.height));
-    if (adjusting && this.needsRescale(this.selectedOption)) {
-      let imageData = this.offscreenCtx.createImageData(w / Z4AbstractFillerPanel.RESCALE, h / Z4AbstractFillerPanel.RESCALE);
-      this.getFiller(this.gradientColor, map.map(point => new Point(point.x / Z4AbstractFillerPanel.RESCALE, point.y / Z4AbstractFillerPanel.RESCALE)), this.selectedOption).fill(imageData);
-      this.offscreenCtx.putImageData(imageData, 0, 0);
-      this.ctx.drawImage(this.offscreenCanvas, 0, 0, w, h);
-    } else {
-      let imageData = this.ctx.createImageData(w, h);
-      this.getFiller(this.gradientColor, map, this.selectedOption).fill(imageData);
-      this.ctx.putImageData(imageData, 0, 0);
+    if (w > 0 && h > 0) {
+      this.ctx.clearRect(0, 0, w, h);
+      let map = this.points.map(point => new Point(w * point.x / this.width, h * point.y / this.height));
+      if (adjusting && this.needsRescale(this.selectedOption)) {
+        let imageData = this.offscreenCtx.createImageData(w / Z4AbstractFillerPanel.RESCALE, h / Z4AbstractFillerPanel.RESCALE);
+        this.getFiller(this.gradientColor, map.map(point => new Point(point.x / Z4AbstractFillerPanel.RESCALE, point.y / Z4AbstractFillerPanel.RESCALE)), this.selectedOption).fill(imageData);
+        this.offscreenCtx.putImageData(imageData, 0, 0);
+        this.ctx.drawImage(this.offscreenCanvas, 0, 0, w, h);
+      } else {
+        let imageData = this.ctx.createImageData(w, h);
+        this.getFiller(this.gradientColor, map, this.selectedOption).fill(imageData);
+        this.ctx.putImageData(imageData, 0, 0);
+      }
+      this.ctx.save();
+      map.forEach((point, index, array) => this.drawCircle(point, index));
+      this.ctx.restore();
+      this.ctx.save();
+      this.drawObjects(this.ctx, map);
+      this.ctx.restore();
     }
-    this.ctx.save();
-    map.forEach((point, index, array) => this.drawCircle(point, index));
-    this.ctx.restore();
-    this.ctx.save();
-    this.drawObjects(this.ctx, map);
-    this.ctx.restore();
   }
 
   /**
@@ -4546,8 +4550,10 @@ class Z4RibbonFilePanel extends JSPanel {
 
    createFromColor() {
     let panel = new Z4NewImagePanel();
-    JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => {
-    }, () => true, response => {
+    JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => panel.addChangeListener(listener), () => {
+      let size = panel.getSelectedSize();
+      return size.width > 0 && size.height > 0;
+    }, response => {
       if (response === JSOptionPane.OK_OPTION) {
         let size = panel.getSelectedSize();
         this.canvas.create(size.width, size.height, panel.getSelectedFilling());
@@ -5097,8 +5103,10 @@ class Z4RibbonLayerPanel extends JSPanel {
     let canvasSize = this.canvas.getSize();
     let panel = new Z4NewImagePanel();
     panel.setSelectedSize(canvasSize.width, canvasSize.height);
-    JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => {
-    }, () => true, response => {
+    JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => panel.addChangeListener(listener), () => {
+      let size = panel.getSelectedSize();
+      return size.width > 0 && size.height > 0;
+    }, response => {
       if (response === JSOptionPane.OK_OPTION) {
         let size = panel.getSelectedSize();
         this.canvas.addLayer(size.width, size.height, panel.getSelectedFilling());
@@ -5799,6 +5807,8 @@ class Z4NewImagePanel extends JSTabbedPane {
 
    fillingPanel = new Z4FillingPanel();
 
+   listeners = new Array();
+
   /**
    * Creates the object
    */
@@ -5871,6 +5881,7 @@ class Z4NewImagePanel extends JSTabbedPane {
     this.dimensionMM.setText(new Number(dimWIN * 25.4).toFixed(2) + " \u2716 " + new Number(dimHIN * 25.4).toFixed(2) + " mm");
     this.dimensionIN.setText(new Number(dimWIN).toFixed(2) + " \u2716 " + new Number(dimHIN).toFixed(2) + " inch");
     this.fillingPanel.setSize(w, h);
+    this.onchange();
   }
 
   /**
@@ -5903,6 +5914,26 @@ class Z4NewImagePanel extends JSTabbedPane {
    */
    getSelectedFilling() {
     return this.fillingPanel.getSelectedFilling();
+  }
+
+  /**
+   * Adds a change listener
+   *
+   * @param listener The listener
+   */
+   addChangeListener(listener) {
+    this.listeners.push(listener);
+  }
+
+   onchange() {
+    let event = new ChangeEvent();
+    this.listeners.forEach(listener => {
+      if (typeof listener === "function") {
+        listener(event);
+      } else {
+        listener.stateChanged(event);
+      }
+    });
   }
 }
 /**

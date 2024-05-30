@@ -171,8 +171,10 @@ public class Z4RibbonFilePanel extends JSPanel {
   private void createFromColor() {
     Z4NewImagePanel panel = new Z4NewImagePanel();
 
-    JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener -> {
-    }, () -> true, response -> {
+    JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener -> panel.addChangeListener(listener), () -> {
+      Dimension size = panel.getSelectedSize();
+      return size.width > 0 && size.height > 0;
+    }, response -> {
       if (response == JSOptionPane.OK_OPTION) {
         Dimension size = panel.getSelectedSize();
         this.canvas.create(size.width, size.height, panel.getSelectedFilling());
@@ -207,7 +209,7 @@ public class Z4RibbonFilePanel extends JSPanel {
     JSCheckBox saveHistory = new JSCheckBox();
     saveHistory.setText(Z4Translations.SAVE_HISTORY);
     panel.add(saveHistory, BorderLayout.SOUTH);
-    
+
     JSOptionPane.showInputDialog(panel, Z4Translations.SAVE, listener -> projectName.addActionListener(event -> listener.$apply(new ChangeEvent())), () -> $exists(projectName.getText()), response -> {
       if (response == JSOptionPane.OK_OPTION) {
         this.canvas.saveProject(projectName.getText(), saveHistory.isSelected(), apply);

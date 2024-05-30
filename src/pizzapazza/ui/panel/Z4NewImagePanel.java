@@ -1,5 +1,6 @@
 package pizzapazza.ui.panel;
 
+import def.js.Array;
 import def.js.Number;
 import javascript.awt.Dimension;
 import javascript.awt.GridBagConstraints;
@@ -10,8 +11,11 @@ import javascript.swing.JSPanel;
 import javascript.swing.JSSpinner;
 import javascript.swing.JSTabbedPane;
 import javascript.swing.SpinnerNumberModel;
+import javascript.swing.event.ChangeEvent;
+import javascript.swing.event.ChangeListener;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
+import static simulation.js.$Globals.$typeof;
 
 /**
  * The panel to create a new image
@@ -27,6 +31,7 @@ public class Z4NewImagePanel extends JSTabbedPane {
   private final JSLabel dimensionIN = new JSLabel();
   private final Z4FillingPanel fillingPanel = new Z4FillingPanel();
 
+  private final Array<ChangeListener> listeners = new Array<>();
   /**
    * Creates the object
    */
@@ -108,6 +113,8 @@ public class Z4NewImagePanel extends JSTabbedPane {
     this.dimensionMM.setText(new Number(dimWIN * 25.4).toFixed(2) + " \u2716 " + new Number(dimHIN * 25.4).toFixed(2) + " mm");
     this.dimensionIN.setText(new Number(dimWIN).toFixed(2) + " \u2716 " + new Number(dimHIN).toFixed(2) + " inch");
     this.fillingPanel.setSize((int) w, (int) h);
+    
+    this.onchange();
   }
 
   /**
@@ -140,5 +147,26 @@ public class Z4NewImagePanel extends JSTabbedPane {
    */
   public Object getSelectedFilling() {
     return this.fillingPanel.getSelectedFilling();
+  }
+  
+  /**
+   * Adds a change listener
+   *
+   * @param listener The listener
+   */
+  public void addChangeListener(ChangeListener listener) {
+    this.listeners.push(listener);
+  }
+  
+  private void onchange() {
+    ChangeEvent event = new ChangeEvent();
+
+    this.listeners.forEach(listener -> {
+      if ($typeof(listener, "function")) {
+        listener.$apply(event);
+      } else {
+        listener.stateChanged(event);
+      }
+    });
   }
 }
