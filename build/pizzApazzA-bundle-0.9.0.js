@@ -4642,6 +4642,8 @@ class Z4RibbonHistoryPanel extends JSPanel {
 
    z4savingInterval = 0;
 
+   timerID = -1;
+
   /**
    * Creates the object
    */
@@ -4649,12 +4651,12 @@ class Z4RibbonHistoryPanel extends JSPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonhistorypanel");
-    this.addButton(this.undo, Z4Translations.UNDO, false, 0, 0, "left", event => {
+    this.addButton(this.undo, Z4Translations.UNDO, 0, 0, "left", event => {
     });
-    this.addButton(this.redo, Z4Translations.REDO, false, 1, 0, "right", event => {
+    this.addButton(this.redo, Z4Translations.REDO, 1, 0, "right", event => {
     });
-    this.addButton(this.save, Z4Translations.SAVE, false, 2, 0, "", event => this.saveHistory("manual"));
-    this.addButton(this.consolidate, Z4Translations.CONSOLIDATE, false, 3, 0, "", event => {
+    this.addButton(this.save, Z4Translations.SAVE, 2, 0, "", event => this.saveHistory("manual"));
+    this.addButton(this.consolidate, Z4Translations.CONSOLIDATE, 3, 0, "", event => {
     });
     this.addVLine(4, 1);
     window.onunload = event => {
@@ -4667,6 +4669,9 @@ class Z4RibbonHistoryPanel extends JSPanel {
    * Resets the history
    */
    resetHistory() {
+    this.undo.setEnabled(false);
+    this.redo.setEnabled(false);
+    this.consolidate.setEnabled(false);
     if (this.dbName) {
       window.indexedDB.deleteDatabase(this.dbName);
     }
@@ -4699,6 +4704,8 @@ class Z4RibbonHistoryPanel extends JSPanel {
       if (policies.indexOf(this.z4historyManagement) !== -1) {
         this.canvas.toHistory(json => {
           this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event => {
+            this.undo.setEnabled(true);
+            this.consolidate.setEnabled(true);
             this.canvas.setChanged(false);
             this.currentIndex = event.target["result"];
             return null;
@@ -4740,11 +4747,26 @@ class Z4RibbonHistoryPanel extends JSPanel {
     this.z4savingDelay = z4savingDelay;
     this.z4savingInterval = z4savingInterval;
     this.save.setEnabled(z4historyManagement === "manual");
+    if (this.timerID !== -1) {
+      clearInterval(this.timerID);
+      this.timerID = -1;
+    }
+    switch(this.z4historyManagement) {
+      case "standard":
+        break;
+      case "timer":
+        this.timerID = setInterval(() => this.saveHistory("timer"), this.z4savingInterval);
+        break;
+      case "manual":
+        break;
+      case "tool":
+        break;
+    }
   }
 
-   addButton(button, text, enabled, gridx, gridy, border, listener) {
+   addButton(button, text, gridx, gridy, border, listener) {
     button.setText(text);
-    button.setEnabled(enabled);
+    button.setEnabled(false);
     button.setContentAreaFilled(false);
     button.addActionListener(listener);
     let constraints = new GridBagConstraints();
