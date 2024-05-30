@@ -4535,9 +4535,12 @@ class Z4RibbonFilePanel extends JSPanel {
     let projectName = new JSTextField();
     projectName.setText(this.canvas.getProjectName());
     panel.add(projectName, BorderLayout.CENTER);
+    let saveHistory = new JSCheckBox();
+    saveHistory.setText(Z4Translations.SAVE_HISTORY);
+    panel.add(saveHistory, BorderLayout.SOUTH);
     JSOptionPane.showInputDialog(panel, Z4Translations.SAVE, listener => projectName.addActionListener(event => listener(new ChangeEvent())), () => !!(projectName.getText()), response => {
       if (response === JSOptionPane.OK_OPTION) {
-        this.canvas.saveProject(projectName.getText(), true, apply);
+        this.canvas.saveProject(projectName.getText(), saveHistory.isSelected(), apply);
       }
     });
   }
@@ -6068,6 +6071,8 @@ class Z4Translations {
 
   static  EXPORT = "";
 
+  static  SAVE_HISTORY = "";
+
   static  PROJECT_NOT_SAVED_MESSAGE = "";
 
   // Ribbon Layer
@@ -6308,6 +6313,7 @@ class Z4Translations {
     Z4Translations.SAVE = "Save";
     Z4Translations.SAVE_PROJECT = "Save Project";
     Z4Translations.EXPORT = "Export";
+    Z4Translations.SAVE_HISTORY = "Save History";
     Z4Translations.PROJECT_NOT_SAVED_MESSAGE = "Project not saved, do you want to save your changes?";
     // Ribbon Layer
     Z4Translations.LAYER = "Layer";
@@ -6435,6 +6441,7 @@ class Z4Translations {
     Z4Translations.SAVE = "Salva";
     Z4Translations.SAVE_PROJECT = "Salva Progetto";
     Z4Translations.EXPORT = "Esporta";
+    Z4Translations.SAVE_HISTORY = "Salva Cronologia";
     Z4Translations.PROJECT_NOT_SAVED_MESSAGE = "Progetto non salvato, vuoi salvare le modifiche?";
     // Ribbon Layer
     Z4Translations.LAYER = "Livello";

@@ -11,6 +11,7 @@ import javascript.awt.GridBagLayout;
 import javascript.awt.Insets;
 import javascript.awt.event.ActionListener;
 import javascript.swing.JSButton;
+import javascript.swing.JSCheckBox;
 import javascript.swing.JSComponent;
 import javascript.swing.JSFileChooser;
 import javascript.swing.JSLabel;
@@ -203,9 +204,13 @@ public class Z4RibbonFilePanel extends JSPanel {
     projectName.setText(this.canvas.getProjectName());
     panel.add(projectName, BorderLayout.CENTER);
 
+    JSCheckBox saveHistory = new JSCheckBox();
+    saveHistory.setText(Z4Translations.SAVE_HISTORY);
+    panel.add(saveHistory, BorderLayout.SOUTH);
+    
     JSOptionPane.showInputDialog(panel, Z4Translations.SAVE, listener -> projectName.addActionListener(event -> listener.$apply(new ChangeEvent())), () -> $exists(projectName.getText()), response -> {
       if (response == JSOptionPane.OK_OPTION) {
-        this.canvas.saveProject(projectName.getText(), true, apply);
+        this.canvas.saveProject(projectName.getText(), saveHistory.isSelected(), apply);
       }
     });
   }

@@ -25,6 +25,7 @@ public class Z4Translations {
   public static String SAVE = "";
   public static String SAVE_PROJECT = "";
   public static String EXPORT = "";
+  public static String SAVE_HISTORY = "";
   public static String PROJECT_NOT_SAVED_MESSAGE = "";
 
   // Ribbon Layer
@@ -177,6 +178,7 @@ public class Z4Translations {
     Z4Translations.SAVE = "Save";
     Z4Translations.SAVE_PROJECT = "Save Project";
     Z4Translations.EXPORT = "Export";
+    Z4Translations.SAVE_HISTORY = "Save History";
     Z4Translations.PROJECT_NOT_SAVED_MESSAGE = "Project not saved, do you want to save your changes?";
 
     // Ribbon Layer
@@ -321,6 +323,7 @@ public class Z4Translations {
     Z4Translations.SAVE = "Salva";
     Z4Translations.SAVE_PROJECT = "Salva Progetto";
     Z4Translations.EXPORT = "Esporta";
+    Z4Translations.SAVE_HISTORY = "Salva Cronologia";
     Z4Translations.PROJECT_NOT_SAVED_MESSAGE = "Progetto non salvato, vuoi salvare le modifiche?";
 
     // Ribbon Layer
