@@ -88,17 +88,28 @@ class Z4RibbonHistoryPanel extends JSPanel {
    saveHistory(policies) {
     if (this.canvas.isChanged()) {
       if (policies.indexOf(this.z4historyManagement) !== -1) {
-        this.canvas.toHistory(json => {
-          this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event => {
-            this.undo.setEnabled(true);
-            this.redo.setEnabled(false);
-            this.consolidate.setEnabled(true);
-            // eliminare tutte le righe superiori a currentKey
-            this.canvas.setChanged(false);
-            this.currentKey = event.target["result"];
-            return null;
-          };
-        });
+        let objectStore = this.database.transaction("history", "readwrite").objectStore("history");
+        objectStore.openCursor(IDBKeyRange.lowerBound(this.currentKey, true)).onsuccess = event2 => {
+          let cursor = event2.target["result"];
+          if (cursor) {
+            cursor.delete().onsuccess = event3 => {
+              cursor.continue();
+              return null;
+            };
+          } else {
+            this.canvas.toHistory(json => {
+              objectStore.add(json).onsuccess = event => {
+                this.undo.setEnabled(true);
+                this.redo.setEnabled(false);
+                this.consolidate.setEnabled(true);
+                this.canvas.setChanged(false);
+                this.currentKey = event.target["result"];
+                return null;
+              };
+            });
+          }
+          return null;
+        };
       }
     }
   }
@@ -124,7 +135,7 @@ class Z4RibbonHistoryPanel extends JSPanel {
    * @param apply The function to apply
    */
    iterateHistoryBuffer(apply) {
-    this.database.transaction("history").objectStore("history").openCursor().onsuccess = event => {
+    this.database.transaction("history", "readonly").objectStore("history").openCursor().onsuccess = event => {
       let cursor = event.target["result"];
       if (cursor) {
         apply(cursor.key, cursor["value"], () => cursor.continue());
@@ -142,11 +153,11 @@ class Z4RibbonHistoryPanel extends JSPanel {
    */
    setCurrentKey(currentKey) {
     this.currentKey = currentKey;
-    this.database.transaction("history").objectStore("history").openCursor(IDBKeyRange.upperBound(this.currentKey, true)).onsuccess = event => {
+    this.database.transaction("history", "readonly").objectStore("history").openCursor(IDBKeyRange.upperBound(this.currentKey, true)).onsuccess = event => {
       this.undo.setEnabled(!!(event.target["result"]));
       return null;
     };
-    this.database.transaction("history").objectStore("history").openCursor(IDBKeyRange.lowerBound(this.currentKey, true)).onsuccess = event => {
+    this.database.transaction("history", "readonly").objectStore("history").openCursor(IDBKeyRange.lowerBound(this.currentKey, true)).onsuccess = event => {
       this.redo.setEnabled(!!(event.target["result"]));
       return null;
     };

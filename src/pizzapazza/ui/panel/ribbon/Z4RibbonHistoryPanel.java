@@ -3,6 +3,7 @@ package pizzapazza.ui.panel.ribbon;
 import static def.dom.Globals.clearInterval;
 import def.dom.IDBDatabase;
 import def.dom.IDBKeyRange;
+import def.dom.IDBObjectStore;
 import def.js.Date;
 import javascript.awt.GridBagConstraints;
 import javascript.awt.GridBagLayout;
@@ -113,19 +114,29 @@ public class Z4RibbonHistoryPanel extends JSPanel {
   public void saveHistory(String policies) {
     if (this.canvas.isChanged()) {
       if (policies.indexOf(this.z4historyManagement) != -1) {
-        this.canvas.toHistory(json -> {
-          this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event -> {
-            this.undo.setEnabled(true);
-            this.redo.setEnabled(false);
-            this.consolidate.setEnabled(true);
-            
-            //eliminare tutte le righe superiori a currentKey
-            
-            this.canvas.setChanged(false);
-            this.currentKey = event.target.$get("result");
-            return null;
-          };
-        });
+        IDBObjectStore objectStore = this.database.transaction("history", "readwrite").objectStore("history");
+        objectStore.openCursor(IDBKeyRange.lowerBound(this.currentKey, true)).onsuccess = event2 -> {
+          $IDBCursor cursor = ($IDBCursor) event2.target.$get("result");
+          if ($exists(cursor)) {
+            cursor.delete().onsuccess = event3 -> {
+              cursor.$continue();
+              return null;
+            };
+          } else {
+            this.canvas.toHistory(json -> {
+              objectStore.add(json).onsuccess = event -> {
+                this.undo.setEnabled(true);
+                this.redo.setEnabled(false);
+                this.consolidate.setEnabled(true);
+
+                this.canvas.setChanged(false);
+                this.currentKey = event.target.$get("result");
+                return null;
+              };
+            });
+          }
+          return null;
+        };
       }
     }
   }
@@ -151,7 +162,7 @@ public class Z4RibbonHistoryPanel extends JSPanel {
    * @param apply The function to apply
    */
   public void iterateHistoryBuffer($Apply_3_Void<Integer, $Object, $Apply_0_Void> apply) {
-    this.database.transaction("history").objectStore("history").openCursor().onsuccess = event -> {
+    this.database.transaction("history", "readonly").objectStore("history").openCursor().onsuccess = event -> {
       $IDBCursor cursor = ($IDBCursor) event.target.$get("result");
       if ($exists(cursor)) {
         apply.$apply((Integer) cursor.key, cursor.$get("value"), () -> cursor.$continue());
@@ -170,12 +181,12 @@ public class Z4RibbonHistoryPanel extends JSPanel {
   public void setCurrentKey(int currentKey) {
     this.currentKey = currentKey;
 
-    this.database.transaction("history").objectStore("history").openCursor(IDBKeyRange.upperBound(this.currentKey, true)).onsuccess = event -> {
+    this.database.transaction("history", "readonly").objectStore("history").openCursor(IDBKeyRange.upperBound(this.currentKey, true)).onsuccess = event -> {
       this.undo.setEnabled($exists(event.target.$get("result")));
       return null;
     };
 
-    this.database.transaction("history").objectStore("history").openCursor(IDBKeyRange.lowerBound(this.currentKey, true)).onsuccess = event -> {
+    this.database.transaction("history", "readonly").objectStore("history").openCursor(IDBKeyRange.lowerBound(this.currentKey, true)).onsuccess = event -> {
       this.redo.setEnabled($exists(event.target.$get("result")));
       return null;
     };
