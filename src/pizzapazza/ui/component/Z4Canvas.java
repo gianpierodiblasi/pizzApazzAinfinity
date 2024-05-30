@@ -142,7 +142,11 @@ public class Z4Canvas extends JSComponent {
     this.ribbonLayerPanel.reset();
     this.ribbonLayerPanel.addLayerPreview(this.paper.getLayerAt(this.paper.getLayersCount() - 1));
 
-    this.afterCreate("", width, height);
+    this.ribbonHistoryPanel.resetHistory(() -> {
+      this.afterCreate("", width, height);
+      this.toHistory(json -> this.ribbonHistoryPanel.addHistory(json, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
+    });
+
   }
 
   /**
@@ -184,7 +188,11 @@ public class Z4Canvas extends JSComponent {
       this.ribbonLayerPanel.reset();
       this.ribbonLayerPanel.addLayerPreview(this.paper.getLayerAt(this.paper.getLayersCount() - 1));
 
-      this.afterCreate(projectName, (int) image.width, (int) image.height);
+      this.ribbonHistoryPanel.resetHistory(() -> {
+        this.afterCreate(projectName, (int) image.width, (int) image.height);
+        this.toHistory(json -> this.ribbonHistoryPanel.addHistory(json, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
+      });
+
       return null;
     };
 
@@ -194,8 +202,6 @@ public class Z4Canvas extends JSComponent {
 
   private void afterCreate(String projectName, int width, int height) {
     this.projectName = projectName;
-
-    this.ribbonHistoryPanel.resetHistory();
 
     this.statusPanel.setProjectName(projectName);
     this.statusPanel.setProjectSize(width, height);
@@ -222,17 +228,19 @@ public class Z4Canvas extends JSComponent {
         zip.file("manifest.json").async("string", null).then(str -> {
           this.paper.reset();
           this.ribbonLayerPanel.reset();
+          this.ribbonHistoryPanel.resetHistory(() -> {
+            $Object json = ($Object) JSON.parse("" + str);
+            this.width = json.$get("width");
+            this.height = json.$get("height");
 
-          $Object json = ($Object) JSON.parse("" + str);
-          this.width = json.$get("width");
-          this.height = json.$get("height");
-
-          this.openLayer(zip, json, json.$get("layers"), 0);
+            this.openLayer(zip, json, json.$get("layers"), 0);
+          });
         });
       });
     });
   }
 
+  @SuppressWarnings("unchecked")
   private void openLayer($JSZip zip, $Object json, Array<$Object> layers, int index) {
     zip.file("layers/layer" + index + ".png").async("blob", metadata -> Z4UI.setPleaseWaitProgressBarValue(metadata.$get("percent"))).then(blob -> {
       $Image image = ($Image) document.createElement("img");
@@ -245,16 +253,51 @@ public class Z4Canvas extends JSComponent {
         layer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
         this.ribbonLayerPanel.addLayerPreview(layer);
 
-        if (index + 1 == layers.length) {
-          this.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
-          Z4UI.pleaseWaitCompleted();
-        } else {
+        if (index + 1 < layers.length) {
           this.openLayer(zip, json, layers, index + 1);
+        } else if ($exists(json.$get("history"))) {
+          this.jsonToHistory(zip, json, 0, json.$get("currentKeyHistory"), 0);
+        } else {
+          this.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
+          this.toHistory(json2 -> this.ribbonHistoryPanel.addHistory(json2, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
+          Z4UI.pleaseWaitCompleted();
         }
         return null;
       };
 
       image.src = URL.createObjectURL(blob);
+    });
+  }
+
+  private void jsonToHistory($JSZip zip, $Object json, int index, int previousCurrentKey, int newCurrentKey) {
+    Array<Integer> history = json.$get("history");
+    int key = history.$get(index);
+    String folder = "history/history_" + key + "/";
+
+    zip.file(folder + "manifest.json").async("string", null).then(str -> {
+      $Object layerJSON = ($Object) JSON.parse("" + str);
+      this.layerToHistory(zip, json, index, previousCurrentKey, newCurrentKey, folder, layerJSON, 0, key);
+    });
+  }
+
+  @SuppressWarnings({"unchecked", "null"})
+  private void layerToHistory($JSZip zip, $Object json, int index, int previousCurrentKey, int newCurrentKey, String folder, $Object layerJSON, int layerIndex, int historyKey) {
+    zip.file(folder + "layers/layer" + layerIndex + ".png").async("blob", metadata -> Z4UI.setPleaseWaitProgressBarValue(metadata.$get("percent"))).then(blob -> {
+      Array<$Object> layers = layerJSON.$get("layers");
+      $Object layer = layers.$get(layerIndex);
+      layer.$set("data", blob);
+
+      if (layerIndex + 1 < layers.length) {
+        this.layerToHistory(zip, json, index, previousCurrentKey, newCurrentKey, folder, layerJSON, layerIndex + 1, historyKey);
+      } else if (index + 1 < ((Array<Integer>) json.$get("history")).length) {
+        this.ribbonHistoryPanel.addHistory(layerJSON, currentKey -> this.jsonToHistory(zip, json, index + 1, previousCurrentKey, previousCurrentKey == historyKey ? currentKey : newCurrentKey), true);
+      } else {
+        this.ribbonHistoryPanel.addHistory(layerJSON, currentKey -> {
+          this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey == historyKey ? currentKey : newCurrentKey);
+          this.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
+          Z4UI.pleaseWaitCompleted();
+        }, true);
+      }
     });
   }
 

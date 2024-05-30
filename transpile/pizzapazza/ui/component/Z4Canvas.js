@@ -106,7 +106,10 @@ class Z4Canvas extends JSComponent {
     this.height = height;
     this.ribbonLayerPanel.reset();
     this.ribbonLayerPanel.addLayerPreview(this.paper.getLayerAt(this.paper.getLayersCount() - 1));
-    this.afterCreate("", width, height);
+    this.ribbonHistoryPanel.resetHistory(() => {
+      this.afterCreate("", width, height);
+      this.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
+    });
   }
 
   /**
@@ -143,7 +146,10 @@ class Z4Canvas extends JSComponent {
       this.height = image.height;
       this.ribbonLayerPanel.reset();
       this.ribbonLayerPanel.addLayerPreview(this.paper.getLayerAt(this.paper.getLayersCount() - 1));
-      this.afterCreate(projectName, image.width, image.height);
+      this.ribbonHistoryPanel.resetHistory(() => {
+        this.afterCreate(projectName, image.width, image.height);
+        this.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
+      });
       return null;
     };
     image.src = url;
@@ -152,7 +158,6 @@ class Z4Canvas extends JSComponent {
 
    afterCreate(projectName, width, height) {
     this.projectName = projectName;
-    this.ribbonHistoryPanel.resetHistory();
     this.statusPanel.setProjectName(projectName);
     this.statusPanel.setProjectSize(width, height);
     this.statusPanel.setZoom(1);
@@ -175,10 +180,12 @@ class Z4Canvas extends JSComponent {
         zip.file("manifest.json").async("string", null).then(str => {
           this.paper.reset();
           this.ribbonLayerPanel.reset();
-          let json = JSON.parse("" + str);
-          this.width = json["width"];
-          this.height = json["height"];
-          this.openLayer(zip, json, json["layers"], 0);
+          this.ribbonHistoryPanel.resetHistory(() => {
+            let json = JSON.parse("" + str);
+            this.width = json["width"];
+            this.height = json["height"];
+            this.openLayer(zip, json, json["layers"], 0);
+          });
         });
       });
     });
@@ -194,15 +201,47 @@ class Z4Canvas extends JSComponent {
         layer.setCompositeOperation(layers[index]["compositeOperation"]);
         layer.move(layers[index]["offsetX"], layers[index]["offsetY"]);
         this.ribbonLayerPanel.addLayerPreview(layer);
-        if (index + 1 === layers.length) {
-          this.afterCreate(json["projectName"], json["width"], json["height"]);
-          Z4UI.pleaseWaitCompleted();
-        } else {
+        if (index + 1 < layers.length) {
           this.openLayer(zip, json, layers, index + 1);
+        } else if (json["history"]) {
+          this.jsonToHistory(zip, json, 0, json["currentKeyHistory"], 0);
+        } else {
+          this.afterCreate(json["projectName"], json["width"], json["height"]);
+          this.toHistory(json2 => this.ribbonHistoryPanel.addHistory(json2, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
+          Z4UI.pleaseWaitCompleted();
         }
         return null;
       };
       image.src = URL.createObjectURL(blob);
+    });
+  }
+
+   jsonToHistory(zip, json, index, previousCurrentKey, newCurrentKey) {
+    let history = json["history"];
+    let key = history[index];
+    let folder = "history/history_" + key + "/";
+    zip.file(folder + "manifest.json").async("string", null).then(str => {
+      let layerJSON = JSON.parse("" + str);
+      this.layerToHistory(zip, json, index, previousCurrentKey, newCurrentKey, folder, layerJSON, 0, key);
+    });
+  }
+
+   layerToHistory(zip, json, index, previousCurrentKey, newCurrentKey, folder, layerJSON, layerIndex, historyKey) {
+    zip.file(folder + "layers/layer" + layerIndex + ".png").async("blob", metadata => Z4UI.setPleaseWaitProgressBarValue(metadata["percent"])).then(blob => {
+      let layers = layerJSON["layers"];
+      let layer = layers[layerIndex];
+      layer["data"] = blob;
+      if (layerIndex + 1 < layers.length) {
+        this.layerToHistory(zip, json, index, previousCurrentKey, newCurrentKey, folder, layerJSON, layerIndex + 1, historyKey);
+      } else if (index + 1 < (json["history"]).length) {
+        this.ribbonHistoryPanel.addHistory(layerJSON, currentKey => this.jsonToHistory(zip, json, index + 1, previousCurrentKey, previousCurrentKey === historyKey ? currentKey : newCurrentKey), true);
+      } else {
+        this.ribbonHistoryPanel.addHistory(layerJSON, currentKey => {
+          this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey === historyKey ? currentKey : newCurrentKey);
+          this.afterCreate(json["projectName"], json["width"], json["height"]);
+          Z4UI.pleaseWaitCompleted();
+        }, true);
+      }
     });
   }
 

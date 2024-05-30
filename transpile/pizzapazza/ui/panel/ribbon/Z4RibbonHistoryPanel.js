@@ -54,8 +54,10 @@ class Z4RibbonHistoryPanel extends JSPanel {
 
   /**
    * Resets the history
+   *
+   * @param apply The function to call after reset
    */
-   resetHistory() {
+   resetHistory(apply) {
     this.clearIntervals();
     this.undo.setEnabled(false);
     this.redo.setEnabled(false);
@@ -69,13 +71,8 @@ class Z4RibbonHistoryPanel extends JSPanel {
       let options = new Object();
       options["autoIncrement"] = true;
       this.database.createObjectStore("history", options).transaction.oncomplete = event2 => {
-        this.canvas.toHistory(json => {
-          this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event3 => {
-            this.setIntervals();
-            this.currentKey = event3.target["result"];
-            return null;
-          };
-        });
+        this.setIntervals();
+        apply();
         return null;
       };
       return null;
@@ -94,7 +91,9 @@ class Z4RibbonHistoryPanel extends JSPanel {
         this.canvas.toHistory(json => {
           this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event => {
             this.undo.setEnabled(true);
+            this.redo.setEnabled(false);
             this.consolidate.setEnabled(true);
+            // eliminare tutte le righe superiori a currentKey
             this.canvas.setChanged(false);
             this.currentKey = event.target["result"];
             return null;
@@ -102,6 +101,21 @@ class Z4RibbonHistoryPanel extends JSPanel {
         });
       }
     }
+  }
+
+  /**
+   * Adds an element to the history
+   *
+   * @param json The element
+   * @param apply The function to call after the add
+   * @param consolidate true to enable the consolidate button, false otherwise
+   */
+   addHistory(json, apply, consolidate) {
+    this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event => {
+      this.consolidate.setEnabled(consolidate);
+      apply(event.target["result"]);
+      return null;
+    };
   }
 
   /**
@@ -117,6 +131,23 @@ class Z4RibbonHistoryPanel extends JSPanel {
       } else {
         apply(-1, null, null);
       }
+      return null;
+    };
+  }
+
+  /**
+   * Sets the current key in the history buffer
+   *
+   * @param currentKey The current key in the history buffer
+   */
+   setCurrentKey(currentKey) {
+    this.currentKey = currentKey;
+    this.database.transaction("history").objectStore("history").openCursor(IDBKeyRange.upperBound(this.currentKey, true)).onsuccess = event => {
+      this.undo.setEnabled(!!(event.target["result"]));
+      return null;
+    };
+    this.database.transaction("history").objectStore("history").openCursor(IDBKeyRange.lowerBound(this.currentKey, true)).onsuccess = event => {
+      this.redo.setEnabled(!!(event.target["result"]));
       return null;
     };
   }
