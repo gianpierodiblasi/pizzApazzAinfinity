@@ -4771,8 +4771,7 @@ class Z4RibbonHistoryPanel extends JSPanel {
    saveHistory(policies) {
     if (this.canvas.isChanged()) {
       if (policies.indexOf(this.z4historyManagement) !== -1) {
-        let objectStore = this.database.transaction("history", "readwrite").objectStore("history");
-        objectStore.openCursor(IDBKeyRange.lowerBound(this.currentKey, true)).onsuccess = event2 => {
+        this.database.transaction("history", "readwrite").objectStore("history").openCursor(IDBKeyRange.lowerBound(this.currentKey, true)).onsuccess = event2 => {
           let cursor = event2.target["result"];
           if (cursor) {
             cursor.delete().onsuccess = event3 => {
@@ -4781,7 +4780,7 @@ class Z4RibbonHistoryPanel extends JSPanel {
             };
           } else {
             this.canvas.toHistory(json => {
-              objectStore.add(json).onsuccess = event => {
+              this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event => {
                 this.undo.setEnabled(true);
                 this.redo.setEnabled(false);
                 this.consolidate.setEnabled(true);
@@ -5095,7 +5094,9 @@ class Z4RibbonLayerPanel extends JSPanel {
   }
 
    addFromColor() {
+    let canvasSize = this.canvas.getSize();
     let panel = new Z4NewImagePanel();
+    panel.setSelectedSize(canvasSize.width, canvasSize.height);
     JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => {
     }, () => true, response => {
       if (response === JSOptionPane.OK_OPTION) {
@@ -5741,40 +5742,42 @@ class Z4FillingPanel extends JSPanel {
    * @param height The height
    */
    setSize(width, height) {
-    this.width = width;
-    this.height = height;
-    this.cardFillerSelectors.forEach((card, index, array) => {
-      switch(card) {
-        case "FLAT":
-          break;
-        case "LINEAR":
-        case "VERTEX":
-        case "CONIC":
-        case "SPIRAL":
-        case "BEZIER":
-        case "SINUSOIDAL":
-        case "TEXTURE":
-          if (this.cardFillerPanels[index]) {
-            (this.cardFillerPanels[index]).setSize(width, height);
-          }
-          break;
-        case "BIGRADIENT":
-          break;
-      }
-    });
-    this.cardColorSelectors.forEach((card, index, array) => {
-      switch(card) {
-        case "FLAT":
-          break;
-        case "GRADIENT":
-          break;
-        case "NONE":
-          break;
-        case "BIGRADIENT":
-          (this.cardColorPanels[index]).setSize(width, height);
-          break;
-      }
-    });
+    if (width > 0 && height > 0) {
+      this.width = width;
+      this.height = height;
+      this.cardFillerSelectors.forEach((card, index, array) => {
+        switch(card) {
+          case "FLAT":
+            break;
+          case "LINEAR":
+          case "VERTEX":
+          case "CONIC":
+          case "SPIRAL":
+          case "BEZIER":
+          case "SINUSOIDAL":
+          case "TEXTURE":
+            if (this.cardFillerPanels[index]) {
+              (this.cardFillerPanels[index]).setSize(width, height);
+            }
+            break;
+          case "BIGRADIENT":
+            break;
+        }
+      });
+      this.cardColorSelectors.forEach((card, index, array) => {
+        switch(card) {
+          case "FLAT":
+            break;
+          case "GRADIENT":
+            break;
+          case "NONE":
+            break;
+          case "BIGRADIENT":
+            (this.cardColorPanels[index]).setSize(width, height);
+            break;
+        }
+      });
+    }
   }
 }
 /**
@@ -5868,6 +5871,18 @@ class Z4NewImagePanel extends JSTabbedPane {
     this.dimensionMM.setText(new Number(dimWIN * 25.4).toFixed(2) + " \u2716 " + new Number(dimHIN * 25.4).toFixed(2) + " mm");
     this.dimensionIN.setText(new Number(dimWIN).toFixed(2) + " \u2716 " + new Number(dimHIN).toFixed(2) + " inch");
     this.fillingPanel.setSize(w, h);
+  }
+
+  /**
+   * Sets the selected size
+   *
+   * @param width The selected width
+   * @param height The selected height
+   */
+   setSelectedSize(width, height) {
+    this.width.setValue(width);
+    this.height.setValue(height);
+    this.fillingPanel.setSize(width, height);
   }
 
   /**

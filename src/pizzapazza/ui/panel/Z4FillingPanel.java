@@ -271,41 +271,43 @@ public class Z4FillingPanel extends JSPanel {
    * @param height The height
    */
   public void setSize(int width, int height) {
-    this.width = width;
-    this.height = height;
+    if (width > 0 && height > 0) {
+      this.width = width;
+      this.height = height;
 
-    this.cardFillerSelectors.forEach((card, index, array) -> {
-      switch (card) {
-        case "FLAT":
-          break;
-        case "LINEAR":
-        case "VERTEX":
-        case "CONIC":
-        case "SPIRAL":
-        case "BEZIER":
-        case "SINUSOIDAL":
-        case "TEXTURE":
-          if ($exists(this.cardFillerPanels.$get(index))) {
-            ((Z4AbstractFillerPanel) this.cardFillerPanels.$get(index)).setSize(width, height);
-          }
-          break;
-        case "BIGRADIENT":
-          break;
-      }
-    });
+      this.cardFillerSelectors.forEach((card, index, array) -> {
+        switch (card) {
+          case "FLAT":
+            break;
+          case "LINEAR":
+          case "VERTEX":
+          case "CONIC":
+          case "SPIRAL":
+          case "BEZIER":
+          case "SINUSOIDAL":
+          case "TEXTURE":
+            if ($exists(this.cardFillerPanels.$get(index))) {
+              ((Z4AbstractFillerPanel) this.cardFillerPanels.$get(index)).setSize(width, height);
+            }
+            break;
+          case "BIGRADIENT":
+            break;
+        }
+      });
 
-    this.cardColorSelectors.forEach((card, index, array) -> {
-      switch (card) {
-        case "FLAT":
-          break;
-        case "GRADIENT":
-          break;
-        case "NONE":
-          break;
-        case "BIGRADIENT":
-          ((Z4BiGradientColorPanel) this.cardColorPanels.$get(index)).setSize(width, height);
-          break;
-      }
-    });
+      this.cardColorSelectors.forEach((card, index, array) -> {
+        switch (card) {
+          case "FLAT":
+            break;
+          case "GRADIENT":
+            break;
+          case "NONE":
+            break;
+          case "BIGRADIENT":
+            ((Z4BiGradientColorPanel) this.cardColorPanels.$get(index)).setSize(width, height);
+            break;
+        }
+      });
+    }
   }
 }

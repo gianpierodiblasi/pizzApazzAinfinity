@@ -3,7 +3,6 @@ package pizzapazza.ui.panel.ribbon;
 import static def.dom.Globals.clearInterval;
 import def.dom.IDBDatabase;
 import def.dom.IDBKeyRange;
-import def.dom.IDBObjectStore;
 import def.js.Date;
 import javascript.awt.GridBagConstraints;
 import javascript.awt.GridBagLayout;
@@ -114,8 +113,7 @@ public class Z4RibbonHistoryPanel extends JSPanel {
   public void saveHistory(String policies) {
     if (this.canvas.isChanged()) {
       if (policies.indexOf(this.z4historyManagement) != -1) {
-        IDBObjectStore objectStore = this.database.transaction("history", "readwrite").objectStore("history");
-        objectStore.openCursor(IDBKeyRange.lowerBound(this.currentKey, true)).onsuccess = event2 -> {
+        this.database.transaction("history", "readwrite").objectStore("history").openCursor(IDBKeyRange.lowerBound(this.currentKey, true)).onsuccess = event2 -> {
           $IDBCursor cursor = ($IDBCursor) event2.target.$get("result");
           if ($exists(cursor)) {
             cursor.delete().onsuccess = event3 -> {
@@ -124,7 +122,7 @@ public class Z4RibbonHistoryPanel extends JSPanel {
             };
           } else {
             this.canvas.toHistory(json -> {
-              objectStore.add(json).onsuccess = event -> {
+              this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event -> {
                 this.undo.setEnabled(true);
                 this.redo.setEnabled(false);
                 this.consolidate.setEnabled(true);

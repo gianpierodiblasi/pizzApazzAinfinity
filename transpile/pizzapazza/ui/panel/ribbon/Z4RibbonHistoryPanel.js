@@ -88,8 +88,7 @@ class Z4RibbonHistoryPanel extends JSPanel {
    saveHistory(policies) {
     if (this.canvas.isChanged()) {
       if (policies.indexOf(this.z4historyManagement) !== -1) {
-        let objectStore = this.database.transaction("history", "readwrite").objectStore("history");
-        objectStore.openCursor(IDBKeyRange.lowerBound(this.currentKey, true)).onsuccess = event2 => {
+        this.database.transaction("history", "readwrite").objectStore("history").openCursor(IDBKeyRange.lowerBound(this.currentKey, true)).onsuccess = event2 => {
           let cursor = event2.target["result"];
           if (cursor) {
             cursor.delete().onsuccess = event3 => {
@@ -98,7 +97,7 @@ class Z4RibbonHistoryPanel extends JSPanel {
             };
           } else {
             this.canvas.toHistory(json => {
-              objectStore.add(json).onsuccess = event => {
+              this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event => {
                 this.undo.setEnabled(true);
                 this.redo.setEnabled(false);
                 this.consolidate.setEnabled(true);

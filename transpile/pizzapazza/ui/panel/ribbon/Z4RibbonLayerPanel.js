@@ -132,7 +132,9 @@ class Z4RibbonLayerPanel extends JSPanel {
   }
 
    addFromColor() {
+    let canvasSize = this.canvas.getSize();
     let panel = new Z4NewImagePanel();
+    panel.setSelectedSize(canvasSize.width, canvasSize.height);
     JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => {
     }, () => true, response => {
       if (response === JSOptionPane.OK_OPTION) {

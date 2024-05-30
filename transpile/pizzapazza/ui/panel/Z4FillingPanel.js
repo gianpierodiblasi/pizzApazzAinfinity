@@ -226,39 +226,41 @@ class Z4FillingPanel extends JSPanel {
    * @param height The height
    */
    setSize(width, height) {
-    this.width = width;
-    this.height = height;
-    this.cardFillerSelectors.forEach((card, index, array) => {
-      switch(card) {
-        case "FLAT":
-          break;
-        case "LINEAR":
-        case "VERTEX":
-        case "CONIC":
-        case "SPIRAL":
-        case "BEZIER":
-        case "SINUSOIDAL":
-        case "TEXTURE":
-          if (this.cardFillerPanels[index]) {
-            (this.cardFillerPanels[index]).setSize(width, height);
-          }
-          break;
-        case "BIGRADIENT":
-          break;
-      }
-    });
-    this.cardColorSelectors.forEach((card, index, array) => {
-      switch(card) {
-        case "FLAT":
-          break;
-        case "GRADIENT":
-          break;
-        case "NONE":
-          break;
-        case "BIGRADIENT":
-          (this.cardColorPanels[index]).setSize(width, height);
-          break;
-      }
-    });
+    if (width > 0 && height > 0) {
+      this.width = width;
+      this.height = height;
+      this.cardFillerSelectors.forEach((card, index, array) => {
+        switch(card) {
+          case "FLAT":
+            break;
+          case "LINEAR":
+          case "VERTEX":
+          case "CONIC":
+          case "SPIRAL":
+          case "BEZIER":
+          case "SINUSOIDAL":
+          case "TEXTURE":
+            if (this.cardFillerPanels[index]) {
+              (this.cardFillerPanels[index]).setSize(width, height);
+            }
+            break;
+          case "BIGRADIENT":
+            break;
+        }
+      });
+      this.cardColorSelectors.forEach((card, index, array) => {
+        switch(card) {
+          case "FLAT":
+            break;
+          case "GRADIENT":
+            break;
+          case "NONE":
+            break;
+          case "BIGRADIENT":
+            (this.cardColorPanels[index]).setSize(width, height);
+            break;
+        }
+      });
+    }
   }
 }
