@@ -37,6 +37,7 @@ public class Z4Layer {
   private String compositeOperation = "source-over";
   private int width;
   private int height;
+  private boolean hidden = false;
 
   /**
    * Creates the object
@@ -177,6 +178,23 @@ public class Z4Layer {
   }
 
   /**
+   * Sets the hidden property
+   *
+   * @param hidden true to hide the layer, false otherwise
+   */
+  public void setHidden(boolean hidden) {
+    this.hidden = hidden;
+  }
+
+  /**
+   * Checks if the hidden property is set
+   * @return true if the hidden property is set, false otherwise 
+   */
+  public boolean isHidden() {
+    return hidden;
+  }
+
+  /**
    * Moves a layer
    *
    * @param offsetX The X offset
@@ -228,13 +246,16 @@ public class Z4Layer {
    *
    * @param ctx The context used to draw the layer
    * @param noOffset true to not use the offset, false otherwise
+   * @param noHidden true to not use the hidden property, false otherwise
    */
-  public void draw($CanvasRenderingContext2D ctx, boolean noOffset) {
-    ctx.save();
-    ctx.globalAlpha = this.opacity;
-    ctx.globalCompositeOperation = this.compositeOperation;
-    ctx.drawImage(this.offscreen, noOffset ? 0 : this.offsetX, noOffset ? 0 : this.offsetY);
-    ctx.restore();
+  public void draw($CanvasRenderingContext2D ctx, boolean noOffset, boolean noHidden) {
+    if (noHidden || !this.hidden) {
+      ctx.save();
+      ctx.globalAlpha = this.opacity;
+      ctx.globalCompositeOperation = this.compositeOperation;
+      ctx.drawImage(this.offscreen, noOffset ? 0 : this.offsetX, noOffset ? 0 : this.offsetY);
+      ctx.restore();
+    }
   }
 
   /**
@@ -328,7 +349,7 @@ public class Z4Layer {
     int temp = this.width;
     this.width = this.height;
     this.height = temp;
-    
+
     this.blob = null;
   }
 }

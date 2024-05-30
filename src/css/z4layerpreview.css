@@ -5,7 +5,7 @@
 
   border: 2px solid var(--main-action-bgcolor);
   border-radius: var(--roundness);
-  
+
   margin-right: 2px;
 }
 .z4layerpreview:has(summary:focus) {
@@ -46,6 +46,13 @@
 .z4layerpreview summary canvas {
   border: 1px solid var(--main-action-bgcolor);
   background-image: url(../image/chessboard.png);
+}
+
+.z4layerpreview summary button {
+  pointer-events: auto;
+  border: none;
+  padding: 0px 4px;
+  max-height: 13px;
 }
 
 .z4layerpreview .z4layerpreview-editor {

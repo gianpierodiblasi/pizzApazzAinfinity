@@ -86,9 +86,34 @@ class Z4LayerPreview extends JSComponent {
     this.name.getStyle().width = Z4LayerPreview.PREVIEW_SIZE + "px";
     this.preview.setAttribute("width", "" + Z4LayerPreview.PREVIEW_SIZE);
     this.preview.setAttribute("height", "" + Z4LayerPreview.PREVIEW_SIZE);
-    this.summary.setLayout(new BorderLayout(0, 0));
-    this.summary.add(this.name, BorderLayout.NORTH);
-    this.summary.add(this.preview, BorderLayout.CENTER);
+    this.summary.setLayout(new GridBagLayout());
+    this.addComponent(this.summary, this.name, 1, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, null);
+    this.addComponent(this.summary, this.preview, 1, 1, 1, 2, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, null);
+    let button = new JSButton();
+    button.setText("\uD83D\uDC41");
+    button.setContentAreaFilled(false);
+    this.addComponent(this.summary, button, 0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    button = new JSButton();
+    // \u2611
+    button.setText("\u2610");
+    button.setContentAreaFilled(false);
+    this.addComponent(this.summary, button, 2, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    button = new JSButton();
+    button.setText("\u00A0\u25C0");
+    button.setContentAreaFilled(false);
+    this.addComponent(this.summary, button, 0, 1, 1, 1, 0, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    button = new JSButton();
+    button.setText("|\u25C0");
+    button.setContentAreaFilled(false);
+    this.addComponent(this.summary, button, 0, 2, 1, 1, 0, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    button = new JSButton();
+    button.setText("\u25B6\u00A0");
+    button.setContentAreaFilled(false);
+    this.addComponent(this.summary, button, 2, 1, 1, 1, 0, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    button = new JSButton();
+    button.setText("\u25B6|");
+    button.setContentAreaFilled(false);
+    this.addComponent(this.summary, button, 2, 2, 1, 1, 0, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
     this.appendNodeChild(document.createElement("summary"));
     this.appendChildInTree("summary", this.summary);
     this.editor.cssAddClass("z4layerpreview-editor");
@@ -134,7 +159,7 @@ class Z4LayerPreview extends JSComponent {
     this.offsetYSlider.getStyle().minWidth = "1.5rem";
     this.offsetYSlider.addChangeListener(event => this.onChange(false, this.offsetYSlider.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
     this.addComponent(panelBasic, this.offsetYSlider, 4, 2, 1, 4, 0, 1, GridBagConstraints.NORTH, GridBagConstraints.NONE, null);
-    let button = new JSButton();
+    button = new JSButton();
     button.setText(Z4Translations.DUPLICATE);
     button.addActionListener(event => {
       this.changed = true;
@@ -311,7 +336,7 @@ class Z4LayerPreview extends JSComponent {
     if (this.layer) {
       this.ctx.save();
       this.ctx.scale(this.zoom, this.zoom);
-      this.layer.draw(this.ctx, true);
+      this.layer.draw(this.ctx, true, true);
       this.ctx.restore();
     }
   }

@@ -99,8 +99,9 @@ class Z4Paper {
    *
    * @param ctx The context used to draw the paper
    * @param noOffset true to not use the offset, false otherwise
+   * @param noHidden true to not use the hidden property, false otherwise
    */
-   draw(ctx, noOffset) {
-    this.layers.forEach(layer => layer.draw(ctx, noOffset));
+   draw(ctx, noOffset, noHidden) {
+    this.layers.forEach(layer => layer.draw(ctx, noOffset, noHidden));
   }
 }

@@ -25,6 +25,8 @@ class Z4Layer {
 
    height = 0;
 
+   hidden = false;
+
   /**
    * Creates the object
    *
@@ -153,6 +155,23 @@ class Z4Layer {
   }
 
   /**
+   * Sets the hidden property
+   *
+   * @param hidden true to hide the layer, false otherwise
+   */
+   setHidden(hidden) {
+    this.hidden = hidden;
+  }
+
+  /**
+   * Checks if the hidden property is set
+   * @return true if the hidden property is set, false otherwise
+   */
+   isHidden() {
+    return hidden;
+  }
+
+  /**
    * Moves a layer
    *
    * @param offsetX The X offset
@@ -204,13 +223,16 @@ class Z4Layer {
    *
    * @param ctx The context used to draw the layer
    * @param noOffset true to not use the offset, false otherwise
+   * @param noHidden true to not use the hidden property, false otherwise
    */
-   draw(ctx, noOffset) {
-    ctx.save();
-    ctx.globalAlpha = this.opacity;
-    ctx.globalCompositeOperation = this.compositeOperation;
-    ctx.drawImage(this.offscreen, noOffset ? 0 : this.offsetX, noOffset ? 0 : this.offsetY);
-    ctx.restore();
+   draw(ctx, noOffset, noHidden) {
+    if (noHidden || !this.hidden) {
+      ctx.save();
+      ctx.globalAlpha = this.opacity;
+      ctx.globalCompositeOperation = this.compositeOperation;
+      ctx.drawImage(this.offscreen, noOffset ? 0 : this.offsetX, noOffset ? 0 : this.offsetY);
+      ctx.restore();
+    }
   }
 
   /**

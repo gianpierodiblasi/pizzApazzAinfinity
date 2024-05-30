@@ -365,7 +365,7 @@ class Z4Canvas extends JSComponent {
     Z4UI.pleaseWait(this, false, false, false, false, "", () => {
       let offscreen = new OffscreenCanvas(this.width, this.height);
       let offscreenCtx = offscreen.getContext("2d");
-      this.paper.draw(offscreenCtx, false);
+      this.paper.draw(offscreenCtx, false, false);
       let options = new Object();
       options["type"] = ext === ".png" ? "image/png" : "image/jpeg";
       options["quality"] = quality;
@@ -633,7 +633,7 @@ class Z4Canvas extends JSComponent {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.save();
     this.ctx.scale(this.zoom, this.zoom);
-    this.paper.draw(this.ctx, false);
+    this.paper.draw(this.ctx, false, false);
     this.ctx.restore();
   }
 
