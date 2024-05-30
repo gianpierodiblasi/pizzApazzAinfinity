@@ -4669,6 +4669,7 @@ class Z4RibbonHistoryPanel extends JSPanel {
    * Resets the history
    */
    resetHistory() {
+    this.clearIntervals();
     this.undo.setEnabled(false);
     this.redo.setEnabled(false);
     this.consolidate.setEnabled(false);
@@ -4683,6 +4684,7 @@ class Z4RibbonHistoryPanel extends JSPanel {
       this.database.createObjectStore("history", options).transaction.oncomplete = event2 => {
         this.canvas.toHistory(json => {
           this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event3 => {
+            this.setIntervals();
             this.currentIndex = event3.target["result"];
             return null;
           };
@@ -4747,10 +4749,18 @@ class Z4RibbonHistoryPanel extends JSPanel {
     this.z4savingDelay = z4savingDelay;
     this.z4savingInterval = z4savingInterval;
     this.save.setEnabled(z4historyManagement === "manual");
+    this.clearIntervals();
+    this.setIntervals();
+  }
+
+   clearIntervals() {
     if (this.timerID !== -1) {
       clearInterval(this.timerID);
       this.timerID = -1;
     }
+  }
+
+   setIntervals() {
     switch(this.z4historyManagement) {
       case "standard":
         break;
