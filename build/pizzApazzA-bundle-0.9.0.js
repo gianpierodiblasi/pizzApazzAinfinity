@@ -1763,59 +1763,26 @@ class Z4Canvas extends JSComponent {
     Z4UI.pleaseWait(this, true, true, false, true, "", () => {
       this.projectName = projectName;
       this.statusPanel.setProjectName(projectName);
-      this.saveLayer(new JSZip(), new Array(), 0, apply);
+      let zip = new JSZip();
+      this.layerToJSON(zip, new Array(), 0, obj => {
+        zip.file("manifest.json", JSON.stringify(obj), null);
+        let options = new Object();
+        options["type"] = "blob";
+        options["compression"] = "DEFLATE";
+        options["streamFiles"] = true;
+        let compressionOptions = new Object();
+        compressionOptions["level"] = 9;
+        options["compressionOptions"] = compressionOptions;
+        zip.generateAsync(options, metadata => Z4UI.setPleaseWaitProgressBarValue(metadata["percent"])).then(zipped => {
+          saveAs(zipped, this.projectName + ".z4i");
+          this.saved = true;
+          Z4UI.pleaseWaitCompleted();
+          if (apply) {
+            apply();
+          }
+        });
+      });
     });
-  }
-
-   saveLayer(zip, layers, index, apply) {
-    // Z4Layer layer = this.paper.getLayerAt(index);
-    // 
-    // layer.convertToBlob(blob -> {
-    // zip.file("layers/layer" + index + ".png", blob, null);
-    // 
-    // Point offset = layer.getOffset();
-    // layers.$set(index,
-    // "{"
-    // + "\"name\": \"" + layer.getName() + "\","
-    // + "\"opacity\": " + layer.getOpacity() + ","
-    // + "\"compositeOperation\": \"" + layer.getCompositeOperation() + "\","
-    // + "\"offsetX\": " + offset.x + ","
-    // + "\"offsetY\": " + offset.y
-    // + "}"
-    // );
-    // 
-    // if (index + 1 == this.paper.getLayersCount()) {
-    // String manifest
-    // = "{"
-    // + "\"projectName\": \"" + this.projectName + "\",\n"
-    // + "\"width\": " + this.width + ",\n"
-    // + "\"height\": " + this.height + ",\n"
-    // + "\"layers\": [" + layers.join(",") + "]"
-    // + "}";
-    // zip.file("manifest.json", manifest, null);
-    // 
-    // $Object options = new $Object();
-    // options.$set("type", "blob");
-    // options.$set("compression", "DEFLATE");
-    // options.$set("streamFiles", true);
-    // 
-    // $Object compressionOptions = new $Object();
-    // compressionOptions.$set("level", 9);
-    // options.$set("compressionOptions", compressionOptions);
-    // 
-    // zip.generateAsync(options, metadata -> Z4UI.setPleaseWaitProgressBarValue(metadata.$get("percent"))).then(zipped -> {
-    // saveAs(zipped, this.projectName + ".z4i");
-    // this.saved = true;
-    // 
-    // Z4UI.pleaseWaitCompleted();
-    // if ($exists(apply)) {
-    // apply.$apply();
-    // }
-    // });
-    // } else {
-    // this.saveLayer(zip, layers, index + 1, apply);
-    // }
-    // });
   }
 
   /**
@@ -1834,65 +1801,36 @@ class Z4Canvas extends JSComponent {
    * @param apply The function to call after preparation
    */
    toHistory(apply) {
-    this.toHistoryLayer(new Array(), 0, apply);
-  }
-
-   toHistoryLayer(layers, index, apply) {
-    // Z4Layer layer = this.paper.getLayerAt(index);
-    // 
-    // layer.convertToBlob(blob -> {
-    // Point offset = layer.getOffset();
-    // 
-    // $Object layerJSON = new $Object();
-    // layerJSON.$set("data", blob);
-    // layerJSON.$set("name", layer.getName());
-    // layerJSON.$set("opacity", layer.getOpacity());
-    // layerJSON.$set("compositeOperation", layer.getCompositeOperation());
-    // layerJSON.$set("offsetX", offset.x);
-    // layerJSON.$set("offsetY", offset.y);
-    // 
-    // layers.$set(index, layerJSON);
-    // 
-    // if (index + 1 == this.paper.getLayersCount()) {
-    // $Object JSON = new $Object();
-    // JSON.$set("projectName", this.projectName);
-    // JSON.$set("width", this.width);
-    // JSON.$set("height", this.height);
-    // JSON.$set("layers", layers);
-    // 
-    // apply.$apply(JSON);
-    // } else {
-    // this.toHistoryLayer(layers, index + 1, apply);
-    // }
-    // });
+    this.layerToJSON(null, new Array(), 0, apply);
   }
 
    layerToJSON(zip, layers, index, apply) {
     let layer = this.paper.getLayerAt(index);
     layer.convertToBlob(blob => {
-      // Point offset = layer.getOffset();
-      // 
-      // $Object layerJSON = new $Object();
-      // layerJSON.$set("data", blob);
-      // layerJSON.$set("name", layer.getName());
-      // layerJSON.$set("opacity", layer.getOpacity());
-      // layerJSON.$set("compositeOperation", layer.getCompositeOperation());
-      // layerJSON.$set("offsetX", offset.x);
-      // layerJSON.$set("offsetY", offset.y);
-      // 
-      // layers.$set(index, layerJSON);
-      // 
-      // if (index + 1 == this.paper.getLayersCount()) {
-      // $Object JSON = new $Object();
-      // JSON.$set("projectName", this.projectName);
-      // JSON.$set("width", this.width);
-      // JSON.$set("height", this.height);
-      // JSON.$set("layers", layers);
-      // 
-      // apply.$apply(JSON);
-      // } else {
-      // this.toHistoryLayer(layers, index + 1, apply);
-      // }
+      if (zip) {
+        zip.file("layers/layer" + index + ".png", blob, null);
+      }
+      let offset = layer.getOffset();
+      let layerJSON = new Object();
+      if (!zip) {
+        layerJSON["data"] = blob;
+      }
+      layerJSON["name"] = layer.getName();
+      layerJSON["opacity"] = layer.getOpacity();
+      layerJSON["compositeOperation"] = layer.getCompositeOperation();
+      layerJSON["offsetX"] = offset.x;
+      layerJSON["offsetY"] = offset.y;
+      layers[index] = layerJSON;
+      if (index + 1 === this.paper.getLayersCount()) {
+        let JSON = new Object();
+        JSON["projectName"] = this.projectName;
+        JSON["width"] = this.width;
+        JSON["height"] = this.height;
+        JSON["layers"] = layers;
+        apply(JSON);
+      } else {
+        this.layerToJSON(zip, layers, index + 1, apply);
+      }
     });
   }
 
