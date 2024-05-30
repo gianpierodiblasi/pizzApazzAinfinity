@@ -253,7 +253,8 @@ class Z4Canvas extends JSComponent {
         (obj["history"]).push(key);
         let folder = "history/history_" + key + "/";
         let layers = value["layers"];
-        layers.forEach(layer => {
+        layers.forEach((layer, index, array) => {
+          zip.file(folder + "layers/layer" + index + ".png", layer["data"], null);
           layer["data"] = null;
         });
         zip.file(folder + "manifest.json", JSON.stringify(value), null);

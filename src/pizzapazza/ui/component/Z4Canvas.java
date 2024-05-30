@@ -313,7 +313,8 @@ public class Z4Canvas extends JSComponent {
         String folder = "history/history_" + key + "/";
 
         Array<$Object> layers = value.$get("layers");
-        layers.forEach(layer -> {
+        layers.forEach((layer, index, array) -> {
+          zip.file(folder + "layers/layer" + index + ".png", layer.$get("data"), null);
           layer.$set("data", null);
         });
 
