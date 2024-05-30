@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -218,6 +218,13 @@ extends javascript.swing.JSTabbedPane</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addChangeListener(javascript.swing.event.ChangeListener)">addChangeListener</a></span>&#8203;(javascript.swing.event.ChangeListener&nbsp;listener)</code></th>
+<td class="colLast">
+<div class="block">Adds a change listener</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>java.lang.Object</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSelectedFilling()">getSelectedFilling</a></span>()</code></th>
 <td class="colLast">
@@ -225,11 +232,19 @@ extends javascript.swing.JSTabbedPane</pre>
  Z4BiGradientColor)</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>javascript.awt.Dimension</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSelectedSize()">getSelectedSize</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the selected size</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSelectedSize(int,int)">setSelectedSize</a></span>&#8203;(int&nbsp;width,
+               int&nbsp;height)</code></th>
+<td class="colLast">
+<div class="block">Sets the selected size</div>
 </td>
 </tr>
 </table>
@@ -297,6 +312,22 @@ extends javascript.swing.JSTabbedPane</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="setSelectedSize(int,int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSelectedSize</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setSelectedSize&#8203;(int&nbsp;width,
+                            int&nbsp;height)</pre>
+<div class="block">Sets the selected size</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>width</code> - The selected width</dd>
+<dd><code>height</code> - The selected height</dd>
+</dl>
+</li>
+</ul>
 <a id="getSelectedSize()">
 <!--   -->
 </a>
@@ -314,7 +345,7 @@ extends javascript.swing.JSTabbedPane</pre>
 <a id="getSelectedFilling()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getSelectedFilling</h4>
 <pre class="methodSignature">public&nbsp;java.lang.Object&nbsp;getSelectedFilling()</pre>
@@ -324,6 +355,20 @@ extends javascript.swing.JSTabbedPane</pre>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The selected filling (an instance of Color, Z4AbstractFiller or
  Z4BiGradientColor)</dd>
+</dl>
+</li>
+</ul>
+<a id="addChangeListener(javascript.swing.event.ChangeListener)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>addChangeListener</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;addChangeListener&#8203;(javascript.swing.event.ChangeListener&nbsp;listener)</pre>
+<div class="block">Adds a change listener</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>listener</code> - The listener</dd>
 </dl>
 </li>
 </ul>

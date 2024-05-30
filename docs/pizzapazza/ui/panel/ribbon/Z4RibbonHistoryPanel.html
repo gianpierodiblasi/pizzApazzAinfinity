@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -197,26 +197,56 @@ extends javascript.swing.JSPanel</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resetHistory()">resetHistory</a></span>()</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addHistory(simulation.js.$Object,simulation.js.$Apply_1_Void,boolean)">addHistory</a></span>&#8203;(simulation.js.$Object&nbsp;json,
+          simulation.js.$Apply_1_Void&lt;java.lang.Integer&gt;&nbsp;apply,
+          boolean&nbsp;consolidate)</code></th>
+<td class="colLast">
+<div class="block">Adds an element to the history</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCurrentKey()">getCurrentKey</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the current key in the history buffer</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#iterateHistoryBuffer(simulation.js.$Apply_3_Void)">iterateHistoryBuffer</a></span>&#8203;(simulation.js.$Apply_3_Void&lt;java.lang.Integer,&#8203;simulation.js.$Object,&#8203;simulation.js.$Apply_0_Void&gt;&nbsp;apply)</code></th>
+<td class="colLast">
+<div class="block">Iterates over the history buffer</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resetHistory(simulation.js.$Apply_0_Void)">resetHistory</a></span>&#8203;(simulation.js.$Apply_0_Void&nbsp;apply)</code></th>
 <td class="colLast">
 <div class="block">Resets the history</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveHistory(java.lang.String)">saveHistory</a></span>&#8203;(java.lang.String&nbsp;policies)</code></th>
 <td class="colLast">
 <div class="block">Saves the history</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCanvas(pizzapazza.ui.component.Z4Canvas)">setCanvas</a></span>&#8203;(<a href="../../component/Z4Canvas.html" title="class in pizzapazza.ui.component">Z4Canvas</a>&nbsp;canvas)</code></th>
 <td class="colLast">
 <div class="block">Sets the canvas to manage</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCurrentKey(int)">setCurrentKey</a></span>&#8203;(int&nbsp;currentKey)</code></th>
+<td class="colLast">
+<div class="block">Sets the current key in the history buffer</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setHistoryManagementSettings(java.lang.String,int,int)">setHistoryManagementSettings</a></span>&#8203;(java.lang.String&nbsp;z4historyManagement,
                             int&nbsp;z4savingDelay,
@@ -225,7 +255,7 @@ extends javascript.swing.JSPanel</pre>
 <div class="block">Sets the history management settings</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStatusPanel(pizzapazza.ui.panel.Z4StatusPanel)">setStatusPanel</a></span>&#8203;(<a href="../Z4StatusPanel.html" title="class in pizzapazza.ui.panel">Z4StatusPanel</a>&nbsp;statusPanel)</code></th>
 <td class="colLast">
@@ -290,14 +320,18 @@ extends javascript.swing.JSPanel</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="resetHistory()">
+<a id="resetHistory(simulation.js.$Apply_0_Void)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>resetHistory</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;resetHistory()</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;resetHistory&#8203;(simulation.js.$Apply_0_Void&nbsp;apply)</pre>
 <div class="block">Resets the history</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>apply</code> - The function to call after reset</dd>
+</dl>
 </li>
 </ul>
 <a id="saveHistory(java.lang.String)">
@@ -312,6 +346,66 @@ extends javascript.swing.JSPanel</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>policies</code> - A comma-separated list of history management policies
  indicating which criteria should perform saving</dd>
+</dl>
+</li>
+</ul>
+<a id="addHistory(simulation.js.$Object,simulation.js.$Apply_1_Void,boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addHistory</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;addHistory&#8203;(simulation.js.$Object&nbsp;json,
+                       simulation.js.$Apply_1_Void&lt;java.lang.Integer&gt;&nbsp;apply,
+                       boolean&nbsp;consolidate)</pre>
+<div class="block">Adds an element to the history</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>json</code> - The element</dd>
+<dd><code>apply</code> - The function to call after the add</dd>
+<dd><code>consolidate</code> - true to enable the consolidate button, false otherwise</dd>
+</dl>
+</li>
+</ul>
+<a id="iterateHistoryBuffer(simulation.js.$Apply_3_Void)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>iterateHistoryBuffer</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;iterateHistoryBuffer&#8203;(simulation.js.$Apply_3_Void&lt;java.lang.Integer,&#8203;simulation.js.$Object,&#8203;simulation.js.$Apply_0_Void&gt;&nbsp;apply)</pre>
+<div class="block">Iterates over the history buffer</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>apply</code> - The function to apply</dd>
+</dl>
+</li>
+</ul>
+<a id="setCurrentKey(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setCurrentKey</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setCurrentKey&#8203;(int&nbsp;currentKey)</pre>
+<div class="block">Sets the current key in the history buffer</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>currentKey</code> - The current key in the history buffer</dd>
+</dl>
+</li>
+</ul>
+<a id="getCurrentKey()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCurrentKey</h4>
+<pre class="methodSignature">public&nbsp;int&nbsp;getCurrentKey()</pre>
+<div class="block">Returns the current key in the history buffer</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The current key in the history buffer</dd>
 </dl>
 </li>
 </ul>

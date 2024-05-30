@@ -332,7 +332,8 @@ extends javascript.swing.JSComponent</pre>
 </tr>
 <tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveProject(java.lang.String,simulation.js.$Apply_0_Void)">saveProject</a></span>&#8203;(java.lang.String&nbsp;projectName,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveProject(java.lang.String,boolean,simulation.js.$Apply_0_Void)">saveProject</a></span>&#8203;(java.lang.String&nbsp;projectName,
+           boolean&nbsp;saveHistory,
            simulation.js.$Apply_0_Void&nbsp;apply)</code></th>
 <td class="colLast">
 <div class="block">Saves the project</div>
@@ -522,18 +523,20 @@ extends javascript.swing.JSComponent</pre>
 </dl>
 </li>
 </ul>
-<a id="saveProject(java.lang.String,simulation.js.$Apply_0_Void)">
+<a id="saveProject(java.lang.String,boolean,simulation.js.$Apply_0_Void)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>saveProject</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;saveProject&#8203;(java.lang.String&nbsp;projectName,
+                        boolean&nbsp;saveHistory,
                         simulation.js.$Apply_0_Void&nbsp;apply)</pre>
 <div class="block">Saves the project</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>projectName</code> - The project name</dd>
+<dd><code>saveHistory</code> - true to save the history, false otherwise</dd>
 <dd><code>apply</code> - The function to call after saving</dd>
 </dl>
 </li>
