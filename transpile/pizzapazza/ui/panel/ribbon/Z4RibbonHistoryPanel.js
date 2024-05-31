@@ -49,7 +49,7 @@ class Z4RibbonHistoryPanel extends JSPanel {
         this.resetHistory(() => this.canvas.toHistory(json => this.addHistory(json, key => this.setCurrentKey(key), false)));
       }
     }));
-    this.addVLine(4, 1);
+    Z4UI.addVLine(this, new GBC(4, 0).h(2).wxy(1, 1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     window.onunload = event => {
       window.indexedDB.deleteDatabase(this.dbName);
       return null;
@@ -237,47 +237,29 @@ class Z4RibbonHistoryPanel extends JSPanel {
     button.setEnabled(false);
     button.setContentAreaFilled(false);
     button.addActionListener(listener);
-    let constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = gridy;
-    constraints.anchor = GridBagConstraints.NORTH;
+    let gbc = new GBC(gridx, gridy).a(GBC.NORTH);
     switch(border) {
       case "left":
-        constraints.insets = new Insets(5, 5, 0, 0);
+        gbc.i(5, 5, 0, 0);
         button.getStyle().borderTopRightRadius = "0px";
         button.getStyle().borderBottomRightRadius = "0px";
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
         break;
       case "both":
-        constraints.insets = new Insets(5, 0, 0, 0);
+        gbc.i(5, 0, 0, 0);
         button.getStyle().borderRadius = "0px";
         button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
         break;
       case "right":
-        constraints.insets = new Insets(5, 0, 0, 5);
+        gbc.i(5, 0, 0, 5);
         button.getStyle().borderTopLeftRadius = "0px";
         button.getStyle().borderBottomLeftRadius = "0px";
         button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
         break;
       default:
-        constraints.insets = new Insets(5, 0, 0, 5);
+        gbc.i(5, 0, 0, 5);
     }
-    this.add(button, constraints);
-  }
-
-   addVLine(gridx, weightx) {
-    let div = new JSComponent(document.createElement("div"));
-    div.getStyle().width = "1px";
-    div.getStyle().background = "var(--main-action-bgcolor)";
-    let constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = 0;
-    constraints.gridheight = 2;
-    constraints.fill = GridBagConstraints.VERTICAL;
-    constraints.weightx = weightx;
-    constraints.weighty = 1;
-    constraints.insets = new Insets(1, 2, 1, 2);
-    this.add(div, constraints);
+    this.add(button, gbc);
   }
 }

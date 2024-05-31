@@ -22,11 +22,11 @@ class Z4RibbonLayerPanel extends JSPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonlayerpanel");
-    this.addLabel(Z4Translations.NEW_LAYER, 0);
+    Z4UI.addLabel(this, Z4Translations.NEW_LAYER, new GBC(0, 0).w(3).a(GBC.WEST).i(5, 5, 2, 0));
     this.addButton(Z4Translations.CREATE, true, 0, 1, "left", event => this.addFromColor());
     this.addButton(Z4Translations.FROM_CLIPBOARD, typeof navigator.clipboard["read"] === "function", 1, 1, "both", event => this.addFromClipboard());
     this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event => this.addFromFile());
-    this.addVLine(3);
+    Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.layersPreview.setLayout(new BoxLayout(this.layersPreview, BoxLayout.X_AXIS));
     this.layersPreview.getStyle().overflowX = "scroll";
     this.layersPreview.addEventListener("dragenter", event => event.preventDefault());
@@ -46,13 +46,7 @@ class Z4RibbonLayerPanel extends JSPanel {
         this.layersPreview.add(this.previewDnD, null);
       }
     });
-    let constraints = new GridBagConstraints();
-    constraints.gridx = 4;
-    constraints.gridy = 0;
-    constraints.gridheight = 2;
-    constraints.weightx = 1;
-    constraints.fill = GridBagConstraints.BOTH;
-    this.add(this.layersPreview, constraints);
+    this.add(this.layersPreview, new GBC(4, 0).h(2).wx(1).f(GBC.BOTH));
   }
 
   /**
@@ -73,31 +67,16 @@ class Z4RibbonLayerPanel extends JSPanel {
     this.statusPanel = statusPanel;
   }
 
-   addLabel(text, gridx) {
-    let label = new JSLabel();
-    label.setText(text);
-    let constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = 0;
-    constraints.gridwidth = 3;
-    constraints.anchor = GridBagConstraints.WEST;
-    constraints.insets = new Insets(5, 5, 2, 0);
-    this.add(label, constraints);
-  }
-
    addButton(text, enabled, gridx, gridy, border, listener) {
     let button = new JSButton();
     button.setText(text);
     button.setEnabled(enabled);
     button.setContentAreaFilled(false);
     button.addActionListener(listener);
-    let constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = gridy;
-    constraints.anchor = GridBagConstraints.NORTH;
+    let gbc = new GBC(gridx, gridy).a(GBC.NORTH);
     switch(border) {
       case "left":
-        constraints.insets = new Insets(0, 5, 0, 0);
+        gbc.i(0, 5, 0, 0);
         button.getStyle().borderTopRightRadius = "0px";
         button.getStyle().borderBottomRightRadius = "0px";
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
@@ -108,27 +87,13 @@ class Z4RibbonLayerPanel extends JSPanel {
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
         break;
       case "right":
-        constraints.insets = new Insets(0, 0, 0, 5);
+        gbc.i(0, 0, 0, 5);
         button.getStyle().borderTopLeftRadius = "0px";
         button.getStyle().borderBottomLeftRadius = "0px";
         button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
         break;
     }
-    this.add(button, constraints);
-  }
-
-   addVLine(gridx) {
-    let div = new JSComponent(document.createElement("div"));
-    div.getStyle().width = "1px";
-    div.getStyle().background = "var(--main-action-bgcolor)";
-    let constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = 0;
-    constraints.gridheight = 2;
-    constraints.fill = GridBagConstraints.VERTICAL;
-    constraints.weighty = 1;
-    constraints.insets = new Insets(1, 2, 1, 2);
-    this.add(div, constraints);
+    this.add(button, gbc);
   }
 
    addFromColor() {

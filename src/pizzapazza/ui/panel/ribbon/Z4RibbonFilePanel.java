@@ -2,17 +2,14 @@ package pizzapazza.ui.panel.ribbon;
 
 import def.dom.DragEvent;
 import def.dom.File;
-import static def.dom.Globals.document;
 import def.js.Array;
 import javascript.awt.BorderLayout;
 import javascript.awt.Dimension;
-import javascript.awt.GridBagConstraints;
+import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
-import javascript.awt.Insets;
 import javascript.awt.event.ActionListener;
 import javascript.swing.JSButton;
 import javascript.swing.JSCheckBox;
-import javascript.swing.JSComponent;
 import javascript.swing.JSFileChooser;
 import javascript.swing.JSLabel;
 import javascript.swing.JSOptionPane;
@@ -25,6 +22,7 @@ import pizzapazza.ui.panel.Z4NewImagePanel;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
+import pizzapazza.util.Z4UI;
 import simulation.js.$Apply_0_Void;
 import simulation.js.$File;
 import static simulation.js.$Globals.$exists;
@@ -49,21 +47,20 @@ public class Z4RibbonFilePanel extends JSPanel {
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonfilepanel");
 
-    this.addLabel(Z4Translations.NEW_PROJECT, 0, 3);
+    Z4UI.addLabel(this, Z4Translations.NEW_PROJECT, new GBC(0, 0).w(3).a(GBC.WEST).i(5, 5, 2, 0));
     this.addButton(Z4Translations.CREATE, true, 0, 1, "left", event -> this.checkSaved(Z4Translations.CREATE, () -> this.createFromColor()));
     this.addButton(Z4Translations.FROM_CLIPBOARD, $typeof(navigator.clipboard.$get("read"), "function"), 1, 1, "both", event -> this.checkSaved(Z4Translations.FROM_CLIPBOARD, () -> this.createFromClipboard()));
     this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event -> this.checkSaved(Z4Translations.FROM_FILE, () -> this.createFromFile()));
-    this.addVLine(3, 0);
+    Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
-    this.addLabel(Z4Translations.OPEN, 4, 1);
-
+    Z4UI.addLabel(this, Z4Translations.OPEN, new GBC(4, 0).a(GBC.WEST).i(5, 5, 2, 0));
     this.addButton(Z4Translations.OPEN_PROJECT, true, 4, 1, "", event -> this.checkSaved(Z4Translations.OPEN_PROJECT, () -> this.openProject()));
-    this.addVLine(5, 0);
+    Z4UI.addVLine(this, new GBC(5, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
-    this.addLabel(Z4Translations.SAVE, 6, 2);
+    Z4UI.addLabel(this, Z4Translations.SAVE, new GBC(6, 0).w(2).a(GBC.WEST).i(5, 5, 2, 0));
     this.addButton(Z4Translations.SAVE_PROJECT, true, 6, 1, "left", event -> this.saveProject(null));
     this.addButton(Z4Translations.EXPORT, true, 7, 1, "right", event -> this.exportToFile());
-    this.addVLine(8, 1);
+    Z4UI.addVLine(this, new GBC(8, 0).h(2).wxy(1, 1).f(GBC.VERTICAL).i(1, 2, 1, 2));
   }
 
   /**
@@ -88,19 +85,6 @@ public class Z4RibbonFilePanel extends JSPanel {
     this.statusPanel = statusPanel;
   }
 
-  private void addLabel(String text, int gridx, int gridwidth) {
-    JSLabel label = new JSLabel();
-    label.setText(text);
-
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = 0;
-    constraints.gridwidth = gridwidth;
-    constraints.anchor = GridBagConstraints.WEST;
-    constraints.insets = new Insets(5, 5, 2, 0);
-    this.add(label, constraints);
-  }
-
   private void addButton(String text, boolean enabled, int gridx, int gridy, String border, ActionListener listener) {
     JSButton button = new JSButton();
     button.setText(text);
@@ -108,13 +92,10 @@ public class Z4RibbonFilePanel extends JSPanel {
     button.setContentAreaFilled(false);
     button.addActionListener(listener);
 
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = gridy;
-    constraints.anchor = GridBagConstraints.NORTH;
+    GBC gbc = new GBC(gridx, gridy).a(GBC.NORTH);
     switch (border) {
       case "left":
-        constraints.insets = new Insets(0, 5, 0, 0);
+        gbc.i(0, 5, 0, 0);
         button.getStyle().borderTopRightRadius = "0px";
         button.getStyle().borderBottomRightRadius = "0px";
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
@@ -125,30 +106,14 @@ public class Z4RibbonFilePanel extends JSPanel {
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
         break;
       case "right":
-        constraints.insets = new Insets(0, 0, 0, 5);
+        gbc.i(0, 0, 0, 5);
         button.getStyle().borderTopLeftRadius = "0px";
         button.getStyle().borderBottomLeftRadius = "0px";
         button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
         break;
     }
 
-    this.add(button, constraints);
-  }
-
-  private void addVLine(int gridx, double weightx) {
-    JSComponent div = new JSComponent(document.createElement("div"));
-    div.getStyle().width = "1px";
-    div.getStyle().background = "var(--main-action-bgcolor)";
-
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = 0;
-    constraints.gridheight = 2;
-    constraints.fill = GridBagConstraints.VERTICAL;
-    constraints.weightx = weightx;
-    constraints.weighty = 1;
-    constraints.insets = new Insets(1, 2, 1, 2);
-    this.add(div, constraints);
+    this.add(button, gbc);
   }
 
   private void checkSaved(String title, $Apply_0_Void apply) {

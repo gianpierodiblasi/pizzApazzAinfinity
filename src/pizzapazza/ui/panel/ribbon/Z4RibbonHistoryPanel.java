@@ -4,22 +4,20 @@ import static def.dom.Globals.clearInterval;
 import def.dom.IDBDatabase;
 import def.dom.IDBKeyRange;
 import def.js.Date;
-import javascript.awt.GridBagConstraints;
+import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
-import javascript.awt.Insets;
 import javascript.awt.event.ActionListener;
 import javascript.swing.JSButton;
-import javascript.swing.JSComponent;
 import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.util.Z4Translations;
+import pizzapazza.util.Z4UI;
 import simulation.js.$Apply_0_Void;
 import simulation.js.$Apply_1_Void;
 import simulation.js.$Apply_3_Void;
 import static simulation.js.$Globals.$exists;
-import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.setInterval;
 import static simulation.js.$Globals.window;
 import simulation.js.$IDBCursor;
@@ -63,7 +61,7 @@ public class Z4RibbonHistoryPanel extends JSPanel {
     this.addButton(this.redo, Z4Translations.REDO, 1, 0, "right", event -> {
     });
     this.addButton(this.save, Z4Translations.SAVE, 2, 0, "", event -> this.saveHistory("manual"));
-    
+
     this.addButton(this.consolidate, Z4Translations.CONSOLIDATE, 3, 0, "", event -> JSOptionPane.showConfirmDialog(Z4Translations.CONSOLIDATE_MESSAGE, Z4Translations.CONSOLIDATE, JSOptionPane.YES_NO_OPTION, JSOptionPane.WARNING_MESSAGE, response -> {
       if (response == JSOptionPane.YES_OPTION) {
         this.canvas.setChanged(false);
@@ -71,7 +69,7 @@ public class Z4RibbonHistoryPanel extends JSPanel {
       }
     }));
 
-    this.addVLine(4, 1);
+    Z4UI.addVLine(this, new GBC(4, 0).h(2).wxy(1, 1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
     window.onunload = event -> {
       window.indexedDB.deleteDatabase(this.dbName);
@@ -271,49 +269,30 @@ public class Z4RibbonHistoryPanel extends JSPanel {
     button.setContentAreaFilled(false);
     button.addActionListener(listener);
 
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = gridy;
-    constraints.anchor = GridBagConstraints.NORTH;
+    GBC gbc = new GBC(gridx, gridy).a(GBC.NORTH);
     switch (border) {
       case "left":
-        constraints.insets = new Insets(5, 5, 0, 0);
+        gbc.i(5, 5, 0, 0);
         button.getStyle().borderTopRightRadius = "0px";
         button.getStyle().borderBottomRightRadius = "0px";
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
         break;
       case "both":
-        constraints.insets = new Insets(5, 0, 0, 0);
+        gbc.i(5, 0, 0, 0);
         button.getStyle().borderRadius = "0px";
         button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
         break;
       case "right":
-        constraints.insets = new Insets(5, 0, 0, 5);
+        gbc.i(5, 0, 0, 5);
         button.getStyle().borderTopLeftRadius = "0px";
         button.getStyle().borderBottomLeftRadius = "0px";
         button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
         break;
       default:
-        constraints.insets = new Insets(5, 0, 0, 5);
+        gbc.i(5, 0, 0, 5);
     }
 
-    this.add(button, constraints);
-  }
-
-  private void addVLine(int gridx, double weightx) {
-    JSComponent div = new JSComponent(document.createElement("div"));
-    div.getStyle().width = "1px";
-    div.getStyle().background = "var(--main-action-bgcolor)";
-
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = 0;
-    constraints.gridheight = 2;
-    constraints.fill = GridBagConstraints.VERTICAL;
-    constraints.weightx = weightx;
-    constraints.weighty = 1;
-    constraints.insets = new Insets(1, 2, 1, 2);
-    this.add(div, constraints);
+    this.add(button, gbc);
   }
 }
