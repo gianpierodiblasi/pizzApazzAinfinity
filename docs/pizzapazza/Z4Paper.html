@@ -214,8 +214,9 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#draw(simulation.dom.$CanvasRenderingContext2D,boolean)">draw</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx,
-    boolean&nbsp;noOffset)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#draw(simulation.dom.$CanvasRenderingContext2D,boolean,boolean)">draw</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx,
+    boolean&nbsp;noOffset,
+    boolean&nbsp;noHidden)</code></th>
 <td class="colLast">
 <div class="block">Draws this paper</div>
 </td>
@@ -411,19 +412,21 @@ extends java.lang.Object</pre>
 <div class="block">Resets the paper</div>
 </li>
 </ul>
-<a id="draw(simulation.dom.$CanvasRenderingContext2D,boolean)">
+<a id="draw(simulation.dom.$CanvasRenderingContext2D,boolean,boolean)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>draw</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;draw&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx,
-                 boolean&nbsp;noOffset)</pre>
+                 boolean&nbsp;noOffset,
+                 boolean&nbsp;noHidden)</pre>
 <div class="block">Draws this paper</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>ctx</code> - The context used to draw the paper</dd>
 <dd><code>noOffset</code> - true to not use the offset, false otherwise</dd>
+<dd><code>noHidden</code> - true to not use the hidden property, false otherwise</dd>
 </dl>
 </li>
 </ul>

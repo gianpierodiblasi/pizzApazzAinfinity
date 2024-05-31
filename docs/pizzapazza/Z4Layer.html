@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":9,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":9,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -199,8 +199,9 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#draw(simulation.dom.$CanvasRenderingContext2D,boolean)">draw</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx,
-    boolean&nbsp;noOffset)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#draw(simulation.dom.$CanvasRenderingContext2D,boolean,boolean)">draw</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx,
+    boolean&nbsp;noOffset,
+    boolean&nbsp;noHidden)</code></th>
 <td class="colLast">
 <div class="block">Draws this layer</div>
 </td>
@@ -265,6 +266,13 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i10" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isHidden()">isHidden</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Checks if the hidden property is set</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#move(int,int)">move</a></span>&#8203;(int&nbsp;offsetX,
     int&nbsp;offsetY)</code></th>
@@ -272,35 +280,42 @@ extends java.lang.Object</pre>
 <div class="block">Moves a layer</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rotatePlus90()">rotatePlus90</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Rotates the layer in clockwise</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCompositeOperation(java.lang.String)">setCompositeOperation</a></span>&#8203;(java.lang.String&nbsp;compositeOperation)</code></th>
 <td class="colLast">
 <div class="block">Sets the composite operation</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setHidden(boolean)">setHidden</a></span>&#8203;(boolean&nbsp;hidden)</code></th>
+<td class="colLast">
+<div class="block">Sets the hidden property</div>
+</td>
+</tr>
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setName(java.lang.String)">setName</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
 <td class="colLast">
 <div class="block">Sets the layer name</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setOpacity(double)">setOpacity</a></span>&#8203;(double&nbsp;opacity)</code></th>
 <td class="colLast">
 <div class="block">Sets the opacity</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shift(int,int)">shift</a></span>&#8203;(int&nbsp;shiftX,
      int&nbsp;shiftY)</code></th>
@@ -475,6 +490,34 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
+<a id="setHidden(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setHidden</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setHidden&#8203;(boolean&nbsp;hidden)</pre>
+<div class="block">Sets the hidden property</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>hidden</code> - true to hide the layer, false otherwise</dd>
+</dl>
+</li>
+</ul>
+<a id="isHidden()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isHidden</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isHidden()</pre>
+<div class="block">Checks if the hidden property is set</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the hidden property is set, false otherwise</dd>
+</dl>
+</li>
+</ul>
 <a id="move(int,int)">
 <!--   -->
 </a>
@@ -547,19 +590,21 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a id="draw(simulation.dom.$CanvasRenderingContext2D,boolean)">
+<a id="draw(simulation.dom.$CanvasRenderingContext2D,boolean,boolean)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;draw&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx,
-                 boolean&nbsp;noOffset)</pre>
+                 boolean&nbsp;noOffset,
+                 boolean&nbsp;noHidden)</pre>
 <div class="block">Draws this layer</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>ctx</code> - The context used to draw the layer</dd>
 <dd><code>noOffset</code> - true to not use the offset, false otherwise</dd>
+<dd><code>noHidden</code> - true to not use the hidden property, false otherwise</dd>
 </dl>
 </li>
 </ul>
