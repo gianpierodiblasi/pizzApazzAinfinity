@@ -4984,15 +4984,15 @@ class Z4RibbonSettingsPanel extends JSPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonsettingspanel");
-    this.addLabel(Z4Translations.LANGUAGE, 0);
+    Z4UI.addLabel(this, Z4Translations.LANGUAGE, new GBC(0, 0).a(GBC.WEST).i(5, 5, 2, 0));
     let languageModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer();
     languageModelAndRenderer.addElement(new KeyValue("en", Z4Translations.LANGUAGE_ENGLISH_NATIVE));
     languageModelAndRenderer.addElement(new KeyValue("it", Z4Translations.LANGUAGE_ITALIAN_NATIVE));
     this.language.setModelAndRenderer(languageModelAndRenderer);
     this.language.setSelectedItem(Z4Translations.CURRENT_LANGUAGE);
     this.language.addActionListener(event => this.onchangeLanguage());
-    this.addComponent(this.language, 0, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 5, 0, 5));
-    this.addLabel(Z4Translations.THEME, 1);
+    this.add(this.language, new GBC(0, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 5));
+    Z4UI.addLabel(this, Z4Translations.THEME, new GBC(1, 0).a(GBC.WEST).i(5, 5, 2, 0));
     let selectedTheme = null;
     let z4theme = localStorage.getItem("z4theme");
     switch(z4theme) {
@@ -5012,15 +5012,15 @@ class Z4RibbonSettingsPanel extends JSPanel {
     this.theme.setModelAndRenderer(themeModelAndRenderer);
     this.theme.setSelectedItem(selectedTheme);
     this.theme.addActionListener(event => this.onchangeTheme());
-    this.addComponent(this.theme, 1, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 5, 0, 5));
-    this.addLabel(Z4Translations.THEME_COLOR, 2);
+    this.add(this.theme, new GBC(1, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 5));
+    Z4UI.addLabel(this, Z4Translations.THEME_COLOR, new GBC(2, 0).a(GBC.WEST).i(5, 5, 2, 0));
     let themeColor = localStorage.getItem("z4color");
     this.color.setSelectedColor(Color.fromRGB_HEX(themeColor ? themeColor : "#0d6efd"));
     this.color.setOpacityVisible(false);
     this.color.addChangeListener(event => this.onchangeColor());
-    this.addComponent(this.color, 2, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 5, 0, 5));
-    this.addVLine(3, 0);
-    this.addLabel(Z4Translations.HISTORY_MANAGEMENT, 4);
+    this.add(this.color, new GBC(2, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 5));
+    Z4UI.addVLine(this, new GBC(3, 0).h(3).wy(1).a(GBC.EAST).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addLabel(this, Z4Translations.HISTORY_MANAGEMENT, new GBC(4, 0).a(GBC.WEST).i(5, 5, 2, 0));
     let selectedHistoryManagement = null;
     let z4historyManagement = localStorage.getItem("z4historymanagement");
     switch(z4historyManagement) {
@@ -5043,10 +5043,10 @@ class Z4RibbonSettingsPanel extends JSPanel {
     this.historyManagement.setModelAndRenderer(historyManagementModelAndRenderer);
     this.historyManagement.setSelectedItem(selectedHistoryManagement);
     this.historyManagement.addActionListener(event => this.onchangeHistoryManagementSettings());
-    this.addComponent(this.historyManagement, 4, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5));
+    this.add(this.historyManagement, new GBC(4, 1).a(GBC.WEST).i(0, 5, 0, 5));
     this.historyManagementDescription.setText(Z4Translations[selectedHistoryManagement.key.toUpperCase() + "_POLICY_DESCRIPTION"]);
-    this.addComponent(this.historyManagementDescription, 4, 2, 3, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(5, 0, 0, 0));
-    this.addLabel(Z4Translations.SAVING_DELAY, 5);
+    this.add(this.historyManagementDescription, new GBC(4, 2).w(3).wx(1).a(GBC.NORTHWEST).i(5, 0, 0, 0));
+    Z4UI.addLabel(this, Z4Translations.SAVING_DELAY, new GBC(5, 0).a(GBC.WEST).i(5, 5, 2, 0));
     let savingDelayValue = parseInt(localStorage.getItem("z4savingdelay"));
     savingDelayValue = savingDelayValue ? savingDelayValue : 1000;
     let savingDelayString = savingDelayValue < 1000 ? savingDelayValue + "ms" : (savingDelayValue / 1000 + "s");
@@ -5063,8 +5063,8 @@ class Z4RibbonSettingsPanel extends JSPanel {
     this.savingDelay.setModelAndRenderer(savingDelayModelAndRenderer);
     this.savingDelay.setSelectedItem(selectedSavingDelay);
     this.savingDelay.addActionListener(event => this.onchangeHistoryManagementSettings());
-    this.addComponent(this.savingDelay, 5, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
-    this.addLabel(Z4Translations.SAVING_INTERVAL, 6);
+    this.add(this.savingDelay, new GBC(5, 1).a(GBC.WEST).i(0, 5, 0, 0));
+    Z4UI.addLabel(this, Z4Translations.SAVING_INTERVAL, new GBC(6, 0).a(GBC.WEST).i(5, 5, 2, 0));
     let savingIntervalValue = parseInt(localStorage.getItem("z4savinginterval"));
     savingIntervalValue = savingIntervalValue ? savingIntervalValue : 60000;
     let savingIntervalString = savingIntervalValue < 60000 ? savingIntervalValue / 1000 + "s" : (savingIntervalValue / 60000 + "min");
@@ -5081,42 +5081,13 @@ class Z4RibbonSettingsPanel extends JSPanel {
     this.savingInterval.setModelAndRenderer(savingIntervalModelAndRenderer);
     this.savingInterval.setSelectedItem(selectedSavingInterval);
     this.savingInterval.addActionListener(event => this.onchangeHistoryManagementSettings());
-    this.addComponent(this.savingInterval, 6, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
-    this.addVLine(7, 0);
+    this.add(this.savingInterval, new GBC(6, 1).a(GBC.WEST).i(0, 5, 0, 0));
+    Z4UI.addVLine(this, new GBC(7, 0).h(3).wy(1).a(GBC.EAST).f(GBC.VERTICAL).i(1, 2, 1, 2));
     let reset = new JSButton();
     reset.setText(Z4Translations.RESET);
     reset.setContentAreaFilled(false);
     reset.addActionListener(event => this.onreset());
-    this.addComponent(reset, 8, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 5, 0, 5));
-  }
-
-   addLabel(text, gridx) {
-    let label = new JSLabel();
-    label.setText(text);
-    this.addComponent(label, gridx, 0, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 2, 0));
-  }
-
-   addVLine(gridx, weightx) {
-    let div = new JSComponent(document.createElement("div"));
-    div.getStyle().width = "1px";
-    div.getStyle().background = "var(--main-action-bgcolor)";
-    this.addComponent(div, gridx, 0, 1, 3, weightx, 1, GridBagConstraints.EAST, GridBagConstraints.VERTICAL, new Insets(1, 2, 1, 2));
-  }
-
-   addComponent(component, gridx, gridy, gridwidth, gridheight, weightx, weighty, anchor, fill, insets) {
-    let constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = gridy;
-    constraints.gridwidth = gridwidth;
-    constraints.gridheight = gridheight;
-    constraints.weightx = weightx;
-    constraints.weighty = weighty;
-    constraints.anchor = anchor;
-    constraints.fill = fill;
-    if (insets) {
-      constraints.insets = insets;
-    }
-    this.add(component, constraints);
+    this.add(reset, new GBC(8, 1).a(GBC.BOTH).i(0, 5, 0, 5));
   }
 
    onchangeLanguage() {
