@@ -107,45 +107,45 @@ public class Z4LayerPreview extends JSComponent {
       }
     });
 
-    this.name.getStyle().width = Z4LayerPreview.PREVIEW_SIZE + "px";
+    this.name.getStyle().width = (Z4LayerPreview.PREVIEW_SIZE + 30) + "px";
 
     this.preview.setAttribute("width", "" + Z4LayerPreview.PREVIEW_SIZE);
     this.preview.setAttribute("height", "" + Z4LayerPreview.PREVIEW_SIZE);
 
     this.summary.setLayout(new GridBagLayout());
 
-    this.summary.add(this.name, new GBC(1, 0).f(GBC.HORIZONTAL));
-    this.summary.add(this.preview, new GBC(1, 1).h(2).f(GBC.BOTH));
+    this.summary.add(this.name, new GBC(0, 0).w(3));
+    this.summary.add(this.preview, new GBC(1, 1).h(3).f(GBC.BOTH));
 
     JSButton button = new JSButton();
-    button.setText("\uD83D\uDC41");
+    button.setText("\u00A0\uD83D\uDC41");
     button.setContentAreaFilled(false);
-    this.summary.add(button, new GBC(0, 0));
+    this.summary.add(button, new GBC(0, 1).i(0, 0, 0, 2));
 
     button = new JSButton();
-    button.setText("\u2610"); //\u2611
+    button.setText("\u2610\u00A0"); //\u2611
     button.setContentAreaFilled(false);
-    this.summary.add(button, new GBC(2, 0));
+    this.summary.add(button, new GBC(2, 1).i(0, 2, 0, 0));
 
     button = new JSButton();
     button.setText("\u00A0\u25C0");
     button.setContentAreaFilled(false);
-    this.summary.add(button, new GBC(0, 1).wy(1));
+    this.summary.add(button, new GBC(0, 2).i(0, 2, 0, 0));
 
     button = new JSButton();
     button.setText("|\u25C0");
     button.setContentAreaFilled(false);
-    this.summary.add(button, new GBC(0, 2).wy(1));
+    this.summary.add(button, new GBC(0, 3).i(0, 2, 0, 0));
 
     button = new JSButton();
     button.setText("\u25B6\u00A0");
     button.setContentAreaFilled(false);
-    this.summary.add(button, new GBC(2, 1).wy(1));
+    this.summary.add(button, new GBC(2, 2).i(0, 2, 0, 0));
 
     button = new JSButton();
     button.setText("\u25B6|");
     button.setContentAreaFilled(false);
-    this.summary.add(button, new GBC(2, 2).wy(1));
+    this.summary.add(button, new GBC(2, 3).i(0, 2, 0, 0));
 
     this.appendNodeChild(document.createElement("summary"));
     this.appendChildInTree("summary", this.summary);
