@@ -105,11 +105,28 @@ class Z4UI {
    * @param panel The panel
    * @param text The text
    * @param gbc The constraints
+   * @return The added label
    */
   static  addLabel(panel, text, gbc) {
     let label = new JSLabel();
     label.setText(text);
     panel.add(label, gbc);
+    return label;
+  }
+
+  /**
+   * Adds a vertical line in a panel with a GridBagLayout manager
+   *
+   * @param panel The panel
+   * @param gbc The constraints
+   * @return The added line
+   */
+  static  addVLine(panel, gbc) {
+    let div = new JSComponent(document.createElement("div"));
+    div.getStyle().width = "1px";
+    div.getStyle().background = "var(--main-action-bgcolor)";
+    panel.add(div, gbc);
+    return div;
   }
 
   constructor() {

@@ -3,9 +3,8 @@ package pizzapazza.ui.component;
 import static def.dom.Globals.document;
 import def.js.Array;
 import javascript.awt.Dimension;
-import javascript.awt.GridBagConstraints;
+import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
-import javascript.awt.Insets;
 import javascript.awt.Point;
 import javascript.swing.ButtonGroup;
 import javascript.swing.JSButton;
@@ -23,6 +22,7 @@ import javascript.util.Translations;
 import pizzapazza.Z4Layer;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
+import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$DOMRect;
 import simulation.js.$Apply_0_Void;
@@ -114,38 +114,38 @@ public class Z4LayerPreview extends JSComponent {
 
     this.summary.setLayout(new GridBagLayout());
 
-    this.addComponent(this.summary, this.name, 1, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, null);
-    this.addComponent(this.summary, this.preview, 1, 1, 1, 2, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, null);
+    this.summary.add(this.name, new GBC(1, 0).f(GBC.HORIZONTAL));
+    this.summary.add(this.preview, new GBC(1, 1).h(2).f(GBC.BOTH));
 
     JSButton button = new JSButton();
     button.setText("\uD83D\uDC41");
     button.setContentAreaFilled(false);
-    this.addComponent(this.summary, button, 0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    this.summary.add(button, new GBC(0, 0));
 
     button = new JSButton();
     button.setText("\u2610"); //\u2611
     button.setContentAreaFilled(false);
-    this.addComponent(this.summary, button, 2, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    this.summary.add(button, new GBC(2, 0));
 
     button = new JSButton();
     button.setText("\u00A0\u25C0");
     button.setContentAreaFilled(false);
-    this.addComponent(this.summary, button, 0, 1, 1, 1, 0, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    this.summary.add(button, new GBC(0, 1).wy(1));
 
     button = new JSButton();
     button.setText("|\u25C0");
     button.setContentAreaFilled(false);
-    this.addComponent(this.summary, button, 0, 2, 1, 1, 0, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    this.summary.add(button, new GBC(0, 2).wy(1));
 
     button = new JSButton();
     button.setText("\u25B6\u00A0");
     button.setContentAreaFilled(false);
-    this.addComponent(this.summary, button, 2, 1, 1, 1, 0, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    this.summary.add(button, new GBC(2, 1).wy(1));
 
     button = new JSButton();
     button.setText("\u25B6|");
     button.setContentAreaFilled(false);
-    this.addComponent(this.summary, button, 2, 2, 1, 1, 0, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
+    this.summary.add(button, new GBC(2, 2).wy(1));
 
     this.appendNodeChild(document.createElement("summary"));
     this.appendChildInTree("summary", this.summary);
@@ -166,45 +166,45 @@ public class Z4LayerPreview extends JSComponent {
       }
     });
 
-    this.addLabel(panelBasic, Z4Translations.LAYER_NAME, 0, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
-    this.addComponent(panelBasic, this.editName, 0, 1, 5, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 5, 0));
+    Z4UI.addLabel(panelBasic, Z4Translations.LAYER_NAME, new GBC(0, 0).a(GBC.WEST));
+    panelBasic.add(this.editName, new GBC(0, 1).w(5).a(GBC.WEST).f(GBC.HORIZONTAL).i(0, 0, 5, 0));
 
-    this.addLabel(panelBasic, Z4Translations.OFFSET_X, 0, 2, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    Z4UI.addLabel(panelBasic, Z4Translations.OFFSET_X, new GBC(0, 2).a(GBC.WEST));
 
     this.offsetXSpinner.cssAddClass("jsspinner_w_4rem");
     this.offsetXSpinner.addChangeListener(event -> this.onChange(true, this.offsetXSpinner.getValueIsAdjusting(), this.offsetXSpinner, this.offsetXSlider));
-    this.addComponent(panelBasic, this.offsetXSpinner, 1, 2, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    panelBasic.add(this.offsetXSpinner, new GBC(1, 2).a(GBC.EAST));
 
     this.offsetXSlider.getStyle().minWidth = "20rem";
     this.offsetXSlider.addChangeListener(event -> this.onChange(false, this.offsetXSlider.getValueIsAdjusting(), this.offsetXSpinner, this.offsetXSlider));
-    this.addComponent(panelBasic, this.offsetXSlider, 0, 3, 2, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
+    panelBasic.add(this.offsetXSlider, new GBC(0, 3).w(2).a(GBC.NORTH).f(GBC.HORIZONTAL));
 
-    this.addLabel(panelBasic, Translations.JSColorChooser_OPACITY, 0, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    Z4UI.addLabel(panelBasic, Translations.JSColorChooser_OPACITY, new GBC(0, 4).a(GBC.WEST));
 
     this.opacitySpinner.cssAddClass("jsspinner_w_4rem");
     this.opacitySpinner.addChangeListener(event -> this.onChange(true, this.opacitySpinner.getValueIsAdjusting(), this.opacitySpinner, this.opacitySlider));
-    this.addComponent(panelBasic, this.opacitySpinner, 1, 4, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    panelBasic.add(this.opacitySpinner, new GBC(1, 4).a(GBC.EAST));
 
     this.opacitySlider.addChangeListener(event -> this.onChange(false, this.opacitySlider.getValueIsAdjusting(), this.opacitySpinner, this.opacitySlider));
     this.opacitySlider.getStyle().minWidth = "20rem";
-    this.addComponent(panelBasic, this.opacitySlider, 0, 5, 2, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
+    panelBasic.add(this.opacitySlider, new GBC(0, 5).w(2).a(GBC.NORTH).f(GBC.HORIZONTAL));
 
-    this.addVLine(panelBasic, 2, 2, 1, 5, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL);
-    this.addLabel(panelBasic, Z4Translations.OFFSET_Y, 3, 5, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE).cssAddClass("jslabel-vertical");
+    Z4UI.addVLine(panelBasic, new GBC(2, 2).h(5).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addLabel(panelBasic, Z4Translations.OFFSET_Y, new GBC(3, 6).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
 
     this.offsetYSpinner.cssAddClass("jsspinner-vertical");
     this.offsetYSpinner.cssAddClass("jsspinner_h_4rem");
     this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
     this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
     this.offsetYSpinner.addChangeListener(event -> this.onChange(true, this.offsetYSpinner.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
-    this.addComponent(panelBasic, this.offsetYSpinner, 3, 2, 1, 3, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.NONE, null);
+    panelBasic.add(this.offsetYSpinner, new GBC(3, 2).h(3).a(GBC.NORTH));
 
     this.offsetYSlider.setOrientation(JSSlider.VERTICAL);
     this.offsetYSlider.setInverted(true);
     this.offsetYSlider.getStyle().minHeight = "20rem";
     this.offsetYSlider.getStyle().minWidth = "1.5rem";
     this.offsetYSlider.addChangeListener(event -> this.onChange(false, this.offsetYSlider.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
-    this.addComponent(panelBasic, this.offsetYSlider, 4, 2, 1, 4, 0, 1, GridBagConstraints.NORTH, GridBagConstraints.NONE, null);
+    panelBasic.add(this.offsetYSlider, new GBC(4, 2).h(5).wy(1).a(GBC.NORTH));
 
     button = new JSButton();
     button.setText(Z4Translations.DUPLICATE);
@@ -213,7 +213,7 @@ public class Z4LayerPreview extends JSComponent {
       this.canvas.duplicateLayer(this.layer);
       this.removeAttribute("open");
     });
-    this.addComponent(panelBasic, button, 0, 6, 1, 1, 0, 0, GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE, null);
+    panelBasic.add(button, new GBC(0, 6).a(GBC.SOUTHWEST));
 
     this.delete.setText(Z4Translations.DELETE);
     this.delete.addActionListener(event -> JSOptionPane.showConfirmDialog(Z4Translations.DELETE_LAYER_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response -> {
@@ -223,14 +223,14 @@ public class Z4LayerPreview extends JSComponent {
         document.querySelector(".z4layerpreview:nth-child(" + (index + 1) + ")").remove();
       }
     }));
-    this.addComponent(panelBasic, this.delete, 1, 6, 1, 1, 0, 0, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE, null);
+    panelBasic.add(this.delete, new GBC(1, 6).a(GBC.SOUTHEAST));
 
     this.editor.addTab(Z4Translations.BASIC, panelBasic);
 
     JSPanel panelAdvanced = new JSPanel();
     panelAdvanced.setLayout(new GridBagLayout());
 
-    this.addLabel(panelAdvanced, Z4Translations.COMPOSITE_OPERATION, 0, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    Z4UI.addLabel(panelAdvanced, Z4Translations.COMPOSITE_OPERATION, new GBC(0, 0).a(GBC.WEST));
 
     Z4Constants.COMPOSITE_OPERATION.forEach((array, index, parent) -> {
       array.forEach((element, index2, array2) -> {
@@ -244,7 +244,7 @@ public class Z4LayerPreview extends JSComponent {
         this.compositeOperations.push(radio);
         this.compositeOperationsGroup.add(radio);
 
-        this.addComponent(panelAdvanced, radio, index2, index + 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(1, 1, 1, 1));
+        panelAdvanced.add(radio, new GBC(index2, index + 1).a(GBC.WEST).f(GBC.HORIZONTAL).i(1, 1, 1, 1));
       });
     });
 
@@ -286,37 +286,7 @@ public class Z4LayerPreview extends JSComponent {
       this.canvas.drawCanvas();
     });
 
-    this.addComponent(panel, button, gridx, gridy, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(1, 1, 1, 1));
-  }
-
-  private JSLabel addLabel(JSPanel panel, String text, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
-    JSLabel label = new JSLabel();
-    label.setText(text);
-    this.addComponent(panel, label, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, null);
-    return label;
-  }
-
-  private void addVLine(JSPanel panel, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
-    JSComponent div = new JSComponent(document.createElement("div"));
-    div.getStyle().width = "1px";
-    div.getStyle().background = "var(--main-action-bgcolor)";
-    this.addComponent(panel, div, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, new Insets(1, 2, 1, 2));
-  }
-
-  private void addComponent(JSPanel panel, JSComponent component, int gridx, int gridy, int gridwidth, int gridheight, int weightx, int weighty, int anchor, int fill, Insets insets) {
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = gridy;
-    constraints.gridwidth = gridwidth;
-    constraints.gridheight = gridheight;
-    constraints.weightx = weightx;
-    constraints.weighty = weighty;
-    constraints.anchor = anchor;
-    constraints.fill = fill;
-    if ($exists(insets)) {
-      constraints.insets = insets;
-    }
-    panel.add(component, constraints);
+    panel.add(button, new GBC(gridx, gridy).f(GBC.HORIZONTAL).i(1, 1, 1, 1));
   }
 
   private void onChange(boolean spTosl, boolean adjusting, JSSpinner spinner, JSSlider slider) {

@@ -1,6 +1,7 @@
 package pizzapazza.util;
 
 import def.dom.Element;
+import static def.dom.Globals.document;
 import javascript.awt.Color;
 import javascript.awt.GBC;
 import javascript.awt.GridBagConstraints;
@@ -11,7 +12,6 @@ import javascript.swing.JSPanel;
 import javascript.swing.JSProgressBar;
 import simulation.js.$Apply_0_Void;
 import static simulation.js.$Globals.$exists;
-import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.setTimeout;
 import static simulation.js.$Globals.window;
 
@@ -127,11 +127,28 @@ public class Z4UI {
    * @param panel The panel
    * @param text The text
    * @param gbc The constraints
+   * @return The added label
    */
-  public static void addLabel(JSPanel panel, String text, GridBagConstraints gbc) {
+  public static JSLabel addLabel(JSPanel panel, String text, GridBagConstraints gbc) {
     JSLabel label = new JSLabel();
     label.setText(text);
     panel.add(label, gbc);
+    return label;
+  }
+
+  /**
+   * Adds a vertical line in a panel with a GridBagLayout manager
+   *
+   * @param panel The panel
+   * @param gbc The constraints
+   * @return The added line
+   */
+  public static JSComponent addVLine(JSPanel panel, GridBagConstraints gbc) {
+    JSComponent div = new JSComponent(document.createElement("div"));
+    div.getStyle().width = "1px";
+    div.getStyle().background = "var(--main-action-bgcolor)";
+    panel.add(div, gbc);
+    return div;
   }
 
   private Z4UI() {
