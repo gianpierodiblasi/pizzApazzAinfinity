@@ -2,10 +2,11 @@ package pizzapazza.util;
 
 import def.dom.Element;
 import javascript.awt.Color;
+import javascript.awt.GBC;
 import javascript.awt.GridBagConstraints;
 import javascript.awt.GridBagLayout;
-import javascript.awt.Insets;
 import javascript.swing.JSComponent;
+import javascript.swing.JSLabel;
 import javascript.swing.JSPanel;
 import javascript.swing.JSProgressBar;
 import simulation.js.$Apply_0_Void;
@@ -27,19 +28,9 @@ public class Z4UI {
   static {
     Z4UI.PLEASE_WAIT.cssAddClass("please-wait");
     Z4UI.PLEASE_WAIT.setLayout(new GridBagLayout());
+    Z4UI.PLEASE_WAIT.add(Z4UI.PROGRESS_BAR, new GBC(0, 0).wx(1).f(GBC.HORIZONTAL).i(0, 25, 0, 25));
 
     Z4UI.PROGRESS_BAR.getStyle().display = "none";
-
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.gridx = 0;
-    constraints.gridy = 0;
-    constraints.gridwidth = 1;
-    constraints.gridheight = 1;
-    constraints.weightx = 1;
-    constraints.anchor = GridBagConstraints.CENTER;
-    constraints.fill = GridBagConstraints.HORIZONTAL;
-    constraints.insets = new Insets(0, 25, 0, 25);
-    Z4UI.PLEASE_WAIT.add(Z4UI.PROGRESS_BAR, constraints);
   }
 
   /**
@@ -128,6 +119,19 @@ public class Z4UI {
    */
   public static void setPleaseWaitProgressBarString(String string) {
     Z4UI.PROGRESS_BAR.setString(string);
+  }
+
+  /**
+   * Adds a label in a panel with a GridBagLayout manager
+   *
+   * @param panel The panel
+   * @param text The text
+   * @param gbc The constraints
+   */
+  public static void addLabel(JSPanel panel, String text, GridBagConstraints gbc) {
+    JSLabel label = new JSLabel();
+    label.setText(text);
+    panel.add(label, gbc);
   }
 
   private Z4UI() {

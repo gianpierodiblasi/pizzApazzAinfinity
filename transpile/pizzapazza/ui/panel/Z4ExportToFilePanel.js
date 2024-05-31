@@ -24,50 +24,24 @@ class Z4ExportToFilePanel extends JSPanel {
     super();
     this.cssAddClass("z4exporttofilepanel");
     this.setLayout(new GridBagLayout());
-    this.addLabel(Z4Translations.FILENAME, 0, 0);
+    Z4UI.addLabel(this, Z4Translations.FILENAME, new GBC(0, 0).a(GBC.WEST));
     this.filename.addActionListener(event => this.onchange());
-    let constraints = new GridBagConstraints();
-    constraints.gridx = 0;
-    constraints.gridy = 1;
-    constraints.gridwidth = 2;
-    constraints.fill = GridBagConstraints.HORIZONTAL;
-    constraints.weightx = 1;
-    this.add(this.filename, constraints);
+    this.add(this.filename, new GBC(0, 1).w(2).f(GBC.HORIZONTAL).wx(1));
     let group = new ButtonGroup();
     group.add(this.png);
     group.add(this.jpg);
     this.addRadio(this.png, true, "PNG", 0);
     this.addRadio(this.jpg, false, "JPG", 1);
-    this.addLabel(Z4Translations.QUALITY, 0, 3);
+    Z4UI.addLabel(this, Z4Translations.QUALITY, new GBC(0, 3).a(GBC.WEST));
     this.qualitySlider.setEnabled(false);
     this.qualitySlider.setValue(100);
     this.qualitySlider.addChangeListener(event => this.qualitySpinner.setValue(this.qualitySlider.getValue()));
-    constraints = new GridBagConstraints();
-    constraints.gridx = 0;
-    constraints.gridy = 4;
-    constraints.gridwidth = 2;
-    constraints.fill = GridBagConstraints.HORIZONTAL;
-    constraints.weightx = 1;
-    this.add(this.qualitySlider, constraints);
+    this.add(this.qualitySlider, new GBC(0, 4).w(2).f(GBC.HORIZONTAL).wx(1));
     this.qualitySpinner.cssAddClass("jsspinner_w_3rem");
     this.qualitySpinner.setEnabled(false);
     this.qualitySpinner.setModel(new SpinnerNumberModel(100, 0, 100, 1));
     this.qualitySpinner.addChangeListener(event => this.qualitySlider.setValue(this.qualitySpinner.getValue()));
-    constraints = new GridBagConstraints();
-    constraints.gridx = 1;
-    constraints.gridy = 3;
-    constraints.anchor = GridBagConstraints.EAST;
-    this.add(this.qualitySpinner, constraints);
-  }
-
-   addLabel(text, gridx, gridy) {
-    let label = new JSLabel();
-    label.setText(text);
-    let constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = gridy;
-    constraints.anchor = GridBagConstraints.WEST;
-    this.add(label, constraints);
+    this.add(this.qualitySpinner, new GBC(1, 3).a(GBC.EAST));
   }
 
    onchange() {
@@ -88,11 +62,7 @@ class Z4ExportToFilePanel extends JSPanel {
       this.qualitySlider.setEnabled(!selected);
       this.qualitySpinner.setEnabled(!selected);
     });
-    let constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = 2;
-    constraints.anchor = GridBagConstraints.WEST;
-    this.add(button, constraints);
+    this.add(button, new GBC(gridx, 2).a(GBC.WEST));
   }
 
   /**
