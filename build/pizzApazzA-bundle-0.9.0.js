@@ -2248,6 +2248,8 @@ class Z4LayerPreview extends JSComponent {
 
    name = new JSLabel();
 
+   eye = new JSButton();
+
    preview = new JSComponent(document.createElement("canvas"));
 
    ctx = this.preview.invoke("getContext('2d')");
@@ -2328,11 +2330,22 @@ class Z4LayerPreview extends JSComponent {
     this.summary.setLayout(new GridBagLayout());
     this.summary.add(this.name, new GBC(0, 0).w(3));
     this.summary.add(this.preview, new GBC(1, 1).h(3).f(GBC.BOTH));
+    this.eye.setText("\u00A0\uD83D\uDC41");
+    this.eye.setContentAreaFilled(false);
+    this.eye.addActionListener(event => {
+      let b = !this.layer.isHidden();
+      if (b) {
+        this.eye.getStyle().removeProperty("color");
+      } else {
+        this.eye.getStyle().color = "var(--main-action-bgcolor)";
+      }
+      this.layer.setHidden(b);
+      this.canvas.setChanged(true);
+      this.canvas.setSaved(false);
+      this.canvas.drawCanvas();
+    });
+    this.summary.add(this.eye, new GBC(0, 1).i(0, 0, 0, 2));
     let button = new JSButton();
-    button.setText("\u00A0\uD83D\uDC41");
-    button.setContentAreaFilled(false);
-    this.summary.add(button, new GBC(0, 1).i(0, 0, 0, 2));
-    button = new JSButton();
     // \u2611
     button.setText("\u2610\u00A0");
     button.setContentAreaFilled(false);
@@ -2507,6 +2520,11 @@ class Z4LayerPreview extends JSComponent {
     this.name.setText(this.layer.getName());
     this.editName.setText(this.layer.getName());
     this.setChildAttributeByQuery("summary", "title", this.layer.getName());
+    if (this.layer.isHidden()) {
+      this.eye.getStyle().removeProperty("color");
+    } else {
+      this.eye.getStyle().color = "var(--main-action-bgcolor)";
+    }
     let d = layer.getSize();
     let ratio = d.width / d.height;
     let w = 0.0;
@@ -6642,7 +6660,7 @@ class Z4Layer {
    * @return true if the hidden property is set, false otherwise
    */
    isHidden() {
-    return hidden;
+    return this.hidden;
   }
 
   /**

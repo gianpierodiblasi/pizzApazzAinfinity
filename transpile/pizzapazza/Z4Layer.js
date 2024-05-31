@@ -168,7 +168,7 @@ class Z4Layer {
    * @return true if the hidden property is set, false otherwise
    */
    isHidden() {
-    return hidden;
+    return this.hidden;
   }
 
   /**

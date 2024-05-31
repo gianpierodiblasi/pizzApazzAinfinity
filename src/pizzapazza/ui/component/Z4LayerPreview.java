@@ -38,6 +38,7 @@ public class Z4LayerPreview extends JSComponent {
 
   private final JSPanel summary = new JSPanel();
   private JSLabel name = new JSLabel();
+  private final JSButton eye = new JSButton();
   private final JSComponent preview = new JSComponent(document.createElement("canvas"));
   private final $CanvasRenderingContext2D ctx = this.preview.invoke("getContext('2d')");
 
@@ -117,12 +118,24 @@ public class Z4LayerPreview extends JSComponent {
     this.summary.add(this.name, new GBC(0, 0).w(3));
     this.summary.add(this.preview, new GBC(1, 1).h(3).f(GBC.BOTH));
 
-    JSButton button = new JSButton();
-    button.setText("\u00A0\uD83D\uDC41");
-    button.setContentAreaFilled(false);
-    this.summary.add(button, new GBC(0, 1).i(0, 0, 0, 2));
+    this.eye.setText("\u00A0\uD83D\uDC41");
+    this.eye.setContentAreaFilled(false);
+    this.eye.addActionListener(event -> {
+      boolean b = !this.layer.isHidden();
+      if (b) {
+        this.eye.getStyle().removeProperty("color");
+      } else {
+        this.eye.getStyle().color = "var(--main-action-bgcolor)";
+      }
 
-    button = new JSButton();
+      this.layer.setHidden(b);
+      this.canvas.setChanged(true);
+      this.canvas.setSaved(false);
+      this.canvas.drawCanvas();
+    });
+    this.summary.add(this.eye, new GBC(0, 1).i(0, 0, 0, 2));
+
+    JSButton button = new JSButton();
     button.setText("\u2610\u00A0"); //\u2611
     button.setContentAreaFilled(false);
     this.summary.add(button, new GBC(2, 1).i(0, 2, 0, 0));
@@ -330,6 +343,12 @@ public class Z4LayerPreview extends JSComponent {
     this.name.setText(this.layer.getName());
     this.editName.setText(this.layer.getName());
     this.setChildAttributeByQuery("summary", "title", this.layer.getName());
+
+    if (this.layer.isHidden()) {
+      this.eye.getStyle().removeProperty("color");
+    } else {
+      this.eye.getStyle().color = "var(--main-action-bgcolor)";
+    }
 
     Dimension d = layer.getSize();
     double ratio = d.width / d.height;
