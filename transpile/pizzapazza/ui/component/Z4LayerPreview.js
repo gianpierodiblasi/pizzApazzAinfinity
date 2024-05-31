@@ -45,6 +45,16 @@ class Z4LayerPreview extends JSComponent {
 
    changed = false;
 
+  /**
+   * The text content for the selected button
+   */
+  static  SELECTED_LAYER_CONTENT = "\u2611\u00A0";
+
+  /**
+   * The text content for the unselected button
+   */
+  static  UNSELECTED_LAYER_CONTENT = "\u2610\u00A0";
+
   static  PREVIEW_SIZE = 50;
 
   constructor() {
@@ -106,12 +116,18 @@ class Z4LayerPreview extends JSComponent {
       this.canvas.drawCanvas();
     });
     this.summary.add(this.eye, new GBC(0, 1).i(0, 0, 0, 2));
+    let selector = new JSButton();
+    selector.setText(Z4LayerPreview.SELECTED_LAYER_CONTENT);
+    selector.cssAddClass("z4layerpreview-selector");
+    selector.getStyle().color = "var(--main-action-bgcolor)";
+    selector.setContentAreaFilled(false);
+    selector.addActionListener(event => {
+      document.querySelectorAll(".z4layerpreview .z4layerpreview-selector").forEach(element => element.textContent = Z4LayerPreview.UNSELECTED_LAYER_CONTENT);
+      selector.setText(Z4LayerPreview.SELECTED_LAYER_CONTENT);
+      this.canvas.setSelectedLayer(this.layer);
+    });
+    this.summary.add(selector, new GBC(2, 1).i(0, 2, 0, 0));
     let button = new JSButton();
-    // \u2611
-    button.setText("\u2610\u00A0");
-    button.setContentAreaFilled(false);
-    this.summary.add(button, new GBC(2, 1).i(0, 2, 0, 0));
-    button = new JSButton();
     button.setText("\u00A0\u25C0");
     button.setContentAreaFilled(false);
     this.summary.add(button, new GBC(0, 2).i(0, 2, 0, 0));

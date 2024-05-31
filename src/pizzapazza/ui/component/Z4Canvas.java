@@ -60,6 +60,7 @@ public class Z4Canvas extends JSComponent {
   private boolean changed = false;
 
   private final Z4Paper paper = new Z4Paper();
+  private Z4Layer selectedLayer;
 
   /**
    * Creates the object
@@ -139,8 +140,10 @@ public class Z4Canvas extends JSComponent {
     this.width = width;
     this.height = height;
 
+    this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
+
     this.ribbonLayerPanel.reset();
-    this.ribbonLayerPanel.addLayerPreview(this.paper.getLayerAt(this.paper.getLayersCount() - 1));
+    this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
 
     this.ribbonHistoryPanel.resetHistory(() -> {
       this.afterCreate("", width, height);
@@ -185,8 +188,10 @@ public class Z4Canvas extends JSComponent {
       this.width = (int) image.width;
       this.height = (int) image.height;
 
+      this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
+
       this.ribbonLayerPanel.reset();
-      this.ribbonLayerPanel.addLayerPreview(this.paper.getLayerAt(this.paper.getLayersCount() - 1));
+      this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
 
       this.ribbonHistoryPanel.resetHistory(() -> {
         this.afterCreate(projectName, (int) image.width, (int) image.height);
@@ -247,11 +252,11 @@ public class Z4Canvas extends JSComponent {
 
       image.onload = event -> {
         this.paper.addLayerFromImage(layers.$get(index).$get("name"), image, (int) image.width, (int) image.height);
-        Z4Layer layer = this.paper.getLayerAt(index);
-        layer.setOpacity(layers.$get(index).$get("opacity"));
-        layer.setCompositeOperation(layers.$get(index).$get("compositeOperation"));
-        layer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
-        this.ribbonLayerPanel.addLayerPreview(layer);
+        this.selectedLayer = this.paper.getLayerAt(index);
+        this.selectedLayer.setOpacity(layers.$get(index).$get("opacity"));
+        this.selectedLayer.setCompositeOperation(layers.$get(index).$get("compositeOperation"));
+        this.selectedLayer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
+        this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
 
         if (index + 1 < layers.length) {
           this.openLayer(zip, json, layers, index + 1);
@@ -412,7 +417,7 @@ public class Z4Canvas extends JSComponent {
 
       layers.$set(index, layerJSON);
 
-      if (index + 1 == this.paper.getLayersCount()) {
+      if (index + 1 == this.getLayersCount()) {
         $Object JSON = new $Object();
         JSON.$set("projectName", this.projectName);
         JSON.$set("width", this.width);
@@ -508,7 +513,7 @@ public class Z4Canvas extends JSComponent {
     String found = "";
     while (!$exists(found)) {
       found = Z4Translations.LAYER + "_" + counter;
-      for (int index = 0; index < this.paper.getLayersCount(); index++) {
+      for (int index = 0; index < this.getLayersCount(); index++) {
         if (found == this.paper.getLayerAt(index).getName()) {
           found = "";
         }
@@ -535,7 +540,10 @@ public class Z4Canvas extends JSComponent {
   private void afterAddLayer() {
     this.changed = true;
     this.ribbonHistoryPanel.saveHistory("standard,tool");
-    this.ribbonLayerPanel.addLayerPreview(this.paper.getLayerAt(this.paper.getLayersCount() - 1));
+
+    this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
+
+    this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
     this.saved = false;
   }
 
@@ -552,11 +560,11 @@ public class Z4Canvas extends JSComponent {
       image.onload = event -> {
         this.paper.addLayerFromImage(this.findLayerName(), image, this.width, this.height);
 
-        Z4Layer duplicate = this.paper.getLayerAt(this.paper.getLayersCount() - 1);
-        duplicate.setOpacity(layer.getOpacity());
-        duplicate.setCompositeOperation(layer.getCompositeOperation());
-        duplicate.move(offset.x, offset.y);
-        this.ribbonLayerPanel.addLayerPreview(duplicate);
+        this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
+        this.selectedLayer.setOpacity(layer.getOpacity());
+        this.selectedLayer.setCompositeOperation(layer.getCompositeOperation());
+        this.selectedLayer.move(offset.x, offset.y);
+        this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
 
         this.saved = false;
         this.drawCanvas();
@@ -574,7 +582,13 @@ public class Z4Canvas extends JSComponent {
    * @return The layer index
    */
   public int deleteLayer(Z4Layer layer) {
+    int oldCount = this.getLayersCount();
     int index = this.paper.deleteLayer(layer);
+
+    if (this.selectedLayer == layer) {
+      this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
+      document.querySelector(".z4layerpreview:nth-child(" + oldCount + ") .z4layerpreview-selector").textContent = Z4LayerPreview.SELECTED_LAYER_CONTENT;
+    }
 
     this.saved = false;
     this.drawCanvas();
@@ -598,6 +612,15 @@ public class Z4Canvas extends JSComponent {
     } else {
       return false;
     }
+  }
+
+  /**
+   * Sets the selected layer
+   *
+   * @param selectedLayer The selected layer
+   */
+  public void setSelectedLayer(Z4Layer selectedLayer) {
+    this.selectedLayer = selectedLayer;
   }
 
   /**

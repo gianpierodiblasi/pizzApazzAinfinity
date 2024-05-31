@@ -18,6 +18,7 @@ import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import simulation.dom.$DOMRect;
 import static simulation.js.$Globals.$typeof;
+import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.navigator;
 import static simulation.js.$Globals.parseInt;
 
@@ -137,6 +138,8 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
       this.layerDnD = layer;
       this.previewDnD = preview;
     });
+
+    document.querySelectorAll(".z4layerpreview .z4layerpreview-selector").forEach(element -> element.textContent = Z4LayerPreview.UNSELECTED_LAYER_CONTENT);
 
     this.layersPreview.add(preview, null);
   }
