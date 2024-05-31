@@ -7,13 +7,11 @@ import def.dom.ImageData;
 import def.dom.MouseEvent;
 import def.js.Array;
 import javascript.awt.Color;
-import javascript.awt.GridBagConstraints;
+import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
-import javascript.awt.Insets;
 import javascript.swing.JSButton;
 import javascript.swing.JSColorChooser;
 import javascript.swing.JSComponent;
-import javascript.swing.JSLabel;
 import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
 import javascript.swing.JSSlider;
@@ -26,8 +24,8 @@ import pizzapazza.color.Z4GradientColor;
 import pizzapazza.math.Z4Math;
 import pizzapazza.ui.component.Z4ColorPreview;
 import pizzapazza.util.Z4Translations;
+import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
-import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.$typeof;
 import simulation.js.$Uint8Array;
 
@@ -70,15 +68,15 @@ public class Z4GradientColorPanel extends JSPanel {
     this.preview.addEventListener("mousedown", event -> this.onMouse((MouseEvent) event, "down"));
     this.preview.addEventListener("mousemove", event -> this.onMouse((MouseEvent) event, "move"));
     this.preview.addEventListener("mouseup", event -> this.onMouse((MouseEvent) event, "up"));
-    this.addComponent(this.preview, 0, 0, 3, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 5, 0));
+    this.add(this.preview, new GBC(0, 0).w(3).i(0, 0, 5, 0));
 
     this.colorPreview.setColor(this.gradientColor.getColorAtIndex(this.selectedIndex));
-    this.addComponent(this.colorPreview, 0, 1, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, null);
+    this.add(this.colorPreview, new GBC(0, 1).wx(1).f(GBC.HORIZONTAL));
 
     JSButton button = new JSButton();
     button.setText(Z4Translations.EDIT);
     button.addActionListener(event -> this.selectColor());
-    this.addComponent(button, 1, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
+    this.add(button, new GBC(1, 1).a(GBC.WEST).i(0, 5, 0, 0));
 
     this.delete.setText(Z4Translations.DELETE);
     this.delete.setEnabled(false);
@@ -91,22 +89,22 @@ public class Z4GradientColorPanel extends JSPanel {
       }
     }));
 
-    this.addComponent(this.delete, 2, 1, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
+    this.add(this.delete, new GBC(2, 1).a(GBC.WEST).i(0, 5, 0, 0));
 
-    this.addLabel(Z4Translations.RIPPLE, 0, 3, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    Z4UI.addLabel(this, Z4Translations.RIPPLE, new GBC(0, 3).a(GBC.WEST));
 
     this.rippleSpinner.cssAddClass("jsspinner_w_4rem");
     this.rippleSpinner.setModel(new SpinnerNumberModel(0, 0, 100, 1));
     this.rippleSpinner.addChangeListener(event -> this.onChange(true, this.rippleSpinner.getValueIsAdjusting()));
-    this.addComponent(this.rippleSpinner, 1, 3, 2, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5, 0, 0, 0));
+    this.add(this.rippleSpinner, new GBC(1, 3).w(2).a(GBC.EAST).i(5, 0, 0, 0));
 
     this.rippleSlider.setValue(0);
     this.rippleSlider.getStyle().minWidth = "20rem";
     this.rippleSlider.addChangeListener(event -> this.onChange(false, this.rippleSlider.getValueIsAdjusting()));
-    this.addComponent(this.rippleSlider, 0, 4, 3, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
+    this.add(this.rippleSlider, new GBC(0, 4).w(3).a(GBC.NORTH).f(GBC.HORIZONTAL));
 
     JSPanel panel = new JSPanel();
-    this.addComponent(panel, 0, 5, 3, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
+    this.add(panel, new GBC(0, 5).w(3).a(GBC.NORTH).f(GBC.HORIZONTAL));
 
     button = new JSButton();
     button.setText(Z4Translations.MIRRORED);
@@ -127,28 +125,6 @@ public class Z4GradientColorPanel extends JSPanel {
     panel.add(button, null);
 
     this.drawPreview(false);
-  }
-
-  private void addLabel(String text, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
-    JSLabel label = new JSLabel();
-    label.setText(text);
-    this.addComponent(label, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, null);
-  }
-
-  private void addComponent(JSComponent component, int gridx, int gridy, int gridwidth, int gridheight, int weightx, int weighty, int anchor, int fill, Insets insets) {
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = gridy;
-    constraints.gridwidth = gridwidth;
-    constraints.gridheight = gridheight;
-    constraints.weightx = weightx;
-    constraints.weighty = weighty;
-    constraints.anchor = anchor;
-    constraints.fill = fill;
-    if ($exists(insets)) {
-      constraints.insets = insets;
-    }
-    this.add(component, constraints);
   }
 
   @SuppressWarnings("StringEquality")

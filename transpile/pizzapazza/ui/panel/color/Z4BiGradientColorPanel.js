@@ -52,34 +52,34 @@ class Z4BiGradientColorPanel extends JSPanel {
     super();
     this.cssAddClass("z4bigradientcolorpanel");
     this.setLayout(new GridBagLayout());
-    this.addComponent(new JSLabel(), 0, 0, 3, 1, 0, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
-    this.space = this.addLabel(Z4Translations.SPACE, 1, 1, 2, 1, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE);
-    this.time = this.addLabel(Z4Translations.TIME, 0, 2, 3, 2, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE);
+    this.add(new JSLabel(), new GBC(0, 0).w(3).wy(1));
+    this.space = Z4UI.addLabel(this, Z4Translations.SPACE, new GBC(1, 1).w(2).a(GBC.SOUTHEAST));
+    this.time = Z4UI.addLabel(this, Z4Translations.TIME, new GBC(0, 2).wh(3, 2).a(GBC.SOUTHEAST));
     this.time.cssAddClass("jslabel-vertical");
     this.preview.setProperty("width", "" + this.width);
     this.preview.setProperty("height", "" + this.height);
     this.preview.addEventListener("mousedown", event => this.onMouse(event, "down"));
     this.preview.addEventListener("mousemove", event => this.onMouse(event, "move"));
     this.preview.addEventListener("mouseup", event => this.onMouse(event, "up"));
-    this.addComponent(this.preview, 1, 2, 2, 2, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
-    this.addLabel(Z4Translations.RIPPLE, 3, 3, 1, 2, GridBagConstraints.SOUTH, GridBagConstraints.NONE).cssAddClass("jslabel-vertical");
+    this.add(this.preview, new GBC(1, 2).wh(2, 2));
+    Z4UI.addLabel(this, Z4Translations.RIPPLE, new GBC(3, 3).h(2).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
     this.biRippleSpinner.cssAddClass("jsspinner-vertical");
     this.biRippleSpinner.cssAddClass("jsspinner_h_4rem");
     this.biRippleSpinner.setModel(new SpinnerNumberModel(0, 0, 100, 1));
     this.biRippleSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
     this.biRippleSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
     this.biRippleSpinner.addChangeListener(event => this.onChange(true, this.biRippleSpinner.getValueIsAdjusting(), this.biRippleSpinner, this.biRippleSlider, true));
-    this.addComponent(this.biRippleSpinner, 3, 0, 1, 3, 0, 0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
+    this.add(this.biRippleSpinner, new GBC(3, 0).h(3).a(GBC.NORTHEAST).i(0, 5, 0, 0));
     this.biRippleSlider.setValue(0);
     this.biRippleSlider.setOrientation(JSSlider.VERTICAL);
     this.biRippleSlider.setInverted(true);
     this.biRippleSlider.getStyle().minHeight = "20rem";
     this.biRippleSlider.getStyle().minWidth = "1.5rem";
     this.biRippleSlider.addChangeListener(event => this.onChange(false, this.biRippleSlider.getValueIsAdjusting(), this.biRippleSpinner, this.biRippleSlider, true));
-    this.addComponent(this.biRippleSlider, 4, 0, 1, 5, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    this.add(this.biRippleSlider, new GBC(4, 0).h(5).a(GBC.EAST));
     let panel = new JSPanel();
     panel.cssAddClass("jspanel-vertical");
-    this.addComponent(panel, 5, 0, 1, 5, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.BOTH, null);
+    this.add(panel, new GBC(5, 0).h(5).a(GBC.NORTH).f(GBC.BOTH));
     let button = new JSButton();
     button.cssAddClass("jsbutton-vertical");
     button.setText(Z4Translations.MIRRORED);
@@ -107,14 +107,14 @@ class Z4BiGradientColorPanel extends JSPanel {
       }
     }));
     panel.add(this.biDelete, null);
-    this.addComponent(new JSLabel(), 0, 4, 3, 1, 0, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
-    this.addHLine(0, 5, 6, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL);
+    this.add(new JSLabel(), new GBC(0, 4).w(3).wy(1));
+    Z4UI.addHLine(this, new GBC(0, 5).w(6).a(GBC.WEST).f(GBC.HORIZONTAL).i(2, 1, 2, 1));
     this.colorPreview.setColor(this.biGradientColor.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
-    this.addComponent(this.colorPreview, 0, 6, 2, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, null);
+    this.add(this.colorPreview, new GBC(0, 6).w(2).wx(1).f(GBC.HORIZONTAL));
     button = new JSButton();
     button.setText(Z4Translations.EDIT);
     button.addActionListener(event => this.selectColor());
-    this.addComponent(button, 2, 6, 2, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
+    this.add(button, new GBC(2, 6).w(2).a(GBC.WEST).i(0, 5, 0, 0));
     this.delete.setText(Z4Translations.DELETE);
     this.delete.setEnabled(false);
     this.delete.addActionListener(event => JSOptionPane.showConfirmDialog(Z4Translations.DELETE_COLOR_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
@@ -125,18 +125,18 @@ class Z4BiGradientColorPanel extends JSPanel {
         this.afterOperation(gradientColor);
       }
     }));
-    this.addComponent(this.delete, 4, 6, 2, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0));
-    this.addLabel(Z4Translations.RIPPLE, 0, 7, 2, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    this.add(this.delete, new GBC(4, 6).w(2).a(GBC.EAST).i(0, 5, 0, 0));
+    Z4UI.addLabel(this, Z4Translations.RIPPLE, new GBC(0, 7).w(2).a(GBC.WEST));
     this.rippleSpinner.setModel(new SpinnerNumberModel(0, 0, 100, 1));
     this.rippleSpinner.cssAddClass("jsspinner_w_4rem");
     this.rippleSpinner.addChangeListener(event => this.onChange(true, this.rippleSpinner.getValueIsAdjusting(), this.rippleSpinner, this.rippleSlider, false));
-    this.addComponent(this.rippleSpinner, 3, 7, 3, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5, 0, 0, 0));
+    this.add(this.rippleSpinner, new GBC(3, 7).w(3).a(GBC.EAST).i(5, 0, 0, 0));
     this.rippleSlider.setValue(0);
     this.rippleSlider.getStyle().minWidth = "20rem";
     this.rippleSlider.addChangeListener(event => this.onChange(false, this.rippleSlider.getValueIsAdjusting(), this.rippleSpinner, this.rippleSlider, false));
-    this.addComponent(this.rippleSlider, 0, 8, 6, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
+    this.add(this.rippleSlider, new GBC(0, 8).w(6).a(GBC.NORTH).f(GBC.HORIZONTAL));
     panel = new JSPanel();
-    this.addComponent(panel, 0, 9, 6, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
+    this.add(panel, new GBC(0, 9).w(6).a(GBC.NORTH).f(GBC.HORIZONTAL));
     button = new JSButton();
     button.setText(Z4Translations.MIRRORED);
     button.addActionListener(event => {
@@ -154,36 +154,6 @@ class Z4BiGradientColorPanel extends JSPanel {
     });
     panel.add(button, null);
     this.drawPreview(false);
-  }
-
-   addLabel(text, gridx, gridy, gridwidth, gridheight, anchor, fill) {
-    let label = new JSLabel();
-    label.setText(text);
-    this.addComponent(label, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, null);
-    return label;
-  }
-
-   addHLine(gridx, gridy, gridwidth, gridheight, anchor, fill) {
-    let div = new JSComponent(document.createElement("div"));
-    div.getStyle().height = "1px";
-    div.getStyle().background = "var(--main-action-bgcolor)";
-    this.addComponent(div, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, new Insets(2, 1, 2, 1));
-  }
-
-   addComponent(component, gridx, gridy, gridwidth, gridheight, weightx, weighty, anchor, fill, insets) {
-    let constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = gridy;
-    constraints.gridwidth = gridwidth;
-    constraints.gridheight = gridheight;
-    constraints.weightx = weightx;
-    constraints.weighty = weighty;
-    constraints.anchor = anchor;
-    constraints.fill = fill;
-    if (insets) {
-      constraints.insets = insets;
-    }
-    this.add(component, constraints);
   }
 
    onMouse(event, type) {
