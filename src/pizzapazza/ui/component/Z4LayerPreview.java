@@ -118,7 +118,7 @@ public class Z4LayerPreview extends JSComponent {
       }
     });
 
-    this.name.getStyle().width = (Z4LayerPreview.PREVIEW_SIZE + 30) + "px";
+    this.name.getStyle().width = (Z4LayerPreview.PREVIEW_SIZE + 35) + "px";
 
     this.preview.setAttribute("width", "" + Z4LayerPreview.PREVIEW_SIZE);
     this.preview.setAttribute("height", "" + Z4LayerPreview.PREVIEW_SIZE);
@@ -143,7 +143,7 @@ public class Z4LayerPreview extends JSComponent {
       this.canvas.setSaved(false);
       this.canvas.drawCanvas();
     });
-    this.summary.add(this.eye, new GBC(0, 1).f(GBC.HORIZONTAL).i(0, 0, 0, 2));
+    this.summary.add(this.eye, new GBC(0, 1).f(GBC.BOTH).i(0, 0, 0, 2));
 
     JSButton selector = new JSButton();
     selector.setText(Z4LayerPreview.SELECTED_LAYER_CONTENT);
@@ -157,32 +157,34 @@ public class Z4LayerPreview extends JSComponent {
 
       this.canvas.setSelectedLayer(this.layer);
     });
-    this.summary.add(selector, new GBC(2, 1).f(GBC.HORIZONTAL).i(0, 2, 0, 0));
+    this.summary.add(selector, new GBC(2, 1).f(GBC.BOTH).i(0, 2, 0, 0));
 
     JSButton button = new JSButton();
     button.setText("\uD83E\uDC08");
     button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
-    this.summary.add(button, new GBC(0, 2).f(GBC.HORIZONTAL).i(0, 0, 0, 2));
+    this.summary.add(button, new GBC(0, 2).f(GBC.BOTH).i(0, 0, 0, 2));
 
     button = new JSButton();
     button.setText("\u2BEC");
     button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
-    this.summary.add(button, new GBC(0, 3).f(GBC.HORIZONTAL).i(0, 0, 0, 2));
+    this.summary.add(button, new GBC(0, 3).f(GBC.BOTH).i(0, 0, 0, 2));
 
     button = new JSButton();
     button.setText("\uD83E\uDC0A");
     button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
-    this.summary.add(button, new GBC(2, 2).f(GBC.HORIZONTAL).i(0, 2, 0, 0));
+    this.summary.add(button, new GBC(2, 2).f(GBC.BOTH).i(0, 2, 0, 0));
 
     button = new JSButton();
     button.setText("\u2BEE");
     button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
-    this.summary.add(button, new GBC(2, 3).f(GBC.HORIZONTAL).i(0, 2, 0, 0));
+    this.summary.add(button, new GBC(2, 3).f(GBC.BOTH).i(0, 2, 0, 0));
 
+    Z4UI.addVLine(this.summary, new GBC(3, 0).h(4).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    
     this.appendNodeChild(document.createElement("summary"));
     this.appendChildInTree("summary", this.summary);
 
