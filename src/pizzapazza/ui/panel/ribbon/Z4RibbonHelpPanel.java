@@ -16,7 +16,7 @@ import static simulation.js.$Globals.document;
  *
  * @author gianpiero.diblasi
  */
-public class Z4RibbonHelpPanel extends JSPanel {
+public class Z4RibbonHelpPanel extends Z4AbstractRibbonPanel {
 
   /**
    * Creates the object

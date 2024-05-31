@@ -9,7 +9,6 @@ import javascript.swing.JSColorChooser;
 import javascript.swing.JSComboBox;
 import javascript.swing.JSLabel;
 import javascript.swing.JSOptionPane;
-import javascript.swing.JSPanel;
 import javascript.swing.MnR.DefaultKeyValueComboBoxModelAndRenderer;
 import javascript.util.KeyValue;
 import pizzapazza.util.Z4Translations;
@@ -22,7 +21,7 @@ import static simulation.js.$Globals.parseInt;
  *
  * @author gianpiero.diblasi
  */
-public class Z4RibbonSettingsPanel extends JSPanel {
+public class Z4RibbonSettingsPanel extends Z4AbstractRibbonPanel {
 
   private final JSComboBox<KeyValue<String, String>> language = new JSComboBox<>();
   private final JSComboBox<KeyValue<String, String>> theme = new JSComboBox<>();
@@ -144,8 +143,7 @@ public class Z4RibbonSettingsPanel extends JSPanel {
     this.savingDelay.setModelAndRenderer(savingDelayModelAndRenderer);
     this.savingDelay.setSelectedItem(selectedSavingDelay);
     this.savingDelay.addActionListener(event -> this.onchangeHistoryManagementSettings());
-    this.add(this.savingDelay, new GBC(5, 1).a(GBC.WEST).i(0, 5, 0, 0)
-    );
+    this.add(this.savingDelay, new GBC(5, 1).a(GBC.WEST).i(0, 5, 0, 0));
 
     Z4UI.addLabel(this, Z4Translations.SAVING_INTERVAL, new GBC(6, 0).a(GBC.WEST).i(5, 5, 2, 0));
 
@@ -167,8 +165,7 @@ public class Z4RibbonSettingsPanel extends JSPanel {
     this.savingInterval.setModelAndRenderer(savingIntervalModelAndRenderer);
     this.savingInterval.setSelectedItem(selectedSavingInterval);
     this.savingInterval.addActionListener(event -> this.onchangeHistoryManagementSettings());
-    this.add(this.savingInterval, new GBC(6, 1).a(GBC.WEST).i(0, 5, 0, 0)
-    );
+    this.add(this.savingInterval, new GBC(6, 1).a(GBC.WEST).i(0, 5, 0, 0));
 
     Z4UI.addVLine(this, new GBC(7, 0).h(3).wy(1).a(GBC.EAST).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
@@ -177,8 +174,7 @@ public class Z4RibbonSettingsPanel extends JSPanel {
     reset.setContentAreaFilled(false);
     reset.addActionListener(event -> this.onreset());
 
-    this.add(reset, new GBC(8, 1).a(GBC.BOTH).i(0, 5, 0, 5)
-    );
+    this.add(reset, new GBC(8, 1).a(GBC.BOTH).i(0, 5, 0, 5));
   }
 
   @SuppressWarnings("unchecked")

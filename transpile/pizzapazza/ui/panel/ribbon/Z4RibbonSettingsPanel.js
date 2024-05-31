@@ -3,7 +3,7 @@
  *
  * @author gianpiero.diblasi
  */
-class Z4RibbonSettingsPanel extends JSPanel {
+class Z4RibbonSettingsPanel extends Z4AbstractRibbonPanel {
 
    language = new JSComboBox();
 

@@ -6,10 +6,8 @@ import def.dom.IDBKeyRange;
 import def.js.Date;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
-import javascript.awt.event.ActionListener;
 import javascript.swing.JSButton;
 import javascript.swing.JSOptionPane;
-import javascript.swing.JSPanel;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.util.Z4Translations;
@@ -28,12 +26,12 @@ import simulation.js.$Object;
  *
  * @author gianpiero.diblasi
  */
-public class Z4RibbonHistoryPanel extends JSPanel {
+public class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
 
-  private final JSButton undo = new JSButton();
-  private final JSButton redo = new JSButton();
-  private final JSButton save = new JSButton();
-  private final JSButton consolidate = new JSButton();
+  private final JSButton undo;
+  private final JSButton redo;
+  private final JSButton save;
+  private final JSButton consolidate;
 
   private Z4Canvas canvas;
   private Z4StatusPanel statusPanel;
@@ -56,13 +54,13 @@ public class Z4RibbonHistoryPanel extends JSPanel {
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonhistorypanel");
 
-    this.addButton(this.undo, Z4Translations.UNDO, 0, 0, "left", event -> {
+    this.undo = this.addButton(Z4Translations.UNDO, false, 0, 0, "left", event -> {
     });
-    this.addButton(this.redo, Z4Translations.REDO, 1, 0, "right", event -> {
+    this.redo = this.addButton(Z4Translations.REDO, false, 1, 0, "right", event -> {
     });
-    this.addButton(this.save, Z4Translations.SAVE, 2, 0, "", event -> this.saveHistory("manual"));
+    this.save = this.addButton(Z4Translations.SAVE, false, 2, 0, "", event -> this.saveHistory("manual"));
 
-    this.addButton(this.consolidate, Z4Translations.CONSOLIDATE, 3, 0, "", event -> JSOptionPane.showConfirmDialog(Z4Translations.CONSOLIDATE_MESSAGE, Z4Translations.CONSOLIDATE, JSOptionPane.YES_NO_OPTION, JSOptionPane.WARNING_MESSAGE, response -> {
+    this.consolidate = this.addButton(Z4Translations.CONSOLIDATE, false, 3, 0, "", event -> JSOptionPane.showConfirmDialog(Z4Translations.CONSOLIDATE_MESSAGE, Z4Translations.CONSOLIDATE, JSOptionPane.YES_NO_OPTION, JSOptionPane.WARNING_MESSAGE, response -> {
       if (response == JSOptionPane.YES_OPTION) {
         this.canvas.setChanged(false);
         this.resetHistory(() -> this.canvas.toHistory(json -> this.addHistory(json, key -> this.setCurrentKey(key), false)));
@@ -261,38 +259,5 @@ public class Z4RibbonHistoryPanel extends JSPanel {
       case "tool":
         break;
     }
-  }
-
-  private void addButton(JSButton button, String text, int gridx, int gridy, String border, ActionListener listener) {
-    button.setText(text);
-    button.setEnabled(false);
-    button.setContentAreaFilled(false);
-    button.addActionListener(listener);
-
-    GBC gbc = new GBC(gridx, gridy).a(GBC.NORTH);
-    switch (border) {
-      case "left":
-        gbc.i(5, 5, 0, 0);
-        button.getStyle().borderTopRightRadius = "0px";
-        button.getStyle().borderBottomRightRadius = "0px";
-        button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
-        break;
-      case "both":
-        gbc.i(5, 0, 0, 0);
-        button.getStyle().borderRadius = "0px";
-        button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
-        button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
-        break;
-      case "right":
-        gbc.i(5, 0, 0, 5);
-        button.getStyle().borderTopLeftRadius = "0px";
-        button.getStyle().borderBottomLeftRadius = "0px";
-        button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
-        break;
-      default:
-        gbc.i(5, 0, 0, 5);
-    }
-
-    this.add(button, gbc);
   }
 }

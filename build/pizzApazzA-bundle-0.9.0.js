@@ -4288,11 +4288,66 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
   }
 }
 /**
+ * The abstract panel for all ribbon panels
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4AbstractRibbonPanel extends JSPanel {
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super();
+  }
+
+  /**
+   * Adds a button
+   *
+   * @param text The text
+   * @param enabled true to enable the button, false otherwise
+   * @param gridx The grid x
+   * @param gridy The grid y
+   * @param border The border type
+   * @param listener The listener
+   * @return The added button
+   */
+   addButton(text, enabled, gridx, gridy, border, listener) {
+    let button = new JSButton();
+    button.setText(text);
+    button.setEnabled(enabled);
+    button.setContentAreaFilled(false);
+    button.addActionListener(listener);
+    let gbc = new GBC(gridx, gridy).a(GBC.NORTH);
+    switch(border) {
+      case "left":
+        gbc.i(0, 5, 0, 0);
+        button.getStyle().borderTopRightRadius = "0px";
+        button.getStyle().borderBottomRightRadius = "0px";
+        button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "both":
+        button.getStyle().borderRadius = "0px";
+        button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "right":
+        gbc.i(0, 0, 0, 5);
+        button.getStyle().borderTopLeftRadius = "0px";
+        button.getStyle().borderBottomLeftRadius = "0px";
+        button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        break;
+    }
+    this.add(button, gbc);
+    return button;
+  }
+}
+/**
  * The ribbon panel containing the file menus
  *
  * @author gianpiero.diblasi
  */
-class Z4RibbonFilePanel extends JSPanel {
+class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
 
    canvas = null;
 
@@ -4339,35 +4394,6 @@ class Z4RibbonFilePanel extends JSPanel {
    */
    setStatusPanel(statusPanel) {
     this.statusPanel = statusPanel;
-  }
-
-   addButton(text, enabled, gridx, gridy, border, listener) {
-    let button = new JSButton();
-    button.setText(text);
-    button.setEnabled(enabled);
-    button.setContentAreaFilled(false);
-    button.addActionListener(listener);
-    let gbc = new GBC(gridx, gridy).a(GBC.NORTH);
-    switch(border) {
-      case "left":
-        gbc.i(0, 5, 0, 0);
-        button.getStyle().borderTopRightRadius = "0px";
-        button.getStyle().borderBottomRightRadius = "0px";
-        button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
-        break;
-      case "both":
-        button.getStyle().borderRadius = "0px";
-        button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
-        button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
-        break;
-      case "right":
-        gbc.i(0, 0, 0, 5);
-        button.getStyle().borderTopLeftRadius = "0px";
-        button.getStyle().borderBottomLeftRadius = "0px";
-        button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
-        break;
-    }
-    this.add(button, gbc);
   }
 
    checkSaved(title, apply) {
@@ -4471,7 +4497,7 @@ class Z4RibbonFilePanel extends JSPanel {
  *
  * @author gianpiero.diblasi
  */
-class Z4RibbonHelpPanel extends JSPanel {
+class Z4RibbonHelpPanel extends Z4AbstractRibbonPanel {
 
   /**
    * Creates the object
@@ -4531,15 +4557,15 @@ class Z4RibbonHelpPanel extends JSPanel {
  *
  * @author gianpiero.diblasi
  */
-class Z4RibbonHistoryPanel extends JSPanel {
+class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
 
-   undo = new JSButton();
+   undo = null;
 
-   redo = new JSButton();
+   redo = null;
 
-   save = new JSButton();
+   save = null;
 
-   consolidate = new JSButton();
+   consolidate = null;
 
    canvas = null;
 
@@ -4566,12 +4592,12 @@ class Z4RibbonHistoryPanel extends JSPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonhistorypanel");
-    this.addButton(this.undo, Z4Translations.UNDO, 0, 0, "left", event => {
+    this.undo = this.addButton(Z4Translations.UNDO, false, 0, 0, "left", event => {
     });
-    this.addButton(this.redo, Z4Translations.REDO, 1, 0, "right", event => {
+    this.redo = this.addButton(Z4Translations.REDO, false, 1, 0, "right", event => {
     });
-    this.addButton(this.save, Z4Translations.SAVE, 2, 0, "", event => this.saveHistory("manual"));
-    this.addButton(this.consolidate, Z4Translations.CONSOLIDATE, 3, 0, "", event => JSOptionPane.showConfirmDialog(Z4Translations.CONSOLIDATE_MESSAGE, Z4Translations.CONSOLIDATE, JSOptionPane.YES_NO_OPTION, JSOptionPane.WARNING_MESSAGE, response => {
+    this.save = this.addButton(Z4Translations.SAVE, false, 2, 0, "", event => this.saveHistory("manual"));
+    this.consolidate = this.addButton(Z4Translations.CONSOLIDATE, false, 3, 0, "", event => JSOptionPane.showConfirmDialog(Z4Translations.CONSOLIDATE_MESSAGE, Z4Translations.CONSOLIDATE, JSOptionPane.YES_NO_OPTION, JSOptionPane.WARNING_MESSAGE, response => {
       if (response === JSOptionPane.YES_OPTION) {
         this.canvas.setChanged(false);
         this.resetHistory(() => this.canvas.toHistory(json => this.addHistory(json, key => this.setCurrentKey(key), false)));
@@ -4759,44 +4785,13 @@ class Z4RibbonHistoryPanel extends JSPanel {
         break;
     }
   }
-
-   addButton(button, text, gridx, gridy, border, listener) {
-    button.setText(text);
-    button.setEnabled(false);
-    button.setContentAreaFilled(false);
-    button.addActionListener(listener);
-    let gbc = new GBC(gridx, gridy).a(GBC.NORTH);
-    switch(border) {
-      case "left":
-        gbc.i(5, 5, 0, 0);
-        button.getStyle().borderTopRightRadius = "0px";
-        button.getStyle().borderBottomRightRadius = "0px";
-        button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
-        break;
-      case "both":
-        gbc.i(5, 0, 0, 0);
-        button.getStyle().borderRadius = "0px";
-        button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
-        button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
-        break;
-      case "right":
-        gbc.i(5, 0, 0, 5);
-        button.getStyle().borderTopLeftRadius = "0px";
-        button.getStyle().borderBottomLeftRadius = "0px";
-        button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
-        break;
-      default:
-        gbc.i(5, 0, 0, 5);
-    }
-    this.add(button, gbc);
-  }
 }
 /**
  * The ribbon panel containing the layer menus
  *
  * @author gianpiero.diblasi
  */
-class Z4RibbonLayerPanel extends JSPanel {
+class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
 
    layersPreview = new JSPanel();
 
@@ -4860,35 +4855,6 @@ class Z4RibbonLayerPanel extends JSPanel {
     this.statusPanel = statusPanel;
   }
 
-   addButton(text, enabled, gridx, gridy, border, listener) {
-    let button = new JSButton();
-    button.setText(text);
-    button.setEnabled(enabled);
-    button.setContentAreaFilled(false);
-    button.addActionListener(listener);
-    let gbc = new GBC(gridx, gridy).a(GBC.NORTH);
-    switch(border) {
-      case "left":
-        gbc.i(0, 5, 0, 0);
-        button.getStyle().borderTopRightRadius = "0px";
-        button.getStyle().borderBottomRightRadius = "0px";
-        button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
-        break;
-      case "both":
-        button.getStyle().borderRadius = "0px";
-        button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
-        button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
-        break;
-      case "right":
-        gbc.i(0, 0, 0, 5);
-        button.getStyle().borderTopLeftRadius = "0px";
-        button.getStyle().borderBottomLeftRadius = "0px";
-        button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
-        break;
-    }
-    this.add(button, gbc);
-  }
-
    addFromColor() {
     let canvasSize = this.canvas.getSize();
     let panel = new Z4NewImagePanel();
@@ -4941,7 +4907,7 @@ class Z4RibbonLayerPanel extends JSPanel {
  *
  * @author gianpiero.diblasi
  */
-class Z4RibbonSettingsPanel extends JSPanel {
+class Z4RibbonSettingsPanel extends Z4AbstractRibbonPanel {
 
    language = new JSComboBox();
 

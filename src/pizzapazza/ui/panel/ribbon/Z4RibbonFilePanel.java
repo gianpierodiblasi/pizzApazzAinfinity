@@ -7,8 +7,6 @@ import javascript.awt.BorderLayout;
 import javascript.awt.Dimension;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
-import javascript.awt.event.ActionListener;
-import javascript.swing.JSButton;
 import javascript.swing.JSCheckBox;
 import javascript.swing.JSFileChooser;
 import javascript.swing.JSLabel;
@@ -34,7 +32,7 @@ import static simulation.js.$Globals.navigator;
  *
  * @author gianpiero.diblasi
  */
-public class Z4RibbonFilePanel extends JSPanel {
+public class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
 
   private Z4Canvas canvas;
   private Z4StatusPanel statusPanel;
@@ -83,37 +81,6 @@ public class Z4RibbonFilePanel extends JSPanel {
    */
   public void setStatusPanel(Z4StatusPanel statusPanel) {
     this.statusPanel = statusPanel;
-  }
-
-  private void addButton(String text, boolean enabled, int gridx, int gridy, String border, ActionListener listener) {
-    JSButton button = new JSButton();
-    button.setText(text);
-    button.setEnabled(enabled);
-    button.setContentAreaFilled(false);
-    button.addActionListener(listener);
-
-    GBC gbc = new GBC(gridx, gridy).a(GBC.NORTH);
-    switch (border) {
-      case "left":
-        gbc.i(0, 5, 0, 0);
-        button.getStyle().borderTopRightRadius = "0px";
-        button.getStyle().borderBottomRightRadius = "0px";
-        button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
-        break;
-      case "both":
-        button.getStyle().borderRadius = "0px";
-        button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
-        button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
-        break;
-      case "right":
-        gbc.i(0, 0, 0, 5);
-        button.getStyle().borderTopLeftRadius = "0px";
-        button.getStyle().borderBottomLeftRadius = "0px";
-        button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
-        break;
-    }
-
-    this.add(button, gbc);
   }
 
   private void checkSaved(String title, $Apply_0_Void apply) {

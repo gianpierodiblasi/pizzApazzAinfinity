@@ -3,7 +3,7 @@
  *
  * @author gianpiero.diblasi
  */
-class Z4RibbonHelpPanel extends JSPanel {
+class Z4RibbonHelpPanel extends Z4AbstractRibbonPanel {
 
   /**
    * Creates the object
