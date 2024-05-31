@@ -3,9 +3,8 @@ package pizzapazza.ui.panel;
 import def.js.Array;
 import def.js.Number;
 import javascript.awt.Dimension;
-import javascript.awt.GridBagConstraints;
+import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
-import javascript.awt.Insets;
 import javascript.swing.JSLabel;
 import javascript.swing.JSPanel;
 import javascript.swing.JSSpinner;
@@ -15,6 +14,7 @@ import javascript.swing.event.ChangeEvent;
 import javascript.swing.event.ChangeListener;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
+import pizzapazza.util.Z4UI;
 import static simulation.js.$Globals.$typeof;
 
 /**
@@ -32,6 +32,7 @@ public class Z4NewImagePanel extends JSTabbedPane {
   private final Z4FillingPanel fillingPanel = new Z4FillingPanel();
 
   private final Array<ChangeListener> listeners = new Array<>();
+
   /**
    * Creates the object
    */
@@ -45,37 +46,20 @@ public class Z4NewImagePanel extends JSTabbedPane {
     panel.setLayout(new GridBagLayout());
     this.addTab(Z4Translations.DIMENSION, panel);
 
-    this.addLabel(panel, Z4Translations.WIDTH + " (px)", 0, 0, 1, 5);
+    Z4UI.addLabel(panel, Z4Translations.WIDTH + " (px)", new GBC(0, 0).a(GBC.WEST).i(5, 5, 0, 5));
     this.addSpinner(panel, this.width, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 0, 1);
-    this.addLabel(panel, Z4Translations.HEIGHT + " (px)", 1, 0, 1, 5);
+    Z4UI.addLabel(panel, Z4Translations.HEIGHT + " (px)", new GBC(1, 0).a(GBC.WEST).i(5, 5, 0, 5));
     this.addSpinner(panel, this.height, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 1, 1);
-    this.addLabel(panel, Z4Translations.RESOLUTION + " (dpi)", 2, 0, 1, 5);
+    Z4UI.addLabel(panel, Z4Translations.RESOLUTION + " (dpi)", new GBC(2, 0).a(GBC.WEST).i(5, 5, 0, 5));
     this.addSpinner(panel, this.resolution, Z4Constants.DEFAULT_DPI, Z4Constants.MAX_DPI, 2, 1);
-    this.addDimension(panel, this.dimensionMM, 3);
-    this.addDimension(panel, this.dimensionIN, 4);
+    panel.add(this.dimensionMM, new GBC(0, 2).w(3).f(GBC.HORIZONTAL).i(2, 5, 0, 0));
+    panel.add(this.dimensionIN, new GBC(0, 3).w(3).f(GBC.HORIZONTAL).i(2, 5, 0, 0));
 
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.gridx = 0;
-    constraints.gridy = 5;
-    constraints.weighty = 1;
-    panel.add(new JSLabel(), constraints);
+    panel.add(new JSLabel(), new GBC(0, 4).wy(1));
 
     this.addTab(Z4Translations.FILLING, this.fillingPanel);
 
     this.setDimensions();
-  }
-
-  private void addLabel(JSPanel panel, String text, int gridx, int gridy, int gridwidth, int top) {
-    JSLabel label = new JSLabel();
-    label.setText(text);
-
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = gridy;
-    constraints.gridwidth = gridwidth;
-    constraints.anchor = GridBagConstraints.WEST;
-    constraints.insets = new Insets(top, 5, 0, 5);
-    panel.add(label, constraints);
   }
 
   private void addSpinner(JSPanel panel, JSSpinner spinner, double value, double max, int gridx, int gridy) {
@@ -84,22 +68,7 @@ public class Z4NewImagePanel extends JSTabbedPane {
     spinner.getChilStyleByQuery("input[type=number]").minWidth = "5.5rem";
     spinner.getChilStyleByQuery("input[type=number]").width = "5.5rem";
     spinner.addChangeListener(event -> this.setDimensions());
-
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = gridy;
-    constraints.anchor = GridBagConstraints.WEST;
-    constraints.insets = new Insets(0, 5, 0, 5);
-    panel.add(spinner, constraints);
-  }
-
-  private void addDimension(JSPanel panel, JSLabel label, int gridy) {
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.gridy = gridy;
-    constraints.gridwidth = 3;
-    constraints.fill = GridBagConstraints.HORIZONTAL;
-    constraints.insets = new Insets(2, 5, 0, 0);
-    panel.add(label, constraints);
+    panel.add(spinner, new GBC(gridx, gridy).a(GBC.WEST).i(0, 5, 0, 5));
   }
 
   private void setDimensions() {
@@ -113,7 +82,7 @@ public class Z4NewImagePanel extends JSTabbedPane {
     this.dimensionMM.setText(new Number(dimWIN * 25.4).toFixed(2) + " \u2716 " + new Number(dimHIN * 25.4).toFixed(2) + " mm");
     this.dimensionIN.setText(new Number(dimWIN).toFixed(2) + " \u2716 " + new Number(dimHIN).toFixed(2) + " inch");
     this.fillingPanel.setSize((int) w, (int) h);
-    
+
     this.onchange();
   }
 
@@ -148,7 +117,7 @@ public class Z4NewImagePanel extends JSTabbedPane {
   public Object getSelectedFilling() {
     return this.fillingPanel.getSelectedFilling();
   }
-  
+
   /**
    * Adds a change listener
    *
@@ -157,7 +126,7 @@ public class Z4NewImagePanel extends JSTabbedPane {
   public void addChangeListener(ChangeListener listener) {
     this.listeners.push(listener);
   }
-  
+
   private void onchange() {
     ChangeEvent event = new ChangeEvent();
 

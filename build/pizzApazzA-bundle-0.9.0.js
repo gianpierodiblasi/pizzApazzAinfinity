@@ -5766,33 +5766,17 @@ class Z4NewImagePanel extends JSTabbedPane {
     let panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
     this.addTab(Z4Translations.DIMENSION, panel);
-    this.addLabel(panel, Z4Translations.WIDTH + " (px)", 0, 0, 1, 5);
+    Z4UI.addLabel(panel, Z4Translations.WIDTH + " (px)", new GBC(0, 0).a(GBC.WEST).i(5, 5, 0, 5));
     this.addSpinner(panel, this.width, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 0, 1);
-    this.addLabel(panel, Z4Translations.HEIGHT + " (px)", 1, 0, 1, 5);
+    Z4UI.addLabel(panel, Z4Translations.HEIGHT + " (px)", new GBC(1, 0).a(GBC.WEST).i(5, 5, 0, 5));
     this.addSpinner(panel, this.height, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 1, 1);
-    this.addLabel(panel, Z4Translations.RESOLUTION + " (dpi)", 2, 0, 1, 5);
+    Z4UI.addLabel(panel, Z4Translations.RESOLUTION + " (dpi)", new GBC(2, 0).a(GBC.WEST).i(5, 5, 0, 5));
     this.addSpinner(panel, this.resolution, Z4Constants.DEFAULT_DPI, Z4Constants.MAX_DPI, 2, 1);
-    this.addDimension(panel, this.dimensionMM, 3);
-    this.addDimension(panel, this.dimensionIN, 4);
-    let constraints = new GridBagConstraints();
-    constraints.gridx = 0;
-    constraints.gridy = 5;
-    constraints.weighty = 1;
-    panel.add(new JSLabel(), constraints);
+    panel.add(this.dimensionMM, new GBC(0, 2).w(3).f(GBC.HORIZONTAL).i(2, 5, 0, 0));
+    panel.add(this.dimensionIN, new GBC(0, 3).w(3).f(GBC.HORIZONTAL).i(2, 5, 0, 0));
+    panel.add(new JSLabel(), new GBC(0, 4).wy(1));
     this.addTab(Z4Translations.FILLING, this.fillingPanel);
     this.setDimensions();
-  }
-
-   addLabel(panel, text, gridx, gridy, gridwidth, top) {
-    let label = new JSLabel();
-    label.setText(text);
-    let constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = gridy;
-    constraints.gridwidth = gridwidth;
-    constraints.anchor = GridBagConstraints.WEST;
-    constraints.insets = new Insets(top, 5, 0, 5);
-    panel.add(label, constraints);
   }
 
    addSpinner(panel, spinner, value, max, gridx, gridy) {
@@ -5801,21 +5785,7 @@ class Z4NewImagePanel extends JSTabbedPane {
     spinner.getChilStyleByQuery("input[type=number]").minWidth = "5.5rem";
     spinner.getChilStyleByQuery("input[type=number]").width = "5.5rem";
     spinner.addChangeListener(event => this.setDimensions());
-    let constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = gridy;
-    constraints.anchor = GridBagConstraints.WEST;
-    constraints.insets = new Insets(0, 5, 0, 5);
-    panel.add(spinner, constraints);
-  }
-
-   addDimension(panel, label, gridy) {
-    let constraints = new GridBagConstraints();
-    constraints.gridy = gridy;
-    constraints.gridwidth = 3;
-    constraints.fill = GridBagConstraints.HORIZONTAL;
-    constraints.insets = new Insets(2, 5, 0, 0);
-    panel.add(label, constraints);
+    panel.add(spinner, new GBC(gridx, gridy).a(GBC.WEST).i(0, 5, 0, 5));
   }
 
    setDimensions() {
