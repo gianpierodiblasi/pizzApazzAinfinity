@@ -36,18 +36,18 @@ class Z4FillingPanel extends JSPanel {
     this.cssAddClass("z4fillingpanel");
     let panelRadio = new JSPanel();
     panelRadio.setLayout(new BoxLayout(panelRadio, BoxLayout.Y_AXIS));
-    this.addComponent(panelRadio, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, 0, null);
-    this.addVLine(1);
+    this.add(panelRadio, new GBC(0, 0).wy(1));
+    Z4UI.addVLine(this, new GBC(1, 0).wy(1).a(GBC.NORTH).f(GBC.VERTICAL).i(1, 5, 1, 5));
     let panelColor = new JSPanel();
     let cardColor = new CardLayout(0, 0);
     panelColor.setLayout(cardColor);
-    this.addComponent(panelColor, 2, GridBagConstraints.NORTH, GridBagConstraints.NONE, 1, new Insets(5, 0, 0, 0));
-    this.addVLine(3);
+    this.add(panelColor, new GBC(2, 0).wxy(1, 1).a(GBC.NORTH).i(5, 0, 0, 0));
+    Z4UI.addVLine(this, new GBC(3, 0).wy(1).a(GBC.NORTH).f(GBC.VERTICAL).i(1, 5, 1, 5));
     let panelFiller = new JSPanel();
     let cardFiller = new CardLayout(0, 0);
     panelFiller.setLayout(cardFiller);
     panelFiller.getStyle().display = "none";
-    this.addComponent(panelFiller, 4, GridBagConstraints.NORTH, GridBagConstraints.NONE, 1, null);
+    this.add(panelFiller, new GBC(4, 0).wxy(1, 1).a(GBC.NORTH));
     let flatPanel = this.cardColorPanels[0];
     flatPanel.setLayout(new BorderLayout(5, 0));
     let label = new JSLabel();
@@ -129,29 +129,6 @@ class Z4FillingPanel extends JSPanel {
       }
     });
     this.cardColorSelectors.forEach((card, index, array) => panelColor.add(this.cardColorPanels[index], card));
-  }
-
-   addVLine(gridx) {
-    let div = new JSComponent(document.createElement("div"));
-    div.getStyle().width = "1px";
-    div.getStyle().background = "var(--main-action-bgcolor)";
-    this.addComponent(div, gridx, GridBagConstraints.NORTH, GridBagConstraints.VERTICAL, 0, new Insets(1, 5, 1, 5));
-  }
-
-   addComponent(component, gridx, anchor, fill, weightx, insets) {
-    let constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = 0;
-    constraints.gridwidth = 1;
-    constraints.gridheight = 1;
-    constraints.anchor = anchor;
-    constraints.fill = fill;
-    constraints.weightx = weightx;
-    constraints.weighty = 1;
-    if (insets) {
-      constraints.insets = insets;
-    }
-    this.add(component, constraints);
   }
 
    afterEval(panelFiller, card, index, gradientColorPanel) {

@@ -6,13 +6,11 @@ import javascript.awt.BorderLayout;
 import javascript.awt.BoxLayout;
 import javascript.awt.CardLayout;
 import javascript.awt.Color;
-import javascript.awt.GridBagConstraints;
+import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
-import javascript.awt.Insets;
 import javascript.swing.ButtonGroup;
 import javascript.swing.JSButton;
 import javascript.swing.JSColorChooser;
-import javascript.swing.JSComponent;
 import javascript.swing.JSLabel;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
@@ -25,7 +23,6 @@ import pizzapazza.util.Z4EmptyImageProducer;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import static simulation.js.$Globals.$exists;
-import static simulation.js.$Globals.document;
 
 /**
  * The panel to manage a filling
@@ -60,22 +57,22 @@ public class Z4FillingPanel extends JSPanel {
 
     JSPanel panelRadio = new JSPanel();
     panelRadio.setLayout(new BoxLayout(panelRadio, BoxLayout.Y_AXIS));
-    this.addComponent(panelRadio, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, 0, null);
+    this.add(panelRadio, new GBC(0, 0).wy(1));
 
-    this.addVLine(1);
+    Z4UI.addVLine(this, new GBC(1, 0).wy(1).a(GBC.NORTH).f(GBC.VERTICAL).i(1, 5, 1, 5));
 
     JSPanel panelColor = new JSPanel();
     CardLayout cardColor = new CardLayout(0, 0);
     panelColor.setLayout(cardColor);
-    this.addComponent(panelColor, 2, GridBagConstraints.NORTH, GridBagConstraints.NONE, 1, new Insets(5, 0, 0, 0));
+    this.add(panelColor, new GBC(2, 0).wxy(1, 1).a(GBC.NORTH).i(5, 0, 0, 0));
 
-    this.addVLine(3);
+    Z4UI.addVLine(this, new GBC(3, 0).wy(1).a(GBC.NORTH).f(GBC.VERTICAL).i(1, 5, 1, 5));
 
     JSPanel panelFiller = new JSPanel();
     CardLayout cardFiller = new CardLayout(0, 0);
     panelFiller.setLayout(cardFiller);
     panelFiller.getStyle().display = "none";
-    this.addComponent(panelFiller, 4, GridBagConstraints.NORTH, GridBagConstraints.NONE, 1, null);
+    this.add(panelFiller, new GBC(4, 0).wxy(1, 1).a(GBC.NORTH));
 
     JSPanel flatPanel = this.cardColorPanels.$get(0);
     flatPanel.setLayout(new BorderLayout(5, 0));
@@ -168,29 +165,6 @@ public class Z4FillingPanel extends JSPanel {
     });
 
     this.cardColorSelectors.forEach((card, index, array) -> panelColor.add(this.cardColorPanels.$get(index), card));
-  }
-
-  private void addVLine(int gridx) {
-    JSComponent div = new JSComponent(document.createElement("div"));
-    div.getStyle().width = "1px";
-    div.getStyle().background = "var(--main-action-bgcolor)";
-    this.addComponent(div, gridx, GridBagConstraints.NORTH, GridBagConstraints.VERTICAL, 0, new Insets(1, 5, 1, 5));
-  }
-
-  private void addComponent(JSComponent component, int gridx, int anchor, int fill, double weightx, Insets insets) {
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = 0;
-    constraints.gridwidth = 1;
-    constraints.gridheight = 1;
-    constraints.anchor = anchor;
-    constraints.fill = fill;
-    constraints.weightx = weightx;
-    constraints.weighty = 1;
-    if ($exists(insets)) {
-      constraints.insets = insets;
-    }
-    this.add(component, constraints);
   }
 
   private void afterEval(JSPanel panelFiller, String card, int index, Z4GradientColorPanel gradientColorPanel) {
