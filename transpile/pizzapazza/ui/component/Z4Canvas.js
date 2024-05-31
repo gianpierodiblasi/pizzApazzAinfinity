@@ -492,11 +492,11 @@ class Z4Canvas extends JSComponent {
    * @return The layer index
    */
    deleteLayer(layer) {
-    let oldCount = this.getLayersCount();
     let index = this.paper.deleteLayer(layer);
     if (this.selectedLayer === layer) {
-      this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
-      document.querySelector(".z4layerpreview:nth-child(" + oldCount + ") .z4layerpreview-selector").textContent = Z4LayerPreview.SELECTED_LAYER_CONTENT;
+      let count = this.getLayersCount();
+      this.selectedLayer = this.paper.getLayerAt(count - 1);
+      document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ") .z4layerpreview-selector").textContent = Z4LayerPreview.SELECTED_LAYER_CONTENT;
     }
     this.saved = false;
     this.drawCanvas();

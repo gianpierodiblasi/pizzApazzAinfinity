@@ -48,12 +48,12 @@ class Z4LayerPreview extends JSComponent {
   /**
    * The text content for the selected button
    */
-  static  SELECTED_LAYER_CONTENT = "\u2611\u00A0";
+  static  SELECTED_LAYER_CONTENT = "\u2611";
 
   /**
    * The text content for the unselected button
    */
-  static  UNSELECTED_LAYER_CONTENT = "\u2610\u00A0";
+  static  UNSELECTED_LAYER_CONTENT = "\u2610";
 
   static  PREVIEW_SIZE = 50;
 
@@ -82,7 +82,7 @@ class Z4LayerPreview extends JSComponent {
           this.getChilStyleByQuery(".z4layerpreview-editor").top = "auto";
           this.getChilStyleByQuery(".z4layerpreview-editor").bottom = "5px";
         }
-        this.delete.setEnabled(document.querySelectorAll(".z4layerpreview").length > 1);
+        this.delete.setEnabled(this.canvas.getLayersCount() > 1);
       } else {
         if (this.changed) {
           this.canvas.setChanged(true);
@@ -101,7 +101,7 @@ class Z4LayerPreview extends JSComponent {
     this.summary.setLayout(new GridBagLayout());
     this.summary.add(this.name, new GBC(0, 0).w(3));
     this.summary.add(this.preview, new GBC(1, 1).h(3).f(GBC.BOTH));
-    this.eye.setText("\u00A0\uD83D\uDC41");
+    this.eye.setText("\uD83D\uDC41");
     this.eye.setContentAreaFilled(false);
     this.eye.addActionListener(event => {
       let b = !this.layer.isHidden();
@@ -115,7 +115,7 @@ class Z4LayerPreview extends JSComponent {
       this.canvas.setSaved(false);
       this.canvas.drawCanvas();
     });
-    this.summary.add(this.eye, new GBC(0, 1).i(0, 0, 0, 2));
+    this.summary.add(this.eye, new GBC(0, 1).f(GBC.HORIZONTAL).i(0, 0, 0, 2));
     let selector = new JSButton();
     selector.setText(Z4LayerPreview.SELECTED_LAYER_CONTENT);
     selector.cssAddClass("z4layerpreview-selector");
@@ -126,23 +126,27 @@ class Z4LayerPreview extends JSComponent {
       selector.setText(Z4LayerPreview.SELECTED_LAYER_CONTENT);
       this.canvas.setSelectedLayer(this.layer);
     });
-    this.summary.add(selector, new GBC(2, 1).i(0, 2, 0, 0));
+    this.summary.add(selector, new GBC(2, 1).f(GBC.HORIZONTAL).i(0, 2, 0, 0));
     let button = new JSButton();
-    button.setText("\u00A0\u25C0");
+    button.setText("\uD83E\uDC08");
+    button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
-    this.summary.add(button, new GBC(0, 2).i(0, 2, 0, 0));
+    this.summary.add(button, new GBC(0, 2).f(GBC.HORIZONTAL).i(0, 0, 0, 2));
     button = new JSButton();
-    button.setText("|\u25C0");
+    button.setText("\u2BEC");
+    button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
-    this.summary.add(button, new GBC(0, 3).i(0, 2, 0, 0));
+    this.summary.add(button, new GBC(0, 3).f(GBC.HORIZONTAL).i(0, 0, 0, 2));
     button = new JSButton();
-    button.setText("\u25B6\u00A0");
+    button.setText("\uD83E\uDC0A");
+    button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
-    this.summary.add(button, new GBC(2, 2).i(0, 2, 0, 0));
+    this.summary.add(button, new GBC(2, 2).f(GBC.HORIZONTAL).i(0, 2, 0, 0));
     button = new JSButton();
-    button.setText("\u25B6|");
+    button.setText("\u2BEE");
+    button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
-    this.summary.add(button, new GBC(2, 3).i(0, 2, 0, 0));
+    this.summary.add(button, new GBC(2, 3).f(GBC.HORIZONTAL).i(0, 2, 0, 0));
     this.appendNodeChild(document.createElement("summary"));
     this.appendChildInTree("summary", this.summary);
     this.editor.cssAddClass("z4layerpreview-editor");
