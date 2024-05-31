@@ -16,14 +16,14 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
    */
   constructor() {
     super(3, new Array(Z4AbstractBoundaryBehaviorFiller.STOP_AT_BOUNDARY, Z4AbstractBoundaryBehaviorFiller.FILL_AT_BOUNDARY, Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY, Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY));
-    this.addLabel(Z4Translations.VERTICES, 0, 7, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    Z4UI.addLabel(this, Z4Translations.VERTICES, new GBC(0, 7).a(GBC.WEST));
     this.star.setText(Z4Translations.STAR);
     this.star.setEnabled(false);
     this.star.addActionListener(event => {
       this.setIcons();
       this.drawPreview(false);
     });
-    this.addComponent(this.star, 1, 7, 3, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    this.add(this.star, new GBC(1, 7).w(3).a(GBC.EAST));
     let vertexModelAndRenderer = new DefaultSliderModelAndRenderer();
     for (let vertex = 3; vertex < 10; vertex++) {
       vertexModelAndRenderer.addElement("" + vertex);
@@ -36,7 +36,7 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       this.setIcons();
       this.drawPreview(false);
     });
-    this.addComponent(this.vertexCounter, 0, 8, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    this.add(this.vertexCounter, new GBC(0, 8).w(4).a(GBC.WEST).f(GBC.HORIZONTAL));
     this.getChilStyleByQuery("*:nth-child(13) datalist option:nth-child(8)").fontSize = "larger";
     this.regular.setText(Z4Translations.REGULAR);
     this.regular.addActionListener(event => {

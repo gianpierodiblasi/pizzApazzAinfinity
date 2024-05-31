@@ -151,6 +151,21 @@ public class Z4UI {
     return div;
   }
 
+  /**
+   * Adds a horizontal line in a panel with a GridBagLayout manager
+   *
+   * @param panel The panel
+   * @param gbc The constraints
+   * @return The added line
+   */
+  public static JSComponent addHLine(JSPanel panel, GridBagConstraints gbc) {
+    JSComponent div = new JSComponent(document.createElement("div"));
+    div.getStyle().height = "1px";
+    div.getStyle().background = "var(--main-action-bgcolor)";
+    panel.add(div, gbc);
+    return div;
+  }
+
   private Z4UI() {
   }
 }

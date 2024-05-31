@@ -7,7 +7,7 @@ import def.dom.ImageData;
 import def.js.Array;
 import javascript.awt.BorderLayout;
 import javascript.awt.Color;
-import javascript.awt.GridBagConstraints;
+import javascript.awt.GBC;
 import javascript.awt.Point;
 import javascript.swing.ButtonGroup;
 import javascript.swing.JSButton;
@@ -23,6 +23,7 @@ import pizzapazza.math.Z4Math;
 import pizzapazza.ui.component.Z4ColorPreview;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
+import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
 import simulation.dom.$OffscreenCanvas;
@@ -55,10 +56,10 @@ public class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
   public Z4TextureFillerPanel() {
     super(2, new Array<>(false, true));
 
-    this.addLabel(Z4Translations.DIMENSION, 0, 7, 4, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    Z4UI.addLabel(this, Z4Translations.DIMENSION, new GBC(0, 7).w(4).a(GBC.WEST));
 
     JSPanel panel = new JSPanel();
-    this.addComponent(panel, 0, 8, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    this.add(panel, new GBC(0, 8).w(4).a(GBC.WEST).f(GBC.HORIZONTAL));
 
     this.free.setText(Z4Translations.FREE);
     this.free.setSelected(true);
@@ -71,11 +72,11 @@ public class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
     this.group.add(this.lock);
     panel.add(this.lock, null);
 
-    this.addLabel(Z4Translations.BACKGROUND_COLOR, 0, 9, 4, 1, GridBagConstraints.EAST, GridBagConstraints.NONE);
+    Z4UI.addLabel(this, Z4Translations.BACKGROUND_COLOR, new GBC(0, 9).w(4).a(GBC.EAST));
 
     panel = new JSPanel();
     panel.setLayout(new BorderLayout(5, 0));
-    this.addComponent(panel, 0, 10, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    this.add(panel, new GBC(0, 10).w(4).a(GBC.WEST).f(GBC.HORIZONTAL));
 
     this.colorPreview.getStyle().alignSelf = "center";
     this.colorPreview.setColor(this.backgroundColor);

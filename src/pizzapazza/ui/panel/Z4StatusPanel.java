@@ -1,9 +1,8 @@
 package pizzapazza.ui.panel;
 
 import static def.js.Globals.parseFloat;
-import javascript.awt.GridBagConstraints;
+import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
-import javascript.awt.Insets;
 import javascript.swing.JSComboBox;
 import javascript.swing.JSLabel;
 import javascript.swing.JSPanel;
@@ -35,7 +34,7 @@ public class Z4StatusPanel extends JSPanel {
     this.setLayout(new GridBagLayout());
 
     this.projectName.setText(Z4Translations.PROJECT_NAME + ": ");
-    this.setLabel(this.projectName, 0);
+    this.add(this.projectName, new GBC(0, 0).i(0, 5, 0, 5));
 
     this.addPipe(1);
 
@@ -47,29 +46,20 @@ public class Z4StatusPanel extends JSPanel {
     this.zoom.getChilStyleByQuery("ul").minWidth = "5rem";
     this.zoom.setSelectedItem(new KeyValue<>("1", ""));
     this.zoom.addActionListener(event -> this.onZoom());
-
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.gridx = 2;
-    constraints.gridy = 0;
-    constraints.insets = new Insets(0, 5, 0, 5);
-    this.add(this.zoom, constraints);
+    this.add(this.zoom, new GBC(2, 0).i(0, 5, 0, 5));
 
     this.addPipe(3);
 
     this.projectSize.setText(Z4Translations.DIMENSION + ": " + Z4Constants.DEFAULT_IMAGE_SIZE + " \u2716 " + Z4Constants.DEFAULT_IMAGE_SIZE);
-    this.setLabel(this.projectSize, 4);
+    this.add(this.projectSize, new GBC(4, 0).i(0, 5, 0, 5));
 
     this.addPipe(5);
 
     this.mousePosition.getStyle().fontFamily = "monospace";
     this.setMousePosition(0, 0);
-    this.setLabel(this.mousePosition, 6);
+    this.add(this.mousePosition, new GBC(6, 0).i(0, 5, 0, 5));
 
-    constraints = new GridBagConstraints();
-    constraints.gridx = 7;
-    constraints.gridy = 0;
-    constraints.weightx = 1;
-    this.add(new JSLabel(), constraints);
+    this.add(new JSLabel(), new GBC(7, 0).wx(1));
   }
 
   private void addPipe(int gridx) {
@@ -77,16 +67,7 @@ public class Z4StatusPanel extends JSPanel {
     pipe.setText("|");
     pipe.getStyle().minWidth = "0.5rem";
     pipe.getStyle().textAlign = "center";
-    this.setLabel(pipe, gridx);
-  }
-
-  private void setLabel(JSLabel label, int gridx) {
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = 0;
-    constraints.anchor = GridBagConstraints.CENTER;
-    constraints.insets = new Insets(0, 5, 0, 5);
-    this.add(label, constraints);
+    this.add(pipe, new GBC(gridx, 0).i(0, 5, 0, 5));
   }
 
   /**

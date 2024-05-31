@@ -3,7 +3,7 @@ package pizzapazza.ui.panel.filler;
 import def.dom.CanvasGradient;
 import def.dom.CanvasPattern;
 import def.js.Array;
-import javascript.awt.GridBagConstraints;
+import javascript.awt.GBC;
 import javascript.awt.Point;
 import javascript.swing.JSCheckBox;
 import javascript.swing.JSSlider;
@@ -18,6 +18,7 @@ import pizzapazza.filler.Z4StarFiller;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import pizzapazza.util.Z4Translations;
+import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
 
 /**
@@ -43,7 +44,7 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
             Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY
     ));
 
-    this.addLabel(Z4Translations.VERTICES, 0, 7, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    Z4UI.addLabel(this, Z4Translations.VERTICES, new GBC(0, 7).a(GBC.WEST));
 
     this.star.setText(Z4Translations.STAR);
     this.star.setEnabled(false);
@@ -52,7 +53,7 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       this.drawPreview(false);
     });
 
-    this.addComponent(this.star, 1, 7, 3, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    this.add(this.star, new GBC(1, 7).w(3).a(GBC.EAST));
 
     DefaultSliderModelAndRenderer<String> vertexModelAndRenderer = new DefaultSliderModelAndRenderer<>();
     for (int vertex = 3; vertex < 10; vertex++) {
@@ -67,7 +68,7 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       this.drawPreview(false);
     });
 
-    this.addComponent(this.vertexCounter, 0, 8, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    this.add(this.vertexCounter, new GBC(0, 8).w(4).a(GBC.WEST).f(GBC.HORIZONTAL));
     this.getChilStyleByQuery("*:nth-child(13) datalist option:nth-child(8)").fontSize = "larger";
 
     this.regular.setText(Z4Translations.REGULAR);

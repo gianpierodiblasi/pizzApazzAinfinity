@@ -54,40 +54,40 @@ class Z4AbstractFillerPanel extends JSPanel {
     this.cssAddClass("z4abstractfillerpanel");
     this.setLayout(new GridBagLayout());
     let panelOptions = new JSPanel();
-    this.addComponent(panelOptions, 0, 0, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    this.add(panelOptions, new GBC(0, 0).w(4).a(GBC.WEST).f(GBC.HORIZONTAL));
     this.preview.setProperty("width", "" + Z4AbstractFillerPanel.SIZE);
     this.preview.setProperty("height", "" + Z4AbstractFillerPanel.SIZE);
     this.preview.addEventListener("mousedown", event => this.onMouse(event, "down"));
     this.preview.addEventListener("mousemove", event => this.onMouse(event, "move"));
     this.preview.addEventListener("mouseup", event => this.onMouse(event, "up"));
-    this.addComponent(this.preview, 0, 1, 2, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, null);
-    this.addLabel("y", 2, 2, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE).cssAddClass("jslabel-vertical");
+    this.add(this.preview, new GBC(0, 1).wh(2, 2).wxy(1, 1));
+    Z4UI.addLabel(this, "y", new GBC(2, 2).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
     this.ySpinner.cssAddClass("jsspinner-vertical");
     this.ySpinner.cssAddClass("jsspinner_h_4rem");
     this.ySpinner.setModel(new SpinnerNumberModel(0, 0, this.height, 1));
     this.ySpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
     this.ySpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
     this.ySpinner.addChangeListener(event => this.onChange(true, this.ySpinner.getValueIsAdjusting(), this.ySpinner, this.ySlider, false));
-    this.addComponent(this.ySpinner, 2, 1, 1, 1, 0, 1, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, null);
+    this.add(this.ySpinner, new GBC(2, 1).wy(1).a(GBC.NORTHEAST));
     this.ySlider.setMaximum(this.height);
     this.ySlider.setOrientation(JSSlider.VERTICAL);
     this.ySlider.setInverted(true);
     this.ySlider.getStyle().minHeight = "20rem";
     this.ySlider.getStyle().minWidth = "1.5rem";
     this.ySlider.addChangeListener(event => this.onChange(false, this.ySlider.getValueIsAdjusting(), this.ySpinner, this.ySlider, false));
-    this.addComponent(this.ySlider, 3, 1, 1, 2, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
-    this.addHLine(0, 3, 4, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL);
-    this.addLabel("x", 0, 4, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    this.add(this.ySlider, new GBC(3, 1).h(2).a(GBC.EAST));
+    Z4UI.addHLine(this, new GBC(0, 3).w(4).a(GBC.WEST).f(GBC.HORIZONTAL).i(2, 1, 2, 1));
+    Z4UI.addLabel(this, "x", new GBC(0, 4).a(GBC.WEST));
     this.xSpinner.setModel(new SpinnerNumberModel(0, 0, this.width, 1));
     this.xSpinner.cssAddClass("jsspinner_w_4rem");
     this.xSpinner.addChangeListener(event => this.onChange(true, this.xSpinner.getValueIsAdjusting(), this.xSpinner, this.xSlider, true));
-    this.addComponent(this.xSpinner, 1, 4, 3, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, null);
+    this.add(this.xSpinner, new GBC(1, 4).w(3).a(GBC.EAST));
     this.xSlider.setMaximum(this.width);
     this.xSlider.getStyle().minWidth = "20rem";
     this.xSlider.addChangeListener(event => this.onChange(false, this.xSlider.getValueIsAdjusting(), this.xSpinner, this.xSlider, true));
-    this.addComponent(this.xSlider, 0, 5, 4, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, null);
+    this.add(this.xSlider, new GBC(0, 5).w(4).a(GBC.NORTH).f(GBC.HORIZONTAL));
     let panelRadios = new JSPanel();
-    this.addComponent(panelRadios, 0, 6, 4, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, null);
+    this.add(panelRadios, new GBC(0, 6).w(4).a(GBC.WEST).f(GBC.HORIZONTAL));
     if (options) {
       let buttonGroupOptions = new ButtonGroup();
       options.forEach((option, index, array) => {
@@ -120,62 +120,6 @@ class Z4AbstractFillerPanel extends JSPanel {
     }
     this.pushPointPositions(this.points, this.width, this.height);
     this.setXY();
-  }
-
-  /**
-   * Adds a label
-   *
-   * @param text The text
-   * @param gridx The grid x
-   * @param gridy The grid y
-   * @param gridwidth The grid width
-   * @param gridheight The grid height
-   * @param anchor The anchor
-   * @param fill The fill
-   * @return The label
-   */
-   addLabel(text, gridx, gridy, gridwidth, gridheight, anchor, fill) {
-    let label = new JSLabel();
-    label.setText(text);
-    this.addComponent(label, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, null);
-    return label;
-  }
-
-  /**
-   * Adds a component
-   *
-   * @param component The component
-   * @param gridx The grid x
-   * @param gridy The grid y
-   * @param gridwidth The grid width
-   * @param gridheight The grid height
-   * @param weightx The weight x
-   * @param weighty The weight y
-   * @param anchor The anchor
-   * @param fill The fill
-   * @param insets The insets
-   */
-   addComponent(component, gridx, gridy, gridwidth, gridheight, weightx, weighty, anchor, fill, insets) {
-    let constraints = new GridBagConstraints();
-    constraints.gridx = gridx;
-    constraints.gridy = gridy;
-    constraints.gridwidth = gridwidth;
-    constraints.gridheight = gridheight;
-    constraints.weightx = weightx;
-    constraints.weighty = weighty;
-    constraints.anchor = anchor;
-    constraints.fill = fill;
-    if (insets) {
-      constraints.insets = insets;
-    }
-    this.add(component, constraints);
-  }
-
-   addHLine(gridx, gridy, gridwidth, gridheight, anchor, fill) {
-    let div = new JSComponent(document.createElement("div"));
-    div.getStyle().height = "1px";
-    div.getStyle().background = "var(--main-action-bgcolor)";
-    this.addComponent(div, gridx, gridy, gridwidth, gridheight, 0, 0, anchor, fill, new Insets(2, 1, 2, 1));
   }
 
    onRadio(index) {
