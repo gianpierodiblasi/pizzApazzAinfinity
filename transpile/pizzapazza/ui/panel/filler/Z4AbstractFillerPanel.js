@@ -357,6 +357,12 @@ class Z4AbstractFillerPanel extends JSPanel {
    drawObjects(ctx, mappedPoints) {
   }
 
+  /**
+   * Dummy method to get a stroke style
+   *
+   * @param style The style
+   * @return The style
+   */
    getStrokeStyle(style) {
     return style;
   }

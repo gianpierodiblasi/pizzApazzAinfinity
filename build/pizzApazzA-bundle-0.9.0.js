@@ -2207,6 +2207,9 @@ class Z4ColorPreview extends JSComponent {
 
    componentOpacity = new JSComponent(document.createElement("div"));
 
+  /**
+   * Creates the object
+   */
   constructor() {
     super(document.createElement("div"));
     this.cssAddClass("z4colorpreview");
@@ -2219,6 +2222,7 @@ class Z4ColorPreview extends JSComponent {
 
   /**
    * Sets the color to preview
+   *
    * @param color The color
    */
    setColor(color) {
@@ -3573,6 +3577,12 @@ class Z4AbstractFillerPanel extends JSPanel {
    drawObjects(ctx, mappedPoints) {
   }
 
+  /**
+   * Dummy method to get a stroke style
+   *
+   * @param style The style
+   * @return The style
+   */
    getStrokeStyle(style) {
     return style;
   }
@@ -3641,10 +3651,6 @@ class Z4BezierFillerPanel extends Z4AbstractFillerPanel {
     ctx.setLineDash(dash);
     ctx.stroke();
   }
-
-   getStrokeStyle(style) {
-    return style;
-  }
 }
 /**
  * The panel to manage a (multi) conic filler
@@ -3699,10 +3705,6 @@ class Z4ConicFillerPanel extends Z4AbstractFillerPanel {
     ctx.setLineDash(dash);
     ctx.stroke();
   }
-
-   getStrokeStyle(style) {
-    return style;
-  }
 }
 /**
  * The panel to manage a (multi) linear filler
@@ -3756,10 +3758,6 @@ class Z4LinearFillerPanel extends Z4AbstractFillerPanel {
     ctx.strokeStyle = this.getStrokeStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();
-  }
-
-   getStrokeStyle(style) {
-    return style;
   }
 }
 /**
@@ -3894,10 +3892,6 @@ class Z4SinusoidalFillerPanel extends Z4AbstractFillerPanel {
     ctx.setLineDash(dash);
     ctx.stroke();
   }
-
-   getStrokeStyle(style) {
-    return style;
-  }
 }
 /**
  * The panel to manage a (multi) spiral filler
@@ -3951,10 +3945,6 @@ class Z4SpiralFillerPanel extends Z4AbstractFillerPanel {
     ctx.strokeStyle = this.getStrokeStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();
-  }
-
-   getStrokeStyle(style) {
-    return style;
   }
 }
 /**
@@ -4123,10 +4113,6 @@ class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
     ctx.strokeStyle = this.getStrokeStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();
-  }
-
-   getStrokeStyle(style) {
-    return style;
   }
 }
 /**
@@ -4299,10 +4285,6 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
     ctx.strokeStyle = this.getStrokeStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();
-  }
-
-   getStrokeStyle(style) {
-    return style;
   }
 }
 /**

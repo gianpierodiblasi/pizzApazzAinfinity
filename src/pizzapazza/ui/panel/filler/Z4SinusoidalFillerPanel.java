@@ -199,12 +199,4 @@ public class Z4SinusoidalFillerPanel extends Z4AbstractFillerPanel {
     ctx.setLineDash(dash);
     ctx.stroke();
   }
-
-  private String getStrokeStyle(String style) {
-    return style;
-  }
-
-  private Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getStrokeStyle(String style) {
-    return null;
-  }
 }

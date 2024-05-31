@@ -38,7 +38,6 @@ public class Z4BiGradientColor extends Z4AbstractGradientColor<Z4GradientColor> 
 
   /**
    * Reverses each gradient color
-   *
    */
   public void gradientReverse() {
     this.colors.forEach(gradientColor -> gradientColor.reverse());

@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -163,6 +163,31 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>static javascript.swing.JSComponent</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addHLine(javascript.swing.JSPanel,javascript.awt.GridBagConstraints)">addHLine</a></span>&#8203;(javascript.swing.JSPanel&nbsp;panel,
+        javascript.awt.GridBagConstraints&nbsp;gbc)</code></th>
+<td class="colLast">
+<div class="block">Adds a horizontal line in a panel with a GridBagLayout manager</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>static javascript.swing.JSLabel</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addLabel(javascript.swing.JSPanel,java.lang.String,javascript.awt.GridBagConstraints)">addLabel</a></span>&#8203;(javascript.swing.JSPanel&nbsp;panel,
+        java.lang.String&nbsp;text,
+        javascript.awt.GridBagConstraints&nbsp;gbc)</code></th>
+<td class="colLast">
+<div class="block">Adds a label in a panel with a GridBagLayout manager</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>static javascript.swing.JSComponent</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addVLine(javascript.swing.JSPanel,javascript.awt.GridBagConstraints)">addVLine</a></span>&#8203;(javascript.swing.JSPanel&nbsp;panel,
+        javascript.awt.GridBagConstraints&nbsp;gbc)</code></th>
+<td class="colLast">
+<div class="block">Adds a vertical line in a panel with a GridBagLayout manager</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pleaseWait(javascript.swing.JSComponent,boolean,boolean,boolean,boolean,java.lang.String,simulation.js.$Apply_0_Void)">pleaseWait</a></span>&#8203;(javascript.swing.JSComponent&nbsp;component,
           boolean&nbsp;async,
@@ -175,28 +200,28 @@ extends java.lang.Object</pre>
 <div class="block">Waits for a process to complete</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pleaseWaitAdvanced(simulation.js.$Apply_0_Void)">pleaseWaitAdvanced</a></span>&#8203;(simulation.js.$Apply_0_Void&nbsp;process)</code></th>
 <td class="colLast">
 <div class="block">Advances the please wait</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pleaseWaitCompleted()">pleaseWaitCompleted</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Completes the please wait</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPleaseWaitProgressBarString(java.lang.String)">setPleaseWaitProgressBarString</a></span>&#8203;(java.lang.String&nbsp;string)</code></th>
 <td class="colLast">
 <div class="block">Sets the progress bar string in the please wait</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPleaseWaitProgressBarValue(int)">setPleaseWaitProgressBarValue</a></span>&#8203;(int&nbsp;value)</code></th>
 <td class="colLast">
@@ -300,7 +325,7 @@ extends java.lang.Object</pre>
 <a id="setPleaseWaitProgressBarString(java.lang.String)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setPleaseWaitProgressBarString</h4>
 <pre class="methodSignature">public static&nbsp;void&nbsp;setPleaseWaitProgressBarString&#8203;(java.lang.String&nbsp;string)</pre>
@@ -308,6 +333,62 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>string</code> - The string in the please wait</dd>
+</dl>
+</li>
+</ul>
+<a id="addLabel(javascript.swing.JSPanel,java.lang.String,javascript.awt.GridBagConstraints)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addLabel</h4>
+<pre class="methodSignature">public static&nbsp;javascript.swing.JSLabel&nbsp;addLabel&#8203;(javascript.swing.JSPanel&nbsp;panel,
+                                                java.lang.String&nbsp;text,
+                                                javascript.awt.GridBagConstraints&nbsp;gbc)</pre>
+<div class="block">Adds a label in a panel with a GridBagLayout manager</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>panel</code> - The panel</dd>
+<dd><code>text</code> - The text</dd>
+<dd><code>gbc</code> - The constraints</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The added label</dd>
+</dl>
+</li>
+</ul>
+<a id="addVLine(javascript.swing.JSPanel,javascript.awt.GridBagConstraints)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addVLine</h4>
+<pre class="methodSignature">public static&nbsp;javascript.swing.JSComponent&nbsp;addVLine&#8203;(javascript.swing.JSPanel&nbsp;panel,
+                                                    javascript.awt.GridBagConstraints&nbsp;gbc)</pre>
+<div class="block">Adds a vertical line in a panel with a GridBagLayout manager</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>panel</code> - The panel</dd>
+<dd><code>gbc</code> - The constraints</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The added line</dd>
+</dl>
+</li>
+</ul>
+<a id="addHLine(javascript.swing.JSPanel,javascript.awt.GridBagConstraints)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>addHLine</h4>
+<pre class="methodSignature">public static&nbsp;javascript.swing.JSComponent&nbsp;addHLine&#8203;(javascript.swing.JSPanel&nbsp;panel,
+                                                    javascript.awt.GridBagConstraints&nbsp;gbc)</pre>
+<div class="block">Adds a horizontal line in a panel with a GridBagLayout manager</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>panel</code> - The panel</dd>
+<dd><code>gbc</code> - The constraints</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The added line</dd>
 </dl>
 </li>
 </ul>

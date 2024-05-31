@@ -15,6 +15,9 @@ public class Z4ColorPreview extends JSComponent {
   private final JSComponent component = new JSComponent(document.createElement("div"));
   private final JSComponent componentOpacity = new JSComponent(document.createElement("div"));
 
+  /**
+   * Creates the object
+   */
   public Z4ColorPreview() {
     super(document.createElement("div"));
 
@@ -31,6 +34,7 @@ public class Z4ColorPreview extends JSComponent {
 
   /**
    * Sets the color to preview
+   *
    * @param color The color
    */
   public void setColor(Color color) {

@@ -51,8 +51,4 @@ class Z4LinearFillerPanel extends Z4AbstractFillerPanel {
     ctx.setLineDash(dash);
     ctx.stroke();
   }
-
-   getStrokeStyle(style) {
-    return style;
-  }
 }

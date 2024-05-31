@@ -169,8 +169,4 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
     ctx.setLineDash(dash);
     ctx.stroke();
   }
-
-   getStrokeStyle(style) {
-    return style;
-  }
 }

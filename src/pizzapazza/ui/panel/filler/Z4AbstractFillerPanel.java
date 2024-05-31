@@ -401,11 +401,23 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
    */
   protected abstract void drawObjects($CanvasRenderingContext2D ctx, Array<Point> mappedPoints);
 
-  private String getStrokeStyle(String style) {
+  /**
+   * Dummy method to get a stroke style
+   *
+   * @param style The style
+   * @return The style
+   */
+  protected String getStrokeStyle(String style) {
     return style;
   }
 
-  private Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getStrokeStyle(String style) {
+  /**
+   * Dummy method to get a stroke style
+   *
+   * @param style The style
+   * @return The style
+   */
+  protected Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getStrokeStyle(String style) {
     return null;
   }
 }
