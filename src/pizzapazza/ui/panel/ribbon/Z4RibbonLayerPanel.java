@@ -63,13 +63,7 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
       $DOMRect rectLayers = this.layersPreview.invoke("getBoundingClientRect()");
 
       int index = parseInt((evt.clientX - rectLayers.left) / rect.width);
-      if (!this.canvas.moveLayer(this.layerDnD, index)) {
-      } else if (index < this.canvas.getLayersCount()) {
-        index = Math.min(this.canvas.getLayersCount(), index + 1);
-        this.layersPreview.insertBefore(this.previewDnD, "details:nth-child(" + index + ")");
-      } else {
-        this.layersPreview.add(this.previewDnD, null);
-      }
+      this.moveLayer(this.previewDnD, this.layerDnD, index);
     });
 
     this.add(this.layersPreview, new GBC(4, 0).h(2).wx(1).f(GBC.BOTH));
@@ -91,6 +85,23 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
    */
   public void setStatusPanel(Z4StatusPanel statusPanel) {
     this.statusPanel = statusPanel;
+  }
+
+  /**
+   * Moves a layer
+   *
+   * @param preview The layer preview
+   * @param layer The layer
+   * @param index The new index layer
+   */
+  public void moveLayer(Z4LayerPreview preview, Z4Layer layer, int index) {
+    if (!this.canvas.moveLayer(layer, index)) {
+    } else if (index < this.canvas.getLayersCount()) {
+      index = Math.min(this.canvas.getLayersCount(), index + 1);
+      this.layersPreview.insertBefore(preview, "details:nth-child(" + index + ")");
+    } else {
+      this.layersPreview.add(preview, null);
+    }
   }
 
   private void addFromColor() {
@@ -131,6 +142,7 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
    */
   public void addLayerPreview(Z4Layer layer) {
     Z4LayerPreview preview = new Z4LayerPreview();
+    preview.setRibbonLayerPanel(this);
     preview.setLayer(this.canvas, layer);
     preview.setChildAttributeByQuery("summary", "draggable", "true");
     preview.addEventListener("dragstart", event -> {

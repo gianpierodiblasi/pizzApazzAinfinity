@@ -37,6 +37,8 @@ class Z4LayerPreview extends JSComponent {
 
    delete = new JSButton();
 
+   ribbonLayerPanel = null;
+
    canvas = null;
 
    layer = null;
@@ -131,21 +133,25 @@ class Z4LayerPreview extends JSComponent {
     button.setText("\uD83E\uDC08");
     button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
+    button.addActionListener(event => this.move(-1));
     this.summary.add(button, new GBC(0, 2).f(GBC.BOTH).i(0, 0, 0, 2));
     button = new JSButton();
     button.setText("\u2BEC");
     button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
+    button.addActionListener(event => this.ribbonLayerPanel.moveLayer(this, this.layer, 0));
     this.summary.add(button, new GBC(0, 3).f(GBC.BOTH).i(0, 0, 0, 2));
     button = new JSButton();
     button.setText("\uD83E\uDC0A");
     button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
+    button.addActionListener(event => this.move(2));
     this.summary.add(button, new GBC(2, 2).f(GBC.BOTH).i(0, 2, 0, 0));
     button = new JSButton();
     button.setText("\u2BEE");
     button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
+    button.addActionListener(event => this.ribbonLayerPanel.moveLayer(this, this.layer, this.canvas.getLayersCount()));
     this.summary.add(button, new GBC(2, 3).f(GBC.BOTH).i(0, 2, 0, 0));
     Z4UI.addVLine(this.summary, new GBC(3, 0).h(4).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.appendNodeChild(document.createElement("summary"));
@@ -288,6 +294,31 @@ class Z4LayerPreview extends JSComponent {
     this.canvas.setSaved(false);
     this.layer.setCompositeOperation(text);
     this.canvas.drawCanvas();
+  }
+
+   move(direction) {
+    this.cssAddClass("z4layerpreview-move");
+    let moveIndex = -1;
+    let move = document.querySelector(".z4layerpreview-move");
+    for (let index = 0; index < move.parentElement.children.length; index++) {
+      if (move === move.parentElement.children.item(index)) {
+        moveIndex = index;
+      }
+    }
+    if ((direction < 0 && moveIndex > 0) || (direction > 0 && moveIndex < this.canvas.getLayersCount() - 1)) {
+      this.removeAttribute("open");
+      this.ribbonLayerPanel.moveLayer(this, this.layer, moveIndex + direction);
+    }
+    this.cssRemoveClass("z4layerpreview-move");
+  }
+
+  /**
+   * Sets the riboon layer panel
+   *
+   * @param ribbonLayerPanel The ribbon layer panel
+   */
+   setRibbonLayerPanel(ribbonLayerPanel) {
+    this.ribbonLayerPanel = ribbonLayerPanel;
   }
 
   /**

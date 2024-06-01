@@ -1,5 +1,6 @@
 package pizzapazza.ui.component;
 
+import def.dom.Element;
 import static def.dom.Globals.document;
 import def.js.Array;
 import javascript.awt.Dimension;
@@ -20,6 +21,7 @@ import javascript.swing.JSTextField;
 import javascript.swing.SpinnerNumberModel;
 import javascript.util.Translations;
 import pizzapazza.Z4Layer;
+import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
@@ -55,6 +57,7 @@ public class Z4LayerPreview extends JSComponent {
   private final ButtonGroup compositeOperationsGroup = new ButtonGroup();
   private final JSButton delete = new JSButton();
 
+  private Z4RibbonLayerPanel ribbonLayerPanel;
   private Z4Canvas canvas;
   private Z4Layer layer;
   private double zoom = 1;
@@ -163,28 +166,32 @@ public class Z4LayerPreview extends JSComponent {
     button.setText("\uD83E\uDC08");
     button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
+    button.addActionListener(event -> this.move(-1));
     this.summary.add(button, new GBC(0, 2).f(GBC.BOTH).i(0, 0, 0, 2));
 
     button = new JSButton();
     button.setText("\u2BEC");
     button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
+    button.addActionListener(event -> this.ribbonLayerPanel.moveLayer(this, this.layer, 0));
     this.summary.add(button, new GBC(0, 3).f(GBC.BOTH).i(0, 0, 0, 2));
 
     button = new JSButton();
     button.setText("\uD83E\uDC0A");
     button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
+    button.addActionListener(event -> this.move(2));
     this.summary.add(button, new GBC(2, 2).f(GBC.BOTH).i(0, 2, 0, 0));
 
     button = new JSButton();
     button.setText("\u2BEE");
     button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
+    button.addActionListener(event -> this.ribbonLayerPanel.moveLayer(this, this.layer, this.canvas.getLayersCount()));
     this.summary.add(button, new GBC(2, 3).f(GBC.BOTH).i(0, 2, 0, 0));
 
     Z4UI.addVLine(this.summary, new GBC(3, 0).h(4).f(GBC.VERTICAL).i(1, 2, 1, 2));
-    
+
     this.appendNodeChild(document.createElement("summary"));
     this.appendChildInTree("summary", this.summary);
 
@@ -353,6 +360,34 @@ public class Z4LayerPreview extends JSComponent {
     this.canvas.setSaved(false);
     this.layer.setCompositeOperation(text);
     this.canvas.drawCanvas();
+  }
+
+  private void move(int direction) {
+    this.cssAddClass("z4layerpreview-move");
+
+    int moveIndex = -1;
+    Element move = document.querySelector(".z4layerpreview-move");
+    for (int index = 0; index < move.parentElement.children.length; index++) {
+      if (move == move.parentElement.children.item(index)) {
+        moveIndex = index;
+      }
+    }
+
+    if ((direction < 0 && moveIndex > 0) || (direction > 0 && moveIndex < this.canvas.getLayersCount() - 1)) {
+      this.removeAttribute("open");
+      this.ribbonLayerPanel.moveLayer(this, this.layer, moveIndex + direction);
+    }
+    
+    this.cssRemoveClass("z4layerpreview-move");
+  }
+
+  /**
+   * Sets the riboon layer panel
+   *
+   * @param ribbonLayerPanel The ribbon layer panel
+   */
+  public void setRibbonLayerPanel(Z4RibbonLayerPanel ribbonLayerPanel) {
+    this.ribbonLayerPanel = ribbonLayerPanel;
   }
 
   /**
