@@ -1750,6 +1750,7 @@ class Z4Canvas extends JSComponent {
         this.selectedLayer = this.paper.getLayerAt(index);
         this.selectedLayer.setOpacity(layers[index]["opacity"]);
         this.selectedLayer.setCompositeOperation(layers[index]["compositeOperation"]);
+        this.selectedLayer.setHidden(layers[index]["hidden"]);
         this.selectedLayer.move(layers[index]["offsetX"], layers[index]["offsetY"]);
         this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
         if (index + 1 < layers.length) {
@@ -1889,6 +1890,7 @@ class Z4Canvas extends JSComponent {
       layerJSON["name"] = layer.getName();
       layerJSON["opacity"] = layer.getOpacity();
       layerJSON["compositeOperation"] = layer.getCompositeOperation();
+      layerJSON["hidden"] = layer.isHidden();
       layerJSON["offsetX"] = offset.x;
       layerJSON["offsetY"] = offset.y;
       layers[index] = layerJSON;
@@ -2022,6 +2024,7 @@ class Z4Canvas extends JSComponent {
         this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
         this.selectedLayer.setOpacity(layer.getOpacity());
         this.selectedLayer.setCompositeOperation(layer.getCompositeOperation());
+        this.selectedLayer.setHidden(layer.isHidden());
         this.selectedLayer.move(offset.x, offset.y);
         this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
         this.saved = false;
@@ -4398,10 +4401,11 @@ class Z4AbstractRibbonPanel extends JSPanel {
    * @param gridx The grid x
    * @param gridy The grid y
    * @param border The border type
+   * @param top The top margin
    * @param listener The listener
    * @return The added button
    */
-   addButton(text, enabled, gridx, gridy, border, listener) {
+   addButton(text, enabled, gridx, gridy, border, top, listener) {
     let button = new JSButton();
     button.setText(text);
     button.setEnabled(enabled);
@@ -4410,7 +4414,7 @@ class Z4AbstractRibbonPanel extends JSPanel {
     let gbc = new GBC(gridx, gridy).a(GBC.NORTH);
     switch(border) {
       case "left":
-        gbc.i(0, 5, 0, 0);
+        gbc.i(top, 5, 0, 0);
         button.getStyle().borderTopRightRadius = "0px";
         button.getStyle().borderBottomRightRadius = "0px";
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
@@ -4421,10 +4425,13 @@ class Z4AbstractRibbonPanel extends JSPanel {
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
         break;
       case "right":
-        gbc.i(0, 0, 0, 5);
+        gbc.i(top, 0, 0, 5);
         button.getStyle().borderTopLeftRadius = "0px";
         button.getStyle().borderBottomLeftRadius = "0px";
         button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        break;
+      default:
+        gbc.i(top, 0, 0, 5);
         break;
     }
     this.add(button, gbc);
@@ -4450,16 +4457,16 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonfilepanel");
     Z4UI.addLabel(this, Z4Translations.NEW_PROJECT, new GBC(0, 0).w(3).a(GBC.WEST).i(5, 5, 2, 0));
-    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", event => this.checkSaved(Z4Translations.CREATE, () => this.createFromColor()));
-    this.addButton(Z4Translations.FROM_CLIPBOARD, typeof navigator.clipboard["read"] === "function", 1, 1, "both", event => this.checkSaved(Z4Translations.FROM_CLIPBOARD, () => this.createFromClipboard()));
-    this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event => this.checkSaved(Z4Translations.FROM_FILE, () => this.createFromFile()));
+    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", 0, event => this.checkSaved(Z4Translations.CREATE, () => this.createFromColor()));
+    this.addButton(Z4Translations.FROM_CLIPBOARD, typeof navigator.clipboard["read"] === "function", 1, 1, "both", 0, event => this.checkSaved(Z4Translations.FROM_CLIPBOARD, () => this.createFromClipboard()));
+    this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", 0, event => this.checkSaved(Z4Translations.FROM_FILE, () => this.createFromFile()));
     Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     Z4UI.addLabel(this, Z4Translations.OPEN, new GBC(4, 0).a(GBC.WEST).i(5, 5, 2, 0));
-    this.addButton(Z4Translations.OPEN_PROJECT, true, 4, 1, "", event => this.checkSaved(Z4Translations.OPEN_PROJECT, () => this.openProject()));
+    this.addButton(Z4Translations.OPEN_PROJECT, true, 4, 1, "", 0, event => this.checkSaved(Z4Translations.OPEN_PROJECT, () => this.openProject()));
     Z4UI.addVLine(this, new GBC(5, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     Z4UI.addLabel(this, Z4Translations.SAVE, new GBC(6, 0).w(2).a(GBC.WEST).i(5, 5, 2, 0));
-    this.addButton(Z4Translations.SAVE_PROJECT, true, 6, 1, "left", event => this.saveProject(null));
-    this.addButton(Z4Translations.EXPORT, true, 7, 1, "right", event => this.exportToFile());
+    this.addButton(Z4Translations.SAVE_PROJECT, true, 6, 1, "left", 0, event => this.saveProject(null));
+    this.addButton(Z4Translations.EXPORT, true, 7, 1, "right", 0, event => this.exportToFile());
     Z4UI.addVLine(this, new GBC(8, 0).h(2).wxy(1, 1).f(GBC.VERTICAL).i(1, 2, 1, 2));
   }
 
@@ -4681,12 +4688,12 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonhistorypanel");
-    this.undo = this.addButton(Z4Translations.UNDO, false, 0, 0, "left", event => {
+    this.undo = this.addButton(Z4Translations.UNDO, false, 0, 0, "left", 5, event => {
     });
-    this.redo = this.addButton(Z4Translations.REDO, false, 1, 0, "right", event => {
+    this.redo = this.addButton(Z4Translations.REDO, false, 1, 0, "right", 5, event => {
     });
-    this.save = this.addButton(Z4Translations.SAVE, false, 2, 0, "", event => this.saveHistory("manual"));
-    this.consolidate = this.addButton(Z4Translations.CONSOLIDATE, false, 3, 0, "", event => JSOptionPane.showConfirmDialog(Z4Translations.CONSOLIDATE_MESSAGE, Z4Translations.CONSOLIDATE, JSOptionPane.YES_NO_OPTION, JSOptionPane.WARNING_MESSAGE, response => {
+    this.save = this.addButton(Z4Translations.SAVE, false, 2, 0, "", 5, event => this.saveHistory("manual"));
+    this.consolidate = this.addButton(Z4Translations.CONSOLIDATE, false, 3, 0, "", 5, event => JSOptionPane.showConfirmDialog(Z4Translations.CONSOLIDATE_MESSAGE, Z4Translations.CONSOLIDATE, JSOptionPane.YES_NO_OPTION, JSOptionPane.WARNING_MESSAGE, response => {
       if (response === JSOptionPane.YES_OPTION) {
         this.canvas.setChanged(false);
         this.resetHistory(() => this.canvas.toHistory(json => this.addHistory(json, key => this.setCurrentKey(key), false)));
@@ -4900,9 +4907,9 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonlayerpanel");
     Z4UI.addLabel(this, Z4Translations.NEW_LAYER, new GBC(0, 0).w(3).a(GBC.WEST).i(5, 5, 2, 0));
-    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", event => this.addFromColor());
-    this.addButton(Z4Translations.FROM_CLIPBOARD, typeof navigator.clipboard["read"] === "function", 1, 1, "both", event => this.addFromClipboard());
-    this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event => this.addFromFile());
+    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", 0, event => this.addFromColor());
+    this.addButton(Z4Translations.FROM_CLIPBOARD, typeof navigator.clipboard["read"] === "function", 1, 1, "both", 0, event => this.addFromClipboard());
+    this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", 0, event => this.addFromFile());
     Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.layersPreview.setLayout(new BoxLayout(this.layersPreview, BoxLayout.X_AXIS));
     this.layersPreview.getStyle().overflowX = "scroll";

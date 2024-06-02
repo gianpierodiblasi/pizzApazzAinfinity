@@ -46,18 +46,18 @@ public class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
     this.cssAddClass("z4ribbonfilepanel");
 
     Z4UI.addLabel(this, Z4Translations.NEW_PROJECT, new GBC(0, 0).w(3).a(GBC.WEST).i(5, 5, 2, 0));
-    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", event -> this.checkSaved(Z4Translations.CREATE, () -> this.createFromColor()));
-    this.addButton(Z4Translations.FROM_CLIPBOARD, $typeof(navigator.clipboard.$get("read"), "function"), 1, 1, "both", event -> this.checkSaved(Z4Translations.FROM_CLIPBOARD, () -> this.createFromClipboard()));
-    this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event -> this.checkSaved(Z4Translations.FROM_FILE, () -> this.createFromFile()));
+    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", 0, event -> this.checkSaved(Z4Translations.CREATE, () -> this.createFromColor()));
+    this.addButton(Z4Translations.FROM_CLIPBOARD, $typeof(navigator.clipboard.$get("read"), "function"), 1, 1, "both", 0, event -> this.checkSaved(Z4Translations.FROM_CLIPBOARD, () -> this.createFromClipboard()));
+    this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", 0, event -> this.checkSaved(Z4Translations.FROM_FILE, () -> this.createFromFile()));
     Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
     Z4UI.addLabel(this, Z4Translations.OPEN, new GBC(4, 0).a(GBC.WEST).i(5, 5, 2, 0));
-    this.addButton(Z4Translations.OPEN_PROJECT, true, 4, 1, "", event -> this.checkSaved(Z4Translations.OPEN_PROJECT, () -> this.openProject()));
+    this.addButton(Z4Translations.OPEN_PROJECT, true, 4, 1, "", 0, event -> this.checkSaved(Z4Translations.OPEN_PROJECT, () -> this.openProject()));
     Z4UI.addVLine(this, new GBC(5, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
     Z4UI.addLabel(this, Z4Translations.SAVE, new GBC(6, 0).w(2).a(GBC.WEST).i(5, 5, 2, 0));
-    this.addButton(Z4Translations.SAVE_PROJECT, true, 6, 1, "left", event -> this.saveProject(null));
-    this.addButton(Z4Translations.EXPORT, true, 7, 1, "right", event -> this.exportToFile());
+    this.addButton(Z4Translations.SAVE_PROJECT, true, 6, 1, "left", 0, event -> this.saveProject(null));
+    this.addButton(Z4Translations.EXPORT, true, 7, 1, "right", 0, event -> this.exportToFile());
     Z4UI.addVLine(this, new GBC(8, 0).h(2).wxy(1, 1).f(GBC.VERTICAL).i(1, 2, 1, 2));
   }
 

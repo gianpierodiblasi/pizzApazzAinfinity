@@ -38,12 +38,12 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonhistorypanel");
-    this.undo = this.addButton(Z4Translations.UNDO, false, 0, 0, "left", event => {
+    this.undo = this.addButton(Z4Translations.UNDO, false, 0, 0, "left", 5, event => {
     });
-    this.redo = this.addButton(Z4Translations.REDO, false, 1, 0, "right", event => {
+    this.redo = this.addButton(Z4Translations.REDO, false, 1, 0, "right", 5, event => {
     });
-    this.save = this.addButton(Z4Translations.SAVE, false, 2, 0, "", event => this.saveHistory("manual"));
-    this.consolidate = this.addButton(Z4Translations.CONSOLIDATE, false, 3, 0, "", event => JSOptionPane.showConfirmDialog(Z4Translations.CONSOLIDATE_MESSAGE, Z4Translations.CONSOLIDATE, JSOptionPane.YES_NO_OPTION, JSOptionPane.WARNING_MESSAGE, response => {
+    this.save = this.addButton(Z4Translations.SAVE, false, 2, 0, "", 5, event => this.saveHistory("manual"));
+    this.consolidate = this.addButton(Z4Translations.CONSOLIDATE, false, 3, 0, "", 5, event => JSOptionPane.showConfirmDialog(Z4Translations.CONSOLIDATE_MESSAGE, Z4Translations.CONSOLIDATE, JSOptionPane.YES_NO_OPTION, JSOptionPane.WARNING_MESSAGE, response => {
       if (response === JSOptionPane.YES_OPTION) {
         this.canvas.setChanged(false);
         this.resetHistory(() => this.canvas.toHistory(json => this.addHistory(json, key => this.setCurrentKey(key), false)));

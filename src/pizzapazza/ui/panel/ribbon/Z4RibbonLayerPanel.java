@@ -45,9 +45,9 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     this.cssAddClass("z4ribbonlayerpanel");
 
     Z4UI.addLabel(this, Z4Translations.NEW_LAYER, new GBC(0, 0).w(3).a(GBC.WEST).i(5, 5, 2, 0));
-    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", event -> this.addFromColor());
-    this.addButton(Z4Translations.FROM_CLIPBOARD, $typeof(navigator.clipboard.$get("read"), "function"), 1, 1, "both", event -> this.addFromClipboard());
-    this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", event -> this.addFromFile());
+    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", 0, event -> this.addFromColor());
+    this.addButton(Z4Translations.FROM_CLIPBOARD, $typeof(navigator.clipboard.$get("read"), "function"), 1, 1, "both", 0, event -> this.addFromClipboard());
+    this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", 0, event -> this.addFromFile());
     Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
     this.layersPreview.setLayout(new BoxLayout(this.layersPreview, BoxLayout.X_AXIS));

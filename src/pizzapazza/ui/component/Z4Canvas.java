@@ -255,6 +255,7 @@ public class Z4Canvas extends JSComponent {
         this.selectedLayer = this.paper.getLayerAt(index);
         this.selectedLayer.setOpacity(layers.$get(index).$get("opacity"));
         this.selectedLayer.setCompositeOperation(layers.$get(index).$get("compositeOperation"));
+        this.selectedLayer.setHidden(layers.$get(index).$get("hidden"));
         this.selectedLayer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
         this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
 
@@ -412,6 +413,7 @@ public class Z4Canvas extends JSComponent {
       layerJSON.$set("name", layer.getName());
       layerJSON.$set("opacity", layer.getOpacity());
       layerJSON.$set("compositeOperation", layer.getCompositeOperation());
+      layerJSON.$set("hidden", layer.isHidden());
       layerJSON.$set("offsetX", offset.x);
       layerJSON.$set("offsetY", offset.y);
 
@@ -563,6 +565,7 @@ public class Z4Canvas extends JSComponent {
         this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
         this.selectedLayer.setOpacity(layer.getOpacity());
         this.selectedLayer.setCompositeOperation(layer.getCompositeOperation());
+        this.selectedLayer.setHidden(layer.isHidden());
         this.selectedLayer.move(offset.x, offset.y);
         this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
 

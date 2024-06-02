@@ -27,10 +27,11 @@ public abstract class Z4AbstractRibbonPanel extends JSPanel {
    * @param gridx The grid x
    * @param gridy The grid y
    * @param border The border type
+   * @param top The top margin
    * @param listener The listener
    * @return The added button
    */
-  protected JSButton addButton(String text, boolean enabled, int gridx, int gridy, String border, ActionListener listener) {
+  protected JSButton addButton(String text, boolean enabled, int gridx, int gridy, String border, int top, ActionListener listener) {
     JSButton button = new JSButton();
     button.setText(text);
     button.setEnabled(enabled);
@@ -40,7 +41,7 @@ public abstract class Z4AbstractRibbonPanel extends JSPanel {
     GBC gbc = new GBC(gridx, gridy).a(GBC.NORTH);
     switch (border) {
       case "left":
-        gbc.i(0, 5, 0, 0);
+        gbc.i(top, 5, 0, 0);
         button.getStyle().borderTopRightRadius = "0px";
         button.getStyle().borderBottomRightRadius = "0px";
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
@@ -51,10 +52,13 @@ public abstract class Z4AbstractRibbonPanel extends JSPanel {
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
         break;
       case "right":
-        gbc.i(0, 0, 0, 5);
+        gbc.i(top, 0, 0, 5);
         button.getStyle().borderTopLeftRadius = "0px";
         button.getStyle().borderBottomLeftRadius = "0px";
         button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        break;
+      default:
+        gbc.i(top, 0, 0, 5);
         break;
     }
 

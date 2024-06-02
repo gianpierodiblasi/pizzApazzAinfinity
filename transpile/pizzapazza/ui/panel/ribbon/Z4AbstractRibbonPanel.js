@@ -20,10 +20,11 @@ class Z4AbstractRibbonPanel extends JSPanel {
    * @param gridx The grid x
    * @param gridy The grid y
    * @param border The border type
+   * @param top The top margin
    * @param listener The listener
    * @return The added button
    */
-   addButton(text, enabled, gridx, gridy, border, listener) {
+   addButton(text, enabled, gridx, gridy, border, top, listener) {
     let button = new JSButton();
     button.setText(text);
     button.setEnabled(enabled);
@@ -32,7 +33,7 @@ class Z4AbstractRibbonPanel extends JSPanel {
     let gbc = new GBC(gridx, gridy).a(GBC.NORTH);
     switch(border) {
       case "left":
-        gbc.i(0, 5, 0, 0);
+        gbc.i(top, 5, 0, 0);
         button.getStyle().borderTopRightRadius = "0px";
         button.getStyle().borderBottomRightRadius = "0px";
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
@@ -43,10 +44,13 @@ class Z4AbstractRibbonPanel extends JSPanel {
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
         break;
       case "right":
-        gbc.i(0, 0, 0, 5);
+        gbc.i(top, 0, 0, 5);
         button.getStyle().borderTopLeftRadius = "0px";
         button.getStyle().borderBottomLeftRadius = "0px";
         button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        break;
+      default:
+        gbc.i(top, 0, 0, 5);
         break;
     }
     this.add(button, gbc);
