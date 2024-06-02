@@ -155,9 +155,7 @@ public class Z4LayerPreview extends JSComponent {
     selector.setContentAreaFilled(false);
     selector.addActionListener(event -> {
       document.querySelectorAll(".z4layerpreview .z4layerpreview-selector").forEach(element -> element.textContent = Z4LayerPreview.UNSELECTED_LAYER_CONTENT);
-
       selector.setText(Z4LayerPreview.SELECTED_LAYER_CONTENT);
-
       this.canvas.setSelectedLayer(this.layer);
     });
     this.summary.add(selector, new GBC(2, 1).f(GBC.BOTH).i(0, 2, 0, 0));

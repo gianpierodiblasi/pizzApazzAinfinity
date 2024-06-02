@@ -7,15 +7,17 @@ class Z4HistoryPreview extends JSComponent {
 
    summary = new JSPanel();
 
-   selector = new JSButton();
+   preview = new JSComponent(document.createElement("canvas"));
 
-   canvas = new JSComponent(document.createElement("canvas"));
+   previewBig = new JSComponent(document.createElement("canvas"));
 
-   canvasBig = new JSComponent(document.createElement("canvas"));
+   ctx = this.preview.invoke("getContext('2d')");
 
-   ctx = this.canvas.invoke("getContext('2d')");
+   ctxBig = this.previewBig.invoke("getContext('2d')");
 
-   ctxBig = this.canvasBig.invoke("getContext('2d')");
+   ribbonHistoryPanel = null;
+
+   canvas = null;
 
    key = 0;
 
@@ -75,26 +77,36 @@ class Z4HistoryPreview extends JSComponent {
       }
     });
     this.summary.setLayout(new GridBagLayout());
-    this.canvas.setAttribute("width", "" + Z4HistoryPreview.PREVIEW_SIZE);
-    this.canvas.setAttribute("height", "" + Z4HistoryPreview.PREVIEW_SIZE);
-    this.summary.add(this.canvas, new GBC(0, 0));
-    this.selector.setText(Z4HistoryPreview.SELECTED_HISTORY_CONTENT);
-    this.selector.cssAddClass("z4historypreview-selector");
-    this.selector.getStyle().color = "var(--main-action-bgcolor)";
-    this.selector.setContentAreaFilled(false);
-    this.selector.addActionListener(event => {
-      document.querySelectorAll(".z4historypreview .z4historypreview-selector").forEach(element => element.textContent = Z4HistoryPreview.UNSELECTED_HISTORY_CONTENT);
-      this.selector.setText(Z4HistoryPreview.SELECTED_HISTORY_CONTENT);
+    this.preview.setAttribute("width", "" + Z4HistoryPreview.PREVIEW_SIZE);
+    this.preview.setAttribute("height", "" + Z4HistoryPreview.PREVIEW_SIZE);
+    this.summary.add(this.preview, new GBC(0, 0));
+    let selector = new JSButton();
+    selector.setText(Z4HistoryPreview.UNSELECTED_HISTORY_CONTENT);
+    selector.cssAddClass("z4historypreview-selector");
+    selector.getStyle().color = "var(--main-action-bgcolor)";
+    selector.setContentAreaFilled(false);
+    selector.addActionListener(event => {
+      this.ribbonHistoryPanel.setCurrentKey(this.key);
+      // this.canvas.
     });
-    this.summary.add(this.selector, new GBC(1, 0).a(GBC.NORTH).i(0, 2, 0, 0));
+    this.summary.add(selector, new GBC(1, 0).a(GBC.NORTH).i(0, 2, 0, 0));
     this.appendNodeChild(document.createElement("summary"));
     this.appendChildInTree("summary", this.summary);
-    this.canvasBig.setAttribute("width", "" + Z4HistoryPreview.PREVIEW_BIG_SIZE);
-    this.canvasBig.setAttribute("height", "" + Z4HistoryPreview.PREVIEW_BIG_SIZE);
+    this.previewBig.setAttribute("width", "" + Z4HistoryPreview.PREVIEW_BIG_SIZE);
+    this.previewBig.setAttribute("height", "" + Z4HistoryPreview.PREVIEW_BIG_SIZE);
     let panel = new JSPanel();
     panel.cssAddClass("z4historypreview-editor");
-    panel.add(this.canvasBig, null);
+    panel.add(this.previewBig, null);
     this.appendChild(panel);
+  }
+
+  /**
+   * Sets the ribbon history panel
+   *
+   * @param ribbonHistoryPanel The ribbon history panel
+   */
+   setRibbonHistoryPanel(ribbonHistoryPanel) {
+    this.ribbonHistoryPanel = ribbonHistoryPanel;
   }
 
   /**
@@ -102,15 +114,15 @@ class Z4HistoryPreview extends JSComponent {
    *
    * @param key The history key
    * @param json The history json
-   * @param selected true if this is the selected history, false otherwise
+   * @param canvas The canvas
    */
-   setHistory(key, json, selected) {
+   setHistory(key, json, canvas) {
     this.key = key;
     this.json = json;
-    this.selector.setText(selected ? Z4HistoryPreview.SELECTED_HISTORY_CONTENT : Z4HistoryPreview.UNSELECTED_HISTORY_CONTENT);
+    this.cssAddClass("z4historypreview-" + key);
     let d = new Dimension(json["width"], json["height"]);
-    this.zoom = this.setSize(this.canvas, d, Z4HistoryPreview.PREVIEW_SIZE);
-    this.zoomBig = this.setSize(this.canvasBig, d, Z4HistoryPreview.PREVIEW_BIG_SIZE);
+    this.zoom = this.setSize(this.preview, d, Z4HistoryPreview.PREVIEW_SIZE);
+    this.zoomBig = this.setSize(this.previewBig, d, Z4HistoryPreview.PREVIEW_BIG_SIZE);
     this.drawHistory(this.ctx, this.zoom);
     this.drawHistory(this.ctxBig, this.zoomBig);
   }

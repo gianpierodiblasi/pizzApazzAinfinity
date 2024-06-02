@@ -111,12 +111,14 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
                 this.undo.setEnabled(true);
                 this.redo.setEnabled(false);
                 this.consolidate.setEnabled(true);
-                document.querySelectorAll(".z4historypreview .z4historypreview-selector").forEach(element => element.textContent = Z4HistoryPreview.UNSELECTED_HISTORY_CONTENT);
                 this.canvas.setChanged(false);
                 this.currentKey = event.target["result"];
                 let hPreview = new Z4HistoryPreview();
-                hPreview.setHistory(this.currentKey, json, true);
+                hPreview.setHistory(this.currentKey, json, this.canvas);
+                hPreview.setRibbonHistoryPanel(this);
                 this.historyPreview.add(hPreview, null);
+                document.querySelectorAll(".z4historypreview .z4historypreview-selector").forEach(element => element.textContent = Z4HistoryPreview.UNSELECTED_HISTORY_CONTENT);
+                document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey + " .z4historypreview-selector").textContent = Z4HistoryPreview.SELECTED_HISTORY_CONTENT;
                 return null;
               };
             });
@@ -139,7 +141,8 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
       this.consolidate.setEnabled(consolidate);
       let key = event.target["result"];
       let hPreview = new Z4HistoryPreview();
-      hPreview.setHistory(key, json, false);
+      hPreview.setHistory(key, json, this.canvas);
+      hPreview.setRibbonHistoryPanel(this);
       this.historyPreview.add(hPreview, null);
       apply(key);
       return null;
@@ -170,6 +173,8 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
    */
    setCurrentKey(currentKey) {
     this.currentKey = currentKey;
+    document.querySelectorAll(".z4historypreview .z4historypreview-selector").forEach(element => element.textContent = Z4HistoryPreview.UNSELECTED_HISTORY_CONTENT);
+    document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey + " .z4historypreview-selector").textContent = Z4HistoryPreview.SELECTED_HISTORY_CONTENT;
     this.database.transaction("history", "readonly").objectStore("history").openCursor(IDBKeyRange.upperBound(this.currentKey, true)).onsuccess = event => {
       this.undo.setEnabled(!!(event.target["result"]));
       return null;
