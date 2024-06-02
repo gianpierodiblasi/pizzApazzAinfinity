@@ -251,6 +251,40 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Opens an history
+   *
+   * @param json The history
+   */
+   openFromHistory(json) {
+    this.paper.reset();
+    this.ribbonLayerPanel.reset();
+    this.width = json["width"];
+    this.height = json["height"];
+    this.openLayerFromHistory(json, json["layers"], 0);
+  }
+
+   openLayerFromHistory(json, layers, index) {
+    let image = document.createElement("img");
+    image.onload = event => {
+      this.paper.addLayerFromImage(layers[index]["name"], image, image.width, image.height);
+      this.selectedLayer = this.paper.getLayerAt(index);
+      this.selectedLayer.setOpacity(layers[index]["opacity"]);
+      this.selectedLayer.setCompositeOperation(layers[index]["compositeOperation"]);
+      this.selectedLayer.setHidden(layers[index]["hidden"]);
+      this.selectedLayer.move(layers[index]["offsetX"], layers[index]["offsetY"]);
+      this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+      if (index + 1 < layers.length) {
+        this.openLayerFromHistory(json, layers, index + 1);
+      } else {
+        this.afterCreate(json["projectName"], json["width"], json["height"]);
+        this.saved = false;
+      }
+      return null;
+    };
+    image.src = URL.createObjectURL(layers[index]["data"]);
+  }
+
+  /**
    * Saves the project
    *
    * @param projectName The project name

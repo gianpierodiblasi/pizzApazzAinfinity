@@ -1,6 +1,8 @@
 package pizzapazza.ui.panel.ribbon;
 
+import def.dom.Event;
 import static def.dom.Globals.clearInterval;
+import def.dom.HTMLElement;
 import def.dom.IDBDatabase;
 import def.dom.IDBKeyRange;
 import def.js.Date;
@@ -59,10 +61,8 @@ public class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonhistorypanel");
 
-    this.undo = this.addButton(Z4Translations.UNDO, false, 0, 0, "left", 5, event -> {
-    });
-    this.redo = this.addButton(Z4Translations.REDO, false, 1, 0, "right", 5, event -> {
-    });
+    this.undo = this.addButton(Z4Translations.UNDO, false, 0, 0, "left", 5, event -> this.database.transaction("history", "readonly").objectStore("history").openCursor(IDBKeyRange.upperBound(this.currentKey, true), "prev").onsuccess = event2 -> this.undoRedo(event2));
+    this.redo = this.addButton(Z4Translations.REDO, false, 1, 0, "right", 5, event -> this.database.transaction("history", "readonly").objectStore("history").openCursor(IDBKeyRange.lowerBound(this.currentKey, true)).onsuccess = event2 -> this.undoRedo(event2));
     this.save = this.addButton(Z4Translations.SAVE, false, 2, 0, "", 5, event -> this.saveHistory("manual"));
 
     this.consolidate = this.addButton(Z4Translations.CONSOLIDATE, false, 3, 0, "", 5, event -> JSOptionPane.showConfirmDialog(Z4Translations.CONSOLIDATE_MESSAGE, Z4Translations.CONSOLIDATE, JSOptionPane.YES_NO_OPTION, JSOptionPane.WARNING_MESSAGE, response -> {
@@ -82,6 +82,15 @@ public class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
       window.indexedDB.deleteDatabase(this.dbName);
       return null;
     };
+  }
+
+  private Object undoRedo(Event event2) {
+    $IDBCursor cursor = ($IDBCursor) event2.target.$get("result");
+    this.setCurrentKey((int) cursor.key);
+    this.canvas.openFromHistory(cursor.$get("value"));
+
+    ((HTMLElement) document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey)).scrollIntoView();
+    return null;
   }
 
   /**
@@ -128,6 +137,8 @@ public class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
         this.database.transaction("history", "readwrite").objectStore("history").openCursor(IDBKeyRange.lowerBound(this.currentKey, true)).onsuccess = event2 -> {
           $IDBCursor cursor = ($IDBCursor) event2.target.$get("result");
           if ($exists(cursor)) {
+            document.querySelector(".z4historypreview.z4historypreview-" + cursor.key).remove();
+
             cursor.delete().onsuccess = event3 -> {
               cursor.$continue();
               return null;
@@ -149,6 +160,7 @@ public class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
 
                 document.querySelectorAll(".z4historypreview .z4historypreview-selector").forEach(element -> element.textContent = Z4HistoryPreview.UNSELECTED_HISTORY_CONTENT);
                 document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey + " .z4historypreview-selector").textContent = Z4HistoryPreview.SELECTED_HISTORY_CONTENT;
+                ((HTMLElement) document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey)).scrollIntoView();
 
                 return null;
               };

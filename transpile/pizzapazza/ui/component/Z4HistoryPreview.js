@@ -87,7 +87,7 @@ class Z4HistoryPreview extends JSComponent {
     selector.setContentAreaFilled(false);
     selector.addActionListener(event => {
       this.ribbonHistoryPanel.setCurrentKey(this.key);
-      // this.canvas.
+      this.canvas.openFromHistory(this.json);
     });
     this.summary.add(selector, new GBC(1, 0).a(GBC.NORTH).i(0, 2, 0, 0));
     this.appendNodeChild(document.createElement("summary"));
@@ -119,6 +119,7 @@ class Z4HistoryPreview extends JSComponent {
    setHistory(key, json, canvas) {
     this.key = key;
     this.json = json;
+    this.canvas = canvas;
     this.cssAddClass("z4historypreview-" + key);
     let d = new Dimension(json["width"], json["height"]);
     this.zoom = this.setSize(this.preview, d, Z4HistoryPreview.PREVIEW_SIZE);

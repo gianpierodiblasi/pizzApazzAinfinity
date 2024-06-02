@@ -308,6 +308,46 @@ public class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Opens an history
+   *
+   * @param json The history
+   */
+  public void openFromHistory($Object json) {
+    this.paper.reset();
+    this.ribbonLayerPanel.reset();
+
+    this.width = json.$get("width");
+    this.height = json.$get("height");
+
+    this.openLayerFromHistory(json, json.$get("layers"), 0);
+  }
+
+  private void openLayerFromHistory($Object json, Array<$Object> layers, int index) {
+    $Image image = ($Image) document.createElement("img");
+
+    image.onload = event -> {
+      this.paper.addLayerFromImage(layers.$get(index).$get("name"), image, (int) image.width, (int) image.height);
+      this.selectedLayer = this.paper.getLayerAt(index);
+      this.selectedLayer.setOpacity(layers.$get(index).$get("opacity"));
+      this.selectedLayer.setCompositeOperation(layers.$get(index).$get("compositeOperation"));
+      this.selectedLayer.setHidden(layers.$get(index).$get("hidden"));
+      this.selectedLayer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
+      this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+
+      if (index + 1 < layers.length) {
+        this.openLayerFromHistory(json, layers, index + 1);
+      } else {
+        this.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
+        this.saved = false;
+      }
+      return null;
+    };
+
+    image.src = URL.createObjectURL(layers.$get(index).$get("data"));
+
+  }
+
+  /**
    * Saves the project
    *
    * @param projectName The project name

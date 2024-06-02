@@ -1798,6 +1798,40 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Opens an history
+   *
+   * @param json The history
+   */
+   openFromHistory(json) {
+    this.paper.reset();
+    this.ribbonLayerPanel.reset();
+    this.width = json["width"];
+    this.height = json["height"];
+    this.openLayerFromHistory(json, json["layers"], 0);
+  }
+
+   openLayerFromHistory(json, layers, index) {
+    let image = document.createElement("img");
+    image.onload = event => {
+      this.paper.addLayerFromImage(layers[index]["name"], image, image.width, image.height);
+      this.selectedLayer = this.paper.getLayerAt(index);
+      this.selectedLayer.setOpacity(layers[index]["opacity"]);
+      this.selectedLayer.setCompositeOperation(layers[index]["compositeOperation"]);
+      this.selectedLayer.setHidden(layers[index]["hidden"]);
+      this.selectedLayer.move(layers[index]["offsetX"], layers[index]["offsetY"]);
+      this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+      if (index + 1 < layers.length) {
+        this.openLayerFromHistory(json, layers, index + 1);
+      } else {
+        this.afterCreate(json["projectName"], json["width"], json["height"]);
+        this.saved = false;
+      }
+      return null;
+    };
+    image.src = URL.createObjectURL(layers[index]["data"]);
+  }
+
+  /**
    * Saves the project
    *
    * @param projectName The project name
@@ -2348,7 +2382,7 @@ class Z4HistoryPreview extends JSComponent {
     selector.setContentAreaFilled(false);
     selector.addActionListener(event => {
       this.ribbonHistoryPanel.setCurrentKey(this.key);
-      // this.canvas.
+      this.canvas.openFromHistory(this.json);
     });
     this.summary.add(selector, new GBC(1, 0).a(GBC.NORTH).i(0, 2, 0, 0));
     this.appendNodeChild(document.createElement("summary"));
@@ -2380,6 +2414,7 @@ class Z4HistoryPreview extends JSComponent {
    setHistory(key, json, canvas) {
     this.key = key;
     this.json = json;
+    this.canvas = canvas;
     this.cssAddClass("z4historypreview-" + key);
     let d = new Dimension(json["width"], json["height"]);
     this.zoom = this.setSize(this.preview, d, Z4HistoryPreview.PREVIEW_SIZE);
@@ -4865,10 +4900,8 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonhistorypanel");
-    this.undo = this.addButton(Z4Translations.UNDO, false, 0, 0, "left", 5, event => {
-    });
-    this.redo = this.addButton(Z4Translations.REDO, false, 1, 0, "right", 5, event => {
-    });
+    this.undo = this.addButton(Z4Translations.UNDO, false, 0, 0, "left", 5, event => this.database.transaction("history", "readonly").objectStore("history").openCursor(IDBKeyRange.upperBound(this.currentKey, true), "prev").onsuccess = event2 => this.undoRedo(event2));
+    this.redo = this.addButton(Z4Translations.REDO, false, 1, 0, "right", 5, event => this.database.transaction("history", "readonly").objectStore("history").openCursor(IDBKeyRange.lowerBound(this.currentKey, true)).onsuccess = event2 => this.undoRedo(event2));
     this.save = this.addButton(Z4Translations.SAVE, false, 2, 0, "", 5, event => this.saveHistory("manual"));
     this.consolidate = this.addButton(Z4Translations.CONSOLIDATE, false, 3, 0, "", 5, event => JSOptionPane.showConfirmDialog(Z4Translations.CONSOLIDATE_MESSAGE, Z4Translations.CONSOLIDATE, JSOptionPane.YES_NO_OPTION, JSOptionPane.WARNING_MESSAGE, response => {
       if (response === JSOptionPane.YES_OPTION) {
@@ -4884,6 +4917,14 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
       window.indexedDB.deleteDatabase(this.dbName);
       return null;
     };
+  }
+
+   undoRedo(event2) {
+    let cursor = event2.target["result"];
+    this.setCurrentKey(cursor.key);
+    this.canvas.openFromHistory(cursor["value"]);
+    (document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey)).scrollIntoView();
+    return null;
   }
 
   /**
@@ -4926,6 +4967,7 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
         this.database.transaction("history", "readwrite").objectStore("history").openCursor(IDBKeyRange.lowerBound(this.currentKey, true)).onsuccess = event2 => {
           let cursor = event2.target["result"];
           if (cursor) {
+            document.querySelector(".z4historypreview.z4historypreview-" + cursor.key).remove();
             cursor.delete().onsuccess = event3 => {
               cursor.continue();
               return null;
@@ -4944,6 +4986,7 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
                 this.historyPreview.add(hPreview, null);
                 document.querySelectorAll(".z4historypreview .z4historypreview-selector").forEach(element => element.textContent = Z4HistoryPreview.UNSELECTED_HISTORY_CONTENT);
                 document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey + " .z4historypreview-selector").textContent = Z4HistoryPreview.SELECTED_HISTORY_CONTENT;
+                (document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey)).scrollIntoView();
                 return null;
               };
             });
