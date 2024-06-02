@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -209,19 +209,28 @@ extends <a href="Z4AbstractRibbonPanel.html" title="class in pizzapazza.ui.panel
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#moveLayer(pizzapazza.ui.component.Z4LayerPreview,pizzapazza.Z4Layer,int)">moveLayer</a></span>&#8203;(<a href="../../component/Z4LayerPreview.html" title="class in pizzapazza.ui.component">Z4LayerPreview</a>&nbsp;preview,
+         <a href="../../../Z4Layer.html" title="class in pizzapazza">Z4Layer</a>&nbsp;layer,
+         int&nbsp;index)</code></th>
+<td class="colLast">
+<div class="block">Moves a layer</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#reset()">reset</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Resets the layers preview</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCanvas(pizzapazza.ui.component.Z4Canvas)">setCanvas</a></span>&#8203;(<a href="../../component/Z4Canvas.html" title="class in pizzapazza.ui.component">Z4Canvas</a>&nbsp;canvas)</code></th>
 <td class="colLast">
 <div class="block">Sets the canvas to manage</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStatusPanel(pizzapazza.ui.panel.Z4StatusPanel)">setStatusPanel</a></span>&#8203;(<a href="../Z4StatusPanel.html" title="class in pizzapazza.ui.panel">Z4StatusPanel</a>&nbsp;statusPanel)</code></th>
 <td class="colLast">
@@ -234,7 +243,7 @@ extends <a href="Z4AbstractRibbonPanel.html" title="class in pizzapazza.ui.panel
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;pizzapazza.ui.panel.ribbon.<a href="Z4AbstractRibbonPanel.html" title="class in pizzapazza.ui.panel.ribbon">Z4AbstractRibbonPanel</a></h3>
-<code><a href="Z4AbstractRibbonPanel.html#addButton(java.lang.String,boolean,int,int,java.lang.String,javascript.awt.event.ActionListener)">addButton</a></code></li>
+<code><a href="Z4AbstractRibbonPanel.html#addButton(java.lang.String,boolean,int,int,java.lang.String,int,javascript.awt.event.ActionListener)">addButton</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.javascript.swing.JSPanel">
@@ -318,6 +327,24 @@ extends <a href="Z4AbstractRibbonPanel.html" title="class in pizzapazza.ui.panel
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>statusPanel</code> - The status panel</dd>
+</dl>
+</li>
+</ul>
+<a id="moveLayer(pizzapazza.ui.component.Z4LayerPreview,pizzapazza.Z4Layer,int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>moveLayer</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;moveLayer&#8203;(<a href="../../component/Z4LayerPreview.html" title="class in pizzapazza.ui.component">Z4LayerPreview</a>&nbsp;preview,
+                      <a href="../../../Z4Layer.html" title="class in pizzapazza">Z4Layer</a>&nbsp;layer,
+                      int&nbsp;index)</pre>
+<div class="block">Moves a layer</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>preview</code> - The layer preview</dd>
+<dd><code>layer</code> - The layer</dd>
+<dd><code>index</code> - The new index layer</dd>
 </dl>
 </li>
 </ul>
