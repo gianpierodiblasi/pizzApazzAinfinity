@@ -4,11 +4,14 @@ import static def.dom.Globals.clearInterval;
 import def.dom.IDBDatabase;
 import def.dom.IDBKeyRange;
 import def.js.Date;
+import javascript.awt.BoxLayout;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
 import javascript.swing.JSButton;
 import javascript.swing.JSOptionPane;
+import javascript.swing.JSPanel;
 import pizzapazza.ui.component.Z4Canvas;
+import pizzapazza.ui.component.Z4HistoryPreview;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
@@ -16,6 +19,7 @@ import simulation.js.$Apply_0_Void;
 import simulation.js.$Apply_1_Void;
 import simulation.js.$Apply_3_Void;
 import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.setInterval;
 import static simulation.js.$Globals.window;
 import simulation.js.$IDBCursor;
@@ -32,6 +36,7 @@ public class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
   private final JSButton redo;
   private final JSButton save;
   private final JSButton consolidate;
+  private final JSPanel historyPreview = new JSPanel();
 
   private Z4Canvas canvas;
   private Z4StatusPanel statusPanel;
@@ -67,7 +72,11 @@ public class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
       }
     }));
 
-    Z4UI.addVLine(this, new GBC(4, 0).h(2).wxy(1, 1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addVLine(this, new GBC(4, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+
+    this.historyPreview.setLayout(new BoxLayout(this.historyPreview, BoxLayout.X_AXIS));
+    this.historyPreview.getStyle().overflowX = "scroll";
+    this.add(this.historyPreview, new GBC(5, 0).h(2).wx(1).f(GBC.BOTH));
 
     window.onunload = event -> {
       window.indexedDB.deleteDatabase(this.dbName);
@@ -85,6 +94,7 @@ public class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
     this.undo.setEnabled(false);
     this.redo.setEnabled(false);
     this.consolidate.setEnabled(false);
+    this.historyPreview.setProperty("innerHTML", "");
 
     if ($exists(this.dbName)) {
       window.indexedDB.deleteDatabase(this.dbName);
@@ -129,8 +139,15 @@ public class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
                 this.redo.setEnabled(false);
                 this.consolidate.setEnabled(true);
 
+                document.querySelectorAll(".z4historypreview .z4historypreview-selector").forEach(element -> element.textContent = Z4HistoryPreview.UNSELECTED_HISTORY_CONTENT);
+                
                 this.canvas.setChanged(false);
                 this.currentKey = event.target.$get("result");
+
+                Z4HistoryPreview hPreview = new Z4HistoryPreview();
+                hPreview.setHistory(this.currentKey, json, true);
+                this.historyPreview.add(hPreview, null);
+
                 return null;
               };
             });
@@ -151,7 +168,14 @@ public class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
   public void addHistory($Object json, $Apply_1_Void<Integer> apply, boolean consolidate) {
     this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event -> {
       this.consolidate.setEnabled(consolidate);
-      apply.$apply(event.target.$get("result"));
+
+      int key = event.target.$get("result");
+
+      Z4HistoryPreview hPreview = new Z4HistoryPreview();
+      hPreview.setHistory(key, json, false);
+      this.historyPreview.add(hPreview, null);
+
+      apply.$apply(key);
       return null;
     };
   }

@@ -13,6 +13,8 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
 
    consolidate = null;
 
+   historyPreview = new JSPanel();
+
    canvas = null;
 
    statusPanel = null;
@@ -49,7 +51,10 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
         this.resetHistory(() => this.canvas.toHistory(json => this.addHistory(json, key => this.setCurrentKey(key), false)));
       }
     }));
-    Z4UI.addVLine(this, new GBC(4, 0).h(2).wxy(1, 1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addVLine(this, new GBC(4, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    this.historyPreview.setLayout(new BoxLayout(this.historyPreview, BoxLayout.X_AXIS));
+    this.historyPreview.getStyle().overflowX = "scroll";
+    this.add(this.historyPreview, new GBC(5, 0).h(2).wx(1).f(GBC.BOTH));
     window.onunload = event => {
       window.indexedDB.deleteDatabase(this.dbName);
       return null;
@@ -66,6 +71,7 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
     this.undo.setEnabled(false);
     this.redo.setEnabled(false);
     this.consolidate.setEnabled(false);
+    this.historyPreview.setProperty("innerHTML", "");
     if (this.dbName) {
       window.indexedDB.deleteDatabase(this.dbName);
     }
@@ -105,8 +111,12 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
                 this.undo.setEnabled(true);
                 this.redo.setEnabled(false);
                 this.consolidate.setEnabled(true);
+                document.querySelectorAll(".z4historypreview .z4historypreview-selector").forEach(element => element.textContent = Z4HistoryPreview.UNSELECTED_HISTORY_CONTENT);
                 this.canvas.setChanged(false);
                 this.currentKey = event.target["result"];
+                let hPreview = new Z4HistoryPreview();
+                hPreview.setHistory(this.currentKey, json, true);
+                this.historyPreview.add(hPreview, null);
                 return null;
               };
             });
@@ -127,7 +137,11 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
    addHistory(json, apply, consolidate) {
     this.database.transaction("history", "readwrite").objectStore("history").add(json).onsuccess = event => {
       this.consolidate.setEnabled(consolidate);
-      apply(event.target["result"]);
+      let key = event.target["result"];
+      let hPreview = new Z4HistoryPreview();
+      hPreview.setHistory(key, json, false);
+      this.historyPreview.add(hPreview, null);
+      apply(key);
       return null;
     };
   }
