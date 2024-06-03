@@ -55,7 +55,7 @@ Currently only the English and Italian languages are managed.
 
 ## Test
 pizzApazzA<sup>&#8734;</sup> has been tested on:
-- desktop
+- Windows
   - chrome 124
   - edge 124
   - firefox 125
