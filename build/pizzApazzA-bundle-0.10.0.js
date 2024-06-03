@@ -1289,6 +1289,90 @@ class Z4TextureFiller extends Z4AbstractFiller {
   }
 }
 /**
+ * The fanciful value
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4FancifulValue {
+
+   constant = new Z4SignedValue();
+
+   random = Z4SignedRandomValue.classic(0);
+
+   uniformSign = false;
+
+  /**
+   * Sets the constant component
+   *
+   * @param constant The constant component
+   */
+   setConstant(constant) {
+    this.constant = constant;
+  }
+
+  /**
+   * Returns the the constant component
+   *
+   * @return The the constant component
+   */
+   getConstant() {
+    return this.constant;
+  }
+
+  /**
+   * Sets the random component
+   *
+   * @param random The random component
+   */
+   setRandom(random) {
+    this.random = random;
+  }
+
+  /**
+   * Returns the random component
+   *
+   * @return The random component
+   */
+   getRandom() {
+    return this.random;
+  }
+
+  /**
+   * Sets if the computed sign has to be equals for both components; if true
+   * then the constant sign is used
+   *
+   * @param uniformSign true if the computed sign has to be equals for both
+   * components, false otherwise
+   */
+   setUniformSign(uniformSign) {
+    this.uniformSign = uniformSign;
+  }
+
+  /**
+   * Checks if the computed sign has to be equals for both components; if true
+   * then the constant sign is used
+   *
+   * @return true if the computed sign has to be equals for both components,
+   * false otherwise
+   */
+   isUniformSign() {
+    return this.uniformSign;
+  }
+
+  /**
+   * Returns the next "fanciful" value
+   *
+   * @return The next "fanciful" value
+   */
+   next() {
+    if (this.uniformSign) {
+      return this.constant.getSign().next() * (this.constant.getValue() + this.random.nextUnsigned());
+    } else {
+      return this.constant.next() + this.random.nextSigned();
+    }
+  }
+}
+/**
  * The line
  *
  * @author gianpiero.diblasi
@@ -1544,6 +1628,374 @@ class Z4Point {
     this.x = x;
     this.y = y;
   }
+}
+/**
+ * The signs of a value
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Sign {
+
+  /**
+   * Positive sign
+   */
+  static  POSITIVE = new Z4Sign(1);
+
+  /**
+   * Negative sign
+   */
+  static  NEGATIVE = new Z4Sign(-1);
+
+  /**
+   * Random sign
+   */
+  static  RANDOM = new Z4Sign(0);
+
+   sign = 0;
+
+  constructor(sign) {
+    this.sign = sign;
+  }
+
+  /**
+   * Returns the next sign
+   *
+   * @return The next sign
+   */
+   next() {
+    switch(this.sign) {
+      case 1:
+      case -1:
+        return this.sign;
+      case 0:
+      default:
+        return Math.random() > 0.5 ? 1 : -1;
+      case 2:
+      case -2:
+        this.sign *= -1;
+        return this.sign / 2;
+    }
+  }
+
+  /**
+   * Creates a Z4Sign providing the following sequence +1, -1, +1, -1, ...
+   *
+   * @return The Z4Sign
+   */
+  static  alternate() {
+    return new Z4Sign(-2);
+  }
+}
+/**
+ * A random value with sign
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4SignedRandomValue {
+
+   sign = Z4Sign.RANDOM;
+
+   value = 0.0;
+
+   type = 0;
+
+   length = 0.0;
+
+   step = 0;
+
+   prevRandom = 0.0;
+
+   controlRandom = 0.0;
+
+   nextRandom = 0.0;
+
+   bezierCurve = null;
+
+  constructor(value, type, length) {
+    this.value = value;
+    this.type = type;
+    this.length = length;
+    this.step = 1;
+    this.prevRandom = Math.random();
+    this.controlRandom = 1;
+    this.nextRandom = Math.random();
+    if (this.type === 1) {
+      this.createBezierCurve();
+    }
+  }
+
+   createBezierCurve() {
+    this.bezierCurve = new Bezier(0, this.prevRandom, this.length / 2, this.controlRandom, 1, this.nextRandom);
+  }
+
+  /**
+   * Checks if this Z4SignedRandomValue generates "classic "random values
+   *
+   * @return true if this Z4SignedRandomValue generates "classic "random values,
+   * false otherwise
+   */
+   isClassic() {
+    return this.type === 0;
+  }
+
+  /**
+   * Checks if this Z4SignedRandomValue generates random values on a bezier
+   * curve
+   *
+   * @return true if this Z4SignedRandomValue generates random values on a
+   * bezier curve, false otherwise
+   */
+   isBezier() {
+    return this.type === 1;
+  }
+
+  /**
+   * Checks if this Z4SignedRandomValue generates random values on a polyline
+   *
+   * @return true if this Z4SignedRandomValue generates random values on a
+   * polyline, false otherwise
+   */
+   isPolyline() {
+    return this.type === 2;
+  }
+
+  /**
+   * Returns if this Z4SignedRandomValue generates random values on a stepped
+   * line
+   *
+   * @return true if this Z4SignedRandomValue generates random values on a
+   * stepped line, false otherwise
+   */
+   isStepped() {
+    return this.type === 3;
+  }
+
+  /**
+   * Returns the sign
+   *
+   * @return The sign
+   */
+   getSign() {
+    return this.sign;
+  }
+
+  /**
+   * Sets the sign
+   *
+   * @param sign The sign
+   */
+   setSign(sign) {
+    this.sign = sign;
+  }
+
+  /**
+   * Returns the value
+   *
+   * @return The (positive) value
+   */
+   getValue() {
+    return this.value;
+  }
+
+  /**
+   * Sets the value
+   *
+   * @param value The (positive) value
+   */
+   setValue(value) {
+    this.value = value;
+  }
+
+  /**
+   * Returns the length
+   *
+   * @return The length
+   */
+   getLength() {
+    return this.length;
+  }
+
+  /**
+   * Sets the length
+   *
+   * @param length The length
+   */
+   setLength(length) {
+    this.length = length;
+  }
+
+  /**
+   * Returns the next unsigned random value
+   *
+   * @return The next unsigned random value (in the range [0,value[)
+   */
+   nextUnsigned() {
+    switch(this.type) {
+      case 0:
+      default:
+        return this.value * Math.random();
+      case 1:
+        if (this.step >= this.length) {
+          this.step = 1;
+          this.prevRandom = this.nextRandom;
+          this.controlRandom = this.controlRandom === 1 ? 0 : 1;
+          this.nextRandom = Math.random();
+          this.createBezierCurve();
+        } else {
+          this.step++;
+        }
+        return this.value * this.bezierCurve.get(this.step / this.length).y;
+      case 2:
+        if (this.step >= this.length) {
+          this.step = 1;
+          this.prevRandom = this.nextRandom;
+          this.nextRandom = Math.random();
+        } else {
+          this.step++;
+        }
+        return this.value * ((this.nextRandom - this.prevRandom) * this.step / this.length + this.prevRandom);
+      case 3:
+        if (this.step >= this.length) {
+          this.step = 1;
+          this.prevRandom = Math.random();
+        } else {
+          this.step++;
+        }
+        return this.value * this.prevRandom;
+    }
+  }
+
+  /**
+   * Returns the next signed random value
+   *
+   * @return The next signed random value (in the range ]-value,value[)
+   */
+   nextSigned() {
+    return this.sign.next() * this.nextUnsigned();
+  }
+
+  /**
+   * Returns a Z4SignedRandomValue generating "classic "random values
+   *
+   * @param value The (positive) value
+   * @return The Z4SignedRandomValue
+   */
+  static  classic(value) {
+    return new Z4SignedRandomValue(value, 0, 1);
+  }
+
+  /**
+   * Returns a Z4SignedRandomValue generating random values on a bezier curve
+   *
+   * @param value The (positive) value
+   * @param length The curve length
+   * @return The Z4SignedRandomValue
+   */
+  static  bezier(value, length) {
+    return new Z4SignedRandomValue(value, 1, length);
+  }
+
+  /**
+   * Returns a Z4SignedRandomValue generating random values on a polyline
+   *
+   * @param value The (positive) value
+   * @param length The polyline length
+   * @return The Z4SignedRandomValue
+   */
+  static  polyline(value, length) {
+    return new Z4SignedRandomValue(value, 2, length);
+  }
+
+  /**
+   * Returns a Z4SignedRandomValue generating random values on a stepped line
+   *
+   * @param value The (positive) value
+   * @param length The step length
+   * @return The Z4SignedRandomValue
+   */
+  static  stepped(value, length) {
+    return new Z4SignedRandomValue(value, 3, length);
+  }
+}
+/**
+ * A value with sign
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4SignedValue {
+
+   sign = Z4Sign.RANDOM;
+
+   value = 0.0;
+
+  /**
+   * Returns the sign
+   *
+   * @return The sign
+   */
+   getSign() {
+    return this.sign;
+  }
+
+  /**
+   * Sets the sign
+   *
+   * @param sign The sign
+   */
+   setSign(sign) {
+    this.sign = sign;
+  }
+
+  /**
+   * Returns the (positive) value
+   *
+   * @return The (positive) value
+   */
+   getValue() {
+    return this.value;
+  }
+
+  /**
+   * Sets the value
+   *
+   * @param value The (positive) value
+   */
+   setValue(value) {
+    this.value = value;
+  }
+
+  /**
+   * Returns the next signed value
+   *
+   * @return The next signed value
+   */
+   next() {
+    return this.sign.next() * this.value;
+  }
+}
+/**
+ * The enumeration of a sign
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4SignEnum {
+
+  /**
+   * The positive
+   */
+  static POSITIVE = 'POSITIVE';
+  /**
+   * The negative
+   */
+  static NEGATIVE = 'NEGATIVE';
+  /**
+   * The random
+   */
+  static RANDOM = 'RANDOM';
+  /**
+   * The alternate
+   */
+  static ALTERNATE = 'ALTERNATE';
 }
 /**
  * The canvas
@@ -5226,7 +5678,7 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     let panel = new Z4MergeLayerPanel();
     panel.setCanvas(this.canvas);
     JSOptionPane.showInputDialog(panel, Z4Translations.MERGE, listener => panel.addChangeListener(listener), () => panel.getSelectedLayers().length > 1, response => {
-      if (respose === JSOptionPane.OK_OPTION) {
+      if (response === JSOptionPane.OK_OPTION) {
         let selected = panel.getSelectedLayers();
         selected.forEach(layer => {
           let index = this.canvas.deleteLayer(layer);

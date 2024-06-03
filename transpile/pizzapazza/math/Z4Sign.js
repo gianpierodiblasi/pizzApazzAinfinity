@@ -1,30 +1,28 @@
-package giada.pizzapazza.math;
-
-import def.js.Math;
-
 /**
  * The signs of a value
  *
  * @author gianpiero.diblasi
  */
-public class Z4Sign {
+class Z4Sign {
 
   /**
    * Positive sign
    */
-  public final static Z4Sign POSITIVE = new Z4Sign(1);
+  static  POSITIVE = new Z4Sign(1);
+
   /**
    * Negative sign
    */
-  public final static Z4Sign NEGATIVE = new Z4Sign(-1);
+  static  NEGATIVE = new Z4Sign(-1);
+
   /**
    * Random sign
    */
-  public final static Z4Sign RANDOM = new Z4Sign(0);
+  static  RANDOM = new Z4Sign(0);
 
-  private int sign;
+   sign = 0;
 
-  private Z4Sign(int sign) {
+  constructor(sign) {
     this.sign = sign;
   }
 
@@ -33,8 +31,8 @@ public class Z4Sign {
    *
    * @return The next sign
    */
-  public int next() {
-    switch (this.sign) {
+   next() {
+    switch(this.sign) {
       case 1:
       case -1:
         return this.sign;
@@ -53,7 +51,7 @@ public class Z4Sign {
    *
    * @return The Z4Sign
    */
-  public static Z4Sign alternate() {
+  static  alternate() {
     return new Z4Sign(-2);
   }
 }

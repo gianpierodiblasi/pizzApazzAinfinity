@@ -1,21 +1,20 @@
-package giada.pizzapazza.math;
-
 /**
  * A value with sign
  *
  * @author gianpiero.diblasi
  */
-public class Z4SignedValue {
+class Z4SignedValue {
 
-  private Z4Sign sign = Z4Sign.RANDOM;
-  private double value;
+   sign = Z4Sign.RANDOM;
+
+   value = 0.0;
 
   /**
    * Returns the sign
    *
    * @return The sign
    */
-  public Z4Sign getSign() {
+   getSign() {
     return this.sign;
   }
 
@@ -23,11 +22,9 @@ public class Z4SignedValue {
    * Sets the sign
    *
    * @param sign The sign
-   * @return This Z4SignedValue
    */
-  public Z4SignedValue setSign(Z4Sign sign) {
+   setSign(sign) {
     this.sign = sign;
-    return this;
   }
 
   /**
@@ -35,7 +32,7 @@ public class Z4SignedValue {
    *
    * @return The (positive) value
    */
-  public double getValue() {
+   getValue() {
     return this.value;
   }
 
@@ -43,11 +40,9 @@ public class Z4SignedValue {
    * Sets the value
    *
    * @param value The (positive) value
-   * @return This Z4SignedValue
    */
-  public Z4SignedValue setValue(double value) {
+   setValue(value) {
     this.value = value;
-    return this;
   }
 
   /**
@@ -55,7 +50,7 @@ public class Z4SignedValue {
    *
    * @return The next signed value
    */
-  public double next() {
+   next() {
     return this.sign.next() * this.value;
   }
 }

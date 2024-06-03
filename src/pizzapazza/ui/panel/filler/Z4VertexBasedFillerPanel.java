@@ -1,14 +1,11 @@
 package pizzapazza.ui.panel.filler;
 
-import def.dom.CanvasGradient;
-import def.dom.CanvasPattern;
 import def.js.Array;
 import javascript.awt.GBC;
 import javascript.awt.Point;
 import javascript.swing.JSCheckBox;
 import javascript.swing.JSSlider;
 import javascript.swing.MnR.DefaultSliderModelAndRenderer;
-import jsweet.util.union.Union4;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.filler.Z4AbstractBoundaryBehaviorFiller;
 import pizzapazza.filler.Z4AbstractFiller;

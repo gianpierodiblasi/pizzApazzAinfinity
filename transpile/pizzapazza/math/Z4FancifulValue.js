@@ -1,25 +1,23 @@
-package giada.pizzapazza.math;
-
 /**
  * The fanciful value
  *
  * @author gianpiero.diblasi
  */
-public class Z4FancifulValue {
+class Z4FancifulValue {
 
-  private Z4SignedValue constant = new Z4SignedValue();
-  private Z4SignedRandomValue random = Z4SignedRandomValue.classic(0);
-  private boolean uniformSign;
+   constant = new Z4SignedValue();
+
+   random = Z4SignedRandomValue.classic(0);
+
+   uniformSign = false;
 
   /**
    * Sets the constant component
    *
    * @param constant The constant component
-   * @return This Z4FancifulValue
    */
-  public Z4FancifulValue setConstant(Z4SignedValue constant) {
+   setConstant(constant) {
     this.constant = constant;
-    return this;
   }
 
   /**
@@ -27,7 +25,7 @@ public class Z4FancifulValue {
    *
    * @return The the constant component
    */
-  public Z4SignedValue getConstant() {
+   getConstant() {
     return this.constant;
   }
 
@@ -35,11 +33,9 @@ public class Z4FancifulValue {
    * Sets the random component
    *
    * @param random The random component
-   * @return This Z4FancifulValue
    */
-  public Z4FancifulValue setRandom(Z4SignedRandomValue random) {
+   setRandom(random) {
     this.random = random;
-    return this;
   }
 
   /**
@@ -47,7 +43,7 @@ public class Z4FancifulValue {
    *
    * @return The random component
    */
-  public Z4SignedRandomValue getRandom() {
+   getRandom() {
     return this.random;
   }
 
@@ -57,11 +53,9 @@ public class Z4FancifulValue {
    *
    * @param uniformSign true if the computed sign has to be equals for both
    * components, false otherwise
-   * @return This Z4FancifulValue
    */
-  public Z4FancifulValue setUniformSign(boolean uniformSign) {
+   setUniformSign(uniformSign) {
     this.uniformSign = uniformSign;
-    return this;
   }
 
   /**
@@ -71,7 +65,7 @@ public class Z4FancifulValue {
    * @return true if the computed sign has to be equals for both components,
    * false otherwise
    */
-  public boolean isUniformSign() {
+   isUniformSign() {
     return this.uniformSign;
   }
 
@@ -80,7 +74,7 @@ public class Z4FancifulValue {
    *
    * @return The next "fanciful" value
    */
-  public double next() {
+   next() {
     if (this.uniformSign) {
       return this.constant.getSign().next() * (this.constant.getValue() + this.random.nextUnsigned());
     } else {

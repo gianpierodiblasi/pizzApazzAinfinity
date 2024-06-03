@@ -1,42 +1,43 @@
-package giada.pizzapazza.math;
-
-import simulation.bezier.$Bezier;
-
 /**
  * A random value with sign
  *
  * @author gianpiero.diblasi
  */
-public class Z4SignedRandomValue {
+class Z4SignedRandomValue {
 
-  private Z4Sign sign = Z4Sign.RANDOM;
-  private double value;
-  private final int type;
-  private double length;
+   sign = Z4Sign.RANDOM;
 
-  private int step;
-  private double prevRandom;
-  private double controlRandom;
-  private double nextRandom;
-  private $Bezier bezierCurve;
+   value = 0.0;
 
-  private Z4SignedRandomValue(double value, int type, double length) {
+   type = 0;
+
+   length = 0.0;
+
+   step = 0;
+
+   prevRandom = 0.0;
+
+   controlRandom = 0.0;
+
+   nextRandom = 0.0;
+
+   bezierCurve = null;
+
+  constructor(value, type, length) {
     this.value = value;
     this.type = type;
     this.length = length;
-
     this.step = 1;
     this.prevRandom = Math.random();
     this.controlRandom = 1;
     this.nextRandom = Math.random();
-
-    if (this.type == 1) {
+    if (this.type === 1) {
       this.createBezierCurve();
     }
   }
 
-  private void createBezierCurve() {
-    this.bezierCurve = new $Bezier(0, this.prevRandom, this.length / 2, this.controlRandom, 1, this.nextRandom);
+   createBezierCurve() {
+    this.bezierCurve = new Bezier(0, this.prevRandom, this.length / 2, this.controlRandom, 1, this.nextRandom);
   }
 
   /**
@@ -45,8 +46,8 @@ public class Z4SignedRandomValue {
    * @return true if this Z4SignedRandomValue generates "classic "random values,
    * false otherwise
    */
-  public boolean isClassic() {
-    return this.type == 0;
+   isClassic() {
+    return this.type === 0;
   }
 
   /**
@@ -56,8 +57,8 @@ public class Z4SignedRandomValue {
    * @return true if this Z4SignedRandomValue generates random values on a
    * bezier curve, false otherwise
    */
-  public boolean isBezier() {
-    return this.type == 1;
+   isBezier() {
+    return this.type === 1;
   }
 
   /**
@@ -66,8 +67,8 @@ public class Z4SignedRandomValue {
    * @return true if this Z4SignedRandomValue generates random values on a
    * polyline, false otherwise
    */
-  public boolean isPolyline() {
-    return this.type == 2;
+   isPolyline() {
+    return this.type === 2;
   }
 
   /**
@@ -77,8 +78,8 @@ public class Z4SignedRandomValue {
    * @return true if this Z4SignedRandomValue generates random values on a
    * stepped line, false otherwise
    */
-  public boolean isStepped() {
-    return this.type == 3;
+   isStepped() {
+    return this.type === 3;
   }
 
   /**
@@ -86,7 +87,7 @@ public class Z4SignedRandomValue {
    *
    * @return The sign
    */
-  public Z4Sign getSign() {
+   getSign() {
     return this.sign;
   }
 
@@ -94,11 +95,9 @@ public class Z4SignedRandomValue {
    * Sets the sign
    *
    * @param sign The sign
-   * @return This Z4SignedRandomValue
    */
-  public Z4SignedRandomValue setSign(Z4Sign sign) {
+   setSign(sign) {
     this.sign = sign;
-    return this;
   }
 
   /**
@@ -106,7 +105,7 @@ public class Z4SignedRandomValue {
    *
    * @return The (positive) value
    */
-  public double getValue() {
+   getValue() {
     return this.value;
   }
 
@@ -114,19 +113,17 @@ public class Z4SignedRandomValue {
    * Sets the value
    *
    * @param value The (positive) value
-   * @return This Z4SignedRandomValue
    */
-  public Z4SignedRandomValue setValue(double value) {
+   setValue(value) {
     this.value = value;
-    return this;
   }
-  
+
   /**
    * Returns the length
    *
    * @return The length
    */
-  public double getLength() {
+   getLength() {
     return this.length;
   }
 
@@ -134,20 +131,18 @@ public class Z4SignedRandomValue {
    * Sets the length
    *
    * @param length The length
-   * @return This Z4SignedRandomValue
    */
-  public Z4SignedRandomValue setLength(double length) {
+   setLength(length) {
     this.length = length;
-    return this;
   }
-  
+
   /**
    * Returns the next unsigned random value
    *
    * @return The next unsigned random value (in the range [0,value[)
    */
-  public double nextUnsigned() {
-    switch (this.type) {
+   nextUnsigned() {
+    switch(this.type) {
       case 0:
       default:
         return this.value * Math.random();
@@ -155,14 +150,12 @@ public class Z4SignedRandomValue {
         if (this.step >= this.length) {
           this.step = 1;
           this.prevRandom = this.nextRandom;
-          this.controlRandom = this.controlRandom == 1 ? 0 : 1;
+          this.controlRandom = this.controlRandom === 1 ? 0 : 1;
           this.nextRandom = Math.random();
-
           this.createBezierCurve();
         } else {
           this.step++;
         }
-
         return this.value * this.bezierCurve.get(this.step / this.length).y;
       case 2:
         if (this.step >= this.length) {
@@ -172,7 +165,6 @@ public class Z4SignedRandomValue {
         } else {
           this.step++;
         }
-
         return this.value * ((this.nextRandom - this.prevRandom) * this.step / this.length + this.prevRandom);
       case 3:
         if (this.step >= this.length) {
@@ -181,7 +173,6 @@ public class Z4SignedRandomValue {
         } else {
           this.step++;
         }
-
         return this.value * this.prevRandom;
     }
   }
@@ -191,17 +182,17 @@ public class Z4SignedRandomValue {
    *
    * @return The next signed random value (in the range ]-value,value[)
    */
-  public double nextSigned() {
+   nextSigned() {
     return this.sign.next() * this.nextUnsigned();
   }
-  
+
   /**
    * Returns a Z4SignedRandomValue generating "classic "random values
    *
    * @param value The (positive) value
    * @return The Z4SignedRandomValue
    */
-  public static Z4SignedRandomValue classic(double value) {
+  static  classic(value) {
     return new Z4SignedRandomValue(value, 0, 1);
   }
 
@@ -212,7 +203,7 @@ public class Z4SignedRandomValue {
    * @param length The curve length
    * @return The Z4SignedRandomValue
    */
-  public static Z4SignedRandomValue bezier(double value, double length) {
+  static  bezier(value, length) {
     return new Z4SignedRandomValue(value, 1, length);
   }
 
@@ -223,7 +214,7 @@ public class Z4SignedRandomValue {
    * @param length The polyline length
    * @return The Z4SignedRandomValue
    */
-  public static Z4SignedRandomValue polyline(double value, double length) {
+  static  polyline(value, length) {
     return new Z4SignedRandomValue(value, 2, length);
   }
 
@@ -234,7 +225,7 @@ public class Z4SignedRandomValue {
    * @param length The step length
    * @return The Z4SignedRandomValue
    */
-  public static Z4SignedRandomValue stepped(double value, double length) {
+  static  stepped(value, length) {
     return new Z4SignedRandomValue(value, 3, length);
   }
 }

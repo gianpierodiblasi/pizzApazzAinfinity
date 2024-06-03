@@ -1,7 +1,5 @@
 package pizzapazza.ui.panel.filler;
 
-import def.dom.CanvasGradient;
-import def.dom.CanvasPattern;
 import def.dom.FileReader;
 import def.dom.ImageData;
 import def.js.Array;
@@ -15,7 +13,6 @@ import javascript.swing.JSColorChooser;
 import javascript.swing.JSFileChooser;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
-import jsweet.util.union.Union4;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.filler.Z4AbstractFiller;
 import pizzapazza.filler.Z4TextureFiller;
