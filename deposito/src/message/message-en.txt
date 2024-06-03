@@ -31,11 +31,6 @@ RELATIVE_TO_PATH = Relative to Path
 DELAYED = Delayed
 
 # Color
-COLOR = Color
-OPACITY = Opacity
-GRADIENT_COLOR = Gradient Color
-GRAY = Gray
-FILLING = Filling
 LIGHTING = Lighting
 LIGHTED = Lighted
 DARKENED = Darkened
@@ -56,8 +51,6 @@ SHAPE = Shape
 SIZE = Size
 SHADOW = Shadow
 BORDER = Border
-WIDTH = Width
-HEIGHT = Height
 REGULAR = Regular
 SHADOW = Shadow
 DELTA_X = Delta X

@@ -31,12 +31,6 @@ RELATIVE_TO_PATH = Relativo al Percorso
 DELAYED = Ritardato
 
 # Color
-COLOR = Colore
-OPACITY = Opacità
-GRADIENT_COLOR = Colore a Gradiente
-GRAY = Grigio
-
-FILLING = Riempimento
 LIGHTING = Illuminazione
 LIGHTED = Illuminato
 DARKENED = Incupito
@@ -57,8 +51,6 @@ SHAPE = Forma
 SIZE = Dimensione
 SHADOW = Ombra
 BORDER = Bordo
-WIDTH = Larghezza
-HEIGHT = Altezza
 REGULAR = Regolare
 SHADOW = Ombra
 DELTA_X = Delta X
