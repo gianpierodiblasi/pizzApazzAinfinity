@@ -107,12 +107,14 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     let panel = new Z4MergeLayerPanel();
     panel.setCanvas(this.canvas);
     JSOptionPane.showInputDialog(panel, Z4Translations.MERGE, listener => panel.addChangeListener(listener), () => panel.getSelectedLayers().length > 1, response => {
-      let selected = panel.getSelectedLayers();
-      selected.forEach(layer => {
-        let index = this.canvas.deleteLayer(layer);
-        document.querySelector(".z4layerpreview:nth-child(" + (index + 1) + ")").remove();
-      });
-      this.canvas.mergeLayers(selected);
+      if (response === JSOptionPane.OK_OPTION) {
+        let selected = panel.getSelectedLayers();
+        selected.forEach(layer => {
+          let index = this.canvas.deleteLayer(layer);
+          document.querySelector(".z4layerpreview:nth-child(" + (index + 1) + ")").remove();
+        });
+        this.canvas.mergeLayers(selected);
+      }
     });
   }
 
