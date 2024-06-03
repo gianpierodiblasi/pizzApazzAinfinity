@@ -5,10 +5,21 @@ package pizzapazza.math;
  *
  * @author gianpiero.diblasi
  */
-public class Z4SignedValue {
+public class Z4SignedValue implements Z4Nextable<Double> {
 
-  private Z4Sign sign = Z4Sign.RANDOM;
-  private double value;
+  private final Z4Sign sign;
+  private final double value;
+
+  /**
+   * Creates the object
+   *
+   * @param sign The sign
+   * @param value The value
+   */
+  public Z4SignedValue(Z4Sign sign, double value) {
+    this.sign = sign;
+    this.value = value;
+  }
 
   /**
    * Returns the sign
@@ -20,15 +31,6 @@ public class Z4SignedValue {
   }
 
   /**
-   * Sets the sign
-   *
-   * @param sign The sign
-   */
-  public void setSign(Z4Sign sign) {
-    this.sign = sign;
-  }
-
-  /**
    * Returns the (positive) value
    *
    * @return The (positive) value
@@ -37,21 +39,8 @@ public class Z4SignedValue {
     return this.value;
   }
 
-  /**
-   * Sets the value
-   *
-   * @param value The (positive) value
-   */
-  public void setValue(double value) {
-    this.value = value;
-  }
-
-  /**
-   * Returns the next signed value
-   *
-   * @return The next signed value
-   */
-  public double next() {
+  @Override
+  public Double next() {
     return this.sign.next() * this.value;
   }
 }

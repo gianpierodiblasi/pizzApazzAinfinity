@@ -5,19 +5,24 @@
  */
 class Z4FancifulValue {
 
-   constant = new Z4SignedValue();
+   constant = null;
 
-   random = Z4SignedRandomValue.classic(0);
+   random = null;
 
    uniformSign = false;
 
   /**
-   * Sets the constant component
+   * Creates the object
    *
    * @param constant The constant component
+   * @param random The random component
+   * @param uniformSign true if the computed sign has to be equals for both
+   * components, false otherwise
    */
-   setConstant(constant) {
+  constructor(constant, random, uniformSign) {
     this.constant = constant;
+    this.random = random;
+    this.uniformSign = uniformSign;
   }
 
   /**
@@ -30,32 +35,12 @@ class Z4FancifulValue {
   }
 
   /**
-   * Sets the random component
-   *
-   * @param random The random component
-   */
-   setRandom(random) {
-    this.random = random;
-  }
-
-  /**
    * Returns the random component
    *
    * @return The random component
    */
    getRandom() {
     return this.random;
-  }
-
-  /**
-   * Sets if the computed sign has to be equals for both components; if true
-   * then the constant sign is used
-   *
-   * @param uniformSign true if the computed sign has to be equals for both
-   * components, false otherwise
-   */
-   setUniformSign(uniformSign) {
-    this.uniformSign = uniformSign;
   }
 
   /**

@@ -28,7 +28,7 @@ public class Z4PolygonFiller extends Z4AbstractEllipseInscribedFiller {
    * @param vertexCount The number of vertices of the polygon
    * @param boundaryBehavior The boundary behavior
    */
-  public Z4PolygonFiller(Z4GradientColor gradientColor, int cx, int cy, int rx, int ry, double angle, int vertexCount, int boundaryBehavior) {
+  public Z4PolygonFiller(Z4GradientColor gradientColor, int cx, int cy, int rx, int ry, double angle, int vertexCount, Z4BoundaryBehavior boundaryBehavior) {
     super(gradientColor, cx, cy, rx, ry, angle, vertexCount, boundaryBehavior);
 
   }

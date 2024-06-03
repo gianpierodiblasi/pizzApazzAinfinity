@@ -7,8 +7,8 @@ import javascript.swing.JSCheckBox;
 import javascript.swing.JSSlider;
 import javascript.swing.MnR.DefaultSliderModelAndRenderer;
 import pizzapazza.color.Z4GradientColor;
-import pizzapazza.filler.Z4AbstractBoundaryBehaviorFiller;
 import pizzapazza.filler.Z4AbstractFiller;
+import pizzapazza.filler.Z4BoundaryBehavior;
 import pizzapazza.filler.Z4EllipticFiller;
 import pizzapazza.filler.Z4PolygonFiller;
 import pizzapazza.filler.Z4StarFiller;
@@ -35,10 +35,10 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
   @SuppressWarnings("unchecked")
   public Z4VertexBasedFillerPanel() {
     super(3, new Array<>(
-            Z4AbstractBoundaryBehaviorFiller.STOP_AT_BOUNDARY,
-            Z4AbstractBoundaryBehaviorFiller.FILL_AT_BOUNDARY,
-            Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY,
-            Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY
+            Z4BoundaryBehavior.STOP_AT_BOUNDARY,
+            Z4BoundaryBehavior.FILL_AT_BOUNDARY,
+            Z4BoundaryBehavior.SYMMETRIC_AT_BOUNDARY,
+            Z4BoundaryBehavior.REPEAT_AT_BOUNDARY
     ));
 
     Z4UI.addLabel(this, Z4Translations.VERTICES, new GBC(0, 7).a(GBC.WEST));
@@ -166,15 +166,12 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
 
   @Override
   protected boolean needsRescale(Object option) {
-    switch ((int) option) {
-      case Z4AbstractBoundaryBehaviorFiller.STOP_AT_BOUNDARY:
-      case Z4AbstractBoundaryBehaviorFiller.FILL_AT_BOUNDARY:
-        return false;
-      case Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY:
-      case Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY:
-        return this.vertexCounter.getValue() != 7;
-      default:
-        return true;
+    if (option == Z4BoundaryBehavior.STOP_AT_BOUNDARY || option == Z4BoundaryBehavior.FILL_AT_BOUNDARY) {
+      return false;
+    } else if (option == Z4BoundaryBehavior.SYMMETRIC_AT_BOUNDARY || option == Z4BoundaryBehavior.REPEAT_AT_BOUNDARY) {
+      return this.vertexCounter.getValue() != 7;
+    } else {
+      return true;
     }
   }
 
@@ -186,11 +183,11 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
 
     int vertex = this.vertexCounter.getValue();
     if (vertex == 7) {
-      return new Z4EllipticFiller(gradientColor, points.$get(0).x, points.$get(0).y, rx, this.regular.isSelected() ? rx : ry, angle, (int) option);
+      return new Z4EllipticFiller(gradientColor, points.$get(0).x, points.$get(0).y, rx, this.regular.isSelected() ? rx : ry, angle, (Z4BoundaryBehavior) option);
     } else if (this.star.isSelected()) {
-      return new Z4StarFiller(gradientColor, points.$get(0).x, points.$get(0).y, rx, this.regular.isSelected() ? rx : ry, angle, vertex + 3, (int) option);
+      return new Z4StarFiller(gradientColor, points.$get(0).x, points.$get(0).y, rx, this.regular.isSelected() ? rx : ry, angle, vertex + 3, (Z4BoundaryBehavior) option);
     } else {
-      return new Z4PolygonFiller(gradientColor, points.$get(0).x, points.$get(0).y, rx, this.regular.isSelected() ? rx : ry, angle, vertex + 3, (int) option);
+      return new Z4PolygonFiller(gradientColor, points.$get(0).x, points.$get(0).y, rx, this.regular.isSelected() ? rx : ry, angle, vertex + 3, (Z4BoundaryBehavior) option);
     }
   }
 

@@ -1,24 +1,24 @@
 /**
- * The enumeration of a sign
+ * The sign definition
  *
  * @author gianpiero.diblasi
  */
-class Z4SignEnum {
+class Z4SignDefinition {
 
   /**
-   * The positive
+   * The positive sign
    */
   static POSITIVE = 'POSITIVE';
   /**
-   * The negative
+   * The negative sign
    */
   static NEGATIVE = 'NEGATIVE';
   /**
-   * The random
+   * The random sign
    */
   static RANDOM = 'RANDOM';
   /**
-   * The alternate
+   * A sign providing the following sequence +1, -1, +1, -1, ...
    */
   static ALTERNATE = 'ALTERNATE';
 }

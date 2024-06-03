@@ -15,7 +15,7 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
    * Creates the object
    */
   constructor() {
-    super(3, new Array(Z4AbstractBoundaryBehaviorFiller.STOP_AT_BOUNDARY, Z4AbstractBoundaryBehaviorFiller.FILL_AT_BOUNDARY, Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY, Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY));
+    super(3, new Array(Z4BoundaryBehavior.STOP_AT_BOUNDARY, Z4BoundaryBehavior.FILL_AT_BOUNDARY, Z4BoundaryBehavior.SYMMETRIC_AT_BOUNDARY, Z4BoundaryBehavior.REPEAT_AT_BOUNDARY));
     Z4UI.addLabel(this, Z4Translations.VERTICES, new GBC(0, 7).a(GBC.WEST));
     this.star.setText(Z4Translations.STAR);
     this.star.setEnabled(false);
@@ -115,15 +115,12 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
   }
 
    needsRescale(option) {
-    switch(option) {
-      case Z4AbstractBoundaryBehaviorFiller.STOP_AT_BOUNDARY:
-      case Z4AbstractBoundaryBehaviorFiller.FILL_AT_BOUNDARY:
-        return false;
-      case Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY:
-      case Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY:
-        return this.vertexCounter.getValue() !== 7;
-      default:
-        return true;
+    if (option === Z4BoundaryBehavior.STOP_AT_BOUNDARY || option === Z4BoundaryBehavior.FILL_AT_BOUNDARY) {
+      return false;
+    } else if (option === Z4BoundaryBehavior.SYMMETRIC_AT_BOUNDARY || option === Z4BoundaryBehavior.REPEAT_AT_BOUNDARY) {
+      return this.vertexCounter.getValue() !== 7;
+    } else {
+      return true;
     }
   }
 

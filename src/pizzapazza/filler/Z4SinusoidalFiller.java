@@ -32,7 +32,7 @@ public class Z4SinusoidalFiller extends Z4AbstractDistanceBasedBoundaryBehaviorF
    * @param angle The rotation angle of the sinusoid
    * @param boundaryBehavior The boundary behavior
    */
-  public Z4SinusoidalFiller(Z4GradientColor gradientColor, int x, int y, double waveLength, double period, double amplitude, double angle, int boundaryBehavior) {
+  public Z4SinusoidalFiller(Z4GradientColor gradientColor, int x, int y, double waveLength, double period, double amplitude, double angle, Z4BoundaryBehavior boundaryBehavior) {
     super(gradientColor, boundaryBehavior);
 
     this.x = x;

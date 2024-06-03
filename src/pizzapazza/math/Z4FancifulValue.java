@@ -7,17 +7,22 @@ package pizzapazza.math;
  */
 public class Z4FancifulValue {
 
-  private Z4SignedValue constant = new Z4SignedValue();
-  private Z4SignedRandomValue random = Z4SignedRandomValue.classic(0);
-  private boolean uniformSign;
+  private final Z4SignedValue constant;
+  private final Z4SignedRandomValue random;
+  private final boolean uniformSign;
 
   /**
-   * Sets the constant component
+   * Creates the object
    *
    * @param constant The constant component
+   * @param random The random component
+   * @param uniformSign true if the computed sign has to be equals for both
+   * components, false otherwise
    */
-  public void setConstant(Z4SignedValue constant) {
+  public Z4FancifulValue(Z4SignedValue constant, Z4SignedRandomValue random, boolean uniformSign) {
     this.constant = constant;
+    this.random = random;
+    this.uniformSign = uniformSign;
   }
 
   /**
@@ -30,32 +35,12 @@ public class Z4FancifulValue {
   }
 
   /**
-   * Sets the random component
-   *
-   * @param random The random component
-   */
-  public void setRandom(Z4SignedRandomValue random) {
-    this.random = random;
-  }
-
-  /**
    * Returns the random component
    *
    * @return The random component
    */
   public Z4SignedRandomValue getRandom() {
     return this.random;
-  }
-
-  /**
-   * Sets if the computed sign has to be equals for both components; if true
-   * then the constant sign is used
-   *
-   * @param uniformSign true if the computed sign has to be equals for both
-   * components, false otherwise
-   */
-  public void setUniformSign(boolean uniformSign) {
-    this.uniformSign = uniformSign;
   }
 
   /**

@@ -5,27 +5,7 @@
  */
 class Z4AbstractBoundaryBehaviorFiller extends Z4AbstractGradientColorFiller {
 
-  /**
-   * The filler does nothing outside the boundary
-   */
-  static  STOP_AT_BOUNDARY = 0;
-
-  /**
-   * The filler uses the last color outside the boundary
-   */
-  static  FILL_AT_BOUNDARY = 1;
-
-  /**
-   * The filler symmetrically repeats the color outside the boundary
-   */
-  static  SYMMETRIC_AT_BOUNDARY = 2;
-
-  /**
-   * The filler restarts the color outside the boundary
-   */
-  static  REPEAT_AT_BOUNDARY = 3;
-
-   boundaryBehavior = 0;
+   boundaryBehavior = null;
 
   /**
    * Creates the object

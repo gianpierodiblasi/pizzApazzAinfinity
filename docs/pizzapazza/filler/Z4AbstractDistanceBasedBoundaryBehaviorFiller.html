@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -166,23 +166,6 @@ extends <a href="Z4AbstractBoundaryBehaviorFiller.html" title="class in pizzapaz
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- =========== FIELD SUMMARY =========== -->
-<section role="region">
-<ul class="blockList">
-<li class="blockList"><a id="field.summary">
-<!--   -->
-</a>
-<h3>Field Summary</h3>
-<ul class="blockList">
-<li class="blockList"><a id="fields.inherited.from.class.pizzapazza.filler.Z4AbstractBoundaryBehaviorFiller">
-<!--   -->
-</a>
-<h3>Fields inherited from class&nbsp;pizzapazza.filler.<a href="Z4AbstractBoundaryBehaviorFiller.html" title="class in pizzapazza.filler">Z4AbstractBoundaryBehaviorFiller</a></h3>
-<code><a href="Z4AbstractBoundaryBehaviorFiller.html#FILL_AT_BOUNDARY">FILL_AT_BOUNDARY</a>, <a href="Z4AbstractBoundaryBehaviorFiller.html#REPEAT_AT_BOUNDARY">REPEAT_AT_BOUNDARY</a>, <a href="Z4AbstractBoundaryBehaviorFiller.html#STOP_AT_BOUNDARY">STOP_AT_BOUNDARY</a>, <a href="Z4AbstractBoundaryBehaviorFiller.html#SYMMETRIC_AT_BOUNDARY">SYMMETRIC_AT_BOUNDARY</a></code></li>
-</ul>
-</li>
-</ul>
-</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section role="region">
 <ul class="blockList">
@@ -197,8 +180,8 @@ extends <a href="Z4AbstractBoundaryBehaviorFiller.html" title="class in pizzapaz
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(pizzapazza.color.Z4GradientColor,int)">Z4AbstractDistanceBasedBoundaryBehaviorFiller</a></span>&#8203;(<a href="../color/Z4GradientColor.html" title="class in pizzapazza.color">Z4GradientColor</a>&nbsp;gradientColor,
-                                             int&nbsp;boundaryBehavior)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(pizzapazza.color.Z4GradientColor,pizzapazza.filler.Z4BoundaryBehavior)">Z4AbstractDistanceBasedBoundaryBehaviorFiller</a></span>&#8203;(<a href="../color/Z4GradientColor.html" title="class in pizzapazza.color">Z4GradientColor</a>&nbsp;gradientColor,
+                                             <a href="Z4BoundaryBehavior.html" title="enum in pizzapazza.filler">Z4BoundaryBehavior</a>&nbsp;boundaryBehavior)</code></th>
 <td class="colLast">
 <div class="block">Creates the object</div>
 </td>
@@ -223,9 +206,9 @@ extends <a href="Z4AbstractBoundaryBehaviorFiller.html" title="class in pizzapaz
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected double</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getColorPositionAtWithBoundaryBehavior(int,int,int)">getColorPositionAtWithBoundaryBehavior</a></span>&#8203;(int&nbsp;x,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getColorPositionAtWithBoundaryBehavior(int,int,pizzapazza.filler.Z4BoundaryBehavior)">getColorPositionAtWithBoundaryBehavior</a></span>&#8203;(int&nbsp;x,
                                       int&nbsp;y,
-                                      int&nbsp;boundaryBehavior)</code></th>
+                                      <a href="Z4BoundaryBehavior.html" title="enum in pizzapazza.filler">Z4BoundaryBehavior</a>&nbsp;boundaryBehavior)</code></th>
 <td class="colLast">
 <div class="block">Returns the color position to use for a pixel</div>
 </td>
@@ -276,14 +259,14 @@ extends <a href="Z4AbstractBoundaryBehaviorFiller.html" title="class in pizzapaz
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(pizzapazza.color.Z4GradientColor,int)">
+<a id="&lt;init&gt;(pizzapazza.color.Z4GradientColor,pizzapazza.filler.Z4BoundaryBehavior)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Z4AbstractDistanceBasedBoundaryBehaviorFiller</h4>
 <pre>public&nbsp;Z4AbstractDistanceBasedBoundaryBehaviorFiller&#8203;(<a href="../color/Z4GradientColor.html" title="class in pizzapazza.color">Z4GradientColor</a>&nbsp;gradientColor,
-                                                     int&nbsp;boundaryBehavior)</pre>
+                                                     <a href="Z4BoundaryBehavior.html" title="enum in pizzapazza.filler">Z4BoundaryBehavior</a>&nbsp;boundaryBehavior)</pre>
 <div class="block">Creates the object</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -320,7 +303,7 @@ extends <a href="Z4AbstractBoundaryBehaviorFiller.html" title="class in pizzapaz
 </dl>
 </li>
 </ul>
-<a id="getColorPositionAtWithBoundaryBehavior(int,int,int)">
+<a id="getColorPositionAtWithBoundaryBehavior(int,int,pizzapazza.filler.Z4BoundaryBehavior)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -328,12 +311,12 @@ extends <a href="Z4AbstractBoundaryBehaviorFiller.html" title="class in pizzapaz
 <h4>getColorPositionAtWithBoundaryBehavior</h4>
 <pre class="methodSignature">protected&nbsp;double&nbsp;getColorPositionAtWithBoundaryBehavior&#8203;(int&nbsp;x,
                                                         int&nbsp;y,
-                                                        int&nbsp;boundaryBehavior)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Z4AbstractBoundaryBehaviorFiller.html#getColorPositionAtWithBoundaryBehavior(int,int,int)">Z4AbstractBoundaryBehaviorFiller</a></code></span></div>
+                                                        <a href="Z4BoundaryBehavior.html" title="enum in pizzapazza.filler">Z4BoundaryBehavior</a>&nbsp;boundaryBehavior)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Z4AbstractBoundaryBehaviorFiller.html#getColorPositionAtWithBoundaryBehavior(int,int,pizzapazza.filler.Z4BoundaryBehavior)">Z4AbstractBoundaryBehaviorFiller</a></code></span></div>
 <div class="block">Returns the color position to use for a pixel</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Z4AbstractBoundaryBehaviorFiller.html#getColorPositionAtWithBoundaryBehavior(int,int,int)">getColorPositionAtWithBoundaryBehavior</a></code>&nbsp;in class&nbsp;<code><a href="Z4AbstractBoundaryBehaviorFiller.html" title="class in pizzapazza.filler">Z4AbstractBoundaryBehaviorFiller</a></code></dd>
+<dd><code><a href="Z4AbstractBoundaryBehaviorFiller.html#getColorPositionAtWithBoundaryBehavior(int,int,pizzapazza.filler.Z4BoundaryBehavior)">getColorPositionAtWithBoundaryBehavior</a></code>&nbsp;in class&nbsp;<code><a href="Z4AbstractBoundaryBehaviorFiller.html" title="class in pizzapazza.filler">Z4AbstractBoundaryBehaviorFiller</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>x</code> - The x-axis coordinate of the pixel</dd>
 <dd><code>y</code> - The y-axis coordinate of the pixel</dd>
@@ -399,7 +382,7 @@ extends <a href="Z4AbstractBoundaryBehaviorFiller.html" title="class in pizzapaz
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>

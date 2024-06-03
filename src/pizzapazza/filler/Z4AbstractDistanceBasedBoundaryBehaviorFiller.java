@@ -16,7 +16,7 @@ public abstract class Z4AbstractDistanceBasedBoundaryBehaviorFiller extends Z4Ab
    * @param gradientColor The color used to fill
    * @param boundaryBehavior The boundary behavior
    */
-  public Z4AbstractDistanceBasedBoundaryBehaviorFiller(Z4GradientColor gradientColor, int boundaryBehavior) {
+  public Z4AbstractDistanceBasedBoundaryBehaviorFiller(Z4GradientColor gradientColor, Z4BoundaryBehavior boundaryBehavior) {
     super(gradientColor, boundaryBehavior);
   }
 
@@ -30,16 +30,16 @@ public abstract class Z4AbstractDistanceBasedBoundaryBehaviorFiller extends Z4Ab
   protected abstract double getDistance(int x, int y);
 
   @Override
-  protected double getColorPositionAtWithBoundaryBehavior(int x, int y, int boundaryBehavior) {
+  protected double getColorPositionAtWithBoundaryBehavior(int x, int y, Z4BoundaryBehavior boundaryBehavior) {
     double d = this.getDistance(x, y);
 
     if (d <= 1) {
       return d;
-    } else if (boundaryBehavior == Z4AbstractDistanceBasedBoundaryBehaviorFiller.STOP_AT_BOUNDARY) {
+    } else if (boundaryBehavior == Z4BoundaryBehavior.STOP_AT_BOUNDARY) {
       return -1;
-    } else if (boundaryBehavior == Z4AbstractDistanceBasedBoundaryBehaviorFiller.FILL_AT_BOUNDARY) {
+    } else if (boundaryBehavior == Z4BoundaryBehavior.FILL_AT_BOUNDARY) {
       return 1;
-    } else if (boundaryBehavior == Z4AbstractDistanceBasedBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY) {
+    } else if (boundaryBehavior == Z4BoundaryBehavior.SYMMETRIC_AT_BOUNDARY) {
       int step = (int) Math.floor(d);
       d -= step;
 
@@ -48,7 +48,7 @@ public abstract class Z4AbstractDistanceBasedBoundaryBehaviorFiller extends Z4Ab
       }
 
       return d;
-    } else if (boundaryBehavior == Z4AbstractDistanceBasedBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY) {
+    } else if (boundaryBehavior == Z4BoundaryBehavior.REPEAT_AT_BOUNDARY) {
       return d - (int) Math.floor(d);
     } else {
       return -1;

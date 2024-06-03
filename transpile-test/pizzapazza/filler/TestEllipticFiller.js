@@ -23,19 +23,19 @@ class TestEllipticFiller extends JSFrame {
     buttons.add(checkBox, null);
     let button = new JSButton();
     button.setText("STOP_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4EllipticFiller.STOP_AT_BOUNDARY, checkBox.isSelected()));
+    button.addActionListener(event => this.fill(Z4BoundaryBehavior.STOP_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     button = new JSButton();
     button.setText("FILL_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4EllipticFiller.FILL_AT_BOUNDARY, checkBox.isSelected()));
+    button.addActionListener(event => this.fill(Z4BoundaryBehavior.FILL_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     button = new JSButton();
     button.setText("SYMMETRIC_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4EllipticFiller.SYMMETRIC_AT_BOUNDARY, checkBox.isSelected()));
+    button.addActionListener(event => this.fill(Z4BoundaryBehavior.SYMMETRIC_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     button = new JSButton();
     button.setText("REPEAT_AT_BOUNDARY");
-    button.addActionListener(event => this.fill(Z4EllipticFiller.REPEAT_AT_BOUNDARY, checkBox.isSelected()));
+    button.addActionListener(event => this.fill(Z4BoundaryBehavior.REPEAT_AT_BOUNDARY, checkBox.isSelected()));
     buttons.add(button, null);
     this.getContentPane().add(buttons, BorderLayout.NORTH);
   }

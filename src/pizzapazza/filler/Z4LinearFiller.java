@@ -34,7 +34,7 @@ public class Z4LinearFiller extends Z4AbstractBoundaryBehaviorFiller {
    * @param y2 The y-axis coordinate of the end point of the line
    * @param boundaryBehavior The boundary behavior
    */
-  public Z4LinearFiller(Z4GradientColor gradientColor, int x1, int y1, int x2, int y2, int boundaryBehavior) {
+  public Z4LinearFiller(Z4GradientColor gradientColor, int x1, int y1, int x2, int y2, Z4BoundaryBehavior boundaryBehavior) {
     super(gradientColor, boundaryBehavior);
 
     this.p1x = x1;
@@ -52,17 +52,17 @@ public class Z4LinearFiller extends Z4AbstractBoundaryBehaviorFiller {
   }
 
   @Override
-  protected double getColorPositionAtWithBoundaryBehavior(int x, int y, int boundaryBehavior) {
+  protected double getColorPositionAtWithBoundaryBehavior(int x, int y, Z4BoundaryBehavior boundaryBehavior) {
     double d1 = Z4Math.ptLineDist(this.p1x, this.p1y, this.line1x, this.line1y, x, y) / this.distance;
     double d2 = Z4Math.ptLineDist(this.p2x, this.p2y, this.line2x, this.line2y, x, y) / this.distance;
 
     if (d1 <= 1 && d2 <= 1) {
       return d1;
-    } else if (boundaryBehavior == Z4LinearFiller.STOP_AT_BOUNDARY) {
+    } else if (boundaryBehavior == Z4BoundaryBehavior.STOP_AT_BOUNDARY) {
       return -1;
-    } else if (boundaryBehavior == Z4LinearFiller.FILL_AT_BOUNDARY) {
+    } else if (boundaryBehavior == Z4BoundaryBehavior.FILL_AT_BOUNDARY) {
       return d1 < d2 ? 0 : 1;
-    } else if (boundaryBehavior == Z4LinearFiller.SYMMETRIC_AT_BOUNDARY) {
+    } else if (boundaryBehavior == Z4BoundaryBehavior.SYMMETRIC_AT_BOUNDARY) {
       double position = d1 < d2 ? d1 : d2;
       int step = (int) Math.floor(position);
       position -= step;
@@ -72,7 +72,7 @@ public class Z4LinearFiller extends Z4AbstractBoundaryBehaviorFiller {
       }
 
       return position;
-    } else if (boundaryBehavior == Z4LinearFiller.REPEAT_AT_BOUNDARY) {
+    } else if (boundaryBehavior == Z4BoundaryBehavior.REPEAT_AT_BOUNDARY) {
       double position = d1 < d2 ? d1 : d2;
       position -= (int) Math.floor(position);
 

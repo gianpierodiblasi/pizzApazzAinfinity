@@ -43,7 +43,7 @@ public class Z4BezierFiller extends Z4AbstractDistanceBasedBoundaryBehaviorFille
    * @param radius The radius
    * @param boundaryBehavior The boundary behavior
    */
-  public Z4BezierFiller(Z4GradientColor gradientColor, int x1, int y1, int ctrlx1, int ctrly1, int ctrlx2, int ctrly2, int x2, int y2, int radius, int boundaryBehavior) {
+  public Z4BezierFiller(Z4GradientColor gradientColor, int x1, int y1, int ctrlx1, int ctrly1, int ctrlx2, int ctrly2, int x2, int y2, int radius, Z4BoundaryBehavior boundaryBehavior) {
     super(gradientColor, boundaryBehavior);
 
     this.x1 = x1;

@@ -54,11 +54,11 @@ class Z4LinearFiller extends Z4AbstractBoundaryBehaviorFiller {
     let d2 = Z4Math.ptLineDist(this.p2x, this.p2y, this.line2x, this.line2y, x, y) / this.distance;
     if (d1 <= 1 && d2 <= 1) {
       return d1;
-    } else if (boundaryBehavior === Z4LinearFiller.STOP_AT_BOUNDARY) {
+    } else if (boundaryBehavior === Z4BoundaryBehavior.STOP_AT_BOUNDARY) {
       return -1;
-    } else if (boundaryBehavior === Z4LinearFiller.FILL_AT_BOUNDARY) {
+    } else if (boundaryBehavior === Z4BoundaryBehavior.FILL_AT_BOUNDARY) {
       return d1 < d2 ? 0 : 1;
-    } else if (boundaryBehavior === Z4LinearFiller.SYMMETRIC_AT_BOUNDARY) {
+    } else if (boundaryBehavior === Z4BoundaryBehavior.SYMMETRIC_AT_BOUNDARY) {
       let position = d1 < d2 ? d1 : d2;
       let step = Math.floor(position);
       position -= step;
@@ -66,7 +66,7 @@ class Z4LinearFiller extends Z4AbstractBoundaryBehaviorFiller {
         position = 1 - position;
       }
       return position;
-    } else if (boundaryBehavior === Z4LinearFiller.REPEAT_AT_BOUNDARY) {
+    } else if (boundaryBehavior === Z4BoundaryBehavior.REPEAT_AT_BOUNDARY) {
       let position = d1 < d2 ? d1 : d2;
       position -= Math.floor(position);
       if (d1 < d2) {

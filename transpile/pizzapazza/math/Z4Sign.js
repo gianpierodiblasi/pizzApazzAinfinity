@@ -5,25 +5,35 @@
  */
 class Z4Sign {
 
-  /**
-   * Positive sign
-   */
-  static  POSITIVE = new Z4Sign(1);
-
-  /**
-   * Negative sign
-   */
-  static  NEGATIVE = new Z4Sign(-1);
-
-  /**
-   * Random sign
-   */
-  static  RANDOM = new Z4Sign(0);
+   signDefinition = null;
 
    sign = 0;
 
-  constructor(sign) {
-    this.sign = sign;
+  /**
+   * Creates the object
+   *
+   * @param signDefinition The sign definition
+   */
+  constructor(signDefinition) {
+    this.signDefinition = signDefinition;
+    if (signDefinition === Z4SignDefinition.POSITIVE) {
+      this.sign = 1;
+    } else if (signDefinition === Z4SignDefinition.NEGATIVE) {
+      this.sign = -1;
+    } else if (signDefinition === Z4SignDefinition.RANDOM) {
+      this.sign = 0;
+    } else if (signDefinition === Z4SignDefinition.ALTERNATE) {
+      this.sign = -2;
+    }
+  }
+
+  /**
+   * Returns the sign definition
+   *
+   * @return The sign definition
+   */
+   getSignDefinition() {
+    return signDefinition;
   }
 
   /**
@@ -44,14 +54,5 @@ class Z4Sign {
         this.sign *= -1;
         return this.sign / 2;
     }
-  }
-
-  /**
-   * Creates a Z4Sign providing the following sequence +1, -1, +1, -1, ...
-   *
-   * @return The Z4Sign
-   */
-  static  alternate() {
-    return new Z4Sign(-2);
   }
 }

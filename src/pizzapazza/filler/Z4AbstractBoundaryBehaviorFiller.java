@@ -9,27 +9,7 @@ import pizzapazza.color.Z4GradientColor;
  */
 public abstract class Z4AbstractBoundaryBehaviorFiller extends Z4AbstractGradientColorFiller {
 
-  /**
-   * The filler does nothing outside the boundary
-   */
-  public final static int STOP_AT_BOUNDARY = 0;
-
-  /**
-   * The filler uses the last color outside the boundary
-   */
-  public final static int FILL_AT_BOUNDARY = 1;
-
-  /**
-   * The filler symmetrically repeats the color outside the boundary
-   */
-  public final static int SYMMETRIC_AT_BOUNDARY = 2;
-
-  /**
-   * The filler restarts the color outside the boundary
-   */
-  public final static int REPEAT_AT_BOUNDARY = 3;
-
-  private final int boundaryBehavior;
+  private final Z4BoundaryBehavior boundaryBehavior;
 
   /**
    * Creates the object
@@ -37,7 +17,7 @@ public abstract class Z4AbstractBoundaryBehaviorFiller extends Z4AbstractGradien
    * @param gradientColor The color used to fill
    * @param boundaryBehavior The boundary behavior
    */
-  public Z4AbstractBoundaryBehaviorFiller(Z4GradientColor gradientColor, int boundaryBehavior) {
+  public Z4AbstractBoundaryBehaviorFiller(Z4GradientColor gradientColor, Z4BoundaryBehavior boundaryBehavior) {
     super(gradientColor);
 
     this.boundaryBehavior = boundaryBehavior;
@@ -56,5 +36,5 @@ public abstract class Z4AbstractBoundaryBehaviorFiller extends Z4AbstractGradien
    * @param boundaryBehavior The boundary behavior
    * @return The color position, -1 if no position is available
    */
-  protected abstract double getColorPositionAtWithBoundaryBehavior(int x, int y, int boundaryBehavior);
+  protected abstract double getColorPositionAtWithBoundaryBehavior(int x, int y, Z4BoundaryBehavior boundaryBehavior);
 }

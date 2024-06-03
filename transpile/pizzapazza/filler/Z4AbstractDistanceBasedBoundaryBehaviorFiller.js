@@ -29,18 +29,18 @@ class Z4AbstractDistanceBasedBoundaryBehaviorFiller extends Z4AbstractBoundaryBe
     let d = this.getDistance(x, y);
     if (d <= 1) {
       return d;
-    } else if (boundaryBehavior === Z4AbstractDistanceBasedBoundaryBehaviorFiller.STOP_AT_BOUNDARY) {
+    } else if (boundaryBehavior === Z4BoundaryBehavior.STOP_AT_BOUNDARY) {
       return -1;
-    } else if (boundaryBehavior === Z4AbstractDistanceBasedBoundaryBehaviorFiller.FILL_AT_BOUNDARY) {
+    } else if (boundaryBehavior === Z4BoundaryBehavior.FILL_AT_BOUNDARY) {
       return 1;
-    } else if (boundaryBehavior === Z4AbstractDistanceBasedBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY) {
+    } else if (boundaryBehavior === Z4BoundaryBehavior.SYMMETRIC_AT_BOUNDARY) {
       let step = Math.floor(d);
       d -= step;
       if ((step % 2)) {
         d = 1 - d;
       }
       return d;
-    } else if (boundaryBehavior === Z4AbstractDistanceBasedBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY) {
+    } else if (boundaryBehavior === Z4BoundaryBehavior.REPEAT_AT_BOUNDARY) {
       return d - Math.floor(d);
     } else {
       return -1;

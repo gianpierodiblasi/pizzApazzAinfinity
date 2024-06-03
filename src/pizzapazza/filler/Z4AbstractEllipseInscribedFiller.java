@@ -41,7 +41,7 @@ public abstract class Z4AbstractEllipseInscribedFiller extends Z4AbstractBoundar
    * @param vertexCount The number of vertices of the polygon
    * @param boundaryBehavior The boundary behavior
    */
-  public Z4AbstractEllipseInscribedFiller(Z4GradientColor gradientColor, int cx, int cy, int rx, int ry, double angle, int vertexCount, int boundaryBehavior) {
+  public Z4AbstractEllipseInscribedFiller(Z4GradientColor gradientColor, int cx, int cy, int rx, int ry, double angle, int vertexCount, Z4BoundaryBehavior boundaryBehavior) {
     super(gradientColor, boundaryBehavior);
 
     this.cx = cx;
@@ -75,32 +75,29 @@ public abstract class Z4AbstractEllipseInscribedFiller extends Z4AbstractBoundar
   protected abstract Array<Z4Line> createEdges(int vertexCount);
 
   @Override
-  protected double getColorPositionAtWithBoundaryBehavior(int x, int y, int boundaryBehavior) {
+  protected double getColorPositionAtWithBoundaryBehavior(int x, int y, Z4BoundaryBehavior boundaryBehavior) {
     Z4Point rotated = Z4Math.rotate(x - this.cx, y - this.cy, this.angle);
     double xx = rotated.x / this.rx;
     double yy = rotated.y / this.ry;
 
-    switch (boundaryBehavior) {
-      case Z4StarFiller.STOP_AT_BOUNDARY:
-      case Z4StarFiller.FILL_AT_BOUNDARY:
-        return this.ctx.isPointInPath(xx, yy) ? 1 - this.getDistance(xx, yy, 1) : boundaryBehavior == Z4StarFiller.STOP_AT_BOUNDARY ? -1 : 1;
-      case Z4StarFiller.SYMMETRIC_AT_BOUNDARY:
-      case Z4StarFiller.REPEAT_AT_BOUNDARY:
-        int divider = 1;
-        double xxx = xx / divider;
-        double yyy = yy / divider;
-        double distance = this.getDistance(xxx, yyy, divider);
+    if (boundaryBehavior == Z4BoundaryBehavior.STOP_AT_BOUNDARY || boundaryBehavior == Z4BoundaryBehavior.FILL_AT_BOUNDARY) {
+      return this.ctx.isPointInPath(xx, yy) ? 1 - this.getDistance(xx, yy, 1) : boundaryBehavior == Z4BoundaryBehavior.STOP_AT_BOUNDARY ? -1 : 1;
+    } else if (boundaryBehavior == Z4BoundaryBehavior.SYMMETRIC_AT_BOUNDARY || boundaryBehavior == Z4BoundaryBehavior.REPEAT_AT_BOUNDARY) {
+      int divider = 1;
+      double xxx = xx / divider;
+      double yyy = yy / divider;
+      double distance = this.getDistance(xxx, yyy, divider);
 
-        while (distance > 1 || !this.ctx.isPointInPath(xxx, yyy)) {
-          divider++;
-          xxx = xx / divider;
-          yyy = yy / divider;
-          distance = this.getDistance(xxx, yyy, divider);
-        }
+      while (distance > 1 || !this.ctx.isPointInPath(xxx, yyy)) {
+        divider++;
+        xxx = xx / divider;
+        yyy = yy / divider;
+        distance = this.getDistance(xxx, yyy, divider);
+      }
 
-        return boundaryBehavior == Z4StarFiller.REPEAT_AT_BOUNDARY ? 1 - distance : $exists(divider % 2) ? 1 - distance : distance;
-      default:
-        return -1;
+      return boundaryBehavior == Z4BoundaryBehavior.REPEAT_AT_BOUNDARY ? 1 - distance : $exists(divider % 2) ? 1 - distance : distance;
+    } else {
+      return -1;
     }
   }
 

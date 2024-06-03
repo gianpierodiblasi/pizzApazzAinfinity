@@ -29,7 +29,7 @@ public class Z4StarFiller extends Z4AbstractEllipseInscribedFiller {
    * @param vertexCount The number of vertices of the star
    * @param boundaryBehavior The boundary behavior
    */
-  public Z4StarFiller(Z4GradientColor gradientColor, int cx, int cy, int rx, int ry, double angle, int vertexCount, int boundaryBehavior) {
+  public Z4StarFiller(Z4GradientColor gradientColor, int cx, int cy, int rx, int ry, double angle, int vertexCount, Z4BoundaryBehavior boundaryBehavior) {
     super(gradientColor, cx, cy, rx, ry, angle, vertexCount, boundaryBehavior);
   }
 

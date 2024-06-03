@@ -3,8 +3,8 @@ package pizzapazza.ui.panel.filler;
 import def.js.Array;
 import javascript.awt.Point;
 import pizzapazza.color.Z4GradientColor;
-import pizzapazza.filler.Z4AbstractBoundaryBehaviorFiller;
 import pizzapazza.filler.Z4AbstractFiller;
+import pizzapazza.filler.Z4BoundaryBehavior;
 import pizzapazza.filler.Z4SinusoidalFiller;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
@@ -23,10 +23,10 @@ public class Z4SinusoidalFillerPanel extends Z4AbstractFillerPanel {
   @SuppressWarnings("unchecked")
   public Z4SinusoidalFillerPanel() {
     super(4, new Array<>(
-            Z4AbstractBoundaryBehaviorFiller.STOP_AT_BOUNDARY,
-            Z4AbstractBoundaryBehaviorFiller.FILL_AT_BOUNDARY,
-            Z4AbstractBoundaryBehaviorFiller.SYMMETRIC_AT_BOUNDARY,
-            Z4AbstractBoundaryBehaviorFiller.REPEAT_AT_BOUNDARY
+            Z4BoundaryBehavior.STOP_AT_BOUNDARY,
+            Z4BoundaryBehavior.FILL_AT_BOUNDARY,
+            Z4BoundaryBehavior.SYMMETRIC_AT_BOUNDARY,
+            Z4BoundaryBehavior.REPEAT_AT_BOUNDARY
     ));
 
     this.cssAddClass("z4sinusoidalfillerpanel");
@@ -160,7 +160,7 @@ public class Z4SinusoidalFillerPanel extends Z4AbstractFillerPanel {
             Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(1).x, points.$get(1).y),
             Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(2).x, points.$get(2).y),
             Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(3).x, points.$get(3).y),
-            Z4Math.atan(points.$get(0).x, points.$get(0).y, points.$get(2).x, points.$get(2).y), (int) option);
+            Z4Math.atan(points.$get(0).x, points.$get(0).y, points.$get(2).x, points.$get(2).y), (Z4BoundaryBehavior) option);
   }
 
   @Override

@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -162,8 +162,12 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">Z4FancifulValue</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(pizzapazza.math.Z4SignedValue,pizzapazza.math.Z4SignedRandomValue,boolean)">Z4FancifulValue</a></span>&#8203;(<a href="Z4SignedValue.html" title="class in pizzapazza.math">Z4SignedValue</a>&nbsp;constant,
+               <a href="Z4SignedRandomValue.html" title="class in pizzapazza.math">Z4SignedRandomValue</a>&nbsp;random,
+               boolean&nbsp;uniformSign)</code></th>
+<td class="colLast">
+<div class="block">Creates the object</div>
+</td>
 </tr>
 </table>
 </li>
@@ -212,28 +216,6 @@ extends java.lang.Object</pre>
 <div class="block">Returns the next "fanciful" value</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setConstant(pizzapazza.math.Z4SignedValue)">setConstant</a></span>&#8203;(<a href="Z4SignedValue.html" title="class in pizzapazza.math">Z4SignedValue</a>&nbsp;constant)</code></th>
-<td class="colLast">
-<div class="block">Sets the constant component</div>
-</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setRandom(pizzapazza.math.Z4SignedRandomValue)">setRandom</a></span>&#8203;(<a href="Z4SignedRandomValue.html" title="class in pizzapazza.math">Z4SignedRandomValue</a>&nbsp;random)</code></th>
-<td class="colLast">
-<div class="block">Sets the random component</div>
-</td>
-</tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setUniformSign(boolean)">setUniformSign</a></span>&#8203;(boolean&nbsp;uniformSign)</code></th>
-<td class="colLast">
-<div class="block">Sets if the computed sign has to be equals for both components; if true
- then the constant sign is used</div>
-</td>
-</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -258,13 +240,23 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;()">
+<a id="&lt;init&gt;(pizzapazza.math.Z4SignedValue,pizzapazza.math.Z4SignedRandomValue,boolean)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Z4FancifulValue</h4>
-<pre>public&nbsp;Z4FancifulValue()</pre>
+<pre>public&nbsp;Z4FancifulValue&#8203;(<a href="Z4SignedValue.html" title="class in pizzapazza.math">Z4SignedValue</a>&nbsp;constant,
+                       <a href="Z4SignedRandomValue.html" title="class in pizzapazza.math">Z4SignedRandomValue</a>&nbsp;random,
+                       boolean&nbsp;uniformSign)</pre>
+<div class="block">Creates the object</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>constant</code> - The constant component</dd>
+<dd><code>random</code> - The random component</dd>
+<dd><code>uniformSign</code> - true if the computed sign has to be equals for both
+ components, false otherwise</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -277,20 +269,6 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="setConstant(pizzapazza.math.Z4SignedValue)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setConstant</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setConstant&#8203;(<a href="Z4SignedValue.html" title="class in pizzapazza.math">Z4SignedValue</a>&nbsp;constant)</pre>
-<div class="block">Sets the constant component</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>constant</code> - The constant component</dd>
-</dl>
-</li>
-</ul>
 <a id="getConstant()">
 <!--   -->
 </a>
@@ -305,20 +283,6 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a id="setRandom(pizzapazza.math.Z4SignedRandomValue)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setRandom</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setRandom&#8203;(<a href="Z4SignedRandomValue.html" title="class in pizzapazza.math">Z4SignedRandomValue</a>&nbsp;random)</pre>
-<div class="block">Sets the random component</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>random</code> - The random component</dd>
-</dl>
-</li>
-</ul>
 <a id="getRandom()">
 <!--   -->
 </a>
@@ -330,22 +294,6 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The random component</dd>
-</dl>
-</li>
-</ul>
-<a id="setUniformSign(boolean)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setUniformSign</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setUniformSign&#8203;(boolean&nbsp;uniformSign)</pre>
-<div class="block">Sets if the computed sign has to be equals for both components; if true
- then the constant sign is used</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>uniformSign</code> - true if the computed sign has to be equals for both
- components, false otherwise</dd>
 </dl>
 </li>
 </ul>

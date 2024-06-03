@@ -5,9 +5,20 @@
  */
 class Z4SignedValue {
 
-   sign = Z4Sign.RANDOM;
+   sign = null;
 
    value = 0.0;
+
+  /**
+   * Creates the object
+   *
+   * @param sign The sign
+   * @param value The value
+   */
+  constructor(sign, value) {
+    this.sign = sign;
+    this.value = value;
+  }
 
   /**
    * Returns the sign
@@ -19,30 +30,12 @@ class Z4SignedValue {
   }
 
   /**
-   * Sets the sign
-   *
-   * @param sign The sign
-   */
-   setSign(sign) {
-    this.sign = sign;
-  }
-
-  /**
    * Returns the (positive) value
    *
    * @return The (positive) value
    */
    getValue() {
     return this.value;
-  }
-
-  /**
-   * Sets the value
-   *
-   * @param value The (positive) value
-   */
-   setValue(value) {
-    this.value = value;
   }
 
   /**

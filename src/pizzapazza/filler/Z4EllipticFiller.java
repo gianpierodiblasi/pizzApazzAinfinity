@@ -28,7 +28,7 @@ public class Z4EllipticFiller extends Z4AbstractDistanceBasedBoundaryBehaviorFil
    * @param angle The rotation angle of the ellipse (in radians)
    * @param boundaryBehavior The boundary behavior
    */
-  public Z4EllipticFiller(Z4GradientColor gradientColor, int cx, int cy, int rx, int ry, double angle, int boundaryBehavior) {
+  public Z4EllipticFiller(Z4GradientColor gradientColor, int cx, int cy, int rx, int ry, double angle, Z4BoundaryBehavior boundaryBehavior) {
     super(gradientColor, boundaryBehavior);
 
     this.cx = cx;
