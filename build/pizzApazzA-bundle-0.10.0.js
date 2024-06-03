@@ -2117,6 +2117,22 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Merges an array of layers
+   *
+   * @param layers The layers
+   */
+   mergeLayers(layers) {
+    let offscreen = new OffscreenCanvas(this.width, this.height);
+    let offscreenCtx = offscreen.getContext("2d");
+    layers.forEach(layer => layer.draw(offscreenCtx, false, false));
+    let options = new Object();
+    options["type"] = "image/png";
+    offscreen.convertToBlob(options).then(converted => {
+      this.addLayerFromURL(this.findLayerName(), URL.createObjectURL(converted));
+    });
+  }
+
+  /**
    * Sets the selected layer
    *
    * @param selectedLayer The selected layer
@@ -5210,6 +5226,12 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     let panel = new Z4MergeLayerPanel();
     panel.setCanvas(this.canvas);
     JSOptionPane.showInputDialog(panel, Z4Translations.MERGE, listener => panel.addChangeListener(listener), () => panel.getSelectedLayers().length > 1, response => {
+      let selected = panel.getSelectedLayers();
+      selected.forEach(layer => {
+        let index = this.canvas.deleteLayer(layer);
+        document.querySelector(".z4layerpreview:nth-child(" + (index + 1) + ")").remove();
+      });
+      this.canvas.mergeLayers(selected);
     });
   }
 

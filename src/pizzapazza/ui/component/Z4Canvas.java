@@ -669,6 +669,23 @@ public class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Merges an array of layers
+   *
+   * @param layers The layers
+   */
+  public void mergeLayers(Array<Z4Layer> layers) {
+    $OffscreenCanvas offscreen = new $OffscreenCanvas(this.width, this.height);
+    $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
+    layers.forEach(layer -> layer.draw(offscreenCtx, false, false));
+
+    $Object options = new $Object();
+    options.$set("type", "image/png");
+    offscreen.convertToBlob(options).then(converted -> {
+      this.addLayerFromURL(this.findLayerName(), URL.createObjectURL(converted));
+    });
+  }
+
+  /**
    * Sets the selected layer
    *
    * @param selectedLayer The selected layer

@@ -1,6 +1,7 @@
 package pizzapazza.ui.panel.ribbon;
 
 import def.dom.DragEvent;
+import def.js.Array;
 import javascript.awt.BoxLayout;
 import javascript.awt.Dimension;
 import javascript.awt.GBC;
@@ -137,6 +138,13 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     panel.setCanvas(this.canvas);
 
     JSOptionPane.showInputDialog(panel, Z4Translations.MERGE, listener -> panel.addChangeListener(listener), () -> panel.getSelectedLayers().length > 1, response -> {
+      Array<Z4Layer> selected = panel.getSelectedLayers();
+      selected.forEach(layer -> {
+        int index = this.canvas.deleteLayer(layer);
+        document.querySelector(".z4layerpreview:nth-child(" + (index + 1) + ")").remove();
+      });
+      
+      this.canvas.mergeLayers(selected);
     });
   }
 
