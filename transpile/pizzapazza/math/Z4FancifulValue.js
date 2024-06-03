@@ -3,7 +3,7 @@
  *
  * @author gianpiero.diblasi
  */
-class Z4FancifulValue {
+class Z4FancifulValue extends Z4Nextable {
 
    constant = null;
 
@@ -17,7 +17,7 @@ class Z4FancifulValue {
    * @param constant The constant component
    * @param random The random component
    * @param uniformSign true if the computed sign has to be equals for both
-   * components, false otherwise
+   * components, false otherwise; if true then the constant sign is used
    */
   constructor(constant, random, uniformSign) {
     this.constant = constant;
@@ -54,16 +54,11 @@ class Z4FancifulValue {
     return this.uniformSign;
   }
 
-  /**
-   * Returns the next "fanciful" value
-   *
-   * @return The next "fanciful" value
-   */
    next() {
     if (this.uniformSign) {
-      return this.constant.getSign().next() * (this.constant.getValue() + this.random.nextUnsigned());
+      return this.constant.getSign().next() * (this.constant.getValue() + this.random.getValue().next());
     } else {
-      return this.constant.next() + this.random.nextSigned();
+      return this.constant.next() + this.random.next();
     }
   }
 }

@@ -3,7 +3,7 @@
  *
  * @author gianpiero.diblasi
  */
-class Z4SignedValue {
+class Z4SignedValue extends Z4Nextable {
 
    sign = null;
 
@@ -38,11 +38,6 @@ class Z4SignedValue {
     return this.value;
   }
 
-  /**
-   * Returns the next signed value
-   *
-   * @return The next signed value
-   */
    next() {
     return this.sign.next() * this.value;
   }

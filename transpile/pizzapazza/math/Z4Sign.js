@@ -3,44 +3,39 @@
  *
  * @author gianpiero.diblasi
  */
-class Z4Sign {
+class Z4Sign extends Z4Nextable {
 
-   signDefinition = null;
+   behavior = null;
 
    sign = 0;
 
   /**
    * Creates the object
    *
-   * @param signDefinition The sign definition
+   * @param behavior The sign behavior
    */
-  constructor(signDefinition) {
-    this.signDefinition = signDefinition;
-    if (signDefinition === Z4SignDefinition.POSITIVE) {
+  constructor(behavior) {
+    this.behavior = behavior;
+    if (behavior === Z4SignBehavior.POSITIVE) {
       this.sign = 1;
-    } else if (signDefinition === Z4SignDefinition.NEGATIVE) {
+    } else if (behavior === Z4SignBehavior.NEGATIVE) {
       this.sign = -1;
-    } else if (signDefinition === Z4SignDefinition.RANDOM) {
+    } else if (behavior === Z4SignBehavior.RANDOM) {
       this.sign = 0;
-    } else if (signDefinition === Z4SignDefinition.ALTERNATE) {
+    } else if (behavior === Z4SignBehavior.ALTERNATE) {
       this.sign = -2;
     }
   }
 
   /**
-   * Returns the sign definition
+   * Returns the sign behavior
    *
-   * @return The sign definition
+   * @return The sign behavior
    */
-   getSignDefinition() {
-    return signDefinition;
+   getSignBehavior() {
+    return this.behavior;
   }
 
-  /**
-   * Returns the next sign
-   *
-   * @return The next sign
-   */
    next() {
     switch(this.sign) {
       case 1:

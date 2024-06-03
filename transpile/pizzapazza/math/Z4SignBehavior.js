@@ -1,9 +1,9 @@
 /**
- * The sign definition
+ * The behavior of a sign
  *
  * @author gianpiero.diblasi
  */
-class Z4SignDefinition {
+class Z4SignBehavior {
 
   /**
    * The positive sign

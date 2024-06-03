@@ -186,7 +186,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/util/Z4Translations.html#ADVANCED">ADVANCED</a></span> - Static variable in class pizzapazza.util.<a href="pizzapazza/util/Z4Translations.html" title="class in pizzapazza.util">Z4Translations</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignDefinition.html#ALTERNATE">ALTERNATE</a></span> - pizzapazza.math.<a href="pizzapazza/math/Z4SignDefinition.html" title="enum in pizzapazza.math">Z4SignDefinition</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignBehavior.html#ALTERNATE">ALTERNATE</a></span> - pizzapazza.math.<a href="pizzapazza/math/Z4SignBehavior.html" title="enum in pizzapazza.math">Z4SignBehavior</a></dt>
 <dd>
 <div class="block">A sign providing the following sequence +1, -1, +1, -1, ...</div>
 </dd>
@@ -208,9 +208,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/util/Z4Translations.html#BASIC">BASIC</a></span> - Static variable in class pizzapazza.util.<a href="pizzapazza/util/Z4Translations.html" title="class in pizzapazza.util">Z4Translations</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignedRandomValueBehavior.html#BEZIER">BEZIER</a></span> - pizzapazza.math.<a href="pizzapazza/math/Z4SignedRandomValueBehavior.html" title="enum in pizzapazza.math">Z4SignedRandomValueBehavior</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4RandomValueBehavior.html#BEZIER">BEZIER</a></span> - pizzapazza.math.<a href="pizzapazza/math/Z4RandomValueBehavior.html" title="enum in pizzapazza.math">Z4RandomValueBehavior</a></dt>
 <dd>
-<div class="block">The signed random value generates random values on a bezier curve</div>
+<div class="block">The random value generates random values on a bezier curve</div>
 </dd>
 </dl>
 <a id="I:C">
@@ -220,9 +220,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dl>
 <dt><span class="memberNameLink"><a href="pizzapazza/util/Z4Translations.html#CHECK_UPDATE">CHECK_UPDATE</a></span> - Static variable in class pizzapazza.util.<a href="pizzapazza/util/Z4Translations.html" title="class in pizzapazza.util">Z4Translations</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignedRandomValueBehavior.html#CLASSIC">CLASSIC</a></span> - pizzapazza.math.<a href="pizzapazza/math/Z4SignedRandomValueBehavior.html" title="enum in pizzapazza.math">Z4SignedRandomValueBehavior</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4RandomValueBehavior.html#CLASSIC">CLASSIC</a></span> - pizzapazza.math.<a href="pizzapazza/math/Z4RandomValueBehavior.html" title="enum in pizzapazza.math">Z4RandomValueBehavior</a></dt>
 <dd>
-<div class="block">The signed random value generates "classic "random values</div>
+<div class="block">The random value generates "classic "random values</div>
 </dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/color/Z4GradientColor.html#cloneColor(javascript.awt.Color)">cloneColor(Color)</a></span> - Method in class pizzapazza.color.<a href="pizzapazza/color/Z4GradientColor.html" title="class in pizzapazza.color">Z4GradientColor</a></dt>
 <dd>&nbsp;</dd>
@@ -608,7 +608,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Returns the layers count</div>
 </dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignedRandomValue.html#getLength()">getLength()</a></span> - Method in class pizzapazza.math.<a href="pizzapazza/math/Z4SignedRandomValue.html" title="class in pizzapazza.math">Z4SignedRandomValue</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4RandomValue.html#getLength()">getLength()</a></span> - Method in class pizzapazza.math.<a href="pizzapazza/math/Z4RandomValue.html" title="class in pizzapazza.math">Z4RandomValue</a></dt>
 <dd>
 <div class="block">Returns The polyline/curve length</div>
 </dd>
@@ -639,6 +639,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="pizzapazza/math/Z4FancifulValue.html#getRandom()">getRandom()</a></span> - Method in class pizzapazza.math.<a href="pizzapazza/math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a></dt>
 <dd>
 <div class="block">Returns the random component</div>
+</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4RandomValue.html#getRandomValueBehavior()">getRandomValueBehavior()</a></span> - Method in class pizzapazza.math.<a href="pizzapazza/math/Z4RandomValue.html" title="class in pizzapazza.math">Z4RandomValue</a></dt>
+<dd>
+<div class="block">Returns the random value behavior</div>
 </dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/color/Z4AbstractGradientColor.html#getRipple()">getRipple()</a></span> - Method in class pizzapazza.color.<a href="pizzapazza/color/Z4AbstractGradientColor.html" title="class in pizzapazza.color">Z4AbstractGradientColor</a></dt>
 <dd>
@@ -678,9 +682,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Returns the sign</div>
 </dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4Sign.html#getSignDefinition()">getSignDefinition()</a></span> - Method in class pizzapazza.math.<a href="pizzapazza/math/Z4Sign.html" title="class in pizzapazza.math">Z4Sign</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4Sign.html#getSignBehavior()">getSignBehavior()</a></span> - Method in class pizzapazza.math.<a href="pizzapazza/math/Z4Sign.html" title="class in pizzapazza.math">Z4Sign</a></dt>
 <dd>
-<div class="block">Returns the sign definition</div>
+<div class="block">Returns the sign behavior</div>
 </dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/ui/component/Z4Canvas.html#getSize()">getSize()</a></span> - Method in class pizzapazza.ui.component.<a href="pizzapazza/ui/component/Z4Canvas.html" title="class in pizzapazza.ui.component">Z4Canvas</a></dt>
 <dd>
@@ -694,9 +698,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Dummy method to get a stroke style</div>
 </dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignedRandomValue.html#getValue()">getValue()</a></span> - Method in class pizzapazza.math.<a href="pizzapazza/math/Z4SignedRandomValue.html" title="class in pizzapazza.math">Z4SignedRandomValue</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4RandomValue.html#getValue()">getValue()</a></span> - Method in class pizzapazza.math.<a href="pizzapazza/math/Z4RandomValue.html" title="class in pizzapazza.math">Z4RandomValue</a></dt>
 <dd>
 <div class="block">Returns the value</div>
+</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignedRandomValue.html#getValue()">getValue()</a></span> - Method in class pizzapazza.math.<a href="pizzapazza/math/Z4SignedRandomValue.html" title="class in pizzapazza.math">Z4SignedRandomValue</a></dt>
+<dd>
+<div class="block">Returns the random value</div>
 </dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignedValue.html#getValue()">getValue()</a></span> - Method in class pizzapazza.math.<a href="pizzapazza/math/Z4SignedValue.html" title="class in pizzapazza.math">Z4SignedValue</a></dt>
 <dd>
@@ -891,7 +899,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/ui/panel/filler/Z4VertexBasedFillerPanel.html#needsRescale(java.lang.Object)">needsRescale(Object)</a></span> - Method in class pizzapazza.ui.panel.filler.<a href="pizzapazza/ui/panel/filler/Z4VertexBasedFillerPanel.html" title="class in pizzapazza.ui.panel.filler">Z4VertexBasedFillerPanel</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignDefinition.html#NEGATIVE">NEGATIVE</a></span> - pizzapazza.math.<a href="pizzapazza/math/Z4SignDefinition.html" title="enum in pizzapazza.math">Z4SignDefinition</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignBehavior.html#NEGATIVE">NEGATIVE</a></span> - pizzapazza.math.<a href="pizzapazza/math/Z4SignBehavior.html" title="enum in pizzapazza.math">Z4SignBehavior</a></dt>
 <dd>
 <div class="block">The negative sign</div>
 </dd>
@@ -900,25 +908,19 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="pizzapazza/util/Z4Translations.html#NEW_PROJECT">NEW_PROJECT</a></span> - Static variable in class pizzapazza.util.<a href="pizzapazza/util/Z4Translations.html" title="class in pizzapazza.util">Z4Translations</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/math/Z4FancifulValue.html#next()">next()</a></span> - Method in class pizzapazza.math.<a href="pizzapazza/math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4Nextable.html#next()">next()</a></span> - Method in interface pizzapazza.math.<a href="pizzapazza/math/Z4Nextable.html" title="interface in pizzapazza.math">Z4Nextable</a></dt>
 <dd>
-<div class="block">Returns the next "fanciful" value</div>
+<div class="block">Returns the next value</div>
 </dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4RandomValue.html#next()">next()</a></span> - Method in class pizzapazza.math.<a href="pizzapazza/math/Z4RandomValue.html" title="class in pizzapazza.math">Z4RandomValue</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/math/Z4Sign.html#next()">next()</a></span> - Method in class pizzapazza.math.<a href="pizzapazza/math/Z4Sign.html" title="class in pizzapazza.math">Z4Sign</a></dt>
-<dd>
-<div class="block">Returns the next sign</div>
-</dd>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignedRandomValue.html#next()">next()</a></span> - Method in class pizzapazza.math.<a href="pizzapazza/math/Z4SignedRandomValue.html" title="class in pizzapazza.math">Z4SignedRandomValue</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignedValue.html#next()">next()</a></span> - Method in class pizzapazza.math.<a href="pizzapazza/math/Z4SignedValue.html" title="class in pizzapazza.math">Z4SignedValue</a></dt>
-<dd>
-<div class="block">Returns the next signed value</div>
-</dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignedRandomValue.html#nextSigned()">nextSigned()</a></span> - Method in class pizzapazza.math.<a href="pizzapazza/math/Z4SignedRandomValue.html" title="class in pizzapazza.math">Z4SignedRandomValue</a></dt>
-<dd>
-<div class="block">Returns the next signed random value</div>
-</dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignedRandomValue.html#nextUnsigned()">nextUnsigned()</a></span> - Method in class pizzapazza.math.<a href="pizzapazza/math/Z4SignedRandomValue.html" title="class in pizzapazza.math">Z4SignedRandomValue</a></dt>
-<dd>
-<div class="block">Returns the next unsigned random value</div>
-</dd>
+<dd>&nbsp;</dd>
 </dl>
 <a id="I:O">
 <!--   -->
@@ -1007,11 +1009,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Completes the please wait</div>
 </dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignedRandomValueBehavior.html#POLYLINE">POLYLINE</a></span> - pizzapazza.math.<a href="pizzapazza/math/Z4SignedRandomValueBehavior.html" title="enum in pizzapazza.math">Z4SignedRandomValueBehavior</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4RandomValueBehavior.html#POLYLINE">POLYLINE</a></span> - pizzapazza.math.<a href="pizzapazza/math/Z4RandomValueBehavior.html" title="enum in pizzapazza.math">Z4RandomValueBehavior</a></dt>
 <dd>
-<div class="block">The signed random value generates random values on a polyline</div>
+<div class="block">The random value generates random values on a polyline</div>
 </dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignDefinition.html#POSITIVE">POSITIVE</a></span> - pizzapazza.math.<a href="pizzapazza/math/Z4SignDefinition.html" title="enum in pizzapazza.math">Z4SignDefinition</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignBehavior.html#POSITIVE">POSITIVE</a></span> - pizzapazza.math.<a href="pizzapazza/math/Z4SignBehavior.html" title="enum in pizzapazza.math">Z4SignBehavior</a></dt>
 <dd>
 <div class="block">The positive sign</div>
 </dd>
@@ -1077,7 +1079,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">RAD to DEG conversion</div>
 </dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignDefinition.html#RANDOM">RANDOM</a></span> - pizzapazza.math.<a href="pizzapazza/math/Z4SignDefinition.html" title="enum in pizzapazza.math">Z4SignDefinition</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignBehavior.html#RANDOM">RANDOM</a></span> - pizzapazza.math.<a href="pizzapazza/math/Z4SignBehavior.html" title="enum in pizzapazza.math">Z4SignBehavior</a></dt>
 <dd>
 <div class="block">The random sign</div>
 </dd>
@@ -1400,9 +1402,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/util/Z4Translations.html#STAR">STAR</a></span> - Static variable in class pizzapazza.util.<a href="pizzapazza/util/Z4Translations.html" title="class in pizzapazza.util">Z4Translations</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignedRandomValueBehavior.html#STEPPED">STEPPED</a></span> - pizzapazza.math.<a href="pizzapazza/math/Z4SignedRandomValueBehavior.html" title="enum in pizzapazza.math">Z4SignedRandomValueBehavior</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4RandomValueBehavior.html#STEPPED">STEPPED</a></span> - pizzapazza.math.<a href="pizzapazza/math/Z4RandomValueBehavior.html" title="enum in pizzapazza.math">Z4RandomValueBehavior</a></dt>
 <dd>
-<div class="block">The signed random value generates random values on a stepped line</div>
+<div class="block">The random value generates random values on a stepped line</div>
 </dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/filler/Z4BoundaryBehavior.html#STOP_AT_BOUNDARY">STOP_AT_BOUNDARY</a></span> - pizzapazza.filler.<a href="pizzapazza/filler/Z4BoundaryBehavior.html" title="enum in pizzapazza.filler">Z4BoundaryBehavior</a></dt>
 <dd>
@@ -1482,11 +1484,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Returns the enum constant of this type with the specified name.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignDefinition.html#valueOf(java.lang.String)">valueOf(String)</a></span> - Static method in enum pizzapazza.math.<a href="pizzapazza/math/Z4SignDefinition.html" title="enum in pizzapazza.math">Z4SignDefinition</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4RandomValueBehavior.html#valueOf(java.lang.String)">valueOf(String)</a></span> - Static method in enum pizzapazza.math.<a href="pizzapazza/math/Z4RandomValueBehavior.html" title="enum in pizzapazza.math">Z4RandomValueBehavior</a></dt>
 <dd>
 <div class="block">Returns the enum constant of this type with the specified name.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignedRandomValueBehavior.html#valueOf(java.lang.String)">valueOf(String)</a></span> - Static method in enum pizzapazza.math.<a href="pizzapazza/math/Z4SignedRandomValueBehavior.html" title="enum in pizzapazza.math">Z4SignedRandomValueBehavior</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignBehavior.html#valueOf(java.lang.String)">valueOf(String)</a></span> - Static method in enum pizzapazza.math.<a href="pizzapazza/math/Z4SignBehavior.html" title="enum in pizzapazza.math">Z4SignBehavior</a></dt>
 <dd>
 <div class="block">Returns the enum constant of this type with the specified name.</div>
 </dd>
@@ -1495,12 +1497,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Returns an array containing the constants of this enum type, in
 the order they are declared.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignDefinition.html#values()">values()</a></span> - Static method in enum pizzapazza.math.<a href="pizzapazza/math/Z4SignDefinition.html" title="enum in pizzapazza.math">Z4SignDefinition</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4RandomValueBehavior.html#values()">values()</a></span> - Static method in enum pizzapazza.math.<a href="pizzapazza/math/Z4RandomValueBehavior.html" title="enum in pizzapazza.math">Z4RandomValueBehavior</a></dt>
 <dd>
 <div class="block">Returns an array containing the constants of this enum type, in
 the order they are declared.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignedRandomValueBehavior.html#values()">values()</a></span> - Static method in enum pizzapazza.math.<a href="pizzapazza/math/Z4SignedRandomValueBehavior.html" title="enum in pizzapazza.math">Z4SignedRandomValueBehavior</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignBehavior.html#values()">values()</a></span> - Static method in enum pizzapazza.math.<a href="pizzapazza/math/Z4SignBehavior.html" title="enum in pizzapazza.math">Z4SignBehavior</a></dt>
 <dd>
 <div class="block">Returns an array containing the constants of this enum type, in
 the order they are declared.</div>
@@ -1644,7 +1646,7 @@ the order they are declared.</div>
 </dd>
 <dt><a href="pizzapazza/filler/Z4BoundaryBehavior.html" title="enum in pizzapazza.filler"><span class="typeNameLink">Z4BoundaryBehavior</span></a> - Enum in <a href="pizzapazza/filler/package-summary.html">pizzapazza.filler</a></dt>
 <dd>
-<div class="block">The boundary behavior of the filler</div>
+<div class="block">The boundary behavior of a filler</div>
 </dd>
 <dt><a href="pizzapazza/ui/component/Z4Canvas.html" title="class in pizzapazza.ui.component"><span class="typeNameLink">Z4Canvas</span></a> - Class in <a href="pizzapazza/ui/component/package-summary.html">pizzapazza.ui.component</a></dt>
 <dd>
@@ -1812,6 +1814,10 @@ the order they are declared.</div>
 <dd>
 <div class="block">Creates the object</div>
 </dd>
+<dt><a href="pizzapazza/math/Z4Nextable.html" title="interface in pizzapazza.math"><span class="typeNameLink">Z4Nextable</span></a>&lt;<a href="pizzapazza/math/Z4Nextable.html" title="type parameter in Z4Nextable">T</a>&gt; - Interface in <a href="pizzapazza/math/package-summary.html">pizzapazza.math</a></dt>
+<dd>
+<div class="block">The common interface for objects able to provide a "next" value</div>
+</dd>
 <dt><a href="pizzapazza/Z4Paper.html" title="class in pizzapazza"><span class="typeNameLink">Z4Paper</span></a> - Class in <a href="pizzapazza/package-summary.html">pizzapazza</a></dt>
 <dd>
 <div class="block">The object representing a paper</div>
@@ -1833,6 +1839,18 @@ the order they are declared.</div>
 <dt><span class="memberNameLink"><a href="pizzapazza/filler/Z4PolygonFiller.html#%3Cinit%3E(pizzapazza.color.Z4GradientColor,int,int,int,int,double,int,pizzapazza.filler.Z4BoundaryBehavior)">Z4PolygonFiller(Z4GradientColor, int, int, int, int, double, int, Z4BoundaryBehavior)</a></span> - Constructor for class pizzapazza.filler.<a href="pizzapazza/filler/Z4PolygonFiller.html" title="class in pizzapazza.filler">Z4PolygonFiller</a></dt>
 <dd>
 <div class="block">Creates the object</div>
+</dd>
+<dt><a href="pizzapazza/math/Z4RandomValue.html" title="class in pizzapazza.math"><span class="typeNameLink">Z4RandomValue</span></a> - Class in <a href="pizzapazza/math/package-summary.html">pizzapazza.math</a></dt>
+<dd>
+<div class="block">A random value</div>
+</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4RandomValue.html#%3Cinit%3E(double,pizzapazza.math.Z4RandomValueBehavior,double)">Z4RandomValue(double, Z4RandomValueBehavior, double)</a></span> - Constructor for class pizzapazza.math.<a href="pizzapazza/math/Z4RandomValue.html" title="class in pizzapazza.math">Z4RandomValue</a></dt>
+<dd>
+<div class="block">Creates the object</div>
+</dd>
+<dt><a href="pizzapazza/math/Z4RandomValueBehavior.html" title="enum in pizzapazza.math"><span class="typeNameLink">Z4RandomValueBehavior</span></a> - Enum in <a href="pizzapazza/math/package-summary.html">pizzapazza.math</a></dt>
+<dd>
+<div class="block">The behavior of a random value</div>
 </dd>
 <dt><a href="pizzapazza/ui/tab/Z4Ribbon.html" title="class in pizzapazza.ui.tab"><span class="typeNameLink">Z4Ribbon</span></a> - Class in <a href="pizzapazza/ui/tab/package-summary.html">pizzapazza.ui.tab</a></dt>
 <dd>
@@ -1886,25 +1904,21 @@ the order they are declared.</div>
 <dd>
 <div class="block">The signs of a value</div>
 </dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4Sign.html#%3Cinit%3E(pizzapazza.math.Z4SignDefinition)">Z4Sign(Z4SignDefinition)</a></span> - Constructor for class pizzapazza.math.<a href="pizzapazza/math/Z4Sign.html" title="class in pizzapazza.math">Z4Sign</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4Sign.html#%3Cinit%3E(pizzapazza.math.Z4SignBehavior)">Z4Sign(Z4SignBehavior)</a></span> - Constructor for class pizzapazza.math.<a href="pizzapazza/math/Z4Sign.html" title="class in pizzapazza.math">Z4Sign</a></dt>
 <dd>
 <div class="block">Creates the object</div>
 </dd>
-<dt><a href="pizzapazza/math/Z4SignDefinition.html" title="enum in pizzapazza.math"><span class="typeNameLink">Z4SignDefinition</span></a> - Enum in <a href="pizzapazza/math/package-summary.html">pizzapazza.math</a></dt>
+<dt><a href="pizzapazza/math/Z4SignBehavior.html" title="enum in pizzapazza.math"><span class="typeNameLink">Z4SignBehavior</span></a> - Enum in <a href="pizzapazza/math/package-summary.html">pizzapazza.math</a></dt>
 <dd>
-<div class="block">The sign definition</div>
+<div class="block">The behavior of a sign</div>
 </dd>
 <dt><a href="pizzapazza/math/Z4SignedRandomValue.html" title="class in pizzapazza.math"><span class="typeNameLink">Z4SignedRandomValue</span></a> - Class in <a href="pizzapazza/math/package-summary.html">pizzapazza.math</a></dt>
 <dd>
 <div class="block">A random value with sign</div>
 </dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignedRandomValue.html#%3Cinit%3E(double,pizzapazza.math.Z4SignedRandomValueBehavior,double)">Z4SignedRandomValue(double, Z4SignedRandomValueBehavior, double)</a></span> - Constructor for class pizzapazza.math.<a href="pizzapazza/math/Z4SignedRandomValue.html" title="class in pizzapazza.math">Z4SignedRandomValue</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4SignedRandomValue.html#%3Cinit%3E(pizzapazza.math.Z4Sign,pizzapazza.math.Z4RandomValue)">Z4SignedRandomValue(Z4Sign, Z4RandomValue)</a></span> - Constructor for class pizzapazza.math.<a href="pizzapazza/math/Z4SignedRandomValue.html" title="class in pizzapazza.math">Z4SignedRandomValue</a></dt>
 <dd>
 <div class="block">Creates the object</div>
-</dd>
-<dt><a href="pizzapazza/math/Z4SignedRandomValueBehavior.html" title="enum in pizzapazza.math"><span class="typeNameLink">Z4SignedRandomValueBehavior</span></a> - Enum in <a href="pizzapazza/math/package-summary.html">pizzapazza.math</a></dt>
-<dd>
-<div class="block">The behavior of a signed random value</div>
 </dd>
 <dt><a href="pizzapazza/math/Z4SignedValue.html" title="class in pizzapazza.math"><span class="typeNameLink">Z4SignedValue</span></a> - Class in <a href="pizzapazza/math/package-summary.html">pizzapazza.math</a></dt>
 <dd>

@@ -134,9 +134,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="Z4Nextable.html" title="interface in pizzapazza.math">Z4Nextable</a>&lt;java.lang.Integer&gt;</code></dd>
+</dl>
 <hr>
 <pre>public class <span class="typeNameLabel">Z4Sign</span>
-extends java.lang.Object</pre>
+extends java.lang.Object
+implements <a href="Z4Nextable.html" title="interface in pizzapazza.math">Z4Nextable</a>&lt;java.lang.Integer&gt;</pre>
 <div class="block">The signs of a value</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
@@ -162,7 +167,7 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(pizzapazza.math.Z4SignDefinition)">Z4Sign</a></span>&#8203;(<a href="Z4SignDefinition.html" title="enum in pizzapazza.math">Z4SignDefinition</a>&nbsp;signDefinition)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(pizzapazza.math.Z4SignBehavior)">Z4Sign</a></span>&#8203;(<a href="Z4SignBehavior.html" title="enum in pizzapazza.math">Z4SignBehavior</a>&nbsp;behavior)</code></th>
 <td class="colLast">
 <div class="block">Creates the object</div>
 </td>
@@ -186,17 +191,17 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="Z4SignDefinition.html" title="enum in pizzapazza.math">Z4SignDefinition</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSignDefinition()">getSignDefinition</a></span>()</code></th>
+<td class="colFirst"><code><a href="Z4SignBehavior.html" title="enum in pizzapazza.math">Z4SignBehavior</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSignBehavior()">getSignBehavior</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Returns the sign definition</div>
+<div class="block">Returns the sign behavior</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>int</code></td>
+<td class="colFirst"><code>java.lang.Integer</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#next()">next</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Returns the next sign</div>
+<div class="block">Returns the next value</div>
 </td>
 </tr>
 </table>
@@ -223,17 +228,17 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(pizzapazza.math.Z4SignDefinition)">
+<a id="&lt;init&gt;(pizzapazza.math.Z4SignBehavior)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Z4Sign</h4>
-<pre>public&nbsp;Z4Sign&#8203;(<a href="Z4SignDefinition.html" title="enum in pizzapazza.math">Z4SignDefinition</a>&nbsp;signDefinition)</pre>
+<pre>public&nbsp;Z4Sign&#8203;(<a href="Z4SignBehavior.html" title="enum in pizzapazza.math">Z4SignBehavior</a>&nbsp;behavior)</pre>
 <div class="block">Creates the object</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>signDefinition</code> - The sign definition</dd>
+<dd><code>behavior</code> - The sign behavior</dd>
 </dl>
 </li>
 </ul>
@@ -247,17 +252,17 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="getSignDefinition()">
+<a id="getSignBehavior()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getSignDefinition</h4>
-<pre class="methodSignature">public&nbsp;<a href="Z4SignDefinition.html" title="enum in pizzapazza.math">Z4SignDefinition</a>&nbsp;getSignDefinition()</pre>
-<div class="block">Returns the sign definition</div>
+<h4>getSignBehavior</h4>
+<pre class="methodSignature">public&nbsp;<a href="Z4SignBehavior.html" title="enum in pizzapazza.math">Z4SignBehavior</a>&nbsp;getSignBehavior()</pre>
+<div class="block">Returns the sign behavior</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>The sign definition</dd>
+<dd>The sign behavior</dd>
 </dl>
 </li>
 </ul>
@@ -267,11 +272,14 @@ extends java.lang.Object</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>next</h4>
-<pre class="methodSignature">public&nbsp;int&nbsp;next()</pre>
-<div class="block">Returns the next sign</div>
+<pre class="methodSignature">public&nbsp;java.lang.Integer&nbsp;next()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Z4Nextable.html#next()">Z4Nextable</a></code></span></div>
+<div class="block">Returns the next value</div>
 <dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Z4Nextable.html#next()">next</a></code>&nbsp;in interface&nbsp;<code><a href="Z4Nextable.html" title="interface in pizzapazza.math">Z4Nextable</a>&lt;java.lang.Integer&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>The next sign</dd>
+<dd>The next value</dd>
 </dl>
 </li>
 </ul>

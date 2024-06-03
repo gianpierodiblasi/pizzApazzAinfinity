@@ -9,24 +9,24 @@ import def.js.Math;
  */
 public class Z4Sign implements Z4Nextable<Integer> {
 
-  private final Z4SignBehavior signBehavior;
+  private final Z4SignBehavior behavior;
   private int sign;
 
   /**
    * Creates the object
    *
-   * @param signBehavior The sign behavior
+   * @param behavior The sign behavior
    */
-  public Z4Sign(Z4SignBehavior signBehavior) {
-    this.signBehavior = signBehavior;
+  public Z4Sign(Z4SignBehavior behavior) {
+    this.behavior = behavior;
 
-    if (signBehavior == Z4SignBehavior.POSITIVE) {
+    if (behavior == Z4SignBehavior.POSITIVE) {
       this.sign = 1;
-    } else if (signBehavior == Z4SignBehavior.NEGATIVE) {
+    } else if (behavior == Z4SignBehavior.NEGATIVE) {
       this.sign = -1;
-    } else if (signBehavior == Z4SignBehavior.RANDOM) {
+    } else if (behavior == Z4SignBehavior.RANDOM) {
       this.sign = 0;
-    } else if (signBehavior == Z4SignBehavior.ALTERNATE) {
+    } else if (behavior == Z4SignBehavior.ALTERNATE) {
       this.sign = -2;
     }
   }
@@ -37,7 +37,7 @@ public class Z4Sign implements Z4Nextable<Integer> {
    * @return The sign behavior
    */
   public Z4SignBehavior getSignBehavior() {
-    return this.signBehavior;
+    return this.behavior;
   }
 
   @Override

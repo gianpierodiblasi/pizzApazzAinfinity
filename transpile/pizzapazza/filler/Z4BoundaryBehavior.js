@@ -1,5 +1,5 @@
 /**
- * The boundary behavior of the filler
+ * The boundary behavior of a filler
  *
  * @author gianpiero.diblasi
  */

@@ -5,7 +5,7 @@ package pizzapazza.math;
  *
  * @author gianpiero.diblasi
  */
-public class Z4FancifulValue {
+public class Z4FancifulValue implements Z4Nextable<Double> {
 
   private final Z4SignedValue constant;
   private final Z4SignedRandomValue random;
@@ -17,7 +17,7 @@ public class Z4FancifulValue {
    * @param constant The constant component
    * @param random The random component
    * @param uniformSign true if the computed sign has to be equals for both
-   * components, false otherwise
+   * components, false otherwise; if true then the constant sign is used
    */
   public Z4FancifulValue(Z4SignedValue constant, Z4SignedRandomValue random, boolean uniformSign) {
     this.constant = constant;
@@ -54,16 +54,12 @@ public class Z4FancifulValue {
     return this.uniformSign;
   }
 
-  /**
-   * Returns the next "fanciful" value
-   *
-   * @return The next "fanciful" value
-   */
-  public double next() {
+  @Override
+  public Double next() {
     if (this.uniformSign) {
-      return this.constant.getSign().next() * (this.constant.getValue() + this.random.nextUnsigned());
+      return this.constant.getSign().next() * (this.constant.getValue() + this.random.getValue().next());
     } else {
-      return this.constant.next() + this.random.nextSigned();
+      return this.constant.next() + this.random.next();
     }
   }
 }
