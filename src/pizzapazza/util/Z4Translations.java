@@ -34,6 +34,8 @@ public class Z4Translations {
   public static String NEW_LAYER = "";
   public static String BACKGROUND_LAYER = "";
   public static String DELETE_LAYER_MESSAGE = "";
+  public static String MERGE_VISIBLE_LAYERS = "";
+  public static String MERGE_ALL_LAYERS = "";
 
   // Ribbon History
   public static String HISTORY = "";
@@ -107,6 +109,7 @@ public class Z4Translations {
   public static String SPACE = "";
   public static String TIME = "";
   public static String FILLING = "";
+  public static String MERGE = "";
 
   // Color
   public static String COLOR = "";
@@ -188,6 +191,8 @@ public class Z4Translations {
     Z4Translations.NEW_LAYER = "New Layer";
     Z4Translations.BACKGROUND_LAYER = "Bkgrd";
     Z4Translations.DELETE_LAYER_MESSAGE = "Do you really want to delete the layer?";
+    Z4Translations.MERGE_VISIBLE_LAYERS = "Merge Visible Layers";
+    Z4Translations.MERGE_ALL_LAYERS = "Merge All Layers";
 
     // Ribbon History
     Z4Translations.HISTORY = "History";
@@ -269,6 +274,7 @@ public class Z4Translations {
     Z4Translations.SPACE = "Space \u2192";
     Z4Translations.TIME = "\u2190 Time";
     Z4Translations.FILLING = "Filling";
+    Z4Translations.MERGE = "Merge";
 
     // Color
     Z4Translations.COLOR = "Color";
@@ -334,6 +340,8 @@ public class Z4Translations {
     Z4Translations.NEW_LAYER = "Nuovo Livello";
     Z4Translations.BACKGROUND_LAYER = "Sfondo";
     Z4Translations.DELETE_LAYER_MESSAGE = "Vuoi davvero eliminare il livello?";
+    Z4Translations.MERGE_VISIBLE_LAYERS = "Fondi Livelli Visibili";
+    Z4Translations.MERGE_ALL_LAYERS = "Fondi Tutti i Livelli";
 
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";
@@ -415,6 +423,7 @@ public class Z4Translations {
     Z4Translations.SPACE = "Spazio \u2192";
     Z4Translations.TIME = "\u2190 Tempo";
     Z4Translations.FILLING = "Riempimento";
+    Z4Translations.MERGE = "Fondi";
 
     // Color
     Z4Translations.COLOR = "Colore";

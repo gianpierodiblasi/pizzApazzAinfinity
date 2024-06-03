@@ -50,7 +50,7 @@ class Z4AbstractRibbonPanel extends JSPanel {
         button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
         break;
       default:
-        gbc.i(top, 0, 0, 5);
+        gbc.i(top, 5, 0, 5);
         break;
     }
     this.add(button, gbc);

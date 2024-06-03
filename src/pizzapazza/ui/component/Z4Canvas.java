@@ -508,6 +508,16 @@ public class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Returns a layer
+   *
+   * @param index The index layer
+   * @return The layer
+   */
+  public Z4Layer getLayerAt(int index) {
+    return this.paper.getLayerAt(index);
+  }
+
+  /**
    * Adds a layer
    *
    * @param width The layer width

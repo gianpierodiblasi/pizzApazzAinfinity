@@ -1970,6 +1970,16 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Returns a layer
+   *
+   * @param index The index layer
+   * @return The layer
+   */
+   getLayerAt(index) {
+    return this.paper.getLayerAt(index);
+  }
+
+  /**
    * Adds a layer
    *
    * @param width The layer width
@@ -2498,6 +2508,11 @@ class Z4LayerPreview extends JSDropDown {
    */
   static  UNSELECTED_LAYER_CONTENT = "\u2610";
 
+  /**
+   * The text content for the visible button
+   */
+  static  VISIBLE_LAYER_CONTENT = "\uD83D\uDC41";
+
   static  PREVIEW_SIZE = 50;
 
   constructor() {
@@ -2518,7 +2533,7 @@ class Z4LayerPreview extends JSDropDown {
     this.summary.setLayout(new GridBagLayout());
     this.summary.add(this.name, new GBC(0, 0).w(3));
     this.summary.add(this.preview, new GBC(1, 1).h(3).f(GBC.BOTH));
-    this.eye.setText("\uD83D\uDC41");
+    this.eye.setText(Z4LayerPreview.VISIBLE_LAYER_CONTENT);
     this.eye.setContentAreaFilled(false);
     this.eye.addActionListener(event => {
       let b = !this.layer.isHidden();
@@ -4584,7 +4599,7 @@ class Z4AbstractRibbonPanel extends JSPanel {
         button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
         break;
       default:
-        gbc.i(top, 0, 0, 5);
+        gbc.i(top, 5, 0, 5);
         break;
     }
     this.add(button, gbc);
@@ -5115,6 +5130,8 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     this.addButton(Z4Translations.FROM_CLIPBOARD, typeof navigator.clipboard["read"] === "function", 1, 1, "both", 0, event => this.addFromClipboard());
     this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", 0, event => this.addFromFile());
     Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    this.addButton(Z4Translations.MERGE, true, 4, 1, "", 0, event => this.merge());
+    Z4UI.addVLine(this, new GBC(5, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.layersPreview.setLayout(new BoxLayout(this.layersPreview, BoxLayout.X_AXIS));
     this.layersPreview.getStyle().overflowX = "scroll";
     this.layersPreview.addEventListener("dragenter", event => event.preventDefault());
@@ -5128,7 +5145,7 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
       let index = parseInt((evt.clientX - rectLayers.left) / rect.width);
       this.moveLayer(this.previewDnD, this.layerDnD, index);
     });
-    this.add(this.layersPreview, new GBC(4, 0).h(2).wx(1).f(GBC.BOTH));
+    this.add(this.layersPreview, new GBC(6, 0).h(2).wx(1).f(GBC.BOTH));
   }
 
   /**
@@ -5187,6 +5204,13 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
 
    addFromClipboard() {
     this.canvas.addLayerFromClipboard();
+  }
+
+   merge() {
+    let panel = new Z4MergeLayerPanel();
+    panel.setCanvas(this.canvas);
+    JSOptionPane.showInputDialog(panel, Z4Translations.MERGE, listener => panel.addChangeListener(listener), () => panel.getSelectedLayers().length > 1, response => {
+    });
   }
 
   /**
@@ -5776,6 +5800,100 @@ class Z4FillingPanel extends JSPanel {
   }
 }
 /**
+ * The panel to merge layers
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4MergeLayerPanel extends JSPanel {
+
+   checkboxes = new Array();
+
+   layers = new Array();
+
+   listeners = new Array();
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super();
+    this.cssAddClass("z4mergelayerpanel");
+    this.setLayout(new GridBagLayout());
+    let button = new JSButton();
+    button.setText(Z4Translations.MERGE_VISIBLE_LAYERS);
+    button.addActionListener(event => {
+      this.layers.forEach((layer, index, array) => this.checkboxes[index].setSelected(!layer.isHidden()));
+      this.onchange();
+    });
+    this.add(button, new GBC(0, 0).i(0, 0, 0, 2));
+    button = new JSButton();
+    button.setText(Z4Translations.MERGE_ALL_LAYERS);
+    button.addActionListener(event => {
+      this.checkboxes.forEach((checkbox, index, array) => checkbox.setSelected(true));
+      this.onchange();
+    });
+    this.add(button, new GBC(1, 0).i(0, 2, 0, 0));
+  }
+
+  /**
+   * Returns the selected layers
+   *
+   * @return The selected layers
+   */
+   getSelectedLayers() {
+    let selected = new Array();
+    this.checkboxes.forEach((checkbox, index, array) => {
+      if (checkbox.isSelected()) {
+        selected.push(this.layers[index]);
+      }
+    });
+    return selected;
+  }
+
+  /**
+   * Sets the canvas
+   *
+   * @param canvas The canvas
+   */
+   setCanvas(canvas) {
+    for (let index = 0; index < canvas.getLayersCount(); index++) {
+      let layer = canvas.getLayerAt(index);
+      let label = new JSLabel();
+      label.setText(Z4LayerPreview.VISIBLE_LAYER_CONTENT);
+      if (!layer.isHidden()) {
+        label.getStyle().color = "var(--main-action-bgcolor)";
+      }
+      this.add(label, new GBC(0, index + 1).a(GBC.EAST));
+      let checkbox = new JSCheckBox();
+      checkbox.setText(layer.getName());
+      checkbox.addActionListener(event => this.onchange());
+      this.add(checkbox, new GBC(1, index + 1).a(GBC.WEST));
+      this.checkboxes.push(checkbox);
+      this.layers.push(layer);
+    }
+  }
+
+   onchange() {
+    let event = new ChangeEvent();
+    this.listeners.forEach(listener => {
+      if (typeof listener === "function") {
+        listener(event);
+      } else {
+        listener.stateChanged(event);
+      }
+    });
+  }
+
+  /**
+   * Adds a change listener
+   *
+   * @param listener The listener
+   */
+   addChangeListener(listener) {
+    this.listeners.push(listener);
+  }
+}
+/**
  * The panel to create a new image
  *
  * @author gianpiero.diblasi
@@ -6164,6 +6282,10 @@ class Z4Translations {
 
   static  DELETE_LAYER_MESSAGE = "";
 
+  static  MERGE_VISIBLE_LAYERS = "";
+
+  static  MERGE_ALL_LAYERS = "";
+
   // Ribbon History
   static  HISTORY = "";
 
@@ -6296,6 +6418,8 @@ class Z4Translations {
 
   static  FILLING = "";
 
+  static  MERGE = "";
+
   // Color
   static  COLOR = "";
 
@@ -6401,6 +6525,8 @@ class Z4Translations {
     Z4Translations.NEW_LAYER = "New Layer";
     Z4Translations.BACKGROUND_LAYER = "Bkgrd";
     Z4Translations.DELETE_LAYER_MESSAGE = "Do you really want to delete the layer?";
+    Z4Translations.MERGE_VISIBLE_LAYERS = "Merge Visible Layers";
+    Z4Translations.MERGE_ALL_LAYERS = "Merge All Layers";
     // Ribbon History
     Z4Translations.HISTORY = "History";
     Z4Translations.UNDO = "Undo";
@@ -6469,6 +6595,7 @@ class Z4Translations {
     Z4Translations.SPACE = "Space \u2192";
     Z4Translations.TIME = "\u2190 Time";
     Z4Translations.FILLING = "Filling";
+    Z4Translations.MERGE = "Merge";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -6530,6 +6657,8 @@ class Z4Translations {
     Z4Translations.NEW_LAYER = "Nuovo Livello";
     Z4Translations.BACKGROUND_LAYER = "Sfondo";
     Z4Translations.DELETE_LAYER_MESSAGE = "Vuoi davvero eliminare il livello?";
+    Z4Translations.MERGE_VISIBLE_LAYERS = "Fondi Livelli Visibili";
+    Z4Translations.MERGE_ALL_LAYERS = "Fondi Tutti i Livelli";
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";
     Z4Translations.UNDO = "Annulla";
@@ -6598,6 +6727,7 @@ class Z4Translations {
     Z4Translations.SPACE = "Spazio \u2192";
     Z4Translations.TIME = "\u2190 Tempo";
     Z4Translations.FILLING = "Riempimento";
+    Z4Translations.MERGE = "Fondi";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";

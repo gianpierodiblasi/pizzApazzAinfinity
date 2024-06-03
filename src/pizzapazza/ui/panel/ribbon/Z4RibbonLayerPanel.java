@@ -11,6 +11,7 @@ import javascript.swing.JSPanel;
 import pizzapazza.Z4Layer;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.component.Z4LayerPreview;
+import pizzapazza.ui.panel.Z4MergeLayerPanel;
 import pizzapazza.ui.panel.Z4NewImagePanel;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.util.Z4Constants;
@@ -50,6 +51,9 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", 0, event -> this.addFromFile());
     Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
+    this.addButton(Z4Translations.MERGE, true, 4, 1, "", 0, event -> this.merge());
+    Z4UI.addVLine(this, new GBC(5, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+
     this.layersPreview.setLayout(new BoxLayout(this.layersPreview, BoxLayout.X_AXIS));
     this.layersPreview.getStyle().overflowX = "scroll";
     this.layersPreview.addEventListener("dragenter", event -> event.preventDefault());
@@ -66,7 +70,7 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
       this.moveLayer(this.previewDnD, this.layerDnD, index);
     });
 
-    this.add(this.layersPreview, new GBC(4, 0).h(2).wx(1).f(GBC.BOTH));
+    this.add(this.layersPreview, new GBC(6, 0).h(2).wx(1).f(GBC.BOTH));
   }
 
   /**
@@ -126,6 +130,14 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
 
   private void addFromClipboard() {
     this.canvas.addLayerFromClipboard();
+  }
+
+  private void merge() {
+    Z4MergeLayerPanel panel = new Z4MergeLayerPanel();
+    panel.setCanvas(this.canvas);
+
+    JSOptionPane.showInputDialog(panel, Z4Translations.MERGE, listener -> panel.addChangeListener(listener), () -> panel.getSelectedLayers().length > 1, response -> {
+    });
   }
 
   /**

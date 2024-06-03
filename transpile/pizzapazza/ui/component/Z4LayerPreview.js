@@ -57,6 +57,11 @@ class Z4LayerPreview extends JSDropDown {
    */
   static  UNSELECTED_LAYER_CONTENT = "\u2610";
 
+  /**
+   * The text content for the visible button
+   */
+  static  VISIBLE_LAYER_CONTENT = "\uD83D\uDC41";
+
   static  PREVIEW_SIZE = 50;
 
   constructor() {
@@ -77,7 +82,7 @@ class Z4LayerPreview extends JSDropDown {
     this.summary.setLayout(new GridBagLayout());
     this.summary.add(this.name, new GBC(0, 0).w(3));
     this.summary.add(this.preview, new GBC(1, 1).h(3).f(GBC.BOTH));
-    this.eye.setText("\uD83D\uDC41");
+    this.eye.setText(Z4LayerPreview.VISIBLE_LAYER_CONTENT);
     this.eye.setContentAreaFilled(false);
     this.eye.addActionListener(event => {
       let b = !this.layer.isHidden();
