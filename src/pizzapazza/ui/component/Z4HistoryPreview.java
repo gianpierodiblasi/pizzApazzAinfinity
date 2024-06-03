@@ -8,10 +8,10 @@ import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
 import javascript.swing.JSButton;
 import javascript.swing.JSComponent;
+import javascript.swing.JSDropDown;
 import javascript.swing.JSPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import simulation.dom.$CanvasRenderingContext2D;
-import simulation.dom.$DOMRect;
 import simulation.dom.$Image;
 import simulation.js.$Object;
 
@@ -20,7 +20,7 @@ import simulation.js.$Object;
  *
  * @author gianpiero.diblasi
  */
-public class Z4HistoryPreview extends JSComponent {
+public class Z4HistoryPreview extends JSDropDown {
 
   private final JSPanel summary = new JSPanel();
   private final JSComponent preview = new JSComponent(document.createElement("canvas"));
@@ -52,43 +52,9 @@ public class Z4HistoryPreview extends JSComponent {
   /**
    * Creates the object
    */
-  @SuppressWarnings("StringEquality")
   public Z4HistoryPreview() {
-    super(document.createElement("details"));
-
+    super(".z4historypreview-editor");
     this.cssAddClass("z4historypreview");
-    this.addEventListener("toggle", event -> {
-      if ("" + this.getProperty("open") == "true") {
-        this.getChilStyleByQuery(".z4historypreview-editor").visibility = "visible";
-
-        $DOMRect rect = this.invokeInTree(".z4historypreview-editor", "getBoundingClientRect()");
-        $DOMRect rectSummary = this.invokeInTree("summary", "getBoundingClientRect()");
-
-        if (rectSummary.left + rect.width < document.body.scrollWidth) {
-          this.getChilStyleByQuery(".z4historypreview-editor").left = rectSummary.left + "px";
-        } else if (rectSummary.right - rect.width > 0) {
-          this.getChilStyleByQuery(".z4historypreview-editor").left = (rectSummary.right - rect.width) + "px";
-        } else {
-          this.getChilStyleByQuery(".z4historypreview-editor").left = "auto";
-          this.getChilStyleByQuery(".z4historypreview-editor").right = "5px";
-        }
-
-        if (rectSummary.bottom + rect.height < document.body.scrollHeight) {
-          this.getChilStyleByQuery(".z4historypreview-editor").top = rectSummary.bottom + "px";
-        } else if (rectSummary.top - rect.height > 0) {
-          this.getChilStyleByQuery(".z4historypreview-editor").top = "calc(" + (rectSummary.top - rect.height) + "px - 1rem)";
-        } else {
-          this.getChilStyleByQuery(".z4historypreview-editor").top = "auto";
-          this.getChilStyleByQuery(".z4historypreview-editor").bottom = "5px";
-        }
-      } else {
-        this.getChilStyleByQuery(".z4historypreview-editor").removeProperty("visibility");
-        this.getChilStyleByQuery(".z4historypreview-editor").removeProperty("top");
-        this.getChilStyleByQuery(".z4historypreview-editor").removeProperty("bottom");
-        this.getChilStyleByQuery(".z4historypreview-editor").removeProperty("left");
-        this.getChilStyleByQuery(".z4historypreview-editor").removeProperty("right");
-      }
-    });
 
     this.summary.setLayout(new GridBagLayout());
 
@@ -107,7 +73,6 @@ public class Z4HistoryPreview extends JSComponent {
     });
     this.summary.add(selector, new GBC(1, 0).a(GBC.NORTH).i(0, 2, 0, 0));
 
-    this.appendNodeChild(document.createElement("summary"));
     this.appendChildInTree("summary", this.summary);
 
     this.previewBig.setAttribute("width", "" + Z4HistoryPreview.PREVIEW_BIG_SIZE);

@@ -2298,7 +2298,7 @@ class Z4ColorPreview extends JSComponent {
  *
  * @author gianpiero.diblasi
  */
-class Z4HistoryPreview extends JSComponent {
+class Z4HistoryPreview extends JSDropDown {
 
    summary = new JSPanel();
 
@@ -2340,37 +2340,8 @@ class Z4HistoryPreview extends JSComponent {
    * Creates the object
    */
   constructor() {
-    super(document.createElement("details"));
+    super(".z4historypreview-editor");
     this.cssAddClass("z4historypreview");
-    this.addEventListener("toggle", event => {
-      if ("" + this.getProperty("open") === "true") {
-        this.getChilStyleByQuery(".z4historypreview-editor").visibility = "visible";
-        let rect = this.invokeInTree(".z4historypreview-editor", "getBoundingClientRect()");
-        let rectSummary = this.invokeInTree("summary", "getBoundingClientRect()");
-        if (rectSummary.left + rect.width < document.body.scrollWidth) {
-          this.getChilStyleByQuery(".z4historypreview-editor").left = rectSummary.left + "px";
-        } else if (rectSummary.right - rect.width > 0) {
-          this.getChilStyleByQuery(".z4historypreview-editor").left = (rectSummary.right - rect.width) + "px";
-        } else {
-          this.getChilStyleByQuery(".z4historypreview-editor").left = "auto";
-          this.getChilStyleByQuery(".z4historypreview-editor").right = "5px";
-        }
-        if (rectSummary.bottom + rect.height < document.body.scrollHeight) {
-          this.getChilStyleByQuery(".z4historypreview-editor").top = rectSummary.bottom + "px";
-        } else if (rectSummary.top - rect.height > 0) {
-          this.getChilStyleByQuery(".z4historypreview-editor").top = "calc(" + (rectSummary.top - rect.height) + "px - 1rem)";
-        } else {
-          this.getChilStyleByQuery(".z4historypreview-editor").top = "auto";
-          this.getChilStyleByQuery(".z4historypreview-editor").bottom = "5px";
-        }
-      } else {
-        this.getChilStyleByQuery(".z4historypreview-editor").removeProperty("visibility");
-        this.getChilStyleByQuery(".z4historypreview-editor").removeProperty("top");
-        this.getChilStyleByQuery(".z4historypreview-editor").removeProperty("bottom");
-        this.getChilStyleByQuery(".z4historypreview-editor").removeProperty("left");
-        this.getChilStyleByQuery(".z4historypreview-editor").removeProperty("right");
-      }
-    });
     this.summary.setLayout(new GridBagLayout());
     this.preview.setAttribute("width", "" + Z4HistoryPreview.PREVIEW_SIZE);
     this.preview.setAttribute("height", "" + Z4HistoryPreview.PREVIEW_SIZE);
@@ -2385,7 +2356,6 @@ class Z4HistoryPreview extends JSComponent {
       this.canvas.openFromHistory(this.json);
     });
     this.summary.add(selector, new GBC(1, 0).a(GBC.NORTH).i(0, 2, 0, 0));
-    this.appendNodeChild(document.createElement("summary"));
     this.appendChildInTree("summary", this.summary);
     this.previewBig.setAttribute("width", "" + Z4HistoryPreview.PREVIEW_BIG_SIZE);
     this.previewBig.setAttribute("height", "" + Z4HistoryPreview.PREVIEW_BIG_SIZE);
@@ -2474,7 +2444,7 @@ class Z4HistoryPreview extends JSComponent {
  *
  * @author gianpiero.diblasi
  */
-class Z4LayerPreview extends JSComponent {
+class Z4LayerPreview extends JSDropDown {
 
    summary = new JSPanel();
 
@@ -2531,41 +2501,15 @@ class Z4LayerPreview extends JSComponent {
   static  PREVIEW_SIZE = 50;
 
   constructor() {
-    super(document.createElement("details"));
+    super(".z4layerpreview-editor");
     this.cssAddClass("z4layerpreview");
     this.addEventListener("toggle", event => {
       if ("" + this.getProperty("open") === "true") {
         this.changed = false;
-        this.getChilStyleByQuery(".z4layerpreview-editor").visibility = "visible";
-        let rect = this.invokeInTree(".z4layerpreview-editor", "getBoundingClientRect()");
-        let rectSummary = this.invokeInTree("summary", "getBoundingClientRect()");
-        if (rectSummary.left + rect.width < document.body.scrollWidth) {
-          this.getChilStyleByQuery(".z4layerpreview-editor").left = rectSummary.left + "px";
-        } else if (rectSummary.right - rect.width > 0) {
-          this.getChilStyleByQuery(".z4layerpreview-editor").left = (rectSummary.right - rect.width) + "px";
-        } else {
-          this.getChilStyleByQuery(".z4layerpreview-editor").left = "auto";
-          this.getChilStyleByQuery(".z4layerpreview-editor").right = "5px";
-        }
-        if (rectSummary.bottom + rect.height < document.body.scrollHeight) {
-          this.getChilStyleByQuery(".z4layerpreview-editor").top = rectSummary.bottom + "px";
-        } else if (rectSummary.top - rect.height > 0) {
-          this.getChilStyleByQuery(".z4layerpreview-editor").top = "calc(" + (rectSummary.top - rect.height) + "px - 1rem)";
-        } else {
-          this.getChilStyleByQuery(".z4layerpreview-editor").top = "auto";
-          this.getChilStyleByQuery(".z4layerpreview-editor").bottom = "5px";
-        }
         this.delete.setEnabled(this.canvas.getLayersCount() > 1);
-      } else {
-        if (this.changed) {
-          this.canvas.setChanged(true);
-          this.canvas.saveHistory("standard,tool");
-        }
-        this.getChilStyleByQuery(".z4layerpreview-editor").removeProperty("visibility");
-        this.getChilStyleByQuery(".z4layerpreview-editor").removeProperty("top");
-        this.getChilStyleByQuery(".z4layerpreview-editor").removeProperty("bottom");
-        this.getChilStyleByQuery(".z4layerpreview-editor").removeProperty("left");
-        this.getChilStyleByQuery(".z4layerpreview-editor").removeProperty("right");
+      } else if (this.changed) {
+        this.canvas.setChanged(true);
+        this.canvas.saveHistory("standard,tool");
       }
     });
     this.name.getStyle().width = (Z4LayerPreview.PREVIEW_SIZE + 35) + "px";
@@ -2625,7 +2569,6 @@ class Z4LayerPreview extends JSComponent {
     button.addActionListener(event => this.ribbonLayerPanel.moveLayer(this, this.layer, this.canvas.getLayersCount()));
     this.summary.add(button, new GBC(2, 3).f(GBC.BOTH).i(0, 2, 0, 0));
     Z4UI.addVLine(this.summary, new GBC(3, 0).h(4).f(GBC.VERTICAL).i(1, 2, 1, 2));
-    this.appendNodeChild(document.createElement("summary"));
     this.appendChildInTree("summary", this.summary);
     this.editor.cssAddClass("z4layerpreview-editor");
     let panelBasic = new JSPanel();

@@ -10,6 +10,7 @@ import javascript.awt.Point;
 import javascript.swing.ButtonGroup;
 import javascript.swing.JSButton;
 import javascript.swing.JSComponent;
+import javascript.swing.JSDropDown;
 import javascript.swing.JSLabel;
 import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
@@ -26,7 +27,6 @@ import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
-import simulation.dom.$DOMRect;
 import simulation.js.$Apply_0_Void;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
@@ -36,7 +36,7 @@ import static simulation.js.$Globals.parseInt;
  *
  * @author gianpiero.diblasi
  */
-public class Z4LayerPreview extends JSComponent {
+public class Z4LayerPreview extends JSDropDown {
 
   private final JSPanel summary = new JSPanel();
   private JSLabel name = new JSLabel();
@@ -77,47 +77,16 @@ public class Z4LayerPreview extends JSComponent {
 
   @SuppressWarnings("StringEquality")
   public Z4LayerPreview() {
-    super(document.createElement("details"));
-
+    super(".z4layerpreview-editor");
     this.cssAddClass("z4layerpreview");
+
     this.addEventListener("toggle", event -> {
       if ("" + this.getProperty("open") == "true") {
         this.changed = false;
-        this.getChilStyleByQuery(".z4layerpreview-editor").visibility = "visible";
-
-        $DOMRect rect = this.invokeInTree(".z4layerpreview-editor", "getBoundingClientRect()");
-        $DOMRect rectSummary = this.invokeInTree("summary", "getBoundingClientRect()");
-
-        if (rectSummary.left + rect.width < document.body.scrollWidth) {
-          this.getChilStyleByQuery(".z4layerpreview-editor").left = rectSummary.left + "px";
-        } else if (rectSummary.right - rect.width > 0) {
-          this.getChilStyleByQuery(".z4layerpreview-editor").left = (rectSummary.right - rect.width) + "px";
-        } else {
-          this.getChilStyleByQuery(".z4layerpreview-editor").left = "auto";
-          this.getChilStyleByQuery(".z4layerpreview-editor").right = "5px";
-        }
-
-        if (rectSummary.bottom + rect.height < document.body.scrollHeight) {
-          this.getChilStyleByQuery(".z4layerpreview-editor").top = rectSummary.bottom + "px";
-        } else if (rectSummary.top - rect.height > 0) {
-          this.getChilStyleByQuery(".z4layerpreview-editor").top = "calc(" + (rectSummary.top - rect.height) + "px - 1rem)";
-        } else {
-          this.getChilStyleByQuery(".z4layerpreview-editor").top = "auto";
-          this.getChilStyleByQuery(".z4layerpreview-editor").bottom = "5px";
-        }
-
         this.delete.setEnabled(this.canvas.getLayersCount() > 1);
-      } else {
-        if (this.changed) {
-          this.canvas.setChanged(true);
-          this.canvas.saveHistory("standard,tool");
-        }
-
-        this.getChilStyleByQuery(".z4layerpreview-editor").removeProperty("visibility");
-        this.getChilStyleByQuery(".z4layerpreview-editor").removeProperty("top");
-        this.getChilStyleByQuery(".z4layerpreview-editor").removeProperty("bottom");
-        this.getChilStyleByQuery(".z4layerpreview-editor").removeProperty("left");
-        this.getChilStyleByQuery(".z4layerpreview-editor").removeProperty("right");
+      } else if (this.changed) {
+        this.canvas.setChanged(true);
+        this.canvas.saveHistory("standard,tool");
       }
     });
 
@@ -190,7 +159,6 @@ public class Z4LayerPreview extends JSComponent {
 
     Z4UI.addVLine(this.summary, new GBC(3, 0).h(4).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
-    this.appendNodeChild(document.createElement("summary"));
     this.appendChildInTree("summary", this.summary);
 
     this.editor.cssAddClass("z4layerpreview-editor");
@@ -375,7 +343,7 @@ public class Z4LayerPreview extends JSComponent {
       this.removeAttribute("open");
       this.ribbonLayerPanel.moveLayer(this, this.layer, moveIndex + direction);
     }
-    
+
     this.cssRemoveClass("z4layerpreview-move");
   }
 
