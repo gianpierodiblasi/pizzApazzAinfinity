@@ -2,6 +2,7 @@ package pizzapazza.ui.panel.ribbon;
 
 import def.dom.Event;
 import static def.dom.Globals.clearInterval;
+import static def.dom.Globals.clearTimeout;
 import def.dom.HTMLElement;
 import def.dom.IDBDatabase;
 import def.dom.IDBKeyRange;
@@ -23,6 +24,7 @@ import simulation.js.$Apply_3_Void;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.setInterval;
+import static simulation.js.$Globals.setTimeout;
 import static simulation.js.$Globals.window;
 import simulation.js.$IDBCursor;
 import simulation.js.$Object;
@@ -52,6 +54,8 @@ public class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
   private int z4savingInterval;
 
   private int timerID = -1;
+  private int standardID = -1;
+  private double standardRand;
 
   /**
    * Creates the object
@@ -262,6 +266,24 @@ public class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
   }
 
   /**
+   * Restarts the timer for the standard saving
+   */
+  @SuppressWarnings("StringEquality")
+  public void restartStandard() {
+    if (this.z4historyManagement == "standard") {
+      this.clearIntervals();
+
+      this.standardRand = Math.random();
+      double rnd = this.standardRand;
+      this.standardID = setTimeout(() -> {
+        if (this.standardRand == rnd) {
+          this.saveHistory("standard");
+        }
+      }, this.z4savingDelay);
+    }
+  }
+
+  /**
    * Sets the history management settings
    *
    * @param z4historyManagement The history management policy
@@ -286,6 +308,11 @@ public class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
     if (this.timerID != -1) {
       clearInterval(this.timerID);
       this.timerID = -1;
+    }
+
+    if (this.standardID != -1) {
+      clearTimeout(this.standardID);
+      this.standardID = -1;
     }
   }
 

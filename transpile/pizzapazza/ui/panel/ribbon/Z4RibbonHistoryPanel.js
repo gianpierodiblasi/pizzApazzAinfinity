@@ -33,6 +33,10 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
 
    timerID = -1;
 
+   standardID = -1;
+
+   standardRand = 0.0;
+
   /**
    * Creates the object
    */
@@ -221,6 +225,22 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
   }
 
   /**
+   * Restarts the timer for the standard saving
+   */
+   restartStandard() {
+    if (this.z4historyManagement === "standard") {
+      this.clearIntervals();
+      this.standardRand = Math.random();
+      let rnd = this.standardRand;
+      this.standardID = setTimeout(() => {
+        if (this.standardRand === rnd) {
+          this.saveHistory("standard");
+        }
+      }, this.z4savingDelay);
+    }
+  }
+
+  /**
    * Sets the history management settings
    *
    * @param z4historyManagement The history management policy
@@ -242,6 +262,10 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
     if (this.timerID !== -1) {
       clearInterval(this.timerID);
       this.timerID = -1;
+    }
+    if (this.standardID !== -1) {
+      clearTimeout(this.standardID);
+      this.standardID = -1;
     }
   }
 
