@@ -20,6 +20,7 @@ public class Z4FancifulValue implements Z4Nextable<Double> {
    * components, false otherwise; if true then the constant sign is used
    */
   public Z4FancifulValue(Z4SignedValue constant, Z4SignedRandomValue random, boolean uniformSign) {
+    super();
     this.constant = constant;
     this.random = random;
     this.uniformSign = uniformSign;

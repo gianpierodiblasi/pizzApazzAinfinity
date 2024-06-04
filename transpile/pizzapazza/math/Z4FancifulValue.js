@@ -20,6 +20,7 @@ class Z4FancifulValue extends Z4Nextable {
    * components, false otherwise; if true then the constant sign is used
    */
   constructor(constant, random, uniformSign) {
+    super();
     this.constant = constant;
     this.random = random;
     this.uniformSign = uniformSign;

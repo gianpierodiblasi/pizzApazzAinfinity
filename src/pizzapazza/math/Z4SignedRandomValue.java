@@ -17,6 +17,7 @@ public class Z4SignedRandomValue implements Z4Nextable<Double> {
    * @param value The random value
    */
   public Z4SignedRandomValue(Z4Sign sign, Z4RandomValue value) {
+    super();
     this.sign = sign;
     this.value = value;
   }

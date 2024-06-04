@@ -29,6 +29,7 @@ class Z4RandomValue extends Z4Nextable {
    * @param length The polyline/curve length
    */
   constructor(value, behavior, length) {
+    super();
     this.value = value;
     this.behavior = behavior;
     this.length = length;

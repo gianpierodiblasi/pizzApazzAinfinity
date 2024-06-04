@@ -15,6 +15,7 @@ class Z4Sign extends Z4Nextable {
    * @param behavior The sign behavior
    */
   constructor(behavior) {
+    super();
     this.behavior = behavior;
     if (behavior === Z4SignBehavior.POSITIVE) {
       this.sign = 1;

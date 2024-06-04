@@ -18,6 +18,7 @@ public class Z4Sign implements Z4Nextable<Integer> {
    * @param behavior The sign behavior
    */
   public Z4Sign(Z4SignBehavior behavior) {
+    super();
     this.behavior = behavior;
 
     if (behavior == Z4SignBehavior.POSITIVE) {

@@ -16,6 +16,7 @@ class Z4SignedRandomValue extends Z4Nextable {
    * @param value The random value
    */
   constructor(sign, value) {
+    super();
     this.sign = sign;
     this.value = value;
   }

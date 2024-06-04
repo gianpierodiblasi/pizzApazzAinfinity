@@ -16,6 +16,7 @@ class Z4SignedValue extends Z4Nextable {
    * @param value The value
    */
   constructor(sign, value) {
+    super();
     this.sign = sign;
     this.value = value;
   }

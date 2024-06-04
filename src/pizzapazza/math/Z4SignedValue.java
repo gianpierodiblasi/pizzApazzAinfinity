@@ -17,6 +17,7 @@ public class Z4SignedValue implements Z4Nextable<Double> {
    * @param value The value
    */
   public Z4SignedValue(Z4Sign sign, double value) {
+    super();
     this.sign = sign;
     this.value = value;
   }

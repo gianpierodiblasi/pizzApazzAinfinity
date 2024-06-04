@@ -6,10 +6,6 @@ NONE_HIM = Nessuno
 NONE_HER = Nessuna
 
 # Math
-POSITIVE = Positivo
-NEGATIVE = Negativo
-ALTERNATE = Alternato
-RANDOM = Random
 RANDOM_SHORT = Rnd
 VALUE = Valore
 SIGN = Segno

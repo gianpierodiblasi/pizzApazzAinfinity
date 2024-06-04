@@ -197,6 +197,15 @@ class Z4Translations {
 
   static  DELETE_COLOR_MESSAGE = "";
 
+  // Math
+  static  POSITIVE = "";
+
+  static  NEGATIVE = "";
+
+  static  ALTERNATE = "";
+
+  static  RANDOM = "";
+
   // Composite Operation
   static  COMPOSITE_OPERATION = "";
 
@@ -367,6 +376,11 @@ class Z4Translations {
     Z4Translations.MIRRORED = "Mirrored";
     Z4Translations.INVERTED = "Inverted";
     Z4Translations.DELETE_COLOR_MESSAGE = "Do you really want to delete the color?";
+    // Math
+    Z4Translations.POSITIVE = "Positive";
+    Z4Translations.NEGATIVE = "Negative";
+    Z4Translations.ALTERNATE = "Alternate";
+    Z4Translations.RANDOM = "Random";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "This is the default setting and draws the layer on top of the existing content";
@@ -499,6 +513,11 @@ class Z4Translations {
     Z4Translations.MIRRORED = "Riflesso";
     Z4Translations.INVERTED = "Invertito";
     Z4Translations.DELETE_COLOR_MESSAGE = "Vuoi davvero eliminare il colore?";
+    // Math
+    Z4Translations.POSITIVE = "Positivo";
+    Z4Translations.NEGATIVE = "Negativo";
+    Z4Translations.ALTERNATE = "Alternato";
+    Z4Translations.RANDOM = "Random";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "Questa \u00E8 l'impostazione predefinita e disegna il livello sopra il contenuto esistente";

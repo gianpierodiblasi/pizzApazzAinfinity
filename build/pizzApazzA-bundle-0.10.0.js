@@ -1562,6 +1562,7 @@ class Z4FancifulValue extends Z4Nextable {
    * components, false otherwise; if true then the constant sign is used
    */
   constructor(constant, random, uniformSign) {
+    super();
     this.constant = constant;
     this.random = random;
     this.uniformSign = uniformSign;
@@ -1635,6 +1636,7 @@ class Z4RandomValue extends Z4Nextable {
    * @param length The polyline/curve length
    */
   constructor(value, behavior, length) {
+    super();
     this.value = value;
     this.behavior = behavior;
     this.length = length;
@@ -1731,6 +1733,7 @@ class Z4Sign extends Z4Nextable {
    * @param behavior The sign behavior
    */
   constructor(behavior) {
+    super();
     this.behavior = behavior;
     if (behavior === Z4SignBehavior.POSITIVE) {
       this.sign = 1;
@@ -1785,6 +1788,7 @@ class Z4SignedRandomValue extends Z4Nextable {
    * @param value The random value
    */
   constructor(sign, value) {
+    super();
     this.sign = sign;
     this.value = value;
   }
@@ -1829,6 +1833,7 @@ class Z4SignedValue extends Z4Nextable {
    * @param value The value
    */
   constructor(sign, value) {
+    super();
     this.sign = sign;
     this.value = value;
   }
@@ -5915,19 +5920,45 @@ class Z4SignPanel extends Z4AbstractValuePanel {
     super();
     this.cssAddClass("z4signpanel");
     this.setLayout(new GridBagLayout());
+    let buttonGroup = new ButtonGroup();
+    this.addRadio(Z4SignBehavior.POSITIVE, buttonGroup, 0, 0, "left");
+    this.addRadio(Z4SignBehavior.NEGATIVE, buttonGroup, 1, 0, "center");
+    this.addRadio(Z4SignBehavior.RANDOM, buttonGroup, 2, 0, "center");
+    this.addRadio(Z4SignBehavior.ALTERNATE, buttonGroup, 3, 0, "right");
     this.setValue(new Z4Sign(Z4SignBehavior.RANDOM));
   }
 
-   addRadio(behavior, buttonGroup) {
+   addRadio(behavior, buttonGroup, x, y, border) {
     let radio = new JSRadioButton();
     radio.setContentAreaFilled(false);
+    radio.setTooltip(Z4Translations["" + behavior]);
     radio.setToggle();
     radio.setIcon(new Z4EmptyImageProducer(behavior));
-    radio.addActionListener(event => {
-    });
+    radio.addActionListener(event => this.onchange());
+    switch(border) {
+      case "left":
+        radio.getStyle().borderTopRightRadius = "0px";
+        radio.getStyle().borderBottomRightRadius = "0px";
+        radio.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "center":
+        radio.getStyle().borderRadius = "0px";
+        radio.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        radio.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "right":
+        radio.getStyle().borderTopLeftRadius = "0px";
+        radio.getStyle().borderBottomLeftRadius = "0px";
+        radio.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        break;
+    }
+    buttonGroup.add(radio);
+    this.radios["" + behavior] = radio;
+    this.add(radio, new GBC(x, y));
   }
 
    setValue(value) {
+    this.value = value;
     (this.radios["" + value.getSignBehavior()]).setSelected(true);
   }
 }
@@ -6931,6 +6962,15 @@ class Z4Translations {
 
   static  DELETE_COLOR_MESSAGE = "";
 
+  // Math
+  static  POSITIVE = "";
+
+  static  NEGATIVE = "";
+
+  static  ALTERNATE = "";
+
+  static  RANDOM = "";
+
   // Composite Operation
   static  COMPOSITE_OPERATION = "";
 
@@ -7101,6 +7141,11 @@ class Z4Translations {
     Z4Translations.MIRRORED = "Mirrored";
     Z4Translations.INVERTED = "Inverted";
     Z4Translations.DELETE_COLOR_MESSAGE = "Do you really want to delete the color?";
+    // Math
+    Z4Translations.POSITIVE = "Positive";
+    Z4Translations.NEGATIVE = "Negative";
+    Z4Translations.ALTERNATE = "Alternate";
+    Z4Translations.RANDOM = "Random";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "This is the default setting and draws the layer on top of the existing content";
@@ -7233,6 +7278,11 @@ class Z4Translations {
     Z4Translations.MIRRORED = "Riflesso";
     Z4Translations.INVERTED = "Invertito";
     Z4Translations.DELETE_COLOR_MESSAGE = "Vuoi davvero eliminare il colore?";
+    // Math
+    Z4Translations.POSITIVE = "Positivo";
+    Z4Translations.NEGATIVE = "Negativo";
+    Z4Translations.ALTERNATE = "Alternato";
+    Z4Translations.RANDOM = "Random";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "Questa \u00E8 l'impostazione predefinita e disegna il livello sopra il contenuto esistente";
