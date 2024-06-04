@@ -20,10 +20,8 @@
 
     <script>
       window.onload = event => {
-        var search = new URLSearchParams(window.location.search);
-        var name = search.get("type");
-        var params = search.get("params");
-        eval("new TestMathPanel(new " + name.replace("Test", "Z4").replaceAll(" ", "") + "(" + (params ? params : "") + ")).setTitle('" + name + "');");
+        var name = new URLSearchParams(window.location.search).get("type");
+        eval("new " + name.replaceAll(" ", "") + "().setTitle('" + name + "');");
       };
     </script>
   </head>

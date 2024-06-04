@@ -1,9 +1,11 @@
 package pizzapazza.ui.panel.math;
 
 import def.js.Array;
+import def.js.Object;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
 import javascript.swing.ButtonGroup;
+import javascript.swing.JSComponent;
 import javascript.swing.JSRadioButton;
 import pizzapazza.math.Z4Sign;
 import pizzapazza.math.Z4SignBehavior;
@@ -59,7 +61,10 @@ public class Z4SignPanel extends Z4AbstractValuePanel<Z4Sign> {
     radio.setTooltip(Z4Translations.$get("" + behavior));
     radio.setToggle();
     radio.setIcon(new Z4EmptyImageProducer<>(behavior));
-    radio.addActionListener(event -> this.onchange());
+    radio.addActionListener(event -> {
+      this.value = new Z4Sign(behavior);
+      this.onchange();
+    });
 
     switch (border) {
       case "left":
@@ -130,7 +135,11 @@ public class Z4SignPanel extends Z4AbstractValuePanel<Z4Sign> {
   @Override
   public void setValue(Z4Sign value) {
     this.value = value;
-
     ((JSRadioButton) this.radios.$get("" + value.getSignBehavior())).setSelected(true);
+  }
+
+  @Override
+  public void setEnabled(boolean b) {
+    Object.keys(this.radios).forEach(key -> ((JSComponent) this.radios.$get(key)).setEnabled(b));
   }
 }
