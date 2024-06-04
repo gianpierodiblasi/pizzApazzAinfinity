@@ -80,6 +80,7 @@ public abstract class Z4AbstractRandomValuePanel<T> extends Z4AbstractValuePanel
     this.valuePanel.addChangeListener(event -> {
       this.valueIsAdjusting = this.valuePanel.getValueIsAdjusting();
       this.onRandomValueChange();
+      this.onchange();
     });
 
     this.lengthPanel.setLabel(Z4Translations.LENGTH);
@@ -87,6 +88,7 @@ public abstract class Z4AbstractRandomValuePanel<T> extends Z4AbstractValuePanel
     this.lengthPanel.addChangeListener(event -> {
       this.valueIsAdjusting = this.lengthPanel.getValueIsAdjusting();
       this.onRandomValueChange();
+      this.onchange();
     });
   }
 
@@ -203,7 +205,7 @@ public abstract class Z4AbstractRandomValuePanel<T> extends Z4AbstractValuePanel
   @SuppressWarnings("StringEquality")
   public void setEnabled(boolean b) {
     this.valuePanel.setEnabled(b);
-    
+
     Object.keys(this.radios).forEach(key -> {
       JSRadioButton radio = this.radios.$get(key);
       radio.setEnabled(b);

@@ -60,12 +60,14 @@ class Z4AbstractRandomValuePanel extends Z4AbstractValuePanel {
     this.valuePanel.addChangeListener(event => {
       this.valueIsAdjusting = this.valuePanel.getValueIsAdjusting();
       this.onRandomValueChange();
+      this.onchange();
     });
     this.lengthPanel.setLabel(Z4Translations.LENGTH);
     this.lengthPanel.setSignVisible(false);
     this.lengthPanel.addChangeListener(event => {
       this.valueIsAdjusting = this.lengthPanel.getValueIsAdjusting();
       this.onRandomValueChange();
+      this.onchange();
     });
   }
 
