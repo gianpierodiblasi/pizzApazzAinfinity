@@ -25,7 +25,7 @@ public class Z4RandomValue implements Z4Nextable<Double> {
    *
    * @param value The value
    * @param behavior The random value behavior
-   * @param length The polyline/curve length
+   * @param length The bezier/polyline/step length
    */
   public Z4RandomValue(double value, Z4RandomValueBehavior behavior, double length) {
     super();
@@ -66,9 +66,9 @@ public class Z4RandomValue implements Z4Nextable<Double> {
   }
 
   /**
-   * Returns The polyline/curve length
+   * Returns The bezier/polyline/step length
    *
-   * @return The polyline/curve length
+   * @return The bezier/polyline/step length
    */
   public double getLength() {
     return this.length;

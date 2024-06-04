@@ -38,6 +38,7 @@ class Z4SignPanel extends Z4AbstractValuePanel {
 
    addRadio(behavior, buttonGroup, x, y, border) {
     let radio = new JSRadioButton();
+    radio.cssAddClass("z4signpanel-radio");
     radio.getStyle().padding = "1px";
     radio.setTooltip(Z4Translations["" + behavior]);
     radio.setToggle();

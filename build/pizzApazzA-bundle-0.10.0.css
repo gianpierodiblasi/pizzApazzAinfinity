@@ -105,6 +105,12 @@
 .z4newimagepanel {
 }
 
+.z4randomvaluepanel {
+}
+
+.z4signedrandomvaluepanel {
+}
+
 .z4signedvaluepanel {
 }
 
@@ -245,7 +251,25 @@
 .z4abstractfillerpanel.z4texturefillerpanel div label:nth-child(2) img {
   content: url(../image/filler/texture_symmetric.png);
 }
-.z4canvas {
+.z4abstractrandomvaluepanel {
+}
+
+.z4abstractrandomvaluepanel .z4abstractrandomvaluepanel-radio img {
+  width: 16px;
+  height: 16px;
+}
+.z4abstractrandomvaluepanel .z4abstractrandomvaluepanel-radio:nth-child(2) img {
+  content: url(../image/math/z4randomvaluebehavior_classic.svg);
+}
+.z4abstractrandomvaluepanel .z4abstractrandomvaluepanel-radio:nth-child(3) img {
+  content: url(../image/math/z4randomvaluebehavior_bezier.svg);
+}
+.z4abstractrandomvaluepanel .z4abstractrandomvaluepanel-radio:nth-child(4) img {
+  content: url(../image/math/z4randomvaluebehavior_polyline.svg);
+}
+.z4abstractrandomvaluepanel .z4abstractrandomvaluepanel-radio:nth-child(5) img {
+  content: url(../image/math/z4randomvaluebehavior_stepped.svg);
+}.z4canvas {
   overflow: scroll;
   display: grid;
   grid-template: "c";
@@ -349,24 +373,6 @@
 
 .z4layerpreview .z4layerpreview-editor[offset=true], .z4layerpreview .z4layerpreview-editor[offset=true] * {
   background: transparent;
-}.z4randomvaluepanel {
-}
-
-.z4randomvaluepanel label img {
-  width: 16px;
-  height: 16px;
-}
-.z4randomvaluepanel label:nth-child(1) img {
-  content: url(../image/math/z4randomvaluebehavior_classic.svg);
-}
-.z4randomvaluepanel label:nth-child(2) img {
-  content: url(../image/math/z4randomvaluebehavior_bezier.svg);
-}
-.z4randomvaluepanel label:nth-child(3) img {
-  content: url(../image/math/z4randomvaluebehavior_polyline.svg);
-}
-.z4randomvaluepanel label:nth-child(4) img {
-  content: url(../image/math/z4randomvaluebehavior_stepped.svg);
 }.z4ribbonhelppanel {
 }
 .z4ribbonhelppanel-about .z4ribbonhelppanel-splash {
@@ -385,19 +391,19 @@
 .z4signpanel {
 }
 
-.z4signpanel label img {
+.z4signpanel .z4signpanel-radio img {
   width: 16px;
   height: 16px;
 }
-.z4signpanel label:nth-child(1) img {
+.z4signpanel .z4signpanel-radio:nth-child(1) img {
   content: url(../image/math/z4signbehavior_positive.svg);
 }
-.z4signpanel label:nth-child(2) img {
+.z4signpanel .z4signpanel-radio:nth-child(2) img {
   content: url(../image/math/z4signbehavior_negative.svg);
 }
-.z4signpanel label:nth-child(3) img {
+.z4signpanel .z4signpanel-radio:nth-child(3) img {
   content: url(../image/math/z4signbehavior_random.svg);
 }
-.z4signpanel label:nth-child(4) img {
+.z4signpanel .z4signpanel-radio:nth-child(4) img {
   content: url(../image/math/z4signbehavior_alternate.svg);
 }

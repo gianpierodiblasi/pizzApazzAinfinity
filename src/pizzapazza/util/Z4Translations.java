@@ -135,6 +135,7 @@ public class Z4Translations {
   public static String STEPPED = "";
   public static String POLYLINE = "";
   public static String BEZIER = "";
+  public static String LENGTH = "";
 
   // Composite Operation
   public static String COMPOSITE_OPERATION = "";
@@ -296,7 +297,7 @@ public class Z4Translations {
     Z4Translations.INVERTED = "Inverted";
     Z4Translations.DELETE_COLOR_MESSAGE = "Do you really want to delete the color?";
 
-    //Math
+    // Math
     Z4Translations.POSITIVE = "Positive";
     Z4Translations.NEGATIVE = "Negative";
     Z4Translations.ALTERNATE = "Alternate";
@@ -305,6 +306,7 @@ public class Z4Translations {
     Z4Translations.STEPPED = "Stepped";
     Z4Translations.POLYLINE = "Polyline";
     Z4Translations.BEZIER = "Bezier";
+    Z4Translations.LENGTH = "Length";
 
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
@@ -459,6 +461,7 @@ public class Z4Translations {
     Z4Translations.STEPPED = "A Gradino";
     Z4Translations.POLYLINE = "Polilinea";
     Z4Translations.BEZIER = "Bezier";
+    Z4Translations.LENGTH = "Lunghezza";
 
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";

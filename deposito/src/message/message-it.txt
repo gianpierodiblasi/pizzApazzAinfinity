@@ -15,7 +15,7 @@ Z4Translations.CONSTANT = "Costante";
 Z4Translations.CONSTANT_SHORT = "Cost";
 Z4Translations.
 Z4Translations.UNIFORM_SIGN = "Segno Uniforme";
-Z4Translations.LENGTH = "Lunghezza";
+
 Z4Translations.START_ANGLE = "Angolo Iniziale";
 Z4Translations.ANGLE = "Angolo";
 Z4Translations.FIXED = "Fisso";

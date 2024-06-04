@@ -29,7 +29,7 @@ class Z4SignedValuePanel extends Z4AbstractValuePanel {
       this.add(this.label, new GBC(0, 0).a(GBC.WEST));
       this.signPanel = new Z4SignPanel(Z4SignPanelOrientation.HORIZONTAL);
       this.add(this.signPanel, new GBC(0, 1));
-      this.add(this.valueSpinner, new GBC(0, 2).f(GBC.HORIZONTAL).i(1, 0, 0, 0));
+      this.add(this.valueSpinner, new GBC(0, 2).wx(1).f(GBC.HORIZONTAL).i(1, 0, 0, 0));
     } else {
       this.signPanel = null;
     }

@@ -56,6 +56,7 @@ public class Z4SignPanel extends Z4AbstractValuePanel<Z4Sign> {
 
   private void addRadio(Z4SignBehavior behavior, ButtonGroup buttonGroup, int x, int y, String border) {
     JSRadioButton radio = new JSRadioButton();
+    radio.cssAddClass("z4signpanel-radio");
     radio.getStyle().padding = "1px";
     radio.setTooltip(Z4Translations.$get("" + behavior));
     radio.setToggle();

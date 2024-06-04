@@ -1,19 +1,19 @@
 .z4signpanel {
 }
 
-.z4signpanel label img {
+.z4signpanel .z4signpanel-radio img {
   width: 16px;
   height: 16px;
 }
-.z4signpanel label:nth-child(1) img {
+.z4signpanel .z4signpanel-radio:nth-child(1) img {
   content: url(../image/math/z4signbehavior_positive.svg);
 }
-.z4signpanel label:nth-child(2) img {
+.z4signpanel .z4signpanel-radio:nth-child(2) img {
   content: url(../image/math/z4signbehavior_negative.svg);
 }
-.z4signpanel label:nth-child(3) img {
+.z4signpanel .z4signpanel-radio:nth-child(3) img {
   content: url(../image/math/z4signbehavior_random.svg);
 }
-.z4signpanel label:nth-child(4) img {
+.z4signpanel .z4signpanel-radio:nth-child(4) img {
   content: url(../image/math/z4signbehavior_alternate.svg);
 }
