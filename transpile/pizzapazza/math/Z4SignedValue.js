@@ -42,4 +42,21 @@ class Z4SignedValue extends Z4Nextable {
    next() {
     return this.sign.next() * this.value;
   }
+
+   toJSON() {
+    let json = new Object();
+    json["sign"] = this.sign.toJSON();
+    json["value"] = this.value;
+    return json;
+  }
+
+  /**
+   * Creates a Z4SignedValue from a JSON object
+   *
+   * @param json The JSON object
+   * @return the signed value
+   */
+  static  fromJSON(json) {
+    return new Z4SignedValue(Z4Sign.fromJSON(json["sign"]), json["value"]);
+  }
 }

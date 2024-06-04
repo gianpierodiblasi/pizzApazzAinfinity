@@ -1,6 +1,7 @@
 package pizzapazza.math;
 
 import simulation.bezier.$Bezier;
+import simulation.js.$Object;
 
 /**
  * A random value
@@ -111,6 +112,36 @@ public class Z4RandomValue implements Z4Nextable<Double> {
       return this.value * this.prevRandom;
     } else {
       return 0.0;
+    }
+  }
+
+  @Override
+  public $Object toJSON() {
+    $Object json = new $Object();
+    json.$set("value", this.value);
+    json.$set("behavior", this.behavior);
+    json.$set("length", this.length);
+    return json;
+  }
+
+  /**
+   * Creates a Z4RandomValue from a JSON object
+   *
+   * @param json The JSON object
+   * @return the random value
+   */
+  public static Z4RandomValue fromJSON($Object json) {
+    switch ("" + json.$get("behavior")) {
+      case "CLASSIC":
+        return new Z4RandomValue(json.$get("value"), Z4RandomValueBehavior.CLASSIC, json.$get("length"));
+      case "BEZIER":
+        return new Z4RandomValue(json.$get("value"), Z4RandomValueBehavior.BEZIER, json.$get("length"));
+      case "POLYLINE":
+        return new Z4RandomValue(json.$get("value"), Z4RandomValueBehavior.POLYLINE, json.$get("length"));
+      case "STEPPED":
+        return new Z4RandomValue(json.$get("value"), Z4RandomValueBehavior.STEPPED, json.$get("length"));
+      default:
+        return null;
     }
   }
 }

@@ -27,12 +27,6 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
   private final $HTMLElement radioRange = this.querySelector(".signed-value-radio-range");
   private final $HTMLElement spinner = this.querySelector(".signed-value-range-input");
 
-  private final $Apply_0_Void applySpin = () -> this.spin();
-  private final $Apply_2_Void<Integer, Double> applyMinusPlus = (sign, speed) -> this.doMinusPlus(sign, speed, this.isApplyMinusPlus, () -> this.applyMinusPlus.$apply(sign, Math.min(50, speed + 1)));
-  private boolean isApplySpin;
-  private boolean isApplyMinusPlus;
-  private int timeoutID;
-
   private boolean signVisible = true;
   private int min = 0;
   private int max = 1000000000;
@@ -64,27 +58,6 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
     };
     this.querySelector(".signed-value-radio-range-label").setAttribute("for", this.radioRange.id);
 
-    $HTMLElement minus = this.querySelector(".signed-value-range-minus");
-    $HTMLElement plus = this.querySelector(".signed-value-range-plus");
-
-    if (Z4Loader.touch) {
-      this.spinner.ontouchstart = (event) -> this.startSpin();
-      this.spinner.ontouchend = (event) -> this.stopSpin();
-      minus.ontouchstart = (event) -> this.minusPlus(-1);
-      minus.ontouchend = (event) -> this.minusPlus(0);
-      plus.ontouchstart = (event) -> this.minusPlus(1);
-      plus.ontouchend = (event) -> this.minusPlus(0);
-    } else {
-      this.spinner.onmousedown = (event) -> this.startSpin();
-      this.spinner.onmouseup = (event) -> this.stopSpin();
-      minus.onmousedown = (event) -> this.minusPlus(-1);
-      minus.onmouseup = (event) -> this.minusPlus(0);
-      minus.onmouseleave = (event) -> this.minusPlus(0);
-      plus.onmousedown = (event) -> this.minusPlus(1);
-      plus.onmouseup = (event) -> this.minusPlus(0);
-      plus.onmouseleave = (event) -> this.minusPlus(0);
-    }
-
     this.spinner.oninput = (event) -> {
       if (this.radioRange.checked) {
         double v = this.getReversedValue(this.spinner.valueAsNumber);
@@ -103,66 +76,6 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
     };
 
     this.setValue(new Z4SignedValue());
-  }
-
-  private Object startSpin() {
-    if (this.radioSpinner.checked) {
-      this.isApplySpin = true;
-      this.applySpin.$apply();
-    }
-    return null;
-  }
-
-  private Object stopSpin() {
-    if (this.radioSpinner.checked) {
-      this.isApplySpin = false;
-      this.spinner.value = "0";
-      this.onchange.$apply(this.value);
-    }
-    return null;
-  }
-
-  private void spin() {
-    double abs = Math.max(1, Math.abs(this.spinner.valueAsNumber));
-
-    if ($exists(this.spinner.valueAsNumber)) {
-      this.doMinusPlus(this.spinner.valueAsNumber > 0 ? 1 : -1, abs, this.isApplySpin, this.applySpin);
-    } else {
-      clearTimeout(this.timeoutID);
-      if (this.isApplySpin) {
-        this.timeoutID = setTimeout(this.applySpin, 500 / abs);
-      }
-    }
-  }
-
-  private Object minusPlus(int sign) {
-    if ($exists(sign)) {
-      this.isApplyMinusPlus = true;
-      this.applyMinusPlus.$apply(sign, 1.0);
-    } else if (this.isApplyMinusPlus) {
-      this.isApplyMinusPlus = false;
-      clearTimeout(this.timeoutID);
-      this.onchange.$apply(this.value);
-    }
-    return null;
-  }
-
-  private void doMinusPlus(int sign, double speed, boolean isApply, $Apply_0_Void apply) {
-    double rangedMax = this.getRangedValue(this.max);
-    double rangedValue = Math.max(0, this.getRangedValue(this.value.getValue()) + sign);
-    rangedValue = Math.min(rangedValue, rangedMax);
-    double reversedValue = this.getReversedValue(rangedValue);
-
-    this.valueLabel.innerText = "" + reversedValue;
-    if (this.radioRange.checked) {
-      this.spinner.value = "" + rangedValue;
-    }
-
-    this.oninput.$apply(this.value.setValue(reversedValue));
-    clearTimeout(this.timeoutID);
-    if (isApply) {
-      this.timeoutID = setTimeout(apply, 500 / speed);
-    }
   }
 
   /**

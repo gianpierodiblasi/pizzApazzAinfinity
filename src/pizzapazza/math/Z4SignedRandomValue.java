@@ -1,5 +1,7 @@
 package pizzapazza.math;
 
+import simulation.js.$Object;
+
 /**
  * A random value with sign
  *
@@ -43,5 +45,23 @@ public class Z4SignedRandomValue implements Z4Nextable<Double> {
   @Override
   public Double next() {
     return this.sign.next() * this.value.next();
+  }
+
+  @Override
+  public $Object toJSON() {
+    $Object json = new $Object();
+    json.$set("sign", this.sign.toJSON());
+    json.$set("value", this.value.toJSON());
+    return json;
+  }
+
+  /**
+   * Creates a Z4SignedRandomValue from a JSON object
+   *
+   * @param json The JSON object
+   * @return the signed random value
+   */
+  public static Z4SignedRandomValue fromJSON($Object json) {
+    return new Z4SignedRandomValue(Z4Sign.fromJSON(json.$get("sign")), Z4RandomValue.fromJSON(json.$get("value")));
   }
 }

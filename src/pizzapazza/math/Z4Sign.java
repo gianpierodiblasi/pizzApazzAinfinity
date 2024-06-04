@@ -71,7 +71,6 @@ public class Z4Sign implements Z4Nextable<Integer> {
    * @param json The JSON object
    * @return the sign
    */
-  @SuppressWarnings("unchecked")
   public static Z4Sign fromJSON($Object json) {
     switch ("" + json.$get("behavior")) {
       case "POSITIVE":

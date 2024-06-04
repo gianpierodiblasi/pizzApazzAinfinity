@@ -7292,6 +7292,24 @@ class Z4FancifulValue extends Z4Nextable {
       return this.constant.next() + this.random.next();
     }
   }
+
+   toJSON() {
+    let json = new Object();
+    json["constant"] = this.constant.toJSON();
+    json["random"] = this.random.toJSON();
+    json["uniform"] = this.uniformSign;
+    return json;
+  }
+
+  /**
+   * Creates a Z4FancifulValue from a JSON object
+   *
+   * @param json The JSON object
+   * @return the fanciful value
+   */
+  static  fromJSON(json) {
+    return new Z4FancifulValue(Z4SignedValue.fromJSON(json["constant"]), Z4SignedRandomValue.fromJSON(json["random"]), json["uniform"]);
+  }
 }
 /**
  * A random value
@@ -7401,6 +7419,35 @@ class Z4RandomValue extends Z4Nextable {
       return this.value * this.prevRandom;
     } else {
       return 0.0;
+    }
+  }
+
+   toJSON() {
+    let json = new Object();
+    json["value"] = this.value;
+    json["behavior"] = this.behavior;
+    json["length"] = this.length;
+    return json;
+  }
+
+  /**
+   * Creates a Z4RandomValue from a JSON object
+   *
+   * @param json The JSON object
+   * @return the random value
+   */
+  static  fromJSON(json) {
+    switch("" + json["behavior"]) {
+      case "CLASSIC":
+        return new Z4RandomValue(json["value"], Z4RandomValueBehavior.CLASSIC, json["length"]);
+      case "BEZIER":
+        return new Z4RandomValue(json["value"], Z4RandomValueBehavior.BEZIER, json["length"]);
+      case "POLYLINE":
+        return new Z4RandomValue(json["value"], Z4RandomValueBehavior.POLYLINE, json["length"]);
+      case "STEPPED":
+        return new Z4RandomValue(json["value"], Z4RandomValueBehavior.STEPPED, json["length"]);
+      default:
+        return null;
     }
   }
 }
@@ -7529,6 +7576,23 @@ class Z4SignedRandomValue extends Z4Nextable {
    next() {
     return this.sign.next() * this.value.next();
   }
+
+   toJSON() {
+    let json = new Object();
+    json["sign"] = this.sign.toJSON();
+    json["value"] = this.value.toJSON();
+    return json;
+  }
+
+  /**
+   * Creates a Z4SignedRandomValue from a JSON object
+   *
+   * @param json The JSON object
+   * @return the signed random value
+   */
+  static  fromJSON(json) {
+    return new Z4SignedRandomValue(Z4Sign.fromJSON(json["sign"]), Z4RandomValue.fromJSON(json["value"]));
+  }
 }
 /**
  * A value with sign
@@ -7573,6 +7637,23 @@ class Z4SignedValue extends Z4Nextable {
 
    next() {
     return this.sign.next() * this.value;
+  }
+
+   toJSON() {
+    let json = new Object();
+    json["sign"] = this.sign.toJSON();
+    json["value"] = this.value;
+    return json;
+  }
+
+  /**
+   * Creates a Z4SignedValue from a JSON object
+   *
+   * @param json The JSON object
+   * @return the signed value
+   */
+  static  fromJSON(json) {
+    return new Z4SignedValue(Z4Sign.fromJSON(json["sign"]), json["value"]);
   }
 }
 /**

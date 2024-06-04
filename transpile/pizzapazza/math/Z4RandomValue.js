@@ -108,4 +108,33 @@ class Z4RandomValue extends Z4Nextable {
       return 0.0;
     }
   }
+
+   toJSON() {
+    let json = new Object();
+    json["value"] = this.value;
+    json["behavior"] = this.behavior;
+    json["length"] = this.length;
+    return json;
+  }
+
+  /**
+   * Creates a Z4RandomValue from a JSON object
+   *
+   * @param json The JSON object
+   * @return the random value
+   */
+  static  fromJSON(json) {
+    switch("" + json["behavior"]) {
+      case "CLASSIC":
+        return new Z4RandomValue(json["value"], Z4RandomValueBehavior.CLASSIC, json["length"]);
+      case "BEZIER":
+        return new Z4RandomValue(json["value"], Z4RandomValueBehavior.BEZIER, json["length"]);
+      case "POLYLINE":
+        return new Z4RandomValue(json["value"], Z4RandomValueBehavior.POLYLINE, json["length"]);
+      case "STEPPED":
+        return new Z4RandomValue(json["value"], Z4RandomValueBehavior.STEPPED, json["length"]);
+      default:
+        return null;
+    }
+  }
 }

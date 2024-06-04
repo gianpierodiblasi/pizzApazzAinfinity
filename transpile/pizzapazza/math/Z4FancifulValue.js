@@ -62,4 +62,22 @@ class Z4FancifulValue extends Z4Nextable {
       return this.constant.next() + this.random.next();
     }
   }
+
+   toJSON() {
+    let json = new Object();
+    json["constant"] = this.constant.toJSON();
+    json["random"] = this.random.toJSON();
+    json["uniform"] = this.uniformSign;
+    return json;
+  }
+
+  /**
+   * Creates a Z4FancifulValue from a JSON object
+   *
+   * @param json The JSON object
+   * @return the fanciful value
+   */
+  static  fromJSON(json) {
+    return new Z4FancifulValue(Z4SignedValue.fromJSON(json["constant"]), Z4SignedRandomValue.fromJSON(json["random"]), json["uniform"]);
+  }
 }

@@ -1,5 +1,7 @@
 package pizzapazza.math;
 
+import simulation.js.$Object;
+
 /**
  * The fanciful value
  *
@@ -62,5 +64,24 @@ public class Z4FancifulValue implements Z4Nextable<Double> {
     } else {
       return this.constant.next() + this.random.next();
     }
+  }
+
+  @Override
+  public $Object toJSON() {
+    $Object json = new $Object();
+    json.$set("constant", this.constant.toJSON());
+    json.$set("random", this.random.toJSON());
+    json.$set("uniform", this.uniformSign);
+    return json;
+  }
+
+  /**
+   * Creates a Z4FancifulValue from a JSON object
+   *
+   * @param json The JSON object
+   * @return the fanciful value
+   */
+  public static Z4FancifulValue fromJSON($Object json) {
+    return new Z4FancifulValue(Z4SignedValue.fromJSON(json.$get("constant")), Z4SignedRandomValue.fromJSON(json.$get("random")), json.$get("uniform"));
   }
 }
