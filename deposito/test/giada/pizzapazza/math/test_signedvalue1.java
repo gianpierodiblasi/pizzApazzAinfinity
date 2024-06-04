@@ -18,19 +18,6 @@ import static simulation.js.$Globals.document;
 public class test_signedvalue1 {
 
   public static void onLoad() {
-    document.$getElementById("language").value = Z4Setting.getLanguage();
-    document.$getElementById("language").onchange = (event) -> {
-      Z4Setting.setLanguage(document.$getElementById("language").value);
-      Z4MessageFactory.changingLanguage();
-      return null;
-    };
-
-    document.$getElementById("theme").value = Z4Setting.getTheme();
-    document.$getElementById("theme").onchange = (event) -> {
-      Z4Setting.setTheme(document.$getElementById("theme").value);
-      return null;
-    };
-
     Z4SignedValueUI ui1 = new Z4SignedValueUI().appendToElement(document.querySelector("#test1"));
     Z4SignedValueUI ui2 = new Z4SignedValueUI().setRange(30, 80, true).setValueLabel("INTENSITY", true, true).setValue(new Z4SignedValue().setSign(Z4Sign.NEGATIVE).setValue(50)).appendToElement(document.querySelector("#test3"));
     Z4SignedValueUI ui3 = new Z4SignedValueUI().setCompact().setRange(0, 1000, true).setValueLabel("INTENSITY", true, true).setValue(new Z4SignedValue().setSign(Z4Sign.NEGATIVE).setValue(50)).appendToElement(document.querySelector("#test5"));
@@ -60,27 +47,6 @@ public class test_signedvalue1 {
       ui3.setEnabled((($HTMLElement) document.getElementById("enabled")).checked);
       return null;
     };
-  }
-
-  private static String stringify(Object object) {
-    @SuppressWarnings("StringEquality")
-    BiFunction<String, Object, Object> replacer = (k, v) -> {
-      if (!$exists(k)) {
-        return v;
-      } else if (k == "bezierCurve") { // JS equality for strings
-        return null;
-      } else if ($typeof(v, "number")) {
-        return v;
-      } else if ($typeof(v, "boolean")) {
-        return v;
-      } else if (Array.isArray(v)) {
-        return v;
-      } else {
-        return JSON.stringify(v).replaceAll("\"", "").replaceAll("\n", "");
-      }
-    };
-
-    return JSON.stringify(object, replacer, "\t").replaceAll("\"", "");
   }
 
   private test_signedvalue1() {

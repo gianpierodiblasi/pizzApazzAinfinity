@@ -38,9 +38,6 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
   private int max = 1000000000;
   private boolean tenMultiplier = true;
 
-  private final static String PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
-  private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/math/ui/Z4SignedValueUI.html");
-
   /**
    * Creates a Z4SignedValueUI
    */
@@ -400,9 +397,5 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
     }
 
     return (T) this;
-  }
-
-  @Override
-  public void dispose() {
   }
 }

@@ -93,6 +93,9 @@
 }
 
 /* panel */
+.z4abstractvaluepanel {
+}
+
 .z4exporttofilepanel {
 }
 
@@ -357,4 +360,6 @@
 }
 .z4ribbonhelppanel .z4check-install span {
   margin-top: -3px;
+}
+.z4signpanel {
 }
