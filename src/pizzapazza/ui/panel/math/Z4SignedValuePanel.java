@@ -104,4 +104,13 @@ public class Z4SignedValuePanel extends Z4AbstractValuePanel<Z4SignedValue> {
     this.signPanel.setEnabled(b);
     this.valueSpinner.setEnabled(b);
   }
+
+  /**
+   * Sets the visibility of the sign
+   *
+   * @param visible true to make the sign visible, false otherwise
+   */
+  public void setSignVisible(boolean visible) {
+    this.signPanel.getStyle().display = visible ? "grid" : "none";
+  }
 }
