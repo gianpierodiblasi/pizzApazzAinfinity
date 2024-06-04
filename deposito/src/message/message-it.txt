@@ -1,57 +1,54 @@
-# General
-TYPE = Tipo
-START = Start
-STOP = Stop
-NONE_HIM = Nessuno
-NONE_HER = Nessuna
+# General";
+Z4Translations.TYPE = "Tipo";
+Z4Translations.START = "Start";
+Z4Translations.STOP = "Stop";
+Z4Translations.NONE_HIM = "Nessuno";
+Z4Translations.NONE_HER = "Nessuna";
 
 # Math
-RANDOM_SHORT = Rnd
-VALUE = Valore
-SIGN = Segno
-SPINNER = Spinner
-RANGE = Range
-CONSTANT = Costante
-CONSTANT_SHORT = Cost
-CLASSIC = Classico
-STEPPED = A Gradino
-POLYLINE = Polilinea
-BEZIER = Bezier
-UNIFORM_SIGN = Segno Uniforme
-LENGTH = Lunghezza
-START_ANGLE = Angolo Iniziale
-ANGLE = Angolo
-FIXED = Fisso
-CUMULATIVE = Cumulativo
-RELATIVE_TO_PATH = Relativo al Percorso
-DELAYED = Ritardato
+Z4Translations.RANDOM_SHORT = "Rnd";
+Z4Translations.VALUE = "Valore";
+Z4Translations.SIGN = "Segno";
+Z4Translations.SPINNER = "Spinner";
+Z4Translations.RANGE = "Range";
+Z4Translations.CONSTANT = "Costante";
+Z4Translations.CONSTANT_SHORT = "Cost";
+Z4Translations.
+Z4Translations.UNIFORM_SIGN = "Segno Uniforme";
+Z4Translations.LENGTH = "Lunghezza";
+Z4Translations.START_ANGLE = "Angolo Iniziale";
+Z4Translations.ANGLE = "Angolo";
+Z4Translations.FIXED = "Fisso";
+Z4Translations.CUMULATIVE = "Cumulativo";
+Z4Translations.RELATIVE_TO_PATH = "Relativo al Percorso";
+Z4Translations.DELAYED = "Ritardato";
 
 # Color
-LIGHTING = Illuminazione
-LIGHTED = Illuminato
-DARKENED = Incupito
-SPATIAL = Spaziale
-TEMPORAL = Temporale
+Z4Translations.LIGHTING = "Illuminazione";
+Z4Translations.LIGHTED = "Illuminato";
+Z4Translations.DARKENED = "Incupito";
+Z4Translations.SPATIAL = "Spaziale";
+Z4Translations.TEMPORAL = "Temporale";
 
 # Label
-INTENSITY = Intensità
-MULTIPLICITY = Molteplicità
-PUSH = Spinta
-ROTATION = Rotazione
-ATTACK = Attacco
-SUSTAIN = Sostegno
-RELEASE = Rilascio
-ENDLESS = Infinito
-STEP = Passo
-SHAPE = Forma
-SIZE = Dimensione
-SHADOW = Ombra
-BORDER = Bordo
-REGULAR = Regolare
-SHADOW = Ombra
-DELTA_X = Delta X
-DELTA_Y = Delta Y
-BORDER = Bordo
-ARROW_MODULE = Modulo Freccia
-RADIUS = Raggio
-SPEED = Velocità
+Z4Translations.INTENSITY = "Intensità";
+Z4Translations.MULTIPLICITY = "Molteplicità";
+Z4Translations.PUSH = "Spinta";
+Z4Translations.ROTATION = "Rotazione";
+Z4Translations.ATTACK = "Attacco";
+Z4Translations.SUSTAIN = "Sostegno";
+Z4Translations.RELEASE = "Rilascio";
+Z4Translations.ENDLESS = "Infinito";
+Z4Translations.STEP = "Passo";
+Z4Translations.SHAPE = "Forma";
+Z4Translations.SIZE = "Dimensione";
+Z4Translations.SHADOW = "Ombra";
+Z4Translations.BORDER = "Bordo";
+Z4Translations.REGULAR = "Regolare";
+Z4Translations.SHADOW = "Ombra";
+Z4Translations.DELTA_X = "Delta X";
+Z4Translations.DELTA_Y = "Delta Y";
+Z4Translations.BORDER = "Bordo";
+Z4Translations.ARROW_MODULE = "Modulo Freccia";
+Z4Translations.RADIUS = "Raggio";
+Z4Translations.SPEED = "Velocità

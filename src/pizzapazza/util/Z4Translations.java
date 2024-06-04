@@ -131,6 +131,10 @@ public class Z4Translations {
   public static String NEGATIVE = "";
   public static String ALTERNATE = "";
   public static String RANDOM = "";
+  public static String CLASSIC = "";
+  public static String STEPPED = "";
+  public static String POLYLINE = "";
+  public static String BEZIER = "";
 
   // Composite Operation
   public static String COMPOSITE_OPERATION = "";
@@ -297,6 +301,10 @@ public class Z4Translations {
     Z4Translations.NEGATIVE = "Negative";
     Z4Translations.ALTERNATE = "Alternate";
     Z4Translations.RANDOM = "Random";
+    Z4Translations.CLASSIC = "Classic";
+    Z4Translations.STEPPED = "Stepped";
+    Z4Translations.POLYLINE = "Polyline";
+    Z4Translations.BEZIER = "Bezier";
 
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
@@ -447,7 +455,11 @@ public class Z4Translations {
     Z4Translations.NEGATIVE = "Negativo";
     Z4Translations.ALTERNATE = "Alternato";
     Z4Translations.RANDOM = "Random";
-    
+    Z4Translations.CLASSIC = "Classico";
+    Z4Translations.STEPPED = "A Gradino";
+    Z4Translations.POLYLINE = "Polilinea";
+    Z4Translations.BEZIER = "Bezier";
+
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "Questa \u00E8 l'impostazione predefinita e disegna il livello sopra il contenuto esistente";
