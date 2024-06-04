@@ -6,14 +6,14 @@
   height: 16px;
 }
 .z4signpanel label:nth-child(1) img {
-  content: url(../image/math/z4sign_positive.svg);
+  content: url(../image/math/z4signbehavior_positive.svg);
 }
 .z4signpanel label:nth-child(2) img {
-  content: url(../image/math/z4sign_negative.svg);
+  content: url(../image/math/z4signbehavior_negative.svg);
 }
 .z4signpanel label:nth-child(3) img {
-  content: url(../image/math/z4sign_random.svg);
+  content: url(../image/math/z4signbehavior_random.svg);
 }
 .z4signpanel label:nth-child(4) img {
-  content: url(../image/math/z4sign_alternate.svg);
+  content: url(../image/math/z4signbehavior_alternate.svg);
 }

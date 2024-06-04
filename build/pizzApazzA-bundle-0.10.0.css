@@ -346,6 +346,24 @@
 
 .z4layerpreview .z4layerpreview-editor[offset=true], .z4layerpreview .z4layerpreview-editor[offset=true] * {
   background: transparent;
+}.z4randomvaluepanel {
+}
+
+.z4randomvaluepanel label img {
+  width: 16px;
+  height: 16px;
+}
+.z4randomvaluepanel label:nth-child(1) img {
+  content: url(../image/math/z4randomvaluebehavior_classic.svg);
+}
+.z4randomvaluepanel label:nth-child(2) img {
+  content: url(../image/math/z4randomvaluebehavior_bezier.svg);
+}
+.z4randomvaluepanel label:nth-child(3) img {
+  content: url(../image/math/z4randomvaluebehavior_polyline.svg);
+}
+.z4randomvaluepanel label:nth-child(4) img {
+  content: url(../image/math/z4randomvaluebehavior_stepped.svg);
 }.z4ribbonhelppanel {
 }
 .z4ribbonhelppanel-about .z4ribbonhelppanel-splash {
@@ -369,14 +387,14 @@
   height: 16px;
 }
 .z4signpanel label:nth-child(1) img {
-  content: url(../image/math/z4sign_positive.svg);
+  content: url(../image/math/z4signbehavior_positive.svg);
 }
 .z4signpanel label:nth-child(2) img {
-  content: url(../image/math/z4sign_negative.svg);
+  content: url(../image/math/z4signbehavior_negative.svg);
 }
 .z4signpanel label:nth-child(3) img {
-  content: url(../image/math/z4sign_random.svg);
+  content: url(../image/math/z4signbehavior_random.svg);
 }
 .z4signpanel label:nth-child(4) img {
-  content: url(../image/math/z4sign_alternate.svg);
+  content: url(../image/math/z4signbehavior_alternate.svg);
 }
