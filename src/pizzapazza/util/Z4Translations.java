@@ -130,12 +130,14 @@ public class Z4Translations {
   public static String POSITIVE = "";
   public static String NEGATIVE = "";
   public static String ALTERNATE = "";
+  public static String CONSTANT = "";
   public static String RANDOM = "";
   public static String CLASSIC = "";
   public static String STEPPED = "";
   public static String POLYLINE = "";
   public static String BEZIER = "";
   public static String LENGTH = "";
+  public static String UNIFORM_SIGN = "";
 
   // Composite Operation
   public static String COMPOSITE_OPERATION = "";
@@ -301,12 +303,14 @@ public class Z4Translations {
     Z4Translations.POSITIVE = "Positive";
     Z4Translations.NEGATIVE = "Negative";
     Z4Translations.ALTERNATE = "Alternate";
+    Z4Translations.CONSTANT = "Constant";
     Z4Translations.RANDOM = "Random";
     Z4Translations.CLASSIC = "Classic";
     Z4Translations.STEPPED = "Stepped";
     Z4Translations.POLYLINE = "Polyline";
     Z4Translations.BEZIER = "Bezier";
     Z4Translations.LENGTH = "Length";
+    Z4Translations.UNIFORM_SIGN = "Uniform Sign";
 
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
@@ -456,12 +460,14 @@ public class Z4Translations {
     Z4Translations.POSITIVE = "Positivo";
     Z4Translations.NEGATIVE = "Negativo";
     Z4Translations.ALTERNATE = "Alternato";
+    Z4Translations.CONSTANT = "Costante";
     Z4Translations.RANDOM = "Random";
     Z4Translations.CLASSIC = "Classico";
     Z4Translations.STEPPED = "A Gradino";
     Z4Translations.POLYLINE = "Polilinea";
     Z4Translations.BEZIER = "Bezier";
     Z4Translations.LENGTH = "Lunghezza";
+    Z4Translations.UNIFORM_SIGN = "Segno Uniforme";
 
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";

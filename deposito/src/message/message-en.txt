@@ -6,15 +6,10 @@ Z4Translations.NONE_HIM = "None";
 Z4Translations.NONE_HER = "None";
 
 # Math
-Z4Translations.RANDOM_SHORT = "Rnd";
 Z4Translations.VALUE = "Value";
 Z4Translations.SIGN = "Sign";
 Z4Translations.SPINNER = "Spinner";
 Z4Translations.RANGE = "Range";
-Z4Translations.CONSTANT = "Constant";
-Z4Translations.CONSTANT_SHORT = "Const";
-Z4Translations.UNIFORM_SIGN = "Uniform Sign";
-
 Z4Translations.START_ANGLE = "Start Angle";
 Z4Translations.ANGLE = "Angle";
 Z4Translations.FIXED = "Fixed";
