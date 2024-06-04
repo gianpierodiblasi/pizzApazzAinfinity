@@ -4236,6 +4236,22 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
   }
 }
 /**
+ * The orientation of a signed value panel
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4SignedValuePanelOrientation {
+
+  /**
+   * The signed value panel is visualized horizontally
+   */
+  static HORIZONTAL = 'HORIZONTAL';
+  /**
+   * The signed value panel is visualized vertically
+   */
+  static VERTICAL = 'VERTICAL';
+}
+/**
  * The orientation of a sign panel
  *
  * @author gianpiero.diblasi
@@ -5223,18 +5239,34 @@ class Z4SignedValuePanel extends Z4AbstractValuePanel {
 
    label = new JSLabel();
 
-   signPanel = new Z4SignPanel(Z4SignPanelOrientation.HORIZONTAL);
+   signPanel = null;
 
    valueSpinner = new JSSpinner();
 
   /**
    * Creates the object
+   *
+   * @param orientation The orientation
    */
-  constructor() {
+  constructor(orientation) {
     super();
     this.cssAddClass("z4signedvaluepanel");
     this.setLayout(new GridBagLayout());
+    if (orientation === Z4SignedValuePanelOrientation.HORIZONTAL) {
+      this.add(this.label, new GBC(1, 0).a(GBC.WEST));
+      this.signPanel = new Z4SignPanel(Z4SignPanelOrientation.SQUARED);
+      this.add(this.signPanel, new GBC(0, 0).h(2).a(GBC.SOUTH));
+      this.add(this.valueSpinner, new GBC(1, 1).a(GBC.SOUTH).i(0, 1, 0, 0));
+    } else if (orientation === Z4SignedValuePanelOrientation.VERTICAL) {
+      this.add(this.label, new GBC(0, 0).a(GBC.WEST));
+      this.signPanel = new Z4SignPanel(Z4SignPanelOrientation.HORIZONTAL);
+      this.add(this.signPanel, new GBC(0, 1));
+      this.add(this.valueSpinner, new GBC(0, 2).f(GBC.HORIZONTAL).i(1, 0, 0, 0));
+    } else {
+      this.signPanel = null;
+    }
     this.signPanel.addChangeListener(event => this.onSignedValueChange());
+    this.valueSpinner.cssAddClass("jsspinner_w_4rem");
     this.valueSpinner.setModel(new SpinnerNumberModel(0, 0, 50, 1));
     this.valueSpinner.addChangeListener(event => this.onSignedValueChange());
     this.setValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0));
@@ -5325,11 +5357,12 @@ class Z4SignPanel extends Z4AbstractValuePanel {
    addRadio(behavior, buttonGroup, x, y, border) {
     let radio = new JSRadioButton();
     radio.getStyle().padding = "1px";
-    radio.setContentAreaFilled(false);
     radio.setTooltip(Z4Translations["" + behavior]);
     radio.setToggle();
     radio.setIcon(new Z4EmptyImageProducer(behavior));
     radio.addActionListener(event => {
+      Object.keys(this.radios).forEach(key => (this.radios[key]).setContentAreaFilled(false));
+      radio.setContentAreaFilled(true);
       this.value = new Z4Sign(behavior);
       this.onchange();
     });
@@ -5400,7 +5433,9 @@ class Z4SignPanel extends Z4AbstractValuePanel {
 
    setValue(value) {
     this.value = value;
+    Object.keys(this.radios).forEach(key => (this.radios[key]).setContentAreaFilled(false));
     (this.radios["" + value.getSignBehavior()]).setSelected(true);
+    (this.radios["" + value.getSignBehavior()]).setContentAreaFilled(true);
   }
 
    setEnabled(b) {

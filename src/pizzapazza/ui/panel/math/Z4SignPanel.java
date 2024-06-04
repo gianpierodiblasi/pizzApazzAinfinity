@@ -57,11 +57,12 @@ public class Z4SignPanel extends Z4AbstractValuePanel<Z4Sign> {
   private void addRadio(Z4SignBehavior behavior, ButtonGroup buttonGroup, int x, int y, String border) {
     JSRadioButton radio = new JSRadioButton();
     radio.getStyle().padding = "1px";
-    radio.setContentAreaFilled(false);
     radio.setTooltip(Z4Translations.$get("" + behavior));
     radio.setToggle();
     radio.setIcon(new Z4EmptyImageProducer<>(behavior));
     radio.addActionListener(event -> {
+      Object.keys(this.radios).forEach(key -> ((JSRadioButton) this.radios.$get(key)).setContentAreaFilled(false));
+      radio.setContentAreaFilled(true);
       this.value = new Z4Sign(behavior);
       this.onchange();
     });
@@ -135,7 +136,9 @@ public class Z4SignPanel extends Z4AbstractValuePanel<Z4Sign> {
   @Override
   public void setValue(Z4Sign value) {
     this.value = value;
+    Object.keys(this.radios).forEach(key -> ((JSRadioButton) this.radios.$get(key)).setContentAreaFilled(false));
     ((JSRadioButton) this.radios.$get("" + value.getSignBehavior())).setSelected(true);
+    ((JSRadioButton) this.radios.$get("" + value.getSignBehavior())).setContentAreaFilled(true);
   }
 
   @Override

@@ -39,11 +39,12 @@ class Z4SignPanel extends Z4AbstractValuePanel {
    addRadio(behavior, buttonGroup, x, y, border) {
     let radio = new JSRadioButton();
     radio.getStyle().padding = "1px";
-    radio.setContentAreaFilled(false);
     radio.setTooltip(Z4Translations["" + behavior]);
     radio.setToggle();
     radio.setIcon(new Z4EmptyImageProducer(behavior));
     radio.addActionListener(event => {
+      Object.keys(this.radios).forEach(key => (this.radios[key]).setContentAreaFilled(false));
+      radio.setContentAreaFilled(true);
       this.value = new Z4Sign(behavior);
       this.onchange();
     });
@@ -114,7 +115,9 @@ class Z4SignPanel extends Z4AbstractValuePanel {
 
    setValue(value) {
     this.value = value;
+    Object.keys(this.radios).forEach(key => (this.radios[key]).setContentAreaFilled(false));
     (this.radios["" + value.getSignBehavior()]).setSelected(true);
+    (this.radios["" + value.getSignBehavior()]).setContentAreaFilled(true);
   }
 
    setEnabled(b) {
