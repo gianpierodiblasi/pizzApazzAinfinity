@@ -4,7 +4,7 @@
  * @author gianpiero.diblasi
  * @param <T> The next value type
  */
-class Z4Nextable {
+class Z4Nextable extends Z4JSONable {
 
   /**
    * Returns the next value

@@ -51,4 +51,31 @@ class Z4Sign extends Z4Nextable {
         return this.sign / 2;
     }
   }
+
+   toJSON() {
+    let json = new Object();
+    json["behavior"] = this.behavior;
+    return json;
+  }
+
+  /**
+   * Creates a Z4Sign from a JSON object
+   *
+   * @param json The JSON object
+   * @return the sign
+   */
+  static  fromJSON(json) {
+    switch("" + json["behavior"]) {
+      case "POSITIVE":
+        return new Z4Sign(Z4SignBehavior.POSITIVE);
+      case "NEGATIVE":
+        return new Z4Sign(Z4SignBehavior.NEGATIVE);
+      case "RANDOM":
+        return new Z4Sign(Z4SignBehavior.RANDOM);
+      case "ALTERNATE":
+        return new Z4Sign(Z4SignBehavior.ALTERNATE);
+      default:
+        return null;
+    }
+  }
 }

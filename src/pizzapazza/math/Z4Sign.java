@@ -1,6 +1,7 @@
 package pizzapazza.math;
 
 import def.js.Math;
+import simulation.js.$Object;
 
 /**
  * The signs of a value
@@ -54,6 +55,35 @@ public class Z4Sign implements Z4Nextable<Integer> {
       case -2:
         this.sign *= -1;
         return this.sign / 2;
+    }
+  }
+
+  @Override
+  public $Object toJSON() {
+    $Object json = new $Object();
+    json.$set("behavior", this.behavior);
+    return json;
+  }
+
+  /**
+   * Creates a Z4Sign from a JSON object
+   *
+   * @param json The JSON object
+   * @return the sign
+   */
+  @SuppressWarnings("unchecked")
+  public static Z4Sign fromJSON($Object json) {
+    switch ("" + json.$get("behavior")) {
+      case "POSITIVE":
+        return new Z4Sign(Z4SignBehavior.POSITIVE);
+      case "NEGATIVE":
+        return new Z4Sign(Z4SignBehavior.NEGATIVE);
+      case "RANDOM":
+        return new Z4Sign(Z4SignBehavior.RANDOM);
+      case "ALTERNATE":
+        return new Z4Sign(Z4SignBehavior.ALTERNATE);
+      default:
+        return null;
     }
   }
 }

@@ -97,380 +97,6 @@ window.onload = () => {
   }
 };
 /**
- * The abstract gradient color
- *
- * @author gianpiero.diblasi
- * @param <T> The type of color
- */
-class Z4AbstractGradientColor {
-
-  /**
-   * The array of colors
-   */
-   colors = new Array();
-
-  /**
-   * The array of positions
-   */
-   colorPositions = new Array();
-
-   ripple = 0.0;
-
-  /**
-   * Adds a color in a position, if the position is already occupied then
-   * replaces the color
-   *
-   * @param color The color
-   * @param position The position (in the range [0,1])
-   */
-   addColor(color, position) {
-    let index = this.colorPositions.findIndex(pos => pos === position);
-    if (index !== -1) {
-      this.colors[index] = color;
-    } else {
-      index = this.colorPositions.findIndex(pos => pos > position);
-      if (index !== -1) {
-        this.colors.splice(index, 0, color);
-        this.colorPositions.splice(index, 0, position);
-      } else {
-        this.colors.push(color);
-        this.colorPositions.push(position);
-      }
-    }
-  }
-
-  /**
-   * Removes a color by position, if the position is not occupied then no color
-   * is removed
-   *
-   * @param position The position (in the range [0,1])
-   */
-   removeColor(position) {
-    let index = this.colorPositions.findIndex(pos => pos === position);
-    if (index !== -1) {
-      this.colors.splice(index, 1);
-      this.colorPositions.splice(index, 1);
-    }
-  }
-
-  /**
-   * Checks if a position is occupied
-   *
-   * @param position The position (in the range [0,1])
-   * @param tolerance The accepted tolerance around the position (a very small
-   * value, for example 0.01)
-   * @return true if the position is occupied, false otherwise
-   */
-   isPositionOccupied(position, tolerance) {
-    return !!(this.colorPositions.filter(pos => Math.abs(pos - position) <= tolerance).length);
-  }
-
-  /**
-   * Returns a position based on another position and a tolerance
-   *
-   * @param position The position (in the range [0,1])
-   * @param tolerance The accepted tolerance around the position (a very small
-   * value, for example 0.01)
-   * @return The position, -1 if there is no valid position
-   */
-   getPosition(position, tolerance) {
-    let positions = this.colorPositions.filter(pos => Math.abs(pos - position) <= tolerance);
-    return positions.length ? positions[0] : -1;
-  }
-
-  /**
-   * Returns a color position in an index
-   *
-   * @param index The index
-   * @return The color position
-   */
-   getColorPositionAtIndex(index) {
-    return this.colorPositions[index];
-  }
-
-  /**
-   * Returns a color in an index
-   *
-   * @param index The index
-   * @return The color
-   */
-   getColorAtIndex(index) {
-    return this.colors[index];
-  }
-
-  /**
-   * Returns the number of managed colors
-   *
-   * @return The number of managed colors
-   */
-   getColorCount() {
-    return this.colors.length;
-  }
-
-  /**
-   * Mirrors this color
-   */
-   mirror() {
-    this.colors.slice().splice(0, this.colors.length - 1).reverse().forEach(color => this.colors.push(this.cloneColor(color)));
-    for (let index = 0; index < this.colorPositions.length; index++) {
-      this.colorPositions[index] = this.colorPositions[index] / 2;
-    }
-    this.colorPositions.slice().splice(0, this.colorPositions.length - 1).reverse().forEach(position => this.colorPositions.push(1 - position));
-  }
-
-  /**
-   * Clones a color
-   *
-   * @param color The color
-   * @return The cloned color
-   */
-   cloneColor(color) {
-  }
-
-  /**
-   * Reverses this color
-   */
-   reverse() {
-    this.colors.reverse();
-    this.colorPositions.reverse().forEach((position, index, array) => this.colorPositions[index] = 1 - position);
-  }
-
-  /**
-   * Sets the ripple
-   *
-   * @param ripple The ripple (in the range [0,1])
-   */
-   setRipple(ripple) {
-    this.ripple = ripple;
-  }
-
-  /**
-   * Returns the ripple
-   *
-   * @return The ripple (in the range [0,1])
-   */
-   getRipple() {
-    return this.ripple;
-  }
-
-  /**
-   * Returns a color in a position
-   *
-   * @param position The color position (in the range [0,1])
-   * @param useRipple true to use ripple, false otherwise
-   * @return The color
-   */
-   getColorAt(position, useRipple) {
-  }
-
-  /**
-   * Returns this color as a JSON object
-   *
-   * @return This color as a JSON object
-   */
-   toJSON() {
-  }
-}
-/**
- * The bidimensional gradient color (a bidimensional gradient between four or
- * more colors)
- *
- * @author gianpiero.diblasi
- */
-class Z4BiGradientColor extends Z4AbstractGradientColor {
-
-  /**
-   * Creates the object
-   */
-  constructor() {
-    super();
-    this.addColor(new Z4GradientColor(), 0);
-    this.addColor(new Z4GradientColor(), 1);
-  }
-
-   cloneColor(color) {
-    return Z4GradientColor.fromJSON(color.toJSON());
-  }
-
-  /**
-   * Mirrors each gradient color
-   */
-   gradientMirror() {
-    this.colors.forEach(gradientColor => gradientColor.mirror());
-  }
-
-  /**
-   * Reverses each gradient color
-   */
-   gradientReverse() {
-    this.colors.forEach(gradientColor => gradientColor.reverse());
-  }
-
-  /**
-   * Sets the ripple of each gradient color
-   *
-   * @param rippleGradient The ripple of each gradient color (in the range
-   * [0,1])
-   */
-   setGradientRipple(rippleGradient) {
-    this.colors.forEach(gradientColor => gradientColor.setRipple(rippleGradient));
-  }
-
-  /**
-   * Returns the ripple of each gradient color
-   *
-   * @return The ripple of each gradient color (in the range [0,1])
-   */
-   getGradientRipple() {
-    return this.colors[0].getRipple();
-  }
-
-   getColorAt(position, useRipple) {
-    if (useRipple && this.getRipple()) {
-      position = Z4Math.ripple(position, 0, 1, this.getRipple());
-    }
-    let finalPos = position;
-    let index = this.colorPositions.findIndex(pos => pos >= finalPos, null);
-    if (this.colorPositions[index] === position) {
-      return this.colors[index];
-    } else if (this.colorPositions[index - 1] === position) {
-      return this.colors[index - 1];
-    } else {
-      let div = (position - this.colorPositions[index - 1]) / (this.colorPositions[index] - this.colorPositions[index - 1]);
-      let before = this.colors[index - 1];
-      let after = this.colors[index];
-      let gradientColor = new Z4GradientColor();
-      gradientColor.setRipple(this.getGradientRipple());
-      before.colors.forEach((beforeColor, idx, array) => {
-        let beforePosition = before.colorPositions[idx];
-        let afterColor = after.getColorAt(beforePosition, false);
-        this.addInGradientColor(gradientColor, beforeColor, afterColor, div, beforePosition);
-      });
-      after.colors.forEach((afterColor, idx, array) => {
-        let afterPosition = after.colorPositions[idx];
-        if (gradientColor.colorPositions.findIndex(pos => pos === afterPosition) === -1) {
-          let beforeColor = before.getColorAt(afterPosition, false);
-          this.addInGradientColor(gradientColor, beforeColor, afterColor, div, afterPosition);
-        }
-      });
-      return gradientColor;
-    }
-  }
-
-   addInGradientColor(gradientColor, beforeColor, afterColor, div, position) {
-    gradientColor.addColor(new Color(parseInt((afterColor.red - beforeColor.red) * div + beforeColor.red), parseInt((afterColor.green - beforeColor.green) * div + beforeColor.green), parseInt((afterColor.blue - beforeColor.blue) * div + beforeColor.blue), parseInt((afterColor.alpha - beforeColor.alpha) * div + beforeColor.alpha)), position);
-  }
-
-   toJSON() {
-    let json = new Object();
-    json["ripple"] = this.getRipple();
-    json["colorsAndPositions"] = this.colors.map((color, index, array) => {
-      let jsonColor = new Object();
-      jsonColor["gradientColor"] = color.toJSON();
-      jsonColor["position"] = this.colorPositions[index];
-      return jsonColor;
-    });
-    return json;
-  }
-
-  /**
-   * Creates a Z4GradientColor from a JSON object
-   *
-   * @param json The JSON object
-   * @return the color
-   */
-  static  fromJSON(json) {
-    let gradientColor = new Z4BiGradientColor();
-    gradientColor.setRipple(json["ripple"]);
-    (json["colorsAndPositions"]).forEach(colorAndPosition => gradientColor.addColor(Z4GradientColor.fromJSON(colorAndPosition["gradientColor"]), colorAndPosition["position"]));
-    return gradientColor;
-  }
-}
-/**
- * The gradient color (a gradient between two or more colors)
- *
- * @author gianpiero.diblasi
- */
-class Z4GradientColor extends Z4AbstractGradientColor {
-
-  /**
-   * Creates the object
-   */
-  constructor() {
-    super();
-    this.addColor(new Color(255, 255, 255, 255), 0);
-    this.addColor(new Color(0, 0, 0, 255), 1);
-  }
-
-   cloneColor(color) {
-    return new Color(color.red, color.green, color.blue, color.alpha);
-  }
-
-   getColorAt(position, useRipple) {
-    if (useRipple && this.getRipple()) {
-      position = Z4Math.ripple(position, 0, 1, this.getRipple());
-    }
-    let finalPos = position;
-    let index = this.colorPositions.findIndex(pos => pos >= finalPos, null);
-    if (this.colorPositions[index] === position) {
-      return this.colors[index];
-    } else if (this.colorPositions[index - 1] === position) {
-      return this.colors[index - 1];
-    } else {
-      let div = (position - this.colorPositions[index - 1]) / (this.colorPositions[index] - this.colorPositions[index - 1]);
-      return new Color(parseInt((this.colors[index].red - this.colors[index - 1].red) * div + this.colors[index - 1].red), parseInt((this.colors[index].green - this.colors[index - 1].green) * div + this.colors[index - 1].green), parseInt((this.colors[index].blue - this.colors[index - 1].blue) * div + this.colors[index - 1].blue), parseInt((this.colors[index].alpha - this.colors[index - 1].alpha) * div + this.colors[index - 1].alpha));
-    }
-  }
-
-   toJSON() {
-    let json = new Object();
-    json["ripple"] = this.getRipple();
-    json["colorsAndPositions"] = this.colors.map((color, index, array) => {
-      let jsonColor = new Object();
-      jsonColor["red"] = color.red;
-      jsonColor["green"] = color.green;
-      jsonColor["blue"] = color.blue;
-      jsonColor["alpha"] = color.alpha;
-      jsonColor["position"] = this.colorPositions[index];
-      return jsonColor;
-    });
-    return json;
-  }
-
-  /**
-   * Merges overlapping colors based on a tolerance
-   *
-   * @param tolerance The accepted tolerance around the position (a very small
-   * value, for example 0.01)
-   */
-   mergeOverlapping(tolerance) {
-    for (let index = this.colorPositions.length - 1; index > 0; index--) {
-      let beforePosition = this.colorPositions[index - 1];
-      let afterPosition = this.colorPositions[index];
-      if (Math.abs(afterPosition - beforePosition) <= tolerance) {
-        let position = (beforePosition + afterPosition) / 2;
-        let color = this.getColorAt(position, false);
-        this.removeColor(beforePosition);
-        this.removeColor(afterPosition);
-        this.addColor(color, position);
-      }
-    }
-  }
-
-  /**
-   * Creates a Z4GradientColor from a JSON object
-   *
-   * @param json The JSON object
-   * @return the color
-   */
-  static  fromJSON(json) {
-    let gradientColor = new Z4GradientColor();
-    gradientColor.setRipple(json["ripple"]);
-    (json["colorsAndPositions"]).forEach(colorAndPosition => gradientColor.addColor(new Color(colorAndPosition["red"], colorAndPosition["green"], colorAndPosition["blue"], colorAndPosition["alpha"]), colorAndPosition["position"]));
-    return gradientColor;
-  }
-}
-/**
  * The common interface for all fillers; each instance of
  * <i>Z4AbstractFiller</i> provides a different painting style (radial, conic,
  * elliptic, ect.)
@@ -1522,342 +1148,6 @@ class Z4Math {
   }
 
   constructor() {
-  }
-}
-/**
- * The common interface for objects able to provide a "next" value
- *
- * @author gianpiero.diblasi
- * @param <T> The next value type
- */
-class Z4Nextable {
-
-  /**
-   * Returns the next value
-   *
-   * @return The next value
-   */
-   next() {
-  }
-}
-/**
- * The fanciful value
- *
- * @author gianpiero.diblasi
- */
-class Z4FancifulValue extends Z4Nextable {
-
-   constant = null;
-
-   random = null;
-
-   uniformSign = false;
-
-  /**
-   * Creates the object
-   *
-   * @param constant The constant component
-   * @param random The random component
-   * @param uniformSign true if the computed sign has to be equals for both
-   * components, false otherwise; if true then the constant sign is used
-   */
-  constructor(constant, random, uniformSign) {
-    super();
-    this.constant = constant;
-    this.random = random;
-    this.uniformSign = uniformSign;
-  }
-
-  /**
-   * Returns the the constant component
-   *
-   * @return The the constant component
-   */
-   getConstant() {
-    return this.constant;
-  }
-
-  /**
-   * Returns the random component
-   *
-   * @return The random component
-   */
-   getRandom() {
-    return this.random;
-  }
-
-  /**
-   * Checks if the computed sign has to be equals for both components; if true
-   * then the constant sign is used
-   *
-   * @return true if the computed sign has to be equals for both components,
-   * false otherwise
-   */
-   isUniformSign() {
-    return this.uniformSign;
-  }
-
-   next() {
-    if (this.uniformSign) {
-      return this.constant.getSign().next() * (this.constant.getValue() + this.random.getValue().next());
-    } else {
-      return this.constant.next() + this.random.next();
-    }
-  }
-}
-/**
- * A random value
- *
- * @author gianpiero.diblasi
- */
-class Z4RandomValue extends Z4Nextable {
-
-   value = 0.0;
-
-   behavior = null;
-
-   length = 0.0;
-
-   step = 0;
-
-   prevRandom = 0.0;
-
-   controlRandom = 0.0;
-
-   nextRandom = 0.0;
-
-   bezierCurve = null;
-
-  /**
-   * Creates the object
-   *
-   * @param value The value
-   * @param behavior The random value behavior
-   * @param length The polyline/curve length
-   */
-  constructor(value, behavior, length) {
-    super();
-    this.value = value;
-    this.behavior = behavior;
-    this.length = length;
-    this.step = 1;
-    this.prevRandom = Math.random();
-    this.controlRandom = 1;
-    this.nextRandom = Math.random();
-    if (this.behavior === Z4RandomValueBehavior.BEZIER) {
-      this.createBezierCurve();
-    }
-  }
-
-   createBezierCurve() {
-    this.bezierCurve = new Bezier(0, this.prevRandom, this.length / 2, this.controlRandom, 1, this.nextRandom);
-  }
-
-  /**
-   * Returns the value
-   *
-   * @return The value
-   */
-   getValue() {
-    return this.value;
-  }
-
-  /**
-   * Returns the random value behavior
-   *
-   * @return The random value behavior
-   */
-   getRandomValueBehavior() {
-    return this.behavior;
-  }
-
-  /**
-   * Returns The polyline/curve length
-   *
-   * @return The polyline/curve length
-   */
-   getLength() {
-    return this.length;
-  }
-
-   next() {
-    if (this.behavior === Z4RandomValueBehavior.CLASSIC) {
-      return this.value * Math.random();
-    } else if (this.behavior === Z4RandomValueBehavior.BEZIER) {
-      if (this.step >= this.length) {
-        this.step = 1;
-        this.prevRandom = this.nextRandom;
-        this.controlRandom = this.controlRandom === 1 ? 0 : 1;
-        this.nextRandom = Math.random();
-        this.createBezierCurve();
-      } else {
-        this.step++;
-      }
-      return this.value * this.bezierCurve.get(this.step / this.length).y;
-    } else if (this.behavior === Z4RandomValueBehavior.POLYLINE) {
-      if (this.step >= this.length) {
-        this.step = 1;
-        this.prevRandom = this.nextRandom;
-        this.nextRandom = Math.random();
-      } else {
-        this.step++;
-      }
-      return this.value * ((this.nextRandom - this.prevRandom) * this.step / this.length + this.prevRandom);
-    } else if (this.behavior === Z4RandomValueBehavior.STEPPED) {
-      if (this.step >= this.length) {
-        this.step = 1;
-        this.prevRandom = Math.random();
-      } else {
-        this.step++;
-      }
-      return this.value * this.prevRandom;
-    } else {
-      return 0.0;
-    }
-  }
-}
-/**
- * The signs of a value
- *
- * @author gianpiero.diblasi
- */
-class Z4Sign extends Z4Nextable {
-
-   behavior = null;
-
-   sign = 0;
-
-  /**
-   * Creates the object
-   *
-   * @param behavior The sign behavior
-   */
-  constructor(behavior) {
-    super();
-    this.behavior = behavior;
-    if (behavior === Z4SignBehavior.POSITIVE) {
-      this.sign = 1;
-    } else if (behavior === Z4SignBehavior.NEGATIVE) {
-      this.sign = -1;
-    } else if (behavior === Z4SignBehavior.RANDOM) {
-      this.sign = 0;
-    } else if (behavior === Z4SignBehavior.ALTERNATE) {
-      this.sign = -2;
-    }
-  }
-
-  /**
-   * Returns the sign behavior
-   *
-   * @return The sign behavior
-   */
-   getSignBehavior() {
-    return this.behavior;
-  }
-
-   next() {
-    switch(this.sign) {
-      case 1:
-      case -1:
-        return this.sign;
-      case 0:
-      default:
-        return Math.random() > 0.5 ? 1 : -1;
-      case 2:
-      case -2:
-        this.sign *= -1;
-        return this.sign / 2;
-    }
-  }
-}
-/**
- * A random value with sign
- *
- * @author gianpiero.diblasi
- */
-class Z4SignedRandomValue extends Z4Nextable {
-
-   sign = null;
-
-   value = null;
-
-  /**
-   * Creates the object
-   *
-   * @param sign The sign
-   * @param value The random value
-   */
-  constructor(sign, value) {
-    super();
-    this.sign = sign;
-    this.value = value;
-  }
-
-  /**
-   * Returns the sign
-   *
-   * @return The sign
-   */
-   getSign() {
-    return this.sign;
-  }
-
-  /**
-   * Returns the random value
-   *
-   * @return The random value
-   */
-   getValue() {
-    return this.value;
-  }
-
-   next() {
-    return this.sign.next() * this.value.next();
-  }
-}
-/**
- * A value with sign
- *
- * @author gianpiero.diblasi
- */
-class Z4SignedValue extends Z4Nextable {
-
-   sign = null;
-
-   value = 0.0;
-
-  /**
-   * Creates the object
-   *
-   * @param sign The sign
-   * @param value The value
-   */
-  constructor(sign, value) {
-    super();
-    this.sign = sign;
-    this.value = value;
-  }
-
-  /**
-   * Returns the sign
-   *
-   * @return The sign
-   */
-   getSign() {
-    return this.sign;
-  }
-
-  /**
-   * Returns the (positive) value
-   *
-   * @return The (positive) value
-   */
-   getValue() {
-    return this.value;
-  }
-
-   next() {
-    return this.sign.next() * this.value;
   }
 }
 /**
@@ -7461,6 +6751,750 @@ class Z4UI {
   }
 
   constructor() {
+  }
+}
+/**
+ * The common interface for objects able to be converted to a JSON object
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4JSONable {
+
+  /**
+   * Returns this object as a JSON object
+   *
+   * @return This object as a JSON object
+   */
+   toJSON() {
+  }
+}
+/**
+ * The abstract gradient color
+ *
+ * @author gianpiero.diblasi
+ * @param <T> The type of color
+ */
+class Z4AbstractGradientColor extends Z4JSONable {
+
+  /**
+   * The array of colors
+   */
+   colors = new Array();
+
+  /**
+   * The array of positions
+   */
+   colorPositions = new Array();
+
+   ripple = 0.0;
+
+  /**
+   * Adds a color in a position, if the position is already occupied then
+   * replaces the color
+   *
+   * @param color The color
+   * @param position The position (in the range [0,1])
+   */
+   addColor(color, position) {
+    let index = this.colorPositions.findIndex(pos => pos === position);
+    if (index !== -1) {
+      this.colors[index] = color;
+    } else {
+      index = this.colorPositions.findIndex(pos => pos > position);
+      if (index !== -1) {
+        this.colors.splice(index, 0, color);
+        this.colorPositions.splice(index, 0, position);
+      } else {
+        this.colors.push(color);
+        this.colorPositions.push(position);
+      }
+    }
+  }
+
+  /**
+   * Removes a color by position, if the position is not occupied then no color
+   * is removed
+   *
+   * @param position The position (in the range [0,1])
+   */
+   removeColor(position) {
+    let index = this.colorPositions.findIndex(pos => pos === position);
+    if (index !== -1) {
+      this.colors.splice(index, 1);
+      this.colorPositions.splice(index, 1);
+    }
+  }
+
+  /**
+   * Checks if a position is occupied
+   *
+   * @param position The position (in the range [0,1])
+   * @param tolerance The accepted tolerance around the position (a very small
+   * value, for example 0.01)
+   * @return true if the position is occupied, false otherwise
+   */
+   isPositionOccupied(position, tolerance) {
+    return !!(this.colorPositions.filter(pos => Math.abs(pos - position) <= tolerance).length);
+  }
+
+  /**
+   * Returns a position based on another position and a tolerance
+   *
+   * @param position The position (in the range [0,1])
+   * @param tolerance The accepted tolerance around the position (a very small
+   * value, for example 0.01)
+   * @return The position, -1 if there is no valid position
+   */
+   getPosition(position, tolerance) {
+    let positions = this.colorPositions.filter(pos => Math.abs(pos - position) <= tolerance);
+    return positions.length ? positions[0] : -1;
+  }
+
+  /**
+   * Returns a color position in an index
+   *
+   * @param index The index
+   * @return The color position
+   */
+   getColorPositionAtIndex(index) {
+    return this.colorPositions[index];
+  }
+
+  /**
+   * Returns a color in an index
+   *
+   * @param index The index
+   * @return The color
+   */
+   getColorAtIndex(index) {
+    return this.colors[index];
+  }
+
+  /**
+   * Returns the number of managed colors
+   *
+   * @return The number of managed colors
+   */
+   getColorCount() {
+    return this.colors.length;
+  }
+
+  /**
+   * Mirrors this color
+   */
+   mirror() {
+    this.colors.slice().splice(0, this.colors.length - 1).reverse().forEach(color => this.colors.push(this.cloneColor(color)));
+    for (let index = 0; index < this.colorPositions.length; index++) {
+      this.colorPositions[index] = this.colorPositions[index] / 2;
+    }
+    this.colorPositions.slice().splice(0, this.colorPositions.length - 1).reverse().forEach(position => this.colorPositions.push(1 - position));
+  }
+
+  /**
+   * Clones a color
+   *
+   * @param color The color
+   * @return The cloned color
+   */
+   cloneColor(color) {
+  }
+
+  /**
+   * Reverses this color
+   */
+   reverse() {
+    this.colors.reverse();
+    this.colorPositions.reverse().forEach((position, index, array) => this.colorPositions[index] = 1 - position);
+  }
+
+  /**
+   * Sets the ripple
+   *
+   * @param ripple The ripple (in the range [0,1])
+   */
+   setRipple(ripple) {
+    this.ripple = ripple;
+  }
+
+  /**
+   * Returns the ripple
+   *
+   * @return The ripple (in the range [0,1])
+   */
+   getRipple() {
+    return this.ripple;
+  }
+
+  /**
+   * Returns a color in a position
+   *
+   * @param position The color position (in the range [0,1])
+   * @param useRipple true to use ripple, false otherwise
+   * @return The color
+   */
+   getColorAt(position, useRipple) {
+  }
+}
+/**
+ * The bidimensional gradient color (a bidimensional gradient between four or
+ * more colors)
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4BiGradientColor extends Z4AbstractGradientColor {
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super();
+    this.addColor(new Z4GradientColor(), 0);
+    this.addColor(new Z4GradientColor(), 1);
+  }
+
+   cloneColor(color) {
+    return Z4GradientColor.fromJSON(color.toJSON());
+  }
+
+  /**
+   * Mirrors each gradient color
+   */
+   gradientMirror() {
+    this.colors.forEach(gradientColor => gradientColor.mirror());
+  }
+
+  /**
+   * Reverses each gradient color
+   */
+   gradientReverse() {
+    this.colors.forEach(gradientColor => gradientColor.reverse());
+  }
+
+  /**
+   * Sets the ripple of each gradient color
+   *
+   * @param rippleGradient The ripple of each gradient color (in the range
+   * [0,1])
+   */
+   setGradientRipple(rippleGradient) {
+    this.colors.forEach(gradientColor => gradientColor.setRipple(rippleGradient));
+  }
+
+  /**
+   * Returns the ripple of each gradient color
+   *
+   * @return The ripple of each gradient color (in the range [0,1])
+   */
+   getGradientRipple() {
+    return this.colors[0].getRipple();
+  }
+
+   getColorAt(position, useRipple) {
+    if (useRipple && this.getRipple()) {
+      position = Z4Math.ripple(position, 0, 1, this.getRipple());
+    }
+    let finalPos = position;
+    let index = this.colorPositions.findIndex(pos => pos >= finalPos, null);
+    if (this.colorPositions[index] === position) {
+      return this.colors[index];
+    } else if (this.colorPositions[index - 1] === position) {
+      return this.colors[index - 1];
+    } else {
+      let div = (position - this.colorPositions[index - 1]) / (this.colorPositions[index] - this.colorPositions[index - 1]);
+      let before = this.colors[index - 1];
+      let after = this.colors[index];
+      let gradientColor = new Z4GradientColor();
+      gradientColor.setRipple(this.getGradientRipple());
+      before.colors.forEach((beforeColor, idx, array) => {
+        let beforePosition = before.colorPositions[idx];
+        let afterColor = after.getColorAt(beforePosition, false);
+        this.addInGradientColor(gradientColor, beforeColor, afterColor, div, beforePosition);
+      });
+      after.colors.forEach((afterColor, idx, array) => {
+        let afterPosition = after.colorPositions[idx];
+        if (gradientColor.colorPositions.findIndex(pos => pos === afterPosition) === -1) {
+          let beforeColor = before.getColorAt(afterPosition, false);
+          this.addInGradientColor(gradientColor, beforeColor, afterColor, div, afterPosition);
+        }
+      });
+      return gradientColor;
+    }
+  }
+
+   addInGradientColor(gradientColor, beforeColor, afterColor, div, position) {
+    gradientColor.addColor(new Color(parseInt((afterColor.red - beforeColor.red) * div + beforeColor.red), parseInt((afterColor.green - beforeColor.green) * div + beforeColor.green), parseInt((afterColor.blue - beforeColor.blue) * div + beforeColor.blue), parseInt((afterColor.alpha - beforeColor.alpha) * div + beforeColor.alpha)), position);
+  }
+
+   toJSON() {
+    let json = new Object();
+    json["ripple"] = this.getRipple();
+    json["colorsAndPositions"] = this.colors.map((color, index, array) => {
+      let jsonColor = new Object();
+      jsonColor["gradientColor"] = color.toJSON();
+      jsonColor["position"] = this.colorPositions[index];
+      return jsonColor;
+    });
+    return json;
+  }
+
+  /**
+   * Creates a Z4GradientColor from a JSON object
+   *
+   * @param json The JSON object
+   * @return the color
+   */
+  static  fromJSON(json) {
+    let gradientColor = new Z4BiGradientColor();
+    gradientColor.setRipple(json["ripple"]);
+    (json["colorsAndPositions"]).forEach(colorAndPosition => gradientColor.addColor(Z4GradientColor.fromJSON(colorAndPosition["gradientColor"]), colorAndPosition["position"]));
+    return gradientColor;
+  }
+}
+/**
+ * The gradient color (a gradient between two or more colors)
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4GradientColor extends Z4AbstractGradientColor {
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super();
+    this.addColor(new Color(255, 255, 255, 255), 0);
+    this.addColor(new Color(0, 0, 0, 255), 1);
+  }
+
+   cloneColor(color) {
+    return new Color(color.red, color.green, color.blue, color.alpha);
+  }
+
+   getColorAt(position, useRipple) {
+    if (useRipple && this.getRipple()) {
+      position = Z4Math.ripple(position, 0, 1, this.getRipple());
+    }
+    let finalPos = position;
+    let index = this.colorPositions.findIndex(pos => pos >= finalPos, null);
+    if (this.colorPositions[index] === position) {
+      return this.colors[index];
+    } else if (this.colorPositions[index - 1] === position) {
+      return this.colors[index - 1];
+    } else {
+      let div = (position - this.colorPositions[index - 1]) / (this.colorPositions[index] - this.colorPositions[index - 1]);
+      return new Color(parseInt((this.colors[index].red - this.colors[index - 1].red) * div + this.colors[index - 1].red), parseInt((this.colors[index].green - this.colors[index - 1].green) * div + this.colors[index - 1].green), parseInt((this.colors[index].blue - this.colors[index - 1].blue) * div + this.colors[index - 1].blue), parseInt((this.colors[index].alpha - this.colors[index - 1].alpha) * div + this.colors[index - 1].alpha));
+    }
+  }
+
+   toJSON() {
+    let json = new Object();
+    json["ripple"] = this.getRipple();
+    json["colorsAndPositions"] = this.colors.map((color, index, array) => {
+      let jsonColor = new Object();
+      jsonColor["red"] = color.red;
+      jsonColor["green"] = color.green;
+      jsonColor["blue"] = color.blue;
+      jsonColor["alpha"] = color.alpha;
+      jsonColor["position"] = this.colorPositions[index];
+      return jsonColor;
+    });
+    return json;
+  }
+
+  /**
+   * Merges overlapping colors based on a tolerance
+   *
+   * @param tolerance The accepted tolerance around the position (a very small
+   * value, for example 0.01)
+   */
+   mergeOverlapping(tolerance) {
+    for (let index = this.colorPositions.length - 1; index > 0; index--) {
+      let beforePosition = this.colorPositions[index - 1];
+      let afterPosition = this.colorPositions[index];
+      if (Math.abs(afterPosition - beforePosition) <= tolerance) {
+        let position = (beforePosition + afterPosition) / 2;
+        let color = this.getColorAt(position, false);
+        this.removeColor(beforePosition);
+        this.removeColor(afterPosition);
+        this.addColor(color, position);
+      }
+    }
+  }
+
+  /**
+   * Creates a Z4GradientColor from a JSON object
+   *
+   * @param json The JSON object
+   * @return the color
+   */
+  static  fromJSON(json) {
+    let gradientColor = new Z4GradientColor();
+    gradientColor.setRipple(json["ripple"]);
+    (json["colorsAndPositions"]).forEach(colorAndPosition => gradientColor.addColor(new Color(colorAndPosition["red"], colorAndPosition["green"], colorAndPosition["blue"], colorAndPosition["alpha"]), colorAndPosition["position"]));
+    return gradientColor;
+  }
+}
+/**
+ * The common interface for objects able to provide a "next" value
+ *
+ * @author gianpiero.diblasi
+ * @param <T> The next value type
+ */
+class Z4Nextable extends Z4JSONable {
+
+  /**
+   * Returns the next value
+   *
+   * @return The next value
+   */
+   next() {
+  }
+}
+/**
+ * The fanciful value
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4FancifulValue extends Z4Nextable {
+
+   constant = null;
+
+   random = null;
+
+   uniformSign = false;
+
+  /**
+   * Creates the object
+   *
+   * @param constant The constant component
+   * @param random The random component
+   * @param uniformSign true if the computed sign has to be equals for both
+   * components, false otherwise; if true then the constant sign is used
+   */
+  constructor(constant, random, uniformSign) {
+    super();
+    this.constant = constant;
+    this.random = random;
+    this.uniformSign = uniformSign;
+  }
+
+  /**
+   * Returns the the constant component
+   *
+   * @return The the constant component
+   */
+   getConstant() {
+    return this.constant;
+  }
+
+  /**
+   * Returns the random component
+   *
+   * @return The random component
+   */
+   getRandom() {
+    return this.random;
+  }
+
+  /**
+   * Checks if the computed sign has to be equals for both components; if true
+   * then the constant sign is used
+   *
+   * @return true if the computed sign has to be equals for both components,
+   * false otherwise
+   */
+   isUniformSign() {
+    return this.uniformSign;
+  }
+
+   next() {
+    if (this.uniformSign) {
+      return this.constant.getSign().next() * (this.constant.getValue() + this.random.getValue().next());
+    } else {
+      return this.constant.next() + this.random.next();
+    }
+  }
+}
+/**
+ * A random value
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4RandomValue extends Z4Nextable {
+
+   value = 0.0;
+
+   behavior = null;
+
+   length = 0.0;
+
+   step = 0;
+
+   prevRandom = 0.0;
+
+   controlRandom = 0.0;
+
+   nextRandom = 0.0;
+
+   bezierCurve = null;
+
+  /**
+   * Creates the object
+   *
+   * @param value The value
+   * @param behavior The random value behavior
+   * @param length The polyline/curve length
+   */
+  constructor(value, behavior, length) {
+    super();
+    this.value = value;
+    this.behavior = behavior;
+    this.length = length;
+    this.step = 1;
+    this.prevRandom = Math.random();
+    this.controlRandom = 1;
+    this.nextRandom = Math.random();
+    if (this.behavior === Z4RandomValueBehavior.BEZIER) {
+      this.createBezierCurve();
+    }
+  }
+
+   createBezierCurve() {
+    this.bezierCurve = new Bezier(0, this.prevRandom, this.length / 2, this.controlRandom, 1, this.nextRandom);
+  }
+
+  /**
+   * Returns the value
+   *
+   * @return The value
+   */
+   getValue() {
+    return this.value;
+  }
+
+  /**
+   * Returns the random value behavior
+   *
+   * @return The random value behavior
+   */
+   getRandomValueBehavior() {
+    return this.behavior;
+  }
+
+  /**
+   * Returns The polyline/curve length
+   *
+   * @return The polyline/curve length
+   */
+   getLength() {
+    return this.length;
+  }
+
+   next() {
+    if (this.behavior === Z4RandomValueBehavior.CLASSIC) {
+      return this.value * Math.random();
+    } else if (this.behavior === Z4RandomValueBehavior.BEZIER) {
+      if (this.step >= this.length) {
+        this.step = 1;
+        this.prevRandom = this.nextRandom;
+        this.controlRandom = this.controlRandom === 1 ? 0 : 1;
+        this.nextRandom = Math.random();
+        this.createBezierCurve();
+      } else {
+        this.step++;
+      }
+      return this.value * this.bezierCurve.get(this.step / this.length).y;
+    } else if (this.behavior === Z4RandomValueBehavior.POLYLINE) {
+      if (this.step >= this.length) {
+        this.step = 1;
+        this.prevRandom = this.nextRandom;
+        this.nextRandom = Math.random();
+      } else {
+        this.step++;
+      }
+      return this.value * ((this.nextRandom - this.prevRandom) * this.step / this.length + this.prevRandom);
+    } else if (this.behavior === Z4RandomValueBehavior.STEPPED) {
+      if (this.step >= this.length) {
+        this.step = 1;
+        this.prevRandom = Math.random();
+      } else {
+        this.step++;
+      }
+      return this.value * this.prevRandom;
+    } else {
+      return 0.0;
+    }
+  }
+}
+/**
+ * The signs of a value
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Sign extends Z4Nextable {
+
+   behavior = null;
+
+   sign = 0;
+
+  /**
+   * Creates the object
+   *
+   * @param behavior The sign behavior
+   */
+  constructor(behavior) {
+    super();
+    this.behavior = behavior;
+    if (behavior === Z4SignBehavior.POSITIVE) {
+      this.sign = 1;
+    } else if (behavior === Z4SignBehavior.NEGATIVE) {
+      this.sign = -1;
+    } else if (behavior === Z4SignBehavior.RANDOM) {
+      this.sign = 0;
+    } else if (behavior === Z4SignBehavior.ALTERNATE) {
+      this.sign = -2;
+    }
+  }
+
+  /**
+   * Returns the sign behavior
+   *
+   * @return The sign behavior
+   */
+   getSignBehavior() {
+    return this.behavior;
+  }
+
+   next() {
+    switch(this.sign) {
+      case 1:
+      case -1:
+        return this.sign;
+      case 0:
+      default:
+        return Math.random() > 0.5 ? 1 : -1;
+      case 2:
+      case -2:
+        this.sign *= -1;
+        return this.sign / 2;
+    }
+  }
+
+   toJSON() {
+    let json = new Object();
+    json["behavior"] = this.behavior;
+    return json;
+  }
+
+  /**
+   * Creates a Z4Sign from a JSON object
+   *
+   * @param json The JSON object
+   * @return the sign
+   */
+  static  fromJSON(json) {
+    switch("" + json["behavior"]) {
+      case "POSITIVE":
+        return new Z4Sign(Z4SignBehavior.POSITIVE);
+      case "NEGATIVE":
+        return new Z4Sign(Z4SignBehavior.NEGATIVE);
+      case "RANDOM":
+        return new Z4Sign(Z4SignBehavior.RANDOM);
+      case "ALTERNATE":
+        return new Z4Sign(Z4SignBehavior.ALTERNATE);
+      default:
+        return null;
+    }
+  }
+}
+/**
+ * A random value with sign
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4SignedRandomValue extends Z4Nextable {
+
+   sign = null;
+
+   value = null;
+
+  /**
+   * Creates the object
+   *
+   * @param sign The sign
+   * @param value The random value
+   */
+  constructor(sign, value) {
+    super();
+    this.sign = sign;
+    this.value = value;
+  }
+
+  /**
+   * Returns the sign
+   *
+   * @return The sign
+   */
+   getSign() {
+    return this.sign;
+  }
+
+  /**
+   * Returns the random value
+   *
+   * @return The random value
+   */
+   getValue() {
+    return this.value;
+  }
+
+   next() {
+    return this.sign.next() * this.value.next();
+  }
+}
+/**
+ * A value with sign
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4SignedValue extends Z4Nextable {
+
+   sign = null;
+
+   value = 0.0;
+
+  /**
+   * Creates the object
+   *
+   * @param sign The sign
+   * @param value The value
+   */
+  constructor(sign, value) {
+    super();
+    this.sign = sign;
+    this.value = value;
+  }
+
+  /**
+   * Returns the sign
+   *
+   * @return The sign
+   */
+   getSign() {
+    return this.sign;
+  }
+
+  /**
+   * Returns the (positive) value
+   *
+   * @return The (positive) value
+   */
+   getValue() {
+    return this.value;
+  }
+
+   next() {
+    return this.sign.next() * this.value;
   }
 }
 /**

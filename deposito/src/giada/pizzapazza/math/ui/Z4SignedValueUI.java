@@ -44,37 +44,6 @@ public class Z4SignedValueUI extends Z4AbstractComponentWithValueUI<Z4SignedValu
   public Z4SignedValueUI() {
     super(Z4SignedValueUI.UI);
 
-    NodeList imgs = this.querySelectorAll(".signed-value-sign-dropdown-menu img[data-type='signed-value']");
-    for (int i = 0; i < imgs.length; i++) {
-      HTMLElement img = (HTMLElement) imgs.item(i);
-      img.setAttribute("src", Z4SignedValueUI.PATH + "z4sign_" + img.getAttribute("data-icon") + ".svg");
-    }
-
-    NodeList buttons = this.querySelectorAll(".signed-value-sign-dropdown-menu button[data-type='signed-value']");
-    for (int i = 0; i < buttons.length; i++) {
-      HTMLElement button = (HTMLElement) buttons.item(i);
-      button.onclick = (event) -> {
-        this.querySelector(".signed-value-sign-button img[data-type='signed-value']").setAttribute("src", button.querySelector("img").getAttribute("src"));
-
-        switch (button.getAttribute("data-value")) {
-          case "positive":
-            this.onchange.$apply(this.value.setSign(Z4Sign.POSITIVE));
-            break;
-          case "negative":
-            this.onchange.$apply(this.value.setSign(Z4Sign.NEGATIVE));
-            break;
-          case "random":
-            this.onchange.$apply(this.value.setSign(Z4Sign.RANDOM));
-            break;
-          case "alternate":
-            this.onchange.$apply(this.value.setSign(Z4Sign.alternate()));
-            break;
-        }
-
-        return null;
-      };
-    }
-
     String name = this.getUniqueName();
     this.radioSpinner.id = this.getUniqueID();
     this.radioSpinner.setAttribute("name", name);

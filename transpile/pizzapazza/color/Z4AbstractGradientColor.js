@@ -4,7 +4,7 @@
  * @author gianpiero.diblasi
  * @param <T> The type of color
  */
-class Z4AbstractGradientColor {
+class Z4AbstractGradientColor extends Z4JSONable {
 
   /**
    * The array of colors
@@ -163,13 +163,5 @@ class Z4AbstractGradientColor {
    * @return The color
    */
    getColorAt(position, useRipple) {
-  }
-
-  /**
-   * Returns this color as a JSON object
-   *
-   * @return This color as a JSON object
-   */
-   toJSON() {
   }
 }

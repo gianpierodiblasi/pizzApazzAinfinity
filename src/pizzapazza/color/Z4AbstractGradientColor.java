@@ -1,8 +1,8 @@
 package pizzapazza.color;
 
 import def.js.Array;
+import pizzapazza.Z4JSONable;
 import static simulation.js.$Globals.$exists;
-import simulation.js.$Object;
 
 /**
  * The abstract gradient color
@@ -10,7 +10,7 @@ import simulation.js.$Object;
  * @author gianpiero.diblasi
  * @param <T> The type of color
  */
-public abstract class Z4AbstractGradientColor<T> {
+public abstract class Z4AbstractGradientColor<T> implements Z4JSONable {
 
   /**
    * The array of colors
@@ -178,11 +178,4 @@ public abstract class Z4AbstractGradientColor<T> {
    * @return The color
    */
   public abstract T getColorAt(double position, boolean useRipple);
-
-  /**
-   * Returns this color as a JSON object
-   *
-   * @return This color as a JSON object
-   */
-  public abstract $Object toJSON();
 }
