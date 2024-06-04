@@ -13,7 +13,7 @@ class TestSignPanel extends JSFrame {
     disabled.setEnabled(false);
     p.add(disabled, null);
     let positive = new Z4SignPanel(Z4SignPanelOrientation.HORIZONTAL);
-    positive.setValue(new Z4Sign(Z4SignBehavior.POSITIVE));
+    positive.setValue(Z4Sign.fromJSON(new Z4Sign(Z4SignBehavior.POSITIVE).toJSON()));
     positive.addChangeListener(event => console.log(positive.getValue().toJSON()));
     p.add(positive, null);
     this.getContentPane().add(p, BorderLayout.NORTH);
