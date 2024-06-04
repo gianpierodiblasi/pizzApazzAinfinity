@@ -7,6 +7,7 @@ pizzapazza.ui.frame
 pizzapazza.ui.panel
 pizzapazza.ui.panel.color
 pizzapazza.ui.panel.filler
+pizzapazza.ui.panel.math
 pizzapazza.ui.panel.ribbon
 pizzapazza.ui.tab
 pizzapazza.util
