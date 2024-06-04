@@ -2,8 +2,8 @@
 }
 
 .z4signpanel label img {
-  width: 24px;
-  height: 24px;
+  width: 16px;
+  height: 16px;
 }
 .z4signpanel label:nth-child(1) img {
   content: url(../image/math/z4sign_positive.svg);
