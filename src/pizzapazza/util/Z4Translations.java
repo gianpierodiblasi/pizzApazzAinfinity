@@ -138,9 +138,8 @@ public class Z4Translations {
   public static String BEZIER = "";
   public static String LENGTH = "";
   public static String UNIFORM_SIGN = "";
-  public static String START_ANGLE = "";
-  public static String ANGLE = "";
   public static String FIXED = "";
+  public static String VARIABLE = "";
   public static String CUMULATIVE = "";
   public static String RELATIVE_TO_PATH = "";
   public static String DELAYED = "";
@@ -317,9 +316,8 @@ public class Z4Translations {
     Z4Translations.BEZIER = "Bezier";
     Z4Translations.LENGTH = "Length";
     Z4Translations.UNIFORM_SIGN = "Uniform Sign";
-    Z4Translations.START_ANGLE = "Start Angle";
-    Z4Translations.ANGLE = "Angle";
     Z4Translations.FIXED = "Fixed";
+    Z4Translations.VARIABLE = "Variable";
     Z4Translations.CUMULATIVE = "Cumulative";
     Z4Translations.RELATIVE_TO_PATH = "Relative to Path";
     Z4Translations.DELAYED = "Delayed";
@@ -480,9 +478,8 @@ public class Z4Translations {
     Z4Translations.BEZIER = "Bezier";
     Z4Translations.LENGTH = "Lunghezza";
     Z4Translations.UNIFORM_SIGN = "Segno Uniforme";
-    Z4Translations.START_ANGLE = "Angolo Iniziale";
-    Z4Translations.ANGLE = "Angolo";
     Z4Translations.FIXED = "Fisso";
+    Z4Translations.VARIABLE = "Variabile";
     Z4Translations.CUMULATIVE = "Cumulativo";
     Z4Translations.RELATIVE_TO_PATH = "Relativo al Percorso";
     Z4Translations.DELAYED = "Ritardato";

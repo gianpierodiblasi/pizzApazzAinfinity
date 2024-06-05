@@ -75,7 +75,7 @@ public class Z4RotationPanel extends Z4AbstractValuePanel<Z4Rotation> {
       this.add(this.label, new GBC(0, 0).w(4).a(GBC.WEST));
 
       this.startAngle = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.VERTICAL);
-      this.add(this.startAngle, new GBC(0, 1).w(4).i(0, 0, 1, 0));
+      this.add(this.startAngle, new GBC(0, 1).w(4).f(GBC.HORIZONTAL).i(0, 0, 1, 0));
 
       this.addRadio(Z4RotationBehavior.FIXED, buttonGroup, 0, 2, "left");
       this.addRadio(Z4RotationBehavior.CUMULATIVE, buttonGroup, 1, 2, "center");
@@ -95,10 +95,10 @@ public class Z4RotationPanel extends Z4AbstractValuePanel<Z4Rotation> {
 
     this.startAngle.setRange(0, 360);
     this.startAngle.setSignVisible(false);
-    this.startAngle.setLabel(Z4Translations.START_ANGLE);
+    this.startAngle.setLabel(Z4Translations.FIXED);
     this.startAngle.addChangeListener(event -> this.onRotationChange(this.startAngle.getValueIsAdjusting()));
 
-    this.angle.setLabel(Z4Translations.ANGLE);
+    this.angle.setLabel(Z4Translations.VARIABLE);
     this.angle.setConstantRange(0, 180);
     this.angle.setRandomRange(0, 180);
     this.angle.addChangeListener(event -> this.onRotationChange(this.angle.getValueIsAdjusting()));

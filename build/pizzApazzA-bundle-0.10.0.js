@@ -5923,7 +5923,7 @@ class Z4RotationPanel extends Z4AbstractValuePanel {
       this.cssAddClass("z4rotationpanel-vertical");
       this.add(this.label, new GBC(0, 0).w(4).a(GBC.WEST));
       this.startAngle = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.VERTICAL);
-      this.add(this.startAngle, new GBC(0, 1).w(4).i(0, 0, 1, 0));
+      this.add(this.startAngle, new GBC(0, 1).w(4).f(GBC.HORIZONTAL).i(0, 0, 1, 0));
       this.addRadio(Z4RotationBehavior.FIXED, buttonGroup, 0, 2, "left");
       this.addRadio(Z4RotationBehavior.CUMULATIVE, buttonGroup, 1, 2, "center");
       this.addRadio(Z4RotationBehavior.RELATIVE_TO_PATH, buttonGroup, 2, 2, "center");
@@ -5939,9 +5939,9 @@ class Z4RotationPanel extends Z4AbstractValuePanel {
     }
     this.startAngle.setRange(0, 360);
     this.startAngle.setSignVisible(false);
-    this.startAngle.setLabel(Z4Translations.START_ANGLE);
+    this.startAngle.setLabel(Z4Translations.FIXED);
     this.startAngle.addChangeListener(event => this.onRotationChange(this.startAngle.getValueIsAdjusting()));
-    this.angle.setLabel(Z4Translations.ANGLE);
+    this.angle.setLabel(Z4Translations.VARIABLE);
     this.angle.setConstantRange(0, 180);
     this.angle.setRandomRange(0, 180);
     this.angle.addChangeListener(event => this.onRotationChange(this.angle.getValueIsAdjusting()));
@@ -7318,11 +7318,9 @@ class Z4Translations {
 
   static  UNIFORM_SIGN = "";
 
-  static  START_ANGLE = "";
-
-  static  ANGLE = "";
-
   static  FIXED = "";
+
+  static  VARIABLE = "";
 
   static  CUMULATIVE = "";
 
@@ -7512,9 +7510,8 @@ class Z4Translations {
     Z4Translations.BEZIER = "Bezier";
     Z4Translations.LENGTH = "Length";
     Z4Translations.UNIFORM_SIGN = "Uniform Sign";
-    Z4Translations.START_ANGLE = "Start Angle";
-    Z4Translations.ANGLE = "Angle";
     Z4Translations.FIXED = "Fixed";
+    Z4Translations.VARIABLE = "Variable";
     Z4Translations.CUMULATIVE = "Cumulative";
     Z4Translations.RELATIVE_TO_PATH = "Relative to Path";
     Z4Translations.DELAYED = "Delayed";
@@ -7662,9 +7659,8 @@ class Z4Translations {
     Z4Translations.BEZIER = "Bezier";
     Z4Translations.LENGTH = "Lunghezza";
     Z4Translations.UNIFORM_SIGN = "Segno Uniforme";
-    Z4Translations.START_ANGLE = "Angolo Iniziale";
-    Z4Translations.ANGLE = "Angolo";
     Z4Translations.FIXED = "Fisso";
+    Z4Translations.VARIABLE = "Variabile";
     Z4Translations.CUMULATIVE = "Cumulativo";
     Z4Translations.RELATIVE_TO_PATH = "Relativo al Percorso";
     Z4Translations.DELAYED = "Ritardato";
