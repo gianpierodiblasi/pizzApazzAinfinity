@@ -1,0 +1,13 @@
+.z4abstractvaluepanel {
+}
+
+.z4abstractvaluepanel.z4abstractvaluepanel-titled {
+  border: 2px solid var(--main-action-bgcolor);
+  border-radius: var(--roundness);
+  padding: 2px;
+}
+
+.z4abstractvaluepanel.z4abstractvaluepanel-titled > label:nth-child(1),
+.z4abstractvaluepanel.z4abstractvaluepanel-titled.z4abstractrandomvaluepanel > .z4signedvaluepanel:nth-child(1) > label:nth-child(1) {
+  font-weight: bold;
+}

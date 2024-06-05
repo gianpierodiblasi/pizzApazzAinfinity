@@ -10,6 +10,7 @@ class TestFancifulValuePanel extends JSFrame {
     p.add(new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL), new GBC(0, 0).wx(1).i(5, 5, 5, 5));
     let labelled = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
     labelled.setLabel("Label");
+    labelled.cssAddClass("z4abstractvaluepanel-titled");
     p.add(labelled, new GBC(1, 0).wx(1).i(5, 5, 5, 5));
     let disabled = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
     disabled.setEnabled(false);
@@ -17,6 +18,7 @@ class TestFancifulValuePanel extends JSFrame {
     p.add(new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL), new GBC(0, 1).w(3).i(5, 5, 5, 5));
     labelled = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
     labelled.setLabel("Label");
+    labelled.cssAddClass("z4abstractvaluepanel-titled");
     p.add(labelled, new GBC(0, 2).w(3).i(5, 5, 5, 5));
     disabled = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
     disabled.setEnabled(false);

@@ -22,6 +22,7 @@ public class TestSignedValuePanel extends JSFrame {
 
     Z4SignedValuePanel labelled = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.HORIZONTAL);
     labelled.setLabel("Label");
+    labelled.cssAddClass("z4abstractvaluepanel-titled");
     p.add(labelled, null);
 
     Z4SignedValuePanel disabled = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.VERTICAL);
@@ -30,6 +31,7 @@ public class TestSignedValuePanel extends JSFrame {
 
     Z4SignedValuePanel valued = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.VERTICAL);
     valued.setLabel("Valore");
+    valued.cssAddClass("z4abstractvaluepanel-titled");
     valued.setRange(20, 80);
     valued.setValue(Z4SignedValue.fromJSON(new Z4SignedValue(new Z4Sign(Z4SignBehavior.ALTERNATE), 30).toJSON()));
     valued.addChangeListener(event -> {

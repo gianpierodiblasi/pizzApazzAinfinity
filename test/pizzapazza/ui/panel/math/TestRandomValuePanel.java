@@ -38,10 +38,12 @@ public class TestRandomValuePanel extends JSFrame {
 
     Z4AbstractRandomValuePanel<?> labelled = new Z4RandomValuePanel(Z4RandomValuePanelOrientation.HORIZONTAL);
     labelled.setLabel("Label");
+    labelled.cssAddClass("z4abstractvaluepanel-titled");
     p.add(labelled, new GBC(0, 2).wx(1).i(5, 5, 5, 5));
 
     labelled = new Z4SignedRandomValuePanel(Z4RandomValuePanelOrientation.HORIZONTAL);
     labelled.setLabel("Label");
+    labelled.cssAddClass("z4abstractvaluepanel-titled");
     p.add(labelled, new GBC(1, 2).wx(1).i(5, 5, 5, 5));
 
     Z4AbstractRandomValuePanel<?> disabled = new Z4RandomValuePanel(Z4RandomValuePanelOrientation.VERTICAL);
@@ -54,6 +56,7 @@ public class TestRandomValuePanel extends JSFrame {
 
     Z4RandomValuePanel valued = new Z4RandomValuePanel(Z4RandomValuePanelOrientation.VERTICAL);
     valued.setLabel("Valore");
+    valued.cssAddClass("z4abstractvaluepanel-titled");
     valued.setRange(20, 80);
     valued.setLengthRange(50, 100);
     valued.setValue(Z4RandomValue.fromJSON(new Z4RandomValue(30, Z4RandomValueBehavior.POLYLINE, 60).toJSON()));
@@ -61,6 +64,7 @@ public class TestRandomValuePanel extends JSFrame {
 
     Z4SignedRandomValuePanel signedValue = new Z4SignedRandomValuePanel(Z4RandomValuePanelOrientation.VERTICAL);
     signedValue.setLabel("Valore");
+    signedValue.cssAddClass("z4abstractvaluepanel-titled");
     signedValue.setRange(20, 80);
     signedValue.setLengthRange(50, 100);
     signedValue.setValue(Z4SignedRandomValue.fromJSON(new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.NEGATIVE), new Z4RandomValue(30, Z4RandomValueBehavior.POLYLINE, 60)).toJSON()));

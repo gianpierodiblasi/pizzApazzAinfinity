@@ -30,6 +30,7 @@ public class TestFancifulValuePanel extends JSFrame {
 
     Z4FancifulValuePanel labelled = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
     labelled.setLabel("Label");
+    labelled.cssAddClass("z4abstractvaluepanel-titled");
     p.add(labelled, new GBC(1, 0).wx(1).i(5, 5, 5, 5));
 
     Z4FancifulValuePanel disabled = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
@@ -40,6 +41,7 @@ public class TestFancifulValuePanel extends JSFrame {
 
     labelled = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
     labelled.setLabel("Label");
+    labelled.cssAddClass("z4abstractvaluepanel-titled");
     p.add(labelled, new GBC(0, 2).w(3).i(5, 5, 5, 5));
 
     disabled = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);

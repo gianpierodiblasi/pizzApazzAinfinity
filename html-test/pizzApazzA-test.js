@@ -993,6 +993,7 @@ class TestFancifulValuePanel extends JSFrame {
     p.add(new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL), new GBC(0, 0).wx(1).i(5, 5, 5, 5));
     let labelled = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
     labelled.setLabel("Label");
+    labelled.cssAddClass("z4abstractvaluepanel-titled");
     p.add(labelled, new GBC(1, 0).wx(1).i(5, 5, 5, 5));
     let disabled = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
     disabled.setEnabled(false);
@@ -1000,6 +1001,7 @@ class TestFancifulValuePanel extends JSFrame {
     p.add(new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL), new GBC(0, 1).w(3).i(5, 5, 5, 5));
     labelled = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
     labelled.setLabel("Label");
+    labelled.cssAddClass("z4abstractvaluepanel-titled");
     p.add(labelled, new GBC(0, 2).w(3).i(5, 5, 5, 5));
     disabled = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
     disabled.setEnabled(false);
@@ -1046,9 +1048,11 @@ class TestRandomValuePanel extends JSFrame {
     p.add(new Z4SignedRandomValuePanel(Z4RandomValuePanelOrientation.HORIZONTAL), new GBC(1, 1).wx(1).i(5, 5, 5, 5));
     let labelled = new Z4RandomValuePanel(Z4RandomValuePanelOrientation.HORIZONTAL);
     labelled.setLabel("Label");
+    labelled.cssAddClass("z4abstractvaluepanel-titled");
     p.add(labelled, new GBC(0, 2).wx(1).i(5, 5, 5, 5));
     labelled = new Z4SignedRandomValuePanel(Z4RandomValuePanelOrientation.HORIZONTAL);
     labelled.setLabel("Label");
+    labelled.cssAddClass("z4abstractvaluepanel-titled");
     p.add(labelled, new GBC(1, 2).wx(1).i(5, 5, 5, 5));
     let disabled = new Z4RandomValuePanel(Z4RandomValuePanelOrientation.VERTICAL);
     disabled.setEnabled(false);
@@ -1058,12 +1062,14 @@ class TestRandomValuePanel extends JSFrame {
     p.add(disabled, new GBC(1, 3).wx(1).i(5, 5, 5, 5));
     let valued = new Z4RandomValuePanel(Z4RandomValuePanelOrientation.VERTICAL);
     valued.setLabel("Valore");
+    valued.cssAddClass("z4abstractvaluepanel-titled");
     valued.setRange(20, 80);
     valued.setLengthRange(50, 100);
     valued.setValue(Z4RandomValue.fromJSON(new Z4RandomValue(30, Z4RandomValueBehavior.POLYLINE, 60).toJSON()));
     p.add(valued, new GBC(0, 4).wx(1).i(5, 5, 5, 5));
     let signedValue = new Z4SignedRandomValuePanel(Z4RandomValuePanelOrientation.VERTICAL);
     signedValue.setLabel("Valore");
+    signedValue.cssAddClass("z4abstractvaluepanel-titled");
     signedValue.setRange(20, 80);
     signedValue.setLengthRange(50, 100);
     signedValue.setValue(Z4SignedRandomValue.fromJSON(new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.NEGATIVE), new Z4RandomValue(30, Z4RandomValueBehavior.POLYLINE, 60)).toJSON()));
@@ -1093,6 +1099,7 @@ class TestRotationPanel extends JSFrame {
     p.add(new Z4RotationPanel(Z4RotationPanelOrientation.VERTICAL), new GBC(0, 0).wx(1).i(5, 5, 5, 5));
     let labelled = new Z4RotationPanel(Z4RotationPanelOrientation.VERTICAL);
     labelled.setLabel("Label");
+    labelled.cssAddClass("z4abstractvaluepanel-titled");
     p.add(labelled, new GBC(1, 0).wx(1).i(5, 5, 5, 5));
     let disabled = new Z4RotationPanel(Z4RotationPanelOrientation.VERTICAL);
     disabled.setEnabled(false);
@@ -1106,6 +1113,7 @@ class TestRotationPanel extends JSFrame {
     p.add(disabled, new GBC(0, 3).w(3).i(5, 5, 5, 5));
     let valued = new Z4RotationPanel(Z4RotationPanelOrientation.HORIZONTAL);
     valued.setLabel("Valore");
+    valued.cssAddClass("z4abstractvaluepanel-titled");
     valued.setValue(Z4Rotation.fromJSON(new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false).toJSON()));
     p.add(valued, new GBC(0, 4).w(3).i(5, 5, 5, 5));
     valued.addChangeListener(event => {
@@ -1127,12 +1135,14 @@ class TestSignedValuePanel extends JSFrame {
     p.add(new Z4SignedValuePanel(Z4SignedValuePanelOrientation.HORIZONTAL), null);
     let labelled = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.HORIZONTAL);
     labelled.setLabel("Label");
+    labelled.cssAddClass("z4abstractvaluepanel-titled");
     p.add(labelled, null);
     let disabled = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.VERTICAL);
     disabled.setEnabled(false);
     p.add(disabled, null);
     let valued = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.VERTICAL);
     valued.setLabel("Valore");
+    valued.cssAddClass("z4abstractvaluepanel-titled");
     valued.setRange(20, 80);
     valued.setValue(Z4SignedValue.fromJSON(new Z4SignedValue(new Z4Sign(Z4SignBehavior.ALTERNATE), 30).toJSON()));
     valued.addChangeListener(event => {

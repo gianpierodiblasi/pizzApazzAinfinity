@@ -93,9 +93,6 @@
 }
 
 /* panel */
-.z4abstractvaluepanel {
-}
-
 .z4exporttofilepanel {
 }
 
@@ -269,6 +266,18 @@
 }
 .z4abstractrandomvaluepanel .z4abstractrandomvaluepanel-radio:nth-child(5) img {
   content: url(../image/math/z4randomvaluebehavior_stepped.svg);
+}.z4abstractvaluepanel {
+}
+
+.z4abstractvaluepanel.z4abstractvaluepanel-titled {
+  border: 2px solid var(--main-action-bgcolor);
+  border-radius: var(--roundness);
+  padding: 2px;
+}
+
+.z4abstractvaluepanel.z4abstractvaluepanel-titled > label:nth-child(1),
+.z4abstractvaluepanel.z4abstractvaluepanel-titled.z4abstractrandomvaluepanel > .z4signedvaluepanel:nth-child(1) > label:nth-child(1) {
+  font-weight: bold;
 }.z4canvas {
   overflow: scroll;
   display: grid;
