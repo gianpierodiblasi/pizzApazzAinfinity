@@ -21,8 +21,9 @@ class Z4Rotation extends Z4JSONable {
    *
    * @param startAngle The initial angle of rotation (in degrees)
    * @param angle The angle (in degrees)
-   * @param behavior
-   * @param delayed
+   * @param behavior The rotation behavior
+   * @param delayed true if the returned rotation has to be delayed (rotated by
+   * a PI angle), false otherwise
    */
   constructor(startAngle, angle, behavior, delayed) {
     super();
