@@ -5,7 +5,6 @@ import def.js.Object;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
 import javascript.swing.ButtonGroup;
-import javascript.swing.JSCheckBox;
 import javascript.swing.JSComponent;
 import javascript.swing.JSLabel;
 import javascript.swing.JSRadioButton;
@@ -110,7 +109,8 @@ public class Z4RotationPanel extends Z4AbstractValuePanel<Z4Rotation> {
     this.delayed.setIcon(new Z4EmptyImageProducer<>(""));
     this.delayed.addActionListener(event -> this.onRotationChange(false));
 
-    this.setValue(new Z4Rotation(0,
+    this.setValue(new Z4Rotation(
+            0,
             new Z4FancifulValue(
                     new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0),
                     new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
