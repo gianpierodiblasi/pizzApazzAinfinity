@@ -9,6 +9,7 @@ import javascript.swing.JSCheckBox;
 import javascript.swing.JSComponent;
 import javascript.swing.JSLabel;
 import javascript.swing.JSRadioButton;
+import javascript.swing.JSToggleButton;
 import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4RandomValue;
 import pizzapazza.math.Z4RandomValueBehavior;
@@ -33,7 +34,7 @@ public class Z4RotationPanel extends Z4AbstractValuePanel<Z4Rotation> {
   private final Z4SignedValuePanel startAngle;
   private final Z4FancifulValuePanel angle;
   private final Array<JSRadioButton> radios = new Array<>();
-  private final JSCheckBox delayed = new JSCheckBox();
+  private final JSToggleButton delayed = new JSToggleButton();
 
   private boolean valueIsAdjusting;
 
@@ -94,7 +95,10 @@ public class Z4RotationPanel extends Z4AbstractValuePanel<Z4Rotation> {
     this.angle.setRandomRange(0, 180);
     this.angle.addChangeListener(event -> this.onRotationChange(this.angle.getValueIsAdjusting()));
 
-    this.delayed.setText(Z4Translations.DELAYED);
+//    this.delayed.cssAddClass("z4rotationpanel-delayed");
+//    this.delayed.getStyle().padding = "1px";
+    this.delayed.setTooltip(Z4Translations.DELAYED);
+//    this.delayed.setIcon(new Z4EmptyImageProducer<>(""));
     this.delayed.addActionListener(event -> this.onRotationChange(false));
 
     this.setValue(new Z4Rotation(0,
@@ -150,7 +154,8 @@ public class Z4RotationPanel extends Z4AbstractValuePanel<Z4Rotation> {
 
   private void onRotationChange(boolean valueIsAdjusting) {
     this.valueIsAdjusting = valueIsAdjusting;
-
+    this.delayed.setContentAreaFilled(this.delayed.isSelected());
+    
     Object.keys(this.radios).forEach(key -> {
       if (((JSRadioButton) this.radios.$get(key)).isSelected()) {
         switch ("" + key) {
@@ -205,7 +210,8 @@ public class Z4RotationPanel extends Z4AbstractValuePanel<Z4Rotation> {
     this.startAngle.setValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), value.getStartAngle()));
     this.angle.setValue(value.getAngle());
     this.delayed.setSelected(value.isDelayed());
-
+    this.delayed.setContentAreaFilled(value.isDelayed());
+    
     Object.keys(this.radios).forEach(key -> ((JSRadioButton) this.radios.$get(key)).setContentAreaFilled(false));
     ((JSRadioButton) this.radios.$get("" + value.getRotationBehavior())).setSelected(true);
     ((JSRadioButton) this.radios.$get("" + value.getRotationBehavior())).setContentAreaFilled(true);

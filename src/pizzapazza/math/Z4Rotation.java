@@ -23,12 +23,13 @@ public class Z4Rotation implements Z4JSONable {
    *
    * @param startAngle The initial angle of rotation (in degrees)
    * @param angle The angle (in degrees)
-   * @param behavior
-   * @param delayed
+   * @param behavior The rotation behavior
+   * @param delayed true if the returned rotation has to be delayed (rotated by
+   * a PI angle), false otherwise
    */
   public Z4Rotation(double startAngle, Z4FancifulValue angle, Z4RotationBehavior behavior, boolean delayed) {
     super();
-    
+
     this.startAngle = startAngle;
     this.delayed = delayed;
     this.behavior = behavior;

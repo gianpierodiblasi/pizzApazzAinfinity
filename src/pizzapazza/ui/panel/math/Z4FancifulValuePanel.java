@@ -2,8 +2,8 @@ package pizzapazza.ui.panel.math;
 
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
-import javascript.swing.JSCheckBox;
 import javascript.swing.JSLabel;
+import javascript.swing.JSToggleButton;
 import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4RandomValue;
 import pizzapazza.math.Z4RandomValueBehavior;
@@ -12,6 +12,7 @@ import pizzapazza.math.Z4SignBehavior;
 import pizzapazza.math.Z4SignedRandomValue;
 import pizzapazza.math.Z4SignedValue;
 import pizzapazza.ui.panel.Z4AbstractValuePanel;
+import pizzapazza.util.Z4EmptyImageProducer;
 import pizzapazza.util.Z4Translations;
 import simulation.dom.$DOMRect;
 
@@ -23,7 +24,7 @@ import simulation.dom.$DOMRect;
 public class Z4FancifulValuePanel extends Z4AbstractValuePanel<Z4FancifulValue> {
 
   private final JSLabel label = new JSLabel();
-  private final JSCheckBox uniformSign = new JSCheckBox();
+  private final JSToggleButton uniformSign = new JSToggleButton();
   private final Z4SignPanel sign;
   private final Z4SignedValuePanel constant;
   private final Z4RandomValuePanel random;
@@ -81,15 +82,22 @@ public class Z4FancifulValuePanel extends Z4AbstractValuePanel<Z4FancifulValue> 
       this.signedRandom = null;
     }
 
-    this.uniformSign.setText(Z4Translations.UNIFORM_SIGN);
+    this.uniformSign.cssAddClass("z4fancifulvaluepanel-uniform-sign");
+    this.uniformSign.getStyle().padding = "1px";
+    this.uniformSign.setTooltip(Z4Translations.UNIFORM_SIGN);
+    this.uniformSign.setIcon(new Z4EmptyImageProducer<>(""));
     this.uniformSign.addActionListener(event -> this.onFancifulValueChange(false));
+    
     this.sign.getStyle().display = "none";
     this.sign.addChangeListener(event -> this.onFancifulValueChange(false));
+    
     this.constant.setLabel(Z4Translations.CONSTANT);
     this.constant.addChangeListener(event -> this.onFancifulValueChange(this.constant.getValueIsAdjusting()));
+    
     this.random.setLabel(Z4Translations.RANDOM);
     this.random.getStyle().display = "none";
     this.random.addChangeListener(event -> this.onFancifulValueChange(this.random.getValueIsAdjusting()));
+    
     this.signedRandom.setLabel(Z4Translations.RANDOM);
     this.signedRandom.addChangeListener(event -> this.onFancifulValueChange(this.signedRandom.getValueIsAdjusting()));
 
@@ -101,7 +109,8 @@ public class Z4FancifulValuePanel extends Z4AbstractValuePanel<Z4FancifulValue> 
 
   private void onFancifulValueChange(boolean valueIsAdjusting) {
     this.valueIsAdjusting = valueIsAdjusting;
-
+    this.uniformSign.setContentAreaFilled(this.uniformSign.isSelected());
+    
     if (!this.signsVisible) {
       this.signedRandom.setValue(new Z4SignedRandomValue(this.signedRandom.getValue().getSign(), this.random.getValue()));
     } else if (this.uniformSign.isSelected()) {
@@ -199,7 +208,8 @@ public class Z4FancifulValuePanel extends Z4AbstractValuePanel<Z4FancifulValue> 
     this.random.setValue(value.getRandom().getValue());
     this.signedRandom.setValue(value.getRandom());
     this.uniformSign.setSelected(value.isUniformSign());
-
+    this.uniformSign.setContentAreaFilled(value.isUniformSign());
+    
     this.setSignsVisible(this.signsVisible);
   }
 

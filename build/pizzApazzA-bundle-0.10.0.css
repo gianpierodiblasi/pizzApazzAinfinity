@@ -99,9 +99,6 @@
 .z4exporttofilepanel {
 }
 
-.z4fancifulvaluepanel {
-}
-
 .z4mergelayerpanel {
 }
 
@@ -303,7 +300,15 @@
   border-top-right-radius: var(--roundness);
   border-bottom-right-radius: var(--roundness);
 }
-.z4fillingpanel {
+.z4fancifulvaluepanel {
+}
+
+.z4fancifulvaluepanel .z4fancifulvaluepanel-uniform-sign img {
+  width: 16px;
+  height: 16px;
+  padding: 2px 0 0 2px;
+  content: url(../image/math/uniform_sign.svg);
+}.z4fillingpanel {
 }
 
 .z4fillingpanel div label:nth-child(1) img {
@@ -394,7 +399,8 @@
 .z4rotationpanel {
 }
 
-.z4rotationpanel .z4rotationpanel-radio img {
+.z4rotationpanel .z4rotationpanel-radio img,
+.z4rotationpanel .z4rotationpanel-delayed img {
   width: 16px;
   height: 16px;
 }
@@ -410,7 +416,9 @@
 .z4rotationpanel.z4rotationpanel-vertical .z4rotationpanel-radio:nth-child(6) img {
   content: url(../image/math/z4rotationbehavior_relativetopath.svg);
 }
-.z4signpanel {
+.z4rotationpanel .z4rotationpanel-delayed img {
+  content: url(../image/math/delayed.svg);
+}.z4signpanel {
 }
 
 .z4signpanel .z4signpanel-radio img {

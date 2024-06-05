@@ -5668,7 +5668,7 @@ class Z4FancifulValuePanel extends Z4AbstractValuePanel {
 
    label = new JSLabel();
 
-   uniformSign = new JSCheckBox();
+   uniformSign = new JSToggleButton();
 
    sign = null;
 
@@ -5722,7 +5722,10 @@ class Z4FancifulValuePanel extends Z4AbstractValuePanel {
       this.random = null;
       this.signedRandom = null;
     }
-    this.uniformSign.setText(Z4Translations.UNIFORM_SIGN);
+    this.uniformSign.cssAddClass("z4fancifulvaluepanel-uniform-sign");
+    this.uniformSign.getStyle().padding = "1px";
+    this.uniformSign.setTooltip(Z4Translations.UNIFORM_SIGN);
+    this.uniformSign.setIcon(new Z4EmptyImageProducer(""));
     this.uniformSign.addActionListener(event => this.onFancifulValueChange(false));
     this.sign.getStyle().display = "none";
     this.sign.addChangeListener(event => this.onFancifulValueChange(false));
@@ -5738,6 +5741,7 @@ class Z4FancifulValuePanel extends Z4AbstractValuePanel {
 
    onFancifulValueChange(valueIsAdjusting) {
     this.valueIsAdjusting = valueIsAdjusting;
+    this.uniformSign.setContentAreaFilled(this.uniformSign.isSelected());
     if (!this.signsVisible) {
       this.signedRandom.setValue(new Z4SignedRandomValue(this.signedRandom.getValue().getSign(), this.random.getValue()));
     } else if (this.uniformSign.isSelected()) {
@@ -5828,6 +5832,7 @@ class Z4FancifulValuePanel extends Z4AbstractValuePanel {
     this.random.setValue(value.getRandom().getValue());
     this.signedRandom.setValue(value.getRandom());
     this.uniformSign.setSelected(value.isUniformSign());
+    this.uniformSign.setContentAreaFilled(value.isUniformSign());
     this.setSignsVisible(this.signsVisible);
   }
 
@@ -5854,7 +5859,7 @@ class Z4RotationPanel extends Z4AbstractValuePanel {
 
    radios = new Array();
 
-   delayed = new JSCheckBox();
+   delayed = new JSToggleButton();
 
    valueIsAdjusting = false;
 
@@ -5902,7 +5907,10 @@ class Z4RotationPanel extends Z4AbstractValuePanel {
     this.angle.setConstantRange(0, 180);
     this.angle.setRandomRange(0, 180);
     this.angle.addChangeListener(event => this.onRotationChange(this.angle.getValueIsAdjusting()));
-    this.delayed.setText(Z4Translations.DELAYED);
+    // this.delayed.cssAddClass("z4rotationpanel-delayed");
+    // this.delayed.getStyle().padding = "1px";
+    this.delayed.setTooltip(Z4Translations.DELAYED);
+    // this.delayed.setIcon(new Z4EmptyImageProducer<>(""));
     this.delayed.addActionListener(event => this.onRotationChange(false));
     this.setValue(new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false));
   }
@@ -5950,6 +5958,7 @@ class Z4RotationPanel extends Z4AbstractValuePanel {
 
    onRotationChange(valueIsAdjusting) {
     this.valueIsAdjusting = valueIsAdjusting;
+    this.delayed.setContentAreaFilled(this.delayed.isSelected());
     Object.keys(this.radios).forEach(key => {
       if ((this.radios[key]).isSelected()) {
         switch("" + key) {
@@ -6001,6 +6010,7 @@ class Z4RotationPanel extends Z4AbstractValuePanel {
     this.startAngle.setValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), value.getStartAngle()));
     this.angle.setValue(value.getAngle());
     this.delayed.setSelected(value.isDelayed());
+    this.delayed.setContentAreaFilled(value.isDelayed());
     Object.keys(this.radios).forEach(key => (this.radios[key]).setContentAreaFilled(false));
     (this.radios["" + value.getRotationBehavior()]).setSelected(true);
     (this.radios["" + value.getRotationBehavior()]).setContentAreaFilled(true);

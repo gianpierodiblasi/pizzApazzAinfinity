@@ -13,7 +13,7 @@ class Z4RotationPanel extends Z4AbstractValuePanel {
 
    radios = new Array();
 
-   delayed = new JSCheckBox();
+   delayed = new JSToggleButton();
 
    valueIsAdjusting = false;
 
@@ -61,7 +61,10 @@ class Z4RotationPanel extends Z4AbstractValuePanel {
     this.angle.setConstantRange(0, 180);
     this.angle.setRandomRange(0, 180);
     this.angle.addChangeListener(event => this.onRotationChange(this.angle.getValueIsAdjusting()));
-    this.delayed.setText(Z4Translations.DELAYED);
+    // this.delayed.cssAddClass("z4rotationpanel-delayed");
+    // this.delayed.getStyle().padding = "1px";
+    this.delayed.setTooltip(Z4Translations.DELAYED);
+    // this.delayed.setIcon(new Z4EmptyImageProducer<>(""));
     this.delayed.addActionListener(event => this.onRotationChange(false));
     this.setValue(new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false));
   }
@@ -109,6 +112,7 @@ class Z4RotationPanel extends Z4AbstractValuePanel {
 
    onRotationChange(valueIsAdjusting) {
     this.valueIsAdjusting = valueIsAdjusting;
+    this.delayed.setContentAreaFilled(this.delayed.isSelected());
     Object.keys(this.radios).forEach(key => {
       if ((this.radios[key]).isSelected()) {
         switch("" + key) {
@@ -160,6 +164,7 @@ class Z4RotationPanel extends Z4AbstractValuePanel {
     this.startAngle.setValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), value.getStartAngle()));
     this.angle.setValue(value.getAngle());
     this.delayed.setSelected(value.isDelayed());
+    this.delayed.setContentAreaFilled(value.isDelayed());
     Object.keys(this.radios).forEach(key => (this.radios[key]).setContentAreaFilled(false));
     (this.radios["" + value.getRotationBehavior()]).setSelected(true);
     (this.radios["" + value.getRotationBehavior()]).setContentAreaFilled(true);

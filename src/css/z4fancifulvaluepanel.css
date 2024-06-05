@@ -1,0 +1,9 @@
+.z4fancifulvaluepanel {
+}
+
+.z4fancifulvaluepanel .z4fancifulvaluepanel-uniform-sign img {
+  width: 16px;
+  height: 16px;
+  padding: 2px 0 0 2px;
+  content: url(../image/math/uniform_sign.svg);
+}
