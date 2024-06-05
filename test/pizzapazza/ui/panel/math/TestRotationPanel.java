@@ -28,26 +28,26 @@ public class TestRotationPanel extends JSFrame {
     JSPanel p = new JSPanel();
     p.setLayout(new GridBagLayout());
     
-    p.add(new Z4RotationPanel(Z4RotationPanelOrientation.VERTICAL), new GBC(0, 0).wx(1).i(5, 5, 5, 5));
+    p.add(new Z4RotationPanel(Z4RotationPanelOrientation.VERTICAL), new GBC(0, 0).w(2).wx(1).i(5, 5, 5, 5));
     
     Z4RotationPanel labelled = new Z4RotationPanel(Z4RotationPanelOrientation.VERTICAL);
     labelled.setLabel("Label");
     labelled.cssAddClass("z4abstractvaluepanel-titled");
-    p.add(labelled, new GBC(1, 0).wx(1).i(5, 5, 5, 5));
+    p.add(labelled, new GBC(2, 0).w(2).wx(1).i(5, 5, 5, 5));
     
     Z4RotationPanel disabled = new Z4RotationPanel(Z4RotationPanelOrientation.VERTICAL);
     disabled.setEnabled(false);
-    p.add(disabled, new GBC(2, 0).wx(1).i(5, 5, 5, 5));
+    p.add(disabled, new GBC(4, 0).w(2).wx(1).i(5, 5, 5, 5));
     
-    p.add(new Z4RotationPanel(Z4RotationPanelOrientation.HORIZONTAL), new GBC(0, 1).w(3).i(5, 5, 5, 5));
+    p.add(new Z4RotationPanel(Z4RotationPanelOrientation.HORIZONTAL), new GBC(0, 1).w(3).wx(1).i(5, 5, 5, 5));
     
     labelled = new Z4RotationPanel(Z4RotationPanelOrientation.HORIZONTAL);
     labelled.setLabel("Label");
-    p.add(labelled, new GBC(0, 2).w(3).i(5, 5, 5, 5));
+    p.add(labelled, new GBC(3, 1).w(3).wx(1).i(5, 5, 5, 5));
     
     disabled = new Z4RotationPanel(Z4RotationPanelOrientation.HORIZONTAL);
     disabled.setEnabled(false);
-    p.add(disabled, new GBC(0, 3).w(3).i(5, 5, 5, 5));
+    p.add(disabled, new GBC(0, 2).w(3).wx(1).i(5, 5, 5, 5));
     
     Z4RotationPanel valued = new Z4RotationPanel(Z4RotationPanelOrientation.HORIZONTAL);
     valued.setLabel("Valore");
@@ -61,7 +61,7 @@ public class TestRotationPanel extends JSFrame {
                     false),
             Z4RotationBehavior.FIXED, false).toJSON()));
     
-    p.add(valued, new GBC(0, 4).w(3).i(5, 5, 5, 5));
+    p.add(valued, new GBC(3, 2).w(3).wx(1).i(5, 5, 5, 5));
     
     valued.addChangeListener(event -> {
       if (!valued.getValueIsAdjusting()) {
