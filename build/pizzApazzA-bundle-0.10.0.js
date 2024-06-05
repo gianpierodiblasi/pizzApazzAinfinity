@@ -2278,6 +2278,7 @@ class Z4LayerPreview extends JSDropDown {
     Z4UI.addVLine(this.summary, new GBC(3, 0).h(4).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.appendChildInTree("summary", this.summary);
     this.editor.cssAddClass("z4layerpreview-editor");
+    this.editor.addChangeListener(event => this.computePopupPosition());
     let panelBasic = new JSPanel();
     panelBasic.setLayout(new GridBagLayout());
     this.editName.addActionListener(event => {
