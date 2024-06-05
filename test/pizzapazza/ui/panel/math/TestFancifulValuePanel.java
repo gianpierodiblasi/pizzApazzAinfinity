@@ -5,7 +5,6 @@ import javascript.awt.BorderLayout;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
 import javascript.swing.JSFrame;
-import javascript.swing.JSLabel;
 import javascript.swing.JSPanel;
 import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4RandomValue;

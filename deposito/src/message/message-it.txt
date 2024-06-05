@@ -10,12 +10,6 @@ Z4Translations.VALUE = "Valore";
 Z4Translations.SIGN = "Segno";
 Z4Translations.SPINNER = "Spinner";
 Z4Translations.RANGE = "Range";
-Z4Translations.START_ANGLE = "Angolo Iniziale";
-Z4Translations.ANGLE = "Angolo";
-Z4Translations.FIXED = "Fisso";
-Z4Translations.CUMULATIVE = "Cumulativo";
-Z4Translations.RELATIVE_TO_PATH = "Relativo al Percorso";
-Z4Translations.DELAYED = "Ritardato";
 
 # Color
 Z4Translations.LIGHTING = "Illuminazione";

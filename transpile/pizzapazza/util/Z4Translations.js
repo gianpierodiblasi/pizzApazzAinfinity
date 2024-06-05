@@ -220,6 +220,18 @@ class Z4Translations {
 
   static  UNIFORM_SIGN = "";
 
+  static  START_ANGLE = "";
+
+  static  ANGLE = "";
+
+  static  FIXED = "";
+
+  static  CUMULATIVE = "";
+
+  static  RELATIVE_TO_PATH = "";
+
+  static  DELAYED = "";
+
   // Composite Operation
   static  COMPOSITE_OPERATION = "";
 
@@ -402,6 +414,12 @@ class Z4Translations {
     Z4Translations.BEZIER = "Bezier";
     Z4Translations.LENGTH = "Length";
     Z4Translations.UNIFORM_SIGN = "Uniform Sign";
+    Z4Translations.START_ANGLE = "Start Angle";
+    Z4Translations.ANGLE = "Angle";
+    Z4Translations.FIXED = "Fixed";
+    Z4Translations.CUMULATIVE = "Cumulative";
+    Z4Translations.RELATIVE_TO_PATH = "Relative to Path";
+    Z4Translations.DELAYED = "Delayed";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "This is the default setting and draws the layer on top of the existing content";
@@ -546,6 +564,12 @@ class Z4Translations {
     Z4Translations.BEZIER = "Bezier";
     Z4Translations.LENGTH = "Lunghezza";
     Z4Translations.UNIFORM_SIGN = "Segno Uniforme";
+    Z4Translations.START_ANGLE = "Angolo Iniziale";
+    Z4Translations.ANGLE = "Angolo";
+    Z4Translations.FIXED = "Fisso";
+    Z4Translations.CUMULATIVE = "Cumulativo";
+    Z4Translations.RELATIVE_TO_PATH = "Relativo al Percorso";
+    Z4Translations.DELAYED = "Ritardato";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "Questa \u00E8 l'impostazione predefinita e disegna il livello sopra il contenuto esistente";

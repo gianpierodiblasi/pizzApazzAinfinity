@@ -1197,6 +1197,26 @@ class Z4RandomValueBehavior {
   static STEPPED = 'STEPPED';
 }
 /**
+ * The behavior of a rotation
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4RotationBehavior {
+
+  /**
+   * The rotation is computed on a fixed value
+   */
+  static FIXED = 'FIXED';
+  /**
+   * The rotation is computed by cumulating previous rotation
+   */
+  static CUMULATIVE = 'CUMULATIVE';
+  /**
+   * The rotation is computed relative to a path
+   */
+  static RELATIVE_TO_PATH = 'RELATIVE_TO_PATH';
+}
+/**
  * The behavior of a sign
  *
  * @author gianpiero.diblasi
@@ -1219,6 +1239,74 @@ class Z4SignBehavior {
    * A sign providing the following sequence +1, -1, +1, -1, ...
    */
   static ALTERNATE = 'ALTERNATE';
+}
+/**
+ * The vector
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Vector {
+
+   x0 = 0.0;
+
+   y0 = 0.0;
+
+   x = 0.0;
+
+   y = 0.0;
+
+   module = 0.0;
+
+   phase = 0.0;
+
+  constructor(x0, y0, x, y, module, phase) {
+    this.x0 = x0;
+    this.y0 = y0;
+    this.x = x;
+    this.y = y;
+    this.module = module;
+    this.phase = phase;
+  }
+
+  /**
+   * Creates a Z4Vector from points
+   *
+   * @param x0 The x-axis coordinate of the start point
+   * @param y0 The y-axis coordinate of the start point
+   * @param x The x-axis coordinate of the end point
+   * @param y The y-axis coordinate of the end point
+   * @return The Z4Vector
+   */
+  static  fromPoints(x0, y0, x, y) {
+    return new Z4Vector(x0, y0, x, y, Z4Math.distance(x0, y0, x, y), Z4Math.atan(x0, y0, x, y));
+  }
+
+  /**
+   * Creates a Z4Vector from a vector
+   *
+   * @param x0 The x-axis coordinate of the start point
+   * @param y0 The y-axis coordinate of the start point
+   * @param module The module
+   * @param phase The phase (in radians)
+   * @return The Z4Vector
+   */
+  static  fromVector(x0, y0, module, phase) {
+    return new Z4Vector(x0, y0, x0 + module * Math.cos(phase), y0 + module * Math.sin(phase), module, phase);
+  }
+
+  /**
+   * Returns the direction in which this vector rotates on another Z4Vector
+   *
+   * @param vector The other vector
+   * @return The direction in which this vector rotates on another Z4Vector
+   */
+   direction(vector) {
+    let x1 = this.x - this.x0;
+    let y1 = this.y - this.y0;
+    let x2 = vector.x - vector.x0;
+    let y2 = vector.y - vector.y0;
+    return Math.atan2(x1 * y2 - y1 * x2, x1 * x2 + y1 * y2) >= 0 ? Z4SignBehavior.POSITIVE : Z4SignBehavior.NEGATIVE;
+  }
 }
 /**
  * The canvas
@@ -4270,6 +4358,22 @@ class Z4RandomValuePanelOrientation {
   static VERTICAL = 'VERTICAL';
 }
 /**
+ * The orientation of a rotation panel
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4RotationPanelOrientation {
+
+  /**
+   * The rotation panel is visualized horizontally
+   */
+  static HORIZONTAL = 'HORIZONTAL';
+  /**
+   * The rotation panel is visualized vertically
+   */
+  static VERTICAL = 'VERTICAL';
+}
+/**
  * The orientation of a signed value panel
  *
  * @author gianpiero.diblasi
@@ -5736,6 +5840,180 @@ class Z4FancifulValuePanel extends Z4AbstractValuePanel {
   }
 }
 /**
+ * The panel to manage a rotation
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4RotationPanel extends Z4AbstractValuePanel {
+
+   label = new JSLabel();
+
+   startAngle = null;
+
+   angle = null;
+
+   radios = new Array();
+
+   delayed = new JSCheckBox();
+
+   valueIsAdjusting = false;
+
+  /**
+   * Creates the object
+   *
+   * @param orientation The orientation
+   */
+  constructor(orientation) {
+    super();
+    this.cssAddClass("z4rotationpanel");
+    this.setLayout(new GridBagLayout());
+    let buttonGroup = new ButtonGroup();
+    if (orientation === Z4RotationPanelOrientation.HORIZONTAL) {
+      this.cssAddClass("z4rotationpanel-horizontal");
+      this.add(this.label, new GBC(0, 0));
+      this.startAngle = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.HORIZONTAL);
+      this.add(this.startAngle, new GBC(1, 0).h(2).a(GBC.SOUTHEAST).wx(1));
+      this.angle = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+      this.add(this.angle, new GBC(0, 2).w(6));
+      this.addRadio(Z4RotationBehavior.FIXED, buttonGroup, 3, 0, "left", orientation);
+      this.addRadio(Z4RotationBehavior.CUMULATIVE, buttonGroup, 4, 0, "center", orientation);
+      this.addRadio(Z4RotationBehavior.RELATIVE_TO_PATH, buttonGroup, 5, 0, "right", orientation);
+      this.add(this.delayed, new GBC(2, 1).w(4));
+    } else if (orientation === Z4RotationPanelOrientation.VERTICAL) {
+      this.cssAddClass("z4rotationpanel-vertical");
+      this.add(this.label, new GBC(0, 0).a(GBC.WEST));
+      this.startAngle = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.VERTICAL);
+      this.add(this.startAngle, new GBC(0, 1).w(3));
+      this.add(this.delayed, new GBC(0, 2).w(3));
+      this.addRadio(Z4RotationBehavior.FIXED, buttonGroup, 0, 3, "left", orientation);
+      this.addRadio(Z4RotationBehavior.CUMULATIVE, buttonGroup, 1, 3, "center", orientation);
+      this.addRadio(Z4RotationBehavior.RELATIVE_TO_PATH, buttonGroup, 2, 3, "right", orientation);
+      this.angle = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
+      this.add(this.angle, new GBC(0, 4).w(3));
+    } else {
+      this.startAngle = null;
+      this.angle = null;
+    }
+    this.startAngle.setRange(0, 360);
+    this.startAngle.setSignVisible(false);
+    this.startAngle.setLabel(Z4Translations.START_ANGLE);
+    this.startAngle.addChangeListener(event => this.onRotationChange(this.startAngle.getValueIsAdjusting()));
+    this.angle.setLabel(Z4Translations.ANGLE);
+    this.angle.setConstantRange(0, 180);
+    this.angle.setRandomRange(0, 180);
+    this.angle.addChangeListener(event => this.onRotationChange(this.angle.getValueIsAdjusting()));
+    this.delayed.setText(Z4Translations.DELAYED);
+    this.delayed.addActionListener(event => this.onRotationChange(false));
+    this.setValue(new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false));
+  }
+
+   addRadio(behavior, buttonGroup, x, y, border, orientation) {
+    let radio = new JSRadioButton();
+    radio.cssAddClass("z4rotationpanel-radio");
+    radio.getStyle().padding = "1px";
+    radio.setTooltip(Z4Translations["" + behavior]);
+    radio.setToggle();
+    radio.setIcon(new Z4EmptyImageProducer(behavior));
+    radio.addActionListener(event => {
+      Object.keys(this.radios).forEach(key => (this.radios[key]).setContentAreaFilled(false));
+      radio.setContentAreaFilled(true);
+      this.onRotationChange(false);
+    });
+    let gbc = new GBC(x, y);
+    switch(border) {
+      case "left":
+        if (orientation === Z4RotationPanelOrientation.VERTICAL) {
+          gbc.a(GBC.EAST).wx(1);
+        }
+        radio.getStyle().borderTopRightRadius = "0px";
+        radio.getStyle().borderBottomRightRadius = "0px";
+        radio.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "center":
+        radio.getStyle().borderRadius = "0px";
+        radio.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        radio.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "right":
+        if (orientation === Z4RotationPanelOrientation.VERTICAL) {
+          gbc.a(GBC.WEST).wx(1);
+        }
+        radio.getStyle().borderTopLeftRadius = "0px";
+        radio.getStyle().borderBottomLeftRadius = "0px";
+        radio.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        break;
+    }
+    buttonGroup.add(radio);
+    this.radios["" + behavior] = radio;
+    this.add(radio, gbc);
+  }
+
+   onRotationChange(valueIsAdjusting) {
+    this.valueIsAdjusting = valueIsAdjusting;
+    Object.keys(this.radios).forEach(key => {
+      if ((this.radios[key]).isSelected()) {
+        switch("" + key) {
+          case "FIXED":
+            this.value = new Z4Rotation(this.startAngle.getValue().getValue(), this.angle.getValue(), Z4RotationBehavior.FIXED, this.delayed.isSelected());
+            break;
+          case "CUMULATIVE":
+            this.value = new Z4Rotation(this.startAngle.getValue().getValue(), this.angle.getValue(), Z4RotationBehavior.CUMULATIVE, this.delayed.isSelected());
+            break;
+          case "RELATIVE_TO_PATH":
+            this.value = new Z4Rotation(this.startAngle.getValue().getValue(), this.angle.getValue(), Z4RotationBehavior.RELATIVE_TO_PATH, this.delayed.isSelected());
+            break;
+        }
+      }
+    });
+    this.onchange();
+  }
+
+  /**
+   * Sets the label
+   *
+   * @param label The label
+   */
+   setLabel(label) {
+    this.label.setText(label);
+  }
+
+  /**
+   * Sets the range of the random length
+   *
+   * @param min The minumum value
+   * @param max The maximum value
+   */
+   setRandomLengthRange(min, max) {
+    this.angle.setRandomLengthRange(min, max);
+  }
+
+  /**
+   * Returns if the value is adjusting
+   *
+   * @return true if the value is adjusting, false otherwise
+   */
+   getValueIsAdjusting() {
+    return this.valueIsAdjusting;
+  }
+
+   setValue(value) {
+    this.value = value;
+    this.startAngle.setValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), value.getStartAngle()));
+    this.angle.setValue(value.getAngle());
+    this.delayed.setSelected(value.isDelayed());
+    Object.keys(this.radios).forEach(key => (this.radios[key]).setContentAreaFilled(false));
+    (this.radios["" + value.getRotationBehavior()]).setSelected(true);
+    (this.radios["" + value.getRotationBehavior()]).setContentAreaFilled(true);
+  }
+
+   setEnabled(b) {
+    this.startAngle.setEnabled(b);
+    this.angle.setEnabled(b);
+    Object.keys(this.radios).forEach(key => (this.radios[key]).setEnabled(b));
+    this.delayed.setEnabled(b);
+  }
+}
+/**
  * The panel to manage a signed value
  *
  * @author gianpiero.diblasi
@@ -6980,6 +7258,18 @@ class Z4Translations {
 
   static  UNIFORM_SIGN = "";
 
+  static  START_ANGLE = "";
+
+  static  ANGLE = "";
+
+  static  FIXED = "";
+
+  static  CUMULATIVE = "";
+
+  static  RELATIVE_TO_PATH = "";
+
+  static  DELAYED = "";
+
   // Composite Operation
   static  COMPOSITE_OPERATION = "";
 
@@ -7162,6 +7452,12 @@ class Z4Translations {
     Z4Translations.BEZIER = "Bezier";
     Z4Translations.LENGTH = "Length";
     Z4Translations.UNIFORM_SIGN = "Uniform Sign";
+    Z4Translations.START_ANGLE = "Start Angle";
+    Z4Translations.ANGLE = "Angle";
+    Z4Translations.FIXED = "Fixed";
+    Z4Translations.CUMULATIVE = "Cumulative";
+    Z4Translations.RELATIVE_TO_PATH = "Relative to Path";
+    Z4Translations.DELAYED = "Delayed";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "This is the default setting and draws the layer on top of the existing content";
@@ -7306,6 +7602,12 @@ class Z4Translations {
     Z4Translations.BEZIER = "Bezier";
     Z4Translations.LENGTH = "Lunghezza";
     Z4Translations.UNIFORM_SIGN = "Segno Uniforme";
+    Z4Translations.START_ANGLE = "Angolo Iniziale";
+    Z4Translations.ANGLE = "Angolo";
+    Z4Translations.FIXED = "Fisso";
+    Z4Translations.CUMULATIVE = "Cumulativo";
+    Z4Translations.RELATIVE_TO_PATH = "Relativo al Percorso";
+    Z4Translations.DELAYED = "Ritardato";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "Questa \u00E8 l'impostazione predefinita e disegna il livello sopra il contenuto esistente";
@@ -8309,6 +8611,125 @@ class Z4SignedValue extends Z4Nextable {
    */
   static  fromJSON(json) {
     return new Z4SignedValue(Z4Sign.fromJSON(json["sign"]), json["value"]);
+  }
+}
+/**
+ * The rotation (angles parameters have to be provided in degrees, rotations are
+ * computed in radians)
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Rotation extends Z4JSONable {
+
+   startAngle = 0.0;
+
+   angle = null;
+
+   behavior = null;
+
+   delayed = false;
+
+   rotationNext = 0.0;
+
+  /**
+   * Creates the object
+   *
+   * @param startAngle The initial angle of rotation (in degrees)
+   * @param angle The angle (in degrees)
+   * @param behavior
+   * @param delayed
+   */
+  constructor(startAngle, angle, behavior, delayed) {
+    super();
+    this.startAngle = startAngle;
+    this.delayed = delayed;
+    this.behavior = behavior;
+    this.angle = angle;
+  }
+
+  /**
+   * Returns the initial angle of rotation (in degrees)
+   *
+   * @return The initial angle of rotation (in degrees)
+   */
+   getStartAngle() {
+    return this.startAngle;
+  }
+
+  /**
+   * Returns the angle (in degrees)
+   *
+   * @return The angle (in degrees)
+   */
+   getAngle() {
+    return this.angle;
+  }
+
+  /**
+   * Returns the rotation behavior
+   *
+   * @return The rotation behavior
+   */
+   getRotationBehavior() {
+    return this.behavior;
+  }
+
+  /**
+   * Returns if the rotation has to be delayed (rotated by a PI angle)
+   *
+   * @return true if the returned rotation has to be delayed (rotated by a PI
+   * angle), false otherwise
+   */
+   isDelayed() {
+    return this.delayed;
+  }
+
+  /**
+   * Returns the next rotation
+   *
+   * @param tangentAngle The tangent angle (in radians)
+   * @return The next rotation (in radians)
+   */
+   next(tangentAngle) {
+    let nextAngle = Z4Math.deg2rad(this.startAngle + this.angle.next());
+    if (this.behavior === Z4RotationBehavior.FIXED) {
+      return nextAngle + (this.delayed ? Math.PI : 0);
+    } else if (this.behavior === Z4RotationBehavior.CUMULATIVE) {
+      this.rotationNext += nextAngle;
+      return this.rotationNext + (this.delayed ? Math.PI : 0);
+    } else if (this.behavior === Z4RotationBehavior.RELATIVE_TO_PATH) {
+      return nextAngle + tangentAngle + (this.delayed ? Math.PI : 0);
+    } else {
+      return 0;
+    }
+  }
+
+   toJSON() {
+    let json = new Object();
+    json["startAngle"] = this.startAngle;
+    json["angle"] = this.angle.toJSON();
+    json["behavior"] = this.behavior;
+    json["delayed"] = this.delayed;
+    return json;
+  }
+
+  /**
+   * Creates a Z4Rotation from a JSON object
+   *
+   * @param json The JSON object
+   * @return the rotation
+   */
+  static  fromJSON(json) {
+    switch("" + json["behavior"]) {
+      case "FIXED":
+        return new Z4Rotation(json["startAngle"], Z4FancifulValue.fromJSON(json["angle"]), Z4RotationBehavior.FIXED, json["delayed"]);
+      case "CUMULATIVE":
+        return new Z4Rotation(json["startAngle"], Z4FancifulValue.fromJSON(json["angle"]), Z4RotationBehavior.CUMULATIVE, json["delayed"]);
+      case "RELATIVE_TO_PATH":
+        return new Z4Rotation(json["startAngle"], Z4FancifulValue.fromJSON(json["angle"]), Z4RotationBehavior.RELATIVE_TO_PATH, json["delayed"]);
+      default:
+        return null;
+    }
   }
 }
 /**

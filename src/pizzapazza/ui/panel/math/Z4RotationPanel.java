@@ -1,0 +1,221 @@
+package pizzapazza.ui.panel.math;
+
+import def.js.Array;
+import def.js.Object;
+import javascript.awt.GBC;
+import javascript.awt.GridBagLayout;
+import javascript.swing.ButtonGroup;
+import javascript.swing.JSCheckBox;
+import javascript.swing.JSComponent;
+import javascript.swing.JSLabel;
+import javascript.swing.JSRadioButton;
+import pizzapazza.math.Z4FancifulValue;
+import pizzapazza.math.Z4RandomValue;
+import pizzapazza.math.Z4RandomValueBehavior;
+import pizzapazza.math.Z4Rotation;
+import pizzapazza.math.Z4RotationBehavior;
+import pizzapazza.math.Z4Sign;
+import pizzapazza.math.Z4SignBehavior;
+import pizzapazza.math.Z4SignedRandomValue;
+import pizzapazza.math.Z4SignedValue;
+import pizzapazza.ui.panel.Z4AbstractValuePanel;
+import pizzapazza.util.Z4EmptyImageProducer;
+import pizzapazza.util.Z4Translations;
+
+/**
+ * The panel to manage a rotation
+ *
+ * @author gianpiero.diblasi
+ */
+public class Z4RotationPanel extends Z4AbstractValuePanel<Z4Rotation> {
+
+  private final JSLabel label = new JSLabel();
+  private final Z4SignedValuePanel startAngle;
+  private final Z4FancifulValuePanel angle;
+  private final Array<JSRadioButton> radios = new Array<>();
+  private final JSCheckBox delayed = new JSCheckBox();
+
+  private boolean valueIsAdjusting;
+
+  /**
+   * Creates the object
+   *
+   * @param orientation The orientation
+   */
+  public Z4RotationPanel(Z4RotationPanelOrientation orientation) {
+    super();
+    this.cssAddClass("z4rotationpanel");
+    this.setLayout(new GridBagLayout());
+
+    ButtonGroup buttonGroup = new ButtonGroup();
+
+    if (orientation == Z4RotationPanelOrientation.HORIZONTAL) {
+      this.cssAddClass("z4rotationpanel-horizontal");
+      this.add(this.label, new GBC(0, 0));
+
+      this.startAngle = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.HORIZONTAL);
+      this.add(this.startAngle, new GBC(1, 0).h(2).a(GBC.SOUTHEAST).wx(1));
+
+      this.angle = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+      this.add(this.angle, new GBC(0, 2).w(6));
+
+      this.addRadio(Z4RotationBehavior.FIXED, buttonGroup, 3, 0, "left", orientation);
+      this.addRadio(Z4RotationBehavior.CUMULATIVE, buttonGroup, 4, 0, "center", orientation);
+      this.addRadio(Z4RotationBehavior.RELATIVE_TO_PATH, buttonGroup, 5, 0, "right", orientation);
+
+      this.add(this.delayed, new GBC(2, 1).w(4));
+    } else if (orientation == Z4RotationPanelOrientation.VERTICAL) {
+      this.cssAddClass("z4rotationpanel-vertical");
+      this.add(this.label, new GBC(0, 0).a(GBC.WEST));
+      
+      this.startAngle = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.VERTICAL);
+      this.add(this.startAngle, new GBC(0, 1).w(3));
+
+      this.add(this.delayed, new GBC(0, 2).w(3));
+      
+      this.addRadio(Z4RotationBehavior.FIXED, buttonGroup, 0, 3, "left", orientation);
+      this.addRadio(Z4RotationBehavior.CUMULATIVE, buttonGroup, 1, 3, "center", orientation);
+      this.addRadio(Z4RotationBehavior.RELATIVE_TO_PATH, buttonGroup, 2, 3, "right", orientation);
+
+      this.angle = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
+      this.add(this.angle, new GBC(0, 4).w(3));
+    } else {
+      this.startAngle = null;
+      this.angle = null;
+    }
+
+    this.startAngle.setRange(0, 360);
+    this.startAngle.setSignVisible(false);
+    this.startAngle.setLabel(Z4Translations.START_ANGLE);
+    this.startAngle.addChangeListener(event -> this.onRotationChange(this.startAngle.getValueIsAdjusting()));
+
+    this.angle.setLabel(Z4Translations.ANGLE);
+    this.angle.setConstantRange(0, 180);
+    this.angle.setRandomRange(0, 180);
+    this.angle.addChangeListener(event -> this.onRotationChange(this.angle.getValueIsAdjusting()));
+
+    this.delayed.setText(Z4Translations.DELAYED);
+    this.delayed.addActionListener(event -> this.onRotationChange(false));
+
+    this.setValue(new Z4Rotation(0,
+            new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false),
+            Z4RotationBehavior.FIXED, false));
+  }
+
+  private void addRadio(Z4RotationBehavior behavior, ButtonGroup buttonGroup, int x, int y, String border, Z4RotationPanelOrientation orientation) {
+    JSRadioButton radio = new JSRadioButton();
+    radio.cssAddClass("z4rotationpanel-radio");
+    radio.getStyle().padding = "1px";
+    radio.setTooltip(Z4Translations.$get("" + behavior));
+    radio.setToggle();
+    radio.setIcon(new Z4EmptyImageProducer<>(behavior));
+    radio.addActionListener(event -> {
+      Object.keys(this.radios).forEach(key -> ((JSRadioButton) this.radios.$get(key)).setContentAreaFilled(false));
+      radio.setContentAreaFilled(true);
+      this.onRotationChange(false);
+    });
+
+    GBC gbc = new GBC(x, y);
+    switch (border) {
+      case "left":
+        if (orientation == Z4RotationPanelOrientation.VERTICAL) {
+          gbc.a(GBC.EAST).wx(1);
+        }
+        radio.getStyle().borderTopRightRadius = "0px";
+        radio.getStyle().borderBottomRightRadius = "0px";
+        radio.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "center":
+        radio.getStyle().borderRadius = "0px";
+        radio.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        radio.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "right":
+        if (orientation == Z4RotationPanelOrientation.VERTICAL) {
+          gbc.a(GBC.WEST).wx(1);
+        }
+        radio.getStyle().borderTopLeftRadius = "0px";
+        radio.getStyle().borderBottomLeftRadius = "0px";
+        radio.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        break;
+    }
+
+    buttonGroup.add(radio);
+    this.radios.$set("" + behavior, radio);
+    this.add(radio, gbc);
+  }
+
+  private void onRotationChange(boolean valueIsAdjusting) {
+    this.valueIsAdjusting = valueIsAdjusting;
+
+    Object.keys(this.radios).forEach(key -> {
+      if (((JSRadioButton) this.radios.$get(key)).isSelected()) {
+        switch ("" + key) {
+          case "FIXED":
+            this.value = new Z4Rotation(this.startAngle.getValue().getValue(), this.angle.getValue(), Z4RotationBehavior.FIXED, this.delayed.isSelected());
+            break;
+          case "CUMULATIVE":
+            this.value = new Z4Rotation(this.startAngle.getValue().getValue(), this.angle.getValue(), Z4RotationBehavior.CUMULATIVE, this.delayed.isSelected());
+            break;
+          case "RELATIVE_TO_PATH":
+            this.value = new Z4Rotation(this.startAngle.getValue().getValue(), this.angle.getValue(), Z4RotationBehavior.RELATIVE_TO_PATH, this.delayed.isSelected());
+            break;
+        }
+      }
+    });
+
+    this.onchange();
+  }
+
+  /**
+   * Sets the label
+   *
+   * @param label The label
+   */
+  public void setLabel(String label) {
+    this.label.setText(label);
+  }
+
+  /**
+   * Sets the range of the random length
+   *
+   * @param min The minumum value
+   * @param max The maximum value
+   */
+  public void setRandomLengthRange(int min, int max) {
+    this.angle.setRandomLengthRange(min, max);
+  }
+
+  /**
+   * Returns if the value is adjusting
+   *
+   * @return true if the value is adjusting, false otherwise
+   */
+  public boolean getValueIsAdjusting() {
+    return this.valueIsAdjusting;
+  }
+
+  @Override
+  public void setValue(Z4Rotation value) {
+    this.value = value;
+
+    this.startAngle.setValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), value.getStartAngle()));
+    this.angle.setValue(value.getAngle());
+    this.delayed.setSelected(value.isDelayed());
+
+    Object.keys(this.radios).forEach(key -> ((JSRadioButton) this.radios.$get(key)).setContentAreaFilled(false));
+    ((JSRadioButton) this.radios.$get("" + value.getRotationBehavior())).setSelected(true);
+    ((JSRadioButton) this.radios.$get("" + value.getRotationBehavior())).setContentAreaFilled(true);
+  }
+
+  @Override
+  public void setEnabled(boolean b) {
+    this.startAngle.setEnabled(b);
+    this.angle.setEnabled(b);
+    Object.keys(this.radios).forEach(key -> ((JSComponent) this.radios.$get(key)).setEnabled(b));
+    this.delayed.setEnabled(b);
+  }
+}
