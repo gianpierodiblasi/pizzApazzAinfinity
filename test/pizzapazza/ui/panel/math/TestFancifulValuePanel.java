@@ -37,16 +37,19 @@ public class TestFancifulValuePanel extends JSFrame {
     disabled.setEnabled(false);
     p.add(disabled, new GBC(2, 0).wx(1).i(5, 5, 5, 5));
 
-    p.add(new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL), new GBC(0, 1).w(3).i(5, 5, 5, 5));
+    p.add(new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTALLY_VERTICAL), new GBC(0, 1).wx(1).i(5, 5, 5, 5));
+
+    labelled = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTALLY_VERTICAL);
+    labelled.setLabel("Label");
+    labelled.cssAddClass("z4abstractvaluepanel-titled");
+    p.add(labelled, new GBC(1, 1).wx(1).i(5, 5, 5, 5));
+
+    p.add(new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL), new GBC(0, 2).w(3).i(5, 5, 5, 5));
 
     labelled = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
     labelled.setLabel("Label");
     labelled.cssAddClass("z4abstractvaluepanel-titled");
-    p.add(labelled, new GBC(0, 2).w(3).i(5, 5, 5, 5));
-
-    disabled = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
-    disabled.setEnabled(false);
-    p.add(disabled, new GBC(0, 3).w(3).i(5, 5, 5, 5));
+    p.add(labelled, new GBC(0, 3).w(3).i(5, 5, 5, 5));
 
     Z4FancifulValuePanel valued = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
     valued.setLabel("Valore");

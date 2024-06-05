@@ -75,6 +75,21 @@ public class Z4FancifulValuePanel extends Z4AbstractValuePanel<Z4FancifulValue> 
 
       this.signedRandom = new Z4SignedRandomValuePanel(Z4RandomValuePanelOrientation.VERTICAL);
       this.add(this.signedRandom, new GBC(0, 4).w(2));
+    } else if (orientation == Z4FancifulValuePanelOrientation.HORIZONTALLY_VERTICAL) {
+      this.add(this.label, new GBC(0, 0).w(2).wx(1).a(GBC.WEST));
+      this.add(this.uniformSign, new GBC(2, 0).a(GBC.EAST));
+
+      this.sign = new Z4SignPanel(Z4SignPanelOrientation.SQUARED);
+      this.add(this.sign, new GBC(0, 1).a(GBC.SOUTH));
+
+      this.constant = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.HORIZONTAL);
+      this.add(this.constant, new GBC(1, 1).w(2));
+
+      this.random = new Z4RandomValuePanel(Z4RandomValuePanelOrientation.HORIZONTALLY_VERTICAL);
+      this.add(this.random, new GBC(0, 2).w(3).a(GBC.EAST));
+
+      this.signedRandom = new Z4SignedRandomValuePanel(Z4RandomValuePanelOrientation.HORIZONTALLY_VERTICAL);
+      this.add(this.signedRandom, new GBC(0, 3).w(3).a(GBC.EAST));
     } else {
       this.sign = null;
       this.constant = null;

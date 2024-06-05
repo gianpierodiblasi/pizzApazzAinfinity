@@ -13,5 +13,10 @@ public enum Z4FancifulValuePanelOrientation {
   /**
    * The fanciful value panel is visualized vertically
    */
-  VERTICAL;
+  VERTICAL,
+  /**
+   * The fanciful value panel is visualized vertically with components
+   * visualized horizontally
+   */
+  HORIZONTALLY_VERTICAL;
 }
