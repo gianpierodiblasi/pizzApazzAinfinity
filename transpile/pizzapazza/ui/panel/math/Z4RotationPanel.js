@@ -31,13 +31,18 @@ class Z4RotationPanel extends Z4AbstractValuePanel {
       this.cssAddClass("z4rotationpanel-horizontal");
       this.add(this.label, new GBC(0, 0));
       this.startAngle = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.HORIZONTAL);
-      this.add(this.startAngle, new GBC(1, 0).h(2).a(GBC.SOUTHEAST).wx(1));
+      this.add(this.startAngle, new GBC(1, 0).h(2).a(GBC.SOUTHEAST).wx(1).i(0, 0, 0, 1));
       this.angle = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
-      this.add(this.angle, new GBC(0, 2).w(6));
-      this.addRadio(Z4RotationBehavior.FIXED, buttonGroup, 3, 0, "left");
-      this.addRadio(Z4RotationBehavior.CUMULATIVE, buttonGroup, 4, 0, "center");
-      this.addRadio(Z4RotationBehavior.RELATIVE_TO_PATH, buttonGroup, 5, 0, "right");
-      this.add(this.delayed, new GBC(2, 1).w(4));
+      this.add(this.angle, new GBC(0, 2).w(4).i(1, 0, 0, 0));
+      this.addRadio(Z4RotationBehavior.FIXED, buttonGroup, 2, 0, "topleft");
+      this.addRadio(Z4RotationBehavior.CUMULATIVE, buttonGroup, 3, 0, "topright");
+      this.addRadio(Z4RotationBehavior.RELATIVE_TO_PATH, buttonGroup, 2, 1, "bottomleft");
+      this.delayed.getStyle().borderTopLeftRadius = "0px";
+      this.delayed.getStyle().borderBottomLeftRadius = "0px";
+      this.delayed.getStyle().borderTopRightRadius = "0px";
+      this.delayed.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+      this.delayed.getStyle().borderTop = "1px solid var(--main-action-bgcolor)";
+      this.add(this.delayed, new GBC(3, 1));
     } else if (orientation === Z4RotationPanelOrientation.VERTICAL) {
       this.cssAddClass("z4rotationpanel-vertical");
       this.add(this.label, new GBC(0, 0).w(4).a(GBC.WEST));
@@ -96,13 +101,8 @@ class Z4RotationPanel extends Z4AbstractValuePanel {
         radio.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
         radio.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
         break;
-      case "right":
-        radio.getStyle().borderTopLeftRadius = "0px";
-        radio.getStyle().borderBottomLeftRadius = "0px";
-        radio.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
-        break;
       case "topleft":
-        // gbc.a(GBC.SOUTH).wy(1);
+        gbc.a(GBC.SOUTH).wy(1);
         radio.getStyle().borderTopRightRadius = "0px";
         radio.getStyle().borderBottomRightRadius = "0px";
         radio.getStyle().borderBottomLeftRadius = "0px";
@@ -110,7 +110,7 @@ class Z4RotationPanel extends Z4AbstractValuePanel {
         radio.getStyle().borderBottom = "1px solid var(--main-action-bgcolor)";
         break;
       case "topright":
-        // gbc.a(GBC.SOUTH).wy(1);
+        gbc.a(GBC.SOUTH).wy(1);
         radio.getStyle().borderTopLeftRadius = "0px";
         radio.getStyle().borderBottomLeftRadius = "0px";
         radio.getStyle().borderBottomRightRadius = "0px";
@@ -122,13 +122,6 @@ class Z4RotationPanel extends Z4AbstractValuePanel {
         radio.getStyle().borderBottomRightRadius = "0px";
         radio.getStyle().borderTopLeftRadius = "0px";
         radio.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
-        radio.getStyle().borderTop = "1px solid var(--main-action-bgcolor)";
-        break;
-      case "bottomright":
-        radio.getStyle().borderTopLeftRadius = "0px";
-        radio.getStyle().borderBottomLeftRadius = "0px";
-        radio.getStyle().borderTopRightRadius = "0px";
-        radio.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
         radio.getStyle().borderTop = "1px solid var(--main-action-bgcolor)";
         break;
     }
