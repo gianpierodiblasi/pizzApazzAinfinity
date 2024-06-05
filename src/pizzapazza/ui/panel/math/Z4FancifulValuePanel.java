@@ -62,19 +62,19 @@ public class Z4FancifulValuePanel extends Z4AbstractValuePanel<Z4FancifulValue> 
       this.add(this.signedRandom, new GBC(3, 1));
     } else if (orientation == Z4FancifulValuePanelOrientation.VERTICAL) {
       this.add(this.label, new GBC(0, 0).a(GBC.WEST));
-      this.add(this.uniformSign, new GBC(0, 1).a(GBC.WEST));
+      this.add(this.uniformSign, new GBC(1, 0).a(GBC.EAST));
 
       this.sign = new Z4SignPanel(Z4SignPanelOrientation.HORIZONTAL);
-      this.add(this.sign, new GBC(0, 2));
+      this.add(this.sign, new GBC(0, 1).w(2).i(1, 0, 0, 0));
 
       this.constant = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.VERTICAL);
-      this.add(this.constant, new GBC(0, 3).i(0, 0, 2, 0));
+      this.add(this.constant, new GBC(0, 2).w(2).i(0, 0, 2, 0));
 
       this.random = new Z4RandomValuePanel(Z4RandomValuePanelOrientation.VERTICAL);
-      this.add(this.random, new GBC(0, 4));
+      this.add(this.random, new GBC(0, 3).w(2));
 
       this.signedRandom = new Z4SignedRandomValuePanel(Z4RandomValuePanelOrientation.VERTICAL);
-      this.add(this.signedRandom, new GBC(0, 5));
+      this.add(this.signedRandom, new GBC(0, 4).w(2));
     } else {
       this.sign = null;
       this.constant = null;
@@ -87,17 +87,17 @@ public class Z4FancifulValuePanel extends Z4AbstractValuePanel<Z4FancifulValue> 
     this.uniformSign.setTooltip(Z4Translations.UNIFORM_SIGN);
     this.uniformSign.setIcon(new Z4EmptyImageProducer<>(""));
     this.uniformSign.addActionListener(event -> this.onFancifulValueChange(false));
-    
+
     this.sign.getStyle().display = "none";
     this.sign.addChangeListener(event -> this.onFancifulValueChange(false));
-    
+
     this.constant.setLabel(Z4Translations.CONSTANT);
     this.constant.addChangeListener(event -> this.onFancifulValueChange(this.constant.getValueIsAdjusting()));
-    
+
     this.random.setLabel(Z4Translations.RANDOM);
     this.random.getStyle().display = "none";
     this.random.addChangeListener(event -> this.onFancifulValueChange(this.random.getValueIsAdjusting()));
-    
+
     this.signedRandom.setLabel(Z4Translations.RANDOM);
     this.signedRandom.addChangeListener(event -> this.onFancifulValueChange(this.signedRandom.getValueIsAdjusting()));
 
@@ -110,7 +110,7 @@ public class Z4FancifulValuePanel extends Z4AbstractValuePanel<Z4FancifulValue> 
   private void onFancifulValueChange(boolean valueIsAdjusting) {
     this.valueIsAdjusting = valueIsAdjusting;
     this.uniformSign.setContentAreaFilled(this.uniformSign.isSelected());
-    
+
     if (!this.signsVisible) {
       this.signedRandom.setValue(new Z4SignedRandomValue(this.signedRandom.getValue().getSign(), this.random.getValue()));
     } else if (this.uniformSign.isSelected()) {
@@ -209,7 +209,7 @@ public class Z4FancifulValuePanel extends Z4AbstractValuePanel<Z4FancifulValue> 
     this.signedRandom.setValue(value.getRandom());
     this.uniformSign.setSelected(value.isUniformSign());
     this.uniformSign.setContentAreaFilled(value.isUniformSign());
-    
+
     this.setSignsVisible(this.signsVisible);
   }
 

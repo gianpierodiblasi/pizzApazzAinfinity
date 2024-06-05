@@ -5707,15 +5707,15 @@ class Z4FancifulValuePanel extends Z4AbstractValuePanel {
       this.add(this.signedRandom, new GBC(3, 1));
     } else if (orientation === Z4FancifulValuePanelOrientation.VERTICAL) {
       this.add(this.label, new GBC(0, 0).a(GBC.WEST));
-      this.add(this.uniformSign, new GBC(0, 1).a(GBC.WEST));
+      this.add(this.uniformSign, new GBC(1, 0).a(GBC.EAST));
       this.sign = new Z4SignPanel(Z4SignPanelOrientation.HORIZONTAL);
-      this.add(this.sign, new GBC(0, 2));
+      this.add(this.sign, new GBC(0, 1).w(2).i(1, 0, 0, 0));
       this.constant = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.VERTICAL);
-      this.add(this.constant, new GBC(0, 3).i(0, 0, 2, 0));
+      this.add(this.constant, new GBC(0, 2).w(2).i(0, 0, 2, 0));
       this.random = new Z4RandomValuePanel(Z4RandomValuePanelOrientation.VERTICAL);
-      this.add(this.random, new GBC(0, 4));
+      this.add(this.random, new GBC(0, 3).w(2));
       this.signedRandom = new Z4SignedRandomValuePanel(Z4RandomValuePanelOrientation.VERTICAL);
-      this.add(this.signedRandom, new GBC(0, 5));
+      this.add(this.signedRandom, new GBC(0, 4).w(2));
     } else {
       this.sign = null;
       this.constant = null;
