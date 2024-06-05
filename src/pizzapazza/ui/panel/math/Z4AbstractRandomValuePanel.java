@@ -71,6 +71,17 @@ public abstract class Z4AbstractRandomValuePanel<T> extends Z4AbstractValuePanel
 
       this.lengthPanel = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.VERTICAL);
       this.add(this.lengthPanel, new GBC(0, 2).w(4).f(GBC.HORIZONTAL));
+    } else if (orientation == Z4RandomValuePanelOrientation.HORIZONTALLY_VERTICAL) {
+      this.valuePanel = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.HORIZONTAL);
+      this.add(this.valuePanel, new GBC(0, 0).w(3).a(GBC.EAST));
+
+      this.addRadio(Z4RandomValueBehavior.CLASSIC, buttonGroup, 0, 1, "topleft");
+      this.addRadio(Z4RandomValueBehavior.BEZIER, buttonGroup, 1, 1, "topright");
+      this.addRadio(Z4RandomValueBehavior.POLYLINE, buttonGroup, 0, 2, "bottomleft");
+      this.addRadio(Z4RandomValueBehavior.STEPPED, buttonGroup, 1, 2, "bottomright");
+
+      this.lengthPanel = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.VERTICAL);
+      this.add(this.lengthPanel, new GBC(2, 1).h(2).i(0, 1, 0, 0));
     } else {
       this.valuePanel = null;
       this.lengthPanel = null;

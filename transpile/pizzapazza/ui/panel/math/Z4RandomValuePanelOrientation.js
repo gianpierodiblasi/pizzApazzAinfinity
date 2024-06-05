@@ -13,4 +13,9 @@ class Z4RandomValuePanelOrientation {
    * The random value panel is visualized vertically
    */
   static VERTICAL = 'VERTICAL';
+  /**
+   * The random value panel is visualized vertically with components visualized
+   * horizontally
+   */
+  static HORIZONTALLY_VERTICAL = 'HORIZONTALLY_VERTICAL';
 }

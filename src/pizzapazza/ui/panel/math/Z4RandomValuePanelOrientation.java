@@ -13,5 +13,10 @@ public enum Z4RandomValuePanelOrientation {
   /**
    * The random value panel is visualized vertically
    */
-  VERTICAL;
+  VERTICAL,
+  /**
+   * The random value panel is visualized vertically with components visualized
+   * horizontally
+   */
+  HORIZONTALLY_VERTICAL;
 }
