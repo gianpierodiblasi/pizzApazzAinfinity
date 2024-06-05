@@ -1766,6 +1766,7 @@ class Z4Canvas extends JSComponent {
       let count = this.getLayersCount();
       this.selectedLayer = this.paper.getLayerAt(count - 1);
       document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ") .z4layerpreview-selector").textContent = Z4LayerPreview.SELECTED_LAYER_CONTENT;
+      (document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
     }
     this.saved = false;
     this.drawCanvas();
@@ -5001,6 +5002,7 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     });
     document.querySelectorAll(".z4layerpreview .z4layerpreview-selector").forEach(element => element.textContent = Z4LayerPreview.UNSELECTED_LAYER_CONTENT);
     this.layersPreview.add(preview, null);
+    preview.invoke("scrollIntoView()");
   }
 }
 /**

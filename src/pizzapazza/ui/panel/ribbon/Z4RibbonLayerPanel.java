@@ -176,5 +176,6 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     document.querySelectorAll(".z4layerpreview .z4layerpreview-selector").forEach(element -> element.textContent = Z4LayerPreview.UNSELECTED_LAYER_CONTENT);
 
     this.layersPreview.add(preview, null);
+    preview.invoke("scrollIntoView()");
   }
 }

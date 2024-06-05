@@ -642,6 +642,7 @@ public class Z4Canvas extends JSComponent {
       this.selectedLayer = this.paper.getLayerAt(count - 1);
 
       document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ") .z4layerpreview-selector").textContent = Z4LayerPreview.SELECTED_LAYER_CONTENT;
+      ((HTMLElement) document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
     }
 
     this.saved = false;
