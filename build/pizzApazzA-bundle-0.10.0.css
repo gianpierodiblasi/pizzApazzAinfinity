@@ -405,15 +405,15 @@
   height: 16px;
 }
 .z4rotationpanel.z4rotationpanel-horizontal .z4rotationpanel-radio:nth-child(4) img,
-.z4rotationpanel.z4rotationpanel-vertical .z4rotationpanel-radio:nth-child(4) img {
+.z4rotationpanel.z4rotationpanel-vertical .z4rotationpanel-radio:nth-child(3) img {
   content: url(../image/math/z4rotationbehavior_fixed.svg);
 }
 .z4rotationpanel.z4rotationpanel-horizontal .z4rotationpanel-radio:nth-child(5) img,
-.z4rotationpanel.z4rotationpanel-vertical .z4rotationpanel-radio:nth-child(5) img {
+.z4rotationpanel.z4rotationpanel-vertical .z4rotationpanel-radio:nth-child(4) img {
   content: url(../image/math/z4rotationbehavior_cumulative.svg);
 }
 .z4rotationpanel.z4rotationpanel-horizontal .z4rotationpanel-radio:nth-child(6) img,
-.z4rotationpanel.z4rotationpanel-vertical .z4rotationpanel-radio:nth-child(6) img {
+.z4rotationpanel.z4rotationpanel-vertical .z4rotationpanel-radio:nth-child(5) img {
   content: url(../image/math/z4rotationbehavior_relativetopath.svg);
 }
 .z4rotationpanel .z4rotationpanel-delayed img {
