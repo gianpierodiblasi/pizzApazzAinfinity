@@ -8,9 +8,6 @@ Z4Translations.VALUE = "Valore";
 Z4Translations.SIGN = "Segno";
 Z4Translations.RANGE = "Range";
 
-# Color
-Z4Translations.LIGHTING = "Illuminazione";
-
 # Label
 Z4Translations.INTENSITY = "Intensità";
 Z4Translations.MULTIPLICITY = "Molteplicità";

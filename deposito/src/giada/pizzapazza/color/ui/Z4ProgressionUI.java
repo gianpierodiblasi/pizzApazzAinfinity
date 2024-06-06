@@ -109,23 +109,7 @@ public class Z4ProgressionUI extends Z4AbstractComponentWithValueUI<Z4Progressio
     this.setValue(Z4Progression.spatial(Z4Lighting.NONE));
   }
 
-  /**
-   * Sets the token of the progression label
-   *
-   * @param token The token of the progression label
-   * @param bold true for bold font, false otherwise
-   * @param italic true for italic font, false otherwise
-   * @return This Z4ProgressionUI
-   */
-  public Z4ProgressionUI setProgressionLabel(String token, boolean bold, boolean italic) {
-    $HTMLElement progressionLabel = this.querySelector(".progression-label");
-    progressionLabel.setAttribute("data-token-lang-inner_text", token);
-    progressionLabel.innerHTML = Z4MessageFactory.get(token);
-    progressionLabel.style.fontWeight = bold ? "700" : "400";
-    progressionLabel.style.fontStyle = italic ? "italic" : "normal";
-    return this;
-  }
-
+  
   @Override
   @SuppressWarnings("unchecked")
   public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(Z4Progression value) {

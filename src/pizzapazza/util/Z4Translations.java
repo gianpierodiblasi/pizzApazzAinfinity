@@ -131,6 +131,7 @@ public class Z4Translations {
   public static String DARKENED = "";
   public static String SPATIAL = "";
   public static String TEMPORAL = "";
+  public static String LIGHTING = "";
 
   // Math
   public static String POSITIVE = "";
@@ -316,6 +317,7 @@ public class Z4Translations {
     Z4Translations.DARKENED = "Darkened";
     Z4Translations.SPATIAL = "Spatial";
     Z4Translations.TEMPORAL = "Temporal";
+    Z4Translations.LIGHTING = "Lighting";
 
     // Math
     Z4Translations.POSITIVE = "Positive";
@@ -485,6 +487,7 @@ public class Z4Translations {
     Z4Translations.DARKENED = "Incupito";
     Z4Translations.SPATIAL = "Spaziale";
     Z4Translations.TEMPORAL = "Temporale";
+    Z4Translations.LIGHTING = "Illuminazione";
 
     // Math
     Z4Translations.POSITIVE = "Positivo";

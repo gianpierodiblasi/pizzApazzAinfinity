@@ -1,13 +1,12 @@
 package pizzapazza.ui.panel.color;
 
-import pizzapazza.ui.panel.math.*;
 import static def.dom.Globals.console;
 import javascript.awt.BorderLayout;
 import javascript.swing.JSFrame;
 import javascript.swing.JSPanel;
+import pizzapazza.color.Z4GradientColorProgression;
+import pizzapazza.color.Z4GradientColorProgressionBehavior;
 import pizzapazza.color.Z4Lighting;
-import pizzapazza.math.Z4Sign;
-import pizzapazza.math.Z4SignBehavior;
 
 /**
  *
@@ -20,16 +19,19 @@ public class TestGradientColorProgressingPanel extends JSFrame {
 
     JSPanel p = new JSPanel();
     p.add(new Z4GradientColorProgressionPanel(), null);
-//    p.add(new Z4LightingPanel(Z4LightingPanelOrientation.VERTICAL), null);
-//
-//    Z4LightingPanel disabled = new Z4LightingPanel(Z4LightingPanelOrientation.HORIZONTAL);
-//    disabled.setEnabled(false);
-//    p.add(disabled, null);
-//
-//    Z4LightingPanel lighted = new Z4LightingPanel(Z4LightingPanelOrientation.HORIZONTAL);
-//    lighted.setValue(Z4Lighting.LIGHTED);
-//    lighted.addChangeListener(event -> console.log(lighted.getValue()));
-//    p.add(lighted, null);
+
+    Z4GradientColorProgressionPanel disabled = new Z4GradientColorProgressionPanel();
+    disabled.setEnabled(false);
+    p.add(disabled, null);
+
+    Z4GradientColorProgressionPanel lighted = new Z4GradientColorProgressionPanel();
+    lighted.setValue(Z4GradientColorProgression.fromJSON(new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.TEMPORAL, 0.34, Z4Lighting.LIGHTED).toJSON()));
+    lighted.addChangeListener(event -> {
+      if (!lighted.getValueIsAdjusting()) {
+        console.log(lighted.getValue());
+      }
+    });
+    p.add(lighted, null);
 
     this.getContentPane().add(p, BorderLayout.NORTH);
   }

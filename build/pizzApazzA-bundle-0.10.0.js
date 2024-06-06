@@ -5494,7 +5494,7 @@ class Z4AbstractValuePanel extends JSPanel {
  */
 class Z4GradientColorProgressionPanel extends Z4AbstractValuePanel {
 
-   lightingPanel = new Z4LightingPanel(Z4LightingPanelOrientation.VERTICAL);
+   lightingPanel = new Z4LightingPanel(Z4LightingPanelOrientation.HORIZONTAL);
 
    radios = new Array();
 
@@ -5511,28 +5511,33 @@ class Z4GradientColorProgressionPanel extends Z4AbstractValuePanel {
     super();
     this.cssAddClass("z4gradientcolorprogressionpanel");
     this.setLayout(new GridBagLayout());
-    Z4UI.addLabel(this, Z4Translations.STEP, new GBC(0, 0).h(2).a(GBC.WEST));
+    Z4UI.addLabel(this, Z4Translations.FILLING, new GBC(0, 0).w(4).a(GBC.WEST));
+    let panel = new JSPanel();
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    this.add(panel, new GBC(0, 1).h(3).i(0, 0, 0, 1));
     let buttonGroup = new ButtonGroup();
-    this.addRadio(Z4GradientColorProgressionBehavior.SPATIAL, buttonGroup, 1, 0, "topleft");
-    this.addRadio(Z4GradientColorProgressionBehavior.TEMPORAL, buttonGroup, 2, 0, "topright");
-    this.addRadio(Z4GradientColorProgressionBehavior.RELATIVE_TO_PATH, buttonGroup, 1, 1, "bottomleft");
-    this.addRadio(Z4GradientColorProgressionBehavior.RANDOM, buttonGroup, 2, 1, "bottomright");
+    this.addRadio(Z4GradientColorProgressionBehavior.SPATIAL, buttonGroup, panel, "top");
+    this.addRadio(Z4GradientColorProgressionBehavior.TEMPORAL, buttonGroup, panel, "center");
+    this.addRadio(Z4GradientColorProgressionBehavior.RELATIVE_TO_PATH, buttonGroup, panel, "center");
+    this.addRadio(Z4GradientColorProgressionBehavior.RANDOM, buttonGroup, panel, "bottom");
+    Z4UI.addLabel(this, Z4Translations.STEP, new GBC(1, 1).a(GBC.WEST).wx(1));
     this.temporalStepSpinner.setModel(new SpinnerNumberModel(1, 1, 100, 1));
     this.temporalStepSpinner.cssAddClass("jsspinner_w_4rem");
     this.temporalStepSpinner.addChangeListener(event => this.onTemporalStepChange(true, this.temporalStepSpinner.getValueIsAdjusting(), this.temporalStepSpinner, this.temporalStepSlider));
-    this.add(this.temporalStepSpinner, new GBC(3, 0).h(2).a(GBC.SOUTHEAST));
+    this.add(this.temporalStepSpinner, new GBC(2, 1).w(2).a(GBC.EAST));
     this.temporalStepSlider.setMinimum(1);
     this.temporalStepSlider.setMaximum(100);
     this.temporalStepSlider.setValue(1);
     this.temporalStepSlider.getStyle().minWidth = "20rem";
     this.temporalStepSlider.addChangeListener(event => this.onTemporalStepChange(false, this.temporalStepSlider.getValueIsAdjusting(), this.temporalStepSpinner, this.temporalStepSlider));
-    this.add(this.temporalStepSlider, new GBC(0, 2).w(4).f(GBC.HORIZONTAL));
-    this.add(this.lightingPanel, new GBC(4, 0).h(3).i(0, 1, 0, 0));
+    this.add(this.temporalStepSlider, new GBC(1, 2).w(3));
+    Z4UI.addLabel(this, Z4Translations.LIGHTING, new GBC(2, 3).a(GBC.EAST).i(0, 0, 0, 1));
+    this.add(this.lightingPanel, new GBC(3, 3));
     this.lightingPanel.addChangeListener(event => this.onProgressionChange(false));
     this.setValue(new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.SPATIAL, 0.1, Z4Lighting.NONE));
   }
 
-   addRadio(behavior, buttonGroup, x, y, border) {
+   addRadio(behavior, buttonGroup, panel, border) {
     let radio = new JSRadioButton();
     radio.cssAddClass("z4gradientcolorprogressionpanel-radio");
     radio.getStyle().padding = "1px";
@@ -5547,49 +5552,48 @@ class Z4GradientColorProgressionPanel extends Z4AbstractValuePanel {
       this.temporalStepSlider.setEnabled(behavior === Z4GradientColorProgressionBehavior.TEMPORAL);
       this.onProgressionChange(false);
     });
-    let gbc = new GBC(x, y).wx(1);
     switch(border) {
-      case "topleft":
-        gbc.a(GBC.EAST);
-        radio.getStyle().borderTopRightRadius = "0px";
-        radio.getStyle().borderBottomRightRadius = "0px";
-        radio.getStyle().borderBottomLeftRadius = "0px";
-        radio.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
-        radio.getStyle().borderBottom = "1px solid var(--main-action-bgcolor)";
-        break;
-      case "topright":
-        gbc.a(GBC.WEST);
-        radio.getStyle().borderTopLeftRadius = "0px";
+      case "top":
         radio.getStyle().borderBottomLeftRadius = "0px";
         radio.getStyle().borderBottomRightRadius = "0px";
-        radio.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
         radio.getStyle().borderBottom = "1px solid var(--main-action-bgcolor)";
         break;
-      case "bottomleft":
-        gbc.a(GBC.EAST);
-        radio.getStyle().borderTopRightRadius = "0px";
-        radio.getStyle().borderBottomRightRadius = "0px";
-        radio.getStyle().borderTopLeftRadius = "0px";
-        radio.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+      case "center":
+        radio.getStyle().borderRadius = "0px";
         radio.getStyle().borderTop = "1px solid var(--main-action-bgcolor)";
+        radio.getStyle().borderBottom = "1px solid var(--main-action-bgcolor)";
         break;
-      case "bottomright":
-        gbc.a(GBC.WEST);
+      case "bottom":
         radio.getStyle().borderTopLeftRadius = "0px";
-        radio.getStyle().borderBottomLeftRadius = "0px";
         radio.getStyle().borderTopRightRadius = "0px";
-        radio.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
         radio.getStyle().borderTop = "1px solid var(--main-action-bgcolor)";
         break;
     }
     buttonGroup.add(radio);
     this.radios["" + behavior] = radio;
-    this.add(radio, gbc);
+    panel.add(radio, null);
   }
 
    onProgressionChange(b) {
     this.valueIsAdjusting = b;
-    // this.value=new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.SPATIAL, 0, Z4Lighting.LIGHTED)
+    Object.keys(this.radios).forEach(key => {
+      if ((this.radios[key]).isSelected()) {
+        switch("" + key) {
+          case "SPATIAL":
+            this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.SPATIAL, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            break;
+          case "TEMPORAL":
+            this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.TEMPORAL, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            break;
+          case "RELATIVE_TO_PATH":
+            this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.RELATIVE_TO_PATH, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            break;
+          case "RANDOM":
+            this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.RANDOM, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            break;
+        }
+      }
+    });
     this.onchange();
   }
 
@@ -7657,6 +7661,8 @@ class Z4Translations {
 
   static  TEMPORAL = "";
 
+  static  LIGHTING = "";
+
   // Math
   static  POSITIVE = "";
 
@@ -7868,6 +7874,7 @@ class Z4Translations {
     Z4Translations.DARKENED = "Darkened";
     Z4Translations.SPATIAL = "Spatial";
     Z4Translations.TEMPORAL = "Temporal";
+    Z4Translations.LIGHTING = "Lighting";
     // Math
     Z4Translations.POSITIVE = "Positive";
     Z4Translations.NEGATIVE = "Negative";
@@ -8024,6 +8031,7 @@ class Z4Translations {
     Z4Translations.DARKENED = "Incupito";
     Z4Translations.SPATIAL = "Spaziale";
     Z4Translations.TEMPORAL = "Temporale";
+    Z4Translations.LIGHTING = "Illuminazione";
     // Math
     Z4Translations.POSITIVE = "Positivo";
     Z4Translations.NEGATIVE = "Negativo";

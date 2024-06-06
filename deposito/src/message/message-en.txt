@@ -9,9 +9,6 @@ Z4Translations.SIGN = "Sign";
 Z4Translations.SPINNER = "Spinner";
 Z4Translations.RANGE = "Range";
 
-# Color
-Z4Translations.LIGHTING = "Lighting";
-
 # Label
 Z4Translations.INTENSITY = "Intensity";
 Z4Translations.MULTIPLICITY = "Multiplicity";

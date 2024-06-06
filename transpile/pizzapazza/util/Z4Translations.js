@@ -209,6 +209,8 @@ class Z4Translations {
 
   static  TEMPORAL = "";
 
+  static  LIGHTING = "";
+
   // Math
   static  POSITIVE = "";
 
@@ -420,6 +422,7 @@ class Z4Translations {
     Z4Translations.DARKENED = "Darkened";
     Z4Translations.SPATIAL = "Spatial";
     Z4Translations.TEMPORAL = "Temporal";
+    Z4Translations.LIGHTING = "Lighting";
     // Math
     Z4Translations.POSITIVE = "Positive";
     Z4Translations.NEGATIVE = "Negative";
@@ -576,6 +579,7 @@ class Z4Translations {
     Z4Translations.DARKENED = "Incupito";
     Z4Translations.SPATIAL = "Spaziale";
     Z4Translations.TEMPORAL = "Temporale";
+    Z4Translations.LIGHTING = "Illuminazione";
     // Math
     Z4Translations.POSITIVE = "Positivo";
     Z4Translations.NEGATIVE = "Negativo";
