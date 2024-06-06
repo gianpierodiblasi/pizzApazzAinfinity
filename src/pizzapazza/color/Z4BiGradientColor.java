@@ -112,17 +112,11 @@ public class Z4BiGradientColor extends Z4AbstractGradientColor<Z4GradientColor> 
   }
 
   @Override
-  public $Object toJSON() {
-    $Object json = super.toJSON();
-
-    json.$set("colorsAndPositions", this.colors.map((color, index, array) -> {
-      $Object jsonColor = new $Object();
-      jsonColor.$set("gradientColor", color.toJSON());
-      jsonColor.$set("position", this.colorPositions.$get(index));
-      return jsonColor;
-    }));
-
-    return json;
+  protected $Object mapColor(Z4GradientColor color, int index) {
+    $Object jsonColor = new $Object();
+    jsonColor.$set("gradientColor", color.toJSON());
+    jsonColor.$set("position", this.colorPositions.$get(index));
+    return jsonColor;
   }
 
   /**

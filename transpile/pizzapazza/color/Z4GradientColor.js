@@ -34,18 +34,14 @@ class Z4GradientColor extends Z4AbstractGradientColor {
     }
   }
 
-   toJSON() {
-    let json = super.toJSON();
-    json["colorsAndPositions"] = this.colors.map((color, index, array) => {
-      let jsonColor = new Object();
-      jsonColor["red"] = color.red;
-      jsonColor["green"] = color.green;
-      jsonColor["blue"] = color.blue;
-      jsonColor["alpha"] = color.alpha;
-      jsonColor["position"] = this.colorPositions[index];
-      return jsonColor;
-    });
-    return json;
+   mapColor(color, index) {
+    let jsonColor = new Object();
+    jsonColor["red"] = color.red;
+    jsonColor["green"] = color.green;
+    jsonColor["blue"] = color.blue;
+    jsonColor["alpha"] = color.alpha;
+    jsonColor["position"] = this.colorPositions[index];
+    return jsonColor;
   }
 
   /**

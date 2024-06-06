@@ -88,15 +88,11 @@ class Z4BiGradientColor extends Z4AbstractGradientColor {
     gradientColor.addColor(new Color(parseInt((afterColor.red - beforeColor.red) * div + beforeColor.red), parseInt((afterColor.green - beforeColor.green) * div + beforeColor.green), parseInt((afterColor.blue - beforeColor.blue) * div + beforeColor.blue), parseInt((afterColor.alpha - beforeColor.alpha) * div + beforeColor.alpha)), position);
   }
 
-   toJSON() {
-    let json = super.toJSON();
-    json["colorsAndPositions"] = this.colors.map((color, index, array) => {
-      let jsonColor = new Object();
-      jsonColor["gradientColor"] = color.toJSON();
-      jsonColor["position"] = this.colorPositions[index];
-      return jsonColor;
-    });
-    return json;
+   mapColor(color, index) {
+    let jsonColor = new Object();
+    jsonColor["gradientColor"] = color.toJSON();
+    jsonColor["position"] = this.colorPositions[index];
+    return jsonColor;
   }
 
   /**

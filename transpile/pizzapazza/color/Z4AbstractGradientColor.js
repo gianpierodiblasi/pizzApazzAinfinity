@@ -168,6 +168,17 @@ class Z4AbstractGradientColor extends Z4JSONable {
    toJSON() {
     let json = new Object();
     json["ripple"] = this.ripple;
+    json["colorsAndPositions"] = this.colors.map((color, index, array) => this.mapColor(color, index));
     return json;
+  }
+
+  /**
+   * Maps a color to a JSON object
+   *
+   * @param color The color
+   * @param index The color index
+   * @return The color as a JSON object
+   */
+   mapColor(color, index) {
   }
 }

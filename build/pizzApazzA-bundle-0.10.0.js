@@ -8121,7 +8121,18 @@ class Z4AbstractGradientColor extends Z4JSONable {
    toJSON() {
     let json = new Object();
     json["ripple"] = this.ripple;
+    json["colorsAndPositions"] = this.colors.map((color, index, array) => this.mapColor(color, index));
     return json;
+  }
+
+  /**
+   * Maps a color to a JSON object
+   *
+   * @param color The color
+   * @param index The color index
+   * @return The color as a JSON object
+   */
+   mapColor(color, index) {
   }
 }
 /**
@@ -8214,15 +8225,11 @@ class Z4BiGradientColor extends Z4AbstractGradientColor {
     gradientColor.addColor(new Color(parseInt((afterColor.red - beforeColor.red) * div + beforeColor.red), parseInt((afterColor.green - beforeColor.green) * div + beforeColor.green), parseInt((afterColor.blue - beforeColor.blue) * div + beforeColor.blue), parseInt((afterColor.alpha - beforeColor.alpha) * div + beforeColor.alpha)), position);
   }
 
-   toJSON() {
-    let json = super.toJSON();
-    json["colorsAndPositions"] = this.colors.map((color, index, array) => {
-      let jsonColor = new Object();
-      jsonColor["gradientColor"] = color.toJSON();
-      jsonColor["position"] = this.colorPositions[index];
-      return jsonColor;
-    });
-    return json;
+   mapColor(color, index) {
+    let jsonColor = new Object();
+    jsonColor["gradientColor"] = color.toJSON();
+    jsonColor["position"] = this.colorPositions[index];
+    return jsonColor;
   }
 
   /**
@@ -8274,18 +8281,14 @@ class Z4GradientColor extends Z4AbstractGradientColor {
     }
   }
 
-   toJSON() {
-    let json = super.toJSON();
-    json["colorsAndPositions"] = this.colors.map((color, index, array) => {
-      let jsonColor = new Object();
-      jsonColor["red"] = color.red;
-      jsonColor["green"] = color.green;
-      jsonColor["blue"] = color.blue;
-      jsonColor["alpha"] = color.alpha;
-      jsonColor["position"] = this.colorPositions[index];
-      return jsonColor;
-    });
-    return json;
+   mapColor(color, index) {
+    let jsonColor = new Object();
+    jsonColor["red"] = color.red;
+    jsonColor["green"] = color.green;
+    jsonColor["blue"] = color.blue;
+    jsonColor["alpha"] = color.alpha;
+    jsonColor["position"] = this.colorPositions[index];
+    return jsonColor;
   }
 
   /**

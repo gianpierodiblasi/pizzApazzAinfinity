@@ -184,6 +184,16 @@ public abstract class Z4AbstractGradientColor<T> implements Z4JSONable {
   public $Object toJSON() {
     $Object json = new $Object();
     json.$set("ripple", this.ripple);
+    json.$set("colorsAndPositions", this.colors.map((color, index, array) -> this.mapColor(color, index)));
     return json;
   }
+
+  /**
+   * Maps a color to a JSON object
+   *
+   * @param color The color
+   * @param index The color index
+   * @return The color as a JSON object
+   */
+  protected abstract $Object mapColor(T color, int index);
 }
