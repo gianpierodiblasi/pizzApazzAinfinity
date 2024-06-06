@@ -315,7 +315,6 @@
 .z4fancifulvaluepanel .z4fancifulvaluepanel-uniform-sign img {
   width: 16px;
   height: 16px;
-  padding: 2px 0 0 2px;
   content: url(../image/math/uniform_sign.svg);
 }.z4fillingpanel {
 }
@@ -390,6 +389,21 @@
 
 .z4layerpreview .z4layerpreview-editor[offset=true], .z4layerpreview .z4layerpreview-editor[offset=true] * {
   background: transparent;
+}.z4lightingpanel {
+}
+
+.z4lightingpanel .z4lightingpanel-radio img {
+  width: 16px;
+  height: 16px;
+}
+.z4lightingpanel .z4lightingpanel-radio:nth-child(1) img {
+  content: url(../image/color/z4lighting_none.svg);
+}
+.z4lightingpanel .z4lightingpanel-radio:nth-child(2) img {
+  content: url(../image/color/z4lighting_lighted.svg);
+}
+.z4lightingpanel .z4lightingpanel-radio:nth-child(3) img {
+  content: url(../image/color/z4lighting_darkened.svg);
 }.z4ribbonhelppanel {
 }
 .z4ribbonhelppanel-about .z4ribbonhelppanel-splash {

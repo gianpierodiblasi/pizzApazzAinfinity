@@ -1,0 +1,16 @@
+.z4lightingpanel {
+}
+
+.z4lightingpanel .z4lightingpanel-radio img {
+  width: 16px;
+  height: 16px;
+}
+.z4lightingpanel .z4lightingpanel-radio:nth-child(1) img {
+  content: url(../image/color/z4lighting_none.svg);
+}
+.z4lightingpanel .z4lightingpanel-radio:nth-child(2) img {
+  content: url(../image/color/z4lighting_lighted.svg);
+}
+.z4lightingpanel .z4lightingpanel-radio:nth-child(3) img {
+  content: url(../image/color/z4lighting_darkened.svg);
+}

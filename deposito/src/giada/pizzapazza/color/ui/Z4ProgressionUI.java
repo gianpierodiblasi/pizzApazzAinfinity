@@ -21,9 +21,6 @@ public class Z4ProgressionUI extends Z4AbstractComponentWithValueUI<Z4Progressio
   private final $HTMLElement stepRange = this.querySelector(".progression-step-range");
   private final $HTMLElement stepBadge = this.querySelector(".progression-step-badge");
 
-  private final static String PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
-  private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/color/ui/Z4ProgressionUI.html");
-
   /**
    * Creates a Z4ProgressionUI
    */

@@ -125,6 +125,8 @@ public class Z4Translations {
   public static String MIRRORED = "";
   public static String INVERTED = "";
   public static String DELETE_COLOR_MESSAGE = "";
+  public static String LIGHTED = "";
+  public static String DARKENED = "";
 
   // Math
   public static String POSITIVE = "";
@@ -143,7 +145,9 @@ public class Z4Translations {
   public static String CUMULATIVE = "";
   public static String RELATIVE_TO_PATH = "";
   public static String DELAYED = "";
-  
+  public static String NONE_HIM = "";
+  public static String NONE_HER = "";
+
   // Composite Operation
   public static String COMPOSITE_OPERATION = "";
   public static String COMPOSITE_OPERATION_SOURCE_OVER = "";
@@ -295,6 +299,8 @@ public class Z4Translations {
     Z4Translations.TIME = "\u2190 Time";
     Z4Translations.FILLING = "Filling";
     Z4Translations.MERGE = "Merge";
+    Z4Translations.NONE_HIM = "None";
+    Z4Translations.NONE_HER = "None";
 
     // Color
     Z4Translations.COLOR = "Color";
@@ -303,6 +309,8 @@ public class Z4Translations {
     Z4Translations.MIRRORED = "Mirrored";
     Z4Translations.INVERTED = "Inverted";
     Z4Translations.DELETE_COLOR_MESSAGE = "Do you really want to delete the color?";
+    Z4Translations.LIGHTED = "Lighted";
+    Z4Translations.DARKENED = "Darkened";
 
     // Math
     Z4Translations.POSITIVE = "Positive";
@@ -457,6 +465,8 @@ public class Z4Translations {
     Z4Translations.TIME = "\u2190 Tempo";
     Z4Translations.FILLING = "Riempimento";
     Z4Translations.MERGE = "Fondi";
+    Z4Translations.NONE_HIM = "Nessuno";
+    Z4Translations.NONE_HER = "Nessuna";
 
     // Color
     Z4Translations.COLOR = "Colore";
@@ -465,6 +475,8 @@ public class Z4Translations {
     Z4Translations.MIRRORED = "Riflesso";
     Z4Translations.INVERTED = "Invertito";
     Z4Translations.DELETE_COLOR_MESSAGE = "Vuoi davvero eliminare il colore?";
+    Z4Translations.LIGHTED = "Illuminato";
+    Z4Translations.DARKENED = "Incupito";
 
     // Math
     Z4Translations.POSITIVE = "Positivo";

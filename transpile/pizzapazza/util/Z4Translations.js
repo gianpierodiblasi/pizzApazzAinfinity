@@ -197,6 +197,10 @@ class Z4Translations {
 
   static  DELETE_COLOR_MESSAGE = "";
 
+  static  LIGHTED = "";
+
+  static  DARKENED = "";
+
   // Math
   static  POSITIVE = "";
 
@@ -229,6 +233,10 @@ class Z4Translations {
   static  RELATIVE_TO_PATH = "";
 
   static  DELAYED = "";
+
+  static  NONE_HIM = "";
+
+  static  NONE_HER = "";
 
   // Composite Operation
   static  COMPOSITE_OPERATION = "";
@@ -393,6 +401,8 @@ class Z4Translations {
     Z4Translations.TIME = "\u2190 Time";
     Z4Translations.FILLING = "Filling";
     Z4Translations.MERGE = "Merge";
+    Z4Translations.NONE_HIM = "None";
+    Z4Translations.NONE_HER = "None";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -400,6 +410,8 @@ class Z4Translations {
     Z4Translations.MIRRORED = "Mirrored";
     Z4Translations.INVERTED = "Inverted";
     Z4Translations.DELETE_COLOR_MESSAGE = "Do you really want to delete the color?";
+    Z4Translations.LIGHTED = "Lighted";
+    Z4Translations.DARKENED = "Darkened";
     // Math
     Z4Translations.POSITIVE = "Positive";
     Z4Translations.NEGATIVE = "Negative";
@@ -542,6 +554,8 @@ class Z4Translations {
     Z4Translations.TIME = "\u2190 Tempo";
     Z4Translations.FILLING = "Riempimento";
     Z4Translations.MERGE = "Fondi";
+    Z4Translations.NONE_HIM = "Nessuno";
+    Z4Translations.NONE_HER = "Nessuna";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";
@@ -549,6 +563,8 @@ class Z4Translations {
     Z4Translations.MIRRORED = "Riflesso";
     Z4Translations.INVERTED = "Invertito";
     Z4Translations.DELETE_COLOR_MESSAGE = "Vuoi davvero eliminare il colore?";
+    Z4Translations.LIGHTED = "Illuminato";
+    Z4Translations.DARKENED = "Incupito";
     // Math
     Z4Translations.POSITIVE = "Positivo";
     Z4Translations.NEGATIVE = "Negativo";

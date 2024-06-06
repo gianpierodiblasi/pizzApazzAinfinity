@@ -2,8 +2,6 @@
 Z4Translations.TYPE = "Type";
 Z4Translations.START = "Start";
 Z4Translations.STOP = "Stop";
-Z4Translations.NONE_HIM = "None";
-Z4Translations.NONE_HER = "None";
 
 # Math
 Z4Translations.VALUE = "Value";
@@ -13,8 +11,6 @@ Z4Translations.RANGE = "Range";
 
 # Color
 Z4Translations.LIGHTING = "Lighting";
-Z4Translations.LIGHTED = "Lighted";
-Z4Translations.DARKENED = "Darkened";
 Z4Translations.SPATIAL = "Spatial";
 Z4Translations.TEMPORAL = "Temporal";
 

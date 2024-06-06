@@ -2,21 +2,13 @@
 <svg width="96" height="96" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <radialGradient spreadMethod="pad" id="svg_7">
-      <stop offset="0" stop-color="#00ffff"/>
-      <stop offset="1" stop-opacity="0.996094" stop-color="#0000ff"/>
-    </radialGradient>
-    <radialGradient spreadMethod="pad" id="svg_9">
-      <stop offset="0" stop-opacity="0.996094" stop-color="#00ffff"/>
-      <stop offset="1" stop-opacity="0.996094" stop-color="#0000ff"/>
-    </radialGradient>
-    <radialGradient spreadMethod="pad" id="svg_10">
-      <stop offset="0" stop-opacity="0.996094" stop-color="#00ffff"/>
-      <stop offset="1" stop-opacity="0.996094" stop-color="#0000ff"/>
+      <stop offset="0" stop-color="#ffdd00"/>
+      <stop offset="1" stop-color="#ff0000"/>
     </radialGradient>
   </defs>
   <g>
     <circle r="23.808392" cy="28.271846" cx="28.271846" stroke-width="3" stroke="#000000" fill="url(#svg_7)"/>
-    <circle r="23.808392" cy="39.048543" cx="54.38835" stroke-width="3" stroke="#000000" fill="url(#svg_9)"/>
-    <circle r="23.808392" cy="69.53398" cx="68.563106" stroke-width="3" stroke="#000000" fill="url(#svg_10)"/>
+    <circle r="23.808392" cy="39.048543" cx="54.38835" stroke-width="3" stroke="#000000" fill="url(#svg_7)"/>
+    <circle r="23.808392" cy="69.53398" cx="68.563106" stroke-width="3" stroke="#000000" fill="url(#svg_7)"/>
   </g>
 </svg>

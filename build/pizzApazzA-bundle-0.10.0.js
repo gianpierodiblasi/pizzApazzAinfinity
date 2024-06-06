@@ -3352,6 +3352,22 @@ class Z4GradientColorPanel extends JSPanel {
   }
 }
 /**
+ * The orientation of a lighting panel
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4LightingPanelOrientation {
+
+  /**
+   * The lighting panel is visualized horizontally
+   */
+  static HORIZONTAL = 'HORIZONTAL';
+  /**
+   * The lighting panel is visualized vertically
+   */
+  static VERTICAL = 'VERTICAL';
+}
+/**
  * The abstract panel to manage fillers
  *
  * @author gianpiero.diblasi
@@ -5472,6 +5488,98 @@ class Z4AbstractValuePanel extends JSPanel {
   }
 }
 /**
+ * The panel to manage the lighting of a color
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4LightingPanel extends Z4AbstractValuePanel {
+
+   radios = new Array();
+
+  /**
+   * Creates the object
+   *
+   * @param orientation The orientation
+   */
+  constructor(orientation) {
+    super();
+    this.cssAddClass("z4lightingpanel");
+    this.setLayout(new GridBagLayout());
+    let buttonGroup = new ButtonGroup();
+    if (orientation === Z4LightingPanelOrientation.HORIZONTAL) {
+      this.addRadio(Z4Lighting.NONE, buttonGroup, 0, 0, "left");
+      this.addRadio(Z4Lighting.LIGHTED, buttonGroup, 1, 0, "centerh");
+      this.addRadio(Z4Lighting.DARKENED, buttonGroup, 3, 0, "right");
+    } else if (orientation === Z4LightingPanelOrientation.VERTICAL) {
+      this.addRadio(Z4Lighting.NONE, buttonGroup, 0, 0, "top");
+      this.addRadio(Z4Lighting.LIGHTED, buttonGroup, 0, 2, "centerv");
+      this.addRadio(Z4Lighting.DARKENED, buttonGroup, 0, 3, "bottom");
+    }
+    this.setValue(Z4Lighting.NONE);
+  }
+
+   addRadio(lighting, buttonGroup, x, y, border) {
+    let radio = new JSRadioButton();
+    radio.cssAddClass("z4lightingpanel-radio");
+    radio.getStyle().padding = "1px";
+    radio.setTooltip(Z4Translations[lighting === Z4Lighting.NONE ? "NONE_HER" : "" + lighting]);
+    radio.setToggle();
+    radio.setIcon(new Z4EmptyImageProducer(lighting));
+    radio.addActionListener(event => {
+      Object.keys(this.radios).forEach(key => (this.radios[key]).setContentAreaFilled(false));
+      radio.setContentAreaFilled(true);
+      this.value = lighting;
+      this.onchange();
+    });
+    switch(border) {
+      case "left":
+        radio.getStyle().borderTopRightRadius = "0px";
+        radio.getStyle().borderBottomRightRadius = "0px";
+        radio.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "centerh":
+        radio.getStyle().borderRadius = "0px";
+        radio.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        radio.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "right":
+        radio.getStyle().borderTopLeftRadius = "0px";
+        radio.getStyle().borderBottomLeftRadius = "0px";
+        radio.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "top":
+        radio.getStyle().borderBottomLeftRadius = "0px";
+        radio.getStyle().borderBottomRightRadius = "0px";
+        radio.getStyle().borderBottom = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "centerv":
+        radio.getStyle().borderRadius = "0px";
+        radio.getStyle().borderTop = "1px solid var(--main-action-bgcolor)";
+        radio.getStyle().borderBottom = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "bottom":
+        radio.getStyle().borderTopLeftRadius = "0px";
+        radio.getStyle().borderTopRightRadius = "0px";
+        radio.getStyle().borderTop = "1px solid var(--main-action-bgcolor)";
+        break;
+    }
+    buttonGroup.add(radio);
+    this.radios["" + lighting] = radio;
+    this.add(radio, new GBC(x, y));
+  }
+
+   setValue(value) {
+    this.value = value;
+    Object.keys(this.radios).forEach(key => (this.radios[key]).setContentAreaFilled(false));
+    (this.radios["" + value]).setSelected(true);
+    (this.radios["" + value]).setContentAreaFilled(true);
+  }
+
+   setEnabled(b) {
+    Object.keys(this.radios).forEach(key => (this.radios[key]).setEnabled(b));
+  }
+}
+/**
  * The abstract panel to manage a random value
  *
  * @author gianpiero.diblasi
@@ -7387,6 +7495,10 @@ class Z4Translations {
 
   static  DELETE_COLOR_MESSAGE = "";
 
+  static  LIGHTED = "";
+
+  static  DARKENED = "";
+
   // Math
   static  POSITIVE = "";
 
@@ -7419,6 +7531,10 @@ class Z4Translations {
   static  RELATIVE_TO_PATH = "";
 
   static  DELAYED = "";
+
+  static  NONE_HIM = "";
+
+  static  NONE_HER = "";
 
   // Composite Operation
   static  COMPOSITE_OPERATION = "";
@@ -7583,6 +7699,8 @@ class Z4Translations {
     Z4Translations.TIME = "\u2190 Time";
     Z4Translations.FILLING = "Filling";
     Z4Translations.MERGE = "Merge";
+    Z4Translations.NONE_HIM = "None";
+    Z4Translations.NONE_HER = "None";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -7590,6 +7708,8 @@ class Z4Translations {
     Z4Translations.MIRRORED = "Mirrored";
     Z4Translations.INVERTED = "Inverted";
     Z4Translations.DELETE_COLOR_MESSAGE = "Do you really want to delete the color?";
+    Z4Translations.LIGHTED = "Lighted";
+    Z4Translations.DARKENED = "Darkened";
     // Math
     Z4Translations.POSITIVE = "Positive";
     Z4Translations.NEGATIVE = "Negative";
@@ -7732,6 +7852,8 @@ class Z4Translations {
     Z4Translations.TIME = "\u2190 Tempo";
     Z4Translations.FILLING = "Riempimento";
     Z4Translations.MERGE = "Fondi";
+    Z4Translations.NONE_HIM = "Nessuno";
+    Z4Translations.NONE_HER = "Nessuna";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";
@@ -7739,6 +7861,8 @@ class Z4Translations {
     Z4Translations.MIRRORED = "Riflesso";
     Z4Translations.INVERTED = "Invertito";
     Z4Translations.DELETE_COLOR_MESSAGE = "Vuoi davvero eliminare il colore?";
+    Z4Translations.LIGHTED = "Illuminato";
+    Z4Translations.DARKENED = "Incupito";
     // Math
     Z4Translations.POSITIVE = "Positivo";
     Z4Translations.NEGATIVE = "Negativo";
