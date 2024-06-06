@@ -7,12 +7,12 @@ package pizzapazza.math;
  */
 public class Z4Vector {
 
-  private final double x0;
-  private final double y0;
-  private final double x;
-  private final double y;
-  private final double module;
-  private final double phase;
+  public final double x0;
+  public final double y0;
+  public final double x;
+  public final double y;
+  public final double module;
+  public final double phase;
 
   private Z4Vector(double x0, double y0, double x, double y, double module, double phase) {
     this.x0 = x0;

@@ -1,6 +1,5 @@
 package pizzapazza.math;
 
-import pizzapazza.Z4JSONable;
 import simulation.js.$Object;
 
 /**
@@ -9,7 +8,7 @@ import simulation.js.$Object;
  *
  * @author gianpiero.diblasi
  */
-public class Z4Rotation implements Z4JSONable {
+public class Z4Rotation implements Z4NextableWithParam<Double, Double> {
 
   private final double startAngle;
   private final Z4FancifulValue angle;
@@ -73,13 +72,8 @@ public class Z4Rotation implements Z4JSONable {
     return this.delayed;
   }
 
-  /**
-   * Returns the next rotation
-   *
-   * @param tangentAngle The tangent angle (in radians)
-   * @return The next rotation (in radians)
-   */
-  public double next(double tangentAngle) {
+  @Override
+  public Double next(Double tangentAngle) {
     double nextAngle = Z4Math.deg2rad(this.startAngle + this.angle.next());
 
     if (this.behavior == Z4RotationBehavior.FIXED) {
@@ -90,7 +84,7 @@ public class Z4Rotation implements Z4JSONable {
     } else if (this.behavior == Z4RotationBehavior.RELATIVE_TO_PATH) {
       return nextAngle + tangentAngle + (this.delayed ? Math.PI : 0);
     } else {
-      return 0;
+      return 0.0;
     }
   }
 

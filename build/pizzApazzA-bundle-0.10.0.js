@@ -97,6 +97,26 @@ window.onload = () => {
   }
 };
 /**
+ * The lighting of a color
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Lighting {
+
+  /**
+   * No lighting
+   */
+  static NONE = 'NONE';
+  /**
+   * lighting
+   */
+  static LIGHTED = 'LIGHTED';
+  /**
+   * darkening
+   */
+  static DARKENED = 'DARKENED';
+}
+/**
  * The common interface for all fillers; each instance of
  * <i>Z4AbstractFiller</i> provides a different painting style (radial, conic,
  * elliptic, ect.)
@@ -914,6 +934,51 @@ class Z4BoundaryBehavior {
    * The filler restarts the color outside the boundary
    */
   static REPEAT_AT_BOUNDARY = 'REPEAT_AT_BOUNDARY';
+}
+/**
+ * The point where to perform a drawing
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4DrawingPoint {
+
+   z4Vector = null;
+
+   intensity = 0.0;
+
+   lighting = null;
+
+   colorPosition = 0.0;
+
+   drawBounds = false;
+
+   side = null;
+
+   useVectorModuleAsSize = false;
+
+  /**
+   * Creates the object
+   *
+   * @param z4Vector The vector providing position and direction of the drawing
+   * @param intensity The intensity of the drawing (in the range [0,1])
+   * @param lighting The lighting to apply to the current color
+   * @param colorPosition The color position to use in the color object (in the
+   * range [0,1]), -1 if this point has no color position
+   * @param drawBounds true if this point has to be used to draw bounds, false
+   * otherwise (this point has to be used to draw real objects)
+   * @param side The side
+   * @param useVectorModuleAsSize true if the vector module of this point has to
+   * be used has size, false otherwise
+   */
+  constructor(z4Vector, intensity, lighting, colorPosition, drawBounds, side, useVectorModuleAsSize) {
+    this.z4Vector = z4Vector;
+    this.intensity = intensity;
+    this.lighting = lighting;
+    this.colorPosition = colorPosition;
+    this.drawBounds = drawBounds;
+    this.side = side;
+    this.useVectorModuleAsSize = useVectorModuleAsSize;
+  }
 }
 /**
  * The line
@@ -8670,12 +8735,31 @@ class Z4SignedValue extends Z4Nextable {
   }
 }
 /**
+ * The common interface for objects able to provide a "next" value by means of a
+ * parameter
+ *
+ * @author gianpiero.diblasi
+ * @param <T> The next value type
+ * @param <S> The parameter type
+ */
+class Z4NextableWithParam extends Z4JSONable {
+
+  /**
+   * Returns the next value
+   *
+   * @param param The parameter
+   * @return The next value
+   */
+   next(param) {
+  }
+}
+/**
  * The rotation (angles parameters have to be provided in degrees, rotations are
  * computed in radians)
  *
  * @author gianpiero.diblasi
  */
-class Z4Rotation extends Z4JSONable {
+class Z4Rotation extends Z4NextableWithParam {
 
    startAngle = 0.0;
 
@@ -8741,12 +8825,6 @@ class Z4Rotation extends Z4JSONable {
     return this.delayed;
   }
 
-  /**
-   * Returns the next rotation
-   *
-   * @param tangentAngle The tangent angle (in radians)
-   * @return The next rotation (in radians)
-   */
    next(tangentAngle) {
     let nextAngle = Z4Math.deg2rad(this.startAngle + this.angle.next());
     if (this.behavior === Z4RotationBehavior.FIXED) {
@@ -8757,7 +8835,7 @@ class Z4Rotation extends Z4JSONable {
     } else if (this.behavior === Z4RotationBehavior.RELATIVE_TO_PATH) {
       return nextAngle + tangentAngle + (this.delayed ? Math.PI : 0);
     } else {
-      return 0;
+      return 0.0;
     }
   }
 

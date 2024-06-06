@@ -4,7 +4,7 @@
  *
  * @author gianpiero.diblasi
  */
-class Z4Rotation extends Z4JSONable {
+class Z4Rotation extends Z4NextableWithParam {
 
    startAngle = 0.0;
 
@@ -70,12 +70,6 @@ class Z4Rotation extends Z4JSONable {
     return this.delayed;
   }
 
-  /**
-   * Returns the next rotation
-   *
-   * @param tangentAngle The tangent angle (in radians)
-   * @return The next rotation (in radians)
-   */
    next(tangentAngle) {
     let nextAngle = Z4Math.deg2rad(this.startAngle + this.angle.next());
     if (this.behavior === Z4RotationBehavior.FIXED) {
@@ -86,7 +80,7 @@ class Z4Rotation extends Z4JSONable {
     } else if (this.behavior === Z4RotationBehavior.RELATIVE_TO_PATH) {
       return nextAngle + tangentAngle + (this.delayed ? Math.PI : 0);
     } else {
-      return 0;
+      return 0.0;
     }
   }
 
