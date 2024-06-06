@@ -117,6 +117,8 @@ public class Z4Translations {
   public static String TIME = "";
   public static String FILLING = "";
   public static String MERGE = "";
+  public static String NONE_HIM = "";
+  public static String NONE_HER = "";
 
   // Color
   public static String COLOR = "";
@@ -127,6 +129,8 @@ public class Z4Translations {
   public static String DELETE_COLOR_MESSAGE = "";
   public static String LIGHTED = "";
   public static String DARKENED = "";
+  public static String SPATIAL = "";
+  public static String TEMPORAL = "";
 
   // Math
   public static String POSITIVE = "";
@@ -145,8 +149,7 @@ public class Z4Translations {
   public static String CUMULATIVE = "";
   public static String RELATIVE_TO_PATH = "";
   public static String DELAYED = "";
-  public static String NONE_HIM = "";
-  public static String NONE_HER = "";
+  public static String STEP = "";
 
   // Composite Operation
   public static String COMPOSITE_OPERATION = "";
@@ -311,6 +314,8 @@ public class Z4Translations {
     Z4Translations.DELETE_COLOR_MESSAGE = "Do you really want to delete the color?";
     Z4Translations.LIGHTED = "Lighted";
     Z4Translations.DARKENED = "Darkened";
+    Z4Translations.SPATIAL = "Spatial";
+    Z4Translations.TEMPORAL = "Temporal";
 
     // Math
     Z4Translations.POSITIVE = "Positive";
@@ -329,6 +334,7 @@ public class Z4Translations {
     Z4Translations.CUMULATIVE = "Cumulative";
     Z4Translations.RELATIVE_TO_PATH = "Relative to Path";
     Z4Translations.DELAYED = "Delayed";
+    Z4Translations.STEP = "Step";
 
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
@@ -477,6 +483,8 @@ public class Z4Translations {
     Z4Translations.DELETE_COLOR_MESSAGE = "Vuoi davvero eliminare il colore?";
     Z4Translations.LIGHTED = "Illuminato";
     Z4Translations.DARKENED = "Incupito";
+    Z4Translations.SPATIAL = "Spaziale";
+    Z4Translations.TEMPORAL = "Temporale";
 
     // Math
     Z4Translations.POSITIVE = "Positivo";
@@ -495,6 +503,7 @@ public class Z4Translations {
     Z4Translations.CUMULATIVE = "Cumulativo";
     Z4Translations.RELATIVE_TO_PATH = "Relativo al Percorso";
     Z4Translations.DELAYED = "Ritardato";
+    Z4Translations.STEP = "Passo";
 
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";

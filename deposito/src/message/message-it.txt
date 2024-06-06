@@ -6,14 +6,10 @@ Z4Translations.STOP = "Stop";
 # Math
 Z4Translations.VALUE = "Valore";
 Z4Translations.SIGN = "Segno";
-Z4Translations.SPINNER = "Spinner";
 Z4Translations.RANGE = "Range";
 
 # Color
 Z4Translations.LIGHTING = "Illuminazione";
-
-Z4Translations.SPATIAL = "Spaziale";
-Z4Translations.TEMPORAL = "Temporale";
 
 # Label
 Z4Translations.INTENSITY = "Intensità";
@@ -24,7 +20,6 @@ Z4Translations.ATTACK = "Attacco";
 Z4Translations.SUSTAIN = "Sostegno";
 Z4Translations.RELEASE = "Rilascio";
 Z4Translations.ENDLESS = "Infinito";
-Z4Translations.STEP = "Passo";
 Z4Translations.SHAPE = "Forma";
 Z4Translations.SIZE = "Dimensione";
 Z4Translations.SHADOW = "Ombra";

@@ -11,8 +11,6 @@ Z4Translations.RANGE = "Range";
 
 # Color
 Z4Translations.LIGHTING = "Lighting";
-Z4Translations.SPATIAL = "Spatial";
-Z4Translations.TEMPORAL = "Temporal";
 
 # Label
 Z4Translations.INTENSITY = "Intensity";
@@ -23,7 +21,6 @@ Z4Translations.ATTACK = "Attack";
 Z4Translations.SUSTAIN = "Sustain";
 Z4Translations.RELEASE = "Release";
 Z4Translations.ENDLESS = "Endless";
-Z4Translations.STEP = "Step";
 Z4Translations.SHAPE = "Shape";
 Z4Translations.SIZE = "Size";
 Z4Translations.SHADOW = "Shadow";

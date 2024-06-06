@@ -184,6 +184,10 @@ class Z4Translations {
 
   static  MERGE = "";
 
+  static  NONE_HIM = "";
+
+  static  NONE_HER = "";
+
   // Color
   static  COLOR = "";
 
@@ -200,6 +204,10 @@ class Z4Translations {
   static  LIGHTED = "";
 
   static  DARKENED = "";
+
+  static  SPATIAL = "";
+
+  static  TEMPORAL = "";
 
   // Math
   static  POSITIVE = "";
@@ -234,9 +242,7 @@ class Z4Translations {
 
   static  DELAYED = "";
 
-  static  NONE_HIM = "";
-
-  static  NONE_HER = "";
+  static  STEP = "";
 
   // Composite Operation
   static  COMPOSITE_OPERATION = "";
@@ -412,6 +418,8 @@ class Z4Translations {
     Z4Translations.DELETE_COLOR_MESSAGE = "Do you really want to delete the color?";
     Z4Translations.LIGHTED = "Lighted";
     Z4Translations.DARKENED = "Darkened";
+    Z4Translations.SPATIAL = "Spatial";
+    Z4Translations.TEMPORAL = "Temporal";
     // Math
     Z4Translations.POSITIVE = "Positive";
     Z4Translations.NEGATIVE = "Negative";
@@ -429,6 +437,7 @@ class Z4Translations {
     Z4Translations.CUMULATIVE = "Cumulative";
     Z4Translations.RELATIVE_TO_PATH = "Relative to Path";
     Z4Translations.DELAYED = "Delayed";
+    Z4Translations.STEP = "Step";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "This is the default setting and draws the layer on top of the existing content";
@@ -565,6 +574,8 @@ class Z4Translations {
     Z4Translations.DELETE_COLOR_MESSAGE = "Vuoi davvero eliminare il colore?";
     Z4Translations.LIGHTED = "Illuminato";
     Z4Translations.DARKENED = "Incupito";
+    Z4Translations.SPATIAL = "Spaziale";
+    Z4Translations.TEMPORAL = "Temporale";
     // Math
     Z4Translations.POSITIVE = "Positivo";
     Z4Translations.NEGATIVE = "Negativo";
@@ -582,6 +593,7 @@ class Z4Translations {
     Z4Translations.CUMULATIVE = "Cumulativo";
     Z4Translations.RELATIVE_TO_PATH = "Relativo al Percorso";
     Z4Translations.DELAYED = "Ritardato";
+    Z4Translations.STEP = "Passo";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "Questa \u00E8 l'impostazione predefinita e disegna il livello sopra il contenuto esistente";

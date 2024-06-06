@@ -345,7 +345,26 @@
 }
 .z4fillingpanel div label:nth-child(9) img {
   content: url(../image/filling/fill_bigradientcolor.gif);
-}.z4historypreview {
+}.z4gradientcolorprogressionpanel {
+}
+
+.z4gradientcolorprogressionpanel .z4gradientcolorprogressionpanel-radio img {
+  width: 16px;
+  height: 16px;
+}
+.z4gradientcolorprogressionpanel .z4gradientcolorprogressionpanel-radio:nth-child(2) img {
+  content: url(../image/color/z4gradientcolorprogressionbehavior_spatial.svg);
+}
+.z4gradientcolorprogressionpanel .z4gradientcolorprogressionpanel-radio:nth-child(3) img {
+  content: url(../image/color/z4gradientcolorprogressionbehavior_temporal.svg);
+}
+.z4gradientcolorprogressionpanel .z4gradientcolorprogressionpanel-radio:nth-child(4) img {
+  content: url(../image/color/z4gradientcolorprogressionbehavior_relativetopath.svg);
+}
+.z4gradientcolorprogressionpanel .z4gradientcolorprogressionpanel-radio:nth-child(5) img {
+  content: url(../image/color/z4gradientcolorprogressionbehavior_random.svg);
+}
+.z4historypreview {
   margin-right: 2px;
 }
 

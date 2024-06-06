@@ -13,6 +13,7 @@ class Z4AbstractGradientColorProgression extends Z4JSONable {
    * @param lighting
    */
   constructor(lighting) {
+    super();
     this.lighting = lighting;
   }
 
