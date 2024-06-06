@@ -4,11 +4,11 @@ import pizzapazza.Z4JSONable;
 import simulation.js.$Object;
 
 /**
- * The progression of a color
+ * The progression of a gradient color
  *
  * @author gianpiero.diblasi
  */
-public abstract class Z4AbstractProgression implements Z4JSONable {
+public abstract class Z4AbstractGradientColorProgression implements Z4JSONable {
 
   private final Z4Lighting lighting;
 
@@ -17,7 +17,7 @@ public abstract class Z4AbstractProgression implements Z4JSONable {
    *
    * @param lighting
    */
-  public Z4AbstractProgression(Z4Lighting lighting) {
+  public Z4AbstractGradientColorProgression(Z4Lighting lighting) {
     this.lighting = lighting;
   }
 

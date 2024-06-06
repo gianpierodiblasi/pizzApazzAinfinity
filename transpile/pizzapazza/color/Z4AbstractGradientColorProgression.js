@@ -1,9 +1,9 @@
 /**
- * The progression of a color
+ * The progression of a gradient color
  *
  * @author gianpiero.diblasi
  */
-class Z4AbstractProgression extends Z4JSONable {
+class Z4AbstractGradientColorProgression extends Z4JSONable {
 
    lighting = null;
 

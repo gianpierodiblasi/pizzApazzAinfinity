@@ -8325,11 +8325,11 @@ class Z4GradientColor extends Z4AbstractGradientColor {
   }
 }
 /**
- * The progression of a color
+ * The progression of a gradient color
  *
  * @author gianpiero.diblasi
  */
-class Z4AbstractProgression extends Z4JSONable {
+class Z4AbstractGradientColorProgression extends Z4JSONable {
 
    lighting = null;
 
@@ -8362,7 +8362,7 @@ class Z4AbstractProgression extends Z4JSONable {
  *
  * @author gianpiero.diblasi
  */
-class Z4GradientColorProgression extends Z4AbstractProgression {
+class Z4GradientColorProgression extends Z4AbstractGradientColorProgression {
 
    behavior = null;
 
@@ -8405,6 +8405,42 @@ class Z4GradientColorProgression extends Z4AbstractProgression {
     json["behavior"] = this.behavior;
     json["temporalStepProgression"] = this.temporalStepProgression;
     return json;
+  }
+
+  /**
+   * Creates a Z4GradientColorProgression from a JSON object
+   *
+   * @param json The JSON object
+   * @return the gradient color progression
+   */
+  static  fromJSON(json) {
+    let lighting = null;
+    switch("" + json["lighting"]) {
+      case "NONE":
+        lighting = Z4Lighting.NONE;
+        break;
+      case "LIGHTED":
+        lighting = Z4Lighting.LIGHTED;
+        break;
+      case "DARKENED":
+        lighting = Z4Lighting.DARKENED;
+        break;
+      default:
+        lighting = null;
+        break;
+    }
+    switch("" + json["behavior"]) {
+      case "SPATIAL":
+        return new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.SPATIAL, json["temporalStepProgression"], lighting);
+      case "TEMPORAL":
+        return new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.TEMPORAL, json["temporalStepProgression"], lighting);
+      case "RELATIVE_TO_PATH":
+        return new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.RELATIVE_TO_PATH, json["temporalStepProgression"], lighting);
+      case "RANDOM":
+        return new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.RANDOM, json["temporalStepProgression"], lighting);
+      default:
+        return null;
+    }
   }
 }
 /**
