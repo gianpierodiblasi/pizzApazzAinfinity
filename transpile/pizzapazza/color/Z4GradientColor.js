@@ -35,8 +35,7 @@ class Z4GradientColor extends Z4AbstractGradientColor {
   }
 
    toJSON() {
-    let json = new Object();
-    json["ripple"] = this.getRipple();
+    let json = super.toJSON();
     json["colorsAndPositions"] = this.colors.map((color, index, array) => {
       let jsonColor = new Object();
       jsonColor["red"] = color.red;

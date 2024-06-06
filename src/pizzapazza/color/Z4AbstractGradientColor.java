@@ -3,6 +3,7 @@ package pizzapazza.color;
 import def.js.Array;
 import pizzapazza.Z4JSONable;
 import static simulation.js.$Globals.$exists;
+import simulation.js.$Object;
 
 /**
  * The abstract gradient color
@@ -178,4 +179,11 @@ public abstract class Z4AbstractGradientColor<T> implements Z4JSONable {
    * @return The color
    */
   public abstract T getColorAt(double position, boolean useRipple);
+
+  @Override
+  public $Object toJSON() {
+    $Object json = new $Object();
+    json.$set("ripple", this.ripple);
+    return json;
+  }
 }

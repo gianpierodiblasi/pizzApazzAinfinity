@@ -164,4 +164,10 @@ class Z4AbstractGradientColor extends Z4JSONable {
    */
    getColorAt(position, useRipple) {
   }
+
+   toJSON() {
+    let json = new Object();
+    json["ripple"] = this.ripple;
+    return json;
+  }
 }

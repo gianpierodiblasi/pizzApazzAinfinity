@@ -97,6 +97,33 @@ window.onload = () => {
   }
 };
 /**
+ * The behavior of a progression of a gradient color
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4GradientColorProgressionBehavior {
+
+  /**
+   * The gradient color is used spatially (the gradient color returns a gradient
+   * at all times)
+   */
+  static SPATIAL = 'SPATIAL';
+  /**
+   * The gradient color is used temporally (the gradient color returns a flat
+   * color every time)
+   */
+  static TEMPORAL = 'TEMPORAL';
+  /**
+   * The gradient color is used temporally relative to a length of a path (the
+   * gradient color returns a flat color every time)
+   */
+  static RELATIVE_TO_PATH = 'RELATIVE_TO_PATH';
+  /**
+   * The gradient color returns a random flat color every time
+   */
+  static RANDOM = 'RANDOM';
+}
+/**
  * The lighting of a color
  *
  * @author gianpiero.diblasi
@@ -8090,6 +8117,12 @@ class Z4AbstractGradientColor extends Z4JSONable {
    */
    getColorAt(position, useRipple) {
   }
+
+   toJSON() {
+    let json = new Object();
+    json["ripple"] = this.ripple;
+    return json;
+  }
 }
 /**
  * The bidimensional gradient color (a bidimensional gradient between four or
@@ -8182,8 +8215,7 @@ class Z4BiGradientColor extends Z4AbstractGradientColor {
   }
 
    toJSON() {
-    let json = new Object();
-    json["ripple"] = this.getRipple();
+    let json = super.toJSON();
     json["colorsAndPositions"] = this.colors.map((color, index, array) => {
       let jsonColor = new Object();
       jsonColor["gradientColor"] = color.toJSON();
@@ -8243,8 +8275,7 @@ class Z4GradientColor extends Z4AbstractGradientColor {
   }
 
    toJSON() {
-    let json = new Object();
-    json["ripple"] = this.getRipple();
+    let json = super.toJSON();
     json["colorsAndPositions"] = this.colors.map((color, index, array) => {
       let jsonColor = new Object();
       jsonColor["red"] = color.red;
@@ -8288,6 +8319,89 @@ class Z4GradientColor extends Z4AbstractGradientColor {
     gradientColor.setRipple(json["ripple"]);
     (json["colorsAndPositions"]).forEach(colorAndPosition => gradientColor.addColor(new Color(colorAndPosition["red"], colorAndPosition["green"], colorAndPosition["blue"], colorAndPosition["alpha"]), colorAndPosition["position"]));
     return gradientColor;
+  }
+}
+/**
+ * The progression of a color
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4AbstractProgression extends Z4JSONable {
+
+   lighting = null;
+
+  /**
+   * Creates the object
+   *
+   * @param lighting
+   */
+  constructor(lighting) {
+    this.lighting = lighting;
+  }
+
+  /**
+   * Returns the color lighting
+   *
+   * @return The color lighting
+   */
+   getLighting() {
+    return this.lighting;
+  }
+
+   toJSON() {
+    let json = new Object();
+    json["lighting"] = this.lighting;
+    return json;
+  }
+}
+/**
+ * The progression of a gradient color
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4GradientColorProgression extends Z4AbstractProgression {
+
+   behavior = null;
+
+   temporalStepProgression = 0.0;
+
+  /**
+   * Creates the object
+   *
+   * @param behavior The gradient color progression behavior
+   * @param temporalStepProgression The step for temporal progression (in the
+   * range [0,1])
+   * @param lighting The color lighting
+   */
+  constructor(behavior, temporalStepProgression, lighting) {
+    super(lighting);
+    this.behavior = behavior;
+    this.temporalStepProgression = temporalStepProgression;
+  }
+
+  /**
+   * Returns the gradient color progression behavior
+   *
+   * @return The gradient color progression behavior
+   */
+   getGradientColorProgressionBehavior() {
+    return this.behavior;
+  }
+
+  /**
+   * Returns the step for temporal progression (in the range [0,1])
+   *
+   * @return The step for temporal progression (in the range [0,1])
+   */
+   getTemporalStepProgression() {
+    return this.temporalStepProgression;
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    json["behavior"] = this.behavior;
+    json["temporalStepProgression"] = this.temporalStepProgression;
+    return json;
   }
 }
 /**

@@ -5,6 +5,10 @@
   "start_url": ".",
   "display": "standalone",
   "icons": [{
+      "src": "image/app_icon/app_icon_16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    }, {
       "src": "image/app_icon/app_icon_36.png",
       "sizes": "36x36",
       "type": "image/png"
@@ -59,6 +63,10 @@
         "application/zip": [".z4i"]
       },
       "icons": [{
+          "src": "image/app_icon/app_icon_16.png",
+          "sizes": "16x16",
+          "type": "image/png"
+        }, {
           "src": "image/app_icon/app_icon_36.png",
           "sizes": "36x36",
           "type": "image/png"
