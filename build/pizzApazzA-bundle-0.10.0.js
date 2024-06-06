@@ -3352,6 +3352,24 @@ class Z4GradientColorPanel extends JSPanel {
   }
 }
 /**
+ * The orientation of a gradient color progression panel
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4GradientColorProgressionPanelOrientation {
+
+  /**
+   * The gradient color progression panel is visualized horizontally with a
+   * compact width
+   */
+  static HORIZONTALLY_COMPACT = 'HORIZONTALLY_COMPACT';
+  /**
+   * The gradient color progression panel is visualized horizontally with a
+   * compact height
+   */
+  static VERTICALLY_COMPACT = 'VERTICALLY_COMPACT';
+}
+/**
  * The orientation of a lighting panel
  *
  * @author gianpiero.diblasi
@@ -5506,33 +5524,50 @@ class Z4GradientColorProgressionPanel extends Z4AbstractValuePanel {
 
   /**
    * Creates the object
+   *
+   * @param orientation The orientation
    */
-  constructor() {
+  constructor(orientation) {
     super();
     this.cssAddClass("z4gradientcolorprogressionpanel");
     this.setLayout(new GridBagLayout());
-    Z4UI.addLabel(this, Z4Translations.FILLING, new GBC(0, 0).w(4).a(GBC.WEST));
     let panel = new JSPanel();
-    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-    this.add(panel, new GBC(0, 1).h(3).i(0, 0, 0, 1));
     let buttonGroup = new ButtonGroup();
-    this.addRadio(Z4GradientColorProgressionBehavior.SPATIAL, buttonGroup, panel, "top");
-    this.addRadio(Z4GradientColorProgressionBehavior.TEMPORAL, buttonGroup, panel, "center");
-    this.addRadio(Z4GradientColorProgressionBehavior.RELATIVE_TO_PATH, buttonGroup, panel, "center");
-    this.addRadio(Z4GradientColorProgressionBehavior.RANDOM, buttonGroup, panel, "bottom");
-    Z4UI.addLabel(this, Z4Translations.STEP, new GBC(1, 1).a(GBC.WEST).wx(1));
+    if (orientation === Z4GradientColorProgressionPanelOrientation.HORIZONTALLY_COMPACT) {
+      Z4UI.addLabel(this, Z4Translations.FILLING, new GBC(0, 0).a(GBC.WEST));
+      panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+      this.add(panel, new GBC(1, 0).w(3));
+      this.addRadio(Z4GradientColorProgressionBehavior.SPATIAL, buttonGroup, panel, "left");
+      this.addRadio(Z4GradientColorProgressionBehavior.TEMPORAL, buttonGroup, panel, "centerh");
+      this.addRadio(Z4GradientColorProgressionBehavior.RELATIVE_TO_PATH, buttonGroup, panel, "centerh");
+      this.addRadio(Z4GradientColorProgressionBehavior.RANDOM, buttonGroup, panel, "right");
+      Z4UI.addLabel(this, Z4Translations.STEP, new GBC(0, 1).a(GBC.WEST).wx(1));
+      this.add(this.temporalStepSpinner, new GBC(1, 1).w(3).a(GBC.EAST).i(1, 0, 0, 0));
+      this.add(this.temporalStepSlider, new GBC(0, 2).w(4));
+      Z4UI.addLabel(this, Z4Translations.LIGHTING, new GBC(0, 3).a(GBC.EAST).w(2).wx(1).i(0, 0, 0, 1));
+      this.add(this.lightingPanel, new GBC(2, 3).w(2).a(GBC.EAST));
+    } else if (orientation === Z4GradientColorProgressionPanelOrientation.VERTICALLY_COMPACT) {
+      Z4UI.addLabel(this, Z4Translations.FILLING, new GBC(0, 0).w(4).a(GBC.WEST));
+      panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+      this.add(panel, new GBC(0, 1).h(3).i(0, 0, 0, 1));
+      this.addRadio(Z4GradientColorProgressionBehavior.SPATIAL, buttonGroup, panel, "top");
+      this.addRadio(Z4GradientColorProgressionBehavior.TEMPORAL, buttonGroup, panel, "centerv");
+      this.addRadio(Z4GradientColorProgressionBehavior.RELATIVE_TO_PATH, buttonGroup, panel, "centerv");
+      this.addRadio(Z4GradientColorProgressionBehavior.RANDOM, buttonGroup, panel, "bottom");
+      Z4UI.addLabel(this, Z4Translations.STEP, new GBC(1, 1).a(GBC.WEST).wx(1));
+      this.add(this.temporalStepSpinner, new GBC(2, 1).w(2).a(GBC.EAST));
+      this.add(this.temporalStepSlider, new GBC(1, 2).w(3));
+      Z4UI.addLabel(this, Z4Translations.LIGHTING, new GBC(2, 3).a(GBC.EAST).i(0, 0, 0, 1));
+      this.add(this.lightingPanel, new GBC(3, 3));
+    }
     this.temporalStepSpinner.setModel(new SpinnerNumberModel(1, 1, 100, 1));
     this.temporalStepSpinner.cssAddClass("jsspinner_w_4rem");
     this.temporalStepSpinner.addChangeListener(event => this.onTemporalStepChange(true, this.temporalStepSpinner.getValueIsAdjusting(), this.temporalStepSpinner, this.temporalStepSlider));
-    this.add(this.temporalStepSpinner, new GBC(2, 1).w(2).a(GBC.EAST));
     this.temporalStepSlider.setMinimum(1);
     this.temporalStepSlider.setMaximum(100);
     this.temporalStepSlider.setValue(1);
     this.temporalStepSlider.getStyle().minWidth = "20rem";
     this.temporalStepSlider.addChangeListener(event => this.onTemporalStepChange(false, this.temporalStepSlider.getValueIsAdjusting(), this.temporalStepSpinner, this.temporalStepSlider));
-    this.add(this.temporalStepSlider, new GBC(1, 2).w(3));
-    Z4UI.addLabel(this, Z4Translations.LIGHTING, new GBC(2, 3).a(GBC.EAST).i(0, 0, 0, 1));
-    this.add(this.lightingPanel, new GBC(3, 3));
     this.lightingPanel.addChangeListener(event => this.onProgressionChange(false));
     this.setValue(new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.SPATIAL, 0.1, Z4Lighting.NONE));
   }
@@ -5553,12 +5588,27 @@ class Z4GradientColorProgressionPanel extends Z4AbstractValuePanel {
       this.onProgressionChange(false);
     });
     switch(border) {
+      case "left":
+        radio.getStyle().borderTopRightRadius = "0px";
+        radio.getStyle().borderBottomRightRadius = "0px";
+        radio.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "centerh":
+        radio.getStyle().borderRadius = "0px";
+        radio.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        radio.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "right":
+        radio.getStyle().borderTopLeftRadius = "0px";
+        radio.getStyle().borderBottomLeftRadius = "0px";
+        radio.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        break;
       case "top":
         radio.getStyle().borderBottomLeftRadius = "0px";
         radio.getStyle().borderBottomRightRadius = "0px";
         radio.getStyle().borderBottom = "1px solid var(--main-action-bgcolor)";
         break;
-      case "center":
+      case "centerv":
         radio.getStyle().borderRadius = "0px";
         radio.getStyle().borderTop = "1px solid var(--main-action-bgcolor)";
         radio.getStyle().borderBottom = "1px solid var(--main-action-bgcolor)";
