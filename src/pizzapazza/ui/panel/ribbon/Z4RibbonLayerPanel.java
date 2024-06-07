@@ -7,8 +7,10 @@ import javascript.awt.Dimension;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
 import javascript.swing.JSFileChooser;
+import javascript.swing.JSFilePicker;
 import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
+import javascript.util.fsa.FilePickerOptions;
 import pizzapazza.Z4Layer;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.component.Z4LayerPreview;
@@ -23,6 +25,7 @@ import static simulation.js.$Globals.$typeof;
 import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.navigator;
 import static simulation.js.$Globals.parseInt;
+import static simulation.js.$Globals.window;
 
 /**
  * The ribbon panel containing the layer menus
@@ -126,7 +129,17 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
   }
 
   private void addFromFile() {
-    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files -> files.forEach(file -> this.canvas.addLayerFromFile(file)));
+    if ($typeof(window.$get("showOpenFilePicker"), "function")) {
+      FilePickerOptions options = new FilePickerOptions();
+      options.excludeAcceptAllOption = true;
+      options.id = Z4Constants.IMAGE_FILE_ID;
+      options.multiple = false;
+      options.types = Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE;
+
+      JSFilePicker.showOpenFilePicker(options, 0, handles -> handles.forEach(handle -> this.canvas.addLayerFromHandle(handle)));
+    } else {
+      JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files -> files.forEach(file -> this.canvas.addLayerFromFile(file)));
+    }
   }
 
   private void addFromClipboard() {

@@ -1875,6 +1875,17 @@ class Z4Canvas extends JSComponent {
   /**
    * Adds a layer from an image file
    *
+   * @param handle The file handle
+   */
+   addLayerFromHandle(handle) {
+    handle.getFile().then(file => {
+      this.addLayerFromFile(file);
+    });
+  }
+
+  /**
+   * Adds a layer from an image file
+   *
    * @param file The file
    */
    addLayerFromFile(file) {
@@ -5239,7 +5250,16 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
   }
 
    addFromFile() {
-    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.addLayerFromFile(file)));
+    if (typeof window["showOpenFilePicker"] === "function") {
+      let options = new FilePickerOptions();
+      options.excludeAcceptAllOption = true;
+      options.id = Z4Constants.IMAGE_FILE_ID;
+      options.multiple = false;
+      options.types = Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE;
+      JSFilePicker.showOpenFilePicker(options, 0, handles => handles.forEach(handle => this.canvas.addLayerFromHandle(handle)));
+    } else {
+      JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.addLayerFromFile(file)));
+    }
   }
 
    addFromClipboard() {

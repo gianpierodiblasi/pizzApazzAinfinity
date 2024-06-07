@@ -557,6 +557,17 @@ public class Z4Canvas extends JSComponent {
   /**
    * Adds a layer from an image file
    *
+   * @param handle The file handle
+   */
+  public void addLayerFromHandle(FileSystemFileHandle handle) {
+    handle.getFile().then(file -> {
+      this.addLayerFromFile(file);
+    });
+  }
+
+  /**
+   * Adds a layer from an image file
+   *
    * @param file The file
    */
   public void addLayerFromFile(File file) {
