@@ -88,8 +88,6 @@ public class Z4Constants {
    * Configures the arrays of accepted file types
    */
   public static void configureAcceptedImageFileTypeArrays() {
-//public static final Array<FilePickerOptionsType> PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE = new Array<>();
-
     FilePickerOptionsType all = new FilePickerOptionsType();
     all.description = Z4Translations.IMAGE_FILE;
     all.pushAccept("image/z4i", Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT);

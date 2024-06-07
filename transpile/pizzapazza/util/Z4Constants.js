@@ -63,7 +63,6 @@ class Z4Constants {
    * Configures the arrays of accepted file types
    */
   static  configureAcceptedImageFileTypeArrays() {
-    // public static final Array<FilePickerOptionsType> PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE = new Array<>();
     let all = new FilePickerOptionsType();
     all.description = Z4Translations.IMAGE_FILE;
     all.pushAccept("image/z4i", Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT);
