@@ -62,9 +62,6 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
   private Z4Painter<?> painter;
   private Z4GradientColor gradientColor;
 
-  private final static String PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
-  private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/ui/Z4ToolComposerUI.html");
-
   /**
    * Creates a Z4ToolComposerUI
    */
