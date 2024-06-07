@@ -57,9 +57,6 @@ public class TestTextureFiller extends JSFrame {
     buttons.add(button, null);
 
     this.getContentPane().add(buttons, BorderLayout.NORTH);
-
-    JSFileChooser.showOpenDialog(".png", JSFileChooser.SINGLE_SELECTION, 0, files -> {
-    });
   }
 
   private void open(boolean b, boolean showLines) {

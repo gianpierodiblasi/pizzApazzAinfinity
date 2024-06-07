@@ -30,8 +30,6 @@ class TestTextureFiller extends JSFrame {
     button.addActionListener(event => this.open(true, checkBox.isSelected()));
     buttons.add(button, null);
     this.getContentPane().add(buttons, BorderLayout.NORTH);
-    JSFileChooser.showOpenDialog(".png", JSFileChooser.SINGLE_SELECTION, 0, files => {
-    });
   }
 
    open(b, showLines) {
