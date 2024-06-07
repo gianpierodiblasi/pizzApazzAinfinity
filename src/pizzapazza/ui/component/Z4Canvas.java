@@ -1,5 +1,6 @@
 package pizzapazza.ui.component;
 
+import def.dom.Blob;
 import def.dom.Event;
 import def.dom.File;
 import def.dom.FileReader;
@@ -15,6 +16,7 @@ import javascript.awt.Dimension;
 import javascript.awt.Point;
 import javascript.swing.JSComponent;
 import javascript.util.fsa.FileSystemFileHandle;
+import javascript.util.fsa.FileSystemWritableFileStreamCreateOptions;
 import pizzapazza.Z4Layer;
 import pizzapazza.Z4Paper;
 import pizzapazza.ui.panel.Z4StatusPanel;
@@ -503,8 +505,39 @@ public class Z4Canvas extends JSComponent {
    * @param ext The file extension
    * @param quality The quality
    */
-  @SuppressWarnings("StringEquality")
   public void exportToFile(String filename, String ext, double quality) {
+    this.exportTo(ext, quality, blob -> {
+      HTMLElement link = document.createElement("a");
+      link.setAttribute("href", URL.createObjectURL(blob));
+      link.setAttribute("download", filename + ext);
+
+      document.body.appendChild(link);
+
+      Event event = document.createEvent("MouseEvents");
+      event.initEvent("click", false, false);
+      link.dispatchEvent(event);
+
+      document.body.removeChild(link);
+    });
+  }
+
+  /**
+   * Exports this project to an image file
+   *
+   * @param handle The file handle
+   * @param quality The quality
+   */
+  public void exportToHandle(FileSystemFileHandle handle, double quality) {
+    handle.getFile().then(file -> {
+      this.exportTo(file.name.toLowerCase().substring(file.name.toLowerCase().lastIndexOf('.')), quality, blob -> handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable -> {
+        writable.write(blob);
+        writable.close();
+      }));
+    });
+  }
+
+  @SuppressWarnings("StringEquality")
+  private void exportTo(String ext, double quality, $Apply_1_Void<Blob> apply) {
     Z4UI.pleaseWait(this, false, false, false, false, "", () -> {
       $OffscreenCanvas offscreen = new $OffscreenCanvas(this.width, this.height);
       $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
@@ -515,17 +548,7 @@ public class Z4Canvas extends JSComponent {
       options.$set("quality", quality);
 
       offscreen.convertToBlob(options).then(blob -> {
-        HTMLElement link = document.createElement("a");
-        link.setAttribute("href", URL.createObjectURL(blob));
-        link.setAttribute("download", filename + ext);
-
-        document.body.appendChild(link);
-
-        Event event = document.createEvent("MouseEvents");
-        event.initEvent("click", false, false);
-        link.dispatchEvent(event);
-
-        document.body.removeChild(link);
+        apply.$apply(blob);
       });
     });
   }

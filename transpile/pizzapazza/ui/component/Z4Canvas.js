@@ -424,6 +424,34 @@ class Z4Canvas extends JSComponent {
    * @param quality The quality
    */
    exportToFile(filename, ext, quality) {
+    this.exportTo(ext, quality, blob => {
+      let link = document.createElement("a");
+      link.setAttribute("href", URL.createObjectURL(blob));
+      link.setAttribute("download", filename + ext);
+      document.body.appendChild(link);
+      let event = document.createEvent("MouseEvents");
+      event.initEvent("click", false, false);
+      link.dispatchEvent(event);
+      document.body.removeChild(link);
+    });
+  }
+
+  /**
+   * Exports this project to an image file
+   *
+   * @param handle The file handle
+   * @param quality The quality
+   */
+   exportToHandle(handle, quality) {
+    handle.getFile().then(file => {
+      this.exportTo(file.name.toLowerCase().substring(file.name.toLowerCase().lastIndexOf('.')), quality, blob => handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable => {
+        writable.write(blob);
+        writable.close();
+      }));
+    });
+  }
+
+   exportTo(ext, quality, apply) {
     Z4UI.pleaseWait(this, false, false, false, false, "", () => {
       let offscreen = new OffscreenCanvas(this.width, this.height);
       let offscreenCtx = offscreen.getContext("2d");
@@ -432,14 +460,7 @@ class Z4Canvas extends JSComponent {
       options["type"] = ext === ".png" ? "image/png" : "image/jpeg";
       options["quality"] = quality;
       offscreen.convertToBlob(options).then(blob => {
-        let link = document.createElement("a");
-        link.setAttribute("href", URL.createObjectURL(blob));
-        link.setAttribute("download", filename + ext);
-        document.body.appendChild(link);
-        let event = document.createEvent("MouseEvents");
-        event.initEvent("click", false, false);
-        link.dispatchEvent(event);
-        document.body.removeChild(link);
+        apply(blob);
       });
     });
   }

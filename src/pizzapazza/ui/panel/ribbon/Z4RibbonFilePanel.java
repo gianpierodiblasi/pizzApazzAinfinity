@@ -16,6 +16,7 @@ import javascript.swing.JSPanel;
 import javascript.swing.JSTextField;
 import javascript.swing.event.ChangeEvent;
 import javascript.util.fsa.FilePickerOptions;
+import javascript.util.fsa.FileSystemFileHandle;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.panel.Z4ExportToFilePanel;
 import pizzapazza.ui.panel.Z4NewImagePanel;
@@ -173,14 +174,48 @@ public class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
   }
 
   private void exportToFile() {
-    Z4ExportToFilePanel panel = new Z4ExportToFilePanel();
-    panel.setFilename(this.canvas.getProjectName());
+    if ($typeof(window.$get("showOpenFilePicker"), "function")) {
+      FilePickerOptions options = new FilePickerOptions();
+      options.excludeAcceptAllOption = true;
+      options.id = Z4Constants.IMAGE_FILE_ID;
+      options.multiple = false;
+      options.suggestedName = this.canvas.getProjectName();
+      options.types = Z4Constants.ACCEPTED_SAVE_IMAGE_FILE_TYPE;
 
-    JSOptionPane.showInputDialog(panel, Z4Translations.EXPORT, listener -> panel.addChangeListener(listener), () -> panel.isValid(), response -> {
-      if (response == JSOptionPane.OK_OPTION) {
-        this.canvas.exportToFile(panel.getFilename(), panel.getFileExtension(), panel.getQuality());
-      }
-    });
+      JSFilePicker.showSaveFilePicker(options, handle -> this.export(handle));
+    } else {
+      this.export(null);
+    }
+  }
+
+  @SuppressWarnings("static-access")
+  private void export(FileSystemFileHandle handle) {
+    if (!$exists(handle)) {
+      Z4ExportToFilePanel panel = new Z4ExportToFilePanel();
+      panel.setFilename(this.canvas.getProjectName());
+
+      JSOptionPane.showInputDialog(panel, Z4Translations.EXPORT, listener -> panel.addChangeListener(listener), () -> panel.isValid(), response -> {
+        if (response == JSOptionPane.OK_OPTION) {
+          this.canvas.exportToFile(panel.getFilename(), panel.getFileExtension(), panel.getQuality());
+        }
+      });
+    } else if (handle.name.toLowerCase().endsWith(".png")) {
+      this.canvas.exportToHandle(handle, 0);
+    } else {
+      handle.getFile().then(file -> {
+        Z4ExportToFilePanel panel = new Z4ExportToFilePanel();
+        panel.setFilename(file.name);
+        panel.setFilenameEditable(false);
+        panel.setFileExtension(".jpg");
+        panel.setFileExtensionEnabled(false);
+
+        JSOptionPane.showInputDialog(panel, Z4Translations.EXPORT, listener -> panel.addChangeListener(listener), () -> panel.isValid(), response -> {
+          if (response == JSOptionPane.OK_OPTION) {
+            this.canvas.exportToHandle(handle, panel.getQuality());
+          }
+        });
+      });
+    }
   }
 
   @SuppressWarnings("StringEquality")

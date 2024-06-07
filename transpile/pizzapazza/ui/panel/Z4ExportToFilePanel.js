@@ -102,12 +102,49 @@ class Z4ExportToFilePanel extends JSPanel {
   }
 
   /**
+   * Sets the editability of the file name
+   *
+   * @param b true to sets the editability of the file name, false otherwise
+   */
+   setFilenameEditable(b) {
+    this.filename.setEditable(b);
+  }
+
+  /**
    * Returns the file extension
    *
    * @return The file extension
    */
    getFileExtension() {
     return this.png.isSelected() ? ".png" : ".jpg";
+  }
+
+  /**
+   * Sets the file extension
+   *
+   * @param ext The file extension
+   */
+   setFileExtension(ext) {
+    switch(ext) {
+      case ".png":
+        this.png.setSelected(true);
+        break;
+      case ".jpg":
+        this.jpg.setSelected(true);
+        break;
+    }
+    this.qualitySlider.setEnabled(ext === ".jpg");
+    this.qualitySpinner.setEnabled(ext === ".jpg");
+  }
+
+  /**
+   * Sets the extensions as enabled
+   *
+   * @param b true to set the extensions as enabled, false othewise
+   */
+   setFileExtensionEnabled(b) {
+    this.png.setEnabled(b);
+    this.jpg.setEnabled(b);
   }
 
   /**

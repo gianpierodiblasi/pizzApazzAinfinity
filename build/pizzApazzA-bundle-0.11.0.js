@@ -1828,6 +1828,34 @@ class Z4Canvas extends JSComponent {
    * @param quality The quality
    */
    exportToFile(filename, ext, quality) {
+    this.exportTo(ext, quality, blob => {
+      let link = document.createElement("a");
+      link.setAttribute("href", URL.createObjectURL(blob));
+      link.setAttribute("download", filename + ext);
+      document.body.appendChild(link);
+      let event = document.createEvent("MouseEvents");
+      event.initEvent("click", false, false);
+      link.dispatchEvent(event);
+      document.body.removeChild(link);
+    });
+  }
+
+  /**
+   * Exports this project to an image file
+   *
+   * @param handle The file handle
+   * @param quality The quality
+   */
+   exportToHandle(handle, quality) {
+    handle.getFile().then(file => {
+      this.exportTo(file.name.toLowerCase().substring(file.name.toLowerCase().lastIndexOf('.')), quality, blob => handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable => {
+        writable.write(blob);
+        writable.close();
+      }));
+    });
+  }
+
+   exportTo(ext, quality, apply) {
     Z4UI.pleaseWait(this, false, false, false, false, "", () => {
       let offscreen = new OffscreenCanvas(this.width, this.height);
       let offscreenCtx = offscreen.getContext("2d");
@@ -1836,14 +1864,7 @@ class Z4Canvas extends JSComponent {
       options["type"] = ext === ".png" ? "image/png" : "image/jpeg";
       options["quality"] = quality;
       offscreen.convertToBlob(options).then(blob => {
-        let link = document.createElement("a");
-        link.setAttribute("href", URL.createObjectURL(blob));
-        link.setAttribute("download", filename + ext);
-        document.body.appendChild(link);
-        let event = document.createEvent("MouseEvents");
-        event.initEvent("click", false, false);
-        link.dispatchEvent(event);
-        document.body.removeChild(link);
+        apply(blob);
       });
     });
   }
@@ -4786,13 +4807,44 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
   }
 
    exportToFile() {
-    let panel = new Z4ExportToFilePanel();
-    panel.setFilename(this.canvas.getProjectName());
-    JSOptionPane.showInputDialog(panel, Z4Translations.EXPORT, listener => panel.addChangeListener(listener), () => panel.isValid(), response => {
-      if (response === JSOptionPane.OK_OPTION) {
-        this.canvas.exportToFile(panel.getFilename(), panel.getFileExtension(), panel.getQuality());
-      }
-    });
+    if (typeof window["showOpenFilePicker"] === "function") {
+      let options = new FilePickerOptions();
+      options.excludeAcceptAllOption = true;
+      options.id = Z4Constants.IMAGE_FILE_ID;
+      options.multiple = false;
+      options.suggestedName = this.canvas.getProjectName();
+      options.types = Z4Constants.ACCEPTED_SAVE_IMAGE_FILE_TYPE;
+      JSFilePicker.showSaveFilePicker(options, handle => this.export(handle));
+    } else {
+      this.export(null);
+    }
+  }
+
+   export(handle) {
+    if (!handle) {
+      let panel = new Z4ExportToFilePanel();
+      panel.setFilename(this.canvas.getProjectName());
+      JSOptionPane.showInputDialog(panel, Z4Translations.EXPORT, listener => panel.addChangeListener(listener), () => panel.isValid(), response => {
+        if (response === JSOptionPane.OK_OPTION) {
+          this.canvas.exportToFile(panel.getFilename(), panel.getFileExtension(), panel.getQuality());
+        }
+      });
+    } else if (handle.name.toLowerCase().endsWith(".png")) {
+      this.canvas.exportToHandle(handle, 0);
+    } else {
+      handle.getFile().then(file => {
+        let panel = new Z4ExportToFilePanel();
+        panel.setFilename(file.name);
+        panel.setFilenameEditable(false);
+        panel.setFileExtension(".jpg");
+        panel.setFileExtensionEnabled(false);
+        JSOptionPane.showInputDialog(panel, Z4Translations.EXPORT, listener => panel.addChangeListener(listener), () => panel.isValid(), response => {
+          if (response === JSOptionPane.OK_OPTION) {
+            this.canvas.exportToHandle(handle, panel.getQuality());
+          }
+        });
+      });
+    }
   }
 
    onDrop(event, doUpload) {
@@ -6878,12 +6930,49 @@ class Z4ExportToFilePanel extends JSPanel {
   }
 
   /**
+   * Sets the editability of the file name
+   *
+   * @param b true to sets the editability of the file name, false otherwise
+   */
+   setFilenameEditable(b) {
+    this.filename.setEditable(b);
+  }
+
+  /**
    * Returns the file extension
    *
    * @return The file extension
    */
    getFileExtension() {
     return this.png.isSelected() ? ".png" : ".jpg";
+  }
+
+  /**
+   * Sets the file extension
+   *
+   * @param ext The file extension
+   */
+   setFileExtension(ext) {
+    switch(ext) {
+      case ".png":
+        this.png.setSelected(true);
+        break;
+      case ".jpg":
+        this.jpg.setSelected(true);
+        break;
+    }
+    this.qualitySlider.setEnabled(ext === ".jpg");
+    this.qualitySpinner.setEnabled(ext === ".jpg");
+  }
+
+  /**
+   * Sets the extensions as enabled
+   *
+   * @param b true to set the extensions as enabled, false othewise
+   */
+   setFileExtensionEnabled(b) {
+    this.png.setEnabled(b);
+    this.jpg.setEnabled(b);
   }
 
   /**
@@ -7589,13 +7678,13 @@ class Z4Constants {
     Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE.push(all);
     Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE, "image/gif", new Array(".gif"));
     Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE, "image/png", new Array(".png", ".apng"));
-    Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE, "image/jpeg", new Array(".jpeg", ".jpg", ".jfif", ".pjpeg", ".pjp"));
+    Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE, "image/jpg", new Array(".jpeg", ".jpg", ".jfif", ".pjpeg", ".pjp"));
     Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE, "image/bmp", new Array(".bmp"));
     Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE, "image/svg+xml", new Array(".svg"));
     Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE, "image/webp", new Array(".webp"));
     Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE, "image/avif", new Array(".avif"));
     Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_SAVE_IMAGE_FILE_TYPE, "image/png", new Array(".png"));
-    Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_SAVE_IMAGE_FILE_TYPE, "image/jpeg", new Array(".jpeg", ".jpg"));
+    Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_SAVE_IMAGE_FILE_TYPE, "image/jpg", new Array(".jpeg", ".jpg"));
     let z4i = new FilePickerOptionsType();
     z4i.description = Z4Translations.PIZZAPAZZA_PROJECT;
     z4i.pushAccept("application/z4i", new Array(".z4i"));

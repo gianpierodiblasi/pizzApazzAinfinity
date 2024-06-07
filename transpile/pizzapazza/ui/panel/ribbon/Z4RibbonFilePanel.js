@@ -132,13 +132,44 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
   }
 
    exportToFile() {
-    let panel = new Z4ExportToFilePanel();
-    panel.setFilename(this.canvas.getProjectName());
-    JSOptionPane.showInputDialog(panel, Z4Translations.EXPORT, listener => panel.addChangeListener(listener), () => panel.isValid(), response => {
-      if (response === JSOptionPane.OK_OPTION) {
-        this.canvas.exportToFile(panel.getFilename(), panel.getFileExtension(), panel.getQuality());
-      }
-    });
+    if (typeof window["showOpenFilePicker"] === "function") {
+      let options = new FilePickerOptions();
+      options.excludeAcceptAllOption = true;
+      options.id = Z4Constants.IMAGE_FILE_ID;
+      options.multiple = false;
+      options.suggestedName = this.canvas.getProjectName();
+      options.types = Z4Constants.ACCEPTED_SAVE_IMAGE_FILE_TYPE;
+      JSFilePicker.showSaveFilePicker(options, handle => this.export(handle));
+    } else {
+      this.export(null);
+    }
+  }
+
+   export(handle) {
+    if (!handle) {
+      let panel = new Z4ExportToFilePanel();
+      panel.setFilename(this.canvas.getProjectName());
+      JSOptionPane.showInputDialog(panel, Z4Translations.EXPORT, listener => panel.addChangeListener(listener), () => panel.isValid(), response => {
+        if (response === JSOptionPane.OK_OPTION) {
+          this.canvas.exportToFile(panel.getFilename(), panel.getFileExtension(), panel.getQuality());
+        }
+      });
+    } else if (handle.name.toLowerCase().endsWith(".png")) {
+      this.canvas.exportToHandle(handle, 0);
+    } else {
+      handle.getFile().then(file => {
+        let panel = new Z4ExportToFilePanel();
+        panel.setFilename(file.name);
+        panel.setFilenameEditable(false);
+        panel.setFileExtension(".jpg");
+        panel.setFileExtensionEnabled(false);
+        JSOptionPane.showInputDialog(panel, Z4Translations.EXPORT, listener => panel.addChangeListener(listener), () => panel.isValid(), response => {
+          if (response === JSOptionPane.OK_OPTION) {
+            this.canvas.exportToHandle(handle, panel.getQuality());
+          }
+        });
+      });
+    }
   }
 
    onDrop(event, doUpload) {
