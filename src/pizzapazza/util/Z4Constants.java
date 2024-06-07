@@ -1,6 +1,7 @@
 package pizzapazza.util;
 
 import def.js.Array;
+import javascript.util.fsa.FilePickerOptionsType;
 
 /**
  * Constants of the applications
@@ -10,9 +11,9 @@ import def.js.Array;
 public class Z4Constants {
 
   /**
-   * The array of accepted image file formats
+   * The array of accepted image file formats for open
    */
-  public static final Array<String> ACCEPTED_IMAGE_FILE_FORMAT = new Array<>(
+  public static final Array<String> ACCEPTED_OPEN_IMAGE_FILE_FORMAT = new Array<>(
           ".gif",
           ".png", ".apng",
           ".jpeg", ".jpg", ".jfif", ".pjpeg", ".pjp",
@@ -21,6 +22,21 @@ public class Z4Constants {
           ".webp",
           ".avif"
   );
+
+  /**
+   * The array of accepted image file types for open
+   */
+  public static final Array<FilePickerOptionsType> ACCEPTED_OPEN_IMAGE_FILE_TYPE = new Array<>();
+
+  /**
+   * The array of accepted image file types for save
+   */
+  public static final Array<FilePickerOptionsType> ACCEPTED_SAVE_IMAGE_FILE_TYPE = new Array<>();
+
+  /**
+   * The array of the pizzApazzA project file type
+   */
+  public static final Array<FilePickerOptionsType> PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE = new Array<>();
 
   /**
    * The zoom levels
@@ -66,5 +82,44 @@ public class Z4Constants {
   public final static int MAX_DPI = 1500;
 
   private Z4Constants() {
+  }
+
+  /**
+   * Configures the arrays of accepted file types
+   */
+  public static void configureAcceptedImageFileTypeArrays() {
+//public static final Array<FilePickerOptionsType> PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE = new Array<>();
+
+    FilePickerOptionsType all = new FilePickerOptionsType();
+    all.description = Z4Translations.IMAGE_FILE;
+    all.pushAccept("image/z4i", Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT);
+    Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE.push(all);
+
+    Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE, "image/gif", new Array<>(".gif"));
+    Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE, "image/png", new Array<>(".png", ".apng"));
+    Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE, "image/jpeg", new Array<>(".jpeg", ".jpg", ".jfif", ".pjpeg", ".pjp"));
+    Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE, "image/bmp", new Array<>(".bmp"));
+    Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE, "image/svg+xml", new Array<>(".svg"));
+    Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE, "image/webp", new Array<>(".webp"));
+    Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE, "image/avif", new Array<>(".avif"));
+
+    Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_SAVE_IMAGE_FILE_TYPE, "image/png", new Array<>(".png"));
+    Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_SAVE_IMAGE_FILE_TYPE, "image/jpeg", new Array<>(".jpeg", ".jpg"));
+
+    FilePickerOptionsType z4i = new FilePickerOptionsType();
+    z4i.description = Z4Translations.PIZZAPAZZA_PROJECT;
+    z4i.pushAccept("application/z4i", new Array<>(".z4i"));
+    Z4Constants.PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE.push(z4i);
+  }
+
+  private static void pushACCEPTED_IMAGE_FILE_TYPE(Array<FilePickerOptionsType> array, String mime, Array<String> extensions) {
+    FilePickerOptionsType filePickerOptionsType = new FilePickerOptionsType();
+
+    int start = mime.indexOf('/') + 1;
+    int end = mime.indexOf('+');
+    filePickerOptionsType.description = end != -1 ? mime.substring(start, end).toUpperCase() : mime.substring(start).toUpperCase();
+
+    filePickerOptionsType.pushAccept(mime, extensions);
+    array.push(filePickerOptionsType);
   }
 }

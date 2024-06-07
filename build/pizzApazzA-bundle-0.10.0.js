@@ -1,4 +1,4 @@
-/* global Translations, Z4Translations, SwingJS, LaunchParams, launchQueue */
+/* global Translations, Z4Translations, SwingJS, LaunchParams, launchQueue, Z4Constants */
 
 window.onload = () => {
   window.addEventListener("wheel", event => {
@@ -44,6 +44,8 @@ window.onload = () => {
 
   SwingJS.instance().fontSize(12).build();
 
+  Z4Constants.configureAcceptedImageFileTypeArrays();
+  
   var frame = new Z4Frame();
 
   if ('launchQueue' in window && 'files' in LaunchParams.prototype) {
@@ -4196,7 +4198,7 @@ class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
   }
 
    selectPattern() {
-    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => {
+    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => {
       let fileReader = new FileReader();
       fileReader.onload = event => {
         let image = document.createElement("img");
@@ -4689,7 +4691,7 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
   }
 
    createFromFile() {
-    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.createFromFile(file)));
+    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.createFromFile(file)));
   }
 
    createFromClipboard() {
@@ -4748,7 +4750,7 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
       if (!doUpload) {
       } else if (files[0].name.toLowerCase().endsWith(".z4i")) {
         this.checkSaved(Z4Translations.OPEN_PROJECT, () => this.canvas.openProject(files[0]));
-      } else if (Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.some((format, index, array) => files[0].name.toLowerCase().endsWith(format))) {
+      } else if (Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.some((format, index, array) => files[0].name.toLowerCase().endsWith(format))) {
         this.checkSaved(Z4Translations.FROM_FILE, () => this.canvas.createFromFile(files[0]));
       }
     }
@@ -5197,7 +5199,7 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
   }
 
    addFromFile() {
-    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.addLayerFromFile(file)));
+    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.addLayerFromFile(file)));
   }
 
    addFromClipboard() {
@@ -7441,9 +7443,24 @@ class Z4Ribbon extends JSTabbedPane {
 class Z4Constants {
 
   /**
-   * The array of accepted image file formats
+   * The array of accepted image file formats for open
    */
-  static  ACCEPTED_IMAGE_FILE_FORMAT = new Array(".gif", ".png", ".apng", ".jpeg", ".jpg", ".jfif", ".pjpeg", ".pjp", ".bmp", ".svg", ".webp", ".avif");
+  static  ACCEPTED_OPEN_IMAGE_FILE_FORMAT = new Array(".gif", ".png", ".apng", ".jpeg", ".jpg", ".jfif", ".pjpeg", ".pjp", ".bmp", ".svg", ".webp", ".avif");
+
+  /**
+   * The array of accepted image file types for open
+   */
+  static  ACCEPTED_OPEN_IMAGE_FILE_TYPE = new Array();
+
+  /**
+   * The array of accepted image file types for save
+   */
+  static  ACCEPTED_SAVE_IMAGE_FILE_TYPE = new Array();
+
+  /**
+   * The array of the pizzApazzA project file type
+   */
+  static  PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE = new Array();
 
   /**
    * The zoom levels
@@ -7477,6 +7494,39 @@ class Z4Constants {
   static  MAX_DPI = 1500;
 
   constructor() {
+  }
+
+  /**
+   * Configures the arrays of accepted file types
+   */
+  static  configureAcceptedImageFileTypeArrays() {
+    // public static final Array<FilePickerOptionsType> PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE = new Array<>();
+    let all = new FilePickerOptionsType();
+    all.description = Z4Translations.IMAGE_FILE;
+    all.pushAccept("image/z4i", Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT);
+    Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE.push(all);
+    Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE, "image/gif", new Array(".gif"));
+    Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE, "image/png", new Array(".png", ".apng"));
+    Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE, "image/jpeg", new Array(".jpeg", ".jpg", ".jfif", ".pjpeg", ".pjp"));
+    Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE, "image/bmp", new Array(".bmp"));
+    Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE, "image/svg+xml", new Array(".svg"));
+    Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE, "image/webp", new Array(".webp"));
+    Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE, "image/avif", new Array(".avif"));
+    Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_SAVE_IMAGE_FILE_TYPE, "image/png", new Array(".png"));
+    Z4Constants.pushACCEPTED_IMAGE_FILE_TYPE(Z4Constants.ACCEPTED_SAVE_IMAGE_FILE_TYPE, "image/jpeg", new Array(".jpeg", ".jpg"));
+    let z4i = new FilePickerOptionsType();
+    z4i.description = Z4Translations.PIZZAPAZZA_PROJECT;
+    z4i.pushAccept("application/z4i", new Array(".z4i"));
+    Z4Constants.PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE.push(z4i);
+  }
+
+  static  pushACCEPTED_IMAGE_FILE_TYPE(array, mime, extensions) {
+    let filePickerOptionsType = new FilePickerOptionsType();
+    let start = mime.indexOf('/') + 1;
+    let end = mime.indexOf('+');
+    filePickerOptionsType.description = end !== -1 ? mime.substring(start, end).toUpperCase() : mime.substring(start).toUpperCase();
+    filePickerOptionsType.pushAccept(mime, extensions);
+    array.push(filePickerOptionsType);
   }
 }
 /**
@@ -7536,6 +7586,10 @@ class Z4Translations {
   static  SAVE_HISTORY = "";
 
   static  PROJECT_NOT_SAVED_MESSAGE = "";
+
+  static  IMAGE_FILE = "";
+
+  static  PIZZAPAZZA_PROJECT = "";
 
   // Ribbon Layer
   static  LAYER = "";
@@ -7834,6 +7888,8 @@ class Z4Translations {
     Z4Translations.EXPORT = "Export";
     Z4Translations.SAVE_HISTORY = "Save History";
     Z4Translations.PROJECT_NOT_SAVED_MESSAGE = "Project not saved, do you want to save your changes?";
+    Z4Translations.IMAGE_FILE = "Image File";
+    Z4Translations.PIZZAPAZZA_PROJECT = "pizzApazzA Project";
     // Ribbon Layer
     Z4Translations.LAYER = "Layer";
     Z4Translations.LAYER_NAME = "Layer Name";
@@ -7991,6 +8047,8 @@ class Z4Translations {
     Z4Translations.EXPORT = "Esporta";
     Z4Translations.SAVE_HISTORY = "Salva Cronologia";
     Z4Translations.PROJECT_NOT_SAVED_MESSAGE = "Progetto non salvato, vuoi salvare le modifiche?";
+    Z4Translations.IMAGE_FILE = "File Immagine";
+    Z4Translations.PIZZAPAZZA_PROJECT = "Progetto pizzApazzA";
     // Ribbon Layer
     Z4Translations.LAYER = "Livello";
     Z4Translations.LAYER_NAME = "Nome Livello";

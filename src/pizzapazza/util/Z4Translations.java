@@ -34,6 +34,8 @@ public class Z4Translations {
   public static String EXPORT = "";
   public static String SAVE_HISTORY = "";
   public static String PROJECT_NOT_SAVED_MESSAGE = "";
+  public static String IMAGE_FILE = "";
+  public static String PIZZAPAZZA_PROJECT = "";
 
   // Ribbon Layer
   public static String LAYER = "";
@@ -217,6 +219,8 @@ public class Z4Translations {
     Z4Translations.EXPORT = "Export";
     Z4Translations.SAVE_HISTORY = "Save History";
     Z4Translations.PROJECT_NOT_SAVED_MESSAGE = "Project not saved, do you want to save your changes?";
+    Z4Translations.IMAGE_FILE = "Image File";
+    Z4Translations.PIZZAPAZZA_PROJECT = "pizzApazzA Project";
 
     // Ribbon Layer
     Z4Translations.LAYER = "Layer";
@@ -387,6 +391,8 @@ public class Z4Translations {
     Z4Translations.EXPORT = "Esporta";
     Z4Translations.SAVE_HISTORY = "Salva Cronologia";
     Z4Translations.PROJECT_NOT_SAVED_MESSAGE = "Progetto non salvato, vuoi salvare le modifiche?";
+    Z4Translations.IMAGE_FILE = "File Immagine";
+    Z4Translations.PIZZAPAZZA_PROJECT = "Progetto pizzApazzA";
 
     // Ribbon Layer
     Z4Translations.LAYER = "Livello";

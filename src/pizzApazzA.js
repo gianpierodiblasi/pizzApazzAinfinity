@@ -1,4 +1,4 @@
-/* global Translations, Z4Translations, SwingJS, LaunchParams, launchQueue */
+/* global Translations, Z4Translations, SwingJS, LaunchParams, launchQueue, Z4Constants */
 
 window.onload = () => {
   window.addEventListener("wheel", event => {
@@ -44,6 +44,8 @@ window.onload = () => {
 
   SwingJS.instance().fontSize(12).build();
 
+  Z4Constants.configureAcceptedImageFileTypeArrays();
+  
   var frame = new Z4Frame();
 
   if ('launchQueue' in window && 'files' in LaunchParams.prototype) {

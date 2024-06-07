@@ -115,7 +115,7 @@ public class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
   }
 
   private void createFromFile() {
-    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files -> files.forEach(file -> this.canvas.createFromFile(file)));
+    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files -> files.forEach(file -> this.canvas.createFromFile(file)));
   }
 
   private void createFromClipboard() {
@@ -183,7 +183,7 @@ public class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
       if (!doUpload) {
       } else if (files.$get(0).name.toLowerCase().endsWith(".z4i")) {
         this.checkSaved(Z4Translations.OPEN_PROJECT, () -> this.canvas.openProject(files.$get(0)));
-      } else if (Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.some((format, index, array) -> files.$get(0).name.toLowerCase().endsWith(format))) {
+      } else if (Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.some((format, index, array) -> files.$get(0).name.toLowerCase().endsWith(format))) {
         this.checkSaved(Z4Translations.FROM_FILE, () -> this.canvas.createFromFile(files.$get(0)));
       }
     }

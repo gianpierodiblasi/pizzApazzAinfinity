@@ -80,7 +80,7 @@ class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
   }
 
    selectPattern() {
-    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => {
+    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => {
       let fileReader = new FileReader();
       fileReader.onload = event => {
         let image = document.createElement("img");

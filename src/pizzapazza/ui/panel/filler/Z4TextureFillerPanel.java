@@ -115,7 +115,7 @@ public class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
   }
 
   private void selectPattern() {
-    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files -> files.forEach(file -> {
+    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files -> files.forEach(file -> {
       FileReader fileReader = new FileReader();
       fileReader.onload = event -> {
         $Image image = ($Image) document.createElement("img");
