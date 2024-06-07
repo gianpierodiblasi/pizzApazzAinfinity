@@ -234,17 +234,18 @@ extends <a href="Z4AbstractGradientColor.html" title="class in pizzapazza.color"
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>protected simulation.js.$Object</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#mapColor(javascript.awt.Color,int)">mapColor</a></span>&#8203;(javascript.awt.Color&nbsp;color,
+        int&nbsp;index)</code></th>
+<td class="colLast">
+<div class="block">Maps a color to a JSON object</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#mergeOverlapping(double)">mergeOverlapping</a></span>&#8203;(double&nbsp;tolerance)</code></th>
 <td class="colLast">
 <div class="block">Merges overlapping colors based on a tolerance</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>simulation.js.$Object</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toJSON()">toJSON</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Returns this object as a JSON object</div>
 </td>
 </tr>
 </table>
@@ -253,7 +254,7 @@ extends <a href="Z4AbstractGradientColor.html" title="class in pizzapazza.color"
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;pizzapazza.color.<a href="Z4AbstractGradientColor.html" title="class in pizzapazza.color">Z4AbstractGradientColor</a></h3>
-<code><a href="Z4AbstractGradientColor.html#addColor(T,double)">addColor</a>, <a href="Z4AbstractGradientColor.html#getColorAtIndex(int)">getColorAtIndex</a>, <a href="Z4AbstractGradientColor.html#getColorCount()">getColorCount</a>, <a href="Z4AbstractGradientColor.html#getColorPositionAtIndex(int)">getColorPositionAtIndex</a>, <a href="Z4AbstractGradientColor.html#getPosition(double,double)">getPosition</a>, <a href="Z4AbstractGradientColor.html#getRipple()">getRipple</a>, <a href="Z4AbstractGradientColor.html#isPositionOccupied(double,double)">isPositionOccupied</a>, <a href="Z4AbstractGradientColor.html#mirror()">mirror</a>, <a href="Z4AbstractGradientColor.html#removeColor(double)">removeColor</a>, <a href="Z4AbstractGradientColor.html#reverse()">reverse</a>, <a href="Z4AbstractGradientColor.html#setRipple(double)">setRipple</a></code></li>
+<code><a href="Z4AbstractGradientColor.html#addColor(T,double)">addColor</a>, <a href="Z4AbstractGradientColor.html#getColorAtIndex(int)">getColorAtIndex</a>, <a href="Z4AbstractGradientColor.html#getColorCount()">getColorCount</a>, <a href="Z4AbstractGradientColor.html#getColorPositionAtIndex(int)">getColorPositionAtIndex</a>, <a href="Z4AbstractGradientColor.html#getPosition(double,double)">getPosition</a>, <a href="Z4AbstractGradientColor.html#getRipple()">getRipple</a>, <a href="Z4AbstractGradientColor.html#isPositionOccupied(double,double)">isPositionOccupied</a>, <a href="Z4AbstractGradientColor.html#mirror()">mirror</a>, <a href="Z4AbstractGradientColor.html#removeColor(double)">removeColor</a>, <a href="Z4AbstractGradientColor.html#reverse()">reverse</a>, <a href="Z4AbstractGradientColor.html#setRipple(double)">setRipple</a>, <a href="Z4AbstractGradientColor.html#toJSON()">toJSON</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -338,18 +339,24 @@ extends <a href="Z4AbstractGradientColor.html" title="class in pizzapazza.color"
 </dl>
 </li>
 </ul>
-<a id="toJSON()">
+<a id="mapColor(javascript.awt.Color,int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>toJSON</h4>
-<pre class="methodSignature">public&nbsp;simulation.js.$Object&nbsp;toJSON()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Z4JSONable.html#toJSON()">Z4JSONable</a></code></span></div>
-<div class="block">Returns this object as a JSON object</div>
+<h4>mapColor</h4>
+<pre class="methodSignature">protected&nbsp;simulation.js.$Object&nbsp;mapColor&#8203;(javascript.awt.Color&nbsp;color,
+                                         int&nbsp;index)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Z4AbstractGradientColor.html#mapColor(T,int)">Z4AbstractGradientColor</a></code></span></div>
+<div class="block">Maps a color to a JSON object</div>
 <dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Z4AbstractGradientColor.html#mapColor(T,int)">mapColor</a></code>&nbsp;in class&nbsp;<code><a href="Z4AbstractGradientColor.html" title="class in pizzapazza.color">Z4AbstractGradientColor</a>&lt;javascript.awt.Color&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>color</code> - The color</dd>
+<dd><code>index</code> - The color index</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>This object as a JSON object</dd>
+<dd>The color as a JSON object</dd>
 </dl>
 </li>
 </ul>

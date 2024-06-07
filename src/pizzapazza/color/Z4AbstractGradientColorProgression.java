@@ -15,7 +15,7 @@ public abstract class Z4AbstractGradientColorProgression implements Z4JSONable {
   /**
    * Creates the object
    *
-   * @param lighting
+   * @param lighting The color lighting
    */
   public Z4AbstractGradientColorProgression(Z4Lighting lighting) {
     super();

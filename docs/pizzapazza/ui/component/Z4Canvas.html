@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -215,6 +215,13 @@ extends javascript.swing.JSComponent</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addLayerFromHandle(javascript.util.fsa.FileSystemFileHandle)">addLayerFromHandle</a></span>&#8203;(javascript.util.fsa.FileSystemFileHandle&nbsp;handle)</code></th>
+<td class="colLast">
+<div class="block">Adds a layer from an image file</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#create(int,int,java.lang.Object)">create</a></span>&#8203;(int&nbsp;width,
       int&nbsp;height,
       java.lang.Object&nbsp;filling)</code></th>
@@ -222,42 +229,49 @@ extends javascript.swing.JSComponent</pre>
 <div class="block">Creates a new project</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFromClipboard()">createFromClipboard</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Creates a new project from an image in the clipboard</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFromFile(def.dom.File)">createFromFile</a></span>&#8203;(def.dom.File&nbsp;file)</code></th>
 <td class="colLast">
 <div class="block">Creates a new project from an image file</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFromHandle(javascript.util.fsa.FileSystemFileHandle)">createFromHandle</a></span>&#8203;(javascript.util.fsa.FileSystemFileHandle&nbsp;handle)</code></th>
+<td class="colLast">
+<div class="block">Creates a new project from an image file</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#deleteLayer(pizzapazza.Z4Layer)">deleteLayer</a></span>&#8203;(<a href="../../Z4Layer.html" title="class in pizzapazza">Z4Layer</a>&nbsp;layer)</code></th>
 <td class="colLast">
 <div class="block">Deletes a layer</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#drawCanvas()">drawCanvas</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Draws this canvas</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#duplicateLayer(pizzapazza.Z4Layer)">duplicateLayer</a></span>&#8203;(<a href="../../Z4Layer.html" title="class in pizzapazza">Z4Layer</a>&nbsp;layer)</code></th>
 <td class="colLast">
 <div class="block">Duplicates a layer</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#exportToFile(java.lang.String,java.lang.String,double)">exportToFile</a></span>&#8203;(java.lang.String&nbsp;filename,
             java.lang.String&nbsp;ext,
@@ -266,63 +280,63 @@ extends javascript.swing.JSComponent</pre>
 <div class="block">Exports this project to an image file</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fitZoom()">fitZoom</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Sets the zoom to fit the available space</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../../Z4Layer.html" title="class in pizzapazza">Z4Layer</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLayerAt(int)">getLayerAt</a></span>&#8203;(int&nbsp;index)</code></th>
 <td class="colLast">
 <div class="block">Returns a layer</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLayersCount()">getLayersCount</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the layers count</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getProjectName()">getProjectName</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the project name</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>javascript.awt.Dimension</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSize()">getSize</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the size</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isChanged()">isChanged</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Checks if this canvas is changed</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSaved()">isSaved</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Checks if this canvas is saved</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#mergeLayers(def.js.Array)">mergeLayers</a></span>&#8203;(def.js.Array&lt;<a href="../../Z4Layer.html" title="class in pizzapazza">Z4Layer</a>&gt;&nbsp;layers)</code></th>
 <td class="colLast">
 <div class="block">Merges an array of layers</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#moveLayer(pizzapazza.Z4Layer,int)">moveLayer</a></span>&#8203;(<a href="../../Z4Layer.html" title="class in pizzapazza">Z4Layer</a>&nbsp;layer,
          int&nbsp;position)</code></th>
@@ -330,28 +344,35 @@ extends javascript.swing.JSComponent</pre>
 <div class="block">Moves a layer to a position</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openFromHistory(simulation.js.$Object)">openFromHistory</a></span>&#8203;(simulation.js.$Object&nbsp;json)</code></th>
 <td class="colLast">
 <div class="block">Opens an history</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openProject(def.dom.File)">openProject</a></span>&#8203;(def.dom.File&nbsp;file)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openProjectFromFile(def.dom.File)">openProjectFromFile</a></span>&#8203;(def.dom.File&nbsp;file)</code></th>
 <td class="colLast">
 <div class="block">Opens a project</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i23" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openProjectFromHandle(javascript.util.fsa.FileSystemFileHandle)">openProjectFromHandle</a></span>&#8203;(javascript.util.fsa.FileSystemFileHandle&nbsp;handle)</code></th>
+<td class="colLast">
+<div class="block">Opens a project</div>
+</td>
+</tr>
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveHistory(java.lang.String)">saveHistory</a></span>&#8203;(java.lang.String&nbsp;policies)</code></th>
 <td class="colLast">
 <div class="block">Saves the history</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveProject(java.lang.String,boolean,simulation.js.$Apply_0_Void)">saveProject</a></span>&#8203;(java.lang.String&nbsp;projectName,
            boolean&nbsp;saveHistory,
@@ -360,14 +381,14 @@ extends javascript.swing.JSComponent</pre>
 <div class="block">Saves the project</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChanged(boolean)">setChanged</a></span>&#8203;(boolean&nbsp;changed)</code></th>
 <td class="colLast">
 <div class="block">Sets the changed status of the canvas</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setRibbonPanels(pizzapazza.ui.panel.ribbon.Z4RibbonFilePanel,pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel,pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel)">setRibbonPanels</a></span>&#8203;(<a href="../panel/ribbon/Z4RibbonFilePanel.html" title="class in pizzapazza.ui.panel.ribbon">Z4RibbonFilePanel</a>&nbsp;ribbonFilePanel,
                <a href="../panel/ribbon/Z4RibbonLayerPanel.html" title="class in pizzapazza.ui.panel.ribbon">Z4RibbonLayerPanel</a>&nbsp;ribbonLayerPanel,
@@ -376,35 +397,35 @@ extends javascript.swing.JSComponent</pre>
 <div class="block">Sets the ribbon panels</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSaved(boolean)">setSaved</a></span>&#8203;(boolean&nbsp;saved)</code></th>
 <td class="colLast">
 <div class="block">Sets the saved status of the canvas</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSelectedLayer(pizzapazza.Z4Layer)">setSelectedLayer</a></span>&#8203;(<a href="../../Z4Layer.html" title="class in pizzapazza">Z4Layer</a>&nbsp;selectedLayer)</code></th>
 <td class="colLast">
 <div class="block">Sets the selected layer</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStatusPanel(pizzapazza.ui.panel.Z4StatusPanel)">setStatusPanel</a></span>&#8203;(<a href="../panel/Z4StatusPanel.html" title="class in pizzapazza.ui.panel">Z4StatusPanel</a>&nbsp;statusPanel)</code></th>
 <td class="colLast">
 <div class="block">Sets the status panel</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setZoom(double)">setZoom</a></span>&#8203;(double&nbsp;zoom)</code></th>
 <td class="colLast">
 <div class="block">Sets the zoom</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toHistory(simulation.js.$Apply_1_Void)">toHistory</a></span>&#8203;(simulation.js.$Apply_1_Void&lt;simulation.js.$Object&gt;&nbsp;apply)</code></th>
 <td class="colLast">
@@ -513,6 +534,20 @@ extends javascript.swing.JSComponent</pre>
 </dl>
 </li>
 </ul>
+<a id="createFromHandle(javascript.util.fsa.FileSystemFileHandle)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createFromHandle</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;createFromHandle&#8203;(javascript.util.fsa.FileSystemFileHandle&nbsp;handle)</pre>
+<div class="block">Creates a new project from an image file</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>handle</code> - The file handle</dd>
+</dl>
+</li>
+</ul>
 <a id="createFromFile(def.dom.File)">
 <!--   -->
 </a>
@@ -537,13 +572,27 @@ extends javascript.swing.JSComponent</pre>
 <div class="block">Creates a new project from an image in the clipboard</div>
 </li>
 </ul>
-<a id="openProject(def.dom.File)">
+<a id="openProjectFromHandle(javascript.util.fsa.FileSystemFileHandle)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>openProject</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;openProject&#8203;(def.dom.File&nbsp;file)</pre>
+<h4>openProjectFromHandle</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;openProjectFromHandle&#8203;(javascript.util.fsa.FileSystemFileHandle&nbsp;handle)</pre>
+<div class="block">Opens a project</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>handle</code> - The file handle</dd>
+</dl>
+</li>
+</ul>
+<a id="openProjectFromFile(def.dom.File)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>openProjectFromFile</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;openProjectFromFile&#8203;(def.dom.File&nbsp;file)</pre>
 <div class="block">Opens a project</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -662,6 +711,20 @@ extends javascript.swing.JSComponent</pre>
 <dd><code>height</code> - The layer height</dd>
 <dd><code>filling</code> - The filling (an instance of Color, Z4AbstractFiller or
  Z4BiGradientColor)</dd>
+</dl>
+</li>
+</ul>
+<a id="addLayerFromHandle(javascript.util.fsa.FileSystemFileHandle)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addLayerFromHandle</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;addLayerFromHandle&#8203;(javascript.util.fsa.FileSystemFileHandle&nbsp;handle)</pre>
+<div class="block">Adds a layer from an image file</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>handle</code> - The file handle</dd>
 </dl>
 </li>
 </ul>
