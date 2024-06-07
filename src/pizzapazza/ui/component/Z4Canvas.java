@@ -14,6 +14,7 @@ import def.js.JSON;
 import javascript.awt.Dimension;
 import javascript.awt.Point;
 import javascript.swing.JSComponent;
+import javascript.util.fsa.FileSystemFileHandle;
 import pizzapazza.Z4Layer;
 import pizzapazza.Z4Paper;
 import pizzapazza.ui.panel.Z4StatusPanel;
@@ -155,6 +156,17 @@ public class Z4Canvas extends JSComponent {
   /**
    * Creates a new project from an image file
    *
+   * @param handle The file handle
+   */
+  public void createFromHandle(FileSystemFileHandle handle) {
+    handle.getFile().then(file -> {
+      this.createFromFile(file);
+    });
+  }
+
+  /**
+   * Creates a new project from an image file
+   *
    * @param file The file
    */
   public void createFromFile(File file) {
@@ -225,9 +237,20 @@ public class Z4Canvas extends JSComponent {
   /**
    * Opens a project
    *
+   * @param handle The file handle
+   */
+  public void openProjectFromHandle(FileSystemFileHandle handle) {
+    handle.getFile().then(file -> {
+      this.openProjectFromFile(file);
+    });
+  }
+
+  /**
+   * Opens a project
+   *
    * @param file The file
    */
-  public void openProject(File file) {
+  public void openProjectFromFile(File file) {
     Z4UI.pleaseWait(this, true, true, false, true, "", () -> {
       new $JSZip().loadAsync(file).then(zip -> {
         zip.file("manifest.json").async("string", null).then(str -> {

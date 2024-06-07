@@ -83,7 +83,16 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
   }
 
    createFromFile() {
-    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.createFromFile(file)));
+    if (typeof window["showOpenFilePicker"] === "function") {
+      let options = new FilePickerOptions();
+      options.excludeAcceptAllOption = true;
+      options.id = Z4Constants.IMAGE_FILE_ID;
+      options.multiple = false;
+      options.types = Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE;
+      JSFilePicker.showOpenFilePicker(options, 0, handles => handles.forEach(handle => this.canvas.createFromHandle(handle)));
+    } else {
+      JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.createFromFile(file)));
+    }
   }
 
    createFromClipboard() {
@@ -91,7 +100,16 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
   }
 
    openProject() {
-    JSFileChooser.showOpenDialog(".z4i", JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.openProject(file)));
+    if (typeof window["showOpenFilePicker"] === "function") {
+      let options = new FilePickerOptions();
+      options.excludeAcceptAllOption = true;
+      options.id = Z4Constants.IMAGE_FILE_ID;
+      options.multiple = false;
+      options.types = Z4Constants.PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE;
+      JSFilePicker.showOpenFilePicker(options, 0, handles => handles.forEach(handle => this.canvas.openProjectFromHandle(handle)));
+    } else {
+      JSFileChooser.showOpenDialog(".z4i", JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.openProjectFromFile(file)));
+    }
   }
 
    saveProject(apply) {
@@ -141,7 +159,7 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
       event.dataTransfer.dropEffect = "copy";
       if (!doUpload) {
       } else if (files[0].name.toLowerCase().endsWith(".z4i")) {
-        this.checkSaved(Z4Translations.OPEN_PROJECT, () => this.canvas.openProject(files[0]));
+        this.checkSaved(Z4Translations.OPEN_PROJECT, () => this.canvas.openProjectFromFile(files[0]));
       } else if (Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.some((format, index, array) => files[0].name.toLowerCase().endsWith(format))) {
         this.checkSaved(Z4Translations.FROM_FILE, () => this.canvas.createFromFile(files[0]));
       }

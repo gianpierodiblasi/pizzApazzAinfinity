@@ -1522,6 +1522,17 @@ class Z4Canvas extends JSComponent {
   /**
    * Creates a new project from an image file
    *
+   * @param handle The file handle
+   */
+   createFromHandle(handle) {
+    handle.getFile().then(file => {
+      this.createFromFile(file);
+    });
+  }
+
+  /**
+   * Creates a new project from an image file
+   *
    * @param file The file
    */
    createFromFile(file) {
@@ -1580,9 +1591,20 @@ class Z4Canvas extends JSComponent {
   /**
    * Opens a project
    *
+   * @param handle The file handle
+   */
+   openProjectFromHandle(handle) {
+    handle.getFile().then(file => {
+      this.openProjectFromFile(file);
+    });
+  }
+
+  /**
+   * Opens a project
+   *
    * @param file The file
    */
-   openProject(file) {
+   openProjectFromFile(file) {
     Z4UI.pleaseWait(this, true, true, false, true, "", () => {
       new JSZip().loadAsync(file).then(zip => {
         zip.file("manifest.json").async("string", null).then(str => {
@@ -4691,7 +4713,16 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
   }
 
    createFromFile() {
-    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.createFromFile(file)));
+    if (typeof window["showOpenFilePicker"] === "function") {
+      let options = new FilePickerOptions();
+      options.excludeAcceptAllOption = true;
+      options.id = Z4Constants.IMAGE_FILE_ID;
+      options.multiple = false;
+      options.types = Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE;
+      JSFilePicker.showOpenFilePicker(options, 0, handles => handles.forEach(handle => this.canvas.createFromHandle(handle)));
+    } else {
+      JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.createFromFile(file)));
+    }
   }
 
    createFromClipboard() {
@@ -4699,7 +4730,16 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
   }
 
    openProject() {
-    JSFileChooser.showOpenDialog(".z4i", JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.openProject(file)));
+    if (typeof window["showOpenFilePicker"] === "function") {
+      let options = new FilePickerOptions();
+      options.excludeAcceptAllOption = true;
+      options.id = Z4Constants.IMAGE_FILE_ID;
+      options.multiple = false;
+      options.types = Z4Constants.PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE;
+      JSFilePicker.showOpenFilePicker(options, 0, handles => handles.forEach(handle => this.canvas.openProjectFromHandle(handle)));
+    } else {
+      JSFileChooser.showOpenDialog(".z4i", JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.openProjectFromFile(file)));
+    }
   }
 
    saveProject(apply) {
@@ -4749,7 +4789,7 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
       event.dataTransfer.dropEffect = "copy";
       if (!doUpload) {
       } else if (files[0].name.toLowerCase().endsWith(".z4i")) {
-        this.checkSaved(Z4Translations.OPEN_PROJECT, () => this.canvas.openProject(files[0]));
+        this.checkSaved(Z4Translations.OPEN_PROJECT, () => this.canvas.openProjectFromFile(files[0]));
       } else if (Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.some((format, index, array) => files[0].name.toLowerCase().endsWith(format))) {
         this.checkSaved(Z4Translations.FROM_FILE, () => this.canvas.createFromFile(files[0]));
       }
@@ -7441,6 +7481,11 @@ class Z4Ribbon extends JSTabbedPane {
  * @author gianpiero.diblasi
  */
 class Z4Constants {
+
+  /**
+   * The ID of the image file folder
+   */
+  static  IMAGE_FILE_ID = "IMAGE_FILE_FOLDER_ID";
 
   /**
    * The array of accepted image file formats for open

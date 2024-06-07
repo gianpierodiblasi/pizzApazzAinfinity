@@ -118,6 +118,17 @@ class Z4Canvas extends JSComponent {
   /**
    * Creates a new project from an image file
    *
+   * @param handle The file handle
+   */
+   createFromHandle(handle) {
+    handle.getFile().then(file => {
+      this.createFromFile(file);
+    });
+  }
+
+  /**
+   * Creates a new project from an image file
+   *
    * @param file The file
    */
    createFromFile(file) {
@@ -176,9 +187,20 @@ class Z4Canvas extends JSComponent {
   /**
    * Opens a project
    *
+   * @param handle The file handle
+   */
+   openProjectFromHandle(handle) {
+    handle.getFile().then(file => {
+      this.openProjectFromFile(file);
+    });
+  }
+
+  /**
+   * Opens a project
+   *
    * @param file The file
    */
-   openProject(file) {
+   openProjectFromFile(file) {
     Z4UI.pleaseWait(this, true, true, false, true, "", () => {
       new JSZip().loadAsync(file).then(zip => {
         zip.file("manifest.json").async("string", null).then(str => {

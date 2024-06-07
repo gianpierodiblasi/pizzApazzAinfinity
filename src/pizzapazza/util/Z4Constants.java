@@ -11,6 +11,11 @@ import javascript.util.fsa.FilePickerOptionsType;
 public class Z4Constants {
 
   /**
+   * The ID of the image file folder
+   */
+  public final static String IMAGE_FILE_ID = "IMAGE_FILE_FOLDER_ID";
+
+  /**
    * The array of accepted image file formats for open
    */
   public static final Array<String> ACCEPTED_OPEN_IMAGE_FILE_FORMAT = new Array<>(
