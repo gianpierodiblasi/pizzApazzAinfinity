@@ -16,6 +16,11 @@ public class Z4Constants {
   public final static String IMAGE_FILE_ID = "IMAGE_FILE_FOLDER_ID";
 
   /**
+   * The ID of the texture file folder
+   */
+  public final static String TEXTURE_FILE_ID = "TEXTURE_FILE_FOLDER_ID";
+
+  /**
    * The array of accepted image file formats for open
    */
   public static final Array<String> ACCEPTED_OPEN_IMAGE_FILE_FORMAT = new Array<>(

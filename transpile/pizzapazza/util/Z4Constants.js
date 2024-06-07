@@ -11,6 +11,11 @@ class Z4Constants {
   static  IMAGE_FILE_ID = "IMAGE_FILE_FOLDER_ID";
 
   /**
+   * The ID of the texture file folder
+   */
+  static  TEXTURE_FILE_ID = "TEXTURE_FILE_FOLDER_ID";
+
+  /**
    * The array of accepted image file formats for open
    */
   static  ACCEPTED_OPEN_IMAGE_FILE_FORMAT = new Array(".gif", ".png", ".apng", ".jpeg", ".jpg", ".jfif", ".pjpeg", ".pjp", ".bmp", ".svg", ".webp", ".avif");

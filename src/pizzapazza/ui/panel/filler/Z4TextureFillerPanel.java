@@ -1,5 +1,6 @@
 package pizzapazza.ui.panel.filler;
 
+import def.dom.File;
 import def.dom.FileReader;
 import def.dom.ImageData;
 import def.js.Array;
@@ -11,8 +12,10 @@ import javascript.swing.ButtonGroup;
 import javascript.swing.JSButton;
 import javascript.swing.JSColorChooser;
 import javascript.swing.JSFileChooser;
+import javascript.swing.JSFilePicker;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
+import javascript.util.fsa.FilePickerOptions;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.filler.Z4AbstractFiller;
 import pizzapazza.filler.Z4TextureFiller;
@@ -24,7 +27,9 @@ import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
 import simulation.dom.$OffscreenCanvas;
+import static simulation.js.$Globals.$typeof;
 import static simulation.js.$Globals.document;
+import static simulation.js.$Globals.window;
 import simulation.js.$Uint8Array;
 
 /**
@@ -115,28 +120,42 @@ public class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
   }
 
   private void selectPattern() {
-    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files -> files.forEach(file -> {
-      FileReader fileReader = new FileReader();
-      fileReader.onload = event -> {
-        $Image image = ($Image) document.createElement("img");
+    if ($typeof(window.$get("showOpenFilePicker"), "function")) {
+      FilePickerOptions options = new FilePickerOptions();
+      options.excludeAcceptAllOption = true;
+      options.id = Z4Constants.TEXTURE_FILE_ID;
+      options.multiple = false;
+      options.types = Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE;
 
-        image.onload = event2 -> {
-          $OffscreenCanvas offscreen = new $OffscreenCanvas(image.width, image.height);
-          $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
-          offscreenCtx.drawImage(image, 0, 0);
-          this.imageData = offscreenCtx.getImageData(0, 0, image.width, image.height);
+      JSFilePicker.showOpenFilePicker(options, 0, handles -> handles.forEach(handle -> handle.getFile().then(file -> {
+        this.openTexture(file);
+      })));
+    } else {
+      JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files -> files.forEach(file -> this.openTexture(file)));
+    }
+  }
 
-          this.newImage = true;
-          this.requestSetPointPosition();
-          this.drawPreview(false);
-          return null;
-        };
+  private void openTexture(File file) {
+    FileReader fileReader = new FileReader();
+    fileReader.onload = event -> {
+      $Image image = ($Image) document.createElement("img");
 
-        image.src = (String) fileReader.result;
+      image.onload = event2 -> {
+        $OffscreenCanvas offscreen = new $OffscreenCanvas(image.width, image.height);
+        $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
+        offscreenCtx.drawImage(image, 0, 0);
+        this.imageData = offscreenCtx.getImageData(0, 0, image.width, image.height);
+
+        this.newImage = true;
+        this.requestSetPointPosition();
+        this.drawPreview(false);
         return null;
       };
-      fileReader.readAsDataURL(file);
-    }));
+
+      image.src = (String) fileReader.result;
+      return null;
+    };
+    fileReader.readAsDataURL(file);
   }
 
   private void selectColor() {

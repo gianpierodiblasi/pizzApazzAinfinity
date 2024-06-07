@@ -4231,25 +4231,38 @@ class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
   }
 
    selectPattern() {
-    JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => {
-      let fileReader = new FileReader();
-      fileReader.onload = event => {
-        let image = document.createElement("img");
-        image.onload = event2 => {
-          let offscreen = new OffscreenCanvas(image.width, image.height);
-          let offscreenCtx = offscreen.getContext("2d");
-          offscreenCtx.drawImage(image, 0, 0);
-          this.imageData = offscreenCtx.getImageData(0, 0, image.width, image.height);
-          this.newImage = true;
-          this.requestSetPointPosition();
-          this.drawPreview(false);
-          return null;
-        };
-        image.src = fileReader.result;
+    if (typeof window["showOpenFilePicker"] === "function") {
+      let options = new FilePickerOptions();
+      options.excludeAcceptAllOption = true;
+      options.id = Z4Constants.TEXTURE_FILE_ID;
+      options.multiple = false;
+      options.types = Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE;
+      JSFilePicker.showOpenFilePicker(options, 0, handles => handles.forEach(handle => handle.getFile().then(file => {
+        this.openTexture(file);
+      })));
+    } else {
+      JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.openTexture(file)));
+    }
+  }
+
+   openTexture(file) {
+    let fileReader = new FileReader();
+    fileReader.onload = event => {
+      let image = document.createElement("img");
+      image.onload = event2 => {
+        let offscreen = new OffscreenCanvas(image.width, image.height);
+        let offscreenCtx = offscreen.getContext("2d");
+        offscreenCtx.drawImage(image, 0, 0);
+        this.imageData = offscreenCtx.getImageData(0, 0, image.width, image.height);
+        this.newImage = true;
+        this.requestSetPointPosition();
+        this.drawPreview(false);
         return null;
       };
-      fileReader.readAsDataURL(file);
-    }));
+      image.src = fileReader.result;
+      return null;
+    };
+    fileReader.readAsDataURL(file);
   }
 
    selectColor() {
@@ -7506,6 +7519,11 @@ class Z4Constants {
    * The ID of the image file folder
    */
   static  IMAGE_FILE_ID = "IMAGE_FILE_FOLDER_ID";
+
+  /**
+   * The ID of the texture file folder
+   */
+  static  TEXTURE_FILE_ID = "TEXTURE_FILE_FOLDER_ID";
 
   /**
    * The array of accepted image file formats for open
