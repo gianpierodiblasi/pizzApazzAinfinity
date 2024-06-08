@@ -37,7 +37,7 @@ import static simulation.js.$Globals.window;
  * @author gianpiero.diblasi
  */
 public class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
-  
+
   private Z4Canvas canvas;
   private Z4StatusPanel statusPanel;
   private final JSButton saveProjectButton;
@@ -49,17 +49,17 @@ public class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonfilepanel");
-    
+
     Z4UI.addLabel(this, Z4Translations.NEW_PROJECT, new GBC(0, 0).w(3).a(GBC.WEST).i(5, 5, 2, 0));
     this.addButton(Z4Translations.CREATE, true, 0, 1, "left", 0, event -> this.checkSaved(Z4Translations.CREATE, () -> this.createFromColor()));
     this.addButton(Z4Translations.FROM_CLIPBOARD, $typeof(navigator.clipboard.$get("read"), "function"), 1, 1, "both", 0, event -> this.checkSaved(Z4Translations.FROM_CLIPBOARD, () -> this.createFromClipboard()));
     this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", 0, event -> this.checkSaved(Z4Translations.FROM_FILE, () -> this.createFromFile()));
     Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
-    
+
     Z4UI.addLabel(this, Z4Translations.OPEN, new GBC(4, 0).a(GBC.WEST).i(5, 5, 2, 0));
     this.addButton(Z4Translations.OPEN_PROJECT, true, 4, 1, "", 0, event -> this.checkSaved(Z4Translations.OPEN_PROJECT, () -> this.openProject()));
     Z4UI.addVLine(this, new GBC(5, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
-    
+
     Z4UI.addLabel(this, Z4Translations.SAVE, new GBC(6, 0).w(2).a(GBC.WEST).i(5, 5, 2, 0));
     this.saveProjectButton = this.addButton(Z4Translations.SAVE_PROJECT, false, 6, 1, "left", 0, event -> this.saveProject(null, false));
     this.addButton(Z4Translations.SAVE_PROJECT_AS, true, 7, 1, "both", 0, event -> this.saveProject(null, true));
@@ -88,7 +88,7 @@ public class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
   public void setStatusPanel(Z4StatusPanel statusPanel) {
     this.statusPanel = statusPanel;
   }
-  
+
   private void checkSaved(String title, $Apply_0_Void apply) {
     if (this.canvas.isSaved()) {
       apply.$apply();
@@ -105,10 +105,10 @@ public class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
       });
     }
   }
-  
+
   private void createFromColor() {
     Z4NewImagePanel panel = new Z4NewImagePanel();
-    
+
     JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener -> panel.addChangeListener(listener), () -> {
       Dimension size = panel.getSelectedSize();
       return size.width > 0 && size.height > 0;
@@ -119,7 +119,7 @@ public class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
       }
     });
   }
-  
+
   private void createFromFile() {
     if ($typeof(window.$get("showOpenFilePicker"), "function")) {
       FilePickerOptions options = new FilePickerOptions();
@@ -127,17 +127,17 @@ public class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
       options.id = Z4Constants.IMAGE_FILE_ID;
       options.multiple = false;
       options.types = Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE;
-      
+
       JSFilePicker.showOpenFilePicker(options, 0, handles -> handles.forEach(handle -> this.canvas.createFromHandle(handle)));
     } else {
       JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files -> files.forEach(file -> this.canvas.createFromFile(file)));
     }
   }
-  
+
   private void createFromClipboard() {
     this.canvas.createFromClipboard();
   }
-  
+
   private void openProject() {
     if ($typeof(window.$get("showOpenFilePicker"), "function")) {
       FilePickerOptions options = new FilePickerOptions();
@@ -145,57 +145,72 @@ public class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
       options.id = Z4Constants.IMAGE_FILE_ID;
       options.multiple = false;
       options.types = Z4Constants.PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE;
-      
+
       JSFilePicker.showOpenFilePicker(options, 0, handles -> handles.forEach(handle -> this.canvas.openProjectFromHandle(handle)));
     } else {
       JSFileChooser.showOpenDialog(".z4i", JSFileChooser.SINGLE_SELECTION, 0, files -> files.forEach(file -> this.canvas.openProjectFromFile(file)));
     }
   }
-  
+
   private void saveProject($Apply_0_Void apply, boolean as) {
+    if ($typeof(window.$get("showSaveFilePicker"), "function")) {
+//      FilePickerOptions options = new FilePickerOptions();
+//      options.excludeAcceptAllOption = true;
+//      options.id = Z4Constants.IMAGE_FILE_ID;
+//      options.multiple = false;
+//      options.suggestedName = this.canvas.getProjectName();
+//      options.types = Z4Constants.PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE;
+
+//      JSFilePicker.showSaveFilePicker(options, handle -> this.save(handle));
+    } else {
+      this.save(apply, as);
+    }
+  }
+
+  private void save($Apply_0_Void apply, boolean as) {
     if (as || !$exists(this.canvas.getProjectName())) {
       JSPanel panel = new JSPanel();
       panel.setLayout(new BorderLayout(0, 0));
-      
+
       JSLabel label = new JSLabel();
       label.setText(Z4Translations.PROJECT_NAME);
       panel.add(label, BorderLayout.NORTH);
-      
+
       JSTextField projectName = new JSTextField();
       projectName.setText(this.canvas.getProjectName());
       panel.add(projectName, BorderLayout.CENTER);
-      
+
       JSOptionPane.showInputDialog(panel, Z4Translations.SAVE, listener -> projectName.addActionListener(event -> listener.$apply(new ChangeEvent())), () -> $exists(projectName.getText()), response -> {
         if (response == JSOptionPane.OK_OPTION) {
-          this.canvas.saveProject(projectName.getText(), apply);
+          this.canvas.saveProjectToFile(projectName.getText(), apply);
         }
       });
     } else {
-      this.canvas.saveProject(this.canvas.getProjectName(), apply);
+      this.canvas.saveProjectToFile(this.canvas.getProjectName(), apply);
     }
   }
-  
+
   private void exportToFile() {
-    if ($typeof(window.$get("showOpenFilePicker"), "function")) {
+    if ($typeof(window.$get("showSaveFilePicker"), "function")) {
       FilePickerOptions options = new FilePickerOptions();
       options.excludeAcceptAllOption = true;
       options.id = Z4Constants.IMAGE_FILE_ID;
       options.multiple = false;
       options.suggestedName = this.canvas.getProjectName();
       options.types = Z4Constants.ACCEPTED_SAVE_IMAGE_FILE_TYPE;
-      
+
       JSFilePicker.showSaveFilePicker(options, handle -> this.export(handle));
     } else {
       this.export(null);
     }
   }
-  
+
   @SuppressWarnings("static-access")
   private void export(FileSystemFileHandle handle) {
     if (!$exists(handle)) {
       Z4ExportToFilePanel panel = new Z4ExportToFilePanel();
       panel.setFilename(this.canvas.getProjectName());
-      
+
       JSOptionPane.showInputDialog(panel, Z4Translations.EXPORT, listener -> panel.addChangeListener(listener), () -> panel.isValid(), response -> {
         if (response == JSOptionPane.OK_OPTION) {
           this.canvas.exportToFile(panel.getFilename(), panel.getFileExtension(), panel.getQuality());
@@ -210,7 +225,7 @@ public class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
         panel.setFilenameEditable(false);
         panel.setFileExtension(".jpg");
         panel.setFileExtensionEnabled(false);
-        
+
         JSOptionPane.showInputDialog(panel, Z4Translations.EXPORT, listener -> panel.addChangeListener(listener), () -> panel.isValid(), response -> {
           if (response == JSOptionPane.OK_OPTION) {
             this.canvas.exportToHandle(handle, panel.getQuality());
@@ -219,12 +234,12 @@ public class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
       });
     }
   }
-  
+
   @SuppressWarnings("StringEquality")
   private void onDrop(DragEvent event, boolean doUpload) {
     event.preventDefault();
     event.dataTransfer.dropEffect = "none";
-    
+
     Array<File> files = new Array<>();
     if ($exists(event.dataTransfer.items)) {
       for (int i = 0; i < event.dataTransfer.items.length; i++) {
@@ -236,10 +251,10 @@ public class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
     } else {
       event.dataTransfer.files.forEach(file -> files.push(file));
     }
-    
+
     if ($exists(files.$get(0))) {
       event.dataTransfer.dropEffect = "copy";
-      
+
       if (!doUpload) {
       } else if (files.$get(0).name.toLowerCase().endsWith(".z4i")) {
         this.checkSaved(Z4Translations.OPEN_PROJECT, () -> this.canvas.openProjectFromFile(files.$get(0)));

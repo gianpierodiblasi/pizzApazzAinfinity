@@ -19,6 +19,8 @@ class Z4Canvas extends JSComponent {
 
    projectName = null;
 
+   handle = null;
+
    width = 0;
 
    height = 0;
@@ -190,6 +192,7 @@ class Z4Canvas extends JSComponent {
    * @param handle The file handle
    */
    openProjectFromHandle(handle) {
+    this.handle = handle;
     handle.getFile().then(file => {
       this.openProjectFromFile(file);
     });
@@ -309,10 +312,28 @@ class Z4Canvas extends JSComponent {
   /**
    * Saves the project
    *
+   * @param handle The file handle
+   * @param apply The function to call after saving
+   */
+   saveProjectToHandle(handle, apply) {
+    this.handle = handle;
+    this.saveProject(handle.name.substring(0, handle.name.lastIndexOf('.')), (zipped, name) => handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable => {
+      writable.write(zipped);
+      writable.close();
+    }), apply);
+  }
+
+  /**
+   * Saves the project
+   *
    * @param projectName The project name
    * @param apply The function to call after saving
    */
-   saveProject(projectName, apply) {
+   saveProjectToFile(projectName, apply) {
+    this.saveProject(projectName, (zipped, name) => saveAs(zipped, name), apply);
+  }
+
+   saveProject(projectName, save, apply) {
     Z4UI.pleaseWait(this, true, true, false, true, "", () => {
       this.projectName = projectName;
       this.statusPanel.setProjectName(projectName);
@@ -328,7 +349,7 @@ class Z4Canvas extends JSComponent {
           compressionOptions["level"] = 9;
           options["compressionOptions"] = compressionOptions;
           zip.generateAsync(options, metadata => Z4UI.setPleaseWaitProgressBarValue(metadata["percent"])).then(zipped => {
-            saveAs(zipped, this.projectName + ".z4i");
+            save(zipped, this.projectName + ".z4i");
             this.setSaved(true);
             Z4UI.pleaseWaitCompleted();
             if (apply) {
@@ -660,6 +681,15 @@ class Z4Canvas extends JSComponent {
    */
    getProjectName() {
     return this.projectName;
+  }
+
+  /**
+   * Returns the file handle of this project
+   *
+   * @return The file handle of this project
+   */
+   getHandle() {
+    return this.handle;
   }
 
   /**

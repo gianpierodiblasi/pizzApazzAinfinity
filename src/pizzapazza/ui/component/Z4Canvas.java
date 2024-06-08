@@ -33,6 +33,7 @@ import simulation.dom.$OffscreenCanvas;
 import static simulation.filesaver.$FileSaver.saveAs;
 import simulation.js.$Apply_0_Void;
 import simulation.js.$Apply_1_Void;
+import simulation.js.$Apply_2_Void;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.navigator;
 import static simulation.js.$Globals.parseInt;
@@ -55,6 +56,7 @@ public class Z4Canvas extends JSComponent {
   private Z4StatusPanel statusPanel;
 
   private String projectName;
+  private FileSystemFileHandle handle;
   private int width;
   private int height;
   private double zoom = 1;
@@ -242,6 +244,8 @@ public class Z4Canvas extends JSComponent {
    * @param handle The file handle
    */
   public void openProjectFromHandle(FileSystemFileHandle handle) {
+    this.handle = handle;
+
     handle.getFile().then(file -> {
       this.openProjectFromFile(file);
     });
@@ -375,10 +379,29 @@ public class Z4Canvas extends JSComponent {
   /**
    * Saves the project
    *
+   * @param handle The file handle
+   * @param apply The function to call after saving
+   */
+  public void saveProjectToHandle(FileSystemFileHandle handle, $Apply_0_Void apply) {
+    this.handle = handle;
+
+    this.saveProject(handle.name.substring(0, handle.name.lastIndexOf('.')), (zipped, name) -> handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable -> {
+      writable.write(zipped);
+      writable.close();
+    }), apply);
+  }
+
+  /**
+   * Saves the project
+   *
    * @param projectName The project name
    * @param apply The function to call after saving
    */
-  public void saveProject(String projectName, $Apply_0_Void apply) {
+  public void saveProjectToFile(String projectName, $Apply_0_Void apply) {
+    this.saveProject(projectName, (zipped, name) -> saveAs(zipped, name), apply);
+  }
+
+  private void saveProject(String projectName, $Apply_2_Void<Object, String> save, $Apply_0_Void apply) {
     Z4UI.pleaseWait(this, true, true, false, true, "", () -> {
       this.projectName = projectName;
       this.statusPanel.setProjectName(projectName);
@@ -398,7 +421,7 @@ public class Z4Canvas extends JSComponent {
           options.$set("compressionOptions", compressionOptions);
 
           zip.generateAsync(options, metadata -> Z4UI.setPleaseWaitProgressBarValue(metadata.$get("percent"))).then(zipped -> {
-            saveAs(zipped, this.projectName + ".z4i");
+            save.$apply(zipped, this.projectName + ".z4i");
             this.setSaved(true);
 
             Z4UI.pleaseWaitCompleted();
@@ -763,6 +786,15 @@ public class Z4Canvas extends JSComponent {
    */
   public String getProjectName() {
     return this.projectName;
+  }
+
+  /**
+   * Returns the file handle of this project
+   *
+   * @return The file handle of this project
+   */
+  public FileSystemFileHandle getHandle() {
+    return this.handle;
   }
 
   /**

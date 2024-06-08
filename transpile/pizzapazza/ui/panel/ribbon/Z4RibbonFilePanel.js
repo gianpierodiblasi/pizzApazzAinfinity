@@ -116,6 +116,20 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
   }
 
    saveProject(apply, as) {
+    if (typeof window["showSaveFilePicker"] === "function") {
+      // FilePickerOptions options = new FilePickerOptions();
+      // options.excludeAcceptAllOption = true;
+      // options.id = Z4Constants.IMAGE_FILE_ID;
+      // options.multiple = false;
+      // options.suggestedName = this.canvas.getProjectName();
+      // options.types = Z4Constants.PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE;
+      // JSFilePicker.showSaveFilePicker(options, handle -> this.save(handle));
+    } else {
+      this.save(apply, as);
+    }
+  }
+
+   save(apply, as) {
     if (as || !this.canvas.getProjectName()) {
       let panel = new JSPanel();
       panel.setLayout(new BorderLayout(0, 0));
@@ -127,16 +141,16 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
       panel.add(projectName, BorderLayout.CENTER);
       JSOptionPane.showInputDialog(panel, Z4Translations.SAVE, listener => projectName.addActionListener(event => listener(new ChangeEvent())), () => !!(projectName.getText()), response => {
         if (response === JSOptionPane.OK_OPTION) {
-          this.canvas.saveProject(projectName.getText(), apply);
+          this.canvas.saveProjectToFile(projectName.getText(), apply);
         }
       });
     } else {
-      this.canvas.saveProject(this.canvas.getProjectName(), apply);
+      this.canvas.saveProjectToFile(this.canvas.getProjectName(), apply);
     }
   }
 
    exportToFile() {
-    if (typeof window["showOpenFilePicker"] === "function") {
+    if (typeof window["showSaveFilePicker"] === "function") {
       let options = new FilePickerOptions();
       options.excludeAcceptAllOption = true;
       options.id = Z4Constants.IMAGE_FILE_ID;
