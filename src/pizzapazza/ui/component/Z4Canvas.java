@@ -227,8 +227,7 @@ public class Z4Canvas extends JSComponent {
     this.statusPanel.setZoom(1);
 
     this.zoom = 1;
-    this.saved = true;
-    this.ribbonFilePanel.setSaveEnabled(!this.saved);
+    this.setSaved(true);
     this.changed = false;
 
     this.canvas.width = width;
@@ -364,8 +363,7 @@ public class Z4Canvas extends JSComponent {
         this.openLayerFromHistory(json, layers, index + 1);
       } else {
         this.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
-        this.saved = false;
-        this.ribbonFilePanel.setSaveEnabled(!this.saved);
+        this.setSaved(false);
       }
       return null;
     };
@@ -401,8 +399,7 @@ public class Z4Canvas extends JSComponent {
 
           zip.generateAsync(options, metadata -> Z4UI.setPleaseWaitProgressBarValue(metadata.$get("percent"))).then(zipped -> {
             saveAs(zipped, this.projectName + ".z4i");
-            this.saved = true;
-            this.ribbonFilePanel.setSaveEnabled(!this.saved);
+            this.setSaved(true);
 
             Z4UI.pleaseWaitCompleted();
             if ($exists(apply)) {
@@ -651,8 +648,7 @@ public class Z4Canvas extends JSComponent {
     this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
 
     this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
-    this.saved = false;
-    this.ribbonFilePanel.setSaveEnabled(!this.saved);
+    this.setSaved(false);
   }
 
   /**
@@ -675,8 +671,7 @@ public class Z4Canvas extends JSComponent {
         this.selectedLayer.move(offset.x, offset.y);
         this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
 
-        this.saved = false;
-        this.ribbonFilePanel.setSaveEnabled(!this.saved);
+        this.setSaved(false);
         this.drawCanvas();
         return null;
       };
@@ -702,8 +697,7 @@ public class Z4Canvas extends JSComponent {
       ((HTMLElement) document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
     }
 
-    this.saved = false;
-    this.ribbonFilePanel.setSaveEnabled(!this.saved);
+    this.setSaved(false);
     this.drawCanvas();
     return index;
   }
@@ -719,8 +713,7 @@ public class Z4Canvas extends JSComponent {
     if (this.paper.moveLayer(layer, position)) {
       this.changed = true;
       this.ribbonHistoryPanel.saveHistory("standard,tool");
-      this.saved = false;
-      this.ribbonFilePanel.setSaveEnabled(!this.saved);
+      this.setSaved(false);
       this.drawCanvas();
       return true;
     } else {

@@ -1581,8 +1581,7 @@ class Z4Canvas extends JSComponent {
     this.statusPanel.setProjectSize(width, height);
     this.statusPanel.setZoom(1);
     this.zoom = 1;
-    this.saved = true;
-    this.ribbonFilePanel.setSaveEnabled(!this.saved);
+    this.setSaved(true);
     this.changed = false;
     this.canvas.width = width;
     this.canvas.height = height;
@@ -1704,8 +1703,7 @@ class Z4Canvas extends JSComponent {
         this.openLayerFromHistory(json, layers, index + 1);
       } else {
         this.afterCreate(json["projectName"], json["width"], json["height"]);
-        this.saved = false;
-        this.ribbonFilePanel.setSaveEnabled(!this.saved);
+        this.setSaved(false);
       }
       return null;
     };
@@ -1735,8 +1733,7 @@ class Z4Canvas extends JSComponent {
           options["compressionOptions"] = compressionOptions;
           zip.generateAsync(options, metadata => Z4UI.setPleaseWaitProgressBarValue(metadata["percent"])).then(zipped => {
             saveAs(zipped, this.projectName + ".z4i");
-            this.saved = true;
-            this.ribbonFilePanel.setSaveEnabled(!this.saved);
+            this.setSaved(true);
             Z4UI.pleaseWaitCompleted();
             if (apply) {
               apply();
@@ -1960,8 +1957,7 @@ class Z4Canvas extends JSComponent {
     this.ribbonHistoryPanel.saveHistory("standard,tool");
     this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
     this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
-    this.saved = false;
-    this.ribbonFilePanel.setSaveEnabled(!this.saved);
+    this.setSaved(false);
   }
 
   /**
@@ -1981,8 +1977,7 @@ class Z4Canvas extends JSComponent {
         this.selectedLayer.setHidden(layer.isHidden());
         this.selectedLayer.move(offset.x, offset.y);
         this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
-        this.saved = false;
-        this.ribbonFilePanel.setSaveEnabled(!this.saved);
+        this.setSaved(false);
         this.drawCanvas();
         return null;
       };
@@ -2004,8 +1999,7 @@ class Z4Canvas extends JSComponent {
       document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ") .z4layerpreview-selector").textContent = Z4LayerPreview.SELECTED_LAYER_CONTENT;
       (document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
     }
-    this.saved = false;
-    this.ribbonFilePanel.setSaveEnabled(!this.saved);
+    this.setSaved(false);
     this.drawCanvas();
     return index;
   }
@@ -2021,8 +2015,7 @@ class Z4Canvas extends JSComponent {
     if (this.paper.moveLayer(layer, position)) {
       this.changed = true;
       this.ribbonHistoryPanel.saveHistory("standard,tool");
-      this.saved = false;
-      this.ribbonFilePanel.setSaveEnabled(!this.saved);
+      this.setSaved(false);
       this.drawCanvas();
       return true;
     } else {
