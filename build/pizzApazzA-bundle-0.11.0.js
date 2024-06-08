@@ -1582,6 +1582,7 @@ class Z4Canvas extends JSComponent {
     this.statusPanel.setZoom(1);
     this.zoom = 1;
     this.saved = true;
+    this.ribbonFilePanel.setSaveEnabled(!this.saved);
     this.changed = false;
     this.canvas.width = width;
     this.canvas.height = height;
@@ -1704,6 +1705,7 @@ class Z4Canvas extends JSComponent {
       } else {
         this.afterCreate(json["projectName"], json["width"], json["height"]);
         this.saved = false;
+        this.ribbonFilePanel.setSaveEnabled(!this.saved);
       }
       return null;
     };
@@ -1714,10 +1716,9 @@ class Z4Canvas extends JSComponent {
    * Saves the project
    *
    * @param projectName The project name
-   * @param saveHistory true to save the history, false otherwise
    * @param apply The function to call after saving
    */
-   saveProject(projectName, saveHistory, apply) {
+   saveProject(projectName, apply) {
     Z4UI.pleaseWait(this, true, true, false, true, "", () => {
       this.projectName = projectName;
       this.statusPanel.setProjectName(projectName);
@@ -1735,19 +1736,16 @@ class Z4Canvas extends JSComponent {
           zip.generateAsync(options, metadata => Z4UI.setPleaseWaitProgressBarValue(metadata["percent"])).then(zipped => {
             saveAs(zipped, this.projectName + ".z4i");
             this.saved = true;
+            this.ribbonFilePanel.setSaveEnabled(!this.saved);
             Z4UI.pleaseWaitCompleted();
             if (apply) {
               apply();
             }
           });
         };
-        if (saveHistory) {
-          obj["currentKeyHistory"] = this.ribbonHistoryPanel.getCurrentKey();
-          obj["history"] = new Array();
-          this.historyToJSON(zip, obj, finish);
-        } else {
-          finish();
-        }
+        obj["currentKeyHistory"] = this.ribbonHistoryPanel.getCurrentKey();
+        obj["history"] = new Array();
+        this.historyToJSON(zip, obj, finish);
       });
     });
   }
@@ -1963,6 +1961,7 @@ class Z4Canvas extends JSComponent {
     this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
     this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
     this.saved = false;
+    this.ribbonFilePanel.setSaveEnabled(!this.saved);
   }
 
   /**
@@ -1983,6 +1982,7 @@ class Z4Canvas extends JSComponent {
         this.selectedLayer.move(offset.x, offset.y);
         this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
         this.saved = false;
+        this.ribbonFilePanel.setSaveEnabled(!this.saved);
         this.drawCanvas();
         return null;
       };
@@ -2005,6 +2005,7 @@ class Z4Canvas extends JSComponent {
       (document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
     }
     this.saved = false;
+    this.ribbonFilePanel.setSaveEnabled(!this.saved);
     this.drawCanvas();
     return index;
   }
@@ -2021,6 +2022,7 @@ class Z4Canvas extends JSComponent {
       this.changed = true;
       this.ribbonHistoryPanel.saveHistory("standard,tool");
       this.saved = false;
+      this.ribbonFilePanel.setSaveEnabled(!this.saved);
       this.drawCanvas();
       return true;
     } else {
@@ -2096,6 +2098,7 @@ class Z4Canvas extends JSComponent {
    */
    setSaved(saved) {
     this.saved = saved;
+    this.ribbonFilePanel.setSaveEnabled(!this.saved);
   }
 
   /**
@@ -4684,6 +4687,8 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
 
    statusPanel = null;
 
+   saveProjectButton = null;
+
   /**
    * Creates the object
    */
@@ -4700,9 +4705,10 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
     this.addButton(Z4Translations.OPEN_PROJECT, true, 4, 1, "", 0, event => this.checkSaved(Z4Translations.OPEN_PROJECT, () => this.openProject()));
     Z4UI.addVLine(this, new GBC(5, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     Z4UI.addLabel(this, Z4Translations.SAVE, new GBC(6, 0).w(2).a(GBC.WEST).i(5, 5, 2, 0));
-    this.addButton(Z4Translations.SAVE_PROJECT, true, 6, 1, "left", 0, event => this.saveProject(null));
-    this.addButton(Z4Translations.EXPORT, true, 7, 1, "right", 0, event => this.exportToFile());
-    Z4UI.addVLine(this, new GBC(8, 0).h(2).wxy(1, 1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    this.saveProjectButton = this.addButton(Z4Translations.SAVE_PROJECT, false, 6, 1, "left", 0, event => this.saveProject(null, false));
+    this.addButton(Z4Translations.SAVE_PROJECT_AS, true, 7, 1, "both", 0, event => this.saveProject(null, true));
+    this.addButton(Z4Translations.EXPORT, true, 8, 1, "right", 0, event => this.exportToFile());
+    Z4UI.addVLine(this, new GBC(9, 0).h(2).wxy(1, 1).f(GBC.VERTICAL).i(1, 2, 1, 2));
   }
 
   /**
@@ -4734,7 +4740,7 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
       JSOptionPane.showConfirmDialog(Z4Translations.PROJECT_NOT_SAVED_MESSAGE, title, JSOptionPane.YES_NO_CANCEL_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
         switch(response) {
           case JSOptionPane.YES_OPTION:
-            this.saveProject(apply);
+            this.saveProject(apply, false);
             break;
           case JSOptionPane.NO_OPTION:
             apply();
@@ -4787,23 +4793,24 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
     }
   }
 
-   saveProject(apply) {
-    let panel = new JSPanel();
-    panel.setLayout(new BorderLayout(0, 0));
-    let label = new JSLabel();
-    label.setText(Z4Translations.PROJECT_NAME);
-    panel.add(label, BorderLayout.NORTH);
-    let projectName = new JSTextField();
-    projectName.setText(this.canvas.getProjectName());
-    panel.add(projectName, BorderLayout.CENTER);
-    let saveHistory = new JSCheckBox();
-    saveHistory.setText(Z4Translations.SAVE_HISTORY);
-    panel.add(saveHistory, BorderLayout.SOUTH);
-    JSOptionPane.showInputDialog(panel, Z4Translations.SAVE, listener => projectName.addActionListener(event => listener(new ChangeEvent())), () => !!(projectName.getText()), response => {
-      if (response === JSOptionPane.OK_OPTION) {
-        this.canvas.saveProject(projectName.getText(), saveHistory.isSelected(), apply);
-      }
-    });
+   saveProject(apply, as) {
+    if (as || !this.canvas.getProjectName()) {
+      let panel = new JSPanel();
+      panel.setLayout(new BorderLayout(0, 0));
+      let label = new JSLabel();
+      label.setText(Z4Translations.PROJECT_NAME);
+      panel.add(label, BorderLayout.NORTH);
+      let projectName = new JSTextField();
+      projectName.setText(this.canvas.getProjectName());
+      panel.add(projectName, BorderLayout.CENTER);
+      JSOptionPane.showInputDialog(panel, Z4Translations.SAVE, listener => projectName.addActionListener(event => listener(new ChangeEvent())), () => !!(projectName.getText()), response => {
+        if (response === JSOptionPane.OK_OPTION) {
+          this.canvas.saveProject(projectName.getText(), apply);
+        }
+      });
+    } else {
+      this.canvas.saveProject(this.canvas.getProjectName(), apply);
+    }
   }
 
    exportToFile() {
@@ -4870,6 +4877,15 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
         this.checkSaved(Z4Translations.FROM_FILE, () => this.canvas.createFromFile(files[0]));
       }
     }
+  }
+
+  /**
+   * Enables the save project button
+   *
+   * @param b true to enable the save project button, false otherwise
+   */
+   setSaveEnabled(b) {
+    this.saveProjectButton.setEnabled(b);
   }
 }
 /**
@@ -6966,9 +6982,9 @@ class Z4ExportToFilePanel extends JSPanel {
   }
 
   /**
-   * Sets the extensions as enabled
+   * Enables the extensions
    *
-   * @param b true to set the extensions as enabled, false othewise
+   * @param b true to enable the extensions, false othewise
    */
    setFileExtensionEnabled(b) {
     this.png.setEnabled(b);
@@ -7752,9 +7768,9 @@ class Z4Translations {
 
   static  SAVE_PROJECT = "";
 
-  static  EXPORT = "";
+  static  SAVE_PROJECT_AS = "";
 
-  static  SAVE_HISTORY = "";
+  static  EXPORT = "";
 
   static  PROJECT_NOT_SAVED_MESSAGE = "";
 
@@ -8056,8 +8072,8 @@ class Z4Translations {
     Z4Translations.OPEN_PROJECT = "Open Project";
     Z4Translations.SAVE = "Save";
     Z4Translations.SAVE_PROJECT = "Save Project";
+    Z4Translations.SAVE_PROJECT = "Save Project As";
     Z4Translations.EXPORT = "Export";
-    Z4Translations.SAVE_HISTORY = "Save History";
     Z4Translations.PROJECT_NOT_SAVED_MESSAGE = "Project not saved, do you want to save your changes?";
     Z4Translations.IMAGE_FILE = "Image File";
     Z4Translations.PIZZAPAZZA_PROJECT = "pizzApazzA Project";
@@ -8215,8 +8231,8 @@ class Z4Translations {
     Z4Translations.OPEN_PROJECT = "Apri Progetto";
     Z4Translations.SAVE = "Salva";
     Z4Translations.SAVE_PROJECT = "Salva Progetto";
+    Z4Translations.SAVE_PROJECT_AS = "Salva Progetto con Nome";
     Z4Translations.EXPORT = "Esporta";
-    Z4Translations.SAVE_HISTORY = "Salva Cronologia";
     Z4Translations.PROJECT_NOT_SAVED_MESSAGE = "Progetto non salvato, vuoi salvare le modifiche?";
     Z4Translations.IMAGE_FILE = "File Immagine";
     Z4Translations.PIZZAPAZZA_PROJECT = "Progetto pizzApazzA";

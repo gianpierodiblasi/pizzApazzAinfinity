@@ -31,8 +31,8 @@ public class Z4Translations {
   public static String OPEN_PROJECT = "";
   public static String SAVE = "";
   public static String SAVE_PROJECT = "";
+  public static String SAVE_PROJECT_AS = "";
   public static String EXPORT = "";
-  public static String SAVE_HISTORY = "";
   public static String PROJECT_NOT_SAVED_MESSAGE = "";
   public static String IMAGE_FILE = "";
   public static String PIZZAPAZZA_PROJECT = "";
@@ -216,8 +216,8 @@ public class Z4Translations {
     Z4Translations.OPEN_PROJECT = "Open Project";
     Z4Translations.SAVE = "Save";
     Z4Translations.SAVE_PROJECT = "Save Project";
+    Z4Translations.SAVE_PROJECT = "Save Project As";
     Z4Translations.EXPORT = "Export";
-    Z4Translations.SAVE_HISTORY = "Save History";
     Z4Translations.PROJECT_NOT_SAVED_MESSAGE = "Project not saved, do you want to save your changes?";
     Z4Translations.IMAGE_FILE = "Image File";
     Z4Translations.PIZZAPAZZA_PROJECT = "pizzApazzA Project";
@@ -388,8 +388,8 @@ public class Z4Translations {
     Z4Translations.OPEN_PROJECT = "Apri Progetto";
     Z4Translations.SAVE = "Salva";
     Z4Translations.SAVE_PROJECT = "Salva Progetto";
+    Z4Translations.SAVE_PROJECT_AS = "Salva Progetto con Nome";
     Z4Translations.EXPORT = "Esporta";
-    Z4Translations.SAVE_HISTORY = "Salva Cronologia";
     Z4Translations.PROJECT_NOT_SAVED_MESSAGE = "Progetto non salvato, vuoi salvare le modifiche?";
     Z4Translations.IMAGE_FILE = "File Immagine";
     Z4Translations.PIZZAPAZZA_PROJECT = "Progetto pizzApazzA";

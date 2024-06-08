@@ -164,9 +164,9 @@ public class Z4ExportToFilePanel extends JSPanel {
   }
 
   /**
-   * Sets the extensions as enabled
+   * Enables the extensions
    *
-   * @param b true to set the extensions as enabled, false othewise
+   * @param b true to enable the extensions, false othewise
    */
   public void setFileExtensionEnabled(boolean b) {
     this.png.setEnabled(b);
