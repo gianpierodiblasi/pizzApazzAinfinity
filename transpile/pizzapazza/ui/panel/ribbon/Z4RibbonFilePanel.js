@@ -117,19 +117,13 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
 
    saveProject(apply, as) {
     if (typeof window["showSaveFilePicker"] === "function") {
-      // FilePickerOptions options = new FilePickerOptions();
-      // options.excludeAcceptAllOption = true;
-      // options.id = Z4Constants.IMAGE_FILE_ID;
-      // options.multiple = false;
-      // options.suggestedName = this.canvas.getProjectName();
-      // options.types = Z4Constants.PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE;
-      // JSFilePicker.showSaveFilePicker(options, handle -> this.save(handle));
+      this.saveProjectToHandle(apply, as);
     } else {
-      this.save(apply, as);
+      this.saveProjectToFile(apply, as);
     }
   }
 
-   save(apply, as) {
+   saveProjectToFile(apply, as) {
     if (as || !this.canvas.getProjectName()) {
       let panel = new JSPanel();
       panel.setLayout(new BorderLayout(0, 0));
@@ -146,6 +140,20 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
       });
     } else {
       this.canvas.saveProjectToFile(this.canvas.getProjectName(), apply);
+    }
+  }
+
+   saveProjectToHandle(apply, as) {
+    if (as || !this.canvas.getHandle()) {
+      let options = new FilePickerOptions();
+      options.excludeAcceptAllOption = true;
+      options.id = Z4Constants.IMAGE_FILE_ID;
+      options.multiple = false;
+      options.suggestedName = this.canvas.getProjectName();
+      options.types = Z4Constants.PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE;
+      JSFilePicker.showSaveFilePicker(options, handle => this.canvas.saveProjectToHandle(handle, apply));
+    } else {
+      this.canvas.saveProjectToHandle(this.canvas.getHandle(), apply);
     }
   }
 
