@@ -6,6 +6,7 @@ import javascript.awt.BoxLayout;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
 import javascript.swing.ButtonGroup;
+import javascript.swing.JSComponent;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
 import javascript.swing.JSSlider;
@@ -16,6 +17,7 @@ import pizzapazza.ui.panel.Z4AbstractValuePanel;
 import pizzapazza.util.Z4EmptyImageProducer;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
+import static simulation.js.$Globals.parseInt;
 
 /**
  * The abstract panel to manage a (bi)gradient color progressing
@@ -31,7 +33,10 @@ public abstract class Z4AbstractGradientColorProgressionPanel<T extends Z4Abstra
    */
   protected final Z4LightingPanel lightingPanel = new Z4LightingPanel(Z4LightingPanelOrientation.HORIZONTAL);
 
-  private final Array<JSRadioButton> radios = new Array<>();
+  /**
+   * The radio buttons
+   */
+  protected final Array<JSRadioButton> radios = new Array<>();
 
   /**
    * The temporal step slider
@@ -95,7 +100,11 @@ public abstract class Z4AbstractGradientColorProgressionPanel<T extends Z4Abstra
     this.temporalStepSlider.getStyle().minWidth = "20rem";
     this.temporalStepSlider.addChangeListener(event -> this.onTemporalStepChange(false, this.temporalStepSlider.getValueIsAdjusting(), this.temporalStepSpinner, this.temporalStepSlider));
 
-    this.lightingPanel.addChangeListener(event -> this.onProgressionChange(false));
+    this.lightingPanel.addChangeListener(event -> {
+      this.valueIsAdjusting = false;
+      this.onProgressionChange();
+      this.onchange();
+    });
   }
 
   /**
@@ -110,7 +119,7 @@ public abstract class Z4AbstractGradientColorProgressionPanel<T extends Z4Abstra
   /**
    * Adds a radio button
    *
-   * @param behavior The associated behavoir
+   * @param behavior The associated behavior
    * @param panel The panel
    * @param buttonGroup The button group
    * @param border The border
@@ -126,7 +135,9 @@ public abstract class Z4AbstractGradientColorProgressionPanel<T extends Z4Abstra
       Object.keys(this.radios).forEach(key -> ((JSRadioButton) this.radios.$get(key)).setContentAreaFilled(false));
       radio.setContentAreaFilled(true);
       this.onRadioChanged(behavior);
-      this.onProgressionChange(false);
+      this.valueIsAdjusting = false;
+      this.onProgressionChange();
+      this.onchange();
     });
 
     switch (border) {
@@ -167,31 +178,17 @@ public abstract class Z4AbstractGradientColorProgressionPanel<T extends Z4Abstra
     panel.add(radio, null);
   }
 
+  /**
+   * Called when a radio button changes
+   *
+   * @param behavior The associated behavior
+   */
   protected abstract void onRadioChanged(S behavior);
 
-  private void onProgressionChange(boolean b) {
-    this.valueIsAdjusting = b;
-
-//    Object.keys(this.radios).forEach(key -> {
-//      if (((JSRadioButton) this.radios.$get(key)).isSelected()) {
-//        switch ("" + key) {
-//          case "SPATIAL":
-//            this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.SPATIAL, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
-//            break;
-//          case "TEMPORAL":
-//            this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.TEMPORAL, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
-//            break;
-//          case "RELATIVE_TO_PATH":
-//            this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.RELATIVE_TO_PATH, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
-//            break;
-//          case "RANDOM":
-//            this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.RANDOM, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
-//            break;
-//        }
-//      }
-//    });
-    this.onchange();
-  }
+  /**
+   * Called when the progression changes
+   */
+  protected abstract void onProgressionChange();
 
   private void onTemporalStepChange(boolean spTosl, boolean adjusting, JSSpinner spinner, JSSlider slider) {
     if (spTosl) {
@@ -200,7 +197,9 @@ public abstract class Z4AbstractGradientColorProgressionPanel<T extends Z4Abstra
       spinner.setValue(slider.getValue());
     }
 
-    this.onProgressionChange(adjusting);
+    this.valueIsAdjusting = adjusting;
+    this.onProgressionChange();
+    this.onchange();
   }
 
   /**
@@ -216,29 +215,15 @@ public abstract class Z4AbstractGradientColorProgressionPanel<T extends Z4Abstra
   public void setValue(T value) {
     this.value = value;
     this.lightingPanel.setValue(value.getLighting());
-//    this.lightingPanel.setEnabled(value.getGradientColorProgressionBehavior() != Z4GradientColorProgressionBehavior.SPATIAL);
 
-//    Object.keys(this.radios).forEach(key -> ((JSRadioButton) this.radios.$get(key)).setContentAreaFilled(false));
-//    ((JSRadioButton) this.radios.$get("" + value.getGradientColorProgressionBehavior())).setSelected(true);
-//    ((JSRadioButton) this.radios.$get("" + value.getGradientColorProgressionBehavior())).setContentAreaFilled(true);
-//    this.temporalStepSpinner.setEnabled(value.getGradientColorProgressionBehavior() == Z4GradientColorProgressionBehavior.TEMPORAL);
-//    this.temporalStepSpinner.setValue(value.getTemporalStepProgression() * 100);
-//    this.temporalStepSlider.setEnabled(value.getGradientColorProgressionBehavior() == Z4GradientColorProgressionBehavior.TEMPORAL);
-//    this.temporalStepSlider.setValue(parseInt(value.getTemporalStepProgression() * 100));
+    Object.keys(this.radios).forEach(key -> ((JSRadioButton) this.radios.$get(key)).setContentAreaFilled(false));
+    this.temporalStepSpinner.setValue(value.getTemporalStepProgression() * 100);
+    this.temporalStepSlider.setValue(parseInt(value.getTemporalStepProgression() * 100));
   }
 
   @Override
   @SuppressWarnings("StringEquality")
   public void setEnabled(boolean b) {
-    Object.keys(this.radios).forEach(key -> {
-      JSRadioButton radio = this.radios.$get(key);
-      radio.setEnabled(b);
-
-      if (radio.isSelected()) {
-//        this.lightingPanel.setEnabled(b && ("" + key) != ("" + Z4GradientColorProgressionBehavior.SPATIAL));
-//        this.temporalStepSpinner.setEnabled(b && ("" + key) != ("" + Z4GradientColorProgressionBehavior.TEMPORAL));
-//        this.temporalStepSlider.setEnabled(b && ("" + key) != ("" + Z4GradientColorProgressionBehavior.TEMPORAL));
-      }
-    });
+    Object.keys(this.radios).forEach(key -> ((JSComponent) this.radios.$get(key)).setEnabled(b));
   }
 }

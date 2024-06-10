@@ -5794,6 +5794,9 @@ class Z4AbstractGradientColorProgressionPanel extends Z4AbstractValuePanel {
    */
    lightingPanel = new Z4LightingPanel(Z4LightingPanelOrientation.HORIZONTAL);
 
+  /**
+   * The radio buttons
+   */
    radios = new Array();
 
   /**
@@ -5846,7 +5849,11 @@ class Z4AbstractGradientColorProgressionPanel extends Z4AbstractValuePanel {
     this.temporalStepSlider.setValue(1);
     this.temporalStepSlider.getStyle().minWidth = "20rem";
     this.temporalStepSlider.addChangeListener(event => this.onTemporalStepChange(false, this.temporalStepSlider.getValueIsAdjusting(), this.temporalStepSpinner, this.temporalStepSlider));
-    this.lightingPanel.addChangeListener(event => this.onProgressionChange(false));
+    this.lightingPanel.addChangeListener(event => {
+      this.valueIsAdjusting = false;
+      this.onProgressionChange();
+      this.onchange();
+    });
   }
 
   /**
@@ -5862,7 +5869,7 @@ class Z4AbstractGradientColorProgressionPanel extends Z4AbstractValuePanel {
   /**
    * Adds a radio button
    *
-   * @param behavior The associated behavoir
+   * @param behavior The associated behavior
    * @param panel The panel
    * @param buttonGroup The button group
    * @param border The border
@@ -5878,7 +5885,9 @@ class Z4AbstractGradientColorProgressionPanel extends Z4AbstractValuePanel {
       Object.keys(this.radios).forEach(key => (this.radios[key]).setContentAreaFilled(false));
       radio.setContentAreaFilled(true);
       this.onRadioChanged(behavior);
-      this.onProgressionChange(false);
+      this.valueIsAdjusting = false;
+      this.onProgressionChange();
+      this.onchange();
     });
     switch(border) {
       case "left":
@@ -5917,30 +5926,18 @@ class Z4AbstractGradientColorProgressionPanel extends Z4AbstractValuePanel {
     panel.add(radio, null);
   }
 
+  /**
+   * Called when a radio button changes
+   *
+   * @param behavior The associated behavior
+   */
    onRadioChanged(behavior) {
   }
 
-   onProgressionChange(b) {
-    this.valueIsAdjusting = b;
-    // Object.keys(this.radios).forEach(key -> {
-    // if (((JSRadioButton) this.radios.$get(key)).isSelected()) {
-    // switch ("" + key) {
-    // case "SPATIAL":
-    // this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.SPATIAL, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
-    // break;
-    // case "TEMPORAL":
-    // this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.TEMPORAL, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
-    // break;
-    // case "RELATIVE_TO_PATH":
-    // this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.RELATIVE_TO_PATH, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
-    // break;
-    // case "RANDOM":
-    // this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.RANDOM, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
-    // break;
-    // }
-    // }
-    // });
-    this.onchange();
+  /**
+   * Called when the progression changes
+   */
+   onProgressionChange() {
   }
 
    onTemporalStepChange(spTosl, adjusting, spinner, slider) {
@@ -5949,7 +5946,9 @@ class Z4AbstractGradientColorProgressionPanel extends Z4AbstractValuePanel {
     } else {
       spinner.setValue(slider.getValue());
     }
-    this.onProgressionChange(adjusting);
+    this.valueIsAdjusting = adjusting;
+    this.onProgressionChange();
+    this.onchange();
   }
 
   /**
@@ -5964,26 +5963,13 @@ class Z4AbstractGradientColorProgressionPanel extends Z4AbstractValuePanel {
    setValue(value) {
     this.value = value;
     this.lightingPanel.setValue(value.getLighting());
-    // this.lightingPanel.setEnabled(value.getGradientColorProgressionBehavior() != Z4GradientColorProgressionBehavior.SPATIAL);
-    // Object.keys(this.radios).forEach(key -> ((JSRadioButton) this.radios.$get(key)).setContentAreaFilled(false));
-    // ((JSRadioButton) this.radios.$get("" + value.getGradientColorProgressionBehavior())).setSelected(true);
-    // ((JSRadioButton) this.radios.$get("" + value.getGradientColorProgressionBehavior())).setContentAreaFilled(true);
-    // this.temporalStepSpinner.setEnabled(value.getGradientColorProgressionBehavior() == Z4GradientColorProgressionBehavior.TEMPORAL);
-    // this.temporalStepSpinner.setValue(value.getTemporalStepProgression() * 100);
-    // this.temporalStepSlider.setEnabled(value.getGradientColorProgressionBehavior() == Z4GradientColorProgressionBehavior.TEMPORAL);
-    // this.temporalStepSlider.setValue(parseInt(value.getTemporalStepProgression() * 100));
+    Object.keys(this.radios).forEach(key => (this.radios[key]).setContentAreaFilled(false));
+    this.temporalStepSpinner.setValue(value.getTemporalStepProgression() * 100);
+    this.temporalStepSlider.setValue(parseInt(value.getTemporalStepProgression() * 100));
   }
 
    setEnabled(b) {
-    Object.keys(this.radios).forEach(key => {
-      let radio = this.radios[key];
-      radio.setEnabled(b);
-      if (radio.isSelected()) {
-        // this.lightingPanel.setEnabled(b && ("" + key) != ("" + Z4GradientColorProgressionBehavior.SPATIAL));
-        // this.temporalStepSpinner.setEnabled(b && ("" + key) != ("" + Z4GradientColorProgressionBehavior.TEMPORAL));
-        // this.temporalStepSlider.setEnabled(b && ("" + key) != ("" + Z4GradientColorProgressionBehavior.TEMPORAL));
-      }
-    });
+    Object.keys(this.radios).forEach(key => (this.radios[key]).setEnabled(b));
   }
 }
 /**
@@ -6023,64 +6009,41 @@ class Z4BiGradientColorProgressionPanel extends Z4AbstractGradientColorProgressi
     this.temporalStepSlider.setEnabled(behavior === Z4BiGradientColorProgressionBehavior.TEMPORAL);
   }
 
-   onProgressionChange(b) {
-    // this.valueIsAdjusting = b;
-    // 
-    // Object.keys(this.radios).forEach(key -> {
-    // if (((JSRadioButton) this.radios.$get(key)).isSelected()) {
-    // switch ("" + key) {
-    // case "TEMPORAL":
-    // this.value = new Z4BiGradientColorProgression(Z4BiGradientColorProgressionBehavior.TEMPORAL, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
-    // break;
-    // case "RELATIVE_TO_PATH":
-    // this.value = new Z4BiGradientColorProgression(Z4BiGradientColorProgressionBehavior.RELATIVE_TO_PATH, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
-    // break;
-    // case "RANDOM":
-    // this.value = new Z4BiGradientColorProgression(Z4BiGradientColorProgressionBehavior.RANDOM, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
-    // break;
-    // }
-    // }
-    // });
-    // 
-    // this.onchange();
-  }
-
-   onTemporalStepChange(spTosl, adjusting, spinner, slider) {
-    // if (spTosl) {
-    // slider.setValue((int) spinner.getValue());
-    // } else {
-    // spinner.setValue(slider.getValue());
-    // }
-    // 
-    // this.onProgressionChange(adjusting);
+   onProgressionChange() {
+    Object.keys(this.radios).forEach(key => {
+      if ((this.radios[key]).isSelected()) {
+        switch("" + key) {
+          case "TEMPORAL":
+            this.value = new Z4BiGradientColorProgression(Z4BiGradientColorProgressionBehavior.TEMPORAL, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            break;
+          case "RELATIVE_TO_PATH":
+            this.value = new Z4BiGradientColorProgression(Z4BiGradientColorProgressionBehavior.RELATIVE_TO_PATH, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            break;
+          case "RANDOM":
+            this.value = new Z4BiGradientColorProgression(Z4BiGradientColorProgressionBehavior.RANDOM, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            break;
+        }
+      }
+    });
   }
 
    setValue(value) {
-    // this.value = value;
-    // this.lightingPanel.setValue(value.getLighting());
-    // 
-    // Object.keys(this.radios).forEach(key -> ((JSRadioButton) this.radios.$get(key)).setContentAreaFilled(false));
-    // ((JSRadioButton) this.radios.$get("" + value.getBiGradientColorProgressionBehavior())).setSelected(true);
-    // ((JSRadioButton) this.radios.$get("" + value.getBiGradientColorProgressionBehavior())).setContentAreaFilled(true);
-    // 
-    // this.temporalStepSpinner.setEnabled(value.getBiGradientColorProgressionBehavior() == Z4BiGradientColorProgressionBehavior.TEMPORAL);
-    // this.temporalStepSpinner.setValue(value.getTemporalStepProgression() * 100);
-    // this.temporalStepSlider.setEnabled(value.getBiGradientColorProgressionBehavior() == Z4BiGradientColorProgressionBehavior.TEMPORAL);
-    // this.temporalStepSlider.setValue(parseInt(value.getTemporalStepProgression() * 100));
+    super.setValue(value);
+    (this.radios["" + value.getBiGradientColorProgressionBehavior()]).setSelected(true);
+    (this.radios["" + value.getBiGradientColorProgressionBehavior()]).setContentAreaFilled(true);
+    this.temporalStepSpinner.setEnabled(value.getBiGradientColorProgressionBehavior() === Z4BiGradientColorProgressionBehavior.TEMPORAL);
+    this.temporalStepSlider.setEnabled(value.getBiGradientColorProgressionBehavior() === Z4BiGradientColorProgressionBehavior.TEMPORAL);
   }
 
    setEnabled(b) {
-    // this.lightingPanel.setEnabled(b);
-    // 
-    // Object.keys(this.radios).forEach(key -> {
-    // JSRadioButton radio = this.radios.$get(key);
-    // radio.setEnabled(b);
-    // 
-    // if (radio.isSelected()) {
-    // this.temporalStepSpinner.setEnabled(b && ("" + key) != ("" + Z4BiGradientColorProgressionBehavior.TEMPORAL));
-    // this.temporalStepSlider.setEnabled(b && ("" + key) != ("" + Z4BiGradientColorProgressionBehavior.TEMPORAL));
-    // }
-    // });
+    super.setEnabled(b);
+    this.lightingPanel.setEnabled(b);
+    Object.keys(this.radios).forEach(key => {
+      if ((this.radios[key]).isSelected()) {
+        this.temporalStepSpinner.setEnabled(b && ("" + key) !== ("" + Z4BiGradientColorProgressionBehavior.TEMPORAL));
+        this.temporalStepSlider.setEnabled(b && ("" + key) !== ("" + Z4BiGradientColorProgressionBehavior.TEMPORAL));
+      }
+    });
   }
 }
 /**
@@ -6123,67 +6086,45 @@ class Z4GradientColorProgressionPanel extends Z4AbstractGradientColorProgression
     this.temporalStepSlider.setEnabled(behavior === Z4GradientColorProgressionBehavior.TEMPORAL);
   }
 
-   onProgressionChange(b) {
-    // this.valueIsAdjusting = b;
-    // 
-    // Object.keys(this.radios).forEach(key -> {
-    // if (((JSRadioButton) this.radios.$get(key)).isSelected()) {
-    // switch ("" + key) {
-    // case "SPATIAL":
-    // this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.SPATIAL, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
-    // break;
-    // case "TEMPORAL":
-    // this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.TEMPORAL, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
-    // break;
-    // case "RELATIVE_TO_PATH":
-    // this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.RELATIVE_TO_PATH, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
-    // break;
-    // case "RANDOM":
-    // this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.RANDOM, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
-    // break;
-    // }
-    // }
-    // });
-    // 
-    // this.onchange();
-  }
-
-   onTemporalStepChange(spTosl, adjusting, spinner, slider) {
-    // if (spTosl) {
-    // slider.setValue((int) spinner.getValue());
-    // } else {
-    // spinner.setValue(slider.getValue());
-    // }
-    // 
-    // this.onProgressionChange(adjusting);
+   onProgressionChange() {
+    Object.keys(this.radios).forEach(key => {
+      if ((this.radios[key]).isSelected()) {
+        switch("" + key) {
+          case "SPATIAL":
+            this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.SPATIAL, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            break;
+          case "TEMPORAL":
+            this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.TEMPORAL, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            break;
+          case "RELATIVE_TO_PATH":
+            this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.RELATIVE_TO_PATH, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            break;
+          case "RANDOM":
+            this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.RANDOM, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            break;
+        }
+      }
+    });
   }
 
    setValue(value) {
-    // this.value = value;
-    // this.lightingPanel.setValue(value.getLighting());
-    // this.lightingPanel.setEnabled(value.getGradientColorProgressionBehavior() != Z4GradientColorProgressionBehavior.SPATIAL);
-    // 
-    // Object.keys(this.radios).forEach(key -> ((JSRadioButton) this.radios.$get(key)).setContentAreaFilled(false));
-    // ((JSRadioButton) this.radios.$get("" + value.getGradientColorProgressionBehavior())).setSelected(true);
-    // ((JSRadioButton) this.radios.$get("" + value.getGradientColorProgressionBehavior())).setContentAreaFilled(true);
-    // 
-    // this.temporalStepSpinner.setEnabled(value.getGradientColorProgressionBehavior() == Z4GradientColorProgressionBehavior.TEMPORAL);
-    // this.temporalStepSpinner.setValue(value.getTemporalStepProgression() * 100);
-    // this.temporalStepSlider.setEnabled(value.getGradientColorProgressionBehavior() == Z4GradientColorProgressionBehavior.TEMPORAL);
-    // this.temporalStepSlider.setValue(parseInt(value.getTemporalStepProgression() * 100));
+    super.setValue(value);
+    this.lightingPanel.setEnabled(value.getGradientColorProgressionBehavior() !== Z4GradientColorProgressionBehavior.SPATIAL);
+    (this.radios["" + value.getGradientColorProgressionBehavior()]).setSelected(true);
+    (this.radios["" + value.getGradientColorProgressionBehavior()]).setContentAreaFilled(true);
+    this.temporalStepSpinner.setEnabled(value.getGradientColorProgressionBehavior() === Z4GradientColorProgressionBehavior.TEMPORAL);
+    this.temporalStepSlider.setEnabled(value.getGradientColorProgressionBehavior() === Z4GradientColorProgressionBehavior.TEMPORAL);
   }
 
    setEnabled(b) {
-    // Object.keys(this.radios).forEach(key -> {
-    // JSRadioButton radio = this.radios.$get(key);
-    // radio.setEnabled(b);
-    // 
-    // if (radio.isSelected()) {
-    // this.lightingPanel.setEnabled(b && ("" + key) != ("" + Z4GradientColorProgressionBehavior.SPATIAL));
-    // this.temporalStepSpinner.setEnabled(b && ("" + key) != ("" + Z4GradientColorProgressionBehavior.TEMPORAL));
-    // this.temporalStepSlider.setEnabled(b && ("" + key) != ("" + Z4GradientColorProgressionBehavior.TEMPORAL));
-    // }
-    // });
+    super.setEnabled(b);
+    Object.keys(this.radios).forEach(key => {
+      if ((this.radios[key]).isSelected()) {
+        this.lightingPanel.setEnabled(b && ("" + key) !== ("" + Z4GradientColorProgressionBehavior.SPATIAL));
+        this.temporalStepSpinner.setEnabled(b && ("" + key) !== ("" + Z4GradientColorProgressionBehavior.TEMPORAL));
+        this.temporalStepSlider.setEnabled(b && ("" + key) !== ("" + Z4GradientColorProgressionBehavior.TEMPORAL));
+      }
+    });
   }
 }
 /**
