@@ -7,8 +7,6 @@ class Z4GradientColorProgression extends Z4AbstractGradientColorProgression {
 
    behavior = null;
 
-   temporalStepProgression = 0.0;
-
   /**
    * Creates the object
    *
@@ -18,9 +16,8 @@ class Z4GradientColorProgression extends Z4AbstractGradientColorProgression {
    * @param lighting The color lighting
    */
   constructor(behavior, temporalStepProgression, lighting) {
-    super(lighting);
+    super(temporalStepProgression, lighting);
     this.behavior = behavior;
-    this.temporalStepProgression = temporalStepProgression;
   }
 
   /**
@@ -32,19 +29,9 @@ class Z4GradientColorProgression extends Z4AbstractGradientColorProgression {
     return this.behavior;
   }
 
-  /**
-   * Returns the step for temporal progression (in the range [0,1])
-   *
-   * @return The step for temporal progression (in the range [0,1])
-   */
-   getTemporalStepProgression() {
-    return this.temporalStepProgression;
-  }
-
    toJSON() {
     let json = super.toJSON();
     json["behavior"] = this.behavior;
-    json["temporalStepProgression"] = this.temporalStepProgression;
     return json;
   }
 

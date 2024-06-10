@@ -12,7 +12,7 @@ import pizzapazza.util.Z4EmptyImageProducer;
 import pizzapazza.util.Z4Translations;
 
 /**
- * The abstract panel to manage a random value
+ * The abstract panel to manage a (signed) random value
  *
  * @author gianpiero.diblasi
  * @param <T> The value type

@@ -1,0 +1,16 @@
+.z4bigradientcolorprogressionpanel {
+}
+
+.z4bigradientcolorprogressionpanel .z4bigradientcolorprogressionpanel-radio img {
+  width: 16px;
+  height: 16px;
+}
+.z4bigradientcolorprogressionpanel .z4bigradientcolorprogressionpanel-radio:nth-child(2) img {
+  content: url(../image/color/z4bigradientcolorprogressionbehavior_temporal.svg);
+}
+.z4bigradientcolorprogressionpanel .z4bigradientcolorprogressionpanel-radio:nth-child(3) img {
+  content: url(../image/color/z4bigradientcolorprogressionbehavior_relativetopath.svg);
+}
+.z4bigradientcolorprogressionpanel .z4bigradientcolorprogressionpanel-radio:nth-child(4) img {
+  content: url(../image/color/z4bigradientcolorprogressionbehavior_random.svg);
+}

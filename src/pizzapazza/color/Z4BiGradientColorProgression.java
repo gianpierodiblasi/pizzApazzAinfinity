@@ -10,8 +10,7 @@ import simulation.js.$Object;
 public class Z4BiGradientColorProgression extends Z4AbstractGradientColorProgression {
 
   private final Z4BiGradientColorProgressionBehavior behavior;
-  private final double temporalStepProgression;
-
+  
   /**
    * Creates the object
    *
@@ -21,9 +20,8 @@ public class Z4BiGradientColorProgression extends Z4AbstractGradientColorProgres
    * @param lighting The color lighting
    */
   public Z4BiGradientColorProgression(Z4BiGradientColorProgressionBehavior behavior, double temporalStepProgression, Z4Lighting lighting) {
-    super(lighting);
+    super(temporalStepProgression,lighting);
     this.behavior = behavior;
-    this.temporalStepProgression = temporalStepProgression;
   }
 
   /**
@@ -35,20 +33,10 @@ public class Z4BiGradientColorProgression extends Z4AbstractGradientColorProgres
     return this.behavior;
   }
 
-  /**
-   * Returns the step for temporal progression (in the range [0,1])
-   *
-   * @return The step for temporal progression (in the range [0,1])
-   */
-  public double getTemporalStepProgression() {
-    return this.temporalStepProgression;
-  }
-
   @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
     json.$set("behavior", this.behavior);
-    json.$set("temporalStepProgression", this.temporalStepProgression);
     return json;
   }
 

@@ -1,0 +1,20 @@
+.z4abstractgradientcolorprogressionpanel {
+}
+
+.z4abstractgradientcolorprogressionpanel .z4abstractgradientcolorprogressionpanel-radio img {
+  width: 16px;
+  height: 16px;
+}
+.z4abstractgradientcolorprogressionpanel .z4abstractgradientcolorprogressionpanel-radio:nth-child(1) img {
+  content: url(../image/color/z4gradientcolorprogressionbehavior_spatial.svg);
+}
+.z4abstractgradientcolorprogressionpanel .z4abstractgradientcolorprogressionpanel-radio:nth-child(2) img {
+  content: url(../image/color/z4gradientcolorprogressionbehavior_temporal.svg);
+}
+.z4abstractgradientcolorprogressionpanel .z4abstractgradientcolorprogressionpanel-radio:nth-child(3) img {
+  content: url(../image/color/z4gradientcolorprogressionbehavior_relativetopath.svg);
+}
+.z4abstractgradientcolorprogressionpanel .z4abstractgradientcolorprogressionpanel-radio:nth-child(4) img {
+  content: url(../image/color/z4gradientcolorprogressionbehavior_random.svg);
+}
+

@@ -248,6 +248,26 @@
 .z4abstractfillerpanel.z4texturefillerpanel div label:nth-child(2) img {
   content: url(../image/filler/texture_symmetric.png);
 }
+.z4abstractgradientcolorprogressionpanel {
+}
+
+.z4abstractgradientcolorprogressionpanel .z4abstractgradientcolorprogressionpanel-radio img {
+  width: 16px;
+  height: 16px;
+}
+.z4abstractgradientcolorprogressionpanel .z4abstractgradientcolorprogressionpanel-radio:nth-child(1) img {
+  content: url(../image/color/z4gradientcolorprogressionbehavior_spatial.svg);
+}
+.z4abstractgradientcolorprogressionpanel .z4abstractgradientcolorprogressionpanel-radio:nth-child(2) img {
+  content: url(../image/color/z4gradientcolorprogressionbehavior_temporal.svg);
+}
+.z4abstractgradientcolorprogressionpanel .z4abstractgradientcolorprogressionpanel-radio:nth-child(3) img {
+  content: url(../image/color/z4gradientcolorprogressionbehavior_relativetopath.svg);
+}
+.z4abstractgradientcolorprogressionpanel .z4abstractgradientcolorprogressionpanel-radio:nth-child(4) img {
+  content: url(../image/color/z4gradientcolorprogressionbehavior_random.svg);
+}
+
 .z4abstractrandomvaluepanel {
 }
 
@@ -278,7 +298,23 @@
 .z4abstractvaluepanel.z4abstractvaluepanel-titled > label:nth-child(1),
 .z4abstractvaluepanel.z4abstractvaluepanel-titled.z4abstractrandomvaluepanel > .z4signedvaluepanel:nth-child(1) > label:nth-child(1) {
   font-weight: bold;
-}.z4canvas {
+}.z4bigradientcolorprogressionpanel {
+}
+
+.z4bigradientcolorprogressionpanel .z4bigradientcolorprogressionpanel-radio img {
+  width: 16px;
+  height: 16px;
+}
+.z4bigradientcolorprogressionpanel .z4bigradientcolorprogressionpanel-radio:nth-child(2) img {
+  content: url(../image/color/z4bigradientcolorprogressionbehavior_temporal.svg);
+}
+.z4bigradientcolorprogressionpanel .z4bigradientcolorprogressionpanel-radio:nth-child(3) img {
+  content: url(../image/color/z4bigradientcolorprogressionbehavior_relativetopath.svg);
+}
+.z4bigradientcolorprogressionpanel .z4bigradientcolorprogressionpanel-radio:nth-child(4) img {
+  content: url(../image/color/z4bigradientcolorprogressionbehavior_random.svg);
+}
+.z4canvas {
   overflow: scroll;
   display: grid;
   grid-template: "c";
