@@ -5,8 +5,6 @@ import javascript.awt.GBC;
 import javascript.swing.ButtonGroup;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
-import javascript.swing.JSSlider;
-import javascript.swing.JSSpinner;
 import pizzapazza.color.Z4GradientColorProgression;
 import pizzapazza.color.Z4GradientColorProgressionBehavior;
 import pizzapazza.color.Z4Lighting;
