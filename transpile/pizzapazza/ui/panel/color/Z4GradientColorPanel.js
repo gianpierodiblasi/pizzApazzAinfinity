@@ -44,6 +44,8 @@ class Z4GradientColorPanel extends JSPanel {
     this.setLayout(new GridBagLayout());
     this.preview.setProperty("width", "" + Z4GradientColorPanel.WIDTH);
     this.preview.setProperty("height", "" + Z4GradientColorPanel.HEIGHT);
+    this.preview.addEventListener("mouseenter", event => this.onMouse(event, "enter"));
+    this.preview.addEventListener("mouseleave", event => this.onMouse(event, "leave"));
     this.preview.addEventListener("mousedown", event => this.onMouse(event, "down"));
     this.preview.addEventListener("mousemove", event => this.onMouse(event, "move"));
     this.preview.addEventListener("mouseup", event => this.onMouse(event, "up"));
@@ -97,6 +99,8 @@ class Z4GradientColorPanel extends JSPanel {
 
    onMouse(event, type) {
     switch(type) {
+      case "enter":
+        break;
       case "down":
         for (let index = 0; index < this.gradientColor.getColorCount(); index++) {
           let position = this.gradientColor.getColorPositionAtIndex(index);
@@ -148,6 +152,7 @@ class Z4GradientColorPanel extends JSPanel {
         }
         break;
       case "up":
+      case "leave":
         this.pressed = false;
         this.drawPreview(false);
         this.valueIsAdjusting = false;

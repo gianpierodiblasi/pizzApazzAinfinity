@@ -65,6 +65,8 @@ public class Z4GradientColorPanel extends JSPanel {
 
     this.preview.setProperty("width", "" + Z4GradientColorPanel.WIDTH);
     this.preview.setProperty("height", "" + Z4GradientColorPanel.HEIGHT);
+    this.preview.addEventListener("mouseenter", event -> this.onMouse((MouseEvent) event, "enter"));
+    this.preview.addEventListener("mouseleave", event -> this.onMouse((MouseEvent) event, "leave"));
     this.preview.addEventListener("mousedown", event -> this.onMouse((MouseEvent) event, "down"));
     this.preview.addEventListener("mousemove", event -> this.onMouse((MouseEvent) event, "move"));
     this.preview.addEventListener("mouseup", event -> this.onMouse((MouseEvent) event, "up"));
@@ -130,6 +132,8 @@ public class Z4GradientColorPanel extends JSPanel {
   @SuppressWarnings("StringEquality")
   private void onMouse(MouseEvent event, String type) {
     switch (type) {
+      case "enter":
+        break;
       case "down":
         for (int index = 0; index < this.gradientColor.getColorCount(); index++) {
           double position = this.gradientColor.getColorPositionAtIndex(index);
@@ -191,6 +195,7 @@ public class Z4GradientColorPanel extends JSPanel {
         }
         break;
       case "up":
+      case "leave":
         this.pressed = false;
         this.drawPreview(false);
         this.valueIsAdjusting = false;

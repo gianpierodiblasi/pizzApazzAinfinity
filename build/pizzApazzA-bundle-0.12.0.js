@@ -965,6 +965,26 @@ class Z4BoundaryBehavior {
   static REPEAT_AT_BOUNDARY = 'REPEAT_AT_BOUNDARY';
 }
 /**
+ * The drawing action of a Z4PointIterator
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4PointIteratorDrawingAction {
+
+  /**
+   * The start
+   */
+  static START = 'START';
+  /**
+   * The continue
+   */
+  static CONTINUE = 'CONTINUE';
+  /**
+   * The stop
+   */
+  static STOP = 'STOP';
+}
+/**
  * The point where to perform a drawing
  *
  * @author gianpiero.diblasi
@@ -1437,6 +1457,8 @@ class Z4Canvas extends JSComponent {
 
    changed = false;
 
+   pressed = false;
+
    paper = new Z4Paper();
 
    selectedLayer = null;
@@ -1448,6 +1470,8 @@ class Z4Canvas extends JSComponent {
     super(document.createElement("div"));
     this.cssAddClass("z4canvas");
     this.appendNodeChild(this.canvas);
+    this.canvas.addEventListener("mouseenter", event => this.onMouse(event, "enter"));
+    this.canvas.addEventListener("mouseleave", event => this.onMouse(event, "leave"));
     this.canvas.addEventListener("mousedown", event => this.onMouse(event, "down"));
     this.canvas.addEventListener("mousemove", event => this.onMouse(event, "move"));
     this.canvas.addEventListener("mouseup", event => this.onMouse(event, "up"));
@@ -2206,12 +2230,20 @@ class Z4Canvas extends JSComponent {
 
    onMouse(event, type) {
     switch(type) {
+      case "enter":
+        this.pressed = event.buttons === 1;
+        break;
       case "down":
+        this.pressed = true;
         break;
       case "move":
         this.statusPanel.setMousePosition(parseInt(Math.max(0, event.offsetX / this.zoom)), parseInt(Math.max(0, event.offsetY / this.zoom)));
         break;
       case "up":
+        this.pressed = false;
+        break;
+      case "leave":
+        this.pressed = false;
         break;
     }
   }
@@ -2863,6 +2895,8 @@ class Z4BiGradientColorPanel extends JSPanel {
     this.time.cssAddClass("jslabel-vertical");
     this.preview.setProperty("width", "" + this.width);
     this.preview.setProperty("height", "" + this.height);
+    this.preview.addEventListener("mouseenter", event => this.onMouse(event, "enter"));
+    this.preview.addEventListener("mouseleave", event => this.onMouse(event, "leave"));
     this.preview.addEventListener("mousedown", event => this.onMouse(event, "down"));
     this.preview.addEventListener("mousemove", event => this.onMouse(event, "move"));
     this.preview.addEventListener("mouseup", event => this.onMouse(event, "up"));
@@ -2963,6 +2997,8 @@ class Z4BiGradientColorPanel extends JSPanel {
 
    onMouse(event, type) {
     switch(type) {
+      case "enter":
+        break;
       case "down":
         for (let biIndex = 0; biIndex < this.biGradientColor.getColorCount(); biIndex++) {
           let biPosition = this.biGradientColor.getColorPositionAtIndex(biIndex);
@@ -3037,6 +3073,7 @@ class Z4BiGradientColorPanel extends JSPanel {
         }
         break;
       case "up":
+      case "leave":
         this.pressed = false;
         this.drawPreview(false);
         break;
@@ -3217,6 +3254,8 @@ class Z4GradientColorPanel extends JSPanel {
     this.setLayout(new GridBagLayout());
     this.preview.setProperty("width", "" + Z4GradientColorPanel.WIDTH);
     this.preview.setProperty("height", "" + Z4GradientColorPanel.HEIGHT);
+    this.preview.addEventListener("mouseenter", event => this.onMouse(event, "enter"));
+    this.preview.addEventListener("mouseleave", event => this.onMouse(event, "leave"));
     this.preview.addEventListener("mousedown", event => this.onMouse(event, "down"));
     this.preview.addEventListener("mousemove", event => this.onMouse(event, "move"));
     this.preview.addEventListener("mouseup", event => this.onMouse(event, "up"));
@@ -3270,6 +3309,8 @@ class Z4GradientColorPanel extends JSPanel {
 
    onMouse(event, type) {
     switch(type) {
+      case "enter":
+        break;
       case "down":
         for (let index = 0; index < this.gradientColor.getColorCount(); index++) {
           let position = this.gradientColor.getColorPositionAtIndex(index);
@@ -3321,6 +3362,7 @@ class Z4GradientColorPanel extends JSPanel {
         }
         break;
       case "up":
+      case "leave":
         this.pressed = false;
         this.drawPreview(false);
         this.valueIsAdjusting = false;
@@ -3526,6 +3568,8 @@ class Z4AbstractFillerPanel extends JSPanel {
     this.add(panelOptions, new GBC(0, 0).w(4).a(GBC.WEST).f(GBC.HORIZONTAL));
     this.preview.setProperty("width", "" + Z4AbstractFillerPanel.SIZE);
     this.preview.setProperty("height", "" + Z4AbstractFillerPanel.SIZE);
+    this.preview.addEventListener("mouseenter", event => this.onMouse(event, "enter"));
+    this.preview.addEventListener("mouseleave", event => this.onMouse(event, "leave"));
     this.preview.addEventListener("mousedown", event => this.onMouse(event, "down"));
     this.preview.addEventListener("mousemove", event => this.onMouse(event, "move"));
     this.preview.addEventListener("mouseup", event => this.onMouse(event, "up"));
@@ -3611,6 +3655,8 @@ class Z4AbstractFillerPanel extends JSPanel {
     let w = parseInt(this.preview.getProperty("width"));
     let h = parseInt(this.preview.getProperty("height"));
     switch(type) {
+      case "enter":
+        break;
       case "down":
         this.points.map(point => new Point(w * point.x / this.width, h * point.y / this.height)).forEach((point, index, array) => {
           if (this.isPointEnabled(index) && Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) <= Z4AbstractFillerPanel.SELECTOR_RADIUS) {
@@ -3637,6 +3683,7 @@ class Z4AbstractFillerPanel extends JSPanel {
         }
         break;
       case "up":
+      case "leave":
         this.pressed = false;
         this.drawPreview(false);
         break;
@@ -9079,6 +9126,154 @@ class Z4GradientColorProgression extends Z4AbstractGradientColorProgression {
   }
 }
 /**
+ * A spatio-temporal color
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4SpatioTemporalColor extends Z4JSONable {
+
+   color = null;
+
+   gradientColor = null;
+
+   biGradientColor = null;
+
+   flatGradientColor = null;
+
+  constructor(color, gradientColor, biGradientColor) {
+    this.color = color;
+    this.gradientColor = gradientColor;
+    this.biGradientColor = biGradientColor;
+    if (color) {
+      this.flatGradientColor = new Z4GradientColor();
+      this.flatGradientColor.addColor(this.color, 0);
+      this.flatGradientColor.addColor(this.color, 1);
+    }
+  }
+
+  /**
+   * Creates a Z4SpatioTemporalColor from a color
+   *
+   * @param color The color
+   * @return the color aggregator
+   */
+  static  fromColor(color) {
+    return new Z4SpatioTemporalColor(color, null, null);
+  }
+
+  /**
+   * Creates a Z4SpatioTemporalColor from a gradient color
+   *
+   * @param gradientColor The gradient color
+   * @return the color aggregator
+   */
+  static  fromGradientColor(gradientColor) {
+    return new Z4SpatioTemporalColor(null, gradientColor, null);
+  }
+
+  /**
+   * Creates a Z4SpatioTemporalColor from a bigradient color
+   *
+   * @param biGradientColor The bigradient color
+   * @return the color aggregator
+   */
+  static  fromBiGradientColor(biGradientColor) {
+    return new Z4SpatioTemporalColor(null, null, biGradientColor);
+  }
+
+  /**
+   * Returns a color in a time instant and in a space position
+   *
+   * @param time The time instant
+   * @param space The space position
+   * @return The color
+   */
+   getColorAt(time, space) {
+    if (this.color) {
+      return this.color;
+    } else if (this.gradientColor) {
+      return this.gradientColor.getColorAt(space, true);
+    } else if (this.biGradientColor) {
+      return this.biGradientColor.getColorAt(time, true).getColorAt(space, true);
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * Returns a gradient color in a time instant
+   *
+   * @param time The time instant
+   * @return The gradient color
+   */
+   getGradientColorAt(time) {
+    if (this.color) {
+      return this.flatGradientColor;
+    } else if (this.gradientColor) {
+      return this.gradientColor;
+    } else if (this.biGradientColor) {
+      return this.biGradientColor.getColorAt(time, true);
+    } else {
+      return null;
+    }
+  }
+
+   toJSON() {
+    let json = new Object();
+    if (this.color) {
+      let jsonColor = new Object();
+      jsonColor["red"] = color.red;
+      jsonColor["green"] = color.green;
+      jsonColor["blue"] = color.blue;
+      jsonColor["alpha"] = color.alpha;
+      json["color"] = jsonColor;
+    } else if (this.gradientColor) {
+      json["gradientColor"] = this.gradientColor.toJSON();
+    } else if (this.biGradientColor) {
+      json["biGradientColor"] = this.biGradientColor.toJSON();
+    }
+    return json;
+  }
+
+  /**
+   * Creates a Z4SpatioTemporalColor from a JSON object
+   *
+   * @param json The JSON object
+   * @return the color
+   */
+  static  fromJSON(json) {
+    if (json["color"]) {
+      let jsonColor = json["color"];
+      return Z4SpatioTemporalColor.fromColor(new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]));
+    } else if (json["gradientColor"]) {
+      return Z4SpatioTemporalColor.fromGradientColor(Z4GradientColor.fromJSON(json["gradientColor"]));
+    } else if (json["biGradientColor"]) {
+      return Z4SpatioTemporalColor.fromBiGradientColor(Z4BiGradientColor.fromJSON(json["biGradientColor"]));
+    } else {
+      return null;
+    }
+  }
+}
+/**
+ * The common parent of all point iterators
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4PointIterator extends Z4JSONable {
+
+  /**
+   * Performs a drawing action
+   *
+   * @param action The action
+   * @param x The x-axis coordinate of the drawing action
+   * @param y The y-axis coordinate of the drawing action
+   * @return true if the painting is modified by the drawing action, false
+   * otherwise
+   */
+   draw(action, x, y) {
+  }
+}
+/**
  * The common interface for objects able to provide a "next" value
  *
  * @author gianpiero.diblasi
@@ -9654,6 +9849,13 @@ class Z4Rotation extends Z4NextableWithParam {
         return null;
     }
   }
+}
+/**
+ * The common parent of all painters
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Painter extends Z4JSONable {
 }
 /**
  * The object representing a layer

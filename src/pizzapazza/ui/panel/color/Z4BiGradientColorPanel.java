@@ -75,6 +75,8 @@ public class Z4BiGradientColorPanel extends JSPanel {
 
     this.preview.setProperty("width", "" + this.width);
     this.preview.setProperty("height", "" + this.height);
+    this.preview.addEventListener("mouseenter", event -> this.onMouse((MouseEvent) event, "enter"));
+    this.preview.addEventListener("mouseleave", event -> this.onMouse((MouseEvent) event, "leave"));
     this.preview.addEventListener("mousedown", event -> this.onMouse((MouseEvent) event, "down"));
     this.preview.addEventListener("mousemove", event -> this.onMouse((MouseEvent) event, "move"));
     this.preview.addEventListener("mouseup", event -> this.onMouse((MouseEvent) event, "up"));
@@ -195,6 +197,8 @@ public class Z4BiGradientColorPanel extends JSPanel {
   @SuppressWarnings("StringEquality")
   private void onMouse(MouseEvent event, String type) {
     switch (type) {
+      case "enter":
+        break;
       case "down":
         for (int biIndex = 0; biIndex < this.biGradientColor.getColorCount(); biIndex++) {
           double biPosition = this.biGradientColor.getColorPositionAtIndex(biIndex);
@@ -284,6 +288,7 @@ public class Z4BiGradientColorPanel extends JSPanel {
         }
         break;
       case "up":
+      case "leave":
         this.pressed = false;
         this.drawPreview(false);
         break;

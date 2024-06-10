@@ -76,6 +76,8 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
 
     this.preview.setProperty("width", "" + Z4AbstractFillerPanel.SIZE);
     this.preview.setProperty("height", "" + Z4AbstractFillerPanel.SIZE);
+    this.preview.addEventListener("mouseenter", event -> this.onMouse((MouseEvent) event, "enter"));
+    this.preview.addEventListener("mouseleave", event -> this.onMouse((MouseEvent) event, "leave"));
     this.preview.addEventListener("mousedown", event -> this.onMouse((MouseEvent) event, "down"));
     this.preview.addEventListener("mousemove", event -> this.onMouse((MouseEvent) event, "move"));
     this.preview.addEventListener("mouseup", event -> this.onMouse((MouseEvent) event, "up"));
@@ -178,6 +180,8 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
     int h = parseInt(this.preview.getProperty("height"));
 
     switch (type) {
+      case "enter":
+        break;
       case "down":
         this.points.map(point -> new Point(w * point.x / this.width, h * point.y / this.height)).forEach((point, index, array) -> {
           if (this.isPointEnabled(index) && Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) <= Z4AbstractFillerPanel.SELECTOR_RADIUS) {
@@ -204,6 +208,7 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
         }
         break;
       case "up":
+      case "leave":
         this.pressed = false;
         this.drawPreview(false);
         break;

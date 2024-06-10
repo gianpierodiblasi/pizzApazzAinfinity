@@ -33,6 +33,8 @@ class Z4Canvas extends JSComponent {
 
    changed = false;
 
+   pressed = false;
+
    paper = new Z4Paper();
 
    selectedLayer = null;
@@ -44,6 +46,8 @@ class Z4Canvas extends JSComponent {
     super(document.createElement("div"));
     this.cssAddClass("z4canvas");
     this.appendNodeChild(this.canvas);
+    this.canvas.addEventListener("mouseenter", event => this.onMouse(event, "enter"));
+    this.canvas.addEventListener("mouseleave", event => this.onMouse(event, "leave"));
     this.canvas.addEventListener("mousedown", event => this.onMouse(event, "down"));
     this.canvas.addEventListener("mousemove", event => this.onMouse(event, "move"));
     this.canvas.addEventListener("mouseup", event => this.onMouse(event, "up"));
@@ -802,12 +806,20 @@ class Z4Canvas extends JSComponent {
 
    onMouse(event, type) {
     switch(type) {
+      case "enter":
+        this.pressed = event.buttons === 1;
+        break;
       case "down":
+        this.pressed = true;
         break;
       case "move":
         this.statusPanel.setMousePosition(parseInt(Math.max(0, event.offsetX / this.zoom)), parseInt(Math.max(0, event.offsetY / this.zoom)));
         break;
       case "up":
+        this.pressed = false;
+        break;
+      case "leave":
+        this.pressed = false;
         break;
     }
   }

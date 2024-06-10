@@ -57,6 +57,8 @@ class Z4AbstractFillerPanel extends JSPanel {
     this.add(panelOptions, new GBC(0, 0).w(4).a(GBC.WEST).f(GBC.HORIZONTAL));
     this.preview.setProperty("width", "" + Z4AbstractFillerPanel.SIZE);
     this.preview.setProperty("height", "" + Z4AbstractFillerPanel.SIZE);
+    this.preview.addEventListener("mouseenter", event => this.onMouse(event, "enter"));
+    this.preview.addEventListener("mouseleave", event => this.onMouse(event, "leave"));
     this.preview.addEventListener("mousedown", event => this.onMouse(event, "down"));
     this.preview.addEventListener("mousemove", event => this.onMouse(event, "move"));
     this.preview.addEventListener("mouseup", event => this.onMouse(event, "up"));
@@ -142,6 +144,8 @@ class Z4AbstractFillerPanel extends JSPanel {
     let w = parseInt(this.preview.getProperty("width"));
     let h = parseInt(this.preview.getProperty("height"));
     switch(type) {
+      case "enter":
+        break;
       case "down":
         this.points.map(point => new Point(w * point.x / this.width, h * point.y / this.height)).forEach((point, index, array) => {
           if (this.isPointEnabled(index) && Z4Math.distance(point.x, point.y, event.offsetX, event.offsetY) <= Z4AbstractFillerPanel.SELECTOR_RADIUS) {
@@ -168,6 +172,7 @@ class Z4AbstractFillerPanel extends JSPanel {
         }
         break;
       case "up":
+      case "leave":
         this.pressed = false;
         this.drawPreview(false);
         break;

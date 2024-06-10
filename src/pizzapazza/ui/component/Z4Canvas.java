@@ -63,6 +63,7 @@ public class Z4Canvas extends JSComponent {
   private boolean zooming;
   private boolean saved = true;
   private boolean changed = false;
+  private boolean pressed = false;
 
   private final Z4Paper paper = new Z4Paper();
   private Z4Layer selectedLayer;
@@ -76,6 +77,8 @@ public class Z4Canvas extends JSComponent {
     this.cssAddClass("z4canvas");
     this.appendNodeChild(this.canvas);
 
+    this.canvas.addEventListener("mouseenter", event -> this.onMouse((MouseEvent) event, "enter"));
+    this.canvas.addEventListener("mouseleave", event -> this.onMouse((MouseEvent) event, "leave"));
     this.canvas.addEventListener("mousedown", event -> this.onMouse((MouseEvent) event, "down"));
     this.canvas.addEventListener("mousemove", event -> this.onMouse((MouseEvent) event, "move"));
     this.canvas.addEventListener("mouseup", event -> this.onMouse((MouseEvent) event, "up"));
@@ -382,6 +385,7 @@ public class Z4Canvas extends JSComponent {
    * @param handle The file handle
    * @param apply The function to call after saving
    */
+  @SuppressWarnings("static-access")
   public void saveProjectToHandle(FileSystemFileHandle handle, $Apply_0_Void apply) {
     this.handle = handle;
 
@@ -908,12 +912,20 @@ public class Z4Canvas extends JSComponent {
 
   private void onMouse(MouseEvent event, String type) {
     switch (type) {
+      case "enter":
+        this.pressed = event.buttons == 1;
+        break;
       case "down":
+        this.pressed = true;
         break;
       case "move":
         this.statusPanel.setMousePosition(parseInt(Math.max(0, event.offsetX / this.zoom)), parseInt(Math.max(0, event.offsetY / this.zoom)));
         break;
       case "up":
+        this.pressed = false;
+        break;
+      case "leave":
+        this.pressed = false;
         break;
     }
   }

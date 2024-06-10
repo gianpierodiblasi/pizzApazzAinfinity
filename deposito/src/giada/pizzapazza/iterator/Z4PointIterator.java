@@ -9,13 +9,7 @@ import giada.pizzapazza.painter.Z4Painter;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.js.$Object;
 
-/**
- * The common parent of all point iterators
- *
- * @param <T>
- * @author gianpiero.diblasi
- */
-public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
+public abstract class Z4PointIterator {
 
   /**
    * The color progression
@@ -54,12 +48,10 @@ public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
    * Sets the color progression
    *
    * @param progression The color progression
-   * @return This Z4PointIterator
    */
   @SuppressWarnings("unchecked")
-  public T setProgression(Z4Progression progression) {
+  public void setProgression(Z4Progression progression) {
     this.progression = progression;
-    return (T) this;
   }
 
   /**
@@ -75,12 +67,10 @@ public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
    * Sets the rotation
    *
    * @param rotation The rotation
-   * @return This Z4PointIterator
    */
   @SuppressWarnings("unchecked")
-  public T setRotation(Z4Rotation rotation) {
+  public void setRotation(Z4Rotation rotation) {
     this.rotation = rotation;
-    return (T) this;
   }
 
   /**
@@ -91,17 +81,6 @@ public abstract class Z4PointIterator<T extends Z4PointIterator<T>> {
   public Z4Rotation getRotation() {
     return this.rotation;
   }
-
-  /**
-   * Performs a drawing action
-   *
-   * @param action The action
-   * @param x The x-axis coordinate of the drawing action
-   * @param y The y-axis coordinate of the drawing action
-   * @return true if the painting is modified by the drawing action, false
-   * otherwise
-   */
-  public abstract boolean draw(Z4Action action, double x, double y);
 
   /**
    * Returns the next point of the iterator

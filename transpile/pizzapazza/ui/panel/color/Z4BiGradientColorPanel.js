@@ -58,6 +58,8 @@ class Z4BiGradientColorPanel extends JSPanel {
     this.time.cssAddClass("jslabel-vertical");
     this.preview.setProperty("width", "" + this.width);
     this.preview.setProperty("height", "" + this.height);
+    this.preview.addEventListener("mouseenter", event => this.onMouse(event, "enter"));
+    this.preview.addEventListener("mouseleave", event => this.onMouse(event, "leave"));
     this.preview.addEventListener("mousedown", event => this.onMouse(event, "down"));
     this.preview.addEventListener("mousemove", event => this.onMouse(event, "move"));
     this.preview.addEventListener("mouseup", event => this.onMouse(event, "up"));
@@ -158,6 +160,8 @@ class Z4BiGradientColorPanel extends JSPanel {
 
    onMouse(event, type) {
     switch(type) {
+      case "enter":
+        break;
       case "down":
         for (let biIndex = 0; biIndex < this.biGradientColor.getColorCount(); biIndex++) {
           let biPosition = this.biGradientColor.getColorPositionAtIndex(biIndex);
@@ -232,6 +236,7 @@ class Z4BiGradientColorPanel extends JSPanel {
         }
         break;
       case "up":
+      case "leave":
         this.pressed = false;
         this.drawPreview(false);
         break;
