@@ -298,7 +298,7 @@
 .z4abstractvaluepanel.z4abstractvaluepanel-titled > label:nth-child(1),
 .z4abstractvaluepanel.z4abstractvaluepanel-titled.z4abstractrandomvaluepanel > .z4signedvaluepanel:nth-child(1) > label:nth-child(1) {
   font-weight: bold;
-}.z4bigradientcolorprogressionpanel {
+}/*.z4bigradientcolorprogressionpanel {
 }
 
 .z4bigradientcolorprogressionpanel .z4bigradientcolorprogressionpanel-radio img {
@@ -313,7 +313,7 @@
 }
 .z4bigradientcolorprogressionpanel .z4bigradientcolorprogressionpanel-radio:nth-child(4) img {
   content: url(../image/color/z4bigradientcolorprogressionbehavior_random.svg);
-}
+}*/
 .z4canvas {
   overflow: scroll;
   display: grid;
@@ -381,7 +381,7 @@
 }
 .z4fillingpanel div label:nth-child(9) img {
   content: url(../image/filling/fill_bigradientcolor.gif);
-}.z4gradientcolorprogressionpanel {
+}/*.z4gradientcolorprogressionpanel {
 }
 
 .z4gradientcolorprogressionpanel .z4gradientcolorprogressionpanel-radio img {
@@ -399,7 +399,7 @@
 }
 .z4gradientcolorprogressionpanel .z4gradientcolorprogressionpanel-radio:nth-child(4) img {
   content: url(../image/color/z4gradientcolorprogressionbehavior_random.svg);
-}
+}*/
 .z4historypreview {
   margin-right: 2px;
 }
