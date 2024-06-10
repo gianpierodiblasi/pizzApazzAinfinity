@@ -1,19 +1,15 @@
 /**
- * The common parent of all point iterators
+ * The tool to perform a drawing
  *
  * @author gianpiero.diblasi
  */
-class Z4PointIterator extends Z4Nextable {
+class Z4DrawingTool extends Z4Nextable {
 
-  /**
-   * The current drawing point
-   */
-   z4DrawingPoint = null;
+   pointIterator = null;
 
-  /**
-   * true if this Z4PointIterator has another point, false otherwise
-   */
-   hasNext = false;
+   painter = null;
+
+   spatioTemporalColor = null;
 
   /**
    * Performs a drawing action
@@ -25,9 +21,21 @@ class Z4PointIterator extends Z4Nextable {
    * otherwise
    */
    drawAction(action, x, y) {
+    return this.pointIterator.drawAction(action, x, y);
   }
 
    next() {
+    return this.pointIterator.next();
+  }
+
+  /**
+   * Performs a drawing
+   *
+   * @param context The context to use to perform the drawing
+   * @param drawingPoint The point where to perform the drawing
+   */
+   draw(context, drawingPoint) {
+    this.painter.draw(context, drawingPoint, this.spatioTemporalColor);
   }
 
   /**
@@ -38,6 +46,7 @@ class Z4PointIterator extends Z4Nextable {
    * otherwise
    */
    isInfinitePointGenerator() {
+    return this.pointIterator.isInfinitePointGenerator();
   }
 
   /**
@@ -47,5 +56,14 @@ class Z4PointIterator extends Z4Nextable {
    * milliseconds)
    */
    getInfinitePointGeneratorSleep() {
+    return this.pointIterator.getInfinitePointGeneratorSleep();
+  }
+
+   toJSON() {
+    let json = new Object();
+    json["pointIterator"] = this.pointIterator;
+    json["painter"] = this.painter;
+    json["spatioTemporalColor"] = this.spatioTemporalColor;
+    return json;
   }
 }

@@ -105,17 +105,6 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
 
       this.shape2DPainterUI.setGradientColor(v);
     };
-
-    if (Z4Loader.touch) {
-      this.canvas.ontouchstart = (event) -> this.manageStart(event);
-      this.canvas.ontouchmove = (event) -> this.manageContinue(event);
-      this.canvas.ontouchend = (event) -> this.manageStop(event);
-    } else {
-      this.canvas.onmousedown = (event) -> this.manageStart(event);
-      this.canvas.onmousemove = (event) -> this.manageContinue(event);
-      this.canvas.onmouseup = (event) -> this.manageStop(event);
-      this.canvas.onmouseleave = (event) -> this.manageStop(event);
-    }
   }
 
   private void configTabs() {
@@ -338,54 +327,6 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
     this.canvasCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
     this.canvasCtx.drawImage(this.offscreenCanvas, 0, 0);
     this.canvasCtx.restore();
-  }
-
-  @Override
-  public void dispose() {
-    this.disposeDevicePixelRatio();
-    this.resizeObserver.unobserve(this.canvas);
-
-    this.stamperUI.dispose();
-    this.tracerUI.dispose();
-    this.airbrushUI.dispose();
-    this.spirographUI.dispose();
-
-    this.shape2DPainterUI.dispose();
-  }
-
-  private Object manageStart(Event event) {
-    this.mouseDown = true;
-    this.manage(true, event, Z4Action.START);
-    return null;
-  }
-
-  private Object manageContinue(Event event) {
-    this.manage(this.mouseDown, event, Z4Action.CONTINUE);
-    return null;
-  }
-
-  private Object manageStop(Event event) {
-    if (this.mouseDown) {
-      this.mouseDown = false;
-      this.manage(true, event, Z4Action.STOP);
-    }
-    return null;
-  }
-
-  private void convertCoordinates(Event event) {
-    if ($exists(((TouchEvent) event).changedTouches)) {
-      event.$set("pageX", ((TouchEvent) event).changedTouches.$get(0).pageX);
-      event.$set("pageY", ((TouchEvent) event).changedTouches.$get(0).pageY);
-    }
-    event.preventDefault();
-  }
-
-  private void manage(boolean doIt, Event event, Z4Action action) {
-    this.convertCoordinates(event);
-
-    if (doIt && this.pointIterator.draw(action, (Double) event.$get("pageX") - this.canvasRect.left, (Double) event.$get("pageY") - this.canvasRect.top)) {
-      this.iteratePoint();
-    }
   }
 
   private void iteratePoint() {

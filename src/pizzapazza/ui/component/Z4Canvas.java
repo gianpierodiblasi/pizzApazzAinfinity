@@ -19,11 +19,14 @@ import javascript.util.fsa.FileSystemFileHandle;
 import javascript.util.fsa.FileSystemWritableFileStreamCreateOptions;
 import pizzapazza.Z4Layer;
 import pizzapazza.Z4Paper;
+import pizzapazza.iterator.Z4PointIteratorDrawingAction;
+import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonFilePanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
 import pizzapazza.util.Z4Constants;
+import pizzapazza.util.Z4DrawingTool;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import simulation.dom.$Canvas;
@@ -37,6 +40,7 @@ import simulation.js.$Apply_2_Void;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.navigator;
 import static simulation.js.$Globals.parseInt;
+import static simulation.js.$Globals.setTimeout;
 import simulation.js.$Object;
 import simulation.jszip.$JSZip;
 
@@ -67,6 +71,8 @@ public class Z4Canvas extends JSComponent {
 
   private final Z4Paper paper = new Z4Paper();
   private Z4Layer selectedLayer;
+
+  private Z4DrawingTool drawingTool;
 
   /**
    * Creates the object
@@ -911,22 +917,62 @@ public class Z4Canvas extends JSComponent {
   }
 
   private void onMouse(MouseEvent event, String type) {
+    double x = Math.min(this.width, Math.max(0, event.offsetX / this.zoom));
+    double y = Math.min(this.height, Math.max(0, event.offsetY / this.zoom));
+
     switch (type) {
       case "enter":
         this.pressed = event.buttons == 1;
+        if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.CONTINUE, x, y)) {
+          this.iteratePoint();
+        }
         break;
       case "down":
         this.pressed = true;
+        if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.START, x, y)) {
+          this.iteratePoint();
+        }
         break;
       case "move":
-        this.statusPanel.setMousePosition(parseInt(Math.max(0, event.offsetX / this.zoom)), parseInt(Math.max(0, event.offsetY / this.zoom)));
+        this.statusPanel.setMousePosition(parseInt(x), parseInt(y));
+
+        if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.CONTINUE, x, y)) {
+          this.iteratePoint();
+        }
         break;
       case "up":
         this.pressed = false;
+        if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
+          this.iteratePoint();
+        }
         break;
       case "leave":
         this.pressed = false;
+        if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
+          this.iteratePoint();
+        }
         break;
+    }
+  }
+
+  private void iteratePoint() {
+    Z4DrawingPoint next;
+    while ((next = this.drawingTool.next()) != null) {
+      if (next.drawBounds) {
+        this.ctx.save();
+        this.ctx.translate(next.z4Vector.x0, next.z4Vector.y0);
+        this.ctx.rotate(next.z4Vector.phase);
+        this.drawingTool.draw(this.ctx, next);
+        this.ctx.restore();
+      } else {
+        this.selectedLayer.drawTool(this.drawingTool, next);
+        this.ribbonHistoryPanel.saveHistory("standard");
+        this.drawCanvas();
+      }
+    }
+
+    if (this.drawingTool.isInfinitePointGenerator() && this.pressed) {
+      setTimeout(() -> this.iteratePoint(), this.drawingTool.getInfinitePointGeneratorSleep());
     }
   }
 }

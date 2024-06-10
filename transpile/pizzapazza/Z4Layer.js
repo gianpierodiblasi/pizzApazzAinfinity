@@ -165,6 +165,7 @@ class Z4Layer {
 
   /**
    * Checks if the hidden property is set
+   *
    * @return true if the hidden property is set, false otherwise
    */
    isHidden() {
@@ -233,6 +234,20 @@ class Z4Layer {
       ctx.drawImage(this.offscreen, noOffset ? 0 : this.offsetX, noOffset ? 0 : this.offsetY);
       ctx.restore();
     }
+  }
+
+  /**
+   * Performs a drawing
+   *
+   * @param drawingTool The tool to perform the drawing
+   * @param drawingPoint The point where to perform the drawing
+   */
+   drawTool(drawingTool, drawingPoint) {
+    this.offscreenCtx.save();
+    this.offscreenCtx.translate(drawingPoint.z4Vector.x0 - this.offsetX, drawingPoint.z4Vector.y0 - this.offsetY);
+    this.offscreenCtx.rotate(drawingPoint.z4Vector.phase);
+    drawingTool.draw(this.offscreenCtx, drawingPoint);
+    this.offscreenCtx.restore();
   }
 
   /**

@@ -11,6 +11,8 @@ import jsweet.util.union.Union4;
 import pizzapazza.color.Z4BiGradientColor;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.filler.Z4AbstractFiller;
+import pizzapazza.math.Z4DrawingPoint;
+import pizzapazza.util.Z4DrawingTool;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
 import simulation.dom.$OffscreenCanvas;
@@ -188,7 +190,8 @@ public class Z4Layer {
 
   /**
    * Checks if the hidden property is set
-   * @return true if the hidden property is set, false otherwise 
+   *
+   * @return true if the hidden property is set, false otherwise
    */
   public boolean isHidden() {
     return this.hidden;
@@ -256,6 +259,20 @@ public class Z4Layer {
       ctx.drawImage(this.offscreen, noOffset ? 0 : this.offsetX, noOffset ? 0 : this.offsetY);
       ctx.restore();
     }
+  }
+
+  /**
+   * Performs a drawing
+   *
+   * @param drawingTool The tool to perform the drawing
+   * @param drawingPoint The point where to perform the drawing
+   */
+  public void drawTool(Z4DrawingTool drawingTool, Z4DrawingPoint drawingPoint) {
+    this.offscreenCtx.save();
+    this.offscreenCtx.translate(drawingPoint.z4Vector.x0 - this.offsetX, drawingPoint.z4Vector.y0 - this.offsetY);
+    this.offscreenCtx.rotate(drawingPoint.z4Vector.phase);
+    drawingTool.draw(this.offscreenCtx, drawingPoint);
+    this.offscreenCtx.restore();
   }
 
   /**

@@ -1463,6 +1463,8 @@ class Z4Canvas extends JSComponent {
 
    selectedLayer = null;
 
+   drawingTool = null;
+
   /**
    * Creates the object
    */
@@ -2229,22 +2231,59 @@ class Z4Canvas extends JSComponent {
   }
 
    onMouse(event, type) {
+    let x = Math.min(this.width, Math.max(0, event.offsetX / this.zoom));
+    let y = Math.min(this.height, Math.max(0, event.offsetY / this.zoom));
     switch(type) {
       case "enter":
         this.pressed = event.buttons === 1;
+        if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.CONTINUE, x, y)) {
+          this.iteratePoint();
+        }
         break;
       case "down":
         this.pressed = true;
+        if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.START, x, y)) {
+          this.iteratePoint();
+        }
         break;
       case "move":
-        this.statusPanel.setMousePosition(parseInt(Math.max(0, event.offsetX / this.zoom)), parseInt(Math.max(0, event.offsetY / this.zoom)));
+        this.statusPanel.setMousePosition(parseInt(x), parseInt(y));
+        if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.CONTINUE, x, y)) {
+          this.iteratePoint();
+        }
         break;
       case "up":
         this.pressed = false;
+        if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
+          this.iteratePoint();
+        }
         break;
       case "leave":
         this.pressed = false;
+        if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
+          this.iteratePoint();
+        }
         break;
+    }
+  }
+
+   iteratePoint() {
+    let next = null;
+    while ((next = this.drawingTool.next()) !== null) {
+      if (next.drawBounds) {
+        this.ctx.save();
+        this.ctx.translate(next.z4Vector.x0, next.z4Vector.y0);
+        this.ctx.rotate(next.z4Vector.phase);
+        this.drawingTool.draw(this.ctx, next);
+        this.ctx.restore();
+      } else {
+        this.selectedLayer.drawTool(this.drawingTool, next);
+        this.ribbonHistoryPanel.saveHistory("standard");
+        this.drawCanvas();
+      }
+    }
+    if (this.drawingTool.isInfinitePointGenerator() && this.pressed) {
+      setTimeout(() => this.iteratePoint(), this.drawingTool.getInfinitePointGeneratorSleep());
     }
   }
 }
@@ -9255,25 +9294,6 @@ class Z4SpatioTemporalColor extends Z4JSONable {
   }
 }
 /**
- * The common parent of all point iterators
- *
- * @author gianpiero.diblasi
- */
-class Z4PointIterator extends Z4JSONable {
-
-  /**
-   * Performs a drawing action
-   *
-   * @param action The action
-   * @param x The x-axis coordinate of the drawing action
-   * @param y The y-axis coordinate of the drawing action
-   * @return true if the painting is modified by the drawing action, false
-   * otherwise
-   */
-   draw(action, x, y) {
-  }
-}
-/**
  * The common interface for objects able to provide a "next" value
  *
  * @author gianpiero.diblasi
@@ -9287,6 +9307,57 @@ class Z4Nextable extends Z4JSONable {
    * @return The next value
    */
    next() {
+  }
+}
+/**
+ * The common parent of all point iterators
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4PointIterator extends Z4Nextable {
+
+  /**
+   * The current drawing point
+   */
+   z4DrawingPoint = null;
+
+  /**
+   * true if this Z4PointIterator has another point, false otherwise
+   */
+   hasNext = false;
+
+  /**
+   * Performs a drawing action
+   *
+   * @param action The action
+   * @param x The x-axis coordinate of the drawing action
+   * @param y The y-axis coordinate of the drawing action
+   * @return true if the painting is modified by the drawing action, false
+   * otherwise
+   */
+   drawAction(action, x, y) {
+  }
+
+   next() {
+  }
+
+  /**
+   * Checks if this Z4PointIterator is an infinite point generator (for example
+   * an airbrush)
+   *
+   * @return true if this Z4PointIterator is an infinite point generator, false
+   * otherwise
+   */
+   isInfinitePointGenerator() {
+  }
+
+  /**
+   * Returns the sleeping time between a point generation and the successive
+   *
+   * @return The sleeping time between a point generation and the successive (in
+   * milliseconds)
+   */
+   getInfinitePointGeneratorSleep() {
   }
 }
 /**
@@ -9718,6 +9789,75 @@ class Z4SignedValue extends Z4Nextable {
   }
 }
 /**
+ * The tool to perform a drawing
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4DrawingTool extends Z4Nextable {
+
+   pointIterator = null;
+
+   painter = null;
+
+   spatioTemporalColor = null;
+
+  /**
+   * Performs a drawing action
+   *
+   * @param action The action
+   * @param x The x-axis coordinate of the drawing action
+   * @param y The y-axis coordinate of the drawing action
+   * @return true if the painting is modified by the drawing action, false
+   * otherwise
+   */
+   drawAction(action, x, y) {
+    return this.pointIterator.drawAction(action, x, y);
+  }
+
+   next() {
+    return this.pointIterator.next();
+  }
+
+  /**
+   * Performs a drawing
+   *
+   * @param context The context to use to perform the drawing
+   * @param drawingPoint The point where to perform the drawing
+   */
+   draw(context, drawingPoint) {
+    this.painter.draw(context, drawingPoint, this.spatioTemporalColor);
+  }
+
+  /**
+   * Checks if this Z4PointIterator is an infinite point generator (for example
+   * an airbrush)
+   *
+   * @return true if this Z4PointIterator is an infinite point generator, false
+   * otherwise
+   */
+   isInfinitePointGenerator() {
+    return this.pointIterator.isInfinitePointGenerator();
+  }
+
+  /**
+   * Returns the sleeping time between a point generation and the successive
+   *
+   * @return The sleeping time between a point generation and the successive (in
+   * milliseconds)
+   */
+   getInfinitePointGeneratorSleep() {
+    return this.pointIterator.getInfinitePointGeneratorSleep();
+  }
+
+   toJSON() {
+    let json = new Object();
+    json["pointIterator"] = this.pointIterator;
+    json["painter"] = this.painter;
+    json["spatioTemporalColor"] = this.spatioTemporalColor;
+    return json;
+  }
+}
+/**
  * The common interface for objects able to provide a "next" value by means of a
  * parameter
  *
@@ -9856,6 +9996,16 @@ class Z4Rotation extends Z4NextableWithParam {
  * @author gianpiero.diblasi
  */
 class Z4Painter extends Z4JSONable {
+
+  /**
+   * Performs a drawing
+   *
+   * @param context The context to use to perform the drawing
+   * @param drawingPoint The point where to perform the drawing
+   * @param spatioTemporalColor The color to use to perform the drawing
+   */
+   draw(context, drawingPoint, spatioTemporalColor) {
+  }
 }
 /**
  * The object representing a layer
@@ -10024,6 +10174,7 @@ class Z4Layer {
 
   /**
    * Checks if the hidden property is set
+   *
    * @return true if the hidden property is set, false otherwise
    */
    isHidden() {
@@ -10092,6 +10243,20 @@ class Z4Layer {
       ctx.drawImage(this.offscreen, noOffset ? 0 : this.offsetX, noOffset ? 0 : this.offsetY);
       ctx.restore();
     }
+  }
+
+  /**
+   * Performs a drawing
+   *
+   * @param drawingTool The tool to perform the drawing
+   * @param drawingPoint The point where to perform the drawing
+   */
+   drawTool(drawingTool, drawingPoint) {
+    this.offscreenCtx.save();
+    this.offscreenCtx.translate(drawingPoint.z4Vector.x0 - this.offsetX, drawingPoint.z4Vector.y0 - this.offsetY);
+    this.offscreenCtx.rotate(drawingPoint.z4Vector.phase);
+    drawingTool.draw(this.offscreenCtx, drawingPoint);
+    this.offscreenCtx.restore();
   }
 
   /**

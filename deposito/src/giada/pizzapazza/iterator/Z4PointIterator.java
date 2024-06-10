@@ -22,19 +22,9 @@ public abstract class Z4PointIterator {
   protected Z4Rotation rotation = Z4Rotation.fixed();
 
   /**
-   * The current Z4Point
-   */
-  protected Z4Point z4Point = new Z4Point();
-
-  /**
    * The current "utility" point
    */
   protected $Object P = new $Object();
-
-  /**
-   * true if this Z4PointIterator has another point, false otherwise
-   */
-  protected boolean hasNext = false;
 
   /**
    * Creates a Z4PointIterator
@@ -80,35 +70,6 @@ public abstract class Z4PointIterator {
    */
   public Z4Rotation getRotation() {
     return this.rotation;
-  }
-
-  /**
-   * Returns the next point of the iterator
-   *
-   * @return The next point of the iterator, null if the iterator has no more
-   * points
-   */
-  public abstract Z4Point next();
-
-  /**
-   * Checks if this Z4PointIterator is an infinite point generator (for example
-   * an airbrush)
-   *
-   * @return true if this Z4PointIterator is an infinite point generator, false
-   * otherwise
-   */
-  public boolean isInfinitePointGenerator() {
-    return false;
-  }
-
-  /**
-   * Returns the sleeping time between a point generation and the successive
-   *
-   * @return The sleeping time between a point generation and the successive (in
-   * milliseconds)
-   */
-  public double getInfinitePointGeneratorSleep() {
-    return 0;
   }
 
   /**

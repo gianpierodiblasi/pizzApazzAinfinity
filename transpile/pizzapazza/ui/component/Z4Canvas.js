@@ -39,6 +39,8 @@ class Z4Canvas extends JSComponent {
 
    selectedLayer = null;
 
+   drawingTool = null;
+
   /**
    * Creates the object
    */
@@ -805,22 +807,59 @@ class Z4Canvas extends JSComponent {
   }
 
    onMouse(event, type) {
+    let x = Math.min(this.width, Math.max(0, event.offsetX / this.zoom));
+    let y = Math.min(this.height, Math.max(0, event.offsetY / this.zoom));
     switch(type) {
       case "enter":
         this.pressed = event.buttons === 1;
+        if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.CONTINUE, x, y)) {
+          this.iteratePoint();
+        }
         break;
       case "down":
         this.pressed = true;
+        if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.START, x, y)) {
+          this.iteratePoint();
+        }
         break;
       case "move":
-        this.statusPanel.setMousePosition(parseInt(Math.max(0, event.offsetX / this.zoom)), parseInt(Math.max(0, event.offsetY / this.zoom)));
+        this.statusPanel.setMousePosition(parseInt(x), parseInt(y));
+        if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.CONTINUE, x, y)) {
+          this.iteratePoint();
+        }
         break;
       case "up":
         this.pressed = false;
+        if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
+          this.iteratePoint();
+        }
         break;
       case "leave":
         this.pressed = false;
+        if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
+          this.iteratePoint();
+        }
         break;
+    }
+  }
+
+   iteratePoint() {
+    let next = null;
+    while ((next = this.drawingTool.next()) !== null) {
+      if (next.drawBounds) {
+        this.ctx.save();
+        this.ctx.translate(next.z4Vector.x0, next.z4Vector.y0);
+        this.ctx.rotate(next.z4Vector.phase);
+        this.drawingTool.draw(this.ctx, next);
+        this.ctx.restore();
+      } else {
+        this.selectedLayer.drawTool(this.drawingTool, next);
+        this.ribbonHistoryPanel.saveHistory("standard");
+        this.drawCanvas();
+      }
+    }
+    if (this.drawingTool.isInfinitePointGenerator() && this.pressed) {
+      setTimeout(() => this.iteratePoint(), this.drawingTool.getInfinitePointGeneratorSleep());
     }
   }
 }
