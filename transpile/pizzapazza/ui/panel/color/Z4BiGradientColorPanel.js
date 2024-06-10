@@ -334,9 +334,6 @@ class Z4BiGradientColorPanel extends JSPanel {
     this.ctx.stroke();
   }
 
-   getStrokeStyle(style) {
-    return style;
-  }
   /**
    * Sets the visibility of the space and time labels
    *

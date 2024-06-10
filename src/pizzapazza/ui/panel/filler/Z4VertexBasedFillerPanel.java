@@ -14,6 +14,7 @@ import pizzapazza.filler.Z4PolygonFiller;
 import pizzapazza.filler.Z4StarFiller;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
+import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
@@ -207,7 +208,7 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       ctx.moveTo(mappedPoints.$get(0).x, mappedPoints.$get(0).y);
       ctx.lineTo(mappedPoints.$get(2).x, mappedPoints.$get(2).y);
     }
-    ctx.strokeStyle = this.$getStrokeStyle("black");
+    ctx.strokeStyle = Z4Constants.$getStyle("black");
     ctx.setLineDash(dash);
     ctx.stroke();
 
@@ -220,7 +221,7 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       ctx.moveTo(mappedPoints.$get(0).x, mappedPoints.$get(0).y);
       ctx.lineTo(mappedPoints.$get(2).x, mappedPoints.$get(2).y);
     }
-    ctx.strokeStyle = this.$getStrokeStyle("white");
+    ctx.strokeStyle = Z4Constants.$getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();
   }

@@ -1,7 +1,10 @@
 package pizzapazza.util;
 
+import def.dom.CanvasGradient;
+import def.dom.CanvasPattern;
 import def.js.Array;
 import javascript.util.fsa.FilePickerOptionsType;
+import jsweet.util.union.Union4;
 
 /**
  * Constants of the applications
@@ -129,5 +132,19 @@ public class Z4Constants {
 
     filePickerOptionsType.pushAccept(mime, extensions);
     array.push(filePickerOptionsType);
+  }
+
+  private static String getStyle(String style) {
+    return style;
+  }
+
+  /**
+   * Dummy method to get a style
+   *
+   * @param style The style
+   * @return The style
+   */
+  public static Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getStyle(String style) {
+    return null;
   }
 }

@@ -1,7 +1,7 @@
 package pizzapazza.color;
 
 import javascript.awt.Color;
-import pizzapazza.Z4JSONable;
+import pizzapazza.util.Z4JSONable;
 import static simulation.js.$Globals.$exists;
 import simulation.js.$Object;
 

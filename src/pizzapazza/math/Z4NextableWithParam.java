@@ -1,6 +1,6 @@
 package pizzapazza.math;
 
-import pizzapazza.Z4JSONable;
+import pizzapazza.util.Z4JSONable;
 
 /**
  * The common interface for objects able to provide a "next" value by means of a

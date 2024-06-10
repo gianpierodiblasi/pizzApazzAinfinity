@@ -8,6 +8,7 @@ import pizzapazza.filler.Z4BoundaryBehavior;
 import pizzapazza.filler.Z4SinusoidalFiller;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
+import pizzapazza.util.Z4Constants;
 import simulation.dom.$CanvasRenderingContext2D;
 
 /**
@@ -179,7 +180,7 @@ public class Z4SinusoidalFillerPanel extends Z4AbstractFillerPanel {
     ctx.lineTo(mappedPoints.$get(2).x, mappedPoints.$get(2).y);
     ctx.moveTo(mappedPoints.$get(0).x, mappedPoints.$get(0).y);
     ctx.lineTo(mappedPoints.$get(3).x, mappedPoints.$get(3).y);
-    ctx.strokeStyle = this.$getStrokeStyle("black");
+    ctx.strokeStyle = Z4Constants.$getStyle("black");
     ctx.setLineDash(dash);
     ctx.stroke();
 
@@ -192,7 +193,7 @@ public class Z4SinusoidalFillerPanel extends Z4AbstractFillerPanel {
     ctx.lineTo(mappedPoints.$get(2).x, mappedPoints.$get(2).y);
     ctx.moveTo(mappedPoints.$get(0).x, mappedPoints.$get(0).y);
     ctx.lineTo(mappedPoints.$get(3).x, mappedPoints.$get(3).y);
-    ctx.strokeStyle = this.$getStrokeStyle("white");
+    ctx.strokeStyle = Z4Constants.$getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();
   }

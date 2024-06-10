@@ -1,7 +1,5 @@
 package pizzapazza.color;
 
-import def.dom.CanvasGradient;
-import def.dom.CanvasPattern;
 import static def.dom.Globals.console;
 import static def.dom.Globals.document;
 import def.dom.ImageData;
@@ -11,7 +9,6 @@ import javascript.swing.JSButton;
 import javascript.swing.JSComponent;
 import javascript.swing.JSFrame;
 import javascript.swing.JSPanel;
-import jsweet.util.union.Union4;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.js.$Object;
@@ -124,13 +121,5 @@ public class TestGradientColor extends JSFrame {
     }
 
     this.ctx.putImageData(imageData, 0, 0);
-  }
-
-  private String getFillStyle(String style) {
-    return style;
-  }
-
-  private Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getFillStyle(String style) {
-    return null;
   }
 }

@@ -1,4 +1,4 @@
-package pizzapazza;
+package pizzapazza.util;
 
 import simulation.js.$Object;
 

@@ -1,18 +1,14 @@
-package pizzapazza;
+package pizzapazza.util;
 
 import def.dom.Blob;
-import def.dom.CanvasGradient;
-import def.dom.CanvasPattern;
 import def.dom.ImageData;
 import javascript.awt.Color;
 import javascript.awt.Dimension;
 import javascript.awt.Point;
-import jsweet.util.union.Union4;
 import pizzapazza.color.Z4BiGradientColor;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.filler.Z4AbstractFiller;
 import pizzapazza.math.Z4DrawingPoint;
-import pizzapazza.util.Z4DrawingTool;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
 import simulation.dom.$OffscreenCanvas;
@@ -58,7 +54,7 @@ public class Z4Layer {
     this.offscreenCtx = this.offscreen.getContext("2d");
 
     if (filling instanceof Color) {
-      this.offscreenCtx.fillStyle = this.$getFillStyle(((Color) filling).getRGBA_HEX());
+      this.offscreenCtx.fillStyle = Z4Constants.$getStyle(((Color) filling).getRGBA_HEX());
       this.offscreenCtx.fillRect(0, 0, width, height);
     } else if (filling instanceof Z4AbstractFiller) {
       ImageData imageData = this.offscreenCtx.createImageData(width, height);
@@ -88,14 +84,6 @@ public class Z4Layer {
     this.offsetY = (containerHeight - height) / 2;
     this.width = width;
     this.height = height;
-  }
-
-  private String getFillStyle(String style) {
-    return style;
-  }
-
-  private Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getFillStyle(String style) {
-    return null;
   }
 
   /**

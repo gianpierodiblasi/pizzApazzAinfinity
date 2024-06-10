@@ -7,6 +7,7 @@ import pizzapazza.filler.Z4AbstractFiller;
 import pizzapazza.filler.Z4BezierFiller;
 import pizzapazza.filler.Z4BoundaryBehavior;
 import pizzapazza.math.Z4Math;
+import pizzapazza.util.Z4Constants;
 import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.parseInt;
 
@@ -77,7 +78,7 @@ public class Z4BezierFillerPanel extends Z4AbstractFillerPanel {
     ctx.lineTo(mappedPoints.$get(3).x, mappedPoints.$get(3).y);
     ctx.moveTo(mappedPoints.$get(0).x, mappedPoints.$get(0).y);
     ctx.lineTo(mappedPoints.$get(4).x, mappedPoints.$get(4).y);
-    ctx.strokeStyle = this.$getStrokeStyle("black");
+    ctx.strokeStyle = Z4Constants.$getStyle("black");
     ctx.setLineDash(dash);
     ctx.stroke();
 
@@ -90,7 +91,7 @@ public class Z4BezierFillerPanel extends Z4AbstractFillerPanel {
     ctx.lineTo(mappedPoints.$get(3).x, mappedPoints.$get(3).y);
     ctx.moveTo(mappedPoints.$get(0).x, mappedPoints.$get(0).y);
     ctx.lineTo(mappedPoints.$get(4).x, mappedPoints.$get(4).y);
-    ctx.strokeStyle = this.$getStrokeStyle("white");
+    ctx.strokeStyle = Z4Constants.$getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();
   }

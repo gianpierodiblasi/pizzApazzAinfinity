@@ -328,29 +328,4 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
     this.canvasCtx.drawImage(this.offscreenCanvas, 0, 0);
     this.canvasCtx.restore();
   }
-
-  private void iteratePoint() {
-    Z4Point next;
-    while ((next = this.pointIterator.next()) != null) {
-      Z4Vector vector = next.getZ4Vector();
-      $CanvasRenderingContext2D ctx = next.isDrawBounds() ? this.canvasCtx : this.offscreenCtx;
-
-      ctx.save();
-      ctx.translate(vector.getX0(), vector.getY0());
-      ctx.rotate(vector.getPhase());
-      this.painter.draw(ctx, next, this.gradientColor);
-      ctx.restore();
-
-      if (!next.isDrawBounds()) {
-        this.canvasCtx.save();
-        this.canvasCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
-        this.canvasCtx.drawImage(this.offscreenCanvas, 0, 0);
-        this.canvasCtx.restore();
-      }
-    }
-
-    if (this.pointIterator.isInfinitePointGenerator() && this.mouseDown) {
-      setTimeout(() -> this.iteratePoint(), this.pointIterator.getInfinitePointGeneratorSleep());
-    }
-  }
 }

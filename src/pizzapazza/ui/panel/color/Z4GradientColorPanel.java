@@ -1,7 +1,5 @@
 package pizzapazza.ui.panel.color;
 
-import def.dom.CanvasGradient;
-import def.dom.CanvasPattern;
 import static def.dom.Globals.document;
 import def.dom.ImageData;
 import def.dom.MouseEvent;
@@ -19,10 +17,10 @@ import javascript.swing.JSSpinner;
 import javascript.swing.SpinnerNumberModel;
 import javascript.swing.event.ChangeEvent;
 import javascript.swing.event.ChangeListener;
-import jsweet.util.union.Union4;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.math.Z4Math;
 import pizzapazza.ui.component.Z4ColorPreview;
+import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
@@ -260,7 +258,7 @@ public class Z4GradientColorPanel extends JSPanel {
     this.ctx.beginPath();
     this.ctx.arc(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, Z4GradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
     this.ctx.closePath();
-    this.ctx.strokeStyle = this.$getStrokeStyle(index == this.selectedIndex ? "red" : "black");
+    this.ctx.strokeStyle = Z4Constants.$getStyle(index == this.selectedIndex ? "red" : "black");
     this.ctx.setLineDash(dash);
     this.ctx.stroke();
 
@@ -269,17 +267,9 @@ public class Z4GradientColorPanel extends JSPanel {
     this.ctx.beginPath();
     this.ctx.arc(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, Z4GradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
     this.ctx.closePath();
-    this.ctx.strokeStyle = this.$getStrokeStyle("white");
+    this.ctx.strokeStyle = Z4Constants.$getStyle("white");
     this.ctx.setLineDash(dash);
     this.ctx.stroke();
-  }
-
-  private String getStrokeStyle(String style) {
-    return style;
-  }
-
-  private Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getStrokeStyle(String style) {
-    return null;
   }
 
   /**

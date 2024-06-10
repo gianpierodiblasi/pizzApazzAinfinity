@@ -1,6 +1,6 @@
 package pizzapazza.color;
 
-import pizzapazza.Z4JSONable;
+import pizzapazza.util.Z4JSONable;
 import simulation.js.$Object;
 
 /**

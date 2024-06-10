@@ -1,7 +1,5 @@
 package pizzapazza.filler;
 
-import def.dom.CanvasGradient;
-import def.dom.CanvasPattern;
 import static def.dom.Globals.console;
 import static def.dom.Globals.document;
 import def.dom.ImageData;
@@ -12,9 +10,9 @@ import javascript.swing.JSCheckBox;
 import javascript.swing.JSComponent;
 import javascript.swing.JSFrame;
 import javascript.swing.JSPanel;
-import jsweet.util.union.Union4;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.math.Z4Math;
+import pizzapazza.util.Z4Constants;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
 
@@ -94,7 +92,7 @@ public class TestStarFiller extends JSFrame {
       this.ctx.fillRect(p1x - 2, p1y - 2, 4, 4);
       this.ctx.fillRect(p2x - 2, p2y - 2, 4, 4);
 
-      this.ctx.strokeStyle = this.$getFillStyle("red");
+      this.ctx.strokeStyle = Z4Constants.$getStyle("red");
       this.ctx.beginPath();
       this.ctx.moveTo(cx, cy);
       this.ctx.lineTo(p1x, p1y);
@@ -105,13 +103,5 @@ public class TestStarFiller extends JSFrame {
       this.ctx.lineTo(p2x, p2y);
       this.ctx.stroke();
     }
-  }
-
-  private String getFillStyle(String style) {
-    return style;
-  }
-
-  private Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getFillStyle(String style) {
-    return null;
   }
 }

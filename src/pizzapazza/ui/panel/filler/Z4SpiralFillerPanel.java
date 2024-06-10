@@ -6,6 +6,7 @@ import pizzapazza.color.Z4GradientColor;
 import pizzapazza.filler.Z4AbstractFiller;
 import pizzapazza.filler.Z4SpiralFiller;
 import pizzapazza.math.Z4Math;
+import pizzapazza.util.Z4Constants;
 import simulation.dom.$CanvasRenderingContext2D;
 
 /**
@@ -59,7 +60,7 @@ public class Z4SpiralFillerPanel extends Z4AbstractFillerPanel {
     ctx.beginPath();
     ctx.moveTo(mappedPoints.$get(0).x, mappedPoints.$get(0).y);
     ctx.lineTo(mappedPoints.$get(1).x, mappedPoints.$get(1).y);
-    ctx.strokeStyle = this.$getStrokeStyle("black");
+    ctx.strokeStyle = Z4Constants.$getStyle("black");
     ctx.setLineDash(dash);
     ctx.stroke();
 
@@ -68,7 +69,7 @@ public class Z4SpiralFillerPanel extends Z4AbstractFillerPanel {
     ctx.beginPath();
     ctx.moveTo(mappedPoints.$get(0).x, mappedPoints.$get(0).y);
     ctx.lineTo(mappedPoints.$get(1).x, mappedPoints.$get(1).y);
-    ctx.strokeStyle = this.$getStrokeStyle("white");
+    ctx.strokeStyle = Z4Constants.$getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();
   }

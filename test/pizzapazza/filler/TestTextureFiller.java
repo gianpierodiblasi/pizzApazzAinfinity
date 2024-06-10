@@ -1,7 +1,5 @@
 package pizzapazza.filler;
 
-import def.dom.CanvasGradient;
-import def.dom.CanvasPattern;
 import def.dom.FileReader;
 import static def.dom.Globals.document;
 import def.dom.ImageData;
@@ -13,7 +11,7 @@ import javascript.swing.JSComponent;
 import javascript.swing.JSFileChooser;
 import javascript.swing.JSFrame;
 import javascript.swing.JSPanel;
-import jsweet.util.union.Union4;
+import pizzapazza.util.Z4Constants;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
@@ -94,19 +92,11 @@ public class TestTextureFiller extends JSFrame {
       this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
       this.ctx.fillRect(px - 2, py - 2, 4, 4);
 
-      this.ctx.strokeStyle = this.$getFillStyle("red");
+      this.ctx.strokeStyle = Z4Constants.$getStyle("red");
       this.ctx.beginPath();
       this.ctx.moveTo(cx, cy);
       this.ctx.lineTo(px, py);
       this.ctx.stroke();
     }
-  }
-
-  private String getFillStyle(String style) {
-    return style;
-  }
-
-  private Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getFillStyle(String style) {
-    return null;
   }
 }

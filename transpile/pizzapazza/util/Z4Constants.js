@@ -100,4 +100,8 @@ class Z4Constants {
     filePickerOptionsType.pushAccept(mime, extensions);
     array.push(filePickerOptionsType);
   }
+
+   getStyle(style) {
+    return style;
+  }
 }

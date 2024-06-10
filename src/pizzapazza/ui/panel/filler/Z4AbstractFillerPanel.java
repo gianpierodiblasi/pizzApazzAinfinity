@@ -1,7 +1,5 @@
 package pizzapazza.ui.panel.filler;
 
-import def.dom.CanvasGradient;
-import def.dom.CanvasPattern;
 import static def.dom.Globals.document;
 import def.dom.ImageData;
 import def.dom.MouseEvent;
@@ -16,7 +14,6 @@ import javascript.swing.JSRadioButton;
 import javascript.swing.JSSlider;
 import javascript.swing.JSSpinner;
 import javascript.swing.SpinnerNumberModel;
-import jsweet.util.union.Union4;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.filler.Z4AbstractFiller;
 import pizzapazza.math.Z4Math;
@@ -375,7 +372,7 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
       this.ctx.beginPath();
       this.ctx.arc(point.x, point.y, Z4AbstractFillerPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
       this.ctx.closePath();
-      this.ctx.strokeStyle = this.$getStrokeStyle(index == this.selectedIndex ? "red" : "black");
+      this.ctx.strokeStyle = Z4Constants.$getStyle(index == this.selectedIndex ? "red" : "black");
       this.ctx.setLineDash(dash);
       this.ctx.stroke();
 
@@ -384,7 +381,7 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
       this.ctx.beginPath();
       this.ctx.arc(point.x, point.y, Z4AbstractFillerPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
       this.ctx.closePath();
-      this.ctx.strokeStyle = this.$getStrokeStyle("white");
+      this.ctx.strokeStyle = Z4Constants.$getStyle("white");
       this.ctx.setLineDash(dash);
       this.ctx.stroke();
     }
@@ -405,24 +402,4 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
    * @param mappedPoints The (mapped) points
    */
   protected abstract void drawObjects($CanvasRenderingContext2D ctx, Array<Point> mappedPoints);
-
-  /**
-   * Dummy method to get a stroke style
-   *
-   * @param style The style
-   * @return The style
-   */
-  protected String getStrokeStyle(String style) {
-    return style;
-  }
-
-  /**
-   * Dummy method to get a stroke style
-   *
-   * @param style The style
-   * @return The style
-   */
-  protected Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getStrokeStyle(String style) {
-    return null;
-  }
 }

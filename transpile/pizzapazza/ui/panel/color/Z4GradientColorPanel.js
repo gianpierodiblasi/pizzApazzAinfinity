@@ -224,9 +224,6 @@ class Z4GradientColorPanel extends JSPanel {
     this.ctx.stroke();
   }
 
-   getStrokeStyle(style) {
-    return style;
-  }
   /**
    * Returns the managed gradient color
    *

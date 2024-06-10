@@ -1,4 +1,4 @@
-package pizzapazza;
+package pizzapazza.util;
 
 import def.js.Array;
 import simulation.dom.$CanvasRenderingContext2D;

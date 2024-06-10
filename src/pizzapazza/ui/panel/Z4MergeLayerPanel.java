@@ -9,9 +9,9 @@ import javascript.swing.JSLabel;
 import javascript.swing.JSPanel;
 import javascript.swing.event.ChangeEvent;
 import javascript.swing.event.ChangeListener;
-import pizzapazza.Z4Layer;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.component.Z4LayerPreview;
+import pizzapazza.util.Z4Layer;
 import pizzapazza.util.Z4Translations;
 import static simulation.js.$Globals.$typeof;
 

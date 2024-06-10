@@ -223,7 +223,7 @@ public class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
     ctx.beginPath();
     ctx.moveTo(mappedPoints.$get(0).x, mappedPoints.$get(0).y);
     ctx.lineTo(mappedPoints.$get(1).x, mappedPoints.$get(1).y);
-    ctx.strokeStyle = this.$getStrokeStyle("black");
+    ctx.strokeStyle = Z4Constants.$getStyle("black");
     ctx.setLineDash(dash);
     ctx.stroke();
 
@@ -232,7 +232,7 @@ public class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
     ctx.beginPath();
     ctx.moveTo(mappedPoints.$get(0).x, mappedPoints.$get(0).y);
     ctx.lineTo(mappedPoints.$get(1).x, mappedPoints.$get(1).y);
-    ctx.strokeStyle = this.$getStrokeStyle("white");
+    ctx.strokeStyle = Z4Constants.$getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();
   }
