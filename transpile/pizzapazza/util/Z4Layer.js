@@ -43,7 +43,7 @@ class Z4Layer {
     this.offscreen = new OffscreenCanvas(width, height);
     this.offscreenCtx = this.offscreen.getContext("2d");
     if (filling instanceof Color) {
-      this.offscreenCtx.fillStyle = this.getFillStyle((filling).getRGBA_HEX());
+      this.offscreenCtx.fillStyle = Z4Constants.getStyle((filling).getRGBA_HEX());
       this.offscreenCtx.fillRect(0, 0, width, height);
     } else if (filling instanceof Z4AbstractFiller) {
       let imageData = this.offscreenCtx.createImageData(width, height);
@@ -71,9 +71,6 @@ class Z4Layer {
     this.height = height;
   }
 
-   getFillStyle(style) {
-    return style;
-  }
   /**
    * Creates a Z4Layer from an image
    *

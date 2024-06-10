@@ -51,7 +51,7 @@ class TestLinearFiller extends JSFrame {
     if (showLines) {
       this.ctx.fillRect(p1x - 2, p1y - 2, 4, 4);
       this.ctx.fillRect(p2x - 2, p2y - 2, 4, 4);
-      this.ctx.strokeStyle = this.getFillStyle("black");
+      this.ctx.strokeStyle = Z4Constants.getStyle("black");
       this.ctx.beginPath();
       this.ctx.moveTo(p1x, p1y);
       this.ctx.lineTo(p2x, p2y);
@@ -61,15 +61,11 @@ class TestLinearFiller extends JSFrame {
       let line1y = (p1y + p2y) / 2;
       let line2x = line1x + 500 * Math.cos(angle);
       let line2y = line1y + 500 * Math.sin(angle);
-      this.ctx.strokeStyle = this.getFillStyle("red");
+      this.ctx.strokeStyle = Z4Constants.getStyle("red");
       this.ctx.beginPath();
       this.ctx.moveTo(line1x, line1y);
       this.ctx.lineTo(line2x, line2y);
       this.ctx.stroke();
     }
-  }
-
-   getFillStyle(style) {
-    return style;
   }
 }

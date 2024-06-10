@@ -322,14 +322,14 @@ class Z4BiGradientColorPanel extends JSPanel {
     this.ctx.beginPath();
     this.ctx.arc(position * this.width, biPosition * this.height, Z4BiGradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
     this.ctx.closePath();
-    this.ctx.strokeStyle = this.getStrokeStyle(biIndex === this.biSelectedIndex && index === this.selectedIndex ? "red" : "black");
+    this.ctx.strokeStyle = Z4Constants.getStyle(biIndex === this.biSelectedIndex && index === this.selectedIndex ? "red" : "black");
     this.ctx.setLineDash(dash);
     this.ctx.stroke();
     dash.push(2.5, 2.5);
     this.ctx.beginPath();
     this.ctx.arc(position * this.width, biPosition * this.height, Z4BiGradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
     this.ctx.closePath();
-    this.ctx.strokeStyle = this.getStrokeStyle("white");
+    this.ctx.strokeStyle = Z4Constants.getStyle("white");
     this.ctx.setLineDash(dash);
     this.ctx.stroke();
   }

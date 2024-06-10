@@ -101,7 +101,7 @@ class Z4Constants {
     array.push(filePickerOptionsType);
   }
 
-   getStyle(style) {
+  static  getStyle(style) {
     return style;
   }
 }

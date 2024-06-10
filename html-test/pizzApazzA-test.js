@@ -190,10 +190,6 @@ class TestBiGradientColor extends JSFrame {
     }
     this.ctx.putImageData(imageData, 0, 0);
   }
-
-   getFillStyle(style) {
-    return style;
-  }
 }
 /**
  * @author gianpiero.diblasi
@@ -291,10 +287,6 @@ class TestGradientColor extends JSFrame {
     }
     this.ctx.putImageData(imageData, 0, 0);
   }
-
-   getFillStyle(style) {
-    return style;
-  }
 }
 /**
  * @author gianpiero.diblasi
@@ -359,16 +351,12 @@ class TestBezierFiller extends JSFrame {
       this.ctx.fillRect(ctrlx1 - 2, ctrly1 - 2, 4, 4);
       this.ctx.fillRect(ctrlx2 - 2, ctrly2 - 2, 4, 4);
       this.ctx.fillRect(x2 - 2, y2 - 2, 4, 4);
-      this.ctx.strokeStyle = this.getFillStyle("red");
+      this.ctx.strokeStyle = Z4Constants.getStyle("red");
       this.ctx.beginPath();
       this.ctx.moveTo(x1, y1);
       this.ctx.bezierCurveTo(ctrlx1, ctrly1, ctrlx2, ctrly2, x2, y2);
       this.ctx.stroke();
     }
-  }
-
-   getFillStyle(style) {
-    return style;
   }
 }
 /**
@@ -417,16 +405,12 @@ class TestConicFiller extends JSFrame {
       let py = cy + 50 * Math.sin(angle);
       this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
       this.ctx.fillRect(px - 2, py - 2, 4, 4);
-      this.ctx.strokeStyle = this.getFillStyle("red");
+      this.ctx.strokeStyle = Z4Constants.getStyle("red");
       this.ctx.beginPath();
       this.ctx.moveTo(cx, cy);
       this.ctx.lineTo(px, py);
       this.ctx.stroke();
     }
-  }
-
-   getFillStyle(style) {
-    return style;
   }
 }
 /**
@@ -488,7 +472,7 @@ class TestEllipticFiller extends JSFrame {
       this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
       this.ctx.fillRect(p1x - 2, p1y - 2, 4, 4);
       this.ctx.fillRect(p2x - 2, p2y - 2, 4, 4);
-      this.ctx.strokeStyle = this.getFillStyle("red");
+      this.ctx.strokeStyle = Z4Constants.getStyle("red");
       this.ctx.beginPath();
       this.ctx.moveTo(cx, cy);
       this.ctx.lineTo(p1x, p1y);
@@ -498,10 +482,6 @@ class TestEllipticFiller extends JSFrame {
       this.ctx.lineTo(p2x, p2y);
       this.ctx.stroke();
     }
-  }
-
-   getFillStyle(style) {
-    return style;
   }
 }
 /**
@@ -557,7 +537,7 @@ class TestLinearFiller extends JSFrame {
     if (showLines) {
       this.ctx.fillRect(p1x - 2, p1y - 2, 4, 4);
       this.ctx.fillRect(p2x - 2, p2y - 2, 4, 4);
-      this.ctx.strokeStyle = this.getFillStyle("black");
+      this.ctx.strokeStyle = Z4Constants.getStyle("black");
       this.ctx.beginPath();
       this.ctx.moveTo(p1x, p1y);
       this.ctx.lineTo(p2x, p2y);
@@ -567,16 +547,12 @@ class TestLinearFiller extends JSFrame {
       let line1y = (p1y + p2y) / 2;
       let line2x = line1x + 500 * Math.cos(angle);
       let line2y = line1y + 500 * Math.sin(angle);
-      this.ctx.strokeStyle = this.getFillStyle("red");
+      this.ctx.strokeStyle = Z4Constants.getStyle("red");
       this.ctx.beginPath();
       this.ctx.moveTo(line1x, line1y);
       this.ctx.lineTo(line2x, line2y);
       this.ctx.stroke();
     }
-  }
-
-   getFillStyle(style) {
-    return style;
   }
 }
 /**
@@ -648,7 +624,7 @@ class TestPolygonFiller extends JSFrame {
         let rotated = Z4Math.rotate(x, y, angle);
         this.ctx.fillRect(cx + rotated.x - 2, cy + rotated.y - 2, 4, 4);
       }
-      this.ctx.strokeStyle = this.getFillStyle("red");
+      this.ctx.strokeStyle = Z4Constants.getStyle("red");
       this.ctx.beginPath();
       this.ctx.moveTo(cx, cy);
       this.ctx.lineTo(p1x, p1y);
@@ -658,10 +634,6 @@ class TestPolygonFiller extends JSFrame {
       this.ctx.lineTo(p2x, p2y);
       this.ctx.stroke();
     }
-  }
-
-   getFillStyle(style) {
-    return style;
   }
 }
 /**
@@ -724,7 +696,7 @@ class TestSinusoidalFiller extends JSFrame {
       this.ctx.fillRect(x - 2, y - 2, 4, 4);
       this.ctx.fillRect(px - 2, py - 2, 4, 4);
       this.ctx.fillRect(ampx - 2, ampy - 2, 4, 4);
-      this.ctx.strokeStyle = this.getFillStyle("red");
+      this.ctx.strokeStyle = Z4Constants.getStyle("red");
       this.ctx.beginPath();
       this.ctx.moveTo(x, y);
       this.ctx.lineTo(px, py);
@@ -734,10 +706,6 @@ class TestSinusoidalFiller extends JSFrame {
       this.ctx.lineTo(ampx, ampy);
       this.ctx.stroke();
     }
-  }
-
-   getFillStyle(style) {
-    return style;
   }
 }
 /**
@@ -787,16 +755,12 @@ class TestSpiralFiller extends JSFrame {
       let py = cy + radius * Math.sin(angle);
       this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
       this.ctx.fillRect(px - 2, py - 2, 4, 4);
-      this.ctx.strokeStyle = this.getFillStyle("red");
+      this.ctx.strokeStyle = Z4Constants.getStyle("red");
       this.ctx.beginPath();
       this.ctx.moveTo(cx, cy);
       this.ctx.lineTo(px, py);
       this.ctx.stroke();
     }
-  }
-
-   getFillStyle(style) {
-    return style;
   }
 }
 /**
@@ -862,7 +826,7 @@ class TestStarFiller extends JSFrame {
       this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
       this.ctx.fillRect(p1x - 2, p1y - 2, 4, 4);
       this.ctx.fillRect(p2x - 2, p2y - 2, 4, 4);
-      this.ctx.strokeStyle = this.getFillStyle("red");
+      this.ctx.strokeStyle = Z4Constants.getStyle("red");
       this.ctx.beginPath();
       this.ctx.moveTo(cx, cy);
       this.ctx.lineTo(p1x, p1y);
@@ -872,10 +836,6 @@ class TestStarFiller extends JSFrame {
       this.ctx.lineTo(p2x, p2y);
       this.ctx.stroke();
     }
-  }
-
-   getFillStyle(style) {
-    return style;
   }
 }
 /**
@@ -942,16 +902,12 @@ class TestTextureFiller extends JSFrame {
     if (showLines) {
       this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
       this.ctx.fillRect(px - 2, py - 2, 4, 4);
-      this.ctx.strokeStyle = this.getFillStyle("red");
+      this.ctx.strokeStyle = Z4Constants.getStyle("red");
       this.ctx.beginPath();
       this.ctx.moveTo(cx, cy);
       this.ctx.lineTo(px, py);
       this.ctx.stroke();
     }
-  }
-
-   getFillStyle(style) {
-    return style;
   }
 }
 /**

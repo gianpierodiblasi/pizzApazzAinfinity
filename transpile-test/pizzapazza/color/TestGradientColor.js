@@ -94,8 +94,4 @@ class TestGradientColor extends JSFrame {
     }
     this.ctx.putImageData(imageData, 0, 0);
   }
-
-   getFillStyle(style) {
-    return style;
-  }
 }

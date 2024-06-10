@@ -61,7 +61,7 @@ class TestStarFiller extends JSFrame {
       this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
       this.ctx.fillRect(p1x - 2, p1y - 2, 4, 4);
       this.ctx.fillRect(p2x - 2, p2y - 2, 4, 4);
-      this.ctx.strokeStyle = this.getFillStyle("red");
+      this.ctx.strokeStyle = Z4Constants.getStyle("red");
       this.ctx.beginPath();
       this.ctx.moveTo(cx, cy);
       this.ctx.lineTo(p1x, p1y);
@@ -71,9 +71,5 @@ class TestStarFiller extends JSFrame {
       this.ctx.lineTo(p2x, p2y);
       this.ctx.stroke();
     }
-  }
-
-   getFillStyle(style) {
-    return style;
   }
 }

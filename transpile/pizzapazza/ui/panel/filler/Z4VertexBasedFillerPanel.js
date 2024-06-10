@@ -151,7 +151,7 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
       ctx.lineTo(mappedPoints[2].x, mappedPoints[2].y);
     }
-    ctx.strokeStyle = this.getStrokeStyle("black");
+    ctx.strokeStyle = Z4Constants.getStyle("black");
     ctx.setLineDash(dash);
     ctx.stroke();
     dash.push(2.5, 2.5);
@@ -162,7 +162,7 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
       ctx.lineTo(mappedPoints[2].x, mappedPoints[2].y);
     }
-    ctx.strokeStyle = this.getStrokeStyle("white");
+    ctx.strokeStyle = Z4Constants.getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();
   }

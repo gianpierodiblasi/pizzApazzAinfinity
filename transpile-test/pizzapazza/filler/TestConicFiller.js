@@ -44,15 +44,11 @@ class TestConicFiller extends JSFrame {
       let py = cy + 50 * Math.sin(angle);
       this.ctx.fillRect(cx - 2, cy - 2, 4, 4);
       this.ctx.fillRect(px - 2, py - 2, 4, 4);
-      this.ctx.strokeStyle = this.getFillStyle("red");
+      this.ctx.strokeStyle = Z4Constants.getStyle("red");
       this.ctx.beginPath();
       this.ctx.moveTo(cx, cy);
       this.ctx.lineTo(px, py);
       this.ctx.stroke();
     }
-  }
-
-   getFillStyle(style) {
-    return style;
   }
 }

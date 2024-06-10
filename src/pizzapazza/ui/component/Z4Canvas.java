@@ -947,10 +947,13 @@ public class Z4Canvas extends JSComponent {
         }
         break;
       case "leave":
-        this.pressed = false;
-        if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
+        if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
+          this.pressed = false;
           this.iteratePoint(Z4PointIteratorDrawingAction.STOP);
+        } else {
+          this.pressed = false;
         }
+
         break;
     }
   }

@@ -29,7 +29,7 @@ public class Z4ArrowPainter implements Z4Painter {
     context.arc(0, 0, 2, 0, Z4Math.TWO_PI);
     context.stroke();
 
-//    context.strokeStyle = Z4Color.$getFillStyle(this.bool ? "blue" : "red");
+    context.strokeStyle = Z4Constants.$getStyle(this.bool ? "blue" : "red");
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(x, 0);

@@ -58,7 +58,7 @@ class TestSinusoidalFiller extends JSFrame {
       this.ctx.fillRect(x - 2, y - 2, 4, 4);
       this.ctx.fillRect(px - 2, py - 2, 4, 4);
       this.ctx.fillRect(ampx - 2, ampy - 2, 4, 4);
-      this.ctx.strokeStyle = this.getFillStyle("red");
+      this.ctx.strokeStyle = Z4Constants.getStyle("red");
       this.ctx.beginPath();
       this.ctx.moveTo(x, y);
       this.ctx.lineTo(px, py);
@@ -68,9 +68,5 @@ class TestSinusoidalFiller extends JSFrame {
       this.ctx.lineTo(ampx, ampy);
       this.ctx.stroke();
     }
-  }
-
-   getFillStyle(style) {
-    return style;
   }
 }

@@ -61,15 +61,11 @@ class TestBezierFiller extends JSFrame {
       this.ctx.fillRect(ctrlx1 - 2, ctrly1 - 2, 4, 4);
       this.ctx.fillRect(ctrlx2 - 2, ctrly2 - 2, 4, 4);
       this.ctx.fillRect(x2 - 2, y2 - 2, 4, 4);
-      this.ctx.strokeStyle = this.getFillStyle("red");
+      this.ctx.strokeStyle = Z4Constants.getStyle("red");
       this.ctx.beginPath();
       this.ctx.moveTo(x1, y1);
       this.ctx.bezierCurveTo(ctrlx1, ctrly1, ctrlx2, ctrly2, x2, y2);
       this.ctx.stroke();
     }
-  }
-
-   getFillStyle(style) {
-    return style;
   }
 }

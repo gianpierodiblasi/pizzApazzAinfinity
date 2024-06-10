@@ -2259,9 +2259,11 @@ class Z4Canvas extends JSComponent {
         }
         break;
       case "leave":
-        this.pressed = false;
-        if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
+        if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
+          this.pressed = false;
           this.iteratePoint(Z4PointIteratorDrawingAction.STOP);
+        } else {
+          this.pressed = false;
         }
         break;
     }
@@ -3203,14 +3205,14 @@ class Z4BiGradientColorPanel extends JSPanel {
     this.ctx.beginPath();
     this.ctx.arc(position * this.width, biPosition * this.height, Z4BiGradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
     this.ctx.closePath();
-    this.ctx.strokeStyle = this.getStrokeStyle(biIndex === this.biSelectedIndex && index === this.selectedIndex ? "red" : "black");
+    this.ctx.strokeStyle = Z4Constants.getStyle(biIndex === this.biSelectedIndex && index === this.selectedIndex ? "red" : "black");
     this.ctx.setLineDash(dash);
     this.ctx.stroke();
     dash.push(2.5, 2.5);
     this.ctx.beginPath();
     this.ctx.arc(position * this.width, biPosition * this.height, Z4BiGradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
     this.ctx.closePath();
-    this.ctx.strokeStyle = this.getStrokeStyle("white");
+    this.ctx.strokeStyle = Z4Constants.getStyle("white");
     this.ctx.setLineDash(dash);
     this.ctx.stroke();
   }
@@ -3463,14 +3465,14 @@ class Z4GradientColorPanel extends JSPanel {
     this.ctx.beginPath();
     this.ctx.arc(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, Z4GradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
     this.ctx.closePath();
-    this.ctx.strokeStyle = this.getStrokeStyle(index === this.selectedIndex ? "red" : "black");
+    this.ctx.strokeStyle = Z4Constants.getStyle(index === this.selectedIndex ? "red" : "black");
     this.ctx.setLineDash(dash);
     this.ctx.stroke();
     dash.push(2.5, 2.5);
     this.ctx.beginPath();
     this.ctx.arc(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, Z4GradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
     this.ctx.closePath();
-    this.ctx.strokeStyle = this.getStrokeStyle("white");
+    this.ctx.strokeStyle = Z4Constants.getStyle("white");
     this.ctx.setLineDash(dash);
     this.ctx.stroke();
   }
@@ -3880,14 +3882,14 @@ class Z4AbstractFillerPanel extends JSPanel {
       this.ctx.beginPath();
       this.ctx.arc(point.x, point.y, Z4AbstractFillerPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
       this.ctx.closePath();
-      this.ctx.strokeStyle = this.getStrokeStyle(index === this.selectedIndex ? "red" : "black");
+      this.ctx.strokeStyle = Z4Constants.getStyle(index === this.selectedIndex ? "red" : "black");
       this.ctx.setLineDash(dash);
       this.ctx.stroke();
       dash.push(2.5, 2.5);
       this.ctx.beginPath();
       this.ctx.arc(point.x, point.y, Z4AbstractFillerPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
       this.ctx.closePath();
-      this.ctx.strokeStyle = this.getStrokeStyle("white");
+      this.ctx.strokeStyle = Z4Constants.getStyle("white");
       this.ctx.setLineDash(dash);
       this.ctx.stroke();
     }
@@ -3909,16 +3911,6 @@ class Z4AbstractFillerPanel extends JSPanel {
    * @param mappedPoints The (mapped) points
    */
    drawObjects(ctx, mappedPoints) {
-  }
-
-  /**
-   * Dummy method to get a stroke style
-   *
-   * @param style The style
-   * @return The style
-   */
-   getStrokeStyle(style) {
-    return style;
   }
 }
 /**
@@ -3970,7 +3962,7 @@ class Z4BezierFillerPanel extends Z4AbstractFillerPanel {
     ctx.lineTo(mappedPoints[3].x, mappedPoints[3].y);
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
     ctx.lineTo(mappedPoints[4].x, mappedPoints[4].y);
-    ctx.strokeStyle = this.getStrokeStyle("black");
+    ctx.strokeStyle = Z4Constants.getStyle("black");
     ctx.setLineDash(dash);
     ctx.stroke();
     dash.push(2.5, 2.5);
@@ -3981,7 +3973,7 @@ class Z4BezierFillerPanel extends Z4AbstractFillerPanel {
     ctx.lineTo(mappedPoints[3].x, mappedPoints[3].y);
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
     ctx.lineTo(mappedPoints[4].x, mappedPoints[4].y);
-    ctx.strokeStyle = this.getStrokeStyle("white");
+    ctx.strokeStyle = Z4Constants.getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();
   }
@@ -4028,14 +4020,14 @@ class Z4ConicFillerPanel extends Z4AbstractFillerPanel {
     ctx.beginPath();
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
     ctx.lineTo(mappedPoints[1].x, mappedPoints[1].y);
-    ctx.strokeStyle = this.getStrokeStyle("black");
+    ctx.strokeStyle = Z4Constants.getStyle("black");
     ctx.setLineDash(dash);
     ctx.stroke();
     dash.push(2.5, 2.5);
     ctx.beginPath();
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
     ctx.lineTo(mappedPoints[1].x, mappedPoints[1].y);
-    ctx.strokeStyle = this.getStrokeStyle("white");
+    ctx.strokeStyle = Z4Constants.getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();
   }
@@ -4082,14 +4074,14 @@ class Z4LinearFillerPanel extends Z4AbstractFillerPanel {
     ctx.beginPath();
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
     ctx.lineTo(mappedPoints[1].x, mappedPoints[1].y);
-    ctx.strokeStyle = this.getStrokeStyle("black");
+    ctx.strokeStyle = Z4Constants.getStyle("black");
     ctx.setLineDash(dash);
     ctx.stroke();
     dash.push(2.5, 2.5);
     ctx.beginPath();
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
     ctx.lineTo(mappedPoints[1].x, mappedPoints[1].y);
-    ctx.strokeStyle = this.getStrokeStyle("white");
+    ctx.strokeStyle = Z4Constants.getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();
   }
@@ -4211,7 +4203,7 @@ class Z4SinusoidalFillerPanel extends Z4AbstractFillerPanel {
     ctx.lineTo(mappedPoints[2].x, mappedPoints[2].y);
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
     ctx.lineTo(mappedPoints[3].x, mappedPoints[3].y);
-    ctx.strokeStyle = this.getStrokeStyle("black");
+    ctx.strokeStyle = Z4Constants.getStyle("black");
     ctx.setLineDash(dash);
     ctx.stroke();
     dash.push(2.5, 2.5);
@@ -4222,7 +4214,7 @@ class Z4SinusoidalFillerPanel extends Z4AbstractFillerPanel {
     ctx.lineTo(mappedPoints[2].x, mappedPoints[2].y);
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
     ctx.lineTo(mappedPoints[3].x, mappedPoints[3].y);
-    ctx.strokeStyle = this.getStrokeStyle("white");
+    ctx.strokeStyle = Z4Constants.getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();
   }
@@ -4269,14 +4261,14 @@ class Z4SpiralFillerPanel extends Z4AbstractFillerPanel {
     ctx.beginPath();
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
     ctx.lineTo(mappedPoints[1].x, mappedPoints[1].y);
-    ctx.strokeStyle = this.getStrokeStyle("black");
+    ctx.strokeStyle = Z4Constants.getStyle("black");
     ctx.setLineDash(dash);
     ctx.stroke();
     dash.push(2.5, 2.5);
     ctx.beginPath();
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
     ctx.lineTo(mappedPoints[1].x, mappedPoints[1].y);
-    ctx.strokeStyle = this.getStrokeStyle("white");
+    ctx.strokeStyle = Z4Constants.getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();
   }
@@ -4450,14 +4442,14 @@ class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
     ctx.beginPath();
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
     ctx.lineTo(mappedPoints[1].x, mappedPoints[1].y);
-    ctx.strokeStyle = this.getStrokeStyle("black");
+    ctx.strokeStyle = Z4Constants.getStyle("black");
     ctx.setLineDash(dash);
     ctx.stroke();
     dash.push(2.5, 2.5);
     ctx.beginPath();
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
     ctx.lineTo(mappedPoints[1].x, mappedPoints[1].y);
-    ctx.strokeStyle = this.getStrokeStyle("white");
+    ctx.strokeStyle = Z4Constants.getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();
   }
@@ -4615,7 +4607,7 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
       ctx.lineTo(mappedPoints[2].x, mappedPoints[2].y);
     }
-    ctx.strokeStyle = this.getStrokeStyle("black");
+    ctx.strokeStyle = Z4Constants.getStyle("black");
     ctx.setLineDash(dash);
     ctx.stroke();
     dash.push(2.5, 2.5);
@@ -4626,7 +4618,7 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
       ctx.lineTo(mappedPoints[2].x, mappedPoints[2].y);
     }
-    ctx.strokeStyle = this.getStrokeStyle("white");
+    ctx.strokeStyle = Z4Constants.getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();
   }
@@ -7856,7 +7848,7 @@ class Z4Constants {
     array.push(filePickerOptionsType);
   }
 
-   getStyle(style) {
+  static  getStyle(style) {
     return style;
   }
 }
@@ -9246,11 +9238,11 @@ class Z4ArrowPainter extends Z4Painter {
     let x = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.module);
     context.save();
     context.lineWidth = 3;
-    context.strokeStyle = Z4Color.getFillStyle("black");
+    context.strokeStyle = Z4Constants.getStyle("black");
     context.beginPath();
     context.arc(0, 0, 2, 0, Z4Math.TWO_PI);
     context.stroke();
-    // context.strokeStyle = Z4Color.$getFillStyle(this.bool ? "blue" : "red");
+    context.strokeStyle = Z4Constants.getStyle(this.bool ? "blue" : "red");
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(x, 0);
@@ -9310,7 +9302,7 @@ class Z4Layer {
     this.offscreen = new OffscreenCanvas(width, height);
     this.offscreenCtx = this.offscreen.getContext("2d");
     if (filling instanceof Color) {
-      this.offscreenCtx.fillStyle = this.getFillStyle((filling).getRGBA_HEX());
+      this.offscreenCtx.fillStyle = Z4Constants.getStyle((filling).getRGBA_HEX());
       this.offscreenCtx.fillRect(0, 0, width, height);
     } else if (filling instanceof Z4AbstractFiller) {
       let imageData = this.offscreenCtx.createImageData(width, height);
@@ -9338,9 +9330,6 @@ class Z4Layer {
     this.height = height;
   }
 
-   getFillStyle(style) {
-    return style;
-  }
   /**
    * Creates a Z4Layer from an image
    *

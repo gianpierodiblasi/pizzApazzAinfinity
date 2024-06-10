@@ -47,7 +47,7 @@ class Z4BezierFillerPanel extends Z4AbstractFillerPanel {
     ctx.lineTo(mappedPoints[3].x, mappedPoints[3].y);
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
     ctx.lineTo(mappedPoints[4].x, mappedPoints[4].y);
-    ctx.strokeStyle = this.getStrokeStyle("black");
+    ctx.strokeStyle = Z4Constants.getStyle("black");
     ctx.setLineDash(dash);
     ctx.stroke();
     dash.push(2.5, 2.5);
@@ -58,7 +58,7 @@ class Z4BezierFillerPanel extends Z4AbstractFillerPanel {
     ctx.lineTo(mappedPoints[3].x, mappedPoints[3].y);
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
     ctx.lineTo(mappedPoints[4].x, mappedPoints[4].y);
-    ctx.strokeStyle = this.getStrokeStyle("white");
+    ctx.strokeStyle = Z4Constants.getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();
   }

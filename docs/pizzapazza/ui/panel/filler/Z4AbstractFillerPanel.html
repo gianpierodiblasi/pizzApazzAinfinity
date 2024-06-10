@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":6,"i2":10,"i3":6,"i4":10,"i5":10,"i6":6,"i7":6,"i8":6,"i9":10,"i10":10,"i11":6,"i12":10,"i13":10};
+var data = {"i0":6,"i1":10,"i2":6,"i3":10,"i4":6,"i5":6,"i6":6,"i7":10,"i8":10,"i9":6,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -201,13 +201,6 @@ extends javascript.swing.JSPanel</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>protected jsweet.util.union.Union4&lt;java.lang.String,&#8203;def.dom.CanvasGradient,&#8203;def.dom.CanvasPattern,&#8203;java.lang.Object&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#$getStrokeStyle(java.lang.String)">$getStrokeStyle</a></span>&#8203;(java.lang.String&nbsp;style)</code></th>
-<td class="colLast">
-<div class="block">Dummy method to get a stroke style</div>
-</td>
-</tr>
-<tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#drawObjects(simulation.dom.$CanvasRenderingContext2D,def.js.Array)">drawObjects</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx,
            def.js.Array&lt;javascript.awt.Point&gt;&nbsp;mappedPoints)</code></th>
@@ -215,14 +208,14 @@ extends javascript.swing.JSPanel</pre>
 <div class="block">Draws other objects</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#drawPreview(boolean)">drawPreview</a></span>&#8203;(boolean&nbsp;adjusting)</code></th>
 <td class="colLast">
 <div class="block">Draws the preview</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>protected abstract <a href="../../../filler/Z4AbstractFiller.html" title="interface in pizzapazza.filler">Z4AbstractFiller</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getFiller(pizzapazza.color.Z4GradientColor,def.js.Array,java.lang.Object)">getFiller</a></span>&#8203;(<a href="../../../color/Z4GradientColor.html" title="class in pizzapazza.color">Z4GradientColor</a>&nbsp;gradientColor,
          def.js.Array&lt;javascript.awt.Point&gt;&nbsp;points,
@@ -231,35 +224,28 @@ extends javascript.swing.JSPanel</pre>
 <div class="block">Returns the filler</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../filler/Z4AbstractFiller.html" title="interface in pizzapazza.filler">Z4AbstractFiller</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSelectedFiller()">getSelectedFiller</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the selected filler</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>protected java.lang.String</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStrokeStyle(java.lang.String)">getStrokeStyle</a></span>&#8203;(java.lang.String&nbsp;style)</code></th>
-<td class="colLast">
-<div class="block">Dummy method to get a stroke style</div>
-</td>
-</tr>
-<tr id="i6" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>protected abstract boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isPointEnabled(int)">isPointEnabled</a></span>&#8203;(int&nbsp;index)</code></th>
 <td class="colLast">
 <div class="block">Checks if a point is enabled</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>protected abstract boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#needsRescale(java.lang.Object)">needsRescale</a></span>&#8203;(java.lang.Object&nbsp;option)</code></th>
 <td class="colLast">
 <div class="block">Check if a rescale is needed during drawing</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pushPointPositions(def.js.Array,int,int)">pushPointPositions</a></span>&#8203;(def.js.Array&lt;javascript.awt.Point&gt;&nbsp;points,
                   int&nbsp;width,
@@ -268,21 +254,21 @@ extends javascript.swing.JSPanel</pre>
 <div class="block">Pushes the point positions</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#requestSetPointPosition()">requestSetPointPosition</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Requests a call to the setPointPosition method</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setGradientColor(pizzapazza.color.Z4GradientColor)">setGradientColor</a></span>&#8203;(<a href="../../../color/Z4GradientColor.html" title="class in pizzapazza.color">Z4GradientColor</a>&nbsp;gradientColor)</code></th>
 <td class="colLast">
 <div class="block">Sets the gradient color to use</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPointPosition(def.js.Array,int,int,int,int,int)">setPointPosition</a></span>&#8203;(def.js.Array&lt;javascript.awt.Point&gt;&nbsp;points,
                 int&nbsp;selectedIndex,
@@ -294,14 +280,14 @@ extends javascript.swing.JSPanel</pre>
 <div class="block">Sets the position of a point</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPointsEnabled()">setPointsEnabled</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Sets the enabled property of all points</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSize(int,int)">setSize</a></span>&#8203;(int&nbsp;width,
        int&nbsp;height)</code></th>
@@ -548,7 +534,7 @@ extends javascript.swing.JSPanel</pre>
 <a id="drawObjects(simulation.dom.$CanvasRenderingContext2D,def.js.Array)">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>drawObjects</h4>
 <pre class="methodSignature">protected abstract&nbsp;void&nbsp;drawObjects&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx,
@@ -558,38 +544,6 @@ extends javascript.swing.JSPanel</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>ctx</code> - The context</dd>
 <dd><code>mappedPoints</code> - The (mapped) points</dd>
-</dl>
-</li>
-</ul>
-<a id="getStrokeStyle(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getStrokeStyle</h4>
-<pre class="methodSignature">protected&nbsp;java.lang.String&nbsp;getStrokeStyle&#8203;(java.lang.String&nbsp;style)</pre>
-<div class="block">Dummy method to get a stroke style</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>style</code> - The style</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>The style</dd>
-</dl>
-</li>
-</ul>
-<a id="$getStrokeStyle(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>$getStrokeStyle</h4>
-<pre class="methodSignature">protected&nbsp;jsweet.util.union.Union4&lt;java.lang.String,&#8203;def.dom.CanvasGradient,&#8203;def.dom.CanvasPattern,&#8203;java.lang.Object&gt;&nbsp;$getStrokeStyle&#8203;(java.lang.String&nbsp;style)</pre>
-<div class="block">Dummy method to get a stroke style</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>style</code> - The style</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>The style</dd>
 </dl>
 </li>
 </ul>

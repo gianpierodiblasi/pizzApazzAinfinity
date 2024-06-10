@@ -67,7 +67,7 @@ class TestPolygonFiller extends JSFrame {
         let rotated = Z4Math.rotate(x, y, angle);
         this.ctx.fillRect(cx + rotated.x - 2, cy + rotated.y - 2, 4, 4);
       }
-      this.ctx.strokeStyle = this.getFillStyle("red");
+      this.ctx.strokeStyle = Z4Constants.getStyle("red");
       this.ctx.beginPath();
       this.ctx.moveTo(cx, cy);
       this.ctx.lineTo(p1x, p1y);
@@ -77,9 +77,5 @@ class TestPolygonFiller extends JSFrame {
       this.ctx.lineTo(p2x, p2y);
       this.ctx.stroke();
     }
-  }
-
-   getFillStyle(style) {
-    return style;
   }
 }
