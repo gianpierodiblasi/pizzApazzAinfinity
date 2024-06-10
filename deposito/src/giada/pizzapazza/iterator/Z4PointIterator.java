@@ -17,24 +17,6 @@ public abstract class Z4PointIterator {
   protected Z4Progression progression = Z4Progression.spatial(Z4Lighting.NONE);
 
   /**
-   * The rotation
-   */
-  protected Z4Rotation rotation = Z4Rotation.fixed();
-
-  /**
-   * The current "utility" point
-   */
-  protected $Object P = new $Object();
-
-  /**
-   * Creates a Z4PointIterator
-   */
-  public Z4PointIterator() {
-    this.P.$set("x", 0);
-    this.P.$set("y", 0);
-  }
-
-  /**
    * Sets the color progression
    *
    * @param progression The color progression

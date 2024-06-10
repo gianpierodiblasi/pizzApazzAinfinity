@@ -6,6 +6,11 @@
 class Z4PointIterator extends Z4Nextable {
 
   /**
+   * The rotation
+   */
+   rotation = null;
+
+  /**
    * The current drawing point
    */
    z4DrawingPoint = null;
@@ -14,6 +19,21 @@ class Z4PointIterator extends Z4Nextable {
    * true if this Z4PointIterator has another point, false otherwise
    */
    hasNext = false;
+
+  /**
+   * The current "utility" point
+   */
+   currentPoint = null;
+
+  /**
+   * Creates the object
+   *
+   * @param rotation The rotation
+   */
+  constructor(rotation) {
+    super();
+    this.rotation = rotation;
+  }
 
   /**
    * Performs a drawing action

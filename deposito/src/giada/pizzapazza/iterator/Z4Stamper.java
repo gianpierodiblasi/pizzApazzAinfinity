@@ -17,62 +17,7 @@ import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
 import simulation.js.$Object;
 
-/**
- * The stamper
- *
- * @author gianpiero.diblasi
- */
 public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
-
-  private Z4FancifulValue multiplicity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(1).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
-  private Z4FancifulValue push = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
-
-  private int currentMultiplicityCounter;
-  private int currentMultiplicityTotal;
-
-  @Override
-  public boolean draw(Z4Action action, double x, double y) {
-    if (action == Z4Action.START) {
-      this.currentMultiplicityCounter = 0;
-      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
-
-      this.P.$set("x", x);
-      this.P.$set("y", y);
-      this.hasNext = true;
-
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  @Override
-  public Z4Point next() {
-    if (!this.hasNext) {
-      return null;
-    } else {
-      this.currentMultiplicityCounter++;
-      this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
-
-      double angle = this.rotation.next(0);
-      double currentPush = this.push.next();
-      if ($exists(currentPush)) {
-        Z4Vector pushed = Z4Vector.fromVector(this.P.$get("x"), this.P.$get("y"), currentPush, angle);
-        this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), 1, angle));
-      } else {
-        this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P.$get("x"), this.P.$get("y"), 1, angle));
-      }
-      this.rotation.nextSide(this.z4Point, null);
-      this.progression.next(this.z4Point);
-
-      if (this.progression.isRelativeToPath()) {
-        this.z4Point.setDrawBounds(false);
-        this.z4Point.setColorPosition(Math.random());
-      }
-
-      return this.z4Point;
-    }
-  }
 
   @Override
   public void drawDemo($CanvasRenderingContext2D context, Z4Painter<?> painter, Z4GradientColor gradientColor, double width, double height) {
