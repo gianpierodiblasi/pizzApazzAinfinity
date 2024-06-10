@@ -9,13 +9,16 @@ class Z4SpatioTemporalColor extends Z4JSONable {
 
    gradientColor = null;
 
+   gradientColorProgression = null;
+
    biGradientColor = null;
 
    flatGradientColor = null;
 
-  constructor(color, gradientColor, biGradientColor) {
+  constructor(color, gradientColor, gradientColorProgression, biGradientColor) {
     this.color = color;
     this.gradientColor = gradientColor;
+    this.gradientColorProgression = gradientColorProgression;
     this.biGradientColor = biGradientColor;
     if (color) {
       this.flatGradientColor = new Z4GradientColor();
@@ -31,17 +34,18 @@ class Z4SpatioTemporalColor extends Z4JSONable {
    * @return the color aggregator
    */
   static  fromColor(color) {
-    return new Z4SpatioTemporalColor(color, null, null);
+    return new Z4SpatioTemporalColor(color, null, null, null);
   }
 
   /**
    * Creates a Z4SpatioTemporalColor from a gradient color
    *
    * @param gradientColor The gradient color
+   * @param gradientColorProgression The gradient color progression
    * @return the color aggregator
    */
-  static  fromGradientColor(gradientColor) {
-    return new Z4SpatioTemporalColor(null, gradientColor, null);
+  static  fromGradientColor(gradientColor, gradientColorProgression) {
+    return new Z4SpatioTemporalColor(null, gradientColor, gradientColorProgression, null);
   }
 
   /**
@@ -51,7 +55,7 @@ class Z4SpatioTemporalColor extends Z4JSONable {
    * @return the color aggregator
    */
   static  fromBiGradientColor(biGradientColor) {
-    return new Z4SpatioTemporalColor(null, null, biGradientColor);
+    return new Z4SpatioTemporalColor(null, null, null, biGradientColor);
   }
 
   /**
@@ -102,6 +106,7 @@ class Z4SpatioTemporalColor extends Z4JSONable {
       json["color"] = jsonColor;
     } else if (this.gradientColor) {
       json["gradientColor"] = this.gradientColor.toJSON();
+      json["gradientColorProgression"] = this.gradientColorProgression.toJSON();
     } else if (this.biGradientColor) {
       json["biGradientColor"] = this.biGradientColor.toJSON();
     }
@@ -119,7 +124,7 @@ class Z4SpatioTemporalColor extends Z4JSONable {
       let jsonColor = json["color"];
       return Z4SpatioTemporalColor.fromColor(new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]));
     } else if (json["gradientColor"]) {
-      return Z4SpatioTemporalColor.fromGradientColor(Z4GradientColor.fromJSON(json["gradientColor"]));
+      return Z4SpatioTemporalColor.fromGradientColor(Z4GradientColor.fromJSON(json["gradientColor"]), Z4GradientColorProgression.fromJSON(json["gradientColorProgression"]));
     } else if (json["biGradientColor"]) {
       return Z4SpatioTemporalColor.fromBiGradientColor(Z4BiGradientColor.fromJSON(json["biGradientColor"]));
     } else {
