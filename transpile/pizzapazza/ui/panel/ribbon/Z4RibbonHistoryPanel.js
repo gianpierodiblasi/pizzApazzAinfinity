@@ -225,9 +225,9 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
   }
 
   /**
-   * Restarts the timer for the standard saving
+   * Starts the timer for the standard saving
    */
-   restartStandard() {
+   startStandard() {
     if (this.z4historyManagement === "standard") {
       this.clearIntervals();
       this.standardRand = Math.random();
@@ -237,6 +237,16 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
           this.saveHistory("standard");
         }
       }, this.z4savingDelay);
+    }
+  }
+
+  /**
+   * Stops the timer for the standard saving
+   */
+   stopStandard() {
+    if (this.z4historyManagement === "standard") {
+      this.clearIntervals();
+      this.standardRand = Math.random();
     }
   }
 
