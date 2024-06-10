@@ -1,5 +1,5 @@
 /**
- * The orientation of a random value panel
+ * The orientation of a (signed) random value panel
  *
  * @author gianpiero.diblasi
  */

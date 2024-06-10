@@ -1,9 +1,9 @@
 /**
- * The panel to manage a gradient color progressing
+ * The panel to manage a bigradient color progressing
  *
  * @author gianpiero.diblasi
  */
-class Z4GradientColorProgressionPanel extends Z4AbstractValuePanel {
+class Z4BiGradientColorProgressionPanel extends Z4AbstractValuePanel {
 
    lightingPanel = new Z4LightingPanel(Z4LightingPanelOrientation.HORIZONTAL);
 
@@ -22,7 +22,7 @@ class Z4GradientColorProgressionPanel extends Z4AbstractValuePanel {
    */
   constructor(orientation) {
     super();
-    this.cssAddClass("z4gradientcolorprogressionpanel");
+    this.cssAddClass("z4bigradientcolorprogressionpanel");
     this.setLayout(new GridBagLayout());
     let panel = new JSPanel();
     let buttonGroup = new ButtonGroup();
@@ -30,10 +30,9 @@ class Z4GradientColorProgressionPanel extends Z4AbstractValuePanel {
       Z4UI.addLabel(this, Z4Translations.FILLING, new GBC(0, 0).a(GBC.WEST));
       panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
       this.add(panel, new GBC(1, 0).w(3));
-      this.addRadio(Z4GradientColorProgressionBehavior.SPATIAL, buttonGroup, panel, "left");
-      this.addRadio(Z4GradientColorProgressionBehavior.TEMPORAL, buttonGroup, panel, "centerh");
-      this.addRadio(Z4GradientColorProgressionBehavior.RELATIVE_TO_PATH, buttonGroup, panel, "centerh");
-      this.addRadio(Z4GradientColorProgressionBehavior.RANDOM, buttonGroup, panel, "right");
+      this.addRadio(Z4BiGradientColorProgressionBehavior.TEMPORAL, buttonGroup, panel, "left");
+      this.addRadio(Z4BiGradientColorProgressionBehavior.RELATIVE_TO_PATH, buttonGroup, panel, "centerh");
+      this.addRadio(Z4BiGradientColorProgressionBehavior.RANDOM, buttonGroup, panel, "right");
       Z4UI.addLabel(this, Z4Translations.STEP, new GBC(0, 1).a(GBC.WEST).wx(1));
       this.add(this.temporalStepSpinner, new GBC(1, 1).w(3).a(GBC.EAST).i(1, 0, 0, 0));
       this.add(this.temporalStepSlider, new GBC(0, 2).w(4));
@@ -43,10 +42,9 @@ class Z4GradientColorProgressionPanel extends Z4AbstractValuePanel {
       Z4UI.addLabel(this, Z4Translations.FILLING, new GBC(0, 0).w(4).a(GBC.WEST));
       panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
       this.add(panel, new GBC(0, 1).h(3).i(0, 0, 0, 1));
-      this.addRadio(Z4GradientColorProgressionBehavior.SPATIAL, buttonGroup, panel, "top");
-      this.addRadio(Z4GradientColorProgressionBehavior.TEMPORAL, buttonGroup, panel, "centerv");
-      this.addRadio(Z4GradientColorProgressionBehavior.RELATIVE_TO_PATH, buttonGroup, panel, "centerv");
-      this.addRadio(Z4GradientColorProgressionBehavior.RANDOM, buttonGroup, panel, "bottom");
+      this.addRadio(Z4BiGradientColorProgressionBehavior.TEMPORAL, buttonGroup, panel, "top");
+      this.addRadio(Z4BiGradientColorProgressionBehavior.RELATIVE_TO_PATH, buttonGroup, panel, "centerv");
+      this.addRadio(Z4BiGradientColorProgressionBehavior.RANDOM, buttonGroup, panel, "bottom");
       Z4UI.addLabel(this, Z4Translations.STEP, new GBC(1, 1).a(GBC.WEST).wx(1));
       this.add(this.temporalStepSpinner, new GBC(2, 1).w(2).a(GBC.EAST));
       this.add(this.temporalStepSlider, new GBC(1, 2).w(3));
@@ -62,12 +60,12 @@ class Z4GradientColorProgressionPanel extends Z4AbstractValuePanel {
     this.temporalStepSlider.getStyle().minWidth = "20rem";
     this.temporalStepSlider.addChangeListener(event => this.onTemporalStepChange(false, this.temporalStepSlider.getValueIsAdjusting(), this.temporalStepSpinner, this.temporalStepSlider));
     this.lightingPanel.addChangeListener(event => this.onProgressionChange(false));
-    this.setValue(new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.SPATIAL, 0.1, Z4Lighting.NONE));
+    this.setValue(new Z4BiGradientColorProgression(Z4BiGradientColorProgressionBehavior.TEMPORAL, 0.1, Z4Lighting.NONE));
   }
 
    addRadio(behavior, buttonGroup, panel, border) {
     let radio = new JSRadioButton();
-    radio.cssAddClass("z4gradientcolorprogressionpanel-radio");
+    radio.cssAddClass("z4bigradientcolorprogressionpanel-radio");
     radio.getStyle().padding = "1px";
     radio.setTooltip(Z4Translations["" + behavior]);
     radio.setToggle();
@@ -75,9 +73,8 @@ class Z4GradientColorProgressionPanel extends Z4AbstractValuePanel {
     radio.addActionListener(event => {
       Object.keys(this.radios).forEach(key => (this.radios[key]).setContentAreaFilled(false));
       radio.setContentAreaFilled(true);
-      this.lightingPanel.setEnabled(behavior !== Z4GradientColorProgressionBehavior.SPATIAL);
-      this.temporalStepSpinner.setEnabled(behavior === Z4GradientColorProgressionBehavior.TEMPORAL);
-      this.temporalStepSlider.setEnabled(behavior === Z4GradientColorProgressionBehavior.TEMPORAL);
+      this.temporalStepSpinner.setEnabled(behavior === Z4BiGradientColorProgressionBehavior.TEMPORAL);
+      this.temporalStepSlider.setEnabled(behavior === Z4BiGradientColorProgressionBehavior.TEMPORAL);
       this.onProgressionChange(false);
     });
     switch(border) {
@@ -122,17 +119,14 @@ class Z4GradientColorProgressionPanel extends Z4AbstractValuePanel {
     Object.keys(this.radios).forEach(key => {
       if ((this.radios[key]).isSelected()) {
         switch("" + key) {
-          case "SPATIAL":
-            this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.SPATIAL, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
-            break;
           case "TEMPORAL":
-            this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.TEMPORAL, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            this.value = new Z4BiGradientColorProgression(Z4BiGradientColorProgressionBehavior.TEMPORAL, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
             break;
           case "RELATIVE_TO_PATH":
-            this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.RELATIVE_TO_PATH, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            this.value = new Z4BiGradientColorProgression(Z4BiGradientColorProgressionBehavior.RELATIVE_TO_PATH, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
             break;
           case "RANDOM":
-            this.value = new Z4GradientColorProgression(Z4GradientColorProgressionBehavior.RANDOM, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            this.value = new Z4BiGradientColorProgression(Z4BiGradientColorProgressionBehavior.RANDOM, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
             break;
         }
       }
@@ -161,24 +155,23 @@ class Z4GradientColorProgressionPanel extends Z4AbstractValuePanel {
    setValue(value) {
     this.value = value;
     this.lightingPanel.setValue(value.getLighting());
-    this.lightingPanel.setEnabled(value.getGradientColorProgressionBehavior() !== Z4GradientColorProgressionBehavior.SPATIAL);
     Object.keys(this.radios).forEach(key => (this.radios[key]).setContentAreaFilled(false));
-    (this.radios["" + value.getGradientColorProgressionBehavior()]).setSelected(true);
-    (this.radios["" + value.getGradientColorProgressionBehavior()]).setContentAreaFilled(true);
-    this.temporalStepSpinner.setEnabled(value.getGradientColorProgressionBehavior() === Z4GradientColorProgressionBehavior.TEMPORAL);
+    (this.radios["" + value.getBiGradientColorProgressionBehavior()]).setSelected(true);
+    (this.radios["" + value.getBiGradientColorProgressionBehavior()]).setContentAreaFilled(true);
+    this.temporalStepSpinner.setEnabled(value.getBiGradientColorProgressionBehavior() === Z4BiGradientColorProgressionBehavior.TEMPORAL);
     this.temporalStepSpinner.setValue(value.getTemporalStepProgression() * 100);
-    this.temporalStepSlider.setEnabled(value.getGradientColorProgressionBehavior() === Z4GradientColorProgressionBehavior.TEMPORAL);
+    this.temporalStepSlider.setEnabled(value.getBiGradientColorProgressionBehavior() === Z4BiGradientColorProgressionBehavior.TEMPORAL);
     this.temporalStepSlider.setValue(parseInt(value.getTemporalStepProgression() * 100));
   }
 
    setEnabled(b) {
+    this.lightingPanel.setEnabled(b);
     Object.keys(this.radios).forEach(key => {
       let radio = this.radios[key];
       radio.setEnabled(b);
       if (radio.isSelected()) {
-        this.lightingPanel.setEnabled(b && ("" + key) !== ("" + Z4GradientColorProgressionBehavior.SPATIAL));
-        this.temporalStepSpinner.setEnabled(b && ("" + key) !== ("" + Z4GradientColorProgressionBehavior.TEMPORAL));
-        this.temporalStepSlider.setEnabled(b && ("" + key) !== ("" + Z4GradientColorProgressionBehavior.TEMPORAL));
+        this.temporalStepSpinner.setEnabled(b && ("" + key) !== ("" + Z4BiGradientColorProgressionBehavior.TEMPORAL));
+        this.temporalStepSlider.setEnabled(b && ("" + key) !== ("" + Z4BiGradientColorProgressionBehavior.TEMPORAL));
       }
     });
   }

@@ -1,7 +1,7 @@
 package pizzapazza.ui.panel.color;
 
 /**
- * The orientation of a gradient color progression panel
+ * The orientation of a (bi)gradient color progression panel
  *
  * @author gianpiero.diblasi
  */
