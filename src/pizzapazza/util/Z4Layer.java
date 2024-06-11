@@ -9,6 +9,7 @@ import pizzapazza.color.Z4BiGradientColor;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.filler.Z4AbstractFiller;
 import pizzapazza.math.Z4DrawingPoint;
+import pizzapazza.ui.component.Z4LayerPreview;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
 import simulation.dom.$OffscreenCanvas;
@@ -26,6 +27,8 @@ public class Z4Layer {
 
   private $OffscreenCanvas offscreen;
   private $CanvasRenderingContext2D offscreenCtx;
+
+  private Z4LayerPreview layerPreview;
 
   private Blob blob;
   private String name;
@@ -99,6 +102,24 @@ public class Z4Layer {
     Z4Layer layer = new Z4Layer(name, (int) image.width, (int) image.height, new Color(0, 0, 0, 0), containerWidth, containerHeight);
     layer.offscreenCtx.drawImage(image, 0, 0);
     return layer;
+  }
+
+  /**
+   * Sets the layer preview
+   *
+   * @param layerPreview The layer preview
+   */
+  public void setLayerPreview(Z4LayerPreview layerPreview) {
+    this.layerPreview = layerPreview;
+  }
+
+  /**
+   * Returns the layer preview
+   *
+   * @return The layer preview
+   */
+  public Z4LayerPreview getLayerPreview() {
+    return this.layerPreview;
   }
 
   /**
@@ -261,6 +282,8 @@ public class Z4Layer {
     this.offscreenCtx.rotate(drawingPoint.z4Vector.phase);
     drawingTool.draw(this.offscreenCtx, drawingPoint);
     this.offscreenCtx.restore();
+
+    this.blob = null;
   }
 
   /**

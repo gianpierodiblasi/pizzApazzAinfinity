@@ -9,6 +9,8 @@ class Z4Layer {
 
    offscreenCtx = null;
 
+   layerPreview = null;
+
    blob = null;
 
    name = null;
@@ -84,6 +86,24 @@ class Z4Layer {
     let layer = new Z4Layer(name, image.width, image.height, new Color(0, 0, 0, 0), containerWidth, containerHeight);
     layer.offscreenCtx.drawImage(image, 0, 0);
     return layer;
+  }
+
+  /**
+   * Sets the layer preview
+   *
+   * @param layerPreview The layer preview
+   */
+   setLayerPreview(layerPreview) {
+    this.layerPreview = layerPreview;
+  }
+
+  /**
+   * Returns the layer preview
+   *
+   * @return The layer preview
+   */
+   getLayerPreview() {
+    return this.layerPreview;
   }
 
   /**
@@ -245,6 +265,7 @@ class Z4Layer {
     this.offscreenCtx.rotate(drawingPoint.z4Vector.phase);
     drawingTool.draw(this.offscreenCtx, drawingPoint);
     this.offscreenCtx.restore();
+    this.blob = null;
   }
 
   /**

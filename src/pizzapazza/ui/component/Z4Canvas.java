@@ -84,7 +84,6 @@ public class Z4Canvas extends JSComponent {
 
   private final Z4Paper paper = new Z4Paper();
   private Z4Layer selectedLayer;
-  private Z4LayerPreview selectedLayerPreview;
 
   private Z4DrawingTool drawingTool = new Z4DrawingTool(
           new Z4Stamper(
@@ -187,7 +186,7 @@ public class Z4Canvas extends JSComponent {
     this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
 
     this.ribbonLayerPanel.reset();
-    this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+    this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
 
     this.ribbonHistoryPanel.resetHistory(() -> {
       this.afterCreate("", width, height);
@@ -246,7 +245,7 @@ public class Z4Canvas extends JSComponent {
       this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
 
       this.ribbonLayerPanel.reset();
-      this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+      this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
 
       this.ribbonHistoryPanel.resetHistory(() -> {
         this.afterCreate(projectName, (int) image.width, (int) image.height);
@@ -325,7 +324,7 @@ public class Z4Canvas extends JSComponent {
         this.selectedLayer.setCompositeOperation(layers.$get(index).$get("compositeOperation"));
         this.selectedLayer.setHidden(layers.$get(index).$get("hidden"));
         this.selectedLayer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
-        this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+        this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
 
         if (index + 1 < layers.length) {
           this.openLayer(zip, json, layers, index + 1);
@@ -400,7 +399,7 @@ public class Z4Canvas extends JSComponent {
       this.selectedLayer.setCompositeOperation(layers.$get(index).$get("compositeOperation"));
       this.selectedLayer.setHidden(layers.$get(index).$get("hidden"));
       this.selectedLayer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
-      this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+      this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
 
       if (index + 1 < layers.length) {
         this.openLayerFromHistory(json, layers, index + 1);
@@ -710,7 +709,7 @@ public class Z4Canvas extends JSComponent {
 
     this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
 
-    this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+    this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
     this.setSaved(false);
   }
 
@@ -732,7 +731,7 @@ public class Z4Canvas extends JSComponent {
         this.selectedLayer.setCompositeOperation(layer.getCompositeOperation());
         this.selectedLayer.setHidden(layer.isHidden());
         this.selectedLayer.move(offset.x, offset.y);
-        this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+        this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
 
         this.setSaved(false);
         this.drawCanvas();
@@ -805,11 +804,9 @@ public class Z4Canvas extends JSComponent {
    * Sets the selected layer
    *
    * @param selectedLayer The selected layer
-   * @param selectedLayerPreview The layer preview
    */
-  public void setSelectedLayer(Z4Layer selectedLayer, Z4LayerPreview selectedLayerPreview) {
+  public void setSelectedLayer(Z4Layer selectedLayer) {
     this.selectedLayer = selectedLayer;
-    this.selectedLayerPreview = selectedLayerPreview;
   }
 
   /**
@@ -1011,7 +1008,7 @@ public class Z4Canvas extends JSComponent {
         this.ctx.restore();
       } else {
         this.selectedLayer.drawTool(this.drawingTool, next);
-        this.selectedLayerPreview.drawLayer();
+        this.selectedLayer.getLayerPreview().drawLayer();
         this.drawCanvas();
       }
     }

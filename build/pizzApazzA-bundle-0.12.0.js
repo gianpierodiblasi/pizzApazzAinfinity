@@ -1485,8 +1485,6 @@ class Z4Canvas extends JSComponent {
 
    selectedLayer = null;
 
-   selectedLayerPreview = null;
-
    drawingTool = new Z4DrawingTool(new Z4Stamper(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)), new Z4ArrowPainter(), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)));
 
   /**
@@ -1564,7 +1562,7 @@ class Z4Canvas extends JSComponent {
     this.height = height;
     this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
     this.ribbonLayerPanel.reset();
-    this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+    this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
     this.ribbonHistoryPanel.resetHistory(() => {
       this.afterCreate("", width, height);
       this.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
@@ -1616,7 +1614,7 @@ class Z4Canvas extends JSComponent {
       this.height = image.height;
       this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
       this.ribbonLayerPanel.reset();
-      this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+      this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
       this.ribbonHistoryPanel.resetHistory(() => {
         this.afterCreate(projectName, image.width, image.height);
         this.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
@@ -1684,7 +1682,7 @@ class Z4Canvas extends JSComponent {
         this.selectedLayer.setCompositeOperation(layers[index]["compositeOperation"]);
         this.selectedLayer.setHidden(layers[index]["hidden"]);
         this.selectedLayer.move(layers[index]["offsetX"], layers[index]["offsetY"]);
-        this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+        this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
         if (index + 1 < layers.length) {
           this.openLayer(zip, json, layers, index + 1);
         } else if (json["history"]) {
@@ -1751,7 +1749,7 @@ class Z4Canvas extends JSComponent {
       this.selectedLayer.setCompositeOperation(layers[index]["compositeOperation"]);
       this.selectedLayer.setHidden(layers[index]["hidden"]);
       this.selectedLayer.move(layers[index]["offsetX"], layers[index]["offsetY"]);
-      this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+      this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
       if (index + 1 < layers.length) {
         this.openLayerFromHistory(json, layers, index + 1);
       } else {
@@ -2027,7 +2025,7 @@ class Z4Canvas extends JSComponent {
     this.changed = true;
     this.ribbonHistoryPanel.saveHistory("standard,tool");
     this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
-    this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+    this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
     this.setSaved(false);
   }
 
@@ -2047,7 +2045,7 @@ class Z4Canvas extends JSComponent {
         this.selectedLayer.setCompositeOperation(layer.getCompositeOperation());
         this.selectedLayer.setHidden(layer.isHidden());
         this.selectedLayer.move(offset.x, offset.y);
-        this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+        this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
         this.setSaved(false);
         this.drawCanvas();
         return null;
@@ -2114,11 +2112,9 @@ class Z4Canvas extends JSComponent {
    * Sets the selected layer
    *
    * @param selectedLayer The selected layer
-   * @param selectedLayerPreview The layer preview
    */
-   setSelectedLayer(selectedLayer, selectedLayerPreview) {
+   setSelectedLayer(selectedLayer) {
     this.selectedLayer = selectedLayer;
-    this.selectedLayerPreview = selectedLayerPreview;
   }
 
   /**
@@ -2315,7 +2311,7 @@ class Z4Canvas extends JSComponent {
         this.ctx.restore();
       } else {
         this.selectedLayer.drawTool(this.drawingTool, next);
-        this.selectedLayerPreview.drawLayer();
+        this.selectedLayer.getLayerPreview().drawLayer();
         this.drawCanvas();
       }
     }
@@ -2618,7 +2614,7 @@ class Z4LayerPreview extends JSDropDown {
     selector.addActionListener(event => {
       document.querySelectorAll(".z4layerpreview .z4layerpreview-selector").forEach(element => element.textContent = Z4LayerPreview.UNSELECTED_LAYER_CONTENT);
       selector.setText(Z4LayerPreview.SELECTED_LAYER_CONTENT);
-      this.canvas.setSelectedLayer(this.layer, this);
+      this.canvas.setSelectedLayer(this.layer);
     });
     this.summary.add(selector, new GBC(2, 1).f(GBC.BOTH).i(0, 2, 0, 0));
     let button = new JSButton();
@@ -2822,6 +2818,7 @@ class Z4LayerPreview extends JSDropDown {
    setLayer(canvas, layer) {
     this.canvas = canvas;
     this.layer = layer;
+    this.layer.setLayerPreview(this);
     this.name.setText(this.layer.getName());
     this.editName.setText(this.layer.getName());
     this.setChildAttributeByQuery("summary", "title", this.layer.getName());
@@ -5538,7 +5535,6 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
    * Adds a new layer preview
    *
    * @param layer The layer
-   * @return The layer preview
    */
    addLayerPreview(layer) {
     let preview = new Z4LayerPreview();
@@ -5553,7 +5549,6 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     document.querySelectorAll(".z4layerpreview .z4layerpreview-selector").forEach(element => element.textContent = Z4LayerPreview.UNSELECTED_LAYER_CONTENT);
     this.layersPreview.add(preview, null);
     preview.invoke("scrollIntoView()");
-    return preview;
   }
 }
 /**
@@ -9652,6 +9647,8 @@ class Z4Layer {
 
    offscreenCtx = null;
 
+   layerPreview = null;
+
    blob = null;
 
    name = null;
@@ -9727,6 +9724,24 @@ class Z4Layer {
     let layer = new Z4Layer(name, image.width, image.height, new Color(0, 0, 0, 0), containerWidth, containerHeight);
     layer.offscreenCtx.drawImage(image, 0, 0);
     return layer;
+  }
+
+  /**
+   * Sets the layer preview
+   *
+   * @param layerPreview The layer preview
+   */
+   setLayerPreview(layerPreview) {
+    this.layerPreview = layerPreview;
+  }
+
+  /**
+   * Returns the layer preview
+   *
+   * @return The layer preview
+   */
+   getLayerPreview() {
+    return this.layerPreview;
   }
 
   /**
@@ -9888,6 +9903,7 @@ class Z4Layer {
     this.offscreenCtx.rotate(drawingPoint.z4Vector.phase);
     drawingTool.draw(this.offscreenCtx, drawingPoint);
     this.offscreenCtx.restore();
+    this.blob = null;
   }
 
   /**

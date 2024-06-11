@@ -138,7 +138,6 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
    * Adds a new layer preview
    *
    * @param layer The layer
-   * @return The layer preview
    */
    addLayerPreview(layer) {
     let preview = new Z4LayerPreview();
@@ -153,6 +152,5 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     document.querySelectorAll(".z4layerpreview .z4layerpreview-selector").forEach(element => element.textContent = Z4LayerPreview.UNSELECTED_LAYER_CONTENT);
     this.layersPreview.add(preview, null);
     preview.invoke("scrollIntoView()");
-    return preview;
   }
 }
