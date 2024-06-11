@@ -3,7 +3,7 @@
  */
 class Z4ArrowPainter extends Z4Painter {
 
-   module = 15;
+   module = 30;
 
    bool = false;
 
@@ -11,7 +11,7 @@ class Z4ArrowPainter extends Z4Painter {
     this.bool = !this.bool;
     let x = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.module);
     context.save();
-    context.lineWidth = 3;
+    context.lineWidth = 2;
     context.strokeStyle = Z4Constants.getStyle("black");
     context.beginPath();
     context.arc(0, 0, 2, 0, Z4Math.TWO_PI);
@@ -20,8 +20,8 @@ class Z4ArrowPainter extends Z4Painter {
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(x, 0);
-    context.lineTo(x - 5, -2.5);
-    context.lineTo(x - 5, +2.5);
+    context.lineTo(x - 10, -5);
+    context.lineTo(x - 10, +5);
     context.lineTo(x, 0);
     context.stroke();
     context.restore();

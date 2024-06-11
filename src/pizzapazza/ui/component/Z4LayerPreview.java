@@ -77,7 +77,7 @@ public class Z4LayerPreview extends JSDropDown {
    * The text content for the visible button
    */
   public final static String VISIBLE_LAYER_CONTENT = "\uD83D\uDC41";
-  
+
   private final static int PREVIEW_SIZE = 50;
 
   @SuppressWarnings("StringEquality")
@@ -130,7 +130,7 @@ public class Z4LayerPreview extends JSDropDown {
     selector.addActionListener(event -> {
       document.querySelectorAll(".z4layerpreview .z4layerpreview-selector").forEach(element -> element.textContent = Z4LayerPreview.UNSELECTED_LAYER_CONTENT);
       selector.setText(Z4LayerPreview.SELECTED_LAYER_CONTENT);
-      this.canvas.setSelectedLayer(this.layer);
+      this.canvas.setSelectedLayer(this.layer, this);
     });
     this.summary.add(selector, new GBC(2, 1).f(GBC.BOTH).i(0, 2, 0, 0));
 
@@ -168,7 +168,7 @@ public class Z4LayerPreview extends JSDropDown {
 
     this.editor.cssAddClass("z4layerpreview-editor");
     this.editor.addChangeListener(event -> this.computePopupPosition());
-    
+
     JSPanel panelBasic = new JSPanel();
     panelBasic.setLayout(new GridBagLayout());
 
@@ -421,7 +421,10 @@ public class Z4LayerPreview extends JSDropDown {
     this.drawLayer();
   }
 
-  private void drawLayer() {
+  /**
+   * Draws the layer
+   */
+  public void drawLayer() {
     if ($exists(this.layer)) {
       this.ctx.save();
       this.ctx.scale(this.zoom, this.zoom);

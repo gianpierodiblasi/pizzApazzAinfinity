@@ -12,6 +12,20 @@ class Z4DrawingTool extends Z4Nextable {
    spatioTemporalColor = null;
 
   /**
+   * Creates the object
+   *
+   * @param pointIterator The point iterator
+   * @param painter The painter
+   * @param spatioTemporalColor The spatio-temporal color
+   */
+  constructor(pointIterator, painter, spatioTemporalColor) {
+    super();
+    this.pointIterator = pointIterator;
+    this.painter = painter;
+    this.spatioTemporalColor = spatioTemporalColor;
+  }
+
+  /**
    * Performs a drawing action
    *
    * @param action The action

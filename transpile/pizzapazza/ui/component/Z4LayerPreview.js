@@ -105,7 +105,7 @@ class Z4LayerPreview extends JSDropDown {
     selector.addActionListener(event => {
       document.querySelectorAll(".z4layerpreview .z4layerpreview-selector").forEach(element => element.textContent = Z4LayerPreview.UNSELECTED_LAYER_CONTENT);
       selector.setText(Z4LayerPreview.SELECTED_LAYER_CONTENT);
-      this.canvas.setSelectedLayer(this.layer);
+      this.canvas.setSelectedLayer(this.layer, this);
     });
     this.summary.add(selector, new GBC(2, 1).f(GBC.BOTH).i(0, 2, 0, 0));
     let button = new JSButton();
@@ -351,6 +351,9 @@ class Z4LayerPreview extends JSDropDown {
     this.drawLayer();
   }
 
+  /**
+   * Draws the layer
+   */
    drawLayer() {
     if (this.layer) {
       this.ctx.save();

@@ -16,9 +16,24 @@ import simulation.js.$Object;
  */
 public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
 
-  private Z4PointIterator pointIterator;
-  private Z4Painter painter;
-  private Z4SpatioTemporalColor spatioTemporalColor;
+  private final Z4PointIterator pointIterator;
+  private final Z4Painter painter;
+  private final Z4SpatioTemporalColor spatioTemporalColor;
+
+  /**
+   * Creates the object
+   *
+   * @param pointIterator The point iterator
+   * @param painter The painter
+   * @param spatioTemporalColor The spatio-temporal color
+   */
+  public Z4DrawingTool(Z4PointIterator pointIterator, Z4Painter painter, Z4SpatioTemporalColor spatioTemporalColor) {
+    super();
+    
+    this.pointIterator = pointIterator;
+    this.painter = painter;
+    this.spatioTemporalColor = spatioTemporalColor;
+  }
 
   /**
    * Performs a drawing action

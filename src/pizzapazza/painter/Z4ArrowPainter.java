@@ -13,7 +13,7 @@ import simulation.js.$Object;
  */
 public class Z4ArrowPainter implements Z4Painter {
 
-  private final double module = 15;
+  private final double module = 30;
   private boolean bool;
 
   @Override
@@ -22,7 +22,7 @@ public class Z4ArrowPainter implements Z4Painter {
     double x = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.module);
 
     context.save();
-    context.lineWidth = 3;
+    context.lineWidth = 2;
 
     context.strokeStyle = Z4Constants.$getStyle("black");
     context.beginPath();
@@ -33,8 +33,8 @@ public class Z4ArrowPainter implements Z4Painter {
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(x, 0);
-    context.lineTo(x - 5, -2.5);
-    context.lineTo(x - 5, +2.5);
+    context.lineTo(x - 10, -5);
+    context.lineTo(x - 10, +5);
     context.lineTo(x, 0);
     context.stroke();
 

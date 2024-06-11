@@ -1,8 +1,8 @@
 package pizzapazza.painter;
 
-import pizzapazza.util.Z4JSONable;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.math.Z4DrawingPoint;
+import pizzapazza.util.Z4JSONable;
 import simulation.dom.$CanvasRenderingContext2D;
 
 /**

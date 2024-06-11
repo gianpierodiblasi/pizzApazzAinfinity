@@ -19,6 +19,8 @@ public class Z4SpatioTemporalColor implements Z4JSONable {
   private Z4GradientColor flatGradientColor;
 
   private Z4SpatioTemporalColor(Color color, Z4GradientColor gradientColor, Z4BiGradientColor biGradientColor) {
+    super();
+    
     this.color = color;
     this.gradientColor = gradientColor;
     this.biGradientColor = biGradientColor;

@@ -174,8 +174,9 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
    * Adds a new layer preview
    *
    * @param layer The layer
+   * @return The layer preview
    */
-  public void addLayerPreview(Z4Layer layer) {
+  public Z4LayerPreview addLayerPreview(Z4Layer layer) {
     Z4LayerPreview preview = new Z4LayerPreview();
     preview.setRibbonLayerPanel(this);
     preview.setLayer(this.canvas, layer);
@@ -190,5 +191,7 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
 
     this.layersPreview.add(preview, null);
     preview.invoke("scrollIntoView()");
+
+    return preview;
   }
 }

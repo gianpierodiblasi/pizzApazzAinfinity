@@ -12,13 +12,26 @@ import def.dom.URL;
 import def.dom.WheelEvent;
 import def.js.Array;
 import def.js.JSON;
+import javascript.awt.Color;
 import javascript.awt.Dimension;
 import javascript.awt.Point;
 import javascript.swing.JSComponent;
 import javascript.util.fsa.FileSystemFileHandle;
 import javascript.util.fsa.FileSystemWritableFileStreamCreateOptions;
+import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.iterator.Z4PointIteratorDrawingAction;
+import pizzapazza.iterator.Z4Stamper;
 import pizzapazza.math.Z4DrawingPoint;
+import pizzapazza.math.Z4FancifulValue;
+import pizzapazza.math.Z4RandomValue;
+import pizzapazza.math.Z4RandomValueBehavior;
+import pizzapazza.math.Z4Rotation;
+import pizzapazza.math.Z4RotationBehavior;
+import pizzapazza.math.Z4Sign;
+import pizzapazza.math.Z4SignBehavior;
+import pizzapazza.math.Z4SignedRandomValue;
+import pizzapazza.math.Z4SignedValue;
+import pizzapazza.painter.Z4ArrowPainter;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonFilePanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
@@ -71,8 +84,25 @@ public class Z4Canvas extends JSComponent {
 
   private final Z4Paper paper = new Z4Paper();
   private Z4Layer selectedLayer;
+  private Z4LayerPreview selectedLayerPreview;
 
-  private Z4DrawingTool drawingTool;
+  private Z4DrawingTool drawingTool = new Z4DrawingTool(
+          new Z4Stamper(
+                  new Z4FancifulValue(
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1),
+                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                          false),
+                  new Z4FancifulValue(
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                          false),
+                  new Z4Rotation(0, new Z4FancifulValue(
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                          false), Z4RotationBehavior.FIXED, false)),
+          new Z4ArrowPainter(),
+          Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255))
+  );
 
   /**
    * Creates the object
@@ -157,7 +187,7 @@ public class Z4Canvas extends JSComponent {
     this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
 
     this.ribbonLayerPanel.reset();
-    this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+    this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
 
     this.ribbonHistoryPanel.resetHistory(() -> {
       this.afterCreate("", width, height);
@@ -216,7 +246,7 @@ public class Z4Canvas extends JSComponent {
       this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
 
       this.ribbonLayerPanel.reset();
-      this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+      this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
 
       this.ribbonHistoryPanel.resetHistory(() -> {
         this.afterCreate(projectName, (int) image.width, (int) image.height);
@@ -295,7 +325,7 @@ public class Z4Canvas extends JSComponent {
         this.selectedLayer.setCompositeOperation(layers.$get(index).$get("compositeOperation"));
         this.selectedLayer.setHidden(layers.$get(index).$get("hidden"));
         this.selectedLayer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
-        this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+        this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
 
         if (index + 1 < layers.length) {
           this.openLayer(zip, json, layers, index + 1);
@@ -370,7 +400,7 @@ public class Z4Canvas extends JSComponent {
       this.selectedLayer.setCompositeOperation(layers.$get(index).$get("compositeOperation"));
       this.selectedLayer.setHidden(layers.$get(index).$get("hidden"));
       this.selectedLayer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
-      this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+      this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
 
       if (index + 1 < layers.length) {
         this.openLayerFromHistory(json, layers, index + 1);
@@ -680,7 +710,7 @@ public class Z4Canvas extends JSComponent {
 
     this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
 
-    this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+    this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
     this.setSaved(false);
   }
 
@@ -702,7 +732,7 @@ public class Z4Canvas extends JSComponent {
         this.selectedLayer.setCompositeOperation(layer.getCompositeOperation());
         this.selectedLayer.setHidden(layer.isHidden());
         this.selectedLayer.move(offset.x, offset.y);
-        this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+        this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
 
         this.setSaved(false);
         this.drawCanvas();
@@ -775,9 +805,11 @@ public class Z4Canvas extends JSComponent {
    * Sets the selected layer
    *
    * @param selectedLayer The selected layer
+   * @param selectedLayerPreview The layer preview
    */
-  public void setSelectedLayer(Z4Layer selectedLayer) {
+  public void setSelectedLayer(Z4Layer selectedLayer, Z4LayerPreview selectedLayerPreview) {
     this.selectedLayer = selectedLayer;
+    this.selectedLayerPreview = selectedLayerPreview;
   }
 
   /**
@@ -924,12 +956,14 @@ public class Z4Canvas extends JSComponent {
       case "enter":
         this.pressed = event.buttons == 1;
         if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.CONTINUE, x, y)) {
+          this.ribbonHistoryPanel.stopStandard();
           this.iteratePoint(Z4PointIteratorDrawingAction.CONTINUE);
         }
         break;
       case "down":
         this.pressed = true;
         if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.START, x, y)) {
+          this.ribbonHistoryPanel.stopStandard();
           this.iteratePoint(Z4PointIteratorDrawingAction.START);
         }
         break;
@@ -937,6 +971,7 @@ public class Z4Canvas extends JSComponent {
         this.statusPanel.setMousePosition(parseInt(x), parseInt(y));
 
         if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.CONTINUE, x, y)) {
+          this.ribbonHistoryPanel.stopStandard();
           this.iteratePoint(Z4PointIteratorDrawingAction.CONTINUE);
         }
         break;
@@ -945,24 +980,27 @@ public class Z4Canvas extends JSComponent {
         if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
           this.iteratePoint(Z4PointIteratorDrawingAction.STOP);
         }
+
+        this.changed = true;
+        this.setSaved(false);
+        this.ribbonHistoryPanel.startStandard();
         break;
       case "leave":
-        if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
+        if (this.pressed) {
           this.pressed = false;
-          this.iteratePoint(Z4PointIteratorDrawingAction.STOP);
-        } else {
-          this.pressed = false;
-        }
+          if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
+            this.iteratePoint(Z4PointIteratorDrawingAction.STOP);
+          }
 
+          this.changed = true;
+          this.setSaved(false);
+          this.ribbonHistoryPanel.startStandard();
+        }
         break;
     }
   }
 
   private void iteratePoint(Z4PointIteratorDrawingAction action) {
-    if (action != Z4PointIteratorDrawingAction.STOP) {
-      this.ribbonHistoryPanel.stopStandard();
-    }
-
     Z4DrawingPoint next;
     while ((next = this.drawingTool.next()) != null) {
       if (next.drawBounds) {
@@ -973,15 +1011,13 @@ public class Z4Canvas extends JSComponent {
         this.ctx.restore();
       } else {
         this.selectedLayer.drawTool(this.drawingTool, next);
-        this.ribbonHistoryPanel.saveHistory("standard");
+        this.selectedLayerPreview.drawLayer();
         this.drawCanvas();
       }
     }
 
     if (this.drawingTool.isInfinitePointGenerator() && this.pressed) {
       setTimeout(() -> this.iteratePoint(Z4PointIteratorDrawingAction.CONTINUE), this.drawingTool.getInfinitePointGeneratorSleep());
-    } else if (action == Z4PointIteratorDrawingAction.STOP) {
-      this.ribbonHistoryPanel.startStandard();
     }
   }
 }

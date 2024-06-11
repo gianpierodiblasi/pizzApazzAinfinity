@@ -1485,7 +1485,9 @@ class Z4Canvas extends JSComponent {
 
    selectedLayer = null;
 
-   drawingTool = null;
+   selectedLayerPreview = null;
+
+   drawingTool = new Z4DrawingTool(new Z4Stamper(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)), new Z4ArrowPainter(), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)));
 
   /**
    * Creates the object
@@ -1562,7 +1564,7 @@ class Z4Canvas extends JSComponent {
     this.height = height;
     this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
     this.ribbonLayerPanel.reset();
-    this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+    this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
     this.ribbonHistoryPanel.resetHistory(() => {
       this.afterCreate("", width, height);
       this.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
@@ -1614,7 +1616,7 @@ class Z4Canvas extends JSComponent {
       this.height = image.height;
       this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
       this.ribbonLayerPanel.reset();
-      this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+      this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
       this.ribbonHistoryPanel.resetHistory(() => {
         this.afterCreate(projectName, image.width, image.height);
         this.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
@@ -1682,7 +1684,7 @@ class Z4Canvas extends JSComponent {
         this.selectedLayer.setCompositeOperation(layers[index]["compositeOperation"]);
         this.selectedLayer.setHidden(layers[index]["hidden"]);
         this.selectedLayer.move(layers[index]["offsetX"], layers[index]["offsetY"]);
-        this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+        this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
         if (index + 1 < layers.length) {
           this.openLayer(zip, json, layers, index + 1);
         } else if (json["history"]) {
@@ -1749,7 +1751,7 @@ class Z4Canvas extends JSComponent {
       this.selectedLayer.setCompositeOperation(layers[index]["compositeOperation"]);
       this.selectedLayer.setHidden(layers[index]["hidden"]);
       this.selectedLayer.move(layers[index]["offsetX"], layers[index]["offsetY"]);
-      this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+      this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
       if (index + 1 < layers.length) {
         this.openLayerFromHistory(json, layers, index + 1);
       } else {
@@ -2025,7 +2027,7 @@ class Z4Canvas extends JSComponent {
     this.changed = true;
     this.ribbonHistoryPanel.saveHistory("standard,tool");
     this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
-    this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+    this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
     this.setSaved(false);
   }
 
@@ -2045,7 +2047,7 @@ class Z4Canvas extends JSComponent {
         this.selectedLayer.setCompositeOperation(layer.getCompositeOperation());
         this.selectedLayer.setHidden(layer.isHidden());
         this.selectedLayer.move(offset.x, offset.y);
-        this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+        this.selectedLayerPreview = this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
         this.setSaved(false);
         this.drawCanvas();
         return null;
@@ -2112,9 +2114,11 @@ class Z4Canvas extends JSComponent {
    * Sets the selected layer
    *
    * @param selectedLayer The selected layer
+   * @param selectedLayerPreview The layer preview
    */
-   setSelectedLayer(selectedLayer) {
+   setSelectedLayer(selectedLayer, selectedLayerPreview) {
     this.selectedLayer = selectedLayer;
+    this.selectedLayerPreview = selectedLayerPreview;
   }
 
   /**
@@ -2259,18 +2263,21 @@ class Z4Canvas extends JSComponent {
       case "enter":
         this.pressed = event.buttons === 1;
         if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.CONTINUE, x, y)) {
+          this.ribbonHistoryPanel.stopStandard();
           this.iteratePoint(Z4PointIteratorDrawingAction.CONTINUE);
         }
         break;
       case "down":
         this.pressed = true;
         if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.START, x, y)) {
+          this.ribbonHistoryPanel.stopStandard();
           this.iteratePoint(Z4PointIteratorDrawingAction.START);
         }
         break;
       case "move":
         this.statusPanel.setMousePosition(parseInt(x), parseInt(y));
         if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.CONTINUE, x, y)) {
+          this.ribbonHistoryPanel.stopStandard();
           this.iteratePoint(Z4PointIteratorDrawingAction.CONTINUE);
         }
         break;
@@ -2279,22 +2286,25 @@ class Z4Canvas extends JSComponent {
         if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
           this.iteratePoint(Z4PointIteratorDrawingAction.STOP);
         }
+        this.changed = true;
+        this.setSaved(false);
+        this.ribbonHistoryPanel.startStandard();
         break;
       case "leave":
-        if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
+        if (this.pressed) {
           this.pressed = false;
-          this.iteratePoint(Z4PointIteratorDrawingAction.STOP);
-        } else {
-          this.pressed = false;
+          if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
+            this.iteratePoint(Z4PointIteratorDrawingAction.STOP);
+          }
+          this.changed = true;
+          this.setSaved(false);
+          this.ribbonHistoryPanel.startStandard();
         }
         break;
     }
   }
 
    iteratePoint(action) {
-    if (action !== Z4PointIteratorDrawingAction.STOP) {
-      this.ribbonHistoryPanel.stopStandard();
-    }
     let next = null;
     while ((next = this.drawingTool.next()) !== null) {
       if (next.drawBounds) {
@@ -2305,14 +2315,12 @@ class Z4Canvas extends JSComponent {
         this.ctx.restore();
       } else {
         this.selectedLayer.drawTool(this.drawingTool, next);
-        this.ribbonHistoryPanel.saveHistory("standard");
+        this.selectedLayerPreview.drawLayer();
         this.drawCanvas();
       }
     }
     if (this.drawingTool.isInfinitePointGenerator() && this.pressed) {
       setTimeout(() => this.iteratePoint(Z4PointIteratorDrawingAction.CONTINUE), this.drawingTool.getInfinitePointGeneratorSleep());
-    } else if (action === Z4PointIteratorDrawingAction.STOP) {
-      this.ribbonHistoryPanel.startStandard();
     }
   }
 }
@@ -2610,7 +2618,7 @@ class Z4LayerPreview extends JSDropDown {
     selector.addActionListener(event => {
       document.querySelectorAll(".z4layerpreview .z4layerpreview-selector").forEach(element => element.textContent = Z4LayerPreview.UNSELECTED_LAYER_CONTENT);
       selector.setText(Z4LayerPreview.SELECTED_LAYER_CONTENT);
-      this.canvas.setSelectedLayer(this.layer);
+      this.canvas.setSelectedLayer(this.layer, this);
     });
     this.summary.add(selector, new GBC(2, 1).f(GBC.BOTH).i(0, 2, 0, 0));
     let button = new JSButton();
@@ -2856,6 +2864,9 @@ class Z4LayerPreview extends JSDropDown {
     this.drawLayer();
   }
 
+  /**
+   * Draws the layer
+   */
    drawLayer() {
     if (this.layer) {
       this.ctx.save();
@@ -5527,6 +5538,7 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
    * Adds a new layer preview
    *
    * @param layer The layer
+   * @return The layer preview
    */
    addLayerPreview(layer) {
     let preview = new Z4LayerPreview();
@@ -5541,6 +5553,7 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     document.querySelectorAll(".z4layerpreview .z4layerpreview-selector").forEach(element => element.textContent = Z4LayerPreview.UNSELECTED_LAYER_CONTENT);
     this.layersPreview.add(preview, null);
     preview.invoke("scrollIntoView()");
+    return preview;
   }
 }
 /**
@@ -8648,16 +8661,14 @@ class Z4SpatioTemporalColor extends Z4JSONable {
 
    gradientColor = null;
 
-   gradientColorProgression = null;
-
    biGradientColor = null;
 
    flatGradientColor = null;
 
-  constructor(color, gradientColor, gradientColorProgression, biGradientColor) {
+  constructor(color, gradientColor, biGradientColor) {
+    super();
     this.color = color;
     this.gradientColor = gradientColor;
-    this.gradientColorProgression = gradientColorProgression;
     this.biGradientColor = biGradientColor;
     if (color) {
       this.flatGradientColor = new Z4GradientColor();
@@ -8673,18 +8684,17 @@ class Z4SpatioTemporalColor extends Z4JSONable {
    * @return the color aggregator
    */
   static  fromColor(color) {
-    return new Z4SpatioTemporalColor(color, null, null, null);
+    return new Z4SpatioTemporalColor(color, null, null);
   }
 
   /**
    * Creates a Z4SpatioTemporalColor from a gradient color
    *
    * @param gradientColor The gradient color
-   * @param gradientColorProgression The gradient color progression
    * @return the color aggregator
    */
-  static  fromGradientColor(gradientColor, gradientColorProgression) {
-    return new Z4SpatioTemporalColor(null, gradientColor, gradientColorProgression, null);
+  static  fromGradientColor(gradientColor) {
+    return new Z4SpatioTemporalColor(null, gradientColor, null);
   }
 
   /**
@@ -8694,7 +8704,7 @@ class Z4SpatioTemporalColor extends Z4JSONable {
    * @return the color aggregator
    */
   static  fromBiGradientColor(biGradientColor) {
-    return new Z4SpatioTemporalColor(null, null, null, biGradientColor);
+    return new Z4SpatioTemporalColor(null, null, biGradientColor);
   }
 
   /**
@@ -8745,7 +8755,6 @@ class Z4SpatioTemporalColor extends Z4JSONable {
       json["color"] = jsonColor;
     } else if (this.gradientColor) {
       json["gradientColor"] = this.gradientColor.toJSON();
-      json["gradientColorProgression"] = this.gradientColorProgression.toJSON();
     } else if (this.biGradientColor) {
       json["biGradientColor"] = this.biGradientColor.toJSON();
     }
@@ -8763,7 +8772,7 @@ class Z4SpatioTemporalColor extends Z4JSONable {
       let jsonColor = json["color"];
       return Z4SpatioTemporalColor.fromColor(new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]));
     } else if (json["gradientColor"]) {
-      return Z4SpatioTemporalColor.fromGradientColor(Z4GradientColor.fromJSON(json["gradientColor"]), Z4GradientColorProgression.fromJSON(json["gradientColorProgression"]));
+      return Z4SpatioTemporalColor.fromGradientColor(Z4GradientColor.fromJSON(json["gradientColor"]));
     } else if (json["biGradientColor"]) {
       return Z4SpatioTemporalColor.fromBiGradientColor(Z4BiGradientColor.fromJSON(json["biGradientColor"]));
     } else {
@@ -8904,14 +8913,14 @@ class Z4Stamper extends Z4PointIterator {
     } else {
       this.currentMultiplicityCounter++;
       this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
-      let angle = this.rotation.next(0.0);
-      let currentPush = this.push.next();
-      if (currentPush) {
-        let pushed = Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, currentPush, angle);
-        // this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), 1, angle));
-      } else {
-        // this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P.$get("x"), this.P.$get("y"), 1, angle));
-      }
+      // double angle = this.rotation.next(0.0);
+      // double currentPush = this.push.next();
+      // if ($exists(currentPush)) {
+      // Z4Vector pushed = Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, currentPush, angle);
+      // this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), 1, angle));
+      // } else {
+      // this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P.$get("x"), this.P.$get("y"), 1, angle));
+      // }
       // this.rotation.nextSide(this.z4Point, null);
       // this.progression.next(this.z4Point);
       // 
@@ -8920,6 +8929,7 @@ class Z4Stamper extends Z4PointIterator {
       // this.z4Point.setColorPosition(Math.random());
       // }
       // 
+      this.z4DrawingPoint = new Z4DrawingPoint(Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, 1, 0), 1, Z4Lighting.NONE, 0, false, new Z4Sign(Z4SignBehavior.POSITIVE), false);
       return this.z4DrawingPoint;
     }
   }
@@ -9379,6 +9389,20 @@ class Z4DrawingTool extends Z4Nextable {
    spatioTemporalColor = null;
 
   /**
+   * Creates the object
+   *
+   * @param pointIterator The point iterator
+   * @param painter The painter
+   * @param spatioTemporalColor The spatio-temporal color
+   */
+  constructor(pointIterator, painter, spatioTemporalColor) {
+    super();
+    this.pointIterator = pointIterator;
+    this.painter = painter;
+    this.spatioTemporalColor = spatioTemporalColor;
+  }
+
+  /**
    * Performs a drawing action
    *
    * @param action The action
@@ -9589,7 +9613,7 @@ class Z4Painter extends Z4JSONable {
  */
 class Z4ArrowPainter extends Z4Painter {
 
-   module = 15;
+   module = 30;
 
    bool = false;
 
@@ -9597,7 +9621,7 @@ class Z4ArrowPainter extends Z4Painter {
     this.bool = !this.bool;
     let x = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.module);
     context.save();
-    context.lineWidth = 3;
+    context.lineWidth = 2;
     context.strokeStyle = Z4Constants.getStyle("black");
     context.beginPath();
     context.arc(0, 0, 2, 0, Z4Math.TWO_PI);
@@ -9606,8 +9630,8 @@ class Z4ArrowPainter extends Z4Painter {
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(x, 0);
-    context.lineTo(x - 5, -2.5);
-    context.lineTo(x - 5, +2.5);
+    context.lineTo(x - 10, -5);
+    context.lineTo(x - 10, +5);
     context.lineTo(x, 0);
     context.stroke();
     context.restore();
