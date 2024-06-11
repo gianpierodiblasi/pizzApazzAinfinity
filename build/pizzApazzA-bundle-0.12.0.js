@@ -1675,7 +1675,41 @@ class Z4Canvas extends JSComponent {
   // new Z4ArrowPainter(),
   // Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255))
   // );
-   drawingTool = new Z4DrawingTool(new Z4Tracer(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), true, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 25), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.RELATIVE_TO_PATH, false)), new Z4ArrowPainter(), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)));
+  // private Z4DrawingTool drawingTool = new Z4DrawingTool(
+  // new Z4Tracer(
+  // new Z4FancifulValue(
+  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1),
+  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+  // false),
+  // new Z4FancifulValue(
+  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+  // false),
+  // new Z4FancifulValue(
+  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+  // false),
+  // new Z4FancifulValue(
+  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+  // false),
+  // new Z4FancifulValue(
+  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+  // false),
+  // true,
+  // new Z4FancifulValue(
+  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 25),
+  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+  // false),
+  // new Z4Rotation(0, new Z4FancifulValue(
+  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0),
+  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+  // false), Z4RotationBehavior.RELATIVE_TO_PATH, false)),
+  // new Z4ArrowPainter(),
+  // Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255))
+  // );
+   drawingTool = new Z4DrawingTool(new Z4Airbrush(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), 100, 5, new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 5), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.RELATIVE_TO_PATH, false)), new Z4ArrowPainter(), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)));
 
   /**
    * Creates the object
@@ -9054,6 +9088,103 @@ class Z4PointIterator extends Z4Nextable {
    toJSON() {
     let json = new Object();
     json["rotation"] = this.rotation.toJSON();
+    return json;
+  }
+}
+/**
+ * The airbrush
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Airbrush extends Z4PointIterator {
+
+   multiplicity = null;
+
+   radius = 0.0;
+
+   speed = 0.0;
+
+   currentMultiplicityCounter = 0;
+
+   currentMultiplicityTotal = 0;
+
+  /**
+   * Creates the object
+   *
+   * @param multiplicity The multiplicity
+   * @param radius The radius
+   * @param speed The speed
+   * @param rotation The rotation
+   */
+  constructor(multiplicity, radius, speed, rotation) {
+    super(rotation);
+    this.multiplicity = multiplicity;
+    this.radius = radius;
+    this.speed = speed;
+  }
+
+   drawAction(action, x, y) {
+    if (action === Z4PointIteratorDrawingAction.START) {
+      this.currentMultiplicityCounter = 0;
+      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
+      this.currentPoint = new Z4Point(x, y);
+      this.hasNext = true;
+      return true;
+    } else if (action === Z4PointIteratorDrawingAction.CONTINUE) {
+      this.currentPoint = new Z4Point(x, y);
+      this.hasNext = true;
+      return false;
+    } else if (action === Z4PointIteratorDrawingAction.STOP) {
+      this.hasNext = false;
+      return false;
+    } else {
+      return false;
+    }
+  }
+
+   next() {
+    if (!this.hasNext) {
+      this.currentMultiplicityCounter = 0;
+      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
+      this.hasNext = true;
+      return null;
+    } else {
+      this.currentMultiplicityCounter++;
+      this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
+      let currentRadius = this.radius * Math.random();
+      let currenAngle = Z4Math.TWO_PI * Math.random();
+      let angle = this.rotation.next(currenAngle);
+      let vector = Z4Vector.fromVector(this.currentPoint.x + currentRadius * Math.cos(currenAngle), currentRadius * Math.sin(currenAngle) + this.currentPoint.y, 1, angle);
+      // this.rotation.nextSide(this.z4Point, null);
+      // if (!this.progression.isTemporal() || this.currentMultiplicityCounter == 1) {
+      // this.progression.next(this.z4Point);
+      // } else {
+      // this.z4Point.setLighting(this.progression.getLighting());
+      // this.z4Point.setDrawBounds(false);
+      // }
+      // 
+      // if (this.progression.isRelativeToPath()) {
+      // this.z4Point.setDrawBounds(false);
+      // this.z4Point.setColorPosition(currentRadius / this.radius);
+      // }
+      // 
+      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, new Z4Sign(Z4SignBehavior.POSITIVE), false);
+    }
+  }
+
+   isInfinitePointGenerator() {
+    return true;
+  }
+
+   getInfinitePointGeneratorSleep() {
+    return parseInt(250 / this.speed);
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    json["multiplicity"] = this.multiplicity.toJSON();
+    json["radius"] = this.radius;
+    json["speed"] = this.speed;
     return json;
   }
 }

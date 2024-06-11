@@ -17,32 +17,12 @@ public abstract class Z4PointIterator {
   protected Z4Progression progression = Z4Progression.spatial(Z4Lighting.NONE);
 
   /**
-   * Sets the color progression
-   *
-   * @param progression The color progression
-   */
-  @SuppressWarnings("unchecked")
-  public void setProgression(Z4Progression progression) {
-    this.progression = progression;
-  }
-
-  /**
    * Returns the color progression
    *
    * @return The color progression
    */
   public Z4Progression getProgression() {
     return this.progression;
-  }
-
-  /**
-   * Sets the rotation
-   *
-   * @param rotation The rotation
-   */
-  @SuppressWarnings("unchecked")
-  public void setRotation(Z4Rotation rotation) {
-    this.rotation = rotation;
   }
 
   /**
