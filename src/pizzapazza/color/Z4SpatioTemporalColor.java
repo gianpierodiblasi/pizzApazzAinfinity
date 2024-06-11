@@ -11,20 +11,18 @@ import simulation.js.$Object;
  * @author gianpiero.diblasi
  */
 public class Z4SpatioTemporalColor implements Z4JSONable {
-  
+
   private final Color color;
   private final Z4GradientColor gradientColor;
-  private final Z4GradientColorProgression gradientColorProgression;
   private final Z4BiGradientColor biGradientColor;
-  
+
   private Z4GradientColor flatGradientColor;
-  
-  private Z4SpatioTemporalColor(Color color, Z4GradientColor gradientColor, Z4GradientColorProgression gradientColorProgression, Z4BiGradientColor biGradientColor) {
+
+  private Z4SpatioTemporalColor(Color color, Z4GradientColor gradientColor, Z4BiGradientColor biGradientColor) {
     this.color = color;
     this.gradientColor = gradientColor;
-    this.gradientColorProgression = gradientColorProgression;
     this.biGradientColor = biGradientColor;
-    
+
     if ($exists(color)) {
       this.flatGradientColor = new Z4GradientColor();
       this.flatGradientColor.addColor(this.color, 0);
@@ -39,18 +37,17 @@ public class Z4SpatioTemporalColor implements Z4JSONable {
    * @return the color aggregator
    */
   public static Z4SpatioTemporalColor fromColor(Color color) {
-    return new Z4SpatioTemporalColor(color, null, null, null);
+    return new Z4SpatioTemporalColor(color, null, null);
   }
 
   /**
    * Creates a Z4SpatioTemporalColor from a gradient color
    *
    * @param gradientColor The gradient color
-   * @param gradientColorProgression The gradient color progression
    * @return the color aggregator
    */
-  public static Z4SpatioTemporalColor fromGradientColor(Z4GradientColor gradientColor, Z4GradientColorProgression gradientColorProgression) {
-    return new Z4SpatioTemporalColor(null, gradientColor, gradientColorProgression, null);
+  public static Z4SpatioTemporalColor fromGradientColor(Z4GradientColor gradientColor) {
+    return new Z4SpatioTemporalColor(null, gradientColor, null);
   }
 
   /**
@@ -60,7 +57,7 @@ public class Z4SpatioTemporalColor implements Z4JSONable {
    * @return the color aggregator
    */
   public static Z4SpatioTemporalColor fromBiGradientColor(Z4BiGradientColor biGradientColor) {
-    return new Z4SpatioTemporalColor(null, null, null, biGradientColor);
+    return new Z4SpatioTemporalColor(null, null, biGradientColor);
   }
 
   /**
@@ -99,7 +96,7 @@ public class Z4SpatioTemporalColor implements Z4JSONable {
       return null;
     }
   }
-  
+
   @Override
   public $Object toJSON() {
     $Object json = new $Object();
@@ -112,7 +109,6 @@ public class Z4SpatioTemporalColor implements Z4JSONable {
       json.$set("color", jsonColor);
     } else if ($exists(this.gradientColor)) {
       json.$set("gradientColor", this.gradientColor.toJSON());
-      json.$set("gradientColorProgression", this.gradientColorProgression.toJSON());
     } else if ($exists(this.biGradientColor)) {
       json.$set("biGradientColor", this.biGradientColor.toJSON());
     }
@@ -130,7 +126,7 @@ public class Z4SpatioTemporalColor implements Z4JSONable {
       $Object jsonColor = json.$get("color");
       return Z4SpatioTemporalColor.fromColor(new Color(jsonColor.$get("red"), jsonColor.$get("green"), jsonColor.$get("blue"), jsonColor.$get("alpha")));
     } else if ($exists(json.$get("gradientColor"))) {
-      return Z4SpatioTemporalColor.fromGradientColor(Z4GradientColor.fromJSON(json.$get("gradientColor")), Z4GradientColorProgression.fromJSON(json.$get("gradientColorProgression")));
+      return Z4SpatioTemporalColor.fromGradientColor(Z4GradientColor.fromJSON(json.$get("gradientColor")));
     } else if ($exists(json.$get("biGradientColor"))) {
       return Z4SpatioTemporalColor.fromBiGradientColor(Z4BiGradientColor.fromJSON(json.$get("biGradientColor")));
     } else {
