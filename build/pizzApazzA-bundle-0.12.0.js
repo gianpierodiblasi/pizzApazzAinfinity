@@ -1377,6 +1377,179 @@ class Z4SignBehavior {
   static ALTERNATE = 'ALTERNATE';
 }
 /**
+ * The path for a Z4Tracer
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4TracerPath {
+
+   surplus = 0.0;
+
+   step = 0.0;
+
+   x1 = 0.0;
+
+   y1 = 0.0;
+
+   x2 = 0.0;
+
+   y2 = 0.0;
+
+   x3 = 0.0;
+
+   y3 = 0.0;
+
+   bezierCurve = null;
+
+   bezierCurveLength = 0.0;
+
+   length = 0.0;
+
+   position = 0.0;
+
+  /**
+   * Creates a Z4TracerPath from a line
+   *
+   * @param x1 The x-axis coordinate of the start point
+   * @param y1 The y-axis coordinate of the start point
+   * @param x2 The x-axis coordinate of the end point
+   * @param y2 The y-axis coordinate of the end point
+   * @param surplus The surplus from a previous path
+   * @param step The step
+   * @return The Z4TracerPath
+   */
+  static  fromLine(x1, y1, x2, y2, surplus, step) {
+    let path = new Z4TracerPath();
+    path.x1 = x1;
+    path.y1 = y1;
+    path.x2 = x2;
+    path.y2 = y2;
+    return path.init(surplus, step);
+  }
+
+  /**
+   * Creates a Z4TracerPath from a quadric Bezier curve followed by a line
+   *
+   * @param x1 The x-axis coordinate of the start point of the curve
+   * @param y1 The y-axis coordinate of the start point of the curve
+   * @param ctrlx The x-axis coordinate of the control point of the curve
+   * @param ctrly The y-axis coordinate of the control point of the curve
+   * @param x2 The x-axis coordinate of the end point of the curve (the start
+   * point of the line)
+   * @param y2 The y-axis coordinate of the end point of the curve (the start
+   * point of the line)
+   * @param x3 The x-axis coordinate of the end point of the line
+   * @param y3 The y-axis coordinate of the end point of the line
+   * @param surplus The surplus from a previous path
+   * @param step The step
+   * @return The Z4TracerPath
+   */
+  static  fromQuadAndLine(x1, y1, ctrlx, ctrly, x2, y2, x3, y3, surplus, step) {
+    let path = new Z4TracerPath();
+    path.bezierCurve = new Bezier(x1, y1, ctrlx, ctrly, x2, y2);
+    path.bezierCurveLength = path.bezierCurve.length();
+    path.x2 = x2;
+    path.y2 = y2;
+    path.x3 = x3;
+    path.y3 = y3;
+    return path.init(surplus, step);
+  }
+
+   init(surplus, step) {
+    this.surplus = surplus;
+    this.step = step;
+    this.length = this.bezierCurve ? this.bezierCurveLength + Z4Math.distance(this.x2, this.y2, this.x3, this.y3) : Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
+    this.position = surplus;
+    return this;
+  }
+
+  /**
+   * Checks if this path has more points
+   *
+   * @return true if this path has more points, false otherwise
+   */
+   hasNext() {
+    return this.length > this.position;
+  }
+
+  /**
+   * Returns the next tangent vector
+   *
+   * @return The next tangent vector, null if the path has no more points
+   */
+   next() {
+    if (!this.hasNext()) {
+      return null;
+    } else if (!this.bezierCurve) {
+      let t = this.position / this.length;
+      let x = (this.x2 - this.x1) * t + this.x1;
+      let y = (this.y2 - this.y1) * t + this.y1;
+      this.position += this.step;
+      return Z4Vector.fromVector(x, y, 1, Z4Math.atan(this.x1, this.y1, this.x2, this.y2));
+    } else if (this.position < this.bezierCurveLength) {
+      let t = this.position / this.bezierCurveLength;
+      let point = this.bezierCurve.get(t);
+      let derivative = this.bezierCurve.derivative(t);
+      this.position += this.step;
+      return Z4Vector.fromPoints(point.x, point.y, point.x + derivative.x, point.y + derivative.y);
+    } else {
+      let t = (this.position - this.bezierCurveLength) / (this.length - this.bezierCurveLength);
+      let x = (this.x3 - this.x2) * t + this.x2;
+      let y = (this.y3 - this.y2) * t + this.y2;
+      this.position += this.step;
+      return Z4Vector.fromVector(x, y, 1, Z4Math.atan(this.x2, this.y2, this.x3, this.y3));
+    }
+  }
+
+  /**
+   * Returns the tangent vector in a position
+   *
+   * @param position The position (in the range [0,1])
+   * @return The tangent vector
+   */
+  // public Z4Vector getTangentAt(double position) {
+  // let tangent = this._gPath.tangentAt(position);
+  // return Z4Vector.fromPoints(tangent.start.x, tangent.start.y, tangent.end.x, tangent.end.y);
+  // return null;
+  // }
+  /**
+   * Restarts the path
+   *
+   * @return This Z4TracerPath
+   */
+   restart() {
+    this.position = this.surplus;
+    return this;
+  }
+
+  /**
+   * Returns the path length
+   *
+   * @return The path length
+   */
+   getLength() {
+    return this.length;
+  }
+
+  /**
+   * Returns the new surplus for the next path
+   *
+   * @return The new surplus for the next path
+   */
+   getNewSurplus() {
+    return this.position - this.length;
+  }
+
+  /**
+   * Returns the number of available points in the path
+   *
+   * @return The number of available points in the path
+   */
+   getPointCount() {
+    return parseInt((this.length - this.surplus) / this.step);
+  }
+}
+/**
  * The vector
  *
  * @author gianpiero.diblasi
@@ -1485,7 +1658,24 @@ class Z4Canvas extends JSComponent {
 
    selectedLayer = null;
 
-   drawingTool = new Z4DrawingTool(new Z4Stamper(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 5), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(5, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(10, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(30, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)), new Z4ArrowPainter(), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)));
+  // private Z4DrawingTool drawingTool = new Z4DrawingTool(
+  // new Z4Stamper(
+  // new Z4FancifulValue(
+  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 5),
+  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(5, Z4RandomValueBehavior.CLASSIC, 0)),
+  // false),
+  // new Z4FancifulValue(
+  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
+  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(10, Z4RandomValueBehavior.CLASSIC, 0)),
+  // false),
+  // new Z4Rotation(0, new Z4FancifulValue(
+  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 45),
+  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(30, Z4RandomValueBehavior.CLASSIC, 0)),
+  // false), Z4RotationBehavior.FIXED, false)),
+  // new Z4ArrowPainter(),
+  // Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255))
+  // );
+   drawingTool = new Z4DrawingTool(new Z4Tracer(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), true, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 25), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.RELATIVE_TO_PATH, false)), new Z4ArrowPainter(), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)));
 
   /**
    * Creates the object
@@ -2258,6 +2448,10 @@ class Z4Canvas extends JSComponent {
     switch(type) {
       case "enter":
         this.pressed = event.buttons === 1;
+        if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.START, x, y)) {
+          this.ribbonHistoryPanel.stopStandard();
+          this.iteratePoint();
+        }
         if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.CONTINUE, x, y)) {
           this.ribbonHistoryPanel.stopStandard();
           this.iteratePoint();
@@ -8804,11 +8998,6 @@ class Z4PointIterator extends Z4Nextable {
    rotation = null;
 
   /**
-   * The current drawing point
-   */
-   z4DrawingPoint = null;
-
-  /**
    * true if this Z4PointIterator has another point, false otherwise
    */
    hasNext = false;
@@ -8860,6 +9049,12 @@ class Z4PointIterator extends Z4Nextable {
    * milliseconds)
    */
    getInfinitePointGeneratorSleep() {
+  }
+
+   toJSON() {
+    let json = new Object();
+    json["rotation"] = this.rotation.toJSON();
+    return json;
   }
 }
 /**
@@ -8926,8 +9121,7 @@ class Z4Stamper extends Z4PointIterator {
       // this.z4Point.setColorPosition(Math.random());
       // }
       // 
-      this.z4DrawingPoint = new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, new Z4Sign(Z4SignBehavior.POSITIVE), false);
-      return this.z4DrawingPoint;
+      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, new Z4Sign(Z4SignBehavior.POSITIVE), false);
     }
   }
 
@@ -8940,8 +9134,209 @@ class Z4Stamper extends Z4PointIterator {
   }
 
    toJSON() {
-    // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    throw new UnsupportedOperationException("Not supported yet.");
+    let json = super.toJSON();
+    json["multiplicity"] = this.multiplicity.toJSON();
+    json["push"] = this.push.toJSON();
+    return json;
+  }
+}
+/**
+ * The tracer
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Tracer extends Z4PointIterator {
+
+   multiplicity = null;
+
+   push = null;
+
+   attack = null;
+
+   sustain = null;
+
+   release = null;
+
+   endlessSustain = false;
+
+   step = null;
+
+   path = null;
+
+   before = null;
+
+   envelopeA = 0.0;
+
+   envelopeS = 0.0;
+
+   envelopeR = 0.0;
+
+   envelopeAS = 0.0;
+
+   envelopeASR = 0.0;
+
+   envelopePosition = 0.0;
+
+   envelopeStep = 0.0;
+
+   clones = new Array();
+
+   clonePos = 0;
+
+   fromClones = false;
+
+   surplus = 0.0;
+
+   connect = false;
+
+   currentVector = null;
+
+   currentMultiplicityCounter = 0;
+
+   currentMultiplicityTotal = 0;
+
+  /**
+   * Creates the object
+   *
+   * @param multiplicity The multiplicity
+   * @param push The push
+   * @param attack The attack
+   * @param sustain The sustain
+   * @param release The release
+   * @param endlessSustain true for an endless sustain, false otherwise
+   * @param step The step
+   * @param rotation
+   */
+  constructor(multiplicity, push, attack, sustain, release, endlessSustain, step, rotation) {
+    super(rotation);
+    this.multiplicity = multiplicity;
+    this.push = push;
+    this.attack = attack;
+    this.sustain = sustain;
+    this.release = release;
+    this.endlessSustain = endlessSustain;
+    this.step = step;
+  }
+
+   drawAction(action, x, y) {
+    if (action === Z4PointIteratorDrawingAction.START) {
+      this.currentPoint = new Z4Point(x, y);
+      this.hasNext = false;
+      this.path = null;
+      this.envelopeA = this.attack.next();
+      this.envelopeS = this.sustain.next();
+      this.envelopeR = this.release.next();
+      this.envelopeAS = this.envelopeA + this.envelopeS;
+      this.envelopeASR = this.envelopeA + this.envelopeS + this.envelopeR;
+      this.envelopePosition = 0;
+      this.envelopeStep = this.step.next();
+      this.clones = new Array();
+      this.fromClones = false;
+      this.surplus = 0;
+      this.connect = false;
+      return false;
+    } else if (action === Z4PointIteratorDrawingAction.CONTINUE) {
+      this.currentMultiplicityCounter = 0;
+      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
+      let distance = Z4Math.distance(this.currentPoint.x, this.currentPoint.y, x, y);
+      if (distance >= 10) {
+        let angle = Z4Math.atan(this.currentPoint.x, this.currentPoint.y, x, y);
+        let vector = Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, 2 * distance / 3, angle);
+        let end = new Z4Point(vector.x, vector.y);
+        if (this.connect) {
+          vector = Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, distance / 3, angle);
+          this.path = Z4TracerPath.fromQuadAndLine(this.before.x, this.before.y, this.currentPoint.x, this.currentPoint.y, vector.x, vector.y, end.x, end.y, this.surplus, this.envelopeStep);
+        } else {
+          this.path = Z4TracerPath.fromLine(this.currentPoint.x, this.currentPoint.y, vector.x, vector.y, this.surplus, this.envelopeStep);
+        }
+        this.connect = true;
+        this.before = end;
+        this.currentPoint = new Z4Point(x, y);
+        this.hasNext = this.path.hasNext();
+        if (!this.hasNext) {
+          this.surplus = this.path.getNewSurplus();
+        }
+      } else {
+        this.hasNext = false;
+      }
+      return true;
+    } else if (action === Z4PointIteratorDrawingAction.STOP) {
+      this.fromClones = true;
+      this.clonePos = 0;
+      this.hasNext = this.clonePos < this.clones.length;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+   next() {
+    if (!this.hasNext) {
+      return null;
+    } else if (this.fromClones) {
+      let clone = this.clones[this.clonePos];
+      // clone.setColorPosition(this.clonePos / this.clones.length);
+      // clone.setDrawBounds(false);
+      this.clonePos++;
+      this.hasNext = this.clonePos < this.clones.length;
+      return clone;
+    } else {
+      if (!this.currentMultiplicityCounter) {
+        this.currentVector = this.path.next();
+      }
+      let vector = null;
+      let angle = this.rotation.next(this.currentVector.phase);
+      let currentPush = this.push.next();
+      if (currentPush) {
+        let pushed = Z4Vector.fromVector(this.currentVector.x0, this.currentVector.y0, currentPush, angle);
+        vector = Z4Vector.fromVector(pushed.x, pushed.y, 1, angle);
+      } else {
+        vector = Z4Vector.fromVector(this.currentVector.x0, this.currentVector.y0, 1, angle);
+      }
+      // this.rotation.nextSide(this.z4Point, this.currentVector);
+      // this.progression.next(this.z4Point);
+      // 
+      // if (this.z4Point.isDrawBounds() && this.z4Point.getIntensity() > 0) {
+      // this.clones.push(this.z4Point.clone());
+      // }
+      // 
+      this.currentMultiplicityCounter++;
+      if (this.currentMultiplicityCounter >= this.currentMultiplicityTotal) {
+        this.currentMultiplicityCounter = 0;
+        this.hasNext = this.path.hasNext();
+        if (!this.hasNext) {
+          this.surplus = this.path.getNewSurplus();
+        }
+      }
+      return new Z4DrawingPoint(vector, this.nextEnvelope(), Z4Lighting.NONE, 0, false, new Z4Sign(Z4SignBehavior.POSITIVE), false);
+    }
+  }
+
+   nextEnvelope() {
+    if (this.envelopePosition < this.envelopeA) {
+      this.envelopePosition++;
+      return this.envelopePosition / this.envelopeA;
+    } else if (this.envelopePosition < this.envelopeAS || this.endlessSustain) {
+      this.envelopePosition++;
+      return 1;
+    } else if (this.envelopePosition < this.envelopeASR) {
+      this.envelopePosition++;
+      return 1 - (this.envelopePosition - this.envelopeAS) / this.envelopeR;
+    } else {
+      return 0;
+    }
+  }
+
+   isInfinitePointGenerator() {
+    return false;
+  }
+
+   getInfinitePointGeneratorSleep() {
+    return 0;
+  }
+
+   toJSON() {
+    return super.toJSON();
   }
 }
 /**

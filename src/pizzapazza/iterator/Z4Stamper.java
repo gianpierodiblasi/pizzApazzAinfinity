@@ -80,7 +80,7 @@ public class Z4Stamper extends Z4PointIterator {
 //        this.z4Point.setColorPosition(Math.random());
 //      }
 //
-      this.z4DrawingPoint = new Z4DrawingPoint(
+      return new Z4DrawingPoint(
               vector,
               1,
               Z4Lighting.NONE,
@@ -89,7 +89,6 @@ public class Z4Stamper extends Z4PointIterator {
               new Z4Sign(Z4SignBehavior.POSITIVE),
               false
       );
-      return this.z4DrawingPoint;
     }
   }
 
@@ -105,7 +104,10 @@ public class Z4Stamper extends Z4PointIterator {
 
   @Override
   public $Object toJSON() {
-    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    $Object json = super.toJSON();
+    json.$set("multiplicity", this.multiplicity.toJSON());
+    json.$set("push", this.push.toJSON());
+    return json;
   }
 
 }

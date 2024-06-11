@@ -4,6 +4,7 @@ import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4Nextable;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Rotation;
+import simulation.js.$Object;
 
 /**
  * The common parent of all point iterators
@@ -16,11 +17,6 @@ public abstract class Z4PointIterator implements Z4Nextable<Z4DrawingPoint> {
    * The rotation
    */
   protected final Z4Rotation rotation;
-
-  /**
-   * The current drawing point
-   */
-  protected Z4DrawingPoint z4DrawingPoint;
 
   /**
    * true if this Z4PointIterator has another point, false otherwise
@@ -72,4 +68,11 @@ public abstract class Z4PointIterator implements Z4Nextable<Z4DrawingPoint> {
    * milliseconds)
    */
   public abstract int getInfinitePointGeneratorSleep();
+
+  @Override
+  public $Object toJSON() {
+    $Object json = new $Object();
+    json.$set("rotation", this.rotation.toJSON());
+    return json;
+  }
 }

@@ -27,175 +27,6 @@ import simulation.js.$Object;
  */
 public class Z4Tracer extends Z4PointIterator<Z4Tracer> {
 
-  private Z4FancifulValue multiplicity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(1).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
-  private Z4FancifulValue push = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
-
-  private Z4FancifulValue attack = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
-  private Z4FancifulValue sustain = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
-  private Z4FancifulValue release = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(0).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
-  private boolean endlessSustain = true;
-
-  private Z4FancifulValue step = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(10).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
-
-  private Z4TracerPath path;
-  private $Object before = new $Object();
-
-  private double envelopeA;
-  private double envelopeS;
-  private double envelopeR;
-  private double envelopeAS;
-  private double envelopeASR;
-  private double envelopePosition;
-  private double envelopeStep;
-
-  private Array<Z4Point> clones = new Array<>();
-  private int clonePos;
-  private boolean fromClones;
-
-  private double surplus;
-  private boolean connect;
-
-  private Z4Vector currentVector;
-  private int currentMultiplicityCounter;
-  private int currentMultiplicityTotal;
-
-  /**
-   * Creates a Z4Tracer
-   */
-  public Z4Tracer() {
-    super();
-
-    this.before.$set("x", 0);
-    this.before.$set("y", 0);
-  }
-
-  @Override
-  public boolean draw(Z4Action action, double x, double y) {
-    if (action == Z4Action.START) {
-      this.P.$set("x", x);
-      this.P.$set("y", y);
-      this.hasNext = false;
-
-      this.path = null;
-      this.envelopeA = this.attack.next();
-      this.envelopeS = this.sustain.next();
-      this.envelopeR = this.release.next();
-      this.envelopeAS = this.envelopeA + this.envelopeS;
-      this.envelopeASR = this.envelopeA + this.envelopeS + this.envelopeR;
-      this.envelopePosition = 0;
-      this.envelopeStep = this.step.next();
-
-      this.clones = new Array<>();
-      this.fromClones = false;
-
-      this.surplus = 0;
-      this.connect = false;
-
-      return false;
-    } else if (action == Z4Action.CONTINUE) {
-      this.currentMultiplicityCounter = 0;
-      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
-
-      double distance = Z4Math.distance(this.P.$get("x"), this.P.$get("y"), x, y);
-      if (distance >= 10) {
-        double angle = Z4Math.atan(this.P.$get("x"), this.P.$get("y"), x, y);
-        Z4Vector vector = Z4Vector.fromVector(this.P.$get("x"), this.P.$get("y"), 2 * distance / 3, angle);
-        $Object end = new $Object();
-        end.$set("x", vector.getX());
-        end.$set("y", vector.getY());
-
-        if (this.connect) {
-          vector = Z4Vector.fromVector(this.P.$get("x"), this.P.$get("y"), distance / 3, angle);
-          this.path = Z4TracerPath.fromQuadAndLine(this.before.$get("x"), this.before.$get("y"), this.P.$get("x"), this.P.$get("y"), vector.getX(), vector.getY(), end.$get("x"), end.$get("y"), this.surplus, this.envelopeStep);
-        } else {
-          this.path = Z4TracerPath.fromLine(this.P.$get("x"), this.P.$get("y"), vector.getX(), vector.getY(), this.surplus, this.envelopeStep);
-        }
-
-        this.connect = true;
-        this.before = end;
-        this.P.$set("x", x);
-        this.P.$set("y", y);
-
-        this.hasNext = this.path.hasNext();
-        if (!this.hasNext) {
-          this.surplus = this.path.getNewSurplus();
-        }
-      } else {
-        this.hasNext = false;
-      }
-
-      return true;
-    } else if (action == Z4Action.STOP) {
-      this.fromClones = true;
-      this.clonePos = 0;
-      this.hasNext = this.clonePos < this.clones.length;
-
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  @Override
-  public Z4Point next() {
-    if (!this.hasNext) {
-      return null;
-    } else if (this.fromClones) {
-      Z4Point clone = this.clones.$get(this.clonePos);
-      clone.setColorPosition(this.clonePos / this.clones.length);
-      clone.setDrawBounds(false);
-
-      this.clonePos++;
-      this.hasNext = this.clonePos < this.clones.length;
-      return clone;
-    } else {
-      if (!$exists(this.currentMultiplicityCounter)) {
-        this.currentVector = this.path.next();
-      }
-      double angle = this.rotation.next(this.currentVector.getPhase());
-      double currentPush = this.push.next();
-      if ($exists(currentPush)) {
-        Z4Vector pushed = Z4Vector.fromVector(this.currentVector.getX0(), this.currentVector.getY0(), currentPush, angle);
-        this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), 1, angle));
-      } else {
-        this.z4Point.setZ4Vector(Z4Vector.fromVector(this.currentVector.getX0(), this.currentVector.getY0(), 1, angle));
-      }
-      this.z4Point.setIntensity(this.nextEnvelope());
-      this.rotation.nextSide(this.z4Point, this.currentVector);
-      this.progression.next(this.z4Point);
-
-      if (this.z4Point.isDrawBounds() && this.z4Point.getIntensity() > 0) {
-        this.clones.push(this.z4Point.clone());
-      }
-
-      this.currentMultiplicityCounter++;
-      if (this.currentMultiplicityCounter >= this.currentMultiplicityTotal) {
-        this.currentMultiplicityCounter = 0;
-        this.hasNext = this.path.hasNext();
-        if (!this.hasNext) {
-          this.surplus = this.path.getNewSurplus();
-        }
-      }
-
-      return this.z4Point;
-    }
-  }
-
-  private double nextEnvelope() {
-    if (this.envelopePosition < this.envelopeA) {
-      this.envelopePosition++;
-      return this.envelopePosition / this.envelopeA;
-    } else if (this.envelopePosition < this.envelopeAS || this.endlessSustain) {
-      this.envelopePosition++;
-      return 1;
-    } else if (this.envelopePosition < this.envelopeASR) {
-      this.envelopePosition++;
-      return 1 - (this.envelopePosition - this.envelopeAS) / this.envelopeR;
-    } else {
-      return 0;
-    }
-  }
-
   @Override
   public void drawDemo($CanvasRenderingContext2D context, Z4Painter<?> painter, Z4GradientColor gradientColor, double width, double height) {
     painter = $exists(painter) ? painter : new Z4ArrowPainter();
@@ -254,51 +85,12 @@ public class Z4Tracer extends Z4PointIterator<Z4Tracer> {
   }
 
   /**
-   * Sets the multiplicity
-   *
-   * @param multiplicity The multiplicity
-   * @return This Z4Tracer
-   */
-  public Z4Tracer setMultiplicity(Z4FancifulValue multiplicity) {
-    this.multiplicity = multiplicity;
-    return this;
-  }
-
-  /**
    * Returns the push
    *
    * @return The push
    */
   public Z4FancifulValue getPush() {
     return this.push;
-  }
-
-  /**
-   * Sets the push
-   *
-   * @param push The push
-   * @return This Z4Tracer
-   */
-  public Z4Tracer setPush(Z4FancifulValue push) {
-    this.push = push;
-    return this;
-  }
-
-  /**
-   * Sets the envelope
-   *
-   * @param attack The attack
-   * @param sustain The sustain
-   * @param release The release
-   * @param endlessSustain true for an endless sustain, false otherwise
-   * @return This Z4Tracer
-   */
-  public Z4Tracer setEnvelope(Z4FancifulValue attack, Z4FancifulValue sustain, Z4FancifulValue release, boolean endlessSustain) {
-    this.attack = attack;
-    this.sustain = sustain;
-    this.release = release;
-    this.endlessSustain = endlessSustain;
-    return this;
   }
 
   /**
@@ -335,17 +127,6 @@ public class Z4Tracer extends Z4PointIterator<Z4Tracer> {
    */
   public boolean isEndlessSustain() {
     return this.endlessSustain;
-  }
-
-  /**
-   * Sets the step
-   *
-   * @param step The step
-   * @return This Z4Tracer
-   */
-  public Z4Tracer setStep(Z4FancifulValue step) {
-    this.step = step;
-    return this;
   }
 
   /**

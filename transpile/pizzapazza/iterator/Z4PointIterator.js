@@ -11,11 +11,6 @@ class Z4PointIterator extends Z4Nextable {
    rotation = null;
 
   /**
-   * The current drawing point
-   */
-   z4DrawingPoint = null;
-
-  /**
    * true if this Z4PointIterator has another point, false otherwise
    */
    hasNext = false;
@@ -67,5 +62,11 @@ class Z4PointIterator extends Z4Nextable {
    * milliseconds)
    */
    getInfinitePointGeneratorSleep() {
+  }
+
+   toJSON() {
+    let json = new Object();
+    json["rotation"] = this.rotation.toJSON();
+    return json;
   }
 }

@@ -21,6 +21,7 @@ import javascript.util.fsa.FileSystemWritableFileStreamCreateOptions;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.iterator.Z4PointIteratorDrawingAction;
 import pizzapazza.iterator.Z4Stamper;
+import pizzapazza.iterator.Z4Tracer;
 import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4RandomValue;
@@ -85,20 +86,54 @@ public class Z4Canvas extends JSComponent {
   private final Z4Paper paper = new Z4Paper();
   private Z4Layer selectedLayer;
 
+//  private Z4DrawingTool drawingTool = new Z4DrawingTool(
+//          new Z4Stamper(
+//                  new Z4FancifulValue(
+//                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 5),
+//                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(5, Z4RandomValueBehavior.CLASSIC, 0)),
+//                          false),
+//                  new Z4FancifulValue(
+//                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
+//                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(10, Z4RandomValueBehavior.CLASSIC, 0)),
+//                          false),
+//                  new Z4Rotation(0, new Z4FancifulValue(
+//                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 45),
+//                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(30, Z4RandomValueBehavior.CLASSIC, 0)),
+//                          false), Z4RotationBehavior.FIXED, false)),
+//          new Z4ArrowPainter(),
+//          Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255))
+//  );
   private Z4DrawingTool drawingTool = new Z4DrawingTool(
-          new Z4Stamper(
+          new Z4Tracer(
                   new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 5),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(5, Z4RandomValueBehavior.CLASSIC, 0)),
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1),
+                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                           false),
                   new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(10, Z4RandomValueBehavior.CLASSIC, 0)),
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                          false),
+                  new Z4FancifulValue(
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                          false),
+                  new Z4FancifulValue(
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                          false),
+                  new Z4FancifulValue(
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                          false),
+                  true,
+                  new Z4FancifulValue(
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 25),
+                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                           false),
                   new Z4Rotation(0, new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 45),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(30, Z4RandomValueBehavior.CLASSIC, 0)),
-                          false), Z4RotationBehavior.FIXED, false)),
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0),
+                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                          false), Z4RotationBehavior.RELATIVE_TO_PATH, false)),
           new Z4ArrowPainter(),
           Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255))
   );
@@ -952,6 +987,10 @@ public class Z4Canvas extends JSComponent {
     switch (type) {
       case "enter":
         this.pressed = event.buttons == 1;
+        if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.START, x, y)) {
+          this.ribbonHistoryPanel.stopStandard();
+          this.iteratePoint();
+        }
         if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.CONTINUE, x, y)) {
           this.ribbonHistoryPanel.stopStandard();
           this.iteratePoint();
