@@ -222,6 +222,16 @@ public class Z4Tracer extends Z4PointIterator {
 
   @Override
   public $Object toJSON() {
-    return super.toJSON();
+    $Object json = super.toJSON();
+    json.$set("multiplicity", this.multiplicity.toJSON());
+    json.$set("push", this.push.toJSON());
+
+    json.$set("attack", this.attack.toJSON());
+    json.$set("sustain", this.sustain.toJSON());
+    json.$set("release", this.release.toJSON());
+    json.$set("endlessSustain", this.endlessSustain);
+
+    json.$set("step", this.step.toJSON());
+    return json;
   }
 }

@@ -194,6 +194,14 @@ class Z4Tracer extends Z4PointIterator {
   }
 
    toJSON() {
-    return super.toJSON();
+    let json = super.toJSON();
+    json["multiplicity"] = this.multiplicity.toJSON();
+    json["push"] = this.push.toJSON();
+    json["attack"] = this.attack.toJSON();
+    json["sustain"] = this.sustain.toJSON();
+    json["release"] = this.release.toJSON();
+    json["endlessSustain"] = this.endlessSustain;
+    json["step"] = this.step.toJSON();
+    return json;
   }
 }
