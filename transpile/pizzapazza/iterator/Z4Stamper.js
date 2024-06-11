@@ -44,14 +44,16 @@ class Z4Stamper extends Z4PointIterator {
     } else {
       this.currentMultiplicityCounter++;
       this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
-      // double angle = this.rotation.next(0.0);
-      // double currentPush = this.push.next();
-      // if ($exists(currentPush)) {
-      // Z4Vector pushed = Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, currentPush, angle);
-      // this.z4Point.setZ4Vector(Z4Vector.fromVector(pushed.getX(), pushed.getY(), 1, angle));
-      // } else {
-      // this.z4Point.setZ4Vector(Z4Vector.fromVector(this.P.$get("x"), this.P.$get("y"), 1, angle));
-      // }
+      let vector = null;
+      let angle = this.rotation.next(0.0);
+      let currentPush = this.push.next();
+      if (currentPush) {
+        let pushed = Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, currentPush, angle);
+        vector = Z4Vector.fromVector(pushed.x, pushed.y, 1, angle);
+      } else {
+        vector = Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, 1, angle);
+      }
+      // 
       // this.rotation.nextSide(this.z4Point, null);
       // this.progression.next(this.z4Point);
       // 
@@ -60,7 +62,7 @@ class Z4Stamper extends Z4PointIterator {
       // this.z4Point.setColorPosition(Math.random());
       // }
       // 
-      this.z4DrawingPoint = new Z4DrawingPoint(Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, 1, 0), 1, Z4Lighting.NONE, 0, false, new Z4Sign(Z4SignBehavior.POSITIVE), false);
+      this.z4DrawingPoint = new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, new Z4Sign(Z4SignBehavior.POSITIVE), false);
       return this.z4DrawingPoint;
     }
   }

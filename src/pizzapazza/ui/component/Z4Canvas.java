@@ -88,16 +88,16 @@ public class Z4Canvas extends JSComponent {
   private Z4DrawingTool drawingTool = new Z4DrawingTool(
           new Z4Stamper(
                   new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 5),
+                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(5, Z4RandomValueBehavior.CLASSIC, 0)),
                           false),
                   new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
+                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(10, Z4RandomValueBehavior.CLASSIC, 0)),
                           false),
                   new Z4Rotation(0, new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 45),
+                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(30, Z4RandomValueBehavior.CLASSIC, 0)),
                           false), Z4RotationBehavior.FIXED, false)),
           new Z4ArrowPainter(),
           Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255))
@@ -954,14 +954,14 @@ public class Z4Canvas extends JSComponent {
         this.pressed = event.buttons == 1;
         if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.CONTINUE, x, y)) {
           this.ribbonHistoryPanel.stopStandard();
-          this.iteratePoint(Z4PointIteratorDrawingAction.CONTINUE);
+          this.iteratePoint();
         }
         break;
       case "down":
         this.pressed = true;
         if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.START, x, y)) {
           this.ribbonHistoryPanel.stopStandard();
-          this.iteratePoint(Z4PointIteratorDrawingAction.START);
+          this.iteratePoint();
         }
         break;
       case "move":
@@ -969,13 +969,13 @@ public class Z4Canvas extends JSComponent {
 
         if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.CONTINUE, x, y)) {
           this.ribbonHistoryPanel.stopStandard();
-          this.iteratePoint(Z4PointIteratorDrawingAction.CONTINUE);
+          this.iteratePoint();
         }
         break;
       case "up":
         this.pressed = false;
         if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
-          this.iteratePoint(Z4PointIteratorDrawingAction.STOP);
+          this.iteratePoint();
         }
 
         this.changed = true;
@@ -986,7 +986,7 @@ public class Z4Canvas extends JSComponent {
         if (this.pressed) {
           this.pressed = false;
           if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
-            this.iteratePoint(Z4PointIteratorDrawingAction.STOP);
+            this.iteratePoint();
           }
 
           this.changed = true;
@@ -997,7 +997,7 @@ public class Z4Canvas extends JSComponent {
     }
   }
 
-  private void iteratePoint(Z4PointIteratorDrawingAction action) {
+  private void iteratePoint() {
     Z4DrawingPoint next;
     while ((next = this.drawingTool.next()) != null) {
       if (next.drawBounds) {
@@ -1014,7 +1014,7 @@ public class Z4Canvas extends JSComponent {
     }
 
     if (this.drawingTool.isInfinitePointGenerator() && this.pressed) {
-      setTimeout(() -> this.iteratePoint(Z4PointIteratorDrawingAction.CONTINUE), this.drawingTool.getInfinitePointGeneratorSleep());
+      setTimeout(() -> this.iteratePoint(), this.drawingTool.getInfinitePointGeneratorSleep());
     }
   }
 }
