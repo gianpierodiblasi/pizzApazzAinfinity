@@ -1,5 +1,6 @@
 package pizzapazza.math;
 
+import static simulation.js.$Globals.$exists;
 import simulation.js.$Object;
 
 /**
@@ -85,6 +86,25 @@ public class Z4Rotation implements Z4NextableWithParam<Double, Double> {
       return nextAngle + tangentAngle + (this.delayed ? Math.PI : 0);
     } else {
       return 0.0;
+    }
+  }
+
+  /**
+   * Computes the side to assign to a point
+   *
+   * @param currentVector The vector of the current point
+   * @param vector The tangent vector (if available)
+   * @return The side to assign to a point
+   */
+  public Z4Sign computeSide(Z4Vector currentVector, Z4Vector vector) {
+    if (this.behavior == Z4RotationBehavior.FIXED) {
+      return new Z4Sign(Z4SignBehavior.POSITIVE);
+    } else if (this.behavior == Z4RotationBehavior.CUMULATIVE) {
+      return new Z4Sign(Z4SignBehavior.POSITIVE);
+    } else if (this.behavior == Z4RotationBehavior.RELATIVE_TO_PATH) {
+      return new Z4Sign($exists(vector) ? vector.direction(currentVector) : Z4SignBehavior.RANDOM);
+    } else {
+      return null;
     }
   }
 

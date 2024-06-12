@@ -6,8 +6,6 @@ import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Rotation;
-import pizzapazza.math.Z4Sign;
-import pizzapazza.math.Z4SignBehavior;
 import pizzapazza.math.Z4Vector;
 import static simulation.js.$Globals.parseInt;
 import simulation.js.$Object;
@@ -82,7 +80,6 @@ public class Z4Airbrush extends Z4PointIterator {
       double angle = this.rotation.next(currenAngle);
       Z4Vector vector = Z4Vector.fromVector(this.currentPoint.x + currentRadius * Math.cos(currenAngle), currentRadius * Math.sin(currenAngle) + this.currentPoint.y, 1, angle);
 
-//      this.rotation.nextSide(this.z4Point, null);
 //      if (!this.progression.isTemporal() || this.currentMultiplicityCounter == 1) {
 //        this.progression.next(this.z4Point);
 //      } else {
@@ -101,7 +98,7 @@ public class Z4Airbrush extends Z4PointIterator {
               Z4Lighting.NONE,
               0,
               false,
-              new Z4Sign(Z4SignBehavior.POSITIVE),
+              this.rotation.computeSide(vector, null),
               false
       );
     }

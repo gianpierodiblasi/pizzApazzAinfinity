@@ -3,11 +3,8 @@ package pizzapazza.iterator;
 import pizzapazza.color.Z4Lighting;
 import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4FancifulValue;
-import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Rotation;
-import pizzapazza.math.Z4Sign;
-import pizzapazza.math.Z4SignBehavior;
 import pizzapazza.math.Z4Vector;
 import static simulation.js.$Globals.parseInt;
 import simulation.js.$Object;
@@ -73,10 +70,10 @@ public class Z4Scatterer extends Z4PointIterator {
       this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
 
       double nextScattering = this.scattering.next();
-      double angle = this.rotation.next(Z4Math.atan(this.before.x, this.before.y, this.currentPoint.x, this.currentPoint.y));
+      Z4Vector currentVector = Z4Vector.fromPoints(this.before.x, this.before.y, this.currentPoint.x, this.currentPoint.y);
+      double angle = this.rotation.next(currentVector.phase);
       Z4Vector vector = Z4Vector.fromVector(this.currentPoint.x + nextScattering * Math.cos(angle), this.currentPoint.y + nextScattering * Math.sin(angle), 1, angle);
 
-//      this.rotation.nextSide(this.z4Point, vector);
 //      this.progression.next(this.z4Point);
 //point.modeLighting=modeLighting;
 //    point.colorPosition=this.evaluateColorPosition(nextScattering/scattering);
@@ -86,7 +83,7 @@ public class Z4Scatterer extends Z4PointIterator {
               Z4Lighting.NONE,
               0,
               false,
-              new Z4Sign(Z4SignBehavior.POSITIVE),
+              this.rotation.computeSide(vector, currentVector),
               false
       );
     }

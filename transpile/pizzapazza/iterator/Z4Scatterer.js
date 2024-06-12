@@ -54,13 +54,13 @@ class Z4Scatterer extends Z4PointIterator {
       this.currentMultiplicityCounter++;
       this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
       let nextScattering = this.scattering.next();
-      let angle = this.rotation.next(Z4Math.atan(this.before.x, this.before.y, this.currentPoint.x, this.currentPoint.y));
+      let currentVector = Z4Vector.fromPoints(this.before.x, this.before.y, this.currentPoint.x, this.currentPoint.y);
+      let angle = this.rotation.next(currentVector.phase);
       let vector = Z4Vector.fromVector(this.currentPoint.x + nextScattering * Math.cos(angle), this.currentPoint.y + nextScattering * Math.sin(angle), 1, angle);
-      // this.rotation.nextSide(this.z4Point, vector);
       // this.progression.next(this.z4Point);
       // point.modeLighting=modeLighting;
       // point.colorPosition=this.evaluateColorPosition(nextScattering/scattering);
-      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, new Z4Sign(Z4SignBehavior.POSITIVE), false);
+      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, this.rotation.computeSide(vector, currentVector), false);
     }
   }
 

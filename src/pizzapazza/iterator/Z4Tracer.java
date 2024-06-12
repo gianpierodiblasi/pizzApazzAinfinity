@@ -7,8 +7,6 @@ import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Rotation;
-import pizzapazza.math.Z4Sign;
-import pizzapazza.math.Z4SignBehavior;
 import pizzapazza.math.Z4TracerPath;
 import pizzapazza.math.Z4Vector;
 import static simulation.js.$Globals.$exists;
@@ -167,7 +165,6 @@ public class Z4Tracer extends Z4PointIterator {
         vector = Z4Vector.fromVector(this.currentVector.x0, this.currentVector.y0, 1, angle);
       }
 
-//      this.rotation.nextSide(this.z4Point, this.currentVector);
 //      this.progression.next(this.z4Point);
 //
 //      if (this.z4Point.isDrawBounds() && this.z4Point.getIntensity() > 0) {
@@ -189,7 +186,7 @@ public class Z4Tracer extends Z4PointIterator {
               Z4Lighting.NONE,
               0,
               false,
-              new Z4Sign(Z4SignBehavior.POSITIVE),
+              this.rotation.computeSide(vector, this.currentVector),
               false
       );
     }

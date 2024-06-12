@@ -62,7 +62,6 @@ class Z4Airbrush extends Z4PointIterator {
       let currenAngle = Z4Math.TWO_PI * Math.random();
       let angle = this.rotation.next(currenAngle);
       let vector = Z4Vector.fromVector(this.currentPoint.x + currentRadius * Math.cos(currenAngle), currentRadius * Math.sin(currenAngle) + this.currentPoint.y, 1, angle);
-      // this.rotation.nextSide(this.z4Point, null);
       // if (!this.progression.isTemporal() || this.currentMultiplicityCounter == 1) {
       // this.progression.next(this.z4Point);
       // } else {
@@ -75,7 +74,7 @@ class Z4Airbrush extends Z4PointIterator {
       // this.z4Point.setColorPosition(currentRadius / this.radius);
       // }
       // 
-      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, new Z4Sign(Z4SignBehavior.POSITIVE), false);
+      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, this.rotation.computeSide(vector, null), false);
     }
   }
 

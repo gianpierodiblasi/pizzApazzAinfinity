@@ -151,7 +151,6 @@ class Z4Tracer extends Z4PointIterator {
       } else {
         vector = Z4Vector.fromVector(this.currentVector.x0, this.currentVector.y0, 1, angle);
       }
-      // this.rotation.nextSide(this.z4Point, this.currentVector);
       // this.progression.next(this.z4Point);
       // 
       // if (this.z4Point.isDrawBounds() && this.z4Point.getIntensity() > 0) {
@@ -166,7 +165,7 @@ class Z4Tracer extends Z4PointIterator {
           this.surplus = this.path.getNewSurplus();
         }
       }
-      return new Z4DrawingPoint(vector, this.nextEnvelope(), Z4Lighting.NONE, 0, false, new Z4Sign(Z4SignBehavior.POSITIVE), false);
+      return new Z4DrawingPoint(vector, this.nextEnvelope(), Z4Lighting.NONE, 0, false, this.rotation.computeSide(vector, this.currentVector), false);
     }
   }
 

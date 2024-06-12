@@ -5,8 +5,6 @@ import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Rotation;
-import pizzapazza.math.Z4Sign;
-import pizzapazza.math.Z4SignBehavior;
 import pizzapazza.math.Z4Vector;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
@@ -71,8 +69,7 @@ public class Z4Stamper extends Z4PointIterator {
       } else {
         vector = Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, 1, angle);
       }
-//      
-//      this.rotation.nextSide(this.z4Point, null);
+
 //      this.progression.next(this.z4Point);
 //
 //      if (this.progression.isRelativeToPath()) {
@@ -86,7 +83,7 @@ public class Z4Stamper extends Z4PointIterator {
               Z4Lighting.NONE,
               0,
               false,
-              new Z4Sign(Z4SignBehavior.POSITIVE),
+              this.rotation.computeSide(vector, null),
               false
       );
     }

@@ -53,8 +53,6 @@ class Z4Stamper extends Z4PointIterator {
       } else {
         vector = Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, 1, angle);
       }
-      // 
-      // this.rotation.nextSide(this.z4Point, null);
       // this.progression.next(this.z4Point);
       // 
       // if (this.progression.isRelativeToPath()) {
@@ -62,7 +60,7 @@ class Z4Stamper extends Z4PointIterator {
       // this.z4Point.setColorPosition(Math.random());
       // }
       // 
-      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, new Z4Sign(Z4SignBehavior.POSITIVE), false);
+      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, this.rotation.computeSide(vector, null), false);
     }
   }
 

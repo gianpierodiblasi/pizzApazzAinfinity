@@ -9179,7 +9179,6 @@ class Z4Airbrush extends Z4PointIterator {
       let currenAngle = Z4Math.TWO_PI * Math.random();
       let angle = this.rotation.next(currenAngle);
       let vector = Z4Vector.fromVector(this.currentPoint.x + currentRadius * Math.cos(currenAngle), currentRadius * Math.sin(currenAngle) + this.currentPoint.y, 1, angle);
-      // this.rotation.nextSide(this.z4Point, null);
       // if (!this.progression.isTemporal() || this.currentMultiplicityCounter == 1) {
       // this.progression.next(this.z4Point);
       // } else {
@@ -9192,7 +9191,7 @@ class Z4Airbrush extends Z4PointIterator {
       // this.z4Point.setColorPosition(currentRadius / this.radius);
       // }
       // 
-      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, new Z4Sign(Z4SignBehavior.POSITIVE), false);
+      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, this.rotation.computeSide(vector, null), false);
     }
   }
 
@@ -9268,13 +9267,13 @@ class Z4Scatterer extends Z4PointIterator {
       this.currentMultiplicityCounter++;
       this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
       let nextScattering = this.scattering.next();
-      let angle = this.rotation.next(Z4Math.atan(this.before.x, this.before.y, this.currentPoint.x, this.currentPoint.y));
+      let currentVector = Z4Vector.fromPoints(this.before.x, this.before.y, this.currentPoint.x, this.currentPoint.y);
+      let angle = this.rotation.next(currentVector.phase);
       let vector = Z4Vector.fromVector(this.currentPoint.x + nextScattering * Math.cos(angle), this.currentPoint.y + nextScattering * Math.sin(angle), 1, angle);
-      // this.rotation.nextSide(this.z4Point, vector);
       // this.progression.next(this.z4Point);
       // point.modeLighting=modeLighting;
       // point.colorPosition=this.evaluateColorPosition(nextScattering/scattering);
-      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, new Z4Sign(Z4SignBehavior.POSITIVE), false);
+      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, this.rotation.computeSide(vector, currentVector), false);
     }
   }
 
@@ -9349,16 +9348,15 @@ class Z4Spirograph extends Z4PointIterator {
       this.hasNext = this.clonePos !== -1;
       return clone;
     } else {
-      let vector = Z4Vector.fromPoints(this.center.x, this.center.y, this.currentPoint.x, this.currentPoint.y);
-      let angle = this.rotation.next(vector.phase);
-      vector = Z4Vector.fromVector(this.center.x, this.center.y, vector.module, angle);
-      // this.rotation.nextSide(this.z4Point, vector);
+      let currentVector = Z4Vector.fromPoints(this.center.x, this.center.y, this.currentPoint.x, this.currentPoint.y);
+      let angle = this.rotation.next(currentVector.phase);
+      let vector = Z4Vector.fromVector(this.center.x, this.center.y, currentVector.module, angle);
       // this.progression.next(this.z4Point);
       // if (this.z4Point.isDrawBounds()) {
       // this.clones.push(this.z4Point.clone());
       // }
       this.hasNext = false;
-      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, new Z4Sign(Z4SignBehavior.POSITIVE), true);
+      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, this.rotation.computeSide(vector, currentVector), true);
     }
   }
 
@@ -9425,8 +9423,6 @@ class Z4Stamper extends Z4PointIterator {
       } else {
         vector = Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, 1, angle);
       }
-      // 
-      // this.rotation.nextSide(this.z4Point, null);
       // this.progression.next(this.z4Point);
       // 
       // if (this.progression.isRelativeToPath()) {
@@ -9434,7 +9430,7 @@ class Z4Stamper extends Z4PointIterator {
       // this.z4Point.setColorPosition(Math.random());
       // }
       // 
-      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, new Z4Sign(Z4SignBehavior.POSITIVE), false);
+      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, this.rotation.computeSide(vector, null), false);
     }
   }
 
@@ -9606,7 +9602,6 @@ class Z4Tracer extends Z4PointIterator {
       } else {
         vector = Z4Vector.fromVector(this.currentVector.x0, this.currentVector.y0, 1, angle);
       }
-      // this.rotation.nextSide(this.z4Point, this.currentVector);
       // this.progression.next(this.z4Point);
       // 
       // if (this.z4Point.isDrawBounds() && this.z4Point.getIntensity() > 0) {
@@ -9621,7 +9616,7 @@ class Z4Tracer extends Z4PointIterator {
           this.surplus = this.path.getNewSurplus();
         }
       }
-      return new Z4DrawingPoint(vector, this.nextEnvelope(), Z4Lighting.NONE, 0, false, new Z4Sign(Z4SignBehavior.POSITIVE), false);
+      return new Z4DrawingPoint(vector, this.nextEnvelope(), Z4Lighting.NONE, 0, false, this.rotation.computeSide(vector, this.currentVector), false);
     }
   }
 

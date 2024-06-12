@@ -5,8 +5,6 @@ import pizzapazza.color.Z4Lighting;
 import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Rotation;
-import pizzapazza.math.Z4Sign;
-import pizzapazza.math.Z4SignBehavior;
 import pizzapazza.math.Z4Vector;
 
 /**
@@ -69,11 +67,10 @@ public class Z4Spirograph extends Z4PointIterator {
       this.hasNext = this.clonePos != -1;
       return clone;
     } else {
-      Z4Vector vector = Z4Vector.fromPoints(this.center.x, this.center.y, this.currentPoint.x, this.currentPoint.y);
-      double angle = this.rotation.next(vector.phase);
-      vector = Z4Vector.fromVector(this.center.x, this.center.y, vector.module, angle);
+      Z4Vector currentVector = Z4Vector.fromPoints(this.center.x, this.center.y, this.currentPoint.x, this.currentPoint.y);
+      double angle = this.rotation.next(currentVector.phase);
+      Z4Vector vector = Z4Vector.fromVector(this.center.x, this.center.y, currentVector.module, angle);
 
-//      this.rotation.nextSide(this.z4Point, vector);
 //      this.progression.next(this.z4Point);
 //      if (this.z4Point.isDrawBounds()) {
 //        this.clones.push(this.z4Point.clone());
@@ -86,7 +83,7 @@ public class Z4Spirograph extends Z4PointIterator {
               Z4Lighting.NONE,
               0,
               false,
-              new Z4Sign(Z4SignBehavior.POSITIVE),
+              this.rotation.computeSide(vector, currentVector),
               true
       );
     }
