@@ -3401,9 +3401,14 @@ class Z4BiGradientColorPanel extends JSPanel {
         }
         break;
       case "up":
-      case "leave":
         this.pressed = false;
         this.drawPreview(false);
+        break;
+      case "leave":
+        if (this.pressed) {
+          this.pressed = false;
+          this.drawPreview(false);
+        }
         break;
     }
   }
@@ -3687,11 +3692,18 @@ class Z4GradientColorPanel extends JSPanel {
         }
         break;
       case "up":
-      case "leave":
         this.pressed = false;
         this.drawPreview(false);
         this.valueIsAdjusting = false;
         this.fireOnChange();
+        break;
+      case "leave":
+        if (this.pressed) {
+          this.pressed = false;
+          this.drawPreview(false);
+          this.valueIsAdjusting = false;
+          this.fireOnChange();
+        }
         break;
     }
   }
@@ -4005,9 +4017,14 @@ class Z4AbstractFillerPanel extends JSPanel {
         }
         break;
       case "up":
-      case "leave":
         this.pressed = false;
         this.drawPreview(false);
+        break;
+      case "leave":
+        if (this.pressed) {
+          this.pressed = false;
+          this.drawPreview(false);
+        }
         break;
     }
   }

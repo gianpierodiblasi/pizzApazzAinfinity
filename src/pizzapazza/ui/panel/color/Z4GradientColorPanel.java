@@ -193,11 +193,18 @@ public class Z4GradientColorPanel extends JSPanel {
         }
         break;
       case "up":
-      case "leave":
         this.pressed = false;
         this.drawPreview(false);
         this.valueIsAdjusting = false;
         this.fireOnChange();
+        break;
+      case "leave":
+        if (this.pressed) {
+          this.pressed = false;
+          this.drawPreview(false);
+          this.valueIsAdjusting = false;
+          this.fireOnChange();
+        }
         break;
     }
   }
