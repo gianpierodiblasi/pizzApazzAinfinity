@@ -1007,6 +1007,11 @@ class Z4PointIteratorDrawingAction {
   static STOP = 'STOP';
 }
 /**
+ * @author gianpiero.diblasi
+ */
+class Z4Scatterer {
+}
+/**
  * The point where to perform a drawing
  *
  * @author gianpiero.diblasi
