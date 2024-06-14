@@ -18,6 +18,9 @@ import javascript.awt.Point;
 import javascript.swing.JSComponent;
 import javascript.util.fsa.FileSystemFileHandle;
 import javascript.util.fsa.FileSystemWritableFileStreamCreateOptions;
+import pizzapazza.color.Z4ColorProgression;
+import pizzapazza.color.Z4ColorProgressionBehavior;
+import pizzapazza.color.Z4Lighting;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.iterator.Z4Airbrush;
 import pizzapazza.iterator.Z4PointIteratorDrawingAction;
@@ -179,7 +182,8 @@ public class Z4Canvas extends JSComponent {
                           new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(30, Z4RandomValueBehavior.CLASSIC, 0)),
                           false), Z4RotationBehavior.RELATIVE_TO_PATH, false)),
           new Z4ArrowPainter(),
-          Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255))
+          Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)),
+          new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE)
   );
 
   /**

@@ -16,7 +16,6 @@ public class Z4Progression {
    */
   public void next(Z4Point z4Point) {
     if (this.isTemporal()) {
-      z4Point.setLighting(this.lighting);
       z4Point.setDrawBounds(false);
 
       double colorPosition = z4Point.getColorPosition();
@@ -26,15 +25,12 @@ public class Z4Progression {
       }
       z4Point.setColorPosition(colorPosition);
     } else if (this.isSpatial()) {
-      z4Point.setLighting(Z4Lighting.NONE);
       z4Point.setDrawBounds(false);
       z4Point.setColorPosition(-1);
     } else if (this.isRelativeToPath()) {
-      z4Point.setLighting(this.lighting);
       z4Point.setDrawBounds(true);
       z4Point.setColorPosition(-1);
     } else if (this.isRandom()) {
-      z4Point.setLighting(this.lighting);
       z4Point.setDrawBounds(false);
       z4Point.setColorPosition(Math.random());
     }

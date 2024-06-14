@@ -1,7 +1,9 @@
 package pizzapazza.iterator;
 
+import pizzapazza.color.Z4ColorProgression;
+import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.math.Z4DrawingPoint;
-import pizzapazza.math.Z4Nextable;
+import pizzapazza.math.Z4NextableWithTwoParams;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Rotation;
 import simulation.js.$Object;
@@ -11,12 +13,17 @@ import simulation.js.$Object;
  *
  * @author gianpiero.diblasi
  */
-public abstract class Z4PointIterator implements Z4Nextable<Z4DrawingPoint> {
+public abstract class Z4PointIterator implements Z4NextableWithTwoParams<Z4DrawingPoint, Z4SpatioTemporalColor, Z4ColorProgression> {
 
   /**
    * The rotation
    */
   protected final Z4Rotation rotation;
+
+  /**
+   * The next drawing point
+   */
+  protected Z4DrawingPoint nextdDrawingPoint;
 
   /**
    * true if this Z4PointIterator has another point, false otherwise
@@ -50,7 +57,7 @@ public abstract class Z4PointIterator implements Z4Nextable<Z4DrawingPoint> {
   public abstract boolean drawAction(Z4PointIteratorDrawingAction action, double x, double y);
 
   @Override
-  public abstract Z4DrawingPoint next();
+  public abstract Z4DrawingPoint next(Z4SpatioTemporalColor color, Z4ColorProgression progression);
 
   /**
    * Checks if this Z4PointIterator is an infinite point generator (for example

@@ -1,5 +1,6 @@
 package pizzapazza.painter;
 
+import pizzapazza.color.Z4ColorProgression;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4Math;
@@ -17,7 +18,7 @@ public class Z4ArrowPainter implements Z4Painter {
   private boolean bool;
 
   @Override
-  public void draw($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor) {
+  public void draw($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
     this.bool = !this.bool;
     double x = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.module);
 

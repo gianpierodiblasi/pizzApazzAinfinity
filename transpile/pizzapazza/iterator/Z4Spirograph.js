@@ -43,7 +43,7 @@ class Z4Spirograph extends Z4PointIterator {
     }
   }
 
-   next() {
+   next(color, progression) {
     if (!this.hasNext) {
       return null;
     } else if (this.fromClones) {
@@ -62,7 +62,7 @@ class Z4Spirograph extends Z4PointIterator {
       // this.clones.push(this.z4Point.clone());
       // }
       this.hasNext = false;
-      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, this.rotation.computeSide(vector, currentVector), true);
+      return new Z4DrawingPoint(vector, 1, 0, 0, false, this.rotation.computeSide(vector, currentVector), true);
     }
   }
 

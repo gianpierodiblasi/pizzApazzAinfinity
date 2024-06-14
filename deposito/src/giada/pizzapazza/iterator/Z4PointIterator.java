@@ -12,11 +12,6 @@ import simulation.js.$Object;
 public abstract class Z4PointIterator {
 
   /**
-   * The color progression
-   */
-  protected Z4Progression progression = Z4Progression.spatial(Z4Lighting.NONE);
-
-  /**
    * Returns the color progression
    *
    * @return The color progression

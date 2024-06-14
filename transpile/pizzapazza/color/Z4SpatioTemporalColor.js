@@ -11,20 +11,6 @@ class Z4SpatioTemporalColor extends Z4JSONable {
 
    biGradientColor = null;
 
-   flatGradientColor = null;
-
-  constructor(color, gradientColor, biGradientColor) {
-    super();
-    this.color = color;
-    this.gradientColor = gradientColor;
-    this.biGradientColor = biGradientColor;
-    if (color) {
-      this.flatGradientColor = new Z4GradientColor();
-      this.flatGradientColor.addColor(this.color, 0);
-      this.flatGradientColor.addColor(this.color, 1);
-    }
-  }
-
   /**
    * Creates a Z4SpatioTemporalColor from a color
    *
@@ -55,6 +41,43 @@ class Z4SpatioTemporalColor extends Z4JSONable {
     return new Z4SpatioTemporalColor(null, null, biGradientColor);
   }
 
+  constructor(color, gradientColor, biGradientColor) {
+    super();
+    this.color = color;
+    this.gradientColor = gradientColor;
+    this.biGradientColor = biGradientColor;
+  }
+
+  /**
+   * Checks if this spatio-temporal color is a (flat) color
+   *
+   * @return true if this spatio-temporal color is a (flat) color, false
+   * otherwise
+   */
+   isColor() {
+    return !!(this.color);
+  }
+
+  /**
+   * Checks if this spatio-temporal color is a gradient color
+   *
+   * @return true if this spatio-temporal color is a gradient color, false
+   * otherwise
+   */
+   isGradientColor() {
+    return !!(this.gradientColor);
+  }
+
+  /**
+   * Checks if this spatio-temporal color is a bigradient color
+   *
+   * @return true if this spatio-temporal color is a bigradient color, false
+   * otherwise
+   */
+   isBiGradientColor() {
+    return !!(this.biGradientColor);
+  }
+
   /**
    * Returns a color in a time instant and in a space position
    *
@@ -62,36 +85,34 @@ class Z4SpatioTemporalColor extends Z4JSONable {
    * @param space The space position
    * @return The color
    */
-   getColorAt(time, space) {
-    if (this.color) {
-      return this.color;
-    } else if (this.gradientColor) {
-      return this.gradientColor.getColorAt(space, true);
-    } else if (this.biGradientColor) {
-      return this.biGradientColor.getColorAt(time, true).getColorAt(space, true);
-    } else {
-      return null;
-    }
-  }
-
+  // public Color getColorAt(double time, double space) {
+  // if ($exists(this.color)) {
+  // return this.color;
+  // } else if ($exists(this.gradientColor)) {
+  // return this.gradientColor.getColorAt(space, true);
+  // } else if ($exists(this.biGradientColor)) {
+  // return this.biGradientColor.getColorAt(time, true).getColorAt(space, true);
+  // } else {
+  // return null;
+  // }
+  // }
   /**
    * Returns a gradient color in a time instant
    *
    * @param time The time instant
    * @return The gradient color
    */
-   getGradientColorAt(time) {
-    if (this.color) {
-      return this.flatGradientColor;
-    } else if (this.gradientColor) {
-      return this.gradientColor;
-    } else if (this.biGradientColor) {
-      return this.biGradientColor.getColorAt(time, true);
-    } else {
-      return null;
-    }
-  }
-
+  // public Z4GradientColor getGradientColorAt(double time) {
+  // if ($exists(this.color)) {
+  // return this.flatGradientColor;
+  // } else if ($exists(this.gradientColor)) {
+  // return this.gradientColor;
+  // } else if ($exists(this.biGradientColor)) {
+  // return this.biGradientColor.getColorAt(time, true);
+  // } else {
+  // return null;
+  // }
+  // }
    toJSON() {
     let json = new Object();
     if (this.color) {

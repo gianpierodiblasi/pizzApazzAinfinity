@@ -47,7 +47,7 @@ class Z4Scatterer extends Z4PointIterator {
     }
   }
 
-   next() {
+   next(color, progression) {
     if (!this.hasNext) {
       return null;
     } else {
@@ -60,7 +60,7 @@ class Z4Scatterer extends Z4PointIterator {
       // this.progression.next(this.z4Point);
       // point.modeLighting=modeLighting;
       // point.colorPosition=this.evaluateColorPosition(nextScattering/scattering);
-      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, this.rotation.computeSide(vector, currentVector), false);
+      return new Z4DrawingPoint(vector, 1, 0, 0, false, this.rotation.computeSide(vector, currentVector), false);
     }
   }
 

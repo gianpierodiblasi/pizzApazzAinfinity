@@ -1,5 +1,6 @@
 package pizzapazza.painter;
 
+import pizzapazza.color.Z4ColorProgression;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.util.Z4JSONable;
@@ -18,6 +19,7 @@ public interface Z4Painter extends Z4JSONable {
    * @param context The context to use to perform the drawing
    * @param drawingPoint The point where to perform the drawing
    * @param spatioTemporalColor The color to use to perform the drawing
+   * @param progression The color progression to use to perform the drawing
    */
-  public abstract void draw($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor);
+  public abstract void draw($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression);
 }

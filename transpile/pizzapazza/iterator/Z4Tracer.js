@@ -128,7 +128,7 @@ class Z4Tracer extends Z4PointIterator {
     }
   }
 
-   next() {
+   next(color, progression) {
     if (!this.hasNext) {
       return null;
     } else if (this.fromClones) {
@@ -165,7 +165,7 @@ class Z4Tracer extends Z4PointIterator {
           this.surplus = this.path.getNewSurplus();
         }
       }
-      return new Z4DrawingPoint(vector, this.nextEnvelope(), Z4Lighting.NONE, 0, false, this.rotation.computeSide(vector, this.currentVector), false);
+      return new Z4DrawingPoint(vector, this.nextEnvelope(), 0, 0, false, this.rotation.computeSide(vector, this.currentVector), false);
     }
   }
 

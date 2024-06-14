@@ -1,6 +1,7 @@
 package pizzapazza.iterator;
 
-import pizzapazza.color.Z4Lighting;
+import pizzapazza.color.Z4ColorProgression;
+import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4Math;
@@ -64,7 +65,7 @@ public class Z4Airbrush extends Z4PointIterator {
   }
 
   @Override
-  public Z4DrawingPoint next() {
+  public Z4DrawingPoint next(Z4SpatioTemporalColor color, Z4ColorProgression progression) {
     if (!this.hasNext) {
       this.currentMultiplicityCounter = 0;
       this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
@@ -95,7 +96,7 @@ public class Z4Airbrush extends Z4PointIterator {
       return new Z4DrawingPoint(
               vector,
               1,
-              Z4Lighting.NONE,
+              0,
               0,
               false,
               this.rotation.computeSide(vector, null),

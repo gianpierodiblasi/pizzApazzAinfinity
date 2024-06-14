@@ -3,12 +3,17 @@
  *
  * @author gianpiero.diblasi
  */
-class Z4PointIterator extends Z4Nextable {
+class Z4PointIterator extends Z4NextableWithTwoParams {
 
   /**
    * The rotation
    */
    rotation = null;
+
+  /**
+   * The next drawing point
+   */
+   nextdDrawingPoint = null;
 
   /**
    * true if this Z4PointIterator has another point, false otherwise
@@ -42,7 +47,7 @@ class Z4PointIterator extends Z4Nextable {
    drawAction(action, x, y) {
   }
 
-   next() {
+   next(color, progression) {
   }
 
   /**

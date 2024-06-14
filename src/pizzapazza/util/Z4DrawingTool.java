@@ -1,5 +1,6 @@
 package pizzapazza.util;
 
+import pizzapazza.color.Z4ColorProgression;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.iterator.Z4PointIterator;
 import pizzapazza.iterator.Z4PointIteratorDrawingAction;
@@ -19,6 +20,7 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
   private final Z4PointIterator pointIterator;
   private final Z4Painter painter;
   private final Z4SpatioTemporalColor spatioTemporalColor;
+  private final Z4ColorProgression progression;
 
   /**
    * Creates the object
@@ -26,13 +28,15 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
    * @param pointIterator The point iterator
    * @param painter The painter
    * @param spatioTemporalColor The spatio-temporal color
+   * @param progression The color progression
    */
-  public Z4DrawingTool(Z4PointIterator pointIterator, Z4Painter painter, Z4SpatioTemporalColor spatioTemporalColor) {
+  public Z4DrawingTool(Z4PointIterator pointIterator, Z4Painter painter, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
     super();
-    
+
     this.pointIterator = pointIterator;
     this.painter = painter;
     this.spatioTemporalColor = spatioTemporalColor;
+    this.progression = progression;
   }
 
   /**
@@ -50,7 +54,7 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
 
   @Override
   public Z4DrawingPoint next() {
-    return this.pointIterator.next();
+    return this.pointIterator.next(this.spatioTemporalColor, this.progression);
   }
 
   /**
@@ -60,7 +64,7 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
    * @param drawingPoint The point where to perform the drawing
    */
   public void draw($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint) {
-    this.painter.draw(context, drawingPoint, this.spatioTemporalColor);
+    this.painter.draw(context, drawingPoint, this.spatioTemporalColor, this.progression);
   }
 
   /**
@@ -90,6 +94,7 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
     json.$set("pointIterator", this.pointIterator);
     json.$set("painter", this.painter);
     json.$set("spatioTemporalColor", this.spatioTemporalColor);
+    json.$set("progression", this.progression);
     return json;
   }
 }

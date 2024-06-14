@@ -38,7 +38,7 @@ class Z4Stamper extends Z4PointIterator {
     }
   }
 
-   next() {
+   next(color, progression) {
     if (!this.hasNext) {
       return null;
     } else {
@@ -53,14 +53,24 @@ class Z4Stamper extends Z4PointIterator {
       } else {
         vector = Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, 1, angle);
       }
-      // this.progression.next(this.z4Point);
-      // 
-      // if (this.progression.isRelativeToPath()) {
-      // this.z4Point.setDrawBounds(false);
-      // this.z4Point.setColorPosition(Math.random());
-      // }
-      // 
-      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, this.rotation.computeSide(vector, null), false);
+      let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
+      let spatialPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.spatialPosition : -1;
+      if (color.isColor()) {
+      } else if (color.isGradientColor()) {
+        switch("" + progression.getColorProgressionBehavior()) {
+          case "SPATIAL":
+            break;
+          case "TEMPORAL":
+            temporalPosition = progression.next(temporalPosition);
+            break;
+          case "RANDOM":
+            temporalPosition = Math.random();
+            break;
+        }
+      } else if (color.isBiGradientColor()) {
+      }
+      this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, spatialPosition, false, this.rotation.computeSide(vector, null), false);
+      return nextdDrawingPoint;
     }
   }
 

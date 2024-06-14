@@ -11,18 +11,22 @@ class Z4DrawingTool extends Z4Nextable {
 
    spatioTemporalColor = null;
 
+   progression = null;
+
   /**
    * Creates the object
    *
    * @param pointIterator The point iterator
    * @param painter The painter
    * @param spatioTemporalColor The spatio-temporal color
+   * @param progression The color progression
    */
-  constructor(pointIterator, painter, spatioTemporalColor) {
+  constructor(pointIterator, painter, spatioTemporalColor, progression) {
     super();
     this.pointIterator = pointIterator;
     this.painter = painter;
     this.spatioTemporalColor = spatioTemporalColor;
+    this.progression = progression;
   }
 
   /**
@@ -39,7 +43,7 @@ class Z4DrawingTool extends Z4Nextable {
   }
 
    next() {
-    return this.pointIterator.next();
+    return this.pointIterator.next(this.spatioTemporalColor, this.progression);
   }
 
   /**
@@ -49,7 +53,7 @@ class Z4DrawingTool extends Z4Nextable {
    * @param drawingPoint The point where to perform the drawing
    */
    draw(context, drawingPoint) {
-    this.painter.draw(context, drawingPoint, this.spatioTemporalColor);
+    this.painter.draw(context, drawingPoint, this.spatioTemporalColor, this.progression);
   }
 
   /**
@@ -78,6 +82,7 @@ class Z4DrawingTool extends Z4Nextable {
     json["pointIterator"] = this.pointIterator;
     json["painter"] = this.painter;
     json["spatioTemporalColor"] = this.spatioTemporalColor;
+    json["progression"] = this.progression;
     return json;
   }
 }

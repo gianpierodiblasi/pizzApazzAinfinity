@@ -121,6 +121,34 @@ class Z4BiGradientColorProgressionBehavior {
   static RANDOM = 'RANDOM';
 }
 /**
+ * The behavior of a progression of a color (flat, gradient, bigradient)
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4ColorProgressionBehavior {
+
+  /**
+   * The color is used spatially
+   */
+  static SPATIAL = 'SPATIAL';
+  /**
+   * The color is used temporally
+   */
+  static TEMPORAL = 'TEMPORAL';
+  /**
+   * The color is used temporally relative to the length of a path
+   */
+  static RELATIVE_TO_PATH = 'RELATIVE_TO_PATH';
+  /**
+   * The color is randomly selected
+   */
+  static RANDOM = 'RANDOM';
+  /**
+   * The color is used spatially relative to the length of a radius
+   */
+  static RADIAL = 'RADIAL';
+}
+/**
  * The behavior of a progression of a gradient color
  *
  * @author gianpiero.diblasi
@@ -1017,9 +1045,9 @@ class Z4DrawingPoint {
 
    intensity = 0.0;
 
-   lighting = null;
+   temporalPosition = 0.0;
 
-   colorPosition = 0.0;
+   spatialPosition = 0.0;
 
    drawBounds = false;
 
@@ -1032,20 +1060,21 @@ class Z4DrawingPoint {
    *
    * @param z4Vector The vector providing position and direction of the drawing
    * @param intensity The intensity of the drawing (in the range [0,1])
-   * @param lighting The lighting to apply to the current color
-   * @param colorPosition The color position to use in the color object (in the
-   * range [0,1]), -1 if this point has no color position
+   * @param temporalPosition The temporal position to use in the color object
+   * (in the range [0,1]), -1 if this point has no temporal position
+   * @param spatialPosition The spatial position to use in the color object (in
+   * the range [0,1]), -1 if this point has no spatial position
    * @param drawBounds true if this point has to be used to draw bounds, false
    * otherwise (this point has to be used to draw real objects)
    * @param side The side
    * @param useVectorModuleAsSize true if the vector module of this point has to
    * be used has size, false otherwise
    */
-  constructor(z4Vector, intensity, lighting, colorPosition, drawBounds, side, useVectorModuleAsSize) {
+  constructor(z4Vector, intensity, temporalPosition, spatialPosition, drawBounds, side, useVectorModuleAsSize) {
     this.z4Vector = z4Vector;
     this.intensity = intensity;
-    this.lighting = lighting;
-    this.colorPosition = colorPosition;
+    this.temporalPosition = temporalPosition;
+    this.spatialPosition = spatialPosition;
     this.drawBounds = drawBounds;
     this.side = side;
     this.useVectorModuleAsSize = useVectorModuleAsSize;
@@ -1733,7 +1762,7 @@ class Z4Canvas extends JSComponent {
   // new Z4ArrowPainter(),
   // Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255))
   // );
-   drawingTool = new Z4DrawingTool(new Z4Scatterer(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(10, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(30, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.RELATIVE_TO_PATH, false)), new Z4ArrowPainter(), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)));
+   drawingTool = new Z4DrawingTool(new Z4Scatterer(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(10, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(30, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.RELATIVE_TO_PATH, false)), new Z4ArrowPainter(), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)), new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE));
 
   /**
    * Creates the object
@@ -8927,20 +8956,6 @@ class Z4SpatioTemporalColor extends Z4JSONable {
 
    biGradientColor = null;
 
-   flatGradientColor = null;
-
-  constructor(color, gradientColor, biGradientColor) {
-    super();
-    this.color = color;
-    this.gradientColor = gradientColor;
-    this.biGradientColor = biGradientColor;
-    if (color) {
-      this.flatGradientColor = new Z4GradientColor();
-      this.flatGradientColor.addColor(this.color, 0);
-      this.flatGradientColor.addColor(this.color, 1);
-    }
-  }
-
   /**
    * Creates a Z4SpatioTemporalColor from a color
    *
@@ -8971,6 +8986,43 @@ class Z4SpatioTemporalColor extends Z4JSONable {
     return new Z4SpatioTemporalColor(null, null, biGradientColor);
   }
 
+  constructor(color, gradientColor, biGradientColor) {
+    super();
+    this.color = color;
+    this.gradientColor = gradientColor;
+    this.biGradientColor = biGradientColor;
+  }
+
+  /**
+   * Checks if this spatio-temporal color is a (flat) color
+   *
+   * @return true if this spatio-temporal color is a (flat) color, false
+   * otherwise
+   */
+   isColor() {
+    return !!(this.color);
+  }
+
+  /**
+   * Checks if this spatio-temporal color is a gradient color
+   *
+   * @return true if this spatio-temporal color is a gradient color, false
+   * otherwise
+   */
+   isGradientColor() {
+    return !!(this.gradientColor);
+  }
+
+  /**
+   * Checks if this spatio-temporal color is a bigradient color
+   *
+   * @return true if this spatio-temporal color is a bigradient color, false
+   * otherwise
+   */
+   isBiGradientColor() {
+    return !!(this.biGradientColor);
+  }
+
   /**
    * Returns a color in a time instant and in a space position
    *
@@ -8978,36 +9030,34 @@ class Z4SpatioTemporalColor extends Z4JSONable {
    * @param space The space position
    * @return The color
    */
-   getColorAt(time, space) {
-    if (this.color) {
-      return this.color;
-    } else if (this.gradientColor) {
-      return this.gradientColor.getColorAt(space, true);
-    } else if (this.biGradientColor) {
-      return this.biGradientColor.getColorAt(time, true).getColorAt(space, true);
-    } else {
-      return null;
-    }
-  }
-
+  // public Color getColorAt(double time, double space) {
+  // if ($exists(this.color)) {
+  // return this.color;
+  // } else if ($exists(this.gradientColor)) {
+  // return this.gradientColor.getColorAt(space, true);
+  // } else if ($exists(this.biGradientColor)) {
+  // return this.biGradientColor.getColorAt(time, true).getColorAt(space, true);
+  // } else {
+  // return null;
+  // }
+  // }
   /**
    * Returns a gradient color in a time instant
    *
    * @param time The time instant
    * @return The gradient color
    */
-   getGradientColorAt(time) {
-    if (this.color) {
-      return this.flatGradientColor;
-    } else if (this.gradientColor) {
-      return this.gradientColor;
-    } else if (this.biGradientColor) {
-      return this.biGradientColor.getColorAt(time, true);
-    } else {
-      return null;
-    }
-  }
-
+  // public Z4GradientColor getGradientColorAt(double time) {
+  // if ($exists(this.color)) {
+  // return this.flatGradientColor;
+  // } else if ($exists(this.gradientColor)) {
+  // return this.gradientColor;
+  // } else if ($exists(this.biGradientColor)) {
+  // return this.biGradientColor.getColorAt(time, true);
+  // } else {
+  // return null;
+  // }
+  // }
    toJSON() {
     let json = new Object();
     if (this.color) {
@@ -9058,618 +9108,6 @@ class Z4Nextable extends Z4JSONable {
    * @return The next value
    */
    next() {
-  }
-}
-/**
- * The common parent of all point iterators
- *
- * @author gianpiero.diblasi
- */
-class Z4PointIterator extends Z4Nextable {
-
-  /**
-   * The rotation
-   */
-   rotation = null;
-
-  /**
-   * true if this Z4PointIterator has another point, false otherwise
-   */
-   hasNext = false;
-
-  /**
-   * The current "utility" point
-   */
-   currentPoint = null;
-
-  /**
-   * Creates the object
-   *
-   * @param rotation The rotation
-   */
-  constructor(rotation) {
-    super();
-    this.rotation = rotation;
-  }
-
-  /**
-   * Performs a drawing action
-   *
-   * @param action The action
-   * @param x The x-axis coordinate of the drawing action
-   * @param y The y-axis coordinate of the drawing action
-   * @return true if the painting is modified by the drawing action, false
-   * otherwise
-   */
-   drawAction(action, x, y) {
-  }
-
-   next() {
-  }
-
-  /**
-   * Checks if this Z4PointIterator is an infinite point generator (for example
-   * an airbrush)
-   *
-   * @return true if this Z4PointIterator is an infinite point generator, false
-   * otherwise
-   */
-   isInfinitePointGenerator() {
-  }
-
-  /**
-   * Returns the sleeping time between a point generation and the successive
-   *
-   * @return The sleeping time between a point generation and the successive (in
-   * milliseconds)
-   */
-   getInfinitePointGeneratorSleep() {
-  }
-
-   toJSON() {
-    let json = new Object();
-    json["rotation"] = this.rotation.toJSON();
-    return json;
-  }
-}
-/**
- * The airbrush
- *
- * @author gianpiero.diblasi
- */
-class Z4Airbrush extends Z4PointIterator {
-
-   multiplicity = null;
-
-   radius = 0.0;
-
-   speed = 0.0;
-
-   currentMultiplicityCounter = 0;
-
-   currentMultiplicityTotal = 0;
-
-  /**
-   * Creates the object
-   *
-   * @param multiplicity The multiplicity
-   * @param radius The radius
-   * @param speed The speed
-   * @param rotation The rotation
-   */
-  constructor(multiplicity, radius, speed, rotation) {
-    super(rotation);
-    this.multiplicity = multiplicity;
-    this.radius = radius;
-    this.speed = speed;
-  }
-
-   drawAction(action, x, y) {
-    if (action === Z4PointIteratorDrawingAction.START) {
-      this.currentMultiplicityCounter = 0;
-      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
-      this.currentPoint = new Z4Point(x, y);
-      this.hasNext = true;
-      return true;
-    } else if (action === Z4PointIteratorDrawingAction.CONTINUE) {
-      this.currentPoint = new Z4Point(x, y);
-      this.hasNext = true;
-      return false;
-    } else if (action === Z4PointIteratorDrawingAction.STOP) {
-      this.hasNext = false;
-      return false;
-    } else {
-      return false;
-    }
-  }
-
-   next() {
-    if (!this.hasNext) {
-      this.currentMultiplicityCounter = 0;
-      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
-      this.hasNext = true;
-      return null;
-    } else {
-      this.currentMultiplicityCounter++;
-      this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
-      let currentRadius = this.radius * Math.random();
-      let currenAngle = Z4Math.TWO_PI * Math.random();
-      let angle = this.rotation.next(currenAngle);
-      let vector = Z4Vector.fromVector(this.currentPoint.x + currentRadius * Math.cos(currenAngle), currentRadius * Math.sin(currenAngle) + this.currentPoint.y, 1, angle);
-      // if (!this.progression.isTemporal() || this.currentMultiplicityCounter == 1) {
-      // this.progression.next(this.z4Point);
-      // } else {
-      // this.z4Point.setLighting(this.progression.getLighting());
-      // this.z4Point.setDrawBounds(false);
-      // }
-      // 
-      // if (this.progression.isRelativeToPath()) {
-      // this.z4Point.setDrawBounds(false);
-      // this.z4Point.setColorPosition(currentRadius / this.radius);
-      // }
-      // 
-      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, this.rotation.computeSide(vector, null), false);
-    }
-  }
-
-   isInfinitePointGenerator() {
-    return true;
-  }
-
-   getInfinitePointGeneratorSleep() {
-    return parseInt(250 / this.speed);
-  }
-
-   toJSON() {
-    let json = super.toJSON();
-    json["multiplicity"] = this.multiplicity.toJSON();
-    json["radius"] = this.radius;
-    json["speed"] = this.speed;
-    return json;
-  }
-}
-/**
- * @author gianpiero.diblasi
- */
-class Z4Scatterer extends Z4PointIterator {
-
-   multiplicity = null;
-
-   scattering = null;
-
-   before = null;
-
-   currentMultiplicityCounter = 0;
-
-   currentMultiplicityTotal = 0;
-
-  /**
-   * Creates the object
-   *
-   * @param multiplicity The multiplicity
-   * @param scattering The scattering
-   * @param rotation The rotation
-   */
-  constructor(multiplicity, scattering, rotation) {
-    super(rotation);
-    this.multiplicity = multiplicity;
-    this.scattering = scattering;
-  }
-
-   drawAction(action, x, y) {
-    if (action === Z4PointIteratorDrawingAction.START) {
-      this.currentMultiplicityCounter = 0;
-      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
-      this.currentPoint = new Z4Point(x, y);
-      this.hasNext = true;
-      return false;
-    } else if (action === Z4PointIteratorDrawingAction.CONTINUE) {
-      this.currentMultiplicityCounter = 0;
-      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
-      this.before = this.currentPoint;
-      this.currentPoint = new Z4Point(x, y);
-      this.hasNext = true;
-      return true;
-    } else if (action === Z4PointIteratorDrawingAction.STOP) {
-      return false;
-    } else {
-      return false;
-    }
-  }
-
-   next() {
-    if (!this.hasNext) {
-      return null;
-    } else {
-      this.currentMultiplicityCounter++;
-      this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
-      let nextScattering = this.scattering.next();
-      let currentVector = Z4Vector.fromPoints(this.before.x, this.before.y, this.currentPoint.x, this.currentPoint.y);
-      let angle = this.rotation.next(currentVector.phase);
-      let vector = Z4Vector.fromVector(this.currentPoint.x + nextScattering * Math.cos(angle), this.currentPoint.y + nextScattering * Math.sin(angle), 1, angle);
-      // this.progression.next(this.z4Point);
-      // point.modeLighting=modeLighting;
-      // point.colorPosition=this.evaluateColorPosition(nextScattering/scattering);
-      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, this.rotation.computeSide(vector, currentVector), false);
-    }
-  }
-
-   isInfinitePointGenerator() {
-    return false;
-  }
-
-   getInfinitePointGeneratorSleep() {
-    return 0;
-  }
-
-   toJSON() {
-    let json = super.toJSON();
-    json["multiplicity"] = this.multiplicity.toJSON();
-    json["scattering"] = this.scattering.toJSON();
-    return json;
-  }
-}
-/**
- * The spirograph
- *
- * @author gianpiero.diblasi
- */
-class Z4Spirograph extends Z4PointIterator {
-
-   center = null;
-
-   clones = new Array();
-
-   clonePos = 0;
-
-   fromClones = false;
-
-  /**
-   * Creates the object
-   *
-   * @param rotation The rotation
-   */
-  constructor(rotation) {
-    super(rotation);
-  }
-
-   drawAction(action, x, y) {
-    if (action === Z4PointIteratorDrawingAction.START) {
-      this.center = new Z4Point(x, y);
-      this.hasNext = false;
-      this.clones = new Array();
-      this.fromClones = false;
-      return false;
-    } else if (action === Z4PointIteratorDrawingAction.CONTINUE) {
-      this.currentPoint = new Z4Point(x, y);
-      this.hasNext = true;
-      return true;
-    } else if (action === Z4PointIteratorDrawingAction.STOP) {
-      this.fromClones = true;
-      this.clonePos = this.clones.length - 1;
-      this.hasNext = this.clonePos !== -1;
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-   next() {
-    if (!this.hasNext) {
-      return null;
-    } else if (this.fromClones) {
-      let clone = this.clones[this.clonePos];
-      // clone.setColorPosition(this.clonePos / this.clones.length);
-      // clone.setDrawBounds(false);
-      this.clonePos--;
-      this.hasNext = this.clonePos !== -1;
-      return clone;
-    } else {
-      let currentVector = Z4Vector.fromPoints(this.center.x, this.center.y, this.currentPoint.x, this.currentPoint.y);
-      let angle = this.rotation.next(currentVector.phase);
-      let vector = Z4Vector.fromVector(this.center.x, this.center.y, currentVector.module, angle);
-      // this.progression.next(this.z4Point);
-      // if (this.z4Point.isDrawBounds()) {
-      // this.clones.push(this.z4Point.clone());
-      // }
-      this.hasNext = false;
-      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, this.rotation.computeSide(vector, currentVector), true);
-    }
-  }
-
-   isInfinitePointGenerator() {
-    return false;
-  }
-
-   getInfinitePointGeneratorSleep() {
-    return 0;
-  }
-}
-/**
- * The stamper
- *
- * @author gianpiero.diblasi
- */
-class Z4Stamper extends Z4PointIterator {
-
-   multiplicity = null;
-
-   push = null;
-
-   currentMultiplicityCounter = 0;
-
-   currentMultiplicityTotal = 0;
-
-  /**
-   * Creates the object
-   *
-   * @param multiplicity The multiplicity
-   * @param push The push
-   * @param rotation The rotation
-   */
-  constructor(multiplicity, push, rotation) {
-    super(rotation);
-    this.multiplicity = multiplicity;
-    this.push = push;
-  }
-
-   drawAction(action, x, y) {
-    if (action === Z4PointIteratorDrawingAction.START) {
-      this.currentMultiplicityCounter = 0;
-      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
-      this.currentPoint = new Z4Point(x, y);
-      this.hasNext = true;
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-   next() {
-    if (!this.hasNext) {
-      return null;
-    } else {
-      this.currentMultiplicityCounter++;
-      this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
-      let vector = null;
-      let angle = this.rotation.next(0.0);
-      let currentPush = this.push.next();
-      if (currentPush) {
-        let pushed = Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, currentPush, angle);
-        vector = Z4Vector.fromVector(pushed.x, pushed.y, 1, angle);
-      } else {
-        vector = Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, 1, angle);
-      }
-      // this.progression.next(this.z4Point);
-      // 
-      // if (this.progression.isRelativeToPath()) {
-      // this.z4Point.setDrawBounds(false);
-      // this.z4Point.setColorPosition(Math.random());
-      // }
-      // 
-      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, this.rotation.computeSide(vector, null), false);
-    }
-  }
-
-   isInfinitePointGenerator() {
-    return false;
-  }
-
-   getInfinitePointGeneratorSleep() {
-    return 0;
-  }
-
-   toJSON() {
-    let json = super.toJSON();
-    json["multiplicity"] = this.multiplicity.toJSON();
-    json["push"] = this.push.toJSON();
-    return json;
-  }
-}
-/**
- * The tracer
- *
- * @author gianpiero.diblasi
- */
-class Z4Tracer extends Z4PointIterator {
-
-   multiplicity = null;
-
-   push = null;
-
-   attack = null;
-
-   sustain = null;
-
-   release = null;
-
-   endlessSustain = false;
-
-   step = null;
-
-   path = null;
-
-   before = null;
-
-   envelopeA = 0.0;
-
-   envelopeS = 0.0;
-
-   envelopeR = 0.0;
-
-   envelopeAS = 0.0;
-
-   envelopeASR = 0.0;
-
-   envelopePosition = 0.0;
-
-   envelopeStep = 0.0;
-
-   clones = new Array();
-
-   clonePos = 0;
-
-   fromClones = false;
-
-   surplus = 0.0;
-
-   connect = false;
-
-   currentVector = null;
-
-   currentMultiplicityCounter = 0;
-
-   currentMultiplicityTotal = 0;
-
-  /**
-   * Creates the object
-   *
-   * @param multiplicity The multiplicity
-   * @param push The push
-   * @param attack The attack
-   * @param sustain The sustain
-   * @param release The release
-   * @param endlessSustain true for an endless sustain, false otherwise
-   * @param step The step
-   * @param rotation
-   */
-  constructor(multiplicity, push, attack, sustain, release, endlessSustain, step, rotation) {
-    super(rotation);
-    this.multiplicity = multiplicity;
-    this.push = push;
-    this.attack = attack;
-    this.sustain = sustain;
-    this.release = release;
-    this.endlessSustain = endlessSustain;
-    this.step = step;
-  }
-
-   drawAction(action, x, y) {
-    if (action === Z4PointIteratorDrawingAction.START) {
-      this.currentPoint = new Z4Point(x, y);
-      this.hasNext = false;
-      this.path = null;
-      this.envelopeA = this.attack.next();
-      this.envelopeS = this.sustain.next();
-      this.envelopeR = this.release.next();
-      this.envelopeAS = this.envelopeA + this.envelopeS;
-      this.envelopeASR = this.envelopeA + this.envelopeS + this.envelopeR;
-      this.envelopePosition = 0;
-      this.envelopeStep = this.step.next();
-      this.clones = new Array();
-      this.fromClones = false;
-      this.surplus = 0;
-      this.connect = false;
-      return false;
-    } else if (action === Z4PointIteratorDrawingAction.CONTINUE) {
-      this.currentMultiplicityCounter = 0;
-      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
-      let distance = Z4Math.distance(this.currentPoint.x, this.currentPoint.y, x, y);
-      if (distance >= 10) {
-        let angle = Z4Math.atan(this.currentPoint.x, this.currentPoint.y, x, y);
-        let vector = Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, 2 * distance / 3, angle);
-        let end = new Z4Point(vector.x, vector.y);
-        if (this.connect) {
-          vector = Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, distance / 3, angle);
-          this.path = Z4TracerPath.fromQuadAndLine(this.before.x, this.before.y, this.currentPoint.x, this.currentPoint.y, vector.x, vector.y, end.x, end.y, this.surplus, this.envelopeStep);
-        } else {
-          this.path = Z4TracerPath.fromLine(this.currentPoint.x, this.currentPoint.y, vector.x, vector.y, this.surplus, this.envelopeStep);
-        }
-        this.connect = true;
-        this.before = end;
-        this.currentPoint = new Z4Point(x, y);
-        this.hasNext = this.path.hasNext();
-        if (!this.hasNext) {
-          this.surplus = this.path.getNewSurplus();
-        }
-      } else {
-        this.hasNext = false;
-      }
-      return true;
-    } else if (action === Z4PointIteratorDrawingAction.STOP) {
-      this.fromClones = true;
-      this.clonePos = 0;
-      this.hasNext = this.clonePos < this.clones.length;
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-   next() {
-    if (!this.hasNext) {
-      return null;
-    } else if (this.fromClones) {
-      let clone = this.clones[this.clonePos];
-      // clone.setColorPosition(this.clonePos / this.clones.length);
-      // clone.setDrawBounds(false);
-      this.clonePos++;
-      this.hasNext = this.clonePos < this.clones.length;
-      return clone;
-    } else {
-      if (!this.currentMultiplicityCounter) {
-        this.currentVector = this.path.next();
-      }
-      let vector = null;
-      let angle = this.rotation.next(this.currentVector.phase);
-      let currentPush = this.push.next();
-      if (currentPush) {
-        let pushed = Z4Vector.fromVector(this.currentVector.x0, this.currentVector.y0, currentPush, angle);
-        vector = Z4Vector.fromVector(pushed.x, pushed.y, 1, angle);
-      } else {
-        vector = Z4Vector.fromVector(this.currentVector.x0, this.currentVector.y0, 1, angle);
-      }
-      // this.progression.next(this.z4Point);
-      // 
-      // if (this.z4Point.isDrawBounds() && this.z4Point.getIntensity() > 0) {
-      // this.clones.push(this.z4Point.clone());
-      // }
-      // 
-      this.currentMultiplicityCounter++;
-      if (this.currentMultiplicityCounter >= this.currentMultiplicityTotal) {
-        this.currentMultiplicityCounter = 0;
-        this.hasNext = this.path.hasNext();
-        if (!this.hasNext) {
-          this.surplus = this.path.getNewSurplus();
-        }
-      }
-      return new Z4DrawingPoint(vector, this.nextEnvelope(), Z4Lighting.NONE, 0, false, this.rotation.computeSide(vector, this.currentVector), false);
-    }
-  }
-
-   nextEnvelope() {
-    if (this.envelopePosition < this.envelopeA) {
-      this.envelopePosition++;
-      return this.envelopePosition / this.envelopeA;
-    } else if (this.envelopePosition < this.envelopeAS || this.endlessSustain) {
-      this.envelopePosition++;
-      return 1;
-    } else if (this.envelopePosition < this.envelopeASR) {
-      this.envelopePosition++;
-      return 1 - (this.envelopePosition - this.envelopeAS) / this.envelopeR;
-    } else {
-      return 0;
-    }
-  }
-
-   isInfinitePointGenerator() {
-    return false;
-  }
-
-   getInfinitePointGeneratorSleep() {
-    return 0;
-  }
-
-   toJSON() {
-    let json = super.toJSON();
-    json["multiplicity"] = this.multiplicity.toJSON();
-    json["push"] = this.push.toJSON();
-    json["attack"] = this.attack.toJSON();
-    json["sustain"] = this.sustain.toJSON();
-    json["release"] = this.release.toJSON();
-    json["endlessSustain"] = this.endlessSustain;
-    json["step"] = this.step.toJSON();
-    return json;
   }
 }
 /**
@@ -10113,18 +9551,22 @@ class Z4DrawingTool extends Z4Nextable {
 
    spatioTemporalColor = null;
 
+   progression = null;
+
   /**
    * Creates the object
    *
    * @param pointIterator The point iterator
    * @param painter The painter
    * @param spatioTemporalColor The spatio-temporal color
+   * @param progression The color progression
    */
-  constructor(pointIterator, painter, spatioTemporalColor) {
+  constructor(pointIterator, painter, spatioTemporalColor, progression) {
     super();
     this.pointIterator = pointIterator;
     this.painter = painter;
     this.spatioTemporalColor = spatioTemporalColor;
+    this.progression = progression;
   }
 
   /**
@@ -10141,7 +9583,7 @@ class Z4DrawingTool extends Z4Nextable {
   }
 
    next() {
-    return this.pointIterator.next();
+    return this.pointIterator.next(this.spatioTemporalColor, this.progression);
   }
 
   /**
@@ -10151,7 +9593,7 @@ class Z4DrawingTool extends Z4Nextable {
    * @param drawingPoint The point where to perform the drawing
    */
    draw(context, drawingPoint) {
-    this.painter.draw(context, drawingPoint, this.spatioTemporalColor);
+    this.painter.draw(context, drawingPoint, this.spatioTemporalColor, this.progression);
   }
 
   /**
@@ -10180,6 +9622,7 @@ class Z4DrawingTool extends Z4Nextable {
     json["pointIterator"] = this.pointIterator;
     json["painter"] = this.painter;
     json["spatioTemporalColor"] = this.spatioTemporalColor;
+    json["progression"] = this.progression;
     return json;
   }
 }
@@ -10200,6 +9643,115 @@ class Z4NextableWithParam extends Z4JSONable {
    * @return The next value
    */
    next(param) {
+  }
+}
+/**
+ * The progression of a color
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4ColorProgression extends Z4NextableWithParam {
+
+   behavior = null;
+
+   temporalStepProgression = 0.0;
+
+   lighting = null;
+
+  /**
+   * Creates the object
+   *
+   * @param behavior The color progression behavior
+   * @param temporalStepProgression The step for temporal progression (in the
+   * range [0,1])
+   * @param lighting The color lighting
+   */
+  constructor(behavior, temporalStepProgression, lighting) {
+    super();
+    this.behavior = behavior;
+    this.temporalStepProgression = temporalStepProgression;
+    this.lighting = lighting;
+  }
+
+  /**
+   * Returns the color progression behavior
+   *
+   * @return The color progression behavior
+   */
+   getColorProgressionBehavior() {
+    return this.behavior;
+  }
+
+  /**
+   * Returns the step for temporal progression (in the range [0,1])
+   *
+   * @return The step for temporal progression (in the range [0,1])
+   */
+   getTemporalStepProgression() {
+    return this.temporalStepProgression;
+  }
+
+  /**
+   * Returns the color lighting
+   *
+   * @return The color lighting
+   */
+   getLighting() {
+    return this.lighting;
+  }
+
+   next(position) {
+    position = position === -1 ? 0 : position + this.temporalStepProgression;
+    if (position > 1) {
+      position -= 1;
+    }
+    return position;
+  }
+
+   toJSON() {
+    let json = new Object();
+    json["behavior"] = this.behavior;
+    json["temporalStepProgression"] = this.temporalStepProgression;
+    json["lighting"] = this.lighting;
+    return json;
+  }
+
+  /**
+   * Creates a Z4ColorProgression from a JSON object
+   *
+   * @param json The JSON object
+   * @return the color progression
+   */
+  static  fromJSON(json) {
+    let lighting = null;
+    switch("" + json["lighting"]) {
+      case "NONE":
+        lighting = Z4Lighting.NONE;
+        break;
+      case "LIGHTED":
+        lighting = Z4Lighting.LIGHTED;
+        break;
+      case "DARKENED":
+        lighting = Z4Lighting.DARKENED;
+        break;
+      default:
+        lighting = null;
+        break;
+    }
+    switch("" + json["behavior"]) {
+      case "SPATIAL":
+        return new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, json["temporalStepProgression"], lighting);
+      case "TEMPORAL":
+        return new Z4ColorProgression(Z4ColorProgressionBehavior.TEMPORAL, json["temporalStepProgression"], lighting);
+      case "RELATIVE_TO_PATH":
+        return new Z4ColorProgression(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, json["temporalStepProgression"], lighting);
+      case "RANDOM":
+        return new Z4ColorProgression(Z4ColorProgressionBehavior.RANDOM, json["temporalStepProgression"], lighting);
+      case "RADIAL":
+        return new Z4ColorProgression(Z4ColorProgressionBehavior.RADIAL, json["temporalStepProgression"], lighting);
+      default:
+        return null;
+    }
   }
 }
 /**
@@ -10317,6 +9869,654 @@ class Z4Rotation extends Z4NextableWithParam {
   }
 }
 /**
+ * The common interface for objects able to provide a "next" value by means of
+ * two parameters
+ *
+ * @author gianpiero.diblasi
+ * @param <T> The next value type
+ * @param <S> The first parameter type
+ * @param <V> The second parameter type
+ */
+class Z4NextableWithTwoParams extends Z4JSONable {
+
+  /**
+   * Returns the next value
+   *
+   * @param param1 The first parameter
+   * @param param2 The second parameter
+   * @return The next value
+   */
+   next(param1, param2) {
+  }
+}
+/**
+ * The common parent of all point iterators
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4PointIterator extends Z4NextableWithTwoParams {
+
+  /**
+   * The rotation
+   */
+   rotation = null;
+
+  /**
+   * The next drawing point
+   */
+   nextdDrawingPoint = null;
+
+  /**
+   * true if this Z4PointIterator has another point, false otherwise
+   */
+   hasNext = false;
+
+  /**
+   * The current "utility" point
+   */
+   currentPoint = null;
+
+  /**
+   * Creates the object
+   *
+   * @param rotation The rotation
+   */
+  constructor(rotation) {
+    super();
+    this.rotation = rotation;
+  }
+
+  /**
+   * Performs a drawing action
+   *
+   * @param action The action
+   * @param x The x-axis coordinate of the drawing action
+   * @param y The y-axis coordinate of the drawing action
+   * @return true if the painting is modified by the drawing action, false
+   * otherwise
+   */
+   drawAction(action, x, y) {
+  }
+
+   next(color, progression) {
+  }
+
+  /**
+   * Checks if this Z4PointIterator is an infinite point generator (for example
+   * an airbrush)
+   *
+   * @return true if this Z4PointIterator is an infinite point generator, false
+   * otherwise
+   */
+   isInfinitePointGenerator() {
+  }
+
+  /**
+   * Returns the sleeping time between a point generation and the successive
+   *
+   * @return The sleeping time between a point generation and the successive (in
+   * milliseconds)
+   */
+   getInfinitePointGeneratorSleep() {
+  }
+
+   toJSON() {
+    let json = new Object();
+    json["rotation"] = this.rotation.toJSON();
+    return json;
+  }
+}
+/**
+ * The airbrush
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Airbrush extends Z4PointIterator {
+
+   multiplicity = null;
+
+   radius = 0.0;
+
+   speed = 0.0;
+
+   currentMultiplicityCounter = 0;
+
+   currentMultiplicityTotal = 0;
+
+  /**
+   * Creates the object
+   *
+   * @param multiplicity The multiplicity
+   * @param radius The radius
+   * @param speed The speed
+   * @param rotation The rotation
+   */
+  constructor(multiplicity, radius, speed, rotation) {
+    super(rotation);
+    this.multiplicity = multiplicity;
+    this.radius = radius;
+    this.speed = speed;
+  }
+
+   drawAction(action, x, y) {
+    if (action === Z4PointIteratorDrawingAction.START) {
+      this.currentMultiplicityCounter = 0;
+      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
+      this.currentPoint = new Z4Point(x, y);
+      this.hasNext = true;
+      return true;
+    } else if (action === Z4PointIteratorDrawingAction.CONTINUE) {
+      this.currentPoint = new Z4Point(x, y);
+      this.hasNext = true;
+      return false;
+    } else if (action === Z4PointIteratorDrawingAction.STOP) {
+      this.hasNext = false;
+      return false;
+    } else {
+      return false;
+    }
+  }
+
+   next(color, progression) {
+    if (!this.hasNext) {
+      this.currentMultiplicityCounter = 0;
+      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
+      this.hasNext = true;
+      return null;
+    } else {
+      this.currentMultiplicityCounter++;
+      this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
+      let currentRadius = this.radius * Math.random();
+      let currenAngle = Z4Math.TWO_PI * Math.random();
+      let angle = this.rotation.next(currenAngle);
+      let vector = Z4Vector.fromVector(this.currentPoint.x + currentRadius * Math.cos(currenAngle), currentRadius * Math.sin(currenAngle) + this.currentPoint.y, 1, angle);
+      // if (!this.progression.isTemporal() || this.currentMultiplicityCounter == 1) {
+      // this.progression.next(this.z4Point);
+      // } else {
+      // this.z4Point.setLighting(this.progression.getLighting());
+      // this.z4Point.setDrawBounds(false);
+      // }
+      // 
+      // if (this.progression.isRelativeToPath()) {
+      // this.z4Point.setDrawBounds(false);
+      // this.z4Point.setColorPosition(currentRadius / this.radius);
+      // }
+      // 
+      return new Z4DrawingPoint(vector, 1, 0, 0, false, this.rotation.computeSide(vector, null), false);
+    }
+  }
+
+   isInfinitePointGenerator() {
+    return true;
+  }
+
+   getInfinitePointGeneratorSleep() {
+    return parseInt(250 / this.speed);
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    json["multiplicity"] = this.multiplicity.toJSON();
+    json["radius"] = this.radius;
+    json["speed"] = this.speed;
+    return json;
+  }
+}
+/**
+ * @author gianpiero.diblasi
+ */
+class Z4Scatterer extends Z4PointIterator {
+
+   multiplicity = null;
+
+   scattering = null;
+
+   before = null;
+
+   currentMultiplicityCounter = 0;
+
+   currentMultiplicityTotal = 0;
+
+  /**
+   * Creates the object
+   *
+   * @param multiplicity The multiplicity
+   * @param scattering The scattering
+   * @param rotation The rotation
+   */
+  constructor(multiplicity, scattering, rotation) {
+    super(rotation);
+    this.multiplicity = multiplicity;
+    this.scattering = scattering;
+  }
+
+   drawAction(action, x, y) {
+    if (action === Z4PointIteratorDrawingAction.START) {
+      this.currentMultiplicityCounter = 0;
+      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
+      this.currentPoint = new Z4Point(x, y);
+      this.hasNext = true;
+      return false;
+    } else if (action === Z4PointIteratorDrawingAction.CONTINUE) {
+      this.currentMultiplicityCounter = 0;
+      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
+      this.before = this.currentPoint;
+      this.currentPoint = new Z4Point(x, y);
+      this.hasNext = true;
+      return true;
+    } else if (action === Z4PointIteratorDrawingAction.STOP) {
+      return false;
+    } else {
+      return false;
+    }
+  }
+
+   next(color, progression) {
+    if (!this.hasNext) {
+      return null;
+    } else {
+      this.currentMultiplicityCounter++;
+      this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
+      let nextScattering = this.scattering.next();
+      let currentVector = Z4Vector.fromPoints(this.before.x, this.before.y, this.currentPoint.x, this.currentPoint.y);
+      let angle = this.rotation.next(currentVector.phase);
+      let vector = Z4Vector.fromVector(this.currentPoint.x + nextScattering * Math.cos(angle), this.currentPoint.y + nextScattering * Math.sin(angle), 1, angle);
+      // this.progression.next(this.z4Point);
+      // point.modeLighting=modeLighting;
+      // point.colorPosition=this.evaluateColorPosition(nextScattering/scattering);
+      return new Z4DrawingPoint(vector, 1, 0, 0, false, this.rotation.computeSide(vector, currentVector), false);
+    }
+  }
+
+   isInfinitePointGenerator() {
+    return false;
+  }
+
+   getInfinitePointGeneratorSleep() {
+    return 0;
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    json["multiplicity"] = this.multiplicity.toJSON();
+    json["scattering"] = this.scattering.toJSON();
+    return json;
+  }
+}
+/**
+ * The spirograph
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Spirograph extends Z4PointIterator {
+
+   center = null;
+
+   clones = new Array();
+
+   clonePos = 0;
+
+   fromClones = false;
+
+  /**
+   * Creates the object
+   *
+   * @param rotation The rotation
+   */
+  constructor(rotation) {
+    super(rotation);
+  }
+
+   drawAction(action, x, y) {
+    if (action === Z4PointIteratorDrawingAction.START) {
+      this.center = new Z4Point(x, y);
+      this.hasNext = false;
+      this.clones = new Array();
+      this.fromClones = false;
+      return false;
+    } else if (action === Z4PointIteratorDrawingAction.CONTINUE) {
+      this.currentPoint = new Z4Point(x, y);
+      this.hasNext = true;
+      return true;
+    } else if (action === Z4PointIteratorDrawingAction.STOP) {
+      this.fromClones = true;
+      this.clonePos = this.clones.length - 1;
+      this.hasNext = this.clonePos !== -1;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+   next(color, progression) {
+    if (!this.hasNext) {
+      return null;
+    } else if (this.fromClones) {
+      let clone = this.clones[this.clonePos];
+      // clone.setColorPosition(this.clonePos / this.clones.length);
+      // clone.setDrawBounds(false);
+      this.clonePos--;
+      this.hasNext = this.clonePos !== -1;
+      return clone;
+    } else {
+      let currentVector = Z4Vector.fromPoints(this.center.x, this.center.y, this.currentPoint.x, this.currentPoint.y);
+      let angle = this.rotation.next(currentVector.phase);
+      let vector = Z4Vector.fromVector(this.center.x, this.center.y, currentVector.module, angle);
+      // this.progression.next(this.z4Point);
+      // if (this.z4Point.isDrawBounds()) {
+      // this.clones.push(this.z4Point.clone());
+      // }
+      this.hasNext = false;
+      return new Z4DrawingPoint(vector, 1, 0, 0, false, this.rotation.computeSide(vector, currentVector), true);
+    }
+  }
+
+   isInfinitePointGenerator() {
+    return false;
+  }
+
+   getInfinitePointGeneratorSleep() {
+    return 0;
+  }
+}
+/**
+ * The stamper
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Stamper extends Z4PointIterator {
+
+   multiplicity = null;
+
+   push = null;
+
+   currentMultiplicityCounter = 0;
+
+   currentMultiplicityTotal = 0;
+
+  /**
+   * Creates the object
+   *
+   * @param multiplicity The multiplicity
+   * @param push The push
+   * @param rotation The rotation
+   */
+  constructor(multiplicity, push, rotation) {
+    super(rotation);
+    this.multiplicity = multiplicity;
+    this.push = push;
+  }
+
+   drawAction(action, x, y) {
+    if (action === Z4PointIteratorDrawingAction.START) {
+      this.currentMultiplicityCounter = 0;
+      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
+      this.currentPoint = new Z4Point(x, y);
+      this.hasNext = true;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+   next(color, progression) {
+    if (!this.hasNext) {
+      return null;
+    } else {
+      this.currentMultiplicityCounter++;
+      this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
+      let vector = null;
+      let angle = this.rotation.next(0.0);
+      let currentPush = this.push.next();
+      if (currentPush) {
+        let pushed = Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, currentPush, angle);
+        vector = Z4Vector.fromVector(pushed.x, pushed.y, 1, angle);
+      } else {
+        vector = Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, 1, angle);
+      }
+      let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
+      let spatialPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.spatialPosition : -1;
+      if (color.isColor()) {
+      } else if (color.isGradientColor()) {
+        switch("" + progression.getColorProgressionBehavior()) {
+          case "SPATIAL":
+            break;
+          case "TEMPORAL":
+            temporalPosition = progression.next(temporalPosition);
+            break;
+          case "RANDOM":
+            temporalPosition = Math.random();
+            break;
+        }
+      } else if (color.isBiGradientColor()) {
+      }
+      this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, spatialPosition, false, this.rotation.computeSide(vector, null), false);
+      return nextdDrawingPoint;
+    }
+  }
+
+   isInfinitePointGenerator() {
+    return false;
+  }
+
+   getInfinitePointGeneratorSleep() {
+    return 0;
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    json["multiplicity"] = this.multiplicity.toJSON();
+    json["push"] = this.push.toJSON();
+    return json;
+  }
+}
+/**
+ * The tracer
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Tracer extends Z4PointIterator {
+
+   multiplicity = null;
+
+   push = null;
+
+   attack = null;
+
+   sustain = null;
+
+   release = null;
+
+   endlessSustain = false;
+
+   step = null;
+
+   path = null;
+
+   before = null;
+
+   envelopeA = 0.0;
+
+   envelopeS = 0.0;
+
+   envelopeR = 0.0;
+
+   envelopeAS = 0.0;
+
+   envelopeASR = 0.0;
+
+   envelopePosition = 0.0;
+
+   envelopeStep = 0.0;
+
+   clones = new Array();
+
+   clonePos = 0;
+
+   fromClones = false;
+
+   surplus = 0.0;
+
+   connect = false;
+
+   currentVector = null;
+
+   currentMultiplicityCounter = 0;
+
+   currentMultiplicityTotal = 0;
+
+  /**
+   * Creates the object
+   *
+   * @param multiplicity The multiplicity
+   * @param push The push
+   * @param attack The attack
+   * @param sustain The sustain
+   * @param release The release
+   * @param endlessSustain true for an endless sustain, false otherwise
+   * @param step The step
+   * @param rotation
+   */
+  constructor(multiplicity, push, attack, sustain, release, endlessSustain, step, rotation) {
+    super(rotation);
+    this.multiplicity = multiplicity;
+    this.push = push;
+    this.attack = attack;
+    this.sustain = sustain;
+    this.release = release;
+    this.endlessSustain = endlessSustain;
+    this.step = step;
+  }
+
+   drawAction(action, x, y) {
+    if (action === Z4PointIteratorDrawingAction.START) {
+      this.currentPoint = new Z4Point(x, y);
+      this.hasNext = false;
+      this.path = null;
+      this.envelopeA = this.attack.next();
+      this.envelopeS = this.sustain.next();
+      this.envelopeR = this.release.next();
+      this.envelopeAS = this.envelopeA + this.envelopeS;
+      this.envelopeASR = this.envelopeA + this.envelopeS + this.envelopeR;
+      this.envelopePosition = 0;
+      this.envelopeStep = this.step.next();
+      this.clones = new Array();
+      this.fromClones = false;
+      this.surplus = 0;
+      this.connect = false;
+      return false;
+    } else if (action === Z4PointIteratorDrawingAction.CONTINUE) {
+      this.currentMultiplicityCounter = 0;
+      this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
+      let distance = Z4Math.distance(this.currentPoint.x, this.currentPoint.y, x, y);
+      if (distance >= 10) {
+        let angle = Z4Math.atan(this.currentPoint.x, this.currentPoint.y, x, y);
+        let vector = Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, 2 * distance / 3, angle);
+        let end = new Z4Point(vector.x, vector.y);
+        if (this.connect) {
+          vector = Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, distance / 3, angle);
+          this.path = Z4TracerPath.fromQuadAndLine(this.before.x, this.before.y, this.currentPoint.x, this.currentPoint.y, vector.x, vector.y, end.x, end.y, this.surplus, this.envelopeStep);
+        } else {
+          this.path = Z4TracerPath.fromLine(this.currentPoint.x, this.currentPoint.y, vector.x, vector.y, this.surplus, this.envelopeStep);
+        }
+        this.connect = true;
+        this.before = end;
+        this.currentPoint = new Z4Point(x, y);
+        this.hasNext = this.path.hasNext();
+        if (!this.hasNext) {
+          this.surplus = this.path.getNewSurplus();
+        }
+      } else {
+        this.hasNext = false;
+      }
+      return true;
+    } else if (action === Z4PointIteratorDrawingAction.STOP) {
+      this.fromClones = true;
+      this.clonePos = 0;
+      this.hasNext = this.clonePos < this.clones.length;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+   next(color, progression) {
+    if (!this.hasNext) {
+      return null;
+    } else if (this.fromClones) {
+      let clone = this.clones[this.clonePos];
+      // clone.setColorPosition(this.clonePos / this.clones.length);
+      // clone.setDrawBounds(false);
+      this.clonePos++;
+      this.hasNext = this.clonePos < this.clones.length;
+      return clone;
+    } else {
+      if (!this.currentMultiplicityCounter) {
+        this.currentVector = this.path.next();
+      }
+      let vector = null;
+      let angle = this.rotation.next(this.currentVector.phase);
+      let currentPush = this.push.next();
+      if (currentPush) {
+        let pushed = Z4Vector.fromVector(this.currentVector.x0, this.currentVector.y0, currentPush, angle);
+        vector = Z4Vector.fromVector(pushed.x, pushed.y, 1, angle);
+      } else {
+        vector = Z4Vector.fromVector(this.currentVector.x0, this.currentVector.y0, 1, angle);
+      }
+      // this.progression.next(this.z4Point);
+      // 
+      // if (this.z4Point.isDrawBounds() && this.z4Point.getIntensity() > 0) {
+      // this.clones.push(this.z4Point.clone());
+      // }
+      // 
+      this.currentMultiplicityCounter++;
+      if (this.currentMultiplicityCounter >= this.currentMultiplicityTotal) {
+        this.currentMultiplicityCounter = 0;
+        this.hasNext = this.path.hasNext();
+        if (!this.hasNext) {
+          this.surplus = this.path.getNewSurplus();
+        }
+      }
+      return new Z4DrawingPoint(vector, this.nextEnvelope(), 0, 0, false, this.rotation.computeSide(vector, this.currentVector), false);
+    }
+  }
+
+   nextEnvelope() {
+    if (this.envelopePosition < this.envelopeA) {
+      this.envelopePosition++;
+      return this.envelopePosition / this.envelopeA;
+    } else if (this.envelopePosition < this.envelopeAS || this.endlessSustain) {
+      this.envelopePosition++;
+      return 1;
+    } else if (this.envelopePosition < this.envelopeASR) {
+      this.envelopePosition++;
+      return 1 - (this.envelopePosition - this.envelopeAS) / this.envelopeR;
+    } else {
+      return 0;
+    }
+  }
+
+   isInfinitePointGenerator() {
+    return false;
+  }
+
+   getInfinitePointGeneratorSleep() {
+    return 0;
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    json["multiplicity"] = this.multiplicity.toJSON();
+    json["push"] = this.push.toJSON();
+    json["attack"] = this.attack.toJSON();
+    json["sustain"] = this.sustain.toJSON();
+    json["release"] = this.release.toJSON();
+    json["endlessSustain"] = this.endlessSustain;
+    json["step"] = this.step.toJSON();
+    return json;
+  }
+}
+/**
  * The common parent of all painters
  *
  * @author gianpiero.diblasi
@@ -10329,8 +10529,9 @@ class Z4Painter extends Z4JSONable {
    * @param context The context to use to perform the drawing
    * @param drawingPoint The point where to perform the drawing
    * @param spatioTemporalColor The color to use to perform the drawing
+   * @param progression The color progression to use to perform the drawing
    */
-   draw(context, drawingPoint, spatioTemporalColor) {
+   draw(context, drawingPoint, spatioTemporalColor, progression) {
   }
 }
 /**
@@ -10342,7 +10543,7 @@ class Z4ArrowPainter extends Z4Painter {
 
    bool = false;
 
-   draw(context, drawingPoint, spatioTemporalColor) {
+   draw(context, drawingPoint, spatioTemporalColor, progression) {
     this.bool = !this.bool;
     let x = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.module);
     context.save();

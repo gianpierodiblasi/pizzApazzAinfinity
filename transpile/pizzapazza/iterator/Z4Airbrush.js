@@ -49,7 +49,7 @@ class Z4Airbrush extends Z4PointIterator {
     }
   }
 
-   next() {
+   next(color, progression) {
     if (!this.hasNext) {
       this.currentMultiplicityCounter = 0;
       this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
@@ -74,7 +74,7 @@ class Z4Airbrush extends Z4PointIterator {
       // this.z4Point.setColorPosition(currentRadius / this.radius);
       // }
       // 
-      return new Z4DrawingPoint(vector, 1, Z4Lighting.NONE, 0, false, this.rotation.computeSide(vector, null), false);
+      return new Z4DrawingPoint(vector, 1, 0, 0, false, this.rotation.computeSide(vector, null), false);
     }
   }
 

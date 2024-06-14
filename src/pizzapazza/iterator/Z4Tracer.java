@@ -1,7 +1,8 @@
 package pizzapazza.iterator;
 
 import def.js.Array;
-import pizzapazza.color.Z4Lighting;
+import pizzapazza.color.Z4ColorProgression;
+import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4Math;
@@ -139,7 +140,7 @@ public class Z4Tracer extends Z4PointIterator {
   }
 
   @Override
-  public Z4DrawingPoint next() {
+  public Z4DrawingPoint next(Z4SpatioTemporalColor color, Z4ColorProgression progression) {
     if (!this.hasNext) {
       return null;
     } else if (this.fromClones) {
@@ -183,7 +184,7 @@ public class Z4Tracer extends Z4PointIterator {
       return new Z4DrawingPoint(
               vector,
               this.nextEnvelope(),
-              Z4Lighting.NONE,
+              0,
               0,
               false,
               this.rotation.computeSide(vector, this.currentVector),

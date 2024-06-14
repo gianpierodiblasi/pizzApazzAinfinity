@@ -1,6 +1,7 @@
 package pizzapazza.iterator;
 
-import pizzapazza.color.Z4Lighting;
+import pizzapazza.color.Z4ColorProgression;
+import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4Point;
@@ -53,7 +54,7 @@ public class Z4Stamper extends Z4PointIterator {
   }
 
   @Override
-  public Z4DrawingPoint next() {
+  public Z4DrawingPoint next(Z4SpatioTemporalColor color, Z4ColorProgression progression) {
     if (!this.hasNext) {
       return null;
     } else {
@@ -70,22 +71,33 @@ public class Z4Stamper extends Z4PointIterator {
         vector = Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, 1, angle);
       }
 
-//      this.progression.next(this.z4Point);
-//
-//      if (this.progression.isRelativeToPath()) {
-//        this.z4Point.setDrawBounds(false);
-//        this.z4Point.setColorPosition(Math.random());
-//      }
-//
-      return new Z4DrawingPoint(
+      double temporalPosition = $exists(this.nextdDrawingPoint) ? this.nextdDrawingPoint.temporalPosition : -1;
+      double spatialPosition = $exists(this.nextdDrawingPoint) ? this.nextdDrawingPoint.spatialPosition : -1;
+      if (color.isColor()) {
+      } else if (color.isGradientColor()) {
+        switch ("" + progression.getColorProgressionBehavior()) {
+          case "SPATIAL":
+            break;
+          case "TEMPORAL":
+            temporalPosition = progression.next(temporalPosition);
+            break;
+          case "RANDOM":
+            temporalPosition = Math.random();
+            break;
+        }
+      } else if (color.isBiGradientColor()) {
+      }
+
+      this.nextdDrawingPoint = new Z4DrawingPoint(
               vector,
               1,
-              Z4Lighting.NONE,
-              0,
+              temporalPosition,
+              spatialPosition,
               false,
               this.rotation.computeSide(vector, null),
               false
       );
+      return nextdDrawingPoint;
     }
   }
 

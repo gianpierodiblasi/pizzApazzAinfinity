@@ -16,22 +16,6 @@ public class Z4SpatioTemporalColor implements Z4JSONable {
   private final Z4GradientColor gradientColor;
   private final Z4BiGradientColor biGradientColor;
 
-  private Z4GradientColor flatGradientColor;
-
-  private Z4SpatioTemporalColor(Color color, Z4GradientColor gradientColor, Z4BiGradientColor biGradientColor) {
-    super();
-    
-    this.color = color;
-    this.gradientColor = gradientColor;
-    this.biGradientColor = biGradientColor;
-
-    if ($exists(color)) {
-      this.flatGradientColor = new Z4GradientColor();
-      this.flatGradientColor.addColor(this.color, 0);
-      this.flatGradientColor.addColor(this.color, 1);
-    }
-  }
-
   /**
    * Creates a Z4SpatioTemporalColor from a color
    *
@@ -62,6 +46,44 @@ public class Z4SpatioTemporalColor implements Z4JSONable {
     return new Z4SpatioTemporalColor(null, null, biGradientColor);
   }
 
+  private Z4SpatioTemporalColor(Color color, Z4GradientColor gradientColor, Z4BiGradientColor biGradientColor) {
+    super();
+
+    this.color = color;
+    this.gradientColor = gradientColor;
+    this.biGradientColor = biGradientColor;
+  }
+
+  /**
+   * Checks if this spatio-temporal color is a (flat) color
+   *
+   * @return true if this spatio-temporal color is a (flat) color, false
+   * otherwise
+   */
+  public boolean isColor() {
+    return $exists(this.color);
+  }
+
+  /**
+   * Checks if this spatio-temporal color is a gradient color
+   *
+   * @return true if this spatio-temporal color is a gradient color, false
+   * otherwise
+   */
+  public boolean isGradientColor() {
+    return $exists(this.gradientColor);
+  }
+
+  /**
+   * Checks if this spatio-temporal color is a bigradient color
+   *
+   * @return true if this spatio-temporal color is a bigradient color, false
+   * otherwise
+   */
+  public boolean isBiGradientColor() {
+    return $exists(this.biGradientColor);
+  }
+
   /**
    * Returns a color in a time instant and in a space position
    *
@@ -69,36 +91,34 @@ public class Z4SpatioTemporalColor implements Z4JSONable {
    * @param space The space position
    * @return The color
    */
-  public Color getColorAt(double time, double space) {
-    if ($exists(this.color)) {
-      return this.color;
-    } else if ($exists(this.gradientColor)) {
-      return this.gradientColor.getColorAt(space, true);
-    } else if ($exists(this.biGradientColor)) {
-      return this.biGradientColor.getColorAt(time, true).getColorAt(space, true);
-    } else {
-      return null;
-    }
-  }
-
+//  public Color getColorAt(double time, double space) {
+//    if ($exists(this.color)) {
+//      return this.color;
+//    } else if ($exists(this.gradientColor)) {
+//      return this.gradientColor.getColorAt(space, true);
+//    } else if ($exists(this.biGradientColor)) {
+//      return this.biGradientColor.getColorAt(time, true).getColorAt(space, true);
+//    } else {
+//      return null;
+//    }
+//  }
   /**
    * Returns a gradient color in a time instant
    *
    * @param time The time instant
    * @return The gradient color
    */
-  public Z4GradientColor getGradientColorAt(double time) {
-    if ($exists(this.color)) {
-      return this.flatGradientColor;
-    } else if ($exists(this.gradientColor)) {
-      return this.gradientColor;
-    } else if ($exists(this.biGradientColor)) {
-      return this.biGradientColor.getColorAt(time, true);
-    } else {
-      return null;
-    }
-  }
-
+//  public Z4GradientColor getGradientColorAt(double time) {
+//    if ($exists(this.color)) {
+//      return this.flatGradientColor;
+//    } else if ($exists(this.gradientColor)) {
+//      return this.gradientColor;
+//    } else if ($exists(this.biGradientColor)) {
+//      return this.biGradientColor.getColorAt(time, true);
+//    } else {
+//      return null;
+//    }
+//  }
   @Override
   public $Object toJSON() {
     $Object json = new $Object();
