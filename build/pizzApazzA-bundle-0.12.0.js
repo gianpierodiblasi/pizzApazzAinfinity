@@ -10289,6 +10289,14 @@ class Z4Stamper extends Z4PointIterator {
             break;
         }
       } else if (color.isBiGradientColor()) {
+        switch("" + progression.getColorProgressionBehavior()) {
+          case "TEMPORAL":
+            temporalPosition = progression.next(temporalPosition);
+            break;
+          case "RANDOM":
+            temporalPosition = Math.random();
+            break;
+        }
       }
       this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, spatialPosition, false, this.rotation.computeSide(vector, null), false);
       return nextdDrawingPoint;
