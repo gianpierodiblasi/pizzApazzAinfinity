@@ -133,11 +133,9 @@ class Z4Tracer extends Z4PointIterator {
       return null;
     } else if (this.fromClones) {
       let clone = this.clones[this.clonePos];
-      // clone.setColorPosition(this.clonePos / this.clones.length);
-      // clone.setDrawBounds(false);
       this.clonePos++;
       this.hasNext = this.clonePos < this.clones.length;
-      return clone;
+      return new Z4DrawingPoint(clone.z4Vector, clone.intensity, this.clonePos / this.clones.length, clone.spatialPosition, false, clone.side, clone.useVectorModuleAsSize);
     } else {
       if (!this.currentMultiplicityCounter) {
         this.currentVector = this.path.next();
@@ -151,12 +149,37 @@ class Z4Tracer extends Z4PointIterator {
       } else {
         vector = Z4Vector.fromVector(this.currentVector.x0, this.currentVector.y0, 1, angle);
       }
-      // this.progression.next(this.z4Point);
-      // 
-      // if (this.z4Point.isDrawBounds() && this.z4Point.getIntensity() > 0) {
-      // this.clones.push(this.z4Point.clone());
-      // }
-      // 
+      let drawBounds = false;
+      let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
+      let spatialPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.spatialPosition : -1;
+      if (color.isColor()) {
+      } else if (color.isGradientColor()) {
+        switch("" + progression.getColorProgressionBehavior()) {
+          case "SPATIAL":
+            break;
+          case "TEMPORAL":
+            temporalPosition = progression.next(temporalPosition);
+            break;
+          case "RELATIVE_TO_PATH":
+            drawBounds = true;
+            break;
+          case "RANDOM":
+            temporalPosition = Math.random();
+            break;
+        }
+      } else if (color.isBiGradientColor()) {
+        switch("" + progression.getColorProgressionBehavior()) {
+          case "TEMPORAL":
+            temporalPosition = progression.next(temporalPosition);
+            break;
+          case "RELATIVE_TO_PATH":
+            drawBounds = true;
+            break;
+          case "RANDOM":
+            temporalPosition = Math.random();
+            break;
+        }
+      }
       this.currentMultiplicityCounter++;
       if (this.currentMultiplicityCounter >= this.currentMultiplicityTotal) {
         this.currentMultiplicityCounter = 0;
@@ -165,7 +188,11 @@ class Z4Tracer extends Z4PointIterator {
           this.surplus = this.path.getNewSurplus();
         }
       }
-      return new Z4DrawingPoint(vector, this.nextEnvelope(), 0, 0, false, this.rotation.computeSide(vector, this.currentVector), false);
+      this.nextdDrawingPoint = new Z4DrawingPoint(vector, this.nextEnvelope(), temporalPosition, spatialPosition, drawBounds, this.rotation.computeSide(vector, this.currentVector), false);
+      if (this.nextdDrawingPoint.drawBounds && this.nextdDrawingPoint.intensity > 0) {
+        this.clones.push(this.nextdDrawingPoint);
+      }
+      return this.nextdDrawingPoint;
     }
   }
 
