@@ -82,45 +82,39 @@ public class Z4Airbrush extends Z4PointIterator {
       double angle = this.rotation.next(currenAngle);
       Z4Vector vector = Z4Vector.fromVector(this.currentPoint.x + currentRadius * Math.cos(currenAngle), currentRadius * Math.sin(currenAngle) + this.currentPoint.y, 1, angle);
 
-//      if (!this.progression.isTemporal() || this.currentMultiplicityCounter == 1) {
-//        this.progression.next(this.z4Point);
-//      } else {
-//        this.z4Point.setLighting(this.progression.getLighting());
-//        this.z4Point.setDrawBounds(false);
-//      }
-//
-//      if (this.progression.isRelativeToPath()) {
-//        this.z4Point.setDrawBounds(false);
-//        this.z4Point.setColorPosition(currentRadius / this.radius);
-//      }
-//
       double temporalPosition = $exists(this.nextdDrawingPoint) ? this.nextdDrawingPoint.temporalPosition : -1;
       double spatialPosition = $exists(this.nextdDrawingPoint) ? this.nextdDrawingPoint.spatialPosition : -1;
       if (color.isColor()) {
       } else if (color.isGradientColor()) {
-//        switch ("" + progression.getColorProgressionBehavior()) {
-//          case "SPATIAL":
-//            break;
-//          case "TEMPORAL":
-//            temporalPosition = progression.next(temporalPosition);
-//            break;
-//          case "RELATIVE_TO_PATH":
-//            break;
-//          case "RANDOM":
-//            temporalPosition = Math.random();
-//            break;
-//        }
+        switch ("" + progression.getColorProgressionBehavior()) {
+          case "SPATIAL":
+            break;
+          case "TEMPORAL":
+            if (this.currentMultiplicityCounter == 1) {
+              temporalPosition = progression.next(temporalPosition);
+            }
+            break;
+          case "RELATIVE_TO_PATH":
+            temporalPosition = currentRadius / this.radius;
+            break;
+          case "RANDOM":
+            temporalPosition = Math.random();
+            break;
+        }
       } else if (color.isBiGradientColor()) {
-//        switch ("" + progression.getColorProgressionBehavior()) {
-//          case "TEMPORAL":
-//            temporalPosition = progression.next(temporalPosition);
-//            break;
-//          case "RELATIVE_TO_PATH":
-//            break;
-//          case "RANDOM":
-//            temporalPosition = Math.random();
-//            break;
-//        }
+        switch ("" + progression.getColorProgressionBehavior()) {
+          case "TEMPORAL":
+            if (this.currentMultiplicityCounter == 1) {
+              temporalPosition = progression.next(temporalPosition);
+            }
+            break;
+          case "RELATIVE_TO_PATH":
+            temporalPosition = currentRadius / this.radius;
+            break;
+          case "RANDOM":
+            temporalPosition = Math.random();
+            break;
+        }
       }
 
       this.nextdDrawingPoint = new Z4DrawingPoint(
