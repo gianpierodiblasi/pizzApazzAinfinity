@@ -48,21 +48,50 @@ class Z4Spirograph extends Z4PointIterator {
       return null;
     } else if (this.fromClones) {
       let clone = this.clones[this.clonePos];
-      // clone.setColorPosition(this.clonePos / this.clones.length);
-      // clone.setDrawBounds(false);
       this.clonePos--;
       this.hasNext = this.clonePos !== -1;
-      return clone;
+      return new Z4DrawingPoint(clone.z4Vector, clone.intensity, this.clonePos / this.clones.length, clone.spatialPosition, false, clone.side, clone.useVectorModuleAsSize);
     } else {
       let currentVector = Z4Vector.fromPoints(this.center.x, this.center.y, this.currentPoint.x, this.currentPoint.y);
       let angle = this.rotation.next(currentVector.phase);
       let vector = Z4Vector.fromVector(this.center.x, this.center.y, currentVector.module, angle);
-      // this.progression.next(this.z4Point);
-      // if (this.z4Point.isDrawBounds()) {
-      // this.clones.push(this.z4Point.clone());
-      // }
+      let drawBounds = false;
+      let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
+      let spatialPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.spatialPosition : -1;
+      if (color.isColor()) {
+      } else if (color.isGradientColor()) {
+        switch("" + progression.getColorProgressionBehavior()) {
+          case "SPATIAL":
+            break;
+          case "TEMPORAL":
+            temporalPosition = progression.next(temporalPosition);
+            break;
+          case "RELATIVE_TO_PATH":
+            drawBounds = true;
+            break;
+          case "RANDOM":
+            temporalPosition = Math.random();
+            break;
+        }
+      } else if (color.isBiGradientColor()) {
+        switch("" + progression.getColorProgressionBehavior()) {
+          case "TEMPORAL":
+            temporalPosition = progression.next(temporalPosition);
+            break;
+          case "RELATIVE_TO_PATH":
+            drawBounds = true;
+            break;
+          case "RANDOM":
+            temporalPosition = Math.random();
+            break;
+        }
+      }
       this.hasNext = false;
-      return new Z4DrawingPoint(vector, 1, 0, 0, false, this.rotation.computeSide(vector, currentVector), true);
+      this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, spatialPosition, drawBounds, this.rotation.computeSide(vector, currentVector), true);
+      if (this.nextdDrawingPoint.drawBounds) {
+        this.clones.push(this.nextdDrawingPoint);
+      }
+      return this.nextdDrawingPoint;
     }
   }
 

@@ -10024,45 +10024,39 @@ class Z4Airbrush extends Z4PointIterator {
       let currenAngle = Z4Math.TWO_PI * Math.random();
       let angle = this.rotation.next(currenAngle);
       let vector = Z4Vector.fromVector(this.currentPoint.x + currentRadius * Math.cos(currenAngle), currentRadius * Math.sin(currenAngle) + this.currentPoint.y, 1, angle);
-      // if (!this.progression.isTemporal() || this.currentMultiplicityCounter == 1) {
-      // this.progression.next(this.z4Point);
-      // } else {
-      // this.z4Point.setLighting(this.progression.getLighting());
-      // this.z4Point.setDrawBounds(false);
-      // }
-      // 
-      // if (this.progression.isRelativeToPath()) {
-      // this.z4Point.setDrawBounds(false);
-      // this.z4Point.setColorPosition(currentRadius / this.radius);
-      // }
-      // 
       let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
       let spatialPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.spatialPosition : -1;
       if (color.isColor()) {
       } else if (color.isGradientColor()) {
-        // switch ("" + progression.getColorProgressionBehavior()) {
-        // case "SPATIAL":
-        // break;
-        // case "TEMPORAL":
-        // temporalPosition = progression.next(temporalPosition);
-        // break;
-        // case "RELATIVE_TO_PATH":
-        // break;
-        // case "RANDOM":
-        // temporalPosition = Math.random();
-        // break;
-        // }
+        switch("" + progression.getColorProgressionBehavior()) {
+          case "SPATIAL":
+            break;
+          case "TEMPORAL":
+            if (this.currentMultiplicityCounter === 1) {
+              temporalPosition = progression.next(temporalPosition);
+            }
+            break;
+          case "RELATIVE_TO_PATH":
+            temporalPosition = currentRadius / this.radius;
+            break;
+          case "RANDOM":
+            temporalPosition = Math.random();
+            break;
+        }
       } else if (color.isBiGradientColor()) {
-        // switch ("" + progression.getColorProgressionBehavior()) {
-        // case "TEMPORAL":
-        // temporalPosition = progression.next(temporalPosition);
-        // break;
-        // case "RELATIVE_TO_PATH":
-        // break;
-        // case "RANDOM":
-        // temporalPosition = Math.random();
-        // break;
-        // }
+        switch("" + progression.getColorProgressionBehavior()) {
+          case "TEMPORAL":
+            if (this.currentMultiplicityCounter === 1) {
+              temporalPosition = progression.next(temporalPosition);
+            }
+            break;
+          case "RELATIVE_TO_PATH":
+            temporalPosition = currentRadius / this.radius;
+            break;
+          case "RANDOM":
+            temporalPosition = Math.random();
+            break;
+        }
       }
       this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, spatialPosition, false, this.rotation.computeSide(vector, null), false);
       return this.nextdDrawingPoint;
@@ -10216,21 +10210,50 @@ class Z4Spirograph extends Z4PointIterator {
       return null;
     } else if (this.fromClones) {
       let clone = this.clones[this.clonePos];
-      // clone.setColorPosition(this.clonePos / this.clones.length);
-      // clone.setDrawBounds(false);
       this.clonePos--;
       this.hasNext = this.clonePos !== -1;
-      return clone;
+      return new Z4DrawingPoint(clone.z4Vector, clone.intensity, this.clonePos / this.clones.length, clone.spatialPosition, false, clone.side, clone.useVectorModuleAsSize);
     } else {
       let currentVector = Z4Vector.fromPoints(this.center.x, this.center.y, this.currentPoint.x, this.currentPoint.y);
       let angle = this.rotation.next(currentVector.phase);
       let vector = Z4Vector.fromVector(this.center.x, this.center.y, currentVector.module, angle);
-      // this.progression.next(this.z4Point);
-      // if (this.z4Point.isDrawBounds()) {
-      // this.clones.push(this.z4Point.clone());
-      // }
+      let drawBounds = false;
+      let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
+      let spatialPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.spatialPosition : -1;
+      if (color.isColor()) {
+      } else if (color.isGradientColor()) {
+        switch("" + progression.getColorProgressionBehavior()) {
+          case "SPATIAL":
+            break;
+          case "TEMPORAL":
+            temporalPosition = progression.next(temporalPosition);
+            break;
+          case "RELATIVE_TO_PATH":
+            drawBounds = true;
+            break;
+          case "RANDOM":
+            temporalPosition = Math.random();
+            break;
+        }
+      } else if (color.isBiGradientColor()) {
+        switch("" + progression.getColorProgressionBehavior()) {
+          case "TEMPORAL":
+            temporalPosition = progression.next(temporalPosition);
+            break;
+          case "RELATIVE_TO_PATH":
+            drawBounds = true;
+            break;
+          case "RANDOM":
+            temporalPosition = Math.random();
+            break;
+        }
+      }
       this.hasNext = false;
-      return new Z4DrawingPoint(vector, 1, 0, 0, false, this.rotation.computeSide(vector, currentVector), true);
+      this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, spatialPosition, drawBounds, this.rotation.computeSide(vector, currentVector), true);
+      if (this.nextdDrawingPoint.drawBounds) {
+        this.clones.push(this.nextdDrawingPoint);
+      }
+      return this.nextdDrawingPoint;
     }
   }
 
