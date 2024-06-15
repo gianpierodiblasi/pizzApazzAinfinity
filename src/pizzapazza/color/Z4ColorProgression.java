@@ -107,8 +107,6 @@ public class Z4ColorProgression implements Z4NextableWithParam<Double, Double> {
         return new Z4ColorProgression(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, json.$get("temporalStepProgression"), lighting);
       case "RANDOM":
         return new Z4ColorProgression(Z4ColorProgressionBehavior.RANDOM, json.$get("temporalStepProgression"), lighting);
-      case "RADIAL":
-        return new Z4ColorProgression(Z4ColorProgressionBehavior.RADIAL, json.$get("temporalStepProgression"), lighting);
       default:
         return null;
     }

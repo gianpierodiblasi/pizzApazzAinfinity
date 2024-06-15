@@ -21,8 +21,4 @@ class Z4ColorProgressionBehavior {
    * The color is randomly selected
    */
   static RANDOM = 'RANDOM';
-  /**
-   * The color is used spatially relative to the length of a radius
-   */
-  static RADIAL = 'RADIAL';
 }

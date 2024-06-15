@@ -74,7 +74,36 @@ class Z4Airbrush extends Z4PointIterator {
       // this.z4Point.setColorPosition(currentRadius / this.radius);
       // }
       // 
-      return new Z4DrawingPoint(vector, 1, 0, 0, false, this.rotation.computeSide(vector, null), false);
+      let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
+      let spatialPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.spatialPosition : -1;
+      if (color.isColor()) {
+      } else if (color.isGradientColor()) {
+        // switch ("" + progression.getColorProgressionBehavior()) {
+        // case "SPATIAL":
+        // break;
+        // case "TEMPORAL":
+        // temporalPosition = progression.next(temporalPosition);
+        // break;
+        // case "RELATIVE_TO_PATH":
+        // break;
+        // case "RANDOM":
+        // temporalPosition = Math.random();
+        // break;
+        // }
+      } else if (color.isBiGradientColor()) {
+        // switch ("" + progression.getColorProgressionBehavior()) {
+        // case "TEMPORAL":
+        // temporalPosition = progression.next(temporalPosition);
+        // break;
+        // case "RELATIVE_TO_PATH":
+        // break;
+        // case "RANDOM":
+        // temporalPosition = Math.random();
+        // break;
+        // }
+      }
+      this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, spatialPosition, false, this.rotation.computeSide(vector, null), false);
+      return this.nextdDrawingPoint;
     }
   }
 

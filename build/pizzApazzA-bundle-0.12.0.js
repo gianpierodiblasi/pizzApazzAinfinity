@@ -143,10 +143,6 @@ class Z4ColorProgressionBehavior {
    * The color is randomly selected
    */
   static RANDOM = 'RANDOM';
-  /**
-   * The color is used spatially relative to the length of a radius
-   */
-  static RADIAL = 'RADIAL';
 }
 /**
  * The behavior of a progression of a gradient color
@@ -9747,8 +9743,6 @@ class Z4ColorProgression extends Z4NextableWithParam {
         return new Z4ColorProgression(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, json["temporalStepProgression"], lighting);
       case "RANDOM":
         return new Z4ColorProgression(Z4ColorProgressionBehavior.RANDOM, json["temporalStepProgression"], lighting);
-      case "RADIAL":
-        return new Z4ColorProgression(Z4ColorProgressionBehavior.RADIAL, json["temporalStepProgression"], lighting);
       default:
         return null;
     }
@@ -10042,7 +10036,36 @@ class Z4Airbrush extends Z4PointIterator {
       // this.z4Point.setColorPosition(currentRadius / this.radius);
       // }
       // 
-      return new Z4DrawingPoint(vector, 1, 0, 0, false, this.rotation.computeSide(vector, null), false);
+      let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
+      let spatialPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.spatialPosition : -1;
+      if (color.isColor()) {
+      } else if (color.isGradientColor()) {
+        // switch ("" + progression.getColorProgressionBehavior()) {
+        // case "SPATIAL":
+        // break;
+        // case "TEMPORAL":
+        // temporalPosition = progression.next(temporalPosition);
+        // break;
+        // case "RELATIVE_TO_PATH":
+        // break;
+        // case "RANDOM":
+        // temporalPosition = Math.random();
+        // break;
+        // }
+      } else if (color.isBiGradientColor()) {
+        // switch ("" + progression.getColorProgressionBehavior()) {
+        // case "TEMPORAL":
+        // temporalPosition = progression.next(temporalPosition);
+        // break;
+        // case "RELATIVE_TO_PATH":
+        // break;
+        // case "RANDOM":
+        // temporalPosition = Math.random();
+        // break;
+        // }
+      }
+      this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, spatialPosition, false, this.rotation.computeSide(vector, null), false);
+      return this.nextdDrawingPoint;
     }
   }
 

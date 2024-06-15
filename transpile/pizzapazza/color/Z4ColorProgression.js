@@ -100,8 +100,6 @@ class Z4ColorProgression extends Z4NextableWithParam {
         return new Z4ColorProgression(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, json["temporalStepProgression"], lighting);
       case "RANDOM":
         return new Z4ColorProgression(Z4ColorProgressionBehavior.RANDOM, json["temporalStepProgression"], lighting);
-      case "RADIAL":
-        return new Z4ColorProgression(Z4ColorProgressionBehavior.RADIAL, json["temporalStepProgression"], lighting);
       default:
         return null;
     }

@@ -22,9 +22,5 @@ public enum Z4ColorProgressionBehavior {
   /**
    * The color is randomly selected
    */
-  RANDOM,
-  /**
-   * The color is used spatially relative to the length of a radius
-   */
-  RADIAL;
+  RANDOM;
 }
