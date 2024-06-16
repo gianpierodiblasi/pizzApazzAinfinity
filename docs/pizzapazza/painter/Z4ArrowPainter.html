@@ -189,9 +189,10 @@ implements <a href="Z4Painter.html" title="interface in pizzapazza.painter">Z4Pa
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#draw(simulation.dom.$CanvasRenderingContext2D,pizzapazza.math.Z4DrawingPoint,pizzapazza.color.Z4SpatioTemporalColor)">draw</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;context,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#draw(simulation.dom.$CanvasRenderingContext2D,pizzapazza.math.Z4DrawingPoint,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">draw</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;context,
     <a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a>&nbsp;drawingPoint,
-    <a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;spatioTemporalColor)</code></th>
+    <a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;spatioTemporalColor,
+    <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression)</code></th>
 <td class="colLast">
 <div class="block">Performs a drawing</div>
 </td>
@@ -246,7 +247,7 @@ implements <a href="Z4Painter.html" title="interface in pizzapazza.painter">Z4Pa
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="draw(simulation.dom.$CanvasRenderingContext2D,pizzapazza.math.Z4DrawingPoint,pizzapazza.color.Z4SpatioTemporalColor)">
+<a id="draw(simulation.dom.$CanvasRenderingContext2D,pizzapazza.math.Z4DrawingPoint,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -254,16 +255,18 @@ implements <a href="Z4Painter.html" title="interface in pizzapazza.painter">Z4Pa
 <h4>draw</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;draw&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;context,
                  <a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a>&nbsp;drawingPoint,
-                 <a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;spatioTemporalColor)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Z4Painter.html#draw(simulation.dom.$CanvasRenderingContext2D,pizzapazza.math.Z4DrawingPoint,pizzapazza.color.Z4SpatioTemporalColor)">Z4Painter</a></code></span></div>
+                 <a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;spatioTemporalColor,
+                 <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Z4Painter.html#draw(simulation.dom.$CanvasRenderingContext2D,pizzapazza.math.Z4DrawingPoint,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">Z4Painter</a></code></span></div>
 <div class="block">Performs a drawing</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Z4Painter.html#draw(simulation.dom.$CanvasRenderingContext2D,pizzapazza.math.Z4DrawingPoint,pizzapazza.color.Z4SpatioTemporalColor)">draw</a></code>&nbsp;in interface&nbsp;<code><a href="Z4Painter.html" title="interface in pizzapazza.painter">Z4Painter</a></code></dd>
+<dd><code><a href="Z4Painter.html#draw(simulation.dom.$CanvasRenderingContext2D,pizzapazza.math.Z4DrawingPoint,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">draw</a></code>&nbsp;in interface&nbsp;<code><a href="Z4Painter.html" title="interface in pizzapazza.painter">Z4Painter</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>context</code> - The context to use to perform the drawing</dd>
 <dd><code>drawingPoint</code> - The point where to perform the drawing</dd>
 <dd><code>spatioTemporalColor</code> - The color to use to perform the drawing</dd>
+<dd><code>progression</code> - The color progression to use to perform the drawing</dd>
 </dl>
 </li>
 </ul>

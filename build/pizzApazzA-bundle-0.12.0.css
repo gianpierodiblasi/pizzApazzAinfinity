@@ -316,7 +316,7 @@
   width: 16px;
   height: 16px;
 }
-/*.z4colorprogressionpanel .z4colorprogressionpanel-radio:nth-child(1) img {
+.z4colorprogressionpanel .z4colorprogressionpanel-radio:nth-child(1) img {
   content: url(../image/color/z4colorprogressionbehavior_spatial.svg);
 }
 .z4colorprogressionpanel .z4colorprogressionpanel-radio:nth-child(2) img {
@@ -327,7 +327,19 @@
 }
 .z4colorprogressionpanel .z4colorprogressionpanel-radio:nth-child(4) img {
   content: url(../image/color/z4colorprogressionbehavior_random.svg);
-}*/
+}
+.z4colorprogressionpanel .z4colorprogressionpanel-radio:nth-child(5) img {
+  content: url(../image/color/z4colorprogressionbehavior_airbrush_spatial.svg);
+}
+.z4colorprogressionpanel .z4colorprogressionpanel-radio:nth-child(6) img {
+  content: url(../image/color/z4colorprogressionbehavior_airbrush_temporal.svg);
+}
+.z4colorprogressionpanel .z4colorprogressionpanel-radio:nth-child(7) img {
+  content: url(../image/color/z4colorprogressionbehavior_airbrush_relativetopath.svg);
+}
+.z4colorprogressionpanel .z4colorprogressionpanel-radio:nth-child(8) img {
+  content: url(../image/color/z4colorprogressionbehavior_airbrush_random.svg);
+}
 .z4fancifulvaluepanel {
 }
 

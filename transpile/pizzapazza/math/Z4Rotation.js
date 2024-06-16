@@ -84,6 +84,25 @@ class Z4Rotation extends Z4NextableWithParam {
     }
   }
 
+  /**
+   * Computes the side to assign to a point
+   *
+   * @param currentVector The vector of the current point
+   * @param vector The tangent vector (if available)
+   * @return The side to assign to a point
+   */
+   computeSide(currentVector, vector) {
+    if (this.behavior === Z4RotationBehavior.FIXED) {
+      return new Z4Sign(Z4SignBehavior.POSITIVE);
+    } else if (this.behavior === Z4RotationBehavior.CUMULATIVE) {
+      return new Z4Sign(Z4SignBehavior.POSITIVE);
+    } else if (this.behavior === Z4RotationBehavior.RELATIVE_TO_PATH) {
+      return new Z4Sign(vector ? vector.direction(currentVector) : Z4SignBehavior.RANDOM);
+    } else {
+      return null;
+    }
+  }
+
    toJSON() {
     let json = new Object();
     json["startAngle"] = this.startAngle;

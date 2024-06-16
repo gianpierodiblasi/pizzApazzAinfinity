@@ -164,9 +164,10 @@ extends <a href="../util/Z4JSONable.html" title="interface in pizzapazza.util">Z
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#draw(simulation.dom.$CanvasRenderingContext2D,pizzapazza.math.Z4DrawingPoint,pizzapazza.color.Z4SpatioTemporalColor)">draw</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;context,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#draw(simulation.dom.$CanvasRenderingContext2D,pizzapazza.math.Z4DrawingPoint,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">draw</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;context,
     <a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a>&nbsp;drawingPoint,
-    <a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;spatioTemporalColor)</code></th>
+    <a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;spatioTemporalColor,
+    <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression)</code></th>
 <td class="colLast">
 <div class="block">Performs a drawing</div>
 </td>
@@ -195,7 +196,7 @@ extends <a href="../util/Z4JSONable.html" title="interface in pizzapazza.util">Z
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="draw(simulation.dom.$CanvasRenderingContext2D,pizzapazza.math.Z4DrawingPoint,pizzapazza.color.Z4SpatioTemporalColor)">
+<a id="draw(simulation.dom.$CanvasRenderingContext2D,pizzapazza.math.Z4DrawingPoint,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -203,13 +204,15 @@ extends <a href="../util/Z4JSONable.html" title="interface in pizzapazza.util">Z
 <h4>draw</h4>
 <pre class="methodSignature">void&nbsp;draw&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;context,
           <a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a>&nbsp;drawingPoint,
-          <a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;spatioTemporalColor)</pre>
+          <a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;spatioTemporalColor,
+          <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression)</pre>
 <div class="block">Performs a drawing</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>context</code> - The context to use to perform the drawing</dd>
 <dd><code>drawingPoint</code> - The point where to perform the drawing</dd>
 <dd><code>spatioTemporalColor</code> - The color to use to perform the drawing</dd>
+<dd><code>progression</code> - The color progression to use to perform the drawing</dd>
 </dl>
 </li>
 </ul>

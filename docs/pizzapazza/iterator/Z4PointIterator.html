@@ -27,8 +27,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":6,"i2":6,"i3":6};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
+var data = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -136,12 +136,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../math/Z4Nextable.html" title="interface in pizzapazza.math">Z4Nextable</a>&lt;<a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a>&gt;</code>, <code><a href="../util/Z4JSONable.html" title="interface in pizzapazza.util">Z4JSONable</a></code></dd>
+<dd><code><a href="../math/Z4NextableWithTwoParams.html" title="interface in pizzapazza.math">Z4NextableWithTwoParams</a>&lt;<a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a>,&#8203;<a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>,&#8203;<a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&gt;</code>, <code><a href="../util/Z4JSONable.html" title="interface in pizzapazza.util">Z4JSONable</a></code></dd>
+</dl>
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><code><a href="Z4Airbrush.html" title="class in pizzapazza.iterator">Z4Airbrush</a></code>, <code><a href="Z4Scatterer.html" title="class in pizzapazza.iterator">Z4Scatterer</a></code>, <code><a href="Z4Spirograph.html" title="class in pizzapazza.iterator">Z4Spirograph</a></code>, <code><a href="Z4Stamper.html" title="class in pizzapazza.iterator">Z4Stamper</a></code>, <code><a href="Z4Tracer.html" title="class in pizzapazza.iterator">Z4Tracer</a></code></dd>
 </dl>
 <hr>
 <pre>public abstract class <span class="typeNameLabel">Z4PointIterator</span>
 extends java.lang.Object
-implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math">Z4Nextable</a>&lt;<a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a>&gt;</pre>
+implements <a href="../math/Z4NextableWithTwoParams.html" title="interface in pizzapazza.math">Z4NextableWithTwoParams</a>&lt;<a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a>,&#8203;<a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>,&#8203;<a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&gt;</pre>
 <div class="block">The common parent of all point iterators</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
@@ -168,17 +172,31 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected <a href="../math/Z4Point.html" title="class in pizzapazza.math">Z4Point</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#currentPoint">currentPoint</a></span></code></th>
+<td class="colLast">
+<div class="block">The current "utility" point</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasNext">hasNext</a></span></code></th>
 <td class="colLast">
 <div class="block">true if this Z4PointIterator has another point, false otherwise</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#z4DrawingPoint">z4DrawingPoint</a></span></code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#nextdDrawingPoint">nextdDrawingPoint</a></span></code></th>
 <td class="colLast">
-<div class="block">The current drawing point</div>
+<div class="block">The next drawing point</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../math/Z4Rotation.html" title="class in pizzapazza.math">Z4Rotation</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rotation">rotation</a></span></code></th>
+<td class="colLast">
+<div class="block">The rotation</div>
 </td>
 </tr>
 </table>
@@ -199,8 +217,10 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">Z4PointIterator</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(pizzapazza.math.Z4Rotation)">Z4PointIterator</a></span>&#8203;(<a href="../math/Z4Rotation.html" title="class in pizzapazza.math">Z4Rotation</a>&nbsp;rotation)</code></th>
+<td class="colLast">
+<div class="block">Creates the object</div>
+</td>
 </tr>
 </table>
 </li>
@@ -214,7 +234,7 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -246,9 +266,17 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>abstract <a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#next()">next</a></span>()</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#next(pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">next</a></span>&#8203;(<a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;color,
+    <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression)</code></th>
 <td class="colLast">
 <div class="block">Returns the next value</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>simulation.js.$Object</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toJSON()">toJSON</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns this object as a JSON object</div>
 </td>
 </tr>
 </table>
@@ -258,13 +286,6 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.Object</h3>
 <code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
-</ul>
-<ul class="blockList">
-<li class="blockList"><a id="methods.inherited.from.class.pizzapazza.util.Z4JSONable">
-<!--   -->
-</a>
-<h3>Methods inherited from interface&nbsp;pizzapazza.util.<a href="../util/Z4JSONable.html" title="interface in pizzapazza.util">Z4JSONable</a></h3>
-<code><a href="../util/Z4JSONable.html#toJSON()">toJSON</a></code></li>
 </ul>
 </li>
 </ul>
@@ -282,24 +303,44 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a id="z4DrawingPoint">
+<a id="rotation">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>z4DrawingPoint</h4>
-<pre>protected&nbsp;<a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a> z4DrawingPoint</pre>
-<div class="block">The current drawing point</div>
+<h4>rotation</h4>
+<pre>protected final&nbsp;<a href="../math/Z4Rotation.html" title="class in pizzapazza.math">Z4Rotation</a> rotation</pre>
+<div class="block">The rotation</div>
+</li>
+</ul>
+<a id="nextdDrawingPoint">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>nextdDrawingPoint</h4>
+<pre>protected&nbsp;<a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a> nextdDrawingPoint</pre>
+<div class="block">The next drawing point</div>
 </li>
 </ul>
 <a id="hasNext">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>hasNext</h4>
 <pre>protected&nbsp;boolean hasNext</pre>
 <div class="block">true if this Z4PointIterator has another point, false otherwise</div>
+</li>
+</ul>
+<a id="currentPoint">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>currentPoint</h4>
+<pre>protected&nbsp;<a href="../math/Z4Point.html" title="class in pizzapazza.math">Z4Point</a> currentPoint</pre>
+<div class="block">The current "utility" point</div>
 </li>
 </ul>
 </li>
@@ -312,13 +353,18 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;()">
+<a id="&lt;init&gt;(pizzapazza.math.Z4Rotation)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Z4PointIterator</h4>
-<pre>public&nbsp;Z4PointIterator()</pre>
+<pre>public&nbsp;Z4PointIterator&#8203;(<a href="../math/Z4Rotation.html" title="class in pizzapazza.math">Z4Rotation</a>&nbsp;rotation)</pre>
+<div class="block">Creates the object</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>rotation</code> - The rotation</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -352,18 +398,22 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 </dl>
 </li>
 </ul>
-<a id="next()">
+<a id="next(pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre class="methodSignature">public abstract&nbsp;<a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a>&nbsp;next()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../math/Z4Nextable.html#next()">Z4Nextable</a></code></span></div>
+<pre class="methodSignature">public abstract&nbsp;<a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a>&nbsp;next&#8203;(<a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;color,
+                                    <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../math/Z4NextableWithTwoParams.html#next(S,V)">Z4NextableWithTwoParams</a></code></span></div>
 <div class="block">Returns the next value</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../math/Z4Nextable.html#next()">next</a></code>&nbsp;in interface&nbsp;<code><a href="../math/Z4Nextable.html" title="interface in pizzapazza.math">Z4Nextable</a>&lt;<a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a>&gt;</code></dd>
+<dd><code><a href="../math/Z4NextableWithTwoParams.html#next(S,V)">next</a></code>&nbsp;in interface&nbsp;<code><a href="../math/Z4NextableWithTwoParams.html" title="interface in pizzapazza.math">Z4NextableWithTwoParams</a>&lt;<a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a>,&#8203;<a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>,&#8203;<a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>color</code> - The first parameter</dd>
+<dd><code>progression</code> - The second parameter</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The next value</dd>
 </dl>
@@ -388,7 +438,7 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 <a id="getInfinitePointGeneratorSleep()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getInfinitePointGeneratorSleep</h4>
 <pre class="methodSignature">public abstract&nbsp;int&nbsp;getInfinitePointGeneratorSleep()</pre>
@@ -397,6 +447,23 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The sleeping time between a point generation and the successive (in
  milliseconds)</dd>
+</dl>
+</li>
+</ul>
+<a id="toJSON()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>toJSON</h4>
+<pre class="methodSignature">public&nbsp;simulation.js.$Object&nbsp;toJSON()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../util/Z4JSONable.html#toJSON()">Z4JSONable</a></code></span></div>
+<div class="block">Returns this object as a JSON object</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../util/Z4JSONable.html#toJSON()">toJSON</a></code>&nbsp;in interface&nbsp;<code><a href="../util/Z4JSONable.html" title="interface in pizzapazza.util">Z4JSONable</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>This object as a JSON object</dd>
 </dl>
 </li>
 </ul>

@@ -157,28 +157,28 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>double</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#colorPosition">colorPosition</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#drawBounds">drawBounds</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#intensity">intensity</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../color/Z4Lighting.html" title="enum in pizzapazza.color">Z4Lighting</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#lighting">lighting</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="Z4Sign.html" title="class in pizzapazza.math">Z4Sign</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#side">side</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#spatialPosition">spatialPosition</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#temporalPosition">temporalPosition</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -209,10 +209,10 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(pizzapazza.math.Z4Vector,double,pizzapazza.color.Z4Lighting,double,boolean,pizzapazza.math.Z4Sign,boolean)">Z4DrawingPoint</a></span>&#8203;(<a href="Z4Vector.html" title="class in pizzapazza.math">Z4Vector</a>&nbsp;z4Vector,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(pizzapazza.math.Z4Vector,double,double,double,boolean,pizzapazza.math.Z4Sign,boolean)">Z4DrawingPoint</a></span>&#8203;(<a href="Z4Vector.html" title="class in pizzapazza.math">Z4Vector</a>&nbsp;z4Vector,
               double&nbsp;intensity,
-              <a href="../color/Z4Lighting.html" title="enum in pizzapazza.color">Z4Lighting</a>&nbsp;lighting,
-              double&nbsp;colorPosition,
+              double&nbsp;temporalPosition,
+              double&nbsp;spatialPosition,
               boolean&nbsp;drawBounds,
               <a href="Z4Sign.html" title="class in pizzapazza.math">Z4Sign</a>&nbsp;side,
               boolean&nbsp;useVectorModuleAsSize)</code></th>
@@ -272,22 +272,22 @@ extends java.lang.Object</pre>
 <pre>public final&nbsp;double intensity</pre>
 </li>
 </ul>
-<a id="lighting">
+<a id="temporalPosition">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>lighting</h4>
-<pre>public final&nbsp;<a href="../color/Z4Lighting.html" title="enum in pizzapazza.color">Z4Lighting</a> lighting</pre>
+<h4>temporalPosition</h4>
+<pre>public final&nbsp;double temporalPosition</pre>
 </li>
 </ul>
-<a id="colorPosition">
+<a id="spatialPosition">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>colorPosition</h4>
-<pre>public final&nbsp;double colorPosition</pre>
+<h4>spatialPosition</h4>
+<pre>public final&nbsp;double spatialPosition</pre>
 </li>
 </ul>
 <a id="drawBounds">
@@ -327,7 +327,7 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(pizzapazza.math.Z4Vector,double,pizzapazza.color.Z4Lighting,double,boolean,pizzapazza.math.Z4Sign,boolean)">
+<a id="&lt;init&gt;(pizzapazza.math.Z4Vector,double,double,double,boolean,pizzapazza.math.Z4Sign,boolean)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -335,8 +335,8 @@ extends java.lang.Object</pre>
 <h4>Z4DrawingPoint</h4>
 <pre>public&nbsp;Z4DrawingPoint&#8203;(<a href="Z4Vector.html" title="class in pizzapazza.math">Z4Vector</a>&nbsp;z4Vector,
                       double&nbsp;intensity,
-                      <a href="../color/Z4Lighting.html" title="enum in pizzapazza.color">Z4Lighting</a>&nbsp;lighting,
-                      double&nbsp;colorPosition,
+                      double&nbsp;temporalPosition,
+                      double&nbsp;spatialPosition,
                       boolean&nbsp;drawBounds,
                       <a href="Z4Sign.html" title="class in pizzapazza.math">Z4Sign</a>&nbsp;side,
                       boolean&nbsp;useVectorModuleAsSize)</pre>
@@ -345,9 +345,10 @@ extends java.lang.Object</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>z4Vector</code> - The vector providing position and direction of the drawing</dd>
 <dd><code>intensity</code> - The intensity of the drawing (in the range [0,1])</dd>
-<dd><code>lighting</code> - The lighting to apply to the current color</dd>
-<dd><code>colorPosition</code> - The color position to use in the color object (in the
- range [0,1]), -1 if this point has no color position</dd>
+<dd><code>temporalPosition</code> - The temporal position to use in the color object
+ (in the range [0,1]), -1 if this point has no temporal position</dd>
+<dd><code>spatialPosition</code> - The spatial position to use in the color object (in
+ the range [0,1]), -1 if this point has no spatial position</dd>
 <dd><code>drawBounds</code> - true if this point has to be used to draw bounds, false
  otherwise (this point has to be used to draw real objects)</dd>
 <dd><code>side</code> - The side</dd>
