@@ -31,11 +31,4 @@ public class Z4GradientColorProgressionPanel extends Z4AbstractGradientColorProg
       this.addRadio(Z4GradientColorProgressionBehavior.RANDOM, panel, buttonGroup, "bottom");
     }
   }
-
-  @Override
-  protected void onRadioChanged(Z4GradientColorProgressionBehavior behavior) {
-    this.lightingPanel.setEnabled(behavior != Z4GradientColorProgressionBehavior.SPATIAL);
-    this.temporalStepSpinner.setEnabled(behavior == Z4GradientColorProgressionBehavior.TEMPORAL);
-    this.temporalStepSlider.setEnabled(behavior == Z4GradientColorProgressionBehavior.TEMPORAL);
-  }
 }

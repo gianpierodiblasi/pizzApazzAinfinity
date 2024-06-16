@@ -15,6 +15,8 @@ import pizzapazza.color.Z4Lighting;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.painter.Z4Painter;
 import pizzapazza.ui.panel.Z4AbstractValuePanel;
+import pizzapazza.util.Z4EmptyImageProducer;
+import pizzapazza.util.Z4Translations;
 import static simulation.js.$Globals.parseInt;
 
 /**
@@ -68,6 +70,62 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
     this.setValue(new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.1, Z4Lighting.NONE));
   }
 
+  private void addRadio(Z4ColorProgressionBehavior behavior, JSPanel panel, ButtonGroup buttonGroup, String border) {
+    JSRadioButton radio = new JSRadioButton();
+    radio.cssAddClass("z4colorprogressionpanel-radio");
+    radio.getStyle().padding = "1px";
+    radio.setTooltip(Z4Translations.$get("" + behavior));
+    radio.setToggle();
+    radio.setIcon(new Z4EmptyImageProducer<>(behavior));
+    radio.addActionListener(event -> {
+      Object.keys(this.radios).forEach(key -> ((JSRadioButton) this.radios.$get(key)).setContentAreaFilled(false));
+      radio.setContentAreaFilled(true);
+
+      this.temporalStepSpinner.setEnabled(behavior == Z4ColorProgressionBehavior.TEMPORAL);
+      this.temporalStepSlider.setEnabled(behavior == Z4ColorProgressionBehavior.TEMPORAL);
+
+      this.valueIsAdjusting = false;
+      this.onProgressionChange();
+    });
+
+    switch (border) {
+      case "left":
+        radio.getStyle().borderTopRightRadius = "0px";
+        radio.getStyle().borderBottomRightRadius = "0px";
+        radio.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "centerh":
+        radio.getStyle().borderRadius = "0px";
+        radio.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        radio.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "right":
+        radio.getStyle().borderTopLeftRadius = "0px";
+        radio.getStyle().borderBottomLeftRadius = "0px";
+        radio.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "top":
+        radio.getStyle().borderBottomLeftRadius = "0px";
+        radio.getStyle().borderBottomRightRadius = "0px";
+        radio.getStyle().borderBottom = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "centerv":
+        radio.getStyle().borderRadius = "0px";
+        radio.getStyle().borderTop = "1px solid var(--main-action-bgcolor)";
+        radio.getStyle().borderBottom = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "bottom":
+        radio.getStyle().borderTopLeftRadius = "0px";
+        radio.getStyle().borderTopRightRadius = "0px";
+        radio.getStyle().borderTop = "1px solid var(--main-action-bgcolor)";
+        break;
+    }
+
+    buttonGroup.add(radio);
+    this.radios.$set("" + behavior, radio);
+    panel.add(radio, null);
+  }
+
   private void onTemporalStepChange(boolean spTosl, boolean adjusting, JSSpinner spinner, JSSlider slider) {
     if (spTosl) {
       slider.setValue((int) spinner.getValue());
@@ -118,7 +176,7 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
    * @param color The color
    */
   public void setPainterAndColor(Z4Painter painter, Z4SpatioTemporalColor color) {
-    
+
   }
 
   @Override

@@ -44,6 +44,58 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
     this.setValue(new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.1, Z4Lighting.NONE));
   }
 
+   addRadio(behavior, panel, buttonGroup, border) {
+    let radio = new JSRadioButton();
+    radio.cssAddClass("z4colorprogressionpanel-radio");
+    radio.getStyle().padding = "1px";
+    radio.setTooltip(Z4Translations["" + behavior]);
+    radio.setToggle();
+    radio.setIcon(new Z4EmptyImageProducer(behavior));
+    radio.addActionListener(event => {
+      Object.keys(this.radios).forEach(key => (this.radios[key]).setContentAreaFilled(false));
+      radio.setContentAreaFilled(true);
+      this.temporalStepSpinner.setEnabled(behavior === Z4ColorProgressionBehavior.TEMPORAL);
+      this.temporalStepSlider.setEnabled(behavior === Z4ColorProgressionBehavior.TEMPORAL);
+      this.valueIsAdjusting = false;
+      this.onProgressionChange();
+    });
+    switch(border) {
+      case "left":
+        radio.getStyle().borderTopRightRadius = "0px";
+        radio.getStyle().borderBottomRightRadius = "0px";
+        radio.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "centerh":
+        radio.getStyle().borderRadius = "0px";
+        radio.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        radio.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "right":
+        radio.getStyle().borderTopLeftRadius = "0px";
+        radio.getStyle().borderBottomLeftRadius = "0px";
+        radio.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "top":
+        radio.getStyle().borderBottomLeftRadius = "0px";
+        radio.getStyle().borderBottomRightRadius = "0px";
+        radio.getStyle().borderBottom = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "centerv":
+        radio.getStyle().borderRadius = "0px";
+        radio.getStyle().borderTop = "1px solid var(--main-action-bgcolor)";
+        radio.getStyle().borderBottom = "1px solid var(--main-action-bgcolor)";
+        break;
+      case "bottom":
+        radio.getStyle().borderTopLeftRadius = "0px";
+        radio.getStyle().borderTopRightRadius = "0px";
+        radio.getStyle().borderTop = "1px solid var(--main-action-bgcolor)";
+        break;
+    }
+    buttonGroup.add(radio);
+    this.radios["" + behavior] = radio;
+    panel.add(radio, null);
+  }
+
    onTemporalStepChange(spTosl, adjusting, spinner, slider) {
     if (spTosl) {
       slider.setValue(spinner.getValue());

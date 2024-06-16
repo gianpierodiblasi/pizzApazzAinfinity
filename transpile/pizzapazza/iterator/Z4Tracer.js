@@ -63,7 +63,7 @@ class Z4Tracer extends Z4PointIterator {
    * @param release The release
    * @param endlessSustain true for an endless sustain, false otherwise
    * @param step The step
-   * @param rotation
+   * @param rotation The rotation
    */
   constructor(multiplicity, push, attack, sustain, release, endlessSustain, step, rotation) {
     super(rotation);
