@@ -248,26 +248,6 @@
 .z4abstractfillerpanel.z4texturefillerpanel div label:nth-child(2) img {
   content: url(../image/filler/texture_symmetric.png);
 }
-.z4abstractgradientcolorprogressionpanel {
-}
-
-.z4abstractgradientcolorprogressionpanel .z4abstractgradientcolorprogressionpanel-radio img {
-  width: 16px;
-  height: 16px;
-}
-.z4abstractgradientcolorprogressionpanel .z4abstractgradientcolorprogressionpanel-radio:nth-child(1) img {
-  content: url(../image/color/z4gradientcolorprogressionbehavior_spatial.svg);
-}
-.z4abstractgradientcolorprogressionpanel .z4abstractgradientcolorprogressionpanel-radio:nth-child(2) img {
-  content: url(../image/color/z4gradientcolorprogressionbehavior_temporal.svg);
-}
-.z4abstractgradientcolorprogressionpanel .z4abstractgradientcolorprogressionpanel-radio:nth-child(3) img {
-  content: url(../image/color/z4gradientcolorprogressionbehavior_relativetopath.svg);
-}
-.z4abstractgradientcolorprogressionpanel .z4abstractgradientcolorprogressionpanel-radio:nth-child(4) img {
-  content: url(../image/color/z4gradientcolorprogressionbehavior_random.svg);
-}
-
 .z4abstractrandomvaluepanel {
 }
 
@@ -298,23 +278,7 @@
 .z4abstractvaluepanel.z4abstractvaluepanel-titled > label:nth-child(1),
 .z4abstractvaluepanel.z4abstractvaluepanel-titled.z4abstractrandomvaluepanel > .z4signedvaluepanel:nth-child(1) > label:nth-child(1) {
   font-weight: bold;
-}/*.z4bigradientcolorprogressionpanel {
-}
-
-.z4bigradientcolorprogressionpanel .z4bigradientcolorprogressionpanel-radio img {
-  width: 16px;
-  height: 16px;
-}
-.z4bigradientcolorprogressionpanel .z4bigradientcolorprogressionpanel-radio:nth-child(2) img {
-  content: url(../image/color/z4bigradientcolorprogressionbehavior_temporal.svg);
-}
-.z4bigradientcolorprogressionpanel .z4bigradientcolorprogressionpanel-radio:nth-child(3) img {
-  content: url(../image/color/z4bigradientcolorprogressionbehavior_relativetopath.svg);
-}
-.z4bigradientcolorprogressionpanel .z4bigradientcolorprogressionpanel-radio:nth-child(4) img {
-  content: url(../image/color/z4bigradientcolorprogressionbehavior_random.svg);
-}*/
-.z4canvas {
+}.z4canvas {
   overflow: scroll;
   display: grid;
   grid-template: "c";
@@ -345,6 +309,25 @@
   border-top-right-radius: var(--roundness);
   border-bottom-right-radius: var(--roundness);
 }
+.z4colorprogressionpanel {
+}
+
+.z4colorprogressionpanel .z4colorprogressionpanel-radio img {
+  width: 16px;
+  height: 16px;
+}
+/*.z4colorprogressionpanel .z4colorprogressionpanel-radio:nth-child(1) img {
+  content: url(../image/color/z4colorprogressionbehavior_spatial.svg);
+}
+.z4colorprogressionpanel .z4colorprogressionpanel-radio:nth-child(2) img {
+  content: url(../image/color/z4colorprogressionbehavior_temporal.svg);
+}
+.z4colorprogressionpanel .z4colorprogressionpanel-radio:nth-child(3) img {
+  content: url(../image/color/z4colorprogressionbehavior_relativetopath.svg);
+}
+.z4colorprogressionpanel .z4colorprogressionpanel-radio:nth-child(4) img {
+  content: url(../image/color/z4colorprogressionbehavior_random.svg);
+}*/
 .z4fancifulvaluepanel {
 }
 
@@ -381,26 +364,7 @@
 }
 .z4fillingpanel div label:nth-child(9) img {
   content: url(../image/filling/fill_bigradientcolor.gif);
-}/*.z4gradientcolorprogressionpanel {
-}
-
-.z4gradientcolorprogressionpanel .z4gradientcolorprogressionpanel-radio img {
-  width: 16px;
-  height: 16px;
-}
-.z4gradientcolorprogressionpanel .z4gradientcolorprogressionpanel-radio:nth-child(1) img {
-  content: url(../image/color/z4gradientcolorprogressionbehavior_spatial.svg);
-}
-.z4gradientcolorprogressionpanel .z4gradientcolorprogressionpanel-radio:nth-child(2) img {
-  content: url(../image/color/z4gradientcolorprogressionbehavior_temporal.svg);
-}
-.z4gradientcolorprogressionpanel .z4gradientcolorprogressionpanel-radio:nth-child(3) img {
-  content: url(../image/color/z4gradientcolorprogressionbehavior_relativetopath.svg);
-}
-.z4gradientcolorprogressionpanel .z4gradientcolorprogressionpanel-radio:nth-child(4) img {
-  content: url(../image/color/z4gradientcolorprogressionbehavior_random.svg);
-}*/
-.z4historypreview {
+}.z4historypreview {
   margin-right: 2px;
 }
 
