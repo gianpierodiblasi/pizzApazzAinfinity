@@ -203,12 +203,24 @@ class Z4Shape2DPainter extends Z4Painter {
         }
         if (currentBorderWidth > 0 || currentBorderHeight > 0) {
           context.save();
-          // this.drawPath(context, currentWidth + currentBorderWidth, currentHeight + currentBorderHeight, this.borderColor);
+          this.drawPath(context, currentWidth + currentBorderWidth, currentHeight + currentBorderHeight, this.borderColor);
           context.restore();
         }
         let lighting = progression.getLighting();
         if (spatioTemporalColor.isColor()) {
           let color = spatioTemporalColor.getColorAt(0, 0);
+          if (lighting === Z4Lighting.NONE) {
+            this.drawPath(context, currentWidth, currentHeight, color);
+          } else {
+            let currentSize = Math.max(currentWidth, currentHeight);
+            for (let scale = currentSize; scale > 0; scale--) {
+              if (lighting === Z4Lighting.LIGHTED) {
+                this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color.lighted(scale / currentSize));
+              } else if (lighting === Z4Lighting.DARKENED) {
+                this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color.darkened(scale / currentSize));
+              }
+            }
+          }
         } else if (spatioTemporalColor.isGradientColor()) {
         } else if (spatioTemporalColor.isBiGradientColor()) {
         }
@@ -217,20 +229,6 @@ class Z4Shape2DPainter extends Z4Painter {
         // 
         // for (double scale = currentSize; scale > 0; scale--) {
         // this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, gradientColor.getZ4ColorAt(scale / currentSize, true, true));
-        // }
-        // } else if (lighting == Z4Lighting.NONE) {
-        // this.drawPath(context, currentWidth, currentHeight, gradientColor.getZ4ColorAt(drawingPoint.temporalPosition, true, true));
-        // } else {
-        // double currentSize = Math.max(currentWidth, currentHeight);
-        // Z4Color newColor = gradientColor.getZ4ColorAt(drawingPoint.temporalPosition, true, true);
-        // 
-        // for (double scale = currentSize; scale > 0; scale--) {
-        // if (lighting == Z4Lighting.LIGHTED) {
-        // this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, Z4Color.fromARGB(newColor.getARGB()).lighted(scale / currentSize));
-        // } else if (lighting == Z4Lighting.DARKENED) {
-        // this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, Z4Color.fromARGB(newColor.getARGB()).darkened(scale / currentSize));
-        // }
-        // }
         // }
       }
     }

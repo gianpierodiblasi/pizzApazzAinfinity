@@ -1007,8 +1007,6 @@ class Z4DrawingPoint {
 
    temporalPosition = 0.0;
 
-   spatialPosition = 0.0;
-
    drawBounds = false;
 
    side = null;
@@ -1022,19 +1020,16 @@ class Z4DrawingPoint {
    * @param intensity The intensity of the drawing (in the range [0,1])
    * @param temporalPosition The temporal position to use in the color object
    * (in the range [0,1]), -1 if this point has no temporal position
-   * @param spatialPosition The spatial position to use in the color object (in
-   * the range [0,1]), -1 if this point has no spatial position
    * @param drawBounds true if this point has to be used to draw bounds, false
    * otherwise (this point has to be used to draw real objects)
    * @param side The side
    * @param useVectorModuleAsSize true if the vector module of this point has to
    * be used has size, false otherwise
    */
-  constructor(z4Vector, intensity, temporalPosition, spatialPosition, drawBounds, side, useVectorModuleAsSize) {
+  constructor(z4Vector, intensity, temporalPosition, drawBounds, side, useVectorModuleAsSize) {
     this.z4Vector = z4Vector;
     this.intensity = intensity;
     this.temporalPosition = temporalPosition;
-    this.spatialPosition = spatialPosition;
     this.drawBounds = drawBounds;
     this.side = side;
     this.useVectorModuleAsSize = useVectorModuleAsSize;
@@ -10796,12 +10791,24 @@ class Z4Shape2DPainter extends Z4Painter {
         }
         if (currentBorderWidth > 0 || currentBorderHeight > 0) {
           context.save();
-          // this.drawPath(context, currentWidth + currentBorderWidth, currentHeight + currentBorderHeight, this.borderColor);
+          this.drawPath(context, currentWidth + currentBorderWidth, currentHeight + currentBorderHeight, this.borderColor);
           context.restore();
         }
         let lighting = progression.getLighting();
         if (spatioTemporalColor.isColor()) {
           let color = spatioTemporalColor.getColorAt(0, 0);
+          if (lighting === Z4Lighting.NONE) {
+            this.drawPath(context, currentWidth, currentHeight, color);
+          } else {
+            let currentSize = Math.max(currentWidth, currentHeight);
+            for (let scale = currentSize; scale > 0; scale--) {
+              if (lighting === Z4Lighting.LIGHTED) {
+                this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color.lighted(scale / currentSize));
+              } else if (lighting === Z4Lighting.DARKENED) {
+                this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color.darkened(scale / currentSize));
+              }
+            }
+          }
         } else if (spatioTemporalColor.isGradientColor()) {
         } else if (spatioTemporalColor.isBiGradientColor()) {
         }
@@ -10810,20 +10817,6 @@ class Z4Shape2DPainter extends Z4Painter {
         // 
         // for (double scale = currentSize; scale > 0; scale--) {
         // this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, gradientColor.getZ4ColorAt(scale / currentSize, true, true));
-        // }
-        // } else if (lighting == Z4Lighting.NONE) {
-        // this.drawPath(context, currentWidth, currentHeight, gradientColor.getZ4ColorAt(drawingPoint.temporalPosition, true, true));
-        // } else {
-        // double currentSize = Math.max(currentWidth, currentHeight);
-        // Z4Color newColor = gradientColor.getZ4ColorAt(drawingPoint.temporalPosition, true, true);
-        // 
-        // for (double scale = currentSize; scale > 0; scale--) {
-        // if (lighting == Z4Lighting.LIGHTED) {
-        // this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, Z4Color.fromARGB(newColor.getARGB()).lighted(scale / currentSize));
-        // } else if (lighting == Z4Lighting.DARKENED) {
-        // this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, Z4Color.fromARGB(newColor.getARGB()).darkened(scale / currentSize));
-        // }
-        // }
         // }
       }
     }
