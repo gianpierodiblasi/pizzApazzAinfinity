@@ -109,17 +109,18 @@ public class Z4SpatioTemporalColor implements Z4JSONable {
    * @param time The time instant
    * @return The gradient color
    */
-//  public Z4GradientColor getGradientColorAt(double time) {
-//    if ($exists(this.color)) {
-//      return this.flatGradientColor;
-//    } else if ($exists(this.gradientColor)) {
-//      return this.gradientColor;
-//    } else if ($exists(this.biGradientColor)) {
-//      return this.biGradientColor.getColorAt(time, true);
-//    } else {
-//      return null;
-//    }
-//  }
+  public Z4GradientColor getGradientColorAt(double time) {
+    if ($exists(this.color)) {
+      return null;
+    } else if ($exists(this.gradientColor)) {
+      return this.gradientColor;
+    } else if ($exists(this.biGradientColor)) {
+      return this.biGradientColor.getColorAt(time, true);
+    } else {
+      return null;
+    }
+  }
+
   @Override
   public $Object toJSON() {
     $Object json = new $Object();

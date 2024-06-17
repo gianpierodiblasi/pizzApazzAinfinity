@@ -8764,17 +8764,18 @@ class Z4SpatioTemporalColor extends Z4JSONable {
    * @param time The time instant
    * @return The gradient color
    */
-  // public Z4GradientColor getGradientColorAt(double time) {
-  // if ($exists(this.color)) {
-  // return this.flatGradientColor;
-  // } else if ($exists(this.gradientColor)) {
-  // return this.gradientColor;
-  // } else if ($exists(this.biGradientColor)) {
-  // return this.biGradientColor.getColorAt(time, true);
-  // } else {
-  // return null;
-  // }
-  // }
+   getGradientColorAt(time) {
+    if (this.color) {
+      return null;
+    } else if (this.gradientColor) {
+      return this.gradientColor;
+    } else if (this.biGradientColor) {
+      return this.biGradientColor.getColorAt(time, true);
+    } else {
+      return null;
+    }
+  }
+
    toJSON() {
     let json = new Object();
     if (this.color) {
@@ -10790,30 +10791,42 @@ class Z4Shape2DPainter extends Z4Painter {
           this.drawPath(context, currentWidth + currentBorderWidth, currentHeight + currentBorderHeight, this.borderColor);
           context.restore();
         }
-        let lighting = progression.getLighting();
         if (spatioTemporalColor.isColor()) {
-          let color = spatioTemporalColor.getColorAt(0, 0);
-          if (lighting === Z4Lighting.NONE) {
-            this.drawPath(context, currentWidth, currentHeight, color);
-          } else {
-            let currentSize = Math.max(currentWidth, currentHeight);
-            for (let scale = currentSize; scale > 0; scale--) {
-              if (lighting === Z4Lighting.LIGHTED) {
-                this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color.lighted(scale / currentSize));
-              } else if (lighting === Z4Lighting.DARKENED) {
-                this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color.darkened(scale / currentSize));
-              }
-            }
-          }
+          let color = spatioTemporalColor.getColorAt(-1, -1);
+          this.drawPathWithColors(context, currentWidth, currentHeight, null, null, color, progression.getLighting());
         } else if (spatioTemporalColor.isGradientColor()) {
+          if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.SPATIAL) {
+            this.drawPathWithColors(context, currentWidth, currentHeight, spatioTemporalColor, null, null, progression.getLighting());
+          } else {
+            let color = spatioTemporalColor.getGradientColorAt(-1).getColorAt(progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition, true);
+            this.drawPathWithColors(context, currentWidth, currentHeight, null, null, color, progression.getLighting());
+          }
         } else if (spatioTemporalColor.isBiGradientColor()) {
+          let gradientColor = spatioTemporalColor.getGradientColorAt(progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition);
+          this.drawPathWithColors(context, currentWidth, currentHeight, null, gradientColor, null, progression.getLighting());
         }
-        // if (drawingPoint.temporalPosition == -1) {
-        // double currentSize = Math.max(currentWidth, currentHeight);
-        // 
-        // for (double scale = currentSize; scale > 0; scale--) {
-        // this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, gradientColor.getZ4ColorAt(scale / currentSize, true, true));
-        // }
+      }
+    }
+  }
+
+   drawPathWithColors(context, currentWidth, currentHeight, spatioTemporalColor, gradientColor, color, lighting) {
+    if (color && lighting === Z4Lighting.NONE) {
+      this.drawPath(context, currentWidth, currentHeight, color);
+    } else {
+      let currentSize = Math.max(currentWidth, currentHeight);
+      for (let scale = currentSize; scale > 0; scale--) {
+        if (spatioTemporalColor) {
+          color = spatioTemporalColor.getColorAt(-1, scale / currentSize);
+        } else if (gradientColor) {
+          color = gradientColor.getColorAt(scale / currentSize, true);
+        }
+        if (!color && lighting === Z4Lighting.NONE) {
+          this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color);
+        } else if (lighting === Z4Lighting.LIGHTED) {
+          this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color.lighted(scale / currentSize));
+        } else if (lighting === Z4Lighting.DARKENED) {
+          this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color.darkened(scale / currentSize));
+        }
       }
     }
   }

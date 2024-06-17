@@ -2,6 +2,8 @@ package pizzapazza.painter;
 
 import javascript.awt.Color;
 import pizzapazza.color.Z4ColorProgression;
+import pizzapazza.color.Z4ColorProgressionBehavior;
+import pizzapazza.color.Z4GradientColor;
 import pizzapazza.color.Z4Lighting;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.math.Z4DrawingPoint;
@@ -226,32 +228,43 @@ public class Z4Shape2DPainter extends Z4Painter {
           context.restore();
         }
 
-        Z4Lighting lighting = progression.getLighting();
         if (spatioTemporalColor.isColor()) {
-          Color color = spatioTemporalColor.getColorAt(0, 0);
-
-          if (lighting == Z4Lighting.NONE) {
-            this.drawPath(context, currentWidth, currentHeight, color);
-          } else {
-            double currentSize = Math.max(currentWidth, currentHeight);
-            for (double scale = currentSize; scale > 0; scale--) {
-              if (lighting == Z4Lighting.LIGHTED) {
-                this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color.lighted(scale / currentSize));
-              } else if (lighting == Z4Lighting.DARKENED) {
-                this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color.darkened(scale / currentSize));
-              }
-            }
-          }
+          Color color = spatioTemporalColor.getColorAt(-1, -1);
+          this.drawPathWithColors(context, currentWidth, currentHeight, null, null, color, progression.getLighting());
         } else if (spatioTemporalColor.isGradientColor()) {
+          if (progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.SPATIAL) {
+            this.drawPathWithColors(context, currentWidth, currentHeight, spatioTemporalColor, null, null, progression.getLighting());
+          } else {
+            Color color = spatioTemporalColor.getGradientColorAt(-1).getColorAt(progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition, true);
+            this.drawPathWithColors(context, currentWidth, currentHeight, null, null, color, progression.getLighting());
+          }
         } else if (spatioTemporalColor.isBiGradientColor()) {
+          Z4GradientColor gradientColor = spatioTemporalColor.getGradientColorAt(progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition);
+          this.drawPathWithColors(context, currentWidth, currentHeight, null, gradientColor, null, progression.getLighting());
+        }
+      }
+    }
+  }
+
+  private void drawPathWithColors($CanvasRenderingContext2D context, double currentWidth, double currentHeight, Z4SpatioTemporalColor spatioTemporalColor, Z4GradientColor gradientColor, Color color, Z4Lighting lighting) {
+    if ($exists(color) && lighting == Z4Lighting.NONE) {
+      this.drawPath(context, currentWidth, currentHeight, color);
+    } else {
+      double currentSize = Math.max(currentWidth, currentHeight);
+      for (double scale = currentSize; scale > 0; scale--) {
+        if ($exists(spatioTemporalColor)) {
+          color = spatioTemporalColor.getColorAt(-1, scale / currentSize);
+        } else if ($exists(gradientColor)) {
+          color = gradientColor.getColorAt(scale / currentSize, true);
         }
 
-//        if (drawingPoint.temporalPosition == -1) {
-//        double currentSize = Math.max(currentWidth, currentHeight);
-//
-//        for (double scale = currentSize; scale > 0; scale--) {
-//          this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, gradientColor.getZ4ColorAt(scale / currentSize, true, true));
-//        }
+        if (!$exists(color) && lighting == Z4Lighting.NONE) {
+          this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color);
+        } else if (lighting == Z4Lighting.LIGHTED) {
+          this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color.lighted(scale / currentSize));
+        } else if (lighting == Z4Lighting.DARKENED) {
+          this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color.darkened(scale / currentSize));
+        }
       }
     }
   }

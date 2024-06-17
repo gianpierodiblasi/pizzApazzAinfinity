@@ -103,17 +103,18 @@ class Z4SpatioTemporalColor extends Z4JSONable {
    * @param time The time instant
    * @return The gradient color
    */
-  // public Z4GradientColor getGradientColorAt(double time) {
-  // if ($exists(this.color)) {
-  // return this.flatGradientColor;
-  // } else if ($exists(this.gradientColor)) {
-  // return this.gradientColor;
-  // } else if ($exists(this.biGradientColor)) {
-  // return this.biGradientColor.getColorAt(time, true);
-  // } else {
-  // return null;
-  // }
-  // }
+   getGradientColorAt(time) {
+    if (this.color) {
+      return null;
+    } else if (this.gradientColor) {
+      return this.gradientColor;
+    } else if (this.biGradientColor) {
+      return this.biGradientColor.getColorAt(time, true);
+    } else {
+      return null;
+    }
+  }
+
    toJSON() {
     let json = new Object();
     if (this.color) {
