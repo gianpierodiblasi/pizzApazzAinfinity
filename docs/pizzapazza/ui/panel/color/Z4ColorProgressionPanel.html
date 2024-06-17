@@ -231,10 +231,12 @@ extends <a href="../Z4AbstractValuePanel.html" title="class in pizzapazza.ui.pan
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPainterAndColor(pizzapazza.painter.Z4Painter,pizzapazza.color.Z4SpatioTemporalColor)">setPainterAndColor</a></span>&#8203;(<a href="../../../painter/Z4Painter.html" title="interface in pizzapazza.painter">Z4Painter</a>&nbsp;painter,
-                  <a href="../../../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;color)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setProgressionSettings(pizzapazza.iterator.Z4PointIteratorType,boolean,boolean,boolean)">setProgressionSettings</a></span>&#8203;(<a href="../../../iterator/Z4PointIteratorType.html" title="enum in pizzapazza.iterator">Z4PointIteratorType</a>&nbsp;type,
+                      boolean&nbsp;isColor,
+                      boolean&nbsp;isGradientColor,
+                      boolean&nbsp;isBiGradientColor)</code></th>
 <td class="colLast">
-<div class="block">Sets the painter and the color</div>
+<div class="block">Sets the progression settings</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -327,19 +329,25 @@ extends <a href="../Z4AbstractValuePanel.html" title="class in pizzapazza.ui.pan
 </dl>
 </li>
 </ul>
-<a id="setPainterAndColor(pizzapazza.painter.Z4Painter,pizzapazza.color.Z4SpatioTemporalColor)">
+<a id="setProgressionSettings(pizzapazza.iterator.Z4PointIteratorType,boolean,boolean,boolean)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setPainterAndColor</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setPainterAndColor&#8203;(<a href="../../../painter/Z4Painter.html" title="interface in pizzapazza.painter">Z4Painter</a>&nbsp;painter,
-                               <a href="../../../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;color)</pre>
-<div class="block">Sets the painter and the color</div>
+<h4>setProgressionSettings</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setProgressionSettings&#8203;(<a href="../../../iterator/Z4PointIteratorType.html" title="enum in pizzapazza.iterator">Z4PointIteratorType</a>&nbsp;type,
+                                   boolean&nbsp;isColor,
+                                   boolean&nbsp;isGradientColor,
+                                   boolean&nbsp;isBiGradientColor)</pre>
+<div class="block">Sets the progression settings</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>painter</code> - The painter</dd>
-<dd><code>color</code> - The color</dd>
+<dd><code>type</code> - The point iterator type</dd>
+<dd><code>isColor</code> - true if the color is a flat color, false otherwise</dd>
+<dd><code>isGradientColor</code> - true if the color is a gradient color, false
+ otherwise</dd>
+<dd><code>isBiGradientColor</code> - true if the color is a bigradient color, false
+ otherwise</dd>
 </dl>
 </li>
 </ul>

@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":10};
+var data = {"i0":6,"i1":6,"i2":6,"i3":10,"i4":6,"i5":6,"i6":6,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -250,13 +250,39 @@ implements <a href="../math/Z4NextableWithTwoParams.html" title="interface in pi
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>abstract void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#drawDemo(simulation.dom.$CanvasRenderingContext2D,pizzapazza.painter.Z4Painter,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression,double,double)">drawDemo</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;context,
+        <a href="../painter/Z4Painter.html" title="class in pizzapazza.painter">Z4Painter</a>&nbsp;painter,
+        <a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;spatioTemporalColor,
+        <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression,
+        double&nbsp;width,
+        double&nbsp;height)</code></th>
+<td class="colLast">
+<div class="block">Draws a demo of this Z4PointIterator</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>abstract int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInfinitePointGeneratorSleep()">getInfinitePointGeneratorSleep</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the sleeping time between a point generation and the successive</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="../math/Z4Rotation.html" title="class in pizzapazza.math">Z4Rotation</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRotation()">getRotation</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the rotation</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>abstract <a href="Z4PointIteratorType.html" title="enum in pizzapazza.iterator">Z4PointIteratorType</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getType()">getType</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the point iterator type</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>abstract boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInfinitePointGenerator()">isInfinitePointGenerator</a></span>()</code></th>
 <td class="colLast">
@@ -264,7 +290,7 @@ implements <a href="../math/Z4NextableWithTwoParams.html" title="interface in pi
  an airbrush)</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>abstract <a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#next(pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">next</a></span>&#8203;(<a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;color,
     <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression)</code></th>
@@ -272,7 +298,7 @@ implements <a href="../math/Z4NextableWithTwoParams.html" title="interface in pi
 <div class="block">Returns the next value</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>simulation.js.$Object</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toJSON()">toJSON</a></span>()</code></th>
 <td class="colLast">
@@ -377,6 +403,34 @@ implements <a href="../math/Z4NextableWithTwoParams.html" title="interface in pi
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="getType()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getType</h4>
+<pre class="methodSignature">public abstract&nbsp;<a href="Z4PointIteratorType.html" title="enum in pizzapazza.iterator">Z4PointIteratorType</a>&nbsp;getType()</pre>
+<div class="block">Returns the point iterator type</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The point iterator type</dd>
+</dl>
+</li>
+</ul>
+<a id="getRotation()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRotation</h4>
+<pre class="methodSignature">public&nbsp;<a href="../math/Z4Rotation.html" title="class in pizzapazza.math">Z4Rotation</a>&nbsp;getRotation()</pre>
+<div class="block">Returns the rotation</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The rotation</dd>
+</dl>
+</li>
+</ul>
 <a id="drawAction(pizzapazza.iterator.Z4PointIteratorDrawingAction,double,double)">
 <!--   -->
 </a>
@@ -447,6 +501,30 @@ implements <a href="../math/Z4NextableWithTwoParams.html" title="interface in pi
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The sleeping time between a point generation and the successive (in
  milliseconds)</dd>
+</dl>
+</li>
+</ul>
+<a id="drawDemo(simulation.dom.$CanvasRenderingContext2D,pizzapazza.painter.Z4Painter,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression,double,double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>drawDemo</h4>
+<pre class="methodSignature">public abstract&nbsp;void&nbsp;drawDemo&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;context,
+                              <a href="../painter/Z4Painter.html" title="class in pizzapazza.painter">Z4Painter</a>&nbsp;painter,
+                              <a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;spatioTemporalColor,
+                              <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression,
+                              double&nbsp;width,
+                              double&nbsp;height)</pre>
+<div class="block">Draws a demo of this Z4PointIterator</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>context</code> - The context where to draw the demo</dd>
+<dd><code>painter</code> - The painter to use, it can be null</dd>
+<dd><code>spatioTemporalColor</code> - The color to use, it can be null</dd>
+<dd><code>progression</code> - The color progression to use, it can be null</dd>
+<dd><code>width</code> - The width</dd>
+<dd><code>height</code> - The height</dd>
 </dl>
 </li>
 </ul>

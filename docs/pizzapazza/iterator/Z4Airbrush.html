@@ -27,8 +27,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -208,7 +208,7 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -224,13 +224,60 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#drawDemo(simulation.dom.$CanvasRenderingContext2D,pizzapazza.painter.Z4Painter,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression,double,double)">drawDemo</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;context,
+        <a href="../painter/Z4Painter.html" title="class in pizzapazza.painter">Z4Painter</a>&nbsp;painter,
+        <a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;spatioTemporalColor,
+        <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression,
+        double&nbsp;width,
+        double&nbsp;height)</code></th>
+<td class="colLast">
+<div class="block">Draws a demo of this Z4PointIterator</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>static <a href="Z4Airbrush.html" title="class in pizzapazza.iterator">Z4Airbrush</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromJSON(simulation.js.$Object)">fromJSON</a></span>&#8203;(simulation.js.$Object&nbsp;json)</code></th>
+<td class="colLast">
+<div class="block">Creates a Z4Airbrush from a JSON object</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInfinitePointGeneratorSleep()">getInfinitePointGeneratorSleep</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the sleeping time between a point generation and the successive</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMultiplicity()">getMultiplicity</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the multiplicity</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRadius()">getRadius</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the radius</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSpeed()">getSpeed</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the speed</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code><a href="Z4PointIteratorType.html" title="enum in pizzapazza.iterator">Z4PointIteratorType</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getType()">getType</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the point iterator type</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInfinitePointGenerator()">isInfinitePointGenerator</a></span>()</code></th>
 <td class="colLast">
@@ -238,7 +285,7 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
  an airbrush)</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#next(pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">next</a></span>&#8203;(<a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;color,
     <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression)</code></th>
@@ -246,7 +293,7 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <div class="block">Returns the next value</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>simulation.js.$Object</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toJSON()">toJSON</a></span>()</code></th>
 <td class="colLast">
@@ -254,6 +301,13 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 </td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.pizzapazza.iterator.Z4PointIterator">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;pizzapazza.iterator.<a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a></h3>
+<code><a href="Z4PointIterator.html#getRotation()">getRotation</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -307,6 +361,65 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="getType()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getType</h4>
+<pre class="methodSignature">public&nbsp;<a href="Z4PointIteratorType.html" title="enum in pizzapazza.iterator">Z4PointIteratorType</a>&nbsp;getType()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Z4PointIterator.html#getType()">Z4PointIterator</a></code></span></div>
+<div class="block">Returns the point iterator type</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Z4PointIterator.html#getType()">getType</a></code>&nbsp;in class&nbsp;<code><a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The point iterator type</dd>
+</dl>
+</li>
+</ul>
+<a id="getMultiplicity()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMultiplicity</h4>
+<pre class="methodSignature">public&nbsp;<a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;getMultiplicity()</pre>
+<div class="block">Returns the multiplicity</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The multiplicity</dd>
+</dl>
+</li>
+</ul>
+<a id="getRadius()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRadius</h4>
+<pre class="methodSignature">public&nbsp;double&nbsp;getRadius()</pre>
+<div class="block">Returns the radius</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The radius</dd>
+</dl>
+</li>
+</ul>
+<a id="getSpeed()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSpeed</h4>
+<pre class="methodSignature">public&nbsp;double&nbsp;getSpeed()</pre>
+<div class="block">Returns the speed</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The speed</dd>
+</dl>
+</li>
+</ul>
 <a id="drawAction(pizzapazza.iterator.Z4PointIteratorDrawingAction,double,double)">
 <!--   -->
 </a>
@@ -391,10 +504,37 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 </dl>
 </li>
 </ul>
+<a id="drawDemo(simulation.dom.$CanvasRenderingContext2D,pizzapazza.painter.Z4Painter,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression,double,double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>drawDemo</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;drawDemo&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;context,
+                     <a href="../painter/Z4Painter.html" title="class in pizzapazza.painter">Z4Painter</a>&nbsp;painter,
+                     <a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;spatioTemporalColor,
+                     <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression,
+                     double&nbsp;width,
+                     double&nbsp;height)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Z4PointIterator.html#drawDemo(simulation.dom.$CanvasRenderingContext2D,pizzapazza.painter.Z4Painter,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression,double,double)">Z4PointIterator</a></code></span></div>
+<div class="block">Draws a demo of this Z4PointIterator</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Z4PointIterator.html#drawDemo(simulation.dom.$CanvasRenderingContext2D,pizzapazza.painter.Z4Painter,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression,double,double)">drawDemo</a></code>&nbsp;in class&nbsp;<code><a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>context</code> - The context where to draw the demo</dd>
+<dd><code>painter</code> - The painter to use, it can be null</dd>
+<dd><code>spatioTemporalColor</code> - The color to use, it can be null</dd>
+<dd><code>progression</code> - The color progression to use, it can be null</dd>
+<dd><code>width</code> - The width</dd>
+<dd><code>height</code> - The height</dd>
+</dl>
+</li>
+</ul>
 <a id="toJSON()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>toJSON</h4>
 <pre class="methodSignature">public&nbsp;simulation.js.$Object&nbsp;toJSON()</pre>
@@ -407,6 +547,22 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <dd><code><a href="Z4PointIterator.html#toJSON()">toJSON</a></code>&nbsp;in class&nbsp;<code><a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>This object as a JSON object</dd>
+</dl>
+</li>
+</ul>
+<a id="fromJSON(simulation.js.$Object)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>fromJSON</h4>
+<pre class="methodSignature">public static&nbsp;<a href="Z4Airbrush.html" title="class in pizzapazza.iterator">Z4Airbrush</a>&nbsp;fromJSON&#8203;(simulation.js.$Object&nbsp;json)</pre>
+<div class="block">Creates a Z4Airbrush from a JSON object</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>json</code> - The JSON object</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the airbrush</dd>
 </dl>
 </li>
 </ul>

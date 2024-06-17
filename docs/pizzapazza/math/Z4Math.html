@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -250,6 +250,20 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>static def.js.Array&lt;<a href="Z4Point.html" title="class in pizzapazza.math">Z4Point</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPolygonVertices(int)">getPolygonVertices</a></span>&#8203;(int&nbsp;vertexCount)</code></th>
+<td class="colLast">
+<div class="block">Returns the vertices of a polygon inscribed in a circle with radius = 1</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>static def.js.Array&lt;<a href="Z4Point.html" title="class in pizzapazza.math">Z4Point</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStarVertices(int)">getStarVertices</a></span>&#8203;(int&nbsp;vertexCount)</code></th>
+<td class="colLast">
+<div class="block">Returns the vertices of a star inscribed in a circle with radius = 1</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#ptLineDist(double,double,double,double,double,double)">ptLineDist</a></span>&#8203;(double&nbsp;x1,
           double&nbsp;y1,
@@ -261,7 +275,7 @@ extends java.lang.Object</pre>
 <div class="block">Returns the distance from a point to a (infinite) line</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#ptLineDistSq(double,double,double,double,double,double)">ptLineDistSq</a></span>&#8203;(double&nbsp;x1,
             double&nbsp;y1,
@@ -273,7 +287,7 @@ extends java.lang.Object</pre>
 <div class="block">Returns the square of the distance from a point to a (infinite) line</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#ptSegDist(double,double,double,double,double,double)">ptSegDist</a></span>&#8203;(double&nbsp;x1,
          double&nbsp;y1,
@@ -285,7 +299,7 @@ extends java.lang.Object</pre>
 <div class="block">Returns the distance from a point to a line segment</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#ptSegDistSq(double,double,double,double,double,double)">ptSegDistSq</a></span>&#8203;(double&nbsp;x1,
            double&nbsp;y1,
@@ -297,14 +311,14 @@ extends java.lang.Object</pre>
 <div class="block">Returns the square of the distance from a point to a line segment</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rad2deg(double)">rad2deg</a></span>&#8203;(double&nbsp;radians)</code></th>
 <td class="colLast">
 <div class="block">Converts an angle from radiants to degrees</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#ripple(double,double,double,double)">ripple</a></span>&#8203;(double&nbsp;value,
       double&nbsp;min,
@@ -314,7 +328,7 @@ extends java.lang.Object</pre>
 <div class="block">Generates a ripple around a value</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>static <a href="Z4Point.html" title="class in pizzapazza.math">Z4Point</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rotate(double,double,double)">rotate</a></span>&#8203;(double&nbsp;x,
       double&nbsp;y,
@@ -621,7 +635,7 @@ extends java.lang.Object</pre>
 <a id="ripple(double,double,double,double)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>ripple</h4>
 <pre class="methodSignature">public static&nbsp;double&nbsp;ripple&#8203;(double&nbsp;value,
@@ -637,6 +651,38 @@ extends java.lang.Object</pre>
 <dd><code>ripple</code> - The ripple (in the range [0,1])</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The rippled value</dd>
+</dl>
+</li>
+</ul>
+<a id="getPolygonVertices(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPolygonVertices</h4>
+<pre class="methodSignature">public static&nbsp;def.js.Array&lt;<a href="Z4Point.html" title="class in pizzapazza.math">Z4Point</a>&gt;&nbsp;getPolygonVertices&#8203;(int&nbsp;vertexCount)</pre>
+<div class="block">Returns the vertices of a polygon inscribed in a circle with radius = 1</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>vertexCount</code> - The vertex count</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The vertices</dd>
+</dl>
+</li>
+</ul>
+<a id="getStarVertices(int)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getStarVertices</h4>
+<pre class="methodSignature">public static&nbsp;def.js.Array&lt;<a href="Z4Point.html" title="class in pizzapazza.math">Z4Point</a>&gt;&nbsp;getStarVertices&#8203;(int&nbsp;vertexCount)</pre>
+<div class="block">Returns the vertices of a star inscribed in a circle with radius = 1</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>vertexCount</code> - The vertex count</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The vertices</dd>
 </dl>
 </li>
 </ul>

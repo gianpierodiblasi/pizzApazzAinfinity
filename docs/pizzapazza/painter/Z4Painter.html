@@ -27,8 +27,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
+var data = {"i0":6,"i1":6,"i2":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -94,13 +94,13 @@ loadScripts(document, 'script');</script>
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
@@ -120,23 +120,32 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <main role="main">
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">pizzapazza.painter</a></div>
-<h2 title="Interface Z4Painter" class="title">Interface Z4Painter</h2>
+<h2 title="Class Z4Painter" class="title">Class Z4Painter</h2>
 </div>
 <div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>pizzapazza.painter.Z4Painter</li>
+</ul>
+</li>
+</ul>
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
 <dl>
-<dt>All Superinterfaces:</dt>
+<dt>All Implemented Interfaces:</dt>
 <dd><code><a href="../util/Z4JSONable.html" title="interface in pizzapazza.util">Z4JSONable</a></code></dd>
 </dl>
 <dl>
-<dt>All Known Implementing Classes:</dt>
-<dd><code><a href="Z4ArrowPainter.html" title="class in pizzapazza.painter">Z4ArrowPainter</a></code></dd>
+<dt>Direct Known Subclasses:</dt>
+<dd><code><a href="Z4ArrowPainter.html" title="class in pizzapazza.painter">Z4ArrowPainter</a></code>, <code><a href="Z4Shape2DPainter.html" title="class in pizzapazza.painter">Z4Shape2DPainter</a></code></dd>
 </dl>
 <hr>
-<pre>public interface <span class="typeNameLabel">Z4Painter</span>
-extends <a href="../util/Z4JSONable.html" title="interface in pizzapazza.util">Z4JSONable</a></pre>
+<pre>public abstract class <span class="typeNameLabel">Z4Painter</span>
+extends java.lang.Object
+implements <a href="../util/Z4JSONable.html" title="interface in pizzapazza.util">Z4JSONable</a></pre>
 <div class="block">The common parent of all painters</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
@@ -148,6 +157,27 @@ extends <a href="../util/Z4JSONable.html" title="interface in pizzapazza.util">Z
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="constructor.summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="memberSummary">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Constructor</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">Z4Painter</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+</section>
 <!-- ========== METHOD SUMMARY =========== -->
 <section role="region">
 <ul class="blockList">
@@ -156,14 +186,14 @@ extends <a href="../util/Z4JSONable.html" title="interface in pizzapazza.util">Z
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>void</code></td>
+<td class="colFirst"><code>abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#draw(simulation.dom.$CanvasRenderingContext2D,pizzapazza.math.Z4DrawingPoint,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">draw</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;context,
     <a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a>&nbsp;drawingPoint,
     <a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;spatioTemporalColor,
@@ -172,13 +202,27 @@ extends <a href="../util/Z4JSONable.html" title="interface in pizzapazza.util">Z
 <div class="block">Performs a drawing</div>
 </td>
 </tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>abstract <a href="Z4PainterType.html" title="enum in pizzapazza.painter">Z4PainterType</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getType()">getType</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the painter type</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>simulation.js.$Object</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toJSON()">toJSON</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns this object as a JSON object</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a id="methods.inherited.from.class.pizzapazza.util.Z4JSONable">
+<li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;pizzapazza.util.<a href="../util/Z4JSONable.html" title="interface in pizzapazza.util">Z4JSONable</a></h3>
-<code><a href="../util/Z4JSONable.html#toJSON()">toJSON</a></code></li>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
 </ul>
 </li>
 </ul>
@@ -189,6 +233,25 @@ extends <a href="../util/Z4JSONable.html" title="interface in pizzapazza.util">Z
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="constructor.detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a id="&lt;init&gt;()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>Z4Painter</h4>
+<pre>public&nbsp;Z4Painter()</pre>
+</li>
+</ul>
+</li>
+</ul>
+</section>
 <!-- ============ METHOD DETAIL ========== -->
 <section role="region">
 <ul class="blockList">
@@ -196,16 +259,30 @@ extends <a href="../util/Z4JSONable.html" title="interface in pizzapazza.util">Z
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="getType()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getType</h4>
+<pre class="methodSignature">public abstract&nbsp;<a href="Z4PainterType.html" title="enum in pizzapazza.painter">Z4PainterType</a>&nbsp;getType()</pre>
+<div class="block">Returns the painter type</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The painter type</dd>
+</dl>
+</li>
+</ul>
 <a id="draw(simulation.dom.$CanvasRenderingContext2D,pizzapazza.math.Z4DrawingPoint,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre class="methodSignature">void&nbsp;draw&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;context,
-          <a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a>&nbsp;drawingPoint,
-          <a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;spatioTemporalColor,
-          <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression)</pre>
+<pre class="methodSignature">public abstract&nbsp;void&nbsp;draw&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;context,
+                          <a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a>&nbsp;drawingPoint,
+                          <a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;spatioTemporalColor,
+                          <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression)</pre>
 <div class="block">Performs a drawing</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -213,6 +290,23 @@ extends <a href="../util/Z4JSONable.html" title="interface in pizzapazza.util">Z
 <dd><code>drawingPoint</code> - The point where to perform the drawing</dd>
 <dd><code>spatioTemporalColor</code> - The color to use to perform the drawing</dd>
 <dd><code>progression</code> - The color progression to use to perform the drawing</dd>
+</dl>
+</li>
+</ul>
+<a id="toJSON()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>toJSON</h4>
+<pre class="methodSignature">public&nbsp;simulation.js.$Object&nbsp;toJSON()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../util/Z4JSONable.html#toJSON()">Z4JSONable</a></code></span></div>
+<div class="block">Returns this object as a JSON object</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../util/Z4JSONable.html#toJSON()">toJSON</a></code>&nbsp;in interface&nbsp;<code><a href="../util/Z4JSONable.html" title="interface in pizzapazza.util">Z4JSONable</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>This object as a JSON object</dd>
 </dl>
 </li>
 </ul>
@@ -273,13 +367,13 @@ extends <a href="../util/Z4JSONable.html" title="interface in pizzapazza.util">Z
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
 </div>

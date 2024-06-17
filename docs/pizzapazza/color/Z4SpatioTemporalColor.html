@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -196,31 +196,46 @@ implements <a href="../util/Z4JSONable.html" title="interface in pizzapazza.util
 </td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>javascript.awt.Color</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getColorAt(double,double)">getColorAt</a></span>&#8203;(double&nbsp;time,
+          double&nbsp;space)</code></th>
+<td class="colLast">
+<div class="block">Returns a color in a time instant and in a space position</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="Z4GradientColor.html" title="class in pizzapazza.color">Z4GradientColor</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getGradientColorAt(double)">getGradientColorAt</a></span>&#8203;(double&nbsp;time)</code></th>
+<td class="colLast">
+<div class="block">Returns a gradient color in a time instant</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isBiGradientColor()">isBiGradientColor</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Checks if this spatio-temporal color is a bigradient color</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isColor()">isColor</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Checks if this spatio-temporal color is a (flat) color</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isGradientColor()">isGradientColor</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Checks if this spatio-temporal color is a gradient color</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>simulation.js.$Object</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toJSON()">toJSON</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Returns a gradient color in a time instant</div>
+<div class="block">Returns this object as a JSON object</div>
 </td>
 </tr>
 </table>
@@ -340,6 +355,40 @@ implements <a href="../util/Z4JSONable.html" title="interface in pizzapazza.util
 </dl>
 </li>
 </ul>
+<a id="getColorAt(double,double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getColorAt</h4>
+<pre class="methodSignature">public&nbsp;javascript.awt.Color&nbsp;getColorAt&#8203;(double&nbsp;time,
+                                       double&nbsp;space)</pre>
+<div class="block">Returns a color in a time instant and in a space position</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>time</code> - The time instant</dd>
+<dd><code>space</code> - The space position</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The color</dd>
+</dl>
+</li>
+</ul>
+<a id="getGradientColorAt(double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getGradientColorAt</h4>
+<pre class="methodSignature">public&nbsp;<a href="Z4GradientColor.html" title="class in pizzapazza.color">Z4GradientColor</a>&nbsp;getGradientColorAt&#8203;(double&nbsp;time)</pre>
+<div class="block">Returns a gradient color in a time instant</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>time</code> - The time instant</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The gradient color</dd>
+</dl>
+</li>
+</ul>
 <a id="toJSON()">
 <!--   -->
 </a>
@@ -347,14 +396,13 @@ implements <a href="../util/Z4JSONable.html" title="interface in pizzapazza.util
 <li class="blockList">
 <h4>toJSON</h4>
 <pre class="methodSignature">public&nbsp;simulation.js.$Object&nbsp;toJSON()</pre>
-<div class="block">Returns a gradient color in a time instant</div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../util/Z4JSONable.html#toJSON()">Z4JSONable</a></code></span></div>
+<div class="block">Returns this object as a JSON object</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../util/Z4JSONable.html#toJSON()">toJSON</a></code>&nbsp;in interface&nbsp;<code><a href="../util/Z4JSONable.html" title="interface in pizzapazza.util">Z4JSONable</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>time</code> - The time instant</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>The gradient color</dd>
+<dd>This object as a JSON object</dd>
 </dl>
 </li>
 </ul>

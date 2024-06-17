@@ -27,8 +27,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -168,7 +168,7 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(pizzapazza.iterator.Z4PointIterator,pizzapazza.painter.Z4Painter,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">Z4DrawingTool</a></span>&#8203;(<a href="../iterator/Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a>&nbsp;pointIterator,
-             <a href="../painter/Z4Painter.html" title="interface in pizzapazza.painter">Z4Painter</a>&nbsp;painter,
+             <a href="../painter/Z4Painter.html" title="class in pizzapazza.painter">Z4Painter</a>&nbsp;painter,
              <a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;spatioTemporalColor,
              <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression)</code></th>
 <td class="colLast">
@@ -187,7 +187,7 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -211,13 +211,48 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>static <a href="Z4DrawingTool.html" title="class in pizzapazza.util">Z4DrawingTool</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromJSON(simulation.js.$Object)">fromJSON</a></span>&#8203;(simulation.js.$Object&nbsp;json)</code></th>
+<td class="colLast">
+<div class="block">Creates a Z4DrawingTool from a JSON object</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInfinitePointGeneratorSleep()">getInfinitePointGeneratorSleep</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the sleeping time between a point generation and the successive</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="../painter/Z4Painter.html" title="class in pizzapazza.painter">Z4Painter</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPainter()">getPainter</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the painter</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="../iterator/Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPointIterator()">getPointIterator</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the point iterator</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code><a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getProgression()">getProgression</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the color progression</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code><a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSpatioTemporalColor()">getSpatioTemporalColor</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the spatio-temporal color</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInfinitePointGenerator()">isInfinitePointGenerator</a></span>()</code></th>
 <td class="colLast">
@@ -225,14 +260,14 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
  an airbrush)</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#next()">next</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the next value</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>simulation.js.$Object</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toJSON()">toJSON</a></span>()</code></th>
 <td class="colLast">
@@ -270,7 +305,7 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 <li class="blockList">
 <h4>Z4DrawingTool</h4>
 <pre>public&nbsp;Z4DrawingTool&#8203;(<a href="../iterator/Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a>&nbsp;pointIterator,
-                     <a href="../painter/Z4Painter.html" title="interface in pizzapazza.painter">Z4Painter</a>&nbsp;painter,
+                     <a href="../painter/Z4Painter.html" title="class in pizzapazza.painter">Z4Painter</a>&nbsp;painter,
                      <a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;spatioTemporalColor,
                      <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression)</pre>
 <div class="block">Creates the object</div>
@@ -293,6 +328,62 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="getPointIterator()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPointIterator</h4>
+<pre class="methodSignature">public&nbsp;<a href="../iterator/Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a>&nbsp;getPointIterator()</pre>
+<div class="block">Returns the point iterator</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the point iterator</dd>
+</dl>
+</li>
+</ul>
+<a id="getPainter()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPainter</h4>
+<pre class="methodSignature">public&nbsp;<a href="../painter/Z4Painter.html" title="class in pizzapazza.painter">Z4Painter</a>&nbsp;getPainter()</pre>
+<div class="block">Returns the painter</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The painter</dd>
+</dl>
+</li>
+</ul>
+<a id="getSpatioTemporalColor()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSpatioTemporalColor</h4>
+<pre class="methodSignature">public&nbsp;<a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;getSpatioTemporalColor()</pre>
+<div class="block">Returns the spatio-temporal color</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The spatio-temporal color</dd>
+</dl>
+</li>
+</ul>
+<a id="getProgression()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getProgression</h4>
+<pre class="methodSignature">public&nbsp;<a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;getProgression()</pre>
+<div class="block">Returns the color progression</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The color progression</dd>
+</dl>
+</li>
+</ul>
 <a id="drawAction(pizzapazza.iterator.Z4PointIteratorDrawingAction,double,double)">
 <!--   -->
 </a>
@@ -381,7 +472,7 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 <a id="toJSON()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>toJSON</h4>
 <pre class="methodSignature">public&nbsp;simulation.js.$Object&nbsp;toJSON()</pre>
@@ -392,6 +483,22 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 <dd><code><a href="Z4JSONable.html#toJSON()">toJSON</a></code>&nbsp;in interface&nbsp;<code><a href="Z4JSONable.html" title="interface in pizzapazza.util">Z4JSONable</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>This object as a JSON object</dd>
+</dl>
+</li>
+</ul>
+<a id="fromJSON(simulation.js.$Object)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>fromJSON</h4>
+<pre class="methodSignature">public static&nbsp;<a href="Z4DrawingTool.html" title="class in pizzapazza.util">Z4DrawingTool</a>&nbsp;fromJSON&#8203;(simulation.js.$Object&nbsp;json)</pre>
+<div class="block">Creates a Z4DrawingTool from a JSON object</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>json</code> - The JSON object</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the drawing tool</dd>
 </dl>
 </li>
 </ul>
