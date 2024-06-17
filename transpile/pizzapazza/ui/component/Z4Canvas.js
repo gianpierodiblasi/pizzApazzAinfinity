@@ -40,10 +40,6 @@ class Z4Canvas extends JSComponent {
    selectedLayer = null;
 
   // private Z4DrawingTool drawingTool = new Z4DrawingTool(
-  // new Z4ArrowPainter(),
-  // Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255))
-  // );
-  // private Z4DrawingTool drawingTool = new Z4DrawingTool(
   // new Z4Tracer(
   // new Z4FancifulValue(
   // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1),
