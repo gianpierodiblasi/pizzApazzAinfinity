@@ -124,10 +124,10 @@ public class Z4SpatioTemporalColor implements Z4JSONable {
     $Object json = new $Object();
     if ($exists(this.color)) {
       $Object jsonColor = new $Object();
-      jsonColor.$set("red", color.red);
-      jsonColor.$set("green", color.green);
-      jsonColor.$set("blue", color.blue);
-      jsonColor.$set("alpha", color.alpha);
+      jsonColor.$set("red", this.color.red);
+      jsonColor.$set("green", this.color.green);
+      jsonColor.$set("blue", this.color.blue);
+      jsonColor.$set("alpha", this.color.alpha);
       json.$set("color", jsonColor);
     } else if ($exists(this.gradientColor)) {
       json.$set("gradientColor", this.gradientColor.toJSON());

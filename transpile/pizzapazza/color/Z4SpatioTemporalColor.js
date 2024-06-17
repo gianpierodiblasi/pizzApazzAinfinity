@@ -117,10 +117,10 @@ class Z4SpatioTemporalColor extends Z4JSONable {
     let json = new Object();
     if (this.color) {
       let jsonColor = new Object();
-      jsonColor["red"] = color.red;
-      jsonColor["green"] = color.green;
-      jsonColor["blue"] = color.blue;
-      jsonColor["alpha"] = color.alpha;
+      jsonColor["red"] = this.color.red;
+      jsonColor["green"] = this.color.green;
+      jsonColor["blue"] = this.color.blue;
+      jsonColor["alpha"] = this.color.alpha;
       json["color"] = jsonColor;
     } else if (this.gradientColor) {
       json["gradientColor"] = this.gradientColor.toJSON();

@@ -6,5 +6,6 @@ package pizzapazza.painter;
  * @author gianpiero.diblasi
  */
 public enum Z4PainterType {
-  ARROW;
+  ARROW,
+  SHAPE_2D;
 }

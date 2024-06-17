@@ -13,36 +13,14 @@ import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
 
 /**
- * The painter of 2D shapes
+ * 
  *
  * @author gianpiero.diblasi
  */
 public class Z4Shape2DPainter extends Z4Painter<Z4Shape2DPainter> {
 
   private Z4Shape2D shape = Z4Shape2D.SQUARE;
-  private Z4FancifulValue width = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(50).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
-  private Z4FancifulValue height = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(50).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
-  private boolean regular;
-
-  private Z4FancifulValue shadowShiftX = new Z4FancifulValue();
-  private Z4FancifulValue shadowShiftY = new Z4FancifulValue();
-  private Z4Color shadowColor = new Z4Color(255, 0, 0, 0);
-
-  private Z4FancifulValue borderWidth = new Z4FancifulValue().setConstant(new Z4SignedValue().setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
-  private Z4FancifulValue borderHeight = new Z4FancifulValue().setConstant(new Z4SignedValue().setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
-  private Z4Color borderColor = new Z4Color(255, 0, 0, 0);
-
-  /**
-   * Sets the shape
-   *
-   * @param shape The shape
-   * @return This Z4Shape2DPainter
-   */
-  public Z4Shape2DPainter setShape2D(Z4Shape2D shape) {
-    this.shape = shape;
-    return this;
-  }
-
+  
   /**
    * Returns the shape
    *
@@ -50,133 +28,6 @@ public class Z4Shape2DPainter extends Z4Painter<Z4Shape2DPainter> {
    */
   public Z4Shape2D getShape() {
     return this.shape;
-  }
-
-  /**
-   * Sets the size
-   *
-   * @param width The width
-   * @param height The height
-   * @param regular true if the shape is regular (width = height), false
-   * otherwise
-   * @return This Z4Shape2DPainter
-   */
-  public Z4Shape2DPainter setSize(Z4FancifulValue width, Z4FancifulValue height, boolean regular) {
-    this.width = width;
-    this.height = height;
-    this.regular = regular;
-    return this;
-  }
-
-  /**
-   * Returns the width
-   *
-   * @return The width
-   */
-  public Z4FancifulValue getWidth() {
-    return this.width;
-  }
-
-  /**
-   * Returns the height
-   *
-   * @return The height
-   */
-  public Z4FancifulValue getHeight() {
-    return this.height;
-  }
-
-  /**
-   * Checks if the shape is regular (width = height)
-   *
-   * @return true if the shape is regular (width = height), false otherwise
-   */
-  public boolean isRegular() {
-    return this.regular;
-  }
-
-  /**
-   * Sets the shadow
-   *
-   * @param shadowShiftX The X shadow shift
-   * @param shadowShiftY The Y shadow shift
-   * @param shadowColor The shadow color
-   * @return This Z4Shape2DPainter
-   */
-  public Z4Shape2DPainter setShadow(Z4FancifulValue shadowShiftX, Z4FancifulValue shadowShiftY, Z4Color shadowColor) {
-    this.shadowShiftX = shadowShiftX;
-    this.shadowShiftY = shadowShiftY;
-    this.shadowColor = shadowColor;
-    return this;
-  }
-
-  /**
-   * Returns the X shadow shift
-   *
-   * @return The X shadow shift
-   */
-  public Z4FancifulValue getShadowShiftX() {
-    return this.shadowShiftX;
-  }
-
-  /**
-   * Returns the Y shadow shift
-   *
-   * @return The Y shadow shift
-   */
-  public Z4FancifulValue getShadowShiftY() {
-    return this.shadowShiftY;
-  }
-
-  /**
-   * Returns the shadow color
-   *
-   * @return The shadow color
-   */
-  public Z4Color getShadowColor() {
-    return this.shadowColor;
-  }
-
-  /**
-   * Sets the border
-   *
-   * @param borderWidth The border width
-   * @param borderHeight The border height
-   * @param borderColor The border color
-   * @return This Z4Shape2DPainter
-   */
-  public Z4Shape2DPainter setBorder(Z4FancifulValue borderWidth, Z4FancifulValue borderHeight, Z4Color borderColor) {
-    this.borderWidth = borderWidth;
-    this.borderHeight = borderHeight;
-    this.borderColor = borderColor;
-    return this;
-  }
-
-  /**
-   * Returns the border width
-   *
-   * @return The border width
-   */
-  public Z4FancifulValue getBorderWidth() {
-    return this.borderWidth;
-  }
-
-  /**
-   * Returns the border height
-   *
-   * @return The border height
-   */
-  public Z4FancifulValue getBorderHeight() {
-    return this.borderHeight;
-  }
-
-  /**
-   * Returns the border color
-   *
-   * @return The border color
-   */
-  public Z4Color getBorderColor() {
-    return this.borderColor;
   }
 
   @Override

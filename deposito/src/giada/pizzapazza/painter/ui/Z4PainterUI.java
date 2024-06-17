@@ -97,11 +97,4 @@ public abstract class Z4PainterUI<S extends Z4Painter<S>> extends Z4AbstractComp
       this.ctx.restore();
     }
   }
-
-  @Override
-  public void dispose() {
-    this.disposeDevicePixelRatio();
-    this.resizeObserver.unobserve(this.canvas);
-    this.mutationObserver.unobserve(document.body);
-  }
 }

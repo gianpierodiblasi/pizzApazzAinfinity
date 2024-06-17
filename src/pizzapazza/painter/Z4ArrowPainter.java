@@ -6,13 +6,12 @@ import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4Math;
 import pizzapazza.util.Z4Constants;
 import simulation.dom.$CanvasRenderingContext2D;
-import simulation.js.$Object;
 
 /**
  *
  * @author gianpiero.diblasi
  */
-public class Z4ArrowPainter implements Z4Painter {
+public class Z4ArrowPainter extends Z4Painter {
 
   private final double module = 30;
   private boolean bool;

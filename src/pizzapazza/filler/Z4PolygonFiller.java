@@ -30,7 +30,6 @@ public class Z4PolygonFiller extends Z4AbstractEllipseInscribedFiller {
    */
   public Z4PolygonFiller(Z4GradientColor gradientColor, int cx, int cy, int rx, int ry, double angle, int vertexCount, Z4BoundaryBehavior boundaryBehavior) {
     super(gradientColor, cx, cy, rx, ry, angle, vertexCount, boundaryBehavior);
-
   }
 
   @Override
