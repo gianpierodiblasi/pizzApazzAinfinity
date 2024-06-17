@@ -2,10 +2,12 @@ package pizzapazza.painter;
 
 import javascript.awt.Color;
 import pizzapazza.color.Z4ColorProgression;
+import pizzapazza.color.Z4Lighting;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4Math;
+import pizzapazza.util.Z4Constants;
 import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
 import simulation.js.$Object;
@@ -195,8 +197,88 @@ public class Z4Shape2DPainter extends Z4Painter {
   }
 
   @Override
+  @SuppressWarnings("null")
   public void draw($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
+    if (drawingPoint.drawBounds) {
+      double scaleW = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.width.getConstant().getValue());
+      double scaleH = this.regular ? scaleW : drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.height.getConstant().getValue());
+      this.drawBounds(context, scaleW, scaleH);
+    } else {
+      double currentWidth = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.width.next());
+      double currentHeight = this.regular ? currentWidth : drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.height.next());
 
+      if (currentWidth > 0 && currentHeight > 0) {
+        double currentShadowShiftX = this.shadowShiftX.next();
+        double currentShadowShiftY = this.shadowShiftY.next();
+        double currentBorderWidth = this.borderWidth.next();
+        double currentBorderHeight = this.borderHeight.next();
+
+        if ($exists(currentShadowShiftX) || $exists(currentShadowShiftY)) {
+          context.save();
+          context.translate(currentShadowShiftX, currentShadowShiftY);
+          this.drawPath(context, currentWidth + (currentBorderWidth > 0 ? currentBorderWidth : 0), currentHeight + (currentBorderHeight > 0 ? currentBorderHeight : 0), this.shadowColor);
+          context.restore();
+        }
+
+        if (currentBorderWidth > 0 || currentBorderHeight > 0) {
+          context.save();
+//        this.drawPath(context, currentWidth + currentBorderWidth, currentHeight + currentBorderHeight, this.borderColor);
+          context.restore();
+        }
+
+        Z4Lighting lighting = progression.getLighting();
+        if (spatioTemporalColor.isColor()) {
+          Color color = spatioTemporalColor.getColorAt(0, 0);
+
+        } else if (spatioTemporalColor.isGradientColor()) {
+        } else if (spatioTemporalColor.isBiGradientColor()) {
+        }
+
+//        if (drawingPoint.temporalPosition == -1) {
+//        double currentSize = Math.max(currentWidth, currentHeight);
+//
+//        for (double scale = currentSize; scale > 0; scale--) {
+//          this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, gradientColor.getZ4ColorAt(scale / currentSize, true, true));
+//        }
+//        } else if (lighting == Z4Lighting.NONE) {
+//        this.drawPath(context, currentWidth, currentHeight, gradientColor.getZ4ColorAt(drawingPoint.temporalPosition, true, true));
+//        } else {
+//        double currentSize = Math.max(currentWidth, currentHeight);
+//        Z4Color newColor = gradientColor.getZ4ColorAt(drawingPoint.temporalPosition, true, true);
+//
+//        for (double scale = currentSize; scale > 0; scale--) {
+//          if (lighting == Z4Lighting.LIGHTED) {
+//            this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, Z4Color.fromARGB(newColor.getARGB()).lighted(scale / currentSize));
+//          } else if (lighting == Z4Lighting.DARKENED) {
+//            this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, Z4Color.fromARGB(newColor.getARGB()).darkened(scale / currentSize));
+//          }
+//        }
+//        }
+      }
+    }
+  }
+
+  private void drawPath($CanvasRenderingContext2D context, double scaleW, double scaleH, Color color) {
+    context.save();
+    context.scale(scaleW, scaleH);
+    context.fillStyle = Z4Constants.$getStyle(color.getARGB_HEX());
+    context.fill(this.path);
+    context.restore();
+  }
+
+  private void drawBounds($CanvasRenderingContext2D context, double scaleW, double scaleH) {
+    context.save();
+    context.scale(scaleW, scaleH);
+    context.lineWidth = 1 / Math.min(scaleW, scaleH);
+
+    context.strokeStyle = Z4Constants.$getStyle("gray");
+    context.stroke(this.path);
+
+    context.strokeStyle = Z4Constants.$getStyle("black");
+    context.translate(1 / scaleW, 1 / scaleH);
+    context.stroke(this.path);
+
+    context.restore();
   }
 
   @Override
@@ -212,26 +294,22 @@ public class Z4Shape2DPainter extends Z4Painter {
     json.$set("shadowShiftX", this.shadowShiftX.toJSON());
     json.$set("shadowShiftY", this.shadowShiftY.toJSON());
 
-    if ($exists(this.shadowColor)) {
-      $Object jsonColor = new $Object();
-      jsonColor.$set("red", this.shadowColor.red);
-      jsonColor.$set("green", this.shadowColor.green);
-      jsonColor.$set("blue", this.shadowColor.blue);
-      jsonColor.$set("alpha", this.shadowColor.alpha);
-      json.$set("shadowColor", jsonColor);
-    }
+    $Object jsonColor = new $Object();
+    jsonColor.$set("red", this.shadowColor.red);
+    jsonColor.$set("green", this.shadowColor.green);
+    jsonColor.$set("blue", this.shadowColor.blue);
+    jsonColor.$set("alpha", this.shadowColor.alpha);
+    json.$set("shadowColor", jsonColor);
 
     json.$set("borderWidth", this.borderWidth.toJSON());
     json.$set("borderHeight", this.borderHeight.toJSON());
 
-    if ($exists(this.borderColor)) {
-      $Object jsonColor = new $Object();
-      jsonColor.$set("red", this.borderColor.red);
-      jsonColor.$set("green", this.borderColor.green);
-      jsonColor.$set("blue", this.borderColor.blue);
-      jsonColor.$set("alpha", this.borderColor.alpha);
-      json.$set("borderColor", jsonColor);
-    }
+    jsonColor = new $Object();
+    jsonColor.$set("red", this.borderColor.red);
+    jsonColor.$set("green", this.borderColor.green);
+    jsonColor.$set("blue", this.borderColor.blue);
+    jsonColor.$set("alpha", this.borderColor.alpha);
+    json.$set("borderColor", jsonColor);
 
     return json;
   }
@@ -243,17 +321,11 @@ public class Z4Shape2DPainter extends Z4Painter {
    * @return the shape 2D painter
    */
   public static Z4Shape2DPainter fromJSON($Object json) {
-    Color shadowColor = null;
-    if ($exists(json.$get("shadowColor"))) {
-      $Object jsonColor = json.$get("shadowColor");
-      shadowColor = new Color(jsonColor.$get("red"), jsonColor.$get("green"), jsonColor.$get("blue"), jsonColor.$get("alpha"));
-    }
+    $Object jsonColor = json.$get("shadowColor");
+    Color shadowColor = new Color(jsonColor.$get("red"), jsonColor.$get("green"), jsonColor.$get("blue"), jsonColor.$get("alpha"));
 
-    Color borderColor = null;
-    if ($exists(json.$get("borderColor"))) {
-      $Object jsonColor = json.$get("borderColor");
-      shadowColor = new Color(jsonColor.$get("red"), jsonColor.$get("green"), jsonColor.$get("blue"), jsonColor.$get("alpha"));
-    }
+    jsonColor = json.$get("borderColor");
+    Color borderColor = new Color(jsonColor.$get("red"), jsonColor.$get("green"), jsonColor.$get("blue"), jsonColor.$get("alpha"));
 
     return new Z4Shape2DPainter(
             Z4FancifulValue.fromJSON(json.$get("width")), Z4FancifulValue.fromJSON(json.$get("height")), json.$get("regular"), json.$get("star"), json.$get("vertices"),

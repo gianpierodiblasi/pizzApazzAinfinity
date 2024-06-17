@@ -8751,17 +8751,18 @@ class Z4SpatioTemporalColor extends Z4JSONable {
    * @param space The space position
    * @return The color
    */
-  // public Color getColorAt(double time, double space) {
-  // if ($exists(this.color)) {
-  // return this.color;
-  // } else if ($exists(this.gradientColor)) {
-  // return this.gradientColor.getColorAt(space, true);
-  // } else if ($exists(this.biGradientColor)) {
-  // return this.biGradientColor.getColorAt(time, true).getColorAt(space, true);
-  // } else {
-  // return null;
-  // }
-  // }
+   getColorAt(time, space) {
+    if (this.color) {
+      return this.color;
+    } else if (this.gradientColor) {
+      return this.gradientColor.getColorAt(space, true);
+    } else if (this.biGradientColor) {
+      return this.biGradientColor.getColorAt(time, true).getColorAt(space, true);
+    } else {
+      return null;
+    }
+  }
+
   /**
    * Returns a gradient color in a time instant
    *
@@ -10775,6 +10776,77 @@ class Z4Shape2DPainter extends Z4Painter {
   }
 
    draw(context, drawingPoint, spatioTemporalColor, progression) {
+    if (drawingPoint.drawBounds) {
+      let scaleW = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.width.getConstant().getValue());
+      let scaleH = this.regular ? scaleW : drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.height.getConstant().getValue());
+      this.drawBounds(context, scaleW, scaleH);
+    } else {
+      let currentWidth = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.width.next());
+      let currentHeight = this.regular ? currentWidth : drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.height.next());
+      if (currentWidth > 0 && currentHeight > 0) {
+        let currentShadowShiftX = this.shadowShiftX.next();
+        let currentShadowShiftY = this.shadowShiftY.next();
+        let currentBorderWidth = this.borderWidth.next();
+        let currentBorderHeight = this.borderHeight.next();
+        if (currentShadowShiftX || currentShadowShiftY) {
+          context.save();
+          context.translate(currentShadowShiftX, currentShadowShiftY);
+          this.drawPath(context, currentWidth + (currentBorderWidth > 0 ? currentBorderWidth : 0), currentHeight + (currentBorderHeight > 0 ? currentBorderHeight : 0), this.shadowColor);
+          context.restore();
+        }
+        if (currentBorderWidth > 0 || currentBorderHeight > 0) {
+          context.save();
+          // this.drawPath(context, currentWidth + currentBorderWidth, currentHeight + currentBorderHeight, this.borderColor);
+          context.restore();
+        }
+        let lighting = progression.getLighting();
+        if (spatioTemporalColor.isColor()) {
+          let color = spatioTemporalColor.getColorAt(0, 0);
+        } else if (spatioTemporalColor.isGradientColor()) {
+        } else if (spatioTemporalColor.isBiGradientColor()) {
+        }
+        // if (drawingPoint.temporalPosition == -1) {
+        // double currentSize = Math.max(currentWidth, currentHeight);
+        // 
+        // for (double scale = currentSize; scale > 0; scale--) {
+        // this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, gradientColor.getZ4ColorAt(scale / currentSize, true, true));
+        // }
+        // } else if (lighting == Z4Lighting.NONE) {
+        // this.drawPath(context, currentWidth, currentHeight, gradientColor.getZ4ColorAt(drawingPoint.temporalPosition, true, true));
+        // } else {
+        // double currentSize = Math.max(currentWidth, currentHeight);
+        // Z4Color newColor = gradientColor.getZ4ColorAt(drawingPoint.temporalPosition, true, true);
+        // 
+        // for (double scale = currentSize; scale > 0; scale--) {
+        // if (lighting == Z4Lighting.LIGHTED) {
+        // this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, Z4Color.fromARGB(newColor.getARGB()).lighted(scale / currentSize));
+        // } else if (lighting == Z4Lighting.DARKENED) {
+        // this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, Z4Color.fromARGB(newColor.getARGB()).darkened(scale / currentSize));
+        // }
+        // }
+        // }
+      }
+    }
+  }
+
+   drawPath(context, scaleW, scaleH, color) {
+    context.save();
+    context.scale(scaleW, scaleH);
+    context.fillStyle = Z4Constants.getStyle(color.getARGB_HEX());
+    context.fill(this.path);
+    context.restore();
+  }
+
+   drawBounds(context, scaleW, scaleH) {
+    context.save();
+    context.scale(scaleW, scaleH);
+    context.lineWidth = 1 / Math.min(scaleW, scaleH);
+    context.strokeStyle = Z4Constants.getStyle("gray");
+    context.stroke(this.path);
+    context.strokeStyle = Z4Constants.getStyle("black");
+    context.translate(1 / scaleW, 1 / scaleH);
+    context.stroke(this.path);
+    context.restore();
   }
 
    toJSON() {
@@ -10786,24 +10858,20 @@ class Z4Shape2DPainter extends Z4Painter {
     json["vertices"] = this.vertices;
     json["shadowShiftX"] = this.shadowShiftX.toJSON();
     json["shadowShiftY"] = this.shadowShiftY.toJSON();
-    if (this.shadowColor) {
-      let jsonColor = new Object();
-      jsonColor["red"] = this.shadowColor.red;
-      jsonColor["green"] = this.shadowColor.green;
-      jsonColor["blue"] = this.shadowColor.blue;
-      jsonColor["alpha"] = this.shadowColor.alpha;
-      json["shadowColor"] = jsonColor;
-    }
+    let jsonColor = new Object();
+    jsonColor["red"] = this.shadowColor.red;
+    jsonColor["green"] = this.shadowColor.green;
+    jsonColor["blue"] = this.shadowColor.blue;
+    jsonColor["alpha"] = this.shadowColor.alpha;
+    json["shadowColor"] = jsonColor;
     json["borderWidth"] = this.borderWidth.toJSON();
     json["borderHeight"] = this.borderHeight.toJSON();
-    if (this.borderColor) {
-      let jsonColor = new Object();
-      jsonColor["red"] = this.borderColor.red;
-      jsonColor["green"] = this.borderColor.green;
-      jsonColor["blue"] = this.borderColor.blue;
-      jsonColor["alpha"] = this.borderColor.alpha;
-      json["borderColor"] = jsonColor;
-    }
+    jsonColor = new Object();
+    jsonColor["red"] = this.borderColor.red;
+    jsonColor["green"] = this.borderColor.green;
+    jsonColor["blue"] = this.borderColor.blue;
+    jsonColor["alpha"] = this.borderColor.alpha;
+    json["borderColor"] = jsonColor;
     return json;
   }
 
@@ -10814,16 +10882,10 @@ class Z4Shape2DPainter extends Z4Painter {
    * @return the shape 2D painter
    */
   static  fromJSON(json) {
-    let shadowColor = null;
-    if (json["shadowColor"]) {
-      let jsonColor = json["shadowColor"];
-      shadowColor = new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]);
-    }
-    let borderColor = null;
-    if (json["borderColor"]) {
-      let jsonColor = json["borderColor"];
-      shadowColor = new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]);
-    }
+    let jsonColor = json["shadowColor"];
+    let shadowColor = new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]);
+    jsonColor = json["borderColor"];
+    let borderColor = new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]);
     return new Z4Shape2DPainter(Z4FancifulValue.fromJSON(json["width"]), Z4FancifulValue.fromJSON(json["height"]), json["regular"], json["star"], json["vertices"], Z4FancifulValue.fromJSON(json["shadowShiftX"]), Z4FancifulValue.fromJSON(json["shadowShiftY"]), shadowColor, Z4FancifulValue.fromJSON(json["borderWidth"]), Z4FancifulValue.fromJSON(json["borderHeight"]), borderColor);
   }
 }
