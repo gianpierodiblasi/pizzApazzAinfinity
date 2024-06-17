@@ -1,5 +1,6 @@
 package pizzapazza.ui.panel.color;
 
+import static def.dom.Globals.console;
 import def.js.Array;
 import javascript.awt.BorderLayout;
 import javascript.awt.GBC;
@@ -9,6 +10,9 @@ import javascript.swing.JSFrame;
 import javascript.swing.JSLabel;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
+import pizzapazza.color.Z4ColorProgression;
+import pizzapazza.color.Z4ColorProgressionBehavior;
+import pizzapazza.color.Z4Lighting;
 import pizzapazza.iterator.Z4PointIteratorType;
 
 /**
@@ -69,6 +73,16 @@ public class TestColorProgressingPanel extends JSFrame {
     p.add(disabled, new GBC(1, 3).wx(1).i(5, 5, 5, 5));
     this.panels.push(disabled);
 
+    Z4ColorProgressionPanel lighted = new Z4ColorProgressionPanel(Z4ColorProgressionPanelOrientation.HORIZONTALLY_COMPACT);
+    lighted.setValue(Z4ColorProgression.fromJSON(new Z4ColorProgression(Z4ColorProgressionBehavior.TEMPORAL, 0.34, Z4Lighting.LIGHTED).toJSON()));
+    lighted.addChangeListener(event -> {
+      if (!lighted.getValueIsAdjusting()) {
+        console.log(lighted.getValue());
+      }
+    });
+    p.add(lighted, new GBC(0, 4).wx(1).i(5, 5, 5, 5));
+    this.panels.push(lighted);
+    
     this.getContentPane().add(p, BorderLayout.NORTH);
   }
 

@@ -6,6 +6,7 @@ import javascript.awt.BoxLayout;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
 import javascript.swing.ButtonGroup;
+import javascript.swing.JSComponent;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
 import javascript.swing.JSSlider;
@@ -33,6 +34,7 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
   private final JSSlider temporalStepSlider = new JSSlider();
   private final JSSpinner temporalStepSpinner = new JSSpinner();
 
+  private boolean enabled = true;
   private boolean valueIsAdjusting;
 
   /**
@@ -211,18 +213,69 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
    * otherwise
    */
   public void setProgressionSettings(Z4PointIteratorType type, boolean isColor, boolean isGradientColor, boolean isBiGradientColor) {
+    if (type == Z4PointIteratorType.AIRBRUSH) {
+      Object.keys(this.radios).forEach(key -> ((JSComponent) this.radios.$get(key)).cssAddClass("z4colorprogressionpanel-airbrush-radio"));
+    } else {
+      Object.keys(this.radios).forEach(key -> ((JSComponent) this.radios.$get(key)).cssRemoveClass("z4colorprogressionpanel-airbrush-radio"));
+    }
+
     if (isColor) {
       Object.keys(this.radios).forEach(key -> {
         JSRadioButton radio = this.radios.$get(key);
         radio.setContentAreaFilled(false);
-        radio.getStyle().display = "none";
+        radio.getStyle().visibility = "hidden";
       });
-      ((JSRadioButton) this.radios.$get("" + Z4ColorProgressionBehavior.SPATIAL)).setSelected(true);
-      ((JSRadioButton) this.radios.$get("" + Z4ColorProgressionBehavior.SPATIAL)).setContentAreaFilled(true);
 
-      this.onProgressionChange();
+      JSRadioButton spatial = this.radios.$get("" + Z4ColorProgressionBehavior.SPATIAL);
+      spatial.setContentAreaFilled(true);
+      if (!spatial.isSelected()) {
+        spatial.setSelected(true);
+        this.onProgressionChange();
+      }
     } else if (isGradientColor) {
+      Object.keys(this.radios).forEach(key -> {
+        JSRadioButton radio = this.radios.$get(key);
+        radio.setEnabled(this.enabled);
+        radio.getStyle().visibility = "visible";
+      });
+
+      if (type == Z4PointIteratorType.STAMPER) {
+        JSRadioButton relative = this.radios.$get("" + Z4ColorProgressionBehavior.RELATIVE_TO_PATH);
+        relative.setEnabled(false);
+        relative.setContentAreaFilled(false);
+
+        if (relative.isSelected()) {
+          ((JSRadioButton) this.radios.$get("" + Z4ColorProgressionBehavior.SPATIAL)).setSelected(true);
+          ((JSRadioButton) this.radios.$get("" + Z4ColorProgressionBehavior.SPATIAL)).setContentAreaFilled(true);
+
+          this.onProgressionChange();
+        }
+      }
     } else if (isBiGradientColor) {
+      Object.keys(this.radios).forEach(key -> {
+        JSRadioButton radio = this.radios.$get(key);
+        radio.setEnabled(this.enabled);
+        radio.getStyle().visibility = "visible";
+      });
+
+      JSRadioButton spatial = this.radios.$get("" + Z4ColorProgressionBehavior.SPATIAL);
+      spatial.setEnabled(false);
+      spatial.setContentAreaFilled(false);
+
+      JSRadioButton relative = this.radios.$get("" + Z4ColorProgressionBehavior.RELATIVE_TO_PATH);
+      if (type == Z4PointIteratorType.STAMPER) {
+        relative.setEnabled(false);
+        relative.setContentAreaFilled(false);
+      }
+
+      if (spatial.isSelected() || (type == Z4PointIteratorType.STAMPER && relative.isSelected())) {
+        ((JSRadioButton) this.radios.$get("" + Z4ColorProgressionBehavior.TEMPORAL)).setSelected(true);
+        ((JSRadioButton) this.radios.$get("" + Z4ColorProgressionBehavior.TEMPORAL)).setContentAreaFilled(true);
+        this.temporalStepSpinner.setEnabled(this.enabled);
+        this.temporalStepSlider.setEnabled(this.enabled);
+
+        this.onProgressionChange();
+      }
     }
   }
 
@@ -245,6 +298,7 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
   @SuppressWarnings("StringEquality")
   public void setEnabled(boolean b) {
     super.setEnabled(b);
+    this.enabled = b;
     this.lightingPanel.setEnabled(b);
 
     Object.keys(this.radios).forEach(key -> {

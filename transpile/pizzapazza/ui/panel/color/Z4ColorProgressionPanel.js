@@ -13,6 +13,8 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
 
    temporalStepSpinner = new JSSpinner();
 
+   enabled = true;
+
    valueIsAdjusting = false;
 
   /**
@@ -173,17 +175,60 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
    * otherwise
    */
    setProgressionSettings(type, isColor, isGradientColor, isBiGradientColor) {
+    if (type === Z4PointIteratorType.AIRBRUSH) {
+      Object.keys(this.radios).forEach(key => (this.radios[key]).cssAddClass("z4colorprogressionpanel-airbrush-radio"));
+    } else {
+      Object.keys(this.radios).forEach(key => (this.radios[key]).cssRemoveClass("z4colorprogressionpanel-airbrush-radio"));
+    }
     if (isColor) {
       Object.keys(this.radios).forEach(key => {
         let radio = this.radios[key];
         radio.setContentAreaFilled(false);
-        radio.getStyle().display = "none";
+        radio.getStyle().visibility = "hidden";
       });
-      (this.radios["" + Z4ColorProgressionBehavior.SPATIAL]).setSelected(true);
-      (this.radios["" + Z4ColorProgressionBehavior.SPATIAL]).setContentAreaFilled(true);
-      this.onProgressionChange();
+      let spatial = this.radios["" + Z4ColorProgressionBehavior.SPATIAL];
+      spatial.setContentAreaFilled(true);
+      if (!spatial.isSelected()) {
+        spatial.setSelected(true);
+        this.onProgressionChange();
+      }
     } else if (isGradientColor) {
+      Object.keys(this.radios).forEach(key => {
+        let radio = this.radios[key];
+        radio.setEnabled(this.enabled);
+        radio.getStyle().visibility = "visible";
+      });
+      if (type === Z4PointIteratorType.STAMPER) {
+        let relative = this.radios["" + Z4ColorProgressionBehavior.RELATIVE_TO_PATH];
+        relative.setEnabled(false);
+        relative.setContentAreaFilled(false);
+        if (relative.isSelected()) {
+          (this.radios["" + Z4ColorProgressionBehavior.SPATIAL]).setSelected(true);
+          (this.radios["" + Z4ColorProgressionBehavior.SPATIAL]).setContentAreaFilled(true);
+          this.onProgressionChange();
+        }
+      }
     } else if (isBiGradientColor) {
+      Object.keys(this.radios).forEach(key => {
+        let radio = this.radios[key];
+        radio.setEnabled(this.enabled);
+        radio.getStyle().visibility = "visible";
+      });
+      let spatial = this.radios["" + Z4ColorProgressionBehavior.SPATIAL];
+      spatial.setEnabled(false);
+      spatial.setContentAreaFilled(false);
+      let relative = this.radios["" + Z4ColorProgressionBehavior.RELATIVE_TO_PATH];
+      if (type === Z4PointIteratorType.STAMPER) {
+        relative.setEnabled(false);
+        relative.setContentAreaFilled(false);
+      }
+      if (spatial.isSelected() || (type === Z4PointIteratorType.STAMPER && relative.isSelected())) {
+        (this.radios["" + Z4ColorProgressionBehavior.TEMPORAL]).setSelected(true);
+        (this.radios["" + Z4ColorProgressionBehavior.TEMPORAL]).setContentAreaFilled(true);
+        this.temporalStepSpinner.setEnabled(this.enabled);
+        this.temporalStepSlider.setEnabled(this.enabled);
+        this.onProgressionChange();
+      }
     }
   }
 
@@ -201,6 +246,7 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
 
    setEnabled(b) {
     super.setEnabled(b);
+    this.enabled = b;
     this.lightingPanel.setEnabled(b);
     Object.keys(this.radios).forEach(key => {
       let radio = this.radios[key];
