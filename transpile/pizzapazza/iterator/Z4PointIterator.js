@@ -86,6 +86,19 @@ class Z4PointIterator extends Z4NextableWithTwoParams {
    getInfinitePointGeneratorSleep() {
   }
 
+  /**
+   * Draws a demo of this Z4PointIterator
+   *
+   * @param context The context where to draw the demo
+   * @param painter The painter to use, it can be null
+   * @param spatioTemporalColor The color to use, it can be null
+   * @param progression The color progression to use, it can be null
+   * @param width The width
+   * @param height The height
+   */
+   drawDemo(context, painter, spatioTemporalColor, progression, width, height) {
+  }
+
    toJSON() {
     let json = new Object();
     json["type"] = this.getType();

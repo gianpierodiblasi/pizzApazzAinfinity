@@ -6,6 +6,8 @@ import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4NextableWithTwoParams;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Rotation;
+import pizzapazza.painter.Z4Painter;
+import simulation.dom.$CanvasRenderingContext2D;
 import simulation.js.$Object;
 
 /**
@@ -91,6 +93,18 @@ public abstract class Z4PointIterator implements Z4NextableWithTwoParams<Z4Drawi
    * milliseconds)
    */
   public abstract int getInfinitePointGeneratorSleep();
+
+  /**
+   * Draws a demo of this Z4PointIterator
+   *
+   * @param context The context where to draw the demo
+   * @param painter The painter to use, it can be null
+   * @param spatioTemporalColor The color to use, it can be null
+   * @param progression The color progression to use, it can be null
+   * @param width The width
+   * @param height The height
+   */
+  public abstract void drawDemo($CanvasRenderingContext2D context, Z4Painter painter, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression, double width, double height);
 
   @Override
   public $Object toJSON() {

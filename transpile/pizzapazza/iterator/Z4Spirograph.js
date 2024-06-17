@@ -85,6 +85,12 @@ class Z4Spirograph extends Z4PointIterator {
     return 0;
   }
 
+   drawDemo(context, painter, spatioTemporalColor, progression, width, height) {
+    let finalPainter = painter ? painter : new Z4ArrowPainter();
+    let finalspSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
+    let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
+  }
+
   /**
    * Creates a Z4Spirograph from a JSON object
    *

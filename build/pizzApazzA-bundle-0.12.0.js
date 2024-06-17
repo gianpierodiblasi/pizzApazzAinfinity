@@ -9784,6 +9784,19 @@ class Z4PointIterator extends Z4NextableWithTwoParams {
    getInfinitePointGeneratorSleep() {
   }
 
+  /**
+   * Draws a demo of this Z4PointIterator
+   *
+   * @param context The context where to draw the demo
+   * @param painter The painter to use, it can be null
+   * @param spatioTemporalColor The color to use, it can be null
+   * @param progression The color progression to use, it can be null
+   * @param width The width
+   * @param height The height
+   */
+   drawDemo(context, painter, spatioTemporalColor, progression, width, height) {
+  }
+
    toJSON() {
     let json = new Object();
     json["type"] = this.getType();
@@ -9907,6 +9920,12 @@ class Z4Airbrush extends Z4PointIterator {
     return parseInt(250 / this.speed);
   }
 
+   drawDemo(context, painter, spatioTemporalColor, progression, width, height) {
+    let finalPainter = painter ? painter : new Z4ArrowPainter();
+    let finalspSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
+    let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["multiplicity"] = this.multiplicity.toJSON();
@@ -10001,6 +10020,12 @@ class Z4Scatterer extends Z4PointIterator {
 
    getInfinitePointGeneratorSleep() {
     return 0;
+  }
+
+   drawDemo(context, painter, spatioTemporalColor, progression, width, height) {
+    let finalPainter = painter ? painter : new Z4ArrowPainter();
+    let finalspSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
+    let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
   }
 
    toJSON() {
@@ -10107,6 +10132,12 @@ class Z4Spirograph extends Z4PointIterator {
     return 0;
   }
 
+   drawDemo(context, painter, spatioTemporalColor, progression, width, height) {
+    let finalPainter = painter ? painter : new Z4ArrowPainter();
+    let finalspSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
+    let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
+  }
+
   /**
    * Creates a Z4Spirograph from a JSON object
    *
@@ -10211,6 +10242,40 @@ class Z4Stamper extends Z4PointIterator {
 
    getInfinitePointGeneratorSleep() {
     return 0;
+  }
+
+   drawDemo(context, painter, spatioTemporalColor, progression, width, height) {
+    let finalPainter = painter ? painter : new Z4ArrowPainter();
+    let finalspSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
+    let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
+    this.initDraw(width, height).forEach(point => {
+      this.drawAction(Z4PointIteratorDrawingAction.START, point.x, point.y);
+      context.save();
+      context.lineWidth = 1;
+      context.fillStyle = Z4Constants.getStyle("black");
+      context.beginPath();
+      context.arc(this.currentPoint.x, this.currentPoint.y, 2, 0, Z4Math.TWO_PI);
+      context.fill();
+      context.restore();
+      let next = null;
+      while ((next = this.next(spatioTemporalColor, finalColorProgression)) !== null) {
+        context.save();
+        context.translate(next.z4Vector.x0, next.z4Vector.y0);
+        context.rotate(next.z4Vector.phase);
+        finalPainter.draw(context, next, finalspSpatioTemporalColor, finalColorProgression);
+        context.restore();
+      }
+    });
+  }
+
+   initDraw(w, h) {
+    let array = new Array();
+    for (let x = 50; x <= w; x += 100) {
+      for (let y = 50; y <= h; y += 100) {
+        array.push(new Z4Point(x, y));
+      }
+    }
+    return array;
   }
 
    toJSON() {
@@ -10494,6 +10559,12 @@ class Z4Tracer extends Z4PointIterator {
 
    getInfinitePointGeneratorSleep() {
     return 0;
+  }
+
+   drawDemo(context, painter, spatioTemporalColor, progression, width, height) {
+    let finalPainter = painter ? painter : new Z4ArrowPainter();
+    let finalspSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
+    let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
   }
 
    toJSON() {

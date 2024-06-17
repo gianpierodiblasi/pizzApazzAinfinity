@@ -1,7 +1,9 @@
 package pizzapazza.iterator;
 
+import javascript.awt.Color;
 import pizzapazza.color.Z4ColorProgression;
 import pizzapazza.color.Z4ColorProgressionBehavior;
+import pizzapazza.color.Z4Lighting;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4FancifulValue;
@@ -9,6 +11,9 @@ import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Rotation;
 import pizzapazza.math.Z4Vector;
+import pizzapazza.painter.Z4ArrowPainter;
+import pizzapazza.painter.Z4Painter;
+import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
 import simulation.js.$Object;
@@ -146,6 +151,14 @@ public class Z4Airbrush extends Z4PointIterator {
     return parseInt(250 / this.speed);
   }
 
+  @Override
+  public void drawDemo($CanvasRenderingContext2D context, Z4Painter painter, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression, double width, double height) {
+    Z4Painter finalPainter = $exists(painter) ? painter : new Z4ArrowPainter();
+    Z4SpatioTemporalColor finalspSpatioTemporalColor = $exists(spatioTemporalColor) ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
+    Z4ColorProgression finalColorProgression = $exists(progression) ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
+    
+  }
+  
   @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
