@@ -95,37 +95,12 @@ class Z4Airbrush extends Z4PointIterator {
       let vector = Z4Vector.fromVector(this.currentPoint.x + currentRadius * Math.cos(currenAngle), currentRadius * Math.sin(currenAngle) + this.currentPoint.y, 1, angle);
       let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
       let spatialPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.spatialPosition : -1;
-      if (color.isColor()) {
-      } else if (color.isGradientColor()) {
-        switch("" + progression.getColorProgressionBehavior()) {
-          case "SPATIAL":
-            break;
-          case "TEMPORAL":
-            if (this.currentMultiplicityCounter === 1) {
-              temporalPosition = progression.next(temporalPosition);
-            }
-            break;
-          case "RELATIVE_TO_PATH":
-            temporalPosition = currentRadius / this.radius;
-            break;
-          case "RANDOM":
-            temporalPosition = Math.random();
-            break;
-        }
-      } else if (color.isBiGradientColor()) {
-        switch("" + progression.getColorProgressionBehavior()) {
-          case "TEMPORAL":
-            if (this.currentMultiplicityCounter === 1) {
-              temporalPosition = progression.next(temporalPosition);
-            }
-            break;
-          case "RELATIVE_TO_PATH":
-            temporalPosition = currentRadius / this.radius;
-            break;
-          case "RANDOM":
-            temporalPosition = Math.random();
-            break;
-        }
+      if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.TEMPORAL && this.currentMultiplicityCounter === 1) {
+        temporalPosition = progression.next(temporalPosition);
+      } else if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RELATIVE_TO_PATH) {
+        temporalPosition = currentRadius / this.radius;
+      } else if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RANDOM) {
+        temporalPosition = Math.random();
       }
       this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, spatialPosition, false, this.rotation.computeSide(vector, null), false);
       return this.nextdDrawingPoint;

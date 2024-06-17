@@ -2,6 +2,7 @@ package pizzapazza.iterator;
 
 import def.js.Array;
 import pizzapazza.color.Z4ColorProgression;
+import pizzapazza.color.Z4ColorProgressionBehavior;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4FancifulValue;
@@ -244,35 +245,15 @@ public class Z4Tracer extends Z4PointIterator {
       boolean drawBounds = false;
       double temporalPosition = $exists(this.nextdDrawingPoint) ? this.nextdDrawingPoint.temporalPosition : -1;
       double spatialPosition = $exists(this.nextdDrawingPoint) ? this.nextdDrawingPoint.spatialPosition : -1;
-      if (color.isColor()) {
-      } else if (color.isGradientColor()) {
-        switch ("" + progression.getColorProgressionBehavior()) {
-          case "SPATIAL":
-            break;
-          case "TEMPORAL":
-            temporalPosition = progression.next(temporalPosition);
-            break;
-          case "RELATIVE_TO_PATH":
-            drawBounds = true;
-            break;
-          case "RANDOM":
-            temporalPosition = Math.random();
-            break;
-        }
-      } else if (color.isBiGradientColor()) {
-        switch ("" + progression.getColorProgressionBehavior()) {
-          case "TEMPORAL":
-            temporalPosition = progression.next(temporalPosition);
-            break;
-          case "RELATIVE_TO_PATH":
-            drawBounds = true;
-            break;
-          case "RANDOM":
-            temporalPosition = Math.random();
-            break;
-        }
+      
+      if (progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.TEMPORAL) {
+        temporalPosition = progression.next(temporalPosition);
+      } else if (progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RELATIVE_TO_PATH) {
+        drawBounds = true;
+      } else if (progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RANDOM) {
+        temporalPosition = Math.random();
       }
-
+      
       this.currentMultiplicityCounter++;
       if (this.currentMultiplicityCounter >= this.currentMultiplicityTotal) {
         this.currentMultiplicityCounter = 0;

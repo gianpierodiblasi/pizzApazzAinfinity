@@ -219,33 +219,12 @@ class Z4Tracer extends Z4PointIterator {
       let drawBounds = false;
       let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
       let spatialPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.spatialPosition : -1;
-      if (color.isColor()) {
-      } else if (color.isGradientColor()) {
-        switch("" + progression.getColorProgressionBehavior()) {
-          case "SPATIAL":
-            break;
-          case "TEMPORAL":
-            temporalPosition = progression.next(temporalPosition);
-            break;
-          case "RELATIVE_TO_PATH":
-            drawBounds = true;
-            break;
-          case "RANDOM":
-            temporalPosition = Math.random();
-            break;
-        }
-      } else if (color.isBiGradientColor()) {
-        switch("" + progression.getColorProgressionBehavior()) {
-          case "TEMPORAL":
-            temporalPosition = progression.next(temporalPosition);
-            break;
-          case "RELATIVE_TO_PATH":
-            drawBounds = true;
-            break;
-          case "RANDOM":
-            temporalPosition = Math.random();
-            break;
-        }
+      if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.TEMPORAL) {
+        temporalPosition = progression.next(temporalPosition);
+      } else if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RELATIVE_TO_PATH) {
+        drawBounds = true;
+      } else if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RANDOM) {
+        temporalPosition = Math.random();
       }
       this.currentMultiplicityCounter++;
       if (this.currentMultiplicityCounter >= this.currentMultiplicityTotal) {
