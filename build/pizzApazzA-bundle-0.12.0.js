@@ -9886,7 +9886,6 @@ class Z4Airbrush extends Z4PointIterator {
       let angle = this.rotation.next(currenAngle);
       let vector = Z4Vector.fromVector(this.currentPoint.x + currentRadius * Math.cos(currenAngle), currentRadius * Math.sin(currenAngle) + this.currentPoint.y, 1, angle);
       let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
-      let spatialPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.spatialPosition : -1;
       if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.TEMPORAL && this.currentMultiplicityCounter === 1) {
         temporalPosition = progression.next(temporalPosition);
       } else if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RELATIVE_TO_PATH) {
@@ -9894,7 +9893,7 @@ class Z4Airbrush extends Z4PointIterator {
       } else if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RANDOM) {
         temporalPosition = Math.random();
       }
-      this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, spatialPosition, false, this.rotation.computeSide(vector, null), false);
+      this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, false, this.rotation.computeSide(vector, null), false);
       return this.nextdDrawingPoint;
     }
   }
@@ -9991,7 +9990,7 @@ class Z4Scatterer extends Z4PointIterator {
       // this.progression.next(this.z4Point);
       // point.modeLighting=modeLighting;
       // point.colorPosition=this.evaluateColorPosition(nextScattering/scattering);
-      return new Z4DrawingPoint(vector, 1, 0, 0, false, this.rotation.computeSide(vector, currentVector), false);
+      return new Z4DrawingPoint(vector, 1, 0, false, this.rotation.computeSide(vector, currentVector), false);
     }
   }
 
@@ -10076,14 +10075,13 @@ class Z4Spirograph extends Z4PointIterator {
       let clone = this.clones[this.clonePos];
       this.clonePos--;
       this.hasNext = this.clonePos !== -1;
-      return new Z4DrawingPoint(clone.z4Vector, clone.intensity, this.clonePos / this.clones.length, clone.spatialPosition, false, clone.side, clone.useVectorModuleAsSize);
+      return new Z4DrawingPoint(clone.z4Vector, clone.intensity, this.clonePos / this.clones.length, false, clone.side, clone.useVectorModuleAsSize);
     } else {
       let currentVector = Z4Vector.fromPoints(this.center.x, this.center.y, this.currentPoint.x, this.currentPoint.y);
       let angle = this.rotation.next(currentVector.phase);
       let vector = Z4Vector.fromVector(this.center.x, this.center.y, currentVector.module, angle);
       let drawBounds = false;
       let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
-      let spatialPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.spatialPosition : -1;
       if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.TEMPORAL) {
         temporalPosition = progression.next(temporalPosition);
       } else if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RELATIVE_TO_PATH) {
@@ -10092,7 +10090,7 @@ class Z4Spirograph extends Z4PointIterator {
         temporalPosition = Math.random();
       }
       this.hasNext = false;
-      this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, spatialPosition, drawBounds, this.rotation.computeSide(vector, currentVector), true);
+      this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, drawBounds, this.rotation.computeSide(vector, currentVector), true);
       if (this.nextdDrawingPoint.drawBounds) {
         this.clones.push(this.nextdDrawingPoint);
       }
@@ -10196,13 +10194,12 @@ class Z4Stamper extends Z4PointIterator {
         vector = Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, 1, angle);
       }
       let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
-      let spatialPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.spatialPosition : -1;
       if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.TEMPORAL) {
         temporalPosition = progression.next(temporalPosition);
       } else if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RANDOM) {
         temporalPosition = Math.random();
       }
-      this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, spatialPosition, false, this.rotation.computeSide(vector, null), false);
+      this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, false, this.rotation.computeSide(vector, null), false);
       return nextdDrawingPoint;
     }
   }
@@ -10436,7 +10433,7 @@ class Z4Tracer extends Z4PointIterator {
       let clone = this.clones[this.clonePos];
       this.clonePos++;
       this.hasNext = this.clonePos < this.clones.length;
-      return new Z4DrawingPoint(clone.z4Vector, clone.intensity, this.clonePos / this.clones.length, clone.spatialPosition, false, clone.side, clone.useVectorModuleAsSize);
+      return new Z4DrawingPoint(clone.z4Vector, clone.intensity, this.clonePos / this.clones.length, false, clone.side, clone.useVectorModuleAsSize);
     } else {
       if (!this.currentMultiplicityCounter) {
         this.currentVector = this.path.next();
@@ -10452,7 +10449,6 @@ class Z4Tracer extends Z4PointIterator {
       }
       let drawBounds = false;
       let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
-      let spatialPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.spatialPosition : -1;
       if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.TEMPORAL) {
         temporalPosition = progression.next(temporalPosition);
       } else if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RELATIVE_TO_PATH) {
@@ -10468,7 +10464,7 @@ class Z4Tracer extends Z4PointIterator {
           this.surplus = this.path.getNewSurplus();
         }
       }
-      this.nextdDrawingPoint = new Z4DrawingPoint(vector, this.nextEnvelope(), temporalPosition, spatialPosition, drawBounds, this.rotation.computeSide(vector, this.currentVector), false);
+      this.nextdDrawingPoint = new Z4DrawingPoint(vector, this.nextEnvelope(), temporalPosition, drawBounds, this.rotation.computeSide(vector, this.currentVector), false);
       if (this.nextdDrawingPoint.drawBounds && this.nextdDrawingPoint.intensity > 0) {
         this.clones.push(this.nextdDrawingPoint);
       }

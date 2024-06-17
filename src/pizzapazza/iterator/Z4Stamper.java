@@ -96,8 +96,6 @@ public class Z4Stamper extends Z4PointIterator {
       }
 
       double temporalPosition = $exists(this.nextdDrawingPoint) ? this.nextdDrawingPoint.temporalPosition : -1;
-      double spatialPosition = $exists(this.nextdDrawingPoint) ? this.nextdDrawingPoint.spatialPosition : -1;
-      
       if (progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.TEMPORAL) {
         temporalPosition = progression.next(temporalPosition);
       } else if (progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RANDOM) {
@@ -108,7 +106,6 @@ public class Z4Stamper extends Z4PointIterator {
               vector,
               1,
               temporalPosition,
-              spatialPosition,
               false,
               this.rotation.computeSide(vector, null),
               false

@@ -87,7 +87,6 @@ public class Z4Scatterer extends Z4PointIterator {
               vector,
               1,
               0,
-              0,
               false,
               this.rotation.computeSide(vector, currentVector),
               false

@@ -202,7 +202,7 @@ class Z4Tracer extends Z4PointIterator {
       let clone = this.clones[this.clonePos];
       this.clonePos++;
       this.hasNext = this.clonePos < this.clones.length;
-      return new Z4DrawingPoint(clone.z4Vector, clone.intensity, this.clonePos / this.clones.length, clone.spatialPosition, false, clone.side, clone.useVectorModuleAsSize);
+      return new Z4DrawingPoint(clone.z4Vector, clone.intensity, this.clonePos / this.clones.length, false, clone.side, clone.useVectorModuleAsSize);
     } else {
       if (!this.currentMultiplicityCounter) {
         this.currentVector = this.path.next();
@@ -218,7 +218,6 @@ class Z4Tracer extends Z4PointIterator {
       }
       let drawBounds = false;
       let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
-      let spatialPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.spatialPosition : -1;
       if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.TEMPORAL) {
         temporalPosition = progression.next(temporalPosition);
       } else if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RELATIVE_TO_PATH) {
@@ -234,7 +233,7 @@ class Z4Tracer extends Z4PointIterator {
           this.surplus = this.path.getNewSurplus();
         }
       }
-      this.nextdDrawingPoint = new Z4DrawingPoint(vector, this.nextEnvelope(), temporalPosition, spatialPosition, drawBounds, this.rotation.computeSide(vector, this.currentVector), false);
+      this.nextdDrawingPoint = new Z4DrawingPoint(vector, this.nextEnvelope(), temporalPosition, drawBounds, this.rotation.computeSide(vector, this.currentVector), false);
       if (this.nextdDrawingPoint.drawBounds && this.nextdDrawingPoint.intensity > 0) {
         this.clones.push(this.nextdDrawingPoint);
       }

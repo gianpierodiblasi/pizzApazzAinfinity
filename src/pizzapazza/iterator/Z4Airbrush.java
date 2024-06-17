@@ -116,8 +116,6 @@ public class Z4Airbrush extends Z4PointIterator {
       Z4Vector vector = Z4Vector.fromVector(this.currentPoint.x + currentRadius * Math.cos(currenAngle), currentRadius * Math.sin(currenAngle) + this.currentPoint.y, 1, angle);
 
       double temporalPosition = $exists(this.nextdDrawingPoint) ? this.nextdDrawingPoint.temporalPosition : -1;
-      double spatialPosition = $exists(this.nextdDrawingPoint) ? this.nextdDrawingPoint.spatialPosition : -1;
-
       if (progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.TEMPORAL && this.currentMultiplicityCounter == 1) {
         temporalPosition = progression.next(temporalPosition);
       } else if (progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RELATIVE_TO_PATH) {
@@ -130,7 +128,6 @@ public class Z4Airbrush extends Z4PointIterator {
               vector,
               1,
               temporalPosition,
-              spatialPosition,
               false,
               this.rotation.computeSide(vector, null),
               false
