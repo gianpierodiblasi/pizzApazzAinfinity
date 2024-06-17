@@ -8,6 +8,7 @@ import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Rotation;
 import pizzapazza.math.Z4Vector;
 import static simulation.js.$Globals.$exists;
+import simulation.js.$Object;
 
 /**
  * The spirograph
@@ -34,7 +35,7 @@ public class Z4Spirograph extends Z4PointIterator {
   public Z4PointIteratorType getType() {
     return Z4PointIteratorType.SPIROGRAPH;
   }
-  
+
   @Override
   public boolean drawAction(Z4PointIteratorDrawingAction action, double x, double y) {
     if (action == Z4PointIteratorDrawingAction.START) {
@@ -143,5 +144,15 @@ public class Z4Spirograph extends Z4PointIterator {
   @Override
   public int getInfinitePointGeneratorSleep() {
     return 0;
+  }
+
+  /**
+   * Creates a Z4Spirograph from a JSON object
+   *
+   * @param json The JSON object
+   * @return the spirograph
+   */
+  public static Z4Spirograph fromJSON($Object json) {
+    return new Z4Spirograph(Z4Rotation.fromJSON(json.$get("rotation")));
   }
 }

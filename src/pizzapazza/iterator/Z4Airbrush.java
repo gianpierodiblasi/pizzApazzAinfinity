@@ -180,4 +180,19 @@ public class Z4Airbrush extends Z4PointIterator {
     json.$set("speed", this.speed);
     return json;
   }
+
+  /**
+   * Creates a Z4Airbrush from a JSON object
+   *
+   * @param json The JSON object
+   * @return the airbrush
+   */
+  public static Z4Airbrush fromJSON($Object json) {
+    return new Z4Airbrush(
+            Z4FancifulValue.fromJSON(json.$get("multiplicity")),
+            json.$get("radius"),
+            json.$get("speed"),
+            Z4Rotation.fromJSON(json.$get("rotation"))
+    );
+  }
 }

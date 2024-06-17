@@ -337,4 +337,23 @@ public class Z4Tracer extends Z4PointIterator {
     json.$set("step", this.step.toJSON());
     return json;
   }
+
+  /**
+   * Creates a Z4Tracer from a JSON object
+   *
+   * @param json The JSON object
+   * @return the tracer
+   */
+  public static Z4Tracer fromJSON($Object json) {
+    return new Z4Tracer(
+            Z4FancifulValue.fromJSON(json.$get("multiplicity")),
+            Z4FancifulValue.fromJSON(json.$get("push")),
+            Z4FancifulValue.fromJSON(json.$get("attack")),
+            Z4FancifulValue.fromJSON(json.$get("sustain")),
+            Z4FancifulValue.fromJSON(json.$get("release")),
+            json.$get("endlessSustain"),
+            Z4FancifulValue.fromJSON(json.$get("step")),
+            Z4Rotation.fromJSON(json.$get("rotation"))
+    );
+  }
 }

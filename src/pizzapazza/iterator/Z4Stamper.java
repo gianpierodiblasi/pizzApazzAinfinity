@@ -150,4 +150,17 @@ public class Z4Stamper extends Z4PointIterator {
     return json;
   }
 
+  /**
+   * Creates a Z4Stamper from a JSON object
+   *
+   * @param json The JSON object
+   * @return the stamper
+   */
+  public static Z4Stamper fromJSON($Object json) {
+    return new Z4Stamper(
+            Z4FancifulValue.fromJSON(json.$get("multiplicity")),
+            Z4FancifulValue.fromJSON(json.$get("push")),
+            Z4Rotation.fromJSON(json.$get("rotation"))
+    );
+  }
 }

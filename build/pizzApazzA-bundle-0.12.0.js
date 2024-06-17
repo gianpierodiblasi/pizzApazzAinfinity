@@ -9839,6 +9839,16 @@ class Z4Airbrush extends Z4PointIterator {
     json["speed"] = this.speed;
     return json;
   }
+
+  /**
+   * Creates a Z4Airbrush from a JSON object
+   *
+   * @param json The JSON object
+   * @return the airbrush
+   */
+  static  fromJSON(json) {
+    return new Z4Airbrush(Z4FancifulValue.fromJSON(json["multiplicity"]), json["radius"], json["speed"], Z4Rotation.fromJSON(json["rotation"]));
+  }
 }
 /**
  * @author gianpiero.diblasi
@@ -9923,6 +9933,16 @@ class Z4Scatterer extends Z4PointIterator {
     json["multiplicity"] = this.multiplicity.toJSON();
     json["scattering"] = this.scattering.toJSON();
     return json;
+  }
+
+  /**
+   * Creates a Z4Scatterer from a JSON object
+   *
+   * @param json The JSON object
+   * @return the scatterer
+   */
+  static  fromJSON(json) {
+    return new Z4Scatterer(Z4FancifulValue.fromJSON(json["multiplicity"]), Z4FancifulValue.fromJSON(json["scattering"]), Z4Rotation.fromJSON(json["rotation"]));
   }
 }
 /**
@@ -10032,6 +10052,16 @@ class Z4Spirograph extends Z4PointIterator {
 
    getInfinitePointGeneratorSleep() {
     return 0;
+  }
+
+  /**
+   * Creates a Z4Spirograph from a JSON object
+   *
+   * @param json The JSON object
+   * @return the spirograph
+   */
+  static  fromJSON(json) {
+    return new Z4Spirograph(Z4Rotation.fromJSON(json["rotation"]));
   }
 }
 /**
@@ -10153,6 +10183,16 @@ class Z4Stamper extends Z4PointIterator {
     json["multiplicity"] = this.multiplicity.toJSON();
     json["push"] = this.push.toJSON();
     return json;
+  }
+
+  /**
+   * Creates a Z4Stamper from a JSON object
+   *
+   * @param json The JSON object
+   * @return the stamper
+   */
+  static  fromJSON(json) {
+    return new Z4Stamper(Z4FancifulValue.fromJSON(json["multiplicity"]), Z4FancifulValue.fromJSON(json["push"]), Z4Rotation.fromJSON(json["rotation"]));
   }
 }
 /**
@@ -10453,6 +10493,16 @@ class Z4Tracer extends Z4PointIterator {
     json["endlessSustain"] = this.endlessSustain;
     json["step"] = this.step.toJSON();
     return json;
+  }
+
+  /**
+   * Creates a Z4Tracer from a JSON object
+   *
+   * @param json The JSON object
+   * @return the tracer
+   */
+  static  fromJSON(json) {
+    return new Z4Tracer(Z4FancifulValue.fromJSON(json["multiplicity"]), Z4FancifulValue.fromJSON(json["push"]), Z4FancifulValue.fromJSON(json["attack"]), Z4FancifulValue.fromJSON(json["sustain"]), Z4FancifulValue.fromJSON(json["release"]), json["endlessSustain"], Z4FancifulValue.fromJSON(json["step"]), Z4Rotation.fromJSON(json["rotation"]));
   }
 }
 /**

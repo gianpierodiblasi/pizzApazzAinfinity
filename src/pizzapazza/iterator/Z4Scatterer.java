@@ -112,4 +112,18 @@ public class Z4Scatterer extends Z4PointIterator {
     json.$set("scattering", this.scattering.toJSON());
     return json;
   }
+
+  /**
+   * Creates a Z4Scatterer from a JSON object
+   *
+   * @param json The JSON object
+   * @return the scatterer
+   */
+  public static Z4Scatterer fromJSON($Object json) {
+    return new Z4Scatterer(
+            Z4FancifulValue.fromJSON(json.$get("multiplicity")),
+            Z4FancifulValue.fromJSON(json.$get("scattering")),
+            Z4Rotation.fromJSON(json.$get("rotation"))
+    );
+  }
 }

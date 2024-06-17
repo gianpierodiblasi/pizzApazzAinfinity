@@ -118,4 +118,14 @@ class Z4Stamper extends Z4PointIterator {
     json["push"] = this.push.toJSON();
     return json;
   }
+
+  /**
+   * Creates a Z4Stamper from a JSON object
+   *
+   * @param json The JSON object
+   * @return the stamper
+   */
+  static  fromJSON(json) {
+    return new Z4Stamper(Z4FancifulValue.fromJSON(json["multiplicity"]), Z4FancifulValue.fromJSON(json["push"]), Z4Rotation.fromJSON(json["rotation"]));
+  }
 }

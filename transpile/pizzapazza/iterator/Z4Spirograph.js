@@ -106,4 +106,14 @@ class Z4Spirograph extends Z4PointIterator {
    getInfinitePointGeneratorSleep() {
     return 0;
   }
+
+  /**
+   * Creates a Z4Spirograph from a JSON object
+   *
+   * @param json The JSON object
+   * @return the spirograph
+   */
+  static  fromJSON(json) {
+    return new Z4Spirograph(Z4Rotation.fromJSON(json["rotation"]));
+  }
 }

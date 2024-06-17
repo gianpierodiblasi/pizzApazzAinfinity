@@ -6,7 +6,6 @@ import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4NextableWithTwoParams;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Rotation;
-import pizzapazza.painter.Z4PainterType;
 import simulation.js.$Object;
 
 /**
