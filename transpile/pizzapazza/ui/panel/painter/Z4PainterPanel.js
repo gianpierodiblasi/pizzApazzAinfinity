@@ -11,6 +11,12 @@ class Z4PainterPanel extends Z4AbstractValuePanel {
    */
    valueIsAdjusting = false;
 
+  constructor() {
+    super();
+    this.cssAddClass("z4painterpanel");
+    this.setLayout(new GridBagLayout());
+  }
+
   /**
    * Returns if the value is adjusting
    *

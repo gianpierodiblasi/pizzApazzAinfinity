@@ -7477,6 +7477,12 @@ class Z4PainterPanel extends Z4AbstractValuePanel {
    */
    valueIsAdjusting = false;
 
+  constructor() {
+    super();
+    this.cssAddClass("z4painterpanel");
+    this.setLayout(new GridBagLayout());
+  }
+
   /**
    * Returns if the value is adjusting
    *
@@ -7490,6 +7496,11 @@ class Z4PainterPanel extends Z4AbstractValuePanel {
  * @author gianpiero.diblasi
  */
 class Z4Shape2DPainterPanel extends Z4PainterPanel {
+
+  constructor() {
+    super();
+    this.cssAddClass("z4shape2dpainterpanel");
+  }
 
    setValue(value) {
   }

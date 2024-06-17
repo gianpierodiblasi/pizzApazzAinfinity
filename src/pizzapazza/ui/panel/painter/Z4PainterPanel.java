@@ -1,5 +1,6 @@
 package pizzapazza.ui.panel.painter;
 
+import javascript.awt.GridBagLayout;
 import pizzapazza.painter.Z4Painter;
 import pizzapazza.ui.panel.Z4AbstractValuePanel;
 
@@ -15,7 +16,13 @@ public abstract class Z4PainterPanel<T extends Z4Painter> extends Z4AbstractValu
    * true if value is adjusting, false otherwise
    */
   protected boolean valueIsAdjusting;
-  
+
+  public Z4PainterPanel() {
+    super();
+    this.cssAddClass("z4painterpanel");
+    this.setLayout(new GridBagLayout());
+  }
+
   /**
    * Returns if the value is adjusting
    *
