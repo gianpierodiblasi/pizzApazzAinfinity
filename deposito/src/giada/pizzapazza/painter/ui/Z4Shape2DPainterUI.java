@@ -30,15 +30,10 @@ public class Z4Shape2DPainterUI extends Z4PainterUI<Z4Shape2DPainter> {
   private final Z4FancifulValueUI borderHeight = new Z4FancifulValueUI().setValueLabel("HEIGHT", true, false).setConstantRange(0, 100, false).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".shape2d-painter-container-third-row"));
   private final Z4ColorUI borderColor = new Z4ColorUI().setColorLabel("COLOR", true, false).appendToElement(this.querySelector(".shape2d-painter-container-third-row"));
 
-  private final static String PATH = Z4Loader.UP + (Z4Loader.allFiles ? "src/image/" : "build/image/");
-  private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/painter/ui/Z4Shape2DPainterUI.html");
-
   /**
    * Creates a Z4Shape2DPainterUI
    */
   public Z4Shape2DPainterUI() {
-    super(Z4Shape2DPainterUI.UI);
-
     NodeList imgs = this.querySelectorAll(".shape2d-painter-shape-dropdown-menu img[data-type='shape']");
     for (int i = 0; i < imgs.length; i++) {
       HTMLElement img = (HTMLElement) imgs.item(i);
@@ -181,9 +176,5 @@ public class Z4Shape2DPainterUI extends Z4PainterUI<Z4Shape2DPainter> {
     this.borderWidth.setValue(this.value.getBorderWidth());
     this.borderHeight.setValue(this.value.getBorderHeight());
     this.borderColor.setValue(this.value.getBorderColor());
-
-    this.drawCanvas();
-
-    return (T) this;
   }
 }
