@@ -41,29 +41,5 @@ public class Z4Airbrush extends Z4PointIterator<Z4Airbrush> {
     this.draw(Z4Action.STOP, width / 2, height / 2);
   }
 
-  /**
-   * Returns the multiplicity
-   * @return The multiplicity
-   */
-  public Z4FancifulValue getMultiplicity() {
-    return this.multiplicity;
-  }
-
-  /**
-   * Returns the radius
-   *
-   * @return The radius
-   */
-  public double getRadius() {
-    return this.radius;
-  }
-
-  /**
-   * Returns the speed
-   *
-   * @return The speed
-   */
-  public double getSpeed() {
-    return this.speed;
-  }
+  
 }

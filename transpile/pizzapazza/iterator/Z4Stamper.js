@@ -30,6 +30,24 @@ class Z4Stamper extends Z4PointIterator {
     return Z4PointIteratorType.STAMPER;
   }
 
+  /**
+   * Returns the multiplicity
+   *
+   * @return The multiplicity
+   */
+   getMultiplicity() {
+    return this.multiplicity;
+  }
+
+  /**
+   * Returns the push
+   *
+   * @return The push
+   */
+   getPush() {
+    return this.push;
+  }
+
    drawAction(action, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.currentMultiplicityCounter = 0;

@@ -80,6 +80,69 @@ class Z4Tracer extends Z4PointIterator {
     return Z4PointIteratorType.TRACER;
   }
 
+  /**
+   * Returns the multiplicity
+   *
+   * @return The multiplicity
+   */
+   getMultiplicity() {
+    return this.multiplicity;
+  }
+
+  /**
+   * Returns the push
+   *
+   * @return The push
+   */
+   getPush() {
+    return this.push;
+  }
+
+  /**
+   * Returns the attack
+   *
+   * @return The attack
+   */
+   getAttack() {
+    return this.attack;
+  }
+
+  /**
+   * Returns the release
+   *
+   * @return The release
+   */
+   getRelease() {
+    return this.release;
+  }
+
+  /**
+   * Returns the sustain
+   *
+   * @return The sustain
+   */
+   getSustain() {
+    return this.sustain;
+  }
+
+  /**
+   * Checks if the sustain is endless
+   *
+   * @return true for an endless sustain, false otherwise
+   */
+   isEndlessSustain() {
+    return this.endlessSustain;
+  }
+
+  /**
+   * Returns the step
+   *
+   * @return The step
+   */
+   getStep() {
+    return this.step;
+  }
+
    drawAction(action, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.currentPoint = new Z4Point(x, y);

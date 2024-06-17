@@ -43,6 +43,24 @@ public class Z4Stamper extends Z4PointIterator {
     return Z4PointIteratorType.STAMPER;
   }
 
+  /**
+   * Returns the multiplicity
+   *
+   * @return The multiplicity
+   */
+  public Z4FancifulValue getMultiplicity() {
+    return this.multiplicity;
+  }
+
+  /**
+   * Returns the push
+   *
+   * @return The push
+   */
+  public Z4FancifulValue getPush() {
+    return this.push;
+  }
+
   @Override
   public boolean drawAction(Z4PointIteratorDrawingAction action, double x, double y) {
     if (action == Z4PointIteratorDrawingAction.START) {

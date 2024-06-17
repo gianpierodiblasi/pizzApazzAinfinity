@@ -9308,10 +9308,10 @@ class Z4DrawingTool extends Z4Nextable {
 
    toJSON() {
     let json = new Object();
-    json["pointIterator"] = this.pointIterator;
-    json["painter"] = this.painter;
-    json["spatioTemporalColor"] = this.spatioTemporalColor;
-    json["progression"] = this.progression;
+    json["pointIterator"] = this.pointIterator.toJSON();
+    json["painter"] = this.painter.toJSON();
+    json["spatioTemporalColor"] = this.spatioTemporalColor.toJSON();
+    json["progression"] = this.progression.toJSON();
     return json;
   }
 }
@@ -9641,6 +9641,15 @@ class Z4PointIterator extends Z4NextableWithTwoParams {
   }
 
   /**
+   * Returns the rotation
+   *
+   * @return The rotation
+   */
+   getRotation() {
+    return this.rotation;
+  }
+
+  /**
    * Performs a drawing action
    *
    * @param action The action
@@ -9715,6 +9724,33 @@ class Z4Airbrush extends Z4PointIterator {
 
    getType() {
     return Z4PointIteratorType.AIRBRUSH;
+  }
+
+  /**
+   * Returns the multiplicity
+   *
+   * @return The multiplicity
+   */
+   getMultiplicity() {
+    return this.multiplicity;
+  }
+
+  /**
+   * Returns the radius
+   *
+   * @return The radius
+   */
+   getRadius() {
+    return this.radius;
+  }
+
+  /**
+   * Returns the speed
+   *
+   * @return The speed
+   */
+   getSpeed() {
+    return this.speed;
   }
 
    drawAction(action, x, y) {
@@ -10030,6 +10066,24 @@ class Z4Stamper extends Z4PointIterator {
     return Z4PointIteratorType.STAMPER;
   }
 
+  /**
+   * Returns the multiplicity
+   *
+   * @return The multiplicity
+   */
+   getMultiplicity() {
+    return this.multiplicity;
+  }
+
+  /**
+   * Returns the push
+   *
+   * @return The push
+   */
+   getPush() {
+    return this.push;
+  }
+
    drawAction(action, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.currentMultiplicityCounter = 0;
@@ -10181,6 +10235,69 @@ class Z4Tracer extends Z4PointIterator {
 
    getType() {
     return Z4PointIteratorType.TRACER;
+  }
+
+  /**
+   * Returns the multiplicity
+   *
+   * @return The multiplicity
+   */
+   getMultiplicity() {
+    return this.multiplicity;
+  }
+
+  /**
+   * Returns the push
+   *
+   * @return The push
+   */
+   getPush() {
+    return this.push;
+  }
+
+  /**
+   * Returns the attack
+   *
+   * @return The attack
+   */
+   getAttack() {
+    return this.attack;
+  }
+
+  /**
+   * Returns the release
+   *
+   * @return The release
+   */
+   getRelease() {
+    return this.release;
+  }
+
+  /**
+   * Returns the sustain
+   *
+   * @return The sustain
+   */
+   getSustain() {
+    return this.sustain;
+  }
+
+  /**
+   * Checks if the sustain is endless
+   *
+   * @return true for an endless sustain, false otherwise
+   */
+   isEndlessSustain() {
+    return this.endlessSustain;
+  }
+
+  /**
+   * Returns the step
+   *
+   * @return The step
+   */
+   getStep() {
+    return this.step;
   }
 
    drawAction(action, x, y) {

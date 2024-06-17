@@ -59,45 +59,4 @@ public class Z4Stamper extends Z4PointIterator<Z4Stamper> {
       }
     }
     return array;
-  }
-
-  /**
-   * Returns the multiplicity
-   *
-   * @return The multiplicity
-   */
-  public Z4FancifulValue getMultiplicity() {
-    return this.multiplicity;
-  }
-
-  /**
-   * Sets the multiplicity
-   *
-   * @param multiplicity The multiplicity
-   * @return This Z4Stamper
-   */
-  public Z4Stamper setMultiplicity(Z4FancifulValue multiplicity) {
-    this.multiplicity = multiplicity;
-    return this;
-  }
-
-  /**
-   * Returns the push
-   *
-   * @return The push
-   */
-  public Z4FancifulValue getPush() {
-    return this.push;
-  }
-
-  /**
-   * Sets the push
-   *
-   * @param push The push
-   * @return This Z4Stamper
-   */
-  public Z4Stamper setPush(Z4FancifulValue push) {
-    this.push = push;
-    return this;
-  }
-}
+  }  

@@ -79,10 +79,10 @@ class Z4DrawingTool extends Z4Nextable {
 
    toJSON() {
     let json = new Object();
-    json["pointIterator"] = this.pointIterator;
-    json["painter"] = this.painter;
-    json["spatioTemporalColor"] = this.spatioTemporalColor;
-    json["progression"] = this.progression;
+    json["pointIterator"] = this.pointIterator.toJSON();
+    json["painter"] = this.painter.toJSON();
+    json["spatioTemporalColor"] = this.spatioTemporalColor.toJSON();
+    json["progression"] = this.progression.toJSON();
     return json;
   }
 }

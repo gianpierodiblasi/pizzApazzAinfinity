@@ -54,6 +54,15 @@ public abstract class Z4PointIterator implements Z4NextableWithTwoParams<Z4Drawi
   public abstract Z4PointIteratorType getType();
 
   /**
+   * Returns the rotation
+   *
+   * @return The rotation
+   */
+  public Z4Rotation getRotation() {
+    return this.rotation;
+  }
+
+  /**
    * Performs a drawing action
    *
    * @param action The action

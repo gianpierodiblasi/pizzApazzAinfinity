@@ -91,10 +91,10 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
   @Override
   public $Object toJSON() {
     $Object json = new $Object();
-    json.$set("pointIterator", this.pointIterator);
-    json.$set("painter", this.painter);
-    json.$set("spatioTemporalColor", this.spatioTemporalColor);
-    json.$set("progression", this.progression);
+    json.$set("pointIterator", this.pointIterator.toJSON());
+    json.$set("painter", this.painter.toJSON());
+    json.$set("spatioTemporalColor", this.spatioTemporalColor.toJSON());
+    json.$set("progression", this.progression.toJSON());
     return json;
   }
 }

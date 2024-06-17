@@ -44,6 +44,15 @@ class Z4PointIterator extends Z4NextableWithTwoParams {
   }
 
   /**
+   * Returns the rotation
+   *
+   * @return The rotation
+   */
+   getRotation() {
+    return this.rotation;
+  }
+
+  /**
    * Performs a drawing action
    *
    * @param action The action

@@ -21,15 +21,6 @@ public abstract class Z4PointIterator {
   }
 
   /**
-   * Returns the rotation
-   *
-   * @return The rotation
-   */
-  public Z4Rotation getRotation() {
-    return this.rotation;
-  }
-
-  /**
    * Draws a demo of this Z4PointIterator
    *
    * @param context The context where to draw the demo

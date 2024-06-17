@@ -34,6 +34,33 @@ class Z4Airbrush extends Z4PointIterator {
     return Z4PointIteratorType.AIRBRUSH;
   }
 
+  /**
+   * Returns the multiplicity
+   *
+   * @return The multiplicity
+   */
+   getMultiplicity() {
+    return this.multiplicity;
+  }
+
+  /**
+   * Returns the radius
+   *
+   * @return The radius
+   */
+   getRadius() {
+    return this.radius;
+  }
+
+  /**
+   * Returns the speed
+   *
+   * @return The speed
+   */
+   getSpeed() {
+    return this.speed;
+  }
+
    drawAction(action, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.currentMultiplicityCounter = 0;
