@@ -27,6 +27,8 @@ class Z4Shape2DPainter extends Z4Painter {
 
    borderColor = null;
 
+   path = new Path2D();
+
   /**
    * Creates the object
    *
@@ -55,6 +57,26 @@ class Z4Shape2DPainter extends Z4Painter {
     this.borderWidth = borderWidth;
     this.borderHeight = borderHeight;
     this.borderColor = borderColor;
+    if (vertices === -1) {
+      this.path.arc(0, 0, 0.5, 0, Z4Math.TWO_PI);
+    } else if (star) {
+      Z4Math.getStarVertices(vertices).forEach((point, index, array) => {
+        if (index) {
+          this.path.lineTo(point.x, point.y);
+        } else {
+          this.path.moveTo(point.x, point.y);
+        }
+      });
+    } else {
+      Z4Math.getPolygonVertices(vertices).forEach((point, index, array) => {
+        if (index) {
+          this.path.lineTo(point.x, point.y);
+        } else {
+          this.path.moveTo(point.x, point.y);
+        }
+      });
+    }
+    this.path.closePath();
   }
 
    getType() {

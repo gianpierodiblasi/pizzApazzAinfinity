@@ -1,5 +1,6 @@
 package pizzapazza.math;
 
+import def.js.Array;
 import def.js.Math;
 
 /**
@@ -205,6 +206,37 @@ public class Z4Math {
     double rnd = (max - min) * ripple * Math.random();
     value += Math.random() > 0.5 ? rnd : -rnd;
     return value < min ? min : value > max ? max : value;
+  }
+
+  /**
+   * Returns the vertices of a polygon inscribed in a circle with radius = 1
+   *
+   * @param vertexCount The vertex count
+   * @return The vertices
+   */
+  public static Array<Z4Point> getPolygonVertices(int vertexCount) {
+    Array<Z4Point> vertices = new Array<>();
+    for (int index = 0; index < vertexCount; index++) {
+      vertices.push(new Z4Point(Math.cos(index * Z4Math.TWO_PI / vertexCount), Math.sin(index * Z4Math.TWO_PI / vertexCount)));
+    }
+    return vertices;
+  }
+
+  /**
+   * Returns the vertices of a star inscribed in a circle with radius = 1
+   *
+   * @param vertexCount The vertex count
+   * @return The vertices
+   */
+  public static Array<Z4Point> getStarVertices(int vertexCount) {
+    Array<Z4Point> vertices = new Array<>();
+    for (int index = 0; index < vertexCount; index++) {
+      double val = index * Z4Math.TWO_PI / vertexCount;
+      vertices.push(new Z4Point(Math.cos(val), Math.sin(val)));
+      val = (index * Z4Math.TWO_PI + Math.PI) / vertexCount;
+      vertices.push(new Z4Point(Math.cos(val) / Z4Math.SQUARE_GOLD_SECTION, Math.sin(val) / Z4Math.SQUARE_GOLD_SECTION));
+    }
+    return vertices;
   }
 
   private Z4Math() {

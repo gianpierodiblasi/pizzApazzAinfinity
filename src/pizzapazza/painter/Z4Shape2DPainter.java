@@ -5,9 +5,11 @@ import pizzapazza.color.Z4ColorProgression;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4FancifulValue;
+import pizzapazza.math.Z4Math;
 import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
 import simulation.js.$Object;
+import simulation.js.$Path2D;
 
 /**
  * The painter of 2D shapes
@@ -29,6 +31,8 @@ public class Z4Shape2DPainter extends Z4Painter {
   private final Z4FancifulValue borderWidth;
   private final Z4FancifulValue borderHeight;
   private final Color borderColor;
+
+  private final $Path2D path = new $Path2D();
 
   /**
    * Creates the object
@@ -63,6 +67,27 @@ public class Z4Shape2DPainter extends Z4Painter {
     this.borderWidth = borderWidth;
     this.borderHeight = borderHeight;
     this.borderColor = borderColor;
+
+    if (vertices == -1) {
+      this.path.arc(0, 0, 0.5, 0, Z4Math.TWO_PI);
+    } else if (star) {
+      Z4Math.getStarVertices(vertices).forEach((point, index, array) -> {
+        if ($exists(index)) {
+          this.path.lineTo(point.x, point.y);
+        } else {
+          this.path.moveTo(point.x, point.y);
+        }
+      });
+    } else {
+      Z4Math.getPolygonVertices(vertices).forEach((point, index, array) -> {
+        if ($exists(index)) {
+          this.path.lineTo(point.x, point.y);
+        } else {
+          this.path.moveTo(point.x, point.y);
+        }
+      });
+    }
+    this.path.closePath();
   }
 
   @Override
