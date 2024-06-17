@@ -18,6 +18,8 @@ class Z4PointIteratorPanel extends Z4AbstractValuePanel {
     super();
     this.cssAddClass("z4pointiteratorpanel");
     this.setLayout(new GridBagLayout());
+    this.rotation.setLabel(Z4Translations.ROTATION);
+    this.rotation.cssAddClass("z4abstractvaluepanel-titled");
     this.rotation.addChangeListener(event => this.onIteratorChange());
   }
 

@@ -135,6 +135,11 @@ public class Z4Translations {
   public static String TEMPORAL = "";
   public static String LIGHTING = "";
 
+  // Point Iterator
+  public static String MULTIPLICITY = "";
+  public static String PUSH = "";
+  public static String ROTATION = "";
+
   // Math
   public static String POSITIVE = "";
   public static String NEGATIVE = "";
@@ -323,6 +328,11 @@ public class Z4Translations {
     Z4Translations.TEMPORAL = "Temporal";
     Z4Translations.LIGHTING = "Lighting";
 
+    // Point Iterator
+    Z4Translations.MULTIPLICITY = "Multiplicity";
+    Z4Translations.PUSH = "Push";
+    Z4Translations.ROTATION = "Rotation";
+
     // Math
     Z4Translations.POSITIVE = "Positive";
     Z4Translations.NEGATIVE = "Negative";
@@ -494,6 +504,11 @@ public class Z4Translations {
     Z4Translations.SPATIAL = "Spaziale";
     Z4Translations.TEMPORAL = "Temporale";
     Z4Translations.LIGHTING = "Illuminazione";
+
+    // Point Iterator
+    Z4Translations.MULTIPLICITY = "Molteplicit\u00E0";
+    Z4Translations.PUSH = "Spinta";
+    Z4Translations.ROTATION = "Rotazione";
 
     // Math
     Z4Translations.POSITIVE = "Positivo";

@@ -1051,6 +1051,18 @@ class TestFillerPanel extends JSFrame {
 /**
  * @author gianpiero.diblasi
  */
+class TestPointIteratorPanel extends JSFrame {
+
+  constructor(panel) {
+    super();
+    let p = new JSPanel();
+    p.add(panel, null);
+    this.getContentPane().add(p, BorderLayout.NORTH);
+  }
+}
+/**
+ * @author gianpiero.diblasi
+ */
 class TestFancifulValuePanel extends JSFrame {
 
   constructor() {

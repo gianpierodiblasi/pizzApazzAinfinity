@@ -4934,15 +4934,6 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
     ctx.stroke();
   }
 }
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-/**
- * @author gianpiero.diblasi
- */
-class Z4PointIteratorPanel {
-}
 /**
  * The orientation of a fanciful value panel
  *
@@ -6453,19 +6444,89 @@ class Z4LightingPanel extends Z4AbstractValuePanel {
   }
 }
 /**
+ * The abstract panel to edit a Z4PointIterator
+ *
+ * @author gianpiero.diblasi
+ * @param <T> The point iterator type
+ */
+class Z4PointIteratorPanel extends Z4AbstractValuePanel {
+
+  /**
+   * The rotation panel
+   */
+   rotation = new Z4RotationPanel(Z4RotationPanelOrientation.HORIZONTAL);
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super();
+    this.cssAddClass("z4pointiteratorpanel");
+    this.setLayout(new GridBagLayout());
+    this.rotation.setLabel(Z4Translations.ROTATION);
+    this.rotation.cssAddClass("z4abstractvaluepanel-titled");
+    this.rotation.addChangeListener(event => this.onIteratorChange());
+  }
+
+  /**
+   * The method to call on iterator changes
+   */
+   onIteratorChange() {
+  }
+
+   setValue(value) {
+    this.rotation.setValue(value.getRotation());
+  }
+
+   setEnabled(b) {
+    super.setEnabled(b);
+    this.rotation.setEnabled(b);
+  }
+}
+/**
  * @author gianpiero.diblasi
  */
-class Z4StamperPanel extends Z4AbstractValuePanel {
+class Z4StamperPanel extends Z4PointIteratorPanel {
 
    multiplicity = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
 
    push = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
 
+  /**
+   * Creates the object
+   */
   constructor() {
-    this.setValue(new Z4Stamper(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 5), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(5, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(10, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(30, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)));
+    super();
+    this.cssAddClass("z4stamperpanel");
+    this.add(this.multiplicity, new GBC(0, 0).i(0, 0, 1, 0));
+    this.add(this.push, new GBC(0, 1).i(0, 0, 1, 0));
+    this.add(this.rotation, new GBC(0, 2));
+    this.multiplicity.setSignsVisible(false);
+    this.multiplicity.setLabel(Z4Translations.MULTIPLICITY);
+    this.multiplicity.cssAddClass("z4abstractvaluepanel-titled");
+    this.multiplicity.addChangeListener(event => this.onIteratorChange());
+    this.push.setSignsVisible(false);
+    this.push.setLabel(Z4Translations.PUSH);
+    this.push.cssAddClass("z4abstractvaluepanel-titled");
+    this.push.addChangeListener(event => this.onIteratorChange());
+    this.setValue(new Z4Stamper(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)));
+  }
+
+   onIteratorChange() {
+    this.value = new Z4Stamper(this.multiplicity.getValue(), this.push.getValue(), this.rotation.getValue());
+    this.onchange();
   }
 
    setValue(value) {
+    super.setValue(value);
+    this.multiplicity.setValue(value.getMultiplicity());
+    this.push.setValue(value.getPush());
+  }
+
+   setEnabled(b) {
+    super.setEnabled(b);
+    this.multiplicity.setEnabled(b);
+    this.push.setEnabled(b);
   }
 }
 /**
@@ -6803,8 +6864,8 @@ class Z4FancifulValuePanel extends Z4AbstractValuePanel {
     this.setLayout(new GridBagLayout());
     this.orientation = orientation;
     if (orientation === Z4FancifulValuePanelOrientation.HORIZONTAL) {
-      this.add(this.label, new GBC(0, 0).w(2).a(GBC.WEST));
-      this.add(this.uniformSign, new GBC(2, 0).w(2).a(GBC.EAST));
+      this.add(this.label, new GBC(0, 0).w(3).a(GBC.WEST));
+      this.add(this.uniformSign, new GBC(3, 0).a(GBC.EAST));
       this.sign = new Z4SignPanel(Z4SignPanelOrientation.SQUARED);
       this.add(this.sign, new GBC(0, 1).i(0, 0, 0, 2).a(GBC.SOUTH));
       this.constant = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.HORIZONTAL);
@@ -11735,6 +11796,13 @@ class Z4Translations {
 
   static  LIGHTING = "";
 
+  // Point Iterator
+  static  MULTIPLICITY = "";
+
+  static  PUSH = "";
+
+  static  ROTATION = "";
+
   // Math
   static  POSITIVE = "";
 
@@ -11949,6 +12017,10 @@ class Z4Translations {
     Z4Translations.SPATIAL = "Spatial";
     Z4Translations.TEMPORAL = "Temporal";
     Z4Translations.LIGHTING = "Lighting";
+    // Point Iterator
+    Z4Translations.MULTIPLICITY = "Multiplicity";
+    Z4Translations.PUSH = "Push";
+    Z4Translations.ROTATION = "Rotation";
     // Math
     Z4Translations.POSITIVE = "Positive";
     Z4Translations.NEGATIVE = "Negative";
@@ -12108,6 +12180,10 @@ class Z4Translations {
     Z4Translations.SPATIAL = "Spaziale";
     Z4Translations.TEMPORAL = "Temporale";
     Z4Translations.LIGHTING = "Illuminazione";
+    // Point Iterator
+    Z4Translations.MULTIPLICITY = "Molteplicit\u00E0";
+    Z4Translations.PUSH = "Spinta";
+    Z4Translations.ROTATION = "Rotazione";
     // Math
     Z4Translations.POSITIVE = "Positivo";
     Z4Translations.NEGATIVE = "Negativo";

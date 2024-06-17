@@ -27,9 +27,6 @@ public abstract class Z4PainterUI<S extends Z4Painter<S>> extends Z4AbstractComp
   private final $Canvas canvas = ($Canvas) this.querySelector(".painter-canvas");
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
 
-  private Z4PointIterator<?> pointIterator = new Z4Stamper();
-  private Z4GradientColor gradientColor = new Z4GradientColor();
-
   /**
    * Draws the demo canvas
    */

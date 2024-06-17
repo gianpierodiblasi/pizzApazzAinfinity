@@ -32,57 +32,6 @@ public abstract class Z4PointIteratorUI<S extends Z4PointIterator<S>> extends Z4
   private final $Canvas canvas = ($Canvas) this.querySelector(".point-iterator-canvas");
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
 
-  
-  private final Z4ProgressionUI progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".point-iterator-container"));
-
-  private final $HTMLElement arrowModule = this.querySelector(".point-iterator-arrow-module-range");
-  private final Z4ArrowPainter arrowPainter = new Z4ArrowPainter();
-  private Z4Painter<?> painter;
-  private Z4GradientColor gradientColor = new Z4GradientColor();
-
-  private final $ResizeObserver resizeObserver = new $ResizeObserver(() -> this.drawCanvas());
-  private final $MutationObserver mutationObserver = new $MutationObserver(() -> this.drawCanvas());
-
-  /**
-   * Creates a Z4PointIteratorUI
-   *
-   * @param ui The HTML
-   */
-  protected Z4PointIteratorUI(String ui) {
-    super(ui);
-
-    this.rotation.oninput = (v) -> this.setRP(v, null, false);
-    this.rotation.onchange = (v) -> this.setRP(v, null, true);
-    this.progression.oninput = (v) -> this.setRP(null, v, false);
-    this.progression.onchange = (v) -> this.setRP(null, v, true);
-
-    this.arrowModule.oninput = (event) -> this.setModule();
-    this.arrowModule.onchange = (event) -> this.setModule();
-  }
-
-  private void setRP(Z4Rotation rotation, Z4Progression progression, boolean onchange) {
-    if ($exists(rotation)) {
-      this.value.setRotation(rotation);
-    }
-    if ($exists(progression)) {
-      this.value.setProgression(progression);
-    }
-
-    this.drawCanvas();
-
-    if (onchange) {
-      this.onchange.$apply(this.value);
-    } else {
-      this.oninput.$apply(this.value);
-    }
-  }
-
-  private Object setModule() {
-    this.arrowPainter.setModule(this.arrowModule.valueAsNumber);
-    this.drawCanvas();
-    return null;
-  }
-
   /**
    * Draws the demo canvas
    */

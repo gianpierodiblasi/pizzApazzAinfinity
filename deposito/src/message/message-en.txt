@@ -11,9 +11,6 @@ Z4Translations.RANGE = "Range";
 
 # Label
 Z4Translations.INTENSITY = "Intensity";
-Z4Translations.MULTIPLICITY = "Multiplicity";
-Z4Translations.PUSH = "Push";
-Z4Translations.ROTATION = "Rotation";
 Z4Translations.ATTACK = "Attack";
 Z4Translations.SUSTAIN = "Sustain";
 Z4Translations.RELEASE = "Release";

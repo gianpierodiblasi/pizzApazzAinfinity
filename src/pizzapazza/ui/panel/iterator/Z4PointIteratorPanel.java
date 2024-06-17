@@ -5,6 +5,7 @@ import pizzapazza.iterator.Z4PointIterator;
 import pizzapazza.ui.panel.Z4AbstractValuePanel;
 import pizzapazza.ui.panel.math.Z4RotationPanel;
 import pizzapazza.ui.panel.math.Z4RotationPanelOrientation;
+import pizzapazza.util.Z4Translations;
 
 /**
  * The abstract panel to edit a Z4PointIterator
@@ -27,6 +28,8 @@ public abstract class Z4PointIteratorPanel<T extends Z4PointIterator> extends Z4
     this.cssAddClass("z4pointiteratorpanel");
     this.setLayout(new GridBagLayout());
     
+    this.rotation.setLabel(Z4Translations.ROTATION);
+    this.rotation.cssAddClass("z4abstractvaluepanel-titled");
     this.rotation.addChangeListener(event -> this.onIteratorChange());
   }
 

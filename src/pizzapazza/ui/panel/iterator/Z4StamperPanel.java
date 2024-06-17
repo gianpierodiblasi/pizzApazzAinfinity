@@ -1,5 +1,6 @@
 package pizzapazza.ui.panel.iterator;
 
+import javascript.awt.GBC;
 import pizzapazza.iterator.Z4Stamper;
 import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4RandomValue;
@@ -12,6 +13,7 @@ import pizzapazza.math.Z4SignedRandomValue;
 import pizzapazza.math.Z4SignedValue;
 import pizzapazza.ui.panel.math.Z4FancifulValuePanel;
 import pizzapazza.ui.panel.math.Z4FancifulValuePanelOrientation;
+import pizzapazza.util.Z4Translations;
 
 /**
  *
@@ -29,21 +31,32 @@ public class Z4StamperPanel extends Z4PointIteratorPanel<Z4Stamper> {
     super();
     this.cssAddClass("z4stamperpanel");
 
+    this.add(this.multiplicity, new GBC(0, 0).i(0, 0, 1, 0));
+    this.add(this.push, new GBC(0, 1).i(0, 0, 1, 0));
+    this.add(this.rotation, new GBC(0, 2));
+
+    this.multiplicity.setSignsVisible(false);
+    this.multiplicity.setLabel(Z4Translations.MULTIPLICITY);
+    this.multiplicity.cssAddClass("z4abstractvaluepanel-titled");
     this.multiplicity.addChangeListener(event -> this.onIteratorChange());
+
+    this.push.setSignsVisible(false);
+    this.push.setLabel(Z4Translations.PUSH);
+    this.push.cssAddClass("z4abstractvaluepanel-titled");
     this.push.addChangeListener(event -> this.onIteratorChange());
-    
+
     this.setValue(new Z4Stamper(
             new Z4FancifulValue(
-                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 5),
-                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(5, Z4RandomValueBehavior.CLASSIC, 0)),
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                     false),
             new Z4FancifulValue(
-                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
-                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(10, Z4RandomValueBehavior.CLASSIC, 0)),
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                     false),
             new Z4Rotation(0, new Z4FancifulValue(
-                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 45),
-                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(30, Z4RandomValueBehavior.CLASSIC, 0)),
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                     false), Z4RotationBehavior.FIXED, false))
     );
   }
