@@ -5,6 +5,7 @@ import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.util.Z4JSONable;
 import simulation.dom.$CanvasRenderingContext2D;
+import simulation.js.$Object;
 
 /**
  * The common parent of all painters
@@ -29,4 +30,11 @@ public interface Z4Painter extends Z4JSONable {
    * @param progression The color progression to use to perform the drawing
    */
   public void draw($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression);
+  
+  @Override
+  public default $Object toJSON() {
+    $Object json = new $Object();
+    json.$set("type", this.getType());
+    return json;
+  }
 }

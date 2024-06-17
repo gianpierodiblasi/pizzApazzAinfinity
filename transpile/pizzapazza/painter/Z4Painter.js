@@ -23,4 +23,10 @@ class Z4Painter extends Z4JSONable {
    */
    draw(context, drawingPoint, spatioTemporalColor, progression) {
   }
+
+   toJSON() {
+    let json = new Object();
+    json["type"] = this.getType();
+    return json;
+  }
 }

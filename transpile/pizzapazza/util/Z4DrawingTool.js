@@ -85,4 +85,40 @@ class Z4DrawingTool extends Z4Nextable {
     json["progression"] = this.progression.toJSON();
     return json;
   }
+
+  /**
+   * Creates a Z4DrawingTool from a JSON object
+   *
+   * @param json The JSON object
+   * @return the drawing tool
+   */
+  static  fromJSON(json) {
+    let pointIterator = null;
+    let painter = null;
+    let pointIteratorJSON = json["pointIterator"];
+    switch("" + pointIteratorJSON["type"]) {
+      case "STAMPER":
+        pointIterator = Z4Stamper.fromJSON(pointIteratorJSON);
+        break;
+      case "TRACER":
+        pointIterator = Z4Tracer.fromJSON(pointIteratorJSON);
+        break;
+      case "AIRBRUSH":
+        pointIterator = Z4Airbrush.fromJSON(pointIteratorJSON);
+        break;
+      case "SPIROGRAPH":
+        pointIterator = Z4Spirograph.fromJSON(pointIteratorJSON);
+        break;
+      case "SCATTERER":
+        pointIterator = Z4Scatterer.fromJSON(pointIteratorJSON);
+        break;
+    }
+    let painterJSON = json["painter"];
+    switch("" + painterJSON["type"]) {
+      case "ARROW":
+        painter = new Z4ArrowPainter();
+        break;
+    }
+    return new Z4DrawingTool(pointIterator, painter, Z4SpatioTemporalColor.fromJSON(json["spatioTemporalColor"]), Z4ColorProgression.fromJSON(json["progression"]));
+  }
 }

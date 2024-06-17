@@ -2,10 +2,16 @@ package pizzapazza.util;
 
 import pizzapazza.color.Z4ColorProgression;
 import pizzapazza.color.Z4SpatioTemporalColor;
+import pizzapazza.iterator.Z4Airbrush;
 import pizzapazza.iterator.Z4PointIterator;
 import pizzapazza.iterator.Z4PointIteratorDrawingAction;
+import pizzapazza.iterator.Z4Scatterer;
+import pizzapazza.iterator.Z4Spirograph;
+import pizzapazza.iterator.Z4Stamper;
+import pizzapazza.iterator.Z4Tracer;
 import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4Nextable;
+import pizzapazza.painter.Z4ArrowPainter;
 import pizzapazza.painter.Z4Painter;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.js.$Object;
@@ -96,5 +102,49 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
     json.$set("spatioTemporalColor", this.spatioTemporalColor.toJSON());
     json.$set("progression", this.progression.toJSON());
     return json;
+  }
+
+  /**
+   * Creates a Z4DrawingTool from a JSON object
+   *
+   * @param json The JSON object
+   * @return the drawing tool
+   */
+  public static Z4DrawingTool fromJSON($Object json) {
+    Z4PointIterator pointIterator = null;
+    Z4Painter painter = null;
+
+    $Object pointIteratorJSON = json.$get("pointIterator");
+    switch ("" + pointIteratorJSON.$get("type")) {
+      case "STAMPER":
+        pointIterator = Z4Stamper.fromJSON(pointIteratorJSON);
+        break;
+      case "TRACER":
+        pointIterator = Z4Tracer.fromJSON(pointIteratorJSON);
+        break;
+      case "AIRBRUSH":
+        pointIterator = Z4Airbrush.fromJSON(pointIteratorJSON);
+        break;
+      case "SPIROGRAPH":
+        pointIterator = Z4Spirograph.fromJSON(pointIteratorJSON);
+        break;
+      case "SCATTERER":
+        pointIterator = Z4Scatterer.fromJSON(pointIteratorJSON);
+        break;
+    }
+
+    $Object painterJSON = json.$get("painter");
+    switch ("" + painterJSON.$get("type")) {
+      case "ARROW":
+        painter = new Z4ArrowPainter();
+        break;
+    }
+
+    return new Z4DrawingTool(
+            pointIterator,
+            painter,
+            Z4SpatioTemporalColor.fromJSON(json.$get("spatioTemporalColor")),
+            Z4ColorProgression.fromJSON(json.$get("progression"))
+    );
   }
 }

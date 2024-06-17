@@ -46,9 +46,4 @@ public class Z4ArrowPainter implements Z4Painter {
 
     context.restore();
   }
-
-  @Override
-  public $Object toJSON() {
-    return new $Object();
-  }
 }

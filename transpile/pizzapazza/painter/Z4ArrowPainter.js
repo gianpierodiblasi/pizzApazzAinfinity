@@ -30,8 +30,4 @@ class Z4ArrowPainter extends Z4Painter {
     context.stroke();
     context.restore();
   }
-
-   toJSON() {
-    return new Object();
-  }
 }
