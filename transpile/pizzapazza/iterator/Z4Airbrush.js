@@ -115,9 +115,19 @@ class Z4Airbrush extends Z4PointIterator {
   }
 
    drawDemo(context, painter, spatioTemporalColor, progression, width, height) {
-    let finalPainter = painter ? painter : new Z4ArrowPainter();
-    let finalspSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
-    let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
+    painter = painter ? painter : new Z4ArrowPainter();
+    spatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
+    progression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
+    this.drawAction(Z4PointIteratorDrawingAction.START, width / 2, height / 2);
+    let next = null;
+    while ((next = this.next(spatioTemporalColor, progression)) !== null) {
+      context.save();
+      context.translate(next.z4Vector.x0, next.z4Vector.y0);
+      context.rotate(next.z4Vector.phase);
+      painter.draw(context, next, spatioTemporalColor, progression);
+      context.restore();
+    }
+    this.drawAction(Z4PointIteratorDrawingAction.STOP, width / 2, height / 2);
   }
 
    toJSON() {

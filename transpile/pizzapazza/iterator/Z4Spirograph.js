@@ -87,8 +87,44 @@ class Z4Spirograph extends Z4PointIterator {
 
    drawDemo(context, painter, spatioTemporalColor, progression, width, height) {
     let finalPainter = painter ? painter : new Z4ArrowPainter();
-    let finalspSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
+    let finalSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
     let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
+    let points = this.initDraw(width, height);
+    let start = points[0];
+    this.drawAction(Z4PointIteratorDrawingAction.START, start.x, start.y);
+    points.slice(1).forEach(point => {
+      this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, point.x, point.y);
+      this.drawDemoPoint(context, finalPainter, finalSpatioTemporalColor, finalColorProgression);
+    });
+    let stop = points[points.length - 1];
+    this.drawAction(Z4PointIteratorDrawingAction.STOP, stop.x, stop.y);
+    this.drawDemoPoint(context, finalPainter, finalSpatioTemporalColor, finalColorProgression);
+  }
+
+   initDraw(w, h) {
+    let w2 = w / 2;
+    let h2 = h / 2;
+    let wh8 = Math.min(w, h) / 16;
+    let size = parseInt(w * h / (100 * 100));
+    let array = new Array();
+    for (let i = 0; i < size; i++) {
+      let theta = Z4Math.TWO_PI * i / size;
+      array.push(new Z4Point(w2 + wh8 * theta * Math.cos(theta), h2 + wh8 * theta * Math.sin(theta)));
+    }
+    return array;
+  }
+
+   drawDemoPoint(context, arrowPainter, spatioTemporalColor, progression) {
+    let next = null;
+    while ((next = this.next(spatioTemporalColor, progression)) !== null) {
+      if (!next.drawBounds) {
+        context.save();
+        context.translate(next.z4Vector.x0, next.z4Vector.y0);
+        context.rotate(next.z4Vector.phase);
+        arrowPainter.draw(context, next, spatioTemporalColor, progression);
+        context.restore();
+      }
+    }
   }
 
   /**

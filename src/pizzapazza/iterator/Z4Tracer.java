@@ -15,6 +15,8 @@ import pizzapazza.math.Z4TracerPath;
 import pizzapazza.math.Z4Vector;
 import pizzapazza.painter.Z4ArrowPainter;
 import pizzapazza.painter.Z4Painter;
+import pizzapazza.util.Z4Constants;
+import simulation.bezier.$Bezier;
 import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
@@ -307,12 +309,51 @@ public class Z4Tracer extends Z4PointIterator {
 
   @Override
   public void drawDemo($CanvasRenderingContext2D context, Z4Painter painter, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression, double width, double height) {
-    Z4Painter finalPainter = $exists(painter) ? painter : new Z4ArrowPainter();
-    Z4SpatioTemporalColor finalspSpatioTemporalColor = $exists(spatioTemporalColor) ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
-    Z4ColorProgression finalColorProgression = $exists(progression) ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
-    
+    painter = $exists(painter) ? painter : new Z4ArrowPainter();
+    spatioTemporalColor = $exists(spatioTemporalColor) ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
+    progression = $exists(progression) ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
+
+    $Bezier bezier = width > height
+            ? new $Bezier(width / 10, height / 3, width / 2, 3 * height / 2, width / 2, -height / 2, 9 * width / 10, height / 2)
+            : new $Bezier(width / 3, 9 * height / 10, 3 * width / 2, height / 2, -width / 2, height / 2, width / 2, height / 10);
+
+    Z4Point p = bezier.get(0);
+    this.drawAction(Z4PointIteratorDrawingAction.START, p.x, p.y);
+
+    for (double s = 0.1; s < 1; s += 0.1) {
+      p = bezier.get(s);
+      this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, p.x, p.y);
+      this.drawDemoPoint(context, p, painter, spatioTemporalColor, progression);
+    }
+
+    p = bezier.get(1);
+    this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, p.x, p.y);
+    this.drawDemoPoint(context, p, painter, spatioTemporalColor, progression);
+    this.drawAction(Z4PointIteratorDrawingAction.STOP, p.x, p.y);
+    this.drawDemoPoint(context, p, painter, spatioTemporalColor, progression);
   }
-  
+
+  private void drawDemoPoint($CanvasRenderingContext2D context, Z4Point p, Z4Painter painter, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
+    context.save();
+    context.lineWidth = 1;
+    context.fillStyle = Z4Constants.$getStyle("black");
+    context.beginPath();
+    context.arc(p.x, p.y, 2, 0, Z4Math.TWO_PI);
+    context.fill();
+    context.restore();
+
+    Z4DrawingPoint next;
+    while ((next = this.next(spatioTemporalColor, progression)) != null) {
+      if (!next.drawBounds) {
+        context.save();
+        context.translate(next.z4Vector.x0, next.z4Vector.y0);
+        context.rotate(next.z4Vector.phase);
+        painter.draw(context, next, spatioTemporalColor, progression);
+        context.restore();
+      }
+    }
+  }
+
   @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
