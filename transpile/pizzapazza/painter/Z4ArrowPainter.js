@@ -7,6 +7,10 @@ class Z4ArrowPainter extends Z4Painter {
 
    bool = false;
 
+   getType() {
+    return Z4PainterType.ARROW;
+  }
+
    draw(context, drawingPoint, spatioTemporalColor, progression) {
     this.bool = !this.bool;
     let x = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.module);

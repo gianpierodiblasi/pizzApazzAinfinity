@@ -6,6 +6,7 @@ import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4NextableWithTwoParams;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Rotation;
+import pizzapazza.painter.Z4PainterType;
 import simulation.js.$Object;
 
 /**
@@ -46,6 +47,13 @@ public abstract class Z4PointIterator implements Z4NextableWithTwoParams<Z4Drawi
   }
 
   /**
+   * Returns the point iterator type
+   *
+   * @return The point iterator type
+   */
+  public abstract Z4PointIteratorType getType();
+
+  /**
    * Performs a drawing action
    *
    * @param action The action
@@ -79,6 +87,7 @@ public abstract class Z4PointIterator implements Z4NextableWithTwoParams<Z4Drawi
   @Override
   public $Object toJSON() {
     $Object json = new $Object();
+    json.$set("type", this.getType());
     json.$set("rotation", this.rotation.toJSON());
     return json;
   }

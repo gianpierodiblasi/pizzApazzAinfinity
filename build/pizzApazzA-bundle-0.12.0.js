@@ -982,6 +982,19 @@ class Z4PointIteratorDrawingAction {
   static STOP = 'STOP';
 }
 /**
+ * The point iterator type
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4PointIteratorType {
+
+  static STAMPER = 'STAMPER';
+  static TRACER = 'TRACER';
+  static AIRBRUSH = 'AIRBRUSH';
+  static SPIROGRAPH = 'SPIROGRAPH';
+  static SCATTERER = 'SCATTERER';
+}
+/**
  * The point where to perform a drawing
  *
  * @author gianpiero.diblasi
@@ -1592,6 +1605,15 @@ class Z4Vector {
     let y2 = vector.y - vector.y0;
     return Math.atan2(x1 * y2 - y1 * x2, x1 * x2 + y1 * y2) >= 0 ? Z4SignBehavior.POSITIVE : Z4SignBehavior.NEGATIVE;
   }
+}
+/**
+ * The painter type
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4PainterType {
+
+  static ARROW = 'ARROW';
 }
 /**
  * The canvas
@@ -6123,6 +6145,7 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
       this.onProgressionChange();
     });
     this.setValue(new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.1, Z4Lighting.NONE));
+    this.setProgressionSettings(Z4PointIteratorType.STAMPER, true, false, false);
   }
 
    addRadio(behavior, panel, buttonGroup, border) {
@@ -6219,12 +6242,28 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
   }
 
   /**
-   * Sets the painter and the color
+   * Sets the progression settings
    *
-   * @param painter The painter
-   * @param color The color
+   * @param type The point iterator type
+   * @param isColor true if the color is a flat color, false otherwise
+   * @param isGradientColor true if the color is a gradient color, false
+   * otherwise
+   * @param isBiGradientColor true if the color is a bigradient color, false
+   * otherwise
    */
-   setPainterAndColor(painter, color) {
+   setProgressionSettings(type, isColor, isGradientColor, isBiGradientColor) {
+    if (isColor) {
+      Object.keys(this.radios).forEach(key => {
+        let radio = this.radios[key];
+        radio.setContentAreaFilled(false);
+        radio.getStyle().display = "none";
+      });
+      (this.radios["" + Z4ColorProgressionBehavior.SPATIAL]).setSelected(true);
+      (this.radios["" + Z4ColorProgressionBehavior.SPATIAL]).setContentAreaFilled(true);
+      this.onProgressionChange();
+    } else if (isGradientColor) {
+    } else if (isBiGradientColor) {
+    }
   }
 
    setValue(value) {
@@ -9548,6 +9587,14 @@ class Z4PointIterator extends Z4NextableWithTwoParams {
   }
 
   /**
+   * Returns the point iterator type
+   *
+   * @return The point iterator type
+   */
+   getType() {
+  }
+
+  /**
    * Performs a drawing action
    *
    * @param action The action
@@ -9583,6 +9630,7 @@ class Z4PointIterator extends Z4NextableWithTwoParams {
 
    toJSON() {
     let json = new Object();
+    json["type"] = this.getType();
     json["rotation"] = this.rotation.toJSON();
     return json;
   }
@@ -9617,6 +9665,10 @@ class Z4Airbrush extends Z4PointIterator {
     this.multiplicity = multiplicity;
     this.radius = radius;
     this.speed = speed;
+  }
+
+   getType() {
+    return Z4PointIteratorType.AIRBRUSH;
   }
 
    drawAction(action, x, y) {
@@ -9734,6 +9786,10 @@ class Z4Scatterer extends Z4PointIterator {
     this.scattering = scattering;
   }
 
+   getType() {
+    return Z4PointIteratorType.SCATTERER;
+  }
+
    drawAction(action, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.currentMultiplicityCounter = 0;
@@ -9809,6 +9865,10 @@ class Z4Spirograph extends Z4PointIterator {
    */
   constructor(rotation) {
     super(rotation);
+  }
+
+   getType() {
+    return Z4PointIteratorType.SPIROGRAPH;
   }
 
    drawAction(action, x, y) {
@@ -9918,6 +9978,10 @@ class Z4Stamper extends Z4PointIterator {
     super(rotation);
     this.multiplicity = multiplicity;
     this.push = push;
+  }
+
+   getType() {
+    return Z4PointIteratorType.STAMPER;
   }
 
    drawAction(action, x, y) {
@@ -10067,6 +10131,10 @@ class Z4Tracer extends Z4PointIterator {
     this.release = release;
     this.endlessSustain = endlessSustain;
     this.step = step;
+  }
+
+   getType() {
+    return Z4PointIteratorType.TRACER;
   }
 
    drawAction(action, x, y) {
@@ -10232,6 +10300,14 @@ class Z4Tracer extends Z4PointIterator {
 class Z4Painter extends Z4JSONable {
 
   /**
+   * Returns the painter type
+   *
+   * @return The painter type
+   */
+   getType() {
+  }
+
+  /**
    * Performs a drawing
    *
    * @param context The context to use to perform the drawing
@@ -10250,6 +10326,10 @@ class Z4ArrowPainter extends Z4Painter {
    module = 30;
 
    bool = false;
+
+   getType() {
+    return Z4PainterType.ARROW;
+  }
 
    draw(context, drawingPoint, spatioTemporalColor, progression) {
     this.bool = !this.bool;

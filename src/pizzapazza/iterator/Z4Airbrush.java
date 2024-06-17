@@ -43,6 +43,11 @@ public class Z4Airbrush extends Z4PointIterator {
   }
 
   @Override
+  public Z4PointIteratorType getType() {
+    return Z4PointIteratorType.AIRBRUSH;
+  }
+  
+  @Override
   public boolean drawAction(Z4PointIteratorDrawingAction action, double x, double y) {
     if (action == Z4PointIteratorDrawingAction.START) {
       this.currentMultiplicityCounter = 0;

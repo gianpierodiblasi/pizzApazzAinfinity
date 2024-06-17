@@ -14,8 +14,7 @@ import javascript.swing.SpinnerNumberModel;
 import pizzapazza.color.Z4ColorProgression;
 import pizzapazza.color.Z4ColorProgressionBehavior;
 import pizzapazza.color.Z4Lighting;
-import pizzapazza.color.Z4SpatioTemporalColor;
-import pizzapazza.painter.Z4Painter;
+import pizzapazza.iterator.Z4PointIteratorType;
 import pizzapazza.ui.panel.Z4AbstractValuePanel;
 import pizzapazza.util.Z4EmptyImageProducer;
 import pizzapazza.util.Z4Translations;
@@ -99,6 +98,7 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
     });
 
     this.setValue(new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.1, Z4Lighting.NONE));
+    this.setProgressionSettings(Z4PointIteratorType.STAMPER, true, false, false);
   }
 
   private void addRadio(Z4ColorProgressionBehavior behavior, JSPanel panel, ButtonGroup buttonGroup, String border) {
@@ -201,13 +201,29 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
   }
 
   /**
-   * Sets the painter and the color
+   * Sets the progression settings
    *
-   * @param painter The painter
-   * @param color The color
+   * @param type The point iterator type
+   * @param isColor true if the color is a flat color, false otherwise
+   * @param isGradientColor true if the color is a gradient color, false
+   * otherwise
+   * @param isBiGradientColor true if the color is a bigradient color, false
+   * otherwise
    */
-  public void setPainterAndColor(Z4Painter painter, Z4SpatioTemporalColor color) {
+  public void setProgressionSettings(Z4PointIteratorType type, boolean isColor, boolean isGradientColor, boolean isBiGradientColor) {
+    if (isColor) {
+      Object.keys(this.radios).forEach(key -> {
+        JSRadioButton radio = this.radios.$get(key);
+        radio.setContentAreaFilled(false);
+        radio.getStyle().display = "none";
+      });
+      ((JSRadioButton) this.radios.$get("" + Z4ColorProgressionBehavior.SPATIAL)).setSelected(true);
+      ((JSRadioButton) this.radios.$get("" + Z4ColorProgressionBehavior.SPATIAL)).setContentAreaFilled(true);
 
+      this.onProgressionChange();
+    } else if (isGradientColor) {
+    } else if (isBiGradientColor) {
+    }
   }
 
   @Override

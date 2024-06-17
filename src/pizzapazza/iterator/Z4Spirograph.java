@@ -31,6 +31,11 @@ public class Z4Spirograph extends Z4PointIterator {
   }
 
   @Override
+  public Z4PointIteratorType getType() {
+    return Z4PointIteratorType.SPIROGRAPH;
+  }
+  
+  @Override
   public boolean drawAction(Z4PointIteratorDrawingAction action, double x, double y) {
     if (action == Z4PointIteratorDrawingAction.START) {
       this.center = new Z4Point(x, y);

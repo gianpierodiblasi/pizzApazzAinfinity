@@ -36,6 +36,14 @@ class Z4PointIterator extends Z4NextableWithTwoParams {
   }
 
   /**
+   * Returns the point iterator type
+   *
+   * @return The point iterator type
+   */
+   getType() {
+  }
+
+  /**
    * Performs a drawing action
    *
    * @param action The action
@@ -71,6 +79,7 @@ class Z4PointIterator extends Z4NextableWithTwoParams {
 
    toJSON() {
     let json = new Object();
+    json["type"] = this.getType();
     json["rotation"] = this.rotation.toJSON();
     return json;
   }

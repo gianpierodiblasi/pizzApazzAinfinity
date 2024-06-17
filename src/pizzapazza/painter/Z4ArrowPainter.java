@@ -18,6 +18,11 @@ public class Z4ArrowPainter implements Z4Painter {
   private boolean bool;
 
   @Override
+  public Z4PainterType getType() {
+    return Z4PainterType.ARROW;
+  }
+
+  @Override
   public void draw($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
     this.bool = !this.bool;
     double x = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.module);

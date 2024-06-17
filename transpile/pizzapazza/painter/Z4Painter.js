@@ -6,6 +6,14 @@
 class Z4Painter extends Z4JSONable {
 
   /**
+   * Returns the painter type
+   *
+   * @return The painter type
+   */
+   getType() {
+  }
+
+  /**
    * Performs a drawing
    *
    * @param context The context to use to perform the drawing

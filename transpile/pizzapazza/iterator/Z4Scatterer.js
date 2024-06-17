@@ -26,6 +26,10 @@ class Z4Scatterer extends Z4PointIterator {
     this.scattering = scattering;
   }
 
+   getType() {
+    return Z4PointIteratorType.SCATTERER;
+  }
+
    drawAction(action, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.currentMultiplicityCounter = 0;

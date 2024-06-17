@@ -78,6 +78,11 @@ public class Z4Tracer extends Z4PointIterator {
   }
 
   @Override
+  public Z4PointIteratorType getType() {
+    return Z4PointIteratorType.TRACER;
+  }
+  
+  @Override
   public boolean drawAction(Z4PointIteratorDrawingAction action, double x, double y) {
     if (action == Z4PointIteratorDrawingAction.START) {
       this.currentPoint = new Z4Point(x, y);

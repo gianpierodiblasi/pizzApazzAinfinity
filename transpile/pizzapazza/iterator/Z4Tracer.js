@@ -76,6 +76,10 @@ class Z4Tracer extends Z4PointIterator {
     this.step = step;
   }
 
+   getType() {
+    return Z4PointIteratorType.TRACER;
+  }
+
    drawAction(action, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.currentPoint = new Z4Point(x, y);

@@ -66,6 +66,7 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
       this.onProgressionChange();
     });
     this.setValue(new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.1, Z4Lighting.NONE));
+    this.setProgressionSettings(Z4PointIteratorType.STAMPER, true, false, false);
   }
 
    addRadio(behavior, panel, buttonGroup, border) {
@@ -162,12 +163,28 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
   }
 
   /**
-   * Sets the painter and the color
+   * Sets the progression settings
    *
-   * @param painter The painter
-   * @param color The color
+   * @param type The point iterator type
+   * @param isColor true if the color is a flat color, false otherwise
+   * @param isGradientColor true if the color is a gradient color, false
+   * otherwise
+   * @param isBiGradientColor true if the color is a bigradient color, false
+   * otherwise
    */
-   setPainterAndColor(painter, color) {
+   setProgressionSettings(type, isColor, isGradientColor, isBiGradientColor) {
+    if (isColor) {
+      Object.keys(this.radios).forEach(key => {
+        let radio = this.radios[key];
+        radio.setContentAreaFilled(false);
+        radio.getStyle().display = "none";
+      });
+      (this.radios["" + Z4ColorProgressionBehavior.SPATIAL]).setSelected(true);
+      (this.radios["" + Z4ColorProgressionBehavior.SPATIAL]).setContentAreaFilled(true);
+      this.onProgressionChange();
+    } else if (isGradientColor) {
+    } else if (isBiGradientColor) {
+    }
   }
 
    setValue(value) {

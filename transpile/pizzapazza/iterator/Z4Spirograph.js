@@ -22,6 +22,10 @@ class Z4Spirograph extends Z4PointIterator {
     super(rotation);
   }
 
+   getType() {
+    return Z4PointIteratorType.SPIROGRAPH;
+  }
+
    drawAction(action, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.center = new Z4Point(x, y);

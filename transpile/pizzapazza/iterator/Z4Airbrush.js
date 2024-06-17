@@ -30,6 +30,10 @@ class Z4Airbrush extends Z4PointIterator {
     this.speed = speed;
   }
 
+   getType() {
+    return Z4PointIteratorType.AIRBRUSH;
+  }
+
    drawAction(action, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.currentMultiplicityCounter = 0;
