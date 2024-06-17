@@ -6457,6 +6457,11 @@ class Z4PointIteratorPanel extends Z4AbstractValuePanel {
    rotation = new Z4RotationPanel(Z4RotationPanelOrientation.HORIZONTAL);
 
   /**
+   * true if value is adjusting, false otherwise
+   */
+   valueIsAdjusting = false;
+
+  /**
    * Creates the object
    */
   constructor() {
@@ -6465,13 +6470,24 @@ class Z4PointIteratorPanel extends Z4AbstractValuePanel {
     this.setLayout(new GridBagLayout());
     this.rotation.setLabel(Z4Translations.ROTATION);
     this.rotation.cssAddClass("z4abstractvaluepanel-titled");
-    this.rotation.addChangeListener(event => this.onIteratorChange());
+    this.rotation.addChangeListener(event => this.onIteratorChange(this.rotation.getValueIsAdjusting()));
   }
 
   /**
    * The method to call on iterator changes
+   *
+   * @param valueIsAdjusting true if value is adjusting, false otherwise
    */
-   onIteratorChange() {
+   onIteratorChange(valueIsAdjusting) {
+  }
+
+  /**
+   * Returns if the value is adjusting
+   *
+   * @return true if the value is adjusting, false otherwise
+   */
+   getValueIsAdjusting() {
+    return this.valueIsAdjusting;
   }
 
    setValue(value) {
@@ -6502,17 +6518,20 @@ class Z4StamperPanel extends Z4PointIteratorPanel {
     this.add(this.push, new GBC(0, 1).a(GBC.WEST).i(0, 0, 1, 0));
     this.add(this.rotation, new GBC(0, 2));
     this.multiplicity.setSignsVisible(false);
+    this.multiplicity.getStyle().setProperty("grid-template", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\" / auto auto auto auto");
     this.multiplicity.setLabel(Z4Translations.MULTIPLICITY);
     this.multiplicity.cssAddClass("z4abstractvaluepanel-titled");
-    this.multiplicity.addChangeListener(event => this.onIteratorChange());
+    this.multiplicity.addChangeListener(event => this.onIteratorChange(this.multiplicity.getValueIsAdjusting()));
     this.push.setSignsVisible(false);
+    this.push.getStyle().setProperty("grid-template", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\" / auto auto auto auto");
     this.push.setLabel(Z4Translations.PUSH);
     this.push.cssAddClass("z4abstractvaluepanel-titled");
-    this.push.addChangeListener(event => this.onIteratorChange());
+    this.push.addChangeListener(event => this.onIteratorChange(this.push.getValueIsAdjusting()));
     this.setValue(new Z4Stamper(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)));
   }
 
-   onIteratorChange() {
+   onIteratorChange(valueIsAdjusting) {
+    this.valueIsAdjusting = valueIsAdjusting;
     this.value = new Z4Stamper(this.multiplicity.getValue(), this.push.getValue(), this.rotation.getValue());
     this.onchange();
   }
@@ -6864,8 +6883,8 @@ class Z4FancifulValuePanel extends Z4AbstractValuePanel {
     this.setLayout(new GridBagLayout());
     this.orientation = orientation;
     if (orientation === Z4FancifulValuePanelOrientation.HORIZONTAL) {
-      this.add(this.label, new GBC(0, 0).w(3).a(GBC.WEST));
-      this.add(this.uniformSign, new GBC(3, 0).a(GBC.EAST));
+      this.add(this.label, new GBC(0, 0).w(2).a(GBC.WEST));
+      this.add(this.uniformSign, new GBC(2, 0).w(2).a(GBC.EAST));
       this.sign = new Z4SignPanel(Z4SignPanelOrientation.SQUARED);
       this.add(this.sign, new GBC(0, 1).i(0, 0, 0, 2).a(GBC.SOUTH));
       this.constant = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.HORIZONTAL);

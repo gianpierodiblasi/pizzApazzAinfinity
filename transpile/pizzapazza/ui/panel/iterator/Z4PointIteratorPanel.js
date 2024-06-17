@@ -12,6 +12,11 @@ class Z4PointIteratorPanel extends Z4AbstractValuePanel {
    rotation = new Z4RotationPanel(Z4RotationPanelOrientation.HORIZONTAL);
 
   /**
+   * true if value is adjusting, false otherwise
+   */
+   valueIsAdjusting = false;
+
+  /**
    * Creates the object
    */
   constructor() {
@@ -20,13 +25,24 @@ class Z4PointIteratorPanel extends Z4AbstractValuePanel {
     this.setLayout(new GridBagLayout());
     this.rotation.setLabel(Z4Translations.ROTATION);
     this.rotation.cssAddClass("z4abstractvaluepanel-titled");
-    this.rotation.addChangeListener(event => this.onIteratorChange());
+    this.rotation.addChangeListener(event => this.onIteratorChange(this.rotation.getValueIsAdjusting()));
   }
 
   /**
    * The method to call on iterator changes
+   *
+   * @param valueIsAdjusting true if value is adjusting, false otherwise
    */
-   onIteratorChange() {
+   onIteratorChange(valueIsAdjusting) {
+  }
+
+  /**
+   * Returns if the value is adjusting
+   *
+   * @return true if the value is adjusting, false otherwise
+   */
+   getValueIsAdjusting() {
+    return this.valueIsAdjusting;
   }
 
    setValue(value) {

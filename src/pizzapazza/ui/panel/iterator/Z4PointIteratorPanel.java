@@ -21,31 +21,47 @@ public abstract class Z4PointIteratorPanel<T extends Z4PointIterator> extends Z4
   protected final Z4RotationPanel rotation = new Z4RotationPanel(Z4RotationPanelOrientation.HORIZONTAL);
 
   /**
+   * true if value is adjusting, false otherwise
+   */
+  protected boolean valueIsAdjusting;
+
+  /**
    * Creates the object
    */
   public Z4PointIteratorPanel() {
     super();
     this.cssAddClass("z4pointiteratorpanel");
     this.setLayout(new GridBagLayout());
-    
+
     this.rotation.setLabel(Z4Translations.ROTATION);
     this.rotation.cssAddClass("z4abstractvaluepanel-titled");
-    this.rotation.addChangeListener(event -> this.onIteratorChange());
+    this.rotation.addChangeListener(event -> this.onIteratorChange(this.rotation.getValueIsAdjusting()));
   }
 
   /**
    * The method to call on iterator changes
+   *
+   * @param valueIsAdjusting true if value is adjusting, false otherwise
    */
-  protected abstract void onIteratorChange();
+  protected abstract void onIteratorChange(boolean valueIsAdjusting);
+
+  /**
+   * Returns if the value is adjusting
+   *
+   * @return true if the value is adjusting, false otherwise
+   */
+  public boolean getValueIsAdjusting() {
+    return this.valueIsAdjusting;
+  }
   
   @Override
   public void setValue(T value) {
     this.rotation.setValue(value.getRotation());
   }
-  
+
   @Override
   public void setEnabled(boolean b) {
     super.setEnabled(b);
     this.rotation.setEnabled(b);
-  }  
+  }
 }

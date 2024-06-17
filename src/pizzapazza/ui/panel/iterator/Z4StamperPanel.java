@@ -36,14 +36,16 @@ public class Z4StamperPanel extends Z4PointIteratorPanel<Z4Stamper> {
     this.add(this.rotation, new GBC(0, 2));
 
     this.multiplicity.setSignsVisible(false);
+    this.multiplicity.getStyle().setProperty("grid-template", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\" / auto auto auto auto");
     this.multiplicity.setLabel(Z4Translations.MULTIPLICITY);
     this.multiplicity.cssAddClass("z4abstractvaluepanel-titled");
-    this.multiplicity.addChangeListener(event -> this.onIteratorChange());
+    this.multiplicity.addChangeListener(event -> this.onIteratorChange(this.multiplicity.getValueIsAdjusting()));
 
     this.push.setSignsVisible(false);
+    this.push.getStyle().setProperty("grid-template", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\" / auto auto auto auto");
     this.push.setLabel(Z4Translations.PUSH);
     this.push.cssAddClass("z4abstractvaluepanel-titled");
-    this.push.addChangeListener(event -> this.onIteratorChange());
+    this.push.addChangeListener(event -> this.onIteratorChange(this.push.getValueIsAdjusting()));
 
     this.setValue(new Z4Stamper(
             new Z4FancifulValue(
@@ -62,7 +64,9 @@ public class Z4StamperPanel extends Z4PointIteratorPanel<Z4Stamper> {
   }
 
   @Override
-  protected void onIteratorChange() {
+  protected void onIteratorChange(boolean valueIsAdjusting) {
+    this.valueIsAdjusting = valueIsAdjusting;
+
     this.value = new Z4Stamper(this.multiplicity.getValue(), this.push.getValue(), this.rotation.getValue());
     this.onchange();
   }
