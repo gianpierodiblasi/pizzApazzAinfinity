@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>TestPointIteratorPanel</title>
+    <title>TestPainterPanel</title>
     <link rel="icon" href="../../../../../image/app_icon/app_icon_36.png" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,7 +21,7 @@
     <script>
       window.onload = event => {
         var name = new URLSearchParams(window.location.search).get("type");
-        eval("new TestPointIteratorPanel(new " + name.replace("Test", "Z4").replaceAll(" ", "") + "()).setTitle('" + name + "');");
+        eval("new TestPainterPanel(new " + name.replace("Test", "Z4").replaceAll(" ", "") + "()).setTitle('" + name + "');");
       };
     </script>
   </head>
