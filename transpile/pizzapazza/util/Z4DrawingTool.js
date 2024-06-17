@@ -30,6 +30,42 @@ class Z4DrawingTool extends Z4Nextable {
   }
 
   /**
+   * Returns the point iterator
+   *
+   * @return the point iterator
+   */
+   getPointIterator() {
+    return pointIterator;
+  }
+
+  /**
+   * Returns the painter
+   *
+   * @return The painter
+   */
+   getPainter() {
+    return painter;
+  }
+
+  /**
+   * Returns the spatio-temporal color
+   *
+   * @return The spatio-temporal color
+   */
+   getSpatioTemporalColor() {
+    return spatioTemporalColor;
+  }
+
+  /**
+   * Returns the color progression
+   *
+   * @return The color progression
+   */
+   getProgression() {
+    return progression;
+  }
+
+  /**
    * Performs a drawing action
    *
    * @param action The action

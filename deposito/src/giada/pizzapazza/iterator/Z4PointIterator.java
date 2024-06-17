@@ -10,16 +10,6 @@ import simulation.dom.$CanvasRenderingContext2D;
 import simulation.js.$Object;
 
 public abstract class Z4PointIterator {
-
-  /**
-   * Returns the color progression
-   *
-   * @return The color progression
-   */
-  public Z4Progression getProgression() {
-    return this.progression;
-  }
-
   /**
    * Draws a demo of this Z4PointIterator
    *
