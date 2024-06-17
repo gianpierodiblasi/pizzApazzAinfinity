@@ -32,7 +32,7 @@ public abstract class Z4PointIteratorUI<S extends Z4PointIterator<S>> extends Z4
   private final $Canvas canvas = ($Canvas) this.querySelector(".point-iterator-canvas");
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
 
-  private final Z4RotationUI rotation = new Z4RotationUI().setValueLabel("ROTATION", true, true).appendToElement(this.querySelector(".point-iterator-container"));
+  
   private final Z4ProgressionUI progression = new Z4ProgressionUI().setProgressionLabel("FILLING", true, true).appendToElement(this.querySelector(".point-iterator-container"));
 
   private final $HTMLElement arrowModule = this.querySelector(".point-iterator-arrow-module-range");
@@ -50,13 +50,6 @@ public abstract class Z4PointIteratorUI<S extends Z4PointIterator<S>> extends Z4
    */
   protected Z4PointIteratorUI(String ui) {
     super(ui);
-
-    this.initDevicePixelRatio(() -> this.drawCanvas());
-    this.resizeObserver.observe(this.canvas);
-
-    $Object config = new $Object();
-    config.$set("attributeFilter", new Array<>("class"));
-    this.mutationObserver.observe(document.body, config);
 
     this.rotation.oninput = (v) -> this.setRP(v, null, false);
     this.rotation.onchange = (v) -> this.setRP(v, null, true);
@@ -91,47 +84,6 @@ public abstract class Z4PointIteratorUI<S extends Z4PointIterator<S>> extends Z4
   }
 
   /**
-   * Sets the Z4Painter to draw the demo
-   *
-   * @param <T>
-   * @param painter The Z4Painter, it can be null
-   * @return This Z4PointIteratorUI
-   */
-  @SuppressWarnings("unchecked")
-  public <T extends Z4PointIteratorUI<?>> T setPainter(Z4Painter<?> painter) {
-    this.painter = painter;
-    this.querySelector(".point-iterator-arrow-module-container").style.display = $exists(this.painter) ? "none" : "flex";
-    this.drawCanvas();
-    return (T) this;
-  }
-
-  /**
-   * Sets the Z4GradientColor to draw the demo
-   *
-   * @param <T>
-   * @param gradientColor The Z4GradientColor
-   * @return This Z4PointIteratorUI
-   */
-  @SuppressWarnings("unchecked")
-  public <T extends Z4PointIteratorUI<?>> T setGradientColor(Z4GradientColor gradientColor) {
-    this.gradientColor = gradientColor;
-    this.drawCanvas();
-    return (T) this;
-  }
-
-  @Override
-  @SuppressWarnings("unchecked")
-  public <T extends Z4AbstractComponentWithValueUI<?>> T setValue(S value) {
-    this.value = value;
-
-    this.rotation.setValue(this.value.getRotation());
-    this.progression.setValue(this.value.getProgression());
-
-    this.drawCanvas();
-    return (T) this;
-  }
-
-  /**
    * Draws the demo canvas
    */
   protected void drawCanvas() {
@@ -150,12 +102,5 @@ public abstract class Z4PointIteratorUI<S extends Z4PointIterator<S>> extends Z4
       this.ctx.drawImage(offscreen, 0, 0);
       this.ctx.restore();
     }
-  }
-
-  @Override
-  public void dispose() {
-    this.disposeDevicePixelRatio();
-    this.resizeObserver.unobserve(this.canvas);
-    this.mutationObserver.unobserve(document.body);
   }
 }

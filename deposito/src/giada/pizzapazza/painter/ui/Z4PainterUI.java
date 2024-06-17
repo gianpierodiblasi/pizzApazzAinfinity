@@ -30,53 +30,6 @@ public abstract class Z4PainterUI<S extends Z4Painter<S>> extends Z4AbstractComp
   private Z4PointIterator<?> pointIterator = new Z4Stamper();
   private Z4GradientColor gradientColor = new Z4GradientColor();
 
-  private final $ResizeObserver resizeObserver = new $ResizeObserver(() -> this.drawCanvas());
-  private final $MutationObserver mutationObserver = new $MutationObserver(() -> this.drawCanvas());
-
-  /**
-   * Creates a Z4PainterUI
-   *
-   * @param ui The HTML
-   */
-  protected Z4PainterUI(String ui) {
-    super(ui);
-
-    this.initDevicePixelRatio(() -> this.drawCanvas());
-    this.resizeObserver.observe(this.canvas);
-
-    $Object config = new $Object();
-    config.$set("attributeFilter", new Array<>("class"));
-    this.mutationObserver.observe(document.body, config);
-  }
-
-  /**
-   * Sets the Z4PointIterator to draw the demo
-   *
-   * @param <T>
-   * @param pointIterator The Z4PointIterator
-   * @return This Z4PainterUI
-   */
-  @SuppressWarnings("unchecked")
-  public <T extends Z4PainterUI<?>> T setPointIterator(Z4PointIterator<?> pointIterator) {
-    this.pointIterator = pointIterator;
-    this.drawCanvas();
-    return (T) this;
-  }
-
-  /**
-   * Sets the Z4GradientColor to draw the demo
-   *
-   * @param <T>
-   * @param gradientColor The Z4GradientColor
-   * @return This Z4PainterUI
-   */
-  @SuppressWarnings("unchecked")
-  public <T extends Z4PainterUI<?>> T setGradientColor(Z4GradientColor gradientColor) {
-    this.gradientColor = gradientColor;
-    this.drawCanvas();
-    return (T) this;
-  }
-
   /**
    * Draws the demo canvas
    */
