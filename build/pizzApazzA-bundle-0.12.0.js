@@ -6498,8 +6498,8 @@ class Z4StamperPanel extends Z4PointIteratorPanel {
   constructor() {
     super();
     this.cssAddClass("z4stamperpanel");
-    this.add(this.multiplicity, new GBC(0, 0).i(0, 0, 1, 0));
-    this.add(this.push, new GBC(0, 1).i(0, 0, 1, 0));
+    this.add(this.multiplicity, new GBC(0, 0).a(GBC.WEST).i(0, 0, 1, 0));
+    this.add(this.push, new GBC(0, 1).a(GBC.WEST).i(0, 0, 1, 0));
     this.add(this.rotation, new GBC(0, 2));
     this.multiplicity.setSignsVisible(false);
     this.multiplicity.setLabel(Z4Translations.MULTIPLICITY);
@@ -6891,7 +6891,7 @@ class Z4FancifulValuePanel extends Z4AbstractValuePanel {
       this.sign = new Z4SignPanel(Z4SignPanelOrientation.SQUARED);
       this.add(this.sign, new GBC(0, 1).a(GBC.SOUTH));
       this.constant = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.HORIZONTAL);
-      this.add(this.constant, new GBC(1, 1).w(2));
+      this.add(this.constant, new GBC(1, 1).w(2).a(GBC.EAST));
       this.random = new Z4RandomValuePanel(Z4RandomValuePanelOrientation.HORIZONTALLY_VERTICAL);
       this.add(this.random, new GBC(0, 2).w(3).a(GBC.EAST));
       this.signedRandom = new Z4SignedRandomValuePanel(Z4RandomValuePanelOrientation.HORIZONTALLY_VERTICAL);

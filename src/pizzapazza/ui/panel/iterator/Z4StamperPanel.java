@@ -31,8 +31,8 @@ public class Z4StamperPanel extends Z4PointIteratorPanel<Z4Stamper> {
     super();
     this.cssAddClass("z4stamperpanel");
 
-    this.add(this.multiplicity, new GBC(0, 0).i(0, 0, 1, 0));
-    this.add(this.push, new GBC(0, 1).i(0, 0, 1, 0));
+    this.add(this.multiplicity, new GBC(0, 0).a(GBC.WEST).i(0, 0, 1, 0));
+    this.add(this.push, new GBC(0, 1).a(GBC.WEST).i(0, 0, 1, 0));
     this.add(this.rotation, new GBC(0, 2));
 
     this.multiplicity.setSignsVisible(false);
