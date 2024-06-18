@@ -46,6 +46,7 @@ class Z4Shape2DPainter extends Z4Painter {
    * @param borderColor The border color
    */
   constructor(width, height, regular, star, vertices, shadowShiftX, shadowShiftY, shadowColor, borderWidth, borderHeight, borderColor) {
+    super();
     this.width = width;
     this.height = height;
     this.regular = regular;

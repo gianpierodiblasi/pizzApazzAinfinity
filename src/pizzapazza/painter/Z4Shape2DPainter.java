@@ -58,6 +58,8 @@ public class Z4Shape2DPainter extends Z4Painter {
           Z4FancifulValue width, Z4FancifulValue height, boolean regular, boolean star, int vertices,
           Z4FancifulValue shadowShiftX, Z4FancifulValue shadowShiftY, Color shadowColor,
           Z4FancifulValue borderWidth, Z4FancifulValue borderHeight, Color borderColor) {
+    super();
+    
     this.width = width;
     this.height = height;
     this.regular = regular;

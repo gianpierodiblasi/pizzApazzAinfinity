@@ -14,7 +14,7 @@ class Z4PainterPanel extends Z4AbstractValuePanel {
   /**
    * true if the panel is enabled, false otherwise
    */
-   enabled = false;
+   enabled = true;
 
   constructor() {
     super();
