@@ -7536,25 +7536,30 @@ class Z4Shape2DPainterPanel extends Z4PainterPanel {
   constructor() {
     super();
     this.cssAddClass("z4shape2dpainterpanel");
+    let tabbedPane = new JSTabbedPane();
+    this.add(tabbedPane, new GBC(0, 0));
+    let panel = new JSPanel();
+    panel.setLayout(new GridBagLayout());
+    tabbedPane.addTab(Z4Translations.DIMENSION, panel);
     this.width.setSignsVisible(false);
     this.width.setConstantRange(1, 50);
     this.width.setLabel(Z4Translations.WIDTH);
     this.width.cssAddClass("z4abstractvaluepanel-titled");
     this.width.addChangeListener(event => this.onshape2dchange(this.width.getValueIsAdjusting(), null, null));
-    // this.add(this.width, new GBC(0, 0).w(3).a(GBC.WEST).i(0, 0, 1, 0));
+    panel.add(this.width, new GBC(0, 0).w(3).a(GBC.WEST).i(1, 0, 1, 0));
     this.height.setSignsVisible(false);
     this.height.setConstantRange(1, 50);
     this.height.setLabel(Z4Translations.HEIGHT);
     this.height.cssAddClass("z4abstractvaluepanel-titled");
     this.height.addChangeListener(event => this.onshape2dchange(this.height.getValueIsAdjusting(), null, null));
-    // this.add(this.height, new GBC(0, 1).w(3).a(GBC.WEST));
-    // Z4UI.addLabel(this, Z4Translations.VERTICES, new GBC(0, 2).wx(1).a(GBC.WEST));
+    panel.add(this.height, new GBC(0, 1).w(3).a(GBC.WEST));
+    Z4UI.addLabel(panel, Z4Translations.VERTICES, new GBC(0, 2).wx(1).a(GBC.WEST));
     this.regular.setText(Z4Translations.REGULAR);
     this.regular.addActionListener(event => this.onshape2dchange(false, null, null));
-    // this.add(this.regular, new GBC(1, 2).a(GBC.EAST));
+    panel.add(this.regular, new GBC(1, 2).a(GBC.EAST));
     this.star.setText(Z4Translations.STAR);
     this.star.addActionListener(event => this.onshape2dchange(false, null, null));
-    // this.add(this.star, new GBC(2, 2).a(GBC.EAST));
+    panel.add(this.star, new GBC(2, 2).a(GBC.EAST));
     let vertexModelAndRenderer = new DefaultSliderModelAndRenderer();
     for (let vertex = 3; vertex < 10; vertex++) {
       vertexModelAndRenderer.addElement("" + vertex);
@@ -7562,45 +7567,40 @@ class Z4Shape2DPainterPanel extends Z4PainterPanel {
     vertexModelAndRenderer.addElement("\u221E");
     this.vertexCounter.setModelAndRenderer(vertexModelAndRenderer);
     this.vertexCounter.addChangeListener(event => this.onshape2dchange(false, null, null));
-    // this.add(this.vertexCounter, new GBC(0, 3).w(3).f(GBC.HORIZONTAL));
-    // this.vertexCounter.getChilStyleByQuery("datalist option:nth-child(8)").fontSize = "larger";
+    panel.add(this.vertexCounter, new GBC(0, 3).w(3).f(GBC.HORIZONTAL));
+    this.vertexCounter.getChilStyleByQuery("datalist option:nth-child(8)").fontSize = "larger";
     this.shadowShiftX.setLabel(Z4Translations.DELTA_X);
+    this.shadowShiftX.cssAddClass("z4abstractvaluepanel-titled");
     this.shadowShiftX.addChangeListener(event => this.onshape2dchange(this.shadowShiftX.getValueIsAdjusting(), null, null));
     this.shadowShiftY.setLabel(Z4Translations.DELTA_Y);
+    this.shadowShiftY.cssAddClass("z4abstractvaluepanel-titled");
     this.shadowShiftY.addChangeListener(event => this.onshape2dchange(this.shadowShiftY.getValueIsAdjusting(), null, null));
     this.editShadowColor.setText(Z4Translations.EDIT);
     this.editShadowColor.addActionListener(event => JSColorChooser.showDialog(Z4Translations.FILLING_COLOR, this.value.getShadowColor(), true, null, color => this.onshape2dchange(false, color, null)));
-    // this.createPanel(Z4Translations.SHADOW, this.shadowShiftX, this.shadowShiftY, this.shadowColorPreview, this.editShadowColor, 4);
+    this.createPanel(tabbedPane, Z4Translations.SHADOW, this.shadowShiftX, this.shadowShiftY, this.shadowColorPreview, this.editShadowColor);
     this.borderWidth.setSignsVisible(false);
     this.borderWidth.setLabel(Z4Translations.WIDTH);
+    this.borderWidth.cssAddClass("z4abstractvaluepanel-titled");
     this.borderWidth.addChangeListener(event => this.onshape2dchange(this.borderWidth.getValueIsAdjusting(), null, null));
     this.borderHeight.setSignsVisible(false);
     this.borderHeight.setLabel(Z4Translations.HEIGHT);
+    this.borderHeight.cssAddClass("z4abstractvaluepanel-titled");
     this.borderHeight.addChangeListener(event => this.onshape2dchange(this.borderHeight.getValueIsAdjusting(), null, null));
     this.editBorderColor.setText(Z4Translations.EDIT);
     this.editBorderColor.addActionListener(event => JSColorChooser.showDialog(Z4Translations.FILLING_COLOR, this.value.getBorderColor(), true, null, color => this.onshape2dchange(false, null, color)));
-    // this.createPanel(Z4Translations.BORDER, this.borderWidth, this.borderHeight, this.borderColorPreview, this.editBorderColor, 5);
+    this.createPanel(tabbedPane, Z4Translations.BORDER, this.borderWidth, this.borderHeight, this.borderColorPreview, this.editBorderColor);
     this.setValue(new Z4Shape2DPainter(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), false, false, -1, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 255), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 255)));
   }
 
-   createPanel(text, p1, p2, preview, button, y) {
-    // JSPanel panel = new JSPanel();
-    // panel.setLayout(new GridBagLayout());
-    // 
-    // Z4UI.addLabel(panel, text, new GBC(0, 0).a(GBC.WEST)).getStyle().fontWeight = "bold";
-    // 
-    // panel.add(p1, new GBC(0, 1));
-    // panel.add(p2, new GBC(0, 2));
-    // 
-    // Z4UI.addLabel(panel, Z4Translations.FILLING_COLOR, new GBC(0, 3).a(GBC.WEST));
-    // //    JSLabel label = new JSLabel();
-    // //    label.setText();
-    // //
-    // //    this.colorPreview.getStyle().alignSelf = "center";
-    // //    this.colorPreview.getStyle().minWidth = "15rem";
-    // //
-    // 
-    // this.add(panel, new GBC(0, y).w(3).a(GBC.WEST));
+   createPanel(tabbedPane, text, p1, p2, preview, button) {
+    let panel = new JSPanel();
+    panel.setLayout(new GridBagLayout());
+    tabbedPane.addTab(text, panel);
+    panel.add(p1, new GBC(0, 1).w(2).i(1, 0, 1, 0));
+    panel.add(p2, new GBC(0, 2).w(2));
+    Z4UI.addLabel(panel, Z4Translations.FILLING_COLOR, new GBC(0, 3).w(2).a(GBC.WEST));
+    panel.add(preview, new GBC(0, 4).wx(1).f(GBC.HORIZONTAL).i(0, 0, 0, 5));
+    panel.add(button, new GBC(1, 4));
   }
 
    onshape2dchange(b, shadowColor, borderColor) {
