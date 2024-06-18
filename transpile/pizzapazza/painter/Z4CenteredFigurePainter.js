@@ -77,6 +77,12 @@ class Z4CenteredFigurePainter extends Z4Painter {
     }
   }
 
+   findControlPointPath(p1x, p1y, p2x, p2y, currentCover) {
+    let module = Z4Math.distance(p1x, p1y, p2x, p2y);
+    let phase = Z4Math.atan(p1x, p1y, p2x, p2y);
+    return new Z4Point(module * currentCover * Math.cos(phase), module * currentCover * Math.sin(phase));
+  }
+
    drawBounds(context, currentHole, point) {
     for (let i = 0; i < this.multiplicity.getConstant().getValue(); i++) {
       context.save();

@@ -90,6 +90,13 @@ public class Z4CenteredFigurePainter extends Z4Painter {
     }
   }
 
+  private Z4Point findControlPointPath(double p1x, double p1y, double p2x, double p2y, double currentCover) {
+    double module = Z4Math.distance(p1x, p1y, p2x, p2y);
+    double phase = Z4Math.atan(p1x, p1y, p2x, p2y);
+
+    return new Z4Point(module * currentCover * Math.cos(phase), module * currentCover * Math.sin(phase));
+  }
+
   private void drawBounds($CanvasRenderingContext2D context, double currentHole, Z4Point point) {
     for (int i = 0; i < this.multiplicity.getConstant().getValue(); i++) {
       context.save();

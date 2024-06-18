@@ -211,16 +211,6 @@ public class Z4CenteredFigurePainter extends Z4Painter<Z4CenteredFigurePainter> 
     return pF;
   }
 
-  private $Object findControlPointPath(double p1x, double p1y, double p2x, double p2y, double currentCover) {
-    double module = Z4Math.distance(p1x, p1y, p2x, p2y);
-    double phase = Z4Math.atan(p1x, p1y, p2x, p2y);
-
-    $Object path = new $Object();
-    path.$set("x", module * currentCover * Math.cos(phase));
-    path.$set("y", module * currentCover * Math.sin(phase));
-    return path;
-  }
-
   private void drawPath($CanvasRenderingContext2D context, double scaleW, double scaleH, Z4Color color) {
 //    context.save();
 //    context.scale(scaleW, scaleH);
