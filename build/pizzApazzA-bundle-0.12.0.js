@@ -1683,15 +1683,6 @@ class Z4Canvas extends JSComponent {
 
    selectedLayer = null;
 
-  // private Z4DrawingTool drawingTool = new Z4DrawingTool(
-  // new Z4Spirograph(
-  // new Z4Rotation(0, new Z4FancifulValue(
-  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 5),
-  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(10, Z4RandomValueBehavior.CLASSIC, 0)),
-  // false), Z4RotationBehavior.RELATIVE_TO_PATH, false)),
-  // new Z4ArrowPainter(),
-  // Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255))
-  // );
    drawingTool = new Z4DrawingTool(new Z4Scatterer(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(10, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(30, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.RELATIVE_TO_PATH, false)), new Z4ArrowPainter(), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)), new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE));
 
   /**
@@ -6509,6 +6500,29 @@ class Z4AirbrushPanel extends Z4PointIteratorPanel {
     this.multiplicity.setEnabled(b);
     this.radius.setEnabled(b);
     this.speed.setEnabled(b);
+  }
+}
+/**
+ * The panel to edit a Z4Spirograph
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4SpirographPanel extends Z4PointIteratorPanel {
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super();
+    this.cssAddClass("z4spirographpanel");
+    this.add(this.rotation, new GBC(0, 0));
+    this.setValue(new Z4Spirograph(new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)));
+  }
+
+   onIteratorChange(valueIsAdjusting) {
+    this.valueIsAdjusting = valueIsAdjusting;
+    this.value = new Z4Spirograph(this.rotation.getValue());
+    this.onchange();
   }
 }
 /**

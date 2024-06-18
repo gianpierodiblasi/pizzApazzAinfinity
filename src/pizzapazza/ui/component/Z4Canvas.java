@@ -22,12 +22,8 @@ import pizzapazza.color.Z4ColorProgression;
 import pizzapazza.color.Z4ColorProgressionBehavior;
 import pizzapazza.color.Z4Lighting;
 import pizzapazza.color.Z4SpatioTemporalColor;
-import pizzapazza.iterator.Z4Airbrush;
 import pizzapazza.iterator.Z4PointIteratorDrawingAction;
 import pizzapazza.iterator.Z4Scatterer;
-import pizzapazza.iterator.Z4Spirograph;
-import pizzapazza.iterator.Z4Stamper;
-import pizzapazza.iterator.Z4Tracer;
 import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4RandomValue;
@@ -92,16 +88,7 @@ public class Z4Canvas extends JSComponent {
   private final Z4Paper paper = new Z4Paper();
   private Z4Layer selectedLayer;
 
-//  private Z4DrawingTool drawingTool = new Z4DrawingTool(
-//          new Z4Spirograph(
-//                  new Z4Rotation(0, new Z4FancifulValue(
-//                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 5),
-//                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(10, Z4RandomValueBehavior.CLASSIC, 0)),
-//                          false), Z4RotationBehavior.RELATIVE_TO_PATH, false)),
-//          new Z4ArrowPainter(),
-//          Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255))
-//  );
-  private Z4DrawingTool drawingTool = new Z4DrawingTool(
+  private final Z4DrawingTool drawingTool = new Z4DrawingTool(
           new Z4Scatterer(
                   new Z4FancifulValue(
                           new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
