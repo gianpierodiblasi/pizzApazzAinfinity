@@ -17,6 +17,11 @@ public abstract class Z4PainterPanel<T extends Z4Painter> extends Z4AbstractValu
    */
   protected boolean valueIsAdjusting;
 
+  /**
+   * true if the panel is enabled, false otherwise
+   */
+  protected boolean enabled;
+
   public Z4PainterPanel() {
     super();
     this.cssAddClass("z4painterpanel");
@@ -30,5 +35,10 @@ public abstract class Z4PainterPanel<T extends Z4Painter> extends Z4AbstractValu
    */
   public boolean getValueIsAdjusting() {
     return this.valueIsAdjusting;
+  }
+  
+  @Override
+  public void setEnabled(boolean b) {
+    super.setEnabled(b);
   }
 }

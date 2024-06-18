@@ -11,6 +11,11 @@ class Z4PainterPanel extends Z4AbstractValuePanel {
    */
    valueIsAdjusting = false;
 
+  /**
+   * true if the panel is enabled, false otherwise
+   */
+   enabled = false;
+
   constructor() {
     super();
     this.cssAddClass("z4painterpanel");
@@ -24,5 +29,9 @@ class Z4PainterPanel extends Z4AbstractValuePanel {
    */
    getValueIsAdjusting() {
     return this.valueIsAdjusting;
+  }
+
+   setEnabled(b) {
+    super.setEnabled(b);
   }
 }

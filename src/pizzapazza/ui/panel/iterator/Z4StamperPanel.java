@@ -16,7 +16,7 @@ import pizzapazza.ui.panel.math.Z4FancifulValuePanelOrientation;
 import pizzapazza.util.Z4Translations;
 
 /**
- *
+ * The panel to edit a Z4Stamper
  * @author gianpiero.diblasi
  */
 public class Z4StamperPanel extends Z4PointIteratorPanel<Z4Stamper> {

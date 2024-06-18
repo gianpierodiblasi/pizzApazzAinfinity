@@ -6,7 +6,6 @@ Z4Translations.STOP = "Stop";
 # Math
 Z4Translations.VALUE = "Value";
 Z4Translations.SIGN = "Sign";
-Z4Translations.SPINNER = "Spinner";
 Z4Translations.RANGE = "Range";
 
 # Label
@@ -16,14 +15,6 @@ Z4Translations.SUSTAIN = "Sustain";
 Z4Translations.RELEASE = "Release";
 Z4Translations.ENDLESS = "Endless";
 Z4Translations.SHAPE = "Shape";
-Z4Translations.SIZE = "Size";
-Z4Translations.SHADOW = "Shadow";
-Z4Translations.BORDER = "Border";
-Z4Translations.REGULAR = "Regular";
-Z4Translations.SHADOW = "Shadow";
-Z4Translations.DELTA_X = "Delta X";
-Z4Translations.DELTA_Y = "Delta Y";
-Z4Translations.BORDER = "Border";
 Z4Translations.ARROW_MODULE = "Arrow Module";
 Z4Translations.RADIUS = "Radius";
 Z4Translations.SPEED = "Speed

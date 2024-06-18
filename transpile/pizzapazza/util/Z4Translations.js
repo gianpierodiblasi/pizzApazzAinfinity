@@ -192,6 +192,14 @@ class Z4Translations {
 
   static  NONE_HER = "";
 
+  static  BORDER = "";
+
+  static  SHADOW = "";
+
+  static  DELTA_X = "";
+
+  static  DELTA_Y = "";
+
   // Color
   static  COLOR = "";
 
@@ -424,6 +432,10 @@ class Z4Translations {
     Z4Translations.MERGE = "Merge";
     Z4Translations.NONE_HIM = "None";
     Z4Translations.NONE_HER = "None";
+    Z4Translations.BORDER = "Border";
+    Z4Translations.SHADOW = "Shadow";
+    Z4Translations.DELTA_X = "Delta X";
+    Z4Translations.DELTA_Y = "Delta Y";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -587,6 +599,10 @@ class Z4Translations {
     Z4Translations.MERGE = "Fondi";
     Z4Translations.NONE_HIM = "Nessuno";
     Z4Translations.NONE_HER = "Nessuna";
+    Z4Translations.BORDER = "Bordo";
+    Z4Translations.SHADOW = "Ombra";
+    Z4Translations.DELTA_X = "Delta X";
+    Z4Translations.DELTA_Y = "Delta Y";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";

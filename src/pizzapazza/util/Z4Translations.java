@@ -121,6 +121,10 @@ public class Z4Translations {
   public static String MERGE = "";
   public static String NONE_HIM = "";
   public static String NONE_HER = "";
+  public static String BORDER = "";
+  public static String SHADOW = "";
+  public static String DELTA_X = "";
+  public static String DELTA_Y = "";
 
   // Color
   public static String COLOR = "";
@@ -314,6 +318,10 @@ public class Z4Translations {
     Z4Translations.MERGE = "Merge";
     Z4Translations.NONE_HIM = "None";
     Z4Translations.NONE_HER = "None";
+    Z4Translations.BORDER = "Border";
+    Z4Translations.SHADOW = "Shadow";
+    Z4Translations.DELTA_X = "Delta X";
+    Z4Translations.DELTA_Y = "Delta Y";
 
     // Color
     Z4Translations.COLOR = "Color";
@@ -491,6 +499,10 @@ public class Z4Translations {
     Z4Translations.MERGE = "Fondi";
     Z4Translations.NONE_HIM = "Nessuno";
     Z4Translations.NONE_HER = "Nessuna";
+    Z4Translations.BORDER = "Bordo";
+    Z4Translations.SHADOW = "Ombra";
+    Z4Translations.DELTA_X = "Delta X";
+    Z4Translations.DELTA_Y = "Delta Y";
 
     // Color
     Z4Translations.COLOR = "Colore";

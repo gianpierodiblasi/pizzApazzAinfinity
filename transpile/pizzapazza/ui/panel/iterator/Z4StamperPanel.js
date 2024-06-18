@@ -1,4 +1,5 @@
 /**
+ * The panel to edit a Z4Stamper
  * @author gianpiero.diblasi
  */
 class Z4StamperPanel extends Z4PointIteratorPanel {
