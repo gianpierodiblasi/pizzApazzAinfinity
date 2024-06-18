@@ -46,7 +46,7 @@ public class Z4FancifulValuePanel extends Z4AbstractValuePanel<Z4FancifulValue> 
 
     this.orientation = orientation;
     if (orientation == Z4FancifulValuePanelOrientation.HORIZONTAL) {
-      this.add(this.label, new GBC(0, 0).w(2).a(GBC.WEST));
+      this.add(this.label, new GBC(0, 0).w(2).wx(1).a(GBC.WEST));
       this.add(this.uniformSign, new GBC(2, 0).w(2).a(GBC.EAST));
 
       this.sign = new Z4SignPanel(Z4SignPanelOrientation.SQUARED);

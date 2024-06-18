@@ -34,7 +34,7 @@ class Z4FancifulValuePanel extends Z4AbstractValuePanel {
     this.setLayout(new GridBagLayout());
     this.orientation = orientation;
     if (orientation === Z4FancifulValuePanelOrientation.HORIZONTAL) {
-      this.add(this.label, new GBC(0, 0).w(2).a(GBC.WEST));
+      this.add(this.label, new GBC(0, 0).w(2).wx(1).a(GBC.WEST));
       this.add(this.uniformSign, new GBC(2, 0).w(2).a(GBC.EAST));
       this.sign = new Z4SignPanel(Z4SignPanelOrientation.SQUARED);
       this.add(this.sign, new GBC(0, 1).i(0, 0, 0, 2).a(GBC.SOUTH));

@@ -6515,12 +6515,10 @@ class Z4StamperPanel extends Z4PointIteratorPanel {
     this.add(this.rotation, new GBC(0, 2));
     this.multiplicity.setSignsVisible(false);
     this.multiplicity.setConstantRange(1, 50);
-    this.multiplicity.getStyle().setProperty("grid-template", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\" / auto auto auto auto");
     this.multiplicity.setLabel(Z4Translations.MULTIPLICITY);
     this.multiplicity.cssAddClass("z4abstractvaluepanel-titled");
     this.multiplicity.addChangeListener(event => this.onIteratorChange(this.multiplicity.getValueIsAdjusting()));
     this.push.setSignsVisible(false);
-    this.push.getStyle().setProperty("grid-template", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\" / auto auto auto auto");
     this.push.setLabel(Z4Translations.PUSH);
     this.push.cssAddClass("z4abstractvaluepanel-titled");
     this.push.addChangeListener(event => this.onIteratorChange(this.push.getValueIsAdjusting()));
@@ -6880,7 +6878,7 @@ class Z4FancifulValuePanel extends Z4AbstractValuePanel {
     this.setLayout(new GridBagLayout());
     this.orientation = orientation;
     if (orientation === Z4FancifulValuePanelOrientation.HORIZONTAL) {
-      this.add(this.label, new GBC(0, 0).w(2).a(GBC.WEST));
+      this.add(this.label, new GBC(0, 0).w(2).wx(1).a(GBC.WEST));
       this.add(this.uniformSign, new GBC(2, 0).w(2).a(GBC.EAST));
       this.sign = new Z4SignPanel(Z4SignPanelOrientation.SQUARED);
       this.add(this.sign, new GBC(0, 1).i(0, 0, 0, 2).a(GBC.SOUTH));
