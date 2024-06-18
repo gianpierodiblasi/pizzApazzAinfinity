@@ -40,5 +40,6 @@ public abstract class Z4PainterPanel<T extends Z4Painter> extends Z4AbstractValu
   @Override
   public void setEnabled(boolean b) {
     super.setEnabled(b);
+    this.enabled = b;
   }
 }

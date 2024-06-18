@@ -3,6 +3,15 @@ package pizzapazza.ui.panel.iterator;
 import javascript.awt.GBC;
 import javascript.swing.JSCheckBox;
 import pizzapazza.iterator.Z4Tracer;
+import pizzapazza.math.Z4FancifulValue;
+import pizzapazza.math.Z4RandomValue;
+import pizzapazza.math.Z4RandomValueBehavior;
+import pizzapazza.math.Z4Rotation;
+import pizzapazza.math.Z4RotationBehavior;
+import pizzapazza.math.Z4Sign;
+import pizzapazza.math.Z4SignBehavior;
+import pizzapazza.math.Z4SignedRandomValue;
+import pizzapazza.math.Z4SignedValue;
 import pizzapazza.ui.panel.math.Z4FancifulValuePanel;
 import pizzapazza.ui.panel.math.Z4FancifulValuePanelOrientation;
 import pizzapazza.util.Z4Translations;
@@ -23,7 +32,7 @@ public class Z4TracerPanel extends Z4PointIteratorPanel<Z4Tracer> {
   private final JSCheckBox endlessSustain = new JSCheckBox();
 
   private final Z4FancifulValuePanel step = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
-  
+
   /**
    * Creates the object
    */
@@ -54,7 +63,11 @@ public class Z4TracerPanel extends Z4PointIteratorPanel<Z4Tracer> {
     this.sustain.setLabel(Z4Translations.SUSTAIN);
     this.sustain.cssAddClass("z4abstractvaluepanel-titled");
     this.sustain.addChangeListener(event -> this.onIteratorChange(this.sustain.getValueIsAdjusting()));
+    this.sustain.add(this.endlessSustain, new GBC(2, 0).w(2).a(GBC.EAST));
     this.add(this.sustain, new GBC(0, 3).a(GBC.WEST).i(0, 0, 1, 0));
+
+    this.endlessSustain.setText(Z4Translations.ENDLESS);
+    this.endlessSustain.addActionListener(event -> this.onIteratorChange(false));
 
     this.release.setSignsVisible(false);
     this.release.setLabel(Z4Translations.RELEASE);
@@ -63,16 +76,90 @@ public class Z4TracerPanel extends Z4PointIteratorPanel<Z4Tracer> {
     this.add(this.release, new GBC(0, 4).a(GBC.WEST).i(0, 0, 1, 0));
 
     this.step.setSignsVisible(false);
+    this.step.setConstantRange(1, 50);
     this.step.setLabel(Z4Translations.STEP);
     this.step.cssAddClass("z4abstractvaluepanel-titled");
     this.step.addChangeListener(event -> this.onIteratorChange(this.step.getValueIsAdjusting()));
     this.add(this.step, new GBC(0, 5).a(GBC.WEST).i(0, 0, 1, 0));
-    
-//    this.add(this.rotation, new GBC(0, 2));
+
+    this.add(this.rotation, new GBC(0, 6));
+
+    this.setValue(new Z4Tracer(
+            new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false),
+            new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false),
+            new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false),
+            new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false),
+            new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false), true,
+            new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false),
+            new Z4Rotation(0, new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false), Z4RotationBehavior.FIXED, false)));
   }
 
   @Override
   protected void onIteratorChange(boolean valueIsAdjusting) {
-    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    this.valueIsAdjusting = valueIsAdjusting;
+
+    this.sustain.setEnabled(this.enabled && !this.endlessSustain.isSelected());
+    this.release.setEnabled(this.enabled && !this.endlessSustain.isSelected());
+
+    this.value = new Z4Tracer(
+            this.multiplicity.getValue(), this.push.getValue(),
+            this.attack.getValue(), this.sustain.getValue(), this.release.getValue(), this.endlessSustain.isSelected(),
+            this.step.getValue(),
+            this.rotation.getValue());
+
+    this.onchange();
+  }
+
+  @Override
+  public void setValue(Z4Tracer value) {
+    super.setValue(value);
+
+    this.multiplicity.setValue(value.getMultiplicity());
+    this.push.setValue(value.getPush());
+
+    this.attack.setValue(value.getAttack());
+    this.sustain.setValue(value.getSustain());
+    this.sustain.setEnabled(this.enabled && !value.isEndlessSustain());
+    this.release.setValue(value.getRelease());
+    this.release.setEnabled(this.enabled && !value.isEndlessSustain());
+    this.endlessSustain.setSelected(value.isEndlessSustain());
+
+    this.step.setValue(value.getStep());
+  }
+
+  @Override
+  public void setEnabled(boolean b) {
+    super.setEnabled(b);
+
+    this.multiplicity.setEnabled(b);
+    this.push.setEnabled(b);
+
+    this.attack.setEnabled(b);
+    this.sustain.setEnabled(b && !this.endlessSustain.isSelected());
+    this.release.setEnabled(b && !this.endlessSustain.isSelected());
+    this.endlessSustain.setEnabled(b);
+
+    this.step.setEnabled(b);
   }
 }

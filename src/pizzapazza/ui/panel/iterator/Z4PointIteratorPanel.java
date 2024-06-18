@@ -26,6 +26,11 @@ public abstract class Z4PointIteratorPanel<T extends Z4PointIterator> extends Z4
   protected boolean valueIsAdjusting;
 
   /**
+   * true if the panel is enabled, false otherwise
+   */
+  protected boolean enabled = true;
+
+  /**
    * Creates the object
    */
   public Z4PointIteratorPanel() {
@@ -53,7 +58,7 @@ public abstract class Z4PointIteratorPanel<T extends Z4PointIterator> extends Z4
   public boolean getValueIsAdjusting() {
     return this.valueIsAdjusting;
   }
-  
+
   @Override
   public void setValue(T value) {
     this.rotation.setValue(value.getRotation());
@@ -62,6 +67,7 @@ public abstract class Z4PointIteratorPanel<T extends Z4PointIterator> extends Z4
   @Override
   public void setEnabled(boolean b) {
     super.setEnabled(b);
+    this.enabled = b;
     this.rotation.setEnabled(b);
   }
 }

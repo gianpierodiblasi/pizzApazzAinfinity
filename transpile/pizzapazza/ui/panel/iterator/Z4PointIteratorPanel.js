@@ -17,6 +17,11 @@ class Z4PointIteratorPanel extends Z4AbstractValuePanel {
    valueIsAdjusting = false;
 
   /**
+   * true if the panel is enabled, false otherwise
+   */
+   enabled = true;
+
+  /**
    * Creates the object
    */
   constructor() {
@@ -51,6 +56,7 @@ class Z4PointIteratorPanel extends Z4AbstractValuePanel {
 
    setEnabled(b) {
     super.setEnabled(b);
+    this.enabled = b;
     this.rotation.setEnabled(b);
   }
 }

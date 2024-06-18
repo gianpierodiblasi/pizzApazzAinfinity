@@ -33,5 +33,6 @@ class Z4PainterPanel extends Z4AbstractValuePanel {
 
    setEnabled(b) {
     super.setEnabled(b);
+    this.enabled = b;
   }
 }
