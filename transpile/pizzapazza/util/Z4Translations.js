@@ -230,6 +230,14 @@ class Z4Translations {
 
   static  ROTATION = "";
 
+  static  ATTACK = "";
+
+  static  SUSTAIN = "";
+
+  static  RELEASE = "";
+
+  static  ENDLESS = "";
+
   // Math
   static  POSITIVE = "";
 
@@ -452,6 +460,10 @@ class Z4Translations {
     Z4Translations.MULTIPLICITY = "Multiplicity";
     Z4Translations.PUSH = "Push";
     Z4Translations.ROTATION = "Rotation";
+    Z4Translations.ATTACK = "Attack";
+    Z4Translations.SUSTAIN = "Sustain";
+    Z4Translations.RELEASE = "Release";
+    Z4Translations.ENDLESS = "Endless";
     // Math
     Z4Translations.POSITIVE = "Positive";
     Z4Translations.NEGATIVE = "Negative";
@@ -619,6 +631,10 @@ class Z4Translations {
     Z4Translations.MULTIPLICITY = "Molteplicit\u00E0";
     Z4Translations.PUSH = "Spinta";
     Z4Translations.ROTATION = "Rotazione";
+    Z4Translations.ATTACK = "Attacco";
+    Z4Translations.SUSTAIN = "Sostegno";
+    Z4Translations.RELEASE = "Rilascio";
+    Z4Translations.ENDLESS = "Infinito";
     // Math
     Z4Translations.POSITIVE = "Positivo";
     Z4Translations.NEGATIVE = "Negativo";

@@ -17,10 +17,11 @@ import pizzapazza.util.Z4Translations;
 
 /**
  * The panel to edit a Z4Stamper
+ *
  * @author gianpiero.diblasi
  */
 public class Z4StamperPanel extends Z4PointIteratorPanel<Z4Stamper> {
-  
+
   private final Z4FancifulValuePanel multiplicity = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
   private final Z4FancifulValuePanel push = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
 
@@ -30,22 +31,22 @@ public class Z4StamperPanel extends Z4PointIteratorPanel<Z4Stamper> {
   public Z4StamperPanel() {
     super();
     this.cssAddClass("z4stamperpanel");
-    
-    this.add(this.multiplicity, new GBC(0, 0).a(GBC.WEST).i(0, 0, 1, 0));
-    this.add(this.push, new GBC(0, 1).a(GBC.WEST).i(0, 0, 1, 0));
-    this.add(this.rotation, new GBC(0, 2));
-    
+
     this.multiplicity.setSignsVisible(false);
     this.multiplicity.setConstantRange(1, 50);
     this.multiplicity.setLabel(Z4Translations.MULTIPLICITY);
     this.multiplicity.cssAddClass("z4abstractvaluepanel-titled");
     this.multiplicity.addChangeListener(event -> this.onIteratorChange(this.multiplicity.getValueIsAdjusting()));
+    this.add(this.multiplicity, new GBC(0, 0).a(GBC.WEST).i(0, 0, 1, 0));
     
     this.push.setSignsVisible(false);
     this.push.setLabel(Z4Translations.PUSH);
     this.push.cssAddClass("z4abstractvaluepanel-titled");
     this.push.addChangeListener(event -> this.onIteratorChange(this.push.getValueIsAdjusting()));
+    this.add(this.push, new GBC(0, 1).a(GBC.WEST).i(0, 0, 1, 0));
     
+    this.add(this.rotation, new GBC(0, 2));
+
     this.setValue(new Z4Stamper(
             new Z4FancifulValue(
                     new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1),
@@ -61,22 +62,22 @@ public class Z4StamperPanel extends Z4PointIteratorPanel<Z4Stamper> {
                     false), Z4RotationBehavior.FIXED, false))
     );
   }
-  
+
   @Override
   protected void onIteratorChange(boolean valueIsAdjusting) {
     this.valueIsAdjusting = valueIsAdjusting;
-    
+
     this.value = new Z4Stamper(this.multiplicity.getValue(), this.push.getValue(), this.rotation.getValue());
     this.onchange();
   }
-  
+
   @Override
   public void setValue(Z4Stamper value) {
     super.setValue(value);
     this.multiplicity.setValue(value.getMultiplicity());
     this.push.setValue(value.getPush());
   }
-  
+
   @Override
   public void setEnabled(boolean b) {
     super.setEnabled(b);

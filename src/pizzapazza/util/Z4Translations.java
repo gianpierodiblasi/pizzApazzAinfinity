@@ -143,6 +143,10 @@ public class Z4Translations {
   public static String MULTIPLICITY = "";
   public static String PUSH = "";
   public static String ROTATION = "";
+  public static String ATTACK = "";
+  public static String SUSTAIN = "";
+  public static String RELEASE = "";
+  public static String ENDLESS = "";
 
   // Math
   public static String POSITIVE = "";
@@ -340,6 +344,10 @@ public class Z4Translations {
     Z4Translations.MULTIPLICITY = "Multiplicity";
     Z4Translations.PUSH = "Push";
     Z4Translations.ROTATION = "Rotation";
+    Z4Translations.ATTACK = "Attack";
+    Z4Translations.SUSTAIN = "Sustain";
+    Z4Translations.RELEASE = "Release";
+    Z4Translations.ENDLESS = "Endless";
 
     // Math
     Z4Translations.POSITIVE = "Positive";
@@ -521,6 +529,10 @@ public class Z4Translations {
     Z4Translations.MULTIPLICITY = "Molteplicit\u00E0";
     Z4Translations.PUSH = "Spinta";
     Z4Translations.ROTATION = "Rotazione";
+    Z4Translations.ATTACK = "Attacco";
+    Z4Translations.SUSTAIN = "Sostegno";
+    Z4Translations.RELEASE = "Rilascio";
+    Z4Translations.ENDLESS = "Infinito";
 
     // Math
     Z4Translations.POSITIVE = "Positivo";
