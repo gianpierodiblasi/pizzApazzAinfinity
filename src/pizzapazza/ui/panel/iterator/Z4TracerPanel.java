@@ -105,7 +105,7 @@ public class Z4TracerPanel extends Z4PointIteratorPanel<Z4Tracer> {
                     new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                     false), true,
             new Z4FancifulValue(
-                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1),
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
                     new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                     false),
             new Z4Rotation(0, new Z4FancifulValue(

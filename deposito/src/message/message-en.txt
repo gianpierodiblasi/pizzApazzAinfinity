@@ -12,5 +12,3 @@ Z4Translations.RANGE = "Range";
 Z4Translations.INTENSITY = "Intensity";
 Z4Translations.SHAPE = "Shape";
 Z4Translations.ARROW_MODULE = "Arrow Module";
-Z4Translations.RADIUS = "Radius";
-Z4Translations.SPEED = "Speed

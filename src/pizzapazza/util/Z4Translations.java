@@ -147,6 +147,8 @@ public class Z4Translations {
   public static String SUSTAIN = "";
   public static String RELEASE = "";
   public static String ENDLESS = "";
+  public static String RADIUS = "";
+  public static String SPEED = "";
 
   // Math
   public static String POSITIVE = "";
@@ -348,6 +350,8 @@ public class Z4Translations {
     Z4Translations.SUSTAIN = "Sustain";
     Z4Translations.RELEASE = "Release";
     Z4Translations.ENDLESS = "Endless";
+    Z4Translations.RADIUS = "Radius";
+    Z4Translations.SPEED = "Speed";
 
     // Math
     Z4Translations.POSITIVE = "Positive";
@@ -533,6 +537,8 @@ public class Z4Translations {
     Z4Translations.SUSTAIN = "Sostegno";
     Z4Translations.RELEASE = "Rilascio";
     Z4Translations.ENDLESS = "Infinito";
+    Z4Translations.RADIUS = "Raggio";
+    Z4Translations.SPEED = "Velocit\u00E0";
 
     // Math
     Z4Translations.POSITIVE = "Positivo";

@@ -16,18 +16,10 @@ import static simulation.js.$Globals.$exists;
  */
 public class Z4AirbrushUI extends Z4PointIteratorUI<Z4Airbrush> {
 
-  private final Z4FancifulValueUI multiplicity = new Z4FancifulValueUI().setValueLabel("MULTIPLICITY", true, true).setConstantRange(1, 100, true).setRandomRange(0, 100, false).setRandomLengthRange(1, 100, false).setSignsVisible(false).appendToElement(this.querySelector(".airbrush-container-first-row"));
-  private final Z4SignedValueUI radius = new Z4SignedValueUI().setValueLabel("RADIUS", true, true).setRange(1, 100, true).setSignVisible(false).setCompact().appendToElement(this.querySelector(".airbrush-container-first-row"));
-  private final Z4SignedValueUI speed = new Z4SignedValueUI().setValueLabel("SPEED", true, true).setRange(1, 10, true).setSignVisible(false).setCompact().appendToElement(this.querySelector(".airbrush-container-first-row"));
-
-  private final static String UI = Z4HTMLFactory.get("giada/pizzapazza/iterator/ui/Z4AirbrushUI.html");
-
   /**
    * Creates a Z4AirbrushUI
    */
   public Z4AirbrushUI() {
-    super(Z4AirbrushUI.UI);
-
     this.multiplicity.oninput = (v) -> this.setMRS(v, null, null, false);
     this.multiplicity.onchange = (v) -> this.setMRS(v, null, null, true);
     this.radius.oninput = (v) -> this.setMRS(null, v, null, false);
