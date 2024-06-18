@@ -15,40 +15,16 @@ import simulation.dom.$CanvasRenderingContext2D;
 import simulation.js.$Object;
 
 /**
- * The painter of centered figures
+ * 
  *
  * @author gianpiero.diblasi
  */
 public class Z4CenteredFigurePainter extends Z4Painter<Z4CenteredFigurePainter> {
 
-  private final int type;
-
-  private Z4FancifulValue size = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(50).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
-
-  private Z4FancifulValue angle1 = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(45).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
-  private Z4FancifulValue angle2 = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(45).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
-
-  private Z4FancifulValue tension = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(3).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
-
-  private Z4FancifulValue multiplicity = new Z4FancifulValue().setConstant(new Z4SignedValue().setValue(3).setSign(Z4Sign.POSITIVE)).setRandom(Z4SignedRandomValue.classic(0).setSign(Z4Sign.POSITIVE));
-
-  private int hole;
-  private Z4Whirlpool whirlpool = Z4Whirlpool.none();
-  private int cover = 100;
-
-  private Z4CenteredFigurePainter(int type) {
-    this.type = type;
-  }
-
   @Override
   public Z4CenteredFigurePainter draw($CanvasRenderingContext2D context, Z4Point point, Z4GradientColor gradientColor) {
     if (point.isDrawBounds()) {
-      double currentSize = point.getIntensity() * (point.isUseVectorModuleAsSize() ? 2 * point.getZ4Vector().getModule() : this.size.getConstant().getValue());
-
-      double currentHole = this.hole;
-      point.setZ4Vector(Z4Vector.fromVector(currentHole, 0, currentSize, 0));
-//      this.checkWhirlpool(point, currentHole);
-      this.drawBounds(context, point, currentHole);
+      
     } else {
       double currentSize = point.getIntensity() * (point.isUseVectorModuleAsSize() ? 2 * point.getZ4Vector().getModule() : this.size.next());
       if (currentSize <= 0) {
@@ -116,38 +92,6 @@ public class Z4CenteredFigurePainter extends Z4Painter<Z4CenteredFigurePainter> 
 //        }
 //      }
     }
-
-    return this;
-  }
-
-  private void drawBounds($CanvasRenderingContext2D context, Z4Point point, double currentHole) {
-    //ANDROID
-    //for (int i=0;i<multiplicity;i++)
-//    {
-//      transparentLayerWhiteCanvas.drawLine(currentHole,0,point.vector[2],point.vector[3],paint);
-//      transparentLayerWhiteCanvas.rotate(360f/multiplicity);
-//    }
-//    
-//    paint.setPathEffect(dashPathEffect);
-//    for (int i=0;i<multiplicity;i++)
-//    {
-//      transparentLayerBlackCanvas.drawLine(currentHole,0,point.vector[2],point.vector[3],paint);
-//      transparentLayerBlackCanvas.rotate(360f/multiplicity);
-//    }
-
-//Z4Shape2D
-//    context.save();
-//    context.scale(scaleW, scaleH);
-//    context.lineWidth = 1 / Math.min(scaleW, scaleH);
-//
-//    context.strokeStyle = Z4Color.$getFillStyle("gray");
-//    context.stroke(this.shape.getPath());
-//
-//    context.strokeStyle = Z4Color.$getFillStyle("black");
-//    context.translate(1 / scaleW, 1 / scaleH);
-//    context.stroke(this.shape.getPath());
-//
-//    context.restore();
   }
 
   //One Bezier curve. Start and end point coincide in the fulcrum
@@ -283,59 +227,5 @@ public class Z4CenteredFigurePainter extends Z4Painter<Z4CenteredFigurePainter> 
 //    context.fillStyle = color.$getHEX();
 //    context.fill(this.shape.getPath());
 //    context.restore();
-  }
-
-  /**
-   * Returns a Z4CenteredFigurePainter of type 0
-   *
-   * @return The Z4CenteredFigurePainter
-   */
-  public static Z4CenteredFigurePainter type0() {
-    return new Z4CenteredFigurePainter(0);
-  }
-
-  /**
-   * Returns a Z4CenteredFigurePainter of type 1
-   *
-   * @return The Z4CenteredFigurePainter
-   */
-  public static Z4CenteredFigurePainter type1() {
-    return new Z4CenteredFigurePainter(1);
-  }
-
-  /**
-   * Returns a Z4CenteredFigurePainter of type 2
-   *
-   * @return The Z4CenteredFigurePainter
-   */
-  public static Z4CenteredFigurePainter type2() {
-    return new Z4CenteredFigurePainter(2);
-  }
-
-  /**
-   * Returns a Z4CenteredFigurePainter of type 3
-   *
-   * @return The Z4CenteredFigurePainter
-   */
-  public static Z4CenteredFigurePainter type3() {
-    return new Z4CenteredFigurePainter(3);
-  }
-
-  /**
-   * Returns a Z4CenteredFigurePainter of type 4
-   *
-   * @return The Z4CenteredFigurePainter
-   */
-  public static Z4CenteredFigurePainter type4() {
-    return new Z4CenteredFigurePainter(4);
-  }
-
-  /**
-   * Returns a Z4CenteredFigurePainter of type 5
-   *
-   * @return The Z4CenteredFigurePainter
-   */
-  public static Z4CenteredFigurePainter type5() {
-    return new Z4CenteredFigurePainter(5);
   }
 }

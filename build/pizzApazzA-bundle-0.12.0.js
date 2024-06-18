@@ -1298,6 +1298,33 @@ class Z4Math {
     return vertices;
   }
 
+  /**
+   * Calculates the control points of a Bezier curve, having coincident starting
+   * (S) and ending (E) points, passing through a given point (P), included in a
+   * given angle (A) and symmetrical with respect to the straight line passing
+   * through the starting point (S) and the given point (P)
+   *
+   * @param vector The vector starting at the starting point (S) and ending at
+   * the given point (P)
+   *
+   * @param alpha The angle (A) including the Bezier curve, in radians
+   * @return An array of two points containing the first and second control
+   * points of the Bezier curve
+   */
+  static  butterfly(vector, alpha) {
+    let cos = Math.cos(alpha);
+    let sin = Math.sin(alpha);
+    let val1 = 3 * (cos + 1);
+    let val2 = vector.y0 - 4 * vector.y;
+    let y = -(val2 * cos + 4 * (vector.x - vector.x0) * sin + val2) / val1;
+    let x = (3 * vector.x0 * cos + 3 * (y - vector.y0) * sin - 5 * vector.x0 + 8 * vector.x) / val1;
+    let controlPoint1 = new Z4Point(x, y);
+    let dx = controlPoint1.x - vector.x0;
+    let dy = controlPoint1.y - vector.y0;
+    let controlPoint2 = new Z4Point(dx * cos - dy * sin + vector.x0, dx * sin + dy * cos + vector.y0);
+    return new Array(controlPoint1, controlPoint2);
+  }
+
   constructor() {
   }
 }
@@ -1633,6 +1660,47 @@ class Z4Vector {
   }
 }
 /**
+ * The behavior of a whirlpool
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4WhirlpoolBehavior {
+
+  /**
+   * A Z4Whirlpool without whirlpool
+   */
+  static NONE = 'NONE';
+  /**
+   * A Z4Whirlpool with forward whirlpool
+   */
+  static FORWARD = 'FORWARD';
+  /**
+   * A Z4Whirlpool with backward whirlpool
+   */
+  static BACKWARD = 'BACKWARD';
+}
+/**
+ * The type of Z4CenteredFigurePainter
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4CenteredFigurePainterType {
+
+  // useAngle1, useAngle2, useTension
+  // true,      false,     false
+  static TYPE_0 = 'TYPE_0';
+  // true,      false,     false
+  static TYPE_1 = 'TYPE_1';
+  // true,      false,     false
+  static TYPE_2 = 'TYPE_2';
+  // true,      true,      true
+  static TYPE_3 = 'TYPE_3';
+  // true,      false,     true
+  static TYPE_4 = 'TYPE_4';
+  // false,     true,      true
+  static TYPE_5 = 'TYPE_5';
+}
+/**
  * The painter type
  *
  * @author gianpiero.diblasi
@@ -1641,6 +1709,7 @@ class Z4PainterType {
 
   static ARROW = 'ARROW';
   static SHAPE_2D = 'SHAPE_2D';
+  static CENTERED_FIGURE = 'CENTERED_FIGURE';
 }
 /**
  * The canvas
@@ -9824,6 +9893,9 @@ class Z4DrawingTool extends Z4Nextable {
       case "SHAPE_2D":
         painter = Z4Shape2DPainter.fromJSON(painterJSON);
         break;
+      case "CENTERED_FIGURE":
+        painter = Z4CenteredFigurePainter.fromJSON(painterJSON);
+        break;
     }
     return new Z4DrawingTool(pointIterator, painter, Z4SpatioTemporalColor.fromJSON(json["spatioTemporalColor"]), Z4ColorProgression.fromJSON(json["progression"]));
   }
@@ -11081,6 +11153,63 @@ class Z4Tracer extends Z4PointIterator {
   }
 }
 /**
+ * The whirlpool
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Whirlpool extends Z4JSONable {
+
+   behavior = null;
+
+   angle = null;
+
+  /**
+   * Creates the object
+   *
+   * @param behavior The behavior
+   * @param angle The angle
+   */
+  constructor(behavior, angle) {
+    this.behavior = behavior;
+    this.angle = angle;
+  }
+
+  /**
+   * Returns the behavior
+   *
+   * @return The behavior
+   */
+   getBehavior() {
+    return this.behavior;
+  }
+
+  /**
+   * Returns the angle
+   *
+   * @return The angle
+   */
+   getAngle() {
+    return this.angle;
+  }
+
+   toJSON() {
+    let json = new Object();
+    json["behavior"] = this.behavior;
+    json["angle"] = this.angle.toJSON();
+    return json;
+  }
+
+  /**
+   * Creates a Z4Whirlpool from a JSON object
+   *
+   * @param json The JSON object
+   * @return the whirlpool
+   */
+  static  fromJSON(json) {
+    return new Z4Whirlpool(json["behavior"], Z4FancifulValue.fromJSON(json["angle"]));
+  }
+}
+/**
  * The common parent of all painters
  *
  * @author gianpiero.diblasi
@@ -11143,6 +11272,126 @@ class Z4ArrowPainter extends Z4Painter {
     context.lineTo(x, 0);
     context.stroke();
     context.restore();
+  }
+}
+/**
+ * The painter of centered figures
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4CenteredFigurePainter extends Z4Painter {
+
+   centeredFigurePainterType = null;
+
+   size = null;
+
+   angle1 = null;
+
+   angle2 = null;
+
+   tension = null;
+
+   multiplicity = null;
+
+   hole = null;
+
+   whirlpool = null;
+
+   cover = 0;
+
+  /**
+   * Creates the object
+   *
+   * @param centeredFigurePainterType The type of Z4CenteredFigurePainter
+   * @param size The size
+   * @param angle1 The first angle
+   * @param angle2 The second angle
+   * @param tension The tension
+   * @param multiplicity The multiplicity
+   * @param hole The hole
+   * @param whirlpool The whirlpool
+   * @param cover The cover
+   */
+  constructor(centeredFigurePainterType, size, angle1, angle2, tension, multiplicity, hole, whirlpool, cover) {
+    this.centeredFigurePainterType = centeredFigurePainterType;
+    this.size = size;
+    this.angle1 = angle1;
+    this.angle2 = angle2;
+    this.tension = tension;
+    this.multiplicity = multiplicity;
+    this.hole = hole;
+    this.whirlpool = whirlpool;
+    this.cover = cover;
+  }
+
+   getType() {
+    return Z4PainterType.CENTERED_FIGURE;
+  }
+
+   draw(context, drawingPoint, spatioTemporalColor, progression) {
+    if (drawingPoint.drawBounds) {
+      let currentAngle = Z4Math.deg2rad(this.whirlpool.getAngle().getConstant().getValue());
+      let currentHole = this.hole.getConstant().getValue();
+      let currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.size.getConstant().getValue());
+      let point = this.checkWhirlpool(currentAngle, currentHole, currentSize);
+      this.drawBounds(context, currentHole, point);
+    } else {
+    }
+  }
+
+   checkWhirlpool(currentAngle, currentHole, currentSize) {
+    if (currentHole === 0 || currentAngle === 0 || this.whirlpool.getBehavior() === Z4WhirlpoolBehavior.NONE) {
+      return new Z4Point(currentSize, 0);
+    } else if (this.whirlpool.getBehavior() === Z4WhirlpoolBehavior.FORWARD) {
+      let point = Z4Math.rotate(currentSize, 0, currentAngle);
+      return new Z4Point(point.x + currentHole, point.y);
+    } else if (this.whirlpool.getBehavior() === Z4WhirlpoolBehavior.BACKWARD) {
+      let point = Z4Math.rotate(currentSize, 0, -currentAngle);
+      return new Z4Point(point.x + currentHole, point.y);
+    } else {
+      return null;
+    }
+  }
+
+   drawBounds(context, currentHole, point) {
+    for (let i = 0; i < this.multiplicity.getConstant().getValue(); i++) {
+      context.save();
+      context.rotate(Z4Math.TWO_PI * i / this.multiplicity.getConstant().getValue());
+      context.strokeStyle = Z4Constants.getStyle("gray");
+      context.moveTo(currentHole, 0);
+      context.lineTo(point.x, point.y);
+      context.stroke();
+      context.strokeStyle = Z4Constants.getStyle("black");
+      context.translate(1, 1);
+      context.moveTo(currentHole, 0);
+      context.lineTo(point.x, point.y);
+      context.stroke();
+      context.restore();
+    }
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    json["centeredFigurePainterType"] = this.centeredFigurePainterType;
+    json["size"] = this.size.toJSON();
+    json["angle1"] = this.angle1.toJSON();
+    json["angle2"] = this.angle2.toJSON();
+    json["tension"] = this.tension.toJSON();
+    json["multiplicity"] = this.multiplicity.toJSON();
+    json["hole"] = this.hole.toJSON();
+    json["whirlpool"] = this.whirlpool.toJSON();
+    json["cover"] = this.cover;
+    return json;
+  }
+
+  /**
+   * Creates a Z4CenteredFigurePainter from a JSON object
+   *
+   * @param json The JSON object
+   * @return the centered figure painter
+   */
+  static  fromJSON(json) {
+    return new Z4CenteredFigurePainter(json["centeredFigurePainterType"], Z4FancifulValue.fromJSON(json["size"]), Z4FancifulValue.fromJSON(json["angle1"]), Z4FancifulValue.fromJSON(json["angle2"]), Z4FancifulValue.fromJSON(json["tension"]), Z4FancifulValue.fromJSON(json["multiplicity"]), Z4FancifulValue.fromJSON(json["hole"]), Z4Whirlpool.fromJSON(json["whirlpool"]), json["cover"]);
   }
 }
 /**

@@ -231,6 +231,33 @@ class Z4Math {
     return vertices;
   }
 
+  /**
+   * Calculates the control points of a Bezier curve, having coincident starting
+   * (S) and ending (E) points, passing through a given point (P), included in a
+   * given angle (A) and symmetrical with respect to the straight line passing
+   * through the starting point (S) and the given point (P)
+   *
+   * @param vector The vector starting at the starting point (S) and ending at
+   * the given point (P)
+   *
+   * @param alpha The angle (A) including the Bezier curve, in radians
+   * @return An array of two points containing the first and second control
+   * points of the Bezier curve
+   */
+  static  butterfly(vector, alpha) {
+    let cos = Math.cos(alpha);
+    let sin = Math.sin(alpha);
+    let val1 = 3 * (cos + 1);
+    let val2 = vector.y0 - 4 * vector.y;
+    let y = -(val2 * cos + 4 * (vector.x - vector.x0) * sin + val2) / val1;
+    let x = (3 * vector.x0 * cos + 3 * (y - vector.y0) * sin - 5 * vector.x0 + 8 * vector.x) / val1;
+    let controlPoint1 = new Z4Point(x, y);
+    let dx = controlPoint1.x - vector.x0;
+    let dy = controlPoint1.y - vector.y0;
+    let controlPoint2 = new Z4Point(dx * cos - dy * sin + vector.x0, dx * sin + dy * cos + vector.y0);
+    return new Array(controlPoint1, controlPoint2);
+  }
+
   constructor() {
   }
 }
