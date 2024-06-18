@@ -154,6 +154,9 @@ class Z4DrawingTool extends Z4Nextable {
       case "ARROW":
         painter = new Z4ArrowPainter();
         break;
+      case "SHAPE_2D":
+        painter = Z4Shape2DPainter.fromJSON(painterJSON);
+        break;
     }
     return new Z4DrawingTool(pointIterator, painter, Z4SpatioTemporalColor.fromJSON(json["spatioTemporalColor"]), Z4ColorProgression.fromJSON(json["progression"]));
   }

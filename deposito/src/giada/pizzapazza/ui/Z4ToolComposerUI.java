@@ -66,11 +66,6 @@ public class Z4ToolComposerUI extends Z4AbstractComponentUI {
    * Creates a Z4ToolComposerUI
    */
   public Z4ToolComposerUI() {
-    super(Z4ToolComposerUI.UI);
-
-    this.initDevicePixelRatio(() -> this.createOffscreen());
-    this.resizeObserver.observe(this.canvas);
-
     this.configTabs();
     this.configPointIterators();
     this.configPointPainters();
