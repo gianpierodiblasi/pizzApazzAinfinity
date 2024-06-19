@@ -1016,52 +1016,42 @@ public class Z4Canvas extends JSComponent {
     switch (type) {
       case "enter":
         this.pressed = event.buttons == 1;
-        if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.START, x, y)) {
-          this.ribbonHistoryPanel.stopStandard();
-          this.iteratePoints(Z4PointIteratorDrawingAction.START);
-        }
-        if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.CONTINUE, x, y)) {
-          this.ribbonHistoryPanel.stopStandard();
-          this.iteratePoints(Z4PointIteratorDrawingAction.CONTINUE);
-        }
+        this.onAction(Z4PointIteratorDrawingAction.START, x, y);
+        this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
         break;
       case "down":
         this.pressed = true;
-        if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.START, x, y)) {
-          this.ribbonHistoryPanel.stopStandard();
-          this.iteratePoints(Z4PointIteratorDrawingAction.START);
-        }
+        this.onAction(Z4PointIteratorDrawingAction.START, x, y);
         break;
       case "move":
         this.statusPanel.setMousePosition(parseInt(x), parseInt(y));
-
-        if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.CONTINUE, x, y)) {
-          this.ribbonHistoryPanel.stopStandard();
-          this.iteratePoints(Z4PointIteratorDrawingAction.CONTINUE);
-        }
+        this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
         break;
       case "up":
-        this.pressed = false;
-        if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
-          this.iteratePoints(Z4PointIteratorDrawingAction.STOP);
-        } else {
-          this.changed = true;
-          this.setSaved(false);
-          this.ribbonHistoryPanel.startStandard();
-        }
+        this.onStop(x, y);
         break;
       case "leave":
         if (this.pressed) {
-          this.pressed = false;
-          if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
-            this.iteratePoints(Z4PointIteratorDrawingAction.STOP);
-          } else {
-            this.changed = true;
-            this.setSaved(false);
-            this.ribbonHistoryPanel.startStandard();
-          }
+          this.onStop(x, y);
         }
         break;
+    }
+  }
+
+  private void onAction(Z4PointIteratorDrawingAction action, double x, double y) {
+    if (this.pressed && this.drawingTool.drawAction(action, x, y)) {
+      this.ribbonHistoryPanel.stopStandard();
+      this.iteratePoints(action);
+    }
+  }
+
+  private void onStop(double x, double y) {
+    this.pressed = false;
+    if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
+      this.ribbonHistoryPanel.stopStandard();
+      this.iteratePoints(Z4PointIteratorDrawingAction.STOP);
+    } else {
+      this.startStandard();
     }
   }
 
@@ -1076,9 +1066,7 @@ public class Z4Canvas extends JSComponent {
     } else if ($exists(this.drawingTool.getNextCountOnSTOP())) {
       Z4UI.pleaseWait(this, true, true, false, true, "", () -> this.iteratePoint(0));
     } else {
-      this.changed = true;
-      this.setSaved(false);
-      this.ribbonHistoryPanel.startStandard();
+      this.startStandard();
     }
   }
 
@@ -1088,10 +1076,7 @@ public class Z4Canvas extends JSComponent {
     if (this.drawNextPoint()) {
       Z4UI.pleaseWaitAdvanced(() -> this.iteratePoint(value + 1));
     } else {
-      this.changed = true;
-      this.setSaved(false);
-      this.ribbonHistoryPanel.startStandard();
-
+      this.startStandard();
       Z4UI.pleaseWaitCompleted();
     }
   }
@@ -1113,5 +1098,11 @@ public class Z4Canvas extends JSComponent {
       this.drawCanvas();
       return true;
     }
+  }
+
+  private void startStandard() {
+    this.changed = true;
+    this.setSaved(false);
+    this.ribbonHistoryPanel.startStandard();
   }
 }
