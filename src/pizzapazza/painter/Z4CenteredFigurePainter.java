@@ -5,6 +5,7 @@ import javascript.awt.Color;
 import pizzapazza.color.Z4ColorProgression;
 import pizzapazza.color.Z4ColorProgressionBehavior;
 import pizzapazza.color.Z4GradientColor;
+import pizzapazza.color.Z4Lighting;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4FancifulValue;
@@ -15,6 +16,7 @@ import pizzapazza.math.Z4Whirlpool;
 import pizzapazza.math.Z4WhirlpoolBehavior;
 import pizzapazza.util.Z4Constants;
 import simulation.dom.$CanvasRenderingContext2D;
+import static simulation.js.$Globals.$exists;
 import simulation.js.$Object;
 
 /**
@@ -107,7 +109,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
           this.type3_4_5(drawingPoint, currentAngle, currentHole, currentCover);
         }
 
-        this.drawPaths(drawingPoint, currentMultiplicity, spatioTemporalColor, progression);
+        this.drawFigures(context, drawingPoint, currentMultiplicity, spatioTemporalColor, progression);
       }
     }
   }
@@ -267,65 +269,78 @@ public class Z4CenteredFigurePainter extends Z4Painter {
     }
   }
 
-  private void drawPaths(Z4DrawingPoint point, double currentMultiplicity, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
+  private void drawFigures($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, double currentMultiplicity, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
+    for (int i = 0; i < currentMultiplicity; i++) {
+      context.save();
+      context.rotate(Z4Math.TWO_PI * i / currentMultiplicity);
+
+      if (this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_0 || this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_1 || this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_2) {
+        this.drawFigure(context, drawingPoint/*,pathForShadowBorderE*/, this.c1e, this.c2e, this.path1e, this.path2e, spatioTemporalColor, progression);
+      } else if (this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_3 || this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_4 || this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_5) {
+        this.drawFigure(context, drawingPoint/*,pathForShadowBorderI*/, this.c1i, this.c2i, this.path1i, this.path2i, spatioTemporalColor, progression);
+        this.drawFigure(context, drawingPoint/*,pathForShadowBorderE*/, this.c1e, this.c2e, this.path1e, this.path2e, spatioTemporalColor, progression);
+      }
+
+      context.restore();
+    }
   }
 
-  private void drawPath(Z4DrawingPoint point/*, Path pathForShadowBorder*/, Z4Point c1, Z4Point c2, Z4Point path1, Z4Point path2, double currentMultiplicity, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
+  private void drawFigure($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint/*, Path pathForShadowBorder*/, Z4Point c1, Z4Point c2, Z4Point path1, Z4Point path2, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
 //    if (shadow) this.drawShadow(pathForShadowBorder);
-
-    double length = Math.max(Z4Math.distance(path1.x, path1.y, 0, 0), Z4Math.distance(path2.x, path2.y, 0, 0));
-    for (int i = 0; i < length; i += 2) {
-//      double val=i/length;
-//      if (point.colorPosition==-1) paint.setColor(color.getColor(1-val,true));
-//      else
-//        switch (point.modeLighting)
-//        {
-//          case NONE:
-//            paint.setColor(newColor);
-//            break;
-//          case LIGTHED:
-//            paint.setColor(Z4Color.lighted(newColor,val));
-//            break;
-//          case DARKENED:
-//            paint.setColor(Z4Color.darkened(newColor,val));
-//            break;
-//        }
 //
-//      path.reset();
-//      path.moveTo(point.vector[0],0);
-//      path.cubicTo(c1.x+path1.x*val,c1.y+path1.y*val,c2.x+path2.x*val,c2.y+path2.y*val,pF[0],pF[1]);
-//      canvas.drawPath(path,paint);
+    if (spatioTemporalColor.isColor()) {
+      Color color = spatioTemporalColor.getColorAt(-1, -1);
+      this.drawFigureWithColors(context, drawingPoint, c1, c2, path1, path2, null, null, color, progression.getLighting());
+    } else if (spatioTemporalColor.isGradientColor()) {
+      if (progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.SPATIAL) {
+        this.drawFigureWithColors(context, drawingPoint, c1, c2, path1, path2, spatioTemporalColor, null, null, progression.getLighting());
+      } else {
+        Color color = spatioTemporalColor.getGradientColorAt(-1).getColorAt(progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition, true);
+        this.drawFigureWithColors(context, drawingPoint, c1, c2, path1, path2, null, null, color, progression.getLighting());
+      }
+    } else if (spatioTemporalColor.isBiGradientColor()) {
+      Z4GradientColor gradientColor = spatioTemporalColor.getGradientColorAt(progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition);
+      this.drawFigureWithColors(context, drawingPoint, c1, c2, path1, path2, null, gradientColor, null, progression.getLighting());
     }
 //
 //    if (border) this.drawBorder(point,pathForShadowBorder);
   }
 
-//  private void drawPath($CanvasRenderingContext2D context, double x1, double y1, double x1c, double y1c, double x2c, double y2c, double x2, double y2, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
-//    if (spatioTemporalColor.isColor()) {
-//      Color color = spatioTemporalColor.getColorAt(-1, -1);
-////          this.drawPathWithColors(context, currentWidth, currentHeight, null, null, color, progression.getLighting());
-//    } else if (spatioTemporalColor.isGradientColor()) {
-//      if (progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.SPATIAL) {
-////            this.drawPathWithColors(context, currentWidth, currentHeight, spatioTemporalColor, null, null, progression.getLighting());
-//      } else {
-//        Color color = spatioTemporalColor.getGradientColorAt(-1).getColorAt(progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition, true);
-////            this.drawPathWithColors(context, currentWidth, currentHeight, null, null, color, progression.getLighting());
-//      }
-//    } else if (spatioTemporalColor.isBiGradientColor()) {
-//      Z4GradientColor gradientColor = spatioTemporalColor.getGradientColorAt(progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition);
-////          this.drawPathWithColors(context, currentWidth, currentHeight, null, gradientColor, null, progression.getLighting());
-//    }
-//  }
-//  private void drawPath($CanvasRenderingContext2D context, double x1, double y1, double x1c, double y1c, double x2c, double y2c, double x2, double y2, Color color) {
-//    context.save();
-//
-//    context.moveTo(x1, y1);
-//    context.bezierCurveTo(x1c, y1c, x2c, y2c, x2, y2);
-//
-//    context.strokeStyle = Z4Constants.$getStyle(color.getARGB_HEX());
-//    context.stroke();
-//    context.restore();
-//  }
+  private void drawFigureWithColors($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4Point c1, Z4Point c2, Z4Point path1, Z4Point path2, Z4SpatioTemporalColor spatioTemporalColor, Z4GradientColor gradientColor, Color color, Z4Lighting lighting) {
+    double length = Math.max(Z4Math.distance(path1.x, path1.y, 0, 0), Z4Math.distance(path2.x, path2.y, 0, 0));
+    for (int i = 0; i < length; i += 2) {
+      double val = i / length;
+      if ($exists(color) && lighting == Z4Lighting.NONE) {
+        this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color);
+      } else {
+        if ($exists(spatioTemporalColor)) {
+          color = spatioTemporalColor.getColorAt(-1, val);
+        } else if ($exists(gradientColor)) {
+          color = gradientColor.getColorAt(val, true);
+        }
+
+        if (!$exists(color) && lighting == Z4Lighting.NONE) {
+          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color);
+        } else if (lighting == Z4Lighting.LIGHTED) {
+          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color.lighted(val));
+        } else if (lighting == Z4Lighting.DARKENED) {
+          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color.darkened(val));
+        }
+      }
+    }
+  }
+
+  private void drawBezier($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4Point c1, Z4Point c2, Z4Point path1, Z4Point path2, double val, Color color) {
+    context.save();
+
+    context.moveTo(drawingPoint.z4Vector.x0, 0);
+    context.bezierCurveTo(c1.x + path1.x * val, c1.y + path1.y * val, c2.x + path2.x * val, c2.y + path2.y * val, this.pF.x, this.pF.y);
+
+    context.strokeStyle = Z4Constants.$getStyle(color.getARGB_HEX());
+    context.stroke();
+    context.restore();
+  }
+
   @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
