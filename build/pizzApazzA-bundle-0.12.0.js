@@ -2552,6 +2552,13 @@ class Z4Canvas extends JSComponent {
   }
 }
 /**
+ * The I/O manager of a Z4Canvas
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4CanvasIOManager {
+}
+/**
  * The mouse manager of a Z4Canvas
  *
  * @author gianpiero.diblasi
