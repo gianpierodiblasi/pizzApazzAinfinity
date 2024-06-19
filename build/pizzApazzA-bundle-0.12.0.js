@@ -11328,7 +11328,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
    * @param multiplicity The multiplicity
    * @param hole The hole
    * @param whirlpool The whirlpool
-   * @param cover The cover
+   * @param cover The cover (in the range [1,100])
    */
   constructor(centeredFigurePainterType, size, angle1, angle2, tension, multiplicity, hole, whirlpool, cover) {
     this.centeredFigurePainterType = centeredFigurePainterType;
@@ -11344,6 +11344,87 @@ class Z4CenteredFigurePainter extends Z4Painter {
 
    getType() {
     return Z4PainterType.CENTERED_FIGURE;
+  }
+
+  /**
+   * Returns the type of Z4CenteredFigurePainter
+   *
+   * @return The type of Z4CenteredFigurePainter
+   */
+   getCenteredFigurePainterType() {
+    return this.centeredFigurePainterType;
+  }
+
+  /**
+   * Returns the size
+   *
+   * @return The size
+   */
+   getSize() {
+    return this.size;
+  }
+
+  /**
+   * Returns the first angle
+   *
+   * @return The first angle
+   */
+   getAngle1() {
+    return this.angle1;
+  }
+
+  /**
+   * Returns the second angle
+   *
+   * @return The second angle
+   */
+   getAngle2() {
+    return this.angle2;
+  }
+
+  /**
+   * Returns the tension
+   *
+   * @return The tension
+   */
+   getTension() {
+    return this.tension;
+  }
+
+  /**
+   * Returns the multiplicity
+   *
+   * @return The multiplicity
+   */
+   getMultiplicity() {
+    return this.multiplicity;
+  }
+
+  /**
+   * Returns the hole
+   *
+   * @return The hole
+   */
+   getHole() {
+    return this.hole;
+  }
+
+  /**
+   * Returns the whirlpool
+   *
+   * @return The whirlpool
+   */
+   getWhirlpool() {
+    return this.whirlpool;
+  }
+
+  /**
+   * Returns the cover (in the range [1,100])
+   *
+   * @return The cover (in the range [1,100])
+   */
+   getCover() {
+    return this.cover;
   }
 
    draw(context, drawingPoint, spatioTemporalColor, progression) {

@@ -61,7 +61,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
    * @param multiplicity The multiplicity
    * @param hole The hole
    * @param whirlpool The whirlpool
-   * @param cover The cover
+   * @param cover The cover (in the range [1,100])
    */
   public Z4CenteredFigurePainter(Z4CenteredFigurePainterType centeredFigurePainterType,
           Z4FancifulValue size, Z4FancifulValue angle1, Z4FancifulValue angle2, Z4FancifulValue tension, Z4FancifulValue multiplicity,
@@ -80,6 +80,87 @@ public class Z4CenteredFigurePainter extends Z4Painter {
   @Override
   public Z4PainterType getType() {
     return Z4PainterType.CENTERED_FIGURE;
+  }
+
+  /**
+   * Returns the type of Z4CenteredFigurePainter
+   *
+   * @return The type of Z4CenteredFigurePainter
+   */
+  public Z4CenteredFigurePainterType getCenteredFigurePainterType() {
+    return this.centeredFigurePainterType;
+  }
+
+  /**
+   * Returns the size
+   *
+   * @return The size
+   */
+  public Z4FancifulValue getSize() {
+    return this.size;
+  }
+
+  /**
+   * Returns the first angle
+   *
+   * @return The first angle
+   */
+  public Z4FancifulValue getAngle1() {
+    return this.angle1;
+  }
+
+  /**
+   * Returns the second angle
+   *
+   * @return The second angle
+   */
+  public Z4FancifulValue getAngle2() {
+    return this.angle2;
+  }
+
+  /**
+   * Returns the tension
+   *
+   * @return The tension
+   */
+  public Z4FancifulValue getTension() {
+    return this.tension;
+  }
+
+  /**
+   * Returns the multiplicity
+   *
+   * @return The multiplicity
+   */
+  public Z4FancifulValue getMultiplicity() {
+    return this.multiplicity;
+  }
+
+  /**
+   * Returns the hole
+   *
+   * @return The hole
+   */
+  public Z4FancifulValue getHole() {
+    return this.hole;
+  }
+
+  /**
+   * Returns the whirlpool
+   *
+   * @return The whirlpool
+   */
+  public Z4Whirlpool getWhirlpool() {
+    return this.whirlpool;
+  }
+
+  /**
+   * Returns the cover (in the range [1,100])
+   *
+   * @return The cover (in the range [1,100])
+   */
+  public int getCover() {
+    return this.cover;
   }
 
   @Override
