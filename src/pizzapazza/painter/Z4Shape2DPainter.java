@@ -59,7 +59,7 @@ public class Z4Shape2DPainter extends Z4Painter {
           Z4FancifulValue shadowShiftX, Z4FancifulValue shadowShiftY, Color shadowColor,
           Z4FancifulValue borderWidth, Z4FancifulValue borderHeight, Color borderColor) {
     super();
-    
+
     this.width = width;
     this.height = height;
     this.regular = regular;
@@ -204,12 +204,12 @@ public class Z4Shape2DPainter extends Z4Painter {
   @SuppressWarnings("null")
   public void draw($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
     if (drawingPoint.drawBounds) {
-      double scaleW = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.width.getConstant().getValue());
-      double scaleH = this.regular ? scaleW : drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.height.getConstant().getValue());
+      double scaleW = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.width.getConstant().getValue());
+      double scaleH = this.regular ? scaleW : drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.height.getConstant().getValue());
       this.drawBounds(context, scaleW, scaleH);
     } else {
-      double currentWidth = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.width.next());
-      double currentHeight = this.regular ? currentWidth : drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.height.next());
+      double currentWidth = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.width.next());
+      double currentHeight = this.regular ? currentWidth : drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.height.next());
 
       if (currentWidth > 0 && currentHeight > 0) {
         double currentShadowShiftX = this.shadowShiftX.next();
@@ -274,7 +274,7 @@ public class Z4Shape2DPainter extends Z4Painter {
   private void drawPath($CanvasRenderingContext2D context, double scaleW, double scaleH, Color color) {
     context.save();
     context.scale(scaleW, scaleH);
-    context.fillStyle = Z4Constants.$getStyle(color.getARGB_HEX());
+    context.fillStyle = Z4Constants.$getStyle(color.getRGBA_HEX());
     context.fill(this.path);
     context.restore();
   }

@@ -414,11 +414,13 @@ public class Z4CenteredFigurePainter extends Z4Painter {
   private void drawBezier($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4Point c1, Z4Point c2, Z4Point path1, Z4Point path2, double val, Color color) {
     context.save();
 
+    context.strokeStyle = Z4Constants.$getStyle(color.getARGB_HEX());
+
+    context.beginPath();
     context.moveTo(drawingPoint.z4Vector.x0, 0);
     context.bezierCurveTo(c1.x + path1.x * val, c1.y + path1.y * val, c2.x + path2.x * val, c2.y + path2.y * val, this.pF.x, this.pF.y);
-
-    context.strokeStyle = Z4Constants.$getStyle(color.getARGB_HEX());
     context.stroke();
+    
     context.restore();
   }
 

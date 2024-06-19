@@ -185,12 +185,12 @@ class Z4Shape2DPainter extends Z4Painter {
 
    draw(context, drawingPoint, spatioTemporalColor, progression) {
     if (drawingPoint.drawBounds) {
-      let scaleW = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.width.getConstant().getValue());
-      let scaleH = this.regular ? scaleW : drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.height.getConstant().getValue());
+      let scaleW = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.width.getConstant().getValue());
+      let scaleH = this.regular ? scaleW : drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.height.getConstant().getValue());
       this.drawBounds(context, scaleW, scaleH);
     } else {
-      let currentWidth = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.width.next());
-      let currentHeight = this.regular ? currentWidth : drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.height.next());
+      let currentWidth = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.width.next());
+      let currentHeight = this.regular ? currentWidth : drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.height.next());
       if (currentWidth > 0 && currentHeight > 0) {
         let currentShadowShiftX = this.shadowShiftX.next();
         let currentShadowShiftY = this.shadowShiftY.next();
@@ -250,7 +250,7 @@ class Z4Shape2DPainter extends Z4Painter {
    drawPath(context, scaleW, scaleH, color) {
     context.save();
     context.scale(scaleW, scaleH);
-    context.fillStyle = Z4Constants.getStyle(color.getARGB_HEX());
+    context.fillStyle = Z4Constants.getStyle(color.getRGBA_HEX());
     context.fill(this.path);
     context.restore();
   }
