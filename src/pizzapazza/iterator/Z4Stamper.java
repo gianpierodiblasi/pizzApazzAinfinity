@@ -123,8 +123,8 @@ public class Z4Stamper extends Z4PointIterator {
   }
 
   @Override
-  public int getNextCount() {
-    return 1;
+  public int getNextCountOnSTOP() {
+    return 0;
   }
 
   @Override

@@ -112,12 +112,12 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
   }
 
   /**
-   * Returns the count of next points
+   * Returns the count of next points to draw on STOP action
    *
-   * @return The count of next points
+   * @return The count of next points to draw on STOP action
    */
-  public int getNextCount() {
-    return this.pointIterator.getNextCount();
+  public int getNextCountOnSTOP() {
+    return this.pointIterator.getNextCountOnSTOP();
   }
   
   /**

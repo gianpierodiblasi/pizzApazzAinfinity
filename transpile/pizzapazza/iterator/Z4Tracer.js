@@ -256,7 +256,7 @@ class Z4Tracer extends Z4PointIterator {
     }
   }
 
-   getNextCount() {
+   getNextCountOnSTOP() {
     return this.clones.length;
   }
 

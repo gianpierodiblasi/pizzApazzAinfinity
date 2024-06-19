@@ -78,7 +78,7 @@ class Z4Spirograph extends Z4PointIterator {
     }
   }
 
-   getNextCount() {
+   getNextCountOnSTOP() {
     return this.clones.length;
   }
 

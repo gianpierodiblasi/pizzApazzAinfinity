@@ -1073,13 +1073,17 @@ public class Z4Canvas extends JSComponent {
       if (this.drawingTool.isInfinitePointGenerator() && this.pressed) {
         setTimeout(() -> this.iteratePoints(action), this.drawingTool.getInfinitePointGeneratorSleep());
       }
-    } else {
+    } else if ($exists(this.drawingTool.getNextCountOnSTOP())) {
       Z4UI.pleaseWait(this, true, true, false, true, "", () -> this.iteratePoint(0));
+    } else {
+      this.changed = true;
+      this.setSaved(false);
+      this.ribbonHistoryPanel.startStandard();
     }
   }
 
   private void iteratePoint(int value) {
-    Z4UI.setPleaseWaitProgressBarValue(100 * value / this.drawingTool.getNextCount());
+    Z4UI.setPleaseWaitProgressBarValue(100 * value / this.drawingTool.getNextCountOnSTOP());
 
     if (this.drawNextPoint()) {
       Z4UI.pleaseWaitAdvanced(() -> this.iteratePoint(value + 1));
