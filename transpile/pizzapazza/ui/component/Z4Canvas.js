@@ -114,6 +114,7 @@ class Z4Canvas extends JSComponent {
     this.paper.addLayer(Z4Translations.BACKGROUND_LAYER, width, height, filling, width, height);
     this.width = width;
     this.height = height;
+    this.mouseManager.setSize(this.getSize());
     this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
     this.ribbonLayerPanel.reset();
     this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
@@ -167,6 +168,7 @@ class Z4Canvas extends JSComponent {
       this.paper.addLayerFromImage(Z4Translations.BACKGROUND_LAYER, image, image.width, image.height);
       this.width = image.width;
       this.height = image.height;
+      this.mouseManager.setSize(this.getSize());
       this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
       this.ribbonLayerPanel.reset();
       this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
@@ -222,6 +224,7 @@ class Z4Canvas extends JSComponent {
             let json = JSON.parse("" + str);
             this.width = json["width"];
             this.height = json["height"];
+            this.mouseManager.setSize(this.getSize());
             this.openLayer(zip, json, json["layers"], 0);
           });
         });
@@ -295,6 +298,7 @@ class Z4Canvas extends JSComponent {
     this.ribbonLayerPanel.reset();
     this.width = json["width"];
     this.height = json["height"];
+    this.mouseManager.setSize(this.getSize());
     this.openLayerFromHistory(json, json["layers"], 0);
   }
 

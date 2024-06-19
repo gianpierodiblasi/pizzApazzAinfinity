@@ -44,6 +44,7 @@ public class Z4CanvasMouseManager {
   private final Z4Canvas canvas;
   private Z4Layer selectedLayer;
   private final $CanvasRenderingContext2D ctx;
+  private Dimension size;
   private double zoom;
 
   private Z4RibbonHistoryPanel ribbonHistoryPanel;
@@ -148,6 +149,15 @@ public class Z4CanvasMouseManager {
   }
 
   /**
+   * Sets the size
+   *
+   * @param size The size
+   */
+  public void setSize(Dimension size) {
+    this.size = size;
+  }
+
+  /**
    * Sets the zoom
    *
    * @param zoom The zoom
@@ -190,9 +200,8 @@ public class Z4CanvasMouseManager {
    * @param type The event type
    */
   public void onMouse(MouseEvent event, String type) {
-    Dimension size = this.canvas.getSize();
-    double x = Math.min(size.width, Math.max(0, event.offsetX / this.zoom));
-    double y = Math.min(size.height, Math.max(0, event.offsetY / this.zoom));
+    double x = Math.min(this.size.width, Math.max(0, event.offsetX / this.zoom));
+    double y = Math.min(this.size.height, Math.max(0, event.offsetY / this.zoom));
 
     switch (type) {
       case "enter":

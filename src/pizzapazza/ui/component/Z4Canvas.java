@@ -48,14 +48,14 @@ public class Z4Canvas extends JSComponent {
 
   private final $Canvas canvas = ($Canvas) document.createElement("canvas");
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
-  
+
   private Z4RibbonFilePanel ribbonFilePanel;
   private Z4RibbonLayerPanel ribbonLayerPanel;
   private Z4RibbonHistoryPanel ribbonHistoryPanel;
   private Z4StatusPanel statusPanel;
 
   private final Z4CanvasMouseManager mouseManager = new Z4CanvasMouseManager(this, this.ctx);
-  
+
   private String projectName;
   private FileSystemFileHandle handle;
   private int width;
@@ -132,7 +132,7 @@ public class Z4Canvas extends JSComponent {
   public void setStatusPanel(Z4StatusPanel statusPanel) {
     this.statusPanel = statusPanel;
     this.statusPanel.setCanvas(this);
-    
+
     this.mouseManager.setStatusPanel(statusPanel);
   }
 
@@ -150,6 +150,7 @@ public class Z4Canvas extends JSComponent {
 
     this.width = width;
     this.height = height;
+    this.mouseManager.setSize(this.getSize());
 
     this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
 
@@ -210,6 +211,7 @@ public class Z4Canvas extends JSComponent {
 
       this.width = (int) image.width;
       this.height = (int) image.height;
+      this.mouseManager.setSize(this.getSize());
 
       this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
 
@@ -276,6 +278,7 @@ public class Z4Canvas extends JSComponent {
             $Object json = ($Object) JSON.parse("" + str);
             this.width = json.$get("width");
             this.height = json.$get("height");
+            this.mouseManager.setSize(this.getSize());
 
             this.openLayer(zip, json, json.$get("layers"), 0);
           });
@@ -360,6 +363,7 @@ public class Z4Canvas extends JSComponent {
 
     this.width = json.$get("width");
     this.height = json.$get("height");
+    this.mouseManager.setSize(this.getSize());
 
     this.openLayerFromHistory(json, json.$get("layers"), 0);
   }

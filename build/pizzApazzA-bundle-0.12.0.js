@@ -1843,6 +1843,7 @@ class Z4Canvas extends JSComponent {
     this.paper.addLayer(Z4Translations.BACKGROUND_LAYER, width, height, filling, width, height);
     this.width = width;
     this.height = height;
+    this.mouseManager.setSize(this.getSize());
     this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
     this.ribbonLayerPanel.reset();
     this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
@@ -1896,6 +1897,7 @@ class Z4Canvas extends JSComponent {
       this.paper.addLayerFromImage(Z4Translations.BACKGROUND_LAYER, image, image.width, image.height);
       this.width = image.width;
       this.height = image.height;
+      this.mouseManager.setSize(this.getSize());
       this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
       this.ribbonLayerPanel.reset();
       this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
@@ -1951,6 +1953,7 @@ class Z4Canvas extends JSComponent {
             let json = JSON.parse("" + str);
             this.width = json["width"];
             this.height = json["height"];
+            this.mouseManager.setSize(this.getSize());
             this.openLayer(zip, json, json["layers"], 0);
           });
         });
@@ -2024,6 +2027,7 @@ class Z4Canvas extends JSComponent {
     this.ribbonLayerPanel.reset();
     this.width = json["width"];
     this.height = json["height"];
+    this.mouseManager.setSize(this.getSize());
     this.openLayerFromHistory(json, json["layers"], 0);
   }
 
@@ -2560,6 +2564,8 @@ class Z4CanvasMouseManager {
 
    ctx = null;
 
+   size = null;
+
    zoom = 0.0;
 
    ribbonHistoryPanel = null;
@@ -2623,6 +2629,15 @@ class Z4CanvasMouseManager {
   }
 
   /**
+   * Sets the size
+   *
+   * @param size The size
+   */
+   setSize(size) {
+    this.size = size;
+  }
+
+  /**
    * Sets the zoom
    *
    * @param zoom The zoom
@@ -2665,9 +2680,8 @@ class Z4CanvasMouseManager {
    * @param type The event type
    */
    onMouse(event, type) {
-    let size = this.canvas.getSize();
-    let x = Math.min(size.width, Math.max(0, event.offsetX / this.zoom));
-    let y = Math.min(size.height, Math.max(0, event.offsetY / this.zoom));
+    let x = Math.min(this.size.width, Math.max(0, event.offsetX / this.zoom));
+    let y = Math.min(this.size.height, Math.max(0, event.offsetY / this.zoom));
     switch(type) {
       case "enter":
         this.pressed = event.buttons === 1;

@@ -11,6 +11,8 @@ class Z4CanvasMouseManager {
 
    ctx = null;
 
+   size = null;
+
    zoom = 0.0;
 
    ribbonHistoryPanel = null;
@@ -74,6 +76,15 @@ class Z4CanvasMouseManager {
   }
 
   /**
+   * Sets the size
+   *
+   * @param size The size
+   */
+   setSize(size) {
+    this.size = size;
+  }
+
+  /**
    * Sets the zoom
    *
    * @param zoom The zoom
@@ -116,9 +127,8 @@ class Z4CanvasMouseManager {
    * @param type The event type
    */
    onMouse(event, type) {
-    let size = this.canvas.getSize();
-    let x = Math.min(size.width, Math.max(0, event.offsetX / this.zoom));
-    let y = Math.min(size.height, Math.max(0, event.offsetY / this.zoom));
+    let x = Math.min(this.size.width, Math.max(0, event.offsetX / this.zoom));
+    let y = Math.min(this.size.height, Math.max(0, event.offsetY / this.zoom));
     switch(type) {
       case "enter":
         this.pressed = event.buttons === 1;
