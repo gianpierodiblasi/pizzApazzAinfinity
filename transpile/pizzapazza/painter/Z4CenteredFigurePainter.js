@@ -31,6 +31,16 @@ class Z4CenteredFigurePainter extends Z4Painter {
 
    path2i = null;
 
+   c1e = null;
+
+   c1i = null;
+
+   c2e = null;
+
+   c2i = null;
+
+   pF = null;
+
   /**
    * Creates the object
    *
@@ -73,24 +83,15 @@ class Z4CenteredFigurePainter extends Z4Painter {
         let currentAngle = Z4Math.deg2rad(this.whirlpool.getAngle().getConstant().getValue());
         let currentHole = this.hole.next();
         let currentCover = this.cover / 100;
+        let currentMultiplicity = this.multiplicity.next();
         let point = this.checkWhirlpool1(currentAngle, currentHole, currentSize);
         drawingPoint = new Z4DrawingPoint(Z4Vector.fromVector(currentHole, 0, point.x, point.y), drawingPoint.intensity, drawingPoint.temporalPosition, drawingPoint.drawBounds, drawingPoint.side, drawingPoint.useVectorModuleAsSize);
-        let pF = null;
         if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_0 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_1 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_2) {
-          pF = this.type0_1_2(drawingPoint, currentCover);
+          this.type0_1_2(drawingPoint, currentCover);
         } else if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_3 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_4 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_5) {
-          pF = this.type3_4_5(drawingPoint, currentAngle, currentHole, currentCover);
+          this.type3_4_5(drawingPoint, currentAngle, currentHole, currentCover);
         }
-        for (let i = 0; i < this.multiplicity.next(); i++) {
-          if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_0 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_1 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_2) {
-            // this.drawPath(point,pathForShadowBorderE,c1e,c2e,path1e,path2e,newColor);
-          } else if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_3 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_4 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_5) {
-            // this.drawPath(point,pathForShadowBorderI,c1i,c2i,path1i,path2i,newColor);
-            // this.drawPath(point,pathForShadowBorderE,c1e,c2e,path1e,path2e,newColor);
-          }
-          // 
-          // canvas.rotate(360f/multiplicity);
-        }
+        this.drawPaths(drawingPoint, currentMultiplicity, spatioTemporalColor, progression);
       }
     }
   }
@@ -115,7 +116,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
   // One Bezier curve. Start and end point coincide in the fulcrum
    type0_1_2(drawingPoint, currentCover) {
     let ce = Z4Math.butterfly(drawingPoint.z4Vector, Z4Math.deg2rad(this.angle1.next()));
-    let pF = new Z4Point(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+    this.pF = new Z4Point(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
     if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_0) {
       // The control points collapse towards the fulcrum
       this.path1e = this.findControlPointPath(ce[0].x, ce[0].y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0, currentCover);
@@ -138,55 +139,53 @@ class Z4CenteredFigurePainter extends Z4Painter {
     // pathForShadowBorderE.moveTo(drawingPoint.z4Vector.x0,drawingPoint.z4Vector.y0);
     // pathForShadowBorderE.cubicTo(c1e.x,c1e.y,c2e.x,c2e.y,drawingPoint.z4Vector.x0,drawingPoint.z4Vector.y0);
     // }
-    // 
-    return pF;
   }
 
   // Two Bezier curves. Start point lies on the fulcrum, end point lies on newPoint
    type3_4_5(drawingPoint, currentAngle, currentHole, currentCover) {
-    let pF = new Z4Point(drawingPoint.z4Vector.x, drawingPoint.z4Vector.y);
+    this.pF = new Z4Point(drawingPoint.z4Vector.x, drawingPoint.z4Vector.y);
     if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_3) {
       // One control point collapses towards the fulcrum, the other one collapses towards newPoint
-      let c1e = this.setControlPoint(drawingPoint, currentHole, 0, this.angle1.next(), 1, this.tension.next());
-      let c1i = this.setControlPoint(drawingPoint, currentHole, 0, this.angle1.next(), -1, this.tension.next());
-      let c2e = this.setControlPoint(drawingPoint, currentHole, -180, this.angle2.next(), -1, this.tension.next());
-      let c2i = this.setControlPoint(drawingPoint, currentHole, -180, this.angle2.next(), 1, this.tension.next());
-      c2e = new Z4Point(drawingPoint.z4Vector.module + c2e.x, c2e.y);
-      c2i = new Z4Point(drawingPoint.z4Vector.module + c2i.x, c2i.y);
-      c1e = this.checkWhirlpool2(drawingPoint, c1e, currentAngle, currentHole);
-      c1i = this.checkWhirlpool2(drawingPoint, c1i, currentAngle, currentHole);
-      c2e = this.checkWhirlpool2(drawingPoint, c2e, currentAngle, currentHole);
-      c2i = this.checkWhirlpool2(drawingPoint, c2i, currentAngle, currentHole);
-      this.path1e = this.findControlPointPath(c1e.x, c1e.y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0, currentCover);
-      this.path1i = this.findControlPointPath(c1i.x, c1i.y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0, currentCover);
-      this.path2e = this.findControlPointPath(c2e.x, c2e.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
-      this.path2i = this.findControlPointPath(c2i.x, c2i.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
+      this.c1e = this.setControlPoint(drawingPoint, currentHole, 0, this.angle1.next(), 1, this.tension.next());
+      this.c1i = this.setControlPoint(drawingPoint, currentHole, 0, this.angle1.next(), -1, this.tension.next());
+      this.c2e = this.setControlPoint(drawingPoint, currentHole, -180, this.angle2.next(), -1, this.tension.next());
+      this.c2i = this.setControlPoint(drawingPoint, currentHole, -180, this.angle2.next(), 1, this.tension.next());
+      this.c2e = new Z4Point(drawingPoint.z4Vector.module + this.c2e.x, this.c2e.y);
+      this.c2i = new Z4Point(drawingPoint.z4Vector.module + this.c2i.x, this.c2i.y);
+      this.c1e = this.checkWhirlpool2(drawingPoint, this.c1e, currentAngle, currentHole);
+      this.c1i = this.checkWhirlpool2(drawingPoint, this.c1i, currentAngle, currentHole);
+      this.c2e = this.checkWhirlpool2(drawingPoint, this.c2e, currentAngle, currentHole);
+      this.c2i = this.checkWhirlpool2(drawingPoint, this.c2i, currentAngle, currentHole);
+      this.path1e = this.findControlPointPath(this.c1e.x, this.c1e.y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0, currentCover);
+      this.path1i = this.findControlPointPath(this.c1i.x, this.c1i.y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0, currentCover);
+      this.path2e = this.findControlPointPath(this.c2e.x, this.c2e.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
+      this.path2i = this.findControlPointPath(this.c2i.x, this.c2i.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
     } else if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_4) {
       // The second control point is fixed on the fulcrum, the first control point collapses towards the fulcrum
-      let c1e = this.setControlPoint(drawingPoint, currentHole, 0, this.angle1.next(), 1, this.tension.next());
-      let c1i = this.setControlPoint(drawingPoint, currentHole, 0, this.angle1.next(), -1, this.tension.next());
-      let c2e = new Z4Point(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
-      let c2i = new Z4Point(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
-      c1e = this.checkWhirlpool2(drawingPoint, c1e, currentAngle, currentHole);
-      c1i = this.checkWhirlpool2(drawingPoint, c1i, currentAngle, currentHole);
-      this.path1e = this.findControlPointPath(c1e.x, c1e.y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0, currentCover);
-      this.path1i = this.findControlPointPath(c1i.x, c1i.y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0, currentCover);
+      this.c1e = this.setControlPoint(drawingPoint, currentHole, 0, this.angle1.next(), 1, this.tension.next());
+      this.c1i = this.setControlPoint(drawingPoint, currentHole, 0, this.angle1.next(), -1, this.tension.next());
+      this.c2e = new Z4Point(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+      this.c2i = new Z4Point(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+      this.c1e = this.checkWhirlpool2(drawingPoint, this.c1e, currentAngle, currentHole);
+      this.c1i = this.checkWhirlpool2(drawingPoint, this.c1i, currentAngle, currentHole);
+      this.path1e = this.findControlPointPath(this.c1e.x, this.c1e.y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0, currentCover);
+      this.path1i = this.findControlPointPath(this.c1i.x, this.c1i.y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0, currentCover);
       this.path2e = new Z4Point(0, 0);
       this.path2i = new Z4Point(0, 0);
     } else if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_5) {
       // The first control point is fixed on newPoint, the second control point collapses towards newPoint
-      let c1e = new Z4Point(drawingPoint.z4Vector.x, drawingPoint.z4Vector.y);
-      let c1i = new Z4Point(drawingPoint.z4Vector.x, drawingPoint.z4Vector.y);
-      let c2e = this.setControlPoint(drawingPoint, currentHole, -180, this.angle2.next(), -1, this.tension.next());
-      let c2i = this.setControlPoint(drawingPoint, currentHole, -180, this.angle2.next(), 1, this.tension.next());
-      c2e = new Z4Point(drawingPoint.z4Vector.module + c2e.x, c2e.y);
-      c2i = new Z4Point(drawingPoint.z4Vector.module + c2i.x, c2i.y);
-      c2e = this.checkWhirlpool2(drawingPoint, c2e, currentAngle, currentHole);
-      c2i = this.checkWhirlpool2(drawingPoint, c2i, currentAngle, currentHole);
+      this.c1e = new Z4Point(drawingPoint.z4Vector.x, drawingPoint.z4Vector.y);
+      this.c1i = new Z4Point(drawingPoint.z4Vector.x, drawingPoint.z4Vector.y);
+      this.c2e = this.setControlPoint(drawingPoint, currentHole, -180, this.angle2.next(), -1, this.tension.next());
+      this.c2i = this.setControlPoint(drawingPoint, currentHole, -180, this.angle2.next(), 1, this.tension.next());
+      this.c2e = new Z4Point(drawingPoint.z4Vector.module + this.c2e.x, this.c2e.y);
+      this.c2i = new Z4Point(drawingPoint.z4Vector.module + this.c2i.x, this.c2i.y);
+      this.c2e = this.checkWhirlpool2(drawingPoint, this.c2e, currentAngle, currentHole);
+      this.c2i = this.checkWhirlpool2(drawingPoint, this.c2i, currentAngle, currentHole);
       this.path1e = new Z4Point(0, 0);
       this.path1i = new Z4Point(0, 0);
-      this.path2e = this.findControlPointPath(c2e.x, c2e.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
-      this.path2i = this.findControlPointPath(c2i.x, c2i.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
+      this.path2e = this.findControlPointPath(this.c2e.x, this.c2e.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
+      this.path2i = this.findControlPointPath(this.c2i.x, this.c2i.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
     }
     // 
     // if (shadow || border) {
@@ -197,8 +196,6 @@ class Z4CenteredFigurePainter extends Z4Painter {
     // pathForShadowBorderI.moveTo(drawingPoint.z4Vector.x0,drawingPoint.z4Vector.y0);
     // pathForShadowBorderI.cubicTo(c1i.x,c1i.y,c2i.x,c2i.y,drawingPoint.z4Vector.x,drawingPoint.z4Vector.y);
     // }
-    // 
-    return pF;
   }
 
    findControlPointPath(p1x, p1y, p2x, p2y, currentCover) {
@@ -238,6 +235,39 @@ class Z4CenteredFigurePainter extends Z4Painter {
     } else {
       return null;
     }
+  }
+
+   drawPaths(point, currentMultiplicity, spatioTemporalColor, progression) {
+  }
+
+   drawPath(point, /*, Path pathForShadowBorder*/
+  c1, c2, path1, path2, currentMultiplicity, spatioTemporalColor, progression) {
+    // if (shadow) this.drawShadow(pathForShadowBorder);
+    let length = Math.max(Z4Math.distance(path1.x, path1.y, 0, 0), Z4Math.distance(path2.x, path2.y, 0, 0));
+    for (let i = 0; i < length; i += 2) {
+      // double val=i/length;
+      // if (point.colorPosition==-1) paint.setColor(color.getColor(1-val,true));
+      // else
+      // switch (point.modeLighting)
+      // {
+      // case NONE:
+      // paint.setColor(newColor);
+      // break;
+      // case LIGTHED:
+      // paint.setColor(Z4Color.lighted(newColor,val));
+      // break;
+      // case DARKENED:
+      // paint.setColor(Z4Color.darkened(newColor,val));
+      // break;
+      // }
+      // 
+      // path.reset();
+      // path.moveTo(point.vector[0],0);
+      // path.cubicTo(c1.x+path1.x*val,c1.y+path1.y*val,c2.x+path2.x*val,c2.y+path2.y*val,pF[0],pF[1]);
+      // canvas.drawPath(path,paint);
+    }
+    // 
+    // if (border) this.drawBorder(point,pathForShadowBorder);
   }
 
   // private void drawPath($CanvasRenderingContext2D context, double x1, double y1, double x1c, double y1c, double x2c, double y2c, double x2, double y2, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {

@@ -40,7 +40,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
   private Z4Point path1i;
   private Z4Point path2e;
   private Z4Point path2i;
-  
+
   private Z4Point c1e;
   private Z4Point c1i;
   private Z4Point c2e;
@@ -96,6 +96,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
         double currentAngle = Z4Math.deg2rad(this.whirlpool.getAngle().getConstant().getValue());
         double currentHole = this.hole.next();
         double currentCover = this.cover / 100;
+        double currentMultiplicity = this.multiplicity.next();
 
         Z4Point point = this.checkWhirlpool1(currentAngle, currentHole, currentSize);
         drawingPoint = new Z4DrawingPoint(Z4Vector.fromVector(currentHole, 0, point.x, point.y), drawingPoint.intensity, drawingPoint.temporalPosition, drawingPoint.drawBounds, drawingPoint.side, drawingPoint.useVectorModuleAsSize);
@@ -106,16 +107,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
           this.type3_4_5(drawingPoint, currentAngle, currentHole, currentCover);
         }
 
-        for (int i = 0; i < this.multiplicity.next(); i++) {
-          if (this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_0 || this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_1 || this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_2) {
-//          this.drawPath(point,pathForShadowBorderE,c1e,c2e,path1e,path2e,newColor);
-          } else if (this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_3 || this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_4 || this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_5) {
-//          this.drawPath(point,pathForShadowBorderI,c1i,c2i,path1i,path2i,newColor);
-//          this.drawPath(point,pathForShadowBorderE,c1e,c2e,path1e,path2e,newColor);
-          }
-//            
-//      canvas.rotate(360f/multiplicity);
-        }
+        this.drawPaths(drawingPoint, currentMultiplicity, spatioTemporalColor, progression);
       }
     }
   }
@@ -275,13 +267,15 @@ public class Z4CenteredFigurePainter extends Z4Painter {
     }
   }
 
-  private void draw(Z4DrawingPoint point/*, Path pathForShadowBorder*/, Z4Point c1, Z4Point c2, Z4Point path1, Z4Point path2) {
+  private void drawPaths(Z4DrawingPoint point, double currentMultiplicity, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
+  }
+
+  private void drawPath(Z4DrawingPoint point/*, Path pathForShadowBorder*/, Z4Point c1, Z4Point c2, Z4Point path1, Z4Point path2, double currentMultiplicity, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
 //    if (shadow) this.drawShadow(pathForShadowBorder);
-//    
-//    float length=Math.max(Z4Math.distance(path1[0],path1[1],0,0),Z4Math.distance(path2[0],path2[1],0,0));
-//    for (int i=0;i<length;i+=2)
-//    {
-//      float val=i/length;
+
+    double length = Math.max(Z4Math.distance(path1.x, path1.y, 0, 0), Z4Math.distance(path2.x, path2.y, 0, 0));
+    for (int i = 0; i < length; i += 2) {
+//      double val=i/length;
 //      if (point.colorPosition==-1) paint.setColor(color.getColor(1-val,true));
 //      else
 //        switch (point.modeLighting)
@@ -299,9 +293,9 @@ public class Z4CenteredFigurePainter extends Z4Painter {
 //
 //      path.reset();
 //      path.moveTo(point.vector[0],0);
-//      path.cubicTo(c1[0]+path1[0]*val,c1[1]+path1[1]*val,c2[0]+path2[0]*val,c2[1]+path2[1]*val,pF[0],pF[1]);
+//      path.cubicTo(c1.x+path1.x*val,c1.y+path1.y*val,c2.x+path2.x*val,c2.y+path2.y*val,pF[0],pF[1]);
 //      canvas.drawPath(path,paint);
-//    }
+    }
 //
 //    if (border) this.drawBorder(point,pathForShadowBorder);
   }
