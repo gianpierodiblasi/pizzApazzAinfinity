@@ -17,33 +17,11 @@ import javascript.awt.Point;
 import javascript.swing.JSComponent;
 import javascript.util.fsa.FileSystemFileHandle;
 import javascript.util.fsa.FileSystemWritableFileStreamCreateOptions;
-import pizzapazza.color.Z4ColorProgression;
-import pizzapazza.color.Z4ColorProgressionBehavior;
-import pizzapazza.color.Z4GradientColor;
-import pizzapazza.color.Z4Lighting;
-import pizzapazza.color.Z4SpatioTemporalColor;
-import pizzapazza.iterator.Z4PointIteratorDrawingAction;
-import pizzapazza.iterator.Z4Spirograph;
-import pizzapazza.math.Z4DrawingPoint;
-import pizzapazza.math.Z4FancifulValue;
-import pizzapazza.math.Z4RandomValue;
-import pizzapazza.math.Z4RandomValueBehavior;
-import pizzapazza.math.Z4Rotation;
-import pizzapazza.math.Z4RotationBehavior;
-import pizzapazza.math.Z4Sign;
-import pizzapazza.math.Z4SignBehavior;
-import pizzapazza.math.Z4SignedRandomValue;
-import pizzapazza.math.Z4SignedValue;
-import pizzapazza.math.Z4Whirlpool;
-import pizzapazza.math.Z4WhirlpoolBehavior;
-import pizzapazza.painter.Z4CenteredFigurePainter;
-import pizzapazza.painter.Z4CenteredFigurePainterType;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonFilePanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
 import pizzapazza.util.Z4Constants;
-import pizzapazza.util.Z4DrawingTool;
 import pizzapazza.util.Z4Layer;
 import pizzapazza.util.Z4Paper;
 import pizzapazza.util.Z4Translations;
@@ -58,8 +36,6 @@ import simulation.js.$Apply_1_Void;
 import simulation.js.$Apply_2_Void;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.navigator;
-import static simulation.js.$Globals.parseInt;
-import static simulation.js.$Globals.setTimeout;
 import simulation.js.$Object;
 import simulation.jszip.$JSZip;
 
@@ -72,12 +48,14 @@ public class Z4Canvas extends JSComponent {
 
   private final $Canvas canvas = ($Canvas) document.createElement("canvas");
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
-
+  
   private Z4RibbonFilePanel ribbonFilePanel;
   private Z4RibbonLayerPanel ribbonLayerPanel;
   private Z4RibbonHistoryPanel ribbonHistoryPanel;
   private Z4StatusPanel statusPanel;
 
+  private final Z4CanvasMouseManager mouseManager = new Z4CanvasMouseManager(this, this.ctx);
+  
   private String projectName;
   private FileSystemFileHandle handle;
   private int width;
@@ -86,86 +64,9 @@ public class Z4Canvas extends JSComponent {
   private boolean zooming;
   private boolean saved = true;
   private boolean changed = false;
-  private boolean pressed = false;
 
   private final Z4Paper paper = new Z4Paper();
   private Z4Layer selectedLayer;
-
-  private final Z4DrawingTool drawingTool = new Z4DrawingTool(
-          new Z4Spirograph(new Z4Rotation(0, new Z4FancifulValue(
-                  new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0),
-                  new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                  false), Z4RotationBehavior.RELATIVE_TO_PATH, false)
-          ),
-          new Z4CenteredFigurePainter(
-                  Z4CenteredFigurePainterType.TYPE_0,
-                  new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                          false),
-                  new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                          false),
-                  new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                          false),
-                  new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                          false),
-                  new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 3),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                          false),
-                  new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                          false),
-                  new Z4Whirlpool(
-                          Z4WhirlpoolBehavior.NONE,
-                          new Z4FancifulValue(
-                                  new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 30),
-                                  new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                                  false)),
-                  100
-          ),
-          //          new Z4Shape2DPainter(
-          //                  new Z4FancifulValue(
-          //                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
-          //                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-          //                          false),
-          //                  new Z4FancifulValue(
-          //                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
-          //                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-          //                          false),
-          //                  false,
-          //                  false,
-          //                  3,
-          //                  new Z4FancifulValue(
-          //                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-          //                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-          //                          false),
-          //                  new Z4FancifulValue(
-          //                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-          //                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-          //                          false),
-          //                  new Color(0, 0, 0, 0),
-          //                  new Z4FancifulValue(
-          //                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-          //                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-          //                          false),
-          //                  new Z4FancifulValue(
-          //                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-          //                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-          //                          false),
-          //                  new Color(0, 0, 0, 0)
-          //          ),
-          //          Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)),
-          Z4SpatioTemporalColor.fromGradientColor(new Z4GradientColor()),
-          new Z4ColorProgression(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, 0.01, Z4Lighting.NONE)
-  );
 
   /**
    * Creates the object
@@ -176,11 +77,11 @@ public class Z4Canvas extends JSComponent {
     this.cssAddClass("z4canvas");
     this.appendNodeChild(this.canvas);
 
-    this.canvas.addEventListener("mouseenter", event -> this.onMouse((MouseEvent) event, "enter"));
-    this.canvas.addEventListener("mouseleave", event -> this.onMouse((MouseEvent) event, "leave"));
-    this.canvas.addEventListener("mousedown", event -> this.onMouse((MouseEvent) event, "down"));
-    this.canvas.addEventListener("mousemove", event -> this.onMouse((MouseEvent) event, "move"));
-    this.canvas.addEventListener("mouseup", event -> this.onMouse((MouseEvent) event, "up"));
+    this.canvas.addEventListener("mouseenter", event -> this.mouseManager.onMouse((MouseEvent) event, "enter"));
+    this.canvas.addEventListener("mouseleave", event -> this.mouseManager.onMouse((MouseEvent) event, "leave"));
+    this.canvas.addEventListener("mousedown", event -> this.mouseManager.onMouse((MouseEvent) event, "down"));
+    this.canvas.addEventListener("mousemove", event -> this.mouseManager.onMouse((MouseEvent) event, "move"));
+    this.canvas.addEventListener("mouseup", event -> this.mouseManager.onMouse((MouseEvent) event, "up"));
 
     this.addEventListener("wheel", event -> {
       WheelEvent evt = (WheelEvent) event;
@@ -220,6 +121,7 @@ public class Z4Canvas extends JSComponent {
     this.ribbonHistoryPanel.setCanvas(this);
     this.ribbonLayerPanel.setCanvas(this);
 
+    this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);
   }
 
   /**
@@ -230,6 +132,8 @@ public class Z4Canvas extends JSComponent {
   public void setStatusPanel(Z4StatusPanel statusPanel) {
     this.statusPanel = statusPanel;
     this.statusPanel.setCanvas(this);
+    
+    this.mouseManager.setStatusPanel(statusPanel);
   }
 
   /**
@@ -251,6 +155,7 @@ public class Z4Canvas extends JSComponent {
 
     this.ribbonLayerPanel.reset();
     this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+    this.mouseManager.setSelectedLayer(this.selectedLayer);
 
     this.ribbonHistoryPanel.resetHistory(() -> {
       this.afterCreate("", width, height);
@@ -310,6 +215,7 @@ public class Z4Canvas extends JSComponent {
 
       this.ribbonLayerPanel.reset();
       this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+      this.mouseManager.setSelectedLayer(this.selectedLayer);
 
       this.ribbonHistoryPanel.resetHistory(() -> {
         this.afterCreate(projectName, (int) image.width, (int) image.height);
@@ -331,6 +237,8 @@ public class Z4Canvas extends JSComponent {
     this.statusPanel.setZoom(1);
 
     this.zoom = 1;
+    this.mouseManager.setZoom(this.zoom);
+
     this.setSaved(true);
     this.changed = false;
 
@@ -383,12 +291,15 @@ public class Z4Canvas extends JSComponent {
 
       image.onload = event -> {
         this.paper.addLayerFromImage(layers.$get(index).$get("name"), image, (int) image.width, (int) image.height);
+
         this.selectedLayer = this.paper.getLayerAt(index);
         this.selectedLayer.setOpacity(layers.$get(index).$get("opacity"));
         this.selectedLayer.setCompositeOperation(layers.$get(index).$get("compositeOperation"));
         this.selectedLayer.setHidden(layers.$get(index).$get("hidden"));
         this.selectedLayer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
+
         this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+        this.mouseManager.setSelectedLayer(this.selectedLayer);
 
         if (index + 1 < layers.length) {
           this.openLayer(zip, json, layers, index + 1);
@@ -458,12 +369,15 @@ public class Z4Canvas extends JSComponent {
 
     image.onload = event -> {
       this.paper.addLayerFromImage(layers.$get(index).$get("name"), image, (int) image.width, (int) image.height);
+
       this.selectedLayer = this.paper.getLayerAt(index);
       this.selectedLayer.setOpacity(layers.$get(index).$get("opacity"));
       this.selectedLayer.setCompositeOperation(layers.$get(index).$get("compositeOperation"));
       this.selectedLayer.setHidden(layers.$get(index).$get("hidden"));
       this.selectedLayer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
+
       this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+      this.mouseManager.setSelectedLayer(this.selectedLayer);
 
       if (index + 1 < layers.length) {
         this.openLayerFromHistory(json, layers, index + 1);
@@ -774,6 +688,8 @@ public class Z4Canvas extends JSComponent {
     this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
 
     this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+    this.mouseManager.setSelectedLayer(this.selectedLayer);
+
     this.setSaved(false);
   }
 
@@ -795,7 +711,9 @@ public class Z4Canvas extends JSComponent {
         this.selectedLayer.setCompositeOperation(layer.getCompositeOperation());
         this.selectedLayer.setHidden(layer.isHidden());
         this.selectedLayer.move(offset.x, offset.y);
+
         this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+        this.mouseManager.setSelectedLayer(this.selectedLayer);
 
         this.setSaved(false);
         this.drawCanvas();
@@ -818,6 +736,7 @@ public class Z4Canvas extends JSComponent {
     if (this.selectedLayer == layer) {
       int count = this.getLayersCount();
       this.selectedLayer = this.paper.getLayerAt(count - 1);
+      this.mouseManager.setSelectedLayer(this.selectedLayer);
 
       document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ") .z4layerpreview-selector").textContent = Z4LayerPreview.SELECTED_LAYER_CONTENT;
       ((HTMLElement) document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
@@ -871,6 +790,7 @@ public class Z4Canvas extends JSComponent {
    */
   public void setSelectedLayer(Z4Layer selectedLayer) {
     this.selectedLayer = selectedLayer;
+    this.mouseManager.setSelectedLayer(this.selectedLayer);
   }
 
   /**
@@ -953,6 +873,8 @@ public class Z4Canvas extends JSComponent {
    */
   public void setZoom(double zoom) {
     this.zoom = zoom;
+    this.mouseManager.setZoom(this.zoom);
+
     this.canvas.width = this.width * zoom;
     this.canvas.height = this.height * zoom;
     this.drawCanvas();
@@ -972,6 +894,8 @@ public class Z4Canvas extends JSComponent {
       double newZoom = Z4Constants.ZOOM_LEVEL.find(level -> level > this.zoom, null);
       if ($exists(newZoom)) {
         this.zoom = newZoom;
+        this.mouseManager.setZoom(this.zoom);
+
         this.canvas.width = this.width * newZoom;
         this.canvas.height = this.height * newZoom;
         this.statusPanel.setZoom(this.zoom);
@@ -988,6 +912,8 @@ public class Z4Canvas extends JSComponent {
       double newZoom = Z4Constants.ZOOM_LEVEL.filter(level -> level < this.zoom).pop();
       if ($exists(newZoom)) {
         this.zoom = newZoom;
+        this.mouseManager.setZoom(this.zoom);
+
         this.canvas.width = this.width * newZoom;
         this.canvas.height = this.height * newZoom;
         this.statusPanel.setZoom(this.zoom);
@@ -1007,102 +933,5 @@ public class Z4Canvas extends JSComponent {
     this.ctx.scale(this.zoom, this.zoom);
     this.paper.draw(this.ctx, false, false);
     this.ctx.restore();
-  }
-
-  private void onMouse(MouseEvent event, String type) {
-    double x = Math.min(this.width, Math.max(0, event.offsetX / this.zoom));
-    double y = Math.min(this.height, Math.max(0, event.offsetY / this.zoom));
-
-    switch (type) {
-      case "enter":
-        this.pressed = event.buttons == 1;
-        this.onAction(Z4PointIteratorDrawingAction.START, x, y);
-        this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
-        break;
-      case "down":
-        this.pressed = true;
-        this.onAction(Z4PointIteratorDrawingAction.START, x, y);
-        break;
-      case "move":
-        this.statusPanel.setMousePosition(parseInt(x), parseInt(y));
-        this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
-        break;
-      case "up":
-        this.onStop(x, y);
-        break;
-      case "leave":
-        if (this.pressed) {
-          this.onStop(x, y);
-        }
-        break;
-    }
-  }
-
-  private void onAction(Z4PointIteratorDrawingAction action, double x, double y) {
-    if (this.pressed && this.drawingTool.drawAction(action, x, y)) {
-      this.ribbonHistoryPanel.stopStandard();
-      this.iteratePoints(action);
-    }
-  }
-
-  private void onStop(double x, double y) {
-    this.pressed = false;
-    if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
-      this.ribbonHistoryPanel.stopStandard();
-      this.iteratePoints(Z4PointIteratorDrawingAction.STOP);
-    } else {
-      this.startStandard();
-    }
-  }
-
-  @SuppressWarnings("empty-statement")
-  private void iteratePoints(Z4PointIteratorDrawingAction action) {
-    if (action != Z4PointIteratorDrawingAction.STOP) {
-      while (this.drawNextPoint());
-
-      if (this.drawingTool.isInfinitePointGenerator() && this.pressed) {
-        setTimeout(() -> this.iteratePoints(action), this.drawingTool.getInfinitePointGeneratorSleep());
-      }
-    } else if ($exists(this.drawingTool.getNextCountOnSTOP())) {
-      Z4UI.pleaseWait(this, true, true, false, true, "", () -> this.iteratePoint(0));
-    } else {
-      this.startStandard();
-    }
-  }
-
-  private void iteratePoint(int value) {
-    Z4UI.setPleaseWaitProgressBarValue(100 * value / this.drawingTool.getNextCountOnSTOP());
-
-    if (this.drawNextPoint()) {
-      Z4UI.pleaseWaitAdvanced(() -> this.iteratePoint(value + 1));
-    } else {
-      this.startStandard();
-      Z4UI.pleaseWaitCompleted();
-    }
-  }
-
-  private boolean drawNextPoint() {
-    Z4DrawingPoint next = this.drawingTool.next();
-    if (!$exists(next)) {
-      return false;
-    } else if (next.drawBounds) {
-      this.ctx.save();
-      this.ctx.translate(next.z4Vector.x0, next.z4Vector.y0);
-      this.ctx.rotate(next.z4Vector.phase);
-      this.drawingTool.draw(this.ctx, next);
-      this.ctx.restore();
-      return true;
-    } else {
-      this.selectedLayer.drawTool(this.drawingTool, next);
-      this.selectedLayer.getLayerPreview().drawLayer();
-      this.drawCanvas();
-      return true;
-    }
-  }
-
-  private void startStandard() {
-    this.changed = true;
-    this.setSaved(false);
-    this.ribbonHistoryPanel.startStandard();
   }
 }

@@ -1746,6 +1746,8 @@ class Z4Canvas extends JSComponent {
 
    statusPanel = null;
 
+   mouseManager = new Z4CanvasMouseManager(this, this.ctx);
+
    projectName = null;
 
    handle = null;
@@ -1762,45 +1764,9 @@ class Z4Canvas extends JSComponent {
 
    changed = false;
 
-   pressed = false;
-
    paper = new Z4Paper();
 
    selectedLayer = null;
-
-   drawingTool = new Z4DrawingTool(new Z4Spirograph(new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.RELATIVE_TO_PATH, false)), new Z4CenteredFigurePainter(Z4CenteredFigurePainterType.TYPE_0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 3), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Whirlpool(Z4WhirlpoolBehavior.NONE, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 30), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false)), 100), // new Z4Shape2DPainter(
-  // new Z4FancifulValue(
-  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
-  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-  // false),
-  // new Z4FancifulValue(
-  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
-  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-  // false),
-  // false,
-  // false,
-  // 3,
-  // new Z4FancifulValue(
-  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-  // false),
-  // new Z4FancifulValue(
-  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-  // false),
-  // new Color(0, 0, 0, 0),
-  // new Z4FancifulValue(
-  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-  // false),
-  // new Z4FancifulValue(
-  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-  // false),
-  // new Color(0, 0, 0, 0)
-  // ),
-  // Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)),
-  Z4SpatioTemporalColor.fromGradientColor(new Z4GradientColor()), new Z4ColorProgression(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, 0.01, Z4Lighting.NONE));
 
   /**
    * Creates the object
@@ -1809,11 +1775,11 @@ class Z4Canvas extends JSComponent {
     super(document.createElement("div"));
     this.cssAddClass("z4canvas");
     this.appendNodeChild(this.canvas);
-    this.canvas.addEventListener("mouseenter", event => this.onMouse(event, "enter"));
-    this.canvas.addEventListener("mouseleave", event => this.onMouse(event, "leave"));
-    this.canvas.addEventListener("mousedown", event => this.onMouse(event, "down"));
-    this.canvas.addEventListener("mousemove", event => this.onMouse(event, "move"));
-    this.canvas.addEventListener("mouseup", event => this.onMouse(event, "up"));
+    this.canvas.addEventListener("mouseenter", event => this.mouseManager.onMouse(event, "enter"));
+    this.canvas.addEventListener("mouseleave", event => this.mouseManager.onMouse(event, "leave"));
+    this.canvas.addEventListener("mousedown", event => this.mouseManager.onMouse(event, "down"));
+    this.canvas.addEventListener("mousemove", event => this.mouseManager.onMouse(event, "move"));
+    this.canvas.addEventListener("mouseup", event => this.mouseManager.onMouse(event, "up"));
     this.addEventListener("wheel", event => {
       let evt = event;
       if (!evt.ctrlKey) {
@@ -1850,6 +1816,7 @@ class Z4Canvas extends JSComponent {
     this.ribbonFilePanel.setCanvas(this);
     this.ribbonHistoryPanel.setCanvas(this);
     this.ribbonLayerPanel.setCanvas(this);
+    this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);
   }
 
   /**
@@ -1860,6 +1827,7 @@ class Z4Canvas extends JSComponent {
    setStatusPanel(statusPanel) {
     this.statusPanel = statusPanel;
     this.statusPanel.setCanvas(this);
+    this.mouseManager.setStatusPanel(statusPanel);
   }
 
   /**
@@ -1878,6 +1846,7 @@ class Z4Canvas extends JSComponent {
     this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
     this.ribbonLayerPanel.reset();
     this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+    this.mouseManager.setSelectedLayer(this.selectedLayer);
     this.ribbonHistoryPanel.resetHistory(() => {
       this.afterCreate("", width, height);
       this.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
@@ -1930,6 +1899,7 @@ class Z4Canvas extends JSComponent {
       this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
       this.ribbonLayerPanel.reset();
       this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+      this.mouseManager.setSelectedLayer(this.selectedLayer);
       this.ribbonHistoryPanel.resetHistory(() => {
         this.afterCreate(projectName, image.width, image.height);
         this.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
@@ -1946,6 +1916,7 @@ class Z4Canvas extends JSComponent {
     this.statusPanel.setProjectSize(width, height);
     this.statusPanel.setZoom(1);
     this.zoom = 1;
+    this.mouseManager.setZoom(this.zoom);
     this.setSaved(true);
     this.changed = false;
     this.canvas.width = width;
@@ -1998,6 +1969,7 @@ class Z4Canvas extends JSComponent {
         this.selectedLayer.setHidden(layers[index]["hidden"]);
         this.selectedLayer.move(layers[index]["offsetX"], layers[index]["offsetY"]);
         this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+        this.mouseManager.setSelectedLayer(this.selectedLayer);
         if (index + 1 < layers.length) {
           this.openLayer(zip, json, layers, index + 1);
         } else if (json["history"]) {
@@ -2065,6 +2037,7 @@ class Z4Canvas extends JSComponent {
       this.selectedLayer.setHidden(layers[index]["hidden"]);
       this.selectedLayer.move(layers[index]["offsetX"], layers[index]["offsetY"]);
       this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+      this.mouseManager.setSelectedLayer(this.selectedLayer);
       if (index + 1 < layers.length) {
         this.openLayerFromHistory(json, layers, index + 1);
       } else {
@@ -2341,6 +2314,7 @@ class Z4Canvas extends JSComponent {
     this.ribbonHistoryPanel.saveHistory("standard,tool");
     this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
     this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+    this.mouseManager.setSelectedLayer(this.selectedLayer);
     this.setSaved(false);
   }
 
@@ -2361,6 +2335,7 @@ class Z4Canvas extends JSComponent {
         this.selectedLayer.setHidden(layer.isHidden());
         this.selectedLayer.move(offset.x, offset.y);
         this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+        this.mouseManager.setSelectedLayer(this.selectedLayer);
         this.setSaved(false);
         this.drawCanvas();
         return null;
@@ -2380,6 +2355,7 @@ class Z4Canvas extends JSComponent {
     if (this.selectedLayer === layer) {
       let count = this.getLayersCount();
       this.selectedLayer = this.paper.getLayerAt(count - 1);
+      this.mouseManager.setSelectedLayer(this.selectedLayer);
       document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ") .z4layerpreview-selector").textContent = Z4LayerPreview.SELECTED_LAYER_CONTENT;
       (document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
     }
@@ -2430,6 +2406,7 @@ class Z4Canvas extends JSComponent {
    */
    setSelectedLayer(selectedLayer) {
     this.selectedLayer = selectedLayer;
+    this.mouseManager.setSelectedLayer(this.selectedLayer);
   }
 
   /**
@@ -2512,6 +2489,7 @@ class Z4Canvas extends JSComponent {
    */
    setZoom(zoom) {
     this.zoom = zoom;
+    this.mouseManager.setZoom(this.zoom);
     this.canvas.width = this.width * zoom;
     this.canvas.height = this.height * zoom;
     this.drawCanvas();
@@ -2531,6 +2509,7 @@ class Z4Canvas extends JSComponent {
       let newZoom = Z4Constants.ZOOM_LEVEL.find(level => level > this.zoom, null);
       if (newZoom) {
         this.zoom = newZoom;
+        this.mouseManager.setZoom(this.zoom);
         this.canvas.width = this.width * newZoom;
         this.canvas.height = this.height * newZoom;
         this.statusPanel.setZoom(this.zoom);
@@ -2547,6 +2526,7 @@ class Z4Canvas extends JSComponent {
       let newZoom = Z4Constants.ZOOM_LEVEL.filter(level => level < this.zoom).pop();
       if (newZoom) {
         this.zoom = newZoom;
+        this.mouseManager.setZoom(this.zoom);
         this.canvas.width = this.width * newZoom;
         this.canvas.height = this.height * newZoom;
         this.statusPanel.setZoom(this.zoom);
@@ -2566,10 +2546,128 @@ class Z4Canvas extends JSComponent {
     this.paper.draw(this.ctx, false, false);
     this.ctx.restore();
   }
+}
+/**
+ * The mouse manager of a Z4Canvas
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4CanvasMouseManager {
 
+   canvas = null;
+
+   selectedLayer = null;
+
+   ctx = null;
+
+   zoom = 0.0;
+
+   ribbonHistoryPanel = null;
+
+   statusPanel = null;
+
+   drawingTool = new Z4DrawingTool(new Z4Spirograph(new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.RELATIVE_TO_PATH, false)), new Z4CenteredFigurePainter(Z4CenteredFigurePainterType.TYPE_0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 3), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Whirlpool(Z4WhirlpoolBehavior.NONE, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 30), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false)), 100), // new Z4Shape2DPainter(
+  // new Z4FancifulValue(
+  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
+  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+  // false),
+  // new Z4FancifulValue(
+  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
+  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+  // false),
+  // false,
+  // false,
+  // 3,
+  // new Z4FancifulValue(
+  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+  // false),
+  // new Z4FancifulValue(
+  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+  // false),
+  // new Color(0, 0, 0, 0),
+  // new Z4FancifulValue(
+  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+  // false),
+  // new Z4FancifulValue(
+  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+  // false),
+  // new Color(0, 0, 0, 0)
+  // ),
+  // Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)),
+  Z4SpatioTemporalColor.fromGradientColor(new Z4GradientColor()), new Z4ColorProgression(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, 0.01, Z4Lighting.NONE));
+
+   pressed = false;
+
+  /**
+   * Creates the object
+   *
+   * @param canvas The canvas
+   * @param ctx The canvas context
+   */
+  constructor(canvas, ctx) {
+    this.canvas = canvas;
+    this.ctx = ctx;
+  }
+
+  /**
+   * Sets the selected layer
+   *
+   * @param selectedLayer The selected layer
+   */
+   setSelectedLayer(selectedLayer) {
+    this.selectedLayer = selectedLayer;
+  }
+
+  /**
+   * Sets the zoom
+   *
+   * @param zoom The zoom
+   */
+   setZoom(zoom) {
+    this.zoom = zoom;
+  }
+
+  /**
+   * Sets the ribbon history panel
+   *
+   * @param ribbonHistoryPanel The ribbon history panel
+   */
+   setRibbonHistoryPanel(ribbonHistoryPanel) {
+    this.ribbonHistoryPanel = ribbonHistoryPanel;
+  }
+
+  /**
+   * Sets the status panel
+   *
+   * @param statusPanel The status panel
+   */
+   setStatusPanel(statusPanel) {
+    this.statusPanel = statusPanel;
+  }
+
+  /**
+   * Sets the drawing tool
+   *
+   * @param drawingTool The drawing tool
+   */
+   setDrawingTool(drawingTool) {
+    this.drawingTool = drawingTool;
+  }
+
+  /**
+   * The mouse event manager
+   *
+   * @param event The mouse event
+   * @param type The event type
+   */
    onMouse(event, type) {
-    let x = Math.min(this.width, Math.max(0, event.offsetX / this.zoom));
-    let y = Math.min(this.height, Math.max(0, event.offsetY / this.zoom));
+    let size = this.canvas.getSize();
+    let x = Math.min(size.width, Math.max(0, event.offsetX / this.zoom));
+    let y = Math.min(size.height, Math.max(0, event.offsetY / this.zoom));
     switch(type) {
       case "enter":
         this.pressed = event.buttons === 1;
@@ -2619,7 +2717,7 @@ class Z4Canvas extends JSComponent {
         setTimeout(() => this.iteratePoints(action), this.drawingTool.getInfinitePointGeneratorSleep());
       }
     } else if (this.drawingTool.getNextCountOnSTOP()) {
-      Z4UI.pleaseWait(this, true, true, false, true, "", () => this.iteratePoint(0));
+      Z4UI.pleaseWait(this.canvas, true, true, false, true, "", () => this.iteratePoint(0));
     } else {
       this.startStandard();
     }
@@ -2640,6 +2738,9 @@ class Z4Canvas extends JSComponent {
     if (!next) {
       return false;
     } else if (next.drawBounds) {
+      if (this.zoom !== 1) {
+        next = new Z4DrawingPoint(Z4Vector.fromPoints(this.zoom * next.z4Vector.x0, this.zoom * next.z4Vector.y0, this.zoom * next.z4Vector.x, this.zoom * next.z4Vector.y), next.intensity, next.temporalPosition, next.drawBounds, next.side, next.useVectorModuleAsSize);
+      }
       this.ctx.save();
       this.ctx.translate(next.z4Vector.x0, next.z4Vector.y0);
       this.ctx.rotate(next.z4Vector.phase);
@@ -2649,14 +2750,14 @@ class Z4Canvas extends JSComponent {
     } else {
       this.selectedLayer.drawTool(this.drawingTool, next);
       this.selectedLayer.getLayerPreview().drawLayer();
-      this.drawCanvas();
+      this.canvas.drawCanvas();
       return true;
     }
   }
 
    startStandard() {
-    this.changed = true;
-    this.setSaved(false);
+    this.canvas.setChanged(true);
+    this.canvas.setSaved(false);
     this.ribbonHistoryPanel.startStandard();
   }
 }
