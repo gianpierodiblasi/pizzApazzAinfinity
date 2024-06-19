@@ -1752,7 +1752,7 @@ class Z4Canvas extends JSComponent {
 
    selectedLayer = null;
 
-   drawingTool = new Z4DrawingTool(new Z4Spirograph(new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.RELATIVE_TO_PATH, false)), new Z4CenteredFigurePainter(Z4CenteredFigurePainterType.TYPE_5, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 3), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Whirlpool(Z4WhirlpoolBehavior.NONE, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 30), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false)), 100), // new Z4Shape2DPainter(
+   drawingTool = new Z4DrawingTool(new Z4Spirograph(new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.RELATIVE_TO_PATH, false)), new Z4CenteredFigurePainter(Z4CenteredFigurePainterType.TYPE_0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 3), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Whirlpool(Z4WhirlpoolBehavior.NONE, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 30), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false)), 100), // new Z4Shape2DPainter(
   // new Z4FancifulValue(
   // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
   // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
@@ -1784,7 +1784,7 @@ class Z4Canvas extends JSComponent {
   // new Color(0, 0, 0, 0)
   // ),
   // Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)),
-  Z4SpatioTemporalColor.fromGradientColor(new Z4GradientColor()), new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.01, Z4Lighting.NONE));
+  Z4SpatioTemporalColor.fromGradientColor(new Z4GradientColor()), new Z4ColorProgression(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, 0.01, Z4Lighting.NONE));
 
   /**
    * Creates the object
@@ -2559,67 +2559,91 @@ class Z4Canvas extends JSComponent {
         this.pressed = event.buttons === 1;
         if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.START, x, y)) {
           this.ribbonHistoryPanel.stopStandard();
-          this.iteratePoint();
+          this.iteratePoints(Z4PointIteratorDrawingAction.START);
         }
         if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.CONTINUE, x, y)) {
           this.ribbonHistoryPanel.stopStandard();
-          this.iteratePoint();
+          this.iteratePoints(Z4PointIteratorDrawingAction.CONTINUE);
         }
         break;
       case "down":
         this.pressed = true;
         if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.START, x, y)) {
           this.ribbonHistoryPanel.stopStandard();
-          this.iteratePoint();
+          this.iteratePoints(Z4PointIteratorDrawingAction.START);
         }
         break;
       case "move":
         this.statusPanel.setMousePosition(parseInt(x), parseInt(y));
         if (this.pressed && this.drawingTool.drawAction(Z4PointIteratorDrawingAction.CONTINUE, x, y)) {
           this.ribbonHistoryPanel.stopStandard();
-          this.iteratePoint();
+          this.iteratePoints(Z4PointIteratorDrawingAction.CONTINUE);
         }
         break;
       case "up":
         this.pressed = false;
         if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
-          this.iteratePoint();
-        }
-        this.changed = true;
-        this.setSaved(false);
-        this.ribbonHistoryPanel.startStandard();
-        break;
-      case "leave":
-        if (this.pressed) {
-          this.pressed = false;
-          if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
-            this.iteratePoint();
-          }
+          this.iteratePoints(Z4PointIteratorDrawingAction.STOP);
+        } else {
           this.changed = true;
           this.setSaved(false);
           this.ribbonHistoryPanel.startStandard();
         }
         break;
+      case "leave":
+        if (this.pressed) {
+          this.pressed = false;
+          if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
+            this.iteratePoints(Z4PointIteratorDrawingAction.STOP);
+          } else {
+            this.changed = true;
+            this.setSaved(false);
+            this.ribbonHistoryPanel.startStandard();
+          }
+        }
+        break;
     }
   }
 
-   iteratePoint() {
-    let next = null;
-    while ((next = this.drawingTool.next()) !== null) {
-      if (next.drawBounds) {
-        this.ctx.save();
-        this.ctx.translate(next.z4Vector.x0, next.z4Vector.y0);
-        this.ctx.rotate(next.z4Vector.phase);
-        this.drawingTool.draw(this.ctx, next);
-        this.ctx.restore();
-      } else {
-        this.selectedLayer.drawTool(this.drawingTool, next);
-        this.selectedLayer.getLayerPreview().drawLayer();
-        this.drawCanvas();
+   iteratePoints(action) {
+    if (action !== Z4PointIteratorDrawingAction.STOP) {
+      while (this.drawNextPoint()) ;
+      if (this.drawingTool.isInfinitePointGenerator() && this.pressed) {
+        setTimeout(() => this.iteratePoints(action), this.drawingTool.getInfinitePointGeneratorSleep());
       }
+    } else {
+      Z4UI.pleaseWait(this, true, true, false, true, "", () => this.iteratePoint(0));
     }
-    if (this.drawingTool.isInfinitePointGenerator() && this.pressed) {
-      setTimeout(() => this.iteratePoint(), this.drawingTool.getInfinitePointGeneratorSleep());
+  }
+
+   iteratePoint(value) {
+    Z4UI.setPleaseWaitProgressBarValue(100 * value / this.drawingTool.getNextCount());
+    if (this.drawNextPoint()) {
+      Z4UI.pleaseWaitAdvanced(() => this.iteratePoint(value + 1));
+    } else {
+      this.changed = true;
+      this.setSaved(false);
+      this.ribbonHistoryPanel.startStandard();
+      Z4UI.pleaseWaitCompleted();
+    }
+  }
+
+   drawNextPoint() {
+    let next = this.drawingTool.next();
+    if (!next) {
+      return false;
+    } else if (next.drawBounds) {
+      this.ctx.save();
+      this.ctx.translate(next.z4Vector.x0, next.z4Vector.y0);
+      this.ctx.rotate(next.z4Vector.phase);
+      this.drawingTool.draw(this.ctx, next);
+      this.ctx.restore();
+      return true;
+    } else {
+      this.selectedLayer.drawTool(this.drawingTool, next);
+      this.selectedLayer.getLayerPreview().drawLayer();
+      this.drawCanvas();
+      return true;
     }
   }
 }
@@ -9861,10 +9885,19 @@ class Z4DrawingTool extends Z4Nextable {
   }
 
   /**
-   * Checks if this Z4PointIterator is an infinite point generator (for example
+   * Returns the count of next points
+   *
+   * @return The count of next points
+   */
+   getNextCount() {
+    return this.pointIterator.getNextCount();
+  }
+
+  /**
+   * Checks if the Z4PointIterator is an infinite point generator (for example
    * an airbrush)
    *
-   * @return true if this Z4PointIterator is an infinite point generator, false
+   * @return true if the Z4PointIterator is an infinite point generator, false
    * otherwise
    */
    isInfinitePointGenerator() {
@@ -10282,6 +10315,14 @@ class Z4PointIterator extends Z4NextableWithTwoParams {
   }
 
   /**
+   * Returns the count of next points
+   *
+   * @return The count of next points
+   */
+   getNextCount() {
+  }
+
+  /**
    * Checks if this Z4PointIterator is an infinite point generator (for example
    * an airbrush)
    *
@@ -10428,6 +10469,10 @@ class Z4Airbrush extends Z4PointIterator {
     }
   }
 
+   getNextCount() {
+    return 1;
+  }
+
    isInfinitePointGenerator() {
     return true;
   }
@@ -10540,6 +10585,10 @@ class Z4Scatterer extends Z4PointIterator {
     }
   }
 
+   getNextCount() {
+    return 1;
+  }
+
    isInfinitePointGenerator() {
     return false;
   }
@@ -10649,6 +10698,10 @@ class Z4Spirograph extends Z4PointIterator {
       }
       return this.nextdDrawingPoint;
     }
+  }
+
+   getNextCount() {
+    return this.clones.length;
   }
 
    isInfinitePointGenerator() {
@@ -10797,6 +10850,10 @@ class Z4Stamper extends Z4PointIterator {
       this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, false, this.rotation.computeSide(vector, null), false);
       return nextdDrawingPoint;
     }
+  }
+
+   getNextCount() {
+    return 1;
   }
 
    isInfinitePointGenerator() {
@@ -11114,6 +11171,10 @@ class Z4Tracer extends Z4PointIterator {
     } else {
       return 0;
     }
+  }
+
+   getNextCount() {
+    return this.clones.length;
   }
 
    isInfinitePointGenerator() {

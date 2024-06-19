@@ -68,6 +68,10 @@ class Z4Scatterer extends Z4PointIterator {
     }
   }
 
+   getNextCount() {
+    return 1;
+  }
+
    isInfinitePointGenerator() {
     return false;
   }

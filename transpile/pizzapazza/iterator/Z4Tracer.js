@@ -256,6 +256,10 @@ class Z4Tracer extends Z4PointIterator {
     }
   }
 
+   getNextCount() {
+    return this.clones.length;
+  }
+
    isInfinitePointGenerator() {
     return false;
   }

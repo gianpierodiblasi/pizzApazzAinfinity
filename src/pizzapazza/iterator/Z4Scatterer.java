@@ -102,6 +102,11 @@ public class Z4Scatterer extends Z4PointIterator {
   }
 
   @Override
+  public int getNextCount() {
+    return 1;
+  }
+  
+  @Override
   public boolean isInfinitePointGenerator() {
     return false;
   }

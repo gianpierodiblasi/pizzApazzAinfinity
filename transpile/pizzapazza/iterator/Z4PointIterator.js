@@ -68,6 +68,14 @@ class Z4PointIterator extends Z4NextableWithTwoParams {
   }
 
   /**
+   * Returns the count of next points
+   *
+   * @return The count of next points
+   */
+   getNextCount() {
+  }
+
+  /**
    * Checks if this Z4PointIterator is an infinite point generator (for example
    * an airbrush)
    *

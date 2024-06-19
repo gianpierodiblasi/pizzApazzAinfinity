@@ -78,6 +78,13 @@ public abstract class Z4PointIterator implements Z4NextableWithTwoParams<Z4Drawi
   public abstract Z4DrawingPoint next(Z4SpatioTemporalColor color, Z4ColorProgression progression);
 
   /**
+   * Returns the count of next points
+   *
+   * @return The count of next points
+   */
+  public abstract int getNextCount();
+
+  /**
    * Checks if this Z4PointIterator is an infinite point generator (for example
    * an airbrush)
    *

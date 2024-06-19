@@ -106,6 +106,10 @@ class Z4Airbrush extends Z4PointIterator {
     }
   }
 
+   getNextCount() {
+    return 1;
+  }
+
    isInfinitePointGenerator() {
     return true;
   }

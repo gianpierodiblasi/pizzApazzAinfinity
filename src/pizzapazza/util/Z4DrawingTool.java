@@ -112,10 +112,19 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
   }
 
   /**
-   * Checks if this Z4PointIterator is an infinite point generator (for example
+   * Returns the count of next points
+   *
+   * @return The count of next points
+   */
+  public int getNextCount() {
+    return this.pointIterator.getNextCount();
+  }
+  
+  /**
+   * Checks if the Z4PointIterator is an infinite point generator (for example
    * an airbrush)
    *
-   * @return true if this Z4PointIterator is an infinite point generator, false
+   * @return true if the Z4PointIterator is an infinite point generator, false
    * otherwise
    */
   public boolean isInfinitePointGenerator() {

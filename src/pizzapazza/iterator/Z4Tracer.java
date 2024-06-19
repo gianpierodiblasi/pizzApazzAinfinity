@@ -298,6 +298,11 @@ public class Z4Tracer extends Z4PointIterator {
   }
 
   @Override
+  public int getNextCount() {
+    return this.clones.length;
+  }
+  
+  @Override
   public boolean isInfinitePointGenerator() {
     return false;
   }

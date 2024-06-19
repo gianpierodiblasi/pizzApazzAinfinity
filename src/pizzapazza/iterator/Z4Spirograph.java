@@ -123,6 +123,11 @@ public class Z4Spirograph extends Z4PointIterator {
   }
 
   @Override
+  public int getNextCount() {
+    return this.clones.length;
+  }
+  
+  @Override
   public boolean isInfinitePointGenerator() {
     return false;
   }

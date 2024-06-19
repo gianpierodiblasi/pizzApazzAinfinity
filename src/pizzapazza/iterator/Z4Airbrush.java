@@ -142,6 +142,11 @@ public class Z4Airbrush extends Z4PointIterator {
   }
 
   @Override
+  public int getNextCount() {
+    return 1;
+  }
+  
+  @Override
   public boolean isInfinitePointGenerator() {
     return true;
   }
