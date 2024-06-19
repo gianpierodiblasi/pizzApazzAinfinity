@@ -11437,7 +11437,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
     } else {
       let currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.size.next());
       if (currentSize > 0) {
-        let currentAngle = Z4Math.deg2rad(this.whirlpool.getAngle().getConstant().getValue());
+        let currentAngle = Z4Math.deg2rad(this.whirlpool.getAngle().next());
         let currentHole = this.hole.next();
         let currentCover = this.cover / 100;
         let currentMultiplicity = this.multiplicity.next();
@@ -11562,7 +11562,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
   }
 
    setControlPoint(drawingPoint, currentHole, phase, currentAngle, angleSign, currenTension) {
-    let point = Z4Math.rotate((4 + currenTension) * drawingPoint.intensity * drawingPoint.z4Vector.module, 0, phase + angleSign * currentAngle);
+    let point = Z4Math.rotate(currenTension * drawingPoint.intensity * drawingPoint.z4Vector.module, 0, phase + angleSign * currentAngle);
     return new Z4Point(point.x + currentHole, point.y);
   }
 

@@ -176,7 +176,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
     } else {
       double currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.size.next());
       if (currentSize > 0) {
-        double currentAngle = Z4Math.deg2rad(this.whirlpool.getAngle().getConstant().getValue());
+        double currentAngle = Z4Math.deg2rad(this.whirlpool.getAngle().next());
         double currentHole = this.hole.next();
         double currentCover = this.cover / 100;
         double currentMultiplicity = this.multiplicity.next();
@@ -318,7 +318,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
   }
 
   private Z4Point setControlPoint(Z4DrawingPoint drawingPoint, double currentHole, double phase, double currentAngle, int angleSign, double currenTension) {
-    Z4Point point = Z4Math.rotate((4 + currenTension) * drawingPoint.intensity * drawingPoint.z4Vector.module, 0, phase + angleSign * currentAngle);
+    Z4Point point = Z4Math.rotate(currenTension * drawingPoint.intensity * drawingPoint.z4Vector.module, 0, phase + angleSign * currentAngle);
     return new Z4Point(point.x + currentHole, point.y);
   }
 
