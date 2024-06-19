@@ -1253,6 +1253,22 @@ class Z4Math {
   }
 
   /**
+   * Rotates a point by an angle and then translates it
+   *
+   * @param x The x-axis coordinate of the point
+   * @param y The y-axis coordinate of the point
+   * @param angle The angle (in radians)
+   * @param tx The x-axis translation
+   * @param ty The y-axis translation
+   * @return The rotated point
+   */
+  static  rotoTranslate(x, y, angle, tx, ty) {
+    let cos = Math.cos(angle);
+    let sin = Math.sin(angle);
+    return new Z4Point(x * cos + y * sin + tx, x * sin - y * cos + ty);
+  }
+
+  /**
    * Generates a ripple around a value
    *
    * @param value The value
@@ -11662,19 +11678,16 @@ class Z4CenteredFigurePainter extends Z4Painter {
   }
 
    setControlPoint(drawingPoint, currentHole, phase, currentAngle, angleSign, currenTension) {
-    let point = Z4Math.rotate(currenTension * drawingPoint.intensity * drawingPoint.z4Vector.module, 0, phase + angleSign * currentAngle);
-    return new Z4Point(point.x + currentHole, point.y);
+    return Z4Math.rotoTranslate(currenTension * drawingPoint.intensity * drawingPoint.z4Vector.module, 0, phase + angleSign * currentAngle, currentHole, 0);
   }
 
    checkWhirlpool1(currentAngle, currentHole, currentSize) {
     if (currentHole === 0 || currentAngle === 0 || this.whirlpool.getBehavior() === Z4WhirlpoolBehavior.NONE) {
       return new Z4Point(currentSize, 0);
     } else if (this.whirlpool.getBehavior() === Z4WhirlpoolBehavior.FORWARD) {
-      let point = Z4Math.rotate(currentSize, 0, currentAngle);
-      return new Z4Point(point.x + currentHole, point.y);
+      return Z4Math.rotoTranslate(currentSize, 0, currentAngle, currentHole, 0);
     } else if (this.whirlpool.getBehavior() === Z4WhirlpoolBehavior.BACKWARD) {
-      let point = Z4Math.rotate(currentSize, 0, -currentAngle);
-      return new Z4Point(point.x + currentHole, point.y);
+      return Z4Math.rotoTranslate(currentSize, 0, -currentAngle, currentHole, 0);
     } else {
       return null;
     }
@@ -11684,11 +11697,9 @@ class Z4CenteredFigurePainter extends Z4Painter {
     if (currentHole === 0 || currentAngle === 0 || this.whirlpool.getBehavior() === Z4WhirlpoolBehavior.NONE) {
       return p;
     } else if (this.whirlpool.getBehavior() === Z4WhirlpoolBehavior.FORWARD) {
-      p = Z4Math.rotate(p.x, p.y, currentAngle);
-      return new Z4Point(point.z4Vector.x0 + p.x, point.z4Vector.y0 + p.y);
+      return Z4Math.rotoTranslate(p.x, p.y, currentAngle, point.z4Vector.x0, point.z4Vector.y0);
     } else if (this.whirlpool.getBehavior() === Z4WhirlpoolBehavior.BACKWARD) {
-      p = Z4Math.rotate(p.x, p.y, -currentAngle);
-      return new Z4Point(point.z4Vector.x0 + p.x, point.z4Vector.y0 + p.y);
+      return Z4Math.rotoTranslate(p.x, p.y, -currentAngle, point.z4Vector.x0, point.z4Vector.y0);
     } else {
       return null;
     }

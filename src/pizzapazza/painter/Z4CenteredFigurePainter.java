@@ -324,19 +324,16 @@ public class Z4CenteredFigurePainter extends Z4Painter {
   }
 
   private Z4Point setControlPoint(Z4DrawingPoint drawingPoint, double currentHole, double phase, double currentAngle, int angleSign, double currenTension) {
-    Z4Point point = Z4Math.rotate(currenTension * drawingPoint.intensity * drawingPoint.z4Vector.module, 0, phase + angleSign * currentAngle);
-    return new Z4Point(point.x + currentHole, point.y);
+    return Z4Math.rotoTranslate(currenTension * drawingPoint.intensity * drawingPoint.z4Vector.module, 0, phase + angleSign * currentAngle, currentHole, 0);
   }
 
   private Z4Point checkWhirlpool1(double currentAngle, double currentHole, double currentSize) {
     if (currentHole == 0 || currentAngle == 0 || this.whirlpool.getBehavior() == Z4WhirlpoolBehavior.NONE) {
       return new Z4Point(currentSize, 0);
     } else if (this.whirlpool.getBehavior() == Z4WhirlpoolBehavior.FORWARD) {
-      Z4Point point = Z4Math.rotate(currentSize, 0, currentAngle);
-      return new Z4Point(point.x + currentHole, point.y);
+      return Z4Math.rotoTranslate(currentSize, 0, currentAngle, currentHole, 0);
     } else if (this.whirlpool.getBehavior() == Z4WhirlpoolBehavior.BACKWARD) {
-      Z4Point point = Z4Math.rotate(currentSize, 0, -currentAngle);
-      return new Z4Point(point.x + currentHole, point.y);
+      return Z4Math.rotoTranslate(currentSize, 0, -currentAngle, currentHole, 0);
     } else {
       return null;
     }
@@ -346,11 +343,9 @@ public class Z4CenteredFigurePainter extends Z4Painter {
     if (currentHole == 0 || currentAngle == 0 || this.whirlpool.getBehavior() == Z4WhirlpoolBehavior.NONE) {
       return p;
     } else if (this.whirlpool.getBehavior() == Z4WhirlpoolBehavior.FORWARD) {
-      p = Z4Math.rotate(p.x, p.y, currentAngle);
-      return new Z4Point(point.z4Vector.x0 + p.x, point.z4Vector.y0 + p.y);
+      return Z4Math.rotoTranslate(p.x, p.y, currentAngle, point.z4Vector.x0, point.z4Vector.y0);
     } else if (this.whirlpool.getBehavior() == Z4WhirlpoolBehavior.BACKWARD) {
-      p = Z4Math.rotate(p.x, p.y, -currentAngle);
-      return new Z4Point(point.z4Vector.x0 + p.x, point.z4Vector.y0 + p.y);
+      return Z4Math.rotoTranslate(p.x, p.y, -currentAngle, point.z4Vector.x0, point.z4Vector.y0);
     } else {
       return null;
     }
@@ -396,7 +391,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
   @SuppressWarnings("null")
   private void drawFigureWithColors($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4Point c1, Z4Point c2, Z4Point path1, Z4Point path2, Z4SpatioTemporalColor spatioTemporalColor, Z4GradientColor gradientColor, Color color, Z4Lighting lighting) {
     double length = Math.max(Z4Math.distance(path1.x, path1.y, 0, 0), Z4Math.distance(path2.x, path2.y, 0, 0));
-    
+
     for (int i = 0; i < length; i += 2) {
       double val = i / length;
 

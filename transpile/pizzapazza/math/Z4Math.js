@@ -186,6 +186,22 @@ class Z4Math {
   }
 
   /**
+   * Rotates a point by an angle and then translates it
+   *
+   * @param x The x-axis coordinate of the point
+   * @param y The y-axis coordinate of the point
+   * @param angle The angle (in radians)
+   * @param tx The x-axis translation
+   * @param ty The y-axis translation
+   * @return The rotated point
+   */
+  static  rotoTranslate(x, y, angle, tx, ty) {
+    let cos = Math.cos(angle);
+    let sin = Math.sin(angle);
+    return new Z4Point(x * cos + y * sin + tx, x * sin - y * cos + ty);
+  }
+
+  /**
    * Generates a ripple around a value
    *
    * @param value The value
