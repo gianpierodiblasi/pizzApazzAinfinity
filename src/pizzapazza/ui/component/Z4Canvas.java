@@ -102,7 +102,7 @@ public class Z4Canvas extends JSComponent {
                   false), Z4RotationBehavior.RELATIVE_TO_PATH, false)
           ),
           new Z4CenteredFigurePainter(
-                  Z4CenteredFigurePainterType.TYPE_3,
+                  Z4CenteredFigurePainterType.TYPE_5,
                   new Z4FancifulValue(
                           new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
                           new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
