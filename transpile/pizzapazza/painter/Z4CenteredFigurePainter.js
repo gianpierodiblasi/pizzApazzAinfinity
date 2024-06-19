@@ -68,6 +68,30 @@ class Z4CenteredFigurePainter extends Z4Painter {
       let point = this.checkWhirlpool1(currentAngle, currentHole, currentSize);
       this.drawBounds(context, currentHole, point);
     } else {
+      let currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.size.next());
+      if (currentSize > 0) {
+        let currentAngle = Z4Math.deg2rad(this.whirlpool.getAngle().getConstant().getValue());
+        let currentHole = this.hole.next();
+        let currentCover = this.cover / 100;
+        let point = this.checkWhirlpool1(currentAngle, currentHole, currentSize);
+        drawingPoint = new Z4DrawingPoint(Z4Vector.fromVector(currentHole, 0, point.x, point.y), drawingPoint.intensity, drawingPoint.temporalPosition, drawingPoint.drawBounds, drawingPoint.side, drawingPoint.useVectorModuleAsSize);
+        let pF = null;
+        if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_0 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_1 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_2) {
+          pF = this.type0_1_2(drawingPoint, currentCover);
+        } else if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_3 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_4 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_5) {
+          pF = this.type3_4_5(drawingPoint, currentAngle, currentHole, currentCover);
+        }
+        for (let i = 0; i < this.multiplicity.next(); i++) {
+          if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_0 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_1 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_2) {
+            // this.drawPath(point,pathForShadowBorderE,c1e,c2e,path1e,path2e,newColor);
+          } else if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_3 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_4 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_5) {
+            // this.drawPath(point,pathForShadowBorderI,c1i,c2i,path1i,path2i,newColor);
+            // this.drawPath(point,pathForShadowBorderE,c1e,c2e,path1e,path2e,newColor);
+          }
+          // 
+          // canvas.rotate(360f/multiplicity);
+        }
+      }
     }
   }
 
@@ -216,6 +240,32 @@ class Z4CenteredFigurePainter extends Z4Painter {
     }
   }
 
+  // private void drawPath($CanvasRenderingContext2D context, double x1, double y1, double x1c, double y1c, double x2c, double y2c, double x2, double y2, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
+  // if (spatioTemporalColor.isColor()) {
+  // Color color = spatioTemporalColor.getColorAt(-1, -1);
+  // //          this.drawPathWithColors(context, currentWidth, currentHeight, null, null, color, progression.getLighting());
+  // } else if (spatioTemporalColor.isGradientColor()) {
+  // if (progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.SPATIAL) {
+  // //            this.drawPathWithColors(context, currentWidth, currentHeight, spatioTemporalColor, null, null, progression.getLighting());
+  // } else {
+  // Color color = spatioTemporalColor.getGradientColorAt(-1).getColorAt(progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition, true);
+  // //            this.drawPathWithColors(context, currentWidth, currentHeight, null, null, color, progression.getLighting());
+  // }
+  // } else if (spatioTemporalColor.isBiGradientColor()) {
+  // Z4GradientColor gradientColor = spatioTemporalColor.getGradientColorAt(progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition);
+  // //          this.drawPathWithColors(context, currentWidth, currentHeight, null, gradientColor, null, progression.getLighting());
+  // }
+  // }
+  // private void drawPath($CanvasRenderingContext2D context, double x1, double y1, double x1c, double y1c, double x2c, double y2c, double x2, double y2, Color color) {
+  // context.save();
+  // 
+  // context.moveTo(x1, y1);
+  // context.bezierCurveTo(x1c, y1c, x2c, y2c, x2, y2);
+  // 
+  // context.strokeStyle = Z4Constants.$getStyle(color.getARGB_HEX());
+  // context.stroke();
+  // context.restore();
+  // }
    toJSON() {
     let json = super.toJSON();
     json["centeredFigurePainterType"] = this.centeredFigurePainterType;
