@@ -20,6 +20,7 @@ import javascript.util.fsa.FileSystemFileHandle;
 import javascript.util.fsa.FileSystemWritableFileStreamCreateOptions;
 import pizzapazza.color.Z4ColorProgression;
 import pizzapazza.color.Z4ColorProgressionBehavior;
+import pizzapazza.color.Z4GradientColor;
 import pizzapazza.color.Z4Lighting;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.iterator.Z4PointIteratorDrawingAction;
@@ -35,7 +36,11 @@ import pizzapazza.math.Z4Sign;
 import pizzapazza.math.Z4SignBehavior;
 import pizzapazza.math.Z4SignedRandomValue;
 import pizzapazza.math.Z4SignedValue;
+import pizzapazza.math.Z4Whirlpool;
+import pizzapazza.math.Z4WhirlpoolBehavior;
 import pizzapazza.painter.Z4ArrowPainter;
+import pizzapazza.painter.Z4CenteredFigurePainter;
+import pizzapazza.painter.Z4CenteredFigurePainterType;
 import pizzapazza.painter.Z4Shape2DPainter;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonFilePanel;
@@ -96,39 +101,74 @@ public class Z4Canvas extends JSComponent {
                   new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                   false), Z4RotationBehavior.RELATIVE_TO_PATH, false)
           ),
-          new Z4Shape2DPainter(
+          new Z4CenteredFigurePainter(
+                  Z4CenteredFigurePainterType.TYPE_3,
                   new Z4FancifulValue(
                           new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
                           new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                           false),
                   new Z4FancifulValue(
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45),
+                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                          false),
+                  new Z4FancifulValue(
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45),
+                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                          false),
+                  new Z4FancifulValue(
                           new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
                           new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                           false),
-                  false,
-                  false,
-                  3,
                   new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 3),
                           new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                           false),
                   new Z4FancifulValue(
                           new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
                           new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                           false),
-                  new Color(0, 0, 0, 0),
-                  new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                          false),
-                  new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                          false),
-                  new Color(0, 0, 0, 0)
+                  new Z4Whirlpool(
+                          Z4WhirlpoolBehavior.NONE,
+                          new Z4FancifulValue(
+                                  new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 30),
+                                  new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                                  false)),
+                  100
           ),
-          Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)),
-          new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE)
+          //          new Z4Shape2DPainter(
+          //                  new Z4FancifulValue(
+          //                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
+          //                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+          //                          false),
+          //                  new Z4FancifulValue(
+          //                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
+          //                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+          //                          false),
+          //                  false,
+          //                  false,
+          //                  3,
+          //                  new Z4FancifulValue(
+          //                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+          //                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+          //                          false),
+          //                  new Z4FancifulValue(
+          //                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+          //                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+          //                          false),
+          //                  new Color(0, 0, 0, 0),
+          //                  new Z4FancifulValue(
+          //                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+          //                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+          //                          false),
+          //                  new Z4FancifulValue(
+          //                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+          //                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+          //                          false),
+          //                  new Color(0, 0, 0, 0)
+          //          ),
+//          Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)),
+                    Z4SpatioTemporalColor.fromGradientColor(new Z4GradientColor()),
+          new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.01, Z4Lighting.NONE)
   );
 
   /**

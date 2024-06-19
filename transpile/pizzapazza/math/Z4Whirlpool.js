@@ -16,6 +16,7 @@ class Z4Whirlpool extends Z4JSONable {
    * @param angle The angle
    */
   constructor(behavior, angle) {
+    super();
     this.behavior = behavior;
     this.angle = angle;
   }

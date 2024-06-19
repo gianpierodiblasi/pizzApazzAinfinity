@@ -1752,7 +1752,39 @@ class Z4Canvas extends JSComponent {
 
    selectedLayer = null;
 
-   drawingTool = new Z4DrawingTool(new Z4Spirograph(new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.RELATIVE_TO_PATH, false)), new Z4Shape2DPainter(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), false, false, 3, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0)), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)), new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE));
+   drawingTool = new Z4DrawingTool(new Z4Spirograph(new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.RELATIVE_TO_PATH, false)), new Z4CenteredFigurePainter(Z4CenteredFigurePainterType.TYPE_3, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 3), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Whirlpool(Z4WhirlpoolBehavior.NONE, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 30), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false)), 100), // new Z4Shape2DPainter(
+  // new Z4FancifulValue(
+  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
+  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+  // false),
+  // new Z4FancifulValue(
+  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
+  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+  // false),
+  // false,
+  // false,
+  // 3,
+  // new Z4FancifulValue(
+  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+  // false),
+  // new Z4FancifulValue(
+  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+  // false),
+  // new Color(0, 0, 0, 0),
+  // new Z4FancifulValue(
+  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+  // false),
+  // new Z4FancifulValue(
+  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+  // false),
+  // new Color(0, 0, 0, 0)
+  // ),
+  // Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)),
+  Z4SpatioTemporalColor.fromGradientColor(new Z4GradientColor()), new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.01, Z4Lighting.NONE));
 
   /**
    * Creates the object
@@ -10593,9 +10625,10 @@ class Z4Spirograph extends Z4PointIterator {
       return null;
     } else if (this.fromClones) {
       let clone = this.clones[this.clonePos];
+      this.nextdDrawingPoint = new Z4DrawingPoint(clone.z4Vector, clone.intensity, this.clonePos / this.clones.length, false, clone.side, clone.useVectorModuleAsSize);
       this.clonePos--;
       this.hasNext = this.clonePos !== -1;
-      return new Z4DrawingPoint(clone.z4Vector, clone.intensity, this.clonePos / this.clones.length, false, clone.side, clone.useVectorModuleAsSize);
+      return this.nextdDrawingPoint;
     } else {
       let currentVector = Z4Vector.fromPoints(this.center.x, this.center.y, this.currentPoint.x, this.currentPoint.y);
       let angle = this.rotation.next(currentVector.phase);
@@ -11170,6 +11203,7 @@ class Z4Whirlpool extends Z4JSONable {
    * @param angle The angle
    */
   constructor(behavior, angle) {
+    super();
     this.behavior = behavior;
     this.angle = angle;
   }
@@ -11331,6 +11365,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
    * @param cover The cover (in the range [1,100])
    */
   constructor(centeredFigurePainterType, size, angle1, angle2, tension, multiplicity, hole, whirlpool, cover) {
+    super();
     this.centeredFigurePainterType = centeredFigurePainterType;
     this.size = size;
     this.angle1 = angle1;
@@ -11431,11 +11466,11 @@ class Z4CenteredFigurePainter extends Z4Painter {
     if (drawingPoint.drawBounds) {
       let currentAngle = Z4Math.deg2rad(this.whirlpool.getAngle().getConstant().getValue());
       let currentHole = this.hole.getConstant().getValue();
-      let currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.size.getConstant().getValue());
+      let currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.size.getConstant().getValue());
       let point = this.checkWhirlpool1(currentAngle, currentHole, currentSize);
       this.drawBounds(context, currentHole, point);
     } else {
-      let currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.size.next());
+      let currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.size.next());
       if (currentSize > 0) {
         let currentAngle = Z4Math.deg2rad(this.whirlpool.getAngle().next());
         let currentHole = this.hole.next();
@@ -11458,11 +11493,13 @@ class Z4CenteredFigurePainter extends Z4Painter {
       context.save();
       context.rotate(Z4Math.TWO_PI * i / this.multiplicity.getConstant().getValue());
       context.strokeStyle = Z4Constants.getStyle("gray");
+      context.beginPath();
       context.moveTo(currentHole, 0);
       context.lineTo(point.x, point.y);
       context.stroke();
       context.strokeStyle = Z4Constants.getStyle("black");
       context.translate(1, 1);
+      context.beginPath();
       context.moveTo(currentHole, 0);
       context.lineTo(point.x, point.y);
       context.stroke();
@@ -11472,22 +11509,24 @@ class Z4CenteredFigurePainter extends Z4Painter {
 
   // One Bezier curve. Start and end point coincide in the fulcrum
    type0_1_2(drawingPoint, currentCover) {
-    let ce = Z4Math.butterfly(drawingPoint.z4Vector, Z4Math.deg2rad(this.angle1.next()));
     this.pF = new Z4Point(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+    let ce = Z4Math.butterfly(drawingPoint.z4Vector, Z4Math.deg2rad(this.angle1.next()));
+    this.c1e = ce[0];
+    this.c2e = ce[1];
     if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_0) {
       // The control points collapse towards the fulcrum
-      this.path1e = this.findControlPointPath(ce[0].x, ce[0].y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0, currentCover);
-      this.path2e = this.findControlPointPath(ce[1].x, ce[1].y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0, currentCover);
+      this.path1e = this.findControlPointPath(this.c1e.x, this.c1e.y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0, currentCover);
+      this.path2e = this.findControlPointPath(this.c2e.x, this.c2e.y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0, currentCover);
     } else if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_1) {
       // The control points collapse towards newPoint
-      this.path1e = this.findControlPointPath(ce[0].x, ce[0].y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
-      this.path2e = this.findControlPointPath(ce[1].x, ce[1].y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
+      this.path1e = this.findControlPointPath(this.c1e.x, this.c1e.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
+      this.path2e = this.findControlPointPath(this.c2e.x, this.c2e.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
     } else if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_2) {
       // The control points collapse towards their midpoint
-      let mx = (ce[0].x + ce[1].x) / 2;
-      let my = (ce[0].y + ce[1].y) / 2;
-      this.path1e = this.findControlPointPath(ce[0].x, ce[0].y, mx, my, currentCover);
-      this.path2e = this.findControlPointPath(ce[1].x, ce[1].y, mx, my, currentCover);
+      let mx = (this.c1e.x + this.c2e.x) / 2;
+      let my = (this.c1e.y + this.c2e.y) / 2;
+      this.path1e = this.findControlPointPath(this.c1e.x, this.c1e.y, mx, my, currentCover);
+      this.path2e = this.findControlPointPath(this.c2e.x, this.c2e.y, mx, my, currentCover);
     }
     // 
     // if (shadow||border)
@@ -11640,17 +11679,18 @@ class Z4CenteredFigurePainter extends Z4Painter {
       if (color && lighting === Z4Lighting.NONE) {
         this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color);
       } else {
+        let c = null;
         if (spatioTemporalColor) {
-          color = spatioTemporalColor.getColorAt(-1, val);
+          c = spatioTemporalColor.getColorAt(-1, val);
         } else if (gradientColor) {
-          color = gradientColor.getColorAt(val, true);
+          c = gradientColor.getColorAt(val, true);
         }
-        if (!color && lighting === Z4Lighting.NONE) {
-          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color);
+        if (lighting === Z4Lighting.NONE) {
+          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, c);
         } else if (lighting === Z4Lighting.LIGHTED) {
-          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color.lighted(val));
+          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, c.lighted(val));
         } else if (lighting === Z4Lighting.DARKENED) {
-          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color.darkened(val));
+          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, c.darkened(val));
         }
       }
     }
@@ -11658,7 +11698,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
 
    drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color) {
     context.save();
-    context.strokeStyle = Z4Constants.getStyle(color.getARGB_HEX());
+    context.strokeStyle = Z4Constants.getStyle(color.getRGBA_HEX());
     context.beginPath();
     context.moveTo(drawingPoint.z4Vector.x0, 0);
     context.bezierCurveTo(c1.x + path1.x * val, c1.y + path1.y * val, c2.x + path2.x * val, c2.y + path2.y * val, this.pF.x, this.pF.y);
@@ -11928,7 +11968,7 @@ class Z4Shape2DPainter extends Z4Painter {
         } else if (gradientColor) {
           color = gradientColor.getColorAt(scale / currentSize, true);
         }
-        if (!color && lighting === Z4Lighting.NONE) {
+        if (lighting === Z4Lighting.NONE) {
           this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color);
         } else if (lighting === Z4Lighting.LIGHTED) {
           this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color.lighted(scale / currentSize));

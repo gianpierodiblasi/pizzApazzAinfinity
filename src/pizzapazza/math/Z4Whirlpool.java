@@ -20,6 +20,7 @@ public class Z4Whirlpool implements Z4JSONable {
    * @param angle The angle
    */
   public Z4Whirlpool(Z4WhirlpoolBehavior behavior, Z4FancifulValue angle) {
+    super();
     this.behavior = behavior;
     this.angle = angle;
   }

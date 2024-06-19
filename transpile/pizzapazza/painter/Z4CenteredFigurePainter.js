@@ -55,6 +55,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
    * @param cover The cover (in the range [1,100])
    */
   constructor(centeredFigurePainterType, size, angle1, angle2, tension, multiplicity, hole, whirlpool, cover) {
+    super();
     this.centeredFigurePainterType = centeredFigurePainterType;
     this.size = size;
     this.angle1 = angle1;
@@ -155,11 +156,11 @@ class Z4CenteredFigurePainter extends Z4Painter {
     if (drawingPoint.drawBounds) {
       let currentAngle = Z4Math.deg2rad(this.whirlpool.getAngle().getConstant().getValue());
       let currentHole = this.hole.getConstant().getValue();
-      let currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.size.getConstant().getValue());
+      let currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.size.getConstant().getValue());
       let point = this.checkWhirlpool1(currentAngle, currentHole, currentSize);
       this.drawBounds(context, currentHole, point);
     } else {
-      let currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.size.next());
+      let currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.size.next());
       if (currentSize > 0) {
         let currentAngle = Z4Math.deg2rad(this.whirlpool.getAngle().next());
         let currentHole = this.hole.next();
@@ -182,11 +183,13 @@ class Z4CenteredFigurePainter extends Z4Painter {
       context.save();
       context.rotate(Z4Math.TWO_PI * i / this.multiplicity.getConstant().getValue());
       context.strokeStyle = Z4Constants.getStyle("gray");
+      context.beginPath();
       context.moveTo(currentHole, 0);
       context.lineTo(point.x, point.y);
       context.stroke();
       context.strokeStyle = Z4Constants.getStyle("black");
       context.translate(1, 1);
+      context.beginPath();
       context.moveTo(currentHole, 0);
       context.lineTo(point.x, point.y);
       context.stroke();
@@ -196,22 +199,24 @@ class Z4CenteredFigurePainter extends Z4Painter {
 
   // One Bezier curve. Start and end point coincide in the fulcrum
    type0_1_2(drawingPoint, currentCover) {
-    let ce = Z4Math.butterfly(drawingPoint.z4Vector, Z4Math.deg2rad(this.angle1.next()));
     this.pF = new Z4Point(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+    let ce = Z4Math.butterfly(drawingPoint.z4Vector, Z4Math.deg2rad(this.angle1.next()));
+    this.c1e = ce[0];
+    this.c2e = ce[1];
     if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_0) {
       // The control points collapse towards the fulcrum
-      this.path1e = this.findControlPointPath(ce[0].x, ce[0].y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0, currentCover);
-      this.path2e = this.findControlPointPath(ce[1].x, ce[1].y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0, currentCover);
+      this.path1e = this.findControlPointPath(this.c1e.x, this.c1e.y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0, currentCover);
+      this.path2e = this.findControlPointPath(this.c2e.x, this.c2e.y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0, currentCover);
     } else if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_1) {
       // The control points collapse towards newPoint
-      this.path1e = this.findControlPointPath(ce[0].x, ce[0].y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
-      this.path2e = this.findControlPointPath(ce[1].x, ce[1].y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
+      this.path1e = this.findControlPointPath(this.c1e.x, this.c1e.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
+      this.path2e = this.findControlPointPath(this.c2e.x, this.c2e.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
     } else if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_2) {
       // The control points collapse towards their midpoint
-      let mx = (ce[0].x + ce[1].x) / 2;
-      let my = (ce[0].y + ce[1].y) / 2;
-      this.path1e = this.findControlPointPath(ce[0].x, ce[0].y, mx, my, currentCover);
-      this.path2e = this.findControlPointPath(ce[1].x, ce[1].y, mx, my, currentCover);
+      let mx = (this.c1e.x + this.c2e.x) / 2;
+      let my = (this.c1e.y + this.c2e.y) / 2;
+      this.path1e = this.findControlPointPath(this.c1e.x, this.c1e.y, mx, my, currentCover);
+      this.path2e = this.findControlPointPath(this.c2e.x, this.c2e.y, mx, my, currentCover);
     }
     // 
     // if (shadow||border)
@@ -364,17 +369,18 @@ class Z4CenteredFigurePainter extends Z4Painter {
       if (color && lighting === Z4Lighting.NONE) {
         this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color);
       } else {
+        let c = null;
         if (spatioTemporalColor) {
-          color = spatioTemporalColor.getColorAt(-1, val);
+          c = spatioTemporalColor.getColorAt(-1, val);
         } else if (gradientColor) {
-          color = gradientColor.getColorAt(val, true);
+          c = gradientColor.getColorAt(val, true);
         }
-        if (!color && lighting === Z4Lighting.NONE) {
-          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color);
+        if (lighting === Z4Lighting.NONE) {
+          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, c);
         } else if (lighting === Z4Lighting.LIGHTED) {
-          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color.lighted(val));
+          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, c.lighted(val));
         } else if (lighting === Z4Lighting.DARKENED) {
-          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color.darkened(val));
+          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, c.darkened(val));
         }
       }
     }
@@ -382,7 +388,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
 
    drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color) {
     context.save();
-    context.strokeStyle = Z4Constants.getStyle(color.getARGB_HEX());
+    context.strokeStyle = Z4Constants.getStyle(color.getRGBA_HEX());
     context.beginPath();
     context.moveTo(drawingPoint.z4Vector.x0, 0);
     context.bezierCurveTo(c1.x + path1.x * val, c1.y + path1.y * val, c2.x + path2.x * val, c2.y + path2.y * val, this.pF.x, this.pF.y);

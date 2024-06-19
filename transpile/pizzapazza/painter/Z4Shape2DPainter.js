@@ -236,7 +236,7 @@ class Z4Shape2DPainter extends Z4Painter {
         } else if (gradientColor) {
           color = gradientColor.getColorAt(scale / currentSize, true);
         }
-        if (!color && lighting === Z4Lighting.NONE) {
+        if (lighting === Z4Lighting.NONE) {
           this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color);
         } else if (lighting === Z4Lighting.LIGHTED) {
           this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color.lighted(scale / currentSize));

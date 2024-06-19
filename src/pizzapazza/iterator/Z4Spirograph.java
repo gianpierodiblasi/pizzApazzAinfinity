@@ -77,10 +77,7 @@ public class Z4Spirograph extends Z4PointIterator {
     } else if (this.fromClones) {
       Z4DrawingPoint clone = this.clones.$get(this.clonePos);
 
-      this.clonePos--;
-      this.hasNext = this.clonePos != -1;
-
-      return new Z4DrawingPoint(
+      this.nextdDrawingPoint = new Z4DrawingPoint(
               clone.z4Vector,
               clone.intensity,
               this.clonePos / this.clones.length,
@@ -88,6 +85,11 @@ public class Z4Spirograph extends Z4PointIterator {
               clone.side,
               clone.useVectorModuleAsSize
       );
+
+      this.clonePos--;
+      this.hasNext = this.clonePos != -1;
+
+      return this.nextdDrawingPoint;
     } else {
       Z4Vector currentVector = Z4Vector.fromPoints(this.center.x, this.center.y, this.currentPoint.x, this.currentPoint.y);
       double angle = this.rotation.next(currentVector.phase);

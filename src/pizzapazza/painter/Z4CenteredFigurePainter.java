@@ -66,6 +66,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
   public Z4CenteredFigurePainter(Z4CenteredFigurePainterType centeredFigurePainterType,
           Z4FancifulValue size, Z4FancifulValue angle1, Z4FancifulValue angle2, Z4FancifulValue tension, Z4FancifulValue multiplicity,
           Z4FancifulValue hole, Z4Whirlpool whirlpool, int cover) {
+    super();
     this.centeredFigurePainterType = centeredFigurePainterType;
     this.size = size;
     this.angle1 = angle1;
@@ -169,12 +170,12 @@ public class Z4CenteredFigurePainter extends Z4Painter {
     if (drawingPoint.drawBounds) {
       double currentAngle = Z4Math.deg2rad(this.whirlpool.getAngle().getConstant().getValue());
       double currentHole = this.hole.getConstant().getValue();
-      double currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.size.getConstant().getValue());
+      double currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.size.getConstant().getValue());
 
       Z4Point point = this.checkWhirlpool1(currentAngle, currentHole, currentSize);
       this.drawBounds(context, currentHole, point);
     } else {
-      double currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? 2 * drawingPoint.z4Vector.module : this.size.next());
+      double currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.size.next());
       if (currentSize > 0) {
         double currentAngle = Z4Math.deg2rad(this.whirlpool.getAngle().next());
         double currentHole = this.hole.next();
@@ -201,12 +202,14 @@ public class Z4CenteredFigurePainter extends Z4Painter {
       context.rotate(Z4Math.TWO_PI * i / this.multiplicity.getConstant().getValue());
 
       context.strokeStyle = Z4Constants.$getStyle("gray");
+      context.beginPath();
       context.moveTo(currentHole, 0);
       context.lineTo(point.x, point.y);
       context.stroke();
 
       context.strokeStyle = Z4Constants.$getStyle("black");
       context.translate(1, 1);
+      context.beginPath();
       context.moveTo(currentHole, 0);
       context.lineTo(point.x, point.y);
       context.stroke();
@@ -217,23 +220,26 @@ public class Z4CenteredFigurePainter extends Z4Painter {
 
   //One Bezier curve. Start and end point coincide in the fulcrum
   private void type0_1_2(Z4DrawingPoint drawingPoint, double currentCover) {
-    Array<Z4Point> ce = Z4Math.butterfly(drawingPoint.z4Vector, Z4Math.deg2rad(this.angle1.next()));
     this.pF = new Z4Point(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+
+    Array<Z4Point> ce = Z4Math.butterfly(drawingPoint.z4Vector, Z4Math.deg2rad(this.angle1.next()));
+    this.c1e = ce.$get(0);
+    this.c2e = ce.$get(1);
 
     if (this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_0) {
       // The control points collapse towards the fulcrum
-      this.path1e = this.findControlPointPath(ce.$get(0).x, ce.$get(0).y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0, currentCover);
-      this.path2e = this.findControlPointPath(ce.$get(1).x, ce.$get(1).y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0, currentCover);
+      this.path1e = this.findControlPointPath(this.c1e.x, this.c1e.y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0, currentCover);
+      this.path2e = this.findControlPointPath(this.c2e.x, this.c2e.y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0, currentCover);
     } else if (this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_1) {
       // The control points collapse towards newPoint
-      this.path1e = this.findControlPointPath(ce.$get(0).x, ce.$get(0).y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
-      this.path2e = this.findControlPointPath(ce.$get(1).x, ce.$get(1).y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
+      this.path1e = this.findControlPointPath(this.c1e.x, this.c1e.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
+      this.path2e = this.findControlPointPath(this.c2e.x, this.c2e.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
     } else if (this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_2) {
       // The control points collapse towards their midpoint
-      double mx = (ce.$get(0).x + ce.$get(1).x) / 2;
-      double my = (ce.$get(0).y + ce.$get(1).y) / 2;
-      this.path1e = this.findControlPointPath(ce.$get(0).x, ce.$get(0).y, mx, my, currentCover);
-      this.path2e = this.findControlPointPath(ce.$get(1).x, ce.$get(1).y, mx, my, currentCover);
+      double mx = (this.c1e.x + this.c2e.x) / 2;
+      double my = (this.c1e.y + this.c2e.y) / 2;
+      this.path1e = this.findControlPointPath(this.c1e.x, this.c1e.y, mx, my, currentCover);
+      this.path2e = this.findControlPointPath(this.c2e.x, this.c2e.y, mx, my, currentCover);
     }
 //
 //    if (shadow||border)
@@ -387,25 +393,29 @@ public class Z4CenteredFigurePainter extends Z4Painter {
 //    if (border) this.drawBorder(point,pathForShadowBorder);
   }
 
+  @SuppressWarnings("null")
   private void drawFigureWithColors($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4Point c1, Z4Point c2, Z4Point path1, Z4Point path2, Z4SpatioTemporalColor spatioTemporalColor, Z4GradientColor gradientColor, Color color, Z4Lighting lighting) {
     double length = Math.max(Z4Math.distance(path1.x, path1.y, 0, 0), Z4Math.distance(path2.x, path2.y, 0, 0));
+    
     for (int i = 0; i < length; i += 2) {
       double val = i / length;
+
       if ($exists(color) && lighting == Z4Lighting.NONE) {
         this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color);
       } else {
+        Color c = null;
         if ($exists(spatioTemporalColor)) {
-          color = spatioTemporalColor.getColorAt(-1, val);
+          c = spatioTemporalColor.getColorAt(-1, val);
         } else if ($exists(gradientColor)) {
-          color = gradientColor.getColorAt(val, true);
+          c = gradientColor.getColorAt(val, true);
         }
 
-        if (!$exists(color) && lighting == Z4Lighting.NONE) {
-          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color);
+        if (lighting == Z4Lighting.NONE) {
+          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, c);
         } else if (lighting == Z4Lighting.LIGHTED) {
-          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color.lighted(val));
+          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, c.lighted(val));
         } else if (lighting == Z4Lighting.DARKENED) {
-          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color.darkened(val));
+          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, c.darkened(val));
         }
       }
     }
@@ -414,13 +424,13 @@ public class Z4CenteredFigurePainter extends Z4Painter {
   private void drawBezier($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4Point c1, Z4Point c2, Z4Point path1, Z4Point path2, double val, Color color) {
     context.save();
 
-    context.strokeStyle = Z4Constants.$getStyle(color.getARGB_HEX());
+    context.strokeStyle = Z4Constants.$getStyle(color.getRGBA_HEX());
 
     context.beginPath();
     context.moveTo(drawingPoint.z4Vector.x0, 0);
     context.bezierCurveTo(c1.x + path1.x * val, c1.y + path1.y * val, c2.x + path2.x * val, c2.y + path2.y * val, this.pF.x, this.pF.y);
     context.stroke();
-    
+
     context.restore();
   }
 
