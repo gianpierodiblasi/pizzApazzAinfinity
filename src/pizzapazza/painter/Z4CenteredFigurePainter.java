@@ -392,7 +392,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
   private void drawFigureWithColors($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4Point c1, Z4Point c2, Z4Point path1, Z4Point path2, Z4SpatioTemporalColor spatioTemporalColor, Z4GradientColor gradientColor, Color color, Z4Lighting lighting) {
     double length = Math.max(Z4Math.distance(path1.x, path1.y, 0, 0), Z4Math.distance(path2.x, path2.y, 0, 0));
 
-    for (int i = 0; i < length; i += 2) {
+    for (int i = 0; i < length; i += 3) {
       double val = i / length;
 
       if ($exists(color) && lighting == Z4Lighting.NONE) {
@@ -419,6 +419,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
   private void drawBezier($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4Point c1, Z4Point c2, Z4Point path1, Z4Point path2, double val, Color color) {
     context.save();
 
+    context.lineWidth = 2;
     context.strokeStyle = Z4Constants.$getStyle(color.getRGBA_HEX());
 
     context.beginPath();

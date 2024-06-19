@@ -19,6 +19,9 @@ public class $Path2D {
   public void rect(double x, double y, double width, double height) {
   }
 
+  public void bezierCurveTo(double cp1x, double cp1y, double cp2x, double cp2y, double x, double y) {
+  }
+
   public void closePath() {
   }
 }

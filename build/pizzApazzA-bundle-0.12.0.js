@@ -11746,7 +11746,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
 
    drawFigureWithColors(context, drawingPoint, c1, c2, path1, path2, spatioTemporalColor, gradientColor, color, lighting) {
     let length = Math.max(Z4Math.distance(path1.x, path1.y, 0, 0), Z4Math.distance(path2.x, path2.y, 0, 0));
-    for (let i = 0; i < length; i += 2) {
+    for (let i = 0; i < length; i += 3) {
       let val = i / length;
       if (color && lighting === Z4Lighting.NONE) {
         this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color);
@@ -11770,6 +11770,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
 
    drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color) {
     context.save();
+    context.lineWidth = 2;
     context.strokeStyle = Z4Constants.getStyle(color.getRGBA_HEX());
     context.beginPath();
     context.moveTo(drawingPoint.z4Vector.x0, 0);
