@@ -110,15 +110,15 @@ public class Z4Canvas extends JSComponent {
    */
   public void setRibbonPanels(Z4RibbonFilePanel ribbonFilePanel, Z4RibbonLayerPanel ribbonLayerPanel, Z4RibbonHistoryPanel ribbonHistoryPanel) {
     this.ribbonFilePanel = ribbonFilePanel;
-    this.ribbonHistoryPanel = ribbonHistoryPanel;
     this.ribbonLayerPanel = ribbonLayerPanel;
+    this.ribbonHistoryPanel = ribbonHistoryPanel;
 
     this.ribbonFilePanel.setCanvas(this);
     this.ribbonHistoryPanel.setCanvas(this);
     this.ribbonLayerPanel.setCanvas(this);
 
     this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);
-    this.ioManager.setRibbonHistoryPanel(ribbonHistoryPanel);
+    this.ioManager.setRibbonPanels(ribbonLayerPanel, ribbonHistoryPanel);
   }
 
   /**
@@ -220,7 +220,14 @@ public class Z4Canvas extends JSComponent {
     return null;
   }
 
-  private void afterCreate(String projectName, int width, int height) {
+  /**
+   * The method called after creaete
+   *
+   * @param projectName The project name
+   * @param width The width
+   * @param height The height
+   */
+  public void afterCreate(String projectName, int width, int height) {
     this.projectName = projectName;
 
     this.statusPanel.setProjectName(projectName);
@@ -246,10 +253,7 @@ public class Z4Canvas extends JSComponent {
    */
   public void openProjectFromHandle(FileSystemFileHandle handle) {
     this.handle = handle;
-
-    handle.getFile().then(file -> {
-      this.openProjectFromFile(file);
-    });
+    this.ioManager.openProjectFromHandle(handle);
   }
 
   /**
@@ -258,51 +262,7 @@ public class Z4Canvas extends JSComponent {
    * @param file The file
    */
   public void openProjectFromFile(File file) {
-    Z4UI.pleaseWait(this, true, true, false, true, "", () -> {
-      new $JSZip().loadAsync(file).then(zip -> {
-        zip.file("manifest.json").async("string", null).then(str -> {
-          this.paper.reset();
-          this.ribbonLayerPanel.reset();
-          this.ribbonHistoryPanel.resetHistory(() -> {
-            $Object json = ($Object) JSON.parse("" + str);
-            this.setSize(json.$get("width"), json.$get("height"));
-
-            this.openLayer(zip, json, json.$get("layers"), 0);
-          });
-        });
-      });
-    });
-  }
-
-  @SuppressWarnings("unchecked")
-  private void openLayer($JSZip zip, $Object json, Array<$Object> layers, int index) {
-    zip.file("layers/layer" + index + ".png").async("blob", metadata -> Z4UI.setPleaseWaitProgressBarValue(metadata.$get("percent"))).then(blob -> {
-      $Image image = ($Image) document.createElement("img");
-
-      image.onload = event -> {
-        this.paper.addLayerFromImage(layers.$get(index).$get("name"), image, (int) image.width, (int) image.height);
-
-        this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(index), () -> {
-          this.selectedLayer.setOpacity(layers.$get(index).$get("opacity"));
-          this.selectedLayer.setCompositeOperation(layers.$get(index).$get("compositeOperation"));
-          this.selectedLayer.setHidden(layers.$get(index).$get("hidden"));
-          this.selectedLayer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
-        }, true);
-
-        if (index + 1 < layers.length) {
-          this.openLayer(zip, json, layers, index + 1);
-        } else if ($exists(json.$get("history"))) {
-          this.jsonToHistory(zip, json, 0, json.$get("currentKeyHistory"), 0);
-        } else {
-          this.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
-          this.toHistory(json2 -> this.ribbonHistoryPanel.addHistory(json2, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
-          Z4UI.pleaseWaitCompleted();
-        }
-        return null;
-      };
-
-      image.src = URL.createObjectURL(blob);
-    });
+    this.ioManager.openProjectFromFile(file);
   }
 
   private void jsonToHistory($JSZip zip, $Object json, int index, int previousCurrentKey, int newCurrentKey) {
@@ -357,11 +317,11 @@ public class Z4Canvas extends JSComponent {
     image.onload = event -> {
       this.paper.addLayerFromImage(layers.$get(index).$get("name"), image, (int) image.width, (int) image.height);
 
-      this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(index), () -> {
-        this.selectedLayer.setOpacity(layers.$get(index).$get("opacity"));
-        this.selectedLayer.setCompositeOperation(layers.$get(index).$get("compositeOperation"));
-        this.selectedLayer.setHidden(layers.$get(index).$get("hidden"));
-        this.selectedLayer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
+      this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(index), layer -> {
+        layer.setOpacity(layers.$get(index).$get("opacity"));
+        layer.setCompositeOperation(layers.$get(index).$get("compositeOperation"));
+        layer.setHidden(layers.$get(index).$get("hidden"));
+        layer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
       }, true);
 
       if (index + 1 < layers.length) {
@@ -592,11 +552,11 @@ public class Z4Canvas extends JSComponent {
       image.onload = event -> {
         this.paper.addLayerFromImage(this.findLayerName(), image, this.width, this.height);
 
-        this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), () -> {
-          this.selectedLayer.setOpacity(layer.getOpacity());
-          this.selectedLayer.setCompositeOperation(layer.getCompositeOperation());
-          this.selectedLayer.setHidden(layer.isHidden());
-          this.selectedLayer.move(offset.x, offset.y);
+        this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), duplicate -> {
+          duplicate.setOpacity(layer.getOpacity());
+          duplicate.setCompositeOperation(layer.getCompositeOperation());
+          duplicate.setHidden(layer.isHidden());
+          duplicate.move(offset.x, offset.y);
         }, true);
 
         this.setSaved(false);
@@ -675,12 +635,19 @@ public class Z4Canvas extends JSComponent {
     this.setSelectedLayerAndAddLayerPreview(selectedLayer, null, false);
   }
 
-  private void setSelectedLayerAndAddLayerPreview(Z4Layer selectedLayer, $Apply_0_Void apply, boolean add) {
+  /**
+   * Sets the selected layer and adds the layer preview
+   *
+   * @param selectedLayer The selected layer
+   * @param apply The function to apply before adding the layer preview
+   * @param add true to add the layer preview, false otherwise
+   */
+  public void setSelectedLayerAndAddLayerPreview(Z4Layer selectedLayer, $Apply_1_Void<Z4Layer> apply, boolean add) {
     this.selectedLayer = selectedLayer;
     this.mouseManager.setSelectedLayer(this.selectedLayer);
 
     if ($exists(apply)) {
-      apply.$apply();
+      apply.$apply(this.selectedLayer);
     }
 
     if (add) {
@@ -715,7 +682,13 @@ public class Z4Canvas extends JSComponent {
     return this.handle;
   }
 
-  private void setSize(int width, int height) {
+  /**
+   * Sets the size
+   *
+   * @param width The width
+   * @param height The height
+   */
+  public void setSize(int width, int height) {
     this.width = width;
     this.height = height;
     this.mouseManager.setSize(this.getSize());

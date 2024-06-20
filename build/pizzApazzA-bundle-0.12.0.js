@@ -1813,13 +1813,13 @@ class Z4Canvas extends JSComponent {
    */
    setRibbonPanels(ribbonFilePanel, ribbonLayerPanel, ribbonHistoryPanel) {
     this.ribbonFilePanel = ribbonFilePanel;
-    this.ribbonHistoryPanel = ribbonHistoryPanel;
     this.ribbonLayerPanel = ribbonLayerPanel;
+    this.ribbonHistoryPanel = ribbonHistoryPanel;
     this.ribbonFilePanel.setCanvas(this);
     this.ribbonHistoryPanel.setCanvas(this);
     this.ribbonLayerPanel.setCanvas(this);
     this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);
-    this.ioManager.setRibbonHistoryPanel(ribbonHistoryPanel);
+    this.ioManager.setRibbonPanels(ribbonLayerPanel, ribbonHistoryPanel);
   }
 
   /**
@@ -1908,6 +1908,13 @@ class Z4Canvas extends JSComponent {
     return null;
   }
 
+  /**
+   * The method called after creaete
+   *
+   * @param projectName The project name
+   * @param width The width
+   * @param height The height
+   */
    afterCreate(projectName, width, height) {
     this.projectName = projectName;
     this.statusPanel.setProjectName(projectName);
@@ -1929,9 +1936,7 @@ class Z4Canvas extends JSComponent {
    */
    openProjectFromHandle(handle) {
     this.handle = handle;
-    handle.getFile().then(file => {
-      this.openProjectFromFile(file);
-    });
+    this.ioManager.openProjectFromHandle(handle);
   }
 
   /**
@@ -1940,45 +1945,7 @@ class Z4Canvas extends JSComponent {
    * @param file The file
    */
    openProjectFromFile(file) {
-    Z4UI.pleaseWait(this, true, true, false, true, "", () => {
-      new JSZip().loadAsync(file).then(zip => {
-        zip.file("manifest.json").async("string", null).then(str => {
-          this.paper.reset();
-          this.ribbonLayerPanel.reset();
-          this.ribbonHistoryPanel.resetHistory(() => {
-            let json = JSON.parse("" + str);
-            this.setSize(json["width"], json["height"]);
-            this.openLayer(zip, json, json["layers"], 0);
-          });
-        });
-      });
-    });
-  }
-
-   openLayer(zip, json, layers, index) {
-    zip.file("layers/layer" + index + ".png").async("blob", metadata => Z4UI.setPleaseWaitProgressBarValue(metadata["percent"])).then(blob => {
-      let image = document.createElement("img");
-      image.onload = event => {
-        this.paper.addLayerFromImage(layers[index]["name"], image, image.width, image.height);
-        this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(index), () => {
-          this.selectedLayer.setOpacity(layers[index]["opacity"]);
-          this.selectedLayer.setCompositeOperation(layers[index]["compositeOperation"]);
-          this.selectedLayer.setHidden(layers[index]["hidden"]);
-          this.selectedLayer.move(layers[index]["offsetX"], layers[index]["offsetY"]);
-        }, true);
-        if (index + 1 < layers.length) {
-          this.openLayer(zip, json, layers, index + 1);
-        } else if (json["history"]) {
-          this.jsonToHistory(zip, json, 0, json["currentKeyHistory"], 0);
-        } else {
-          this.afterCreate(json["projectName"], json["width"], json["height"]);
-          this.toHistory(json2 => this.ribbonHistoryPanel.addHistory(json2, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
-          Z4UI.pleaseWaitCompleted();
-        }
-        return null;
-      };
-      image.src = URL.createObjectURL(blob);
-    });
+    this.ioManager.openProjectFromFile(file);
   }
 
    jsonToHistory(zip, json, index, previousCurrentKey, newCurrentKey) {
@@ -2026,11 +1993,11 @@ class Z4Canvas extends JSComponent {
     let image = document.createElement("img");
     image.onload = event => {
       this.paper.addLayerFromImage(layers[index]["name"], image, image.width, image.height);
-      this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(index), () => {
-        this.selectedLayer.setOpacity(layers[index]["opacity"]);
-        this.selectedLayer.setCompositeOperation(layers[index]["compositeOperation"]);
-        this.selectedLayer.setHidden(layers[index]["hidden"]);
-        this.selectedLayer.move(layers[index]["offsetX"], layers[index]["offsetY"]);
+      this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(index), layer => {
+        layer.setOpacity(layers[index]["opacity"]);
+        layer.setCompositeOperation(layers[index]["compositeOperation"]);
+        layer.setHidden(layers[index]["hidden"]);
+        layer.move(layers[index]["offsetX"], layers[index]["offsetY"]);
       }, true);
       if (index + 1 < layers.length) {
         this.openLayerFromHistory(json, layers, index + 1);
@@ -2242,11 +2209,11 @@ class Z4Canvas extends JSComponent {
       let image = document.createElement("img");
       image.onload = event => {
         this.paper.addLayerFromImage(this.findLayerName(), image, this.width, this.height);
-        this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), () => {
-          this.selectedLayer.setOpacity(layer.getOpacity());
-          this.selectedLayer.setCompositeOperation(layer.getCompositeOperation());
-          this.selectedLayer.setHidden(layer.isHidden());
-          this.selectedLayer.move(offset.x, offset.y);
+        this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), duplicate => {
+          duplicate.setOpacity(layer.getOpacity());
+          duplicate.setCompositeOperation(layer.getCompositeOperation());
+          duplicate.setHidden(layer.isHidden());
+          duplicate.move(offset.x, offset.y);
         }, true);
         this.setSaved(false);
         this.drawCanvas();
@@ -2319,11 +2286,18 @@ class Z4Canvas extends JSComponent {
     this.setSelectedLayerAndAddLayerPreview(selectedLayer, null, false);
   }
 
+  /**
+   * Sets the selected layer and adds the layer preview
+   *
+   * @param selectedLayer The selected layer
+   * @param apply The function to apply before adding the layer preview
+   * @param add true to add the layer preview, false otherwise
+   */
    setSelectedLayerAndAddLayerPreview(selectedLayer, apply, add) {
     this.selectedLayer = selectedLayer;
     this.mouseManager.setSelectedLayer(this.selectedLayer);
     if (apply) {
-      apply();
+      apply(this.selectedLayer);
     }
     if (add) {
       this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
@@ -2357,6 +2331,12 @@ class Z4Canvas extends JSComponent {
     return this.handle;
   }
 
+  /**
+   * Sets the size
+   *
+   * @param width The width
+   * @param height The height
+   */
    setSize(width, height) {
     this.width = width;
     this.height = height;
@@ -2488,6 +2468,8 @@ class Z4CanvasIOManager {
 
    size = null;
 
+   ribbonLayerPanel = null;
+
    ribbonHistoryPanel = null;
 
    statusPanel = null;
@@ -2504,7 +2486,7 @@ class Z4CanvasIOManager {
   }
 
   /**
-   * Sets the size
+   * Sets the ribbon panels
    *
    * @param size The size
    */
@@ -2515,9 +2497,11 @@ class Z4CanvasIOManager {
   /**
    * Sets the ribbon history panel
    *
+   * @param ribbonLayerPanel The ribbon layer panel
    * @param ribbonHistoryPanel The ribbon history panel
    */
-   setRibbonHistoryPanel(ribbonHistoryPanel) {
+   setRibbonPanels(ribbonLayerPanel, ribbonHistoryPanel) {
+    this.ribbonLayerPanel = ribbonLayerPanel;
     this.ribbonHistoryPanel = ribbonHistoryPanel;
   }
 
@@ -2528,6 +2512,93 @@ class Z4CanvasIOManager {
    */
    setStatusPanel(statusPanel) {
     this.statusPanel = statusPanel;
+  }
+
+  /**
+   * Opens a canvas project
+   *
+   * @param handle The file handle
+   */
+   openProjectFromHandle(handle) {
+    handle.getFile().then(file => {
+      this.openProjectFromFile(file);
+    });
+  }
+
+  /**
+   * Opens a canvas project
+   *
+   * @param file The file
+   */
+   openProjectFromFile(file) {
+    Z4UI.pleaseWait(this.canvas, true, true, false, true, "", () => {
+      new JSZip().loadAsync(file).then(zip => {
+        zip.file("manifest.json").async("string", null).then(str => {
+          this.paper.reset();
+          this.ribbonLayerPanel.reset();
+          this.ribbonHistoryPanel.resetHistory(() => {
+            let json = JSON.parse("" + str);
+            this.canvas.setSize(json["width"], json["height"]);
+            this.openLayer(zip, json, json["layers"], 0);
+          });
+        });
+      });
+    });
+  }
+
+   openLayer(zip, json, layers, index) {
+    zip.file("layers/layer" + index + ".png").async("blob", metadata => Z4UI.setPleaseWaitProgressBarValue(metadata["percent"])).then(blob => {
+      let image = document.createElement("img");
+      image.onload = event => {
+        this.paper.addLayerFromImage(layers[index]["name"], image, image.width, image.height);
+        this.canvas.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(index), selectedLayer => {
+          selectedLayer.setOpacity(layers[index]["opacity"]);
+          selectedLayer.setCompositeOperation(layers[index]["compositeOperation"]);
+          selectedLayer.setHidden(layers[index]["hidden"]);
+          selectedLayer.move(layers[index]["offsetX"], layers[index]["offsetY"]);
+        }, true);
+        if (index + 1 < layers.length) {
+          this.openLayer(zip, json, layers, index + 1);
+        } else if (json["history"]) {
+          this.jsonToHistory(zip, json, 0, json["currentKeyHistory"], 0);
+        } else {
+          this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
+          this.canvas.toHistory(json2 => this.ribbonHistoryPanel.addHistory(json2, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
+          Z4UI.pleaseWaitCompleted();
+        }
+        return null;
+      };
+      image.src = URL.createObjectURL(blob);
+    });
+  }
+
+   jsonToHistory(zip, json, index, previousCurrentKey, newCurrentKey) {
+    let history = json["history"];
+    let key = history[index];
+    let folder = "history/history_" + key + "/";
+    zip.file(folder + "manifest.json").async("string", null).then(str => {
+      let layerJSON = JSON.parse("" + str);
+      this.layerToHistory(zip, json, index, previousCurrentKey, newCurrentKey, folder, layerJSON, 0, key);
+    });
+  }
+
+   layerToHistory(zip, json, index, previousCurrentKey, newCurrentKey, folder, layerJSON, layerIndex, historyKey) {
+    zip.file(folder + "layers/layer" + layerIndex + ".png").async("blob", metadata => Z4UI.setPleaseWaitProgressBarValue(metadata["percent"])).then(blob => {
+      let layers = layerJSON["layers"];
+      let layer = layers[layerIndex];
+      layer["data"] = blob;
+      if (layerIndex + 1 < layers.length) {
+        this.layerToHistory(zip, json, index, previousCurrentKey, newCurrentKey, folder, layerJSON, layerIndex + 1, historyKey);
+      } else if (index + 1 < (json["history"]).length) {
+        this.ribbonHistoryPanel.addHistory(layerJSON, currentKey => this.jsonToHistory(zip, json, index + 1, previousCurrentKey, previousCurrentKey === historyKey ? currentKey : newCurrentKey), true);
+      } else {
+        this.ribbonHistoryPanel.addHistory(layerJSON, currentKey => {
+          this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey === historyKey ? currentKey : newCurrentKey);
+          this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
+          Z4UI.pleaseWaitCompleted();
+        }, true);
+      }
+    });
   }
 
   /**

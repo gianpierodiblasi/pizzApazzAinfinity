@@ -2,6 +2,7 @@ package pizzapazza.ui.component;
 
 import def.dom.Blob;
 import def.dom.Event;
+import def.dom.File;
 import static def.dom.Globals.document;
 import def.dom.HTMLElement;
 import def.dom.URL;
@@ -13,10 +14,12 @@ import javascript.util.fsa.FileSystemFileHandle;
 import javascript.util.fsa.FileSystemWritableFileStreamCreateOptions;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
+import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
 import pizzapazza.util.Z4Layer;
 import pizzapazza.util.Z4Paper;
 import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
+import simulation.dom.$Image;
 import simulation.dom.$OffscreenCanvas;
 import static simulation.filesaver.$FileSaver.saveAs;
 import simulation.js.$Apply_0_Void;
@@ -37,6 +40,7 @@ public class Z4CanvasIOManager {
   private final Z4Paper paper;
   private Dimension size;
 
+  private Z4RibbonLayerPanel ribbonLayerPanel;
   private Z4RibbonHistoryPanel ribbonHistoryPanel;
   private Z4StatusPanel statusPanel;
 
@@ -52,7 +56,7 @@ public class Z4CanvasIOManager {
   }
 
   /**
-   * Sets the size
+   * Sets the ribbon panels
    *
    * @param size The size
    */
@@ -63,9 +67,11 @@ public class Z4CanvasIOManager {
   /**
    * Sets the ribbon history panel
    *
+   * @param ribbonLayerPanel The ribbon layer panel
    * @param ribbonHistoryPanel The ribbon history panel
    */
-  public void setRibbonHistoryPanel(Z4RibbonHistoryPanel ribbonHistoryPanel) {
+  public void setRibbonPanels(Z4RibbonLayerPanel ribbonLayerPanel, Z4RibbonHistoryPanel ribbonHistoryPanel) {
+    this.ribbonLayerPanel = ribbonLayerPanel;
     this.ribbonHistoryPanel = ribbonHistoryPanel;
   }
 
@@ -79,6 +85,102 @@ public class Z4CanvasIOManager {
   }
 
   /**
+   * Opens a canvas project
+   *
+   * @param handle The file handle
+   */
+  public void openProjectFromHandle(FileSystemFileHandle handle) {
+    handle.getFile().then(file -> {
+      this.openProjectFromFile(file);
+    });
+  }
+
+  /**
+   * Opens a canvas project
+   *
+   * @param file The file
+   */
+  public void openProjectFromFile(File file) {
+    Z4UI.pleaseWait(this.canvas, true, true, false, true, "", () -> {
+      new $JSZip().loadAsync(file).then(zip -> {
+        zip.file("manifest.json").async("string", null).then(str -> {
+          this.paper.reset();
+          this.ribbonLayerPanel.reset();
+          this.ribbonHistoryPanel.resetHistory(() -> {
+            $Object json = ($Object) JSON.parse("" + str);
+            this.canvas.setSize(json.$get("width"), json.$get("height"));
+
+            this.openLayer(zip, json, json.$get("layers"), 0);
+          });
+        });
+      });
+    });
+  }
+
+  @SuppressWarnings("unchecked")
+  private void openLayer($JSZip zip, $Object json, Array<$Object> layers, int index) {
+    zip.file("layers/layer" + index + ".png").async("blob", metadata -> Z4UI.setPleaseWaitProgressBarValue(metadata.$get("percent"))).then(blob -> {
+      $Image image = ($Image) document.createElement("img");
+
+      image.onload = event -> {
+        this.paper.addLayerFromImage(layers.$get(index).$get("name"), image, (int) image.width, (int) image.height);
+
+        this.canvas.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(index), selectedLayer -> {
+          selectedLayer.setOpacity(layers.$get(index).$get("opacity"));
+          selectedLayer.setCompositeOperation(layers.$get(index).$get("compositeOperation"));
+          selectedLayer.setHidden(layers.$get(index).$get("hidden"));
+          selectedLayer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
+        }, true);
+
+        if (index + 1 < layers.length) {
+          this.openLayer(zip, json, layers, index + 1);
+        } else if ($exists(json.$get("history"))) {
+          this.jsonToHistory(zip, json, 0, json.$get("currentKeyHistory"), 0);
+        } else {
+          this.canvas.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
+          this.canvas.toHistory(json2 -> this.ribbonHistoryPanel.addHistory(json2, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
+          Z4UI.pleaseWaitCompleted();
+        }
+        return null;
+      };
+
+      image.src = URL.createObjectURL(blob);
+    });
+  }
+
+  private void jsonToHistory($JSZip zip, $Object json, int index, int previousCurrentKey, int newCurrentKey) {
+    Array<Integer> history = json.$get("history");
+    int key = history.$get(index);
+    String folder = "history/history_" + key + "/";
+
+    zip.file(folder + "manifest.json").async("string", null).then(str -> {
+      $Object layerJSON = ($Object) JSON.parse("" + str);
+      this.layerToHistory(zip, json, index, previousCurrentKey, newCurrentKey, folder, layerJSON, 0, key);
+    });
+  }
+
+  @SuppressWarnings({"unchecked", "null"})
+  private void layerToHistory($JSZip zip, $Object json, int index, int previousCurrentKey, int newCurrentKey, String folder, $Object layerJSON, int layerIndex, int historyKey) {
+    zip.file(folder + "layers/layer" + layerIndex + ".png").async("blob", metadata -> Z4UI.setPleaseWaitProgressBarValue(metadata.$get("percent"))).then(blob -> {
+      Array<$Object> layers = layerJSON.$get("layers");
+      $Object layer = layers.$get(layerIndex);
+      layer.$set("data", blob);
+
+      if (layerIndex + 1 < layers.length) {
+        this.layerToHistory(zip, json, index, previousCurrentKey, newCurrentKey, folder, layerJSON, layerIndex + 1, historyKey);
+      } else if (index + 1 < ((Array<Integer>) json.$get("history")).length) {
+        this.ribbonHistoryPanel.addHistory(layerJSON, currentKey -> this.jsonToHistory(zip, json, index + 1, previousCurrentKey, previousCurrentKey == historyKey ? currentKey : newCurrentKey), true);
+      } else {
+        this.ribbonHistoryPanel.addHistory(layerJSON, currentKey -> {
+          this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey == historyKey ? currentKey : newCurrentKey);
+          this.canvas.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
+          Z4UI.pleaseWaitCompleted();
+        }, true);
+      }
+    });
+  }
+
+  /**
    * Saves a canvas project
    *
    * @param handle The file handle
@@ -88,12 +190,12 @@ public class Z4CanvasIOManager {
   @SuppressWarnings("static-access")
   public String saveProjectToHandle(FileSystemFileHandle handle, $Apply_0_Void apply) {
     String projectName = handle.name.substring(0, handle.name.lastIndexOf('.'));
-    
+
     this.saveProject(projectName, (zipped, name) -> handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable -> {
       writable.write(zipped);
       writable.close();
     }), apply);
-    
+
     return projectName;
   }
 
