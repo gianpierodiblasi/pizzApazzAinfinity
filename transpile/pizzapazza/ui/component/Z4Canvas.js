@@ -90,6 +90,7 @@ class Z4Canvas extends JSComponent {
     this.ribbonHistoryPanel.setCanvas(this);
     this.ribbonLayerPanel.setCanvas(this);
     this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);
+    this.ioManager.setRibbonHistoryPanel(ribbonHistoryPanel);
   }
 
   /**
@@ -101,6 +102,7 @@ class Z4Canvas extends JSComponent {
     this.statusPanel = statusPanel;
     this.statusPanel.setCanvas(this);
     this.mouseManager.setStatusPanel(statusPanel);
+    this.ioManager.setStatusPanel(statusPanel);
   }
 
   /**
@@ -320,7 +322,8 @@ class Z4Canvas extends JSComponent {
    */
    saveProjectToHandle(handle, apply) {
     this.handle = handle;
-    this.saveProject(handle.name.substring(0, handle.name.lastIndexOf('.')), (zipped, name) => handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable => {
+    this.projectName = handle.name.substring(0, handle.name.lastIndexOf('.'));
+    this.ioManager.saveProject(this.projectName, (zipped, name) => handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable => {
       writable.write(zipped);
       writable.close();
     }), apply);
@@ -333,56 +336,8 @@ class Z4Canvas extends JSComponent {
    * @param apply The function to call after saving
    */
    saveProjectToFile(projectName, apply) {
-    this.saveProject(projectName, (zipped, name) => saveAs(zipped, name), apply);
-  }
-
-   saveProject(projectName, save, apply) {
-    Z4UI.pleaseWait(this, true, true, false, true, "", () => {
-      this.projectName = projectName;
-      this.statusPanel.setProjectName(projectName);
-      let zip = new JSZip();
-      this.layerToJSON(zip, new Array(), 0, obj => {
-        let finish = () => {
-          zip.file("manifest.json", JSON.stringify(obj), null);
-          let options = new Object();
-          options["type"] = "blob";
-          options["compression"] = "DEFLATE";
-          options["streamFiles"] = true;
-          let compressionOptions = new Object();
-          compressionOptions["level"] = 9;
-          options["compressionOptions"] = compressionOptions;
-          zip.generateAsync(options, metadata => Z4UI.setPleaseWaitProgressBarValue(metadata["percent"])).then(zipped => {
-            save(zipped, this.projectName + ".z4i");
-            this.setSaved(true);
-            Z4UI.pleaseWaitCompleted();
-            if (apply) {
-              apply();
-            }
-          });
-        };
-        obj["currentKeyHistory"] = this.ribbonHistoryPanel.getCurrentKey();
-        obj["history"] = new Array();
-        this.historyToJSON(zip, obj, finish);
-      });
-    });
-  }
-
-   historyToJSON(zip, obj, finish) {
-    this.ribbonHistoryPanel.iterateHistoryBuffer((key, value, apply) => {
-      if (key !== -1) {
-        (obj["history"]).push(key);
-        let folder = "history/history_" + key + "/";
-        let layers = value["layers"];
-        layers.forEach((layer, index, array) => {
-          zip.file(folder + "layers/layer" + index + ".png", layer["data"], null);
-          layer["data"] = null;
-        });
-        zip.file(folder + "manifest.json", JSON.stringify(value), null);
-        apply();
-      } else {
-        finish();
-      }
-    });
+    this.projectName = projectName;
+    this.ioManager.saveProject(projectName, (zipped, name) => saveAs(zipped, name), apply);
   }
 
   /**

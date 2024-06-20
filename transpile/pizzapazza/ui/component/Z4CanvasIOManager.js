@@ -11,6 +11,10 @@ class Z4CanvasIOManager {
 
    size = null;
 
+   ribbonHistoryPanel = null;
+
+   statusPanel = null;
+
   /**
    * Creates the object
    *
@@ -29,6 +33,110 @@ class Z4CanvasIOManager {
    */
    setSize(size) {
     this.size = size;
+  }
+
+  /**
+   * Sets the ribbon history panel
+   *
+   * @param ribbonHistoryPanel The ribbon history panel
+   */
+   setRibbonHistoryPanel(ribbonHistoryPanel) {
+    this.ribbonHistoryPanel = ribbonHistoryPanel;
+  }
+
+  /**
+   * Sets the status panel
+   *
+   * @param statusPanel The status panel
+   */
+   setStatusPanel(statusPanel) {
+    this.statusPanel = statusPanel;
+  }
+
+  /**
+   * Save a canvas project
+   *
+   * @param projectName The project name
+   * @param save The function used to save
+   * @param apply The function to call after saving
+   */
+   saveProject(projectName, save, apply) {
+    Z4UI.pleaseWait(this.canvas, true, true, false, true, "", () => {
+      this.statusPanel.setProjectName(projectName);
+      let zip = new JSZip();
+      this.layerToJSON(zip, projectName, new Array(), 0, obj => {
+        let finish = () => {
+          zip.file("manifest.json", JSON.stringify(obj), null);
+          let options = new Object();
+          options["type"] = "blob";
+          options["compression"] = "DEFLATE";
+          options["streamFiles"] = true;
+          let compressionOptions = new Object();
+          compressionOptions["level"] = 9;
+          options["compressionOptions"] = compressionOptions;
+          zip.generateAsync(options, metadata => Z4UI.setPleaseWaitProgressBarValue(metadata["percent"])).then(zipped => {
+            save(zipped, projectName + ".z4i");
+            this.canvas.setSaved(true);
+            Z4UI.pleaseWaitCompleted();
+            if (apply) {
+              apply();
+            }
+          });
+        };
+        obj["currentKeyHistory"] = this.ribbonHistoryPanel.getCurrentKey();
+        obj["history"] = new Array();
+        this.historyToJSON(zip, obj, finish);
+      });
+    });
+  }
+
+   layerToJSON(zip, projectName, layers, index, apply) {
+    let layer = this.paper.getLayerAt(index);
+    layer.convertToBlob(blob => {
+      if (zip) {
+        zip.file("layers/layer" + index + ".png", blob, null);
+      }
+      let offset = layer.getOffset();
+      let layerJSON = new Object();
+      if (!zip) {
+        layerJSON["data"] = blob;
+      }
+      layerJSON["name"] = layer.getName();
+      layerJSON["opacity"] = layer.getOpacity();
+      layerJSON["compositeOperation"] = layer.getCompositeOperation();
+      layerJSON["hidden"] = layer.isHidden();
+      layerJSON["offsetX"] = offset.x;
+      layerJSON["offsetY"] = offset.y;
+      layers[index] = layerJSON;
+      if (index + 1 === this.canvas.getLayersCount()) {
+        let JSON = new Object();
+        JSON["projectName"] = projectName;
+        JSON["width"] = this.size.width;
+        JSON["height"] = this.size.height;
+        JSON["layers"] = layers;
+        apply(JSON);
+      } else {
+        this.layerToJSON(zip, projectName, layers, index + 1, apply);
+      }
+    });
+  }
+
+   historyToJSON(zip, obj, finish) {
+    this.ribbonHistoryPanel.iterateHistoryBuffer((key, value, apply) => {
+      if (key !== -1) {
+        (obj["history"]).push(key);
+        let folder = "history/history_" + key + "/";
+        let layers = value["layers"];
+        layers.forEach((layer, index, array) => {
+          zip.file(folder + "layers/layer" + index + ".png", layer["data"], null);
+          layer["data"] = null;
+        });
+        zip.file(folder + "manifest.json", JSON.stringify(value), null);
+        apply();
+      } else {
+        finish();
+      }
+    });
   }
 
   /**

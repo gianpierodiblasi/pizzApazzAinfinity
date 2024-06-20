@@ -31,7 +31,6 @@ import simulation.dom.$OffscreenCanvas;
 import static simulation.filesaver.$FileSaver.saveAs;
 import simulation.js.$Apply_0_Void;
 import simulation.js.$Apply_1_Void;
-import simulation.js.$Apply_2_Void;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.navigator;
 import simulation.js.$Object;
@@ -121,6 +120,7 @@ public class Z4Canvas extends JSComponent {
     this.ribbonLayerPanel.setCanvas(this);
 
     this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);
+    this.ioManager.setRibbonHistoryPanel(ribbonHistoryPanel);
   }
 
   /**
@@ -133,6 +133,7 @@ public class Z4Canvas extends JSComponent {
     this.statusPanel.setCanvas(this);
 
     this.mouseManager.setStatusPanel(statusPanel);
+    this.ioManager.setStatusPanel(statusPanel);
   }
 
   /**
@@ -388,7 +389,8 @@ public class Z4Canvas extends JSComponent {
   public void saveProjectToHandle(FileSystemFileHandle handle, $Apply_0_Void apply) {
     this.handle = handle;
 
-    this.saveProject(handle.name.substring(0, handle.name.lastIndexOf('.')), (zipped, name) -> handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable -> {
+    this.projectName = handle.name.substring(0, handle.name.lastIndexOf('.'));
+    this.ioManager.saveProject(this.projectName, (zipped, name) -> handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable -> {
       writable.write(zipped);
       writable.close();
     }), apply);
@@ -401,66 +403,8 @@ public class Z4Canvas extends JSComponent {
    * @param apply The function to call after saving
    */
   public void saveProjectToFile(String projectName, $Apply_0_Void apply) {
-    this.saveProject(projectName, (zipped, name) -> saveAs(zipped, name), apply);
-  }
-
-  private void saveProject(String projectName, $Apply_2_Void<Object, String> save, $Apply_0_Void apply) {
-    Z4UI.pleaseWait(this, true, true, false, true, "", () -> {
-      this.projectName = projectName;
-      this.statusPanel.setProjectName(projectName);
-
-      $JSZip zip = new $JSZip();
-      this.layerToJSON(zip, new Array<>(), 0, obj -> {
-        $Apply_0_Void finish = () -> {
-          zip.file("manifest.json", JSON.stringify(obj), null);
-
-          $Object options = new $Object();
-          options.$set("type", "blob");
-          options.$set("compression", "DEFLATE");
-          options.$set("streamFiles", true);
-
-          $Object compressionOptions = new $Object();
-          compressionOptions.$set("level", 9);
-          options.$set("compressionOptions", compressionOptions);
-
-          zip.generateAsync(options, metadata -> Z4UI.setPleaseWaitProgressBarValue(metadata.$get("percent"))).then(zipped -> {
-            save.$apply(zipped, this.projectName + ".z4i");
-            this.setSaved(true);
-
-            Z4UI.pleaseWaitCompleted();
-            if ($exists(apply)) {
-              apply.$apply();
-            }
-          });
-        };
-
-        obj.$set("currentKeyHistory", this.ribbonHistoryPanel.getCurrentKey());
-        obj.$set("history", new Array<Integer>());
-        this.historyToJSON(zip, obj, finish);
-      });
-    });
-  }
-
-  @SuppressWarnings("unchecked")
-  private void historyToJSON($JSZip zip, $Object obj, $Apply_0_Void finish) {
-    this.ribbonHistoryPanel.iterateHistoryBuffer((key, value, apply) -> {
-      if (key != -1) {
-        ((Array<Integer>) obj.$get("history")).push(key);
-        String folder = "history/history_" + key + "/";
-
-        Array<$Object> layers = value.$get("layers");
-        layers.forEach((layer, index, array) -> {
-          zip.file(folder + "layers/layer" + index + ".png", layer.$get("data"), null);
-          layer.$set("data", null);
-        });
-
-        zip.file(folder + "manifest.json", JSON.stringify(value), null);
-
-        apply.$apply();
-      } else {
-        finish.$apply();
-      }
-    });
+    this.projectName = projectName;
+    this.ioManager.saveProject(projectName, (zipped, name) -> saveAs(zipped, name), apply);
   }
 
   /**
