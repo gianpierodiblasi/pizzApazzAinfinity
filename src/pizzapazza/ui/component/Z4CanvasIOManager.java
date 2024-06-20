@@ -83,13 +83,18 @@ public class Z4CanvasIOManager {
    *
    * @param handle The file handle
    * @param apply The function to call after saving
+   * @return The project name
    */
   @SuppressWarnings("static-access")
-  public void saveProjectToHandle(FileSystemFileHandle handle, $Apply_0_Void apply) {
-    this.saveProject(handle.name.substring(0, handle.name.lastIndexOf('.')), (zipped, name) -> handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable -> {
+  public String saveProjectToHandle(FileSystemFileHandle handle, $Apply_0_Void apply) {
+    String projectName = handle.name.substring(0, handle.name.lastIndexOf('.'));
+    
+    this.saveProject(projectName, (zipped, name) -> handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable -> {
       writable.write(zipped);
       writable.close();
     }), apply);
+    
+    return projectName;
   }
 
   /**

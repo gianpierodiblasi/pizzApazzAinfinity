@@ -386,8 +386,7 @@ public class Z4Canvas extends JSComponent {
   @SuppressWarnings("static-access")
   public void saveProjectToHandle(FileSystemFileHandle handle, $Apply_0_Void apply) {
     this.handle = handle;
-    this.projectName = handle.name.substring(0, handle.name.lastIndexOf('.'));
-    this.ioManager.saveProjectToHandle(handle, apply);
+    this.projectName = this.ioManager.saveProjectToHandle(handle, apply);
   }
 
   /**

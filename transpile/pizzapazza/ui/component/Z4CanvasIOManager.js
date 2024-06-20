@@ -58,12 +58,15 @@ class Z4CanvasIOManager {
    *
    * @param handle The file handle
    * @param apply The function to call after saving
+   * @return The project name
    */
    saveProjectToHandle(handle, apply) {
-    this.saveProject(handle.name.substring(0, handle.name.lastIndexOf('.')), (zipped, name) => handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable => {
+    let projectName = handle.name.substring(0, handle.name.lastIndexOf('.'));
+    this.saveProject(projectName, (zipped, name) => handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable => {
       writable.write(zipped);
       writable.close();
     }), apply);
+    return projectName;
   }
 
   /**

@@ -322,8 +322,7 @@ class Z4Canvas extends JSComponent {
    */
    saveProjectToHandle(handle, apply) {
     this.handle = handle;
-    this.projectName = handle.name.substring(0, handle.name.lastIndexOf('.'));
-    this.ioManager.saveProjectToHandle(handle, apply);
+    this.projectName = this.ioManager.saveProjectToHandle(handle, apply);
   }
 
   /**
