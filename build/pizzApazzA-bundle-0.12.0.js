@@ -1764,13 +1764,13 @@ class Z4Canvas extends JSComponent {
 
    paper = new Z4Paper();
 
+   selectedLayer = null;
+
    mouseManager = new Z4CanvasMouseManager(this, this.ctx);
 
    ioManager = new Z4CanvasIOManager(this, this.paper);
 
    historyManager = new Z4CanvasHistoryManager(this, this.paper);
-
-   selectedLayer = null;
 
   /**
    * Creates the object

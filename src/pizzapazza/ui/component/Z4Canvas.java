@@ -53,11 +53,11 @@ public class Z4Canvas extends JSComponent {
   private boolean changed = false;
 
   private final Z4Paper paper = new Z4Paper();
+  private Z4Layer selectedLayer;
+
   private final Z4CanvasMouseManager mouseManager = new Z4CanvasMouseManager(this, this.ctx);
   private final Z4CanvasIOManager ioManager = new Z4CanvasIOManager(this, this.paper);
   private final Z4CanvasHistoryManager historyManager = new Z4CanvasHistoryManager(this, this.paper);
-
-  private Z4Layer selectedLayer;
 
   /**
    * Creates the object
