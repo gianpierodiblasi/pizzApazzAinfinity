@@ -436,6 +436,9 @@ public class Z4Canvas extends JSComponent {
       image.onload = event -> {
         this.paper.addLayerFromImage(this.findLayerName(), image, this.width, this.height);
 
+        this.changed = true;
+        this.ribbonHistoryPanel.saveHistory("standard,tool");
+
         this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), duplicate -> {
           duplicate.setOpacity(layer.getOpacity());
           duplicate.setCompositeOperation(layer.getCompositeOperation());
