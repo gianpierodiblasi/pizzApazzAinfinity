@@ -55,10 +55,11 @@ Currently only the English and Italian languages are managed.
 
 ## Test
 pizzApazzA<sup>&#8734;</sup> has been tested on:
-- Windows
+- Windows 11
   - chrome 124
   - edge 124
   - firefox 125
+- ChromeOS 125
 
 ## Dependencies
 - josetta - [link](https://github.com/gianpierodiblasi/josetta)
