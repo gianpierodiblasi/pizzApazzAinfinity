@@ -3,6 +3,7 @@ package pizzapazza.ui.component;
 import def.dom.Blob;
 import def.dom.Event;
 import def.dom.File;
+import def.dom.FileReader;
 import static def.dom.Globals.document;
 import def.dom.HTMLElement;
 import def.dom.URL;
@@ -17,6 +18,7 @@ import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
 import pizzapazza.util.Z4Layer;
 import pizzapazza.util.Z4Paper;
+import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
@@ -26,6 +28,7 @@ import simulation.js.$Apply_0_Void;
 import simulation.js.$Apply_1_Void;
 import simulation.js.$Apply_2_Void;
 import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.navigator;
 import simulation.js.$Object;
 import simulation.jszip.$JSZip;
 
@@ -82,6 +85,67 @@ public class Z4CanvasIOManager {
    */
   public void setStatusPanel(Z4StatusPanel statusPanel) {
     this.statusPanel = statusPanel;
+  }
+
+  /**
+   * Creates a new canvas project from an image file
+   *
+   * @param handle The file handle
+   */
+  public void createFromHandle(FileSystemFileHandle handle) {
+    handle.getFile().then(file -> {
+      this.createFromFile(file);
+    });
+  }
+  
+  /**
+   * Creates a new canvas project from an image file
+   *
+   * @param file The file
+   */
+  public void createFromFile(File file) {
+    FileReader fileReader = new FileReader();
+    fileReader.onload = event -> this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), (String) fileReader.result);
+    fileReader.readAsDataURL(file);
+  }
+  
+  /**
+   * Creates a new canvas project from an image in the clipboard
+   */
+  public void createFromClipboard() {
+    navigator.clipboard.read().then(items -> {
+      items.forEach(item -> {
+        String imageType = item.types.find((type, index, array) -> type.startsWith("image/"));
+
+        item.getType(imageType).then(blob -> {
+          this.createFromURL("", URL.createObjectURL(blob));
+        });
+      });
+    });
+  }
+  
+  private Object createFromURL(String projectName, String url) {
+    $Image image = ($Image) document.createElement("img");
+
+    image.onload = event -> {
+      this.paper.reset();
+      this.paper.addLayerFromImage(Z4Translations.BACKGROUND_LAYER, image, (int) image.width, (int) image.height);
+
+      this.canvas.setSize((int) image.width, (int) image.height);
+
+      this.ribbonLayerPanel.reset();
+      this.canvas.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.canvas.getLayersCount() - 1), null, true);
+
+      this.ribbonHistoryPanel.resetHistory(() -> {
+        this.canvas.afterCreate(projectName, (int) image.width, (int) image.height);
+        this.canvas.toHistory(json -> this.ribbonHistoryPanel.addHistory(json, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
+      });
+
+      return null;
+    };
+
+    image.src = url;
+    return null;
   }
 
   /**

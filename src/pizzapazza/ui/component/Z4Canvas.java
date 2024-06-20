@@ -40,15 +40,15 @@ import simulation.jszip.$JSZip;
  * @author gianpiero.diblasi
  */
 public class Z4Canvas extends JSComponent {
-
+  
   private final $Canvas canvas = ($Canvas) document.createElement("canvas");
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
-
+  
   private Z4RibbonFilePanel ribbonFilePanel;
   private Z4RibbonLayerPanel ribbonLayerPanel;
   private Z4RibbonHistoryPanel ribbonHistoryPanel;
   private Z4StatusPanel statusPanel;
-
+  
   private String projectName;
   private FileSystemFileHandle handle;
   private int width;
@@ -57,11 +57,11 @@ public class Z4Canvas extends JSComponent {
   private boolean zooming;
   private boolean saved = true;
   private boolean changed = false;
-
+  
   private final Z4Paper paper = new Z4Paper();
   private final Z4CanvasMouseManager mouseManager = new Z4CanvasMouseManager(this, this.ctx);
   private final Z4CanvasIOManager ioManager = new Z4CanvasIOManager(this, this.paper);
-
+  
   private Z4Layer selectedLayer;
 
   /**
@@ -72,13 +72,13 @@ public class Z4Canvas extends JSComponent {
     super(document.createElement("div"));
     this.cssAddClass("z4canvas");
     this.appendNodeChild(this.canvas);
-
+    
     this.canvas.addEventListener("mouseenter", event -> this.mouseManager.onMouse((MouseEvent) event, "enter"));
     this.canvas.addEventListener("mouseleave", event -> this.mouseManager.onMouse((MouseEvent) event, "leave"));
     this.canvas.addEventListener("mousedown", event -> this.mouseManager.onMouse((MouseEvent) event, "down"));
     this.canvas.addEventListener("mousemove", event -> this.mouseManager.onMouse((MouseEvent) event, "move"));
     this.canvas.addEventListener("mouseup", event -> this.mouseManager.onMouse((MouseEvent) event, "up"));
-
+    
     this.addEventListener("wheel", event -> {
       WheelEvent evt = (WheelEvent) event;
       if (!evt.ctrlKey) {
@@ -112,11 +112,11 @@ public class Z4Canvas extends JSComponent {
     this.ribbonFilePanel = ribbonFilePanel;
     this.ribbonLayerPanel = ribbonLayerPanel;
     this.ribbonHistoryPanel = ribbonHistoryPanel;
-
+    
     this.ribbonFilePanel.setCanvas(this);
     this.ribbonHistoryPanel.setCanvas(this);
     this.ribbonLayerPanel.setCanvas(this);
-
+    
     this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);
     this.ioManager.setRibbonPanels(ribbonLayerPanel, ribbonHistoryPanel);
   }
@@ -129,7 +129,7 @@ public class Z4Canvas extends JSComponent {
   public void setStatusPanel(Z4StatusPanel statusPanel) {
     this.statusPanel = statusPanel;
     this.statusPanel.setCanvas(this);
-
+    
     this.mouseManager.setStatusPanel(statusPanel);
     this.ioManager.setStatusPanel(statusPanel);
   }
@@ -145,18 +145,16 @@ public class Z4Canvas extends JSComponent {
   public void create(int width, int height, Object filling) {
     this.paper.reset();
     this.paper.addLayer(Z4Translations.BACKGROUND_LAYER, width, height, filling, width, height);
-
+    
     this.setSize(width, height);
-
+    
     this.ribbonLayerPanel.reset();
-
     this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), null, true);
-
+    
     this.ribbonHistoryPanel.resetHistory(() -> {
       this.afterCreate("", width, height);
       this.toHistory(json -> this.ribbonHistoryPanel.addHistory(json, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
     });
-
   }
 
   /**
@@ -165,9 +163,7 @@ public class Z4Canvas extends JSComponent {
    * @param handle The file handle
    */
   public void createFromHandle(FileSystemFileHandle handle) {
-    handle.getFile().then(file -> {
-      this.createFromFile(file);
-    });
+    this.ioManager.createFromHandle(handle);
   }
 
   /**
@@ -176,48 +172,14 @@ public class Z4Canvas extends JSComponent {
    * @param file The file
    */
   public void createFromFile(File file) {
-    FileReader fileReader = new FileReader();
-    fileReader.onload = event -> this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), (String) fileReader.result);
-    fileReader.readAsDataURL(file);
+    this.ioManager.createFromFile(file);
   }
 
   /**
    * Creates a new project from an image in the clipboard
    */
   public void createFromClipboard() {
-    navigator.clipboard.read().then(items -> {
-      items.forEach(item -> {
-        String imageType = item.types.find((type, index, array) -> type.startsWith("image/"));
-
-        item.getType(imageType).then(blob -> {
-          this.createFromURL("", URL.createObjectURL(blob));
-        });
-      });
-    });
-  }
-
-  private Object createFromURL(String projectName, String url) {
-    $Image image = ($Image) document.createElement("img");
-
-    image.onload = event -> {
-      this.paper.reset();
-      this.paper.addLayerFromImage(Z4Translations.BACKGROUND_LAYER, image, (int) image.width, (int) image.height);
-
-      this.setSize((int) image.width, (int) image.height);
-
-      this.ribbonLayerPanel.reset();
-      this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), null, true);
-
-      this.ribbonHistoryPanel.resetHistory(() -> {
-        this.afterCreate(projectName, (int) image.width, (int) image.height);
-        this.toHistory(json -> this.ribbonHistoryPanel.addHistory(json, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
-      });
-
-      return null;
-    };
-
-    image.src = url;
-    return null;
+    this.ioManager.createFromClipboard();
   }
 
   /**
@@ -229,20 +191,20 @@ public class Z4Canvas extends JSComponent {
    */
   public void afterCreate(String projectName, int width, int height) {
     this.projectName = projectName;
-
+    
     this.statusPanel.setProjectName(projectName);
     this.statusPanel.setProjectSize(width, height);
     this.statusPanel.setZoom(1);
-
+    
     this.zoom = 1;
     this.mouseManager.setZoom(this.zoom);
-
+    
     this.setSaved(true);
     this.changed = false;
-
+    
     this.canvas.width = width;
     this.canvas.height = height;
-
+    
     this.drawCanvas();
   }
 
@@ -264,25 +226,25 @@ public class Z4Canvas extends JSComponent {
   public void openProjectFromFile(File file) {
     this.ioManager.openProjectFromFile(file);
   }
-
+  
   private void jsonToHistory($JSZip zip, $Object json, int index, int previousCurrentKey, int newCurrentKey) {
     Array<Integer> history = json.$get("history");
     int key = history.$get(index);
     String folder = "history/history_" + key + "/";
-
+    
     zip.file(folder + "manifest.json").async("string", null).then(str -> {
       $Object layerJSON = ($Object) JSON.parse("" + str);
       this.layerToHistory(zip, json, index, previousCurrentKey, newCurrentKey, folder, layerJSON, 0, key);
     });
   }
-
+  
   @SuppressWarnings({"unchecked", "null"})
   private void layerToHistory($JSZip zip, $Object json, int index, int previousCurrentKey, int newCurrentKey, String folder, $Object layerJSON, int layerIndex, int historyKey) {
     zip.file(folder + "layers/layer" + layerIndex + ".png").async("blob", metadata -> Z4UI.setPleaseWaitProgressBarValue(metadata.$get("percent"))).then(blob -> {
       Array<$Object> layers = layerJSON.$get("layers");
       $Object layer = layers.$get(layerIndex);
       layer.$set("data", blob);
-
+      
       if (layerIndex + 1 < layers.length) {
         this.layerToHistory(zip, json, index, previousCurrentKey, newCurrentKey, folder, layerJSON, layerIndex + 1, historyKey);
       } else if (index + 1 < ((Array<Integer>) json.$get("history")).length) {
@@ -305,25 +267,25 @@ public class Z4Canvas extends JSComponent {
   public void openFromHistory($Object json) {
     this.paper.reset();
     this.ribbonLayerPanel.reset();
-
+    
     this.setSize(json.$get("width"), json.$get("height"));
-
+    
     this.openLayerFromHistory(json, json.$get("layers"), 0);
   }
-
+  
   private void openLayerFromHistory($Object json, Array<$Object> layers, int index) {
     $Image image = ($Image) document.createElement("img");
-
+    
     image.onload = event -> {
       this.paper.addLayerFromImage(layers.$get(index).$get("name"), image, (int) image.width, (int) image.height);
-
+      
       this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(index), layer -> {
         layer.setOpacity(layers.$get(index).$get("opacity"));
         layer.setCompositeOperation(layers.$get(index).$get("compositeOperation"));
         layer.setHidden(layers.$get(index).$get("hidden"));
         layer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
       }, true);
-
+      
       if (index + 1 < layers.length) {
         this.openLayerFromHistory(json, layers, index + 1);
       } else {
@@ -332,9 +294,9 @@ public class Z4Canvas extends JSComponent {
       }
       return null;
     };
-
+    
     image.src = URL.createObjectURL(layers.$get(index).$get("data"));
-
+    
   }
 
   /**
@@ -378,17 +340,17 @@ public class Z4Canvas extends JSComponent {
   public void toHistory($Apply_1_Void<$Object> apply) {
     this.layerToJSON(null, new Array<>(), 0, apply);
   }
-
+  
   private void layerToJSON($JSZip zip, Array<$Object> layers, int index, $Apply_1_Void<$Object> apply) {
     Z4Layer layer = this.paper.getLayerAt(index);
-
+    
     layer.convertToBlob(blob -> {
       if ($exists(zip)) {
         zip.file("layers/layer" + index + ".png", blob, null);
       }
-
+      
       Point offset = layer.getOffset();
-
+      
       $Object layerJSON = new $Object();
       if (!$exists(zip)) {
         layerJSON.$set("data", blob);
@@ -399,16 +361,16 @@ public class Z4Canvas extends JSComponent {
       layerJSON.$set("hidden", layer.isHidden());
       layerJSON.$set("offsetX", offset.x);
       layerJSON.$set("offsetY", offset.y);
-
+      
       layers.$set(index, layerJSON);
-
+      
       if (index + 1 == this.getLayersCount()) {
         $Object JSON = new $Object();
         JSON.$set("projectName", this.projectName);
         JSON.$set("width", this.width);
         JSON.$set("height", this.height);
         JSON.$set("layers", layers);
-
+        
         apply.$apply(JSON);
       } else {
         this.layerToJSON(zip, layers, index + 1, apply);
@@ -479,7 +441,7 @@ public class Z4Canvas extends JSComponent {
    */
   public void addLayerFromFile(File file) {
     String name = file.name.substring(0, file.name.lastIndexOf('.'));
-
+    
     FileReader fileReader = new FileReader();
     fileReader.onload = event -> this.addLayerFromURL(name, (String) fileReader.result);
     fileReader.readAsDataURL(file);
@@ -492,14 +454,14 @@ public class Z4Canvas extends JSComponent {
     navigator.clipboard.read().then(items -> {
       items.forEach(item -> {
         String imageType = item.types.find((type, index, array) -> type.startsWith("image/"));
-
+        
         item.getType(imageType).then(blob -> {
           this.addLayerFromURL(this.findLayerName(), URL.createObjectURL(blob));
         });
       });
     });
   }
-
+  
   @SuppressWarnings("StringEquality")
   private String findLayerName() {
     int counter = 0;
@@ -515,27 +477,27 @@ public class Z4Canvas extends JSComponent {
     }
     return found;
   }
-
+  
   private Object addLayerFromURL(String name, String url) {
     $Image image = ($Image) document.createElement("img");
-
+    
     image.onload = event -> {
       this.paper.addLayerFromImage(name, image, this.width, this.height);
       this.afterAddLayer();
       this.drawCanvas();
       return null;
     };
-
+    
     image.src = url;
     return null;
   }
-
+  
   private void afterAddLayer() {
     this.changed = true;
     this.ribbonHistoryPanel.saveHistory("standard,tool");
-
+    
     this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), null, true);
-
+    
     this.setSaved(false);
   }
 
@@ -548,22 +510,22 @@ public class Z4Canvas extends JSComponent {
     Point offset = layer.getOffset();
     layer.convertToBlob(blob -> {
       $Image image = ($Image) document.createElement("img");
-
+      
       image.onload = event -> {
         this.paper.addLayerFromImage(this.findLayerName(), image, this.width, this.height);
-
+        
         this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), duplicate -> {
           duplicate.setOpacity(layer.getOpacity());
           duplicate.setCompositeOperation(layer.getCompositeOperation());
           duplicate.setHidden(layer.isHidden());
           duplicate.move(offset.x, offset.y);
         }, true);
-
+        
         this.setSaved(false);
         this.drawCanvas();
         return null;
       };
-
+      
       image.src = URL.createObjectURL(blob);
     });
   }
@@ -576,15 +538,15 @@ public class Z4Canvas extends JSComponent {
    */
   public int deleteLayer(Z4Layer layer) {
     int index = this.paper.deleteLayer(layer);
-
+    
     if (this.selectedLayer == layer) {
       int count = this.getLayersCount();
       this.setSelectedLayer(this.paper.getLayerAt(count - 1));
-
+      
       document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ") .z4layerpreview-selector").textContent = Z4LayerPreview.SELECTED_LAYER_CONTENT;
       ((HTMLElement) document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
     }
-
+    
     this.setSaved(false);
     this.drawCanvas();
     return index;
@@ -618,7 +580,7 @@ public class Z4Canvas extends JSComponent {
     $OffscreenCanvas offscreen = new $OffscreenCanvas(this.width, this.height);
     $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
     layers.forEach(layer -> layer.draw(offscreenCtx, false, false));
-
+    
     $Object options = new $Object();
     options.$set("type", "image/png");
     offscreen.convertToBlob(options).then(converted -> {
@@ -645,11 +607,11 @@ public class Z4Canvas extends JSComponent {
   public void setSelectedLayerAndAddLayerPreview(Z4Layer selectedLayer, $Apply_1_Void<Z4Layer> apply, boolean add) {
     this.selectedLayer = selectedLayer;
     this.mouseManager.setSelectedLayer(this.selectedLayer);
-
+    
     if ($exists(apply)) {
       apply.$apply(this.selectedLayer);
     }
-
+    
     if (add) {
       this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
     }
@@ -749,7 +711,7 @@ public class Z4Canvas extends JSComponent {
   public void setZoom(double zoom) {
     this.zoom = zoom;
     this.mouseManager.setZoom(this.zoom);
-
+    
     this.canvas.width = this.width * zoom;
     this.canvas.height = this.height * zoom;
     this.drawCanvas();
@@ -761,7 +723,7 @@ public class Z4Canvas extends JSComponent {
   public void fitZoom() {
     this.setZoom(Math.min((this.canvas.parentElement.clientWidth - 20) / this.width, (this.canvas.parentElement.clientHeight - 20) / this.height));
   }
-
+  
   private void zoomIn() {
     if (this.zooming) {
     } else {
@@ -770,7 +732,7 @@ public class Z4Canvas extends JSComponent {
       if ($exists(newZoom)) {
         this.zoom = newZoom;
         this.mouseManager.setZoom(this.zoom);
-
+        
         this.canvas.width = this.width * newZoom;
         this.canvas.height = this.height * newZoom;
         this.statusPanel.setZoom(this.zoom);
@@ -779,7 +741,7 @@ public class Z4Canvas extends JSComponent {
       this.zooming = false;
     }
   }
-
+  
   private void zoomOut() {
     if (this.zooming) {
     } else {
@@ -788,7 +750,7 @@ public class Z4Canvas extends JSComponent {
       if ($exists(newZoom)) {
         this.zoom = newZoom;
         this.mouseManager.setZoom(this.zoom);
-
+        
         this.canvas.width = this.width * newZoom;
         this.canvas.height = this.height * newZoom;
         this.statusPanel.setZoom(this.zoom);
@@ -803,7 +765,7 @@ public class Z4Canvas extends JSComponent {
    */
   public void drawCanvas() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
+    
     this.ctx.save();
     this.ctx.scale(this.zoom, this.zoom);
     this.paper.draw(this.ctx, false, false);

@@ -131,9 +131,7 @@ class Z4Canvas extends JSComponent {
    * @param handle The file handle
    */
    createFromHandle(handle) {
-    handle.getFile().then(file => {
-      this.createFromFile(file);
-    });
+    this.ioManager.createFromHandle(handle);
   }
 
   /**
@@ -142,41 +140,14 @@ class Z4Canvas extends JSComponent {
    * @param file The file
    */
    createFromFile(file) {
-    let fileReader = new FileReader();
-    fileReader.onload = event => this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), fileReader.result);
-    fileReader.readAsDataURL(file);
+    this.ioManager.createFromFile(file);
   }
 
   /**
    * Creates a new project from an image in the clipboard
    */
    createFromClipboard() {
-    navigator.clipboard.read().then(items => {
-      items.forEach(item => {
-        let imageType = item.types.find((type, index, array) => type.startsWith("image/"));
-        item.getType(imageType).then(blob => {
-          this.createFromURL("", URL.createObjectURL(blob));
-        });
-      });
-    });
-  }
-
-   createFromURL(projectName, url) {
-    let image = document.createElement("img");
-    image.onload = event => {
-      this.paper.reset();
-      this.paper.addLayerFromImage(Z4Translations.BACKGROUND_LAYER, image, image.width, image.height);
-      this.setSize(image.width, image.height);
-      this.ribbonLayerPanel.reset();
-      this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), null, true);
-      this.ribbonHistoryPanel.resetHistory(() => {
-        this.afterCreate(projectName, image.width, image.height);
-        this.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
-      });
-      return null;
-    };
-    image.src = url;
-    return null;
+    this.ioManager.createFromClipboard();
   }
 
   /**

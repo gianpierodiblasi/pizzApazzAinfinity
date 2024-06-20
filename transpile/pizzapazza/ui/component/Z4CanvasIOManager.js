@@ -58,6 +58,60 @@ class Z4CanvasIOManager {
   }
 
   /**
+   * Creates a new canvas project from an image file
+   *
+   * @param handle The file handle
+   */
+   createFromHandle(handle) {
+    handle.getFile().then(file => {
+      this.createFromFile(file);
+    });
+  }
+
+  /**
+   * Creates a new canvas project from an image file
+   *
+   * @param file The file
+   */
+   createFromFile(file) {
+    let fileReader = new FileReader();
+    fileReader.onload = event => this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), fileReader.result);
+    fileReader.readAsDataURL(file);
+  }
+
+  /**
+   * Creates a new canvas project from an image in the clipboard
+   */
+   createFromClipboard() {
+    navigator.clipboard.read().then(items => {
+      items.forEach(item => {
+        let imageType = item.types.find((type, index, array) => type.startsWith("image/"));
+        item.getType(imageType).then(blob => {
+          this.createFromURL("", URL.createObjectURL(blob));
+        });
+      });
+    });
+  }
+
+   createFromURL(projectName, url) {
+    let image = document.createElement("img");
+    image.onload = event => {
+      this.paper.reset();
+      this.paper.addLayerFromImage(Z4Translations.BACKGROUND_LAYER, image, image.width, image.height);
+      this.canvas.setSize(image.width, image.height);
+      this.ribbonLayerPanel.reset();
+      this.canvas.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.canvas.getLayersCount() - 1), null, true);
+      this.ribbonHistoryPanel.resetHistory(() => {
+        this.canvas.afterCreate(projectName, image.width, image.height);
+        this.canvas.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
+      });
+      return null;
+    };
+    image.src = url;
+    return null;
+  }
+
+  /**
    * Opens a canvas project
    *
    * @param handle The file handle
