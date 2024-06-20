@@ -27,7 +27,6 @@ import simulation.js.$Apply_0_Void;
 import simulation.js.$Apply_1_Void;
 import static simulation.js.$Globals.$exists;
 import simulation.js.$Object;
-import simulation.jszip.$JSZip;
 
 /**
  * The canvas
@@ -56,6 +55,7 @@ public class Z4Canvas extends JSComponent {
   private final Z4Paper paper = new Z4Paper();
   private final Z4CanvasMouseManager mouseManager = new Z4CanvasMouseManager(this, this.ctx);
   private final Z4CanvasIOManager ioManager = new Z4CanvasIOManager(this, this.paper);
+  private final Z4CanvasHistoryManager historyManager = new Z4CanvasHistoryManager(this, this.paper);
 
   private Z4Layer selectedLayer;
 
@@ -114,6 +114,7 @@ public class Z4Canvas extends JSComponent {
 
     this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);
     this.ioManager.setRibbonPanels(ribbonLayerPanel, ribbonHistoryPanel);
+    this.historyManager.setRibbonLayerPanel(ribbonLayerPanel);
   }
 
   /**
@@ -228,38 +229,7 @@ public class Z4Canvas extends JSComponent {
    * @param json The history
    */
   public void openFromHistory($Object json) {
-    this.paper.reset();
-    this.ribbonLayerPanel.reset();
-
-    this.setSize(json.$get("width"), json.$get("height"));
-
-    this.openLayerFromHistory(json, json.$get("layers"), 0);
-  }
-
-  private void openLayerFromHistory($Object json, Array<$Object> layers, int index) {
-    $Image image = ($Image) document.createElement("img");
-
-    image.onload = event -> {
-      this.paper.addLayerFromImage(layers.$get(index).$get("name"), image, (int) image.width, (int) image.height);
-
-      this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(index), layer -> {
-        layer.setOpacity(layers.$get(index).$get("opacity"));
-        layer.setCompositeOperation(layers.$get(index).$get("compositeOperation"));
-        layer.setHidden(layers.$get(index).$get("hidden"));
-        layer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
-      }, true);
-
-      if (index + 1 < layers.length) {
-        this.openLayerFromHistory(json, layers, index + 1);
-      } else {
-        this.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
-        this.setSaved(false);
-      }
-      return null;
-    };
-
-    image.src = URL.createObjectURL(layers.$get(index).$get("data"));
-
+    this.historyManager.openFromHistory(json);
   }
 
   /**
@@ -296,49 +266,12 @@ public class Z4Canvas extends JSComponent {
   }
 
   /**
-   * Prepare the project for the history
+   * Prepares the project for the history
    *
    * @param apply The function to call after preparation
    */
   public void toHistory($Apply_1_Void<$Object> apply) {
-    this.layerToJSON(null, new Array<>(), 0, apply);
-  }
-
-  private void layerToJSON($JSZip zip, Array<$Object> layers, int index, $Apply_1_Void<$Object> apply) {
-    Z4Layer layer = this.paper.getLayerAt(index);
-
-    layer.convertToBlob(blob -> {
-      if ($exists(zip)) {
-        zip.file("layers/layer" + index + ".png", blob, null);
-      }
-
-      Point offset = layer.getOffset();
-
-      $Object layerJSON = new $Object();
-      if (!$exists(zip)) {
-        layerJSON.$set("data", blob);
-      }
-      layerJSON.$set("name", layer.getName());
-      layerJSON.$set("opacity", layer.getOpacity());
-      layerJSON.$set("compositeOperation", layer.getCompositeOperation());
-      layerJSON.$set("hidden", layer.isHidden());
-      layerJSON.$set("offsetX", offset.x);
-      layerJSON.$set("offsetY", offset.y);
-
-      layers.$set(index, layerJSON);
-
-      if (index + 1 == this.getLayersCount()) {
-        $Object JSON = new $Object();
-        JSON.$set("projectName", this.projectName);
-        JSON.$set("width", this.width);
-        JSON.$set("height", this.height);
-        JSON.$set("layers", layers);
-
-        apply.$apply(JSON);
-      } else {
-        this.layerToJSON(zip, layers, index + 1, apply);
-      }
-    });
+    this.historyManager.toHistory(apply);
   }
 
   /**
@@ -592,9 +525,10 @@ public class Z4Canvas extends JSComponent {
   public void setSize(int width, int height) {
     this.width = width;
     this.height = height;
-    
+
     this.mouseManager.setSize(this.getSize());
     this.ioManager.setSize(this.getSize());
+    this.historyManager.setSize(this.getSize());
   }
 
   /**

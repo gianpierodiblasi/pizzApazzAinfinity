@@ -39,6 +39,8 @@ class Z4Canvas extends JSComponent {
 
    ioManager = new Z4CanvasIOManager(this, this.paper);
 
+   historyManager = new Z4CanvasHistoryManager(this, this.paper);
+
    selectedLayer = null;
 
   /**
@@ -91,6 +93,7 @@ class Z4Canvas extends JSComponent {
     this.ribbonLayerPanel.setCanvas(this);
     this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);
     this.ioManager.setRibbonPanels(ribbonLayerPanel, ribbonHistoryPanel);
+    this.historyManager.setRibbonLayerPanel(ribbonLayerPanel);
   }
 
   /**
@@ -196,31 +199,7 @@ class Z4Canvas extends JSComponent {
    * @param json The history
    */
    openFromHistory(json) {
-    this.paper.reset();
-    this.ribbonLayerPanel.reset();
-    this.setSize(json["width"], json["height"]);
-    this.openLayerFromHistory(json, json["layers"], 0);
-  }
-
-   openLayerFromHistory(json, layers, index) {
-    let image = document.createElement("img");
-    image.onload = event => {
-      this.paper.addLayerFromImage(layers[index]["name"], image, image.width, image.height);
-      this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(index), layer => {
-        layer.setOpacity(layers[index]["opacity"]);
-        layer.setCompositeOperation(layers[index]["compositeOperation"]);
-        layer.setHidden(layers[index]["hidden"]);
-        layer.move(layers[index]["offsetX"], layers[index]["offsetY"]);
-      }, true);
-      if (index + 1 < layers.length) {
-        this.openLayerFromHistory(json, layers, index + 1);
-      } else {
-        this.afterCreate(json["projectName"], json["width"], json["height"]);
-        this.setSaved(false);
-      }
-      return null;
-    };
-    image.src = URL.createObjectURL(layers[index]["data"]);
+    this.historyManager.openFromHistory(json);
   }
 
   /**
@@ -256,43 +235,12 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
-   * Prepare the project for the history
+   * Prepares the project for the history
    *
    * @param apply The function to call after preparation
    */
    toHistory(apply) {
-    this.layerToJSON(null, new Array(), 0, apply);
-  }
-
-   layerToJSON(zip, layers, index, apply) {
-    let layer = this.paper.getLayerAt(index);
-    layer.convertToBlob(blob => {
-      if (zip) {
-        zip.file("layers/layer" + index + ".png", blob, null);
-      }
-      let offset = layer.getOffset();
-      let layerJSON = new Object();
-      if (!zip) {
-        layerJSON["data"] = blob;
-      }
-      layerJSON["name"] = layer.getName();
-      layerJSON["opacity"] = layer.getOpacity();
-      layerJSON["compositeOperation"] = layer.getCompositeOperation();
-      layerJSON["hidden"] = layer.isHidden();
-      layerJSON["offsetX"] = offset.x;
-      layerJSON["offsetY"] = offset.y;
-      layers[index] = layerJSON;
-      if (index + 1 === this.getLayersCount()) {
-        let JSON = new Object();
-        JSON["projectName"] = this.projectName;
-        JSON["width"] = this.width;
-        JSON["height"] = this.height;
-        JSON["layers"] = layers;
-        apply(JSON);
-      } else {
-        this.layerToJSON(zip, layers, index + 1, apply);
-      }
-    });
+    this.historyManager.toHistory(apply);
   }
 
   /**
@@ -536,6 +484,7 @@ class Z4Canvas extends JSComponent {
     this.height = height;
     this.mouseManager.setSize(this.getSize());
     this.ioManager.setSize(this.getSize());
+    this.historyManager.setSize(this.getSize());
   }
 
   /**
