@@ -323,10 +323,7 @@ class Z4Canvas extends JSComponent {
    saveProjectToHandle(handle, apply) {
     this.handle = handle;
     this.projectName = handle.name.substring(0, handle.name.lastIndexOf('.'));
-    this.ioManager.saveProject(this.projectName, (zipped, name) => handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable => {
-      writable.write(zipped);
-      writable.close();
-    }), apply);
+    this.ioManager.saveProjectToHandle(handle, apply);
   }
 
   /**
@@ -337,7 +334,7 @@ class Z4Canvas extends JSComponent {
    */
    saveProjectToFile(projectName, apply) {
     this.projectName = projectName;
-    this.ioManager.saveProject(projectName, (zipped, name) => saveAs(zipped, name), apply);
+    this.ioManager.saveProjectToFile(projectName, apply);
   }
 
   /**

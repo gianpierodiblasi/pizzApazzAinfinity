@@ -18,6 +18,7 @@ import pizzapazza.util.Z4Paper;
 import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$OffscreenCanvas;
+import static simulation.filesaver.$FileSaver.saveAs;
 import simulation.js.$Apply_0_Void;
 import simulation.js.$Apply_1_Void;
 import simulation.js.$Apply_2_Void;
@@ -78,13 +79,30 @@ public class Z4CanvasIOManager {
   }
 
   /**
-   * Save a canvas project
+   * Saves a canvas project
    *
-   * @param projectName The project name
-   * @param save The function used to save
+   * @param handle The file handle
    * @param apply The function to call after saving
    */
-  public void saveProject(String projectName, $Apply_2_Void<Object, String> save, $Apply_0_Void apply) {
+  @SuppressWarnings("static-access")
+  public void saveProjectToHandle(FileSystemFileHandle handle, $Apply_0_Void apply) {
+    this.saveProject(handle.name.substring(0, handle.name.lastIndexOf('.')), (zipped, name) -> handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable -> {
+      writable.write(zipped);
+      writable.close();
+    }), apply);
+  }
+
+  /**
+   * Saves a canvas project
+   *
+   * @param projectName The project name
+   * @param apply The function to call after saving
+   */
+  public void saveProjectToFile(String projectName, $Apply_0_Void apply) {
+    this.saveProject(projectName, (zipped, name) -> saveAs(zipped, name), apply);
+  }
+
+  private void saveProject(String projectName, $Apply_2_Void<Object, String> save, $Apply_0_Void apply) {
     Z4UI.pleaseWait(this.canvas, true, true, false, true, "", () -> {
       this.statusPanel.setProjectName(projectName);
 

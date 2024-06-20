@@ -14,7 +14,6 @@ import javascript.awt.Dimension;
 import javascript.awt.Point;
 import javascript.swing.JSComponent;
 import javascript.util.fsa.FileSystemFileHandle;
-import javascript.util.fsa.FileSystemWritableFileStreamCreateOptions;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonFilePanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
@@ -28,7 +27,6 @@ import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
 import simulation.dom.$OffscreenCanvas;
-import static simulation.filesaver.$FileSaver.saveAs;
 import simulation.js.$Apply_0_Void;
 import simulation.js.$Apply_1_Void;
 import static simulation.js.$Globals.$exists;
@@ -388,12 +386,8 @@ public class Z4Canvas extends JSComponent {
   @SuppressWarnings("static-access")
   public void saveProjectToHandle(FileSystemFileHandle handle, $Apply_0_Void apply) {
     this.handle = handle;
-
     this.projectName = handle.name.substring(0, handle.name.lastIndexOf('.'));
-    this.ioManager.saveProject(this.projectName, (zipped, name) -> handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable -> {
-      writable.write(zipped);
-      writable.close();
-    }), apply);
+    this.ioManager.saveProjectToHandle(handle, apply);
   }
 
   /**
@@ -404,7 +398,7 @@ public class Z4Canvas extends JSComponent {
    */
   public void saveProjectToFile(String projectName, $Apply_0_Void apply) {
     this.projectName = projectName;
-    this.ioManager.saveProject(projectName, (zipped, name) -> saveAs(zipped, name), apply);
+    this.ioManager.saveProjectToFile(projectName, apply);
   }
 
   /**

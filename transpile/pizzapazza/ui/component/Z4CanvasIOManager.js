@@ -54,12 +54,28 @@ class Z4CanvasIOManager {
   }
 
   /**
-   * Save a canvas project
+   * Saves a canvas project
    *
-   * @param projectName The project name
-   * @param save The function used to save
+   * @param handle The file handle
    * @param apply The function to call after saving
    */
+   saveProjectToHandle(handle, apply) {
+    this.saveProject(handle.name.substring(0, handle.name.lastIndexOf('.')), (zipped, name) => handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable => {
+      writable.write(zipped);
+      writable.close();
+    }), apply);
+  }
+
+  /**
+   * Saves a canvas project
+   *
+   * @param projectName The project name
+   * @param apply The function to call after saving
+   */
+   saveProjectToFile(projectName, apply) {
+    this.saveProject(projectName, (zipped, name) => saveAs(zipped, name), apply);
+  }
+
    saveProject(projectName, save, apply) {
     Z4UI.pleaseWait(this.canvas, true, true, false, true, "", () => {
       this.statusPanel.setProjectName(projectName);
