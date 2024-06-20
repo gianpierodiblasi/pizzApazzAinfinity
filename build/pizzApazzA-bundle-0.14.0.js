@@ -12196,7 +12196,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
 
    drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color) {
     context.save();
-    context.lineWidth = 2;
+    context.lineWidth = 3;
     context.strokeStyle = Z4Constants.getStyle(color.getRGBA_HEX());
     context.beginPath();
     context.moveTo(drawingPoint.z4Vector.x0, 0);
@@ -13369,7 +13369,7 @@ class Z4Translations {
     Z4Translations.OPEN_PROJECT = "Open Project";
     Z4Translations.SAVE = "Save";
     Z4Translations.SAVE_PROJECT = "Save Project";
-    Z4Translations.SAVE_PROJECT = "Save Project As";
+    Z4Translations.SAVE_PROJECT_AS = "Save Project As";
     Z4Translations.EXPORT = "Export";
     Z4Translations.PROJECT_NOT_SAVED_MESSAGE = "Project not saved, do you want to save your changes?";
     Z4Translations.IMAGE_FILE = "Image File";
@@ -13413,7 +13413,7 @@ class Z4Translations {
     // Ribbon Help
     Z4Translations.HELP = "Help";
     Z4Translations.ABOUT = "About";
-    Z4Translations.BASED_ON = "<p>pizzApazzA<sup>&#8734;</sup> Version $version$ is based on pizzApazzA VB6 by Ettore Luzio and is licensed under <a href='https://unlicense.org/'>Unlicense license</a>.</p>" + "<p>Developed in Java by Gianpiero Di Blasi, transpilled in JavaScript by means of <a href='https://github.com/gianpierodiblasi/josetta' target='_blank'>Josetta</a> (<a href='https://github.com/gianpierodiblasi/pizzApazzAinfinity' target='_blank'>github repository</a>).</p>" + "<p>Ettore Luzio and Gianpiero Di Blasi are the founders of <a href='https://sites.google.com/view/gruppoz4/home'>GruppoZ4</a>.</p>" + "<p>Dependencies: " + Z4Translations.DEPENDENCIES + "</p>";
+    Z4Translations.BASED_ON = "<p>pizzApazzA<sup>&#8734;</sup> Version $version$ is based on pizzApazzA VB6 by Ettore Luzio and is licensed under <a href='https://unlicense.org/'>Unlicense license</a>.</p>" + "<p>Developed in Java by Gianpiero Di Blasi, transpilled in JavaScript by means of <a href='https://github.com/gianpierodiblasi/josetta' target='_blank'>josetta</a> (<a href='https://github.com/gianpierodiblasi/pizzApazzAinfinity' target='_blank'>github repository</a>).</p>" + "<p>Ettore Luzio and Gianpiero Di Blasi are the founders of <a href='https://sites.google.com/view/gruppoz4/home'>GruppoZ4</a>.</p>" + "<p>Dependencies: " + Z4Translations.DEPENDENCIES + "</p>";
     Z4Translations.INSTALL = "<span>Install pizzApazzA<sup>&#8734;</sup></span>";
     Z4Translations.CHECK_UPDATE = "Check for Updates";
     // Other
@@ -13592,7 +13592,7 @@ class Z4Translations {
     // Ribbon Help
     Z4Translations.HELP = "Aiuto";
     Z4Translations.ABOUT = "Informazioni su";
-    Z4Translations.BASED_ON = "<p>pizzApazzA<sup>&#8734;</sup> Versione $version$ \u00E8 basato su pizzApazzA VB6 di Ettore Luzio ed \u00E8 distribuito con <a href='https://unlicense.org/' target='_blank'>licenza Unlicense</a>.</p>" + "<p>Sviluppato in Java da Gianpiero Di Blasi, tradotto in JavaScript tramite <a href='https://github.com/gianpierodiblasi/josetta' target='_blank'>Josetta</a> (<a href='https://github.com/gianpierodiblasi/pizzApazzAinfinity' target='_blank'>repository github</a>).</p>" + "<p>Ettore Luzio e Gianpiero Di Blasi sono i fondatori del <a href='https://sites.google.com/view/gruppoz4/home'>GruppoZ4</a>.</p>" + "<p>Dipendenze: " + Z4Translations.DEPENDENCIES + "</p>";
+    Z4Translations.BASED_ON = "<p>pizzApazzA<sup>&#8734;</sup> Versione $version$ \u00E8 basato su pizzApazzA VB6 di Ettore Luzio ed \u00E8 distribuito con <a href='https://unlicense.org/' target='_blank'>licenza Unlicense</a>.</p>" + "<p>Sviluppato in Java da Gianpiero Di Blasi, tradotto in JavaScript tramite <a href='https://github.com/gianpierodiblasi/josetta' target='_blank'>josetta</a> (<a href='https://github.com/gianpierodiblasi/pizzApazzAinfinity' target='_blank'>repository github</a>).</p>" + "<p>Ettore Luzio e Gianpiero Di Blasi sono i fondatori del <a href='https://sites.google.com/view/gruppoz4/home'>GruppoZ4</a>.</p>" + "<p>Dipendenze: " + Z4Translations.DEPENDENCIES + "</p>";
     Z4Translations.INSTALL = "<span>Installa pizzApazzA<sup>&#8734;</sup></span>";
     Z4Translations.CHECK_UPDATE = "Controlla gli Aggiornamenti";
     // Other

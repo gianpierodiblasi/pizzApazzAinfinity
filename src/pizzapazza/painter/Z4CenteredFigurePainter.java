@@ -419,7 +419,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
   private void drawBezier($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4Point c1, Z4Point c2, Z4Point path1, Z4Point path2, double val, Color color) {
     context.save();
 
-    context.lineWidth = 2;
+    context.lineWidth = 3;
     context.strokeStyle = Z4Constants.$getStyle(color.getRGBA_HEX());
 
     context.beginPath();

@@ -59,7 +59,11 @@ pizzApazzA<sup>&#8734;</sup> has been tested on:
   - chrome 124
   - edge 124
   - firefox 125
-- ChromeOS 125
+- Chrome OS 125
+- Debian 12
+  - chrome 124
+  - edge 124
+  - firefox 125
 
 ## Dependencies
 - josetta - [link](https://github.com/gianpierodiblasi/josetta)
