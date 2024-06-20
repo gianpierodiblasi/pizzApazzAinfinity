@@ -50,7 +50,7 @@ public class Z4StatusPanel extends JSPanel {
 
     this.addPipe(3);
 
-    this.projectSize.setText(Z4Translations.DIMENSION + ": " + Z4Constants.DEFAULT_IMAGE_SIZE + " \u2716 " + Z4Constants.DEFAULT_IMAGE_SIZE);
+    this.projectSize.setText(Z4Translations.DIMENSION + ": " + Z4Constants.DEFAULT_IMAGE_SIZE + " x " + Z4Constants.DEFAULT_IMAGE_SIZE);
     this.add(this.projectSize, new GBC(4, 0).i(0, 5, 0, 5));
 
     this.addPipe(5);
@@ -95,7 +95,7 @@ public class Z4StatusPanel extends JSPanel {
    * @param height The height
    */
   public void setProjectSize(int width, int height) {
-    this.projectSize.setText(Z4Translations.DIMENSION + ": " + width + " \u2716 " + height);
+    this.projectSize.setText(Z4Translations.DIMENSION + ": " + width + " x " + height);
   }
 
   /**
@@ -105,7 +105,7 @@ public class Z4StatusPanel extends JSPanel {
    * @param y The y-axis coordinate of the pixel
    */
   public void setMousePosition(int x, int y) {
-    this.mousePosition.setText(new $Number(x).toFixed(0).padStart(4, "\u00A0") + " \u2716 " + new $Number(y).toFixed(0).padEnd(4, "\u00A0"));
+    this.mousePosition.setText(new $Number(x).toFixed(0).padStart(4, "\u00A0") + " x " + new $Number(y).toFixed(0).padEnd(4, "\u00A0"));
   }
 
   /**

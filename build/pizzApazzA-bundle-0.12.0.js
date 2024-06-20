@@ -8901,8 +8901,8 @@ class Z4NewImagePanel extends JSTabbedPane {
     let res = this.resolution.getValue();
     let dimWIN = w / res;
     let dimHIN = h / res;
-    this.dimensionMM.setText(new Number(dimWIN * 25.4).toFixed(2) + " \u2716 " + new Number(dimHIN * 25.4).toFixed(2) + " mm");
-    this.dimensionIN.setText(new Number(dimWIN).toFixed(2) + " \u2716 " + new Number(dimHIN).toFixed(2) + " inch");
+    this.dimensionMM.setText(new Number(dimWIN * 25.4).toFixed(2) + " x " + new Number(dimHIN * 25.4).toFixed(2) + " mm");
+    this.dimensionIN.setText(new Number(dimWIN).toFixed(2) + " x " + new Number(dimHIN).toFixed(2) + " inch");
     this.fillingPanel.setSize(w, h);
     this.onchange();
   }
@@ -8939,11 +8939,6 @@ class Z4NewImagePanel extends JSTabbedPane {
     return this.fillingPanel.getSelectedFilling();
   }
 
-  /**
-   * Adds a change listener
-   *
-   * @param listener The listener
-   */
    addChangeListener(listener) {
     this.listeners.push(listener);
   }
@@ -8993,7 +8988,7 @@ class Z4StatusPanel extends JSPanel {
     this.zoom.addActionListener(event => this.onZoom());
     this.add(this.zoom, new GBC(2, 0).i(0, 5, 0, 5));
     this.addPipe(3);
-    this.projectSize.setText(Z4Translations.DIMENSION + ": " + Z4Constants.DEFAULT_IMAGE_SIZE + " \u2716 " + Z4Constants.DEFAULT_IMAGE_SIZE);
+    this.projectSize.setText(Z4Translations.DIMENSION + ": " + Z4Constants.DEFAULT_IMAGE_SIZE + " x " + Z4Constants.DEFAULT_IMAGE_SIZE);
     this.add(this.projectSize, new GBC(4, 0).i(0, 5, 0, 5));
     this.addPipe(5);
     this.mousePosition.getStyle().fontFamily = "monospace";
@@ -9035,7 +9030,7 @@ class Z4StatusPanel extends JSPanel {
    * @param height The height
    */
    setProjectSize(width, height) {
-    this.projectSize.setText(Z4Translations.DIMENSION + ": " + width + " \u2716 " + height);
+    this.projectSize.setText(Z4Translations.DIMENSION + ": " + width + " x " + height);
   }
 
   /**
@@ -9045,7 +9040,7 @@ class Z4StatusPanel extends JSPanel {
    * @param y The y-axis coordinate of the pixel
    */
    setMousePosition(x, y) {
-    this.mousePosition.setText(new Number(x).toFixed(0).padStart(4, "\u00A0") + " \u2716 " + new Number(y).toFixed(0).padEnd(4, "\u00A0"));
+    this.mousePosition.setText(new Number(x).toFixed(0).padStart(4, "\u00A0") + " x " + new Number(y).toFixed(0).padEnd(4, "\u00A0"));
   }
 
   /**

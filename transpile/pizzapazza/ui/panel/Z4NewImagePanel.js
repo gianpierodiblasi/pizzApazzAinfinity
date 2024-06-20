@@ -58,8 +58,8 @@ class Z4NewImagePanel extends JSTabbedPane {
     let res = this.resolution.getValue();
     let dimWIN = w / res;
     let dimHIN = h / res;
-    this.dimensionMM.setText(new Number(dimWIN * 25.4).toFixed(2) + " \u2716 " + new Number(dimHIN * 25.4).toFixed(2) + " mm");
-    this.dimensionIN.setText(new Number(dimWIN).toFixed(2) + " \u2716 " + new Number(dimHIN).toFixed(2) + " inch");
+    this.dimensionMM.setText(new Number(dimWIN * 25.4).toFixed(2) + " x " + new Number(dimHIN * 25.4).toFixed(2) + " mm");
+    this.dimensionIN.setText(new Number(dimWIN).toFixed(2) + " x " + new Number(dimHIN).toFixed(2) + " inch");
     this.fillingPanel.setSize(w, h);
     this.onchange();
   }
@@ -96,11 +96,6 @@ class Z4NewImagePanel extends JSTabbedPane {
     return this.fillingPanel.getSelectedFilling();
   }
 
-  /**
-   * Adds a change listener
-   *
-   * @param listener The listener
-   */
    addChangeListener(listener) {
     this.listeners.push(listener);
   }
