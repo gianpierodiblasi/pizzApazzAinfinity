@@ -17,8 +17,6 @@ class Z4Canvas extends JSComponent {
 
    statusPanel = null;
 
-   mouseManager = new Z4CanvasMouseManager(this, this.ctx);
-
    projectName = null;
 
    handle = null;
@@ -36,6 +34,10 @@ class Z4Canvas extends JSComponent {
    changed = false;
 
    paper = new Z4Paper();
+
+   mouseManager = new Z4CanvasMouseManager(this, this.ctx);
+
+   ioManager = new Z4CanvasIOManager(this, this.paper);
 
    selectedLayer = null;
 
@@ -441,16 +443,7 @@ class Z4Canvas extends JSComponent {
    * @param quality The quality
    */
    exportToFile(filename, ext, quality) {
-    this.exportTo(ext, quality, blob => {
-      let link = document.createElement("a");
-      link.setAttribute("href", URL.createObjectURL(blob));
-      link.setAttribute("download", filename + ext);
-      document.body.appendChild(link);
-      let event = document.createEvent("MouseEvents");
-      event.initEvent("click", false, false);
-      link.dispatchEvent(event);
-      document.body.removeChild(link);
-    });
+    this.ioManager.exportToFile(filename, ext, quality);
   }
 
   /**
@@ -460,26 +453,7 @@ class Z4Canvas extends JSComponent {
    * @param quality The quality
    */
    exportToHandle(handle, quality) {
-    handle.getFile().then(file => {
-      this.exportTo(file.name.toLowerCase().substring(file.name.toLowerCase().lastIndexOf('.')), quality, blob => handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable => {
-        writable.write(blob);
-        writable.close();
-      }));
-    });
-  }
-
-   exportTo(ext, quality, apply) {
-    Z4UI.pleaseWait(this, false, false, false, false, "", () => {
-      let offscreen = new OffscreenCanvas(this.width, this.height);
-      let offscreenCtx = offscreen.getContext("2d");
-      this.paper.draw(offscreenCtx, false, false);
-      let options = new Object();
-      options["type"] = ext === ".png" ? "image/png" : "image/jpeg";
-      options["quality"] = quality;
-      offscreen.convertToBlob(options).then(blob => {
-        apply(blob);
-      });
-    });
+    this.ioManager.exportToHandle(handle, quality);
   }
 
   /**
