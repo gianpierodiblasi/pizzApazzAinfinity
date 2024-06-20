@@ -386,14 +386,14 @@ class Z4Canvas extends JSComponent {
       let image = document.createElement("img");
       image.onload = event => {
         this.paper.addLayerFromImage(this.findLayerName(), image, this.width, this.height);
-        this.changed = true;
-        this.ribbonHistoryPanel.saveHistory("standard,tool");
         this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), duplicate => {
           duplicate.setOpacity(layer.getOpacity());
           duplicate.setCompositeOperation(layer.getCompositeOperation());
           duplicate.setHidden(layer.isHidden());
           duplicate.move(offset.x, offset.y);
         }, true);
+        this.changed = true;
+        this.ribbonHistoryPanel.saveHistory("standard,tool");
         this.setSaved(false);
         this.drawCanvas();
         return null;
@@ -416,6 +416,8 @@ class Z4Canvas extends JSComponent {
       document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ") .z4layerpreview-selector").textContent = Z4LayerPreview.SELECTED_LAYER_CONTENT;
       (document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
     }
+    this.changed = true;
+    this.ribbonHistoryPanel.saveHistory("standard,tool");
     this.setSaved(false);
     this.drawCanvas();
     return index;
