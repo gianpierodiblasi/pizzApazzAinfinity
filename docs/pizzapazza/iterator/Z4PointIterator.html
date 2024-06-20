@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":6,"i2":6,"i3":10,"i4":6,"i5":6,"i6":6,"i7":10};
+var data = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":10,"i5":6,"i6":6,"i7":6,"i8":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -269,20 +269,27 @@ implements <a href="../math/Z4NextableWithTwoParams.html" title="interface in pi
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>abstract int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNextCountOnSTOP()">getNextCountOnSTOP</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the count of next points to draw on STOP action</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../math/Z4Rotation.html" title="class in pizzapazza.math">Z4Rotation</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRotation()">getRotation</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the rotation</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>abstract <a href="Z4PointIteratorType.html" title="enum in pizzapazza.iterator">Z4PointIteratorType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getType()">getType</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the point iterator type</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>abstract boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInfinitePointGenerator()">isInfinitePointGenerator</a></span>()</code></th>
 <td class="colLast">
@@ -290,7 +297,7 @@ implements <a href="../math/Z4NextableWithTwoParams.html" title="interface in pi
  an airbrush)</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>abstract <a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#next(pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">next</a></span>&#8203;(<a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;color,
     <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression)</code></th>
@@ -298,7 +305,7 @@ implements <a href="../math/Z4NextableWithTwoParams.html" title="interface in pi
 <div class="block">Returns the next value</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>simulation.js.$Object</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toJSON()">toJSON</a></span>()</code></th>
 <td class="colLast">
@@ -470,6 +477,20 @@ implements <a href="../math/Z4NextableWithTwoParams.html" title="interface in pi
 <dd><code>progression</code> - The second parameter</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The next value</dd>
+</dl>
+</li>
+</ul>
+<a id="getNextCountOnSTOP()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNextCountOnSTOP</h4>
+<pre class="methodSignature">public abstract&nbsp;int&nbsp;getNextCountOnSTOP()</pre>
+<div class="block">Returns the count of next points to draw on STOP action</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The count of next points to draw on STOP action</dd>
 </dl>
 </li>
 </ul>

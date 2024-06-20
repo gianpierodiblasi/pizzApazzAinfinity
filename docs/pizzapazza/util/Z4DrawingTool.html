@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -225,49 +225,56 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 </td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNextCountOnSTOP()">getNextCountOnSTOP</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the count of next points to draw on STOP action</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../painter/Z4Painter.html" title="class in pizzapazza.painter">Z4Painter</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPainter()">getPainter</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the painter</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../iterator/Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPointIterator()">getPointIterator</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the point iterator</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getProgression()">getProgression</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the color progression</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSpatioTemporalColor()">getSpatioTemporalColor</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the spatio-temporal color</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInfinitePointGenerator()">isInfinitePointGenerator</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Checks if this Z4PointIterator is an infinite point generator (for example
+<div class="block">Checks if the Z4PointIterator is an infinite point generator (for example
  an airbrush)</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#next()">next</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the next value</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>simulation.js.$Object</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toJSON()">toJSON</a></span>()</code></th>
 <td class="colLast">
@@ -438,6 +445,20 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 </dl>
 </li>
 </ul>
+<a id="getNextCountOnSTOP()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNextCountOnSTOP</h4>
+<pre class="methodSignature">public&nbsp;int&nbsp;getNextCountOnSTOP()</pre>
+<div class="block">Returns the count of next points to draw on STOP action</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The count of next points to draw on STOP action</dd>
+</dl>
+</li>
+</ul>
 <a id="isInfinitePointGenerator()">
 <!--   -->
 </a>
@@ -445,11 +466,11 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 <li class="blockList">
 <h4>isInfinitePointGenerator</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isInfinitePointGenerator()</pre>
-<div class="block">Checks if this Z4PointIterator is an infinite point generator (for example
+<div class="block">Checks if the Z4PointIterator is an infinite point generator (for example
  an airbrush)</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if this Z4PointIterator is an infinite point generator, false
+<dd>true if the Z4PointIterator is an infinite point generator, false
  otherwise</dd>
 </dl>
 </li>

@@ -148,15 +148,11 @@ public class Z4Canvas extends JSComponent {
     this.paper.reset();
     this.paper.addLayer(Z4Translations.BACKGROUND_LAYER, width, height, filling, width, height);
 
-    this.width = width;
-    this.height = height;
-    this.mouseManager.setSize(this.getSize());
-
-    this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
+    this.setSize(width, height);
 
     this.ribbonLayerPanel.reset();
-    this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
-    this.mouseManager.setSelectedLayer(this.selectedLayer);
+
+    this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), null, true);
 
     this.ribbonHistoryPanel.resetHistory(() -> {
       this.afterCreate("", width, height);
@@ -209,15 +205,10 @@ public class Z4Canvas extends JSComponent {
       this.paper.reset();
       this.paper.addLayerFromImage(Z4Translations.BACKGROUND_LAYER, image, (int) image.width, (int) image.height);
 
-      this.width = (int) image.width;
-      this.height = (int) image.height;
-      this.mouseManager.setSize(this.getSize());
-
-      this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
+      this.setSize((int) image.width, (int) image.height);
 
       this.ribbonLayerPanel.reset();
-      this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
-      this.mouseManager.setSelectedLayer(this.selectedLayer);
+      this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), null, true);
 
       this.ribbonHistoryPanel.resetHistory(() -> {
         this.afterCreate(projectName, (int) image.width, (int) image.height);
@@ -276,9 +267,7 @@ public class Z4Canvas extends JSComponent {
           this.ribbonLayerPanel.reset();
           this.ribbonHistoryPanel.resetHistory(() -> {
             $Object json = ($Object) JSON.parse("" + str);
-            this.width = json.$get("width");
-            this.height = json.$get("height");
-            this.mouseManager.setSize(this.getSize());
+            this.setSize(json.$get("width"), json.$get("height"));
 
             this.openLayer(zip, json, json.$get("layers"), 0);
           });
@@ -295,14 +284,12 @@ public class Z4Canvas extends JSComponent {
       image.onload = event -> {
         this.paper.addLayerFromImage(layers.$get(index).$get("name"), image, (int) image.width, (int) image.height);
 
-        this.selectedLayer = this.paper.getLayerAt(index);
-        this.selectedLayer.setOpacity(layers.$get(index).$get("opacity"));
-        this.selectedLayer.setCompositeOperation(layers.$get(index).$get("compositeOperation"));
-        this.selectedLayer.setHidden(layers.$get(index).$get("hidden"));
-        this.selectedLayer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
-
-        this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
-        this.mouseManager.setSelectedLayer(this.selectedLayer);
+        this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(index), () -> {
+          this.selectedLayer.setOpacity(layers.$get(index).$get("opacity"));
+          this.selectedLayer.setCompositeOperation(layers.$get(index).$get("compositeOperation"));
+          this.selectedLayer.setHidden(layers.$get(index).$get("hidden"));
+          this.selectedLayer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
+        }, true);
 
         if (index + 1 < layers.length) {
           this.openLayer(zip, json, layers, index + 1);
@@ -361,9 +348,7 @@ public class Z4Canvas extends JSComponent {
     this.paper.reset();
     this.ribbonLayerPanel.reset();
 
-    this.width = json.$get("width");
-    this.height = json.$get("height");
-    this.mouseManager.setSize(this.getSize());
+    this.setSize(json.$get("width"), json.$get("height"));
 
     this.openLayerFromHistory(json, json.$get("layers"), 0);
   }
@@ -374,14 +359,12 @@ public class Z4Canvas extends JSComponent {
     image.onload = event -> {
       this.paper.addLayerFromImage(layers.$get(index).$get("name"), image, (int) image.width, (int) image.height);
 
-      this.selectedLayer = this.paper.getLayerAt(index);
-      this.selectedLayer.setOpacity(layers.$get(index).$get("opacity"));
-      this.selectedLayer.setCompositeOperation(layers.$get(index).$get("compositeOperation"));
-      this.selectedLayer.setHidden(layers.$get(index).$get("hidden"));
-      this.selectedLayer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
-
-      this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
-      this.mouseManager.setSelectedLayer(this.selectedLayer);
+      this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(index), () -> {
+        this.selectedLayer.setOpacity(layers.$get(index).$get("opacity"));
+        this.selectedLayer.setCompositeOperation(layers.$get(index).$get("compositeOperation"));
+        this.selectedLayer.setHidden(layers.$get(index).$get("hidden"));
+        this.selectedLayer.move(layers.$get(index).$get("offsetX"), layers.$get(index).$get("offsetY"));
+      }, true);
 
       if (index + 1 < layers.length) {
         this.openLayerFromHistory(json, layers, index + 1);
@@ -689,10 +672,7 @@ public class Z4Canvas extends JSComponent {
     this.changed = true;
     this.ribbonHistoryPanel.saveHistory("standard,tool");
 
-    this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
-
-    this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
-    this.mouseManager.setSelectedLayer(this.selectedLayer);
+    this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), null, true);
 
     this.setSaved(false);
   }
@@ -710,14 +690,12 @@ public class Z4Canvas extends JSComponent {
       image.onload = event -> {
         this.paper.addLayerFromImage(this.findLayerName(), image, this.width, this.height);
 
-        this.selectedLayer = this.paper.getLayerAt(this.getLayersCount() - 1);
-        this.selectedLayer.setOpacity(layer.getOpacity());
-        this.selectedLayer.setCompositeOperation(layer.getCompositeOperation());
-        this.selectedLayer.setHidden(layer.isHidden());
-        this.selectedLayer.move(offset.x, offset.y);
-
-        this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
-        this.mouseManager.setSelectedLayer(this.selectedLayer);
+        this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), () -> {
+          this.selectedLayer.setOpacity(layer.getOpacity());
+          this.selectedLayer.setCompositeOperation(layer.getCompositeOperation());
+          this.selectedLayer.setHidden(layer.isHidden());
+          this.selectedLayer.move(offset.x, offset.y);
+        }, true);
 
         this.setSaved(false);
         this.drawCanvas();
@@ -739,8 +717,7 @@ public class Z4Canvas extends JSComponent {
 
     if (this.selectedLayer == layer) {
       int count = this.getLayersCount();
-      this.selectedLayer = this.paper.getLayerAt(count - 1);
-      this.mouseManager.setSelectedLayer(this.selectedLayer);
+      this.setSelectedLayer(this.paper.getLayerAt(count - 1));
 
       document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ") .z4layerpreview-selector").textContent = Z4LayerPreview.SELECTED_LAYER_CONTENT;
       ((HTMLElement) document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
@@ -793,8 +770,20 @@ public class Z4Canvas extends JSComponent {
    * @param selectedLayer The selected layer
    */
   public void setSelectedLayer(Z4Layer selectedLayer) {
+    this.setSelectedLayerAndAddLayerPreview(selectedLayer, null, false);
+  }
+
+  private void setSelectedLayerAndAddLayerPreview(Z4Layer selectedLayer, $Apply_0_Void apply, boolean add) {
     this.selectedLayer = selectedLayer;
     this.mouseManager.setSelectedLayer(this.selectedLayer);
+
+    if ($exists(apply)) {
+      apply.$apply();
+    }
+
+    if (add) {
+      this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
+    }
   }
 
   /**
@@ -822,6 +811,12 @@ public class Z4Canvas extends JSComponent {
    */
   public FileSystemFileHandle getHandle() {
     return this.handle;
+  }
+
+  private void setSize(int width, int height) {
+    this.width = width;
+    this.height = height;
+    this.mouseManager.setSize(this.getSize());
   }
 
   /**

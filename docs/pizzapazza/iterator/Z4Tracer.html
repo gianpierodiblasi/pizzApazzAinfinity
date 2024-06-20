@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
+var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -268,48 +268,55 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 </td>
 </tr>
 <tr id="i6" class="altColor">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNextCountOnSTOP()">getNextCountOnSTOP</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the count of next points to draw on STOP action</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPush()">getPush</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the push</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRelease()">getRelease</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the release</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStep()">getStep</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the step</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSustain()">getSustain</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the sustain</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="Z4PointIteratorType.html" title="enum in pizzapazza.iterator">Z4PointIteratorType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getType()">getType</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the point iterator type</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isEndlessSustain()">isEndlessSustain</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Checks if the sustain is endless</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInfinitePointGenerator()">isInfinitePointGenerator</a></span>()</code></th>
 <td class="colLast">
@@ -317,7 +324,7 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
  an airbrush)</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#next(pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">next</a></span>&#8203;(<a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;color,
     <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression)</code></th>
@@ -325,7 +332,7 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <div class="block">Returns the next value</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>simulation.js.$Object</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toJSON()">toJSON</a></span>()</code></th>
 <td class="colLast">
@@ -560,6 +567,23 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <dd><code>progression</code> - The second parameter</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The next value</dd>
+</dl>
+</li>
+</ul>
+<a id="getNextCountOnSTOP()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNextCountOnSTOP</h4>
+<pre class="methodSignature">public&nbsp;int&nbsp;getNextCountOnSTOP()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Z4PointIterator.html#getNextCountOnSTOP()">Z4PointIterator</a></code></span></div>
+<div class="block">Returns the count of next points to draw on STOP action</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Z4PointIterator.html#getNextCountOnSTOP()">getNextCountOnSTOP</a></code>&nbsp;in class&nbsp;<code><a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The count of next points to draw on STOP action</dd>
 </dl>
 </li>
 </ul>

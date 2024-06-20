@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -348,6 +348,17 @@ extends java.lang.Object</pre>
 <div class="block">Rotates a point by an angle</div>
 </td>
 </tr>
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>static <a href="Z4Point.html" title="class in pizzapazza.math">Z4Point</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rotoTranslate(double,double,double,double,double)">rotoTranslate</a></span>&#8203;(double&nbsp;x,
+             double&nbsp;y,
+             double&nbsp;angle,
+             double&nbsp;tx,
+             double&nbsp;ty)</code></th>
+<td class="colLast">
+<div class="block">Rotates a point by an angle and then translates it</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -638,6 +649,30 @@ extends java.lang.Object</pre>
 <dd><code>x</code> - The x-axis coordinate of the point</dd>
 <dd><code>y</code> - The y-axis coordinate of the point</dd>
 <dd><code>angle</code> - The angle (in radians)</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The rotated point</dd>
+</dl>
+</li>
+</ul>
+<a id="rotoTranslate(double,double,double,double,double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>rotoTranslate</h4>
+<pre class="methodSignature">public static&nbsp;<a href="Z4Point.html" title="class in pizzapazza.math">Z4Point</a>&nbsp;rotoTranslate&#8203;(double&nbsp;x,
+                                    double&nbsp;y,
+                                    double&nbsp;angle,
+                                    double&nbsp;tx,
+                                    double&nbsp;ty)</pre>
+<div class="block">Rotates a point by an angle and then translates it</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>x</code> - The x-axis coordinate of the point</dd>
+<dd><code>y</code> - The y-axis coordinate of the point</dd>
+<dd><code>angle</code> - The angle (in radians)</dd>
+<dd><code>tx</code> - The x-axis translation</dd>
+<dd><code>ty</code> - The y-axis translation</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The rotated point</dd>
 </dl>
