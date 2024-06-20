@@ -23,6 +23,15 @@ class Z4CanvasIOManager {
   }
 
   /**
+   * Sets the size
+   *
+   * @param size The size
+   */
+   setSize(size) {
+    this.size = size;
+  }
+
+  /**
    * Exports a canvas project to an image file
    *
    * @param filename The file name

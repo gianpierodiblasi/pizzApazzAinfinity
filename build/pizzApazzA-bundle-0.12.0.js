@@ -2410,6 +2410,7 @@ class Z4Canvas extends JSComponent {
     this.width = width;
     this.height = height;
     this.mouseManager.setSize(this.getSize());
+    this.ioManager.setSize(this.getSize());
   }
 
   /**
@@ -2545,6 +2546,15 @@ class Z4CanvasIOManager {
   constructor(canvas, paper) {
     this.canvas = canvas;
     this.paper = paper;
+  }
+
+  /**
+   * Sets the size
+   *
+   * @param size The size
+   */
+   setSize(size) {
+    this.size = size;
   }
 
   /**

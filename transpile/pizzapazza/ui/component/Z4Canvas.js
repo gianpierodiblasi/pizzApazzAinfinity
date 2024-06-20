@@ -681,6 +681,7 @@ class Z4Canvas extends JSComponent {
     this.width = width;
     this.height = height;
     this.mouseManager.setSize(this.getSize());
+    this.ioManager.setSize(this.getSize());
   }
 
   /**
