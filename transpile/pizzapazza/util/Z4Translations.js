@@ -200,6 +200,18 @@ class Z4Translations {
 
   static  DELTA_Y = "";
 
+  static  VISIBLE = "";
+
+  static  SELECTED = "";
+
+  static  MOVE_UP = "";
+
+  static  MOVE_DOWN = "";
+
+  static  MOVE_BOTTOM = "";
+
+  static  MOVE_TOP = "";
+
   // Color
   static  COLOR = "";
 
@@ -448,6 +460,12 @@ class Z4Translations {
     Z4Translations.SHADOW = "Shadow";
     Z4Translations.DELTA_X = "Delta X";
     Z4Translations.DELTA_Y = "Delta Y";
+    Z4Translations.VISIBLE = "Visible";
+    Z4Translations.SELECTED = "Selected";
+    Z4Translations.MOVE_UP = "Move Up";
+    Z4Translations.MOVE_DOWN = "Move Down";
+    Z4Translations.MOVE_BOTTOM = "Move to Bottom";
+    Z4Translations.MOVE_TOP = "Move to Top";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -621,6 +639,12 @@ class Z4Translations {
     Z4Translations.SHADOW = "Ombra";
     Z4Translations.DELTA_X = "Delta X";
     Z4Translations.DELTA_Y = "Delta Y";
+    Z4Translations.VISIBLE = "Visibile";
+    Z4Translations.SELECTED = "Selezionato";
+    Z4Translations.MOVE_UP = "Muovi Su";
+    Z4Translations.MOVE_DOWN = "Muovi Gi\u00F9";
+    Z4Translations.MOVE_BOTTOM = "Muovi in Fondo";
+    Z4Translations.MOVE_TOP = "Muovi in Cima";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";

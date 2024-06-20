@@ -13,6 +13,10 @@
   padding: 1px 2px;
 }
 
+.z4historypreview summary .z4historypreview-selector {
+  font-family: monospace;
+}
+
 .z4historypreview .z4historypreview-editor canvas {
   border: 1px solid var(--main-action-bgcolor);
   background-image: url(../image/chessboard.png);

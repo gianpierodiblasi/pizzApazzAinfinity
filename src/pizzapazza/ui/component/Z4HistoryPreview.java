@@ -11,6 +11,7 @@ import javascript.swing.JSComponent;
 import javascript.swing.JSDropDown;
 import javascript.swing.JSPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
+import pizzapazza.util.Z4Translations;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
 import simulation.js.$Object;
@@ -42,12 +43,12 @@ public class Z4HistoryPreview extends JSDropDown {
   /**
    * The text content for the selected button
    */
-  public final static String SELECTED_HISTORY_CONTENT = "\u2611";
+  public final static String SELECTED_HISTORY_CONTENT = "x";
 
   /**
    * The text content for the unselected button
    */
-  public final static String UNSELECTED_HISTORY_CONTENT = "\u2610";
+  public final static String UNSELECTED_HISTORY_CONTENT = "-";
 
   /**
    * Creates the object
@@ -64,6 +65,7 @@ public class Z4HistoryPreview extends JSDropDown {
 
     JSButton selector = new JSButton();
     selector.setText(Z4HistoryPreview.UNSELECTED_HISTORY_CONTENT);
+    selector.setTooltip(Z4Translations.SELECTED);
     selector.cssAddClass("z4historypreview-selector");
     selector.getStyle().color = "var(--main-action-bgcolor)";
     selector.setContentAreaFilled(false);

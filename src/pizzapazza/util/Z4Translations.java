@@ -125,6 +125,12 @@ public class Z4Translations {
   public static String SHADOW = "";
   public static String DELTA_X = "";
   public static String DELTA_Y = "";
+  public static String VISIBLE = "";
+  public static String SELECTED = "";
+  public static String MOVE_UP = "";
+  public static String MOVE_DOWN = "";
+  public static String MOVE_BOTTOM = "";
+  public static String MOVE_TOP = "";
 
   // Color
   public static String COLOR = "";
@@ -328,6 +334,12 @@ public class Z4Translations {
     Z4Translations.SHADOW = "Shadow";
     Z4Translations.DELTA_X = "Delta X";
     Z4Translations.DELTA_Y = "Delta Y";
+    Z4Translations.VISIBLE = "Visible";
+    Z4Translations.SELECTED = "Selected";
+    Z4Translations.MOVE_UP = "Move Up";
+    Z4Translations.MOVE_DOWN = "Move Down";
+    Z4Translations.MOVE_BOTTOM = "Move to Bottom";
+    Z4Translations.MOVE_TOP = "Move to Top";
 
     // Color
     Z4Translations.COLOR = "Color";
@@ -515,6 +527,12 @@ public class Z4Translations {
     Z4Translations.SHADOW = "Ombra";
     Z4Translations.DELTA_X = "Delta X";
     Z4Translations.DELTA_Y = "Delta Y";
+    Z4Translations.VISIBLE = "Visibile";
+    Z4Translations.SELECTED = "Selezionato";
+    Z4Translations.MOVE_UP = "Muovi Su";
+    Z4Translations.MOVE_DOWN = "Muovi Gi\u00F9";
+    Z4Translations.MOVE_BOTTOM = "Muovi in Fondo";
+    Z4Translations.MOVE_TOP = "Muovi in Cima";
 
     // Color
     Z4Translations.COLOR = "Colore";

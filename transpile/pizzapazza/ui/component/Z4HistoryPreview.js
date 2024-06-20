@@ -34,12 +34,12 @@ class Z4HistoryPreview extends JSDropDown {
   /**
    * The text content for the selected button
    */
-  static  SELECTED_HISTORY_CONTENT = "\u2611";
+  static  SELECTED_HISTORY_CONTENT = "x";
 
   /**
    * The text content for the unselected button
    */
-  static  UNSELECTED_HISTORY_CONTENT = "\u2610";
+  static  UNSELECTED_HISTORY_CONTENT = "-";
 
   /**
    * Creates the object
@@ -53,6 +53,7 @@ class Z4HistoryPreview extends JSDropDown {
     this.summary.add(this.preview, new GBC(0, 0));
     let selector = new JSButton();
     selector.setText(Z4HistoryPreview.UNSELECTED_HISTORY_CONTENT);
+    selector.setTooltip(Z4Translations.SELECTED);
     selector.cssAddClass("z4historypreview-selector");
     selector.getStyle().color = "var(--main-action-bgcolor)";
     selector.setContentAreaFilled(false);

@@ -50,17 +50,17 @@ class Z4LayerPreview extends JSDropDown {
   /**
    * The text content for the selected button
    */
-  static  SELECTED_LAYER_CONTENT = "\u2611";
+  static  SELECTED_LAYER_CONTENT = "x";
 
   /**
    * The text content for the unselected button
    */
-  static  UNSELECTED_LAYER_CONTENT = "\u2610";
+  static  UNSELECTED_LAYER_CONTENT = "-";
 
   /**
    * The text content for the visible button
    */
-  static  VISIBLE_LAYER_CONTENT = "\uD83D\uDC41";
+  static  VISIBLE_LAYER_CONTENT = "#";
 
   static  PREVIEW_SIZE = 50;
 
@@ -83,6 +83,7 @@ class Z4LayerPreview extends JSDropDown {
     this.summary.add(this.name, new GBC(0, 0).w(3));
     this.summary.add(this.preview, new GBC(1, 1).h(3).f(GBC.BOTH));
     this.eye.setText(Z4LayerPreview.VISIBLE_LAYER_CONTENT);
+    this.eye.setTooltip(Z4Translations.VISIBLE);
     this.eye.setContentAreaFilled(false);
     this.eye.addActionListener(event => {
       let b = !this.layer.isHidden();
@@ -99,6 +100,7 @@ class Z4LayerPreview extends JSDropDown {
     this.summary.add(this.eye, new GBC(0, 1).f(GBC.BOTH).i(0, 0, 0, 2));
     let selector = new JSButton();
     selector.setText(Z4LayerPreview.SELECTED_LAYER_CONTENT);
+    selector.setTooltip(Z4Translations.SELECTED);
     selector.cssAddClass("z4layerpreview-selector");
     selector.getStyle().color = "var(--main-action-bgcolor)";
     selector.setContentAreaFilled(false);
@@ -110,24 +112,28 @@ class Z4LayerPreview extends JSDropDown {
     this.summary.add(selector, new GBC(2, 1).f(GBC.BOTH).i(0, 2, 0, 0));
     let button = new JSButton();
     button.setText("\uD83E\uDC08");
+    button.setTooltip(Z4Translations.MOVE_DOWN);
     button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
     button.addActionListener(event => this.move(-1));
     this.summary.add(button, new GBC(0, 2).f(GBC.BOTH).i(0, 0, 0, 2));
     button = new JSButton();
     button.setText("\u2BEC");
+    button.setTooltip(Z4Translations.MOVE_BOTTOM);
     button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
     button.addActionListener(event => this.ribbonLayerPanel.moveLayer(this, this.layer, 0));
     this.summary.add(button, new GBC(0, 3).f(GBC.BOTH).i(0, 0, 0, 2));
     button = new JSButton();
     button.setText("\uD83E\uDC0A");
+    button.setTooltip(Z4Translations.MOVE_UP);
     button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
     button.addActionListener(event => this.move(2));
     this.summary.add(button, new GBC(2, 2).f(GBC.BOTH).i(0, 2, 0, 0));
     button = new JSButton();
     button.setText("\u2BEE");
+    button.setTooltip(Z4Translations.MOVE_TOP);
     button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
     button.addActionListener(event => this.ribbonLayerPanel.moveLayer(this, this.layer, this.canvas.getLayersCount()));

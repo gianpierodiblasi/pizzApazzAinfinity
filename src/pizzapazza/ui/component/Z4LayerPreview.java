@@ -66,17 +66,17 @@ public class Z4LayerPreview extends JSDropDown {
   /**
    * The text content for the selected button
    */
-  public final static String SELECTED_LAYER_CONTENT = "\u2611";
+  public final static String SELECTED_LAYER_CONTENT = "x";
 
   /**
    * The text content for the unselected button
    */
-  public final static String UNSELECTED_LAYER_CONTENT = "\u2610";
+  public final static String UNSELECTED_LAYER_CONTENT = "-";
 
   /**
    * The text content for the visible button
    */
-  public final static String VISIBLE_LAYER_CONTENT = "\uD83D\uDC41";
+  public final static String VISIBLE_LAYER_CONTENT = "#";
 
   private final static int PREVIEW_SIZE = 50;
 
@@ -106,6 +106,7 @@ public class Z4LayerPreview extends JSDropDown {
     this.summary.add(this.preview, new GBC(1, 1).h(3).f(GBC.BOTH));
 
     this.eye.setText(Z4LayerPreview.VISIBLE_LAYER_CONTENT);
+    this.eye.setTooltip(Z4Translations.VISIBLE);
     this.eye.setContentAreaFilled(false);
     this.eye.addActionListener(event -> {
       boolean b = !this.layer.isHidden();
@@ -124,6 +125,7 @@ public class Z4LayerPreview extends JSDropDown {
 
     JSButton selector = new JSButton();
     selector.setText(Z4LayerPreview.SELECTED_LAYER_CONTENT);
+    selector.setTooltip(Z4Translations.SELECTED);
     selector.cssAddClass("z4layerpreview-selector");
     selector.getStyle().color = "var(--main-action-bgcolor)";
     selector.setContentAreaFilled(false);
@@ -136,6 +138,7 @@ public class Z4LayerPreview extends JSDropDown {
 
     JSButton button = new JSButton();
     button.setText("\uD83E\uDC08");
+    button.setTooltip(Z4Translations.MOVE_DOWN);
     button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
     button.addActionListener(event -> this.move(-1));
@@ -143,6 +146,7 @@ public class Z4LayerPreview extends JSDropDown {
 
     button = new JSButton();
     button.setText("\u2BEC");
+    button.setTooltip(Z4Translations.MOVE_BOTTOM);
     button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
     button.addActionListener(event -> this.ribbonLayerPanel.moveLayer(this, this.layer, 0));
@@ -150,6 +154,7 @@ public class Z4LayerPreview extends JSDropDown {
 
     button = new JSButton();
     button.setText("\uD83E\uDC0A");
+    button.setTooltip(Z4Translations.MOVE_UP);
     button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
     button.addActionListener(event -> this.move(2));
@@ -157,6 +162,7 @@ public class Z4LayerPreview extends JSDropDown {
 
     button = new JSButton();
     button.setText("\u2BEE");
+    button.setTooltip(Z4Translations.MOVE_TOP);
     button.getStyle().color = "var(--main-action-bgcolor)";
     button.setContentAreaFilled(false);
     button.addActionListener(event -> this.ribbonLayerPanel.moveLayer(this, this.layer, this.canvas.getLayersCount()));

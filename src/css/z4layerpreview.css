@@ -22,6 +22,10 @@
   max-height: 15px;
 }
 
+.z4layerpreview summary .z4layerpreview-selector {
+  font-family: monospace;
+}
+
 .z4layerpreview .z4layerpreview-editor[offset=true], .z4layerpreview .z4layerpreview-editor[offset=true] * {
   background: transparent;
 }
