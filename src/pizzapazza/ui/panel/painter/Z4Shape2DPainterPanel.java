@@ -77,10 +77,10 @@ public class Z4Shape2DPainterPanel extends Z4PainterPanel<Z4Shape2DPainter> {
     panel.add(this.height, new GBC(0, 1).w(3).a(GBC.WEST));
 
     Z4UI.addLabel(panel, Z4Translations.VERTICES, new GBC(0, 2).wx(1).a(GBC.WEST));
-    
+
     this.regular.setText(Z4Translations.REGULAR);
     this.regular.addActionListener(event -> this.onshape2dchange(false, null, null));
-    panel.add(this.regular, new GBC(1, 2).a(GBC.EAST));
+    panel.add(this.regular, new GBC(1, 2).a(GBC.EAST).i(0, 0, 0, 5));
 
     this.star.setText(Z4Translations.STAR);
     this.star.addActionListener(event -> this.onshape2dchange(false, null, null));
