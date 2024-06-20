@@ -1919,35 +1919,6 @@ class Z4Canvas extends JSComponent {
     this.ioManager.openProjectFromFile(file);
   }
 
-   jsonToHistory(zip, json, index, previousCurrentKey, newCurrentKey) {
-    let history = json["history"];
-    let key = history[index];
-    let folder = "history/history_" + key + "/";
-    zip.file(folder + "manifest.json").async("string", null).then(str => {
-      let layerJSON = JSON.parse("" + str);
-      this.layerToHistory(zip, json, index, previousCurrentKey, newCurrentKey, folder, layerJSON, 0, key);
-    });
-  }
-
-   layerToHistory(zip, json, index, previousCurrentKey, newCurrentKey, folder, layerJSON, layerIndex, historyKey) {
-    zip.file(folder + "layers/layer" + layerIndex + ".png").async("blob", metadata => Z4UI.setPleaseWaitProgressBarValue(metadata["percent"])).then(blob => {
-      let layers = layerJSON["layers"];
-      let layer = layers[layerIndex];
-      layer["data"] = blob;
-      if (layerIndex + 1 < layers.length) {
-        this.layerToHistory(zip, json, index, previousCurrentKey, newCurrentKey, folder, layerJSON, layerIndex + 1, historyKey);
-      } else if (index + 1 < (json["history"]).length) {
-        this.ribbonHistoryPanel.addHistory(layerJSON, currentKey => this.jsonToHistory(zip, json, index + 1, previousCurrentKey, previousCurrentKey === historyKey ? currentKey : newCurrentKey), true);
-      } else {
-        this.ribbonHistoryPanel.addHistory(layerJSON, currentKey => {
-          this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey === historyKey ? currentKey : newCurrentKey);
-          this.afterCreate(json["projectName"], json["width"], json["height"]);
-          Z4UI.pleaseWaitCompleted();
-        }, true);
-      }
-    });
-  }
-
   /**
    * Opens an history
    *
