@@ -97,7 +97,7 @@ public class Z4CanvasIOManager {
       this.createFromFile(file);
     });
   }
-  
+
   /**
    * Creates a new canvas project from an image file
    *
@@ -108,7 +108,7 @@ public class Z4CanvasIOManager {
     fileReader.onload = event -> this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), (String) fileReader.result);
     fileReader.readAsDataURL(file);
   }
-  
+
   /**
    * Creates a new canvas project from an image in the clipboard
    */
@@ -123,7 +123,7 @@ public class Z4CanvasIOManager {
       });
     });
   }
-  
+
   private Object createFromURL(String projectName, String url) {
     $Image image = ($Image) document.createElement("img");
 
@@ -421,5 +421,75 @@ public class Z4CanvasIOManager {
         apply.$apply(blob);
       });
     });
+  }
+
+  /**
+   * Adds a canvas layer from an image file
+   *
+   * @param handle The file handle
+   */
+  public void addLayerFromHandle(FileSystemFileHandle handle) {
+    handle.getFile().then(file -> {
+      this.addLayerFromFile(file);
+    });
+  }
+
+  /**
+   * Adds a canvas layer from an image file
+   *
+   * @param file The file
+   */
+  public void addLayerFromFile(File file) {
+    String name = file.name.substring(0, file.name.lastIndexOf('.'));
+
+    FileReader fileReader = new FileReader();
+    fileReader.onload = event -> this.addLayerFromURL(name, (String) fileReader.result);
+    fileReader.readAsDataURL(file);
+  }
+
+  /**
+   * Adds a canvas layer from an image in the clipboard
+   */
+  public void addLayerFromClipboard() {
+    navigator.clipboard.read().then(items -> {
+      items.forEach(item -> {
+        String imageType = item.types.find((type, index, array) -> type.startsWith("image/"));
+
+        item.getType(imageType).then(blob -> {
+          this.addLayerFromURL(this.canvas.findLayerName(), URL.createObjectURL(blob));
+        });
+      });
+    });
+  }
+
+  /**
+   * Merges an array of layers in the canvas
+   *
+   * @param layers The layers
+   */
+  public void mergeLayers(Array<Z4Layer> layers) {
+    $OffscreenCanvas offscreen = new $OffscreenCanvas(this.size.width, this.size.height);
+    $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
+    layers.forEach(layer -> layer.draw(offscreenCtx, false, false));
+
+    $Object options = new $Object();
+    options.$set("type", "image/png");
+    offscreen.convertToBlob(options).then(converted -> {
+      this.addLayerFromURL(this.canvas.findLayerName(), URL.createObjectURL(converted));
+    });
+  }
+
+  private Object addLayerFromURL(String name, String url) {
+    $Image image = ($Image) document.createElement("img");
+
+    image.onload = event -> {
+      this.paper.addLayerFromImage(name, image, this.size.width, this.size.height);
+      this.canvas.afterAddLayer();
+      this.canvas.drawCanvas();
+      return null;
+    };
+
+    image.src = url;
+    return null;
   }
 }

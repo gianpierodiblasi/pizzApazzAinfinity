@@ -1,7 +1,6 @@
 package pizzapazza.ui.component;
 
 import def.dom.File;
-import def.dom.FileReader;
 import static def.dom.Globals.document;
 import def.dom.HTMLElement;
 import def.dom.KeyboardEvent;
@@ -24,11 +23,9 @@ import pizzapazza.util.Z4Translations;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
-import simulation.dom.$OffscreenCanvas;
 import simulation.js.$Apply_0_Void;
 import simulation.js.$Apply_1_Void;
 import static simulation.js.$Globals.$exists;
-import static simulation.js.$Globals.navigator;
 import simulation.js.$Object;
 import simulation.jszip.$JSZip;
 
@@ -181,7 +178,7 @@ public class Z4Canvas extends JSComponent {
   }
 
   /**
-   * The method called after creaete
+   * The method called after create
    *
    * @param projectName The project name
    * @param width The width
@@ -395,9 +392,7 @@ public class Z4Canvas extends JSComponent {
    * @param handle The file handle
    */
   public void addLayerFromHandle(FileSystemFileHandle handle) {
-    handle.getFile().then(file -> {
-      this.addLayerFromFile(file);
-    });
+    this.ioManager.addLayerFromHandle(handle);
   }
 
   /**
@@ -406,59 +401,20 @@ public class Z4Canvas extends JSComponent {
    * @param file The file
    */
   public void addLayerFromFile(File file) {
-    String name = file.name.substring(0, file.name.lastIndexOf('.'));
-
-    FileReader fileReader = new FileReader();
-    fileReader.onload = event -> this.addLayerFromURL(name, (String) fileReader.result);
-    fileReader.readAsDataURL(file);
+    this.ioManager.addLayerFromFile(file);
   }
 
   /**
    * Adds a layer from an image in the clipboard
    */
   public void addLayerFromClipboard() {
-    navigator.clipboard.read().then(items -> {
-      items.forEach(item -> {
-        String imageType = item.types.find((type, index, array) -> type.startsWith("image/"));
-
-        item.getType(imageType).then(blob -> {
-          this.addLayerFromURL(this.findLayerName(), URL.createObjectURL(blob));
-        });
-      });
-    });
+    this.ioManager.addLayerFromClipboard();
   }
 
-  @SuppressWarnings("StringEquality")
-  private String findLayerName() {
-    int counter = 0;
-    String found = "";
-    while (!$exists(found)) {
-      found = Z4Translations.LAYER + "_" + counter;
-      for (int index = 0; index < this.getLayersCount(); index++) {
-        if (found == this.paper.getLayerAt(index).getName()) {
-          found = "";
-        }
-      }
-      counter++;
-    }
-    return found;
-  }
-
-  private Object addLayerFromURL(String name, String url) {
-    $Image image = ($Image) document.createElement("img");
-
-    image.onload = event -> {
-      this.paper.addLayerFromImage(name, image, this.width, this.height);
-      this.afterAddLayer();
-      this.drawCanvas();
-      return null;
-    };
-
-    image.src = url;
-    return null;
-  }
-
-  private void afterAddLayer() {
+  /**
+   * The method called after adding a layer
+   */
+  public void afterAddLayer() {
     this.changed = true;
     this.ribbonHistoryPanel.saveHistory("standard,tool");
 
@@ -543,15 +499,28 @@ public class Z4Canvas extends JSComponent {
    * @param layers The layers
    */
   public void mergeLayers(Array<Z4Layer> layers) {
-    $OffscreenCanvas offscreen = new $OffscreenCanvas(this.width, this.height);
-    $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
-    layers.forEach(layer -> layer.draw(offscreenCtx, false, false));
+    this.ioManager.mergeLayers(layers);
+  }
 
-    $Object options = new $Object();
-    options.$set("type", "image/png");
-    offscreen.convertToBlob(options).then(converted -> {
-      this.addLayerFromURL(this.findLayerName(), URL.createObjectURL(converted));
-    });
+  /**
+   * Finds a layer name
+   *
+   * @return The layer name
+   */
+  @SuppressWarnings("StringEquality")
+  public String findLayerName() {
+    int counter = 0;
+    String found = "";
+    while (!$exists(found)) {
+      found = Z4Translations.LAYER + "_" + counter;
+      for (int index = 0; index < this.getLayersCount(); index++) {
+        if (found == this.paper.getLayerAt(index).getName()) {
+          found = "";
+        }
+      }
+      counter++;
+    }
+    return found;
   }
 
   /**

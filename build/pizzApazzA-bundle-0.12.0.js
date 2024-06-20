@@ -1880,7 +1880,7 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
-   * The method called after creaete
+   * The method called after create
    *
    * @param projectName The project name
    * @param width The width
@@ -2075,9 +2075,7 @@ class Z4Canvas extends JSComponent {
    * @param handle The file handle
    */
    addLayerFromHandle(handle) {
-    handle.getFile().then(file => {
-      this.addLayerFromFile(file);
-    });
+    this.ioManager.addLayerFromHandle(handle);
   }
 
   /**
@@ -2086,53 +2084,19 @@ class Z4Canvas extends JSComponent {
    * @param file The file
    */
    addLayerFromFile(file) {
-    let name = file.name.substring(0, file.name.lastIndexOf('.'));
-    let fileReader = new FileReader();
-    fileReader.onload = event => this.addLayerFromURL(name, fileReader.result);
-    fileReader.readAsDataURL(file);
+    this.ioManager.addLayerFromFile(file);
   }
 
   /**
    * Adds a layer from an image in the clipboard
    */
    addLayerFromClipboard() {
-    navigator.clipboard.read().then(items => {
-      items.forEach(item => {
-        let imageType = item.types.find((type, index, array) => type.startsWith("image/"));
-        item.getType(imageType).then(blob => {
-          this.addLayerFromURL(this.findLayerName(), URL.createObjectURL(blob));
-        });
-      });
-    });
+    this.ioManager.addLayerFromClipboard();
   }
 
-   findLayerName() {
-    let counter = 0;
-    let found = "";
-    while (!found) {
-      found = Z4Translations.LAYER + "_" + counter;
-      for (let index = 0; index < this.getLayersCount(); index++) {
-        if (found === this.paper.getLayerAt(index).getName()) {
-          found = "";
-        }
-      }
-      counter++;
-    }
-    return found;
-  }
-
-   addLayerFromURL(name, url) {
-    let image = document.createElement("img");
-    image.onload = event => {
-      this.paper.addLayerFromImage(name, image, this.width, this.height);
-      this.afterAddLayer();
-      this.drawCanvas();
-      return null;
-    };
-    image.src = url;
-    return null;
-  }
-
+  /**
+   * The method called after adding a layer
+   */
    afterAddLayer() {
     this.changed = true;
     this.ribbonHistoryPanel.saveHistory("standard,tool");
@@ -2209,14 +2173,27 @@ class Z4Canvas extends JSComponent {
    * @param layers The layers
    */
    mergeLayers(layers) {
-    let offscreen = new OffscreenCanvas(this.width, this.height);
-    let offscreenCtx = offscreen.getContext("2d");
-    layers.forEach(layer => layer.draw(offscreenCtx, false, false));
-    let options = new Object();
-    options["type"] = "image/png";
-    offscreen.convertToBlob(options).then(converted => {
-      this.addLayerFromURL(this.findLayerName(), URL.createObjectURL(converted));
-    });
+    this.ioManager.mergeLayers(layers);
+  }
+
+  /**
+   * Finds a layer name
+   *
+   * @return The layer name
+   */
+   findLayerName() {
+    let counter = 0;
+    let found = "";
+    while (!found) {
+      found = Z4Translations.LAYER + "_" + counter;
+      for (let index = 0; index < this.getLayersCount(); index++) {
+        if (found === this.paper.getLayerAt(index).getName()) {
+          found = "";
+        }
+      }
+      counter++;
+    }
+    return found;
   }
 
   /**
@@ -2749,6 +2726,71 @@ class Z4CanvasIOManager {
         apply(blob);
       });
     });
+  }
+
+  /**
+   * Adds a canvas layer from an image file
+   *
+   * @param handle The file handle
+   */
+   addLayerFromHandle(handle) {
+    handle.getFile().then(file => {
+      this.addLayerFromFile(file);
+    });
+  }
+
+  /**
+   * Adds a canvas layer from an image file
+   *
+   * @param file The file
+   */
+   addLayerFromFile(file) {
+    let name = file.name.substring(0, file.name.lastIndexOf('.'));
+    let fileReader = new FileReader();
+    fileReader.onload = event => this.addLayerFromURL(name, fileReader.result);
+    fileReader.readAsDataURL(file);
+  }
+
+  /**
+   * Adds a canvas layer from an image in the clipboard
+   */
+   addLayerFromClipboard() {
+    navigator.clipboard.read().then(items => {
+      items.forEach(item => {
+        let imageType = item.types.find((type, index, array) => type.startsWith("image/"));
+        item.getType(imageType).then(blob => {
+          this.addLayerFromURL(this.canvas.findLayerName(), URL.createObjectURL(blob));
+        });
+      });
+    });
+  }
+
+  /**
+   * Merges an array of layers in the canvas
+   *
+   * @param layers The layers
+   */
+   mergeLayers(layers) {
+    let offscreen = new OffscreenCanvas(this.size.width, this.size.height);
+    let offscreenCtx = offscreen.getContext("2d");
+    layers.forEach(layer => layer.draw(offscreenCtx, false, false));
+    let options = new Object();
+    options["type"] = "image/png";
+    offscreen.convertToBlob(options).then(converted => {
+      this.addLayerFromURL(this.canvas.findLayerName(), URL.createObjectURL(converted));
+    });
+  }
+
+   addLayerFromURL(name, url) {
+    let image = document.createElement("img");
+    image.onload = event => {
+      this.paper.addLayerFromImage(name, image, this.size.width, this.size.height);
+      this.canvas.afterAddLayer();
+      this.canvas.drawCanvas();
+      return null;
+    };
+    image.src = url;
+    return null;
   }
 }
 /**

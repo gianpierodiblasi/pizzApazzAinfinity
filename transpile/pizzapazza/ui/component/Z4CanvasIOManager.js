@@ -351,4 +351,69 @@ class Z4CanvasIOManager {
       });
     });
   }
+
+  /**
+   * Adds a canvas layer from an image file
+   *
+   * @param handle The file handle
+   */
+   addLayerFromHandle(handle) {
+    handle.getFile().then(file => {
+      this.addLayerFromFile(file);
+    });
+  }
+
+  /**
+   * Adds a canvas layer from an image file
+   *
+   * @param file The file
+   */
+   addLayerFromFile(file) {
+    let name = file.name.substring(0, file.name.lastIndexOf('.'));
+    let fileReader = new FileReader();
+    fileReader.onload = event => this.addLayerFromURL(name, fileReader.result);
+    fileReader.readAsDataURL(file);
+  }
+
+  /**
+   * Adds a canvas layer from an image in the clipboard
+   */
+   addLayerFromClipboard() {
+    navigator.clipboard.read().then(items => {
+      items.forEach(item => {
+        let imageType = item.types.find((type, index, array) => type.startsWith("image/"));
+        item.getType(imageType).then(blob => {
+          this.addLayerFromURL(this.canvas.findLayerName(), URL.createObjectURL(blob));
+        });
+      });
+    });
+  }
+
+  /**
+   * Merges an array of layers in the canvas
+   *
+   * @param layers The layers
+   */
+   mergeLayers(layers) {
+    let offscreen = new OffscreenCanvas(this.size.width, this.size.height);
+    let offscreenCtx = offscreen.getContext("2d");
+    layers.forEach(layer => layer.draw(offscreenCtx, false, false));
+    let options = new Object();
+    options["type"] = "image/png";
+    offscreen.convertToBlob(options).then(converted => {
+      this.addLayerFromURL(this.canvas.findLayerName(), URL.createObjectURL(converted));
+    });
+  }
+
+   addLayerFromURL(name, url) {
+    let image = document.createElement("img");
+    image.onload = event => {
+      this.paper.addLayerFromImage(name, image, this.size.width, this.size.height);
+      this.canvas.afterAddLayer();
+      this.canvas.drawCanvas();
+      return null;
+    };
+    image.src = url;
+    return null;
+  }
 }
