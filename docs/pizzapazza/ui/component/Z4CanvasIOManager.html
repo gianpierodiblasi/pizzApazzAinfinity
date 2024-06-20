@@ -27,6 +27,12 @@
     catch(err) {
     }
 //-->
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var altColor = "altColor";
+var rowColor = "rowColor";
+var tableTab = "tableTab";
+var activeTableTab = "activeTableTab";
 var pathtoroot = "../../../";
 var useModuleDirectories = true;
 loadScripts(document, 'script');</script>
@@ -95,7 +101,7 @@ loadScripts(document, 'script');</script>
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a id="skip.navbar.top">
@@ -173,6 +179,132 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Summary</h3>
+<table class="memberSummary">
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Method</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr id="i0" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addLayerFromClipboard()">addLayerFromClipboard</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Adds a canvas layer from an image in the clipboard</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addLayerFromFile(def.dom.File)">addLayerFromFile</a></span>&#8203;(def.dom.File&nbsp;file)</code></th>
+<td class="colLast">
+<div class="block">Adds a canvas layer from an image file</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addLayerFromHandle(javascript.util.fsa.FileSystemFileHandle)">addLayerFromHandle</a></span>&#8203;(javascript.util.fsa.FileSystemFileHandle&nbsp;handle)</code></th>
+<td class="colLast">
+<div class="block">Adds a canvas layer from an image file</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFromClipboard()">createFromClipboard</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Creates a new canvas project from an image in the clipboard</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFromFile(def.dom.File)">createFromFile</a></span>&#8203;(def.dom.File&nbsp;file)</code></th>
+<td class="colLast">
+<div class="block">Creates a new canvas project from an image file</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFromHandle(javascript.util.fsa.FileSystemFileHandle)">createFromHandle</a></span>&#8203;(javascript.util.fsa.FileSystemFileHandle&nbsp;handle)</code></th>
+<td class="colLast">
+<div class="block">Creates a new canvas project from an image file</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#exportToFile(java.lang.String,java.lang.String,double)">exportToFile</a></span>&#8203;(java.lang.String&nbsp;filename,
+            java.lang.String&nbsp;ext,
+            double&nbsp;quality)</code></th>
+<td class="colLast">
+<div class="block">Exports a canvas project to an image file</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#exportToHandle(javascript.util.fsa.FileSystemFileHandle,double)">exportToHandle</a></span>&#8203;(javascript.util.fsa.FileSystemFileHandle&nbsp;handle,
+              double&nbsp;quality)</code></th>
+<td class="colLast">
+<div class="block">Exports a canvas project to an image file</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#mergeLayers(def.js.Array)">mergeLayers</a></span>&#8203;(def.js.Array&lt;<a href="../../util/Z4Layer.html" title="class in pizzapazza.util">Z4Layer</a>&gt;&nbsp;layers)</code></th>
+<td class="colLast">
+<div class="block">Merges an array of layers in the canvas</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openProjectFromFile(def.dom.File)">openProjectFromFile</a></span>&#8203;(def.dom.File&nbsp;file)</code></th>
+<td class="colLast">
+<div class="block">Opens a canvas project</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openProjectFromHandle(javascript.util.fsa.FileSystemFileHandle)">openProjectFromHandle</a></span>&#8203;(javascript.util.fsa.FileSystemFileHandle&nbsp;handle)</code></th>
+<td class="colLast">
+<div class="block">Opens a canvas project</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveProjectToFile(java.lang.String,simulation.js.$Apply_0_Void)">saveProjectToFile</a></span>&#8203;(java.lang.String&nbsp;projectName,
+                 simulation.js.$Apply_0_Void&nbsp;apply)</code></th>
+<td class="colLast">
+<div class="block">Saves a canvas project</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveProjectToHandle(javascript.util.fsa.FileSystemFileHandle,simulation.js.$Apply_0_Void)">saveProjectToHandle</a></span>&#8203;(javascript.util.fsa.FileSystemFileHandle&nbsp;handle,
+                   simulation.js.$Apply_0_Void&nbsp;apply)</code></th>
+<td class="colLast">
+<div class="block">Saves a canvas project</div>
+</td>
+</tr>
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setRibbonPanels(pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel,pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel)">setRibbonPanels</a></span>&#8203;(<a href="../panel/ribbon/Z4RibbonLayerPanel.html" title="class in pizzapazza.ui.panel.ribbon">Z4RibbonLayerPanel</a>&nbsp;ribbonLayerPanel,
+               <a href="../panel/ribbon/Z4RibbonHistoryPanel.html" title="class in pizzapazza.ui.panel.ribbon">Z4RibbonHistoryPanel</a>&nbsp;ribbonHistoryPanel)</code></th>
+<td class="colLast">
+<div class="block">Sets the ribbon history panel</div>
+</td>
+</tr>
+<tr id="i14" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSize(javascript.awt.Dimension)">setSize</a></span>&#8203;(javascript.awt.Dimension&nbsp;size)</code></th>
+<td class="colLast">
+<div class="block">Sets the ribbon panels</div>
+</td>
+</tr>
+<tr id="i15" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStatusPanel(pizzapazza.ui.panel.Z4StatusPanel)">setStatusPanel</a></span>&#8203;(<a href="../panel/Z4StatusPanel.html" title="class in pizzapazza.ui.panel">Z4StatusPanel</a>&nbsp;statusPanel)</code></th>
+<td class="colLast">
+<div class="block">Sets the status panel</div>
+</td>
+</tr>
+</table>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -209,6 +341,246 @@ extends java.lang.Object</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>canvas</code> - The canvas</dd>
 <dd><code>paper</code> - The paper</dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<!-- ============ METHOD DETAIL ========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="method.detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a id="setSize(javascript.awt.Dimension)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSize</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setSize&#8203;(javascript.awt.Dimension&nbsp;size)</pre>
+<div class="block">Sets the ribbon panels</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>size</code> - The size</dd>
+</dl>
+</li>
+</ul>
+<a id="setRibbonPanels(pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel,pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setRibbonPanels</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setRibbonPanels&#8203;(<a href="../panel/ribbon/Z4RibbonLayerPanel.html" title="class in pizzapazza.ui.panel.ribbon">Z4RibbonLayerPanel</a>&nbsp;ribbonLayerPanel,
+                            <a href="../panel/ribbon/Z4RibbonHistoryPanel.html" title="class in pizzapazza.ui.panel.ribbon">Z4RibbonHistoryPanel</a>&nbsp;ribbonHistoryPanel)</pre>
+<div class="block">Sets the ribbon history panel</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>ribbonLayerPanel</code> - The ribbon layer panel</dd>
+<dd><code>ribbonHistoryPanel</code> - The ribbon history panel</dd>
+</dl>
+</li>
+</ul>
+<a id="setStatusPanel(pizzapazza.ui.panel.Z4StatusPanel)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setStatusPanel</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setStatusPanel&#8203;(<a href="../panel/Z4StatusPanel.html" title="class in pizzapazza.ui.panel">Z4StatusPanel</a>&nbsp;statusPanel)</pre>
+<div class="block">Sets the status panel</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>statusPanel</code> - The status panel</dd>
+</dl>
+</li>
+</ul>
+<a id="createFromHandle(javascript.util.fsa.FileSystemFileHandle)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createFromHandle</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;createFromHandle&#8203;(javascript.util.fsa.FileSystemFileHandle&nbsp;handle)</pre>
+<div class="block">Creates a new canvas project from an image file</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>handle</code> - The file handle</dd>
+</dl>
+</li>
+</ul>
+<a id="createFromFile(def.dom.File)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createFromFile</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;createFromFile&#8203;(def.dom.File&nbsp;file)</pre>
+<div class="block">Creates a new canvas project from an image file</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>file</code> - The file</dd>
+</dl>
+</li>
+</ul>
+<a id="createFromClipboard()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createFromClipboard</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;createFromClipboard()</pre>
+<div class="block">Creates a new canvas project from an image in the clipboard</div>
+</li>
+</ul>
+<a id="openProjectFromHandle(javascript.util.fsa.FileSystemFileHandle)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>openProjectFromHandle</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;openProjectFromHandle&#8203;(javascript.util.fsa.FileSystemFileHandle&nbsp;handle)</pre>
+<div class="block">Opens a canvas project</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>handle</code> - The file handle</dd>
+</dl>
+</li>
+</ul>
+<a id="openProjectFromFile(def.dom.File)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>openProjectFromFile</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;openProjectFromFile&#8203;(def.dom.File&nbsp;file)</pre>
+<div class="block">Opens a canvas project</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>file</code> - The file</dd>
+</dl>
+</li>
+</ul>
+<a id="saveProjectToHandle(javascript.util.fsa.FileSystemFileHandle,simulation.js.$Apply_0_Void)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveProjectToHandle</h4>
+<pre class="methodSignature">public&nbsp;java.lang.String&nbsp;saveProjectToHandle&#8203;(javascript.util.fsa.FileSystemFileHandle&nbsp;handle,
+                                            simulation.js.$Apply_0_Void&nbsp;apply)</pre>
+<div class="block">Saves a canvas project</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>handle</code> - The file handle</dd>
+<dd><code>apply</code> - The function to call after saving</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The project name</dd>
+</dl>
+</li>
+</ul>
+<a id="saveProjectToFile(java.lang.String,simulation.js.$Apply_0_Void)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveProjectToFile</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;saveProjectToFile&#8203;(java.lang.String&nbsp;projectName,
+                              simulation.js.$Apply_0_Void&nbsp;apply)</pre>
+<div class="block">Saves a canvas project</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>projectName</code> - The project name</dd>
+<dd><code>apply</code> - The function to call after saving</dd>
+</dl>
+</li>
+</ul>
+<a id="exportToFile(java.lang.String,java.lang.String,double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>exportToFile</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;exportToFile&#8203;(java.lang.String&nbsp;filename,
+                         java.lang.String&nbsp;ext,
+                         double&nbsp;quality)</pre>
+<div class="block">Exports a canvas project to an image file</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>filename</code> - The file name</dd>
+<dd><code>ext</code> - The file extension</dd>
+<dd><code>quality</code> - The quality</dd>
+</dl>
+</li>
+</ul>
+<a id="exportToHandle(javascript.util.fsa.FileSystemFileHandle,double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>exportToHandle</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;exportToHandle&#8203;(javascript.util.fsa.FileSystemFileHandle&nbsp;handle,
+                           double&nbsp;quality)</pre>
+<div class="block">Exports a canvas project to an image file</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>handle</code> - The file handle</dd>
+<dd><code>quality</code> - The quality</dd>
+</dl>
+</li>
+</ul>
+<a id="addLayerFromHandle(javascript.util.fsa.FileSystemFileHandle)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addLayerFromHandle</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;addLayerFromHandle&#8203;(javascript.util.fsa.FileSystemFileHandle&nbsp;handle)</pre>
+<div class="block">Adds a canvas layer from an image file</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>handle</code> - The file handle</dd>
+</dl>
+</li>
+</ul>
+<a id="addLayerFromFile(def.dom.File)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addLayerFromFile</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;addLayerFromFile&#8203;(def.dom.File&nbsp;file)</pre>
+<div class="block">Adds a canvas layer from an image file</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>file</code> - The file</dd>
+</dl>
+</li>
+</ul>
+<a id="addLayerFromClipboard()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addLayerFromClipboard</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;addLayerFromClipboard()</pre>
+<div class="block">Adds a canvas layer from an image in the clipboard</div>
+</li>
+</ul>
+<a id="mergeLayers(def.js.Array)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>mergeLayers</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;mergeLayers&#8203;(def.js.Array&lt;<a href="../../util/Z4Layer.html" title="class in pizzapazza.util">Z4Layer</a>&gt;&nbsp;layers)</pre>
+<div class="block">Merges an array of layers in the canvas</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>layers</code> - The layers</dd>
 </dl>
 </li>
 </ul>
@@ -276,7 +648,7 @@ extends java.lang.Object</pre>
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a id="skip.navbar.bottom">
