@@ -187,7 +187,8 @@ public class Z4Shape2DPainterPanel extends Z4PainterPanel<Z4Shape2DPainter> {
     this.value = new Z4Shape2DPainter(
             this.width.getValue(), this.height.getValue(), this.regular.isSelected(), this.star.isSelected(), vCount == 7 ? -1 : vCount + 3,
             this.shadowShiftX.getValue(), this.shadowShiftY.getValue(), $exists(shadowColor) ? shadowColor : this.value.getShadowColor(),
-            this.borderWidth.getValue(), this.borderHeight.getValue(), $exists(borderColor) ? borderColor : this.value.getBorderColor());
+            this.borderWidth.getValue(), this.borderHeight.getValue(), $exists(borderColor) ? borderColor : this.value.getBorderColor()
+    );
 
     this.onchange();
   }

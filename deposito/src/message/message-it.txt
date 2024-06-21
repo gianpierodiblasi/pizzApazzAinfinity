@@ -10,5 +10,5 @@ Z4Translations.RANGE = "Range";
 
 # Label
 Z4Translations.INTENSITY = "Intensità";
-Z4Translations.SHAPE = "Forma";
+
 Z4Translations.ARROW_MODULE = "Modulo Freccia";

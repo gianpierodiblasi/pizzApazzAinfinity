@@ -174,6 +174,8 @@ public class Z4Translations {
   public static String RELATIVE_TO_PATH = "";
   public static String DELAYED = "";
   public static String STEP = "";
+  public static String SHAPE = "";
+  public static String ANGLE = "";
 
   // Composite Operation
   public static String COMPOSITE_OPERATION = "";
@@ -383,6 +385,8 @@ public class Z4Translations {
     Z4Translations.RELATIVE_TO_PATH = "Relative to Path";
     Z4Translations.DELAYED = "Delayed";
     Z4Translations.STEP = "Step";
+    Z4Translations.SHAPE = "Shape";
+    Z4Translations.ANGLE = "Angle";
 
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
@@ -576,6 +580,8 @@ public class Z4Translations {
     Z4Translations.RELATIVE_TO_PATH = "Relativo al Percorso";
     Z4Translations.DELAYED = "Ritardato";
     Z4Translations.STEP = "Passo";
+    Z4Translations.SHAPE = "Forma";
+    Z4Translations.ANGLE = "Angolo";
 
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";

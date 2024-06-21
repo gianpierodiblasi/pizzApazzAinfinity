@@ -289,6 +289,10 @@ class Z4Translations {
 
   static  STEP = "";
 
+  static  SHAPE = "";
+
+  static  ANGLE = "";
+
   // Composite Operation
   static  COMPOSITE_OPERATION = "";
 
@@ -506,6 +510,8 @@ class Z4Translations {
     Z4Translations.RELATIVE_TO_PATH = "Relative to Path";
     Z4Translations.DELAYED = "Delayed";
     Z4Translations.STEP = "Step";
+    Z4Translations.SHAPE = "Shape";
+    Z4Translations.ANGLE = "Angle";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "This is the default setting and draws the layer on top of the existing content";
@@ -685,6 +691,8 @@ class Z4Translations {
     Z4Translations.RELATIVE_TO_PATH = "Relativo al Percorso";
     Z4Translations.DELAYED = "Ritardato";
     Z4Translations.STEP = "Passo";
+    Z4Translations.SHAPE = "Forma";
+    Z4Translations.ANGLE = "Angolo";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "Questa \u00E8 l'impostazione predefinita e disegna il livello sopra il contenuto esistente";
