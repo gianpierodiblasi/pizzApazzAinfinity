@@ -451,7 +451,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
           Z4Point c1, Z4Point c2, Z4Point path1, Z4Point path2, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression,
           $Path2D pathForShadowBorder, double currentShadowShiftX, double currentShadowShiftY, double currentBorderSize) {
     if ($exists(currentShadowShiftX) || $exists(currentShadowShiftY)) {
-      this.drawShadow(context, pathForShadowBorder, currentShadowShiftX + currentBorderSize, currentShadowShiftY + currentBorderSize);
+      this.drawShadow(context, pathForShadowBorder, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
     }
     if (currentBorderSize > 0) {
       this.drawBorder(context, pathForShadowBorder, currentBorderSize);
@@ -515,11 +515,20 @@ public class Z4CenteredFigurePainter extends Z4Painter {
     context.restore();
   }
 
-  private void drawShadow($CanvasRenderingContext2D context, $Path2D pathForShadowBorder, double currentShadowShiftX, double currentShadowShiftY) {
+  private void drawShadow($CanvasRenderingContext2D context, $Path2D pathForShadowBorder, double currentShadowShiftX, double currentShadowShiftY, double currentBorderSize) {
     context.save();
-    context.fillStyle = Z4Constants.$getStyle(this.shadowColor.getRGBA_HEX());
+
     context.translate(currentShadowShiftX, currentShadowShiftY);
+
+    if (currentBorderSize > 0) {
+      context.lineWidth = currentBorderSize;
+      context.strokeStyle = Z4Constants.$getStyle(this.shadowColor.getRGBA_HEX());
+      context.stroke(pathForShadowBorder);
+    }
+
+    context.fillStyle = Z4Constants.$getStyle(this.shadowColor.getRGBA_HEX());
     context.fill(pathForShadowBorder);
+
     context.restore();
   }
 

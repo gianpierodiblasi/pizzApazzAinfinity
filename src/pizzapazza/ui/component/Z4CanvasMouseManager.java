@@ -58,7 +58,7 @@ public class Z4CanvasMouseManager {
                   false), Z4RotationBehavior.RELATIVE_TO_PATH, false)
           ),
           new Z4CenteredFigurePainter(
-                  Z4CenteredFigurePainterType.TYPE_5,
+                  Z4CenteredFigurePainterType.TYPE_0,
                   new Z4FancifulValue(
                           new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
                           new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
@@ -91,11 +91,11 @@ public class Z4CanvasMouseManager {
                                   false)),
                   100,
                   new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
                           new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                           false),
                   new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
                           new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                           false),
                   new Color(255, 0, 0, 255),
@@ -103,7 +103,7 @@ public class Z4CanvasMouseManager {
                           new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
                           new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                           false),
-                  new Color(255, 0, 0, 255)
+                  new Color(255, 255, 0, 255)
           ),
           //          new Z4Shape2DPainter(
           //                  new Z4FancifulValue(

@@ -404,7 +404,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
 
    drawFigure(context, drawingPoint, c1, c2, path1, path2, spatioTemporalColor, progression, pathForShadowBorder, currentShadowShiftX, currentShadowShiftY, currentBorderSize) {
     if (currentShadowShiftX || currentShadowShiftY) {
-      this.drawShadow(context, pathForShadowBorder, currentShadowShiftX + currentBorderSize, currentShadowShiftY + currentBorderSize);
+      this.drawShadow(context, pathForShadowBorder, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
     }
     if (currentBorderSize > 0) {
       this.drawBorder(context, pathForShadowBorder, currentBorderSize);
@@ -460,10 +460,15 @@ class Z4CenteredFigurePainter extends Z4Painter {
     context.restore();
   }
 
-   drawShadow(context, pathForShadowBorder, currentShadowShiftX, currentShadowShiftY) {
+   drawShadow(context, pathForShadowBorder, currentShadowShiftX, currentShadowShiftY, currentBorderSize) {
     context.save();
-    context.fillStyle = Z4Constants.getStyle(this.shadowColor.getRGBA_HEX());
     context.translate(currentShadowShiftX, currentShadowShiftY);
+    if (currentBorderSize > 0) {
+      context.lineWidth = currentBorderSize;
+      context.strokeStyle = Z4Constants.getStyle(this.shadowColor.getRGBA_HEX());
+      context.stroke(pathForShadowBorder);
+    }
+    context.fillStyle = Z4Constants.getStyle(this.shadowColor.getRGBA_HEX());
     context.fill(pathForShadowBorder);
     context.restore();
   }
