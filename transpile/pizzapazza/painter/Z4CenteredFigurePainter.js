@@ -23,6 +23,18 @@ class Z4CenteredFigurePainter extends Z4Painter {
 
    cover = 0;
 
+   shadowShiftX = null;
+
+   shadowShiftY = null;
+
+   shadowColor = null;
+
+   borderWidth = null;
+
+   borderHeight = null;
+
+   borderColor = null;
+
    path1e = null;
 
    path1i = null;
@@ -53,8 +65,14 @@ class Z4CenteredFigurePainter extends Z4Painter {
    * @param hole The hole
    * @param whirlpool The whirlpool
    * @param cover The cover (in the range [1,100])
+   * @param shadowShiftX The X shadow shift
+   * @param shadowShiftY The Y shadow shift
+   * @param shadowColor The shadow color
+   * @param borderWidth The border width
+   * @param borderHeight The border height
+   * @param borderColor The border color
    */
-  constructor(centeredFigurePainterType, size, angle1, angle2, tension, multiplicity, hole, whirlpool, cover) {
+  constructor(centeredFigurePainterType, size, angle1, angle2, tension, multiplicity, hole, whirlpool, cover, shadowShiftX, shadowShiftY, shadowColor, borderWidth, borderHeight, borderColor) {
     super();
     this.centeredFigurePainterType = centeredFigurePainterType;
     this.size = size;
@@ -65,6 +83,12 @@ class Z4CenteredFigurePainter extends Z4Painter {
     this.hole = hole;
     this.whirlpool = whirlpool;
     this.cover = cover;
+    this.shadowShiftX = shadowShiftX;
+    this.shadowShiftY = shadowShiftY;
+    this.shadowColor = shadowColor;
+    this.borderWidth = borderWidth;
+    this.borderHeight = borderHeight;
+    this.borderColor = borderColor;
   }
 
    getType() {
@@ -150,6 +174,60 @@ class Z4CenteredFigurePainter extends Z4Painter {
    */
    getCover() {
     return this.cover;
+  }
+
+  /**
+   * Returns the X shadow shift
+   *
+   * @return The X shadow shift
+   */
+   getShadowShiftX() {
+    return this.shadowShiftX;
+  }
+
+  /**
+   * Returns the Y shadow shift
+   *
+   * @return The Y shadow shift
+   */
+   getShadowShiftY() {
+    return this.shadowShiftY;
+  }
+
+  /**
+   * Returns the shadow color
+   *
+   * @return The shadow color
+   */
+   getShadowColor() {
+    return this.shadowColor;
+  }
+
+  /**
+   * Returns the border width
+   *
+   * @return The border width
+   */
+   getBorderWidth() {
+    return this.borderWidth;
+  }
+
+  /**
+   * Returns the border height
+   *
+   * @return The border height
+   */
+   getBorderHeight() {
+    return this.borderHeight;
+  }
+
+  /**
+   * Returns the border color
+   *
+   * @return The border color
+   */
+   getBorderColor() {
+    return this.borderColor;
   }
 
    draw(context, drawingPoint, spatioTemporalColor, progression) {
@@ -403,6 +481,22 @@ class Z4CenteredFigurePainter extends Z4Painter {
     json["hole"] = this.hole.toJSON();
     json["whirlpool"] = this.whirlpool.toJSON();
     json["cover"] = this.cover;
+    json["shadowShiftX"] = this.shadowShiftX.toJSON();
+    json["shadowShiftY"] = this.shadowShiftY.toJSON();
+    let jsonColor = new Object();
+    jsonColor["red"] = this.shadowColor.red;
+    jsonColor["green"] = this.shadowColor.green;
+    jsonColor["blue"] = this.shadowColor.blue;
+    jsonColor["alpha"] = this.shadowColor.alpha;
+    json["shadowColor"] = jsonColor;
+    json["borderWidth"] = this.borderWidth.toJSON();
+    json["borderHeight"] = this.borderHeight.toJSON();
+    jsonColor = new Object();
+    jsonColor["red"] = this.borderColor.red;
+    jsonColor["green"] = this.borderColor.green;
+    jsonColor["blue"] = this.borderColor.blue;
+    jsonColor["alpha"] = this.borderColor.alpha;
+    json["borderColor"] = jsonColor;
     return json;
   }
 
@@ -413,6 +507,10 @@ class Z4CenteredFigurePainter extends Z4Painter {
    * @return the centered figure painter
    */
   static  fromJSON(json) {
-    return new Z4CenteredFigurePainter(json["centeredFigurePainterType"], Z4FancifulValue.fromJSON(json["size"]), Z4FancifulValue.fromJSON(json["angle1"]), Z4FancifulValue.fromJSON(json["angle2"]), Z4FancifulValue.fromJSON(json["tension"]), Z4FancifulValue.fromJSON(json["multiplicity"]), Z4FancifulValue.fromJSON(json["hole"]), Z4Whirlpool.fromJSON(json["whirlpool"]), json["cover"]);
+    let jsonColor = json["shadowColor"];
+    let shadowColor = new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]);
+    jsonColor = json["borderColor"];
+    let borderColor = new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]);
+    return new Z4CenteredFigurePainter(json["centeredFigurePainterType"], Z4FancifulValue.fromJSON(json["size"]), Z4FancifulValue.fromJSON(json["angle1"]), Z4FancifulValue.fromJSON(json["angle2"]), Z4FancifulValue.fromJSON(json["tension"]), Z4FancifulValue.fromJSON(json["multiplicity"]), Z4FancifulValue.fromJSON(json["hole"]), Z4Whirlpool.fromJSON(json["whirlpool"]), json["cover"], Z4FancifulValue.fromJSON(json["shadowShiftX"]), Z4FancifulValue.fromJSON(json["shadowShiftY"]), shadowColor, Z4FancifulValue.fromJSON(json["borderWidth"]), Z4FancifulValue.fromJSON(json["borderHeight"]), borderColor);
   }
 }

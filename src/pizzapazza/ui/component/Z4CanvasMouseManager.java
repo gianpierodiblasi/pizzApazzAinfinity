@@ -1,6 +1,7 @@
 package pizzapazza.ui.component;
 
 import def.dom.MouseEvent;
+import javascript.awt.Color;
 import javascript.awt.Dimension;
 import pizzapazza.color.Z4ColorProgression;
 import pizzapazza.color.Z4ColorProgressionBehavior;
@@ -88,7 +89,25 @@ public class Z4CanvasMouseManager {
                                   new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 30),
                                   new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                                   false)),
-                  100
+                  100,
+                  new Z4FancifulValue(
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                          false),
+                  new Z4FancifulValue(
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                          false),
+                  new Color(0, 0, 0, 0),
+                  new Z4FancifulValue(
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                          false),
+                  new Z4FancifulValue(
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                          false),
+                  new Color(0, 0, 0, 0)
           ),
           //          new Z4Shape2DPainter(
           //                  new Z4FancifulValue(
