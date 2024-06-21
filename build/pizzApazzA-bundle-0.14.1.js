@@ -8320,12 +8320,30 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
     if (borderColor) {
       this.borderColorPreview.setColor(borderColor);
     }
-    // this.value = new Z4CenteredFigurePainter(
-    // this.size.getValue(), this.height.getValue(), this.regular.isSelected(), this.star.isSelected(), vCount == 7 ? -1 : vCount + 3,
-    // this.shadowShiftX.getValue(), this.shadowShiftY.getValue(), $exists(shadowColor) ? shadowColor : this.value.getShadowColor(),
-    // this.borderSize.getValue(),  $exists(borderColor) ? borderColor : this.value.getBorderColor()
-    // );
+    let type = null;
+    switch("" + Object.keys(this.radios).find((key, index, array) => (this.radios[key]).isSelected())) {
+      case "TYPE_0":
+        type = Z4CenteredFigurePainterType.TYPE_0;
+        break;
+      case "TYPE_1":
+        type = Z4CenteredFigurePainterType.TYPE_1;
+        break;
+      case "TYPE_2":
+        type = Z4CenteredFigurePainterType.TYPE_2;
+        break;
+      case "TYPE_3":
+        type = Z4CenteredFigurePainterType.TYPE_3;
+        break;
+      case "TYPE_4":
+        type = Z4CenteredFigurePainterType.TYPE_4;
+        break;
+      case "TYPE_5":
+        type = Z4CenteredFigurePainterType.TYPE_5;
+        break;
+    }
+    this.value = new Z4CenteredFigurePainter(type, this.size.getValue(), this.angle1.getValue(), this.angle2.getValue(), null, null, null, null, 0, this.shadowShiftX.getValue(), this.shadowShiftY.getValue(), shadowColor ? shadowColor : this.value.getShadowColor(), this.borderSize.getValue(), borderColor ? borderColor : this.value.getBorderColor());
     this.angle1.setEnabled(this.enabled && this.value.getCenteredFigurePainterType() !== Z4CenteredFigurePainterType.TYPE_5);
+    this.angle2.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_5));
     this.onchange();
   }
 
@@ -8336,6 +8354,7 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
     this.angle1.setValue(this.value.getAngle1());
     this.angle1.setEnabled(this.enabled && this.value.getCenteredFigurePainterType() !== Z4CenteredFigurePainterType.TYPE_5);
     this.angle2.setValue(this.value.getAngle2());
+    this.angle2.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_5));
     this.shadowShiftX.setValue(this.value.getShadowShiftX());
     this.shadowShiftY.setValue(this.value.getShadowShiftY());
     this.shadowColorPreview.setColor(this.value.getShadowColor());
@@ -8347,8 +8366,8 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
     super.setEnabled(b);
     Object.keys(this.radios).forEach(key => (this.radios[key]).setEnabled(b));
     this.size.setEnabled(b);
-    this.angle1.setEnabled(b);
     this.angle1.setEnabled(b && this.value.getCenteredFigurePainterType() !== Z4CenteredFigurePainterType.TYPE_5);
+    this.angle2.setEnabled(b && (this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_5));
     this.shadowShiftX.setEnabled(b);
     this.shadowShiftY.setEnabled(b);
     this.editShadowColor.setEnabled(b);
