@@ -156,6 +156,12 @@ public class Z4Translations {
   public static String RADIUS = "";
   public static String SPEED = "";
 
+  // Painter
+  public static String TENSION = "";
+  public static String HOLE = "";
+  public static String COVER = "";
+  public static String WHIRLPOOL = "";
+
   // Math
   public static String POSITIVE = "";
   public static String NEGATIVE = "";
@@ -367,6 +373,12 @@ public class Z4Translations {
     Z4Translations.RADIUS = "Radius";
     Z4Translations.SPEED = "Speed";
 
+    // Painter
+    Z4Translations.TENSION = "Tension";
+    Z4Translations.HOLE = "Hole";
+    Z4Translations.COVER = "Cover";
+    Z4Translations.WHIRLPOOL = "Whirlpool";
+
     // Math
     Z4Translations.POSITIVE = "Positive";
     Z4Translations.NEGATIVE = "Negative";
@@ -561,6 +573,12 @@ public class Z4Translations {
     Z4Translations.ENDLESS = "Infinito";
     Z4Translations.RADIUS = "Raggio";
     Z4Translations.SPEED = "Velocit\u00E0";
+
+    // Painter
+    Z4Translations.TENSION = "Tensione";
+    Z4Translations.HOLE = "Buco";
+    Z4Translations.COVER = "Copertura";
+    Z4Translations.WHIRLPOOL = "Vortice";
 
     // Math
     Z4Translations.POSITIVE = "Positivo";

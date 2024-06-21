@@ -13,6 +13,8 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
 
    angle2 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
 
+   tension = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+
    shadowShiftX = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
 
    shadowShiftY = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
@@ -67,6 +69,12 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
     this.angle2.cssAddClass("z4abstractvaluepanel-titled");
     this.angle2.addChangeListener(event => this.onfigurechange(this.angle2.getValueIsAdjusting(), null, null));
     panel.add(this.angle2, new GBC(0, 3).a(GBC.WEST));
+    this.tension.setSignsVisible(false);
+    this.tension.setConstantRange(1, 100);
+    this.tension.setLabel(Z4Translations.TENSION);
+    this.tension.cssAddClass("z4abstractvaluepanel-titled");
+    this.tension.addChangeListener(event => this.onfigurechange(this.tension.getValueIsAdjusting(), null, null));
+    panel.add(this.tension, new GBC(0, 4).a(GBC.WEST));
     this.shadowShiftX.setLabel(Z4Translations.DELTA_X);
     this.shadowShiftX.cssAddClass("z4abstractvaluepanel-titled");
     this.shadowShiftX.addChangeListener(event => this.onfigurechange(this.shadowShiftX.getValueIsAdjusting(), null, null));
@@ -143,6 +151,7 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
     this.value = new Z4CenteredFigurePainter(type, this.size.getValue(), this.angle1.getValue(), this.angle2.getValue(), null, null, null, null, 0, this.shadowShiftX.getValue(), this.shadowShiftY.getValue(), shadowColor ? shadowColor : this.value.getShadowColor(), this.borderSize.getValue(), borderColor ? borderColor : this.value.getBorderColor());
     this.angle1.setEnabled(this.enabled && this.value.getCenteredFigurePainterType() !== Z4CenteredFigurePainterType.TYPE_5);
     this.angle2.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_5));
+    this.tension.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_4 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_5));
     this.onchange();
   }
 
@@ -154,6 +163,8 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
     this.angle1.setEnabled(this.enabled && this.value.getCenteredFigurePainterType() !== Z4CenteredFigurePainterType.TYPE_5);
     this.angle2.setValue(this.value.getAngle2());
     this.angle2.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_5));
+    this.tension.setValue(this.value.getTension());
+    this.tension.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_4 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_5));
     this.shadowShiftX.setValue(this.value.getShadowShiftX());
     this.shadowShiftY.setValue(this.value.getShadowShiftY());
     this.shadowColorPreview.setColor(this.value.getShadowColor());
@@ -167,6 +178,7 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
     this.size.setEnabled(b);
     this.angle1.setEnabled(b && this.value.getCenteredFigurePainterType() !== Z4CenteredFigurePainterType.TYPE_5);
     this.angle2.setEnabled(b && (this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_5));
+    this.tension.setEnabled(b && (this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_4 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_5));
     this.shadowShiftX.setEnabled(b);
     this.shadowShiftY.setEnabled(b);
     this.editShadowColor.setEnabled(b);

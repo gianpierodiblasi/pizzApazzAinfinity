@@ -41,6 +41,7 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
   private final Z4FancifulValuePanel size = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
   private final Z4FancifulValuePanel angle1 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
   private final Z4FancifulValuePanel angle2 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+  private final Z4FancifulValuePanel tension = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
 
   private final Z4FancifulValuePanel shadowShiftX = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
   private final Z4FancifulValuePanel shadowShiftY = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
@@ -97,6 +98,13 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     this.angle2.cssAddClass("z4abstractvaluepanel-titled");
     this.angle2.addChangeListener(event -> this.onfigurechange(this.angle2.getValueIsAdjusting(), null, null));
     panel.add(this.angle2, new GBC(0, 3).a(GBC.WEST));
+
+    this.tension.setSignsVisible(false);
+    this.tension.setConstantRange(1, 100);
+    this.tension.setLabel(Z4Translations.TENSION);
+    this.tension.cssAddClass("z4abstractvaluepanel-titled");
+    this.tension.addChangeListener(event -> this.onfigurechange(this.tension.getValueIsAdjusting(), null, null));
+    panel.add(this.tension, new GBC(0, 4).a(GBC.WEST));
 
     this.shadowShiftX.setLabel(Z4Translations.DELTA_X);
     this.shadowShiftX.cssAddClass("z4abstractvaluepanel-titled");
@@ -243,6 +251,7 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
 
     this.angle1.setEnabled(this.enabled && this.value.getCenteredFigurePainterType() != Z4CenteredFigurePainterType.TYPE_5);
     this.angle2.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_5));
+    this.tension.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_4 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_5));
 
     this.onchange();
   }
@@ -257,6 +266,8 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     this.angle1.setEnabled(this.enabled && this.value.getCenteredFigurePainterType() != Z4CenteredFigurePainterType.TYPE_5);
     this.angle2.setValue(this.value.getAngle2());
     this.angle2.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_5));
+    this.tension.setValue(this.value.getTension());
+    this.tension.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_4 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_5));
 
     this.shadowShiftX.setValue(this.value.getShadowShiftX());
     this.shadowShiftY.setValue(this.value.getShadowShiftY());
@@ -275,6 +286,7 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     this.size.setEnabled(b);
     this.angle1.setEnabled(b && this.value.getCenteredFigurePainterType() != Z4CenteredFigurePainterType.TYPE_5);
     this.angle2.setEnabled(b && (this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_5));
+    this.tension.setEnabled(b && (this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_4 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_5));
 
     this.shadowShiftX.setEnabled(b);
     this.shadowShiftY.setEnabled(b);
