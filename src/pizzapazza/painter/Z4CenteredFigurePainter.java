@@ -18,6 +18,7 @@ import pizzapazza.util.Z4Constants;
 import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
 import simulation.js.$Object;
+import simulation.js.$Path2D;
 
 /**
  * The painter of centered figures
@@ -57,6 +58,9 @@ public class Z4CenteredFigurePainter extends Z4Painter {
   private Z4Point c2i;
 
   private Z4Point pF;
+
+  private $Path2D pathForShadowBorderE;
+  private $Path2D pathForShadowBorderI;
 
   /**
    * Creates the object
@@ -244,7 +248,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
   public Color getBorderColor() {
     return this.borderColor;
   }
-  
+
   @Override
   @SuppressWarnings("null")
   public void draw($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
@@ -266,10 +270,16 @@ public class Z4CenteredFigurePainter extends Z4Painter {
         Z4Point point = this.checkWhirlpool1(currentAngle, currentHole, currentSize);
         drawingPoint = new Z4DrawingPoint(Z4Vector.fromVector(currentHole, 0, point.x, point.y), drawingPoint.intensity, drawingPoint.temporalPosition, drawingPoint.drawBounds, drawingPoint.side, drawingPoint.useVectorModuleAsSize);
 
+        double currentShadowShiftX = this.shadowShiftX.next();
+        double currentShadowShiftY = this.shadowShiftY.next();
+        double currentBorderWidth = this.borderWidth.next();
+        double currentBorderHeight = this.borderHeight.next();
+        boolean shadowOrBorder = $exists(currentShadowShiftX) || $exists(currentShadowShiftY) || currentBorderWidth > 0 || currentBorderHeight > 0;
+
         if (this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_0 || this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_1 || this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_2) {
-          this.type0_1_2(drawingPoint, currentCover);
+          this.type0_1_2(drawingPoint, currentCover, shadowOrBorder);
         } else if (this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_3 || this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_4 || this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_5) {
-          this.type3_4_5(drawingPoint, currentAngle, currentHole, currentCover);
+          this.type3_4_5(drawingPoint, currentAngle, currentHole, currentCover, shadowOrBorder);
         }
 
         this.drawFigures(context, drawingPoint, currentMultiplicity, spatioTemporalColor, progression);
@@ -300,7 +310,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
   }
 
   //One Bezier curve. Start and end point coincide in the fulcrum
-  private void type0_1_2(Z4DrawingPoint drawingPoint, double currentCover) {
+  private void type0_1_2(Z4DrawingPoint drawingPoint, double currentCover, boolean shadowOrBorder) {
     this.pF = new Z4Point(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
 
     Array<Z4Point> ce = Z4Math.butterfly(drawingPoint.z4Vector, Z4Math.deg2rad(this.angle1.next()));
@@ -322,17 +332,16 @@ public class Z4CenteredFigurePainter extends Z4Painter {
       this.path1e = this.findControlPointPath(this.c1e.x, this.c1e.y, mx, my, currentCover);
       this.path2e = this.findControlPointPath(this.c2e.x, this.c2e.y, mx, my, currentCover);
     }
-//
-//    if (shadow||border)
-//    {
-//      pathForShadowBorderE.reset();
-//      pathForShadowBorderE.moveTo(drawingPoint.z4Vector.x0,drawingPoint.z4Vector.y0);
-//      pathForShadowBorderE.cubicTo(c1e.x,c1e.y,c2e.x,c2e.y,drawingPoint.z4Vector.x0,drawingPoint.z4Vector.y0);
-//    }
+
+    if (shadowOrBorder) {
+      this.pathForShadowBorderE = new $Path2D();
+      this.pathForShadowBorderE.moveTo(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+      this.pathForShadowBorderE.bezierCurveTo(c1e.x, c1e.y, c2e.x, c2e.y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+    }
   }
 
   //Two Bezier curves. Start point lies on the fulcrum, end point lies on newPoint
-  private void type3_4_5(Z4DrawingPoint drawingPoint, double currentAngle, double currentHole, double currentCover) {
+  private void type3_4_5(Z4DrawingPoint drawingPoint, double currentAngle, double currentHole, double currentCover, boolean shadowOrBorder) {
     this.pF = new Z4Point(drawingPoint.z4Vector.x, drawingPoint.z4Vector.y);
 
     if (this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_3) {
@@ -386,15 +395,16 @@ public class Z4CenteredFigurePainter extends Z4Painter {
       this.path2e = this.findControlPointPath(this.c2e.x, this.c2e.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
       this.path2i = this.findControlPointPath(this.c2i.x, this.c2i.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
     }
-//    
-//    if (shadow || border) {
-//      pathForShadowBorderE.reset();
-//      pathForShadowBorderE.moveTo(drawingPoint.z4Vector.x0,drawingPoint.z4Vector.y0);
-//      pathForShadowBorderE.cubicTo(c1e.x,c1e.y,c2e.x,c2e.y,drawingPoint.z4Vector.x,drawingPoint.z4Vector.y);
-//      pathForShadowBorderI.reset();
-//      pathForShadowBorderI.moveTo(drawingPoint.z4Vector.x0,drawingPoint.z4Vector.y0);
-//      pathForShadowBorderI.cubicTo(c1i.x,c1i.y,c2i.x,c2i.y,drawingPoint.z4Vector.x,drawingPoint.z4Vector.y);
-//    }
+
+    if (shadowOrBorder) {
+      this.pathForShadowBorderE = new $Path2D();
+      this.pathForShadowBorderE.moveTo(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+      this.pathForShadowBorderE.bezierCurveTo(c1e.x, c1e.y, c2e.x, c2e.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y);
+
+      this.pathForShadowBorderI = new $Path2D();
+      this.pathForShadowBorderI.moveTo(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+      this.pathForShadowBorderI.bezierCurveTo(c1i.x, c1i.y, c2i.x, c2i.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y);
+    }
   }
 
   private Z4Point findControlPointPath(double p1x, double p1y, double p2x, double p2y, double currentCover) {
