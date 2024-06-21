@@ -26,7 +26,7 @@ class Z4Whirlpool extends Z4JSONable {
    *
    * @return The behavior
    */
-   getBehavior() {
+   getWhirlpoolBehavior() {
     return this.behavior;
   }
 

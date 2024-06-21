@@ -69,7 +69,6 @@ public class Z4RotationPanel extends Z4AbstractValuePanel<Z4Rotation> {
       this.delayed.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
       this.delayed.getStyle().borderTop = "1px solid var(--main-action-bgcolor)";
       this.add(this.delayed, new GBC(3, 1));
-
     } else if (orientation == Z4RotationPanelOrientation.VERTICAL) {
       this.cssAddClass("z4rotationpanel-vertical");
       this.add(this.label, new GBC(0, 0).w(4).a(GBC.WEST));

@@ -182,6 +182,9 @@ public class Z4Translations {
   public static String STEP = "";
   public static String SHAPE = "";
   public static String ANGLE = "";
+  public static String FORWARD = "";
+  public static String BACKWARD = "";
+  
 
   // Composite Operation
   public static String COMPOSITE_OPERATION = "";
@@ -399,6 +402,8 @@ public class Z4Translations {
     Z4Translations.STEP = "Step";
     Z4Translations.SHAPE = "Shape";
     Z4Translations.ANGLE = "Angle";
+    Z4Translations.FORWARD = "Forward";
+    Z4Translations.BACKWARD = "Backward";
 
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
@@ -600,6 +605,8 @@ public class Z4Translations {
     Z4Translations.STEP = "Passo";
     Z4Translations.SHAPE = "Forma";
     Z4Translations.ANGLE = "Angolo";
+    Z4Translations.FORWARD = "In Avanti";
+    Z4Translations.BACKWARD = "Indietro";
 
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";

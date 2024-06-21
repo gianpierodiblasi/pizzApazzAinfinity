@@ -406,11 +406,11 @@ public class Z4CenteredFigurePainter extends Z4Painter {
   }
 
   private Z4Point checkWhirlpool1(double currentAngle, double currentHole, double currentSize) {
-    if (currentHole == 0 || currentAngle == 0 || this.whirlpool.getBehavior() == Z4WhirlpoolBehavior.NONE) {
+    if (currentHole == 0 || currentAngle == 0 || this.whirlpool.getWhirlpoolBehavior() == Z4WhirlpoolBehavior.NONE) {
       return new Z4Point(currentSize, 0);
-    } else if (this.whirlpool.getBehavior() == Z4WhirlpoolBehavior.FORWARD) {
+    } else if (this.whirlpool.getWhirlpoolBehavior() == Z4WhirlpoolBehavior.FORWARD) {
       return Z4Math.rotoTranslate(currentSize, 0, currentAngle, currentHole, 0);
-    } else if (this.whirlpool.getBehavior() == Z4WhirlpoolBehavior.BACKWARD) {
+    } else if (this.whirlpool.getWhirlpoolBehavior() == Z4WhirlpoolBehavior.BACKWARD) {
       return Z4Math.rotoTranslate(currentSize, 0, -currentAngle, currentHole, 0);
     } else {
       return null;
@@ -418,11 +418,11 @@ public class Z4CenteredFigurePainter extends Z4Painter {
   }
 
   private Z4Point checkWhirlpool2(Z4DrawingPoint point, Z4Point p, double currentAngle, double currentHole) {
-    if (currentHole == 0 || currentAngle == 0 || this.whirlpool.getBehavior() == Z4WhirlpoolBehavior.NONE) {
+    if (currentHole == 0 || currentAngle == 0 || this.whirlpool.getWhirlpoolBehavior() == Z4WhirlpoolBehavior.NONE) {
       return p;
-    } else if (this.whirlpool.getBehavior() == Z4WhirlpoolBehavior.FORWARD) {
+    } else if (this.whirlpool.getWhirlpoolBehavior() == Z4WhirlpoolBehavior.FORWARD) {
       return Z4Math.rotoTranslate(p.x, p.y, currentAngle, point.z4Vector.x0, point.z4Vector.y0);
-    } else if (this.whirlpool.getBehavior() == Z4WhirlpoolBehavior.BACKWARD) {
+    } else if (this.whirlpool.getWhirlpoolBehavior() == Z4WhirlpoolBehavior.BACKWARD) {
       return Z4Math.rotoTranslate(p.x, p.y, -currentAngle, point.z4Vector.x0, point.z4Vector.y0);
     } else {
       return null;

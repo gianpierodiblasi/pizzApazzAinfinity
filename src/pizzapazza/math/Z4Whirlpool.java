@@ -30,7 +30,7 @@ public class Z4Whirlpool implements Z4JSONable {
    *
    * @return The behavior
    */
-  public Z4WhirlpoolBehavior getBehavior() {
+  public Z4WhirlpoolBehavior getWhirlpoolBehavior() {
     return this.behavior;
   }
 

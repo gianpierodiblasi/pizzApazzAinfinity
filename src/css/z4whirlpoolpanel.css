@@ -1,0 +1,16 @@
+.z4whirlpoolpanel {
+}
+
+.z4whirlpoolpanel .z4whirlpoolpanel-radio img {
+  width: 16px;
+  height: 16px;
+}
+.z4whirlpoolpanel .z4whirlpoolpanel-radio:nth-child(2) img {
+  content: url(../image/math/z4whirlpoolbehavior_none.png);
+}
+.z4whirlpoolpanel .z4whirlpoolpanel-radio:nth-child(3) img {
+  content: url(../image/math/z4whirlpoolbehavior_forward.png);
+}
+.z4whirlpoolpanel .z4whirlpoolpanel-radio:nth-child(4) img {
+  content: url(../image/math/z4whirlpoolbehavior_backward.png);
+}
