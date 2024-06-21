@@ -25,6 +25,10 @@ import pizzapazza.painter.Z4CenteredFigurePainterType;
 import pizzapazza.ui.component.Z4ColorPreview;
 import pizzapazza.ui.panel.math.Z4FancifulValuePanel;
 import pizzapazza.ui.panel.math.Z4FancifulValuePanelOrientation;
+import pizzapazza.ui.panel.math.Z4SignedValuePanel;
+import pizzapazza.ui.panel.math.Z4SignedValuePanelOrientation;
+import pizzapazza.ui.panel.math.Z4WhirlpoolPanel;
+import pizzapazza.ui.panel.math.Z4WhirlpoolPanelOrientation;
 import pizzapazza.util.Z4EmptyImageProducer;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
@@ -45,6 +49,8 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
   private final Z4FancifulValuePanel multiplicity = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
 
   private final Z4FancifulValuePanel hole = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+  private final Z4WhirlpoolPanel whirlpool = new Z4WhirlpoolPanel(Z4WhirlpoolPanelOrientation.HORIZONTAL);
+  private final Z4SignedValuePanel cover = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.HORIZONTAL);
 
   private final Z4FancifulValuePanel shadowShiftX = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
   private final Z4FancifulValuePanel shadowShiftY = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
@@ -121,6 +127,16 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     this.hole.cssAddClass("z4abstractvaluepanel-titled");
     this.hole.addChangeListener(event -> this.onfigurechange(this.hole.getValueIsAdjusting(), null, null));
     panel.add(this.hole, new GBC(0, 6).a(GBC.WEST));
+
+    this.whirlpool.cssAddClass("z4abstractvaluepanel-titled");
+    this.whirlpool.addChangeListener(event -> this.onfigurechange(this.whirlpool.getValueIsAdjusting(), null, null));
+    panel.add(this.whirlpool, new GBC(0, 7).a(GBC.WEST));
+
+    this.cover.setSignVisible(false);
+    this.cover.setRange(0, 100);
+    this.cover.setLabel(Z4Translations.COVER);
+    this.cover.addChangeListener(event -> this.onfigurechange(this.cover.getValueIsAdjusting(), null, null));
+    panel.add(this.cover, new GBC(0, 8).a(GBC.WEST));
 
     this.shadowShiftX.setLabel(Z4Translations.DELTA_X);
     this.shadowShiftX.cssAddClass("z4abstractvaluepanel-titled");
@@ -260,7 +276,7 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     this.value = new Z4CenteredFigurePainter(
             type,
             this.size.getValue(), this.angle1.getValue(), this.angle2.getValue(),
-            this.tension.getValue(), this.multiplicity.getValue(), this.hole.getValue(), null, 0,
+            this.tension.getValue(), this.multiplicity.getValue(), this.hole.getValue(), this.whirlpool.getValue(), (int) this.cover.getValue().getValue(),
             this.shadowShiftX.getValue(), this.shadowShiftY.getValue(), $exists(shadowColor) ? shadowColor : this.value.getShadowColor(),
             this.borderSize.getValue(), $exists(borderColor) ? borderColor : this.value.getBorderColor()
     );
@@ -286,6 +302,8 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     this.tension.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_4 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_5));
     this.multiplicity.setValue(this.value.getMultiplicity());
     this.hole.setValue(this.value.getHole());
+    this.whirlpool.setValue(this.value.getWhirlpool());
+    this.cover.setValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), this.value.getCover()));
 
     this.shadowShiftX.setValue(this.value.getShadowShiftX());
     this.shadowShiftY.setValue(this.value.getShadowShiftY());
@@ -307,6 +325,8 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     this.tension.setEnabled(b && (this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_4 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_5));
     this.multiplicity.setEnabled(b);
     this.hole.setEnabled(b);
+    this.whirlpool.setEnabled(b);
+    this.cover.setEnabled(b);
 
     this.shadowShiftX.setEnabled(b);
     this.shadowShiftY.setEnabled(b);
