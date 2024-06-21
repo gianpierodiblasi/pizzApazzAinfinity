@@ -57,21 +57,21 @@ public class Z4CanvasMouseManager {
                   false), Z4RotationBehavior.RELATIVE_TO_PATH, false)
           ),
           new Z4CenteredFigurePainter(
-                  Z4CenteredFigurePainterType.TYPE_3,
+                  Z4CenteredFigurePainterType.TYPE_5,
                   new Z4FancifulValue(
                           new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
                           new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                           false),
                   new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 90),
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45),
                           new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                           false),
                   new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 90),
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45),
                           new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                           false),
                   new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1),
+                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 50),
                           new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                           false),
                   new Z4FancifulValue(
@@ -123,7 +123,7 @@ public class Z4CanvasMouseManager {
           //          ),
           //          Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)),
           Z4SpatioTemporalColor.fromGradientColor(new Z4GradientColor()),
-          new Z4ColorProgression(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, 0.01, Z4Lighting.NONE)
+          new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.01, Z4Lighting.NONE)
   );
 
   private boolean pressed;

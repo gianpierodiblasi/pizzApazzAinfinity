@@ -291,7 +291,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
   }
 
    setControlPoint(drawingPoint, currentHole, phase, currentAngle, angleSign, currentTension) {
-    return Z4Math.rotoTranslate(currentTension * drawingPoint.intensity * drawingPoint.z4Vector.module, 0, phase + angleSign * currentAngle, currentHole, 0);
+    return Z4Math.rotoTranslate(currentTension / 100 * drawingPoint.intensity * drawingPoint.z4Vector.module, 0, phase + angleSign * currentAngle, currentHole, 0);
   }
 
    checkWhirlpool1(currentAngle, currentHole, currentSize) {
