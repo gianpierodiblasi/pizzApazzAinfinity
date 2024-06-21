@@ -29,9 +29,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
 
    shadowColor = null;
 
-   borderWidth = null;
-
-   borderHeight = null;
+   borderSize = null;
 
    borderColor = null;
 
@@ -72,11 +70,10 @@ class Z4CenteredFigurePainter extends Z4Painter {
    * @param shadowShiftX The X shadow shift
    * @param shadowShiftY The Y shadow shift
    * @param shadowColor The shadow color
-   * @param borderWidth The border width
-   * @param borderHeight The border height
+   * @param borderSize The border size
    * @param borderColor The border color
    */
-  constructor(centeredFigurePainterType, size, angle1, angle2, tension, multiplicity, hole, whirlpool, cover, shadowShiftX, shadowShiftY, shadowColor, borderWidth, borderHeight, borderColor) {
+  constructor(centeredFigurePainterType, size, angle1, angle2, tension, multiplicity, hole, whirlpool, cover, shadowShiftX, shadowShiftY, shadowColor, borderSize, borderColor) {
     super();
     this.centeredFigurePainterType = centeredFigurePainterType;
     this.size = size;
@@ -90,8 +87,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
     this.shadowShiftX = shadowShiftX;
     this.shadowShiftY = shadowShiftY;
     this.shadowColor = shadowColor;
-    this.borderWidth = borderWidth;
-    this.borderHeight = borderHeight;
+    this.borderSize = borderSize;
     this.borderColor = borderColor;
   }
 
@@ -208,21 +204,12 @@ class Z4CenteredFigurePainter extends Z4Painter {
   }
 
   /**
-   * Returns the border width
+   * Returns the border size
    *
-   * @return The border width
+   * @return The border size
    */
-   getBorderWidth() {
-    return this.borderWidth;
-  }
-
-  /**
-   * Returns the border height
-   *
-   * @return The border height
-   */
-   getBorderHeight() {
-    return this.borderHeight;
+   getBorderSize() {
+    return this.borderSize;
   }
 
   /**
@@ -252,15 +239,14 @@ class Z4CenteredFigurePainter extends Z4Painter {
         drawingPoint = new Z4DrawingPoint(Z4Vector.fromVector(currentHole, 0, point.x, point.y), drawingPoint.intensity, drawingPoint.temporalPosition, drawingPoint.drawBounds, drawingPoint.side, drawingPoint.useVectorModuleAsSize);
         let currentShadowShiftX = this.shadowShiftX.next();
         let currentShadowShiftY = this.shadowShiftY.next();
-        let currentBorderWidth = this.borderWidth.next();
-        let currentBorderHeight = this.borderHeight.next();
-        let shadowOrBorder = currentShadowShiftX || currentShadowShiftY || currentBorderWidth > 0 || currentBorderHeight > 0;
+        let currentBorderSize = this.borderSize.next();
+        let shadowOrBorder = currentShadowShiftX || currentShadowShiftY || currentBorderSize > 0;
         if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_0 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_1 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_2) {
           this.type0_1_2(drawingPoint, currentCover, shadowOrBorder);
         } else if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_3 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_4 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_5) {
           this.type3_4_5(drawingPoint, currentAngle, currentHole, currentCover, shadowOrBorder);
         }
-        this.drawFigures(context, drawingPoint, currentMultiplicity, spatioTemporalColor, progression);
+        this.drawFigures(context, drawingPoint, currentMultiplicity, spatioTemporalColor, progression, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
       }
     }
   }
@@ -308,7 +294,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
     if (shadowOrBorder) {
       this.pathForShadowBorderE = new Path2D();
       this.pathForShadowBorderE.moveTo(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
-      this.pathForShadowBorderE.bezierCurveTo(c1e.x, c1e.y, c2e.x, c2e.y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+      this.pathForShadowBorderE.bezierCurveTo(this.c1e.x, this.c1e.y, this.c2e.x, this.c2e.y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
     }
   }
 
@@ -361,10 +347,10 @@ class Z4CenteredFigurePainter extends Z4Painter {
     if (shadowOrBorder) {
       this.pathForShadowBorderE = new Path2D();
       this.pathForShadowBorderE.moveTo(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
-      this.pathForShadowBorderE.bezierCurveTo(c1e.x, c1e.y, c2e.x, c2e.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y);
+      this.pathForShadowBorderE.bezierCurveTo(this.c1e.x, this.c1e.y, this.c2e.x, this.c2e.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y);
       this.pathForShadowBorderI = new Path2D();
       this.pathForShadowBorderI.moveTo(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
-      this.pathForShadowBorderI.bezierCurveTo(c1i.x, c1i.y, c2i.x, c2i.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y);
+      this.pathForShadowBorderI.bezierCurveTo(this.c1i.x, this.c1i.y, this.c2i.x, this.c2i.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y);
     }
   }
 
@@ -402,27 +388,27 @@ class Z4CenteredFigurePainter extends Z4Painter {
     }
   }
 
-   drawFigures(context, drawingPoint, currentMultiplicity, spatioTemporalColor, progression) {
+   drawFigures(context, drawingPoint, currentMultiplicity, spatioTemporalColor, progression, currentShadowShiftX, currentShadowShiftY, currentBorderSize) {
     for (let i = 0; i < currentMultiplicity; i++) {
       context.save();
       context.rotate(Z4Math.TWO_PI * i / currentMultiplicity);
       if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_0 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_1 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_2) {
-        this.drawFigure(context, drawingPoint, /*,pathForShadowBorderE*/
-        this.c1e, this.c2e, this.path1e, this.path2e, spatioTemporalColor, progression);
+        this.drawFigure(context, drawingPoint, this.c1e, this.c2e, this.path1e, this.path2e, spatioTemporalColor, progression, this.pathForShadowBorderE, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
       } else if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_3 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_4 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_5) {
-        this.drawFigure(context, drawingPoint, /*,pathForShadowBorderI*/
-        this.c1i, this.c2i, this.path1i, this.path2i, spatioTemporalColor, progression);
-        this.drawFigure(context, drawingPoint, /*,pathForShadowBorderE*/
-        this.c1e, this.c2e, this.path1e, this.path2e, spatioTemporalColor, progression);
+        this.drawFigure(context, drawingPoint, this.c1i, this.c2i, this.path1i, this.path2i, spatioTemporalColor, progression, this.pathForShadowBorderI, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
+        this.drawFigure(context, drawingPoint, this.c1e, this.c2e, this.path1e, this.path2e, spatioTemporalColor, progression, this.pathForShadowBorderE, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
       }
       context.restore();
     }
   }
 
-   drawFigure(context, drawingPoint, /*, Path pathForShadowBorder*/
-  c1, c2, path1, path2, spatioTemporalColor, progression) {
-    // if (shadow) this.drawShadow(pathForShadowBorder);
-    // 
+   drawFigure(context, drawingPoint, c1, c2, path1, path2, spatioTemporalColor, progression, pathForShadowBorder, currentShadowShiftX, currentShadowShiftY, currentBorderSize) {
+    if (currentShadowShiftX || currentShadowShiftY) {
+      this.drawShadow(context, pathForShadowBorder, currentShadowShiftX + currentBorderSize, currentShadowShiftY + currentBorderSize);
+    }
+    if (currentBorderSize > 0) {
+      this.drawBorder(context, pathForShadowBorder, currentBorderSize);
+    }
     if (spatioTemporalColor.isColor()) {
       let color = spatioTemporalColor.getColorAt(-1, -1);
       this.drawFigureWithColors(context, drawingPoint, c1, c2, path1, path2, null, null, color, progression.getLighting());
@@ -437,8 +423,6 @@ class Z4CenteredFigurePainter extends Z4Painter {
       let gradientColor = spatioTemporalColor.getGradientColorAt(progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition);
       this.drawFigureWithColors(context, drawingPoint, c1, c2, path1, path2, null, gradientColor, null, progression.getLighting());
     }
-    // 
-    // if (border) this.drawBorder(point,pathForShadowBorder);
   }
 
    drawFigureWithColors(context, drawingPoint, c1, c2, path1, path2, spatioTemporalColor, gradientColor, color, lighting) {
@@ -476,6 +460,22 @@ class Z4CenteredFigurePainter extends Z4Painter {
     context.restore();
   }
 
+   drawShadow(context, pathForShadowBorder, currentShadowShiftX, currentShadowShiftY) {
+    context.save();
+    context.fillStyle = Z4Constants.getStyle(this.shadowColor.getRGBA_HEX());
+    context.translate(currentShadowShiftX, currentShadowShiftY);
+    context.fill(pathForShadowBorder);
+    context.restore();
+  }
+
+   drawBorder(context, pathForShadowBorder, currentBorderSize) {
+    context.save();
+    context.lineWidth = currentBorderSize;
+    context.strokeStyle = Z4Constants.getStyle(this.borderColor.getRGBA_HEX());
+    context.stroke(pathForShadowBorder);
+    context.restore();
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["centeredFigurePainterType"] = this.centeredFigurePainterType;
@@ -495,8 +495,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
     jsonColor["blue"] = this.shadowColor.blue;
     jsonColor["alpha"] = this.shadowColor.alpha;
     json["shadowColor"] = jsonColor;
-    json["borderWidth"] = this.borderWidth.toJSON();
-    json["borderHeight"] = this.borderHeight.toJSON();
+    json["borderSize"] = this.borderSize.toJSON();
     jsonColor = new Object();
     jsonColor["red"] = this.borderColor.red;
     jsonColor["green"] = this.borderColor.green;
@@ -517,6 +516,6 @@ class Z4CenteredFigurePainter extends Z4Painter {
     let shadowColor = new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]);
     jsonColor = json["borderColor"];
     let borderColor = new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]);
-    return new Z4CenteredFigurePainter(json["centeredFigurePainterType"], Z4FancifulValue.fromJSON(json["size"]), Z4FancifulValue.fromJSON(json["angle1"]), Z4FancifulValue.fromJSON(json["angle2"]), Z4FancifulValue.fromJSON(json["tension"]), Z4FancifulValue.fromJSON(json["multiplicity"]), Z4FancifulValue.fromJSON(json["hole"]), Z4Whirlpool.fromJSON(json["whirlpool"]), json["cover"], Z4FancifulValue.fromJSON(json["shadowShiftX"]), Z4FancifulValue.fromJSON(json["shadowShiftY"]), shadowColor, Z4FancifulValue.fromJSON(json["borderWidth"]), Z4FancifulValue.fromJSON(json["borderHeight"]), borderColor);
+    return new Z4CenteredFigurePainter(json["centeredFigurePainterType"], Z4FancifulValue.fromJSON(json["size"]), Z4FancifulValue.fromJSON(json["angle1"]), Z4FancifulValue.fromJSON(json["angle2"]), Z4FancifulValue.fromJSON(json["tension"]), Z4FancifulValue.fromJSON(json["multiplicity"]), Z4FancifulValue.fromJSON(json["hole"]), Z4Whirlpool.fromJSON(json["whirlpool"]), json["cover"], Z4FancifulValue.fromJSON(json["shadowShiftX"]), Z4FancifulValue.fromJSON(json["shadowShiftY"]), shadowColor, Z4FancifulValue.fromJSON(json["borderSize"]), borderColor);
   }
 }

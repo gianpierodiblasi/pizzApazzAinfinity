@@ -43,8 +43,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
   private final Z4FancifulValue shadowShiftY;
   private final Color shadowColor;
 
-  private final Z4FancifulValue borderWidth;
-  private final Z4FancifulValue borderHeight;
+  private final Z4FancifulValue borderSize;
   private final Color borderColor;
 
   private Z4Point path1e;
@@ -77,15 +76,14 @@ public class Z4CenteredFigurePainter extends Z4Painter {
    * @param shadowShiftX The X shadow shift
    * @param shadowShiftY The Y shadow shift
    * @param shadowColor The shadow color
-   * @param borderWidth The border width
-   * @param borderHeight The border height
+   * @param borderSize The border size
    * @param borderColor The border color
    */
   public Z4CenteredFigurePainter(Z4CenteredFigurePainterType centeredFigurePainterType,
           Z4FancifulValue size, Z4FancifulValue angle1, Z4FancifulValue angle2, Z4FancifulValue tension, Z4FancifulValue multiplicity,
           Z4FancifulValue hole, Z4Whirlpool whirlpool, int cover,
           Z4FancifulValue shadowShiftX, Z4FancifulValue shadowShiftY, Color shadowColor,
-          Z4FancifulValue borderWidth, Z4FancifulValue borderHeight, Color borderColor) {
+          Z4FancifulValue borderSize, Color borderColor) {
     super();
 
     this.centeredFigurePainterType = centeredFigurePainterType;
@@ -104,8 +102,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
     this.shadowShiftY = shadowShiftY;
     this.shadowColor = shadowColor;
 
-    this.borderWidth = borderWidth;
-    this.borderHeight = borderHeight;
+    this.borderSize = borderSize;
     this.borderColor = borderColor;
   }
 
@@ -223,21 +220,12 @@ public class Z4CenteredFigurePainter extends Z4Painter {
   }
 
   /**
-   * Returns the border width
+   * Returns the border size
    *
-   * @return The border width
+   * @return The border size
    */
-  public Z4FancifulValue getBorderWidth() {
-    return this.borderWidth;
-  }
-
-  /**
-   * Returns the border height
-   *
-   * @return The border height
-   */
-  public Z4FancifulValue getBorderHeight() {
-    return this.borderHeight;
+  public Z4FancifulValue getBorderSize() {
+    return this.borderSize;
   }
 
   /**
@@ -272,9 +260,8 @@ public class Z4CenteredFigurePainter extends Z4Painter {
 
         double currentShadowShiftX = this.shadowShiftX.next();
         double currentShadowShiftY = this.shadowShiftY.next();
-        double currentBorderWidth = this.borderWidth.next();
-        double currentBorderHeight = this.borderHeight.next();
-        boolean shadowOrBorder = $exists(currentShadowShiftX) || $exists(currentShadowShiftY) || currentBorderWidth > 0 || currentBorderHeight > 0;
+        double currentBorderSize = this.borderSize.next();
+        boolean shadowOrBorder = $exists(currentShadowShiftX) || $exists(currentShadowShiftY) || currentBorderSize > 0;
 
         if (this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_0 || this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_1 || this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_2) {
           this.type0_1_2(drawingPoint, currentCover, shadowOrBorder);
@@ -282,7 +269,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
           this.type3_4_5(drawingPoint, currentAngle, currentHole, currentCover, shadowOrBorder);
         }
 
-        this.drawFigures(context, drawingPoint, currentMultiplicity, spatioTemporalColor, progression);
+        this.drawFigures(context, drawingPoint, currentMultiplicity, spatioTemporalColor, progression, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
       }
     }
   }
@@ -336,7 +323,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
     if (shadowOrBorder) {
       this.pathForShadowBorderE = new $Path2D();
       this.pathForShadowBorderE.moveTo(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
-      this.pathForShadowBorderE.bezierCurveTo(c1e.x, c1e.y, c2e.x, c2e.y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+      this.pathForShadowBorderE.bezierCurveTo(this.c1e.x, this.c1e.y, this.c2e.x, this.c2e.y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
     }
   }
 
@@ -399,11 +386,11 @@ public class Z4CenteredFigurePainter extends Z4Painter {
     if (shadowOrBorder) {
       this.pathForShadowBorderE = new $Path2D();
       this.pathForShadowBorderE.moveTo(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
-      this.pathForShadowBorderE.bezierCurveTo(c1e.x, c1e.y, c2e.x, c2e.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y);
+      this.pathForShadowBorderE.bezierCurveTo(this.c1e.x, this.c1e.y, this.c2e.x, this.c2e.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y);
 
       this.pathForShadowBorderI = new $Path2D();
       this.pathForShadowBorderI.moveTo(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
-      this.pathForShadowBorderI.bezierCurveTo(c1i.x, c1i.y, c2i.x, c2i.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y);
+      this.pathForShadowBorderI.bezierCurveTo(this.c1i.x, this.c1i.y, this.c2i.x, this.c2i.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y);
     }
   }
 
@@ -442,25 +429,34 @@ public class Z4CenteredFigurePainter extends Z4Painter {
     }
   }
 
-  private void drawFigures($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, double currentMultiplicity, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
+  private void drawFigures($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint,
+          double currentMultiplicity, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression,
+          double currentShadowShiftX, double currentShadowShiftY, double currentBorderSize) {
     for (int i = 0; i < currentMultiplicity; i++) {
       context.save();
       context.rotate(Z4Math.TWO_PI * i / currentMultiplicity);
 
       if (this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_0 || this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_1 || this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_2) {
-        this.drawFigure(context, drawingPoint/*,pathForShadowBorderE*/, this.c1e, this.c2e, this.path1e, this.path2e, spatioTemporalColor, progression);
+        this.drawFigure(context, drawingPoint, this.c1e, this.c2e, this.path1e, this.path2e, spatioTemporalColor, progression, this.pathForShadowBorderE, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
       } else if (this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_3 || this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_4 || this.centeredFigurePainterType == Z4CenteredFigurePainterType.TYPE_5) {
-        this.drawFigure(context, drawingPoint/*,pathForShadowBorderI*/, this.c1i, this.c2i, this.path1i, this.path2i, spatioTemporalColor, progression);
-        this.drawFigure(context, drawingPoint/*,pathForShadowBorderE*/, this.c1e, this.c2e, this.path1e, this.path2e, spatioTemporalColor, progression);
+        this.drawFigure(context, drawingPoint, this.c1i, this.c2i, this.path1i, this.path2i, spatioTemporalColor, progression, this.pathForShadowBorderI, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
+        this.drawFigure(context, drawingPoint, this.c1e, this.c2e, this.path1e, this.path2e, spatioTemporalColor, progression, this.pathForShadowBorderE, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
       }
 
       context.restore();
     }
   }
 
-  private void drawFigure($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint/*, Path pathForShadowBorder*/, Z4Point c1, Z4Point c2, Z4Point path1, Z4Point path2, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
-//    if (shadow) this.drawShadow(pathForShadowBorder);
-//
+  private void drawFigure($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint,
+          Z4Point c1, Z4Point c2, Z4Point path1, Z4Point path2, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression,
+          $Path2D pathForShadowBorder, double currentShadowShiftX, double currentShadowShiftY, double currentBorderSize) {
+    if ($exists(currentShadowShiftX) || $exists(currentShadowShiftY)) {
+      this.drawShadow(context, pathForShadowBorder, currentShadowShiftX + currentBorderSize, currentShadowShiftY + currentBorderSize);
+    }
+    if (currentBorderSize > 0) {
+      this.drawBorder(context, pathForShadowBorder, currentBorderSize);
+    }
+
     if (spatioTemporalColor.isColor()) {
       Color color = spatioTemporalColor.getColorAt(-1, -1);
       this.drawFigureWithColors(context, drawingPoint, c1, c2, path1, path2, null, null, color, progression.getLighting());
@@ -475,8 +471,6 @@ public class Z4CenteredFigurePainter extends Z4Painter {
       Z4GradientColor gradientColor = spatioTemporalColor.getGradientColorAt(progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition);
       this.drawFigureWithColors(context, drawingPoint, c1, c2, path1, path2, null, gradientColor, null, progression.getLighting());
     }
-//
-//    if (border) this.drawBorder(point,pathForShadowBorder);
   }
 
   @SuppressWarnings("null")
@@ -521,6 +515,22 @@ public class Z4CenteredFigurePainter extends Z4Painter {
     context.restore();
   }
 
+  private void drawShadow($CanvasRenderingContext2D context, $Path2D pathForShadowBorder, double currentShadowShiftX, double currentShadowShiftY) {
+    context.save();
+    context.fillStyle = Z4Constants.$getStyle(this.shadowColor.getRGBA_HEX());
+    context.translate(currentShadowShiftX, currentShadowShiftY);
+    context.fill(pathForShadowBorder);
+    context.restore();
+  }
+
+  private void drawBorder($CanvasRenderingContext2D context, $Path2D pathForShadowBorder, double currentBorderSize) {
+    context.save();
+    context.lineWidth = currentBorderSize;
+    context.strokeStyle = Z4Constants.$getStyle(this.borderColor.getRGBA_HEX());
+    context.stroke(pathForShadowBorder);
+    context.restore();
+  }
+
   @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
@@ -546,8 +556,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
     jsonColor.$set("alpha", this.shadowColor.alpha);
     json.$set("shadowColor", jsonColor);
 
-    json.$set("borderWidth", this.borderWidth.toJSON());
-    json.$set("borderHeight", this.borderHeight.toJSON());
+    json.$set("borderSize", this.borderSize.toJSON());
 
     jsonColor = new $Object();
     jsonColor.$set("red", this.borderColor.red);
@@ -579,7 +588,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
             Z4FancifulValue.fromJSON(json.$get("tension")), Z4FancifulValue.fromJSON(json.$get("multiplicity")),
             Z4FancifulValue.fromJSON(json.$get("hole")), Z4Whirlpool.fromJSON(json.$get("whirlpool")), json.$get("cover"),
             Z4FancifulValue.fromJSON(json.$get("shadowShiftX")), Z4FancifulValue.fromJSON(json.$get("shadowShiftY")), shadowColor,
-            Z4FancifulValue.fromJSON(json.$get("borderWidth")), Z4FancifulValue.fromJSON(json.$get("borderHeight")), borderColor
+            Z4FancifulValue.fromJSON(json.$get("borderSize")), borderColor
     );
   }
 }
