@@ -232,10 +232,10 @@ class Z4CenteredFigurePainter extends Z4Painter {
     this.pF = new Z4Point(drawingPoint.z4Vector.x, drawingPoint.z4Vector.y);
     if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_3) {
       // One control point collapses towards the fulcrum, the other one collapses towards newPoint
-      this.c1e = this.setControlPoint(drawingPoint, currentHole, 0, this.angle1.next(), 1, this.tension.next());
-      this.c1i = this.setControlPoint(drawingPoint, currentHole, 0, this.angle1.next(), -1, this.tension.next());
-      this.c2e = this.setControlPoint(drawingPoint, currentHole, -180, this.angle2.next(), -1, this.tension.next());
-      this.c2i = this.setControlPoint(drawingPoint, currentHole, -180, this.angle2.next(), 1, this.tension.next());
+      this.c1e = this.setControlPoint(drawingPoint, currentHole, 0, Z4Math.deg2rad(this.angle1.next()), 1, this.tension.next());
+      this.c1i = this.setControlPoint(drawingPoint, currentHole, 0, Z4Math.deg2rad(this.angle1.next()), -1, this.tension.next());
+      this.c2e = this.setControlPoint(drawingPoint, currentHole, -Math.PI, Z4Math.deg2rad(this.angle2.next()), -1, this.tension.next());
+      this.c2i = this.setControlPoint(drawingPoint, currentHole, -Math.PI, Z4Math.deg2rad(this.angle2.next()), 1, this.tension.next());
       this.c2e = new Z4Point(drawingPoint.z4Vector.module + this.c2e.x, this.c2e.y);
       this.c2i = new Z4Point(drawingPoint.z4Vector.module + this.c2i.x, this.c2i.y);
       this.c1e = this.checkWhirlpool2(drawingPoint, this.c1e, currentAngle, currentHole);
@@ -248,8 +248,8 @@ class Z4CenteredFigurePainter extends Z4Painter {
       this.path2i = this.findControlPointPath(this.c2i.x, this.c2i.y, drawingPoint.z4Vector.x, drawingPoint.z4Vector.y, currentCover);
     } else if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_4) {
       // The second control point is fixed on the fulcrum, the first control point collapses towards the fulcrum
-      this.c1e = this.setControlPoint(drawingPoint, currentHole, 0, this.angle1.next(), 1, this.tension.next());
-      this.c1i = this.setControlPoint(drawingPoint, currentHole, 0, this.angle1.next(), -1, this.tension.next());
+      this.c1e = this.setControlPoint(drawingPoint, currentHole, 0, Z4Math.deg2rad(this.angle1.next()), 1, this.tension.next());
+      this.c1i = this.setControlPoint(drawingPoint, currentHole, 0, Z4Math.deg2rad(this.angle1.next()), -1, this.tension.next());
       this.c2e = new Z4Point(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
       this.c2i = new Z4Point(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
       this.c1e = this.checkWhirlpool2(drawingPoint, this.c1e, currentAngle, currentHole);
@@ -262,8 +262,8 @@ class Z4CenteredFigurePainter extends Z4Painter {
       // The first control point is fixed on newPoint, the second control point collapses towards newPoint
       this.c1e = new Z4Point(drawingPoint.z4Vector.x, drawingPoint.z4Vector.y);
       this.c1i = new Z4Point(drawingPoint.z4Vector.x, drawingPoint.z4Vector.y);
-      this.c2e = this.setControlPoint(drawingPoint, currentHole, -180, this.angle2.next(), -1, this.tension.next());
-      this.c2i = this.setControlPoint(drawingPoint, currentHole, -180, this.angle2.next(), 1, this.tension.next());
+      this.c2e = this.setControlPoint(drawingPoint, currentHole, -Math.PI, Z4Math.deg2rad(this.angle2.next()), -1, this.tension.next());
+      this.c2i = this.setControlPoint(drawingPoint, currentHole, -Math.PI, Z4Math.deg2rad(this.angle2.next()), 1, this.tension.next());
       this.c2e = new Z4Point(drawingPoint.z4Vector.module + this.c2e.x, this.c2e.y);
       this.c2i = new Z4Point(drawingPoint.z4Vector.module + this.c2i.x, this.c2i.y);
       this.c2e = this.checkWhirlpool2(drawingPoint, this.c2e, currentAngle, currentHole);
@@ -290,8 +290,8 @@ class Z4CenteredFigurePainter extends Z4Painter {
     return new Z4Point(module * currentCover * Math.cos(phase), module * currentCover * Math.sin(phase));
   }
 
-   setControlPoint(drawingPoint, currentHole, phase, currentAngle, angleSign, currenTension) {
-    return Z4Math.rotoTranslate(currenTension * drawingPoint.intensity * drawingPoint.z4Vector.module, 0, phase + angleSign * currentAngle, currentHole, 0);
+   setControlPoint(drawingPoint, currentHole, phase, currentAngle, angleSign, currentTension) {
+    return Z4Math.rotoTranslate(currentTension * drawingPoint.intensity * drawingPoint.z4Vector.module, 0, phase + angleSign * currentAngle, currentHole, 0);
   }
 
    checkWhirlpool1(currentAngle, currentHole, currentSize) {
