@@ -2,6 +2,7 @@ package pizzapazza.ui.panel.painter;
 
 import def.js.Array;
 import def.js.Object;
+import javascript.awt.BoxLayout;
 import javascript.awt.Color;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
@@ -78,8 +79,10 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     tabbedPane.addTab(Z4Translations.SHAPE, panel);
 
     JSPanel panelType = new JSPanel();
+    panelType.setLayout(new BoxLayout(panelType, BoxLayout.Y_AXIS));
+    panel.add(panelType, new GBC(0, 0).h(8).f(GBC.VERTICAL));
+
     ButtonGroup buttonGroup = new ButtonGroup();
-    panel.add(panelType, new GBC(0, 0).w(2).a(GBC.WEST).f(GBC.HORIZONTAL));
     this.addRadio(Z4CenteredFigurePainterType.TYPE_0, panelType, buttonGroup);
     this.addRadio(Z4CenteredFigurePainterType.TYPE_1, panelType, buttonGroup);
     this.addRadio(Z4CenteredFigurePainterType.TYPE_2, panelType, buttonGroup);
@@ -92,7 +95,7 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     this.size.setLabel(Z4Translations.DIMENSION);
     this.size.cssAddClass("z4abstractvaluepanel-titled");
     this.size.addChangeListener(event -> this.onfigurechange(this.size.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.size, new GBC(0, 1).w(2).a(GBC.WEST));
+    panel.add(this.size, new GBC(1, 0).w(2).a(GBC.WEST));
 
     this.angle1.setSignsVisible(false);
     this.angle1.setConstantRange(0, 90);
@@ -100,7 +103,7 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     this.angle1.setLabel(Z4Translations.ANGLE + " 1");
     this.angle1.cssAddClass("z4abstractvaluepanel-titled");
     this.angle1.addChangeListener(event -> this.onfigurechange(this.angle1.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.angle1, new GBC(0, 2).w(2).a(GBC.WEST));
+    panel.add(this.angle1, new GBC(1, 1).w(2).a(GBC.WEST));
 
     this.angle2.setSignsVisible(false);
     this.angle2.setConstantRange(0, 90);
@@ -108,41 +111,41 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     this.angle2.setLabel(Z4Translations.ANGLE + " 2");
     this.angle2.cssAddClass("z4abstractvaluepanel-titled");
     this.angle2.addChangeListener(event -> this.onfigurechange(this.angle2.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.angle2, new GBC(0, 3).w(2).a(GBC.WEST));
+    panel.add(this.angle2, new GBC(1, 2).w(2).a(GBC.WEST));
 
     this.tension.setSignsVisible(false);
     this.tension.setConstantRange(1, 100);
     this.tension.setLabel(Z4Translations.TENSION);
     this.tension.cssAddClass("z4abstractvaluepanel-titled");
     this.tension.addChangeListener(event -> this.onfigurechange(this.tension.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.tension, new GBC(0, 4).w(2).a(GBC.WEST));
+    panel.add(this.tension, new GBC(1, 3).w(2).a(GBC.WEST));
 
     this.multiplicity.setSignsVisible(false);
     this.multiplicity.setConstantRange(3, 10);
     this.multiplicity.setLabel(Z4Translations.MULTIPLICITY);
     this.multiplicity.cssAddClass("z4abstractvaluepanel-titled");
     this.multiplicity.addChangeListener(event -> this.onfigurechange(this.multiplicity.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.multiplicity, new GBC(0, 5).w(2).a(GBC.WEST));
+    panel.add(this.multiplicity, new GBC(1, 4).w(2).a(GBC.WEST));
 
     this.hole.setSignsVisible(false);
     this.hole.setLabel(Z4Translations.HOLE);
     this.hole.cssAddClass("z4abstractvaluepanel-titled");
     this.hole.addChangeListener(event -> this.onfigurechange(this.hole.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.hole, new GBC(0, 6).w(2).a(GBC.WEST));
+    panel.add(this.hole, new GBC(1, 5).w(2).a(GBC.WEST));
 
     this.whirlpool.cssAddClass("z4abstractvaluepanel-titled");
     this.whirlpool.addChangeListener(event -> this.onfigurechange(this.whirlpool.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.whirlpool, new GBC(0, 7).w(2).a(GBC.WEST));
+    panel.add(this.whirlpool, new GBC(1, 6).w(2).a(GBC.WEST));
 
-    Z4UI.addLabel(panel, Z4Translations.COVER, new GBC(0, 8).a(GBC.WEST));
+    Z4UI.addLabel(panel, Z4Translations.COVER, new GBC(1, 7).a(GBC.WEST));
 
     this.coverSpinner.cssAddClass("jsspinner_w_4rem");
     this.coverSpinner.setModel(new SpinnerNumberModel(100, 0, 100, 1));
     this.coverSpinner.addChangeListener(event -> this.onfigurechange(this.coverSpinner.getValueIsAdjusting(), null, null, (int) this.coverSpinner.getValue()));
-    panel.add(this.coverSpinner, new GBC(1, 8).a(GBC.EAST));
+    panel.add(this.coverSpinner, new GBC(2, 7).a(GBC.EAST));
 
     this.coverSlider.addChangeListener(event -> this.onfigurechange(this.coverSlider.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.coverSlider, new GBC(0, 9).w(2).f(GBC.HORIZONTAL));
+    panel.add(this.coverSlider, new GBC(1, 8).w(2).f(GBC.HORIZONTAL));
 
     this.shadowShiftX.setLabel(Z4Translations.DELTA_X);
     this.shadowShiftX.cssAddClass("z4abstractvaluepanel-titled");
@@ -289,7 +292,7 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
             this.shadowShiftX.getValue(), this.shadowShiftY.getValue(), $exists(shadowColor) ? shadowColor : this.value.getShadowColor(),
             this.borderSize.getValue(), $exists(borderColor) ? borderColor : this.value.getBorderColor()
     );
-    
+
     this.angle1.setEnabled(this.enabled && this.value.getCenteredFigurePainterType() != Z4CenteredFigurePainterType.TYPE_5);
     this.angle2.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_5));
     this.tension.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_4 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_5));
