@@ -8365,17 +8365,17 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
 
    radios = new Array();
 
-   size = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+   size = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTALLY_VERTICAL);
 
-   angle1 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+   angle1 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTALLY_VERTICAL);
 
-   angle2 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+   angle2 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTALLY_VERTICAL);
 
-   tension = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+   tension = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTALLY_VERTICAL);
 
-   multiplicity = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+   multiplicity = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTALLY_VERTICAL);
 
-   hole = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+   hole = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTALLY_VERTICAL);
 
    whirlpool = new Z4WhirlpoolPanel(Z4WhirlpoolPanelOrientation.HORIZONTAL);
 
@@ -8409,62 +8409,62 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
     panel.setLayout(new GridBagLayout());
     tabbedPane.addTab(Z4Translations.SHAPE, panel);
     let panelType = new JSPanel();
-    panelType.setLayout(new BoxLayout(panelType, BoxLayout.Y_AXIS));
-    panel.add(panelType, new GBC(0, 0).h(8).f(GBC.VERTICAL));
+    panelType.setLayout(new GridBagLayout());
+    panel.add(panelType, new GBC(0, 0).h(5).f(GBC.VERTICAL));
     let buttonGroup = new ButtonGroup();
-    this.addRadio(Z4CenteredFigurePainterType.TYPE_0, panelType, buttonGroup);
-    this.addRadio(Z4CenteredFigurePainterType.TYPE_1, panelType, buttonGroup);
-    this.addRadio(Z4CenteredFigurePainterType.TYPE_2, panelType, buttonGroup);
-    this.addRadio(Z4CenteredFigurePainterType.TYPE_3, panelType, buttonGroup);
-    this.addRadio(Z4CenteredFigurePainterType.TYPE_4, panelType, buttonGroup);
-    this.addRadio(Z4CenteredFigurePainterType.TYPE_5, panelType, buttonGroup);
+    this.addRadio(Z4CenteredFigurePainterType.TYPE_0, panelType, buttonGroup, 0);
+    this.addRadio(Z4CenteredFigurePainterType.TYPE_1, panelType, buttonGroup, 1);
+    this.addRadio(Z4CenteredFigurePainterType.TYPE_2, panelType, buttonGroup, 2);
+    this.addRadio(Z4CenteredFigurePainterType.TYPE_3, panelType, buttonGroup, 3);
+    this.addRadio(Z4CenteredFigurePainterType.TYPE_4, panelType, buttonGroup, 4);
+    this.addRadio(Z4CenteredFigurePainterType.TYPE_5, panelType, buttonGroup, 5);
     this.size.setSignsVisible(false);
     this.size.setConstantRange(1, 50);
     this.size.setLabel(Z4Translations.DIMENSION);
     this.size.cssAddClass("z4abstractvaluepanel-titled");
     this.size.addChangeListener(event => this.onfigurechange(this.size.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.size, new GBC(1, 0).w(2).a(GBC.WEST));
+    panel.add(this.size, new GBC(1, 0).i(1, 0, 0, 0));
     this.angle1.setSignsVisible(false);
     this.angle1.setConstantRange(0, 90);
     this.angle1.setRandomRange(0, 90);
     this.angle1.setLabel(Z4Translations.ANGLE + " 1");
     this.angle1.cssAddClass("z4abstractvaluepanel-titled");
     this.angle1.addChangeListener(event => this.onfigurechange(this.angle1.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.angle1, new GBC(1, 1).w(2).a(GBC.WEST));
+    panel.add(this.angle1, new GBC(2, 0).i(1, 1, 0, 1));
     this.angle2.setSignsVisible(false);
     this.angle2.setConstantRange(0, 90);
     this.angle2.setRandomRange(0, 90);
     this.angle2.setLabel(Z4Translations.ANGLE + " 2");
     this.angle2.cssAddClass("z4abstractvaluepanel-titled");
     this.angle2.addChangeListener(event => this.onfigurechange(this.angle2.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.angle2, new GBC(1, 2).w(2).a(GBC.WEST));
+    panel.add(this.angle2, new GBC(3, 0).i(1, 0, 0, 0));
     this.tension.setSignsVisible(false);
     this.tension.setConstantRange(1, 100);
     this.tension.setLabel(Z4Translations.TENSION);
     this.tension.cssAddClass("z4abstractvaluepanel-titled");
     this.tension.addChangeListener(event => this.onfigurechange(this.tension.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.tension, new GBC(1, 3).w(2).a(GBC.WEST));
+    panel.add(this.tension, new GBC(1, 1).i(1, 0, 0, 0));
     this.multiplicity.setSignsVisible(false);
     this.multiplicity.setConstantRange(3, 10);
     this.multiplicity.setLabel(Z4Translations.MULTIPLICITY);
     this.multiplicity.cssAddClass("z4abstractvaluepanel-titled");
     this.multiplicity.addChangeListener(event => this.onfigurechange(this.multiplicity.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.multiplicity, new GBC(1, 4).w(2).a(GBC.WEST));
+    panel.add(this.multiplicity, new GBC(2, 1).i(1, 1, 0, 1));
     this.hole.setSignsVisible(false);
     this.hole.setLabel(Z4Translations.HOLE);
     this.hole.cssAddClass("z4abstractvaluepanel-titled");
     this.hole.addChangeListener(event => this.onfigurechange(this.hole.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.hole, new GBC(1, 5).w(2).a(GBC.WEST));
+    panel.add(this.hole, new GBC(3, 1).i(1, 0, 0, 0));
     this.whirlpool.cssAddClass("z4abstractvaluepanel-titled");
     this.whirlpool.addChangeListener(event => this.onfigurechange(this.whirlpool.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.whirlpool, new GBC(1, 6).w(2).a(GBC.WEST));
-    Z4UI.addLabel(panel, Z4Translations.COVER, new GBC(1, 7).a(GBC.WEST));
+    panel.add(this.whirlpool, new GBC(1, 2).w(3).a(GBC.WEST).i(1, 0, 0, 0));
+    Z4UI.addLabel(panel, Z4Translations.COVER, new GBC(1, 3).w(2).a(GBC.WEST));
     this.coverSpinner.cssAddClass("jsspinner_w_4rem");
     this.coverSpinner.setModel(new SpinnerNumberModel(100, 0, 100, 1));
     this.coverSpinner.addChangeListener(event => this.onfigurechange(this.coverSpinner.getValueIsAdjusting(), null, null, this.coverSpinner.getValue()));
-    panel.add(this.coverSpinner, new GBC(2, 7).a(GBC.EAST));
+    panel.add(this.coverSpinner, new GBC(3, 3).a(GBC.EAST));
     this.coverSlider.addChangeListener(event => this.onfigurechange(this.coverSlider.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.coverSlider, new GBC(1, 8).w(2).f(GBC.HORIZONTAL));
+    panel.add(this.coverSlider, new GBC(1, 4).w(3).f(GBC.HORIZONTAL));
     this.shadowShiftX.setLabel(Z4Translations.DELTA_X);
     this.shadowShiftX.cssAddClass("z4abstractvaluepanel-titled");
     this.shadowShiftX.addChangeListener(event => this.onfigurechange(this.shadowShiftX.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
@@ -8484,7 +8484,7 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
     this.setValue(new Z4CenteredFigurePainter(Z4CenteredFigurePainterType.TYPE_0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 50), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 3), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Whirlpool(Z4WhirlpoolBehavior.NONE, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false)), 100, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 255), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 255)));
   }
 
-   addRadio(centeredFigurePainterType, panel, buttonGroup) {
+   addRadio(centeredFigurePainterType, panel, buttonGroup, y) {
     let radio = new JSRadioButton();
     radio.cssAddClass("z4centeredfigurepainterpanel-radio");
     radio.setContentAreaFilled(false);
@@ -8493,7 +8493,7 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
     radio.addActionListener(event => this.onfigurechange(false, null, null, this.coverSlider.getValue()));
     buttonGroup.add(radio);
     this.radios["" + centeredFigurePainterType] = radio;
-    panel.add(radio, null);
+    panel.add(radio, new GBC(0, y).wy(1).i(0, 0, 0, 5));
   }
 
    createPanel(tabbedPane, text, p1, p2, preview, button) {
