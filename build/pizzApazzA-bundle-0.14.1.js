@@ -8216,6 +8216,10 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
 
    tension = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
 
+   multiplicity = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+
+   hole = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+
    shadowShiftX = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
 
    shadowShiftY = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
@@ -8276,6 +8280,17 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
     this.tension.cssAddClass("z4abstractvaluepanel-titled");
     this.tension.addChangeListener(event => this.onfigurechange(this.tension.getValueIsAdjusting(), null, null));
     panel.add(this.tension, new GBC(0, 4).a(GBC.WEST));
+    this.multiplicity.setSignsVisible(false);
+    this.multiplicity.setConstantRange(3, 10);
+    this.multiplicity.setLabel(Z4Translations.MULTIPLICITY);
+    this.multiplicity.cssAddClass("z4abstractvaluepanel-titled");
+    this.multiplicity.addChangeListener(event => this.onfigurechange(this.multiplicity.getValueIsAdjusting(), null, null));
+    panel.add(this.multiplicity, new GBC(0, 5).a(GBC.WEST));
+    this.hole.setSignsVisible(false);
+    this.hole.setLabel(Z4Translations.HOLE);
+    this.hole.cssAddClass("z4abstractvaluepanel-titled");
+    this.hole.addChangeListener(event => this.onfigurechange(this.hole.getValueIsAdjusting(), null, null));
+    panel.add(this.hole, new GBC(0, 6).a(GBC.WEST));
     this.shadowShiftX.setLabel(Z4Translations.DELTA_X);
     this.shadowShiftX.cssAddClass("z4abstractvaluepanel-titled");
     this.shadowShiftX.addChangeListener(event => this.onfigurechange(this.shadowShiftX.getValueIsAdjusting(), null, null));
@@ -8349,7 +8364,7 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
         type = Z4CenteredFigurePainterType.TYPE_5;
         break;
     }
-    this.value = new Z4CenteredFigurePainter(type, this.size.getValue(), this.angle1.getValue(), this.angle2.getValue(), null, null, null, null, 0, this.shadowShiftX.getValue(), this.shadowShiftY.getValue(), shadowColor ? shadowColor : this.value.getShadowColor(), this.borderSize.getValue(), borderColor ? borderColor : this.value.getBorderColor());
+    this.value = new Z4CenteredFigurePainter(type, this.size.getValue(), this.angle1.getValue(), this.angle2.getValue(), this.tension.getValue(), this.multiplicity.getValue(), this.hole.getValue(), null, 0, this.shadowShiftX.getValue(), this.shadowShiftY.getValue(), shadowColor ? shadowColor : this.value.getShadowColor(), this.borderSize.getValue(), borderColor ? borderColor : this.value.getBorderColor());
     this.angle1.setEnabled(this.enabled && this.value.getCenteredFigurePainterType() !== Z4CenteredFigurePainterType.TYPE_5);
     this.angle2.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_5));
     this.tension.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_4 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_5));
@@ -8366,6 +8381,8 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
     this.angle2.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_5));
     this.tension.setValue(this.value.getTension());
     this.tension.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_4 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_5));
+    this.multiplicity.setValue(this.value.getMultiplicity());
+    this.hole.setValue(this.value.getHole());
     this.shadowShiftX.setValue(this.value.getShadowShiftX());
     this.shadowShiftY.setValue(this.value.getShadowShiftY());
     this.shadowColorPreview.setColor(this.value.getShadowColor());
@@ -8380,6 +8397,8 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
     this.angle1.setEnabled(b && this.value.getCenteredFigurePainterType() !== Z4CenteredFigurePainterType.TYPE_5);
     this.angle2.setEnabled(b && (this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_5));
     this.tension.setEnabled(b && (this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_4 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_5));
+    this.multiplicity.setEnabled(b);
+    this.hole.setEnabled(b);
     this.shadowShiftX.setEnabled(b);
     this.shadowShiftY.setEnabled(b);
     this.editShadowColor.setEnabled(b);
