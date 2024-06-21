@@ -61,6 +61,7 @@ public abstract class Z4PointIteratorPanel<T extends Z4PointIterator> extends Z4
 
   @Override
   public void setValue(T value) {
+    this.value = value;
     this.rotation.setValue(value.getRotation());
   }
 

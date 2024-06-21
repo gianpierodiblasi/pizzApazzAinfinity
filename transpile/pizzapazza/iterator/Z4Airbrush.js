@@ -7,9 +7,9 @@ class Z4Airbrush extends Z4PointIterator {
 
    multiplicity = null;
 
-   radius = 0.0;
+   radius = 0;
 
-   speed = 0.0;
+   speed = 0;
 
    currentMultiplicityCounter = 0;
 

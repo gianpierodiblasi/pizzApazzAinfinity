@@ -51,6 +51,7 @@ class Z4PointIteratorPanel extends Z4AbstractValuePanel {
   }
 
    setValue(value) {
+    this.value = value;
     this.rotation.setValue(value.getRotation());
   }
 

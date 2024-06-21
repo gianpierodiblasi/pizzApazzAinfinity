@@ -26,8 +26,8 @@ import simulation.js.$Object;
 public class Z4Airbrush extends Z4PointIterator {
 
   private final Z4FancifulValue multiplicity;
-  private final double radius;
-  private final double speed;
+  private final int radius;
+  private final int speed;
 
   private int currentMultiplicityCounter;
   private int currentMultiplicityTotal;
@@ -40,7 +40,7 @@ public class Z4Airbrush extends Z4PointIterator {
    * @param speed The speed
    * @param rotation The rotation
    */
-  public Z4Airbrush(Z4FancifulValue multiplicity, double radius, double speed, Z4Rotation rotation) {
+  public Z4Airbrush(Z4FancifulValue multiplicity, int radius, int speed, Z4Rotation rotation) {
     super(rotation);
 
     this.multiplicity = multiplicity;
@@ -67,7 +67,7 @@ public class Z4Airbrush extends Z4PointIterator {
    *
    * @return The radius
    */
-  public double getRadius() {
+  public int getRadius() {
     return this.radius;
   }
 
@@ -76,7 +76,7 @@ public class Z4Airbrush extends Z4PointIterator {
    *
    * @return The speed
    */
-  public double getSpeed() {
+  public int getSpeed() {
     return this.speed;
   }
 
