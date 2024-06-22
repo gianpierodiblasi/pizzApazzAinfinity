@@ -254,6 +254,8 @@ class Z4Translations {
 
   static  SPEED = "";
 
+  static  DRAW_WHILE_MOVING = "";
+
   // Painter
   static  TENSION = "";
 
@@ -505,6 +507,7 @@ class Z4Translations {
     Z4Translations.ENDLESS = "Endless";
     Z4Translations.RADIUS = "Radius";
     Z4Translations.SPEED = "Speed";
+    Z4Translations.DRAW_WHILE_MOVING = "Draw While Moving";
     // Painter
     Z4Translations.TENSION = "Tension";
     Z4Translations.HOLE = "Hole";
@@ -693,6 +696,7 @@ class Z4Translations {
     Z4Translations.ENDLESS = "Infinito";
     Z4Translations.RADIUS = "Raggio";
     Z4Translations.SPEED = "Velocit\u00E0";
+    Z4Translations.DRAW_WHILE_MOVING = "Disegna Durante il Movimento";
     // Painter
     Z4Translations.TENSION = "Tensione";
     Z4Translations.HOLE = "Buco";

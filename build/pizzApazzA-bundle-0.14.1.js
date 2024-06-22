@@ -2903,7 +2903,7 @@ class Z4CanvasMouseManager {
 
    statusPanel = null;
 
-   drawingTool = new Z4DrawingTool(new Z4Spirograph(new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.RELATIVE_TO_PATH, false)), new Z4CenteredFigurePainter(Z4CenteredFigurePainterType.TYPE_0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 50), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 3), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Whirlpool(Z4WhirlpoolBehavior.NONE, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 30), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false)), 100, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(255, 0, 0, 255), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(255, 255, 0, 255)), // new Z4Shape2DPainter(
+   drawingTool = new Z4DrawingTool(new Z4Spirograph(true, new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.RELATIVE_TO_PATH, false)), new Z4CenteredFigurePainter(Z4CenteredFigurePainterType.TYPE_0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 50), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 3), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Whirlpool(Z4WhirlpoolBehavior.NONE, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 30), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false)), 100, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(255, 0, 0, 255), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(255, 255, 0, 255)), // new Z4Shape2DPainter(
   // new Z4FancifulValue(
   // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
   // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
@@ -7141,20 +7141,35 @@ class Z4AirbrushPanel extends Z4PointIteratorPanel {
  */
 class Z4SpirographPanel extends Z4PointIteratorPanel {
 
+   drawWhileMoving = new JSCheckBox();
+
   /**
    * Creates the object
    */
   constructor() {
     super();
     this.cssAddClass("z4spirographpanel");
-    this.add(this.rotation, new GBC(0, 0));
-    this.setValue(new Z4Spirograph(new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)));
+    this.drawWhileMoving.setText(Z4Translations.DRAW_WHILE_MOVING);
+    this.drawWhileMoving.addActionListener(event => this.onIteratorChange(false));
+    this.add(this.drawWhileMoving, new GBC(0, 0).a(GBC.WEST));
+    this.add(this.rotation, new GBC(0, 1));
+    this.setValue(new Z4Spirograph(true, new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)));
   }
 
    onIteratorChange(valueIsAdjusting) {
     this.valueIsAdjusting = valueIsAdjusting;
-    this.value = new Z4Spirograph(this.rotation.getValue());
+    this.value = new Z4Spirograph(this.drawWhileMoving.isSelected(), this.rotation.getValue());
     this.onchange();
+  }
+
+   setValue(value) {
+    super.setValue(value);
+    this.drawWhileMoving.setSelected(value.isDrawWhileMoving());
+  }
+
+   setEnabled(b) {
+    super.setEnabled(b);
+    this.drawWhileMoving.setEnabled(b);
   }
 }
 /**
@@ -11501,7 +11516,7 @@ class Z4Scatterer extends Z4PointIterator {
  */
 class Z4Spirograph extends Z4PointIterator {
 
-   drawLast = true;
+   drawWhileMoving = false;
 
    center = null;
 
@@ -11514,14 +11529,25 @@ class Z4Spirograph extends Z4PointIterator {
   /**
    * Creates the object
    *
+   * @param drawWhileMoving true to draw while moving, false otherwise
    * @param rotation The rotation
    */
-  constructor(rotation) {
+  constructor(drawWhileMoving, rotation) {
     super(rotation);
+    this.drawWhileMoving = drawWhileMoving;
   }
 
    getType() {
     return Z4PointIteratorType.SPIROGRAPH;
+  }
+
+  /**
+   * Checks if this painter has to draw while moving
+   *
+   * @return true if this painter has to draw while moving, false otherwise
+   */
+   isDrawWhileMoving() {
+    return this.drawWhileMoving;
   }
 
    drawAction(action, x, y) {
@@ -11558,11 +11584,11 @@ class Z4Spirograph extends Z4PointIterator {
       let currentVector = Z4Vector.fromPoints(this.center.x, this.center.y, this.currentPoint.x, this.currentPoint.y);
       let angle = this.rotation.next(currentVector.phase);
       let vector = Z4Vector.fromVector(this.center.x, this.center.y, currentVector.module, angle);
-      let intent = this.drawLast ? Z4DrawingPointIntent.REPLACE_PREVIOUS_BOUNDS : Z4DrawingPointIntent.DRAW_OBJECTS;
+      let intent = this.drawWhileMoving ? Z4DrawingPointIntent.DRAW_OBJECTS : Z4DrawingPointIntent.REPLACE_PREVIOUS_BOUNDS;
       let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
       if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.TEMPORAL) {
         temporalPosition = progression.next(temporalPosition);
-      } else if (!this.drawLast && progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RELATIVE_TO_PATH) {
+      } else if (this.drawWhileMoving && progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RELATIVE_TO_PATH) {
         intent = Z4DrawingPointIntent.DRAW_BOUNDS;
       } else if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RANDOM) {
         temporalPosition = Math.random();
@@ -11632,6 +11658,12 @@ class Z4Spirograph extends Z4PointIterator {
     }
   }
 
+   toJSON() {
+    let json = super.toJSON();
+    json["drawWhileMoving"] = this.drawWhileMoving;
+    return json;
+  }
+
   /**
    * Creates a Z4Spirograph from a JSON object
    *
@@ -11639,7 +11671,7 @@ class Z4Spirograph extends Z4PointIterator {
    * @return the spirograph
    */
   static  fromJSON(json) {
-    return new Z4Spirograph(Z4Rotation.fromJSON(json["rotation"]));
+    return new Z4Spirograph(json["drawWhileMoving"], Z4Rotation.fromJSON(json["rotation"]));
   }
 }
 /**
@@ -13795,6 +13827,8 @@ class Z4Translations {
 
   static  SPEED = "";
 
+  static  DRAW_WHILE_MOVING = "";
+
   // Painter
   static  TENSION = "";
 
@@ -14046,6 +14080,7 @@ class Z4Translations {
     Z4Translations.ENDLESS = "Endless";
     Z4Translations.RADIUS = "Radius";
     Z4Translations.SPEED = "Speed";
+    Z4Translations.DRAW_WHILE_MOVING = "Draw While Moving";
     // Painter
     Z4Translations.TENSION = "Tension";
     Z4Translations.HOLE = "Hole";
@@ -14234,6 +14269,7 @@ class Z4Translations {
     Z4Translations.ENDLESS = "Infinito";
     Z4Translations.RADIUS = "Raggio";
     Z4Translations.SPEED = "Velocit\u00E0";
+    Z4Translations.DRAW_WHILE_MOVING = "Disegna Durante il Movimento";
     // Painter
     Z4Translations.TENSION = "Tensione";
     Z4Translations.HOLE = "Buco";

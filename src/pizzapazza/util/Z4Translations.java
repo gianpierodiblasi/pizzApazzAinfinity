@@ -155,6 +155,7 @@ public class Z4Translations {
   public static String ENDLESS = "";
   public static String RADIUS = "";
   public static String SPEED = "";
+  public static String DRAW_WHILE_MOVING = "";
 
   // Painter
   public static String TENSION = "";
@@ -184,7 +185,6 @@ public class Z4Translations {
   public static String ANGLE = "";
   public static String FORWARD = "";
   public static String BACKWARD = "";
-  
 
   // Composite Operation
   public static String COMPOSITE_OPERATION = "";
@@ -375,6 +375,7 @@ public class Z4Translations {
     Z4Translations.ENDLESS = "Endless";
     Z4Translations.RADIUS = "Radius";
     Z4Translations.SPEED = "Speed";
+    Z4Translations.DRAW_WHILE_MOVING = "Draw While Moving";
 
     // Painter
     Z4Translations.TENSION = "Tension";
@@ -578,6 +579,7 @@ public class Z4Translations {
     Z4Translations.ENDLESS = "Infinito";
     Z4Translations.RADIUS = "Raggio";
     Z4Translations.SPEED = "Velocit\u00E0";
+    Z4Translations.DRAW_WHILE_MOVING = "Disegna Durante il Movimento";
 
     // Painter
     Z4Translations.TENSION = "Tensione";

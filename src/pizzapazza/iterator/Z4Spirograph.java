@@ -26,7 +26,7 @@ import simulation.js.$Object;
  */
 public class Z4Spirograph extends Z4PointIterator {
 
-  private final boolean drawLast = true;
+  private final boolean drawWhileMoving;
 
   private Z4Point center;
   private Array<Z4DrawingPoint> clones = new Array<>();
@@ -36,15 +36,26 @@ public class Z4Spirograph extends Z4PointIterator {
   /**
    * Creates the object
    *
+   * @param drawWhileMoving true to draw while moving, false otherwise
    * @param rotation The rotation
    */
-  public Z4Spirograph(Z4Rotation rotation) {
+  public Z4Spirograph(boolean drawWhileMoving, Z4Rotation rotation) {
     super(rotation);
+    this.drawWhileMoving = drawWhileMoving;
   }
 
   @Override
   public Z4PointIteratorType getType() {
     return Z4PointIteratorType.SPIROGRAPH;
+  }
+
+  /**
+   * Checks if this painter has to draw while moving
+   *
+   * @return true if this painter has to draw while moving, false otherwise
+   */
+  public boolean isDrawWhileMoving() {
+    return this.drawWhileMoving;
   }
 
   @Override
@@ -98,12 +109,12 @@ public class Z4Spirograph extends Z4PointIterator {
       double angle = this.rotation.next(currentVector.phase);
       Z4Vector vector = Z4Vector.fromVector(this.center.x, this.center.y, currentVector.module, angle);
 
-      Z4DrawingPointIntent intent = this.drawLast ? Z4DrawingPointIntent.REPLACE_PREVIOUS_BOUNDS : Z4DrawingPointIntent.DRAW_OBJECTS;
+      Z4DrawingPointIntent intent = this.drawWhileMoving ? Z4DrawingPointIntent.DRAW_OBJECTS : Z4DrawingPointIntent.REPLACE_PREVIOUS_BOUNDS;
       double temporalPosition = $exists(this.nextdDrawingPoint) ? this.nextdDrawingPoint.temporalPosition : -1;
 
       if (progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.TEMPORAL) {
         temporalPosition = progression.next(temporalPosition);
-      } else if (!this.drawLast && progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RELATIVE_TO_PATH) {
+      } else if (this.drawWhileMoving && progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RELATIVE_TO_PATH) {
         intent = Z4DrawingPointIntent.DRAW_BOUNDS;
       } else if (progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RANDOM) {
         temporalPosition = Math.random();
@@ -191,6 +202,13 @@ public class Z4Spirograph extends Z4PointIterator {
     }
   }
 
+  @Override
+  public $Object toJSON() {
+    $Object json = super.toJSON();
+    json.$set("drawWhileMoving", this.drawWhileMoving);
+    return json;
+  }
+
   /**
    * Creates a Z4Spirograph from a JSON object
    *
@@ -198,6 +216,6 @@ public class Z4Spirograph extends Z4PointIterator {
    * @return the spirograph
    */
   public static Z4Spirograph fromJSON($Object json) {
-    return new Z4Spirograph(Z4Rotation.fromJSON(json.$get("rotation")));
+    return new Z4Spirograph(json.$get("drawWhileMoving"), Z4Rotation.fromJSON(json.$get("rotation")));
   }
 }
