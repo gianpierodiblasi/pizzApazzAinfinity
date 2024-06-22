@@ -184,7 +184,7 @@ class Z4Shape2DPainter extends Z4Painter {
   }
 
    draw(context, drawingPoint, spatioTemporalColor, progression) {
-    if (drawingPoint.drawBounds) {
+    if (drawingPoint.intent !== Z4DrawingPointIntent.DRAW_OBJECTS) {
       let scaleW = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.width.getConstant().getValue());
       let scaleH = this.regular ? scaleW : drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.height.getConstant().getValue());
       this.drawBounds(context, scaleW, scaleH);

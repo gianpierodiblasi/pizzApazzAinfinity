@@ -6,6 +6,7 @@ import pizzapazza.color.Z4ColorProgressionBehavior;
 import pizzapazza.color.Z4Lighting;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.math.Z4DrawingPoint;
+import pizzapazza.math.Z4DrawingPointIntent;
 import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
@@ -133,7 +134,7 @@ public class Z4Airbrush extends Z4PointIterator {
               vector,
               1,
               temporalPosition,
-              false,
+              Z4DrawingPointIntent.DRAW_OBJECTS,
               this.rotation.computeSide(vector, null),
               false
       );

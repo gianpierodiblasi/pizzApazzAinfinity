@@ -101,7 +101,7 @@ class Z4Airbrush extends Z4PointIterator {
       } else if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RANDOM) {
         temporalPosition = Math.random();
       }
-      this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, false, this.rotation.computeSide(vector, null), false);
+      this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, Z4DrawingPointIntent.DRAW_OBJECTS, this.rotation.computeSide(vector, null), false);
       return this.nextdDrawingPoint;
     }
   }

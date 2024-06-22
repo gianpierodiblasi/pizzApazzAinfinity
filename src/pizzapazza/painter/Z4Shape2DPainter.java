@@ -7,6 +7,7 @@ import pizzapazza.color.Z4GradientColor;
 import pizzapazza.color.Z4Lighting;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.math.Z4DrawingPoint;
+import pizzapazza.math.Z4DrawingPointIntent;
 import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4Math;
 import pizzapazza.util.Z4Constants;
@@ -203,7 +204,7 @@ public class Z4Shape2DPainter extends Z4Painter {
   @Override
   @SuppressWarnings("null")
   public void draw($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
-    if (drawingPoint.drawBounds) {
+    if (drawingPoint.intent != Z4DrawingPointIntent.DRAW_OBJECTS) {
       double scaleW = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.width.getConstant().getValue());
       double scaleH = this.regular ? scaleW : drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.height.getConstant().getValue());
       this.drawBounds(context, scaleW, scaleH);

@@ -222,7 +222,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
   }
 
    draw(context, drawingPoint, spatioTemporalColor, progression) {
-    if (drawingPoint.drawBounds) {
+    if (drawingPoint.intent !== Z4DrawingPointIntent.DRAW_OBJECTS) {
       let currentAngle = Z4Math.deg2rad(this.whirlpool.getAngle().getConstant().getValue());
       let currentHole = this.hole.getConstant().getValue();
       let currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.size.getConstant().getValue());
@@ -236,7 +236,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
         let currentCover = this.cover / 100;
         let currentMultiplicity = this.multiplicity.next();
         let point = this.checkWhirlpool1(currentAngle, currentHole, currentSize);
-        drawingPoint = new Z4DrawingPoint(Z4Vector.fromVector(currentHole, 0, point.x, point.y), drawingPoint.intensity, drawingPoint.temporalPosition, drawingPoint.drawBounds, drawingPoint.side, drawingPoint.useVectorModuleAsSize);
+        drawingPoint = new Z4DrawingPoint(Z4Vector.fromVector(currentHole, 0, point.x, point.y), drawingPoint.intensity, drawingPoint.temporalPosition, drawingPoint.intent, drawingPoint.side, drawingPoint.useVectorModuleAsSize);
         let currentShadowShiftX = this.shadowShiftX.next();
         let currentShadowShiftY = this.shadowShiftY.next();
         let currentBorderSize = this.borderSize.next();

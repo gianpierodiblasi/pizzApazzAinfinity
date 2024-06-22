@@ -8,6 +8,7 @@ import pizzapazza.color.Z4GradientColor;
 import pizzapazza.color.Z4Lighting;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.math.Z4DrawingPoint;
+import pizzapazza.math.Z4DrawingPointIntent;
 import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
@@ -240,7 +241,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
   @Override
   @SuppressWarnings("null")
   public void draw($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
-    if (drawingPoint.drawBounds) {
+    if (drawingPoint.intent != Z4DrawingPointIntent.DRAW_OBJECTS) {
       double currentAngle = Z4Math.deg2rad(this.whirlpool.getAngle().getConstant().getValue());
       double currentHole = this.hole.getConstant().getValue();
       double currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.size.getConstant().getValue());
@@ -256,7 +257,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
         double currentMultiplicity = this.multiplicity.next();
 
         Z4Point point = this.checkWhirlpool1(currentAngle, currentHole, currentSize);
-        drawingPoint = new Z4DrawingPoint(Z4Vector.fromVector(currentHole, 0, point.x, point.y), drawingPoint.intensity, drawingPoint.temporalPosition, drawingPoint.drawBounds, drawingPoint.side, drawingPoint.useVectorModuleAsSize);
+        drawingPoint = new Z4DrawingPoint(Z4Vector.fromVector(currentHole, 0, point.x, point.y), drawingPoint.intensity, drawingPoint.temporalPosition, drawingPoint.intent, drawingPoint.side, drawingPoint.useVectorModuleAsSize);
 
         double currentShadowShiftX = this.shadowShiftX.next();
         double currentShadowShiftY = this.shadowShiftY.next();

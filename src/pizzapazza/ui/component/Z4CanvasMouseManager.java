@@ -11,6 +11,7 @@ import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.iterator.Z4PointIteratorDrawingAction;
 import pizzapazza.iterator.Z4Spirograph;
 import pizzapazza.math.Z4DrawingPoint;
+import pizzapazza.math.Z4DrawingPointIntent;
 import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4RandomValue;
 import pizzapazza.math.Z4RandomValueBehavior;
@@ -290,9 +291,18 @@ public class Z4CanvasMouseManager {
     Z4DrawingPoint next = this.drawingTool.next();
     if (!$exists(next)) {
       return false;
-    } else if (next.drawBounds) {
+    } else if (next.intent == Z4DrawingPointIntent.DRAW_OBJECTS) {
+      this.selectedLayer.drawTool(this.drawingTool, next);
+      this.selectedLayer.getLayerPreview().drawLayer();
+      this.canvas.drawCanvas();
+      return true;
+    } else {
       if (this.zoom != 1) {
-        next = new Z4DrawingPoint(Z4Vector.fromPoints(this.zoom * next.z4Vector.x0, this.zoom * next.z4Vector.y0, this.zoom * next.z4Vector.x, this.zoom * next.z4Vector.y), next.intensity, next.temporalPosition, next.drawBounds, next.side, next.useVectorModuleAsSize);
+        next = new Z4DrawingPoint(Z4Vector.fromPoints(this.zoom * next.z4Vector.x0, this.zoom * next.z4Vector.y0, this.zoom * next.z4Vector.x, this.zoom * next.z4Vector.y), next.intensity, next.temporalPosition, next.intent, next.side, next.useVectorModuleAsSize);
+      }
+
+      if (next.intent == Z4DrawingPointIntent.REPLACE_PREVIOUS_BOUNDS) {
+        this.canvas.drawCanvas();
       }
 
       this.ctx.save();
@@ -300,11 +310,6 @@ public class Z4CanvasMouseManager {
       this.ctx.rotate(next.z4Vector.phase);
       this.drawingTool.draw(this.ctx, next);
       this.ctx.restore();
-      return true;
-    } else {
-      this.selectedLayer.drawTool(this.drawingTool, next);
-      this.selectedLayer.getLayerPreview().drawLayer();
-      this.canvas.drawCanvas();
       return true;
     }
   }

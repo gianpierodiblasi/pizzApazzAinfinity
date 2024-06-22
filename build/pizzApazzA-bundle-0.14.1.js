@@ -1007,7 +1007,7 @@ class Z4DrawingPoint {
 
    temporalPosition = 0.0;
 
-   drawBounds = false;
+   intent = null;
 
    side = null;
 
@@ -1020,20 +1020,39 @@ class Z4DrawingPoint {
    * @param intensity The intensity of the drawing (in the range [0,1])
    * @param temporalPosition The temporal position to use in the color object
    * (in the range [0,1]), -1 if this point has no temporal position
-   * @param drawBounds true if this point has to be used to draw bounds, false
-   * otherwise (this point has to be used to draw real objects)
+   * @param intent the intent of this point
    * @param side The side
    * @param useVectorModuleAsSize true if the vector module of this point has to
    * be used has size, false otherwise
    */
-  constructor(z4Vector, intensity, temporalPosition, drawBounds, side, useVectorModuleAsSize) {
+  constructor(z4Vector, intensity, temporalPosition, intent, side, useVectorModuleAsSize) {
     this.z4Vector = z4Vector;
     this.intensity = intensity;
     this.temporalPosition = temporalPosition;
-    this.drawBounds = drawBounds;
+    this.intent = intent;
     this.side = side;
     this.useVectorModuleAsSize = useVectorModuleAsSize;
   }
+}
+/**
+ * The intent of a Z4DrawingPoint
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4DrawingPointIntent {
+
+  /**
+   * The point has to be used to draw bounds
+   */
+  static DRAW_BOUNDS = 'DRAW_BOUNDS';
+  /**
+   * The point has to be used to replace previous bounds and draw new bounds
+   */
+  static REPLACE_PREVIOUS_BOUNDS = 'REPLACE_PREVIOUS_BOUNDS';
+  /**
+   * The point has to be used to draw objects
+   */
+  static DRAW_OBJECTS = 'DRAW_OBJECTS';
 }
 /**
  * The line
@@ -3063,20 +3082,23 @@ class Z4CanvasMouseManager {
     let next = this.drawingTool.next();
     if (!next) {
       return false;
-    } else if (next.drawBounds) {
+    } else if (next.intent === Z4DrawingPointIntent.DRAW_OBJECTS) {
+      this.selectedLayer.drawTool(this.drawingTool, next);
+      this.selectedLayer.getLayerPreview().drawLayer();
+      this.canvas.drawCanvas();
+      return true;
+    } else {
       if (this.zoom !== 1) {
-        next = new Z4DrawingPoint(Z4Vector.fromPoints(this.zoom * next.z4Vector.x0, this.zoom * next.z4Vector.y0, this.zoom * next.z4Vector.x, this.zoom * next.z4Vector.y), next.intensity, next.temporalPosition, next.drawBounds, next.side, next.useVectorModuleAsSize);
+        next = new Z4DrawingPoint(Z4Vector.fromPoints(this.zoom * next.z4Vector.x0, this.zoom * next.z4Vector.y0, this.zoom * next.z4Vector.x, this.zoom * next.z4Vector.y), next.intensity, next.temporalPosition, next.intent, next.side, next.useVectorModuleAsSize);
+      }
+      if (next.intent === Z4DrawingPointIntent.REPLACE_PREVIOUS_BOUNDS) {
+        this.canvas.drawCanvas();
       }
       this.ctx.save();
       this.ctx.translate(next.z4Vector.x0, next.z4Vector.y0);
       this.ctx.rotate(next.z4Vector.phase);
       this.drawingTool.draw(this.ctx, next);
       this.ctx.restore();
-      return true;
-    } else {
-      this.selectedLayer.drawTool(this.drawingTool, next);
-      this.selectedLayer.getLayerPreview().drawLayer();
-      this.canvas.drawCanvas();
       return true;
     }
   }
@@ -11316,7 +11338,7 @@ class Z4Airbrush extends Z4PointIterator {
       } else if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RANDOM) {
         temporalPosition = Math.random();
       }
-      this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, false, this.rotation.computeSide(vector, null), false);
+      this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, Z4DrawingPointIntent.DRAW_OBJECTS, this.rotation.computeSide(vector, null), false);
       return this.nextdDrawingPoint;
     }
   }
@@ -11433,7 +11455,7 @@ class Z4Scatterer extends Z4PointIterator {
       // this.progression.next(this.z4Point);
       // point.modeLighting=modeLighting;
       // point.colorPosition=this.evaluateColorPosition(nextScattering/scattering);
-      return new Z4DrawingPoint(vector, 1, 0, false, this.rotation.computeSide(vector, currentVector), false);
+      return new Z4DrawingPoint(vector, 1, 0, Z4DrawingPointIntent.DRAW_OBJECTS, this.rotation.computeSide(vector, currentVector), false);
     }
   }
 
@@ -11478,6 +11500,8 @@ class Z4Scatterer extends Z4PointIterator {
  * @author gianpiero.diblasi
  */
 class Z4Spirograph extends Z4PointIterator {
+
+   drawLast = true;
 
    center = null;
 
@@ -11526,7 +11550,7 @@ class Z4Spirograph extends Z4PointIterator {
       return null;
     } else if (this.fromClones) {
       let clone = this.clones[this.clonePos];
-      this.nextdDrawingPoint = new Z4DrawingPoint(clone.z4Vector, clone.intensity, this.clonePos / this.clones.length, false, clone.side, clone.useVectorModuleAsSize);
+      this.nextdDrawingPoint = new Z4DrawingPoint(clone.z4Vector, clone.intensity, this.clonePos / this.clones.length, Z4DrawingPointIntent.DRAW_OBJECTS, clone.side, clone.useVectorModuleAsSize);
       this.clonePos--;
       this.hasNext = this.clonePos !== -1;
       return this.nextdDrawingPoint;
@@ -11534,18 +11558,20 @@ class Z4Spirograph extends Z4PointIterator {
       let currentVector = Z4Vector.fromPoints(this.center.x, this.center.y, this.currentPoint.x, this.currentPoint.y);
       let angle = this.rotation.next(currentVector.phase);
       let vector = Z4Vector.fromVector(this.center.x, this.center.y, currentVector.module, angle);
-      let drawBounds = false;
+      let intent = this.drawLast ? Z4DrawingPointIntent.REPLACE_PREVIOUS_BOUNDS : Z4DrawingPointIntent.DRAW_OBJECTS;
       let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
       if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.TEMPORAL) {
         temporalPosition = progression.next(temporalPosition);
-      } else if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RELATIVE_TO_PATH) {
-        drawBounds = true;
+      } else if (!this.drawLast && progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RELATIVE_TO_PATH) {
+        intent = Z4DrawingPointIntent.DRAW_BOUNDS;
       } else if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RANDOM) {
         temporalPosition = Math.random();
       }
       this.hasNext = false;
-      this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, drawBounds, this.rotation.computeSide(vector, currentVector), true);
-      if (this.nextdDrawingPoint.drawBounds) {
+      this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, intent, this.rotation.computeSide(vector, currentVector), true);
+      if (this.nextdDrawingPoint.intent === Z4DrawingPointIntent.REPLACE_PREVIOUS_BOUNDS) {
+        this.clones = new Array(this.nextdDrawingPoint);
+      } else if (this.nextdDrawingPoint.intent === Z4DrawingPointIntent.DRAW_BOUNDS) {
         this.clones.push(this.nextdDrawingPoint);
       }
       return this.nextdDrawingPoint;
@@ -11596,7 +11622,7 @@ class Z4Spirograph extends Z4PointIterator {
    drawDemoPoint(context, arrowPainter, spatioTemporalColor, progression) {
     let next = null;
     while ((next = this.next(spatioTemporalColor, progression)) !== null) {
-      if (!next.drawBounds) {
+      if (next.intent === Z4DrawingPointIntent.DRAW_OBJECTS) {
         context.save();
         context.translate(next.z4Vector.x0, next.z4Vector.y0);
         context.rotate(next.z4Vector.phase);
@@ -11699,7 +11725,7 @@ class Z4Stamper extends Z4PointIterator {
       } else if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RANDOM) {
         temporalPosition = Math.random();
       }
-      this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, false, this.rotation.computeSide(vector, null), false);
+      this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, Z4DrawingPointIntent.DRAW_OBJECTS, this.rotation.computeSide(vector, null), false);
       return nextdDrawingPoint;
     }
   }
@@ -11971,7 +11997,7 @@ class Z4Tracer extends Z4PointIterator {
       let clone = this.clones[this.clonePos];
       this.clonePos++;
       this.hasNext = this.clonePos < this.clones.length;
-      return new Z4DrawingPoint(clone.z4Vector, clone.intensity, this.clonePos / this.clones.length, false, clone.side, clone.useVectorModuleAsSize);
+      return new Z4DrawingPoint(clone.z4Vector, clone.intensity, this.clonePos / this.clones.length, Z4DrawingPointIntent.DRAW_OBJECTS, clone.side, clone.useVectorModuleAsSize);
     } else {
       if (!this.currentMultiplicityCounter) {
         this.currentVector = this.path.next();
@@ -11985,12 +12011,12 @@ class Z4Tracer extends Z4PointIterator {
       } else {
         vector = Z4Vector.fromVector(this.currentVector.x0, this.currentVector.y0, 1, angle);
       }
-      let drawBounds = false;
+      let intent = Z4DrawingPointIntent.DRAW_OBJECTS;
       let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
       if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.TEMPORAL) {
         temporalPosition = progression.next(temporalPosition);
       } else if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RELATIVE_TO_PATH) {
-        drawBounds = true;
+        intent = Z4DrawingPointIntent.DRAW_BOUNDS;
       } else if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RANDOM) {
         temporalPosition = Math.random();
       }
@@ -12002,8 +12028,8 @@ class Z4Tracer extends Z4PointIterator {
           this.surplus = this.path.getNewSurplus();
         }
       }
-      this.nextdDrawingPoint = new Z4DrawingPoint(vector, this.nextEnvelope(), temporalPosition, drawBounds, this.rotation.computeSide(vector, this.currentVector), false);
-      if (this.nextdDrawingPoint.drawBounds && this.nextdDrawingPoint.intensity > 0) {
+      this.nextdDrawingPoint = new Z4DrawingPoint(vector, this.nextEnvelope(), temporalPosition, intent, this.rotation.computeSide(vector, this.currentVector), false);
+      if (this.nextdDrawingPoint.intent === Z4DrawingPointIntent.DRAW_BOUNDS && this.nextdDrawingPoint.intensity > 0) {
         this.clones.push(this.nextdDrawingPoint);
       }
       return this.nextdDrawingPoint;
@@ -12066,7 +12092,7 @@ class Z4Tracer extends Z4PointIterator {
     context.restore();
     let next = null;
     while ((next = this.next(spatioTemporalColor, progression)) !== null) {
-      if (!next.drawBounds) {
+      if (next.intent === Z4DrawingPointIntent.DRAW_OBJECTS) {
         context.save();
         context.translate(next.z4Vector.x0, next.z4Vector.y0);
         context.rotate(next.z4Vector.phase);
@@ -12445,7 +12471,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
   }
 
    draw(context, drawingPoint, spatioTemporalColor, progression) {
-    if (drawingPoint.drawBounds) {
+    if (drawingPoint.intent !== Z4DrawingPointIntent.DRAW_OBJECTS) {
       let currentAngle = Z4Math.deg2rad(this.whirlpool.getAngle().getConstant().getValue());
       let currentHole = this.hole.getConstant().getValue();
       let currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.size.getConstant().getValue());
@@ -12459,7 +12485,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
         let currentCover = this.cover / 100;
         let currentMultiplicity = this.multiplicity.next();
         let point = this.checkWhirlpool1(currentAngle, currentHole, currentSize);
-        drawingPoint = new Z4DrawingPoint(Z4Vector.fromVector(currentHole, 0, point.x, point.y), drawingPoint.intensity, drawingPoint.temporalPosition, drawingPoint.drawBounds, drawingPoint.side, drawingPoint.useVectorModuleAsSize);
+        drawingPoint = new Z4DrawingPoint(Z4Vector.fromVector(currentHole, 0, point.x, point.y), drawingPoint.intensity, drawingPoint.temporalPosition, drawingPoint.intent, drawingPoint.side, drawingPoint.useVectorModuleAsSize);
         let currentShadowShiftX = this.shadowShiftX.next();
         let currentShadowShiftY = this.shadowShiftY.next();
         let currentBorderSize = this.borderSize.next();
@@ -12933,7 +12959,7 @@ class Z4Shape2DPainter extends Z4Painter {
   }
 
    draw(context, drawingPoint, spatioTemporalColor, progression) {
-    if (drawingPoint.drawBounds) {
+    if (drawingPoint.intent !== Z4DrawingPointIntent.DRAW_OBJECTS) {
       let scaleW = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.width.getConstant().getValue());
       let scaleH = this.regular ? scaleW : drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.height.getConstant().getValue());
       this.drawBounds(context, scaleW, scaleH);

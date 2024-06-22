@@ -7,6 +7,7 @@ import pizzapazza.color.Z4ColorProgressionBehavior;
 import pizzapazza.color.Z4Lighting;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.math.Z4DrawingPoint;
+import pizzapazza.math.Z4DrawingPointIntent;
 import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
@@ -229,7 +230,7 @@ public class Z4Tracer extends Z4PointIterator {
               clone.z4Vector,
               clone.intensity,
               this.clonePos / this.clones.length,
-              false,
+              Z4DrawingPointIntent.DRAW_OBJECTS,
               clone.side,
               clone.useVectorModuleAsSize
       );
@@ -248,12 +249,12 @@ public class Z4Tracer extends Z4PointIterator {
         vector = Z4Vector.fromVector(this.currentVector.x0, this.currentVector.y0, 1, angle);
       }
 
-      boolean drawBounds = false;
+      Z4DrawingPointIntent intent = Z4DrawingPointIntent.DRAW_OBJECTS;
       double temporalPosition = $exists(this.nextdDrawingPoint) ? this.nextdDrawingPoint.temporalPosition : -1;
       if (progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.TEMPORAL) {
         temporalPosition = progression.next(temporalPosition);
       } else if (progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RELATIVE_TO_PATH) {
-        drawBounds = true;
+        intent = Z4DrawingPointIntent.DRAW_BOUNDS;
       } else if (progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RANDOM) {
         temporalPosition = Math.random();
       }
@@ -271,11 +272,11 @@ public class Z4Tracer extends Z4PointIterator {
               vector,
               this.nextEnvelope(),
               temporalPosition,
-              drawBounds,
+              intent,
               this.rotation.computeSide(vector, this.currentVector),
               false
       );
-      if (this.nextdDrawingPoint.drawBounds && this.nextdDrawingPoint.intensity > 0) {
+      if (this.nextdDrawingPoint.intent == Z4DrawingPointIntent.DRAW_BOUNDS && this.nextdDrawingPoint.intensity > 0) {
         this.clones.push(this.nextdDrawingPoint);
       }
       return this.nextdDrawingPoint;
@@ -301,7 +302,7 @@ public class Z4Tracer extends Z4PointIterator {
   public int getNextCountOnSTOP() {
     return this.clones.length;
   }
-  
+
   @Override
   public boolean isInfinitePointGenerator() {
     return false;
@@ -349,7 +350,7 @@ public class Z4Tracer extends Z4PointIterator {
 
     Z4DrawingPoint next;
     while ((next = this.next(spatioTemporalColor, progression)) != null) {
-      if (!next.drawBounds) {
+      if (next.intent == Z4DrawingPointIntent.DRAW_OBJECTS) {
         context.save();
         context.translate(next.z4Vector.x0, next.z4Vector.y0);
         context.rotate(next.z4Vector.phase);

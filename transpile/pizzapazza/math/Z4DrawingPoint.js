@@ -11,7 +11,7 @@ class Z4DrawingPoint {
 
    temporalPosition = 0.0;
 
-   drawBounds = false;
+   intent = null;
 
    side = null;
 
@@ -24,17 +24,16 @@ class Z4DrawingPoint {
    * @param intensity The intensity of the drawing (in the range [0,1])
    * @param temporalPosition The temporal position to use in the color object
    * (in the range [0,1]), -1 if this point has no temporal position
-   * @param drawBounds true if this point has to be used to draw bounds, false
-   * otherwise (this point has to be used to draw real objects)
+   * @param intent the intent of this point
    * @param side The side
    * @param useVectorModuleAsSize true if the vector module of this point has to
    * be used has size, false otherwise
    */
-  constructor(z4Vector, intensity, temporalPosition, drawBounds, side, useVectorModuleAsSize) {
+  constructor(z4Vector, intensity, temporalPosition, intent, side, useVectorModuleAsSize) {
     this.z4Vector = z4Vector;
     this.intensity = intensity;
     this.temporalPosition = temporalPosition;
-    this.drawBounds = drawBounds;
+    this.intent = intent;
     this.side = side;
     this.useVectorModuleAsSize = useVectorModuleAsSize;
   }

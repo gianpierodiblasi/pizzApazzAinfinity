@@ -5,6 +5,8 @@
  */
 class Z4Spirograph extends Z4PointIterator {
 
+   drawLast = true;
+
    center = null;
 
    clones = new Array();
@@ -52,7 +54,7 @@ class Z4Spirograph extends Z4PointIterator {
       return null;
     } else if (this.fromClones) {
       let clone = this.clones[this.clonePos];
-      this.nextdDrawingPoint = new Z4DrawingPoint(clone.z4Vector, clone.intensity, this.clonePos / this.clones.length, false, clone.side, clone.useVectorModuleAsSize);
+      this.nextdDrawingPoint = new Z4DrawingPoint(clone.z4Vector, clone.intensity, this.clonePos / this.clones.length, Z4DrawingPointIntent.DRAW_OBJECTS, clone.side, clone.useVectorModuleAsSize);
       this.clonePos--;
       this.hasNext = this.clonePos !== -1;
       return this.nextdDrawingPoint;
@@ -60,18 +62,20 @@ class Z4Spirograph extends Z4PointIterator {
       let currentVector = Z4Vector.fromPoints(this.center.x, this.center.y, this.currentPoint.x, this.currentPoint.y);
       let angle = this.rotation.next(currentVector.phase);
       let vector = Z4Vector.fromVector(this.center.x, this.center.y, currentVector.module, angle);
-      let drawBounds = false;
+      let intent = this.drawLast ? Z4DrawingPointIntent.REPLACE_PREVIOUS_BOUNDS : Z4DrawingPointIntent.DRAW_OBJECTS;
       let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
       if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.TEMPORAL) {
         temporalPosition = progression.next(temporalPosition);
-      } else if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RELATIVE_TO_PATH) {
-        drawBounds = true;
+      } else if (!this.drawLast && progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RELATIVE_TO_PATH) {
+        intent = Z4DrawingPointIntent.DRAW_BOUNDS;
       } else if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RANDOM) {
         temporalPosition = Math.random();
       }
       this.hasNext = false;
-      this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, drawBounds, this.rotation.computeSide(vector, currentVector), true);
-      if (this.nextdDrawingPoint.drawBounds) {
+      this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, intent, this.rotation.computeSide(vector, currentVector), true);
+      if (this.nextdDrawingPoint.intent === Z4DrawingPointIntent.REPLACE_PREVIOUS_BOUNDS) {
+        this.clones = new Array(this.nextdDrawingPoint);
+      } else if (this.nextdDrawingPoint.intent === Z4DrawingPointIntent.DRAW_BOUNDS) {
         this.clones.push(this.nextdDrawingPoint);
       }
       return this.nextdDrawingPoint;
@@ -122,7 +126,7 @@ class Z4Spirograph extends Z4PointIterator {
    drawDemoPoint(context, arrowPainter, spatioTemporalColor, progression) {
     let next = null;
     while ((next = this.next(spatioTemporalColor, progression)) !== null) {
-      if (!next.drawBounds) {
+      if (next.intent === Z4DrawingPointIntent.DRAW_OBJECTS) {
         context.save();
         context.translate(next.z4Vector.x0, next.z4Vector.y0);
         context.rotate(next.z4Vector.phase);

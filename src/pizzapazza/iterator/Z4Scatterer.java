@@ -6,6 +6,7 @@ import pizzapazza.color.Z4ColorProgressionBehavior;
 import pizzapazza.color.Z4Lighting;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.math.Z4DrawingPoint;
+import pizzapazza.math.Z4DrawingPointIntent;
 import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Rotation;
@@ -94,7 +95,7 @@ public class Z4Scatterer extends Z4PointIterator {
               vector,
               1,
               0,
-              false,
+              Z4DrawingPointIntent.DRAW_OBJECTS,
               this.rotation.computeSide(vector, currentVector),
               false
       );
