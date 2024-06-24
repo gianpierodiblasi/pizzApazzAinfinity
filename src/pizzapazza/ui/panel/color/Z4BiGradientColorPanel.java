@@ -196,7 +196,7 @@ public class Z4BiGradientColorPanel extends Z4AbstractValuePanel<Z4BiGradientCol
     });
     panel.add(button, null);
 
-    this.drawPreview(false);
+    this.setValue(new Z4BiGradientColor());
   }
 
   @SuppressWarnings("StringEquality")

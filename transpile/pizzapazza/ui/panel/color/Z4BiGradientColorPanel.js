@@ -162,7 +162,7 @@ class Z4BiGradientColorPanel extends Z4AbstractValuePanel {
       this.onchange();
     });
     panel.add(button, null);
-    this.drawPreview(false);
+    this.setValue(new Z4BiGradientColor());
   }
 
    onMouse(event, type) {
