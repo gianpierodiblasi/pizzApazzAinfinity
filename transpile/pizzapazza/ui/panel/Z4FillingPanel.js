@@ -13,9 +13,7 @@ class Z4FillingPanel extends JSPanel {
 
    cardColorSelectors = new Array("FLAT", "GRADIENT", "NONE", "BIGRADIENT");
 
-   cardColorPanels = new Array(new JSPanel(), new Z4GradientColorPanel(), new JSPanel(), new Z4BiGradientColorPanel());
-
-   colorPreview = new Z4ColorPanel();
+   cardColorPanels = new Array(new Z4ColorPanel(), new Z4GradientColorPanel(), new JSPanel(), new Z4BiGradientColorPanel());
 
    width = Z4Constants.DEFAULT_IMAGE_SIZE;
 
@@ -48,24 +46,11 @@ class Z4FillingPanel extends JSPanel {
     panelFiller.setLayout(cardFiller);
     panelFiller.getStyle().display = "none";
     this.add(panelFiller, new GBC(4, 0).wxy(1, 1).a(GBC.NORTH));
-    let flatPanel = this.cardColorPanels[0];
-    flatPanel.setLayout(new BorderLayout(5, 0));
-    let label = new JSLabel();
-    label.setText(Z4Translations.FILLING_COLOR);
-    flatPanel.add(label, BorderLayout.NORTH);
-    this.colorPreview.setColor(this.selectedColor);
-    this.colorPreview.getStyle().alignSelf = "center";
-    this.colorPreview.getStyle().minWidth = "15rem";
-    flatPanel.add(this.colorPreview, BorderLayout.CENTER);
-    let button = new JSButton();
-    button.setText(Z4Translations.EDIT);
-    button.addActionListener(event => {
-      JSColorChooser.showDialog(Z4Translations.FILLING_COLOR, this.selectedColor, true, null, color => {
-        this.selectedColor = color;
-        this.colorPreview.setColor(color);
-      });
-    });
-    flatPanel.add(button, BorderLayout.EAST);
+    let colorPanel = this.cardColorPanels[0];
+    colorPanel.setLabel(Z4Translations.FILLING_COLOR);
+    colorPanel.setValue(this.selectedColor);
+    colorPanel.getStyle().minWidth = "15rem";
+    colorPanel.addChangeListener(event => this.selectedColor = colorPanel.value);
     let gradientColorPanel = this.cardColorPanels[1];
     gradientColorPanel.addChangeListener(event => {
       switch(this.selectedFillerSelector) {
