@@ -3,7 +3,7 @@
  *
  * @author gianpiero.diblasi
  */
-class Z4BiGradientColorPanel extends JSPanel {
+class Z4BiGradientColorPanel extends Z4AbstractValuePanel {
 
    preview = new JSComponent(document.createElement("canvas"));
 
@@ -27,13 +27,13 @@ class Z4BiGradientColorPanel extends JSPanel {
 
    time = null;
 
-   biGradientColor = new Z4BiGradientColor();
-
    biSelectedIndex = 0;
 
    selectedIndex = 0;
 
    pressed = false;
+
+   valueIsAdjusting = false;
 
    width = Z4BiGradientColorPanel.SIZE;
 
@@ -70,14 +70,14 @@ class Z4BiGradientColorPanel extends JSPanel {
     this.biRippleSpinner.setModel(new SpinnerNumberModel(0, 0, 100, 1));
     this.biRippleSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
     this.biRippleSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
-    this.biRippleSpinner.addChangeListener(event => this.onChange(true, this.biRippleSpinner.getValueIsAdjusting(), this.biRippleSpinner, this.biRippleSlider, true));
+    this.biRippleSpinner.addChangeListener(event => this.onRippleChange(true, this.biRippleSpinner.getValueIsAdjusting(), this.biRippleSpinner, this.biRippleSlider, true));
     this.add(this.biRippleSpinner, new GBC(3, 0).h(3).a(GBC.NORTHEAST).i(0, 5, 0, 0));
     this.biRippleSlider.setValue(0);
     this.biRippleSlider.setOrientation(JSSlider.VERTICAL);
     this.biRippleSlider.setInverted(true);
     this.biRippleSlider.getStyle().minHeight = "20rem";
     this.biRippleSlider.getStyle().minWidth = "1.5rem";
-    this.biRippleSlider.addChangeListener(event => this.onChange(false, this.biRippleSlider.getValueIsAdjusting(), this.biRippleSpinner, this.biRippleSlider, true));
+    this.biRippleSlider.addChangeListener(event => this.onRippleChange(false, this.biRippleSlider.getValueIsAdjusting(), this.biRippleSpinner, this.biRippleSlider, true));
     this.add(this.biRippleSlider, new GBC(4, 0).h(5).a(GBC.EAST));
     let panel = new JSPanel();
     panel.cssAddClass("jspanel-vertical");
@@ -86,16 +86,18 @@ class Z4BiGradientColorPanel extends JSPanel {
     button.cssAddClass("jsbutton-vertical");
     button.setText(Z4Translations.MIRRORED);
     button.addActionListener(event => {
-      this.biGradientColor.mirror();
-      this.afterOperation(this.biGradientColor.getColorAtIndex(this.biSelectedIndex));
+      this.value.mirror();
+      this.afterOperation(this.value.getColorAtIndex(this.biSelectedIndex));
+      this.onchange();
     });
     panel.add(button, null);
     button = new JSButton();
     button.cssAddClass("jsbutton-vertical");
     button.setText(Z4Translations.INVERTED);
     button.addActionListener(event => {
-      this.biGradientColor.reverse();
+      this.value.reverse();
       this.drawPreview(false);
+      this.onchange();
     });
     panel.add(button, null);
     this.biDelete.cssAddClass("jsbutton-vertical");
@@ -103,57 +105,61 @@ class Z4BiGradientColorPanel extends JSPanel {
     this.biDelete.setEnabled(false);
     this.biDelete.addActionListener(event => JSOptionPane.showConfirmDialog(Z4Translations.DELETE_COLOR_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
       if (response === JSOptionPane.YES_OPTION) {
-        this.biGradientColor.removeColor(this.biGradientColor.getColorPositionAtIndex(this.biSelectedIndex));
+        this.value.removeColor(this.value.getColorPositionAtIndex(this.biSelectedIndex));
         this.biSelectedIndex = 0;
-        this.afterOperation(this.biGradientColor.getColorAtIndex(this.biSelectedIndex));
+        this.afterOperation(this.value.getColorAtIndex(this.biSelectedIndex));
+        this.onchange();
       }
     }));
     panel.add(this.biDelete, null);
     this.add(new JSLabel(), new GBC(0, 4).w(3).wy(1));
     Z4UI.addHLine(this, new GBC(0, 5).w(6).a(GBC.WEST).f(GBC.HORIZONTAL).i(2, 1, 2, 1));
-    this.colorPanel.setValue(this.biGradientColor.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
     this.colorPanel.addChangeListener(event => {
-      let gradientColor = this.biGradientColor.getColorAtIndex(this.biSelectedIndex);
+      let gradientColor = this.value.getColorAtIndex(this.biSelectedIndex);
       gradientColor.addColor(this.colorPanel.getValue(), gradientColor.getColorPositionAtIndex(this.selectedIndex));
       this.drawPreview(false);
+      this.onchange();
     });
     this.add(this.colorPanel, new GBC(0, 6).w(4).wx(1).f(GBC.HORIZONTAL));
     this.delete.setText(Z4Translations.DELETE);
     this.delete.setEnabled(false);
     this.delete.addActionListener(event => JSOptionPane.showConfirmDialog(Z4Translations.DELETE_COLOR_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
       if (response === JSOptionPane.YES_OPTION) {
-        let gradientColor = this.biGradientColor.getColorAtIndex(this.biSelectedIndex);
+        let gradientColor = this.value.getColorAtIndex(this.biSelectedIndex);
         gradientColor.removeColor(gradientColor.getColorPositionAtIndex(this.selectedIndex));
         this.selectedIndex = 0;
         this.afterOperation(gradientColor);
+        this.onchange();
       }
     }));
     this.add(this.delete, new GBC(4, 6).w(2).a(GBC.EAST).i(0, 5, 0, 0));
     Z4UI.addLabel(this, Z4Translations.RIPPLE, new GBC(0, 7).w(2).a(GBC.WEST));
     this.rippleSpinner.setModel(new SpinnerNumberModel(0, 0, 100, 1));
     this.rippleSpinner.cssAddClass("jsspinner_w_4rem");
-    this.rippleSpinner.addChangeListener(event => this.onChange(true, this.rippleSpinner.getValueIsAdjusting(), this.rippleSpinner, this.rippleSlider, false));
+    this.rippleSpinner.addChangeListener(event => this.onRippleChange(true, this.rippleSpinner.getValueIsAdjusting(), this.rippleSpinner, this.rippleSlider, false));
     this.add(this.rippleSpinner, new GBC(3, 7).w(3).a(GBC.EAST).i(5, 0, 0, 0));
     this.rippleSlider.setValue(0);
     this.rippleSlider.getStyle().minWidth = "20rem";
-    this.rippleSlider.addChangeListener(event => this.onChange(false, this.rippleSlider.getValueIsAdjusting(), this.rippleSpinner, this.rippleSlider, false));
+    this.rippleSlider.addChangeListener(event => this.onRippleChange(false, this.rippleSlider.getValueIsAdjusting(), this.rippleSpinner, this.rippleSlider, false));
     this.add(this.rippleSlider, new GBC(0, 8).w(6).a(GBC.NORTH).f(GBC.HORIZONTAL));
     panel = new JSPanel();
     this.add(panel, new GBC(0, 9).w(6).a(GBC.NORTH).f(GBC.HORIZONTAL));
     button = new JSButton();
     button.setText(Z4Translations.MIRRORED);
     button.addActionListener(event => {
-      let gradientColor = this.biGradientColor.getColorAtIndex(this.biSelectedIndex);
+      let gradientColor = this.value.getColorAtIndex(this.biSelectedIndex);
       gradientColor.mirror();
       this.afterOperation(gradientColor);
+      this.onchange();
     });
     panel.add(button, null);
     button = new JSButton();
     button.setText(Z4Translations.INVERTED);
     button.addActionListener(event => {
-      let gradientColor = this.biGradientColor.getColorAtIndex(this.biSelectedIndex);
+      let gradientColor = this.value.getColorAtIndex(this.biSelectedIndex);
       gradientColor.reverse();
       this.afterOperation(gradientColor);
+      this.onchange();
     });
     panel.add(button, null);
     this.drawPreview(false);
@@ -164,9 +170,9 @@ class Z4BiGradientColorPanel extends JSPanel {
       case "enter":
         break;
       case "down":
-        for (let biIndex = 0; biIndex < this.biGradientColor.getColorCount(); biIndex++) {
-          let biPosition = this.biGradientColor.getColorPositionAtIndex(biIndex);
-          let gradientColor = this.biGradientColor.getColorAtIndex(biIndex);
+        for (let biIndex = 0; biIndex < this.value.getColorCount(); biIndex++) {
+          let biPosition = this.value.getColorPositionAtIndex(biIndex);
+          let gradientColor = this.value.getColorAtIndex(biIndex);
           for (let index = 0; index < gradientColor.getColorCount(); index++) {
             let position = gradientColor.getColorPositionAtIndex(index);
             if (Z4Math.distance(position * this.width, biPosition * this.height, event.offsetX, event.offsetY) <= Z4BiGradientColorPanel.SELECTOR_RADIUS) {
@@ -177,8 +183,8 @@ class Z4BiGradientColorPanel extends JSPanel {
             }
           }
         }
-        if (!this.pressed && !this.biGradientColor.isPositionOccupied(event.offsetY / this.height, Z4BiGradientColorPanel.TOLERANCE)) {
-          let gradientColor = this.biGradientColor.getColorAt(event.offsetY / this.height, false);
+        if (!this.pressed && !this.value.isPositionOccupied(event.offsetY / this.height, Z4BiGradientColorPanel.TOLERANCE)) {
+          let gradientColor = this.value.getColorAt(event.offsetY / this.height, false);
           while (gradientColor.getColorCount() > 2) {
             gradientColor.removeColor(gradientColor.getColorPositionAtIndex(1));
           }
@@ -186,13 +192,13 @@ class Z4BiGradientColorPanel extends JSPanel {
             gradientColor.addColor(gradientColor.getColorAt(event.offsetX / this.width, false), event.offsetX / this.width);
           }
           gradientColor.mergeOverlapping(Z4BiGradientColorPanel.TOLERANCE);
-          this.biGradientColor.addColor(gradientColor, event.offsetY / this.height);
+          this.value.addColor(gradientColor, event.offsetY / this.height);
           this.pressed = true;
           this.setPointer(event, true);
         }
         if (!this.pressed) {
-          let biPosition = this.biGradientColor.getPosition(event.offsetY / this.height, Z4BiGradientColorPanel.TOLERANCE);
-          let gradientColor = this.biGradientColor.getColorAt(biPosition, false);
+          let biPosition = this.value.getPosition(event.offsetY / this.height, Z4BiGradientColorPanel.TOLERANCE);
+          let gradientColor = this.value.getColorAt(biPosition, false);
           if (!gradientColor.isPositionOccupied(event.offsetX / this.width, Z4BiGradientColorPanel.TOLERANCE)) {
             gradientColor.addColor(gradientColor.getColorAt(event.offsetX / this.width, false), event.offsetX / this.width);
             this.setPointer(event, true);
@@ -201,18 +207,18 @@ class Z4BiGradientColorPanel extends JSPanel {
         break;
       case "move":
         if (this.pressed) {
-          let biPosition = this.biGradientColor.getColorPositionAtIndex(this.biSelectedIndex);
-          let biPositionBefore = this.biGradientColor.getColorPositionAtIndex(this.biSelectedIndex - 1);
-          let biPositionAfter = this.biGradientColor.getColorPositionAtIndex(this.biSelectedIndex + 1);
+          let biPosition = this.value.getColorPositionAtIndex(this.biSelectedIndex);
+          let biPositionBefore = this.value.getColorPositionAtIndex(this.biSelectedIndex - 1);
+          let biPositionAfter = this.value.getColorPositionAtIndex(this.biSelectedIndex + 1);
           let newBiPosition = event.offsetY / this.height;
-          let gradientColor = this.biGradientColor.getColorAtIndex(this.biSelectedIndex);
+          let gradientColor = this.value.getColorAtIndex(this.biSelectedIndex);
           let position = gradientColor.getColorPositionAtIndex(this.selectedIndex);
           let positionBefore = gradientColor.getColorPositionAtIndex(this.selectedIndex - 1);
           let positionAfter = gradientColor.getColorPositionAtIndex(this.selectedIndex + 1);
           let newPosition = event.offsetX / this.width;
-          if (this.biSelectedIndex !== 0 && this.biSelectedIndex !== this.biGradientColor.getColorCount() - 1 && biPositionBefore < newBiPosition - Z4BiGradientColorPanel.TOLERANCE && biPositionAfter > newBiPosition + Z4BiGradientColorPanel.TOLERANCE) {
-            this.biGradientColor.removeColor(biPosition);
-            this.biGradientColor.addColor(gradientColor, newBiPosition);
+          if (this.biSelectedIndex !== 0 && this.biSelectedIndex !== this.value.getColorCount() - 1 && biPositionBefore < newBiPosition - Z4BiGradientColorPanel.TOLERANCE && biPositionAfter > newBiPosition + Z4BiGradientColorPanel.TOLERANCE) {
+            this.value.removeColor(biPosition);
+            this.value.addColor(gradientColor, newBiPosition);
             this.drawPreview(true);
           }
           if (this.selectedIndex !== 0 && this.selectedIndex !== gradientColor.getColorCount() - 1 && positionBefore < newPosition - Z4BiGradientColorPanel.TOLERANCE && positionAfter > newPosition + Z4BiGradientColorPanel.TOLERANCE) {
@@ -224,12 +230,12 @@ class Z4BiGradientColorPanel extends JSPanel {
         } else {
           this.preview.getStyle().cursor = "default";
           this.setPointer(event, false);
-          if (this.preview.getStyle().cursor === "default" && !this.biGradientColor.isPositionOccupied(event.offsetY / this.height, Z4BiGradientColorPanel.TOLERANCE)) {
+          if (this.preview.getStyle().cursor === "default" && !this.value.isPositionOccupied(event.offsetY / this.height, Z4BiGradientColorPanel.TOLERANCE)) {
             this.preview.getStyle().cursor = "copy";
           }
           if (this.preview.getStyle().cursor === "default") {
-            let biPosition = this.biGradientColor.getPosition(event.offsetY / this.height, Z4BiGradientColorPanel.TOLERANCE);
-            let gradientColor = this.biGradientColor.getColorAt(biPosition, false);
+            let biPosition = this.value.getPosition(event.offsetY / this.height, Z4BiGradientColorPanel.TOLERANCE);
+            let gradientColor = this.value.getColorAt(biPosition, false);
             if (!gradientColor.isPositionOccupied(event.offsetX / this.width, Z4BiGradientColorPanel.TOLERANCE)) {
               this.preview.getStyle().cursor = "copy";
             }
@@ -250,9 +256,9 @@ class Z4BiGradientColorPanel extends JSPanel {
   }
 
    setPointer(event, setOther) {
-    for (let biIndex = 0; biIndex < this.biGradientColor.getColorCount(); biIndex++) {
-      let biPosition = this.biGradientColor.getColorPositionAtIndex(biIndex);
-      let gradientColor = this.biGradientColor.getColorAtIndex(biIndex);
+    for (let biIndex = 0; biIndex < this.value.getColorCount(); biIndex++) {
+      let biPosition = this.value.getColorPositionAtIndex(biIndex);
+      let gradientColor = this.value.getColorAtIndex(biIndex);
       for (let index = 0; index < gradientColor.getColorCount(); index++) {
         let position = gradientColor.getColorPositionAtIndex(index);
         if (Z4Math.distance(position * this.width, biPosition * this.height, event.offsetX, event.offsetY) <= Z4BiGradientColorPanel.SELECTOR_RADIUS) {
@@ -267,23 +273,25 @@ class Z4BiGradientColorPanel extends JSPanel {
     }
   }
 
-   onChange(spTosl, adjusting, spinner, slider, isBi) {
+   onRippleChange(spTosl, adjusting, spinner, slider, isBi) {
     if (spTosl) {
       slider.setValue(spinner.getValue());
     } else {
       spinner.setValue(slider.getValue());
     }
     if (isBi) {
-      this.biGradientColor.setRipple(slider.getValue() / 100);
+      this.value.setRipple(slider.getValue() / 100);
     } else {
-      this.biGradientColor.setGradientRipple(slider.getValue() / 100);
+      this.value.setGradientRipple(slider.getValue() / 100);
     }
     this.drawPreview(adjusting);
+    this.valueIsAdjusting = adjusting;
+    this.onchange();
   }
 
    afterOperation(gradientColor) {
-    this.colorPanel.setValue(this.biGradientColor.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
-    this.biDelete.setEnabled(this.biSelectedIndex !== 0 && this.biSelectedIndex !== this.biGradientColor.getColorCount() - 1);
+    this.colorPanel.setValue(this.value.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
+    this.biDelete.setEnabled(this.biSelectedIndex !== 0 && this.biSelectedIndex !== this.value.getColorCount() - 1);
     this.delete.setEnabled(this.selectedIndex !== 0 && this.selectedIndex !== gradientColor.getColorCount() - 1);
     this.drawPreview(false);
   }
@@ -293,7 +301,7 @@ class Z4BiGradientColorPanel extends JSPanel {
       let imageData = this.ctx.createImageData(this.width, this.height);
       let data = imageData.data;
       for (let y = 0; y < this.height; y++) {
-        let gradientColor = this.biGradientColor.getColorAt(y / this.height, true);
+        let gradientColor = this.value.getColorAt(y / this.height, true);
         for (let x = 0; x < this.width; x++) {
           let color = gradientColor.getColorAt(x / this.width, true);
           let index = (y * this.width + x) * 4;
@@ -304,9 +312,9 @@ class Z4BiGradientColorPanel extends JSPanel {
         }
       }
       this.ctx.putImageData(imageData, 0, 0);
-      for (let biIndex = 0; biIndex < this.biGradientColor.getColorCount(); biIndex++) {
-        let biPosition = this.biGradientColor.getColorPositionAtIndex(biIndex);
-        let gradientColor = this.biGradientColor.getColorAtIndex(biIndex);
+      for (let biIndex = 0; biIndex < this.value.getColorCount(); biIndex++) {
+        let biPosition = this.value.getColorPositionAtIndex(biIndex);
+        let gradientColor = this.value.getColorAtIndex(biIndex);
         for (let index = 0; index < gradientColor.getColorCount(); index++) {
           this.drawCircle(biPosition, gradientColor.getColorPositionAtIndex(index), biIndex, index);
         }
@@ -357,11 +365,17 @@ class Z4BiGradientColorPanel extends JSPanel {
   }
 
   /**
-   * Returns the selected bigradient color
+   * Returns if the value is adjusting
    *
-   * @return The selected bigradient color
+   * @return true if the value is adjusting, false otherwise
    */
-   getSelectedBiGradientColor() {
-    return this.biGradientColor;
+   getValueIsAdjusting() {
+    return this.valueIsAdjusting;
+  }
+
+   setValue(value) {
+    this.value = Z4BiGradientColor.fromJSON(value.toJSON());
+    this.colorPanel.setValue(this.value.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
+    this.drawPreview(false);
   }
 }

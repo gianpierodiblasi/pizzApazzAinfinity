@@ -116,7 +116,7 @@ class Z4FillingPanel extends JSPanel {
 
    afterEval(panelFiller, card, index, gradientColorPanel) {
     (this.selectedFillerPanel).setSize(this.width, this.height);
-    (this.selectedFillerPanel).setGradientColor(gradientColorPanel.getGradientColor());
+    (this.selectedFillerPanel).setGradientColor(gradientColorPanel.getValue());
     this.cardFillerPanels[index] = this.selectedFillerPanel;
     panelFiller.add(this.selectedFillerPanel, card);
   }
