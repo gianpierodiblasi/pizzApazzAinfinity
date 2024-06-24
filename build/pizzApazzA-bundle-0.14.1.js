@@ -8821,15 +8821,15 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
 
    cardColorEvalPanels = new Array("new Z4ColorPanel()", "new Z4GradientColorPanel()", "new Z4BiGradientColorPanel()");
 
-   selectedPointIteratorSelector = "STAMPER";
+  // private String selectedPointIteratorSelector = "STAMPER";
+   selectedPointIteratorPanel = null;
 
-  // private JSPanel selectedPointIteratorPanel = this.cardPointIteratorPanels.$get(0);
-   selectedPainterSelector = "SHAPE_2D";
+  // private String selectedPainterSelector = "SHAPE_2D";
+   selectedPainterPanel = null;
 
-  // private JSPanel selectedPainterPanel = this.cardPainterPanels.$get(0);
-   selectedColorSelector = "COLOR";
+  // private String selectedColorSelector = "COLOR";
+   selectedColorPanel = null;
 
-  // private JSPanel selectedColorPanel = this.cardColorPanels.$get(0);
   constructor() {
     super();
     this.setLayout(new GridBagLayout());
@@ -8849,13 +8849,10 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     panelCard.setLayout(cardLayout);
     panel.add(panelCard, new GBC(2, 0).a(GBC.NORTH));
     let buttonGroup = new ButtonGroup();
-    this.addRadioButtons(this.cardPointIteratorSelectors, this.cardPointIteratorPanels, this.cardPointIteratorEvalPanels, panelRadio, panelCard, cardLayout, buttonGroup);
-    this.addRadioButtons(this.cardPainterSelectors, this.cardPainterPanels, this.cardPainterEvalPanels, panelRadio, panelCard, cardLayout, buttonGroup);
-    this.addRadioButtons(this.cardColorSelectors, this.cardColorPanels, this.cardColorEvalPanels, panelRadio, panelCard, cardLayout, buttonGroup);
+    this.selectedPointIteratorPanel = this.addRadioButtons(this.cardPointIteratorSelectors, this.cardPointIteratorPanels, this.cardPointIteratorEvalPanels, panelRadio, panelCard, cardLayout, buttonGroup);
+    this.selectedPainterPanel = this.addRadioButtons(this.cardPainterSelectors, this.cardPainterPanels, this.cardPainterEvalPanels, panelRadio, panelCard, cardLayout, buttonGroup);
+    this.selectedColorPanel = this.addRadioButtons(this.cardColorSelectors, this.cardColorPanels, this.cardColorEvalPanels, panelRadio, panelCard, cardLayout, buttonGroup);
     pane.addTab(Z4Translations.TRY_ME, new JSPanel());
-    let panelEval = eval(this.cardPointIteratorEvalPanels[0]);
-    this.cardPointIteratorPanels[0] = panelEval;
-    panelCard.add(panelEval, this.cardPointIteratorSelectors[0]);
   }
 
    addRadioButtons(cardSelector, cardPanels, cardEvalPanels, panelRadio, panelCard, cardLayout, buttonGroup) {
@@ -8868,26 +8865,23 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
       radio.setSelected(cardSelector === this.cardPointIteratorSelectors && index === 0);
       radio.setIcon(new Z4EmptyImageProducer(index));
       radio.addActionListener(event => {
-        // //        this.selectedFillerSelector = card;
-        // //
-        if (cardPanels[index]) {
-          // //          this.selectedFillerPanel = this.cardFillerPanels.$get(index);
-          // 
-          cardLayout.show(panelCard, card);
-        } else {
-          // //this.selectedFillerPanel = eval(cardEvalPanels.$get(index));
+        if (!cardPanels[index]) {
           let panelEval = eval(cardEvalPanels[index]);
-          if (card === "COLOR") {
-            panelEval.getStyle().minWidth = "15rem";
-          }
           cardPanels[index] = panelEval;
           panelCard.add(panelEval, card);
-          cardLayout.show(panelCard, card);
         }
+        cardLayout.show(panelCard, card);
       });
       buttonGroup.add(radio);
       panelRadio.add(radio, null);
     });
+    let panelEval = eval(cardEvalPanels[0]);
+    if (cardSelector === this.cardColorSelectors) {
+      panelEval.getStyle().minWidth = "15rem";
+    }
+    cardPanels[0] = panelEval;
+    panelCard.add(panelEval, cardSelector[0]);
+    return panelEval;
   }
 
    setValue(value) {
