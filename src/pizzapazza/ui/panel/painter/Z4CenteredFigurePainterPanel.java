@@ -8,6 +8,7 @@ import javascript.awt.GridBagLayout;
 import javascript.swing.ButtonGroup;
 import javascript.swing.JSButton;
 import javascript.swing.JSColorChooser;
+import javascript.swing.JSComponent;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
 import javascript.swing.JSSlider;
@@ -34,6 +35,7 @@ import pizzapazza.util.Z4EmptyImageProducer;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.document;
 
 /**
  * The panel to edit a Z4CenteredFigurePainter
@@ -43,6 +45,7 @@ import static simulation.js.$Globals.$exists;
 public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigurePainter> {
 
   private final Array<JSRadioButton> radios = new Array<>();
+  private final JSComponent sample = new JSComponent(document.createElement("img"));
   private final Z4FancifulValuePanel size = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
   private final Z4FancifulValuePanel angle1 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
   private final Z4FancifulValuePanel angle2 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
@@ -88,6 +91,9 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     this.addRadio(Z4CenteredFigurePainterType.TYPE_4, panelType, buttonGroup);
     this.addRadio(Z4CenteredFigurePainterType.TYPE_5, panelType, buttonGroup);
 
+    this.sample.cssAddClass("z4centeredfigurepainterpanel-sample");
+    panelType.add(this.sample, null);
+
     this.size.setSignsVisible(false);
     this.size.setConstantRange(1, 50);
     this.size.setLabel(Z4Translations.DIMENSION);
@@ -95,25 +101,27 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     this.size.addChangeListener(event -> this.onfigurechange(this.size.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
     panel.add(this.size, new GBC(0, 1).i(1, 0, 0, 1));
 
+    this.angle1.getStyle().setProperty("grid-template-areas", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\"");
     this.angle1.setSignsVisible(false);
     this.angle1.setConstantRange(0, 90);
     this.angle1.setRandomRange(0, 90);
-    this.angle1.setLabel(Z4Translations.ANGLE + " 1");
+    this.angle1.setLabel(Z4Translations.ANGLE + " 1 (\u03B11)");
     this.angle1.cssAddClass("z4abstractvaluepanel-titled");
     this.angle1.addChangeListener(event -> this.onfigurechange(this.angle1.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
     panel.add(this.angle1, new GBC(0, 2).i(1, 0, 0, 1));
 
+    this.angle2.getStyle().setProperty("grid-template-areas", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\"");
     this.angle2.setSignsVisible(false);
     this.angle2.setConstantRange(0, 90);
     this.angle2.setRandomRange(0, 90);
-    this.angle2.setLabel(Z4Translations.ANGLE + " 2");
+    this.angle2.setLabel(Z4Translations.ANGLE + " 2 (\u03B12)");
     this.angle2.cssAddClass("z4abstractvaluepanel-titled");
     this.angle2.addChangeListener(event -> this.onfigurechange(this.angle2.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
     panel.add(this.angle2, new GBC(1, 2).w(2).i(1, 0, 0, 0));
 
     this.tension.setSignsVisible(false);
     this.tension.setConstantRange(1, 100);
-    this.tension.setLabel(Z4Translations.TENSION);
+    this.tension.setLabel(Z4Translations.TENSION + " (\u03C4)");
     this.tension.cssAddClass("z4abstractvaluepanel-titled");
     this.tension.addChangeListener(event -> this.onfigurechange(this.tension.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
     panel.add(this.tension, new GBC(1, 1).w(2).i(1, 0, 0, 0));
@@ -291,6 +299,14 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
             this.borderSize.getValue(), $exists(borderColor) ? borderColor : this.value.getBorderColor()
     );
 
+    this.sample.cssRemoveClass("z4centeredfigurepainterpanel-sample0_1_2");
+    this.sample.cssRemoveClass("z4centeredfigurepainterpanel-sample3_4_5");
+    if (this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_0 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_1 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_2) {
+      this.sample.cssAddClass("z4centeredfigurepainterpanel-sample0_1_2");
+    } else if (this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_4 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_5) {
+      this.sample.cssAddClass("z4centeredfigurepainterpanel-sample3_4_5");
+    }
+    
     this.angle1.setEnabled(this.enabled && this.value.getCenteredFigurePainterType() != Z4CenteredFigurePainterType.TYPE_5);
     this.angle2.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_5));
     this.tension.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_4 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_5));
@@ -303,6 +319,15 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     this.value = value;
 
     ((JSRadioButton) this.radios.$get("" + value.getCenteredFigurePainterType())).setSelected(true);
+
+    this.sample.cssRemoveClass("z4centeredfigurepainterpanel-sample0_1_2");
+    this.sample.cssRemoveClass("z4centeredfigurepainterpanel-sample3_4_5");
+    if (this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_0 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_1 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_2) {
+      this.sample.cssAddClass("z4centeredfigurepainterpanel-sample0_1_2");
+    } else if (this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_4 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_5) {
+      this.sample.cssAddClass("z4centeredfigurepainterpanel-sample3_4_5");
+    }
+
     this.size.setValue(this.value.getSize());
     this.angle1.setValue(this.value.getAngle1());
     this.angle1.setEnabled(this.enabled && this.value.getCenteredFigurePainterType() != Z4CenteredFigurePainterType.TYPE_5);

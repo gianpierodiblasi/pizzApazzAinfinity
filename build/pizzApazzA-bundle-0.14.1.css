@@ -337,6 +337,17 @@
 }
 .z4centeredfigurepainterpanel .z4centeredfigurepainterpanel-radio:nth-child(6) img {
   content: url(../image/painter/centered_figure_type5.png);
+}
+
+.z4centeredfigurepainterpanel .z4centeredfigurepainterpanel-sample {
+  width: 66px;
+  height: 66px;
+}
+.z4centeredfigurepainterpanel .z4centeredfigurepainterpanel-sample.z4centeredfigurepainterpanel-sample0_1_2 {
+  content: url(../image/painter/centered_figure_type_sample0_1_2.svg);
+}
+.z4centeredfigurepainterpanel .z4centeredfigurepainterpanel-sample.z4centeredfigurepainterpanel-sample3_4_5 {
+  content: url(../image/painter/centered_figure_type_sample3_4_5.svg);
 }.z4colorpreview {
   height: 2rem;
   display: grid;

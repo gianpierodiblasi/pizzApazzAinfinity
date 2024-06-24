@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<svg width="96" height="96" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <path stroke="#007fff" d="m4,48 C24,0 72,0 92,48" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" fill="none"/>
+    <path stroke="#007fff" d="m4,48 C24,95 72,95 92,48" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" fill="none"/>
+    <line stroke="#ff0000" x1="4" y1="48" x2="92" y2="48" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  fill="none"/>
+    <line stroke="#ff0000" x1="4" y1="48" x2="22" y2="2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  fill="none"/>
+    <text x="8" y="20">&#x03C4;</text>
+    <path stroke="#ff0000" d="m18,48 A 30 30 0 0 0 11 31" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill="none"/>
+    <text x="20" y="44">&#x03B1;1</text>
+    <line stroke="#ff0000" x1="74" y1="2" x2="92" y2="48" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  fill="none"/>
+    <text x="82" y="20">&#x03C4;</text>
+    <path stroke="#ff0000" d="m78,48 A 30 30 0 0 1 85 31" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill="none"/>
+    <text x="60" y="44">&#x03B1;2</text>
+  </g>
+</svg>

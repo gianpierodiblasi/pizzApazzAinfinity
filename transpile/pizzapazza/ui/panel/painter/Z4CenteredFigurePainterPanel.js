@@ -7,6 +7,8 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
 
    radios = new Array();
 
+   sample = new JSComponent(document.createElement("img"));
+
    size = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
 
    angle1 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
@@ -59,29 +61,33 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
     this.addRadio(Z4CenteredFigurePainterType.TYPE_3, panelType, buttonGroup);
     this.addRadio(Z4CenteredFigurePainterType.TYPE_4, panelType, buttonGroup);
     this.addRadio(Z4CenteredFigurePainterType.TYPE_5, panelType, buttonGroup);
+    this.sample.cssAddClass("z4centeredfigurepainterpanel-sample");
+    panelType.add(this.sample, null);
     this.size.setSignsVisible(false);
     this.size.setConstantRange(1, 50);
     this.size.setLabel(Z4Translations.DIMENSION);
     this.size.cssAddClass("z4abstractvaluepanel-titled");
     this.size.addChangeListener(event => this.onfigurechange(this.size.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
     panel.add(this.size, new GBC(0, 1).i(1, 0, 0, 1));
+    this.angle1.getStyle().setProperty("grid-template-areas", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\"");
     this.angle1.setSignsVisible(false);
     this.angle1.setConstantRange(0, 90);
     this.angle1.setRandomRange(0, 90);
-    this.angle1.setLabel(Z4Translations.ANGLE + " 1");
+    this.angle1.setLabel(Z4Translations.ANGLE + " 1 (\u03B11)");
     this.angle1.cssAddClass("z4abstractvaluepanel-titled");
     this.angle1.addChangeListener(event => this.onfigurechange(this.angle1.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
     panel.add(this.angle1, new GBC(0, 2).i(1, 0, 0, 1));
+    this.angle2.getStyle().setProperty("grid-template-areas", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\"");
     this.angle2.setSignsVisible(false);
     this.angle2.setConstantRange(0, 90);
     this.angle2.setRandomRange(0, 90);
-    this.angle2.setLabel(Z4Translations.ANGLE + " 2");
+    this.angle2.setLabel(Z4Translations.ANGLE + " 2 (\u03B12)");
     this.angle2.cssAddClass("z4abstractvaluepanel-titled");
     this.angle2.addChangeListener(event => this.onfigurechange(this.angle2.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
     panel.add(this.angle2, new GBC(1, 2).w(2).i(1, 0, 0, 0));
     this.tension.setSignsVisible(false);
     this.tension.setConstantRange(1, 100);
-    this.tension.setLabel(Z4Translations.TENSION);
+    this.tension.setLabel(Z4Translations.TENSION + " (\u03C4)");
     this.tension.cssAddClass("z4abstractvaluepanel-titled");
     this.tension.addChangeListener(event => this.onfigurechange(this.tension.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
     panel.add(this.tension, new GBC(1, 1).w(2).i(1, 0, 0, 0));
@@ -182,6 +188,13 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
         break;
     }
     this.value = new Z4CenteredFigurePainter(type, this.size.getValue(), this.angle1.getValue(), this.angle2.getValue(), this.tension.getValue(), this.multiplicity.getValue(), this.hole.getValue(), this.whirlpool.getValue(), this.coverSlider.getValue(), this.shadowShiftX.getValue(), this.shadowShiftY.getValue(), shadowColor ? shadowColor : this.value.getShadowColor(), this.borderSize.getValue(), borderColor ? borderColor : this.value.getBorderColor());
+    this.sample.cssRemoveClass("z4centeredfigurepainterpanel-sample0_1_2");
+    this.sample.cssRemoveClass("z4centeredfigurepainterpanel-sample3_4_5");
+    if (this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_0 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_1 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_2) {
+      this.sample.cssAddClass("z4centeredfigurepainterpanel-sample0_1_2");
+    } else if (this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_4 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_5) {
+      this.sample.cssAddClass("z4centeredfigurepainterpanel-sample3_4_5");
+    }
     this.angle1.setEnabled(this.enabled && this.value.getCenteredFigurePainterType() !== Z4CenteredFigurePainterType.TYPE_5);
     this.angle2.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_5));
     this.tension.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_4 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_5));
@@ -191,6 +204,13 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
    setValue(value) {
     this.value = value;
     (this.radios["" + value.getCenteredFigurePainterType()]).setSelected(true);
+    this.sample.cssRemoveClass("z4centeredfigurepainterpanel-sample0_1_2");
+    this.sample.cssRemoveClass("z4centeredfigurepainterpanel-sample3_4_5");
+    if (this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_0 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_1 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_2) {
+      this.sample.cssAddClass("z4centeredfigurepainterpanel-sample0_1_2");
+    } else if (this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_4 || this.value.getCenteredFigurePainterType() === Z4CenteredFigurePainterType.TYPE_5) {
+      this.sample.cssAddClass("z4centeredfigurepainterpanel-sample3_4_5");
+    }
     this.size.setValue(this.value.getSize());
     this.angle1.setValue(this.value.getAngle1());
     this.angle1.setEnabled(this.enabled && this.value.getCenteredFigurePainterType() !== Z4CenteredFigurePainterType.TYPE_5);
