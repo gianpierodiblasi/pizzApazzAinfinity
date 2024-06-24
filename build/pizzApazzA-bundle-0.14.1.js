@@ -4066,7 +4066,7 @@ class Z4GradientColorPanel extends JSPanel {
 
    rippleSlider = new JSSlider();
 
-   colorPreview = new Z4ColorPane();
+   colorPanel = new Z4ColorPanel();
 
    delete = new JSButton();
 
@@ -4103,12 +4103,13 @@ class Z4GradientColorPanel extends JSPanel {
     this.preview.addEventListener("mousemove", event => this.onMouse(event, "move"));
     this.preview.addEventListener("mouseup", event => this.onMouse(event, "up"));
     this.add(this.preview, new GBC(0, 0).w(3).i(0, 0, 5, 0));
-    this.colorPreview.setColor(this.gradientColor.getColorAtIndex(this.selectedIndex));
-    this.add(this.colorPreview, new GBC(0, 1).wx(1).f(GBC.HORIZONTAL));
-    let button = new JSButton();
-    button.setText(Z4Translations.EDIT);
-    button.addActionListener(event => this.selectColor());
-    this.add(button, new GBC(1, 1).a(GBC.WEST).i(0, 5, 0, 0));
+    this.colorPanel.setValue(this.gradientColor.getColorAtIndex(this.selectedIndex));
+    this.colorPanel.addChangeListener(event => {
+      this.gradientColor.addColor(this.colorPanel.getValue(), this.gradientColor.getColorPositionAtIndex(this.selectedIndex));
+      this.drawPreview(false);
+      this.fireOnChange();
+    });
+    this.add(this.colorPanel, new GBC(0, 1).w(2).wx(1).f(GBC.HORIZONTAL));
     this.delete.setText(Z4Translations.DELETE);
     this.delete.setEnabled(false);
     this.delete.addActionListener(event => JSOptionPane.showConfirmDialog(Z4Translations.DELETE_COLOR_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
@@ -4131,7 +4132,7 @@ class Z4GradientColorPanel extends JSPanel {
     this.add(this.rippleSlider, new GBC(0, 4).w(3).a(GBC.NORTH).f(GBC.HORIZONTAL));
     let panel = new JSPanel();
     this.add(panel, new GBC(0, 5).w(3).a(GBC.NORTH).f(GBC.HORIZONTAL));
-    button = new JSButton();
+    let button = new JSButton();
     button.setText(Z4Translations.MIRRORED);
     button.addActionListener(event => {
       this.gradientColor.mirror();
@@ -4233,17 +4234,8 @@ class Z4GradientColorPanel extends JSPanel {
     this.fireOnChange();
   }
 
-   selectColor() {
-    JSColorChooser.showDialog(Z4Translations.COLOR, this.gradientColor.getColorAtIndex(this.selectedIndex), true, null, c => {
-      this.gradientColor.addColor(c, this.gradientColor.getColorPositionAtIndex(this.selectedIndex));
-      this.colorPreview.setColor(c);
-      this.drawPreview(false);
-      this.fireOnChange();
-    });
-  }
-
    afterOperation() {
-    this.colorPreview.setColor(this.gradientColor.getColorAtIndex(this.selectedIndex));
+    this.colorPanel.setValue(this.gradientColor.getColorAtIndex(this.selectedIndex));
     this.delete.setEnabled(this.selectedIndex !== 0 && this.selectedIndex !== this.gradientColor.getColorCount() - 1);
     this.drawPreview(false);
   }

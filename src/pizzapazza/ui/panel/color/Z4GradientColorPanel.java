@@ -8,7 +8,6 @@ import javascript.awt.Color;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
 import javascript.swing.JSButton;
-import javascript.swing.JSColorChooser;
 import javascript.swing.JSComponent;
 import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
@@ -19,7 +18,6 @@ import javascript.swing.event.ChangeEvent;
 import javascript.swing.event.ChangeListener;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.math.Z4Math;
-import pizzapazza.ui.component.Z4ColorPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
@@ -38,7 +36,7 @@ public class Z4GradientColorPanel extends JSPanel {
   private final $CanvasRenderingContext2D ctx = this.preview.invoke("getContext('2d')");
   private final JSSpinner rippleSpinner = new JSSpinner();
   private final JSSlider rippleSlider = new JSSlider();
-  private final Z4ColorPane colorPreview = new Z4ColorPane();
+  private final Z4ColorPanel colorPanel = new Z4ColorPanel();
   private final JSButton delete = new JSButton();
 
   private final Z4GradientColor gradientColor = new Z4GradientColor();
@@ -70,13 +68,13 @@ public class Z4GradientColorPanel extends JSPanel {
     this.preview.addEventListener("mouseup", event -> this.onMouse((MouseEvent) event, "up"));
     this.add(this.preview, new GBC(0, 0).w(3).i(0, 0, 5, 0));
 
-    this.colorPreview.setColor(this.gradientColor.getColorAtIndex(this.selectedIndex));
-    this.add(this.colorPreview, new GBC(0, 1).wx(1).f(GBC.HORIZONTAL));
-
-    JSButton button = new JSButton();
-    button.setText(Z4Translations.EDIT);
-    button.addActionListener(event -> this.selectColor());
-    this.add(button, new GBC(1, 1).a(GBC.WEST).i(0, 5, 0, 0));
+    this.colorPanel.setValue(this.gradientColor.getColorAtIndex(this.selectedIndex));
+    this.colorPanel.addChangeListener(event -> {
+      this.gradientColor.addColor(this.colorPanel.getValue(), this.gradientColor.getColorPositionAtIndex(this.selectedIndex));
+      this.drawPreview(false);
+      this.fireOnChange();
+    });
+    this.add(this.colorPanel, new GBC(0, 1).w(2).wx(1).f(GBC.HORIZONTAL));
 
     this.delete.setText(Z4Translations.DELETE);
     this.delete.setEnabled(false);
@@ -106,7 +104,7 @@ public class Z4GradientColorPanel extends JSPanel {
     JSPanel panel = new JSPanel();
     this.add(panel, new GBC(0, 5).w(3).a(GBC.NORTH).f(GBC.HORIZONTAL));
 
-    button = new JSButton();
+    JSButton button = new JSButton();
     button.setText(Z4Translations.MIRRORED);
     button.addActionListener(event -> {
       this.gradientColor.mirror();
@@ -222,17 +220,8 @@ public class Z4GradientColorPanel extends JSPanel {
     this.fireOnChange();
   }
 
-  private void selectColor() {
-    JSColorChooser.showDialog(Z4Translations.COLOR, this.gradientColor.getColorAtIndex(this.selectedIndex), true, null, c -> {
-      this.gradientColor.addColor(c, this.gradientColor.getColorPositionAtIndex(this.selectedIndex));
-      this.colorPreview.setColor(c);
-      this.drawPreview(false);
-      this.fireOnChange();
-    });
-  }
-
   private void afterOperation() {
-    this.colorPreview.setColor(this.gradientColor.getColorAtIndex(this.selectedIndex));
+    this.colorPanel.setValue(this.gradientColor.getColorAtIndex(this.selectedIndex));
     this.delete.setEnabled(this.selectedIndex != 0 && this.selectedIndex != this.gradientColor.getColorCount() - 1);
     this.drawPreview(false);
   }
