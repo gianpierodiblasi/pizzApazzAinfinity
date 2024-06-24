@@ -227,6 +227,10 @@ class Z4GradientColorPanel extends Z4AbstractValuePanel {
     return this.valueIsAdjusting;
   }
 
+   getValue() {
+    return Z4GradientColor.fromJSON(this.value.toJSON());
+  }
+
    setValue(value) {
     this.value = Z4GradientColor.fromJSON(value.toJSON());
     this.colorPanel.setValue(this.value.getColorAtIndex(this.selectedIndex));

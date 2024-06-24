@@ -272,6 +272,11 @@ public class Z4GradientColorPanel extends Z4AbstractValuePanel<Z4GradientColor> 
   }
 
   @Override
+  public Z4GradientColor getValue() {
+    return Z4GradientColor.fromJSON(this.value.toJSON());
+  }
+
+  @Override
   public void setValue(Z4GradientColor value) {
     this.value = Z4GradientColor.fromJSON(value.toJSON());
 

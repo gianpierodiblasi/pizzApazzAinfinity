@@ -234,6 +234,7 @@ public class Z4BiGradientColorPanel extends Z4AbstractValuePanel<Z4BiGradientCol
           this.value.addColor(gradientColor, event.offsetY / this.height);
           this.pressed = true;
           this.setPointer(event, true);
+          this.onchange();
         }
 
         if (!this.pressed) {
@@ -264,6 +265,8 @@ public class Z4BiGradientColorPanel extends Z4AbstractValuePanel<Z4BiGradientCol
             this.value.removeColor(biPosition);
             this.value.addColor(gradientColor, newBiPosition);
             this.drawPreview(true);
+            this.valueIsAdjusting = true;
+            this.onchange();
           }
 
           if (this.selectedIndex != 0 && this.selectedIndex != gradientColor.getColorCount() - 1
@@ -272,6 +275,8 @@ public class Z4BiGradientColorPanel extends Z4AbstractValuePanel<Z4BiGradientCol
             gradientColor.removeColor(position);
             gradientColor.addColor(color, newPosition);
             this.drawPreview(true);
+            this.valueIsAdjusting = true;
+            this.onchange();
           }
         } else {
           this.preview.getStyle().cursor = "default";
@@ -295,11 +300,15 @@ public class Z4BiGradientColorPanel extends Z4AbstractValuePanel<Z4BiGradientCol
       case "up":
         this.pressed = false;
         this.drawPreview(false);
+        this.valueIsAdjusting = false;
+        this.onchange();
         break;
       case "leave":
         if (this.pressed) {
           this.pressed = false;
           this.drawPreview(false);
+          this.valueIsAdjusting = false;
+        this.onchange();
         }
         break;
     }
@@ -436,6 +445,12 @@ public class Z4BiGradientColorPanel extends Z4AbstractValuePanel<Z4BiGradientCol
     return this.valueIsAdjusting;
   }
 
+  @Override
+  public Z4BiGradientColor getValue() {
+    return Z4BiGradientColor.fromJSON(this.value.toJSON());
+  }
+
+  
   @Override
   public void setValue(Z4BiGradientColor value) {
     this.value = Z4BiGradientColor.fromJSON(value.toJSON());

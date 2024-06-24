@@ -195,6 +195,7 @@ class Z4BiGradientColorPanel extends Z4AbstractValuePanel {
           this.value.addColor(gradientColor, event.offsetY / this.height);
           this.pressed = true;
           this.setPointer(event, true);
+          this.onchange();
         }
         if (!this.pressed) {
           let biPosition = this.value.getPosition(event.offsetY / this.height, Z4BiGradientColorPanel.TOLERANCE);
@@ -220,12 +221,16 @@ class Z4BiGradientColorPanel extends Z4AbstractValuePanel {
             this.value.removeColor(biPosition);
             this.value.addColor(gradientColor, newBiPosition);
             this.drawPreview(true);
+            this.valueIsAdjusting = true;
+            this.onchange();
           }
           if (this.selectedIndex !== 0 && this.selectedIndex !== gradientColor.getColorCount() - 1 && positionBefore < newPosition - Z4BiGradientColorPanel.TOLERANCE && positionAfter > newPosition + Z4BiGradientColorPanel.TOLERANCE) {
             let color = gradientColor.getColorAtIndex(this.selectedIndex);
             gradientColor.removeColor(position);
             gradientColor.addColor(color, newPosition);
             this.drawPreview(true);
+            this.valueIsAdjusting = true;
+            this.onchange();
           }
         } else {
           this.preview.getStyle().cursor = "default";
@@ -245,11 +250,15 @@ class Z4BiGradientColorPanel extends Z4AbstractValuePanel {
       case "up":
         this.pressed = false;
         this.drawPreview(false);
+        this.valueIsAdjusting = false;
+        this.onchange();
         break;
       case "leave":
         if (this.pressed) {
           this.pressed = false;
           this.drawPreview(false);
+          this.valueIsAdjusting = false;
+          this.onchange();
         }
         break;
     }
@@ -371,6 +380,10 @@ class Z4BiGradientColorPanel extends Z4AbstractValuePanel {
    */
    getValueIsAdjusting() {
     return this.valueIsAdjusting;
+  }
+
+   getValue() {
+    return Z4BiGradientColor.fromJSON(this.value.toJSON());
   }
 
    setValue(value) {
