@@ -10,7 +10,6 @@ import javascript.awt.GBC;
 import javascript.awt.Point;
 import javascript.swing.ButtonGroup;
 import javascript.swing.JSButton;
-import javascript.swing.JSColorChooser;
 import javascript.swing.JSFileChooser;
 import javascript.swing.JSFilePicker;
 import javascript.swing.JSPanel;
@@ -20,7 +19,7 @@ import pizzapazza.color.Z4GradientColor;
 import pizzapazza.filler.Z4AbstractFiller;
 import pizzapazza.filler.Z4TextureFiller;
 import pizzapazza.math.Z4Math;
-import pizzapazza.ui.component.Z4ColorPanel;
+import pizzapazza.ui.panel.color.Z4ColorPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
@@ -39,7 +38,7 @@ import simulation.js.$Uint8Array;
  */
 public class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
 
-  private final Z4ColorPanel colorPreview = new Z4ColorPanel();
+  private final Z4ColorPanel colorPanel = new Z4ColorPanel();
   private final JSRadioButton free = new JSRadioButton();
   private final JSRadioButton lockRatio = new JSRadioButton();
   private final JSRadioButton lock = new JSRadioButton();
@@ -74,15 +73,9 @@ public class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
     this.group.add(this.lock);
     panel.add(this.lock, null);
 
-    Z4UI.addLabel(this, Z4Translations.BACKGROUND_COLOR, new GBC(0, 9).w(4).a(GBC.EAST));
-
     panel = new JSPanel();
     panel.setLayout(new BorderLayout(5, 0));
-    this.add(panel, new GBC(0, 10).w(4).a(GBC.WEST).f(GBC.HORIZONTAL));
-
-    this.colorPreview.getStyle().alignSelf = "center";
-    this.colorPreview.setColor(this.backgroundColor);
-    panel.add(this.colorPreview, BorderLayout.CENTER);
+    this.add(panel, new GBC(0, 9).w(4).a(GBC.WEST).f(GBC.HORIZONTAL));
 
     JSButton button = new JSButton();
     button.setText(Z4Translations.PATTERN);
@@ -90,10 +83,13 @@ public class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
     button.addActionListener(event -> this.selectPattern());
     panel.add(button, BorderLayout.WEST);
 
-    button = new JSButton();
-    button.setText(Z4Translations.EDIT);
-    button.addActionListener(event -> this.selectColor());
-    panel.add(button, BorderLayout.EAST);
+    this.colorPanel.setLabel(Z4Translations.BACKGROUND_COLOR);
+    this.colorPanel.setValue(this.backgroundColor);
+    this.colorPanel.addChangeListener(event -> {
+      this.backgroundColor = this.colorPanel.getValue();
+      this.drawPreview(false);
+    });
+    panel.add(this.colorPanel, BorderLayout.CENTER);
 
     $Uint8Array data = ($Uint8Array) this.imageData.data;
     for (int y = 0; y < Z4TextureFillerPanel.DEFAULT_SIZE; y++) {
@@ -156,14 +152,6 @@ public class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
       return null;
     };
     fileReader.readAsDataURL(file);
-  }
-
-  private void selectColor() {
-    JSColorChooser.showDialog(Z4Translations.BACKGROUND_COLOR, this.backgroundColor, true, null, c -> {
-      this.backgroundColor = c;
-      this.colorPreview.setColor(c);
-      this.drawPreview(false);
-    });
   }
 
   @Override

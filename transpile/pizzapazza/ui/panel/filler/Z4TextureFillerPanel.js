@@ -5,7 +5,7 @@
  */
 class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
 
-   colorPreview = new Z4ColorPanel();
+   colorPanel = new Z4ColorPanel();
 
    free = new JSRadioButton();
 
@@ -41,22 +41,21 @@ class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
     this.lock.setText(Z4Translations.LOCK);
     this.group.add(this.lock);
     panel.add(this.lock, null);
-    Z4UI.addLabel(this, Z4Translations.BACKGROUND_COLOR, new GBC(0, 9).w(4).a(GBC.EAST));
     panel = new JSPanel();
     panel.setLayout(new BorderLayout(5, 0));
-    this.add(panel, new GBC(0, 10).w(4).a(GBC.WEST).f(GBC.HORIZONTAL));
-    this.colorPreview.getStyle().alignSelf = "center";
-    this.colorPreview.setColor(this.backgroundColor);
-    panel.add(this.colorPreview, BorderLayout.CENTER);
+    this.add(panel, new GBC(0, 9).w(4).a(GBC.WEST).f(GBC.HORIZONTAL));
     let button = new JSButton();
     button.setText(Z4Translations.PATTERN);
     button.getStyle().marginRight = "4rem";
     button.addActionListener(event => this.selectPattern());
     panel.add(button, BorderLayout.WEST);
-    button = new JSButton();
-    button.setText(Z4Translations.EDIT);
-    button.addActionListener(event => this.selectColor());
-    panel.add(button, BorderLayout.EAST);
+    this.colorPanel.setLabel(Z4Translations.BACKGROUND_COLOR);
+    this.colorPanel.setValue(this.backgroundColor);
+    this.colorPanel.addChangeListener(event => {
+      this.backgroundColor = this.colorPanel.getValue();
+      this.drawPreview(false);
+    });
+    panel.add(this.colorPanel, BorderLayout.CENTER);
     let data = this.imageData.data;
     for (let y = 0; y < Z4TextureFillerPanel.DEFAULT_SIZE; y++) {
       for (let x = 0; x < Z4TextureFillerPanel.DEFAULT_SIZE; x++) {
@@ -112,14 +111,6 @@ class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
       return null;
     };
     fileReader.readAsDataURL(file);
-  }
-
-   selectColor() {
-    JSColorChooser.showDialog(Z4Translations.BACKGROUND_COLOR, this.backgroundColor, true, null, c => {
-      this.backgroundColor = c;
-      this.colorPreview.setColor(c);
-      this.drawPreview(false);
-    });
   }
 
    setPointPosition(points, selectedIndex, x, y, width, height) {
