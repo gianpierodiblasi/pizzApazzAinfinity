@@ -23,8 +23,6 @@ class Z4FillingPanel extends JSPanel {
 
    selectedFillerPanel = this.cardFillerPanels[0];
 
-   selectedColor = new Color(255, 255, 255, 255);
-
   /**
    * Creates the object
    */
@@ -48,9 +46,8 @@ class Z4FillingPanel extends JSPanel {
     this.add(panelFiller, new GBC(4, 0).wxy(1, 1).a(GBC.NORTH));
     let colorPanel = this.cardColorPanels[0];
     colorPanel.setLabel(Z4Translations.FILLING_COLOR);
-    colorPanel.setValue(this.selectedColor);
+    colorPanel.setValue(new Color(255, 255, 255, 255));
     colorPanel.getStyle().minWidth = "15rem";
-    colorPanel.addChangeListener(event => this.selectedColor = colorPanel.value);
     let gradientColorPanel = this.cardColorPanels[1];
     gradientColorPanel.addChangeListener(event => {
       switch(this.selectedFillerSelector) {
@@ -166,7 +163,7 @@ class Z4FillingPanel extends JSPanel {
    getSelectedFilling() {
     switch(this.selectedFillerSelector) {
       case "FLAT":
-        return this.selectedColor;
+        return (this.cardColorPanels[0]).getValue();
       case "LINEAR":
       case "VERTEX":
       case "CONIC":

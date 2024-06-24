@@ -131,6 +131,7 @@ public class Z4Translations {
   public static String MOVE_DOWN = "";
   public static String MOVE_BOTTOM = "";
   public static String MOVE_TOP = "";
+  public static String TRY_ME = "";
 
   // Color
   public static String COLOR = "";
@@ -351,6 +352,7 @@ public class Z4Translations {
     Z4Translations.MOVE_DOWN = "Move Down";
     Z4Translations.MOVE_BOTTOM = "Move to Bottom";
     Z4Translations.MOVE_TOP = "Move to Top";
+    Z4Translations.TRY_ME = "Try Me";
 
     // Color
     Z4Translations.COLOR = "Color";
@@ -555,6 +557,7 @@ public class Z4Translations {
     Z4Translations.MOVE_DOWN = "Muovi Gi\u00F9";
     Z4Translations.MOVE_BOTTOM = "Muovi in Fondo";
     Z4Translations.MOVE_TOP = "Muovi in Cima";
+    Z4Translations.TRY_ME = "Provami";
 
     // Color
     Z4Translations.COLOR = "Colore";

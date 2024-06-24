@@ -212,6 +212,8 @@ class Z4Translations {
 
   static  MOVE_TOP = "";
 
+  static  TRY_ME = "";
+
   // Color
   static  COLOR = "";
 
@@ -485,6 +487,7 @@ class Z4Translations {
     Z4Translations.MOVE_DOWN = "Move Down";
     Z4Translations.MOVE_BOTTOM = "Move to Bottom";
     Z4Translations.MOVE_TOP = "Move to Top";
+    Z4Translations.TRY_ME = "Try Me";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -674,6 +677,7 @@ class Z4Translations {
     Z4Translations.MOVE_DOWN = "Muovi Gi\u00F9";
     Z4Translations.MOVE_BOTTOM = "Muovi in Fondo";
     Z4Translations.MOVE_TOP = "Muovi in Cima";
+    Z4Translations.TRY_ME = "Provami";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";

@@ -39,8 +39,6 @@ public class Z4FillingPanel extends JSPanel {
   private String selectedFillerSelector = "FLAT";
   private JSPanel selectedFillerPanel = this.cardFillerPanels.$get(0);
 
-  private Color selectedColor = new Color(255, 255, 255, 255);
-
   /**
    * Creates the object
    */
@@ -71,9 +69,8 @@ public class Z4FillingPanel extends JSPanel {
 
     Z4ColorPanel colorPanel = (Z4ColorPanel) this.cardColorPanels.$get(0);
     colorPanel.setLabel(Z4Translations.FILLING_COLOR);
-    colorPanel.setValue(this.selectedColor);
+    colorPanel.setValue(new Color(255, 255, 255, 255));
     colorPanel.getStyle().minWidth = "15rem";
-    colorPanel.addChangeListener(event -> this.selectedColor = colorPanel.value);
 
     Z4GradientColorPanel gradientColorPanel = (Z4GradientColorPanel) this.cardColorPanels.$get(1);
     gradientColorPanel.addChangeListener(event -> {
@@ -199,10 +196,11 @@ public class Z4FillingPanel extends JSPanel {
    * @return The selected filling (an instance of Color, Z4AbstractFiller or
    * Z4BiGradientColor)
    */
+  @SuppressWarnings("unchecked")
   public Object getSelectedFilling() {
     switch (this.selectedFillerSelector) {
       case "FLAT":
-        return this.selectedColor;
+        return ((Z4AbstractValuePanel<Color>) this.cardColorPanels.$get(0)).getValue();
       case "LINEAR":
       case "VERTEX":
       case "CONIC":

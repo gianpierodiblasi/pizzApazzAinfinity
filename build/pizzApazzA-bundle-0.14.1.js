@@ -8803,9 +8803,41 @@ class Z4Shape2DPainterPanel extends Z4PainterPanel {
  */
 class Z4DrawingToolPanel extends Z4AbstractValuePanel {
 
+   cardPointIteratorSelectors = new Array("STAMPER", "TRACER", "AIRBRUSH", "SPIROGRAPH");
+
+   cardPointIteratorPanels = new Array(null, null, null, null);
+
+   cardPointIteratorEvalPanels = new Array("new Z4StamperPanel()", "new Z4TracerPanel()", "new Z4AirbrushPanel()", "new Z4SpirographPanel()");
+
+   cardPainterSelectors = new Array("SHAPE_2D", "CENTERED_FIGURE");
+
+   cardPainterPanels = new Array(null, null);
+
+   cardPainterEvalPanels = new Array("new Z4Shape2DPainterPanel()", "new Z4CenteredFigurePainterPanel()");
+
+   cardColorSelectors = new Array("COLOR", "GRADIENT_COLOR", "BIGRADIENT_COLOR");
+
+   cardColorPanels = new Array(null, null, null);
+
+   cardColorEvalPanels = new Array("new Z4ColorPanel()", "new Z4GradientColorPanel()", "new Z4BiGradientColorPanel()");
+
+   selectedPointIteratorSelector = "STAMPER";
+
+  // private JSPanel selectedPointIteratorPanel = this.cardPointIteratorPanels.$get(0);
+   selectedPainterSelector = "SHAPE_2D";
+
+  // private JSPanel selectedPainterPanel = this.cardPainterPanels.$get(0);
+   selectedColorSelector = "COLOR";
+
+  // private JSPanel selectedColorPanel = this.cardColorPanels.$get(0);
   constructor() {
     super();
     this.cssAddClass("z4drawingtoolpanel");
+    let pane = new JSTabbedPane();
+    pane.setTabPlacement(JSTabbedPane.LEFT);
+    this.add(pane, null);
+    pane.addTab(Z4Translations.SETTINGS, new JSPanel());
+    pane.addTab(Z4Translations.TRY_ME, new JSPanel());
   }
 
    setValue(value) {
@@ -8994,8 +9026,6 @@ class Z4FillingPanel extends JSPanel {
 
    selectedFillerPanel = this.cardFillerPanels[0];
 
-   selectedColor = new Color(255, 255, 255, 255);
-
   /**
    * Creates the object
    */
@@ -9019,9 +9049,8 @@ class Z4FillingPanel extends JSPanel {
     this.add(panelFiller, new GBC(4, 0).wxy(1, 1).a(GBC.NORTH));
     let colorPanel = this.cardColorPanels[0];
     colorPanel.setLabel(Z4Translations.FILLING_COLOR);
-    colorPanel.setValue(this.selectedColor);
+    colorPanel.setValue(new Color(255, 255, 255, 255));
     colorPanel.getStyle().minWidth = "15rem";
-    colorPanel.addChangeListener(event => this.selectedColor = colorPanel.value);
     let gradientColorPanel = this.cardColorPanels[1];
     gradientColorPanel.addChangeListener(event => {
       switch(this.selectedFillerSelector) {
@@ -9137,7 +9166,7 @@ class Z4FillingPanel extends JSPanel {
    getSelectedFilling() {
     switch(this.selectedFillerSelector) {
       case "FLAT":
-        return this.selectedColor;
+        return (this.cardColorPanels[0]).getValue();
       case "LINEAR":
       case "VERTEX":
       case "CONIC":
@@ -13782,6 +13811,8 @@ class Z4Translations {
 
   static  MOVE_TOP = "";
 
+  static  TRY_ME = "";
+
   // Color
   static  COLOR = "";
 
@@ -14055,6 +14086,7 @@ class Z4Translations {
     Z4Translations.MOVE_DOWN = "Move Down";
     Z4Translations.MOVE_BOTTOM = "Move to Bottom";
     Z4Translations.MOVE_TOP = "Move to Top";
+    Z4Translations.TRY_ME = "Try Me";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -14244,6 +14276,7 @@ class Z4Translations {
     Z4Translations.MOVE_DOWN = "Muovi Gi\u00F9";
     Z4Translations.MOVE_BOTTOM = "Muovi in Fondo";
     Z4Translations.MOVE_TOP = "Muovi in Cima";
+    Z4Translations.TRY_ME = "Provami";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";
