@@ -17,7 +17,7 @@ class Z4BiGradientColorPanel extends JSPanel {
 
    rippleSlider = new JSSlider();
 
-   colorPreview = new Z4ColorPreview();
+   colorPanel = new Z4ColorPanel();
 
    biDelete = new JSButton();
 
@@ -111,12 +111,13 @@ class Z4BiGradientColorPanel extends JSPanel {
     panel.add(this.biDelete, null);
     this.add(new JSLabel(), new GBC(0, 4).w(3).wy(1));
     Z4UI.addHLine(this, new GBC(0, 5).w(6).a(GBC.WEST).f(GBC.HORIZONTAL).i(2, 1, 2, 1));
-    this.colorPreview.setColor(this.biGradientColor.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
-    this.add(this.colorPreview, new GBC(0, 6).w(2).wx(1).f(GBC.HORIZONTAL));
-    button = new JSButton();
-    button.setText(Z4Translations.EDIT);
-    button.addActionListener(event => this.selectColor());
-    this.add(button, new GBC(2, 6).w(2).a(GBC.WEST).i(0, 5, 0, 0));
+    this.colorPanel.setValue(this.biGradientColor.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
+    this.colorPanel.addChangeListener(event => {
+      let gradientColor = this.biGradientColor.getColorAtIndex(this.biSelectedIndex);
+      gradientColor.addColor(this.colorPanel.getValue(), gradientColor.getColorPositionAtIndex(this.selectedIndex));
+      this.drawPreview(false);
+    });
+    this.add(this.colorPanel, new GBC(0, 6).w(4).wx(1).f(GBC.HORIZONTAL));
     this.delete.setText(Z4Translations.DELETE);
     this.delete.setEnabled(false);
     this.delete.addActionListener(event => JSOptionPane.showConfirmDialog(Z4Translations.DELETE_COLOR_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
@@ -280,17 +281,8 @@ class Z4BiGradientColorPanel extends JSPanel {
     this.drawPreview(adjusting);
   }
 
-   selectColor() {
-    JSColorChooser.showDialog(Z4Translations.COLOR, this.biGradientColor.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex), true, null, c => {
-      let gradientColor = this.biGradientColor.getColorAtIndex(this.biSelectedIndex);
-      gradientColor.addColor(c, gradientColor.getColorPositionAtIndex(this.selectedIndex));
-      this.colorPreview.setColor(c);
-      this.drawPreview(false);
-    });
-  }
-
    afterOperation(gradientColor) {
-    this.colorPreview.setColor(this.biGradientColor.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
+    this.colorPanel.setValue(this.biGradientColor.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
     this.biDelete.setEnabled(this.biSelectedIndex !== 0 && this.biSelectedIndex !== this.biGradientColor.getColorCount() - 1);
     this.delete.setEnabled(this.selectedIndex !== 0 && this.selectedIndex !== gradientColor.getColorCount() - 1);
     this.drawPreview(false);

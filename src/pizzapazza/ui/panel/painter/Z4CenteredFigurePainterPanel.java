@@ -26,7 +26,7 @@ import pizzapazza.math.Z4Whirlpool;
 import pizzapazza.math.Z4WhirlpoolBehavior;
 import pizzapazza.painter.Z4CenteredFigurePainter;
 import pizzapazza.painter.Z4CenteredFigurePainterType;
-import pizzapazza.ui.component.Z4ColorPreview;
+import pizzapazza.ui.component.Z4ColorPanel;
 import pizzapazza.ui.panel.math.Z4FancifulValuePanel;
 import pizzapazza.ui.panel.math.Z4FancifulValuePanelOrientation;
 import pizzapazza.ui.panel.math.Z4WhirlpoolPanel;
@@ -60,11 +60,11 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
   private final Z4FancifulValuePanel shadowShiftX = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
   private final Z4FancifulValuePanel shadowShiftY = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
   private final JSButton editShadowColor = new JSButton();
-  private final Z4ColorPreview shadowColorPreview = new Z4ColorPreview();
+  private final Z4ColorPanel shadowColorPreview = new Z4ColorPanel();
 
   private final Z4FancifulValuePanel borderSize = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
   private final JSButton editBorderColor = new JSButton();
-  private final Z4ColorPreview borderColorPreview = new Z4ColorPreview();
+  private final Z4ColorPanel borderColorPreview = new Z4ColorPanel();
 
   /**
    * Creates the object
@@ -239,7 +239,7 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     panel.add(radio, null);
   }
 
-  private void createPanel(JSTabbedPane tabbedPane, String text, Z4FancifulValuePanel p1, Z4FancifulValuePanel p2, Z4ColorPreview preview, JSButton button) {
+  private void createPanel(JSTabbedPane tabbedPane, String text, Z4FancifulValuePanel p1, Z4FancifulValuePanel p2, Z4ColorPanel preview, JSButton button) {
     JSPanel panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
     tabbedPane.addTab(text, panel);

@@ -18,7 +18,7 @@ import pizzapazza.math.Z4SignBehavior;
 import pizzapazza.math.Z4SignedRandomValue;
 import pizzapazza.math.Z4SignedValue;
 import pizzapazza.painter.Z4Shape2DPainter;
-import pizzapazza.ui.component.Z4ColorPreview;
+import pizzapazza.ui.component.Z4ColorPanel;
 import pizzapazza.ui.panel.math.Z4FancifulValuePanel;
 import pizzapazza.ui.panel.math.Z4FancifulValuePanelOrientation;
 import pizzapazza.util.Z4Translations;
@@ -41,12 +41,12 @@ public class Z4Shape2DPainterPanel extends Z4PainterPanel<Z4Shape2DPainter> {
   private final Z4FancifulValuePanel shadowShiftX = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
   private final Z4FancifulValuePanel shadowShiftY = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
   private final JSButton editShadowColor = new JSButton();
-  private final Z4ColorPreview shadowColorPreview = new Z4ColorPreview();
+  private final Z4ColorPanel shadowColorPreview = new Z4ColorPanel();
 
   private final Z4FancifulValuePanel borderWidth = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
   private final Z4FancifulValuePanel borderHeight = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
   private final JSButton editBorderColor = new JSButton();
-  private final Z4ColorPreview borderColorPreview = new Z4ColorPreview();
+  private final Z4ColorPanel borderColorPreview = new Z4ColorPanel();
 
   /**
    * Creates the object
@@ -155,7 +155,7 @@ public class Z4Shape2DPainterPanel extends Z4PainterPanel<Z4Shape2DPainter> {
     ));
   }
 
-  private void createPanel(JSTabbedPane tabbedPane, String text, Z4FancifulValuePanel p1, Z4FancifulValuePanel p2, Z4ColorPreview preview, JSButton button) {
+  private void createPanel(JSTabbedPane tabbedPane, String text, Z4FancifulValuePanel p1, Z4FancifulValuePanel p2, Z4ColorPanel preview, JSButton button) {
     JSPanel panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
     tabbedPane.addTab(text, panel);

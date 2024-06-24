@@ -13,7 +13,7 @@ class Z4GradientColorPanel extends JSPanel {
 
    rippleSlider = new JSSlider();
 
-   colorPreview = new Z4ColorPreview();
+   colorPreview = new Z4ColorPane();
 
    delete = new JSButton();
 

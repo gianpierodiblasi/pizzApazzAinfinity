@@ -3110,47 +3110,6 @@ class Z4CanvasMouseManager {
   }
 }
 /**
- * The component to preview a color
- *
- * @author gianpiero.diblasi
- */
-class Z4ColorPreview extends JSComponent {
-
-   component = new JSComponent(document.createElement("div"));
-
-   componentOpacity = new JSComponent(document.createElement("div"));
-
-  /**
-   * Creates the object
-   */
-  constructor() {
-    super(document.createElement("div"));
-    this.cssAddClass("z4colorpreview");
-    this.component.cssAddClass("z4colorpreview-opaque");
-    this.appendChild(this.component);
-    this.componentOpacity.cssAddClass("z4colorpreview-transparent");
-    this.appendChild(this.componentOpacity);
-    this.setColor(new Color(0, 0, 0, 255));
-  }
-
-  /**
-   * Sets the color to preview
-   *
-   * @param color The color
-   */
-   setColor(color) {
-    this.component.getStyle().backgroundColor = color.getRGB_String();
-    this.componentOpacity.getStyle().backgroundColor = color.getRGBA_String();
-    let rgb = new Array();
-    let hsl = new Array();
-    rgb[0] = color.red;
-    rgb[1] = color.green;
-    rgb[2] = color.blue;
-    Color.RGBtoHSL(rgb, hsl);
-    this.getStyle().border = "1px solid " + (hsl[2] > 0.5 ? color.darkened(0.1).getRGB_HEX() : color.lighted(0.1).getRGB_HEX());
-  }
-}
-/**
  * The history preview
  *
  * @author gianpiero.diblasi
@@ -3726,7 +3685,7 @@ class Z4BiGradientColorPanel extends JSPanel {
 
    rippleSlider = new JSSlider();
 
-   colorPreview = new Z4ColorPreview();
+   colorPanel = new Z4ColorPanel();
 
    biDelete = new JSButton();
 
@@ -3820,12 +3779,13 @@ class Z4BiGradientColorPanel extends JSPanel {
     panel.add(this.biDelete, null);
     this.add(new JSLabel(), new GBC(0, 4).w(3).wy(1));
     Z4UI.addHLine(this, new GBC(0, 5).w(6).a(GBC.WEST).f(GBC.HORIZONTAL).i(2, 1, 2, 1));
-    this.colorPreview.setColor(this.biGradientColor.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
-    this.add(this.colorPreview, new GBC(0, 6).w(2).wx(1).f(GBC.HORIZONTAL));
-    button = new JSButton();
-    button.setText(Z4Translations.EDIT);
-    button.addActionListener(event => this.selectColor());
-    this.add(button, new GBC(2, 6).w(2).a(GBC.WEST).i(0, 5, 0, 0));
+    this.colorPanel.setValue(this.biGradientColor.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
+    this.colorPanel.addChangeListener(event => {
+      let gradientColor = this.biGradientColor.getColorAtIndex(this.biSelectedIndex);
+      gradientColor.addColor(this.colorPanel.getValue(), gradientColor.getColorPositionAtIndex(this.selectedIndex));
+      this.drawPreview(false);
+    });
+    this.add(this.colorPanel, new GBC(0, 6).w(4).wx(1).f(GBC.HORIZONTAL));
     this.delete.setText(Z4Translations.DELETE);
     this.delete.setEnabled(false);
     this.delete.addActionListener(event => JSOptionPane.showConfirmDialog(Z4Translations.DELETE_COLOR_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
@@ -3989,17 +3949,8 @@ class Z4BiGradientColorPanel extends JSPanel {
     this.drawPreview(adjusting);
   }
 
-   selectColor() {
-    JSColorChooser.showDialog(Z4Translations.COLOR, this.biGradientColor.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex), true, null, c => {
-      let gradientColor = this.biGradientColor.getColorAtIndex(this.biSelectedIndex);
-      gradientColor.addColor(c, gradientColor.getColorPositionAtIndex(this.selectedIndex));
-      this.colorPreview.setColor(c);
-      this.drawPreview(false);
-    });
-  }
-
    afterOperation(gradientColor) {
-    this.colorPreview.setColor(this.biGradientColor.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
+    this.colorPanel.setValue(this.biGradientColor.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
     this.biDelete.setEnabled(this.biSelectedIndex !== 0 && this.biSelectedIndex !== this.biGradientColor.getColorCount() - 1);
     this.delete.setEnabled(this.selectedIndex !== 0 && this.selectedIndex !== gradientColor.getColorCount() - 1);
     this.drawPreview(false);
@@ -4115,7 +4066,7 @@ class Z4GradientColorPanel extends JSPanel {
 
    rippleSlider = new JSSlider();
 
-   colorPreview = new Z4ColorPreview();
+   colorPreview = new Z4ColorPane();
 
    delete = new JSButton();
 
@@ -5123,7 +5074,7 @@ class Z4SpiralFillerPanel extends Z4AbstractFillerPanel {
  */
 class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
 
-   colorPreview = new Z4ColorPreview();
+   colorPreview = new Z4ColorPanel();
 
    free = new JSRadioButton();
 
@@ -6637,6 +6588,75 @@ class Z4AbstractValuePanel extends JSPanel {
         listener.stateChanged(event);
       }
     });
+  }
+}
+/**
+ * The panale to manage a color
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4ColorPanel extends Z4AbstractValuePanel {
+
+   label = new JSLabel();
+
+   container = new JSComponent(document.createElement("div"));
+
+   component = new JSComponent(document.createElement("div"));
+
+   componentOpacity = new JSComponent(document.createElement("div"));
+
+   edit = new JSButton();
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super();
+    this.cssAddClass("z4colorpanel");
+    this.setLayout(new GridBagLayout());
+    this.add(this.label, new GBC(0, 0).w(2).a(GBC.WEST));
+    this.container.cssAddClass("z4colorpanel-container");
+    this.add(this.container, new GBC(0, 1).wx(1).f(GBC.HORIZONTAL));
+    this.component.cssAddClass("z4colorpanel-opaque");
+    this.container.appendChild(this.component);
+    this.componentOpacity.cssAddClass("z4colorpanel-transparent");
+    this.container.appendChild(this.componentOpacity);
+    this.edit.setText(Z4Translations.EDIT);
+    this.edit.addActionListener(event => {
+      JSColorChooser.showDialog(Z4Translations.COLOR, this.value, true, null, c => {
+        this.setValue(c);
+        this.onchange();
+      });
+    });
+    this.add(this.edit, new GBC(1, 1).i(0, 5, 0, 0));
+    this.setValue(new Color(0, 0, 0, 255));
+  }
+
+  /**
+   * Sets the label
+   *
+   * @param label The label
+   */
+   setLabel(label) {
+    this.label.setText(label);
+  }
+
+   setValue(value) {
+    this.value = value;
+    this.component.getStyle().backgroundColor = value.getRGB_String();
+    this.componentOpacity.getStyle().backgroundColor = value.getRGBA_String();
+    let rgb = new Array();
+    let hsl = new Array();
+    rgb[0] = value.red;
+    rgb[1] = value.green;
+    rgb[2] = value.blue;
+    Color.RGBtoHSL(rgb, hsl);
+    this.container.getStyle().border = "1px solid " + (hsl[2] > 0.5 ? value.darkened(0.1).getRGB_HEX() : value.lighted(0.1).getRGB_HEX());
+  }
+
+   setEnabled(b) {
+    super.setEnabled(b);
+    this.edit.setEnabled(b);
   }
 }
 /**
@@ -8450,13 +8470,13 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
 
    editShadowColor = new JSButton();
 
-   shadowColorPreview = new Z4ColorPreview();
+   shadowColorPreview = new Z4ColorPanel();
 
    borderSize = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
 
    editBorderColor = new JSButton();
 
-   borderColorPreview = new Z4ColorPreview();
+   borderColorPreview = new Z4ColorPanel();
 
   /**
    * Creates the object
@@ -8689,7 +8709,7 @@ class Z4Shape2DPainterPanel extends Z4PainterPanel {
 
    editShadowColor = new JSButton();
 
-   shadowColorPreview = new Z4ColorPreview();
+   shadowColorPreview = new Z4ColorPanel();
 
    borderWidth = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
 
@@ -8697,7 +8717,7 @@ class Z4Shape2DPainterPanel extends Z4PainterPanel {
 
    editBorderColor = new JSButton();
 
-   borderColorPreview = new Z4ColorPreview();
+   borderColorPreview = new Z4ColorPanel();
 
   /**
    * Creates the object
@@ -9010,7 +9030,7 @@ class Z4FillingPanel extends JSPanel {
 
    cardColorPanels = new Array(new JSPanel(), new Z4GradientColorPanel(), new JSPanel(), new Z4BiGradientColorPanel());
 
-   colorPreview = new Z4ColorPreview();
+   colorPreview = new Z4ColorPanel();
 
    width = Z4Constants.DEFAULT_IMAGE_SIZE;
 

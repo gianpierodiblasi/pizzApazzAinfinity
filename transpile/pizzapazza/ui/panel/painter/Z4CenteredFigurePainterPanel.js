@@ -33,13 +33,13 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
 
    editShadowColor = new JSButton();
 
-   shadowColorPreview = new Z4ColorPreview();
+   shadowColorPreview = new Z4ColorPanel();
 
    borderSize = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
 
    editBorderColor = new JSButton();
 
-   borderColorPreview = new Z4ColorPreview();
+   borderColorPreview = new Z4ColorPanel();
 
   /**
    * Creates the object

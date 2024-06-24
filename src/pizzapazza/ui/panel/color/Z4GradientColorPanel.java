@@ -19,7 +19,7 @@ import javascript.swing.event.ChangeEvent;
 import javascript.swing.event.ChangeListener;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.math.Z4Math;
-import pizzapazza.ui.component.Z4ColorPreview;
+import pizzapazza.ui.component.Z4ColorPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
@@ -38,7 +38,7 @@ public class Z4GradientColorPanel extends JSPanel {
   private final $CanvasRenderingContext2D ctx = this.preview.invoke("getContext('2d')");
   private final JSSpinner rippleSpinner = new JSSpinner();
   private final JSSlider rippleSlider = new JSSlider();
-  private final Z4ColorPreview colorPreview = new Z4ColorPreview();
+  private final Z4ColorPane colorPreview = new Z4ColorPane();
   private final JSButton delete = new JSButton();
 
   private final Z4GradientColor gradientColor = new Z4GradientColor();

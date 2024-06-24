@@ -21,7 +21,7 @@ class Z4Shape2DPainterPanel extends Z4PainterPanel {
 
    editShadowColor = new JSButton();
 
-   shadowColorPreview = new Z4ColorPreview();
+   shadowColorPreview = new Z4ColorPanel();
 
    borderWidth = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
 
@@ -29,7 +29,7 @@ class Z4Shape2DPainterPanel extends Z4PainterPanel {
 
    editBorderColor = new JSButton();
 
-   borderColorPreview = new Z4ColorPreview();
+   borderColorPreview = new Z4ColorPanel();
 
   /**
    * Creates the object

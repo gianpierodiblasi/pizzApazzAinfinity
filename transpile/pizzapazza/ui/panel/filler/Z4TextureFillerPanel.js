@@ -5,7 +5,7 @@
  */
 class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
 
-   colorPreview = new Z4ColorPreview();
+   colorPreview = new Z4ColorPanel();
 
    free = new JSRadioButton();
 

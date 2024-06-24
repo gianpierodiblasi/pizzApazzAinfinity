@@ -1,4 +1,7 @@
-.z4colorpreview {
+.z4colorpanel {
+}
+
+.z4colorpanel .z4colorpanel-container {
   height: 2rem;
   display: grid;
   grid-template: "c1 c2";
@@ -9,13 +12,13 @@
   background-image: linear-gradient(90deg, #DDD 1rem, white 1rem), linear-gradient(90deg, white 1rem, #DDD 1rem);
 }
 
-.z4colorpreview-opaque {
+.z4colorpanel .z4colorpanel-container .z4colorpanel-opaque {
   grid-area: c1;
   border-top-left-radius: var(--roundness);
   border-bottom-left-radius: var(--roundness);
 }
 
-.z4colorpreview-transparent {
+.z4colorpanel .z4colorpanel-container .z4colorpanel-transparent {
   grid-area: c2;
   border-top-right-radius: var(--roundness);
   border-bottom-right-radius: var(--roundness);

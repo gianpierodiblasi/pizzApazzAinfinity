@@ -15,7 +15,7 @@ class Z4FillingPanel extends JSPanel {
 
    cardColorPanels = new Array(new JSPanel(), new Z4GradientColorPanel(), new JSPanel(), new Z4BiGradientColorPanel());
 
-   colorPreview = new Z4ColorPreview();
+   colorPreview = new Z4ColorPanel();
 
    width = Z4Constants.DEFAULT_IMAGE_SIZE;
 

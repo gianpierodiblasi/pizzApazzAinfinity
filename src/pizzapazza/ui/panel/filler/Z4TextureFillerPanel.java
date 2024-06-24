@@ -20,7 +20,7 @@ import pizzapazza.color.Z4GradientColor;
 import pizzapazza.filler.Z4AbstractFiller;
 import pizzapazza.filler.Z4TextureFiller;
 import pizzapazza.math.Z4Math;
-import pizzapazza.ui.component.Z4ColorPreview;
+import pizzapazza.ui.component.Z4ColorPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
@@ -39,7 +39,7 @@ import simulation.js.$Uint8Array;
  */
 public class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
 
-  private final Z4ColorPreview colorPreview = new Z4ColorPreview();
+  private final Z4ColorPanel colorPreview = new Z4ColorPanel();
   private final JSRadioButton free = new JSRadioButton();
   private final JSRadioButton lockRatio = new JSRadioButton();
   private final JSRadioButton lock = new JSRadioButton();

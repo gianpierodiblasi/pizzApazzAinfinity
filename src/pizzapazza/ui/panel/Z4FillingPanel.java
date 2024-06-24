@@ -14,7 +14,7 @@ import javascript.swing.JSColorChooser;
 import javascript.swing.JSLabel;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
-import pizzapazza.ui.component.Z4ColorPreview;
+import pizzapazza.ui.component.Z4ColorPanel;
 import pizzapazza.ui.panel.color.Z4BiGradientColorPanel;
 import pizzapazza.ui.panel.color.Z4GradientColorPanel;
 import pizzapazza.ui.panel.filler.Z4AbstractFillerPanel;
@@ -36,7 +36,7 @@ public class Z4FillingPanel extends JSPanel {
   private final Array<String> cardFillerEvalPanels = new Array<>("", "new Z4LinearFillerPanel()", "new Z4VertexBasedFillerPanel()", "new Z4ConicFillerPanel()", "new Z4SpiralFillerPanel()", "new Z4BezierFillerPanel()", "new Z4SinusoidalFillerPanel()", "new Z4TextureFillerPanel()", "");
   private final Array<String> cardColorSelectors = new Array<>("FLAT", "GRADIENT", "NONE", "BIGRADIENT");
   private final Array<JSPanel> cardColorPanels = new Array<>(new JSPanel(), new Z4GradientColorPanel(), new JSPanel(), new Z4BiGradientColorPanel());
-  private final Z4ColorPreview colorPreview = new Z4ColorPreview();
+  private final Z4ColorPanel colorPreview = new Z4ColorPanel();
 
   private int width = Z4Constants.DEFAULT_IMAGE_SIZE;
   private int height = Z4Constants.DEFAULT_IMAGE_SIZE;
