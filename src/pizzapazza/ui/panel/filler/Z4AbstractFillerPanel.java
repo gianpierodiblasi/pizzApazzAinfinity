@@ -78,7 +78,7 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
     this.preview.addEventListener("mousedown", event -> this.onMouse((MouseEvent) event, "down"));
     this.preview.addEventListener("mousemove", event -> this.onMouse((MouseEvent) event, "move"));
     this.preview.addEventListener("mouseup", event -> this.onMouse((MouseEvent) event, "up"));
-    this.add(this.preview, new GBC(0, 1).wh(2, 2).wxy(1, 1));
+    this.add(this.preview, new GBC(0, 1).wh(2, 2).wxy(1, 1).i(2, 2, 2, 2));
 
     Z4UI.addLabel(this, "y", new GBC(2, 2).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
 

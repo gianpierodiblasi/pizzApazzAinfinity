@@ -74,7 +74,6 @@ public class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
       this.setPointsEnabled();
       this.drawPreview(false);
     });
-
     this.appendChildInTree("*:nth-child(10)", this.regular);
 
     this.cssAddClass("z4ellipticfillerpanel");

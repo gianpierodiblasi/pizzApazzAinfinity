@@ -4394,7 +4394,7 @@ class Z4AbstractFillerPanel extends JSPanel {
     this.preview.addEventListener("mousedown", event => this.onMouse(event, "down"));
     this.preview.addEventListener("mousemove", event => this.onMouse(event, "move"));
     this.preview.addEventListener("mouseup", event => this.onMouse(event, "up"));
-    this.add(this.preview, new GBC(0, 1).wh(2, 2).wxy(1, 1));
+    this.add(this.preview, new GBC(0, 1).wh(2, 2).wxy(1, 1).i(2, 2, 2, 2));
     Z4UI.addLabel(this, "y", new GBC(2, 2).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
     this.ySpinner.cssAddClass("jsspinner-vertical");
     this.ySpinner.cssAddClass("jsspinner_h_4rem");
@@ -5102,21 +5102,17 @@ class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
     this.lock.setText(Z4Translations.LOCK);
     this.group.add(this.lock);
     panel.add(this.lock, null);
-    panel = new JSPanel();
-    panel.setLayout(new BorderLayout(5, 0));
-    this.add(panel, new GBC(0, 9).w(4).a(GBC.WEST).f(GBC.HORIZONTAL));
-    let button = new JSButton();
-    button.setText(Z4Translations.PATTERN);
-    button.getStyle().marginRight = "4rem";
-    button.addActionListener(event => this.selectPattern());
-    panel.add(button, BorderLayout.WEST);
     this.colorPanel.setLabel(Z4Translations.BACKGROUND_COLOR);
     this.colorPanel.setValue(this.backgroundColor);
     this.colorPanel.addChangeListener(event => {
       this.backgroundColor = this.colorPanel.getValue();
       this.drawPreview(false);
     });
-    panel.add(this.colorPanel, BorderLayout.CENTER);
+    this.add(this.colorPanel, new GBC(0, 9).w(2).f(GBC.HORIZONTAL).i(0, 0, 0, 5));
+    let button = new JSButton();
+    button.setText(Z4Translations.PATTERN);
+    button.addActionListener(event => this.selectPattern());
+    this.add(button, new GBC(2, 9).w(2).a(GBC.SOUTHEAST));
     let data = this.imageData.data;
     for (let y = 0; y < Z4TextureFillerPanel.DEFAULT_SIZE; y++) {
       for (let x = 0; x < Z4TextureFillerPanel.DEFAULT_SIZE; x++) {

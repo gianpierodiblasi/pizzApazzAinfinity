@@ -4,7 +4,6 @@ import def.dom.File;
 import def.dom.FileReader;
 import def.dom.ImageData;
 import def.js.Array;
-import javascript.awt.BorderLayout;
 import javascript.awt.Color;
 import javascript.awt.GBC;
 import javascript.awt.Point;
@@ -73,23 +72,18 @@ public class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
     this.group.add(this.lock);
     panel.add(this.lock, null);
 
-    panel = new JSPanel();
-    panel.setLayout(new BorderLayout(5, 0));
-    this.add(panel, new GBC(0, 9).w(4).a(GBC.WEST).f(GBC.HORIZONTAL));
-
-    JSButton button = new JSButton();
-    button.setText(Z4Translations.PATTERN);
-    button.getStyle().marginRight = "4rem";
-    button.addActionListener(event -> this.selectPattern());
-    panel.add(button, BorderLayout.WEST);
-
     this.colorPanel.setLabel(Z4Translations.BACKGROUND_COLOR);
     this.colorPanel.setValue(this.backgroundColor);
     this.colorPanel.addChangeListener(event -> {
       this.backgroundColor = this.colorPanel.getValue();
       this.drawPreview(false);
     });
-    panel.add(this.colorPanel, BorderLayout.CENTER);
+    this.add(this.colorPanel, new GBC(0, 9).w(2).f(GBC.HORIZONTAL).i(0, 0, 0, 5));
+
+    JSButton button = new JSButton();
+    button.setText(Z4Translations.PATTERN);
+    button.addActionListener(event -> this.selectPattern());
+    this.add(button, new GBC(2, 9).w(2).a(GBC.SOUTHEAST));
 
     $Uint8Array data = ($Uint8Array) this.imageData.data;
     for (int y = 0; y < Z4TextureFillerPanel.DEFAULT_SIZE; y++) {
