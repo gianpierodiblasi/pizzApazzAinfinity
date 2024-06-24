@@ -8803,37 +8803,32 @@ class Z4Shape2DPainterPanel extends Z4PainterPanel {
  */
 class Z4DrawingToolPanel extends Z4AbstractValuePanel {
 
-   cardPointIteratorSelectors = new Array("STAMPER", "TRACER", "AIRBRUSH", "SPIROGRAPH");
+   selectedPointInterator = new JSComponent(document.createElement("img"));
 
-   cardPointIteratorPanels = new Array(null, null, null, null);
+   selectedPainter = new JSComponent(document.createElement("img"));
 
-   cardPointIteratorEvalPanels = new Array("new Z4StamperPanel()", "new Z4TracerPanel()", "new Z4AirbrushPanel()", "new Z4SpirographPanel()");
+   selectedSpatioTemporalColor = new JSComponent(document.createElement("img"));
 
-   cardPainterSelectors = new Array("SHAPE_2D", "CENTERED_FIGURE");
+   radios = new Array();
 
-   cardPainterPanels = new Array(null, null);
+   cardPanel = new JSPanel();
 
-   cardPainterEvalPanels = new Array("new Z4Shape2DPainterPanel()", "new Z4CenteredFigurePainterPanel()");
+   cardLayout = new CardLayout(0, 0);
 
-   cardColorSelectors = new Array("COLOR", "GRADIENT_COLOR", "BIGRADIENT_COLOR");
-
-   cardColorPanels = new Array(null, null, null);
-
-   cardColorEvalPanels = new Array("new Z4ColorPanel()", "new Z4GradientColorPanel()", "new Z4BiGradientColorPanel()");
-
-  // private String selectedPointIteratorSelector = "STAMPER";
-   selectedPointIteratorPanel = null;
-
-  // private String selectedPainterSelector = "SHAPE_2D";
-   selectedPainterPanel = null;
-
-  // private String selectedColorSelector = "COLOR";
-   selectedColorPanel = null;
+   cardPanels = new Array();
 
   constructor() {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4drawingtoolpanel");
+    let selected = new JSPanel();
+    this.selectedPointInterator.cssAddClass("z4drawingtoolpanel-selected");
+    selected.add(this.selectedPointInterator, null);
+    this.selectedPainter.cssAddClass("z4drawingtoolpanel-selected");
+    selected.add(this.selectedPainter, null);
+    this.selectedSpatioTemporalColor.cssAddClass("z4drawingtoolpanel-selected");
+    selected.add(this.selectedSpatioTemporalColor, null);
+    this.add(selected, new GBC(0, 0));
     let pane = new JSTabbedPane();
     pane.setTabPlacement(JSTabbedPane.LEFT);
     this.add(pane, new GBC(0, 1));
@@ -8844,47 +8839,98 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     panelRadio.setLayout(new BoxLayout(panelRadio, BoxLayout.Y_AXIS));
     panel.add(panelRadio, new GBC(0, 0).i(0, 5, 0, 0));
     Z4UI.addVLine(panel, new GBC(1, 0).wy(1).a(GBC.NORTH).f(GBC.VERTICAL).i(1, 5, 1, 5));
-    let panelCard = new JSPanel();
-    let cardLayout = new CardLayout(0, 0);
-    panelCard.setLayout(cardLayout);
-    panel.add(panelCard, new GBC(2, 0).a(GBC.NORTH));
+    this.cardPanel.setLayout(this.cardLayout);
+    panel.add(this.cardPanel, new GBC(2, 0).a(GBC.NORTH));
     let buttonGroup = new ButtonGroup();
-    this.selectedPointIteratorPanel = this.addRadioButtons(this.cardPointIteratorSelectors, this.cardPointIteratorPanels, this.cardPointIteratorEvalPanels, panelRadio, panelCard, cardLayout, buttonGroup);
-    this.selectedPainterPanel = this.addRadioButtons(this.cardPainterSelectors, this.cardPainterPanels, this.cardPainterEvalPanels, panelRadio, panelCard, cardLayout, buttonGroup);
-    this.selectedColorPanel = this.addRadioButtons(this.cardColorSelectors, this.cardColorPanels, this.cardColorEvalPanels, panelRadio, panelCard, cardLayout, buttonGroup);
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedPointInterator, "STAMPER", "new Z4StamperPanel()", "1px");
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedPointInterator, "TRACER", "new Z4TracerPanel()", "1px");
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedPointInterator, "AIRBRUSH", "new Z4AirbrushPanel()", "1px");
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedPointInterator, "SPIROGRAPH", "new Z4SpirographPanel()", "10px");
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedPainter, "SHAPE2D", "new Z4Shape2DPainterPanel()", "1px");
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedPainter, "CENTERED-FIGURE", "new Z4CenteredFigurePainterPanel()", "10px");
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedSpatioTemporalColor, "COLOR", "new Z4ColorPanel()", "1px");
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedSpatioTemporalColor, "GRADIENT-COLOR", "new Z4GradientColorPanel()", "1px");
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedSpatioTemporalColor, "BIGRADIENT-COLOR", "new Z4BiGradientColorPanel()", "10px");
     pane.addTab(Z4Translations.TRY_ME, new JSPanel());
+    this.setValue(new Z4DrawingTool(new Z4Stamper(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.RELATIVE_TO_PATH, false)), new Z4Shape2DPainter(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), false, false, 3, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0)), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)), new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.01, Z4Lighting.NONE)));
   }
 
-   addRadioButtons(cardSelector, cardPanels, cardEvalPanels, panelRadio, panelCard, cardLayout, buttonGroup) {
-    cardSelector.forEach((card, index, array) => {
-      let radio = new JSRadioButton();
-      radio.setContentAreaFilled(false);
-      radio.getStyle().marginBottom = index === cardSelector.length - 1 ? "10px" : "1px";
-      radio.setToggle();
-      radio.cssAddClass("z4drawingtoolpanel-selector");
-      radio.setSelected(cardSelector === this.cardPointIteratorSelectors && index === 0);
-      radio.setIcon(new Z4EmptyImageProducer(index));
-      radio.addActionListener(event => {
-        if (!cardPanels[index]) {
-          let panelEval = eval(cardEvalPanels[index]);
-          cardPanels[index] = panelEval;
-          panelCard.add(panelEval, card);
-        }
-        cardLayout.show(panelCard, card);
-      });
-      buttonGroup.add(radio);
-      panelRadio.add(radio, null);
+   addRadioButton(panelRadio, buttonGroup, selected, card, evaluate, marginBottom) {
+    let radio = new JSRadioButton();
+    radio.setContentAreaFilled(false);
+    radio.getStyle().marginBottom = marginBottom;
+    radio.setToggle();
+    radio.cssAddClass("z4drawingtoolpanel-selector");
+    radio.setIcon(new Z4EmptyImageProducer(card));
+    radio.addActionListener(event => {
+      this.check(selected, card, evaluate, null, true);
+      // IMPOSTARE this.value
+      this.onchange();
     });
-    let panelEval = eval(cardEvalPanels[0]);
-    if (cardSelector === this.cardColorSelectors) {
-      panelEval.getStyle().minWidth = "15rem";
-    }
-    cardPanels[0] = panelEval;
-    panelCard.add(panelEval, cardSelector[0]);
-    return panelEval;
+    this.radios[card] = radio;
+    buttonGroup.add(radio);
+    panelRadio.add(radio, null);
   }
 
    setValue(value) {
+    this.value = value;
+    this.setPointInterator();
+    this.setPainter();
+    this.spatioTemporalColor();
+  }
+
+   setPointInterator() {
+    new Array("z4drawingtoolpanel-stamper-selected", "z4drawingtoolpanel-tracer-selected", "z4drawingtoolpanel-airbrush-selected", "z4drawingtoolpanel-spirograph-selected").forEach(css => this.selectedPointInterator.cssRemoveClass(css));
+    if (this.value.getPointIterator().getType() === Z4PointIteratorType.STAMPER) {
+      this.check(this.selectedPointInterator, "STAMPER", "new Z4StamperPanel()", this.value.getPointIterator(), false);
+    } else if (this.value.getPointIterator().getType() === Z4PointIteratorType.TRACER) {
+      this.check(this.selectedPointInterator, "TRACER", "new Z4TracerPanel()", this.value.getPointIterator(), false);
+    } else if (this.value.getPointIterator().getType() === Z4PointIteratorType.AIRBRUSH) {
+      this.check(this.selectedPointInterator, "AIRBRUSH", "new Z4AirbrushPanel()", this.value.getPointIterator(), false);
+    } else if (this.value.getPointIterator().getType() === Z4PointIteratorType.SPIROGRAPH) {
+      this.check(this.selectedPointInterator, "SPIROGRAPH", "new Z4SpirographPanel()", this.value.getPointIterator(), false);
+    }
+  }
+
+   setPainter() {
+    new Array("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-centered-figure-selected").forEach(css => this.selectedPainter.cssRemoveClass(css));
+    if (this.value.getPainter().getType() === Z4PainterType.SHAPE_2D) {
+      this.check(this.selectedPainter, "SHAPE2D", "new Z4Shape2DPainterPanel()", this.value.getPainter(), false);
+    } else if (this.value.getPainter().getType() === Z4PainterType.CENTERED_FIGURE) {
+      this.check(this.selectedPainter, "CENTERED-FIGURE", "new Z4CenteredFigurePainterPanel()", this.value.getPainter(), false);
+    }
+  }
+
+   spatioTemporalColor() {
+    new Array("z4drawingtoolpanel-color-selected", "z4drawingtoolpanel-gradient-color-selected", "z4drawingtoolpanel-bigradient-color-selected").forEach(css => this.selectedSpatioTemporalColor.cssRemoveClass(css));
+    if (this.value.getSpatioTemporalColor().isColor()) {
+      this.check(this.selectedSpatioTemporalColor, "COLOR", "new Z4ColorPanel()", this.value.getSpatioTemporalColor().getColor(), false);
+    } else if (this.value.getSpatioTemporalColor().isGradientColor()) {
+      this.check(this.selectedSpatioTemporalColor, "GRADIENT-COLOR", "new Z4GradientColorPanel()", this.value.getSpatioTemporalColor().getGradientColor(), false);
+    } else if (this.value.getSpatioTemporalColor().isBiGradientColor()) {
+      this.check(this.selectedSpatioTemporalColor, "BIGRADIENT-COLOR", "new Z4BiGradientColorPanel()", this.value.getSpatioTemporalColor().getBiGradientColor(), false);
+    }
+  }
+
+   check(selected, card, evaluate, value, show) {
+    selected.cssAddClass("z4drawingtoolpanel-" + card.toLowerCase() + "-selected");
+    if (!this.cardPanels[card]) {
+      this.cardPanels[card] = eval(evaluate);
+      this.cardPanel.add(this.cardPanels[card], card);
+      if (card === "COLOR") {
+        (this.cardPanels[card]).getStyle().minWidth = "15rem";
+      }
+      (this.cardPanels[card]).addChangeListener(event => {
+        // IMPOSTARE this.value
+        this.onchange();
+      });
+    }
+    if (value) {
+      (this.cardPanels[card]).setValue(value);
+    }
+    if (show) {
+      this.cardLayout.show(this.cardPanel, card);
+    }
   }
 }
 /**
@@ -10233,6 +10279,33 @@ class Z4SpatioTemporalColor extends Z4JSONable {
   }
 
   /**
+   * Returns the color
+   *
+   * @return The color
+   */
+   getColor() {
+    return this.color;
+  }
+
+  /**
+   * Returns the gradient color
+   *
+   * @return The gradient color
+   */
+   getGradientColor() {
+    return this.gradientColor;
+  }
+
+  /**
+   * Returns the bigradient color
+   *
+   * @return The bigradient color
+   */
+   getBiGradientColor() {
+    return this.biGradientColor;
+  }
+
+  /**
    * Returns a color in a time instant and in a space position
    *
    * @param time The time instant
@@ -10786,7 +10859,7 @@ class Z4DrawingTool extends Z4Nextable {
    * @return the point iterator
    */
    getPointIterator() {
-    return pointIterator;
+    return this.pointIterator;
   }
 
   /**
@@ -10795,7 +10868,7 @@ class Z4DrawingTool extends Z4Nextable {
    * @return The painter
    */
    getPainter() {
-    return painter;
+    return this.painter;
   }
 
   /**
@@ -10804,7 +10877,7 @@ class Z4DrawingTool extends Z4Nextable {
    * @return The spatio-temporal color
    */
    getSpatioTemporalColor() {
-    return spatioTemporalColor;
+    return this.spatioTemporalColor;
   }
 
   /**
@@ -10813,7 +10886,7 @@ class Z4DrawingTool extends Z4Nextable {
    * @return The color progression
    */
    getProgression() {
-    return progression;
+    return this.progression;
   }
 
   /**

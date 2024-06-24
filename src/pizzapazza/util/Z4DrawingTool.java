@@ -53,7 +53,7 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
    * @return the point iterator
    */
   public Z4PointIterator getPointIterator() {
-    return pointIterator;
+    return this.pointIterator;
   }
 
   /**
@@ -62,7 +62,7 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
    * @return The painter
    */
   public Z4Painter getPainter() {
-    return painter;
+    return this.painter;
   }
 
   /**
@@ -71,7 +71,7 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
    * @return The spatio-temporal color
    */
   public Z4SpatioTemporalColor getSpatioTemporalColor() {
-    return spatioTemporalColor;
+    return this.spatioTemporalColor;
   }
 
   /**
@@ -80,7 +80,7 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
    * @return The color progression
    */
   public Z4ColorProgression getProgression() {
-    return progression;
+    return this.progression;
   }
 
   /**

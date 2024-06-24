@@ -79,6 +79,33 @@ class Z4SpatioTemporalColor extends Z4JSONable {
   }
 
   /**
+   * Returns the color
+   *
+   * @return The color
+   */
+   getColor() {
+    return this.color;
+  }
+
+  /**
+   * Returns the gradient color
+   *
+   * @return The gradient color
+   */
+   getGradientColor() {
+    return this.gradientColor;
+  }
+
+  /**
+   * Returns the bigradient color
+   *
+   * @return The bigradient color
+   */
+   getBiGradientColor() {
+    return this.biGradientColor;
+  }
+
+  /**
    * Returns a color in a time instant and in a space position
    *
    * @param time The time instant

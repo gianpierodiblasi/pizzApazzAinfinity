@@ -1,7 +1,7 @@
 .z4drawingtoolpanel {
 }
 
-.z4drawingtoolpanel .z4drawingtoolpanel-selector img {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector img, .z4drawingtoolpanel-selected {
   max-width: 25px;
   max-height: 25px;
 }

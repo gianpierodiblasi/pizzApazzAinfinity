@@ -85,6 +85,33 @@ public class Z4SpatioTemporalColor implements Z4JSONable {
   }
 
   /**
+   * Returns the color
+   *
+   * @return The color
+   */
+  public Color getColor() {
+    return this.color;
+  }
+
+  /**
+   * Returns the gradient color
+   *
+   * @return The gradient color
+   */
+  public Z4GradientColor getGradientColor() {
+    return this.gradientColor;
+  }
+
+  /**
+   * Returns the bigradient color
+   *
+   * @return The bigradient color
+   */
+  public Z4BiGradientColor getBiGradientColor() {
+    return this.biGradientColor;
+  }
+
+  /**
    * Returns a color in a time instant and in a space position
    *
    * @param time The time instant

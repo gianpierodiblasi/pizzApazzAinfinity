@@ -35,7 +35,7 @@ class Z4DrawingTool extends Z4Nextable {
    * @return the point iterator
    */
    getPointIterator() {
-    return pointIterator;
+    return this.pointIterator;
   }
 
   /**
@@ -44,7 +44,7 @@ class Z4DrawingTool extends Z4Nextable {
    * @return The painter
    */
    getPainter() {
-    return painter;
+    return this.painter;
   }
 
   /**
@@ -53,7 +53,7 @@ class Z4DrawingTool extends Z4Nextable {
    * @return The spatio-temporal color
    */
    getSpatioTemporalColor() {
-    return spatioTemporalColor;
+    return this.spatioTemporalColor;
   }
 
   /**
@@ -62,7 +62,7 @@ class Z4DrawingTool extends Z4Nextable {
    * @return The color progression
    */
    getProgression() {
-    return progression;
+    return this.progression;
   }
 
   /**

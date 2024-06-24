@@ -4,18 +4,38 @@ import def.js.Array;
 import static def.js.Globals.eval;
 import javascript.awt.BoxLayout;
 import javascript.awt.CardLayout;
+import javascript.awt.Color;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
 import javascript.swing.ButtonGroup;
+import javascript.swing.JSComponent;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
 import javascript.swing.JSTabbedPane;
+import pizzapazza.color.Z4ColorProgression;
+import pizzapazza.color.Z4ColorProgressionBehavior;
+import pizzapazza.color.Z4Lighting;
+import pizzapazza.color.Z4SpatioTemporalColor;
+import pizzapazza.iterator.Z4PointIteratorType;
+import pizzapazza.iterator.Z4Stamper;
+import pizzapazza.math.Z4FancifulValue;
+import pizzapazza.math.Z4RandomValue;
+import pizzapazza.math.Z4RandomValueBehavior;
+import pizzapazza.math.Z4Rotation;
+import pizzapazza.math.Z4RotationBehavior;
+import pizzapazza.math.Z4Sign;
+import pizzapazza.math.Z4SignBehavior;
+import pizzapazza.math.Z4SignedRandomValue;
+import pizzapazza.math.Z4SignedValue;
+import pizzapazza.painter.Z4PainterType;
+import pizzapazza.painter.Z4Shape2DPainter;
 import pizzapazza.ui.panel.Z4AbstractValuePanel;
 import pizzapazza.util.Z4DrawingTool;
 import pizzapazza.util.Z4EmptyImageProducer;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.document;
 
 /**
  * The panel to edit a Z4DrawingTool
@@ -24,27 +44,29 @@ import static simulation.js.$Globals.$exists;
  */
 public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
 
-  private final Array<String> cardPointIteratorSelectors = new Array<>("STAMPER", "TRACER", "AIRBRUSH", "SPIROGRAPH");
-  private final Array<JSPanel> cardPointIteratorPanels = new Array<>(null, null, null, null);
-  private final Array<String> cardPointIteratorEvalPanels = new Array<>("new Z4StamperPanel()", "new Z4TracerPanel()", "new Z4AirbrushPanel()", "new Z4SpirographPanel()");
-  private final Array<String> cardPainterSelectors = new Array<>("SHAPE_2D", "CENTERED_FIGURE");
-  private final Array<JSPanel> cardPainterPanels = new Array<>(null, null);
-  private final Array<String> cardPainterEvalPanels = new Array<>("new Z4Shape2DPainterPanel()", "new Z4CenteredFigurePainterPanel()");
-  private final Array<String> cardColorSelectors = new Array<>("COLOR", "GRADIENT_COLOR", "BIGRADIENT_COLOR");
-  private final Array<JSPanel> cardColorPanels = new Array<>(null, null, null);
-  private final Array<String> cardColorEvalPanels = new Array<>("new Z4ColorPanel()", "new Z4GradientColorPanel()", "new Z4BiGradientColorPanel()");
+  private final JSComponent selectedPointInterator = new JSComponent(document.createElement("img"));
+  private final JSComponent selectedPainter = new JSComponent(document.createElement("img"));
+  private final JSComponent selectedSpatioTemporalColor = new JSComponent(document.createElement("img"));
 
-//  private String selectedPointIteratorSelector = "STAMPER";
-  private JSPanel selectedPointIteratorPanel;
-//  private String selectedPainterSelector = "SHAPE_2D";
-  private JSPanel selectedPainterPanel;
-//  private String selectedColorSelector = "COLOR";
-  private JSPanel selectedColorPanel;
+  private final Array<JSRadioButton> radios = new Array<>();
+
+  private final JSPanel cardPanel = new JSPanel();
+  private final CardLayout cardLayout = new CardLayout(0, 0);
+  private final Array<JSPanel> cardPanels = new Array<>();
 
   public Z4DrawingToolPanel() {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4drawingtoolpanel");
+
+    JSPanel selected = new JSPanel();
+    this.selectedPointInterator.cssAddClass("z4drawingtoolpanel-selected");
+    selected.add(this.selectedPointInterator, null);
+    this.selectedPainter.cssAddClass("z4drawingtoolpanel-selected");
+    selected.add(this.selectedPainter, null);
+    this.selectedSpatioTemporalColor.cssAddClass("z4drawingtoolpanel-selected");
+    selected.add(this.selectedSpatioTemporalColor, null);
+    this.add(selected, new GBC(0, 0));
 
     JSTabbedPane pane = new JSTabbedPane();
     pane.setTabPlacement(JSTabbedPane.LEFT);
@@ -60,54 +82,161 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
 
     Z4UI.addVLine(panel, new GBC(1, 0).wy(1).a(GBC.NORTH).f(GBC.VERTICAL).i(1, 5, 1, 5));
 
-    JSPanel panelCard = new JSPanel();
-    CardLayout cardLayout = new CardLayout(0, 0);
-    panelCard.setLayout(cardLayout);
-    panel.add(panelCard, new GBC(2, 0).a(GBC.NORTH));
+    this.cardPanel.setLayout(this.cardLayout);
+    panel.add(this.cardPanel, new GBC(2, 0).a(GBC.NORTH));
 
     ButtonGroup buttonGroup = new ButtonGroup();
-    this.selectedPointIteratorPanel = this.addRadioButtons(this.cardPointIteratorSelectors, this.cardPointIteratorPanels, this.cardPointIteratorEvalPanels, panelRadio, panelCard, cardLayout, buttonGroup);
-    this.selectedPainterPanel = this.addRadioButtons(this.cardPainterSelectors, this.cardPainterPanels, this.cardPainterEvalPanels, panelRadio, panelCard, cardLayout, buttonGroup);
-    this.selectedColorPanel = this.addRadioButtons(this.cardColorSelectors, this.cardColorPanels, this.cardColorEvalPanels, panelRadio, panelCard, cardLayout, buttonGroup);
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedPointInterator, "STAMPER", "new Z4StamperPanel()", "1px");
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedPointInterator, "TRACER", "new Z4TracerPanel()", "1px");
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedPointInterator, "AIRBRUSH", "new Z4AirbrushPanel()", "1px");
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedPointInterator, "SPIROGRAPH", "new Z4SpirographPanel()", "10px");
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedPainter, "SHAPE2D", "new Z4Shape2DPainterPanel()", "1px");
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedPainter, "CENTERED-FIGURE", "new Z4CenteredFigurePainterPanel()", "10px");
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedSpatioTemporalColor, "COLOR", "new Z4ColorPanel()", "1px");
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedSpatioTemporalColor, "GRADIENT-COLOR", "new Z4GradientColorPanel()", "1px");
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedSpatioTemporalColor, "BIGRADIENT-COLOR", "new Z4BiGradientColorPanel()", "10px");
 
     pane.addTab(Z4Translations.TRY_ME, new JSPanel());
+
+    this.setValue(new Z4DrawingTool(
+            new Z4Stamper(
+                    new Z4FancifulValue(
+                            new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1),
+                            new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                            false),
+                    new Z4FancifulValue(
+                            new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                            new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                            false),
+                    new Z4Rotation(0, new Z4FancifulValue(
+                            new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0),
+                            new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                            false), Z4RotationBehavior.RELATIVE_TO_PATH, false)
+            ),
+            new Z4Shape2DPainter(
+                    new Z4FancifulValue(
+                            new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
+                            new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                            false),
+                    new Z4FancifulValue(
+                            new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
+                            new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                            false),
+                    false,
+                    false,
+                    3,
+                    new Z4FancifulValue(
+                            new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                            new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                            false),
+                    new Z4FancifulValue(
+                            new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                            new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                            false),
+                    new Color(0, 0, 0, 0),
+                    new Z4FancifulValue(
+                            new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                            new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                            false),
+                    new Z4FancifulValue(
+                            new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                            new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                            false),
+                    new Color(0, 0, 0, 0)
+            ),
+            Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)),
+            new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.01, Z4Lighting.NONE)
+    ));
   }
 
-  @SuppressWarnings("StringEquality")
-  private JSPanel addRadioButtons(Array<String> cardSelector, Array<JSPanel> cardPanels, Array<String> cardEvalPanels, JSPanel panelRadio, JSPanel panelCard, CardLayout cardLayout, ButtonGroup buttonGroup) {
-    cardSelector.forEach((card, index, array) -> {
-      JSRadioButton radio = new JSRadioButton();
-      radio.setContentAreaFilled(false);
-      radio.getStyle().marginBottom = index == cardSelector.length - 1 ? "10px" : "1px";
-      radio.setToggle();
-      radio.cssAddClass("z4drawingtoolpanel-selector");
-      radio.setSelected(cardSelector == this.cardPointIteratorSelectors && index == 0);
-      radio.setIcon(new Z4EmptyImageProducer<>(index));
+  private void addRadioButton(JSPanel panelRadio, ButtonGroup buttonGroup, JSComponent selected, String card, String evaluate, String marginBottom) {
+    JSRadioButton radio = new JSRadioButton();
+    radio.setContentAreaFilled(false);
+    radio.getStyle().marginBottom = marginBottom;
+    radio.setToggle();
+    radio.cssAddClass("z4drawingtoolpanel-selector");
+    radio.setIcon(new Z4EmptyImageProducer<>(card));
 
-      radio.addActionListener(event -> {
-        if (!$exists(cardPanels.$get(index))) {
-          JSPanel panelEval = eval(cardEvalPanels.$get(index));
-          cardPanels.$set(index, panelEval);
-          panelCard.add(panelEval, card);
-        }
-
-        cardLayout.show(panelCard, card);
-      });
-
-      buttonGroup.add(radio);
-      panelRadio.add(radio, null);
+    radio.addActionListener(event -> {
+      this.check(selected, card, evaluate, null, true);
+      // IMPOSTARE this.value
+      this.onchange();
     });
 
-    JSPanel panelEval = eval(cardEvalPanels.$get(0));
-    if (cardSelector == this.cardColorSelectors) {
-      panelEval.getStyle().minWidth = "15rem";
-    }
-    cardPanels.$set(0, panelEval);
-    panelCard.add(panelEval, cardSelector.$get(0));
-    return panelEval;
+    this.radios.$set(card, radio);
+    buttonGroup.add(radio);
+    panelRadio.add(radio, null);
   }
 
   @Override
   public void setValue(Z4DrawingTool value) {
+    this.value = value;
+
+    this.setPointInterator();
+    this.setPainter();
+    this.spatioTemporalColor();
+  }
+
+  private void setPointInterator() {
+    new Array<>("z4drawingtoolpanel-stamper-selected", "z4drawingtoolpanel-tracer-selected", "z4drawingtoolpanel-airbrush-selected", "z4drawingtoolpanel-spirograph-selected").forEach(css -> this.selectedPointInterator.cssRemoveClass(css));
+
+    if (this.value.getPointIterator().getType() == Z4PointIteratorType.STAMPER) {
+      this.check(this.selectedPointInterator, "STAMPER", "new Z4StamperPanel()", this.value.getPointIterator(), false);
+    } else if (this.value.getPointIterator().getType() == Z4PointIteratorType.TRACER) {
+      this.check(this.selectedPointInterator, "TRACER", "new Z4TracerPanel()", this.value.getPointIterator(), false);
+    } else if (this.value.getPointIterator().getType() == Z4PointIteratorType.AIRBRUSH) {
+      this.check(this.selectedPointInterator, "AIRBRUSH", "new Z4AirbrushPanel()", this.value.getPointIterator(), false);
+    } else if (this.value.getPointIterator().getType() == Z4PointIteratorType.SPIROGRAPH) {
+      this.check(this.selectedPointInterator, "SPIROGRAPH", "new Z4SpirographPanel()", this.value.getPointIterator(), false);
+    }
+  }
+
+  private void setPainter() {
+    new Array<>("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-centered-figure-selected").forEach(css -> this.selectedPainter.cssRemoveClass(css));
+
+    if (this.value.getPainter().getType() == Z4PainterType.SHAPE_2D) {
+      this.check(this.selectedPainter, "SHAPE2D", "new Z4Shape2DPainterPanel()", this.value.getPainter(), false);
+    } else if (this.value.getPainter().getType() == Z4PainterType.CENTERED_FIGURE) {
+      this.check(this.selectedPainter, "CENTERED-FIGURE", "new Z4CenteredFigurePainterPanel()", this.value.getPainter(), false);
+    }
+  }
+
+  private void spatioTemporalColor() {
+    new Array<>("z4drawingtoolpanel-color-selected", "z4drawingtoolpanel-gradient-color-selected", "z4drawingtoolpanel-bigradient-color-selected").forEach(css -> this.selectedSpatioTemporalColor.cssRemoveClass(css));
+
+    if (this.value.getSpatioTemporalColor().isColor()) {
+      this.check(this.selectedSpatioTemporalColor, "COLOR", "new Z4ColorPanel()", this.value.getSpatioTemporalColor().getColor(), false);
+    } else if (this.value.getSpatioTemporalColor().isGradientColor()) {
+      this.check(this.selectedSpatioTemporalColor, "GRADIENT-COLOR", "new Z4GradientColorPanel()", this.value.getSpatioTemporalColor().getGradientColor(), false);
+    } else if (this.value.getSpatioTemporalColor().isBiGradientColor()) {
+      this.check(this.selectedSpatioTemporalColor, "BIGRADIENT-COLOR", "new Z4BiGradientColorPanel()", this.value.getSpatioTemporalColor().getBiGradientColor(), false);
+    }
+  }
+
+  @SuppressWarnings({"unchecked", "StringEquality"})
+  private void check(JSComponent selected, String card, String evaluate, Object value, boolean show) {
+    selected.cssAddClass("z4drawingtoolpanel-" + card.toLowerCase() + "-selected");
+
+    if (!$exists(this.cardPanels.$get(card))) {
+      this.cardPanels.$set(card, eval(evaluate));
+      this.cardPanel.add(this.cardPanels.$get(card), card);
+
+      if (card == "COLOR") {
+        ((JSComponent) this.cardPanels.$get(card)).getStyle().minWidth = "15rem";
+      }
+
+      ((Z4AbstractValuePanel) this.cardPanels.$get(card)).addChangeListener(event -> {
+        // IMPOSTARE this.value
+        this.onchange();
+      });
+    }
+
+    if ($exists(value)) {
+      ((Z4AbstractValuePanel) this.cardPanels.$get(card)).setValue(value);
+    }
+
+    if (show) {
+      this.cardLayout.show(this.cardPanel, card);
+    }
   }
 }
