@@ -34,6 +34,7 @@ import pizzapazza.painter.Z4Shape2DPainter;
 import pizzapazza.ui.panel.Z4AbstractValuePanel;
 import pizzapazza.ui.panel.color.Z4BiGradientColorPanel;
 import pizzapazza.ui.panel.color.Z4ColorPanel;
+import pizzapazza.ui.panel.color.Z4ColorProgressionPanel;
 import pizzapazza.ui.panel.color.Z4GradientColorPanel;
 import pizzapazza.ui.panel.iterator.Z4PointIteratorPanel;
 import pizzapazza.ui.panel.painter.Z4PainterPanel;
@@ -54,6 +55,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
   private final JSComponent selectedPointInterator = new JSComponent(document.createElement("img"));
   private final JSComponent selectedPainter = new JSComponent(document.createElement("img"));
   private final JSComponent selectedSpatioTemporalColor = new JSComponent(document.createElement("img"));
+  private final JSComponent selectedColorProgression = new JSComponent(document.createElement("img"));
 
   private final Array<JSRadioButton> radios = new Array<>();
 
@@ -64,6 +66,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
   private String selectedPointInteratorCard;
   private String selectedPainterCard;
   private String selectedSpatioTemporalColorCard;
+  private String selectedColorProgressionCard;
 
   public Z4DrawingToolPanel() {
     super();
@@ -77,6 +80,8 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     selected.add(this.selectedPainter, null);
     this.selectedSpatioTemporalColor.cssAddClass("z4drawingtoolpanel-selected");
     selected.add(this.selectedSpatioTemporalColor, null);
+    this.selectedColorProgression.cssAddClass("z4drawingtoolpanel-selected");
+    selected.add(this.selectedColorProgression, null);
     this.add(selected, new GBC(0, 0));
 
     JSTabbedPane pane = new JSTabbedPane();
@@ -97,15 +102,20 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     panel.add(this.cardPanel, new GBC(2, 0).a(GBC.NORTH));
 
     ButtonGroup buttonGroup = new ButtonGroup();
-    this.addRadioButton(panelRadio, buttonGroup, this.selectedPointInterator, "STAMPER", "new Z4StamperPanel()", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, this.selectedPointInterator, "TRACER", "new Z4TracerPanel()", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, this.selectedPointInterator, "AIRBRUSH", "new Z4AirbrushPanel()", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, this.selectedPointInterator, "SPIROGRAPH", "new Z4SpirographPanel()", "10px");
-    this.addRadioButton(panelRadio, buttonGroup, this.selectedPainter, "SHAPE2D", "new Z4Shape2DPainterPanel()", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, this.selectedPainter, "CENTERED-FIGURE", "new Z4CenteredFigurePainterPanel()", "10px");
-    this.addRadioButton(panelRadio, buttonGroup, this.selectedSpatioTemporalColor, "COLOR", "new Z4ColorPanel()", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, this.selectedSpatioTemporalColor, "GRADIENT-COLOR", "new Z4GradientColorPanel()", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, this.selectedSpatioTemporalColor, "BIGRADIENT-COLOR", "new Z4BiGradientColorPanel()", "10px");
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedPointInterator, "STAMPER", "new Z4StamperPanel()", "pointIterator", "1px");
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedPointInterator, "TRACER", "new Z4TracerPanel()", "pointIterator", "1px");
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedPointInterator, "AIRBRUSH", "new Z4AirbrushPanel()", "pointIterator", "1px");
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedPointInterator, "SPIROGRAPH", "new Z4SpirographPanel()", "pointIterator", "10px");
+
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedPainter, "SHAPE2D", "new Z4Shape2DPainterPanel()", "painter", "1px");
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedPainter, "CENTERED-FIGURE", "new Z4CenteredFigurePainterPanel()", "painter", "10px");
+
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedSpatioTemporalColor, "COLOR", "new Z4ColorPanel()", "spatioTemporalColor", "1px");
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedSpatioTemporalColor, "GRADIENT-COLOR", "new Z4GradientColorPanel()", "spatioTemporalColor", "1px");
+
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedSpatioTemporalColor, "BIGRADIENT-COLOR", "new Z4BiGradientColorPanel()", "spatioTemporalColor", "10px");
+
+    this.addRadioButton(panelRadio, buttonGroup, this.selectedColorProgression, "COLOR-PROGRESSION", "new Z4ColorProgressionPanel(Z4ColorProgressionPanelOrientation.HORIZONTALLY_COMPACT)", "colorProgression", "0px");
 
     pane.addTab(Z4Translations.TRY_ME, new JSPanel());
 
@@ -160,7 +170,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     ));
   }
 
-  private void addRadioButton(JSPanel panelRadio, ButtonGroup buttonGroup, JSComponent selected, String card, String evaluate, String marginBottom) {
+  private void addRadioButton(JSPanel panelRadio, ButtonGroup buttonGroup, JSComponent selected, String card, String evaluate, String type, String marginBottom) {
     JSRadioButton radio = new JSRadioButton();
     radio.setContentAreaFilled(false);
     radio.getStyle().marginBottom = marginBottom;
@@ -170,7 +180,22 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
 
     radio.addActionListener(event -> {
       this.check(selected, card, evaluate, null, true);
-      // IMPOSTARE this.value
+
+      switch (type) {
+        case "pointIterator":
+          this.selectedPointInteratorCard = card;
+          break;
+        case "painter":
+          this.selectedPainterCard = card;
+          break;
+        case "spatioTemporalColor":
+          this.selectedSpatioTemporalColorCard = card;
+          break;
+        case "colorProgression":
+          this.selectedColorProgressionCard = card;
+          break;
+      }
+      this.createValue();
       this.onchange();
     });
 
@@ -185,7 +210,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
 
     this.setPointInterator();
     this.setPainter();
-    this.spatioTemporalColor();
+    this.setSpatioTemporalColor();
   }
 
   private void setPointInterator() {
@@ -212,15 +237,20 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     }
   }
 
-  private void spatioTemporalColor() {
+  private void setSpatioTemporalColor() {
     new Array<>("z4drawingtoolpanel-color-selected", "z4drawingtoolpanel-gradient-color-selected", "z4drawingtoolpanel-bigradient-color-selected").forEach(css -> this.selectedSpatioTemporalColor.cssRemoveClass(css));
+
+    this.selectedColorProgressionCard = this.check(this.selectedColorProgression, "COLOR-PROGRESSION", "new Z4ColorProgressionPanel(Z4ColorProgressionPanelOrientation.HORIZONTALLY_COMPACT)", this.value.getProgression(), false);
 
     if (this.value.getSpatioTemporalColor().isColor()) {
       this.selectedSpatioTemporalColorCard = this.check(this.selectedSpatioTemporalColor, "COLOR", "new Z4ColorPanel()", this.value.getSpatioTemporalColor().getColor(), false);
+      ((Z4ColorProgressionPanel) this.cardPanels.$get(this.selectedColorProgressionCard)).setProgressionSettings(this.value.getPointIterator().getType(), true, false, false);
     } else if (this.value.getSpatioTemporalColor().isGradientColor()) {
       this.selectedSpatioTemporalColorCard = this.check(this.selectedSpatioTemporalColor, "GRADIENT-COLOR", "new Z4GradientColorPanel()", this.value.getSpatioTemporalColor().getGradientColor(), false);
+      ((Z4ColorProgressionPanel) this.cardPanels.$get(this.selectedColorProgressionCard)).setProgressionSettings(this.value.getPointIterator().getType(), false, true, false);
     } else if (this.value.getSpatioTemporalColor().isBiGradientColor()) {
       this.selectedSpatioTemporalColorCard = this.check(this.selectedSpatioTemporalColor, "BIGRADIENT-COLOR", "new Z4BiGradientColorPanel()", this.value.getSpatioTemporalColor().getBiGradientColor(), false);
+      ((Z4ColorProgressionPanel) this.cardPanels.$get(this.selectedColorProgressionCard)).setProgressionSettings(this.value.getPointIterator().getType(), false, false, true);
     }
   }
 
@@ -260,18 +290,24 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     Z4Painter painter = ((Z4PainterPanel<Z4Painter>) this.cardPanels.$get(this.selectedPainterCard)).getValue();
 
     Z4SpatioTemporalColor spatioTemporalColor = null;
+    Z4ColorProgressionPanel colorProgressionPanel = (Z4ColorProgressionPanel) this.cardPanels.$get(this.selectedColorProgressionCard);
     switch (this.selectedSpatioTemporalColorCard) {
       case "COLOR":
         spatioTemporalColor = Z4SpatioTemporalColor.fromColor(((Z4ColorPanel) this.cardPanels.$get(this.selectedSpatioTemporalColorCard)).getValue());
+        colorProgressionPanel.setProgressionSettings(pointIterator.getType(), true, false, false);
         break;
       case "GRADIENT-COLOR":
         spatioTemporalColor = Z4SpatioTemporalColor.fromGradientColor(((Z4GradientColorPanel) this.cardPanels.$get(this.selectedSpatioTemporalColorCard)).getValue());
+        colorProgressionPanel.setProgressionSettings(pointIterator.getType(), false, true, false);
         break;
       case "BIGRADIENT-COLOR":
         spatioTemporalColor = Z4SpatioTemporalColor.fromBiGradientColor(((Z4BiGradientColorPanel) this.cardPanels.$get(this.selectedSpatioTemporalColorCard)).getValue());
+        colorProgressionPanel.setProgressionSettings(pointIterator.getType(), false, false, true);
         break;
     }
 
-    this.value = new Z4DrawingTool(pointIterator, painter, spatioTemporalColor, new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.01, Z4Lighting.NONE));
+    Z4ColorProgression progression = colorProgressionPanel.getValue();
+
+    this.value = new Z4DrawingTool(pointIterator, painter, spatioTemporalColor, progression);
   }
 }

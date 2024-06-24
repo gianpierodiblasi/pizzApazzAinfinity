@@ -439,6 +439,9 @@
 .z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(9) img, .z4drawingtoolpanel-bigradient-color-selected {
   content: url(../image/filling/fill_bigradientcolor.gif);
 }
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(10) img {
+  content: url(../image/color/z4colorprogressionbehavior_spatial.svg);
+}
 .z4fancifulvaluepanel {
 }
 

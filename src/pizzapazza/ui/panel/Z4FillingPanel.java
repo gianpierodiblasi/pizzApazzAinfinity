@@ -10,6 +10,7 @@ import javascript.awt.GridBagLayout;
 import javascript.swing.ButtonGroup;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
+import pizzapazza.color.Z4BiGradientColor;
 import pizzapazza.ui.panel.color.Z4BiGradientColorPanel;
 import pizzapazza.ui.panel.color.Z4ColorPanel;
 import pizzapazza.ui.panel.color.Z4GradientColorPanel;
@@ -210,7 +211,7 @@ public class Z4FillingPanel extends JSPanel {
       case "TEXTURE":
         return ((Z4AbstractFillerPanel) this.selectedFillerPanel).getSelectedFiller();
       case "BIGRADIENT":
-        return ((Z4BiGradientColorPanel) this.cardColorPanels.$get(3)).getSelectedBiGradientColor();
+        return ((Z4AbstractValuePanel<Z4BiGradientColor>) this.cardColorPanels.$get(3)).getValue();
       default:
         return null;
     }

@@ -173,7 +173,7 @@ class Z4FillingPanel extends JSPanel {
       case "TEXTURE":
         return (this.selectedFillerPanel).getSelectedFiller();
       case "BIGRADIENT":
-        return (this.cardColorPanels[3]).getSelectedBiGradientColor();
+        return (this.cardColorPanels[3]).getValue();
       default:
         return null;
     }
