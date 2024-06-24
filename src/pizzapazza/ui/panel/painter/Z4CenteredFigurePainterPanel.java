@@ -6,8 +6,6 @@ import javascript.awt.Color;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
 import javascript.swing.ButtonGroup;
-import javascript.swing.JSButton;
-import javascript.swing.JSColorChooser;
 import javascript.swing.JSComponent;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
@@ -26,7 +24,7 @@ import pizzapazza.math.Z4Whirlpool;
 import pizzapazza.math.Z4WhirlpoolBehavior;
 import pizzapazza.painter.Z4CenteredFigurePainter;
 import pizzapazza.painter.Z4CenteredFigurePainterType;
-import pizzapazza.ui.component.Z4ColorPanel;
+import pizzapazza.ui.panel.color.Z4ColorPanel;
 import pizzapazza.ui.panel.math.Z4FancifulValuePanel;
 import pizzapazza.ui.panel.math.Z4FancifulValuePanelOrientation;
 import pizzapazza.ui.panel.math.Z4WhirlpoolPanel;
@@ -59,12 +57,10 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
 
   private final Z4FancifulValuePanel shadowShiftX = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
   private final Z4FancifulValuePanel shadowShiftY = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
-  private final JSButton editShadowColor = new JSButton();
-  private final Z4ColorPanel shadowColorPreview = new Z4ColorPanel();
+  private final Z4ColorPanel shadowColorPanel = new Z4ColorPanel();
 
   private final Z4FancifulValuePanel borderSize = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
-  private final JSButton editBorderColor = new JSButton();
-  private final Z4ColorPanel borderColorPreview = new Z4ColorPanel();
+  private final Z4ColorPanel borderColorPanel = new Z4ColorPanel();
 
   /**
    * Creates the object
@@ -161,20 +157,16 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     this.shadowShiftY.cssAddClass("z4abstractvaluepanel-titled");
     this.shadowShiftY.addChangeListener(event -> this.onfigurechange(this.shadowShiftY.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
 
-    this.editShadowColor.setText(Z4Translations.EDIT);
-    this.editShadowColor.addActionListener(event -> JSColorChooser.showDialog(Z4Translations.FILLING_COLOR, this.value.getShadowColor(), true, null, color -> this.onfigurechange(false, color, null, this.coverSlider.getValue())));
-
-    this.createPanel(tabbedPane, Z4Translations.SHADOW, this.shadowShiftX, this.shadowShiftY, this.shadowColorPreview, this.editShadowColor);
+    this.shadowColorPanel.addChangeListener(event -> this.onfigurechange(false, this.shadowColorPanel.getValue(), null, this.coverSlider.getValue()));
+    this.createPanel(tabbedPane, Z4Translations.SHADOW, this.shadowShiftX, this.shadowShiftY, this.shadowColorPanel);
 
     this.borderSize.setSignsVisible(false);
     this.borderSize.setLabel(Z4Translations.DIMENSION);
     this.borderSize.cssAddClass("z4abstractvaluepanel-titled");
     this.borderSize.addChangeListener(event -> this.onfigurechange(this.borderSize.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
 
-    this.editBorderColor.setText(Z4Translations.EDIT);
-    this.editBorderColor.addActionListener(event -> JSColorChooser.showDialog(Z4Translations.FILLING_COLOR, this.value.getBorderColor(), true, null, color -> this.onfigurechange(false, null, color, this.coverSlider.getValue())));
-
-    this.createPanel(tabbedPane, Z4Translations.BORDER, this.borderSize, null, this.borderColorPreview, this.editBorderColor);
+    this.borderColorPanel.addChangeListener(event -> this.onfigurechange(false, null, this.borderColorPanel.getValue(), this.coverSlider.getValue()));
+    this.createPanel(tabbedPane, Z4Translations.BORDER, this.borderSize, null, this.borderColorPanel);
 
     this.setValue(new Z4CenteredFigurePainter(
             Z4CenteredFigurePainterType.TYPE_0,
@@ -239,20 +231,18 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     panel.add(radio, null);
   }
 
-  private void createPanel(JSTabbedPane tabbedPane, String text, Z4FancifulValuePanel p1, Z4FancifulValuePanel p2, Z4ColorPanel preview, JSButton button) {
+  private void createPanel(JSTabbedPane tabbedPane, String text, Z4FancifulValuePanel p1, Z4FancifulValuePanel p2, Z4ColorPanel colorPanel) {
     JSPanel panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
     tabbedPane.addTab(text, panel);
 
-    panel.add(p1, new GBC(0, 1).w(2).i(1, 0, 1, 0));
+    panel.add(p1, new GBC(0, 1).i(1, 0, 1, 0));
     if ($exists(p2)) {
-      panel.add(p2, new GBC(0, 2).w(2));
+      panel.add(p2, new GBC(0, 2));
     }
 
-    Z4UI.addLabel(panel, Z4Translations.FILLING_COLOR, new GBC(0, 3).w(2).a(GBC.WEST));
-
-    panel.add(preview, new GBC(0, 4).wx(1).f(GBC.HORIZONTAL).i(0, 0, 0, 5));
-    panel.add(button, new GBC(1, 4));
+    colorPanel.setLabel(Z4Translations.FILLING_COLOR);
+    panel.add(colorPanel, new GBC(0, 3).f(GBC.HORIZONTAL));
   }
 
   private void onfigurechange(boolean b, Color shadowColor, Color borderColor, int cover) {
@@ -260,14 +250,6 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
 
     this.coverSpinner.setValue(cover);
     this.coverSlider.setValue(cover);
-
-    if ($exists(shadowColor)) {
-      this.shadowColorPreview.setColor(shadowColor);
-    }
-
-    if ($exists(borderColor)) {
-      this.borderColorPreview.setColor(borderColor);
-    }
 
     Z4CenteredFigurePainterType type = null;
     switch ("" + Object.keys(this.radios).find((key, index, array) -> ((JSRadioButton) this.radios.$get(key)).isSelected())) {
@@ -306,7 +288,7 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     } else if (this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_4 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_5) {
       this.sample.cssAddClass("z4centeredfigurepainterpanel-sample3_4_5");
     }
-    
+
     this.angle1.setEnabled(this.enabled && this.value.getCenteredFigurePainterType() != Z4CenteredFigurePainterType.TYPE_5);
     this.angle2.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_5));
     this.tension.setEnabled(this.enabled && (this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_3 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_4 || this.value.getCenteredFigurePainterType() == Z4CenteredFigurePainterType.TYPE_5));
@@ -343,10 +325,10 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
 
     this.shadowShiftX.setValue(this.value.getShadowShiftX());
     this.shadowShiftY.setValue(this.value.getShadowShiftY());
-    this.shadowColorPreview.setColor(this.value.getShadowColor());
+    this.shadowColorPanel.setValue(this.value.getShadowColor());
 
     this.borderSize.setValue(this.value.getBorderSize());
-    this.borderColorPreview.setColor(this.value.getBorderColor());
+    this.borderColorPanel.setValue(this.value.getBorderColor());
   }
 
   @Override
@@ -367,9 +349,9 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
 
     this.shadowShiftX.setEnabled(b);
     this.shadowShiftY.setEnabled(b);
-    this.editShadowColor.setEnabled(b);
+    this.shadowColorPanel.setEnabled(b);
 
     this.borderSize.setEnabled(b);
-    this.editBorderColor.setEnabled(b);
+    this.borderColorPanel.setEnabled(b);
   }
 }

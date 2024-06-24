@@ -19,17 +19,13 @@ class Z4Shape2DPainterPanel extends Z4PainterPanel {
 
    shadowShiftY = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
 
-   editShadowColor = new JSButton();
-
-   shadowColorPreview = new Z4ColorPanel();
+   shadowColorPanel = new Z4ColorPanel();
 
    borderWidth = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
 
    borderHeight = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
 
-   editBorderColor = new JSButton();
-
-   borderColorPreview = new Z4ColorPanel();
+   borderColorPanel = new Z4ColorPanel();
 
   /**
    * Creates the object
@@ -76,9 +72,8 @@ class Z4Shape2DPainterPanel extends Z4PainterPanel {
     this.shadowShiftY.setLabel(Z4Translations.DELTA_Y);
     this.shadowShiftY.cssAddClass("z4abstractvaluepanel-titled");
     this.shadowShiftY.addChangeListener(event => this.onshape2dchange(this.shadowShiftY.getValueIsAdjusting(), null, null));
-    this.editShadowColor.setText(Z4Translations.EDIT);
-    this.editShadowColor.addActionListener(event => JSColorChooser.showDialog(Z4Translations.FILLING_COLOR, this.value.getShadowColor(), true, null, color => this.onshape2dchange(false, color, null)));
-    this.createPanel(tabbedPane, Z4Translations.SHADOW, this.shadowShiftX, this.shadowShiftY, this.shadowColorPreview, this.editShadowColor);
+    this.shadowColorPanel.addChangeListener(event => this.onshape2dchange(false, this.shadowColorPanel.getValue(), null));
+    this.createPanel(tabbedPane, Z4Translations.SHADOW, this.shadowShiftX, this.shadowShiftY, this.shadowColorPanel);
     this.borderWidth.setSignsVisible(false);
     this.borderWidth.setLabel(Z4Translations.WIDTH);
     this.borderWidth.cssAddClass("z4abstractvaluepanel-titled");
@@ -87,31 +82,23 @@ class Z4Shape2DPainterPanel extends Z4PainterPanel {
     this.borderHeight.setLabel(Z4Translations.HEIGHT);
     this.borderHeight.cssAddClass("z4abstractvaluepanel-titled");
     this.borderHeight.addChangeListener(event => this.onshape2dchange(this.borderHeight.getValueIsAdjusting(), null, null));
-    this.editBorderColor.setText(Z4Translations.EDIT);
-    this.editBorderColor.addActionListener(event => JSColorChooser.showDialog(Z4Translations.FILLING_COLOR, this.value.getBorderColor(), true, null, color => this.onshape2dchange(false, null, color)));
-    this.createPanel(tabbedPane, Z4Translations.BORDER, this.borderWidth, this.borderHeight, this.borderColorPreview, this.editBorderColor);
+    this.borderColorPanel.addChangeListener(event => this.onshape2dchange(false, null, this.borderColorPanel.getValue()));
+    this.createPanel(tabbedPane, Z4Translations.BORDER, this.borderWidth, this.borderHeight, this.borderColorPanel);
     this.setValue(new Z4Shape2DPainter(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), false, false, -1, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 255), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 255)));
   }
 
-   createPanel(tabbedPane, text, p1, p2, preview, button) {
+   createPanel(tabbedPane, text, p1, p2, colorPanel) {
     let panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
     tabbedPane.addTab(text, panel);
-    panel.add(p1, new GBC(0, 1).w(2).i(1, 0, 1, 0));
-    panel.add(p2, new GBC(0, 2).w(2));
-    Z4UI.addLabel(panel, Z4Translations.FILLING_COLOR, new GBC(0, 3).w(2).a(GBC.WEST));
-    panel.add(preview, new GBC(0, 4).wx(1).f(GBC.HORIZONTAL).i(0, 0, 0, 5));
-    panel.add(button, new GBC(1, 4));
+    panel.add(p1, new GBC(0, 1).i(1, 0, 1, 0));
+    panel.add(p2, new GBC(0, 2));
+    colorPanel.setLabel(Z4Translations.FILLING_COLOR);
+    panel.add(colorPanel, new GBC(0, 3).f(GBC.HORIZONTAL));
   }
 
    onshape2dchange(b, shadowColor, borderColor) {
     this.valueIsAdjusting = b;
-    if (shadowColor) {
-      this.shadowColorPreview.setColor(shadowColor);
-    }
-    if (borderColor) {
-      this.borderColorPreview.setColor(borderColor);
-    }
     let vCount = this.vertexCounter.getValue();
     this.height.setEnabled(this.enabled && !this.regular.isSelected());
     this.star.setEnabled(this.enabled && vCount !== 7);
@@ -131,10 +118,10 @@ class Z4Shape2DPainterPanel extends Z4PainterPanel {
     this.vertexCounter.setValue(vCount === -1 ? 7 : vCount - 3);
     this.shadowShiftX.setValue(this.value.getShadowShiftX());
     this.shadowShiftY.setValue(this.value.getShadowShiftY());
-    this.shadowColorPreview.setColor(this.value.getShadowColor());
+    this.shadowColorPanel.setValue(this.value.getShadowColor());
     this.borderWidth.setValue(this.value.getBorderWidth());
     this.borderHeight.setValue(this.value.getBorderHeight());
-    this.borderColorPreview.setColor(this.value.getBorderColor());
+    this.borderColorPanel.setValue(this.value.getBorderColor());
   }
 
    setEnabled(b) {
@@ -146,9 +133,9 @@ class Z4Shape2DPainterPanel extends Z4PainterPanel {
     this.vertexCounter.setEnabled(b);
     this.shadowShiftX.setEnabled(b);
     this.shadowShiftY.setEnabled(b);
-    this.editShadowColor.setEnabled(b);
+    this.shadowColorPanel.setEnabled(b);
     this.borderWidth.setEnabled(b);
     this.borderHeight.setEnabled(b);
-    this.editBorderColor.setEnabled(b);
+    this.borderColorPanel.setEnabled(b);
   }
 }
