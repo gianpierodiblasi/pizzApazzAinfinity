@@ -6,6 +6,7 @@ import def.dom.ImageData;
 import def.js.Array;
 import javascript.awt.Color;
 import javascript.awt.GBC;
+import javascript.awt.GridBagLayout;
 import javascript.awt.Point;
 import javascript.swing.ButtonGroup;
 import javascript.swing.JSButton;
@@ -72,18 +73,22 @@ public class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
     this.group.add(this.lock);
     panel.add(this.lock, null);
 
+    panel = new JSPanel();
+    panel.setLayout(new GridBagLayout());
+    this.add(panel, new GBC(0, 9).w(4).wx(1).f(GBC.HORIZONTAL));
+
+    JSButton button = new JSButton();
+    button.setText(Z4Translations.PATTERN);
+    button.addActionListener(event -> this.selectPattern());
+    panel.add(button, new GBC(0, 0).a(GBC.SOUTHWEST).i(0, 0, 0, 25));
+
     this.colorPanel.setLabel(Z4Translations.BACKGROUND_COLOR);
     this.colorPanel.setValue(this.backgroundColor);
     this.colorPanel.addChangeListener(event -> {
       this.backgroundColor = this.colorPanel.getValue();
       this.drawPreview(false);
     });
-    this.add(this.colorPanel, new GBC(0, 9).w(2).f(GBC.HORIZONTAL).i(0, 0, 0, 5));
-
-    JSButton button = new JSButton();
-    button.setText(Z4Translations.PATTERN);
-    button.addActionListener(event -> this.selectPattern());
-    this.add(button, new GBC(2, 9).w(2).a(GBC.SOUTHEAST));
+    panel.add(this.colorPanel, new GBC(1, 0).wx(1).f(GBC.HORIZONTAL));
 
     $Uint8Array data = ($Uint8Array) this.imageData.data;
     for (int y = 0; y < Z4TextureFillerPanel.DEFAULT_SIZE; y++) {
