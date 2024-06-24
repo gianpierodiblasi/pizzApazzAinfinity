@@ -43,11 +43,14 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
 
   public Z4DrawingToolPanel() {
     super();
+    this.setLayout(new GridBagLayout());
     this.cssAddClass("z4drawingtoolpanel");
 
+    
+    
     JSTabbedPane pane = new JSTabbedPane();
     pane.setTabPlacement(JSTabbedPane.LEFT);
-    this.add(pane, null);
+    this.add(pane, new GBC(0, 1));
 
     JSPanel panel = new JSPanel();
     panel.setLayout(new GridBagLayout());

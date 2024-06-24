@@ -8832,10 +8832,11 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
   // private JSPanel selectedColorPanel = this.cardColorPanels.$get(0);
   constructor() {
     super();
+    this.setLayout(new GridBagLayout());
     this.cssAddClass("z4drawingtoolpanel");
     let pane = new JSTabbedPane();
     pane.setTabPlacement(JSTabbedPane.LEFT);
-    this.add(pane, null);
+    this.add(pane, new GBC(0, 1));
     let panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
     pane.addTab(Z4Translations.SETTINGS, panel);
