@@ -16,6 +16,7 @@ import pizzapazza.color.Z4ColorProgression;
 import pizzapazza.color.Z4ColorProgressionBehavior;
 import pizzapazza.color.Z4Lighting;
 import pizzapazza.color.Z4SpatioTemporalColor;
+import pizzapazza.iterator.Z4PointIterator;
 import pizzapazza.iterator.Z4PointIteratorType;
 import pizzapazza.iterator.Z4Stamper;
 import pizzapazza.math.Z4FancifulValue;
@@ -27,9 +28,15 @@ import pizzapazza.math.Z4Sign;
 import pizzapazza.math.Z4SignBehavior;
 import pizzapazza.math.Z4SignedRandomValue;
 import pizzapazza.math.Z4SignedValue;
+import pizzapazza.painter.Z4Painter;
 import pizzapazza.painter.Z4PainterType;
 import pizzapazza.painter.Z4Shape2DPainter;
 import pizzapazza.ui.panel.Z4AbstractValuePanel;
+import pizzapazza.ui.panel.color.Z4BiGradientColorPanel;
+import pizzapazza.ui.panel.color.Z4ColorPanel;
+import pizzapazza.ui.panel.color.Z4GradientColorPanel;
+import pizzapazza.ui.panel.iterator.Z4PointIteratorPanel;
+import pizzapazza.ui.panel.painter.Z4PainterPanel;
 import pizzapazza.util.Z4DrawingTool;
 import pizzapazza.util.Z4EmptyImageProducer;
 import pizzapazza.util.Z4Translations;
@@ -53,6 +60,10 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
   private final JSPanel cardPanel = new JSPanel();
   private final CardLayout cardLayout = new CardLayout(0, 0);
   private final Array<JSPanel> cardPanels = new Array<>();
+
+  private String selectedPointInteratorCard;
+  private String selectedPainterCard;
+  private String selectedSpatioTemporalColorCard;
 
   public Z4DrawingToolPanel() {
     super();
@@ -181,13 +192,13 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     new Array<>("z4drawingtoolpanel-stamper-selected", "z4drawingtoolpanel-tracer-selected", "z4drawingtoolpanel-airbrush-selected", "z4drawingtoolpanel-spirograph-selected").forEach(css -> this.selectedPointInterator.cssRemoveClass(css));
 
     if (this.value.getPointIterator().getType() == Z4PointIteratorType.STAMPER) {
-      this.check(this.selectedPointInterator, "STAMPER", "new Z4StamperPanel()", this.value.getPointIterator(), false);
+      this.selectedPointInteratorCard = this.check(this.selectedPointInterator, "STAMPER", "new Z4StamperPanel()", this.value.getPointIterator(), true);
     } else if (this.value.getPointIterator().getType() == Z4PointIteratorType.TRACER) {
-      this.check(this.selectedPointInterator, "TRACER", "new Z4TracerPanel()", this.value.getPointIterator(), false);
+      this.selectedPointInteratorCard = this.check(this.selectedPointInterator, "TRACER", "new Z4TracerPanel()", this.value.getPointIterator(), true);
     } else if (this.value.getPointIterator().getType() == Z4PointIteratorType.AIRBRUSH) {
-      this.check(this.selectedPointInterator, "AIRBRUSH", "new Z4AirbrushPanel()", this.value.getPointIterator(), false);
+      this.selectedPointInteratorCard = this.check(this.selectedPointInterator, "AIRBRUSH", "new Z4AirbrushPanel()", this.value.getPointIterator(), true);
     } else if (this.value.getPointIterator().getType() == Z4PointIteratorType.SPIROGRAPH) {
-      this.check(this.selectedPointInterator, "SPIROGRAPH", "new Z4SpirographPanel()", this.value.getPointIterator(), false);
+      this.selectedPointInteratorCard = this.check(this.selectedPointInterator, "SPIROGRAPH", "new Z4SpirographPanel()", this.value.getPointIterator(), true);
     }
   }
 
@@ -195,9 +206,9 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     new Array<>("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-centered-figure-selected").forEach(css -> this.selectedPainter.cssRemoveClass(css));
 
     if (this.value.getPainter().getType() == Z4PainterType.SHAPE_2D) {
-      this.check(this.selectedPainter, "SHAPE2D", "new Z4Shape2DPainterPanel()", this.value.getPainter(), false);
+      this.selectedPainterCard = this.check(this.selectedPainter, "SHAPE2D", "new Z4Shape2DPainterPanel()", this.value.getPainter(), false);
     } else if (this.value.getPainter().getType() == Z4PainterType.CENTERED_FIGURE) {
-      this.check(this.selectedPainter, "CENTERED-FIGURE", "new Z4CenteredFigurePainterPanel()", this.value.getPainter(), false);
+      this.selectedPainterCard = this.check(this.selectedPainter, "CENTERED-FIGURE", "new Z4CenteredFigurePainterPanel()", this.value.getPainter(), false);
     }
   }
 
@@ -205,16 +216,16 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     new Array<>("z4drawingtoolpanel-color-selected", "z4drawingtoolpanel-gradient-color-selected", "z4drawingtoolpanel-bigradient-color-selected").forEach(css -> this.selectedSpatioTemporalColor.cssRemoveClass(css));
 
     if (this.value.getSpatioTemporalColor().isColor()) {
-      this.check(this.selectedSpatioTemporalColor, "COLOR", "new Z4ColorPanel()", this.value.getSpatioTemporalColor().getColor(), false);
+      this.selectedSpatioTemporalColorCard = this.check(this.selectedSpatioTemporalColor, "COLOR", "new Z4ColorPanel()", this.value.getSpatioTemporalColor().getColor(), false);
     } else if (this.value.getSpatioTemporalColor().isGradientColor()) {
-      this.check(this.selectedSpatioTemporalColor, "GRADIENT-COLOR", "new Z4GradientColorPanel()", this.value.getSpatioTemporalColor().getGradientColor(), false);
+      this.selectedSpatioTemporalColorCard = this.check(this.selectedSpatioTemporalColor, "GRADIENT-COLOR", "new Z4GradientColorPanel()", this.value.getSpatioTemporalColor().getGradientColor(), false);
     } else if (this.value.getSpatioTemporalColor().isBiGradientColor()) {
-      this.check(this.selectedSpatioTemporalColor, "BIGRADIENT-COLOR", "new Z4BiGradientColorPanel()", this.value.getSpatioTemporalColor().getBiGradientColor(), false);
+      this.selectedSpatioTemporalColorCard = this.check(this.selectedSpatioTemporalColor, "BIGRADIENT-COLOR", "new Z4BiGradientColorPanel()", this.value.getSpatioTemporalColor().getBiGradientColor(), false);
     }
   }
 
   @SuppressWarnings({"unchecked", "StringEquality"})
-  private void check(JSComponent selected, String card, String evaluate, Object value, boolean show) {
+  private String check(JSComponent selected, String card, String evaluate, Object value, boolean show) {
     selected.cssAddClass("z4drawingtoolpanel-" + card.toLowerCase() + "-selected");
 
     if (!$exists(this.cardPanels.$get(card))) {
@@ -226,7 +237,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
       }
 
       ((Z4AbstractValuePanel) this.cardPanels.$get(card)).addChangeListener(event -> {
-        // IMPOSTARE this.value
+        this.createValue();
         this.onchange();
       });
     }
@@ -236,7 +247,31 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     }
 
     if (show) {
+      ((JSRadioButton) this.radios.$get(card)).setSelected(true);
       this.cardLayout.show(this.cardPanel, card);
     }
+
+    return card;
+  }
+
+  @SuppressWarnings("unchecked")
+  private void createValue() {
+    Z4PointIterator pointIterator = ((Z4PointIteratorPanel<Z4PointIterator>) this.cardPanels.$get(this.selectedPointInteratorCard)).getValue();
+    Z4Painter painter = ((Z4PainterPanel<Z4Painter>) this.cardPanels.$get(this.selectedPainterCard)).getValue();
+
+    Z4SpatioTemporalColor spatioTemporalColor = null;
+    switch (this.selectedSpatioTemporalColorCard) {
+      case "COLOR":
+        spatioTemporalColor = Z4SpatioTemporalColor.fromColor(((Z4ColorPanel) this.cardPanels.$get(this.selectedSpatioTemporalColorCard)).getValue());
+        break;
+      case "GRADIENT-COLOR":
+        spatioTemporalColor = Z4SpatioTemporalColor.fromGradientColor(((Z4GradientColorPanel) this.cardPanels.$get(this.selectedSpatioTemporalColorCard)).getValue());
+        break;
+      case "BIGRADIENT-COLOR":
+        spatioTemporalColor = Z4SpatioTemporalColor.fromBiGradientColor(((Z4BiGradientColorPanel) this.cardPanels.$get(this.selectedSpatioTemporalColorCard)).getValue());
+        break;
+    }
+
+    this.value = new Z4DrawingTool(pointIterator, painter, spatioTemporalColor, new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.01, Z4Lighting.NONE));
   }
 }

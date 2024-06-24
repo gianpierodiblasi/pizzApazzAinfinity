@@ -19,6 +19,12 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
 
    cardPanels = new Array();
 
+   selectedPointInteratorCard = null;
+
+   selectedPainterCard = null;
+
+   selectedSpatioTemporalColorCard = null;
+
   constructor() {
     super();
     this.setLayout(new GridBagLayout());
@@ -84,33 +90,33 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
    setPointInterator() {
     new Array("z4drawingtoolpanel-stamper-selected", "z4drawingtoolpanel-tracer-selected", "z4drawingtoolpanel-airbrush-selected", "z4drawingtoolpanel-spirograph-selected").forEach(css => this.selectedPointInterator.cssRemoveClass(css));
     if (this.value.getPointIterator().getType() === Z4PointIteratorType.STAMPER) {
-      this.check(this.selectedPointInterator, "STAMPER", "new Z4StamperPanel()", this.value.getPointIterator(), false);
+      this.selectedPointInteratorCard = this.check(this.selectedPointInterator, "STAMPER", "new Z4StamperPanel()", this.value.getPointIterator(), true);
     } else if (this.value.getPointIterator().getType() === Z4PointIteratorType.TRACER) {
-      this.check(this.selectedPointInterator, "TRACER", "new Z4TracerPanel()", this.value.getPointIterator(), false);
+      this.selectedPointInteratorCard = this.check(this.selectedPointInterator, "TRACER", "new Z4TracerPanel()", this.value.getPointIterator(), true);
     } else if (this.value.getPointIterator().getType() === Z4PointIteratorType.AIRBRUSH) {
-      this.check(this.selectedPointInterator, "AIRBRUSH", "new Z4AirbrushPanel()", this.value.getPointIterator(), false);
+      this.selectedPointInteratorCard = this.check(this.selectedPointInterator, "AIRBRUSH", "new Z4AirbrushPanel()", this.value.getPointIterator(), true);
     } else if (this.value.getPointIterator().getType() === Z4PointIteratorType.SPIROGRAPH) {
-      this.check(this.selectedPointInterator, "SPIROGRAPH", "new Z4SpirographPanel()", this.value.getPointIterator(), false);
+      this.selectedPointInteratorCard = this.check(this.selectedPointInterator, "SPIROGRAPH", "new Z4SpirographPanel()", this.value.getPointIterator(), true);
     }
   }
 
    setPainter() {
     new Array("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-centered-figure-selected").forEach(css => this.selectedPainter.cssRemoveClass(css));
     if (this.value.getPainter().getType() === Z4PainterType.SHAPE_2D) {
-      this.check(this.selectedPainter, "SHAPE2D", "new Z4Shape2DPainterPanel()", this.value.getPainter(), false);
+      this.selectedPainterCard = this.check(this.selectedPainter, "SHAPE2D", "new Z4Shape2DPainterPanel()", this.value.getPainter(), false);
     } else if (this.value.getPainter().getType() === Z4PainterType.CENTERED_FIGURE) {
-      this.check(this.selectedPainter, "CENTERED-FIGURE", "new Z4CenteredFigurePainterPanel()", this.value.getPainter(), false);
+      this.selectedPainterCard = this.check(this.selectedPainter, "CENTERED-FIGURE", "new Z4CenteredFigurePainterPanel()", this.value.getPainter(), false);
     }
   }
 
    spatioTemporalColor() {
     new Array("z4drawingtoolpanel-color-selected", "z4drawingtoolpanel-gradient-color-selected", "z4drawingtoolpanel-bigradient-color-selected").forEach(css => this.selectedSpatioTemporalColor.cssRemoveClass(css));
     if (this.value.getSpatioTemporalColor().isColor()) {
-      this.check(this.selectedSpatioTemporalColor, "COLOR", "new Z4ColorPanel()", this.value.getSpatioTemporalColor().getColor(), false);
+      this.selectedSpatioTemporalColorCard = this.check(this.selectedSpatioTemporalColor, "COLOR", "new Z4ColorPanel()", this.value.getSpatioTemporalColor().getColor(), false);
     } else if (this.value.getSpatioTemporalColor().isGradientColor()) {
-      this.check(this.selectedSpatioTemporalColor, "GRADIENT-COLOR", "new Z4GradientColorPanel()", this.value.getSpatioTemporalColor().getGradientColor(), false);
+      this.selectedSpatioTemporalColorCard = this.check(this.selectedSpatioTemporalColor, "GRADIENT-COLOR", "new Z4GradientColorPanel()", this.value.getSpatioTemporalColor().getGradientColor(), false);
     } else if (this.value.getSpatioTemporalColor().isBiGradientColor()) {
-      this.check(this.selectedSpatioTemporalColor, "BIGRADIENT-COLOR", "new Z4BiGradientColorPanel()", this.value.getSpatioTemporalColor().getBiGradientColor(), false);
+      this.selectedSpatioTemporalColorCard = this.check(this.selectedSpatioTemporalColor, "BIGRADIENT-COLOR", "new Z4BiGradientColorPanel()", this.value.getSpatioTemporalColor().getBiGradientColor(), false);
     }
   }
 
@@ -123,7 +129,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
         (this.cardPanels[card]).getStyle().minWidth = "15rem";
       }
       (this.cardPanels[card]).addChangeListener(event => {
-        // IMPOSTARE this.value
+        this.createValue();
         this.onchange();
       });
     }
@@ -131,7 +137,27 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
       (this.cardPanels[card]).setValue(value);
     }
     if (show) {
+      (this.radios[card]).setSelected(true);
       this.cardLayout.show(this.cardPanel, card);
     }
+    return card;
+  }
+
+   createValue() {
+    let pointIterator = (this.cardPanels[this.selectedPointInteratorCard]).getValue();
+    let painter = (this.cardPanels[this.selectedPainterCard]).getValue();
+    let spatioTemporalColor = null;
+    switch(this.selectedSpatioTemporalColorCard) {
+      case "COLOR":
+        spatioTemporalColor = Z4SpatioTemporalColor.fromColor((this.cardPanels[this.selectedSpatioTemporalColorCard]).getValue());
+        break;
+      case "GRADIENT-COLOR":
+        spatioTemporalColor = Z4SpatioTemporalColor.fromGradientColor((this.cardPanels[this.selectedSpatioTemporalColorCard]).getValue());
+        break;
+      case "BIGRADIENT-COLOR":
+        spatioTemporalColor = Z4SpatioTemporalColor.fromBiGradientColor((this.cardPanels[this.selectedSpatioTemporalColorCard]).getValue());
+        break;
+    }
+    this.value = new Z4DrawingTool(pointIterator, painter, spatioTemporalColor, new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.01, Z4Lighting.NONE));
   }
 }
