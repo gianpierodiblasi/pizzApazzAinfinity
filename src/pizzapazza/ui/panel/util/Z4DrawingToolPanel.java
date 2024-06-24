@@ -82,11 +82,11 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     selected.add(this.selectedSpatioTemporalColor, null);
     this.selectedColorProgression.cssAddClass("z4drawingtoolpanel-selected");
     selected.add(this.selectedColorProgression, null);
-    this.add(selected, new GBC(0, 0));
+    this.add(selected, new GBC(0, 0).i(0, 0, 5, 0));
 
     JSTabbedPane pane = new JSTabbedPane();
     pane.setTabPlacement(JSTabbedPane.LEFT);
-    this.add(pane, new GBC(0, 1));
+    this.add(pane, new GBC(0, 1).wxy(1, 1).f(GBC.BOTH));
 
     JSPanel panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
@@ -99,7 +99,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     Z4UI.addVLine(panel, new GBC(1, 0).wy(1).a(GBC.NORTH).f(GBC.VERTICAL).i(1, 5, 1, 5));
 
     this.cardPanel.setLayout(this.cardLayout);
-    panel.add(this.cardPanel, new GBC(2, 0).a(GBC.NORTH));
+    panel.add(this.cardPanel, new GBC(2, 0).a(GBC.NORTHWEST).wx(1));
 
     ButtonGroup buttonGroup = new ButtonGroup();
     this.addRadioButton(panelRadio, buttonGroup, this.selectedPointInterator, "STAMPER", "new Z4StamperPanel()", "pointIterator", "1px");
