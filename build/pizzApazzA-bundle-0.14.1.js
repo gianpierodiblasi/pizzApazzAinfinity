@@ -8821,6 +8821,36 @@ class Z4Shape2DPainterPanel extends Z4PainterPanel {
   }
 }
 /**
+ * The panel to edit a Z4DrawingTool
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4DrawingToolPanel extends Z4AbstractValuePanel {
+
+  constructor() {
+    super();
+    this.cssAddClass("z4drawingtoolpanel");
+    let pane = new JSTabbedPane();
+    pane.setTabPlacement(JSTabbedPane.LEFT);
+    this.add(pane, null);
+    let panel = new JSPanel();
+    panel.setLayout(new GridBagLayout());
+    pane.addTab("POINT ITERATOR", panel);
+    panel = new JSPanel();
+    panel.setLayout(new GridBagLayout());
+    pane.addTab("PAINTER", panel);
+    panel = new JSPanel();
+    panel.setLayout(new GridBagLayout());
+    pane.addTab("SPATIO-TEMPORAL COLOR", panel);
+    panel = new JSPanel();
+    panel.setLayout(new GridBagLayout());
+    pane.addTab("TRY ME", panel);
+  }
+
+   setValue(value) {
+  }
+}
+/**
  * The panel to configure the export to file
  *
  * @author gianpiero.diblasi
@@ -9069,6 +9099,7 @@ class Z4FillingPanel extends JSPanel {
     this.cardFillerSelectors.forEach((card, index, array) => {
       let radio = new JSRadioButton();
       radio.setContentAreaFilled(false);
+      radio.getStyle().marginBottom = "1px";
       radio.setToggle();
       radio.setSelected(index === 0);
       radio.setIcon(new Z4EmptyImageProducer(index));

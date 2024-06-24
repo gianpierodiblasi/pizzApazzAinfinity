@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>TestPointIteratorPanel</title>
+    <title>Test Drawing Tool Panel</title>
     <link rel="icon" href="../../../../../image/app_icon/app_icon_36.png" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,10 +19,7 @@
     <script src="../../../../pizzApazzA-test.js"></script>
 
     <script>
-      window.onload = event => {
-        var name = new URLSearchParams(window.location.search).get("type");
-        eval("new TestPointIteratorPanel(new " + name.replace("Test", "Z4").replaceAll(" ", "") + "()).setTitle('" + name + "');");
-      };
+      window.onload = event => new TestDrawingToolPanel();
     </script>
   </head>
   <body>

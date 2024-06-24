@@ -121,6 +121,7 @@ public class Z4FillingPanel extends JSPanel {
     this.cardFillerSelectors.forEach((card, index, array) -> {
       JSRadioButton radio = new JSRadioButton();
       radio.setContentAreaFilled(false);
+      radio.getStyle().marginBottom = "1px";
       radio.setToggle();
       radio.setSelected(index == 0);
       radio.setIcon(new Z4EmptyImageProducer<>(index));
