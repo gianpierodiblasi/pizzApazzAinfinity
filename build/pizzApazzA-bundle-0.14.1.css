@@ -406,6 +406,39 @@
 }
 .z4drawingtoolpanel {
 }
+
+.z4drawingtoolpanel .z4drawingtoolpanel-selector img {
+  max-width: 25px;
+  max-height: 25px;
+}
+
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(1) img {
+  content: url(../image/iterator/stamper.svg);
+}
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(2) img {
+  content: url(../image/iterator/tracer.svg);
+}
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(3) img {
+  content: url(../image/iterator/airbrush.svg);
+}
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(4) img {
+  content: url(../image/iterator/spirograph.svg);
+}
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(5) img {
+  content: url(../image/painter/shape2d.svg);
+}
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(6) img {
+  content: url(../image/painter/centered_figure.png);
+}
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(7) img {
+  content: url(../image/filling/fill_flat.gif);
+}
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(8) img {
+  content: url(../image/filling/fill_linear.gif);
+}
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(9) img {
+  content: url(../image/filling/fill_bigradientcolor.gif);
+}
 .z4fancifulvaluepanel {
 }
 

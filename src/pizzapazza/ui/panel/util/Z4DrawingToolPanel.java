@@ -1,11 +1,21 @@
 package pizzapazza.ui.panel.util;
 
 import def.js.Array;
+import static def.js.Globals.eval;
+import javascript.awt.BoxLayout;
+import javascript.awt.CardLayout;
+import javascript.awt.GBC;
+import javascript.awt.GridBagLayout;
+import javascript.swing.ButtonGroup;
 import javascript.swing.JSPanel;
+import javascript.swing.JSRadioButton;
 import javascript.swing.JSTabbedPane;
 import pizzapazza.ui.panel.Z4AbstractValuePanel;
 import pizzapazza.util.Z4DrawingTool;
+import pizzapazza.util.Z4EmptyImageProducer;
 import pizzapazza.util.Z4Translations;
+import pizzapazza.util.Z4UI;
+import static simulation.js.$Globals.$exists;
 
 /**
  * The panel to edit a Z4DrawingTool
@@ -39,8 +49,66 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     pane.setTabPlacement(JSTabbedPane.LEFT);
     this.add(pane, null);
 
-    pane.addTab(Z4Translations.SETTINGS, new JSPanel());
+    JSPanel panel = new JSPanel();
+    panel.setLayout(new GridBagLayout());
+    pane.addTab(Z4Translations.SETTINGS, panel);
+
+    JSPanel panelRadio = new JSPanel();
+    panelRadio.setLayout(new BoxLayout(panelRadio, BoxLayout.Y_AXIS));
+    panel.add(panelRadio, new GBC(0, 0).i(0, 5, 0, 0));
+
+    Z4UI.addVLine(panel, new GBC(1, 0).wy(1).a(GBC.NORTH).f(GBC.VERTICAL).i(1, 5, 1, 5));
+
+    JSPanel panelCard = new JSPanel();
+    CardLayout cardLayout = new CardLayout(0, 0);
+    panelCard.setLayout(cardLayout);
+    panel.add(panelCard, new GBC(2, 0).a(GBC.NORTH));
+
+    ButtonGroup buttonGroup = new ButtonGroup();
+    this.addRadioButtons(this.cardPointIteratorSelectors, this.cardPointIteratorPanels, this.cardPointIteratorEvalPanels, panelRadio, panelCard, cardLayout, buttonGroup);
+    this.addRadioButtons(this.cardPainterSelectors, this.cardPainterPanels, this.cardPainterEvalPanels, panelRadio, panelCard, cardLayout, buttonGroup);
+    this.addRadioButtons(this.cardColorSelectors, this.cardColorPanels, this.cardColorEvalPanels, panelRadio, panelCard, cardLayout, buttonGroup);
+
     pane.addTab(Z4Translations.TRY_ME, new JSPanel());
+
+    JSPanel panelEval = eval(this.cardPointIteratorEvalPanels.$get(0));
+    this.cardPointIteratorPanels.$set(0, panelEval);
+    panelCard.add(panelEval, this.cardPointIteratorSelectors.$get(0));
+  }
+
+  @SuppressWarnings("StringEquality")
+  private void addRadioButtons(Array<String> cardSelector, Array<JSPanel> cardPanels, Array<String> cardEvalPanels, JSPanel panelRadio, JSPanel panelCard, CardLayout cardLayout, ButtonGroup buttonGroup) {
+    cardSelector.forEach((card, index, array) -> {
+      JSRadioButton radio = new JSRadioButton();
+      radio.setContentAreaFilled(false);
+      radio.getStyle().marginBottom = index == cardSelector.length - 1 ? "10px" : "1px";
+      radio.setToggle();
+      radio.cssAddClass("z4drawingtoolpanel-selector");
+      radio.setSelected(cardSelector == this.cardPointIteratorSelectors && index == 0);
+      radio.setIcon(new Z4EmptyImageProducer<>(index));
+      radio.addActionListener(event -> {
+////        this.selectedFillerSelector = card;
+////
+        if ($exists(cardPanels.$get(index))) {
+////          this.selectedFillerPanel = this.cardFillerPanels.$get(index);
+//
+          cardLayout.show(panelCard, card);
+        } else {
+//          //this.selectedFillerPanel = eval(cardEvalPanels.$get(index));
+          JSPanel panelEval = eval(cardEvalPanels.$get(index));
+          if (card == "COLOR") {
+            panelEval.getStyle().minWidth = "15rem";
+          }
+          cardPanels.$set(index, panelEval);
+          panelCard.add(panelEval, card);
+
+          cardLayout.show(panelCard, card);
+        }
+      });
+
+      buttonGroup.add(radio);
+      panelRadio.add(radio, null);
+    });
   }
 
   @Override
