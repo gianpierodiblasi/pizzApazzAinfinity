@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -188,7 +188,8 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(pizzapazza.math.Z4Rotation)">Z4Spirograph</a></span>&#8203;(<a href="../math/Z4Rotation.html" title="class in pizzapazza.math">Z4Rotation</a>&nbsp;rotation)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(boolean,pizzapazza.math.Z4Rotation)">Z4Spirograph</a></span>&#8203;(boolean&nbsp;drawWhileMoving,
+            <a href="../math/Z4Rotation.html" title="class in pizzapazza.math">Z4Rotation</a>&nbsp;rotation)</code></th>
 <td class="colLast">
 <div class="block">Creates the object</div>
 </td>
@@ -262,18 +263,32 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isDrawWhileMoving()">isDrawWhileMoving</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Checks if this painter has to draw while moving</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInfinitePointGenerator()">isInfinitePointGenerator</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Checks if this Z4PointIterator is an infinite point generator (for example
  an airbrush)</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#next(pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">next</a></span>&#8203;(<a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;color,
     <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression)</code></th>
 <td class="colLast">
 <div class="block">Returns the next value</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>simulation.js.$Object</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toJSON()">toJSON</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns this object as a JSON object</div>
 </td>
 </tr>
 </table>
@@ -282,7 +297,7 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;pizzapazza.iterator.<a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a></h3>
-<code><a href="Z4PointIterator.html#getRotation()">getRotation</a>, <a href="Z4PointIterator.html#toJSON()">toJSON</a></code></li>
+<code><a href="Z4PointIterator.html#getRotation()">getRotation</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -307,16 +322,18 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(pizzapazza.math.Z4Rotation)">
+<a id="&lt;init&gt;(boolean,pizzapazza.math.Z4Rotation)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Z4Spirograph</h4>
-<pre>public&nbsp;Z4Spirograph&#8203;(<a href="../math/Z4Rotation.html" title="class in pizzapazza.math">Z4Rotation</a>&nbsp;rotation)</pre>
+<pre>public&nbsp;Z4Spirograph&#8203;(boolean&nbsp;drawWhileMoving,
+                    <a href="../math/Z4Rotation.html" title="class in pizzapazza.math">Z4Rotation</a>&nbsp;rotation)</pre>
 <div class="block">Creates the object</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>drawWhileMoving</code> - true to draw while moving, false otherwise</dd>
 <dd><code>rotation</code> - The rotation</dd>
 </dl>
 </li>
@@ -345,6 +362,20 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <dd><code><a href="Z4PointIterator.html#getType()">getType</a></code>&nbsp;in class&nbsp;<code><a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The point iterator type</dd>
+</dl>
+</li>
+</ul>
+<a id="isDrawWhileMoving()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isDrawWhileMoving</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isDrawWhileMoving()</pre>
+<div class="block">Checks if this painter has to draw while moving</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if this painter has to draw while moving, false otherwise</dd>
 </dl>
 </li>
 </ul>
@@ -473,6 +504,25 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <dd><code>progression</code> - The color progression to use, it can be null</dd>
 <dd><code>width</code> - The width</dd>
 <dd><code>height</code> - The height</dd>
+</dl>
+</li>
+</ul>
+<a id="toJSON()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>toJSON</h4>
+<pre class="methodSignature">public&nbsp;simulation.js.$Object&nbsp;toJSON()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../util/Z4JSONable.html#toJSON()">Z4JSONable</a></code></span></div>
+<div class="block">Returns this object as a JSON object</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../util/Z4JSONable.html#toJSON()">toJSON</a></code>&nbsp;in interface&nbsp;<code><a href="../util/Z4JSONable.html" title="interface in pizzapazza.util">Z4JSONable</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="Z4PointIterator.html#toJSON()">toJSON</a></code>&nbsp;in class&nbsp;<code><a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>This object as a JSON object</dd>
 </dl>
 </li>
 </ul>

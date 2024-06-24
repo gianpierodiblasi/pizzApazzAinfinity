@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
+var data = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -171,7 +171,7 @@ extends <a href="Z4Painter.html" title="class in pizzapazza.painter">Z4Painter</
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(pizzapazza.painter.Z4CenteredFigurePainterType,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4Whirlpool,int)">Z4CenteredFigurePainter</a></span>&#8203;(<a href="Z4CenteredFigurePainterType.html" title="enum in pizzapazza.painter">Z4CenteredFigurePainterType</a>&nbsp;centeredFigurePainterType,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(pizzapazza.painter.Z4CenteredFigurePainterType,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4Whirlpool,int,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,javascript.awt.Color,pizzapazza.math.Z4FancifulValue,javascript.awt.Color)">Z4CenteredFigurePainter</a></span>&#8203;(<a href="Z4CenteredFigurePainterType.html" title="enum in pizzapazza.painter">Z4CenteredFigurePainterType</a>&nbsp;centeredFigurePainterType,
                        <a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;size,
                        <a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;angle1,
                        <a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;angle2,
@@ -179,7 +179,12 @@ extends <a href="Z4Painter.html" title="class in pizzapazza.painter">Z4Painter</
                        <a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;multiplicity,
                        <a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;hole,
                        <a href="../math/Z4Whirlpool.html" title="class in pizzapazza.math">Z4Whirlpool</a>&nbsp;whirlpool,
-                       int&nbsp;cover)</code></th>
+                       int&nbsp;cover,
+                       <a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;shadowShiftX,
+                       <a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;shadowShiftY,
+                       javascript.awt.Color&nbsp;shadowColor,
+                       <a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;borderSize,
+                       javascript.awt.Color&nbsp;borderColor)</code></th>
 <td class="colLast">
 <div class="block">Creates the object</div>
 </td>
@@ -234,62 +239,97 @@ extends <a href="Z4Painter.html" title="class in pizzapazza.painter">Z4Painter</
 </td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>javascript.awt.Color</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBorderColor()">getBorderColor</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the border color</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBorderSize()">getBorderSize</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the border size</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="Z4CenteredFigurePainterType.html" title="enum in pizzapazza.painter">Z4CenteredFigurePainterType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCenteredFigurePainterType()">getCenteredFigurePainterType</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the type of Z4CenteredFigurePainter</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCover()">getCover</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the cover (in the range [1,100])</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getHole()">getHole</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the hole</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMultiplicity()">getMultiplicity</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the multiplicity</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>javascript.awt.Color</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getShadowColor()">getShadowColor</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the shadow color</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code><a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getShadowShiftX()">getShadowShiftX</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the X shadow shift</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code><a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getShadowShiftY()">getShadowShiftY</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the Y shadow shift</div>
+</td>
+</tr>
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSize()">getSize</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the size</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTension()">getTension</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the tension</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="Z4PainterType.html" title="enum in pizzapazza.painter">Z4PainterType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getType()">getType</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the painter type</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code><a href="../math/Z4Whirlpool.html" title="class in pizzapazza.math">Z4Whirlpool</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getWhirlpool()">getWhirlpool</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the whirlpool</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>simulation.js.$Object</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toJSON()">toJSON</a></span>()</code></th>
 <td class="colLast">
@@ -320,7 +360,7 @@ extends <a href="Z4Painter.html" title="class in pizzapazza.painter">Z4Painter</
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(pizzapazza.painter.Z4CenteredFigurePainterType,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4Whirlpool,int)">
+<a id="&lt;init&gt;(pizzapazza.painter.Z4CenteredFigurePainterType,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4Whirlpool,int,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,javascript.awt.Color,pizzapazza.math.Z4FancifulValue,javascript.awt.Color)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -334,7 +374,12 @@ extends <a href="Z4Painter.html" title="class in pizzapazza.painter">Z4Painter</
                                <a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;multiplicity,
                                <a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;hole,
                                <a href="../math/Z4Whirlpool.html" title="class in pizzapazza.math">Z4Whirlpool</a>&nbsp;whirlpool,
-                               int&nbsp;cover)</pre>
+                               int&nbsp;cover,
+                               <a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;shadowShiftX,
+                               <a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;shadowShiftY,
+                               javascript.awt.Color&nbsp;shadowColor,
+                               <a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;borderSize,
+                               javascript.awt.Color&nbsp;borderColor)</pre>
 <div class="block">Creates the object</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -347,6 +392,11 @@ extends <a href="Z4Painter.html" title="class in pizzapazza.painter">Z4Painter</
 <dd><code>hole</code> - The hole</dd>
 <dd><code>whirlpool</code> - The whirlpool</dd>
 <dd><code>cover</code> - The cover (in the range [1,100])</dd>
+<dd><code>shadowShiftX</code> - The X shadow shift</dd>
+<dd><code>shadowShiftY</code> - The Y shadow shift</dd>
+<dd><code>shadowColor</code> - The shadow color</dd>
+<dd><code>borderSize</code> - The border size</dd>
+<dd><code>borderColor</code> - The border color</dd>
 </dl>
 </li>
 </ul>
@@ -500,6 +550,76 @@ extends <a href="Z4Painter.html" title="class in pizzapazza.painter">Z4Painter</
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The cover (in the range [1,100])</dd>
+</dl>
+</li>
+</ul>
+<a id="getShadowShiftX()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getShadowShiftX</h4>
+<pre class="methodSignature">public&nbsp;<a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;getShadowShiftX()</pre>
+<div class="block">Returns the X shadow shift</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The X shadow shift</dd>
+</dl>
+</li>
+</ul>
+<a id="getShadowShiftY()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getShadowShiftY</h4>
+<pre class="methodSignature">public&nbsp;<a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;getShadowShiftY()</pre>
+<div class="block">Returns the Y shadow shift</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The Y shadow shift</dd>
+</dl>
+</li>
+</ul>
+<a id="getShadowColor()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getShadowColor</h4>
+<pre class="methodSignature">public&nbsp;javascript.awt.Color&nbsp;getShadowColor()</pre>
+<div class="block">Returns the shadow color</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The shadow color</dd>
+</dl>
+</li>
+</ul>
+<a id="getBorderSize()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBorderSize</h4>
+<pre class="methodSignature">public&nbsp;<a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;getBorderSize()</pre>
+<div class="block">Returns the border size</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The border size</dd>
+</dl>
+</li>
+</ul>
+<a id="getBorderColor()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBorderColor</h4>
+<pre class="methodSignature">public&nbsp;javascript.awt.Color&nbsp;getBorderColor()</pre>
+<div class="block">Returns the border color</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The border color</dd>
 </dl>
 </li>
 </ul>

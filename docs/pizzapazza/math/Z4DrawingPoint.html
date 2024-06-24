@@ -157,13 +157,13 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#drawBounds">drawBounds</a></span></code></th>
+<td class="colFirst"><code>double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#intensity">intensity</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>double</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#intensity">intensity</a></span></code></th>
+<td class="colFirst"><code><a href="Z4DrawingPointIntent.html" title="enum in pizzapazza.math">Z4DrawingPointIntent</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#intent">intent</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -204,10 +204,10 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(pizzapazza.math.Z4Vector,double,double,boolean,pizzapazza.math.Z4Sign,boolean)">Z4DrawingPoint</a></span>&#8203;(<a href="Z4Vector.html" title="class in pizzapazza.math">Z4Vector</a>&nbsp;z4Vector,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(pizzapazza.math.Z4Vector,double,double,pizzapazza.math.Z4DrawingPointIntent,pizzapazza.math.Z4Sign,boolean)">Z4DrawingPoint</a></span>&#8203;(<a href="Z4Vector.html" title="class in pizzapazza.math">Z4Vector</a>&nbsp;z4Vector,
               double&nbsp;intensity,
               double&nbsp;temporalPosition,
-              boolean&nbsp;drawBounds,
+              <a href="Z4DrawingPointIntent.html" title="enum in pizzapazza.math">Z4DrawingPointIntent</a>&nbsp;intent,
               <a href="Z4Sign.html" title="class in pizzapazza.math">Z4Sign</a>&nbsp;side,
               boolean&nbsp;useVectorModuleAsSize)</code></th>
 <td class="colLast">
@@ -275,13 +275,13 @@ extends java.lang.Object</pre>
 <pre>public final&nbsp;double temporalPosition</pre>
 </li>
 </ul>
-<a id="drawBounds">
+<a id="intent">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>drawBounds</h4>
-<pre>public final&nbsp;boolean drawBounds</pre>
+<h4>intent</h4>
+<pre>public final&nbsp;<a href="Z4DrawingPointIntent.html" title="enum in pizzapazza.math">Z4DrawingPointIntent</a> intent</pre>
 </li>
 </ul>
 <a id="side">
@@ -312,7 +312,7 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(pizzapazza.math.Z4Vector,double,double,boolean,pizzapazza.math.Z4Sign,boolean)">
+<a id="&lt;init&gt;(pizzapazza.math.Z4Vector,double,double,pizzapazza.math.Z4DrawingPointIntent,pizzapazza.math.Z4Sign,boolean)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -321,7 +321,7 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;Z4DrawingPoint&#8203;(<a href="Z4Vector.html" title="class in pizzapazza.math">Z4Vector</a>&nbsp;z4Vector,
                       double&nbsp;intensity,
                       double&nbsp;temporalPosition,
-                      boolean&nbsp;drawBounds,
+                      <a href="Z4DrawingPointIntent.html" title="enum in pizzapazza.math">Z4DrawingPointIntent</a>&nbsp;intent,
                       <a href="Z4Sign.html" title="class in pizzapazza.math">Z4Sign</a>&nbsp;side,
                       boolean&nbsp;useVectorModuleAsSize)</pre>
 <div class="block">Creates the object</div>
@@ -331,8 +331,7 @@ extends java.lang.Object</pre>
 <dd><code>intensity</code> - The intensity of the drawing (in the range [0,1])</dd>
 <dd><code>temporalPosition</code> - The temporal position to use in the color object
  (in the range [0,1]), -1 if this point has no temporal position</dd>
-<dd><code>drawBounds</code> - true if this point has to be used to draw bounds, false
- otherwise (this point has to be used to draw real objects)</dd>
+<dd><code>intent</code> - the intent of this point</dd>
 <dd><code>side</code> - The side</dd>
 <dd><code>useVectorModuleAsSize</code> - true if the vector module of this point has to
  be used has size, false otherwise</dd>
