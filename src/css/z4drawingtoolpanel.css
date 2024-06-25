@@ -36,3 +36,28 @@
 .z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(10) img {
   content: url(../image/color/z4colorprogressionbehavior_spatial.svg);
 }
+
+.z4drawingtoolpanel-color-progression-spatial-selected {
+  content: url(../image/color/z4colorprogressionbehavior_spatial.svg);
+}
+.z4drawingtoolpanel-color-progression-temporal-selected {
+  content: url(../image/color/z4colorprogressionbehavior_temporal.svg);
+}
+.z4drawingtoolpanel-color-progression-relativetopath-selected {
+  content: url(../image/color/z4colorprogressionbehavior_relativetopath.svg);
+}
+.z4drawingtoolpanel-color-progression-random-selected {
+  content: url(../image/color/z4colorprogressionbehavior_random.svg);
+}
+.z4drawingtoolpanel-color-progression-airbrush-spatial-selected {
+  content: url(../image/color/z4colorprogressionbehavior_airbrush_spatial.svg);
+}
+.z4drawingtoolpanel-color-progression-airbrush-temporal-selected {
+  content: url(../image/color/z4colorprogressionbehavior_airbrush_temporal.svg);
+}
+.z4drawingtoolpanel-color-progression-airbrush-relativetopath-selected {
+  content: url(../image/color/z4colorprogressionbehavior_airbrush_relativetopath.svg);
+}
+.z4drawingtoolpanel-color-progression-airbrush-random-selected {
+  content: url(../image/color/z4colorprogressionbehavior_airbrush_random.svg);
+}
