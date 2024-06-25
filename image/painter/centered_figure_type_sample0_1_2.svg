@@ -1,10 +1,16 @@
 <?xml version="1.0"?>
 <svg width="96" height="96" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .centered_figure_sample_text {
+      font-family: arial;
+      font-size: 1.3rem;
+    }
+  </style>
   <g>
-    <path stroke="#007fff" d="m24,48 C96,0 96,96 24,48" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" fill="none"/>
-    <line stroke="#ff0000" x1="24" y1="48" x2="90" y2="4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  fill="none"/>
+    <path stroke="#007fff" d="m24,48 C96,-48 96,144 24,48" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" fill="none"/>
+    <line stroke="#ff0000" x1="24" y1="48" x2="96" y2="-48" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  fill="none"/>
     <line stroke="#ff0000" x1="24" y1="48" x2="90" y2="48" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  fill="none"/>
-    <path stroke="#ff0000" d="m48,48 A 30 30 0 0 0 45 35" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill="none"/>
-    <text x="50" y="44">&#x03B1;1</text>
+    <path stroke="#ff0000" d="m48,48 A 30 30 0 0 0 39 30" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill="none"/>
+    <text x="50" y="44" class="centered_figure_sample_text">&#x03B1;1</text>
   </g>
 </svg>

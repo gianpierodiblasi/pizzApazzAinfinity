@@ -88,6 +88,6 @@ class TestColorProgressingPanel extends JSFrame {
   }
 
    updatePanels() {
-    this.panels.forEach(panel => panel.setProgressionSettings(this.type, this.isColor, this.isGradientColor, this.isBiGradientColor));
+    this.panels.forEach(panel => panel.setProgressionSettings(this.type, new Object(), this.isColor, this.isGradientColor, this.isBiGradientColor));
   }
 }

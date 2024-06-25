@@ -20,7 +20,9 @@ import pizzapazza.ui.panel.Z4AbstractValuePanel;
 import pizzapazza.util.Z4EmptyImageProducer;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
+import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
+import simulation.js.$Object;
 
 /**
  * The panel to manage the progression of a color
@@ -100,7 +102,7 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
     });
 
     this.setValue(new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.1, Z4Lighting.NONE));
-    this.setProgressionSettings(Z4PointIteratorType.STAMPER, true, false, false);
+    this.setProgressionSettings(Z4PointIteratorType.STAMPER, null, true, false, false);
   }
 
   private void addRadio(Z4ColorProgressionBehavior behavior, JSPanel panel, ButtonGroup buttonGroup, String border) {
@@ -206,13 +208,14 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
    * Sets the progression settings
    *
    * @param type The point iterator type
+   * @param options Options relative to the point iterator
    * @param isColor true if the color is a flat color, false otherwise
    * @param isGradientColor true if the color is a gradient color, false
    * otherwise
    * @param isBiGradientColor true if the color is a bigradient color, false
    * otherwise
    */
-  public void setProgressionSettings(Z4PointIteratorType type, boolean isColor, boolean isGradientColor, boolean isBiGradientColor) {
+  public void setProgressionSettings(Z4PointIteratorType type, $Object options, boolean isColor, boolean isGradientColor, boolean isBiGradientColor) {
     if (type == Z4PointIteratorType.AIRBRUSH) {
       Object.keys(this.radios).forEach(key -> ((JSComponent) this.radios.$get(key)).cssAddClass("z4colorprogressionpanel-airbrush-radio"));
     } else {
@@ -239,7 +242,7 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
         radio.getStyle().visibility = "visible";
       });
 
-      if (type == Z4PointIteratorType.STAMPER) {
+      if (type == Z4PointIteratorType.STAMPER || (type == Z4PointIteratorType.SPIROGRAPH && !$exists(options.$get("drawWhileMoving")))) {
         JSRadioButton relative = this.radios.$get("" + Z4ColorProgressionBehavior.RELATIVE_TO_PATH);
         relative.setEnabled(false);
         relative.setContentAreaFilled(false);
@@ -263,12 +266,14 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
       spatial.setContentAreaFilled(false);
 
       JSRadioButton relative = this.radios.$get("" + Z4ColorProgressionBehavior.RELATIVE_TO_PATH);
-      if (type == Z4PointIteratorType.STAMPER) {
+      if (type == Z4PointIteratorType.STAMPER || (type == Z4PointIteratorType.SPIROGRAPH && $exists(options.$get("drawWhileMoving")))) {
         relative.setEnabled(false);
         relative.setContentAreaFilled(false);
       }
 
-      if (spatial.isSelected() || (type == Z4PointIteratorType.STAMPER && relative.isSelected())) {
+      if (spatial.isSelected()
+              || (type == Z4PointIteratorType.STAMPER && relative.isSelected())
+              || (type == Z4PointIteratorType.SPIROGRAPH && !$exists(options.$get("drawWhileMoving")) && relative.isSelected())) {
         ((JSRadioButton) this.radios.$get("" + Z4ColorProgressionBehavior.TEMPORAL)).setSelected(true);
         ((JSRadioButton) this.radios.$get("" + Z4ColorProgressionBehavior.TEMPORAL)).setContentAreaFilled(true);
         this.temporalStepSpinner.setEnabled(this.enabled);

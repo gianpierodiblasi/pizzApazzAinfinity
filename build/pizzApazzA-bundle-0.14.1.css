@@ -317,8 +317,6 @@
 }
 
 .z4centeredfigurepainterpanel .z4centeredfigurepainterpanel-radio img {
-  width: 48px;
-  height: 48px;
 }
 .z4centeredfigurepainterpanel .z4centeredfigurepainterpanel-radio:nth-child(1) img {
   content: url(../image/painter/centered_figure_type0.png);
@@ -340,8 +338,7 @@
 }
 
 .z4centeredfigurepainterpanel .z4centeredfigurepainterpanel-sample {
-  width: 66px;
-  height: 66px;
+  height: 50px;
 }
 .z4centeredfigurepainterpanel .z4centeredfigurepainterpanel-sample.z4centeredfigurepainterpanel-sample0_1_2 {
   content: url(../image/painter/centered_figure_type_sample0_1_2.svg);

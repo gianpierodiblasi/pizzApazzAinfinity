@@ -14,6 +14,7 @@ import pizzapazza.color.Z4ColorProgression;
 import pizzapazza.color.Z4ColorProgressionBehavior;
 import pizzapazza.color.Z4Lighting;
 import pizzapazza.iterator.Z4PointIteratorType;
+import simulation.js.$Object;
 
 /**
  *
@@ -82,7 +83,7 @@ public class TestColorProgressingPanel extends JSFrame {
     });
     p.add(lighted, new GBC(0, 4).wx(1).i(5, 5, 5, 5));
     this.panels.push(lighted);
-    
+
     this.getContentPane().add(p, BorderLayout.NORTH);
   }
 
@@ -115,6 +116,6 @@ public class TestColorProgressingPanel extends JSFrame {
   }
 
   private void updatePanels() {
-    this.panels.forEach(panel -> panel.setProgressionSettings(this.type, this.isColor, this.isGradientColor, this.isBiGradientColor));
+    this.panels.forEach(panel -> panel.setProgressionSettings(this.type, new $Object(), this.isColor, this.isGradientColor, this.isBiGradientColor));
   }
 }
