@@ -317,28 +317,30 @@
 }
 
 .z4centeredfigurepainterpanel .z4centeredfigurepainterpanel-radio img {
-}
-.z4centeredfigurepainterpanel .z4centeredfigurepainterpanel-radio:nth-child(1) img {
-  content: url(../image/painter/centered_figure_type0.png);
+  height: 26px;
 }
 .z4centeredfigurepainterpanel .z4centeredfigurepainterpanel-radio:nth-child(2) img {
-  content: url(../image/painter/centered_figure_type1.png);
+  content: url(../image/painter/centered_figure_type0.png);
 }
 .z4centeredfigurepainterpanel .z4centeredfigurepainterpanel-radio:nth-child(3) img {
-  content: url(../image/painter/centered_figure_type2.png);
+  content: url(../image/painter/centered_figure_type1.png);
 }
 .z4centeredfigurepainterpanel .z4centeredfigurepainterpanel-radio:nth-child(4) img {
-  content: url(../image/painter/centered_figure_type3.png);
+  content: url(../image/painter/centered_figure_type2.png);
 }
 .z4centeredfigurepainterpanel .z4centeredfigurepainterpanel-radio:nth-child(5) img {
-  content: url(../image/painter/centered_figure_type4.png);
+  content: url(../image/painter/centered_figure_type3.png);
 }
 .z4centeredfigurepainterpanel .z4centeredfigurepainterpanel-radio:nth-child(6) img {
+  content: url(../image/painter/centered_figure_type4.png);
+}
+.z4centeredfigurepainterpanel .z4centeredfigurepainterpanel-radio:nth-child(7) img {
   content: url(../image/painter/centered_figure_type5.png);
 }
 
 .z4centeredfigurepainterpanel .z4centeredfigurepainterpanel-sample {
-  height: 50px;
+  align-self: center;
+  height: 44px;
 }
 .z4centeredfigurepainterpanel .z4centeredfigurepainterpanel-sample.z4centeredfigurepainterpanel-sample0_1_2 {
   content: url(../image/painter/centered_figure_type_sample0_1_2.svg);

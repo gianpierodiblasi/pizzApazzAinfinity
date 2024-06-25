@@ -13,13 +13,21 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
 
    selectedColorProgression = new JSComponent(document.createElement("img"));
 
-   transparent = new JSButton();
+   transparent1 = new JSButton();
 
-   swatchesPanel = new JSColorMiniSwatchesPanel();
+   swatchesPanel1 = new JSColorMiniSwatchesPanel();
 
-   preview = new JSComponent(document.createElement("canvas"));
+   preview1 = new JSComponent(document.createElement("canvas"));
 
-   ctx = this.preview.invoke("getContext('2d')");
+   ctx1 = this.preview1.invoke("getContext('2d')");
+
+   transparent2 = new JSButton();
+
+   swatchesPanel2 = new JSColorMiniSwatchesPanel();
+
+   preview2 = new JSComponent(document.createElement("canvas"));
+
+   ctx2 = this.preview2.invoke("getContext('2d')");
 
    radios = new Array();
 
@@ -78,21 +86,21 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     this.addRadioButton(panelRadio, buttonGroup, "COLOR-PROGRESSION", "0px");
     let colors = new JSPanel();
     panel.add(colors, new GBC(2, 1));
-    this.transparent.addActionListener(event => {
+    this.transparent1.addActionListener(event => {
       this.previewColor = null;
       this.drawPreview();
     });
-    this.transparent.cssAddClass("z4drawingtoolpanel-transparent");
-    colors.add(this.transparent, null);
-    this.swatchesPanel.addActionListener(event => {
-      this.previewColor = this.swatchesPanel.getSelectedColor();
+    this.transparent1.cssAddClass("z4drawingtoolpanel-transparent");
+    colors.add(this.transparent1, null);
+    this.swatchesPanel1.addActionListener(event => {
+      this.previewColor = this.swatchesPanel1.getSelectedColor();
       this.drawPreview();
     });
-    colors.add(this.swatchesPanel, null);
-    this.preview.setProperty("width", "500");
-    this.preview.setProperty("height", "300");
-    this.preview.cssAddClass("z4drawingtoolpanel-preview");
-    panel.add(this.preview, new GBC(2, 2).i(5, 0, 0, 0));
+    colors.add(this.swatchesPanel1, null);
+    this.preview1.setProperty("width", "500");
+    this.preview1.setProperty("height", "300");
+    this.preview1.cssAddClass("z4drawingtoolpanel-preview");
+    panel.add(this.preview1, new GBC(2, 2).i(5, 0, 0, 0));
     pane.addTab(Z4Translations.TRY_ME, new JSPanel());
     this.setValue(new Z4DrawingTool(new Z4Stamper(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.RELATIVE_TO_PATH, false)), new Z4Shape2DPainter(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), false, false, 3, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0)), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)), new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.01, Z4Lighting.NONE)));
   }
@@ -297,11 +305,11 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
   }
 
    drawPreview() {
-    this.ctx.clearRect(0, 0, 500, 300);
+    this.ctx1.clearRect(0, 0, 500, 300);
     if (this.previewColor) {
-      this.ctx.fillStyle = Z4Constants.getStyle(this.previewColor.getRGBA_HEX());
-      this.ctx.fillRect(0, 0, 500, 300);
+      this.ctx1.fillStyle = Z4Constants.getStyle(this.previewColor.getRGBA_HEX());
+      this.ctx1.fillRect(0, 0, 500, 300);
     }
-    this.value.getPointIterator().drawDemo(this.ctx, this.value.getPainter(), this.value.getSpatioTemporalColor(), this.value.getProgression(), 500, 300);
+    this.value.getPointIterator().drawDemo(this.ctx1, this.value.getPainter(), this.value.getSpatioTemporalColor(), this.value.getProgression(), 500, 300);
   }
 }

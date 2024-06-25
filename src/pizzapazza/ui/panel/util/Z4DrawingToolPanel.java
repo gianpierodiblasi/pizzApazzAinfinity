@@ -74,10 +74,15 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
   private final JSComponent selectedSpatioTemporalColor = new JSComponent(document.createElement("img"));
   private final JSComponent selectedColorProgression = new JSComponent(document.createElement("img"));
 
-  private final JSButton transparent = new JSButton();
-  private final JSColorMiniSwatchesPanel swatchesPanel = new JSColorMiniSwatchesPanel();
-  private final JSComponent preview = new JSComponent(document.createElement("canvas"));
-  private final $CanvasRenderingContext2D ctx = this.preview.invoke("getContext('2d')");
+  private final JSButton transparent1 = new JSButton();
+  private final JSColorMiniSwatchesPanel swatchesPanel1 = new JSColorMiniSwatchesPanel();
+  private final JSComponent preview1 = new JSComponent(document.createElement("canvas"));
+  private final $CanvasRenderingContext2D ctx1 = this.preview1.invoke("getContext('2d')");
+
+  private final JSButton transparent2 = new JSButton();
+  private final JSColorMiniSwatchesPanel swatchesPanel2 = new JSColorMiniSwatchesPanel();
+  private final JSComponent preview2 = new JSComponent(document.createElement("canvas"));
+  private final $CanvasRenderingContext2D ctx2 = this.preview2.invoke("getContext('2d')");
 
   private final Array<JSRadioButton> radios = new Array<>();
 
@@ -123,7 +128,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     Z4UI.addVLine(panel, new GBC(1, 0).h(3).wy(1).a(GBC.NORTH).f(GBC.VERTICAL).i(1, 5, 1, 5));
 
     this.cardPanel.setLayout(this.cardLayout);
-    panel.add(this.cardPanel, new GBC(2, 0).a(GBC.NORTH).wxy(1,1));
+    panel.add(this.cardPanel, new GBC(2, 0).a(GBC.NORTH).wxy(1, 1));
 
     ButtonGroup buttonGroup = new ButtonGroup();
     this.addRadioButton(panelRadio, buttonGroup, "STAMPER", "1px");
@@ -143,23 +148,23 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     JSPanel colors = new JSPanel();
     panel.add(colors, new GBC(2, 1));
 
-    this.transparent.addActionListener(event -> {
+    this.transparent1.addActionListener(event -> {
       this.previewColor = null;
       this.drawPreview();
     });
-    this.transparent.cssAddClass("z4drawingtoolpanel-transparent");
-    colors.add(this.transparent, null);
+    this.transparent1.cssAddClass("z4drawingtoolpanel-transparent");
+    colors.add(this.transparent1, null);
 
-    this.swatchesPanel.addActionListener(event -> {
-      this.previewColor = this.swatchesPanel.getSelectedColor();
+    this.swatchesPanel1.addActionListener(event -> {
+      this.previewColor = this.swatchesPanel1.getSelectedColor();
       this.drawPreview();
     });
-    colors.add(this.swatchesPanel, null);
+    colors.add(this.swatchesPanel1, null);
 
-    this.preview.setProperty("width", "500");
-    this.preview.setProperty("height", "300");
-    this.preview.cssAddClass("z4drawingtoolpanel-preview");
-    panel.add(this.preview, new GBC(2, 2).i(5, 0, 0, 0));
+    this.preview1.setProperty("width", "500");
+    this.preview1.setProperty("height", "300");
+    this.preview1.cssAddClass("z4drawingtoolpanel-preview");
+    panel.add(this.preview1, new GBC(2, 2).i(5, 0, 0, 0));
 
     pane.addTab(Z4Translations.TRY_ME, new JSPanel());
 
@@ -448,12 +453,12 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
   }
 
   private void drawPreview() {
-    this.ctx.clearRect(0, 0, 500, 300);
+    this.ctx1.clearRect(0, 0, 500, 300);
     if ($exists(this.previewColor)) {
-      this.ctx.fillStyle = Z4Constants.$getStyle(this.previewColor.getRGBA_HEX());
-      this.ctx.fillRect(0, 0, 500, 300);
+      this.ctx1.fillStyle = Z4Constants.$getStyle(this.previewColor.getRGBA_HEX());
+      this.ctx1.fillRect(0, 0, 500, 300);
     }
 
-    this.value.getPointIterator().drawDemo(this.ctx, this.value.getPainter(), this.value.getSpatioTemporalColor(), this.value.getProgression(), 500, 300);
+    this.value.getPointIterator().drawDemo(this.ctx1, this.value.getPainter(), this.value.getSpatioTemporalColor(), this.value.getProgression(), 500, 300);
   }
 }
