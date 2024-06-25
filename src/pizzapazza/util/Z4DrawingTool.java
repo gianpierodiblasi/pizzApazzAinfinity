@@ -13,6 +13,7 @@ import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4Nextable;
 import pizzapazza.painter.Z4ArrowPainter;
 import pizzapazza.painter.Z4CenteredFigurePainter;
+import pizzapazza.painter.Z4NaturalFigurePainter;
 import pizzapazza.painter.Z4Painter;
 import pizzapazza.painter.Z4Shape2DPainter;
 import simulation.dom.$CanvasRenderingContext2D;
@@ -119,7 +120,7 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
   public int getNextCountOnSTOP() {
     return this.pointIterator.getNextCountOnSTOP();
   }
-  
+
   /**
    * Checks if the Z4PointIterator is an infinite point generator (for example
    * an airbrush)
@@ -190,6 +191,9 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
         break;
       case "CENTERED_FIGURE":
         painter = Z4CenteredFigurePainter.fromJSON(painterJSON);
+        break;
+      case "NATURAL_FIGURE":
+        painter = Z4NaturalFigurePainter.fromJSON(painterJSON);
         break;
     }
 

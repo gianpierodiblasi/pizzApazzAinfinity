@@ -1745,6 +1745,7 @@ class Z4PainterType {
   static ARROW = 'ARROW';
   static SHAPE_2D = 'SHAPE_2D';
   static CENTERED_FIGURE = 'CENTERED_FIGURE';
+  static NATURAL_FIGURE = 'NATURAL_FIGURE';
 }
 /**
  * The canvas
@@ -11343,6 +11344,9 @@ class Z4DrawingTool extends Z4Nextable {
       case "CENTERED_FIGURE":
         painter = Z4CenteredFigurePainter.fromJSON(painterJSON);
         break;
+      case "NATURAL_FIGURE":
+        painter = Z4NaturalFigurePainter.fromJSON(painterJSON);
+        break;
     }
     return new Z4DrawingTool(pointIterator, painter, Z4SpatioTemporalColor.fromJSON(json["spatioTemporalColor"]), Z4ColorProgression.fromJSON(json["progression"]));
   }
@@ -13296,6 +13300,42 @@ class Z4CenteredFigurePainter extends Z4Painter {
     jsonColor = json["borderColor"];
     let borderColor = new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]);
     return new Z4CenteredFigurePainter(json["centeredFigurePainterType"], Z4FancifulValue.fromJSON(json["size"]), Z4FancifulValue.fromJSON(json["angle1"]), Z4FancifulValue.fromJSON(json["angle2"]), Z4FancifulValue.fromJSON(json["tension"]), Z4FancifulValue.fromJSON(json["multiplicity"]), Z4FancifulValue.fromJSON(json["hole"]), Z4Whirlpool.fromJSON(json["whirlpool"]), json["cover"], Z4FancifulValue.fromJSON(json["shadowShiftX"]), Z4FancifulValue.fromJSON(json["shadowShiftY"]), shadowColor, Z4FancifulValue.fromJSON(json["borderSize"]), borderColor);
+  }
+}
+/**
+ * The painter of natural figures
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4NaturalFigurePainter extends Z4Painter {
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super();
+  }
+
+   getType() {
+    return Z4PainterType.NATURAL_FIGURE;
+  }
+
+   draw(context, drawingPoint, spatioTemporalColor, progression) {
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    return json;
+  }
+
+  /**
+   * Creates a Z4NaturalFigurePainter from a JSON object
+   *
+   * @param json The JSON object
+   * @return the natural figure painter
+   */
+  static  fromJSON(json) {
+    return new Z4NaturalFigurePainter();
   }
 }
 /**

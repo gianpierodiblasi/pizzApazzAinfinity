@@ -169,6 +169,9 @@ class Z4DrawingTool extends Z4Nextable {
       case "CENTERED_FIGURE":
         painter = Z4CenteredFigurePainter.fromJSON(painterJSON);
         break;
+      case "NATURAL_FIGURE":
+        painter = Z4NaturalFigurePainter.fromJSON(painterJSON);
+        break;
     }
     return new Z4DrawingTool(pointIterator, painter, Z4SpatioTemporalColor.fromJSON(json["spatioTemporalColor"]), Z4ColorProgression.fromJSON(json["progression"]));
   }

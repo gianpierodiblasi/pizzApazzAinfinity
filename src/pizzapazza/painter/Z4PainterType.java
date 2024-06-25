@@ -8,5 +8,6 @@ package pizzapazza.painter;
 public enum Z4PainterType {
   ARROW,
   SHAPE_2D,
-  CENTERED_FIGURE;
+  CENTERED_FIGURE,
+  NATURAL_FIGURE;
 }
