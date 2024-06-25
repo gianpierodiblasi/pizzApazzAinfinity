@@ -8866,7 +8866,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     panel.add(panelRadio, new GBC(0, 0).h(3).i(0, 5, 0, 0));
     Z4UI.addVLine(panel, new GBC(1, 0).h(3).wy(1).a(GBC.NORTH).f(GBC.VERTICAL).i(1, 5, 1, 5));
     this.cardPanel.setLayout(this.cardLayout);
-    panel.add(this.cardPanel, new GBC(2, 0).a(GBC.NORTHWEST).wx(1));
+    panel.add(this.cardPanel, new GBC(2, 0).a(GBC.NORTH).wx(1));
     let buttonGroup = new ButtonGroup();
     this.addRadioButton(panelRadio, buttonGroup, "STAMPER", "1px");
     this.addRadioButton(panelRadio, buttonGroup, "TRACER", "1px");
@@ -9104,6 +9104,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
       this.ctx.fillStyle = Z4Constants.getStyle(this.previewColor.getRGBA_HEX());
       this.ctx.fillRect(0, 0, 500, 300);
     }
+    this.value.getPointIterator().drawDemo(this.ctx, this.value.getPainter(), this.value.getSpatioTemporalColor(), this.value.getProgression(), 500, 300);
   }
 }
 /**
@@ -12074,7 +12075,7 @@ class Z4Stamper extends Z4PointIterator {
         temporalPosition = Math.random();
       }
       this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, Z4DrawingPointIntent.DRAW_OBJECTS, this.rotation.computeSide(vector, null), false);
-      return nextdDrawingPoint;
+      return this.nextdDrawingPoint;
     }
   }
 
@@ -12833,7 +12834,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
         let currentCover = this.cover / 100;
         let currentMultiplicity = this.multiplicity.next();
         let point = this.checkWhirlpool1(currentAngle, currentHole, currentSize);
-        drawingPoint = new Z4DrawingPoint(Z4Vector.fromVector(currentHole, 0, point.x, point.y), drawingPoint.intensity, drawingPoint.temporalPosition, drawingPoint.intent, drawingPoint.side, drawingPoint.useVectorModuleAsSize);
+        drawingPoint = new Z4DrawingPoint(Z4Vector.fromPoints(currentHole, 0, point.x, point.y), drawingPoint.intensity, drawingPoint.temporalPosition, drawingPoint.intent, drawingPoint.side, drawingPoint.useVectorModuleAsSize);
         let currentShadowShiftX = this.shadowShiftX.next();
         let currentShadowShiftY = this.shadowShiftY.next();
         let currentBorderSize = this.borderSize.next();
@@ -12963,7 +12964,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
 
    checkWhirlpool1(currentAngle, currentHole, currentSize) {
     if (currentHole === 0 || currentAngle === 0 || this.whirlpool.getWhirlpoolBehavior() === Z4WhirlpoolBehavior.NONE) {
-      return new Z4Point(currentSize, 0);
+      return new Z4Point(currentSize + currentHole, 0);
     } else if (this.whirlpool.getWhirlpoolBehavior() === Z4WhirlpoolBehavior.FORWARD) {
       return Z4Math.rotoTranslate(currentSize, 0, currentAngle, currentHole, 0);
     } else if (this.whirlpool.getWhirlpoolBehavior() === Z4WhirlpoolBehavior.BACKWARD) {
@@ -12975,7 +12976,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
 
    checkWhirlpool2(point, p, currentAngle, currentHole) {
     if (currentHole === 0 || currentAngle === 0 || this.whirlpool.getWhirlpoolBehavior() === Z4WhirlpoolBehavior.NONE) {
-      return p;
+      return new Z4Point(p.x + point.z4Vector.x0, p.y + point.z4Vector.y0);
     } else if (this.whirlpool.getWhirlpoolBehavior() === Z4WhirlpoolBehavior.FORWARD) {
       return Z4Math.rotoTranslate(p.x, p.y, currentAngle, point.z4Vector.x0, point.z4Vector.y0);
     } else if (this.whirlpool.getWhirlpoolBehavior() === Z4WhirlpoolBehavior.BACKWARD) {

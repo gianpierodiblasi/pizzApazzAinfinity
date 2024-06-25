@@ -82,7 +82,7 @@ class Z4Stamper extends Z4PointIterator {
         temporalPosition = Math.random();
       }
       this.nextdDrawingPoint = new Z4DrawingPoint(vector, 1, temporalPosition, Z4DrawingPointIntent.DRAW_OBJECTS, this.rotation.computeSide(vector, null), false);
-      return nextdDrawingPoint;
+      return this.nextdDrawingPoint;
     }
   }
 

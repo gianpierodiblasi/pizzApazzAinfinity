@@ -236,7 +236,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
         let currentCover = this.cover / 100;
         let currentMultiplicity = this.multiplicity.next();
         let point = this.checkWhirlpool1(currentAngle, currentHole, currentSize);
-        drawingPoint = new Z4DrawingPoint(Z4Vector.fromVector(currentHole, 0, point.x, point.y), drawingPoint.intensity, drawingPoint.temporalPosition, drawingPoint.intent, drawingPoint.side, drawingPoint.useVectorModuleAsSize);
+        drawingPoint = new Z4DrawingPoint(Z4Vector.fromPoints(currentHole, 0, point.x, point.y), drawingPoint.intensity, drawingPoint.temporalPosition, drawingPoint.intent, drawingPoint.side, drawingPoint.useVectorModuleAsSize);
         let currentShadowShiftX = this.shadowShiftX.next();
         let currentShadowShiftY = this.shadowShiftY.next();
         let currentBorderSize = this.borderSize.next();
@@ -366,7 +366,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
 
    checkWhirlpool1(currentAngle, currentHole, currentSize) {
     if (currentHole === 0 || currentAngle === 0 || this.whirlpool.getWhirlpoolBehavior() === Z4WhirlpoolBehavior.NONE) {
-      return new Z4Point(currentSize, 0);
+      return new Z4Point(currentSize + currentHole, 0);
     } else if (this.whirlpool.getWhirlpoolBehavior() === Z4WhirlpoolBehavior.FORWARD) {
       return Z4Math.rotoTranslate(currentSize, 0, currentAngle, currentHole, 0);
     } else if (this.whirlpool.getWhirlpoolBehavior() === Z4WhirlpoolBehavior.BACKWARD) {
@@ -378,7 +378,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
 
    checkWhirlpool2(point, p, currentAngle, currentHole) {
     if (currentHole === 0 || currentAngle === 0 || this.whirlpool.getWhirlpoolBehavior() === Z4WhirlpoolBehavior.NONE) {
-      return p;
+      return new Z4Point(p.x + point.z4Vector.x0, p.y + point.z4Vector.y0);
     } else if (this.whirlpool.getWhirlpoolBehavior() === Z4WhirlpoolBehavior.FORWARD) {
       return Z4Math.rotoTranslate(p.x, p.y, currentAngle, point.z4Vector.x0, point.z4Vector.y0);
     } else if (this.whirlpool.getWhirlpoolBehavior() === Z4WhirlpoolBehavior.BACKWARD) {

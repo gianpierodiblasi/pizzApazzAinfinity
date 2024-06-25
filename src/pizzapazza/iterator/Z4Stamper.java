@@ -119,7 +119,7 @@ public class Z4Stamper extends Z4PointIterator {
               this.rotation.computeSide(vector, null),
               false
       );
-      return nextdDrawingPoint;
+      return this.nextdDrawingPoint;
     }
   }
 
