@@ -123,12 +123,12 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
 
     JSPanel panelRadio = new JSPanel();
     panelRadio.setLayout(new BoxLayout(panelRadio, BoxLayout.Y_AXIS));
-    panel.add(panelRadio, new GBC(0, 0).h(3).i(0, 5, 0, 0));
+    panel.add(panelRadio, new GBC(0, 0).h(4).i(0, 5, 0, 0));
 
-    Z4UI.addVLine(panel, new GBC(1, 0).h(3).wy(1).a(GBC.NORTH).f(GBC.VERTICAL).i(1, 5, 1, 5));
+    Z4UI.addVLine(panel, new GBC(1, 0).h(4).wy(1).a(GBC.NORTH).f(GBC.VERTICAL).i(1, 5, 1, 5));
 
     this.cardPanel.setLayout(this.cardLayout);
-    panel.add(this.cardPanel, new GBC(2, 0).a(GBC.NORTH).wxy(1, 1));
+    panel.add(this.cardPanel, new GBC(2, 0).a(GBC.NORTH).h(2).wxy(1, 1));
 
     ButtonGroup buttonGroup = new ButtonGroup();
     this.addRadioButton(panelRadio, buttonGroup, "STAMPER", "1px");
@@ -145,26 +145,8 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
 
     this.addRadioButton(panelRadio, buttonGroup, "COLOR-PROGRESSION", "0px");
 
-    JSPanel colors = new JSPanel();
-    panel.add(colors, new GBC(2, 1));
-
-    this.transparent1.addActionListener(event -> {
-      this.previewColor = null;
-      this.drawPreview();
-    });
-    this.transparent1.cssAddClass("z4drawingtoolpanel-transparent");
-    colors.add(this.transparent1, null);
-
-    this.swatchesPanel1.addActionListener(event -> {
-      this.previewColor = this.swatchesPanel1.getSelectedColor();
-      this.drawPreview();
-    });
-    colors.add(this.swatchesPanel1, null);
-
-    this.preview1.setProperty("width", "500");
-    this.preview1.setProperty("height", "300");
-    this.preview1.cssAddClass("z4drawingtoolpanel-preview");
-    panel.add(this.preview1, new GBC(2, 2).i(5, 0, 0, 0));
+    this.addPreview(panel, 2, 2, this.transparent1, this.swatchesPanel1, this.preview1, 500, 300, new GBC(2, 3), false);
+    this.addPreview(panel, 3, 0, this.transparent2, this.swatchesPanel2, this.preview2, 300, 500, new GBC(3, 1).a(GBC.NORTH).i(0, 5, 0, 0), true);
 
     pane.addTab(Z4Translations.TRY_ME, new JSPanel());
 
@@ -219,6 +201,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     ));
   }
 
+  @SuppressWarnings("StringEquality")
   private void addRadioButton(JSPanel panelRadio, ButtonGroup buttonGroup, String card, String marginBottom) {
     JSRadioButton radio = new JSRadioButton();
     radio.setContentAreaFilled(false);
@@ -252,6 +235,13 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
           break;
       }
 
+      this.transparent1.getStyle().display = card == "BIGRADIENT-COLOR" ? "none" : "flex";
+      this.swatchesPanel1.getStyle().display = card == "BIGRADIENT-COLOR" ? "none" : "flex";
+      this.preview1.getStyle().display = card == "BIGRADIENT-COLOR" ? "none" : "flex";
+      this.transparent2.getStyle().display = card == "BIGRADIENT-COLOR" ? "flex" : "none";
+      this.swatchesPanel2.getStyle().display = card == "BIGRADIENT-COLOR" ? "flex" : "none";
+      this.preview2.getStyle().display = card == "BIGRADIENT-COLOR" ? "flex" : "none";
+
       this.valueIsAdjusting = false;
       this.createValue();
       this.drawPreview();
@@ -261,6 +251,35 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     this.radios.$set(card, radio);
     buttonGroup.add(radio);
     panelRadio.add(radio, null);
+  }
+
+  private void addPreview(JSPanel panel, int x, int y, JSButton transparent, JSColorMiniSwatchesPanel swatchesPanel, JSComponent preview, int width, int height, GBC gbc, boolean hide) {
+    JSPanel colors = new JSPanel();
+    panel.add(colors, new GBC(x, y));
+
+    transparent.addActionListener(event -> {
+      this.previewColor = null;
+      this.drawPreview();
+    });
+    transparent.cssAddClass("z4drawingtoolpanel-transparent");
+    colors.add(transparent, null);
+
+    swatchesPanel.addActionListener(event -> {
+      this.previewColor = swatchesPanel.getSelectedColor();
+      this.drawPreview();
+    });
+    colors.add(swatchesPanel, null);
+
+    preview.setProperty("width", "" + width);
+    preview.setProperty("height", "" + height);
+    preview.cssAddClass("z4drawingtoolpanel-preview");
+    panel.add(preview, gbc);
+
+    if (hide) {
+      transparent.getStyle().display = "none";
+      swatchesPanel.getStyle().display = "none";
+      preview.getStyle().display = "none";
+    }
   }
 
   /**
@@ -454,11 +473,17 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
 
   private void drawPreview() {
     this.ctx1.clearRect(0, 0, 500, 300);
+    this.ctx2.clearRect(0, 0, 300, 500);
+
     if ($exists(this.previewColor)) {
       this.ctx1.fillStyle = Z4Constants.$getStyle(this.previewColor.getRGBA_HEX());
       this.ctx1.fillRect(0, 0, 500, 300);
+
+      this.ctx2.fillStyle = Z4Constants.$getStyle(this.previewColor.getRGBA_HEX());
+      this.ctx2.fillRect(0, 0, 300, 500);
     }
 
     this.value.getPointIterator().drawDemo(this.ctx1, this.value.getPainter(), this.value.getSpatioTemporalColor(), this.value.getProgression(), 500, 300);
+    this.value.getPointIterator().drawDemo(this.ctx2, this.value.getPainter(), this.value.getSpatioTemporalColor(), this.value.getProgression(), 300, 500);
   }
 }
