@@ -13,6 +13,14 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
 
    selectedColorProgression = new JSComponent(document.createElement("img"));
 
+   transparent = new JSButton();
+
+   swatchesPanel = new JSColorMiniSwatchesPanel();
+
+   preview = new JSComponent(document.createElement("canvas"));
+
+   ctx = this.preview.invoke("getContext('2d')");
+
    radios = new Array();
 
    cardPanel = new JSPanel();
@@ -28,6 +36,8 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
    selectedSpatioTemporalColorCard = null;
 
    valueIsAdjusting = false;
+
+   previewColor = null;
 
   constructor() {
     super();
@@ -51,8 +61,8 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     pane.addTab(Z4Translations.SETTINGS, panel);
     let panelRadio = new JSPanel();
     panelRadio.setLayout(new BoxLayout(panelRadio, BoxLayout.Y_AXIS));
-    panel.add(panelRadio, new GBC(0, 0).i(0, 5, 0, 0));
-    Z4UI.addVLine(panel, new GBC(1, 0).wy(1).a(GBC.NORTH).f(GBC.VERTICAL).i(1, 5, 1, 5));
+    panel.add(panelRadio, new GBC(0, 0).h(3).i(0, 5, 0, 0));
+    Z4UI.addVLine(panel, new GBC(1, 0).h(3).wy(1).a(GBC.NORTH).f(GBC.VERTICAL).i(1, 5, 1, 5));
     this.cardPanel.setLayout(this.cardLayout);
     panel.add(this.cardPanel, new GBC(2, 0).a(GBC.NORTHWEST).wx(1));
     let buttonGroup = new ButtonGroup();
@@ -66,6 +76,23 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     this.addRadioButton(panelRadio, buttonGroup, "GRADIENT-COLOR", "1px");
     this.addRadioButton(panelRadio, buttonGroup, "BIGRADIENT-COLOR", "10px");
     this.addRadioButton(panelRadio, buttonGroup, "COLOR-PROGRESSION", "0px");
+    let colors = new JSPanel();
+    panel.add(colors, new GBC(2, 1));
+    this.transparent.addActionListener(event => {
+      this.previewColor = null;
+      this.drawPreview();
+    });
+    this.transparent.cssAddClass("z4drawingtoolpanel-transparent");
+    colors.add(this.transparent, null);
+    this.swatchesPanel.addActionListener(event => {
+      this.previewColor = this.swatchesPanel.getSelectedColor();
+      this.drawPreview();
+    });
+    colors.add(this.swatchesPanel, null);
+    this.preview.setProperty("width", "500");
+    this.preview.setProperty("height", "300");
+    this.preview.cssAddClass("z4drawingtoolpanel-preview");
+    panel.add(this.preview, new GBC(2, 2).i(5, 0, 0, 0));
     pane.addTab(Z4Translations.TRY_ME, new JSPanel());
     this.setValue(new Z4DrawingTool(new Z4Stamper(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.RELATIVE_TO_PATH, false)), new Z4Shape2DPainter(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), false, false, 3, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0)), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)), new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.01, Z4Lighting.NONE)));
   }
@@ -103,6 +130,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
       }
       this.valueIsAdjusting = false;
       this.createValue();
+      this.drawPreview();
       this.onchange();
     });
     this.radios[card] = radio;
@@ -126,6 +154,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     this.setSpatioTemporalColor();
     this.setColorProgression();
     this.setColorProgressionSettings();
+    this.drawPreview();
   }
 
    setPointInterator() {
@@ -216,6 +245,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
       }
       (this.cardPanels[card]).addChangeListener(event => {
         this.createValue();
+        this.drawPreview();
         this.onchange();
       });
       this.cardPanel.add(this.cardPanels[card], card);
@@ -264,5 +294,13 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
       options["drawWhileMoving"] = (this.value.getPointIterator()).isDrawWhileMoving();
     }
     (this.cardPanels["COLOR-PROGRESSION"]).setProgressionSettings(this.value.getPointIterator().getType(), options, this.value.getSpatioTemporalColor().isColor(), this.value.getSpatioTemporalColor().isGradientColor(), this.value.getSpatioTemporalColor().isBiGradientColor());
+  }
+
+   drawPreview() {
+    this.ctx.clearRect(0, 0, 500, 300);
+    if (this.previewColor) {
+      this.ctx.fillStyle = Z4Constants.getStyle(this.previewColor.getRGBA_HEX());
+      this.ctx.fillRect(0, 0, 500, 300);
+    }
   }
 }

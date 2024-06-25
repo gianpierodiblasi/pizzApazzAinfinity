@@ -15,7 +15,11 @@ public class TestDrawingToolPanel extends JSFrame {
     super();
 
     Z4DrawingToolPanel panel = new Z4DrawingToolPanel();
-    panel.addChangeListener(event -> console.log(panel.getValue().toJSON()));
+    panel.addChangeListener(event -> {
+      if (!panel.getValueIsAdjusting()) {
+        console.log(panel.getValue().toJSON());
+      }
+    });
     panel.getStyle().minWidth = "56rem";
     panel.getStyle().minHeight = "41rem";
 

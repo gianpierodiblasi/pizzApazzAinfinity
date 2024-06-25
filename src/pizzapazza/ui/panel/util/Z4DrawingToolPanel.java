@@ -1,5 +1,6 @@
 package pizzapazza.ui.panel.util;
 
+import static def.dom.Globals.document;
 import def.js.Array;
 import javascript.awt.BoxLayout;
 import javascript.awt.CardLayout;
@@ -7,10 +8,12 @@ import javascript.awt.Color;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
 import javascript.swing.ButtonGroup;
+import javascript.swing.JSButton;
 import javascript.swing.JSComponent;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
 import javascript.swing.JSTabbedPane;
+import javascript.swing.colorchooser.JSColorMiniSwatchesPanel;
 import pizzapazza.color.Z4BiGradientColor;
 import pizzapazza.color.Z4ColorProgression;
 import pizzapazza.color.Z4ColorProgressionBehavior;
@@ -50,12 +53,13 @@ import pizzapazza.ui.panel.iterator.Z4TracerPanel;
 import pizzapazza.ui.panel.painter.Z4CenteredFigurePainterPanel;
 import pizzapazza.ui.panel.painter.Z4PainterPanel;
 import pizzapazza.ui.panel.painter.Z4Shape2DPainterPanel;
+import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4DrawingTool;
 import pizzapazza.util.Z4EmptyImageProducer;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
+import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
-import static simulation.js.$Globals.document;
 import simulation.js.$Object;
 
 /**
@@ -70,6 +74,11 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
   private final JSComponent selectedSpatioTemporalColor = new JSComponent(document.createElement("img"));
   private final JSComponent selectedColorProgression = new JSComponent(document.createElement("img"));
 
+  private final JSButton transparent = new JSButton();
+  private final JSColorMiniSwatchesPanel swatchesPanel = new JSColorMiniSwatchesPanel();
+  private final JSComponent preview = new JSComponent(document.createElement("canvas"));
+  private final $CanvasRenderingContext2D ctx = this.preview.invoke("getContext('2d')");
+
   private final Array<JSRadioButton> radios = new Array<>();
 
   private final JSPanel cardPanel = new JSPanel();
@@ -81,6 +90,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
   private String selectedSpatioTemporalColorCard;
 
   private boolean valueIsAdjusting;
+  private Color previewColor;
 
   public Z4DrawingToolPanel() {
     super();
@@ -108,9 +118,9 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
 
     JSPanel panelRadio = new JSPanel();
     panelRadio.setLayout(new BoxLayout(panelRadio, BoxLayout.Y_AXIS));
-    panel.add(panelRadio, new GBC(0, 0).i(0, 5, 0, 0));
+    panel.add(panelRadio, new GBC(0, 0).h(3).i(0, 5, 0, 0));
 
-    Z4UI.addVLine(panel, new GBC(1, 0).wy(1).a(GBC.NORTH).f(GBC.VERTICAL).i(1, 5, 1, 5));
+    Z4UI.addVLine(panel, new GBC(1, 0).h(3).wy(1).a(GBC.NORTH).f(GBC.VERTICAL).i(1, 5, 1, 5));
 
     this.cardPanel.setLayout(this.cardLayout);
     panel.add(this.cardPanel, new GBC(2, 0).a(GBC.NORTHWEST).wx(1));
@@ -129,6 +139,27 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     this.addRadioButton(panelRadio, buttonGroup, "BIGRADIENT-COLOR", "10px");
 
     this.addRadioButton(panelRadio, buttonGroup, "COLOR-PROGRESSION", "0px");
+
+    JSPanel colors = new JSPanel();
+    panel.add(colors, new GBC(2, 1));
+
+    this.transparent.addActionListener(event -> {
+      this.previewColor = null;
+      this.drawPreview();
+    });
+    this.transparent.cssAddClass("z4drawingtoolpanel-transparent");
+    colors.add(this.transparent, null);
+
+    this.swatchesPanel.addActionListener(event -> {
+      this.previewColor = this.swatchesPanel.getSelectedColor();
+      this.drawPreview();
+    });
+    colors.add(this.swatchesPanel, null);
+
+    this.preview.setProperty("width", "500");
+    this.preview.setProperty("height", "300");
+    this.preview.cssAddClass("z4drawingtoolpanel-preview");
+    panel.add(this.preview, new GBC(2, 2).i(5, 0, 0, 0));
 
     pane.addTab(Z4Translations.TRY_ME, new JSPanel());
 
@@ -218,6 +249,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
 
       this.valueIsAdjusting = false;
       this.createValue();
+      this.drawPreview();
       this.onchange();
     });
 
@@ -244,6 +276,8 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     this.setSpatioTemporalColor();
     this.setColorProgression();
     this.setColorProgressionSettings();
+
+    this.drawPreview();
   }
 
   private void setPointInterator() {
@@ -347,6 +381,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
 
       ((Z4AbstractValuePanel) this.cardPanels.$get(card)).addChangeListener(event -> {
         this.createValue();
+        this.drawPreview();
         this.onchange();
       });
 
@@ -410,5 +445,13 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
             this.value.getSpatioTemporalColor().isColor(),
             this.value.getSpatioTemporalColor().isGradientColor(),
             this.value.getSpatioTemporalColor().isBiGradientColor());
+  }
+
+  private void drawPreview() {
+    this.ctx.clearRect(0, 0, 500, 300);
+    if ($exists(this.previewColor)) {
+      this.ctx.fillStyle = Z4Constants.$getStyle(this.previewColor.getRGBA_HEX());
+      this.ctx.fillRect(0, 0, 500, 300);
+    }
   }
 }

@@ -61,3 +61,12 @@
 .z4drawingtoolpanel-airbrush-random-selected {
   content: url(../image/color/z4colorprogressionbehavior_airbrush_random.svg);
 }
+
+.z4drawingtoolpanel .z4drawingtoolpanel-preview {
+  border: 1px solid var(--main-action-bgcolor);
+  background-image: url(../image/chessboard.png);
+  border-radius: var(--roundness);
+}
+.z4drawingtoolpanel .z4drawingtoolpanel-transparent {
+  background-image: url(../image/chessboard.png);
+}
