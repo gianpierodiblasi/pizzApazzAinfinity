@@ -84,6 +84,11 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
   private final JSComponent preview2 = new JSComponent(document.createElement("canvas"));
   private final $CanvasRenderingContext2D ctx2 = this.preview2.invoke("getContext('2d')");
 
+  private final JSButton transparentTryMe = new JSButton();
+  private final JSColorMiniSwatchesPanel swatchesPanelTryMe = new JSColorMiniSwatchesPanel();
+  private final JSComponent previewTryMe = new JSComponent(document.createElement("canvas"));
+  private final $CanvasRenderingContext2D ctxTryMe = this.previewTryMe.invoke("getContext('2d')");
+
   private final Array<JSRadioButton> radios = new Array<>();
 
   private final JSPanel cardPanel = new JSPanel();
@@ -148,7 +153,10 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     this.addPreview(panel, 2, 2, this.transparent1, this.swatchesPanel1, this.preview1, 500, 300, new GBC(2, 3), false);
     this.addPreview(panel, 3, 0, this.transparent2, this.swatchesPanel2, this.preview2, 300, 500, new GBC(3, 1).a(GBC.NORTH).i(0, 5, 0, 0), true);
 
-    pane.addTab(Z4Translations.TRY_ME, new JSPanel());
+    panel = new JSPanel();
+    panel.setLayout(new GridBagLayout());
+    pane.addTab(Z4Translations.TRY_ME, panel);
+    this.addTryMe(panel);
 
     this.setValue(new Z4DrawingTool(
             new Z4Stamper(
@@ -280,6 +288,27 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
       swatchesPanel.getStyle().display = "none";
       preview.getStyle().display = "none";
     }
+  }
+
+  private void addTryMe(JSPanel panel) {
+    JSPanel colors = new JSPanel();
+    panel.add(colors, new GBC(0, 0));
+
+    this.transparentTryMe.addActionListener(event -> this.ctxTryMe.clearRect(0, 0, 700, 600));
+    this.transparentTryMe.cssAddClass("z4drawingtoolpanel-transparent");
+    colors.add(this.transparentTryMe, null);
+
+    this.swatchesPanelTryMe.addActionListener(event -> {
+      this.ctxTryMe.clearRect(0, 0, 700, 600);
+      this.ctxTryMe.fillStyle = Z4Constants.$getStyle(this.swatchesPanelTryMe.getSelectedColor().getRGBA_HEX());
+      this.ctxTryMe.fillRect(0, 0, 700, 600);
+    });
+    colors.add(this.swatchesPanelTryMe, null);
+
+    this.previewTryMe.setProperty("width", "700");
+    this.previewTryMe.setProperty("height", "600");
+    this.previewTryMe.cssAddClass("z4drawingtoolpanel-preview");
+    panel.add(this.previewTryMe, new GBC(0, 1).wxy(1, 1).a(GBC.NORTH));
   }
 
   /**

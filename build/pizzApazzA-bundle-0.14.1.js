@@ -8833,6 +8833,14 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
 
    ctx2 = this.preview2.invoke("getContext('2d')");
 
+   transparentTryMe = new JSButton();
+
+   swatchesPanelTryMe = new JSColorMiniSwatchesPanel();
+
+   previewTryMe = new JSComponent(document.createElement("canvas"));
+
+   ctxTryMe = this.previewTryMe.invoke("getContext('2d')");
+
    radios = new Array();
 
    cardPanel = new JSPanel();
@@ -8890,7 +8898,10 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     this.addRadioButton(panelRadio, buttonGroup, "COLOR-PROGRESSION", "0px");
     this.addPreview(panel, 2, 2, this.transparent1, this.swatchesPanel1, this.preview1, 500, 300, new GBC(2, 3), false);
     this.addPreview(panel, 3, 0, this.transparent2, this.swatchesPanel2, this.preview2, 300, 500, new GBC(3, 1).a(GBC.NORTH).i(0, 5, 0, 0), true);
-    pane.addTab(Z4Translations.TRY_ME, new JSPanel());
+    panel = new JSPanel();
+    panel.setLayout(new GridBagLayout());
+    pane.addTab(Z4Translations.TRY_ME, panel);
+    this.addTryMe(panel);
     this.setValue(new Z4DrawingTool(new Z4Stamper(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.RELATIVE_TO_PATH, false)), new Z4Shape2DPainter(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), false, false, 3, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0)), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)), new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.01, Z4Lighting.NONE)));
   }
 
@@ -8964,6 +8975,24 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
       swatchesPanel.getStyle().display = "none";
       preview.getStyle().display = "none";
     }
+  }
+
+   addTryMe(panel) {
+    let colors = new JSPanel();
+    panel.add(colors, new GBC(0, 0));
+    this.transparentTryMe.addActionListener(event => this.ctxTryMe.clearRect(0, 0, 700, 600));
+    this.transparentTryMe.cssAddClass("z4drawingtoolpanel-transparent");
+    colors.add(this.transparentTryMe, null);
+    this.swatchesPanelTryMe.addActionListener(event => {
+      this.ctxTryMe.clearRect(0, 0, 700, 600);
+      this.ctxTryMe.fillStyle = Z4Constants.getStyle(this.swatchesPanelTryMe.getSelectedColor().getRGBA_HEX());
+      this.ctxTryMe.fillRect(0, 0, 700, 600);
+    });
+    colors.add(this.swatchesPanelTryMe, null);
+    this.previewTryMe.setProperty("width", "700");
+    this.previewTryMe.setProperty("height", "600");
+    this.previewTryMe.cssAddClass("z4drawingtoolpanel-preview");
+    panel.add(this.previewTryMe, new GBC(0, 1).wxy(1, 1).a(GBC.NORTH));
   }
 
   /**
