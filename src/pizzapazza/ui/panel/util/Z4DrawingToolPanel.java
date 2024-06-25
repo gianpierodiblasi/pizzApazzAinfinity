@@ -1,7 +1,6 @@
 package pizzapazza.ui.panel.util;
 
 import def.js.Array;
-import static def.js.Globals.eval;
 import javascript.awt.BoxLayout;
 import javascript.awt.CardLayout;
 import javascript.awt.Color;
@@ -12,13 +11,17 @@ import javascript.swing.JSComponent;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
 import javascript.swing.JSTabbedPane;
+import pizzapazza.color.Z4BiGradientColor;
 import pizzapazza.color.Z4ColorProgression;
 import pizzapazza.color.Z4ColorProgressionBehavior;
+import pizzapazza.color.Z4GradientColor;
 import pizzapazza.color.Z4Lighting;
 import pizzapazza.color.Z4SpatioTemporalColor;
-import pizzapazza.iterator.Z4PointIterator;
+import pizzapazza.iterator.Z4Airbrush;
 import pizzapazza.iterator.Z4PointIteratorType;
+import pizzapazza.iterator.Z4Spirograph;
 import pizzapazza.iterator.Z4Stamper;
+import pizzapazza.iterator.Z4Tracer;
 import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4RandomValue;
 import pizzapazza.math.Z4RandomValueBehavior;
@@ -28,16 +31,23 @@ import pizzapazza.math.Z4Sign;
 import pizzapazza.math.Z4SignBehavior;
 import pizzapazza.math.Z4SignedRandomValue;
 import pizzapazza.math.Z4SignedValue;
-import pizzapazza.painter.Z4Painter;
+import pizzapazza.painter.Z4CenteredFigurePainter;
 import pizzapazza.painter.Z4PainterType;
 import pizzapazza.painter.Z4Shape2DPainter;
 import pizzapazza.ui.panel.Z4AbstractValuePanel;
 import pizzapazza.ui.panel.color.Z4BiGradientColorPanel;
 import pizzapazza.ui.panel.color.Z4ColorPanel;
 import pizzapazza.ui.panel.color.Z4ColorProgressionPanel;
+import pizzapazza.ui.panel.color.Z4ColorProgressionPanelOrientation;
 import pizzapazza.ui.panel.color.Z4GradientColorPanel;
+import pizzapazza.ui.panel.iterator.Z4AirbrushPanel;
 import pizzapazza.ui.panel.iterator.Z4PointIteratorPanel;
+import pizzapazza.ui.panel.iterator.Z4SpirographPanel;
+import pizzapazza.ui.panel.iterator.Z4StamperPanel;
+import pizzapazza.ui.panel.iterator.Z4TracerPanel;
+import pizzapazza.ui.panel.painter.Z4CenteredFigurePainterPanel;
 import pizzapazza.ui.panel.painter.Z4PainterPanel;
+import pizzapazza.ui.panel.painter.Z4Shape2DPainterPanel;
 import pizzapazza.util.Z4DrawingTool;
 import pizzapazza.util.Z4EmptyImageProducer;
 import pizzapazza.util.Z4Translations;
@@ -62,6 +72,8 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
   private final JSPanel cardPanel = new JSPanel();
   private final CardLayout cardLayout = new CardLayout(0, 0);
   private final Array<JSPanel> cardPanels = new Array<>();
+
+  private boolean valueIsAdjusting;
 
   public Z4DrawingToolPanel() {
     super();
@@ -107,7 +119,6 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
 
     this.addRadioButton(panelRadio, buttonGroup, "COLOR", "1px");
     this.addRadioButton(panelRadio, buttonGroup, "GRADIENT-COLOR", "1px");
-
     this.addRadioButton(panelRadio, buttonGroup, "BIGRADIENT-COLOR", "10px");
 
     this.addRadioButton(panelRadio, buttonGroup, "COLOR-PROGRESSION", "0px");
@@ -199,6 +210,15 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     panelRadio.add(radio, null);
   }
 
+  /**
+   * Returns if the value is adjusting
+   *
+   * @return true if the value is adjusting, false otherwise
+   */
+  public boolean getValueIsAdjusting() {
+    return this.valueIsAdjusting;
+  }
+
   @Override
   public void setValue(Z4DrawingTool value) {
     this.value = value;
@@ -213,17 +233,13 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     new Array<>("z4drawingtoolpanel-stamper-selected", "z4drawingtoolpanel-tracer-selected", "z4drawingtoolpanel-airbrush-selected", "z4drawingtoolpanel-spirograph-selected").forEach(css -> this.selectedPointInterator.cssRemoveClass(css));
 
     if (this.value.getPointIterator().getType() == Z4PointIteratorType.STAMPER) {
-      /*this.selectedPointInteratorCard = */
-      this.check(this.selectedPointInterator, "STAMPER", "new Z4StamperPanel()", this.value.getPointIterator(), true);
+      this.check(this.selectedPointInterator, "STAMPER", this.value.getPointIterator(), true);
     } else if (this.value.getPointIterator().getType() == Z4PointIteratorType.TRACER) {
-      /*this.selectedPointInteratorCard = */
-      this.check(this.selectedPointInterator, "TRACER", "new Z4TracerPanel()", this.value.getPointIterator(), true);
+      this.check(this.selectedPointInterator, "TRACER", this.value.getPointIterator(), true);
     } else if (this.value.getPointIterator().getType() == Z4PointIteratorType.AIRBRUSH) {
-      /*this.selectedPointInteratorCard = */
-      this.check(this.selectedPointInterator, "AIRBRUSH", "new Z4AirbrushPanel()", this.value.getPointIterator(), true);
+      this.check(this.selectedPointInterator, "AIRBRUSH", this.value.getPointIterator(), true);
     } else if (this.value.getPointIterator().getType() == Z4PointIteratorType.SPIROGRAPH) {
-      /*this.selectedPointInteratorCard = */
-      this.check(this.selectedPointInterator, "SPIROGRAPH", "new Z4SpirographPanel()", this.value.getPointIterator(), true);
+      this.check(this.selectedPointInterator, "SPIROGRAPH", this.value.getPointIterator(), true);
     }
   }
 
@@ -231,11 +247,9 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     new Array<>("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-centered-figure-selected").forEach(css -> this.selectedPainter.cssRemoveClass(css));
 
     if (this.value.getPainter().getType() == Z4PainterType.SHAPE_2D) {
-      /*this.selectedPainterCard = */
-      this.check(this.selectedPainter, "SHAPE2D", "new Z4Shape2DPainterPanel()", this.value.getPainter(), false);
+      this.check(this.selectedPainter, "SHAPE2D", this.value.getPainter(), false);
     } else if (this.value.getPainter().getType() == Z4PainterType.CENTERED_FIGURE) {
-      /*this.selectedPainterCard = */
-      this.check(this.selectedPainter, "CENTERED-FIGURE", "new Z4CenteredFigurePainterPanel()", this.value.getPainter(), false);
+      this.check(this.selectedPainter, "CENTERED-FIGURE", this.value.getPainter(), false);
     }
   }
 
@@ -243,60 +257,95 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     new Array<>("z4drawingtoolpanel-color-selected", "z4drawingtoolpanel-gradient-color-selected", "z4drawingtoolpanel-bigradient-color-selected").forEach(css -> this.selectedSpatioTemporalColor.cssRemoveClass(css));
 
     if (this.value.getSpatioTemporalColor().isColor()) {
-      /*this.selectedSpatioTemporalColorCard = */
-      this.check(this.selectedSpatioTemporalColor, "COLOR", "new Z4ColorPanel()", this.value.getSpatioTemporalColor().getColor(), false);
+      this.check(this.selectedSpatioTemporalColor, "COLOR", this.value.getSpatioTemporalColor().getColor(), false);
 //      ((Z4ColorProgressionPanel) this.cardPanels.$get(this.selectedColorProgressionCard)).setProgressionSettings(this.value.getPointIterator().getType(), true, false, false);
     } else if (this.value.getSpatioTemporalColor().isGradientColor()) {
-      /*this.selectedSpatioTemporalColorCard = */
-      this.check(this.selectedSpatioTemporalColor, "GRADIENT-COLOR", "new Z4GradientColorPanel()", this.value.getSpatioTemporalColor().getGradientColor(), false);
+      this.check(this.selectedSpatioTemporalColor, "GRADIENT-COLOR", this.value.getSpatioTemporalColor().getGradientColor(), false);
 //      ((Z4ColorProgressionPanel) this.cardPanels.$get(this.selectedColorProgressionCard)).setProgressionSettings(this.value.getPointIterator().getType(), false, true, false);
     } else if (this.value.getSpatioTemporalColor().isBiGradientColor()) {
-      /*this.selectedSpatioTemporalColorCard = */
-      this.check(this.selectedSpatioTemporalColor, "BIGRADIENT-COLOR", "new Z4BiGradientColorPanel()", this.value.getSpatioTemporalColor().getBiGradientColor(), false);
+      this.check(this.selectedSpatioTemporalColor, "BIGRADIENT-COLOR", this.value.getSpatioTemporalColor().getBiGradientColor(), false);
 //      ((Z4ColorProgressionPanel) this.cardPanels.$get(this.selectedColorProgressionCard)).setProgressionSettings(this.value.getPointIterator().getType(), false, false, true);
     }
   }
 
   private void setColorProgression() {
     new Array<>(
-            "z4drawingtoolpanel-color-progression-spatial-selected", "z4drawingtoolpanel-color-progression-temporal-selected", "z4drawingtoolpanel-color-progression-relativetopath-selected", "z4drawingtoolpanel-color-progression-random-selected",
-            "z4drawingtoolpanel-color-progression-airbrush-spatial-selected", "z4drawingtoolpanel-color-progression-airbrush-temporal-selected", "z4drawingtoolpanel-color-progression-airbrush-relativetopath-selected", "z4drawingtoolpanel-color-progression-airbrush-random-selected"
+            "z4drawingtoolpanel-spatial-selected", "z4drawingtoolpanel-temporal-selected", "z4drawingtoolpanel-relativetopath-selected", "z4drawingtoolpanel-random-selected",
+            "z4drawingtoolpanel-airbrush-spatial-selected", "z4drawingtoolpanel-airbrush-temporal-selected", "z4drawingtoolpanel-airbrush-relativetopath-selected", "z4drawingtoolpanel-airbrush-random-selected"
     ).forEach(css -> this.selectedColorProgression.cssRemoveClass(css));
 
     String card
             = (this.value.getPointIterator().getType() == Z4PointIteratorType.AIRBRUSH ? "airbrush-" : "")
             + ("" + this.value.getProgression().getColorProgressionBehavior()).toLowerCase().replace("_", "");
 
-    this.selectedColorProgression.cssAddClass("z4drawingtoolpanel-color-progression-" + card + "-selected");
+    this.check(this.selectedColorProgression, card, this.value.getProgression(), false);
   }
 
-//  @SuppressWarnings({"unchecked", "StringEquality"})
-  private String check(JSComponent selected, String card, String evaluate, Object value, boolean show) {
+  @SuppressWarnings("unchecked")
+  private String check(JSComponent selected, String card, Object value, boolean show) {
     selected.cssAddClass("z4drawingtoolpanel-" + card.toLowerCase() + "-selected");
-//
-//    if (!$exists(this.cardPanels.$get(card))) {
-//      this.cardPanels.$set(card, eval(evaluate));
-//      this.cardPanel.add(this.cardPanels.$get(card), card);
-//
-//      if (card == "COLOR") {
-//        ((JSComponent) this.cardPanels.$get(card)).getStyle().minWidth = "15rem";
-//      }
-//
-//      ((Z4AbstractValuePanel) this.cardPanels.$get(card)).addChangeListener(event -> {
-//        this.createValue();
-//        this.onchange();
-//      });
-//    }
-//
-//    if ($exists(value)) {
-//      ((Z4AbstractValuePanel) this.cardPanels.$get(card)).setValue(value);
-//    }
-//
-//    if (show) {
-//      ((JSRadioButton) this.radios.$get(card)).setSelected(true);
-//      this.cardLayout.show(this.cardPanel, card);
-//    }
-//
+
+    if (!$exists(this.cardPanels.$get(card))) {
+      switch (card) {
+        case "STAMPER":
+          this.cardPanels.$set(card, new Z4StamperPanel());
+          ((Z4AbstractValuePanel<Z4Stamper>) this.cardPanels.$get(card)).addChangeListener(event -> this.valueIsAdjusting = ((Z4PointIteratorPanel<Z4Stamper>) this.cardPanels.$get(card)).getValueIsAdjusting());
+          break;
+        case "TRACER":
+          this.cardPanels.$set(card, new Z4TracerPanel());
+          ((Z4AbstractValuePanel<Z4Tracer>) this.cardPanels.$get(card)).addChangeListener(event -> this.valueIsAdjusting = ((Z4PointIteratorPanel<Z4Tracer>) this.cardPanels.$get(card)).getValueIsAdjusting());
+          break;
+        case "AIRBRUSH":
+          this.cardPanels.$set(card, new Z4AirbrushPanel());
+          ((Z4AbstractValuePanel<Z4Airbrush>) this.cardPanels.$get(card)).addChangeListener(event -> this.valueIsAdjusting = ((Z4PointIteratorPanel<Z4Airbrush>) this.cardPanels.$get(card)).getValueIsAdjusting());
+          break;
+        case "SPIROGRAPH":
+          this.cardPanels.$set(card, new Z4SpirographPanel());
+          ((Z4AbstractValuePanel<Z4Spirograph>) this.cardPanels.$get(card)).addChangeListener(event -> this.valueIsAdjusting = ((Z4PointIteratorPanel<Z4Spirograph>) this.cardPanels.$get(card)).getValueIsAdjusting());
+          break;
+        case "SHAPE2D":
+          this.cardPanels.$set(card, new Z4Shape2DPainterPanel());
+          ((Z4AbstractValuePanel<Z4Shape2DPainter>) this.cardPanels.$get(card)).addChangeListener(event -> this.valueIsAdjusting = ((Z4PainterPanel<Z4Shape2DPainter>) this.cardPanels.$get(card)).getValueIsAdjusting());
+          break;
+        case "CENTERED-FIGURE":
+          this.cardPanels.$set(card, new Z4CenteredFigurePainterPanel());
+          ((Z4AbstractValuePanel<Z4CenteredFigurePainter>) this.cardPanels.$get(card)).addChangeListener(event -> this.valueIsAdjusting = ((Z4PainterPanel<Z4CenteredFigurePainter>) this.cardPanels.$get(card)).getValueIsAdjusting());
+          break;
+        case "COLOR":
+          this.cardPanels.$set(card, new Z4ColorPanel());
+          ((JSComponent) this.cardPanels.$get(card)).getStyle().minWidth = "15rem";
+          break;
+        case "GRADIENT-COLOR":
+          this.cardPanels.$set(card, new Z4GradientColorPanel());
+          ((Z4AbstractValuePanel<Z4GradientColor>) this.cardPanels.$get(card)).addChangeListener(event -> this.valueIsAdjusting = ((Z4GradientColorPanel) this.cardPanels.$get(card)).getValueIsAdjusting());
+          break;
+        case "BIGRADIENT-COLOR":
+          this.cardPanels.$set(card, new Z4BiGradientColorPanel());
+          ((Z4AbstractValuePanel<Z4BiGradientColor>) this.cardPanels.$get(card)).addChangeListener(event -> this.valueIsAdjusting = ((Z4BiGradientColorPanel) this.cardPanels.$get(card)).getValueIsAdjusting());
+          break;
+        default:
+          this.cardPanels.$set(card, new Z4ColorProgressionPanel(Z4ColorProgressionPanelOrientation.HORIZONTALLY_COMPACT));
+          ((Z4AbstractValuePanel<Z4ColorProgression>) this.cardPanels.$get(card)).addChangeListener(event -> this.valueIsAdjusting = ((Z4ColorProgressionPanel) this.cardPanels.$get(card)).getValueIsAdjusting());
+          break;
+      }
+
+      ((Z4AbstractValuePanel) this.cardPanels.$get(card)).addChangeListener(event -> {
+        this.createValue();
+        this.onchange();
+      });
+      
+      this.cardPanel.add(this.cardPanels.$get(card), card);
+    }
+
+    if ($exists(value)) {
+      ((Z4AbstractValuePanel) this.cardPanels.$get(card)).setValue(value);
+    }
+
+    if (show) {
+      ((JSRadioButton) this.radios.$get(card)).setSelected(true);
+      this.cardLayout.show(this.cardPanel, card);
+    }
+
     return card;
   }
 

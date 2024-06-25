@@ -440,28 +440,28 @@
   content: url(../image/color/z4colorprogressionbehavior_spatial.svg);
 }
 
-.z4drawingtoolpanel-color-progression-spatial-selected {
+.z4drawingtoolpanel-spatial-selected {
   content: url(../image/color/z4colorprogressionbehavior_spatial.svg);
 }
-.z4drawingtoolpanel-color-progression-temporal-selected {
+.z4drawingtoolpanel-temporal-selected {
   content: url(../image/color/z4colorprogressionbehavior_temporal.svg);
 }
-.z4drawingtoolpanel-color-progression-relativetopath-selected {
+.z4drawingtoolpanel-relativetopath-selected {
   content: url(../image/color/z4colorprogressionbehavior_relativetopath.svg);
 }
-.z4drawingtoolpanel-color-progression-random-selected {
+.z4drawingtoolpanel-random-selected {
   content: url(../image/color/z4colorprogressionbehavior_random.svg);
 }
-.z4drawingtoolpanel-color-progression-airbrush-spatial-selected {
+.z4drawingtoolpanel-airbrush-spatial-selected {
   content: url(../image/color/z4colorprogressionbehavior_airbrush_spatial.svg);
 }
-.z4drawingtoolpanel-color-progression-airbrush-temporal-selected {
+.z4drawingtoolpanel-airbrush-temporal-selected {
   content: url(../image/color/z4colorprogressionbehavior_airbrush_temporal.svg);
 }
-.z4drawingtoolpanel-color-progression-airbrush-relativetopath-selected {
+.z4drawingtoolpanel-airbrush-relativetopath-selected {
   content: url(../image/color/z4colorprogressionbehavior_airbrush_relativetopath.svg);
 }
-.z4drawingtoolpanel-color-progression-airbrush-random-selected {
+.z4drawingtoolpanel-airbrush-random-selected {
   content: url(../image/color/z4colorprogressionbehavior_airbrush_random.svg);
 }.z4fancifulvaluepanel {
 }

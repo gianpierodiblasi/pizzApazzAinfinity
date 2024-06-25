@@ -8823,6 +8823,8 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
 
    cardPanels = new Array();
 
+   valueIsAdjusting = false;
+
   constructor() {
     super();
     this.setLayout(new GridBagLayout());
@@ -8896,6 +8898,15 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     panelRadio.add(radio, null);
   }
 
+  /**
+   * Returns if the value is adjusting
+   *
+   * @return true if the value is adjusting, false otherwise
+   */
+   getValueIsAdjusting() {
+    return this.valueIsAdjusting;
+  }
+
    setValue(value) {
     this.value = value;
     this.setPointInterator();
@@ -8907,81 +8918,103 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
    setPointInterator() {
     new Array("z4drawingtoolpanel-stamper-selected", "z4drawingtoolpanel-tracer-selected", "z4drawingtoolpanel-airbrush-selected", "z4drawingtoolpanel-spirograph-selected").forEach(css => this.selectedPointInterator.cssRemoveClass(css));
     if (this.value.getPointIterator().getType() === Z4PointIteratorType.STAMPER) {
-      /*this.selectedPointInteratorCard = */
-      this.check(this.selectedPointInterator, "STAMPER", "new Z4StamperPanel()", this.value.getPointIterator(), true);
+      this.check(this.selectedPointInterator, "STAMPER", this.value.getPointIterator(), true);
     } else if (this.value.getPointIterator().getType() === Z4PointIteratorType.TRACER) {
-      /*this.selectedPointInteratorCard = */
-      this.check(this.selectedPointInterator, "TRACER", "new Z4TracerPanel()", this.value.getPointIterator(), true);
+      this.check(this.selectedPointInterator, "TRACER", this.value.getPointIterator(), true);
     } else if (this.value.getPointIterator().getType() === Z4PointIteratorType.AIRBRUSH) {
-      /*this.selectedPointInteratorCard = */
-      this.check(this.selectedPointInterator, "AIRBRUSH", "new Z4AirbrushPanel()", this.value.getPointIterator(), true);
+      this.check(this.selectedPointInterator, "AIRBRUSH", this.value.getPointIterator(), true);
     } else if (this.value.getPointIterator().getType() === Z4PointIteratorType.SPIROGRAPH) {
-      /*this.selectedPointInteratorCard = */
-      this.check(this.selectedPointInterator, "SPIROGRAPH", "new Z4SpirographPanel()", this.value.getPointIterator(), true);
+      this.check(this.selectedPointInterator, "SPIROGRAPH", this.value.getPointIterator(), true);
     }
   }
 
    setPainter() {
     new Array("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-centered-figure-selected").forEach(css => this.selectedPainter.cssRemoveClass(css));
     if (this.value.getPainter().getType() === Z4PainterType.SHAPE_2D) {
-      /*this.selectedPainterCard = */
-      this.check(this.selectedPainter, "SHAPE2D", "new Z4Shape2DPainterPanel()", this.value.getPainter(), false);
+      this.check(this.selectedPainter, "SHAPE2D", this.value.getPainter(), false);
     } else if (this.value.getPainter().getType() === Z4PainterType.CENTERED_FIGURE) {
-      /*this.selectedPainterCard = */
-      this.check(this.selectedPainter, "CENTERED-FIGURE", "new Z4CenteredFigurePainterPanel()", this.value.getPainter(), false);
+      this.check(this.selectedPainter, "CENTERED-FIGURE", this.value.getPainter(), false);
     }
   }
 
    setSpatioTemporalColor() {
     new Array("z4drawingtoolpanel-color-selected", "z4drawingtoolpanel-gradient-color-selected", "z4drawingtoolpanel-bigradient-color-selected").forEach(css => this.selectedSpatioTemporalColor.cssRemoveClass(css));
     if (this.value.getSpatioTemporalColor().isColor()) {
-      /*this.selectedSpatioTemporalColorCard = */
-      this.check(this.selectedSpatioTemporalColor, "COLOR", "new Z4ColorPanel()", this.value.getSpatioTemporalColor().getColor(), false);
+      this.check(this.selectedSpatioTemporalColor, "COLOR", this.value.getSpatioTemporalColor().getColor(), false);
       // ((Z4ColorProgressionPanel) this.cardPanels.$get(this.selectedColorProgressionCard)).setProgressionSettings(this.value.getPointIterator().getType(), true, false, false);
     } else if (this.value.getSpatioTemporalColor().isGradientColor()) {
-      /*this.selectedSpatioTemporalColorCard = */
-      this.check(this.selectedSpatioTemporalColor, "GRADIENT-COLOR", "new Z4GradientColorPanel()", this.value.getSpatioTemporalColor().getGradientColor(), false);
+      this.check(this.selectedSpatioTemporalColor, "GRADIENT-COLOR", this.value.getSpatioTemporalColor().getGradientColor(), false);
       // ((Z4ColorProgressionPanel) this.cardPanels.$get(this.selectedColorProgressionCard)).setProgressionSettings(this.value.getPointIterator().getType(), false, true, false);
     } else if (this.value.getSpatioTemporalColor().isBiGradientColor()) {
-      /*this.selectedSpatioTemporalColorCard = */
-      this.check(this.selectedSpatioTemporalColor, "BIGRADIENT-COLOR", "new Z4BiGradientColorPanel()", this.value.getSpatioTemporalColor().getBiGradientColor(), false);
+      this.check(this.selectedSpatioTemporalColor, "BIGRADIENT-COLOR", this.value.getSpatioTemporalColor().getBiGradientColor(), false);
       // ((Z4ColorProgressionPanel) this.cardPanels.$get(this.selectedColorProgressionCard)).setProgressionSettings(this.value.getPointIterator().getType(), false, false, true);
     }
   }
 
    setColorProgression() {
-    new Array("z4drawingtoolpanel-color-progression-spatial-selected", "z4drawingtoolpanel-color-progression-temporal-selected", "z4drawingtoolpanel-color-progression-relativetopath-selected", "z4drawingtoolpanel-color-progression-random-selected", "z4drawingtoolpanel-color-progression-airbrush-spatial-selected", "z4drawingtoolpanel-color-progression-airbrush-temporal-selected", "z4drawingtoolpanel-color-progression-airbrush-relativetopath-selected", "z4drawingtoolpanel-color-progression-airbrush-random-selected").forEach(css => this.selectedColorProgression.cssRemoveClass(css));
+    new Array("z4drawingtoolpanel-spatial-selected", "z4drawingtoolpanel-temporal-selected", "z4drawingtoolpanel-relativetopath-selected", "z4drawingtoolpanel-random-selected", "z4drawingtoolpanel-airbrush-spatial-selected", "z4drawingtoolpanel-airbrush-temporal-selected", "z4drawingtoolpanel-airbrush-relativetopath-selected", "z4drawingtoolpanel-airbrush-random-selected").forEach(css => this.selectedColorProgression.cssRemoveClass(css));
     let card = (this.value.getPointIterator().getType() === Z4PointIteratorType.AIRBRUSH ? "airbrush-" : "") + ("" + this.value.getProgression().getColorProgressionBehavior()).toLowerCase().replace("_", "");
-    this.selectedColorProgression.cssAddClass("z4drawingtoolpanel-color-progression-" + card + "-selected");
+    this.check(this.selectedColorProgression, card, this.value.getProgression(), false);
   }
 
-  // @SuppressWarnings({"unchecked", "StringEquality"})
-   check(selected, card, evaluate, value, show) {
+   check(selected, card, value, show) {
     selected.cssAddClass("z4drawingtoolpanel-" + card.toLowerCase() + "-selected");
-    // 
-    // if (!$exists(this.cardPanels.$get(card))) {
-    // this.cardPanels.$set(card, eval(evaluate));
-    // this.cardPanel.add(this.cardPanels.$get(card), card);
-    // 
-    // if (card == "COLOR") {
-    // ((JSComponent) this.cardPanels.$get(card)).getStyle().minWidth = "15rem";
-    // }
-    // 
-    // ((Z4AbstractValuePanel) this.cardPanels.$get(card)).addChangeListener(event -> {
-    // this.createValue();
-    // this.onchange();
-    // });
-    // }
-    // 
-    // if ($exists(value)) {
-    // ((Z4AbstractValuePanel) this.cardPanels.$get(card)).setValue(value);
-    // }
-    // 
-    // if (show) {
-    // ((JSRadioButton) this.radios.$get(card)).setSelected(true);
-    // this.cardLayout.show(this.cardPanel, card);
-    // }
-    // 
+    if (!this.cardPanels[card]) {
+      switch(card) {
+        case "STAMPER":
+          this.cardPanels[card] = new Z4StamperPanel();
+          (this.cardPanels[card]).addChangeListener(event => this.valueIsAdjusting = (this.cardPanels[card]).getValueIsAdjusting());
+          break;
+        case "TRACER":
+          this.cardPanels[card] = new Z4TracerPanel();
+          (this.cardPanels[card]).addChangeListener(event => this.valueIsAdjusting = (this.cardPanels[card]).getValueIsAdjusting());
+          break;
+        case "AIRBRUSH":
+          this.cardPanels[card] = new Z4AirbrushPanel();
+          (this.cardPanels[card]).addChangeListener(event => this.valueIsAdjusting = (this.cardPanels[card]).getValueIsAdjusting());
+          break;
+        case "SPIROGRAPH":
+          this.cardPanels[card] = new Z4SpirographPanel();
+          (this.cardPanels[card]).addChangeListener(event => this.valueIsAdjusting = (this.cardPanels[card]).getValueIsAdjusting());
+          break;
+        case "SHAPE2D":
+          this.cardPanels[card] = new Z4Shape2DPainterPanel();
+          (this.cardPanels[card]).addChangeListener(event => this.valueIsAdjusting = (this.cardPanels[card]).getValueIsAdjusting());
+          break;
+        case "CENTERED-FIGURE":
+          this.cardPanels[card] = new Z4CenteredFigurePainterPanel();
+          (this.cardPanels[card]).addChangeListener(event => this.valueIsAdjusting = (this.cardPanels[card]).getValueIsAdjusting());
+          break;
+        case "COLOR":
+          this.cardPanels[card] = new Z4ColorPanel();
+          (this.cardPanels[card]).getStyle().minWidth = "15rem";
+          break;
+        case "GRADIENT-COLOR":
+          this.cardPanels[card] = new Z4GradientColorPanel();
+          (this.cardPanels[card]).addChangeListener(event => this.valueIsAdjusting = (this.cardPanels[card]).getValueIsAdjusting());
+          break;
+        case "BIGRADIENT-COLOR":
+          this.cardPanels[card] = new Z4BiGradientColorPanel();
+          (this.cardPanels[card]).addChangeListener(event => this.valueIsAdjusting = (this.cardPanels[card]).getValueIsAdjusting());
+          break;
+        default:
+          this.cardPanels[card] = new Z4ColorProgressionPanel(Z4ColorProgressionPanelOrientation.HORIZONTALLY_COMPACT);
+          (this.cardPanels[card]).addChangeListener(event => this.valueIsAdjusting = (this.cardPanels[card]).getValueIsAdjusting());
+          break;
+      }
+      (this.cardPanels[card]).addChangeListener(event => {
+        this.createValue();
+        this.onchange();
+      });
+      this.cardPanel.add(this.cardPanels[card], card);
+    }
+    if (value) {
+      (this.cardPanels[card]).setValue(value);
+    }
+    if (show) {
+      (this.radios[card]).setSelected(true);
+      this.cardLayout.show(this.cardPanel, card);
+    }
     return card;
   }
 
