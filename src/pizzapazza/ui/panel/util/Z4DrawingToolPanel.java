@@ -225,21 +225,21 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
 
     this.setPointInterator();
     this.setPainter();
-    this.setSpatioTemporalColor();
     this.setColorProgression();
+    this.setSpatioTemporalColor();
   }
 
   private void setPointInterator() {
     new Array<>("z4drawingtoolpanel-stamper-selected", "z4drawingtoolpanel-tracer-selected", "z4drawingtoolpanel-airbrush-selected", "z4drawingtoolpanel-spirograph-selected").forEach(css -> this.selectedPointInterator.cssRemoveClass(css));
 
     if (this.value.getPointIterator().getType() == Z4PointIteratorType.STAMPER) {
-      this.check(this.selectedPointInterator, "STAMPER", this.value.getPointIterator(), true);
+      this.check(this.selectedPointInterator, "STAMPER", "stamper", this.value.getPointIterator(), true);
     } else if (this.value.getPointIterator().getType() == Z4PointIteratorType.TRACER) {
-      this.check(this.selectedPointInterator, "TRACER", this.value.getPointIterator(), true);
+      this.check(this.selectedPointInterator, "TRACER", "tracer", this.value.getPointIterator(), true);
     } else if (this.value.getPointIterator().getType() == Z4PointIteratorType.AIRBRUSH) {
-      this.check(this.selectedPointInterator, "AIRBRUSH", this.value.getPointIterator(), true);
+      this.check(this.selectedPointInterator, "AIRBRUSH", "airbrush", this.value.getPointIterator(), true);
     } else if (this.value.getPointIterator().getType() == Z4PointIteratorType.SPIROGRAPH) {
-      this.check(this.selectedPointInterator, "SPIROGRAPH", this.value.getPointIterator(), true);
+      this.check(this.selectedPointInterator, "SPIROGRAPH", "spirograph", this.value.getPointIterator(), true);
     }
   }
 
@@ -247,9 +247,9 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     new Array<>("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-centered-figure-selected").forEach(css -> this.selectedPainter.cssRemoveClass(css));
 
     if (this.value.getPainter().getType() == Z4PainterType.SHAPE_2D) {
-      this.check(this.selectedPainter, "SHAPE2D", this.value.getPainter(), false);
+      this.check(this.selectedPainter, "SHAPE2D", "shape2d", this.value.getPainter(), false);
     } else if (this.value.getPainter().getType() == Z4PainterType.CENTERED_FIGURE) {
-      this.check(this.selectedPainter, "CENTERED-FIGURE", this.value.getPainter(), false);
+      this.check(this.selectedPainter, "CENTERED-FIGURE", "centered-figure", this.value.getPainter(), false);
     }
   }
 
@@ -257,13 +257,13 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     new Array<>("z4drawingtoolpanel-color-selected", "z4drawingtoolpanel-gradient-color-selected", "z4drawingtoolpanel-bigradient-color-selected").forEach(css -> this.selectedSpatioTemporalColor.cssRemoveClass(css));
 
     if (this.value.getSpatioTemporalColor().isColor()) {
-      this.check(this.selectedSpatioTemporalColor, "COLOR", this.value.getSpatioTemporalColor().getColor(), false);
+      this.check(this.selectedSpatioTemporalColor, "COLOR", "color", this.value.getSpatioTemporalColor().getColor(), false);
 //      ((Z4ColorProgressionPanel) this.cardPanels.$get(this.selectedColorProgressionCard)).setProgressionSettings(this.value.getPointIterator().getType(), true, false, false);
     } else if (this.value.getSpatioTemporalColor().isGradientColor()) {
-      this.check(this.selectedSpatioTemporalColor, "GRADIENT-COLOR", this.value.getSpatioTemporalColor().getGradientColor(), false);
+      this.check(this.selectedSpatioTemporalColor, "GRADIENT-COLOR", "gradient-color", this.value.getSpatioTemporalColor().getGradientColor(), false);
 //      ((Z4ColorProgressionPanel) this.cardPanels.$get(this.selectedColorProgressionCard)).setProgressionSettings(this.value.getPointIterator().getType(), false, true, false);
     } else if (this.value.getSpatioTemporalColor().isBiGradientColor()) {
-      this.check(this.selectedSpatioTemporalColor, "BIGRADIENT-COLOR", this.value.getSpatioTemporalColor().getBiGradientColor(), false);
+      this.check(this.selectedSpatioTemporalColor, "BIGRADIENT-COLOR", "bigradient-color", this.value.getSpatioTemporalColor().getBiGradientColor(), false);
 //      ((Z4ColorProgressionPanel) this.cardPanels.$get(this.selectedColorProgressionCard)).setProgressionSettings(this.value.getPointIterator().getType(), false, false, true);
     }
   }
@@ -274,16 +274,16 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
             "z4drawingtoolpanel-airbrush-spatial-selected", "z4drawingtoolpanel-airbrush-temporal-selected", "z4drawingtoolpanel-airbrush-relativetopath-selected", "z4drawingtoolpanel-airbrush-random-selected"
     ).forEach(css -> this.selectedColorProgression.cssRemoveClass(css));
 
-    String card
+    String css
             = (this.value.getPointIterator().getType() == Z4PointIteratorType.AIRBRUSH ? "airbrush-" : "")
             + ("" + this.value.getProgression().getColorProgressionBehavior()).toLowerCase().replace("_", "");
 
-    this.check(this.selectedColorProgression, card, this.value.getProgression(), false);
+    this.check(this.selectedColorProgression, "COLOR-PROGRESSION", css, this.value.getProgression(), false);
   }
 
   @SuppressWarnings("unchecked")
-  private String check(JSComponent selected, String card, Object value, boolean show) {
-    selected.cssAddClass("z4drawingtoolpanel-" + card.toLowerCase() + "-selected");
+  private String check(JSComponent selected, String card, String css, Object value, boolean show) {
+    selected.cssAddClass("z4drawingtoolpanel-" + css + "-selected");
 
     if (!$exists(this.cardPanels.$get(card))) {
       switch (card) {
@@ -333,7 +333,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
         this.createValue();
         this.onchange();
       });
-      
+
       this.cardPanel.add(this.cardPanels.$get(card), card);
     }
 
