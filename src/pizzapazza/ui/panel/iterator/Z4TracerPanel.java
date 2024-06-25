@@ -44,33 +44,33 @@ public class Z4TracerPanel extends Z4PointIteratorPanel<Z4Tracer> {
     this.multiplicity.setLabel(Z4Translations.MULTIPLICITY);
     this.multiplicity.cssAddClass("z4abstractvaluepanel-titled");
     this.multiplicity.addChangeListener(event -> this.onIteratorChange(this.multiplicity.getValueIsAdjusting()));
-    this.add(this.multiplicity, new GBC(0, 0));
+    this.add(this.multiplicity, new GBC(0, 0).a(GBC.NORTH).i(0, 0, 0, 1));
 
     this.push.setSignsVisible(false);
     this.push.setLabel(Z4Translations.PUSH);
     this.push.cssAddClass("z4abstractvaluepanel-titled");
     this.push.addChangeListener(event -> this.onIteratorChange(this.push.getValueIsAdjusting()));
-    this.add(this.push, new GBC(1, 0).i(0, 1, 0, 1));
+    this.add(this.push, new GBC(1, 0).a(GBC.NORTH).i(0, 0, 0, 1));
 
     this.step.setSignsVisible(false);
     this.step.setConstantRange(1, 50);
     this.step.setLabel(Z4Translations.STEP);
     this.step.cssAddClass("z4abstractvaluepanel-titled");
     this.step.addChangeListener(event -> this.onIteratorChange(this.step.getValueIsAdjusting()));
-    this.add(this.step, new GBC(2, 0));
+    this.add(this.step, new GBC(2, 0).a(GBC.NORTH).i(0, 0, 0, 1));
 
     this.attack.setSignsVisible(false);
     this.attack.setLabel(Z4Translations.ATTACK);
     this.attack.cssAddClass("z4abstractvaluepanel-titled");
     this.attack.addChangeListener(event -> this.onIteratorChange(this.attack.getValueIsAdjusting()));
-    this.add(this.attack, new GBC(0, 1).i(1, 0, 0, 0).a(GBC.NORTH));
+    this.add(this.attack, new GBC(3, 0).a(GBC.NORTH).i(0, 0, 0, 1));
 
     this.sustain.setSignsVisible(false);
     this.sustain.setLabel(Z4Translations.SUSTAIN);
     this.sustain.cssAddClass("z4abstractvaluepanel-titled");
     this.sustain.addChangeListener(event -> this.onIteratorChange(this.sustain.getValueIsAdjusting()));
     this.sustain.add(this.endlessSustain, new GBC(0, 4).w(3).a(GBC.WEST));
-    this.add(this.sustain, new GBC(1, 1).i(1, 1, 1, 1));
+    this.add(this.sustain, new GBC(4, 0).i(0, 0, 0, 1));
 
     this.endlessSustain.setText(Z4Translations.ENDLESS);
     this.endlessSustain.addActionListener(event -> this.onIteratorChange(false));
@@ -79,9 +79,9 @@ public class Z4TracerPanel extends Z4PointIteratorPanel<Z4Tracer> {
     this.release.setLabel(Z4Translations.RELEASE);
     this.release.cssAddClass("z4abstractvaluepanel-titled");
     this.release.addChangeListener(event -> this.onIteratorChange(this.release.getValueIsAdjusting()));
-    this.add(this.release, new GBC(2, 1).a(GBC.NORTH).i(1, 0, 0, 0));
+    this.add(this.release, new GBC(5, 0).a(GBC.NORTH));
 
-    this.add(this.rotation, new GBC(0, 2).w(3).a(GBC.WEST));
+    this.add(this.rotation, new GBC(0, 1).w(6).i(1, 0, 0, 0));
 
     this.setValue(new Z4Tracer(
             new Z4FancifulValue(

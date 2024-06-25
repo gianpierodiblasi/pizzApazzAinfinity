@@ -123,7 +123,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     Z4UI.addVLine(panel, new GBC(1, 0).h(3).wy(1).a(GBC.NORTH).f(GBC.VERTICAL).i(1, 5, 1, 5));
 
     this.cardPanel.setLayout(this.cardLayout);
-    panel.add(this.cardPanel, new GBC(2, 0).a(GBC.NORTH).wx(1));
+    panel.add(this.cardPanel, new GBC(2, 0).a(GBC.NORTH).wxy(1,1));
 
     ButtonGroup buttonGroup = new ButtonGroup();
     this.addRadioButton(panelRadio, buttonGroup, "STAMPER", "1px");

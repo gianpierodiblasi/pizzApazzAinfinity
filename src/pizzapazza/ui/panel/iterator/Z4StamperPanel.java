@@ -37,15 +37,15 @@ public class Z4StamperPanel extends Z4PointIteratorPanel<Z4Stamper> {
     this.multiplicity.setLabel(Z4Translations.MULTIPLICITY);
     this.multiplicity.cssAddClass("z4abstractvaluepanel-titled");
     this.multiplicity.addChangeListener(event -> this.onIteratorChange(this.multiplicity.getValueIsAdjusting()));
-    this.add(this.multiplicity, new GBC(0, 0).a(GBC.WEST).i(0, 0, 1, 0));
-    
+    this.add(this.multiplicity, new GBC(0, 0));
+
     this.push.setSignsVisible(false);
     this.push.setLabel(Z4Translations.PUSH);
     this.push.cssAddClass("z4abstractvaluepanel-titled");
     this.push.addChangeListener(event -> this.onIteratorChange(this.push.getValueIsAdjusting()));
-    this.add(this.push, new GBC(0, 1).a(GBC.WEST).i(0, 0, 1, 0));
-    
-    this.add(this.rotation, new GBC(0, 2));
+    this.add(this.push, new GBC(0, 1).i(1, 0, 0, 0));
+
+    this.add(this.rotation, new GBC(1, 0).h(2).a(GBC.NORTH).i(0, 1, 0, 0));
 
     this.setValue(new Z4Stamper(
             new Z4FancifulValue(
