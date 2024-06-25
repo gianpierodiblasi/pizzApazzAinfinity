@@ -18,6 +18,7 @@ import pizzapazza.color.Z4GradientColor;
 import pizzapazza.color.Z4Lighting;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.iterator.Z4Airbrush;
+import pizzapazza.iterator.Z4PointIterator;
 import pizzapazza.iterator.Z4PointIteratorType;
 import pizzapazza.iterator.Z4Spirograph;
 import pizzapazza.iterator.Z4Stamper;
@@ -32,6 +33,7 @@ import pizzapazza.math.Z4SignBehavior;
 import pizzapazza.math.Z4SignedRandomValue;
 import pizzapazza.math.Z4SignedValue;
 import pizzapazza.painter.Z4CenteredFigurePainter;
+import pizzapazza.painter.Z4Painter;
 import pizzapazza.painter.Z4PainterType;
 import pizzapazza.painter.Z4Shape2DPainter;
 import pizzapazza.ui.panel.Z4AbstractValuePanel;
@@ -54,6 +56,7 @@ import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.document;
+import simulation.js.$Object;
 
 /**
  * The panel to edit a Z4DrawingTool
@@ -229,8 +232,9 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
 
     this.setPointInterator();
     this.setPainter();
-    this.setColorProgression();
     this.setSpatioTemporalColor();
+    this.setColorProgression();
+    this.setColorProgressionSettings();
   }
 
   private void setPointInterator() {
@@ -262,13 +266,10 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
 
     if (this.value.getSpatioTemporalColor().isColor()) {
       this.selectedSpatioTemporalColorCard = this.check(this.selectedSpatioTemporalColor, "COLOR", "color", this.value.getSpatioTemporalColor().getColor(), false);
-//      ((Z4ColorProgressionPanel) this.cardPanels.$get(this.selectedColorProgressionCard)).setProgressionSettings(this.value.getPointIterator().getType(), true, false, false);
     } else if (this.value.getSpatioTemporalColor().isGradientColor()) {
       this.selectedSpatioTemporalColorCard = this.check(this.selectedSpatioTemporalColor, "GRADIENT-COLOR", "gradient-color", this.value.getSpatioTemporalColor().getGradientColor(), false);
-//      ((Z4ColorProgressionPanel) this.cardPanels.$get(this.selectedColorProgressionCard)).setProgressionSettings(this.value.getPointIterator().getType(), false, true, false);
     } else if (this.value.getSpatioTemporalColor().isBiGradientColor()) {
       this.selectedSpatioTemporalColorCard = this.check(this.selectedSpatioTemporalColor, "BIGRADIENT-COLOR", "bigradient-color", this.value.getSpatioTemporalColor().getBiGradientColor(), false);
-//      ((Z4ColorProgressionPanel) this.cardPanels.$get(this.selectedColorProgressionCard)).setProgressionSettings(this.value.getPointIterator().getType(), false, false, true);
     }
   }
 
@@ -355,28 +356,47 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
 
   @SuppressWarnings("unchecked")
   private void createValue() {
-//    Z4PointIterator pointIterator = ((Z4PointIteratorPanel<Z4PointIterator>) this.cardPanels.$get(this.selectedPointInteratorCard)).getValue();
-//    Z4Painter painter = ((Z4PainterPanel<Z4Painter>) this.cardPanels.$get(this.selectedPainterCard)).getValue();
-//
-//    Z4SpatioTemporalColor spatioTemporalColor = null;
-//    Z4ColorProgressionPanel colorProgressionPanel = (Z4ColorProgressionPanel) this.cardPanels.$get(this.selectedColorProgressionCard);
-//    switch (this.selectedSpatioTemporalColorCard) {
-//      case "COLOR":
-//        spatioTemporalColor = Z4SpatioTemporalColor.fromColor(((Z4ColorPanel) this.cardPanels.$get(this.selectedSpatioTemporalColorCard)).getValue());
-//        colorProgressionPanel.setProgressionSettings(pointIterator.getType(), true, false, false);
-//        break;
-//      case "GRADIENT-COLOR":
-//        spatioTemporalColor = Z4SpatioTemporalColor.fromGradientColor(((Z4GradientColorPanel) this.cardPanels.$get(this.selectedSpatioTemporalColorCard)).getValue());
-//        colorProgressionPanel.setProgressionSettings(pointIterator.getType(), false, true, false);
-//        break;
-//      case "BIGRADIENT-COLOR":
-//        spatioTemporalColor = Z4SpatioTemporalColor.fromBiGradientColor(((Z4BiGradientColorPanel) this.cardPanels.$get(this.selectedSpatioTemporalColorCard)).getValue());
-//        colorProgressionPanel.setProgressionSettings(pointIterator.getType(), false, false, true);
-//        break;
-//    }
-//
-//    Z4ColorProgression progression = colorProgressionPanel.getValue();
-//
-//    this.value = new Z4DrawingTool(pointIterator, painter, spatioTemporalColor, progression);
+    Z4PointIterator pointIterator = ((Z4PointIteratorPanel<Z4PointIterator>) this.cardPanels.$get(this.selectedPointInteratorCard)).getValue();
+
+    $Object options = new $Object();
+    if (pointIterator.getType() == Z4PointIteratorType.SPIROGRAPH) {
+      options.$set("drawWhileMoving", ((Z4Spirograph) pointIterator).isDrawWhileMoving());
+    }
+
+    Z4Painter painter = ((Z4PainterPanel<Z4Painter>) this.cardPanels.$get(this.selectedPainterCard)).getValue();
+
+    Z4SpatioTemporalColor spatioTemporalColor = null;
+    Z4ColorProgressionPanel colorProgressionPanel = (Z4ColorProgressionPanel) this.cardPanels.$get("COLOR-PROGRESSION");
+    switch (this.selectedSpatioTemporalColorCard) {
+      case "COLOR":
+        spatioTemporalColor = Z4SpatioTemporalColor.fromColor(((Z4ColorPanel) this.cardPanels.$get(this.selectedSpatioTemporalColorCard)).getValue());
+        colorProgressionPanel.setProgressionSettings(pointIterator.getType(), options, true, false, false);
+        break;
+      case "GRADIENT-COLOR":
+        spatioTemporalColor = Z4SpatioTemporalColor.fromGradientColor(((Z4GradientColorPanel) this.cardPanels.$get(this.selectedSpatioTemporalColorCard)).getValue());
+        colorProgressionPanel.setProgressionSettings(pointIterator.getType(), options, false, true, false);
+        break;
+      case "BIGRADIENT-COLOR":
+        spatioTemporalColor = Z4SpatioTemporalColor.fromBiGradientColor(((Z4BiGradientColorPanel) this.cardPanels.$get(this.selectedSpatioTemporalColorCard)).getValue());
+        colorProgressionPanel.setProgressionSettings(pointIterator.getType(), options, false, false, true);
+        break;
+    }
+    Z4ColorProgression progression = colorProgressionPanel.getValue();
+
+    this.value = new Z4DrawingTool(pointIterator, painter, spatioTemporalColor, progression);
+  }
+
+  private void setColorProgressionSettings() {
+    $Object options = new $Object();
+    if (this.value.getPointIterator().getType() == Z4PointIteratorType.SPIROGRAPH) {
+      options.$set("drawWhileMoving", ((Z4Spirograph) this.value.getPointIterator()).isDrawWhileMoving());
+    }
+
+    ((Z4ColorProgressionPanel) this.cardPanels.$get("COLOR-PROGRESSION")).setProgressionSettings(
+            this.value.getPointIterator().getType(),
+            options,
+            this.value.getSpatioTemporalColor().isColor(),
+            this.value.getSpatioTemporalColor().isGradientColor(),
+            this.value.getSpatioTemporalColor().isBiGradientColor());
   }
 }
