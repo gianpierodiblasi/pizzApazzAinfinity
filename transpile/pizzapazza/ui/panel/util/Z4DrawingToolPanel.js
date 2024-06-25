@@ -190,13 +190,21 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
    addTryMe(panel) {
     let colors = new JSPanel();
     panel.add(colors, new GBC(0, 0));
-    this.transparentTryMe.addActionListener(event => this.ctxTryMe.clearRect(0, 0, this.widthTryMe, this.heightTryMe));
+    this.transparentTryMe.addActionListener(event => {
+      this.ctxTryMe.clearRect(0, 0, this.widthTryMe, this.heightTryMe);
+      this.offscreenCtxObjects.clearRect(0, 0, this.widthTryMe, this.heightTryMe);
+      this.offscreenCtxBounds.clearRect(0, 0, this.widthTryMe, this.heightTryMe);
+    });
     this.transparentTryMe.cssAddClass("z4drawingtoolpanel-transparent");
     colors.add(this.transparentTryMe, null);
     this.swatchesPanelTryMe.addActionListener(event => {
       this.ctxTryMe.clearRect(0, 0, this.widthTryMe, this.heightTryMe);
+      this.offscreenCtxObjects.clearRect(0, 0, this.widthTryMe, this.heightTryMe);
+      this.offscreenCtxBounds.clearRect(0, 0, this.widthTryMe, this.heightTryMe);
       this.ctxTryMe.fillStyle = Z4Constants.getStyle(this.swatchesPanelTryMe.getSelectedColor().getRGBA_HEX());
       this.ctxTryMe.fillRect(0, 0, this.widthTryMe, this.heightTryMe);
+      this.offscreenCtxObjects.fillStyle = Z4Constants.getStyle(this.swatchesPanelTryMe.getSelectedColor().getRGBA_HEX());
+      this.offscreenCtxObjects.fillRect(0, 0, this.widthTryMe, this.heightTryMe);
     });
     colors.add(this.swatchesPanelTryMe, null);
     this.previewTryMe.setProperty("width", "" + this.widthTryMe);
@@ -257,6 +265,9 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
         setTimeout(() => this.iteratePoints(action), this.value.getInfinitePointGeneratorSleep());
       }
     } else if (this.value.getNextCountOnSTOP()) {
+      this.ctxTryMe.clearRect(0, 0, this.widthTryMe, this.heightTryMe);
+      this.offscreenCtxBounds.clearRect(0, 0, this.widthTryMe, this.heightTryMe);
+      this.ctxTryMe.drawImage(this.offscreenObjects, 0, 0);
       Z4UI.pleaseWait(this.previewTryMe, true, true, false, true, "", () => this.iteratePoint(0));
     }
   }
@@ -275,19 +286,24 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     if (!next) {
       return false;
     } else if (next.intent === Z4DrawingPointIntent.DRAW_OBJECTS) {
-      // this.selectedLayer.drawTool(this.value, next);
-      // this.selectedLayer.getLayerPreview().drawLayer();
-      // this.canvas.drawCanvas();
+      this.offscreenCtxObjects.save();
+      this.offscreenCtxObjects.translate(next.z4Vector.x0, next.z4Vector.y0);
+      this.offscreenCtxObjects.rotate(next.z4Vector.phase);
+      this.value.draw(this.offscreenCtxObjects, next);
+      this.offscreenCtxObjects.restore();
+      this.ctxTryMe.drawImage(this.offscreenObjects, 0, 0);
       return true;
     } else {
       if (next.intent === Z4DrawingPointIntent.REPLACE_PREVIOUS_BOUNDS) {
-        // this.canvas.drawCanvas();
+        this.offscreenCtxBounds.clearRect(0, 0, this.widthTryMe, this.heightTryMe);
       }
-      // this.ctx.save();
-      // this.ctx.translate(next.z4Vector.x0, next.z4Vector.y0);
-      // this.ctx.rotate(next.z4Vector.phase);
-      // this.value.draw(this.ctx, next);
-      // this.ctx.restore();
+      this.offscreenCtxBounds.save();
+      this.offscreenCtxBounds.translate(next.z4Vector.x0, next.z4Vector.y0);
+      this.offscreenCtxBounds.rotate(next.z4Vector.phase);
+      this.value.draw(this.offscreenCtxBounds, next);
+      this.offscreenCtxBounds.restore();
+      this.ctxTryMe.drawImage(this.offscreenObjects, 0, 0);
+      this.ctxTryMe.drawImage(this.offscreenBounds, 0, 0);
       return true;
     }
   }
@@ -346,7 +362,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
 
    setColorProgression() {
     new Array("z4drawingtoolpanel-spatial-selected", "z4drawingtoolpanel-temporal-selected", "z4drawingtoolpanel-relativetopath-selected", "z4drawingtoolpanel-random-selected", "z4drawingtoolpanel-airbrush-spatial-selected", "z4drawingtoolpanel-airbrush-temporal-selected", "z4drawingtoolpanel-airbrush-relativetopath-selected", "z4drawingtoolpanel-airbrush-random-selected").forEach(css => this.selectedColorProgression.cssRemoveClass(css));
-    let css = (this.value.getPointIterator().getType() === Z4PointIteratorType.AIRBRUSH ? "airbrush-" : "") + ("" + this.value.getProgression().getColorProgressionBehavior()).toLowerCase().replace("_", "");
+    let css = (this.value.getPointIterator().getType() === Z4PointIteratorType.AIRBRUSH ? "airbrush-" : "") + ("" + this.value.getProgression().getColorProgressionBehavior()).toLowerCase().replaceAll("_", "");
     this.check(this.selectedColorProgression, "COLOR-PROGRESSION", css, this.value.getProgression(), false);
   }
 
