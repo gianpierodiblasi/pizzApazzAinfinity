@@ -78,24 +78,32 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     radio.cssAddClass("z4drawingtoolpanel-selector");
     radio.setIcon(new Z4EmptyImageProducer(card));
     radio.addActionListener(event => {
-      // this.check(selected, card, evaluate, null, true);
-      // 
-      // switch (type) {
-      // case "pointIterator":
-      // this.selectedPointInteratorCard = card;
-      // break;
-      // case "painter":
-      // this.selectedPainterCard = card;
-      // break;
-      // case "spatioTemporalColor":
-      // this.selectedSpatioTemporalColorCard = card;
-      // break;
-      // case "colorProgression":
-      // this.selectedColorProgressionCard = card;
-      // break;
-      // }
-      // this.createValue();
-      // this.onchange();
+      switch(card) {
+        case "STAMPER":
+        case "TRACER":
+        case "AIRBRUSH":
+        case "SPIROGRAPH":
+          new Array("z4drawingtoolpanel-stamper-selected", "z4drawingtoolpanel-tracer-selected", "z4drawingtoolpanel-airbrush-selected", "z4drawingtoolpanel-spirograph-selected").forEach(css => this.selectedPointInterator.cssRemoveClass(css));
+          this.selectedPointInteratorCard = this.check(this.selectedPointInterator, card, card.toLowerCase(), null, true);
+          break;
+        case "SHAPE2D":
+        case "CENTERED-FIGURE":
+          new Array("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-centered-figure-selected").forEach(css => this.selectedPainter.cssRemoveClass(css));
+          this.selectedPainterCard = this.check(this.selectedPainter, card, card.toLowerCase(), null, true);
+          break;
+        case "COLOR":
+        case "GRADIENT-COLOR":
+        case "BIGRADIENT-COLOR":
+          new Array("z4drawingtoolpanel-color-selected", "z4drawingtoolpanel-gradient-color-selected", "z4drawingtoolpanel-bigradient-color-selected").forEach(css => this.selectedSpatioTemporalColor.cssRemoveClass(css));
+          this.selectedSpatioTemporalColorCard = this.check(this.selectedSpatioTemporalColor, card, card.toLowerCase(), null, true);
+          break;
+        case "COLOR-PROGRESSION":
+          this.check(this.selectedColorProgression, "COLOR-PROGRESSION", null, null, true);
+          break;
+      }
+      this.valueIsAdjusting = false;
+      this.createValue();
+      this.onchange();
     });
     this.radios[card] = radio;
     buttonGroup.add(radio);
@@ -160,7 +168,9 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
   }
 
    check(selected, card, css, value, show) {
-    selected.cssAddClass("z4drawingtoolpanel-" + css + "-selected");
+    if (css) {
+      selected.cssAddClass("z4drawingtoolpanel-" + css + "-selected");
+    }
     if (!this.cardPanels[card]) {
       switch(card) {
         case "STAMPER":
@@ -245,6 +255,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     }
     let progression = colorProgressionPanel.getValue();
     this.value = new Z4DrawingTool(pointIterator, painter, spatioTemporalColor, progression);
+    this.setColorProgression();
   }
 
    setColorProgressionSettings() {
