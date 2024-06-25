@@ -23,10 +23,13 @@ import pizzapazza.color.Z4Lighting;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.iterator.Z4Airbrush;
 import pizzapazza.iterator.Z4PointIterator;
+import pizzapazza.iterator.Z4PointIteratorDrawingAction;
 import pizzapazza.iterator.Z4PointIteratorType;
 import pizzapazza.iterator.Z4Spirograph;
 import pizzapazza.iterator.Z4Stamper;
 import pizzapazza.iterator.Z4Tracer;
+import pizzapazza.math.Z4DrawingPoint;
+import pizzapazza.math.Z4DrawingPointIntent;
 import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4RandomValue;
 import pizzapazza.math.Z4RandomValueBehavior;
@@ -60,7 +63,9 @@ import pizzapazza.util.Z4EmptyImageProducer;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
+import simulation.dom.$OffscreenCanvas;
 import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.setTimeout;
 import simulation.js.$Object;
 
 /**
@@ -101,10 +106,17 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
   private String selectedSpatioTemporalColorCard;
 
   private boolean valueIsAdjusting;
+
   private Color previewColor;
-  private int widthTryMe = 700;
-  private int heightTryMe = 600;
-  
+
+  private final int widthTryMe = 700;
+  private final int heightTryMe = 600;
+  private final $OffscreenCanvas offscreenObjects = new $OffscreenCanvas(this.widthTryMe, this.heightTryMe);
+  private final $CanvasRenderingContext2D offscreenCtxObjects = this.offscreenObjects.getContext("2d");
+  private final $OffscreenCanvas offscreenBounds = new $OffscreenCanvas(this.widthTryMe, this.heightTryMe);
+  private final $CanvasRenderingContext2D offscreenCtxBounds = this.offscreenBounds.getContext("2d");
+  private boolean pressedTryMe;
+
   public Z4DrawingToolPanel() {
     super();
     this.setLayout(new GridBagLayout());
@@ -308,8 +320,8 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     });
     colors.add(this.swatchesPanelTryMe, null);
 
-    this.previewTryMe.setProperty("width", ""+this.widthTryMe);
-    this.previewTryMe.setProperty("height", ""+this.heightTryMe);
+    this.previewTryMe.setProperty("width", "" + this.widthTryMe);
+    this.previewTryMe.setProperty("height", "" + this.heightTryMe);
     this.previewTryMe.cssAddClass("z4drawingtoolpanel-preview");
     this.previewTryMe.addEventListener("mouseenter", event -> this.onMouse((MouseEvent) event, "enter"));
     this.previewTryMe.addEventListener("mouseleave", event -> this.onMouse((MouseEvent) event, "leave"));
@@ -320,104 +332,92 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
   }
 
   public void onMouse(MouseEvent event, String type) {
-//    double x = Math.min(this.size.width, Math.max(0, event.offsetX / this.zoom));
-//    double y = Math.min(this.size.height, Math.max(0, event.offsetY / this.zoom));
-//
-//    switch (type) {
-//      case "enter":
-//        this.pressed = event.buttons == 1;
-//        this.onAction(Z4PointIteratorDrawingAction.START, x, y);
-//        this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
-//        break;
-//      case "down":
-//        this.pressed = true;
-//        this.onAction(Z4PointIteratorDrawingAction.START, x, y);
-//        break;
-//      case "move":
-//        this.statusPanel.setMousePosition(parseInt(x), parseInt(y));
-//        this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
-//        break;
-//      case "up":
-//        this.onStop(x, y);
-//        break;
-//      case "leave":
-//        if (this.pressed) {
-//          this.onStop(x, y);
-//        }
-//        break;
-//    }
+    double x = Math.min(this.widthTryMe, Math.max(0, event.offsetX));
+    double y = Math.min(this.heightTryMe, Math.max(0, event.offsetY));
+
+    switch (type) {
+      case "enter":
+        this.pressedTryMe = event.buttons == 1;
+        this.onAction(Z4PointIteratorDrawingAction.START, x, y);
+        this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
+        break;
+      case "down":
+        this.pressedTryMe = true;
+        this.onAction(Z4PointIteratorDrawingAction.START, x, y);
+        break;
+      case "move":
+        this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
+        break;
+      case "up":
+        this.onStop(x, y);
+        break;
+      case "leave":
+        if (this.pressedTryMe) {
+          this.onStop(x, y);
+        }
+        break;
+    }
   }
 
-//  private void onAction(Z4PointIteratorDrawingAction action, double x, double y) {
-//    if (this.pressed && this.drawingTool.drawAction(action, x, y)) {
-//      this.ribbonHistoryPanel.stopStandard();
-//      this.iteratePoints(action);
-//    }
-//  }
+  private void onAction(Z4PointIteratorDrawingAction action, double x, double y) {
+    if (this.pressedTryMe && this.value.drawAction(action, x, y)) {
+      this.iteratePoints(action);
+    }
+  }
 
-//  private void onStop(double x, double y) {
-//    this.pressed = false;
-//    if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
-//      this.ribbonHistoryPanel.stopStandard();
-//      this.iteratePoints(Z4PointIteratorDrawingAction.STOP);
-//    } else {
-//      this.startStandard();
-//    }
-//  }
+  private void onStop(double x, double y) {
+    this.pressedTryMe = false;
+    if (this.value.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
+      this.iteratePoints(Z4PointIteratorDrawingAction.STOP);
+    }
+  }
 
-//  @SuppressWarnings("empty-statement")
-//  private void iteratePoints(Z4PointIteratorDrawingAction action) {
-//    if (action != Z4PointIteratorDrawingAction.STOP) {
-//      while (this.drawNextPoint());
-//
-//      if (this.drawingTool.isInfinitePointGenerator() && this.pressed) {
-//        setTimeout(() -> this.iteratePoints(action), this.drawingTool.getInfinitePointGeneratorSleep());
-//      }
-//    } else if ($exists(this.drawingTool.getNextCountOnSTOP())) {
-//      Z4UI.pleaseWait(this.canvas, true, true, false, true, "", () -> this.iteratePoint(0));
-//    } else {
-//      this.startStandard();
-//    }
-//  }
+  @SuppressWarnings("empty-statement")
+  private void iteratePoints(Z4PointIteratorDrawingAction action) {
+    if (action != Z4PointIteratorDrawingAction.STOP) {
+      while (this.drawNextPoint());
 
-//  private void iteratePoint(int value) {
-//    Z4UI.setPleaseWaitProgressBarValue(100 * value / this.drawingTool.getNextCountOnSTOP());
-//
-//    if (this.drawNextPoint()) {
-//      Z4UI.pleaseWaitAdvanced(() -> this.iteratePoint(value + 1));
-//    } else {
-//      this.startStandard();
-//      Z4UI.pleaseWaitCompleted();
-//    }
-//  }
+      if (this.value.isInfinitePointGenerator() && this.pressedTryMe) {
+        setTimeout(() -> this.iteratePoints(action), this.value.getInfinitePointGeneratorSleep());
+      }
+    } else if ($exists(this.value.getNextCountOnSTOP())) {
+      Z4UI.pleaseWait(this.previewTryMe, true, true, false, true, "", () -> this.iteratePoint(0));
+    }
+  }
 
-//  private boolean drawNextPoint() {
-//    Z4DrawingPoint next = this.drawingTool.next();
-//    if (!$exists(next)) {
-//      return false;
-//    } else if (next.intent == Z4DrawingPointIntent.DRAW_OBJECTS) {
-//      this.selectedLayer.drawTool(this.drawingTool, next);
+  private void iteratePoint(int value) {
+    Z4UI.setPleaseWaitProgressBarValue(100 * value / this.value.getNextCountOnSTOP());
+
+    if (this.drawNextPoint()) {
+      Z4UI.pleaseWaitAdvanced(() -> this.iteratePoint(value + 1));
+    } else {
+      Z4UI.pleaseWaitCompleted();
+    }
+  }
+
+  private boolean drawNextPoint() {
+    Z4DrawingPoint next = this.value.next();
+    if (!$exists(next)) {
+      return false;
+    } else if (next.intent == Z4DrawingPointIntent.DRAW_OBJECTS) {
+//      this.selectedLayer.drawTool(this.value, next);
 //      this.selectedLayer.getLayerPreview().drawLayer();
 //      this.canvas.drawCanvas();
-//      return true;
-//    } else {
-//      if (this.zoom != 1) {
-//        next = new Z4DrawingPoint(Z4Vector.fromPoints(this.zoom * next.z4Vector.x0, this.zoom * next.z4Vector.y0, this.zoom * next.z4Vector.x, this.zoom * next.z4Vector.y), next.intensity, next.temporalPosition, next.intent, next.side, next.useVectorModuleAsSize);
-//      }
-//
-//      if (next.intent == Z4DrawingPointIntent.REPLACE_PREVIOUS_BOUNDS) {
+      return true;
+    } else {
+      if (next.intent == Z4DrawingPointIntent.REPLACE_PREVIOUS_BOUNDS) {
 //        this.canvas.drawCanvas();
-//      }
-//
+      }
+
 //      this.ctx.save();
 //      this.ctx.translate(next.z4Vector.x0, next.z4Vector.y0);
 //      this.ctx.rotate(next.z4Vector.phase);
-//      this.drawingTool.draw(this.ctx, next);
+//      this.value.draw(this.ctx, next);
 //      this.ctx.restore();
-//      return true;
-//    }
-//  }
-  
+      return true;
+    }
+  }
+
   /**
    * Returns if the value is adjusting
    *
