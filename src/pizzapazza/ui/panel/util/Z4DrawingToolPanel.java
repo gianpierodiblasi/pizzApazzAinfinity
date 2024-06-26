@@ -189,7 +189,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
                     new Z4Rotation(0, new Z4FancifulValue(
                             new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0),
                             new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                            false), Z4RotationBehavior.RELATIVE_TO_PATH, false)
+                            false), Z4RotationBehavior.FIXED, false)
             ),
             new Z4Shape2DPainter(
                     new Z4FancifulValue(
