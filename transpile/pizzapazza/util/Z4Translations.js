@@ -267,13 +267,17 @@ class Z4Translations {
 
   static  WHIRLPOOL = "";
 
-  static  INTERNAL_ANGLE = "";
+  static  INTERNAL_BASE_POINT = "";
 
-  static  EXTERNAL_ANGLE = "";
+  static  EXTERNAL_BASE_POINT = "";
 
-  static  INTERNAL_TENSION = "";
+  static  INTERNAL_TERMINAL_POINT = "";
 
-  static  EXTERNAL_TENSION = "";
+  static  EXTERNAL_TERMINAL_POINT = "";
+
+  static  INDENTATION = "";
+
+  static  EXTERNAL_FORCE = "";
 
   // Math
   static  POSITIVE = "";
@@ -524,10 +528,12 @@ class Z4Translations {
     Z4Translations.HOLE = "Hole";
     Z4Translations.COVER = "Cover";
     Z4Translations.WHIRLPOOL = "Whirlpool";
-    Z4Translations.INTERNAL_ANGLE = "Internal Angle";
-    Z4Translations.EXTERNAL_ANGLE = "External Angle";
-    Z4Translations.INTERNAL_TENSION = "Internal Tension";
-    Z4Translations.EXTERNAL_TENSION = "External Tension";
+    Z4Translations.INTERNAL_BASE_POINT = "Internal Base Point";
+    Z4Translations.EXTERNAL_BASE_POINT = "External Base Point";
+    Z4Translations.INTERNAL_TERMINAL_POINT = "Internal Terminal Point";
+    Z4Translations.EXTERNAL_TERMINAL_POINT = "External Terminal Point";
+    Z4Translations.INDENTATION = "Indentation";
+    Z4Translations.EXTERNAL_FORCE = "External Force";
     // Math
     Z4Translations.POSITIVE = "Positive";
     Z4Translations.NEGATIVE = "Negative";
@@ -718,10 +724,12 @@ class Z4Translations {
     Z4Translations.HOLE = "Buco";
     Z4Translations.COVER = "Copertura";
     Z4Translations.WHIRLPOOL = "Vortice";
-    Z4Translations.INTERNAL_ANGLE = "Angolo Interno";
-    Z4Translations.EXTERNAL_ANGLE = "Angolo Esterno";
-    Z4Translations.INTERNAL_TENSION = "Tensione Interna";
-    Z4Translations.EXTERNAL_TENSION = "Tensione Esterna";
+    Z4Translations.INTERNAL_BASE_POINT = "Punto Base Interno";
+    Z4Translations.EXTERNAL_BASE_POINT = "Punto Base Esterno";
+    Z4Translations.INTERNAL_TERMINAL_POINT = "Punto Terminale Interno";
+    Z4Translations.EXTERNAL_TERMINAL_POINT = "Punto Terminale Esterno";
+    Z4Translations.INDENTATION = "Frastagliatura";
+    Z4Translations.EXTERNAL_FORCE = "Forza Esterna";
     // Math
     Z4Translations.POSITIVE = "Positivo";
     Z4Translations.NEGATIVE = "Negativo";

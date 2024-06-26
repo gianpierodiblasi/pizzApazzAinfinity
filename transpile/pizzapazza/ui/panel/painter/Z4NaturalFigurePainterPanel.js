@@ -26,14 +26,14 @@ class Z4NaturalFigurePainterPanel extends Z4PainterPanel {
 
    externalTension2 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
 
-  // 
-  // private final Z4FancifulValuePanel hole = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
-  // private final Z4WhirlpoolPanel whirlpool = new Z4WhirlpoolPanel(Z4WhirlpoolPanelOrientation.HORIZONTAL);
+   externalForceAngle = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+
+   externalForceTension = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+
    indentationSpinner = new JSSpinner();
 
    indentationSlider = new JSSlider();
 
-  // 
    shadowShiftX = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
 
    shadowShiftY = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
@@ -76,95 +76,32 @@ class Z4NaturalFigurePainterPanel extends Z4PainterPanel {
     this.size.setLabel(Z4Translations.DIMENSION);
     this.size.cssAddClass("z4abstractvaluepanel-titled");
     this.size.addChangeListener(event => this.onfigurechange(this.size.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
-    panel.add(this.size, new GBC(1, 0));
-    this.internalAngle1.getStyle().setProperty("grid-template-areas", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\"");
-    this.internalAngle1.setSignsVisible(false);
-    this.internalAngle1.setConstantRange(0, 90);
-    this.internalAngle1.setRandomRange(0, 90);
-    this.internalAngle1.setLabel(Z4Translations.INTERNAL_ANGLE + " 1 (\u03B1i1)");
-    this.internalAngle1.cssAddClass("z4abstractvaluepanel-titled");
-    this.internalAngle1.addChangeListener(event => this.onfigurechange(this.internalAngle1.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
-    panel.add(this.internalAngle1, new GBC(1, 1));
-    this.externalAngle1.getStyle().setProperty("grid-template-areas", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\"");
-    this.externalAngle1.setSignsVisible(false);
-    this.externalAngle1.setConstantRange(0, 90);
-    this.externalAngle1.setRandomRange(0, 90);
-    this.externalAngle1.setLabel(Z4Translations.EXTERNAL_ANGLE + " 1 (\u03B1e1)");
-    this.externalAngle1.cssAddClass("z4abstractvaluepanel-titled");
-    this.externalAngle1.addChangeListener(event => this.onfigurechange(this.externalAngle1.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
-    panel.add(this.externalAngle1, new GBC(2, 1).w(2));
-    this.internalAngle2.getStyle().setProperty("grid-template-areas", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\"");
-    this.internalAngle2.setSignsVisible(false);
-    this.internalAngle2.setConstantRange(0, 90);
-    this.internalAngle2.setRandomRange(0, 90);
-    this.internalAngle2.setLabel(Z4Translations.INTERNAL_ANGLE + " 2 (\u03B1i2)");
-    this.internalAngle2.cssAddClass("z4abstractvaluepanel-titled");
-    this.internalAngle2.addChangeListener(event => this.onfigurechange(this.internalAngle2.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
-    panel.add(this.internalAngle2, new GBC(1, 2));
-    this.externalAngle2.getStyle().setProperty("grid-template-areas", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\"");
-    this.externalAngle2.setSignsVisible(false);
-    this.externalAngle2.setConstantRange(0, 90);
-    this.externalAngle2.setRandomRange(0, 90);
-    this.externalAngle2.setLabel(Z4Translations.EXTERNAL_ANGLE + " 2 (\u03B1e2)");
-    this.externalAngle2.cssAddClass("z4abstractvaluepanel-titled");
-    this.externalAngle2.addChangeListener(event => this.onfigurechange(this.externalAngle2.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
-    panel.add(this.externalAngle2, new GBC(2, 2).w(2));
-    this.internalTension1.getStyle().setProperty("grid-template-areas", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\"");
-    this.internalTension1.setSignsVisible(false);
-    this.internalTension1.setConstantRange(1, 100);
-    this.internalTension1.setLabel(Z4Translations.INTERNAL_TENSION + " 1 (\u03C4i1)");
-    this.internalTension1.cssAddClass("z4abstractvaluepanel-titled");
-    this.internalTension1.addChangeListener(event => this.onfigurechange(this.internalTension1.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
-    panel.add(this.internalTension1, new GBC(1, 3));
-    this.externalTension1.getStyle().setProperty("grid-template-areas", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\"");
-    this.externalTension1.setSignsVisible(false);
-    this.externalTension1.setConstantRange(1, 100);
-    this.externalTension1.setLabel(Z4Translations.EXTERNAL_TENSION + " 1 (\u03C4e1)");
-    this.externalTension1.cssAddClass("z4abstractvaluepanel-titled");
-    this.externalTension1.addChangeListener(event => this.onfigurechange(this.externalTension1.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
-    panel.add(this.externalTension1, new GBC(2, 3));
-    this.internalTension2.getStyle().setProperty("grid-template-areas", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\"");
-    this.internalTension2.setSignsVisible(false);
-    this.internalTension2.setConstantRange(1, 100);
-    this.internalTension2.setLabel(Z4Translations.INTERNAL_TENSION + " 2 (\u03C4i2)");
-    this.internalTension2.cssAddClass("z4abstractvaluepanel-titled");
-    this.internalTension2.addChangeListener(event => this.onfigurechange(this.internalTension2.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
-    panel.add(this.internalTension2, new GBC(1, 4));
-    this.externalTension2.getStyle().setProperty("grid-template-areas", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\"");
-    this.externalTension2.setSignsVisible(false);
-    this.externalTension2.setConstantRange(1, 100);
-    this.externalTension2.setLabel(Z4Translations.EXTERNAL_TENSION + " 2 (\u03C4e2)");
-    this.externalTension2.cssAddClass("z4abstractvaluepanel-titled");
-    this.externalTension2.addChangeListener(event => this.onfigurechange(this.externalTension2.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
-    panel.add(this.externalTension2, new GBC(2, 4));
-    // 
-    // this.multiplicity.setSignsVisible(false);
-    // this.multiplicity.setConstantRange(3, 10);
-    // this.multiplicity.setLabel(Z4Translations.MULTIPLICITY);
-    // this.multiplicity.cssAddClass("z4abstractvaluepanel-titled");
-    // this.multiplicity.addChangeListener(event -> this.onfigurechange(this.multiplicity.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
-    // panel.add(this.multiplicity, new GBC(1, 2).i(1, 0, 0, 1));
-    // 
-    // this.hole.setSignsVisible(false);
-    // this.hole.setLabel(Z4Translations.HOLE);
-    // this.hole.cssAddClass("z4abstractvaluepanel-titled");
-    // this.hole.addChangeListener(event -> this.onfigurechange(this.hole.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
-    // panel.add(this.hole, new GBC(2, 2).w(2).i(1, 0, 0, 0));
-    // 
-    // this.whirlpool.cssAddClass("z4abstractvaluepanel-titled");
-    // this.whirlpool.addChangeListener(event -> this.onfigurechange(this.whirlpool.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
-    // panel.add(this.whirlpool, new GBC(1, 3).h(2).i(1, 0, 0, 1));
-    // 
-    // Z4UI.addLabel(panel, Z4Translations.INDENTATION, new GBC(2, 3).a(GBC.SOUTHWEST).wy(1));
-    // 
-    // this.indentationSpinner.cssAddClass("jsspinner_w_4rem");
-    // this.indentationSpinner.setModel(new SpinnerNumberModel(100, 0, 100, 1));
-    // this.indentationSpinner.addChangeListener(event -> this.onfigurechange(this.indentationSpinner.getValueIsAdjusting(), null, null, (int) this.indentationSpinner.getValue()));
-    // panel.add(this.indentationSpinner, new GBC(3, 3).a(GBC.SOUTHEAST));
-    // 
-    // this.indentationSlider.addChangeListener(event -> this.onfigurechange(this.indentationSlider.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
-    // panel.add(this.indentationSlider, new GBC(2, 4).w(2).f(GBC.HORIZONTAL).a(GBC.SOUTH));
-    // 
+    panel.add(this.size, new GBC(1, 0).i(1, 0, 1, 0));
+    this.createPoint(panel, this.internalAngle1, this.internalTension1, Z4Translations.INTERNAL_BASE_POINT, "i1", 1);
+    this.createPoint(panel, this.externalAngle1, this.externalTension1, Z4Translations.EXTERNAL_BASE_POINT, "e1", 3);
+    this.createPoint(panel, this.internalAngle2, this.internalTension2, Z4Translations.INTERNAL_TERMINAL_POINT, "i2", 5);
+    this.createPoint(panel, this.externalAngle2, this.externalTension2, Z4Translations.EXTERNAL_TERMINAL_POINT, "e2", 7);
+    Z4UI.addLabel(panel, Z4Translations.EXTERNAL_FORCE, new GBC(1, 9).w(2).a(GBC.WEST)).getStyle().fontWeight = "bold";
+    this.externalForceAngle.setConstantRange(0, 90);
+    this.externalForceAngle.setRandomRange(0, 90);
+    this.externalForceAngle.setLabel(Z4Translations.ANGLE + " (\u03B1)");
+    this.externalForceAngle.cssAddClass("z4abstractvaluepanel-titled");
+    this.externalForceAngle.addChangeListener(event => this.onfigurechange(this.externalForceAngle.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
+    panel.add(this.externalForceAngle, new GBC(1, 10));
+    this.externalForceTension.getStyle().setProperty("grid-template-areas", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\"");
+    this.externalForceTension.setSignsVisible(false);
+    this.externalForceTension.setConstantRange(1, 100);
+    this.externalForceTension.setLabel(Z4Translations.TENSION + " (\u03C4)");
+    this.externalForceTension.cssAddClass("z4abstractvaluepanel-titled");
+    this.externalForceTension.addChangeListener(event => this.onfigurechange(this.externalForceTension.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
+    panel.add(this.externalForceTension, new GBC(2, 10));
+    Z4UI.addLabel(panel, Z4Translations.INDENTATION, new GBC(1, 11).a(GBC.WEST));
+    this.indentationSpinner.cssAddClass("jsspinner_w_4rem");
+    this.indentationSpinner.setModel(new SpinnerNumberModel(100, 0, 100, 1));
+    this.indentationSpinner.addChangeListener(event => this.onfigurechange(this.indentationSpinner.getValueIsAdjusting(), null, null, this.indentationSpinner.getValue()));
+    panel.add(this.indentationSpinner, new GBC(2, 11).a(GBC.EAST));
+    this.indentationSlider.addChangeListener(event => this.onfigurechange(this.indentationSlider.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
+    panel.add(this.indentationSlider, new GBC(1, 12).w(2).f(GBC.HORIZONTAL));
     this.shadowShiftX.setLabel(Z4Translations.DELTA_X);
     this.shadowShiftX.cssAddClass("z4abstractvaluepanel-titled");
     this.shadowShiftX.addChangeListener(event => this.onfigurechange(this.shadowShiftX.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
@@ -243,6 +180,25 @@ class Z4NaturalFigurePainterPanel extends Z4PainterPanel {
     // panel.add(radio, null);
   }
 
+   createPoint(panel, angle, tension, title, suffix, y) {
+    Z4UI.addLabel(panel, title, new GBC(1, y).w(2).a(GBC.WEST)).getStyle().fontWeight = "bold";
+    angle.getStyle().setProperty("grid-template-areas", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\"");
+    angle.setSignsVisible(false);
+    angle.setConstantRange(0, 90);
+    angle.setRandomRange(0, 90);
+    angle.setLabel(Z4Translations.ANGLE + " (\u03B1" + suffix + ")");
+    angle.cssAddClass("z4abstractvaluepanel-titled");
+    angle.addChangeListener(event => this.onfigurechange(angle.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
+    panel.add(angle, new GBC(1, y + 1).i(0, 0, 1, 1));
+    tension.getStyle().setProperty("grid-template-areas", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\"");
+    tension.setSignsVisible(false);
+    tension.setConstantRange(1, 100);
+    tension.setLabel(Z4Translations.TENSION + " (\u03C4" + suffix + ")");
+    tension.cssAddClass("z4abstractvaluepanel-titled");
+    tension.addChangeListener(event => this.onfigurechange(tension.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
+    panel.add(tension, new GBC(2, y + 1));
+  }
+
    createPanel(tabbedPane, text, p1, p2, colorPanel) {
     let panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
@@ -278,7 +234,7 @@ class Z4NaturalFigurePainterPanel extends Z4PainterPanel {
     // this.value = new Z4NaturalFigurePainter(
     // type,
     // this.size.getValue(), this.angle1.getValue(), this.angle2.getValue(),
-    // this.tension.getValue(), this.multiplicity.getValue(), this.hole.getValue(), this.whirlpool.getValue(), this.indentationSlider.getValue(),
+    // this.tension.getValue(), this.externalforceangle.getValue(), this.hole.getValue(), this.whirlpool.getValue(), this.indentationSlider.getValue(),
     // this.shadowShiftX.getValue(), this.shadowShiftY.getValue(), $exists(shadowColor) ? shadowColor : this.value.getShadowColor(),
     // this.borderSize.getValue(), $exists(borderColor) ? borderColor : this.value.getBorderColor()
     // );
@@ -327,9 +283,8 @@ class Z4NaturalFigurePainterPanel extends Z4PainterPanel {
     // this.tension2.setEnabled(this.enabled && this.value.getNaturalFigurePainterType() != Z4NaturalFigurePainterType.TYPE_5);
     this.externalTension2.setValue(this.value.getExternalTension2());
     // this.tension2.setEnabled(this.enabled && (this.value.getNaturalFigurePainterType() == Z4NaturalFigurePainterType.TYPE_3 || this.value.getNaturalFigurePainterType() == Z4NaturalFigurePainterType.TYPE_5));
-    // this.multiplicity.setValue(this.value.getMultiplicity());
-    // this.hole.setValue(this.value.getHole());
-    // this.whirlpool.setValue(this.value.getWhirlpool());
+    this.externalForceAngle.setValue(this.value.getExternalForceAngle());
+    this.externalForceTension.setValue(this.value.getExternalForceTension());
     this.indentationSpinner.setValue(this.value.getIndentation());
     this.indentationSlider.setValue(this.value.getIndentation());
     this.shadowShiftX.setValue(this.value.getShadowShiftX());
@@ -347,9 +302,9 @@ class Z4NaturalFigurePainterPanel extends Z4PainterPanel {
     // this.angle1.setEnabled(b && this.value.getNaturalFigurePainterType() != Z4NaturalFigurePainterType.TYPE_5);
     // this.angle2.setEnabled(b && (this.value.getNaturalFigurePainterType() == Z4NaturalFigurePainterType.TYPE_3 || this.value.getNaturalFigurePainterType() == Z4NaturalFigurePainterType.TYPE_5));
     // this.tension.setEnabled(b && (this.value.getNaturalFigurePainterType() == Z4NaturalFigurePainterType.TYPE_3 || this.value.getNaturalFigurePainterType() == Z4NaturalFigurePainterType.TYPE_4 || this.value.getNaturalFigurePainterType() == Z4NaturalFigurePainterType.TYPE_5));
-    // this.multiplicity.setEnabled(b);
-    // this.hole.setEnabled(b);
-    // this.whirlpool.setEnabled(b);
+    // 
+    this.externalForceAngle.setEnabled(b);
+    this.externalForceTension.setEnabled(b);
     this.indentationSpinner.setEnabled(b);
     this.indentationSlider.setEnabled(b);
     this.shadowShiftX.setEnabled(b);
