@@ -44,6 +44,13 @@ public class Z4NaturalFigurePainter extends Z4Painter {
   private final Z4FancifulValue externalForceAngle;
   private final Z4FancifulValue externalForceTension;
 
+  private final Z4FancifulValue shadowShiftX;
+  private final Z4FancifulValue shadowShiftY;
+  private final Color shadowColor;
+
+  private final Z4FancifulValue borderSize;
+  private final Color borderColor;
+
   private Z4Point path1;
   private Z4Point path2;
 
@@ -75,13 +82,20 @@ public class Z4NaturalFigurePainter extends Z4Painter {
    * @param indentation The indentation
    * @param externalForceAngle The angle of the external force
    * @param externalForceTension The tension of the external force
+   * @param shadowShiftX The X shadow shift
+   * @param shadowShiftY The Y shadow shift
+   * @param shadowColor The shadow color
+   * @param borderSize The border size
+   * @param borderColor The border color
    */
   public Z4NaturalFigurePainter(Z4NaturalFigurePainterType naturalFigurePainterType, Z4NaturalFigurePainterControlPointClosure controlPointClosure,
           Z4FancifulValue size,
           Z4FancifulValue internalAngle1, Z4FancifulValue externalAngle1, Z4FancifulValue internalAngle2, Z4FancifulValue externalAngle2,
           Z4FancifulValue internalTension1, Z4FancifulValue externalTension1, Z4FancifulValue internalTension2, Z4FancifulValue externalTension2,
           int indentation,
-          Z4FancifulValue externalForceAngle, Z4FancifulValue externalForceTension) {
+          Z4FancifulValue externalForceAngle, Z4FancifulValue externalForceTension,
+          Z4FancifulValue shadowShiftX, Z4FancifulValue shadowShiftY, Color shadowColor,
+          Z4FancifulValue borderSize, Color borderColor) {
     super();
 
     this.naturalFigurePainterType = naturalFigurePainterType;
@@ -103,6 +117,13 @@ public class Z4NaturalFigurePainter extends Z4Painter {
 
     this.externalForceAngle = externalForceAngle;
     this.externalForceTension = externalForceTension;
+
+    this.shadowShiftX = shadowShiftX;
+    this.shadowShiftY = shadowShiftY;
+    this.shadowColor = shadowColor;
+
+    this.borderSize = borderSize;
+    this.borderColor = borderColor;
   }
 
   @Override
@@ -234,6 +255,51 @@ public class Z4NaturalFigurePainter extends Z4Painter {
    */
   public Z4FancifulValue getExternalForceTension() {
     return this.externalForceTension;
+  }
+
+  /**
+   * Returns the X shadow shift
+   *
+   * @return The X shadow shift
+   */
+  public Z4FancifulValue getShadowShiftX() {
+    return this.shadowShiftX;
+  }
+
+  /**
+   * Returns the Y shadow shift
+   *
+   * @return The Y shadow shift
+   */
+  public Z4FancifulValue getShadowShiftY() {
+    return this.shadowShiftY;
+  }
+
+  /**
+   * Returns the shadow color
+   *
+   * @return The shadow color
+   */
+  public Color getShadowColor() {
+    return this.shadowColor;
+  }
+
+  /**
+   * Returns the border size
+   *
+   * @return The border size
+   */
+  public Z4FancifulValue getBorderSize() {
+    return this.borderSize;
+  }
+
+  /**
+   * Returns the border color
+   *
+   * @return The border color
+   */
+  public Color getBorderColor() {
+    return this.borderColor;
   }
 
   @Override
@@ -490,6 +556,25 @@ public class Z4NaturalFigurePainter extends Z4Painter {
     json.$set("externalForceAngle", this.externalForceAngle.toJSON());
     json.$set("externalForceTension", this.externalForceTension.toJSON());
 
+    json.$set("shadowShiftX", this.shadowShiftX.toJSON());
+    json.$set("shadowShiftY", this.shadowShiftY.toJSON());
+
+    $Object jsonColor = new $Object();
+    jsonColor.$set("red", this.shadowColor.red);
+    jsonColor.$set("green", this.shadowColor.green);
+    jsonColor.$set("blue", this.shadowColor.blue);
+    jsonColor.$set("alpha", this.shadowColor.alpha);
+    json.$set("shadowColor", jsonColor);
+
+    json.$set("borderSize", this.borderSize.toJSON());
+
+    jsonColor = new $Object();
+    jsonColor.$set("red", this.borderColor.red);
+    jsonColor.$set("green", this.borderColor.green);
+    jsonColor.$set("blue", this.borderColor.blue);
+    jsonColor.$set("alpha", this.borderColor.alpha);
+    json.$set("borderColor", jsonColor);
+
     return json;
   }
 
@@ -500,6 +585,12 @@ public class Z4NaturalFigurePainter extends Z4Painter {
    * @return the natural figure painter
    */
   public static Z4NaturalFigurePainter fromJSON($Object json) {
+    $Object jsonColor = json.$get("shadowColor");
+    Color shadowColor = new Color(jsonColor.$get("red"), jsonColor.$get("green"), jsonColor.$get("blue"), jsonColor.$get("alpha"));
+
+    jsonColor = json.$get("borderColor");
+    Color borderColor = new Color(jsonColor.$get("red"), jsonColor.$get("green"), jsonColor.$get("blue"), jsonColor.$get("alpha"));
+
     return new Z4NaturalFigurePainter(
             json.$get("naturalFigurePainterType"),
             json.$get("controlPointClosure"),
@@ -507,7 +598,9 @@ public class Z4NaturalFigurePainter extends Z4Painter {
             Z4FancifulValue.fromJSON(json.$get("internalAngle1")), Z4FancifulValue.fromJSON(json.$get("externalAngle1")), Z4FancifulValue.fromJSON(json.$get("internalAngle2")), Z4FancifulValue.fromJSON(json.$get("externalAngle2")),
             Z4FancifulValue.fromJSON(json.$get("internalTension1")), Z4FancifulValue.fromJSON(json.$get("externalTension1")), Z4FancifulValue.fromJSON(json.$get("internalTension2")), Z4FancifulValue.fromJSON(json.$get("externalTension2")),
             json.$get("indentation"),
-            Z4FancifulValue.fromJSON(json.$get("externalForceAngle")), Z4FancifulValue.fromJSON(json.$get("externalForceTension"))
+            Z4FancifulValue.fromJSON(json.$get("externalForceAngle")), Z4FancifulValue.fromJSON(json.$get("externalForceTension")),
+            Z4FancifulValue.fromJSON(json.$get("shadowShiftX")), Z4FancifulValue.fromJSON(json.$get("shadowShiftY")), shadowColor,
+            Z4FancifulValue.fromJSON(json.$get("borderSize")), borderColor
     );
   }
 }

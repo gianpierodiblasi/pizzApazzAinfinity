@@ -42,6 +42,16 @@ class Z4NaturalFigurePainter extends Z4Painter {
 
    externalForceTension = null;
 
+   shadowShiftX = null;
+
+   shadowShiftY = null;
+
+   shadowColor = null;
+
+   borderSize = null;
+
+   borderColor = null;
+
    path1 = null;
 
    path2 = null;
@@ -78,8 +88,13 @@ class Z4NaturalFigurePainter extends Z4Painter {
    * @param indentation The indentation
    * @param externalForceAngle The angle of the external force
    * @param externalForceTension The tension of the external force
+   * @param shadowShiftX The X shadow shift
+   * @param shadowShiftY The Y shadow shift
+   * @param shadowColor The shadow color
+   * @param borderSize The border size
+   * @param borderColor The border color
    */
-  constructor(naturalFigurePainterType, controlPointClosure, size, internalAngle1, externalAngle1, internalAngle2, externalAngle2, internalTension1, externalTension1, internalTension2, externalTension2, indentation, externalForceAngle, externalForceTension) {
+  constructor(naturalFigurePainterType, controlPointClosure, size, internalAngle1, externalAngle1, internalAngle2, externalAngle2, internalTension1, externalTension1, internalTension2, externalTension2, indentation, externalForceAngle, externalForceTension, shadowShiftX, shadowShiftY, shadowColor, borderSize, borderColor) {
     super();
     this.naturalFigurePainterType = naturalFigurePainterType;
     this.controlPointClosure = controlPointClosure;
@@ -95,6 +110,11 @@ class Z4NaturalFigurePainter extends Z4Painter {
     this.indentation = indentation;
     this.externalForceAngle = externalForceAngle;
     this.externalForceTension = externalForceTension;
+    this.shadowShiftX = shadowShiftX;
+    this.shadowShiftY = shadowShiftY;
+    this.shadowColor = shadowColor;
+    this.borderSize = borderSize;
+    this.borderColor = borderColor;
   }
 
    getType() {
@@ -225,6 +245,51 @@ class Z4NaturalFigurePainter extends Z4Painter {
    */
    getExternalForceTension() {
     return this.externalForceTension;
+  }
+
+  /**
+   * Returns the X shadow shift
+   *
+   * @return The X shadow shift
+   */
+   getShadowShiftX() {
+    return this.shadowShiftX;
+  }
+
+  /**
+   * Returns the Y shadow shift
+   *
+   * @return The Y shadow shift
+   */
+   getShadowShiftY() {
+    return this.shadowShiftY;
+  }
+
+  /**
+   * Returns the shadow color
+   *
+   * @return The shadow color
+   */
+   getShadowColor() {
+    return this.shadowColor;
+  }
+
+  /**
+   * Returns the border size
+   *
+   * @return The border size
+   */
+   getBorderSize() {
+    return this.borderSize;
+  }
+
+  /**
+   * Returns the border color
+   *
+   * @return The border color
+   */
+   getBorderColor() {
+    return this.borderColor;
   }
 
    draw(context, drawingPoint, spatioTemporalColor, progression) {
@@ -452,6 +517,21 @@ class Z4NaturalFigurePainter extends Z4Painter {
     json["indentation"] = this.indentation;
     json["externalForceAngle"] = this.externalForceAngle.toJSON();
     json["externalForceTension"] = this.externalForceTension.toJSON();
+    json["shadowShiftX"] = this.shadowShiftX.toJSON();
+    json["shadowShiftY"] = this.shadowShiftY.toJSON();
+    let jsonColor = new Object();
+    jsonColor["red"] = this.shadowColor.red;
+    jsonColor["green"] = this.shadowColor.green;
+    jsonColor["blue"] = this.shadowColor.blue;
+    jsonColor["alpha"] = this.shadowColor.alpha;
+    json["shadowColor"] = jsonColor;
+    json["borderSize"] = this.borderSize.toJSON();
+    jsonColor = new Object();
+    jsonColor["red"] = this.borderColor.red;
+    jsonColor["green"] = this.borderColor.green;
+    jsonColor["blue"] = this.borderColor.blue;
+    jsonColor["alpha"] = this.borderColor.alpha;
+    json["borderColor"] = jsonColor;
     return json;
   }
 
@@ -462,6 +542,10 @@ class Z4NaturalFigurePainter extends Z4Painter {
    * @return the natural figure painter
    */
   static  fromJSON(json) {
-    return new Z4NaturalFigurePainter(json["naturalFigurePainterType"], json["controlPointClosure"], Z4FancifulValue.fromJSON(json["size"]), Z4FancifulValue.fromJSON(json["internalAngle1"]), Z4FancifulValue.fromJSON(json["externalAngle1"]), Z4FancifulValue.fromJSON(json["internalAngle2"]), Z4FancifulValue.fromJSON(json["externalAngle2"]), Z4FancifulValue.fromJSON(json["internalTension1"]), Z4FancifulValue.fromJSON(json["externalTension1"]), Z4FancifulValue.fromJSON(json["internalTension2"]), Z4FancifulValue.fromJSON(json["externalTension2"]), json["indentation"], Z4FancifulValue.fromJSON(json["externalForceAngle"]), Z4FancifulValue.fromJSON(json["externalForceTension"]));
+    let jsonColor = json["shadowColor"];
+    let shadowColor = new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]);
+    jsonColor = json["borderColor"];
+    let borderColor = new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]);
+    return new Z4NaturalFigurePainter(json["naturalFigurePainterType"], json["controlPointClosure"], Z4FancifulValue.fromJSON(json["size"]), Z4FancifulValue.fromJSON(json["internalAngle1"]), Z4FancifulValue.fromJSON(json["externalAngle1"]), Z4FancifulValue.fromJSON(json["internalAngle2"]), Z4FancifulValue.fromJSON(json["externalAngle2"]), Z4FancifulValue.fromJSON(json["internalTension1"]), Z4FancifulValue.fromJSON(json["externalTension1"]), Z4FancifulValue.fromJSON(json["internalTension2"]), Z4FancifulValue.fromJSON(json["externalTension2"]), json["indentation"], Z4FancifulValue.fromJSON(json["externalForceAngle"]), Z4FancifulValue.fromJSON(json["externalForceTension"]), Z4FancifulValue.fromJSON(json["shadowShiftX"]), Z4FancifulValue.fromJSON(json["shadowShiftY"]), shadowColor, Z4FancifulValue.fromJSON(json["borderSize"]), borderColor);
   }
 }
