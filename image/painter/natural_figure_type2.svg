@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<svg width="96" height="96" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <path fill="#ff0000" stroke-width="2" stroke-linecap="round" d="m-26.474131,48.165718l24.437471,-10.349998l0,5.174999l35.416131,0l0,-5.174999l24.437481,10.349998l-24.437481,10.350002l0,-5.174992l-35.416131,0l0,5.174992l-24.437471,-10.350002z" transform="rotate(90 15.6714 48.1657)" stroke="#000000"/>
+    <path d="m3,48c59.880241,-26.74651 31.317371,-26.7465 90,0" stroke-linecap="round" stroke-width="5" stroke="#000000" fill="#ff0000"/>
+    <path transform="rotate(-180 48 57.8052)" d="m3,67.760437c61.676651,-26.746517 27.32535,-26.746498 90.000023,0" stroke-linecap="round" stroke-width="5" stroke="#000000" fill="#ffdd00"/>
+  </g>
+</svg>

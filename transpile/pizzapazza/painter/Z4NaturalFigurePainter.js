@@ -11,28 +11,20 @@ class Z4NaturalFigurePainter extends Z4Painter {
 
    size = null;
 
-  // = 45
    internalAngle1 = null;
 
-  // = 45;
    externalAngle1 = null;
 
-  // = 45;
    internalAngle2 = null;
 
-  // = 45;
    externalAngle2 = null;
 
-  // = 3;
    internalTension1 = null;
 
-  // = 3;
    externalTension1 = null;
 
-  // = 3;
    internalTension2 = null;
 
-  // = 3;
    externalTension2 = null;
 
   // Frastagliatura

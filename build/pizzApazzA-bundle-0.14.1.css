@@ -583,27 +583,30 @@
 }.z4naturalfigurepainterpanel {
 }
 
-/*.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio img {
+.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio img {
   height: 26px;
-}*/
-/*.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(2) img {
-  content: url(../image/painter/natural_figure_type0.png);
-}*/
-/*.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(3) img {
-  content: url(../image/painter/natural_figure_type1.png);
-}*/
-/*.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(4) img {
-  content: url(../image/painter/natural_figure_type2.png);
-}*/
-/*.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(5) img {
-  content: url(../image/painter/natural_figure_type3.png);
-}*/
-/*.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(6) img {
-  content: url(../image/painter/natural_figure_type4.png);
-}*/
-/*.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(7) img {
-  content: url(../image/painter/natural_figure_type5.png);
-}*/
+}
+.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(2) img {
+  content: url(../image/painter/natural_figure_type0.svg);
+}
+.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(3) img {
+  content: url(../image/painter/natural_figure_type1.svg);
+}
+.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(4) img {
+  content: url(../image/painter/natural_figure_type2.svg);
+}
+.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(5) img {
+  content: url(../image/painter/natural_figure_type3.svg);
+}
+.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(6) img {
+  content: url(../image/painter/natural_figure_control_point_closure0.png);
+}
+.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(7) img {
+  content: url(../image/painter/natural_figure_control_point_closure1.png);
+}
+.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(8) img {
+  content: url(../image/painter/natural_figure_control_point_closure2.png);
+}
 
 /*.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-sample {
   align-self: center;

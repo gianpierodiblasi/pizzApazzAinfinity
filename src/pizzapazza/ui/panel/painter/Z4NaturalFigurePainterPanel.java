@@ -21,15 +21,12 @@ import pizzapazza.math.Z4Sign;
 import pizzapazza.math.Z4SignBehavior;
 import pizzapazza.math.Z4SignedRandomValue;
 import pizzapazza.math.Z4SignedValue;
-import pizzapazza.math.Z4Whirlpool;
-import pizzapazza.math.Z4WhirlpoolBehavior;
 import pizzapazza.painter.Z4NaturalFigurePainter;
+import pizzapazza.painter.Z4NaturalFigurePainterControlPointClosure;
 import pizzapazza.painter.Z4NaturalFigurePainterType;
 import pizzapazza.ui.panel.color.Z4ColorPanel;
 import pizzapazza.ui.panel.math.Z4FancifulValuePanel;
 import pizzapazza.ui.panel.math.Z4FancifulValuePanelOrientation;
-import pizzapazza.ui.panel.math.Z4WhirlpoolPanel;
-import pizzapazza.ui.panel.math.Z4WhirlpoolPanelOrientation;
 import pizzapazza.util.Z4EmptyImageProducer;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
@@ -44,7 +41,8 @@ import static simulation.js.$Globals.document;
 public class Z4NaturalFigurePainterPanel extends Z4PainterPanel<Z4NaturalFigurePainter> {
 
   private final Array<JSRadioButton> radios = new Array<>();
-//  private final JSComponent sample = new JSComponent(document.createElement("img"));
+  private final Array<JSRadioButton> radiosClosure = new Array<>();
+  private final JSComponent sample = new JSComponent(document.createElement("img"));
 
   private final Z4FancifulValuePanel size = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
 
@@ -84,22 +82,25 @@ public class Z4NaturalFigurePainterPanel extends Z4PainterPanel<Z4NaturalFigureP
     JSPanel panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
     tabbedPane.addTab(Z4Translations.SHAPE, panel);
-//    
-//    JSPanel panelType = new JSPanel();
-//    panelType.setLayout(new BoxLayout(panelType, BoxLayout.Y_AXIS));
-//    panel.add(panelType, new GBC(0, 0).h(5).i(1, 0, 0, 1));
-//    
-//    this.sample.cssAddClass("z4naturalfigurepainterpanel-sample");
-//    panelType.add(this.sample, null);
-//    
-//    ButtonGroup buttonGroup = new ButtonGroup();
-//    this.addRadio(Z4NaturalFigurePainterType.TYPE_0, panelType, buttonGroup);
-//    this.addRadio(Z4NaturalFigurePainterType.TYPE_1, panelType, buttonGroup);
-//    this.addRadio(Z4NaturalFigurePainterType.TYPE_2, panelType, buttonGroup);
-//    this.addRadio(Z4NaturalFigurePainterType.TYPE_3, panelType, buttonGroup);
-//    this.addRadio(Z4NaturalFigurePainterType.TYPE_4, panelType, buttonGroup);
-//    this.addRadio(Z4NaturalFigurePainterType.TYPE_5, panelType, buttonGroup);
-//    
+
+    JSPanel panelType = new JSPanel();
+    panelType.setLayout(new BoxLayout(panelType, BoxLayout.Y_AXIS));
+    panel.add(panelType, new GBC(0, 0).h(13).i(1, 0, 0, 1));
+
+    this.sample.cssAddClass("z4naturalfigurepainterpanel-sample");
+    panelType.add(this.sample, null);
+
+    ButtonGroup buttonGroup = new ButtonGroup();
+    this.addRadio("" + Z4NaturalFigurePainterType.TYPE_0, panelType, this.radios, buttonGroup, "1px");
+    this.addRadio("" + Z4NaturalFigurePainterType.TYPE_1, panelType, this.radios, buttonGroup, "1px");
+    this.addRadio("" + Z4NaturalFigurePainterType.TYPE_2, panelType, this.radios, buttonGroup, "1px");
+    this.addRadio("" + Z4NaturalFigurePainterType.TYPE_3, panelType, this.radios, buttonGroup, "10px");
+
+    buttonGroup = new ButtonGroup();
+    this.addRadio("" + Z4NaturalFigurePainterControlPointClosure.CONTROL_POINT_CLOSURE_0, panelType, this.radiosClosure, buttonGroup, "1px");
+    this.addRadio("" + Z4NaturalFigurePainterControlPointClosure.CONTROL_POINT_CLOSURE_1, panelType, this.radiosClosure, buttonGroup, "1px");
+    this.addRadio("" + Z4NaturalFigurePainterControlPointClosure.CONTROL_POINT_CLOSURE_2, panelType, this.radiosClosure, buttonGroup, "0px");
+
     this.size.setSignsVisible(false);
     this.size.setConstantRange(1, 50);
     this.size.setLabel(Z4Translations.DIMENSION);
@@ -123,7 +124,7 @@ public class Z4NaturalFigurePainterPanel extends Z4PainterPanel<Z4NaturalFigureP
 
     this.externalForceTension.getStyle().setProperty("grid-template-areas", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\"");
     this.externalForceTension.setSignsVisible(false);
-    this.externalForceTension.setConstantRange(1, 100);
+    this.externalForceTension.setConstantRange(0, 100);
     this.externalForceTension.setLabel(Z4Translations.TENSION + " (\u03C4)");
     this.externalForceTension.cssAddClass("z4abstractvaluepanel-titled");
     this.externalForceTension.addChangeListener(event -> this.onfigurechange(this.externalForceTension.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
@@ -158,68 +159,83 @@ public class Z4NaturalFigurePainterPanel extends Z4PainterPanel<Z4NaturalFigureP
     this.borderColorPanel.addChangeListener(event -> this.onfigurechange(false, null, this.borderColorPanel.getValue(), this.indentationSlider.getValue()));
     this.createPanel(tabbedPane, Z4Translations.BORDER, this.borderSize, null, this.borderColorPanel);
 
-//    this.setValue(new Z4NaturalFigurePainter(
-//            Z4NaturalFigurePainterType.TYPE_0,
-//            new Z4FancifulValue(
-//                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
-//                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-//                    false),
-//            new Z4FancifulValue(
-//                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45),
-//                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-//                    false),
-//            new Z4FancifulValue(
-//                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45),
-//                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-//                    false),
-//            new Z4FancifulValue(
-//                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 50),
-//                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-//                    false),
-//            new Z4FancifulValue(
-//                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 3),
-//                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-//                    false),
-//            new Z4FancifulValue(
-//                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-//                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-//                    false),
-//            new Z4Whirlpool(
-//                    Z4WhirlpoolBehavior.NONE,
-//                    new Z4FancifulValue(
-//                            new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-//                            new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-//                            false)),
-//            100,
-//            new Z4FancifulValue(
-//                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-//                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-//                    false),
-//            new Z4FancifulValue(
-//                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-//                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-//                    false),
-//            new Color(0, 0, 0, 255),
-//            new Z4FancifulValue(
-//                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-//                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-//                    false),
-//            new Color(0, 0, 0, 255)
-//    ));
+    this.setValue(new Z4NaturalFigurePainter(
+            Z4NaturalFigurePainterType.TYPE_0,
+            Z4NaturalFigurePainterControlPointClosure.CONTROL_POINT_CLOSURE_1,
+            new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false),
+            new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false),
+            new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false),
+            new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false),
+            new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false),
+            new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 3),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false),
+            new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 3),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false),
+            new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 3),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false),
+            new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 3),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false),
+            0,
+            new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false),
+            new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false),
+            new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false),
+            new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false),
+            new Color(0, 0, 0, 255),
+            new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false),
+            new Color(0, 0, 0, 255)
+    ));
   }
 
-  private void addRadio(Z4NaturalFigurePainterType naturalFigurePainterType, JSPanel panel, ButtonGroup buttonGroup) {
-//    JSRadioButton radio = new JSRadioButton();
-//    radio.cssAddClass("z4naturalfigurepainterpanel-radio");
-//    radio.getStyle().marginBottom = "1px";
-//    radio.setContentAreaFilled(false);
-//    radio.setToggle();
-//    radio.setIcon(new Z4EmptyImageProducer<>(naturalFigurePainterType));
-//    radio.addActionListener(event -> this.onfigurechange(false, null, null, this.indentationSlider.getValue()));
-//    
-//    buttonGroup.add(radio);
-//    this.radios.$set("" + naturalFigurePainterType, radio);
-//    panel.add(radio, null);
+  private void addRadio(String object, JSPanel panel, Array<JSRadioButton> radios, ButtonGroup buttonGroup, String bottom) {
+    JSRadioButton radio = new JSRadioButton();
+    radio.cssAddClass("z4naturalfigurepainterpanel-radio");
+    radio.getStyle().marginBottom = bottom;
+    radio.setContentAreaFilled(false);
+    radio.setToggle();
+    radio.setIcon(new Z4EmptyImageProducer<>(object));
+    radio.addActionListener(event -> this.onfigurechange(false, null, null, this.indentationSlider.getValue()));
+
+    buttonGroup.add(radio);
+    radios.$set(object, radio);
+    panel.add(radio, null);
   }
 
   private void createPoint(JSPanel panel, Z4FancifulValuePanel angle, Z4FancifulValuePanel tension, String title, String suffix, int y) {
@@ -278,14 +294,30 @@ public class Z4NaturalFigurePainterPanel extends Z4PainterPanel<Z4NaturalFigureP
         type = Z4NaturalFigurePainterType.TYPE_3;
         break;
     }
-//    
-//    this.value = new Z4NaturalFigurePainter(
-//            type,
-//            this.size.getValue(), this.angle1.getValue(), this.angle2.getValue(),
-//            this.tension.getValue(), this.externalforceangle.getValue(), this.hole.getValue(), this.whirlpool.getValue(), this.indentationSlider.getValue(),
-//            this.shadowShiftX.getValue(), this.shadowShiftY.getValue(), $exists(shadowColor) ? shadowColor : this.value.getShadowColor(),
-//            this.borderSize.getValue(), $exists(borderColor) ? borderColor : this.value.getBorderColor()
-//    );
+
+    Z4NaturalFigurePainterControlPointClosure controlPointClosure = null;
+    switch ("" + Object.keys(this.radiosClosure).find((key, index, array) -> ((JSRadioButton) this.radiosClosure.$get(key)).isSelected())) {
+      case "CONTROL_POINT_CLOSURE_0":
+        controlPointClosure = Z4NaturalFigurePainterControlPointClosure.CONTROL_POINT_CLOSURE_0;
+        break;
+      case "CONTROL_POINT_CLOSURE_1":
+        controlPointClosure = Z4NaturalFigurePainterControlPointClosure.CONTROL_POINT_CLOSURE_1;
+        break;
+      case "CONTROL_POINT_CLOSURE_2":
+        controlPointClosure = Z4NaturalFigurePainterControlPointClosure.CONTROL_POINT_CLOSURE_2;
+        break;
+    }
+
+    this.value = new Z4NaturalFigurePainter(
+            type, controlPointClosure,
+            this.size.getValue(),
+            this.internalAngle1.getValue(), this.externalAngle1.getValue(), this.internalAngle2.getValue(), this.externalAngle2.getValue(),
+            this.internalTension1.getValue(), this.externalTension1.getValue(), this.internalTension2.getValue(), this.externalTension2.getValue(),
+            this.indentationSlider.getValue(),
+            this.externalForceAngle.getValue(), this.externalForceTension.getValue(),
+            this.shadowShiftX.getValue(), this.shadowShiftY.getValue(), $exists(shadowColor) ? shadowColor : this.value.getShadowColor(),
+            this.borderSize.getValue(), $exists(borderColor) ? borderColor : this.value.getBorderColor()
+    );
 //    
 //    this.sample.cssRemoveClass("z4naturalfigurepainterpanel-sample0_1_2");
 //    this.sample.cssRemoveClass("z4naturalfigurepainterpanel-sample3_4_5");
@@ -306,8 +338,9 @@ public class Z4NaturalFigurePainterPanel extends Z4PainterPanel<Z4NaturalFigureP
   public void setValue(Z4NaturalFigurePainter value) {
     this.value = value;
 
-//    ((JSRadioButton) this.radios.$get("" + value.getNaturalFigurePainterType())).setSelected(true);
-//    
+    ((JSRadioButton) this.radios.$get("" + value.getNaturalFigurePainterType())).setSelected(true);
+    ((JSRadioButton) this.radiosClosure.$get("" + value.getControlPointClosure())).setSelected(true);
+
 //    this.sample.cssRemoveClass("z4naturalfigurepainterpanel-sample0_1_2");
 //    this.sample.cssRemoveClass("z4naturalfigurepainterpanel-sample3_4_5");
 //    if (this.value.getNaturalFigurePainterType() == Z4NaturalFigurePainterType.TYPE_0 || this.value.getNaturalFigurePainterType() == Z4NaturalFigurePainterType.TYPE_1 || this.value.getNaturalFigurePainterType() == Z4NaturalFigurePainterType.TYPE_2) {
@@ -354,7 +387,8 @@ public class Z4NaturalFigurePainterPanel extends Z4PainterPanel<Z4NaturalFigureP
   public void setEnabled(boolean b) {
     super.setEnabled(b);
 
-//    Object.keys(this.radios).forEach(key -> ((JSRadioButton) this.radios.$get(key)).setEnabled(b));
+    Object.keys(this.radios).forEach(key -> ((JSRadioButton) this.radios.$get(key)).setEnabled(b));
+    Object.keys(this.radiosClosure).forEach(key -> ((JSRadioButton) this.radiosClosure.$get(key)).setEnabled(b));
 //    
     this.size.setEnabled(b);
 //    this.angle1.setEnabled(b && this.value.getNaturalFigurePainterType() != Z4NaturalFigurePainterType.TYPE_5);

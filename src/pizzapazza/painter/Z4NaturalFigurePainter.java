@@ -30,15 +30,15 @@ public class Z4NaturalFigurePainter extends Z4Painter {
 
   private final Z4FancifulValue size;
   
-  private final Z4FancifulValue internalAngle1;// = 45
-  private final Z4FancifulValue externalAngle1;// = 45;
-  private final Z4FancifulValue internalAngle2;// = 45;
-  private final Z4FancifulValue externalAngle2;// = 45;
+  private final Z4FancifulValue internalAngle1;
+  private final Z4FancifulValue externalAngle1;
+  private final Z4FancifulValue internalAngle2;
+  private final Z4FancifulValue externalAngle2;
 
-  private final Z4FancifulValue internalTension1;// = 3;
-  private final Z4FancifulValue externalTension1;// = 3;
-  private final Z4FancifulValue internalTension2;// = 3;
-  private final Z4FancifulValue externalTension2;// = 3;
+  private final Z4FancifulValue internalTension1;
+  private final Z4FancifulValue externalTension1;
+  private final Z4FancifulValue internalTension2;
+  private final Z4FancifulValue externalTension2;
 
   private final int indentation; //Frastagliatura
 
