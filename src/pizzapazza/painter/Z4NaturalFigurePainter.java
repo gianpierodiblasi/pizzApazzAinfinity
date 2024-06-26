@@ -433,7 +433,7 @@ public class Z4NaturalFigurePainter extends Z4Painter {
       pathForShadowBorder.bezierCurveTo(this.c1e.x, this.c1e.y, this.c2e.x, this.c2e.y, this.pF.x, this.pF.y);
     }
 
-    this.drawFigure(context, drawingPoint, c1e, c2e, spatioTemporalColor, progression, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
+    this.drawFigure(context, drawingPoint, this.c1e, this.c2e, spatioTemporalColor, progression, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
   }
 
   private void type2($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression,
@@ -447,7 +447,7 @@ public class Z4NaturalFigurePainter extends Z4Painter {
       pathForShadowBorder.bezierCurveTo(this.c2i.x, this.c2i.y, this.c1i.x, this.c1i.y, this.pF.x, this.pF.y);
     }
 
-    this.drawFigure(context, drawingPoint, c2i, c1i, spatioTemporalColor, progression, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
+    this.drawFigure(context, drawingPoint, this.c2i, this.c1i, spatioTemporalColor, progression, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
 
     this.path1 = this.findControlPointPath(this.c2e.x, this.c2e.y, 0, 0);
     this.path2 = this.findControlPointPath(this.c1e.x, this.c1e.y, this.pF.x, this.pF.y);
@@ -458,7 +458,7 @@ public class Z4NaturalFigurePainter extends Z4Painter {
       pathForShadowBorder.bezierCurveTo(this.c2e.x, this.c2e.y, this.c1e.x, this.c1e.y, this.pF.x, this.pF.y);
     }
 
-    this.drawFigure(context, drawingPoint, c2e, c1e, spatioTemporalColor, progression, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
+    this.drawFigure(context, drawingPoint, this.c2e, this.c1e, spatioTemporalColor, progression, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
   }
 
   private void type3($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression,
@@ -473,7 +473,7 @@ public class Z4NaturalFigurePainter extends Z4Painter {
       this.pathForShadowBorder.bezierCurveTo(this.c2e.x, this.c2e.y, this.c1i.x, this.c1i.y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
     }
 
-    this.drawFigure(context, drawingPoint, c1e, c2i, spatioTemporalColor, progression, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
+    this.drawFigure(context, drawingPoint, this.c1e, this.c2i, spatioTemporalColor, progression, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
   }
 
   private Z4Point findControlPointPath(double p1x, double p1y, double p2x, double p2y) {
