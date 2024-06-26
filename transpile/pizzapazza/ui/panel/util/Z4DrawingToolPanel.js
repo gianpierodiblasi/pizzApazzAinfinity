@@ -101,7 +101,8 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     this.addRadioButton(panelRadio, buttonGroup, "AIRBRUSH", "1px");
     this.addRadioButton(panelRadio, buttonGroup, "SPIROGRAPH", "10px");
     this.addRadioButton(panelRadio, buttonGroup, "SHAPE2D", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, "CENTERED-FIGURE", "10px");
+    this.addRadioButton(panelRadio, buttonGroup, "CENTERED-FIGURE", "1px");
+    this.addRadioButton(panelRadio, buttonGroup, "NATURAL-FIGURE", "10px");
     this.addRadioButton(panelRadio, buttonGroup, "COLOR", "1px");
     this.addRadioButton(panelRadio, buttonGroup, "GRADIENT-COLOR", "1px");
     this.addRadioButton(panelRadio, buttonGroup, "BIGRADIENT-COLOR", "10px");
@@ -133,7 +134,8 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
           break;
         case "SHAPE2D":
         case "CENTERED-FIGURE":
-          new Array("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-centered-figure-selected").forEach(css => this.selectedPainter.cssRemoveClass(css));
+        case "NATURAL-FIGURE":
+          new Array("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css => this.selectedPainter.cssRemoveClass(css));
           this.selectedPainterCard = this.check(this.selectedPainter, card, card.toLowerCase(), null, true);
           break;
         case "COLOR":
@@ -341,11 +343,13 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
   }
 
    setPainter() {
-    new Array("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-centered-figure-selected").forEach(css => this.selectedPainter.cssRemoveClass(css));
+    new Array("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css => this.selectedPainter.cssRemoveClass(css));
     if (this.value.getPainter().getType() === Z4PainterType.SHAPE_2D) {
       this.selectedPainterCard = this.check(this.selectedPainter, "SHAPE2D", "shape2d", this.value.getPainter(), false);
     } else if (this.value.getPainter().getType() === Z4PainterType.CENTERED_FIGURE) {
       this.selectedPainterCard = this.check(this.selectedPainter, "CENTERED-FIGURE", "centered-figure", this.value.getPainter(), false);
+    } else if (this.value.getPainter().getType() === Z4PainterType.NATURAL_FIGURE) {
+      this.selectedPainterCard = this.check(this.selectedPainter, "NATURAL-FIGURE", "natural-figure", this.value.getPainter(), false);
     }
   }
 
@@ -394,6 +398,10 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
           break;
         case "CENTERED-FIGURE":
           this.cardPanels[card] = new Z4CenteredFigurePainterPanel();
+          (this.cardPanels[card]).addChangeListener(event => this.valueIsAdjusting = (this.cardPanels[card]).getValueIsAdjusting());
+          break;
+        case "NATURAL-FIGURE":
+          this.cardPanels[card] = new Z4NaturalFigurePainterPanel();
           (this.cardPanels[card]).addChangeListener(event => this.valueIsAdjusting = (this.cardPanels[card]).getValueIsAdjusting());
           break;
         case "COLOR":

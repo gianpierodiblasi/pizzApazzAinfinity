@@ -40,6 +40,7 @@ import pizzapazza.math.Z4SignBehavior;
 import pizzapazza.math.Z4SignedRandomValue;
 import pizzapazza.math.Z4SignedValue;
 import pizzapazza.painter.Z4CenteredFigurePainter;
+import pizzapazza.painter.Z4NaturalFigurePainter;
 import pizzapazza.painter.Z4Painter;
 import pizzapazza.painter.Z4PainterType;
 import pizzapazza.painter.Z4Shape2DPainter;
@@ -55,6 +56,7 @@ import pizzapazza.ui.panel.iterator.Z4SpirographPanel;
 import pizzapazza.ui.panel.iterator.Z4StamperPanel;
 import pizzapazza.ui.panel.iterator.Z4TracerPanel;
 import pizzapazza.ui.panel.painter.Z4CenteredFigurePainterPanel;
+import pizzapazza.ui.panel.painter.Z4NaturalFigurePainterPanel;
 import pizzapazza.ui.panel.painter.Z4PainterPanel;
 import pizzapazza.ui.panel.painter.Z4Shape2DPainterPanel;
 import pizzapazza.util.Z4Constants;
@@ -157,7 +159,8 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     this.addRadioButton(panelRadio, buttonGroup, "SPIROGRAPH", "10px");
 
     this.addRadioButton(panelRadio, buttonGroup, "SHAPE2D", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, "CENTERED-FIGURE", "10px");
+    this.addRadioButton(panelRadio, buttonGroup, "CENTERED-FIGURE", "1px");
+    this.addRadioButton(panelRadio, buttonGroup, "NATURAL-FIGURE", "10px");
 
     this.addRadioButton(panelRadio, buttonGroup, "COLOR", "1px");
     this.addRadioButton(panelRadio, buttonGroup, "GRADIENT-COLOR", "1px");
@@ -244,7 +247,8 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
           break;
         case "SHAPE2D":
         case "CENTERED-FIGURE":
-          new Array<>("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-centered-figure-selected").forEach(css -> this.selectedPainter.cssRemoveClass(css));
+        case "NATURAL-FIGURE":
+          new Array<>("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css -> this.selectedPainter.cssRemoveClass(css));
           this.selectedPainterCard = this.check(this.selectedPainter, card, card.toLowerCase(), null, true);
           break;
         case "COLOR":
@@ -476,12 +480,14 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
   }
 
   private void setPainter() {
-    new Array<>("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-centered-figure-selected").forEach(css -> this.selectedPainter.cssRemoveClass(css));
+    new Array<>("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css -> this.selectedPainter.cssRemoveClass(css));
 
     if (this.value.getPainter().getType() == Z4PainterType.SHAPE_2D) {
       this.selectedPainterCard = this.check(this.selectedPainter, "SHAPE2D", "shape2d", this.value.getPainter(), false);
     } else if (this.value.getPainter().getType() == Z4PainterType.CENTERED_FIGURE) {
       this.selectedPainterCard = this.check(this.selectedPainter, "CENTERED-FIGURE", "centered-figure", this.value.getPainter(), false);
+    } else if (this.value.getPainter().getType() == Z4PainterType.NATURAL_FIGURE) {
+      this.selectedPainterCard = this.check(this.selectedPainter, "NATURAL-FIGURE", "natural-figure", this.value.getPainter(), false);
     }
   }
 
@@ -541,6 +547,10 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
         case "CENTERED-FIGURE":
           this.cardPanels.$set(card, new Z4CenteredFigurePainterPanel());
           ((Z4AbstractValuePanel<Z4CenteredFigurePainter>) this.cardPanels.$get(card)).addChangeListener(event -> this.valueIsAdjusting = ((Z4PainterPanel<Z4CenteredFigurePainter>) this.cardPanels.$get(card)).getValueIsAdjusting());
+          break;
+        case "NATURAL-FIGURE":
+          this.cardPanels.$set(card, new Z4NaturalFigurePainterPanel());
+          ((Z4AbstractValuePanel<Z4NaturalFigurePainter>) this.cardPanels.$get(card)).addChangeListener(event -> this.valueIsAdjusting = ((Z4PainterPanel<Z4NaturalFigurePainter>) this.cardPanels.$get(card)).getValueIsAdjusting());
           break;
         case "COLOR":
           this.cardPanels.$set(card, new Z4ColorPanel());

@@ -24,16 +24,19 @@
 .z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(6) img, .z4drawingtoolpanel-centered-figure-selected {
   content: url(../image/painter/centered_figure.png);
 }
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(7) img, .z4drawingtoolpanel-color-selected {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(7) img, .z4drawingtoolpanel-natural-figure-selected {
+  content: url(../image/painter/natural_figure.png);
+}
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(8) img, .z4drawingtoolpanel-color-selected {
   content: url(../image/filling/fill_flat.gif);
 }
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(8) img, .z4drawingtoolpanel-gradient-color-selected {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(9) img, .z4drawingtoolpanel-gradient-color-selected {
   content: url(../image/filling/fill_linear.gif);
 }
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(9) img, .z4drawingtoolpanel-bigradient-color-selected {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(10) img, .z4drawingtoolpanel-bigradient-color-selected {
   content: url(../image/filling/fill_bigradientcolor.gif);
 }
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(10) img {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(11) img {
   content: url(../image/color/z4colorprogressionbehavior_spatial.svg);
 }
 
