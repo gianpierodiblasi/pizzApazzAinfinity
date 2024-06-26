@@ -326,9 +326,9 @@ public class Z4NaturalFigurePainter extends Z4Painter {
         this.evalForce(drawingPoint, originalAngle, currentExternalForceAngle, currentExternalForceTension);
 
         this.c1e = this.setControlPoint(0, Z4Math.deg2rad(this.externalAngle1.next()), 1, this.externalTension1.next(), drawingPoint.intensity, drawingPoint.side.next());
-        this.c1i = this.setControlPoint(0, Z4Math.deg2rad(internalAngle1.next()), -1, this.internalTension1.next(), drawingPoint.intensity, drawingPoint.side.next());
-        this.c2e = this.setControlPoint(-Math.PI, Z4Math.deg2rad(externalAngle2.next()), -1, this.externalTension2.next(), drawingPoint.intensity, drawingPoint.side.next());
-        this.c2i = this.setControlPoint(-Math.PI, Z4Math.deg2rad(internalAngle2.next()), 1, this.internalTension2.next(), drawingPoint.intensity, drawingPoint.side.next());
+        this.c1i = this.setControlPoint(0, Z4Math.deg2rad(this.internalAngle1.next()), -1, this.internalTension1.next(), drawingPoint.intensity, drawingPoint.side.next());
+        this.c2e = this.setControlPoint(-Math.PI, Z4Math.deg2rad(this.externalAngle2.next()), -1, this.externalTension2.next(), drawingPoint.intensity, drawingPoint.side.next());
+        this.c2i = this.setControlPoint(-Math.PI, Z4Math.deg2rad(this.internalAngle2.next()), 1, this.internalTension2.next(), drawingPoint.intensity, drawingPoint.side.next());
         this.evalPointClosure(drawingPoint);
 
         double currentShadowShiftX = this.shadowShiftX.next();
@@ -508,7 +508,7 @@ public class Z4NaturalFigurePainter extends Z4Painter {
 
   @SuppressWarnings("null")
   private void drawFigureWithColors($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4Point c1, Z4Point c2, Z4SpatioTemporalColor spatioTemporalColor, Z4GradientColor gradientColor, Color color, Z4Lighting lighting) {
-    double length = Math.max(Z4Math.distance(path1.x, path1.y, 0, 0), Z4Math.distance(path2.x, path2.y, 0, 0));
+    double length = Math.max(Z4Math.distance(this.path1.x, this.path1.y, 0, 0), Z4Math.distance(this.path2.x, this.path2.y, 0, 0));
 
     for (int i = 0; i < length; i += 3) {
       double val = i / length;
@@ -542,7 +542,7 @@ public class Z4NaturalFigurePainter extends Z4Painter {
 
       context.beginPath();
       context.moveTo(drawingPoint.z4Vector.x0, 0);
-      context.bezierCurveTo(c1.x + path1.x * val, c1.y + path1.y * val, c2.x + path2.x * val, c2.y + path2.y * val, this.pF.x + indentX, this.pF.y + indentY);
+      context.bezierCurveTo(c1.x + this.path1.x * val, c1.y + this.path1.y * val, c2.x + this.path2.x * val, c2.y + this.path2.y * val, this.pF.x + indentX, this.pF.y + indentY);
       context.stroke();
 
       context.restore();

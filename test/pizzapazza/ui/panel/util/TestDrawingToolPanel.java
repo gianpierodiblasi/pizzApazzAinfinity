@@ -21,7 +21,7 @@ public class TestDrawingToolPanel extends JSFrame {
       }
     });
     panel.getStyle().minWidth = "70rem";
-    panel.getStyle().minHeight = "55rem";
+    panel.getStyle().minHeight = "56rem";
 
     JSPanel p = new JSPanel();
     p.add(panel, null);

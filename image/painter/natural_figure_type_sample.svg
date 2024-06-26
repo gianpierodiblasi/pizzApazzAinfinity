@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<svg width="96" height="96" xmlns="http://www.w3.org/2000/svg">
+  <style>.centered_figure_sample_text {font-family: arial; font-size: 1.1rem;}</style>
+  <g>
+    <path stroke="#007fff" d="m4,48 C24,0 72,0 92,48" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" fill="none"/>
+    <path stroke="#007fff" d="m4,48 C24,95 72,95 92,48" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" fill="none"/>
+    <line stroke="#ff0000" x1="4" y1="48" x2="92" y2="48" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  fill="none"/>
+    <line stroke="#ff0000" x1="4" y1="48" x2="22" y2="2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  fill="none"/>
+    <text x="22" y="16" class="centered_figure_sample_text">&#x03C4;<tspan dy="2" font-size=".6em">i1</tspan></text>
+    <line stroke="#ff0000" x1="4" y1="48" x2="22" y2="94" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  fill="none"/>
+    <text x="22" y="94" class="centered_figure_sample_text">&#x03C4;<tspan dy="2" font-size=".6em">e1</tspan></text>
+    <path stroke="#ff0000" d="m18,48 A 30 30 0 0 0 11 31" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill="none"/>
+    <text x="20" y="44" class="centered_figure_sample_text">&#x03B1;<tspan dy="2" font-size=".6em">i1</tspan></text>
+    <path stroke="#ff0000" d="m18,48 A 30 30 0 0 1 11 65" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill="none"/>
+    <text x="20" y="60" class="centered_figure_sample_text">&#x03B1;<tspan dy="2" font-size=".6em">e1</tspan></text>
+    <line stroke="#ff0000" x1="74" y1="2" x2="92" y2="48" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  fill="none"/>
+    <text x="60" y="16" class="centered_figure_sample_text">&#x03C4;<tspan dy="2" font-size=".6em">i2</tspan></text>
+    <line stroke="#ff0000" x1="74" y1="94" x2="92" y2="48" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  fill="none"/>
+    <text x="54" y="94" class="centered_figure_sample_text">&#x03C4;<tspan dy="2" font-size=".6em">e2</tspan></text>
+    <path stroke="#ff0000" d="m78,48 A 30 30 0 0 1 85 31" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill="none"/>
+    <text x="58" y="44" class="centered_figure_sample_text">&#x03B1;<tspan dy="2" font-size=".6em">i2</tspan></text>
+    <path stroke="#ff0000" d="m78,48 A 30 30 0 0 0 85 65" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill="none"/>
+    <text x="54" y="60" class="centered_figure_sample_text">&#x03B1;<tspan dy="2" font-size=".6em">e2</tspan></text>        
+  </g>
+</svg>

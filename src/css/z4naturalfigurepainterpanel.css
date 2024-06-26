@@ -4,35 +4,28 @@
 .z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio img {
   height: 26px;
 }
-.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(2) img {
+.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(1) img {
   content: url(../image/painter/natural_figure_type0.svg);
 }
-.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(3) img {
+.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(2) img {
   content: url(../image/painter/natural_figure_type1.svg);
 }
-.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(4) img {
+.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(3) img {
   content: url(../image/painter/natural_figure_type2.svg);
 }
-.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(5) img {
+.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(4) img {
   content: url(../image/painter/natural_figure_type3.svg);
 }
-.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(6) img {
+.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(5) img {
   content: url(../image/painter/natural_figure_control_point_closure0.png);
 }
-.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(7) img {
+.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(6) img {
   content: url(../image/painter/natural_figure_control_point_closure1.png);
 }
-.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(8) img {
+.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-radio:nth-child(7) img {
   content: url(../image/painter/natural_figure_control_point_closure2.png);
 }
 
-/*.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-sample {
-  align-self: center;
-  height: 44px;
-}*/
-/*.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-sample.z4naturalfigurepainterpanel-sample0_1_2 {
-  content: url(../image/painter/natural_figure_type_sample0_1_2.svg);
-}*/
-/*.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-sample.z4naturalfigurepainterpanel-sample3_4_5 {
-  content: url(../image/painter/natural_figure_type_sample3_4_5.svg);
-}*/
+.z4naturalfigurepainterpanel .z4naturalfigurepainterpanel-sample {
+  content: url(../image/painter/natural_figure_type_sample.svg);
+}

@@ -1,11 +1,6 @@
 <?xml version="1.0"?>
 <svg width="96" height="96" xmlns="http://www.w3.org/2000/svg">
-  <style>
-    .centered_figure_sample_text {
-      font-family: arial;
-      font-size: 1.3rem;
-    }
-  </style>
+  <style>.centered_figure_sample_text {font-family: arial; font-size: 1.3rem;}</style>
   <g>
     <path stroke="#007fff" d="m24,48 C96,-48 96,144 24,48" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" fill="none"/>
     <line stroke="#ff0000" x1="24" y1="48" x2="96" y2="-48" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  fill="none"/>

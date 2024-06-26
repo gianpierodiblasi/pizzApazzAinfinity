@@ -163,6 +163,7 @@ public class Z4Translations {
   public static String HOLE = "";
   public static String COVER = "";
   public static String WHIRLPOOL = "";
+  public static String POINTS = "";
   public static String INTERNAL_BASE_POINT = "";
   public static String EXTERNAL_BASE_POINT = "";
   public static String INTERNAL_TERMINAL_POINT = "";
@@ -390,6 +391,7 @@ public class Z4Translations {
     Z4Translations.HOLE = "Hole";
     Z4Translations.COVER = "Cover";
     Z4Translations.WHIRLPOOL = "Whirlpool";
+    Z4Translations.POINTS = "Points";
     Z4Translations.INTERNAL_BASE_POINT = "Internal Base Point";
     Z4Translations.EXTERNAL_BASE_POINT = "External Base Point";
     Z4Translations.INTERNAL_TERMINAL_POINT = "Internal Terminal Point";
@@ -601,6 +603,7 @@ public class Z4Translations {
     Z4Translations.HOLE = "Buco";
     Z4Translations.COVER = "Copertura";
     Z4Translations.WHIRLPOOL = "Vortice";
+    Z4Translations.POINTS = "Punti";
     Z4Translations.INTERNAL_BASE_POINT = "Punto Base Interno";
     Z4Translations.EXTERNAL_BASE_POINT = "Punto Base Esterno";
     Z4Translations.INTERNAL_TERMINAL_POINT = "Punto Terminale Interno";
