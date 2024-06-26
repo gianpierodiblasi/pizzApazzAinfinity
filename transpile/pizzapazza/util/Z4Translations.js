@@ -267,6 +267,14 @@ class Z4Translations {
 
   static  WHIRLPOOL = "";
 
+  static  INTERNAL_ANGLE = "";
+
+  static  EXTERNAL_ANGLE = "";
+
+  static  INTERNAL_TENSION = "";
+
+  static  EXTERNAL_TENSION = "";
+
   // Math
   static  POSITIVE = "";
 
@@ -516,6 +524,10 @@ class Z4Translations {
     Z4Translations.HOLE = "Hole";
     Z4Translations.COVER = "Cover";
     Z4Translations.WHIRLPOOL = "Whirlpool";
+    Z4Translations.INTERNAL_ANGLE = "Internal Angle";
+    Z4Translations.EXTERNAL_ANGLE = "External Angle";
+    Z4Translations.INTERNAL_TENSION = "Internal Tension";
+    Z4Translations.EXTERNAL_TENSION = "External Tension";
     // Math
     Z4Translations.POSITIVE = "Positive";
     Z4Translations.NEGATIVE = "Negative";
@@ -706,6 +718,10 @@ class Z4Translations {
     Z4Translations.HOLE = "Buco";
     Z4Translations.COVER = "Copertura";
     Z4Translations.WHIRLPOOL = "Vortice";
+    Z4Translations.INTERNAL_ANGLE = "Angolo Interno";
+    Z4Translations.EXTERNAL_ANGLE = "Angolo Esterno";
+    Z4Translations.INTERNAL_TENSION = "Tensione Interna";
+    Z4Translations.EXTERNAL_TENSION = "Tensione Esterna";
     // Math
     Z4Translations.POSITIVE = "Positivo";
     Z4Translations.NEGATIVE = "Negativo";

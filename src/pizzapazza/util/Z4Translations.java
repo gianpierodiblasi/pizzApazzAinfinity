@@ -163,6 +163,10 @@ public class Z4Translations {
   public static String HOLE = "";
   public static String COVER = "";
   public static String WHIRLPOOL = "";
+  public static String INTERNAL_ANGLE = "";
+  public static String EXTERNAL_ANGLE = "";
+  public static String INTERNAL_TENSION = "";
+  public static String EXTERNAL_TENSION = "";
 
   // Math
   public static String POSITIVE = "";
@@ -384,6 +388,10 @@ public class Z4Translations {
     Z4Translations.HOLE = "Hole";
     Z4Translations.COVER = "Cover";
     Z4Translations.WHIRLPOOL = "Whirlpool";
+    Z4Translations.INTERNAL_ANGLE = "Internal Angle";
+    Z4Translations.EXTERNAL_ANGLE = "External Angle";
+    Z4Translations.INTERNAL_TENSION = "Internal Tension";
+    Z4Translations.EXTERNAL_TENSION = "External Tension";
 
     // Math
     Z4Translations.POSITIVE = "Positive";
@@ -589,6 +597,10 @@ public class Z4Translations {
     Z4Translations.HOLE = "Buco";
     Z4Translations.COVER = "Copertura";
     Z4Translations.WHIRLPOOL = "Vortice";
+    Z4Translations.INTERNAL_ANGLE = "Angolo Interno";
+    Z4Translations.EXTERNAL_ANGLE = "Angolo Esterno";
+    Z4Translations.INTERNAL_TENSION = "Tensione Interna";
+    Z4Translations.EXTERNAL_TENSION = "Tensione Esterna";
 
     // Math
     Z4Translations.POSITIVE = "Positivo";
