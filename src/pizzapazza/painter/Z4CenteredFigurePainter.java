@@ -242,14 +242,15 @@ public class Z4CenteredFigurePainter extends Z4Painter {
   @SuppressWarnings("null")
   public void draw($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
     if (drawingPoint.intent != Z4DrawingPointIntent.DRAW_OBJECTS) {
+      double currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.size.getConstant().getValue());
       double currentAngle = Z4Math.deg2rad(this.whirlpool.getAngle().getConstant().getValue());
       double currentHole = this.hole.getConstant().getValue();
-      double currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.size.getConstant().getValue());
 
       Z4Point point = this.checkWhirlpool1(currentAngle, currentHole, currentSize);
       this.drawBounds(context, currentHole, point);
     } else {
       double currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.size.next());
+      
       if (currentSize > 0) {
         double currentAngle = Z4Math.deg2rad(this.whirlpool.getAngle().next());
         double currentHole = this.hole.next();

@@ -1,11 +1,20 @@
 package pizzapazza.painter;
 
+import javascript.awt.Color;
 import pizzapazza.color.Z4ColorProgression;
+import pizzapazza.color.Z4ColorProgressionBehavior;
+import pizzapazza.color.Z4GradientColor;
+import pizzapazza.color.Z4Lighting;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.math.Z4DrawingPoint;
+import pizzapazza.math.Z4DrawingPointIntent;
 import pizzapazza.math.Z4FancifulValue;
+import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
+import pizzapazza.math.Z4Vector;
+import pizzapazza.util.Z4Constants;
 import simulation.dom.$CanvasRenderingContext2D;
+import static simulation.js.$Globals.$exists;
 import simulation.js.$Object;
 import simulation.js.$Path2D;
 
@@ -19,6 +28,7 @@ public class Z4NaturalFigurePainter extends Z4Painter {
   private final Z4NaturalFigurePainterType naturalFigurePainterType;
   private final Z4NaturalFigurePainterControlPointClosure controlPointClosure;
 
+  private final Z4FancifulValue size;
   private final Z4FancifulValue internalAngle1;// = 45
   private final Z4FancifulValue externalAngle1;// = 45;
   private final Z4FancifulValue internalAngle2;// = 45;
@@ -53,6 +63,7 @@ public class Z4NaturalFigurePainter extends Z4Painter {
    * @param naturalFigurePainterType The type of Z4NaturalFigurePainter
    * @param controlPointClosure The control point closure of
    * Z4NaturalFigurePainter
+   * @param size The size
    * @param internalAngle1 The angle of the first internal control point
    * @param externalAngle1 The angle of the first external control point
    * @param internalAngle2 The angle of the second internal control point
@@ -66,6 +77,7 @@ public class Z4NaturalFigurePainter extends Z4Painter {
    * @param externalForceTension The tension of the external force
    */
   public Z4NaturalFigurePainter(Z4NaturalFigurePainterType naturalFigurePainterType, Z4NaturalFigurePainterControlPointClosure controlPointClosure,
+          Z4FancifulValue size,
           Z4FancifulValue internalAngle1, Z4FancifulValue externalAngle1, Z4FancifulValue internalAngle2, Z4FancifulValue externalAngle2,
           Z4FancifulValue internalTension1, Z4FancifulValue externalTension1, Z4FancifulValue internalTension2, Z4FancifulValue externalTension2,
           int indentation,
@@ -74,6 +86,8 @@ public class Z4NaturalFigurePainter extends Z4Painter {
 
     this.naturalFigurePainterType = naturalFigurePainterType;
     this.controlPointClosure = controlPointClosure;
+
+    this.size = size;
 
     this.internalAngle1 = internalAngle1;
     this.externalAngle1 = externalAngle1;
@@ -112,6 +126,15 @@ public class Z4NaturalFigurePainter extends Z4Painter {
    */
   public Z4NaturalFigurePainterControlPointClosure getControlPointClosure() {
     return this.controlPointClosure;
+  }
+
+  /**
+   * Returns the size
+   *
+   * @return The size
+   */
+  public Z4FancifulValue getSize() {
+    return this.size;
   }
 
   /**
@@ -214,8 +237,233 @@ public class Z4NaturalFigurePainter extends Z4Painter {
   }
 
   @Override
+  @SuppressWarnings("null")
   public void draw($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
+    if (drawingPoint.intent != Z4DrawingPointIntent.DRAW_OBJECTS) {
+      double currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.size.getConstant().getValue());
+      double originalAngle = drawingPoint.z4Vector.phase;
+      double currentExternalForceAngle = this.externalForceAngle.getConstant().getValue();
+      double currentExternalForceTension = this.externalForceTension.getConstant().getValue();
 
+      drawingPoint = new Z4DrawingPoint(Z4Vector.fromVector(0, 0, currentSize, 0), drawingPoint.intensity, drawingPoint.temporalPosition, drawingPoint.intent, drawingPoint.side, drawingPoint.useVectorModuleAsSize);
+      this.evalForce(drawingPoint, originalAngle, currentExternalForceAngle, currentExternalForceTension);
+      this.drawBounds(context);
+    } else {
+      double currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.size.next());
+
+      if (currentSize > 0) {
+        double originalAngle = drawingPoint.z4Vector.phase;
+        double currentExternalForceAngle = this.externalForceAngle.next();
+        double currentExternalForceTension = this.externalForceTension.next();
+
+        drawingPoint = new Z4DrawingPoint(Z4Vector.fromVector(0, 0, currentSize, 0), drawingPoint.intensity, drawingPoint.temporalPosition, drawingPoint.intent, drawingPoint.side, drawingPoint.useVectorModuleAsSize);
+        this.evalForce(drawingPoint, originalAngle, currentExternalForceAngle, currentExternalForceTension);
+
+        this.c1e = this.setControlPoint(0, Z4Math.deg2rad(this.externalAngle1.next()), 1, this.externalTension1.next(), drawingPoint.intensity, drawingPoint.side.next());
+        this.c1i = this.setControlPoint(0, Z4Math.deg2rad(internalAngle1.next()), -1, this.internalTension1.next(), drawingPoint.intensity, drawingPoint.side.next());
+        this.c2e = this.setControlPoint(-Math.PI, Z4Math.deg2rad(externalAngle2.next()), -1, this.externalTension2.next(), drawingPoint.intensity, drawingPoint.side.next());
+        this.c2i = this.setControlPoint(-Math.PI, Z4Math.deg2rad(internalAngle2.next()), 1, this.internalTension2.next(), drawingPoint.intensity, drawingPoint.side.next());
+        this.evalPointClosure(drawingPoint);
+
+        if (this.naturalFigurePainterType == Z4NaturalFigurePainterType.TYPE_0) {
+          this.type0(context, drawingPoint, spatioTemporalColor, progression);
+        } else if (this.naturalFigurePainterType == Z4NaturalFigurePainterType.TYPE_1) {
+          this.type1(context, drawingPoint, spatioTemporalColor, progression);
+        } else if (this.naturalFigurePainterType == Z4NaturalFigurePainterType.TYPE_2) {
+          this.type2(context, drawingPoint, spatioTemporalColor, progression);
+        } else if (this.naturalFigurePainterType == Z4NaturalFigurePainterType.TYPE_3) {
+          this.type3(context, drawingPoint, spatioTemporalColor, progression);
+        }
+      }
+    }
+  }
+
+  private void drawBounds($CanvasRenderingContext2D context) {
+    context.save();
+
+    context.strokeStyle = Z4Constants.$getStyle("gray");
+    context.beginPath();
+    context.moveTo(0, 0);
+    context.lineTo(this.pF.x, this.pF.y);
+    context.stroke();
+
+    context.strokeStyle = Z4Constants.$getStyle("black");
+    context.translate(1, 1);
+    context.beginPath();
+    context.moveTo(0, 0);
+    context.lineTo(this.pF.x, this.pF.y);
+    context.stroke();
+
+    context.restore();
+  }
+
+  private void evalForce(Z4DrawingPoint drawingPoint, double originalAngle, double currentExternalForceAngle, double currentExternalForceTension) {
+    if (currentExternalForceTension > 0) {
+      double angle = Z4Math.deg2rad(currentExternalForceAngle) - originalAngle;
+      double tension = drawingPoint.intensity * currentExternalForceTension;
+
+      this.pF = new Z4Point(drawingPoint.z4Vector.x + tension * Math.cos(angle), drawingPoint.z4Vector.y + tension * Math.sin(angle));
+    } else {
+      this.pF = new Z4Point(drawingPoint.z4Vector.x, drawingPoint.z4Vector.y);
+    }
+  }
+
+  private Z4Point setControlPoint(double phase, double angle, int angleSign, double tension, double intensity, int side) {
+    return Z4Math.rotate(intensity * tension, 0, phase + angleSign * side * angle);
+  }
+
+  private void evalPointClosure(Z4DrawingPoint drawingPoint) {
+    if (this.controlPointClosure == Z4NaturalFigurePainterControlPointClosure.CONTROL_POINT_CLOSURE_0) {
+      this.c1e = new Z4Point(this.c1e.x + drawingPoint.z4Vector.x, this.c1e.y + drawingPoint.z4Vector.y);
+      this.c1i = new Z4Point(this.c1i.x + drawingPoint.z4Vector.x, this.c1i.y + drawingPoint.z4Vector.y);
+      this.c2e = new Z4Point(this.c2e.x + drawingPoint.z4Vector.x, this.c2e.y + drawingPoint.z4Vector.y);
+      this.c2i = new Z4Point(this.c2i.x + drawingPoint.z4Vector.x, this.c2i.y + drawingPoint.z4Vector.y);
+    } else if (this.controlPointClosure == Z4NaturalFigurePainterControlPointClosure.CONTROL_POINT_CLOSURE_1) {
+      this.c2e = new Z4Point(this.c2e.x + drawingPoint.z4Vector.x, this.c2e.y + drawingPoint.z4Vector.y);
+      this.c2i = new Z4Point(this.c2i.x + drawingPoint.z4Vector.x, this.c2i.y + drawingPoint.z4Vector.y);
+    } else if (this.controlPointClosure == Z4NaturalFigurePainterControlPointClosure.CONTROL_POINT_CLOSURE_2) {
+    }
+  }
+
+  private void type0($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
+    this.path1 = this.findControlPointPath(this.c1e.x, this.c1e.y, this.c1i.x, this.c1i.y);
+    this.path2 = this.findControlPointPath(this.c2e.x, this.c2e.y, this.c2i.x, this.c2i.y);
+//    
+//    if (shadow || border) {
+//      pathForShadowBorder.reset();
+//      pathForShadowBorder.cubicTo(c1e[0], c1e[1], c2e[0], c2e[1], this.pF.x, this.pF.y);
+//      pathForShadowBorder.cubicTo(c2i[0], c2i[1], c1i[0], c1i[1], 0, 0);
+//    }
+//
+    this.drawFigure(context, drawingPoint, this.c1e, this.c2e, spatioTemporalColor, progression);
+  }
+
+  private void type1($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
+    this.path1 = this.findControlPointPath(this.c1i.x, this.c1i.y, 0, 0);
+    this.path2 = this.findControlPointPath(this.c2i.x, this.c2i.y, this.pF.x, this.pF.y);
+//    
+//    if (shadow || border) {
+//      pathForShadowBorder.reset();
+//      pathForShadowBorder.cubicTo(c1i[0], c1i[1], c2i[0], c2i[1], this.pF.x, this.pF.y);
+//    }
+//    this.drawFigure(context, drawingPoint, this.c1i, this.c2i, spatioTemporalColor, progression);
+//
+    this.path1 = this.findControlPointPath(this.c1e.x, this.c1e.y, 0, 0);
+    this.path2 = this.findControlPointPath(this.c2e.x, this.c2e.y, this.pF.x, this.pF.y);
+//    
+//    if (shadow || border) {
+//      pathForShadowBorder.reset();
+//      pathForShadowBorder.cubicTo(c1e[0], c1e[1], c2e[0], c2e[1], this.pF.x, this.pF.y);
+//    }
+//    
+    this.drawFigure(context, drawingPoint, c1e, c2e, spatioTemporalColor, progression);
+  }
+
+  private void type2($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
+    this.path1 = this.findControlPointPath(this.c2i.x, this.c2i.y, 0, 0);
+    this.path2 = this.findControlPointPath(this.c1i.x, this.c1i.y, this.pF.x, this.pF.y);
+//    
+//    if (shadow || border) {
+//      pathForShadowBorder.reset();
+//      pathForShadowBorder.cubicTo(c2i[0], c2i[1], c1i[0], c1i[1], this.pF.x, this.pF.y);
+//    }
+//    
+    this.drawFigure(context, drawingPoint, c2i, c1i, spatioTemporalColor, progression);
+
+    this.path1 = this.findControlPointPath(this.c2e.x, this.c2e.y, 0, 0);
+    this.path2 = this.findControlPointPath(this.c1e.x, this.c1e.y, this.pF.x, this.pF.y);
+//    
+//    if (shadow || border) {
+//      pathForShadowBorder.reset();
+//      pathForShadowBorder.cubicTo(c2e[0], c2e[1], c1e[0], c1e[1], this.pF.x, this.pF.y);
+//    }
+//    
+    this.drawFigure(context, drawingPoint, c2e, c1e, spatioTemporalColor, progression);
+  }
+
+  private void type3($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
+    this.path1 = this.findControlPointPath(this.c1e.x, this.c1e.y, this.c1i.x, this.c1i.y);
+    this.path2 = this.findControlPointPath(this.c2i.x, this.c2i.y, this.c2e.x, this.c2e.y);
+//    
+//    if (shadow || border) {
+//      pathForShadowBorder.reset();
+//      pathForShadowBorder.cubicTo(c1e[0], c1e[1], c2i[0], c2i[1], this.pF.x, this.pF.y);
+//      pathForShadowBorder.cubicTo(c2e[0], c2e[1], c1i[0], c1i[1], 0, 0);
+//    }
+//    
+    this.drawFigure(context, drawingPoint, c1e, c2i, spatioTemporalColor, progression);
+  }
+
+  private Z4Point findControlPointPath(double p1x, double p1y, double p2x, double p2y) {
+    Z4Vector helpVector = Z4Vector.fromPoints(p1x, p1y, p2x, p2y);
+    return Z4Math.rotate(helpVector.module, 0, helpVector.phase);
+  }
+
+  private void drawFigure($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4Point c1, Z4Point c2, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
+//    if (shadow) {
+//      this.drawShadow();
+//    }
+//    if (border) {
+//      this.drawBorder(point);
+//    }
+
+    if (spatioTemporalColor.isColor()) {
+      Color color = spatioTemporalColor.getColorAt(-1, -1);
+      this.drawFigureWithColors(context, drawingPoint, c1, c2, null, null, color, progression.getLighting());
+    } else if (spatioTemporalColor.isGradientColor()) {
+      if (progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.SPATIAL) {
+        this.drawFigureWithColors(context, drawingPoint, c1, c2, spatioTemporalColor, null, null, progression.getLighting());
+      } else {
+        Color color = spatioTemporalColor.getGradientColorAt(-1).getColorAt(progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition, true);
+        this.drawFigureWithColors(context, drawingPoint, c1, c2, null, null, color, progression.getLighting());
+      }
+    } else if (spatioTemporalColor.isBiGradientColor()) {
+      Z4GradientColor gradientColor = spatioTemporalColor.getGradientColorAt(progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition);
+      this.drawFigureWithColors(context, drawingPoint, c1, c2, null, gradientColor, null, progression.getLighting());
+    }
+  }
+
+  @SuppressWarnings("null")
+  private void drawFigureWithColors($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4Point c1, Z4Point c2, Z4SpatioTemporalColor spatioTemporalColor, Z4GradientColor gradientColor, Color color, Z4Lighting lighting) {
+    double length = Math.max(Z4Math.distance(path1.x, path1.y, 0, 0), Z4Math.distance(path2.x, path2.y, 0, 0));
+
+    for (int i = 0; i < length; i += 2) {
+      double val = i / length;
+      Color c = null;
+      if ($exists(color) && lighting == Z4Lighting.NONE) {
+        c = color;
+      } else {
+        if ($exists(spatioTemporalColor)) {
+          c = spatioTemporalColor.getColorAt(-1, val);
+        } else if ($exists(gradientColor)) {
+          c = gradientColor.getColorAt(val, true);
+        }
+      }
+
+      if (lighting == Z4Lighting.NONE) {
+      } else if (lighting == Z4Lighting.LIGHTED) {
+        c = c.lighted(val);
+      } else if (lighting == Z4Lighting.DARKENED) {
+        c = c.darkened(val);
+      }
+
+      double indentationValue = this.indentation * Math.random();
+      double indentationAngle = Z4Math.TWO_PI * Math.random();
+      double indentX = indentationValue > 0 ? indentationValue * Math.cos(indentationAngle) : 0;
+      double indentY = indentationValue > 0 ? indentationValue * Math.sin(indentationAngle) : 0;
+
+      context.save();
+
+      context.lineWidth = 3;
+      context.strokeStyle = Z4Constants.$getStyle(c.getRGBA_HEX());
+
+      context.beginPath();
+      context.moveTo(drawingPoint.z4Vector.x0, 0);
+      context.bezierCurveTo(c1.x + path1.x * val, c1.y + path1.y * val, c2.x + path2.x * val, c2.y + path2.y * val, this.pF.x + indentX, this.pF.y + indentY);
+      context.stroke();
+
+      context.restore();
+    }
   }
 
   @Override
@@ -224,6 +472,8 @@ public class Z4NaturalFigurePainter extends Z4Painter {
 
     json.$set("naturalFigurePainterType", this.naturalFigurePainterType);
     json.$set("controlPointClosure", this.controlPointClosure);
+
+    json.$set("size", this.size.toJSON());
 
     json.$set("internalAngle1", this.internalAngle1.toJSON());
     json.$set("externalAngle1", this.externalAngle1.toJSON());
@@ -253,6 +503,7 @@ public class Z4NaturalFigurePainter extends Z4Painter {
     return new Z4NaturalFigurePainter(
             json.$get("naturalFigurePainterType"),
             json.$get("controlPointClosure"),
+            Z4FancifulValue.fromJSON(json.$get("size")),
             Z4FancifulValue.fromJSON(json.$get("internalAngle1")), Z4FancifulValue.fromJSON(json.$get("externalAngle1")), Z4FancifulValue.fromJSON(json.$get("internalAngle2")), Z4FancifulValue.fromJSON(json.$get("externalAngle2")),
             Z4FancifulValue.fromJSON(json.$get("internalTension1")), Z4FancifulValue.fromJSON(json.$get("externalTension1")), Z4FancifulValue.fromJSON(json.$get("internalTension2")), Z4FancifulValue.fromJSON(json.$get("externalTension2")),
             json.$get("indentation"),

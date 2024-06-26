@@ -223,9 +223,9 @@ class Z4CenteredFigurePainter extends Z4Painter {
 
    draw(context, drawingPoint, spatioTemporalColor, progression) {
     if (drawingPoint.intent !== Z4DrawingPointIntent.DRAW_OBJECTS) {
+      let currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.size.getConstant().getValue());
       let currentAngle = Z4Math.deg2rad(this.whirlpool.getAngle().getConstant().getValue());
       let currentHole = this.hole.getConstant().getValue();
-      let currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.size.getConstant().getValue());
       let point = this.checkWhirlpool1(currentAngle, currentHole, currentSize);
       this.drawBounds(context, currentHole, point);
     } else {
