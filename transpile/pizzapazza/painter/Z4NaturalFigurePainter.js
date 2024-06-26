@@ -403,7 +403,7 @@ class Z4NaturalFigurePainter extends Z4Painter {
 
    drawFigureWithColors(context, drawingPoint, c1, c2, spatioTemporalColor, gradientColor, color, lighting) {
     let length = Math.max(Z4Math.distance(path1.x, path1.y, 0, 0), Z4Math.distance(path2.x, path2.y, 0, 0));
-    for (let i = 0; i < length; i += 2) {
+    for (let i = 0; i < length; i += 3) {
       let val = i / length;
       let c = null;
       if (color && lighting === Z4Lighting.NONE) {

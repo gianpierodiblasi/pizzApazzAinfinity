@@ -427,7 +427,7 @@ public class Z4NaturalFigurePainter extends Z4Painter {
   private void drawFigureWithColors($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4Point c1, Z4Point c2, Z4SpatioTemporalColor spatioTemporalColor, Z4GradientColor gradientColor, Color color, Z4Lighting lighting) {
     double length = Math.max(Z4Math.distance(path1.x, path1.y, 0, 0), Z4Math.distance(path2.x, path2.y, 0, 0));
 
-    for (int i = 0; i < length; i += 2) {
+    for (int i = 0; i < length; i += 3) {
       double val = i / length;
       Color c = null;
       if ($exists(color) && lighting == Z4Lighting.NONE) {
