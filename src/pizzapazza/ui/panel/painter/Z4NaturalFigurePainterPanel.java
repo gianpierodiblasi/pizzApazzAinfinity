@@ -2,7 +2,6 @@ package pizzapazza.ui.panel.painter;
 
 import def.js.Array;
 import def.js.Object;
-import javascript.awt.BoxLayout;
 import javascript.awt.Color;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
