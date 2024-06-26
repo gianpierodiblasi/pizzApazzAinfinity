@@ -66,9 +66,7 @@ class Z4NaturalFigurePainter extends Z4Painter {
 
    pF = null;
 
-   pathForShadowBorderE = null;
-
-   pathForShadowBorderI = null;
+   pathForShadowBorder = null;
 
   /**
    * Creates the object
@@ -314,14 +312,18 @@ class Z4NaturalFigurePainter extends Z4Painter {
         this.c2e = this.setControlPoint(-Math.PI, Z4Math.deg2rad(externalAngle2.next()), -1, this.externalTension2.next(), drawingPoint.intensity, drawingPoint.side.next());
         this.c2i = this.setControlPoint(-Math.PI, Z4Math.deg2rad(internalAngle2.next()), 1, this.internalTension2.next(), drawingPoint.intensity, drawingPoint.side.next());
         this.evalPointClosure(drawingPoint);
+        let currentShadowShiftX = this.shadowShiftX.next();
+        let currentShadowShiftY = this.shadowShiftY.next();
+        let currentBorderSize = this.borderSize.next();
+        let shadowOrBorder = currentShadowShiftX || currentShadowShiftY || currentBorderSize > 0;
         if (this.naturalFigurePainterType === Z4NaturalFigurePainterType.TYPE_0) {
-          this.type0(context, drawingPoint, spatioTemporalColor, progression);
+          this.type0(context, drawingPoint, spatioTemporalColor, progression, shadowOrBorder, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
         } else if (this.naturalFigurePainterType === Z4NaturalFigurePainterType.TYPE_1) {
-          this.type1(context, drawingPoint, spatioTemporalColor, progression);
+          this.type1(context, drawingPoint, spatioTemporalColor, progression, shadowOrBorder, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
         } else if (this.naturalFigurePainterType === Z4NaturalFigurePainterType.TYPE_2) {
-          this.type2(context, drawingPoint, spatioTemporalColor, progression);
+          this.type2(context, drawingPoint, spatioTemporalColor, progression, shadowOrBorder, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
         } else if (this.naturalFigurePainterType === Z4NaturalFigurePainterType.TYPE_3) {
-          this.type3(context, drawingPoint, spatioTemporalColor, progression);
+          this.type3(context, drawingPoint, spatioTemporalColor, progression, shadowOrBorder, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
         }
       }
     }
@@ -370,72 +372,66 @@ class Z4NaturalFigurePainter extends Z4Painter {
     }
   }
 
-   type0(context, drawingPoint, spatioTemporalColor, progression) {
+   type0(context, drawingPoint, spatioTemporalColor, progression, shadowOrBorder, currentShadowShiftX, currentShadowShiftY, currentBorderSize) {
     this.path1 = this.findControlPointPath(this.c1e.x, this.c1e.y, this.c1i.x, this.c1i.y);
     this.path2 = this.findControlPointPath(this.c2e.x, this.c2e.y, this.c2i.x, this.c2i.y);
-    // 
-    // if (shadow || border) {
-    // pathForShadowBorder.reset();
-    // pathForShadowBorder.cubicTo(c1e[0], c1e[1], c2e[0], c2e[1], this.pF.x, this.pF.y);
-    // pathForShadowBorder.cubicTo(c2i[0], c2i[1], c1i[0], c1i[1], 0, 0);
-    // }
-    // 
-    this.drawFigure(context, drawingPoint, this.c1e, this.c2e, spatioTemporalColor, progression);
+    if (shadowOrBorder) {
+      this.pathForShadowBorder = new Path2D();
+      this.pathForShadowBorder.moveTo(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+      this.pathForShadowBorder.bezierCurveTo(this.c1e.x, this.c1e.y, this.c2e.x, this.c2e.y, this.pF.x, this.pF.y);
+      this.pathForShadowBorder.bezierCurveTo(this.c2i.x, this.c2i.y, this.c1i.x, this.c1i.y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+    }
+    this.drawFigure(context, drawingPoint, this.c1e, this.c2e, spatioTemporalColor, progression, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
   }
 
-   type1(context, drawingPoint, spatioTemporalColor, progression) {
+   type1(context, drawingPoint, spatioTemporalColor, progression, shadowOrBorder, currentShadowShiftX, currentShadowShiftY, currentBorderSize) {
     this.path1 = this.findControlPointPath(this.c1i.x, this.c1i.y, 0, 0);
     this.path2 = this.findControlPointPath(this.c2i.x, this.c2i.y, this.pF.x, this.pF.y);
-    // 
-    // if (shadow || border) {
-    // pathForShadowBorder.reset();
-    // pathForShadowBorder.cubicTo(c1i[0], c1i[1], c2i[0], c2i[1], this.pF.x, this.pF.y);
-    // }
-    // this.drawFigure(context, drawingPoint, this.c1i, this.c2i, spatioTemporalColor, progression);
-    // 
+    if (shadowOrBorder) {
+      this.pathForShadowBorder = new Path2D();
+      this.pathForShadowBorder.moveTo(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+      pathForShadowBorder.bezierCurveTo(this.c1i.x, this.c1i.y, this.c2i.x, this.c2i.y, this.pF.x, this.pF.y);
+    }
+    this.drawFigure(context, drawingPoint, this.c1i, this.c2i, spatioTemporalColor, progression, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
     this.path1 = this.findControlPointPath(this.c1e.x, this.c1e.y, 0, 0);
     this.path2 = this.findControlPointPath(this.c2e.x, this.c2e.y, this.pF.x, this.pF.y);
-    // 
-    // if (shadow || border) {
-    // pathForShadowBorder.reset();
-    // pathForShadowBorder.cubicTo(c1e[0], c1e[1], c2e[0], c2e[1], this.pF.x, this.pF.y);
-    // }
-    // 
-    this.drawFigure(context, drawingPoint, c1e, c2e, spatioTemporalColor, progression);
+    if (shadowOrBorder) {
+      this.pathForShadowBorder = new Path2D();
+      this.pathForShadowBorder.moveTo(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+      pathForShadowBorder.bezierCurveTo(this.c1e.x, this.c1e.y, this.c2e.x, this.c2e.y, this.pF.x, this.pF.y);
+    }
+    this.drawFigure(context, drawingPoint, c1e, c2e, spatioTemporalColor, progression, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
   }
 
-   type2(context, drawingPoint, spatioTemporalColor, progression) {
+   type2(context, drawingPoint, spatioTemporalColor, progression, shadowOrBorder, currentShadowShiftX, currentShadowShiftY, currentBorderSize) {
     this.path1 = this.findControlPointPath(this.c2i.x, this.c2i.y, 0, 0);
     this.path2 = this.findControlPointPath(this.c1i.x, this.c1i.y, this.pF.x, this.pF.y);
-    // 
-    // if (shadow || border) {
-    // pathForShadowBorder.reset();
-    // pathForShadowBorder.cubicTo(c2i[0], c2i[1], c1i[0], c1i[1], this.pF.x, this.pF.y);
-    // }
-    // 
-    this.drawFigure(context, drawingPoint, c2i, c1i, spatioTemporalColor, progression);
+    if (shadowOrBorder) {
+      this.pathForShadowBorder = new Path2D();
+      this.pathForShadowBorder.moveTo(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+      pathForShadowBorder.bezierCurveTo(this.c2i.x, this.c2i.y, this.c1i.x, this.c1i.y, this.pF.x, this.pF.y);
+    }
+    this.drawFigure(context, drawingPoint, c2i, c1i, spatioTemporalColor, progression, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
     this.path1 = this.findControlPointPath(this.c2e.x, this.c2e.y, 0, 0);
     this.path2 = this.findControlPointPath(this.c1e.x, this.c1e.y, this.pF.x, this.pF.y);
-    // 
-    // if (shadow || border) {
-    // pathForShadowBorder.reset();
-    // pathForShadowBorder.cubicTo(c2e[0], c2e[1], c1e[0], c1e[1], this.pF.x, this.pF.y);
-    // }
-    // 
-    this.drawFigure(context, drawingPoint, c2e, c1e, spatioTemporalColor, progression);
+    if (shadowOrBorder) {
+      this.pathForShadowBorder = new Path2D();
+      this.pathForShadowBorder.moveTo(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+      pathForShadowBorder.bezierCurveTo(this.c2e.x, this.c2e.y, this.c1e.x, this.c1e.y, this.pF.x, this.pF.y);
+    }
+    this.drawFigure(context, drawingPoint, c2e, c1e, spatioTemporalColor, progression, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
   }
 
-   type3(context, drawingPoint, spatioTemporalColor, progression) {
+   type3(context, drawingPoint, spatioTemporalColor, progression, shadowOrBorder, currentShadowShiftX, currentShadowShiftY, currentBorderSize) {
     this.path1 = this.findControlPointPath(this.c1e.x, this.c1e.y, this.c1i.x, this.c1i.y);
     this.path2 = this.findControlPointPath(this.c2i.x, this.c2i.y, this.c2e.x, this.c2e.y);
-    // 
-    // if (shadow || border) {
-    // pathForShadowBorder.reset();
-    // pathForShadowBorder.cubicTo(c1e[0], c1e[1], c2i[0], c2i[1], this.pF.x, this.pF.y);
-    // pathForShadowBorder.cubicTo(c2e[0], c2e[1], c1i[0], c1i[1], 0, 0);
-    // }
-    // 
-    this.drawFigure(context, drawingPoint, c1e, c2i, spatioTemporalColor, progression);
+    if (shadowOrBorder) {
+      this.pathForShadowBorder = new Path2D();
+      this.pathForShadowBorder.moveTo(drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+      this.pathForShadowBorder.bezierCurveTo(this.c1e.x, this.c1e.y, this.c2i.x, this.c2i.y, this.pF.x, this.pF.y);
+      this.pathForShadowBorder.bezierCurveTo(this.c2e.x, this.c2e.y, this.c1i.x, this.c1i.y, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+    }
+    this.drawFigure(context, drawingPoint, c1e, c2i, spatioTemporalColor, progression, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
   }
 
    findControlPointPath(p1x, p1y, p2x, p2y) {
@@ -443,13 +439,13 @@ class Z4NaturalFigurePainter extends Z4Painter {
     return Z4Math.rotate(helpVector.module, 0, helpVector.phase);
   }
 
-   drawFigure(context, drawingPoint, c1, c2, spatioTemporalColor, progression) {
-    // if (shadow) {
-    // this.drawShadow();
-    // }
-    // if (border) {
-    // this.drawBorder(point);
-    // }
+   drawFigure(context, drawingPoint, c1, c2, spatioTemporalColor, progression, currentShadowShiftX, currentShadowShiftY, currentBorderSize) {
+    if (currentShadowShiftX || currentShadowShiftY) {
+      this.drawShadow(context, currentShadowShiftX, currentShadowShiftY, currentBorderSize);
+    }
+    if (currentBorderSize > 0) {
+      this.drawBorder(context, currentBorderSize);
+    }
     if (spatioTemporalColor.isColor()) {
       let color = spatioTemporalColor.getColorAt(-1, -1);
       this.drawFigureWithColors(context, drawingPoint, c1, c2, null, null, color, progression.getLighting());
@@ -499,6 +495,27 @@ class Z4NaturalFigurePainter extends Z4Painter {
       context.stroke();
       context.restore();
     }
+  }
+
+   drawShadow(context, currentShadowShiftX, currentShadowShiftY, currentBorderSize) {
+    context.save();
+    context.translate(currentShadowShiftX, currentShadowShiftY);
+    if (currentBorderSize > 0) {
+      context.lineWidth = currentBorderSize;
+      context.strokeStyle = Z4Constants.getStyle(this.shadowColor.getRGBA_HEX());
+      context.stroke(this.pathForShadowBorder);
+    }
+    context.fillStyle = Z4Constants.getStyle(this.shadowColor.getRGBA_HEX());
+    context.fill(this.pathForShadowBorder);
+    context.restore();
+  }
+
+   drawBorder(context, currentBorderSize) {
+    context.save();
+    context.lineWidth = currentBorderSize;
+    context.strokeStyle = Z4Constants.getStyle(this.borderColor.getRGBA_HEX());
+    context.stroke(this.pathForShadowBorder);
+    context.restore();
   }
 
    toJSON() {
