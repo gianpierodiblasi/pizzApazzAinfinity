@@ -5,13 +5,15 @@
  */
 class Z4DrawingToolPanel extends Z4AbstractValuePanel {
 
-   selectedPointInterator = new JSComponent(document.createElement("img"));
+   selectedPointInterator = new JSButton();
 
-   selectedPainter = new JSComponent(document.createElement("img"));
+   selectedPainter = new JSButton();
 
-   selectedSpatioTemporalColor = new JSComponent(document.createElement("img"));
+   selectedSpatioTemporalColor = new JSButton();
 
-   selectedColorProgression = new JSComponent(document.createElement("img"));
+   selectedColorProgression = new JSButton();
+
+   pane = new JSTabbedPane();
 
    transparent1 = new JSButton();
 
@@ -69,26 +71,32 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
 
    pressedTryMe = false;
 
+   tabbedPaneID = "z4drawingtoolpanel_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
+
   constructor() {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4drawingtoolpanel");
     let selected = new JSPanel();
-    this.selectedPointInterator.cssAddClass("z4drawingtoolpanel-selected");
+    this.setSelectedButton(this.selectedPointInterator);
+    this.selectedPointInterator.addActionListener(event => this.selectCard(this.selectedPointInteratorCard));
     selected.add(this.selectedPointInterator, null);
-    this.selectedPainter.cssAddClass("z4drawingtoolpanel-selected");
+    this.setSelectedButton(this.selectedPainter);
+    this.selectedPainter.addActionListener(event => this.selectCard(this.selectedPainterCard));
     selected.add(this.selectedPainter, null);
-    this.selectedSpatioTemporalColor.cssAddClass("z4drawingtoolpanel-selected");
+    this.setSelectedButton(this.selectedSpatioTemporalColor);
     selected.add(this.selectedSpatioTemporalColor, null);
-    this.selectedColorProgression.cssAddClass("z4drawingtoolpanel-selected");
+    this.selectedSpatioTemporalColor.addActionListener(event => this.selectCard(this.selectedSpatioTemporalColorCard));
+    this.setSelectedButton(this.selectedColorProgression);
     selected.add(this.selectedColorProgression, null);
+    this.selectedColorProgression.addActionListener(event => this.selectCard("COLOR-PROGRESSION"));
     this.add(selected, new GBC(0, 0).i(0, 0, 5, 0));
-    let pane = new JSTabbedPane();
-    pane.setTabPlacement(JSTabbedPane.LEFT);
-    this.add(pane, new GBC(0, 1).wxy(1, 1).f(GBC.BOTH));
+    this.pane.setID(this.tabbedPaneID);
+    this.pane.setTabPlacement(JSTabbedPane.LEFT);
+    this.add(this.pane, new GBC(0, 1).wxy(1, 1).f(GBC.BOTH));
     let panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
-    pane.addTab(Z4Translations.SETTINGS, panel);
+    this.pane.addTab(Z4Translations.SETTINGS, panel);
     let panelRadio = new JSPanel();
     panelRadio.setLayout(new BoxLayout(panelRadio, BoxLayout.Y_AXIS));
     panel.add(panelRadio, new GBC(0, 0).h(4).i(0, 5, 0, 0));
@@ -117,9 +125,15 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     this.addPreview(panel, 3, 0, this.transparent2, this.swatchesPanel2, this.preview2, 300, 500, new GBC(3, 1).a(GBC.NORTH).i(0, 5, 0, 0), true);
     panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
-    pane.addTab(Z4Translations.TRY_ME, panel);
+    this.pane.addTab(Z4Translations.TRY_ME, panel);
     this.addTryMe(panel);
     this.setValue(new Z4DrawingTool(new Z4Stamper(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)), new Z4Shape2DPainter(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), false, false, 3, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0)), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)), new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.01, Z4Lighting.NONE)));
+  }
+
+   setSelectedButton(button) {
+    button.setContentAreaFilled(false);
+    button.cssAddClass("z4drawingtoolpanel-selected");
+    button.setIcon(new Z4EmptyImageProducer(""));
   }
 
    addRadioButton(panelRadio, buttonGroup, card) {
@@ -129,48 +143,51 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     radio.setToggle();
     radio.cssAddClass("z4drawingtoolpanel-selector");
     radio.setIcon(new Z4EmptyImageProducer(card));
-    radio.addActionListener(event => {
-      switch(card) {
-        case "STAMPER":
-        case "TRACER":
-        case "AIRBRUSH":
-        case "SPIROGRAPH":
-        case "SCATTERER":
-          new Array("z4drawingtoolpanel-stamper-selected", "z4drawingtoolpanel-tracer-selected", "z4drawingtoolpanel-airbrush-selected", "z4drawingtoolpanel-spirograph-selected", "z4drawingtoolpanel-scatterer-selected").forEach(css => this.selectedPointInterator.cssRemoveClass(css));
-          this.selectedPointInteratorCard = this.check(this.selectedPointInterator, card, card.toLowerCase(), null, true);
-          break;
-        case "SHAPE2D":
-        case "DROP":
-        case "BRUSH":
-        case "CENTERED-FIGURE":
-        case "NATURAL-FIGURE":
-          new Array("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-drop-selected", "z4drawingtoolpanel-brush-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css => this.selectedPainter.cssRemoveClass(css));
-          this.selectedPainterCard = this.check(this.selectedPainter, card, card.toLowerCase(), null, true);
-          break;
-        case "COLOR":
-        case "GRADIENT-COLOR":
-        case "BIGRADIENT-COLOR":
-          new Array("z4drawingtoolpanel-color-selected", "z4drawingtoolpanel-gradient-color-selected", "z4drawingtoolpanel-bigradient-color-selected").forEach(css => this.selectedSpatioTemporalColor.cssRemoveClass(css));
-          this.selectedSpatioTemporalColorCard = this.check(this.selectedSpatioTemporalColor, card, card.toLowerCase(), null, true);
-          break;
-        case "COLOR-PROGRESSION":
-          this.check(this.selectedColorProgression, "COLOR-PROGRESSION", null, null, true);
-          break;
-      }
-      this.transparent1.getStyle().display = card === "BIGRADIENT-COLOR" ? "none" : "flex";
-      this.swatchesPanel1.getStyle().display = card === "BIGRADIENT-COLOR" ? "none" : "flex";
-      this.preview1.getStyle().display = card === "BIGRADIENT-COLOR" ? "none" : "flex";
-      this.transparent2.getStyle().display = card === "BIGRADIENT-COLOR" ? "flex" : "none";
-      this.swatchesPanel2.getStyle().display = card === "BIGRADIENT-COLOR" ? "flex" : "none";
-      this.preview2.getStyle().display = card === "BIGRADIENT-COLOR" ? "flex" : "none";
-      this.valueIsAdjusting = false;
-      this.createValue();
-      this.drawPreview();
-      this.onchange();
-    });
+    radio.addActionListener(event => this.selectCard(card));
     this.radios[card] = radio;
     buttonGroup.add(radio);
     panelRadio.add(radio, null);
+  }
+
+   selectCard(card) {
+    (document.querySelector("#" + this.tabbedPaneID + " > .west > ul > li:nth-child(2) input")).click();
+    switch(card) {
+      case "STAMPER":
+      case "TRACER":
+      case "AIRBRUSH":
+      case "SPIROGRAPH":
+      case "SCATTERER":
+        new Array("z4drawingtoolpanel-stamper-selected", "z4drawingtoolpanel-tracer-selected", "z4drawingtoolpanel-airbrush-selected", "z4drawingtoolpanel-spirograph-selected", "z4drawingtoolpanel-scatterer-selected").forEach(css => this.selectedPointInterator.cssRemoveClass(css));
+        this.selectedPointInteratorCard = this.check(this.selectedPointInterator, card, card.toLowerCase(), null, true);
+        break;
+      case "SHAPE2D":
+      case "DROP":
+      case "BRUSH":
+      case "CENTERED-FIGURE":
+      case "NATURAL-FIGURE":
+        new Array("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-drop-selected", "z4drawingtoolpanel-brush-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css => this.selectedPainter.cssRemoveClass(css));
+        this.selectedPainterCard = this.check(this.selectedPainter, card, card.toLowerCase(), null, true);
+        break;
+      case "COLOR":
+      case "GRADIENT-COLOR":
+      case "BIGRADIENT-COLOR":
+        new Array("z4drawingtoolpanel-color-selected", "z4drawingtoolpanel-gradient-color-selected", "z4drawingtoolpanel-bigradient-color-selected").forEach(css => this.selectedSpatioTemporalColor.cssRemoveClass(css));
+        this.selectedSpatioTemporalColorCard = this.check(this.selectedSpatioTemporalColor, card, card.toLowerCase(), null, true);
+        break;
+      case "COLOR-PROGRESSION":
+        this.check(this.selectedColorProgression, "COLOR-PROGRESSION", null, null, true);
+        break;
+    }
+    this.transparent1.getStyle().display = card === "BIGRADIENT-COLOR" ? "none" : "flex";
+    this.swatchesPanel1.getStyle().display = card === "BIGRADIENT-COLOR" ? "none" : "flex";
+    this.preview1.getStyle().display = card === "BIGRADIENT-COLOR" ? "none" : "flex";
+    this.transparent2.getStyle().display = card === "BIGRADIENT-COLOR" ? "flex" : "none";
+    this.swatchesPanel2.getStyle().display = card === "BIGRADIENT-COLOR" ? "flex" : "none";
+    this.preview2.getStyle().display = card === "BIGRADIENT-COLOR" ? "flex" : "none";
+    this.valueIsAdjusting = false;
+    this.createValue();
+    this.drawPreview();
+    this.onchange();
   }
 
    getHLine() {

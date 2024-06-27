@@ -409,76 +409,76 @@
 .z4drawingtoolpanel {
 }
 
-.z4drawingtoolpanel .z4drawingtoolpanel-selector img, .z4drawingtoolpanel-selected {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector img, .z4drawingtoolpanel-selected img {
   max-width: 25px;
   max-height: 25px;
 }
 
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(1) img, .z4drawingtoolpanel-stamper-selected {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(1) img, .z4drawingtoolpanel-stamper-selected img {
   content: url(../image/iterator/stamper.svg);
 }
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(2) img, .z4drawingtoolpanel-tracer-selected {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(2) img, .z4drawingtoolpanel-tracer-selected img {
   content: url(../image/iterator/tracer.svg);
 }
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(3) img, .z4drawingtoolpanel-airbrush-selected {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(3) img, .z4drawingtoolpanel-airbrush-selected img {
   content: url(../image/iterator/airbrush.svg);
 }
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(4) img, .z4drawingtoolpanel-spirograph-selected {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(4) img, .z4drawingtoolpanel-spirograph-selected img {
   content: url(../image/iterator/spirograph.svg);
 }
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(5) img, .z4drawingtoolpanel-scatterer-selected {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(5) img, .z4drawingtoolpanel-scatterer-selected img {
   content: url(../image/iterator/scatterer.svg);
 }
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(7) img, .z4drawingtoolpanel-shape2d-selected {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(7) img, .z4drawingtoolpanel-shape2d-selected img {
   content: url(../image/painter/shape2d.svg);
 }
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(8) img, .z4drawingtoolpanel-drop-selected {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(8) img, .z4drawingtoolpanel-drop-selected img {
   content: url(../image/painter/drop.png);
 }
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(9) img, .z4drawingtoolpanel-brush-selected {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(9) img, .z4drawingtoolpanel-brush-selected img {
   content: url(../image/painter/brush.png);
 }
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(10) img, .z4drawingtoolpanel-centered-figure-selected {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(10) img, .z4drawingtoolpanel-centered-figure-selected img {
   content: url(../image/painter/centered_figure.png);
 }
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(11) img, .z4drawingtoolpanel-natural-figure-selected {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(11) img, .z4drawingtoolpanel-natural-figure-selected img {
   content: url(../image/painter/natural_figure.png);
 }
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(13) img, .z4drawingtoolpanel-color-selected {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(13) img, .z4drawingtoolpanel-color-selected img {
   content: url(../image/filling/fill_flat.gif);
 }
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(14) img, .z4drawingtoolpanel-gradient-color-selected {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(14) img, .z4drawingtoolpanel-gradient-color-selected img {
   content: url(../image/filling/fill_linear.gif);
 }
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(15) img, .z4drawingtoolpanel-bigradient-color-selected {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(15) img, .z4drawingtoolpanel-bigradient-color-selected img {
   content: url(../image/filling/fill_bigradientcolor.gif);
 }
 .z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(17) img {
   content: url(../image/color/z4colorprogressionbehavior_spatial.svg);
 }
 
-.z4drawingtoolpanel-spatial-selected {
+.z4drawingtoolpanel-spatial-selected img {
   content: url(../image/color/z4colorprogressionbehavior_spatial.svg);
 }
-.z4drawingtoolpanel-temporal-selected {
+.z4drawingtoolpanel-temporal-selected img {
   content: url(../image/color/z4colorprogressionbehavior_temporal.svg);
 }
-.z4drawingtoolpanel-relativetopath-selected {
+.z4drawingtoolpanel-relativetopath-selected img {
   content: url(../image/color/z4colorprogressionbehavior_relativetopath.svg);
 }
-.z4drawingtoolpanel-random-selected {
+.z4drawingtoolpanel-random-selected img {
   content: url(../image/color/z4colorprogressionbehavior_random.svg);
 }
-.z4drawingtoolpanel-airbrush-spatial-selected {
+.z4drawingtoolpanel-airbrush-spatial-selected img {
   content: url(../image/color/z4colorprogressionbehavior_airbrush_spatial.svg);
 }
-.z4drawingtoolpanel-airbrush-temporal-selected {
+.z4drawingtoolpanel-airbrush-temporal-selected img {
   content: url(../image/color/z4colorprogressionbehavior_airbrush_temporal.svg);
 }
-.z4drawingtoolpanel-airbrush-relativetopath-selected {
+.z4drawingtoolpanel-airbrush-relativetopath-selected img {
   content: url(../image/color/z4colorprogressionbehavior_airbrush_relativetopath.svg);
 }
-.z4drawingtoolpanel-airbrush-random-selected {
+.z4drawingtoolpanel-airbrush-random-selected img {
   content: url(../image/color/z4colorprogressionbehavior_airbrush_random.svg);
 }
 
