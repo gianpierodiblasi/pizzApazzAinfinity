@@ -12,8 +12,11 @@ import pizzapazza.math.Z4DrawingPointIntent;
 import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4Math;
 import pizzapazza.util.Z4Constants;
+import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
+import simulation.dom.$Image;
 import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.document;
 import simulation.js.$Object;
 
 /**
@@ -25,18 +28,21 @@ public class Z4BrushPainter extends Z4Painter {
 
   private final Z4FancifulValue width;
   private final Z4FancifulValue thickness;
+  private final $Image pattern;
 
   /**
    * Creates the object
    *
    * @param width The width of the brush
    * @param thickness The thickness of the brush
+   * @param pattern The pattern, it can be null
    */
-  public Z4BrushPainter(Z4FancifulValue width, Z4FancifulValue thickness) {
+  public Z4BrushPainter(Z4FancifulValue width, Z4FancifulValue thickness, $Image pattern) {
     super();
 
     this.width = width;
     this.thickness = thickness;
+    this.pattern = pattern;
   }
 
   @Override
@@ -60,6 +66,15 @@ public class Z4BrushPainter extends Z4Painter {
    */
   public Z4FancifulValue getThickness() {
     return this.thickness;
+  }
+
+  /**
+   * Returns the pattern
+   *
+   * @return The pattern
+   */
+  public $Image getPattern() {
+    return this.pattern;
   }
 
   @Override
@@ -92,24 +107,6 @@ public class Z4BrushPainter extends Z4Painter {
   }
 
   private void drawWithColors($CanvasRenderingContext2D context, double currentWidth, double currentThickness, Z4GradientColor gradientColor, Color color, Z4Lighting lighting) {
-//    if (ww > halfWidth) { // dovrei aggiungere la property border
-//      double cos = Math.cos(rot + randAddingRotation);
-//      double sen = Math.sin(rot + randAddingRotation);
-//      double x1 = point.x + cos * ww;
-//      double y1 = point.y + sen * ww;
-//      double x2 = point.x - cos * ww;
-//      double y2 = point.y - sen * ww;
-//      Line2D line = new Line2D.Double(x1, y1, x2, y2);
-//      
-//      g2.setStroke(new BasicStroke((int) Math.ceil(tt), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-//      if (effect == this.NO_EFFECT) {
-//        g2.setPaint(addingColor.getLocalColor(color).getMultiLinearPaint(point, new Point2D.Double(x2, y2), false));
-//      } else if (effect == this.PATTERN_EFFECT) {
-//        g2.setPaint(new TexturePaint(pattern, rect));
-//      }
-//      g2.draw(line);
-//    }
-//
 //    if (effect == this.NO_EFFECT) {
 //      g2.setPaint(color.getMultiLinearPaint(point, new Point2D.Double(x2, y2), false));
 //    } else if (effect == this.PATTERN_EFFECT) {
@@ -160,7 +157,7 @@ public class Z4BrushPainter extends Z4Painter {
   private void drawBounds($CanvasRenderingContext2D context, double currentWidth) {
     context.save();
     context.rotate(Z4Math.HALF_PI);
-    
+
     context.strokeStyle = Z4Constants.$getStyle("gray");
     context.beginPath();
     context.moveTo(-currentWidth / 2, 0);
@@ -184,6 +181,16 @@ public class Z4BrushPainter extends Z4Painter {
     json.$set("width", this.width.toJSON());
     json.$set("thickness", this.thickness.toJSON());
 
+    if ($exists(this.pattern)) {
+      $Canvas canvas = ($Canvas) document.createElement("canvas");
+      canvas.width = this.pattern.width;
+      canvas.height = this.pattern.height;
+
+      $CanvasRenderingContext2D context = canvas.getContext("2d");
+      context.drawImage(this.pattern, 0, 0);
+      json.$set("pattern", canvas.toDataURL("image/png", 1));
+    }
+
     return json;
   }
 
@@ -194,6 +201,12 @@ public class Z4BrushPainter extends Z4Painter {
    * @return the brush painter
    */
   public static Z4BrushPainter fromJSON($Object json) {
-    return new Z4BrushPainter(Z4FancifulValue.fromJSON(json.$get("width")), Z4FancifulValue.fromJSON(json.$get("thickness")));
+    $Image pattern = null;
+    if ($exists(json.$get("pattern"))) {
+      pattern = new $Image();
+      pattern.src = json.$get("pattern");
+    }
+
+    return new Z4BrushPainter(Z4FancifulValue.fromJSON(json.$get("width")), Z4FancifulValue.fromJSON(json.$get("thickness")), pattern);
   }
 }

@@ -289,6 +289,8 @@ class Z4Translations {
 
   static  THICKNESS = "";
 
+  static  DELETE_PATTERN_MESSAGE = "";
+
   // Math
   static  POSITIVE = "";
 
@@ -549,6 +551,7 @@ class Z4Translations {
     Z4Translations.INTENSITY = "Intensity";
     Z4Translations.GAUSSIAN_CORRECTION = "Gaussian Correction";
     Z4Translations.THICKNESS = "Thickness";
+    Z4Translations.DELETE_PATTERN_MESSAGE = "Do you really want to delete the pattern?";
     // Math
     Z4Translations.POSITIVE = "Positive";
     Z4Translations.NEGATIVE = "Negative";
@@ -750,6 +753,7 @@ class Z4Translations {
     Z4Translations.INTENSITY = "Intensit\u00E0";
     Z4Translations.GAUSSIAN_CORRECTION = "Correzione Gaussiana";
     Z4Translations.THICKNESS = "Spessore";
+    Z4Translations.DELETE_PATTERN_MESSAGE = "Vuoi davvero eliminare la trama?";
     // Math
     Z4Translations.POSITIVE = "Positivo";
     Z4Translations.NEGATIVE = "Negativo";

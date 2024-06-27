@@ -4,6 +4,7 @@ import static def.dom.Globals.console;
 import javascript.awt.BorderLayout;
 import javascript.swing.JSFrame;
 import javascript.swing.JSPanel;
+import pizzapazza.util.Z4Constants;
 
 /**
  *
@@ -13,7 +14,9 @@ public class TestPainterPanel extends JSFrame {
 
   public TestPainterPanel(Z4PainterPanel<?> panel) {
     super();
-
+    
+    Z4Constants.configureAcceptedImageFileTypeArrays();
+    
     JSPanel p = new JSPanel();
     p.add(panel, null);
     this.getContentPane().add(p, BorderLayout.NORTH);

@@ -34,15 +34,11 @@ public class $CanvasRenderingContext2D extends CanvasRenderingContext2D {
   public void setLineDash(Array<Double> array) {
   }
 
-  public CanvasGradient createLinearGradient(double x0, double y0, double x1, double y1) {
-    return null;
-  }
-  
   public CanvasGradient createConicGradient(double angle, double x, double y) {
     return null;
   }
 
-  public Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> createPattern($Image image, String string) {
+  public Union4<String, CanvasGradient, CanvasPattern, Object> createPattern($Image image, String string) {
     return null;
   }
 }

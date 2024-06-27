@@ -9,16 +9,20 @@ class Z4BrushPainter extends Z4Painter {
 
    thickness = null;
 
+   pattern = null;
+
   /**
    * Creates the object
    *
    * @param width The width of the brush
    * @param thickness The thickness of the brush
+   * @param pattern The pattern, it can be null
    */
-  constructor(width, thickness) {
+  constructor(width, thickness, pattern) {
     super();
     this.width = width;
     this.thickness = thickness;
+    this.pattern = pattern;
   }
 
    getType() {
@@ -41,6 +45,15 @@ class Z4BrushPainter extends Z4Painter {
    */
    getThickness() {
     return this.thickness;
+  }
+
+  /**
+   * Returns the pattern
+   *
+   * @return The pattern
+   */
+   getPattern() {
+    return this.pattern;
   }
 
    draw(context, drawingPoint, spatioTemporalColor, progression) {
@@ -70,24 +83,6 @@ class Z4BrushPainter extends Z4Painter {
   }
 
    drawWithColors(context, currentWidth, currentThickness, gradientColor, color, lighting) {
-    // if (ww > halfWidth) { // dovrei aggiungere la property border
-    // double cos = Math.cos(rot + randAddingRotation);
-    // double sen = Math.sin(rot + randAddingRotation);
-    // double x1 = point.x + cos * ww;
-    // double y1 = point.y + sen * ww;
-    // double x2 = point.x - cos * ww;
-    // double y2 = point.y - sen * ww;
-    // Line2D line = new Line2D.Double(x1, y1, x2, y2);
-    // 
-    // g2.setStroke(new BasicStroke((int) Math.ceil(tt), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-    // if (effect == this.NO_EFFECT) {
-    // g2.setPaint(addingColor.getLocalColor(color).getMultiLinearPaint(point, new Point2D.Double(x2, y2), false));
-    // } else if (effect == this.PATTERN_EFFECT) {
-    // g2.setPaint(new TexturePaint(pattern, rect));
-    // }
-    // g2.draw(line);
-    // }
-    // 
     // if (effect == this.NO_EFFECT) {
     // g2.setPaint(color.getMultiLinearPaint(point, new Point2D.Double(x2, y2), false));
     // } else if (effect == this.PATTERN_EFFECT) {
@@ -153,6 +148,14 @@ class Z4BrushPainter extends Z4Painter {
     let json = super.toJSON();
     json["width"] = this.width.toJSON();
     json["thickness"] = this.thickness.toJSON();
+    if (this.pattern) {
+      let canvas = document.createElement("canvas");
+      canvas.width = this.pattern.width;
+      canvas.height = this.pattern.height;
+      let context = canvas.getContext("2d");
+      context.drawImage(this.pattern, 0, 0);
+      json["pattern"] = canvas.toDataURL("image/png", 1);
+    }
     return json;
   }
 
@@ -163,6 +166,11 @@ class Z4BrushPainter extends Z4Painter {
    * @return the brush painter
    */
   static  fromJSON(json) {
-    return new Z4BrushPainter(Z4FancifulValue.fromJSON(json["width"]), Z4FancifulValue.fromJSON(json["thickness"]));
+    let pattern = null;
+    if (json["pattern"]) {
+      pattern = new Image();
+      pattern.src = json["pattern"];
+    }
+    return new Z4BrushPainter(Z4FancifulValue.fromJSON(json["width"]), Z4FancifulValue.fromJSON(json["thickness"]), pattern);
   }
 }

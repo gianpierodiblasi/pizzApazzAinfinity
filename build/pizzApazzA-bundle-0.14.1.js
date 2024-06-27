@@ -8540,9 +8540,15 @@ class Z4PainterPanel extends Z4AbstractValuePanel {
  */
 class Z4BrushPainterPanel extends Z4PainterPanel {
 
-   width = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+   width = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
 
-   thickness = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+   thickness = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
+
+   pattern = new JSComponent(document.createElement("img"));
+
+   open = new JSButton();
+
+   delete = new JSButton();
 
   /**
    * Creates the object
@@ -8554,20 +8560,74 @@ class Z4BrushPainterPanel extends Z4PainterPanel {
     this.width.setConstantRange(1, 150);
     this.width.setLabel(Z4Translations.WIDTH);
     this.width.cssAddClass("z4abstractvaluepanel-titled");
-    this.width.addChangeListener(event => this.onbrushchange(this.width.getValueIsAdjusting()));
-    this.add(this.width, new GBC(0, 0).i(1, 0, 1, 0));
+    this.width.addChangeListener(event => this.onbrushchange(this.width.getValueIsAdjusting(), this.value.getPattern()));
+    this.add(this.width, new GBC(0, 0).h(3).i(1, 0, 0, 1));
     this.thickness.setSignsVisible(false);
     this.thickness.setConstantRange(1, 15);
     this.thickness.setLabel(Z4Translations.THICKNESS);
     this.thickness.cssAddClass("z4abstractvaluepanel-titled");
-    this.thickness.addChangeListener(event => this.onbrushchange(this.thickness.getValueIsAdjusting()));
-    this.add(this.thickness, new GBC(0, 1));
-    this.setValue(new Z4BrushPainter(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 2), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false)));
+    this.thickness.addChangeListener(event => this.onbrushchange(this.thickness.getValueIsAdjusting(), this.value.getPattern()));
+    this.add(this.thickness, new GBC(1, 0).h(3).i(0, 0, 0, 1));
+    Z4UI.addLabel(this, Z4Translations.PATTERN, new GBC(2, 0).w(2).a(GBC.WEST));
+    this.pattern.setAttribute("width", "150");
+    this.pattern.setAttribute("height", "150");
+    this.pattern.getStyle().border = "1px solid var(--main-action-bgcolor)";
+    this.pattern.getStyle().borderRadius = "var(--roundness)";
+    this.add(this.pattern, new GBC(2, 1).wxy(1, 1).w(2));
+    this.open.setText(Z4Translations.OPEN);
+    this.open.addActionListener(event => this.selectPattern());
+    this.add(this.open, new GBC(2, 2).i(0, 0, 0, 1).a(GBC.EAST).wx(1));
+    this.delete.setText(Z4Translations.DELETE);
+    this.delete.setEnabled(false);
+    this.delete.addActionListener(event => JSOptionPane.showConfirmDialog(Z4Translations.DELETE_PATTERN_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
+      if (response === JSOptionPane.YES_OPTION) {
+        this.onbrushchange(false, null);
+      }
+    }));
+    this.add(this.delete, new GBC(3, 2));
+    this.setValue(new Z4BrushPainter(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 2), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), null));
   }
 
-   onbrushchange(b) {
+   selectPattern() {
+    if (typeof window["showOpenFilePicker"] === "function") {
+      let options = new FilePickerOptions();
+      options.excludeAcceptAllOption = true;
+      options.id = Z4Constants.TEXTURE_FILE_ID;
+      options.multiple = false;
+      options.types = Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE;
+      JSFilePicker.showOpenFilePicker(options, 0, handles => handles.forEach(handle => handle.getFile().then(file => {
+        this.openTexture(file);
+      })));
+    } else {
+      JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.openTexture(file)));
+    }
+  }
+
+   openTexture(file) {
+    let fileReader = new FileReader();
+    fileReader.onload = event => {
+      let image = new Image();
+      image.src = fileReader.result;
+      this.onbrushchange(false, image);
+      return null;
+    };
+    fileReader.readAsDataURL(file);
+  }
+
+   onbrushchange(b, pattern) {
     this.valueIsAdjusting = b;
-    this.value = new Z4BrushPainter(this.width.getValue(), this.thickness.getValue());
+    this.value = new Z4BrushPainter(this.width.getValue(), this.thickness.getValue(), pattern);
+    if (this.value.getPattern()) {
+      this.pattern.setAttribute("src", this.value.getPattern().src);
+      this.pattern.setAttribute("width", "" + this.value.getPattern().width);
+      this.pattern.removeAttribute("height");
+      this.delete.setEnabled(this.enabled);
+    } else {
+      this.pattern.removeAttribute("src");
+      this.pattern.setAttribute("width", "150");
+      this.pattern.setAttribute("height", "150");
+      this.delete.setEnabled(false);
+    }
     this.onchange();
   }
 
@@ -8575,12 +8635,25 @@ class Z4BrushPainterPanel extends Z4PainterPanel {
     this.value = value;
     this.width.setValue(this.value.getWidth());
     this.thickness.setValue(this.value.getThickness());
+    if (this.value.getPattern()) {
+      this.pattern.setAttribute("src", this.value.getPattern().src);
+      this.pattern.setAttribute("width", "" + this.value.getPattern().width);
+      this.pattern.removeAttribute("height");
+      this.delete.setEnabled(this.enabled);
+    } else {
+      this.pattern.removeAttribute("src");
+      this.pattern.setAttribute("width", "150");
+      this.pattern.setAttribute("height", "150");
+      this.delete.setEnabled(false);
+    }
   }
 
    setEnabled(b) {
     super.setEnabled(b);
     this.width.setEnabled(b);
     this.thickness.setEnabled(b);
+    this.open.setEnabled(b);
+    this.delete.setEnabled(b && this.value.getPattern());
   }
 }
 /**
@@ -13451,16 +13524,20 @@ class Z4BrushPainter extends Z4Painter {
 
    thickness = null;
 
+   pattern = null;
+
   /**
    * Creates the object
    *
    * @param width The width of the brush
    * @param thickness The thickness of the brush
+   * @param pattern The pattern, it can be null
    */
-  constructor(width, thickness) {
+  constructor(width, thickness, pattern) {
     super();
     this.width = width;
     this.thickness = thickness;
+    this.pattern = pattern;
   }
 
    getType() {
@@ -13483,6 +13560,15 @@ class Z4BrushPainter extends Z4Painter {
    */
    getThickness() {
     return this.thickness;
+  }
+
+  /**
+   * Returns the pattern
+   *
+   * @return The pattern
+   */
+   getPattern() {
+    return this.pattern;
   }
 
    draw(context, drawingPoint, spatioTemporalColor, progression) {
@@ -13512,24 +13598,6 @@ class Z4BrushPainter extends Z4Painter {
   }
 
    drawWithColors(context, currentWidth, currentThickness, gradientColor, color, lighting) {
-    // if (ww > halfWidth) { // dovrei aggiungere la property border
-    // double cos = Math.cos(rot + randAddingRotation);
-    // double sen = Math.sin(rot + randAddingRotation);
-    // double x1 = point.x + cos * ww;
-    // double y1 = point.y + sen * ww;
-    // double x2 = point.x - cos * ww;
-    // double y2 = point.y - sen * ww;
-    // Line2D line = new Line2D.Double(x1, y1, x2, y2);
-    // 
-    // g2.setStroke(new BasicStroke((int) Math.ceil(tt), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-    // if (effect == this.NO_EFFECT) {
-    // g2.setPaint(addingColor.getLocalColor(color).getMultiLinearPaint(point, new Point2D.Double(x2, y2), false));
-    // } else if (effect == this.PATTERN_EFFECT) {
-    // g2.setPaint(new TexturePaint(pattern, rect));
-    // }
-    // g2.draw(line);
-    // }
-    // 
     // if (effect == this.NO_EFFECT) {
     // g2.setPaint(color.getMultiLinearPaint(point, new Point2D.Double(x2, y2), false));
     // } else if (effect == this.PATTERN_EFFECT) {
@@ -13595,6 +13663,14 @@ class Z4BrushPainter extends Z4Painter {
     let json = super.toJSON();
     json["width"] = this.width.toJSON();
     json["thickness"] = this.thickness.toJSON();
+    if (this.pattern) {
+      let canvas = document.createElement("canvas");
+      canvas.width = this.pattern.width;
+      canvas.height = this.pattern.height;
+      let context = canvas.getContext("2d");
+      context.drawImage(this.pattern, 0, 0);
+      json["pattern"] = canvas.toDataURL("image/png", 1);
+    }
     return json;
   }
 
@@ -13605,7 +13681,12 @@ class Z4BrushPainter extends Z4Painter {
    * @return the brush painter
    */
   static  fromJSON(json) {
-    return new Z4BrushPainter(Z4FancifulValue.fromJSON(json["width"]), Z4FancifulValue.fromJSON(json["thickness"]));
+    let pattern = null;
+    if (json["pattern"]) {
+      pattern = new Image();
+      pattern.src = json["pattern"];
+    }
+    return new Z4BrushPainter(Z4FancifulValue.fromJSON(json["width"]), Z4FancifulValue.fromJSON(json["thickness"]), pattern);
   }
 }
 /**
@@ -15925,6 +16006,8 @@ class Z4Translations {
 
   static  THICKNESS = "";
 
+  static  DELETE_PATTERN_MESSAGE = "";
+
   // Math
   static  POSITIVE = "";
 
@@ -16185,6 +16268,7 @@ class Z4Translations {
     Z4Translations.INTENSITY = "Intensity";
     Z4Translations.GAUSSIAN_CORRECTION = "Gaussian Correction";
     Z4Translations.THICKNESS = "Thickness";
+    Z4Translations.DELETE_PATTERN_MESSAGE = "Do you really want to delete the pattern?";
     // Math
     Z4Translations.POSITIVE = "Positive";
     Z4Translations.NEGATIVE = "Negative";
@@ -16386,6 +16470,7 @@ class Z4Translations {
     Z4Translations.INTENSITY = "Intensit\u00E0";
     Z4Translations.GAUSSIAN_CORRECTION = "Correzione Gaussiana";
     Z4Translations.THICKNESS = "Spessore";
+    Z4Translations.DELETE_PATTERN_MESSAGE = "Vuoi davvero eliminare la trama?";
     // Math
     Z4Translations.POSITIVE = "Positivo";
     Z4Translations.NEGATIVE = "Negativo";
