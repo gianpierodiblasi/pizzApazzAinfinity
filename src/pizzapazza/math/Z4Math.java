@@ -21,6 +21,11 @@ public class Z4Math {
   public final static double HALF_PI = Math.PI / 2;
 
   /**
+   * The square root of 2
+   */
+  public final static double SQRT_OF_2 = Math.sqrt(2);
+
+  /**
    * The gold section
    */
   public final static double GOLD_SECTION = (1 + Math.sqrt(5)) / 2;
@@ -288,6 +293,17 @@ public class Z4Math {
     );
 
     return new Array<>(controlPoint1, controlPoint2);
+  }
+
+  /**
+   * Evaluates a random number by using a correction factor given by the law
+   * f(x,y)=pow(x,1/y) with y>=1
+   *
+   * @param factor The correction factor
+   * @return The random number with the correction factor
+   */
+  public static double randomCorrected(double factor) {
+    return Math.pow(Math.random(), 1.0 / factor);
   }
 
   private Z4Math() {
