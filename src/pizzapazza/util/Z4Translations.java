@@ -173,6 +173,7 @@ public class Z4Translations {
   public static String EXTERNAL_FORCE = "";
   public static String INTENSITY = "";
   public static String GAUSSIAN_CORRECTION = "";
+  public static String THICKNESS = "";
 
   // Math
   public static String POSITIVE = "";
@@ -404,6 +405,7 @@ public class Z4Translations {
     Z4Translations.EXTERNAL_FORCE = "External Force";
     Z4Translations.INTENSITY = "Intensity";
     Z4Translations.GAUSSIAN_CORRECTION = "Gaussian Correction";
+    Z4Translations.THICKNESS = "Thickness";
 
     // Math
     Z4Translations.POSITIVE = "Positive";
@@ -619,6 +621,7 @@ public class Z4Translations {
     Z4Translations.EXTERNAL_FORCE = "Forza Esterna";
     Z4Translations.INTENSITY = "Intensit\u00E0";
     Z4Translations.GAUSSIAN_CORRECTION = "Correzione Gaussiana";
+    Z4Translations.THICKNESS = "Spessore";
 
     // Math
     Z4Translations.POSITIVE = "Positivo";

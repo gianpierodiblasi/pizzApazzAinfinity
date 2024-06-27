@@ -287,6 +287,8 @@ class Z4Translations {
 
   static  GAUSSIAN_CORRECTION = "";
 
+  static  THICKNESS = "";
+
   // Math
   static  POSITIVE = "";
 
@@ -546,6 +548,7 @@ class Z4Translations {
     Z4Translations.EXTERNAL_FORCE = "External Force";
     Z4Translations.INTENSITY = "Intensity";
     Z4Translations.GAUSSIAN_CORRECTION = "Gaussian Correction";
+    Z4Translations.THICKNESS = "Thickness";
     // Math
     Z4Translations.POSITIVE = "Positive";
     Z4Translations.NEGATIVE = "Negative";
@@ -746,6 +749,7 @@ class Z4Translations {
     Z4Translations.EXTERNAL_FORCE = "Forza Esterna";
     Z4Translations.INTENSITY = "Intensit\u00E0";
     Z4Translations.GAUSSIAN_CORRECTION = "Correzione Gaussiana";
+    Z4Translations.THICKNESS = "Spessore";
     // Math
     Z4Translations.POSITIVE = "Positivo";
     Z4Translations.NEGATIVE = "Negativo";

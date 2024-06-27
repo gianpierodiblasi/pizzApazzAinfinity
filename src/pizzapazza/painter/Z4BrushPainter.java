@@ -10,6 +10,7 @@ import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4DrawingPointIntent;
 import pizzapazza.math.Z4FancifulValue;
+import pizzapazza.math.Z4Math;
 import pizzapazza.util.Z4Constants;
 import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
@@ -22,8 +23,8 @@ import simulation.js.$Object;
  */
 public class Z4BrushPainter extends Z4Painter {
 
-  private final Z4FancifulValue width;//=new CRPvalue(10,0,0);
-  private final Z4FancifulValue thickness;//=new CRPvalue(2,1,0);
+  private final Z4FancifulValue width;
+  private final Z4FancifulValue thickness;
 
   /**
    * Creates the object
@@ -143,6 +144,8 @@ public class Z4BrushPainter extends Z4Painter {
 
   private void drawPath($CanvasRenderingContext2D context, double currentWidth, double currentThickness, Object color) {
     context.save();
+    context.rotate(Z4Math.HALF_PI);
+    context.lineCap = "round";
     context.lineWidth = currentThickness;
     context.strokeStyle = Z4Constants.$getStyle(color);
 
@@ -156,7 +159,8 @@ public class Z4BrushPainter extends Z4Painter {
 
   private void drawBounds($CanvasRenderingContext2D context, double currentWidth) {
     context.save();
-
+    context.rotate(Z4Math.HALF_PI);
+    
     context.strokeStyle = Z4Constants.$getStyle("gray");
     context.beginPath();
     context.moveTo(-currentWidth / 2, 0);

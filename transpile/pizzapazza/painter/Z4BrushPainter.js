@@ -5,10 +5,8 @@
  */
 class Z4BrushPainter extends Z4Painter {
 
-  // =new CRPvalue(10,0,0);
    width = null;
 
-  // =new CRPvalue(2,1,0);
    thickness = null;
 
   /**
@@ -123,6 +121,8 @@ class Z4BrushPainter extends Z4Painter {
 
    drawPath(context, currentWidth, currentThickness, color) {
     context.save();
+    context.rotate(Z4Math.HALF_PI);
+    context.lineCap = "round";
     context.lineWidth = currentThickness;
     context.strokeStyle = Z4Constants.getStyle(color);
     context.beginPath();
@@ -134,6 +134,7 @@ class Z4BrushPainter extends Z4Painter {
 
    drawBounds(context, currentWidth) {
     context.save();
+    context.rotate(Z4Math.HALF_PI);
     context.strokeStyle = Z4Constants.getStyle("gray");
     context.beginPath();
     context.moveTo(-currentWidth / 2, 0);

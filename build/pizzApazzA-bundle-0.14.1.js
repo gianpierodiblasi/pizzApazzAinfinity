@@ -8534,6 +8534,56 @@ class Z4PainterPanel extends Z4AbstractValuePanel {
   }
 }
 /**
+ * The panel to edit a Z4BrushPainter
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4BrushPainterPanel extends Z4PainterPanel {
+
+   width = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+
+   thickness = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super();
+    this.cssAddClass("z4brushpainterpanel");
+    this.width.setSignsVisible(false);
+    this.width.setConstantRange(1, 150);
+    this.width.setLabel(Z4Translations.WIDTH);
+    this.width.cssAddClass("z4abstractvaluepanel-titled");
+    this.width.addChangeListener(event => this.onbrushchange(this.width.getValueIsAdjusting()));
+    this.add(this.width, new GBC(0, 0).i(1, 0, 1, 0));
+    this.thickness.setSignsVisible(false);
+    this.thickness.setConstantRange(1, 15);
+    this.thickness.setLabel(Z4Translations.THICKNESS);
+    this.thickness.cssAddClass("z4abstractvaluepanel-titled");
+    this.thickness.addChangeListener(event => this.onbrushchange(this.thickness.getValueIsAdjusting()));
+    this.add(this.thickness, new GBC(0, 1));
+    this.setValue(new Z4BrushPainter(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 2), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false)));
+  }
+
+   onbrushchange(b) {
+    this.valueIsAdjusting = b;
+    this.value = new Z4BrushPainter(this.width.getValue(), this.thickness.getValue());
+    this.onchange();
+  }
+
+   setValue(value) {
+    this.value = value;
+    this.width.setValue(this.value.getWidth());
+    this.thickness.setValue(this.value.getThickness());
+  }
+
+   setEnabled(b) {
+    super.setEnabled(b);
+    this.width.setEnabled(b);
+    this.thickness.setEnabled(b);
+  }
+}
+/**
  * The panel to edit a Z4CenteredFigurePainter
  *
  * @author gianpiero.diblasi
@@ -9384,6 +9434,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     panelRadio.add(this.getHLine(), null);
     this.addRadioButton(panelRadio, buttonGroup, "SHAPE2D");
     this.addRadioButton(panelRadio, buttonGroup, "DROP");
+    this.addRadioButton(panelRadio, buttonGroup, "BRUSH");
     this.addRadioButton(panelRadio, buttonGroup, "CENTERED-FIGURE");
     this.addRadioButton(panelRadio, buttonGroup, "NATURAL-FIGURE");
     panelRadio.add(this.getHLine(), null);
@@ -9420,9 +9471,10 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
           break;
         case "SHAPE2D":
         case "DROP":
+        case "BRUSH":
         case "CENTERED-FIGURE":
         case "NATURAL-FIGURE":
-          new Array("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-drop-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css => this.selectedPainter.cssRemoveClass(css));
+          new Array("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-drop-selected", "z4drawingtoolpanel-brush-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css => this.selectedPainter.cssRemoveClass(css));
           this.selectedPainterCard = this.check(this.selectedPainter, card, card.toLowerCase(), null, true);
           break;
         case "COLOR":
@@ -9641,11 +9693,13 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
   }
 
    setPainter() {
-    new Array("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-drop-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css => this.selectedPainter.cssRemoveClass(css));
+    new Array("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-drop-selected", "z4drawingtoolpanel-brush-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css => this.selectedPainter.cssRemoveClass(css));
     if (this.value.getPainter().getType() === Z4PainterType.SHAPE_2D) {
       this.selectedPainterCard = this.check(this.selectedPainter, "SHAPE2D", "shape2d", this.value.getPainter(), false);
     } else if (this.value.getPainter().getType() === Z4PainterType.DROP) {
       this.selectedPainterCard = this.check(this.selectedPainter, "DROP", "drop", this.value.getPainter(), false);
+    } else if (this.value.getPainter().getType() === Z4PainterType.BRUSH) {
+      this.selectedPainterCard = this.check(this.selectedPainter, "BRUSH", "brush", this.value.getPainter(), false);
     } else if (this.value.getPainter().getType() === Z4PainterType.CENTERED_FIGURE) {
       this.selectedPainterCard = this.check(this.selectedPainter, "CENTERED-FIGURE", "centered-figure", this.value.getPainter(), false);
     } else if (this.value.getPainter().getType() === Z4PainterType.NATURAL_FIGURE) {
@@ -9702,6 +9756,10 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
           break;
         case "DROP":
           this.cardPanels[card] = new Z4DropPainterPanel();
+          (this.cardPanels[card]).addChangeListener(event => this.valueIsAdjusting = (this.cardPanels[card]).getValueIsAdjusting());
+          break;
+        case "BRUSH":
+          this.cardPanels[card] = new Z4BrushPainterPanel();
           (this.cardPanels[card]).addChangeListener(event => this.valueIsAdjusting = (this.cardPanels[card]).getValueIsAdjusting());
           break;
         case "CENTERED-FIGURE":
@@ -13389,10 +13447,8 @@ class Z4ArrowPainter extends Z4Painter {
  */
 class Z4BrushPainter extends Z4Painter {
 
-  // =new CRPvalue(10,0,0);
    width = null;
 
-  // =new CRPvalue(2,1,0);
    thickness = null;
 
   /**
@@ -13507,6 +13563,8 @@ class Z4BrushPainter extends Z4Painter {
 
    drawPath(context, currentWidth, currentThickness, color) {
     context.save();
+    context.rotate(Z4Math.HALF_PI);
+    context.lineCap = "round";
     context.lineWidth = currentThickness;
     context.strokeStyle = Z4Constants.getStyle(color);
     context.beginPath();
@@ -13518,6 +13576,7 @@ class Z4BrushPainter extends Z4Painter {
 
    drawBounds(context, currentWidth) {
     context.save();
+    context.rotate(Z4Math.HALF_PI);
     context.strokeStyle = Z4Constants.getStyle("gray");
     context.beginPath();
     context.moveTo(-currentWidth / 2, 0);
@@ -15864,6 +15923,8 @@ class Z4Translations {
 
   static  GAUSSIAN_CORRECTION = "";
 
+  static  THICKNESS = "";
+
   // Math
   static  POSITIVE = "";
 
@@ -16123,6 +16184,7 @@ class Z4Translations {
     Z4Translations.EXTERNAL_FORCE = "External Force";
     Z4Translations.INTENSITY = "Intensity";
     Z4Translations.GAUSSIAN_CORRECTION = "Gaussian Correction";
+    Z4Translations.THICKNESS = "Thickness";
     // Math
     Z4Translations.POSITIVE = "Positive";
     Z4Translations.NEGATIVE = "Negative";
@@ -16323,6 +16385,7 @@ class Z4Translations {
     Z4Translations.EXTERNAL_FORCE = "Forza Esterna";
     Z4Translations.INTENSITY = "Intensit\u00E0";
     Z4Translations.GAUSSIAN_CORRECTION = "Correzione Gaussiana";
+    Z4Translations.THICKNESS = "Spessore";
     // Math
     Z4Translations.POSITIVE = "Positivo";
     Z4Translations.NEGATIVE = "Negativo";
