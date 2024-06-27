@@ -9,7 +9,7 @@ class Z4BrushPainterPanel extends Z4PainterPanel {
 
    thickness = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
 
-   pattern = new JSComponent(document.createElement("img"));
+   pattern = document.createElement("img");
 
    open = new JSButton();
 
@@ -34,11 +34,18 @@ class Z4BrushPainterPanel extends Z4PainterPanel {
     this.thickness.addChangeListener(event => this.onbrushchange(this.thickness.getValueIsAdjusting(), this.value.getPattern()));
     this.add(this.thickness, new GBC(1, 0).h(3).i(0, 0, 0, 1));
     Z4UI.addLabel(this, Z4Translations.PATTERN, new GBC(2, 0).w(2).a(GBC.WEST));
-    this.pattern.setAttribute("width", "150");
-    this.pattern.setAttribute("height", "150");
-    this.pattern.getStyle().border = "1px solid var(--main-action-bgcolor)";
-    this.pattern.getStyle().borderRadius = "var(--roundness)";
-    this.add(this.pattern, new GBC(2, 1).wxy(1, 1).w(2));
+    let div = new JSComponent(document.createElement("div"));
+    div.getStyle().width = "150px";
+    div.getStyle().height = "150px";
+    div.getStyle().border = "2px solid var(--main-action-bgcolor)";
+    div.getStyle().borderRadius = "var(--roundness)";
+    div.getStyle().display = "flex";
+    div.getStyle().alignItems = "center";
+    div.getStyle().justifyContent = "center";
+    this.add(div, new GBC(2, 1).wxy(1, 1).w(2));
+    this.pattern.style.maxWidth = "150px";
+    this.pattern.style.maxHeight = "150px";
+    div.appendNodeChild(this.pattern);
     this.open.setText(Z4Translations.OPEN);
     this.open.addActionListener(event => this.selectPattern());
     this.add(this.open, new GBC(2, 2).i(0, 0, 0, 1).a(GBC.EAST).wx(1));
@@ -72,8 +79,11 @@ class Z4BrushPainterPanel extends Z4PainterPanel {
     let fileReader = new FileReader();
     fileReader.onload = event => {
       let image = new Image();
+      image.onload = event2 => {
+        this.onbrushchange(false, image);
+        return null;
+      };
       image.src = fileReader.result;
-      this.onbrushchange(false, image);
       return null;
     };
     fileReader.readAsDataURL(file);
@@ -83,14 +93,10 @@ class Z4BrushPainterPanel extends Z4PainterPanel {
     this.valueIsAdjusting = b;
     this.value = new Z4BrushPainter(this.width.getValue(), this.thickness.getValue(), pattern);
     if (this.value.getPattern()) {
-      this.pattern.setAttribute("src", this.value.getPattern().src);
-      this.pattern.setAttribute("width", "" + this.value.getPattern().width);
-      this.pattern.removeAttribute("height");
+      this.pattern.src = this.value.getPattern().src;
       this.delete.setEnabled(this.enabled);
     } else {
       this.pattern.removeAttribute("src");
-      this.pattern.setAttribute("width", "150");
-      this.pattern.setAttribute("height", "150");
       this.delete.setEnabled(false);
     }
     this.onchange();
@@ -101,14 +107,10 @@ class Z4BrushPainterPanel extends Z4PainterPanel {
     this.width.setValue(this.value.getWidth());
     this.thickness.setValue(this.value.getThickness());
     if (this.value.getPattern()) {
-      this.pattern.setAttribute("src", this.value.getPattern().src);
-      this.pattern.setAttribute("width", "" + this.value.getPattern().width);
-      this.pattern.removeAttribute("height");
+      this.pattern.src = this.value.getPattern().src;
       this.delete.setEnabled(this.enabled);
     } else {
       this.pattern.removeAttribute("src");
-      this.pattern.setAttribute("width", "150");
-      this.pattern.setAttribute("height", "150");
       this.delete.setEnabled(false);
     }
   }

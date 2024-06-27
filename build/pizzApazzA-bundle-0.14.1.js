@@ -8544,7 +8544,7 @@ class Z4BrushPainterPanel extends Z4PainterPanel {
 
    thickness = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
 
-   pattern = new JSComponent(document.createElement("img"));
+   pattern = document.createElement("img");
 
    open = new JSButton();
 
@@ -8569,11 +8569,18 @@ class Z4BrushPainterPanel extends Z4PainterPanel {
     this.thickness.addChangeListener(event => this.onbrushchange(this.thickness.getValueIsAdjusting(), this.value.getPattern()));
     this.add(this.thickness, new GBC(1, 0).h(3).i(0, 0, 0, 1));
     Z4UI.addLabel(this, Z4Translations.PATTERN, new GBC(2, 0).w(2).a(GBC.WEST));
-    this.pattern.setAttribute("width", "150");
-    this.pattern.setAttribute("height", "150");
-    this.pattern.getStyle().border = "1px solid var(--main-action-bgcolor)";
-    this.pattern.getStyle().borderRadius = "var(--roundness)";
-    this.add(this.pattern, new GBC(2, 1).wxy(1, 1).w(2));
+    let div = new JSComponent(document.createElement("div"));
+    div.getStyle().width = "150px";
+    div.getStyle().height = "150px";
+    div.getStyle().border = "2px solid var(--main-action-bgcolor)";
+    div.getStyle().borderRadius = "var(--roundness)";
+    div.getStyle().display = "flex";
+    div.getStyle().alignItems = "center";
+    div.getStyle().justifyContent = "center";
+    this.add(div, new GBC(2, 1).wxy(1, 1).w(2));
+    this.pattern.style.maxWidth = "150px";
+    this.pattern.style.maxHeight = "150px";
+    div.appendNodeChild(this.pattern);
     this.open.setText(Z4Translations.OPEN);
     this.open.addActionListener(event => this.selectPattern());
     this.add(this.open, new GBC(2, 2).i(0, 0, 0, 1).a(GBC.EAST).wx(1));
@@ -8607,8 +8614,11 @@ class Z4BrushPainterPanel extends Z4PainterPanel {
     let fileReader = new FileReader();
     fileReader.onload = event => {
       let image = new Image();
+      image.onload = event2 => {
+        this.onbrushchange(false, image);
+        return null;
+      };
       image.src = fileReader.result;
-      this.onbrushchange(false, image);
       return null;
     };
     fileReader.readAsDataURL(file);
@@ -8618,14 +8628,10 @@ class Z4BrushPainterPanel extends Z4PainterPanel {
     this.valueIsAdjusting = b;
     this.value = new Z4BrushPainter(this.width.getValue(), this.thickness.getValue(), pattern);
     if (this.value.getPattern()) {
-      this.pattern.setAttribute("src", this.value.getPattern().src);
-      this.pattern.setAttribute("width", "" + this.value.getPattern().width);
-      this.pattern.removeAttribute("height");
+      this.pattern.src = this.value.getPattern().src;
       this.delete.setEnabled(this.enabled);
     } else {
       this.pattern.removeAttribute("src");
-      this.pattern.setAttribute("width", "150");
-      this.pattern.setAttribute("height", "150");
       this.delete.setEnabled(false);
     }
     this.onchange();
@@ -8636,14 +8642,10 @@ class Z4BrushPainterPanel extends Z4PainterPanel {
     this.width.setValue(this.value.getWidth());
     this.thickness.setValue(this.value.getThickness());
     if (this.value.getPattern()) {
-      this.pattern.setAttribute("src", this.value.getPattern().src);
-      this.pattern.setAttribute("width", "" + this.value.getPattern().width);
-      this.pattern.removeAttribute("height");
+      this.pattern.src = this.value.getPattern().src;
       this.delete.setEnabled(this.enabled);
     } else {
       this.pattern.removeAttribute("src");
-      this.pattern.setAttribute("width", "150");
-      this.pattern.setAttribute("height", "150");
       this.delete.setEnabled(false);
     }
   }
@@ -13581,29 +13583,23 @@ class Z4BrushPainter extends Z4Painter {
       if (currentWidth > 0 && currentThickness > 0) {
         if (spatioTemporalColor.isColor()) {
           let color = spatioTemporalColor.getColorAt(-1, -1);
-          this.drawWithColors(context, currentWidth, currentThickness, null, color, progression.getLighting());
+          this.drawWithColors(context, drawingPoint, currentWidth, currentThickness, null, color, progression.getLighting());
         } else if (spatioTemporalColor.isGradientColor()) {
           if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.SPATIAL) {
-            this.drawWithColors(context, currentWidth, currentThickness, spatioTemporalColor.getGradientColorAt(-1), null, progression.getLighting());
+            this.drawWithColors(context, drawingPoint, currentWidth, currentThickness, spatioTemporalColor.getGradientColorAt(-1), null, progression.getLighting());
           } else {
             let color = spatioTemporalColor.getGradientColorAt(-1).getColorAt(progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition, true);
-            this.drawWithColors(context, currentWidth, currentThickness, null, color, progression.getLighting());
+            this.drawWithColors(context, drawingPoint, currentWidth, currentThickness, null, color, progression.getLighting());
           }
         } else if (spatioTemporalColor.isBiGradientColor()) {
           let gradientColor = spatioTemporalColor.getGradientColorAt(progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition);
-          this.drawWithColors(context, currentWidth, currentThickness, gradientColor, null, progression.getLighting());
+          this.drawWithColors(context, drawingPoint, currentWidth, currentThickness, gradientColor, null, progression.getLighting());
         }
       }
     }
   }
 
-   drawWithColors(context, currentWidth, currentThickness, gradientColor, color, lighting) {
-    // if (effect == this.NO_EFFECT) {
-    // g2.setPaint(color.getMultiLinearPaint(point, new Point2D.Double(x2, y2), false));
-    // } else if (effect == this.PATTERN_EFFECT) {
-    // g2.setPaint(new TexturePaint(pattern, rect));
-    // }
-    // 
+   drawWithColors(context, drawingPoint, currentWidth, currentThickness, gradientColor, color, lighting) {
     if (color) {
       if (lighting === Z4Lighting.NONE) {
         this.drawPath(context, currentWidth, currentThickness, color.getRGBA_HEX());
@@ -13627,6 +13623,9 @@ class Z4BrushPainter extends Z4Painter {
         this.drawPath(context, currentWidth, currentThickness, gradientColor.darkened().createLinearGradient(context, -currentWidth / 2, 0, currentWidth / 2, 0));
       }
     }
+    if (this.pattern) {
+      this.drawPattern(context, drawingPoint, currentWidth, currentThickness, context.createPattern(this.pattern, "repeat"));
+    }
   }
 
    drawPath(context, currentWidth, currentThickness, color) {
@@ -13638,6 +13637,22 @@ class Z4BrushPainter extends Z4Painter {
     context.beginPath();
     context.moveTo(-currentWidth / 2, 0);
     context.lineTo(+currentWidth / 2, 0);
+    context.stroke();
+    context.restore();
+  }
+
+   drawPattern(context, drawingPoint, currentWidth, currentThickness, color) {
+    context.save();
+    context.rotate(-drawingPoint.z4Vector.phase);
+    context.translate(-drawingPoint.z4Vector.x0, -drawingPoint.z4Vector.y0);
+    context.lineCap = "round";
+    context.lineWidth = currentThickness + 2;
+    context.strokeStyle = Z4Constants.getStyle(color);
+    context.beginPath();
+    let point = Z4Math.rotoTranslate(-currentWidth / 2, 0, Z4Math.HALF_PI + drawingPoint.z4Vector.phase, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+    context.moveTo(point.x, point.y);
+    point = Z4Math.rotoTranslate(currentWidth / 2, 0, Z4Math.HALF_PI + drawingPoint.z4Vector.phase, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+    context.lineTo(point.x, point.y);
     context.stroke();
     context.restore();
   }

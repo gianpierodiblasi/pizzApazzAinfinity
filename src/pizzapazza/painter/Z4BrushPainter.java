@@ -11,6 +11,7 @@ import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4DrawingPointIntent;
 import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4Math;
+import pizzapazza.math.Z4Point;
 import pizzapazza.util.Z4Constants;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
@@ -90,30 +91,23 @@ public class Z4BrushPainter extends Z4Painter {
       if (currentWidth > 0 && currentThickness > 0) {
         if (spatioTemporalColor.isColor()) {
           Color color = spatioTemporalColor.getColorAt(-1, -1);
-          this.drawWithColors(context, currentWidth, currentThickness, null, color, progression.getLighting());
+          this.drawWithColors(context, drawingPoint, currentWidth, currentThickness, null, color, progression.getLighting());
         } else if (spatioTemporalColor.isGradientColor()) {
           if (progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.SPATIAL) {
-            this.drawWithColors(context, currentWidth, currentThickness, spatioTemporalColor.getGradientColorAt(-1), null, progression.getLighting());
+            this.drawWithColors(context, drawingPoint, currentWidth, currentThickness, spatioTemporalColor.getGradientColorAt(-1), null, progression.getLighting());
           } else {
             Color color = spatioTemporalColor.getGradientColorAt(-1).getColorAt(progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition, true);
-            this.drawWithColors(context, currentWidth, currentThickness, null, color, progression.getLighting());
+            this.drawWithColors(context, drawingPoint, currentWidth, currentThickness, null, color, progression.getLighting());
           }
         } else if (spatioTemporalColor.isBiGradientColor()) {
           Z4GradientColor gradientColor = spatioTemporalColor.getGradientColorAt(progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition);
-          this.drawWithColors(context, currentWidth, currentThickness, gradientColor, null, progression.getLighting());
+          this.drawWithColors(context, drawingPoint, currentWidth, currentThickness, gradientColor, null, progression.getLighting());
         }
       }
     }
   }
 
-  private void drawWithColors($CanvasRenderingContext2D context, double currentWidth, double currentThickness, Z4GradientColor gradientColor, Color color, Z4Lighting lighting) {
-//    if (effect == this.NO_EFFECT) {
-//      g2.setPaint(color.getMultiLinearPaint(point, new Point2D.Double(x2, y2), false));
-//    } else if (effect == this.PATTERN_EFFECT) {
-//      g2.setPaint(new TexturePaint(pattern, rect));
-//    }
-//
-
+  private void drawWithColors($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, double currentWidth, double currentThickness, Z4GradientColor gradientColor, Color color, Z4Lighting lighting) {
     if ($exists(color)) {
       if (lighting == Z4Lighting.NONE) {
         this.drawPath(context, currentWidth, currentThickness, color.getRGBA_HEX());
@@ -137,6 +131,10 @@ public class Z4BrushPainter extends Z4Painter {
         this.drawPath(context, currentWidth, currentThickness, gradientColor.darkened().createLinearGradient(context, -currentWidth / 2, 0, currentWidth / 2, 0));
       }
     }
+
+    if ($exists(this.pattern)) {
+      this.drawPattern(context, drawingPoint, currentWidth, currentThickness, context.createPattern(this.pattern, "repeat"));
+    }
   }
 
   private void drawPath($CanvasRenderingContext2D context, double currentWidth, double currentThickness, Object color) {
@@ -149,6 +147,25 @@ public class Z4BrushPainter extends Z4Painter {
     context.beginPath();
     context.moveTo(-currentWidth / 2, 0);
     context.lineTo(+currentWidth / 2, 0);
+    context.stroke();
+
+    context.restore();
+  }
+
+  private void drawPattern($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, double currentWidth, double currentThickness, Object color) {
+    context.save();
+    context.rotate(-drawingPoint.z4Vector.phase);
+    context.translate(-drawingPoint.z4Vector.x0, -drawingPoint.z4Vector.y0);
+
+    context.lineCap = "round";
+    context.lineWidth = currentThickness + 2;
+    context.strokeStyle = Z4Constants.$getStyle(color);
+
+    context.beginPath();
+    Z4Point point = Z4Math.rotoTranslate(-currentWidth / 2, 0, Z4Math.HALF_PI + drawingPoint.z4Vector.phase, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+    context.moveTo(point.x, point.y);
+    point = Z4Math.rotoTranslate(currentWidth / 2, 0, Z4Math.HALF_PI + drawingPoint.z4Vector.phase, drawingPoint.z4Vector.x0, drawingPoint.z4Vector.y0);
+    context.lineTo(point.x, point.y);
     context.stroke();
 
     context.restore();
