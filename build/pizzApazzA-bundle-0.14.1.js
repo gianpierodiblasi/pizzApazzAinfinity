@@ -8821,11 +8821,11 @@ class Z4DropPainterPanel extends Z4PainterPanel {
     Z4UI.addLabel(this, Z4Translations.GAUSSIAN_CORRECTION, new GBC(0, 4).a(GBC.WEST));
     this.gaussianCorrectionSpinner.cssAddClass("jsspinner_w_4rem");
     this.gaussianCorrectionSpinner.setModel(new SpinnerNumberModel(10, 1, 100, 1));
-    this.gaussianCorrectionSpinner.addChangeListener(event => this.ondropchange(this.gaussianCorrectionSpinner.getValueIsAdjusting(), this.gaussianCorrectionSpinner.getValue(), this.intensitySlider.getValue()));
+    this.gaussianCorrectionSpinner.addChangeListener(event => this.ondropchange(this.gaussianCorrectionSpinner.getValueIsAdjusting(), this.intensitySlider.getValue(), this.gaussianCorrectionSpinner.getValue()));
     this.add(this.gaussianCorrectionSpinner, new GBC(1, 4).a(GBC.EAST));
     this.gaussianCorrectionSlider.setMinimum(1);
     this.gaussianCorrectionSlider.setMaximum(100);
-    this.gaussianCorrectionSlider.addChangeListener(event => this.ondropchange(this.gaussianCorrectionSlider.getValueIsAdjusting(), this.gaussianCorrectionSlider.getValue(), this.intensitySlider.getValue()));
+    this.gaussianCorrectionSlider.addChangeListener(event => this.ondropchange(this.gaussianCorrectionSlider.getValueIsAdjusting(), this.intensitySlider.getValue(), this.gaussianCorrectionSlider.getValue()));
     this.add(this.gaussianCorrectionSlider, new GBC(0, 5).w(2).f(GBC.HORIZONTAL));
     this.setValue(new Z4DropPainter(Z4DropPainterType.THOUSAND_POINTS, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), 20, 10));
   }
@@ -13952,43 +13952,46 @@ class Z4DropPainter extends Z4Painter {
     let cos = Z4Math.SQRT_OF_2 * Math.cos(angle);
     let sin = Z4Math.SQRT_OF_2 * Math.sin(angle);
     for (let t = 0; t < val; t++) {
-      let rand = Z4Math.randomCorrected(this.gaussianCorrection / 10.0);
+      let r = currentRadius * Z4Math.randomCorrected(this.gaussianCorrection / 10.0);
       if (color && lighting === Z4Lighting.NONE) {
-        this.drawPath(context, currentRadius, rand, cos, sin, color);
+        this.drawPath(context, r, cos, sin, color);
       } else {
+        let c = null;
         if (spatioTemporalColor) {
-          color = spatioTemporalColor.getColorAt(-1, rand);
+          c = spatioTemporalColor.getColorAt(-1, r / currentRadius);
         } else if (gradientColor) {
-          color = gradientColor.getColorAt(rand, true);
+          c = gradientColor.getColorAt(r / currentRadius, true);
         }
         if (lighting === Z4Lighting.NONE) {
-          this.drawPath(context, currentRadius, rand, cos, sin, color);
+          this.drawPath(context, r, cos, sin, c);
         } else if (lighting === Z4Lighting.LIGHTED) {
-          this.drawPath(context, currentRadius, rand, cos, sin, color.lighted(rand));
+          this.drawPath(context, r, cos, sin, c.lighted(r / currentRadius));
         } else if (lighting === Z4Lighting.DARKENED) {
-          this.drawPath(context, currentRadius, rand, cos, sin, color.darkened(rand));
+          this.drawPath(context, r, cos, sin, c.darkened(r / currentRadius));
         }
       }
     }
   }
 
-   drawPath(context, currentRadius, rand, cos, sin, color) {
+   drawPath(context, radius, cos, sin, color) {
     context.save();
     context.fillStyle = Z4Constants.getStyle(color.getRGBA_HEX());
-    let rr = rand * currentRadius;
+    context.strokeStyle = Z4Constants.getStyle(color.getRGBA_HEX());
     let alfa = Math.random() * Z4Math.TWO_PI;
-    let rX = rr * Math.cos(alfa);
-    let rY = rr * Math.sin(alfa);
+    let rX = radius * Math.cos(alfa);
+    let rY = radius * Math.sin(alfa);
     context.beginPath();
     if (this.dropPainterType === Z4DropPainterType.THOUSAND_POINTS) {
       context.arc(rX, rY, 1, 0, Z4Math.TWO_PI);
+      context.fill();
     } else if (this.dropPainterType === Z4DropPainterType.THOUSAND_LINES) {
       context.moveTo(rX + cos, rY + sin);
       context.lineTo(rX - cos, rY - sin);
+      context.stroke();
     } else if (this.dropPainterType === Z4DropPainterType.THOUSAND_AREAS) {
       context.arc(rX, rY, 2, 0, Z4Math.TWO_PI);
+      context.fill();
     }
-    context.fill();
     context.restore();
   }
 

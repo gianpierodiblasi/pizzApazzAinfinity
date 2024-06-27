@@ -47,11 +47,11 @@ class Z4DropPainterPanel extends Z4PainterPanel {
     Z4UI.addLabel(this, Z4Translations.GAUSSIAN_CORRECTION, new GBC(0, 4).a(GBC.WEST));
     this.gaussianCorrectionSpinner.cssAddClass("jsspinner_w_4rem");
     this.gaussianCorrectionSpinner.setModel(new SpinnerNumberModel(10, 1, 100, 1));
-    this.gaussianCorrectionSpinner.addChangeListener(event => this.ondropchange(this.gaussianCorrectionSpinner.getValueIsAdjusting(), this.gaussianCorrectionSpinner.getValue(), this.intensitySlider.getValue()));
+    this.gaussianCorrectionSpinner.addChangeListener(event => this.ondropchange(this.gaussianCorrectionSpinner.getValueIsAdjusting(), this.intensitySlider.getValue(), this.gaussianCorrectionSpinner.getValue()));
     this.add(this.gaussianCorrectionSpinner, new GBC(1, 4).a(GBC.EAST));
     this.gaussianCorrectionSlider.setMinimum(1);
     this.gaussianCorrectionSlider.setMaximum(100);
-    this.gaussianCorrectionSlider.addChangeListener(event => this.ondropchange(this.gaussianCorrectionSlider.getValueIsAdjusting(), this.gaussianCorrectionSlider.getValue(), this.intensitySlider.getValue()));
+    this.gaussianCorrectionSlider.addChangeListener(event => this.ondropchange(this.gaussianCorrectionSlider.getValueIsAdjusting(), this.intensitySlider.getValue(), this.gaussianCorrectionSlider.getValue()));
     this.add(this.gaussianCorrectionSlider, new GBC(0, 5).w(2).f(GBC.HORIZONTAL));
     this.setValue(new Z4DropPainter(Z4DropPainterType.THOUSAND_POINTS, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), 20, 10));
   }

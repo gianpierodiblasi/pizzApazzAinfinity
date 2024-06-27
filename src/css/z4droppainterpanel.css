@@ -5,11 +5,11 @@
   /*height: 26px;*/
 }
 .z4droppainterpanel .z4droppainterpanel-radio:nth-child(1) img {
-  content: url(../image/painter/centered_figure_type0.png);
+  content: url(../image/painter/drop_thousand_points.png);
 }
 .z4droppainterpanel .z4droppainterpanel-radio:nth-child(2) img {
-  content: url(../image/painter/centered_figure_type1.png);
+  content: url(../image/painter/drop_thousand_lines.png);
 }
 .z4droppainterpanel .z4droppainterpanel-radio:nth-child(3) img {
-  content: url(../image/painter/centered_figure_type2.png);
+  content: url(../image/painter/drop_thousand_areas.png);
 }

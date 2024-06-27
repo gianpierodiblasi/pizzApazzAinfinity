@@ -113,29 +113,31 @@ public class Z4DropPainter extends Z4Painter {
     }
   }
 
+  @SuppressWarnings("null")
   private void drawWithColors($CanvasRenderingContext2D context, double currentRadius, double angle, Z4SpatioTemporalColor spatioTemporalColor, Z4GradientColor gradientColor, Color color, Z4Lighting lighting) {
     double val = currentRadius * this.intensity / 2;
     double cos = Z4Math.SQRT_OF_2 * Math.cos(angle);
     double sin = Z4Math.SQRT_OF_2 * Math.sin(angle);
 
     for (int t = 0; t < val; t++) {
-      double rand = Z4Math.randomCorrected(this.gaussianCorrection / 10.0);
-      
+      double r = currentRadius * Z4Math.randomCorrected(this.gaussianCorrection / 10.0);
+
       if ($exists(color) && lighting == Z4Lighting.NONE) {
-        this.drawPath(context, currentRadius, rand, cos, sin, color);
+        this.drawPath(context, r, cos, sin, color);
       } else {
+        Color c = null;
         if ($exists(spatioTemporalColor)) {
-          color = spatioTemporalColor.getColorAt(-1, rand);
+          c = spatioTemporalColor.getColorAt(-1, r / currentRadius);
         } else if ($exists(gradientColor)) {
-          color = gradientColor.getColorAt(rand, true);
+          c = gradientColor.getColorAt(r / currentRadius, true);
         }
 
         if (lighting == Z4Lighting.NONE) {
-          this.drawPath(context, currentRadius, rand, cos, sin, color);
+          this.drawPath(context, r, cos, sin, c);
         } else if (lighting == Z4Lighting.LIGHTED) {
-          this.drawPath(context, currentRadius, rand, cos, sin, color.lighted(rand));
+          this.drawPath(context, r, cos, sin, c.lighted(r / currentRadius));
         } else if (lighting == Z4Lighting.DARKENED) {
-          this.drawPath(context, currentRadius, rand, cos, sin, color.darkened(rand));
+          this.drawPath(context, r, cos, sin, c.darkened(r / currentRadius));
         }
 
       }
@@ -143,25 +145,27 @@ public class Z4DropPainter extends Z4Painter {
 
   }
 
-  private void drawPath($CanvasRenderingContext2D context, double currentRadius, double rand, double cos, double sin, Color color) {
+  private void drawPath($CanvasRenderingContext2D context, double radius, double cos, double sin, Color color) {
     context.save();
     context.fillStyle = Z4Constants.$getStyle(color.getRGBA_HEX());
+    context.strokeStyle = Z4Constants.$getStyle(color.getRGBA_HEX());
 
-    double rr = rand * currentRadius;
     double alfa = Math.random() * Z4Math.TWO_PI;
-    double rX = rr * Math.cos(alfa);
-    double rY = rr * Math.sin(alfa);
+    double rX = radius * Math.cos(alfa);
+    double rY = radius * Math.sin(alfa);
 
     context.beginPath();
     if (this.dropPainterType == Z4DropPainterType.THOUSAND_POINTS) {
       context.arc(rX, rY, 1, 0, Z4Math.TWO_PI);
+      context.fill();
     } else if (this.dropPainterType == Z4DropPainterType.THOUSAND_LINES) {
       context.moveTo(rX + cos, rY + sin);
       context.lineTo(rX - cos, rY - sin);
+      context.stroke();
     } else if (this.dropPainterType == Z4DropPainterType.THOUSAND_AREAS) {
       context.arc(rX, rY, 2, 0, Z4Math.TWO_PI);
+      context.fill();
     }
-    context.fill();
 
     context.restore();
   }
