@@ -96,19 +96,22 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     this.cardPanel.setLayout(this.cardLayout);
     panel.add(this.cardPanel, new GBC(2, 0).a(GBC.NORTH).h(2).wxy(1, 1));
     let buttonGroup = new ButtonGroup();
-    this.addRadioButton(panelRadio, buttonGroup, "STAMPER", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, "TRACER", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, "AIRBRUSH", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, "SPIROGRAPH", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, "SCATTERER", "10px");
-    this.addRadioButton(panelRadio, buttonGroup, "SHAPE2D", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, "DROP", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, "CENTERED-FIGURE", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, "NATURAL-FIGURE", "10px");
-    this.addRadioButton(panelRadio, buttonGroup, "COLOR", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, "GRADIENT-COLOR", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, "BIGRADIENT-COLOR", "10px");
-    this.addRadioButton(panelRadio, buttonGroup, "COLOR-PROGRESSION", "0px");
+    this.addRadioButton(panelRadio, buttonGroup, "STAMPER");
+    this.addRadioButton(panelRadio, buttonGroup, "TRACER");
+    this.addRadioButton(panelRadio, buttonGroup, "AIRBRUSH");
+    this.addRadioButton(panelRadio, buttonGroup, "SPIROGRAPH");
+    this.addRadioButton(panelRadio, buttonGroup, "SCATTERER");
+    panelRadio.add(this.getHLine(), null);
+    this.addRadioButton(panelRadio, buttonGroup, "SHAPE2D");
+    this.addRadioButton(panelRadio, buttonGroup, "DROP");
+    this.addRadioButton(panelRadio, buttonGroup, "CENTERED-FIGURE");
+    this.addRadioButton(panelRadio, buttonGroup, "NATURAL-FIGURE");
+    panelRadio.add(this.getHLine(), null);
+    this.addRadioButton(panelRadio, buttonGroup, "COLOR");
+    this.addRadioButton(panelRadio, buttonGroup, "GRADIENT-COLOR");
+    this.addRadioButton(panelRadio, buttonGroup, "BIGRADIENT-COLOR");
+    panelRadio.add(this.getHLine(), null);
+    this.addRadioButton(panelRadio, buttonGroup, "COLOR-PROGRESSION");
     this.addPreview(panel, 2, 2, this.transparent1, this.swatchesPanel1, this.preview1, 500, 300, new GBC(2, 3), false);
     this.addPreview(panel, 3, 0, this.transparent2, this.swatchesPanel2, this.preview2, 300, 500, new GBC(3, 1).a(GBC.NORTH).i(0, 5, 0, 0), true);
     panel = new JSPanel();
@@ -118,10 +121,10 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     this.setValue(new Z4DrawingTool(new Z4Stamper(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)), new Z4Shape2DPainter(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), false, false, 3, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0)), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)), new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.01, Z4Lighting.NONE)));
   }
 
-   addRadioButton(panelRadio, buttonGroup, card, marginBottom) {
+   addRadioButton(panelRadio, buttonGroup, card) {
     let radio = new JSRadioButton();
     radio.setContentAreaFilled(false);
-    radio.getStyle().marginBottom = marginBottom;
+    radio.getStyle().marginBottom = "1px";
     radio.setToggle();
     radio.cssAddClass("z4drawingtoolpanel-selector");
     radio.setIcon(new Z4EmptyImageProducer(card));
@@ -166,6 +169,15 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     this.radios[card] = radio;
     buttonGroup.add(radio);
     panelRadio.add(radio, null);
+  }
+
+   getHLine() {
+    let div = new JSComponent(document.createElement("div"));
+    div.getStyle().height = "1px";
+    div.getStyle().width = "100%";
+    div.getStyle().margin = "10px 1px 11px 1px";
+    div.getStyle().background = "var(--main-action-bgcolor)";
+    return div;
   }
 
    addPreview(panel, x, y, transparent, swatchesPanel, preview, width, height, gbc, hide) {

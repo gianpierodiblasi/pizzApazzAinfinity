@@ -157,22 +157,22 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     panel.add(this.cardPanel, new GBC(2, 0).a(GBC.NORTH).h(2).wxy(1, 1));
 
     ButtonGroup buttonGroup = new ButtonGroup();
-    this.addRadioButton(panelRadio, buttonGroup, "STAMPER", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, "TRACER", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, "AIRBRUSH", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, "SPIROGRAPH", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, "SCATTERER", "10px");
-
-    this.addRadioButton(panelRadio, buttonGroup, "SHAPE2D", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, "DROP", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, "CENTERED-FIGURE", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, "NATURAL-FIGURE", "10px");
-
-    this.addRadioButton(panelRadio, buttonGroup, "COLOR", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, "GRADIENT-COLOR", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, "BIGRADIENT-COLOR", "10px");
-
-    this.addRadioButton(panelRadio, buttonGroup, "COLOR-PROGRESSION", "0px");
+    this.addRadioButton(panelRadio, buttonGroup, "STAMPER");
+    this.addRadioButton(panelRadio, buttonGroup, "TRACER");
+    this.addRadioButton(panelRadio, buttonGroup, "AIRBRUSH");
+    this.addRadioButton(panelRadio, buttonGroup, "SPIROGRAPH");
+    this.addRadioButton(panelRadio, buttonGroup, "SCATTERER");
+    panelRadio.add(this.getHLine(), null);
+    this.addRadioButton(panelRadio, buttonGroup, "SHAPE2D");
+    this.addRadioButton(panelRadio, buttonGroup, "DROP");
+    this.addRadioButton(panelRadio, buttonGroup, "CENTERED-FIGURE");
+    this.addRadioButton(panelRadio, buttonGroup, "NATURAL-FIGURE");
+    panelRadio.add(this.getHLine(), null);
+    this.addRadioButton(panelRadio, buttonGroup, "COLOR");
+    this.addRadioButton(panelRadio, buttonGroup, "GRADIENT-COLOR");
+    this.addRadioButton(panelRadio, buttonGroup, "BIGRADIENT-COLOR");
+    panelRadio.add(this.getHLine(), null);
+    this.addRadioButton(panelRadio, buttonGroup, "COLOR-PROGRESSION");
 
     this.addPreview(panel, 2, 2, this.transparent1, this.swatchesPanel1, this.preview1, 500, 300, new GBC(2, 3), false);
     this.addPreview(panel, 3, 0, this.transparent2, this.swatchesPanel2, this.preview2, 300, 500, new GBC(3, 1).a(GBC.NORTH).i(0, 5, 0, 0), true);
@@ -234,10 +234,10 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
   }
 
   @SuppressWarnings("StringEquality")
-  private void addRadioButton(JSPanel panelRadio, ButtonGroup buttonGroup, String card, String marginBottom) {
+  private void addRadioButton(JSPanel panelRadio, ButtonGroup buttonGroup, String card) {
     JSRadioButton radio = new JSRadioButton();
     radio.setContentAreaFilled(false);
-    radio.getStyle().marginBottom = marginBottom;
+    radio.getStyle().marginBottom = "1px";
     radio.setToggle();
     radio.cssAddClass("z4drawingtoolpanel-selector");
     radio.setIcon(new Z4EmptyImageProducer<>(card));
@@ -286,6 +286,15 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     this.radios.$set(card, radio);
     buttonGroup.add(radio);
     panelRadio.add(radio, null);
+  }
+
+  private JSComponent getHLine() {
+    JSComponent div = new JSComponent(document.createElement("div"));
+    div.getStyle().height = "1px";
+    div.getStyle().width = "100%";
+    div.getStyle().margin = "10px 1px 11px 1px";
+    div.getStyle().background = "var(--main-action-bgcolor)";
+    return div;
   }
 
   private void addPreview(JSPanel panel, int x, int y, JSButton transparent, JSColorMiniSwatchesPanel swatchesPanel, JSComponent preview, int width, int height, GBC gbc, boolean hide) {
@@ -490,7 +499,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
   }
 
   private void setPainter() {
-    new Array<>("z4drawingtoolpanel-shape2d-selected","z4drawingtoolpanel-drop-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css -> this.selectedPainter.cssRemoveClass(css));
+    new Array<>("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-drop-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css -> this.selectedPainter.cssRemoveClass(css));
 
     if (this.value.getPainter().getType() == Z4PainterType.SHAPE_2D) {
       this.selectedPainterCard = this.check(this.selectedPainter, "SHAPE2D", "shape2d", this.value.getPainter(), false);

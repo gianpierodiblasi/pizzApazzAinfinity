@@ -2,7 +2,6 @@
 }
 
 .z4droppainterpanel .z4droppainterpanel-radio img {
-  /*height: 26px;*/
 }
 .z4droppainterpanel .z4droppainterpanel-radio:nth-child(1) img {
   content: url(../image/painter/drop_thousand_points.png);
