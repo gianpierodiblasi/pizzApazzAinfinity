@@ -1,7 +1,9 @@
 package pizzapazza.color;
 
+import def.dom.CanvasGradient;
 import javascript.awt.Color;
 import pizzapazza.math.Z4Math;
+import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
 import simulation.js.$Object;
@@ -83,6 +85,44 @@ public class Z4GradientColor extends Z4AbstractGradientColor<Color> {
         this.addColor(color, position);
       }
     }
+  }
+
+  /**
+   * Creates a linear gradient
+   *
+   * @param context The context to use to create the linear gradient
+   * @param x0 The x-axis coordinate of the start point
+   * @param y0 The y-axis coordinate of the start point
+   * @param x1 The x-axis coordinate of the end point
+   * @param y1 The y-axis coordinate of the end point
+   * @return The linear gradient
+   */
+  public CanvasGradient createLinearGradient($CanvasRenderingContext2D context, double x0, double y0, double x1, double y1) {
+    CanvasGradient linearGradient = context.createLinearGradient(x0, y0, x1, y1);
+    this.colors.forEach((color, index, array) -> linearGradient.addColorStop(this.colorPositions.$get(index), color.getRGBA_HEX()));
+    return linearGradient;
+  }
+
+  /**
+   * Lights up this Z4GradientColor, the transparency is not changed
+   *
+   * @return This lighted Z4GradientColor
+   */
+  public Z4GradientColor lighted() {
+    Z4GradientColor lighted = new Z4GradientColor();
+    this.colors.forEach((color, index, array) -> lighted.addColor(color.lighted(this.colorPositions.$get(index)), this.colorPositions.$get(index)));
+    return lighted;
+  }
+
+  /**
+   * Darkens this Z4GradientColor, the transparency is not changed
+   *
+   * @return This darkened Z4GradientColor
+   */
+  public Z4GradientColor darkened() {
+    Z4GradientColor darkened = new Z4GradientColor();
+    this.colors.forEach((color, index, array) -> darkened.addColor(color.darkened(this.colorPositions.$get(index)), this.colorPositions.$get(index)));
+    return darkened;
   }
 
   /**

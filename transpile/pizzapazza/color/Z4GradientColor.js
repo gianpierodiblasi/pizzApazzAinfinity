@@ -65,6 +65,44 @@ class Z4GradientColor extends Z4AbstractGradientColor {
   }
 
   /**
+   * Creates a linear gradient
+   *
+   * @param context The context to use to create the linear gradient
+   * @param x0 The x-axis coordinate of the start point
+   * @param y0 The y-axis coordinate of the start point
+   * @param x1 The x-axis coordinate of the end point
+   * @param y1 The y-axis coordinate of the end point
+   * @return The linear gradient
+   */
+   createLinearGradient(context, x0, y0, x1, y1) {
+    let linearGradient = context.createLinearGradient(x0, y0, x1, y1);
+    this.colors.forEach((color, index, array) => linearGradient.addColorStop(this.colorPositions[index], color.getRGBA_HEX()));
+    return linearGradient;
+  }
+
+  /**
+   * Lights up this Z4GradientColor, the transparency is not changed
+   *
+   * @return This lighted Z4GradientColor
+   */
+   lighted() {
+    let lighted = new Z4GradientColor();
+    this.colors.forEach((color, index, array) => lighted.addColor(color.lighted(this.colorPositions[index]), this.colorPositions[index]));
+    return lighted;
+  }
+
+  /**
+   * Darkens this Z4GradientColor, the transparency is not changed
+   *
+   * @return This darkened Z4GradientColor
+   */
+   darkened() {
+    let darkened = new Z4GradientColor();
+    this.colors.forEach((color, index, array) => darkened.addColor(color.darkened(this.colorPositions[index]), this.colorPositions[index]));
+    return darkened;
+  }
+
+  /**
    * Creates a Z4GradientColor from a JSON object
    *
    * @param json The JSON object

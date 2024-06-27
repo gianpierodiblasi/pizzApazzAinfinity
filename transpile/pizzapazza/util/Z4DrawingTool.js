@@ -166,6 +166,12 @@ class Z4DrawingTool extends Z4Nextable {
       case "SHAPE_2D":
         painter = Z4Shape2DPainter.fromJSON(painterJSON);
         break;
+      case "DROP":
+        painter = Z4DropPainter.fromJSON(painterJSON);
+        break;
+      case "BRUSH":
+        painter = Z4BrushPainter.fromJSON(painterJSON);
+        break;
       case "CENTERED_FIGURE":
         painter = Z4CenteredFigurePainter.fromJSON(painterJSON);
         break;

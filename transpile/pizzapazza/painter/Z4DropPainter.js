@@ -78,30 +78,28 @@ class Z4DropPainter extends Z4Painter {
       if (currentRadius > 0) {
         if (spatioTemporalColor.isColor()) {
           let color = spatioTemporalColor.getColorAt(-1, -1);
-          this.drawWithColors(context, currentRadius, drawingPoint.z4Vector.phase, null, null, color, progression.getLighting());
+          this.drawWithColors(context, currentRadius, null, null, color, progression.getLighting());
         } else if (spatioTemporalColor.isGradientColor()) {
           if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.SPATIAL) {
-            this.drawWithColors(context, currentRadius, drawingPoint.z4Vector.phase, spatioTemporalColor, null, null, progression.getLighting());
+            this.drawWithColors(context, currentRadius, spatioTemporalColor, null, null, progression.getLighting());
           } else {
             let color = spatioTemporalColor.getGradientColorAt(-1).getColorAt(progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition, true);
-            this.drawWithColors(context, currentRadius, drawingPoint.z4Vector.phase, null, null, color, progression.getLighting());
+            this.drawWithColors(context, currentRadius, null, null, color, progression.getLighting());
           }
         } else if (spatioTemporalColor.isBiGradientColor()) {
           let gradientColor = spatioTemporalColor.getGradientColorAt(progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition);
-          this.drawWithColors(context, currentRadius, drawingPoint.z4Vector.phase, null, gradientColor, null, progression.getLighting());
+          this.drawWithColors(context, currentRadius, null, gradientColor, null, progression.getLighting());
         }
       }
     }
   }
 
-   drawWithColors(context, currentRadius, angle, spatioTemporalColor, gradientColor, color, lighting) {
+   drawWithColors(context, currentRadius, spatioTemporalColor, gradientColor, color, lighting) {
     let val = currentRadius * this.intensity / 2;
-    let cos = Z4Math.SQRT_OF_2 * Math.cos(angle);
-    let sin = Z4Math.SQRT_OF_2 * Math.sin(angle);
     for (let t = 0; t < val; t++) {
       let r = currentRadius * Z4Math.randomCorrected(this.gaussianCorrection / 10.0);
       if (color && lighting === Z4Lighting.NONE) {
-        this.drawPath(context, r, cos, sin, color);
+        this.drawPath(context, r, color);
       } else {
         let c = null;
         if (spatioTemporalColor) {
@@ -110,17 +108,17 @@ class Z4DropPainter extends Z4Painter {
           c = gradientColor.getColorAt(r / currentRadius, true);
         }
         if (lighting === Z4Lighting.NONE) {
-          this.drawPath(context, r, cos, sin, c);
+          this.drawPath(context, r, c);
         } else if (lighting === Z4Lighting.LIGHTED) {
-          this.drawPath(context, r, cos, sin, c.lighted(r / currentRadius));
+          this.drawPath(context, r, c.lighted(r / currentRadius));
         } else if (lighting === Z4Lighting.DARKENED) {
-          this.drawPath(context, r, cos, sin, c.darkened(r / currentRadius));
+          this.drawPath(context, r, c.darkened(r / currentRadius));
         }
       }
     }
   }
 
-   drawPath(context, radius, cos, sin, color) {
+   drawPath(context, radius, color) {
     context.save();
     context.fillStyle = Z4Constants.getStyle(color.getRGBA_HEX());
     context.strokeStyle = Z4Constants.getStyle(color.getRGBA_HEX());
@@ -132,8 +130,8 @@ class Z4DropPainter extends Z4Painter {
       context.arc(rX, rY, 1, 0, Z4Math.TWO_PI);
       context.fill();
     } else if (this.dropPainterType === Z4DropPainterType.THOUSAND_LINES) {
-      context.moveTo(rX + cos, rY + sin);
-      context.lineTo(rX - cos, rY - sin);
+      context.moveTo(rX + Z4Math.SQRT_OF_2, rY);
+      context.lineTo(rX - Z4Math.SQRT_OF_2, rY);
       context.stroke();
     } else if (this.dropPainterType === Z4DropPainterType.THOUSAND_AREAS) {
       context.arc(rX, rY, 2, 0, Z4Math.TWO_PI);
@@ -150,7 +148,7 @@ class Z4DropPainter extends Z4Painter {
     context.stroke();
     context.strokeStyle = Z4Constants.getStyle("black");
     context.beginPath();
-    context.arc(0, 0, currentRadius, 0, Z4Math.TWO_PI);
+    context.arc(1, 1, currentRadius, 0, Z4Math.TWO_PI);
     context.stroke();
     context.restore();
   }

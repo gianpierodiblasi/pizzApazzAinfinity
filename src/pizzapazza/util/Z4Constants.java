@@ -134,7 +134,7 @@ public class Z4Constants {
     array.push(filePickerOptionsType);
   }
 
-  private static String getStyle(String style) {
+  private static Object getStyle(Object style) {
     return style;
   }
 
@@ -144,7 +144,7 @@ public class Z4Constants {
    * @param style The style
    * @return The style
    */
-  public static Union4<String, CanvasGradient, CanvasPattern, java.lang.Object> $getStyle(String style) {
+  public static Union4<String, CanvasGradient, CanvasPattern, Object> $getStyle(Object style) {
     return null;
   }
 }

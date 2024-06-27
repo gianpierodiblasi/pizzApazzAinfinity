@@ -15,7 +15,7 @@ import simulation.js.$Path2D;
 public class $CanvasRenderingContext2D extends CanvasRenderingContext2D {
 
   public boolean imageSmoothingEnabled;
-  
+
   public void stroke($Path2D path) {
   }
 
@@ -30,8 +30,12 @@ public class $CanvasRenderingContext2D extends CanvasRenderingContext2D {
 
   public void drawImage($OffscreenCanvas canvas, double x, double y, double w, double h) {
   }
-  
+
   public void setLineDash(Array<Double> array) {
+  }
+
+  public CanvasGradient createLinearGradient(double x0, double y0, double x1, double y1) {
+    return null;
   }
   
   public CanvasGradient createConicGradient(double angle, double x, double y) {

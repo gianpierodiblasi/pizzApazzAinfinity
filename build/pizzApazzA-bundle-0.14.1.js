@@ -1804,6 +1804,7 @@ class Z4PainterType {
   static ARROW = 'ARROW';
   static SHAPE_2D = 'SHAPE_2D';
   static DROP = 'DROP';
+  static BRUSH = 'BRUSH';
   static CENTERED_FIGURE = 'CENTERED_FIGURE';
   static NATURAL_FIGURE = 'NATURAL_FIGURE';
 }
@@ -11047,6 +11048,44 @@ class Z4GradientColor extends Z4AbstractGradientColor {
   }
 
   /**
+   * Creates a linear gradient
+   *
+   * @param context The context to use to create the linear gradient
+   * @param x0 The x-axis coordinate of the start point
+   * @param y0 The y-axis coordinate of the start point
+   * @param x1 The x-axis coordinate of the end point
+   * @param y1 The y-axis coordinate of the end point
+   * @return The linear gradient
+   */
+   createLinearGradient(context, x0, y0, x1, y1) {
+    let linearGradient = context.createLinearGradient(x0, y0, x1, y1);
+    this.colors.forEach((color, index, array) => linearGradient.addColorStop(this.colorPositions[index], color.getRGBA_HEX()));
+    return linearGradient;
+  }
+
+  /**
+   * Lights up this Z4GradientColor, the transparency is not changed
+   *
+   * @return This lighted Z4GradientColor
+   */
+   lighted() {
+    let lighted = new Z4GradientColor();
+    this.colors.forEach((color, index, array) => lighted.addColor(color.lighted(this.colorPositions[index]), this.colorPositions[index]));
+    return lighted;
+  }
+
+  /**
+   * Darkens this Z4GradientColor, the transparency is not changed
+   *
+   * @return This darkened Z4GradientColor
+   */
+   darkened() {
+    let darkened = new Z4GradientColor();
+    this.colors.forEach((color, index, array) => darkened.addColor(color.darkened(this.colorPositions[index]), this.colorPositions[index]));
+    return darkened;
+  }
+
+  /**
    * Creates a Z4GradientColor from a JSON object
    *
    * @param json The JSON object
@@ -11850,6 +11889,12 @@ class Z4DrawingTool extends Z4Nextable {
         break;
       case "SHAPE_2D":
         painter = Z4Shape2DPainter.fromJSON(painterJSON);
+        break;
+      case "DROP":
+        painter = Z4DropPainter.fromJSON(painterJSON);
+        break;
+      case "BRUSH":
+        painter = Z4BrushPainter.fromJSON(painterJSON);
         break;
       case "CENTERED_FIGURE":
         painter = Z4CenteredFigurePainter.fromJSON(painterJSON);
@@ -13338,6 +13383,173 @@ class Z4ArrowPainter extends Z4Painter {
   }
 }
 /**
+ * The painter representing a brush
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4BrushPainter extends Z4Painter {
+
+  // =new CRPvalue(10,0,0);
+   width = null;
+
+  // =new CRPvalue(2,1,0);
+   thickness = null;
+
+  /**
+   * Creates the object
+   *
+   * @param width The width of the brush
+   * @param thickness The thickness of the brush
+   */
+  constructor(width, thickness) {
+    super();
+    this.width = width;
+    this.thickness = thickness;
+  }
+
+   getType() {
+    return Z4PainterType.BRUSH;
+  }
+
+  /**
+   * Returns the width of the brush
+   *
+   * @return The width of the brush
+   */
+   getWidth() {
+    return this.width;
+  }
+
+  /**
+   * Returns the thickness of the brush
+   *
+   * @return The thickness of the brush
+   */
+   getThickness() {
+    return this.thickness;
+  }
+
+   draw(context, drawingPoint, spatioTemporalColor, progression) {
+    if (drawingPoint.intent !== Z4DrawingPointIntent.DRAW_OBJECTS) {
+      let currentWidth = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.width.getConstant().getValue());
+      this.drawBounds(context, currentWidth);
+    } else {
+      let currentWidth = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.width.next());
+      let currentThickness = drawingPoint.intensity * this.thickness.next();
+      if (currentWidth > 0 && currentThickness > 0) {
+        if (spatioTemporalColor.isColor()) {
+          let color = spatioTemporalColor.getColorAt(-1, -1);
+          this.drawWithColors(context, currentWidth, currentThickness, null, color, progression.getLighting());
+        } else if (spatioTemporalColor.isGradientColor()) {
+          if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.SPATIAL) {
+            this.drawWithColors(context, currentWidth, currentThickness, spatioTemporalColor.getGradientColorAt(-1), null, progression.getLighting());
+          } else {
+            let color = spatioTemporalColor.getGradientColorAt(-1).getColorAt(progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition, true);
+            this.drawWithColors(context, currentWidth, currentThickness, null, color, progression.getLighting());
+          }
+        } else if (spatioTemporalColor.isBiGradientColor()) {
+          let gradientColor = spatioTemporalColor.getGradientColorAt(progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition);
+          this.drawWithColors(context, currentWidth, currentThickness, gradientColor, null, progression.getLighting());
+        }
+      }
+    }
+  }
+
+   drawWithColors(context, currentWidth, currentThickness, gradientColor, color, lighting) {
+    // if (ww > halfWidth) { // dovrei aggiungere la property border
+    // double cos = Math.cos(rot + randAddingRotation);
+    // double sen = Math.sin(rot + randAddingRotation);
+    // double x1 = point.x + cos * ww;
+    // double y1 = point.y + sen * ww;
+    // double x2 = point.x - cos * ww;
+    // double y2 = point.y - sen * ww;
+    // Line2D line = new Line2D.Double(x1, y1, x2, y2);
+    // 
+    // g2.setStroke(new BasicStroke((int) Math.ceil(tt), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+    // if (effect == this.NO_EFFECT) {
+    // g2.setPaint(addingColor.getLocalColor(color).getMultiLinearPaint(point, new Point2D.Double(x2, y2), false));
+    // } else if (effect == this.PATTERN_EFFECT) {
+    // g2.setPaint(new TexturePaint(pattern, rect));
+    // }
+    // g2.draw(line);
+    // }
+    // 
+    // if (effect == this.NO_EFFECT) {
+    // g2.setPaint(color.getMultiLinearPaint(point, new Point2D.Double(x2, y2), false));
+    // } else if (effect == this.PATTERN_EFFECT) {
+    // g2.setPaint(new TexturePaint(pattern, rect));
+    // }
+    // 
+    if (color) {
+      if (lighting === Z4Lighting.NONE) {
+        this.drawPath(context, currentWidth, currentThickness, color.getRGBA_HEX());
+      } else if (lighting === Z4Lighting.LIGHTED) {
+        let linearGradient = context.createLinearGradient(-currentWidth / 2, 0, currentWidth / 2, 0);
+        linearGradient.addColorStop(0, color.getRGBA_HEX());
+        linearGradient.addColorStop(1, "#FFFFFFFF");
+        this.drawPath(context, currentWidth, currentThickness, linearGradient);
+      } else if (lighting === Z4Lighting.DARKENED) {
+        let linearGradient = context.createLinearGradient(-currentWidth / 2, 0, currentWidth / 2, 0);
+        linearGradient.addColorStop(0, color.getRGBA_HEX());
+        linearGradient.addColorStop(1, "#000000FF");
+        this.drawPath(context, currentWidth, currentThickness, linearGradient);
+      }
+    } else if (gradientColor) {
+      if (lighting === Z4Lighting.NONE) {
+        this.drawPath(context, currentWidth, currentThickness, gradientColor.createLinearGradient(context, -currentWidth / 2, 0, currentWidth / 2, 0));
+      } else if (lighting === Z4Lighting.LIGHTED) {
+        this.drawPath(context, currentWidth, currentThickness, gradientColor.lighted().createLinearGradient(context, -currentWidth / 2, 0, currentWidth / 2, 0));
+      } else if (lighting === Z4Lighting.DARKENED) {
+        this.drawPath(context, currentWidth, currentThickness, gradientColor.darkened().createLinearGradient(context, -currentWidth / 2, 0, currentWidth / 2, 0));
+      }
+    }
+  }
+
+   drawPath(context, currentWidth, currentThickness, color) {
+    context.save();
+    context.lineWidth = currentThickness;
+    context.strokeStyle = Z4Constants.getStyle(color);
+    context.beginPath();
+    context.moveTo(-currentWidth / 2, 0);
+    context.lineTo(+currentWidth / 2, 0);
+    context.stroke();
+    context.restore();
+  }
+
+   drawBounds(context, currentWidth) {
+    context.save();
+    context.strokeStyle = Z4Constants.getStyle("gray");
+    context.beginPath();
+    context.moveTo(-currentWidth / 2, 0);
+    context.lineTo(+currentWidth / 2, 0);
+    context.stroke();
+    context.strokeStyle = Z4Constants.getStyle("black");
+    context.beginPath();
+    context.translate(1, 1);
+    context.moveTo(-currentWidth / 2, 0);
+    context.lineTo(+currentWidth / 2, 0);
+    context.stroke();
+    context.restore();
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    json["width"] = this.width.toJSON();
+    json["thickness"] = this.thickness.toJSON();
+    return json;
+  }
+
+  /**
+   * Creates a Z4BrushPainter from a JSON object
+   *
+   * @param json The JSON object
+   * @return the brush painter
+   */
+  static  fromJSON(json) {
+    return new Z4BrushPainter(Z4FancifulValue.fromJSON(json["width"]), Z4FancifulValue.fromJSON(json["thickness"]));
+  }
+}
+/**
  * The painter of centered figures
  *
  * @author gianpiero.diblasi
@@ -13943,30 +14155,28 @@ class Z4DropPainter extends Z4Painter {
       if (currentRadius > 0) {
         if (spatioTemporalColor.isColor()) {
           let color = spatioTemporalColor.getColorAt(-1, -1);
-          this.drawWithColors(context, currentRadius, drawingPoint.z4Vector.phase, null, null, color, progression.getLighting());
+          this.drawWithColors(context, currentRadius, null, null, color, progression.getLighting());
         } else if (spatioTemporalColor.isGradientColor()) {
           if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.SPATIAL) {
-            this.drawWithColors(context, currentRadius, drawingPoint.z4Vector.phase, spatioTemporalColor, null, null, progression.getLighting());
+            this.drawWithColors(context, currentRadius, spatioTemporalColor, null, null, progression.getLighting());
           } else {
             let color = spatioTemporalColor.getGradientColorAt(-1).getColorAt(progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition, true);
-            this.drawWithColors(context, currentRadius, drawingPoint.z4Vector.phase, null, null, color, progression.getLighting());
+            this.drawWithColors(context, currentRadius, null, null, color, progression.getLighting());
           }
         } else if (spatioTemporalColor.isBiGradientColor()) {
           let gradientColor = spatioTemporalColor.getGradientColorAt(progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RANDOM ? Math.random() : drawingPoint.temporalPosition);
-          this.drawWithColors(context, currentRadius, drawingPoint.z4Vector.phase, null, gradientColor, null, progression.getLighting());
+          this.drawWithColors(context, currentRadius, null, gradientColor, null, progression.getLighting());
         }
       }
     }
   }
 
-   drawWithColors(context, currentRadius, angle, spatioTemporalColor, gradientColor, color, lighting) {
+   drawWithColors(context, currentRadius, spatioTemporalColor, gradientColor, color, lighting) {
     let val = currentRadius * this.intensity / 2;
-    let cos = Z4Math.SQRT_OF_2 * Math.cos(angle);
-    let sin = Z4Math.SQRT_OF_2 * Math.sin(angle);
     for (let t = 0; t < val; t++) {
       let r = currentRadius * Z4Math.randomCorrected(this.gaussianCorrection / 10.0);
       if (color && lighting === Z4Lighting.NONE) {
-        this.drawPath(context, r, cos, sin, color);
+        this.drawPath(context, r, color);
       } else {
         let c = null;
         if (spatioTemporalColor) {
@@ -13975,17 +14185,17 @@ class Z4DropPainter extends Z4Painter {
           c = gradientColor.getColorAt(r / currentRadius, true);
         }
         if (lighting === Z4Lighting.NONE) {
-          this.drawPath(context, r, cos, sin, c);
+          this.drawPath(context, r, c);
         } else if (lighting === Z4Lighting.LIGHTED) {
-          this.drawPath(context, r, cos, sin, c.lighted(r / currentRadius));
+          this.drawPath(context, r, c.lighted(r / currentRadius));
         } else if (lighting === Z4Lighting.DARKENED) {
-          this.drawPath(context, r, cos, sin, c.darkened(r / currentRadius));
+          this.drawPath(context, r, c.darkened(r / currentRadius));
         }
       }
     }
   }
 
-   drawPath(context, radius, cos, sin, color) {
+   drawPath(context, radius, color) {
     context.save();
     context.fillStyle = Z4Constants.getStyle(color.getRGBA_HEX());
     context.strokeStyle = Z4Constants.getStyle(color.getRGBA_HEX());
@@ -13997,8 +14207,8 @@ class Z4DropPainter extends Z4Painter {
       context.arc(rX, rY, 1, 0, Z4Math.TWO_PI);
       context.fill();
     } else if (this.dropPainterType === Z4DropPainterType.THOUSAND_LINES) {
-      context.moveTo(rX + cos, rY + sin);
-      context.lineTo(rX - cos, rY - sin);
+      context.moveTo(rX + Z4Math.SQRT_OF_2, rY);
+      context.lineTo(rX - Z4Math.SQRT_OF_2, rY);
       context.stroke();
     } else if (this.dropPainterType === Z4DropPainterType.THOUSAND_AREAS) {
       context.arc(rX, rY, 2, 0, Z4Math.TWO_PI);
@@ -14015,7 +14225,7 @@ class Z4DropPainter extends Z4Painter {
     context.stroke();
     context.strokeStyle = Z4Constants.getStyle("black");
     context.beginPath();
-    context.arc(0, 0, currentRadius, 0, Z4Math.TWO_PI);
+    context.arc(1, 1, currentRadius, 0, Z4Math.TWO_PI);
     context.stroke();
     context.restore();
   }
