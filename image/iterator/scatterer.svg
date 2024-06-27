@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<svg width="96" height="96" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
+ <defs>
+  <linearGradient id="svg_14" x2="1" y2="0">
+   <stop stop-color="#bfbfbf" offset="0"/>
+   <stop stop-color="#404040" offset="1"/>
+  </linearGradient>
+  <linearGradient id="svg_19">
+   <stop stop-color="#00aeff" stop-opacity="0.996094" offset="0"/>
+   <stop stop-color="#0008ff" stop-opacity="0.996094" offset="1"/>
+  </linearGradient>
+  <linearGradient id="svg_20">
+   <stop stop-color="#00bbff" stop-opacity="0.996094" offset="0"/>
+   <stop stop-color="#007fff" stop-opacity="0.996094" offset="1"/>
+  </linearGradient>
+  <linearGradient id="svg_21" x1="0" y1="0" x2="1" y2="0">
+   <stop stop-color="#00bbff" stop-opacity="0.996094" offset="0"/>
+   <stop stop-color="#0072ff" stop-opacity="0.992188" offset="1"/>
+  </linearGradient>
+  <linearGradient id="svg_22" x1="0" y1="0" x2="1" y2="0">
+   <stop stop-color="#00a9ff" stop-opacity="0.992188" offset="0"/>
+   <stop stop-color="#0000bf" stop-opacity="0.996094" offset="1"/>
+  </linearGradient>
+ </defs>
+ <g>
+  <title>Layer 1</title>
+  <g id="svg_23" transform="rotate(41.5039 53.7803 45.1288)">
+   <path fill="url(#svg_22)" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" d="m25.5606,22.59091c0,0 9.4697,44.886347 10.984859,50.378794c1.515141,5.492439 32.00758,4.924294 33.878788,-0.401512c1.871216,-5.325813 11.57576,-50.166672 11.553009,-50.189402c-0.02272,-0.02273 -56.416656,0.21212 -56.416656,0.21212z" id="svg_18"/>
+   <ellipse fill="url(#svg_14)" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="53.590908" cy="22.21212" id="svg_7" rx="28.030303" ry="10.416667"/>
+  </g>
+  <line fill="none" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="20.731059" y1="59.143937" x2="6.905301" y2="73.72727" id="svg_26" stroke="#000000"/>
+  <line fill="none" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="41.943179" y1="77.515149" x2="28.117421" y2="92.098482" stroke="#000000" id="svg_27"/>
+  <line fill="none" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="30.011363" y1="69.465908" x2="9.17803" y2="91.440793" id="svg_28" stroke="#000000"/>
+  <line fill="none" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="25.276513" y1="64.257573" x2="9.178029" y2="81.238166" id="svg_29" stroke="#000000"/>
+  <line fill="none" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="35.693181" y1="73.570306" x2="19.594696" y2="90.550899" stroke="#000000" id="svg_30"/>
+ </g>
+</svg>

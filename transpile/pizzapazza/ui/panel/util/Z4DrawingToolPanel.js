@@ -99,7 +99,8 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     this.addRadioButton(panelRadio, buttonGroup, "STAMPER", "1px");
     this.addRadioButton(panelRadio, buttonGroup, "TRACER", "1px");
     this.addRadioButton(panelRadio, buttonGroup, "AIRBRUSH", "1px");
-    this.addRadioButton(panelRadio, buttonGroup, "SPIROGRAPH", "10px");
+    this.addRadioButton(panelRadio, buttonGroup, "SPIROGRAPH", "1px");
+    this.addRadioButton(panelRadio, buttonGroup, "SCATTERER", "10px");
     this.addRadioButton(panelRadio, buttonGroup, "SHAPE2D", "1px");
     this.addRadioButton(panelRadio, buttonGroup, "CENTERED-FIGURE", "1px");
     this.addRadioButton(panelRadio, buttonGroup, "NATURAL-FIGURE", "10px");
@@ -129,7 +130,8 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
         case "TRACER":
         case "AIRBRUSH":
         case "SPIROGRAPH":
-          new Array("z4drawingtoolpanel-stamper-selected", "z4drawingtoolpanel-tracer-selected", "z4drawingtoolpanel-airbrush-selected", "z4drawingtoolpanel-spirograph-selected").forEach(css => this.selectedPointInterator.cssRemoveClass(css));
+        case "SCATTERER":
+          new Array("z4drawingtoolpanel-stamper-selected", "z4drawingtoolpanel-tracer-selected", "z4drawingtoolpanel-airbrush-selected", "z4drawingtoolpanel-spirograph-selected", "z4drawingtoolpanel-scatterer-selected").forEach(css => this.selectedPointInterator.cssRemoveClass(css));
           this.selectedPointInteratorCard = this.check(this.selectedPointInterator, card, card.toLowerCase(), null, true);
           break;
         case "SHAPE2D":
@@ -330,7 +332,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
   }
 
    setPointInterator() {
-    new Array("z4drawingtoolpanel-stamper-selected", "z4drawingtoolpanel-tracer-selected", "z4drawingtoolpanel-airbrush-selected", "z4drawingtoolpanel-spirograph-selected").forEach(css => this.selectedPointInterator.cssRemoveClass(css));
+    new Array("z4drawingtoolpanel-stamper-selected", "z4drawingtoolpanel-tracer-selected", "z4drawingtoolpanel-airbrush-selected", "z4drawingtoolpanel-spirograph-selected", "z4drawingtoolpanel-scatterer-selected").forEach(css => this.selectedPointInterator.cssRemoveClass(css));
     if (this.value.getPointIterator().getType() === Z4PointIteratorType.STAMPER) {
       this.selectedPointInteratorCard = this.check(this.selectedPointInterator, "STAMPER", "stamper", this.value.getPointIterator(), true);
     } else if (this.value.getPointIterator().getType() === Z4PointIteratorType.TRACER) {
@@ -339,6 +341,8 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
       this.selectedPointInteratorCard = this.check(this.selectedPointInterator, "AIRBRUSH", "airbrush", this.value.getPointIterator(), true);
     } else if (this.value.getPointIterator().getType() === Z4PointIteratorType.SPIROGRAPH) {
       this.selectedPointInteratorCard = this.check(this.selectedPointInterator, "SPIROGRAPH", "spirograph", this.value.getPointIterator(), true);
+    } else if (this.value.getPointIterator().getType() === Z4PointIteratorType.SCATTERER) {
+      this.selectedPointInteratorCard = this.check(this.selectedPointInterator, "SCATTERER", "scatterer", this.value.getPointIterator(), true);
     }
   }
 
@@ -390,6 +394,10 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
           break;
         case "SPIROGRAPH":
           this.cardPanels[card] = new Z4SpirographPanel();
+          (this.cardPanels[card]).addChangeListener(event => this.valueIsAdjusting = (this.cardPanels[card]).getValueIsAdjusting());
+          break;
+        case "SCATTERER":
+          this.cardPanels[card] = new Z4ScattererPanel();
           (this.cardPanels[card]).addChangeListener(event => this.valueIsAdjusting = (this.cardPanels[card]).getValueIsAdjusting());
           break;
         case "SHAPE2D":

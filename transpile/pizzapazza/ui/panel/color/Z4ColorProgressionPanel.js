@@ -199,7 +199,7 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
         radio.setEnabled(this.enabled);
         radio.getStyle().visibility = "visible";
       });
-      if (type === Z4PointIteratorType.STAMPER || (type === Z4PointIteratorType.SPIROGRAPH && !options["drawWhileMoving"])) {
+      if (type === Z4PointIteratorType.STAMPER || (type === Z4PointIteratorType.SPIROGRAPH && !options["drawWhileMoving"]) || type === Z4PointIteratorType.SCATTERER) {
         let relative = this.radios["" + Z4ColorProgressionBehavior.RELATIVE_TO_PATH];
         relative.setEnabled(false);
         relative.setContentAreaFilled(false);
@@ -219,11 +219,11 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
       spatial.setEnabled(false);
       spatial.setContentAreaFilled(false);
       let relative = this.radios["" + Z4ColorProgressionBehavior.RELATIVE_TO_PATH];
-      if (type === Z4PointIteratorType.STAMPER || (type === Z4PointIteratorType.SPIROGRAPH && options["drawWhileMoving"])) {
+      if (type === Z4PointIteratorType.STAMPER || (type === Z4PointIteratorType.SPIROGRAPH && options["drawWhileMoving"]) || type === Z4PointIteratorType.SCATTERER) {
         relative.setEnabled(false);
         relative.setContentAreaFilled(false);
       }
-      if (spatial.isSelected() || (type === Z4PointIteratorType.STAMPER && relative.isSelected()) || (type === Z4PointIteratorType.SPIROGRAPH && !options["drawWhileMoving"] && relative.isSelected())) {
+      if (spatial.isSelected() || (type === Z4PointIteratorType.STAMPER && relative.isSelected()) || (type === Z4PointIteratorType.SPIROGRAPH && !options["drawWhileMoving"] && relative.isSelected()) || (type === Z4PointIteratorType.SCATTERER && relative.isSelected())) {
         (this.radios["" + Z4ColorProgressionBehavior.TEMPORAL]).setSelected(true);
         (this.radios["" + Z4ColorProgressionBehavior.TEMPORAL]).setContentAreaFilled(true);
         this.temporalStepSpinner.setEnabled(this.enabled);

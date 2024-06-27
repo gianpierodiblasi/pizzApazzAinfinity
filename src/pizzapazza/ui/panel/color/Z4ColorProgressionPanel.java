@@ -242,7 +242,7 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
         radio.getStyle().visibility = "visible";
       });
 
-      if (type == Z4PointIteratorType.STAMPER || (type == Z4PointIteratorType.SPIROGRAPH && !$exists(options.$get("drawWhileMoving")))) {
+      if (type == Z4PointIteratorType.STAMPER || (type == Z4PointIteratorType.SPIROGRAPH && !$exists(options.$get("drawWhileMoving")))||type == Z4PointIteratorType.SCATTERER) {
         JSRadioButton relative = this.radios.$get("" + Z4ColorProgressionBehavior.RELATIVE_TO_PATH);
         relative.setEnabled(false);
         relative.setContentAreaFilled(false);
@@ -266,14 +266,15 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
       spatial.setContentAreaFilled(false);
 
       JSRadioButton relative = this.radios.$get("" + Z4ColorProgressionBehavior.RELATIVE_TO_PATH);
-      if (type == Z4PointIteratorType.STAMPER || (type == Z4PointIteratorType.SPIROGRAPH && $exists(options.$get("drawWhileMoving")))) {
+      if (type == Z4PointIteratorType.STAMPER || (type == Z4PointIteratorType.SPIROGRAPH && $exists(options.$get("drawWhileMoving")))||type == Z4PointIteratorType.SCATTERER) {
         relative.setEnabled(false);
         relative.setContentAreaFilled(false);
       }
 
       if (spatial.isSelected()
               || (type == Z4PointIteratorType.STAMPER && relative.isSelected())
-              || (type == Z4PointIteratorType.SPIROGRAPH && !$exists(options.$get("drawWhileMoving")) && relative.isSelected())) {
+              || (type == Z4PointIteratorType.SPIROGRAPH && !$exists(options.$get("drawWhileMoving")) && relative.isSelected())
+              || (type == Z4PointIteratorType.SCATTERER && relative.isSelected())) {
         ((JSRadioButton) this.radios.$get("" + Z4ColorProgressionBehavior.TEMPORAL)).setSelected(true);
         ((JSRadioButton) this.radios.$get("" + Z4ColorProgressionBehavior.TEMPORAL)).setContentAreaFilled(true);
         this.temporalStepSpinner.setEnabled(this.enabled);
