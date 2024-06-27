@@ -23,9 +23,9 @@ import simulation.js.$Object;
 public class Z4DropPainter extends Z4Painter {
 
   private final Z4DropPainterType dropPainterType;
-  private final Z4FancifulValue radius; // 10
-  private final int intensity; // 20
-  private final int gaussianCorrection; // 10
+  private final Z4FancifulValue radius;
+  private final int intensity;
+  private final int gaussianCorrection;
 
   /**
    * Creates the object
@@ -36,6 +36,8 @@ public class Z4DropPainter extends Z4Painter {
    * @param gaussianCorrection The gaussian correction
    */
   public Z4DropPainter(Z4DropPainterType dropPainterType, Z4FancifulValue radius, int intensity, int gaussianCorrection) {
+    super();
+
     this.dropPainterType = dropPainterType;
     this.radius = radius;
     this.intensity = intensity;
@@ -117,10 +119,11 @@ public class Z4DropPainter extends Z4Painter {
     double sin = Z4Math.SQRT_OF_2 * Math.sin(angle);
 
     for (int t = 0; t < val; t++) {
+      double rand = Z4Math.randomCorrected(this.gaussianCorrection / 10.0);
+      
       if ($exists(color) && lighting == Z4Lighting.NONE) {
-
+        this.drawPath(context, currentRadius, rand, cos, sin, color);
       } else {
-        double rand = Z4Math.randomCorrected(gaussianCorrection / 10.0);
         if ($exists(spatioTemporalColor)) {
           color = spatioTemporalColor.getColorAt(-1, rand);
         } else if ($exists(gradientColor)) {

@@ -283,6 +283,10 @@ class Z4Translations {
 
   static  EXTERNAL_FORCE = "";
 
+  static  INTENSITY = "";
+
+  static  GAUSSIAN_CORRECTION = "";
+
   // Math
   static  POSITIVE = "";
 
@@ -540,6 +544,8 @@ class Z4Translations {
     Z4Translations.EXTERNAL_TERMINAL_POINT = "External Terminal Point";
     Z4Translations.INDENTATION = "Indentation";
     Z4Translations.EXTERNAL_FORCE = "External Force";
+    Z4Translations.INTENSITY = "Intensity";
+    Z4Translations.GAUSSIAN_CORRECTION = "Gaussian Correction";
     // Math
     Z4Translations.POSITIVE = "Positive";
     Z4Translations.NEGATIVE = "Negative";
@@ -738,6 +744,8 @@ class Z4Translations {
     Z4Translations.EXTERNAL_TERMINAL_POINT = "Punto Terminale Esterno";
     Z4Translations.INDENTATION = "Frastagliatura";
     Z4Translations.EXTERNAL_FORCE = "Forza Esterna";
+    Z4Translations.INTENSITY = "Intensit\u00E0";
+    Z4Translations.GAUSSIAN_CORRECTION = "Correzione Gaussiana";
     // Math
     Z4Translations.POSITIVE = "Positivo";
     Z4Translations.NEGATIVE = "Negativo";

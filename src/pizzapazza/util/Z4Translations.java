@@ -158,7 +158,7 @@ public class Z4Translations {
   public static String SPEED = "";
   public static String DRAW_WHILE_MOVING = "";
   public static String SCATTERING = "";
-  
+
   // Painter
   public static String TENSION = "";
   public static String HOLE = "";
@@ -171,6 +171,8 @@ public class Z4Translations {
   public static String EXTERNAL_TERMINAL_POINT = "";
   public static String INDENTATION = "";
   public static String EXTERNAL_FORCE = "";
+  public static String INTENSITY = "";
+  public static String GAUSSIAN_CORRECTION = "";
 
   // Math
   public static String POSITIVE = "";
@@ -400,6 +402,8 @@ public class Z4Translations {
     Z4Translations.EXTERNAL_TERMINAL_POINT = "External Terminal Point";
     Z4Translations.INDENTATION = "Indentation";
     Z4Translations.EXTERNAL_FORCE = "External Force";
+    Z4Translations.INTENSITY = "Intensity";
+    Z4Translations.GAUSSIAN_CORRECTION = "Gaussian Correction";
 
     // Math
     Z4Translations.POSITIVE = "Positive";
@@ -613,6 +617,8 @@ public class Z4Translations {
     Z4Translations.EXTERNAL_TERMINAL_POINT = "Punto Terminale Esterno";
     Z4Translations.INDENTATION = "Frastagliatura";
     Z4Translations.EXTERNAL_FORCE = "Forza Esterna";
+    Z4Translations.INTENSITY = "Intensit\u00E0";
+    Z4Translations.GAUSSIAN_CORRECTION = "Correzione Gaussiana";
 
     // Math
     Z4Translations.POSITIVE = "Positivo";

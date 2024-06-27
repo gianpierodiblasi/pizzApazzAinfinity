@@ -7,6 +7,3 @@ Z4Translations.STOP = "Stop";
 Z4Translations.VALUE = "Value";
 Z4Translations.SIGN = "Sign";
 Z4Translations.RANGE = "Range";
-
-# Label
-Z4Translations.INTENSITY = "Intensity";

@@ -41,6 +41,7 @@ import pizzapazza.math.Z4SignBehavior;
 import pizzapazza.math.Z4SignedRandomValue;
 import pizzapazza.math.Z4SignedValue;
 import pizzapazza.painter.Z4CenteredFigurePainter;
+import pizzapazza.painter.Z4DropPainter;
 import pizzapazza.painter.Z4NaturalFigurePainter;
 import pizzapazza.painter.Z4Painter;
 import pizzapazza.painter.Z4PainterType;
@@ -58,6 +59,7 @@ import pizzapazza.ui.panel.iterator.Z4SpirographPanel;
 import pizzapazza.ui.panel.iterator.Z4StamperPanel;
 import pizzapazza.ui.panel.iterator.Z4TracerPanel;
 import pizzapazza.ui.panel.painter.Z4CenteredFigurePainterPanel;
+import pizzapazza.ui.panel.painter.Z4DropPainterPanel;
 import pizzapazza.ui.panel.painter.Z4NaturalFigurePainterPanel;
 import pizzapazza.ui.panel.painter.Z4PainterPanel;
 import pizzapazza.ui.panel.painter.Z4Shape2DPainterPanel;
@@ -162,6 +164,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     this.addRadioButton(panelRadio, buttonGroup, "SCATTERER", "10px");
 
     this.addRadioButton(panelRadio, buttonGroup, "SHAPE2D", "1px");
+    this.addRadioButton(panelRadio, buttonGroup, "DROP", "1px");
     this.addRadioButton(panelRadio, buttonGroup, "CENTERED-FIGURE", "1px");
     this.addRadioButton(panelRadio, buttonGroup, "NATURAL-FIGURE", "10px");
 
@@ -250,9 +253,10 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
           this.selectedPointInteratorCard = this.check(this.selectedPointInterator, card, card.toLowerCase(), null, true);
           break;
         case "SHAPE2D":
+        case "DROP":
         case "CENTERED-FIGURE":
         case "NATURAL-FIGURE":
-          new Array<>("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css -> this.selectedPainter.cssRemoveClass(css));
+          new Array<>("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-drop-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css -> this.selectedPainter.cssRemoveClass(css));
           this.selectedPainterCard = this.check(this.selectedPainter, card, card.toLowerCase(), null, true);
           break;
         case "COLOR":
@@ -486,10 +490,12 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
   }
 
   private void setPainter() {
-    new Array<>("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css -> this.selectedPainter.cssRemoveClass(css));
+    new Array<>("z4drawingtoolpanel-shape2d-selected","z4drawingtoolpanel-drop-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css -> this.selectedPainter.cssRemoveClass(css));
 
     if (this.value.getPainter().getType() == Z4PainterType.SHAPE_2D) {
       this.selectedPainterCard = this.check(this.selectedPainter, "SHAPE2D", "shape2d", this.value.getPainter(), false);
+    } else if (this.value.getPainter().getType() == Z4PainterType.DROP) {
+      this.selectedPainterCard = this.check(this.selectedPainter, "DROP", "drop", this.value.getPainter(), false);
     } else if (this.value.getPainter().getType() == Z4PainterType.CENTERED_FIGURE) {
       this.selectedPainterCard = this.check(this.selectedPainter, "CENTERED-FIGURE", "centered-figure", this.value.getPainter(), false);
     } else if (this.value.getPainter().getType() == Z4PainterType.NATURAL_FIGURE) {
@@ -553,6 +559,10 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
         case "SHAPE2D":
           this.cardPanels.$set(card, new Z4Shape2DPainterPanel());
           ((Z4AbstractValuePanel<Z4Shape2DPainter>) this.cardPanels.$get(card)).addChangeListener(event -> this.valueIsAdjusting = ((Z4PainterPanel<Z4Shape2DPainter>) this.cardPanels.$get(card)).getValueIsAdjusting());
+          break;
+        case "DROP":
+          this.cardPanels.$set(card, new Z4DropPainterPanel());
+          ((Z4AbstractValuePanel<Z4DropPainter>) this.cardPanels.$get(card)).addChangeListener(event -> this.valueIsAdjusting = ((Z4PainterPanel<Z4DropPainter>) this.cardPanels.$get(card)).getValueIsAdjusting());
           break;
         case "CENTERED-FIGURE":
           this.cardPanels.$set(card, new Z4CenteredFigurePainterPanel());

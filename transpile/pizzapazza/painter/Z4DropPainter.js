@@ -7,13 +7,10 @@ class Z4DropPainter extends Z4Painter {
 
    dropPainterType = null;
 
-  // 10
    radius = null;
 
-  // 20
    intensity = 0;
 
-  // 10
    gaussianCorrection = 0;
 
   /**
@@ -25,6 +22,7 @@ class Z4DropPainter extends Z4Painter {
    * @param gaussianCorrection The gaussian correction
    */
   constructor(dropPainterType, radius, intensity, gaussianCorrection) {
+    super();
     this.dropPainterType = dropPainterType;
     this.radius = radius;
     this.intensity = intensity;
@@ -101,9 +99,10 @@ class Z4DropPainter extends Z4Painter {
     let cos = Z4Math.SQRT_OF_2 * Math.cos(angle);
     let sin = Z4Math.SQRT_OF_2 * Math.sin(angle);
     for (let t = 0; t < val; t++) {
+      let rand = Z4Math.randomCorrected(this.gaussianCorrection / 10.0);
       if (color && lighting === Z4Lighting.NONE) {
+        this.drawPath(context, currentRadius, rand, cos, sin, color);
       } else {
-        let rand = Z4Math.randomCorrected(gaussianCorrection / 10.0);
         if (spatioTemporalColor) {
           color = spatioTemporalColor.getColorAt(-1, rand);
         } else if (gradientColor) {

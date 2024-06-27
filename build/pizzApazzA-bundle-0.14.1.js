@@ -8773,6 +8773,118 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
   }
 }
 /**
+ * The panel to edit a Z4DropPainter
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4DropPainterPanel extends Z4PainterPanel {
+
+   radios = new Array();
+
+   radius = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+
+   intensitySpinner = new JSSpinner();
+
+   intensitySlider = new JSSlider();
+
+   gaussianCorrectionSpinner = new JSSpinner();
+
+   gaussianCorrectionSlider = new JSSlider();
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super();
+    this.cssAddClass("z4droppainterpanel");
+    let panelType = new JSPanel();
+    this.add(panelType, new GBC(0, 0).w(2));
+    let buttonGroup = new ButtonGroup();
+    this.addRadio(Z4DropPainterType.THOUSAND_POINTS, panelType, buttonGroup);
+    this.addRadio(Z4DropPainterType.THOUSAND_LINES, panelType, buttonGroup);
+    this.addRadio(Z4DropPainterType.THOUSAND_AREAS, panelType, buttonGroup);
+    this.radius.setSignsVisible(false);
+    this.radius.setConstantRange(1, 100);
+    this.radius.setLabel(Z4Translations.RADIUS);
+    this.radius.cssAddClass("z4abstractvaluepanel-titled");
+    this.radius.addChangeListener(event => this.ondropchange(this.radius.getValueIsAdjusting(), this.intensitySlider.getValue(), this.gaussianCorrectionSlider.getValue()));
+    this.add(this.radius, new GBC(0, 1).w(2).i(0, 0, 1, 0));
+    Z4UI.addLabel(this, Z4Translations.INTENSITY, new GBC(0, 2).a(GBC.WEST));
+    this.intensitySpinner.cssAddClass("jsspinner_w_4rem");
+    this.intensitySpinner.setModel(new SpinnerNumberModel(20, 1, 200, 1));
+    this.intensitySpinner.addChangeListener(event => this.ondropchange(this.intensitySpinner.getValueIsAdjusting(), this.intensitySpinner.getValue(), this.gaussianCorrectionSlider.getValue()));
+    this.add(this.intensitySpinner, new GBC(1, 2).a(GBC.EAST));
+    this.intensitySlider.setMinimum(1);
+    this.intensitySlider.setMaximum(200);
+    this.intensitySlider.addChangeListener(event => this.ondropchange(this.intensitySlider.getValueIsAdjusting(), this.intensitySlider.getValue(), this.gaussianCorrectionSlider.getValue()));
+    this.add(this.intensitySlider, new GBC(0, 3).w(2).f(GBC.HORIZONTAL));
+    Z4UI.addLabel(this, Z4Translations.GAUSSIAN_CORRECTION, new GBC(0, 4).a(GBC.WEST));
+    this.gaussianCorrectionSpinner.cssAddClass("jsspinner_w_4rem");
+    this.gaussianCorrectionSpinner.setModel(new SpinnerNumberModel(10, 1, 100, 1));
+    this.gaussianCorrectionSpinner.addChangeListener(event => this.ondropchange(this.gaussianCorrectionSpinner.getValueIsAdjusting(), this.gaussianCorrectionSpinner.getValue(), this.intensitySlider.getValue()));
+    this.add(this.gaussianCorrectionSpinner, new GBC(1, 4).a(GBC.EAST));
+    this.gaussianCorrectionSlider.setMinimum(1);
+    this.gaussianCorrectionSlider.setMaximum(100);
+    this.gaussianCorrectionSlider.addChangeListener(event => this.ondropchange(this.gaussianCorrectionSlider.getValueIsAdjusting(), this.gaussianCorrectionSlider.getValue(), this.intensitySlider.getValue()));
+    this.add(this.gaussianCorrectionSlider, new GBC(0, 5).w(2).f(GBC.HORIZONTAL));
+    this.setValue(new Z4DropPainter(Z4DropPainterType.THOUSAND_POINTS, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), 20, 10));
+  }
+
+   addRadio(dropPainterType, panel, buttonGroup) {
+    let radio = new JSRadioButton();
+    radio.cssAddClass("z4droppainterpanel-radio");
+    radio.setContentAreaFilled(false);
+    radio.setToggle();
+    radio.setIcon(new Z4EmptyImageProducer(dropPainterType));
+    radio.addActionListener(event => this.ondropchange(false, this.intensitySlider.getValue(), this.gaussianCorrectionSlider.getValue()));
+    buttonGroup.add(radio);
+    this.radios["" + dropPainterType] = radio;
+    panel.add(radio, null);
+  }
+
+   ondropchange(b, intensity, gaussianCorrection) {
+    this.valueIsAdjusting = b;
+    this.intensitySpinner.setValue(intensity);
+    this.intensitySlider.setValue(intensity);
+    this.gaussianCorrectionSpinner.setValue(gaussianCorrection);
+    this.gaussianCorrectionSlider.setValue(gaussianCorrection);
+    let type = null;
+    switch("" + Object.keys(this.radios).find((key, index, array) => (this.radios[key]).isSelected())) {
+      case "THOUSAND_POINTS":
+        type = Z4DropPainterType.THOUSAND_POINTS;
+        break;
+      case "THOUSAND_LINES":
+        type = Z4DropPainterType.THOUSAND_LINES;
+        break;
+      case "THOUSAND_AREAS":
+        type = Z4DropPainterType.THOUSAND_AREAS;
+        break;
+    }
+    this.value = new Z4DropPainter(type, this.radius.getValue(), this.intensitySlider.getValue(), this.gaussianCorrectionSlider.getValue());
+    this.onchange();
+  }
+
+   setValue(value) {
+    this.value = value;
+    (this.radios["" + value.getDropPainterType()]).setSelected(true);
+    this.radius.setValue(this.value.getRadius());
+    this.intensitySpinner.setValue(this.value.getIntensity());
+    this.intensitySlider.setValue(this.value.getIntensity());
+    this.gaussianCorrectionSpinner.setValue(this.value.getGaussianCorrection());
+    this.gaussianCorrectionSlider.setValue(this.value.getGaussianCorrection());
+  }
+
+   setEnabled(b) {
+    super.setEnabled(b);
+    Object.keys(this.radios).forEach(key => (this.radios[key]).setEnabled(b));
+    this.radius.setEnabled(b);
+    this.intensitySpinner.setEnabled(b);
+    this.intensitySlider.setEnabled(b);
+    this.gaussianCorrectionSpinner.setEnabled(b);
+    this.gaussianCorrectionSlider.setEnabled(b);
+  }
+}
+/**
  * The panel to edit a Z4NaturalFigurePainter
  *
  * @author gianpiero.diblasi
@@ -9269,6 +9381,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     this.addRadioButton(panelRadio, buttonGroup, "SPIROGRAPH", "1px");
     this.addRadioButton(panelRadio, buttonGroup, "SCATTERER", "10px");
     this.addRadioButton(panelRadio, buttonGroup, "SHAPE2D", "1px");
+    this.addRadioButton(panelRadio, buttonGroup, "DROP", "1px");
     this.addRadioButton(panelRadio, buttonGroup, "CENTERED-FIGURE", "1px");
     this.addRadioButton(panelRadio, buttonGroup, "NATURAL-FIGURE", "10px");
     this.addRadioButton(panelRadio, buttonGroup, "COLOR", "1px");
@@ -9302,9 +9415,10 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
           this.selectedPointInteratorCard = this.check(this.selectedPointInterator, card, card.toLowerCase(), null, true);
           break;
         case "SHAPE2D":
+        case "DROP":
         case "CENTERED-FIGURE":
         case "NATURAL-FIGURE":
-          new Array("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css => this.selectedPainter.cssRemoveClass(css));
+          new Array("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-drop-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css => this.selectedPainter.cssRemoveClass(css));
           this.selectedPainterCard = this.check(this.selectedPainter, card, card.toLowerCase(), null, true);
           break;
         case "COLOR":
@@ -9514,9 +9628,11 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
   }
 
    setPainter() {
-    new Array("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css => this.selectedPainter.cssRemoveClass(css));
+    new Array("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-drop-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css => this.selectedPainter.cssRemoveClass(css));
     if (this.value.getPainter().getType() === Z4PainterType.SHAPE_2D) {
       this.selectedPainterCard = this.check(this.selectedPainter, "SHAPE2D", "shape2d", this.value.getPainter(), false);
+    } else if (this.value.getPainter().getType() === Z4PainterType.DROP) {
+      this.selectedPainterCard = this.check(this.selectedPainter, "DROP", "drop", this.value.getPainter(), false);
     } else if (this.value.getPainter().getType() === Z4PainterType.CENTERED_FIGURE) {
       this.selectedPainterCard = this.check(this.selectedPainter, "CENTERED-FIGURE", "centered-figure", this.value.getPainter(), false);
     } else if (this.value.getPainter().getType() === Z4PainterType.NATURAL_FIGURE) {
@@ -9569,6 +9685,10 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
           break;
         case "SHAPE2D":
           this.cardPanels[card] = new Z4Shape2DPainterPanel();
+          (this.cardPanels[card]).addChangeListener(event => this.valueIsAdjusting = (this.cardPanels[card]).getValueIsAdjusting());
+          break;
+        case "DROP":
+          this.cardPanels[card] = new Z4DropPainterPanel();
           (this.cardPanels[card]).addChangeListener(event => this.valueIsAdjusting = (this.cardPanels[card]).getValueIsAdjusting());
           break;
         case "CENTERED-FIGURE":
@@ -13740,13 +13860,10 @@ class Z4DropPainter extends Z4Painter {
 
    dropPainterType = null;
 
-  // 10
    radius = null;
 
-  // 20
    intensity = 0;
 
-  // 10
    gaussianCorrection = 0;
 
   /**
@@ -13758,6 +13875,7 @@ class Z4DropPainter extends Z4Painter {
    * @param gaussianCorrection The gaussian correction
    */
   constructor(dropPainterType, radius, intensity, gaussianCorrection) {
+    super();
     this.dropPainterType = dropPainterType;
     this.radius = radius;
     this.intensity = intensity;
@@ -13834,9 +13952,10 @@ class Z4DropPainter extends Z4Painter {
     let cos = Z4Math.SQRT_OF_2 * Math.cos(angle);
     let sin = Z4Math.SQRT_OF_2 * Math.sin(angle);
     for (let t = 0; t < val; t++) {
+      let rand = Z4Math.randomCorrected(this.gaussianCorrection / 10.0);
       if (color && lighting === Z4Lighting.NONE) {
+        this.drawPath(context, currentRadius, rand, cos, sin, color);
       } else {
-        let rand = Z4Math.randomCorrected(gaussianCorrection / 10.0);
         if (spatioTemporalColor) {
           color = spatioTemporalColor.getColorAt(-1, rand);
         } else if (gradientColor) {
@@ -15516,6 +15635,10 @@ class Z4Translations {
 
   static  EXTERNAL_FORCE = "";
 
+  static  INTENSITY = "";
+
+  static  GAUSSIAN_CORRECTION = "";
+
   // Math
   static  POSITIVE = "";
 
@@ -15773,6 +15896,8 @@ class Z4Translations {
     Z4Translations.EXTERNAL_TERMINAL_POINT = "External Terminal Point";
     Z4Translations.INDENTATION = "Indentation";
     Z4Translations.EXTERNAL_FORCE = "External Force";
+    Z4Translations.INTENSITY = "Intensity";
+    Z4Translations.GAUSSIAN_CORRECTION = "Gaussian Correction";
     // Math
     Z4Translations.POSITIVE = "Positive";
     Z4Translations.NEGATIVE = "Negative";
@@ -15971,6 +16096,8 @@ class Z4Translations {
     Z4Translations.EXTERNAL_TERMINAL_POINT = "Punto Terminale Esterno";
     Z4Translations.INDENTATION = "Frastagliatura";
     Z4Translations.EXTERNAL_FORCE = "Forza Esterna";
+    Z4Translations.INTENSITY = "Intensit\u00E0";
+    Z4Translations.GAUSSIAN_CORRECTION = "Correzione Gaussiana";
     // Math
     Z4Translations.POSITIVE = "Positivo";
     Z4Translations.NEGATIVE = "Negativo";
