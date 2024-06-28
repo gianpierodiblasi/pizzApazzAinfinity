@@ -29,6 +29,7 @@ import simulation.js.$Object;
  */
 public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
 
+  private final String name;
   private final Z4PointIterator pointIterator;
   private final Z4Painter painter;
   private final Z4SpatioTemporalColor spatioTemporalColor;
@@ -37,18 +38,29 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
   /**
    * Creates the object
    *
+   * @param name The name
    * @param pointIterator The point iterator
    * @param painter The painter
    * @param spatioTemporalColor The spatio-temporal color
    * @param progression The color progression
    */
-  public Z4DrawingTool(Z4PointIterator pointIterator, Z4Painter painter, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
+  public Z4DrawingTool(String name, Z4PointIterator pointIterator, Z4Painter painter, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
     super();
 
+    this.name = name;
     this.pointIterator = pointIterator;
     this.painter = painter;
     this.spatioTemporalColor = spatioTemporalColor;
     this.progression = progression;
+  }
+
+  /**
+   * Returns the name
+   *
+   * @return The name
+   */
+  public String getName() {
+    return this.name;
   }
 
   /**
@@ -148,6 +160,7 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
   @Override
   public $Object toJSON() {
     $Object json = new $Object();
+    json.$set("name", this.name);
     json.$set("pointIterator", this.pointIterator.toJSON());
     json.$set("painter", this.painter.toJSON());
     json.$set("spatioTemporalColor", this.spatioTemporalColor.toJSON());
@@ -210,6 +223,7 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
     }
 
     return new Z4DrawingTool(
+            json.$get("name"),
             pointIterator,
             painter,
             Z4SpatioTemporalColor.fromJSON(json.$get("spatioTemporalColor")),

@@ -2966,7 +2966,7 @@ class Z4CanvasMouseManager {
 
    statusPanel = null;
 
-   drawingTool = new Z4DrawingTool(new Z4Spirograph(true, new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.RELATIVE_TO_PATH, false)), new Z4CenteredFigurePainter(Z4CenteredFigurePainterType.TYPE_0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 50), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 3), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Whirlpool(Z4WhirlpoolBehavior.NONE, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 30), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false)), 100, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(255, 0, 0, 255), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(255, 255, 0, 255)), // new Z4Shape2DPainter(
+   drawingTool = new Z4DrawingTool("", new Z4Spirograph(true, new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.RELATIVE_TO_PATH, false)), new Z4CenteredFigurePainter(Z4CenteredFigurePainterType.TYPE_0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 50), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 3), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Whirlpool(Z4WhirlpoolBehavior.NONE, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 30), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false)), 100, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(255, 0, 0, 255), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(255, 255, 0, 255)), // new Z4Shape2DPainter(
   // new Z4FancifulValue(
   // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
   // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
@@ -9613,6 +9613,8 @@ class Z4Shape2DPainterPanel extends Z4PainterPanel {
  */
 class Z4DrawingToolPanel extends Z4AbstractValuePanel {
 
+   name = new JSTextField();
+
    selectedPointInterator = new JSButton();
 
    selectedPainter = new JSButton();
@@ -9681,10 +9683,19 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
 
    tabbedPaneID = "z4drawingtoolpanel_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
 
+  /**
+   * Creates the object
+   */
   constructor() {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4drawingtoolpanel");
+    Z4UI.addLabel(this, Z4Translations.DRAWING_TOOL_NAME, new GBC(0, 0).w(2).a(GBC.WEST));
+    this.name.addActionListener(event => {
+      this.createValue();
+      this.onchange();
+    });
+    this.add(this.name, new GBC(0, 1).wx(1).f(GBC.HORIZONTAL).i(0, 0, 5, 0));
     let selected = new JSPanel();
     this.setSelectedButton(this.selectedPointInterator);
     this.selectedPointInterator.addActionListener(event => this.selectCard(this.selectedPointInteratorCard));
@@ -9698,10 +9709,10 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     this.setSelectedButton(this.selectedColorProgression);
     selected.add(this.selectedColorProgression, null);
     this.selectedColorProgression.addActionListener(event => this.selectCard("COLOR-PROGRESSION"));
-    this.add(selected, new GBC(0, 0).i(0, 0, 5, 0));
+    this.add(selected, new GBC(1, 0).h(2));
     this.pane.setID(this.tabbedPaneID);
     this.pane.setTabPlacement(JSTabbedPane.LEFT);
-    this.add(this.pane, new GBC(0, 1).wxy(1, 1).f(GBC.BOTH));
+    this.add(this.pane, new GBC(0, 2).w(2).wxy(1, 1).f(GBC.BOTH));
     let panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
     this.pane.addTab(Z4Translations.SETTINGS, panel);
@@ -9736,7 +9747,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     panel.setLayout(new GridBagLayout());
     this.pane.addTab(Z4Translations.TRY_ME, panel);
     this.addTryMe(panel);
-    this.setValue(new Z4DrawingTool(new Z4Stamper(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)), new Z4Shape2DPainter(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), false, false, 3, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0)), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)), new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.01, Z4Lighting.NONE)));
+    this.setValue(new Z4DrawingTool(Z4Translations.DRAWING_TOOL, new Z4Stamper(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)), new Z4Shape2DPainter(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), false, false, 3, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0)), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)), new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.01, Z4Lighting.NONE)));
   }
 
    setSelectedButton(button) {
@@ -9966,6 +9977,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
 
    setValue(value) {
     this.value = value;
+    this.name.setText(value.getName());
     this.setPointInterator();
     this.setPainter();
     this.setSpatioTemporalColor();
@@ -10131,7 +10143,8 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
         break;
     }
     let progression = colorProgressionPanel.getValue();
-    this.value = new Z4DrawingTool(pointIterator, painter, spatioTemporalColor, progression);
+    let currentName = this.name.getText();
+    this.value = new Z4DrawingTool(currentName ? currentName : Z4Translations.DRAWING_TOOL, pointIterator, painter, spatioTemporalColor, progression);
     this.setColorProgression();
   }
 
@@ -12090,6 +12103,8 @@ class Z4SignedValue extends Z4Nextable {
  */
 class Z4DrawingTool extends Z4Nextable {
 
+   name = null;
+
    pointIterator = null;
 
    painter = null;
@@ -12101,17 +12116,28 @@ class Z4DrawingTool extends Z4Nextable {
   /**
    * Creates the object
    *
+   * @param name The name
    * @param pointIterator The point iterator
    * @param painter The painter
    * @param spatioTemporalColor The spatio-temporal color
    * @param progression The color progression
    */
-  constructor(pointIterator, painter, spatioTemporalColor, progression) {
+  constructor(name, pointIterator, painter, spatioTemporalColor, progression) {
     super();
+    this.name = name;
     this.pointIterator = pointIterator;
     this.painter = painter;
     this.spatioTemporalColor = spatioTemporalColor;
     this.progression = progression;
+  }
+
+  /**
+   * Returns the name
+   *
+   * @return The name
+   */
+   getName() {
+    return this.name;
   }
 
   /**
@@ -12209,6 +12235,7 @@ class Z4DrawingTool extends Z4Nextable {
 
    toJSON() {
     let json = new Object();
+    json["name"] = this.name;
     json["pointIterator"] = this.pointIterator.toJSON();
     json["painter"] = this.painter.toJSON();
     json["spatioTemporalColor"] = this.spatioTemporalColor.toJSON();
@@ -12267,7 +12294,7 @@ class Z4DrawingTool extends Z4Nextable {
         painter = Z4NaturalFigurePainter.fromJSON(painterJSON);
         break;
     }
-    return new Z4DrawingTool(pointIterator, painter, Z4SpatioTemporalColor.fromJSON(json["spatioTemporalColor"]), Z4ColorProgression.fromJSON(json["progression"]));
+    return new Z4DrawingTool(json["name"], pointIterator, painter, Z4SpatioTemporalColor.fromJSON(json["spatioTemporalColor"]), Z4ColorProgression.fromJSON(json["progression"]));
   }
 }
 /**
@@ -16153,6 +16180,11 @@ class Z4Translations {
 
   static  MERGE_ALL_LAYERS = "";
 
+  // Ribbon Drawing Tool
+  static  DRAWING_TOOL = "";
+
+  static  DRAWING_TOOL_NAME = "";
+
   // Ribbon History
   static  HISTORY = "";
 
@@ -16537,6 +16569,9 @@ class Z4Translations {
     Z4Translations.DELETE_LAYER_MESSAGE = "Do you really want to delete the layer?";
     Z4Translations.MERGE_VISIBLE_LAYERS = "Merge Visible Layers";
     Z4Translations.MERGE_ALL_LAYERS = "Merge All Layers";
+    // Ribbon Drawing Tool
+    Z4Translations.DRAWING_TOOL = "Drawing Tool";
+    Z4Translations.DRAWING_TOOL_NAME = "Drawing Tool Name";
     // Ribbon History
     Z4Translations.HISTORY = "History";
     Z4Translations.UNDO = "Undo";
@@ -16743,6 +16778,9 @@ class Z4Translations {
     Z4Translations.DELETE_LAYER_MESSAGE = "Vuoi davvero eliminare il livello?";
     Z4Translations.MERGE_VISIBLE_LAYERS = "Fondi Livelli Visibili";
     Z4Translations.MERGE_ALL_LAYERS = "Fondi Tutti i Livelli";
+    // Ribbon Drawing Tool
+    Z4Translations.DRAWING_TOOL = "Strumento di Disegno";
+    Z4Translations.DRAWING_TOOL_NAME = "Nome Strumento di Disegno";
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";
     Z4Translations.UNDO = "Annulla";

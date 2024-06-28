@@ -5,6 +5,8 @@
  */
 class Z4DrawingTool extends Z4Nextable {
 
+   name = null;
+
    pointIterator = null;
 
    painter = null;
@@ -16,17 +18,28 @@ class Z4DrawingTool extends Z4Nextable {
   /**
    * Creates the object
    *
+   * @param name The name
    * @param pointIterator The point iterator
    * @param painter The painter
    * @param spatioTemporalColor The spatio-temporal color
    * @param progression The color progression
    */
-  constructor(pointIterator, painter, spatioTemporalColor, progression) {
+  constructor(name, pointIterator, painter, spatioTemporalColor, progression) {
     super();
+    this.name = name;
     this.pointIterator = pointIterator;
     this.painter = painter;
     this.spatioTemporalColor = spatioTemporalColor;
     this.progression = progression;
+  }
+
+  /**
+   * Returns the name
+   *
+   * @return The name
+   */
+   getName() {
+    return this.name;
   }
 
   /**
@@ -124,6 +137,7 @@ class Z4DrawingTool extends Z4Nextable {
 
    toJSON() {
     let json = new Object();
+    json["name"] = this.name;
     json["pointIterator"] = this.pointIterator.toJSON();
     json["painter"] = this.painter.toJSON();
     json["spatioTemporalColor"] = this.spatioTemporalColor.toJSON();
@@ -182,6 +196,6 @@ class Z4DrawingTool extends Z4Nextable {
         painter = Z4NaturalFigurePainter.fromJSON(painterJSON);
         break;
     }
-    return new Z4DrawingTool(pointIterator, painter, Z4SpatioTemporalColor.fromJSON(json["spatioTemporalColor"]), Z4ColorProgression.fromJSON(json["progression"]));
+    return new Z4DrawingTool(json["name"], pointIterator, painter, Z4SpatioTemporalColor.fromJSON(json["spatioTemporalColor"]), Z4ColorProgression.fromJSON(json["progression"]));
   }
 }

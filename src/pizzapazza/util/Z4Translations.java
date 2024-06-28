@@ -46,6 +46,10 @@ public class Z4Translations {
   public static String MERGE_VISIBLE_LAYERS = "";
   public static String MERGE_ALL_LAYERS = "";
 
+  // Ribbon Drawing Tool
+  public static String DRAWING_TOOL = "";
+  public static String DRAWING_TOOL_NAME = "";
+
   // Ribbon History
   public static String HISTORY = "";
   public static String UNDO = "";
@@ -280,6 +284,10 @@ public class Z4Translations {
     Z4Translations.MERGE_VISIBLE_LAYERS = "Merge Visible Layers";
     Z4Translations.MERGE_ALL_LAYERS = "Merge All Layers";
 
+    // Ribbon Drawing Tool
+    Z4Translations.DRAWING_TOOL = "Drawing Tool";
+    Z4Translations.DRAWING_TOOL_NAME = "Drawing Tool Name";
+
     // Ribbon History
     Z4Translations.HISTORY = "History";
     Z4Translations.UNDO = "Undo";
@@ -500,6 +508,10 @@ public class Z4Translations {
     Z4Translations.DELETE_LAYER_MESSAGE = "Vuoi davvero eliminare il livello?";
     Z4Translations.MERGE_VISIBLE_LAYERS = "Fondi Livelli Visibili";
     Z4Translations.MERGE_ALL_LAYERS = "Fondi Tutti i Livelli";
+
+    // Ribbon Drawing Tool
+    Z4Translations.DRAWING_TOOL = "Strumento di Disegno";
+    Z4Translations.DRAWING_TOOL_NAME = "Nome Strumento di Disegno";
 
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";

@@ -16,6 +16,7 @@ import javascript.swing.JSComponent;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
 import javascript.swing.JSTabbedPane;
+import javascript.swing.JSTextField;
 import javascript.swing.colorchooser.JSColorMiniSwatchesPanel;
 import pizzapazza.color.Z4BiGradientColor;
 import pizzapazza.color.Z4ColorProgression;
@@ -88,6 +89,7 @@ import simulation.js.$Object;
  */
 public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
 
+  private final JSTextField name = new JSTextField();
   private final JSButton selectedPointInterator = new JSButton();
   private final JSButton selectedPainter = new JSButton();
   private final JSButton selectedSpatioTemporalColor = new JSButton();
@@ -134,10 +136,21 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
 
   private final String tabbedPaneID = "z4drawingtoolpanel_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
 
+  /**
+   * Creates the object
+   */
   public Z4DrawingToolPanel() {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4drawingtoolpanel");
+
+    Z4UI.addLabel(this, Z4Translations.DRAWING_TOOL_NAME, new GBC(0, 0).w(2).a(GBC.WEST));
+
+    this.name.addActionListener(event -> {
+      this.createValue();
+      this.onchange();
+    });
+    this.add(this.name, new GBC(0, 1).wx(1).f(GBC.HORIZONTAL).i(0, 0, 5, 0));
 
     JSPanel selected = new JSPanel();
 
@@ -156,11 +169,11 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     this.setSelectedButton(this.selectedColorProgression);
     selected.add(this.selectedColorProgression, null);
     this.selectedColorProgression.addActionListener(event -> this.selectCard("COLOR-PROGRESSION"));
-    this.add(selected, new GBC(0, 0).i(0, 0, 5, 0));
+    this.add(selected, new GBC(1, 0).h(2));
 
     this.pane.setID(this.tabbedPaneID);
     this.pane.setTabPlacement(JSTabbedPane.LEFT);
-    this.add(this.pane, new GBC(0, 1).wxy(1, 1).f(GBC.BOTH));
+    this.add(this.pane, new GBC(0, 2).w(2).wxy(1, 1).f(GBC.BOTH));
 
     JSPanel panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
@@ -204,6 +217,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     this.addTryMe(panel);
 
     this.setValue(new Z4DrawingTool(
+            Z4Translations.DRAWING_TOOL,
             new Z4Stamper(
                     new Z4FancifulValue(
                             new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1),
@@ -505,6 +519,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
   public void setValue(Z4DrawingTool value) {
     this.value = value;
 
+    this.name.setText(value.getName());
     this.setPointInterator();
     this.setPainter();
     this.setSpatioTemporalColor();
@@ -693,7 +708,8 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     }
     Z4ColorProgression progression = colorProgressionPanel.getValue();
 
-    this.value = new Z4DrawingTool(pointIterator, painter, spatioTemporalColor, progression);
+    String currentName = this.name.getText();
+    this.value = new Z4DrawingTool($exists(currentName) ? currentName : Z4Translations.DRAWING_TOOL, pointIterator, painter, spatioTemporalColor, progression);
     this.setColorProgression();
   }
 

@@ -53,6 +53,7 @@ public class Z4CanvasMouseManager {
   private Z4StatusPanel statusPanel;
 
   private Z4DrawingTool drawingTool = new Z4DrawingTool(
+          "",
           new Z4Spirograph(true, new Z4Rotation(0, new Z4FancifulValue(
                   new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0),
                   new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
