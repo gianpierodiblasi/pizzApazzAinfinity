@@ -1,10 +1,7 @@
 package pizzapazza.painter;
 
 import def.js.Array;
-import javascript.awt.Color;
 import pizzapazza.color.Z4ColorProgression;
-import pizzapazza.color.Z4GradientColor;
-import pizzapazza.color.Z4Lighting;
 import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4DrawingPointIntent;
