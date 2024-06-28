@@ -17,6 +17,8 @@ class Z4PatternPainterPanel extends Z4PainterPanel {
 
    multiSize = new JSCheckBox();
 
+   checkBoxDnD = null;
+
   /**
    * Creates the object
    */
@@ -33,6 +35,39 @@ class Z4PatternPainterPanel extends Z4PainterPanel {
     this.panel.getStyle().display = "flex";
     this.panel.getStyle().flexFlow = "row wrap";
     this.panel.getStyle().setProperty("gap", "10px");
+    this.panel.addEventListener("dragenter", event => event.preventDefault());
+    this.panel.addEventListener("dragover", event => {
+      event.preventDefault();
+      let evt = event;
+      let index = this.checkBoxs.findIndex(checkBox => {
+        let rect = checkBox.invoke("getBoundingClientRect()");
+        return evt.clientX < rect.left + rect.width && evt.clientY < rect.top + rect.height;
+      });
+      this.checkBoxs.forEach((checkBox, idx, array) => {
+        checkBox.getStyle().backgroundColor = index === idx ? "var(--main-action-bgcolor)" : "transparent";
+        checkBox.getStyle().borderRadius = "var(--roundness)";
+      });
+    });
+    this.panel.addEventListener("dragleave", event => {
+      event.preventDefault();
+      this.checkBoxs.forEach((checkBox, idx, array) => {
+        checkBox.getStyle().removeProperty("backgroundColor");
+        checkBox.getStyle().removeProperty("borderRadius");
+      });
+    });
+    this.panel.addEventListener("drop", event => {
+      event.preventDefault();
+      this.checkBoxs.forEach((checkBox, idx, array) => {
+        checkBox.getStyle().removeProperty("backgroundColor");
+        checkBox.getStyle().removeProperty("borderRadius");
+      });
+      let evt = event;
+      let index = this.checkBoxs.findIndex(checkBox => {
+        let rect = checkBox.invoke("getBoundingClientRect()");
+        return evt.clientX < rect.left + rect.width && evt.clientY < rect.top + rect.height;
+      });
+      this.moveCheckBox(index);
+    });
     div.appendChild(this.panel);
     this.add(div, new GBC(0, 1).w(3));
     this.open.setText(Z4Translations.OPEN);
@@ -73,12 +108,7 @@ class Z4PatternPainterPanel extends Z4PainterPanel {
    openTexture(file) {
     let fileReader = new FileReader();
     fileReader.onload = event => {
-      let checkBox = new JSCheckBox();
-      checkBox.setIcon(new DefaultHTMLImageProducer("", fileReader.result));
-      checkBox.getStyle().flexDirection = "row-reverse";
-      checkBox.getStyle().marginLeft = "5px";
-      checkBox.getChilStyleByQuery("img").width = "30px";
-      checkBox.addActionListener(event2 => this.delete.setEnabled(!!(this.checkBoxs.filter(checkbox => checkbox.isSelected()).length)));
+      let checkBox = this.createCheckBox(fileReader.result);
       this.checkBoxs.push(checkBox);
       this.panel.appendChild(checkBox);
       let image = new Image();
@@ -102,9 +132,9 @@ class Z4PatternPainterPanel extends Z4PainterPanel {
    onpatternDelete() {
     this.delete.setEnabled(false);
     let patterns = this.value.getPatterns().filter((pattern, index, array) => !this.checkBoxs[index].isSelected());
-    this.checkBoxs = this.checkBoxs.filter(checkbox => !checkbox.isSelected());
+    this.checkBoxs = this.checkBoxs.filter(checkBox => !checkBox.isSelected());
     this.panel.clearContent();
-    this.checkBoxs.forEach(checkbox => this.panel.appendChild(checkbox));
+    this.checkBoxs.forEach(checkBox => this.panel.appendChild(checkBox));
     this.onpatternchange(false, patterns);
   }
 
@@ -114,18 +144,30 @@ class Z4PatternPainterPanel extends Z4PainterPanel {
     this.onchange();
   }
 
+   moveCheckBox(index) {
+    let newPosition = Math.min(this.checkBoxs.length, index);
+    let currentPosition = this.checkBoxs.indexOf(this.checkBoxDnD);
+    if (newPosition < currentPosition) {
+      let patterns = this.value.getPatterns().slice();
+      patterns.splice(newPosition, 0, patterns.splice(currentPosition, 1)[0]);
+      this.onpatternchange(false, patterns);
+      this.setValue(this.value);
+    } else if (newPosition > currentPosition) {
+      let patterns = this.value.getPatterns().slice();
+      patterns.splice(newPosition, 0, patterns[currentPosition]);
+      patterns.splice(currentPosition, 1);
+      this.onpatternchange(false, patterns);
+      this.setValue(this.value);
+    }
+  }
+
    setValue(value) {
     this.value = value;
     this.panel.clearContent();
     this.checkBoxs.length = 0;
     this.value.getPatterns().forEach(image => {
-      let checkBox = new JSCheckBox();
-      checkBox.setIcon(new DefaultHTMLImageProducer("", image.src));
-      checkBox.getStyle().flexDirection = "row-reverse";
-      checkBox.getStyle().marginLeft = "5px";
-      checkBox.getChilStyleByQuery("img").width = "30px";
+      let checkBox = this.createCheckBox(image.src);
       checkBox.setTooltip(image.width + "x" + image.height);
-      checkBox.addActionListener(event2 => this.delete.setEnabled(!!(this.checkBoxs.filter(checkbox => checkbox.isSelected()).length)));
       this.checkBoxs.push(checkBox);
       this.panel.appendChild(checkBox);
     });
@@ -134,11 +176,26 @@ class Z4PatternPainterPanel extends Z4PainterPanel {
     this.multiSize.setSelected(this.value.isMultiSize());
   }
 
+   createCheckBox(src) {
+    let checkBox = new JSCheckBox();
+    checkBox.setIcon(new DefaultHTMLImageProducer("", src));
+    checkBox.getStyle().flexDirection = "row-reverse";
+    checkBox.getStyle().marginLeft = "5px";
+    checkBox.getChilStyleByQuery("img").width = "30px";
+    checkBox.addActionListener(event2 => this.delete.setEnabled(!!(this.checkBoxs.filter(cb => cb.isSelected()).length)));
+    checkBox.setAttribute("draggable", "true");
+    checkBox.addEventListener("dragstart", event => {
+      (event).dataTransfer.effectAllowed = "move";
+      this.checkBoxDnD = checkBox;
+    });
+    return checkBox;
+  }
+
    setEnabled(b) {
     super.setEnabled(b);
-    this.checkBoxs.forEach(checkbox => checkbox.setEnabled(b));
+    this.checkBoxs.forEach(checkBox => checkBox.setEnabled(b));
     this.open.setEnabled(b);
-    this.delete.setEnabled(b && this.checkBoxs.filter(checkbox => checkbox.isSelected()).length);
+    this.delete.setEnabled(b && this.checkBoxs.filter(checkBox => checkBox.isSelected()).length);
     this.randomSequence.setEnabled(b);
     this.multiSize.setEnabled(b);
   }
