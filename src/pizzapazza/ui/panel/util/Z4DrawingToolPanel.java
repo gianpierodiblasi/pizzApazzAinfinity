@@ -150,7 +150,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
       this.createValue();
       this.onchange();
     });
-    this.add(this.name, new GBC(0, 1).wx(1).f(GBC.HORIZONTAL).i(0, 0, 5, 0));
+    this.add(this.name, new GBC(0, 1).wx(1).f(GBC.HORIZONTAL).i(0, 0, 7, 0));
 
     JSPanel selected = new JSPanel();
 
@@ -216,6 +216,8 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     this.pane.addTab(Z4Translations.TRY_ME, panel);
     this.addTryMe(panel);
 
+//    this.pane.appendChildInTree(".west ul", panelRadio);
+    
     this.setValue(new Z4DrawingTool(
             Z4Translations.DRAWING_TOOL,
             new Z4Stamper(
