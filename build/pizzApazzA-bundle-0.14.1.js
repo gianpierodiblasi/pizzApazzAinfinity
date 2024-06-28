@@ -9288,22 +9288,21 @@ class Z4PatternPainterPanel extends Z4PainterPanel {
   constructor() {
     super();
     this.cssAddClass("z4patternpainterpanel");
-    Z4UI.addLabel(this, Z4Translations.PATTERNS, new GBC(0, 0).w(2).a(GBC.WEST));
+    Z4UI.addLabel(this, Z4Translations.PATTERNS, new GBC(0, 0).w(3).a(GBC.WEST));
     let div = new JSComponent(document.createElement("div"));
-    div.getStyle().width = "300px";
-    div.getStyle().maxWidth = "300px";
-    div.getStyle().height = "300px";
+    div.getStyle().width = "25rem";
+    div.getStyle().height = "20rem";
     div.getStyle().border = "2px solid var(--main-action-bgcolor)";
     div.getStyle().borderRadius = "var(--roundness)";
-    div.getStyle().overflow = "scroll";
+    div.getStyle().overflowY = "auto";
     this.panel.getStyle().display = "flex";
     this.panel.getStyle().flexFlow = "row wrap";
     this.panel.getStyle().setProperty("gap", "10px");
     div.appendChild(this.panel);
-    this.add(div, new GBC(0, 1).w(2).wx(1).f(GBC.HORIZONTAL));
+    this.add(div, new GBC(0, 1).w(3));
     this.open.setText(Z4Translations.OPEN);
     this.open.addActionListener(event => this.selectPattern());
-    this.add(this.open, new GBC(0, 2).i(1, 0, 0, 1).a(GBC.EAST).wx(1));
+    this.add(this.open, new GBC(1, 2).h(2).a(GBC.NORTH).i(1, 0, 0, 1));
     this.delete.setText(Z4Translations.DELETE);
     this.delete.setEnabled(false);
     this.delete.addActionListener(event => JSOptionPane.showConfirmDialog(Z4Translations.DELETE_PATTERNS_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
@@ -9311,13 +9310,13 @@ class Z4PatternPainterPanel extends Z4PainterPanel {
         this.onpatternDelete();
       }
     }));
-    this.add(this.delete, new GBC(1, 2));
+    this.add(this.delete, new GBC(2, 2).h(2).a(GBC.NORTH).i(1, 0, 0, 0));
     this.randomSequence.setText(Z4Translations.RANDOM_SEQUENCE);
     this.randomSequence.addActionListener(event => this.onpatternchange(false, this.value.getPatterns()));
-    this.add(this.randomSequence, new GBC(0, 3).w(2).a(GBC.WEST));
+    this.add(this.randomSequence, new GBC(0, 2).wx(1).a(GBC.WEST));
     this.multiSize.setText(Z4Translations.MULTI_DIMENSION);
     this.multiSize.addActionListener(event => this.onpatternchange(false, this.value.getPatterns()));
-    this.add(this.multiSize, new GBC(0, 4).w(2).a(GBC.WEST));
+    this.add(this.multiSize, new GBC(0, 3).a(GBC.WEST));
     this.setValue(new Z4PatternPainter(new Array(), false, false));
   }
 
