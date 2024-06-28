@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -167,7 +167,8 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(pizzapazza.iterator.Z4PointIterator,pizzapazza.painter.Z4Painter,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">Z4DrawingTool</a></span>&#8203;(<a href="../iterator/Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a>&nbsp;pointIterator,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,pizzapazza.iterator.Z4PointIterator,pizzapazza.painter.Z4Painter,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">Z4DrawingTool</a></span>&#8203;(java.lang.String&nbsp;name,
+             <a href="../iterator/Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a>&nbsp;pointIterator,
              <a href="../painter/Z4Painter.html" title="class in pizzapazza.painter">Z4Painter</a>&nbsp;painter,
              <a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;spatioTemporalColor,
              <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression)</code></th>
@@ -225,41 +226,48 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 </td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getName()">getName</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the name</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNextCountOnSTOP()">getNextCountOnSTOP</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the count of next points to draw on STOP action</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../painter/Z4Painter.html" title="class in pizzapazza.painter">Z4Painter</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPainter()">getPainter</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the painter</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../iterator/Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPointIterator()">getPointIterator</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the point iterator</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getProgression()">getProgression</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the color progression</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSpatioTemporalColor()">getSpatioTemporalColor</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the spatio-temporal color</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInfinitePointGenerator()">isInfinitePointGenerator</a></span>()</code></th>
 <td class="colLast">
@@ -267,14 +275,14 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
  an airbrush)</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#next()">next</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the next value</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>simulation.js.$Object</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toJSON()">toJSON</a></span>()</code></th>
 <td class="colLast">
@@ -305,19 +313,21 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(pizzapazza.iterator.Z4PointIterator,pizzapazza.painter.Z4Painter,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">
+<a id="&lt;init&gt;(java.lang.String,pizzapazza.iterator.Z4PointIterator,pizzapazza.painter.Z4Painter,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Z4DrawingTool</h4>
-<pre>public&nbsp;Z4DrawingTool&#8203;(<a href="../iterator/Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a>&nbsp;pointIterator,
+<pre>public&nbsp;Z4DrawingTool&#8203;(java.lang.String&nbsp;name,
+                     <a href="../iterator/Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a>&nbsp;pointIterator,
                      <a href="../painter/Z4Painter.html" title="class in pizzapazza.painter">Z4Painter</a>&nbsp;painter,
                      <a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;spatioTemporalColor,
                      <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression)</pre>
 <div class="block">Creates the object</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>name</code> - The name</dd>
 <dd><code>pointIterator</code> - The point iterator</dd>
 <dd><code>painter</code> - The painter</dd>
 <dd><code>spatioTemporalColor</code> - The spatio-temporal color</dd>
@@ -335,6 +345,20 @@ implements <a href="../math/Z4Nextable.html" title="interface in pizzapazza.math
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="getName()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getName</h4>
+<pre class="methodSignature">public&nbsp;java.lang.String&nbsp;getName()</pre>
+<div class="block">Returns the name</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The name</dd>
+</dl>
+</li>
+</ul>
 <a id="getPointIterator()">
 <!--   -->
 </a>

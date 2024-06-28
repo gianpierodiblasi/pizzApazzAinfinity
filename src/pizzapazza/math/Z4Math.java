@@ -297,7 +297,7 @@ public class Z4Math {
 
   /**
    * Evaluates a random number by using a correction factor given by the law
-   * f(x,y)=pow(x,1/y) with y>=1
+   * f(x,y)=pow(x,1/y) with y&gt;=1
    *
    * @param factor The correction factor
    * @return The random number with the correction factor

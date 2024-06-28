@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -192,12 +192,19 @@ extends java.lang.Object</pre>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#SQRT_OF_2">SQRT_OF_2</a></span></code></th>
+<td class="colLast">
+<div class="block">The square root of 2</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#SQUARE_GOLD_SECTION">SQUARE_GOLD_SECTION</a></span></code></th>
 <td class="colLast">
 <div class="block">The gold section square</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#TWO_PI">TWO_PI</a></span></code></th>
 <td class="colLast">
@@ -331,6 +338,14 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#randomCorrected(double)">randomCorrected</a></span>&#8203;(double&nbsp;factor)</code></th>
+<td class="colLast">
+<div class="block">Evaluates a random number by using a correction factor given by the law
+ f(x,y)=pow(x,1/y) with y&gt;=1</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#ripple(double,double,double,double)">ripple</a></span>&#8203;(double&nbsp;value,
       double&nbsp;min,
       double&nbsp;max,
@@ -339,7 +354,7 @@ extends java.lang.Object</pre>
 <div class="block">Generates a ripple around a value</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>static <a href="Z4Point.html" title="class in pizzapazza.math">Z4Point</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rotate(double,double,double)">rotate</a></span>&#8203;(double&nbsp;x,
       double&nbsp;y,
@@ -348,7 +363,7 @@ extends java.lang.Object</pre>
 <div class="block">Rotates a point by an angle</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>static <a href="Z4Point.html" title="class in pizzapazza.math">Z4Point</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rotoTranslate(double,double,double,double,double)">rotoTranslate</a></span>&#8203;(double&nbsp;x,
              double&nbsp;y,
@@ -401,6 +416,16 @@ extends java.lang.Object</pre>
 <h4>HALF_PI</h4>
 <pre>public static final&nbsp;double HALF_PI</pre>
 <div class="block">PI/2 value</div>
+</li>
+</ul>
+<a id="SQRT_OF_2">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SQRT_OF_2</h4>
+<pre>public static final&nbsp;double SQRT_OF_2</pre>
+<div class="block">The square root of 2</div>
 </li>
 </ul>
 <a id="GOLD_SECTION">
@@ -735,7 +760,7 @@ extends java.lang.Object</pre>
 <a id="butterfly(pizzapazza.math.Z4Vector,double)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>butterfly</h4>
 <pre class="methodSignature">public static&nbsp;def.js.Array&lt;<a href="Z4Point.html" title="class in pizzapazza.math">Z4Point</a>&gt;&nbsp;butterfly&#8203;(<a href="Z4Vector.html" title="class in pizzapazza.math">Z4Vector</a>&nbsp;vector,
@@ -752,6 +777,23 @@ extends java.lang.Object</pre>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>An array of two points containing the first and second control
  points of the Bezier curve</dd>
+</dl>
+</li>
+</ul>
+<a id="randomCorrected(double)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>randomCorrected</h4>
+<pre class="methodSignature">public static&nbsp;double&nbsp;randomCorrected&#8203;(double&nbsp;factor)</pre>
+<div class="block">Evaluates a random number by using a correction factor given by the law
+ f(x,y)=pow(x,1/y) with y&gt;=1</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>factor</code> - The correction factor</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The random number with the correction factor</dd>
 </dl>
 </li>
 </ul>
