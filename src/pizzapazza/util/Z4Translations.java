@@ -177,7 +177,9 @@ public class Z4Translations {
   public static String THICKNESS = "";
   public static String DELETE_PATTERN_MESSAGE = "";
   public static String DELETE_PATTERNS_MESSAGE = "";
-  
+  public static String RANDOM_SEQUENCE = "";
+  public static String MULTI_DIMENSION = "";
+
   // Math
   public static String POSITIVE = "";
   public static String NEGATIVE = "";
@@ -412,7 +414,9 @@ public class Z4Translations {
     Z4Translations.THICKNESS = "Thickness";
     Z4Translations.DELETE_PATTERN_MESSAGE = "Do you really want to delete the pattern?";
     Z4Translations.DELETE_PATTERNS_MESSAGE = "Do you really want to delete the selected patterns?";
-    
+    Z4Translations.RANDOM_SEQUENCE = "Random Sequence";
+    Z4Translations.MULTI_DIMENSION = "Multi Dimension";
+
     // Math
     Z4Translations.POSITIVE = "Positive";
     Z4Translations.NEGATIVE = "Negative";
@@ -631,7 +635,9 @@ public class Z4Translations {
     Z4Translations.THICKNESS = "Spessore";
     Z4Translations.DELETE_PATTERN_MESSAGE = "Vuoi davvero eliminare la trama?";
     Z4Translations.DELETE_PATTERNS_MESSAGE = "Vuoi davvero eliminare le trame selezionate?";
-    
+    Z4Translations.RANDOM_SEQUENCE = "Sequenza Casuale";
+    Z4Translations.MULTI_DIMENSION = "Multi Dimensione";
+
     // Math
     Z4Translations.POSITIVE = "Positivo";
     Z4Translations.NEGATIVE = "Negativo";

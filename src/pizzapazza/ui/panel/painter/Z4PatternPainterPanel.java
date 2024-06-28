@@ -3,7 +3,6 @@ package pizzapazza.ui.panel.painter;
 import def.dom.File;
 import def.dom.FileReader;
 import def.js.Array;
-import javascript.awt.BoxLayout;
 import javascript.awt.GBC;
 import javascript.swing.JSButton;
 import javascript.swing.JSCheckBox;
@@ -11,7 +10,6 @@ import javascript.swing.JSComponent;
 import javascript.swing.JSFileChooser;
 import javascript.swing.JSFilePicker;
 import javascript.swing.JSOptionPane;
-import javascript.swing.JSPanel;
 import javascript.util.DefaultHTMLImageProducer;
 import javascript.util.fsa.FilePickerOptions;
 import pizzapazza.painter.Z4PatternPainter;
@@ -31,7 +29,7 @@ import static simulation.js.$Globals.window;
  */
 public class Z4PatternPainterPanel extends Z4PainterPanel<Z4PatternPainter> {
 
-  private final JSPanel panel = new JSPanel();
+  private final JSComponent panel = new JSComponent(document.createElement("div"));
   private Array<JSCheckBox> checkBoxs = new Array<>();
   private final JSButton open = new JSButton();
   private final JSButton delete = new JSButton();
@@ -56,7 +54,9 @@ public class Z4PatternPainterPanel extends Z4PainterPanel<Z4PatternPainter> {
     div.getStyle().borderRadius = "var(--roundness)";
     div.getStyle().overflow = "scroll";
 
-    this.panel.setLayout(new BoxLayout(this.panel, BoxLayout.Y_AXIS));
+    this.panel.getStyle().display = "flex";
+    this.panel.getStyle().flexFlow = "row wrap";
+    this.panel.getStyle().setProperty("gap", "10px");
     div.appendChild(this.panel);
     this.add(div, new GBC(0, 1).w(2).wx(1).f(GBC.HORIZONTAL));
 
@@ -73,11 +73,11 @@ public class Z4PatternPainterPanel extends Z4PainterPanel<Z4PatternPainter> {
     }));
     this.add(this.delete, new GBC(1, 2));
 
-    this.randomSequence.setText("RANDOM_SEQUENCE");
+    this.randomSequence.setText(Z4Translations.RANDOM_SEQUENCE);
     this.randomSequence.addActionListener(event -> this.onpatternchange(false, this.value.getPatterns()));
     this.add(this.randomSequence, new GBC(0, 3).w(2).a(GBC.WEST));
 
-    this.multiSize.setText("MULTI_SIZE");
+    this.multiSize.setText(Z4Translations.MULTI_DIMENSION);
     this.multiSize.addActionListener(event -> this.onpatternchange(false, this.value.getPatterns()));
     this.add(this.multiSize, new GBC(0, 4).w(2).a(GBC.WEST));
 
@@ -105,14 +105,17 @@ public class Z4PatternPainterPanel extends Z4PainterPanel<Z4PatternPainter> {
     fileReader.onload = event -> {
       JSCheckBox checkBox = new JSCheckBox();
       checkBox.setIcon(new DefaultHTMLImageProducer<>("", (String) fileReader.result));
-      checkBox.getStyle().borderBottom = "1px";
+      checkBox.getStyle().flexDirection = "row-reverse";
+      checkBox.getStyle().marginLeft = "5px";
+      checkBox.getChilStyleByQuery("img").width = "30px";
       checkBox.addActionListener(event2 -> this.delete.setEnabled($exists(this.checkBoxs.filter(checkbox -> checkbox.isSelected()).length)));
 
       this.checkBoxs.push(checkBox);
-      this.panel.add(checkBox, null);
+      this.panel.appendChild(checkBox);
 
       $Image image = new $Image();
       image.onload = event2 -> {
+        checkBox.setTooltip(image.width + "x" + image.height);
         this.onpatternAdd(image);
         return null;
       };
@@ -131,11 +134,11 @@ public class Z4PatternPainterPanel extends Z4PainterPanel<Z4PatternPainter> {
   private void onpatternDelete() {
     this.delete.setEnabled(false);
 
-    Array<$Image> patterns = this.value.getPatterns().filter((pattern, index, array) -> this.checkBoxs.$get(index).isSelected());
-
+    Array<$Image> patterns = this.value.getPatterns().filter((pattern, index, array) -> !this.checkBoxs.$get(index).isSelected());
     this.checkBoxs = this.checkBoxs.filter(checkbox -> !checkbox.isSelected());
+
     this.panel.clearContent();
-    this.checkBoxs.forEach(checkbox -> this.panel.add(checkbox, null));
+    this.checkBoxs.forEach(checkbox -> this.panel.appendChild(checkbox));
 
     this.onpatternchange(false, patterns);
   }
@@ -156,11 +159,14 @@ public class Z4PatternPainterPanel extends Z4PainterPanel<Z4PatternPainter> {
     this.value.getPatterns().forEach(image -> {
       JSCheckBox checkBox = new JSCheckBox();
       checkBox.setIcon(new DefaultHTMLImageProducer<>("", image.src));
-      checkBox.getStyle().borderBottom = "1px";
+      checkBox.getStyle().flexDirection = "row-reverse";
+      checkBox.getStyle().marginLeft = "5px";
+      checkBox.getChilStyleByQuery("img").width = "30px";
+      checkBox.setTooltip(image.width + "x" + image.height);
       checkBox.addActionListener(event2 -> this.delete.setEnabled($exists(this.checkBoxs.filter(checkbox -> checkbox.isSelected()).length)));
 
       this.checkBoxs.push(checkBox);
-      this.panel.add(checkBox, null);
+      this.panel.appendChild(checkBox);
     });
 
     this.delete.setEnabled(false);

@@ -9270,7 +9270,7 @@ class Z4NaturalFigurePainterPanel extends Z4PainterPanel {
  */
 class Z4PatternPainterPanel extends Z4PainterPanel {
 
-   panel = new JSPanel();
+   panel = new JSComponent(document.createElement("div"));
 
    checkBoxs = new Array();
 
@@ -9296,7 +9296,9 @@ class Z4PatternPainterPanel extends Z4PainterPanel {
     div.getStyle().border = "2px solid var(--main-action-bgcolor)";
     div.getStyle().borderRadius = "var(--roundness)";
     div.getStyle().overflow = "scroll";
-    this.panel.setLayout(new BoxLayout(this.panel, BoxLayout.Y_AXIS));
+    this.panel.getStyle().display = "flex";
+    this.panel.getStyle().flexFlow = "row wrap";
+    this.panel.getStyle().setProperty("gap", "10px");
     div.appendChild(this.panel);
     this.add(div, new GBC(0, 1).w(2).wx(1).f(GBC.HORIZONTAL));
     this.open.setText(Z4Translations.OPEN);
@@ -9310,10 +9312,10 @@ class Z4PatternPainterPanel extends Z4PainterPanel {
       }
     }));
     this.add(this.delete, new GBC(1, 2));
-    this.randomSequence.setText("RANDOM_SEQUENCE");
+    this.randomSequence.setText(Z4Translations.RANDOM_SEQUENCE);
     this.randomSequence.addActionListener(event => this.onpatternchange(false, this.value.getPatterns()));
     this.add(this.randomSequence, new GBC(0, 3).w(2).a(GBC.WEST));
-    this.multiSize.setText("MULTI_SIZE");
+    this.multiSize.setText(Z4Translations.MULTI_DIMENSION);
     this.multiSize.addActionListener(event => this.onpatternchange(false, this.value.getPatterns()));
     this.add(this.multiSize, new GBC(0, 4).w(2).a(GBC.WEST));
     this.setValue(new Z4PatternPainter(new Array(), false, false));
@@ -9339,12 +9341,15 @@ class Z4PatternPainterPanel extends Z4PainterPanel {
     fileReader.onload = event => {
       let checkBox = new JSCheckBox();
       checkBox.setIcon(new DefaultHTMLImageProducer("", fileReader.result));
-      checkBox.getStyle().borderBottom = "1px";
+      checkBox.getStyle().flexDirection = "row-reverse";
+      checkBox.getStyle().marginLeft = "5px";
+      checkBox.getChilStyleByQuery("img").width = "30px";
       checkBox.addActionListener(event2 => this.delete.setEnabled(!!(this.checkBoxs.filter(checkbox => checkbox.isSelected()).length)));
       this.checkBoxs.push(checkBox);
-      this.panel.add(checkBox, null);
+      this.panel.appendChild(checkBox);
       let image = new Image();
       image.onload = event2 => {
+        checkBox.setTooltip(image.width + "x" + image.height);
         this.onpatternAdd(image);
         return null;
       };
@@ -9362,10 +9367,10 @@ class Z4PatternPainterPanel extends Z4PainterPanel {
 
    onpatternDelete() {
     this.delete.setEnabled(false);
-    let patterns = this.value.getPatterns().filter((pattern, index, array) => this.checkBoxs[index].isSelected());
+    let patterns = this.value.getPatterns().filter((pattern, index, array) => !this.checkBoxs[index].isSelected());
     this.checkBoxs = this.checkBoxs.filter(checkbox => !checkbox.isSelected());
     this.panel.clearContent();
-    this.checkBoxs.forEach(checkbox => this.panel.add(checkbox, null));
+    this.checkBoxs.forEach(checkbox => this.panel.appendChild(checkbox));
     this.onpatternchange(false, patterns);
   }
 
@@ -9382,10 +9387,13 @@ class Z4PatternPainterPanel extends Z4PainterPanel {
     this.value.getPatterns().forEach(image => {
       let checkBox = new JSCheckBox();
       checkBox.setIcon(new DefaultHTMLImageProducer("", image.src));
-      checkBox.getStyle().borderBottom = "1px";
+      checkBox.getStyle().flexDirection = "row-reverse";
+      checkBox.getStyle().marginLeft = "5px";
+      checkBox.getChilStyleByQuery("img").width = "30px";
+      checkBox.setTooltip(image.width + "x" + image.height);
       checkBox.addActionListener(event2 => this.delete.setEnabled(!!(this.checkBoxs.filter(checkbox => checkbox.isSelected()).length)));
       this.checkBoxs.push(checkBox);
-      this.panel.add(checkBox, null);
+      this.panel.appendChild(checkBox);
     });
     this.delete.setEnabled(false);
     this.randomSequence.setSelected(this.value.isRandomSequence());
@@ -16330,6 +16338,10 @@ class Z4Translations {
 
   static  DELETE_PATTERNS_MESSAGE = "";
 
+  static  RANDOM_SEQUENCE = "";
+
+  static  MULTI_DIMENSION = "";
+
   // Math
   static  POSITIVE = "";
 
@@ -16593,6 +16605,8 @@ class Z4Translations {
     Z4Translations.THICKNESS = "Thickness";
     Z4Translations.DELETE_PATTERN_MESSAGE = "Do you really want to delete the pattern?";
     Z4Translations.DELETE_PATTERNS_MESSAGE = "Do you really want to delete the selected patterns?";
+    Z4Translations.RANDOM_SEQUENCE = "Random Sequence";
+    Z4Translations.MULTI_DIMENSION = "Multi Dimension";
     // Math
     Z4Translations.POSITIVE = "Positive";
     Z4Translations.NEGATIVE = "Negative";
@@ -16797,6 +16811,8 @@ class Z4Translations {
     Z4Translations.THICKNESS = "Spessore";
     Z4Translations.DELETE_PATTERN_MESSAGE = "Vuoi davvero eliminare la trama?";
     Z4Translations.DELETE_PATTERNS_MESSAGE = "Vuoi davvero eliminare le trame selezionate?";
+    Z4Translations.RANDOM_SEQUENCE = "Sequenza Casuale";
+    Z4Translations.MULTI_DIMENSION = "Multi Dimensione";
     // Math
     Z4Translations.POSITIVE = "Positivo";
     Z4Translations.NEGATIVE = "Negativo";
