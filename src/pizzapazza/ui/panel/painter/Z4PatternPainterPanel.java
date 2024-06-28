@@ -51,8 +51,8 @@ public class Z4PatternPainterPanel extends Z4PainterPanel<Z4PatternPainter> {
     Z4UI.addLabel(this, Z4Translations.PATTERNS, new GBC(0, 0).w(3).a(GBC.WEST));
 
     JSComponent div = new JSComponent(document.createElement("div"));
-    div.getStyle().width = "25rem";
-    div.getStyle().height = "20rem";
+    div.getStyle().width = "400px";
+    div.getStyle().height = "200px";
     div.getStyle().border = "2px solid var(--main-action-bgcolor)";
     div.getStyle().borderRadius = "var(--roundness)";
     div.getStyle().overflowY = "auto";
