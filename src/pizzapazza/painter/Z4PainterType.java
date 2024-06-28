@@ -10,6 +10,7 @@ public enum Z4PainterType {
   SHAPE_2D,
   DROP,
   BRUSH,
+  PATTERN,
   CENTERED_FIGURE,
   NATURAL_FIGURE;
 }

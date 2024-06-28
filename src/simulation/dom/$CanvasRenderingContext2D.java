@@ -16,6 +16,9 @@ public class $CanvasRenderingContext2D extends CanvasRenderingContext2D {
 
   public boolean imageSmoothingEnabled;
 
+  public void ellipse(double x, double y, double radiusX, double radiusY, double rotation, double startAngle, double endAngle) {
+  }
+
   public void stroke($Path2D path) {
   }
 
@@ -25,6 +28,9 @@ public class $CanvasRenderingContext2D extends CanvasRenderingContext2D {
   public void drawImage($Image image, double x, double y) {
   }
 
+  public void drawImage($Image canvas, double x, double y, double w, double h) {
+  }
+  
   public void drawImage($OffscreenCanvas canvas, double x, double y) {
   }
 

@@ -9,6 +9,7 @@ class Z4PainterType {
   static SHAPE_2D = 'SHAPE_2D';
   static DROP = 'DROP';
   static BRUSH = 'BRUSH';
+  static PATTERN = 'PATTERN';
   static CENTERED_FIGURE = 'CENTERED_FIGURE';
   static NATURAL_FIGURE = 'NATURAL_FIGURE';
 }
