@@ -17,6 +17,7 @@ import pizzapazza.painter.Z4CenteredFigurePainter;
 import pizzapazza.painter.Z4DropPainter;
 import pizzapazza.painter.Z4NaturalFigurePainter;
 import pizzapazza.painter.Z4Painter;
+import pizzapazza.painter.Z4PatternPainter;
 import pizzapazza.painter.Z4Shape2DPainter;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.js.$Object;
@@ -196,6 +197,9 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
         break;
       case "BRUSH":
         painter = Z4BrushPainter.fromJSON(painterJSON);
+        break;
+      case "PATTERN":
+        painter = Z4PatternPainter.fromJSON(painterJSON);
         break;
       case "CENTERED_FIGURE":
         painter = Z4CenteredFigurePainter.fromJSON(painterJSON);

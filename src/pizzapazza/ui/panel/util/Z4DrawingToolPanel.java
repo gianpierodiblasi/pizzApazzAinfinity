@@ -48,6 +48,7 @@ import pizzapazza.painter.Z4DropPainter;
 import pizzapazza.painter.Z4NaturalFigurePainter;
 import pizzapazza.painter.Z4Painter;
 import pizzapazza.painter.Z4PainterType;
+import pizzapazza.painter.Z4PatternPainter;
 import pizzapazza.painter.Z4Shape2DPainter;
 import pizzapazza.ui.panel.Z4AbstractValuePanel;
 import pizzapazza.ui.panel.color.Z4BiGradientColorPanel;
@@ -66,6 +67,7 @@ import pizzapazza.ui.panel.painter.Z4CenteredFigurePainterPanel;
 import pizzapazza.ui.panel.painter.Z4DropPainterPanel;
 import pizzapazza.ui.panel.painter.Z4NaturalFigurePainterPanel;
 import pizzapazza.ui.panel.painter.Z4PainterPanel;
+import pizzapazza.ui.panel.painter.Z4PatternPainterPanel;
 import pizzapazza.ui.panel.painter.Z4Shape2DPainterPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4DrawingTool;
@@ -183,6 +185,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     this.addRadioButton(panelRadio, buttonGroup, "SHAPE2D");
     this.addRadioButton(panelRadio, buttonGroup, "DROP");
     this.addRadioButton(panelRadio, buttonGroup, "BRUSH");
+    this.addRadioButton(panelRadio, buttonGroup, "PATTERN");
     this.addRadioButton(panelRadio, buttonGroup, "CENTERED-FIGURE");
     this.addRadioButton(panelRadio, buttonGroup, "NATURAL-FIGURE");
     panelRadio.add(this.getHLine(), null);
@@ -287,9 +290,10 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
       case "SHAPE2D":
       case "DROP":
       case "BRUSH":
+      case "PATTERN":
       case "CENTERED-FIGURE":
       case "NATURAL-FIGURE":
-        new Array<>("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-drop-selected", "z4drawingtoolpanel-brush-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css -> this.selectedPainter.cssRemoveClass(css));
+        new Array<>("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-drop-selected", "z4drawingtoolpanel-brush-selected", "z4drawingtoolpanel-pattern-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css -> this.selectedPainter.cssRemoveClass(css));
         this.selectedPainterCard = this.check(this.selectedPainter, card, card.toLowerCase(), null, true);
         break;
       case "COLOR":
@@ -527,7 +531,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
   }
 
   private void setPainter() {
-    new Array<>("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-drop-selected", "z4drawingtoolpanel-brush-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css -> this.selectedPainter.cssRemoveClass(css));
+    new Array<>("z4drawingtoolpanel-shape2d-selected", "z4drawingtoolpanel-drop-selected", "z4drawingtoolpanel-brush-selected", "z4drawingtoolpanel-pattern-selected", "z4drawingtoolpanel-centered-figure-selected", "z4drawingtoolpanel-natural-figure-selected").forEach(css -> this.selectedPainter.cssRemoveClass(css));
 
     if (this.value.getPainter().getType() == Z4PainterType.SHAPE_2D) {
       this.selectedPainterCard = this.check(this.selectedPainter, "SHAPE2D", "shape2d", this.value.getPainter(), false);
@@ -535,6 +539,8 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
       this.selectedPainterCard = this.check(this.selectedPainter, "DROP", "drop", this.value.getPainter(), false);
     } else if (this.value.getPainter().getType() == Z4PainterType.BRUSH) {
       this.selectedPainterCard = this.check(this.selectedPainter, "BRUSH", "brush", this.value.getPainter(), false);
+    } else if (this.value.getPainter().getType() == Z4PainterType.PATTERN) {
+      this.selectedPainterCard = this.check(this.selectedPainter, "PATTERN", "pattern", this.value.getPainter(), false);
     } else if (this.value.getPainter().getType() == Z4PainterType.CENTERED_FIGURE) {
       this.selectedPainterCard = this.check(this.selectedPainter, "CENTERED-FIGURE", "centered-figure", this.value.getPainter(), false);
     } else if (this.value.getPainter().getType() == Z4PainterType.NATURAL_FIGURE) {
@@ -606,6 +612,10 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
         case "BRUSH":
           this.cardPanels.$set(card, new Z4BrushPainterPanel());
           ((Z4AbstractValuePanel<Z4BrushPainter>) this.cardPanels.$get(card)).addChangeListener(event -> this.valueIsAdjusting = ((Z4PainterPanel<Z4BrushPainter>) this.cardPanels.$get(card)).getValueIsAdjusting());
+          break;
+        case "PATTERN":
+          this.cardPanels.$set(card, new Z4PatternPainterPanel());
+          ((Z4AbstractValuePanel<Z4PatternPainter>) this.cardPanels.$get(card)).addChangeListener(event -> this.valueIsAdjusting = ((Z4PainterPanel<Z4PatternPainter>) this.cardPanels.$get(card)).getValueIsAdjusting());
           break;
         case "CENTERED-FIGURE":
           this.cardPanels.$set(card, new Z4CenteredFigurePainterPanel());

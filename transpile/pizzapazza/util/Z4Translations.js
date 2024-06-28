@@ -136,6 +136,8 @@ class Z4Translations {
 
   static  PATTERN = "";
 
+  static  PATTERNS = "";
+
   static  EDIT = "";
 
   static  FIT = "";
@@ -290,6 +292,8 @@ class Z4Translations {
   static  THICKNESS = "";
 
   static  DELETE_PATTERN_MESSAGE = "";
+
+  static  DELETE_PATTERNS_MESSAGE = "";
 
   // Math
   static  POSITIVE = "";
@@ -473,6 +477,7 @@ class Z4Translations {
     Z4Translations.HEIGHT = "Height";
     Z4Translations.RESOLUTION = "Resolution";
     Z4Translations.PATTERN = "Pattern";
+    Z4Translations.PATTERNS = "Patterns";
     Z4Translations.EDIT = "Edit";
     Z4Translations.FIT = "Fit";
     Z4Translations.OFFSET_X = "Offset X";
@@ -552,6 +557,7 @@ class Z4Translations {
     Z4Translations.GAUSSIAN_CORRECTION = "Gaussian Correction";
     Z4Translations.THICKNESS = "Thickness";
     Z4Translations.DELETE_PATTERN_MESSAGE = "Do you really want to delete the pattern?";
+    Z4Translations.DELETE_PATTERNS_MESSAGE = "Do you really want to delete the selected patterns?";
     // Math
     Z4Translations.POSITIVE = "Positive";
     Z4Translations.NEGATIVE = "Negative";
@@ -675,6 +681,7 @@ class Z4Translations {
     Z4Translations.HEIGHT = "Altezza";
     Z4Translations.RESOLUTION = "Risoluzione";
     Z4Translations.PATTERN = "Trama";
+    Z4Translations.PATTERNS = "Trame";
     Z4Translations.EDIT = "Modifica";
     Z4Translations.FIT = "Adatta";
     Z4Translations.OFFSET_X = "Offset X";
@@ -754,6 +761,7 @@ class Z4Translations {
     Z4Translations.GAUSSIAN_CORRECTION = "Correzione Gaussiana";
     Z4Translations.THICKNESS = "Spessore";
     Z4Translations.DELETE_PATTERN_MESSAGE = "Vuoi davvero eliminare la trama?";
+    Z4Translations.DELETE_PATTERNS_MESSAGE = "Vuoi davvero eliminare le trame selezionate?";
     // Math
     Z4Translations.POSITIVE = "Positivo";
     Z4Translations.NEGATIVE = "Negativo";

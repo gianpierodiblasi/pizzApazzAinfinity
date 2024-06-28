@@ -93,6 +93,7 @@ public class Z4Translations {
   public static String HEIGHT = "";
   public static String RESOLUTION = "";
   public static String PATTERN = "";
+  public static String PATTERNS = "";
   public static String EDIT = "";
   public static String FIT = "";
   public static String OFFSET_X = "";
@@ -175,6 +176,7 @@ public class Z4Translations {
   public static String GAUSSIAN_CORRECTION = "";
   public static String THICKNESS = "";
   public static String DELETE_PATTERN_MESSAGE = "";
+  public static String DELETE_PATTERNS_MESSAGE = "";
   
   // Math
   public static String POSITIVE = "";
@@ -326,6 +328,7 @@ public class Z4Translations {
     Z4Translations.HEIGHT = "Height";
     Z4Translations.RESOLUTION = "Resolution";
     Z4Translations.PATTERN = "Pattern";
+    Z4Translations.PATTERNS = "Patterns";
     Z4Translations.EDIT = "Edit";
     Z4Translations.FIT = "Fit";
     Z4Translations.OFFSET_X = "Offset X";
@@ -408,6 +411,7 @@ public class Z4Translations {
     Z4Translations.GAUSSIAN_CORRECTION = "Gaussian Correction";
     Z4Translations.THICKNESS = "Thickness";
     Z4Translations.DELETE_PATTERN_MESSAGE = "Do you really want to delete the pattern?";
+    Z4Translations.DELETE_PATTERNS_MESSAGE = "Do you really want to delete the selected patterns?";
     
     // Math
     Z4Translations.POSITIVE = "Positive";
@@ -543,6 +547,7 @@ public class Z4Translations {
     Z4Translations.HEIGHT = "Altezza";
     Z4Translations.RESOLUTION = "Risoluzione";
     Z4Translations.PATTERN = "Trama";
+    Z4Translations.PATTERNS = "Trame";
     Z4Translations.EDIT = "Modifica";
     Z4Translations.FIT = "Adatta";
     Z4Translations.OFFSET_X = "Offset X";
@@ -625,6 +630,7 @@ public class Z4Translations {
     Z4Translations.GAUSSIAN_CORRECTION = "Correzione Gaussiana";
     Z4Translations.THICKNESS = "Spessore";
     Z4Translations.DELETE_PATTERN_MESSAGE = "Vuoi davvero eliminare la trama?";
+    Z4Translations.DELETE_PATTERNS_MESSAGE = "Vuoi davvero eliminare le trame selezionate?";
     
     // Math
     Z4Translations.POSITIVE = "Positivo";

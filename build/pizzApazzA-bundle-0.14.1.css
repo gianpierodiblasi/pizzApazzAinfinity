@@ -438,22 +438,25 @@
 .z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(9) img, .z4drawingtoolpanel-brush-selected img {
   content: url(../image/painter/brush.png);
 }
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(10) img, .z4drawingtoolpanel-centered-figure-selected img {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(10) img, .z4drawingtoolpanel-pattern-selected img {
+  content: url(../image/painter/pattern.gif);
+}
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(11) img, .z4drawingtoolpanel-centered-figure-selected img {
   content: url(../image/painter/centered_figure.png);
 }
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(11) img, .z4drawingtoolpanel-natural-figure-selected img {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(12) img, .z4drawingtoolpanel-natural-figure-selected img {
   content: url(../image/painter/natural_figure.png);
 }
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(13) img, .z4drawingtoolpanel-color-selected img {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(14) img, .z4drawingtoolpanel-color-selected img {
   content: url(../image/filling/fill_flat.gif);
 }
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(14) img, .z4drawingtoolpanel-gradient-color-selected img {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(15) img, .z4drawingtoolpanel-gradient-color-selected img {
   content: url(../image/filling/fill_linear.gif);
 }
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(15) img, .z4drawingtoolpanel-bigradient-color-selected img {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(16) img, .z4drawingtoolpanel-bigradient-color-selected img {
   content: url(../image/filling/fill_bigradientcolor.gif);
 }
-.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(17) img {
+.z4drawingtoolpanel .z4drawingtoolpanel-selector:nth-child(18) img {
   content: url(../image/color/z4colorprogressionbehavior_spatial.svg);
 }
 
