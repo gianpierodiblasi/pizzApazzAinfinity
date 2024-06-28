@@ -179,45 +179,52 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     panel.setLayout(new GridBagLayout());
     this.pane.addTab(Z4Translations.SETTINGS, panel);
 
-    JSPanel panelRadio = new JSPanel();
-    panelRadio.setLayout(new BoxLayout(panelRadio, BoxLayout.Y_AXIS));
-    panel.add(panelRadio, new GBC(0, 0).h(4).i(0, 5, 0, 0));
-
-    Z4UI.addVLine(panel, new GBC(1, 0).h(4).wy(1).a(GBC.NORTH).f(GBC.VERTICAL).i(1, 5, 1, 5));
+    JSPanel panelRadioContainer = new JSPanel();
+    panelRadioContainer.setLayout(new GridBagLayout());
 
     this.cardPanel.setLayout(this.cardLayout);
-    panel.add(this.cardPanel, new GBC(2, 0).a(GBC.NORTH).h(2).wxy(1, 1));
+    panel.add(this.cardPanel, new GBC(0, 0).a(GBC.NORTH).h(2).wxy(1, 1));
 
     ButtonGroup buttonGroup = new ButtonGroup();
+
+    JSPanel panelRadio = new JSPanel();
+    panelRadio.setLayout(new BoxLayout(panelRadio, BoxLayout.Y_AXIS));
+    panelRadioContainer.add(panelRadio, new GBC(0, 0).a(GBC.NORTH).i(150, 0, 0, 15));
     this.addRadioButton(panelRadio, buttonGroup, "STAMPER");
     this.addRadioButton(panelRadio, buttonGroup, "TRACER");
     this.addRadioButton(panelRadio, buttonGroup, "AIRBRUSH");
     this.addRadioButton(panelRadio, buttonGroup, "SPIROGRAPH");
     this.addRadioButton(panelRadio, buttonGroup, "SCATTERER");
-    panelRadio.add(this.getHLine(), null);
+
+    panelRadio = new JSPanel();
+    panelRadio.setLayout(new BoxLayout(panelRadio, BoxLayout.Y_AXIS));
+    panelRadioContainer.add(panelRadio, new GBC(1, 0).a(GBC.NORTH).i(150, 0, 0, 15));
     this.addRadioButton(panelRadio, buttonGroup, "SHAPE2D");
     this.addRadioButton(panelRadio, buttonGroup, "DROP");
     this.addRadioButton(panelRadio, buttonGroup, "BRUSH");
     this.addRadioButton(panelRadio, buttonGroup, "PATTERN");
     this.addRadioButton(panelRadio, buttonGroup, "CENTERED-FIGURE");
     this.addRadioButton(panelRadio, buttonGroup, "NATURAL-FIGURE");
-    panelRadio.add(this.getHLine(), null);
+
+    panelRadio = new JSPanel();
+    panelRadio.setLayout(new BoxLayout(panelRadio, BoxLayout.Y_AXIS));
+    panelRadioContainer.add(panelRadio, new GBC(2, 0).a(GBC.NORTH).i(150, 0, 0, 5));
     this.addRadioButton(panelRadio, buttonGroup, "COLOR");
     this.addRadioButton(panelRadio, buttonGroup, "GRADIENT-COLOR");
     this.addRadioButton(panelRadio, buttonGroup, "BIGRADIENT-COLOR");
     panelRadio.add(this.getHLine(), null);
     this.addRadioButton(panelRadio, buttonGroup, "COLOR-PROGRESSION");
 
-    this.addPreview(panel, 2, 2, this.transparent1, this.swatchesPanel1, this.preview1, 500, 300, new GBC(2, 3), false);
-    this.addPreview(panel, 3, 0, this.transparent2, this.swatchesPanel2, this.preview2, 300, 500, new GBC(3, 1).a(GBC.NORTH).i(0, 5, 0, 0), true);
+    this.addPreview(panel, 0, 2, this.transparent1, this.swatchesPanel1, this.preview1, 500, 300, new GBC(0, 3), false);
+    this.addPreview(panel, 1, 0, this.transparent2, this.swatchesPanel2, this.preview2, 300, 500, new GBC(1, 1).a(GBC.NORTH).i(0, 5, 0, 0), true);
 
     panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
     this.pane.addTab(Z4Translations.TRY_ME, panel);
     this.addTryMe(panel);
 
-//    this.pane.appendChildInTree(".west ul", panelRadio);
-    
+    this.pane.appendChildInTree(".west ul", panelRadioContainer);
+
     this.setValue(new Z4DrawingTool(
             Z4Translations.DRAWING_TOOL,
             new Z4Stamper(
@@ -272,6 +279,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
 
   private void setSelectedButton(JSButton button) {
     button.setContentAreaFilled(false);
+    button.getStyle().minHeight = "43px";
     button.cssAddClass("z4drawingtoolpanel-selected");
     button.setIcon(new Z4EmptyImageProducer<>(""));
   }
@@ -280,8 +288,10 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     JSRadioButton radio = new JSRadioButton();
     radio.setContentAreaFilled(false);
     radio.getStyle().marginBottom = "1px";
+    radio.getStyle().minHeight = "25px";
     radio.setToggle();
     radio.cssAddClass("z4drawingtoolpanel-selector");
+    radio.cssAddClass("z4drawingtoolpanel-selector-" + card.toLowerCase());
     radio.setIcon(new Z4EmptyImageProducer<>(card));
     radio.addActionListener(event -> this.selectCard(card));
 
@@ -340,7 +350,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     JSComponent div = new JSComponent(document.createElement("div"));
     div.getStyle().height = "1px";
     div.getStyle().width = "100%";
-    div.getStyle().margin = "10px 1px 11px 1px";
+    div.getStyle().margin = "21px 1px 22px 1px";
     div.getStyle().background = "var(--main-action-bgcolor)";
     return div;
   }
