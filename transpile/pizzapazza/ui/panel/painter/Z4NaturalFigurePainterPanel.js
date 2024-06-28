@@ -13,21 +13,21 @@ class Z4NaturalFigurePainterPanel extends Z4PainterPanel {
 
    size = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
 
-   internalAngle1 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+   internalAngle1 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
 
-   externalAngle1 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+   externalAngle1 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
 
-   internalAngle2 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+   internalAngle2 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
 
-   externalAngle2 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+   externalAngle2 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
 
-   internalTension1 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+   internalTension1 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
 
-   externalTension1 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+   externalTension1 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
 
-   internalTension2 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+   internalTension2 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
 
-   externalTension2 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+   externalTension2 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
 
    externalForceAngle = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
 
@@ -86,11 +86,11 @@ class Z4NaturalFigurePainterPanel extends Z4PainterPanel {
     panel.setLayout(new GridBagLayout());
     tabbedPane.addTab(Z4Translations.POINTS, panel);
     this.sample.cssAddClass("z4naturalfigurepainterpanel-sample");
-    panel.add(this.sample, new GBC(0, 0).h(8));
-    this.createPoint(panel, this.internalAngle1, this.internalTension1, Z4Translations.INTERNAL_BASE_POINT, "i1", 0);
-    this.createPoint(panel, this.externalAngle1, this.externalTension1, Z4Translations.EXTERNAL_BASE_POINT, "e1", 2);
-    this.createPoint(panel, this.internalAngle2, this.internalTension2, Z4Translations.INTERNAL_TERMINAL_POINT, "i2", 4);
-    this.createPoint(panel, this.externalAngle2, this.externalTension2, Z4Translations.EXTERNAL_TERMINAL_POINT, "e2", 6);
+    panel.add(this.sample, new GBC(0, 0).h(2));
+    this.createPoint(panel, this.internalAngle1, this.internalTension1, Z4Translations.INTERNAL_BASE_POINT, "i1", 1);
+    this.createPoint(panel, this.externalAngle1, this.externalTension1, Z4Translations.EXTERNAL_BASE_POINT, "e1", 3);
+    this.createPoint(panel, this.internalAngle2, this.internalTension2, Z4Translations.INTERNAL_TERMINAL_POINT, "i2", 5);
+    this.createPoint(panel, this.externalAngle2, this.externalTension2, Z4Translations.EXTERNAL_TERMINAL_POINT, "e2", 7);
     panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
     tabbedPane.addTab(Z4Translations.EXTERNAL_FORCE, panel);
@@ -136,23 +136,25 @@ class Z4NaturalFigurePainterPanel extends Z4PainterPanel {
     panel.add(radio, null);
   }
 
-   createPoint(panel, angle, tension, title, suffix, y) {
-    Z4UI.addLabel(panel, title, new GBC(1, y).w(2).a(GBC.WEST)).getStyle().fontWeight = "bold";
-    angle.getStyle().setProperty("grid-template-areas", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\"");
+   createPoint(panel, angle, tension, title, suffix, x) {
+    Z4UI.addLabel(panel, title, new GBC(x, 0).w(2).a(GBC.WEST)).getStyle().fontWeight = "bold";
+    angle.getStyle().setProperty("grid-template-areas", "\"p1 p1\"\n\"p3 p3\"\n\"p4 p4\"\n\"p5 p5\"\n\"p6 p6\"");
     angle.setSignsVisible(false);
     angle.setConstantRange(0, 90);
     angle.setRandomRange(0, 90);
     angle.setLabel(Z4Translations.ANGLE + " (\u03B1" + suffix + ")");
     angle.cssAddClass("z4abstractvaluepanel-titled");
+    angle.getChilStyleByQuery("label:nth-child(1)").fontSize = "smaller";
     angle.addChangeListener(event => this.onfigurechange(angle.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
-    panel.add(angle, new GBC(1, y + 1).i(0, 0, 1, 1));
-    tension.getStyle().setProperty("grid-template-areas", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\"");
+    panel.add(angle, new GBC(x, 1).i(0, 0, 0, 1));
+    tension.getStyle().setProperty("grid-template-areas", "\"p1 p1\"\n\"p3 p3\"\n\"p4 p4\"\n\"p5 p5\"\n\"p6 p6\"");
     tension.setSignsVisible(false);
     tension.setConstantRange(1, 100);
     tension.setLabel(Z4Translations.TENSION + " (\u03C4" + suffix + ")");
     tension.cssAddClass("z4abstractvaluepanel-titled");
+    tension.getChilStyleByQuery("label:nth-child(1)").fontSize = "smaller";
     tension.addChangeListener(event => this.onfigurechange(tension.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
-    panel.add(tension, new GBC(2, y + 1));
+    panel.add(tension, new GBC(x + 1, 1).i(0, 0, 0, 1));
   }
 
    createPanel(tabbedPane, text, p1, p2, colorPanel) {
