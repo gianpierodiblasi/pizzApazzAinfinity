@@ -12,8 +12,8 @@ class TestDrawingToolPanel extends JSFrame {
         console.log(panel.getValue().toJSON());
       }
     });
-    panel.getStyle().minWidth = "72rem";
-    panel.getStyle().minHeight = "56rem";
+    panel.getStyle().minWidth = "71rem";
+    panel.getStyle().minHeight = "52rem";
     let p = new JSPanel();
     p.add(panel, null);
     this.getContentPane().add(p, BorderLayout.NORTH);

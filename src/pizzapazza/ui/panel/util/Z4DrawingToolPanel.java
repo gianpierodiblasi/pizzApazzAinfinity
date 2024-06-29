@@ -150,9 +150,10 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
       this.createValue();
       this.onchange();
     });
-    this.add(this.name, new GBC(0, 1).wx(1).f(GBC.HORIZONTAL).i(0, 0, 7, 0));
+    this.add(this.name, new GBC(0, 1).wx(1).f(GBC.HORIZONTAL).i(0, 0, 5, 0));
 
     JSPanel selected = new JSPanel();
+    selected.setLayout(new BoxLayout(selected, BoxLayout.X_AXIS));
 
     this.setSelectedButton(this.selectedPointInterator);
     this.selectedPointInterator.addActionListener(event -> this.selectCard(this.selectedPointInteratorCard));
@@ -169,7 +170,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     this.setSelectedButton(this.selectedColorProgression);
     selected.add(this.selectedColorProgression, null);
     this.selectedColorProgression.addActionListener(event -> this.selectCard("COLOR-PROGRESSION"));
-    this.add(selected, new GBC(1, 0).h(2));
+    this.add(selected, new GBC(1, 0).h(2).a(GBC.SOUTH).i(0, 0, 5, 0));
 
     this.pane.setID(this.tabbedPaneID);
     this.pane.setTabPlacement(JSTabbedPane.LEFT);
@@ -280,6 +281,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
   private void setSelectedButton(JSButton button) {
     button.setContentAreaFilled(false);
     button.getStyle().minHeight = "43px";
+    button.getStyle().marginLeft = "1px";
     button.cssAddClass("z4drawingtoolpanel-selected");
     button.setIcon(new Z4EmptyImageProducer<>(""));
   }

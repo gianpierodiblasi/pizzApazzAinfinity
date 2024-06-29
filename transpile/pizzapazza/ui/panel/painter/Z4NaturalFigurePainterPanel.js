@@ -100,7 +100,6 @@ class Z4NaturalFigurePainterPanel extends Z4PainterPanel {
     this.externalForceAngle.cssAddClass("z4abstractvaluepanel-titled");
     this.externalForceAngle.addChangeListener(event => this.onfigurechange(this.externalForceAngle.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
     panel.add(this.externalForceAngle, new GBC(0, 0).i(1, 0, 0, 1));
-    this.externalForceTension.getStyle().setProperty("grid-template-areas", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\"");
     this.externalForceTension.setSignsVisible(false);
     this.externalForceTension.setConstantRange(0, 100);
     this.externalForceTension.setLabel(Z4Translations.TENSION + " (\u03C4)");

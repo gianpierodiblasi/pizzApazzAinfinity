@@ -8670,19 +8670,19 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
 
    sample = new JSComponent(document.createElement("img"));
 
-   size = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+   size = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
 
-   angle1 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+   angle1 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
 
-   angle2 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+   angle2 = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
 
-   tension = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+   tension = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
 
-   multiplicity = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+   multiplicity = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
 
-   hole = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTAL);
+   hole = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.VERTICAL);
 
-   whirlpool = new Z4WhirlpoolPanel(Z4WhirlpoolPanelOrientation.HORIZONTAL);
+   whirlpool = new Z4WhirlpoolPanel(Z4WhirlpoolPanelOrientation.VERTICAL);
 
    coverSpinner = new JSSpinner();
 
@@ -8709,11 +8709,11 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
     let panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
     tabbedPane.addTab(Z4Translations.SHAPE, panel);
-    let panelType = new JSPanel();
-    panelType.setLayout(new BoxLayout(panelType, BoxLayout.Y_AXIS));
-    panel.add(panelType, new GBC(0, 0).h(5).i(1, 0, 0, 1));
     this.sample.cssAddClass("z4centeredfigurepainterpanel-sample");
-    panelType.add(this.sample, null);
+    panel.add(this.sample, new GBC(0, 0));
+    let panelType = new JSPanel();
+    panelType.setLayout(new GridLayout(3, 2, 1, 1));
+    panel.add(panelType, new GBC(0, 1).i(0, 0, 0, 1));
     let buttonGroup = new ButtonGroup();
     this.addRadio(Z4CenteredFigurePainterType.TYPE_0, panelType, buttonGroup);
     this.addRadio(Z4CenteredFigurePainterType.TYPE_1, panelType, buttonGroup);
@@ -8722,54 +8722,65 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
     this.addRadio(Z4CenteredFigurePainterType.TYPE_4, panelType, buttonGroup);
     this.addRadio(Z4CenteredFigurePainterType.TYPE_5, panelType, buttonGroup);
     this.size.setSignsVisible(false);
+    this.size.getStyle().setProperty("grid-template-areas", "\"p1 p1\"\n\"p3 p3\"\n\"p4 p4\"\n\"p5 p5\"\n\"p6 p6\"");
     this.size.setConstantRange(1, 50);
     this.size.setLabel(Z4Translations.DIMENSION);
     this.size.cssAddClass("z4abstractvaluepanel-titled");
+    this.size.getChilStyleByQuery("label:nth-child(1)").fontSize = "smaller";
     this.size.addChangeListener(event => this.onfigurechange(this.size.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.size, new GBC(1, 0).i(1, 0, 1, 1));
-    this.angle1.getStyle().setProperty("grid-template-areas", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\"");
+    panel.add(this.size, new GBC(2, 0).h(2).i(1, 0, 0, 1));
+    this.tension.setSignsVisible(false);
+    this.tension.getStyle().setProperty("grid-template-areas", "\"p1 p1\"\n\"p3 p3\"\n\"p4 p4\"\n\"p5 p5\"\n\"p6 p6\"");
+    this.tension.setConstantRange(1, 100);
+    this.tension.setLabel(Z4Translations.TENSION + " (\u03C4)");
+    this.tension.cssAddClass("z4abstractvaluepanel-titled");
+    this.tension.getChilStyleByQuery("label:nth-child(1)").fontSize = "smaller";
+    this.tension.addChangeListener(event => this.onfigurechange(this.tension.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
+    panel.add(this.tension, new GBC(3, 0).h(2).i(1, 0, 0, 1));
     this.angle1.setSignsVisible(false);
+    this.angle1.getStyle().setProperty("grid-template-areas", "\"p1 p1\"\n\"p3 p3\"\n\"p4 p4\"\n\"p5 p5\"\n\"p6 p6\"");
     this.angle1.setConstantRange(0, 90);
     this.angle1.setRandomRange(0, 90);
     this.angle1.setLabel(Z4Translations.ANGLE + " 1 (\u03B11)");
     this.angle1.cssAddClass("z4abstractvaluepanel-titled");
+    this.angle1.getChilStyleByQuery("label:nth-child(1)").fontSize = "smaller";
     this.angle1.addChangeListener(event => this.onfigurechange(this.angle1.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.angle1, new GBC(1, 1).i(0, 0, 0, 1));
-    this.angle2.getStyle().setProperty("grid-template-areas", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\"");
+    panel.add(this.angle1, new GBC(4, 0).h(2).i(1, 0, 0, 1));
     this.angle2.setSignsVisible(false);
+    this.angle2.getStyle().setProperty("grid-template-areas", "\"p1 p1\"\n\"p3 p3\"\n\"p4 p4\"\n\"p5 p5\"\n\"p6 p6\"");
     this.angle2.setConstantRange(0, 90);
     this.angle2.setRandomRange(0, 90);
     this.angle2.setLabel(Z4Translations.ANGLE + " 2 (\u03B12)");
     this.angle2.cssAddClass("z4abstractvaluepanel-titled");
+    this.angle2.getChilStyleByQuery("label:nth-child(1)").fontSize = "smaller";
     this.angle2.addChangeListener(event => this.onfigurechange(this.angle2.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.angle2, new GBC(2, 1).w(2));
-    this.tension.setSignsVisible(false);
-    this.tension.setConstantRange(1, 100);
-    this.tension.setLabel(Z4Translations.TENSION + " (\u03C4)");
-    this.tension.cssAddClass("z4abstractvaluepanel-titled");
-    this.tension.addChangeListener(event => this.onfigurechange(this.tension.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.tension, new GBC(2, 0).w(2).i(1, 0, 0, 0));
+    panel.add(this.angle2, new GBC(5, 0).h(2).i(1, 0, 0, 1));
     this.multiplicity.setSignsVisible(false);
+    this.multiplicity.getStyle().setProperty("grid-template-areas", "\"p1 p1\"\n\"p3 p3\"\n\"p4 p4\"\n\"p5 p5\"\n\"p6 p6\"");
     this.multiplicity.setConstantRange(3, 10);
     this.multiplicity.setLabel(Z4Translations.MULTIPLICITY);
     this.multiplicity.cssAddClass("z4abstractvaluepanel-titled");
+    this.multiplicity.getChilStyleByQuery("label:nth-child(1)").fontSize = "smaller";
     this.multiplicity.addChangeListener(event => this.onfigurechange(this.multiplicity.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.multiplicity, new GBC(1, 2).i(1, 0, 0, 1));
+    panel.add(this.multiplicity, new GBC(6, 0).h(2).i(1, 0, 0, 1));
     this.hole.setSignsVisible(false);
+    this.hole.getStyle().setProperty("grid-template-areas", "\"p1 p1\"\n\"p3 p3\"\n\"p4 p4\"\n\"p5 p5\"\n\"p6 p6\"");
     this.hole.setLabel(Z4Translations.HOLE);
     this.hole.cssAddClass("z4abstractvaluepanel-titled");
+    this.hole.getChilStyleByQuery("label:nth-child(1)").fontSize = "smaller";
     this.hole.addChangeListener(event => this.onfigurechange(this.hole.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.hole, new GBC(2, 2).w(2).i(1, 0, 0, 0));
+    panel.add(this.hole, new GBC(7, 0).h(2).i(1, 0, 0, 1));
     this.whirlpool.cssAddClass("z4abstractvaluepanel-titled");
+    this.whirlpool.getChilStyleByQuery("label:nth-child(1)").fontSize = "smaller";
     this.whirlpool.addChangeListener(event => this.onfigurechange(this.whirlpool.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.whirlpool, new GBC(1, 3).h(2).i(1, 0, 0, 1));
-    Z4UI.addLabel(panel, Z4Translations.COVER, new GBC(2, 3).a(GBC.SOUTHWEST).wy(1));
+    panel.add(this.whirlpool, new GBC(8, 0).h(3).i(1, 0, 0, 0));
+    Z4UI.addLabel(panel, Z4Translations.COVER, new GBC(2, 2).w(2).a(GBC.WEST));
     this.coverSpinner.cssAddClass("jsspinner_w_4rem");
     this.coverSpinner.setModel(new SpinnerNumberModel(100, 0, 100, 1));
     this.coverSpinner.addChangeListener(event => this.onfigurechange(this.coverSpinner.getValueIsAdjusting(), null, null, this.coverSpinner.getValue()));
-    panel.add(this.coverSpinner, new GBC(3, 3).a(GBC.SOUTHEAST));
+    panel.add(this.coverSpinner, new GBC(4, 2).a(GBC.EAST));
     this.coverSlider.addChangeListener(event => this.onfigurechange(this.coverSlider.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.coverSlider, new GBC(2, 4).w(2).f(GBC.HORIZONTAL).a(GBC.SOUTH));
+    panel.add(this.coverSlider, new GBC(2, 3).w(3).f(GBC.HORIZONTAL));
     this.shadowShiftX.setLabel(Z4Translations.DELTA_X);
     this.shadowShiftX.cssAddClass("z4abstractvaluepanel-titled");
     this.shadowShiftX.addChangeListener(event => this.onfigurechange(this.shadowShiftX.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
@@ -9113,7 +9124,6 @@ class Z4NaturalFigurePainterPanel extends Z4PainterPanel {
     this.externalForceAngle.cssAddClass("z4abstractvaluepanel-titled");
     this.externalForceAngle.addChangeListener(event => this.onfigurechange(this.externalForceAngle.getValueIsAdjusting(), null, null, this.indentationSlider.getValue()));
     panel.add(this.externalForceAngle, new GBC(0, 0).i(1, 0, 0, 1));
-    this.externalForceTension.getStyle().setProperty("grid-template-areas", "\"p1 p1 p1 p1\" \"p3 p4 p5 p6\"");
     this.externalForceTension.setSignsVisible(false);
     this.externalForceTension.setConstantRange(0, 100);
     this.externalForceTension.setLabel(Z4Translations.TENSION + " (\u03C4)");
@@ -9697,8 +9707,9 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
       this.createValue();
       this.onchange();
     });
-    this.add(this.name, new GBC(0, 1).wx(1).f(GBC.HORIZONTAL).i(0, 0, 7, 0));
+    this.add(this.name, new GBC(0, 1).wx(1).f(GBC.HORIZONTAL).i(0, 0, 5, 0));
     let selected = new JSPanel();
+    selected.setLayout(new BoxLayout(selected, BoxLayout.X_AXIS));
     this.setSelectedButton(this.selectedPointInterator);
     this.selectedPointInterator.addActionListener(event => this.selectCard(this.selectedPointInteratorCard));
     selected.add(this.selectedPointInterator, null);
@@ -9711,7 +9722,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     this.setSelectedButton(this.selectedColorProgression);
     selected.add(this.selectedColorProgression, null);
     this.selectedColorProgression.addActionListener(event => this.selectCard("COLOR-PROGRESSION"));
-    this.add(selected, new GBC(1, 0).h(2));
+    this.add(selected, new GBC(1, 0).h(2).a(GBC.SOUTH).i(0, 0, 5, 0));
     this.pane.setID(this.tabbedPaneID);
     this.pane.setTabPlacement(JSTabbedPane.LEFT);
     this.add(this.pane, new GBC(0, 2).w(2).wxy(1, 1).f(GBC.BOTH));
@@ -9761,6 +9772,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
    setSelectedButton(button) {
     button.setContentAreaFilled(false);
     button.getStyle().minHeight = "43px";
+    button.getStyle().marginLeft = "1px";
     button.cssAddClass("z4drawingtoolpanel-selected");
     button.setIcon(new Z4EmptyImageProducer(""));
   }
