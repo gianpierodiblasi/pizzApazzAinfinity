@@ -79,18 +79,18 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     tabbedPane.addTab(Z4Translations.SHAPE, panel);
 
     this.sample.cssAddClass("z4centeredfigurepainterpanel-sample");
-    panel.add(this.sample, new GBC(0, 0));
+    panel.add(this.sample, new GBC(0, 0).wy(1));
 
     JSPanel panelType = new JSPanel();
     panelType.setLayout(new GridLayout(3, 2, 1, 1));
-    panel.add(panelType, new GBC(0, 1).i(0, 0, 0, 1));
+    panel.add(panelType, new GBC(0, 1).h(3).i(0, 0, 0, 1));
 
     ButtonGroup buttonGroup = new ButtonGroup();
     this.addRadio(Z4CenteredFigurePainterType.TYPE_0, panelType, buttonGroup);
-    this.addRadio(Z4CenteredFigurePainterType.TYPE_1, panelType, buttonGroup);
-    this.addRadio(Z4CenteredFigurePainterType.TYPE_2, panelType, buttonGroup);
     this.addRadio(Z4CenteredFigurePainterType.TYPE_3, panelType, buttonGroup);
+    this.addRadio(Z4CenteredFigurePainterType.TYPE_1, panelType, buttonGroup);
     this.addRadio(Z4CenteredFigurePainterType.TYPE_4, panelType, buttonGroup);
+    this.addRadio(Z4CenteredFigurePainterType.TYPE_2, panelType, buttonGroup);
     this.addRadio(Z4CenteredFigurePainterType.TYPE_5, panelType, buttonGroup);
 
     this.size.setSignsVisible(false);
@@ -100,7 +100,7 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     this.size.cssAddClass("z4abstractvaluepanel-titled");
     this.size.getChilStyleByQuery("label:nth-child(1)").fontSize = "smaller";
     this.size.addChangeListener(event -> this.onfigurechange(this.size.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.size, new GBC(2, 0).h(2).i(1, 0, 0, 1));
+    panel.add(this.size, new GBC(1, 0).h(2).i(1, 0, 0, 1));
 
     this.tension.setSignsVisible(false);
     this.tension.getStyle().setProperty("grid-template-areas", "\"p1 p1\"\n\"p3 p3\"\n\"p4 p4\"\n\"p5 p5\"\n\"p6 p6\"");
@@ -109,7 +109,7 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     this.tension.cssAddClass("z4abstractvaluepanel-titled");
     this.tension.getChilStyleByQuery("label:nth-child(1)").fontSize = "smaller";
     this.tension.addChangeListener(event -> this.onfigurechange(this.tension.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.tension, new GBC(3, 0).h(2).i(1, 0, 0, 1));
+    panel.add(this.tension, new GBC(2, 0).h(2).i(1, 0, 0, 1));
 
     this.angle1.setSignsVisible(false);
     this.angle1.getStyle().setProperty("grid-template-areas", "\"p1 p1\"\n\"p3 p3\"\n\"p4 p4\"\n\"p5 p5\"\n\"p6 p6\"");
@@ -119,7 +119,7 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     this.angle1.cssAddClass("z4abstractvaluepanel-titled");
     this.angle1.getChilStyleByQuery("label:nth-child(1)").fontSize = "smaller";
     this.angle1.addChangeListener(event -> this.onfigurechange(this.angle1.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.angle1, new GBC(4, 0).h(2).i(1, 0, 0, 1));
+    panel.add(this.angle1, new GBC(3, 0).h(2).i(1, 0, 0, 1));
 
     this.angle2.setSignsVisible(false);
     this.angle2.getStyle().setProperty("grid-template-areas", "\"p1 p1\"\n\"p3 p3\"\n\"p4 p4\"\n\"p5 p5\"\n\"p6 p6\"");
@@ -129,7 +129,7 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     this.angle2.cssAddClass("z4abstractvaluepanel-titled");
     this.angle2.getChilStyleByQuery("label:nth-child(1)").fontSize = "smaller";
     this.angle2.addChangeListener(event -> this.onfigurechange(this.angle2.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.angle2, new GBC(5, 0).h(2).i(1, 0, 0, 1));
+    panel.add(this.angle2, new GBC(4, 0).h(2).i(1, 0, 0, 1));
 
     this.multiplicity.setSignsVisible(false);
     this.multiplicity.getStyle().setProperty("grid-template-areas", "\"p1 p1\"\n\"p3 p3\"\n\"p4 p4\"\n\"p5 p5\"\n\"p6 p6\"");
@@ -138,7 +138,7 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     this.multiplicity.cssAddClass("z4abstractvaluepanel-titled");
     this.multiplicity.getChilStyleByQuery("label:nth-child(1)").fontSize = "smaller";
     this.multiplicity.addChangeListener(event -> this.onfigurechange(this.multiplicity.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.multiplicity, new GBC(6, 0).h(2).i(1, 0, 0, 1));
+    panel.add(this.multiplicity, new GBC(5, 0).h(2).i(1, 0, 0, 1));
 
     this.hole.setSignsVisible(false);
     this.hole.getStyle().setProperty("grid-template-areas", "\"p1 p1\"\n\"p3 p3\"\n\"p4 p4\"\n\"p5 p5\"\n\"p6 p6\"");
@@ -146,22 +146,22 @@ public class Z4CenteredFigurePainterPanel extends Z4PainterPanel<Z4CenteredFigur
     this.hole.cssAddClass("z4abstractvaluepanel-titled");
     this.hole.getChilStyleByQuery("label:nth-child(1)").fontSize = "smaller";
     this.hole.addChangeListener(event -> this.onfigurechange(this.hole.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.hole, new GBC(7, 0).h(2).i(1, 0, 0, 1));
+    panel.add(this.hole, new GBC(6, 0).h(2).i(1, 0, 0, 1));
 
     this.whirlpool.cssAddClass("z4abstractvaluepanel-titled");
     this.whirlpool.getChilStyleByQuery("label:nth-child(1)").fontSize = "smaller";
     this.whirlpool.addChangeListener(event -> this.onfigurechange(this.whirlpool.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.whirlpool, new GBC(8, 0).h(3).i(1, 0, 0, 0));
+    panel.add(this.whirlpool, new GBC(7, 0).a(GBC.NORTH).h(4).i(1, 0, 0, 0));
 
-    Z4UI.addLabel(panel, Z4Translations.COVER, new GBC(2, 2).w(2).a(GBC.WEST));
+    Z4UI.addLabel(panel, Z4Translations.COVER, new GBC(1, 2).w(2).a(GBC.WEST));
 
     this.coverSpinner.cssAddClass("jsspinner_w_4rem");
     this.coverSpinner.setModel(new SpinnerNumberModel(100, 0, 100, 1));
     this.coverSpinner.addChangeListener(event -> this.onfigurechange(this.coverSpinner.getValueIsAdjusting(), null, null, (int) this.coverSpinner.getValue()));
-    panel.add(this.coverSpinner, new GBC(4, 2).a(GBC.EAST));
+    panel.add(this.coverSpinner, new GBC(3, 2).a(GBC.EAST).i(1, 0, 0, 0));
 
     this.coverSlider.addChangeListener(event -> this.onfigurechange(this.coverSlider.getValueIsAdjusting(), null, null, this.coverSlider.getValue()));
-    panel.add(this.coverSlider, new GBC(2, 3).w(3).f(GBC.HORIZONTAL));
+    panel.add(this.coverSlider, new GBC(1, 3).w(3).f(GBC.HORIZONTAL));
 
     this.shadowShiftX.setLabel(Z4Translations.DELTA_X);
     this.shadowShiftX.cssAddClass("z4abstractvaluepanel-titled");
