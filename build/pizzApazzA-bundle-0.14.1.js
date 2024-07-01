@@ -3067,13 +3067,12 @@ class Z4CanvasIOManager {
   }
 
    saveDrawingTools(fileName, save) {
-    Z4UI.pleaseWait(this.canvas, true, true, false, true, "", () => {
+    Z4UI.pleaseWait(this.canvas, false, false, false, false, "", () => {
       let array = new Array();
       this.drawingTools.forEach(drawingTool => array.push(drawingTool.toJSON()));
       let json = new Object();
       json["drawingTool"] = array;
       save(json, fileName);
-      Z4UI.pleaseWaitCompleted();
     });
   }
 }

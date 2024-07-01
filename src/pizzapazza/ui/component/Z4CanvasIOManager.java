@@ -530,7 +530,7 @@ public class Z4CanvasIOManager {
   }
 
   private void saveDrawingTools(String fileName, $Apply_2_Void<Object, String> save) {
-    Z4UI.pleaseWait(this.canvas, true, true, false, true, "", () -> {
+    Z4UI.pleaseWait(this.canvas, false, false, false, false, "", () -> {
       Array<$Object> array = new Array<>();
       this.drawingTools.forEach(drawingTool -> array.push(drawingTool.toJSON()));
 
@@ -538,7 +538,6 @@ public class Z4CanvasIOManager {
       json.$set("drawingTool", array);
 
       save.$apply(json, fileName);
-      Z4UI.pleaseWaitCompleted();
     });
   }
 }
