@@ -190,11 +190,33 @@ public class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
 
     JSFilePicker.showSaveFilePicker(options, handle -> this.canvas.saveDrawingToolsToHandle(handle));
   }
-  
+
   /**
-   * Resets the layers preview
+   * Resets the drawing tools preview
    */
   public void reset() {
     this.drawingToolsPreview.setProperty("innerHTML", "");
+  }
+
+  /**
+   * Adds a new drawing tool preview
+   *
+   * @param drawingTool The drawing tool
+   */
+  public void addDrawingToolPreview(Z4DrawingTool drawingTool) {
+//    Z4LayerPreview preview = new Z4LayerPreview();
+//    preview.setRibbonLayerPanel(this);
+//    preview.setLayer(this.canvas, layer);
+//    preview.setChildAttributeByQuery("summary", "draggable", "true");
+//    preview.addEventListener("dragstart", event -> {
+//      ((DragEvent) event).dataTransfer.effectAllowed = "move";
+//      this.layerDnD = layer;
+//      this.previewDnD = preview;
+//    });
+//
+//    document.querySelectorAll(".z4layerpreview .z4layerpreview-selector").forEach(element -> element.textContent = Z4LayerPreview.UNSELECTED_LAYER_CONTENT);
+//
+//    this.layersPreview.add(preview, null);
+//    preview.invoke("scrollIntoView()");
   }
 }

@@ -473,7 +473,7 @@ class Z4Canvas extends JSComponent {
    */
    addDrawingTool(drawingTool) {
     this.drawingTools.push(drawingTool);
-    this.setSelectedDrawingTool(drawingTool);
+    this.setSelectedDrawingToolAndAddDrawingToolPreview(drawingTool, true);
     this.setSaved(false);
   }
 
@@ -496,7 +496,7 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
-   * Deletes a drawing toolt
+   * Deletes a drawing tool
    *
    * @param drawingTool The drawing tool
    * @return The drawing tool index
@@ -506,9 +506,8 @@ class Z4Canvas extends JSComponent {
     this.drawingTools.splice(index, 1);
     if (this.selectedDrawingTool === drawingTool) {
       this.setSelectedDrawingTool(this.drawingTools[this.drawingTools.length - 1]);
-      // 
-      // document.querySelector(".z4drawingtoolpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ") .z4drawingtoolpreview-selector").textContent = Z4DrawingToolPreview.SELECTED_DRAWING_TOOL_CONTENT;
-      // ((HTMLElement) document.querySelector(".z4drawingtoolpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
+      document.querySelector(".z4drawingtoolpreview:nth-child(" + (this.drawingTools.length + (index < this.drawingTools.length ? 1 : 0)) + ") .z4drawingtoolpreview-selector").textContent = Z4DrawingToolPreview.SELECTED_DRAWING_TOOL_CONTENT;
+      (document.querySelector(".z4drawingtoolpreview:nth-child(" + (this.drawingTools.length + (index < this.drawingTools.length ? 1 : 0)) + ")")).scrollIntoView();
     }
     this.setSaved(false);
     return index;
@@ -540,9 +539,22 @@ class Z4Canvas extends JSComponent {
    * @param selectedDrawingTool The selected drawing tool
    */
    setSelectedDrawingTool(selectedDrawingTool) {
+    this.setSelectedDrawingToolAndAddDrawingToolPreview(selectedDrawingTool, false);
+  }
+
+  /**
+   * Sets the selected drawing tool and adds the drawing tool preview
+   *
+   * @param selectedDrawingTool The selected drawing tool
+   * @param add true to add the drawing tool preview, false otherwise
+   */
+   setSelectedDrawingToolAndAddDrawingToolPreview(selectedDrawingTool, add) {
     this.selectedDrawingTool = selectedDrawingTool;
     this.mouseManager.setSelectedDrawingTool(selectedDrawingTool);
     this.ribbonHistoryPanel.saveHistory("tool");
+    if (add) {
+      this.ribbonDrawingToolPanel.addDrawingToolPreview(this.selectedDrawingTool);
+    }
   }
 
   /**

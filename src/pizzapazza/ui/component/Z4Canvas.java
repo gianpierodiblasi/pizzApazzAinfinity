@@ -158,7 +158,7 @@ public class Z4Canvas extends JSComponent {
 
     this.drawingTools.length = 0;
     this.ribbonDrawingToolPanel.reset();
-    
+
     this.ribbonHistoryPanel.resetHistory(() -> {
       this.afterCreate("", width, height);
       this.toHistory(json -> this.ribbonHistoryPanel.addHistory(json, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
@@ -517,7 +517,7 @@ public class Z4Canvas extends JSComponent {
    */
   public void addDrawingTool(Z4DrawingTool drawingTool) {
     this.drawingTools.push(drawingTool);
-    this.setSelectedDrawingTool(drawingTool);
+    this.setSelectedDrawingToolAndAddDrawingToolPreview(drawingTool, true);
     this.setSaved(false);
   }
 
@@ -540,7 +540,7 @@ public class Z4Canvas extends JSComponent {
   }
 
   /**
-   * Deletes a drawing toolt
+   * Deletes a drawing tool
    *
    * @param drawingTool The drawing tool
    * @return The drawing tool index
@@ -551,9 +551,9 @@ public class Z4Canvas extends JSComponent {
 
     if (this.selectedDrawingTool == drawingTool) {
       this.setSelectedDrawingTool(this.drawingTools.$get(this.drawingTools.length - 1));
-//
-//      document.querySelector(".z4drawingtoolpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ") .z4drawingtoolpreview-selector").textContent = Z4DrawingToolPreview.SELECTED_DRAWING_TOOL_CONTENT;
-//      ((HTMLElement) document.querySelector(".z4drawingtoolpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
+
+      document.querySelector(".z4drawingtoolpreview:nth-child(" + (this.drawingTools.length + (index < this.drawingTools.length ? 1 : 0)) + ") .z4drawingtoolpreview-selector").textContent = Z4DrawingToolPreview.SELECTED_DRAWING_TOOL_CONTENT;
+      ((HTMLElement) document.querySelector(".z4drawingtoolpreview:nth-child(" + (this.drawingTools.length + (index < this.drawingTools.length ? 1 : 0)) + ")")).scrollIntoView();
     }
 
     this.setSaved(false);
@@ -587,10 +587,24 @@ public class Z4Canvas extends JSComponent {
    * @param selectedDrawingTool The selected drawing tool
    */
   public void setSelectedDrawingTool(Z4DrawingTool selectedDrawingTool) {
+    this.setSelectedDrawingToolAndAddDrawingToolPreview(selectedDrawingTool, false);
+  }
+
+  /**
+   * Sets the selected drawing tool and adds the drawing tool preview
+   *
+   * @param selectedDrawingTool The selected drawing tool
+   * @param add true to add the drawing tool preview, false otherwise
+   */
+  public void setSelectedDrawingToolAndAddDrawingToolPreview(Z4DrawingTool selectedDrawingTool, boolean add) {
     this.selectedDrawingTool = selectedDrawingTool;
     this.mouseManager.setSelectedDrawingTool(selectedDrawingTool);
 
     this.ribbonHistoryPanel.saveHistory("tool");
+
+    if (add) {
+      this.ribbonDrawingToolPanel.addDrawingToolPreview(this.selectedDrawingTool);
+    }
   }
 
   /**
