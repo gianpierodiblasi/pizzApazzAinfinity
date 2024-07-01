@@ -45,7 +45,7 @@ class Z4Canvas extends JSComponent {
 
    mouseManager = new Z4CanvasMouseManager(this, this.ctx);
 
-   ioManager = new Z4CanvasIOManager(this, this.paper);
+   ioManager = new Z4CanvasIOManager(this, this.paper, this.drawingTools);
 
    historyManager = new Z4CanvasHistoryManager(this, this.paper);
 

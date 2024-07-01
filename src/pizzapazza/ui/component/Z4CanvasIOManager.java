@@ -8,6 +8,7 @@ import static def.dom.Globals.document;
 import def.dom.HTMLElement;
 import def.dom.URL;
 import def.js.Array;
+import static def.js.Globals.eval;
 import def.js.JSON;
 import javascript.awt.Dimension;
 import javascript.awt.Point;
@@ -16,6 +17,7 @@ import javascript.util.fsa.FileSystemWritableFileStreamCreateOptions;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
+import pizzapazza.util.Z4DrawingTool;
 import pizzapazza.util.Z4Layer;
 import pizzapazza.util.Z4Paper;
 import pizzapazza.util.Z4Translations;
@@ -41,6 +43,7 @@ public class Z4CanvasIOManager {
 
   private final Z4Canvas canvas;
   private final Z4Paper paper;
+  private final Array<Z4DrawingTool> drawingTools;
   private Dimension size;
 
   private Z4RibbonLayerPanel ribbonLayerPanel;
@@ -52,10 +55,12 @@ public class Z4CanvasIOManager {
    *
    * @param canvas The canvas
    * @param paper The paper
+   * @param drawingTools The drawing tools
    */
-  public Z4CanvasIOManager(Z4Canvas canvas, Z4Paper paper) {
+  public Z4CanvasIOManager(Z4Canvas canvas, Z4Paper paper, Array<Z4DrawingTool> drawingTools) {
     this.canvas = canvas;
     this.paper = paper;
+    this.drawingTools = drawingTools;
   }
 
   /**
@@ -492,13 +497,21 @@ public class Z4CanvasIOManager {
     image.src = url;
     return null;
   }
-  
+
   /**
    * Saves the drawing tools
    *
    * @param fileName The file name
    */
   public void saveDrawingToolsToFile(String fileName) {
+    if (!fileName.toLowerCase().endsWith(".z4ts")) {
+      fileName += ".z4ts";
+    }
+    this.saveDrawingTools(fileName, (json, name) -> {
+      Blob blob = null;
+      eval("blob = new Blob([JSON.stringify(json)], {type: 'application/json'});");
+      saveAs(blob, name);
+    });
   }
 
   /**
@@ -506,6 +519,26 @@ public class Z4CanvasIOManager {
    *
    * @param handle The file handle
    */
+  @SuppressWarnings("static-access")
   public void saveDrawingToolsToHandle(FileSystemFileHandle handle) {
+    String fileName = handle.name.substring(0, handle.name.lastIndexOf('.'));
+
+    this.saveDrawingTools(fileName, (json, name) -> handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable -> {
+      writable.write(JSON.stringify(json));
+      writable.close();
+    }));
+  }
+
+  private void saveDrawingTools(String fileName, $Apply_2_Void<Object, String> save) {
+    Z4UI.pleaseWait(this.canvas, true, true, false, true, "", () -> {
+      Array<$Object> array = new Array<>();
+      this.drawingTools.forEach(drawingTool -> array.push(drawingTool.toJSON()));
+
+      $Object json = new $Object();
+      json.$set("drawingTool", array);
+
+      save.$apply(json, fileName);
+      Z4UI.pleaseWaitCompleted();
+    });
   }
 }

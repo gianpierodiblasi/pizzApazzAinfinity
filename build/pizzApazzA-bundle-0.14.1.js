@@ -1856,7 +1856,7 @@ class Z4Canvas extends JSComponent {
 
    mouseManager = new Z4CanvasMouseManager(this, this.ctx);
 
-   ioManager = new Z4CanvasIOManager(this, this.paper);
+   ioManager = new Z4CanvasIOManager(this, this.paper, this.drawingTools);
 
    historyManager = new Z4CanvasHistoryManager(this, this.paper);
 
@@ -2625,6 +2625,8 @@ class Z4CanvasIOManager {
 
    paper = null;
 
+   drawingTools = null;
+
    size = null;
 
    ribbonLayerPanel = null;
@@ -2638,10 +2640,12 @@ class Z4CanvasIOManager {
    *
    * @param canvas The canvas
    * @param paper The paper
+   * @param drawingTools The drawing tools
    */
-  constructor(canvas, paper) {
+  constructor(canvas, paper, drawingTools) {
     this.canvas = canvas;
     this.paper = paper;
+    this.drawingTools = drawingTools;
   }
 
   /**
@@ -3039,6 +3043,14 @@ class Z4CanvasIOManager {
    * @param fileName The file name
    */
    saveDrawingToolsToFile(fileName) {
+    if (!fileName.toLowerCase().endsWith(".z4ts")) {
+      fileName += ".z4ts";
+    }
+    this.saveDrawingTools(fileName, (json, name) => {
+      let blob = null;
+      eval("blob = new Blob([JSON.stringify(json)], {type: 'application/json'});");
+      saveAs(blob, name);
+    });
   }
 
   /**
@@ -3047,6 +3059,22 @@ class Z4CanvasIOManager {
    * @param handle The file handle
    */
    saveDrawingToolsToHandle(handle) {
+    let fileName = handle.name.substring(0, handle.name.lastIndexOf('.'));
+    this.saveDrawingTools(fileName, (json, name) => handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable => {
+      writable.write(JSON.stringify(json));
+      writable.close();
+    }));
+  }
+
+   saveDrawingTools(fileName, save) {
+    Z4UI.pleaseWait(this.canvas, true, true, false, true, "", () => {
+      let array = new Array();
+      this.drawingTools.forEach(drawingTool => array.push(drawingTool.toJSON()));
+      let json = new Object();
+      json["drawingTool"] = array;
+      save(json, fileName);
+      Z4UI.pleaseWaitCompleted();
+    });
   }
 }
 /**
