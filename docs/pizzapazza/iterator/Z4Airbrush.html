@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -188,9 +188,10 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(pizzapazza.math.Z4FancifulValue,int,int,pizzapazza.math.Z4Rotation)">Z4Airbrush</a></span>&#8203;(<a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;multiplicity,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(pizzapazza.math.Z4FancifulValue,int,int,int,pizzapazza.math.Z4Rotation)">Z4Airbrush</a></span>&#8203;(<a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;multiplicity,
           int&nbsp;radius,
           int&nbsp;speed,
+          int&nbsp;gaussianCorrection,
           <a href="../math/Z4Rotation.html" title="class in pizzapazza.math">Z4Rotation</a>&nbsp;rotation)</code></th>
 <td class="colLast">
 <div class="block">Creates the object</div>
@@ -244,47 +245,54 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getGaussianCorrection()">getGaussianCorrection</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the gaussian correction</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInfinitePointGeneratorSleep()">getInfinitePointGeneratorSleep</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the sleeping time between a point generation and the successive</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMultiplicity()">getMultiplicity</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the multiplicity</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNextCountOnSTOP()">getNextCountOnSTOP</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the count of next points to draw on STOP action</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRadius()">getRadius</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the radius</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSpeed()">getSpeed</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the speed</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="Z4PointIteratorType.html" title="enum in pizzapazza.iterator">Z4PointIteratorType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getType()">getType</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the point iterator type</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInfinitePointGenerator()">isInfinitePointGenerator</a></span>()</code></th>
 <td class="colLast">
@@ -292,7 +300,7 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
  an airbrush)</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#next(pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">next</a></span>&#8203;(<a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;color,
     <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression)</code></th>
@@ -300,7 +308,7 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <div class="block">Returns the next value</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>simulation.js.$Object</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toJSON()">toJSON</a></span>()</code></th>
 <td class="colLast">
@@ -338,7 +346,7 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(pizzapazza.math.Z4FancifulValue,int,int,pizzapazza.math.Z4Rotation)">
+<a id="&lt;init&gt;(pizzapazza.math.Z4FancifulValue,int,int,int,pizzapazza.math.Z4Rotation)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -347,6 +355,7 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <pre>public&nbsp;Z4Airbrush&#8203;(<a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;multiplicity,
                   int&nbsp;radius,
                   int&nbsp;speed,
+                  int&nbsp;gaussianCorrection,
                   <a href="../math/Z4Rotation.html" title="class in pizzapazza.math">Z4Rotation</a>&nbsp;rotation)</pre>
 <div class="block">Creates the object</div>
 <dl>
@@ -354,6 +363,7 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <dd><code>multiplicity</code> - The multiplicity</dd>
 <dd><code>radius</code> - The radius</dd>
 <dd><code>speed</code> - The speed</dd>
+<dd><code>gaussianCorrection</code> - The gaussian correction</dd>
 <dd><code>rotation</code> - The rotation</dd>
 </dl>
 </li>
@@ -424,6 +434,20 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The speed</dd>
+</dl>
+</li>
+</ul>
+<a id="getGaussianCorrection()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getGaussianCorrection</h4>
+<pre class="methodSignature">public&nbsp;int&nbsp;getGaussianCorrection()</pre>
+<div class="block">Returns the gaussian correction</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The gaussian correction</dd>
 </dl>
 </li>
 </ul>
