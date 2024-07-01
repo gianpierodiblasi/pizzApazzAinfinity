@@ -78,6 +78,17 @@ class Z4DrawingToolPreview extends JSDropDown {
       this.drawDemo();
     });
     this.appendChild(this.editor);
+    this.editor.addAction(Z4Translations.DUPLICATE, new GBC(0, 0).a(GBC.NORTH).i(0, 1, 0, 0), event => {
+    });
+    this.editor.addAction(Z4Translations.SAVE_DRAWING_TOOL_AS, new GBC(1, 0).a(GBC.NORTH).i(0, 1, 0, 0), event => {
+    });
+    this.editor.addAction(Z4Translations.DELETE, new GBC(2, 0).a(GBC.NORTHEAST).wxy(1, 1), event => JSOptionPane.showConfirmDialog(Z4Translations.DELETE_DRAWING_TOOL_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
+      if (response === JSOptionPane.YES_OPTION) {
+        this.changed = true;
+        let index = this.canvas.deleteDrawingTool(this.drawingTool);
+        document.querySelector(".z4drawingtoolpreview:nth-child(" + (index + 1) + ")").remove();
+      }
+    }));
     // button = new JSButton();
     // button.setText(Z4Translations.DUPLICATE);
     // button.addActionListener(event -> {
@@ -86,15 +97,6 @@ class Z4DrawingToolPreview extends JSDropDown {
     // this.removeAttribute("open");
     // });
     // panelBasic.add(button, new GBC(0, 6).a(GBC.SOUTHWEST));
-    // 
-    // this.delete.setText(Z4Translations.DELETE);
-    // this.delete.addActionListener(event -> JSOptionPane.showConfirmDialog(Z4Translations.DELETE_LAYER_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response -> {
-    // if (response == JSOptionPane.YES_OPTION) {
-    // this.changed = true;
-    // int index = this.canvas.deleteLayer(this.drawingtool);
-    // document.querySelector(".z4drawingtoolpreview:nth-child(" + (index + 1) + ")").remove();
-    // }
-    // }));
   }
 
   /**

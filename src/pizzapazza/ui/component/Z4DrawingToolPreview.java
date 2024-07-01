@@ -7,6 +7,7 @@ import javascript.swing.JSButton;
 import javascript.swing.JSComponent;
 import javascript.swing.JSDropDown;
 import javascript.swing.JSLabel;
+import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonDrawingToolPanel;
 import pizzapazza.ui.panel.util.Z4DrawingToolPanel;
@@ -99,6 +100,19 @@ public class Z4DrawingToolPreview extends JSDropDown {
     });
     this.appendChild(this.editor);
 
+    this.editor.addAction(Z4Translations.DUPLICATE, new GBC(0, 0).a(GBC.NORTH).i(0, 1, 0, 0), event -> {
+    });
+
+    this.editor.addAction(Z4Translations.SAVE_DRAWING_TOOL_AS, new GBC(1, 0).a(GBC.NORTH).i(0, 1, 0, 0), event -> {
+    });
+
+    this.editor.addAction(Z4Translations.DELETE, new GBC(2, 0).a(GBC.NORTHEAST).wxy(1, 1), event -> JSOptionPane.showConfirmDialog(Z4Translations.DELETE_DRAWING_TOOL_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response -> {
+      if (response == JSOptionPane.YES_OPTION) {
+        this.changed = true;
+        int index = this.canvas.deleteDrawingTool(this.drawingTool);
+        document.querySelector(".z4drawingtoolpreview:nth-child(" + (index + 1) + ")").remove();
+      }
+    }));
 //    button = new JSButton();
 //    button.setText(Z4Translations.DUPLICATE);
 //    button.addActionListener(event -> {
@@ -107,15 +121,6 @@ public class Z4DrawingToolPreview extends JSDropDown {
 //      this.removeAttribute("open");
 //    });
 //    panelBasic.add(button, new GBC(0, 6).a(GBC.SOUTHWEST));
-//
-//    this.delete.setText(Z4Translations.DELETE);
-//    this.delete.addActionListener(event -> JSOptionPane.showConfirmDialog(Z4Translations.DELETE_LAYER_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response -> {
-//      if (response == JSOptionPane.YES_OPTION) {
-//        this.changed = true;
-//        int index = this.canvas.deleteLayer(this.drawingtool);
-//        document.querySelector(".z4drawingtoolpreview:nth-child(" + (index + 1) + ")").remove();
-//      }
-//    }));
   }
 
   /**
@@ -151,7 +156,7 @@ public class Z4DrawingToolPreview extends JSDropDown {
   public void drawDemo() {
     if ($exists(this.drawingTool)) {
       this.ctx.clearRect(0, 0, Z4DrawingToolPreview.PREVIEW_SIZE, Z4DrawingToolPreview.PREVIEW_SIZE);
-      
+
       this.ctx.save();
       this.ctx.scale(0.1, 0.1);
       this.drawingTool.getPointIterator().drawDemo(this.ctx, this.drawingTool.getPainter(), this.drawingTool.getSpatioTemporalColor(), this.drawingTool.getProgression(), Z4DrawingToolPreview.PREVIEW_SIZE * 10, Z4DrawingToolPreview.PREVIEW_SIZE * 10);

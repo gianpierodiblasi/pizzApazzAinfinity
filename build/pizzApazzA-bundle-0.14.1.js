@@ -2324,10 +2324,13 @@ class Z4Canvas extends JSComponent {
    deleteDrawingTool(drawingTool) {
     let index = this.drawingTools.indexOf(drawingTool);
     this.drawingTools.splice(index, 1);
-    if (this.selectedDrawingTool === drawingTool) {
+    if (this.selectedDrawingTool !== drawingTool) {
+    } else if (this.drawingTools.length) {
       this.setSelectedDrawingTool(this.drawingTools[this.drawingTools.length - 1]);
       document.querySelector(".z4drawingtoolpreview:nth-child(" + (this.drawingTools.length + (index < this.drawingTools.length ? 1 : 0)) + ") .z4drawingtoolpreview-selector").textContent = Z4DrawingToolPreview.SELECTED_DRAWING_TOOL_CONTENT;
       (document.querySelector(".z4drawingtoolpreview:nth-child(" + (this.drawingTools.length + (index < this.drawingTools.length ? 1 : 0)) + ")")).scrollIntoView();
+    } else {
+      this.setSelectedDrawingTool(null);
     }
     this.setSaved(false);
     return index;
@@ -3451,6 +3454,17 @@ class Z4DrawingToolPreview extends JSDropDown {
       this.drawDemo();
     });
     this.appendChild(this.editor);
+    this.editor.addAction(Z4Translations.DUPLICATE, new GBC(0, 0).a(GBC.NORTH).i(0, 1, 0, 0), event => {
+    });
+    this.editor.addAction(Z4Translations.SAVE_DRAWING_TOOL_AS, new GBC(1, 0).a(GBC.NORTH).i(0, 1, 0, 0), event => {
+    });
+    this.editor.addAction(Z4Translations.DELETE, new GBC(2, 0).a(GBC.NORTHEAST).wxy(1, 1), event => JSOptionPane.showConfirmDialog(Z4Translations.DELETE_DRAWING_TOOL_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
+      if (response === JSOptionPane.YES_OPTION) {
+        this.changed = true;
+        let index = this.canvas.deleteDrawingTool(this.drawingTool);
+        document.querySelector(".z4drawingtoolpreview:nth-child(" + (index + 1) + ")").remove();
+      }
+    }));
     // button = new JSButton();
     // button.setText(Z4Translations.DUPLICATE);
     // button.addActionListener(event -> {
@@ -3459,15 +3473,6 @@ class Z4DrawingToolPreview extends JSDropDown {
     // this.removeAttribute("open");
     // });
     // panelBasic.add(button, new GBC(0, 6).a(GBC.SOUTHWEST));
-    // 
-    // this.delete.setText(Z4Translations.DELETE);
-    // this.delete.addActionListener(event -> JSOptionPane.showConfirmDialog(Z4Translations.DELETE_LAYER_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response -> {
-    // if (response == JSOptionPane.YES_OPTION) {
-    // this.changed = true;
-    // int index = this.canvas.deleteLayer(this.drawingtool);
-    // document.querySelector(".z4drawingtoolpreview:nth-child(" + (index + 1) + ")").remove();
-    // }
-    // }));
   }
 
   /**
@@ -10146,6 +10151,8 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
 
    cardPanels = new Array();
 
+   actions = new JSPanel();
+
    selectedPointInteratorCard = null;
 
    selectedPainterCard = null;
@@ -10242,6 +10249,8 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     panel.setLayout(new GridBagLayout());
     this.pane.addTab(Z4Translations.TRY_ME, panel);
     this.addTryMe(panel);
+    this.actions.setLayout(new GridBagLayout());
+    this.pane.addTab(Z4Translations.ACTIONS, this.actions);
     this.pane.appendChildInTree(".west ul", panelRadioContainer);
     this.setValue(new Z4DrawingTool(Z4Translations.DRAWING_TOOL, new Z4Stamper(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)), new Z4Shape2DPainter(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), false, false, -1, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0)), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)), new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE)));
   }
@@ -10464,6 +10473,20 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
       this.ctxTryMe.drawImage(this.offscreenBounds, 0, 0);
       return true;
     }
+  }
+
+  /**
+   * Adds an action
+   *
+   * @param text The text
+   * @param gbc The constraints
+   * @param listener The listener
+   */
+   addAction(text, gbc, listener) {
+    let button = new JSButton();
+    button.setText(text);
+    button.addActionListener(listener);
+    this.actions.add(button, gbc);
   }
 
   /**
@@ -16737,11 +16760,15 @@ class Z4Translations {
 
   static  DRAWING_TOOL_NAME = "";
 
+  static  SAVE_DRAWING_TOOL_AS = "";
+
   static  SAVE_DRAWING_TOOLS_AS = "";
 
   static  PIZZAPAZZA_DRAWING_TOOL = "";
 
   static  PIZZAPAZZA_DRAWING_TOOLS = "";
+
+  static  DELETE_DRAWING_TOOL_MESSAGE = "";
 
   // Ribbon History
   static  HISTORY = "";
@@ -16904,6 +16931,8 @@ class Z4Translations {
   static  MOVE_TOP = "";
 
   static  TRY_ME = "";
+
+  static  ACTIONS = "";
 
   // Color
   static  COLOR = "";
@@ -17130,9 +17159,11 @@ class Z4Translations {
     // Ribbon Drawing Tool
     Z4Translations.DRAWING_TOOL = "Drawing Tool";
     Z4Translations.DRAWING_TOOL_NAME = "Drawing Tool Name";
+    Z4Translations.SAVE_DRAWING_TOOL_AS = "Save Drawing Tool As";
     Z4Translations.SAVE_DRAWING_TOOLS_AS = "Save Drawing Tools As";
     Z4Translations.PIZZAPAZZA_DRAWING_TOOL = "pizzApazzA Drawing Tool";
     Z4Translations.PIZZAPAZZA_DRAWING_TOOLS = "pizzApazzA Drawing Tools";
+    Z4Translations.DELETE_DRAWING_TOOL_MESSAGE = "Do you really want to delete the drawing tool?";
     // Ribbon History
     Z4Translations.HISTORY = "History";
     Z4Translations.UNDO = "Undo";
@@ -17216,6 +17247,7 @@ class Z4Translations {
     Z4Translations.MOVE_BOTTOM = "Move to Bottom";
     Z4Translations.MOVE_TOP = "Move to Top";
     Z4Translations.TRY_ME = "Try Me";
+    Z4Translations.ACTIONS = "Actions";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -17342,9 +17374,11 @@ class Z4Translations {
     // Ribbon Drawing Tool
     Z4Translations.DRAWING_TOOL = "Strumento di Disegno";
     Z4Translations.DRAWING_TOOL_NAME = "Nome Strumento di Disegno";
+    Z4Translations.SAVE_DRAWING_TOOL_AS = "Salva Strumento di Disegno con Nome";
     Z4Translations.SAVE_DRAWING_TOOLS_AS = "Salva Strumenti di Disegno con Nome";
     Z4Translations.PIZZAPAZZA_DRAWING_TOOL = "Strumento di Disegno pizzApazzA";
     Z4Translations.PIZZAPAZZA_DRAWING_TOOLS = "Strumenti di Disegno pizzApazzA";
+    Z4Translations.DELETE_DRAWING_TOOL_MESSAGE = "Vuoi davvero eliminare lo strumento di disegno?";
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";
     Z4Translations.UNDO = "Annulla";
@@ -17428,6 +17462,7 @@ class Z4Translations {
     Z4Translations.MOVE_BOTTOM = "Muovi in Fondo";
     Z4Translations.MOVE_TOP = "Muovi in Cima";
     Z4Translations.TRY_ME = "Provami";
+    Z4Translations.ACTIONS = "Azioni";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";

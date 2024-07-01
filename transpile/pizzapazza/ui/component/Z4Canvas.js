@@ -513,10 +513,13 @@ class Z4Canvas extends JSComponent {
    deleteDrawingTool(drawingTool) {
     let index = this.drawingTools.indexOf(drawingTool);
     this.drawingTools.splice(index, 1);
-    if (this.selectedDrawingTool === drawingTool) {
+    if (this.selectedDrawingTool !== drawingTool) {
+    } else if (this.drawingTools.length) {
       this.setSelectedDrawingTool(this.drawingTools[this.drawingTools.length - 1]);
       document.querySelector(".z4drawingtoolpreview:nth-child(" + (this.drawingTools.length + (index < this.drawingTools.length ? 1 : 0)) + ") .z4drawingtoolpreview-selector").textContent = Z4DrawingToolPreview.SELECTED_DRAWING_TOOL_CONTENT;
       (document.querySelector(".z4drawingtoolpreview:nth-child(" + (this.drawingTools.length + (index < this.drawingTools.length ? 1 : 0)) + ")")).scrollIntoView();
+    } else {
+      this.setSelectedDrawingTool(null);
     }
     this.setSaved(false);
     return index;

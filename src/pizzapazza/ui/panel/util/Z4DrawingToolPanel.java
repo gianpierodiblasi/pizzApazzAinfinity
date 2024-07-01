@@ -9,7 +9,9 @@ import javascript.awt.BoxLayout;
 import javascript.awt.CardLayout;
 import javascript.awt.Color;
 import javascript.awt.GBC;
+import javascript.awt.GridBagConstraints;
 import javascript.awt.GridBagLayout;
+import javascript.awt.event.ActionListener;
 import javascript.swing.ButtonGroup;
 import javascript.swing.JSButton;
 import javascript.swing.JSComponent;
@@ -118,6 +120,8 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
   private final CardLayout cardLayout = new CardLayout(0, 0);
   private final Array<JSPanel> cardPanels = new Array<>();
 
+  private final JSPanel actions = new JSPanel();
+
   private String selectedPointInteratorCard;
   private String selectedPainterCard;
   private String selectedSpatioTemporalColorCard;
@@ -223,6 +227,9 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     panel.setLayout(new GridBagLayout());
     this.pane.addTab(Z4Translations.TRY_ME, panel);
     this.addTryMe(panel);
+
+    this.actions.setLayout(new GridBagLayout());
+    this.pane.addTab(Z4Translations.ACTIONS, this.actions);
 
     this.pane.appendChildInTree(".west ul", panelRadioContainer);
 
@@ -419,7 +426,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     panel.add(this.previewTryMe, new GBC(0, 1).wxy(1, 1).a(GBC.NORTH));
   }
 
-  public void onMouse(MouseEvent event, String type) {
+  private void onMouse(MouseEvent event, String type) {
     double x = Math.min(this.widthTryMe, Math.max(0, event.offsetX));
     double y = Math.min(this.heightTryMe, Math.max(0, event.offsetY));
 
@@ -515,6 +522,20 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
       this.ctxTryMe.drawImage(this.offscreenBounds, 0, 0);
       return true;
     }
+  }
+
+  /**
+   * Adds an action
+   *
+   * @param text The text
+   * @param gbc The constraints
+   * @param listener The listener
+   */
+  public void addAction(String text, GridBagConstraints gbc, ActionListener listener) {
+    JSButton button = new JSButton();
+    button.setText(text);
+    button.addActionListener(listener);
+    this.actions.add(button, gbc);
   }
 
   /**

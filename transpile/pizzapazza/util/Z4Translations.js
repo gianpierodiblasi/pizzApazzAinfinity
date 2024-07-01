@@ -59,11 +59,15 @@ class Z4Translations {
 
   static  DRAWING_TOOL_NAME = "";
 
+  static  SAVE_DRAWING_TOOL_AS = "";
+
   static  SAVE_DRAWING_TOOLS_AS = "";
 
   static  PIZZAPAZZA_DRAWING_TOOL = "";
 
   static  PIZZAPAZZA_DRAWING_TOOLS = "";
+
+  static  DELETE_DRAWING_TOOL_MESSAGE = "";
 
   // Ribbon History
   static  HISTORY = "";
@@ -226,6 +230,8 @@ class Z4Translations {
   static  MOVE_TOP = "";
 
   static  TRY_ME = "";
+
+  static  ACTIONS = "";
 
   // Color
   static  COLOR = "";
@@ -452,9 +458,11 @@ class Z4Translations {
     // Ribbon Drawing Tool
     Z4Translations.DRAWING_TOOL = "Drawing Tool";
     Z4Translations.DRAWING_TOOL_NAME = "Drawing Tool Name";
+    Z4Translations.SAVE_DRAWING_TOOL_AS = "Save Drawing Tool As";
     Z4Translations.SAVE_DRAWING_TOOLS_AS = "Save Drawing Tools As";
     Z4Translations.PIZZAPAZZA_DRAWING_TOOL = "pizzApazzA Drawing Tool";
     Z4Translations.PIZZAPAZZA_DRAWING_TOOLS = "pizzApazzA Drawing Tools";
+    Z4Translations.DELETE_DRAWING_TOOL_MESSAGE = "Do you really want to delete the drawing tool?";
     // Ribbon History
     Z4Translations.HISTORY = "History";
     Z4Translations.UNDO = "Undo";
@@ -538,6 +546,7 @@ class Z4Translations {
     Z4Translations.MOVE_BOTTOM = "Move to Bottom";
     Z4Translations.MOVE_TOP = "Move to Top";
     Z4Translations.TRY_ME = "Try Me";
+    Z4Translations.ACTIONS = "Actions";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -664,9 +673,11 @@ class Z4Translations {
     // Ribbon Drawing Tool
     Z4Translations.DRAWING_TOOL = "Strumento di Disegno";
     Z4Translations.DRAWING_TOOL_NAME = "Nome Strumento di Disegno";
+    Z4Translations.SAVE_DRAWING_TOOL_AS = "Salva Strumento di Disegno con Nome";
     Z4Translations.SAVE_DRAWING_TOOLS_AS = "Salva Strumenti di Disegno con Nome";
     Z4Translations.PIZZAPAZZA_DRAWING_TOOL = "Strumento di Disegno pizzApazzA";
     Z4Translations.PIZZAPAZZA_DRAWING_TOOLS = "Strumenti di Disegno pizzApazzA";
+    Z4Translations.DELETE_DRAWING_TOOL_MESSAGE = "Vuoi davvero eliminare lo strumento di disegno?";
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";
     Z4Translations.UNDO = "Annulla";
@@ -750,6 +761,7 @@ class Z4Translations {
     Z4Translations.MOVE_BOTTOM = "Muovi in Fondo";
     Z4Translations.MOVE_TOP = "Muovi in Cima";
     Z4Translations.TRY_ME = "Provami";
+    Z4Translations.ACTIONS = "Azioni";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";
