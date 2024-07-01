@@ -15,6 +15,8 @@ class Z4CanvasIOManager {
 
    ribbonLayerPanel = null;
 
+   ribbonDrawingToolPanel = null;
+
    ribbonHistoryPanel = null;
 
    statusPanel = null;
@@ -45,10 +47,12 @@ class Z4CanvasIOManager {
    * Sets the ribbon history panel
    *
    * @param ribbonLayerPanel The ribbon layer panel
+   * @param ribbonDrawingToolPanel The ribbon drawing tool panel
    * @param ribbonHistoryPanel The ribbon history panel
    */
-   setRibbonPanels(ribbonLayerPanel, ribbonHistoryPanel) {
+   setRibbonPanels(ribbonLayerPanel, ribbonDrawingToolPanel, ribbonHistoryPanel) {
     this.ribbonLayerPanel = ribbonLayerPanel;
+    this.ribbonDrawingToolPanel = ribbonDrawingToolPanel;
     this.ribbonHistoryPanel = ribbonHistoryPanel;
   }
 
@@ -105,6 +109,8 @@ class Z4CanvasIOManager {
       this.canvas.setSize(image.width, image.height);
       this.ribbonLayerPanel.reset();
       this.canvas.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.canvas.getLayersCount() - 1), null, true);
+      this.drawingTools.length = 0;
+      this.ribbonDrawingToolPanel.reset();
       this.ribbonHistoryPanel.resetHistory(() => {
         this.canvas.afterCreate(projectName, image.width, image.height);
         this.canvas.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
@@ -137,6 +143,8 @@ class Z4CanvasIOManager {
         zip.file("manifest.json").async("string", null).then(str => {
           this.paper.reset();
           this.ribbonLayerPanel.reset();
+          this.drawingTools.length = 0;
+          this.ribbonDrawingToolPanel.reset();
           this.ribbonHistoryPanel.resetHistory(() => {
             let json = JSON.parse("" + str);
             this.canvas.setSize(json["width"], json["height"]);
@@ -163,9 +171,19 @@ class Z4CanvasIOManager {
         } else if (json["history"]) {
           this.jsonToHistory(zip, json, 0, json["currentKeyHistory"], 0);
         } else {
-          this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
-          this.canvas.toHistory(json2 => this.ribbonHistoryPanel.addHistory(json2, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
-          Z4UI.pleaseWaitCompleted();
+          let zipObject = zip.file("drawingTools.json");
+          if (zipObject) {
+            zipObject.async("string", null).then(str => {
+              ((JSON.parse(str))["drawingTools"]).forEach(drawingTool => this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
+              this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
+              this.canvas.toHistory(json2 => this.ribbonHistoryPanel.addHistory(json2, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
+              Z4UI.pleaseWaitCompleted();
+            });
+          } else {
+            this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
+            this.canvas.toHistory(json2 => this.ribbonHistoryPanel.addHistory(json2, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
+            Z4UI.pleaseWaitCompleted();
+          }
         }
         return null;
       };
@@ -194,9 +212,19 @@ class Z4CanvasIOManager {
         this.ribbonHistoryPanel.addHistory(layerJSON, currentKey => this.jsonToHistory(zip, json, index + 1, previousCurrentKey, previousCurrentKey === historyKey ? currentKey : newCurrentKey), true);
       } else {
         this.ribbonHistoryPanel.addHistory(layerJSON, currentKey => {
-          this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey === historyKey ? currentKey : newCurrentKey);
-          this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
-          Z4UI.pleaseWaitCompleted();
+          let zipObject = zip.file("drawingTools.json");
+          if (zipObject) {
+            zipObject.async("string", null).then(str => {
+              ((JSON.parse(str))["drawingTools"]).forEach(drawingTool => this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
+              this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey === historyKey ? currentKey : newCurrentKey);
+              this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
+              Z4UI.pleaseWaitCompleted();
+            });
+          } else {
+            this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey === historyKey ? currentKey : newCurrentKey);
+            this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
+            Z4UI.pleaseWaitCompleted();
+          }
         }, true);
       }
     });
@@ -424,6 +452,36 @@ class Z4CanvasIOManager {
     };
     image.src = url;
     return null;
+  }
+
+  /**
+   * Adds a drawing tool from a file
+   *
+   * @param handle The file handle
+   */
+   addDrawingToolFromHandle(handle) {
+    handle.getFile().then(file => {
+      this.addDrawingToolFromFile(file);
+    });
+  }
+
+  /**
+   * Adds a drawing tool from a file
+   *
+   * @param file The file
+   */
+   addDrawingToolFromFile(file) {
+    let fileReader = new FileReader();
+    fileReader.onload = event => {
+      let json = JSON.parse(fileReader.result);
+      if (file.name.toLowerCase().endsWith(".z4ts")) {
+        (json["drawingTools"]).forEach(drawingTool => this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
+      } else {
+        this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(json));
+      }
+      return null;
+    };
+    fileReader.readAsText(file);
   }
 
   /**

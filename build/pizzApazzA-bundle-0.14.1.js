@@ -1912,7 +1912,7 @@ class Z4Canvas extends JSComponent {
     this.ribbonDrawingToolPanel.setCanvas(this);
     this.ribbonHistoryPanel.setCanvas(this);
     this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);
-    this.ioManager.setRibbonPanels(ribbonLayerPanel, ribbonHistoryPanel);
+    this.ioManager.setRibbonPanels(ribbonLayerPanel, ribbonDrawingToolPanel, ribbonHistoryPanel);
     this.historyManager.setRibbonLayerPanel(ribbonLayerPanel);
   }
 
@@ -1942,6 +1942,8 @@ class Z4Canvas extends JSComponent {
     this.setSize(width, height);
     this.ribbonLayerPanel.reset();
     this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), null, true);
+    this.drawingTools.length = 0;
+    this.ribbonDrawingToolPanel.reset();
     this.ribbonHistoryPanel.resetHistory(() => {
       this.afterCreate("", width, height);
       this.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
@@ -2284,6 +2286,24 @@ class Z4Canvas extends JSComponent {
     this.drawingTools.push(drawingTool);
     this.setSelectedDrawingTool(drawingTool);
     this.setSaved(false);
+  }
+
+  /**
+   * Adds a drawing tool from a file
+   *
+   * @param handle The file handle
+   */
+   addDrawingToolFromHandle(handle) {
+    this.ioManager.addDrawingToolFromHandle(handle);
+  }
+
+  /**
+   * Adds a drawing tool from a file
+   *
+   * @param file The file
+   */
+   addDrawingToolFromFile(file) {
+    this.ioManager.addDrawingToolFromFile(file);
   }
 
   /**
@@ -2631,6 +2651,8 @@ class Z4CanvasIOManager {
 
    ribbonLayerPanel = null;
 
+   ribbonDrawingToolPanel = null;
+
    ribbonHistoryPanel = null;
 
    statusPanel = null;
@@ -2661,10 +2683,12 @@ class Z4CanvasIOManager {
    * Sets the ribbon history panel
    *
    * @param ribbonLayerPanel The ribbon layer panel
+   * @param ribbonDrawingToolPanel The ribbon drawing tool panel
    * @param ribbonHistoryPanel The ribbon history panel
    */
-   setRibbonPanels(ribbonLayerPanel, ribbonHistoryPanel) {
+   setRibbonPanels(ribbonLayerPanel, ribbonDrawingToolPanel, ribbonHistoryPanel) {
     this.ribbonLayerPanel = ribbonLayerPanel;
+    this.ribbonDrawingToolPanel = ribbonDrawingToolPanel;
     this.ribbonHistoryPanel = ribbonHistoryPanel;
   }
 
@@ -2721,6 +2745,8 @@ class Z4CanvasIOManager {
       this.canvas.setSize(image.width, image.height);
       this.ribbonLayerPanel.reset();
       this.canvas.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.canvas.getLayersCount() - 1), null, true);
+      this.drawingTools.length = 0;
+      this.ribbonDrawingToolPanel.reset();
       this.ribbonHistoryPanel.resetHistory(() => {
         this.canvas.afterCreate(projectName, image.width, image.height);
         this.canvas.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
@@ -2753,6 +2779,8 @@ class Z4CanvasIOManager {
         zip.file("manifest.json").async("string", null).then(str => {
           this.paper.reset();
           this.ribbonLayerPanel.reset();
+          this.drawingTools.length = 0;
+          this.ribbonDrawingToolPanel.reset();
           this.ribbonHistoryPanel.resetHistory(() => {
             let json = JSON.parse("" + str);
             this.canvas.setSize(json["width"], json["height"]);
@@ -2779,9 +2807,19 @@ class Z4CanvasIOManager {
         } else if (json["history"]) {
           this.jsonToHistory(zip, json, 0, json["currentKeyHistory"], 0);
         } else {
-          this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
-          this.canvas.toHistory(json2 => this.ribbonHistoryPanel.addHistory(json2, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
-          Z4UI.pleaseWaitCompleted();
+          let zipObject = zip.file("drawingTools.json");
+          if (zipObject) {
+            zipObject.async("string", null).then(str => {
+              ((JSON.parse(str))["drawingTools"]).forEach(drawingTool => this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
+              this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
+              this.canvas.toHistory(json2 => this.ribbonHistoryPanel.addHistory(json2, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
+              Z4UI.pleaseWaitCompleted();
+            });
+          } else {
+            this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
+            this.canvas.toHistory(json2 => this.ribbonHistoryPanel.addHistory(json2, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
+            Z4UI.pleaseWaitCompleted();
+          }
         }
         return null;
       };
@@ -2810,9 +2848,19 @@ class Z4CanvasIOManager {
         this.ribbonHistoryPanel.addHistory(layerJSON, currentKey => this.jsonToHistory(zip, json, index + 1, previousCurrentKey, previousCurrentKey === historyKey ? currentKey : newCurrentKey), true);
       } else {
         this.ribbonHistoryPanel.addHistory(layerJSON, currentKey => {
-          this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey === historyKey ? currentKey : newCurrentKey);
-          this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
-          Z4UI.pleaseWaitCompleted();
+          let zipObject = zip.file("drawingTools.json");
+          if (zipObject) {
+            zipObject.async("string", null).then(str => {
+              ((JSON.parse(str))["drawingTools"]).forEach(drawingTool => this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
+              this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey === historyKey ? currentKey : newCurrentKey);
+              this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
+              Z4UI.pleaseWaitCompleted();
+            });
+          } else {
+            this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey === historyKey ? currentKey : newCurrentKey);
+            this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
+            Z4UI.pleaseWaitCompleted();
+          }
         }, true);
       }
     });
@@ -3040,6 +3088,36 @@ class Z4CanvasIOManager {
     };
     image.src = url;
     return null;
+  }
+
+  /**
+   * Adds a drawing tool from a file
+   *
+   * @param handle The file handle
+   */
+   addDrawingToolFromHandle(handle) {
+    handle.getFile().then(file => {
+      this.addDrawingToolFromFile(file);
+    });
+  }
+
+  /**
+   * Adds a drawing tool from a file
+   *
+   * @param file The file
+   */
+   addDrawingToolFromFile(file) {
+    let fileReader = new FileReader();
+    fileReader.onload = event => {
+      let json = JSON.parse(fileReader.result);
+      if (file.name.toLowerCase().endsWith(".z4ts")) {
+        (json["drawingTools"]).forEach(drawingTool => this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
+      } else {
+        this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(json));
+      }
+      return null;
+    };
+    fileReader.readAsText(file);
   }
 
   /**
@@ -5129,8 +5207,7 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbondrawingtoolpanel");
     this.addButton(Z4Translations.CREATE, true, 0, 0, "left", 5, event => this.create());
-    this.addButton(Z4Translations.OPEN, true, 1, 0, "both", 5, event => {
-    });
+    this.addButton(Z4Translations.OPEN, true, 1, 0, "both", 5, event => this.open());
     this.addButton(Z4Translations.SAVE_DRAWING_TOOLS_AS, true, 2, 0, "right", 5, event => this.save());
     Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.drawingToolsPreview.setLayout(new BoxLayout(this.drawingToolsPreview, BoxLayout.X_AXIS));
@@ -5158,6 +5235,19 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
 
    create() {
     this.canvas.addDrawingTool(new Z4DrawingTool(this.canvas.findDrawingToolName(), new Z4Stamper(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)), new Z4Shape2DPainter(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), false, false, -1, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0)), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)), new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE)));
+  }
+
+   open() {
+    if (typeof window["showOpenFilePicker"] === "function") {
+      let options = new FilePickerOptions();
+      options.excludeAcceptAllOption = true;
+      options.id = Z4Constants.TOOL_FILE_ID;
+      options.multiple = true;
+      options.types = Z4Constants.PIZZAPAZZA_OPEN_TOOLS_FILE_TYPE;
+      JSFilePicker.showOpenFilePicker(options, 0, handles => handles.forEach(handle => this.canvas.addDrawingToolFromHandle(handle)));
+    } else {
+      JSFileChooser.showOpenDialog(".z4t,.z4ts", JSFileChooser.MULTIPLE_SELECTION, 0, files => files.forEach(file => this.canvas.addDrawingToolFromFile(file)));
+    }
   }
 
    save() {
@@ -5192,6 +5282,13 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     options.suggestedName = this.canvas.getProjectName();
     options.types = Z4Constants.PIZZAPAZZA_SAVE_TOOLS_FILE_TYPE;
     JSFilePicker.showSaveFilePicker(options, handle => this.canvas.saveDrawingToolsToHandle(handle));
+  }
+
+  /**
+   * Resets the layers preview
+   */
+   reset() {
+    this.drawingToolsPreview.setProperty("innerHTML", "");
   }
 }
 /**
@@ -11279,6 +11376,10 @@ class Z4Constants {
     z4ts.description = Z4Translations.PIZZAPAZZA_DRAWING_TOOLS;
     z4ts.pushAccept("application/z4ts", new Array(".z4ts"));
     Z4Constants.PIZZAPAZZA_SAVE_TOOLS_FILE_TYPE.push(z4ts);
+    all = new FilePickerOptionsType();
+    all.description = Z4Translations.PIZZAPAZZA_DRAWING_TOOLS;
+    all.pushAccept("application/z4tx", new Array(".z4t", ".z4ts"));
+    Z4Constants.PIZZAPAZZA_OPEN_TOOLS_FILE_TYPE.push(all);
     Z4Constants.PIZZAPAZZA_OPEN_TOOLS_FILE_TYPE.push(z4t);
     Z4Constants.PIZZAPAZZA_OPEN_TOOLS_FILE_TYPE.push(z4ts);
   }

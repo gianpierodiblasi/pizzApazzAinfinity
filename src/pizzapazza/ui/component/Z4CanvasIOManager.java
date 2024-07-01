@@ -15,6 +15,7 @@ import javascript.awt.Point;
 import javascript.util.fsa.FileSystemFileHandle;
 import javascript.util.fsa.FileSystemWritableFileStreamCreateOptions;
 import pizzapazza.ui.panel.Z4StatusPanel;
+import pizzapazza.ui.panel.ribbon.Z4RibbonDrawingToolPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
 import pizzapazza.util.Z4DrawingTool;
@@ -33,6 +34,7 @@ import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.navigator;
 import simulation.js.$Object;
 import simulation.jszip.$JSZip;
+import simulation.jszip.$ZipObject;
 
 /**
  * The I/O manager of a Z4Canvas
@@ -47,6 +49,7 @@ public class Z4CanvasIOManager {
   private Dimension size;
 
   private Z4RibbonLayerPanel ribbonLayerPanel;
+  private Z4RibbonDrawingToolPanel ribbonDrawingToolPanel;
   private Z4RibbonHistoryPanel ribbonHistoryPanel;
   private Z4StatusPanel statusPanel;
 
@@ -76,10 +79,12 @@ public class Z4CanvasIOManager {
    * Sets the ribbon history panel
    *
    * @param ribbonLayerPanel The ribbon layer panel
+   * @param ribbonDrawingToolPanel The ribbon drawing tool panel
    * @param ribbonHistoryPanel The ribbon history panel
    */
-  public void setRibbonPanels(Z4RibbonLayerPanel ribbonLayerPanel, Z4RibbonHistoryPanel ribbonHistoryPanel) {
+  public void setRibbonPanels(Z4RibbonLayerPanel ribbonLayerPanel, Z4RibbonDrawingToolPanel ribbonDrawingToolPanel, Z4RibbonHistoryPanel ribbonHistoryPanel) {
     this.ribbonLayerPanel = ribbonLayerPanel;
+    this.ribbonDrawingToolPanel = ribbonDrawingToolPanel;
     this.ribbonHistoryPanel = ribbonHistoryPanel;
   }
 
@@ -141,6 +146,9 @@ public class Z4CanvasIOManager {
       this.ribbonLayerPanel.reset();
       this.canvas.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.canvas.getLayersCount() - 1), null, true);
 
+      this.drawingTools.length = 0;
+      this.ribbonDrawingToolPanel.reset();
+
       this.ribbonHistoryPanel.resetHistory(() -> {
         this.canvas.afterCreate(projectName, (int) image.width, (int) image.height);
         this.canvas.toHistory(json -> this.ribbonHistoryPanel.addHistory(json, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
@@ -175,6 +183,10 @@ public class Z4CanvasIOManager {
         zip.file("manifest.json").async("string", null).then(str -> {
           this.paper.reset();
           this.ribbonLayerPanel.reset();
+
+          this.drawingTools.length = 0;
+          this.ribbonDrawingToolPanel.reset();
+
           this.ribbonHistoryPanel.resetHistory(() -> {
             $Object json = ($Object) JSON.parse("" + str);
             this.canvas.setSize(json.$get("width"), json.$get("height"));
@@ -206,9 +218,20 @@ public class Z4CanvasIOManager {
         } else if ($exists(json.$get("history"))) {
           this.jsonToHistory(zip, json, 0, json.$get("currentKeyHistory"), 0);
         } else {
-          this.canvas.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
-          this.canvas.toHistory(json2 -> this.ribbonHistoryPanel.addHistory(json2, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
-          Z4UI.pleaseWaitCompleted();
+          $ZipObject zipObject = zip.file("drawingTools.json");
+          if ($exists(zipObject)) {
+            zipObject.async("string", null).then(str -> {
+              ((Iterable<$Object>) (($Object) JSON.parse((String) str)).$get("drawingTools")).forEach(drawingTool -> this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
+
+              this.canvas.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
+              this.canvas.toHistory(json2 -> this.ribbonHistoryPanel.addHistory(json2, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
+              Z4UI.pleaseWaitCompleted();
+            });
+          } else {
+            this.canvas.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
+            this.canvas.toHistory(json2 -> this.ribbonHistoryPanel.addHistory(json2, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
+            Z4UI.pleaseWaitCompleted();
+          }
         }
         return null;
       };
@@ -241,9 +264,20 @@ public class Z4CanvasIOManager {
         this.ribbonHistoryPanel.addHistory(layerJSON, currentKey -> this.jsonToHistory(zip, json, index + 1, previousCurrentKey, previousCurrentKey == historyKey ? currentKey : newCurrentKey), true);
       } else {
         this.ribbonHistoryPanel.addHistory(layerJSON, currentKey -> {
-          this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey == historyKey ? currentKey : newCurrentKey);
-          this.canvas.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
-          Z4UI.pleaseWaitCompleted();
+          $ZipObject zipObject = zip.file("drawingTools.json");
+          if ($exists(zipObject)) {
+            zipObject.async("string", null).then(str -> {
+              ((Iterable<$Object>) (($Object) JSON.parse((String) str)).$get("drawingTools")).forEach(drawingTool -> this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
+
+              this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey == historyKey ? currentKey : newCurrentKey);
+              this.canvas.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
+              Z4UI.pleaseWaitCompleted();
+            });
+          } else {
+            this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey == historyKey ? currentKey : newCurrentKey);
+            this.canvas.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
+            Z4UI.pleaseWaitCompleted();
+          }
         }, true);
       }
     });
@@ -502,6 +536,39 @@ public class Z4CanvasIOManager {
 
     image.src = url;
     return null;
+  }
+
+  /**
+   * Adds a drawing tool from a file
+   *
+   * @param handle The file handle
+   */
+  public void addDrawingToolFromHandle(FileSystemFileHandle handle) {
+    handle.getFile().then(file -> {
+      this.addDrawingToolFromFile(file);
+    });
+  }
+
+  /**
+   * Adds a drawing tool from a file
+   *
+   * @param file The file
+   */
+  @SuppressWarnings("unchecked")
+  public void addDrawingToolFromFile(File file) {
+    FileReader fileReader = new FileReader();
+    fileReader.onload = event -> {
+      $Object json = ($Object) JSON.parse((String) fileReader.result);
+
+      if (file.name.toLowerCase().endsWith(".z4ts")) {
+        ((Iterable<$Object>) json.$get("drawingTools")).forEach(drawingTool -> this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
+      } else {
+        this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(json));
+      }
+
+      return null;
+    };
+    fileReader.readAsText(file);
   }
 
   /**

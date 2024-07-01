@@ -5,6 +5,7 @@ import javascript.awt.BoxLayout;
 import javascript.awt.Color;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
+import javascript.swing.JSFileChooser;
 import javascript.swing.JSFilePicker;
 import javascript.swing.JSLabel;
 import javascript.swing.JSOptionPane;
@@ -59,8 +60,7 @@ public class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
 
     this.addButton(Z4Translations.CREATE, true, 0, 0, "left", 5, event -> this.create());
 
-    this.addButton(Z4Translations.OPEN, true, 1, 0, "both", 5, event -> {
-    });
+    this.addButton(Z4Translations.OPEN, true, 1, 0, "both", 5, event -> this.open());
 
     this.addButton(Z4Translations.SAVE_DRAWING_TOOLS_AS, true, 2, 0, "right", 5, event -> this.save());
 
@@ -139,6 +139,20 @@ public class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     ));
   }
 
+  private void open() {
+    if ($typeof(window.$get("showOpenFilePicker"), "function")) {
+      FilePickerOptions options = new FilePickerOptions();
+      options.excludeAcceptAllOption = true;
+      options.id = Z4Constants.TOOL_FILE_ID;
+      options.multiple = true;
+      options.types = Z4Constants.PIZZAPAZZA_OPEN_TOOLS_FILE_TYPE;
+
+      JSFilePicker.showOpenFilePicker(options, 0, handles -> handles.forEach(handle -> this.canvas.addDrawingToolFromHandle(handle)));
+    } else {
+      JSFileChooser.showOpenDialog(".z4t,.z4ts", JSFileChooser.MULTIPLE_SELECTION, 0, files -> files.forEach(file -> this.canvas.addDrawingToolFromFile(file)));
+    }
+  }
+
   private void save() {
     if ($typeof(window.$get("showSaveFilePicker"), "function")) {
       this.saveToolsToHandle();
@@ -175,5 +189,12 @@ public class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     options.types = Z4Constants.PIZZAPAZZA_SAVE_TOOLS_FILE_TYPE;
 
     JSFilePicker.showSaveFilePicker(options, handle -> this.canvas.saveDrawingToolsToHandle(handle));
+  }
+  
+  /**
+   * Resets the layers preview
+   */
+  public void reset() {
+    this.drawingToolsPreview.setProperty("innerHTML", "");
   }
 }

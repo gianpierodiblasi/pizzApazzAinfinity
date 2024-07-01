@@ -118,6 +118,10 @@ class Z4Constants {
     z4ts.description = Z4Translations.PIZZAPAZZA_DRAWING_TOOLS;
     z4ts.pushAccept("application/z4ts", new Array(".z4ts"));
     Z4Constants.PIZZAPAZZA_SAVE_TOOLS_FILE_TYPE.push(z4ts);
+    all = new FilePickerOptionsType();
+    all.description = Z4Translations.PIZZAPAZZA_DRAWING_TOOLS;
+    all.pushAccept("application/z4tx", new Array(".z4t", ".z4ts"));
+    Z4Constants.PIZZAPAZZA_OPEN_TOOLS_FILE_TYPE.push(all);
     Z4Constants.PIZZAPAZZA_OPEN_TOOLS_FILE_TYPE.push(z4t);
     Z4Constants.PIZZAPAZZA_OPEN_TOOLS_FILE_TYPE.push(z4ts);
   }

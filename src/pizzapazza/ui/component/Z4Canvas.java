@@ -122,7 +122,7 @@ public class Z4Canvas extends JSComponent {
     this.ribbonHistoryPanel.setCanvas(this);
 
     this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);
-    this.ioManager.setRibbonPanels(ribbonLayerPanel, ribbonHistoryPanel);
+    this.ioManager.setRibbonPanels(ribbonLayerPanel, ribbonDrawingToolPanel, ribbonHistoryPanel);
     this.historyManager.setRibbonLayerPanel(ribbonLayerPanel);
   }
 
@@ -156,6 +156,9 @@ public class Z4Canvas extends JSComponent {
     this.ribbonLayerPanel.reset();
     this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), null, true);
 
+    this.drawingTools.length = 0;
+    this.ribbonDrawingToolPanel.reset();
+    
     this.ribbonHistoryPanel.resetHistory(() -> {
       this.afterCreate("", width, height);
       this.toHistory(json -> this.ribbonHistoryPanel.addHistory(json, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
@@ -516,6 +519,24 @@ public class Z4Canvas extends JSComponent {
     this.drawingTools.push(drawingTool);
     this.setSelectedDrawingTool(drawingTool);
     this.setSaved(false);
+  }
+
+  /**
+   * Adds a drawing tool from a file
+   *
+   * @param handle The file handle
+   */
+  public void addDrawingToolFromHandle(FileSystemFileHandle handle) {
+    this.ioManager.addDrawingToolFromHandle(handle);
+  }
+
+  /**
+   * Adds a drawing tool from a file
+   *
+   * @param file The file
+   */
+  public void addDrawingToolFromFile(File file) {
+    this.ioManager.addDrawingToolFromFile(file);
   }
 
   /**
