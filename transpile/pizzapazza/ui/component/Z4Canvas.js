@@ -13,6 +13,8 @@ class Z4Canvas extends JSComponent {
 
    ribbonLayerPanel = null;
 
+   ribbonDrawingToolPanel = null;
+
    ribbonHistoryPanel = null;
 
    statusPanel = null;
@@ -86,15 +88,18 @@ class Z4Canvas extends JSComponent {
    *
    * @param ribbonFilePanel The ribbon file panel
    * @param ribbonLayerPanel The ribbon layer panel
+   * @param ribbonDrawingToolPanel The ribbon drawing tool panel
    * @param ribbonHistoryPanel The ribbon history panel
    */
-   setRibbonPanels(ribbonFilePanel, ribbonLayerPanel, ribbonHistoryPanel) {
+   setRibbonPanels(ribbonFilePanel, ribbonLayerPanel, ribbonDrawingToolPanel, ribbonHistoryPanel) {
     this.ribbonFilePanel = ribbonFilePanel;
     this.ribbonLayerPanel = ribbonLayerPanel;
+    this.ribbonDrawingToolPanel = ribbonDrawingToolPanel;
     this.ribbonHistoryPanel = ribbonHistoryPanel;
     this.ribbonFilePanel.setCanvas(this);
-    this.ribbonHistoryPanel.setCanvas(this);
     this.ribbonLayerPanel.setCanvas(this);
+    this.ribbonDrawingToolPanel.setCanvas(this);
+    this.ribbonHistoryPanel.setCanvas(this);
     this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);
     this.ioManager.setRibbonPanels(ribbonLayerPanel, ribbonHistoryPanel);
     this.historyManager.setRibbonLayerPanel(ribbonLayerPanel);
@@ -487,6 +492,26 @@ class Z4Canvas extends JSComponent {
     }
     this.setSaved(false);
     return index;
+  }
+
+  /**
+   * Finds a drawing tool name
+   *
+   * @return The drawing tool name
+   */
+   findDrawingToolName() {
+    let counter = 0;
+    let found = "";
+    while (!found) {
+      found = Z4Translations.DRAWING_TOOL + " " + counter;
+      for (let index = 0; index < this.drawingTools.length; index++) {
+        if (found === this.drawingTools[index].getName()) {
+          found = "";
+        }
+      }
+      counter++;
+    }
+    return found;
   }
 
   /**

@@ -13,6 +13,7 @@ import javascript.awt.Point;
 import javascript.swing.JSComponent;
 import javascript.util.fsa.FileSystemFileHandle;
 import pizzapazza.ui.panel.Z4StatusPanel;
+import pizzapazza.ui.panel.ribbon.Z4RibbonDrawingToolPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonFilePanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
@@ -41,6 +42,7 @@ public class Z4Canvas extends JSComponent {
 
   private Z4RibbonFilePanel ribbonFilePanel;
   private Z4RibbonLayerPanel ribbonLayerPanel;
+  private Z4RibbonDrawingToolPanel ribbonDrawingToolPanel;
   private Z4RibbonHistoryPanel ribbonHistoryPanel;
   private Z4StatusPanel statusPanel;
 
@@ -105,16 +107,19 @@ public class Z4Canvas extends JSComponent {
    *
    * @param ribbonFilePanel The ribbon file panel
    * @param ribbonLayerPanel The ribbon layer panel
+   * @param ribbonDrawingToolPanel The ribbon drawing tool panel
    * @param ribbonHistoryPanel The ribbon history panel
    */
-  public void setRibbonPanels(Z4RibbonFilePanel ribbonFilePanel, Z4RibbonLayerPanel ribbonLayerPanel, Z4RibbonHistoryPanel ribbonHistoryPanel) {
+  public void setRibbonPanels(Z4RibbonFilePanel ribbonFilePanel, Z4RibbonLayerPanel ribbonLayerPanel, Z4RibbonDrawingToolPanel ribbonDrawingToolPanel, Z4RibbonHistoryPanel ribbonHistoryPanel) {
     this.ribbonFilePanel = ribbonFilePanel;
     this.ribbonLayerPanel = ribbonLayerPanel;
+    this.ribbonDrawingToolPanel = ribbonDrawingToolPanel;
     this.ribbonHistoryPanel = ribbonHistoryPanel;
 
     this.ribbonFilePanel.setCanvas(this);
-    this.ribbonHistoryPanel.setCanvas(this);
     this.ribbonLayerPanel.setCanvas(this);
+    this.ribbonDrawingToolPanel.setCanvas(this);
+    this.ribbonHistoryPanel.setCanvas(this);
 
     this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);
     this.ioManager.setRibbonPanels(ribbonLayerPanel, ribbonHistoryPanel);
@@ -532,6 +537,27 @@ public class Z4Canvas extends JSComponent {
 
     this.setSaved(false);
     return index;
+  }
+
+  /**
+   * Finds a drawing tool name
+   *
+   * @return The drawing tool name
+   */
+  @SuppressWarnings("StringEquality")
+  public String findDrawingToolName() {
+    int counter = 0;
+    String found = "";
+    while (!$exists(found)) {
+      found = Z4Translations.DRAWING_TOOL + " " + counter;
+      for (int index = 0; index < this.drawingTools.length; index++) {
+        if (found == this.drawingTools.$get(index).getName()) {
+          found = "";
+        }
+      }
+      counter++;
+    }
+    return found;
   }
 
   /**

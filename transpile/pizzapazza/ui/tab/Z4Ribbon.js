@@ -38,7 +38,7 @@ class Z4Ribbon extends JSTabbedPane {
    * @param canvas The canvas
    */
    setCanvas(canvas) {
-    canvas.setRibbonPanels(this.filePanel, this.layerPanel, this.historyPanel);
+    canvas.setRibbonPanels(this.filePanel, this.layerPanel, this.drawingToolPanel, this.historyPanel);
   }
 
   /**
@@ -49,6 +49,7 @@ class Z4Ribbon extends JSTabbedPane {
    setStatusPanel(statusPanel) {
     this.filePanel.setStatusPanel(statusPanel);
     this.layerPanel.setStatusPanel(statusPanel);
+    this.drawingToolPanel.setStatusPanel(statusPanel);
     this.historyPanel.setStatusPanel(statusPanel);
   }
 }
