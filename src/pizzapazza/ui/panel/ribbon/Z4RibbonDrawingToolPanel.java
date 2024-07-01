@@ -1,10 +1,17 @@
 package pizzapazza.ui.panel.ribbon;
 
+import javascript.awt.BorderLayout;
 import javascript.awt.BoxLayout;
 import javascript.awt.Color;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
+import javascript.swing.JSFilePicker;
+import javascript.swing.JSLabel;
+import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
+import javascript.swing.JSTextField;
+import javascript.swing.event.ChangeEvent;
+import javascript.util.fsa.FilePickerOptions;
 import pizzapazza.color.Z4ColorProgression;
 import pizzapazza.color.Z4ColorProgressionBehavior;
 import pizzapazza.color.Z4Lighting;
@@ -22,9 +29,13 @@ import pizzapazza.math.Z4SignedValue;
 import pizzapazza.painter.Z4Shape2DPainter;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.panel.Z4StatusPanel;
+import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4DrawingTool;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
+import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.$typeof;
+import static simulation.js.$Globals.window;
 
 /**
  * The ribbon panel containing the drawing tool menus
@@ -51,8 +62,7 @@ public class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     this.addButton(Z4Translations.OPEN, true, 1, 0, "both", 5, event -> {
     });
 
-    this.addButton(Z4Translations.SAVE_DRAWING_TOOLS_AS, true, 2, 0, "right", 5, event -> {
-    });
+    this.addButton(Z4Translations.SAVE_DRAWING_TOOLS_AS, true, 2, 0, "right", 5, event -> this.save());
 
     Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
@@ -127,5 +137,43 @@ public class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
             Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)),
             new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE)
     ));
+  }
+
+  private void save() {
+    if ($typeof(window.$get("showSaveFilePicker"), "function")) {
+      this.saveToolsToHandle();
+    } else {
+      this.saveToolsToFile();
+    }
+  }
+
+  private void saveToolsToFile() {
+    JSPanel panel = new JSPanel();
+    panel.setLayout(new BorderLayout(0, 0));
+
+    JSLabel label = new JSLabel();
+    label.setText(Z4Translations.FILENAME);
+    panel.add(label, BorderLayout.NORTH);
+
+    JSTextField fileName = new JSTextField();
+    fileName.setText(this.canvas.getProjectName());
+    panel.add(fileName, BorderLayout.CENTER);
+
+    JSOptionPane.showInputDialog(panel, Z4Translations.SAVE, listener -> fileName.addActionListener(event -> listener.$apply(new ChangeEvent())), () -> $exists(fileName.getText()), response -> {
+      if (response == JSOptionPane.OK_OPTION) {
+        this.canvas.saveDrawingToolsToFile(fileName.getText());
+      }
+    });
+  }
+
+  private void saveToolsToHandle() {
+    FilePickerOptions options = new FilePickerOptions();
+    options.excludeAcceptAllOption = true;
+    options.id = Z4Constants.TOOL_FILE_ID;
+    options.multiple = false;
+    options.suggestedName = this.canvas.getProjectName();
+    options.types = Z4Constants.PIZZAPAZZA_SAVE_TOOLS_FILE_TYPE;
+
+    JSFilePicker.showSaveFilePicker(options, handle -> this.canvas.saveDrawingToolsToHandle(handle));
   }
 }

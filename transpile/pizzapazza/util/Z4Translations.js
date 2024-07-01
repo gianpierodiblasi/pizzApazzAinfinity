@@ -61,6 +61,10 @@ class Z4Translations {
 
   static  SAVE_DRAWING_TOOLS_AS = "";
 
+  static  PIZZAPAZZA_DRAWING_TOOL = "";
+
+  static  PIZZAPAZZA_DRAWING_TOOLS = "";
+
   // Ribbon History
   static  HISTORY = "";
 
@@ -449,6 +453,8 @@ class Z4Translations {
     Z4Translations.DRAWING_TOOL = "Drawing Tool";
     Z4Translations.DRAWING_TOOL_NAME = "Drawing Tool Name";
     Z4Translations.SAVE_DRAWING_TOOLS_AS = "Save Drawing Tools As";
+    Z4Translations.PIZZAPAZZA_DRAWING_TOOL = "pizzApazzA Drawing Tool";
+    Z4Translations.PIZZAPAZZA_DRAWING_TOOLS = "pizzApazzA Drawing Tools";
     // Ribbon History
     Z4Translations.HISTORY = "History";
     Z4Translations.UNDO = "Undo";
@@ -659,6 +665,8 @@ class Z4Translations {
     Z4Translations.DRAWING_TOOL = "Strumento di Disegno";
     Z4Translations.DRAWING_TOOL_NAME = "Nome Strumento di Disegno";
     Z4Translations.SAVE_DRAWING_TOOLS_AS = "Salva Strumenti di Disegno con Nome";
+    Z4Translations.PIZZAPAZZA_DRAWING_TOOL = "Strumento di Disegno pizzApazzA";
+    Z4Translations.PIZZAPAZZA_DRAWING_TOOLS = "Strumenti di Disegno pizzApazzA";
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";
     Z4Translations.UNDO = "Annulla";

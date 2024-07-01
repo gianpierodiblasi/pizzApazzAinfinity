@@ -44,7 +44,7 @@ window.onload = () => {
 
   SwingJS.instance().fontSize(12).build();
 
-  Z4Constants.configureAcceptedImageFileTypeArrays();
+  Z4Constants.configureAcceptedFileTypeArrays();
   
   var frame = new Z4Frame();
 

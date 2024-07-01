@@ -416,4 +416,20 @@ class Z4CanvasIOManager {
     image.src = url;
     return null;
   }
+
+  /**
+   * Saves the drawing tools
+   *
+   * @param fileName The file name
+   */
+   saveDrawingToolsToFile(fileName) {
+  }
+
+  /**
+   * Saves the drawing tools
+   *
+   * @param handle The file handle
+   */
+   saveDrawingToolsToHandle(handle) {
+  }
 }

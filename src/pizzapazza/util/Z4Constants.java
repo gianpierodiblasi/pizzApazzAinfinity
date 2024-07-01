@@ -19,6 +19,11 @@ public class Z4Constants {
   public final static String IMAGE_FILE_ID = "IMAGE_FILE_FOLDER_ID";
 
   /**
+   * The ID of the tool file folder
+   */
+  public final static String TOOL_FILE_ID = "TOOL_FILE_FOLDER_ID";
+
+  /**
    * The ID of the texture file folder
    */
   public final static String TEXTURE_FILE_ID = "TEXTURE_FILE_FOLDER_ID";
@@ -49,7 +54,22 @@ public class Z4Constants {
   /**
    * The array of the pizzApazzA project file type
    */
-  public static final Array<FilePickerOptionsType> PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE = new Array<>();
+  public static final Array<FilePickerOptionsType> PIZZAPAZZA_PROJECT_FILE_TYPE = new Array<>();
+
+  /**
+   * The array of the pizzApazzA tools file type for open
+   */
+  public static final Array<FilePickerOptionsType> PIZZAPAZZA_OPEN_TOOLS_FILE_TYPE = new Array<>();
+
+  /**
+   * The array of the pizzApazzA tool file type for save
+   */
+  public static final Array<FilePickerOptionsType> PIZZAPAZZA_SAVE_TOOL_FILE_TYPE = new Array<>();
+
+  /**
+   * The array of the pizzApazzA tools file type for save
+   */
+  public static final Array<FilePickerOptionsType> PIZZAPAZZA_SAVE_TOOLS_FILE_TYPE = new Array<>();
 
   /**
    * The zoom levels
@@ -100,7 +120,7 @@ public class Z4Constants {
   /**
    * Configures the arrays of accepted file types
    */
-  public static void configureAcceptedImageFileTypeArrays() {
+  public static void configureAcceptedFileTypeArrays() {
     FilePickerOptionsType all = new FilePickerOptionsType();
     all.description = Z4Translations.IMAGE_FILE;
     all.pushAccept("image/z4i", Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT);
@@ -120,7 +140,20 @@ public class Z4Constants {
     FilePickerOptionsType z4i = new FilePickerOptionsType();
     z4i.description = Z4Translations.PIZZAPAZZA_PROJECT;
     z4i.pushAccept("application/z4i", new Array<>(".z4i"));
-    Z4Constants.PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE.push(z4i);
+    Z4Constants.PIZZAPAZZA_PROJECT_FILE_TYPE.push(z4i);
+
+    FilePickerOptionsType z4t = new FilePickerOptionsType();
+    z4t.description = Z4Translations.PIZZAPAZZA_DRAWING_TOOL;
+    z4t.pushAccept("application/z4t", new Array<>(".z4t"));
+    Z4Constants.PIZZAPAZZA_SAVE_TOOL_FILE_TYPE.push(z4t);
+
+    FilePickerOptionsType z4ts = new FilePickerOptionsType();
+    z4ts.description = Z4Translations.PIZZAPAZZA_DRAWING_TOOLS;
+    z4ts.pushAccept("application/z4ts", new Array<>(".z4ts"));
+    Z4Constants.PIZZAPAZZA_SAVE_TOOLS_FILE_TYPE.push(z4ts);
+
+    Z4Constants.PIZZAPAZZA_OPEN_TOOLS_FILE_TYPE.push(z4t);
+    Z4Constants.PIZZAPAZZA_OPEN_TOOLS_FILE_TYPE.push(z4ts);
   }
 
   private static void pushACCEPTED_IMAGE_FILE_TYPE(Array<FilePickerOptionsType> array, String mime, Array<String> extensions) {

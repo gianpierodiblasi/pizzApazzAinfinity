@@ -144,7 +144,7 @@ public class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
       options.excludeAcceptAllOption = true;
       options.id = Z4Constants.IMAGE_FILE_ID;
       options.multiple = false;
-      options.types = Z4Constants.PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE;
+      options.types = Z4Constants.PIZZAPAZZA_PROJECT_FILE_TYPE;
 
       JSFilePicker.showOpenFilePicker(options, 0, handles -> handles.forEach(handle -> this.canvas.openProjectFromHandle(handle)));
     } else {
@@ -190,7 +190,7 @@ public class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
       options.id = Z4Constants.IMAGE_FILE_ID;
       options.multiple = false;
       options.suggestedName = this.canvas.getProjectName();
-      options.types = Z4Constants.PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE;
+      options.types = Z4Constants.PIZZAPAZZA_PROJECT_FILE_TYPE;
 
       JSFilePicker.showSaveFilePicker(options, handle -> this.canvas.saveProjectToHandle(handle, apply));
     } else {

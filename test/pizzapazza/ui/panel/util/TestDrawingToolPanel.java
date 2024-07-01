@@ -15,7 +15,7 @@ public class TestDrawingToolPanel extends JSFrame {
   public TestDrawingToolPanel() {
     super();
 
-    Z4Constants.configureAcceptedImageFileTypeArrays();
+    Z4Constants.configureAcceptedFileTypeArrays();
     
     Z4DrawingToolPanel panel = new Z4DrawingToolPanel();
     panel.addChangeListener(event -> {

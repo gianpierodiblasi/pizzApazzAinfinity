@@ -526,6 +526,24 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Saves the drawing tools
+   *
+   * @param fileName The file name
+   */
+   saveDrawingToolsToFile(fileName) {
+    this.ioManager.saveDrawingToolsToFile(fileName);
+  }
+
+  /**
+   * Saves the drawing tools
+   *
+   * @param handle The file handle
+   */
+   saveDrawingToolsToHandle(handle) {
+    this.ioManager.saveDrawingToolsToHandle(handle);
+  }
+
+  /**
    * Returns the project name
    *
    * @return The project name

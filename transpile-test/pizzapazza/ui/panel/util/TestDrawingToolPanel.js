@@ -5,7 +5,7 @@ class TestDrawingToolPanel extends JSFrame {
 
   constructor() {
     super();
-    Z4Constants.configureAcceptedImageFileTypeArrays();
+    Z4Constants.configureAcceptedFileTypeArrays();
     let panel = new Z4DrawingToolPanel();
     panel.addChangeListener(event => {
       if (!panel.getValueIsAdjusting()) {

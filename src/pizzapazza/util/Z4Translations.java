@@ -50,6 +50,8 @@ public class Z4Translations {
   public static String DRAWING_TOOL = "";
   public static String DRAWING_TOOL_NAME = "";
   public static String SAVE_DRAWING_TOOLS_AS = "";
+  public static String PIZZAPAZZA_DRAWING_TOOL = "";
+  public static String PIZZAPAZZA_DRAWING_TOOLS = "";
 
   // Ribbon History
   public static String HISTORY = "";
@@ -289,7 +291,9 @@ public class Z4Translations {
     Z4Translations.DRAWING_TOOL = "Drawing Tool";
     Z4Translations.DRAWING_TOOL_NAME = "Drawing Tool Name";
     Z4Translations.SAVE_DRAWING_TOOLS_AS = "Save Drawing Tools As";
-
+    Z4Translations.PIZZAPAZZA_DRAWING_TOOL = "pizzApazzA Drawing Tool";
+    Z4Translations.PIZZAPAZZA_DRAWING_TOOLS = "pizzApazzA Drawing Tools";
+    
     // Ribbon History
     Z4Translations.HISTORY = "History";
     Z4Translations.UNDO = "Undo";
@@ -515,7 +519,9 @@ public class Z4Translations {
     Z4Translations.DRAWING_TOOL = "Strumento di Disegno";
     Z4Translations.DRAWING_TOOL_NAME = "Nome Strumento di Disegno";
     Z4Translations.SAVE_DRAWING_TOOLS_AS = "Salva Strumenti di Disegno con Nome";
-
+    Z4Translations.PIZZAPAZZA_DRAWING_TOOL = "Strumento di Disegno pizzApazzA";
+    Z4Translations.PIZZAPAZZA_DRAWING_TOOLS = "Strumenti di Disegno pizzApazzA";
+    
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";
     Z4Translations.UNDO = "Annulla";

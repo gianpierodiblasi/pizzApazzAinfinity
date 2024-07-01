@@ -44,7 +44,7 @@ window.onload = () => {
 
   SwingJS.instance().fontSize(12).build();
 
-  Z4Constants.configureAcceptedImageFileTypeArrays();
+  Z4Constants.configureAcceptedFileTypeArrays();
   
   var frame = new Z4Frame();
 
@@ -2337,6 +2337,24 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Saves the drawing tools
+   *
+   * @param fileName The file name
+   */
+   saveDrawingToolsToFile(fileName) {
+    this.ioManager.saveDrawingToolsToFile(fileName);
+  }
+
+  /**
+   * Saves the drawing tools
+   *
+   * @param handle The file handle
+   */
+   saveDrawingToolsToHandle(handle) {
+    this.ioManager.saveDrawingToolsToHandle(handle);
+  }
+
+  /**
    * Returns the project name
    *
    * @return The project name
@@ -3013,6 +3031,22 @@ class Z4CanvasIOManager {
     };
     image.src = url;
     return null;
+  }
+
+  /**
+   * Saves the drawing tools
+   *
+   * @param fileName The file name
+   */
+   saveDrawingToolsToFile(fileName) {
+  }
+
+  /**
+   * Saves the drawing tools
+   *
+   * @param handle The file handle
+   */
+   saveDrawingToolsToHandle(handle) {
   }
 }
 /**
@@ -5065,8 +5099,7 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     this.addButton(Z4Translations.CREATE, true, 0, 0, "left", 5, event => this.create());
     this.addButton(Z4Translations.OPEN, true, 1, 0, "both", 5, event => {
     });
-    this.addButton(Z4Translations.SAVE_DRAWING_TOOLS_AS, true, 2, 0, "right", 5, event => {
-    });
+    this.addButton(Z4Translations.SAVE_DRAWING_TOOLS_AS, true, 2, 0, "right", 5, event => this.save());
     Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.drawingToolsPreview.setLayout(new BoxLayout(this.drawingToolsPreview, BoxLayout.X_AXIS));
     this.drawingToolsPreview.getStyle().overflowX = "scroll";
@@ -5093,6 +5126,40 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
 
    create() {
     this.canvas.addDrawingTool(new Z4DrawingTool(this.canvas.findDrawingToolName(), new Z4Stamper(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)), new Z4Shape2DPainter(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), false, false, -1, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0)), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)), new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE)));
+  }
+
+   save() {
+    if (typeof window["showSaveFilePicker"] === "function") {
+      this.saveToolsToHandle();
+    } else {
+      this.saveToolsToFile();
+    }
+  }
+
+   saveToolsToFile() {
+    let panel = new JSPanel();
+    panel.setLayout(new BorderLayout(0, 0));
+    let label = new JSLabel();
+    label.setText(Z4Translations.FILENAME);
+    panel.add(label, BorderLayout.NORTH);
+    let fileName = new JSTextField();
+    fileName.setText(this.canvas.getProjectName());
+    panel.add(fileName, BorderLayout.CENTER);
+    JSOptionPane.showInputDialog(panel, Z4Translations.SAVE, listener => fileName.addActionListener(event => listener(new ChangeEvent())), () => !!(fileName.getText()), response => {
+      if (response === JSOptionPane.OK_OPTION) {
+        this.canvas.saveDrawingToolsToFile(fileName.getText());
+      }
+    });
+  }
+
+   saveToolsToHandle() {
+    let options = new FilePickerOptions();
+    options.excludeAcceptAllOption = true;
+    options.id = Z4Constants.TOOL_FILE_ID;
+    options.multiple = false;
+    options.suggestedName = this.canvas.getProjectName();
+    options.types = Z4Constants.PIZZAPAZZA_SAVE_TOOLS_FILE_TYPE;
+    JSFilePicker.showSaveFilePicker(options, handle => this.canvas.saveDrawingToolsToHandle(handle));
   }
 }
 /**
@@ -5205,7 +5272,7 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
       options.excludeAcceptAllOption = true;
       options.id = Z4Constants.IMAGE_FILE_ID;
       options.multiple = false;
-      options.types = Z4Constants.PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE;
+      options.types = Z4Constants.PIZZAPAZZA_PROJECT_FILE_TYPE;
       JSFilePicker.showOpenFilePicker(options, 0, handles => handles.forEach(handle => this.canvas.openProjectFromHandle(handle)));
     } else {
       JSFileChooser.showOpenDialog(".z4i", JSFileChooser.SINGLE_SELECTION, 0, files => files.forEach(file => this.canvas.openProjectFromFile(file)));
@@ -5247,7 +5314,7 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
       options.id = Z4Constants.IMAGE_FILE_ID;
       options.multiple = false;
       options.suggestedName = this.canvas.getProjectName();
-      options.types = Z4Constants.PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE;
+      options.types = Z4Constants.PIZZAPAZZA_PROJECT_FILE_TYPE;
       JSFilePicker.showSaveFilePicker(options, handle => this.canvas.saveProjectToHandle(handle, apply));
     } else {
       this.canvas.saveProjectToHandle(this.canvas.getHandle(), apply);
@@ -11073,6 +11140,11 @@ class Z4Constants {
   static  IMAGE_FILE_ID = "IMAGE_FILE_FOLDER_ID";
 
   /**
+   * The ID of the tool file folder
+   */
+  static  TOOL_FILE_ID = "TOOL_FILE_FOLDER_ID";
+
+  /**
    * The ID of the texture file folder
    */
   static  TEXTURE_FILE_ID = "TEXTURE_FILE_FOLDER_ID";
@@ -11095,7 +11167,22 @@ class Z4Constants {
   /**
    * The array of the pizzApazzA project file type
    */
-  static  PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE = new Array();
+  static  PIZZAPAZZA_PROJECT_FILE_TYPE = new Array();
+
+  /**
+   * The array of the pizzApazzA tools file type for open
+   */
+  static  PIZZAPAZZA_OPEN_TOOLS_FILE_TYPE = new Array();
+
+  /**
+   * The array of the pizzApazzA tool file type for save
+   */
+  static  PIZZAPAZZA_SAVE_TOOL_FILE_TYPE = new Array();
+
+  /**
+   * The array of the pizzApazzA tools file type for save
+   */
+  static  PIZZAPAZZA_SAVE_TOOLS_FILE_TYPE = new Array();
 
   /**
    * The zoom levels
@@ -11134,7 +11221,7 @@ class Z4Constants {
   /**
    * Configures the arrays of accepted file types
    */
-  static  configureAcceptedImageFileTypeArrays() {
+  static  configureAcceptedFileTypeArrays() {
     let all = new FilePickerOptionsType();
     all.description = Z4Translations.IMAGE_FILE;
     all.pushAccept("image/z4i", Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT);
@@ -11151,7 +11238,17 @@ class Z4Constants {
     let z4i = new FilePickerOptionsType();
     z4i.description = Z4Translations.PIZZAPAZZA_PROJECT;
     z4i.pushAccept("application/z4i", new Array(".z4i"));
-    Z4Constants.PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE.push(z4i);
+    Z4Constants.PIZZAPAZZA_PROJECT_FILE_TYPE.push(z4i);
+    let z4t = new FilePickerOptionsType();
+    z4t.description = Z4Translations.PIZZAPAZZA_DRAWING_TOOL;
+    z4t.pushAccept("application/z4t", new Array(".z4t"));
+    Z4Constants.PIZZAPAZZA_SAVE_TOOL_FILE_TYPE.push(z4t);
+    let z4ts = new FilePickerOptionsType();
+    z4ts.description = Z4Translations.PIZZAPAZZA_DRAWING_TOOLS;
+    z4ts.pushAccept("application/z4ts", new Array(".z4ts"));
+    Z4Constants.PIZZAPAZZA_SAVE_TOOLS_FILE_TYPE.push(z4ts);
+    Z4Constants.PIZZAPAZZA_OPEN_TOOLS_FILE_TYPE.push(z4t);
+    Z4Constants.PIZZAPAZZA_OPEN_TOOLS_FILE_TYPE.push(z4ts);
   }
 
   static  pushACCEPTED_IMAGE_FILE_TYPE(array, mime, extensions) {
@@ -16343,6 +16440,10 @@ class Z4Translations {
 
   static  SAVE_DRAWING_TOOLS_AS = "";
 
+  static  PIZZAPAZZA_DRAWING_TOOL = "";
+
+  static  PIZZAPAZZA_DRAWING_TOOLS = "";
+
   // Ribbon History
   static  HISTORY = "";
 
@@ -16731,6 +16832,8 @@ class Z4Translations {
     Z4Translations.DRAWING_TOOL = "Drawing Tool";
     Z4Translations.DRAWING_TOOL_NAME = "Drawing Tool Name";
     Z4Translations.SAVE_DRAWING_TOOLS_AS = "Save Drawing Tools As";
+    Z4Translations.PIZZAPAZZA_DRAWING_TOOL = "pizzApazzA Drawing Tool";
+    Z4Translations.PIZZAPAZZA_DRAWING_TOOLS = "pizzApazzA Drawing Tools";
     // Ribbon History
     Z4Translations.HISTORY = "History";
     Z4Translations.UNDO = "Undo";
@@ -16941,6 +17044,8 @@ class Z4Translations {
     Z4Translations.DRAWING_TOOL = "Strumento di Disegno";
     Z4Translations.DRAWING_TOOL_NAME = "Nome Strumento di Disegno";
     Z4Translations.SAVE_DRAWING_TOOLS_AS = "Salva Strumenti di Disegno con Nome";
+    Z4Translations.PIZZAPAZZA_DRAWING_TOOL = "Strumento di Disegno pizzApazzA";
+    Z4Translations.PIZZAPAZZA_DRAWING_TOOLS = "Strumenti di Disegno pizzApazzA";
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";
     Z4Translations.UNDO = "Annulla";

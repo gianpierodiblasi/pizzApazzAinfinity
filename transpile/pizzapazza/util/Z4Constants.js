@@ -11,6 +11,11 @@ class Z4Constants {
   static  IMAGE_FILE_ID = "IMAGE_FILE_FOLDER_ID";
 
   /**
+   * The ID of the tool file folder
+   */
+  static  TOOL_FILE_ID = "TOOL_FILE_FOLDER_ID";
+
+  /**
    * The ID of the texture file folder
    */
   static  TEXTURE_FILE_ID = "TEXTURE_FILE_FOLDER_ID";
@@ -33,7 +38,22 @@ class Z4Constants {
   /**
    * The array of the pizzApazzA project file type
    */
-  static  PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE = new Array();
+  static  PIZZAPAZZA_PROJECT_FILE_TYPE = new Array();
+
+  /**
+   * The array of the pizzApazzA tools file type for open
+   */
+  static  PIZZAPAZZA_OPEN_TOOLS_FILE_TYPE = new Array();
+
+  /**
+   * The array of the pizzApazzA tool file type for save
+   */
+  static  PIZZAPAZZA_SAVE_TOOL_FILE_TYPE = new Array();
+
+  /**
+   * The array of the pizzApazzA tools file type for save
+   */
+  static  PIZZAPAZZA_SAVE_TOOLS_FILE_TYPE = new Array();
 
   /**
    * The zoom levels
@@ -72,7 +92,7 @@ class Z4Constants {
   /**
    * Configures the arrays of accepted file types
    */
-  static  configureAcceptedImageFileTypeArrays() {
+  static  configureAcceptedFileTypeArrays() {
     let all = new FilePickerOptionsType();
     all.description = Z4Translations.IMAGE_FILE;
     all.pushAccept("image/z4i", Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT);
@@ -89,7 +109,17 @@ class Z4Constants {
     let z4i = new FilePickerOptionsType();
     z4i.description = Z4Translations.PIZZAPAZZA_PROJECT;
     z4i.pushAccept("application/z4i", new Array(".z4i"));
-    Z4Constants.PIZZAPAZZA_PROJECT_IMAGE_FILE_TYPE.push(z4i);
+    Z4Constants.PIZZAPAZZA_PROJECT_FILE_TYPE.push(z4i);
+    let z4t = new FilePickerOptionsType();
+    z4t.description = Z4Translations.PIZZAPAZZA_DRAWING_TOOL;
+    z4t.pushAccept("application/z4t", new Array(".z4t"));
+    Z4Constants.PIZZAPAZZA_SAVE_TOOL_FILE_TYPE.push(z4t);
+    let z4ts = new FilePickerOptionsType();
+    z4ts.description = Z4Translations.PIZZAPAZZA_DRAWING_TOOLS;
+    z4ts.pushAccept("application/z4ts", new Array(".z4ts"));
+    Z4Constants.PIZZAPAZZA_SAVE_TOOLS_FILE_TYPE.push(z4ts);
+    Z4Constants.PIZZAPAZZA_OPEN_TOOLS_FILE_TYPE.push(z4t);
+    Z4Constants.PIZZAPAZZA_OPEN_TOOLS_FILE_TYPE.push(z4ts);
   }
 
   static  pushACCEPTED_IMAGE_FILE_TYPE(array, mime, extensions) {
