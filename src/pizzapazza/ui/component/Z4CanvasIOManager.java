@@ -218,20 +218,11 @@ public class Z4CanvasIOManager {
         } else if ($exists(json.$get("history"))) {
           this.jsonToHistory(zip, json, 0, json.$get("currentKeyHistory"), 0);
         } else {
-          $ZipObject zipObject = zip.file("drawingTools.json");
-          if ($exists(zipObject)) {
-            zipObject.async("string", null).then(str -> {
-              ((Iterable<$Object>) (($Object) JSON.parse((String) str)).$get("drawingTools")).forEach(drawingTool -> this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
-
-              this.canvas.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
-              this.canvas.toHistory(json2 -> this.ribbonHistoryPanel.addHistory(json2, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
-              Z4UI.pleaseWaitCompleted();
-            });
-          } else {
+          this.jsonToDrawingTools(zip, () -> {
             this.canvas.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
             this.canvas.toHistory(json2 -> this.ribbonHistoryPanel.addHistory(json2, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
             Z4UI.pleaseWaitCompleted();
-          }
+          });
         }
         return null;
       };
@@ -263,24 +254,26 @@ public class Z4CanvasIOManager {
       } else if (index + 1 < ((Array<Integer>) json.$get("history")).length) {
         this.ribbonHistoryPanel.addHistory(layerJSON, currentKey -> this.jsonToHistory(zip, json, index + 1, previousCurrentKey, previousCurrentKey == historyKey ? currentKey : newCurrentKey), true);
       } else {
-        this.ribbonHistoryPanel.addHistory(layerJSON, currentKey -> {
-          $ZipObject zipObject = zip.file("drawingTools.json");
-          if ($exists(zipObject)) {
-            zipObject.async("string", null).then(str -> {
-              ((Iterable<$Object>) (($Object) JSON.parse((String) str)).$get("drawingTools")).forEach(drawingTool -> this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
-
-              this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey == historyKey ? currentKey : newCurrentKey);
-              this.canvas.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
-              Z4UI.pleaseWaitCompleted();
-            });
-          } else {
-            this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey == historyKey ? currentKey : newCurrentKey);
-            this.canvas.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
-            Z4UI.pleaseWaitCompleted();
-          }
-        }, true);
+        this.ribbonHistoryPanel.addHistory(layerJSON, currentKey -> this.jsonToDrawingTools(zip, () -> {
+          this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey == historyKey ? currentKey : newCurrentKey);
+          this.canvas.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
+          Z4UI.pleaseWaitCompleted();
+        }), true);
       }
     });
+  }
+
+  @SuppressWarnings("unchecked")
+  private void jsonToDrawingTools($JSZip zip, $Apply_0_Void apply) {
+    $ZipObject zipObject = zip.file("drawingTools.json");
+    if ($exists(zipObject)) {
+      zipObject.async("string", null).then(str -> {
+        ((Iterable<$Object>) (($Object) JSON.parse((String) str)).$get("drawingTools")).forEach(drawingTool -> this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
+        apply.$apply();
+      });
+    } else {
+      apply.$apply();
+    }
   }
 
   /**

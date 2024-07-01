@@ -171,19 +171,11 @@ class Z4CanvasIOManager {
         } else if (json["history"]) {
           this.jsonToHistory(zip, json, 0, json["currentKeyHistory"], 0);
         } else {
-          let zipObject = zip.file("drawingTools.json");
-          if (zipObject) {
-            zipObject.async("string", null).then(str => {
-              ((JSON.parse(str))["drawingTools"]).forEach(drawingTool => this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
-              this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
-              this.canvas.toHistory(json2 => this.ribbonHistoryPanel.addHistory(json2, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
-              Z4UI.pleaseWaitCompleted();
-            });
-          } else {
+          this.jsonToDrawingTools(zip, () => {
             this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
             this.canvas.toHistory(json2 => this.ribbonHistoryPanel.addHistory(json2, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
             Z4UI.pleaseWaitCompleted();
-          }
+          });
         }
         return null;
       };
@@ -211,23 +203,25 @@ class Z4CanvasIOManager {
       } else if (index + 1 < (json["history"]).length) {
         this.ribbonHistoryPanel.addHistory(layerJSON, currentKey => this.jsonToHistory(zip, json, index + 1, previousCurrentKey, previousCurrentKey === historyKey ? currentKey : newCurrentKey), true);
       } else {
-        this.ribbonHistoryPanel.addHistory(layerJSON, currentKey => {
-          let zipObject = zip.file("drawingTools.json");
-          if (zipObject) {
-            zipObject.async("string", null).then(str => {
-              ((JSON.parse(str))["drawingTools"]).forEach(drawingTool => this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
-              this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey === historyKey ? currentKey : newCurrentKey);
-              this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
-              Z4UI.pleaseWaitCompleted();
-            });
-          } else {
-            this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey === historyKey ? currentKey : newCurrentKey);
-            this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
-            Z4UI.pleaseWaitCompleted();
-          }
-        }, true);
+        this.ribbonHistoryPanel.addHistory(layerJSON, currentKey => this.jsonToDrawingTools(zip, () => {
+          this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey === historyKey ? currentKey : newCurrentKey);
+          this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
+          Z4UI.pleaseWaitCompleted();
+        }), true);
       }
     });
+  }
+
+   jsonToDrawingTools(zip, apply) {
+    let zipObject = zip.file("drawingTools.json");
+    if (zipObject) {
+      zipObject.async("string", null).then(str => {
+        ((JSON.parse(str))["drawingTools"]).forEach(drawingTool => this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
+        apply();
+      });
+    } else {
+      apply();
+    }
   }
 
   /**
