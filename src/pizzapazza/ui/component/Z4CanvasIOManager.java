@@ -565,6 +565,36 @@ public class Z4CanvasIOManager {
   }
 
   /**
+   * Saves a drawing tool
+   *
+   * @param fileName The file name
+   * @param drawingTool the drawing tool
+   */
+  public void saveDrawingToolToFile(String fileName, Z4DrawingTool drawingTool) {
+    if (!fileName.toLowerCase().endsWith(".z4t")) {
+      fileName += ".z4t";
+    }
+
+    Blob blob = null;
+    eval("blob = new Blob([JSON.stringify(drawingTool.toJSON())], {type: 'application/json'});");
+    saveAs(blob, fileName);
+  }
+
+  /**
+   * Saves a drawing tool
+   *
+   * @param handle The file handle
+   * @param drawingTool The drawing tool
+   */
+  @SuppressWarnings("static-access")
+  public void saveDrawingToolToHandle(FileSystemFileHandle handle, Z4DrawingTool drawingTool) {
+    handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable -> {
+      writable.write(JSON.stringify(drawingTool.toJSON()));
+      writable.close();
+    });
+  }
+
+  /**
    * Saves the drawing tools
    *
    * @param fileName The file name

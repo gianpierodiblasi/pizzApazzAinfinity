@@ -79,9 +79,12 @@ class Z4DrawingToolPreview extends JSDropDown {
     });
     this.appendChild(this.editor);
     this.editor.addAction(Z4Translations.DUPLICATE, new GBC(0, 0).a(GBC.NORTH).i(0, 1, 0, 0), event => {
+      let json = this.drawingTool.toJSON();
+      json["name"] = this.canvas.findDrawingToolName();
+      this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(json));
+      this.removeAttribute("open");
     });
-    this.editor.addAction(Z4Translations.SAVE_DRAWING_TOOL_AS, new GBC(1, 0).a(GBC.NORTH).i(0, 1, 0, 0), event => {
-    });
+    this.editor.addAction(Z4Translations.SAVE_DRAWING_TOOL_AS, new GBC(1, 0).a(GBC.NORTH).i(0, 1, 0, 0), event => this.save());
     this.editor.addAction(Z4Translations.DELETE, new GBC(2, 0).a(GBC.NORTHEAST).wxy(1, 1), event => JSOptionPane.showConfirmDialog(Z4Translations.DELETE_DRAWING_TOOL_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
       if (response === JSOptionPane.YES_OPTION) {
         this.changed = true;
@@ -89,14 +92,6 @@ class Z4DrawingToolPreview extends JSDropDown {
         document.querySelector(".z4drawingtoolpreview:nth-child(" + (index + 1) + ")").remove();
       }
     }));
-    // button = new JSButton();
-    // button.setText(Z4Translations.DUPLICATE);
-    // button.addActionListener(event -> {
-    // this.changed = true;
-    // this.canvas.duplicateLayer(this.drawingtool);
-    // this.removeAttribute("open");
-    // });
-    // panelBasic.add(button, new GBC(0, 6).a(GBC.SOUTHWEST));
   }
 
   /**
@@ -134,5 +129,39 @@ class Z4DrawingToolPreview extends JSDropDown {
       this.drawingTool.getPointIterator().drawDemo(this.ctx, this.drawingTool.getPainter(), this.drawingTool.getSpatioTemporalColor(), this.drawingTool.getProgression(), Z4DrawingToolPreview.PREVIEW_SIZE * 10, Z4DrawingToolPreview.PREVIEW_SIZE * 10);
       this.ctx.restore();
     }
+  }
+
+   save() {
+    if (typeof window["showSaveFilePicker"] === "function") {
+      this.saveToolsToHandle();
+    } else {
+      this.saveToolsToFile();
+    }
+  }
+
+   saveToolsToFile() {
+    let panel = new JSPanel();
+    panel.setLayout(new BorderLayout(0, 0));
+    let label = new JSLabel();
+    label.setText(Z4Translations.FILENAME);
+    panel.add(label, BorderLayout.NORTH);
+    let fileName = new JSTextField();
+    fileName.setText(this.drawingTool.getName());
+    panel.add(fileName, BorderLayout.CENTER);
+    JSOptionPane.showInputDialog(panel, Z4Translations.SAVE, listener => fileName.addActionListener(event => listener(new ChangeEvent())), () => !!(fileName.getText()), response => {
+      if (response === JSOptionPane.OK_OPTION) {
+        this.canvas.saveDrawingToolToFile(fileName.getText(), this.drawingTool);
+      }
+    });
+  }
+
+   saveToolsToHandle() {
+    let options = new FilePickerOptions();
+    options.excludeAcceptAllOption = true;
+    options.id = Z4Constants.TOOL_FILE_ID;
+    options.multiple = false;
+    options.suggestedName = this.drawingTool.getName();
+    options.types = Z4Constants.PIZZAPAZZA_SAVE_TOOL_FILE_TYPE;
+    JSFilePicker.showSaveFilePicker(options, handle => this.canvas.saveDrawingToolToHandle(handle, this.drawingTool));
   }
 }

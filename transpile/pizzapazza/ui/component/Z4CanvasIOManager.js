@@ -479,6 +479,34 @@ class Z4CanvasIOManager {
   }
 
   /**
+   * Saves a drawing tool
+   *
+   * @param fileName The file name
+   * @param drawingTool the drawing tool
+   */
+   saveDrawingToolToFile(fileName, drawingTool) {
+    if (!fileName.toLowerCase().endsWith(".z4t")) {
+      fileName += ".z4t";
+    }
+    let blob = null;
+    eval("blob = new Blob([JSON.stringify(drawingTool.toJSON())], {type: 'application/json'});");
+    saveAs(blob, fileName);
+  }
+
+  /**
+   * Saves a drawing tool
+   *
+   * @param handle The file handle
+   * @param drawingTool The drawing tool
+   */
+   saveDrawingToolToHandle(handle, drawingTool) {
+    handle.createWritable(new FileSystemWritableFileStreamCreateOptions()).then(writable => {
+      writable.write(JSON.stringify(drawingTool.toJSON()));
+      writable.close();
+    });
+  }
+
+  /**
    * Saves the drawing tools
    *
    * @param fileName The file name
