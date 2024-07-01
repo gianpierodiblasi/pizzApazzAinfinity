@@ -39,7 +39,7 @@ import static simulation.js.$Globals.parseInt;
 public class Z4LayerPreview extends JSDropDown {
 
   private final JSPanel summary = new JSPanel();
-  private JSLabel name = new JSLabel();
+  private final JSLabel name = new JSLabel();
   private final JSButton eye = new JSButton();
   private final JSComponent preview = new JSComponent(document.createElement("canvas"));
   private final $CanvasRenderingContext2D ctx = this.preview.invoke("getContext('2d')");

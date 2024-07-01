@@ -41,6 +41,7 @@ class Z4AirbrushPanel extends Z4PointIteratorPanel {
     this.add(this.radiusSpinner, new GBC(2, 0).a(GBC.EAST));
     this.radiusSlider.setMinimum(1);
     this.radiusSlider.setMaximum(500);
+    this.radiusSlider.getStyle().minWidth = "18rem";
     this.radiusSlider.addChangeListener(event => {
       this.radiusSpinner.setValue(this.radiusSlider.getValue());
       this.onIteratorChange(this.radiusSlider.getValueIsAdjusting());
@@ -67,7 +68,7 @@ class Z4AirbrushPanel extends Z4PointIteratorPanel {
     this.speed.setMaximum(10);
     this.speed.addChangeListener(event => this.onIteratorChange(this.speed.getValueIsAdjusting()));
     this.add(this.speed, new GBC(1, 5).w(2).f(GBC.HORIZONTAL).wy(1).a(GBC.NORTH));
-    this.add(this.rotation, new GBC(0, 6).w(3).i(1, 0, 0, 0));
+    this.add(this.rotation, new GBC(3, 0).h(6).a(GBC.NORTH).i(1, 1, 0, 0));
     this.setValue(new Z4Airbrush(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), 100, 5, 10, new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)));
   }
 

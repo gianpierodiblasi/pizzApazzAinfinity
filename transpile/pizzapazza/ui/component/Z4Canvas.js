@@ -495,6 +495,15 @@ class Z4Canvas extends JSComponent {
     this.ioManager.addDrawingToolFromFile(file);
   }
 
+   replaceDrawingTool(oldDrawingTool, newDrawingTool) {
+    let index = this.drawingTools.indexOf(oldDrawingTool);
+    this.drawingTools[index] = newDrawingTool;
+    if (this.selectedDrawingTool === oldDrawingTool) {
+      this.setSelectedDrawingTool(newDrawingTool);
+    }
+    this.setSaved(false);
+  }
+
   /**
    * Deletes a drawing tool
    *
