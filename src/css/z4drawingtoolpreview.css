@@ -1,0 +1,31 @@
+/*.z4drawingtoolpreview {
+  margin-right: 2px;
+}*/
+
+/*.z4drawingtoolpreview summary label {
+  font-size: calc(var(--font-size) - 0.15rem);
+  text-wrap: nowrap;
+  text-align: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}*/
+
+/*.z4drawingtoolpreview summary canvas {
+  border: 1px solid var(--main-action-bgcolor);
+  background-image: url(../image/chessboard.png);
+}*/
+
+/*.z4drawingtoolpreview summary button {
+  pointer-events: auto;
+  border: none;
+  padding: 1px 2px;
+  max-height: 15px;
+}*/
+
+/*.z4drawingtoolpreview summary .z4drawingtoolpreview-selector {
+  font-family: monospace;
+}*/
+
+/*.z4drawingtoolpreview .z4drawingtoolpreview-editor[offset=true], .z4drawingtoolpreview .z4drawingtoolpreview-editor[offset=true] * {
+  background: transparent;
+}*/

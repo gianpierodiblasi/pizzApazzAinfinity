@@ -29,6 +29,7 @@ import pizzapazza.math.Z4SignedRandomValue;
 import pizzapazza.math.Z4SignedValue;
 import pizzapazza.painter.Z4Shape2DPainter;
 import pizzapazza.ui.component.Z4Canvas;
+import pizzapazza.ui.component.Z4DrawingToolPreview;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4DrawingTool;
@@ -36,6 +37,7 @@ import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.$typeof;
+import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.window;
 
 /**
@@ -204,19 +206,13 @@ public class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
    * @param drawingTool The drawing tool
    */
   public void addDrawingToolPreview(Z4DrawingTool drawingTool) {
-//    Z4LayerPreview preview = new Z4LayerPreview();
-//    preview.setRibbonLayerPanel(this);
-//    preview.setLayer(this.canvas, layer);
-//    preview.setChildAttributeByQuery("summary", "draggable", "true");
-//    preview.addEventListener("dragstart", event -> {
-//      ((DragEvent) event).dataTransfer.effectAllowed = "move";
-//      this.layerDnD = layer;
-//      this.previewDnD = preview;
-//    });
-//
-//    document.querySelectorAll(".z4layerpreview .z4layerpreview-selector").forEach(element -> element.textContent = Z4LayerPreview.UNSELECTED_LAYER_CONTENT);
-//
-//    this.layersPreview.add(preview, null);
-//    preview.invoke("scrollIntoView()");
+    Z4DrawingToolPreview preview = new Z4DrawingToolPreview();
+    preview.setRibbonDrawingToolPanel(this);
+    preview.setDrawingTool(this.canvas, drawingTool);
+
+    document.querySelectorAll(".z4drawingtoolpreview .z4drawingtoolpreview-selector").forEach(element -> element.textContent = Z4DrawingToolPreview.UNSELECTED_DRAWING_TOOL_CONTENT);
+
+    this.drawingToolsPreview.add(preview, null);
+    preview.invoke("scrollIntoView()");
   }
 }
