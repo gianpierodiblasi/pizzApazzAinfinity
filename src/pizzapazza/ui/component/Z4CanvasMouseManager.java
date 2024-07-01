@@ -44,104 +44,16 @@ import static simulation.js.$Globals.setTimeout;
 public class Z4CanvasMouseManager {
 
   private final Z4Canvas canvas;
-  private Z4Layer selectedLayer;
   private final $CanvasRenderingContext2D ctx;
+
+  private Z4Layer selectedLayer;
+  private Z4DrawingTool selectedDrawingTool;
+
   private Dimension size;
   private double zoom;
 
   private Z4RibbonHistoryPanel ribbonHistoryPanel;
   private Z4StatusPanel statusPanel;
-
-  private Z4DrawingTool drawingTool = new Z4DrawingTool(
-          "",
-          new Z4Spirograph(true, new Z4Rotation(0, new Z4FancifulValue(
-                  new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0),
-                  new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                  false), Z4RotationBehavior.RELATIVE_TO_PATH, false)
-          ),
-          new Z4CenteredFigurePainter(
-                  Z4CenteredFigurePainterType.TYPE_0,
-                  new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                          false),
-                  new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                          false),
-                  new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                          false),
-                  new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 50),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                          false),
-                  new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 3),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                          false),
-                  new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                          false),
-                  new Z4Whirlpool(
-                          Z4WhirlpoolBehavior.NONE,
-                          new Z4FancifulValue(
-                                  new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 30),
-                                  new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                                  false)),
-                  100,
-                  new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                          false),
-                  new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                          false),
-                  new Color(255, 0, 0, 255),
-                  new Z4FancifulValue(
-                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
-                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                          false),
-                  new Color(255, 255, 0, 255)
-          ),
-          //          new Z4Shape2DPainter(
-          //                  new Z4FancifulValue(
-          //                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
-          //                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-          //                          false),
-          //                  new Z4FancifulValue(
-          //                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
-          //                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-          //                          false),
-          //                  false,
-          //                  false,
-          //                  3,
-          //                  new Z4FancifulValue(
-          //                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-          //                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-          //                          false),
-          //                  new Z4FancifulValue(
-          //                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-          //                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-          //                          false),
-          //                  new Color(0, 0, 0, 0),
-          //                  new Z4FancifulValue(
-          //                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-          //                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-          //                          false),
-          //                  new Z4FancifulValue(
-          //                          new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-          //                          new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-          //                          false),
-          //                  new Color(0, 0, 0, 0)
-          //          ),
-          //          Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)),
-          Z4SpatioTemporalColor.fromGradientColor(new Z4GradientColor()),
-          new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.01, Z4Lighting.NONE)
-  );
 
   private boolean pressed;
 
@@ -163,6 +75,15 @@ public class Z4CanvasMouseManager {
    */
   public void setSelectedLayer(Z4Layer selectedLayer) {
     this.selectedLayer = selectedLayer;
+  }
+
+  /**
+   * Sets the selected drawing tool
+   *
+   * @param selectedDrawingTool The selected drawing tool
+   */
+  public void setSelectedDrawingTool(Z4DrawingTool selectedDrawingTool) {
+    this.selectedDrawingTool = selectedDrawingTool;
   }
 
   /**
@@ -202,15 +123,6 @@ public class Z4CanvasMouseManager {
   }
 
   /**
-   * Sets the drawing tool
-   *
-   * @param drawingTool The drawing tool
-   */
-  public void setDrawingTool(Z4DrawingTool drawingTool) {
-    this.drawingTool = drawingTool;
-  }
-
-  /**
    * The mouse event manager
    *
    * @param event The mouse event
@@ -246,7 +158,8 @@ public class Z4CanvasMouseManager {
   }
 
   private void onAction(Z4PointIteratorDrawingAction action, double x, double y) {
-    if (this.pressed && this.drawingTool.drawAction(action, x, y)) {
+    if (!$exists(this.selectedDrawingTool) || !$exists(this.selectedLayer)) {
+    } else if (this.pressed && this.selectedDrawingTool.drawAction(action, x, y)) {
       this.ribbonHistoryPanel.stopStandard();
       this.iteratePoints(action);
     }
@@ -254,7 +167,8 @@ public class Z4CanvasMouseManager {
 
   private void onStop(double x, double y) {
     this.pressed = false;
-    if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
+    if (!$exists(this.selectedDrawingTool) || !$exists(this.selectedLayer)) {
+    } else if (this.selectedDrawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
       this.ribbonHistoryPanel.stopStandard();
       this.iteratePoints(Z4PointIteratorDrawingAction.STOP);
     } else {
@@ -267,10 +181,10 @@ public class Z4CanvasMouseManager {
     if (action != Z4PointIteratorDrawingAction.STOP) {
       while (this.drawNextPoint());
 
-      if (this.drawingTool.isInfinitePointGenerator() && this.pressed) {
-        setTimeout(() -> this.iteratePoints(action), this.drawingTool.getInfinitePointGeneratorSleep());
+      if (this.selectedDrawingTool.isInfinitePointGenerator() && this.pressed) {
+        setTimeout(() -> this.iteratePoints(action), this.selectedDrawingTool.getInfinitePointGeneratorSleep());
       }
-    } else if ($exists(this.drawingTool.getNextCountOnSTOP())) {
+    } else if ($exists(this.selectedDrawingTool.getNextCountOnSTOP())) {
       Z4UI.pleaseWait(this.canvas, true, true, false, true, "", () -> this.iteratePoint(0));
     } else {
       this.startStandard();
@@ -278,7 +192,7 @@ public class Z4CanvasMouseManager {
   }
 
   private void iteratePoint(int value) {
-    Z4UI.setPleaseWaitProgressBarValue(100 * value / this.drawingTool.getNextCountOnSTOP());
+    Z4UI.setPleaseWaitProgressBarValue(100 * value / this.selectedDrawingTool.getNextCountOnSTOP());
 
     if (this.drawNextPoint()) {
       Z4UI.pleaseWaitAdvanced(() -> this.iteratePoint(value + 1));
@@ -289,11 +203,11 @@ public class Z4CanvasMouseManager {
   }
 
   private boolean drawNextPoint() {
-    Z4DrawingPoint next = this.drawingTool.next();
+    Z4DrawingPoint next = this.selectedDrawingTool.next();
     if (!$exists(next)) {
       return false;
     } else if (next.intent == Z4DrawingPointIntent.DRAW_OBJECTS) {
-      this.selectedLayer.drawTool(this.drawingTool, next);
+      this.selectedLayer.drawTool(this.selectedDrawingTool, next);
       this.selectedLayer.getLayerPreview().drawLayer();
       this.canvas.drawCanvas();
       return true;
@@ -309,7 +223,7 @@ public class Z4CanvasMouseManager {
       this.ctx.save();
       this.ctx.translate(next.z4Vector.x0, next.z4Vector.y0);
       this.ctx.rotate(next.z4Vector.phase);
-      this.drawingTool.draw(this.ctx, next);
+      this.selectedDrawingTool.draw(this.ctx, next);
       this.ctx.restore();
       return true;
     }

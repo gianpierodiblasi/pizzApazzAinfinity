@@ -47,6 +47,7 @@ public abstract class Z4AbstractRibbonPanel extends JSPanel {
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
         break;
       case "both":
+        gbc.i(top, 0, 0, 0);
         button.getStyle().borderRadius = "0px";
         button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";

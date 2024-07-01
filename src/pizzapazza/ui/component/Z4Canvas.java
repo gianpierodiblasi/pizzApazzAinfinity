@@ -17,6 +17,7 @@ import pizzapazza.ui.panel.ribbon.Z4RibbonFilePanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
 import pizzapazza.util.Z4Constants;
+import pizzapazza.util.Z4DrawingTool;
 import pizzapazza.util.Z4Layer;
 import pizzapazza.util.Z4Paper;
 import pizzapazza.util.Z4Translations;
@@ -54,6 +55,9 @@ public class Z4Canvas extends JSComponent {
 
   private final Z4Paper paper = new Z4Paper();
   private Z4Layer selectedLayer;
+
+  private final Array<Z4DrawingTool> drawingTools = new Array<>();
+  private Z4DrawingTool selectedDrawingTool;
 
   private final Z4CanvasMouseManager mouseManager = new Z4CanvasMouseManager(this, this.ctx);
   private final Z4CanvasIOManager ioManager = new Z4CanvasIOManager(this, this.paper);
@@ -496,6 +500,50 @@ public class Z4Canvas extends JSComponent {
    */
   public int getLayersCount() {
     return this.paper.getLayersCount();
+  }
+
+  /**
+   * Adds a drawing tool
+   *
+   * @param drawingTool The drawing tool
+   */
+  public void addDrawingTool(Z4DrawingTool drawingTool) {
+    this.drawingTools.push(drawingTool);
+    this.setSelectedDrawingTool(drawingTool);
+    this.setSaved(false);
+  }
+
+  /**
+   * Deletes a drawing toolt
+   *
+   * @param drawingTool The drawing tool
+   * @return The drawing tool index
+   */
+  public int deleteDrawingTool(Z4DrawingTool drawingTool) {
+    int index = this.drawingTools.indexOf(drawingTool);
+    this.drawingTools.splice(index, 1);
+
+    if (this.selectedDrawingTool == drawingTool) {
+      this.setSelectedDrawingTool(this.drawingTools.$get(this.drawingTools.length - 1));
+//
+//      document.querySelector(".z4drawingtoolpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ") .z4drawingtoolpreview-selector").textContent = Z4DrawingToolPreview.SELECTED_DRAWING_TOOL_CONTENT;
+//      ((HTMLElement) document.querySelector(".z4drawingtoolpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
+    }
+
+    this.setSaved(false);
+    return index;
+  }
+
+  /**
+   * Sets the selected drawing tool
+   *
+   * @param selectedDrawingTool The selected drawing tool
+   */
+  public void setSelectedDrawingTool(Z4DrawingTool selectedDrawingTool) {
+    this.selectedDrawingTool = selectedDrawingTool;
+    this.mouseManager.setSelectedDrawingTool(selectedDrawingTool);
+
+    this.ribbonHistoryPanel.saveHistory("tool");
   }
 
   /**

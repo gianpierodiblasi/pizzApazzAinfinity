@@ -1848,6 +1848,10 @@ class Z4Canvas extends JSComponent {
 
    selectedLayer = null;
 
+   drawingTools = new Array();
+
+   selectedDrawingTool = null;
+
    mouseManager = new Z4CanvasMouseManager(this, this.ctx);
 
    ioManager = new Z4CanvasIOManager(this, this.paper);
@@ -2264,6 +2268,47 @@ class Z4Canvas extends JSComponent {
    */
    getLayersCount() {
     return this.paper.getLayersCount();
+  }
+
+  /**
+   * Adds a drawing tool
+   *
+   * @param drawingTool The drawing tool
+   */
+   addDrawingTool(drawingTool) {
+    this.drawingTools.push(drawingTool);
+    this.setSelectedDrawingTool(drawingTool);
+    this.setSaved(false);
+  }
+
+  /**
+   * Deletes a drawing toolt
+   *
+   * @param drawingTool The drawing tool
+   * @return The drawing tool index
+   */
+   deleteDrawingTool(drawingTool) {
+    let index = this.drawingTools.indexOf(drawingTool);
+    this.drawingTools.splice(index, 1);
+    if (this.selectedDrawingTool === drawingTool) {
+      this.setSelectedDrawingTool(this.drawingTools[this.drawingTools.length - 1]);
+      // 
+      // document.querySelector(".z4drawingtoolpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ") .z4drawingtoolpreview-selector").textContent = Z4DrawingToolPreview.SELECTED_DRAWING_TOOL_CONTENT;
+      // ((HTMLElement) document.querySelector(".z4drawingtoolpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
+    }
+    this.setSaved(false);
+    return index;
+  }
+
+  /**
+   * Sets the selected drawing tool
+   *
+   * @param selectedDrawingTool The selected drawing tool
+   */
+   setSelectedDrawingTool(selectedDrawingTool) {
+    this.selectedDrawingTool = selectedDrawingTool;
+    this.mouseManager.setSelectedDrawingTool(selectedDrawingTool);
+    this.ribbonHistoryPanel.saveHistory("tool");
   }
 
   /**
@@ -2954,9 +2999,11 @@ class Z4CanvasMouseManager {
 
    canvas = null;
 
+   ctx = null;
+
    selectedLayer = null;
 
-   ctx = null;
+   selectedDrawingTool = null;
 
    size = null;
 
@@ -2965,40 +3012,6 @@ class Z4CanvasMouseManager {
    ribbonHistoryPanel = null;
 
    statusPanel = null;
-
-   drawingTool = new Z4DrawingTool("", new Z4Spirograph(true, new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.RELATIVE_TO_PATH, false)), new Z4CenteredFigurePainter(Z4CenteredFigurePainterType.TYPE_0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 45), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 50), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 3), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Whirlpool(Z4WhirlpoolBehavior.NONE, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 30), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false)), 100, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(255, 0, 0, 255), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(255, 255, 0, 255)), // new Z4Shape2DPainter(
-  // new Z4FancifulValue(
-  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
-  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-  // false),
-  // new Z4FancifulValue(
-  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
-  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-  // false),
-  // false,
-  // false,
-  // 3,
-  // new Z4FancifulValue(
-  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-  // false),
-  // new Z4FancifulValue(
-  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-  // false),
-  // new Color(0, 0, 0, 0),
-  // new Z4FancifulValue(
-  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-  // false),
-  // new Z4FancifulValue(
-  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-  // false),
-  // new Color(0, 0, 0, 0)
-  // ),
-  // Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)),
-  Z4SpatioTemporalColor.fromGradientColor(new Z4GradientColor()), new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.01, Z4Lighting.NONE));
 
    pressed = false;
 
@@ -3020,6 +3033,15 @@ class Z4CanvasMouseManager {
    */
    setSelectedLayer(selectedLayer) {
     this.selectedLayer = selectedLayer;
+  }
+
+  /**
+   * Sets the selected drawing tool
+   *
+   * @param selectedDrawingTool The selected drawing tool
+   */
+   setSelectedDrawingTool(selectedDrawingTool) {
+    this.selectedDrawingTool = selectedDrawingTool;
   }
 
   /**
@@ -3059,15 +3081,6 @@ class Z4CanvasMouseManager {
   }
 
   /**
-   * Sets the drawing tool
-   *
-   * @param drawingTool The drawing tool
-   */
-   setDrawingTool(drawingTool) {
-    this.drawingTool = drawingTool;
-  }
-
-  /**
    * The mouse event manager
    *
    * @param event The mouse event
@@ -3102,7 +3115,8 @@ class Z4CanvasMouseManager {
   }
 
    onAction(action, x, y) {
-    if (this.pressed && this.drawingTool.drawAction(action, x, y)) {
+    if (!this.selectedDrawingTool || !this.selectedLayer) {
+    } else if (this.pressed && this.selectedDrawingTool.drawAction(action, x, y)) {
       this.ribbonHistoryPanel.stopStandard();
       this.iteratePoints(action);
     }
@@ -3110,7 +3124,8 @@ class Z4CanvasMouseManager {
 
    onStop(x, y) {
     this.pressed = false;
-    if (this.drawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
+    if (!this.selectedDrawingTool || !this.selectedLayer) {
+    } else if (this.selectedDrawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
       this.ribbonHistoryPanel.stopStandard();
       this.iteratePoints(Z4PointIteratorDrawingAction.STOP);
     } else {
@@ -3121,10 +3136,10 @@ class Z4CanvasMouseManager {
    iteratePoints(action) {
     if (action !== Z4PointIteratorDrawingAction.STOP) {
       while (this.drawNextPoint()) ;
-      if (this.drawingTool.isInfinitePointGenerator() && this.pressed) {
-        setTimeout(() => this.iteratePoints(action), this.drawingTool.getInfinitePointGeneratorSleep());
+      if (this.selectedDrawingTool.isInfinitePointGenerator() && this.pressed) {
+        setTimeout(() => this.iteratePoints(action), this.selectedDrawingTool.getInfinitePointGeneratorSleep());
       }
-    } else if (this.drawingTool.getNextCountOnSTOP()) {
+    } else if (this.selectedDrawingTool.getNextCountOnSTOP()) {
       Z4UI.pleaseWait(this.canvas, true, true, false, true, "", () => this.iteratePoint(0));
     } else {
       this.startStandard();
@@ -3132,7 +3147,7 @@ class Z4CanvasMouseManager {
   }
 
    iteratePoint(value) {
-    Z4UI.setPleaseWaitProgressBarValue(100 * value / this.drawingTool.getNextCountOnSTOP());
+    Z4UI.setPleaseWaitProgressBarValue(100 * value / this.selectedDrawingTool.getNextCountOnSTOP());
     if (this.drawNextPoint()) {
       Z4UI.pleaseWaitAdvanced(() => this.iteratePoint(value + 1));
     } else {
@@ -3142,11 +3157,11 @@ class Z4CanvasMouseManager {
   }
 
    drawNextPoint() {
-    let next = this.drawingTool.next();
+    let next = this.selectedDrawingTool.next();
     if (!next) {
       return false;
     } else if (next.intent === Z4DrawingPointIntent.DRAW_OBJECTS) {
-      this.selectedLayer.drawTool(this.drawingTool, next);
+      this.selectedLayer.drawTool(this.selectedDrawingTool, next);
       this.selectedLayer.getLayerPreview().drawLayer();
       this.canvas.drawCanvas();
       return true;
@@ -3160,7 +3175,7 @@ class Z4CanvasMouseManager {
       this.ctx.save();
       this.ctx.translate(next.z4Vector.x0, next.z4Vector.y0);
       this.ctx.rotate(next.z4Vector.phase);
-      this.drawingTool.draw(this.ctx, next);
+      this.selectedDrawingTool.draw(this.ctx, next);
       this.ctx.restore();
       return true;
     }
@@ -4983,6 +4998,7 @@ class Z4AbstractRibbonPanel extends JSPanel {
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
         break;
       case "both":
+        gbc.i(top, 0, 0, 0);
         button.getStyle().borderRadius = "0px";
         button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
@@ -4999,6 +5015,34 @@ class Z4AbstractRibbonPanel extends JSPanel {
     }
     this.add(button, gbc);
     return button;
+  }
+}
+/**
+ * The ribbon panel containing the drawing tool menus
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
+
+   drawingToolsPreview = new JSPanel();
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super();
+    this.setLayout(new GridBagLayout());
+    this.cssAddClass("z4ribbondrawingtoolpanel");
+    this.addButton(Z4Translations.CREATE, true, 0, 0, "left", 5, event => {
+    });
+    this.addButton(Z4Translations.OPEN, true, 1, 0, "both", 5, event => {
+    });
+    this.addButton(Z4Translations.SAVE_DRAWING_TOOLS_AS, true, 2, 0, "right", 5, event => {
+    });
+    Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    this.drawingToolsPreview.setLayout(new BoxLayout(this.drawingToolsPreview, BoxLayout.X_AXIS));
+    this.drawingToolsPreview.getStyle().overflowX = "scroll";
+    this.add(this.drawingToolsPreview, new GBC(4, 0).h(2).wx(1).f(GBC.BOTH));
   }
 }
 /**
@@ -10922,6 +10966,8 @@ class Z4Ribbon extends JSTabbedPane {
 
    layerPanel = new Z4RibbonLayerPanel();
 
+   drawingToolPanel = new Z4RibbonDrawingToolPanel();
+
    historyPanel = new Z4RibbonHistoryPanel();
 
    settingsPanel = new Z4RibbonSettingsPanel();
@@ -10936,6 +10982,7 @@ class Z4Ribbon extends JSTabbedPane {
     this.cssAddClass("z4ribbon");
     this.addTab(Z4Translations.FILE, this.filePanel);
     this.addTab(Z4Translations.LAYER, this.layerPanel);
+    this.addTab(Z4Translations.DRAWING_TOOL, this.drawingToolPanel);
     this.addTab(Z4Translations.HISTORY, this.historyPanel);
     this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
     this.addTab(Z4Translations.HELP, this.helpPanel);
@@ -16243,6 +16290,8 @@ class Z4Translations {
 
   static  DRAWING_TOOL_NAME = "";
 
+  static  SAVE_DRAWING_TOOLS_AS = "";
+
   // Ribbon History
   static  HISTORY = "";
 
@@ -16630,6 +16679,7 @@ class Z4Translations {
     // Ribbon Drawing Tool
     Z4Translations.DRAWING_TOOL = "Drawing Tool";
     Z4Translations.DRAWING_TOOL_NAME = "Drawing Tool Name";
+    Z4Translations.SAVE_DRAWING_TOOLS_AS = "Save Drawing Tools As";
     // Ribbon History
     Z4Translations.HISTORY = "History";
     Z4Translations.UNDO = "Undo";
@@ -16839,6 +16889,7 @@ class Z4Translations {
     // Ribbon Drawing Tool
     Z4Translations.DRAWING_TOOL = "Strumento di Disegno";
     Z4Translations.DRAWING_TOOL_NAME = "Nome Strumento di Disegno";
+    Z4Translations.SAVE_DRAWING_TOOLS_AS = "Salva Strumenti di Disegno con Nome";
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";
     Z4Translations.UNDO = "Annulla";

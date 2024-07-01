@@ -37,6 +37,10 @@ class Z4Canvas extends JSComponent {
 
    selectedLayer = null;
 
+   drawingTools = new Array();
+
+   selectedDrawingTool = null;
+
    mouseManager = new Z4CanvasMouseManager(this, this.ctx);
 
    ioManager = new Z4CanvasIOManager(this, this.paper);
@@ -453,6 +457,47 @@ class Z4Canvas extends JSComponent {
    */
    getLayersCount() {
     return this.paper.getLayersCount();
+  }
+
+  /**
+   * Adds a drawing tool
+   *
+   * @param drawingTool The drawing tool
+   */
+   addDrawingTool(drawingTool) {
+    this.drawingTools.push(drawingTool);
+    this.setSelectedDrawingTool(drawingTool);
+    this.setSaved(false);
+  }
+
+  /**
+   * Deletes a drawing toolt
+   *
+   * @param drawingTool The drawing tool
+   * @return The drawing tool index
+   */
+   deleteDrawingTool(drawingTool) {
+    let index = this.drawingTools.indexOf(drawingTool);
+    this.drawingTools.splice(index, 1);
+    if (this.selectedDrawingTool === drawingTool) {
+      this.setSelectedDrawingTool(this.drawingTools[this.drawingTools.length - 1]);
+      // 
+      // document.querySelector(".z4drawingtoolpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ") .z4drawingtoolpreview-selector").textContent = Z4DrawingToolPreview.SELECTED_DRAWING_TOOL_CONTENT;
+      // ((HTMLElement) document.querySelector(".z4drawingtoolpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
+    }
+    this.setSaved(false);
+    return index;
+  }
+
+  /**
+   * Sets the selected drawing tool
+   *
+   * @param selectedDrawingTool The selected drawing tool
+   */
+   setSelectedDrawingTool(selectedDrawingTool) {
+    this.selectedDrawingTool = selectedDrawingTool;
+    this.mouseManager.setSelectedDrawingTool(selectedDrawingTool);
+    this.ribbonHistoryPanel.saveHistory("tool");
   }
 
   /**

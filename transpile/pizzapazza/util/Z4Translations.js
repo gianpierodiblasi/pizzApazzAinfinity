@@ -59,6 +59,8 @@ class Z4Translations {
 
   static  DRAWING_TOOL_NAME = "";
 
+  static  SAVE_DRAWING_TOOLS_AS = "";
+
   // Ribbon History
   static  HISTORY = "";
 
@@ -446,6 +448,7 @@ class Z4Translations {
     // Ribbon Drawing Tool
     Z4Translations.DRAWING_TOOL = "Drawing Tool";
     Z4Translations.DRAWING_TOOL_NAME = "Drawing Tool Name";
+    Z4Translations.SAVE_DRAWING_TOOLS_AS = "Save Drawing Tools As";
     // Ribbon History
     Z4Translations.HISTORY = "History";
     Z4Translations.UNDO = "Undo";
@@ -655,6 +658,7 @@ class Z4Translations {
     // Ribbon Drawing Tool
     Z4Translations.DRAWING_TOOL = "Strumento di Disegno";
     Z4Translations.DRAWING_TOOL_NAME = "Nome Strumento di Disegno";
+    Z4Translations.SAVE_DRAWING_TOOLS_AS = "Salva Strumenti di Disegno con Nome";
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";
     Z4Translations.UNDO = "Annulla";
