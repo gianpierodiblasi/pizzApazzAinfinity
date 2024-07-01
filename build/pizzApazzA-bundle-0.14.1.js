@@ -7140,6 +7140,10 @@ class Z4AirbrushPanel extends Z4PointIteratorPanel {
 
    speedLabel = new JSLabel();
 
+   gaussianCorrectionSpinner = new JSSpinner();
+
+   gaussianCorrectionSlider = new JSSlider();
+
   /**
    * Creates the object
    */
@@ -7151,7 +7155,7 @@ class Z4AirbrushPanel extends Z4PointIteratorPanel {
     this.multiplicity.setLabel(Z4Translations.MULTIPLICITY);
     this.multiplicity.cssAddClass("z4abstractvaluepanel-titled");
     this.multiplicity.addChangeListener(event => this.onIteratorChange(this.multiplicity.getValueIsAdjusting()));
-    this.add(this.multiplicity, new GBC(0, 0).h(3).i(0, 0, 0, 1));
+    this.add(this.multiplicity, new GBC(0, 0).h(6).i(0, 0, 0, 1));
     Z4UI.addLabel(this, Z4Translations.RADIUS, new GBC(1, 0).a(GBC.WEST));
     this.radiusSpinner.cssAddClass("jsspinner_w_4rem");
     this.radiusSpinner.setModel(new SpinnerNumberModel(100, 1, 500, 1));
@@ -7166,23 +7170,36 @@ class Z4AirbrushPanel extends Z4PointIteratorPanel {
       this.radiusSpinner.setValue(this.radiusSlider.getValue());
       this.onIteratorChange(this.radiusSlider.getValueIsAdjusting());
     });
-    this.add(this.radiusSlider, new GBC(1, 1).w(2).wx(3).f(GBC.HORIZONTAL));
-    Z4UI.addLabel(this, Z4Translations.SPEED + ":", new GBC(3, 0).a(GBC.EAST).wx(2));
-    this.speedLabel.getStyle().minWidth = "1.5rem";
-    this.speedLabel.getStyle().textAlign = "right";
-    this.add(this.speedLabel, new GBC(4, 0));
+    this.add(this.radiusSlider, new GBC(1, 1).w(2).f(GBC.HORIZONTAL));
+    Z4UI.addLabel(this, Z4Translations.GAUSSIAN_CORRECTION, new GBC(1, 2).a(GBC.WEST));
+    this.gaussianCorrectionSpinner.cssAddClass("jsspinner_w_4rem");
+    this.gaussianCorrectionSpinner.setModel(new SpinnerNumberModel(10, 1, 100, 1));
+    this.gaussianCorrectionSpinner.addChangeListener(event => {
+      this.gaussianCorrectionSlider.setValue(this.gaussianCorrectionSpinner.getValue());
+      this.onIteratorChange(this.gaussianCorrectionSpinner.getValueIsAdjusting());
+    });
+    this.add(this.gaussianCorrectionSpinner, new GBC(2, 2).a(GBC.EAST));
+    this.gaussianCorrectionSlider.setMinimum(1);
+    this.gaussianCorrectionSlider.setMaximum(100);
+    this.gaussianCorrectionSlider.addChangeListener(event => {
+      this.gaussianCorrectionSpinner.setValue(this.gaussianCorrectionSlider.getValue());
+      this.onIteratorChange(this.gaussianCorrectionSlider.getValueIsAdjusting());
+    });
+    this.add(this.gaussianCorrectionSlider, new GBC(1, 3).w(2).f(GBC.HORIZONTAL));
+    Z4UI.addLabel(this, Z4Translations.SPEED, new GBC(1, 4).wx(1).a(GBC.WEST));
+    this.add(this.speedLabel, new GBC(2, 4));
     this.speed.setMinimum(1);
     this.speed.setMaximum(10);
     this.speed.addChangeListener(event => this.onIteratorChange(this.speed.getValueIsAdjusting()));
-    this.add(this.speed, new GBC(3, 1).w(2).f(GBC.HORIZONTAL));
-    this.add(this.rotation, new GBC(1, 2).w(4).wy(1).a(GBC.SOUTH));
-    this.setValue(new Z4Airbrush(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), 100, 5, new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)));
+    this.add(this.speed, new GBC(1, 5).w(2).f(GBC.HORIZONTAL).wy(1).a(GBC.NORTH));
+    this.add(this.rotation, new GBC(0, 6).w(3).i(1, 0, 0, 0));
+    this.setValue(new Z4Airbrush(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), 100, 5, 10, new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)));
   }
 
    onIteratorChange(valueIsAdjusting) {
     this.valueIsAdjusting = valueIsAdjusting;
     this.speedLabel.setText("" + this.speed.getValue());
-    this.value = new Z4Airbrush(this.multiplicity.getValue(), this.radiusSlider.getValue(), this.speed.getValue(), this.rotation.getValue());
+    this.value = new Z4Airbrush(this.multiplicity.getValue(), this.radiusSlider.getValue(), this.speed.getValue(), this.gaussianCorrectionSlider.getValue(), this.rotation.getValue());
     this.onchange();
   }
 
@@ -7193,6 +7210,8 @@ class Z4AirbrushPanel extends Z4PointIteratorPanel {
     this.radiusSlider.setValue(value.getRadius());
     this.speed.setValue(value.getSpeed());
     this.speedLabel.setText("" + value.getSpeed());
+    this.gaussianCorrectionSpinner.setValue(value.getGaussianCorrection());
+    this.gaussianCorrectionSlider.setValue(value.getGaussianCorrection());
   }
 
    setEnabled(b) {
@@ -7201,6 +7220,8 @@ class Z4AirbrushPanel extends Z4PointIteratorPanel {
     this.radiusSpinner.setEnabled(b);
     this.radiusSlider.setEnabled(b);
     this.speed.setEnabled(b);
+    this.gaussianCorrectionSpinner.setEnabled(b);
+    this.gaussianCorrectionSlider.setEnabled(b);
   }
 }
 /**
@@ -12729,6 +12750,8 @@ class Z4Airbrush extends Z4PointIterator {
 
    speed = 0;
 
+   gaussianCorrection = 0;
+
    currentMultiplicityCounter = 0;
 
    currentMultiplicityTotal = 0;
@@ -12739,13 +12762,15 @@ class Z4Airbrush extends Z4PointIterator {
    * @param multiplicity The multiplicity
    * @param radius The radius
    * @param speed The speed
+   * @param gaussianCorrection The gaussian correction
    * @param rotation The rotation
    */
-  constructor(multiplicity, radius, speed, rotation) {
+  constructor(multiplicity, radius, speed, gaussianCorrection, rotation) {
     super(rotation);
     this.multiplicity = multiplicity;
     this.radius = radius;
     this.speed = speed;
+    this.gaussianCorrection = gaussianCorrection;
   }
 
    getType() {
@@ -12779,6 +12804,15 @@ class Z4Airbrush extends Z4PointIterator {
     return this.speed;
   }
 
+  /**
+   * Returns the gaussian correction
+   *
+   * @return The gaussian correction
+   */
+   getGaussianCorrection() {
+    return this.gaussianCorrection;
+  }
+
    drawAction(action, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.currentMultiplicityCounter = 0;
@@ -12807,7 +12841,7 @@ class Z4Airbrush extends Z4PointIterator {
     } else {
       this.currentMultiplicityCounter++;
       this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
-      let currentRadius = this.radius * Math.random();
+      let currentRadius = this.radius * Z4Math.randomCorrected(this.gaussianCorrection / 10.0);
       let currenAngle = Z4Math.TWO_PI * Math.random();
       let angle = this.rotation.next(currenAngle);
       let vector = Z4Vector.fromVector(this.currentPoint.x + currentRadius * Math.cos(currenAngle), currentRadius * Math.sin(currenAngle) + this.currentPoint.y, 1, angle);
@@ -12857,6 +12891,7 @@ class Z4Airbrush extends Z4PointIterator {
     json["multiplicity"] = this.multiplicity.toJSON();
     json["radius"] = this.radius;
     json["speed"] = this.speed;
+    json["gaussianCorrection"] = this.gaussianCorrection;
     return json;
   }
 
@@ -12867,7 +12902,7 @@ class Z4Airbrush extends Z4PointIterator {
    * @return the airbrush
    */
   static  fromJSON(json) {
-    return new Z4Airbrush(Z4FancifulValue.fromJSON(json["multiplicity"]), json["radius"], json["speed"], Z4Rotation.fromJSON(json["rotation"]));
+    return new Z4Airbrush(Z4FancifulValue.fromJSON(json["multiplicity"]), json["radius"], json["speed"], json["gaussianCorrection"], Z4Rotation.fromJSON(json["rotation"]));
   }
 }
 /**
@@ -14670,8 +14705,8 @@ class Z4DropPainter extends Z4Painter {
     let json = super.toJSON();
     json["dropPainterType"] = this.dropPainterType;
     json["radius"] = this.radius.toJSON();
-    json["regular"] = this.intensity;
-    json["star"] = this.gaussianCorrection;
+    json["intensity"] = this.intensity;
+    json["gaussianCorrection"] = this.gaussianCorrection;
     return json;
   }
 

@@ -29,6 +29,7 @@ public class Z4Airbrush extends Z4PointIterator {
   private final Z4FancifulValue multiplicity;
   private final int radius;
   private final int speed;
+  private final int gaussianCorrection;
 
   private int currentMultiplicityCounter;
   private int currentMultiplicityTotal;
@@ -39,14 +40,16 @@ public class Z4Airbrush extends Z4PointIterator {
    * @param multiplicity The multiplicity
    * @param radius The radius
    * @param speed The speed
+   * @param gaussianCorrection The gaussian correction
    * @param rotation The rotation
    */
-  public Z4Airbrush(Z4FancifulValue multiplicity, int radius, int speed, Z4Rotation rotation) {
+  public Z4Airbrush(Z4FancifulValue multiplicity, int radius, int speed, int gaussianCorrection, Z4Rotation rotation) {
     super(rotation);
 
     this.multiplicity = multiplicity;
     this.radius = radius;
     this.speed = speed;
+    this.gaussianCorrection = gaussianCorrection;
   }
 
   @Override
@@ -79,6 +82,15 @@ public class Z4Airbrush extends Z4PointIterator {
    */
   public int getSpeed() {
     return this.speed;
+  }
+
+  /**
+   * Returns the gaussian correction
+   *
+   * @return The gaussian correction
+   */
+  public int getGaussianCorrection() {
+    return this.gaussianCorrection;
   }
 
   @Override
@@ -115,7 +127,7 @@ public class Z4Airbrush extends Z4PointIterator {
       this.currentMultiplicityCounter++;
       this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
 
-      double currentRadius = this.radius * Math.random();
+      double currentRadius = this.radius * Z4Math.randomCorrected(this.gaussianCorrection / 10.0);
       double currenAngle = Z4Math.TWO_PI * Math.random();
 
       double angle = this.rotation.next(currenAngle);
@@ -146,7 +158,7 @@ public class Z4Airbrush extends Z4PointIterator {
   public int getNextCountOnSTOP() {
     return 0;
   }
-  
+
   @Override
   public boolean isInfinitePointGenerator() {
     return true;
@@ -183,6 +195,7 @@ public class Z4Airbrush extends Z4PointIterator {
     json.$set("multiplicity", this.multiplicity.toJSON());
     json.$set("radius", this.radius);
     json.$set("speed", this.speed);
+    json.$set("gaussianCorrection", this.gaussianCorrection);
     return json;
   }
 
@@ -197,6 +210,7 @@ public class Z4Airbrush extends Z4PointIterator {
             Z4FancifulValue.fromJSON(json.$get("multiplicity")),
             json.$get("radius"),
             json.$get("speed"),
+            json.$get("gaussianCorrection"),
             Z4Rotation.fromJSON(json.$get("rotation"))
     );
   }

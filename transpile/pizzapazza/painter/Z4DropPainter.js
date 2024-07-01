@@ -157,8 +157,8 @@ class Z4DropPainter extends Z4Painter {
     let json = super.toJSON();
     json["dropPainterType"] = this.dropPainterType;
     json["radius"] = this.radius.toJSON();
-    json["regular"] = this.intensity;
-    json["star"] = this.gaussianCorrection;
+    json["intensity"] = this.intensity;
+    json["gaussianCorrection"] = this.gaussianCorrection;
     return json;
   }
 

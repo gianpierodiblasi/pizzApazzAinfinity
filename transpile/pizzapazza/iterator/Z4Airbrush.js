@@ -11,6 +11,8 @@ class Z4Airbrush extends Z4PointIterator {
 
    speed = 0;
 
+   gaussianCorrection = 0;
+
    currentMultiplicityCounter = 0;
 
    currentMultiplicityTotal = 0;
@@ -21,13 +23,15 @@ class Z4Airbrush extends Z4PointIterator {
    * @param multiplicity The multiplicity
    * @param radius The radius
    * @param speed The speed
+   * @param gaussianCorrection The gaussian correction
    * @param rotation The rotation
    */
-  constructor(multiplicity, radius, speed, rotation) {
+  constructor(multiplicity, radius, speed, gaussianCorrection, rotation) {
     super(rotation);
     this.multiplicity = multiplicity;
     this.radius = radius;
     this.speed = speed;
+    this.gaussianCorrection = gaussianCorrection;
   }
 
    getType() {
@@ -61,6 +65,15 @@ class Z4Airbrush extends Z4PointIterator {
     return this.speed;
   }
 
+  /**
+   * Returns the gaussian correction
+   *
+   * @return The gaussian correction
+   */
+   getGaussianCorrection() {
+    return this.gaussianCorrection;
+  }
+
    drawAction(action, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.currentMultiplicityCounter = 0;
@@ -89,7 +102,7 @@ class Z4Airbrush extends Z4PointIterator {
     } else {
       this.currentMultiplicityCounter++;
       this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
-      let currentRadius = this.radius * Math.random();
+      let currentRadius = this.radius * Z4Math.randomCorrected(this.gaussianCorrection / 10.0);
       let currenAngle = Z4Math.TWO_PI * Math.random();
       let angle = this.rotation.next(currenAngle);
       let vector = Z4Vector.fromVector(this.currentPoint.x + currentRadius * Math.cos(currenAngle), currentRadius * Math.sin(currenAngle) + this.currentPoint.y, 1, angle);
@@ -139,6 +152,7 @@ class Z4Airbrush extends Z4PointIterator {
     json["multiplicity"] = this.multiplicity.toJSON();
     json["radius"] = this.radius;
     json["speed"] = this.speed;
+    json["gaussianCorrection"] = this.gaussianCorrection;
     return json;
   }
 
@@ -149,6 +163,6 @@ class Z4Airbrush extends Z4PointIterator {
    * @return the airbrush
    */
   static  fromJSON(json) {
-    return new Z4Airbrush(Z4FancifulValue.fromJSON(json["multiplicity"]), json["radius"], json["speed"], Z4Rotation.fromJSON(json["rotation"]));
+    return new Z4Airbrush(Z4FancifulValue.fromJSON(json["multiplicity"]), json["radius"], json["speed"], json["gaussianCorrection"], Z4Rotation.fromJSON(json["rotation"]));
   }
 }

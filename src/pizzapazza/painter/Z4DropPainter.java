@@ -188,8 +188,8 @@ public class Z4DropPainter extends Z4Painter {
     $Object json = super.toJSON();
     json.$set("dropPainterType", this.dropPainterType);
     json.$set("radius", this.radius.toJSON());
-    json.$set("regular", this.intensity);
-    json.$set("star", this.gaussianCorrection);
+    json.$set("intensity", this.intensity);
+    json.$set("gaussianCorrection", this.gaussianCorrection);
     return json;
   }
 
