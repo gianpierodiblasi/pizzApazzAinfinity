@@ -238,10 +238,9 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
                             new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                             false),
                     new Z4Rotation(0, new Z4FancifulValue(
-                            new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0),
-                            new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                            false), Z4RotationBehavior.FIXED, false)
-            ),
+                            new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
+                            new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                            false), Z4RotationBehavior.FIXED, false)),
             new Z4Shape2DPainter(
                     new Z4FancifulValue(
                             new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
@@ -251,9 +250,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
                             new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
                             new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                             false),
-                    false,
-                    false,
-                    3,
+                    false, false, -1,
                     new Z4FancifulValue(
                             new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
                             new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
@@ -274,7 +271,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
                     new Color(0, 0, 0, 0)
             ),
             Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)),
-            new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.01, Z4Lighting.NONE)
+            new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE)
     ));
   }
 

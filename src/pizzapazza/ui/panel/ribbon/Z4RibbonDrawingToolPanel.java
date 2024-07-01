@@ -113,7 +113,7 @@ public class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
                             new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
                             new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                             false),
-                    new Color(0, 0, 0, 255),
+                    new Color(0, 0, 0, 0),
                     new Z4FancifulValue(
                             new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
                             new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
@@ -122,7 +122,7 @@ public class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
                             new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
                             new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                             false),
-                    new Color(0, 0, 0, 255)
+                    new Color(0, 0, 0, 0)
             ),
             Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)),
             new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE)
