@@ -2850,6 +2850,11 @@ class Z4CanvasIOManager {
       let zip = new JSZip();
       this.layerToJSON(zip, projectName, new Array(), 0, obj => {
         let finish = () => {
+          let json = new Object();
+          let array = new Array();
+          this.drawingTools.forEach(drawingTool => array.push(drawingTool.toJSON()));
+          json["drawingTools"] = array;
+          zip.file("drawingTools.json", JSON.stringify(json), null);
           zip.file("manifest.json", JSON.stringify(obj), null);
           let options = new Object();
           options["type"] = "blob";
@@ -3071,7 +3076,7 @@ class Z4CanvasIOManager {
       let array = new Array();
       this.drawingTools.forEach(drawingTool => array.push(drawingTool.toJSON()));
       let json = new Object();
-      json["drawingTool"] = array;
+      json["drawingTools"] = array;
       save(json, fileName);
     });
   }

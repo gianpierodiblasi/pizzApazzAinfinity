@@ -285,6 +285,12 @@ public class Z4CanvasIOManager {
       $JSZip zip = new $JSZip();
       this.layerToJSON(zip, projectName, new Array<>(), 0, obj -> {
         $Apply_0_Void finish = () -> {
+          $Object json = new $Object();
+          Array<$Object> array = new Array<>();
+          this.drawingTools.forEach(drawingTool -> array.push(drawingTool.toJSON()));
+          json.$set("drawingTools", array);
+          zip.file("drawingTools.json", JSON.stringify(json), null);
+
           zip.file("manifest.json", JSON.stringify(obj), null);
 
           $Object options = new $Object();
@@ -535,7 +541,7 @@ public class Z4CanvasIOManager {
       this.drawingTools.forEach(drawingTool -> array.push(drawingTool.toJSON()));
 
       $Object json = new $Object();
-      json.$set("drawingTool", array);
+      json.$set("drawingTools", array);
 
       save.$apply(json, fileName);
     });
