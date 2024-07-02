@@ -20,15 +20,20 @@ class Z4OpenDrawingToolsFromLibraryPanel extends JSPanel {
     this.setLayout(new GridBagLayout());
     let json = null;
     eval("json = z4drawingtool_library");
-    Object.keys(json).forEach((key, index, array) => {
-      let value = json[key];
+    json.sort((obj1, obj2) => {
+      let name1 = obj1[Z4Translations.CURRENT_LANGUAGE.key];
+      let name2 = obj2[Z4Translations.CURRENT_LANGUAGE.key];
+      let response = 0;
+      eval("response = name1 < name2 ? -1 : +1");
+      return response;
+    }).forEach((obj, index, array) => {
       let checkbox = new JSCheckBox();
-      checkbox.setText(value[Z4Translations.CURRENT_LANGUAGE.key]);
+      checkbox.setText(obj[Z4Translations.CURRENT_LANGUAGE.key]);
       checkbox.addActionListener(event => this.onchange());
       this.add(checkbox, new GBC(0, index).a(GBC.WEST));
       this.checkboxes.push(checkbox);
-      let z4drawingtool = value["z4drawingtool"];
-      z4drawingtool["name"] = value[Z4Translations.CURRENT_LANGUAGE.key];
+      let z4drawingtool = obj["z4drawingtool"];
+      z4drawingtool["name"] = obj[Z4Translations.CURRENT_LANGUAGE.key];
       this.drawingTools.push(z4drawingtool);
     });
   }

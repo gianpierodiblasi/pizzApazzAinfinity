@@ -2,7 +2,6 @@ package pizzapazza.ui.panel;
 
 import def.js.Array;
 import static def.js.Globals.eval;
-import def.js.Object;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
 import javascript.swing.JSCheckBox;
@@ -33,19 +32,23 @@ public class Z4OpenDrawingToolsFromLibraryPanel extends JSPanel {
     this.cssAddClass("z4opendrawingtoolsfromlibrarypanel");
     this.setLayout(new GridBagLayout());
 
-    $Object json = null;
+    Array<$Object> json = null;
     eval("json = z4drawingtool_library");
-    Object.keys(json).forEach((key, index, array) -> {
-      $Object value = json.$get(key);
-
+    json.sort((obj1, obj2) -> {
+      String name1 = obj1.$get(Z4Translations.CURRENT_LANGUAGE.key);
+      String name2 = obj2.$get(Z4Translations.CURRENT_LANGUAGE.key);
+      int response = 0;
+      eval("response = name1 < name2 ? -1 : +1");
+      return response;
+    }).forEach((obj, index, array) -> {
       JSCheckBox checkbox = new JSCheckBox();
-      checkbox.setText(value.$get(Z4Translations.CURRENT_LANGUAGE.key));
+      checkbox.setText(obj.$get(Z4Translations.CURRENT_LANGUAGE.key));
       checkbox.addActionListener(event -> this.onchange());
       this.add(checkbox, new GBC(0, index).a(GBC.WEST));
       this.checkboxes.push(checkbox);
 
-      $Object z4drawingtool = value.$get("z4drawingtool");
-      z4drawingtool.$set("name", value.$get(Z4Translations.CURRENT_LANGUAGE.key));
+      $Object z4drawingtool = obj.$get("z4drawingtool");
+      z4drawingtool.$set("name", obj.$get(Z4Translations.CURRENT_LANGUAGE.key));
       this.drawingTools.push(z4drawingtool);
     });
   }
