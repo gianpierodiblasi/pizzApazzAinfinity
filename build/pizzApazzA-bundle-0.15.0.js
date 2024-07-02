@@ -5439,13 +5439,18 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbondrawingtoolpanel");
-    this.addButton(Z4Translations.CREATE, true, 0, 0, "left", 5, event => this.create());
-    this.addButton(Z4Translations.OPEN, true, 1, 0, "both", 5, event => this.open());
-    this.addButton(Z4Translations.SAVE_DRAWING_TOOLS_AS, true, 2, 0, "right", 5, event => this.save());
+    Z4UI.addLabel(this, Z4Translations.NEW_DRAWING_TOOL, new GBC(0, 0).w(3).a(GBC.WEST).i(5, 5, 2, 0));
+    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", 0, event => this.create());
+    this.addButton(Z4Translations.FROM_FILE, true, 1, 1, "both", 0, event => this.open());
+    this.addButton(Z4Translations.FROM_LIBRARY, true, 2, 1, "right", 0, event => this.openFromLibrary());
     Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    this.addButton(Z4Translations.SAVE_DRAWING_TOOLS_AS, true, 4, 1, "", 0, event => this.save());
+    Z4UI.addVLine(this, new GBC(5, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    this.addButton(Z4Translations.DELETE, true, 6, 1, "", 0, event => this.delete());
+    Z4UI.addVLine(this, new GBC(7, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.drawingToolsPreview.setLayout(new BoxLayout(this.drawingToolsPreview, BoxLayout.X_AXIS));
     this.drawingToolsPreview.getStyle().overflowX = "scroll";
-    this.add(this.drawingToolsPreview, new GBC(4, 0).h(2).wx(1).f(GBC.BOTH));
+    this.add(this.drawingToolsPreview, new GBC(8, 0).h(2).wx(1).f(GBC.BOTH));
   }
 
   /**
@@ -5483,6 +5488,9 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     }
   }
 
+   openFromLibrary() {
+  }
+
    save() {
     if (typeof window["showSaveFilePicker"] === "function") {
       this.saveToolsToHandle();
@@ -5515,6 +5523,9 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     options.suggestedName = this.canvas.getProjectName();
     options.types = Z4Constants.PIZZAPAZZA_SAVE_TOOLS_FILE_TYPE;
     JSFilePicker.showSaveFilePicker(options, handle => this.canvas.saveDrawingToolsToHandle(handle));
+  }
+
+   delete() {
   }
 
   /**
@@ -16832,6 +16843,8 @@ class Z4Translations {
   static  MERGE_ALL_LAYERS = "";
 
   // Ribbon Drawing Tool
+  static  NEW_DRAWING_TOOL = "";
+
   static  DRAWING_TOOL = "";
 
   static  DRAWING_TOOL_NAME = "";
@@ -16845,6 +16858,8 @@ class Z4Translations {
   static  PIZZAPAZZA_DRAWING_TOOLS = "";
 
   static  DELETE_DRAWING_TOOL_MESSAGE = "";
+
+  static  FROM_LIBRARY = "";
 
   // Ribbon History
   static  HISTORY = "";
@@ -17233,6 +17248,7 @@ class Z4Translations {
     Z4Translations.MERGE_VISIBLE_LAYERS = "Merge Visible Layers";
     Z4Translations.MERGE_ALL_LAYERS = "Merge All Layers";
     // Ribbon Drawing Tool
+    Z4Translations.NEW_DRAWING_TOOL = "New Drawing Tool";
     Z4Translations.DRAWING_TOOL = "Drawing Tool";
     Z4Translations.DRAWING_TOOL_NAME = "Drawing Tool Name";
     Z4Translations.SAVE_DRAWING_TOOL_AS = "Save As";
@@ -17240,6 +17256,7 @@ class Z4Translations {
     Z4Translations.PIZZAPAZZA_DRAWING_TOOL = "pizzApazzA Drawing Tool";
     Z4Translations.PIZZAPAZZA_DRAWING_TOOLS = "pizzApazzA Drawing Tools";
     Z4Translations.DELETE_DRAWING_TOOL_MESSAGE = "Do you really want to delete the drawing tool?";
+    Z4Translations.FROM_LIBRARY = "From Library";
     // Ribbon History
     Z4Translations.HISTORY = "History";
     Z4Translations.UNDO = "Undo";
@@ -17448,6 +17465,7 @@ class Z4Translations {
     Z4Translations.MERGE_VISIBLE_LAYERS = "Fondi Livelli Visibili";
     Z4Translations.MERGE_ALL_LAYERS = "Fondi Tutti i Livelli";
     // Ribbon Drawing Tool
+    Z4Translations.NEW_DRAWING_TOOL = "Nuovo Strumento di Disegno";
     Z4Translations.DRAWING_TOOL = "Strumento di Disegno";
     Z4Translations.DRAWING_TOOL_NAME = "Nome Strumento di Disegno";
     Z4Translations.SAVE_DRAWING_TOOL_AS = "Salva con Nome";
@@ -17455,6 +17473,7 @@ class Z4Translations {
     Z4Translations.PIZZAPAZZA_DRAWING_TOOL = "Strumento di Disegno pizzApazzA";
     Z4Translations.PIZZAPAZZA_DRAWING_TOOLS = "Strumenti di Disegno pizzApazzA";
     Z4Translations.DELETE_DRAWING_TOOL_MESSAGE = "Vuoi davvero eliminare lo strumento di disegno?";
+    Z4Translations.FROM_LIBRARY = "Da Libreria";
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";
     Z4Translations.UNDO = "Annulla";

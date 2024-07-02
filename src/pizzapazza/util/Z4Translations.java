@@ -47,6 +47,7 @@ public class Z4Translations {
   public static String MERGE_ALL_LAYERS = "";
 
   // Ribbon Drawing Tool
+  public static String NEW_DRAWING_TOOL = "";
   public static String DRAWING_TOOL = "";
   public static String DRAWING_TOOL_NAME = "";
   public static String SAVE_DRAWING_TOOL_AS = "";
@@ -54,6 +55,7 @@ public class Z4Translations {
   public static String PIZZAPAZZA_DRAWING_TOOL = "";
   public static String PIZZAPAZZA_DRAWING_TOOLS = "";
   public static String DELETE_DRAWING_TOOL_MESSAGE = "";
+  public static String FROM_LIBRARY = "";
 
   // Ribbon History
   public static String HISTORY = "";
@@ -291,6 +293,7 @@ public class Z4Translations {
     Z4Translations.MERGE_ALL_LAYERS = "Merge All Layers";
 
     // Ribbon Drawing Tool
+    Z4Translations.NEW_DRAWING_TOOL = "New Drawing Tool";
     Z4Translations.DRAWING_TOOL = "Drawing Tool";
     Z4Translations.DRAWING_TOOL_NAME = "Drawing Tool Name";
     Z4Translations.SAVE_DRAWING_TOOL_AS = "Save As";
@@ -298,6 +301,7 @@ public class Z4Translations {
     Z4Translations.PIZZAPAZZA_DRAWING_TOOL = "pizzApazzA Drawing Tool";
     Z4Translations.PIZZAPAZZA_DRAWING_TOOLS = "pizzApazzA Drawing Tools";
     Z4Translations.DELETE_DRAWING_TOOL_MESSAGE = "Do you really want to delete the drawing tool?";
+    Z4Translations.FROM_LIBRARY = "From Library";
 
     // Ribbon History
     Z4Translations.HISTORY = "History";
@@ -522,6 +526,7 @@ public class Z4Translations {
     Z4Translations.MERGE_ALL_LAYERS = "Fondi Tutti i Livelli";
 
     // Ribbon Drawing Tool
+    Z4Translations.NEW_DRAWING_TOOL = "Nuovo Strumento di Disegno";
     Z4Translations.DRAWING_TOOL = "Strumento di Disegno";
     Z4Translations.DRAWING_TOOL_NAME = "Nome Strumento di Disegno";
     Z4Translations.SAVE_DRAWING_TOOL_AS = "Salva con Nome";
@@ -529,7 +534,8 @@ public class Z4Translations {
     Z4Translations.PIZZAPAZZA_DRAWING_TOOL = "Strumento di Disegno pizzApazzA";
     Z4Translations.PIZZAPAZZA_DRAWING_TOOLS = "Strumenti di Disegno pizzApazzA";
     Z4Translations.DELETE_DRAWING_TOOL_MESSAGE = "Vuoi davvero eliminare lo strumento di disegno?";
-
+    Z4Translations.FROM_LIBRARY = "Da Libreria";
+    
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";
     Z4Translations.UNDO = "Annulla";

@@ -60,17 +60,22 @@ public class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbondrawingtoolpanel");
 
-    this.addButton(Z4Translations.CREATE, true, 0, 0, "left", 5, event -> this.create());
+    Z4UI.addLabel(this, Z4Translations.NEW_DRAWING_TOOL, new GBC(0, 0).w(3).a(GBC.WEST).i(5, 5, 2, 0));
 
-    this.addButton(Z4Translations.OPEN, true, 1, 0, "both", 5, event -> this.open());
-
-    this.addButton(Z4Translations.SAVE_DRAWING_TOOLS_AS, true, 2, 0, "right", 5, event -> this.save());
-
+    this.addButton(Z4Translations.CREATE, true, 0, 1, "left", 0, event -> this.create());
+    this.addButton(Z4Translations.FROM_FILE, true, 1, 1, "both", 0, event -> this.open());
+    this.addButton(Z4Translations.FROM_LIBRARY, true, 2, 1, "right", 0, event -> this.openFromLibrary());
     Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+
+    this.addButton(Z4Translations.SAVE_DRAWING_TOOLS_AS, true, 4, 1, "", 0, event -> this.save());
+    Z4UI.addVLine(this, new GBC(5, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+
+    this.addButton(Z4Translations.DELETE, true, 6, 1, "", 0, event -> this.delete());
+    Z4UI.addVLine(this, new GBC(7, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
     this.drawingToolsPreview.setLayout(new BoxLayout(this.drawingToolsPreview, BoxLayout.X_AXIS));
     this.drawingToolsPreview.getStyle().overflowX = "scroll";
-    this.add(this.drawingToolsPreview, new GBC(4, 0).h(2).wx(1).f(GBC.BOTH));
+    this.add(this.drawingToolsPreview, new GBC(8, 0).h(2).wx(1).f(GBC.BOTH));
   }
 
   /**
@@ -155,6 +160,10 @@ public class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     }
   }
 
+  private void openFromLibrary() {
+
+  }
+
   private void save() {
     if ($typeof(window.$get("showSaveFilePicker"), "function")) {
       this.saveToolsToHandle();
@@ -191,6 +200,9 @@ public class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     options.types = Z4Constants.PIZZAPAZZA_SAVE_TOOLS_FILE_TYPE;
 
     JSFilePicker.showSaveFilePicker(options, handle -> this.canvas.saveDrawingToolsToHandle(handle));
+  }
+
+  private void delete() {
   }
 
   /**
