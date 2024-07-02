@@ -293,8 +293,8 @@ public class Z4Translations {
     // Ribbon Drawing Tool
     Z4Translations.DRAWING_TOOL = "Drawing Tool";
     Z4Translations.DRAWING_TOOL_NAME = "Drawing Tool Name";
-    Z4Translations.SAVE_DRAWING_TOOL_AS = "Save Drawing Tool As";
-    Z4Translations.SAVE_DRAWING_TOOLS_AS = "Save Drawing Tools As";
+    Z4Translations.SAVE_DRAWING_TOOL_AS = "Save As";
+    Z4Translations.SAVE_DRAWING_TOOLS_AS = "Save All As";
     Z4Translations.PIZZAPAZZA_DRAWING_TOOL = "pizzApazzA Drawing Tool";
     Z4Translations.PIZZAPAZZA_DRAWING_TOOLS = "pizzApazzA Drawing Tools";
     Z4Translations.DELETE_DRAWING_TOOL_MESSAGE = "Do you really want to delete the drawing tool?";
@@ -524,8 +524,8 @@ public class Z4Translations {
     // Ribbon Drawing Tool
     Z4Translations.DRAWING_TOOL = "Strumento di Disegno";
     Z4Translations.DRAWING_TOOL_NAME = "Nome Strumento di Disegno";
-    Z4Translations.SAVE_DRAWING_TOOL_AS = "Salva Strumento di Disegno con Nome";
-    Z4Translations.SAVE_DRAWING_TOOLS_AS = "Salva Strumenti di Disegno con Nome";
+    Z4Translations.SAVE_DRAWING_TOOL_AS = "Salva con Nome";
+    Z4Translations.SAVE_DRAWING_TOOLS_AS = "Salva Tutti con Nome";
     Z4Translations.PIZZAPAZZA_DRAWING_TOOL = "Strumento di Disegno pizzApazzA";
     Z4Translations.PIZZAPAZZA_DRAWING_TOOLS = "Strumenti di Disegno pizzApazzA";
     Z4Translations.DELETE_DRAWING_TOOL_MESSAGE = "Vuoi davvero eliminare lo strumento di disegno?";
