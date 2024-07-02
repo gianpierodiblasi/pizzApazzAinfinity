@@ -5446,11 +5446,9 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.addButton(Z4Translations.SAVE_DRAWING_TOOLS_AS, true, 4, 1, "", 0, event => this.save());
     Z4UI.addVLine(this, new GBC(5, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
-    this.addButton(Z4Translations.DELETE, true, 6, 1, "", 0, event => this.delete());
-    Z4UI.addVLine(this, new GBC(7, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.drawingToolsPreview.setLayout(new BoxLayout(this.drawingToolsPreview, BoxLayout.X_AXIS));
     this.drawingToolsPreview.getStyle().overflowX = "scroll";
-    this.add(this.drawingToolsPreview, new GBC(8, 0).h(2).wx(1).f(GBC.BOTH));
+    this.add(this.drawingToolsPreview, new GBC(6, 0).h(2).wx(1).f(GBC.BOTH));
   }
 
   /**
@@ -5489,6 +5487,12 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
   }
 
    openFromLibrary() {
+    let panel = new Z4OpenDrawingToolsFromLibraryPanel();
+    JSOptionPane.showInputDialog(panel, Z4Translations.FROM_LIBRARY, listener => panel.addChangeListener(listener), () => !!(panel.getSelectedDrawingTools().length), response => {
+      if (response === JSOptionPane.OK_OPTION) {
+        panel.getSelectedDrawingTools().forEach(drawingTool => this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
+      }
+    });
   }
 
    save() {
@@ -5523,9 +5527,6 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     options.suggestedName = this.canvas.getProjectName();
     options.types = Z4Constants.PIZZAPAZZA_SAVE_TOOLS_FILE_TYPE;
     JSFilePicker.showSaveFilePicker(options, handle => this.canvas.saveDrawingToolsToHandle(handle));
-  }
-
-   delete() {
   }
 
   /**
@@ -11369,6 +11370,76 @@ class Z4NewImagePanel extends JSTabbedPane {
         listener.stateChanged(event);
       }
     });
+  }
+}
+/**
+ * The panel to open the drawing tools from library
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4OpenDrawingToolsFromLibraryPanel extends JSPanel {
+
+   checkboxes = new Array();
+
+   drawingTools = new Array();
+
+   listeners = new Array();
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super();
+    this.cssAddClass("z4opendrawingtoolsfromlibrarypanel");
+    this.setLayout(new GridBagLayout());
+    let json = null;
+    eval("json = z4drawingtool_library");
+    Object.keys(json).forEach((key, index, array) => {
+      let value = json[key];
+      let checkbox = new JSCheckBox();
+      checkbox.setText(value[Z4Translations.CURRENT_LANGUAGE.key]);
+      checkbox.addActionListener(event => this.onchange());
+      this.add(checkbox, new GBC(0, index).a(GBC.WEST));
+      this.checkboxes.push(checkbox);
+      let z4drawingtool = value["z4drawingtool"];
+      z4drawingtool["name"] = value[Z4Translations.CURRENT_LANGUAGE.key];
+      this.drawingTools.push(z4drawingtool);
+    });
+  }
+
+  /**
+   * Returns the selected drawing tools
+   *
+   * @return The selected drawing tools
+   */
+   getSelectedDrawingTools() {
+    let selected = new Array();
+    this.checkboxes.forEach((checkbox, index, array) => {
+      if (checkbox.isSelected()) {
+        selected.push(this.drawingTools[index]);
+      }
+    });
+    return selected;
+  }
+
+   onchange() {
+    let event = new ChangeEvent();
+    this.listeners.forEach(listener => {
+      if (typeof listener === "function") {
+        listener(event);
+      } else {
+        listener.stateChanged(event);
+      }
+    });
+  }
+
+  /**
+   * Adds a change listener
+   *
+   * @param listener The listener
+   */
+   addChangeListener(listener) {
+    this.listeners.push(listener);
   }
 }
 /**

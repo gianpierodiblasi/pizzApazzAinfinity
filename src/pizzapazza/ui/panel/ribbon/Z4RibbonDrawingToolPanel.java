@@ -30,6 +30,7 @@ import pizzapazza.math.Z4SignedValue;
 import pizzapazza.painter.Z4Shape2DPainter;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.component.Z4DrawingToolPreview;
+import pizzapazza.ui.panel.Z4OpenDrawingToolsFromLibraryPanel;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4DrawingTool;
@@ -70,12 +71,9 @@ public class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     this.addButton(Z4Translations.SAVE_DRAWING_TOOLS_AS, true, 4, 1, "", 0, event -> this.save());
     Z4UI.addVLine(this, new GBC(5, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
-    this.addButton(Z4Translations.DELETE, true, 6, 1, "", 0, event -> this.delete());
-    Z4UI.addVLine(this, new GBC(7, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
-
     this.drawingToolsPreview.setLayout(new BoxLayout(this.drawingToolsPreview, BoxLayout.X_AXIS));
     this.drawingToolsPreview.getStyle().overflowX = "scroll";
-    this.add(this.drawingToolsPreview, new GBC(8, 0).h(2).wx(1).f(GBC.BOTH));
+    this.add(this.drawingToolsPreview, new GBC(6, 0).h(2).wx(1).f(GBC.BOTH));
   }
 
   /**
@@ -161,7 +159,13 @@ public class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
   }
 
   private void openFromLibrary() {
+    Z4OpenDrawingToolsFromLibraryPanel panel = new Z4OpenDrawingToolsFromLibraryPanel();
 
+    JSOptionPane.showInputDialog(panel, Z4Translations.FROM_LIBRARY, listener -> panel.addChangeListener(listener), () -> $exists(panel.getSelectedDrawingTools().length), response -> {
+      if (response == JSOptionPane.OK_OPTION) {
+        panel.getSelectedDrawingTools().forEach(drawingTool -> this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
+      }
+    });
   }
 
   private void save() {
@@ -200,9 +204,6 @@ public class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     options.types = Z4Constants.PIZZAPAZZA_SAVE_TOOLS_FILE_TYPE;
 
     JSFilePicker.showSaveFilePicker(options, handle -> this.canvas.saveDrawingToolsToHandle(handle));
-  }
-
-  private void delete() {
   }
 
   /**
