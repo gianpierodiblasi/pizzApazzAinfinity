@@ -432,7 +432,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
       if (color && lighting === Z4Lighting.NONE) {
         this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color);
       } else {
-        let c = null;
+        let c = color;
         if (spatioTemporalColor) {
           c = spatioTemporalColor.getColorAt(-1, val);
         } else if (gradientColor) {

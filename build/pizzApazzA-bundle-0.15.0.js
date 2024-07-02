@@ -15048,7 +15048,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
       if (color && lighting === Z4Lighting.NONE) {
         this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color);
       } else {
-        let c = null;
+        let c = color;
         if (spatioTemporalColor) {
           c = spatioTemporalColor.getColorAt(-1, val);
         } else if (gradientColor) {
@@ -15243,7 +15243,7 @@ class Z4DropPainter extends Z4Painter {
       if (color && lighting === Z4Lighting.NONE) {
         this.drawPath(context, r, color);
       } else {
-        let c = null;
+        let c = color;
         if (spatioTemporalColor) {
           c = spatioTemporalColor.getColorAt(-1, r / currentRadius);
         } else if (gradientColor) {
@@ -15774,9 +15774,8 @@ class Z4NaturalFigurePainter extends Z4Painter {
     let length = Math.max(Z4Math.distance(this.path1.x, this.path1.y, 0, 0), Z4Math.distance(this.path2.x, this.path2.y, 0, 0));
     for (let i = 0; i < length; i += 3) {
       let val = i / length;
-      let c = null;
+      let c = color;
       if (color && lighting === Z4Lighting.NONE) {
-        c = color;
       } else {
         if (spatioTemporalColor) {
           c = spatioTemporalColor.getColorAt(-1, val);

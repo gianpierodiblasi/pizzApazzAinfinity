@@ -123,7 +123,7 @@ public class Z4DropPainter extends Z4Painter {
       if ($exists(color) && lighting == Z4Lighting.NONE) {
         this.drawPath(context, r, color);
       } else {
-        Color c = null;
+        Color c = color;
         if ($exists(spatioTemporalColor)) {
           c = spatioTemporalColor.getColorAt(-1, r / currentRadius);
         } else if ($exists(gradientColor)) {

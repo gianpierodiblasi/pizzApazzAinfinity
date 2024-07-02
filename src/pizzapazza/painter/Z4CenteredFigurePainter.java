@@ -485,7 +485,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
       if ($exists(color) && lighting == Z4Lighting.NONE) {
         this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color);
       } else {
-        Color c = null;
+        Color c = color;
         if ($exists(spatioTemporalColor)) {
           c = spatioTemporalColor.getColorAt(-1, val);
         } else if ($exists(gradientColor)) {

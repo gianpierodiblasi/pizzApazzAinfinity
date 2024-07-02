@@ -101,7 +101,7 @@ class Z4DropPainter extends Z4Painter {
       if (color && lighting === Z4Lighting.NONE) {
         this.drawPath(context, r, color);
       } else {
-        let c = null;
+        let c = color;
         if (spatioTemporalColor) {
           c = spatioTemporalColor.getColorAt(-1, r / currentRadius);
         } else if (gradientColor) {

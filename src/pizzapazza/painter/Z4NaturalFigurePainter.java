@@ -512,9 +512,8 @@ public class Z4NaturalFigurePainter extends Z4Painter {
 
     for (int i = 0; i < length; i += 3) {
       double val = i / length;
-      Color c = null;
+      Color c = color;
       if ($exists(color) && lighting == Z4Lighting.NONE) {
-        c = color;
       } else {
         if ($exists(spatioTemporalColor)) {
           c = spatioTemporalColor.getColorAt(-1, val);
