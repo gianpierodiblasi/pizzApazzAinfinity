@@ -995,6 +995,26 @@ class Z4PointIteratorType {
   static SCATTERER = 'SCATTERER';
 }
 /**
+ * The direction of a drawing
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4DrawingDirection {
+
+  /**
+   * The drawing can move in any direction
+   */
+  static FREE = 'FREE';
+  /**
+   * The drawing can only move horizontally
+   */
+  static HORIZONTAL = 'HORIZONTAL';
+  /**
+   * The drawing can only move vertically
+   */
+  static VERTICAL = 'VERTICAL';
+}
+/**
  * The point where to perform a drawing
  *
  * @author gianpiero.diblasi
@@ -1854,6 +1874,8 @@ class Z4Canvas extends JSComponent {
 
    selectedDrawingTool = null;
 
+   drawingDirection = Z4DrawingDirection.FREE;
+
    mouseManager = new Z4CanvasMouseManager(this, this.ctx);
 
    ioManager = new Z4CanvasIOManager(this, this.paper, this.drawingTools);
@@ -1987,8 +2009,10 @@ class Z4Canvas extends JSComponent {
     this.statusPanel.setProjectName(projectName);
     this.statusPanel.setProjectSize(width, height);
     this.statusPanel.setZoom(1);
+    this.statusPanel.setDrawingDirection(Z4DrawingDirection.FREE);
     this.zoom = 1;
     this.mouseManager.setZoom(this.zoom);
+    this.setDrawingDirection(Z4DrawingDirection.FREE);
     this.setSaved(true);
     this.changed = false;
     this.canvas.width = width;
@@ -2548,6 +2572,25 @@ class Z4Canvas extends JSComponent {
       }
       this.zooming = false;
     }
+  }
+
+  /**
+   * Returns the drawing direction
+   *
+   * @return The drawing direction
+   */
+   getDrawingDirection() {
+    return this.drawingDirection;
+  }
+
+  /**
+   * Sets the drawing direction
+   *
+   * @param drawingDirection The drawing direction
+   */
+   setDrawingDirection(drawingDirection) {
+    this.drawingDirection = drawingDirection;
+    this.mouseManager.setDrawingDirection(drawingDirection);
   }
 
   /**
@@ -3240,6 +3283,8 @@ class Z4CanvasMouseManager {
 
    selectedDrawingTool = null;
 
+   drawingDirection = Z4DrawingDirection.FREE;
+
    size = null;
 
    zoom = 0.0;
@@ -3277,6 +3322,15 @@ class Z4CanvasMouseManager {
    */
    setSelectedDrawingTool(selectedDrawingTool) {
     this.selectedDrawingTool = selectedDrawingTool;
+  }
+
+  /**
+   * Sets the drawing direction
+   *
+   * @param drawingDirection The drawing direction
+   */
+   setDrawingDirection(drawingDirection) {
+    this.drawingDirection = drawingDirection;
   }
 
   /**
@@ -11465,11 +11519,13 @@ class Z4StatusPanel extends JSPanel {
 
    projectName = new JSLabel();
 
+   zoom = new JSComboBox();
+
    projectSize = new JSLabel();
 
    mousePosition = new JSLabel();
 
-   zoom = new JSComboBox();
+   drawingDirection = new JSButton();
 
   constructor() {
     super();
@@ -11494,7 +11550,15 @@ class Z4StatusPanel extends JSPanel {
     this.mousePosition.getStyle().fontFamily = "monospace";
     this.setMousePosition(0, 0);
     this.add(this.mousePosition, new GBC(6, 0).i(0, 5, 0, 5));
-    this.add(new JSLabel(), new GBC(7, 0).wx(1));
+    this.addPipe(7);
+    this.drawingDirection.setContentAreaFilled(false);
+    this.drawingDirection.setTooltip(Z4Translations.DRAWING_DIRECTION);
+    this.drawingDirection.setIcon(new Z4EmptyImageProducer(""));
+    this.drawingDirection.cssAddClass("z4drawingdirection");
+    this.drawingDirection.cssAddClass("z4drawingdirection-free");
+    this.drawingDirection.addActionListener(event => this.setDrawingDirection(null));
+    this.add(this.drawingDirection, new GBC(8, 0).i(0, 5, 0, 5));
+    this.add(new JSLabel(), new GBC(9, 0).wx(1));
   }
 
    addPipe(gridx) {
@@ -11550,6 +11614,33 @@ class Z4StatusPanel extends JSPanel {
    */
    setZoom(zoom) {
     this.zoom.setSelectedItem(new KeyValue("" + zoom, ""));
+  }
+
+  /**
+   * Sets the drawing direction
+   *
+   * @param drawingDirection The drawing direction
+   */
+   setDrawingDirection(drawingDirection) {
+    this.drawingDirection.cssRemoveClass("z4drawingdirection-free");
+    this.drawingDirection.cssRemoveClass("z4drawingdirection-horizontal");
+    this.drawingDirection.cssRemoveClass("z4drawingdirection-vertical");
+    if (drawingDirection === Z4DrawingDirection.FREE) {
+      this.drawingDirection.cssAddClass("z4drawingdirection-free");
+    } else if (drawingDirection === Z4DrawingDirection.HORIZONTAL) {
+      this.drawingDirection.cssAddClass("z4drawingdirection-horizontal");
+    } else if (drawingDirection === Z4DrawingDirection.VERTICAL) {
+      this.drawingDirection.cssAddClass("z4drawingdirection-vertical");
+    } else if (this.canvas.getDrawingDirection() === Z4DrawingDirection.FREE) {
+      this.drawingDirection.cssAddClass("z4drawingdirection-horizontal");
+      this.canvas.setDrawingDirection(Z4DrawingDirection.HORIZONTAL);
+    } else if (this.canvas.getDrawingDirection() === Z4DrawingDirection.HORIZONTAL) {
+      this.drawingDirection.cssAddClass("z4drawingdirection-vertical");
+      this.canvas.setDrawingDirection(Z4DrawingDirection.VERTICAL);
+    } else if (this.canvas.getDrawingDirection() === Z4DrawingDirection.VERTICAL) {
+      this.drawingDirection.cssAddClass("z4drawingdirection-free");
+      this.canvas.setDrawingDirection(Z4DrawingDirection.FREE);
+    }
   }
 
    onZoom() {
@@ -17149,6 +17240,8 @@ class Z4Translations {
 
   static  ACTIONS = "";
 
+  static  DRAWING_DIRECTION = "";
+
   // Color
   static  COLOR = "";
 
@@ -17465,6 +17558,7 @@ class Z4Translations {
     Z4Translations.MOVE_TOP = "Move to Top";
     Z4Translations.TRY_ME = "Try Me";
     Z4Translations.ACTIONS = "Actions";
+    Z4Translations.DRAWING_DIRECTION = "Drawing Direction";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -17682,6 +17776,7 @@ class Z4Translations {
     Z4Translations.MOVE_TOP = "Muovi in Cima";
     Z4Translations.TRY_ME = "Provami";
     Z4Translations.ACTIONS = "Azioni";
+    Z4Translations.DRAWING_DIRECTION = "Direzione di Disegno";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";

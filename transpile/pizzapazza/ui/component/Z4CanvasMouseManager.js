@@ -13,6 +13,8 @@ class Z4CanvasMouseManager {
 
    selectedDrawingTool = null;
 
+   drawingDirection = Z4DrawingDirection.FREE;
+
    size = null;
 
    zoom = 0.0;
@@ -50,6 +52,15 @@ class Z4CanvasMouseManager {
    */
    setSelectedDrawingTool(selectedDrawingTool) {
     this.selectedDrawingTool = selectedDrawingTool;
+  }
+
+  /**
+   * Sets the drawing direction
+   *
+   * @param drawingDirection The drawing direction
+   */
+   setDrawingDirection(drawingDirection) {
+    this.drawingDirection = drawingDirection;
   }
 
   /**

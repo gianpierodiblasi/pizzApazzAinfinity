@@ -237,6 +237,8 @@ class Z4Translations {
 
   static  ACTIONS = "";
 
+  static  DRAWING_DIRECTION = "";
+
   // Color
   static  COLOR = "";
 
@@ -553,6 +555,7 @@ class Z4Translations {
     Z4Translations.MOVE_TOP = "Move to Top";
     Z4Translations.TRY_ME = "Try Me";
     Z4Translations.ACTIONS = "Actions";
+    Z4Translations.DRAWING_DIRECTION = "Drawing Direction";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -770,6 +773,7 @@ class Z4Translations {
     Z4Translations.MOVE_TOP = "Muovi in Cima";
     Z4Translations.TRY_ME = "Provami";
     Z4Translations.ACTIONS = "Azioni";
+    Z4Translations.DRAWING_DIRECTION = "Direzione di Disegno";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";

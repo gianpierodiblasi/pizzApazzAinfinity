@@ -1,0 +1,16 @@
+.z4statuspanel {
+}
+
+.z4statuspanel .z4drawingdirection img {
+  width: 14px;
+  height: 14px;
+}
+.z4statuspanel .z4drawingdirection-free img {
+  content: url(../image/drawingdirection-free.gif);
+}
+.z4statuspanel .z4drawingdirection-horizontal img {
+  content: url(../image/drawingdirection-horizontal.gif);
+}
+.z4statuspanel .z4drawingdirection-vertical img {
+  content: url(../image/drawingdirection-vertical.gif);
+}

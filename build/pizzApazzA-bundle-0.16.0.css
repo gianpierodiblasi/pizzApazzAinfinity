@@ -114,9 +114,6 @@
 .z4signedvaluepanel {
 }
 
-.z4statuspanel {
-}
-
 /* panel/color */
 
 .z4bigradientcolorpanel canvas, .z4gradientcolorpanel canvas {
@@ -729,7 +726,23 @@
 }
 .z4signpanel .z4signpanel-radio:nth-child(4) img {
   content: url(../image/math/z4signbehavior_alternate.svg);
-}.z4whirlpoolpanel {
+}.z4statuspanel {
+}
+
+.z4statuspanel .z4drawingdirection img {
+  width: 14px;
+  height: 14px;
+}
+.z4statuspanel .z4drawingdirection-free img {
+  content: url(../image/drawingdirection-free.gif);
+}
+.z4statuspanel .z4drawingdirection-horizontal img {
+  content: url(../image/drawingdirection-horizontal.gif);
+}
+.z4statuspanel .z4drawingdirection-vertical img {
+  content: url(../image/drawingdirection-vertical.gif);
+}
+.z4whirlpoolpanel {
 }
 
 .z4whirlpoolpanel .z4whirlpoolpanel-radio img {

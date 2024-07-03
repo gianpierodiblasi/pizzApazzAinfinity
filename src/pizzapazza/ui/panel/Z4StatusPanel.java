@@ -3,13 +3,16 @@ package pizzapazza.ui.panel;
 import static def.js.Globals.parseFloat;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
+import javascript.swing.JSButton;
 import javascript.swing.JSComboBox;
 import javascript.swing.JSLabel;
 import javascript.swing.JSPanel;
 import javascript.swing.MnR.DefaultKeyValueComboBoxModelAndRenderer;
 import javascript.util.KeyValue;
+import pizzapazza.math.Z4DrawingDirection;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.util.Z4Constants;
+import pizzapazza.util.Z4EmptyImageProducer;
 import pizzapazza.util.Z4Translations;
 import static simulation.js.$Globals.parseInt;
 import simulation.js.$Number;
@@ -24,9 +27,10 @@ public class Z4StatusPanel extends JSPanel {
   private Z4Canvas canvas;
 
   private final JSLabel projectName = new JSLabel();
+  private final JSComboBox<KeyValue<String, String>> zoom = new JSComboBox<>();
   private final JSLabel projectSize = new JSLabel();
   private final JSLabel mousePosition = new JSLabel();
-  private final JSComboBox<KeyValue<String, String>> zoom = new JSComboBox<>();
+  private final JSButton drawingDirection = new JSButton();
 
   public Z4StatusPanel() {
     super();
@@ -59,7 +63,17 @@ public class Z4StatusPanel extends JSPanel {
     this.setMousePosition(0, 0);
     this.add(this.mousePosition, new GBC(6, 0).i(0, 5, 0, 5));
 
-    this.add(new JSLabel(), new GBC(7, 0).wx(1));
+    this.addPipe(7);
+
+    this.drawingDirection.setContentAreaFilled(false);
+    this.drawingDirection.setTooltip(Z4Translations.DRAWING_DIRECTION);
+    this.drawingDirection.setIcon(new Z4EmptyImageProducer<>(""));
+    this.drawingDirection.cssAddClass("z4drawingdirection");
+    this.drawingDirection.cssAddClass("z4drawingdirection-free");
+    this.drawingDirection.addActionListener(event -> this.setDrawingDirection(null));
+    this.add(this.drawingDirection, new GBC(8, 0).i(0, 5, 0, 5));
+
+    this.add(new JSLabel(), new GBC(9, 0).wx(1));
   }
 
   private void addPipe(int gridx) {
@@ -115,6 +129,34 @@ public class Z4StatusPanel extends JSPanel {
    */
   public void setZoom(double zoom) {
     this.zoom.setSelectedItem(new KeyValue<>("" + zoom, ""));
+  }
+
+  /**
+   * Sets the drawing direction
+   *
+   * @param drawingDirection The drawing direction
+   */
+  public void setDrawingDirection(Z4DrawingDirection drawingDirection) {
+    this.drawingDirection.cssRemoveClass("z4drawingdirection-free");
+    this.drawingDirection.cssRemoveClass("z4drawingdirection-horizontal");
+    this.drawingDirection.cssRemoveClass("z4drawingdirection-vertical");
+
+    if (drawingDirection == Z4DrawingDirection.FREE) {
+      this.drawingDirection.cssAddClass("z4drawingdirection-free");
+    } else if (drawingDirection == Z4DrawingDirection.HORIZONTAL) {
+      this.drawingDirection.cssAddClass("z4drawingdirection-horizontal");
+    } else if (drawingDirection == Z4DrawingDirection.VERTICAL) {
+      this.drawingDirection.cssAddClass("z4drawingdirection-vertical");
+    } else if (this.canvas.getDrawingDirection() == Z4DrawingDirection.FREE) {
+      this.drawingDirection.cssAddClass("z4drawingdirection-horizontal");
+      this.canvas.setDrawingDirection(Z4DrawingDirection.HORIZONTAL);
+    } else if (this.canvas.getDrawingDirection() == Z4DrawingDirection.HORIZONTAL) {
+      this.drawingDirection.cssAddClass("z4drawingdirection-vertical");
+      this.canvas.setDrawingDirection(Z4DrawingDirection.VERTICAL);
+    } else if (this.canvas.getDrawingDirection() == Z4DrawingDirection.VERTICAL) {
+      this.drawingDirection.cssAddClass("z4drawingdirection-free");
+      this.canvas.setDrawingDirection(Z4DrawingDirection.FREE);
+    }
   }
 
   @SuppressWarnings({"unchecked", "StringEquality"})

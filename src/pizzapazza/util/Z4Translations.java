@@ -145,6 +145,7 @@ public class Z4Translations {
   public static String MOVE_TOP = "";
   public static String TRY_ME = "";
   public static String ACTIONS = "";
+  public static String DRAWING_DIRECTION = "";
 
   // Color
   public static String COLOR = "";
@@ -394,6 +395,7 @@ public class Z4Translations {
     Z4Translations.MOVE_TOP = "Move to Top";
     Z4Translations.TRY_ME = "Try Me";
     Z4Translations.ACTIONS = "Actions";
+    Z4Translations.DRAWING_DIRECTION = "Drawing Direction";
 
     // Color
     Z4Translations.COLOR = "Color";
@@ -535,7 +537,7 @@ public class Z4Translations {
     Z4Translations.PIZZAPAZZA_DRAWING_TOOLS = "Strumenti di Disegno pizzApazzA";
     Z4Translations.DELETE_DRAWING_TOOL_MESSAGE = "Vuoi davvero eliminare lo strumento di disegno?";
     Z4Translations.FROM_LIBRARY = "Da Libreria";
-    
+
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";
     Z4Translations.UNDO = "Annulla";
@@ -627,6 +629,7 @@ public class Z4Translations {
     Z4Translations.MOVE_TOP = "Muovi in Cima";
     Z4Translations.TRY_ME = "Provami";
     Z4Translations.ACTIONS = "Azioni";
+    Z4Translations.DRAWING_DIRECTION = "Direzione di Disegno";
 
     // Color
     Z4Translations.COLOR = "Colore";

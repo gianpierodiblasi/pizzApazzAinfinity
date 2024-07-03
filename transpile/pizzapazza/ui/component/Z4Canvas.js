@@ -43,6 +43,8 @@ class Z4Canvas extends JSComponent {
 
    selectedDrawingTool = null;
 
+   drawingDirection = Z4DrawingDirection.FREE;
+
    mouseManager = new Z4CanvasMouseManager(this, this.ctx);
 
    ioManager = new Z4CanvasIOManager(this, this.paper, this.drawingTools);
@@ -176,8 +178,10 @@ class Z4Canvas extends JSComponent {
     this.statusPanel.setProjectName(projectName);
     this.statusPanel.setProjectSize(width, height);
     this.statusPanel.setZoom(1);
+    this.statusPanel.setDrawingDirection(Z4DrawingDirection.FREE);
     this.zoom = 1;
     this.mouseManager.setZoom(this.zoom);
+    this.setDrawingDirection(Z4DrawingDirection.FREE);
     this.setSaved(true);
     this.changed = false;
     this.canvas.width = width;
@@ -737,6 +741,25 @@ class Z4Canvas extends JSComponent {
       }
       this.zooming = false;
     }
+  }
+
+  /**
+   * Returns the drawing direction
+   *
+   * @return The drawing direction
+   */
+   getDrawingDirection() {
+    return this.drawingDirection;
+  }
+
+  /**
+   * Sets the drawing direction
+   *
+   * @param drawingDirection The drawing direction
+   */
+   setDrawingDirection(drawingDirection) {
+    this.drawingDirection = drawingDirection;
+    this.mouseManager.setDrawingDirection(drawingDirection);
   }
 
   /**

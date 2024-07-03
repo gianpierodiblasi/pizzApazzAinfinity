@@ -9,11 +9,13 @@ class Z4StatusPanel extends JSPanel {
 
    projectName = new JSLabel();
 
+   zoom = new JSComboBox();
+
    projectSize = new JSLabel();
 
    mousePosition = new JSLabel();
 
-   zoom = new JSComboBox();
+   drawingDirection = new JSButton();
 
   constructor() {
     super();
@@ -38,7 +40,15 @@ class Z4StatusPanel extends JSPanel {
     this.mousePosition.getStyle().fontFamily = "monospace";
     this.setMousePosition(0, 0);
     this.add(this.mousePosition, new GBC(6, 0).i(0, 5, 0, 5));
-    this.add(new JSLabel(), new GBC(7, 0).wx(1));
+    this.addPipe(7);
+    this.drawingDirection.setContentAreaFilled(false);
+    this.drawingDirection.setTooltip(Z4Translations.DRAWING_DIRECTION);
+    this.drawingDirection.setIcon(new Z4EmptyImageProducer(""));
+    this.drawingDirection.cssAddClass("z4drawingdirection");
+    this.drawingDirection.cssAddClass("z4drawingdirection-free");
+    this.drawingDirection.addActionListener(event => this.setDrawingDirection(null));
+    this.add(this.drawingDirection, new GBC(8, 0).i(0, 5, 0, 5));
+    this.add(new JSLabel(), new GBC(9, 0).wx(1));
   }
 
    addPipe(gridx) {
@@ -94,6 +104,33 @@ class Z4StatusPanel extends JSPanel {
    */
    setZoom(zoom) {
     this.zoom.setSelectedItem(new KeyValue("" + zoom, ""));
+  }
+
+  /**
+   * Sets the drawing direction
+   *
+   * @param drawingDirection The drawing direction
+   */
+   setDrawingDirection(drawingDirection) {
+    this.drawingDirection.cssRemoveClass("z4drawingdirection-free");
+    this.drawingDirection.cssRemoveClass("z4drawingdirection-horizontal");
+    this.drawingDirection.cssRemoveClass("z4drawingdirection-vertical");
+    if (drawingDirection === Z4DrawingDirection.FREE) {
+      this.drawingDirection.cssAddClass("z4drawingdirection-free");
+    } else if (drawingDirection === Z4DrawingDirection.HORIZONTAL) {
+      this.drawingDirection.cssAddClass("z4drawingdirection-horizontal");
+    } else if (drawingDirection === Z4DrawingDirection.VERTICAL) {
+      this.drawingDirection.cssAddClass("z4drawingdirection-vertical");
+    } else if (this.canvas.getDrawingDirection() === Z4DrawingDirection.FREE) {
+      this.drawingDirection.cssAddClass("z4drawingdirection-horizontal");
+      this.canvas.setDrawingDirection(Z4DrawingDirection.HORIZONTAL);
+    } else if (this.canvas.getDrawingDirection() === Z4DrawingDirection.HORIZONTAL) {
+      this.drawingDirection.cssAddClass("z4drawingdirection-vertical");
+      this.canvas.setDrawingDirection(Z4DrawingDirection.VERTICAL);
+    } else if (this.canvas.getDrawingDirection() === Z4DrawingDirection.VERTICAL) {
+      this.drawingDirection.cssAddClass("z4drawingdirection-free");
+      this.canvas.setDrawingDirection(Z4DrawingDirection.FREE);
+    }
   }
 
    onZoom() {

@@ -1,31 +1,12 @@
 package pizzapazza.ui.component;
 
 import def.dom.MouseEvent;
-import javascript.awt.Color;
 import javascript.awt.Dimension;
-import pizzapazza.color.Z4ColorProgression;
-import pizzapazza.color.Z4ColorProgressionBehavior;
-import pizzapazza.color.Z4GradientColor;
-import pizzapazza.color.Z4Lighting;
-import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.iterator.Z4PointIteratorDrawingAction;
-import pizzapazza.iterator.Z4Spirograph;
+import pizzapazza.math.Z4DrawingDirection;
 import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4DrawingPointIntent;
-import pizzapazza.math.Z4FancifulValue;
-import pizzapazza.math.Z4RandomValue;
-import pizzapazza.math.Z4RandomValueBehavior;
-import pizzapazza.math.Z4Rotation;
-import pizzapazza.math.Z4RotationBehavior;
-import pizzapazza.math.Z4Sign;
-import pizzapazza.math.Z4SignBehavior;
-import pizzapazza.math.Z4SignedRandomValue;
-import pizzapazza.math.Z4SignedValue;
 import pizzapazza.math.Z4Vector;
-import pizzapazza.math.Z4Whirlpool;
-import pizzapazza.math.Z4WhirlpoolBehavior;
-import pizzapazza.painter.Z4CenteredFigurePainter;
-import pizzapazza.painter.Z4CenteredFigurePainterType;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.util.Z4DrawingTool;
@@ -48,6 +29,7 @@ public class Z4CanvasMouseManager {
 
   private Z4Layer selectedLayer;
   private Z4DrawingTool selectedDrawingTool;
+  private Z4DrawingDirection drawingDirection = Z4DrawingDirection.FREE;
 
   private Dimension size;
   private double zoom;
@@ -84,6 +66,15 @@ public class Z4CanvasMouseManager {
    */
   public void setSelectedDrawingTool(Z4DrawingTool selectedDrawingTool) {
     this.selectedDrawingTool = selectedDrawingTool;
+  }
+
+  /**
+   * Sets the drawing direction
+   *
+   * @param drawingDirection The drawing direction
+   */
+  public void setDrawingDirection(Z4DrawingDirection drawingDirection) {
+    this.drawingDirection = drawingDirection;
   }
 
   /**

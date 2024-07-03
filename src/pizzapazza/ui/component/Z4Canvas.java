@@ -12,6 +12,7 @@ import javascript.awt.Dimension;
 import javascript.awt.Point;
 import javascript.swing.JSComponent;
 import javascript.util.fsa.FileSystemFileHandle;
+import pizzapazza.math.Z4DrawingDirection;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonDrawingToolPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonFilePanel;
@@ -60,6 +61,7 @@ public class Z4Canvas extends JSComponent {
 
   private final Array<Z4DrawingTool> drawingTools = new Array<>();
   private Z4DrawingTool selectedDrawingTool;
+  private Z4DrawingDirection drawingDirection = Z4DrawingDirection.FREE;
 
   private final Z4CanvasMouseManager mouseManager = new Z4CanvasMouseManager(this, this.ctx);
   private final Z4CanvasIOManager ioManager = new Z4CanvasIOManager(this, this.paper, this.drawingTools);
@@ -203,9 +205,11 @@ public class Z4Canvas extends JSComponent {
     this.statusPanel.setProjectName(projectName);
     this.statusPanel.setProjectSize(width, height);
     this.statusPanel.setZoom(1);
+    this.statusPanel.setDrawingDirection(Z4DrawingDirection.FREE);
 
     this.zoom = 1;
     this.mouseManager.setZoom(this.zoom);
+    this.setDrawingDirection(Z4DrawingDirection.FREE);
 
     this.setSaved(true);
     this.changed = false;
@@ -794,6 +798,25 @@ public class Z4Canvas extends JSComponent {
       }
       this.zooming = false;
     }
+  }
+
+  /**
+   * Returns the drawing direction
+   *
+   * @return The drawing direction
+   */
+  public Z4DrawingDirection getDrawingDirection() {
+    return this.drawingDirection;
+  }
+
+  /**
+   * Sets the drawing direction
+   *
+   * @param drawingDirection The drawing direction
+   */
+  public void setDrawingDirection(Z4DrawingDirection drawingDirection) {
+    this.drawingDirection = drawingDirection;
+    this.mouseManager.setDrawingDirection(drawingDirection);
   }
 
   /**
