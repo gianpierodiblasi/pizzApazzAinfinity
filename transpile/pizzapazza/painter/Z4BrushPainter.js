@@ -59,7 +59,8 @@ class Z4BrushPainter extends Z4Painter {
    draw(context, drawingPoint, spatioTemporalColor, progression) {
     if (drawingPoint.intent !== Z4DrawingPointIntent.DRAW_OBJECTS) {
       let currentWidth = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.width.getConstant().getValue());
-      this.drawBounds(context, currentWidth);
+      let currentThickness = drawingPoint.intensity * this.thickness.getConstant().getValue();
+      this.drawBounds(context, currentWidth, currentThickness);
     } else {
       let currentWidth = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.width.next());
       let currentThickness = drawingPoint.intensity * this.thickness.next();
@@ -140,9 +141,11 @@ class Z4BrushPainter extends Z4Painter {
     context.restore();
   }
 
-   drawBounds(context, currentWidth) {
+   drawBounds(context, currentWidth, currentThickness) {
     context.save();
     context.rotate(Z4Math.HALF_PI);
+    context.lineCap = "round";
+    context.lineWidth = currentThickness;
     context.strokeStyle = Z4Constants.getStyle("gray");
     context.beginPath();
     context.moveTo(-currentWidth / 2, 0);

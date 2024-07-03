@@ -83,7 +83,8 @@ public class Z4BrushPainter extends Z4Painter {
   public void draw($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
     if (drawingPoint.intent != Z4DrawingPointIntent.DRAW_OBJECTS) {
       double currentWidth = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.width.getConstant().getValue());
-      this.drawBounds(context, currentWidth);
+      double currentThickness = drawingPoint.intensity * this.thickness.getConstant().getValue();
+      this.drawBounds(context, currentWidth, currentThickness);
     } else {
       double currentWidth = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.width.next());
       double currentThickness = drawingPoint.intensity * this.thickness.next();
@@ -140,6 +141,7 @@ public class Z4BrushPainter extends Z4Painter {
   private void drawPath($CanvasRenderingContext2D context, double currentWidth, double currentThickness, Object color) {
     context.save();
     context.rotate(Z4Math.HALF_PI);
+
     context.lineCap = "round";
     context.lineWidth = currentThickness;
     context.strokeStyle = Z4Constants.$getStyle(color);
@@ -171,9 +173,12 @@ public class Z4BrushPainter extends Z4Painter {
     context.restore();
   }
 
-  private void drawBounds($CanvasRenderingContext2D context, double currentWidth) {
+  private void drawBounds($CanvasRenderingContext2D context, double currentWidth, double currentThickness) {
     context.save();
     context.rotate(Z4Math.HALF_PI);
+
+    context.lineCap = "round";
+    context.lineWidth = currentThickness;
 
     context.strokeStyle = Z4Constants.$getStyle("gray");
     context.beginPath();

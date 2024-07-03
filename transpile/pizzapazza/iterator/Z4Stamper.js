@@ -98,7 +98,7 @@ class Z4Stamper extends Z4PointIterator {
     return 0;
   }
 
-   drawDemo(context, painter, spatioTemporalColor, progression, width, height) {
+   drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
     let finalPainter = painter ? painter : new Z4ArrowPainter();
     let finalSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
     let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
@@ -113,6 +113,9 @@ class Z4Stamper extends Z4PointIterator {
       context.restore();
       let next = null;
       while ((next = this.next(spatioTemporalColor, finalColorProgression)) !== null) {
+        if (valueIsAdjusting) {
+          next = new Z4DrawingPoint(next.z4Vector, next.intensity, next.temporalPosition, Z4DrawingPointIntent.DRAW_BOUNDS, next.side, next.useVectorModuleAsSize);
+        }
         context.save();
         context.translate(next.z4Vector.x0, next.z4Vector.y0);
         context.rotate(next.z4Vector.phase);

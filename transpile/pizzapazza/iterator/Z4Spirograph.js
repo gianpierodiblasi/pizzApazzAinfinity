@@ -105,7 +105,7 @@ class Z4Spirograph extends Z4PointIterator {
     return 0;
   }
 
-   drawDemo(context, painter, spatioTemporalColor, progression, width, height) {
+   drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
     let finalPainter = painter ? painter : new Z4ArrowPainter();
     let finalSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
     let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
@@ -114,11 +114,11 @@ class Z4Spirograph extends Z4PointIterator {
     this.drawAction(Z4PointIteratorDrawingAction.START, start.x, start.y);
     points.slice(1).forEach(point => {
       this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, point.x, point.y);
-      this.drawDemoPoint(context, finalPainter, finalSpatioTemporalColor, finalColorProgression);
+      this.drawDemoPoint(context, finalPainter, finalSpatioTemporalColor, finalColorProgression, valueIsAdjusting);
     });
     let stop = points[points.length - 1];
     this.drawAction(Z4PointIteratorDrawingAction.STOP, stop.x, stop.y);
-    this.drawDemoPoint(context, finalPainter, finalSpatioTemporalColor, finalColorProgression);
+    this.drawDemoPoint(context, finalPainter, finalSpatioTemporalColor, finalColorProgression, valueIsAdjusting);
   }
 
    initDraw(w, h) {
@@ -134,10 +134,13 @@ class Z4Spirograph extends Z4PointIterator {
     return array;
   }
 
-   drawDemoPoint(context, arrowPainter, spatioTemporalColor, progression) {
+   drawDemoPoint(context, arrowPainter, spatioTemporalColor, progression, valueIsAdjusting) {
     let next = null;
     while ((next = this.next(spatioTemporalColor, progression)) !== null) {
-      if (next.intent === Z4DrawingPointIntent.DRAW_OBJECTS) {
+      if (valueIsAdjusting) {
+        next = new Z4DrawingPoint(next.z4Vector, next.intensity, next.temporalPosition, Z4DrawingPointIntent.DRAW_BOUNDS, next.side, next.useVectorModuleAsSize);
+      }
+      if (next.intent === Z4DrawingPointIntent.DRAW_OBJECTS || valueIsAdjusting) {
         context.save();
         context.translate(next.z4Vector.x0, next.z4Vector.y0);
         context.rotate(next.z4Vector.phase);

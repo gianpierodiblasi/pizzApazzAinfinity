@@ -156,7 +156,7 @@ public class Z4Spirograph extends Z4PointIterator {
   }
 
   @Override
-  public void drawDemo($CanvasRenderingContext2D context, Z4Painter painter, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression, double width, double height) {
+  public void drawDemo($CanvasRenderingContext2D context, Z4Painter painter, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression, double width, double height, boolean valueIsAdjusting) {
     Z4Painter finalPainter = $exists(painter) ? painter : new Z4ArrowPainter();
     Z4SpatioTemporalColor finalSpatioTemporalColor = $exists(spatioTemporalColor) ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
     Z4ColorProgression finalColorProgression = $exists(progression) ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
@@ -167,12 +167,12 @@ public class Z4Spirograph extends Z4PointIterator {
 
     points.slice(1).forEach(point -> {
       this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, point.x, point.y);
-      this.drawDemoPoint(context, finalPainter, finalSpatioTemporalColor, finalColorProgression);
+      this.drawDemoPoint(context, finalPainter, finalSpatioTemporalColor, finalColorProgression, valueIsAdjusting);
     });
 
     Z4Point stop = points.$get(points.length - 1);
     this.drawAction(Z4PointIteratorDrawingAction.STOP, stop.x, stop.y);
-    this.drawDemoPoint(context, finalPainter, finalSpatioTemporalColor, finalColorProgression);
+    this.drawDemoPoint(context, finalPainter, finalSpatioTemporalColor, finalColorProgression, valueIsAdjusting);
   }
 
   private Array<Z4Point> initDraw(double w, double h) {
@@ -189,10 +189,14 @@ public class Z4Spirograph extends Z4PointIterator {
     return array;
   }
 
-  private void drawDemoPoint($CanvasRenderingContext2D context, Z4Painter arrowPainter, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression) {
+  private void drawDemoPoint($CanvasRenderingContext2D context, Z4Painter arrowPainter, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression, boolean valueIsAdjusting) {
     Z4DrawingPoint next;
     while ((next = this.next(spatioTemporalColor, progression)) != null) {
-      if (next.intent == Z4DrawingPointIntent.DRAW_OBJECTS) {
+      if (valueIsAdjusting) {
+        next = new Z4DrawingPoint(next.z4Vector, next.intensity, next.temporalPosition, Z4DrawingPointIntent.DRAW_BOUNDS, next.side, next.useVectorModuleAsSize);
+      }
+
+      if (next.intent == Z4DrawingPointIntent.DRAW_OBJECTS || valueIsAdjusting) {
         context.save();
         context.translate(next.z4Vector.x0, next.z4Vector.y0);
         context.rotate(next.z4Vector.phase);

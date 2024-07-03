@@ -1,5 +1,6 @@
 package pizzapazza.ui.panel.util;
 
+import static def.dom.Globals.clearTimeout;
 import static def.dom.Globals.document;
 import def.dom.HTMLElement;
 import def.dom.MouseEvent;
@@ -140,8 +141,8 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
 
   private final String tabbedPaneID = "z4drawingtoolpanel_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
 
-  private boolean run;
-
+  private int currentTimeoutID;
+  
   /**
    * Creates the object
    */
@@ -763,43 +764,27 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
 
   @SuppressWarnings({"empty-statement", "StringEquality"})
   private void drawPreview() {
-    setTimeout(() -> {
-      if (!this.valueIsAdjusting || !this.run) {
-        Z4DrawingTool.STOP_DRAW_DEMO = true;
-        while (this.run);
-        Z4DrawingTool.STOP_DRAW_DEMO = false;
+    clearTimeout(this.currentTimeoutID);
 
-        this.run = true;
+    this.currentTimeoutID = setTimeout(() -> {
+      if (this.preview1.getStyle().display != "none") {
+        this.ctx1.clearRect(0, 0, 500, 300);
 
         if ($exists(this.previewColor)) {
           this.ctx1.fillStyle = Z4Constants.$getStyle(this.previewColor.getRGBA_HEX());
           this.ctx1.fillRect(0, 0, 500, 300);
+        }
 
+        this.value.getPointIterator().drawDemo(this.ctx1, this.value.getPainter(), this.value.getSpatioTemporalColor(), this.value.getProgression(), 500, 300, this.valueIsAdjusting);
+      } else {
+        this.ctx2.clearRect(0, 0, 300, 500);
+
+        if ($exists(this.previewColor)) {
           this.ctx2.fillStyle = Z4Constants.$getStyle(this.previewColor.getRGBA_HEX());
           this.ctx2.fillRect(0, 0, 300, 500);
         }
 
-        if (this.preview1.getStyle().display == "flex") {
-          this.ctx1.clearRect(0, 0, 500, 300);
-
-          if ($exists(this.previewColor)) {
-            this.ctx1.fillStyle = Z4Constants.$getStyle(this.previewColor.getRGBA_HEX());
-            this.ctx1.fillRect(0, 0, 500, 300);
-          }
-
-          this.value.getPointIterator().drawDemo(this.ctx1, this.value.getPainter(), this.value.getSpatioTemporalColor(), this.value.getProgression(), 500, 300);
-        } else {
-          this.ctx2.clearRect(0, 0, 300, 500);
-
-          if ($exists(this.previewColor)) {
-            this.ctx2.fillStyle = Z4Constants.$getStyle(this.previewColor.getRGBA_HEX());
-            this.ctx2.fillRect(0, 0, 300, 500);
-          }
-
-          this.value.getPointIterator().drawDemo(this.ctx2, this.value.getPainter(), this.value.getSpatioTemporalColor(), this.value.getProgression(), 300, 500);
-        }
-
-        this.run = false;
+        this.value.getPointIterator().drawDemo(this.ctx2, this.value.getPainter(), this.value.getSpatioTemporalColor(), this.value.getProgression(), 300, 500, this.valueIsAdjusting);
       }
     }, 0);
 

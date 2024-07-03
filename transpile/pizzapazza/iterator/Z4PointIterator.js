@@ -103,8 +103,10 @@ class Z4PointIterator extends Z4NextableWithTwoParams {
    * @param progression The color progression to use, it can be null
    * @param width The width
    * @param height The height
+   * @param valueIsAdjusting true if the demo is for an adjusting value, false
+   * otherwise
    */
-   drawDemo(context, painter, spatioTemporalColor, progression, width, height) {
+   drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
   }
 
    toJSON() {

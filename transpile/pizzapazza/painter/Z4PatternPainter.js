@@ -91,12 +91,12 @@ class Z4PatternPainter extends Z4Painter {
     context.save();
     context.strokeStyle = Z4Constants.getStyle("gray");
     context.beginPath();
-    context.ellipse(0, 0, currentWidth, currentHeight, 0, 0, Z4Math.TWO_PI);
+    context.ellipse(0, 0, currentWidth / 2, currentHeight / 2, 0, 0, Z4Math.TWO_PI);
     context.stroke();
     context.strokeStyle = Z4Constants.getStyle("black");
     context.beginPath();
     context.translate(1, 1);
-    context.ellipse(0, 0, currentWidth, currentHeight, 0, 0, Z4Math.TWO_PI);
+    context.ellipse(0, 0, currentWidth / 2, currentHeight / 2, 0, 0, Z4Math.TWO_PI);
     context.stroke();
     context.restore();
   }

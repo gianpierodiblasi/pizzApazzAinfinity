@@ -155,16 +155,13 @@ public class Z4DrawingToolPreview extends JSDropDown {
     this.drawDemo();
   }
 
-  /**
-   * Draws the demo of the drawing tool
-   */
-  public void drawDemo() {
+  private void drawDemo() {
     if ($exists(this.drawingTool)) {
       this.ctx.clearRect(0, 0, Z4DrawingToolPreview.PREVIEW_SIZE, Z4DrawingToolPreview.PREVIEW_SIZE);
 
       this.ctx.save();
       this.ctx.scale(0.1, 0.1);
-      this.drawingTool.getPointIterator().drawDemo(this.ctx, this.drawingTool.getPainter(), this.drawingTool.getSpatioTemporalColor(), this.drawingTool.getProgression(), Z4DrawingToolPreview.PREVIEW_SIZE * 10, Z4DrawingToolPreview.PREVIEW_SIZE * 10);
+      this.drawingTool.getPointIterator().drawDemo(this.ctx, this.drawingTool.getPainter(), this.drawingTool.getSpatioTemporalColor(), this.drawingTool.getProgression(), Z4DrawingToolPreview.PREVIEW_SIZE * 10, Z4DrawingToolPreview.PREVIEW_SIZE * 10, false);
       this.ctx.restore();
     }
   }

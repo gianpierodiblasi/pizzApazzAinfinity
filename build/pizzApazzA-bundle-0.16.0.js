@@ -3542,15 +3542,12 @@ class Z4DrawingToolPreview extends JSDropDown {
     this.drawDemo();
   }
 
-  /**
-   * Draws the demo of the drawing tool
-   */
    drawDemo() {
     if (this.drawingTool) {
       this.ctx.clearRect(0, 0, Z4DrawingToolPreview.PREVIEW_SIZE, Z4DrawingToolPreview.PREVIEW_SIZE);
       this.ctx.save();
       this.ctx.scale(0.1, 0.1);
-      this.drawingTool.getPointIterator().drawDemo(this.ctx, this.drawingTool.getPainter(), this.drawingTool.getSpatioTemporalColor(), this.drawingTool.getProgression(), Z4DrawingToolPreview.PREVIEW_SIZE * 10, Z4DrawingToolPreview.PREVIEW_SIZE * 10);
+      this.drawingTool.getPointIterator().drawDemo(this.ctx, this.drawingTool.getPainter(), this.drawingTool.getSpatioTemporalColor(), this.drawingTool.getProgression(), Z4DrawingToolPreview.PREVIEW_SIZE * 10, Z4DrawingToolPreview.PREVIEW_SIZE * 10, false);
       this.ctx.restore();
     }
   }
@@ -10268,7 +10265,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
 
    tabbedPaneID = "z4drawingtoolpanel_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
 
-   run = false;
+   currentTimeoutID = 0;
 
   /**
    * Creates the object
@@ -10771,34 +10768,22 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
   }
 
    drawPreview() {
-    setTimeout(() => {
-      if (!this.valueIsAdjusting || !this.run) {
-        Z4DrawingTool.STOP_DRAW_DEMO = true;
-        while (this.run) ;
-        Z4DrawingTool.STOP_DRAW_DEMO = false;
-        this.run = true;
+    clearTimeout(this.currentTimeoutID);
+    this.currentTimeoutID = setTimeout(() => {
+      if (this.preview1.getStyle().display !== "none") {
+        this.ctx1.clearRect(0, 0, 500, 300);
         if (this.previewColor) {
           this.ctx1.fillStyle = Z4Constants.getStyle(this.previewColor.getRGBA_HEX());
           this.ctx1.fillRect(0, 0, 500, 300);
+        }
+        this.value.getPointIterator().drawDemo(this.ctx1, this.value.getPainter(), this.value.getSpatioTemporalColor(), this.value.getProgression(), 500, 300, this.valueIsAdjusting);
+      } else {
+        this.ctx2.clearRect(0, 0, 300, 500);
+        if (this.previewColor) {
           this.ctx2.fillStyle = Z4Constants.getStyle(this.previewColor.getRGBA_HEX());
           this.ctx2.fillRect(0, 0, 300, 500);
         }
-        if (this.preview1.getStyle().display === "flex") {
-          this.ctx1.clearRect(0, 0, 500, 300);
-          if (this.previewColor) {
-            this.ctx1.fillStyle = Z4Constants.getStyle(this.previewColor.getRGBA_HEX());
-            this.ctx1.fillRect(0, 0, 500, 300);
-          }
-          this.value.getPointIterator().drawDemo(this.ctx1, this.value.getPainter(), this.value.getSpatioTemporalColor(), this.value.getProgression(), 500, 300);
-        } else {
-          this.ctx2.clearRect(0, 0, 300, 500);
-          if (this.previewColor) {
-            this.ctx2.fillStyle = Z4Constants.getStyle(this.previewColor.getRGBA_HEX());
-            this.ctx2.fillRect(0, 0, 300, 500);
-          }
-          this.value.getPointIterator().drawDemo(this.ctx2, this.value.getPainter(), this.value.getSpatioTemporalColor(), this.value.getProgression(), 300, 500);
-        }
-        this.run = false;
+        this.value.getPointIterator().drawDemo(this.ctx2, this.value.getPainter(), this.value.getSpatioTemporalColor(), this.value.getProgression(), 300, 500, this.valueIsAdjusting);
       }
     }, 0);
   }
@@ -13429,8 +13414,10 @@ class Z4PointIterator extends Z4NextableWithTwoParams {
    * @param progression The color progression to use, it can be null
    * @param width The width
    * @param height The height
+   * @param valueIsAdjusting true if the demo is for an adjusting value, false
+   * otherwise
    */
-   drawDemo(context, painter, spatioTemporalColor, progression, width, height) {
+   drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
   }
 
    toJSON() {
@@ -13573,13 +13560,16 @@ class Z4Airbrush extends Z4PointIterator {
     return parseInt(250 / this.speed);
   }
 
-   drawDemo(context, painter, spatioTemporalColor, progression, width, height) {
+   drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
     painter = painter ? painter : new Z4ArrowPainter();
     spatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
     progression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
     this.drawAction(Z4PointIteratorDrawingAction.START, width / 2, height / 2);
     let next = null;
     while ((next = this.next(spatioTemporalColor, progression)) !== null) {
+      if (valueIsAdjusting) {
+        next = new Z4DrawingPoint(next.z4Vector, next.intensity, next.temporalPosition, Z4DrawingPointIntent.DRAW_BOUNDS, next.side, next.useVectorModuleAsSize);
+      }
       context.save();
       context.translate(next.z4Vector.x0, next.z4Vector.y0);
       context.rotate(next.z4Vector.phase);
@@ -13714,7 +13704,7 @@ class Z4Scatterer extends Z4PointIterator {
     return 0;
   }
 
-   drawDemo(context, painter, spatioTemporalColor, progression, width, height) {
+   drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
     let finalPainter = painter ? painter : new Z4ArrowPainter();
     let finalSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
     let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
@@ -13729,6 +13719,9 @@ class Z4Scatterer extends Z4PointIterator {
       context.restore();
       let next = null;
       while ((next = this.next(spatioTemporalColor, finalColorProgression)) !== null) {
+        if (valueIsAdjusting) {
+          next = new Z4DrawingPoint(next.z4Vector, next.intensity, next.temporalPosition, Z4DrawingPointIntent.DRAW_BOUNDS, next.side, next.useVectorModuleAsSize);
+        }
         context.save();
         context.translate(next.z4Vector.x0, next.z4Vector.y0);
         context.rotate(next.z4Vector.phase);
@@ -13871,7 +13864,7 @@ class Z4Spirograph extends Z4PointIterator {
     return 0;
   }
 
-   drawDemo(context, painter, spatioTemporalColor, progression, width, height) {
+   drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
     let finalPainter = painter ? painter : new Z4ArrowPainter();
     let finalSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
     let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
@@ -13880,11 +13873,11 @@ class Z4Spirograph extends Z4PointIterator {
     this.drawAction(Z4PointIteratorDrawingAction.START, start.x, start.y);
     points.slice(1).forEach(point => {
       this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, point.x, point.y);
-      this.drawDemoPoint(context, finalPainter, finalSpatioTemporalColor, finalColorProgression);
+      this.drawDemoPoint(context, finalPainter, finalSpatioTemporalColor, finalColorProgression, valueIsAdjusting);
     });
     let stop = points[points.length - 1];
     this.drawAction(Z4PointIteratorDrawingAction.STOP, stop.x, stop.y);
-    this.drawDemoPoint(context, finalPainter, finalSpatioTemporalColor, finalColorProgression);
+    this.drawDemoPoint(context, finalPainter, finalSpatioTemporalColor, finalColorProgression, valueIsAdjusting);
   }
 
    initDraw(w, h) {
@@ -13900,10 +13893,13 @@ class Z4Spirograph extends Z4PointIterator {
     return array;
   }
 
-   drawDemoPoint(context, arrowPainter, spatioTemporalColor, progression) {
+   drawDemoPoint(context, arrowPainter, spatioTemporalColor, progression, valueIsAdjusting) {
     let next = null;
     while ((next = this.next(spatioTemporalColor, progression)) !== null) {
-      if (next.intent === Z4DrawingPointIntent.DRAW_OBJECTS) {
+      if (valueIsAdjusting) {
+        next = new Z4DrawingPoint(next.z4Vector, next.intensity, next.temporalPosition, Z4DrawingPointIntent.DRAW_BOUNDS, next.side, next.useVectorModuleAsSize);
+      }
+      if (next.intent === Z4DrawingPointIntent.DRAW_OBJECTS || valueIsAdjusting) {
         context.save();
         context.translate(next.z4Vector.x0, next.z4Vector.y0);
         context.rotate(next.z4Vector.phase);
@@ -14029,7 +14025,7 @@ class Z4Stamper extends Z4PointIterator {
     return 0;
   }
 
-   drawDemo(context, painter, spatioTemporalColor, progression, width, height) {
+   drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
     let finalPainter = painter ? painter : new Z4ArrowPainter();
     let finalSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
     let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
@@ -14044,6 +14040,9 @@ class Z4Stamper extends Z4PointIterator {
       context.restore();
       let next = null;
       while ((next = this.next(spatioTemporalColor, finalColorProgression)) !== null) {
+        if (valueIsAdjusting) {
+          next = new Z4DrawingPoint(next.z4Vector, next.intensity, next.temporalPosition, Z4DrawingPointIntent.DRAW_BOUNDS, next.side, next.useVectorModuleAsSize);
+        }
         context.save();
         context.translate(next.z4Vector.x0, next.z4Vector.y0);
         context.rotate(next.z4Vector.phase);
@@ -14350,7 +14349,7 @@ class Z4Tracer extends Z4PointIterator {
     return 0;
   }
 
-   drawDemo(context, painter, spatioTemporalColor, progression, width, height) {
+   drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
     painter = painter ? painter : new Z4ArrowPainter();
     spatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
     progression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
@@ -14360,16 +14359,16 @@ class Z4Tracer extends Z4PointIterator {
     for (let s = 0.1; s < 1; s += 0.1) {
       p = bezier.get(s);
       this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, p.x, p.y);
-      this.drawDemoPoint(context, p, painter, spatioTemporalColor, progression);
+      this.drawDemoPoint(context, p, painter, spatioTemporalColor, progression, valueIsAdjusting);
     }
     p = bezier.get(1);
     this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, p.x, p.y);
-    this.drawDemoPoint(context, p, painter, spatioTemporalColor, progression);
+    this.drawDemoPoint(context, p, painter, spatioTemporalColor, progression, valueIsAdjusting);
     this.drawAction(Z4PointIteratorDrawingAction.STOP, p.x, p.y);
-    this.drawDemoPoint(context, p, painter, spatioTemporalColor, progression);
+    this.drawDemoPoint(context, p, painter, spatioTemporalColor, progression, valueIsAdjusting);
   }
 
-   drawDemoPoint(context, p, painter, spatioTemporalColor, progression) {
+   drawDemoPoint(context, p, painter, spatioTemporalColor, progression, valueIsAdjusting) {
     context.save();
     context.lineWidth = 1;
     context.fillStyle = Z4Constants.getStyle("black");
@@ -14379,7 +14378,10 @@ class Z4Tracer extends Z4PointIterator {
     context.restore();
     let next = null;
     while ((next = this.next(spatioTemporalColor, progression)) !== null) {
-      if (next.intent === Z4DrawingPointIntent.DRAW_OBJECTS) {
+      if (valueIsAdjusting) {
+        next = new Z4DrawingPoint(next.z4Vector, next.intensity, next.temporalPosition, Z4DrawingPointIntent.DRAW_BOUNDS, next.side, next.useVectorModuleAsSize);
+      }
+      if (next.intent === Z4DrawingPointIntent.DRAW_OBJECTS || valueIsAdjusting) {
         context.save();
         context.translate(next.z4Vector.x0, next.z4Vector.y0);
         context.rotate(next.z4Vector.phase);
@@ -14595,7 +14597,8 @@ class Z4BrushPainter extends Z4Painter {
    draw(context, drawingPoint, spatioTemporalColor, progression) {
     if (drawingPoint.intent !== Z4DrawingPointIntent.DRAW_OBJECTS) {
       let currentWidth = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.width.getConstant().getValue());
-      this.drawBounds(context, currentWidth);
+      let currentThickness = drawingPoint.intensity * this.thickness.getConstant().getValue();
+      this.drawBounds(context, currentWidth, currentThickness);
     } else {
       let currentWidth = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.width.next());
       let currentThickness = drawingPoint.intensity * this.thickness.next();
@@ -14676,9 +14679,11 @@ class Z4BrushPainter extends Z4Painter {
     context.restore();
   }
 
-   drawBounds(context, currentWidth) {
+   drawBounds(context, currentWidth, currentThickness) {
     context.save();
     context.rotate(Z4Math.HALF_PI);
+    context.lineCap = "round";
+    context.lineWidth = currentThickness;
     context.strokeStyle = Z4Constants.getStyle("gray");
     context.beginPath();
     context.moveTo(-currentWidth / 2, 0);
@@ -16075,12 +16080,12 @@ class Z4PatternPainter extends Z4Painter {
     context.save();
     context.strokeStyle = Z4Constants.getStyle("gray");
     context.beginPath();
-    context.ellipse(0, 0, currentWidth, currentHeight, 0, 0, Z4Math.TWO_PI);
+    context.ellipse(0, 0, currentWidth / 2, currentHeight / 2, 0, 0, Z4Math.TWO_PI);
     context.stroke();
     context.strokeStyle = Z4Constants.getStyle("black");
     context.beginPath();
     context.translate(1, 1);
-    context.ellipse(0, 0, currentWidth, currentHeight, 0, 0, Z4Math.TWO_PI);
+    context.ellipse(0, 0, currentWidth / 2, currentHeight / 2, 0, 0, Z4Math.TWO_PI);
     context.stroke();
     context.restore();
   }

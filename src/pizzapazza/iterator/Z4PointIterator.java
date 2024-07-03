@@ -110,8 +110,10 @@ public abstract class Z4PointIterator implements Z4NextableWithTwoParams<Z4Drawi
    * @param progression The color progression to use, it can be null
    * @param width The width
    * @param height The height
+   * @param valueIsAdjusting true if the demo is for an adjusting value, false
+   * otherwise
    */
-  public abstract void drawDemo($CanvasRenderingContext2D context, Z4Painter painter, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression, double width, double height);
+  public abstract void drawDemo($CanvasRenderingContext2D context, Z4Painter painter, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression, double width, double height, boolean valueIsAdjusting);
 
   @Override
   public $Object toJSON() {
