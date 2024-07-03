@@ -105,10 +105,10 @@ public class Z4Scatterer extends Z4PointIterator {
       this.currentMultiplicityCounter++;
       this.hasNext = this.currentMultiplicityCounter < this.currentMultiplicityTotal;
 
-      double nextScattering = this.scattering.next() /10;
+      double nextScattering = this.scattering.next() / 10;
       Z4Vector currentVector = Z4Vector.fromPoints(this.before.x, this.before.y, this.currentPoint.x, this.currentPoint.y);
       double angle = this.rotation.next(currentVector.phase);
-      Z4Vector vector = Z4Vector.fromVector(this.currentPoint.x + currentVector.module * nextScattering* Math.cos(angle), this.currentPoint.y + currentVector.module * nextScattering * Math.sin(angle), 1, angle);
+      Z4Vector vector = Z4Vector.fromVector(this.currentPoint.x + currentVector.module * nextScattering * Math.cos(angle), this.currentPoint.y + currentVector.module * nextScattering * Math.sin(angle), 1, angle);
 
       double temporalPosition = $exists(this.nextdDrawingPoint) ? this.nextdDrawingPoint.temporalPosition : -1;
       if (progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.TEMPORAL) {

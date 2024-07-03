@@ -78,7 +78,7 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
     panel.add(this.tension, new GBC(2, 0).h(2).i(1, 0, 0, 1));
     this.angle1.setSignsVisible(false);
     this.angle1.getStyle().setProperty("grid-template-areas", "\"p1 p1\"\n\"p3 p3\"\n\"p4 p4\"\n\"p5 p5\"\n\"p6 p6\"");
-    this.angle1.setConstantRange(0, 90);
+    this.angle1.setConstantRange(0, 360);
     this.angle1.setRandomRange(0, 90);
     this.angle1.setLabel(Z4Translations.ANGLE + " 1 (\u03B11)");
     this.angle1.cssAddClass("z4abstractvaluepanel-titled");
@@ -87,7 +87,7 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
     panel.add(this.angle1, new GBC(3, 0).h(2).i(1, 0, 0, 1));
     this.angle2.setSignsVisible(false);
     this.angle2.getStyle().setProperty("grid-template-areas", "\"p1 p1\"\n\"p3 p3\"\n\"p4 p4\"\n\"p5 p5\"\n\"p6 p6\"");
-    this.angle2.setConstantRange(0, 90);
+    this.angle2.setConstantRange(0, 360);
     this.angle2.setRandomRange(0, 90);
     this.angle2.setLabel(Z4Translations.ANGLE + " 2 (\u03B12)");
     this.angle2.cssAddClass("z4abstractvaluepanel-titled");

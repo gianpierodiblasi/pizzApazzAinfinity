@@ -129,7 +129,7 @@ public class Z4NaturalFigurePainterPanel extends Z4PainterPanel<Z4NaturalFigureP
     panel.setLayout(new GridBagLayout());
     tabbedPane.addTab(Z4Translations.EXTERNAL_FORCE, panel);
 
-    this.externalForceAngle.setConstantRange(0, 90);
+    this.externalForceAngle.setConstantRange(0, 360);
     this.externalForceAngle.setRandomRange(0, 90);
     this.externalForceAngle.setLabel(Z4Translations.ANGLE + " (\u03B1)");
     this.externalForceAngle.cssAddClass("z4abstractvaluepanel-titled");
@@ -245,7 +245,7 @@ public class Z4NaturalFigurePainterPanel extends Z4PainterPanel<Z4NaturalFigureP
 
     angle.getStyle().setProperty("grid-template-areas", "\"p1 p1\"\n\"p3 p3\"\n\"p4 p4\"\n\"p5 p5\"\n\"p6 p6\"");
     angle.setSignsVisible(false);
-    angle.setConstantRange(0, 90);
+    angle.setConstantRange(0, 360);
     angle.setRandomRange(0, 90);
     angle.setLabel(Z4Translations.ANGLE + " (\u03B1" + suffix + ")");
     angle.cssAddClass("z4abstractvaluepanel-titled");

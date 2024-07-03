@@ -29,7 +29,7 @@ public class Z4NaturalFigurePainter extends Z4Painter {
   private final Z4NaturalFigurePainterControlPointClosure controlPointClosure;
 
   private final Z4FancifulValue size;
-  
+
   private final Z4FancifulValue internalAngle1;
   private final Z4FancifulValue externalAngle1;
   private final Z4FancifulValue internalAngle2;

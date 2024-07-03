@@ -9310,7 +9310,7 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
     panel.add(this.tension, new GBC(2, 0).h(2).i(1, 0, 0, 1));
     this.angle1.setSignsVisible(false);
     this.angle1.getStyle().setProperty("grid-template-areas", "\"p1 p1\"\n\"p3 p3\"\n\"p4 p4\"\n\"p5 p5\"\n\"p6 p6\"");
-    this.angle1.setConstantRange(0, 90);
+    this.angle1.setConstantRange(0, 360);
     this.angle1.setRandomRange(0, 90);
     this.angle1.setLabel(Z4Translations.ANGLE + " 1 (\u03B11)");
     this.angle1.cssAddClass("z4abstractvaluepanel-titled");
@@ -9319,7 +9319,7 @@ class Z4CenteredFigurePainterPanel extends Z4PainterPanel {
     panel.add(this.angle1, new GBC(3, 0).h(2).i(1, 0, 0, 1));
     this.angle2.setSignsVisible(false);
     this.angle2.getStyle().setProperty("grid-template-areas", "\"p1 p1\"\n\"p3 p3\"\n\"p4 p4\"\n\"p5 p5\"\n\"p6 p6\"");
-    this.angle2.setConstantRange(0, 90);
+    this.angle2.setConstantRange(0, 360);
     this.angle2.setRandomRange(0, 90);
     this.angle2.setLabel(Z4Translations.ANGLE + " 2 (\u03B12)");
     this.angle2.cssAddClass("z4abstractvaluepanel-titled");
@@ -9689,7 +9689,7 @@ class Z4NaturalFigurePainterPanel extends Z4PainterPanel {
     panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
     tabbedPane.addTab(Z4Translations.EXTERNAL_FORCE, panel);
-    this.externalForceAngle.setConstantRange(0, 90);
+    this.externalForceAngle.setConstantRange(0, 360);
     this.externalForceAngle.setRandomRange(0, 90);
     this.externalForceAngle.setLabel(Z4Translations.ANGLE + " (\u03B1)");
     this.externalForceAngle.cssAddClass("z4abstractvaluepanel-titled");
@@ -9734,7 +9734,7 @@ class Z4NaturalFigurePainterPanel extends Z4PainterPanel {
     Z4UI.addLabel(panel, title, new GBC(x, 0).w(2).a(GBC.WEST)).getStyle().fontWeight = "bold";
     angle.getStyle().setProperty("grid-template-areas", "\"p1 p1\"\n\"p3 p3\"\n\"p4 p4\"\n\"p5 p5\"\n\"p6 p6\"");
     angle.setSignsVisible(false);
-    angle.setConstantRange(0, 90);
+    angle.setConstantRange(0, 360);
     angle.setRandomRange(0, 90);
     angle.setLabel(Z4Translations.ANGLE + " (\u03B1" + suffix + ")");
     angle.cssAddClass("z4abstractvaluepanel-titled");
@@ -10268,6 +10268,8 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
 
    tabbedPaneID = "z4drawingtoolpanel_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
 
+   run = false;
+
   /**
    * Creates the object
    */
@@ -10769,16 +10771,36 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
   }
 
    drawPreview() {
-    this.ctx1.clearRect(0, 0, 500, 300);
-    this.ctx2.clearRect(0, 0, 300, 500);
-    if (this.previewColor) {
-      this.ctx1.fillStyle = Z4Constants.getStyle(this.previewColor.getRGBA_HEX());
-      this.ctx1.fillRect(0, 0, 500, 300);
-      this.ctx2.fillStyle = Z4Constants.getStyle(this.previewColor.getRGBA_HEX());
-      this.ctx2.fillRect(0, 0, 300, 500);
-    }
-    this.value.getPointIterator().drawDemo(this.ctx1, this.value.getPainter(), this.value.getSpatioTemporalColor(), this.value.getProgression(), 500, 300);
-    this.value.getPointIterator().drawDemo(this.ctx2, this.value.getPainter(), this.value.getSpatioTemporalColor(), this.value.getProgression(), 300, 500);
+    setTimeout(() => {
+      if (!this.valueIsAdjusting || !this.run) {
+        Z4DrawingTool.STOP_DRAW_DEMO = true;
+        while (this.run) ;
+        Z4DrawingTool.STOP_DRAW_DEMO = false;
+        this.run = true;
+        if (this.previewColor) {
+          this.ctx1.fillStyle = Z4Constants.getStyle(this.previewColor.getRGBA_HEX());
+          this.ctx1.fillRect(0, 0, 500, 300);
+          this.ctx2.fillStyle = Z4Constants.getStyle(this.previewColor.getRGBA_HEX());
+          this.ctx2.fillRect(0, 0, 300, 500);
+        }
+        if (this.preview1.getStyle().display === "flex") {
+          this.ctx1.clearRect(0, 0, 500, 300);
+          if (this.previewColor) {
+            this.ctx1.fillStyle = Z4Constants.getStyle(this.previewColor.getRGBA_HEX());
+            this.ctx1.fillRect(0, 0, 500, 300);
+          }
+          this.value.getPointIterator().drawDemo(this.ctx1, this.value.getPainter(), this.value.getSpatioTemporalColor(), this.value.getProgression(), 500, 300);
+        } else {
+          this.ctx2.clearRect(0, 0, 300, 500);
+          if (this.previewColor) {
+            this.ctx2.fillStyle = Z4Constants.getStyle(this.previewColor.getRGBA_HEX());
+            this.ctx2.fillRect(0, 0, 300, 500);
+          }
+          this.value.getPointIterator().drawDemo(this.ctx2, this.value.getPainter(), this.value.getSpatioTemporalColor(), this.value.getProgression(), 300, 500);
+        }
+        this.run = false;
+      }
+    }, 0);
   }
 }
 /**

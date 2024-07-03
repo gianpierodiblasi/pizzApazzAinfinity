@@ -250,7 +250,7 @@ public class Z4CenteredFigurePainter extends Z4Painter {
       this.drawBounds(context, currentHole, point);
     } else {
       double currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.size.next());
-      
+
       if (currentSize > 0) {
         double currentAngle = Z4Math.deg2rad(this.whirlpool.getAngle().next());
         double currentHole = this.hole.next();
