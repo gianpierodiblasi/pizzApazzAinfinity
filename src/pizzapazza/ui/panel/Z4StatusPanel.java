@@ -32,6 +32,9 @@ public class Z4StatusPanel extends JSPanel {
   private final JSLabel mousePosition = new JSLabel();
   private final JSButton drawingDirection = new JSButton();
 
+  /**
+   * Creates the object
+   */
   public Z4StatusPanel() {
     super();
     this.cssAddClass("z4statuspanel");

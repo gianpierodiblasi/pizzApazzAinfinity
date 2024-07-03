@@ -3295,6 +3295,10 @@ class Z4CanvasMouseManager {
 
    pressed = false;
 
+   onStartX = 0.0;
+
+   onStartY = 0.0;
+
   /**
    * Creates the object
    *
@@ -3404,6 +3408,15 @@ class Z4CanvasMouseManager {
   }
 
    onAction(action, x, y) {
+    if (action === Z4PointIteratorDrawingAction.START) {
+      this.onStartX = x;
+      this.onStartY = y;
+    } else if (this.drawingDirection === Z4DrawingDirection.FREE) {
+    } else if (this.drawingDirection === Z4DrawingDirection.HORIZONTAL) {
+      y = this.onStartY;
+    } else if (this.drawingDirection === Z4DrawingDirection.VERTICAL) {
+      x = this.onStartX;
+    }
     if (!this.selectedDrawingTool || !this.selectedLayer) {
     } else if (this.pressed && this.selectedDrawingTool.drawAction(action, x, y)) {
       this.ribbonHistoryPanel.stopStandard();
@@ -3412,6 +3425,12 @@ class Z4CanvasMouseManager {
   }
 
    onStop(x, y) {
+    if (this.drawingDirection === Z4DrawingDirection.FREE) {
+    } else if (this.drawingDirection === Z4DrawingDirection.HORIZONTAL) {
+      y = this.onStartY;
+    } else if (this.drawingDirection === Z4DrawingDirection.VERTICAL) {
+      x = this.onStartX;
+    }
     this.pressed = false;
     if (!this.selectedDrawingTool || !this.selectedLayer) {
     } else if (this.selectedDrawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
@@ -11527,6 +11546,9 @@ class Z4StatusPanel extends JSPanel {
 
    drawingDirection = new JSButton();
 
+  /**
+   * Creates the object
+   */
   constructor() {
     super();
     this.cssAddClass("z4statuspanel");

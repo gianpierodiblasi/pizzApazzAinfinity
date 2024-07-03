@@ -17,6 +17,9 @@ class Z4StatusPanel extends JSPanel {
 
    drawingDirection = new JSButton();
 
+  /**
+   * Creates the object
+   */
   constructor() {
     super();
     this.cssAddClass("z4statuspanel");

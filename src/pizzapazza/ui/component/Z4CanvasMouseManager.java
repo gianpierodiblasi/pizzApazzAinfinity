@@ -38,6 +38,8 @@ public class Z4CanvasMouseManager {
   private Z4StatusPanel statusPanel;
 
   private boolean pressed;
+  private double onStartX;
+  private double onStartY;
 
   /**
    * Creates the object
@@ -149,6 +151,16 @@ public class Z4CanvasMouseManager {
   }
 
   private void onAction(Z4PointIteratorDrawingAction action, double x, double y) {
+    if (action == Z4PointIteratorDrawingAction.START) {
+      this.onStartX = x;
+      this.onStartY = y;
+    } else if (this.drawingDirection == Z4DrawingDirection.FREE) {
+    } else if (this.drawingDirection == Z4DrawingDirection.HORIZONTAL) {
+      y = this.onStartY;
+    } else if (this.drawingDirection == Z4DrawingDirection.VERTICAL) {
+      x = this.onStartX;
+    }
+
     if (!$exists(this.selectedDrawingTool) || !$exists(this.selectedLayer)) {
     } else if (this.pressed && this.selectedDrawingTool.drawAction(action, x, y)) {
       this.ribbonHistoryPanel.stopStandard();
@@ -157,6 +169,13 @@ public class Z4CanvasMouseManager {
   }
 
   private void onStop(double x, double y) {
+    if (this.drawingDirection == Z4DrawingDirection.FREE) {
+    } else if (this.drawingDirection == Z4DrawingDirection.HORIZONTAL) {
+      y = this.onStartY;
+    } else if (this.drawingDirection == Z4DrawingDirection.VERTICAL) {
+      x = this.onStartX;
+    }
+
     this.pressed = false;
     if (!$exists(this.selectedDrawingTool) || !$exists(this.selectedLayer)) {
     } else if (this.selectedDrawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
