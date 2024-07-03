@@ -31,6 +31,7 @@ public class Z4StatusPanel extends JSPanel {
   private final JSLabel projectSize = new JSLabel();
   private final JSLabel mousePosition = new JSLabel();
   private final JSButton drawingDirection = new JSButton();
+  private final Z4CanvasGridPanel canvasGridPanel = new Z4CanvasGridPanel();
 
   /**
    * Creates the object
@@ -76,7 +77,9 @@ public class Z4StatusPanel extends JSPanel {
     this.drawingDirection.addActionListener(event -> this.setDrawingDirection(null));
     this.add(this.drawingDirection, new GBC(8, 0).i(0, 5, 0, 5));
 
-    this.add(new JSLabel(), new GBC(9, 0).wx(1));
+    this.add(this.canvasGridPanel, new GBC(9, 0).i(0, 5, 0, 5));
+
+    this.add(new JSLabel(), new GBC(10, 0).wx(1));
   }
 
   private void addPipe(int gridx) {
@@ -160,6 +163,13 @@ public class Z4StatusPanel extends JSPanel {
       this.drawingDirection.cssAddClass("z4drawingdirection-free");
       this.canvas.setDrawingDirection(Z4DrawingDirection.FREE);
     }
+  }
+
+  /**
+   * Resets the canvas grid panel
+   */
+  public void resetCanvasGridPanel() {
+    this.canvasGridPanel.reset();
   }
 
   @SuppressWarnings({"unchecked", "StringEquality"})

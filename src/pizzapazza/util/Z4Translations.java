@@ -146,6 +146,9 @@ public class Z4Translations {
   public static String TRY_ME = "";
   public static String ACTIONS = "";
   public static String DRAWING_DIRECTION = "";
+  public static String SHOW_GRID = "";
+  public static String MAGNETIC_GRID = "";
+  public static String DOTTED_GRID = "";
 
   // Color
   public static String COLOR = "";
@@ -396,6 +399,9 @@ public class Z4Translations {
     Z4Translations.TRY_ME = "Try Me";
     Z4Translations.ACTIONS = "Actions";
     Z4Translations.DRAWING_DIRECTION = "Drawing Direction";
+    Z4Translations.SHOW_GRID = "Show Grid";
+    Z4Translations.MAGNETIC_GRID = "Magnetic Grid";
+    Z4Translations.DOTTED_GRID = "Dotted Grid";
 
     // Color
     Z4Translations.COLOR = "Color";
@@ -630,6 +636,9 @@ public class Z4Translations {
     Z4Translations.TRY_ME = "Provami";
     Z4Translations.ACTIONS = "Azioni";
     Z4Translations.DRAWING_DIRECTION = "Direzione di Disegno";
+    Z4Translations.SHOW_GRID = "Mostra Griglia";
+    Z4Translations.MAGNETIC_GRID = "Griglia Magnetica";
+    Z4Translations.DOTTED_GRID = "Griglia Punteggiata";
 
     // Color
     Z4Translations.COLOR = "Colore";

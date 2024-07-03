@@ -128,7 +128,7 @@
 .z4ribbonlayerpanel {
 }
 
-.z4ribbondrawingtoolpanel {  
+.z4ribbondrawingtoolpanel {
 }
 
 .z4ribbonhistorypanel {
@@ -325,6 +325,34 @@
 .z4canvas .main-canvas {
   background-image: url(../image/chessboard.png);
   pointer-events: auto;
+}
+.z4canvasgridpanel {
+}
+
+.z4canvasgridpanel .z4canvasgridpanel-showgrid, .z4canvasgridpanel .z4canvasgridpanel-dottedgrid {
+  width: 14px;
+  height: 14px;
+}
+
+.z4canvasgridpanel .z4canvasgridpanel-showgrid-on {
+  content: url(../image/status/showgrid-on.gif);
+}
+.z4canvasgridpanel .z4canvasgridpanel-showgrid-off {
+  content: url(../image/status/showgrid-off.gif);
+}
+
+.z4canvasgridpanel .z4canvasgridpanel-dottedgrid-on {
+  content: url(../image/status/dottedgrid-on.gif);
+}
+.z4canvasgridpanel .z4canvasgridpanel-dottedgrid-off {
+  content: url(../image/status/dottedgrid-off.gif);
+}
+
+.z4canvasgridpanel .z4canvasgridpanel-magneticgrid-on {
+  content: url(../image/status/magneticgrid-on.gif);
+}
+.z4canvasgridpanel .z4canvasgridpanel-magneticgrid-off {
+  content: url(../image/status/magneticgrid-off.gif);
 }
 .z4centeredfigurepainterpanel {
 }
@@ -741,13 +769,13 @@
   height: 14px;
 }
 .z4statuspanel .z4drawingdirection-free img {
-  content: url(../image/drawingdirection-free.gif);
+  content: url(../image/status/drawingdirection-free.gif);
 }
 .z4statuspanel .z4drawingdirection-horizontal img {
-  content: url(../image/drawingdirection-horizontal.gif);
+  content: url(../image/status/drawingdirection-horizontal.gif);
 }
 .z4statuspanel .z4drawingdirection-vertical img {
-  content: url(../image/drawingdirection-vertical.gif);
+  content: url(../image/status/drawingdirection-vertical.gif);
 }
 .z4whirlpoolpanel {
 }

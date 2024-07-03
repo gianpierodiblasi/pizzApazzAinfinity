@@ -239,6 +239,12 @@ class Z4Translations {
 
   static  DRAWING_DIRECTION = "";
 
+  static  SHOW_GRID = "";
+
+  static  MAGNETIC_GRID = "";
+
+  static  DOTTED_GRID = "";
+
   // Color
   static  COLOR = "";
 
@@ -556,6 +562,9 @@ class Z4Translations {
     Z4Translations.TRY_ME = "Try Me";
     Z4Translations.ACTIONS = "Actions";
     Z4Translations.DRAWING_DIRECTION = "Drawing Direction";
+    Z4Translations.SHOW_GRID = "Show Grid";
+    Z4Translations.MAGNETIC_GRID = "Magnetic Grid";
+    Z4Translations.DOTTED_GRID = "Dotted Grid";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -774,6 +783,9 @@ class Z4Translations {
     Z4Translations.TRY_ME = "Provami";
     Z4Translations.ACTIONS = "Azioni";
     Z4Translations.DRAWING_DIRECTION = "Direzione di Disegno";
+    Z4Translations.SHOW_GRID = "Mostra Griglia";
+    Z4Translations.MAGNETIC_GRID = "Griglia Magnetica";
+    Z4Translations.DOTTED_GRID = "Griglia Punteggiata";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";

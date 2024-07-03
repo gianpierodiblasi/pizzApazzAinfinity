@@ -1,0 +1,28 @@
+.z4canvasgridpanel {
+}
+
+.z4canvasgridpanel .z4canvasgridpanel-showgrid, .z4canvasgridpanel .z4canvasgridpanel-dottedgrid {
+  width: 14px;
+  height: 14px;
+}
+
+.z4canvasgridpanel .z4canvasgridpanel-showgrid-on {
+  content: url(../image/status/showgrid-on.gif);
+}
+.z4canvasgridpanel .z4canvasgridpanel-showgrid-off {
+  content: url(../image/status/showgrid-off.gif);
+}
+
+.z4canvasgridpanel .z4canvasgridpanel-dottedgrid-on {
+  content: url(../image/status/dottedgrid-on.gif);
+}
+.z4canvasgridpanel .z4canvasgridpanel-dottedgrid-off {
+  content: url(../image/status/dottedgrid-off.gif);
+}
+
+.z4canvasgridpanel .z4canvasgridpanel-magneticgrid-on {
+  content: url(../image/status/magneticgrid-on.gif);
+}
+.z4canvasgridpanel .z4canvasgridpanel-magneticgrid-off {
+  content: url(../image/status/magneticgrid-off.gif);
+}

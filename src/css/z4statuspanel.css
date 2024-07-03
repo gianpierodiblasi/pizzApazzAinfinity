@@ -6,11 +6,11 @@
   height: 14px;
 }
 .z4statuspanel .z4drawingdirection-free img {
-  content: url(../image/drawingdirection-free.gif);
+  content: url(../image/status/drawingdirection-free.gif);
 }
 .z4statuspanel .z4drawingdirection-horizontal img {
-  content: url(../image/drawingdirection-horizontal.gif);
+  content: url(../image/status/drawingdirection-horizontal.gif);
 }
 .z4statuspanel .z4drawingdirection-vertical img {
-  content: url(../image/drawingdirection-vertical.gif);
+  content: url(../image/status/drawingdirection-vertical.gif);
 }
