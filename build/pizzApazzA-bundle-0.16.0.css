@@ -329,7 +329,9 @@
 .z4canvasgridpanel {
 }
 
-.z4canvasgridpanel .z4canvasgridpanel-showgrid, .z4canvasgridpanel .z4canvasgridpanel-dottedgrid {
+.z4canvasgridpanel .z4canvasgridpanel-showgrid,
+.z4canvasgridpanel .z4canvasgridpanel-dottedgrid,
+.z4canvasgridpanel .z4canvasgridpanel-magneticgrid {
   width: 14px;
   height: 14px;
 }

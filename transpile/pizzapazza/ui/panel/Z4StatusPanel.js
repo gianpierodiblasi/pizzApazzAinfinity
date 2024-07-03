@@ -101,6 +101,7 @@ class Z4StatusPanel extends JSPanel {
    */
    setMousePosition(x, y) {
     this.mousePosition.setText(new Number(x).toFixed(0).padStart(4, "\u00A0") + " x " + new Number(y).toFixed(0).padEnd(4, "\u00A0"));
+    this.canvasGridPanel.setMousePosition(x, y);
   }
 
   /**

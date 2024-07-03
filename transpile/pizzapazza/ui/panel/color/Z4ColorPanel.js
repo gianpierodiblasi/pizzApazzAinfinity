@@ -15,6 +15,8 @@ class Z4ColorPanel extends Z4AbstractValuePanel {
 
    edit = new JSButton();
 
+   opacityVisible = true;
+
   /**
    * Creates the object
    */
@@ -31,7 +33,7 @@ class Z4ColorPanel extends Z4AbstractValuePanel {
     this.container.appendChild(this.componentOpacity);
     this.edit.setText(Z4Translations.EDIT);
     this.edit.addActionListener(event => {
-      JSColorChooser.showDialog(Z4Translations.COLOR, this.value, true, null, c => {
+      JSColorChooser.showDialog(Z4Translations.COLOR, this.value, this.opacityVisible, null, c => {
         this.setValue(c);
         this.onchange();
       });
@@ -65,5 +67,23 @@ class Z4ColorPanel extends Z4AbstractValuePanel {
    setEnabled(b) {
     super.setEnabled(b);
     this.edit.setEnabled(b);
+  }
+
+  /**
+   * Sets the visibility of the edit button
+   *
+   * @param b true to show the edit button, false otherwise
+   */
+   setEditButtonVisible(b) {
+    this.edit.getStyle().display = b ? "flex" : "none";
+  }
+
+  /**
+   * Sets the visibility of the opacity selector
+   *
+   * @param b true to show the opacity selector, false otherwise
+   */
+   setOpacityVisible(b) {
+    this.opacityVisible = b;
   }
 }
