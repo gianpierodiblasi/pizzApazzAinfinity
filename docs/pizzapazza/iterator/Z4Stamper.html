@@ -224,12 +224,13 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#drawDemo(simulation.dom.$CanvasRenderingContext2D,pizzapazza.painter.Z4Painter,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression,double,double)">drawDemo</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;context,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#drawDemo(simulation.dom.$CanvasRenderingContext2D,pizzapazza.painter.Z4Painter,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression,double,double,boolean)">drawDemo</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;context,
         <a href="../painter/Z4Painter.html" title="class in pizzapazza.painter">Z4Painter</a>&nbsp;painter,
         <a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;spatioTemporalColor,
         <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression,
         double&nbsp;width,
-        double&nbsp;height)</code></th>
+        double&nbsp;height,
+        boolean&nbsp;valueIsAdjusting)</code></th>
 <td class="colLast">
 <div class="block">Draws a demo of this Z4PointIterator</div>
 </td>
@@ -504,7 +505,7 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 </dl>
 </li>
 </ul>
-<a id="drawDemo(simulation.dom.$CanvasRenderingContext2D,pizzapazza.painter.Z4Painter,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression,double,double)">
+<a id="drawDemo(simulation.dom.$CanvasRenderingContext2D,pizzapazza.painter.Z4Painter,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression,double,double,boolean)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -515,12 +516,13 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
                      <a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;spatioTemporalColor,
                      <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression,
                      double&nbsp;width,
-                     double&nbsp;height)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Z4PointIterator.html#drawDemo(simulation.dom.$CanvasRenderingContext2D,pizzapazza.painter.Z4Painter,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression,double,double)">Z4PointIterator</a></code></span></div>
+                     double&nbsp;height,
+                     boolean&nbsp;valueIsAdjusting)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Z4PointIterator.html#drawDemo(simulation.dom.$CanvasRenderingContext2D,pizzapazza.painter.Z4Painter,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression,double,double,boolean)">Z4PointIterator</a></code></span></div>
 <div class="block">Draws a demo of this Z4PointIterator</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Z4PointIterator.html#drawDemo(simulation.dom.$CanvasRenderingContext2D,pizzapazza.painter.Z4Painter,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression,double,double)">drawDemo</a></code>&nbsp;in class&nbsp;<code><a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a></code></dd>
+<dd><code><a href="Z4PointIterator.html#drawDemo(simulation.dom.$CanvasRenderingContext2D,pizzapazza.painter.Z4Painter,pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression,double,double,boolean)">drawDemo</a></code>&nbsp;in class&nbsp;<code><a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>context</code> - The context where to draw the demo</dd>
 <dd><code>painter</code> - The painter to use, it can be null</dd>
@@ -528,6 +530,8 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <dd><code>progression</code> - The color progression to use, it can be null</dd>
 <dd><code>width</code> - The width</dd>
 <dd><code>height</code> - The height</dd>
+<dd><code>valueIsAdjusting</code> - true if the demo is for an adjusting value, false
+ otherwise</dd>
 </dl>
 </li>
 </ul>

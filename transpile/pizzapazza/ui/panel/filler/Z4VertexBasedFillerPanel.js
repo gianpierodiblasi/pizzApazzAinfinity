@@ -143,6 +143,7 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
   }
 
    drawObjects(ctx, mappedPoints) {
+    ctx.lineWidth = 3;
     let dash = new Array();
     ctx.beginPath();
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);

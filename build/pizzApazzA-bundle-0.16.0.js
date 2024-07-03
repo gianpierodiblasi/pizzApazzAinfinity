@@ -1840,6 +1840,8 @@ class Z4Canvas extends JSComponent {
 
    ctx = this.canvas.getContext("2d");
 
+   canvasGrid = document.createElement("canvas");
+
    ribbonFilePanel = null;
 
    ribbonLayerPanel = null;
@@ -1889,6 +1891,8 @@ class Z4Canvas extends JSComponent {
     super(document.createElement("div"));
     this.cssAddClass("z4canvas");
     this.appendNodeChild(this.canvas);
+    this.appendNodeChild(this.canvasGrid);
+    this.canvas.classList.add("main-canvas");
     this.canvas.addEventListener("mouseenter", event => this.mouseManager.onMouse(event, "enter"));
     this.canvas.addEventListener("mouseleave", event => this.mouseManager.onMouse(event, "leave"));
     this.canvas.addEventListener("mousedown", event => this.mouseManager.onMouse(event, "down"));
@@ -2017,6 +2021,8 @@ class Z4Canvas extends JSComponent {
     this.changed = false;
     this.canvas.width = width;
     this.canvas.height = height;
+    this.canvasGrid.width = width;
+    this.canvasGrid.height = height;
     this.drawCanvas();
   }
 
@@ -2530,6 +2536,8 @@ class Z4Canvas extends JSComponent {
     this.mouseManager.setZoom(this.zoom);
     this.canvas.width = this.width * zoom;
     this.canvas.height = this.height * zoom;
+    this.canvas.width = this.width * zoom;
+    this.canvas.height = this.height * zoom;
     this.drawCanvas();
   }
 
@@ -2550,6 +2558,8 @@ class Z4Canvas extends JSComponent {
         this.mouseManager.setZoom(this.zoom);
         this.canvas.width = this.width * newZoom;
         this.canvas.height = this.height * newZoom;
+        this.canvasGrid.width = this.width * newZoom;
+        this.canvasGrid.height = this.height * newZoom;
         this.statusPanel.setZoom(this.zoom);
         this.drawCanvas();
       }
@@ -2567,11 +2577,16 @@ class Z4Canvas extends JSComponent {
         this.mouseManager.setZoom(this.zoom);
         this.canvas.width = this.width * newZoom;
         this.canvas.height = this.height * newZoom;
+        this.canvasGrid.width = this.width * newZoom;
+        this.canvasGrid.height = this.height * newZoom;
         this.statusPanel.setZoom(this.zoom);
         this.drawCanvas();
       }
       this.zooming = false;
     }
+  }
+
+   zoomInOut() {
   }
 
   /**
@@ -4584,17 +4599,16 @@ class Z4AbstractFillerPanel extends JSPanel {
 
    drawCircle(point, index) {
     if (this.isPointEnabled(index)) {
+      this.ctx.lineWidth = 3;
       let dash = new Array();
       this.ctx.beginPath();
       this.ctx.arc(point.x, point.y, Z4AbstractFillerPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
-      this.ctx.closePath();
       this.ctx.strokeStyle = Z4Constants.getStyle(index === this.selectedIndex ? "red" : "black");
       this.ctx.setLineDash(dash);
       this.ctx.stroke();
       dash.push(2.5, 2.5);
       this.ctx.beginPath();
       this.ctx.arc(point.x, point.y, Z4AbstractFillerPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
-      this.ctx.closePath();
       this.ctx.strokeStyle = Z4Constants.getStyle("white");
       this.ctx.setLineDash(dash);
       this.ctx.stroke();
@@ -4660,6 +4674,7 @@ class Z4BezierFillerPanel extends Z4AbstractFillerPanel {
   }
 
    drawObjects(ctx, mappedPoints) {
+    ctx.lineWidth = 3;
     let dash = new Array();
     ctx.beginPath();
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
@@ -4722,6 +4737,7 @@ class Z4ConicFillerPanel extends Z4AbstractFillerPanel {
   }
 
    drawObjects(ctx, mappedPoints) {
+    ctx.lineWidth = 3;
     let dash = new Array();
     ctx.beginPath();
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
@@ -4776,6 +4792,7 @@ class Z4LinearFillerPanel extends Z4AbstractFillerPanel {
   }
 
    drawObjects(ctx, mappedPoints) {
+    ctx.lineWidth = 3;
     let dash = new Array();
     ctx.beginPath();
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
@@ -4901,6 +4918,7 @@ class Z4SinusoidalFillerPanel extends Z4AbstractFillerPanel {
   }
 
    drawObjects(ctx, mappedPoints) {
+    ctx.lineWidth = 3;
     let dash = new Array();
     ctx.beginPath();
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
@@ -4963,6 +4981,7 @@ class Z4SpiralFillerPanel extends Z4AbstractFillerPanel {
   }
 
    drawObjects(ctx, mappedPoints) {
+    ctx.lineWidth = 3;
     let dash = new Array();
     ctx.beginPath();
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
@@ -5134,6 +5153,7 @@ class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
   }
 
    drawObjects(ctx, mappedPoints) {
+    ctx.lineWidth = 3;
     let dash = new Array();
     ctx.beginPath();
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
@@ -5295,6 +5315,7 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
   }
 
    drawObjects(ctx, mappedPoints) {
+    ctx.lineWidth = 3;
     let dash = new Array();
     ctx.beginPath();
     ctx.moveTo(mappedPoints[0].x, mappedPoints[0].y);
@@ -6958,17 +6979,16 @@ class Z4BiGradientColorPanel extends Z4AbstractValuePanel {
   }
 
    drawCircle(biPosition, position, biIndex, index) {
+    this.ctx.lineWidth = 3;
     let dash = new Array();
     this.ctx.beginPath();
     this.ctx.arc(position * this.width, biPosition * this.height, Z4BiGradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
-    this.ctx.closePath();
     this.ctx.strokeStyle = Z4Constants.getStyle(biIndex === this.biSelectedIndex && index === this.selectedIndex ? "red" : "black");
     this.ctx.setLineDash(dash);
     this.ctx.stroke();
     dash.push(2.5, 2.5);
     this.ctx.beginPath();
     this.ctx.arc(position * this.width, biPosition * this.height, Z4BiGradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
-    this.ctx.closePath();
     this.ctx.strokeStyle = Z4Constants.getStyle("white");
     this.ctx.setLineDash(dash);
     this.ctx.stroke();
@@ -7552,17 +7572,16 @@ class Z4GradientColorPanel extends Z4AbstractValuePanel {
   }
 
    drawCircle(position, index) {
+    this.ctx.lineWidth = 3;
     let dash = new Array();
     this.ctx.beginPath();
     this.ctx.arc(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, Z4GradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
-    this.ctx.closePath();
     this.ctx.strokeStyle = Z4Constants.getStyle(index === this.selectedIndex ? "red" : "black");
     this.ctx.setLineDash(dash);
     this.ctx.stroke();
     dash.push(2.5, 2.5);
     this.ctx.beginPath();
     this.ctx.arc(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, Z4GradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
-    this.ctx.closePath();
     this.ctx.strokeStyle = Z4Constants.getStyle("white");
     this.ctx.setLineDash(dash);
     this.ctx.stroke();

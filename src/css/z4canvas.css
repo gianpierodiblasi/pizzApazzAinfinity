@@ -6,5 +6,9 @@
   background: #DDDDDD;
 }
 .z4canvas canvas {
+  grid-area: c;
+}
+
+.z4canvas .main-canvas {
   background-image: url(../image/chessboard.png);
 }

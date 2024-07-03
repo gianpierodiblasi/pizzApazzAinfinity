@@ -202,17 +202,16 @@ class Z4GradientColorPanel extends Z4AbstractValuePanel {
   }
 
    drawCircle(position, index) {
+    this.ctx.lineWidth = 3;
     let dash = new Array();
     this.ctx.beginPath();
     this.ctx.arc(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, Z4GradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
-    this.ctx.closePath();
     this.ctx.strokeStyle = Z4Constants.getStyle(index === this.selectedIndex ? "red" : "black");
     this.ctx.setLineDash(dash);
     this.ctx.stroke();
     dash.push(2.5, 2.5);
     this.ctx.beginPath();
     this.ctx.arc(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, Z4GradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
-    this.ctx.closePath();
     this.ctx.strokeStyle = Z4Constants.getStyle("white");
     this.ctx.setLineDash(dash);
     this.ctx.stroke();

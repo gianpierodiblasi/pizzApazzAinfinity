@@ -9,6 +9,8 @@ class Z4Canvas extends JSComponent {
 
    ctx = this.canvas.getContext("2d");
 
+   canvasGrid = document.createElement("canvas");
+
    ribbonFilePanel = null;
 
    ribbonLayerPanel = null;
@@ -58,6 +60,8 @@ class Z4Canvas extends JSComponent {
     super(document.createElement("div"));
     this.cssAddClass("z4canvas");
     this.appendNodeChild(this.canvas);
+    this.appendNodeChild(this.canvasGrid);
+    this.canvas.classList.add("main-canvas");
     this.canvas.addEventListener("mouseenter", event => this.mouseManager.onMouse(event, "enter"));
     this.canvas.addEventListener("mouseleave", event => this.mouseManager.onMouse(event, "leave"));
     this.canvas.addEventListener("mousedown", event => this.mouseManager.onMouse(event, "down"));
@@ -186,6 +190,8 @@ class Z4Canvas extends JSComponent {
     this.changed = false;
     this.canvas.width = width;
     this.canvas.height = height;
+    this.canvasGrid.width = width;
+    this.canvasGrid.height = height;
     this.drawCanvas();
   }
 
@@ -699,6 +705,8 @@ class Z4Canvas extends JSComponent {
     this.mouseManager.setZoom(this.zoom);
     this.canvas.width = this.width * zoom;
     this.canvas.height = this.height * zoom;
+    this.canvas.width = this.width * zoom;
+    this.canvas.height = this.height * zoom;
     this.drawCanvas();
   }
 
@@ -719,6 +727,8 @@ class Z4Canvas extends JSComponent {
         this.mouseManager.setZoom(this.zoom);
         this.canvas.width = this.width * newZoom;
         this.canvas.height = this.height * newZoom;
+        this.canvasGrid.width = this.width * newZoom;
+        this.canvasGrid.height = this.height * newZoom;
         this.statusPanel.setZoom(this.zoom);
         this.drawCanvas();
       }
@@ -736,11 +746,16 @@ class Z4Canvas extends JSComponent {
         this.mouseManager.setZoom(this.zoom);
         this.canvas.width = this.width * newZoom;
         this.canvas.height = this.height * newZoom;
+        this.canvasGrid.width = this.width * newZoom;
+        this.canvasGrid.height = this.height * newZoom;
         this.statusPanel.setZoom(this.zoom);
         this.drawCanvas();
       }
       this.zooming = false;
     }
+  }
+
+   zoomInOut() {
   }
 
   /**

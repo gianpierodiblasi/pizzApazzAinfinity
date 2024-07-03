@@ -308,7 +308,7 @@ public class Z4BiGradientColorPanel extends Z4AbstractValuePanel<Z4BiGradientCol
           this.pressed = false;
           this.drawPreview(false);
           this.valueIsAdjusting = false;
-        this.onchange();
+          this.onchange();
         }
         break;
     }
@@ -390,11 +390,12 @@ public class Z4BiGradientColorPanel extends Z4AbstractValuePanel<Z4BiGradientCol
   }
 
   private void drawCircle(double biPosition, double position, int biIndex, int index) {
+    this.ctx.lineWidth = 3;
+    
     Array<Double> dash = new Array<>();
 
     this.ctx.beginPath();
     this.ctx.arc(position * this.width, biPosition * this.height, Z4BiGradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
-    this.ctx.closePath();
     this.ctx.strokeStyle = Z4Constants.$getStyle(biIndex == this.biSelectedIndex && index == this.selectedIndex ? "red" : "black");
     this.ctx.setLineDash(dash);
     this.ctx.stroke();
@@ -403,7 +404,6 @@ public class Z4BiGradientColorPanel extends Z4AbstractValuePanel<Z4BiGradientCol
 
     this.ctx.beginPath();
     this.ctx.arc(position * this.width, biPosition * this.height, Z4BiGradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
-    this.ctx.closePath();
     this.ctx.strokeStyle = Z4Constants.$getStyle("white");
     this.ctx.setLineDash(dash);
     this.ctx.stroke();
@@ -450,7 +450,6 @@ public class Z4BiGradientColorPanel extends Z4AbstractValuePanel<Z4BiGradientCol
     return Z4BiGradientColor.fromJSON(this.value.toJSON());
   }
 
-  
   @Override
   public void setValue(Z4BiGradientColor value) {
     this.value = Z4BiGradientColor.fromJSON(value.toJSON());

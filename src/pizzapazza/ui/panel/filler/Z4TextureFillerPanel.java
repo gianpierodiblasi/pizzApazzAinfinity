@@ -205,6 +205,8 @@ public class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
 
   @Override
   protected void drawObjects($CanvasRenderingContext2D ctx, Array<Point> mappedPoints) {
+    ctx.lineWidth = 3;
+    
     Array<Double> dash = new Array<>();
 
     ctx.beginPath();

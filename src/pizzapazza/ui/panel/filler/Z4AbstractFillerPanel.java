@@ -372,11 +372,12 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
 
   private void drawCircle(Point point, int index) {
     if (this.isPointEnabled(index)) {
+      this.ctx.lineWidth = 3;
+      
       Array<Double> dash = new Array<>();
 
       this.ctx.beginPath();
       this.ctx.arc(point.x, point.y, Z4AbstractFillerPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
-      this.ctx.closePath();
       this.ctx.strokeStyle = Z4Constants.$getStyle(index == this.selectedIndex ? "red" : "black");
       this.ctx.setLineDash(dash);
       this.ctx.stroke();
@@ -385,7 +386,6 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
 
       this.ctx.beginPath();
       this.ctx.arc(point.x, point.y, Z4AbstractFillerPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
-      this.ctx.closePath();
       this.ctx.strokeStyle = Z4Constants.$getStyle("white");
       this.ctx.setLineDash(dash);
       this.ctx.stroke();

@@ -243,11 +243,12 @@ public class Z4GradientColorPanel extends Z4AbstractValuePanel<Z4GradientColor> 
   }
 
   private void drawCircle(double position, int index) {
+    this.ctx.lineWidth = 3;
+    
     Array<Double> dash = new Array<>();
 
     this.ctx.beginPath();
     this.ctx.arc(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, Z4GradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
-    this.ctx.closePath();
     this.ctx.strokeStyle = Z4Constants.$getStyle(index == this.selectedIndex ? "red" : "black");
     this.ctx.setLineDash(dash);
     this.ctx.stroke();
@@ -256,7 +257,6 @@ public class Z4GradientColorPanel extends Z4AbstractValuePanel<Z4GradientColor> 
 
     this.ctx.beginPath();
     this.ctx.arc(position * Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT / 2, Z4GradientColorPanel.SELECTOR_RADIUS, 0, 2 * Math.PI);
-    this.ctx.closePath();
     this.ctx.strokeStyle = Z4Constants.$getStyle("white");
     this.ctx.setLineDash(dash);
     this.ctx.stroke();
