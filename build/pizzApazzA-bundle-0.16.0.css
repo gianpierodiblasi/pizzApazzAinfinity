@@ -319,11 +319,14 @@
 }
 .z4canvas canvas {
   grid-area: c;
+  pointer-events: none;
 }
 
 .z4canvas .main-canvas {
   background-image: url(../image/chessboard.png);
-}.z4centeredfigurepainterpanel {
+  pointer-events: auto;
+}
+.z4centeredfigurepainterpanel {
 }
 
 .z4centeredfigurepainterpanel .z4centeredfigurepainterpanel-radio img {

@@ -162,6 +162,24 @@ class Z4Math {
   }
 
   /**
+   * Returns, give a point and a grid, the point in the grid with the minimum
+   * distance from the given point
+   *
+   * @param point The point
+   * @param center The grid center
+   * @param plotWidth The grid plot width
+   * @param magnetismPercentage The grid magnetism percentage, in the range
+   * ]0,1]
+   * @return The point in the grid with the minimum distance from the given
+   * point, if the given point is inside the magnetism area, null otherwise
+   */
+  static  nearestPointInGrid(point, center, plotWidth, magnetismPercentage) {
+    let dx = center.x + parseInt(Math.round((point.x - center.x) / plotWidth) * plotWidth);
+    let dy = center.y + parseInt(Math.round((point.y - center.y) / plotWidth) * plotWidth);
+    return Z4Math.distance(point.x, point.y, dx, dy) <= magnetismPercentage * plotWidth ? new Point(dx, dy) : null;
+  }
+
+  /**
    * Returns the theta component of a point or a vector, in polar coordinates.
    * The value is normalized in the range [0,2*PI]
    *

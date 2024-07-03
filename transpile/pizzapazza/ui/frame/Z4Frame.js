@@ -17,7 +17,6 @@ class Z4Frame extends JSFrame {
   constructor() {
     super();
     this.cssAddClass("z4frame");
-    this.getContentPane().setLayout(new BorderLayout(5, 5));
     this.ribbon.setCanvas(this.canvas);
     this.ribbon.setStatusPanel(this.statusPanel);
     this.canvas.setStatusPanel(this.statusPanel);

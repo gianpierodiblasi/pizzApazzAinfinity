@@ -7,8 +7,10 @@
 }
 .z4canvas canvas {
   grid-area: c;
+  pointer-events: none;
 }
 
 .z4canvas .main-canvas {
   background-image: url(../image/chessboard.png);
+  pointer-events: auto;
 }

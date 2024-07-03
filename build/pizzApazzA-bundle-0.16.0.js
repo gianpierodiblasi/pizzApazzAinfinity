@@ -1268,6 +1268,24 @@ class Z4Math {
   }
 
   /**
+   * Returns, give a point and a grid, the point in the grid with the minimum
+   * distance from the given point
+   *
+   * @param point The point
+   * @param center The grid center
+   * @param plotWidth The grid plot width
+   * @param magnetismPercentage The grid magnetism percentage, in the range
+   * ]0,1]
+   * @return The point in the grid with the minimum distance from the given
+   * point, if the given point is inside the magnetism area, null otherwise
+   */
+  static  nearestPointInGrid(point, center, plotWidth, magnetismPercentage) {
+    let dx = center.x + parseInt(Math.round((point.x - center.x) / plotWidth) * plotWidth);
+    let dy = center.y + parseInt(Math.round((point.y - center.y) / plotWidth) * plotWidth);
+    return Z4Math.distance(point.x, point.y, dx, dy) <= magnetismPercentage * plotWidth ? new Point(dx, dy) : null;
+  }
+
+  /**
    * Returns the theta component of a point or a vector, in polar coordinates.
    * The value is normalized in the range [0,2*PI]
    *
@@ -1841,6 +1859,18 @@ class Z4Canvas extends JSComponent {
    ctx = this.canvas.getContext("2d");
 
    canvasGrid = document.createElement("canvas");
+
+   ctxGrid = this.canvas.getContext("2d");
+
+   pathGrid = null;
+
+   centerGrid = null;
+
+   plotWidthGrid = 0;
+
+   magneticGrid = false;
+
+   colorGrid = null;
 
    ribbonFilePanel = null;
 
@@ -2609,6 +2639,24 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Sets the grid
+   *
+   * @param path The grid path
+   * @param center The grid center
+   * @param plotWidth The grid plot width
+   * @param magnetic true for a magnetic grid, false otherwise
+   * @param color The grid color
+   */
+   setGrid(path, center, plotWidth, magnetic, color) {
+    this.pathGrid = path;
+    this.centerGrid = center;
+    this.plotWidthGrid = plotWidth;
+    this.magneticGrid = magnetic;
+    this.colorGrid = color;
+    this.drawCanvasGrid();
+  }
+
+  /**
    * Draws this canvas
    */
    drawCanvas() {
@@ -2617,6 +2665,19 @@ class Z4Canvas extends JSComponent {
     this.ctx.scale(this.zoom, this.zoom);
     this.paper.draw(this.ctx, false, false);
     this.ctx.restore();
+  }
+
+   drawCanvasGrid() {
+    this.ctxGrid.clearRect(0, 0, this.canvasGrid.width, this.canvasGrid.height);
+    this.ctxGrid.save();
+    if (this.pathGrid) {
+      this.ctxGrid.strokeStyle = Z4Constants.getStyle(this.colorGrid.getRGBA_HEX());
+      this.ctxGrid.stroke(this.pathGrid);
+      this.ctxGrid.beginPath();
+      this.ctxGrid.arc(this.centerGrid.x, this.centerGrid.y, 3, 0, Z4Math.TWO_PI);
+      this.ctxGrid.stroke();
+    }
+    this.ctxGrid.restore();
   }
 }
 /**
@@ -4212,7 +4273,6 @@ class Z4Frame extends JSFrame {
   constructor() {
     super();
     this.cssAddClass("z4frame");
-    this.getContentPane().setLayout(new BorderLayout(5, 5));
     this.ribbon.setCanvas(this.canvas);
     this.ribbon.setStatusPanel(this.statusPanel);
     this.canvas.setStatusPanel(this.statusPanel);

@@ -11,6 +11,18 @@ class Z4Canvas extends JSComponent {
 
    canvasGrid = document.createElement("canvas");
 
+   ctxGrid = this.canvas.getContext("2d");
+
+   pathGrid = null;
+
+   centerGrid = null;
+
+   plotWidthGrid = 0;
+
+   magneticGrid = false;
+
+   colorGrid = null;
+
    ribbonFilePanel = null;
 
    ribbonLayerPanel = null;
@@ -778,6 +790,24 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Sets the grid
+   *
+   * @param path The grid path
+   * @param center The grid center
+   * @param plotWidth The grid plot width
+   * @param magnetic true for a magnetic grid, false otherwise
+   * @param color The grid color
+   */
+   setGrid(path, center, plotWidth, magnetic, color) {
+    this.pathGrid = path;
+    this.centerGrid = center;
+    this.plotWidthGrid = plotWidth;
+    this.magneticGrid = magnetic;
+    this.colorGrid = color;
+    this.drawCanvasGrid();
+  }
+
+  /**
    * Draws this canvas
    */
    drawCanvas() {
@@ -786,5 +816,18 @@ class Z4Canvas extends JSComponent {
     this.ctx.scale(this.zoom, this.zoom);
     this.paper.draw(this.ctx, false, false);
     this.ctx.restore();
+  }
+
+   drawCanvasGrid() {
+    this.ctxGrid.clearRect(0, 0, this.canvasGrid.width, this.canvasGrid.height);
+    this.ctxGrid.save();
+    if (this.pathGrid) {
+      this.ctxGrid.strokeStyle = Z4Constants.getStyle(this.colorGrid.getRGBA_HEX());
+      this.ctxGrid.stroke(this.pathGrid);
+      this.ctxGrid.beginPath();
+      this.ctxGrid.arc(this.centerGrid.x, this.centerGrid.y, 3, 0, Z4Math.TWO_PI);
+      this.ctxGrid.stroke();
+    }
+    this.ctxGrid.restore();
   }
 }
