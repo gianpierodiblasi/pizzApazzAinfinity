@@ -329,6 +329,14 @@
 .z4canvasgridpanel {
 }
 
+.z4canvasgridpanel summary {
+  padding: 0.1rem;
+}
+
+.z4canvasgridpanel summary > div {
+  padding-right: 0.5rem;
+}
+
 .z4canvasgridpanel .z4canvasgridpanel-showgrid,
 .z4canvasgridpanel .z4canvasgridpanel-dottedgrid,
 .z4canvasgridpanel .z4canvasgridpanel-magneticgrid {

@@ -14,6 +14,7 @@ import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4EmptyImageProducer;
 import pizzapazza.util.Z4Translations;
+import pizzapazza.util.Z4UI;
 import static simulation.js.$Globals.parseInt;
 import simulation.js.$Number;
 
@@ -44,7 +45,7 @@ public class Z4StatusPanel extends JSPanel {
     this.projectName.setText(Z4Translations.PROJECT_NAME + ": ");
     this.add(this.projectName, new GBC(0, 0).i(0, 5, 0, 5));
 
-    this.addPipe(1);
+    Z4UI.addVLine(this, new GBC(1, 0).h(2).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
     DefaultKeyValueComboBoxModelAndRenderer<String, String> zoomModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer<>();
     Z4Constants.ZOOM_LEVEL.forEach(level -> zoomModelAndRenderer.addElement(new KeyValue<>("" + level, parseInt(100 * level) + "%")));
@@ -56,18 +57,18 @@ public class Z4StatusPanel extends JSPanel {
     this.zoom.addActionListener(event -> this.onZoom());
     this.add(this.zoom, new GBC(2, 0).i(0, 5, 0, 5));
 
-    this.addPipe(3);
+    Z4UI.addVLine(this, new GBC(3, 0).h(2).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
     this.projectSize.setText(Z4Translations.DIMENSION + ": " + Z4Constants.DEFAULT_IMAGE_SIZE + " x " + Z4Constants.DEFAULT_IMAGE_SIZE);
     this.add(this.projectSize, new GBC(4, 0).i(0, 5, 0, 5));
 
-    this.addPipe(5);
+    Z4UI.addVLine(this, new GBC(5, 0).h(2).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
     this.mousePosition.getStyle().fontFamily = "monospace";
     this.setMousePosition(0, 0);
     this.add(this.mousePosition, new GBC(6, 0).i(0, 5, 0, 5));
 
-    this.addPipe(7);
+    Z4UI.addVLine(this, new GBC(7, 0).h(2).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
     this.drawingDirection.setContentAreaFilled(false);
     this.drawingDirection.setTooltip(Z4Translations.DRAWING_DIRECTION);
@@ -80,14 +81,6 @@ public class Z4StatusPanel extends JSPanel {
     this.add(this.canvasGridPanel, new GBC(9, 0).i(0, 5, 0, 5));
 
     this.add(new JSLabel(), new GBC(10, 0).wx(1));
-  }
-
-  private void addPipe(int gridx) {
-    JSLabel pipe = new JSLabel();
-    pipe.setText("|");
-    pipe.getStyle().minWidth = "0.5rem";
-    pipe.getStyle().textAlign = "center";
-    this.add(pipe, new GBC(gridx, 0).i(0, 5, 0, 5));
   }
 
   /**
