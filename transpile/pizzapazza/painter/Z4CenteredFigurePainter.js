@@ -227,7 +227,13 @@ class Z4CenteredFigurePainter extends Z4Painter {
       let currentAngle = Z4Math.deg2rad(this.whirlpool.getAngle().getConstant().getValue());
       let currentHole = this.hole.getConstant().getValue();
       let point = this.checkWhirlpool1(currentAngle, currentHole, currentSize);
-      this.drawBounds(context, currentHole, point);
+      drawingPoint = new Z4DrawingPoint(Z4Vector.fromPoints(currentHole, 0, point.x, point.y), drawingPoint.intensity, drawingPoint.temporalPosition, drawingPoint.intent, drawingPoint.side, drawingPoint.useVectorModuleAsSize);
+      if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_0 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_1 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_2) {
+        this.type0_1_2(drawingPoint, 1, false);
+      } else if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_3 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_4 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_5) {
+        this.type3_4_5(drawingPoint, currentAngle, currentHole, 1, false);
+      }
+      this.drawBounds(context, drawingPoint);
     } else {
       let currentSize = drawingPoint.intensity * (drawingPoint.useVectorModuleAsSize ? drawingPoint.z4Vector.module : this.size.next());
       if (currentSize > 0) {
@@ -251,21 +257,23 @@ class Z4CenteredFigurePainter extends Z4Painter {
     }
   }
 
-   drawBounds(context, currentHole, point) {
+   drawBounds(context, drawingPoint) {
     for (let i = 0; i < this.multiplicity.getConstant().getValue(); i++) {
       context.save();
       context.rotate(Z4Math.TWO_PI * i / this.multiplicity.getConstant().getValue());
-      context.strokeStyle = Z4Constants.getStyle("gray");
-      context.beginPath();
-      context.moveTo(currentHole, 0);
-      context.lineTo(point.x, point.y);
-      context.stroke();
-      context.strokeStyle = Z4Constants.getStyle("black");
+      if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_0 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_1 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_2) {
+        this.drawBezier(context, drawingPoint, this.c1e, this.c2e, this.path1e, this.path2e, 0, 1, new Color(128, 128, 128, 255));
+      } else if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_3 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_4 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_5) {
+        this.drawBezier(context, drawingPoint, this.c1i, this.c2i, this.path1i, this.path2i, 0, 1, new Color(128, 128, 128, 255));
+        this.drawBezier(context, drawingPoint, this.c1e, this.c2e, this.path1e, this.path2e, 0, 1, new Color(128, 128, 128, 255));
+      }
       context.translate(1, 1);
-      context.beginPath();
-      context.moveTo(currentHole, 0);
-      context.lineTo(point.x, point.y);
-      context.stroke();
+      if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_0 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_1 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_2) {
+        this.drawBezier(context, drawingPoint, this.c1e, this.c2e, this.path1e, this.path2e, 0, 1, new Color(0, 0, 0, 255));
+      } else if (this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_3 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_4 || this.centeredFigurePainterType === Z4CenteredFigurePainterType.TYPE_5) {
+        this.drawBezier(context, drawingPoint, this.c1i, this.c2i, this.path1i, this.path2i, 0, 1, new Color(0, 0, 0, 255));
+        this.drawBezier(context, drawingPoint, this.c1e, this.c2e, this.path1e, this.path2e, 0, 1, new Color(0, 0, 0, 255));
+      }
       context.restore();
     }
   }
@@ -430,7 +438,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
     for (let i = 0; i < length; i += 3) {
       let val = i / length;
       if (color && lighting === Z4Lighting.NONE) {
-        this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color);
+        this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, 3, color);
       } else {
         let c = color;
         if (spatioTemporalColor) {
@@ -439,19 +447,19 @@ class Z4CenteredFigurePainter extends Z4Painter {
           c = gradientColor.getColorAt(val, true);
         }
         if (lighting === Z4Lighting.NONE) {
-          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, c);
+          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, 3, c);
         } else if (lighting === Z4Lighting.LIGHTED) {
-          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, c.lighted(val));
+          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, 3, c.lighted(val));
         } else if (lighting === Z4Lighting.DARKENED) {
-          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, c.darkened(val));
+          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, 3, c.darkened(val));
         }
       }
     }
   }
 
-   drawBezier(context, drawingPoint, c1, c2, path1, path2, val, color) {
+   drawBezier(context, drawingPoint, c1, c2, path1, path2, val, lineWidth, color) {
     context.save();
-    context.lineWidth = 3;
+    context.lineWidth = lineWidth;
     context.strokeStyle = Z4Constants.getStyle(color.getRGBA_HEX());
     context.beginPath();
     context.moveTo(drawingPoint.z4Vector.x0, 0);
