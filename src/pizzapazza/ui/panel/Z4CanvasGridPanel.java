@@ -23,7 +23,6 @@ import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.parseInt;
 import simulation.js.$Number;
-import simulation.js.$Path2D;
 
 /**
  * The panel to manage the grid of a canvas
@@ -211,7 +210,7 @@ public class Z4CanvasGridPanel extends JSDropDown {
     this.offsetYSpinner.setEnabled(this.showGridCheckBox.isSelected());
     this.offsetYSlider.setEnabled(this.showGridCheckBox.isSelected());
 
-    this.canvas.setGrid(this.showGridCheckBox.isSelected(), this.center, this.plotWidthSlider.getValue(), this.magneticGridCheckBox.isSelected(), this.colorPanelLabel.getValue());
+    this.canvas.setGrid(this.showGridCheckBox.isSelected(), this.center, this.plotWidthSlider.getValue(), this.dottedGridCheckBox.isSelected(), this.magneticGridCheckBox.isSelected(), this.colorPanelLabel.getValue());
   }
 
   /**
@@ -285,6 +284,7 @@ public class Z4CanvasGridPanel extends JSDropDown {
 
     this.plotWidthSpinner.setEnabled(false);
     this.plotWidthSpinner.setModel(new SpinnerNumberModel(20, 5, parseInt(Math.min(width, height) / 2), 1));
+    this.plotWidthSpinner.setValue(20);
     this.plotWidthSlider.setEnabled(false);
     this.plotWidthSlider.setMinimum(5);
     this.plotWidthSlider.setMaximum(parseInt(Math.min(width, height) / 2));

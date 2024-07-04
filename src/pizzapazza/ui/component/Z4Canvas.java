@@ -32,6 +32,7 @@ import simulation.js.$Apply_0_T;
 import simulation.js.$Apply_0_Void;
 import simulation.js.$Apply_1_Void;
 import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.parseInt;
 import simulation.js.$Object;
 import simulation.js.$Path2D;
 
@@ -50,6 +51,7 @@ public class Z4Canvas extends JSComponent {
   private $Path2D pathGrid;
   private Point centerGrid;
   private int plotWidthGrid;
+  private boolean dottedGrid;
   private boolean magneticGrid;
   private Color colorGrid;
 
@@ -832,12 +834,14 @@ public class Z4Canvas extends JSComponent {
    * @param visible true if the grid is visible, false otherwise
    * @param center The grid center
    * @param plotWidth The grid plot width
+   * @param dottedGrid true for the dotted grid, false otherwise
    * @param magnetic true for a magnetic grid, false otherwise
    * @param color The grid color
    */
-  public void setGrid(boolean visible, Point center, int plotWidth, boolean magnetic, Color color) {
+  public void setGrid(boolean visible, Point center, int plotWidth, boolean dottedGrid, boolean magnetic, Color color) {
     this.centerGrid = center;
     this.plotWidthGrid = plotWidth;
+    this.dottedGrid = dottedGrid;
     this.magneticGrid = magnetic;
     this.colorGrid = color;
 
@@ -848,73 +852,67 @@ public class Z4Canvas extends JSComponent {
   private $Path2D createGrid() {
     $Path2D grid = new $Path2D();
 
-//    int plotWidth = this.plotWidthSlider.getValue();
-//    
-//    if (this.dottedGridCheckBox.isSelected()) {
-//      for (int x = this.center.x; x > 0; x -= plotWidth) {
-//        for (int y = this.center.y; y > 0; y -= plotWidth) {
-//          grid.moveTo(x + 2, y);
-//          grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
-//        }
-//        for (int y = this.center.y; y < this.size.height; y += plotWidth) {
-//          grid.moveTo(x + 2, y);
-//          grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
-//        }
-//      }
-//      for (int x = this.center.x; x < this.size.width; x += plotWidth) {
-//        for (int y = this.center.y; y > 0; y -= plotWidth) {
-//          grid.moveTo(x + 2, y);
-//          grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
-//        }
-//        for (int y = this.center.y; y < this.size.height; y += plotWidth) {
-//          grid.moveTo(x + 2, y);
-//          grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
-//        }
-//      }
-//    } else {
-//      for (int x = this.center.x; x > 0; x -= plotWidth) {
-//        grid.moveTo(x, 0);
-//        grid.lineTo(x, this.size.height);
-//      }
-//      for (int x = this.center.x; x < this.size.width; x += plotWidth) {
-//        grid.moveTo(x, 0);
-//        grid.lineTo(x, this.size.height);
-//      }
-//      for (int y = this.center.y; y > 0; y -= plotWidth) {
-//        grid.moveTo(0, y);
-//        grid.lineTo(this.size.width, y);
-//      }
-//      for (int y = this.center.y; y < this.size.height; y += plotWidth) {
-//        grid.moveTo(0, y);
-//        grid.lineTo(this.size.width, y);
-//      }
-//    }
-//    
-//    if (this.magneticGridCheckBox.isSelected()) {
-//      int magneticRadius = parseInt(plotWidth * Z4CanvasGridPanel.MAGNETISM_PERCENTAGE);
-//      
-//      for (int x = this.center.x; x > 0; x -= plotWidth) {
-//        for (int y = this.center.y; y > 0; y -= plotWidth) {
-//          grid.moveTo(x + magneticRadius, y);
-//          grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
-//        }
-//        for (int y = this.center.y; y < this.size.height; y += plotWidth) {
-//          grid.moveTo(x + magneticRadius, y);
-//          grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
-//        }
-//      }
-//      for (int x = this.center.x; x < this.size.width; x += plotWidth) {
-//        for (int y = this.center.y; y > 0; y -= plotWidth) {
-//          grid.moveTo(x + magneticRadius, y);
-//          grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
-//        }
-//        for (int y = this.center.y; y < this.size.height; y += plotWidth) {
-//          grid.moveTo(x + magneticRadius, y);
-//          grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
-//        }
-//      }
-//    }
+    if (this.dottedGrid) {
+      for (int x = this.centerGrid.x; x > 0; x -= this.plotWidthGrid) {
+        this.createDottedGrid(grid, x);
+      }
+      for (int x = this.centerGrid.x; x < this.width; x += this.plotWidthGrid) {
+        this.createDottedGrid(grid, x);
+      }
+    } else {
+      for (int x = this.centerGrid.x; x > 0; x -= this.plotWidthGrid) {
+        this.createLineGrid(grid, x, 0, x, this.height);
+      }
+      for (int x = this.centerGrid.x; x < this.width; x += this.plotWidthGrid) {
+        this.createLineGrid(grid, x, 0, x, this.height);
+      }
+      for (int y = this.centerGrid.y; y > 0; y -= this.plotWidthGrid) {
+        this.createLineGrid(grid, 0, y, this.width, y);
+      }
+      for (int y = this.centerGrid.y; y < this.height; y += this.plotWidthGrid) {
+        this.createLineGrid(grid, 0, y, this.width, y);
+      }
+    }
+
+    if (this.magneticGrid) {
+      int magneticRadius = parseInt(this.plotWidthGrid * Z4Constants.MAGNETISM_PERCENTAGE);
+
+      for (int x = this.centerGrid.x; x > 0; x -= this.plotWidthGrid) {
+        this.createMagneticGrid(grid, x, magneticRadius);
+      }
+      for (int x = this.centerGrid.x; x < this.width; x += this.plotWidthGrid) {
+        this.createMagneticGrid(grid, x, magneticRadius);
+      }
+    }
+
     return grid;
+  }
+
+  private void createDottedGrid($Path2D grid, int x) {
+    for (int y = this.centerGrid.y; y > 0; y -= this.plotWidthGrid) {
+      grid.moveTo(x + 2 / this.zoom, y);
+      grid.arc(x, y, 2 / this.zoom, 0, Z4Math.TWO_PI);
+    }
+    for (int y = this.centerGrid.y; y < this.height; y += this.plotWidthGrid) {
+      grid.moveTo(x + 2 / this.zoom, y);
+      grid.arc(x, y, 2 / this.zoom, 0, Z4Math.TWO_PI);
+    }
+  }
+
+  private void createLineGrid($Path2D grid, int x0, int y0, int x1, int y1) {
+    grid.moveTo(x0, y0);
+    grid.lineTo(x1, y1);
+  }
+
+  private void createMagneticGrid($Path2D grid, int x, int magneticRadius) {
+    for (int y = this.centerGrid.y; y > 0; y -= this.plotWidthGrid) {
+      grid.moveTo(x + magneticRadius, y);
+      grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
+    }
+    for (int y = this.centerGrid.y; y < this.height; y += this.plotWidthGrid) {
+      grid.moveTo(x + magneticRadius, y);
+      grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
+    }
   }
 
   /**

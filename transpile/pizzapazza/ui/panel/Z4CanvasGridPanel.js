@@ -163,7 +163,7 @@ class Z4CanvasGridPanel extends JSDropDown {
     this.offsetXSlider.setEnabled(this.showGridCheckBox.isSelected());
     this.offsetYSpinner.setEnabled(this.showGridCheckBox.isSelected());
     this.offsetYSlider.setEnabled(this.showGridCheckBox.isSelected());
-    this.canvas.setGrid(this.showGridCheckBox.isSelected(), this.center, this.plotWidthSlider.getValue(), this.magneticGridCheckBox.isSelected(), this.colorPanelLabel.getValue());
+    this.canvas.setGrid(this.showGridCheckBox.isSelected(), this.center, this.plotWidthSlider.getValue(), this.dottedGridCheckBox.isSelected(), this.magneticGridCheckBox.isSelected(), this.colorPanelLabel.getValue());
   }
 
   /**
@@ -226,6 +226,7 @@ class Z4CanvasGridPanel extends JSDropDown {
     this.vline2.getStyle().visibility = "hidden";
     this.plotWidthSpinner.setEnabled(false);
     this.plotWidthSpinner.setModel(new SpinnerNumberModel(20, 5, parseInt(Math.min(width, height) / 2), 1));
+    this.plotWidthSpinner.setValue(20);
     this.plotWidthSlider.setEnabled(false);
     this.plotWidthSlider.setMinimum(5);
     this.plotWidthSlider.setMaximum(parseInt(Math.min(width, height) / 2));

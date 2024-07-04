@@ -1868,6 +1868,8 @@ class Z4Canvas extends JSComponent {
 
    plotWidthGrid = 0;
 
+   dottedGrid = false;
+
    magneticGrid = false;
 
    colorGrid = null;
@@ -2627,12 +2629,14 @@ class Z4Canvas extends JSComponent {
    * @param visible true if the grid is visible, false otherwise
    * @param center The grid center
    * @param plotWidth The grid plot width
+   * @param dottedGrid true for the dotted grid, false otherwise
    * @param magnetic true for a magnetic grid, false otherwise
    * @param color The grid color
    */
-   setGrid(visible, center, plotWidth, magnetic, color) {
+   setGrid(visible, center, plotWidth, dottedGrid, magnetic, color) {
     this.centerGrid = center;
     this.plotWidthGrid = plotWidth;
+    this.dottedGrid = dottedGrid;
     this.magneticGrid = magnetic;
     this.colorGrid = color;
     this.pathGrid = visible ? this.createGrid() : null;
@@ -2641,73 +2645,64 @@ class Z4Canvas extends JSComponent {
 
    createGrid() {
     let grid = new Path2D();
-    // int plotWidth = this.plotWidthSlider.getValue();
-    // 
-    // if (this.dottedGridCheckBox.isSelected()) {
-    // for (int x = this.center.x; x > 0; x -= plotWidth) {
-    // for (int y = this.center.y; y > 0; y -= plotWidth) {
-    // grid.moveTo(x + 2, y);
-    // grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
-    // }
-    // for (int y = this.center.y; y < this.size.height; y += plotWidth) {
-    // grid.moveTo(x + 2, y);
-    // grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
-    // }
-    // }
-    // for (int x = this.center.x; x < this.size.width; x += plotWidth) {
-    // for (int y = this.center.y; y > 0; y -= plotWidth) {
-    // grid.moveTo(x + 2, y);
-    // grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
-    // }
-    // for (int y = this.center.y; y < this.size.height; y += plotWidth) {
-    // grid.moveTo(x + 2, y);
-    // grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
-    // }
-    // }
-    // } else {
-    // for (int x = this.center.x; x > 0; x -= plotWidth) {
-    // grid.moveTo(x, 0);
-    // grid.lineTo(x, this.size.height);
-    // }
-    // for (int x = this.center.x; x < this.size.width; x += plotWidth) {
-    // grid.moveTo(x, 0);
-    // grid.lineTo(x, this.size.height);
-    // }
-    // for (int y = this.center.y; y > 0; y -= plotWidth) {
-    // grid.moveTo(0, y);
-    // grid.lineTo(this.size.width, y);
-    // }
-    // for (int y = this.center.y; y < this.size.height; y += plotWidth) {
-    // grid.moveTo(0, y);
-    // grid.lineTo(this.size.width, y);
-    // }
-    // }
-    // 
-    // if (this.magneticGridCheckBox.isSelected()) {
-    // int magneticRadius = parseInt(plotWidth * Z4CanvasGridPanel.MAGNETISM_PERCENTAGE);
-    // 
-    // for (int x = this.center.x; x > 0; x -= plotWidth) {
-    // for (int y = this.center.y; y > 0; y -= plotWidth) {
-    // grid.moveTo(x + magneticRadius, y);
-    // grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
-    // }
-    // for (int y = this.center.y; y < this.size.height; y += plotWidth) {
-    // grid.moveTo(x + magneticRadius, y);
-    // grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
-    // }
-    // }
-    // for (int x = this.center.x; x < this.size.width; x += plotWidth) {
-    // for (int y = this.center.y; y > 0; y -= plotWidth) {
-    // grid.moveTo(x + magneticRadius, y);
-    // grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
-    // }
-    // for (int y = this.center.y; y < this.size.height; y += plotWidth) {
-    // grid.moveTo(x + magneticRadius, y);
-    // grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
-    // }
-    // }
-    // }
+    if (this.dottedGrid) {
+      for (let x = this.centerGrid.x; x > 0; x -= this.plotWidthGrid) {
+        this.createDottedGrid(grid, x);
+      }
+      for (let x = this.centerGrid.x; x < this.width; x += this.plotWidthGrid) {
+        this.createDottedGrid(grid, x);
+      }
+    } else {
+      for (let x = this.centerGrid.x; x > 0; x -= this.plotWidthGrid) {
+        this.createLineGrid(grid, x, 0, x, this.height);
+      }
+      for (let x = this.centerGrid.x; x < this.width; x += this.plotWidthGrid) {
+        this.createLineGrid(grid, x, 0, x, this.height);
+      }
+      for (let y = this.centerGrid.y; y > 0; y -= this.plotWidthGrid) {
+        this.createLineGrid(grid, 0, y, this.width, y);
+      }
+      for (let y = this.centerGrid.y; y < this.height; y += this.plotWidthGrid) {
+        this.createLineGrid(grid, 0, y, this.width, y);
+      }
+    }
+    if (this.magneticGrid) {
+      let magneticRadius = parseInt(this.plotWidthGrid * Z4Constants.MAGNETISM_PERCENTAGE);
+      for (let x = this.centerGrid.x; x > 0; x -= this.plotWidthGrid) {
+        this.createMagneticGrid(grid, x, magneticRadius);
+      }
+      for (let x = this.centerGrid.x; x < this.width; x += this.plotWidthGrid) {
+        this.createMagneticGrid(grid, x, magneticRadius);
+      }
+    }
     return grid;
+  }
+
+   createDottedGrid(grid, x) {
+    for (let y = this.centerGrid.y; y > 0; y -= this.plotWidthGrid) {
+      grid.moveTo(x + 2 / this.zoom, y);
+      grid.arc(x, y, 2 / this.zoom, 0, Z4Math.TWO_PI);
+    }
+    for (let y = this.centerGrid.y; y < this.height; y += this.plotWidthGrid) {
+      grid.moveTo(x + 2 / this.zoom, y);
+      grid.arc(x, y, 2 / this.zoom, 0, Z4Math.TWO_PI);
+    }
+  }
+
+   createLineGrid(grid, x0, y0, x1, y1) {
+    grid.moveTo(x0, y0);
+    grid.lineTo(x1, y1);
+  }
+
+   createMagneticGrid(grid, x, magneticRadius) {
+    for (let y = this.centerGrid.y; y > 0; y -= this.plotWidthGrid) {
+      grid.moveTo(x + magneticRadius, y);
+      grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
+    }
+    for (let y = this.centerGrid.y; y < this.height; y += this.plotWidthGrid) {
+      grid.moveTo(x + magneticRadius, y);
+      grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
+    }
   }
 
   /**
@@ -11182,7 +11177,7 @@ class Z4CanvasGridPanel extends JSDropDown {
     this.offsetXSlider.setEnabled(this.showGridCheckBox.isSelected());
     this.offsetYSpinner.setEnabled(this.showGridCheckBox.isSelected());
     this.offsetYSlider.setEnabled(this.showGridCheckBox.isSelected());
-    this.canvas.setGrid(this.showGridCheckBox.isSelected(), this.center, this.plotWidthSlider.getValue(), this.magneticGridCheckBox.isSelected(), this.colorPanelLabel.getValue());
+    this.canvas.setGrid(this.showGridCheckBox.isSelected(), this.center, this.plotWidthSlider.getValue(), this.dottedGridCheckBox.isSelected(), this.magneticGridCheckBox.isSelected(), this.colorPanelLabel.getValue());
   }
 
   /**
@@ -11245,6 +11240,7 @@ class Z4CanvasGridPanel extends JSDropDown {
     this.vline2.getStyle().visibility = "hidden";
     this.plotWidthSpinner.setEnabled(false);
     this.plotWidthSpinner.setModel(new SpinnerNumberModel(20, 5, parseInt(Math.min(width, height) / 2), 1));
+    this.plotWidthSpinner.setValue(20);
     this.plotWidthSlider.setEnabled(false);
     this.plotWidthSlider.setMinimum(5);
     this.plotWidthSlider.setMaximum(parseInt(Math.min(width, height) / 2));
