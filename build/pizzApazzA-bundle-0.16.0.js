@@ -1271,18 +1271,20 @@ class Z4Math {
    * Returns, give a point and a grid, the point in the grid with the minimum
    * distance from the given point
    *
-   * @param point The point
-   * @param center The grid center
+   * @param x The x-axis coordinate of the point
+   * @param y The y-axis coordinate of the point
+   * @param cx The x-axis coordinate of the grid center
+   * @param cy The y-axis coordinate of the grid center
    * @param plotWidth The grid plot width
    * @param magnetismPercentage The grid magnetism percentage, in the range
    * ]0,1]
    * @return The point in the grid with the minimum distance from the given
    * point, if the given point is inside the magnetism area, null otherwise
    */
-  static  nearestPointInGrid(point, center, plotWidth, magnetismPercentage) {
-    let dx = center.x + parseInt(Math.round((point.x - center.x) / plotWidth) * plotWidth);
-    let dy = center.y + parseInt(Math.round((point.y - center.y) / plotWidth) * plotWidth);
-    return Z4Math.distance(point.x, point.y, dx, dy) <= magnetismPercentage * plotWidth ? new Point(dx, dy) : null;
+  static  nearestPointInGrid(x, y, cx, cy, plotWidth, magnetismPercentage) {
+    let dx = cx + Math.round((x - cx) / plotWidth) * plotWidth;
+    let dy = cy + Math.round((y - cy) / plotWidth) * plotWidth;
+    return Z4Math.distance(x, y, dx, dy) <= magnetismPercentage * plotWidth ? new Z4Point(dx, dy) : null;
   }
 
   /**
@@ -3557,29 +3559,15 @@ class Z4CanvasMouseManager {
   }
 
    onAction(action, x, y) {
-    if (action === Z4PointIteratorDrawingAction.START) {
-      this.onStartX = x;
-      this.onStartY = y;
-    } else if (this.drawingDirection === Z4DrawingDirection.FREE) {
-    } else if (this.drawingDirection === Z4DrawingDirection.HORIZONTAL) {
-      y = this.onStartY;
-    } else if (this.drawingDirection === Z4DrawingDirection.VERTICAL) {
-      x = this.onStartX;
-    }
-    if (!this.selectedDrawingTool || !this.selectedLayer) {
-    } else if (this.pressed && this.selectedDrawingTool.drawAction(action, x, y)) {
+    let point = this.checkPoint(action, x, y);
+    if (!this.selectedDrawingTool || !this.selectedLayer || !point) {
+    } else if (this.pressed && this.selectedDrawingTool.drawAction(action, point.x, point.y)) {
       this.ribbonHistoryPanel.stopStandard();
       this.iteratePoints(action);
     }
   }
 
    onStop(x, y) {
-    if (this.drawingDirection === Z4DrawingDirection.FREE) {
-    } else if (this.drawingDirection === Z4DrawingDirection.HORIZONTAL) {
-      y = this.onStartY;
-    } else if (this.drawingDirection === Z4DrawingDirection.VERTICAL) {
-      x = this.onStartX;
-    }
     this.pressed = false;
     if (!this.selectedDrawingTool || !this.selectedLayer) {
     } else if (this.selectedDrawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
@@ -3587,6 +3575,28 @@ class Z4CanvasMouseManager {
       this.iteratePoints(Z4PointIteratorDrawingAction.STOP);
     } else {
       this.startStandard();
+    }
+  }
+
+   checkPoint(action, x, y) {
+    let point = this.magneticGrid ? Z4Math.nearestPointInGrid(x, y, this.centerGrid.x, this.centerGrid.y, this.plotWidthGrid, Z4Constants.MAGNETISM_PERCENTAGE) : new Z4Point(x, y);
+    if (!point) {
+      if (action === Z4PointIteratorDrawingAction.START) {
+        this.pressed = false;
+      }
+      return null;
+    } else if (action === Z4PointIteratorDrawingAction.START) {
+      this.onStartX = x;
+      this.onStartY = y;
+      return point;
+    } else if (this.drawingDirection === Z4DrawingDirection.FREE) {
+      return point;
+    } else if (this.drawingDirection === Z4DrawingDirection.HORIZONTAL) {
+      return new Z4Point(point.x, this.onStartY);
+    } else if (this.drawingDirection === Z4DrawingDirection.VERTICAL) {
+      return new Z4Point(this.onStartX, point.y);
+    } else {
+      return null;
     }
   }
 

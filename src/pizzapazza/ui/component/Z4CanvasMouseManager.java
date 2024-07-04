@@ -7,9 +7,12 @@ import pizzapazza.iterator.Z4PointIteratorDrawingAction;
 import pizzapazza.math.Z4DrawingDirection;
 import pizzapazza.math.Z4DrawingPoint;
 import pizzapazza.math.Z4DrawingPointIntent;
+import pizzapazza.math.Z4Math;
+import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Vector;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
+import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4DrawingTool;
 import pizzapazza.util.Z4Layer;
 import pizzapazza.util.Z4UI;
@@ -169,31 +172,16 @@ public class Z4CanvasMouseManager {
   }
 
   private void onAction(Z4PointIteratorDrawingAction action, double x, double y) {
-    if (action == Z4PointIteratorDrawingAction.START) {
-      this.onStartX = x;
-      this.onStartY = y;
-    } else if (this.drawingDirection == Z4DrawingDirection.FREE) {
-    } else if (this.drawingDirection == Z4DrawingDirection.HORIZONTAL) {
-      y = this.onStartY;
-    } else if (this.drawingDirection == Z4DrawingDirection.VERTICAL) {
-      x = this.onStartX;
-    }
+    Z4Point point = this.checkPoint(action, x, y);
 
-    if (!$exists(this.selectedDrawingTool) || !$exists(this.selectedLayer)) {
-    } else if (this.pressed && this.selectedDrawingTool.drawAction(action, x, y)) {
+    if (!$exists(this.selectedDrawingTool) || !$exists(this.selectedLayer) || !$exists(point)) {
+    } else if (this.pressed && this.selectedDrawingTool.drawAction(action, point.x, point.y)) {
       this.ribbonHistoryPanel.stopStandard();
       this.iteratePoints(action);
     }
   }
 
   private void onStop(double x, double y) {
-    if (this.drawingDirection == Z4DrawingDirection.FREE) {
-    } else if (this.drawingDirection == Z4DrawingDirection.HORIZONTAL) {
-      y = this.onStartY;
-    } else if (this.drawingDirection == Z4DrawingDirection.VERTICAL) {
-      x = this.onStartX;
-    }
-
     this.pressed = false;
     if (!$exists(this.selectedDrawingTool) || !$exists(this.selectedLayer)) {
     } else if (this.selectedDrawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
@@ -201,6 +189,31 @@ public class Z4CanvasMouseManager {
       this.iteratePoints(Z4PointIteratorDrawingAction.STOP);
     } else {
       this.startStandard();
+    }
+  }
+
+  private Z4Point checkPoint(Z4PointIteratorDrawingAction action, double x, double y) {
+    Z4Point point = this.magneticGrid ? Z4Math.nearestPointInGrid(x, y, this.centerGrid.x, this.centerGrid.y, this.plotWidthGrid, Z4Constants.MAGNETISM_PERCENTAGE) : new Z4Point(x, y);
+
+    if (!$exists(point)) {
+      if (action == Z4PointIteratorDrawingAction.START) {
+        this.pressed = false;
+      }
+
+      return null;
+    } else if (action == Z4PointIteratorDrawingAction.START) {
+      this.onStartX = x;
+      this.onStartY = y;
+
+      return point;
+    } else if (this.drawingDirection == Z4DrawingDirection.FREE) {
+      return point;
+    } else if (this.drawingDirection == Z4DrawingDirection.HORIZONTAL) {
+      return new Z4Point(point.x, this.onStartY);
+    } else if (this.drawingDirection == Z4DrawingDirection.VERTICAL) {
+      return new Z4Point(this.onStartX, point.y);
+    } else {
+      return null;
     }
   }
 

@@ -157,29 +157,15 @@ class Z4CanvasMouseManager {
   }
 
    onAction(action, x, y) {
-    if (action === Z4PointIteratorDrawingAction.START) {
-      this.onStartX = x;
-      this.onStartY = y;
-    } else if (this.drawingDirection === Z4DrawingDirection.FREE) {
-    } else if (this.drawingDirection === Z4DrawingDirection.HORIZONTAL) {
-      y = this.onStartY;
-    } else if (this.drawingDirection === Z4DrawingDirection.VERTICAL) {
-      x = this.onStartX;
-    }
-    if (!this.selectedDrawingTool || !this.selectedLayer) {
-    } else if (this.pressed && this.selectedDrawingTool.drawAction(action, x, y)) {
+    let point = this.checkPoint(action, x, y);
+    if (!this.selectedDrawingTool || !this.selectedLayer || !point) {
+    } else if (this.pressed && this.selectedDrawingTool.drawAction(action, point.x, point.y)) {
       this.ribbonHistoryPanel.stopStandard();
       this.iteratePoints(action);
     }
   }
 
    onStop(x, y) {
-    if (this.drawingDirection === Z4DrawingDirection.FREE) {
-    } else if (this.drawingDirection === Z4DrawingDirection.HORIZONTAL) {
-      y = this.onStartY;
-    } else if (this.drawingDirection === Z4DrawingDirection.VERTICAL) {
-      x = this.onStartX;
-    }
     this.pressed = false;
     if (!this.selectedDrawingTool || !this.selectedLayer) {
     } else if (this.selectedDrawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
@@ -187,6 +173,28 @@ class Z4CanvasMouseManager {
       this.iteratePoints(Z4PointIteratorDrawingAction.STOP);
     } else {
       this.startStandard();
+    }
+  }
+
+   checkPoint(action, x, y) {
+    let point = this.magneticGrid ? Z4Math.nearestPointInGrid(x, y, this.centerGrid.x, this.centerGrid.y, this.plotWidthGrid, Z4Constants.MAGNETISM_PERCENTAGE) : new Z4Point(x, y);
+    if (!point) {
+      if (action === Z4PointIteratorDrawingAction.START) {
+        this.pressed = false;
+      }
+      return null;
+    } else if (action === Z4PointIteratorDrawingAction.START) {
+      this.onStartX = x;
+      this.onStartY = y;
+      return point;
+    } else if (this.drawingDirection === Z4DrawingDirection.FREE) {
+      return point;
+    } else if (this.drawingDirection === Z4DrawingDirection.HORIZONTAL) {
+      return new Z4Point(point.x, this.onStartY);
+    } else if (this.drawingDirection === Z4DrawingDirection.VERTICAL) {
+      return new Z4Point(this.onStartX, point.y);
+    } else {
+      return null;
     }
   }
 
