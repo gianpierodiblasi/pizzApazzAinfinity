@@ -4,7 +4,7 @@
 
 .z4historypreview summary canvas {
   border: 1px solid var(--main-action-bgcolor);
-  background-image: url(../image/chessboard.png);
+  background-image: url(../image/util/chessboard.png);
 }
 
 .z4historypreview summary button {
@@ -19,5 +19,5 @@
 
 .z4historypreview .z4historypreview-editor canvas {
   border: 1px solid var(--main-action-bgcolor);
-  background-image: url(../image/chessboard.png);
+  background-image: url(../image/util/chessboard.png);
 }

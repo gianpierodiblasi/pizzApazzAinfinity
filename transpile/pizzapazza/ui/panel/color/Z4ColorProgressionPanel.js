@@ -13,6 +13,8 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
 
    temporalStepSpinner = new JSSpinner();
 
+   resetOnStartMoving = new JSToggleButton();
+
    enabled = true;
 
    valueIsAdjusting = false;
@@ -67,7 +69,7 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
       this.valueIsAdjusting = false;
       this.onProgressionChange();
     });
-    this.setValue(new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.1, Z4Lighting.NONE));
+    this.setValue(new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.1, false, Z4Lighting.NONE));
     this.setProgressionSettings(Z4PointIteratorType.STAMPER, null, true, false, false);
   }
 
@@ -138,16 +140,16 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
       if ((this.radios[key]).isSelected()) {
         switch("" + key) {
           case "SPATIAL":
-            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, this.temporalStepSlider.getValue() / 100, this.resetOnStartMoving.isSelected(), this.lightingPanel.getValue());
             break;
           case "TEMPORAL":
-            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.TEMPORAL, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.TEMPORAL, this.temporalStepSlider.getValue() / 100, this.resetOnStartMoving.isSelected(), this.lightingPanel.getValue());
             break;
           case "RELATIVE_TO_PATH":
-            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, this.temporalStepSlider.getValue() / 100, this.resetOnStartMoving.isSelected(), this.lightingPanel.getValue());
             break;
           case "RANDOM":
-            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.RANDOM, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.RANDOM, this.temporalStepSlider.getValue() / 100, this.resetOnStartMoving.isSelected(), this.lightingPanel.getValue());
             break;
         }
       }

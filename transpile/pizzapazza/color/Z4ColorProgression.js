@@ -9,6 +9,8 @@ class Z4ColorProgression extends Z4NextableWithParam {
 
    temporalStepProgression = 0.0;
 
+   resetOnStartMoving = false;
+
    lighting = null;
 
   /**
@@ -17,12 +19,15 @@ class Z4ColorProgression extends Z4NextableWithParam {
    * @param behavior The color progression behavior
    * @param temporalStepProgression The step for temporal progression (in the
    * range [0,1])
+   * @param resetOnStartMoving true to reset the temporal position when the
+   * moving starts, false otherwise
    * @param lighting The color lighting
    */
-  constructor(behavior, temporalStepProgression, lighting) {
+  constructor(behavior, temporalStepProgression, resetOnStartMoving, lighting) {
     super();
     this.behavior = behavior;
     this.temporalStepProgression = temporalStepProgression;
+    this.resetOnStartMoving = resetOnStartMoving;
     this.lighting = lighting;
   }
 
@@ -42,6 +47,16 @@ class Z4ColorProgression extends Z4NextableWithParam {
    */
    getTemporalStepProgression() {
     return this.temporalStepProgression;
+  }
+
+  /**
+   * Checks if the temporal position has to be reset on start moving
+   *
+   * @return true to reset the temporal position when the moving starts, false
+   * otherwise
+   */
+   isResetOnStartMoving() {
+    return resetOnStartMoving;
   }
 
   /**
@@ -65,6 +80,7 @@ class Z4ColorProgression extends Z4NextableWithParam {
     let json = new Object();
     json["behavior"] = this.behavior;
     json["temporalStepProgression"] = this.temporalStepProgression;
+    json["resetOnStartMoving"] = this.resetOnStartMoving;
     json["lighting"] = this.lighting;
     return json;
   }
@@ -99,13 +115,13 @@ class Z4ColorProgression extends Z4NextableWithParam {
     }
     switch("" + json["behavior"]) {
       case "SPATIAL":
-        return new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, json["temporalStepProgression"], lighting);
+        return new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, json["temporalStepProgression"], json["resetOnStartMoving"], lighting);
       case "TEMPORAL":
-        return new Z4ColorProgression(Z4ColorProgressionBehavior.TEMPORAL, json["temporalStepProgression"], lighting);
+        return new Z4ColorProgression(Z4ColorProgressionBehavior.TEMPORAL, json["temporalStepProgression"], json["resetOnStartMoving"], lighting);
       case "RELATIVE_TO_PATH":
-        return new Z4ColorProgression(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, json["temporalStepProgression"], lighting);
+        return new Z4ColorProgression(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, json["temporalStepProgression"], json["resetOnStartMoving"], lighting);
       case "RANDOM":
-        return new Z4ColorProgression(Z4ColorProgressionBehavior.RANDOM, json["temporalStepProgression"], lighting);
+        return new Z4ColorProgression(Z4ColorProgressionBehavior.RANDOM, json["temporalStepProgression"], json["resetOnStartMoving"], lighting);
       default:
         return null;
     }

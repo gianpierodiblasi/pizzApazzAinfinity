@@ -5718,7 +5718,7 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
   }
 
    create() {
-    this.canvas.addDrawingTool(new Z4DrawingTool(this.canvas.findDrawingToolName(), new Z4Stamper(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)), new Z4Shape2DPainter(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), false, false, -1, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0)), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)), new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE)));
+    this.canvas.addDrawingTool(new Z4DrawingTool(this.canvas.findDrawingToolName(), new Z4Stamper(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)), new Z4Shape2DPainter(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), false, false, -1, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0)), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)), new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE)));
   }
 
    open() {
@@ -7299,6 +7299,8 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
 
    temporalStepSpinner = new JSSpinner();
 
+   resetOnStartMoving = new JSToggleButton();
+
    enabled = true;
 
    valueIsAdjusting = false;
@@ -7353,7 +7355,7 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
       this.valueIsAdjusting = false;
       this.onProgressionChange();
     });
-    this.setValue(new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.1, Z4Lighting.NONE));
+    this.setValue(new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.1, false, Z4Lighting.NONE));
     this.setProgressionSettings(Z4PointIteratorType.STAMPER, null, true, false, false);
   }
 
@@ -7424,16 +7426,16 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
       if ((this.radios[key]).isSelected()) {
         switch("" + key) {
           case "SPATIAL":
-            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, this.temporalStepSlider.getValue() / 100, this.resetOnStartMoving.isSelected(), this.lightingPanel.getValue());
             break;
           case "TEMPORAL":
-            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.TEMPORAL, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.TEMPORAL, this.temporalStepSlider.getValue() / 100, this.resetOnStartMoving.isSelected(), this.lightingPanel.getValue());
             break;
           case "RELATIVE_TO_PATH":
-            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, this.temporalStepSlider.getValue() / 100, this.resetOnStartMoving.isSelected(), this.lightingPanel.getValue());
             break;
           case "RANDOM":
-            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.RANDOM, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.RANDOM, this.temporalStepSlider.getValue() / 100, this.resetOnStartMoving.isSelected(), this.lightingPanel.getValue());
             break;
         }
       }
@@ -10613,7 +10615,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     this.actions.setLayout(new GridBagLayout());
     this.pane.addTab(Z4Translations.ACTIONS, this.actions);
     this.pane.appendChildInTree(".west ul", panelRadioContainer);
-    this.setValue(new Z4DrawingTool(Z4Translations.DRAWING_TOOL, new Z4Stamper(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)), new Z4Shape2DPainter(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), false, false, -1, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0)), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)), new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE)));
+    this.setValue(new Z4DrawingTool(Z4Translations.DRAWING_TOOL, new Z4Stamper(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)), new Z4Shape2DPainter(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), false, false, -1, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Color(0, 0, 0, 0)), Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)), new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE)));
   }
 
    setSelectedButton(button) {
@@ -13655,6 +13657,8 @@ class Z4ColorProgression extends Z4NextableWithParam {
 
    temporalStepProgression = 0.0;
 
+   resetOnStartMoving = false;
+
    lighting = null;
 
   /**
@@ -13663,12 +13667,15 @@ class Z4ColorProgression extends Z4NextableWithParam {
    * @param behavior The color progression behavior
    * @param temporalStepProgression The step for temporal progression (in the
    * range [0,1])
+   * @param resetOnStartMoving true to reset the temporal position when the
+   * moving starts, false otherwise
    * @param lighting The color lighting
    */
-  constructor(behavior, temporalStepProgression, lighting) {
+  constructor(behavior, temporalStepProgression, resetOnStartMoving, lighting) {
     super();
     this.behavior = behavior;
     this.temporalStepProgression = temporalStepProgression;
+    this.resetOnStartMoving = resetOnStartMoving;
     this.lighting = lighting;
   }
 
@@ -13688,6 +13695,16 @@ class Z4ColorProgression extends Z4NextableWithParam {
    */
    getTemporalStepProgression() {
     return this.temporalStepProgression;
+  }
+
+  /**
+   * Checks if the temporal position has to be reset on start moving
+   *
+   * @return true to reset the temporal position when the moving starts, false
+   * otherwise
+   */
+   isResetOnStartMoving() {
+    return resetOnStartMoving;
   }
 
   /**
@@ -13711,6 +13728,7 @@ class Z4ColorProgression extends Z4NextableWithParam {
     let json = new Object();
     json["behavior"] = this.behavior;
     json["temporalStepProgression"] = this.temporalStepProgression;
+    json["resetOnStartMoving"] = this.resetOnStartMoving;
     json["lighting"] = this.lighting;
     return json;
   }
@@ -13745,13 +13763,13 @@ class Z4ColorProgression extends Z4NextableWithParam {
     }
     switch("" + json["behavior"]) {
       case "SPATIAL":
-        return new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, json["temporalStepProgression"], lighting);
+        return new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, json["temporalStepProgression"], json["resetOnStartMoving"], lighting);
       case "TEMPORAL":
-        return new Z4ColorProgression(Z4ColorProgressionBehavior.TEMPORAL, json["temporalStepProgression"], lighting);
+        return new Z4ColorProgression(Z4ColorProgressionBehavior.TEMPORAL, json["temporalStepProgression"], json["resetOnStartMoving"], lighting);
       case "RELATIVE_TO_PATH":
-        return new Z4ColorProgression(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, json["temporalStepProgression"], lighting);
+        return new Z4ColorProgression(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, json["temporalStepProgression"], json["resetOnStartMoving"], lighting);
       case "RANDOM":
-        return new Z4ColorProgression(Z4ColorProgressionBehavior.RANDOM, json["temporalStepProgression"], lighting);
+        return new Z4ColorProgression(Z4ColorProgressionBehavior.RANDOM, json["temporalStepProgression"], json["resetOnStartMoving"], lighting);
       default:
         return null;
     }
@@ -14165,7 +14183,7 @@ class Z4Airbrush extends Z4PointIterator {
    drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
     painter = painter ? painter : new Z4ArrowPainter();
     spatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
-    progression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
+    progression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE);
     this.drawAction(Z4PointIteratorDrawingAction.START, width / 2, height / 2);
     let next = null;
     while ((next = this.next(spatioTemporalColor, progression)) !== null) {
@@ -14309,7 +14327,7 @@ class Z4Scatterer extends Z4PointIterator {
    drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
     let finalPainter = painter ? painter : new Z4ArrowPainter();
     let finalSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
-    let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
+    let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE);
     this.initDraw(width, height).forEach((point, index, array) => {
       this.drawAction(index ? Z4PointIteratorDrawingAction.CONTINUE : Z4PointIteratorDrawingAction.START, point.x, point.y);
       context.save();
@@ -14469,7 +14487,7 @@ class Z4Spirograph extends Z4PointIterator {
    drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
     let finalPainter = painter ? painter : new Z4ArrowPainter();
     let finalSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
-    let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
+    let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE);
     let points = this.initDraw(width, height);
     let start = points[0];
     this.drawAction(Z4PointIteratorDrawingAction.START, start.x, start.y);
@@ -14630,7 +14648,7 @@ class Z4Stamper extends Z4PointIterator {
    drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
     let finalPainter = painter ? painter : new Z4ArrowPainter();
     let finalSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
-    let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
+    let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE);
     this.initDraw(width, height).forEach(point => {
       this.drawAction(Z4PointIteratorDrawingAction.START, point.x, point.y);
       context.save();
@@ -14954,7 +14972,7 @@ class Z4Tracer extends Z4PointIterator {
    drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
     painter = painter ? painter : new Z4ArrowPainter();
     spatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
-    progression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
+    progression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE);
     let bezier = width > height ? new Bezier(width / 10, height / 3, width / 2, 3 * height / 2, width / 2, -height / 2, 9 * width / 10, height / 2) : new Bezier(width / 3, 9 * height / 10, 3 * width / 2, height / 2, -width / 2, height / 2, width / 2, height / 10);
     let p = bezier.get(0);
     this.drawAction(Z4PointIteratorDrawingAction.START, p.x, p.y);
@@ -17791,6 +17809,8 @@ class Z4Translations {
 
   static  PLOT_WIDTH = "";
 
+  static  RESET_ON_START_MOVING = "";
+
   // Color
   static  COLOR = "";
 
@@ -18114,6 +18134,7 @@ class Z4Translations {
     Z4Translations.MAGNETIC_GRID = "Magnetic Grid";
     Z4Translations.DOTTED_GRID = "Dotted Grid";
     Z4Translations.PLOT_WIDTH = "Plot Width";
+    Z4Translations.RESET_ON_START_MOVING = "Reset on Start Moving";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -18337,6 +18358,7 @@ class Z4Translations {
     Z4Translations.MAGNETIC_GRID = "Griglia Magnetica";
     Z4Translations.DOTTED_GRID = "Griglia Punteggiata";
     Z4Translations.PLOT_WIDTH = "Larghezza Trama";
+    Z4Translations.RESET_ON_START_MOVING = "Riavvia su Inizio del Movimento";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";

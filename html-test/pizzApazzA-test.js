@@ -15,7 +15,7 @@ class TestBiGradientColor extends JSFrame {
     this.getContentPane().add(this.panel, BorderLayout.CENTER);
     this.canvas.setAttribute("width", "500");
     this.canvas.setAttribute("height", "500");
-    this.canvas.style.backgroundImage = "url(../../../image/chessboard.png)";
+    this.canvas.style.backgroundImage = "url(../../../image/util/chessboard.png)";
     let buttons = new JSPanel();
     let button = new JSButton();
     button.setText("WHITE->BLACK");
@@ -208,7 +208,7 @@ class TestGradientColor extends JSFrame {
     this.getContentPane().add(this.panel, BorderLayout.CENTER);
     this.canvas.setAttribute("width", "500");
     this.canvas.setAttribute("height", "100");
-    this.canvas.style.backgroundImage = "url(../../../image/chessboard.png)";
+    this.canvas.style.backgroundImage = "url(../../../image/util/chessboard.png)";
     let buttons = new JSPanel();
     let button = new JSButton();
     button.setText("WHITE->BLACK");
@@ -974,7 +974,7 @@ class TestColorProgressingPanel extends JSFrame {
     p.add(disabled, new GBC(1, 3).wx(1).i(5, 5, 5, 5));
     this.panels.push(disabled);
     let lighted = new Z4ColorProgressionPanel(Z4ColorProgressionPanelOrientation.HORIZONTALLY_COMPACT);
-    lighted.setValue(Z4ColorProgression.fromJSON(new Z4ColorProgression(Z4ColorProgressionBehavior.TEMPORAL, 0.34, Z4Lighting.LIGHTED_IN_OUT).toJSON()));
+    lighted.setValue(Z4ColorProgression.fromJSON(new Z4ColorProgression(Z4ColorProgressionBehavior.TEMPORAL, 0.34, false, Z4Lighting.LIGHTED_IN_OUT).toJSON()));
     lighted.addChangeListener(event => {
       if (!lighted.getValueIsAdjusting()) {
         console.log(lighted.getValue());

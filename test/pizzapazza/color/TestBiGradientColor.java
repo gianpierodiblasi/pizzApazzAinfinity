@@ -32,7 +32,7 @@ public class TestBiGradientColor extends JSFrame {
 
     this.canvas.setAttribute("width", "500");
     this.canvas.setAttribute("height", "500");
-    this.canvas.style.backgroundImage = "url(../../../image/chessboard.png)";
+    this.canvas.style.backgroundImage = "url(../../../image/util/chessboard.png)";
 
     JSPanel buttons = new JSPanel();
 

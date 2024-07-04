@@ -12,6 +12,7 @@ public class Z4ColorProgression implements Z4NextableWithParam<Double, Double> {
 
   private final Z4ColorProgressionBehavior behavior;
   private final double temporalStepProgression;
+  private final boolean resetOnStartMoving;
   private final Z4Lighting lighting;
 
   /**
@@ -20,12 +21,16 @@ public class Z4ColorProgression implements Z4NextableWithParam<Double, Double> {
    * @param behavior The color progression behavior
    * @param temporalStepProgression The step for temporal progression (in the
    * range [0,1])
+   * @param resetOnStartMoving true to reset the temporal position when the
+   * moving starts, false otherwise
    * @param lighting The color lighting
+   *
    */
-  public Z4ColorProgression(Z4ColorProgressionBehavior behavior, double temporalStepProgression, Z4Lighting lighting) {
+  public Z4ColorProgression(Z4ColorProgressionBehavior behavior, double temporalStepProgression, boolean resetOnStartMoving, Z4Lighting lighting) {
     super();
     this.behavior = behavior;
     this.temporalStepProgression = temporalStepProgression;
+    this.resetOnStartMoving = resetOnStartMoving;
     this.lighting = lighting;
   }
 
@@ -45,6 +50,16 @@ public class Z4ColorProgression implements Z4NextableWithParam<Double, Double> {
    */
   public double getTemporalStepProgression() {
     return this.temporalStepProgression;
+  }
+
+  /**
+   * Checks if the temporal position has to be reset on start moving
+   *
+   * @return true to reset the temporal position when the moving starts, false
+   * otherwise
+   */
+  public boolean isResetOnStartMoving() {
+    return resetOnStartMoving;
   }
 
   /**
@@ -70,6 +85,7 @@ public class Z4ColorProgression implements Z4NextableWithParam<Double, Double> {
     $Object json = new $Object();
     json.$set("behavior", this.behavior);
     json.$set("temporalStepProgression", this.temporalStepProgression);
+    json.$set("resetOnStartMoving", this.resetOnStartMoving);
     json.$set("lighting", this.lighting);
     return json;
   }
@@ -106,13 +122,13 @@ public class Z4ColorProgression implements Z4NextableWithParam<Double, Double> {
 
     switch ("" + json.$get("behavior")) {
       case "SPATIAL":
-        return new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, json.$get("temporalStepProgression"), lighting);
+        return new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, json.$get("temporalStepProgression"), json.$get("resetOnStartMoving"), lighting);
       case "TEMPORAL":
-        return new Z4ColorProgression(Z4ColorProgressionBehavior.TEMPORAL, json.$get("temporalStepProgression"), lighting);
+        return new Z4ColorProgression(Z4ColorProgressionBehavior.TEMPORAL, json.$get("temporalStepProgression"), json.$get("resetOnStartMoving"), lighting);
       case "RELATIVE_TO_PATH":
-        return new Z4ColorProgression(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, json.$get("temporalStepProgression"), lighting);
+        return new Z4ColorProgression(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, json.$get("temporalStepProgression"), json.$get("resetOnStartMoving"), lighting);
       case "RANDOM":
-        return new Z4ColorProgression(Z4ColorProgressionBehavior.RANDOM, json.$get("temporalStepProgression"), lighting);
+        return new Z4ColorProgression(Z4ColorProgressionBehavior.RANDOM, json.$get("temporalStepProgression"), json.$get("resetOnStartMoving"), lighting);
       default:
         return null;
     }

@@ -271,7 +271,7 @@ class Z4Tracer extends Z4PointIterator {
    drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
     painter = painter ? painter : new Z4ArrowPainter();
     spatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
-    progression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
+    progression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE);
     let bezier = width > height ? new Bezier(width / 10, height / 3, width / 2, 3 * height / 2, width / 2, -height / 2, 9 * width / 10, height / 2) : new Bezier(width / 3, 9 * height / 10, 3 * width / 2, height / 2, -width / 2, height / 2, width / 2, height / 10);
     let p = bezier.get(0);
     this.drawAction(Z4PointIteratorDrawingAction.START, p.x, p.y);

@@ -101,7 +101,7 @@ class Z4Stamper extends Z4PointIterator {
    drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
     let finalPainter = painter ? painter : new Z4ArrowPainter();
     let finalSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
-    let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
+    let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE);
     this.initDraw(width, height).forEach(point => {
       this.drawAction(Z4PointIteratorDrawingAction.START, point.x, point.y);
       context.save();

@@ -15,7 +15,7 @@ class TestGradientColor extends JSFrame {
     this.getContentPane().add(this.panel, BorderLayout.CENTER);
     this.canvas.setAttribute("width", "500");
     this.canvas.setAttribute("height", "100");
-    this.canvas.style.backgroundImage = "url(../../../image/chessboard.png)";
+    this.canvas.style.backgroundImage = "url(../../../image/util/chessboard.png)";
     let buttons = new JSPanel();
     let button = new JSButton();
     button.setText("WHITE->BLACK");

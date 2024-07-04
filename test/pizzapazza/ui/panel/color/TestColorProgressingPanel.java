@@ -75,7 +75,7 @@ public class TestColorProgressingPanel extends JSFrame {
     this.panels.push(disabled);
 
     Z4ColorProgressionPanel lighted = new Z4ColorProgressionPanel(Z4ColorProgressionPanelOrientation.HORIZONTALLY_COMPACT);
-    lighted.setValue(Z4ColorProgression.fromJSON(new Z4ColorProgression(Z4ColorProgressionBehavior.TEMPORAL, 0.34, Z4Lighting.LIGHTED_IN_OUT).toJSON()));
+    lighted.setValue(Z4ColorProgression.fromJSON(new Z4ColorProgression(Z4ColorProgressionBehavior.TEMPORAL, 0.34, false, Z4Lighting.LIGHTED_IN_OUT).toJSON()));
     lighted.addChangeListener(event -> {
       if (!lighted.getValueIsAdjusting()) {
         console.log(lighted.getValue());

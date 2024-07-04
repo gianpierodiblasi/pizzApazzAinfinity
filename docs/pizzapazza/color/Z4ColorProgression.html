@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var data = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -167,8 +167,9 @@ implements <a href="../math/Z4NextableWithParam.html" title="interface in pizzap
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(pizzapazza.color.Z4ColorProgressionBehavior,double,pizzapazza.color.Z4Lighting)">Z4ColorProgression</a></span>&#8203;(<a href="Z4ColorProgressionBehavior.html" title="enum in pizzapazza.color">Z4ColorProgressionBehavior</a>&nbsp;behavior,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(pizzapazza.color.Z4ColorProgressionBehavior,double,boolean,pizzapazza.color.Z4Lighting)">Z4ColorProgression</a></span>&#8203;(<a href="Z4ColorProgressionBehavior.html" title="enum in pizzapazza.color">Z4ColorProgressionBehavior</a>&nbsp;behavior,
                   double&nbsp;temporalStepProgression,
+                  boolean&nbsp;resetOnStartMoving,
                   <a href="Z4Lighting.html" title="enum in pizzapazza.color">Z4Lighting</a>&nbsp;lighting)</code></th>
 <td class="colLast">
 <div class="block">Creates the object</div>
@@ -221,13 +222,20 @@ implements <a href="../math/Z4NextableWithParam.html" title="interface in pizzap
 </td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isResetOnStartMoving()">isResetOnStartMoving</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Checks if the temporal position has to be reset on start moving</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>java.lang.Double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#next(java.lang.Double)">next</a></span>&#8203;(java.lang.Double&nbsp;position)</code></th>
 <td class="colLast">
 <div class="block">Returns the next value</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>simulation.js.$Object</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toJSON()">toJSON</a></span>()</code></th>
 <td class="colLast">
@@ -258,7 +266,7 @@ implements <a href="../math/Z4NextableWithParam.html" title="interface in pizzap
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(pizzapazza.color.Z4ColorProgressionBehavior,double,pizzapazza.color.Z4Lighting)">
+<a id="&lt;init&gt;(pizzapazza.color.Z4ColorProgressionBehavior,double,boolean,pizzapazza.color.Z4Lighting)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -266,6 +274,7 @@ implements <a href="../math/Z4NextableWithParam.html" title="interface in pizzap
 <h4>Z4ColorProgression</h4>
 <pre>public&nbsp;Z4ColorProgression&#8203;(<a href="Z4ColorProgressionBehavior.html" title="enum in pizzapazza.color">Z4ColorProgressionBehavior</a>&nbsp;behavior,
                           double&nbsp;temporalStepProgression,
+                          boolean&nbsp;resetOnStartMoving,
                           <a href="Z4Lighting.html" title="enum in pizzapazza.color">Z4Lighting</a>&nbsp;lighting)</pre>
 <div class="block">Creates the object</div>
 <dl>
@@ -273,6 +282,8 @@ implements <a href="../math/Z4NextableWithParam.html" title="interface in pizzap
 <dd><code>behavior</code> - The color progression behavior</dd>
 <dd><code>temporalStepProgression</code> - The step for temporal progression (in the
  range [0,1])</dd>
+<dd><code>resetOnStartMoving</code> - true to reset the temporal position when the
+ moving starts, false otherwise</dd>
 <dd><code>lighting</code> - The color lighting</dd>
 </dl>
 </li>
@@ -312,6 +323,21 @@ implements <a href="../math/Z4NextableWithParam.html" title="interface in pizzap
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The step for temporal progression (in the range [0,1])</dd>
+</dl>
+</li>
+</ul>
+<a id="isResetOnStartMoving()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isResetOnStartMoving</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isResetOnStartMoving()</pre>
+<div class="block">Checks if the temporal position has to be reset on start moving</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true to reset the temporal position when the moving starts, false
+ otherwise</dd>
 </dl>
 </li>
 </ul>

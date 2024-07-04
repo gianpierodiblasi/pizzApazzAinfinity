@@ -150,7 +150,7 @@ public class Z4Translations {
   public static String MAGNETIC_GRID = "";
   public static String DOTTED_GRID = "";
   public static String PLOT_WIDTH = "";
-
+  public static String RESET_ON_START_MOVING = "";
   // Color
   public static String COLOR = "";
   public static String FILLING_COLOR = "";
@@ -405,6 +405,7 @@ public class Z4Translations {
     Z4Translations.MAGNETIC_GRID = "Magnetic Grid";
     Z4Translations.DOTTED_GRID = "Dotted Grid";
     Z4Translations.PLOT_WIDTH = "Plot Width";
+    Z4Translations.RESET_ON_START_MOVING = "Reset on Start Moving";
 
     // Color
     Z4Translations.COLOR = "Color";
@@ -644,6 +645,7 @@ public class Z4Translations {
     Z4Translations.MAGNETIC_GRID = "Griglia Magnetica";
     Z4Translations.DOTTED_GRID = "Griglia Punteggiata";
     Z4Translations.PLOT_WIDTH = "Larghezza Trama";
+    Z4Translations.RESET_ON_START_MOVING = "Riavvia su Inizio del Movimento";
 
     // Color
     Z4Translations.COLOR = "Colore";

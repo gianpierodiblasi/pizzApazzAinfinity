@@ -118,7 +118,7 @@
 
 .z4bigradientcolorpanel canvas, .z4gradientcolorpanel canvas {
   border: 1px solid var(--main-action-bgcolor);
-  background-image: url(../image/chessboard.png);
+  background-image: url(../image/util/chessboard.png);
 }
 
 /* panel/ribbon */

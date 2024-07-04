@@ -11,6 +11,7 @@ import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
 import javascript.swing.JSSlider;
 import javascript.swing.JSSpinner;
+import javascript.swing.JSToggleButton;
 import javascript.swing.SpinnerNumberModel;
 import pizzapazza.color.Z4ColorProgression;
 import pizzapazza.color.Z4ColorProgressionBehavior;
@@ -35,6 +36,7 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
   private final Array<JSRadioButton> radios = new Array<>();
   private final JSSlider temporalStepSlider = new JSSlider();
   private final JSSpinner temporalStepSpinner = new JSSpinner();
+  private final JSToggleButton resetOnStartMoving = new JSToggleButton();
 
   private boolean enabled = true;
   private boolean valueIsAdjusting;
@@ -101,7 +103,7 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
       this.onProgressionChange();
     });
 
-    this.setValue(new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.1, Z4Lighting.NONE));
+    this.setValue(new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0.1, false, Z4Lighting.NONE));
     this.setProgressionSettings(Z4PointIteratorType.STAMPER, null, true, false, false);
   }
 
@@ -177,16 +179,16 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
       if (((JSRadioButton) this.radios.$get(key)).isSelected()) {
         switch ("" + key) {
           case "SPATIAL":
-            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, this.temporalStepSlider.getValue() / 100, this.resetOnStartMoving.isSelected(), this.lightingPanel.getValue());
             break;
           case "TEMPORAL":
-            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.TEMPORAL, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.TEMPORAL, this.temporalStepSlider.getValue() / 100, this.resetOnStartMoving.isSelected(), this.lightingPanel.getValue());
             break;
           case "RELATIVE_TO_PATH":
-            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, this.temporalStepSlider.getValue() / 100, this.resetOnStartMoving.isSelected(), this.lightingPanel.getValue());
             break;
           case "RANDOM":
-            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.RANDOM, this.temporalStepSlider.getValue() / 100, this.lightingPanel.getValue());
+            this.value = new Z4ColorProgression(Z4ColorProgressionBehavior.RANDOM, this.temporalStepSlider.getValue() / 100, this.resetOnStartMoving.isSelected(), this.lightingPanel.getValue());
             break;
         }
       }
@@ -242,7 +244,7 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
         radio.getStyle().visibility = "visible";
       });
 
-      if (type == Z4PointIteratorType.STAMPER || (type == Z4PointIteratorType.SPIROGRAPH && !$exists(options.$get("drawWhileMoving")))||type == Z4PointIteratorType.SCATTERER) {
+      if (type == Z4PointIteratorType.STAMPER || (type == Z4PointIteratorType.SPIROGRAPH && !$exists(options.$get("drawWhileMoving"))) || type == Z4PointIteratorType.SCATTERER) {
         JSRadioButton relative = this.radios.$get("" + Z4ColorProgressionBehavior.RELATIVE_TO_PATH);
         relative.setEnabled(false);
         relative.setContentAreaFilled(false);
@@ -266,7 +268,7 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
       spatial.setContentAreaFilled(false);
 
       JSRadioButton relative = this.radios.$get("" + Z4ColorProgressionBehavior.RELATIVE_TO_PATH);
-      if (type == Z4PointIteratorType.STAMPER || (type == Z4PointIteratorType.SPIROGRAPH && $exists(options.$get("drawWhileMoving")))||type == Z4PointIteratorType.SCATTERER) {
+      if (type == Z4PointIteratorType.STAMPER || (type == Z4PointIteratorType.SPIROGRAPH && $exists(options.$get("drawWhileMoving"))) || type == Z4PointIteratorType.SCATTERER) {
         relative.setEnabled(false);
         relative.setContentAreaFilled(false);
       }

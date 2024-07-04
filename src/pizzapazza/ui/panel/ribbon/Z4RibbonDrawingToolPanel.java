@@ -140,7 +140,7 @@ public class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
                     new Color(0, 0, 0, 0)
             ),
             Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)),
-            new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE)
+            new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE)
     ));
   }
 

@@ -11,6 +11,6 @@
 }
 
 .z4canvas .main-canvas {
-  background-image: url(../image/chessboard.png);
+  background-image: url(../image/util/chessboard.png);
   pointer-events: auto;
 }

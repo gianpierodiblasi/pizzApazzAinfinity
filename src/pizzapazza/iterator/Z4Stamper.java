@@ -142,7 +142,7 @@ public class Z4Stamper extends Z4PointIterator {
   public void drawDemo($CanvasRenderingContext2D context, Z4Painter painter, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression, double width, double height, boolean valueIsAdjusting) {
     Z4Painter finalPainter = $exists(painter) ? painter : new Z4ArrowPainter();
     Z4SpatioTemporalColor finalSpatioTemporalColor = $exists(spatioTemporalColor) ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
-    Z4ColorProgression finalColorProgression = $exists(progression) ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, Z4Lighting.NONE);
+    Z4ColorProgression finalColorProgression = $exists(progression) ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE);
 
     this.initDraw(width, height).forEach(point -> {
       this.drawAction(Z4PointIteratorDrawingAction.START, point.x, point.y);

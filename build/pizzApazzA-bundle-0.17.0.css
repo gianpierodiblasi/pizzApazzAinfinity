@@ -118,7 +118,7 @@
 
 .z4bigradientcolorpanel canvas, .z4gradientcolorpanel canvas {
   border: 1px solid var(--main-action-bgcolor);
-  background-image: url(../image/chessboard.png);
+  background-image: url(../image/util/chessboard.png);
 }
 
 /* panel/ribbon */
@@ -172,10 +172,10 @@
 }
 .z4abstractfillerpanel canvas {
   border: 1px solid var(--main-action-bgcolor);
-  background-image: url(../image/chessboard.png);
+  background-image: url(../image/util/chessboard.png);
 }
 .z4abstractfillerpanel img {
-  background-image: url(../image/chessboard.png);
+  background-image: url(../image/util/chessboard.png);
 }
 
 .z4abstractfillerpanel div label img {
@@ -323,7 +323,7 @@
 }
 
 .z4canvas .main-canvas {
-  background-image: url(../image/chessboard.png);
+  background-image: url(../image/util/chessboard.png);
   pointer-events: auto;
 }
 .z4canvasgridpanel {
@@ -533,11 +533,11 @@
 
 .z4drawingtoolpanel .z4drawingtoolpanel-preview {
   border: 1px solid var(--main-action-bgcolor);
-  background-image: url(../image/chessboard.png);
+  background-image: url(../image/util/chessboard.png);
   border-radius: var(--roundness);
 }
 .z4drawingtoolpanel .z4drawingtoolpanel-transparent {
-  background-image: url(../image/chessboard.png);
+  background-image: url(../image/util/chessboard.png);
 }.z4drawingtoolpreview {
   margin-right: 2px;
 }
@@ -552,7 +552,7 @@
 
 .z4drawingtoolpreview summary canvas {
   border: 1px solid var(--main-action-bgcolor);
-  background-image: url(../image/chessboard.png);
+  background-image: url(../image/util/chessboard.png);
 }
 
 .z4drawingtoolpreview summary button {
@@ -625,7 +625,7 @@
 
 .z4historypreview summary canvas {
   border: 1px solid var(--main-action-bgcolor);
-  background-image: url(../image/chessboard.png);
+  background-image: url(../image/util/chessboard.png);
 }
 
 .z4historypreview summary button {
@@ -640,7 +640,7 @@
 
 .z4historypreview .z4historypreview-editor canvas {
   border: 1px solid var(--main-action-bgcolor);
-  background-image: url(../image/chessboard.png);
+  background-image: url(../image/util/chessboard.png);
 }.z4layerpreview {
   margin-right: 2px;
 }
@@ -655,7 +655,7 @@
 
 .z4layerpreview summary canvas {
   border: 1px solid var(--main-action-bgcolor);
-  background-image: url(../image/chessboard.png);
+  background-image: url(../image/util/chessboard.png);
 }
 
 .z4layerpreview summary button {
