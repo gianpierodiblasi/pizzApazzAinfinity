@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -282,6 +282,19 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i6" class="altColor">
+<td class="colFirst"><code>static <a href="Z4Point.html" title="class in pizzapazza.math">Z4Point</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#nearestPointInGrid(double,double,double,double,int,double)">nearestPointInGrid</a></span>&#8203;(double&nbsp;x,
+                  double&nbsp;y,
+                  double&nbsp;cx,
+                  double&nbsp;cy,
+                  int&nbsp;plotWidth,
+                  double&nbsp;magnetismPercentage)</code></th>
+<td class="colLast">
+<div class="block">Returns, give a point and a grid, the point in the grid with the minimum
+ distance from the given point</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#ptLineDist(double,double,double,double,double,double)">ptLineDist</a></span>&#8203;(double&nbsp;x1,
           double&nbsp;y1,
@@ -293,7 +306,7 @@ extends java.lang.Object</pre>
 <div class="block">Returns the distance from a point to a (infinite) line</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#ptLineDistSq(double,double,double,double,double,double)">ptLineDistSq</a></span>&#8203;(double&nbsp;x1,
             double&nbsp;y1,
@@ -305,7 +318,7 @@ extends java.lang.Object</pre>
 <div class="block">Returns the square of the distance from a point to a (infinite) line</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#ptSegDist(double,double,double,double,double,double)">ptSegDist</a></span>&#8203;(double&nbsp;x1,
          double&nbsp;y1,
@@ -317,7 +330,7 @@ extends java.lang.Object</pre>
 <div class="block">Returns the distance from a point to a line segment</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#ptSegDistSq(double,double,double,double,double,double)">ptSegDistSq</a></span>&#8203;(double&nbsp;x1,
            double&nbsp;y1,
@@ -329,14 +342,14 @@ extends java.lang.Object</pre>
 <div class="block">Returns the square of the distance from a point to a line segment</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rad2deg(double)">rad2deg</a></span>&#8203;(double&nbsp;radians)</code></th>
 <td class="colLast">
 <div class="block">Converts an angle from radiants to degrees</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#randomCorrected(double)">randomCorrected</a></span>&#8203;(double&nbsp;factor)</code></th>
 <td class="colLast">
@@ -344,7 +357,7 @@ extends java.lang.Object</pre>
  f(x,y)=pow(x,1/y) with y&gt;=1</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#ripple(double,double,double,double)">ripple</a></span>&#8203;(double&nbsp;value,
       double&nbsp;min,
@@ -354,7 +367,7 @@ extends java.lang.Object</pre>
 <div class="block">Generates a ripple around a value</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>static <a href="Z4Point.html" title="class in pizzapazza.math">Z4Point</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rotate(double,double,double)">rotate</a></span>&#8203;(double&nbsp;x,
       double&nbsp;y,
@@ -363,7 +376,7 @@ extends java.lang.Object</pre>
 <div class="block">Rotates a point by an angle</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>static <a href="Z4Point.html" title="class in pizzapazza.math">Z4Point</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rotoTranslate(double,double,double,double,double)">rotoTranslate</a></span>&#8203;(double&nbsp;x,
              double&nbsp;y,
@@ -633,6 +646,35 @@ extends java.lang.Object</pre>
 <dd><code>py</code> - The y-axis coordinate of the point</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The square of the distance</dd>
+</dl>
+</li>
+</ul>
+<a id="nearestPointInGrid(double,double,double,double,int,double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>nearestPointInGrid</h4>
+<pre class="methodSignature">public static&nbsp;<a href="Z4Point.html" title="class in pizzapazza.math">Z4Point</a>&nbsp;nearestPointInGrid&#8203;(double&nbsp;x,
+                                         double&nbsp;y,
+                                         double&nbsp;cx,
+                                         double&nbsp;cy,
+                                         int&nbsp;plotWidth,
+                                         double&nbsp;magnetismPercentage)</pre>
+<div class="block">Returns, give a point and a grid, the point in the grid with the minimum
+ distance from the given point</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>x</code> - The x-axis coordinate of the point</dd>
+<dd><code>y</code> - The y-axis coordinate of the point</dd>
+<dd><code>cx</code> - The x-axis coordinate of the grid center</dd>
+<dd><code>cy</code> - The y-axis coordinate of the grid center</dd>
+<dd><code>plotWidth</code> - The grid plot width</dd>
+<dd><code>magnetismPercentage</code> - The grid magnetism percentage, in the range
+ ]0,1]</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The point in the grid with the minimum distance from the given
+ point, if the given point is inside the magnetism area, null otherwise</dd>
 </dl>
 </li>
 </ul>

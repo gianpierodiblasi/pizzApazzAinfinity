@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -219,17 +219,31 @@ extends <a href="../Z4AbstractValuePanel.html" title="class in pizzapazza.ui.pan
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEditButtonVisible(boolean)">setEditButtonVisible</a></span>&#8203;(boolean&nbsp;b)</code></th>
+<td class="colLast">
+<div class="block">Sets the visibility of the edit button</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEnabled(boolean)">setEnabled</a></span>&#8203;(boolean&nbsp;b)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLabel(java.lang.String)">setLabel</a></span>&#8203;(java.lang.String&nbsp;label)</code></th>
 <td class="colLast">
 <div class="block">Sets the label</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setOpacityVisible(boolean)">setOpacityVisible</a></span>&#8203;(boolean&nbsp;b)</code></th>
+<td class="colLast">
+<div class="block">Sets the visibility of the opacity selector</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setValue(javascript.awt.Color)">setValue</a></span>&#8203;(javascript.awt.Color&nbsp;value)</code></th>
 <td class="colLast">
@@ -335,13 +349,41 @@ extends <a href="../Z4AbstractValuePanel.html" title="class in pizzapazza.ui.pan
 <a id="setEnabled(boolean)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setEnabled</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setEnabled&#8203;(boolean&nbsp;b)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>setEnabled</code>&nbsp;in class&nbsp;<code>javascript.swing.JSComponent</code></dd>
+</dl>
+</li>
+</ul>
+<a id="setEditButtonVisible(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setEditButtonVisible</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setEditButtonVisible&#8203;(boolean&nbsp;b)</pre>
+<div class="block">Sets the visibility of the edit button</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>b</code> - true to show the edit button, false otherwise</dd>
+</dl>
+</li>
+</ul>
+<a id="setOpacityVisible(boolean)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setOpacityVisible</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setOpacityVisible&#8203;(boolean&nbsp;b)</pre>
+<div class="block">Sets the visibility of the opacity selector</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>b</code> - true to show the opacity selector, false otherwise</dd>
 </dl>
 </li>
 </ul>
