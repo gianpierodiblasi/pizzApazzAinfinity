@@ -195,7 +195,7 @@ class Z4Canvas extends JSComponent {
     this.statusPanel.setProjectSize(width, height);
     this.statusPanel.setZoom(1);
     this.statusPanel.setDrawingDirection(Z4DrawingDirection.FREE);
-    this.statusPanel.resetCanvasGridPanel();
+    this.statusPanel.resetCanvasGridPanel(width, height);
     this.zoom = 1;
     this.mouseManager.setZoom(this.zoom);
     this.setDrawingDirection(Z4DrawingDirection.FREE);

@@ -2044,7 +2044,7 @@ class Z4Canvas extends JSComponent {
     this.statusPanel.setProjectSize(width, height);
     this.statusPanel.setZoom(1);
     this.statusPanel.setDrawingDirection(Z4DrawingDirection.FREE);
-    this.statusPanel.resetCanvasGridPanel();
+    this.statusPanel.resetCanvasGridPanel(width, height);
     this.zoom = 1;
     this.mouseManager.setZoom(this.zoom);
     this.setDrawingDirection(Z4DrawingDirection.FREE);
@@ -10998,7 +10998,17 @@ class Z4CanvasGridPanel extends JSDropDown {
 
    colorPanel = new Z4ColorPanel();
 
-   center = new Point(0, 0);
+   offsetXSlider = new JSSlider();
+
+   offsetXSpinner = new JSSpinner();
+
+   offsetYSlider = new JSSlider();
+
+   offsetYSpinner = new JSSpinner();
+
+   canvas = null;
+
+   center = null;
 
   /**
    * Creates the object
@@ -11037,23 +11047,48 @@ class Z4CanvasGridPanel extends JSDropDown {
     panel.cssAddClass("z4canvasgridpanel-editor");
     panel.setLayout(new GridBagLayout());
     this.showGridCheckBox.setText(Z4Translations.SHOW_GRID);
-    this.showGridCheckBox.addActionListener(event => this.onchange());
-    panel.add(this.showGridCheckBox, new GBC(0, 3).a(GBC.WEST));
+    this.showGridCheckBox.addActionListener(event => this.onchange(false, null, null));
+    panel.add(this.showGridCheckBox, new GBC(0, 5).w(2).a(GBC.WEST));
     this.dottedGridCheckBox.setText(Z4Translations.DOTTED_GRID);
-    this.dottedGridCheckBox.addActionListener(event => this.onchange());
-    panel.add(this.dottedGridCheckBox, new GBC(0, 2).a(GBC.WEST));
+    this.dottedGridCheckBox.addActionListener(event => this.onchange(false, null, null));
+    panel.add(this.dottedGridCheckBox, new GBC(0, 4).w(2).a(GBC.WEST));
     this.magneticGridCheckBox.setText(Z4Translations.MAGNETIC_GRID);
-    this.magneticGridCheckBox.addActionListener(event => this.onchange());
-    panel.add(this.magneticGridCheckBox, new GBC(0, 1).a(GBC.WEST));
+    this.magneticGridCheckBox.addActionListener(event => this.onchange(false, null, null));
+    panel.add(this.magneticGridCheckBox, new GBC(0, 3).w(2).a(GBC.WEST));
     this.colorPanel.setLabel(Z4Translations.COLOR);
     this.colorPanel.setOpacityVisible(false);
-    this.colorPanel.addChangeListener(event => this.onchange());
-    panel.add(this.colorPanel, new GBC(0, 0).a(GBC.WEST).f(GBC.HORIZONTAL));
+    this.colorPanel.addChangeListener(event => this.onchange(false, null, null));
+    panel.add(this.colorPanel, new GBC(0, 2).w(2).a(GBC.WEST).f(GBC.HORIZONTAL));
+    this.offsetXSlider.getStyle().minWidth = "15.5rem";
+    this.offsetXSlider.addChangeListener(event => this.onchange(false, this.offsetXSpinner, this.offsetXSlider));
+    panel.add(this.offsetXSlider, new GBC(0, 1).w(2).f(GBC.HORIZONTAL));
+    Z4UI.addLabel(panel, Z4Translations.OFFSET_X, new GBC(0, 0).a(GBC.WEST));
+    this.offsetXSpinner.cssAddClass("jsspinner_w_4rem");
+    this.offsetXSpinner.addChangeListener(event => this.onchange(true, this.offsetXSpinner, this.offsetXSlider));
+    panel.add(this.offsetXSpinner, new GBC(1, 0).a(GBC.EAST));
+    Z4UI.addVLine(panel, new GBC(2, 0).h(6).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addLabel(panel, Z4Translations.OFFSET_Y, new GBC(3, 3).h(3).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
+    this.offsetYSpinner.cssAddClass("jsspinner-vertical");
+    this.offsetYSpinner.cssAddClass("jsspinner_h_4rem");
+    this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
+    this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
+    this.offsetYSpinner.addChangeListener(event => this.onchange(true, this.offsetYSpinner, this.offsetYSlider));
+    panel.add(this.offsetYSpinner, new GBC(3, 0).h(3).a(GBC.NORTH));
+    this.offsetYSlider.setOrientation(JSSlider.VERTICAL);
+    this.offsetYSlider.setInverted(true);
+    this.offsetYSlider.getStyle().minWidth = "1.5rem";
+    this.offsetYSlider.addChangeListener(event => this.onchange(false, this.offsetYSpinner, this.offsetYSlider));
+    panel.add(this.offsetYSlider, new GBC(4, 0).h(6).wy(1).a(GBC.NORTH).f(GBC.VERTICAL));
     this.appendChild(panel);
-    this.reset();
+    this.reset(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE);
   }
 
-   onchange() {
+   onchange(spTosl, spinner, slider) {
+    if (spinner && spTosl) {
+      slider.setValue(spinner.getValue());
+    } else if (spinner) {
+      spinner.setValue(slider.getValue());
+    }
     this.showGridLabel.cssRemoveClass("z4canvasgridpanel-showgrid-on");
     this.showGridLabel.cssRemoveClass("z4canvasgridpanel-showgrid-off");
     this.showGridLabel.cssAddClass("z4canvasgridpanel-showgrid-" + (this.showGridCheckBox.isSelected() ? "on" : "off"));
@@ -11076,6 +11111,77 @@ class Z4CanvasGridPanel extends JSDropDown {
     this.deltaYLabel.getStyle().visibility = this.showGridCheckBox.isSelected() ? "visible" : "hidden";
     this.vline1.getStyle().visibility = this.showGridCheckBox.isSelected() ? "visible" : "hidden";
     this.vline2.getStyle().visibility = this.showGridCheckBox.isSelected() ? "visible" : "hidden";
+    this.center = new Point(this.offsetXSlider.getValue(), this.offsetYSlider.getValue());
+    this.offsetXSpinner.setEnabled(this.showGridCheckBox.isSelected());
+    this.offsetXSlider.setEnabled(this.showGridCheckBox.isSelected());
+    this.offsetYSpinner.setEnabled(this.showGridCheckBox.isSelected());
+    this.offsetYSlider.setEnabled(this.showGridCheckBox.isSelected());
+  }
+
+   createGrid() {
+    let grid = new Path2D();
+    // centro = new Point(x.getValue(), y.getValue());
+    // int l = larghezzaTrama.getValue();
+    // int ll = (int) (l * this.MAGNETISM_PERCENTAGE);
+    // int duell = 2 * ll;
+    // if (grigliaPunteggiata.isSelected()) {
+    // for (int x = centro.x; x > 0; x -= l) {
+    // for (int y = centro.y; y > 0; y -= l) {
+    // griglia.append(new Line2D.Double(x, y, x + 1, y), false);
+    // }
+    // for (int y = centro.y; y < dimensione.height; y += l) {
+    // griglia.append(new Line2D.Double(x, y, x + 1, y), false);
+    // }
+    // }
+    // for (int x = centro.x; x < dimensione.width; x += l) {
+    // for (int y = centro.y; y > 0; y -= l) {
+    // griglia.append(new Line2D.Double(x, y, x + 1, y), false);
+    // }
+    // for (int y = centro.y; y < dimensione.height; y += l) {
+    // griglia.append(new Line2D.Double(x, y, x + 1, y), false);
+    // }
+    // }
+    // } else {
+    // for (int x = centro.x; x > 0; x -= l) {
+    // griglia.append(new Line2D.Double(x, 0, x, dimensione.height), false);
+    // }
+    // for (int x = centro.x; x < dimensione.width; x += l) {
+    // griglia.append(new Line2D.Double(x, 0, x, dimensione.height), false);
+    // }
+    // for (int y = centro.y; y > 0; y -= l) {
+    // griglia.append(new Line2D.Double(0, y, dimensione.width, y), false);
+    // }
+    // for (int y = centro.y; y < dimensione.height; y += l) {
+    // griglia.append(new Line2D.Double(0, y, dimensione.width, y), false);
+    // }
+    // }
+    // for (int x = centro.x; x > 0; x -= l) {
+    // for (int y = centro.y; y > 0; y -= l) {
+    // griglia.append(new Ellipse2D.Double(x - ll, y - ll, duell, duell), false);
+    // }
+    // for (int y = centro.y; y < dimensione.height; y += l) {
+    // griglia.append(new Ellipse2D.Double(x - ll, y - ll, duell, duell), false);
+    // }
+    // }
+    // for (int x = centro.x; x < dimensione.width; x += l) {
+    // for (int y = centro.y; y > 0; y -= l) {
+    // griglia.append(new Ellipse2D.Double(x - ll, y - ll, duell, duell), false);
+    // }
+    // for (int y = centro.y; y < dimensione.height; y += l) {
+    // griglia.append(new Ellipse2D.Double(x - ll, y - ll, duell, duell), false);
+    // }
+    // }
+    // griglia.append(new Ellipse2D.Double(centro.x - 4, centro.y - 4, 8, 8), false);
+    return grid;
+  }
+
+  /**
+   * Sets the canvas to manage
+   *
+   * @param canvas The canvas
+   */
+   setCanvas(canvas) {
+    this.canvas = canvas;
   }
 
   /**
@@ -11099,8 +11205,11 @@ class Z4CanvasGridPanel extends JSDropDown {
 
   /**
    * Resets the panel
+   *
+   * @param width The canvas width
+   * @param height The canvas height
    */
-   reset() {
+   reset(width, height) {
     this.showGridLabel.cssRemoveClass("z4canvasgridpanel-showgrid-on");
     this.showGridLabel.cssAddClass("z4canvasgridpanel-showgrid-off");
     this.showGridCheckBox.setSelected(false);
@@ -11124,6 +11233,17 @@ class Z4CanvasGridPanel extends JSDropDown {
     this.deltaYLabel.getStyle().visibility = "hidden";
     this.vline1.getStyle().visibility = "hidden";
     this.vline2.getStyle().visibility = "hidden";
+    this.center = new Point(0, 0);
+    this.offsetXSpinner.setEnabled(false);
+    this.offsetXSpinner.setModel(new SpinnerNumberModel(0, 0, width, 1));
+    this.offsetXSlider.setEnabled(false);
+    this.offsetXSlider.setMaximum(width);
+    this.offsetXSlider.setValue(0);
+    this.offsetYSpinner.setEnabled(false);
+    this.offsetYSpinner.setModel(new SpinnerNumberModel(0, 0, height, 1));
+    this.offsetYSlider.setEnabled(false);
+    this.offsetYSlider.setMaximum(height);
+    this.offsetYSlider.setValue(0);
   }
 }
 /**
@@ -11858,6 +11978,7 @@ class Z4StatusPanel extends JSPanel {
    */
    setCanvas(canvas) {
     this.canvas = canvas;
+    this.canvasGridPanel.setCanvas(canvas);
   }
 
   /**
@@ -11928,9 +12049,11 @@ class Z4StatusPanel extends JSPanel {
 
   /**
    * Resets the canvas grid panel
+   * @param width The canvas width
+   * @param height The canvas height
    */
-   resetCanvasGridPanel() {
-    this.canvasGridPanel.reset();
+   resetCanvasGridPanel(width, height) {
+    this.canvasGridPanel.reset(width, height);
   }
 
    onZoom() {

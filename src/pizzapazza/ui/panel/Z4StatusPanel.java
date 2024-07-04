@@ -90,6 +90,7 @@ public class Z4StatusPanel extends JSPanel {
    */
   public void setCanvas(Z4Canvas canvas) {
     this.canvas = canvas;
+    this.canvasGridPanel.setCanvas(canvas);
   }
 
   /**
@@ -161,9 +162,11 @@ public class Z4StatusPanel extends JSPanel {
 
   /**
    * Resets the canvas grid panel
+   * @param width The canvas width
+   * @param height The canvas height
    */
-  public void resetCanvasGridPanel() {
-    this.canvasGridPanel.reset();
+  public void resetCanvasGridPanel(int width, int height) {
+    this.canvasGridPanel.reset(width, height);
   }
 
   @SuppressWarnings({"unchecked", "StringEquality"})

@@ -219,13 +219,13 @@ public class Z4Canvas extends JSComponent {
     this.statusPanel.setProjectSize(width, height);
     this.statusPanel.setZoom(1);
     this.statusPanel.setDrawingDirection(Z4DrawingDirection.FREE);
-    this.statusPanel.resetCanvasGridPanel();
-    
+    this.statusPanel.resetCanvasGridPanel(width, height);
+
     this.zoom = 1;
     this.mouseManager.setZoom(this.zoom);
     this.setDrawingDirection(Z4DrawingDirection.FREE);
     this.pathGrid = null;
-    
+
     this.setSaved(true);
     this.changed = false;
 
@@ -885,7 +885,7 @@ public class Z4Canvas extends JSComponent {
 
     if ($exists(this.pathGrid)) {
       this.ctxGrid.save();
-      
+
       this.ctxGrid.strokeStyle = Z4Constants.$getStyle(this.colorGrid.getRGBA_HEX());
 
       this.ctxGrid.stroke(this.pathGrid);
@@ -893,7 +893,7 @@ public class Z4Canvas extends JSComponent {
       this.ctxGrid.beginPath();
       this.ctxGrid.arc(this.centerGrid.x, this.centerGrid.y, 3, 0, Z4Math.TWO_PI);
       this.ctxGrid.stroke();
-      
+
       this.ctxGrid.restore();
     }
   }

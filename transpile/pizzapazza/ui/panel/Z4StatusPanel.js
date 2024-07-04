@@ -64,6 +64,7 @@ class Z4StatusPanel extends JSPanel {
    */
    setCanvas(canvas) {
     this.canvas = canvas;
+    this.canvasGridPanel.setCanvas(canvas);
   }
 
   /**
@@ -134,9 +135,11 @@ class Z4StatusPanel extends JSPanel {
 
   /**
    * Resets the canvas grid panel
+   * @param width The canvas width
+   * @param height The canvas height
    */
-   resetCanvasGridPanel() {
-    this.canvasGridPanel.reset();
+   resetCanvasGridPanel(width, height) {
+    this.canvasGridPanel.reset(width, height);
   }
 
    onZoom() {
