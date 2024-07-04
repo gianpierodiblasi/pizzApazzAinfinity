@@ -828,8 +828,9 @@ class Z4Canvas extends JSComponent {
       this.ctxGrid.strokeStyle = Z4Constants.getStyle(this.colorGrid.getRGBA_HEX());
       this.ctxGrid.stroke(this.pathGrid);
       this.ctxGrid.beginPath();
-      this.ctxGrid.arc(this.centerGrid.x, this.centerGrid.y, 3, 0, Z4Math.TWO_PI);
-      this.ctxGrid.stroke();
+      this.ctxGrid.arc(this.centerGrid.x, this.centerGrid.y, 4, 0, Z4Math.TWO_PI);
+      this.ctxGrid.fillStyle = Z4Constants.getStyle(this.colorGrid.getRGBA_HEX());
+      this.ctxGrid.fill();
       this.ctxGrid.restore();
     }
   }

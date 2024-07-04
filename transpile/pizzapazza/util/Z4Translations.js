@@ -245,6 +245,8 @@ class Z4Translations {
 
   static  DOTTED_GRID = "";
 
+  static  PLOT_WIDTH = "";
+
   // Color
   static  COLOR = "";
 
@@ -567,6 +569,7 @@ class Z4Translations {
     Z4Translations.SHOW_GRID = "Show Grid";
     Z4Translations.MAGNETIC_GRID = "Magnetic Grid";
     Z4Translations.DOTTED_GRID = "Dotted Grid";
+    Z4Translations.PLOT_WIDTH = "Plot Width";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -789,6 +792,7 @@ class Z4Translations {
     Z4Translations.SHOW_GRID = "Mostra Griglia";
     Z4Translations.MAGNETIC_GRID = "Griglia Magnetica";
     Z4Translations.DOTTED_GRID = "Griglia Punteggiata";
+    Z4Translations.PLOT_WIDTH = "Larghezza Trama";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";
