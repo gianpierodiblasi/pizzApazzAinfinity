@@ -200,6 +200,7 @@ class Z4Canvas extends JSComponent {
     this.statusPanel.resetCanvasGridPanel(width, height);
     this.zoom = 1;
     this.mouseManager.setZoom(this.zoom);
+    this.mouseManager.setMagneticGrid(null, 0, false);
     this.setDrawingDirection(Z4DrawingDirection.FREE);
     this.pathGrid = null;
     this.setSaved(true);
@@ -791,6 +792,7 @@ class Z4Canvas extends JSComponent {
     this.magneticGrid = magnetic;
     this.colorGrid = color;
     this.pathGrid = visible ? this.createGrid() : null;
+    this.mouseManager.setMagneticGrid(center, plotWidth, visible && magnetic);
     this.drawCanvasGrid();
   }
 

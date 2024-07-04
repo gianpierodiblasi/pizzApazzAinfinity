@@ -15,6 +15,12 @@ class Z4CanvasMouseManager {
 
    drawingDirection = Z4DrawingDirection.FREE;
 
+   centerGrid = null;
+
+   plotWidthGrid = 0;
+
+   magneticGrid = false;
+
    size = null;
 
    zoom = 0.0;
@@ -65,6 +71,19 @@ class Z4CanvasMouseManager {
    */
    setDrawingDirection(drawingDirection) {
     this.drawingDirection = drawingDirection;
+  }
+
+  /**
+   * Sets the magnetic grid
+   *
+   * @param center The grid center
+   * @param plotWidth The grid plot width
+   * @param b true to enable the magnetic grid, false otherwise
+   */
+   setMagneticGrid(center, plotWidth, b) {
+    this.centerGrid = center;
+    this.plotWidthGrid = plotWidth;
+    this.magneticGrid = b;
   }
 
   /**

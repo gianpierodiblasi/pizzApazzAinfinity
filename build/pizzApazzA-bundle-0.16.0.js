@@ -2049,6 +2049,7 @@ class Z4Canvas extends JSComponent {
     this.statusPanel.resetCanvasGridPanel(width, height);
     this.zoom = 1;
     this.mouseManager.setZoom(this.zoom);
+    this.mouseManager.setMagneticGrid(null, 0, false);
     this.setDrawingDirection(Z4DrawingDirection.FREE);
     this.pathGrid = null;
     this.setSaved(true);
@@ -2640,6 +2641,7 @@ class Z4Canvas extends JSComponent {
     this.magneticGrid = magnetic;
     this.colorGrid = color;
     this.pathGrid = visible ? this.createGrid() : null;
+    this.mouseManager.setMagneticGrid(center, plotWidth, visible && magnetic);
     this.drawCanvasGrid();
   }
 
@@ -3413,6 +3415,12 @@ class Z4CanvasMouseManager {
 
    drawingDirection = Z4DrawingDirection.FREE;
 
+   centerGrid = null;
+
+   plotWidthGrid = 0;
+
+   magneticGrid = false;
+
    size = null;
 
    zoom = 0.0;
@@ -3463,6 +3471,19 @@ class Z4CanvasMouseManager {
    */
    setDrawingDirection(drawingDirection) {
     this.drawingDirection = drawingDirection;
+  }
+
+  /**
+   * Sets the magnetic grid
+   *
+   * @param center The grid center
+   * @param plotWidth The grid plot width
+   * @param b true to enable the magnetic grid, false otherwise
+   */
+   setMagneticGrid(center, plotWidth, b) {
+    this.centerGrid = center;
+    this.plotWidthGrid = plotWidth;
+    this.magneticGrid = b;
   }
 
   /**
@@ -11245,19 +11266,19 @@ class Z4CanvasGridPanel extends JSDropDown {
     this.plotWidthSlider.setMinimum(5);
     this.plotWidthSlider.setMaximum(parseInt(Math.min(width, height) / 2));
     this.plotWidthSlider.setValue(20);
-    this.center = new Point(0, 0);
+    this.center = new Point(parseInt(width / 2), parseInt(height / 2));
     this.offsetXSpinner.setEnabled(false);
-    this.offsetXSpinner.setModel(new SpinnerNumberModel(0, 0, width, 1));
-    this.offsetXSpinner.setValue(0);
+    this.offsetXSpinner.setModel(new SpinnerNumberModel(this.center.x, 0, width, 1));
+    this.offsetXSpinner.setValue(this.center.x);
     this.offsetXSlider.setEnabled(false);
     this.offsetXSlider.setMaximum(width);
-    this.offsetXSlider.setValue(0);
+    this.offsetXSlider.setValue(this.center.x);
     this.offsetYSpinner.setEnabled(false);
-    this.offsetYSpinner.setModel(new SpinnerNumberModel(0, 0, height, 1));
-    this.offsetYSpinner.setValue(0);
+    this.offsetYSpinner.setModel(new SpinnerNumberModel(this.center.y, 0, height, 1));
+    this.offsetYSpinner.setValue(this.center.y);
     this.offsetYSlider.setEnabled(false);
     this.offsetYSlider.setMaximum(height);
-    this.offsetYSlider.setValue(0);
+    this.offsetYSlider.setValue(this.center.y);
   }
 }
 /**

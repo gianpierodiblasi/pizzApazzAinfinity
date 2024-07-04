@@ -2,6 +2,7 @@ package pizzapazza.ui.component;
 
 import def.dom.MouseEvent;
 import javascript.awt.Dimension;
+import javascript.awt.Point;
 import pizzapazza.iterator.Z4PointIteratorDrawingAction;
 import pizzapazza.math.Z4DrawingDirection;
 import pizzapazza.math.Z4DrawingPoint;
@@ -30,6 +31,10 @@ public class Z4CanvasMouseManager {
   private Z4Layer selectedLayer;
   private Z4DrawingTool selectedDrawingTool;
   private Z4DrawingDirection drawingDirection = Z4DrawingDirection.FREE;
+
+  private Point centerGrid;
+  private int plotWidthGrid;
+  private boolean magneticGrid;
 
   private Dimension size;
   private double zoom;
@@ -77,6 +82,19 @@ public class Z4CanvasMouseManager {
    */
   public void setDrawingDirection(Z4DrawingDirection drawingDirection) {
     this.drawingDirection = drawingDirection;
+  }
+
+  /**
+   * Sets the magnetic grid
+   *
+   * @param center The grid center
+   * @param plotWidth The grid plot width
+   * @param b true to enable the magnetic grid, false otherwise
+   */
+  public void setMagneticGrid(Point center, int plotWidth, boolean b) {
+    this.centerGrid = center;
+    this.plotWidthGrid = plotWidth;
+    this.magneticGrid = b;
   }
 
   /**
