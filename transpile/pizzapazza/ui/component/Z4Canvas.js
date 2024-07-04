@@ -51,6 +51,8 @@ class Z4Canvas extends JSComponent {
 
    changed = false;
 
+   isOpenFromHistory = false;
+
    paper = new Z4Paper();
 
    selectedLayer = null;
@@ -195,20 +197,23 @@ class Z4Canvas extends JSComponent {
     this.projectName = projectName;
     this.statusPanel.setProjectName(projectName);
     this.statusPanel.setProjectSize(width, height);
-    this.statusPanel.setZoom(1);
-    this.statusPanel.setDrawingDirection(Z4DrawingDirection.FREE);
-    this.statusPanel.resetCanvasGridPanel(width, height);
-    this.zoom = 1;
-    this.mouseManager.setZoom(this.zoom);
-    this.mouseManager.setMagneticGrid(null, 0, false);
-    this.setDrawingDirection(Z4DrawingDirection.FREE);
-    this.pathGrid = null;
-    this.setSaved(true);
-    this.changed = false;
-    this.canvas.width = width;
-    this.canvas.height = height;
-    this.canvasGrid.width = width;
-    this.canvasGrid.height = height;
+    if (!this.isOpenFromHistory) {
+      this.statusPanel.setZoom(1);
+      this.statusPanel.setDrawingDirection(Z4DrawingDirection.FREE);
+      this.statusPanel.resetCanvasGridPanel(width, height);
+      this.zoom = 1;
+      this.mouseManager.setZoom(this.zoom);
+      this.mouseManager.setMagneticGrid(null, 0, false);
+      this.setDrawingDirection(Z4DrawingDirection.FREE);
+      this.pathGrid = null;
+      this.setSaved(true);
+      this.changed = false;
+    }
+    this.isOpenFromHistory = false;
+    this.canvas.width = width * this.zoom;
+    this.canvas.height = height * this.zoom;
+    this.canvasGrid.width = width * this.zoom;
+    this.canvasGrid.height = height * this.zoom;
     this.drawCanvas();
     this.drawCanvasGrid();
   }
@@ -238,6 +243,7 @@ class Z4Canvas extends JSComponent {
    * @param json The history
    */
    openFromHistory(json) {
+    this.isOpenFromHistory = true;
     this.historyManager.openFromHistory(json);
   }
 

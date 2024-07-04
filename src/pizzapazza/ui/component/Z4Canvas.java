@@ -69,6 +69,7 @@ public class Z4Canvas extends JSComponent {
   private boolean zooming;
   private boolean saved = true;
   private boolean changed = false;
+  private boolean isOpenFromHistory;
 
   private final Z4Paper paper = new Z4Paper();
   private Z4Layer selectedLayer;
@@ -220,23 +221,28 @@ public class Z4Canvas extends JSComponent {
 
     this.statusPanel.setProjectName(projectName);
     this.statusPanel.setProjectSize(width, height);
-    this.statusPanel.setZoom(1);
-    this.statusPanel.setDrawingDirection(Z4DrawingDirection.FREE);
-    this.statusPanel.resetCanvasGridPanel(width, height);
 
-    this.zoom = 1;
-    this.mouseManager.setZoom(this.zoom);
-    this.mouseManager.setMagneticGrid(null, 0, false);
-    this.setDrawingDirection(Z4DrawingDirection.FREE);
-    this.pathGrid = null;
+    if (!this.isOpenFromHistory) {
+      this.statusPanel.setZoom(1);
+      this.statusPanel.setDrawingDirection(Z4DrawingDirection.FREE);
+      this.statusPanel.resetCanvasGridPanel(width, height);
 
-    this.setSaved(true);
-    this.changed = false;
+      this.zoom = 1;
+      this.mouseManager.setZoom(this.zoom);
+      this.mouseManager.setMagneticGrid(null, 0, false);
 
-    this.canvas.width = width;
-    this.canvas.height = height;
-    this.canvasGrid.width = width;
-    this.canvasGrid.height = height;
+      this.setDrawingDirection(Z4DrawingDirection.FREE);
+      this.pathGrid = null;
+
+      this.setSaved(true);
+      this.changed = false;
+    }
+    this.isOpenFromHistory = false;
+
+    this.canvas.width = width * this.zoom;
+    this.canvas.height = height * this.zoom;
+    this.canvasGrid.width = width * this.zoom;
+    this.canvasGrid.height = height * this.zoom;
 
     this.drawCanvas();
     this.drawCanvasGrid();
@@ -267,6 +273,7 @@ public class Z4Canvas extends JSComponent {
    * @param json The history
    */
   public void openFromHistory($Object json) {
+    this.isOpenFromHistory = true;
     this.historyManager.openFromHistory(json);
   }
 
@@ -848,7 +855,7 @@ public class Z4Canvas extends JSComponent {
 
     this.pathGrid = visible ? this.createGrid() : null;
     this.mouseManager.setMagneticGrid(center, plotWidth, visible && magnetic);
-    
+
     this.drawCanvasGrid();
   }
 

@@ -13,6 +13,10 @@ class Z4CanvasGridPanel extends JSDropDown {
 
    colorPanelLabel = new Z4ColorPanel();
 
+   xLabel = new JSLabel();
+
+   yLabel = new JSLabel();
+
    distanceLabel = new JSLabel();
 
    angleLabel = new JSLabel();
@@ -24,6 +28,8 @@ class Z4CanvasGridPanel extends JSDropDown {
    vline1 = null;
 
    vline2 = null;
+
+   vline3 = null;
 
    showGridCheckBox = new JSCheckBox();
 
@@ -68,19 +74,26 @@ class Z4CanvasGridPanel extends JSDropDown {
     this.colorPanelLabel.getStyle().width = "14px";
     summary.add(this.colorPanelLabel, new GBC(3, 0).h(2));
     this.vline1 = Z4UI.addVLine(summary, new GBC(4, 0).h(2).f(GBC.VERTICAL).i(1, 5, 1, 5));
+    this.xLabel.getStyle().fontFamily = "monospace";
+    this.xLabel.getStyle().fontSize = "smaller";
+    summary.add(this.xLabel, new GBC(5, 0));
+    this.yLabel.getStyle().fontFamily = "monospace";
+    this.yLabel.getStyle().fontSize = "smaller";
+    summary.add(this.yLabel, new GBC(5, 1).a(GBC.WEST));
+    this.vline2 = Z4UI.addVLine(summary, new GBC(6, 0).h(2).f(GBC.VERTICAL).i(1, 5, 1, 5));
     this.distanceLabel.getStyle().fontFamily = "monospace";
     this.distanceLabel.getStyle().fontSize = "smaller";
-    summary.add(this.distanceLabel, new GBC(5, 0));
+    summary.add(this.distanceLabel, new GBC(7, 0));
     this.angleLabel.getStyle().fontFamily = "monospace";
     this.angleLabel.getStyle().fontSize = "smaller";
-    summary.add(this.angleLabel, new GBC(5, 1));
-    this.vline2 = Z4UI.addVLine(summary, new GBC(6, 0).h(2).f(GBC.VERTICAL).i(1, 5, 1, 5));
+    summary.add(this.angleLabel, new GBC(7, 1));
+    this.vline3 = Z4UI.addVLine(summary, new GBC(8, 0).h(2).f(GBC.VERTICAL).i(1, 5, 1, 5));
     this.deltaXLabel.getStyle().fontFamily = "monospace";
     this.deltaXLabel.getStyle().fontSize = "smaller";
-    summary.add(this.deltaXLabel, new GBC(7, 0));
+    summary.add(this.deltaXLabel, new GBC(9, 0));
     this.deltaYLabel.getStyle().fontFamily = "monospace";
     this.deltaYLabel.getStyle().fontSize = "smaller";
-    summary.add(this.deltaYLabel, new GBC(7, 1).a(GBC.WEST));
+    summary.add(this.deltaYLabel, new GBC(9, 1).a(GBC.WEST));
     this.appendChildInTree("summary", summary);
     let panel = new JSPanel();
     panel.cssAddClass("z4canvasgridpanel-editor");
@@ -134,6 +147,7 @@ class Z4CanvasGridPanel extends JSDropDown {
     } else if (spinner) {
       spinner.setValue(slider.getValue());
     }
+    this.center = new Point(this.offsetXSlider.getValue(), this.offsetYSlider.getValue());
     this.showGridLabel.cssRemoveClass("z4canvasgridpanel-showgrid-on");
     this.showGridLabel.cssRemoveClass("z4canvasgridpanel-showgrid-off");
     this.showGridLabel.cssAddClass("z4canvasgridpanel-showgrid-" + (this.showGridCheckBox.isSelected() ? "on" : "off"));
@@ -150,15 +164,19 @@ class Z4CanvasGridPanel extends JSDropDown {
     this.colorPanelLabel.getStyle().visibility = this.showGridCheckBox.isSelected() ? "visible" : "hidden";
     this.colorPanelLabel.setValue(this.colorPanel.getValue());
     this.colorPanel.setEnabled(this.showGridCheckBox.isSelected());
+    this.xLabel.getStyle().visibility = this.showGridCheckBox.isSelected() ? "visible" : "hidden";
+    this.xLabel.setText("X : " + new Number(this.center.x).toFixed(0).padStart(4, "\u00A0") + "px");
+    this.yLabel.getStyle().visibility = this.showGridCheckBox.isSelected() ? "visible" : "hidden";
+    this.yLabel.setText("Y : " + new Number(this.center.y).toFixed(0).padStart(4, "\u00A0") + "px");
     this.distanceLabel.getStyle().visibility = this.showGridCheckBox.isSelected() ? "visible" : "hidden";
     this.angleLabel.getStyle().visibility = this.showGridCheckBox.isSelected() ? "visible" : "hidden";
     this.deltaXLabel.getStyle().visibility = this.showGridCheckBox.isSelected() ? "visible" : "hidden";
     this.deltaYLabel.getStyle().visibility = this.showGridCheckBox.isSelected() ? "visible" : "hidden";
     this.vline1.getStyle().visibility = this.showGridCheckBox.isSelected() ? "visible" : "hidden";
     this.vline2.getStyle().visibility = this.showGridCheckBox.isSelected() ? "visible" : "hidden";
+    this.vline3.getStyle().visibility = this.showGridCheckBox.isSelected() ? "visible" : "hidden";
     this.plotWidthSpinner.setEnabled(this.showGridCheckBox.isSelected());
     this.plotWidthSlider.setEnabled(this.showGridCheckBox.isSelected());
-    this.center = new Point(this.offsetXSlider.getValue(), this.offsetYSlider.getValue());
     this.offsetXSpinner.setEnabled(this.showGridCheckBox.isSelected());
     this.offsetXSlider.setEnabled(this.showGridCheckBox.isSelected());
     this.offsetYSpinner.setEnabled(this.showGridCheckBox.isSelected());
@@ -218,12 +236,15 @@ class Z4CanvasGridPanel extends JSDropDown {
     this.colorPanelLabel.setValue(new Color(0, 0, 0, 255));
     this.colorPanel.setEnabled(false);
     this.colorPanel.setValue(new Color(0, 0, 0, 255));
+    this.xLabel.getStyle().visibility = "hidden";
+    this.yLabel.getStyle().visibility = "hidden";
     this.distanceLabel.getStyle().visibility = "hidden";
     this.angleLabel.getStyle().visibility = "hidden";
     this.deltaXLabel.getStyle().visibility = "hidden";
     this.deltaYLabel.getStyle().visibility = "hidden";
     this.vline1.getStyle().visibility = "hidden";
     this.vline2.getStyle().visibility = "hidden";
+    this.vline3.getStyle().visibility = "hidden";
     this.plotWidthSpinner.setEnabled(false);
     this.plotWidthSpinner.setModel(new SpinnerNumberModel(20, 5, parseInt(Math.min(width, height) / 2), 1));
     this.plotWidthSpinner.setValue(20);
