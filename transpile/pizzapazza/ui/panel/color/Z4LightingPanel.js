@@ -19,12 +19,16 @@ class Z4LightingPanel extends Z4AbstractValuePanel {
     let buttonGroup = new ButtonGroup();
     if (orientation === Z4LightingPanelOrientation.HORIZONTAL) {
       this.addRadio(Z4Lighting.NONE, buttonGroup, 0, 0, "left");
-      this.addRadio(Z4Lighting.LIGHTED, buttonGroup, 1, 0, "centerh");
-      this.addRadio(Z4Lighting.DARKENED, buttonGroup, 3, 0, "right");
+      this.addRadio(Z4Lighting.LIGHTED_IN_OUT, buttonGroup, 1, 0, "centerh");
+      this.addRadio(Z4Lighting.LIGHTED_OUT_IN, buttonGroup, 2, 0, "centerh");
+      this.addRadio(Z4Lighting.DARKENED_IN_OUT, buttonGroup, 3, 0, "centerh");
+      this.addRadio(Z4Lighting.DARKENED_OUT_IN, buttonGroup, 4, 0, "right");
     } else if (orientation === Z4LightingPanelOrientation.VERTICAL) {
       this.addRadio(Z4Lighting.NONE, buttonGroup, 0, 0, "top");
-      this.addRadio(Z4Lighting.LIGHTED, buttonGroup, 0, 2, "centerv");
-      this.addRadio(Z4Lighting.DARKENED, buttonGroup, 0, 3, "bottom");
+      this.addRadio(Z4Lighting.LIGHTED_IN_OUT, buttonGroup, 0, 1, "centerv");
+      this.addRadio(Z4Lighting.LIGHTED_OUT_IN, buttonGroup, 0, 2, "centerv");
+      this.addRadio(Z4Lighting.DARKENED_IN_OUT, buttonGroup, 0, 3, "centerv");
+      this.addRadio(Z4Lighting.DARKENED_OUT_IN, buttonGroup, 0, 4, "bottom");
     }
     this.setValue(Z4Lighting.NONE);
   }
@@ -33,7 +37,7 @@ class Z4LightingPanel extends Z4AbstractValuePanel {
     let radio = new JSRadioButton();
     radio.cssAddClass("z4lightingpanel-radio");
     radio.getStyle().padding = "1px";
-    radio.setTooltip(Z4Translations[lighting === Z4Lighting.NONE ? "NONE_HER" : "" + lighting]);
+    radio.setTooltip(Z4Translations[("" + lighting).replace("NONE", "NONE_HER").replace("_IN_OUT", "").replace("_OUT_IN", "")]);
     radio.setToggle();
     radio.setIcon(new Z4EmptyImageProducer(lighting));
     radio.addActionListener(event => {

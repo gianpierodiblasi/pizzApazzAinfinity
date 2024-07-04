@@ -81,11 +81,17 @@ class Z4ColorProgression extends Z4NextableWithParam {
       case "NONE":
         lighting = Z4Lighting.NONE;
         break;
-      case "LIGHTED":
-        lighting = Z4Lighting.LIGHTED;
+      case "LIGHTED_IN_OUT":
+        lighting = Z4Lighting.LIGHTED_IN_OUT;
         break;
-      case "DARKENED":
-        lighting = Z4Lighting.DARKENED;
+      case "DARKENED_IN_OUT":
+        lighting = Z4Lighting.DARKENED_IN_OUT;
+        break;
+      case "LIGHTED_OUT_IN":
+        lighting = Z4Lighting.LIGHTED_OUT_IN;
+        break;
+      case "DARKENED_OUT_IN":
+        lighting = Z4Lighting.DARKENED_OUT_IN;
         break;
       default:
         lighting = null;

@@ -974,7 +974,7 @@ class TestColorProgressingPanel extends JSFrame {
     p.add(disabled, new GBC(1, 3).wx(1).i(5, 5, 5, 5));
     this.panels.push(disabled);
     let lighted = new Z4ColorProgressionPanel(Z4ColorProgressionPanelOrientation.HORIZONTALLY_COMPACT);
-    lighted.setValue(Z4ColorProgression.fromJSON(new Z4ColorProgression(Z4ColorProgressionBehavior.TEMPORAL, 0.34, Z4Lighting.LIGHTED).toJSON()));
+    lighted.setValue(Z4ColorProgression.fromJSON(new Z4ColorProgression(Z4ColorProgressionBehavior.TEMPORAL, 0.34, Z4Lighting.LIGHTED_IN_OUT).toJSON()));
     lighted.addChangeListener(event => {
       if (!lighted.getValueIsAdjusting()) {
         console.log(lighted.getValue());
@@ -1029,7 +1029,7 @@ class TestLightingPanel extends JSFrame {
     disabled.setEnabled(false);
     p.add(disabled, null);
     let lighted = new Z4LightingPanel(Z4LightingPanelOrientation.HORIZONTAL);
-    lighted.setValue(Z4Lighting.LIGHTED);
+    lighted.setValue(Z4Lighting.LIGHTED_IN_OUT);
     lighted.addChangeListener(event => console.log(lighted.getValue()));
     p.add(lighted, null);
     this.getContentPane().add(p, BorderLayout.NORTH);

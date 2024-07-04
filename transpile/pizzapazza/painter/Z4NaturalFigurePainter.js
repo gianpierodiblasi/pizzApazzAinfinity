@@ -478,9 +478,13 @@ class Z4NaturalFigurePainter extends Z4Painter {
           }
         }
         if (lighting === Z4Lighting.NONE) {
-        } else if (lighting === Z4Lighting.LIGHTED) {
+        } else if (lighting === Z4Lighting.LIGHTED_IN_OUT) {
+          c = c.lighted(1 - val);
+        } else if (lighting === Z4Lighting.DARKENED_IN_OUT) {
+          c = c.darkened(1 - val);
+        } else if (lighting === Z4Lighting.LIGHTED_OUT_IN) {
           c = c.lighted(val);
-        } else if (lighting === Z4Lighting.DARKENED) {
+        } else if (lighting === Z4Lighting.DARKENED_OUT_IN) {
           c = c.darkened(val);
         }
         this.drawBezier(context, drawingPoint, c1, c2, val, this.indentation * Math.random(), Z4Math.TWO_PI * Math.random(), 3, c);

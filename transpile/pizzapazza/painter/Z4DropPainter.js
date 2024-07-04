@@ -109,10 +109,14 @@ class Z4DropPainter extends Z4Painter {
         }
         if (lighting === Z4Lighting.NONE) {
           this.drawPath(context, r, c);
-        } else if (lighting === Z4Lighting.LIGHTED) {
+        } else if (lighting === Z4Lighting.LIGHTED_IN_OUT) {
           this.drawPath(context, r, c.lighted(r / currentRadius));
-        } else if (lighting === Z4Lighting.DARKENED) {
+        } else if (lighting === Z4Lighting.DARKENED_IN_OUT) {
           this.drawPath(context, r, c.darkened(r / currentRadius));
+        } else if (lighting === Z4Lighting.LIGHTED_OUT_IN) {
+          this.drawPath(context, r, c.lighted(1 - r / currentRadius));
+        } else if (lighting === Z4Lighting.DARKENED_OUT_IN) {
+          this.drawPath(context, r, c.darkened(1 - r / currentRadius));
         }
       }
     }

@@ -1,13 +1,10 @@
 package pizzapazza.ui.panel.color;
 
-import pizzapazza.ui.panel.math.*;
 import static def.dom.Globals.console;
 import javascript.awt.BorderLayout;
 import javascript.swing.JSFrame;
 import javascript.swing.JSPanel;
 import pizzapazza.color.Z4Lighting;
-import pizzapazza.math.Z4Sign;
-import pizzapazza.math.Z4SignBehavior;
 
 /**
  *
@@ -27,7 +24,7 @@ public class TestLightingPanel extends JSFrame {
     p.add(disabled, null);
 
     Z4LightingPanel lighted = new Z4LightingPanel(Z4LightingPanelOrientation.HORIZONTAL);
-    lighted.setValue(Z4Lighting.LIGHTED);
+    lighted.setValue(Z4Lighting.LIGHTED_IN_OUT);
     lighted.addChangeListener(event -> console.log(lighted.getValue()));
     p.add(lighted, null);
 

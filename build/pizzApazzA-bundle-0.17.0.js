@@ -134,13 +134,21 @@ class Z4Lighting {
    */
   static NONE = 'NONE';
   /**
-   * lighting
+   * lighting from in to out
    */
-  static LIGHTED = 'LIGHTED';
+  static LIGHTED_IN_OUT = 'LIGHTED_IN_OUT';
   /**
-   * darkening
+   * darkening from in to out
    */
-  static DARKENED = 'DARKENED';
+  static DARKENED_IN_OUT = 'DARKENED_IN_OUT';
+  /**
+   * lighting from out to in
+   */
+  static LIGHTED_OUT_IN = 'LIGHTED_OUT_IN';
+  /**
+   * darkening from out to in
+   */
+  static DARKENED_OUT_IN = 'DARKENED_OUT_IN';
 }
 /**
  * The common interface for all fillers; each instance of
@@ -7309,29 +7317,29 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
     if (orientation === Z4ColorProgressionPanelOrientation.HORIZONTALLY_COMPACT) {
       Z4UI.addLabel(this, Z4Translations.FILLING, new GBC(0, 0).a(GBC.WEST));
       panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-      this.add(panel, new GBC(1, 0).w(3));
+      this.add(panel, new GBC(1, 0).a(GBC.EAST));
       this.addRadio(Z4ColorProgressionBehavior.SPATIAL, panel, buttonGroup, "left");
       this.addRadio(Z4ColorProgressionBehavior.TEMPORAL, panel, buttonGroup, "centerh");
       this.addRadio(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, panel, buttonGroup, "centerh");
       this.addRadio(Z4ColorProgressionBehavior.RANDOM, panel, buttonGroup, "right");
-      Z4UI.addLabel(this, Z4Translations.STEP, new GBC(0, 1).a(GBC.WEST).wx(1));
-      this.add(this.temporalStepSpinner, new GBC(1, 1).w(3).a(GBC.EAST).i(1, 0, 0, 0));
-      this.add(this.temporalStepSlider, new GBC(0, 2).w(4));
-      Z4UI.addLabel(this, Z4Translations.LIGHTING, new GBC(0, 3).a(GBC.EAST).w(2).wx(1).i(0, 0, 0, 1));
-      this.add(this.lightingPanel, new GBC(2, 3).w(2).a(GBC.EAST));
+      Z4UI.addLabel(this, Z4Translations.STEP, new GBC(0, 1).a(GBC.WEST));
+      this.add(this.temporalStepSpinner, new GBC(1, 1).a(GBC.EAST).i(1, 0, 0, 0));
+      this.add(this.temporalStepSlider, new GBC(0, 2).w(2));
+      Z4UI.addLabel(this, Z4Translations.LIGHTING, new GBC(0, 3).a(GBC.EAST).wx(1).i(0, 0, 0, 2));
+      this.add(this.lightingPanel, new GBC(1, 3).a(GBC.EAST));
     } else if (orientation === Z4ColorProgressionPanelOrientation.VERTICALLY_COMPACT) {
-      Z4UI.addLabel(this, Z4Translations.FILLING, new GBC(0, 0).w(4).a(GBC.WEST));
+      Z4UI.addLabel(this, Z4Translations.FILLING, new GBC(0, 0).w(3).a(GBC.WEST));
       panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
       this.add(panel, new GBC(0, 1).h(3).i(0, 0, 0, 1));
       this.addRadio(Z4ColorProgressionBehavior.SPATIAL, panel, buttonGroup, "top");
       this.addRadio(Z4ColorProgressionBehavior.TEMPORAL, panel, buttonGroup, "centerv");
       this.addRadio(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, panel, buttonGroup, "centerv");
       this.addRadio(Z4ColorProgressionBehavior.RANDOM, panel, buttonGroup, "bottom");
-      Z4UI.addLabel(this, Z4Translations.STEP, new GBC(1, 1).a(GBC.WEST).wx(1));
-      this.add(this.temporalStepSpinner, new GBC(2, 1).w(2).a(GBC.EAST));
-      this.add(this.temporalStepSlider, new GBC(1, 2).w(3));
-      Z4UI.addLabel(this, Z4Translations.LIGHTING, new GBC(2, 3).a(GBC.EAST).i(0, 0, 0, 1));
-      this.add(this.lightingPanel, new GBC(3, 3));
+      Z4UI.addLabel(this, Z4Translations.STEP, new GBC(1, 1).a(GBC.WEST));
+      this.add(this.temporalStepSpinner, new GBC(2, 1).a(GBC.EAST));
+      this.add(this.temporalStepSlider, new GBC(1, 2).w(2));
+      Z4UI.addLabel(this, Z4Translations.LIGHTING, new GBC(1, 3).a(GBC.EAST).wx(1).i(0, 0, 0, 2));
+      this.add(this.lightingPanel, new GBC(2, 3).a(GBC.EAST));
     }
     this.temporalStepSpinner.setModel(new SpinnerNumberModel(1, 1, 100, 1));
     this.temporalStepSpinner.cssAddClass("jsspinner_w_4rem");
@@ -7796,12 +7804,16 @@ class Z4LightingPanel extends Z4AbstractValuePanel {
     let buttonGroup = new ButtonGroup();
     if (orientation === Z4LightingPanelOrientation.HORIZONTAL) {
       this.addRadio(Z4Lighting.NONE, buttonGroup, 0, 0, "left");
-      this.addRadio(Z4Lighting.LIGHTED, buttonGroup, 1, 0, "centerh");
-      this.addRadio(Z4Lighting.DARKENED, buttonGroup, 3, 0, "right");
+      this.addRadio(Z4Lighting.LIGHTED_IN_OUT, buttonGroup, 1, 0, "centerh");
+      this.addRadio(Z4Lighting.LIGHTED_OUT_IN, buttonGroup, 2, 0, "centerh");
+      this.addRadio(Z4Lighting.DARKENED_IN_OUT, buttonGroup, 3, 0, "centerh");
+      this.addRadio(Z4Lighting.DARKENED_OUT_IN, buttonGroup, 4, 0, "right");
     } else if (orientation === Z4LightingPanelOrientation.VERTICAL) {
       this.addRadio(Z4Lighting.NONE, buttonGroup, 0, 0, "top");
-      this.addRadio(Z4Lighting.LIGHTED, buttonGroup, 0, 2, "centerv");
-      this.addRadio(Z4Lighting.DARKENED, buttonGroup, 0, 3, "bottom");
+      this.addRadio(Z4Lighting.LIGHTED_IN_OUT, buttonGroup, 0, 1, "centerv");
+      this.addRadio(Z4Lighting.LIGHTED_OUT_IN, buttonGroup, 0, 2, "centerv");
+      this.addRadio(Z4Lighting.DARKENED_IN_OUT, buttonGroup, 0, 3, "centerv");
+      this.addRadio(Z4Lighting.DARKENED_OUT_IN, buttonGroup, 0, 4, "bottom");
     }
     this.setValue(Z4Lighting.NONE);
   }
@@ -7810,7 +7822,7 @@ class Z4LightingPanel extends Z4AbstractValuePanel {
     let radio = new JSRadioButton();
     radio.cssAddClass("z4lightingpanel-radio");
     radio.getStyle().padding = "1px";
-    radio.setTooltip(Z4Translations[lighting === Z4Lighting.NONE ? "NONE_HER" : "" + lighting]);
+    radio.setTooltip(Z4Translations[("" + lighting).replace("NONE", "NONE_HER").replace("_IN_OUT", "").replace("_OUT_IN", "")]);
     radio.setToggle();
     radio.setIcon(new Z4EmptyImageProducer(lighting));
     radio.addActionListener(event => {
@@ -12754,22 +12766,24 @@ class Z4GradientColor extends Z4AbstractGradientColor {
   /**
    * Lights up this Z4GradientColor, the transparency is not changed
    *
+   * @param inOut true for an in-out lighting, false for an out-in lighting
    * @return This lighted Z4GradientColor
    */
-   lighted() {
+   lighted(inOut) {
     let lighted = new Z4GradientColor();
-    this.colors.forEach((color, index, array) => lighted.addColor(color.lighted(this.colorPositions[index]), this.colorPositions[index]));
+    this.colors.forEach((color, index, array) => lighted.addColor(color.lighted(inOut ? this.colorPositions[index] : 1 - this.colorPositions[index]), this.colorPositions[index]));
     return lighted;
   }
 
   /**
    * Darkens this Z4GradientColor, the transparency is not changed
    *
+   * @param inOut true for an in-out lighting, false for an out-in lighting
    * @return This darkened Z4GradientColor
    */
-   darkened() {
+   darkened(inOut) {
     let darkened = new Z4GradientColor();
-    this.colors.forEach((color, index, array) => darkened.addColor(color.darkened(this.colorPositions[index]), this.colorPositions[index]));
+    this.colors.forEach((color, index, array) => darkened.addColor(color.darkened(inOut ? this.colorPositions[index] : 1 - this.colorPositions[index]), this.colorPositions[index]));
     return darkened;
   }
 
@@ -13713,11 +13727,17 @@ class Z4ColorProgression extends Z4NextableWithParam {
       case "NONE":
         lighting = Z4Lighting.NONE;
         break;
-      case "LIGHTED":
-        lighting = Z4Lighting.LIGHTED;
+      case "LIGHTED_IN_OUT":
+        lighting = Z4Lighting.LIGHTED_IN_OUT;
         break;
-      case "DARKENED":
-        lighting = Z4Lighting.DARKENED;
+      case "DARKENED_IN_OUT":
+        lighting = Z4Lighting.DARKENED_IN_OUT;
+        break;
+      case "LIGHTED_OUT_IN":
+        lighting = Z4Lighting.LIGHTED_OUT_IN;
+        break;
+      case "DARKENED_OUT_IN":
+        lighting = Z4Lighting.DARKENED_OUT_IN;
         break;
       default:
         lighting = null;
@@ -15207,24 +15227,38 @@ class Z4BrushPainter extends Z4Painter {
     if (color) {
       if (lighting === Z4Lighting.NONE) {
         this.drawPath(context, currentWidth, currentThickness, color.getRGBA_HEX());
-      } else if (lighting === Z4Lighting.LIGHTED) {
+      } else if (lighting === Z4Lighting.LIGHTED_IN_OUT) {
         let linearGradient = context.createLinearGradient(-currentWidth / 2, 0, currentWidth / 2, 0);
         linearGradient.addColorStop(0, color.getRGBA_HEX());
         linearGradient.addColorStop(1, "#FFFFFFFF");
         this.drawPath(context, currentWidth, currentThickness, linearGradient);
-      } else if (lighting === Z4Lighting.DARKENED) {
+      } else if (lighting === Z4Lighting.DARKENED_IN_OUT) {
         let linearGradient = context.createLinearGradient(-currentWidth / 2, 0, currentWidth / 2, 0);
         linearGradient.addColorStop(0, color.getRGBA_HEX());
         linearGradient.addColorStop(1, "#000000FF");
+        this.drawPath(context, currentWidth, currentThickness, linearGradient);
+      } else if (lighting === Z4Lighting.LIGHTED_OUT_IN) {
+        let linearGradient = context.createLinearGradient(-currentWidth / 2, 0, currentWidth / 2, 0);
+        linearGradient.addColorStop(0, "#FFFFFFFF");
+        linearGradient.addColorStop(1, color.getRGBA_HEX());
+        this.drawPath(context, currentWidth, currentThickness, linearGradient);
+      } else if (lighting === Z4Lighting.DARKENED_OUT_IN) {
+        let linearGradient = context.createLinearGradient(-currentWidth / 2, 0, currentWidth / 2, 0);
+        linearGradient.addColorStop(0, "#000000FF");
+        linearGradient.addColorStop(1, color.getRGBA_HEX());
         this.drawPath(context, currentWidth, currentThickness, linearGradient);
       }
     } else if (gradientColor) {
       if (lighting === Z4Lighting.NONE) {
         this.drawPath(context, currentWidth, currentThickness, gradientColor.createLinearGradient(context, -currentWidth / 2, 0, currentWidth / 2, 0));
-      } else if (lighting === Z4Lighting.LIGHTED) {
-        this.drawPath(context, currentWidth, currentThickness, gradientColor.lighted().createLinearGradient(context, -currentWidth / 2, 0, currentWidth / 2, 0));
-      } else if (lighting === Z4Lighting.DARKENED) {
-        this.drawPath(context, currentWidth, currentThickness, gradientColor.darkened().createLinearGradient(context, -currentWidth / 2, 0, currentWidth / 2, 0));
+      } else if (lighting === Z4Lighting.LIGHTED_IN_OUT) {
+        this.drawPath(context, currentWidth, currentThickness, gradientColor.lighted(true).createLinearGradient(context, -currentWidth / 2, 0, currentWidth / 2, 0));
+      } else if (lighting === Z4Lighting.DARKENED_IN_OUT) {
+        this.drawPath(context, currentWidth, currentThickness, gradientColor.darkened(true).createLinearGradient(context, -currentWidth / 2, 0, currentWidth / 2, 0));
+      } else if (lighting === Z4Lighting.LIGHTED_OUT_IN) {
+        this.drawPath(context, currentWidth, currentThickness, gradientColor.lighted(false).createLinearGradient(context, -currentWidth / 2, 0, currentWidth / 2, 0));
+      } else if (lighting === Z4Lighting.DARKENED_OUT_IN) {
+        this.drawPath(context, currentWidth, currentThickness, gradientColor.darkened(false).createLinearGradient(context, -currentWidth / 2, 0, currentWidth / 2, 0));
       }
     }
     if (this.pattern) {
@@ -15760,9 +15794,13 @@ class Z4CenteredFigurePainter extends Z4Painter {
         }
         if (lighting === Z4Lighting.NONE) {
           this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, 3, c);
-        } else if (lighting === Z4Lighting.LIGHTED) {
+        } else if (lighting === Z4Lighting.LIGHTED_IN_OUT) {
+          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, 3, c.lighted(1 - val));
+        } else if (lighting === Z4Lighting.DARKENED_IN_OUT) {
+          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, 3, c.darkened(1 - val));
+        } else if (lighting === Z4Lighting.LIGHTED_OUT_IN) {
           this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, 3, c.lighted(val));
-        } else if (lighting === Z4Lighting.DARKENED) {
+        } else if (lighting === Z4Lighting.DARKENED_OUT_IN) {
           this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, 3, c.darkened(val));
         }
       }
@@ -15955,10 +15993,14 @@ class Z4DropPainter extends Z4Painter {
         }
         if (lighting === Z4Lighting.NONE) {
           this.drawPath(context, r, c);
-        } else if (lighting === Z4Lighting.LIGHTED) {
+        } else if (lighting === Z4Lighting.LIGHTED_IN_OUT) {
           this.drawPath(context, r, c.lighted(r / currentRadius));
-        } else if (lighting === Z4Lighting.DARKENED) {
+        } else if (lighting === Z4Lighting.DARKENED_IN_OUT) {
           this.drawPath(context, r, c.darkened(r / currentRadius));
+        } else if (lighting === Z4Lighting.LIGHTED_OUT_IN) {
+          this.drawPath(context, r, c.lighted(1 - r / currentRadius));
+        } else if (lighting === Z4Lighting.DARKENED_OUT_IN) {
+          this.drawPath(context, r, c.darkened(1 - r / currentRadius));
         }
       }
     }
@@ -16498,9 +16540,13 @@ class Z4NaturalFigurePainter extends Z4Painter {
           }
         }
         if (lighting === Z4Lighting.NONE) {
-        } else if (lighting === Z4Lighting.LIGHTED) {
+        } else if (lighting === Z4Lighting.LIGHTED_IN_OUT) {
+          c = c.lighted(1 - val);
+        } else if (lighting === Z4Lighting.DARKENED_IN_OUT) {
+          c = c.darkened(1 - val);
+        } else if (lighting === Z4Lighting.LIGHTED_OUT_IN) {
           c = c.lighted(val);
-        } else if (lighting === Z4Lighting.DARKENED) {
+        } else if (lighting === Z4Lighting.DARKENED_OUT_IN) {
           c = c.darkened(val);
         }
         this.drawBezier(context, drawingPoint, c1, c2, val, this.indentation * Math.random(), Z4Math.TWO_PI * Math.random(), 3, c);
@@ -16966,10 +17012,14 @@ class Z4Shape2DPainter extends Z4Painter {
         }
         if (lighting === Z4Lighting.NONE) {
           this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color);
-        } else if (lighting === Z4Lighting.LIGHTED) {
+        } else if (lighting === Z4Lighting.LIGHTED_IN_OUT) {
           this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color.lighted(scale / currentSize));
-        } else if (lighting === Z4Lighting.DARKENED) {
+        } else if (lighting === Z4Lighting.DARKENED_IN_OUT) {
           this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color.darkened(scale / currentSize));
+        } else if (lighting === Z4Lighting.LIGHTED_OUT_IN) {
+          this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color.lighted(1 - scale / currentSize));
+        } else if (lighting === Z4Lighting.DARKENED_OUT_IN) {
+          this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color.darkened(1 - scale / currentSize));
         }
       }
     }

@@ -10,11 +10,19 @@ class Z4Lighting {
    */
   static NONE = 'NONE';
   /**
-   * lighting
+   * lighting from in to out
    */
-  static LIGHTED = 'LIGHTED';
+  static LIGHTED_IN_OUT = 'LIGHTED_IN_OUT';
   /**
-   * darkening
+   * darkening from in to out
    */
-  static DARKENED = 'DARKENED';
+  static DARKENED_IN_OUT = 'DARKENED_IN_OUT';
+  /**
+   * lighting from out to in
+   */
+  static LIGHTED_OUT_IN = 'LIGHTED_OUT_IN';
+  /**
+   * darkening from out to in
+   */
+  static DARKENED_OUT_IN = 'DARKENED_OUT_IN';
 }

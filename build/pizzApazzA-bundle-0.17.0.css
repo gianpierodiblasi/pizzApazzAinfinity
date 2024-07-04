@@ -682,10 +682,16 @@
   content: url(../image/color/z4lighting_none.svg);
 }
 .z4lightingpanel .z4lightingpanel-radio:nth-child(2) img {
-  content: url(../image/color/z4lighting_lighted.svg);
+  content: url(../image/color/z4lighting_lighted_in_out.svg);
 }
 .z4lightingpanel .z4lightingpanel-radio:nth-child(3) img {
-  content: url(../image/color/z4lighting_darkened.svg);
+  content: url(../image/color/z4lighting_lighted_out_in.svg);
+}
+.z4lightingpanel .z4lightingpanel-radio:nth-child(4) img {
+  content: url(../image/color/z4lighting_darkened_in_out.svg);
+}
+.z4lightingpanel .z4lightingpanel-radio:nth-child(5) img {
+  content: url(../image/color/z4lighting_darkened_out_in.svg);
 }.z4naturalfigurepainterpanel {
 }
 

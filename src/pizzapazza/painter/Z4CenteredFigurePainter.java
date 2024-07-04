@@ -504,9 +504,13 @@ public class Z4CenteredFigurePainter extends Z4Painter {
 
         if (lighting == Z4Lighting.NONE) {
           this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, 3, c);
-        } else if (lighting == Z4Lighting.LIGHTED) {
+        } else if (lighting == Z4Lighting.LIGHTED_IN_OUT) {
+          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, 3, c.lighted(1 - val));
+        } else if (lighting == Z4Lighting.DARKENED_IN_OUT) {
+          this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, 3, c.darkened(1 - val));
+        } else if (lighting == Z4Lighting.LIGHTED_OUT_IN) {
           this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, 3, c.lighted(val));
-        } else if (lighting == Z4Lighting.DARKENED) {
+        } else if (lighting == Z4Lighting.DARKENED_OUT_IN) {
           this.drawBezier(context, drawingPoint, c1, c2, path1, path2, val, 3, c.darkened(val));
         }
       }

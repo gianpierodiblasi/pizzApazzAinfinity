@@ -112,24 +112,38 @@ public class Z4BrushPainter extends Z4Painter {
     if ($exists(color)) {
       if (lighting == Z4Lighting.NONE) {
         this.drawPath(context, currentWidth, currentThickness, color.getRGBA_HEX());
-      } else if (lighting == Z4Lighting.LIGHTED) {
+      } else if (lighting == Z4Lighting.LIGHTED_IN_OUT) {
         CanvasGradient linearGradient = context.createLinearGradient(-currentWidth / 2, 0, currentWidth / 2, 0);
         linearGradient.addColorStop(0, color.getRGBA_HEX());
         linearGradient.addColorStop(1, "#FFFFFFFF");
         this.drawPath(context, currentWidth, currentThickness, linearGradient);
-      } else if (lighting == Z4Lighting.DARKENED) {
+      } else if (lighting == Z4Lighting.DARKENED_IN_OUT) {
         CanvasGradient linearGradient = context.createLinearGradient(-currentWidth / 2, 0, currentWidth / 2, 0);
         linearGradient.addColorStop(0, color.getRGBA_HEX());
         linearGradient.addColorStop(1, "#000000FF");
+        this.drawPath(context, currentWidth, currentThickness, linearGradient);
+      } else if (lighting == Z4Lighting.LIGHTED_OUT_IN) {
+        CanvasGradient linearGradient = context.createLinearGradient(-currentWidth / 2, 0, currentWidth / 2, 0);
+        linearGradient.addColorStop(0, "#FFFFFFFF");
+        linearGradient.addColorStop(1, color.getRGBA_HEX());
+        this.drawPath(context, currentWidth, currentThickness, linearGradient);
+      } else if (lighting == Z4Lighting.DARKENED_OUT_IN) {
+        CanvasGradient linearGradient = context.createLinearGradient(-currentWidth / 2, 0, currentWidth / 2, 0);
+        linearGradient.addColorStop(0, "#000000FF");
+        linearGradient.addColorStop(1, color.getRGBA_HEX());
         this.drawPath(context, currentWidth, currentThickness, linearGradient);
       }
     } else if ($exists(gradientColor)) {
       if (lighting == Z4Lighting.NONE) {
         this.drawPath(context, currentWidth, currentThickness, gradientColor.createLinearGradient(context, -currentWidth / 2, 0, currentWidth / 2, 0));
-      } else if (lighting == Z4Lighting.LIGHTED) {
-        this.drawPath(context, currentWidth, currentThickness, gradientColor.lighted().createLinearGradient(context, -currentWidth / 2, 0, currentWidth / 2, 0));
-      } else if (lighting == Z4Lighting.DARKENED) {
-        this.drawPath(context, currentWidth, currentThickness, gradientColor.darkened().createLinearGradient(context, -currentWidth / 2, 0, currentWidth / 2, 0));
+      } else if (lighting == Z4Lighting.LIGHTED_IN_OUT) {
+        this.drawPath(context, currentWidth, currentThickness, gradientColor.lighted(true).createLinearGradient(context, -currentWidth / 2, 0, currentWidth / 2, 0));
+      } else if (lighting == Z4Lighting.DARKENED_IN_OUT) {
+        this.drawPath(context, currentWidth, currentThickness, gradientColor.darkened(true).createLinearGradient(context, -currentWidth / 2, 0, currentWidth / 2, 0));
+      } else if (lighting == Z4Lighting.LIGHTED_OUT_IN) {
+        this.drawPath(context, currentWidth, currentThickness, gradientColor.lighted(false).createLinearGradient(context, -currentWidth / 2, 0, currentWidth / 2, 0));
+      } else if (lighting == Z4Lighting.DARKENED_OUT_IN) {
+        this.drawPath(context, currentWidth, currentThickness, gradientColor.darkened(false).createLinearGradient(context, -currentWidth / 2, 0, currentWidth / 2, 0));
       }
     }
 

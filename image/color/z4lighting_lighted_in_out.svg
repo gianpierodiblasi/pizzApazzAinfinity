@@ -2,11 +2,11 @@
 <svg width="96" height="96" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <radialGradient spreadMethod="pad" id="svg_2">
-      <stop offset="0" stop-color="#ffffff"/>
-      <stop offset="1" stop-color="#ff0000"/>
+      <stop offset="0" stop-color="#ff0000"/>
+      <stop offset="1" stop-color="#ffffff"/>
     </radialGradient>
   </defs>
   <g>
-    <circle stroke="#000000" fill="url(#svg_2)" stroke-width="3" cx="47.999998" cy="48" r="43.322956"/>
+    <circle stroke="#000000" fill="url(#svg_2)" stroke-width="3" cx="48" cy="48" r="46"/>
   </g>
 </svg>

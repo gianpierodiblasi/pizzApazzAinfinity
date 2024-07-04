@@ -12,7 +12,7 @@ class TestLightingPanel extends JSFrame {
     disabled.setEnabled(false);
     p.add(disabled, null);
     let lighted = new Z4LightingPanel(Z4LightingPanelOrientation.HORIZONTAL);
-    lighted.setValue(Z4Lighting.LIGHTED);
+    lighted.setValue(Z4Lighting.LIGHTED_IN_OUT);
     lighted.addChangeListener(event => console.log(lighted.getValue()));
     p.add(lighted, null);
     this.getContentPane().add(p, BorderLayout.NORTH);

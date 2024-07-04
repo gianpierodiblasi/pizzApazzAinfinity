@@ -106,22 +106,26 @@ public class Z4GradientColor extends Z4AbstractGradientColor<Color> {
   /**
    * Lights up this Z4GradientColor, the transparency is not changed
    *
+   * @param inOut true for an in-out lighting, false for an out-in lighting
    * @return This lighted Z4GradientColor
    */
-  public Z4GradientColor lighted() {
+  @SuppressWarnings("null")
+  public Z4GradientColor lighted(boolean inOut) {
     Z4GradientColor lighted = new Z4GradientColor();
-    this.colors.forEach((color, index, array) -> lighted.addColor(color.lighted(this.colorPositions.$get(index)), this.colorPositions.$get(index)));
+    this.colors.forEach((color, index, array) -> lighted.addColor(color.lighted(inOut ? this.colorPositions.$get(index) : 1 - this.colorPositions.$get(index)), this.colorPositions.$get(index)));
     return lighted;
   }
 
   /**
    * Darkens this Z4GradientColor, the transparency is not changed
    *
+   * @param inOut true for an in-out lighting, false for an out-in lighting
    * @return This darkened Z4GradientColor
    */
-  public Z4GradientColor darkened() {
+  @SuppressWarnings("null")
+  public Z4GradientColor darkened(boolean inOut) {
     Z4GradientColor darkened = new Z4GradientColor();
-    this.colors.forEach((color, index, array) -> darkened.addColor(color.darkened(this.colorPositions.$get(index)), this.colorPositions.$get(index)));
+    this.colors.forEach((color, index, array) -> darkened.addColor(color.darkened(inOut ? this.colorPositions.$get(index) : 1 - this.colorPositions.$get(index)), this.colorPositions.$get(index)));
     return darkened;
   }
 

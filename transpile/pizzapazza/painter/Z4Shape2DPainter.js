@@ -238,10 +238,14 @@ class Z4Shape2DPainter extends Z4Painter {
         }
         if (lighting === Z4Lighting.NONE) {
           this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color);
-        } else if (lighting === Z4Lighting.LIGHTED) {
+        } else if (lighting === Z4Lighting.LIGHTED_IN_OUT) {
           this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color.lighted(scale / currentSize));
-        } else if (lighting === Z4Lighting.DARKENED) {
+        } else if (lighting === Z4Lighting.DARKENED_IN_OUT) {
           this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color.darkened(scale / currentSize));
+        } else if (lighting === Z4Lighting.LIGHTED_OUT_IN) {
+          this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color.lighted(1 - scale / currentSize));
+        } else if (lighting === Z4Lighting.DARKENED_OUT_IN) {
+          this.drawPath(context, currentWidth * scale / currentSize, currentHeight * scale / currentSize, color.darkened(1 - scale / currentSize));
         }
       }
     }
