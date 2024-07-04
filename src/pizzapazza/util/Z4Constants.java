@@ -77,6 +77,11 @@ public class Z4Constants {
   public static final Array<Double> ZOOM_LEVEL = new Array<>(0.25, 0.33, 0.5, 0.66, 1.0, 1.5, 2.0, 3.0, 4.0);
 
   /**
+   * The magnetism percentage of the grid
+   */
+  public static final double MAGNETISM_PERCENTAGE = 0.25;
+
+  /**
    * The available composite operations
    */
   @SuppressWarnings("unchecked")

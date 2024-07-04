@@ -28,6 +28,7 @@ import pizzapazza.util.Z4Translations;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
+import simulation.js.$Apply_0_T;
 import simulation.js.$Apply_0_Void;
 import simulation.js.$Apply_1_Void;
 import static simulation.js.$Globals.$exists;
@@ -45,7 +46,7 @@ public class Z4Canvas extends JSComponent {
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
 
   private final $Canvas canvasGrid = ($Canvas) document.createElement("canvas");
-  private final $CanvasRenderingContext2D ctxGrid = this.canvas.getContext("2d");
+  private final $CanvasRenderingContext2D ctxGrid = this.canvasGrid.getContext("2d");
   private $Path2D pathGrid;
   private Point centerGrid;
   private int plotWidthGrid;
@@ -99,9 +100,9 @@ public class Z4Canvas extends JSComponent {
       WheelEvent evt = (WheelEvent) event;
       if (!evt.ctrlKey) {
       } else if (evt.deltaY < 0) {
-        this.zoomIn();
+        this.zoomInOut(() -> Z4Constants.ZOOM_LEVEL.find(level -> level > this.zoom, null));
       } else if (evt.ctrlKey && evt.deltaY > 0) {
-        this.zoomOut();
+        this.zoomInOut(() -> Z4Constants.ZOOM_LEVEL.filter(level -> level < this.zoom).pop());
       }
     });
     this.addEventListener("keydown", event -> {
@@ -109,10 +110,10 @@ public class Z4Canvas extends JSComponent {
       if (!evt.ctrlKey) {
       } else if (evt.key == "+") {
         evt.stopPropagation();
-        this.zoomIn();
+        this.zoomInOut(() -> Z4Constants.ZOOM_LEVEL.find(level -> level > this.zoom, null));
       } else if (evt.key == "-") {
         evt.stopPropagation();
-        this.zoomOut();
+        this.zoomInOut(() -> Z4Constants.ZOOM_LEVEL.filter(level -> level < this.zoom).pop());
       }
     });
   }
@@ -561,6 +562,12 @@ public class Z4Canvas extends JSComponent {
     this.ioManager.addDrawingToolFromFile(file);
   }
 
+  /**
+   * Replaces a drawing tool
+   *
+   * @param oldDrawingTool The old drawing tool
+   * @param newDrawingTool The new drawing tool
+   */
   public void replaceDrawingTool(Z4DrawingTool oldDrawingTool, Z4DrawingTool newDrawingTool) {
     int index = this.drawingTools.indexOf(oldDrawingTool);
     this.drawingTools.$set(index, newDrawingTool);
@@ -772,10 +779,12 @@ public class Z4Canvas extends JSComponent {
 
     this.canvas.width = this.width * zoom;
     this.canvas.height = this.height * zoom;
-    this.canvas.width = this.width * zoom;
-    this.canvas.height = this.height * zoom;
+    this.canvasGrid.width = this.width * zoom;
+    this.canvasGrid.height = this.height * zoom;
 
+    this.pathGrid = $exists(this.pathGrid) ? this.createGrid() : null;
     this.drawCanvas();
+    this.drawCanvasGrid();
   }
 
   /**
@@ -785,49 +794,17 @@ public class Z4Canvas extends JSComponent {
     this.setZoom(Math.min((this.canvas.parentElement.clientWidth - 20) / this.width, (this.canvas.parentElement.clientHeight - 20) / this.height));
   }
 
-  private void zoomIn() {
+  private void zoomInOut($Apply_0_T<Double> apply) {
     if (this.zooming) {
     } else {
       this.zooming = true;
-      double newZoom = Z4Constants.ZOOM_LEVEL.find(level -> level > this.zoom, null);
+      double newZoom = apply.$apply();
       if ($exists(newZoom)) {
-        this.zoom = newZoom;
-        this.mouseManager.setZoom(this.zoom);
-
-        this.canvas.width = this.width * newZoom;
-        this.canvas.height = this.height * newZoom;
-        this.canvasGrid.width = this.width * newZoom;
-        this.canvasGrid.height = this.height * newZoom;
-
+        this.setZoom(newZoom);
         this.statusPanel.setZoom(this.zoom);
-        this.drawCanvas();
       }
       this.zooming = false;
     }
-  }
-
-  private void zoomOut() {
-    if (this.zooming) {
-    } else {
-      this.zooming = true;
-      double newZoom = Z4Constants.ZOOM_LEVEL.filter(level -> level < this.zoom).pop();
-      if ($exists(newZoom)) {
-        this.zoom = newZoom;
-        this.mouseManager.setZoom(this.zoom);
-
-        this.canvas.width = this.width * newZoom;
-        this.canvas.height = this.height * newZoom;
-        this.canvasGrid.width = this.width * newZoom;
-        this.canvasGrid.height = this.height * newZoom;
-
-        this.statusPanel.setZoom(this.zoom);
-        this.drawCanvas();
-      }
-      this.zooming = false;
-    }
-  }
-
-  private void zoomInOut() {
   }
 
   /**
@@ -852,20 +829,92 @@ public class Z4Canvas extends JSComponent {
   /**
    * Sets the grid
    *
-   * @param path The grid path
+   * @param visible true if the grid is visible, false otherwise
    * @param center The grid center
    * @param plotWidth The grid plot width
    * @param magnetic true for a magnetic grid, false otherwise
    * @param color The grid color
    */
-  public void setGrid($Path2D path, Point center, int plotWidth, boolean magnetic, Color color) {
-    this.pathGrid = path;
+  public void setGrid(boolean visible, Point center, int plotWidth, boolean magnetic, Color color) {
     this.centerGrid = center;
     this.plotWidthGrid = plotWidth;
     this.magneticGrid = magnetic;
     this.colorGrid = color;
 
+    this.pathGrid = visible ? this.createGrid() : null;
     this.drawCanvasGrid();
+  }
+
+  private $Path2D createGrid() {
+    $Path2D grid = new $Path2D();
+
+//    int plotWidth = this.plotWidthSlider.getValue();
+//    
+//    if (this.dottedGridCheckBox.isSelected()) {
+//      for (int x = this.center.x; x > 0; x -= plotWidth) {
+//        for (int y = this.center.y; y > 0; y -= plotWidth) {
+//          grid.moveTo(x + 2, y);
+//          grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
+//        }
+//        for (int y = this.center.y; y < this.size.height; y += plotWidth) {
+//          grid.moveTo(x + 2, y);
+//          grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
+//        }
+//      }
+//      for (int x = this.center.x; x < this.size.width; x += plotWidth) {
+//        for (int y = this.center.y; y > 0; y -= plotWidth) {
+//          grid.moveTo(x + 2, y);
+//          grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
+//        }
+//        for (int y = this.center.y; y < this.size.height; y += plotWidth) {
+//          grid.moveTo(x + 2, y);
+//          grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
+//        }
+//      }
+//    } else {
+//      for (int x = this.center.x; x > 0; x -= plotWidth) {
+//        grid.moveTo(x, 0);
+//        grid.lineTo(x, this.size.height);
+//      }
+//      for (int x = this.center.x; x < this.size.width; x += plotWidth) {
+//        grid.moveTo(x, 0);
+//        grid.lineTo(x, this.size.height);
+//      }
+//      for (int y = this.center.y; y > 0; y -= plotWidth) {
+//        grid.moveTo(0, y);
+//        grid.lineTo(this.size.width, y);
+//      }
+//      for (int y = this.center.y; y < this.size.height; y += plotWidth) {
+//        grid.moveTo(0, y);
+//        grid.lineTo(this.size.width, y);
+//      }
+//    }
+//    
+//    if (this.magneticGridCheckBox.isSelected()) {
+//      int magneticRadius = parseInt(plotWidth * Z4CanvasGridPanel.MAGNETISM_PERCENTAGE);
+//      
+//      for (int x = this.center.x; x > 0; x -= plotWidth) {
+//        for (int y = this.center.y; y > 0; y -= plotWidth) {
+//          grid.moveTo(x + magneticRadius, y);
+//          grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
+//        }
+//        for (int y = this.center.y; y < this.size.height; y += plotWidth) {
+//          grid.moveTo(x + magneticRadius, y);
+//          grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
+//        }
+//      }
+//      for (int x = this.center.x; x < this.size.width; x += plotWidth) {
+//        for (int y = this.center.y; y > 0; y -= plotWidth) {
+//          grid.moveTo(x + magneticRadius, y);
+//          grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
+//        }
+//        for (int y = this.center.y; y < this.size.height; y += plotWidth) {
+//          grid.moveTo(x + magneticRadius, y);
+//          grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
+//        }
+//      }
+//    }
+    return grid;
   }
 
   /**
@@ -885,12 +934,14 @@ public class Z4Canvas extends JSComponent {
 
     if ($exists(this.pathGrid)) {
       this.ctxGrid.save();
+      this.ctxGrid.scale(this.zoom, this.zoom);
 
       this.ctxGrid.strokeStyle = Z4Constants.$getStyle(this.colorGrid.getRGBA_HEX());
+      this.ctxGrid.lineWidth = 1 / this.zoom;
       this.ctxGrid.stroke(this.pathGrid);
 
       this.ctxGrid.beginPath();
-      this.ctxGrid.arc(this.centerGrid.x, this.centerGrid.y, 4, 0, Z4Math.TWO_PI);
+      this.ctxGrid.arc(this.centerGrid.x, this.centerGrid.y, 4 / this.zoom, 0, Z4Math.TWO_PI);
       this.ctxGrid.fillStyle = Z4Constants.$getStyle(this.colorGrid.getRGBA_HEX());
       this.ctxGrid.fill();
 

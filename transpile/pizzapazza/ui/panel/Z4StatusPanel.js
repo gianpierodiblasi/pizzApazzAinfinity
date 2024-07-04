@@ -135,6 +135,7 @@ class Z4StatusPanel extends JSPanel {
 
   /**
    * Resets the canvas grid panel
+   *
    * @param width The canvas width
    * @param height The canvas height
    */

@@ -1860,7 +1860,7 @@ class Z4Canvas extends JSComponent {
 
    canvasGrid = document.createElement("canvas");
 
-   ctxGrid = this.canvas.getContext("2d");
+   ctxGrid = this.canvasGrid.getContext("2d");
 
    pathGrid = null;
 
@@ -1932,9 +1932,9 @@ class Z4Canvas extends JSComponent {
       let evt = event;
       if (!evt.ctrlKey) {
       } else if (evt.deltaY < 0) {
-        this.zoomIn();
+        this.zoomInOut(() => Z4Constants.ZOOM_LEVEL.find(level => level > this.zoom, null));
       } else if (evt.ctrlKey && evt.deltaY > 0) {
-        this.zoomOut();
+        this.zoomInOut(() => Z4Constants.ZOOM_LEVEL.filter(level => level < this.zoom).pop());
       }
     });
     this.addEventListener("keydown", event => {
@@ -1942,10 +1942,10 @@ class Z4Canvas extends JSComponent {
       if (!evt.ctrlKey) {
       } else if (evt.key === "+") {
         evt.stopPropagation();
-        this.zoomIn();
+        this.zoomInOut(() => Z4Constants.ZOOM_LEVEL.find(level => level > this.zoom, null));
       } else if (evt.key === "-") {
         evt.stopPropagation();
-        this.zoomOut();
+        this.zoomInOut(() => Z4Constants.ZOOM_LEVEL.filter(level => level < this.zoom).pop());
       }
     });
   }
@@ -2369,6 +2369,12 @@ class Z4Canvas extends JSComponent {
     this.ioManager.addDrawingToolFromFile(file);
   }
 
+  /**
+   * Replaces a drawing tool
+   *
+   * @param oldDrawingTool The old drawing tool
+   * @param newDrawingTool The new drawing tool
+   */
    replaceDrawingTool(oldDrawingTool, newDrawingTool) {
     let index = this.drawingTools.indexOf(oldDrawingTool);
     this.drawingTools[index] = newDrawingTool;
@@ -2569,9 +2575,11 @@ class Z4Canvas extends JSComponent {
     this.mouseManager.setZoom(this.zoom);
     this.canvas.width = this.width * zoom;
     this.canvas.height = this.height * zoom;
-    this.canvas.width = this.width * zoom;
-    this.canvas.height = this.height * zoom;
+    this.canvasGrid.width = this.width * zoom;
+    this.canvasGrid.height = this.height * zoom;
+    this.pathGrid = this.pathGrid ? this.createGrid() : null;
     this.drawCanvas();
+    this.drawCanvasGrid();
   }
 
   /**
@@ -2581,45 +2589,17 @@ class Z4Canvas extends JSComponent {
     this.setZoom(Math.min((this.canvas.parentElement.clientWidth - 20) / this.width, (this.canvas.parentElement.clientHeight - 20) / this.height));
   }
 
-   zoomIn() {
+   zoomInOut(apply) {
     if (this.zooming) {
     } else {
       this.zooming = true;
-      let newZoom = Z4Constants.ZOOM_LEVEL.find(level => level > this.zoom, null);
+      let newZoom = apply();
       if (newZoom) {
-        this.zoom = newZoom;
-        this.mouseManager.setZoom(this.zoom);
-        this.canvas.width = this.width * newZoom;
-        this.canvas.height = this.height * newZoom;
-        this.canvasGrid.width = this.width * newZoom;
-        this.canvasGrid.height = this.height * newZoom;
+        this.setZoom(newZoom);
         this.statusPanel.setZoom(this.zoom);
-        this.drawCanvas();
       }
       this.zooming = false;
     }
-  }
-
-   zoomOut() {
-    if (this.zooming) {
-    } else {
-      this.zooming = true;
-      let newZoom = Z4Constants.ZOOM_LEVEL.filter(level => level < this.zoom).pop();
-      if (newZoom) {
-        this.zoom = newZoom;
-        this.mouseManager.setZoom(this.zoom);
-        this.canvas.width = this.width * newZoom;
-        this.canvas.height = this.height * newZoom;
-        this.canvasGrid.width = this.width * newZoom;
-        this.canvasGrid.height = this.height * newZoom;
-        this.statusPanel.setZoom(this.zoom);
-        this.drawCanvas();
-      }
-      this.zooming = false;
-    }
-  }
-
-   zoomInOut() {
   }
 
   /**
@@ -2644,19 +2624,90 @@ class Z4Canvas extends JSComponent {
   /**
    * Sets the grid
    *
-   * @param path The grid path
+   * @param visible true if the grid is visible, false otherwise
    * @param center The grid center
    * @param plotWidth The grid plot width
    * @param magnetic true for a magnetic grid, false otherwise
    * @param color The grid color
    */
-   setGrid(path, center, plotWidth, magnetic, color) {
-    this.pathGrid = path;
+   setGrid(visible, center, plotWidth, magnetic, color) {
     this.centerGrid = center;
     this.plotWidthGrid = plotWidth;
     this.magneticGrid = magnetic;
     this.colorGrid = color;
+    this.pathGrid = visible ? this.createGrid() : null;
     this.drawCanvasGrid();
+  }
+
+   createGrid() {
+    let grid = new Path2D();
+    // int plotWidth = this.plotWidthSlider.getValue();
+    // 
+    // if (this.dottedGridCheckBox.isSelected()) {
+    // for (int x = this.center.x; x > 0; x -= plotWidth) {
+    // for (int y = this.center.y; y > 0; y -= plotWidth) {
+    // grid.moveTo(x + 2, y);
+    // grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
+    // }
+    // for (int y = this.center.y; y < this.size.height; y += plotWidth) {
+    // grid.moveTo(x + 2, y);
+    // grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
+    // }
+    // }
+    // for (int x = this.center.x; x < this.size.width; x += plotWidth) {
+    // for (int y = this.center.y; y > 0; y -= plotWidth) {
+    // grid.moveTo(x + 2, y);
+    // grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
+    // }
+    // for (int y = this.center.y; y < this.size.height; y += plotWidth) {
+    // grid.moveTo(x + 2, y);
+    // grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
+    // }
+    // }
+    // } else {
+    // for (int x = this.center.x; x > 0; x -= plotWidth) {
+    // grid.moveTo(x, 0);
+    // grid.lineTo(x, this.size.height);
+    // }
+    // for (int x = this.center.x; x < this.size.width; x += plotWidth) {
+    // grid.moveTo(x, 0);
+    // grid.lineTo(x, this.size.height);
+    // }
+    // for (int y = this.center.y; y > 0; y -= plotWidth) {
+    // grid.moveTo(0, y);
+    // grid.lineTo(this.size.width, y);
+    // }
+    // for (int y = this.center.y; y < this.size.height; y += plotWidth) {
+    // grid.moveTo(0, y);
+    // grid.lineTo(this.size.width, y);
+    // }
+    // }
+    // 
+    // if (this.magneticGridCheckBox.isSelected()) {
+    // int magneticRadius = parseInt(plotWidth * Z4CanvasGridPanel.MAGNETISM_PERCENTAGE);
+    // 
+    // for (int x = this.center.x; x > 0; x -= plotWidth) {
+    // for (int y = this.center.y; y > 0; y -= plotWidth) {
+    // grid.moveTo(x + magneticRadius, y);
+    // grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
+    // }
+    // for (int y = this.center.y; y < this.size.height; y += plotWidth) {
+    // grid.moveTo(x + magneticRadius, y);
+    // grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
+    // }
+    // }
+    // for (int x = this.center.x; x < this.size.width; x += plotWidth) {
+    // for (int y = this.center.y; y > 0; y -= plotWidth) {
+    // grid.moveTo(x + magneticRadius, y);
+    // grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
+    // }
+    // for (int y = this.center.y; y < this.size.height; y += plotWidth) {
+    // grid.moveTo(x + magneticRadius, y);
+    // grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
+    // }
+    // }
+    // }
+    return grid;
   }
 
   /**
@@ -2674,10 +2725,12 @@ class Z4Canvas extends JSComponent {
     this.ctxGrid.clearRect(0, 0, this.canvasGrid.width, this.canvasGrid.height);
     if (this.pathGrid) {
       this.ctxGrid.save();
+      this.ctxGrid.scale(this.zoom, this.zoom);
       this.ctxGrid.strokeStyle = Z4Constants.getStyle(this.colorGrid.getRGBA_HEX());
+      this.ctxGrid.lineWidth = 1 / this.zoom;
       this.ctxGrid.stroke(this.pathGrid);
       this.ctxGrid.beginPath();
-      this.ctxGrid.arc(this.centerGrid.x, this.centerGrid.y, 4, 0, Z4Math.TWO_PI);
+      this.ctxGrid.arc(this.centerGrid.x, this.centerGrid.y, 4 / this.zoom, 0, Z4Math.TWO_PI);
       this.ctxGrid.fillStyle = Z4Constants.getStyle(this.colorGrid.getRGBA_HEX());
       this.ctxGrid.fill();
       this.ctxGrid.restore();
@@ -11015,10 +11068,6 @@ class Z4CanvasGridPanel extends JSDropDown {
 
    center = null;
 
-   size = null;
-
-  static  MAGNETISM_PERCENTAGE = 0.25;
-
   /**
    * Creates the object
    */
@@ -11133,75 +11182,7 @@ class Z4CanvasGridPanel extends JSDropDown {
     this.offsetXSlider.setEnabled(this.showGridCheckBox.isSelected());
     this.offsetYSpinner.setEnabled(this.showGridCheckBox.isSelected());
     this.offsetYSlider.setEnabled(this.showGridCheckBox.isSelected());
-    this.canvas.setGrid(this.createGrid(), this.center, this.plotWidthSlider.getValue(), this.magneticGridCheckBox.isSelected(), this.colorPanelLabel.getValue());
-  }
-
-   createGrid() {
-    let grid = new Path2D();
-    let plotWidth = this.plotWidthSlider.getValue();
-    if (this.dottedGridCheckBox.isSelected()) {
-      for (let x = this.center.x; x > 0; x -= plotWidth) {
-        for (let y = this.center.y; y > 0; y -= plotWidth) {
-          grid.moveTo(x + 2, y);
-          grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
-        }
-        for (let y = this.center.y; y < this.size.height; y += plotWidth) {
-          grid.moveTo(x + 2, y);
-          grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
-        }
-      }
-      for (let x = this.center.x; x < this.size.width; x += plotWidth) {
-        for (let y = this.center.y; y > 0; y -= plotWidth) {
-          grid.moveTo(x + 2, y);
-          grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
-        }
-        for (let y = this.center.y; y < this.size.height; y += plotWidth) {
-          grid.moveTo(x + 2, y);
-          grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
-        }
-      }
-    } else {
-      for (let x = this.center.x; x > 0; x -= plotWidth) {
-        grid.moveTo(x, 0);
-        grid.lineTo(x, this.size.height);
-      }
-      for (let x = this.center.x; x < this.size.width; x += plotWidth) {
-        grid.moveTo(x, 0);
-        grid.lineTo(x, this.size.height);
-      }
-      for (let y = this.center.y; y > 0; y -= plotWidth) {
-        grid.moveTo(0, y);
-        grid.lineTo(this.size.width, y);
-      }
-      for (let y = this.center.y; y < this.size.height; y += plotWidth) {
-        grid.moveTo(0, y);
-        grid.lineTo(this.size.width, y);
-      }
-    }
-    if (this.magneticGridCheckBox.isSelected()) {
-      let magneticRadius = parseInt(plotWidth * Z4CanvasGridPanel.MAGNETISM_PERCENTAGE);
-      for (let x = this.center.x; x > 0; x -= plotWidth) {
-        for (let y = this.center.y; y > 0; y -= plotWidth) {
-          grid.moveTo(x + magneticRadius, y);
-          grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
-        }
-        for (let y = this.center.y; y < this.size.height; y += plotWidth) {
-          grid.moveTo(x + magneticRadius, y);
-          grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
-        }
-      }
-      for (let x = this.center.x; x < this.size.width; x += plotWidth) {
-        for (let y = this.center.y; y > 0; y -= plotWidth) {
-          grid.moveTo(x + magneticRadius, y);
-          grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
-        }
-        for (let y = this.center.y; y < this.size.height; y += plotWidth) {
-          grid.moveTo(x + magneticRadius, y);
-          grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
-        }
-      }
-    }
-    return grid;
+    this.canvas.setGrid(this.showGridCheckBox.isSelected(), this.center, this.plotWidthSlider.getValue(), this.magneticGridCheckBox.isSelected(), this.colorPanelLabel.getValue());
   }
 
   /**
@@ -11269,14 +11250,15 @@ class Z4CanvasGridPanel extends JSDropDown {
     this.plotWidthSlider.setMaximum(parseInt(Math.min(width, height) / 2));
     this.plotWidthSlider.setValue(20);
     this.center = new Point(0, 0);
-    this.size = new Dimension(width, height);
     this.offsetXSpinner.setEnabled(false);
     this.offsetXSpinner.setModel(new SpinnerNumberModel(0, 0, width, 1));
+    this.offsetXSpinner.setValue(0);
     this.offsetXSlider.setEnabled(false);
     this.offsetXSlider.setMaximum(width);
     this.offsetXSlider.setValue(0);
     this.offsetYSpinner.setEnabled(false);
     this.offsetYSpinner.setModel(new SpinnerNumberModel(0, 0, height, 1));
+    this.offsetYSpinner.setValue(0);
     this.offsetYSlider.setEnabled(false);
     this.offsetYSlider.setMaximum(height);
     this.offsetYSlider.setValue(0);
@@ -12085,6 +12067,7 @@ class Z4StatusPanel extends JSPanel {
 
   /**
    * Resets the canvas grid panel
+   *
    * @param width The canvas width
    * @param height The canvas height
    */
@@ -12217,6 +12200,11 @@ class Z4Constants {
    * The zoom levels
    */
   static  ZOOM_LEVEL = new Array(0.25, 0.33, 0.5, 0.66, 1.0, 1.5, 2.0, 3.0, 4.0);
+
+  /**
+   * The magnetism percentage of the grid
+   */
+  static  MAGNETISM_PERCENTAGE = 0.25;
 
   /**
    * The available composite operations

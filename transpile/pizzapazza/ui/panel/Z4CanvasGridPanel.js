@@ -49,10 +49,6 @@ class Z4CanvasGridPanel extends JSDropDown {
 
    center = null;
 
-   size = null;
-
-  static  MAGNETISM_PERCENTAGE = 0.25;
-
   /**
    * Creates the object
    */
@@ -167,75 +163,7 @@ class Z4CanvasGridPanel extends JSDropDown {
     this.offsetXSlider.setEnabled(this.showGridCheckBox.isSelected());
     this.offsetYSpinner.setEnabled(this.showGridCheckBox.isSelected());
     this.offsetYSlider.setEnabled(this.showGridCheckBox.isSelected());
-    this.canvas.setGrid(this.createGrid(), this.center, this.plotWidthSlider.getValue(), this.magneticGridCheckBox.isSelected(), this.colorPanelLabel.getValue());
-  }
-
-   createGrid() {
-    let grid = new Path2D();
-    let plotWidth = this.plotWidthSlider.getValue();
-    if (this.dottedGridCheckBox.isSelected()) {
-      for (let x = this.center.x; x > 0; x -= plotWidth) {
-        for (let y = this.center.y; y > 0; y -= plotWidth) {
-          grid.moveTo(x + 2, y);
-          grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
-        }
-        for (let y = this.center.y; y < this.size.height; y += plotWidth) {
-          grid.moveTo(x + 2, y);
-          grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
-        }
-      }
-      for (let x = this.center.x; x < this.size.width; x += plotWidth) {
-        for (let y = this.center.y; y > 0; y -= plotWidth) {
-          grid.moveTo(x + 2, y);
-          grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
-        }
-        for (let y = this.center.y; y < this.size.height; y += plotWidth) {
-          grid.moveTo(x + 2, y);
-          grid.arc(x, y, 2, 0, Z4Math.TWO_PI);
-        }
-      }
-    } else {
-      for (let x = this.center.x; x > 0; x -= plotWidth) {
-        grid.moveTo(x, 0);
-        grid.lineTo(x, this.size.height);
-      }
-      for (let x = this.center.x; x < this.size.width; x += plotWidth) {
-        grid.moveTo(x, 0);
-        grid.lineTo(x, this.size.height);
-      }
-      for (let y = this.center.y; y > 0; y -= plotWidth) {
-        grid.moveTo(0, y);
-        grid.lineTo(this.size.width, y);
-      }
-      for (let y = this.center.y; y < this.size.height; y += plotWidth) {
-        grid.moveTo(0, y);
-        grid.lineTo(this.size.width, y);
-      }
-    }
-    if (this.magneticGridCheckBox.isSelected()) {
-      let magneticRadius = parseInt(plotWidth * Z4CanvasGridPanel.MAGNETISM_PERCENTAGE);
-      for (let x = this.center.x; x > 0; x -= plotWidth) {
-        for (let y = this.center.y; y > 0; y -= plotWidth) {
-          grid.moveTo(x + magneticRadius, y);
-          grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
-        }
-        for (let y = this.center.y; y < this.size.height; y += plotWidth) {
-          grid.moveTo(x + magneticRadius, y);
-          grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
-        }
-      }
-      for (let x = this.center.x; x < this.size.width; x += plotWidth) {
-        for (let y = this.center.y; y > 0; y -= plotWidth) {
-          grid.moveTo(x + magneticRadius, y);
-          grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
-        }
-        for (let y = this.center.y; y < this.size.height; y += plotWidth) {
-          grid.moveTo(x + magneticRadius, y);
-          grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
-        }
-      }
-    }
-    return grid;
+    this.canvas.setGrid(this.showGridCheckBox.isSelected(), this.center, this.plotWidthSlider.getValue(), this.magneticGridCheckBox.isSelected(), this.colorPanelLabel.getValue());
   }
 
   /**
@@ -303,14 +231,15 @@ class Z4CanvasGridPanel extends JSDropDown {
     this.plotWidthSlider.setMaximum(parseInt(Math.min(width, height) / 2));
     this.plotWidthSlider.setValue(20);
     this.center = new Point(0, 0);
-    this.size = new Dimension(width, height);
     this.offsetXSpinner.setEnabled(false);
     this.offsetXSpinner.setModel(new SpinnerNumberModel(0, 0, width, 1));
+    this.offsetXSpinner.setValue(0);
     this.offsetXSlider.setEnabled(false);
     this.offsetXSlider.setMaximum(width);
     this.offsetXSlider.setValue(0);
     this.offsetYSpinner.setEnabled(false);
     this.offsetYSpinner.setModel(new SpinnerNumberModel(0, 0, height, 1));
+    this.offsetYSpinner.setValue(0);
     this.offsetYSlider.setEnabled(false);
     this.offsetYSlider.setMaximum(height);
     this.offsetYSlider.setValue(0);
