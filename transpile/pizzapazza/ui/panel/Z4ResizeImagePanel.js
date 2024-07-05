@@ -127,18 +127,12 @@ class Z4ResizeImagePanel extends JSPanel {
     this.preview.setProperty("height", "" + parseInt(newRatio > 1 ? Z4ResizeImagePanel.SIZE / newRatio : Z4ResizeImagePanel.SIZE));
     if (!this.canvasToResize) {
     } else if (this.resizeByKeepingRatio.isSelected()) {
-      this.offsetX.setEnabled(false);
-      this.offsetY.setEnabled(false);
-      this.center.setEnabled(false);
+      this.setComponentsEnabled(false, false, false);
       this.ctx.drawImage(this.canvasToResize, 0, 0, parseInt(this.preview.getProperty("width")), parseInt(this.preview.getProperty("height")));
     } else if (this.adaptByKeepingRatio.isSelected()) {
-      this.offsetX.setEnabled(w !== this.originalWidth);
-      this.offsetY.setEnabled(h !== this.originalHeight);
-      this.center.setEnabled(true);
+      this.setComponentsEnabled(w !== this.originalWidth, h !== this.originalHeight, true);
     } else if (this.keepSize.isSelected()) {
-      this.offsetX.setEnabled(true);
-      this.offsetY.setEnabled(true);
-      this.center.setEnabled(true);
+      this.setComponentsEnabled(true, true, true);
       // 
       // double scale = parseInt(this.preview.getProperty("width")) / this.originalWidth;
       // 
@@ -148,6 +142,12 @@ class Z4ResizeImagePanel extends JSPanel {
       // this.ctx.restore();
     }
     this.onchange();
+  }
+
+   setComponentsEnabled(x, y, c) {
+    this.offsetX.setEnabled(x);
+    this.offsetY.setEnabled(y);
+    this.center.setEnabled(c);
   }
 
   /**
