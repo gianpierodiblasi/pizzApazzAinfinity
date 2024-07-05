@@ -109,7 +109,7 @@ class Z4ResizeImagePanel extends JSPanel {
       this.setComponentsEnabled(false, false, false);
       this.ctx.drawImage(this.canvasToResize, 0, 0, parseInt(this.preview.getProperty("width")), parseInt(this.preview.getProperty("height")));
     } else if (this.adaptByKeepingRatio.isSelected()) {
-      this.setComponentsEnabled(size.width !== this.originalWidth, size.height !== this.originalHeight, true);
+      this.setComponentsEnabled(false, false, true);
     } else if (this.keepSize.isSelected()) {
       this.setComponentsEnabled(true, true, true);
       // 
