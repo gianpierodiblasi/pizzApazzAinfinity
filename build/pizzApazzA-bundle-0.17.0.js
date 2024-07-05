@@ -16882,7 +16882,7 @@ class Z4Shape2DPainter extends Z4Painter {
     this.borderHeight = borderHeight;
     this.borderColor = borderColor;
     if (vertices === -1) {
-      this.path.arc(0, 0, 0.5, 0, Z4Math.TWO_PI);
+      this.path.arc(0, 0, 1, 0, Z4Math.TWO_PI);
     } else if (star) {
       Z4Math.getStarVertices(vertices).forEach((point, index, array) => {
         if (index) {
