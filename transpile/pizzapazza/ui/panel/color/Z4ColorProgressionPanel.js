@@ -41,27 +41,23 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
       Z4UI.addLabel(this, Z4Translations.STEP, new GBC(0, 1).w(2).a(GBC.WEST));
       this.add(this.temporalStepSpinner, new GBC(2, 1).a(GBC.EAST).i(1, 0, 0, 0));
       this.add(this.temporalStepSlider, new GBC(0, 2).w(3));
-      this.resetOnStartMoving.setContentAreaFilled(false);
-      this.resetOnStartMoving.cssAddClass("z4colorprogressionpanel-toggle");
-      this.resetOnStartMoving.getStyle().padding = "1px";
-      this.resetOnStartMoving.setTooltip(Z4Translations.RESET_ON_START_MOVING);
-      this.resetOnStartMoving.setIcon(new Z4EmptyImageProducer(""));
       this.add(this.resetOnStartMoving, new GBC(0, 3).a(GBC.WEST).wx(1));
       Z4UI.addLabel(this, Z4Translations.LIGHTING, new GBC(1, 3).a(GBC.EAST).i(0, 0, 0, 2));
       this.add(this.lightingPanel, new GBC(2, 3).a(GBC.EAST));
     } else if (orientation === Z4ColorProgressionPanelOrientation.VERTICALLY_COMPACT) {
-      Z4UI.addLabel(this, Z4Translations.FILLING, new GBC(0, 0).w(3).a(GBC.WEST));
+      Z4UI.addLabel(this, Z4Translations.FILLING, new GBC(0, 0).w(4).a(GBC.WEST));
       panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
       this.add(panel, new GBC(0, 1).h(3).i(0, 0, 0, 1));
       this.addRadio(Z4ColorProgressionBehavior.SPATIAL, panel, buttonGroup, "top");
       this.addRadio(Z4ColorProgressionBehavior.TEMPORAL, panel, buttonGroup, "centerv");
       this.addRadio(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, panel, buttonGroup, "centerv");
       this.addRadio(Z4ColorProgressionBehavior.RANDOM, panel, buttonGroup, "bottom");
-      Z4UI.addLabel(this, Z4Translations.STEP, new GBC(1, 1).a(GBC.WEST));
-      this.add(this.temporalStepSpinner, new GBC(2, 1).a(GBC.EAST));
-      this.add(this.temporalStepSlider, new GBC(1, 2).w(2));
-      Z4UI.addLabel(this, Z4Translations.LIGHTING, new GBC(1, 3).a(GBC.EAST).wx(1).i(0, 0, 0, 2));
-      this.add(this.lightingPanel, new GBC(2, 3).a(GBC.EAST));
+      Z4UI.addLabel(this, Z4Translations.STEP, new GBC(1, 1).w(2).a(GBC.WEST));
+      this.add(this.temporalStepSpinner, new GBC(3, 1).a(GBC.EAST));
+      this.add(this.temporalStepSlider, new GBC(1, 2).w(3));
+      this.add(this.resetOnStartMoving, new GBC(1, 3).a(GBC.WEST).wx(1));
+      Z4UI.addLabel(this, Z4Translations.LIGHTING, new GBC(2, 3).a(GBC.EAST).i(0, 0, 0, 2));
+      this.add(this.lightingPanel, new GBC(3, 3).a(GBC.EAST));
     }
     this.temporalStepSpinner.setModel(new SpinnerNumberModel(1, 1, 100, 1));
     this.temporalStepSpinner.cssAddClass("jsspinner_w_4rem");
@@ -71,6 +67,11 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
     this.temporalStepSlider.setValue(1);
     this.temporalStepSlider.getStyle().minWidth = "20rem";
     this.temporalStepSlider.addChangeListener(event => this.onTemporalStepChange(false, this.temporalStepSlider.getValueIsAdjusting(), this.temporalStepSpinner, this.temporalStepSlider));
+    this.resetOnStartMoving.setContentAreaFilled(false);
+    this.resetOnStartMoving.cssAddClass("z4colorprogressionpanel-toggle");
+    this.resetOnStartMoving.getStyle().padding = "1px";
+    this.resetOnStartMoving.setTooltip(Z4Translations.RESET_ON_START_MOVING);
+    this.resetOnStartMoving.setIcon(new Z4EmptyImageProducer(""));
     this.resetOnStartMoving.addActionListener(event => {
       this.valueIsAdjusting = false;
       this.onProgressionChange();
