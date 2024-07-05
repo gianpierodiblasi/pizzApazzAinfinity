@@ -71,7 +71,7 @@ class Z4ResizeImagePanel extends JSPanel {
     this.center.addActionListener(event => {
     });
     this.add(this.center, new GBC(2, 8).a(GBC.EAST).i(0, 5, 0, 5));
-    this.add(this.preview, new GBC(3, 0).h(9));
+    this.add(this.preview, new GBC(3, 0).h(9).i(5, 5, 5, 5));
     this.setDimensions(false, false);
   }
 
@@ -122,18 +122,30 @@ class Z4ResizeImagePanel extends JSPanel {
     let dimHIN = h / res;
     this.dimensionMM.setText(new Number(dimWIN * 25.4).toFixed(2) + " x " + new Number(dimHIN * 25.4).toFixed(2) + " mm");
     this.dimensionIN.setText(new Number(dimWIN).toFixed(2) + " x " + new Number(dimHIN).toFixed(2) + " inch");
-    this.offsetX.setEnabled(!this.resizeByKeepingRatio.isSelected());
-    this.offsetY.setEnabled(!this.resizeByKeepingRatio.isSelected());
-    this.center.setEnabled(!this.resizeByKeepingRatio.isSelected());
     let newRatio = w / h;
     this.preview.setProperty("width", "" + parseInt(newRatio > 1 ? Z4ResizeImagePanel.SIZE : Z4ResizeImagePanel.SIZE * newRatio));
     this.preview.setProperty("height", "" + parseInt(newRatio > 1 ? Z4ResizeImagePanel.SIZE / newRatio : Z4ResizeImagePanel.SIZE));
     if (!this.canvasToResize) {
     } else if (this.resizeByKeepingRatio.isSelected()) {
+      this.offsetX.setEnabled(false);
+      this.offsetY.setEnabled(false);
+      this.center.setEnabled(false);
       this.ctx.drawImage(this.canvasToResize, 0, 0, parseInt(this.preview.getProperty("width")), parseInt(this.preview.getProperty("height")));
     } else if (this.adaptByKeepingRatio.isSelected()) {
+      this.offsetX.setEnabled(w !== this.originalWidth);
+      this.offsetY.setEnabled(h !== this.originalHeight);
+      this.center.setEnabled(true);
     } else if (this.keepSize.isSelected()) {
-      this.ctx.drawImage(this.canvasToResize, 0, 0, this.originalWidth / newRatio, this.originalHeight * newRatio);
+      this.offsetX.setEnabled(true);
+      this.offsetY.setEnabled(true);
+      this.center.setEnabled(true);
+      // 
+      // double scale = parseInt(this.preview.getProperty("width")) / this.originalWidth;
+      // 
+      // this.ctx.save();
+      // this.ctx.scale(scale, scale);
+      // this.ctx.drawImage(this.canvasToResize, 0, 0);
+      // this.ctx.restore();
     }
     this.onchange();
   }
