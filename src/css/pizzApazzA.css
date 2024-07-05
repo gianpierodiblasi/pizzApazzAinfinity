@@ -77,6 +77,7 @@
 }
 
 .jsframe .please-wait, .jsdialog .please-wait {
+  z-index: 200;
   position: absolute;
   top: 0;
   left: 0;
