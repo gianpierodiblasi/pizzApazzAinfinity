@@ -347,4 +347,7 @@ class Z4Layer {
     this.height = temp;
     this.blob = null;
   }
+
+   resize() {
+  }
 }

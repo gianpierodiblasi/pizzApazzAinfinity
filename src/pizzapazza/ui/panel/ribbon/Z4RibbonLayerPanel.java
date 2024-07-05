@@ -119,7 +119,7 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
 
     JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener -> panel.addChangeListener(listener), () -> {
       Dimension size = panel.getSelectedSize();
-      return size.width > 0 && size.height > 0;
+      return 0 < size.width && size.width <= Z4Constants.MAX_IMAGE_SIZE && 0 < size.height && size.height < Z4Constants.MAX_IMAGE_SIZE;
     }, response -> {
       if (response == JSOptionPane.OK_OPTION) {
         Dimension size = panel.getSelectedSize();

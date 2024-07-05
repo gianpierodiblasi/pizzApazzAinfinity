@@ -5,10 +5,12 @@ import def.js.Number;
 import javascript.awt.Dimension;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
+import javascript.swing.ButtonGroup;
 import javascript.swing.JSLabel;
 import javascript.swing.JSPanel;
+import javascript.swing.JSRadioButton;
+import javascript.swing.JSSlider;
 import javascript.swing.JSSpinner;
-import javascript.swing.JSTabbedPane;
 import javascript.swing.SpinnerNumberModel;
 import javascript.swing.event.ChangeEvent;
 import javascript.swing.event.ChangeListener;
@@ -18,57 +20,69 @@ import pizzapazza.util.Z4UI;
 import static simulation.js.$Globals.$typeof;
 
 /**
- * The panel to create a new image
+ * The panel to resize an image
  *
  * @author gianpiero.diblasi
  */
-public class Z4NewImagePanel extends JSTabbedPane {
+public class Z4ResizeImagePanel extends JSPanel {
 
   private final JSSpinner width = new JSSpinner();
   private final JSSpinner height = new JSSpinner();
   private final JSSpinner resolution = new JSSpinner();
   private final JSLabel dimensionMM = new JSLabel();
   private final JSLabel dimensionIN = new JSLabel();
-  private final Z4FillingPanel fillingPanel = new Z4FillingPanel();
+  
+  private final JSSlider offsetXSlider = new JSSlider();
+  private final JSSpinner offsetXSpinner = new JSSpinner();
+  private final JSSlider offsetYSlider = new JSSlider();
+  private final JSSpinner offsetYSpinner = new JSSpinner();
+  
+  private final JSRadioButton resizeByKeepingRatio = new JSRadioButton();
+  private final JSRadioButton adaptByKeepingRatio = new JSRadioButton();
+  private final JSRadioButton keepSize = new JSRadioButton();
 
   private final Array<ChangeListener> listeners = new Array<>();
 
   /**
    * Creates the object
    */
-  public Z4NewImagePanel() {
+  public Z4ResizeImagePanel() {
     super();
-    this.cssAddClass("z4newimagepanel");
-    this.getStyle().minWidth = "60rem";
-    this.getStyle().minHeight = "45rem";
+    this.cssAddClass("z4resizeimagepanel");
+    this.setLayout(new GridBagLayout());
 
-    JSPanel panel = new JSPanel();
-    panel.setLayout(new GridBagLayout());
-    this.addTab(Z4Translations.DIMENSION, panel);
+    Z4UI.addLabel(this, Z4Translations.WIDTH + " (px)", new GBC(0, 0).a(GBC.WEST).i(5, 5, 0, 5));
+    this.addSpinner(this.width, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 0, 1);
+    Z4UI.addLabel(this, Z4Translations.HEIGHT + " (px)", new GBC(1, 0).a(GBC.WEST).i(5, 5, 0, 5));
+    this.addSpinner(this.height, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 1, 1);
+    Z4UI.addLabel(this, Z4Translations.RESOLUTION + " (dpi)", new GBC(2, 0).a(GBC.WEST).i(5, 5, 0, 5));
+    this.addSpinner(this.resolution, Z4Constants.DEFAULT_DPI, Z4Constants.MAX_DPI, 2, 1);
+    this.add(this.dimensionMM, new GBC(0, 2).w(3).f(GBC.HORIZONTAL).i(2, 5, 0, 0));
+    this.add(this.dimensionIN, new GBC(0, 3).w(3).f(GBC.HORIZONTAL).i(2, 5, 0, 0));
 
-    Z4UI.addLabel(panel, Z4Translations.WIDTH + " (px)", new GBC(0, 0).a(GBC.WEST).i(5, 5, 0, 5));
-    this.addSpinner(panel, this.width, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 0, 1);
-    Z4UI.addLabel(panel, Z4Translations.HEIGHT + " (px)", new GBC(1, 0).a(GBC.WEST).i(5, 5, 0, 5));
-    this.addSpinner(panel, this.height, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 1, 1);
-    Z4UI.addLabel(panel, Z4Translations.RESOLUTION + " (dpi)", new GBC(2, 0).a(GBC.WEST).i(5, 5, 0, 5));
-    this.addSpinner(panel, this.resolution, Z4Constants.DEFAULT_DPI, Z4Constants.MAX_DPI, 2, 1);
-    panel.add(this.dimensionMM, new GBC(0, 2).w(3).f(GBC.HORIZONTAL).i(2, 5, 0, 0));
-    panel.add(this.dimensionIN, new GBC(0, 3).w(3).f(GBC.HORIZONTAL).i(2, 5, 0, 0));
-
-    panel.add(new JSLabel(), new GBC(0, 4).wy(1));
-
-    this.addTab(Z4Translations.FILLING, this.fillingPanel);
-
+    ButtonGroup buttonGroup = new ButtonGroup();
+    this.addRadio(this.resizeByKeepingRatio, buttonGroup, Z4Translations.RESIZE_BY_KEEPING_RATIO, true, 4);
+    this.addRadio(this.adaptByKeepingRatio, buttonGroup, Z4Translations.ADAPT_BY_KEEPING_RATIO, false, 5);
+    this.addRadio(this.keepSize, buttonGroup, Z4Translations.KEEP_SIZE, false, 6);
+    
     this.setDimensions();
   }
 
-  private void addSpinner(JSPanel panel, JSSpinner spinner, double value, double max, int gridx, int gridy) {
+  private void addSpinner(JSSpinner spinner, double value, double max, int gridx, int gridy) {
     spinner.setModel(new SpinnerNumberModel(value, 1, max, 1));
     spinner.getStyle().minWidth = "6.6rem";
     spinner.getChilStyleByQuery("input[type=number]").minWidth = "5.5rem";
     spinner.getChilStyleByQuery("input[type=number]").width = "5.5rem";
     spinner.addChangeListener(event -> this.setDimensions());
-    panel.add(spinner, new GBC(gridx, gridy).a(GBC.WEST).i(0, 5, 0, 5));
+    this.add(spinner, new GBC(gridx, gridy).a(GBC.WEST).i(0, 5, 0, 5));
+  }
+
+  private void addRadio(JSRadioButton radio, ButtonGroup buttonGroup, String text, boolean selected, int gridy) {
+    radio.setText(text);
+    radio.setSelected(selected);
+    radio.addActionListener(event -> this.setDimensions());
+    buttonGroup.add(radio);
+    this.add(radio, new GBC(0, gridy).a(GBC.WEST).w(3));
   }
 
   private void setDimensions() {
@@ -81,7 +95,6 @@ public class Z4NewImagePanel extends JSTabbedPane {
 
     this.dimensionMM.setText(new Number(dimWIN * 25.4).toFixed(2) + " x " + new Number(dimHIN * 25.4).toFixed(2) + " mm");
     this.dimensionIN.setText(new Number(dimWIN).toFixed(2) + " x " + new Number(dimHIN).toFixed(2) + " inch");
-    this.fillingPanel.setSize((int) w, (int) h);
 
     this.onchange();
   }
@@ -107,18 +120,6 @@ public class Z4NewImagePanel extends JSTabbedPane {
     return new Dimension((int) this.width.getValue(), (int) this.height.getValue());
   }
 
-  /**
-   * Returns the selected filling (an instance of Color, Z4AbstractFiller or
-   * Z4BiGradientColor)
-   *
-   * @return The selected filling (an instance of Color, Z4AbstractFiller or
-   * Z4BiGradientColor)
-   */
-  public Object getSelectedFilling() {
-    return this.fillingPanel.getSelectedFilling();
-  }
-
-  @Override
   public void addChangeListener(ChangeListener listener) {
     this.listeners.push(listener);
   }

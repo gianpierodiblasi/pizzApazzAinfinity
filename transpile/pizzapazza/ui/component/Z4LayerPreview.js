@@ -222,38 +222,64 @@ class Z4LayerPreview extends JSDropDown {
     let panelTranform = new JSPanel();
     panelTranform.setLayout(new GridBagLayout());
     this.editor.addTab(Z4Translations.TRANSFORM, panelTranform);
-    this.addButton(panelTranform, Z4Translations.FLIP_HORIZONTAL, 0, 0, () => this.layer.flipHorizonal());
-    this.addButton(panelTranform, Z4Translations.FLIP_VERTICAL, 1, 0, () => this.layer.flipVertical());
-    this.addButton(panelTranform, Z4Translations.ROTATE_PLUS_90, 0, 1, () => {
-      this.layer.rotatePlus90();
-      this.setLayer(this.canvas, this.layer);
+    this.addButton(panelTranform, Z4Translations.FLIP_HORIZONTAL, 0, 0, event => {
+      this.layer.flipHorizonal();
+      this.afterTransform();
     });
-    this.addButton(panelTranform, Z4Translations.ROTATE_MINUS_90, 1, 1, () => {
-      this.layer.rotatePlus90();
-      this.layer.rotatePlus90();
-      this.layer.rotatePlus90();
-      this.setLayer(this.canvas, this.layer);
+    this.addButton(panelTranform, Z4Translations.FLIP_VERTICAL, 1, 0, event => {
+      this.layer.flipVertical();
+      this.afterTransform();
     });
-    this.addButton(panelTranform, Z4Translations.ROTATE_180, 0, 2, () => {
+    this.addButton(panelTranform, Z4Translations.ROTATE_PLUS_90, 0, 1, event => {
+      this.layer.rotatePlus90();
+      this.setLayer(this.canvas, this.layer);
+      this.afterTransform();
+    });
+    this.addButton(panelTranform, Z4Translations.ROTATE_MINUS_90, 1, 1, event => {
+      this.layer.rotatePlus90();
       this.layer.rotatePlus90();
       this.layer.rotatePlus90();
       this.setLayer(this.canvas, this.layer);
+      this.afterTransform();
+    });
+    this.addButton(panelTranform, Z4Translations.ROTATE_180, 0, 2, event => {
+      this.layer.rotatePlus90();
+      this.layer.rotatePlus90();
+      this.setLayer(this.canvas, this.layer);
+      this.afterTransform();
+    });
+    this.addButton(panelTranform, Z4Translations.RESIZE, 1, 2, event => {
+      let layerSize = this.layer.getSize();
+      let resizeImagePanel = new Z4ResizeImagePanel();
+      resizeImagePanel.setSelectedSize(layerSize.width, layerSize.height);
+      JSOptionPane.showInputDialog(resizeImagePanel, Z4Translations.RESIZE, listener => resizeImagePanel.addChangeListener(listener), () => {
+        let size = resizeImagePanel.getSelectedSize();
+        return 0 < size.width && size.width <= Z4Constants.MAX_IMAGE_SIZE && 0 < size.height && size.height < Z4Constants.MAX_IMAGE_SIZE;
+      }, response => {
+        if (response === JSOptionPane.OK_OPTION) {
+          let size = resizeImagePanel.getSelectedSize();
+          this.layer.resize();
+          this.setLayer(this.canvas, this.layer);
+          this.afterTransform();
+        }
+      });
     });
     this.appendChild(this.editor);
   }
 
-   addButton(panel, text, gridx, gridy, func) {
+   addButton(panel, text, gridx, gridy, listener) {
     let button = new JSButton();
     button.setText(text);
     button.setContentAreaFilled(false);
-    button.addActionListener(event => {
-      this.changed = true;
-      func();
-      this.drawLayer();
-      this.canvas.setSaved(false);
-      this.canvas.drawCanvas();
-    });
+    button.addActionListener(listener);
     panel.add(button, new GBC(gridx, gridy).f(GBC.HORIZONTAL).i(1, 1, 1, 1));
+  }
+
+   afterTransform() {
+    this.changed = true;
+    this.drawLayer();
+    this.canvas.setSaved(false);
+    this.canvas.drawCanvas();
   }
 
    onChange(spTosl, adjusting, spinner, slider) {

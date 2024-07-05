@@ -62,7 +62,7 @@ class Z4MergeLayerPanel extends JSPanel {
       if (!layer.isHidden()) {
         label.getStyle().color = "var(--main-action-bgcolor)";
       }
-      this.add(label, new GBC(0, index + 1).a(GBC.EAST));
+      this.add(label, new GBC(0, index + 1).a(GBC.EAST).i(0, 0, 0, 2));
       let checkbox = new JSCheckBox();
       checkbox.setText(layer.getName());
       checkbox.addActionListener(event => this.onchange());

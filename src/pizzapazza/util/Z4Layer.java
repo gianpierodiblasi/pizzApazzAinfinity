@@ -380,4 +380,7 @@ public class Z4Layer {
 
     this.blob = null;
   }
+
+  public void resize() {
+  }
 }

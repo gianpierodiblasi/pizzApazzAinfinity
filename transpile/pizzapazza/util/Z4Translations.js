@@ -249,6 +249,14 @@ class Z4Translations {
 
   static  RESET_ON_START_MOVING = "";
 
+  static  RESIZE = "";
+
+  static  RESIZE_BY_KEEPING_RATIO = "";
+
+  static  ADAPT_BY_KEEPING_RATIO = "";
+
+  static  KEEP_SIZE = "";
+
   // Color
   static  COLOR = "";
 
@@ -573,6 +581,10 @@ class Z4Translations {
     Z4Translations.DOTTED_GRID = "Dotted Grid";
     Z4Translations.PLOT_WIDTH = "Plot Width";
     Z4Translations.RESET_ON_START_MOVING = "Reset on Start Moving";
+    Z4Translations.RESIZE = "Resize";
+    Z4Translations.RESIZE_BY_KEEPING_RATIO = "Resize by Keeping Ratio";
+    Z4Translations.ADAPT_BY_KEEPING_RATIO = "Adapt by Keeping Ratio";
+    Z4Translations.KEEP_SIZE = "Keep Size";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -797,6 +809,10 @@ class Z4Translations {
     Z4Translations.DOTTED_GRID = "Griglia Punteggiata";
     Z4Translations.PLOT_WIDTH = "Larghezza Trama";
     Z4Translations.RESET_ON_START_MOVING = "Riavvia su Inizio del Movimento";
+    Z4Translations.RESIZE = "Ridimensiona";
+    Z4Translations.RESIZE_BY_KEEPING_RATIO = "Ridimensiona Mantenendo il Rapporto";
+    Z4Translations.ADAPT_BY_KEEPING_RATIO = "Adatta Mantenendo il Rapporto";
+    Z4Translations.KEEP_SIZE = "Mantieni le Dimensioni";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";

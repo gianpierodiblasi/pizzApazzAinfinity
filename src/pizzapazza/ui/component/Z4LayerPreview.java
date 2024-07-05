@@ -7,6 +7,7 @@ import javascript.awt.Dimension;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
 import javascript.awt.Point;
+import javascript.awt.event.ActionListener;
 import javascript.swing.ButtonGroup;
 import javascript.swing.JSButton;
 import javascript.swing.JSComponent;
@@ -21,13 +22,13 @@ import javascript.swing.JSTabbedPane;
 import javascript.swing.JSTextField;
 import javascript.swing.SpinnerNumberModel;
 import javascript.util.Translations;
+import pizzapazza.ui.panel.Z4ResizeImagePanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Layer;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
-import simulation.js.$Apply_0_Void;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
 
@@ -277,39 +278,65 @@ public class Z4LayerPreview extends JSDropDown {
     panelTranform.setLayout(new GridBagLayout());
 
     this.editor.addTab(Z4Translations.TRANSFORM, panelTranform);
-    this.addButton(panelTranform, Z4Translations.FLIP_HORIZONTAL, 0, 0, () -> this.layer.flipHorizonal());
-    this.addButton(panelTranform, Z4Translations.FLIP_VERTICAL, 1, 0, () -> this.layer.flipVertical());
-    this.addButton(panelTranform, Z4Translations.ROTATE_PLUS_90, 0, 1, () -> {
-      this.layer.rotatePlus90();
-      this.setLayer(this.canvas, this.layer);
+    this.addButton(panelTranform, Z4Translations.FLIP_HORIZONTAL, 0, 0, event -> {
+      this.layer.flipHorizonal();
+      this.afterTransform();
     });
-    this.addButton(panelTranform, Z4Translations.ROTATE_MINUS_90, 1, 1, () -> {
-      this.layer.rotatePlus90();
-      this.layer.rotatePlus90();
-      this.layer.rotatePlus90();
-      this.setLayer(this.canvas, this.layer);
+    this.addButton(panelTranform, Z4Translations.FLIP_VERTICAL, 1, 0, event -> {
+      this.layer.flipVertical();
+      this.afterTransform();
     });
-    this.addButton(panelTranform, Z4Translations.ROTATE_180, 0, 2, () -> {
+    this.addButton(panelTranform, Z4Translations.ROTATE_PLUS_90, 0, 1, event -> {
+      this.layer.rotatePlus90();
+      this.setLayer(this.canvas, this.layer);
+      this.afterTransform();
+    });
+    this.addButton(panelTranform, Z4Translations.ROTATE_MINUS_90, 1, 1, event -> {
+      this.layer.rotatePlus90();
       this.layer.rotatePlus90();
       this.layer.rotatePlus90();
       this.setLayer(this.canvas, this.layer);
+      this.afterTransform();
+    });
+    this.addButton(panelTranform, Z4Translations.ROTATE_180, 0, 2, event -> {
+      this.layer.rotatePlus90();
+      this.layer.rotatePlus90();
+      this.setLayer(this.canvas, this.layer);
+      this.afterTransform();
+    });
+    this.addButton(panelTranform, Z4Translations.RESIZE, 1, 2, event -> {
+      Dimension layerSize = this.layer.getSize();
+      Z4ResizeImagePanel resizeImagePanel = new Z4ResizeImagePanel();
+
+      resizeImagePanel.setSelectedSize(layerSize.width, layerSize.height);
+      JSOptionPane.showInputDialog(resizeImagePanel, Z4Translations.RESIZE, listener -> resizeImagePanel.addChangeListener(listener), () -> {
+        Dimension size = resizeImagePanel.getSelectedSize();
+        return 0 < size.width && size.width <= Z4Constants.MAX_IMAGE_SIZE && 0 < size.height && size.height < Z4Constants.MAX_IMAGE_SIZE;
+      }, response -> {
+        if (response == JSOptionPane.OK_OPTION) {
+          Dimension size = resizeImagePanel.getSelectedSize();
+          this.layer.resize();
+          this.setLayer(this.canvas, this.layer);
+          this.afterTransform();
+        }
+      });
     });
     this.appendChild(this.editor);
   }
 
-  private void addButton(JSPanel panel, String text, int gridx, int gridy, $Apply_0_Void func) {
+  private void addButton(JSPanel panel, String text, int gridx, int gridy, ActionListener listener) {
     JSButton button = new JSButton();
     button.setText(text);
     button.setContentAreaFilled(false);
-    button.addActionListener(event -> {
-      this.changed = true;
-      func.$apply();
-      this.drawLayer();
-      this.canvas.setSaved(false);
-      this.canvas.drawCanvas();
-    });
-
+    button.addActionListener(listener);
     panel.add(button, new GBC(gridx, gridy).f(GBC.HORIZONTAL).i(1, 1, 1, 1));
+  }
+
+  private void afterTransform() {
+    this.changed = true;
+    this.drawLayer();
+    this.canvas.setSaved(false);
+    this.canvas.drawCanvas();
   }
 
   private void onChange(boolean spTosl, boolean adjusting, JSSpinner spinner, JSSlider slider) {

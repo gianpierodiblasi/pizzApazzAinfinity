@@ -73,7 +73,7 @@ class Z4NewImagePanel extends JSTabbedPane {
    setSelectedSize(width, height) {
     this.width.setValue(width);
     this.height.setValue(height);
-    this.fillingPanel.setSize(width, height);
+    this.setDimensions();
   }
 
   /**

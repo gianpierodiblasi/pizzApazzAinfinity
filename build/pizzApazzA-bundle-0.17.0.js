@@ -4203,38 +4203,64 @@ class Z4LayerPreview extends JSDropDown {
     let panelTranform = new JSPanel();
     panelTranform.setLayout(new GridBagLayout());
     this.editor.addTab(Z4Translations.TRANSFORM, panelTranform);
-    this.addButton(panelTranform, Z4Translations.FLIP_HORIZONTAL, 0, 0, () => this.layer.flipHorizonal());
-    this.addButton(panelTranform, Z4Translations.FLIP_VERTICAL, 1, 0, () => this.layer.flipVertical());
-    this.addButton(panelTranform, Z4Translations.ROTATE_PLUS_90, 0, 1, () => {
-      this.layer.rotatePlus90();
-      this.setLayer(this.canvas, this.layer);
+    this.addButton(panelTranform, Z4Translations.FLIP_HORIZONTAL, 0, 0, event => {
+      this.layer.flipHorizonal();
+      this.afterTransform();
     });
-    this.addButton(panelTranform, Z4Translations.ROTATE_MINUS_90, 1, 1, () => {
-      this.layer.rotatePlus90();
-      this.layer.rotatePlus90();
-      this.layer.rotatePlus90();
-      this.setLayer(this.canvas, this.layer);
+    this.addButton(panelTranform, Z4Translations.FLIP_VERTICAL, 1, 0, event => {
+      this.layer.flipVertical();
+      this.afterTransform();
     });
-    this.addButton(panelTranform, Z4Translations.ROTATE_180, 0, 2, () => {
+    this.addButton(panelTranform, Z4Translations.ROTATE_PLUS_90, 0, 1, event => {
+      this.layer.rotatePlus90();
+      this.setLayer(this.canvas, this.layer);
+      this.afterTransform();
+    });
+    this.addButton(panelTranform, Z4Translations.ROTATE_MINUS_90, 1, 1, event => {
+      this.layer.rotatePlus90();
       this.layer.rotatePlus90();
       this.layer.rotatePlus90();
       this.setLayer(this.canvas, this.layer);
+      this.afterTransform();
+    });
+    this.addButton(panelTranform, Z4Translations.ROTATE_180, 0, 2, event => {
+      this.layer.rotatePlus90();
+      this.layer.rotatePlus90();
+      this.setLayer(this.canvas, this.layer);
+      this.afterTransform();
+    });
+    this.addButton(panelTranform, Z4Translations.RESIZE, 1, 2, event => {
+      let layerSize = this.layer.getSize();
+      let resizeImagePanel = new Z4ResizeImagePanel();
+      resizeImagePanel.setSelectedSize(layerSize.width, layerSize.height);
+      JSOptionPane.showInputDialog(resizeImagePanel, Z4Translations.RESIZE, listener => resizeImagePanel.addChangeListener(listener), () => {
+        let size = resizeImagePanel.getSelectedSize();
+        return 0 < size.width && size.width <= Z4Constants.MAX_IMAGE_SIZE && 0 < size.height && size.height < Z4Constants.MAX_IMAGE_SIZE;
+      }, response => {
+        if (response === JSOptionPane.OK_OPTION) {
+          let size = resizeImagePanel.getSelectedSize();
+          this.layer.resize();
+          this.setLayer(this.canvas, this.layer);
+          this.afterTransform();
+        }
+      });
     });
     this.appendChild(this.editor);
   }
 
-   addButton(panel, text, gridx, gridy, func) {
+   addButton(panel, text, gridx, gridy, listener) {
     let button = new JSButton();
     button.setText(text);
     button.setContentAreaFilled(false);
-    button.addActionListener(event => {
-      this.changed = true;
-      func();
-      this.drawLayer();
-      this.canvas.setSaved(false);
-      this.canvas.drawCanvas();
-    });
+    button.addActionListener(listener);
     panel.add(button, new GBC(gridx, gridy).f(GBC.HORIZONTAL).i(1, 1, 1, 1));
+  }
+
+   afterTransform() {
+    this.changed = true;
+    this.drawLayer();
+    this.canvas.setSaved(false);
+    this.canvas.drawCanvas();
   }
 
    onChange(spTosl, adjusting, spinner, slider) {
@@ -5876,7 +5902,7 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
     let panel = new Z4NewImagePanel();
     JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => panel.addChangeListener(listener), () => {
       let size = panel.getSelectedSize();
-      return size.width > 0 && size.height > 0;
+      return 0 < size.width && size.width <= Z4Constants.MAX_IMAGE_SIZE && 0 < size.height && size.height < Z4Constants.MAX_IMAGE_SIZE;
     }, response => {
       if (response === JSOptionPane.OK_OPTION) {
         let size = panel.getSelectedSize();
@@ -6475,7 +6501,7 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     panel.setSelectedSize(canvasSize.width, canvasSize.height);
     JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => panel.addChangeListener(listener), () => {
       let size = panel.getSelectedSize();
-      return size.width > 0 && size.height > 0;
+      return 0 < size.width && size.width <= Z4Constants.MAX_IMAGE_SIZE && 0 < size.height && size.height < Z4Constants.MAX_IMAGE_SIZE;
     }, response => {
       if (response === JSOptionPane.OK_OPTION) {
         let size = panel.getSelectedSize();
@@ -11795,7 +11821,7 @@ class Z4MergeLayerPanel extends JSPanel {
       if (!layer.isHidden()) {
         label.getStyle().color = "var(--main-action-bgcolor)";
       }
-      this.add(label, new GBC(0, index + 1).a(GBC.EAST));
+      this.add(label, new GBC(0, index + 1).a(GBC.EAST).i(0, 0, 0, 2));
       let checkbox = new JSCheckBox();
       checkbox.setText(layer.getName());
       checkbox.addActionListener(event => this.onchange());
@@ -11900,7 +11926,7 @@ class Z4NewImagePanel extends JSTabbedPane {
    setSelectedSize(width, height) {
     this.width.setValue(width);
     this.height.setValue(height);
-    this.fillingPanel.setSize(width, height);
+    this.setDimensions();
   }
 
   /**
@@ -12011,6 +12037,125 @@ class Z4OpenDrawingToolsFromLibraryPanel extends JSPanel {
    */
    addChangeListener(listener) {
     this.listeners.push(listener);
+  }
+}
+/**
+ * The panel to resize an image
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4ResizeImagePanel extends JSPanel {
+
+   width = new JSSpinner();
+
+   height = new JSSpinner();
+
+   resolution = new JSSpinner();
+
+   dimensionMM = new JSLabel();
+
+   dimensionIN = new JSLabel();
+
+   offsetXSlider = new JSSlider();
+
+   offsetXSpinner = new JSSpinner();
+
+   offsetYSlider = new JSSlider();
+
+   offsetYSpinner = new JSSpinner();
+
+   resizeByKeepingRatio = new JSRadioButton();
+
+   adaptByKeepingRatio = new JSRadioButton();
+
+   keepSize = new JSRadioButton();
+
+   listeners = new Array();
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super();
+    this.cssAddClass("z4resizeimagepanel");
+    this.setLayout(new GridBagLayout());
+    Z4UI.addLabel(this, Z4Translations.WIDTH + " (px)", new GBC(0, 0).a(GBC.WEST).i(5, 5, 0, 5));
+    this.addSpinner(this.width, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 0, 1);
+    Z4UI.addLabel(this, Z4Translations.HEIGHT + " (px)", new GBC(1, 0).a(GBC.WEST).i(5, 5, 0, 5));
+    this.addSpinner(this.height, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 1, 1);
+    Z4UI.addLabel(this, Z4Translations.RESOLUTION + " (dpi)", new GBC(2, 0).a(GBC.WEST).i(5, 5, 0, 5));
+    this.addSpinner(this.resolution, Z4Constants.DEFAULT_DPI, Z4Constants.MAX_DPI, 2, 1);
+    this.add(this.dimensionMM, new GBC(0, 2).w(3).f(GBC.HORIZONTAL).i(2, 5, 0, 0));
+    this.add(this.dimensionIN, new GBC(0, 3).w(3).f(GBC.HORIZONTAL).i(2, 5, 0, 0));
+    let buttonGroup = new ButtonGroup();
+    this.addRadio(this.resizeByKeepingRatio, buttonGroup, Z4Translations.RESIZE_BY_KEEPING_RATIO, true, 4);
+    this.addRadio(this.adaptByKeepingRatio, buttonGroup, Z4Translations.ADAPT_BY_KEEPING_RATIO, false, 5);
+    this.addRadio(this.keepSize, buttonGroup, Z4Translations.KEEP_SIZE, false, 6);
+    this.setDimensions();
+  }
+
+   addSpinner(spinner, value, max, gridx, gridy) {
+    spinner.setModel(new SpinnerNumberModel(value, 1, max, 1));
+    spinner.getStyle().minWidth = "6.6rem";
+    spinner.getChilStyleByQuery("input[type=number]").minWidth = "5.5rem";
+    spinner.getChilStyleByQuery("input[type=number]").width = "5.5rem";
+    spinner.addChangeListener(event => this.setDimensions());
+    this.add(spinner, new GBC(gridx, gridy).a(GBC.WEST).i(0, 5, 0, 5));
+  }
+
+   addRadio(radio, buttonGroup, text, selected, gridy) {
+    radio.setText(text);
+    radio.setSelected(selected);
+    radio.addActionListener(event => this.setDimensions());
+    buttonGroup.add(radio);
+    this.add(radio, new GBC(0, gridy).a(GBC.WEST).w(3));
+  }
+
+   setDimensions() {
+    let w = this.width.getValue();
+    let h = this.height.getValue();
+    let res = this.resolution.getValue();
+    let dimWIN = w / res;
+    let dimHIN = h / res;
+    this.dimensionMM.setText(new Number(dimWIN * 25.4).toFixed(2) + " x " + new Number(dimHIN * 25.4).toFixed(2) + " mm");
+    this.dimensionIN.setText(new Number(dimWIN).toFixed(2) + " x " + new Number(dimHIN).toFixed(2) + " inch");
+    this.onchange();
+  }
+
+  /**
+   * Sets the selected size
+   *
+   * @param width The selected width
+   * @param height The selected height
+   */
+   setSelectedSize(width, height) {
+    this.width.setValue(width);
+    this.height.setValue(height);
+    this.setDimensions();
+  }
+
+  /**
+   * Returns the selected size
+   *
+   * @return The selected size
+   */
+   getSelectedSize() {
+    return new Dimension(this.width.getValue(), this.height.getValue());
+  }
+
+   addChangeListener(listener) {
+    this.listeners.push(listener);
+  }
+
+   onchange() {
+    let event = new ChangeEvent();
+    this.listeners.forEach(listener => {
+      if (typeof listener === "function") {
+        listener(event);
+      } else {
+        listener.stateChanged(event);
+      }
+    });
   }
 }
 /**
@@ -17483,6 +17628,9 @@ class Z4Layer {
     this.height = temp;
     this.blob = null;
   }
+
+   resize() {
+  }
 }
 /**
  * The object representing a paper
@@ -17842,6 +17990,14 @@ class Z4Translations {
 
   static  RESET_ON_START_MOVING = "";
 
+  static  RESIZE = "";
+
+  static  RESIZE_BY_KEEPING_RATIO = "";
+
+  static  ADAPT_BY_KEEPING_RATIO = "";
+
+  static  KEEP_SIZE = "";
+
   // Color
   static  COLOR = "";
 
@@ -18166,6 +18322,10 @@ class Z4Translations {
     Z4Translations.DOTTED_GRID = "Dotted Grid";
     Z4Translations.PLOT_WIDTH = "Plot Width";
     Z4Translations.RESET_ON_START_MOVING = "Reset on Start Moving";
+    Z4Translations.RESIZE = "Resize";
+    Z4Translations.RESIZE_BY_KEEPING_RATIO = "Resize by Keeping Ratio";
+    Z4Translations.ADAPT_BY_KEEPING_RATIO = "Adapt by Keeping Ratio";
+    Z4Translations.KEEP_SIZE = "Keep Size";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -18390,6 +18550,10 @@ class Z4Translations {
     Z4Translations.DOTTED_GRID = "Griglia Punteggiata";
     Z4Translations.PLOT_WIDTH = "Larghezza Trama";
     Z4Translations.RESET_ON_START_MOVING = "Riavvia su Inizio del Movimento";
+    Z4Translations.RESIZE = "Ridimensiona";
+    Z4Translations.RESIZE_BY_KEEPING_RATIO = "Ridimensiona Mantenendo il Rapporto";
+    Z4Translations.ADAPT_BY_KEEPING_RATIO = "Adatta Mantenendo il Rapporto";
+    Z4Translations.KEEP_SIZE = "Mantieni le Dimensioni";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";

@@ -242,7 +242,8 @@ implements <a href="../math/Z4NextableWithTwoParams.html" title="interface in pi
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>abstract boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#drawAction(pizzapazza.iterator.Z4PointIteratorDrawingAction,double,double)">drawAction</a></span>&#8203;(<a href="Z4PointIteratorDrawingAction.html" title="enum in pizzapazza.iterator">Z4PointIteratorDrawingAction</a>&nbsp;action,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#drawAction(pizzapazza.iterator.Z4PointIteratorDrawingAction,pizzapazza.color.Z4ColorProgression,double,double)">drawAction</a></span>&#8203;(<a href="Z4PointIteratorDrawingAction.html" title="enum in pizzapazza.iterator">Z4PointIteratorDrawingAction</a>&nbsp;action,
+          <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression,
           double&nbsp;x,
           double&nbsp;y)</code></th>
 <td class="colLast">
@@ -439,19 +440,21 @@ implements <a href="../math/Z4NextableWithTwoParams.html" title="interface in pi
 </dl>
 </li>
 </ul>
-<a id="drawAction(pizzapazza.iterator.Z4PointIteratorDrawingAction,double,double)">
+<a id="drawAction(pizzapazza.iterator.Z4PointIteratorDrawingAction,pizzapazza.color.Z4ColorProgression,double,double)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>drawAction</h4>
 <pre class="methodSignature">public abstract&nbsp;boolean&nbsp;drawAction&#8203;(<a href="Z4PointIteratorDrawingAction.html" title="enum in pizzapazza.iterator">Z4PointIteratorDrawingAction</a>&nbsp;action,
+                                   <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression,
                                    double&nbsp;x,
                                    double&nbsp;y)</pre>
 <div class="block">Performs a drawing action</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>action</code> - The action</dd>
+<dd><code>progression</code> - The color progression</dd>
 <dd><code>x</code> - The x-axis coordinate of the drawing action</dd>
 <dd><code>y</code> - The y-axis coordinate of the drawing action</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
