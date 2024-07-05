@@ -109,7 +109,7 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
    * otherwise
    */
   public boolean drawAction(Z4PointIteratorDrawingAction action, double x, double y) {
-    return this.pointIterator.drawAction(action, x, y);
+    return this.pointIterator.drawAction(action, this.progression, x, y);
   }
 
   @Override

@@ -59,7 +59,7 @@ public class Z4ColorProgression implements Z4NextableWithParam<Double, Double> {
    * otherwise
    */
   public boolean isResetOnStartMoving() {
-    return resetOnStartMoving;
+    return this.resetOnStartMoving;
   }
 
   /**

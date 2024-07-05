@@ -88,7 +88,7 @@ class Z4DrawingTool extends Z4Nextable {
    * otherwise
    */
    drawAction(action, x, y) {
-    return this.pointIterator.drawAction(action, x, y);
+    return this.pointIterator.drawAction(action, this.progression, x, y);
   }
 
    next() {

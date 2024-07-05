@@ -56,7 +56,7 @@ class Z4ColorProgression extends Z4NextableWithParam {
    * otherwise
    */
    isResetOnStartMoving() {
-    return resetOnStartMoving;
+    return this.resetOnStartMoving;
   }
 
   /**

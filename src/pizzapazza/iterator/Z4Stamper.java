@@ -72,13 +72,17 @@ public class Z4Stamper extends Z4PointIterator {
   }
 
   @Override
-  public boolean drawAction(Z4PointIteratorDrawingAction action, double x, double y) {
+  public boolean drawAction(Z4PointIteratorDrawingAction action, Z4ColorProgression progression, double x, double y) {
     if (action == Z4PointIteratorDrawingAction.START) {
       this.currentMultiplicityCounter = 0;
       this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
 
       this.currentPoint = new Z4Point(x, y);
       this.hasNext = true;
+
+      if (progression.isResetOnStartMoving()) {
+        this.nextdDrawingPoint = null;
+      }
 
       return true;
     } else {
@@ -145,7 +149,7 @@ public class Z4Stamper extends Z4PointIterator {
     Z4ColorProgression finalColorProgression = $exists(progression) ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE);
 
     this.initDraw(width, height).forEach(point -> {
-      this.drawAction(Z4PointIteratorDrawingAction.START, point.x, point.y);
+      this.drawAction(Z4PointIteratorDrawingAction.START, finalColorProgression, point.x, point.y);
 
       context.save();
       context.lineWidth = 1;

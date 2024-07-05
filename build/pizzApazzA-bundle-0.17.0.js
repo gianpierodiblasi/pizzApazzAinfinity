@@ -7317,18 +7317,24 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
     let panel = new JSPanel();
     let buttonGroup = new ButtonGroup();
     if (orientation === Z4ColorProgressionPanelOrientation.HORIZONTALLY_COMPACT) {
-      Z4UI.addLabel(this, Z4Translations.FILLING, new GBC(0, 0).a(GBC.WEST));
+      Z4UI.addLabel(this, Z4Translations.FILLING, new GBC(0, 0).w(2).a(GBC.WEST));
       panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-      this.add(panel, new GBC(1, 0).a(GBC.EAST));
+      this.add(panel, new GBC(2, 0).a(GBC.EAST));
       this.addRadio(Z4ColorProgressionBehavior.SPATIAL, panel, buttonGroup, "left");
       this.addRadio(Z4ColorProgressionBehavior.TEMPORAL, panel, buttonGroup, "centerh");
       this.addRadio(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, panel, buttonGroup, "centerh");
       this.addRadio(Z4ColorProgressionBehavior.RANDOM, panel, buttonGroup, "right");
-      Z4UI.addLabel(this, Z4Translations.STEP, new GBC(0, 1).a(GBC.WEST));
-      this.add(this.temporalStepSpinner, new GBC(1, 1).a(GBC.EAST).i(1, 0, 0, 0));
-      this.add(this.temporalStepSlider, new GBC(0, 2).w(2));
-      Z4UI.addLabel(this, Z4Translations.LIGHTING, new GBC(0, 3).a(GBC.EAST).wx(1).i(0, 0, 0, 2));
-      this.add(this.lightingPanel, new GBC(1, 3).a(GBC.EAST));
+      Z4UI.addLabel(this, Z4Translations.STEP, new GBC(0, 1).w(2).a(GBC.WEST));
+      this.add(this.temporalStepSpinner, new GBC(2, 1).a(GBC.EAST).i(1, 0, 0, 0));
+      this.add(this.temporalStepSlider, new GBC(0, 2).w(3));
+      this.resetOnStartMoving.setContentAreaFilled(false);
+      this.resetOnStartMoving.cssAddClass("z4colorprogressionpanel-toggle");
+      this.resetOnStartMoving.getStyle().padding = "1px";
+      this.resetOnStartMoving.setTooltip(Z4Translations.RESET_ON_START_MOVING);
+      this.resetOnStartMoving.setIcon(new Z4EmptyImageProducer(""));
+      this.add(this.resetOnStartMoving, new GBC(0, 3).a(GBC.WEST).wx(1));
+      Z4UI.addLabel(this, Z4Translations.LIGHTING, new GBC(1, 3).a(GBC.EAST).i(0, 0, 0, 2));
+      this.add(this.lightingPanel, new GBC(2, 3).a(GBC.EAST));
     } else if (orientation === Z4ColorProgressionPanelOrientation.VERTICALLY_COMPACT) {
       Z4UI.addLabel(this, Z4Translations.FILLING, new GBC(0, 0).w(3).a(GBC.WEST));
       panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -7351,6 +7357,10 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
     this.temporalStepSlider.setValue(1);
     this.temporalStepSlider.getStyle().minWidth = "20rem";
     this.temporalStepSlider.addChangeListener(event => this.onTemporalStepChange(false, this.temporalStepSlider.getValueIsAdjusting(), this.temporalStepSpinner, this.temporalStepSlider));
+    this.resetOnStartMoving.addActionListener(event => {
+      this.valueIsAdjusting = false;
+      this.onProgressionChange();
+    });
     this.lightingPanel.addChangeListener(event => {
       this.valueIsAdjusting = false;
       this.onProgressionChange();
@@ -7422,6 +7432,7 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
   }
 
    onProgressionChange() {
+    this.resetOnStartMoving.setContentAreaFilled(this.resetOnStartMoving.isSelected());
     Object.keys(this.radios).forEach(key => {
       if ((this.radios[key]).isSelected()) {
         switch("" + key) {
@@ -7531,11 +7542,14 @@ class Z4ColorProgressionPanel extends Z4AbstractValuePanel {
     this.temporalStepSpinner.setEnabled(value.getColorProgressionBehavior() === Z4ColorProgressionBehavior.TEMPORAL);
     this.temporalStepSlider.setValue(parseInt(value.getTemporalStepProgression() * 100));
     this.temporalStepSlider.setEnabled(value.getColorProgressionBehavior() === Z4ColorProgressionBehavior.TEMPORAL);
+    this.resetOnStartMoving.setSelected(value.isResetOnStartMoving());
+    this.resetOnStartMoving.setContentAreaFilled(value.isResetOnStartMoving());
   }
 
    setEnabled(b) {
     super.setEnabled(b);
     this.enabled = b;
+    this.resetOnStartMoving.setEnabled(b);
     this.lightingPanel.setEnabled(b);
     Object.keys(this.radios).forEach(key => {
       let radio = this.radios[key];
@@ -13516,7 +13530,7 @@ class Z4DrawingTool extends Z4Nextable {
    * otherwise
    */
    drawAction(action, x, y) {
-    return this.pointIterator.drawAction(action, x, y);
+    return this.pointIterator.drawAction(action, this.progression, x, y);
   }
 
    next() {
@@ -13704,7 +13718,7 @@ class Z4ColorProgression extends Z4NextableWithParam {
    * otherwise
    */
    isResetOnStartMoving() {
-    return resetOnStartMoving;
+    return this.resetOnStartMoving;
   }
 
   /**
@@ -13987,12 +14001,13 @@ class Z4PointIterator extends Z4NextableWithTwoParams {
    * Performs a drawing action
    *
    * @param action The action
+   * @param progression The color progression
    * @param x The x-axis coordinate of the drawing action
    * @param y The y-axis coordinate of the drawing action
    * @return true if the painting is modified by the drawing action, false
    * otherwise
    */
-   drawAction(action, x, y) {
+   drawAction(action, progression, x, y) {
   }
 
    next(color, progression) {
@@ -14123,12 +14138,15 @@ class Z4Airbrush extends Z4PointIterator {
     return this.gaussianCorrection;
   }
 
-   drawAction(action, x, y) {
+   drawAction(action, progression, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.currentMultiplicityCounter = 0;
       this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
       this.currentPoint = new Z4Point(x, y);
       this.hasNext = true;
+      if (progression.isResetOnStartMoving()) {
+        this.nextdDrawingPoint = null;
+      }
       return true;
     } else if (action === Z4PointIteratorDrawingAction.CONTINUE) {
       this.currentPoint = new Z4Point(x, y);
@@ -14184,7 +14202,7 @@ class Z4Airbrush extends Z4PointIterator {
     painter = painter ? painter : new Z4ArrowPainter();
     spatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
     progression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE);
-    this.drawAction(Z4PointIteratorDrawingAction.START, width / 2, height / 2);
+    this.drawAction(Z4PointIteratorDrawingAction.START, progression, width / 2, height / 2);
     let next = null;
     while ((next = this.next(spatioTemporalColor, progression)) !== null) {
       if (valueIsAdjusting) {
@@ -14196,7 +14214,7 @@ class Z4Airbrush extends Z4PointIterator {
       painter.draw(context, next, spatioTemporalColor, progression);
       context.restore();
     }
-    this.drawAction(Z4PointIteratorDrawingAction.STOP, width / 2, height / 2);
+    this.drawAction(Z4PointIteratorDrawingAction.STOP, progression, width / 2, height / 2);
   }
 
    toJSON() {
@@ -14270,13 +14288,16 @@ class Z4Scatterer extends Z4PointIterator {
     return this.scattering;
   }
 
-   drawAction(action, x, y) {
+   drawAction(action, progression, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.currentMultiplicityCounter = 0;
       this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
       this.currentPoint = new Z4Point(x, y);
       this.before = this.currentPoint;
       this.hasNext = false;
+      if (progression.isResetOnStartMoving()) {
+        this.nextdDrawingPoint = null;
+      }
       return false;
     } else if (action === Z4PointIteratorDrawingAction.CONTINUE) {
       this.currentMultiplicityCounter = 0;
@@ -14329,7 +14350,7 @@ class Z4Scatterer extends Z4PointIterator {
     let finalSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
     let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE);
     this.initDraw(width, height).forEach((point, index, array) => {
-      this.drawAction(index ? Z4PointIteratorDrawingAction.CONTINUE : Z4PointIteratorDrawingAction.START, point.x, point.y);
+      this.drawAction(index ? Z4PointIteratorDrawingAction.CONTINUE : Z4PointIteratorDrawingAction.START, finalColorProgression, point.x, point.y);
       context.save();
       context.lineWidth = 1;
       context.fillStyle = Z4Constants.getStyle("black");
@@ -14418,12 +14439,15 @@ class Z4Spirograph extends Z4PointIterator {
     return this.drawWhileMoving;
   }
 
-   drawAction(action, x, y) {
+   drawAction(action, progression, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.center = new Z4Point(x, y);
       this.hasNext = false;
       this.clones = new Array();
       this.fromClones = false;
+      if (progression.isResetOnStartMoving()) {
+        this.nextdDrawingPoint = null;
+      }
       return false;
     } else if (action === Z4PointIteratorDrawingAction.CONTINUE) {
       this.currentPoint = new Z4Point(x, y);
@@ -14490,13 +14514,13 @@ class Z4Spirograph extends Z4PointIterator {
     let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE);
     let points = this.initDraw(width, height);
     let start = points[0];
-    this.drawAction(Z4PointIteratorDrawingAction.START, start.x, start.y);
+    this.drawAction(Z4PointIteratorDrawingAction.START, finalColorProgression, start.x, start.y);
     points.slice(1).forEach(point => {
-      this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, point.x, point.y);
+      this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, finalColorProgression, point.x, point.y);
       this.drawDemoPoint(context, finalPainter, finalSpatioTemporalColor, finalColorProgression, valueIsAdjusting);
     });
     let stop = points[points.length - 1];
-    this.drawAction(Z4PointIteratorDrawingAction.STOP, stop.x, stop.y);
+    this.drawAction(Z4PointIteratorDrawingAction.STOP, finalColorProgression, stop.x, stop.y);
     this.drawDemoPoint(context, finalPainter, finalSpatioTemporalColor, finalColorProgression, valueIsAdjusting);
   }
 
@@ -14595,12 +14619,15 @@ class Z4Stamper extends Z4PointIterator {
     return this.push;
   }
 
-   drawAction(action, x, y) {
+   drawAction(action, progression, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.currentMultiplicityCounter = 0;
       this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
       this.currentPoint = new Z4Point(x, y);
       this.hasNext = true;
+      if (progression.isResetOnStartMoving()) {
+        this.nextdDrawingPoint = null;
+      }
       return true;
     } else {
       return false;
@@ -14650,7 +14677,7 @@ class Z4Stamper extends Z4PointIterator {
     let finalSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
     let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE);
     this.initDraw(width, height).forEach(point => {
-      this.drawAction(Z4PointIteratorDrawingAction.START, point.x, point.y);
+      this.drawAction(Z4PointIteratorDrawingAction.START, finalColorProgression, point.x, point.y);
       context.save();
       context.lineWidth = 1;
       context.fillStyle = Z4Constants.getStyle("black");
@@ -14844,7 +14871,7 @@ class Z4Tracer extends Z4PointIterator {
     return this.step;
   }
 
-   drawAction(action, x, y) {
+   drawAction(action, progression, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.currentPoint = new Z4Point(x, y);
       this.hasNext = false;
@@ -14860,6 +14887,9 @@ class Z4Tracer extends Z4PointIterator {
       this.fromClones = false;
       this.surplus = 0;
       this.connect = false;
+      if (progression.isResetOnStartMoving()) {
+        this.nextdDrawingPoint = null;
+      }
       return false;
     } else if (action === Z4PointIteratorDrawingAction.CONTINUE) {
       this.currentMultiplicityCounter = 0;
@@ -14975,16 +15005,16 @@ class Z4Tracer extends Z4PointIterator {
     progression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE);
     let bezier = width > height ? new Bezier(width / 10, height / 3, width / 2, 3 * height / 2, width / 2, -height / 2, 9 * width / 10, height / 2) : new Bezier(width / 3, 9 * height / 10, 3 * width / 2, height / 2, -width / 2, height / 2, width / 2, height / 10);
     let p = bezier.get(0);
-    this.drawAction(Z4PointIteratorDrawingAction.START, p.x, p.y);
+    this.drawAction(Z4PointIteratorDrawingAction.START, progression, p.x, p.y);
     for (let s = 0.1; s < 1; s += 0.1) {
       p = bezier.get(s);
-      this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, p.x, p.y);
+      this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, progression, p.x, p.y);
       this.drawDemoPoint(context, p, painter, spatioTemporalColor, progression, valueIsAdjusting);
     }
     p = bezier.get(1);
-    this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, p.x, p.y);
+    this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, progression, p.x, p.y);
     this.drawDemoPoint(context, p, painter, spatioTemporalColor, progression, valueIsAdjusting);
-    this.drawAction(Z4PointIteratorDrawingAction.STOP, p.x, p.y);
+    this.drawAction(Z4PointIteratorDrawingAction.STOP, progression, p.x, p.y);
     this.drawDemoPoint(context, p, painter, spatioTemporalColor, progression, valueIsAdjusting);
   }
 

@@ -1,7 +1,8 @@
 .z4colorprogressionpanel {
 }
 
-.z4colorprogressionpanel .z4colorprogressionpanel-radio img {
+.z4colorprogressionpanel .z4colorprogressionpanel-radio img,
+.z4colorprogressionpanel .z4colorprogressionpanel-toggle img {
   width: 16px;
   height: 16px;
 }
@@ -28,4 +29,8 @@
 }
 .z4colorprogressionpanel .z4colorprogressionpanel-airbrush-radio:nth-child(4) img {
   content: url(../image/color/z4colorprogressionbehavior_airbrush_random.svg);
+}
+
+.z4colorprogressionpanel .z4colorprogressionpanel-toggle img {
+  content: url(../image/util/reset.svg);
 }

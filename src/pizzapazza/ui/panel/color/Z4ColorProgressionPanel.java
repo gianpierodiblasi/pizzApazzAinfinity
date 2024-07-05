@@ -55,21 +55,28 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
     ButtonGroup buttonGroup = new ButtonGroup();
 
     if (orientation == Z4ColorProgressionPanelOrientation.HORIZONTALLY_COMPACT) {
-      Z4UI.addLabel(this, Z4Translations.FILLING, new GBC(0, 0).a(GBC.WEST));
+      Z4UI.addLabel(this, Z4Translations.FILLING, new GBC(0, 0).w(2).a(GBC.WEST));
       panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 
-      this.add(panel, new GBC(1, 0).a(GBC.EAST));
+      this.add(panel, new GBC(2, 0).a(GBC.EAST));
       this.addRadio(Z4ColorProgressionBehavior.SPATIAL, panel, buttonGroup, "left");
       this.addRadio(Z4ColorProgressionBehavior.TEMPORAL, panel, buttonGroup, "centerh");
       this.addRadio(Z4ColorProgressionBehavior.RELATIVE_TO_PATH, panel, buttonGroup, "centerh");
       this.addRadio(Z4ColorProgressionBehavior.RANDOM, panel, buttonGroup, "right");
 
-      Z4UI.addLabel(this, Z4Translations.STEP, new GBC(0, 1).a(GBC.WEST));
-      this.add(this.temporalStepSpinner, new GBC(1, 1).a(GBC.EAST).i(1, 0, 0, 0));
-      this.add(this.temporalStepSlider, new GBC(0, 2).w(2));
+      Z4UI.addLabel(this, Z4Translations.STEP, new GBC(0, 1).w(2).a(GBC.WEST));
+      this.add(this.temporalStepSpinner, new GBC(2, 1).a(GBC.EAST).i(1, 0, 0, 0));
+      this.add(this.temporalStepSlider, new GBC(0, 2).w(3));
 
-      Z4UI.addLabel(this, Z4Translations.LIGHTING, new GBC(0, 3).a(GBC.EAST).wx(1).i(0, 0, 0, 2));
-      this.add(this.lightingPanel, new GBC(1, 3).a(GBC.EAST));
+      this.resetOnStartMoving.setContentAreaFilled(false);
+      this.resetOnStartMoving.cssAddClass("z4colorprogressionpanel-toggle");
+      this.resetOnStartMoving.getStyle().padding = "1px";
+      this.resetOnStartMoving.setTooltip(Z4Translations.RESET_ON_START_MOVING);
+      this.resetOnStartMoving.setIcon(new Z4EmptyImageProducer<>(""));
+      this.add(this.resetOnStartMoving, new GBC(0, 3).a(GBC.WEST).wx(1));
+
+      Z4UI.addLabel(this, Z4Translations.LIGHTING, new GBC(1, 3).a(GBC.EAST).i(0, 0, 0, 2));
+      this.add(this.lightingPanel, new GBC(2, 3).a(GBC.EAST));
     } else if (orientation == Z4ColorProgressionPanelOrientation.VERTICALLY_COMPACT) {
       Z4UI.addLabel(this, Z4Translations.FILLING, new GBC(0, 0).w(3).a(GBC.WEST));
       panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -97,6 +104,11 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
     this.temporalStepSlider.setValue(1);
     this.temporalStepSlider.getStyle().minWidth = "20rem";
     this.temporalStepSlider.addChangeListener(event -> this.onTemporalStepChange(false, this.temporalStepSlider.getValueIsAdjusting(), this.temporalStepSpinner, this.temporalStepSlider));
+
+    this.resetOnStartMoving.addActionListener(event -> {
+      this.valueIsAdjusting = false;
+      this.onProgressionChange();
+    });
 
     this.lightingPanel.addChangeListener(event -> {
       this.valueIsAdjusting = false;
@@ -175,6 +187,8 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
   }
 
   private void onProgressionChange() {
+    this.resetOnStartMoving.setContentAreaFilled(this.resetOnStartMoving.isSelected());
+
     Object.keys(this.radios).forEach(key -> {
       if (((JSRadioButton) this.radios.$get(key)).isSelected()) {
         switch ("" + key) {
@@ -300,6 +314,9 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
     this.temporalStepSpinner.setEnabled(value.getColorProgressionBehavior() == Z4ColorProgressionBehavior.TEMPORAL);
     this.temporalStepSlider.setValue(parseInt(value.getTemporalStepProgression() * 100));
     this.temporalStepSlider.setEnabled(value.getColorProgressionBehavior() == Z4ColorProgressionBehavior.TEMPORAL);
+
+    this.resetOnStartMoving.setSelected(value.isResetOnStartMoving());
+    this.resetOnStartMoving.setContentAreaFilled(value.isResetOnStartMoving());
   }
 
   @Override
@@ -307,6 +324,7 @@ public class Z4ColorProgressionPanel extends Z4AbstractValuePanel<Z4ColorProgres
   public void setEnabled(boolean b) {
     super.setEnabled(b);
     this.enabled = b;
+    this.resetOnStartMoving.setEnabled(b);
     this.lightingPanel.setEnabled(b);
 
     Object.keys(this.radios).forEach(key -> {

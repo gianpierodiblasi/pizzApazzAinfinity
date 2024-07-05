@@ -72,7 +72,7 @@ public class Z4Scatterer extends Z4PointIterator {
   }
 
   @Override
-  public boolean drawAction(Z4PointIteratorDrawingAction action, double x, double y) {
+  public boolean drawAction(Z4PointIteratorDrawingAction action, Z4ColorProgression progression, double x, double y) {
     if (action == Z4PointIteratorDrawingAction.START) {
       this.currentMultiplicityCounter = 0;
       this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
@@ -81,6 +81,10 @@ public class Z4Scatterer extends Z4PointIterator {
       this.before = this.currentPoint;
       this.hasNext = false;
 
+      if (progression.isResetOnStartMoving()) {
+        this.nextdDrawingPoint = null;
+      }
+      
       return false;
     } else if (action == Z4PointIteratorDrawingAction.CONTINUE) {
       this.currentMultiplicityCounter = 0;
@@ -152,7 +156,7 @@ public class Z4Scatterer extends Z4PointIterator {
     Z4ColorProgression finalColorProgression = $exists(progression) ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE);
 
     this.initDraw(width, height).forEach((point, index, array) -> {
-      this.drawAction($exists(index) ? Z4PointIteratorDrawingAction.CONTINUE : Z4PointIteratorDrawingAction.START, point.x, point.y);
+      this.drawAction($exists(index) ? Z4PointIteratorDrawingAction.CONTINUE : Z4PointIteratorDrawingAction.START,finalColorProgression, point.x, point.y);
 
       context.save();
       context.lineWidth = 1;

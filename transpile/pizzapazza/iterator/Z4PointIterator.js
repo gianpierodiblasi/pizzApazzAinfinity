@@ -56,12 +56,13 @@ class Z4PointIterator extends Z4NextableWithTwoParams {
    * Performs a drawing action
    *
    * @param action The action
+   * @param progression The color progression
    * @param x The x-axis coordinate of the drawing action
    * @param y The y-axis coordinate of the drawing action
    * @return true if the painting is modified by the drawing action, false
    * otherwise
    */
-   drawAction(action, x, y) {
+   drawAction(action, progression, x, y) {
   }
 
    next(color, progression) {

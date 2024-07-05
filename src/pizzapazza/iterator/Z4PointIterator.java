@@ -67,12 +67,13 @@ public abstract class Z4PointIterator implements Z4NextableWithTwoParams<Z4Drawi
    * Performs a drawing action
    *
    * @param action The action
+   * @param progression The color progression
    * @param x The x-axis coordinate of the drawing action
    * @param y The y-axis coordinate of the drawing action
    * @return true if the painting is modified by the drawing action, false
    * otherwise
    */
-  public abstract boolean drawAction(Z4PointIteratorDrawingAction action, double x, double y);
+  public abstract boolean drawAction(Z4PointIteratorDrawingAction action, Z4ColorProgression progression, double x, double y);
 
   @Override
   public abstract Z4DrawingPoint next(Z4SpatioTemporalColor color, Z4ColorProgression progression);

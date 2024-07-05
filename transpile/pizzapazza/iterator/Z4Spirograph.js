@@ -39,12 +39,15 @@ class Z4Spirograph extends Z4PointIterator {
     return this.drawWhileMoving;
   }
 
-   drawAction(action, x, y) {
+   drawAction(action, progression, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.center = new Z4Point(x, y);
       this.hasNext = false;
       this.clones = new Array();
       this.fromClones = false;
+      if (progression.isResetOnStartMoving()) {
+        this.nextdDrawingPoint = null;
+      }
       return false;
     } else if (action === Z4PointIteratorDrawingAction.CONTINUE) {
       this.currentPoint = new Z4Point(x, y);
@@ -111,13 +114,13 @@ class Z4Spirograph extends Z4PointIterator {
     let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE);
     let points = this.initDraw(width, height);
     let start = points[0];
-    this.drawAction(Z4PointIteratorDrawingAction.START, start.x, start.y);
+    this.drawAction(Z4PointIteratorDrawingAction.START, finalColorProgression, start.x, start.y);
     points.slice(1).forEach(point => {
-      this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, point.x, point.y);
+      this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, finalColorProgression, point.x, point.y);
       this.drawDemoPoint(context, finalPainter, finalSpatioTemporalColor, finalColorProgression, valueIsAdjusting);
     });
     let stop = points[points.length - 1];
-    this.drawAction(Z4PointIteratorDrawingAction.STOP, stop.x, stop.y);
+    this.drawAction(Z4PointIteratorDrawingAction.STOP, finalColorProgression, stop.x, stop.y);
     this.drawDemoPoint(context, finalPainter, finalSpatioTemporalColor, finalColorProgression, valueIsAdjusting);
   }
 

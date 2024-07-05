@@ -48,12 +48,15 @@ class Z4Stamper extends Z4PointIterator {
     return this.push;
   }
 
-   drawAction(action, x, y) {
+   drawAction(action, progression, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.currentMultiplicityCounter = 0;
       this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
       this.currentPoint = new Z4Point(x, y);
       this.hasNext = true;
+      if (progression.isResetOnStartMoving()) {
+        this.nextdDrawingPoint = null;
+      }
       return true;
     } else {
       return false;
@@ -103,7 +106,7 @@ class Z4Stamper extends Z4PointIterator {
     let finalSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
     let finalColorProgression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE);
     this.initDraw(width, height).forEach(point => {
-      this.drawAction(Z4PointIteratorDrawingAction.START, point.x, point.y);
+      this.drawAction(Z4PointIteratorDrawingAction.START, finalColorProgression, point.x, point.y);
       context.save();
       context.lineWidth = 1;
       context.fillStyle = Z4Constants.getStyle("black");

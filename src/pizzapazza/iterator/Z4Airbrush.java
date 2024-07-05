@@ -94,7 +94,7 @@ public class Z4Airbrush extends Z4PointIterator {
   }
 
   @Override
-  public boolean drawAction(Z4PointIteratorDrawingAction action, double x, double y) {
+  public boolean drawAction(Z4PointIteratorDrawingAction action, Z4ColorProgression progression, double x, double y) {
     if (action == Z4PointIteratorDrawingAction.START) {
       this.currentMultiplicityCounter = 0;
       this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
@@ -102,6 +102,10 @@ public class Z4Airbrush extends Z4PointIterator {
       this.currentPoint = new Z4Point(x, y);
       this.hasNext = true;
 
+      if (progression.isResetOnStartMoving()) {
+        this.nextdDrawingPoint = null;
+      }
+      
       return true;
     } else if (action == Z4PointIteratorDrawingAction.CONTINUE) {
       this.currentPoint = new Z4Point(x, y);
@@ -175,7 +179,7 @@ public class Z4Airbrush extends Z4PointIterator {
     spatioTemporalColor = $exists(spatioTemporalColor) ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
     progression = $exists(progression) ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE);
 
-    this.drawAction(Z4PointIteratorDrawingAction.START, width / 2, height / 2);
+    this.drawAction(Z4PointIteratorDrawingAction.START, progression, width / 2, height / 2);
 
     Z4DrawingPoint next;
     while ((next = this.next(spatioTemporalColor, progression)) != null) {
@@ -190,7 +194,7 @@ public class Z4Airbrush extends Z4PointIterator {
       context.restore();
     }
 
-    this.drawAction(Z4PointIteratorDrawingAction.STOP, width / 2, height / 2);
+    this.drawAction(Z4PointIteratorDrawingAction.STOP, progression, width / 2, height / 2);
   }
 
   @Override

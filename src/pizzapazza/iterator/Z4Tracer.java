@@ -155,7 +155,7 @@ public class Z4Tracer extends Z4PointIterator {
   }
 
   @Override
-  public boolean drawAction(Z4PointIteratorDrawingAction action, double x, double y) {
+  public boolean drawAction(Z4PointIteratorDrawingAction action, Z4ColorProgression progression, double x, double y) {
     if (action == Z4PointIteratorDrawingAction.START) {
       this.currentPoint = new Z4Point(x, y);
       this.hasNext = false;
@@ -175,6 +175,10 @@ public class Z4Tracer extends Z4PointIterator {
       this.surplus = 0;
       this.connect = false;
 
+      if (progression.isResetOnStartMoving()) {
+        this.nextdDrawingPoint = null;
+      }
+      
       return false;
     } else if (action == Z4PointIteratorDrawingAction.CONTINUE) {
       this.currentMultiplicityCounter = 0;
@@ -324,18 +328,18 @@ public class Z4Tracer extends Z4PointIterator {
             : new $Bezier(width / 3, 9 * height / 10, 3 * width / 2, height / 2, -width / 2, height / 2, width / 2, height / 10);
 
     Z4Point p = bezier.get(0);
-    this.drawAction(Z4PointIteratorDrawingAction.START, p.x, p.y);
+    this.drawAction(Z4PointIteratorDrawingAction.START, progression, p.x, p.y);
 
     for (double s = 0.1; s < 1; s += 0.1) {
       p = bezier.get(s);
-      this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, p.x, p.y);
+      this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, progression, p.x, p.y);
       this.drawDemoPoint(context, p, painter, spatioTemporalColor, progression, valueIsAdjusting);
     }
 
     p = bezier.get(1);
-    this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, p.x, p.y);
+    this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, progression, p.x, p.y);
     this.drawDemoPoint(context, p, painter, spatioTemporalColor, progression, valueIsAdjusting);
-    this.drawAction(Z4PointIteratorDrawingAction.STOP, p.x, p.y);
+    this.drawAction(Z4PointIteratorDrawingAction.STOP, progression, p.x, p.y);
     this.drawDemoPoint(context, p, painter, spatioTemporalColor, progression, valueIsAdjusting);
   }
 

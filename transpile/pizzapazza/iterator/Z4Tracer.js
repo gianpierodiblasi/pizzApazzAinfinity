@@ -143,7 +143,7 @@ class Z4Tracer extends Z4PointIterator {
     return this.step;
   }
 
-   drawAction(action, x, y) {
+   drawAction(action, progression, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.currentPoint = new Z4Point(x, y);
       this.hasNext = false;
@@ -159,6 +159,9 @@ class Z4Tracer extends Z4PointIterator {
       this.fromClones = false;
       this.surplus = 0;
       this.connect = false;
+      if (progression.isResetOnStartMoving()) {
+        this.nextdDrawingPoint = null;
+      }
       return false;
     } else if (action === Z4PointIteratorDrawingAction.CONTINUE) {
       this.currentMultiplicityCounter = 0;
@@ -274,16 +277,16 @@ class Z4Tracer extends Z4PointIterator {
     progression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE);
     let bezier = width > height ? new Bezier(width / 10, height / 3, width / 2, 3 * height / 2, width / 2, -height / 2, 9 * width / 10, height / 2) : new Bezier(width / 3, 9 * height / 10, 3 * width / 2, height / 2, -width / 2, height / 2, width / 2, height / 10);
     let p = bezier.get(0);
-    this.drawAction(Z4PointIteratorDrawingAction.START, p.x, p.y);
+    this.drawAction(Z4PointIteratorDrawingAction.START, progression, p.x, p.y);
     for (let s = 0.1; s < 1; s += 0.1) {
       p = bezier.get(s);
-      this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, p.x, p.y);
+      this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, progression, p.x, p.y);
       this.drawDemoPoint(context, p, painter, spatioTemporalColor, progression, valueIsAdjusting);
     }
     p = bezier.get(1);
-    this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, p.x, p.y);
+    this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, progression, p.x, p.y);
     this.drawDemoPoint(context, p, painter, spatioTemporalColor, progression, valueIsAdjusting);
-    this.drawAction(Z4PointIteratorDrawingAction.STOP, p.x, p.y);
+    this.drawAction(Z4PointIteratorDrawingAction.STOP, progression, p.x, p.y);
     this.drawDemoPoint(context, p, painter, spatioTemporalColor, progression, valueIsAdjusting);
   }
 

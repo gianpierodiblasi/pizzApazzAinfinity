@@ -74,12 +74,15 @@ class Z4Airbrush extends Z4PointIterator {
     return this.gaussianCorrection;
   }
 
-   drawAction(action, x, y) {
+   drawAction(action, progression, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.currentMultiplicityCounter = 0;
       this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
       this.currentPoint = new Z4Point(x, y);
       this.hasNext = true;
+      if (progression.isResetOnStartMoving()) {
+        this.nextdDrawingPoint = null;
+      }
       return true;
     } else if (action === Z4PointIteratorDrawingAction.CONTINUE) {
       this.currentPoint = new Z4Point(x, y);
@@ -135,7 +138,7 @@ class Z4Airbrush extends Z4PointIterator {
     painter = painter ? painter : new Z4ArrowPainter();
     spatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
     progression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE);
-    this.drawAction(Z4PointIteratorDrawingAction.START, width / 2, height / 2);
+    this.drawAction(Z4PointIteratorDrawingAction.START, progression, width / 2, height / 2);
     let next = null;
     while ((next = this.next(spatioTemporalColor, progression)) !== null) {
       if (valueIsAdjusting) {
@@ -147,7 +150,7 @@ class Z4Airbrush extends Z4PointIterator {
       painter.draw(context, next, spatioTemporalColor, progression);
       context.restore();
     }
-    this.drawAction(Z4PointIteratorDrawingAction.STOP, width / 2, height / 2);
+    this.drawAction(Z4PointIteratorDrawingAction.STOP, progression, width / 2, height / 2);
   }
 
    toJSON() {
