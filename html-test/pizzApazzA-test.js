@@ -1356,7 +1356,7 @@ class TestResizeImagePanel extends JSFrame {
     super();
     let canvasToResize = new OffscreenCanvas(400, 300);
     let context = canvasToResize.getContext("2d");
-    let gradient = context.createLinearGradient(0, 0, 400, 0);
+    let gradient = context.createLinearGradient(0, 0, 400, 300);
     gradient.addColorStop(0, "red");
     gradient.addColorStop(0.5, "yellow");
     gradient.addColorStop(1, "blue");

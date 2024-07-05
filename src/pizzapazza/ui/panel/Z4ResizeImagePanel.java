@@ -114,9 +114,44 @@ public class Z4ResizeImagePanel extends JSPanel {
   }
 
   private void setDimensions(boolean isW, boolean isH) {
+    Dimension size = this.computeDimension(isW, isH);
+    this.width.setValue(size.width);
+    this.height.setValue(size.height);
+
+    double res = this.resolution.getValue();
+    double dimWIN = size.width / res;
+    double dimHIN = size.height / res;
+
+    this.dimensionMM.setText(new Number(dimWIN * 25.4).toFixed(2) + " x " + new Number(dimHIN * 25.4).toFixed(2) + " mm");
+    this.dimensionIN.setText(new Number(dimWIN).toFixed(2) + " x " + new Number(dimHIN).toFixed(2) + " inch");
+
+    double newRatio = size.width / size.height;
+    this.preview.setProperty("width", "" + parseInt(newRatio > 1 ? Z4ResizeImagePanel.SIZE : Z4ResizeImagePanel.SIZE * newRatio));
+    this.preview.setProperty("height", "" + parseInt(newRatio > 1 ? Z4ResizeImagePanel.SIZE / newRatio : Z4ResizeImagePanel.SIZE));
+
+    if (!$exists(this.canvasToResize)) {
+    } else if (this.resizeByKeepingRatio.isSelected()) {
+      this.setComponentsEnabled(false, false, false);
+      this.ctx.drawImage(this.canvasToResize, 0, 0, parseInt(this.preview.getProperty("width")), parseInt(this.preview.getProperty("height")));
+    } else if (this.adaptByKeepingRatio.isSelected()) {
+      this.setComponentsEnabled(size.width != this.originalWidth, size.height != this.originalHeight, true);
+    } else if (this.keepSize.isSelected()) {
+      this.setComponentsEnabled(true, true, true);
+//      
+//      double scale = parseInt(this.preview.getProperty("width")) / this.originalWidth;
+//
+//      this.ctx.save();
+//      this.ctx.scale(scale, scale);
+//      this.ctx.drawImage(this.canvasToResize, 0, 0);
+//      this.ctx.restore();
+    }
+
+    this.onchange();
+  }
+
+  private Dimension computeDimension(boolean isW, boolean isH) {
     double w = this.width.getValue();
     double h = this.height.getValue();
-    double res = this.resolution.getValue();
 
     if (!this.resizeByKeepingRatio.isSelected()) {
     } else if (isW) {
@@ -141,38 +176,7 @@ public class Z4ResizeImagePanel extends JSPanel {
       }
     }
 
-    this.width.setValue(w);
-    this.height.setValue(h);
-
-    double dimWIN = w / res;
-    double dimHIN = h / res;
-
-    this.dimensionMM.setText(new Number(dimWIN * 25.4).toFixed(2) + " x " + new Number(dimHIN * 25.4).toFixed(2) + " mm");
-    this.dimensionIN.setText(new Number(dimWIN).toFixed(2) + " x " + new Number(dimHIN).toFixed(2) + " inch");
-
-    double newRatio = w / h;
-    this.preview.setProperty("width", "" + parseInt(newRatio > 1 ? Z4ResizeImagePanel.SIZE : Z4ResizeImagePanel.SIZE * newRatio));
-    this.preview.setProperty("height", "" + parseInt(newRatio > 1 ? Z4ResizeImagePanel.SIZE / newRatio : Z4ResizeImagePanel.SIZE));
-
-    if (!$exists(this.canvasToResize)) {
-    } else if (this.resizeByKeepingRatio.isSelected()) {
-      this.setComponentsEnabled(false, false, false);
-
-      this.ctx.drawImage(this.canvasToResize, 0, 0, parseInt(this.preview.getProperty("width")), parseInt(this.preview.getProperty("height")));
-    } else if (this.adaptByKeepingRatio.isSelected()) {
-      this.setComponentsEnabled(w != this.originalWidth, h != this.originalHeight, true);
-    } else if (this.keepSize.isSelected()) {
-      this.setComponentsEnabled(true, true, true);
-//      
-//      double scale = parseInt(this.preview.getProperty("width")) / this.originalWidth;
-//
-//      this.ctx.save();
-//      this.ctx.scale(scale, scale);
-//      this.ctx.drawImage(this.canvasToResize, 0, 0);
-//      this.ctx.restore();
-    }
-
-    this.onchange();
+    return new Dimension((int) w, (int) h);
   }
 
   private void setComponentsEnabled(boolean x, boolean y, boolean c) {
