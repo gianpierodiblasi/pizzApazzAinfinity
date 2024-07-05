@@ -1,5 +1,6 @@
 package pizzapazza.ui.panel;
 
+import static def.dom.Globals.document;
 import def.js.Array;
 import def.js.Number;
 import javascript.awt.Dimension;
@@ -7,6 +8,7 @@ import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
 import javascript.swing.ButtonGroup;
 import javascript.swing.JSButton;
+import javascript.swing.JSComponent;
 import javascript.swing.JSLabel;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
@@ -17,7 +19,9 @@ import javascript.swing.event.ChangeListener;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
+import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$OffscreenCanvas;
+import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.$typeof;
 import static simulation.js.$Globals.parseInt;
 
@@ -42,10 +46,17 @@ public class Z4ResizeImagePanel extends JSPanel {
   private final JSSpinner offsetY = new JSSpinner();
   private final JSButton center = new JSButton();
 
+  private final JSComponent preview = new JSComponent(document.createElement("canvas"));
+  private final $CanvasRenderingContext2D ctx = this.preview.invoke("getContext('2d')");
+
   private final Array<ChangeListener> listeners = new Array<>();
 
-  private $OffscreenCanvas canvas;
-  private double ratio = 1;
+  private $OffscreenCanvas canvasToResize;
+  private double originalWidth = Z4Constants.DEFAULT_IMAGE_SIZE;
+  private double originalHeight = Z4Constants.DEFAULT_IMAGE_SIZE;
+  private double originalRatio = 1;
+
+  private static final int SIZE = 180;
 
   /**
    * Creates the object
@@ -56,11 +67,11 @@ public class Z4ResizeImagePanel extends JSPanel {
     this.setLayout(new GridBagLayout());
 
     Z4UI.addLabel(this, Z4Translations.WIDTH + " (px)", new GBC(0, 0).a(GBC.WEST).i(5, 5, 0, 5));
-    this.addSpinner(this.width, 1, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, true, false, 0, 1);
+    this.addSpinner(this.width, Z4Constants.DEFAULT_IMAGE_SIZE, 1, Z4Constants.MAX_IMAGE_SIZE, true, false, 0, 1);
     Z4UI.addLabel(this, Z4Translations.HEIGHT + " (px)", new GBC(1, 0).a(GBC.WEST).i(5, 5, 0, 5));
-    this.addSpinner(this.height, 1, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, false, true, 1, 1);
+    this.addSpinner(this.height, Z4Constants.DEFAULT_IMAGE_SIZE, 1, Z4Constants.MAX_IMAGE_SIZE, false, true, 1, 1);
     Z4UI.addLabel(this, Z4Translations.RESOLUTION + " (dpi)", new GBC(2, 0).a(GBC.WEST).i(5, 5, 0, 5));
-    this.addSpinner(this.resolution, 1, Z4Constants.DEFAULT_DPI, Z4Constants.MAX_DPI, false, false, 2, 1);
+    this.addSpinner(this.resolution, Z4Constants.DEFAULT_DPI, 1, Z4Constants.MAX_DPI, false, false, 2, 1);
     this.add(this.dimensionMM, new GBC(0, 2).w(3).f(GBC.HORIZONTAL).i(2, 5, 0, 0));
     this.add(this.dimensionIN, new GBC(0, 3).w(3).f(GBC.HORIZONTAL).i(2, 5, 0, 0));
 
@@ -79,6 +90,8 @@ public class Z4ResizeImagePanel extends JSPanel {
     this.center.addActionListener(event -> {
     });
     this.add(this.center, new GBC(2, 8).a(GBC.EAST).i(0, 5, 0, 5));
+
+    this.add(this.preview, new GBC(3, 0).h(9));
 
     this.setDimensions(false, false);
   }
@@ -107,24 +120,24 @@ public class Z4ResizeImagePanel extends JSPanel {
 
     if (!this.resizeByKeepingRatio.isSelected()) {
     } else if (isW) {
-      h = parseInt(w / this.ratio);
+      h = parseInt(w / this.originalRatio);
 
       if (h < 1) {
-        w = parseInt(this.ratio);
+        w = parseInt(this.originalRatio);
         h = 1;
       } else if (h > Z4Constants.MAX_IMAGE_SIZE) {
-        w = parseInt(Z4Constants.MAX_IMAGE_SIZE * this.ratio);
+        w = parseInt(Z4Constants.MAX_IMAGE_SIZE * this.originalRatio);
         h = Z4Constants.MAX_IMAGE_SIZE;
       }
     } else if (isH) {
-      w = parseInt(h * this.ratio);
+      w = parseInt(h * this.originalRatio);
 
       if (w < 1) {
         w = 1;
-        h = parseInt(1 / this.ratio);
+        h = parseInt(1 / this.originalRatio);
       } else if (w > Z4Constants.MAX_IMAGE_SIZE) {
         w = Z4Constants.MAX_IMAGE_SIZE;
-        h = parseInt(Z4Constants.MAX_IMAGE_SIZE / this.ratio);
+        h = parseInt(Z4Constants.MAX_IMAGE_SIZE / this.originalRatio);
       }
     }
 
@@ -141,6 +154,18 @@ public class Z4ResizeImagePanel extends JSPanel {
     this.offsetY.setEnabled(!this.resizeByKeepingRatio.isSelected());
     this.center.setEnabled(!this.resizeByKeepingRatio.isSelected());
 
+    double newRatio = w / h;
+    this.preview.setProperty("width", "" + parseInt(newRatio > 1 ? Z4ResizeImagePanel.SIZE : Z4ResizeImagePanel.SIZE * newRatio));
+    this.preview.setProperty("height", "" + parseInt(newRatio > 1 ? Z4ResizeImagePanel.SIZE / newRatio : Z4ResizeImagePanel.SIZE));
+
+    if (!$exists(this.canvasToResize)) {
+    } else if (this.resizeByKeepingRatio.isSelected()) {
+      this.ctx.drawImage(this.canvasToResize, 0, 0, parseInt(this.preview.getProperty("width")), parseInt(this.preview.getProperty("height")));
+    } else if (this.adaptByKeepingRatio.isSelected()) {
+    } else if (this.keepSize.isSelected()) {
+      this.ctx.drawImage(this.canvasToResize, 0, 0, this.originalWidth / newRatio, this.originalHeight * newRatio);
+    }
+
     this.onchange();
   }
 
@@ -153,8 +178,10 @@ public class Z4ResizeImagePanel extends JSPanel {
    * @param height The canvas height
    */
   public void setCanvasToResize($OffscreenCanvas canvas, int width, int height) {
-    this.canvas = canvas;
-    this.ratio = width / height;
+    this.canvasToResize = canvas;
+    this.originalWidth = width;
+    this.originalHeight = height;
+    this.originalRatio = width / height;
 
     this.width.setValue(width);
     this.height.setValue(height);

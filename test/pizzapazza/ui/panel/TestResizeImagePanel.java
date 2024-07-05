@@ -1,5 +1,6 @@
 package pizzapazza.ui.panel;
 
+import def.dom.CanvasGradient;
 import javascript.awt.BorderLayout;
 import javascript.swing.JSFrame;
 import javascript.swing.JSPanel;
@@ -18,7 +19,11 @@ public class TestResizeImagePanel extends JSFrame {
 
     $OffscreenCanvas canvasToResize = new $OffscreenCanvas(400, 300);
     $CanvasRenderingContext2D context = canvasToResize.getContext("2d");
-    context.fillStyle = Z4Constants.$getStyle("red");
+    CanvasGradient gradient = context.createLinearGradient(0, 0, 400, 0);
+    gradient.addColorStop(0, "red");
+    gradient.addColorStop(0.5, "yellow");
+    gradient.addColorStop(1, "blue");
+    context.fillStyle = Z4Constants.$getStyle(gradient);
     context.fillRect(0, 0, 400, 300);
 
     Z4ResizeImagePanel resizeImagePanel = new Z4ResizeImagePanel();

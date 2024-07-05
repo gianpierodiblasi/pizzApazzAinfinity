@@ -12070,11 +12070,21 @@ class Z4ResizeImagePanel extends JSPanel {
 
    center = new JSButton();
 
+   preview = new JSComponent(document.createElement("canvas"));
+
+   ctx = this.preview.invoke("getContext('2d')");
+
    listeners = new Array();
 
-   canvas = null;
+   canvasToResize = null;
 
-   ratio = 1;
+   originalWidth = Z4Constants.DEFAULT_IMAGE_SIZE;
+
+   originalHeight = Z4Constants.DEFAULT_IMAGE_SIZE;
+
+   originalRatio = 1;
+
+  static  SIZE = 180;
 
   /**
    * Creates the object
@@ -12084,11 +12094,11 @@ class Z4ResizeImagePanel extends JSPanel {
     this.cssAddClass("z4resizeimagepanel");
     this.setLayout(new GridBagLayout());
     Z4UI.addLabel(this, Z4Translations.WIDTH + " (px)", new GBC(0, 0).a(GBC.WEST).i(5, 5, 0, 5));
-    this.addSpinner(this.width, 1, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, true, false, 0, 1);
+    this.addSpinner(this.width, Z4Constants.DEFAULT_IMAGE_SIZE, 1, Z4Constants.MAX_IMAGE_SIZE, true, false, 0, 1);
     Z4UI.addLabel(this, Z4Translations.HEIGHT + " (px)", new GBC(1, 0).a(GBC.WEST).i(5, 5, 0, 5));
-    this.addSpinner(this.height, 1, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, false, true, 1, 1);
+    this.addSpinner(this.height, Z4Constants.DEFAULT_IMAGE_SIZE, 1, Z4Constants.MAX_IMAGE_SIZE, false, true, 1, 1);
     Z4UI.addLabel(this, Z4Translations.RESOLUTION + " (dpi)", new GBC(2, 0).a(GBC.WEST).i(5, 5, 0, 5));
-    this.addSpinner(this.resolution, 1, Z4Constants.DEFAULT_DPI, Z4Constants.MAX_DPI, false, false, 2, 1);
+    this.addSpinner(this.resolution, Z4Constants.DEFAULT_DPI, 1, Z4Constants.MAX_DPI, false, false, 2, 1);
     this.add(this.dimensionMM, new GBC(0, 2).w(3).f(GBC.HORIZONTAL).i(2, 5, 0, 0));
     this.add(this.dimensionIN, new GBC(0, 3).w(3).f(GBC.HORIZONTAL).i(2, 5, 0, 0));
     let buttonGroup = new ButtonGroup();
@@ -12104,6 +12114,7 @@ class Z4ResizeImagePanel extends JSPanel {
     this.center.addActionListener(event => {
     });
     this.add(this.center, new GBC(2, 8).a(GBC.EAST).i(0, 5, 0, 5));
+    this.add(this.preview, new GBC(3, 0).h(9));
     this.setDimensions(false, false);
   }
 
@@ -12130,22 +12141,22 @@ class Z4ResizeImagePanel extends JSPanel {
     let res = this.resolution.getValue();
     if (!this.resizeByKeepingRatio.isSelected()) {
     } else if (isW) {
-      h = parseInt(w / this.ratio);
+      h = parseInt(w / this.originalRatio);
       if (h < 1) {
-        w = parseInt(this.ratio);
+        w = parseInt(this.originalRatio);
         h = 1;
       } else if (h > Z4Constants.MAX_IMAGE_SIZE) {
-        w = parseInt(Z4Constants.MAX_IMAGE_SIZE * this.ratio);
+        w = parseInt(Z4Constants.MAX_IMAGE_SIZE * this.originalRatio);
         h = Z4Constants.MAX_IMAGE_SIZE;
       }
     } else if (isH) {
-      w = parseInt(h * this.ratio);
+      w = parseInt(h * this.originalRatio);
       if (w < 1) {
         w = 1;
-        h = parseInt(1 / this.ratio);
+        h = parseInt(1 / this.originalRatio);
       } else if (w > Z4Constants.MAX_IMAGE_SIZE) {
         w = Z4Constants.MAX_IMAGE_SIZE;
-        h = parseInt(Z4Constants.MAX_IMAGE_SIZE / this.ratio);
+        h = parseInt(Z4Constants.MAX_IMAGE_SIZE / this.originalRatio);
       }
     }
     this.width.setValue(w);
@@ -12157,6 +12168,16 @@ class Z4ResizeImagePanel extends JSPanel {
     this.offsetX.setEnabled(!this.resizeByKeepingRatio.isSelected());
     this.offsetY.setEnabled(!this.resizeByKeepingRatio.isSelected());
     this.center.setEnabled(!this.resizeByKeepingRatio.isSelected());
+    let newRatio = w / h;
+    this.preview.setProperty("width", "" + parseInt(newRatio > 1 ? Z4ResizeImagePanel.SIZE : Z4ResizeImagePanel.SIZE * newRatio));
+    this.preview.setProperty("height", "" + parseInt(newRatio > 1 ? Z4ResizeImagePanel.SIZE / newRatio : Z4ResizeImagePanel.SIZE));
+    if (!this.canvasToResize) {
+    } else if (this.resizeByKeepingRatio.isSelected()) {
+      this.ctx.drawImage(this.canvasToResize, 0, 0, parseInt(this.preview.getProperty("width")), parseInt(this.preview.getProperty("height")));
+    } else if (this.adaptByKeepingRatio.isSelected()) {
+    } else if (this.keepSize.isSelected()) {
+      this.ctx.drawImage(this.canvasToResize, 0, 0, this.originalWidth / newRatio, this.originalHeight * newRatio);
+    }
     this.onchange();
   }
 
@@ -12168,8 +12189,10 @@ class Z4ResizeImagePanel extends JSPanel {
    * @param height The canvas height
    */
    setCanvasToResize(canvas, width, height) {
-    this.canvas = canvas;
-    this.ratio = width / height;
+    this.canvasToResize = canvas;
+    this.originalWidth = width;
+    this.originalHeight = height;
+    this.originalRatio = width / height;
     this.width.setValue(width);
     this.height.setValue(height);
     this.setDimensions(false, false);

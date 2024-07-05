@@ -109,7 +109,9 @@
 .z4randomvaluepanel {
 }
 
-.z4resizeimagepanel {
+.z4resizeimagepanel canvas {
+  border: 1px solid var(--main-action-bgcolor);
+  background-image: url(../image/util/chessboard.png);
 }
 
 .z4signedrandomvaluepanel {
