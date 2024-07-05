@@ -259,10 +259,10 @@ class Z4LayerPreview extends JSDropDown {
         return 0 < size.width && size.width <= Z4Constants.MAX_IMAGE_SIZE && 0 < size.height && size.height < Z4Constants.MAX_IMAGE_SIZE;
       }, response => {
         if (response === JSOptionPane.OK_OPTION) {
-          let size = resizeImagePanel.getSelectedSize();
-          this.layer.resize();
-          this.setLayer(this.canvas, this.layer);
-          this.afterTransform();
+          // Dimension size = resizeImagePanel.getSelectedSize();
+          // this.layer.resize();
+          // this.setLayer(this.canvas, this.layer);
+          // this.afterTransform();
         }
       });
     });
