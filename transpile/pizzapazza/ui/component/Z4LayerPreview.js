@@ -250,8 +250,10 @@ class Z4LayerPreview extends JSDropDown {
     });
     this.addButton(panelTranform, Z4Translations.RESIZE, 1, 2, event => {
       let layerSize = this.layer.getSize();
+      let canvasToResize = new OffscreenCanvas(layerSize.width, layerSize.height);
+      this.layer.draw(canvasToResize.getContext("2d"), true, true);
       let resizeImagePanel = new Z4ResizeImagePanel();
-      resizeImagePanel.setSelectedSize(layerSize.width, layerSize.height);
+      resizeImagePanel.setCanvasToResize(canvasToResize, layerSize.width, layerSize.height);
       JSOptionPane.showInputDialog(resizeImagePanel, Z4Translations.RESIZE, listener => resizeImagePanel.addChangeListener(listener), () => {
         let size = resizeImagePanel.getSelectedSize();
         return 0 < size.width && size.width <= Z4Constants.MAX_IMAGE_SIZE && 0 < size.height && size.height < Z4Constants.MAX_IMAGE_SIZE;

@@ -29,6 +29,7 @@ import pizzapazza.util.Z4Layer;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
+import simulation.dom.$OffscreenCanvas;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
 
@@ -306,9 +307,12 @@ public class Z4LayerPreview extends JSDropDown {
     });
     this.addButton(panelTranform, Z4Translations.RESIZE, 1, 2, event -> {
       Dimension layerSize = this.layer.getSize();
-      Z4ResizeImagePanel resizeImagePanel = new Z4ResizeImagePanel();
+      $OffscreenCanvas canvasToResize = new $OffscreenCanvas(layerSize.width, layerSize.height);
+      this.layer.draw(canvasToResize.getContext("2d"), true, true);
 
-      resizeImagePanel.setSelectedSize(layerSize.width, layerSize.height);
+      Z4ResizeImagePanel resizeImagePanel = new Z4ResizeImagePanel();
+      resizeImagePanel.setCanvasToResize(canvasToResize, layerSize.width, layerSize.height);
+      
       JSOptionPane.showInputDialog(resizeImagePanel, Z4Translations.RESIZE, listener -> resizeImagePanel.addChangeListener(listener), () -> {
         Dimension size = resizeImagePanel.getSelectedSize();
         return 0 < size.width && size.width <= Z4Constants.MAX_IMAGE_SIZE && 0 < size.height && size.height < Z4Constants.MAX_IMAGE_SIZE;

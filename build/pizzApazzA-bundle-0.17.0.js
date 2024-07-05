@@ -4231,8 +4231,10 @@ class Z4LayerPreview extends JSDropDown {
     });
     this.addButton(panelTranform, Z4Translations.RESIZE, 1, 2, event => {
       let layerSize = this.layer.getSize();
+      let canvasToResize = new OffscreenCanvas(layerSize.width, layerSize.height);
+      this.layer.draw(canvasToResize.getContext("2d"), true, true);
       let resizeImagePanel = new Z4ResizeImagePanel();
-      resizeImagePanel.setSelectedSize(layerSize.width, layerSize.height);
+      resizeImagePanel.setCanvasToResize(canvasToResize, layerSize.width, layerSize.height);
       JSOptionPane.showInputDialog(resizeImagePanel, Z4Translations.RESIZE, listener => resizeImagePanel.addChangeListener(listener), () => {
         let size = resizeImagePanel.getSelectedSize();
         return 0 < size.width && size.width <= Z4Constants.MAX_IMAGE_SIZE && 0 < size.height && size.height < Z4Constants.MAX_IMAGE_SIZE;
@@ -12056,21 +12058,23 @@ class Z4ResizeImagePanel extends JSPanel {
 
    dimensionIN = new JSLabel();
 
-   offsetXSlider = new JSSlider();
-
-   offsetXSpinner = new JSSpinner();
-
-   offsetYSlider = new JSSlider();
-
-   offsetYSpinner = new JSSpinner();
-
    resizeByKeepingRatio = new JSRadioButton();
 
    adaptByKeepingRatio = new JSRadioButton();
 
    keepSize = new JSRadioButton();
 
+   offsetX = new JSSpinner();
+
+   offsetY = new JSSpinner();
+
+   center = new JSButton();
+
    listeners = new Array();
+
+   canvas = null;
+
+   ratio = 0.0;
 
   /**
    * Creates the object
@@ -12091,6 +12095,15 @@ class Z4ResizeImagePanel extends JSPanel {
     this.addRadio(this.resizeByKeepingRatio, buttonGroup, Z4Translations.RESIZE_BY_KEEPING_RATIO, true, 4);
     this.addRadio(this.adaptByKeepingRatio, buttonGroup, Z4Translations.ADAPT_BY_KEEPING_RATIO, false, 5);
     this.addRadio(this.keepSize, buttonGroup, Z4Translations.KEEP_SIZE, false, 6);
+    Z4UI.addLabel(this, Z4Translations.OFFSET_X, new GBC(0, 7).a(GBC.WEST).i(5, 5, 0, 5));
+    this.addSpinner(this.offsetX, 0, Z4Constants.MAX_IMAGE_SIZE, 0, 8);
+    Z4UI.addLabel(this, Z4Translations.OFFSET_Y, new GBC(1, 7).a(GBC.WEST).i(5, 5, 0, 5));
+    this.addSpinner(this.offsetY, 0, Z4Constants.MAX_IMAGE_SIZE, 1, 8);
+    this.center.setContentAreaFilled(false);
+    this.center.setText(Z4Translations.CENTER_VERB);
+    this.center.addActionListener(event => {
+    });
+    this.add(this.center, new GBC(2, 8).a(GBC.EAST).i(0, 5, 0, 5));
     this.setDimensions();
   }
 
@@ -12123,12 +12136,15 @@ class Z4ResizeImagePanel extends JSPanel {
   }
 
   /**
-   * Sets the selected size
+   * Sets the canvas to resize
    *
-   * @param width The selected width
-   * @param height The selected height
+   * @param canvas The canvas to resize;
+   * @param width The canvas width
+   * @param height The canvas height
    */
-   setSelectedSize(width, height) {
+   setCanvasToResize(canvas, width, height) {
+    this.canvas = canvas;
+    this.ratio = width / height;
     this.width.setValue(width);
     this.height.setValue(height);
     this.setDimensions();
@@ -18126,6 +18142,8 @@ class Z4Translations {
 
   static  DISTANCE = "";
 
+  static  CENTER_VERB = "";
+
   // Composite Operation
   static  COMPOSITE_OPERATION = "";
 
@@ -18392,6 +18410,7 @@ class Z4Translations {
     Z4Translations.FORWARD = "Forward";
     Z4Translations.BACKWARD = "Backward";
     Z4Translations.DISTANCE = "Distance";
+    Z4Translations.CENTER_VERB = "Center";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "This is the default setting and draws the layer on top of the existing content";
@@ -18620,6 +18639,7 @@ class Z4Translations {
     Z4Translations.FORWARD = "In Avanti";
     Z4Translations.BACKWARD = "Indietro";
     Z4Translations.DISTANCE = "Distanza";
+    Z4Translations.CENTER_VERB = "Centra";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "Questa \u00E8 l'impostazione predefinita e disegna il livello sopra il contenuto esistente";

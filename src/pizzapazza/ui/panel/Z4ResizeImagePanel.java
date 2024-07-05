@@ -6,10 +6,10 @@ import javascript.awt.Dimension;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
 import javascript.swing.ButtonGroup;
+import javascript.swing.JSButton;
 import javascript.swing.JSLabel;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
-import javascript.swing.JSSlider;
 import javascript.swing.JSSpinner;
 import javascript.swing.SpinnerNumberModel;
 import javascript.swing.event.ChangeEvent;
@@ -17,6 +17,7 @@ import javascript.swing.event.ChangeListener;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
+import simulation.dom.$OffscreenCanvas;
 import static simulation.js.$Globals.$typeof;
 
 /**
@@ -31,17 +32,19 @@ public class Z4ResizeImagePanel extends JSPanel {
   private final JSSpinner resolution = new JSSpinner();
   private final JSLabel dimensionMM = new JSLabel();
   private final JSLabel dimensionIN = new JSLabel();
-  
-  private final JSSlider offsetXSlider = new JSSlider();
-  private final JSSpinner offsetXSpinner = new JSSpinner();
-  private final JSSlider offsetYSlider = new JSSlider();
-  private final JSSpinner offsetYSpinner = new JSSpinner();
-  
+
   private final JSRadioButton resizeByKeepingRatio = new JSRadioButton();
   private final JSRadioButton adaptByKeepingRatio = new JSRadioButton();
   private final JSRadioButton keepSize = new JSRadioButton();
 
+  private final JSSpinner offsetX = new JSSpinner();
+  private final JSSpinner offsetY = new JSSpinner();
+  private final JSButton center = new JSButton();
+
   private final Array<ChangeListener> listeners = new Array<>();
+
+  private $OffscreenCanvas canvas;
+  private double ratio;
 
   /**
    * Creates the object
@@ -64,7 +67,18 @@ public class Z4ResizeImagePanel extends JSPanel {
     this.addRadio(this.resizeByKeepingRatio, buttonGroup, Z4Translations.RESIZE_BY_KEEPING_RATIO, true, 4);
     this.addRadio(this.adaptByKeepingRatio, buttonGroup, Z4Translations.ADAPT_BY_KEEPING_RATIO, false, 5);
     this.addRadio(this.keepSize, buttonGroup, Z4Translations.KEEP_SIZE, false, 6);
-    
+
+    Z4UI.addLabel(this, Z4Translations.OFFSET_X, new GBC(0, 7).a(GBC.WEST).i(5, 5, 0, 5));
+    this.addSpinner(this.offsetX, 0, Z4Constants.MAX_IMAGE_SIZE, 0, 8);
+    Z4UI.addLabel(this, Z4Translations.OFFSET_Y, new GBC(1, 7).a(GBC.WEST).i(5, 5, 0, 5));
+    this.addSpinner(this.offsetY, 0, Z4Constants.MAX_IMAGE_SIZE, 1, 8);
+
+    this.center.setContentAreaFilled(false);
+    this.center.setText(Z4Translations.CENTER_VERB);
+    this.center.addActionListener(event -> {
+    });
+    this.add(this.center, new GBC(2, 8).a(GBC.EAST).i(0, 5, 0, 5));
+
     this.setDimensions();
   }
 
@@ -100,12 +114,17 @@ public class Z4ResizeImagePanel extends JSPanel {
   }
 
   /**
-   * Sets the selected size
+   * Sets the canvas to resize
    *
-   * @param width The selected width
-   * @param height The selected height
+   *
+   * @param canvas The canvas to resize;
+   * @param width The canvas width
+   * @param height The canvas height
    */
-  public void setSelectedSize(int width, int height) {
+  public void setCanvasToResize($OffscreenCanvas canvas, int width, int height) {
+    this.canvas = canvas;
+    this.ratio = width / height;
+
     this.width.setValue(width);
     this.height.setValue(height);
     this.setDimensions();
