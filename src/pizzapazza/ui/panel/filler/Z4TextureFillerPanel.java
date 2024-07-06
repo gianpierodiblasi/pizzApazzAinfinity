@@ -66,7 +66,7 @@ public class Z4TextureFillerPanel extends Z4AbstractFillerPanel {
     this.free.setSelected(true);
     this.group.add(this.free);
     panel.add(this.free, null);
-    this.lockRatio.setText(Z4Translations.LOCK_RATIO);
+    this.lockRatio.setText(Z4Translations.LOCK_ASPECT_RATIO);
     this.group.add(this.lockRatio);
     panel.add(this.lockRatio, null);
     this.lock.setText(Z4Translations.LOCK);

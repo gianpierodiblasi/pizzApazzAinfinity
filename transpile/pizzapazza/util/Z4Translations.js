@@ -179,7 +179,7 @@ class Z4Translations {
 
   static  FREE = "";
 
-  static  LOCK_RATIO = "";
+  static  LOCK_ASPECT_RATIO = "";
 
   static  LOCK = "";
 
@@ -255,11 +255,11 @@ class Z4Translations {
 
   static  RESIZE_LAYER_AND_CONTENT = "";
 
+  static  RESIZE_LAYER_AND_ADAPT_CONTENT = "";
+
   static  RESIZE_LAYER = "";
 
   static  RESIZE_CONTENT = "";
-
-  static  KEEP_RATIO = "";
 
   // Color
   static  COLOR = "";
@@ -552,7 +552,7 @@ class Z4Translations {
     Z4Translations.REGULAR = "Regular";
     Z4Translations.DIMENSION = "Dimension";
     Z4Translations.FREE = "Free";
-    Z4Translations.LOCK_RATIO = "Lock Ratio";
+    Z4Translations.LOCK_ASPECT_RATIO = "Lock Aspect Ratio";
     Z4Translations.LOCK = "Lock";
     Z4Translations.RIPPLE = "Ripple";
     Z4Translations.DELETE = "Delete";
@@ -590,9 +590,9 @@ class Z4Translations {
     Z4Translations.RESIZE = "Resize";
     Z4Translations.CONTENT = "Content";
     Z4Translations.RESIZE_LAYER_AND_CONTENT = "Resize Layer and Content";
+    Z4Translations.RESIZE_LAYER_AND_ADAPT_CONTENT = "Resize Layer and Adapt Content";
     Z4Translations.RESIZE_LAYER = "Resize Layer";
     Z4Translations.RESIZE_CONTENT = "Resize Content";
-    Z4Translations.KEEP_RATIO = "Keep Ratio";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -783,7 +783,7 @@ class Z4Translations {
     Z4Translations.REGULAR = "Regolare";
     Z4Translations.DIMENSION = "Dimensione";
     Z4Translations.FREE = "Libero";
-    Z4Translations.LOCK_RATIO = "Blocca Rapporto";
+    Z4Translations.LOCK_ASPECT_RATIO = "Blocca Proporzioni";
     Z4Translations.LOCK = "Blocca";
     Z4Translations.RIPPLE = "Caoticit\u00E0";
     Z4Translations.DELETE = "Elimina";
@@ -821,9 +821,9 @@ class Z4Translations {
     Z4Translations.RESIZE = "Ridimensiona";
     Z4Translations.CONTENT = "Contenuto";
     Z4Translations.RESIZE_LAYER_AND_CONTENT = "Ridimensiona Livello e Contenuto";
+    Z4Translations.RESIZE_LAYER_AND_ADAPT_CONTENT = "Ridimensiona Livello ed Adatta Contenuto";
     Z4Translations.RESIZE_LAYER = "Ridimensiona Livello";
     Z4Translations.RESIZE_CONTENT = "Ridimensiona Contenuto";
-    Z4Translations.KEEP_RATIO = "Mantieni il Rapporto";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";

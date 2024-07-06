@@ -116,7 +116,7 @@ public class Z4Translations {
   public static String REGULAR = "";
   public static String DIMENSION = "";
   public static String FREE = "";
-  public static String LOCK_RATIO = "";
+  public static String LOCK_ASPECT_RATIO = "";
   public static String LOCK = "";
   public static String RIPPLE = "";
   public static String DELETE = "";
@@ -154,10 +154,10 @@ public class Z4Translations {
   public static String RESIZE = "";
   public static String CONTENT = "";
   public static String RESIZE_LAYER_AND_CONTENT = "";
+  public static String RESIZE_LAYER_AND_ADAPT_CONTENT = "";
   public static String RESIZE_LAYER = "";
   public static String RESIZE_CONTENT = "";
-  public static String KEEP_RATIO = "";
-
+  
   // Color
   public static String COLOR = "";
   public static String FILLING_COLOR = "";
@@ -379,7 +379,7 @@ public class Z4Translations {
     Z4Translations.REGULAR = "Regular";
     Z4Translations.DIMENSION = "Dimension";
     Z4Translations.FREE = "Free";
-    Z4Translations.LOCK_RATIO = "Lock Ratio";
+    Z4Translations.LOCK_ASPECT_RATIO = "Lock Aspect Ratio";
     Z4Translations.LOCK = "Lock";
     Z4Translations.RIPPLE = "Ripple";
     Z4Translations.DELETE = "Delete";
@@ -417,10 +417,10 @@ public class Z4Translations {
     Z4Translations.RESIZE = "Resize";
     Z4Translations.CONTENT = "Content";
     Z4Translations.RESIZE_LAYER_AND_CONTENT = "Resize Layer and Content";
+    Z4Translations.RESIZE_LAYER_AND_ADAPT_CONTENT = "Resize Layer and Adapt Content";
     Z4Translations.RESIZE_LAYER = "Resize Layer";
     Z4Translations.RESIZE_CONTENT = "Resize Content";
-    Z4Translations.KEEP_RATIO = "Keep Ratio";
-
+    
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -626,7 +626,7 @@ public class Z4Translations {
     Z4Translations.REGULAR = "Regolare";
     Z4Translations.DIMENSION = "Dimensione";
     Z4Translations.FREE = "Libero";
-    Z4Translations.LOCK_RATIO = "Blocca Rapporto";
+    Z4Translations.LOCK_ASPECT_RATIO = "Blocca Proporzioni";
     Z4Translations.LOCK = "Blocca";
     Z4Translations.RIPPLE = "Caoticit\u00E0";
     Z4Translations.DELETE = "Elimina";
@@ -664,9 +664,9 @@ public class Z4Translations {
     Z4Translations.RESIZE = "Ridimensiona";
     Z4Translations.CONTENT = "Contenuto";
     Z4Translations.RESIZE_LAYER_AND_CONTENT = "Ridimensiona Livello e Contenuto";
+    Z4Translations.RESIZE_LAYER_AND_ADAPT_CONTENT = "Ridimensiona Livello ed Adatta Contenuto";
     Z4Translations.RESIZE_LAYER = "Ridimensiona Livello";
     Z4Translations.RESIZE_CONTENT = "Ridimensiona Contenuto";
-    Z4Translations.KEEP_RATIO = "Mantieni il Rapporto";
 
     // Color
     Z4Translations.COLOR = "Colore";
