@@ -251,9 +251,16 @@ class Z4Translations {
 
   static  RESIZE = "";
 
-  // public static String RESIZE_BY_KEEPING_RATIO = "";
-  // public static String ADAPT_BY_KEEPING_RATIO = "";
-  // public static String KEEP_SIZE = "";
+  static  CONTENT = "";
+
+  static  RESIZE_LAYER_AND_CONTENT = "";
+
+  static  RESIZE_LAYER = "";
+
+  static  RESIZE_CONTENT = "";
+
+  static  KEEP_RATIO = "";
+
   // Color
   static  COLOR = "";
 
@@ -581,9 +588,11 @@ class Z4Translations {
     Z4Translations.PLOT_WIDTH = "Plot Width";
     Z4Translations.RESET_ON_START_MOVING = "Reset on Start Moving";
     Z4Translations.RESIZE = "Resize";
-    // Z4Translations.RESIZE_BY_KEEPING_RATIO = "Resize by Keeping Ratio";
-    // Z4Translations.ADAPT_BY_KEEPING_RATIO = "Adapt by Keeping Ratio";
-    // Z4Translations.KEEP_SIZE = "Keep Size";
+    Z4Translations.CONTENT = "Content";
+    Z4Translations.RESIZE_LAYER_AND_CONTENT = "Resize Layer and Content";
+    Z4Translations.RESIZE_LAYER = "Resize Layer";
+    Z4Translations.RESIZE_CONTENT = "Resize Content";
+    Z4Translations.KEEP_RATIO = "Keep Ratio";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -810,9 +819,11 @@ class Z4Translations {
     Z4Translations.PLOT_WIDTH = "Larghezza Trama";
     Z4Translations.RESET_ON_START_MOVING = "Riavvia su Inizio del Movimento";
     Z4Translations.RESIZE = "Ridimensiona";
-    // Z4Translations.RESIZE_BY_KEEPING_RATIO = "Ridimensiona Mantenendo il Rapporto";
-    // Z4Translations.ADAPT_BY_KEEPING_RATIO = "Adatta Mantenendo il Rapporto";
-    // Z4Translations.KEEP_SIZE = "Mantieni le Dimensioni";
+    Z4Translations.CONTENT = "Contenuto";
+    Z4Translations.RESIZE_LAYER_AND_CONTENT = "Ridimensiona Livello e Contenuto";
+    Z4Translations.RESIZE_LAYER = "Ridimensiona Livello";
+    Z4Translations.RESIZE_CONTENT = "Ridimensiona Contenuto";
+    Z4Translations.KEEP_RATIO = "Mantieni il Rapporto";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";

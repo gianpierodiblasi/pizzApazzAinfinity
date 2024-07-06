@@ -8,6 +8,7 @@ import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
 import javascript.swing.ButtonGroup;
 import javascript.swing.JSButton;
+import javascript.swing.JSCheckBox;
 import javascript.swing.JSComponent;
 import javascript.swing.JSLabel;
 import javascript.swing.JSPanel;
@@ -32,31 +33,38 @@ import static simulation.js.$Globals.parseInt;
  */
 public class Z4ResizeImagePanel extends JSPanel {
 
-//  private final JSSpinner width = new JSSpinner();
-//  private final JSSpinner height = new JSSpinner();
-//  private final JSSpinner resolution = new JSSpinner();
-//  private final JSLabel dimensionMM = new JSLabel();
-//  private final JSLabel dimensionIN = new JSLabel();
-//
-//  private final JSRadioButton resizeByKeepingRatio = new JSRadioButton();
-//  private final JSRadioButton adaptByKeepingRatio = new JSRadioButton();
-//  private final JSRadioButton keepSize = new JSRadioButton();
-//
-//  private final JSSpinner offsetX = new JSSpinner();
-//  private final JSSpinner offsetY = new JSSpinner();
-//  private final JSButton center = new JSButton();
-//
-//  private final JSComponent preview = new JSComponent(document.createElement("canvas"));
-//  private final $CanvasRenderingContext2D ctx = this.preview.invoke("getContext('2d')");
+  private final JSSpinner layerWidth = new JSSpinner();
+  private final JSSpinner layerHeight = new JSSpinner();
+  private final JSSpinner layerResolution = new JSSpinner();
+  private final JSLabel layerDimensionMM = new JSLabel();
+  private final JSLabel layerDimensionIN = new JSLabel();
+
+  private final JSSpinner contentWidth = new JSSpinner();
+  private final JSSpinner contentHeight = new JSSpinner();
+  private final JSSpinner contentResolution = new JSSpinner();
+  private final JSLabel contentDimensionMM = new JSLabel();
+  private final JSLabel contentDimensionIN = new JSLabel();
+
+  private final JSSpinner contentOffsetX = new JSSpinner();
+  private final JSSpinner contentOffsetY = new JSSpinner();
+  private final JSButton centerContent = new JSButton();
+
+  private final JSRadioButton resizeLayerAndContent = new JSRadioButton();
+  private final JSRadioButton resizeLayer = new JSRadioButton();
+  private final JSRadioButton resizeContent = new JSRadioButton();
+  private final JSCheckBox keepRatio = new JSCheckBox();
+
+  private final JSComponent preview = new JSComponent(document.createElement("canvas"));
+  private final $CanvasRenderingContext2D ctx = this.preview.invoke("getContext('2d')");
+  
+  private $OffscreenCanvas canvas;
+  private double canvasWidth = Z4Constants.DEFAULT_IMAGE_SIZE;
+  private double canvasHeight = Z4Constants.DEFAULT_IMAGE_SIZE;
+  private double canvasRatio = 1;
 
   private final Array<ChangeListener> listeners = new Array<>();
 
-//  private $OffscreenCanvas canvasToResize;
-//  private double originalWidth = Z4Constants.DEFAULT_IMAGE_SIZE;
-//  private double originalHeight = Z4Constants.DEFAULT_IMAGE_SIZE;
-//  private double originalRatio = 1;
-
-  private static final int SIZE = 180;
+  private static final int SIZE = 200;
 
   /**
    * Creates the object
@@ -66,53 +74,70 @@ public class Z4ResizeImagePanel extends JSPanel {
     this.cssAddClass("z4resizeimagepanel");
     this.setLayout(new GridBagLayout());
 
-//    Z4UI.addLabel(this, Z4Translations.WIDTH + " (px)", new GBC(0, 0).a(GBC.WEST).i(5, 5, 0, 5));
-//    this.addSpinner(this.width, Z4Constants.DEFAULT_IMAGE_SIZE, 1, Z4Constants.MAX_IMAGE_SIZE, true, false, 0, 1);
-//    Z4UI.addLabel(this, Z4Translations.HEIGHT + " (px)", new GBC(1, 0).a(GBC.WEST).i(5, 5, 0, 5));
-//    this.addSpinner(this.height, Z4Constants.DEFAULT_IMAGE_SIZE, 1, Z4Constants.MAX_IMAGE_SIZE, false, true, 1, 1);
-//    Z4UI.addLabel(this, Z4Translations.RESOLUTION + " (dpi)", new GBC(2, 0).a(GBC.WEST).i(5, 5, 0, 5));
-//    this.addSpinner(this.resolution, Z4Constants.DEFAULT_DPI, 1, Z4Constants.MAX_DPI, false, false, 2, 1);
-//    this.add(this.dimensionMM, new GBC(0, 2).w(3).f(GBC.HORIZONTAL).i(2, 5, 0, 0));
-//    this.add(this.dimensionIN, new GBC(0, 3).w(3).f(GBC.HORIZONTAL).i(2, 5, 0, 0));
-//
-//    ButtonGroup buttonGroup = new ButtonGroup();
-//    this.addRadio(this.resizeByKeepingRatio, buttonGroup, Z4Translations.RESIZE_BY_KEEPING_RATIO, true, 4);
-//    this.addRadio(this.adaptByKeepingRatio, buttonGroup, Z4Translations.ADAPT_BY_KEEPING_RATIO, false, 5);
-//    this.addRadio(this.keepSize, buttonGroup, Z4Translations.KEEP_SIZE, false, 6);
-//
-//    Z4UI.addLabel(this, Z4Translations.OFFSET_X, new GBC(0, 7).a(GBC.WEST).i(5, 5, 0, 5));
-//    this.addSpinner(this.offsetX, 0, 0, Z4Constants.MAX_IMAGE_SIZE, false, false, 0, 8);
-//    Z4UI.addLabel(this, Z4Translations.OFFSET_Y, new GBC(1, 7).a(GBC.WEST).i(5, 5, 0, 5));
-//    this.addSpinner(this.offsetY, 0, 0, Z4Constants.MAX_IMAGE_SIZE, false, false, 1, 8);
-//
-//    this.center.setContentAreaFilled(false);
-//    this.center.setText(Z4Translations.CENTER_VERB);
+    Z4UI.addLabel(this, Z4Translations.LAYER, new GBC(0, 0).a(GBC.WEST).w(6));
+    Z4UI.addLabel(this, Z4Translations.WIDTH + " (px)", new GBC(0, 1).a(GBC.WEST));
+    this.addSpinner(this.layerWidth, Z4Constants.DEFAULT_IMAGE_SIZE, 1, Z4Constants.MAX_IMAGE_SIZE, 0, 2);
+    Z4UI.addLabel(this, Z4Translations.HEIGHT + " (px)", new GBC(1, 1).a(GBC.WEST));
+    this.addSpinner(this.layerHeight, Z4Constants.DEFAULT_IMAGE_SIZE, 1, Z4Constants.MAX_IMAGE_SIZE, 1, 2);
+    Z4UI.addLabel(this, Z4Translations.RESOLUTION + " (dpi)", new GBC(2, 1).a(GBC.WEST));
+    this.addSpinner(this.layerResolution, Z4Constants.DEFAULT_DPI, 1, Z4Constants.MAX_DPI, 2, 2);
+    this.add(this.layerDimensionMM, new GBC(0, 3).w(6).f(GBC.HORIZONTAL).i(2, 0, 0, 0));
+    this.add(this.layerDimensionIN, new GBC(0, 4).w(6).f(GBC.HORIZONTAL).i(2, 0, 0, 0));
+
+    Z4UI.addLabel(this, Z4Translations.CONTENT, new GBC(0, 5).a(GBC.WEST).w(6));
+    Z4UI.addLabel(this, Z4Translations.WIDTH + " (px)", new GBC(0, 6).a(GBC.WEST));
+    this.addSpinner(this.contentWidth, Z4Constants.DEFAULT_IMAGE_SIZE, 1, Z4Constants.MAX_IMAGE_SIZE, 0, 7);
+    Z4UI.addLabel(this, Z4Translations.HEIGHT + " (px)", new GBC(1, 6).a(GBC.WEST));
+    this.addSpinner(this.contentHeight, Z4Constants.DEFAULT_IMAGE_SIZE, 1, Z4Constants.MAX_IMAGE_SIZE, 1, 7);
+    Z4UI.addLabel(this, Z4Translations.RESOLUTION + " (dpi)", new GBC(2, 6).a(GBC.WEST));
+    this.addSpinner(this.contentResolution, Z4Constants.DEFAULT_DPI, 1, Z4Constants.MAX_DPI, 2, 7);
+    Z4UI.addLabel(this, Z4Translations.OFFSET_X, new GBC(3, 6).a(GBC.WEST));
+    this.addSpinner(this.contentOffsetX, 0, 0, Z4Constants.MAX_IMAGE_SIZE, 3, 7);
+    Z4UI.addLabel(this, Z4Translations.OFFSET_Y, new GBC(4, 6).a(GBC.WEST));
+    this.addSpinner(this.contentOffsetY, 0, 0, Z4Constants.MAX_IMAGE_SIZE, 4, 7);
+
+    this.centerContent.setContentAreaFilled(false);
+    this.centerContent.setText(Z4Translations.CENTER_VERB);
 //    this.center.addActionListener(event -> {
 //    });
-//    this.add(this.center, new GBC(2, 8).a(GBC.EAST).i(0, 5, 0, 5));
-//
-//    this.add(this.preview, new GBC(3, 0).h(9).i(5, 5, 5, 5));
+    this.add(this.centerContent, new GBC(5, 7));
+
+    this.add(this.contentDimensionMM, new GBC(0, 8).w(6).f(GBC.HORIZONTAL).i(2, 0, 0, 0));
+    this.add(this.contentDimensionIN, new GBC(0, 9).w(6).f(GBC.HORIZONTAL).i(2, 0, 0, 0));
+
+    ButtonGroup buttonGroup = new ButtonGroup();
+    this.addRadio(this.resizeLayerAndContent, buttonGroup, Z4Translations.RESIZE_LAYER_AND_CONTENT, true, 10);
+    this.addRadio(this.resizeLayer, buttonGroup, Z4Translations.RESIZE_LAYER, false, 11);
+    this.addRadio(this.resizeContent, buttonGroup, Z4Translations.RESIZE_CONTENT, false, 12);
+
+    this.keepRatio.setText(Z4Translations.KEEP_RATIO);
+    this.keepRatio.setSelected(true);
+//    this.keepRatio.addActionListener(event -> {
+//    });
+    this.add(this.keepRatio, new GBC(0, 13).a(GBC.WEST).w(6));
+
+    this.add(this.preview, new GBC(6, 0).h(14).i(5, 5, 5, 5).wxy(1, 1));
 //
 //    this.setDimensions(false, false);
   }
 
-//  private void addSpinner(JSSpinner spinner, double value, double min, double max, boolean isW, boolean isH, int gridx, int gridy) {
-//    spinner.setModel(new SpinnerNumberModel(value, min, max, 1));
-//    spinner.getStyle().minWidth = "6.6rem";
-//    spinner.getChilStyleByQuery("input[type=number]").minWidth = "5.5rem";
-//    spinner.getChilStyleByQuery("input[type=number]").width = "5.5rem";
+  private void addSpinner(JSSpinner spinner, double value, double min, double max, int gridx, int gridy) {
+    spinner.setModel(new SpinnerNumberModel(value, min, max, 1));
+    spinner.getStyle().minWidth = "6.6rem";
+    spinner.getChilStyleByQuery("input[type=number]").minWidth = "5.5rem";
+    spinner.getChilStyleByQuery("input[type=number]").width = "5.5rem";
 //    spinner.addChangeListener(event -> this.setDimensions(isW, isH));
-//    this.add(spinner, new GBC(gridx, gridy).a(GBC.WEST).i(0, 5, 0, 5));
-//  }
+    this.add(spinner, new GBC(gridx, gridy).a(GBC.WEST).i(0, 0, 0, 5));
+  }
 
-//  private void addRadio(JSRadioButton radio, ButtonGroup buttonGroup, String text, boolean selected, int gridy) {
-//    radio.setText(text);
-//    radio.setSelected(selected);
+  private void addRadio(JSRadioButton radio, ButtonGroup buttonGroup, String text, boolean selected, int gridy) {
+    radio.setText(text);
+    radio.setSelected(selected);
 //    radio.addActionListener(event -> this.setDimensions(selected, false));
-//    buttonGroup.add(radio);
-//    this.add(radio, new GBC(0, gridy).a(GBC.WEST).w(3));
-//  }
-
+    buttonGroup.add(radio);
+    this.add(radio, new GBC(0, gridy).a(GBC.WEST).w(6));
+  }
+//
 //  private void setDimensions(boolean isW, boolean isH) {
 //    Dimension size = this.computeDimension(isW, isH);
 //    this.width.setValue(size.width);
@@ -148,7 +173,6 @@ public class Z4ResizeImagePanel extends JSPanel {
 //
 //    this.onchange();
 //  }
-
 //  private Dimension computeDimension(boolean isW, boolean isH) {
 //    double w = this.width.getValue();
 //    double h = this.height.getValue();
@@ -178,7 +202,6 @@ public class Z4ResizeImagePanel extends JSPanel {
 //
 //    return new Dimension((int) w, (int) h);
 //  }
-
 //  private void setComponentsEnabled(boolean x, boolean y, boolean c) {
 //    this.offsetX.setEnabled(x);
 //    this.offsetY.setEnabled(y);
@@ -194,13 +217,16 @@ public class Z4ResizeImagePanel extends JSPanel {
    * @param height The canvas height
    */
   public void setCanvas($OffscreenCanvas canvas, int width, int height) {
-//    this.canvas = canvas;
-//    this.originalWidth = width;
-//    this.originalHeight = height;
-//    this.originalRatio = width / height;
-//
-//    this.width.setValue(width);
-//    this.height.setValue(height);
+    this.canvas = canvas;
+    this.canvasWidth = width;
+    this.canvasHeight = height;
+    this.canvasRatio = width / height;
+
+    this.layerWidth.setValue(width);
+    this.layerHeight.setValue(height);
+    this.contentWidth.setValue(width);
+    this.contentHeight.setValue(height);
+
 //    this.setDimensions(false, false);
   }
 
@@ -212,7 +238,6 @@ public class Z4ResizeImagePanel extends JSPanel {
 //  public Dimension getSelectedSize() {
 //    return new Dimension((int) this.width.getValue(), (int) this.height.getValue());
 //  }
-
   /**
    * Adds a change listener
    *
