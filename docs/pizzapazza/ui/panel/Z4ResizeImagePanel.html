@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10};
+var data = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -198,21 +198,17 @@ extends javascript.swing.JSPanel</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addChangeListener(javascript.swing.event.ChangeListener)">addChangeListener</a></span>&#8203;(javascript.swing.event.ChangeListener&nbsp;listener)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>javascript.awt.Dimension</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSelectedSize()">getSelectedSize</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Returns the selected size</div>
+<div class="block">Adds a change listener</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSelectedSize(int,int)">setSelectedSize</a></span>&#8203;(int&nbsp;width,
-               int&nbsp;height)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCanvas(simulation.dom.$OffscreenCanvas,int,int)">setCanvas</a></span>&#8203;(simulation.dom.$OffscreenCanvas&nbsp;canvas,
+         int&nbsp;width,
+         int&nbsp;height)</code></th>
 <td class="colLast">
-<div class="block">Sets the selected size</div>
+<div class="block">Sets the canvas to resize</div>
 </td>
 </tr>
 </table>
@@ -273,33 +269,21 @@ extends javascript.swing.JSPanel</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="setSelectedSize(int,int)">
+<a id="setCanvas(simulation.dom.$OffscreenCanvas,int,int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setSelectedSize</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setSelectedSize&#8203;(int&nbsp;width,
-                            int&nbsp;height)</pre>
-<div class="block">Sets the selected size</div>
+<h4>setCanvas</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setCanvas&#8203;(simulation.dom.$OffscreenCanvas&nbsp;canvas,
+                      int&nbsp;width,
+                      int&nbsp;height)</pre>
+<div class="block">Sets the canvas to resize</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>width</code> - The selected width</dd>
-<dd><code>height</code> - The selected height</dd>
-</dl>
-</li>
-</ul>
-<a id="getSelectedSize()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getSelectedSize</h4>
-<pre class="methodSignature">public&nbsp;javascript.awt.Dimension&nbsp;getSelectedSize()</pre>
-<div class="block">Returns the selected size</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>The selected size</dd>
+<dd><code>canvas</code> - The canvas to resize;</dd>
+<dd><code>width</code> - The canvas width</dd>
+<dd><code>height</code> - The canvas height</dd>
 </dl>
 </li>
 </ul>
@@ -310,6 +294,11 @@ extends javascript.swing.JSPanel</pre>
 <li class="blockList">
 <h4>addChangeListener</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;addChangeListener&#8203;(javascript.swing.event.ChangeListener&nbsp;listener)</pre>
+<div class="block">Adds a change listener</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>listener</code> - The listener</dd>
+</dl>
 </li>
 </ul>
 </li>

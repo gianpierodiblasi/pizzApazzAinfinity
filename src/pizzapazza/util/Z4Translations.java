@@ -152,9 +152,9 @@ public class Z4Translations {
   public static String PLOT_WIDTH = "";
   public static String RESET_ON_START_MOVING = "";
   public static String RESIZE = "";
-  public static String RESIZE_BY_KEEPING_RATIO = "";
-  public static String ADAPT_BY_KEEPING_RATIO = "";
-  public static String KEEP_SIZE = "";
+//  public static String RESIZE_BY_KEEPING_RATIO = "";
+//  public static String ADAPT_BY_KEEPING_RATIO = "";
+//  public static String KEEP_SIZE = "";
 
   // Color
   public static String COLOR = "";
@@ -413,9 +413,9 @@ public class Z4Translations {
     Z4Translations.PLOT_WIDTH = "Plot Width";
     Z4Translations.RESET_ON_START_MOVING = "Reset on Start Moving";
     Z4Translations.RESIZE = "Resize";
-    Z4Translations.RESIZE_BY_KEEPING_RATIO = "Resize by Keeping Ratio";
-    Z4Translations.ADAPT_BY_KEEPING_RATIO = "Adapt by Keeping Ratio";
-    Z4Translations.KEEP_SIZE = "Keep Size";
+//    Z4Translations.RESIZE_BY_KEEPING_RATIO = "Resize by Keeping Ratio";
+//    Z4Translations.ADAPT_BY_KEEPING_RATIO = "Adapt by Keeping Ratio";
+//    Z4Translations.KEEP_SIZE = "Keep Size";
 
     // Color
     Z4Translations.COLOR = "Color";
@@ -658,9 +658,9 @@ public class Z4Translations {
     Z4Translations.PLOT_WIDTH = "Larghezza Trama";
     Z4Translations.RESET_ON_START_MOVING = "Riavvia su Inizio del Movimento";
     Z4Translations.RESIZE = "Ridimensiona";
-    Z4Translations.RESIZE_BY_KEEPING_RATIO = "Ridimensiona Mantenendo il Rapporto";
-    Z4Translations.ADAPT_BY_KEEPING_RATIO = "Adatta Mantenendo il Rapporto";
-    Z4Translations.KEEP_SIZE = "Mantieni le Dimensioni";
+//    Z4Translations.RESIZE_BY_KEEPING_RATIO = "Ridimensiona Mantenendo il Rapporto";
+//    Z4Translations.ADAPT_BY_KEEPING_RATIO = "Adatta Mantenendo il Rapporto";
+//    Z4Translations.KEEP_SIZE = "Mantieni le Dimensioni";
 
     // Color
     Z4Translations.COLOR = "Colore";

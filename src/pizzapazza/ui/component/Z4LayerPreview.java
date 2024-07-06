@@ -307,23 +307,23 @@ public class Z4LayerPreview extends JSDropDown {
     });
     this.addButton(panelTranform, Z4Translations.RESIZE, 1, 2, event -> {
       Dimension layerSize = this.layer.getSize();
-      $OffscreenCanvas canvasToResize = new $OffscreenCanvas(layerSize.width, layerSize.height);
-      this.layer.draw(canvasToResize.getContext("2d"), true, true);
+      $OffscreenCanvas canvas = new $OffscreenCanvas(layerSize.width, layerSize.height);
+      this.layer.draw(canvas.getContext("2d"), true, true);
 
       Z4ResizeImagePanel resizeImagePanel = new Z4ResizeImagePanel();
-      resizeImagePanel.setCanvasToResize(canvasToResize, layerSize.width, layerSize.height);
-      
-      JSOptionPane.showInputDialog(resizeImagePanel, Z4Translations.RESIZE, listener -> resizeImagePanel.addChangeListener(listener), () -> {
-        Dimension size = resizeImagePanel.getSelectedSize();
-        return 0 < size.width && size.width <= Z4Constants.MAX_IMAGE_SIZE && 0 < size.height && size.height < Z4Constants.MAX_IMAGE_SIZE;
-      }, response -> {
-        if (response == JSOptionPane.OK_OPTION) {
+      resizeImagePanel.setCanvas(canvas, layerSize.width, layerSize.height);
+//      
+//      JSOptionPane.showInputDialog(resizeImagePanel, Z4Translations.RESIZE, listener -> resizeImagePanel.addChangeListener(listener), () -> {
+//        Dimension size = resizeImagePanel.getSelectedSize();
+//        return 0 < size.width && size.width <= Z4Constants.MAX_IMAGE_SIZE && 0 < size.height && size.height < Z4Constants.MAX_IMAGE_SIZE;
+//      }, response -> {
+//        if (response == JSOptionPane.OK_OPTION) {
 //          Dimension size = resizeImagePanel.getSelectedSize();
 //          this.layer.resize();
 //          this.setLayer(this.canvas, this.layer);
 //          this.afterTransform();
-        }
-      });
+//        }
+//      });
     });
     this.appendChild(this.editor);
   }
