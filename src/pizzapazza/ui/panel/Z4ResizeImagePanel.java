@@ -103,16 +103,19 @@ public class Z4ResizeImagePanel extends JSPanel {
 
     this.addCheckBox(this.contentLockRatio, this.contentWidth, this.contentHeight);
     this.add(this.contentLockRatio, new GBC(0, 11).a(GBC.WEST).w(3));
-    
+
     Z4UI.addLabel(this, Z4Translations.OFFSET_X, new GBC(0, 12).a(GBC.WEST));
-    this.addSpinner(this.contentOffsetX, 0, 0, Z4Constants.MAX_IMAGE_SIZE, 0, 13, this.contentWidth, this.contentHeight, this.contentLockRatio);
+    this.addSpinner(this.contentOffsetX, 0, -Z4Constants.MAX_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 0, 13, this.contentWidth, this.contentHeight, this.contentLockRatio);
     Z4UI.addLabel(this, Z4Translations.OFFSET_Y, new GBC(1, 12).a(GBC.WEST));
-    this.addSpinner(this.contentOffsetY, 0, 0, Z4Constants.MAX_IMAGE_SIZE, 1, 13, this.contentWidth, this.contentHeight, this.contentLockRatio);
+    this.addSpinner(this.contentOffsetY, 0, -Z4Constants.MAX_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 1, 13, this.contentWidth, this.contentHeight, this.contentLockRatio);
 
     this.centerContent.setContentAreaFilled(false);
     this.centerContent.setText(Z4Translations.CENTER_VERB);
-//    this.centerContent.addActionListener(event -> {
-//    });
+    this.centerContent.addActionListener(event -> {
+      this.contentOffsetX.setValue((this.layerWidth.getValue() - this.contentWidth.getValue()) / 2);
+      this.contentOffsetY.setValue((this.layerHeight.getValue() - this.contentHeight.getValue()) / 2);
+      this.setDimensions();
+    });
     this.add(this.centerContent, new GBC(2, 13));
 
     JSPanel panel = new JSPanel();
@@ -235,7 +238,7 @@ public class Z4ResizeImagePanel extends JSPanel {
 //      this.ctx.restore();
 //    }
 //
-//    this.onchange();
+    this.onchange();
   }
 
   private void setComponentsEnabled(boolean layer, boolean content, boolean offset) {
