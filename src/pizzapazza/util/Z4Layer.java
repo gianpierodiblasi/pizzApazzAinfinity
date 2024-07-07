@@ -381,6 +381,25 @@ public class Z4Layer {
     this.blob = null;
   }
 
-  public void resize() {
+  /**
+   * Resizes the layer
+   *
+   * @param resizeOptions The resize options
+   */
+  public void resize(Z4ResizeOptions resizeOptions) {
+    $OffscreenCanvas resizedOffscreen = new $OffscreenCanvas(resizeOptions.containerWidth, resizeOptions.containerHeight);
+    $CanvasRenderingContext2D resizedOffscreenCtx = resizedOffscreen.getContext("2d");
+
+    resizedOffscreenCtx.drawImage(this.offscreen, resizeOptions.contentOffsetX, resizeOptions.contentOffsetY, resizeOptions.contentWidth, resizeOptions.contentHeight);
+
+    this.offscreen = resizedOffscreen;
+    this.offscreenCtx = resizedOffscreenCtx;
+
+    this.offsetX = 0;
+    this.offsetY = 0;
+    this.width = resizeOptions.containerWidth;
+    this.height = resizeOptions.containerHeight;
+
+    this.blob = null;
   }
 }

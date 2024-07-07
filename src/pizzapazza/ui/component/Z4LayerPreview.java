@@ -322,8 +322,7 @@ public class Z4LayerPreview extends JSDropDown {
 
       }, response -> {
         if (response == JSOptionPane.OK_OPTION) {
-          Z4ResizeOptions resizeOptions = resizeImagePanel.getResizeOptions();
-          this.layer.resize();
+          this.layer.resize(resizeImagePanel.getResizeOptions());
           this.setLayer(this.canvas, this.layer);
           this.afterTransform();
         }

@@ -348,6 +348,21 @@ class Z4Layer {
     this.blob = null;
   }
 
-   resize() {
+  /**
+   * Resizes the layer
+   *
+   * @param resizeOptions The resize options
+   */
+   resize(resizeOptions) {
+    let resizedOffscreen = new OffscreenCanvas(resizeOptions.containerWidth, resizeOptions.containerHeight);
+    let resizedOffscreenCtx = resizedOffscreen.getContext("2d");
+    resizedOffscreenCtx.drawImage(this.offscreen, resizeOptions.contentOffsetX, resizeOptions.contentOffsetY, resizeOptions.contentWidth, resizeOptions.contentHeight);
+    this.offscreen = resizedOffscreen;
+    this.offscreenCtx = resizedOffscreenCtx;
+    this.offsetX = 0;
+    this.offsetY = 0;
+    this.width = resizeOptions.containerWidth;
+    this.height = resizeOptions.containerHeight;
+    this.blob = null;
   }
 }
