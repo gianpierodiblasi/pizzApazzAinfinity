@@ -19,6 +19,7 @@ import javascript.swing.SpinnerNumberModel;
 import javascript.swing.event.ChangeEvent;
 import javascript.swing.event.ChangeListener;
 import pizzapazza.util.Z4Constants;
+import pizzapazza.util.Z4ResizeOptions;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
@@ -34,12 +35,12 @@ import static simulation.js.$Globals.parseInt;
  */
 public class Z4ResizeImagePanel extends JSPanel {
 
-  private final JSSpinner layerWidth = new JSSpinner();
-  private final JSSpinner layerHeight = new JSSpinner();
-  private final JSSpinner layerResolution = new JSSpinner();
-  private final JSCheckBox layerLockRatio = new JSCheckBox();
-  private final JSLabel layerDimensionMM = new JSLabel();
-  private final JSLabel layerDimensionIN = new JSLabel();
+  private final JSSpinner containerWidth = new JSSpinner();
+  private final JSSpinner containerHeight = new JSSpinner();
+  private final JSSpinner containerResolution = new JSSpinner();
+  private final JSCheckBox containerLockRatio = new JSCheckBox();
+  private final JSLabel containerDimensionMM = new JSLabel();
+  private final JSLabel containerDimensionIN = new JSLabel();
 
   private final JSSpinner contentWidth = new JSSpinner();
   private final JSSpinner contentHeight = new JSSpinner();
@@ -79,17 +80,17 @@ public class Z4ResizeImagePanel extends JSPanel {
 
     Z4UI.addLabel(this, Z4Translations.LAYER, new GBC(0, 0).a(GBC.WEST).w(3)).getStyle().fontWeight = "bold";
     Z4UI.addLabel(this, Z4Translations.WIDTH + " (px)", new GBC(0, 1).a(GBC.WEST));
-    this.addSpinner(this.layerWidth, Z4Constants.DEFAULT_IMAGE_SIZE, 1, Z4Constants.MAX_IMAGE_SIZE, 0, 2, this.layerWidth, this.layerHeight, this.layerLockRatio);
+    this.addSpinner(this.containerWidth, Z4Constants.DEFAULT_IMAGE_SIZE, 1, Z4Constants.MAX_IMAGE_SIZE, 0, 2, this.containerWidth, this.containerHeight, this.containerLockRatio);
     Z4UI.addLabel(this, Z4Translations.HEIGHT + " (px)", new GBC(1, 1).a(GBC.WEST));
-    this.addSpinner(this.layerHeight, Z4Constants.DEFAULT_IMAGE_SIZE, 1, Z4Constants.MAX_IMAGE_SIZE, 1, 2, this.layerWidth, this.layerHeight, this.layerLockRatio);
+    this.addSpinner(this.containerHeight, Z4Constants.DEFAULT_IMAGE_SIZE, 1, Z4Constants.MAX_IMAGE_SIZE, 1, 2, this.containerWidth, this.containerHeight, this.containerLockRatio);
     Z4UI.addLabel(this, Z4Translations.RESOLUTION + " (dpi)", new GBC(2, 1).a(GBC.WEST));
-    this.addSpinner(this.layerResolution, Z4Constants.DEFAULT_DPI, 1, Z4Constants.MAX_DPI, 2, 2, this.layerWidth, this.layerHeight, this.layerLockRatio);
+    this.addSpinner(this.containerResolution, Z4Constants.DEFAULT_DPI, 1, Z4Constants.MAX_DPI, 2, 2, this.containerWidth, this.containerHeight, this.containerLockRatio);
 
-    this.add(this.layerDimensionMM, new GBC(0, 3).w(3).f(GBC.HORIZONTAL).i(2, 0, 0, 0));
-    this.add(this.layerDimensionIN, new GBC(0, 4).w(3).f(GBC.HORIZONTAL).i(2, 0, 0, 0));
+    this.add(this.containerDimensionMM, new GBC(0, 3).w(3).f(GBC.HORIZONTAL).i(2, 0, 0, 0));
+    this.add(this.containerDimensionIN, new GBC(0, 4).w(3).f(GBC.HORIZONTAL).i(2, 0, 0, 0));
 
-    this.addCheckBox(this.layerLockRatio, this.layerWidth, this.layerHeight);
-    this.add(this.layerLockRatio, new GBC(0, 5).a(GBC.WEST).w(3));
+    this.addCheckBox(this.containerLockRatio, this.containerWidth, this.containerHeight);
+    this.add(this.containerLockRatio, new GBC(0, 5).a(GBC.WEST).w(3));
 
     Z4UI.addLabel(this, Z4Translations.CONTENT, new GBC(0, 6).a(GBC.WEST).w(3)).getStyle().fontWeight = "bold";
     Z4UI.addLabel(this, Z4Translations.WIDTH + " (px)", new GBC(0, 7).a(GBC.WEST));
@@ -113,8 +114,8 @@ public class Z4ResizeImagePanel extends JSPanel {
     this.centerContent.setContentAreaFilled(false);
     this.centerContent.setText(Z4Translations.CENTER_VERB);
     this.centerContent.addActionListener(event -> {
-      this.contentOffsetX.setValue(parseInt((this.layerWidth.getValue() - this.contentWidth.getValue()) / 2));
-      this.contentOffsetY.setValue(parseInt((this.layerHeight.getValue() - this.contentHeight.getValue()) / 2));
+      this.contentOffsetX.setValue(parseInt((this.containerWidth.getValue() - this.contentWidth.getValue()) / 2));
+      this.contentOffsetY.setValue(parseInt((this.containerHeight.getValue() - this.contentHeight.getValue()) / 2));
       this.setDimensions();
     });
     this.add(this.centerContent, new GBC(2, 13));
@@ -200,8 +201,8 @@ public class Z4ResizeImagePanel extends JSPanel {
   private void setDimensions() {
     if (this.resizeLayerAdaptContent.isSelected()) {
       this.setComponentsEnabled(true, false, false);
-      this.contentWidth.setValue(this.layerWidth.getValue());
-      this.contentHeight.setValue(this.layerHeight.getValue());
+      this.contentWidth.setValue(this.containerWidth.getValue());
+      this.contentHeight.setValue(this.containerHeight.getValue());
       this.contentOffsetX.setValue(0);
       this.contentOffsetY.setValue(0);
     } else if (this.resizeLayerAndContent.isSelected()) {
@@ -212,25 +213,25 @@ public class Z4ResizeImagePanel extends JSPanel {
       this.contentHeight.setValue(this.canvasHeight);
     } else if (this.resizeContent.isSelected()) {
       this.setComponentsEnabled(false, true, true);
-      this.layerWidth.setValue(this.canvasWidth);
-      this.layerHeight.setValue(this.canvasHeight);
+      this.containerWidth.setValue(this.canvasWidth);
+      this.containerHeight.setValue(this.canvasHeight);
     }
 
-    this.setLabels(this.layerWidth, this.layerHeight, this.layerResolution, this.layerDimensionMM, this.layerDimensionIN);
+    this.setLabels(this.containerWidth, this.containerHeight, this.containerResolution, this.containerDimensionMM, this.containerDimensionIN);
     this.setLabels(this.contentWidth, this.contentHeight, this.contentResolution, this.contentDimensionMM, this.contentDimensionIN);
 
-    double layerW = this.layerWidth.getValue();
-    double layerH = this.layerHeight.getValue();
+    double containerW = this.containerWidth.getValue();
+    double containerH = this.containerHeight.getValue();
 
-    double newRatio = layerW / layerH;
+    double newRatio = containerW / containerH;
     double previewW = newRatio > 1 ? Z4ResizeImagePanel.SIZE : Z4ResizeImagePanel.SIZE * newRatio;
     double previewH = newRatio > 1 ? Z4ResizeImagePanel.SIZE / newRatio : Z4ResizeImagePanel.SIZE;
     this.preview.setProperty("width", "" + parseInt(previewW));
     this.preview.setProperty("height", "" + parseInt(previewH));
 
     if ($exists(this.canvas)) {
-      double scaleW = previewW / layerW;
-      double scaleH = previewH / layerH;
+      double scaleW = previewW / containerW;
+      double scaleH = previewH / containerH;
 
       this.ctx.save();
       this.ctx.scale(scaleW, scaleH);
@@ -241,10 +242,10 @@ public class Z4ResizeImagePanel extends JSPanel {
     this.onchange();
   }
 
-  private void setComponentsEnabled(boolean layer, boolean content, boolean offset) {
-    this.layerWidth.setEnabled(layer);
-    this.layerHeight.setEnabled(layer);
-    this.layerLockRatio.setEnabled(layer);
+  private void setComponentsEnabled(boolean container, boolean content, boolean offset) {
+    this.containerWidth.setEnabled(container);
+    this.containerHeight.setEnabled(container);
+    this.containerLockRatio.setEnabled(container);
     this.contentWidth.setEnabled(content);
     this.contentHeight.setEnabled(content);
     this.contentLockRatio.setEnabled(content);
@@ -279,8 +280,8 @@ public class Z4ResizeImagePanel extends JSPanel {
     this.canvasHeight = height;
     this.canvasRatio = width / height;
 
-    this.layerWidth.setValue(width);
-    this.layerHeight.setValue(height);
+    this.containerWidth.setValue(width);
+    this.containerHeight.setValue(height);
     this.contentWidth.setValue(width);
     this.contentHeight.setValue(height);
 
@@ -288,14 +289,18 @@ public class Z4ResizeImagePanel extends JSPanel {
   }
 
   /**
-   * Returns the selected size
+   * Returns the resize options
    *
-   * @return The selected size
+   * @return The resize options
    */
-//  public Dimension getSelectedSize() {
-//    return new Dimension((int) this.width.getValue(), (int) this.height.getValue());
-//  }
-//  
+  public Z4ResizeOptions getResizeOptions() {
+    return new Z4ResizeOptions(
+            (int) this.containerWidth.getValue(), (int) this.containerHeight.getValue(),
+            (int) this.contentWidth.getValue(), (int) this.contentHeight.getValue(),
+            (int) this.contentOffsetX.getValue(), (int) this.contentOffsetY.getValue()
+    );
+  }
+
   /**
    * Adds a change listener
    *
