@@ -436,23 +436,28 @@ public class Z4Canvas extends JSComponent {
    * Deletes a layer
    *
    * @param layer The layer
+   * @param fromMerge true if the delete is called from a merge action, false
+   * otherwise
    * @return The layer index
    */
-  public int deleteLayer(Z4Layer layer) {
+  public int deleteLayer(Z4Layer layer, boolean fromMerge) {
     int index = this.paper.deleteLayer(layer);
 
-    if (this.selectedLayer == layer) {
-      int count = this.getLayersCount();
-      this.setSelectedLayer(this.paper.getLayerAt(count - 1));
+    if (!fromMerge) {
+      if (this.selectedLayer == layer) {
+        int count = this.getLayersCount();
+        this.setSelectedLayer(this.paper.getLayerAt(count - 1));
 
-      document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ") .z4layerpreview-selector").textContent = Z4LayerPreview.SELECTED_LAYER_CONTENT;
-      ((HTMLElement) document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
+        document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ") .z4layerpreview-selector").textContent = Z4LayerPreview.SELECTED_LAYER_CONTENT;
+        ((HTMLElement) document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
+      }
+
+      this.changed = true;
+      this.ribbonHistoryPanel.saveHistory("standard,tool");
+      this.setSaved(false);
+      this.drawCanvas();
     }
 
-    this.changed = true;
-    this.ribbonHistoryPanel.saveHistory("standard,tool");
-    this.setSaved(false);
-    this.drawCanvas();
     return index;
   }
 

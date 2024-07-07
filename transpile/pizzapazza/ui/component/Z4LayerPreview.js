@@ -196,7 +196,7 @@ class Z4LayerPreview extends JSDropDown {
     this.delete.addActionListener(event => JSOptionPane.showConfirmDialog(Z4Translations.DELETE_LAYER_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
       if (response === JSOptionPane.YES_OPTION) {
         this.changed = true;
-        let index = this.canvas.deleteLayer(this.layer);
+        let index = this.canvas.deleteLayer(this.layer, false);
         document.querySelector(".z4layerpreview:nth-child(" + (index + 1) + ")").remove();
       }
     }));

@@ -154,7 +154,7 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
       if (response == JSOptionPane.OK_OPTION) {
         Array<Z4Layer> selected = panel.getSelectedLayers();
         selected.forEach(layer -> {
-          int index = this.canvas.deleteLayer(layer);
+          int index = this.canvas.deleteLayer(layer, true);
           document.querySelector(".z4layerpreview:nth-child(" + (index + 1) + ")").remove();
         });
 

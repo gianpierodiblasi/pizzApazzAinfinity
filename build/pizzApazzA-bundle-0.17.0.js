@@ -2258,20 +2258,24 @@ class Z4Canvas extends JSComponent {
    * Deletes a layer
    *
    * @param layer The layer
+   * @param fromMerge true if the delete is called from a merge action, false
+   * otherwise
    * @return The layer index
    */
-   deleteLayer(layer) {
+   deleteLayer(layer, fromMerge) {
     let index = this.paper.deleteLayer(layer);
-    if (this.selectedLayer === layer) {
-      let count = this.getLayersCount();
-      this.setSelectedLayer(this.paper.getLayerAt(count - 1));
-      document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ") .z4layerpreview-selector").textContent = Z4LayerPreview.SELECTED_LAYER_CONTENT;
-      (document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
+    if (!fromMerge) {
+      if (this.selectedLayer === layer) {
+        let count = this.getLayersCount();
+        this.setSelectedLayer(this.paper.getLayerAt(count - 1));
+        document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ") .z4layerpreview-selector").textContent = Z4LayerPreview.SELECTED_LAYER_CONTENT;
+        (document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
+      }
+      this.changed = true;
+      this.ribbonHistoryPanel.saveHistory("standard,tool");
+      this.setSaved(false);
+      this.drawCanvas();
     }
-    this.changed = true;
-    this.ribbonHistoryPanel.saveHistory("standard,tool");
-    this.setSaved(false);
-    this.drawCanvas();
     return index;
   }
 
@@ -4177,7 +4181,7 @@ class Z4LayerPreview extends JSDropDown {
     this.delete.addActionListener(event => JSOptionPane.showConfirmDialog(Z4Translations.DELETE_LAYER_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
       if (response === JSOptionPane.YES_OPTION) {
         this.changed = true;
-        let index = this.canvas.deleteLayer(this.layer);
+        let index = this.canvas.deleteLayer(this.layer, false);
         document.querySelector(".z4layerpreview:nth-child(" + (index + 1) + ")").remove();
       }
     }));
@@ -6537,7 +6541,7 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
       if (response === JSOptionPane.OK_OPTION) {
         let selected = panel.getSelectedLayers();
         selected.forEach(layer => {
-          let index = this.canvas.deleteLayer(layer);
+          let index = this.canvas.deleteLayer(layer, true);
           document.querySelector(".z4layerpreview:nth-child(" + (index + 1) + ")").remove();
         });
         this.canvas.mergeLayers(selected);
