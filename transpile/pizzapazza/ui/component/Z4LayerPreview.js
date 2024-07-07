@@ -255,16 +255,17 @@ class Z4LayerPreview extends JSDropDown {
       let resizeImagePanel = new Z4ResizeImagePanel();
       resizeImagePanel.setCanvas(offsetCanvas, layerSize.width, layerSize.height);
       JSOptionPane.showInputDialog(resizeImagePanel, Z4Translations.RESIZE, listener => resizeImagePanel.addChangeListener(listener), () => {
-        // Dimension size = resizeImagePanel.getSelectedSize();
-        // return 0 < size.width && size.width <= Z4Constants.MAX_IMAGE_SIZE && 0 < size.height && size.height < Z4Constants.MAX_IMAGE_SIZE;
-        return false;
+        let resizeOptions = resizeImagePanel.getResizeOptions();
+        let containerOK = 0 < resizeOptions.containerWidth && resizeOptions.containerWidth <= Z4Constants.MAX_IMAGE_SIZE && 0 < resizeOptions.containerHeight && resizeOptions.containerHeight < Z4Constants.MAX_IMAGE_SIZE;
+        let contentOK = 0 < resizeOptions.contentWidth && resizeOptions.contentWidth <= Z4Constants.MAX_IMAGE_SIZE && 0 < resizeOptions.contentHeight && resizeOptions.contentHeight < Z4Constants.MAX_IMAGE_SIZE;
+        return containerOK && contentOK;
       }, response => {
-        // if (response == JSOptionPane.OK_OPTION) {
-        // Dimension size = resizeImagePanel.getSelectedSize();
-        // this.layer.resize();
-        // this.setLayer(this.canvas, this.layer);
-        // this.afterTransform();
-        // }
+        if (response === JSOptionPane.OK_OPTION) {
+          let resizeOptions = resizeImagePanel.getResizeOptions();
+          this.layer.resize();
+          this.setLayer(this.canvas, this.layer);
+          this.afterTransform();
+        }
       });
     });
     this.appendChild(this.editor);
@@ -355,15 +356,8 @@ class Z4LayerPreview extends JSDropDown {
     }
     let d = layer.getSize();
     let ratio = d.width / d.height;
-    let w = 0.0;
-    let h = 0.0;
-    if (ratio > 1) {
-      w = Z4LayerPreview.PREVIEW_SIZE;
-      h = Z4LayerPreview.PREVIEW_SIZE / ratio;
-    } else {
-      w = Z4LayerPreview.PREVIEW_SIZE * ratio;
-      h = Z4LayerPreview.PREVIEW_SIZE;
-    }
+    let w = ratio > 1 ? Z4LayerPreview.PREVIEW_SIZE : Z4LayerPreview.PREVIEW_SIZE * ratio;
+    let h = ratio > 1 ? Z4LayerPreview.PREVIEW_SIZE / ratio : Z4LayerPreview.PREVIEW_SIZE;
     this.zoom = Math.min(w / d.width, h / d.height);
     this.preview.setAttribute("width", "" + w);
     this.preview.setAttribute("height", "" + h);

@@ -26,6 +26,7 @@ import pizzapazza.ui.panel.Z4ResizeImagePanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Layer;
+import pizzapazza.util.Z4ResizeOptions;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
@@ -314,16 +315,18 @@ public class Z4LayerPreview extends JSDropDown {
       resizeImagePanel.setCanvas(offsetCanvas, layerSize.width, layerSize.height);
 
       JSOptionPane.showInputDialog(resizeImagePanel, Z4Translations.RESIZE, listener -> resizeImagePanel.addChangeListener(listener), () -> {
-//        Dimension size = resizeImagePanel.getSelectedSize();
-//        return 0 < size.width && size.width <= Z4Constants.MAX_IMAGE_SIZE && 0 < size.height && size.height < Z4Constants.MAX_IMAGE_SIZE;
-        return false;
+        Z4ResizeOptions resizeOptions = resizeImagePanel.getResizeOptions();
+        boolean containerOK = 0 < resizeOptions.containerWidth && resizeOptions.containerWidth <= Z4Constants.MAX_IMAGE_SIZE && 0 < resizeOptions.containerHeight && resizeOptions.containerHeight < Z4Constants.MAX_IMAGE_SIZE;
+        boolean contentOK = 0 < resizeOptions.contentWidth && resizeOptions.contentWidth <= Z4Constants.MAX_IMAGE_SIZE && 0 < resizeOptions.contentHeight && resizeOptions.contentHeight < Z4Constants.MAX_IMAGE_SIZE;
+        return containerOK && contentOK;
+
       }, response -> {
-//        if (response == JSOptionPane.OK_OPTION) {
-//          Dimension size = resizeImagePanel.getSelectedSize();
-//          this.layer.resize();
-//          this.setLayer(this.canvas, this.layer);
-//          this.afterTransform();
-//        }
+        if (response == JSOptionPane.OK_OPTION) {
+          Z4ResizeOptions resizeOptions = resizeImagePanel.getResizeOptions();
+          this.layer.resize();
+          this.setLayer(this.canvas, this.layer);
+          this.afterTransform();
+        }
       });
     });
     this.appendChild(this.editor);
@@ -423,15 +426,8 @@ public class Z4LayerPreview extends JSDropDown {
 
     Dimension d = layer.getSize();
     double ratio = d.width / d.height;
-    double w;
-    double h;
-    if (ratio > 1) {
-      w = Z4LayerPreview.PREVIEW_SIZE;
-      h = Z4LayerPreview.PREVIEW_SIZE / ratio;
-    } else {
-      w = Z4LayerPreview.PREVIEW_SIZE * ratio;
-      h = Z4LayerPreview.PREVIEW_SIZE;
-    }
+    double w = ratio > 1 ? Z4LayerPreview.PREVIEW_SIZE : Z4LayerPreview.PREVIEW_SIZE * ratio;
+    double h = ratio > 1 ? Z4LayerPreview.PREVIEW_SIZE / ratio : Z4LayerPreview.PREVIEW_SIZE;
     this.zoom = Math.min(w / d.width, h / d.height);
 
     this.preview.setAttribute("width", "" + w);
