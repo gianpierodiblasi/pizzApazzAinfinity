@@ -2,6 +2,7 @@ package pizzapazza.ui.panel.ribbon;
 
 import def.dom.DragEvent;
 import def.dom.File;
+import def.dom.HTMLElement;
 import def.js.Array;
 import javascript.awt.BorderLayout;
 import javascript.awt.Dimension;
@@ -28,6 +29,7 @@ import simulation.js.$Apply_0_Void;
 import simulation.js.$File;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.$typeof;
+import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.navigator;
 import static simulation.js.$Globals.window;
 
@@ -68,19 +70,40 @@ public class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
 
     Z4UI.addLabel(this, Z4Translations.TRANSFORM, new GBC(10, 0).w(3).a(GBC.WEST).i(5, 5, 2, 0));
     this.addButton(Z4Translations.FLIP_HORIZONTAL, true, 10, 1, "left", 0, event -> {
+      document.querySelectorAll(".z4layerpreview .z4layerpreview-fliphorizontal").forEach(element -> ((HTMLElement) element).click());
+      this.afterTransform();
     }).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.FLIP_VERTICAL, true, 11, 1, "both", 0, event -> {
+      document.querySelectorAll(".z4layerpreview .z4layerpreview-flipvertical").forEach(element -> ((HTMLElement) element).click());
+      this.afterTransform();
     }).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.RESIZE, true, 12, 1, "right", 0, event -> {
     }).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.ROTATE_PLUS_90, true, 10, 2, "left", 0, event -> {
+//      document.querySelectorAll(".z4layerpreview .z4layerpreview-rotateplus90").forEach(element -> ((HTMLElement) element).click());
+// ESEGUIRE L'OPERAZIONE SUL CANVAS
+//      this.afterTransform();
     });
     this.addButton(Z4Translations.ROTATE_MINUS_90, true, 11, 2, "both", 0, event -> {
+//      document.querySelectorAll(".z4layerpreview .z4layerpreview-rotateminus90").forEach(element -> ((HTMLElement) element).click());
+// ESEGUIRE L'OPERAZIONE SUL CANVAS
+//      this.afterTransform();
     });
     this.addButton(Z4Translations.ROTATE_180, true, 12, 2, "right", 0, event -> {
+//      document.querySelectorAll(".z4layerpreview .z4layerpreview-rotate180").forEach(element -> ((HTMLElement) element).click());
+// ESEGUIRE L'OPERAZIONE SUL CANVAS
+//      this.afterTransform();
     });
 
     Z4UI.addVLine(this, new GBC(16, 0).h(3).wxy(1, 1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+  }
+
+  private void afterTransform() {
+    this.canvas.setSaved(false);
+    this.canvas.drawCanvas();
+    this.canvas.drawCanvasBounds();
+    this.canvas.setChanged(true);
+    this.canvas.saveHistory("standard,tool");
   }
 
   /**

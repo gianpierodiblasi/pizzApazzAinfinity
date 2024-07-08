@@ -235,11 +235,11 @@ class Z4LayerPreview extends JSDropDown {
     this.addButton(panelTranform, Z4Translations.FLIP_HORIZONTAL, 0, 0, event => {
       this.layer.flipHorizonal();
       this.afterTransform();
-    });
+    }).cssAddClass("z4layerpreview-fliphorizontal");
     this.addButton(panelTranform, Z4Translations.FLIP_VERTICAL, 1, 0, event => {
       this.layer.flipVertical();
       this.afterTransform();
-    });
+    }).cssAddClass("z4layerpreview-flipvertical");
     this.addButton(panelTranform, Z4Translations.RESIZE, 2, 0, event => {
       let layerSize = this.layer.getSize();
       let offsetCanvas = new OffscreenCanvas(layerSize.width, layerSize.height);
@@ -263,20 +263,20 @@ class Z4LayerPreview extends JSDropDown {
       this.layer.rotatePlus90();
       this.setLayer(this.canvas, this.layer);
       this.afterTransform();
-    });
+    }).cssAddClass("z4layerpreview-rotateplus90");
     this.addButton(panelTranform, Z4Translations.ROTATE_MINUS_90, 1, 1, event => {
       this.layer.rotatePlus90();
       this.layer.rotatePlus90();
       this.layer.rotatePlus90();
       this.setLayer(this.canvas, this.layer);
       this.afterTransform();
-    });
+    }).cssAddClass("z4layerpreview-rotateminus90");
     this.addButton(panelTranform, Z4Translations.ROTATE_180, 2, 1, event => {
       this.layer.rotatePlus90();
       this.layer.rotatePlus90();
       this.setLayer(this.canvas, this.layer);
       this.afterTransform();
-    });
+    }).cssAddClass("z4layerpreview-rotate180");
     this.appendChild(this.editor);
   }
 
@@ -286,6 +286,7 @@ class Z4LayerPreview extends JSDropDown {
     button.setContentAreaFilled(false);
     button.addActionListener(listener);
     panel.add(button, new GBC(gridx, gridy).f(GBC.HORIZONTAL).i(1, 1, 1, 1));
+    return button;
   }
 
    afterTransform() {

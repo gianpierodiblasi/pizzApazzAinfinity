@@ -15,6 +15,7 @@ import simulation.dom.$Image;
 import simulation.dom.$OffscreenCanvas;
 import simulation.js.$Apply_1_Void;
 import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.parseInt;
 import simulation.js.$Object;
 import simulation.js.$Uint8Array;
 
@@ -393,8 +394,8 @@ public class Z4Layer {
     this.offscreen = rotatedOffscreen;
     this.offscreenCtx = rotatedOffscreenCtx;
 
-    this.offsetX = 0;
-    this.offsetY = 0;
+    this.offsetX += parseInt(this.width / 2 - this.height / 2);
+    this.offsetY += parseInt(this.height / 2 - this.width / 2);
     int temp = this.width;
     this.width = this.height;
     this.height = temp;

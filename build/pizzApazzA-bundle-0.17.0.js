@@ -4329,11 +4329,11 @@ class Z4LayerPreview extends JSDropDown {
     this.addButton(panelTranform, Z4Translations.FLIP_HORIZONTAL, 0, 0, event => {
       this.layer.flipHorizonal();
       this.afterTransform();
-    });
+    }).cssAddClass("z4layerpreview-fliphorizontal");
     this.addButton(panelTranform, Z4Translations.FLIP_VERTICAL, 1, 0, event => {
       this.layer.flipVertical();
       this.afterTransform();
-    });
+    }).cssAddClass("z4layerpreview-flipvertical");
     this.addButton(panelTranform, Z4Translations.RESIZE, 2, 0, event => {
       let layerSize = this.layer.getSize();
       let offsetCanvas = new OffscreenCanvas(layerSize.width, layerSize.height);
@@ -4357,20 +4357,20 @@ class Z4LayerPreview extends JSDropDown {
       this.layer.rotatePlus90();
       this.setLayer(this.canvas, this.layer);
       this.afterTransform();
-    });
+    }).cssAddClass("z4layerpreview-rotateplus90");
     this.addButton(panelTranform, Z4Translations.ROTATE_MINUS_90, 1, 1, event => {
       this.layer.rotatePlus90();
       this.layer.rotatePlus90();
       this.layer.rotatePlus90();
       this.setLayer(this.canvas, this.layer);
       this.afterTransform();
-    });
+    }).cssAddClass("z4layerpreview-rotateminus90");
     this.addButton(panelTranform, Z4Translations.ROTATE_180, 2, 1, event => {
       this.layer.rotatePlus90();
       this.layer.rotatePlus90();
       this.setLayer(this.canvas, this.layer);
       this.afterTransform();
-    });
+    }).cssAddClass("z4layerpreview-rotate180");
     this.appendChild(this.editor);
   }
 
@@ -4380,6 +4380,7 @@ class Z4LayerPreview extends JSDropDown {
     button.setContentAreaFilled(false);
     button.addActionListener(listener);
     panel.add(button, new GBC(gridx, gridy).f(GBC.HORIZONTAL).i(1, 1, 1, 1));
+    return button;
   }
 
    afterTransform() {
@@ -6498,18 +6499,39 @@ class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
     Z4UI.addVLine(this, new GBC(9, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     Z4UI.addLabel(this, Z4Translations.TRANSFORM, new GBC(10, 0).w(3).a(GBC.WEST).i(5, 5, 2, 0));
     this.addButton(Z4Translations.FLIP_HORIZONTAL, true, 10, 1, "left", 0, event => {
+      document.querySelectorAll(".z4layerpreview .z4layerpreview-fliphorizontal").forEach(element => (element).click());
+      this.afterTransform();
     }).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.FLIP_VERTICAL, true, 11, 1, "both", 0, event => {
+      document.querySelectorAll(".z4layerpreview .z4layerpreview-flipvertical").forEach(element => (element).click());
+      this.afterTransform();
     }).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.RESIZE, true, 12, 1, "right", 0, event => {
     }).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.ROTATE_PLUS_90, true, 10, 2, "left", 0, event => {
+      // document.querySelectorAll(".z4layerpreview .z4layerpreview-rotateplus90").forEach(element -> ((HTMLElement) element).click());
+      // ESEGUIRE L'OPERAZIONE SUL CANVAS
+      // this.afterTransform();
     });
     this.addButton(Z4Translations.ROTATE_MINUS_90, true, 11, 2, "both", 0, event => {
+      // document.querySelectorAll(".z4layerpreview .z4layerpreview-rotateminus90").forEach(element -> ((HTMLElement) element).click());
+      // ESEGUIRE L'OPERAZIONE SUL CANVAS
+      // this.afterTransform();
     });
     this.addButton(Z4Translations.ROTATE_180, true, 12, 2, "right", 0, event => {
+      // document.querySelectorAll(".z4layerpreview .z4layerpreview-rotate180").forEach(element -> ((HTMLElement) element).click());
+      // ESEGUIRE L'OPERAZIONE SUL CANVAS
+      // this.afterTransform();
     });
     Z4UI.addVLine(this, new GBC(16, 0).h(3).wxy(1, 1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+  }
+
+   afterTransform() {
+    this.canvas.setSaved(false);
+    this.canvas.drawCanvas();
+    this.canvas.drawCanvasBounds();
+    this.canvas.setChanged(true);
+    this.canvas.saveHistory("standard,tool");
   }
 
   /**
@@ -17947,8 +17969,8 @@ class Z4Layer {
     rotatedOffscreenCtx.putImageData(rotatedImageData, 0, 0);
     this.offscreen = rotatedOffscreen;
     this.offscreenCtx = rotatedOffscreenCtx;
-    this.offsetX = 0;
-    this.offsetY = 0;
+    this.offsetX += parseInt(this.width / 2 - this.height / 2);
+    this.offsetY += parseInt(this.height / 2 - this.width / 2);
     let temp = this.width;
     this.width = this.height;
     this.height = temp;

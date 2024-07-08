@@ -362,8 +362,8 @@ class Z4Layer {
     rotatedOffscreenCtx.putImageData(rotatedImageData, 0, 0);
     this.offscreen = rotatedOffscreen;
     this.offscreenCtx = rotatedOffscreenCtx;
-    this.offsetX = 0;
-    this.offsetY = 0;
+    this.offsetX += parseInt(this.width / 2 - this.height / 2);
+    this.offsetY += parseInt(this.height / 2 - this.width / 2);
     let temp = this.width;
     this.width = this.height;
     this.height = temp;

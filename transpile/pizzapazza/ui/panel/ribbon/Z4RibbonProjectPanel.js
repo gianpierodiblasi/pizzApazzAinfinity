@@ -33,18 +33,39 @@ class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
     Z4UI.addVLine(this, new GBC(9, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     Z4UI.addLabel(this, Z4Translations.TRANSFORM, new GBC(10, 0).w(3).a(GBC.WEST).i(5, 5, 2, 0));
     this.addButton(Z4Translations.FLIP_HORIZONTAL, true, 10, 1, "left", 0, event => {
+      document.querySelectorAll(".z4layerpreview .z4layerpreview-fliphorizontal").forEach(element => (element).click());
+      this.afterTransform();
     }).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.FLIP_VERTICAL, true, 11, 1, "both", 0, event => {
+      document.querySelectorAll(".z4layerpreview .z4layerpreview-flipvertical").forEach(element => (element).click());
+      this.afterTransform();
     }).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.RESIZE, true, 12, 1, "right", 0, event => {
     }).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.ROTATE_PLUS_90, true, 10, 2, "left", 0, event => {
+      // document.querySelectorAll(".z4layerpreview .z4layerpreview-rotateplus90").forEach(element -> ((HTMLElement) element).click());
+      // ESEGUIRE L'OPERAZIONE SUL CANVAS
+      // this.afterTransform();
     });
     this.addButton(Z4Translations.ROTATE_MINUS_90, true, 11, 2, "both", 0, event => {
+      // document.querySelectorAll(".z4layerpreview .z4layerpreview-rotateminus90").forEach(element -> ((HTMLElement) element).click());
+      // ESEGUIRE L'OPERAZIONE SUL CANVAS
+      // this.afterTransform();
     });
     this.addButton(Z4Translations.ROTATE_180, true, 12, 2, "right", 0, event => {
+      // document.querySelectorAll(".z4layerpreview .z4layerpreview-rotate180").forEach(element -> ((HTMLElement) element).click());
+      // ESEGUIRE L'OPERAZIONE SUL CANVAS
+      // this.afterTransform();
     });
     Z4UI.addVLine(this, new GBC(16, 0).h(3).wxy(1, 1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+  }
+
+   afterTransform() {
+    this.canvas.setSaved(false);
+    this.canvas.drawCanvas();
+    this.canvas.drawCanvasBounds();
+    this.canvas.setChanged(true);
+    this.canvas.saveHistory("standard,tool");
   }
 
   /**
