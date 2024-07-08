@@ -19,6 +19,8 @@ class Z4LayerPreview extends JSDropDown {
 
    editName = new JSTextField();
 
+   size = new JSLabel();
+
    offsetXSlider = new JSSlider();
 
    offsetXSpinner = new JSSpinner();
@@ -154,7 +156,8 @@ class Z4LayerPreview extends JSDropDown {
         this.setChildAttributeByQuery("summary", "title", newName);
       }
     });
-    Z4UI.addLabel(panelBasic, Z4Translations.LAYER_NAME, new GBC(0, 0).a(GBC.WEST));
+    Z4UI.addLabel(panelBasic, Z4Translations.LAYER_NAME, new GBC(0, 0).a(GBC.WEST).wx(1));
+    panelBasic.add(this.size, new GBC(1, 0).a(GBC.EAST).w(4));
     panelBasic.add(this.editName, new GBC(0, 1).w(5).a(GBC.WEST).f(GBC.HORIZONTAL).i(0, 0, 5, 0));
     Z4UI.addLabel(panelBasic, Z4Translations.OFFSET_X, new GBC(0, 2).a(GBC.WEST));
     this.offsetXSpinner.cssAddClass("jsspinner_w_4rem");
@@ -346,6 +349,7 @@ class Z4LayerPreview extends JSDropDown {
     this.layer = layer;
     this.layer.setLayerPreview(this);
     this.name.setText(this.layer.getName());
+    this.size.setText(this.layer.getSize().width + " x " + this.layer.getSize().height);
     this.editName.setText(this.layer.getName());
     this.setChildAttributeByQuery("summary", "title", this.layer.getName());
     if (this.layer.isHidden()) {
