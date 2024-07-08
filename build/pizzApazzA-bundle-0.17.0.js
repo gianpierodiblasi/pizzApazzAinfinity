@@ -2222,7 +2222,7 @@ class Z4Canvas extends JSComponent {
    */
    afterAddLayer() {
     this.changed = true;
-    this.ribbonHistoryPanel.saveHistory("standard,tool");
+    this.saveHistory("standard,tool");
     this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), null, true);
     this.setSaved(false);
   }
@@ -2245,7 +2245,7 @@ class Z4Canvas extends JSComponent {
           duplicate.move(offset.x, offset.y);
         }, true);
         this.changed = true;
-        this.ribbonHistoryPanel.saveHistory("standard,tool");
+        this.saveHistory("standard,tool");
         this.setSaved(false);
         this.drawCanvas();
         return null;
@@ -2272,7 +2272,7 @@ class Z4Canvas extends JSComponent {
         (document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
       }
       this.changed = true;
-      this.ribbonHistoryPanel.saveHistory("standard,tool");
+      this.saveHistory("standard,tool");
       this.setSaved(false);
       this.drawCanvas();
     }
@@ -2289,7 +2289,7 @@ class Z4Canvas extends JSComponent {
    moveLayer(layer, position) {
     if (this.paper.moveLayer(layer, position)) {
       this.changed = true;
-      this.ribbonHistoryPanel.saveHistory("standard,tool");
+      this.saveHistory("standard,tool");
       this.setSaved(false);
       this.drawCanvas();
       return true;
@@ -2466,7 +2466,7 @@ class Z4Canvas extends JSComponent {
    setSelectedDrawingToolAndAddDrawingToolPreview(selectedDrawingTool, add) {
     this.selectedDrawingTool = selectedDrawingTool;
     this.mouseManager.setSelectedDrawingTool(selectedDrawingTool);
-    this.ribbonHistoryPanel.saveHistory("tool");
+    this.saveHistory("tool");
     if (add) {
       this.ribbonDrawingToolPanel.addDrawingToolPreview(this.selectedDrawingTool);
     }
