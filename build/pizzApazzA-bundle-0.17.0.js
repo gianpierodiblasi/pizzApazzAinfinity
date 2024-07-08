@@ -4334,25 +4334,7 @@ class Z4LayerPreview extends JSDropDown {
       this.layer.flipVertical();
       this.afterTransform();
     });
-    this.addButton(panelTranform, Z4Translations.ROTATE_PLUS_90, 0, 1, event => {
-      this.layer.rotatePlus90();
-      this.setLayer(this.canvas, this.layer);
-      this.afterTransform();
-    });
-    this.addButton(panelTranform, Z4Translations.ROTATE_MINUS_90, 1, 1, event => {
-      this.layer.rotatePlus90();
-      this.layer.rotatePlus90();
-      this.layer.rotatePlus90();
-      this.setLayer(this.canvas, this.layer);
-      this.afterTransform();
-    });
-    this.addButton(panelTranform, Z4Translations.ROTATE_180, 0, 2, event => {
-      this.layer.rotatePlus90();
-      this.layer.rotatePlus90();
-      this.setLayer(this.canvas, this.layer);
-      this.afterTransform();
-    });
-    this.addButton(panelTranform, Z4Translations.RESIZE, 1, 2, event => {
+    this.addButton(panelTranform, Z4Translations.RESIZE, 2, 0, event => {
       let layerSize = this.layer.getSize();
       let offsetCanvas = new OffscreenCanvas(layerSize.width, layerSize.height);
       this.layer.draw(offsetCanvas.getContext("2d"), true);
@@ -4370,6 +4352,24 @@ class Z4LayerPreview extends JSDropDown {
           this.afterTransform();
         }
       });
+    });
+    this.addButton(panelTranform, Z4Translations.ROTATE_PLUS_90, 0, 1, event => {
+      this.layer.rotatePlus90();
+      this.setLayer(this.canvas, this.layer);
+      this.afterTransform();
+    });
+    this.addButton(panelTranform, Z4Translations.ROTATE_MINUS_90, 1, 1, event => {
+      this.layer.rotatePlus90();
+      this.layer.rotatePlus90();
+      this.layer.rotatePlus90();
+      this.setLayer(this.canvas, this.layer);
+      this.afterTransform();
+    });
+    this.addButton(panelTranform, Z4Translations.ROTATE_180, 2, 1, event => {
+      this.layer.rotatePlus90();
+      this.layer.rotatePlus90();
+      this.setLayer(this.canvas, this.layer);
+      this.afterTransform();
     });
     this.appendChild(this.editor);
   }
@@ -5790,19 +5790,19 @@ class Z4AbstractRibbonPanel extends JSPanel {
     let gbc = new GBC(gridx, gridy).a(GBC.NORTHWEST);
     switch(border) {
       case "left":
-        gbc.i(top, 5, 0, 0);
+        gbc.i(top, 5, 0, 0).f(GBC.HORIZONTAL);
         button.getStyle().borderTopRightRadius = "0px";
         button.getStyle().borderBottomRightRadius = "0px";
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
         break;
       case "both":
-        gbc.i(top, 0, 0, 0);
+        gbc.i(top, 0, 0, 0).f(GBC.HORIZONTAL);
         button.getStyle().borderRadius = "0px";
         button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
         break;
       case "right":
-        gbc.i(top, 0, 0, 5);
+        gbc.i(top, 0, 0, 5).f(GBC.HORIZONTAL);
         button.getStyle().borderTopLeftRadius = "0px";
         button.getStyle().borderBottomLeftRadius = "0px";
         button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
@@ -6487,15 +6487,29 @@ class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
     this.addButton(Z4Translations.CREATE, true, 0, 1, "left", 0, event => this.checkSaved(Z4Translations.CREATE, () => this.createFromColor()));
     this.addButton(Z4Translations.FROM_CLIPBOARD, typeof navigator.clipboard["read"] === "function", 1, 1, "both", 0, event => this.checkSaved(Z4Translations.FROM_CLIPBOARD, () => this.createFromClipboard()));
     this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", 0, event => this.checkSaved(Z4Translations.FROM_FILE, () => this.createFromFile()));
-    Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addVLine(this, new GBC(3, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     Z4UI.addLabel(this, Z4Translations.OPEN, new GBC(4, 0).a(GBC.WEST).i(5, 5, 2, 0));
     this.addButton(Z4Translations.OPEN_PROJECT, true, 4, 1, "", 0, event => this.checkSaved(Z4Translations.OPEN_PROJECT, () => this.openProject()));
-    Z4UI.addVLine(this, new GBC(5, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addVLine(this, new GBC(5, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     Z4UI.addLabel(this, Z4Translations.SAVE, new GBC(6, 0).w(2).a(GBC.WEST).i(5, 5, 2, 0));
     this.saveProjectButton = this.addButton(Z4Translations.SAVE_PROJECT, false, 6, 1, "left", 0, event => this.saveProject(null, false));
-    this.addButton(Z4Translations.SAVE_PROJECT_AS, true, 7, 1, "both", 0, event => this.saveProject(null, true));
-    this.addButton(Z4Translations.EXPORT, true, 8, 1, "right", 0, event => this.exportToFile());
-    Z4UI.addVLine(this, new GBC(9, 0).h(2).wxy(1, 1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    this.addButton(Z4Translations.SAVE_PROJECT_AS, true, 7, 1, "right", 0, event => this.saveProject(null, true));
+    this.addButton(Z4Translations.EXPORT, true, 6, 2, "", 0, event => this.exportToFile());
+    Z4UI.addVLine(this, new GBC(9, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addLabel(this, Z4Translations.TRANSFORM, new GBC(10, 0).w(3).a(GBC.WEST).i(5, 5, 2, 0));
+    this.addButton(Z4Translations.FLIP_HORIZONTAL, true, 10, 1, "left", 0, event => {
+    }).getStyle().marginBottom = "5px";
+    this.addButton(Z4Translations.FLIP_VERTICAL, true, 11, 1, "both", 0, event => {
+    }).getStyle().marginBottom = "5px";
+    this.addButton(Z4Translations.RESIZE, true, 12, 1, "right", 0, event => {
+    }).getStyle().marginBottom = "5px";
+    this.addButton(Z4Translations.ROTATE_PLUS_90, true, 10, 2, "left", 0, event => {
+    });
+    this.addButton(Z4Translations.ROTATE_MINUS_90, true, 11, 2, "both", 0, event => {
+    });
+    this.addButton(Z4Translations.ROTATE_180, true, 12, 2, "right", 0, event => {
+    });
+    Z4UI.addVLine(this, new GBC(16, 0).h(3).wxy(1, 1).f(GBC.VERTICAL).i(1, 2, 1, 2));
   }
 
   /**

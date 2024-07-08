@@ -240,25 +240,7 @@ class Z4LayerPreview extends JSDropDown {
       this.layer.flipVertical();
       this.afterTransform();
     });
-    this.addButton(panelTranform, Z4Translations.ROTATE_PLUS_90, 0, 1, event => {
-      this.layer.rotatePlus90();
-      this.setLayer(this.canvas, this.layer);
-      this.afterTransform();
-    });
-    this.addButton(panelTranform, Z4Translations.ROTATE_MINUS_90, 1, 1, event => {
-      this.layer.rotatePlus90();
-      this.layer.rotatePlus90();
-      this.layer.rotatePlus90();
-      this.setLayer(this.canvas, this.layer);
-      this.afterTransform();
-    });
-    this.addButton(panelTranform, Z4Translations.ROTATE_180, 0, 2, event => {
-      this.layer.rotatePlus90();
-      this.layer.rotatePlus90();
-      this.setLayer(this.canvas, this.layer);
-      this.afterTransform();
-    });
-    this.addButton(panelTranform, Z4Translations.RESIZE, 1, 2, event => {
+    this.addButton(panelTranform, Z4Translations.RESIZE, 2, 0, event => {
       let layerSize = this.layer.getSize();
       let offsetCanvas = new OffscreenCanvas(layerSize.width, layerSize.height);
       this.layer.draw(offsetCanvas.getContext("2d"), true);
@@ -276,6 +258,24 @@ class Z4LayerPreview extends JSDropDown {
           this.afterTransform();
         }
       });
+    });
+    this.addButton(panelTranform, Z4Translations.ROTATE_PLUS_90, 0, 1, event => {
+      this.layer.rotatePlus90();
+      this.setLayer(this.canvas, this.layer);
+      this.afterTransform();
+    });
+    this.addButton(panelTranform, Z4Translations.ROTATE_MINUS_90, 1, 1, event => {
+      this.layer.rotatePlus90();
+      this.layer.rotatePlus90();
+      this.layer.rotatePlus90();
+      this.setLayer(this.canvas, this.layer);
+      this.afterTransform();
+    });
+    this.addButton(panelTranform, Z4Translations.ROTATE_180, 2, 1, event => {
+      this.layer.rotatePlus90();
+      this.layer.rotatePlus90();
+      this.setLayer(this.canvas, this.layer);
+      this.afterTransform();
     });
     this.appendChild(this.editor);
   }

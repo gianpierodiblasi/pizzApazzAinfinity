@@ -33,19 +33,19 @@ class Z4AbstractRibbonPanel extends JSPanel {
     let gbc = new GBC(gridx, gridy).a(GBC.NORTHWEST);
     switch(border) {
       case "left":
-        gbc.i(top, 5, 0, 0);
+        gbc.i(top, 5, 0, 0).f(GBC.HORIZONTAL);
         button.getStyle().borderTopRightRadius = "0px";
         button.getStyle().borderBottomRightRadius = "0px";
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
         break;
       case "both":
-        gbc.i(top, 0, 0, 0);
+        gbc.i(top, 0, 0, 0).f(GBC.HORIZONTAL);
         button.getStyle().borderRadius = "0px";
         button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
         button.getStyle().borderRight = "1px solid var(--main-action-bgcolor)";
         break;
       case "right":
-        gbc.i(top, 0, 0, 5);
+        gbc.i(top, 0, 0, 5).f(GBC.HORIZONTAL);
         button.getStyle().borderTopLeftRadius = "0px";
         button.getStyle().borderBottomLeftRadius = "0px";
         button.getStyle().borderLeft = "1px solid var(--main-action-bgcolor)";
