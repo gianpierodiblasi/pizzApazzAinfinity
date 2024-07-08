@@ -12,12 +12,14 @@ import static def.js.Globals.eval;
 import def.js.JSON;
 import javascript.awt.Dimension;
 import javascript.awt.Point;
+import javascript.swing.JSOptionPane;
 import javascript.util.fsa.FileSystemFileHandle;
 import javascript.util.fsa.FileSystemWritableFileStreamCreateOptions;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonDrawingToolPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
+import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4DrawingTool;
 import pizzapazza.util.Z4Layer;
 import pizzapazza.util.Z4Paper;
@@ -114,16 +116,18 @@ public class Z4CanvasIOManager {
    * @param file The file
    */
   public void createFromFile(File file) {
-    FileReader fileReader = new FileReader();
-    fileReader.onload = event -> this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), (String) fileReader.result);
-    fileReader.readAsDataURL(file);
+    Z4UI.pleaseWait(this.canvas, true, true, true, false, "", () -> {
+      FileReader fileReader = new FileReader();
+      fileReader.onload = event -> this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), (String) fileReader.result);
+      fileReader.readAsDataURL(file);
+    });
   }
 
   /**
    * Creates a new canvas project from an image in the clipboard
    */
   public void createFromClipboard() {
-    navigator.clipboard.read().then(items -> {
+    Z4UI.pleaseWait(this.canvas, true, true, true, false, "", () -> navigator.clipboard.read().then(items -> {
       items.forEach(item -> {
         String imageType = item.types.find((type, index, array) -> type.startsWith("image/"));
 
@@ -131,28 +135,34 @@ public class Z4CanvasIOManager {
           this.createFromURL("", URL.createObjectURL(blob));
         });
       });
-    });
+    }));
   }
 
   private Object createFromURL(String projectName, String url) {
     $Image image = ($Image) document.createElement("img");
 
     image.onload = event -> {
-      this.paper.reset();
-      this.paper.addLayerFromImage(Z4Translations.BACKGROUND_LAYER, image, (int) image.width, (int) image.height);
+      Z4UI.pleaseWaitCompleted();
 
-      this.canvas.setSize((int) image.width, (int) image.height);
+      if (image.width <= Z4Constants.MAX_IMAGE_SIZE && image.height < Z4Constants.MAX_IMAGE_SIZE) {
+        this.paper.reset();
+        this.paper.addLayerFromImage(Z4Translations.BACKGROUND_LAYER, image, (int) image.width, (int) image.height);
 
-      this.ribbonLayerPanel.reset();
-      this.canvas.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.canvas.getLayersCount() - 1), null, true);
+        this.canvas.setSize((int) image.width, (int) image.height);
 
-      this.drawingTools.length = 0;
-      this.ribbonDrawingToolPanel.reset();
+        this.ribbonLayerPanel.reset();
+        this.canvas.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.canvas.getLayersCount() - 1), null, true);
 
-      this.ribbonHistoryPanel.resetHistory(() -> {
-        this.canvas.afterCreate(projectName, (int) image.width, (int) image.height);
-        this.canvas.toHistory(json -> this.ribbonHistoryPanel.addHistory(json, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
-      });
+        this.drawingTools.length = 0;
+        this.ribbonDrawingToolPanel.reset();
+
+        this.ribbonHistoryPanel.resetHistory(() -> {
+          this.canvas.afterCreate(projectName, (int) image.width, (int) image.height);
+          this.canvas.toHistory(json -> this.ribbonHistoryPanel.addHistory(json, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
+        });
+      } else {
+        JSOptionPane.showMessageDialog(Z4Translations.IMAGE_TOO_BIG_MESSAGE.replace("$image_size$", image.width + " x " + image.height).replace("$max_image_size$", Z4Constants.MAX_IMAGE_SIZE + " x " + Z4Constants.MAX_IMAGE_SIZE), Z4Translations.OPEN, JSOptionPane.ERROR_MESSAGE, null);
+      }
 
       return null;
     };
@@ -478,18 +488,20 @@ public class Z4CanvasIOManager {
    * @param file The file
    */
   public void addLayerFromFile(File file) {
-    String name = file.name.substring(0, file.name.lastIndexOf('.'));
+    Z4UI.pleaseWait(this.canvas, true, true, true, false, "", () -> {
+      String name = file.name.substring(0, file.name.lastIndexOf('.'));
 
-    FileReader fileReader = new FileReader();
-    fileReader.onload = event -> this.addLayerFromURL(name, (String) fileReader.result);
-    fileReader.readAsDataURL(file);
+      FileReader fileReader = new FileReader();
+      fileReader.onload = event -> this.addLayerFromURL(name, (String) fileReader.result);
+      fileReader.readAsDataURL(file);
+    });
   }
 
   /**
    * Adds a canvas layer from an image in the clipboard
    */
   public void addLayerFromClipboard() {
-    navigator.clipboard.read().then(items -> {
+    Z4UI.pleaseWait(this.canvas, true, true, true, false, "", () -> navigator.clipboard.read().then(items -> {
       items.forEach(item -> {
         String imageType = item.types.find((type, index, array) -> type.startsWith("image/"));
 
@@ -497,7 +509,7 @@ public class Z4CanvasIOManager {
           this.addLayerFromURL(this.canvas.findLayerName(), URL.createObjectURL(blob));
         });
       });
-    });
+    }));
   }
 
   /**
@@ -521,9 +533,16 @@ public class Z4CanvasIOManager {
     $Image image = ($Image) document.createElement("img");
 
     image.onload = event -> {
-      this.paper.addLayerFromImage(name, image, this.size.width, this.size.height);
-      this.canvas.afterAddLayer();
-      this.canvas.drawCanvas();
+      Z4UI.pleaseWaitCompleted();
+
+      if (image.width <= Z4Constants.MAX_IMAGE_SIZE && image.height < Z4Constants.MAX_IMAGE_SIZE) {
+        this.paper.addLayerFromImage(name, image, this.size.width, this.size.height);
+        this.canvas.afterAddLayer();
+        this.canvas.drawCanvas();
+      } else {
+        JSOptionPane.showMessageDialog(Z4Translations.IMAGE_TOO_BIG_MESSAGE.replace("$image_size$", image.width + " x " + image.height).replace("$max_image_size$", Z4Constants.MAX_IMAGE_SIZE + " x " + Z4Constants.MAX_IMAGE_SIZE), Z4Translations.OPEN, JSOptionPane.ERROR_MESSAGE, null);
+      }
+
       return null;
     };
 

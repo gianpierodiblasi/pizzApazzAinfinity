@@ -261,6 +261,8 @@ class Z4Translations {
 
   static  RESIZE_CONTENT = "";
 
+  static  IMAGE_TOO_BIG_MESSAGE = "";
+
   // Color
   static  COLOR = "";
 
@@ -593,6 +595,7 @@ class Z4Translations {
     Z4Translations.RESIZE_LAYER_AND_ADAPT_CONTENT = "Resize Layer and Adapt Content";
     Z4Translations.RESIZE_LAYER = "Resize Layer";
     Z4Translations.RESIZE_CONTENT = "Resize Content";
+    Z4Translations.IMAGE_TOO_BIG_MESSAGE = "The image is too big to be loaded; image size = $image_size$, max image size = $max_image_size$";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -824,6 +827,7 @@ class Z4Translations {
     Z4Translations.RESIZE_LAYER_AND_ADAPT_CONTENT = "Ridimensiona Livello ed Adatta Contenuto";
     Z4Translations.RESIZE_LAYER = "Ridimensiona Livello";
     Z4Translations.RESIZE_CONTENT = "Ridimensiona Contenuto";
+    Z4Translations.IMAGE_TOO_BIG_MESSAGE = "L'immagine \u00E8 troppo grande per essere caricata; dimensione immagine = $image_size$, dimensione massima immagine = $max_image_size$";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";

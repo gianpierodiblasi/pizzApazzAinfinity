@@ -36,7 +36,7 @@ public class Z4Translations {
   public static String PROJECT_NOT_SAVED_MESSAGE = "";
   public static String IMAGE_FILE = "";
   public static String PIZZAPAZZA_PROJECT = "";
-
+  
   // Ribbon Layer
   public static String LAYER = "";
   public static String LAYER_NAME = "";
@@ -157,6 +157,7 @@ public class Z4Translations {
   public static String RESIZE_LAYER_AND_ADAPT_CONTENT = "";
   public static String RESIZE_LAYER = "";
   public static String RESIZE_CONTENT = "";
+  public static String IMAGE_TOO_BIG_MESSAGE = "";
   
   // Color
   public static String COLOR = "";
@@ -420,6 +421,7 @@ public class Z4Translations {
     Z4Translations.RESIZE_LAYER_AND_ADAPT_CONTENT = "Resize Layer and Adapt Content";
     Z4Translations.RESIZE_LAYER = "Resize Layer";
     Z4Translations.RESIZE_CONTENT = "Resize Content";
+    Z4Translations.IMAGE_TOO_BIG_MESSAGE = "The image is too big to be loaded; image size = $image_size$, max image size = $max_image_size$";
     
     // Color
     Z4Translations.COLOR = "Color";
@@ -667,7 +669,8 @@ public class Z4Translations {
     Z4Translations.RESIZE_LAYER_AND_ADAPT_CONTENT = "Ridimensiona Livello ed Adatta Contenuto";
     Z4Translations.RESIZE_LAYER = "Ridimensiona Livello";
     Z4Translations.RESIZE_CONTENT = "Ridimensiona Contenuto";
-
+    Z4Translations.IMAGE_TOO_BIG_MESSAGE = "L'immagine \u00E8 troppo grande per essere caricata; dimensione immagine = $image_size$, dimensione massima immagine = $max_image_size$";
+    
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";

@@ -2955,39 +2955,46 @@ class Z4CanvasIOManager {
    * @param file The file
    */
    createFromFile(file) {
-    let fileReader = new FileReader();
-    fileReader.onload = event => this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), fileReader.result);
-    fileReader.readAsDataURL(file);
+    Z4UI.pleaseWait(this.canvas, true, true, true, false, "", () => {
+      let fileReader = new FileReader();
+      fileReader.onload = event => this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), fileReader.result);
+      fileReader.readAsDataURL(file);
+    });
   }
 
   /**
    * Creates a new canvas project from an image in the clipboard
    */
    createFromClipboard() {
-    navigator.clipboard.read().then(items => {
+    Z4UI.pleaseWait(this.canvas, true, true, true, false, "", () => navigator.clipboard.read().then(items => {
       items.forEach(item => {
         let imageType = item.types.find((type, index, array) => type.startsWith("image/"));
         item.getType(imageType).then(blob => {
           this.createFromURL("", URL.createObjectURL(blob));
         });
       });
-    });
+    }));
   }
 
    createFromURL(projectName, url) {
     let image = document.createElement("img");
     image.onload = event => {
-      this.paper.reset();
-      this.paper.addLayerFromImage(Z4Translations.BACKGROUND_LAYER, image, image.width, image.height);
-      this.canvas.setSize(image.width, image.height);
-      this.ribbonLayerPanel.reset();
-      this.canvas.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.canvas.getLayersCount() - 1), null, true);
-      this.drawingTools.length = 0;
-      this.ribbonDrawingToolPanel.reset();
-      this.ribbonHistoryPanel.resetHistory(() => {
-        this.canvas.afterCreate(projectName, image.width, image.height);
-        this.canvas.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
-      });
+      Z4UI.pleaseWaitCompleted();
+      if (image.width <= Z4Constants.MAX_IMAGE_SIZE && image.height < Z4Constants.MAX_IMAGE_SIZE) {
+        this.paper.reset();
+        this.paper.addLayerFromImage(Z4Translations.BACKGROUND_LAYER, image, image.width, image.height);
+        this.canvas.setSize(image.width, image.height);
+        this.ribbonLayerPanel.reset();
+        this.canvas.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.canvas.getLayersCount() - 1), null, true);
+        this.drawingTools.length = 0;
+        this.ribbonDrawingToolPanel.reset();
+        this.ribbonHistoryPanel.resetHistory(() => {
+          this.canvas.afterCreate(projectName, image.width, image.height);
+          this.canvas.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
+        });
+      } else {
+        JSOptionPane.showMessageDialog(Z4Translations.IMAGE_TOO_BIG_MESSAGE.replace("$image_size$", image.width + " x " + image.height).replace("$max_image_size$", Z4Constants.MAX_IMAGE_SIZE + " x " + Z4Constants.MAX_IMAGE_SIZE), Z4Translations.OPEN, JSOptionPane.ERROR_MESSAGE, null);
+      }
       return null;
     };
     image.src = url;
@@ -3273,24 +3280,26 @@ class Z4CanvasIOManager {
    * @param file The file
    */
    addLayerFromFile(file) {
-    let name = file.name.substring(0, file.name.lastIndexOf('.'));
-    let fileReader = new FileReader();
-    fileReader.onload = event => this.addLayerFromURL(name, fileReader.result);
-    fileReader.readAsDataURL(file);
+    Z4UI.pleaseWait(this.canvas, true, true, true, false, "", () => {
+      let name = file.name.substring(0, file.name.lastIndexOf('.'));
+      let fileReader = new FileReader();
+      fileReader.onload = event => this.addLayerFromURL(name, fileReader.result);
+      fileReader.readAsDataURL(file);
+    });
   }
 
   /**
    * Adds a canvas layer from an image in the clipboard
    */
    addLayerFromClipboard() {
-    navigator.clipboard.read().then(items => {
+    Z4UI.pleaseWait(this.canvas, true, true, true, false, "", () => navigator.clipboard.read().then(items => {
       items.forEach(item => {
         let imageType = item.types.find((type, index, array) => type.startsWith("image/"));
         item.getType(imageType).then(blob => {
           this.addLayerFromURL(this.canvas.findLayerName(), URL.createObjectURL(blob));
         });
       });
-    });
+    }));
   }
 
   /**
@@ -3312,9 +3321,14 @@ class Z4CanvasIOManager {
    addLayerFromURL(name, url) {
     let image = document.createElement("img");
     image.onload = event => {
-      this.paper.addLayerFromImage(name, image, this.size.width, this.size.height);
-      this.canvas.afterAddLayer();
-      this.canvas.drawCanvas();
+      Z4UI.pleaseWaitCompleted();
+      if (image.width <= Z4Constants.MAX_IMAGE_SIZE && image.height < Z4Constants.MAX_IMAGE_SIZE) {
+        this.paper.addLayerFromImage(name, image, this.size.width, this.size.height);
+        this.canvas.afterAddLayer();
+        this.canvas.drawCanvas();
+      } else {
+        JSOptionPane.showMessageDialog(Z4Translations.IMAGE_TOO_BIG_MESSAGE.replace("$image_size$", image.width + " x " + image.height).replace("$max_image_size$", Z4Constants.MAX_IMAGE_SIZE + " x " + Z4Constants.MAX_IMAGE_SIZE), Z4Translations.OPEN, JSOptionPane.ERROR_MESSAGE, null);
+      }
       return null;
     };
     image.src = url;
@@ -18217,6 +18231,8 @@ class Z4Translations {
 
   static  RESIZE_CONTENT = "";
 
+  static  IMAGE_TOO_BIG_MESSAGE = "";
+
   // Color
   static  COLOR = "";
 
@@ -18549,6 +18565,7 @@ class Z4Translations {
     Z4Translations.RESIZE_LAYER_AND_ADAPT_CONTENT = "Resize Layer and Adapt Content";
     Z4Translations.RESIZE_LAYER = "Resize Layer";
     Z4Translations.RESIZE_CONTENT = "Resize Content";
+    Z4Translations.IMAGE_TOO_BIG_MESSAGE = "The image is too big to be loaded; image size = $image_size$, max image size = $max_image_size$";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -18780,6 +18797,7 @@ class Z4Translations {
     Z4Translations.RESIZE_LAYER_AND_ADAPT_CONTENT = "Ridimensiona Livello ed Adatta Contenuto";
     Z4Translations.RESIZE_LAYER = "Ridimensiona Livello";
     Z4Translations.RESIZE_CONTENT = "Ridimensiona Contenuto";
+    Z4Translations.IMAGE_TOO_BIG_MESSAGE = "L'immagine \u00E8 troppo grande per essere caricata; dimensione immagine = $image_size$, dimensione massima immagine = $max_image_size$";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";
