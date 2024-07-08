@@ -29,6 +29,8 @@ class Z4Layer {
 
    hidden = false;
 
+   showBounds = false;
+
   /**
    * Creates the object
    *
@@ -187,6 +189,24 @@ class Z4Layer {
    */
    isHidden() {
     return this.hidden;
+  }
+
+  /**
+   * Sets the visualization of the bounds
+   *
+   * @param showBounds true to show the bounds, false otherwise
+   */
+   setShowBounds(showBounds) {
+    this.showBounds = showBounds;
+  }
+
+  /**
+   * Checks if the bounds have to be shown
+   *
+   * @return true if the bounds have to be shown, false otherwise
+   */
+   isShowBounds() {
+    return this.showBounds;
   }
 
   /**

@@ -38,7 +38,8 @@ public class Z4Layer {
   private String compositeOperation = "source-over";
   private int width;
   private int height;
-  private boolean hidden = false;
+  private boolean hidden;
+  private boolean showBounds;
 
   /**
    * Creates the object
@@ -204,6 +205,24 @@ public class Z4Layer {
    */
   public boolean isHidden() {
     return this.hidden;
+  }
+
+  /**
+   * Sets the visualization of the bounds
+   *
+   * @param showBounds true to show the bounds, false otherwise
+   */
+  public void setShowBounds(boolean showBounds) {
+    this.showBounds = showBounds;
+  }
+
+  /**
+   * Checks if the bounds have to be shown
+   *
+   * @return true if the bounds have to be shown, false otherwise
+   */
+  public boolean isShowBounds() {
+    return this.showBounds;
   }
 
   /**

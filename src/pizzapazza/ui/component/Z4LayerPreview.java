@@ -10,6 +10,7 @@ import javascript.awt.Point;
 import javascript.awt.event.ActionListener;
 import javascript.swing.ButtonGroup;
 import javascript.swing.JSButton;
+import javascript.swing.JSCheckBox;
 import javascript.swing.JSComponent;
 import javascript.swing.JSDropDown;
 import javascript.swing.JSLabel;
@@ -217,8 +218,8 @@ public class Z4LayerPreview extends JSDropDown {
     this.opacitySlider.getStyle().minWidth = "20rem";
     panelBasic.add(this.opacitySlider, new GBC(0, 5).w(2).a(GBC.NORTH).f(GBC.HORIZONTAL));
 
-    Z4UI.addVLine(panelBasic, new GBC(2, 2).h(5).f(GBC.VERTICAL).i(1, 2, 1, 2));
-    Z4UI.addLabel(panelBasic, Z4Translations.OFFSET_Y, new GBC(3, 6).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
+    Z4UI.addVLine(panelBasic, new GBC(2, 2).h(6).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addLabel(panelBasic, Z4Translations.OFFSET_Y, new GBC(3, 5).h(3).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
 
     this.offsetYSpinner.cssAddClass("jsspinner-vertical");
     this.offsetYSpinner.cssAddClass("jsspinner_h_4rem");
@@ -232,7 +233,15 @@ public class Z4LayerPreview extends JSDropDown {
     this.offsetYSlider.getStyle().minHeight = "20rem";
     this.offsetYSlider.getStyle().minWidth = "1.5rem";
     this.offsetYSlider.addChangeListener(event -> this.onChange(false, this.offsetYSlider.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
-    panelBasic.add(this.offsetYSlider, new GBC(4, 2).h(5).wy(1).a(GBC.NORTH));
+    panelBasic.add(this.offsetYSlider, new GBC(4, 2).h(6).wy(1).a(GBC.NORTH));
+
+    JSCheckBox showLayerBounds = new JSCheckBox();
+    showLayerBounds.setText(Z4Translations.SHOW_LAYER_BOUNDS);
+    showLayerBounds.addActionListener(event -> {
+      this.layer.setShowBounds(showLayerBounds.isSelected());
+      this.canvas.drawCanvas();
+    });
+    panelBasic.add(showLayerBounds, new GBC(0, 6).a(GBC.NORTHWEST));
 
     button = new JSButton();
     button.setText(Z4Translations.DUPLICATE);
@@ -241,7 +250,7 @@ public class Z4LayerPreview extends JSDropDown {
       this.canvas.duplicateLayer(this.layer);
       this.removeAttribute("open");
     });
-    panelBasic.add(button, new GBC(0, 6).a(GBC.SOUTHWEST));
+    panelBasic.add(button, new GBC(0, 7).a(GBC.SOUTHWEST));
 
     this.delete.setText(Z4Translations.DELETE);
     this.delete.addActionListener(event -> JSOptionPane.showConfirmDialog(Z4Translations.DELETE_LAYER_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response -> {
@@ -251,7 +260,7 @@ public class Z4LayerPreview extends JSDropDown {
         document.querySelector(".z4layerpreview:nth-child(" + (index + 1) + ")").remove();
       }
     }));
-    panelBasic.add(this.delete, new GBC(1, 6).a(GBC.SOUTHEAST));
+    panelBasic.add(this.delete, new GBC(1, 7).a(GBC.SOUTHEAST));
 
     this.editor.addTab(Z4Translations.BASIC, panelBasic);
 

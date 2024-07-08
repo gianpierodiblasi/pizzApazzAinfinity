@@ -888,22 +888,25 @@ class Z4Canvas extends JSComponent {
     this.ctx.save();
     this.ctx.scale(this.zoom, this.zoom);
     this.paper.draw(this.ctx, false);
-    if (this.showLayerBounds) {
+    let show = false;
+    let bounds = new Path2D();
+    for (let index = 0; index < this.getLayersCount(); index++) {
+      let layer = this.paper.getLayerAt(index);
+      if (this.showLayerBounds || layer.isShowBounds()) {
+        show = true;
+        bounds.rect(layer.getOffset().x, layer.getOffset().y, layer.getSize().width, layer.getSize().height);
+      }
+    }
+    if (show) {
       this.ctx.lineWidth = 3 / this.zoom;
       let dash = new Array();
       this.ctx.strokeStyle = Z4Constants.getStyle("black");
       this.ctx.setLineDash(dash);
-      for (let index = 0; index < this.getLayersCount(); index++) {
-        let layer = this.paper.getLayerAt(index);
-        this.ctx.strokeRect(layer.getOffset().x, layer.getOffset().y, layer.getSize().width, layer.getSize().height);
-      }
+      this.ctx.stroke(bounds);
       dash.push(2 * this.ctx.lineWidth, 2 * this.ctx.lineWidth);
       this.ctx.strokeStyle = Z4Constants.getStyle("white");
       this.ctx.setLineDash(dash);
-      for (let index = 0; index < this.getLayersCount(); index++) {
-        let layer = this.paper.getLayerAt(index);
-        this.ctx.strokeRect(layer.getOffset().x, layer.getOffset().y, layer.getSize().width, layer.getSize().height);
-      }
+      this.ctx.stroke(bounds);
     }
     this.ctx.restore();
   }
