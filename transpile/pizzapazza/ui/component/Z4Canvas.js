@@ -875,7 +875,7 @@ class Z4Canvas extends JSComponent {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.save();
     this.ctx.scale(this.zoom, this.zoom);
-    this.paper.draw(this.ctx, false, false);
+    this.paper.draw(this.ctx, false);
     this.ctx.restore();
   }
 

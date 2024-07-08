@@ -105,10 +105,10 @@ public class Z4Paper {
    * Draws this paper
    *
    * @param ctx The context used to draw the paper
-   * @param noOffset true to not use the offset, false otherwise
-   * @param noHidden true to not use the hidden property, false otherwise
+   * @param doNotUseProperties true to not use the offset, the hidden, the alpha
+   * and the composite operation properties, false otherwise
    */
-  public void draw($CanvasRenderingContext2D ctx, boolean noOffset, boolean noHidden) {
-    this.layers.forEach(layer -> layer.draw(ctx, noOffset, noHidden));
+  public void draw($CanvasRenderingContext2D ctx, boolean doNotUseProperties) {
+    this.layers.forEach(layer -> layer.draw(ctx, doNotUseProperties));
   }
 }

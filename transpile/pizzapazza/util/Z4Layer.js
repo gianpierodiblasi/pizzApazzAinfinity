@@ -240,15 +240,17 @@ class Z4Layer {
    * Draws this layer
    *
    * @param ctx The context used to draw the layer
-   * @param noOffset true to not use the offset, false otherwise
-   * @param noHidden true to not use the hidden property, false otherwise
+   * @param doNotUseProperties true to not use the offset, the hidden, the alpha
+   * and the composite operation properties, false otherwise
    */
-   draw(ctx, noOffset, noHidden) {
-    if (noHidden || !this.hidden) {
+   draw(ctx, doNotUseProperties) {
+    if (doNotUseProperties || !this.hidden) {
       ctx.save();
-      ctx.globalAlpha = this.opacity;
-      ctx.globalCompositeOperation = this.compositeOperation;
-      ctx.drawImage(this.offscreen, noOffset ? 0 : this.offsetX, noOffset ? 0 : this.offsetY);
+      if (!doNotUseProperties) {
+        ctx.globalAlpha = this.opacity;
+        ctx.globalCompositeOperation = this.compositeOperation;
+      }
+      ctx.drawImage(this.offscreen, doNotUseProperties ? 0 : this.offsetX, doNotUseProperties ? 0 : this.offsetY);
       ctx.restore();
     }
   }

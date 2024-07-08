@@ -2734,7 +2734,7 @@ class Z4Canvas extends JSComponent {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.save();
     this.ctx.scale(this.zoom, this.zoom);
-    this.paper.draw(this.ctx, false, false);
+    this.paper.draw(this.ctx, false);
     this.ctx.restore();
   }
 
@@ -3274,7 +3274,7 @@ class Z4CanvasIOManager {
     Z4UI.pleaseWait(this.canvas, false, false, false, false, "", () => {
       let offscreen = new OffscreenCanvas(this.size.width, this.size.height);
       let offscreenCtx = offscreen.getContext("2d");
-      this.paper.draw(offscreenCtx, false, false);
+      this.paper.draw(offscreenCtx, false);
       let options = new Object();
       options["type"] = ext === ".png" ? "image/png" : "image/jpeg";
       options["quality"] = quality;
@@ -3341,7 +3341,7 @@ class Z4CanvasIOManager {
    mergeLayers(layers) {
     let offscreen = new OffscreenCanvas(this.size.width, this.size.height);
     let offscreenCtx = offscreen.getContext("2d");
-    layers.forEach(layer => layer.draw(offscreenCtx, false, false));
+    layers.forEach(layer => layer.draw(offscreenCtx, false));
     let options = new Object();
     options["type"] = "image/png";
     offscreen.convertToBlob(options).then(converted => {
@@ -4297,7 +4297,7 @@ class Z4LayerPreview extends JSDropDown {
     this.addButton(panelTranform, Z4Translations.RESIZE, 1, 2, event => {
       let layerSize = this.layer.getSize();
       let offsetCanvas = new OffscreenCanvas(layerSize.width, layerSize.height);
-      this.layer.draw(offsetCanvas.getContext("2d"), true, true);
+      this.layer.draw(offsetCanvas.getContext("2d"), true);
       let resizeImagePanel = new Z4ResizeImagePanel();
       resizeImagePanel.setCanvas(offsetCanvas, layerSize.width, layerSize.height);
       JSOptionPane.showInputDialog(resizeImagePanel, Z4Translations.RESIZE, listener => resizeImagePanel.addChangeListener(listener), () => {
@@ -4434,7 +4434,7 @@ class Z4LayerPreview extends JSDropDown {
     if (this.layer) {
       this.ctx.save();
       this.ctx.scale(this.zoom, this.zoom);
-      this.layer.draw(this.ctx, true, true);
+      this.layer.draw(this.ctx, true);
       this.ctx.restore();
     }
   }
@@ -17745,15 +17745,17 @@ class Z4Layer {
    * Draws this layer
    *
    * @param ctx The context used to draw the layer
-   * @param noOffset true to not use the offset, false otherwise
-   * @param noHidden true to not use the hidden property, false otherwise
+   * @param doNotUseProperties true to not use the offset, the hidden, the alpha
+   * and the composite operation properties, false otherwise
    */
-   draw(ctx, noOffset, noHidden) {
-    if (noHidden || !this.hidden) {
+   draw(ctx, doNotUseProperties) {
+    if (doNotUseProperties || !this.hidden) {
       ctx.save();
-      ctx.globalAlpha = this.opacity;
-      ctx.globalCompositeOperation = this.compositeOperation;
-      ctx.drawImage(this.offscreen, noOffset ? 0 : this.offsetX, noOffset ? 0 : this.offsetY);
+      if (!doNotUseProperties) {
+        ctx.globalAlpha = this.opacity;
+        ctx.globalCompositeOperation = this.compositeOperation;
+      }
+      ctx.drawImage(this.offscreen, doNotUseProperties ? 0 : this.offsetX, doNotUseProperties ? 0 : this.offsetY);
       ctx.restore();
     }
   }
@@ -17971,11 +17973,11 @@ class Z4Paper {
    * Draws this paper
    *
    * @param ctx The context used to draw the paper
-   * @param noOffset true to not use the offset, false otherwise
-   * @param noHidden true to not use the hidden property, false otherwise
+   * @param doNotUseProperties true to not use the offset, the hidden, the alpha
+   * and the composite operation properties, false otherwise
    */
-   draw(ctx, noOffset, noHidden) {
-    this.layers.forEach(layer => layer.draw(ctx, noOffset, noHidden));
+   draw(ctx, doNotUseProperties) {
+    this.layers.forEach(layer => layer.draw(ctx, doNotUseProperties));
   }
 }
 /**

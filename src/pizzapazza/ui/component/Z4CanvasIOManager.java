@@ -483,7 +483,7 @@ public class Z4CanvasIOManager {
     Z4UI.pleaseWait(this.canvas, false, false, false, false, "", () -> {
       $OffscreenCanvas offscreen = new $OffscreenCanvas(this.size.width, this.size.height);
       $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
-      this.paper.draw(offscreenCtx, false, false);
+      this.paper.draw(offscreenCtx, false);
 
       $Object options = new $Object();
       options.$set("type", ext == ".png" ? "image/png" : "image/jpeg");
@@ -554,7 +554,7 @@ public class Z4CanvasIOManager {
   public void mergeLayers(Array<Z4Layer> layers) {
     $OffscreenCanvas offscreen = new $OffscreenCanvas(this.size.width, this.size.height);
     $CanvasRenderingContext2D offscreenCtx = offscreen.getContext("2d");
-    layers.forEach(layer -> layer.draw(offscreenCtx, false, false));
+    layers.forEach(layer -> layer.draw(offscreenCtx, false));
 
     $Object options = new $Object();
     options.$set("type", "image/png");
@@ -611,7 +611,7 @@ public class Z4CanvasIOManager {
     fileReader.onload = event -> {
       try {
         $Object json = ($Object) JSON.parse((String) fileReader.result);
-        
+
         if (file.name.toLowerCase().endsWith(".z4ts")) {
           ((Iterable<$Object>) json.$get("drawingTools")).forEach(drawingTool -> this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
         } else {

@@ -401,7 +401,7 @@ class Z4CanvasIOManager {
     Z4UI.pleaseWait(this.canvas, false, false, false, false, "", () => {
       let offscreen = new OffscreenCanvas(this.size.width, this.size.height);
       let offscreenCtx = offscreen.getContext("2d");
-      this.paper.draw(offscreenCtx, false, false);
+      this.paper.draw(offscreenCtx, false);
       let options = new Object();
       options["type"] = ext === ".png" ? "image/png" : "image/jpeg";
       options["quality"] = quality;
@@ -468,7 +468,7 @@ class Z4CanvasIOManager {
    mergeLayers(layers) {
     let offscreen = new OffscreenCanvas(this.size.width, this.size.height);
     let offscreenCtx = offscreen.getContext("2d");
-    layers.forEach(layer => layer.draw(offscreenCtx, false, false));
+    layers.forEach(layer => layer.draw(offscreenCtx, false));
     let options = new Object();
     options["type"] = "image/png";
     offscreen.convertToBlob(options).then(converted => {
