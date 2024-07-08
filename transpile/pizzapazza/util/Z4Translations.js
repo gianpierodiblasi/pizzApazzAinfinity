@@ -10,8 +10,8 @@ class Z4Translations {
 
   static  DEPENDENCIES = "<a href='https://repository.jsweet.org/artifactory/libs-release-local/org/jsweet/jsweet-core' target='_blank'>jsweet-core</a>, " + "<a href='https://github.com/gianpierodiblasi/swing.js' target='_blank'>swing.js</a>, " + "<a href='https://pomax.github.io/bezierjs' target='_blank'>Bezier.js</a>, " + "<a href='https://stuk.github.io/jszip' target='_blank'>JSZip</a>, " + "<a href='https://github.com/eligrey/FileSaver.js' target='_blank'>FileSaver.js</a>.";
 
-  // Ribbon File
-  static  FILE = "";
+  // Ribbon Project
+  static  PROJECT = "";
 
   static  NEW_PROJECT = "";
 
@@ -464,8 +464,8 @@ class Z4Translations {
    * Sets the English language
    */
   static  setEnglish() {
-    // Ribbon File
-    Z4Translations.FILE = "File";
+    // Ribbon Project
+    Z4Translations.PROJECT = "Project";
     Z4Translations.NEW_PROJECT = "New Project";
     Z4Translations.CREATE = "Create";
     Z4Translations.FROM_CLIPBOARD = "From Clipboard";
@@ -695,8 +695,8 @@ class Z4Translations {
    * Sets the Italian language
    */
   static  setItalian() {
-    // Ribbon File
-    Z4Translations.FILE = "File";
+    // Ribbon Project
+    Z4Translations.PROJECT = "Progetto";
     Z4Translations.NEW_PROJECT = "Nuovo Progetto";
     Z4Translations.CREATE = "Crea";
     Z4Translations.FROM_CLIPBOARD = "Dagli Appunti";

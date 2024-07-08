@@ -21,8 +21,8 @@ public class Z4Translations {
           + "<a href='https://stuk.github.io/jszip' target='_blank'>JSZip</a>, "
           + "<a href='https://github.com/eligrey/FileSaver.js' target='_blank'>FileSaver.js</a>.";
 
-  // Ribbon File
-  public static String FILE = "";
+  // Ribbon Project
+  public static String PROJECT = "";
   public static String NEW_PROJECT = "";
   public static String CREATE = "";
   public static String FROM_CLIPBOARD = "";
@@ -281,8 +281,8 @@ public class Z4Translations {
    * Sets the English language
    */
   public static void setEnglish() {
-    // Ribbon File
-    Z4Translations.FILE = "File";
+    // Ribbon Project
+    Z4Translations.PROJECT = "Project";
     Z4Translations.NEW_PROJECT = "New Project";
     Z4Translations.CREATE = "Create";
     Z4Translations.FROM_CLIPBOARD = "From Clipboard";
@@ -528,8 +528,8 @@ public class Z4Translations {
    * Sets the Italian language
    */
   public static void setItalian() {
-    // Ribbon File
-    Z4Translations.FILE = "File";
+    // Ribbon Project
+    Z4Translations.PROJECT = "Progetto";
     Z4Translations.NEW_PROJECT = "Nuovo Progetto";
     Z4Translations.CREATE = "Crea";
     Z4Translations.FROM_CLIPBOARD = "Dagli Appunti";

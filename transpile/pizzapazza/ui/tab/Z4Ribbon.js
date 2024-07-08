@@ -5,7 +5,7 @@
  */
 class Z4Ribbon extends JSTabbedPane {
 
-   filePanel = new Z4RibbonFilePanel();
+   projectPanel = new Z4RibbonProjectPanel();
 
    layerPanel = new Z4RibbonLayerPanel();
 
@@ -23,7 +23,7 @@ class Z4Ribbon extends JSTabbedPane {
   constructor() {
     super();
     this.cssAddClass("z4ribbon");
-    this.addTab(Z4Translations.FILE, this.filePanel);
+    this.addTab(Z4Translations.PROJECT, this.projectPanel);
     this.addTab(Z4Translations.LAYER, this.layerPanel);
     this.addTab(Z4Translations.DRAWING_TOOL, this.drawingToolPanel);
     this.addTab(Z4Translations.HISTORY, this.historyPanel);
@@ -38,7 +38,7 @@ class Z4Ribbon extends JSTabbedPane {
    * @param canvas The canvas
    */
    setCanvas(canvas) {
-    canvas.setRibbonPanels(this.filePanel, this.layerPanel, this.drawingToolPanel, this.historyPanel);
+    canvas.setRibbonPanels(this.projectPanel, this.layerPanel, this.drawingToolPanel, this.historyPanel);
   }
 
   /**
@@ -47,7 +47,7 @@ class Z4Ribbon extends JSTabbedPane {
    * @param statusPanel The status panel
    */
    setStatusPanel(statusPanel) {
-    this.filePanel.setStatusPanel(statusPanel);
+    this.projectPanel.setStatusPanel(statusPanel);
     this.layerPanel.setStatusPanel(statusPanel);
     this.drawingToolPanel.setStatusPanel(statusPanel);
     this.historyPanel.setStatusPanel(statusPanel);

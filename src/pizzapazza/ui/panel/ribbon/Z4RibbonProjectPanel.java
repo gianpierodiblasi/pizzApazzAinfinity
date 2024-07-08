@@ -32,11 +32,11 @@ import static simulation.js.$Globals.navigator;
 import static simulation.js.$Globals.window;
 
 /**
- * The ribbon panel containing the file menus
+ * The ribbon panel containing the project menus
  *
  * @author gianpiero.diblasi
  */
-public class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
+public class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
 
   private Z4Canvas canvas;
   private Z4StatusPanel statusPanel;
@@ -45,10 +45,10 @@ public class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
   /**
    * Creates the object
    */
-  public Z4RibbonFilePanel() {
+  public Z4RibbonProjectPanel() {
     super();
     this.setLayout(new GridBagLayout());
-    this.cssAddClass("z4ribbonfilepanel");
+    this.cssAddClass("z4ribbonprojectpanel");
 
     Z4UI.addLabel(this, Z4Translations.NEW_PROJECT, new GBC(0, 0).w(3).a(GBC.WEST).i(5, 5, 2, 0));
     this.addButton(Z4Translations.CREATE, true, 0, 1, "left", 0, event -> this.checkSaved(Z4Translations.CREATE, () -> this.createFromColor()));

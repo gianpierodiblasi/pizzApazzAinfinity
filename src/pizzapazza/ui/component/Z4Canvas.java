@@ -17,9 +17,9 @@ import pizzapazza.math.Z4DrawingDirection;
 import pizzapazza.math.Z4Math;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonDrawingToolPanel;
-import pizzapazza.ui.panel.ribbon.Z4RibbonFilePanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
+import pizzapazza.ui.panel.ribbon.Z4RibbonProjectPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4DrawingTool;
 import pizzapazza.util.Z4Layer;
@@ -55,7 +55,7 @@ public class Z4Canvas extends JSComponent {
   private boolean magneticGrid;
   private Color colorGrid;
 
-  private Z4RibbonFilePanel ribbonFilePanel;
+  private Z4RibbonProjectPanel ribbonProjectPanel;
   private Z4RibbonLayerPanel ribbonLayerPanel;
   private Z4RibbonDrawingToolPanel ribbonDrawingToolPanel;
   private Z4RibbonHistoryPanel ribbonHistoryPanel;
@@ -124,18 +124,18 @@ public class Z4Canvas extends JSComponent {
   /**
    * Sets the ribbon panels
    *
-   * @param ribbonFilePanel The ribbon file panel
+   * @param ribbonProjectPanel The ribbon project panel
    * @param ribbonLayerPanel The ribbon layer panel
    * @param ribbonDrawingToolPanel The ribbon drawing tool panel
    * @param ribbonHistoryPanel The ribbon history panel
    */
-  public void setRibbonPanels(Z4RibbonFilePanel ribbonFilePanel, Z4RibbonLayerPanel ribbonLayerPanel, Z4RibbonDrawingToolPanel ribbonDrawingToolPanel, Z4RibbonHistoryPanel ribbonHistoryPanel) {
-    this.ribbonFilePanel = ribbonFilePanel;
+  public void setRibbonPanels(Z4RibbonProjectPanel ribbonProjectPanel, Z4RibbonLayerPanel ribbonLayerPanel, Z4RibbonDrawingToolPanel ribbonDrawingToolPanel, Z4RibbonHistoryPanel ribbonHistoryPanel) {
+    this.ribbonProjectPanel = ribbonProjectPanel;
     this.ribbonLayerPanel = ribbonLayerPanel;
     this.ribbonDrawingToolPanel = ribbonDrawingToolPanel;
     this.ribbonHistoryPanel = ribbonHistoryPanel;
 
-    this.ribbonFilePanel.setCanvas(this);
+    this.ribbonProjectPanel.setCanvas(this);
     this.ribbonLayerPanel.setCanvas(this);
     this.ribbonDrawingToolPanel.setCanvas(this);
     this.ribbonHistoryPanel.setCanvas(this);
@@ -762,7 +762,7 @@ public class Z4Canvas extends JSComponent {
    */
   public void setSaved(boolean saved) {
     this.saved = saved;
-    this.ribbonFilePanel.setSaveEnabled(!this.saved);
+    this.ribbonProjectPanel.setSaveEnabled(!this.saved);
   }
 
   /**

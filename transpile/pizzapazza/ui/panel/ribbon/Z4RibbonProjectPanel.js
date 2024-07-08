@@ -1,9 +1,9 @@
 /**
- * The ribbon panel containing the file menus
+ * The ribbon panel containing the project menus
  *
  * @author gianpiero.diblasi
  */
-class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
+class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
 
    canvas = null;
 
@@ -17,7 +17,7 @@ class Z4RibbonFilePanel extends Z4AbstractRibbonPanel {
   constructor() {
     super();
     this.setLayout(new GridBagLayout());
-    this.cssAddClass("z4ribbonfilepanel");
+    this.cssAddClass("z4ribbonprojectpanel");
     Z4UI.addLabel(this, Z4Translations.NEW_PROJECT, new GBC(0, 0).w(3).a(GBC.WEST).i(5, 5, 2, 0));
     this.addButton(Z4Translations.CREATE, true, 0, 1, "left", 0, event => this.checkSaved(Z4Translations.CREATE, () => this.createFromColor()));
     this.addButton(Z4Translations.FROM_CLIPBOARD, typeof navigator.clipboard["read"] === "function", 1, 1, "both", 0, event => this.checkSaved(Z4Translations.FROM_CLIPBOARD, () => this.createFromClipboard()));

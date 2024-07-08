@@ -25,7 +25,7 @@ class Z4Canvas extends JSComponent {
 
    colorGrid = null;
 
-   ribbonFilePanel = null;
+   ribbonProjectPanel = null;
 
    ribbonLayerPanel = null;
 
@@ -108,17 +108,17 @@ class Z4Canvas extends JSComponent {
   /**
    * Sets the ribbon panels
    *
-   * @param ribbonFilePanel The ribbon file panel
+   * @param ribbonProjectPanel The ribbon project panel
    * @param ribbonLayerPanel The ribbon layer panel
    * @param ribbonDrawingToolPanel The ribbon drawing tool panel
    * @param ribbonHistoryPanel The ribbon history panel
    */
-   setRibbonPanels(ribbonFilePanel, ribbonLayerPanel, ribbonDrawingToolPanel, ribbonHistoryPanel) {
-    this.ribbonFilePanel = ribbonFilePanel;
+   setRibbonPanels(ribbonProjectPanel, ribbonLayerPanel, ribbonDrawingToolPanel, ribbonHistoryPanel) {
+    this.ribbonProjectPanel = ribbonProjectPanel;
     this.ribbonLayerPanel = ribbonLayerPanel;
     this.ribbonDrawingToolPanel = ribbonDrawingToolPanel;
     this.ribbonHistoryPanel = ribbonHistoryPanel;
-    this.ribbonFilePanel.setCanvas(this);
+    this.ribbonProjectPanel.setCanvas(this);
     this.ribbonLayerPanel.setCanvas(this);
     this.ribbonDrawingToolPanel.setCanvas(this);
     this.ribbonHistoryPanel.setCanvas(this);
@@ -708,7 +708,7 @@ class Z4Canvas extends JSComponent {
    */
    setSaved(saved) {
     this.saved = saved;
-    this.ribbonFilePanel.setSaveEnabled(!this.saved);
+    this.ribbonProjectPanel.setSaveEnabled(!this.saved);
   }
 
   /**

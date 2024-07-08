@@ -4,10 +4,10 @@ import javascript.swing.JSTabbedPane;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonDrawingToolPanel;
-import pizzapazza.ui.panel.ribbon.Z4RibbonFilePanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHelpPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
+import pizzapazza.ui.panel.ribbon.Z4RibbonProjectPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonSettingsPanel;
 import pizzapazza.util.Z4Translations;
 
@@ -18,7 +18,7 @@ import pizzapazza.util.Z4Translations;
  */
 public class Z4Ribbon extends JSTabbedPane {
 
-  private final Z4RibbonFilePanel filePanel = new Z4RibbonFilePanel();
+  private final Z4RibbonProjectPanel projectPanel = new Z4RibbonProjectPanel();
   private final Z4RibbonLayerPanel layerPanel = new Z4RibbonLayerPanel();
   private final Z4RibbonDrawingToolPanel drawingToolPanel = new Z4RibbonDrawingToolPanel();
   private final Z4RibbonHistoryPanel historyPanel = new Z4RibbonHistoryPanel();
@@ -32,7 +32,7 @@ public class Z4Ribbon extends JSTabbedPane {
     super();
     this.cssAddClass("z4ribbon");
 
-    this.addTab(Z4Translations.FILE, this.filePanel);
+    this.addTab(Z4Translations.PROJECT, this.projectPanel);
     this.addTab(Z4Translations.LAYER, this.layerPanel);
     this.addTab(Z4Translations.DRAWING_TOOL, this.drawingToolPanel);
     this.addTab(Z4Translations.HISTORY, this.historyPanel);
@@ -48,7 +48,7 @@ public class Z4Ribbon extends JSTabbedPane {
    * @param canvas The canvas
    */
   public void setCanvas(Z4Canvas canvas) {
-    canvas.setRibbonPanels(this.filePanel, this.layerPanel, this.drawingToolPanel, this.historyPanel);
+    canvas.setRibbonPanels(this.projectPanel, this.layerPanel, this.drawingToolPanel, this.historyPanel);
   }
 
   /**
@@ -57,7 +57,7 @@ public class Z4Ribbon extends JSTabbedPane {
    * @param statusPanel The status panel
    */
   public void setStatusPanel(Z4StatusPanel statusPanel) {
-    this.filePanel.setStatusPanel(statusPanel);
+    this.projectPanel.setStatusPanel(statusPanel);
     this.layerPanel.setStatusPanel(statusPanel);
     this.drawingToolPanel.setStatusPanel(statusPanel);
     this.historyPanel.setStatusPanel(statusPanel);
