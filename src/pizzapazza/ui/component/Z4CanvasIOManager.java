@@ -119,6 +119,11 @@ public class Z4CanvasIOManager {
     Z4UI.pleaseWait(this.canvas, true, true, true, false, "", () -> {
       FileReader fileReader = new FileReader();
       fileReader.onload = event -> this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), (String) fileReader.result, Z4Translations.FROM_FILE);
+      fileReader.onerror = event -> {
+        Z4UI.pleaseWaitCompleted();
+        JSOptionPane.showMessageDialog(Z4Translations.IMAGE_OPEN_ERROR_MESSAGE, Z4Translations.FROM_FILE, JSOptionPane.ERROR_MESSAGE, null);
+        return null;
+      };
       fileReader.readAsDataURL(file);
     });
   }
@@ -131,9 +136,14 @@ public class Z4CanvasIOManager {
       items.forEach(item -> {
         String imageType = item.types.find((type, index, array) -> type.startsWith("image/"));
 
-        item.getType(imageType).then(blob -> {
-          this.createFromURL("", URL.createObjectURL(blob), Z4Translations.FROM_CLIPBOARD);
-        });
+        if ($exists(imageType)) {
+          item.getType(imageType).then(blob -> {
+            this.createFromURL("", URL.createObjectURL(blob), Z4Translations.FROM_CLIPBOARD);
+          });
+        } else {
+          Z4UI.pleaseWaitCompleted();
+          JSOptionPane.showMessageDialog(Z4Translations.IMAGE_OPEN_ERROR_MESSAGE, Z4Translations.FROM_CLIPBOARD, JSOptionPane.ERROR_MESSAGE, null);
+        }
       });
     }));
   }
@@ -164,6 +174,11 @@ public class Z4CanvasIOManager {
         JSOptionPane.showMessageDialog(Z4Translations.IMAGE_TOO_BIG_MESSAGE.replace("$image_size$", image.width + " x " + image.height).replace("$max_image_size$", Z4Constants.MAX_IMAGE_SIZE + " x " + Z4Constants.MAX_IMAGE_SIZE), errorTitle, JSOptionPane.ERROR_MESSAGE, null);
       }
 
+      return null;
+    };
+    image.onerror = event -> {
+      Z4UI.pleaseWaitCompleted();
+      JSOptionPane.showMessageDialog(Z4Translations.IMAGE_OPEN_ERROR_MESSAGE, errorTitle, JSOptionPane.ERROR_MESSAGE, null);
       return null;
     };
 
@@ -493,6 +508,11 @@ public class Z4CanvasIOManager {
 
       FileReader fileReader = new FileReader();
       fileReader.onload = event -> this.addLayerFromURL(name, (String) fileReader.result, Z4Translations.FROM_FILE);
+      fileReader.onerror = event -> {
+        Z4UI.pleaseWaitCompleted();
+        JSOptionPane.showMessageDialog(Z4Translations.IMAGE_OPEN_ERROR_MESSAGE, Z4Translations.FROM_FILE, JSOptionPane.ERROR_MESSAGE, null);
+        return null;
+      };
       fileReader.readAsDataURL(file);
     });
   }
@@ -505,9 +525,14 @@ public class Z4CanvasIOManager {
       items.forEach(item -> {
         String imageType = item.types.find((type, index, array) -> type.startsWith("image/"));
 
-        item.getType(imageType).then(blob -> {
-          this.addLayerFromURL(this.canvas.findLayerName(), URL.createObjectURL(blob), Z4Translations.FROM_CLIPBOARD);
-        });
+        if ($exists(imageType)) {
+          item.getType(imageType).then(blob -> {
+            this.addLayerFromURL(this.canvas.findLayerName(), URL.createObjectURL(blob), Z4Translations.FROM_CLIPBOARD);
+          });
+        } else {
+          Z4UI.pleaseWaitCompleted();
+          JSOptionPane.showMessageDialog(Z4Translations.IMAGE_OPEN_ERROR_MESSAGE, Z4Translations.FROM_CLIPBOARD, JSOptionPane.ERROR_MESSAGE, null);
+        }
       });
     }));
   }
@@ -543,6 +568,11 @@ public class Z4CanvasIOManager {
         JSOptionPane.showMessageDialog(Z4Translations.IMAGE_TOO_BIG_MESSAGE.replace("$image_size$", image.width + " x " + image.height).replace("$max_image_size$", Z4Constants.MAX_IMAGE_SIZE + " x " + Z4Constants.MAX_IMAGE_SIZE), errorTitle, JSOptionPane.ERROR_MESSAGE, null);
       }
 
+      return null;
+    };
+    image.onerror = event -> {
+      Z4UI.pleaseWaitCompleted();
+      JSOptionPane.showMessageDialog(Z4Translations.IMAGE_OPEN_ERROR_MESSAGE, errorTitle, JSOptionPane.ERROR_MESSAGE, null);
       return null;
     };
 
