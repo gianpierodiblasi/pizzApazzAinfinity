@@ -160,9 +160,13 @@ class Z4CanvasIOManager {
    * @param file The file
    */
    openProjectFromFile(file) {
+    let onError = error => {
+      Z4UI.pleaseWaitCompleted();
+      JSOptionPane.showMessageDialog(Z4Translations.IMAGE_OPEN_ERROR_MESSAGE, Z4Translations.OPEN_PROJECT, JSOptionPane.ERROR_MESSAGE, null);
+    };
     Z4UI.pleaseWait(this.canvas, true, true, false, true, "", () => {
       let promise = new JSZip().loadAsync(file).then(zip => {
-        zip.file("manifest.json").async("string", null).then(str => {
+        let promise2 = zip.file("manifest.json").async("string", null).then(str => {
           this.paper.reset();
           this.ribbonLayerPanel.reset();
           this.drawingTools.length = 0;
@@ -173,11 +177,8 @@ class Z4CanvasIOManager {
             this.openLayer(zip, json, json["layers"], 0);
           });
         });
+        eval("promise2.catch(onError);");
       });
-      let onError = error => {
-        Z4UI.pleaseWaitCompleted();
-        JSOptionPane.showMessageDialog(Z4Translations.IMAGE_OPEN_ERROR_MESSAGE, Z4Translations.OPEN_PROJECT, JSOptionPane.ERROR_MESSAGE, null);
-      };
       eval("promise.catch(onError);");
     });
   }
