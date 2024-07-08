@@ -191,7 +191,7 @@ class Z4LayerPreview extends JSDropDown {
     showLayerBounds.setText(Z4Translations.SHOW_LAYER_BOUNDS);
     showLayerBounds.addActionListener(event => {
       this.layer.setShowBounds(showLayerBounds.isSelected());
-      this.canvas.drawCanvas();
+      this.canvas.drawCanvasBounds();
     });
     panelBasic.add(showLayerBounds, new GBC(0, 6).a(GBC.NORTHWEST));
     button = new JSButton();
@@ -293,6 +293,7 @@ class Z4LayerPreview extends JSDropDown {
     this.drawLayer();
     this.canvas.setSaved(false);
     this.canvas.drawCanvas();
+    this.canvas.drawCanvasBounds();
   }
 
    onChange(spTosl, adjusting, spinner, slider) {
@@ -311,6 +312,7 @@ class Z4LayerPreview extends JSDropDown {
     this.layer.setOpacity(this.opacitySpinner.getValue() / 100);
     this.layer.move(this.offsetXSlider.getValue(), this.offsetYSlider.getValue());
     this.canvas.drawCanvas();
+    this.canvas.drawCanvasBounds();
   }
 
    onAction(text) {

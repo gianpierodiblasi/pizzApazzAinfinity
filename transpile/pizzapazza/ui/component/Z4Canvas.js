@@ -25,6 +25,12 @@ class Z4Canvas extends JSComponent {
 
    colorGrid = null;
 
+   canvasBounds = document.createElement("canvas");
+
+   ctxBounds = this.canvasBounds.getContext("2d");
+
+   showLayerBounds = false;
+
    ribbonProjectPanel = null;
 
    ribbonLayerPanel = null;
@@ -57,8 +63,6 @@ class Z4Canvas extends JSComponent {
 
    selectedLayer = null;
 
-   showLayerBounds = false;
-
    drawingTools = new Array();
 
    selectedDrawingTool = null;
@@ -79,6 +83,7 @@ class Z4Canvas extends JSComponent {
     this.cssAddClass("z4canvas");
     this.appendNodeChild(this.canvas);
     this.appendNodeChild(this.canvasGrid);
+    this.appendNodeChild(this.canvasBounds);
     this.canvas.classList.add("main-canvas");
     this.canvas.addEventListener("mouseenter", event => this.mouseManager.onMouse(event, "enter"));
     this.canvas.addEventListener("mouseleave", event => this.mouseManager.onMouse(event, "leave"));
@@ -216,8 +221,11 @@ class Z4Canvas extends JSComponent {
     this.canvas.height = height * this.zoom;
     this.canvasGrid.width = width * this.zoom;
     this.canvasGrid.height = height * this.zoom;
+    this.canvasBounds.width = width * this.zoom;
+    this.canvasBounds.height = height * this.zoom;
     this.drawCanvas();
     this.drawCanvasGrid();
+    this.drawCanvasBounds();
   }
 
   /**
@@ -513,7 +521,7 @@ class Z4Canvas extends JSComponent {
    */
    setShowLayerBounds(showLayerBounds) {
     this.showLayerBounds = showLayerBounds;
-    this.drawCanvas();
+    this.drawCanvasBounds();
   }
 
   /**
@@ -753,9 +761,12 @@ class Z4Canvas extends JSComponent {
     this.canvas.height = this.height * zoom;
     this.canvasGrid.width = this.width * zoom;
     this.canvasGrid.height = this.height * zoom;
+    this.canvasBounds.width = this.width * zoom;
+    this.canvasBounds.height = this.height * zoom;
     this.pathGrid = this.pathGrid ? this.createGrid() : null;
     this.drawCanvas();
     this.drawCanvasGrid();
+    this.drawCanvasBounds();
   }
 
   /**
@@ -888,26 +899,6 @@ class Z4Canvas extends JSComponent {
     this.ctx.save();
     this.ctx.scale(this.zoom, this.zoom);
     this.paper.draw(this.ctx, false);
-    let show = false;
-    let bounds = new Path2D();
-    for (let index = 0; index < this.getLayersCount(); index++) {
-      let layer = this.paper.getLayerAt(index);
-      if (this.showLayerBounds || layer.isShowBounds()) {
-        show = true;
-        bounds.rect(layer.getOffset().x, layer.getOffset().y, layer.getSize().width, layer.getSize().height);
-      }
-    }
-    if (show) {
-      this.ctx.lineWidth = 3 / this.zoom;
-      let dash = new Array();
-      this.ctx.strokeStyle = Z4Constants.getStyle("black");
-      this.ctx.setLineDash(dash);
-      this.ctx.stroke(bounds);
-      dash.push(2 * this.ctx.lineWidth, 2 * this.ctx.lineWidth);
-      this.ctx.strokeStyle = Z4Constants.getStyle("white");
-      this.ctx.setLineDash(dash);
-      this.ctx.stroke(bounds);
-    }
     this.ctx.restore();
   }
 
@@ -924,6 +915,33 @@ class Z4Canvas extends JSComponent {
       this.ctxGrid.fillStyle = Z4Constants.getStyle(this.colorGrid.getRGBA_HEX());
       this.ctxGrid.fill();
       this.ctxGrid.restore();
+    }
+  }
+
+   drawCanvasBounds() {
+    this.ctxBounds.clearRect(0, 0, this.canvasBounds.width, this.canvasBounds.height);
+    let show = false;
+    let bounds = new Path2D();
+    for (let index = 0; index < this.getLayersCount(); index++) {
+      let layer = this.paper.getLayerAt(index);
+      if (this.showLayerBounds || layer.isShowBounds()) {
+        show = true;
+        bounds.rect(layer.getOffset().x, layer.getOffset().y, layer.getSize().width, layer.getSize().height);
+      }
+    }
+    if (show) {
+      this.ctxBounds.save();
+      this.ctxBounds.scale(this.zoom, this.zoom);
+      this.ctxBounds.lineWidth = 3 / this.zoom;
+      let dash = new Array();
+      this.ctxBounds.strokeStyle = Z4Constants.getStyle("black");
+      this.ctxBounds.setLineDash(dash);
+      this.ctxBounds.stroke(bounds);
+      dash.push(2 * this.ctxBounds.lineWidth, 2 * this.ctxBounds.lineWidth);
+      this.ctxBounds.strokeStyle = Z4Constants.getStyle("white");
+      this.ctxBounds.setLineDash(dash);
+      this.ctxBounds.stroke(bounds);
+      this.ctxBounds.restore();
     }
   }
 }
