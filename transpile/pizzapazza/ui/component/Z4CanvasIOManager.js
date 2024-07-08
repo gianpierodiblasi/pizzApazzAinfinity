@@ -161,7 +161,7 @@ class Z4CanvasIOManager {
    */
    openProjectFromFile(file) {
     Z4UI.pleaseWait(this.canvas, true, true, false, true, "", () => {
-      new JSZip().loadAsync(file).then(zip => {
+      let promise = new JSZip().loadAsync(file).then(zip => {
         zip.file("manifest.json").async("string", null).then(str => {
           this.paper.reset();
           this.ribbonLayerPanel.reset();
@@ -174,6 +174,11 @@ class Z4CanvasIOManager {
           });
         });
       });
+      let onError = error => {
+        Z4UI.pleaseWaitCompleted();
+        JSOptionPane.showMessageDialog(Z4Translations.IMAGE_OPEN_ERROR_MESSAGE, Z4Translations.OPEN_PROJECT, JSOptionPane.ERROR_MESSAGE, null);
+      };
+      eval("promise.catch(onError);");
     });
   }
 
@@ -512,11 +517,19 @@ class Z4CanvasIOManager {
     let fileReader = new FileReader();
     fileReader.onload = event => {
       let json = JSON.parse(fileReader.result);
-      if (file.name.toLowerCase().endsWith(".z4ts")) {
-        (json["drawingTools"]).forEach(drawingTool => this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
-      } else {
-        this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(json));
+      try {
+        if (file.name.toLowerCase().endsWith(".z4ts")) {
+          (json["drawingTools"]).forEach(drawingTool => this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
+        } else {
+          this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(json));
+        }
+      } catch (ex) {
+        JSOptionPane.showMessageDialog(Z4Translations.DRAWING_TOOL_OPEN_ERROR_MESSAGE, Z4Translations.FROM_FILE, JSOptionPane.ERROR_MESSAGE, null);
       }
+      return null;
+    };
+    fileReader.onerror = event => {
+      JSOptionPane.showMessageDialog(Z4Translations.DRAWING_TOOL_OPEN_ERROR_MESSAGE, Z4Translations.FROM_FILE, JSOptionPane.ERROR_MESSAGE, null);
       return null;
     };
     fileReader.readAsText(file);

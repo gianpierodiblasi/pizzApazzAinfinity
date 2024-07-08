@@ -159,6 +159,7 @@ public class Z4Translations {
   public static String RESIZE_CONTENT = "";
   public static String IMAGE_TOO_BIG_MESSAGE = "";
   public static String IMAGE_OPEN_ERROR_MESSAGE = "";
+  public static String DRAWING_TOOL_OPEN_ERROR_MESSAGE = "";
 
   // Color
   public static String COLOR = "";
@@ -424,7 +425,8 @@ public class Z4Translations {
     Z4Translations.RESIZE_CONTENT = "Resize Content";
     Z4Translations.IMAGE_TOO_BIG_MESSAGE = "The image is too big to be loaded; image size = $image_size$, max image size = $max_image_size$";
     Z4Translations.IMAGE_OPEN_ERROR_MESSAGE = "It is not possible to open the image";
-    
+    Z4Translations.DRAWING_TOOL_OPEN_ERROR_MESSAGE = "It is not possible to open the drawing tool";
+
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -672,7 +674,8 @@ public class Z4Translations {
     Z4Translations.RESIZE_LAYER = "Ridimensiona Livello";
     Z4Translations.RESIZE_CONTENT = "Ridimensiona Contenuto";
     Z4Translations.IMAGE_TOO_BIG_MESSAGE = "L'immagine \u00E8 troppo grande per essere caricata; dimensione immagine = $image_size$, dimensione massima immagine = $max_image_size$";
-Z4Translations.IMAGE_OPEN_ERROR_MESSAGE = "Non \u00E8 possibile aprire l'immagine";
+    Z4Translations.IMAGE_OPEN_ERROR_MESSAGE = "Non \u00E8 possibile aprire l'immagine";
+    Z4Translations.DRAWING_TOOL_OPEN_ERROR_MESSAGE = "Non \u00E8 possibile aprire lo strumento di disegno";
 
     // Color
     Z4Translations.COLOR = "Colore";
