@@ -2072,6 +2072,7 @@ class Z4Canvas extends JSComponent {
       this.mouseManager.setMagneticGrid(null, 0, false);
       this.setDrawingDirection(Z4DrawingDirection.FREE);
       this.pathGrid = null;
+      this.showLayerBounds = false;
       this.setSaved(true);
       this.changed = false;
     }
@@ -6307,6 +6308,8 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
  */
 class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
 
+   showLayerBounds = new JSCheckBox();
+
    layersPreview = new JSPanel();
 
    statusPanel = null;
@@ -6330,10 +6333,9 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", 0, event => this.addFromFile());
     Z4UI.addVLine(this, new GBC(3, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.addButton(Z4Translations.MERGE, true, 4, 1, "", 0, event => this.merge());
-    let showLayerBounds = new JSCheckBox();
-    showLayerBounds.setText(Z4Translations.SHOW_LAYER_BOUNDS);
-    showLayerBounds.addActionListener(event => this.canvas.setShowLayerBounds(showLayerBounds.isSelected()));
-    this.add(showLayerBounds, new GBC(4, 2).a(GBC.NORTH));
+    this.showLayerBounds.setText(Z4Translations.SHOW_LAYER_BOUNDS);
+    this.showLayerBounds.addActionListener(event => this.canvas.setShowLayerBounds(this.showLayerBounds.isSelected()));
+    this.add(this.showLayerBounds, new GBC(4, 2).a(GBC.NORTH));
     Z4UI.addVLine(this, new GBC(5, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.layersPreview.setLayout(new BoxLayout(this.layersPreview, BoxLayout.X_AXIS));
     this.layersPreview.getStyle().overflowX = "scroll";
@@ -6437,6 +6439,7 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
    * Resets the layers preview
    */
    reset() {
+    this.showLayerBounds.setSelected(false);
     this.layersPreview.setProperty("innerHTML", "");
   }
 

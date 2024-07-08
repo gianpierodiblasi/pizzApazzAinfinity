@@ -238,6 +238,7 @@ public class Z4Canvas extends JSComponent {
 
       this.setDrawingDirection(Z4DrawingDirection.FREE);
       this.pathGrid = null;
+      this.showLayerBounds = false;
 
       this.setSaved(true);
       this.changed = false;
@@ -818,6 +819,7 @@ public class Z4Canvas extends JSComponent {
     this.canvasBounds.height = this.height * zoom;
 
     this.pathGrid = $exists(this.pathGrid) ? this.createGrid() : null;
+
     this.drawCanvas();
     this.drawCanvasGrid();
     this.drawCanvasBounds();

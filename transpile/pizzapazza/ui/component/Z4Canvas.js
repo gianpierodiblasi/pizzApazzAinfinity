@@ -213,6 +213,7 @@ class Z4Canvas extends JSComponent {
       this.mouseManager.setMagneticGrid(null, 0, false);
       this.setDrawingDirection(Z4DrawingDirection.FREE);
       this.pathGrid = null;
+      this.showLayerBounds = false;
       this.setSaved(true);
       this.changed = false;
     }
