@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -199,9 +199,8 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#draw(simulation.dom.$CanvasRenderingContext2D,boolean,boolean)">draw</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx,
-    boolean&nbsp;noOffset,
-    boolean&nbsp;noHidden)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#draw(simulation.dom.$CanvasRenderingContext2D,boolean)">draw</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx,
+    boolean&nbsp;doNotUseProperties)</code></th>
 <td class="colLast">
 <div class="block">Draws this layer</div>
 </td>
@@ -288,6 +287,13 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isShowBounds()">isShowBounds</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Checks if the bounds have to be shown</div>
+</td>
+</tr>
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#move(int,int)">move</a></span>&#8203;(int&nbsp;offsetX,
     int&nbsp;offsetY)</code></th>
@@ -295,54 +301,63 @@ extends java.lang.Object</pre>
 <div class="block">Moves a layer</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resize()">resize</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
 <tr id="i15" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resize(pizzapazza.util.Z4ResizeOptions)">resize</a></span>&#8203;(<a href="Z4ResizeOptions.html" title="class in pizzapazza.util">Z4ResizeOptions</a>&nbsp;resizeOptions)</code></th>
+<td class="colLast">
+<div class="block">Resizes the layer</div>
+</td>
+</tr>
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rotatePlus90()">rotatePlus90</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Rotates the layer in clockwise</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCompositeOperation(java.lang.String)">setCompositeOperation</a></span>&#8203;(java.lang.String&nbsp;compositeOperation)</code></th>
 <td class="colLast">
 <div class="block">Sets the composite operation</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setHidden(boolean)">setHidden</a></span>&#8203;(boolean&nbsp;hidden)</code></th>
 <td class="colLast">
 <div class="block">Sets the hidden property</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLayerPreview(pizzapazza.ui.component.Z4LayerPreview)">setLayerPreview</a></span>&#8203;(<a href="../ui/component/Z4LayerPreview.html" title="class in pizzapazza.ui.component">Z4LayerPreview</a>&nbsp;layerPreview)</code></th>
 <td class="colLast">
 <div class="block">Sets the layer preview</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setName(java.lang.String)">setName</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
 <td class="colLast">
 <div class="block">Sets the layer name</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setOpacity(double)">setOpacity</a></span>&#8203;(double&nbsp;opacity)</code></th>
 <td class="colLast">
 <div class="block">Sets the opacity</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i22" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setShowBounds(boolean)">setShowBounds</a></span>&#8203;(boolean&nbsp;showBounds)</code></th>
+<td class="colLast">
+<div class="block">Sets the visualization of the bounds</div>
+</td>
+</tr>
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shift(int,int)">shift</a></span>&#8203;(int&nbsp;shiftX,
      int&nbsp;shiftY)</code></th>
@@ -573,6 +588,34 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
+<a id="setShowBounds(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setShowBounds</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setShowBounds&#8203;(boolean&nbsp;showBounds)</pre>
+<div class="block">Sets the visualization of the bounds</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>showBounds</code> - true to show the bounds, false otherwise</dd>
+</dl>
+</li>
+</ul>
+<a id="isShowBounds()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isShowBounds</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isShowBounds()</pre>
+<div class="block">Checks if the bounds have to be shown</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the bounds have to be shown, false otherwise</dd>
+</dl>
+</li>
+</ul>
 <a id="move(int,int)">
 <!--   -->
 </a>
@@ -645,21 +688,20 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a id="draw(simulation.dom.$CanvasRenderingContext2D,boolean,boolean)">
+<a id="draw(simulation.dom.$CanvasRenderingContext2D,boolean)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;draw&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx,
-                 boolean&nbsp;noOffset,
-                 boolean&nbsp;noHidden)</pre>
+                 boolean&nbsp;doNotUseProperties)</pre>
 <div class="block">Draws this layer</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>ctx</code> - The context used to draw the layer</dd>
-<dd><code>noOffset</code> - true to not use the offset, false otherwise</dd>
-<dd><code>noHidden</code> - true to not use the hidden property, false otherwise</dd>
+<dd><code>doNotUseProperties</code> - true to not use the offset, the hidden, the alpha
+ and the composite operation properties, false otherwise</dd>
 </dl>
 </li>
 </ul>
@@ -709,13 +751,18 @@ extends java.lang.Object</pre>
 <div class="block">Rotates the layer in clockwise</div>
 </li>
 </ul>
-<a id="resize()">
+<a id="resize(pizzapazza.util.Z4ResizeOptions)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>resize</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;resize()</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;resize&#8203;(<a href="Z4ResizeOptions.html" title="class in pizzapazza.util">Z4ResizeOptions</a>&nbsp;resizeOptions)</pre>
+<div class="block">Resizes the layer</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>resizeOptions</code> - The resize options</dd>
+</dl>
 </li>
 </ul>
 </li>

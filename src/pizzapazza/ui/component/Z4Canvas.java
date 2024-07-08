@@ -230,7 +230,7 @@ public class Z4Canvas extends JSComponent {
     if (!this.isOpenFromHistory) {
       this.statusPanel.setZoom(1);
       this.statusPanel.setDrawingDirection(Z4DrawingDirection.FREE);
-      this.statusPanel.resetCanvasGridPanel(width, height);
+      this.statusPanel.resetCanvasGridPanel(width, height, false);
 
       this.zoom = 1;
       this.mouseManager.setZoom(this.zoom);
@@ -951,6 +951,28 @@ public class Z4Canvas extends JSComponent {
       grid.moveTo(x + magneticRadius, y);
       grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
     }
+  }
+
+  /**
+   * Rotates the canvas in clockwise
+   */
+  @SuppressWarnings("SuspiciousNameCombination")
+  public void rotatePlus90() {
+    this.setSize(this.height, this.width);
+
+    this.statusPanel.setProjectSize(this.width, this.height);
+    this.statusPanel.resetCanvasGridPanel(this.width, this.height, true);
+
+    this.canvas.width = this.width * this.zoom;
+    this.canvas.height = this.height * this.zoom;
+    this.canvasGrid.width = this.width * this.zoom;
+    this.canvasGrid.height = this.height * this.zoom;
+    this.canvasBounds.width = this.width * this.zoom;
+    this.canvasBounds.height = this.height * this.zoom;
+
+    this.drawCanvas();
+    this.drawCanvasGrid();
+    this.drawCanvasBounds();
   }
 
   /**

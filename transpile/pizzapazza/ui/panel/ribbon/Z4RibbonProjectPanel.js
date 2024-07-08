@@ -43,18 +43,23 @@ class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
     this.addButton(Z4Translations.RESIZE, true, 12, 1, "right", 0, event => {
     }).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.ROTATE_PLUS_90, true, 10, 2, "left", 0, event => {
-      // document.querySelectorAll(".z4layerpreview .z4layerpreview-rotateplus90").forEach(element -> ((HTMLElement) element).click());
-      // ESEGUIRE L'OPERAZIONE SUL CANVAS
-      // this.afterTransform();
+      for (let index = 0; index < this.canvas.getLayersCount(); index++) {
+        let layer = this.canvas.getLayerAt(index);
+        let offset = layer.getOffset();
+        let size = layer.getSize();
+        layer.move(-offset.y - parseInt(size.width / 2 - size.height / 2), offset.x - parseInt(size.height / 2 - size.width / 2));
+      }
+      this.canvas.rotatePlus90();
+      document.querySelectorAll(".z4layerpreview .z4layerpreview-rotateplus90").forEach(element => (element).click());
+      this.afterTransform();
     });
     this.addButton(Z4Translations.ROTATE_MINUS_90, true, 11, 2, "both", 0, event => {
+      // this.canvas.rotatePlus90();
       // document.querySelectorAll(".z4layerpreview .z4layerpreview-rotateminus90").forEach(element -> ((HTMLElement) element).click());
-      // ESEGUIRE L'OPERAZIONE SUL CANVAS
       // this.afterTransform();
     });
     this.addButton(Z4Translations.ROTATE_180, true, 12, 2, "right", 0, event => {
       // document.querySelectorAll(".z4layerpreview .z4layerpreview-rotate180").forEach(element -> ((HTMLElement) element).click());
-      // ESEGUIRE L'OPERAZIONE SUL CANVAS
       // this.afterTransform();
     });
     Z4UI.addVLine(this, new GBC(16, 0).h(3).wxy(1, 1).f(GBC.VERTICAL).i(1, 2, 1, 2));

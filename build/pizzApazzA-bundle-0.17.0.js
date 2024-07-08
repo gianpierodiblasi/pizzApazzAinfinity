@@ -2066,7 +2066,7 @@ class Z4Canvas extends JSComponent {
     if (!this.isOpenFromHistory) {
       this.statusPanel.setZoom(1);
       this.statusPanel.setDrawingDirection(Z4DrawingDirection.FREE);
-      this.statusPanel.resetCanvasGridPanel(width, height);
+      this.statusPanel.resetCanvasGridPanel(width, height, false);
       this.zoom = 1;
       this.mouseManager.setZoom(this.zoom);
       this.mouseManager.setMagneticGrid(null, 0, false);
@@ -2749,6 +2749,24 @@ class Z4Canvas extends JSComponent {
       grid.moveTo(x + magneticRadius, y);
       grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
     }
+  }
+
+  /**
+   * Rotates the canvas in clockwise
+   */
+   rotatePlus90() {
+    this.setSize(this.height, this.width);
+    this.statusPanel.setProjectSize(this.width, this.height);
+    this.statusPanel.resetCanvasGridPanel(this.width, this.height, true);
+    this.canvas.width = this.width * this.zoom;
+    this.canvas.height = this.height * this.zoom;
+    this.canvasGrid.width = this.width * this.zoom;
+    this.canvasGrid.height = this.height * this.zoom;
+    this.canvasBounds.width = this.width * this.zoom;
+    this.canvasBounds.height = this.height * this.zoom;
+    this.drawCanvas();
+    this.drawCanvasGrid();
+    this.drawCanvasBounds();
   }
 
   /**
@@ -6509,18 +6527,23 @@ class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
     this.addButton(Z4Translations.RESIZE, true, 12, 1, "right", 0, event => {
     }).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.ROTATE_PLUS_90, true, 10, 2, "left", 0, event => {
-      // document.querySelectorAll(".z4layerpreview .z4layerpreview-rotateplus90").forEach(element -> ((HTMLElement) element).click());
-      // ESEGUIRE L'OPERAZIONE SUL CANVAS
-      // this.afterTransform();
+      for (let index = 0; index < this.canvas.getLayersCount(); index++) {
+        let layer = this.canvas.getLayerAt(index);
+        let offset = layer.getOffset();
+        let size = layer.getSize();
+        layer.move(-offset.y - parseInt(size.width / 2 - size.height / 2), offset.x - parseInt(size.height / 2 - size.width / 2));
+      }
+      this.canvas.rotatePlus90();
+      document.querySelectorAll(".z4layerpreview .z4layerpreview-rotateplus90").forEach(element => (element).click());
+      this.afterTransform();
     });
     this.addButton(Z4Translations.ROTATE_MINUS_90, true, 11, 2, "both", 0, event => {
+      // this.canvas.rotatePlus90();
       // document.querySelectorAll(".z4layerpreview .z4layerpreview-rotateminus90").forEach(element -> ((HTMLElement) element).click());
-      // ESEGUIRE L'OPERAZIONE SUL CANVAS
       // this.afterTransform();
     });
     this.addButton(Z4Translations.ROTATE_180, true, 12, 2, "right", 0, event => {
       // document.querySelectorAll(".z4layerpreview .z4layerpreview-rotate180").forEach(element -> ((HTMLElement) element).click());
-      // ESEGUIRE L'OPERAZIONE SUL CANVAS
       // this.afterTransform();
     });
     Z4UI.addVLine(this, new GBC(16, 0).h(3).wxy(1, 1).f(GBC.VERTICAL).i(1, 2, 1, 2));
@@ -11408,7 +11431,7 @@ class Z4CanvasGridPanel extends JSDropDown {
     this.offsetYSlider.addChangeListener(event => this.onchange(false, this.offsetYSpinner, this.offsetYSlider));
     panel.add(this.offsetYSlider, new GBC(4, 0).h(8).wy(1).a(GBC.NORTH).f(GBC.VERTICAL));
     this.appendChild(panel);
-    this.reset(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE);
+    this.reset(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, false);
   }
 
    onchange(spTosl, spinner, slider) {
@@ -11487,51 +11510,55 @@ class Z4CanvasGridPanel extends JSDropDown {
    *
    * @param width The canvas width
    * @param height The canvas height
+   * @param resetOnlySize true to reset only the canvas size, false otherwise
    */
-   reset(width, height) {
-    this.showGridLabel.cssRemoveClass("z4canvasgridpanel-showgrid-on");
-    this.showGridLabel.cssAddClass("z4canvasgridpanel-showgrid-off");
-    this.showGridCheckBox.setSelected(false);
-    this.dottedGridLabel.getStyle().visibility = "hidden";
-    this.dottedGridLabel.cssRemoveClass("z4canvasgridpanel-dottedgrid-on");
-    this.dottedGridLabel.cssAddClass("z4canvasgridpanel-dottedgrid-off");
-    this.dottedGridCheckBox.setSelected(false);
-    this.dottedGridCheckBox.setEnabled(false);
-    this.magneticGridLabel.getStyle().visibility = "hidden";
-    this.magneticGridLabel.cssRemoveClass("z4canvasgridpanel-magneticgrid-on");
-    this.magneticGridLabel.cssAddClass("z4canvasgridpanel-magneticgrid-off");
-    this.magneticGridCheckBox.setSelected(false);
-    this.magneticGridCheckBox.setEnabled(false);
-    this.colorPanelLabel.getStyle().visibility = "hidden";
-    this.colorPanelLabel.setValue(new Color(0, 0, 0, 255));
-    this.colorPanel.setEnabled(false);
-    this.colorPanel.setValue(new Color(0, 0, 0, 255));
-    this.xLabel.getStyle().visibility = "hidden";
-    this.yLabel.getStyle().visibility = "hidden";
-    this.distanceLabel.getStyle().visibility = "hidden";
-    this.angleLabel.getStyle().visibility = "hidden";
-    this.deltaXLabel.getStyle().visibility = "hidden";
-    this.deltaYLabel.getStyle().visibility = "hidden";
-    this.vline1.getStyle().visibility = "hidden";
-    this.vline2.getStyle().visibility = "hidden";
-    this.vline3.getStyle().visibility = "hidden";
+   reset(width, height, resetOnlySize) {
+    let value = 0.0;
+    if (!resetOnlySize) {
+      this.showGridLabel.cssRemoveClass("z4canvasgridpanel-showgrid-on");
+      this.showGridLabel.cssAddClass("z4canvasgridpanel-showgrid-off");
+      this.showGridCheckBox.setSelected(false);
+      this.dottedGridLabel.getStyle().visibility = "hidden";
+      this.dottedGridLabel.cssRemoveClass("z4canvasgridpanel-dottedgrid-on");
+      this.dottedGridLabel.cssAddClass("z4canvasgridpanel-dottedgrid-off");
+      this.dottedGridCheckBox.setSelected(false);
+      this.dottedGridCheckBox.setEnabled(false);
+      this.magneticGridLabel.getStyle().visibility = "hidden";
+      this.magneticGridLabel.cssRemoveClass("z4canvasgridpanel-magneticgrid-on");
+      this.magneticGridLabel.cssAddClass("z4canvasgridpanel-magneticgrid-off");
+      this.magneticGridCheckBox.setSelected(false);
+      this.magneticGridCheckBox.setEnabled(false);
+      this.colorPanelLabel.getStyle().visibility = "hidden";
+      this.colorPanelLabel.setValue(new Color(0, 0, 0, 255));
+      this.colorPanel.setEnabled(false);
+      this.colorPanel.setValue(new Color(0, 0, 0, 255));
+      this.xLabel.getStyle().visibility = "hidden";
+      this.yLabel.getStyle().visibility = "hidden";
+      this.distanceLabel.getStyle().visibility = "hidden";
+      this.angleLabel.getStyle().visibility = "hidden";
+      this.deltaXLabel.getStyle().visibility = "hidden";
+      this.deltaYLabel.getStyle().visibility = "hidden";
+      this.vline1.getStyle().visibility = "hidden";
+      this.vline2.getStyle().visibility = "hidden";
+      this.vline3.getStyle().visibility = "hidden";
+      value = 20;
+    } else {
+      value = this.plotWidthSpinner.getValue();
+    }
     this.plotWidthSpinner.setEnabled(false);
-    this.plotWidthSpinner.setModel(new SpinnerNumberModel(20, 5, parseInt(Math.min(width, height) / 2), 1));
-    this.plotWidthSpinner.setValue(20);
+    this.plotWidthSpinner.setModel(new SpinnerNumberModel(value, 5, parseInt(Math.min(width, height) / 2), 1));
     this.plotWidthSlider.setEnabled(false);
     this.plotWidthSlider.setMinimum(5);
     this.plotWidthSlider.setMaximum(parseInt(Math.min(width, height) / 2));
-    this.plotWidthSlider.setValue(20);
+    this.plotWidthSlider.setValue(value);
     this.center = new Point(parseInt(width / 2), parseInt(height / 2));
     this.offsetXSpinner.setEnabled(false);
     this.offsetXSpinner.setModel(new SpinnerNumberModel(this.center.x, 0, width, 1));
-    this.offsetXSpinner.setValue(this.center.x);
     this.offsetXSlider.setEnabled(false);
     this.offsetXSlider.setMaximum(width);
     this.offsetXSlider.setValue(this.center.x);
     this.offsetYSpinner.setEnabled(false);
     this.offsetYSpinner.setModel(new SpinnerNumberModel(this.center.y, 0, height, 1));
-    this.offsetYSpinner.setValue(this.center.y);
     this.offsetYSlider.setEnabled(false);
     this.offsetYSlider.setMaximum(height);
     this.offsetYSlider.setValue(this.center.y);
@@ -12624,9 +12651,10 @@ class Z4StatusPanel extends JSPanel {
    *
    * @param width The canvas width
    * @param height The canvas height
+   * @param resetOnlySize true to reset only the canvas size, false otherwise
    */
-   resetCanvasGridPanel(width, height) {
-    this.canvasGridPanel.reset(width, height);
+   resetCanvasGridPanel(width, height, resetOnlySize) {
+    this.canvasGridPanel.reset(width, height, resetOnlySize);
   }
 
    onZoom() {

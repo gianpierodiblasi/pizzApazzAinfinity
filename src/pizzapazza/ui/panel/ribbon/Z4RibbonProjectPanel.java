@@ -8,6 +8,7 @@ import javascript.awt.BorderLayout;
 import javascript.awt.Dimension;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
+import javascript.awt.Point;
 import javascript.swing.JSButton;
 import javascript.swing.JSFileChooser;
 import javascript.swing.JSFilePicker;
@@ -23,6 +24,7 @@ import pizzapazza.ui.panel.Z4ExportToFilePanel;
 import pizzapazza.ui.panel.Z4NewImagePanel;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.util.Z4Constants;
+import pizzapazza.util.Z4Layer;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import simulation.js.$Apply_0_Void;
@@ -31,6 +33,7 @@ import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.$typeof;
 import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.navigator;
+import static simulation.js.$Globals.parseInt;
 import static simulation.js.$Globals.window;
 
 /**
@@ -80,18 +83,25 @@ public class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
     this.addButton(Z4Translations.RESIZE, true, 12, 1, "right", 0, event -> {
     }).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.ROTATE_PLUS_90, true, 10, 2, "left", 0, event -> {
-//      document.querySelectorAll(".z4layerpreview .z4layerpreview-rotateplus90").forEach(element -> ((HTMLElement) element).click());
-// ESEGUIRE L'OPERAZIONE SUL CANVAS
-//      this.afterTransform();
+      for (int index = 0; index < this.canvas.getLayersCount(); index++) {
+        Z4Layer layer = this.canvas.getLayerAt(index);
+        Point offset = layer.getOffset();
+        Dimension size = layer.getSize();
+        layer.move(-offset.y - parseInt(size.width / 2 - size.height / 2), offset.x - parseInt(size.height / 2 - size.width / 2));
+      }
+
+      this.canvas.rotatePlus90();
+      document.querySelectorAll(".z4layerpreview .z4layerpreview-rotateplus90").forEach(element -> ((HTMLElement) element).click());
+
+      this.afterTransform();
     });
     this.addButton(Z4Translations.ROTATE_MINUS_90, true, 11, 2, "both", 0, event -> {
+//      this.canvas.rotatePlus90();
 //      document.querySelectorAll(".z4layerpreview .z4layerpreview-rotateminus90").forEach(element -> ((HTMLElement) element).click());
-// ESEGUIRE L'OPERAZIONE SUL CANVAS
 //      this.afterTransform();
     });
     this.addButton(Z4Translations.ROTATE_180, true, 12, 2, "right", 0, event -> {
 //      document.querySelectorAll(".z4layerpreview .z4layerpreview-rotate180").forEach(element -> ((HTMLElement) element).click());
-// ESEGUIRE L'OPERAZIONE SUL CANVAS
 //      this.afterTransform();
     });
 

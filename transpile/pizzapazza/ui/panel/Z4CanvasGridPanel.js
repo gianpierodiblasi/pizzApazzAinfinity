@@ -138,7 +138,7 @@ class Z4CanvasGridPanel extends JSDropDown {
     this.offsetYSlider.addChangeListener(event => this.onchange(false, this.offsetYSpinner, this.offsetYSlider));
     panel.add(this.offsetYSlider, new GBC(4, 0).h(8).wy(1).a(GBC.NORTH).f(GBC.VERTICAL));
     this.appendChild(panel);
-    this.reset(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE);
+    this.reset(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, false);
   }
 
    onchange(spTosl, spinner, slider) {
@@ -217,51 +217,55 @@ class Z4CanvasGridPanel extends JSDropDown {
    *
    * @param width The canvas width
    * @param height The canvas height
+   * @param resetOnlySize true to reset only the canvas size, false otherwise
    */
-   reset(width, height) {
-    this.showGridLabel.cssRemoveClass("z4canvasgridpanel-showgrid-on");
-    this.showGridLabel.cssAddClass("z4canvasgridpanel-showgrid-off");
-    this.showGridCheckBox.setSelected(false);
-    this.dottedGridLabel.getStyle().visibility = "hidden";
-    this.dottedGridLabel.cssRemoveClass("z4canvasgridpanel-dottedgrid-on");
-    this.dottedGridLabel.cssAddClass("z4canvasgridpanel-dottedgrid-off");
-    this.dottedGridCheckBox.setSelected(false);
-    this.dottedGridCheckBox.setEnabled(false);
-    this.magneticGridLabel.getStyle().visibility = "hidden";
-    this.magneticGridLabel.cssRemoveClass("z4canvasgridpanel-magneticgrid-on");
-    this.magneticGridLabel.cssAddClass("z4canvasgridpanel-magneticgrid-off");
-    this.magneticGridCheckBox.setSelected(false);
-    this.magneticGridCheckBox.setEnabled(false);
-    this.colorPanelLabel.getStyle().visibility = "hidden";
-    this.colorPanelLabel.setValue(new Color(0, 0, 0, 255));
-    this.colorPanel.setEnabled(false);
-    this.colorPanel.setValue(new Color(0, 0, 0, 255));
-    this.xLabel.getStyle().visibility = "hidden";
-    this.yLabel.getStyle().visibility = "hidden";
-    this.distanceLabel.getStyle().visibility = "hidden";
-    this.angleLabel.getStyle().visibility = "hidden";
-    this.deltaXLabel.getStyle().visibility = "hidden";
-    this.deltaYLabel.getStyle().visibility = "hidden";
-    this.vline1.getStyle().visibility = "hidden";
-    this.vline2.getStyle().visibility = "hidden";
-    this.vline3.getStyle().visibility = "hidden";
+   reset(width, height, resetOnlySize) {
+    let value = 0.0;
+    if (!resetOnlySize) {
+      this.showGridLabel.cssRemoveClass("z4canvasgridpanel-showgrid-on");
+      this.showGridLabel.cssAddClass("z4canvasgridpanel-showgrid-off");
+      this.showGridCheckBox.setSelected(false);
+      this.dottedGridLabel.getStyle().visibility = "hidden";
+      this.dottedGridLabel.cssRemoveClass("z4canvasgridpanel-dottedgrid-on");
+      this.dottedGridLabel.cssAddClass("z4canvasgridpanel-dottedgrid-off");
+      this.dottedGridCheckBox.setSelected(false);
+      this.dottedGridCheckBox.setEnabled(false);
+      this.magneticGridLabel.getStyle().visibility = "hidden";
+      this.magneticGridLabel.cssRemoveClass("z4canvasgridpanel-magneticgrid-on");
+      this.magneticGridLabel.cssAddClass("z4canvasgridpanel-magneticgrid-off");
+      this.magneticGridCheckBox.setSelected(false);
+      this.magneticGridCheckBox.setEnabled(false);
+      this.colorPanelLabel.getStyle().visibility = "hidden";
+      this.colorPanelLabel.setValue(new Color(0, 0, 0, 255));
+      this.colorPanel.setEnabled(false);
+      this.colorPanel.setValue(new Color(0, 0, 0, 255));
+      this.xLabel.getStyle().visibility = "hidden";
+      this.yLabel.getStyle().visibility = "hidden";
+      this.distanceLabel.getStyle().visibility = "hidden";
+      this.angleLabel.getStyle().visibility = "hidden";
+      this.deltaXLabel.getStyle().visibility = "hidden";
+      this.deltaYLabel.getStyle().visibility = "hidden";
+      this.vline1.getStyle().visibility = "hidden";
+      this.vline2.getStyle().visibility = "hidden";
+      this.vline3.getStyle().visibility = "hidden";
+      value = 20;
+    } else {
+      value = this.plotWidthSpinner.getValue();
+    }
     this.plotWidthSpinner.setEnabled(false);
-    this.plotWidthSpinner.setModel(new SpinnerNumberModel(20, 5, parseInt(Math.min(width, height) / 2), 1));
-    this.plotWidthSpinner.setValue(20);
+    this.plotWidthSpinner.setModel(new SpinnerNumberModel(value, 5, parseInt(Math.min(width, height) / 2), 1));
     this.plotWidthSlider.setEnabled(false);
     this.plotWidthSlider.setMinimum(5);
     this.plotWidthSlider.setMaximum(parseInt(Math.min(width, height) / 2));
-    this.plotWidthSlider.setValue(20);
+    this.plotWidthSlider.setValue(value);
     this.center = new Point(parseInt(width / 2), parseInt(height / 2));
     this.offsetXSpinner.setEnabled(false);
     this.offsetXSpinner.setModel(new SpinnerNumberModel(this.center.x, 0, width, 1));
-    this.offsetXSpinner.setValue(this.center.x);
     this.offsetXSlider.setEnabled(false);
     this.offsetXSlider.setMaximum(width);
     this.offsetXSlider.setValue(this.center.x);
     this.offsetYSpinner.setEnabled(false);
     this.offsetYSpinner.setModel(new SpinnerNumberModel(this.center.y, 0, height, 1));
-    this.offsetYSpinner.setValue(this.center.y);
     this.offsetYSlider.setEnabled(false);
     this.offsetYSlider.setMaximum(height);
     this.offsetYSlider.setValue(this.center.y);

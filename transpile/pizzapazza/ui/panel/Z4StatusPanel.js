@@ -138,9 +138,10 @@ class Z4StatusPanel extends JSPanel {
    *
    * @param width The canvas width
    * @param height The canvas height
+   * @param resetOnlySize true to reset only the canvas size, false otherwise
    */
-   resetCanvasGridPanel(width, height) {
-    this.canvasGridPanel.reset(width, height);
+   resetCanvasGridPanel(width, height, resetOnlySize) {
+    this.canvasGridPanel.reset(width, height, resetOnlySize);
   }
 
    onZoom() {
