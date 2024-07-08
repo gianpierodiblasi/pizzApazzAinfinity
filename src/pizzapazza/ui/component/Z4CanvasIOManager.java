@@ -609,9 +609,9 @@ public class Z4CanvasIOManager {
   public void addDrawingToolFromFile(File file) {
     FileReader fileReader = new FileReader();
     fileReader.onload = event -> {
-      $Object json = ($Object) JSON.parse((String) fileReader.result);
-
       try {
+        $Object json = ($Object) JSON.parse((String) fileReader.result);
+        
         if (file.name.toLowerCase().endsWith(".z4ts")) {
           ((Iterable<$Object>) json.$get("drawingTools")).forEach(drawingTool -> this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
         } else {

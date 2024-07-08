@@ -517,8 +517,8 @@ class Z4CanvasIOManager {
    addDrawingToolFromFile(file) {
     let fileReader = new FileReader();
     fileReader.onload = event => {
-      let json = JSON.parse(fileReader.result);
       try {
+        let json = JSON.parse(fileReader.result);
         if (file.name.toLowerCase().endsWith(".z4ts")) {
           (json["drawingTools"]).forEach(drawingTool => this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
         } else {
