@@ -86,8 +86,8 @@ public class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
       for (int index = 0; index < this.canvas.getLayersCount(); index++) {
         Z4Layer layer = this.canvas.getLayerAt(index);
         Point offset = layer.getOffset();
-        Dimension size = layer.getSize();
-        layer.move(-offset.y - parseInt(size.width / 2 - size.height / 2), offset.x - parseInt(size.height / 2 - size.width / 2));
+        Dimension sizeLayer = layer.getSize();
+        Dimension sizeCanvas = this.canvas.getSize();
       }
 
       this.canvas.rotatePlus90();

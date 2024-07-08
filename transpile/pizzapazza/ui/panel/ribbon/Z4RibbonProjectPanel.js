@@ -46,8 +46,8 @@ class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
       for (let index = 0; index < this.canvas.getLayersCount(); index++) {
         let layer = this.canvas.getLayerAt(index);
         let offset = layer.getOffset();
-        let size = layer.getSize();
-        layer.move(-offset.y - parseInt(size.width / 2 - size.height / 2), offset.x - parseInt(size.height / 2 - size.width / 2));
+        let sizeLayer = layer.getSize();
+        let sizeCanvas = this.canvas.getSize();
       }
       this.canvas.rotatePlus90();
       document.querySelectorAll(".z4layerpreview .z4layerpreview-rotateplus90").forEach(element => (element).click());
