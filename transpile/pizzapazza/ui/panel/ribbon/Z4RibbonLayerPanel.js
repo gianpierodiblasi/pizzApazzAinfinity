@@ -26,9 +26,13 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     this.addButton(Z4Translations.CREATE, true, 0, 1, "left", 0, event => this.addFromColor());
     this.addButton(Z4Translations.FROM_CLIPBOARD, typeof navigator.clipboard["read"] === "function", 1, 1, "both", 0, event => this.addFromClipboard());
     this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", 0, event => this.addFromFile());
-    Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addVLine(this, new GBC(3, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.addButton(Z4Translations.MERGE, true, 4, 1, "", 0, event => this.merge());
-    Z4UI.addVLine(this, new GBC(5, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    let showLayerBounds = new JSCheckBox();
+    showLayerBounds.setText(Z4Translations.SHOW_LAYER_BOUNDS);
+    showLayerBounds.addActionListener(event => this.canvas.setShowLayerBounds(showLayerBounds.isSelected()));
+    this.add(showLayerBounds, new GBC(4, 2).a(GBC.NORTH));
+    Z4UI.addVLine(this, new GBC(5, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.layersPreview.setLayout(new BoxLayout(this.layersPreview, BoxLayout.X_AXIS));
     this.layersPreview.getStyle().overflowX = "scroll";
     this.layersPreview.addEventListener("dragenter", event => event.preventDefault());
@@ -42,7 +46,7 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
       let index = parseInt((evt.clientX - rectLayers.left) / rect.width);
       this.moveLayer(this.previewDnD, this.layerDnD, index);
     });
-    this.add(this.layersPreview, new GBC(6, 0).h(2).wx(1).f(GBC.BOTH));
+    this.add(this.layersPreview, new GBC(6, 0).h(3).wx(1).f(GBC.BOTH));
   }
 
   /**

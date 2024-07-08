@@ -57,6 +57,8 @@ class Z4Canvas extends JSComponent {
 
    selectedLayer = null;
 
+   showLayerBounds = false;
+
    drawingTools = new Array();
 
    selectedDrawingTool = null;
@@ -505,6 +507,16 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Sets the visualization of the layer bounds
+   *
+   * @param showLayerBounds true to show the layer bounds, false otherwise
+   */
+   setShowLayerBounds(showLayerBounds) {
+    this.showLayerBounds = showLayerBounds;
+    this.drawCanvas();
+  }
+
+  /**
    * Adds a drawing tool
    *
    * @param drawingTool The drawing tool
@@ -876,6 +888,23 @@ class Z4Canvas extends JSComponent {
     this.ctx.save();
     this.ctx.scale(this.zoom, this.zoom);
     this.paper.draw(this.ctx, false);
+    if (this.showLayerBounds) {
+      this.ctx.lineWidth = 3 / this.zoom;
+      let dash = new Array();
+      this.ctx.strokeStyle = Z4Constants.getStyle("black");
+      this.ctx.setLineDash(dash);
+      for (let index = 0; index < this.getLayersCount(); index++) {
+        let layer = this.paper.getLayerAt(index);
+        this.ctx.strokeRect(layer.getOffset().x, layer.getOffset().y, layer.getSize().width, layer.getSize().height);
+      }
+      dash.push(2 * this.ctx.lineWidth, 2 * this.ctx.lineWidth);
+      this.ctx.strokeStyle = Z4Constants.getStyle("white");
+      this.ctx.setLineDash(dash);
+      for (let index = 0; index < this.getLayersCount(); index++) {
+        let layer = this.paper.getLayerAt(index);
+        this.ctx.strokeRect(layer.getOffset().x, layer.getOffset().y, layer.getSize().width, layer.getSize().height);
+      }
+    }
     this.ctx.restore();
   }
 

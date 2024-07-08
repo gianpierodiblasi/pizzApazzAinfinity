@@ -6,6 +6,7 @@ import javascript.awt.BoxLayout;
 import javascript.awt.Dimension;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
+import javascript.swing.JSCheckBox;
 import javascript.swing.JSFileChooser;
 import javascript.swing.JSFilePicker;
 import javascript.swing.JSOptionPane;
@@ -33,10 +34,10 @@ import static simulation.js.$Globals.window;
  * @author gianpiero.diblasi
  */
 public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
-
+  
   private final JSPanel layersPreview = new JSPanel();
   private Z4StatusPanel statusPanel;
-
+  
   private Z4Canvas canvas;
   private Z4Layer layerDnD;
   private Z4LayerPreview previewDnD;
@@ -48,16 +49,22 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbonlayerpanel");
-
+    
     Z4UI.addLabel(this, Z4Translations.NEW_LAYER, new GBC(0, 0).w(3).a(GBC.WEST).i(5, 5, 2, 0));
     this.addButton(Z4Translations.CREATE, true, 0, 1, "left", 0, event -> this.addFromColor());
     this.addButton(Z4Translations.FROM_CLIPBOARD, $typeof(navigator.clipboard.$get("read"), "function"), 1, 1, "both", 0, event -> this.addFromClipboard());
     this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", 0, event -> this.addFromFile());
-    Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
-
+    Z4UI.addVLine(this, new GBC(3, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    
     this.addButton(Z4Translations.MERGE, true, 4, 1, "", 0, event -> this.merge());
-    Z4UI.addVLine(this, new GBC(5, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
-
+    
+    JSCheckBox showLayerBounds = new JSCheckBox();
+    showLayerBounds.setText(Z4Translations.SHOW_LAYER_BOUNDS);
+    showLayerBounds.addActionListener(event -> this.canvas.setShowLayerBounds(showLayerBounds.isSelected()));
+    this.add(showLayerBounds, new GBC(4, 2).a(GBC.NORTH));
+    
+    Z4UI.addVLine(this, new GBC(5, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    
     this.layersPreview.setLayout(new BoxLayout(this.layersPreview, BoxLayout.X_AXIS));
     this.layersPreview.getStyle().overflowX = "scroll";
     this.layersPreview.addEventListener("dragenter", event -> event.preventDefault());
@@ -65,16 +72,16 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     this.layersPreview.addEventListener("dragleave", event -> event.preventDefault());
     this.layersPreview.addEventListener("drop", event -> {
       event.preventDefault();
-
+      
       DragEvent evt = (DragEvent) event;
       $DOMRect rect = this.previewDnD.invoke("getBoundingClientRect()");
       $DOMRect rectLayers = this.layersPreview.invoke("getBoundingClientRect()");
-
+      
       int index = parseInt((evt.clientX - rectLayers.left) / rect.width);
       this.moveLayer(this.previewDnD, this.layerDnD, index);
     });
-
-    this.add(this.layersPreview, new GBC(6, 0).h(2).wx(1).f(GBC.BOTH));
+    
+    this.add(this.layersPreview, new GBC(6, 0).h(3).wx(1).f(GBC.BOTH));
   }
 
   /**
@@ -111,12 +118,12 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
       this.layersPreview.add(preview, null);
     }
   }
-
+  
   private void addFromColor() {
     Dimension canvasSize = this.canvas.getSize();
     Z4NewImagePanel panel = new Z4NewImagePanel();
     panel.setSelectedSize(canvasSize.width, canvasSize.height);
-
+    
     JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener -> panel.addChangeListener(listener), () -> {
       Dimension size = panel.getSelectedSize();
       return 0 < size.width && size.width <= Z4Constants.MAX_IMAGE_SIZE && 0 < size.height && size.height < Z4Constants.MAX_IMAGE_SIZE;
@@ -127,7 +134,7 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
       }
     });
   }
-
+  
   private void addFromFile() {
     if ($typeof(window.$get("showOpenFilePicker"), "function")) {
       FilePickerOptions options = new FilePickerOptions();
@@ -135,21 +142,21 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
       options.id = Z4Constants.IMAGE_FILE_ID;
       options.multiple = false;
       options.types = Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_TYPE;
-
+      
       JSFilePicker.showOpenFilePicker(options, 0, handles -> handles.forEach(handle -> this.canvas.addLayerFromHandle(handle)));
     } else {
       JSFileChooser.showOpenDialog("" + Z4Constants.ACCEPTED_OPEN_IMAGE_FILE_FORMAT.join(","), JSFileChooser.SINGLE_SELECTION, 0, files -> files.forEach(file -> this.canvas.addLayerFromFile(file)));
     }
   }
-
+  
   private void addFromClipboard() {
     this.canvas.addLayerFromClipboard();
   }
-
+  
   private void merge() {
     Z4MergeLayerPanel panel = new Z4MergeLayerPanel();
     panel.setCanvas(this.canvas);
-
+    
     JSOptionPane.showInputDialog(panel, Z4Translations.MERGE, listener -> panel.addChangeListener(listener), () -> panel.getSelectedLayers().length > 1, response -> {
       if (response == JSOptionPane.OK_OPTION) {
         Array<Z4Layer> selected = panel.getSelectedLayers();
@@ -157,7 +164,7 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
           int index = this.canvas.deleteLayer(layer, true);
           document.querySelector(".z4layerpreview:nth-child(" + (index + 1) + ")").remove();
         });
-
+        
         this.canvas.mergeLayers(selected);
       }
     });
@@ -185,9 +192,9 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
       this.layerDnD = layer;
       this.previewDnD = preview;
     });
-
+    
     document.querySelectorAll(".z4layerpreview .z4layerpreview-selector").forEach(element -> element.textContent = Z4LayerPreview.UNSELECTED_LAYER_CONTENT);
-
+    
     this.layersPreview.add(preview, null);
     preview.invoke("scrollIntoView()");
   }

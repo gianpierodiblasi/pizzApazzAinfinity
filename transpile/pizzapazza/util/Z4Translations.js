@@ -54,6 +54,8 @@ class Z4Translations {
 
   static  MERGE_ALL_LAYERS = "";
 
+  static  SHOW_LAYER_BOUNDS = "";
+
   // Ribbon Drawing Tool
   static  NEW_DRAWING_TOOL = "";
 
@@ -493,6 +495,7 @@ class Z4Translations {
     Z4Translations.DELETE_LAYER_MESSAGE = "Do you really want to delete the layer?";
     Z4Translations.MERGE_VISIBLE_LAYERS = "Merge Visible Layers";
     Z4Translations.MERGE_ALL_LAYERS = "Merge All Layers";
+    Z4Translations.SHOW_LAYER_BOUNDS = "Show Layer Bounds";
     // Ribbon Drawing Tool
     Z4Translations.NEW_DRAWING_TOOL = "New Drawing Tool";
     Z4Translations.DRAWING_TOOL = "Drawing Tool";
@@ -727,6 +730,7 @@ class Z4Translations {
     Z4Translations.DELETE_LAYER_MESSAGE = "Vuoi davvero eliminare il livello?";
     Z4Translations.MERGE_VISIBLE_LAYERS = "Fondi Livelli Visibili";
     Z4Translations.MERGE_ALL_LAYERS = "Fondi Tutti i Livelli";
+    Z4Translations.SHOW_LAYER_BOUNDS = "Mostra Bordi Livello";
     // Ribbon Drawing Tool
     Z4Translations.NEW_DRAWING_TOOL = "Nuovo Strumento di Disegno";
     Z4Translations.DRAWING_TOOL = "Strumento di Disegno";

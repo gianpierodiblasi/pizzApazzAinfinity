@@ -30,7 +30,7 @@ class Z4AbstractRibbonPanel extends JSPanel {
     button.setEnabled(enabled);
     button.setContentAreaFilled(false);
     button.addActionListener(listener);
-    let gbc = new GBC(gridx, gridy).a(GBC.NORTH);
+    let gbc = new GBC(gridx, gridy).a(GBC.NORTHWEST);
     switch(border) {
       case "left":
         gbc.i(top, 5, 0, 0);

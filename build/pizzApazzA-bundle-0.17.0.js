@@ -1916,6 +1916,8 @@ class Z4Canvas extends JSComponent {
 
    selectedLayer = null;
 
+   showLayerBounds = false;
+
    drawingTools = new Array();
 
    selectedDrawingTool = null;
@@ -2364,6 +2366,16 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Sets the visualization of the layer bounds
+   *
+   * @param showLayerBounds true to show the layer bounds, false otherwise
+   */
+   setShowLayerBounds(showLayerBounds) {
+    this.showLayerBounds = showLayerBounds;
+    this.drawCanvas();
+  }
+
+  /**
    * Adds a drawing tool
    *
    * @param drawingTool The drawing tool
@@ -2735,6 +2747,23 @@ class Z4Canvas extends JSComponent {
     this.ctx.save();
     this.ctx.scale(this.zoom, this.zoom);
     this.paper.draw(this.ctx, false);
+    if (this.showLayerBounds) {
+      this.ctx.lineWidth = 3 / this.zoom;
+      let dash = new Array();
+      this.ctx.strokeStyle = Z4Constants.getStyle("black");
+      this.ctx.setLineDash(dash);
+      for (let index = 0; index < this.getLayersCount(); index++) {
+        let layer = this.paper.getLayerAt(index);
+        this.ctx.strokeRect(layer.getOffset().x, layer.getOffset().y, layer.getSize().width, layer.getSize().height);
+      }
+      dash.push(2 * this.ctx.lineWidth, 2 * this.ctx.lineWidth);
+      this.ctx.strokeStyle = Z4Constants.getStyle("white");
+      this.ctx.setLineDash(dash);
+      for (let index = 0; index < this.getLayersCount(); index++) {
+        let layer = this.paper.getLayerAt(index);
+        this.ctx.strokeRect(layer.getOffset().x, layer.getOffset().y, layer.getSize().width, layer.getSize().height);
+      }
+    }
     this.ctx.restore();
   }
 
@@ -5727,7 +5756,7 @@ class Z4AbstractRibbonPanel extends JSPanel {
     button.setEnabled(enabled);
     button.setContentAreaFilled(false);
     button.addActionListener(listener);
-    let gbc = new GBC(gridx, gridy).a(GBC.NORTH);
+    let gbc = new GBC(gridx, gridy).a(GBC.NORTHWEST);
     switch(border) {
       case "left":
         gbc.i(top, 5, 0, 0);
@@ -6269,9 +6298,13 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     this.addButton(Z4Translations.CREATE, true, 0, 1, "left", 0, event => this.addFromColor());
     this.addButton(Z4Translations.FROM_CLIPBOARD, typeof navigator.clipboard["read"] === "function", 1, 1, "both", 0, event => this.addFromClipboard());
     this.addButton(Z4Translations.FROM_FILE, true, 2, 1, "right", 0, event => this.addFromFile());
-    Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addVLine(this, new GBC(3, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.addButton(Z4Translations.MERGE, true, 4, 1, "", 0, event => this.merge());
-    Z4UI.addVLine(this, new GBC(5, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    let showLayerBounds = new JSCheckBox();
+    showLayerBounds.setText(Z4Translations.SHOW_LAYER_BOUNDS);
+    showLayerBounds.addActionListener(event => this.canvas.setShowLayerBounds(showLayerBounds.isSelected()));
+    this.add(showLayerBounds, new GBC(4, 2).a(GBC.NORTH));
+    Z4UI.addVLine(this, new GBC(5, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.layersPreview.setLayout(new BoxLayout(this.layersPreview, BoxLayout.X_AXIS));
     this.layersPreview.getStyle().overflowX = "scroll";
     this.layersPreview.addEventListener("dragenter", event => event.preventDefault());
@@ -6285,7 +6318,7 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
       let index = parseInt((evt.clientX - rectLayers.left) / rect.width);
       this.moveLayer(this.previewDnD, this.layerDnD, index);
     });
-    this.add(this.layersPreview, new GBC(6, 0).h(2).wx(1).f(GBC.BOTH));
+    this.add(this.layersPreview, new GBC(6, 0).h(3).wx(1).f(GBC.BOTH));
   }
 
   /**
@@ -18074,6 +18107,8 @@ class Z4Translations {
 
   static  MERGE_ALL_LAYERS = "";
 
+  static  SHOW_LAYER_BOUNDS = "";
+
   // Ribbon Drawing Tool
   static  NEW_DRAWING_TOOL = "";
 
@@ -18513,6 +18548,7 @@ class Z4Translations {
     Z4Translations.DELETE_LAYER_MESSAGE = "Do you really want to delete the layer?";
     Z4Translations.MERGE_VISIBLE_LAYERS = "Merge Visible Layers";
     Z4Translations.MERGE_ALL_LAYERS = "Merge All Layers";
+    Z4Translations.SHOW_LAYER_BOUNDS = "Show Layer Bounds";
     // Ribbon Drawing Tool
     Z4Translations.NEW_DRAWING_TOOL = "New Drawing Tool";
     Z4Translations.DRAWING_TOOL = "Drawing Tool";
@@ -18747,6 +18783,7 @@ class Z4Translations {
     Z4Translations.DELETE_LAYER_MESSAGE = "Vuoi davvero eliminare il livello?";
     Z4Translations.MERGE_VISIBLE_LAYERS = "Fondi Livelli Visibili";
     Z4Translations.MERGE_ALL_LAYERS = "Fondi Tutti i Livelli";
+    Z4Translations.SHOW_LAYER_BOUNDS = "Mostra Bordi Livello";
     // Ribbon Drawing Tool
     Z4Translations.NEW_DRAWING_TOOL = "Nuovo Strumento di Disegno";
     Z4Translations.DRAWING_TOOL = "Strumento di Disegno";
