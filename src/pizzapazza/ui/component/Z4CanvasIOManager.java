@@ -118,7 +118,7 @@ public class Z4CanvasIOManager {
   public void createFromFile(File file) {
     Z4UI.pleaseWait(this.canvas, true, true, true, false, "", () -> {
       FileReader fileReader = new FileReader();
-      fileReader.onload = event -> this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), (String) fileReader.result);
+      fileReader.onload = event -> this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), (String) fileReader.result, Z4Translations.FROM_FILE);
       fileReader.readAsDataURL(file);
     });
   }
@@ -132,13 +132,13 @@ public class Z4CanvasIOManager {
         String imageType = item.types.find((type, index, array) -> type.startsWith("image/"));
 
         item.getType(imageType).then(blob -> {
-          this.createFromURL("", URL.createObjectURL(blob));
+          this.createFromURL("", URL.createObjectURL(blob), Z4Translations.FROM_CLIPBOARD);
         });
       });
     }));
   }
 
-  private Object createFromURL(String projectName, String url) {
+  private Object createFromURL(String projectName, String url, String errorTitle) {
     $Image image = ($Image) document.createElement("img");
 
     image.onload = event -> {
@@ -161,7 +161,7 @@ public class Z4CanvasIOManager {
           this.canvas.toHistory(json -> this.ribbonHistoryPanel.addHistory(json, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
         });
       } else {
-        JSOptionPane.showMessageDialog(Z4Translations.IMAGE_TOO_BIG_MESSAGE.replace("$image_size$", image.width + " x " + image.height).replace("$max_image_size$", Z4Constants.MAX_IMAGE_SIZE + " x " + Z4Constants.MAX_IMAGE_SIZE), Z4Translations.OPEN, JSOptionPane.ERROR_MESSAGE, null);
+        JSOptionPane.showMessageDialog(Z4Translations.IMAGE_TOO_BIG_MESSAGE.replace("$image_size$", image.width + " x " + image.height).replace("$max_image_size$", Z4Constants.MAX_IMAGE_SIZE + " x " + Z4Constants.MAX_IMAGE_SIZE), errorTitle, JSOptionPane.ERROR_MESSAGE, null);
       }
 
       return null;
@@ -492,7 +492,7 @@ public class Z4CanvasIOManager {
       String name = file.name.substring(0, file.name.lastIndexOf('.'));
 
       FileReader fileReader = new FileReader();
-      fileReader.onload = event -> this.addLayerFromURL(name, (String) fileReader.result);
+      fileReader.onload = event -> this.addLayerFromURL(name, (String) fileReader.result, Z4Translations.FROM_FILE);
       fileReader.readAsDataURL(file);
     });
   }
@@ -506,7 +506,7 @@ public class Z4CanvasIOManager {
         String imageType = item.types.find((type, index, array) -> type.startsWith("image/"));
 
         item.getType(imageType).then(blob -> {
-          this.addLayerFromURL(this.canvas.findLayerName(), URL.createObjectURL(blob));
+          this.addLayerFromURL(this.canvas.findLayerName(), URL.createObjectURL(blob), Z4Translations.FROM_CLIPBOARD);
         });
       });
     }));
@@ -525,11 +525,11 @@ public class Z4CanvasIOManager {
     $Object options = new $Object();
     options.$set("type", "image/png");
     offscreen.convertToBlob(options).then(converted -> {
-      this.addLayerFromURL(this.canvas.findLayerName(), URL.createObjectURL(converted));
+      this.addLayerFromURL(this.canvas.findLayerName(), URL.createObjectURL(converted), Z4Translations.MERGE);
     });
   }
 
-  private Object addLayerFromURL(String name, String url) {
+  private Object addLayerFromURL(String name, String url, String errorTitle) {
     $Image image = ($Image) document.createElement("img");
 
     image.onload = event -> {
@@ -540,7 +540,7 @@ public class Z4CanvasIOManager {
         this.canvas.afterAddLayer();
         this.canvas.drawCanvas();
       } else {
-        JSOptionPane.showMessageDialog(Z4Translations.IMAGE_TOO_BIG_MESSAGE.replace("$image_size$", image.width + " x " + image.height).replace("$max_image_size$", Z4Constants.MAX_IMAGE_SIZE + " x " + Z4Constants.MAX_IMAGE_SIZE), Z4Translations.OPEN, JSOptionPane.ERROR_MESSAGE, null);
+        JSOptionPane.showMessageDialog(Z4Translations.IMAGE_TOO_BIG_MESSAGE.replace("$image_size$", image.width + " x " + image.height).replace("$max_image_size$", Z4Constants.MAX_IMAGE_SIZE + " x " + Z4Constants.MAX_IMAGE_SIZE), errorTitle, JSOptionPane.ERROR_MESSAGE, null);
       }
 
       return null;

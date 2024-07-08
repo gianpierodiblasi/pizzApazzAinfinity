@@ -2957,7 +2957,7 @@ class Z4CanvasIOManager {
    createFromFile(file) {
     Z4UI.pleaseWait(this.canvas, true, true, true, false, "", () => {
       let fileReader = new FileReader();
-      fileReader.onload = event => this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), fileReader.result);
+      fileReader.onload = event => this.createFromURL(file.name.substring(0, file.name.lastIndexOf('.')), fileReader.result, Z4Translations.FROM_FILE);
       fileReader.readAsDataURL(file);
     });
   }
@@ -2970,13 +2970,13 @@ class Z4CanvasIOManager {
       items.forEach(item => {
         let imageType = item.types.find((type, index, array) => type.startsWith("image/"));
         item.getType(imageType).then(blob => {
-          this.createFromURL("", URL.createObjectURL(blob));
+          this.createFromURL("", URL.createObjectURL(blob), Z4Translations.FROM_CLIPBOARD);
         });
       });
     }));
   }
 
-   createFromURL(projectName, url) {
+   createFromURL(projectName, url, errorTitle) {
     let image = document.createElement("img");
     image.onload = event => {
       Z4UI.pleaseWaitCompleted();
@@ -2993,7 +2993,7 @@ class Z4CanvasIOManager {
           this.canvas.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
         });
       } else {
-        JSOptionPane.showMessageDialog(Z4Translations.IMAGE_TOO_BIG_MESSAGE.replace("$image_size$", image.width + " x " + image.height).replace("$max_image_size$", Z4Constants.MAX_IMAGE_SIZE + " x " + Z4Constants.MAX_IMAGE_SIZE), Z4Translations.OPEN, JSOptionPane.ERROR_MESSAGE, null);
+        JSOptionPane.showMessageDialog(Z4Translations.IMAGE_TOO_BIG_MESSAGE.replace("$image_size$", image.width + " x " + image.height).replace("$max_image_size$", Z4Constants.MAX_IMAGE_SIZE + " x " + Z4Constants.MAX_IMAGE_SIZE), errorTitle, JSOptionPane.ERROR_MESSAGE, null);
       }
       return null;
     };
@@ -3283,7 +3283,7 @@ class Z4CanvasIOManager {
     Z4UI.pleaseWait(this.canvas, true, true, true, false, "", () => {
       let name = file.name.substring(0, file.name.lastIndexOf('.'));
       let fileReader = new FileReader();
-      fileReader.onload = event => this.addLayerFromURL(name, fileReader.result);
+      fileReader.onload = event => this.addLayerFromURL(name, fileReader.result, Z4Translations.FROM_FILE);
       fileReader.readAsDataURL(file);
     });
   }
@@ -3296,7 +3296,7 @@ class Z4CanvasIOManager {
       items.forEach(item => {
         let imageType = item.types.find((type, index, array) => type.startsWith("image/"));
         item.getType(imageType).then(blob => {
-          this.addLayerFromURL(this.canvas.findLayerName(), URL.createObjectURL(blob));
+          this.addLayerFromURL(this.canvas.findLayerName(), URL.createObjectURL(blob), Z4Translations.FROM_CLIPBOARD);
         });
       });
     }));
@@ -3314,11 +3314,11 @@ class Z4CanvasIOManager {
     let options = new Object();
     options["type"] = "image/png";
     offscreen.convertToBlob(options).then(converted => {
-      this.addLayerFromURL(this.canvas.findLayerName(), URL.createObjectURL(converted));
+      this.addLayerFromURL(this.canvas.findLayerName(), URL.createObjectURL(converted), Z4Translations.MERGE);
     });
   }
 
-   addLayerFromURL(name, url) {
+   addLayerFromURL(name, url, errorTitle) {
     let image = document.createElement("img");
     image.onload = event => {
       Z4UI.pleaseWaitCompleted();
@@ -3327,7 +3327,7 @@ class Z4CanvasIOManager {
         this.canvas.afterAddLayer();
         this.canvas.drawCanvas();
       } else {
-        JSOptionPane.showMessageDialog(Z4Translations.IMAGE_TOO_BIG_MESSAGE.replace("$image_size$", image.width + " x " + image.height).replace("$max_image_size$", Z4Constants.MAX_IMAGE_SIZE + " x " + Z4Constants.MAX_IMAGE_SIZE), Z4Translations.OPEN, JSOptionPane.ERROR_MESSAGE, null);
+        JSOptionPane.showMessageDialog(Z4Translations.IMAGE_TOO_BIG_MESSAGE.replace("$image_size$", image.width + " x " + image.height).replace("$max_image_size$", Z4Constants.MAX_IMAGE_SIZE + " x " + Z4Constants.MAX_IMAGE_SIZE), errorTitle, JSOptionPane.ERROR_MESSAGE, null);
       }
       return null;
     };
@@ -18233,6 +18233,8 @@ class Z4Translations {
 
   static  IMAGE_TOO_BIG_MESSAGE = "";
 
+  static  IMAGE_OPEN_ERROR_MESSAGE = "";
+
   // Color
   static  COLOR = "";
 
@@ -18566,6 +18568,7 @@ class Z4Translations {
     Z4Translations.RESIZE_LAYER = "Resize Layer";
     Z4Translations.RESIZE_CONTENT = "Resize Content";
     Z4Translations.IMAGE_TOO_BIG_MESSAGE = "The image is too big to be loaded; image size = $image_size$, max image size = $max_image_size$";
+    Z4Translations.IMAGE_OPEN_ERROR_MESSAGE = "It is not possible to open the image";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -18798,6 +18801,7 @@ class Z4Translations {
     Z4Translations.RESIZE_LAYER = "Ridimensiona Livello";
     Z4Translations.RESIZE_CONTENT = "Ridimensiona Contenuto";
     Z4Translations.IMAGE_TOO_BIG_MESSAGE = "L'immagine \u00E8 troppo grande per essere caricata; dimensione immagine = $image_size$, dimensione massima immagine = $max_image_size$";
+    Z4Translations.IMAGE_OPEN_ERROR_MESSAGE = "Non \u00E8 possibile aprire l'immagine";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";
