@@ -911,6 +911,26 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Resizes the canvas
+   *
+   * @param resizeOptions The resize options
+   */
+   resize(resizeOptions) {
+    this.setSize(resizeOptions.containerWidth, resizeOptions.containerHeight);
+    this.statusPanel.setProjectSize(this.width, this.height);
+    this.statusPanel.resetCanvasGridPanel(this.width, this.height, true);
+    this.canvas.width = this.width * this.zoom;
+    this.canvas.height = this.height * this.zoom;
+    this.canvasGrid.width = this.width * this.zoom;
+    this.canvasGrid.height = this.height * this.zoom;
+    this.canvasBounds.width = this.width * this.zoom;
+    this.canvasBounds.height = this.height * this.zoom;
+    this.drawCanvas();
+    this.drawCanvasGrid();
+    this.drawCanvasBounds();
+  }
+
+  /**
    * Draws this canvas
    */
    drawCanvas() {

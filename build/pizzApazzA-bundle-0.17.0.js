@@ -2770,6 +2770,26 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Resizes the canvas
+   *
+   * @param resizeOptions The resize options
+   */
+   resize(resizeOptions) {
+    this.setSize(resizeOptions.containerWidth, resizeOptions.containerHeight);
+    this.statusPanel.setProjectSize(this.width, this.height);
+    this.statusPanel.resetCanvasGridPanel(this.width, this.height, true);
+    this.canvas.width = this.width * this.zoom;
+    this.canvas.height = this.height * this.zoom;
+    this.canvasGrid.width = this.width * this.zoom;
+    this.canvasGrid.height = this.height * this.zoom;
+    this.canvasBounds.width = this.width * this.zoom;
+    this.canvasBounds.height = this.height * this.zoom;
+    this.drawCanvas();
+    this.drawCanvasGrid();
+    this.drawCanvasBounds();
+  }
+
+  /**
    * Draws this canvas
    */
    drawCanvas() {
@@ -6520,7 +6540,36 @@ class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
     this.addButton(Z4Translations.FLIP_HORIZONTAL, true, 10, 1, "left", 0, event => this.flip(layer => layer.flipHorizonal(), (centerCanvas, offsetLayer, sizeLayer) => new Point(2 * centerCanvas.x - offsetLayer.x - sizeLayer.width, offsetLayer.y))).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.FLIP_VERTICAL, true, 11, 1, "both", 0, event => this.flip(layer => layer.flipVertical(), (centerCanvas, offsetLayer, sizeLayer) => new Point(offsetLayer.x, 2 * centerCanvas.y - offsetLayer.y - sizeLayer.height))).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.RESIZE, true, 12, 1, "right", 0, event => {
-      // TODO
+      let canvasSize = this.canvas.getSize();
+      let offsetCanvas = new OffscreenCanvas(canvasSize.width, canvasSize.height);
+      let offsetContext = offsetCanvas.getContext("2d");
+      for (let index = 0; index < this.canvas.getLayersCount(); index++) {
+        this.canvas.getLayerAt(index).draw(offsetContext, false);
+      }
+      let resizeImagePanel = new Z4ResizeImagePanel();
+      resizeImagePanel.setCanvas(offsetCanvas, canvasSize.width, canvasSize.height);
+      JSOptionPane.showInputDialog(resizeImagePanel, Z4Translations.RESIZE, listener => resizeImagePanel.addChangeListener(listener), () => {
+        let resizeOptions = resizeImagePanel.getResizeOptions();
+        let containerOK = 0 < resizeOptions.containerWidth && resizeOptions.containerWidth <= Z4Constants.MAX_IMAGE_SIZE && 0 < resizeOptions.containerHeight && resizeOptions.containerHeight < Z4Constants.MAX_IMAGE_SIZE;
+        let contentOK = 0 < resizeOptions.contentWidth && resizeOptions.contentWidth <= Z4Constants.MAX_IMAGE_SIZE && 0 < resizeOptions.contentHeight && resizeOptions.contentHeight < Z4Constants.MAX_IMAGE_SIZE;
+        return containerOK && contentOK;
+      }, response => {
+        if (response === JSOptionPane.OK_OPTION) {
+          let resizeOptions = resizeImagePanel.getResizeOptions();
+          let scaleW = resizeOptions.contentWidth / canvasSize.width;
+          let scaleH = resizeOptions.contentHeight / canvasSize.height;
+          for (let index = 0; index < this.canvas.getLayersCount(); index++) {
+            let layer = this.canvas.getLayerAt(index);
+            let layerOffset = layer.getOffset();
+            let layerSize = layer.getSize();
+            layer.resize(new Z4ResizeOptions(parseInt(layerSize.width * scaleW), parseInt(layerSize.height * scaleH), parseInt(layerSize.width * scaleW), parseInt(layerSize.height * scaleH), 0, 0));
+            layer.move(resizeOptions.contentOffsetX + parseInt(layerOffset.x * scaleW), resizeOptions.contentOffsetY + parseInt(layerOffset.y * scaleH));
+          }
+          this.canvas.resize(resizeOptions);
+          document.querySelectorAll(".z4layerpreview .z4layerpreview-setlayer").forEach(element => (element).click());
+          this.afterTransform();
+        }
+      });
     }).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.ROTATE_PLUS_90, true, 10, 2, "left", 0, event => {
       this.rotatePlus90();
@@ -12318,7 +12367,7 @@ class Z4ResizeImagePanel extends JSPanel {
     super();
     this.cssAddClass("z4resizeimagepanel");
     this.setLayout(new GridBagLayout());
-    Z4UI.addLabel(this, Z4Translations.LAYER, new GBC(0, 0).a(GBC.WEST).w(3)).getStyle().fontWeight = "bold";
+    Z4UI.addLabel(this, Z4Translations.CONTAINER, new GBC(0, 0).a(GBC.WEST).w(3)).getStyle().fontWeight = "bold";
     Z4UI.addLabel(this, Z4Translations.WIDTH + " (px)", new GBC(0, 1).a(GBC.WEST));
     this.addSpinner(this.containerWidth, Z4Constants.DEFAULT_IMAGE_SIZE, 1, Z4Constants.MAX_IMAGE_SIZE, 0, 2, this.containerWidth, this.containerHeight, this.containerLockRatio);
     Z4UI.addLabel(this, Z4Translations.HEIGHT + " (px)", new GBC(1, 1).a(GBC.WEST));
@@ -12356,9 +12405,9 @@ class Z4ResizeImagePanel extends JSPanel {
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
     this.add(panel, new GBC(3, 0).h(6).a(GBC.NORTHWEST));
     let buttonGroup = new ButtonGroup();
-    this.addRadio(panel, this.resizeLayerAdaptContent, buttonGroup, Z4Translations.RESIZE_LAYER_AND_ADAPT_CONTENT, true);
-    this.addRadio(panel, this.resizeLayerAndContent, buttonGroup, Z4Translations.RESIZE_LAYER_AND_CONTENT, false);
-    this.addRadio(panel, this.resizeLayer, buttonGroup, Z4Translations.RESIZE_LAYER, false);
+    this.addRadio(panel, this.resizeLayerAdaptContent, buttonGroup, Z4Translations.RESIZE_CONTAINER_AND_ADAPT_CONTENT, true);
+    this.addRadio(panel, this.resizeLayerAndContent, buttonGroup, Z4Translations.RESIZE_CONTAINER_AND_CONTENT, false);
+    this.addRadio(panel, this.resizeLayer, buttonGroup, Z4Translations.RESIZE_CONTAINER, false);
     this.addRadio(panel, this.resizeContent, buttonGroup, Z4Translations.RESIZE_CONTENT, false);
     this.add(this.preview, new GBC(3, 6).h(8).wxy(1, 1));
     this.setDimensions();
@@ -18443,13 +18492,15 @@ class Z4Translations {
 
   static  RESIZE = "";
 
+  static  CONTAINER = "";
+
   static  CONTENT = "";
 
-  static  RESIZE_LAYER_AND_CONTENT = "";
+  static  RESIZE_CONTAINER_AND_CONTENT = "";
 
-  static  RESIZE_LAYER_AND_ADAPT_CONTENT = "";
+  static  RESIZE_CONTAINER_AND_ADAPT_CONTENT = "";
 
-  static  RESIZE_LAYER = "";
+  static  RESIZE_CONTAINER = "";
 
   static  RESIZE_CONTENT = "";
 
@@ -18787,10 +18838,11 @@ class Z4Translations {
     Z4Translations.PLOT_WIDTH = "Plot Width";
     Z4Translations.RESET_ON_START_MOVING = "Reset on Start Moving";
     Z4Translations.RESIZE = "Resize";
+    Z4Translations.CONTAINER = "Container";
     Z4Translations.CONTENT = "Content";
-    Z4Translations.RESIZE_LAYER_AND_CONTENT = "Resize Layer and Content";
-    Z4Translations.RESIZE_LAYER_AND_ADAPT_CONTENT = "Resize Layer and Adapt Content";
-    Z4Translations.RESIZE_LAYER = "Resize Layer";
+    Z4Translations.RESIZE_CONTAINER_AND_CONTENT = "Resize Container and Content";
+    Z4Translations.RESIZE_CONTAINER_AND_ADAPT_CONTENT = "Resize Container and Adapt Content";
+    Z4Translations.RESIZE_CONTAINER = "Resize Container";
     Z4Translations.RESIZE_CONTENT = "Resize Content";
     Z4Translations.IMAGE_TOO_BIG_MESSAGE = "The image is too big to be loaded; image size = $image_size$, max image size = $max_image_size$";
     Z4Translations.IMAGE_OPEN_ERROR_MESSAGE = "It is not possible to open the image";
@@ -19022,10 +19074,11 @@ class Z4Translations {
     Z4Translations.PLOT_WIDTH = "Larghezza Trama";
     Z4Translations.RESET_ON_START_MOVING = "Riavvia su Inizio del Movimento";
     Z4Translations.RESIZE = "Ridimensiona";
+    Z4Translations.CONTAINER = "Contenitore";
     Z4Translations.CONTENT = "Contenuto";
-    Z4Translations.RESIZE_LAYER_AND_CONTENT = "Ridimensiona Livello e Contenuto";
-    Z4Translations.RESIZE_LAYER_AND_ADAPT_CONTENT = "Ridimensiona Livello ed Adatta Contenuto";
-    Z4Translations.RESIZE_LAYER = "Ridimensiona Livello";
+    Z4Translations.RESIZE_CONTAINER_AND_CONTENT = "Ridimensiona Contenitore e Contenuto";
+    Z4Translations.RESIZE_CONTAINER_AND_ADAPT_CONTENT = "Ridimensiona Contenitore ed Adatta Contenuto";
+    Z4Translations.RESIZE_CONTAINER = "Ridimensiona Contenitore";
     Z4Translations.RESIZE_CONTENT = "Ridimensiona Contenuto";
     Z4Translations.IMAGE_TOO_BIG_MESSAGE = "L'immagine \u00E8 troppo grande per essere caricata; dimensione immagine = $image_size$, dimensione massima immagine = $max_image_size$";
     Z4Translations.IMAGE_OPEN_ERROR_MESSAGE = "Non \u00E8 possibile aprire l'immagine";

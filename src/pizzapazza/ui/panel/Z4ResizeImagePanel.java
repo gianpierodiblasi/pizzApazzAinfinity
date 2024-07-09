@@ -78,7 +78,7 @@ public class Z4ResizeImagePanel extends JSPanel {
     this.cssAddClass("z4resizeimagepanel");
     this.setLayout(new GridBagLayout());
 
-    Z4UI.addLabel(this, Z4Translations.LAYER, new GBC(0, 0).a(GBC.WEST).w(3)).getStyle().fontWeight = "bold";
+    Z4UI.addLabel(this, Z4Translations.CONTAINER, new GBC(0, 0).a(GBC.WEST).w(3)).getStyle().fontWeight = "bold";
     Z4UI.addLabel(this, Z4Translations.WIDTH + " (px)", new GBC(0, 1).a(GBC.WEST));
     this.addSpinner(this.containerWidth, Z4Constants.DEFAULT_IMAGE_SIZE, 1, Z4Constants.MAX_IMAGE_SIZE, 0, 2, this.containerWidth, this.containerHeight, this.containerLockRatio);
     Z4UI.addLabel(this, Z4Translations.HEIGHT + " (px)", new GBC(1, 1).a(GBC.WEST));
@@ -125,9 +125,9 @@ public class Z4ResizeImagePanel extends JSPanel {
     this.add(panel, new GBC(3, 0).h(6).a(GBC.NORTHWEST));
 
     ButtonGroup buttonGroup = new ButtonGroup();
-    this.addRadio(panel, this.resizeLayerAdaptContent, buttonGroup, Z4Translations.RESIZE_LAYER_AND_ADAPT_CONTENT, true);
-    this.addRadio(panel, this.resizeLayerAndContent, buttonGroup, Z4Translations.RESIZE_LAYER_AND_CONTENT, false);
-    this.addRadio(panel, this.resizeLayer, buttonGroup, Z4Translations.RESIZE_LAYER, false);
+    this.addRadio(panel, this.resizeLayerAdaptContent, buttonGroup, Z4Translations.RESIZE_CONTAINER_AND_ADAPT_CONTENT, true);
+    this.addRadio(panel, this.resizeLayerAndContent, buttonGroup, Z4Translations.RESIZE_CONTAINER_AND_CONTENT, false);
+    this.addRadio(panel, this.resizeLayer, buttonGroup, Z4Translations.RESIZE_CONTAINER, false);
     this.addRadio(panel, this.resizeContent, buttonGroup, Z4Translations.RESIZE_CONTENT, false);
 
     this.add(this.preview, new GBC(3, 6).h(8).wxy(1, 1));

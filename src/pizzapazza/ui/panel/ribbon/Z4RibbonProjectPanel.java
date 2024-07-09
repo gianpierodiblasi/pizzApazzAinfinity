@@ -22,11 +22,15 @@ import javascript.util.fsa.FileSystemFileHandle;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.panel.Z4ExportToFilePanel;
 import pizzapazza.ui.panel.Z4NewImagePanel;
+import pizzapazza.ui.panel.Z4ResizeImagePanel;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Layer;
+import pizzapazza.util.Z4ResizeOptions;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
+import simulation.dom.$CanvasRenderingContext2D;
+import simulation.dom.$OffscreenCanvas;
 import simulation.js.$Apply_0_Void;
 import simulation.js.$Apply_1_Void;
 import simulation.js.$Apply_3_V;
@@ -35,6 +39,7 @@ import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.$typeof;
 import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.navigator;
+import static simulation.js.$Globals.parseInt;
 import static simulation.js.$Globals.window;
 
 /**
@@ -76,7 +81,40 @@ public class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
     this.addButton(Z4Translations.FLIP_HORIZONTAL, true, 10, 1, "left", 0, event -> this.flip(layer -> layer.flipHorizonal(), (centerCanvas, offsetLayer, sizeLayer) -> new Point(2 * centerCanvas.x - offsetLayer.x - sizeLayer.width, offsetLayer.y))).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.FLIP_VERTICAL, true, 11, 1, "both", 0, event -> this.flip(layer -> layer.flipVertical(), (centerCanvas, offsetLayer, sizeLayer) -> new Point(offsetLayer.x, 2 * centerCanvas.y - offsetLayer.y - sizeLayer.height))).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.RESIZE, true, 12, 1, "right", 0, event -> {
-//      TODO
+      Dimension canvasSize = this.canvas.getSize();
+      $OffscreenCanvas offsetCanvas = new $OffscreenCanvas(canvasSize.width, canvasSize.height);
+      $CanvasRenderingContext2D offsetContext = offsetCanvas.getContext("2d");
+      for (int index = 0; index < this.canvas.getLayersCount(); index++) {
+        this.canvas.getLayerAt(index).draw(offsetContext, false);
+      }
+
+      Z4ResizeImagePanel resizeImagePanel = new Z4ResizeImagePanel();
+      resizeImagePanel.setCanvas(offsetCanvas, canvasSize.width, canvasSize.height);
+
+      JSOptionPane.showInputDialog(resizeImagePanel, Z4Translations.RESIZE, listener -> resizeImagePanel.addChangeListener(listener), () -> {
+        Z4ResizeOptions resizeOptions = resizeImagePanel.getResizeOptions();
+        boolean containerOK = 0 < resizeOptions.containerWidth && resizeOptions.containerWidth <= Z4Constants.MAX_IMAGE_SIZE && 0 < resizeOptions.containerHeight && resizeOptions.containerHeight < Z4Constants.MAX_IMAGE_SIZE;
+        boolean contentOK = 0 < resizeOptions.contentWidth && resizeOptions.contentWidth <= Z4Constants.MAX_IMAGE_SIZE && 0 < resizeOptions.contentHeight && resizeOptions.contentHeight < Z4Constants.MAX_IMAGE_SIZE;
+        return containerOK && contentOK;
+      }, response -> {
+        if (response == JSOptionPane.OK_OPTION) {
+          Z4ResizeOptions resizeOptions = resizeImagePanel.getResizeOptions();
+          double scaleW = resizeOptions.contentWidth / canvasSize.width;
+          double scaleH = resizeOptions.contentHeight / canvasSize.height;
+
+          for (int index = 0; index < this.canvas.getLayersCount(); index++) {
+            Z4Layer layer = this.canvas.getLayerAt(index);
+            Point layerOffset = layer.getOffset();
+            Dimension layerSize = layer.getSize();
+            layer.resize(new Z4ResizeOptions(parseInt(layerSize.width * scaleW), parseInt(layerSize.height * scaleH), parseInt(layerSize.width * scaleW), parseInt(layerSize.height * scaleH), 0, 0));
+            layer.move(resizeOptions.contentOffsetX + parseInt(layerOffset.x * scaleW), resizeOptions.contentOffsetY + parseInt(layerOffset.y * scaleH));
+          }
+          this.canvas.resize(resizeOptions);
+
+          document.querySelectorAll(".z4layerpreview .z4layerpreview-setlayer").forEach(element -> ((HTMLElement) element).click());
+          this.afterTransform();
+        }
+      });
     }).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.ROTATE_PLUS_90, true, 10, 2, "left", 0, event -> {
       this.rotatePlus90();

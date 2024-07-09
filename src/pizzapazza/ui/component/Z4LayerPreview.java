@@ -312,7 +312,6 @@ public class Z4LayerPreview extends JSDropDown {
         boolean containerOK = 0 < resizeOptions.containerWidth && resizeOptions.containerWidth <= Z4Constants.MAX_IMAGE_SIZE && 0 < resizeOptions.containerHeight && resizeOptions.containerHeight < Z4Constants.MAX_IMAGE_SIZE;
         boolean contentOK = 0 < resizeOptions.contentWidth && resizeOptions.contentWidth <= Z4Constants.MAX_IMAGE_SIZE && 0 < resizeOptions.contentHeight && resizeOptions.contentHeight < Z4Constants.MAX_IMAGE_SIZE;
         return containerOK && contentOK;
-
       }, response -> {
         if (response == JSOptionPane.OK_OPTION) {
           this.layer.resize(resizeImagePanel.getResizeOptions());

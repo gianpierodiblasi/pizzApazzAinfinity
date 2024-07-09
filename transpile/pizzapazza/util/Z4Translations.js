@@ -253,13 +253,15 @@ class Z4Translations {
 
   static  RESIZE = "";
 
+  static  CONTAINER = "";
+
   static  CONTENT = "";
 
-  static  RESIZE_LAYER_AND_CONTENT = "";
+  static  RESIZE_CONTAINER_AND_CONTENT = "";
 
-  static  RESIZE_LAYER_AND_ADAPT_CONTENT = "";
+  static  RESIZE_CONTAINER_AND_ADAPT_CONTENT = "";
 
-  static  RESIZE_LAYER = "";
+  static  RESIZE_CONTAINER = "";
 
   static  RESIZE_CONTENT = "";
 
@@ -597,10 +599,11 @@ class Z4Translations {
     Z4Translations.PLOT_WIDTH = "Plot Width";
     Z4Translations.RESET_ON_START_MOVING = "Reset on Start Moving";
     Z4Translations.RESIZE = "Resize";
+    Z4Translations.CONTAINER = "Container";
     Z4Translations.CONTENT = "Content";
-    Z4Translations.RESIZE_LAYER_AND_CONTENT = "Resize Layer and Content";
-    Z4Translations.RESIZE_LAYER_AND_ADAPT_CONTENT = "Resize Layer and Adapt Content";
-    Z4Translations.RESIZE_LAYER = "Resize Layer";
+    Z4Translations.RESIZE_CONTAINER_AND_CONTENT = "Resize Container and Content";
+    Z4Translations.RESIZE_CONTAINER_AND_ADAPT_CONTENT = "Resize Container and Adapt Content";
+    Z4Translations.RESIZE_CONTAINER = "Resize Container";
     Z4Translations.RESIZE_CONTENT = "Resize Content";
     Z4Translations.IMAGE_TOO_BIG_MESSAGE = "The image is too big to be loaded; image size = $image_size$, max image size = $max_image_size$";
     Z4Translations.IMAGE_OPEN_ERROR_MESSAGE = "It is not possible to open the image";
@@ -832,10 +835,11 @@ class Z4Translations {
     Z4Translations.PLOT_WIDTH = "Larghezza Trama";
     Z4Translations.RESET_ON_START_MOVING = "Riavvia su Inizio del Movimento";
     Z4Translations.RESIZE = "Ridimensiona";
+    Z4Translations.CONTAINER = "Contenitore";
     Z4Translations.CONTENT = "Contenuto";
-    Z4Translations.RESIZE_LAYER_AND_CONTENT = "Ridimensiona Livello e Contenuto";
-    Z4Translations.RESIZE_LAYER_AND_ADAPT_CONTENT = "Ridimensiona Livello ed Adatta Contenuto";
-    Z4Translations.RESIZE_LAYER = "Ridimensiona Livello";
+    Z4Translations.RESIZE_CONTAINER_AND_CONTENT = "Ridimensiona Contenitore e Contenuto";
+    Z4Translations.RESIZE_CONTAINER_AND_ADAPT_CONTENT = "Ridimensiona Contenitore ed Adatta Contenuto";
+    Z4Translations.RESIZE_CONTAINER = "Ridimensiona Contenitore";
     Z4Translations.RESIZE_CONTENT = "Ridimensiona Contenuto";
     Z4Translations.IMAGE_TOO_BIG_MESSAGE = "L'immagine \u00E8 troppo grande per essere caricata; dimensione immagine = $image_size$, dimensione massima immagine = $max_image_size$";
     Z4Translations.IMAGE_OPEN_ERROR_MESSAGE = "Non \u00E8 possibile aprire l'immagine";
