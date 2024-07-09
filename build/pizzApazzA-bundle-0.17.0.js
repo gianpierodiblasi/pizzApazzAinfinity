@@ -6523,26 +6523,22 @@ class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
       // TODO
     }).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.ROTATE_PLUS_90, true, 10, 2, "left", 0, event => {
-      // for (int index = 0; index < this.canvas.getLayersCount(); index++) {
-      // Z4Layer layer = this.canvas.getLayerAt(index);
-      // Point offset = layer.getOffset();
-      // Dimension sizeLayer = layer.getSize();
-      // Dimension sizeCanvas = this.canvas.getSize();
-      // }
-      // 
-      // this.canvas.rotatePlus90();
-      // document.querySelectorAll(".z4layerpreview .z4layerpreview-rotateplus90").forEach(element -> ((HTMLElement) element).click());
-      // 
-      // this.afterTransform();
+      this.rotatePlus90();
+      document.querySelectorAll(".z4layerpreview .z4layerpreview-setlayer").forEach(element => (element).click());
+      this.afterTransform();
     });
     this.addButton(Z4Translations.ROTATE_MINUS_90, true, 11, 2, "both", 0, event => {
-      // this.canvas.rotatePlus90();
-      // document.querySelectorAll(".z4layerpreview .z4layerpreview-rotateminus90").forEach(element -> ((HTMLElement) element).click());
-      // this.afterTransform();
+      this.rotatePlus90();
+      this.rotatePlus90();
+      this.rotatePlus90();
+      document.querySelectorAll(".z4layerpreview .z4layerpreview-setlayer").forEach(element => (element).click());
+      this.afterTransform();
     });
     this.addButton(Z4Translations.ROTATE_180, true, 12, 2, "right", 0, event => {
-      // document.querySelectorAll(".z4layerpreview .z4layerpreview-rotate180").forEach(element -> ((HTMLElement) element).click());
-      // this.afterTransform();
+      this.rotatePlus90();
+      this.rotatePlus90();
+      document.querySelectorAll(".z4layerpreview .z4layerpreview-setlayer").forEach(element => (element).click());
+      this.afterTransform();
     });
     Z4UI.addVLine(this, new GBC(16, 0).h(3).wxy(1, 1).f(GBC.VERTICAL).i(1, 2, 1, 2));
   }
@@ -6558,6 +6554,19 @@ class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
     }
     document.querySelectorAll(".z4layerpreview .z4layerpreview-setlayer").forEach(element => (element).click());
     this.afterTransform();
+  }
+
+   rotatePlus90() {
+    let sizeCanvas = this.canvas.getSize();
+    let centerCanvas = new Point(sizeCanvas.width / 2, sizeCanvas.height / 2);
+    for (let index = 0; index < this.canvas.getLayersCount(); index++) {
+      let layer = this.canvas.getLayerAt(index);
+      let offsetLayer = layer.getOffset();
+      let sizeLayer = layer.getSize();
+      layer.rotatePlus90();
+      layer.move(2 * centerCanvas.y - offsetLayer.y - sizeLayer.height, offsetLayer.x);
+    }
+    this.canvas.rotatePlus90();
   }
 
    afterTransform() {
