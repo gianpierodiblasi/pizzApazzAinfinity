@@ -682,7 +682,12 @@
 
 .z4layerpreview .z4layerpreview-editor[offset=true], .z4layerpreview .z4layerpreview-editor[offset=true] * {
   background: transparent;
-}.z4lightingpanel {
+}
+
+.z4layerpreview .z4layerpreview-setlayer {
+  display: none;
+}
+.z4lightingpanel {
 }
 
 .z4lightingpanel .z4lightingpanel-radio img {

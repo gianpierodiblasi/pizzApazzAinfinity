@@ -32,26 +32,23 @@ class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
     this.addButton(Z4Translations.EXPORT, true, 6, 2, "", 0, event => this.exportToFile());
     Z4UI.addVLine(this, new GBC(9, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     Z4UI.addLabel(this, Z4Translations.TRANSFORM, new GBC(10, 0).w(3).a(GBC.WEST).i(5, 5, 2, 0));
-    this.addButton(Z4Translations.FLIP_HORIZONTAL, true, 10, 1, "left", 0, event => {
-      document.querySelectorAll(".z4layerpreview .z4layerpreview-fliphorizontal").forEach(element => (element).click());
-      this.afterTransform();
-    }).getStyle().marginBottom = "5px";
-    this.addButton(Z4Translations.FLIP_VERTICAL, true, 11, 1, "both", 0, event => {
-      document.querySelectorAll(".z4layerpreview .z4layerpreview-flipvertical").forEach(element => (element).click());
-      this.afterTransform();
-    }).getStyle().marginBottom = "5px";
+    this.addButton(Z4Translations.FLIP_HORIZONTAL, true, 10, 1, "left", 0, event => this.flip(layer => layer.flipHorizonal(), (centerCanvas, offsetLayer, sizeLayer) => new Point(2 * centerCanvas.x - offsetLayer.x - sizeLayer.width, offsetLayer.y))).getStyle().marginBottom = "5px";
+    this.addButton(Z4Translations.FLIP_VERTICAL, true, 11, 1, "both", 0, event => this.flip(layer => layer.flipVertical(), (centerCanvas, offsetLayer, sizeLayer) => new Point(offsetLayer.x, 2 * centerCanvas.y - offsetLayer.y - sizeLayer.height))).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.RESIZE, true, 12, 1, "right", 0, event => {
+      // TODO
     }).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.ROTATE_PLUS_90, true, 10, 2, "left", 0, event => {
-      for (let index = 0; index < this.canvas.getLayersCount(); index++) {
-        let layer = this.canvas.getLayerAt(index);
-        let offset = layer.getOffset();
-        let sizeLayer = layer.getSize();
-        let sizeCanvas = this.canvas.getSize();
-      }
-      this.canvas.rotatePlus90();
-      document.querySelectorAll(".z4layerpreview .z4layerpreview-rotateplus90").forEach(element => (element).click());
-      this.afterTransform();
+      // for (int index = 0; index < this.canvas.getLayersCount(); index++) {
+      // Z4Layer layer = this.canvas.getLayerAt(index);
+      // Point offset = layer.getOffset();
+      // Dimension sizeLayer = layer.getSize();
+      // Dimension sizeCanvas = this.canvas.getSize();
+      // }
+      // 
+      // this.canvas.rotatePlus90();
+      // document.querySelectorAll(".z4layerpreview .z4layerpreview-rotateplus90").forEach(element -> ((HTMLElement) element).click());
+      // 
+      // this.afterTransform();
     });
     this.addButton(Z4Translations.ROTATE_MINUS_90, true, 11, 2, "both", 0, event => {
       // this.canvas.rotatePlus90();
@@ -63,6 +60,19 @@ class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
       // this.afterTransform();
     });
     Z4UI.addVLine(this, new GBC(16, 0).h(3).wxy(1, 1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+  }
+
+   flip(operation, apply) {
+    let sizeCanvas = this.canvas.getSize();
+    let centerCanvas = new Point(sizeCanvas.width / 2, sizeCanvas.height / 2);
+    for (let index = 0; index < this.canvas.getLayersCount(); index++) {
+      let layer = this.canvas.getLayerAt(index);
+      operation(layer);
+      let newOffset = apply(centerCanvas, layer.getOffset(), layer.getSize());
+      layer.move(newOffset.x, newOffset.y);
+    }
+    document.querySelectorAll(".z4layerpreview .z4layerpreview-setlayer").forEach(element => (element).click());
+    this.afterTransform();
   }
 
    afterTransform() {

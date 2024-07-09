@@ -28,12 +28,13 @@ import pizzapazza.util.Z4Layer;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import simulation.js.$Apply_0_Void;
+import simulation.js.$Apply_1_Void;
+import simulation.js.$Apply_3_V;
 import simulation.js.$File;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.$typeof;
 import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.navigator;
-import static simulation.js.$Globals.parseInt;
 import static simulation.js.$Globals.window;
 
 /**
@@ -72,28 +73,23 @@ public class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
     Z4UI.addVLine(this, new GBC(9, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
     Z4UI.addLabel(this, Z4Translations.TRANSFORM, new GBC(10, 0).w(3).a(GBC.WEST).i(5, 5, 2, 0));
-    this.addButton(Z4Translations.FLIP_HORIZONTAL, true, 10, 1, "left", 0, event -> {
-      document.querySelectorAll(".z4layerpreview .z4layerpreview-fliphorizontal").forEach(element -> ((HTMLElement) element).click());
-      this.afterTransform();
-    }).getStyle().marginBottom = "5px";
-    this.addButton(Z4Translations.FLIP_VERTICAL, true, 11, 1, "both", 0, event -> {
-      document.querySelectorAll(".z4layerpreview .z4layerpreview-flipvertical").forEach(element -> ((HTMLElement) element).click());
-      this.afterTransform();
-    }).getStyle().marginBottom = "5px";
+    this.addButton(Z4Translations.FLIP_HORIZONTAL, true, 10, 1, "left", 0, event -> this.flip(layer -> layer.flipHorizonal(), (centerCanvas, offsetLayer, sizeLayer) -> new Point(2 * centerCanvas.x - offsetLayer.x - sizeLayer.width, offsetLayer.y))).getStyle().marginBottom = "5px";
+    this.addButton(Z4Translations.FLIP_VERTICAL, true, 11, 1, "both", 0, event -> this.flip(layer -> layer.flipVertical(), (centerCanvas, offsetLayer, sizeLayer) -> new Point(offsetLayer.x, 2 * centerCanvas.y - offsetLayer.y - sizeLayer.height))).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.RESIZE, true, 12, 1, "right", 0, event -> {
+//      TODO
     }).getStyle().marginBottom = "5px";
     this.addButton(Z4Translations.ROTATE_PLUS_90, true, 10, 2, "left", 0, event -> {
-      for (int index = 0; index < this.canvas.getLayersCount(); index++) {
-        Z4Layer layer = this.canvas.getLayerAt(index);
-        Point offset = layer.getOffset();
-        Dimension sizeLayer = layer.getSize();
-        Dimension sizeCanvas = this.canvas.getSize();
-      }
-
-      this.canvas.rotatePlus90();
-      document.querySelectorAll(".z4layerpreview .z4layerpreview-rotateplus90").forEach(element -> ((HTMLElement) element).click());
-
-      this.afterTransform();
+//      for (int index = 0; index < this.canvas.getLayersCount(); index++) {
+//        Z4Layer layer = this.canvas.getLayerAt(index);
+//        Point offset = layer.getOffset();
+//        Dimension sizeLayer = layer.getSize();
+//        Dimension sizeCanvas = this.canvas.getSize();
+//      }
+//
+//      this.canvas.rotatePlus90();
+//      document.querySelectorAll(".z4layerpreview .z4layerpreview-rotateplus90").forEach(element -> ((HTMLElement) element).click());
+//
+//      this.afterTransform();
     });
     this.addButton(Z4Translations.ROTATE_MINUS_90, true, 11, 2, "both", 0, event -> {
 //      this.canvas.rotatePlus90();
@@ -106,6 +102,21 @@ public class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
     });
 
     Z4UI.addVLine(this, new GBC(16, 0).h(3).wxy(1, 1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+  }
+
+  private void flip($Apply_1_Void<Z4Layer> operation, $Apply_3_V<Point, Point, Dimension, Point> apply) {
+    Dimension sizeCanvas = this.canvas.getSize();
+    Point centerCanvas = new Point(sizeCanvas.width / 2, sizeCanvas.height / 2);
+
+    for (int index = 0; index < this.canvas.getLayersCount(); index++) {
+      Z4Layer layer = this.canvas.getLayerAt(index);
+      operation.$apply(layer);
+      Point newOffset = apply.$apply(centerCanvas, layer.getOffset(), layer.getSize());
+      layer.move(newOffset.x, newOffset.y);
+    }
+
+    document.querySelectorAll(".z4layerpreview .z4layerpreview-setlayer").forEach(element -> ((HTMLElement) element).click());
+    this.afterTransform();
   }
 
   private void afterTransform() {

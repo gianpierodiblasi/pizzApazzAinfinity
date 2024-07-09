@@ -11,5 +11,5 @@ package simulation.js;
 @FunctionalInterface
 public interface $Apply_2_Void<T,S> {
 
-  void $apply(T elementT, S elementS);
+  public void $apply(T elementT, S elementS);
 }

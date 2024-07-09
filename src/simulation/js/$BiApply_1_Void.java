@@ -13,5 +13,5 @@ package simulation.js;
 @FunctionalInterface
 public interface $BiApply_1_Void<A, B, T extends $Apply_1_Void<A>, U extends $Apply_1_Void<B>> {
 
-  void $apply(T resolve, U reject);
+  public void $apply(T resolve, U reject);
 }
