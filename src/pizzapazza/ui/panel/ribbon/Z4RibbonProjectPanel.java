@@ -115,6 +115,7 @@ public class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
     this.afterTransform();
   }
 
+  @SuppressWarnings("SuspiciousNameCombination")
   private void rotatePlus90() {
     Dimension sizeCanvas = this.canvas.getSize();
     Point centerCanvas = new Point(sizeCanvas.width / 2, sizeCanvas.height / 2);
