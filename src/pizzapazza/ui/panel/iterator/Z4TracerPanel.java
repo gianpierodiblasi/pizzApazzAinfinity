@@ -26,6 +26,7 @@ public class Z4TracerPanel extends Z4PointIteratorPanel<Z4Tracer> {
   private final Z4FancifulValuePanel multiplicity = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTALLY_VERTICAL);
   private final Z4FancifulValuePanel push = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTALLY_VERTICAL);
   private final Z4FancifulValuePanel step = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTALLY_VERTICAL);
+  private final JSCheckBox assistedDrawing = new JSCheckBox();
 
   private final Z4FancifulValuePanel attack = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTALLY_VERTICAL);
   private final Z4FancifulValuePanel sustain = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTALLY_VERTICAL);
@@ -81,7 +82,11 @@ public class Z4TracerPanel extends Z4PointIteratorPanel<Z4Tracer> {
     this.release.addChangeListener(event -> this.onIteratorChange(this.release.getValueIsAdjusting()));
     this.add(this.release, new GBC(5, 0));
 
-    this.add(this.rotation, new GBC(0, 1).w(3).i(1, 0, 0, 0));
+    this.assistedDrawing.setText(Z4Translations.ASSISTED_DRAWING);
+    this.assistedDrawing.addActionListener(event -> this.onIteratorChange(false));
+    this.add(this.assistedDrawing, new GBC(0, 1).w(3).a(GBC.WEST));
+
+    this.add(this.rotation, new GBC(0, 2).w(3).a(GBC.WEST));
 
     this.setValue(new Z4Tracer(
             new Z4FancifulValue(
@@ -108,6 +113,7 @@ public class Z4TracerPanel extends Z4PointIteratorPanel<Z4Tracer> {
                     new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
                     new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
                     false),
+            true,
             new Z4Rotation(0, new Z4FancifulValue(
                     new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
                     new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
@@ -124,7 +130,7 @@ public class Z4TracerPanel extends Z4PointIteratorPanel<Z4Tracer> {
     this.value = new Z4Tracer(
             this.multiplicity.getValue(), this.push.getValue(),
             this.attack.getValue(), this.sustain.getValue(), this.release.getValue(), this.endlessSustain.isSelected(),
-            this.step.getValue(),
+            this.step.getValue(), this.assistedDrawing.isSelected(),
             this.rotation.getValue());
 
     this.onchange();
@@ -145,6 +151,7 @@ public class Z4TracerPanel extends Z4PointIteratorPanel<Z4Tracer> {
     this.endlessSustain.setSelected(value.isEndlessSustain());
 
     this.step.setValue(value.getStep());
+    this.assistedDrawing.setSelected(value.isAssistedDrawing());
   }
 
   @Override
@@ -160,5 +167,6 @@ public class Z4TracerPanel extends Z4PointIteratorPanel<Z4Tracer> {
     this.endlessSustain.setEnabled(b);
 
     this.step.setEnabled(b);
+    this.assistedDrawing.setEnabled(b);
   }
 }

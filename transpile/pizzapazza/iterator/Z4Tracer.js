@@ -19,6 +19,8 @@ class Z4Tracer extends Z4PointIterator {
 
    step = null;
 
+   assistedDrawing = false;
+
    path = null;
 
    before = null;
@@ -63,9 +65,10 @@ class Z4Tracer extends Z4PointIterator {
    * @param release The release
    * @param endlessSustain true for an endless sustain, false otherwise
    * @param step The step
+   * @param assistedDrawing true to use the assisted drawing, false otherwise
    * @param rotation The rotation
    */
-  constructor(multiplicity, push, attack, sustain, release, endlessSustain, step, rotation) {
+  constructor(multiplicity, push, attack, sustain, release, endlessSustain, step, assistedDrawing, rotation) {
     super(rotation);
     this.multiplicity = multiplicity;
     this.push = push;
@@ -74,6 +77,7 @@ class Z4Tracer extends Z4PointIterator {
     this.release = release;
     this.endlessSustain = endlessSustain;
     this.step = step;
+    this.assistedDrawing = assistedDrawing;
   }
 
    getType() {
@@ -143,6 +147,15 @@ class Z4Tracer extends Z4PointIterator {
     return this.step;
   }
 
+  /**
+   * Checks if the assisted drawing is active
+   *
+   * @return true if the assisted drawing is active, false otherwise
+   */
+   isAssistedDrawing() {
+    return this.assistedDrawing;
+  }
+
    drawAction(action, progression, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.currentPoint = new Z4Point(x, y);
@@ -167,7 +180,15 @@ class Z4Tracer extends Z4PointIterator {
       this.currentMultiplicityCounter = 0;
       this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
       let distance = Z4Math.distance(this.currentPoint.x, this.currentPoint.y, x, y);
-      if (distance >= 10) {
+      if (!this.assistedDrawing) {
+        this.path = Z4TracerPath.fromLine(this.currentPoint.x, this.currentPoint.y, x, y, this.surplus, this.envelopeStep);
+        this.connect = true;
+        this.currentPoint = new Z4Point(x, y);
+        this.hasNext = this.path.hasNext();
+        if (!this.hasNext) {
+          this.surplus = this.path.getNewSurplus();
+        }
+      } else if (distance >= 10) {
         let angle = Z4Math.atan(this.currentPoint.x, this.currentPoint.y, x, y);
         let vector = Z4Vector.fromVector(this.currentPoint.x, this.currentPoint.y, 2 * distance / 3, angle);
         let end = new Z4Point(vector.x, vector.y);
@@ -322,6 +343,7 @@ class Z4Tracer extends Z4PointIterator {
     json["release"] = this.release.toJSON();
     json["endlessSustain"] = this.endlessSustain;
     json["step"] = this.step.toJSON();
+    json["assistedDrawing"] = this.assistedDrawing;
     return json;
   }
 
@@ -332,6 +354,6 @@ class Z4Tracer extends Z4PointIterator {
    * @return the tracer
    */
   static  fromJSON(json) {
-    return new Z4Tracer(Z4FancifulValue.fromJSON(json["multiplicity"]), Z4FancifulValue.fromJSON(json["push"]), Z4FancifulValue.fromJSON(json["attack"]), Z4FancifulValue.fromJSON(json["sustain"]), Z4FancifulValue.fromJSON(json["release"]), json["endlessSustain"], Z4FancifulValue.fromJSON(json["step"]), Z4Rotation.fromJSON(json["rotation"]));
+    return new Z4Tracer(Z4FancifulValue.fromJSON(json["multiplicity"]), Z4FancifulValue.fromJSON(json["push"]), Z4FancifulValue.fromJSON(json["attack"]), Z4FancifulValue.fromJSON(json["sustain"]), Z4FancifulValue.fromJSON(json["release"]), json["endlessSustain"], Z4FancifulValue.fromJSON(json["step"]), json["assistedDrawing"], Z4Rotation.fromJSON(json["rotation"]));
   }
 }

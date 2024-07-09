@@ -317,6 +317,8 @@ class Z4Translations {
 
   static  SCATTERING = "";
 
+  static  ASSISTED_DRAWING = "";
+
   // Painter
   static  TENSION = "";
 
@@ -632,6 +634,7 @@ class Z4Translations {
     Z4Translations.SPEED = "Speed";
     Z4Translations.DRAW_WHILE_MOVING = "Draw While Moving";
     Z4Translations.SCATTERING = "Scattering";
+    Z4Translations.ASSISTED_DRAWING = "Assisted Drawing";
     // Painter
     Z4Translations.TENSION = "Tension";
     Z4Translations.HOLE = "Hole";
@@ -868,6 +871,7 @@ class Z4Translations {
     Z4Translations.SPEED = "Velocit\u00E0";
     Z4Translations.DRAW_WHILE_MOVING = "Disegna Durante il Movimento";
     Z4Translations.SCATTERING = "Dispersione";
+    Z4Translations.ASSISTED_DRAWING = "Disegno Assistito";
     // Painter
     Z4Translations.TENSION = "Tensione";
     Z4Translations.HOLE = "Buco";
