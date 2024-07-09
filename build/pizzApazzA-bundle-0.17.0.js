@@ -2755,27 +2755,17 @@ class Z4Canvas extends JSComponent {
    * Rotates the canvas in clockwise
    */
    rotatePlus90() {
-    this.setSize(this.height, this.width);
-    this.statusPanel.setProjectSize(this.width, this.height);
-    this.statusPanel.resetCanvasGridPanel(this.width, this.height, true);
-    this.canvas.width = this.width * this.zoom;
-    this.canvas.height = this.height * this.zoom;
-    this.canvasGrid.width = this.width * this.zoom;
-    this.canvasGrid.height = this.height * this.zoom;
-    this.canvasBounds.width = this.width * this.zoom;
-    this.canvasBounds.height = this.height * this.zoom;
-    this.drawCanvas();
-    this.drawCanvasGrid();
-    this.drawCanvasBounds();
+    this.resize(this.height, this.width);
   }
 
   /**
    * Resizes the canvas
    *
-   * @param resizeOptions The resize options
+   * @param width The width
+   * @param height The height
    */
-   resize(resizeOptions) {
-    this.setSize(resizeOptions.containerWidth, resizeOptions.containerHeight);
+   resize(width, height) {
+    this.setSize(width, height);
     this.statusPanel.setProjectSize(this.width, this.height);
     this.statusPanel.resetCanvasGridPanel(this.width, this.height, true);
     this.canvas.width = this.width * this.zoom;
@@ -6565,7 +6555,7 @@ class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
             layer.resize(new Z4ResizeOptions(parseInt(layerSize.width * scaleW), parseInt(layerSize.height * scaleH), parseInt(layerSize.width * scaleW), parseInt(layerSize.height * scaleH), 0, 0));
             layer.move(resizeOptions.contentOffsetX + parseInt(layerOffset.x * scaleW), resizeOptions.contentOffsetY + parseInt(layerOffset.y * scaleH));
           }
-          this.canvas.resize(resizeOptions);
+          this.canvas.resize(resizeOptions.containerWidth, resizeOptions.containerHeight);
           document.querySelectorAll(".z4layerpreview .z4layerpreview-setlayer").forEach(element => (element).click());
           this.afterTransform();
         }

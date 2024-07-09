@@ -109,7 +109,7 @@ public class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
             layer.resize(new Z4ResizeOptions(parseInt(layerSize.width * scaleW), parseInt(layerSize.height * scaleH), parseInt(layerSize.width * scaleW), parseInt(layerSize.height * scaleH), 0, 0));
             layer.move(resizeOptions.contentOffsetX + parseInt(layerOffset.x * scaleW), resizeOptions.contentOffsetY + parseInt(layerOffset.y * scaleH));
           }
-          this.canvas.resize(resizeOptions);
+          this.canvas.resize(resizeOptions.containerWidth, resizeOptions.containerHeight);
 
           document.querySelectorAll(".z4layerpreview .z4layerpreview-setlayer").forEach(element -> ((HTMLElement) element).click());
           this.afterTransform();
