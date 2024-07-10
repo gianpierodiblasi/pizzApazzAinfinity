@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6};
+var data = {"i0":6,"i1":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -166,6 +166,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Fills an image</div>
 </td>
 </tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>java.lang.Object</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getFillingColor()">getFillingColor</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the filling color (an instance of Color or Z4GradientColor) if it
+ exists</div>
+</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -186,7 +194,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <a id="fill(def.dom.ImageData)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>fill</h4>
 <pre class="methodSignature">void&nbsp;fill&#8203;(def.dom.ImageData&nbsp;imageData)</pre>
@@ -194,6 +202,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>imageData</code> - The image data</dd>
+</dl>
+</li>
+</ul>
+<a id="getFillingColor()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getFillingColor</h4>
+<pre class="methodSignature">java.lang.Object&nbsp;getFillingColor()</pre>
+<div class="block">Returns the filling color (an instance of Color or Z4GradientColor) if it
+ exists</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The filling color (an instance of Color or Z4GradientColor)</dd>
 </dl>
 </li>
 </ul>

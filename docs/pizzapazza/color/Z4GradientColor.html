@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":9,"i6":10,"i7":10,"i8":10,"i9":9,"i10":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -252,13 +252,20 @@ extends <a href="Z4AbstractGradientColor.html" title="class in pizzapazza.color"
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>static def.js.Array&lt;<a href="Z4GradientColor.html" title="class in pizzapazza.color">Z4GradientColor</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getHistory()">getHistory</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the gradient color history</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="Z4GradientColor.html" title="class in pizzapazza.color">Z4GradientColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#lighted(boolean)">lighted</a></span>&#8203;(boolean&nbsp;inOut)</code></th>
 <td class="colLast">
 <div class="block">Lights up this Z4GradientColor, the transparency is not changed</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected simulation.js.$Object</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#mapColor(javascript.awt.Color,int)">mapColor</a></span>&#8203;(javascript.awt.Color&nbsp;color,
         int&nbsp;index)</code></th>
@@ -266,11 +273,26 @@ extends <a href="Z4AbstractGradientColor.html" title="class in pizzapazza.color"
 <div class="block">Maps a color to a JSON object</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#mergeOverlapping(double)">mergeOverlapping</a></span>&#8203;(double&nbsp;tolerance)</code></th>
 <td class="colLast">
 <div class="block">Merges overlapping colors based on a tolerance</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pushHistory(pizzapazza.color.Z4GradientColor)">pushHistory</a></span>&#8203;(<a href="Z4GradientColor.html" title="class in pizzapazza.color">Z4GradientColor</a>&nbsp;color)</code></th>
+<td class="colLast">
+<div class="block">Pushes a gradient color in the gradient color history (if not already
+ present)</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resetHistory()">resetHistory</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Resets the gradient color history</div>
 </td>
 </tr>
 </table>
@@ -459,7 +481,7 @@ extends <a href="Z4AbstractGradientColor.html" title="class in pizzapazza.color"
 <a id="fromJSON(simulation.js.$Object)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>fromJSON</h4>
 <pre class="methodSignature">public static&nbsp;<a href="Z4GradientColor.html" title="class in pizzapazza.color">Z4GradientColor</a>&nbsp;fromJSON&#8203;(simulation.js.$Object&nbsp;json)</pre>
@@ -470,6 +492,45 @@ extends <a href="Z4AbstractGradientColor.html" title="class in pizzapazza.color"
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the color</dd>
 </dl>
+</li>
+</ul>
+<a id="pushHistory(pizzapazza.color.Z4GradientColor)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>pushHistory</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;pushHistory&#8203;(<a href="Z4GradientColor.html" title="class in pizzapazza.color">Z4GradientColor</a>&nbsp;color)</pre>
+<div class="block">Pushes a gradient color in the gradient color history (if not already
+ present)</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>color</code> - The gradient color</dd>
+</dl>
+</li>
+</ul>
+<a id="getHistory()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getHistory</h4>
+<pre class="methodSignature">public static&nbsp;def.js.Array&lt;<a href="Z4GradientColor.html" title="class in pizzapazza.color">Z4GradientColor</a>&gt;&nbsp;getHistory()</pre>
+<div class="block">Returns the gradient color history</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The gradient color history</dd>
+</dl>
+</li>
+</ul>
+<a id="resetHistory()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>resetHistory</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;resetHistory()</pre>
+<div class="block">Resets the gradient color history</div>
 </li>
 </ul>
 </li>

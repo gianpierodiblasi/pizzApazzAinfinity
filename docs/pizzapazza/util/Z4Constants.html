@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9};
+var data = {"i0":9,"i1":9,"i2":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -313,6 +313,14 @@ extends java.lang.Object</pre>
 <div class="block">Configures the arrays of accepted file types</div>
 </td>
 </tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pushHistory(java.lang.Object)">pushHistory</a></span>&#8203;(java.lang.Object&nbsp;object)</code></th>
+<td class="colLast">
+<div class="block">Pushes an object in its object history (if the history exists and if not
+ already present)</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -562,7 +570,7 @@ extends java.lang.Object</pre>
 <a id="$getStyle(java.lang.Object)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>$getStyle</h4>
 <pre class="methodSignature">public static&nbsp;jsweet.util.union.Union4&lt;java.lang.String,&#8203;def.dom.CanvasGradient,&#8203;def.dom.CanvasPattern,&#8203;java.lang.Object&gt;&nbsp;$getStyle&#8203;(java.lang.Object&nbsp;style)</pre>
@@ -572,6 +580,21 @@ extends java.lang.Object</pre>
 <dd><code>style</code> - The style</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The style</dd>
+</dl>
+</li>
+</ul>
+<a id="pushHistory(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>pushHistory</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;pushHistory&#8203;(java.lang.Object&nbsp;object)</pre>
+<div class="block">Pushes an object in its object history (if the history exists and if not
+ already present)</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>object</code> - The object</dd>
 </dl>
 </li>
 </ul>

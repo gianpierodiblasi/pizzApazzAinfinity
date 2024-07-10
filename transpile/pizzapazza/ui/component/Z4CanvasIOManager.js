@@ -199,7 +199,7 @@ class Z4CanvasIOManager {
         } else if (json["history"]) {
           this.jsonToHistory(zip, json, 0, json["currentKeyHistory"], 0);
         } else {
-          this.jsonToDrawingTools(zip, () => {
+          this.jsonToArrays(zip, () => {
             this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
             this.canvas.toHistory(json2 => this.ribbonHistoryPanel.addHistory(json2, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
             Z4UI.pleaseWaitCompleted();
@@ -231,7 +231,7 @@ class Z4CanvasIOManager {
       } else if (index + 1 < (json["history"]).length) {
         this.ribbonHistoryPanel.addHistory(layerJSON, currentKey => this.jsonToHistory(zip, json, index + 1, previousCurrentKey, previousCurrentKey === historyKey ? currentKey : newCurrentKey), true);
       } else {
-        this.ribbonHistoryPanel.addHistory(layerJSON, currentKey => this.jsonToDrawingTools(zip, () => {
+        this.ribbonHistoryPanel.addHistory(layerJSON, currentKey => this.jsonToArrays(zip, () => {
           this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey === historyKey ? currentKey : newCurrentKey);
           this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
           Z4UI.pleaseWaitCompleted();
@@ -240,11 +240,20 @@ class Z4CanvasIOManager {
     });
   }
 
-   jsonToDrawingTools(zip, apply) {
-    let zipObject = zip.file("drawingTools.json");
+   jsonToArrays(zip, apply) {
+    this.jsonToArray(zip, "drawingTools", false, drawingTool => this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)), () => this.jsonToArray(zip, "colors", true, color => Color.pushHistory(Color.fromJSON(color)), () => this.jsonToArray(zip, "gradientcolors", true, color => Z4GradientColor.pushHistory(Z4GradientColor.fromJSON(color)), () => this.jsonToArray(zip, "bigradientcolors", true, color => Z4BiGradientColor.pushHistory(Z4BiGradientColor.fromJSON(color)), apply))));
+  }
+
+   jsonToArray(zip, name, reverse, applyObj, apply) {
+    let zipObject = zip.file(name + ".json");
     if (zipObject) {
       zipObject.async("string", null).then(str => {
-        ((JSON.parse(str))["drawingTools"]).forEach(drawingTool => this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
+        let array = (JSON.parse(str))[name];
+        if (reverse) {
+          array.reverse().forEach(obj => applyObj(obj));
+        } else {
+          array.forEach(obj => applyObj(obj));
+        }
         apply();
       });
     } else {

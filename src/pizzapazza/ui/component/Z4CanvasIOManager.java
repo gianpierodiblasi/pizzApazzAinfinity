@@ -255,7 +255,7 @@ public class Z4CanvasIOManager {
         } else if ($exists(json.$get("history"))) {
           this.jsonToHistory(zip, json, 0, json.$get("currentKeyHistory"), 0);
         } else {
-          this.jsonToDrawingTools(zip, () -> {
+          this.jsonToArrays(zip, () -> {
             this.canvas.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
             this.canvas.toHistory(json2 -> this.ribbonHistoryPanel.addHistory(json2, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
             Z4UI.pleaseWaitCompleted();
@@ -291,7 +291,7 @@ public class Z4CanvasIOManager {
       } else if (index + 1 < ((Array<Integer>) json.$get("history")).length) {
         this.ribbonHistoryPanel.addHistory(layerJSON, currentKey -> this.jsonToHistory(zip, json, index + 1, previousCurrentKey, previousCurrentKey == historyKey ? currentKey : newCurrentKey), true);
       } else {
-        this.ribbonHistoryPanel.addHistory(layerJSON, currentKey -> this.jsonToDrawingTools(zip, () -> {
+        this.ribbonHistoryPanel.addHistory(layerJSON, currentKey -> this.jsonToArrays(zip, () -> {
           this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey == historyKey ? currentKey : newCurrentKey);
           this.canvas.afterCreate(json.$get("projectName"), json.$get("width"), json.$get("height"));
           Z4UI.pleaseWaitCompleted();
@@ -301,11 +301,27 @@ public class Z4CanvasIOManager {
   }
 
   @SuppressWarnings("unchecked")
-  private void jsonToDrawingTools($JSZip zip, $Apply_0_Void apply) {
-    $ZipObject zipObject = zip.file("drawingTools.json");
+  private void jsonToArrays($JSZip zip, $Apply_0_Void apply) {
+    this.jsonToArray(zip, "drawingTools", false, drawingTool -> this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(($Object) drawingTool)),
+            () -> this.jsonToArray(zip, "colors", true, color -> Color.pushHistory(Color.fromJSON(($Object) color)),
+                    () -> this.jsonToArray(zip, "gradientcolors", true, color -> Z4GradientColor.pushHistory(Z4GradientColor.fromJSON(($Object) color)),
+                            () -> this.jsonToArray(zip, "bigradientcolors", true, color -> Z4BiGradientColor.pushHistory(Z4BiGradientColor.fromJSON(($Object) color)), apply)
+                    )
+            )
+    );
+  }
+
+  @SuppressWarnings("unchecked")
+  private void jsonToArray($JSZip zip, String name, boolean reverse, $Apply_1_Void<Object> applyObj, $Apply_0_Void apply) {
+    $ZipObject zipObject = zip.file(name + ".json");
     if ($exists(zipObject)) {
       zipObject.async("string", null).then(str -> {
-        ((Iterable<$Object>) (($Object) JSON.parse((String) str)).$get("drawingTools")).forEach(drawingTool -> this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
+        Array<$Object> array = (($Object) JSON.parse((String) str)).$get(name);
+        if (reverse) {
+          array.reverse().forEach(obj -> applyObj.$apply(obj));
+        } else {
+          array.forEach(obj -> applyObj.$apply(obj));
+        }
         apply.$apply();
       });
     } else {

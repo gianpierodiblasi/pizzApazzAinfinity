@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var data = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":9,"i5":10,"i6":10,"i7":10,"i8":9,"i9":9,"i10":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -242,20 +242,27 @@ extends <a href="Z4AbstractGradientColor.html" title="class in pizzapazza.color"
 </td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>static def.js.Array&lt;<a href="Z4BiGradientColor.html" title="class in pizzapazza.color">Z4BiGradientColor</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getHistory()">getHistory</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the bigradient color history</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#gradientMirror()">gradientMirror</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Mirrors each gradient color</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#gradientReverse()">gradientReverse</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Reverses each gradient color</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected simulation.js.$Object</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#mapColor(pizzapazza.color.Z4GradientColor,int)">mapColor</a></span>&#8203;(<a href="Z4GradientColor.html" title="class in pizzapazza.color">Z4GradientColor</a>&nbsp;color,
         int&nbsp;index)</code></th>
@@ -263,7 +270,22 @@ extends <a href="Z4AbstractGradientColor.html" title="class in pizzapazza.color"
 <div class="block">Maps a color to a JSON object</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pushHistory(pizzapazza.color.Z4BiGradientColor)">pushHistory</a></span>&#8203;(<a href="Z4BiGradientColor.html" title="class in pizzapazza.color">Z4BiGradientColor</a>&nbsp;color)</code></th>
+<td class="colLast">
+<div class="block">Pushes a bigradient color in the bigradient color history (if not already
+ present)</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resetHistory()">resetHistory</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Resets the bigradient color history</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setGradientRipple(double)">setGradientRipple</a></span>&#8203;(double&nbsp;rippleGradient)</code></th>
 <td class="colLast">
@@ -434,7 +456,7 @@ extends <a href="Z4AbstractGradientColor.html" title="class in pizzapazza.color"
 <a id="fromJSON(simulation.js.$Object)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>fromJSON</h4>
 <pre class="methodSignature">public static&nbsp;<a href="Z4BiGradientColor.html" title="class in pizzapazza.color">Z4BiGradientColor</a>&nbsp;fromJSON&#8203;(simulation.js.$Object&nbsp;json)</pre>
@@ -445,6 +467,45 @@ extends <a href="Z4AbstractGradientColor.html" title="class in pizzapazza.color"
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the color</dd>
 </dl>
+</li>
+</ul>
+<a id="pushHistory(pizzapazza.color.Z4BiGradientColor)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>pushHistory</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;pushHistory&#8203;(<a href="Z4BiGradientColor.html" title="class in pizzapazza.color">Z4BiGradientColor</a>&nbsp;color)</pre>
+<div class="block">Pushes a bigradient color in the bigradient color history (if not already
+ present)</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>color</code> - The bigradient color</dd>
+</dl>
+</li>
+</ul>
+<a id="getHistory()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getHistory</h4>
+<pre class="methodSignature">public static&nbsp;def.js.Array&lt;<a href="Z4BiGradientColor.html" title="class in pizzapazza.color">Z4BiGradientColor</a>&gt;&nbsp;getHistory()</pre>
+<div class="block">Returns the bigradient color history</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The bigradient color history</dd>
+</dl>
+</li>
+</ul>
+<a id="resetHistory()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>resetHistory</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;resetHistory()</pre>
+<div class="block">Resets the bigradient color history</div>
 </li>
 </ul>
 </li>

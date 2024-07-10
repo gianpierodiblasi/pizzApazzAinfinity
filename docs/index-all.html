@@ -1153,6 +1153,15 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/ui/panel/filler/Z4VertexBasedFillerPanel.html#getFiller(pizzapazza.color.Z4GradientColor,def.js.Array,java.lang.Object)">getFiller(Z4GradientColor, Array&lt;Point&gt;, Object)</a></span> - Method in class pizzapazza.ui.panel.filler.<a href="pizzapazza/ui/panel/filler/Z4VertexBasedFillerPanel.html" title="class in pizzapazza.ui.panel.filler">Z4VertexBasedFillerPanel</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/filler/Z4AbstractFiller.html#getFillingColor()">getFillingColor()</a></span> - Method in interface pizzapazza.filler.<a href="pizzapazza/filler/Z4AbstractFiller.html" title="interface in pizzapazza.filler">Z4AbstractFiller</a></dt>
+<dd>
+<div class="block">Returns the filling color (an instance of Color or Z4GradientColor) if it
+ exists</div>
+</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/filler/Z4AbstractGradientColorFiller.html#getFillingColor()">getFillingColor()</a></span> - Method in class pizzapazza.filler.<a href="pizzapazza/filler/Z4AbstractGradientColorFiller.html" title="class in pizzapazza.filler">Z4AbstractGradientColorFiller</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/filler/Z4TextureFiller.html#getFillingColor()">getFillingColor()</a></span> - Method in class pizzapazza.filler.<a href="pizzapazza/filler/Z4TextureFiller.html" title="class in pizzapazza.filler">Z4TextureFiller</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/iterator/Z4Airbrush.html#getGaussianCorrection()">getGaussianCorrection()</a></span> - Method in class pizzapazza.iterator.<a href="pizzapazza/iterator/Z4Airbrush.html" title="class in pizzapazza.iterator">Z4Airbrush</a></dt>
 <dd>
 <div class="block">Returns the gaussian correction</div>
@@ -1180,6 +1189,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="pizzapazza/painter/Z4Shape2DPainter.html#getHeight()">getHeight()</a></span> - Method in class pizzapazza.painter.<a href="pizzapazza/painter/Z4Shape2DPainter.html" title="class in pizzapazza.painter">Z4Shape2DPainter</a></dt>
 <dd>
 <div class="block">Returns the height</div>
+</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/color/Z4BiGradientColor.html#getHistory()">getHistory()</a></span> - Static method in class pizzapazza.color.<a href="pizzapazza/color/Z4BiGradientColor.html" title="class in pizzapazza.color">Z4BiGradientColor</a></dt>
+<dd>
+<div class="block">Returns the bigradient color history</div>
+</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/color/Z4GradientColor.html#getHistory()">getHistory()</a></span> - Static method in class pizzapazza.color.<a href="pizzapazza/color/Z4GradientColor.html" title="class in pizzapazza.color">Z4GradientColor</a></dt>
+<dd>
+<div class="block">Returns the gradient color history</div>
 </dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/painter/Z4CenteredFigurePainter.html#getHole()">getHole()</a></span> - Method in class pizzapazza.painter.<a href="pizzapazza/painter/Z4CenteredFigurePainter.html" title="class in pizzapazza.painter">Z4CenteredFigurePainter</a></dt>
 <dd>
@@ -2344,6 +2361,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/util/Z4Translations.html#PUSH">PUSH</a></span> - Static variable in class pizzapazza.util.<a href="pizzapazza/util/Z4Translations.html" title="class in pizzapazza.util">Z4Translations</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/util/Z4Constants.html#pushHistory(java.lang.Object)">pushHistory(Object)</a></span> - Static method in class pizzapazza.util.<a href="pizzapazza/util/Z4Constants.html" title="class in pizzapazza.util">Z4Constants</a></dt>
+<dd>
+<div class="block">Pushes an object in its object history (if the history exists and if not
+ already present)</div>
+</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/color/Z4BiGradientColor.html#pushHistory(pizzapazza.color.Z4BiGradientColor)">pushHistory(Z4BiGradientColor)</a></span> - Static method in class pizzapazza.color.<a href="pizzapazza/color/Z4BiGradientColor.html" title="class in pizzapazza.color">Z4BiGradientColor</a></dt>
+<dd>
+<div class="block">Pushes a bigradient color in the bigradient color history (if not already
+ present)</div>
+</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/color/Z4GradientColor.html#pushHistory(pizzapazza.color.Z4GradientColor)">pushHistory(Z4GradientColor)</a></span> - Static method in class pizzapazza.color.<a href="pizzapazza/color/Z4GradientColor.html" title="class in pizzapazza.color">Z4GradientColor</a></dt>
+<dd>
+<div class="block">Pushes a gradient color in the gradient color history (if not already
+ present)</div>
+</dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/ui/panel/filler/Z4AbstractFillerPanel.html#pushPointPositions(def.js.Array,int,int)">pushPointPositions(Array&lt;Point&gt;, int, int)</a></span> - Method in class pizzapazza.ui.panel.filler.<a href="pizzapazza/ui/panel/filler/Z4AbstractFillerPanel.html" title="class in pizzapazza.ui.panel.filler">Z4AbstractFillerPanel</a></dt>
 <dd>
 <div class="block">Pushes the point positions</div>
@@ -2469,6 +2501,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="pizzapazza/ui/panel/Z4StatusPanel.html#resetCanvasGridPanel(int,int,boolean)">resetCanvasGridPanel(int, int, boolean)</a></span> - Method in class pizzapazza.ui.panel.<a href="pizzapazza/ui/panel/Z4StatusPanel.html" title="class in pizzapazza.ui.panel">Z4StatusPanel</a></dt>
 <dd>
 <div class="block">Resets the canvas grid panel</div>
+</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/color/Z4BiGradientColor.html#resetHistory()">resetHistory()</a></span> - Static method in class pizzapazza.color.<a href="pizzapazza/color/Z4BiGradientColor.html" title="class in pizzapazza.color">Z4BiGradientColor</a></dt>
+<dd>
+<div class="block">Resets the bigradient color history</div>
+</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/color/Z4GradientColor.html#resetHistory()">resetHistory()</a></span> - Static method in class pizzapazza.color.<a href="pizzapazza/color/Z4GradientColor.html" title="class in pizzapazza.color">Z4GradientColor</a></dt>
+<dd>
+<div class="block">Resets the gradient color history</div>
 </dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/ui/panel/ribbon/Z4RibbonHistoryPanel.html#resetHistory(simulation.js.$Apply_0_Void)">resetHistory($Apply_0_Void)</a></span> - Method in class pizzapazza.ui.panel.ribbon.<a href="pizzapazza/ui/panel/ribbon/Z4RibbonHistoryPanel.html" title="class in pizzapazza.ui.panel.ribbon">Z4RibbonHistoryPanel</a></dt>
 <dd>
