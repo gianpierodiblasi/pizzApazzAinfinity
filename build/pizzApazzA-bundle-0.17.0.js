@@ -3253,11 +3253,10 @@ class Z4CanvasIOManager {
       let zip = new JSZip();
       this.layerToJSON(zip, projectName, new Array(), 0, obj => {
         let finish = () => {
-          let json = new Object();
-          let array = new Array();
-          this.drawingTools.forEach(drawingTool => array.push(drawingTool.toJSON()));
-          json["drawingTools"] = array;
-          zip.file("drawingTools.json", JSON.stringify(json), null);
+          this.writeJSONArray(zip, "drawingTools", array => this.drawingTools.forEach(drawingTool => array.push(drawingTool.toJSON())));
+          this.writeJSONArray(zip, "colors", array => Color.getHistory().forEach(color => array.push(color.getJSON())));
+          this.writeJSONArray(zip, "gradientcolors", array => Z4GradientColor.getHistory().forEach(color => array.push(color.toJSON())));
+          this.writeJSONArray(zip, "bigradientcolors", array => Z4BiGradientColor.getHistory().forEach(color => array.push(color.toJSON())));
           zip.file("manifest.json", JSON.stringify(obj), null);
           let options = new Object();
           options["type"] = "blob";
@@ -3280,6 +3279,14 @@ class Z4CanvasIOManager {
         this.historyToJSON(zip, obj, finish);
       });
     });
+  }
+
+   writeJSONArray(zip, name, apply) {
+    let json = new Object();
+    let array = new Array();
+    apply(array);
+    json[name] = array;
+    zip.file(name + ".json", JSON.stringify(json), null);
   }
 
    layerToJSON(zip, projectName, layers, index, apply) {

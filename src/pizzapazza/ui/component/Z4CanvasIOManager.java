@@ -12,11 +12,14 @@ import static def.js.Globals.eval;
 import def.js.JSON;
 import def.js.Promise;
 import java.util.function.Consumer;
+import javascript.awt.Color;
 import javascript.awt.Dimension;
 import javascript.awt.Point;
 import javascript.swing.JSOptionPane;
 import javascript.util.fsa.FileSystemFileHandle;
 import javascript.util.fsa.FileSystemWritableFileStreamCreateOptions;
+import pizzapazza.color.Z4BiGradientColor;
+import pizzapazza.color.Z4GradientColor;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonDrawingToolPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
@@ -346,11 +349,10 @@ public class Z4CanvasIOManager {
       $JSZip zip = new $JSZip();
       this.layerToJSON(zip, projectName, new Array<>(), 0, obj -> {
         $Apply_0_Void finish = () -> {
-          $Object json = new $Object();
-          Array<$Object> array = new Array<>();
-          this.drawingTools.forEach(drawingTool -> array.push(drawingTool.toJSON()));
-          json.$set("drawingTools", array);
-          zip.file("drawingTools.json", JSON.stringify(json), null);
+          this.writeJSONArray(zip, "drawingTools", array -> this.drawingTools.forEach(drawingTool -> array.push(drawingTool.toJSON())));
+          this.writeJSONArray(zip, "colors", array -> Color.getHistory().forEach(color -> array.push(color.getJSON())));
+          this.writeJSONArray(zip, "gradientcolors", array -> Z4GradientColor.getHistory().forEach(color -> array.push(color.toJSON())));
+          this.writeJSONArray(zip, "bigradientcolors", array -> Z4BiGradientColor.getHistory().forEach(color -> array.push(color.toJSON())));
 
           zip.file("manifest.json", JSON.stringify(obj), null);
 
@@ -379,6 +381,14 @@ public class Z4CanvasIOManager {
         this.historyToJSON(zip, obj, finish);
       });
     });
+  }
+
+  private void writeJSONArray($JSZip zip, String name, $Apply_1_Void<Array<$Object>> apply) {
+    $Object json = new $Object();
+    Array<$Object> array = new Array<>();
+    apply.$apply(array);
+    json.$set(name, array);
+    zip.file(name + ".json", JSON.stringify(json), null);
   }
 
   private void layerToJSON($JSZip zip, String projectName, Array<$Object> layers, int index, $Apply_1_Void<$Object> apply) {
