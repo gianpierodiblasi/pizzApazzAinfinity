@@ -300,7 +300,6 @@ public class Z4CanvasIOManager {
     });
   }
 
-  @SuppressWarnings("unchecked")
   private void jsonToArrays($JSZip zip, $Apply_0_Void apply) {
     this.jsonToArray(zip, "drawingTools", false, drawingTool -> this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(($Object) drawingTool)),
             () -> this.jsonToArray(zip, "colors", true, color -> Color.pushHistory(Color.fromJSON(($Object) color)),
@@ -311,7 +310,6 @@ public class Z4CanvasIOManager {
     );
   }
 
-  @SuppressWarnings("unchecked")
   private void jsonToArray($JSZip zip, String name, boolean reverse, $Apply_1_Void<Object> applyObj, $Apply_0_Void apply) {
     $ZipObject zipObject = zip.file(name + ".json");
     if ($exists(zipObject)) {
