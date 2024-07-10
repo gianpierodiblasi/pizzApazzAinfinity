@@ -13,6 +13,8 @@ import javascript.awt.Dimension;
 import javascript.awt.Point;
 import javascript.swing.JSComponent;
 import javascript.util.fsa.FileSystemFileHandle;
+import pizzapazza.color.Z4BiGradientColor;
+import pizzapazza.color.Z4GradientColor;
 import pizzapazza.math.Z4DrawingDirection;
 import pizzapazza.math.Z4Math;
 import pizzapazza.ui.panel.Z4StatusPanel;
@@ -183,6 +185,10 @@ public class Z4Canvas extends JSComponent {
     this.drawingTools.length = 0;
     this.ribbonDrawingToolPanel.reset();
 
+    Color.resetHistory();
+    Z4GradientColor.resetHistory();
+    Z4BiGradientColor.resetHistory();
+    
     this.ribbonHistoryPanel.resetHistory(() -> {
       this.afterCreate("", width, height);
       this.toHistory(json -> this.ribbonHistoryPanel.addHistory(json, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));

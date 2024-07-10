@@ -171,6 +171,10 @@ public class Z4CanvasIOManager {
         this.drawingTools.length = 0;
         this.ribbonDrawingToolPanel.reset();
 
+        Color.resetHistory();
+        Z4GradientColor.resetHistory();
+        Z4BiGradientColor.resetHistory();
+
         this.ribbonHistoryPanel.resetHistory(() -> {
           this.canvas.afterCreate(projectName, (int) image.width, (int) image.height);
           this.canvas.toHistory(json -> this.ribbonHistoryPanel.addHistory(json, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
@@ -221,6 +225,10 @@ public class Z4CanvasIOManager {
 
           this.drawingTools.length = 0;
           this.ribbonDrawingToolPanel.reset();
+
+          Color.resetHistory();
+          Z4GradientColor.resetHistory();
+          Z4BiGradientColor.resetHistory();
 
           this.ribbonHistoryPanel.resetHistory(() -> {
             $Object json = ($Object) JSON.parse("" + str);

@@ -162,6 +162,9 @@ class Z4Canvas extends JSComponent {
     this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), null, true);
     this.drawingTools.length = 0;
     this.ribbonDrawingToolPanel.reset();
+    Color.resetHistory();
+    Z4GradientColor.resetHistory();
+    Z4BiGradientColor.resetHistory();
     this.ribbonHistoryPanel.resetHistory(() => {
       this.afterCreate("", width, height);
       this.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));

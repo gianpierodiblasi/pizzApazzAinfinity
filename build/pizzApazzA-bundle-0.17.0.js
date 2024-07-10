@@ -2038,6 +2038,9 @@ class Z4Canvas extends JSComponent {
     this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), null, true);
     this.drawingTools.length = 0;
     this.ribbonDrawingToolPanel.reset();
+    Color.resetHistory();
+    Z4GradientColor.resetHistory();
+    Z4BiGradientColor.resetHistory();
     this.ribbonHistoryPanel.resetHistory(() => {
       this.afterCreate("", width, height);
       this.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
@@ -3094,6 +3097,9 @@ class Z4CanvasIOManager {
         this.canvas.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.canvas.getLayersCount() - 1), null, true);
         this.drawingTools.length = 0;
         this.ribbonDrawingToolPanel.reset();
+        Color.resetHistory();
+        Z4GradientColor.resetHistory();
+        Z4BiGradientColor.resetHistory();
         this.ribbonHistoryPanel.resetHistory(() => {
           this.canvas.afterCreate(projectName, image.width, image.height);
           this.canvas.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
@@ -3140,6 +3146,9 @@ class Z4CanvasIOManager {
           this.ribbonLayerPanel.reset();
           this.drawingTools.length = 0;
           this.ribbonDrawingToolPanel.reset();
+          Color.resetHistory();
+          Z4GradientColor.resetHistory();
+          Z4BiGradientColor.resetHistory();
           this.ribbonHistoryPanel.resetHistory(() => {
             let json = JSON.parse("" + str);
             this.canvas.setSize(json["width"], json["height"]);
