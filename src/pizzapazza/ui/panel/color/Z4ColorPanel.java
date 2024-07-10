@@ -8,6 +8,7 @@ import javascript.swing.JSButton;
 import javascript.swing.JSColorChooser;
 import javascript.swing.JSComponent;
 import javascript.swing.JSLabel;
+import javascript.swing.colorchooser.JSColorPreview;
 import pizzapazza.ui.panel.Z4AbstractValuePanel;
 import pizzapazza.util.Z4Translations;
 import static simulation.js.$Globals.document;
@@ -20,11 +21,7 @@ import static simulation.js.$Globals.document;
 public class Z4ColorPanel extends Z4AbstractValuePanel<Color> {
 
   private final JSLabel label = new JSLabel();
-
-  private final JSComponent container = new JSComponent(document.createElement("div"));
-  private final JSComponent component = new JSComponent(document.createElement("div"));
-  private final JSComponent componentOpacity = new JSComponent(document.createElement("div"));
-
+  private final JSColorPreview colorPreview = new JSColorPreview();
   private final JSButton edit = new JSButton();
 
   private boolean opacityVisible = true;
@@ -38,15 +35,7 @@ public class Z4ColorPanel extends Z4AbstractValuePanel<Color> {
     this.setLayout(new GridBagLayout());
 
     this.add(this.label, new GBC(0, 0).w(2).a(GBC.WEST));
-
-    this.container.cssAddClass("z4colorpanel-container");
-    this.add(this.container, new GBC(0, 1).wx(1).f(GBC.HORIZONTAL));
-
-    this.component.cssAddClass("z4colorpanel-opaque");
-    this.container.appendChild(this.component);
-
-    this.componentOpacity.cssAddClass("z4colorpanel-transparent");
-    this.container.appendChild(this.componentOpacity);
+    this.add(this.colorPreview, new GBC(0, 1).wx(1).f(GBC.HORIZONTAL));
 
     this.edit.setText(Z4Translations.EDIT);
     this.edit.addActionListener(event -> {
@@ -72,8 +61,7 @@ public class Z4ColorPanel extends Z4AbstractValuePanel<Color> {
   @Override
   public void setValue(Color value) {
     this.value = value;
-    this.component.getStyle().backgroundColor = value.getRGB_String();
-    this.componentOpacity.getStyle().backgroundColor = value.getRGBA_String();
+    this.colorPreview.setColor(value);
 
     Array<Integer> rgb = new Array<>();
     Array<Double> hsl = new Array<>();
@@ -81,7 +69,6 @@ public class Z4ColorPanel extends Z4AbstractValuePanel<Color> {
     rgb.$set(1, value.green);
     rgb.$set(2, value.blue);
     Color.RGBtoHSL(rgb, hsl);
-    this.container.getStyle().border = "1px solid " + (hsl.$get(2) > 0.5 ? value.darkened(0.1).getRGB_HEX() : value.lighted(0.1).getRGB_HEX());
   }
 
   @Override

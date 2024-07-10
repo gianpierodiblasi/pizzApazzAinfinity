@@ -70,7 +70,7 @@ class Z4CanvasGridPanel extends JSDropDown {
     this.magneticGridLabel.cssAddClass("z4canvasgridpanel-magneticgrid");
     summary.add(this.magneticGridLabel, new GBC(2, 0).h(2).i(0, 0, 0, 5));
     this.colorPanelLabel.setEditButtonVisible(false);
-    this.colorPanelLabel.getChilStyleByQuery(".z4colorpanel-container").height = "14px";
+    this.colorPanelLabel.getChilStyleByQuery(".jscolorpreview").height = "14px";
     this.colorPanelLabel.getStyle().width = "14px";
     summary.add(this.colorPanelLabel, new GBC(3, 0).h(2));
     this.vline1 = Z4UI.addVLine(summary, new GBC(4, 0).h(2).f(GBC.VERTICAL).i(1, 5, 1, 5));

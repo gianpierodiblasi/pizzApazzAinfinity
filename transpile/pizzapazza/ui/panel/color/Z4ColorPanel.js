@@ -7,11 +7,7 @@ class Z4ColorPanel extends Z4AbstractValuePanel {
 
    label = new JSLabel();
 
-   container = new JSComponent(document.createElement("div"));
-
-   component = new JSComponent(document.createElement("div"));
-
-   componentOpacity = new JSComponent(document.createElement("div"));
+   colorPreview = new JSColorPreview();
 
    edit = new JSButton();
 
@@ -25,12 +21,7 @@ class Z4ColorPanel extends Z4AbstractValuePanel {
     this.cssAddClass("z4colorpanel");
     this.setLayout(new GridBagLayout());
     this.add(this.label, new GBC(0, 0).w(2).a(GBC.WEST));
-    this.container.cssAddClass("z4colorpanel-container");
-    this.add(this.container, new GBC(0, 1).wx(1).f(GBC.HORIZONTAL));
-    this.component.cssAddClass("z4colorpanel-opaque");
-    this.container.appendChild(this.component);
-    this.componentOpacity.cssAddClass("z4colorpanel-transparent");
-    this.container.appendChild(this.componentOpacity);
+    this.add(this.colorPreview, new GBC(0, 1).wx(1).f(GBC.HORIZONTAL));
     this.edit.setText(Z4Translations.EDIT);
     this.edit.addActionListener(event => {
       JSColorChooser.showDialog(Z4Translations.COLOR, this.value, this.opacityVisible, null, c => {
@@ -53,15 +44,13 @@ class Z4ColorPanel extends Z4AbstractValuePanel {
 
    setValue(value) {
     this.value = value;
-    this.component.getStyle().backgroundColor = value.getRGB_String();
-    this.componentOpacity.getStyle().backgroundColor = value.getRGBA_String();
+    this.colorPreview.setColor(value);
     let rgb = new Array();
     let hsl = new Array();
     rgb[0] = value.red;
     rgb[1] = value.green;
     rgb[2] = value.blue;
     Color.RGBtoHSL(rgb, hsl);
-    this.container.getStyle().border = "1px solid " + (hsl[2] > 0.5 ? value.darkened(0.1).getRGB_HEX() : value.lighted(0.1).getRGB_HEX());
   }
 
    setEnabled(b) {
