@@ -1,5 +1,6 @@
 package pizzapazza.ui.panel.ribbon;
 
+import static def.dom.Globals.document;
 import javascript.awt.BorderLayout;
 import javascript.awt.BoxLayout;
 import javascript.awt.Color;
@@ -38,7 +39,7 @@ import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.$typeof;
-import static simulation.js.$Globals.document;
+import static simulation.js.$Globals.setTimeout;
 import static simulation.js.$Globals.window;
 
 /**
@@ -142,6 +143,8 @@ public class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
             Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)),
             new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE)
     ));
+
+    setTimeout(() -> document.querySelector(".z4drawingtoolpreview:nth-last-child(1)").setAttribute("open", "open"), 0);
   }
 
   private void open() {

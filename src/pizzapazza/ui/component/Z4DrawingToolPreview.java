@@ -22,6 +22,7 @@ import pizzapazza.util.Z4Translations;
 import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.$typeof;
+import static simulation.js.$Globals.setTimeout;
 import static simulation.js.$Globals.window;
 import simulation.js.$Object;
 
@@ -115,6 +116,7 @@ public class Z4DrawingToolPreview extends JSDropDown {
       this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(json));
 
       this.removeAttribute("open");
+      setTimeout(() -> document.querySelector(".z4drawingtoolpreview:nth-last-child(1)").setAttribute("open", "open"), 0);
     });
 
     this.editor.addAction(Z4Translations.SAVE_DRAWING_TOOL_AS, new GBC(1, 0).a(GBC.NORTH).i(0, 1, 0, 0), event -> this.save());
