@@ -43,4 +43,8 @@ class Z4AbstractGradientColorFiller extends Z4AbstractFiller {
    */
    getColorPositionAt(x, y) {
   }
+
+   getFillingColor() {
+    return this.gradientColor;
+  }
 }

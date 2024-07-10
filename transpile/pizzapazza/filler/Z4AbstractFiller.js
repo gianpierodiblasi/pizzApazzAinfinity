@@ -14,4 +14,13 @@ class Z4AbstractFiller {
    */
    fill(imageData) {
   }
+
+  /**
+   * Returns the filling color (an instance of Color or Z4GradientColor) if it
+   * exists
+   *
+   * @return The filling color (an instance of Color or Z4GradientColor)
+   */
+   getFillingColor() {
+  }
 }

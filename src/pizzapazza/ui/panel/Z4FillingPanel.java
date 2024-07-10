@@ -84,6 +84,7 @@ public class Z4FillingPanel extends JSPanel {
         case "SPIRAL":
         case "BEZIER":
         case "SINUSOIDAL":
+          ((Z4AbstractFillerPanel) this.selectedFillerPanel).setGradientColor(gradientColorPanel.getValue());
           ((Z4AbstractFillerPanel) this.selectedFillerPanel).drawPreview(gradientColorPanel.getValueIsAdjusting());
           break;
         case "TEXTURE":

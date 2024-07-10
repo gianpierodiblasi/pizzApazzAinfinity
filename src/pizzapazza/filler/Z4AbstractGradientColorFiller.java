@@ -53,4 +53,9 @@ public abstract class Z4AbstractGradientColorFiller implements Z4AbstractFiller 
    * @return The color position, -1 if no position is available
    */
   protected abstract double getColorPositionAt(int x, int y);
+
+  @Override
+  public Object getFillingColor() {
+    return this.gradientColor;
+  }
 }

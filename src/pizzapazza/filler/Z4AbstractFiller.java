@@ -17,4 +17,12 @@ public interface Z4AbstractFiller {
    * @param imageData The image data
    */
   public void fill(ImageData imageData);
+
+  /**
+   * Returns the filling color (an instance of Color or Z4GradientColor) if it
+   * exists
+   *
+   * @return The filling color (an instance of Color or Z4GradientColor)
+   */
+  public Object getFillingColor();
 }

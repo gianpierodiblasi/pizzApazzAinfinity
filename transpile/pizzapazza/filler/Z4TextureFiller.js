@@ -145,4 +145,8 @@ class Z4TextureFiller extends Z4AbstractFiller {
     }
     return new Point(l, t);
   }
+
+   getFillingColor() {
+    return this.color;
+  }
 }

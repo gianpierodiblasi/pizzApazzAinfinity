@@ -158,4 +158,9 @@ public class Z4TextureFiller implements Z4AbstractFiller {
 
     return new Point(l, t);
   }
+
+  @Override
+  public Object getFillingColor() {
+    return this.color;
+  }
 }

@@ -166,6 +166,15 @@ class Z4AbstractFiller {
    */
    fill(imageData) {
   }
+
+  /**
+   * Returns the filling color (an instance of Color or Z4GradientColor) if it
+   * exists
+   *
+   * @return The filling color (an instance of Color or Z4GradientColor)
+   */
+   getFillingColor() {
+  }
 }
 /**
  * A Filler based on a gradient color
@@ -211,6 +220,10 @@ class Z4AbstractGradientColorFiller extends Z4AbstractFiller {
    * @return The color position, -1 if no position is available
    */
    getColorPositionAt(x, y) {
+  }
+
+   getFillingColor() {
+    return this.gradientColor;
   }
 }
 /**
@@ -943,6 +956,10 @@ class Z4TextureFiller extends Z4AbstractFiller {
       b = t + this.height;
     }
     return new Point(l, t);
+  }
+
+   getFillingColor() {
+    return this.color;
   }
 }
 /**
@@ -3858,6 +3875,9 @@ class Z4DrawingToolPreview extends JSDropDown {
       } else if (this.changed) {
         this.canvas.setChanged(true);
         this.canvas.replaceDrawingTool(this.oldDrawingTool, this.drawingTool);
+        if (JSON.stringify(this.oldDrawingTool.getSpatioTemporalColor().toJSON()) !== JSON.stringify(this.drawingTool.getSpatioTemporalColor().toJSON())) {
+          Z4Constants.pushHistory(this.drawingTool.getSpatioTemporalColor());
+        }
       }
     });
     this.name.getStyle().width = (Z4DrawingToolPreview.PREVIEW_SIZE + 15) + "px";
@@ -6430,7 +6450,9 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     }, response => {
       if (response === JSOptionPane.OK_OPTION) {
         let size = panel.getSelectedSize();
-        this.canvas.addLayer(size.width, size.height, panel.getSelectedFilling());
+        let filling = panel.getSelectedFilling();
+        this.canvas.addLayer(size.width, size.height, filling);
+        Z4Constants.pushHistory(filling);
       }
     });
   }
@@ -6665,7 +6687,9 @@ class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
     }, response => {
       if (response === JSOptionPane.OK_OPTION) {
         let size = panel.getSelectedSize();
-        this.canvas.create(size.width, size.height, panel.getSelectedFilling());
+        let filling = panel.getSelectedFilling();
+        this.canvas.create(size.width, size.height, filling);
+        Z4Constants.pushHistory(filling);
       }
     });
   }
@@ -11945,6 +11969,7 @@ class Z4FillingPanel extends JSPanel {
         case "SPIRAL":
         case "BEZIER":
         case "SINUSOIDAL":
+          (this.selectedFillerPanel).setGradientColor(gradientColorPanel.getValue());
           (this.selectedFillerPanel).drawPreview(gradientColorPanel.getValueIsAdjusting());
           break;
         case "TEXTURE":
@@ -13027,6 +13052,30 @@ class Z4Constants {
 
   static  getStyle(style) {
     return style;
+  }
+  /**
+   * Pushes an object in its object history (if the history exists and if not
+   * already present)
+   *
+   * @param object The object
+   */
+  static  pushHistory(object) {
+    if (object instanceof Z4AbstractFiller) {
+      Z4Constants.pushHistory((object).getFillingColor());
+    } else if (object instanceof Color) {
+      Color.pushHistory(object);
+    } else if (object instanceof Z4GradientColor) {
+      Z4GradientColor.pushHistory(object);
+    } else if (object instanceof Z4BiGradientColor) {
+      Z4BiGradientColor.pushHistory(object);
+    } else if (!(object instanceof Z4SpatioTemporalColor)) {
+    } else if ((object).isColor()) {
+      Color.pushHistory((object).getColor());
+    } else if ((object).isGradientColor()) {
+      Z4GradientColor.pushHistory((object).getGradientColor());
+    } else if ((object).isBiGradientColor()) {
+      Z4BiGradientColor.pushHistory((object).getBiGradientColor());
+    }
   }
 }
 /**

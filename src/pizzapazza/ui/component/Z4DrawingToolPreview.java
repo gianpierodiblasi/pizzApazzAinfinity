@@ -1,6 +1,7 @@
 package pizzapazza.ui.component;
 
 import static def.dom.Globals.document;
+import def.js.JSON;
 import javascript.awt.BorderLayout;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
@@ -70,6 +71,10 @@ public class Z4DrawingToolPreview extends JSDropDown {
       } else if (this.changed) {
         this.canvas.setChanged(true);
         this.canvas.replaceDrawingTool(this.oldDrawingTool, this.drawingTool);
+
+        if (JSON.stringify(this.oldDrawingTool.getSpatioTemporalColor().toJSON()) != JSON.stringify(this.drawingTool.getSpatioTemporalColor().toJSON())) {
+          Z4Constants.pushHistory(this.drawingTool.getSpatioTemporalColor());
+        }
       }
     });
 

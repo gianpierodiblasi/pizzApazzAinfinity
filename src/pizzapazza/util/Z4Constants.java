@@ -3,8 +3,13 @@ package pizzapazza.util;
 import def.dom.CanvasGradient;
 import def.dom.CanvasPattern;
 import def.js.Array;
+import javascript.awt.Color;
 import javascript.util.fsa.FilePickerOptionsType;
 import jsweet.util.union.Union4;
+import pizzapazza.color.Z4BiGradientColor;
+import pizzapazza.color.Z4GradientColor;
+import pizzapazza.color.Z4SpatioTemporalColor;
+import pizzapazza.filler.Z4AbstractFiller;
 
 /**
  * Constants of the applications
@@ -188,5 +193,30 @@ public class Z4Constants {
    */
   public static Union4<String, CanvasGradient, CanvasPattern, Object> $getStyle(Object style) {
     return null;
+  }
+
+  /**
+   * Pushes an object in its object history (if the history exists and if not
+   * already present)
+   *
+   * @param object The object
+   */
+  public static void pushHistory(Object object) {
+    if (object instanceof Z4AbstractFiller) {
+      Z4Constants.pushHistory(((Z4AbstractFiller) object).getFillingColor());
+    } else if (object instanceof Color) {
+      Color.pushHistory((Color) object);
+    } else if (object instanceof Z4GradientColor) {
+      Z4GradientColor.pushHistory((Z4GradientColor) object);
+    } else if (object instanceof Z4BiGradientColor) {
+      Z4BiGradientColor.pushHistory((Z4BiGradientColor) object);
+    } else if (!(object instanceof Z4SpatioTemporalColor)) {
+    } else if (((Z4SpatioTemporalColor) object).isColor()) {
+      Color.pushHistory(((Z4SpatioTemporalColor) object).getColor());
+    } else if (((Z4SpatioTemporalColor) object).isGradientColor()) {
+      Z4GradientColor.pushHistory(((Z4SpatioTemporalColor) object).getGradientColor());
+    } else if (((Z4SpatioTemporalColor) object).isBiGradientColor()) {
+      Z4BiGradientColor.pushHistory(((Z4SpatioTemporalColor) object).getBiGradientColor());
+    }
   }
 }

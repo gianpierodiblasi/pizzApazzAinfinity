@@ -143,4 +143,28 @@ class Z4Constants {
   static  getStyle(style) {
     return style;
   }
+  /**
+   * Pushes an object in its object history (if the history exists and if not
+   * already present)
+   *
+   * @param object The object
+   */
+  static  pushHistory(object) {
+    if (object instanceof Z4AbstractFiller) {
+      Z4Constants.pushHistory((object).getFillingColor());
+    } else if (object instanceof Color) {
+      Color.pushHistory(object);
+    } else if (object instanceof Z4GradientColor) {
+      Z4GradientColor.pushHistory(object);
+    } else if (object instanceof Z4BiGradientColor) {
+      Z4BiGradientColor.pushHistory(object);
+    } else if (!(object instanceof Z4SpatioTemporalColor)) {
+    } else if ((object).isColor()) {
+      Color.pushHistory((object).getColor());
+    } else if ((object).isGradientColor()) {
+      Z4GradientColor.pushHistory((object).getGradientColor());
+    } else if ((object).isBiGradientColor()) {
+      Z4BiGradientColor.pushHistory((object).getBiGradientColor());
+    }
+  }
 }

@@ -225,7 +225,9 @@ public class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
     }, response -> {
       if (response == JSOptionPane.OK_OPTION) {
         Dimension size = panel.getSelectedSize();
-        this.canvas.create(size.width, size.height, panel.getSelectedFilling());
+        Object filling = panel.getSelectedFilling();
+        this.canvas.create(size.width, size.height, filling);
+        Z4Constants.pushHistory(filling);
       }
     });
   }
