@@ -145,12 +145,7 @@ class Z4SpatioTemporalColor extends Z4JSONable {
    toJSON() {
     let json = new Object();
     if (this.color) {
-      let jsonColor = new Object();
-      jsonColor["red"] = this.color.red;
-      jsonColor["green"] = this.color.green;
-      jsonColor["blue"] = this.color.blue;
-      jsonColor["alpha"] = this.color.alpha;
-      json["color"] = jsonColor;
+      json["color"] = this.color.getJSON();
     } else if (this.gradientColor) {
       json["gradientColor"] = this.gradientColor.toJSON();
     } else if (this.biGradientColor) {
@@ -163,12 +158,11 @@ class Z4SpatioTemporalColor extends Z4JSONable {
    * Creates a Z4SpatioTemporalColor from a JSON object
    *
    * @param json The JSON object
-   * @return the color
+   * @return The color
    */
   static  fromJSON(json) {
     if (json["color"]) {
-      let jsonColor = json["color"];
-      return Z4SpatioTemporalColor.fromColor(new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]));
+      return Z4SpatioTemporalColor.fromColor(Color.fromJSON(json["color"]));
     } else if (json["gradientColor"]) {
       return Z4SpatioTemporalColor.fromGradientColor(Z4GradientColor.fromJSON(json["gradientColor"]));
     } else if (json["biGradientColor"]) {

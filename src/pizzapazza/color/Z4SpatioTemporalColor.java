@@ -152,12 +152,7 @@ public class Z4SpatioTemporalColor implements Z4JSONable {
   public $Object toJSON() {
     $Object json = new $Object();
     if ($exists(this.color)) {
-      $Object jsonColor = new $Object();
-      jsonColor.$set("red", this.color.red);
-      jsonColor.$set("green", this.color.green);
-      jsonColor.$set("blue", this.color.blue);
-      jsonColor.$set("alpha", this.color.alpha);
-      json.$set("color", jsonColor);
+      json.$set("color", this.color.getJSON());
     } else if ($exists(this.gradientColor)) {
       json.$set("gradientColor", this.gradientColor.toJSON());
     } else if ($exists(this.biGradientColor)) {
@@ -170,12 +165,11 @@ public class Z4SpatioTemporalColor implements Z4JSONable {
    * Creates a Z4SpatioTemporalColor from a JSON object
    *
    * @param json The JSON object
-   * @return the color
+   * @return The color
    */
   public static Z4SpatioTemporalColor fromJSON($Object json) {
     if ($exists(json.$get("color"))) {
-      $Object jsonColor = json.$get("color");
-      return Z4SpatioTemporalColor.fromColor(new Color(jsonColor.$get("red"), jsonColor.$get("green"), jsonColor.$get("blue"), jsonColor.$get("alpha")));
+      return Z4SpatioTemporalColor.fromColor(Color.fromJSON(json.$get("color")));
     } else if ($exists(json.$get("gradientColor"))) {
       return Z4SpatioTemporalColor.fromGradientColor(Z4GradientColor.fromJSON(json.$get("gradientColor")));
     } else if ($exists(json.$get("biGradientColor"))) {

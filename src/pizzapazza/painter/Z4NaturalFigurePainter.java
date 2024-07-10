@@ -624,22 +624,10 @@ public class Z4NaturalFigurePainter extends Z4Painter {
 
     json.$set("shadowShiftX", this.shadowShiftX.toJSON());
     json.$set("shadowShiftY", this.shadowShiftY.toJSON());
-
-    $Object jsonColor = new $Object();
-    jsonColor.$set("red", this.shadowColor.red);
-    jsonColor.$set("green", this.shadowColor.green);
-    jsonColor.$set("blue", this.shadowColor.blue);
-    jsonColor.$set("alpha", this.shadowColor.alpha);
-    json.$set("shadowColor", jsonColor);
+    json.$set("shadowColor", this.shadowColor.getJSON());
 
     json.$set("borderSize", this.borderSize.toJSON());
-
-    jsonColor = new $Object();
-    jsonColor.$set("red", this.borderColor.red);
-    jsonColor.$set("green", this.borderColor.green);
-    jsonColor.$set("blue", this.borderColor.blue);
-    jsonColor.$set("alpha", this.borderColor.alpha);
-    json.$set("borderColor", jsonColor);
+    json.$set("borderColor", this.borderColor.getJSON());
 
     return json;
   }
@@ -651,12 +639,6 @@ public class Z4NaturalFigurePainter extends Z4Painter {
    * @return the natural figure painter
    */
   public static Z4NaturalFigurePainter fromJSON($Object json) {
-    $Object jsonColor = json.$get("shadowColor");
-    Color shadowColor = new Color(jsonColor.$get("red"), jsonColor.$get("green"), jsonColor.$get("blue"), jsonColor.$get("alpha"));
-
-    jsonColor = json.$get("borderColor");
-    Color borderColor = new Color(jsonColor.$get("red"), jsonColor.$get("green"), jsonColor.$get("blue"), jsonColor.$get("alpha"));
-
     return new Z4NaturalFigurePainter(
             json.$get("naturalFigurePainterType"),
             json.$get("controlPointClosure"),
@@ -665,8 +647,8 @@ public class Z4NaturalFigurePainter extends Z4Painter {
             Z4FancifulValue.fromJSON(json.$get("internalTension1")), Z4FancifulValue.fromJSON(json.$get("externalTension1")), Z4FancifulValue.fromJSON(json.$get("internalTension2")), Z4FancifulValue.fromJSON(json.$get("externalTension2")),
             json.$get("indentation"),
             Z4FancifulValue.fromJSON(json.$get("externalForceAngle")), Z4FancifulValue.fromJSON(json.$get("externalForceTension")),
-            Z4FancifulValue.fromJSON(json.$get("shadowShiftX")), Z4FancifulValue.fromJSON(json.$get("shadowShiftY")), shadowColor,
-            Z4FancifulValue.fromJSON(json.$get("borderSize")), borderColor
+            Z4FancifulValue.fromJSON(json.$get("shadowShiftX")), Z4FancifulValue.fromJSON(json.$get("shadowShiftY")), Color.fromJSON(json.$get("shadowColor")),
+            Z4FancifulValue.fromJSON(json.$get("borderSize")), Color.fromJSON(json.$get("borderColor"))
     );
   }
 }

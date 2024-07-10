@@ -280,20 +280,10 @@ class Z4Shape2DPainter extends Z4Painter {
     json["vertices"] = this.vertices;
     json["shadowShiftX"] = this.shadowShiftX.toJSON();
     json["shadowShiftY"] = this.shadowShiftY.toJSON();
-    let jsonColor = new Object();
-    jsonColor["red"] = this.shadowColor.red;
-    jsonColor["green"] = this.shadowColor.green;
-    jsonColor["blue"] = this.shadowColor.blue;
-    jsonColor["alpha"] = this.shadowColor.alpha;
-    json["shadowColor"] = jsonColor;
+    json["shadowColor"] = this.shadowColor.getJSON();
     json["borderWidth"] = this.borderWidth.toJSON();
     json["borderHeight"] = this.borderHeight.toJSON();
-    jsonColor = new Object();
-    jsonColor["red"] = this.borderColor.red;
-    jsonColor["green"] = this.borderColor.green;
-    jsonColor["blue"] = this.borderColor.blue;
-    jsonColor["alpha"] = this.borderColor.alpha;
-    json["borderColor"] = jsonColor;
+    json["borderColor"] = this.borderColor.getJSON();
     return json;
   }
 
@@ -304,10 +294,6 @@ class Z4Shape2DPainter extends Z4Painter {
    * @return the shape 2D painter
    */
   static  fromJSON(json) {
-    let jsonColor = json["shadowColor"];
-    let shadowColor = new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]);
-    jsonColor = json["borderColor"];
-    let borderColor = new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]);
-    return new Z4Shape2DPainter(Z4FancifulValue.fromJSON(json["width"]), Z4FancifulValue.fromJSON(json["height"]), json["regular"], json["star"], json["vertices"], Z4FancifulValue.fromJSON(json["shadowShiftX"]), Z4FancifulValue.fromJSON(json["shadowShiftY"]), shadowColor, Z4FancifulValue.fromJSON(json["borderWidth"]), Z4FancifulValue.fromJSON(json["borderHeight"]), borderColor);
+    return new Z4Shape2DPainter(Z4FancifulValue.fromJSON(json["width"]), Z4FancifulValue.fromJSON(json["height"]), json["regular"], json["star"], json["vertices"], Z4FancifulValue.fromJSON(json["shadowShiftX"]), Z4FancifulValue.fromJSON(json["shadowShiftY"]), Color.fromJSON(json["shadowColor"]), Z4FancifulValue.fromJSON(json["borderWidth"]), Z4FancifulValue.fromJSON(json["borderHeight"]), Color.fromJSON(json["borderColor"]));
   }
 }

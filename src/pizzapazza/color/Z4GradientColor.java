@@ -60,11 +60,7 @@ public class Z4GradientColor extends Z4AbstractGradientColor<Color> {
 
   @Override
   protected $Object mapColor(Color color, int index) {
-    $Object jsonColor = new $Object();
-    jsonColor.$set("red", color.red);
-    jsonColor.$set("green", color.green);
-    jsonColor.$set("blue", color.blue);
-    jsonColor.$set("alpha", color.alpha);
+    $Object jsonColor = color.getJSON();
     jsonColor.$set("position", this.colorPositions.$get(index));
     return jsonColor;
   }
@@ -143,7 +139,7 @@ public class Z4GradientColor extends Z4AbstractGradientColor<Color> {
   public static Z4GradientColor fromJSON($Object json) {
     Z4GradientColor gradientColor = new Z4GradientColor();
     gradientColor.setRipple(json.$get("ripple"));
-    ((Iterable<$Object>) json.$get("colorsAndPositions")).forEach(colorAndPosition -> gradientColor.addColor(new Color(colorAndPosition.$get("red"), colorAndPosition.$get("green"), colorAndPosition.$get("blue"), colorAndPosition.$get("alpha")), colorAndPosition.$get("position")));
+    ((Iterable<$Object>) json.$get("colorsAndPositions")).forEach(colorAndPosition -> gradientColor.addColor(Color.fromJSON(colorAndPosition), colorAndPosition.$get("position")));
     return gradientColor;
   }
 

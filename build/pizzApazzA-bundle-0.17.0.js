@@ -13480,11 +13480,7 @@ class Z4GradientColor extends Z4AbstractGradientColor {
   }
 
    mapColor(color, index) {
-    let jsonColor = new Object();
-    jsonColor["red"] = color.red;
-    jsonColor["green"] = color.green;
-    jsonColor["blue"] = color.blue;
-    jsonColor["alpha"] = color.alpha;
+    let jsonColor = color.getJSON();
     jsonColor["position"] = this.colorPositions[index];
     return jsonColor;
   }
@@ -13558,7 +13554,7 @@ class Z4GradientColor extends Z4AbstractGradientColor {
   static  fromJSON(json) {
     let gradientColor = new Z4GradientColor();
     gradientColor.setRipple(json["ripple"]);
-    (json["colorsAndPositions"]).forEach(colorAndPosition => gradientColor.addColor(new Color(colorAndPosition["red"], colorAndPosition["green"], colorAndPosition["blue"], colorAndPosition["alpha"]), colorAndPosition["position"]));
+    (json["colorsAndPositions"]).forEach(colorAndPosition => gradientColor.addColor(Color.fromJSON(colorAndPosition), colorAndPosition["position"]));
     return gradientColor;
   }
 
@@ -13740,12 +13736,7 @@ class Z4SpatioTemporalColor extends Z4JSONable {
    toJSON() {
     let json = new Object();
     if (this.color) {
-      let jsonColor = new Object();
-      jsonColor["red"] = this.color.red;
-      jsonColor["green"] = this.color.green;
-      jsonColor["blue"] = this.color.blue;
-      jsonColor["alpha"] = this.color.alpha;
-      json["color"] = jsonColor;
+      json["color"] = this.color.getJSON();
     } else if (this.gradientColor) {
       json["gradientColor"] = this.gradientColor.toJSON();
     } else if (this.biGradientColor) {
@@ -13758,12 +13749,11 @@ class Z4SpatioTemporalColor extends Z4JSONable {
    * Creates a Z4SpatioTemporalColor from a JSON object
    *
    * @param json The JSON object
-   * @return the color
+   * @return The color
    */
   static  fromJSON(json) {
     if (json["color"]) {
-      let jsonColor = json["color"];
-      return Z4SpatioTemporalColor.fromColor(new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]));
+      return Z4SpatioTemporalColor.fromColor(Color.fromJSON(json["color"]));
     } else if (json["gradientColor"]) {
       return Z4SpatioTemporalColor.fromGradientColor(Z4GradientColor.fromJSON(json["gradientColor"]));
     } else if (json["biGradientColor"]) {
@@ -16699,19 +16689,9 @@ class Z4CenteredFigurePainter extends Z4Painter {
     json["cover"] = this.cover;
     json["shadowShiftX"] = this.shadowShiftX.toJSON();
     json["shadowShiftY"] = this.shadowShiftY.toJSON();
-    let jsonColor = new Object();
-    jsonColor["red"] = this.shadowColor.red;
-    jsonColor["green"] = this.shadowColor.green;
-    jsonColor["blue"] = this.shadowColor.blue;
-    jsonColor["alpha"] = this.shadowColor.alpha;
-    json["shadowColor"] = jsonColor;
+    json["shadowColor"] = this.shadowColor.getJSON();
     json["borderSize"] = this.borderSize.toJSON();
-    jsonColor = new Object();
-    jsonColor["red"] = this.borderColor.red;
-    jsonColor["green"] = this.borderColor.green;
-    jsonColor["blue"] = this.borderColor.blue;
-    jsonColor["alpha"] = this.borderColor.alpha;
-    json["borderColor"] = jsonColor;
+    json["borderColor"] = this.borderColor.getJSON();
     return json;
   }
 
@@ -16722,11 +16702,7 @@ class Z4CenteredFigurePainter extends Z4Painter {
    * @return the centered figure painter
    */
   static  fromJSON(json) {
-    let jsonColor = json["shadowColor"];
-    let shadowColor = new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]);
-    jsonColor = json["borderColor"];
-    let borderColor = new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]);
-    return new Z4CenteredFigurePainter(json["centeredFigurePainterType"], Z4FancifulValue.fromJSON(json["size"]), Z4FancifulValue.fromJSON(json["angle1"]), Z4FancifulValue.fromJSON(json["angle2"]), Z4FancifulValue.fromJSON(json["tension"]), Z4FancifulValue.fromJSON(json["multiplicity"]), Z4FancifulValue.fromJSON(json["hole"]), Z4Whirlpool.fromJSON(json["whirlpool"]), json["cover"], Z4FancifulValue.fromJSON(json["shadowShiftX"]), Z4FancifulValue.fromJSON(json["shadowShiftY"]), shadowColor, Z4FancifulValue.fromJSON(json["borderSize"]), borderColor);
+    return new Z4CenteredFigurePainter(json["centeredFigurePainterType"], Z4FancifulValue.fromJSON(json["size"]), Z4FancifulValue.fromJSON(json["angle1"]), Z4FancifulValue.fromJSON(json["angle2"]), Z4FancifulValue.fromJSON(json["tension"]), Z4FancifulValue.fromJSON(json["multiplicity"]), Z4FancifulValue.fromJSON(json["hole"]), Z4Whirlpool.fromJSON(json["whirlpool"]), json["cover"], Z4FancifulValue.fromJSON(json["shadowShiftX"]), Z4FancifulValue.fromJSON(json["shadowShiftY"]), Color.fromJSON(json["shadowColor"]), Z4FancifulValue.fromJSON(json["borderSize"]), Color.fromJSON(json["borderColor"]));
   }
 }
 /**
@@ -17453,19 +17429,9 @@ class Z4NaturalFigurePainter extends Z4Painter {
     json["externalForceTension"] = this.externalForceTension.toJSON();
     json["shadowShiftX"] = this.shadowShiftX.toJSON();
     json["shadowShiftY"] = this.shadowShiftY.toJSON();
-    let jsonColor = new Object();
-    jsonColor["red"] = this.shadowColor.red;
-    jsonColor["green"] = this.shadowColor.green;
-    jsonColor["blue"] = this.shadowColor.blue;
-    jsonColor["alpha"] = this.shadowColor.alpha;
-    json["shadowColor"] = jsonColor;
+    json["shadowColor"] = this.shadowColor.getJSON();
     json["borderSize"] = this.borderSize.toJSON();
-    jsonColor = new Object();
-    jsonColor["red"] = this.borderColor.red;
-    jsonColor["green"] = this.borderColor.green;
-    jsonColor["blue"] = this.borderColor.blue;
-    jsonColor["alpha"] = this.borderColor.alpha;
-    json["borderColor"] = jsonColor;
+    json["borderColor"] = this.borderColor.getJSON();
     return json;
   }
 
@@ -17476,11 +17442,7 @@ class Z4NaturalFigurePainter extends Z4Painter {
    * @return the natural figure painter
    */
   static  fromJSON(json) {
-    let jsonColor = json["shadowColor"];
-    let shadowColor = new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]);
-    jsonColor = json["borderColor"];
-    let borderColor = new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]);
-    return new Z4NaturalFigurePainter(json["naturalFigurePainterType"], json["controlPointClosure"], Z4FancifulValue.fromJSON(json["size"]), Z4FancifulValue.fromJSON(json["internalAngle1"]), Z4FancifulValue.fromJSON(json["externalAngle1"]), Z4FancifulValue.fromJSON(json["internalAngle2"]), Z4FancifulValue.fromJSON(json["externalAngle2"]), Z4FancifulValue.fromJSON(json["internalTension1"]), Z4FancifulValue.fromJSON(json["externalTension1"]), Z4FancifulValue.fromJSON(json["internalTension2"]), Z4FancifulValue.fromJSON(json["externalTension2"]), json["indentation"], Z4FancifulValue.fromJSON(json["externalForceAngle"]), Z4FancifulValue.fromJSON(json["externalForceTension"]), Z4FancifulValue.fromJSON(json["shadowShiftX"]), Z4FancifulValue.fromJSON(json["shadowShiftY"]), shadowColor, Z4FancifulValue.fromJSON(json["borderSize"]), borderColor);
+    return new Z4NaturalFigurePainter(json["naturalFigurePainterType"], json["controlPointClosure"], Z4FancifulValue.fromJSON(json["size"]), Z4FancifulValue.fromJSON(json["internalAngle1"]), Z4FancifulValue.fromJSON(json["externalAngle1"]), Z4FancifulValue.fromJSON(json["internalAngle2"]), Z4FancifulValue.fromJSON(json["externalAngle2"]), Z4FancifulValue.fromJSON(json["internalTension1"]), Z4FancifulValue.fromJSON(json["externalTension1"]), Z4FancifulValue.fromJSON(json["internalTension2"]), Z4FancifulValue.fromJSON(json["externalTension2"]), json["indentation"], Z4FancifulValue.fromJSON(json["externalForceAngle"]), Z4FancifulValue.fromJSON(json["externalForceTension"]), Z4FancifulValue.fromJSON(json["shadowShiftX"]), Z4FancifulValue.fromJSON(json["shadowShiftY"]), Color.fromJSON(json["shadowColor"]), Z4FancifulValue.fromJSON(json["borderSize"]), Color.fromJSON(json["borderColor"]));
   }
 }
 /**
@@ -17901,20 +17863,10 @@ class Z4Shape2DPainter extends Z4Painter {
     json["vertices"] = this.vertices;
     json["shadowShiftX"] = this.shadowShiftX.toJSON();
     json["shadowShiftY"] = this.shadowShiftY.toJSON();
-    let jsonColor = new Object();
-    jsonColor["red"] = this.shadowColor.red;
-    jsonColor["green"] = this.shadowColor.green;
-    jsonColor["blue"] = this.shadowColor.blue;
-    jsonColor["alpha"] = this.shadowColor.alpha;
-    json["shadowColor"] = jsonColor;
+    json["shadowColor"] = this.shadowColor.getJSON();
     json["borderWidth"] = this.borderWidth.toJSON();
     json["borderHeight"] = this.borderHeight.toJSON();
-    jsonColor = new Object();
-    jsonColor["red"] = this.borderColor.red;
-    jsonColor["green"] = this.borderColor.green;
-    jsonColor["blue"] = this.borderColor.blue;
-    jsonColor["alpha"] = this.borderColor.alpha;
-    json["borderColor"] = jsonColor;
+    json["borderColor"] = this.borderColor.getJSON();
     return json;
   }
 
@@ -17925,11 +17877,7 @@ class Z4Shape2DPainter extends Z4Painter {
    * @return the shape 2D painter
    */
   static  fromJSON(json) {
-    let jsonColor = json["shadowColor"];
-    let shadowColor = new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]);
-    jsonColor = json["borderColor"];
-    let borderColor = new Color(jsonColor["red"], jsonColor["green"], jsonColor["blue"], jsonColor["alpha"]);
-    return new Z4Shape2DPainter(Z4FancifulValue.fromJSON(json["width"]), Z4FancifulValue.fromJSON(json["height"]), json["regular"], json["star"], json["vertices"], Z4FancifulValue.fromJSON(json["shadowShiftX"]), Z4FancifulValue.fromJSON(json["shadowShiftY"]), shadowColor, Z4FancifulValue.fromJSON(json["borderWidth"]), Z4FancifulValue.fromJSON(json["borderHeight"]), borderColor);
+    return new Z4Shape2DPainter(Z4FancifulValue.fromJSON(json["width"]), Z4FancifulValue.fromJSON(json["height"]), json["regular"], json["star"], json["vertices"], Z4FancifulValue.fromJSON(json["shadowShiftX"]), Z4FancifulValue.fromJSON(json["shadowShiftY"]), Color.fromJSON(json["shadowColor"]), Z4FancifulValue.fromJSON(json["borderWidth"]), Z4FancifulValue.fromJSON(json["borderHeight"]), Color.fromJSON(json["borderColor"]));
   }
 }
 /**

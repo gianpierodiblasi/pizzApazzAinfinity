@@ -37,11 +37,7 @@ class Z4GradientColor extends Z4AbstractGradientColor {
   }
 
    mapColor(color, index) {
-    let jsonColor = new Object();
-    jsonColor["red"] = color.red;
-    jsonColor["green"] = color.green;
-    jsonColor["blue"] = color.blue;
-    jsonColor["alpha"] = color.alpha;
+    let jsonColor = color.getJSON();
     jsonColor["position"] = this.colorPositions[index];
     return jsonColor;
   }
@@ -115,7 +111,7 @@ class Z4GradientColor extends Z4AbstractGradientColor {
   static  fromJSON(json) {
     let gradientColor = new Z4GradientColor();
     gradientColor.setRipple(json["ripple"]);
-    (json["colorsAndPositions"]).forEach(colorAndPosition => gradientColor.addColor(new Color(colorAndPosition["red"], colorAndPosition["green"], colorAndPosition["blue"], colorAndPosition["alpha"]), colorAndPosition["position"]));
+    (json["colorsAndPositions"]).forEach(colorAndPosition => gradientColor.addColor(Color.fromJSON(colorAndPosition), colorAndPosition["position"]));
     return gradientColor;
   }
 
