@@ -27,6 +27,7 @@ import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$HTMLElement;
+import static simulation.js.$Globals.parseInt;
 import simulation.js.$Uint8Array;
 
 /**
@@ -260,8 +261,8 @@ public class Z4GradientColorPanel extends Z4AbstractValuePanel<Z4GradientColor> 
 
       this.putImageData(previewHistory.invoke("getContext('2d')"), gradientColor);
 
-      historyPanel.add(radio, new GBC(0, index));
-      historyPanel.add(previewHistory, new GBC(1, index).i(2, 0, 2, 0).wx(1).f(GBC.HORIZONTAL));
+      historyPanel.add(radio, new GBC((index % 2) * 2, parseInt(index / 2)));
+      historyPanel.add(previewHistory, new GBC((index % 2) * 2 + 1, parseInt(index / 2)).i(2, 0, 2, 20).wx(1).f(GBC.HORIZONTAL));
     });
 
     JSOptionPane.showInputDialog(scrollPanel, Z4Translations.HISTORY, listener -> {

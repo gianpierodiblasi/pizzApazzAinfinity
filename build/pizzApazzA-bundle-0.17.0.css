@@ -123,17 +123,6 @@
 .z4signedvaluepanel {
 }
 
-/* panel/color */
-
-.z4bigradientcolorpanel canvas {
-  border: 1px solid var(--main-action-bgcolor);
-  background-image: url(../image/util/chessboard.png);
-}
-.z4bigradientcolorpanel .z4bigradientcolorpanel-history img {
-  content: url(../image/util/history.svg);
-  width: 1.143rem;
-}
-
 /* panel/ribbon */
 .z4ribbonprojectpanel {
 }
@@ -323,7 +312,28 @@
 .z4abstractvaluepanel.z4abstractvaluepanel-titled > label:nth-child(1),
 .z4abstractvaluepanel.z4abstractvaluepanel-titled.z4abstractrandomvaluepanel > .z4signedvaluepanel:nth-child(1) > label:nth-child(1) {
   font-weight: bold;
-}.z4canvas {
+}.z4bigradientcolorpanel canvas {
+  border: 1px solid var(--main-action-bgcolor);
+  background-image: url(../image/util/chessboard.png);
+}
+.z4bigradientcolorpanel .z4bigradientcolorpanel-history img {
+  content: url(../image/util/history.svg);
+  width: 1.143rem;
+}
+
+.z4bigradientcolorpanel-scrollpanel {
+  overflow-y: scroll;
+}
+.z4bigradientcolorpanel-historypanel {
+  width:100%;
+}
+.z4bigradientcolorpanel-historypanel canvas {
+  border-radius: var(--roundness);
+  border: 1px solid var(--main-action-bgcolor);
+  background-image: url(../image/util/chessboard.png);
+  cursor: pointer;
+}
+.z4canvas {
   overflow: scroll;
   display: grid;
   grid-template: "c";

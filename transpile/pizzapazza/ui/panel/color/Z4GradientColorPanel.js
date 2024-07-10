@@ -209,8 +209,8 @@ class Z4GradientColorPanel extends Z4AbstractValuePanel {
       previewHistory.getStyle().height = Z4GradientColorPanel.HEIGHT + "px";
       previews.push(previewHistory);
       this.putImageData(previewHistory.invoke("getContext('2d')"), gradientColor);
-      historyPanel.add(radio, new GBC(0, index));
-      historyPanel.add(previewHistory, new GBC(1, index).i(2, 0, 2, 0).wx(1).f(GBC.HORIZONTAL));
+      historyPanel.add(radio, new GBC((index % 2) * 2, parseInt(index / 2)));
+      historyPanel.add(previewHistory, new GBC((index % 2) * 2 + 1, parseInt(index / 2)).i(2, 0, 2, 20).wx(1).f(GBC.HORIZONTAL));
     });
     JSOptionPane.showInputDialog(scrollPanel, Z4Translations.HISTORY, listener => {
       radios.forEach(radio => radio.addActionListener(event => listener(new ChangeEvent())));

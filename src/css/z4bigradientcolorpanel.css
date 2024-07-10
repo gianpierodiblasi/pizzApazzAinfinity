@@ -1,0 +1,21 @@
+.z4bigradientcolorpanel canvas {
+  border: 1px solid var(--main-action-bgcolor);
+  background-image: url(../image/util/chessboard.png);
+}
+.z4bigradientcolorpanel .z4bigradientcolorpanel-history img {
+  content: url(../image/util/history.svg);
+  width: 1.143rem;
+}
+
+.z4bigradientcolorpanel-scrollpanel {
+  overflow-y: scroll;
+}
+.z4bigradientcolorpanel-historypanel {
+  width:100%;
+}
+.z4bigradientcolorpanel-historypanel canvas {
+  border-radius: var(--roundness);
+  border: 1px solid var(--main-action-bgcolor);
+  background-image: url(../image/util/chessboard.png);
+  cursor: pointer;
+}

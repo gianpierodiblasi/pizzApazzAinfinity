@@ -1,28 +1,34 @@
 package pizzapazza.ui.panel.color;
 
 import static def.dom.Globals.document;
+import def.dom.HTMLElement;
 import def.dom.ImageData;
 import def.dom.MouseEvent;
 import def.js.Array;
 import javascript.awt.Color;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
+import javascript.swing.ButtonGroup;
 import javascript.swing.JSButton;
 import javascript.swing.JSComponent;
 import javascript.swing.JSLabel;
 import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
+import javascript.swing.JSRadioButton;
 import javascript.swing.JSSlider;
 import javascript.swing.JSSpinner;
 import javascript.swing.SpinnerNumberModel;
+import javascript.swing.event.ChangeEvent;
 import pizzapazza.color.Z4BiGradientColor;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.math.Z4Math;
 import pizzapazza.ui.panel.Z4AbstractValuePanel;
 import pizzapazza.util.Z4Constants;
+import pizzapazza.util.Z4EmptyImageProducer;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
+import simulation.dom.$HTMLElement;
 import static simulation.js.$Globals.parseInt;
 import simulation.js.$Uint8Array;
 
@@ -174,7 +180,7 @@ public class Z4BiGradientColorPanel extends Z4AbstractValuePanel<Z4BiGradientCol
     this.add(this.rippleSlider, new GBC(0, 8).w(6).a(GBC.NORTH).f(GBC.HORIZONTAL));
 
     panel = new JSPanel();
-    this.add(panel, new GBC(0, 9).w(6).a(GBC.NORTH).f(GBC.HORIZONTAL));
+    this.add(panel, new GBC(0, 9).w(5).a(GBC.NORTH).f(GBC.HORIZONTAL));
 
     button = new JSButton();
     button.setText(Z4Translations.MIRRORED);
@@ -195,6 +201,13 @@ public class Z4BiGradientColorPanel extends Z4AbstractValuePanel<Z4BiGradientCol
       this.onchange();
     });
     panel.add(button, null);
+
+    button = new JSButton();
+    button.cssAddClass("z4bigradientcolorpanel-history");
+    button.setIcon(new Z4EmptyImageProducer<>(""));
+    button.setTooltip(Z4Translations.HISTORY);
+    button.addActionListener(event -> this.showHistory());
+    this.add(button, new GBC(5, 9).a(GBC.EAST));
 
     this.setValue(new Z4BiGradientColor());
   }
@@ -358,26 +371,61 @@ public class Z4BiGradientColorPanel extends Z4AbstractValuePanel<Z4BiGradientCol
     this.drawPreview(false);
   }
 
+  private void showHistory() {
+    JSPanel scrollPanel = new JSPanel();
+    scrollPanel.cssAddClass("z4bigradientcolorpanel-scrollpanel");
+    scrollPanel.getStyle().height = ((Z4BiGradientColorPanel.SIZE / 2 + 6) * 4 + 5) + "px";
+
+    JSPanel historyPanel = new JSPanel();
+    historyPanel.setLayout(new GridBagLayout());
+    historyPanel.cssAddClass("z4bigradientcolorpanel-historypanel");
+    scrollPanel.add(historyPanel, null);
+
+    Array<JSRadioButton> radios = new Array<>();
+    Array<JSComponent> previews = new Array<>();
+    ButtonGroup buttonGroup = new ButtonGroup();
+
+    Z4BiGradientColor.getHistory().forEach((gradientColor, index, array) -> {
+      JSRadioButton radio = new JSRadioButton();
+      buttonGroup.add(radio);
+      radios.push(radio);
+
+      JSComponent previewHistory = new JSComponent(document.createElement("canvas"));
+      previewHistory.setProperty("width", "" + Z4BiGradientColorPanel.SIZE / 2);
+      previewHistory.setProperty("height", "" + Z4BiGradientColorPanel.SIZE / 2);
+      previewHistory.getStyle().width = Z4BiGradientColorPanel.SIZE / 2 + "px";
+      previewHistory.getStyle().height = Z4BiGradientColorPanel.SIZE / 2 + "px";
+      previews.push(previewHistory);
+
+      this.putImageData(previewHistory.invoke("getContext('2d')"), gradientColor, Z4BiGradientColorPanel.SIZE / 2, Z4BiGradientColorPanel.SIZE / 2);
+
+      historyPanel.add(radio, new GBC((index % 4) * 2, parseInt(index / 4)));
+      historyPanel.add(previewHistory, new GBC((index % 4) * 2 + 1, parseInt(index / 4)).wx(1).a(GBC.WEST).i(2, 0, 2, 20));
+    });
+
+    JSOptionPane.showInputDialog(scrollPanel, Z4Translations.HISTORY, listener -> {
+      radios.forEach(radio -> radio.addActionListener(event -> listener.$apply(new ChangeEvent())));
+      previews.forEach((previewHistory, index, array) -> previewHistory.addEventListener("mousedown", event -> {
+        radios.$get(index).setSelected(true);
+        listener.$apply(new ChangeEvent());
+      }));
+      previews.forEach((previewHistory, index, array) -> previewHistory.addEventListener("dblclick", event -> {
+        radios.$get(index).setSelected(true);
+        listener.$apply(new ChangeEvent());
+
+        ((HTMLElement) (($HTMLElement) document.querySelector(".z4bigradientcolorpanel-historypanel")).closest(".jsdialog").querySelector(".jsoptionpane-option-0")).click();
+      }));
+    }, () -> radios.some((radio, index, array) -> radio.isSelected()), response -> {
+      if (response == JSOptionPane.OK_OPTION) {
+        this.setValue(Z4BiGradientColor.getHistory().$get(radios.findIndex(radio -> radio.isSelected())));
+      }
+    });
+  }
+
   private void drawPreview(boolean adjusting) {
     if (this.width > 0 && this.height > 0) {
-      ImageData imageData = this.ctx.createImageData(this.width, this.height);
-      $Uint8Array data = ($Uint8Array) imageData.data;
-
-      for (int y = 0; y < this.height; y++) {
-        Z4GradientColor gradientColor = this.value.getColorAt(y / this.height, true);
-        for (int x = 0; x < this.width; x++) {
-          Color color = gradientColor.getColorAt(x / this.width, true);
-
-          int index = (y * this.width + x) * 4;
-          data.$set(index, color.red);
-          data.$set(index + 1, color.green);
-          data.$set(index + 2, color.blue);
-          data.$set(index + 3, color.alpha);
-        }
-      }
-
-      this.ctx.putImageData(imageData, 0, 0);
-
+      this.putImageData(this.ctx, this.value, this.width, this.height);
+      
       for (int biIndex = 0; biIndex < this.value.getColorCount(); biIndex++) {
         double biPosition = this.value.getColorPositionAtIndex(biIndex);
         Z4GradientColor gradientColor = this.value.getColorAtIndex(biIndex);
@@ -389,9 +437,29 @@ public class Z4BiGradientColorPanel extends Z4AbstractValuePanel<Z4BiGradientCol
     }
   }
 
+  private void putImageData($CanvasRenderingContext2D ctx, Z4BiGradientColor bigradientColor, int width, int height) {
+    ImageData imageData = ctx.createImageData(width, height);
+    $Uint8Array data = ($Uint8Array) imageData.data;
+
+    for (int y = 0; y < height; y++) {
+      Z4GradientColor gradientColor = bigradientColor.getColorAt(y / height, true);
+      for (int x = 0; x < width; x++) {
+        Color color = gradientColor.getColorAt(x / width, true);
+
+        int index = (y * width + x) * 4;
+        data.$set(index, color.red);
+        data.$set(index + 1, color.green);
+        data.$set(index + 2, color.blue);
+        data.$set(index + 3, color.alpha);
+      }
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+  }
+
   private void drawCircle(double biPosition, double position, int biIndex, int index) {
     this.ctx.lineWidth = 3;
-    
+
     Array<Double> dash = new Array<>();
 
     this.ctx.beginPath();
