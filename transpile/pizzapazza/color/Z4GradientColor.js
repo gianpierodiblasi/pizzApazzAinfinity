@@ -5,6 +5,8 @@
  */
 class Z4GradientColor extends Z4AbstractGradientColor {
 
+  static  history = new Array();
+
   /**
    * Creates the object
    */
@@ -115,5 +117,36 @@ class Z4GradientColor extends Z4AbstractGradientColor {
     gradientColor.setRipple(json["ripple"]);
     (json["colorsAndPositions"]).forEach(colorAndPosition => gradientColor.addColor(new Color(colorAndPosition["red"], colorAndPosition["green"], colorAndPosition["blue"], colorAndPosition["alpha"]), colorAndPosition["position"]));
     return gradientColor;
+  }
+
+  /**
+   * Pushes a gradient color in the gradient color history (if not already
+   * present)
+   *
+   * @param color The gradient color
+   */
+  static  pushHistory(color) {
+    let index = Z4GradientColor.history.findIndex(element => JSON.stringify(element.toJSON()) === JSON.stringify(color.toJSON()));
+    if (index !== -1) {
+      Z4GradientColor.history.splice(index, 1);
+    }
+    Z4GradientColor.history.unshift(color);
+    Z4GradientColor.history.splice(48);
+  }
+
+  /**
+   * Returns the gradient color history
+   *
+   * @return The gradient color history
+   */
+  static  getHistory() {
+    return Z4GradientColor.history.map(color => color);
+  }
+
+  /**
+   * Resets the gradient color history
+   */
+  static  resetHistory() {
+    Z4GradientColor.history.length = 0;
   }
 }

@@ -63,17 +63,17 @@ class Z4GradientColorPanel extends Z4AbstractValuePanel {
       }
     }));
     this.add(this.delete, new GBC(2, 1).a(GBC.WEST).i(0, 5, 0, 0));
-    Z4UI.addLabel(this, Z4Translations.RIPPLE, new GBC(0, 3).a(GBC.WEST));
+    Z4UI.addLabel(this, Z4Translations.RIPPLE, new GBC(0, 2).a(GBC.WEST));
     this.rippleSpinner.cssAddClass("jsspinner_w_4rem");
     this.rippleSpinner.setModel(new SpinnerNumberModel(0, 0, 100, 1));
     this.rippleSpinner.addChangeListener(event => this.onRippleChange(true, this.rippleSpinner.getValueIsAdjusting()));
-    this.add(this.rippleSpinner, new GBC(1, 3).w(2).a(GBC.EAST).i(5, 0, 0, 0));
+    this.add(this.rippleSpinner, new GBC(1, 2).w(2).a(GBC.EAST).i(5, 0, 0, 0));
     this.rippleSlider.setValue(0);
     this.rippleSlider.getStyle().minWidth = "20rem";
     this.rippleSlider.addChangeListener(event => this.onRippleChange(false, this.rippleSlider.getValueIsAdjusting()));
-    this.add(this.rippleSlider, new GBC(0, 4).w(3).a(GBC.NORTH).f(GBC.HORIZONTAL));
+    this.add(this.rippleSlider, new GBC(0, 3).w(3).a(GBC.NORTH).f(GBC.HORIZONTAL));
     let panel = new JSPanel();
-    this.add(panel, new GBC(0, 5).w(3).a(GBC.NORTH).f(GBC.HORIZONTAL));
+    this.add(panel, new GBC(0, 4).w(2).a(GBC.NORTH).f(GBC.HORIZONTAL));
     let button = new JSButton();
     button.setText(Z4Translations.MIRRORED);
     button.addActionListener(event => {
@@ -90,6 +90,12 @@ class Z4GradientColorPanel extends Z4AbstractValuePanel {
       this.onchange();
     });
     panel.add(button, null);
+    button = new JSButton();
+    button.cssAddClass("z4gradientcolorpanel-history");
+    button.setIcon(new Z4EmptyImageProducer(""));
+    button.setTooltip(Z4Translations.HISTORY);
+    button.addActionListener(event => this.showHistory());
+    this.add(button, new GBC(2, 4).a(GBC.EAST));
     this.setValue(new Z4GradientColor());
   }
 
@@ -182,23 +188,69 @@ class Z4GradientColorPanel extends Z4AbstractValuePanel {
     this.drawPreview(false);
   }
 
-   drawPreview(adjusting) {
-    let imageData = this.ctx.createImageData(Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT);
-    let data = imageData.data;
-    for (let x = 0; x < Z4GradientColorPanel.WIDTH; x++) {
-      let color = this.value.getColorAt(x / Z4GradientColorPanel.WIDTH, true);
-      for (let y = 0; y < Z4GradientColorPanel.HEIGHT; y++) {
-        let index = (y * Z4GradientColorPanel.WIDTH + x) * 4;
-        data[index] = color.red;
-        data[index + 1] = color.green;
-        data[index + 2] = color.blue;
-        data[index + 3] = color.alpha;
+   showHistory() {
+    let scrollPanel = new JSPanel();
+    scrollPanel.cssAddClass("z4gradientcolorpanel-scrollpanel");
+    scrollPanel.getStyle().height = ((Z4GradientColorPanel.HEIGHT + 6) * 8 + 5) + "px";
+    let historyPanel = new JSPanel();
+    historyPanel.setLayout(new GridBagLayout());
+    historyPanel.cssAddClass("z4gradientcolorpanel-historypanel");
+    scrollPanel.add(historyPanel, null);
+    let radios = new Array();
+    let previews = new Array();
+    let buttonGroup = new ButtonGroup();
+    Z4GradientColor.getHistory().forEach((gradientColor, index, array) => {
+      let radio = new JSRadioButton();
+      buttonGroup.add(radio);
+      radios.push(radio);
+      let previewHistory = new JSComponent(document.createElement("canvas"));
+      previewHistory.setProperty("width", "" + Z4GradientColorPanel.WIDTH);
+      previewHistory.setProperty("height", "" + Z4GradientColorPanel.HEIGHT);
+      previewHistory.getStyle().height = Z4GradientColorPanel.HEIGHT + "px";
+      previews.push(previewHistory);
+      this.putImageData(previewHistory.invoke("getContext('2d')"), gradientColor);
+      historyPanel.add(radio, new GBC(0, index));
+      historyPanel.add(previewHistory, new GBC(1, index).i(2, 0, 2, 0).wx(1).f(GBC.HORIZONTAL));
+    });
+    JSOptionPane.showInputDialog(scrollPanel, Z4Translations.HISTORY, listener => {
+      radios.forEach(radio => radio.addActionListener(event => listener(new ChangeEvent())));
+      previews.forEach((previewHistory, index, array) => previewHistory.addEventListener("mousedown", event => {
+        radios[index].setSelected(true);
+        listener(new ChangeEvent());
+      }));
+      previews.forEach((previewHistory, index, array) => previewHistory.addEventListener("dblclick", event => {
+        radios[index].setSelected(true);
+        listener(new ChangeEvent());
+        ((document.querySelector(".z4gradientcolorpanel-historypanel")).closest(".jsdialog").querySelector(".jsoptionpane-option-0")).click();
+      }));
+    }, () => radios.some((radio, index, array) => radio.isSelected()), response => {
+      if (response === JSOptionPane.OK_OPTION) {
+        this.setValue(Z4GradientColor.getHistory()[radios.findIndex(radio => radio.isSelected())]);
       }
-    }
-    this.ctx.putImageData(imageData, 0, 0);
+    });
+  }
+
+   drawPreview(adjusting) {
+    this.putImageData(this.ctx, this.value);
     for (let index = 0; index < this.value.getColorCount(); index++) {
       this.drawCircle(this.value.getColorPositionAtIndex(index), index);
     }
+  }
+
+   putImageData(ctx, gradientColor) {
+    let imageData = ctx.createImageData(Z4GradientColorPanel.WIDTH, Z4GradientColorPanel.HEIGHT);
+    let data = imageData.data;
+    for (let x = 0; x < Z4GradientColorPanel.WIDTH; x++) {
+      let color = gradientColor.getColorAt(x / Z4GradientColorPanel.WIDTH, true);
+      for (let y = 0; y < Z4GradientColorPanel.HEIGHT; y++) {
+        let idx = (y * Z4GradientColorPanel.WIDTH + x) * 4;
+        data[idx] = color.red;
+        data[idx + 1] = color.green;
+        data[idx + 2] = color.blue;
+        data[idx + 3] = color.alpha;
+      }
+    }
+    ctx.putImageData(imageData, 0, 0);
   }
 
    drawCircle(position, index) {

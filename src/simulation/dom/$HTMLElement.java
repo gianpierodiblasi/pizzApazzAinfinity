@@ -21,7 +21,11 @@ public class $HTMLElement extends HTMLElement {
 
   public void select() {
   }
-  
+
   public void prepend(Node node) {
+  }
+
+  public $HTMLElement closest(String selector) {
+    return null;
   }
 }

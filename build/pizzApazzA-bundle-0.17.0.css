@@ -125,9 +125,13 @@
 
 /* panel/color */
 
-.z4bigradientcolorpanel canvas, .z4gradientcolorpanel canvas {
+.z4bigradientcolorpanel canvas {
   border: 1px solid var(--main-action-bgcolor);
   background-image: url(../image/util/chessboard.png);
+}
+.z4bigradientcolorpanel .z4bigradientcolorpanel-history img {
+  content: url(../image/util/history.svg);
+  width: 1.143rem;
 }
 
 /* panel/ribbon */
@@ -608,7 +612,28 @@
 }
 .z4fillingpanel div label:nth-child(9) img {
   content: url(../image/filling/fill_bigradientcolor.gif);
-}.z4historypreview {
+}.z4gradientcolorpanel canvas {
+  border: 1px solid var(--main-action-bgcolor);
+  background-image: url(../image/util/chessboard.png);
+}
+.z4gradientcolorpanel .z4gradientcolorpanel-history img {
+  content: url(../image/util/history.svg);
+  width: 1.143rem;
+}
+
+.z4gradientcolorpanel-scrollpanel {
+  overflow-y: scroll;
+}
+.z4gradientcolorpanel-historypanel {
+  width:100%;
+}
+.z4gradientcolorpanel-historypanel canvas {
+  border-radius: var(--roundness);
+  border: 1px solid var(--main-action-bgcolor);
+  background-image: url(../image/util/chessboard.png);
+  cursor: pointer;
+}
+.z4historypreview {
   margin-right: 2px;
 }
 

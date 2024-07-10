@@ -1,6 +1,8 @@
 package pizzapazza.color;
 
 import def.dom.CanvasGradient;
+import def.js.Array;
+import def.js.JSON;
 import javascript.awt.Color;
 import pizzapazza.math.Z4Math;
 import simulation.dom.$CanvasRenderingContext2D;
@@ -14,6 +16,8 @@ import simulation.js.$Object;
  * @author gianpiero.diblasi
  */
 public class Z4GradientColor extends Z4AbstractGradientColor<Color> {
+
+  private final static Array<Z4GradientColor> history = new Array<>();
 
   /**
    * Creates the object
@@ -141,5 +145,37 @@ public class Z4GradientColor extends Z4AbstractGradientColor<Color> {
     gradientColor.setRipple(json.$get("ripple"));
     ((Iterable<$Object>) json.$get("colorsAndPositions")).forEach(colorAndPosition -> gradientColor.addColor(new Color(colorAndPosition.$get("red"), colorAndPosition.$get("green"), colorAndPosition.$get("blue"), colorAndPosition.$get("alpha")), colorAndPosition.$get("position")));
     return gradientColor;
+  }
+
+  /**
+   * Pushes a gradient color in the gradient color history (if not already
+   * present)
+   *
+   * @param color The gradient color
+   */
+  @SuppressWarnings("StringEquality")
+  public static void pushHistory(Z4GradientColor color) {
+    int index = Z4GradientColor.history.findIndex(element -> JSON.stringify(element.toJSON()) == JSON.stringify(color.toJSON()));
+    if (index != -1) {
+      Z4GradientColor.history.splice(index, 1);
+    }
+    Z4GradientColor.history.unshift(color);
+    Z4GradientColor.history.splice(48);
+  }
+
+  /**
+   * Returns the gradient color history
+   *
+   * @return The gradient color history
+   */
+  public static Array<Z4GradientColor> getHistory() {
+    return Z4GradientColor.history.map(color -> color);
+  }
+
+  /**
+   * Resets the gradient color history
+   */
+  public static void resetHistory() {
+    Z4GradientColor.history.length = 0;
   }
 }

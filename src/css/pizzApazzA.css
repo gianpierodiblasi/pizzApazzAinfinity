@@ -125,9 +125,13 @@
 
 /* panel/color */
 
-.z4bigradientcolorpanel canvas, .z4gradientcolorpanel canvas {
+.z4bigradientcolorpanel canvas {
   border: 1px solid var(--main-action-bgcolor);
   background-image: url(../image/util/chessboard.png);
+}
+.z4bigradientcolorpanel .z4bigradientcolorpanel-history img {
+  content: url(../image/util/history.svg);
+  width: 1.143rem;
 }
 
 /* panel/ribbon */

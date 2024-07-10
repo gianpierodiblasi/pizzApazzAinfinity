@@ -6,6 +6,8 @@
  */
 class Z4BiGradientColor extends Z4AbstractGradientColor {
 
+  static  history = new Array();
+
   /**
    * Creates the object
    */
@@ -106,5 +108,36 @@ class Z4BiGradientColor extends Z4AbstractGradientColor {
     gradientColor.setRipple(json["ripple"]);
     (json["colorsAndPositions"]).forEach(colorAndPosition => gradientColor.addColor(Z4GradientColor.fromJSON(colorAndPosition["gradientColor"]), colorAndPosition["position"]));
     return gradientColor;
+  }
+
+  /**
+   * Pushes a bigradient color in the bigradient color history (if not already
+   * present)
+   *
+   * @param color The bigradient color
+   */
+  static  pushHistory(color) {
+    let index = Z4BiGradientColor.history.findIndex(element => JSON.stringify(element.toJSON()) === JSON.stringify(color.toJSON()));
+    if (index !== -1) {
+      Z4BiGradientColor.history.splice(index, 1);
+    }
+    Z4BiGradientColor.history.unshift(color);
+    Z4BiGradientColor.history.splice(48);
+  }
+
+  /**
+   * Returns the bigradient color history
+   *
+   * @return The bigradient color history
+   */
+  static  getHistory() {
+    return Z4BiGradientColor.history.map(color => color);
+  }
+
+  /**
+   * Resets the bigradient color history
+   */
+  static  resetHistory() {
+    Z4BiGradientColor.history.length = 0;
   }
 }
