@@ -167,7 +167,7 @@ class Z4Canvas extends JSComponent {
     Z4BiGradientColor.resetHistory();
     this.ribbonHistoryPanel.resetHistory(() => {
       this.afterCreate("", width, height);
-      this.fitZoom();
+      this.fitZoomIfNeeded();
       this.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
     });
   }
@@ -802,6 +802,17 @@ class Z4Canvas extends JSComponent {
    */
    fitZoom() {
     this.setZoom(Math.min((this.canvas.parentElement.clientWidth - 20) / this.width, (this.canvas.parentElement.clientHeight - 20) / this.height));
+  }
+
+  /**
+   * Sets the zoom to fit the available space if needed, that is if the image is
+   * bigger than the available space
+   */
+   fitZoomIfNeeded() {
+    if ((this.canvas.parentElement.clientWidth - 20) < this.width || (this.canvas.parentElement.clientHeight - 20) < this.height) {
+      this.fitZoom();
+      this.statusPanel.setZoom(this.zoom);
+    }
   }
 
    zoomInOut(apply) {

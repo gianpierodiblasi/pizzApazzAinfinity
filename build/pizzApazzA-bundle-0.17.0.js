@@ -2043,7 +2043,7 @@ class Z4Canvas extends JSComponent {
     Z4BiGradientColor.resetHistory();
     this.ribbonHistoryPanel.resetHistory(() => {
       this.afterCreate("", width, height);
-      this.fitZoom();
+      this.fitZoomIfNeeded();
       this.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
     });
   }
@@ -2680,6 +2680,17 @@ class Z4Canvas extends JSComponent {
     this.setZoom(Math.min((this.canvas.parentElement.clientWidth - 20) / this.width, (this.canvas.parentElement.clientHeight - 20) / this.height));
   }
 
+  /**
+   * Sets the zoom to fit the available space if needed, that is if the image is
+   * bigger than the available space
+   */
+   fitZoomIfNeeded() {
+    if ((this.canvas.parentElement.clientWidth - 20) < this.width || (this.canvas.parentElement.clientHeight - 20) < this.height) {
+      this.fitZoom();
+      this.statusPanel.setZoom(this.zoom);
+    }
+  }
+
    zoomInOut(apply) {
     if (this.zooming) {
     } else {
@@ -3129,7 +3140,7 @@ class Z4CanvasIOManager {
         Z4BiGradientColor.resetHistory();
         this.ribbonHistoryPanel.resetHistory(() => {
           this.canvas.afterCreate(projectName, image.width, image.height);
-          this.canvas.fitZoom();
+          this.canvas.fitZoomIfNeeded();
           this.canvas.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
         });
       } else {
@@ -3207,7 +3218,7 @@ class Z4CanvasIOManager {
         } else {
           this.jsonToArrays(zip, () => {
             this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
-            this.canvas.fitZoom();
+            this.canvas.fitZoomIfNeeded();
             this.canvas.toHistory(json2 => this.ribbonHistoryPanel.addHistory(json2, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
             Z4UI.pleaseWaitCompleted();
           });
@@ -3241,7 +3252,7 @@ class Z4CanvasIOManager {
         this.ribbonHistoryPanel.addHistory(layerJSON, currentKey => this.jsonToArrays(zip, () => {
           this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey === historyKey ? currentKey : newCurrentKey);
           this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
-          this.canvas.fitZoom();
+          this.canvas.fitZoomIfNeeded();
           Z4UI.pleaseWaitCompleted();
         }), true);
       }
@@ -12886,7 +12897,11 @@ class Z4StatusPanel extends JSPanel {
    * @param zoom The zoom
    */
    setZoom(zoom) {
-    this.zoom.setSelectedItem(new KeyValue("" + zoom, ""));
+    if (Z4Constants.ZOOM_LEVEL.findIndex(value => value === zoom) !== -1) {
+      this.zoom.setSelectedItem(new KeyValue("" + zoom, ""));
+    } else {
+      this.zoom.setSelectedItem(new KeyValue("FIT", ""));
+    }
   }
 
   /**

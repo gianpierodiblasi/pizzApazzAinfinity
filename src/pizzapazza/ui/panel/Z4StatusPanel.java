@@ -150,7 +150,11 @@ public class Z4StatusPanel extends JSPanel {
    * @param zoom The zoom
    */
   public void setZoom(double zoom) {
-    this.zoom.setSelectedItem(new KeyValue<>("" + zoom, ""));
+    if (Z4Constants.ZOOM_LEVEL.findIndex(value -> value == zoom) != -1) {
+      this.zoom.setSelectedItem(new KeyValue<>("" + zoom, ""));
+    } else {
+      this.zoom.setSelectedItem(new KeyValue<>("FIT", ""));
+    }
   }
 
   /**
