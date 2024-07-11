@@ -4,6 +4,7 @@ import def.dom.CanvasGradient;
 import def.dom.CanvasPattern;
 import def.js.Array;
 import javascript.awt.Color;
+import javascript.awt.Dimension;
 import javascript.util.fsa.FilePickerOptionsType;
 import jsweet.util.union.Union4;
 import pizzapazza.color.Z4BiGradientColor;
@@ -123,6 +124,24 @@ public class Z4Constants {
    * The max DPI
    */
   public final static int MAX_DPI = 1500;
+
+  /**
+   * The standard image sizes
+   */
+  public final static Array<Dimension> STANDARD_IMAGE_SIZE = new Array<>(
+          new Dimension(640, 480),
+          new Dimension(800, 600),
+          new Dimension(1024, 768),
+          new Dimension(1080, 720),
+          new Dimension(1080, 1080),
+          new Dimension(1152, 864),
+          new Dimension(1280, 720),
+          new Dimension(1280, 1024),
+          new Dimension(1800, 1200),
+          new Dimension(1920, 1080),
+          new Dimension(2100, 1500),
+          new Dimension(3000, 2400)
+  );
 
   private Z4Constants() {
   }

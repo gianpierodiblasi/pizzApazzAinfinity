@@ -91,6 +91,11 @@ class Z4Constants {
    */
   static  MAX_DPI = 1500;
 
+  /**
+   * The standard image sizes
+   */
+  static  STANDARD_IMAGE_SIZE = new Array(new Dimension(640, 480), new Dimension(800, 600), new Dimension(1024, 768), new Dimension(1080, 720), new Dimension(1080, 1080), new Dimension(1152, 864), new Dimension(1280, 720), new Dimension(1280, 1024), new Dimension(1800, 1200), new Dimension(1920, 1080), new Dimension(2100, 1500), new Dimension(3000, 2400));
+
   constructor() {
   }
 

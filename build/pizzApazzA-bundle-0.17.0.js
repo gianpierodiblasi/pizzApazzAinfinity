@@ -12307,20 +12307,27 @@ class Z4NewImagePanel extends JSTabbedPane {
   constructor() {
     super();
     this.cssAddClass("z4newimagepanel");
-    this.getStyle().minWidth = "60rem";
-    this.getStyle().minHeight = "45rem";
+    this.getStyle().width = "60rem";
+    this.getStyle().height = "45rem";
     let panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
     this.addTab(Z4Translations.DIMENSION, panel);
-    Z4UI.addLabel(panel, Z4Translations.WIDTH + " (px)", new GBC(0, 0).a(GBC.WEST).i(5, 0, 0, 5));
-    this.addSpinner(panel, this.width, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 0, 1);
-    Z4UI.addLabel(panel, Z4Translations.HEIGHT + " (px)", new GBC(1, 0).a(GBC.WEST).i(5, 5, 0, 5));
-    this.addSpinner(panel, this.height, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 1, 1);
-    Z4UI.addLabel(panel, Z4Translations.RESOLUTION + " (dpi)", new GBC(2, 0).a(GBC.WEST).i(5, 0, 0, 5));
-    this.addSpinner(panel, this.resolution, Z4Constants.DEFAULT_DPI, Z4Constants.MAX_DPI, 2, 1);
-    panel.add(this.dimensionMM, new GBC(0, 2).w(3).f(GBC.HORIZONTAL).i(2, 0, 0, 0));
-    panel.add(this.dimensionIN, new GBC(0, 3).w(3).f(GBC.HORIZONTAL).i(2, 0, 0, 0));
-    panel.add(new JSLabel(), new GBC(0, 4).wy(1));
+    Z4UI.addLabel(panel, Z4Translations.WIDTH + " (px)", new GBC(1, 0).a(GBC.WEST).i(5, 0, 0, 5));
+    this.addSpinner(panel, this.width, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 1, 1);
+    Z4UI.addLabel(panel, Z4Translations.HEIGHT + " (px)", new GBC(2, 0).a(GBC.WEST).i(5, 5, 0, 5));
+    this.addSpinner(panel, this.height, Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.MAX_IMAGE_SIZE, 2, 1);
+    Z4UI.addLabel(panel, Z4Translations.RESOLUTION + " (dpi)", new GBC(3, 0).a(GBC.WEST).i(5, 0, 0, 5));
+    this.addSpinner(panel, this.resolution, Z4Constants.DEFAULT_DPI, Z4Constants.MAX_DPI, 3, 1);
+    panel.add(this.dimensionMM, new GBC(1, 2).w(3).f(GBC.HORIZONTAL).i(2, 0, 0, 0));
+    panel.add(this.dimensionIN, new GBC(1, 3).w(3).f(GBC.HORIZONTAL).i(2, 0, 0, 0));
+    let p1 = new JSPanel();
+    p1.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+    Z4Constants.STANDARD_IMAGE_SIZE.forEach(dimension => this.addButton(p1, dimension));
+    panel.add(p1, new GBC(0, 4).w(5).i(5, 0, 0, 0));
+    let p2 = new JSPanel();
+    p2.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+    Z4Constants.STANDARD_IMAGE_SIZE.forEach(dimension => this.addButton(p2, new Dimension(dimension.height, dimension.width)));
+    panel.add(p2, new GBC(0, 5).w(5).wy(1).a(GBC.NORTH).i(5, 0, 0, 0));
     this.addTab(Z4Translations.FILLING, this.fillingPanel);
     this.setDimensions();
   }
@@ -12332,6 +12339,17 @@ class Z4NewImagePanel extends JSTabbedPane {
     spinner.getChilStyleByQuery("input[type=number]").width = "5.5rem";
     spinner.addChangeListener(event => this.setDimensions());
     panel.add(spinner, new GBC(gridx, gridy).a(GBC.WEST).i(0, 0, 0, 5));
+  }
+
+   addButton(panel, dimension) {
+    let button = new JSButton();
+    button.setText(dimension.width + " x " + dimension.height);
+    button.addActionListener(event => {
+      this.width.setValue(dimension.width);
+      this.height.setValue(dimension.height);
+      this.setDimensions();
+    });
+    panel.add(button, null);
   }
 
    setDimensions() {
@@ -13061,6 +13079,11 @@ class Z4Constants {
    * The max DPI
    */
   static  MAX_DPI = 1500;
+
+  /**
+   * The standard image sizes
+   */
+  static  STANDARD_IMAGE_SIZE = new Array(new Dimension(640, 480), new Dimension(800, 600), new Dimension(1024, 768), new Dimension(1080, 720), new Dimension(1080, 1080), new Dimension(1152, 864), new Dimension(1280, 720), new Dimension(1280, 1024), new Dimension(1800, 1200), new Dimension(1920, 1080), new Dimension(2100, 1500), new Dimension(3000, 2400));
 
   constructor() {
   }
