@@ -813,13 +813,6 @@
   font-size: smaller;
 }
 
-.z4statuspanel .jscombobox {
-  border-width: 0px;
-}
-.z4statuspanel .jscombobox summary {
-  min-height: 0px;
-}
-
 .z4statuspanel .z4statuspanel-projectname {
   width: 20rem;
   text-overflow: ellipsis;
@@ -827,27 +820,38 @@
   overflow: hidden;
 }
 
-.z4statuspanel .z4drawingpicker {
+.z4statuspanel .z4statuspanel-zoom {
+  min-width: 4.5rem;
+}
+.z4statuspanel .z4statuspanel-zoom summary {
+  min-height: 0px;
+  padding: 0px;
+}
+.z4statuspanel .z4statuspanel-zoom ul {
+  min-width: 5rem;
+}
+
+.z4statuspanel .z4statuspanel-colorpicker {
   padding: 0px;
   border-width: 0px;
 }
-.z4statuspanel .z4drawingpicker img {
+.z4statuspanel .z4statuspanel-colorpicker img {
   width: 11px;
   height: 11px;
   content: url(../image/color/picker.gif);
 }
 
-.z4statuspanel .z4drawingdirection img {
+.z4statuspanel .z4statuspanel-drawingdirection img {
   width: 14px;
   height: 14px;
 }
-.z4statuspanel .z4drawingdirection-free img {
+.z4statuspanel .z4statuspanel-drawingdirection-free img {
   content: url(../image/status/drawingdirection-free.gif);
 }
-.z4statuspanel .z4drawingdirection-horizontal img {
+.z4statuspanel .z4statuspanel-drawingdirection-horizontal img {
   content: url(../image/status/drawingdirection-horizontal.gif);
 }
-.z4statuspanel .z4drawingdirection-vertical img {
+.z4statuspanel .z4statuspanel-drawingdirection-vertical img {
   content: url(../image/status/drawingdirection-vertical.gif);
 }.z4whirlpoolpanel {
 }

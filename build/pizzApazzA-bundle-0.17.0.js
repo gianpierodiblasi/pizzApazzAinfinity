@@ -12824,10 +12824,8 @@ class Z4StatusPanel extends JSPanel {
     let zoomModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer();
     Z4Constants.ZOOM_LEVEL.forEach(level => zoomModelAndRenderer.addElement(new KeyValue("" + level, parseInt(100 * level) + "%")));
     zoomModelAndRenderer.addElement(new KeyValue("FIT", Z4Translations.FIT));
+    this.zoom.cssAddClass("z4statuspanel-zoom");
     this.zoom.setModelAndRenderer(zoomModelAndRenderer);
-    this.zoom.getStyle().minWidth = "4.5rem";
-    this.zoom.getChilStyleByQuery("summary").padding = "0px";
-    this.zoom.getChilStyleByQuery("ul").minWidth = "5rem";
     this.zoom.setSelectedItem(new KeyValue("1", ""));
     this.zoom.addActionListener(event => this.onZoom());
     this.add(this.zoom, new GBC(1, 1).a(GBC.EAST).i(0, 5, 0, 5));
@@ -12837,21 +12835,23 @@ class Z4StatusPanel extends JSPanel {
     this.add(this.mousePosition, new GBC(3, 0).h(2).i(0, 5, 0, 5));
     this.color.getStyle().fontFamily = "monospace";
     this.add(this.color, new GBC(4, 0).h(2).i(0, 5, 0, 5));
-    this.pickProjectColor.cssAddClass("z4drawingpicker");
+    this.pickProjectColor.cssAddClass("z4statuspanel-colorpicker");
     this.pickProjectColor.setContentAreaFilled(false);
+    this.pickProjectColor.setTooltip(Z4Translations.PICK_COLOR);
     this.pickProjectColor.setIcon(new Z4EmptyImageProducer(""));
     this.pickProjectColor.addActionListener(event => this.pickColor(this.pickProjectColor));
     this.add(this.pickProjectColor, new GBC(5, 0).i(0, 5, 0, 5));
-    this.pickLayerColor.cssAddClass("z4drawingpicker");
+    this.pickLayerColor.cssAddClass("z4statuspanel-colorpicker");
     this.pickLayerColor.setContentAreaFilled(false);
+    this.pickLayerColor.setTooltip(Z4Translations.PICK_COLOR);
     this.pickLayerColor.setIcon(new Z4EmptyImageProducer(""));
     this.pickLayerColor.addActionListener(event => this.pickColor(this.pickLayerColor));
     this.add(this.pickLayerColor, new GBC(5, 1).i(0, 5, 0, 5));
     this.drawingDirection.setContentAreaFilled(false);
     this.drawingDirection.setTooltip(Z4Translations.DRAWING_DIRECTION);
     this.drawingDirection.setIcon(new Z4EmptyImageProducer(""));
-    this.drawingDirection.cssAddClass("z4drawingdirection");
-    this.drawingDirection.cssAddClass("z4drawingdirection-free");
+    this.drawingDirection.cssAddClass("z4statuspanel-drawingdirection");
+    this.drawingDirection.cssAddClass("z4statuspanel-drawingdirection-free");
     this.drawingDirection.addActionListener(event => this.setDrawingDirection(null));
     this.add(this.drawingDirection, new GBC(6, 0).h(2).i(0, 5, 0, 5));
     this.add(this.canvasGridPanel, new GBC(7, 0).h(2).i(0, 5, 0, 5));
@@ -12935,23 +12935,23 @@ class Z4StatusPanel extends JSPanel {
    * @param drawingDirection The drawing direction
    */
    setDrawingDirection(drawingDirection) {
-    this.drawingDirection.cssRemoveClass("z4drawingdirection-free");
-    this.drawingDirection.cssRemoveClass("z4drawingdirection-horizontal");
-    this.drawingDirection.cssRemoveClass("z4drawingdirection-vertical");
+    this.drawingDirection.cssRemoveClass("z4statuspanel-drawingdirection-free");
+    this.drawingDirection.cssRemoveClass("z4statuspanel-drawingdirection-horizontal");
+    this.drawingDirection.cssRemoveClass("z4statuspanel-drawingdirection-vertical");
     if (drawingDirection === Z4DrawingDirection.FREE) {
-      this.drawingDirection.cssAddClass("z4drawingdirection-free");
+      this.drawingDirection.cssAddClass("z4statuspanel-drawingdirection-free");
     } else if (drawingDirection === Z4DrawingDirection.HORIZONTAL) {
-      this.drawingDirection.cssAddClass("z4drawingdirection-horizontal");
+      this.drawingDirection.cssAddClass("z4statuspanel-drawingdirection-horizontal");
     } else if (drawingDirection === Z4DrawingDirection.VERTICAL) {
-      this.drawingDirection.cssAddClass("z4drawingdirection-vertical");
+      this.drawingDirection.cssAddClass("z4statuspanel-drawingdirection-vertical");
     } else if (this.canvas.getDrawingDirection() === Z4DrawingDirection.FREE) {
-      this.drawingDirection.cssAddClass("z4drawingdirection-horizontal");
+      this.drawingDirection.cssAddClass("z4statuspanel-drawingdirection-horizontal");
       this.canvas.setDrawingDirection(Z4DrawingDirection.HORIZONTAL);
     } else if (this.canvas.getDrawingDirection() === Z4DrawingDirection.HORIZONTAL) {
-      this.drawingDirection.cssAddClass("z4drawingdirection-vertical");
+      this.drawingDirection.cssAddClass("z4statuspanel-drawingdirection-vertical");
       this.canvas.setDrawingDirection(Z4DrawingDirection.VERTICAL);
     } else if (this.canvas.getDrawingDirection() === Z4DrawingDirection.VERTICAL) {
-      this.drawingDirection.cssAddClass("z4drawingdirection-free");
+      this.drawingDirection.cssAddClass("z4statuspanel-drawingdirection-free");
       this.canvas.setDrawingDirection(Z4DrawingDirection.FREE);
     }
   }
