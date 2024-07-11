@@ -1973,7 +1973,8 @@ class Z4Canvas extends JSComponent {
     this.canvas.addEventListener("mousedown", event => this.mouseManager.onMouse(event, "down"));
     this.canvas.addEventListener("mousemove", event => this.mouseManager.onMouse(event, "move"));
     this.canvas.addEventListener("mouseup", event => this.mouseManager.onMouse(event, "up"));
-    this.canvasOverlay.addEventListener("mousedown", event => this.mouseManager.onMouse(event, "down"));
+    this.canvasOverlay.addEventListener("mousemove", event => this.mouseManager.onMouse(event, "move"));
+    this.canvasOverlay.addEventListener("mouseup", event => this.mouseManager.onMouse(event, "up"));
     this.addEventListener("wheel", event => {
       let evt = event;
       if (!evt.ctrlKey) {
@@ -3820,8 +3821,17 @@ class Z4CanvasMouseManager {
    onMouse(event, type) {
     let x = Math.min(this.size.width, Math.max(0, event.offsetX / this.zoom));
     let y = Math.min(this.size.height, Math.max(0, event.offsetY / this.zoom));
+    let xParsed = parseInt(x);
+    let yParsed = parseInt(y);
     if (this.canvasOverlayMode === Z4CanvasOverlayMode.PICK_COLOR) {
-      this.statusPanel.colorPicked(this.canvas.getColorAt(parseInt(x), parseInt(y)), this.canvas.getSelectedLayerColorAt(parseInt(x), parseInt(y)));
+      switch(type) {
+        case "up":
+          this.statusPanel.colorPicked(this.canvas.getColorAt(xParsed, yParsed), this.canvas.getSelectedLayerColorAt(xParsed, yParsed));
+          break;
+        case "move":
+          this.statusPanel.setMousePosition(xParsed, yParsed);
+          break;
+      }
     } else {
       switch(type) {
         case "enter":
@@ -3834,7 +3844,7 @@ class Z4CanvasMouseManager {
           this.onAction(Z4PointIteratorDrawingAction.START, x, y);
           break;
         case "move":
-          this.statusPanel.setMousePosition(parseInt(x), parseInt(y));
+          this.statusPanel.setMousePosition(xParsed, yParsed);
           this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
           break;
         case "up":
@@ -12919,7 +12929,7 @@ class Z4StatusPanel extends JSPanel {
     this.drawingDirection.cssAddClass("z4statuspanel-drawingdirection-free");
     this.drawingDirection.addActionListener(event => this.setDrawingDirection(null));
     this.add(this.drawingDirection, new GBC(6, 0).h(2).i(0, 5, 0, 5));
-    this.add(this.canvasGridPanel, new GBC(7, 0).h(2).i(0, 5, 0, 5));
+    this.add(this.canvasGridPanel, new GBC(7, 0).h(2).f(GBC.VERTICAL).i(0, 5, 0, 5));
     this.add(new JSLabel(), new GBC(8, 0).wx(1));
   }
 
@@ -12942,7 +12952,9 @@ class Z4StatusPanel extends JSPanel {
    */
    colorPicked(projectColor, layerColor) {
     if (this.pickProjectColor.isSelected() && projectColor) {
+      Color.pushHistory(projectColor);
     } else if (this.pickLayerColor.isSelected() && layerColor) {
+      Color.pushHistory(layerColor);
     }
     this.pickProjectColor.setContentAreaFilled(false);
     this.pickProjectColor.setSelected(false);

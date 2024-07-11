@@ -70,7 +70,7 @@ class Z4StatusPanel extends JSPanel {
     this.drawingDirection.cssAddClass("z4statuspanel-drawingdirection-free");
     this.drawingDirection.addActionListener(event => this.setDrawingDirection(null));
     this.add(this.drawingDirection, new GBC(6, 0).h(2).i(0, 5, 0, 5));
-    this.add(this.canvasGridPanel, new GBC(7, 0).h(2).i(0, 5, 0, 5));
+    this.add(this.canvasGridPanel, new GBC(7, 0).h(2).f(GBC.VERTICAL).i(0, 5, 0, 5));
     this.add(new JSLabel(), new GBC(8, 0).wx(1));
   }
 
@@ -93,7 +93,9 @@ class Z4StatusPanel extends JSPanel {
    */
    colorPicked(projectColor, layerColor) {
     if (this.pickProjectColor.isSelected() && projectColor) {
+      Color.pushHistory(projectColor);
     } else if (this.pickLayerColor.isSelected() && layerColor) {
+      Color.pushHistory(layerColor);
     }
     this.pickProjectColor.setContentAreaFilled(false);
     this.pickProjectColor.setSelected(false);

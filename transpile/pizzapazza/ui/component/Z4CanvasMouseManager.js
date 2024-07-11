@@ -142,8 +142,17 @@ class Z4CanvasMouseManager {
    onMouse(event, type) {
     let x = Math.min(this.size.width, Math.max(0, event.offsetX / this.zoom));
     let y = Math.min(this.size.height, Math.max(0, event.offsetY / this.zoom));
+    let xParsed = parseInt(x);
+    let yParsed = parseInt(y);
     if (this.canvasOverlayMode === Z4CanvasOverlayMode.PICK_COLOR) {
-      this.statusPanel.colorPicked(this.canvas.getColorAt(parseInt(x), parseInt(y)), this.canvas.getSelectedLayerColorAt(parseInt(x), parseInt(y)));
+      switch(type) {
+        case "up":
+          this.statusPanel.colorPicked(this.canvas.getColorAt(xParsed, yParsed), this.canvas.getSelectedLayerColorAt(xParsed, yParsed));
+          break;
+        case "move":
+          this.statusPanel.setMousePosition(xParsed, yParsed);
+          break;
+      }
     } else {
       switch(type) {
         case "enter":
@@ -156,7 +165,7 @@ class Z4CanvasMouseManager {
           this.onAction(Z4PointIteratorDrawingAction.START, x, y);
           break;
         case "move":
-          this.statusPanel.setMousePosition(parseInt(x), parseInt(y));
+          this.statusPanel.setMousePosition(xParsed, yParsed);
           this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
           break;
         case "up":
