@@ -9,9 +9,9 @@ class Z4StatusPanel extends JSPanel {
 
    projectName = new JSLabel();
 
-   zoom = new JSComboBox();
-
    projectSize = new JSLabel();
+
+   zoom = new JSComboBox();
 
    mousePosition = new JSLabel();
 
@@ -28,38 +28,35 @@ class Z4StatusPanel extends JSPanel {
     super();
     this.cssAddClass("z4statuspanel");
     this.setLayout(new GridBagLayout());
+    this.projectName.cssAddClass("z4statuspanel-projectname");
     this.projectName.setText(Z4Translations.PROJECT_NAME + ": ");
-    this.add(this.projectName, new GBC(0, 0).i(0, 5, 0, 5));
-    Z4UI.addVLine(this, new GBC(1, 0).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    this.add(this.projectName, new GBC(0, 0).a(GBC.WEST).i(0, 5, 0, 5));
+    this.projectSize.setText(Z4Translations.DIMENSION + ": " + Z4Constants.DEFAULT_IMAGE_SIZE + " x " + Z4Constants.DEFAULT_IMAGE_SIZE);
+    this.add(this.projectSize, new GBC(0, 1).a(GBC.WEST).i(0, 5, 0, 5));
+    Z4UI.addVLine(this, new GBC(1, 0).h(2).f(GBC.VERTICAL).i(1, 2, 1, 2));
     let zoomModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer();
     Z4Constants.ZOOM_LEVEL.forEach(level => zoomModelAndRenderer.addElement(new KeyValue("" + level, parseInt(100 * level) + "%")));
     zoomModelAndRenderer.addElement(new KeyValue("FIT", Z4Translations.FIT));
     this.zoom.setModelAndRenderer(zoomModelAndRenderer);
-    this.zoom.getStyle().minWidth = "5rem";
+    this.zoom.getStyle().minWidth = "4.5rem";
     this.zoom.getChilStyleByQuery("ul").minWidth = "5rem";
     this.zoom.setSelectedItem(new KeyValue("1", ""));
     this.zoom.addActionListener(event => this.onZoom());
-    this.add(this.zoom, new GBC(2, 0).i(0, 5, 0, 5));
-    Z4UI.addVLine(this, new GBC(3, 0).f(GBC.VERTICAL).i(1, 2, 1, 2));
-    this.projectSize.setText(Z4Translations.DIMENSION + ": " + Z4Constants.DEFAULT_IMAGE_SIZE + " x " + Z4Constants.DEFAULT_IMAGE_SIZE);
-    this.add(this.projectSize, new GBC(4, 0).i(0, 5, 0, 5));
-    Z4UI.addVLine(this, new GBC(5, 0).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    this.add(this.zoom, new GBC(2, 0).h(2).i(0, 5, 0, 5));
     this.mousePosition.getStyle().fontFamily = "monospace";
     this.setMousePosition(0, 0);
-    this.add(this.mousePosition, new GBC(6, 0).i(0, 5, 0, 5));
+    this.add(this.mousePosition, new GBC(3, 0).h(2).i(0, 5, 0, 5));
     this.color.getStyle().fontFamily = "monospace";
-    this.color.getStyle().fontSize = "smaller";
-    this.add(this.color, new GBC(7, 0).i(0, 5, 0, 5));
-    Z4UI.addVLine(this, new GBC(8, 0).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    this.add(this.color, new GBC(4, 0).h(2).i(0, 5, 0, 5));
     this.drawingDirection.setContentAreaFilled(false);
     this.drawingDirection.setTooltip(Z4Translations.DRAWING_DIRECTION);
     this.drawingDirection.setIcon(new Z4EmptyImageProducer(""));
     this.drawingDirection.cssAddClass("z4drawingdirection");
     this.drawingDirection.cssAddClass("z4drawingdirection-free");
     this.drawingDirection.addActionListener(event => this.setDrawingDirection(null));
-    this.add(this.drawingDirection, new GBC(9, 0).i(0, 5, 0, 5));
-    this.add(this.canvasGridPanel, new GBC(10, 0).i(0, 5, 0, 5));
-    this.add(new JSLabel(), new GBC(11, 0).wx(1));
+    this.add(this.drawingDirection, new GBC(5, 0).h(2).i(0, 5, 0, 5));
+    this.add(this.canvasGridPanel, new GBC(6, 0).h(2).i(0, 5, 0, 5));
+    this.add(new JSLabel(), new GBC(7, 0).wx(1));
   }
 
   /**
@@ -79,6 +76,7 @@ class Z4StatusPanel extends JSPanel {
    */
    setProjectName(projectName) {
     this.projectName.setText(Z4Translations.PROJECT_NAME + ": " + projectName);
+    this.projectName.setAttribute("title", projectName);
   }
 
   /**

@@ -1,6 +1,17 @@
 .z4statuspanel {
 }
 
+.z4statuspanel > label, .z4statuspanel .jscombobox summary label {
+  font-size: smaller;
+}
+
+.z4statuspanel .z4statuspanel-projectname {
+  width: 20rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 .z4statuspanel .z4drawingdirection img {
   width: 14px;
   height: 14px;
