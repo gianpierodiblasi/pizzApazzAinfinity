@@ -111,16 +111,22 @@ class Z4StatusPanel extends JSPanel {
    colorPicked(projectColor, layerColor) {
     if (this.pickProjectColor.isSelected() && projectColor) {
       Color.pushHistory(projectColor);
-      // MESSAGGIO DI COLOR PICKED
+      this.colorPickedMessage();
     } else if (this.pickLayerColor.isSelected() && layerColor) {
       Color.pushHistory(layerColor);
-      // MESSAGGIO DI COLOR PICKED
+      this.colorPickedMessage();
     }
     this.pickProjectColor.setContentAreaFilled(false);
     this.pickProjectColor.setSelected(false);
     this.pickLayerColor.setContentAreaFilled(false);
     this.pickLayerColor.setSelected(false);
     setTimeout(() => this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.PICK_COLOR), 0);
+  }
+
+   colorPickedMessage() {
+    let panel = new JSPanel();
+    JSOptionPane.showMessageDialog(panel, Z4Translations.PICK_COLOR, JSOptionPane.INFORMATION_MESSAGE, () => {
+    });
   }
 
   /**

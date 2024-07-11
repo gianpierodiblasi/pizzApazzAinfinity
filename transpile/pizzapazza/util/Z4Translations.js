@@ -271,6 +271,8 @@ class Z4Translations {
 
   static  DRAWING_TOOL_OPEN_ERROR_MESSAGE = "";
 
+  static  DO_NOT_SHOW_AGAIN_MESSAGE = "";
+
   // Color
   static  COLOR = "";
 
@@ -295,6 +297,8 @@ class Z4Translations {
   static  LIGHTING = "";
 
   static  PICK_COLOR = "";
+
+  static  COLOR_STORED_IN_HISTORY = "";
 
   // Point Iterator
   static  MULTIPLICITY = "";
@@ -612,6 +616,8 @@ class Z4Translations {
     Z4Translations.IMAGE_TOO_BIG_MESSAGE = "The image is too big to be loaded; image size = $image_size$, max image size = $max_image_size$";
     Z4Translations.IMAGE_OPEN_ERROR_MESSAGE = "It is not possible to open the image";
     Z4Translations.DRAWING_TOOL_OPEN_ERROR_MESSAGE = "It is not possible to open the drawing tool";
+    Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE = "Do not show this message again";
+    Z4Translations.COLOR_STORED_IN_HISTORY = "The color has been stored in the color history";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -850,6 +856,7 @@ class Z4Translations {
     Z4Translations.IMAGE_TOO_BIG_MESSAGE = "L'immagine \u00E8 troppo grande per essere caricata; dimensione immagine = $image_size$, dimensione massima immagine = $max_image_size$";
     Z4Translations.IMAGE_OPEN_ERROR_MESSAGE = "Non \u00E8 possibile aprire l'immagine";
     Z4Translations.DRAWING_TOOL_OPEN_ERROR_MESSAGE = "Non \u00E8 possibile aprire lo strumento di disegno";
+    Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE = "Non mostrare pi\u00F9 questo messaggio";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";
@@ -863,6 +870,7 @@ class Z4Translations {
     Z4Translations.TEMPORAL = "Temporale";
     Z4Translations.LIGHTING = "Illuminazione";
     Z4Translations.PICK_COLOR = "Preleva Colore";
+    Z4Translations.COLOR_STORED_IN_HISTORY = "Il colore \u00E8 stato conservato nella cronologia dei colori";
     // Point Iterator
     Z4Translations.MULTIPLICITY = "Molteplicit\u00E0";
     Z4Translations.PUSH = "Spinta";

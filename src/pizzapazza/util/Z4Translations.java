@@ -162,6 +162,7 @@ public class Z4Translations {
   public static String IMAGE_TOO_BIG_MESSAGE = "";
   public static String IMAGE_OPEN_ERROR_MESSAGE = "";
   public static String DRAWING_TOOL_OPEN_ERROR_MESSAGE = "";
+  public static String DO_NOT_SHOW_AGAIN_MESSAGE = "";
 
   // Color
   public static String COLOR = "";
@@ -176,6 +177,7 @@ public class Z4Translations {
   public static String TEMPORAL = "";
   public static String LIGHTING = "";
   public static String PICK_COLOR = "";
+  public static String COLOR_STORED_IN_HISTORY = "";
 
   // Point Iterator
   public static String MULTIPLICITY = "";
@@ -432,6 +434,8 @@ public class Z4Translations {
     Z4Translations.IMAGE_TOO_BIG_MESSAGE = "The image is too big to be loaded; image size = $image_size$, max image size = $max_image_size$";
     Z4Translations.IMAGE_OPEN_ERROR_MESSAGE = "It is not possible to open the image";
     Z4Translations.DRAWING_TOOL_OPEN_ERROR_MESSAGE = "It is not possible to open the drawing tool";
+    Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE = "Do not show this message again";
+    Z4Translations.COLOR_STORED_IN_HISTORY = "The color has been stored in the color history";
 
     // Color
     Z4Translations.COLOR = "Color";
@@ -686,6 +690,7 @@ public class Z4Translations {
     Z4Translations.IMAGE_TOO_BIG_MESSAGE = "L'immagine \u00E8 troppo grande per essere caricata; dimensione immagine = $image_size$, dimensione massima immagine = $max_image_size$";
     Z4Translations.IMAGE_OPEN_ERROR_MESSAGE = "Non \u00E8 possibile aprire l'immagine";
     Z4Translations.DRAWING_TOOL_OPEN_ERROR_MESSAGE = "Non \u00E8 possibile aprire lo strumento di disegno";
+    Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE = "Non mostrare pi\u00F9 questo messaggio";
 
     // Color
     Z4Translations.COLOR = "Colore";
@@ -700,6 +705,7 @@ public class Z4Translations {
     Z4Translations.TEMPORAL = "Temporale";
     Z4Translations.LIGHTING = "Illuminazione";
     Z4Translations.PICK_COLOR = "Preleva Colore";
+    Z4Translations.COLOR_STORED_IN_HISTORY = "Il colore \u00E8 stato conservato nella cronologia dei colori";
 
     // Point Iterator
     Z4Translations.MULTIPLICITY = "Molteplicit\u00E0";

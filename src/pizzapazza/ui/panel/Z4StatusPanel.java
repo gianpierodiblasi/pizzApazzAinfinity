@@ -8,6 +8,7 @@ import javascript.awt.GridBagLayout;
 import javascript.swing.JSButton;
 import javascript.swing.JSComboBox;
 import javascript.swing.JSLabel;
+import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
 import javascript.swing.JSToggleButton;
 import javascript.swing.MnR.DefaultKeyValueComboBoxModelAndRenderer;
@@ -145,10 +146,10 @@ public class Z4StatusPanel extends JSPanel {
   public void colorPicked(Color projectColor, Color layerColor) {
     if (this.pickProjectColor.isSelected() && $exists(projectColor)) {
       Color.pushHistory(projectColor);
-      // MESSAGGIO DI COLOR PICKED
+      this.colorPickedMessage();
     } else if (this.pickLayerColor.isSelected() && $exists(layerColor)) {
       Color.pushHistory(layerColor);
-      // MESSAGGIO DI COLOR PICKED
+      this.colorPickedMessage();
     }
 
     this.pickProjectColor.setContentAreaFilled(false);
@@ -157,6 +158,12 @@ public class Z4StatusPanel extends JSPanel {
     this.pickLayerColor.setSelected(false);
 
     setTimeout(() -> this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.PICK_COLOR), 0);
+  }
+
+  private void colorPickedMessage() {
+    JSPanel panel = new JSPanel();
+    JSOptionPane.showMessageDialog(panel, Z4Translations.PICK_COLOR, JSOptionPane.INFORMATION_MESSAGE, () -> {
+    });
   }
 
   /**
