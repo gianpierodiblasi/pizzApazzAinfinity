@@ -175,6 +175,7 @@ public class Z4Translations {
   public static String SPATIAL = "";
   public static String TEMPORAL = "";
   public static String LIGHTING = "";
+  public static String PICK_COLOR = "";
 
   // Point Iterator
   public static String MULTIPLICITY = "";
@@ -444,6 +445,7 @@ public class Z4Translations {
     Z4Translations.SPATIAL = "Spatial";
     Z4Translations.TEMPORAL = "Temporal";
     Z4Translations.LIGHTING = "Lighting";
+    Z4Translations.PICK_COLOR = "Pick Color";
 
     // Point Iterator
     Z4Translations.MULTIPLICITY = "Multiplicity";
@@ -697,6 +699,7 @@ public class Z4Translations {
     Z4Translations.SPATIAL = "Spaziale";
     Z4Translations.TEMPORAL = "Temporale";
     Z4Translations.LIGHTING = "Illuminazione";
+    Z4Translations.PICK_COLOR = "Preleva Colore";
 
     // Point Iterator
     Z4Translations.MULTIPLICITY = "Molteplicit\u00E0";

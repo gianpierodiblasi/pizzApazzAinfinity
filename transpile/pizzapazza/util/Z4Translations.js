@@ -294,6 +294,8 @@ class Z4Translations {
 
   static  LIGHTING = "";
 
+  static  PICK_COLOR = "";
+
   // Point Iterator
   static  MULTIPLICITY = "";
 
@@ -622,6 +624,7 @@ class Z4Translations {
     Z4Translations.SPATIAL = "Spatial";
     Z4Translations.TEMPORAL = "Temporal";
     Z4Translations.LIGHTING = "Lighting";
+    Z4Translations.PICK_COLOR = "Pick Color";
     // Point Iterator
     Z4Translations.MULTIPLICITY = "Multiplicity";
     Z4Translations.PUSH = "Push";
@@ -859,6 +862,7 @@ class Z4Translations {
     Z4Translations.SPATIAL = "Spaziale";
     Z4Translations.TEMPORAL = "Temporale";
     Z4Translations.LIGHTING = "Illuminazione";
+    Z4Translations.PICK_COLOR = "Preleva Colore";
     // Point Iterator
     Z4Translations.MULTIPLICITY = "Molteplicit\u00E0";
     Z4Translations.PUSH = "Spinta";

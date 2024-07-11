@@ -9,6 +9,7 @@ import javascript.swing.JSButton;
 import javascript.swing.JSComboBox;
 import javascript.swing.JSLabel;
 import javascript.swing.JSPanel;
+import javascript.swing.JSToggleButton;
 import javascript.swing.MnR.DefaultKeyValueComboBoxModelAndRenderer;
 import javascript.util.KeyValue;
 import pizzapazza.math.Z4DrawingDirection;
@@ -36,6 +37,8 @@ public class Z4StatusPanel extends JSPanel {
   private final JSComboBox<KeyValue<String, String>> zoom = new JSComboBox<>();
   private final JSLabel mousePosition = new JSLabel();
   private final JSLabel color = new JSLabel();
+  private final JSToggleButton pickProjectColor = new JSToggleButton();
+  private final JSToggleButton pickLayerColor = new JSToggleButton();
   private final JSButton drawingDirection = new JSButton();
   private final Z4CanvasGridPanel canvasGridPanel = new Z4CanvasGridPanel();
 
@@ -49,22 +52,23 @@ public class Z4StatusPanel extends JSPanel {
 
     this.projectName.cssAddClass("z4statuspanel-projectname");
     this.projectName.setText(Z4Translations.PROJECT_NAME + ": ");
-    this.add(this.projectName, new GBC(0, 0).a(GBC.WEST).i(0, 5, 0, 5));
+    this.add(this.projectName, new GBC(0, 0).w(2).a(GBC.WEST).i(0, 5, 0, 5));
 
     this.projectSize.setText(Z4Translations.DIMENSION + ": " + Z4Constants.DEFAULT_IMAGE_SIZE + " x " + Z4Constants.DEFAULT_IMAGE_SIZE);
     this.add(this.projectSize, new GBC(0, 1).a(GBC.WEST).i(0, 5, 0, 5));
-
-    Z4UI.addVLine(this, new GBC(1, 0).h(2).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
     DefaultKeyValueComboBoxModelAndRenderer<String, String> zoomModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer<>();
     Z4Constants.ZOOM_LEVEL.forEach(level -> zoomModelAndRenderer.addElement(new KeyValue<>("" + level, parseInt(100 * level) + "%")));
     zoomModelAndRenderer.addElement(new KeyValue<>("FIT", Z4Translations.FIT));
     this.zoom.setModelAndRenderer(zoomModelAndRenderer);
     this.zoom.getStyle().minWidth = "4.5rem";
+    this.zoom.getChilStyleByQuery("summary").padding = "0px";
     this.zoom.getChilStyleByQuery("ul").minWidth = "5rem";
     this.zoom.setSelectedItem(new KeyValue<>("1", ""));
     this.zoom.addActionListener(event -> this.onZoom());
-    this.add(this.zoom, new GBC(2, 0).h(2).i(0, 5, 0, 5));
+    this.add(this.zoom, new GBC(1, 1).a(GBC.EAST).i(0, 5, 0, 5));
+
+    Z4UI.addVLine(this, new GBC(2, 0).h(2).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
     this.mousePosition.getStyle().fontFamily = "monospace";
     this.setMousePosition(0, 0);
@@ -73,17 +77,41 @@ public class Z4StatusPanel extends JSPanel {
     this.color.getStyle().fontFamily = "monospace";
     this.add(this.color, new GBC(4, 0).h(2).i(0, 5, 0, 5));
 
+    this.pickProjectColor.cssAddClass("z4drawingpicker");
+    this.pickProjectColor.setContentAreaFilled(false);
+    this.pickProjectColor.setIcon(new Z4EmptyImageProducer<>(""));
+    this.pickProjectColor.addActionListener(event -> this.pickColor(this.pickProjectColor));
+    this.add(this.pickProjectColor, new GBC(5, 0).i(0, 5, 0, 5));
+
+    this.pickLayerColor.cssAddClass("z4drawingpicker");
+    this.pickLayerColor.setContentAreaFilled(false);
+    this.pickLayerColor.setIcon(new Z4EmptyImageProducer<>(""));
+    this.pickLayerColor.addActionListener(event -> this.pickColor(this.pickLayerColor));
+    this.add(this.pickLayerColor, new GBC(5, 1).i(0, 5, 0, 5));
+
     this.drawingDirection.setContentAreaFilled(false);
     this.drawingDirection.setTooltip(Z4Translations.DRAWING_DIRECTION);
     this.drawingDirection.setIcon(new Z4EmptyImageProducer<>(""));
     this.drawingDirection.cssAddClass("z4drawingdirection");
     this.drawingDirection.cssAddClass("z4drawingdirection-free");
     this.drawingDirection.addActionListener(event -> this.setDrawingDirection(null));
-    this.add(this.drawingDirection, new GBC(5, 0).h(2).i(0, 5, 0, 5));
+    this.add(this.drawingDirection, new GBC(6, 0).h(2).i(0, 5, 0, 5));
 
-    this.add(this.canvasGridPanel, new GBC(6, 0).h(2).i(0, 5, 0, 5));
+    this.add(this.canvasGridPanel, new GBC(7, 0).h(2).i(0, 5, 0, 5));
 
-    this.add(new JSLabel(), new GBC(7, 0).wx(1));
+    this.add(new JSLabel(), new GBC(8, 0).wx(1));
+  }
+
+  private void pickColor(JSToggleButton pickColor) {
+    boolean selected = pickColor.isSelected();
+
+    this.pickProjectColor.setContentAreaFilled(false);
+    this.pickProjectColor.setSelected(false);
+    this.pickLayerColor.setContentAreaFilled(false);
+    this.pickLayerColor.setSelected(false);
+
+    pickColor.setContentAreaFilled(selected);
+    pickColor.setSelected(selected);
   }
 
   /**

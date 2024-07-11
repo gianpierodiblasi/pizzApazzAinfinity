@@ -5,11 +5,28 @@
   font-size: smaller;
 }
 
+.z4statuspanel .jscombobox {
+  border-width: 0px;
+}
+.z4statuspanel .jscombobox summary {
+  min-height: 0px;
+}
+
 .z4statuspanel .z4statuspanel-projectname {
   width: 20rem;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.z4statuspanel .z4drawingpicker {
+  padding: 0px;
+  border-width: 0px;
+}
+.z4statuspanel .z4drawingpicker img {
+  width: 11px;
+  height: 11px;
+  content: url(../image/color/picker.gif);
 }
 
 .z4statuspanel .z4drawingdirection img {
