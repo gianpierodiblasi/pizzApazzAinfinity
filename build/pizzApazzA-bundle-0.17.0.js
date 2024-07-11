@@ -2662,8 +2662,12 @@ class Z4Canvas extends JSComponent {
    * @return The pixel color
    */
    getColorAt(x, y) {
-    let data = this.ctx.getImageData(x * this.zoom, y * this.zoom, 1, 1).data;
-    return new Color(parseInt(data[0]), parseInt(data[1]), parseInt(data[2]), parseInt(data[3]));
+    if (0 <= x && x < this.width && 0 <= y && y < this.height) {
+      let data = this.ctx.getImageData(x * this.zoom, y * this.zoom, 1, 1).data;
+      return new Color(parseInt(data[0]), parseInt(data[1]), parseInt(data[2]), parseInt(data[3]));
+    } else {
+      return null;
+    }
   }
 
   /**
@@ -12874,7 +12878,13 @@ class Z4StatusPanel extends JSPanel {
 
    mousePosition = new JSLabel();
 
-   color = new JSLabel();
+   projectColor = new JSLabel();
+
+   layerColor = new JSLabel();
+
+   projectColorPreview = new JSColorPreview();
+
+   layerColorPreview = new JSColorPreview();
 
    pickProjectColor = new JSToggleButton();
 
@@ -12893,9 +12903,9 @@ class Z4StatusPanel extends JSPanel {
     this.setLayout(new GridBagLayout());
     this.projectName.cssAddClass("z4statuspanel-projectname");
     this.projectName.setText(Z4Translations.PROJECT_NAME + ": ");
-    this.add(this.projectName, new GBC(0, 0).w(2).a(GBC.WEST).i(0, 5, 0, 5));
+    this.add(this.projectName, new GBC(0, 0).w(2).a(GBC.WEST).i(0, 5, 0, 0));
     this.projectSize.setText(Z4Translations.DIMENSION + ": " + Z4Constants.DEFAULT_IMAGE_SIZE + " x " + Z4Constants.DEFAULT_IMAGE_SIZE);
-    this.add(this.projectSize, new GBC(0, 1).a(GBC.WEST).i(0, 5, 0, 5));
+    this.add(this.projectSize, new GBC(0, 1).a(GBC.WEST).i(0, 5, 0, 0));
     let zoomModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer();
     Z4Constants.ZOOM_LEVEL.forEach(level => zoomModelAndRenderer.addElement(new KeyValue("" + level, parseInt(100 * level) + "%")));
     zoomModelAndRenderer.addElement(new KeyValue("FIT", Z4Translations.FIT));
@@ -12903,34 +12913,41 @@ class Z4StatusPanel extends JSPanel {
     this.zoom.setModelAndRenderer(zoomModelAndRenderer);
     this.zoom.setSelectedItem(new KeyValue("1", ""));
     this.zoom.addActionListener(event => this.onZoom());
-    this.add(this.zoom, new GBC(1, 1).a(GBC.EAST).i(0, 5, 0, 5));
-    Z4UI.addVLine(this, new GBC(2, 0).h(2).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    this.add(this.zoom, new GBC(1, 1).a(GBC.EAST));
+    Z4UI.addVLine(this, new GBC(2, 0).h(2).f(GBC.VERTICAL).i(1, 5, 1, 5));
     this.mousePosition.getStyle().fontFamily = "monospace";
     this.setMousePosition(0, 0);
-    this.add(this.mousePosition, new GBC(3, 0).h(2).i(0, 5, 0, 5));
-    this.color.getStyle().fontFamily = "monospace";
-    this.add(this.color, new GBC(4, 0).h(2).i(0, 5, 0, 5));
+    this.add(this.mousePosition, new GBC(3, 0).h(2).i(0, 0, 0, 5));
+    this.projectColor.getStyle().fontFamily = "monospace";
+    this.add(this.projectColor, new GBC(4, 0));
+    this.layerColor.getStyle().fontFamily = "monospace";
+    this.add(this.layerColor, new GBC(4, 1));
+    this.projectColorPreview.getStyle().visibility = "hidden";
+    this.add(this.projectColorPreview, new GBC(5, 0));
+    this.layerColorPreview.getStyle().visibility = "hidden";
+    this.add(this.layerColorPreview, new GBC(5, 1));
     this.pickProjectColor.cssAddClass("z4statuspanel-colorpicker");
     this.pickProjectColor.setContentAreaFilled(false);
     this.pickProjectColor.setTooltip(Z4Translations.PICK_COLOR);
     this.pickProjectColor.setIcon(new Z4EmptyImageProducer(""));
     this.pickProjectColor.addActionListener(event => this.pickColor(this.pickProjectColor));
-    this.add(this.pickProjectColor, new GBC(5, 0).i(0, 5, 0, 5));
+    this.add(this.pickProjectColor, new GBC(6, 0));
     this.pickLayerColor.cssAddClass("z4statuspanel-colorpicker");
     this.pickLayerColor.setContentAreaFilled(false);
     this.pickLayerColor.setTooltip(Z4Translations.PICK_COLOR);
     this.pickLayerColor.setIcon(new Z4EmptyImageProducer(""));
     this.pickLayerColor.addActionListener(event => this.pickColor(this.pickLayerColor));
-    this.add(this.pickLayerColor, new GBC(5, 1).i(0, 5, 0, 5));
+    this.add(this.pickLayerColor, new GBC(6, 1));
+    Z4UI.addVLine(this, new GBC(7, 0).h(2).f(GBC.VERTICAL).i(1, 5, 1, 5));
     this.drawingDirection.setContentAreaFilled(false);
     this.drawingDirection.setTooltip(Z4Translations.DRAWING_DIRECTION);
     this.drawingDirection.setIcon(new Z4EmptyImageProducer(""));
     this.drawingDirection.cssAddClass("z4statuspanel-drawingdirection");
     this.drawingDirection.cssAddClass("z4statuspanel-drawingdirection-free");
     this.drawingDirection.addActionListener(event => this.setDrawingDirection(null));
-    this.add(this.drawingDirection, new GBC(6, 0).h(2).i(0, 5, 0, 5));
-    this.add(this.canvasGridPanel, new GBC(7, 0).h(2).f(GBC.VERTICAL).i(0, 5, 0, 5));
-    this.add(new JSLabel(), new GBC(8, 0).wx(1));
+    this.add(this.drawingDirection, new GBC(8, 0).h(2));
+    this.add(this.canvasGridPanel, new GBC(9, 0).h(2).f(GBC.VERTICAL).i(0, 5, 0, 0));
+    this.add(new JSLabel(), new GBC(10, 0).wx(1));
   }
 
    pickColor(pickColor) {
@@ -12953,14 +12970,16 @@ class Z4StatusPanel extends JSPanel {
    colorPicked(projectColor, layerColor) {
     if (this.pickProjectColor.isSelected() && projectColor) {
       Color.pushHistory(projectColor);
+      // MESSAGGIO DI COLOR PICKED
     } else if (this.pickLayerColor.isSelected() && layerColor) {
       Color.pushHistory(layerColor);
+      // MESSAGGIO DI COLOR PICKED
     }
     this.pickProjectColor.setContentAreaFilled(false);
     this.pickProjectColor.setSelected(false);
     this.pickLayerColor.setContentAreaFilled(false);
     this.pickLayerColor.setSelected(false);
-    this.canvas.setCanvasOverlayMode(null);
+    setTimeout(() => this.canvas.setCanvasOverlayMode(null), 0);
   }
 
   /**
@@ -13004,11 +13023,18 @@ class Z4StatusPanel extends JSPanel {
     this.canvasGridPanel.setMousePosition(x, y);
     let diff = 0;
     eval("diff = Z4Translations.PROJECT.length - Z4Translations.LAYER.length;");
-    this.color.setProperty("innerHTML", this.getColorString(this.canvas ? this.canvas.getColorAt(x, y) : null, Z4Translations.PROJECT, diff < 0 ? -diff : 0) + "<br/>" + this.getColorString(this.canvas ? this.canvas.getSelectedLayerColorAt(x, y) : null, Z4Translations.LAYER, diff > 0 ? diff : 0));
+    let color = this.canvas ? this.canvas.getColorAt(x, y) : null;
+    this.setColor(this.projectColor, this.projectColorPreview, color, Z4Translations.PROJECT, diff < 0 ? -diff : 0);
+    color = this.canvas ? this.canvas.getSelectedLayerColorAt(x, y) : null;
+    this.setColor(this.layerColor, this.layerColorPreview, color, Z4Translations.LAYER, diff > 0 ? diff : 0);
   }
 
-   getColorString(color, string, pad) {
-    return string + ": " + new String("").padStart(pad, "\u00A0") + "(" + (color ? new Number(color.red).toFixed(0).padStart(3, "\u00A0") : "---") + ", " + (color ? new Number(color.green).toFixed(0).padStart(3, "\u00A0") : "---") + ", " + (color ? new Number(color.blue).toFixed(0).padStart(3, "\u00A0") : "---") + ", " + (color ? new Number(color.alpha).toFixed(0).padStart(3, "\u00A0") : "---") + ")";
+   setColor(label, preview, color, string, pad) {
+    label.setText(string + ": " + new String("").padStart(pad, "\u00A0") + "(" + (color ? new Number(color.red).toFixed(0).padStart(3, "\u00A0") : "---") + ", " + (color ? new Number(color.green).toFixed(0).padStart(3, "\u00A0") : "---") + ", " + (color ? new Number(color.blue).toFixed(0).padStart(3, "\u00A0") : "---") + ", " + (color ? new Number(color.alpha).toFixed(0).padStart(3, "\u00A0") : "---") + ")");
+    preview.getStyle().visibility = color ? "visible" : "hidden";
+    if (color) {
+      preview.setColor(color);
+    }
   }
 
   /**

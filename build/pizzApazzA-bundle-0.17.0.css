@@ -815,7 +815,7 @@
 
 .z4statuspanel .z4statuspanel-zoom {
   border-width: 1px;
-  min-width: 4.5rem;
+  min-width: 4rem;
 }
 .z4statuspanel .z4statuspanel-zoom summary {
   min-height: 0px;
@@ -823,6 +823,13 @@
 }
 .z4statuspanel .z4statuspanel-zoom ul {
   min-width: 5rem;
+}
+
+.z4statuspanel .jscolorpreview {
+  height: 12px;
+  width: 14px;
+  background: url(../image/util/chessboard.png);
+  border: 1px solid transparent;
 }
 
 .z4statuspanel .z4statuspanel-colorpicker {

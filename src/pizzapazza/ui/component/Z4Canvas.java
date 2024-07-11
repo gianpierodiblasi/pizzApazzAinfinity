@@ -114,7 +114,7 @@ public class Z4Canvas extends JSComponent {
 
     this.canvasOverlay.addEventListener("mousemove", event -> this.mouseManager.onMouse((MouseEvent) event, "move"));
     this.canvasOverlay.addEventListener("mouseup", event -> this.mouseManager.onMouse((MouseEvent) event, "up"));
-    
+
     this.addEventListener("wheel", event -> {
       WheelEvent evt = (WheelEvent) event;
       if (!evt.ctrlKey) {
@@ -841,8 +841,12 @@ public class Z4Canvas extends JSComponent {
    * @return The pixel color
    */
   public Color getColorAt(int x, int y) {
-    $Uint8Array data = ($Uint8Array) this.ctx.getImageData(x * this.zoom, y * this.zoom, 1, 1).data;
-    return new Color(parseInt(data.$get(0)), parseInt(data.$get(1)), parseInt(data.$get(2)), parseInt(data.$get(3)));
+    if (0 <= x && x < this.width && 0 <= y && y < this.height) {
+      $Uint8Array data = ($Uint8Array) this.ctx.getImageData(x * this.zoom, y * this.zoom, 1, 1).data;
+      return new Color(parseInt(data.$get(0)), parseInt(data.$get(1)), parseInt(data.$get(2)), parseInt(data.$get(3)));
+    } else {
+      return null;
+    }
   }
 
   /**

@@ -786,8 +786,12 @@ class Z4Canvas extends JSComponent {
    * @return The pixel color
    */
    getColorAt(x, y) {
-    let data = this.ctx.getImageData(x * this.zoom, y * this.zoom, 1, 1).data;
-    return new Color(parseInt(data[0]), parseInt(data[1]), parseInt(data[2]), parseInt(data[3]));
+    if (0 <= x && x < this.width && 0 <= y && y < this.height) {
+      let data = this.ctx.getImageData(x * this.zoom, y * this.zoom, 1, 1).data;
+      return new Color(parseInt(data[0]), parseInt(data[1]), parseInt(data[2]), parseInt(data[3]));
+    } else {
+      return null;
+    }
   }
 
   /**
