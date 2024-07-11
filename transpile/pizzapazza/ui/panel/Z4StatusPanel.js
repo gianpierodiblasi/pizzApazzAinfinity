@@ -15,6 +15,8 @@ class Z4StatusPanel extends JSPanel {
 
    mousePosition = new JSLabel();
 
+   color = new JSLabel();
+
    drawingDirection = new JSButton();
 
    canvasGridPanel = new Z4CanvasGridPanel();
@@ -28,7 +30,7 @@ class Z4StatusPanel extends JSPanel {
     this.setLayout(new GridBagLayout());
     this.projectName.setText(Z4Translations.PROJECT_NAME + ": ");
     this.add(this.projectName, new GBC(0, 0).i(0, 5, 0, 5));
-    Z4UI.addVLine(this, new GBC(1, 0).h(2).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addVLine(this, new GBC(1, 0).f(GBC.VERTICAL).i(1, 2, 1, 2));
     let zoomModelAndRenderer = new DefaultKeyValueComboBoxModelAndRenderer();
     Z4Constants.ZOOM_LEVEL.forEach(level => zoomModelAndRenderer.addElement(new KeyValue("" + level, parseInt(100 * level) + "%")));
     zoomModelAndRenderer.addElement(new KeyValue("FIT", Z4Translations.FIT));
@@ -38,23 +40,26 @@ class Z4StatusPanel extends JSPanel {
     this.zoom.setSelectedItem(new KeyValue("1", ""));
     this.zoom.addActionListener(event => this.onZoom());
     this.add(this.zoom, new GBC(2, 0).i(0, 5, 0, 5));
-    Z4UI.addVLine(this, new GBC(3, 0).h(2).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addVLine(this, new GBC(3, 0).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.projectSize.setText(Z4Translations.DIMENSION + ": " + Z4Constants.DEFAULT_IMAGE_SIZE + " x " + Z4Constants.DEFAULT_IMAGE_SIZE);
     this.add(this.projectSize, new GBC(4, 0).i(0, 5, 0, 5));
-    Z4UI.addVLine(this, new GBC(5, 0).h(2).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addVLine(this, new GBC(5, 0).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.mousePosition.getStyle().fontFamily = "monospace";
     this.setMousePosition(0, 0);
     this.add(this.mousePosition, new GBC(6, 0).i(0, 5, 0, 5));
-    Z4UI.addVLine(this, new GBC(7, 0).h(2).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    this.color.getStyle().fontFamily = "monospace";
+    this.color.getStyle().fontSize = "smaller";
+    this.add(this.color, new GBC(7, 0).i(0, 5, 0, 5));
+    Z4UI.addVLine(this, new GBC(8, 0).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.drawingDirection.setContentAreaFilled(false);
     this.drawingDirection.setTooltip(Z4Translations.DRAWING_DIRECTION);
     this.drawingDirection.setIcon(new Z4EmptyImageProducer(""));
     this.drawingDirection.cssAddClass("z4drawingdirection");
     this.drawingDirection.cssAddClass("z4drawingdirection-free");
     this.drawingDirection.addActionListener(event => this.setDrawingDirection(null));
-    this.add(this.drawingDirection, new GBC(8, 0).i(0, 5, 0, 5));
-    this.add(this.canvasGridPanel, new GBC(9, 0).i(0, 5, 0, 5));
-    this.add(new JSLabel(), new GBC(10, 0).wx(1));
+    this.add(this.drawingDirection, new GBC(9, 0).i(0, 5, 0, 5));
+    this.add(this.canvasGridPanel, new GBC(10, 0).i(0, 5, 0, 5));
+    this.add(new JSLabel(), new GBC(11, 0).wx(1));
   }
 
   /**
@@ -95,6 +100,13 @@ class Z4StatusPanel extends JSPanel {
    setMousePosition(x, y) {
     this.mousePosition.setText(new Number(x).toFixed(0).padStart(4, "\u00A0") + " x " + new Number(y).toFixed(0).padEnd(4, "\u00A0"));
     this.canvasGridPanel.setMousePosition(x, y);
+    let diff = 0;
+    eval("diff = Z4Translations.PROJECT.length - Z4Translations.LAYER.length;");
+    this.color.setProperty("innerHTML", this.getColorString(this.canvas ? this.canvas.getColorAt(x, y) : null, Z4Translations.PROJECT, diff < 0 ? -diff : 0) + "<br/>" + this.getColorString(this.canvas ? this.canvas.getSelectedLayerColorAt(x, y) : null, Z4Translations.LAYER, diff > 0 ? diff : 0));
+  }
+
+   getColorString(color, string, pad) {
+    return string + ": " + new String("").padStart(pad, "\u00A0") + "(" + (color ? new Number(color.red).toFixed(0).padStart(3, "\u00A0") : "---") + ", " + (color ? new Number(color.green).toFixed(0).padStart(3, "\u00A0") : "---") + ", " + (color ? new Number(color.blue).toFixed(0).padStart(3, "\u00A0") : "---") + ", " + (color ? new Number(color.alpha).toFixed(0).padStart(3, "\u00A0") : "---") + ")";
   }
 
   /**

@@ -210,9 +210,9 @@ public class Z4CanvasGridPanel extends JSDropDown {
     this.colorPanel.setEnabled(this.showGridCheckBox.isSelected());
 
     this.xLabel.getStyle().visibility = this.showGridCheckBox.isSelected() ? "visible" : "hidden";
-    this.xLabel.setText("X : " + new $Number(this.center.x).toFixed(0).padStart(4, "\u00A0") + "px");
+    this.xLabel.setText("X: " + new $Number(this.center.x).toFixed(0).padStart(4, "\u00A0") + "px");
     this.yLabel.getStyle().visibility = this.showGridCheckBox.isSelected() ? "visible" : "hidden";
-    this.yLabel.setText("Y : " + new $Number(this.center.y).toFixed(0).padStart(4, "\u00A0") + "px");
+    this.yLabel.setText("Y: " + new $Number(this.center.y).toFixed(0).padStart(4, "\u00A0") + "px");
     this.distanceLabel.getStyle().visibility = this.showGridCheckBox.isSelected() ? "visible" : "hidden";
     this.angleLabel.getStyle().visibility = this.showGridCheckBox.isSelected() ? "visible" : "hidden";
     this.deltaXLabel.getStyle().visibility = this.showGridCheckBox.isSelected() ? "visible" : "hidden";

@@ -257,6 +257,24 @@ class Z4Layer {
   }
 
   /**
+   * Returns a pixel color
+   *
+   * @param x The x-axis coordinate of the pixel
+   * @param y The y-axis coordinate of the pixel
+   * @return The pixel color
+   */
+   getColorAt(x, y) {
+    x -= this.offsetX;
+    y -= this.offsetY;
+    if (0 <= x && x < this.width && 0 <= y && y < this.height) {
+      let data = this.offscreenCtx.getImageData(x, y, 1, 1).data;
+      return new Color(parseInt(data[0]), parseInt(data[1]), parseInt(data[2]), parseInt(data[3]));
+    } else {
+      return null;
+    }
+  }
+
+  /**
    * Draws this layer
    *
    * @param ctx The context used to draw the layer

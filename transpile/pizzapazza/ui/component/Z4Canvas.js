@@ -754,6 +754,29 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Returns a pixel color
+   *
+   * @param x The x-axis coordinate of the pixel
+   * @param y The y-axis coordinate of the pixel
+   * @return The pixel color
+   */
+   getColorAt(x, y) {
+    let data = this.ctx.getImageData(x * this.zoom, y * this.zoom, 1, 1).data;
+    return new Color(parseInt(data[0]), parseInt(data[1]), parseInt(data[2]), parseInt(data[3]));
+  }
+
+  /**
+   * Returns a pixel color in the selected layer
+   *
+   * @param x The x-axis coordinate of the pixel
+   * @param y The y-axis coordinate of the pixel
+   * @return The pixel color
+   */
+   getSelectedLayerColorAt(x, y) {
+    return this.selectedLayer.getColorAt(x, y);
+  }
+
+  /**
    * Sets the zoom
    *
    * @param zoom The zoom
@@ -950,6 +973,9 @@ class Z4Canvas extends JSComponent {
     }
   }
 
+  /**
+   * Draws the canvas (and layer) bounds
+   */
    drawCanvasBounds() {
     this.ctxBounds.clearRect(0, 0, this.canvasBounds.width, this.canvasBounds.height);
     let show = false;

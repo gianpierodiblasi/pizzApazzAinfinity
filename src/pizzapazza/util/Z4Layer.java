@@ -274,6 +274,25 @@ public class Z4Layer {
   }
 
   /**
+   * Returns a pixel color
+   *
+   * @param x The x-axis coordinate of the pixel
+   * @param y The y-axis coordinate of the pixel
+   * @return The pixel color
+   */
+  public Color getColorAt(int x, int y) {
+    x -= this.offsetX;
+    y -= this.offsetY;
+
+    if (0 <= x && x < this.width && 0 <= y && y < this.height) {
+      $Uint8Array data = ($Uint8Array) this.offscreenCtx.getImageData(x, y, 1, 1).data;
+      return new Color(parseInt(data.$get(0)), parseInt(data.$get(1)), parseInt(data.$get(2)), parseInt(data.$get(3)));
+    } else {
+      return null;
+    }
+  }
+
+  /**
    * Draws this layer
    *
    * @param ctx The context used to draw the layer

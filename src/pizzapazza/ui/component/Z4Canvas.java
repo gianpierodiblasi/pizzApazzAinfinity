@@ -37,6 +37,7 @@ import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
 import simulation.js.$Object;
 import simulation.js.$Path2D;
+import simulation.js.$Uint8Array;
 
 /**
  * The canvas
@@ -188,7 +189,7 @@ public class Z4Canvas extends JSComponent {
     Color.resetHistory();
     Z4GradientColor.resetHistory();
     Z4BiGradientColor.resetHistory();
-    
+
     this.ribbonHistoryPanel.resetHistory(() -> {
       this.afterCreate("", width, height);
       this.toHistory(json -> this.ribbonHistoryPanel.addHistory(json, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
@@ -809,6 +810,29 @@ public class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Returns a pixel color
+   *
+   * @param x The x-axis coordinate of the pixel
+   * @param y The y-axis coordinate of the pixel
+   * @return The pixel color
+   */
+  public Color getColorAt(int x, int y) {
+    $Uint8Array data = ($Uint8Array) this.ctx.getImageData(x * this.zoom, y * this.zoom, 1, 1).data;
+    return new Color(parseInt(data.$get(0)), parseInt(data.$get(1)), parseInt(data.$get(2)), parseInt(data.$get(3)));
+  }
+
+  /**
+   * Returns a pixel color in the selected layer
+   *
+   * @param x The x-axis coordinate of the pixel
+   * @param y The y-axis coordinate of the pixel
+   * @return The pixel color
+   */
+  public Color getSelectedLayerColorAt(int x, int y) {
+    return this.selectedLayer.getColorAt(x, y);
+  }
+
+  /**
    * Sets the zoom
    *
    * @param zoom The zoom
@@ -1023,6 +1047,9 @@ public class Z4Canvas extends JSComponent {
     }
   }
 
+  /**
+   * Draws the canvas (and layer) bounds
+   */
   public void drawCanvasBounds() {
     this.ctxBounds.clearRect(0, 0, this.canvasBounds.width, this.canvasBounds.height);
 
