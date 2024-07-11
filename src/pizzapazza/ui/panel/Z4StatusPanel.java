@@ -129,7 +129,11 @@ public class Z4StatusPanel extends JSPanel {
     pickColor.setContentAreaFilled(selected);
     pickColor.setSelected(selected);
 
-    this.canvas.setCanvasOverlayMode(selected ? Z4CanvasOverlayMode.PICK_COLOR : null);
+    if (selected) {
+      this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.PICK_COLOR);
+    } else {
+      this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.PICK_COLOR);
+    }
   }
 
   /**
@@ -152,7 +156,7 @@ public class Z4StatusPanel extends JSPanel {
     this.pickLayerColor.setContentAreaFilled(false);
     this.pickLayerColor.setSelected(false);
 
-    setTimeout(() -> this.canvas.setCanvasOverlayMode(null), 0);
+    setTimeout(() -> this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.PICK_COLOR), 0);
   }
 
   /**
@@ -227,7 +231,7 @@ public class Z4StatusPanel extends JSPanel {
    * @param zoom The zoom
    */
   public void setZoom(double zoom) {
-    if (Z4Constants.ZOOM_LEVEL.findIndex(value -> value == zoom) != -1) {
+    if (Z4Constants.ZOOM_LEVEL.indexOf(zoom) != -1) {
       this.zoom.setSelectedItem(new KeyValue<>("" + zoom, ""));
     } else {
       this.zoom.setSelectedItem(new KeyValue<>("FIT", ""));

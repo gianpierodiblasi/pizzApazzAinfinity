@@ -1911,7 +1911,7 @@ class Z4Canvas extends JSComponent {
 
    ctxOverlay = this.canvasOverlay.getContext("2d");
 
-   canvasOverlayMode = null;
+   canvasOverlayModes = new Array();
 
    ribbonProjectPanel = null;
 
@@ -2418,14 +2418,33 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
-   * Sets the canvas overlay mode
+   * Adds a canvas overlay mode
    *
    * @param canvasOverlayMode The canvas overlay mode
    */
-   setCanvasOverlayMode(canvasOverlayMode) {
-    this.canvasOverlayMode = canvasOverlayMode;
-    this.canvasOverlay.style.pointerEvents = canvasOverlayMode ? "auto" : "none";
-    this.mouseManager.setCanvasOverlayMode(canvasOverlayMode);
+   addCanvasOverlayMode(canvasOverlayMode) {
+    this.addRemoveCanvasOverlayMode(canvasOverlayMode, true);
+  }
+
+  /**
+   * Removes a canvas overlay mode
+   *
+   * @param canvasOverlayMode The canvas overlay mode
+   */
+   removeCanvasOverlayMode(canvasOverlayMode) {
+    this.addRemoveCanvasOverlayMode(canvasOverlayMode, false);
+  }
+
+   addRemoveCanvasOverlayMode(canvasOverlayMode, add) {
+    let index = this.canvasOverlayModes.indexOf(canvasOverlayMode);
+    if (add && index === -1) {
+      this.canvasOverlayModes.push(canvasOverlayMode);
+      this.mouseManager.addCanvasOverlayMode(canvasOverlayMode);
+    } else if (!add && index !== -1) {
+      this.canvasOverlayModes.splice(index, 1);
+      this.mouseManager.removeCanvasOverlayMode(canvasOverlayMode);
+    }
+    this.canvasOverlay.style.pointerEvents = this.canvasOverlayModes.length ? "auto" : "none";
     this.drawCanvasOverlay();
   }
 
@@ -2930,7 +2949,7 @@ class Z4Canvas extends JSComponent {
    */
    drawCanvasOverlay() {
     this.ctxOverlay.clearRect(0, 0, this.canvasOverlay.width, this.canvasOverlay.height);
-    if (this.canvasOverlayMode === Z4CanvasOverlayMode.PICK_COLOR) {
+    if (this.canvasOverlayModes.indexOf(Z4CanvasOverlayMode.PICK_COLOR) !== -1) {
     }
   }
 }
@@ -3708,7 +3727,7 @@ class Z4CanvasMouseManager {
 
    zoom = 0.0;
 
-   canvasOverlayMode = null;
+   canvasOverlayModes = new Array();
 
    ribbonHistoryPanel = null;
 
@@ -3790,12 +3809,26 @@ class Z4CanvasMouseManager {
   }
 
   /**
-   * Sets the canvas overlay mode
+   * Adds a canvas overlay mode
    *
    * @param canvasOverlayMode The canvas overlay mode
    */
-   setCanvasOverlayMode(canvasOverlayMode) {
-    this.canvasOverlayMode = canvasOverlayMode;
+   addCanvasOverlayMode(canvasOverlayMode) {
+    if (this.canvasOverlayModes.indexOf(canvasOverlayMode) === -1) {
+      this.canvasOverlayModes.push(canvasOverlayMode);
+    }
+  }
+
+  /**
+   * Removes a canvas overlay mode
+   *
+   * @param canvasOverlayMode The canvas overlay mode
+   */
+   removeCanvasOverlayMode(canvasOverlayMode) {
+    let index = this.canvasOverlayModes.indexOf(canvasOverlayMode);
+    if (index !== -1) {
+      this.canvasOverlayModes.splice(index, 1);
+    }
   }
 
   /**
@@ -3827,7 +3860,7 @@ class Z4CanvasMouseManager {
     let y = Math.min(this.size.height, Math.max(0, event.offsetY / this.zoom));
     let xParsed = parseInt(x);
     let yParsed = parseInt(y);
-    if (this.canvasOverlayMode === Z4CanvasOverlayMode.PICK_COLOR) {
+    if (this.canvasOverlayModes.indexOf(Z4CanvasOverlayMode.PICK_COLOR) !== -1) {
       switch(type) {
         case "up":
           this.statusPanel.colorPicked(this.canvas.getColorAt(xParsed, yParsed), this.canvas.getSelectedLayerColorAt(xParsed, yParsed));
@@ -12958,7 +12991,11 @@ class Z4StatusPanel extends JSPanel {
     this.pickLayerColor.setSelected(false);
     pickColor.setContentAreaFilled(selected);
     pickColor.setSelected(selected);
-    this.canvas.setCanvasOverlayMode(selected ? Z4CanvasOverlayMode.PICK_COLOR : null);
+    if (selected) {
+      this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.PICK_COLOR);
+    } else {
+      this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.PICK_COLOR);
+    }
   }
 
   /**
@@ -12979,7 +13016,7 @@ class Z4StatusPanel extends JSPanel {
     this.pickProjectColor.setSelected(false);
     this.pickLayerColor.setContentAreaFilled(false);
     this.pickLayerColor.setSelected(false);
-    setTimeout(() => this.canvas.setCanvasOverlayMode(null), 0);
+    setTimeout(() => this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.PICK_COLOR), 0);
   }
 
   /**
@@ -13043,7 +13080,7 @@ class Z4StatusPanel extends JSPanel {
    * @param zoom The zoom
    */
    setZoom(zoom) {
-    if (Z4Constants.ZOOM_LEVEL.findIndex(value => value === zoom) !== -1) {
+    if (Z4Constants.ZOOM_LEVEL.indexOf(zoom) !== -1) {
       this.zoom.setSelectedItem(new KeyValue("" + zoom, ""));
     } else {
       this.zoom.setSelectedItem(new KeyValue("FIT", ""));

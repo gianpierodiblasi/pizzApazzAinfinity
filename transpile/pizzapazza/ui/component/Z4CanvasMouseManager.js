@@ -25,7 +25,7 @@ class Z4CanvasMouseManager {
 
    zoom = 0.0;
 
-   canvasOverlayMode = null;
+   canvasOverlayModes = new Array();
 
    ribbonHistoryPanel = null;
 
@@ -107,12 +107,26 @@ class Z4CanvasMouseManager {
   }
 
   /**
-   * Sets the canvas overlay mode
+   * Adds a canvas overlay mode
    *
    * @param canvasOverlayMode The canvas overlay mode
    */
-   setCanvasOverlayMode(canvasOverlayMode) {
-    this.canvasOverlayMode = canvasOverlayMode;
+   addCanvasOverlayMode(canvasOverlayMode) {
+    if (this.canvasOverlayModes.indexOf(canvasOverlayMode) === -1) {
+      this.canvasOverlayModes.push(canvasOverlayMode);
+    }
+  }
+
+  /**
+   * Removes a canvas overlay mode
+   *
+   * @param canvasOverlayMode The canvas overlay mode
+   */
+   removeCanvasOverlayMode(canvasOverlayMode) {
+    let index = this.canvasOverlayModes.indexOf(canvasOverlayMode);
+    if (index !== -1) {
+      this.canvasOverlayModes.splice(index, 1);
+    }
   }
 
   /**
@@ -144,7 +158,7 @@ class Z4CanvasMouseManager {
     let y = Math.min(this.size.height, Math.max(0, event.offsetY / this.zoom));
     let xParsed = parseInt(x);
     let yParsed = parseInt(y);
-    if (this.canvasOverlayMode === Z4CanvasOverlayMode.PICK_COLOR) {
+    if (this.canvasOverlayModes.indexOf(Z4CanvasOverlayMode.PICK_COLOR) !== -1) {
       switch(type) {
         case "up":
           this.statusPanel.colorPicked(this.canvas.getColorAt(xParsed, yParsed), this.canvas.getSelectedLayerColorAt(xParsed, yParsed));

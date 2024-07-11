@@ -64,7 +64,7 @@ public class Z4Canvas extends JSComponent {
 
   private final $Canvas canvasOverlay = ($Canvas) document.createElement("canvas");
   private final $CanvasRenderingContext2D ctxOverlay = this.canvasOverlay.getContext("2d");
-  private Z4CanvasOverlayMode canvasOverlayMode;
+  private final Array<Z4CanvasOverlayMode> canvasOverlayModes = new Array<>();
 
   private Z4RibbonProjectPanel ribbonProjectPanel;
   private Z4RibbonLayerPanel ribbonLayerPanel;
@@ -587,14 +587,34 @@ public class Z4Canvas extends JSComponent {
   }
 
   /**
-   * Sets the canvas overlay mode
+   * Adds a canvas overlay mode
    *
    * @param canvasOverlayMode The canvas overlay mode
    */
-  public void setCanvasOverlayMode(Z4CanvasOverlayMode canvasOverlayMode) {
-    this.canvasOverlayMode = canvasOverlayMode;
-    this.canvasOverlay.style.pointerEvents = $exists(canvasOverlayMode) ? "auto" : "none";
-    this.mouseManager.setCanvasOverlayMode(canvasOverlayMode);
+  public void addCanvasOverlayMode(Z4CanvasOverlayMode canvasOverlayMode) {
+    this.addRemoveCanvasOverlayMode(canvasOverlayMode, true);
+  }
+
+  /**
+   * Removes a canvas overlay mode
+   *
+   * @param canvasOverlayMode The canvas overlay mode
+   */
+  public void removeCanvasOverlayMode(Z4CanvasOverlayMode canvasOverlayMode) {
+    this.addRemoveCanvasOverlayMode(canvasOverlayMode, false);
+  }
+
+  private void addRemoveCanvasOverlayMode(Z4CanvasOverlayMode canvasOverlayMode, boolean add) {
+    int index = this.canvasOverlayModes.indexOf(canvasOverlayMode);
+    if (add && index == -1) {
+      this.canvasOverlayModes.push(canvasOverlayMode);
+      this.mouseManager.addCanvasOverlayMode(canvasOverlayMode);
+    } else if (!add && index != -1) {
+      this.canvasOverlayModes.splice(index, 1);
+      this.mouseManager.removeCanvasOverlayMode(canvasOverlayMode);
+    }
+
+    this.canvasOverlay.style.pointerEvents = $exists(this.canvasOverlayModes.length) ? "auto" : "none";
     this.drawCanvasOverlay();
   }
 
@@ -1134,7 +1154,7 @@ public class Z4Canvas extends JSComponent {
   public void drawCanvasOverlay() {
     this.ctxOverlay.clearRect(0, 0, this.canvasOverlay.width, this.canvasOverlay.height);
 
-    if (this.canvasOverlayMode == Z4CanvasOverlayMode.PICK_COLOR) {
+    if (this.canvasOverlayModes.indexOf(Z4CanvasOverlayMode.PICK_COLOR) != -1) {
     }
   }
 }
