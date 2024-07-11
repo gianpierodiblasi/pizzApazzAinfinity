@@ -3127,7 +3127,7 @@ class Z4CanvasIOManager {
     let image = document.createElement("img");
     image.onload = event => {
       Z4UI.pleaseWaitCompleted();
-      if (image.width <= Z4Constants.MAX_IMAGE_SIZE && image.height < Z4Constants.MAX_IMAGE_SIZE) {
+      if (image.width <= Z4Constants.MAX_IMAGE_SIZE && image.height <= Z4Constants.MAX_IMAGE_SIZE) {
         this.paper.reset();
         this.paper.addLayerFromImage(Z4Translations.BACKGROUND_LAYER, image, image.width, image.height);
         this.canvas.setSize(image.width, image.height);
@@ -3515,7 +3515,7 @@ class Z4CanvasIOManager {
     let image = document.createElement("img");
     image.onload = event => {
       Z4UI.pleaseWaitCompleted();
-      if (image.width <= Z4Constants.MAX_IMAGE_SIZE && image.height < Z4Constants.MAX_IMAGE_SIZE) {
+      if (image.width <= Z4Constants.MAX_IMAGE_SIZE && image.height <= Z4Constants.MAX_IMAGE_SIZE) {
         this.paper.addLayerFromImage(name, image, this.size.width, this.size.height);
         this.canvas.afterAddLayer();
         this.canvas.drawCanvas();
@@ -4457,8 +4457,8 @@ class Z4LayerPreview extends JSDropDown {
       resizeImagePanel.setCanvas(offsetCanvas, layerSize.width, layerSize.height);
       JSOptionPane.showInputDialog(resizeImagePanel, Z4Translations.RESIZE, listener => resizeImagePanel.addChangeListener(listener), () => {
         let resizeOptions = resizeImagePanel.getResizeOptions();
-        let containerOK = 0 < resizeOptions.containerWidth && resizeOptions.containerWidth <= Z4Constants.MAX_IMAGE_SIZE && 0 < resizeOptions.containerHeight && resizeOptions.containerHeight < Z4Constants.MAX_IMAGE_SIZE;
-        let contentOK = 0 < resizeOptions.contentWidth && resizeOptions.contentWidth <= Z4Constants.MAX_IMAGE_SIZE && 0 < resizeOptions.contentHeight && resizeOptions.contentHeight < Z4Constants.MAX_IMAGE_SIZE;
+        let containerOK = 0 < resizeOptions.containerWidth && resizeOptions.containerWidth <= Z4Constants.MAX_IMAGE_SIZE && 0 < resizeOptions.containerHeight && resizeOptions.containerHeight <= Z4Constants.MAX_IMAGE_SIZE;
+        let contentOK = 0 < resizeOptions.contentWidth && resizeOptions.contentWidth <= Z4Constants.MAX_IMAGE_SIZE && 0 < resizeOptions.contentHeight && resizeOptions.contentHeight <= Z4Constants.MAX_IMAGE_SIZE;
         return containerOK && contentOK;
       }, response => {
         if (response === JSOptionPane.OK_OPTION) {
@@ -6512,7 +6512,7 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     panel.setSelectedSize(canvasSize.width, canvasSize.height);
     JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => panel.addChangeListener(listener), () => {
       let size = panel.getSelectedSize();
-      return 0 < size.width && size.width <= Z4Constants.MAX_IMAGE_SIZE && 0 < size.height && size.height < Z4Constants.MAX_IMAGE_SIZE;
+      return 0 < size.width && size.width <= Z4Constants.MAX_IMAGE_SIZE && 0 < size.height && size.height <= Z4Constants.MAX_IMAGE_SIZE;
     }, response => {
       if (response === JSOptionPane.OK_OPTION) {
         let size = panel.getSelectedSize();
@@ -6630,8 +6630,8 @@ class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
       resizeImagePanel.setCanvas(offsetCanvas, canvasSize.width, canvasSize.height);
       JSOptionPane.showInputDialog(resizeImagePanel, Z4Translations.RESIZE, listener => resizeImagePanel.addChangeListener(listener), () => {
         let resizeOptions = resizeImagePanel.getResizeOptions();
-        let containerOK = 0 < resizeOptions.containerWidth && resizeOptions.containerWidth <= Z4Constants.MAX_IMAGE_SIZE && 0 < resizeOptions.containerHeight && resizeOptions.containerHeight < Z4Constants.MAX_IMAGE_SIZE;
-        let contentOK = 0 < resizeOptions.contentWidth && resizeOptions.contentWidth <= Z4Constants.MAX_IMAGE_SIZE && 0 < resizeOptions.contentHeight && resizeOptions.contentHeight < Z4Constants.MAX_IMAGE_SIZE;
+        let containerOK = 0 < resizeOptions.containerWidth && resizeOptions.containerWidth <= Z4Constants.MAX_IMAGE_SIZE && 0 < resizeOptions.containerHeight && resizeOptions.containerHeight <= Z4Constants.MAX_IMAGE_SIZE;
+        let contentOK = 0 < resizeOptions.contentWidth && resizeOptions.contentWidth <= Z4Constants.MAX_IMAGE_SIZE && 0 < resizeOptions.contentHeight && resizeOptions.contentHeight <= Z4Constants.MAX_IMAGE_SIZE;
         return containerOK && contentOK;
       }, response => {
         if (response === JSOptionPane.OK_OPTION) {
@@ -6749,7 +6749,7 @@ class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
     let panel = new Z4NewImagePanel();
     JSOptionPane.showInputDialog(panel, Z4Translations.CREATE, listener => panel.addChangeListener(listener), () => {
       let size = panel.getSelectedSize();
-      return 0 < size.width && size.width <= Z4Constants.MAX_IMAGE_SIZE && 0 < size.height && size.height < Z4Constants.MAX_IMAGE_SIZE;
+      return 0 < size.width && size.width <= Z4Constants.MAX_IMAGE_SIZE && 0 < size.height && size.height <= Z4Constants.MAX_IMAGE_SIZE;
     }, response => {
       if (response === JSOptionPane.OK_OPTION) {
         let size = panel.getSelectedSize();
@@ -13087,7 +13087,7 @@ class Z4Constants {
   /**
    * The maximum image size
    */
-  static  MAX_IMAGE_SIZE = 3000;
+  static  MAX_IMAGE_SIZE = 2500;
 
   /**
    * The default DPI
@@ -13102,7 +13102,7 @@ class Z4Constants {
   /**
    * The standard image sizes
    */
-  static  STANDARD_IMAGE_SIZE = new Array(new Dimension(640, 480), new Dimension(800, 600), new Dimension(1024, 768), new Dimension(1080, 720), new Dimension(1080, 1080), new Dimension(1152, 864), new Dimension(1280, 720), new Dimension(1280, 1024), new Dimension(1800, 1200), new Dimension(1920, 1080), new Dimension(2100, 1500), new Dimension(3000, 2400));
+  static  STANDARD_IMAGE_SIZE = new Array(new Dimension(640, 480), new Dimension(800, 600), new Dimension(1024, 768), new Dimension(1080, 720), new Dimension(1080, 1080), new Dimension(1152, 864), new Dimension(1280, 720), new Dimension(1280, 1024), new Dimension(1800, 1200), new Dimension(1920, 1080), new Dimension(2100, 1500));
 
   constructor() {
   }

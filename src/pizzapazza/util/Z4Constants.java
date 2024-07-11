@@ -113,7 +113,7 @@ public class Z4Constants {
   /**
    * The maximum image size
    */
-  public final static int MAX_IMAGE_SIZE = 3000;
+  public final static int MAX_IMAGE_SIZE = 2500;
 
   /**
    * The default DPI
@@ -139,8 +139,7 @@ public class Z4Constants {
           new Dimension(1280, 1024),
           new Dimension(1800, 1200),
           new Dimension(1920, 1080),
-          new Dimension(2100, 1500),
-          new Dimension(3000, 2400)
+          new Dimension(2100, 1500)
   );
 
   private Z4Constants() {

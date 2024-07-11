@@ -159,7 +159,7 @@ public class Z4CanvasIOManager {
     image.onload = event -> {
       Z4UI.pleaseWaitCompleted();
 
-      if (image.width <= Z4Constants.MAX_IMAGE_SIZE && image.height < Z4Constants.MAX_IMAGE_SIZE) {
+      if (image.width <= Z4Constants.MAX_IMAGE_SIZE && image.height <= Z4Constants.MAX_IMAGE_SIZE) {
         this.paper.reset();
         this.paper.addLayerFromImage(Z4Translations.BACKGROUND_LAYER, image, (int) image.width, (int) image.height);
 
@@ -604,7 +604,7 @@ public class Z4CanvasIOManager {
     image.onload = event -> {
       Z4UI.pleaseWaitCompleted();
 
-      if (image.width <= Z4Constants.MAX_IMAGE_SIZE && image.height < Z4Constants.MAX_IMAGE_SIZE) {
+      if (image.width <= Z4Constants.MAX_IMAGE_SIZE && image.height <= Z4Constants.MAX_IMAGE_SIZE) {
         this.paper.addLayerFromImage(name, image, this.size.width, this.size.height);
         this.canvas.afterAddLayer();
         this.canvas.drawCanvas();
