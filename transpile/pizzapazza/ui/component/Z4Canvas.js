@@ -167,6 +167,7 @@ class Z4Canvas extends JSComponent {
     Z4BiGradientColor.resetHistory();
     this.ribbonHistoryPanel.resetHistory(() => {
       this.afterCreate("", width, height);
+      this.fitZoom();
       this.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
     });
   }

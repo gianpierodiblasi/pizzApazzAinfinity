@@ -130,6 +130,7 @@ class Z4CanvasIOManager {
         Z4BiGradientColor.resetHistory();
         this.ribbonHistoryPanel.resetHistory(() => {
           this.canvas.afterCreate(projectName, image.width, image.height);
+          this.canvas.fitZoom();
           this.canvas.toHistory(json => this.ribbonHistoryPanel.addHistory(json, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
         });
       } else {
@@ -207,6 +208,7 @@ class Z4CanvasIOManager {
         } else {
           this.jsonToArrays(zip, () => {
             this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
+            this.canvas.fitZoom();
             this.canvas.toHistory(json2 => this.ribbonHistoryPanel.addHistory(json2, key => this.ribbonHistoryPanel.setCurrentKey(key), false));
             Z4UI.pleaseWaitCompleted();
           });
@@ -240,6 +242,7 @@ class Z4CanvasIOManager {
         this.ribbonHistoryPanel.addHistory(layerJSON, currentKey => this.jsonToArrays(zip, () => {
           this.ribbonHistoryPanel.setCurrentKey(previousCurrentKey === historyKey ? currentKey : newCurrentKey);
           this.canvas.afterCreate(json["projectName"], json["width"], json["height"]);
+          this.canvas.fitZoom();
           Z4UI.pleaseWaitCompleted();
         }), true);
       }

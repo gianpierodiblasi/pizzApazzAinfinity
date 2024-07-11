@@ -192,6 +192,7 @@ public class Z4Canvas extends JSComponent {
 
     this.ribbonHistoryPanel.resetHistory(() -> {
       this.afterCreate("", width, height);
+      this.fitZoom();
       this.toHistory(json -> this.ribbonHistoryPanel.addHistory(json, key -> this.ribbonHistoryPanel.setCurrentKey(key), false));
     });
   }
