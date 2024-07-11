@@ -360,13 +360,6 @@
   padding-right: 0.5rem;
 }
 
-.z4canvasgridpanel .z4canvasgridpanel-showgrid,
-.z4canvasgridpanel .z4canvasgridpanel-dottedgrid,
-.z4canvasgridpanel .z4canvasgridpanel-magneticgrid {
-  width: 14px;
-  height: 14px;
-}
-
 .z4canvasgridpanel .z4canvasgridpanel-showgrid-on {
   content: url(../image/status/showgrid-on.gif);
 }
@@ -821,6 +814,7 @@
 }
 
 .z4statuspanel .z4statuspanel-zoom {
+  border-width: 1px;
   min-width: 4.5rem;
 }
 .z4statuspanel .z4statuspanel-zoom summary {
@@ -836,15 +830,9 @@
   border-width: 0px;
 }
 .z4statuspanel .z4statuspanel-colorpicker img {
-  width: 11px;
-  height: 11px;
   content: url(../image/color/picker.gif);
 }
 
-.z4statuspanel .z4statuspanel-drawingdirection img {
-  width: 14px;
-  height: 14px;
-}
 .z4statuspanel .z4statuspanel-drawingdirection-free img {
   content: url(../image/status/drawingdirection-free.gif);
 }

@@ -42,6 +42,8 @@ public class Z4CanvasMouseManager {
   private Dimension size;
   private double zoom;
 
+  private Z4CanvasOverlayMode canvasOverlayMode;
+
   private Z4RibbonHistoryPanel ribbonHistoryPanel;
   private Z4StatusPanel statusPanel;
 
@@ -119,6 +121,15 @@ public class Z4CanvasMouseManager {
   }
 
   /**
+   * Sets the canvas overlay mode
+   *
+   * @param canvasOverlayMode The canvas overlay mode
+   */
+  public void setCanvasOverlayMode(Z4CanvasOverlayMode canvasOverlayMode) {
+    this.canvasOverlayMode = canvasOverlayMode;
+  }
+
+  /**
    * Sets the ribbon history panel
    *
    * @param ribbonHistoryPanel The ribbon history panel
@@ -146,28 +157,32 @@ public class Z4CanvasMouseManager {
     double x = Math.min(this.size.width, Math.max(0, event.offsetX / this.zoom));
     double y = Math.min(this.size.height, Math.max(0, event.offsetY / this.zoom));
 
-    switch (type) {
-      case "enter":
-        this.pressed = event.buttons == 1;
-        this.onAction(Z4PointIteratorDrawingAction.START, x, y);
-        this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
-        break;
-      case "down":
-        this.pressed = true;
-        this.onAction(Z4PointIteratorDrawingAction.START, x, y);
-        break;
-      case "move":
-        this.statusPanel.setMousePosition(parseInt(x), parseInt(y));
-        this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
-        break;
-      case "up":
-        this.onStop(x, y);
-        break;
-      case "leave":
-        if (this.pressed) {
+    if (this.canvasOverlayMode == Z4CanvasOverlayMode.PICK_COLOR) {
+      this.statusPanel.colorPicked(this.canvas.getColorAt(parseInt(x), parseInt(y)), this.canvas.getSelectedLayerColorAt(parseInt(x), parseInt(y)));
+    } else {
+      switch (type) {
+        case "enter":
+          this.pressed = event.buttons == 1;
+          this.onAction(Z4PointIteratorDrawingAction.START, x, y);
+          this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
+          break;
+        case "down":
+          this.pressed = true;
+          this.onAction(Z4PointIteratorDrawingAction.START, x, y);
+          break;
+        case "move":
+          this.statusPanel.setMousePosition(parseInt(x), parseInt(y));
+          this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
+          break;
+        case "up":
           this.onStop(x, y);
-        }
-        break;
+          break;
+        case "leave":
+          if (this.pressed) {
+            this.onStop(x, y);
+          }
+          break;
+      }
     }
   }
 

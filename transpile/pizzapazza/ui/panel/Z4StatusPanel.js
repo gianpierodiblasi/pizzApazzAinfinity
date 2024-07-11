@@ -86,6 +86,23 @@ class Z4StatusPanel extends JSPanel {
   }
 
   /**
+   * A color has been picked
+   *
+   * @param projectColor The color picked from the project, it can be null
+   * @param layerColor The color picked from the layer, it can be null
+   */
+   colorPicked(projectColor, layerColor) {
+    if (this.pickProjectColor.isSelected() && projectColor) {
+    } else if (this.pickLayerColor.isSelected() && layerColor) {
+    }
+    this.pickProjectColor.setContentAreaFilled(false);
+    this.pickProjectColor.setSelected(false);
+    this.pickLayerColor.setContentAreaFilled(false);
+    this.pickLayerColor.setSelected(false);
+    this.canvas.setCanvasOverlayMode(null);
+  }
+
+  /**
    * Sets the canvas to manage
    *
    * @param canvas The canvas

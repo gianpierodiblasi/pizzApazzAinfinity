@@ -1973,6 +1973,7 @@ class Z4Canvas extends JSComponent {
     this.canvas.addEventListener("mousedown", event => this.mouseManager.onMouse(event, "down"));
     this.canvas.addEventListener("mousemove", event => this.mouseManager.onMouse(event, "move"));
     this.canvas.addEventListener("mouseup", event => this.mouseManager.onMouse(event, "up"));
+    this.canvasOverlay.addEventListener("mousedown", event => this.mouseManager.onMouse(event, "down"));
     this.addEventListener("wheel", event => {
       let evt = event;
       if (!evt.ctrlKey) {
@@ -2423,6 +2424,7 @@ class Z4Canvas extends JSComponent {
    setCanvasOverlayMode(canvasOverlayMode) {
     this.canvasOverlayMode = canvasOverlayMode;
     this.canvasOverlay.style.pointerEvents = canvasOverlayMode ? "auto" : "none";
+    this.mouseManager.setCanvasOverlayMode(canvasOverlayMode);
     this.drawCanvasOverlay();
   }
 
@@ -3701,6 +3703,8 @@ class Z4CanvasMouseManager {
 
    zoom = 0.0;
 
+   canvasOverlayMode = null;
+
    ribbonHistoryPanel = null;
 
    statusPanel = null;
@@ -3781,6 +3785,15 @@ class Z4CanvasMouseManager {
   }
 
   /**
+   * Sets the canvas overlay mode
+   *
+   * @param canvasOverlayMode The canvas overlay mode
+   */
+   setCanvasOverlayMode(canvasOverlayMode) {
+    this.canvasOverlayMode = canvasOverlayMode;
+  }
+
+  /**
    * Sets the ribbon history panel
    *
    * @param ribbonHistoryPanel The ribbon history panel
@@ -3807,28 +3820,32 @@ class Z4CanvasMouseManager {
    onMouse(event, type) {
     let x = Math.min(this.size.width, Math.max(0, event.offsetX / this.zoom));
     let y = Math.min(this.size.height, Math.max(0, event.offsetY / this.zoom));
-    switch(type) {
-      case "enter":
-        this.pressed = event.buttons === 1;
-        this.onAction(Z4PointIteratorDrawingAction.START, x, y);
-        this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
-        break;
-      case "down":
-        this.pressed = true;
-        this.onAction(Z4PointIteratorDrawingAction.START, x, y);
-        break;
-      case "move":
-        this.statusPanel.setMousePosition(parseInt(x), parseInt(y));
-        this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
-        break;
-      case "up":
-        this.onStop(x, y);
-        break;
-      case "leave":
-        if (this.pressed) {
+    if (this.canvasOverlayMode === Z4CanvasOverlayMode.PICK_COLOR) {
+      this.statusPanel.colorPicked(this.canvas.getColorAt(parseInt(x), parseInt(y)), this.canvas.getSelectedLayerColorAt(parseInt(x), parseInt(y)));
+    } else {
+      switch(type) {
+        case "enter":
+          this.pressed = event.buttons === 1;
+          this.onAction(Z4PointIteratorDrawingAction.START, x, y);
+          this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
+          break;
+        case "down":
+          this.pressed = true;
+          this.onAction(Z4PointIteratorDrawingAction.START, x, y);
+          break;
+        case "move":
+          this.statusPanel.setMousePosition(parseInt(x), parseInt(y));
+          this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
+          break;
+        case "up":
           this.onStop(x, y);
-        }
-        break;
+          break;
+        case "leave":
+          if (this.pressed) {
+            this.onStop(x, y);
+          }
+          break;
+      }
     }
   }
 
@@ -12915,6 +12932,23 @@ class Z4StatusPanel extends JSPanel {
     pickColor.setContentAreaFilled(selected);
     pickColor.setSelected(selected);
     this.canvas.setCanvasOverlayMode(selected ? Z4CanvasOverlayMode.PICK_COLOR : null);
+  }
+
+  /**
+   * A color has been picked
+   *
+   * @param projectColor The color picked from the project, it can be null
+   * @param layerColor The color picked from the layer, it can be null
+   */
+   colorPicked(projectColor, layerColor) {
+    if (this.pickProjectColor.isSelected() && projectColor) {
+    } else if (this.pickLayerColor.isSelected() && layerColor) {
+    }
+    this.pickProjectColor.setContentAreaFilled(false);
+    this.pickProjectColor.setSelected(false);
+    this.pickLayerColor.setContentAreaFilled(false);
+    this.pickLayerColor.setSelected(false);
+    this.canvas.setCanvasOverlayMode(null);
   }
 
   /**
