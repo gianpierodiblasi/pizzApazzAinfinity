@@ -31,6 +31,12 @@ class Z4Canvas extends JSComponent {
 
    showLayerBounds = false;
 
+   canvasOverlay = document.createElement("canvas");
+
+   ctxOverlay = this.canvasOverlay.getContext("2d");
+
+   canvasOverlayMode = null;
+
    ribbonProjectPanel = null;
 
    ribbonLayerPanel = null;
@@ -84,6 +90,7 @@ class Z4Canvas extends JSComponent {
     this.appendNodeChild(this.canvas);
     this.appendNodeChild(this.canvasGrid);
     this.appendNodeChild(this.canvasBounds);
+    this.appendNodeChild(this.canvasOverlay);
     this.canvas.classList.add("main-canvas");
     this.canvas.addEventListener("mouseenter", event => this.mouseManager.onMouse(event, "enter"));
     this.canvas.addEventListener("mouseleave", event => this.mouseManager.onMouse(event, "leave"));
@@ -228,9 +235,12 @@ class Z4Canvas extends JSComponent {
     this.canvasGrid.height = height * this.zoom;
     this.canvasBounds.width = width * this.zoom;
     this.canvasBounds.height = height * this.zoom;
+    this.canvasOverlay.width = width * this.zoom;
+    this.canvasOverlay.height = height * this.zoom;
     this.drawCanvas();
     this.drawCanvasGrid();
     this.drawCanvasBounds();
+    this.drawCanvasOverlay();
   }
 
   /**
@@ -530,6 +540,17 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Sets the canvas overlay mode
+   *
+   * @param canvasOverlayMode The canvas overlay mode
+   */
+   setCanvasOverlayMode(canvasOverlayMode) {
+    this.canvasOverlayMode = canvasOverlayMode;
+    this.canvasOverlay.style.pointerEvents = canvasOverlayMode ? "auto" : "none";
+    this.drawCanvasOverlay();
+  }
+
+  /**
    * Adds a drawing tool
    *
    * @param drawingTool The drawing tool
@@ -791,10 +812,13 @@ class Z4Canvas extends JSComponent {
     this.canvasGrid.height = this.height * zoom;
     this.canvasBounds.width = this.width * zoom;
     this.canvasBounds.height = this.height * zoom;
+    this.canvasOverlay.width = this.width * zoom;
+    this.canvasOverlay.height = this.height * zoom;
     this.pathGrid = this.pathGrid ? this.createGrid() : null;
     this.drawCanvas();
     this.drawCanvasGrid();
     this.drawCanvasBounds();
+    this.drawCanvasOverlay();
   }
 
   /**
@@ -953,9 +977,12 @@ class Z4Canvas extends JSComponent {
     this.canvasGrid.height = this.height * this.zoom;
     this.canvasBounds.width = this.width * this.zoom;
     this.canvasBounds.height = this.height * this.zoom;
+    this.canvasOverlay.width = this.width * this.zoom;
+    this.canvasOverlay.height = this.height * this.zoom;
     this.drawCanvas();
     this.drawCanvasGrid();
     this.drawCanvasBounds();
+    this.drawCanvasOverlay();
   }
 
   /**
@@ -1012,6 +1039,15 @@ class Z4Canvas extends JSComponent {
       this.ctxBounds.setLineDash(dash);
       this.ctxBounds.stroke(bounds);
       this.ctxBounds.restore();
+    }
+  }
+
+  /**
+   * Draws the canvas overlay
+   */
+   drawCanvasOverlay() {
+    this.ctxOverlay.clearRect(0, 0, this.canvasOverlay.width, this.canvasOverlay.height);
+    if (this.canvasOverlayMode === Z4CanvasOverlayMode.PICK_COLOR) {
     }
   }
 }

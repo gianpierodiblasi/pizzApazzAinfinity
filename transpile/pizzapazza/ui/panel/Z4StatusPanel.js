@@ -82,6 +82,7 @@ class Z4StatusPanel extends JSPanel {
     this.pickLayerColor.setSelected(false);
     pickColor.setContentAreaFilled(selected);
     pickColor.setSelected(selected);
+    this.canvas.setCanvasOverlayMode(selected ? Z4CanvasOverlayMode.PICK_COLOR : null);
   }
 
   /**
