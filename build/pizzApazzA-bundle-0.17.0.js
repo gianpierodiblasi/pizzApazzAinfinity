@@ -7270,7 +7270,6 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
         }
       });
       this.checkLocalFonts(foundFonts);
-      return null;
     });
   }
 
@@ -7279,7 +7278,6 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
       window.queryLocalFonts().then(localFonts => {
         localFonts.forEach(localFont => foundFonts.add(localFont.family));
         this.setFontsChecked(foundFonts);
-        return null;
       });
     } else {
       this.setFontsChecked(foundFonts);
@@ -12389,6 +12387,24 @@ class Z4FillingPanel extends JSPanel {
         }
       });
     }
+  }
+}
+/**
+ * The panel to select a font
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4FontSelectionPanel extends JSPanel {
+
+  /**
+   * Creates the object
+   *
+   * @param fonts The available fonts
+   */
+  constructor(fonts) {
+    super();
+    this.setLayout(new GridBagLayout());
+    this.cssAddClass("z4fontselectionpanel");
   }
 }
 /**

@@ -1,52 +1,21 @@
-package pizzapazza.ui.panel.ribbon;
+package pizzapazza.ui.panel;
 
 import def.js.Array;
 import def.js.Set;
-import javascript.awt.GridBagLayout;
-import pizzapazza.ui.component.Z4Canvas;
-import pizzapazza.ui.component.Z4CanvasOverlayMode;
-import static simulation.js.$Globals.$typeof;
+import javascript.awt.BorderLayout;
+import javascript.swing.JSFrame;
+import javascript.swing.JSPanel;
 import static simulation.js.$Globals.document;
-import static simulation.js.$Globals.window;
 
 /**
- * The ribbon panel containing the settings to draw text
  *
  * @author gianpiero.diblasi
  */
-public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
+public class TestFontSelectionPanel extends JSFrame {
 
-  private Z4Canvas canvas;
-  private boolean fontsChecked;
-  private final Array<String> fonts = new Array<>();
-
-  /**
-   * Creates the object
-   */
-  public Z4RibbonTextPanel() {
+  public TestFontSelectionPanel() {
     super();
-    this.setLayout(new GridBagLayout());
-    this.cssAddClass("z4ribbontextpanel");
-  }
-
-  /**
-   * Sets the canvas to manage
-   *
-   * @param canvas The canvas
-   */
-  public void setCanvas(Z4Canvas canvas) {
-    this.canvas = canvas;
-  }
-
-  /**
-   * Checks the available fonts
-   */
-  public void checkFonts() {
-    if (this.fontsChecked) {
-      this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
-    } else {
-      this.checkStandardFonts();
-    }
+    this.checkStandardFonts();
   }
 
   private void checkStandardFonts() {
@@ -63,26 +32,15 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
         }
       });
 
-      this.checkLocalFonts(foundFonts);
+      Array<String> fonts = new Array<>();
+      foundFonts.forEach((value, key, set) -> fonts.push(value));
+      fonts.sort();
+
+      Z4FontSelectionPanel fontSelectionPanel = new Z4FontSelectionPanel(fonts);
+
+      JSPanel p = new JSPanel();
+      p.add(fontSelectionPanel, null);
+      this.getContentPane().add(p, BorderLayout.NORTH);
     });
-  }
-
-  private void checkLocalFonts(Set<String> foundFonts) {
-    if ($typeof(window.$get("queryLocalFonts"), "function")) {
-      window.queryLocalFonts().then(localFonts -> {
-        localFonts.forEach(localFont -> foundFonts.add(localFont.family));
-        this.setFontsChecked(foundFonts);
-      });
-    } else {
-      this.setFontsChecked(foundFonts);
-    }
-  }
-
-  private void setFontsChecked(Set<String> foundFonts) {
-    foundFonts.forEach((value, key, set) -> this.fonts.push(value));
-    this.fonts.sort();
-
-    this.fontsChecked = true;
-    this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
   }
 }

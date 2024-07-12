@@ -1,43 +1,11 @@
 /**
- * The ribbon panel containing the settings to draw text
- *
  * @author gianpiero.diblasi
  */
-class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
+class TestFontSelectionPanel extends JSFrame {
 
-   canvas = null;
-
-   fontsChecked = false;
-
-   fonts = new Array();
-
-  /**
-   * Creates the object
-   */
   constructor() {
     super();
-    this.setLayout(new GridBagLayout());
-    this.cssAddClass("z4ribbontextpanel");
-  }
-
-  /**
-   * Sets the canvas to manage
-   *
-   * @param canvas The canvas
-   */
-   setCanvas(canvas) {
-    this.canvas = canvas;
-  }
-
-  /**
-   * Checks the available fonts
-   */
-   checkFonts() {
-    if (this.fontsChecked) {
-      this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
-    } else {
-      this.checkStandardFonts();
-    }
+    this.checkStandardFonts();
   }
 
    checkStandardFonts() {
@@ -49,25 +17,13 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
           foundFonts.add(value);
         }
       });
-      this.checkLocalFonts(foundFonts);
+      let fonts = new Array();
+      foundFonts.forEach((value, key, set) => fonts.push(value));
+      fonts.sort();
+      let fontSelectionPanel = new Z4FontSelectionPanel(fonts);
+      let p = new JSPanel();
+      p.add(fontSelectionPanel, null);
+      this.getContentPane().add(p, BorderLayout.NORTH);
     });
-  }
-
-   checkLocalFonts(foundFonts) {
-    if (typeof window["queryLocalFonts"] === "function") {
-      window.queryLocalFonts().then(localFonts => {
-        localFonts.forEach(localFont => foundFonts.add(localFont.family));
-        this.setFontsChecked(foundFonts);
-      });
-    } else {
-      this.setFontsChecked(foundFonts);
-    }
-  }
-
-   setFontsChecked(foundFonts) {
-    foundFonts.forEach((value, key, set) => this.fonts.push(value));
-    this.fonts.sort();
-    this.fontsChecked = true;
-    this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
   }
 }
