@@ -24,7 +24,7 @@
   min-width: 5rem;
 }
 
-.z4statuspanel .jscolorpreview {
+.z4statuspanel > .jscolorpreview {
   height: 12px;
   width: 14px;
   background: url(../image/util/chessboard.png);
