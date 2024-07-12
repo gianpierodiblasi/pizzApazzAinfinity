@@ -11771,7 +11771,7 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
       });
       this.onFontChange();
     });
-    this.add(this.filter, new GBC(0, 1).f(GBC.HORIZONTAL).i(0, 0, 0, 5));
+    this.add(this.filter, new GBC(0, 1).a(GBC.WEST).wx(1));
     this.size.setLabel(Z4Translations.DIMENSION);
     this.size.setSignVisible(false);
     this.size.setRange(7, 400);
@@ -11787,11 +11787,11 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
     let panel = new JSPanel();
     panel.setLayout(new GridLayout(parseInt(this.fonts.length / 3) + 1, 3, 0, 0));
     panel.cssAddClass("z4fontselectionpanel-fontlist");
-    this.add(panel, new GBC(0, 2).w(5));
+    this.add(panel, new GBC(0, 2).w(4));
     let buttonGroup = new ButtonGroup();
     fonts.forEach(font => this.addFont(font, buttonGroup, panel));
     this.sample.cssAddClass("z4fontselectionpanel-sample");
-    this.add(this.sample, new GBC(0, 3).w(5).i(5, 0, 0, 0));
+    this.add(this.sample, new GBC(0, 3).w(4).i(5, 0, 0, 0));
   }
 
    addFont(font, buttonGroup, panel) {
