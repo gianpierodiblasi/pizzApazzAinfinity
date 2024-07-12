@@ -1,9 +1,9 @@
 package pizzapazza.ui.panel;
 
 import def.js.Array;
-import javascript.awt.BoxLayout;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
+import javascript.awt.GridLayout;
 import javascript.swing.ButtonGroup;
 import javascript.swing.JSCheckBox;
 import javascript.swing.JSLabel;
@@ -18,6 +18,7 @@ import pizzapazza.ui.panel.math.Z4SignedValuePanelOrientation;
 import pizzapazza.util.Z4Font;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
+import static simulation.js.$Globals.parseInt;
 
 /**
  * The panel to select a font
@@ -58,30 +59,33 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
       });
       this.onFontChange();
     });
-    this.add(this.filter, new GBC(0, 1).f(GBC.HORIZONTAL).i(0, 0, 5, 5));
-
-    JSPanel panel = new JSPanel();
-    panel.cssAddClass("z4fontselectionpanel-fontlist");
-    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-    this.add(panel, new GBC(0, 2).h(3).i(0, 0, 0, 5));
-
-    ButtonGroup buttonGroup = new ButtonGroup();
-    fonts.forEach(font -> this.addFont(font, buttonGroup, panel));
+    this.add(this.filter, new GBC(0, 1).f(GBC.HORIZONTAL).i(0, 0, 0, 5));
 
     this.size.setLabel(Z4Translations.DIMENSION);
     this.size.setSignVisible(false);
     this.size.setRange(7, 400);
     this.size.setValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 12));
     this.size.addChangeListener(event -> this.onFontChange());
-    this.add(this.size, new GBC(1, 0).h(2).a(GBC.WEST).i(0, 0, 5, 0));
+    this.add(this.size, new GBC(1, 0).h(2).a(GBC.WEST).i(0, 0, 0, 5));
 
     this.bold.setText(Z4Translations.BOLD);
     this.bold.addActionListener(event -> this.onFontChange());
-    this.add(this.bold, new GBC(1, 2).a(GBC.WEST).i(0, 5, 0, 0));
+    this.add(this.bold, new GBC(2, 1).i(0, 0, 0, 5));
 
     this.italic.setText(Z4Translations.ITALIC);
     this.italic.addActionListener(event -> this.onFontChange());
-    this.add(this.italic, new GBC(1, 3).a(GBC.WEST).i(0, 5, 0, 0));
+    this.add(this.italic, new GBC(3, 1));
+
+    JSPanel panel = new JSPanel();
+    panel.setLayout(new GridLayout(parseInt(this.fonts.length / 3) + 1, 3, 0, 0));
+    panel.cssAddClass("z4fontselectionpanel-fontlist");
+    this.add(panel, new GBC(0, 2).w(5));
+
+    ButtonGroup buttonGroup = new ButtonGroup();
+    fonts.forEach(font -> this.addFont(font, buttonGroup, panel));
+
+    this.sample.cssAddClass("z4fontselectionpanel-sample");
+    this.add(this.sample, new GBC(0, 3).w(5).i(5, 0, 0, 0));
   }
 
   private void addFont(String font, ButtonGroup buttonGroup, JSPanel panel) {
@@ -99,8 +103,15 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
     int index = this.radios.findIndex(radio -> radio.isSelected() && radio.getStyle().display != "none");
     if (index != -1) {
       this.value = new Z4Font(this.fonts.$get(index), (int) this.size.getValue().getValue(), this.bold.isSelected(), this.italic.isSelected());
+      this.sample.setText(Z4Translations.STRING_EXAMPLE);
+
+      this.sample.getStyle().fontFamily = this.value.family;
+      this.sample.getStyle().fontSize = this.value.size + "px";
+      this.sample.getStyle().fontStyle = this.value.italic ? "italic" : "normal";
+      this.sample.getStyle().fontWeight = this.value.bold ? "bold" : "normal";
     } else {
       this.value = null;
+      this.sample.setText("");
     }
 
     this.onchange();

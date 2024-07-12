@@ -2,7 +2,20 @@
 }
 
 .z4fontselectionpanel .z4fontselectionpanel-fontlist {
-  width: 20rem;
-  height: 25rem;
+  width: 45rem;
+  height: 14rem;
   overflow-y: scroll;
+}
+
+.z4fontselectionpanel .z4fontselectionpanel-sample {
+  width: 45rem;
+  height: 20rem;
+  border: 2px solid var(--main-action-bgcolor);
+  border-radius: var(--roundness);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  
 }

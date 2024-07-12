@@ -169,6 +169,8 @@ public class Z4Translations {
   public static String FILTER = "";
   public static String BOLD = "";
   public static String ITALIC = "";
+  public static String STRING_EXAMPLE = "";
+  public static String FONT_SELECTION = "";
 
   // Color
   public static String COLOR = "";
@@ -447,6 +449,8 @@ public class Z4Translations {
     Z4Translations.FILTER = "Filter";
     Z4Translations.BOLD = "Bold";
     Z4Translations.ITALIC = "Italic";
+    Z4Translations.STRING_EXAMPLE = "Sample string of the selected font";
+    Z4Translations.FONT_SELECTION = "Font Selection";
 
     // Color
     Z4Translations.COLOR = "Color";
@@ -709,7 +713,9 @@ public class Z4Translations {
     Z4Translations.FILTER = "Filtra";
     Z4Translations.BOLD = "Grassetto";
     Z4Translations.ITALIC = "Corsivo";
-    
+    Z4Translations.STRING_EXAMPLE = "Stringa di esempio del font selezionato";
+    Z4Translations.FONT_SELECTION = "Selezione Font";
+
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";
