@@ -3,7 +3,15 @@
  *
  * @author gianpiero.diblasi
  */
-class Z4FontSelectionPanel extends JSPanel {
+class Z4FontSelectionPanel extends Z4AbstractValuePanel {
+
+   bold = new JSCheckBox();
+
+   italic = new JSCheckBox();
+
+   sample = new JSLabel();
+
+   radios = new Array();
 
   /**
    * Creates the object
@@ -14,5 +22,9 @@ class Z4FontSelectionPanel extends JSPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4fontselectionpanel");
+  }
+
+   setValue(value) {
+    this.value = value;
   }
 }

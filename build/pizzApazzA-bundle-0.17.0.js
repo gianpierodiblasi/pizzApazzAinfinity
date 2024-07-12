@@ -11732,6 +11732,36 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
   }
 }
 /**
+ * The panel to select a font
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4FontSelectionPanel extends Z4AbstractValuePanel {
+
+   bold = new JSCheckBox();
+
+   italic = new JSCheckBox();
+
+   sample = new JSLabel();
+
+   radios = new Array();
+
+  /**
+   * Creates the object
+   *
+   * @param fonts The available fonts
+   */
+  constructor(fonts) {
+    super();
+    this.setLayout(new GridBagLayout());
+    this.cssAddClass("z4fontselectionpanel");
+  }
+
+   setValue(value) {
+    this.value = value;
+  }
+}
+/**
  * The panel to manage the grid of a canvas
  *
  * @author gianpiero.diblasi
@@ -12387,24 +12417,6 @@ class Z4FillingPanel extends JSPanel {
         }
       });
     }
-  }
-}
-/**
- * The panel to select a font
- *
- * @author gianpiero.diblasi
- */
-class Z4FontSelectionPanel extends JSPanel {
-
-  /**
-   * Creates the object
-   *
-   * @param fonts The available fonts
-   */
-  constructor(fonts) {
-    super();
-    this.setLayout(new GridBagLayout());
-    this.cssAddClass("z4fontselectionpanel");
   }
 }
 /**
@@ -13508,6 +13520,36 @@ class Z4EmptyImageProducer extends AbstractHTMLImageProducer {
 
    produce() {
     return document.createElement("img");
+  }
+}
+/**
+ * The font object
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Font {
+
+   family = null;
+
+   size = 0;
+
+   bold = false;
+
+   italic = false;
+
+  /**
+   * Creates the object
+   *
+   * @param family The font family
+   * @param size The font size (in pixel)
+   * @param bold true for a bold font, false otherwise
+   * @param italic true for an italic font, false otherwise
+   */
+  constructor(family, size, bold, italic) {
+    this.family = family;
+    this.size = size;
+    this.bold = bold;
+    this.italic = italic;
   }
 }
 /**
