@@ -6,12 +6,10 @@ import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
 import javascript.swing.JSButton;
 import javascript.swing.JSColorChooser;
-import javascript.swing.JSComponent;
 import javascript.swing.JSLabel;
 import javascript.swing.colorchooser.JSColorPreview;
 import pizzapazza.ui.panel.Z4AbstractValuePanel;
 import pizzapazza.util.Z4Translations;
-import static simulation.js.$Globals.document;
 
 /**
  * The panale to manage a color
@@ -84,6 +82,16 @@ public class Z4ColorPanel extends Z4AbstractValuePanel<Color> {
    */
   public void setEditButtonVisible(boolean b) {
     this.edit.getStyle().display = b ? "flex" : "none";
+  }
+
+  /**
+   * Sets the filling of the area of the edit button
+   *
+   * @param b true to set the filling of the area of the edit button, false
+   * otherwise
+   */
+  public void setEditButtonContentAreaFilled(boolean b) {
+    this.edit.setContentAreaFilled(b);
   }
 
   /**

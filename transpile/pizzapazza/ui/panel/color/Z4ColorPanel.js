@@ -68,6 +68,16 @@ class Z4ColorPanel extends Z4AbstractValuePanel {
   }
 
   /**
+   * Sets the filling of the area of the edit button
+   *
+   * @param b true to set the filling of the area of the edit button, false
+   * otherwise
+   */
+   setEditButtonContentAreaFilled(b) {
+    this.edit.setContentAreaFilled(b);
+  }
+
+  /**
    * Sets the visibility of the opacity selector
    *
    * @param b true to show the opacity selector, false otherwise

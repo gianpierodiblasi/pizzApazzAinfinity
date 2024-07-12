@@ -9,9 +9,13 @@ class Z4TextInfo {
 
    textText = null;
 
-   shadowText = null;
-
    textEmpty = false;
+
+   textBorder = 0;
+
+   textBorderColor = null;
+
+   shadowText = null;
 
    shadowEmpty = false;
 }

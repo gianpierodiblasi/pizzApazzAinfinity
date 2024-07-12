@@ -9,7 +9,7 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
 
    radios = new Array();
 
-   size = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.HORIZONTAL);
+   size = new JSSpinner();
 
    sample = new JSLabel();
 
@@ -39,12 +39,11 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
       this.onFontChange();
     });
     this.add(this.filter, new GBC(0, 1).a(GBC.WEST).wx(1));
-    this.size.setLabel(Z4Translations.DIMENSION);
-    this.size.setSignVisible(false);
-    this.size.setRange(7, 400);
-    this.size.setValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 12));
+    Z4UI.addLabel(this, Z4Translations.DIMENSION, new GBC(1, 0).a(GBC.WEST));
+    this.size.cssAddClass("jsspinner_w_4rem");
+    this.size.setModel(new SpinnerNumberModel(12, 7, 400, 1));
     this.size.addChangeListener(event => this.onFontChange());
-    this.add(this.size, new GBC(1, 0).h(2).a(GBC.WEST).i(0, 0, 0, 5));
+    this.add(this.size, new GBC(1, 1).a(GBC.WEST).i(0, 0, 0, 5));
     this.bold.setText(Z4Translations.BOLD);
     this.bold.addActionListener(event => this.onFontChange());
     this.add(this.bold, new GBC(2, 1).i(0, 0, 0, 5));
@@ -73,7 +72,7 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
    onFontChange() {
     let index = this.radios.findIndex(radio => radio.isSelected() && radio.getStyle().display !== "none");
     if (index !== -1) {
-      this.value = new Z4Font(this.fonts[index], this.size.getValue().getValue(), this.bold.isSelected(), this.italic.isSelected());
+      this.value = new Z4Font(this.fonts[index], parseInt(this.size.getValue()), this.bold.isSelected(), this.italic.isSelected());
       this.setSample();
     } else {
       this.value = null;
@@ -91,7 +90,7 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
     } else {
       this.radios.forEach(radio => radio.setSelected(false));
     }
-    this.size.setValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), value.size));
+    this.size.setValue(value.size);
     this.bold.setSelected(value.bold);
     this.italic.setSelected(value.italic);
     this.setSample();

@@ -7231,6 +7231,10 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
    shadowText = new JSTextField();
 
+   textBorder = new JSSpinner();
+
+   textBorderColor = new Z4ColorPanel();
+
    textEmpty = new JSCheckBox();
 
    shadowEmpty = new JSCheckBox();
@@ -7254,7 +7258,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbontextpanel");
-    this.textInfo.font = new Z4Font("Arial", 15, true, true);
+    this.textInfo.font = new Z4Font("Arial", 12, false, false);
     this.fontSelection.setContentAreaFilled(false);
     this.fontSelection.setText(Z4Translations.FONT_SELECTION);
     this.fontSelection.addActionListener(event => {
@@ -7267,18 +7271,28 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
         }
       });
     });
-    this.add(this.fontSelection, new GBC(0, 1));
+    this.add(this.fontSelection, new GBC(0, 1).f(GBC.VERTICAL));
     Z4UI.addVLine(this, new GBC(1, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     Z4UI.addLabel(this, Z4Translations.TEXT, new GBC(2, 0).a(GBC.WEST).i(5, 5, 2, 0));
     this.textText.addActionListener(event => this.onTextInfoChange());
-    this.add(this.textText, new GBC(2, 1).a(GBC.WEST));
+    this.add(this.textText, new GBC(2, 1).a(GBC.WEST).f(GBC.VERTICAL).i(0, 0, 0, 5));
     this.textEmpty.setText(Z4Translations.EMPTY);
     this.textEmpty.addActionListener(event => this.onTextInfoChange());
     this.add(this.textEmpty, new GBC(2, 2).a(GBC.WEST));
+    Z4UI.addLabel(this, Z4Translations.BORDER, new GBC(3, 0).a(GBC.WEST).i(5, 5, 2, 0));
+    this.textBorder.cssAddClass("jsspinner_w_4rem");
+    this.textBorder.setModel(new SpinnerNumberModel(0, 1, 20, 1));
+    this.textBorder.addChangeListener(event => this.onTextInfoChange());
+    this.add(this.textBorder, new GBC(3, 1).a(GBC.WEST));
+    this.textBorderColor.getStyle().minWidth = "8rem";
+    this.textBorderColor.setValue(new Color(0, 0, 0, 255));
+    this.textBorderColor.setEditButtonContentAreaFilled(false);
+    this.textBorderColor.addChangeListener(event => this.onTextInfoChange());
+    this.add(this.textBorderColor, new GBC(3, 2).f(GBC.HORIZONTAL));
     Z4UI.addVLine(this, new GBC(11, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     Z4UI.addLabel(this, Z4Translations.SHADOW, new GBC(12, 0).a(GBC.WEST).i(5, 5, 2, 0));
     this.shadowText.addActionListener(event => this.onTextInfoChange());
-    this.add(this.shadowText, new GBC(12, 1).a(GBC.WEST));
+    this.add(this.shadowText, new GBC(12, 1).f(GBC.VERTICAL).a(GBC.WEST));
     this.shadowEmpty.setText(Z4Translations.EMPTY);
     this.shadowEmpty.addActionListener(event => this.onTextInfoChange());
     this.add(this.shadowEmpty, new GBC(12, 2).a(GBC.WEST));
@@ -7287,23 +7301,28 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.apply.setText("APPLY");
     this.apply.addActionListener(event => {
     });
-    this.add(this.apply, new GBC(22, 1));
+    this.add(this.apply, new GBC(22, 1).f(GBC.VERTICAL));
     this.reset.setContentAreaFilled(false);
     this.reset.setText(Z4Translations.RESET);
     this.reset.addActionListener(event => this.onReset());
-    this.add(this.reset, new GBC(23, 1).i(0, 5, 0, 0));
+    this.add(this.reset, new GBC(23, 1).f(GBC.VERTICAL).i(0, 5, 0, 0));
   }
 
    onTextInfoChange() {
     this.textInfo.textText = this.textText.getText();
     this.textInfo.textEmpty = this.textEmpty.isSelected();
+    this.textInfo.textBorder = parseInt(this.textBorder.getValue());
+    this.textInfo.textBorderColor = this.textBorderColor.getValue();
     this.textInfo.shadowText = this.shadowText.getText();
     this.textInfo.shadowEmpty = this.shadowEmpty.isSelected();
   }
 
    onReset() {
+    this.textInfo.font = new Z4Font("Arial", 12, false, false);
     this.textText.setText("");
     this.textEmpty.setSelected(false);
+    this.textBorder.setValue(0);
+    this.textBorderColor.setValue(new Color(0, 0, 0, 255));
     this.shadowText.setText("");
     this.shadowEmpty.setSelected(false);
     this.onTextInfoChange();
@@ -7936,6 +7955,16 @@ class Z4ColorPanel extends Z4AbstractValuePanel {
    */
    setEditButtonVisible(b) {
     this.edit.getStyle().display = b ? "flex" : "none";
+  }
+
+  /**
+   * Sets the filling of the area of the edit button
+   *
+   * @param b true to set the filling of the area of the edit button, false
+   * otherwise
+   */
+   setEditButtonContentAreaFilled(b) {
+    this.edit.setContentAreaFilled(b);
   }
 
   /**
@@ -11811,7 +11840,7 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
 
    radios = new Array();
 
-   size = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.HORIZONTAL);
+   size = new JSSpinner();
 
    sample = new JSLabel();
 
@@ -11841,12 +11870,11 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
       this.onFontChange();
     });
     this.add(this.filter, new GBC(0, 1).a(GBC.WEST).wx(1));
-    this.size.setLabel(Z4Translations.DIMENSION);
-    this.size.setSignVisible(false);
-    this.size.setRange(7, 400);
-    this.size.setValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 12));
+    Z4UI.addLabel(this, Z4Translations.DIMENSION, new GBC(1, 0).a(GBC.WEST));
+    this.size.cssAddClass("jsspinner_w_4rem");
+    this.size.setModel(new SpinnerNumberModel(12, 7, 400, 1));
     this.size.addChangeListener(event => this.onFontChange());
-    this.add(this.size, new GBC(1, 0).h(2).a(GBC.WEST).i(0, 0, 0, 5));
+    this.add(this.size, new GBC(1, 1).a(GBC.WEST).i(0, 0, 0, 5));
     this.bold.setText(Z4Translations.BOLD);
     this.bold.addActionListener(event => this.onFontChange());
     this.add(this.bold, new GBC(2, 1).i(0, 0, 0, 5));
@@ -11875,7 +11903,7 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
    onFontChange() {
     let index = this.radios.findIndex(radio => radio.isSelected() && radio.getStyle().display !== "none");
     if (index !== -1) {
-      this.value = new Z4Font(this.fonts[index], this.size.getValue().getValue(), this.bold.isSelected(), this.italic.isSelected());
+      this.value = new Z4Font(this.fonts[index], parseInt(this.size.getValue()), this.bold.isSelected(), this.italic.isSelected());
       this.setSample();
     } else {
       this.value = null;
@@ -11893,7 +11921,7 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
     } else {
       this.radios.forEach(radio => radio.setSelected(false));
     }
-    this.size.setValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), value.size));
+    this.size.setValue(value.size);
     this.bold.setSelected(value.bold);
     this.italic.setSelected(value.italic);
     this.setSample();
@@ -19043,9 +19071,13 @@ class Z4TextInfo {
 
    textText = null;
 
-   shadowText = null;
-
    textEmpty = false;
+
+   textBorder = 0;
+
+   textBorderColor = null;
+
+   shadowText = null;
 
    shadowEmpty = false;
 }

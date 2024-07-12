@@ -9,15 +9,13 @@ import javascript.swing.JSCheckBox;
 import javascript.swing.JSLabel;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
+import javascript.swing.JSSpinner;
 import javascript.swing.JSTextField;
-import pizzapazza.math.Z4Sign;
-import pizzapazza.math.Z4SignBehavior;
-import pizzapazza.math.Z4SignedValue;
-import pizzapazza.ui.panel.math.Z4SignedValuePanel;
-import pizzapazza.ui.panel.math.Z4SignedValuePanelOrientation;
+import javascript.swing.SpinnerNumberModel;
 import pizzapazza.util.Z4Font;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
+import static simulation.js.$Globals.parseInt;
 import static simulation.js.$Globals.setTimeout;
 
 /**
@@ -29,7 +27,7 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
 
   private final JSTextField filter = new JSTextField();
   private final Array<JSRadioButton> radios = new Array<>();
-  private final Z4SignedValuePanel size = new Z4SignedValuePanel(Z4SignedValuePanelOrientation.HORIZONTAL);
+  private final JSSpinner size = new JSSpinner();
   private final JSLabel sample = new JSLabel();
   private final JSCheckBox bold = new JSCheckBox();
   private final JSCheckBox italic = new JSCheckBox();
@@ -61,12 +59,12 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
     });
     this.add(this.filter, new GBC(0, 1).a(GBC.WEST).wx(1));
 
-    this.size.setLabel(Z4Translations.DIMENSION);
-    this.size.setSignVisible(false);
-    this.size.setRange(7, 400);
-    this.size.setValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 12));
+    Z4UI.addLabel(this, Z4Translations.DIMENSION, new GBC(1, 0).a(GBC.WEST));
+
+    this.size.cssAddClass("jsspinner_w_4rem");
+    this.size.setModel(new SpinnerNumberModel(12, 7, 400, 1));
     this.size.addChangeListener(event -> this.onFontChange());
-    this.add(this.size, new GBC(1, 0).h(2).a(GBC.WEST).i(0, 0, 0, 5));
+    this.add(this.size, new GBC(1, 1).a(GBC.WEST).i(0, 0, 0, 5));
 
     this.bold.setText(Z4Translations.BOLD);
     this.bold.addActionListener(event -> this.onFontChange());
@@ -102,7 +100,7 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
   private void onFontChange() {
     int index = this.radios.findIndex(radio -> radio.isSelected() && radio.getStyle().display != "none");
     if (index != -1) {
-      this.value = new Z4Font(this.fonts.$get(index), (int) this.size.getValue().getValue(), this.bold.isSelected(), this.italic.isSelected());
+      this.value = new Z4Font(this.fonts.$get(index), parseInt(this.size.getValue()), this.bold.isSelected(), this.italic.isSelected());
       this.setSample();
     } else {
       this.value = null;
@@ -125,7 +123,7 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
       this.radios.forEach(radio -> radio.setSelected(false));
     }
 
-    this.size.setValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), value.size));
+    this.size.setValue(value.size);
     this.bold.setSelected(value.bold);
     this.italic.setSelected(value.italic);
 
