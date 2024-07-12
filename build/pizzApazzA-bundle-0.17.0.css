@@ -620,7 +620,12 @@
   content: url(../image/filling/fill_bigradientcolor.gif);
 }.z4fontselectionpanel {
 }
-.z4gradientcolorpanel canvas {
+
+.z4fontselectionpanel .z4fontselectionpanel-fontlist {
+  width: 20rem;
+  height: 30rem;
+  overflow-y: scroll;
+}.z4gradientcolorpanel canvas {
   border: 1px solid var(--main-action-bgcolor);
   background-image: url(../image/util/chessboard.png);
 }

@@ -11738,13 +11738,17 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
  */
 class Z4FontSelectionPanel extends Z4AbstractValuePanel {
 
+   filter = new JSTextField();
+
+   radios = new Array();
+
    bold = new JSCheckBox();
 
    italic = new JSCheckBox();
 
    sample = new JSLabel();
 
-   radios = new Array();
+   fonts = null;
 
   /**
    * Creates the object
@@ -11755,10 +11759,45 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4fontselectionpanel");
+    this.fonts = fonts;
+    Z4UI.addLabel(this, Z4Translations.FILTER, new GBC(0, 0).a(GBC.WEST));
+    this.filter.addActionListener(event => {
+      let str = this.filter.getText();
+      this.radios.forEach((radio, index, array) => {
+        radio.setSelected(false);
+        radio.getStyle().display = this.fonts[index].contains(str) ? "flex" : "none";
+        this.value = null;
+        this.onchange();
+      });
+    });
+    this.add(this.filter, new GBC(0, 1).f(GBC.HORIZONTAL));
+    let panel = new JSPanel();
+    panel.cssAddClass("z4fontselectionpanel-fontlist");
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    this.add(panel, new GBC(0, 2));
+    let buttonGroup = new ButtonGroup();
+    fonts.forEach(font => this.addFont(font, buttonGroup, panel));
+  }
+
+   addFont(font, buttonGroup, panel) {
+    let radio = new JSRadioButton();
+    radio.setText(font);
+    radio.addActionListener(event => {
+      // this.value = new Z4Font(font, 0, true, true);
+      this.onchange();
+    });
+    buttonGroup.add(radio);
+    panel.add(radio, null);
   }
 
    setValue(value) {
     this.value = value;
+    let index = this.fonts.findIndex(font => font === value.family);
+    if (index !== -1) {
+      this.radios[index].setSelected(true);
+    } else {
+      this.radios.forEach(radio => radio.setSelected(false));
+    }
   }
 }
 /**
@@ -19164,6 +19203,8 @@ class Z4Translations {
 
   static  DO_NOT_SHOW_AGAIN_MESSAGE = "";
 
+  static  FILTER = "";
+
   // Color
   static  COLOR = "";
 
@@ -19510,7 +19551,7 @@ class Z4Translations {
     Z4Translations.IMAGE_OPEN_ERROR_MESSAGE = "It is not possible to open the image";
     Z4Translations.DRAWING_TOOL_OPEN_ERROR_MESSAGE = "It is not possible to open the drawing tool";
     Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE = "Do not show this message again";
-    Z4Translations.COLOR_STORED_IN_HISTORY = "The color has been stored in the color history";
+    Z4Translations.FILTER = "Filter";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -19524,6 +19565,7 @@ class Z4Translations {
     Z4Translations.TEMPORAL = "Temporal";
     Z4Translations.LIGHTING = "Lighting";
     Z4Translations.PICK_COLOR = "Pick Color";
+    Z4Translations.COLOR_STORED_IN_HISTORY = "The color has been stored in the color history";
     // Point Iterator
     Z4Translations.MULTIPLICITY = "Multiplicity";
     Z4Translations.PUSH = "Push";
@@ -19752,6 +19794,7 @@ class Z4Translations {
     Z4Translations.IMAGE_OPEN_ERROR_MESSAGE = "Non \u00E8 possibile aprire l'immagine";
     Z4Translations.DRAWING_TOOL_OPEN_ERROR_MESSAGE = "Non \u00E8 possibile aprire lo strumento di disegno";
     Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE = "Non mostrare pi\u00F9 questo messaggio";
+    Z4Translations.FILTER = "Filtra";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";

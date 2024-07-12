@@ -1,2 +1,8 @@
 .z4fontselectionpanel {
 }
+
+.z4fontselectionpanel .z4fontselectionpanel-fontlist {
+  width: 20rem;
+  height: 30rem;
+  overflow-y: scroll;
+}

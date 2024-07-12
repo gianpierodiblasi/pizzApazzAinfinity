@@ -166,7 +166,7 @@ public class Z4Translations {
   public static String IMAGE_OPEN_ERROR_MESSAGE = "";
   public static String DRAWING_TOOL_OPEN_ERROR_MESSAGE = "";
   public static String DO_NOT_SHOW_AGAIN_MESSAGE = "";
-
+  public static String FILTER = "";
   // Color
   public static String COLOR = "";
   public static String FILLING_COLOR = "";
@@ -441,7 +441,7 @@ public class Z4Translations {
     Z4Translations.IMAGE_OPEN_ERROR_MESSAGE = "It is not possible to open the image";
     Z4Translations.DRAWING_TOOL_OPEN_ERROR_MESSAGE = "It is not possible to open the drawing tool";
     Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE = "Do not show this message again";
-    Z4Translations.COLOR_STORED_IN_HISTORY = "The color has been stored in the color history";
+    Z4Translations.FILTER = "Filter";
 
     // Color
     Z4Translations.COLOR = "Color";
@@ -456,6 +456,7 @@ public class Z4Translations {
     Z4Translations.TEMPORAL = "Temporal";
     Z4Translations.LIGHTING = "Lighting";
     Z4Translations.PICK_COLOR = "Pick Color";
+    Z4Translations.COLOR_STORED_IN_HISTORY = "The color has been stored in the color history";
 
     // Point Iterator
     Z4Translations.MULTIPLICITY = "Multiplicity";
@@ -591,7 +592,7 @@ public class Z4Translations {
 
     // Ribbon Text
     Z4Translations.TEXT = "Testo";
-    
+
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";
     Z4Translations.UNDO = "Annulla";
@@ -700,6 +701,7 @@ public class Z4Translations {
     Z4Translations.IMAGE_OPEN_ERROR_MESSAGE = "Non \u00E8 possibile aprire l'immagine";
     Z4Translations.DRAWING_TOOL_OPEN_ERROR_MESSAGE = "Non \u00E8 possibile aprire lo strumento di disegno";
     Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE = "Non mostrare pi\u00F9 questo messaggio";
+    Z4Translations.FILTER = "Filtra";
 
     // Color
     Z4Translations.COLOR = "Colore";
