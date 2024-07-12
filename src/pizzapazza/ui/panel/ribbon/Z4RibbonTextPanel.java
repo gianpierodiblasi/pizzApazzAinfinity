@@ -7,6 +7,7 @@ import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
 import javascript.swing.JSButton;
 import javascript.swing.JSCheckBox;
+import javascript.swing.JSColorChooser;
 import javascript.swing.JSOptionPane;
 import javascript.swing.JSSpinner;
 import javascript.swing.JSTextField;
@@ -14,7 +15,6 @@ import javascript.swing.SpinnerNumberModel;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.component.Z4CanvasOverlayMode;
 import pizzapazza.ui.panel.Z4FontSelectionPanel;
-import pizzapazza.ui.panel.color.Z4ColorPanel;
 import pizzapazza.util.Z4Font;
 import pizzapazza.util.Z4TextInfo;
 import pizzapazza.util.Z4Translations;
@@ -35,7 +35,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
   private final JSTextField textText = new JSTextField();
   private final JSTextField shadowText = new JSTextField();
   private final JSSpinner textBorder = new JSSpinner();
-  private final Z4ColorPanel textBorderColor = new Z4ColorPanel();
+  private final JSColorChooser textBorderColor = new JSColorChooser();
 
   private final JSCheckBox textEmpty = new JSCheckBox();
   private final JSCheckBox shadowEmpty = new JSCheckBox();
@@ -90,9 +90,8 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textBorder.addChangeListener(event -> this.onTextInfoChange());
     this.add(this.textBorder, new GBC(3, 1).a(GBC.WEST));
 
-    this.textBorderColor.getStyle().minWidth = "8rem";
-    this.textBorderColor.setValue(new Color(0, 0, 0, 255));
-    this.textBorderColor.setEditButtonContentAreaFilled(false);
+    this.textBorderColor.setCloseOnChange(false);
+    this.textBorderColor.setSelectedColor(new Color(0, 0, 0, 255));
     this.textBorderColor.addChangeListener(event -> this.onTextInfoChange());
     this.add(this.textBorderColor, new GBC(3, 2).f(GBC.HORIZONTAL));
 
@@ -125,7 +124,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textInfo.textText = this.textText.getText();
     this.textInfo.textEmpty = this.textEmpty.isSelected();
     this.textInfo.textBorder = parseInt(this.textBorder.getValue());
-    this.textInfo.textBorderColor = this.textBorderColor.getValue();
+    this.textInfo.textBorderColor = this.textBorderColor.getSelectedColor();
 
     this.textInfo.shadowText = this.shadowText.getText();
     this.textInfo.shadowEmpty = this.shadowEmpty.isSelected();
@@ -137,7 +136,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textText.setText("");
     this.textEmpty.setSelected(false);
     this.textBorder.setValue(0);
-    this.textBorderColor.setValue(new Color(0, 0, 0, 255));
+    this.textBorderColor.setSelectedColor(new Color(0, 0, 0, 255));
 
     this.shadowText.setText("");
     this.shadowEmpty.setSelected(false);

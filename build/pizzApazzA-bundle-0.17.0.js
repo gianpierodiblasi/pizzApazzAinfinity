@@ -7233,7 +7233,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
    textBorder = new JSSpinner();
 
-   textBorderColor = new Z4ColorPanel();
+   textBorderColor = new JSColorChooser();
 
    textEmpty = new JSCheckBox();
 
@@ -7284,9 +7284,8 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textBorder.setModel(new SpinnerNumberModel(0, 1, 20, 1));
     this.textBorder.addChangeListener(event => this.onTextInfoChange());
     this.add(this.textBorder, new GBC(3, 1).a(GBC.WEST));
-    this.textBorderColor.getStyle().minWidth = "8rem";
-    this.textBorderColor.setValue(new Color(0, 0, 0, 255));
-    this.textBorderColor.setEditButtonContentAreaFilled(false);
+    this.textBorderColor.setCloseOnChange(false);
+    this.textBorderColor.setSelectedColor(new Color(0, 0, 0, 255));
     this.textBorderColor.addChangeListener(event => this.onTextInfoChange());
     this.add(this.textBorderColor, new GBC(3, 2).f(GBC.HORIZONTAL));
     Z4UI.addVLine(this, new GBC(11, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
@@ -7312,7 +7311,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textInfo.textText = this.textText.getText();
     this.textInfo.textEmpty = this.textEmpty.isSelected();
     this.textInfo.textBorder = parseInt(this.textBorder.getValue());
-    this.textInfo.textBorderColor = this.textBorderColor.getValue();
+    this.textInfo.textBorderColor = this.textBorderColor.getSelectedColor();
     this.textInfo.shadowText = this.shadowText.getText();
     this.textInfo.shadowEmpty = this.shadowEmpty.isSelected();
   }
@@ -7322,7 +7321,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textText.setText("");
     this.textEmpty.setSelected(false);
     this.textBorder.setValue(0);
-    this.textBorderColor.setValue(new Color(0, 0, 0, 255));
+    this.textBorderColor.setSelectedColor(new Color(0, 0, 0, 255));
     this.shadowText.setText("");
     this.shadowEmpty.setSelected(false);
     this.onTextInfoChange();
