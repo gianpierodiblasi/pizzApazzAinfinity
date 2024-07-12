@@ -6,4 +6,12 @@
 class Z4TextInfo {
 
    font = null;
+
+   textText = null;
+
+   shadowText = null;
+
+   textEmpty = false;
+
+   shadowEmpty = false;
 }

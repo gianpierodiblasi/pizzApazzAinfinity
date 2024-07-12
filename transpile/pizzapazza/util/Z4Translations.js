@@ -278,6 +278,9 @@ class Z4Translations {
 
   static  FILTER = "";
 
+  static  EMPTY = "";
+
+  // Text
   static  BOLD = "";
 
   static  ITALIC = "";
@@ -633,6 +636,8 @@ class Z4Translations {
     Z4Translations.DRAWING_TOOL_OPEN_ERROR_MESSAGE = "It is not possible to open the drawing tool";
     Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE = "Do not show this message again";
     Z4Translations.FILTER = "Filter";
+    Z4Translations.EMPTY = "Empty";
+    // Text
     Z4Translations.BOLD = "Bold";
     Z4Translations.ITALIC = "Italic";
     Z4Translations.STRING_EXAMPLE = "Sample string of the selected font";
@@ -880,6 +885,8 @@ class Z4Translations {
     Z4Translations.DRAWING_TOOL_OPEN_ERROR_MESSAGE = "Non \u00E8 possibile aprire lo strumento di disegno";
     Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE = "Non mostrare pi\u00F9 questo messaggio";
     Z4Translations.FILTER = "Filtra";
+    Z4Translations.EMPTY = "Vuoto";
+    // Text
     Z4Translations.BOLD = "Grassetto";
     Z4Translations.ITALIC = "Corsivo";
     Z4Translations.STRING_EXAMPLE = "Stringa di esempio del font selezionato";

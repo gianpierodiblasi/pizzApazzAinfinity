@@ -7227,6 +7227,18 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
    fontSelection = new JSButton();
 
+   textText = new JSTextField();
+
+   shadowText = new JSTextField();
+
+   textEmpty = new JSCheckBox();
+
+   shadowEmpty = new JSCheckBox();
+
+   apply = new JSButton();
+
+   reset = new JSButton();
+
    canvas = null;
 
    fontsChecked = false;
@@ -7255,10 +7267,46 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
         }
       });
     });
-    this.add(this.fontSelection, new GBC(0, 0));
+    this.add(this.fontSelection, new GBC(0, 1));
+    Z4UI.addVLine(this, new GBC(1, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addLabel(this, Z4Translations.TEXT, new GBC(2, 0).a(GBC.WEST).i(5, 5, 2, 0));
+    this.textText.addActionListener(event => this.onTextInfoChange());
+    this.add(this.textText, new GBC(2, 1).a(GBC.WEST));
+    this.textEmpty.setText(Z4Translations.EMPTY);
+    this.textEmpty.addActionListener(event => this.onTextInfoChange());
+    this.add(this.textEmpty, new GBC(2, 2).a(GBC.WEST));
+    Z4UI.addVLine(this, new GBC(11, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addLabel(this, Z4Translations.SHADOW, new GBC(12, 0).a(GBC.WEST).i(5, 5, 2, 0));
+    this.shadowText.addActionListener(event => this.onTextInfoChange());
+    this.add(this.shadowText, new GBC(12, 1).a(GBC.WEST));
+    this.shadowEmpty.setText(Z4Translations.EMPTY);
+    this.shadowEmpty.addActionListener(event => this.onTextInfoChange());
+    this.add(this.shadowEmpty, new GBC(12, 2).a(GBC.WEST));
+    Z4UI.addVLine(this, new GBC(21, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    this.apply.setContentAreaFilled(false);
+    this.apply.setText("APPLY");
+    this.apply.addActionListener(event => {
+    });
+    this.add(this.apply, new GBC(22, 1));
+    this.reset.setContentAreaFilled(false);
+    this.reset.setText(Z4Translations.RESET);
+    this.reset.addActionListener(event => this.onReset());
+    this.add(this.reset, new GBC(23, 1).i(0, 5, 0, 0));
   }
 
    onTextInfoChange() {
+    this.textInfo.textText = this.textText.getText();
+    this.textInfo.textEmpty = this.textEmpty.isSelected();
+    this.textInfo.shadowText = this.shadowText.getText();
+    this.textInfo.shadowEmpty = this.shadowEmpty.isSelected();
+  }
+
+   onReset() {
+    this.textText.setText("");
+    this.textEmpty.setSelected(false);
+    this.shadowText.setText("");
+    this.shadowEmpty.setSelected(false);
+    this.onTextInfoChange();
   }
 
   /**
@@ -7295,14 +7343,14 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
   }
 
    checkLocalFonts(foundFonts) {
-    if (typeof window["queryLocalFonts"] === "function") {
-      window.queryLocalFonts().then(localFonts => {
-        localFonts.forEach(localFont => foundFonts.add(localFont.family));
-        this.setFontsChecked(foundFonts);
-      });
-    } else {
-      this.setFontsChecked(foundFonts);
-    }
+    // if ($typeof(window.$get("queryLocalFonts"), "function")) {
+    // window.queryLocalFonts().then(localFonts -> {
+    // localFonts.forEach(localFont -> foundFonts.add(localFont.family));
+    // this.setFontsChecked(foundFonts);
+    // });
+    // } else {
+    this.setFontsChecked(foundFonts);
+    // }
   }
 
    setFontsChecked(foundFonts) {
@@ -18992,6 +19040,14 @@ class Z4ResizeOptions {
 class Z4TextInfo {
 
    font = null;
+
+   textText = null;
+
+   shadowText = null;
+
+   textEmpty = false;
+
+   shadowEmpty = false;
 }
 /**
  * The object managing the translations, currently only the English and Italian
@@ -19273,6 +19329,9 @@ class Z4Translations {
 
   static  FILTER = "";
 
+  static  EMPTY = "";
+
+  // Text
   static  BOLD = "";
 
   static  ITALIC = "";
@@ -19628,6 +19687,8 @@ class Z4Translations {
     Z4Translations.DRAWING_TOOL_OPEN_ERROR_MESSAGE = "It is not possible to open the drawing tool";
     Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE = "Do not show this message again";
     Z4Translations.FILTER = "Filter";
+    Z4Translations.EMPTY = "Empty";
+    // Text
     Z4Translations.BOLD = "Bold";
     Z4Translations.ITALIC = "Italic";
     Z4Translations.STRING_EXAMPLE = "Sample string of the selected font";
@@ -19875,6 +19936,8 @@ class Z4Translations {
     Z4Translations.DRAWING_TOOL_OPEN_ERROR_MESSAGE = "Non \u00E8 possibile aprire lo strumento di disegno";
     Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE = "Non mostrare pi\u00F9 questo messaggio";
     Z4Translations.FILTER = "Filtra";
+    Z4Translations.EMPTY = "Vuoto";
+    // Text
     Z4Translations.BOLD = "Grassetto";
     Z4Translations.ITALIC = "Corsivo";
     Z4Translations.STRING_EXAMPLE = "Stringa di esempio del font selezionato";
