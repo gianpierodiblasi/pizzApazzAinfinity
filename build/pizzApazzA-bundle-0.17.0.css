@@ -623,7 +623,7 @@
 
 .z4fontselectionpanel .z4fontselectionpanel-fontlist {
   width: 20rem;
-  height: 30rem;
+  height: 25rem;
   overflow-y: scroll;
 }.z4gradientcolorpanel canvas {
   border: 1px solid var(--main-action-bgcolor);
