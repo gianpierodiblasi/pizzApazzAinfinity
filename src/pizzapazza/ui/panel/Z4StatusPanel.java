@@ -1,11 +1,13 @@
 package pizzapazza.ui.panel;
 
+import static def.dom.Globals.localStorage;
 import static def.js.Globals.eval;
 import static def.js.Globals.parseFloat;
 import javascript.awt.Color;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
 import javascript.swing.JSButton;
+import javascript.swing.JSCheckBox;
 import javascript.swing.JSComboBox;
 import javascript.swing.JSLabel;
 import javascript.swing.JSOptionPane;
@@ -161,9 +163,24 @@ public class Z4StatusPanel extends JSPanel {
   }
 
   private void colorPickedMessage() {
-    JSPanel panel = new JSPanel();
-    JSOptionPane.showMessageDialog(panel, Z4Translations.PICK_COLOR, JSOptionPane.INFORMATION_MESSAGE, () -> {
-    });
+    if (!$exists(localStorage.getItem("z4pickcolormessage"))) {
+      JSPanel panel = new JSPanel();
+      panel.setLayout(new GridBagLayout());
+
+      JSLabel label = new JSLabel();
+      label.setText(Z4Translations.COLOR_STORED_IN_HISTORY);
+      panel.add(label, new GBC(0, 0).a(GBC.WEST));
+
+      JSCheckBox checkBox = new JSCheckBox();
+      checkBox.setText(Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE);
+      panel.add(checkBox, new GBC(0, 1).a(GBC.WEST).i(20, 0, 0, 0));
+
+      JSOptionPane.showMessageDialog(panel, Z4Translations.PICK_COLOR, JSOptionPane.INFORMATION_MESSAGE, () -> {
+        if (checkBox.isSelected()) {
+          localStorage.setItem("z4pickcolormessage", "true");
+        }
+      });
+    }
   }
 
   /**

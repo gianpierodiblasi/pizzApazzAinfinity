@@ -124,9 +124,21 @@ class Z4StatusPanel extends JSPanel {
   }
 
    colorPickedMessage() {
-    let panel = new JSPanel();
-    JSOptionPane.showMessageDialog(panel, Z4Translations.PICK_COLOR, JSOptionPane.INFORMATION_MESSAGE, () => {
-    });
+    if (!localStorage.getItem("z4pickcolormessage")) {
+      let panel = new JSPanel();
+      panel.setLayout(new GridBagLayout());
+      let label = new JSLabel();
+      label.setText(Z4Translations.COLOR_STORED_IN_HISTORY);
+      panel.add(label, new GBC(0, 0).a(GBC.WEST));
+      let checkBox = new JSCheckBox();
+      checkBox.setText(Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE);
+      panel.add(checkBox, new GBC(0, 1).a(GBC.WEST).i(20, 0, 0, 0));
+      JSOptionPane.showMessageDialog(panel, Z4Translations.PICK_COLOR, JSOptionPane.INFORMATION_MESSAGE, () => {
+        if (checkBox.isSelected()) {
+          localStorage.setItem("z4pickcolormessage", "true");
+        }
+      });
+    }
   }
 
   /**
