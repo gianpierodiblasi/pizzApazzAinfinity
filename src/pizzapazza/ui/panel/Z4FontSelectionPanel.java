@@ -19,6 +19,7 @@ import pizzapazza.util.Z4Font;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import static simulation.js.$Globals.parseInt;
+import static simulation.js.$Globals.setTimeout;
 
 /**
  * The panel to select a font
@@ -125,6 +126,7 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
     int index = this.fonts.findIndex(font -> font == value.family);
     if (index != -1) {
       this.radios.$get(index).setSelected(true);
+      setTimeout(() -> this.radios.$get(index).invoke("scrollIntoView()"), 0);
     } else {
       this.radios.forEach(radio -> radio.setSelected(false));
     }

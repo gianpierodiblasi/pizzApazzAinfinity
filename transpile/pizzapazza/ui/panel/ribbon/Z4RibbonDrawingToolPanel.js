@@ -127,6 +127,6 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     preview.setDrawingTool(this.canvas, drawingTool);
     document.querySelectorAll(".z4drawingtoolpreview .z4drawingtoolpreview-selector").forEach(element => element.textContent = Z4DrawingToolPreview.UNSELECTED_DRAWING_TOOL_CONTENT);
     this.drawingToolsPreview.add(preview, null);
-    preview.invoke("scrollIntoView()");
+    setTimeout(() => preview.invoke("scrollIntoView()"), 0);
   }
 }

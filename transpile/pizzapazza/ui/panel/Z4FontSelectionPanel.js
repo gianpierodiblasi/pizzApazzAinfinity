@@ -91,6 +91,7 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
     let index = this.fonts.findIndex(font => font === value.family);
     if (index !== -1) {
       this.radios[index].setSelected(true);
+      setTimeout(() => this.radios[index].invoke("scrollIntoView()"), 0);
     } else {
       this.radios.forEach(radio => radio.setSelected(false));
     }

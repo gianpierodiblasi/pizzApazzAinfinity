@@ -93,7 +93,7 @@ public class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
     this.setCurrentKey((int) cursor.key);
     this.canvas.openFromHistory(cursor.$get("value"));
 
-    ((HTMLElement) document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey)).scrollIntoView();
+    setTimeout(() -> ((HTMLElement) document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey)).scrollIntoView(), 0);
     return null;
   }
 
@@ -164,7 +164,7 @@ public class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
 
                 document.querySelectorAll(".z4historypreview .z4historypreview-selector").forEach(element -> element.textContent = Z4HistoryPreview.UNSELECTED_HISTORY_CONTENT);
                 document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey + " .z4historypreview-selector").textContent = Z4HistoryPreview.SELECTED_HISTORY_CONTENT;
-                ((HTMLElement) document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey)).scrollIntoView();
+                setTimeout(() -> ((HTMLElement) document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey)).scrollIntoView(), 0);
 
                 return null;
               };
@@ -282,7 +282,7 @@ public class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
       }, this.z4savingDelay);
     }
   }
-  
+
   /**
    * Stops the timer for the standard saving
    */

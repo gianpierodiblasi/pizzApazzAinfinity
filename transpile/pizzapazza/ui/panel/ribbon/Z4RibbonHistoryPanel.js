@@ -67,7 +67,7 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
     let cursor = event2.target["result"];
     this.setCurrentKey(cursor.key);
     this.canvas.openFromHistory(cursor["value"]);
-    (document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey)).scrollIntoView();
+    setTimeout(() => (document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey)).scrollIntoView(), 0);
     return null;
   }
 
@@ -130,7 +130,7 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
                 this.historyPreview.add(hPreview, null);
                 document.querySelectorAll(".z4historypreview .z4historypreview-selector").forEach(element => element.textContent = Z4HistoryPreview.UNSELECTED_HISTORY_CONTENT);
                 document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey + " .z4historypreview-selector").textContent = Z4HistoryPreview.SELECTED_HISTORY_CONTENT;
-                (document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey)).scrollIntoView();
+                setTimeout(() => (document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey)).scrollIntoView(), 0);
                 return null;
               };
             });

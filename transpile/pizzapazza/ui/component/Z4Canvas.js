@@ -442,7 +442,7 @@ class Z4Canvas extends JSComponent {
         let count = this.getLayersCount();
         this.setSelectedLayer(this.paper.getLayerAt(count - 1));
         document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ") .z4layerpreview-selector").textContent = Z4LayerPreview.SELECTED_LAYER_CONTENT;
-        (document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
+        setTimeout(() => (document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView(), 0);
       }
       this.changed = true;
       this.saveHistory("standard,tool");
@@ -633,7 +633,7 @@ class Z4Canvas extends JSComponent {
     } else if (this.drawingTools.length) {
       this.setSelectedDrawingTool(this.drawingTools[this.drawingTools.length - 1]);
       document.querySelector(".z4drawingtoolpreview:nth-child(" + (this.drawingTools.length + (index < this.drawingTools.length ? 1 : 0)) + ") .z4drawingtoolpreview-selector").textContent = Z4DrawingToolPreview.SELECTED_DRAWING_TOOL_CONTENT;
-      (document.querySelector(".z4drawingtoolpreview:nth-child(" + (this.drawingTools.length + (index < this.drawingTools.length ? 1 : 0)) + ")")).scrollIntoView();
+      setTimeout(() => (document.querySelector(".z4drawingtoolpreview:nth-child(" + (this.drawingTools.length + (index < this.drawingTools.length ? 1 : 0)) + ")")).scrollIntoView(), 0);
     } else {
       this.setSelectedDrawingTool(null);
     }

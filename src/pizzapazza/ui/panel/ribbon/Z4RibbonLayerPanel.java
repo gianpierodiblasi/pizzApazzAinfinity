@@ -26,6 +26,7 @@ import static simulation.js.$Globals.$typeof;
 import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.navigator;
 import static simulation.js.$Globals.parseInt;
+import static simulation.js.$Globals.setTimeout;
 import static simulation.js.$Globals.window;
 
 /**
@@ -199,6 +200,6 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     document.querySelectorAll(".z4layerpreview .z4layerpreview-selector").forEach(element -> element.textContent = Z4LayerPreview.UNSELECTED_LAYER_CONTENT);
 
     this.layersPreview.add(preview, null);
-    preview.invoke("scrollIntoView()");
+    setTimeout(() -> preview.invoke("scrollIntoView()"), 0);
   }
 }

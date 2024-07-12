@@ -5,11 +5,15 @@
  */
 class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
+   fontSelection = new JSButton();
+
    canvas = null;
 
    fontsChecked = false;
 
    fonts = new Array();
+
+   textInfo = new Z4TextInfo();
 
   /**
    * Creates the object
@@ -18,6 +22,23 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbontextpanel");
+    this.textInfo.font = new Z4Font("Copperplate", 12, false, false);
+    this.fontSelection.setContentAreaFilled(false);
+    this.fontSelection.setText(Z4Translations.FONT_SELECTION);
+    this.fontSelection.addActionListener(event => {
+      let fontSelectionPanel = new Z4FontSelectionPanel(this.fonts);
+      fontSelectionPanel.setValue(this.textInfo.font);
+      JSOptionPane.showInputDialog(fontSelectionPanel, Z4Translations.FONT_SELECTION, listener => fontSelectionPanel.addChangeListener(listener), () => !!(fontSelectionPanel.getValue()), response => {
+        if (response === JSOptionPane.OK_OPTION) {
+          this.textInfo.font = fontSelectionPanel.getValue();
+          this.onTextInfoChange();
+        }
+      });
+    });
+    this.add(this.fontSelection, new GBC(0, 0));
+  }
+
+   onTextInfoChange() {
   }
 
   /**

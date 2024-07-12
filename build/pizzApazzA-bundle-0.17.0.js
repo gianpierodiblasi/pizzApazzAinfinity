@@ -2318,7 +2318,7 @@ class Z4Canvas extends JSComponent {
         let count = this.getLayersCount();
         this.setSelectedLayer(this.paper.getLayerAt(count - 1));
         document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ") .z4layerpreview-selector").textContent = Z4LayerPreview.SELECTED_LAYER_CONTENT;
-        (document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
+        setTimeout(() => (document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView(), 0);
       }
       this.changed = true;
       this.saveHistory("standard,tool");
@@ -2509,7 +2509,7 @@ class Z4Canvas extends JSComponent {
     } else if (this.drawingTools.length) {
       this.setSelectedDrawingTool(this.drawingTools[this.drawingTools.length - 1]);
       document.querySelector(".z4drawingtoolpreview:nth-child(" + (this.drawingTools.length + (index < this.drawingTools.length ? 1 : 0)) + ") .z4drawingtoolpreview-selector").textContent = Z4DrawingToolPreview.SELECTED_DRAWING_TOOL_CONTENT;
-      (document.querySelector(".z4drawingtoolpreview:nth-child(" + (this.drawingTools.length + (index < this.drawingTools.length ? 1 : 0)) + ")")).scrollIntoView();
+      setTimeout(() => (document.querySelector(".z4drawingtoolpreview:nth-child(" + (this.drawingTools.length + (index < this.drawingTools.length ? 1 : 0)) + ")")).scrollIntoView(), 0);
     } else {
       this.setSelectedDrawingTool(null);
     }
@@ -6176,7 +6176,7 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     preview.setDrawingTool(this.canvas, drawingTool);
     document.querySelectorAll(".z4drawingtoolpreview .z4drawingtoolpreview-selector").forEach(element => element.textContent = Z4DrawingToolPreview.UNSELECTED_DRAWING_TOOL_CONTENT);
     this.drawingToolsPreview.add(preview, null);
-    preview.invoke("scrollIntoView()");
+    setTimeout(() => preview.invoke("scrollIntoView()"), 0);
   }
 }
 /**
@@ -6308,7 +6308,7 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
     let cursor = event2.target["result"];
     this.setCurrentKey(cursor.key);
     this.canvas.openFromHistory(cursor["value"]);
-    (document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey)).scrollIntoView();
+    setTimeout(() => (document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey)).scrollIntoView(), 0);
     return null;
   }
 
@@ -6371,7 +6371,7 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
                 this.historyPreview.add(hPreview, null);
                 document.querySelectorAll(".z4historypreview .z4historypreview-selector").forEach(element => element.textContent = Z4HistoryPreview.UNSELECTED_HISTORY_CONTENT);
                 document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey + " .z4historypreview-selector").textContent = Z4HistoryPreview.SELECTED_HISTORY_CONTENT;
-                (document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey)).scrollIntoView();
+                setTimeout(() => (document.querySelector(".z4historypreview.z4historypreview-" + this.currentKey)).scrollIntoView(), 0);
                 return null;
               };
             });
@@ -6695,7 +6695,7 @@ class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
     });
     document.querySelectorAll(".z4layerpreview .z4layerpreview-selector").forEach(element => element.textContent = Z4LayerPreview.UNSELECTED_LAYER_CONTENT);
     this.layersPreview.add(preview, null);
-    preview.invoke("scrollIntoView()");
+    setTimeout(() => preview.invoke("scrollIntoView()"), 0);
   }
 }
 /**
@@ -7225,11 +7225,15 @@ class Z4RibbonSettingsPanel extends Z4AbstractRibbonPanel {
  */
 class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
+   fontSelection = new JSButton();
+
    canvas = null;
 
    fontsChecked = false;
 
    fonts = new Array();
+
+   textInfo = new Z4TextInfo();
 
   /**
    * Creates the object
@@ -7238,6 +7242,23 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbontextpanel");
+    this.textInfo.font = new Z4Font("Copperplate", 12, false, false);
+    this.fontSelection.setContentAreaFilled(false);
+    this.fontSelection.setText(Z4Translations.FONT_SELECTION);
+    this.fontSelection.addActionListener(event => {
+      let fontSelectionPanel = new Z4FontSelectionPanel(this.fonts);
+      fontSelectionPanel.setValue(this.textInfo.font);
+      JSOptionPane.showInputDialog(fontSelectionPanel, Z4Translations.FONT_SELECTION, listener => fontSelectionPanel.addChangeListener(listener), () => !!(fontSelectionPanel.getValue()), response => {
+        if (response === JSOptionPane.OK_OPTION) {
+          this.textInfo.font = fontSelectionPanel.getValue();
+          this.onTextInfoChange();
+        }
+      });
+    });
+    this.add(this.fontSelection, new GBC(0, 0));
+  }
+
+   onTextInfoChange() {
   }
 
   /**
@@ -11824,6 +11845,7 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
     let index = this.fonts.findIndex(font => font === value.family);
     if (index !== -1) {
       this.radios[index].setSelected(true);
+      setTimeout(() => this.radios[index].invoke("scrollIntoView()"), 0);
     } else {
       this.radios.forEach(radio => radio.setSelected(false));
     }
@@ -18953,6 +18975,15 @@ class Z4ResizeOptions {
     this.contentOffsetX = contentOffsetX;
     this.contentOffsetY = contentOffsetY;
   }
+}
+/**
+ * Utility object to store text info
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4TextInfo {
+
+   font = null;
 }
 /**
  * The object managing the translations, currently only the English and Italian
