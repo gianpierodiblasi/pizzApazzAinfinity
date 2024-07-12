@@ -11806,7 +11806,7 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
     this.italic.addActionListener(event => this.onFontChange());
     this.add(this.italic, new GBC(3, 1));
     let panel = new JSPanel();
-    panel.setLayout(new GridLayout(parseInt(this.fonts.length / 3) + 1, 3, 0, 0));
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
     panel.cssAddClass("z4fontselectionpanel-fontlist");
     this.add(panel, new GBC(0, 2).w(4));
     let buttonGroup = new ButtonGroup();

@@ -1,9 +1,9 @@
 package pizzapazza.ui.panel;
 
 import def.js.Array;
+import javascript.awt.BoxLayout;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
-import javascript.awt.GridLayout;
 import javascript.swing.ButtonGroup;
 import javascript.swing.JSCheckBox;
 import javascript.swing.JSLabel;
@@ -18,7 +18,6 @@ import pizzapazza.ui.panel.math.Z4SignedValuePanelOrientation;
 import pizzapazza.util.Z4Font;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
-import static simulation.js.$Globals.parseInt;
 import static simulation.js.$Globals.setTimeout;
 
 /**
@@ -78,7 +77,7 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
     this.add(this.italic, new GBC(3, 1));
 
     JSPanel panel = new JSPanel();
-    panel.setLayout(new GridLayout(parseInt(this.fonts.length / 3) + 1, 3, 0, 0));
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
     panel.cssAddClass("z4fontselectionpanel-fontlist");
     this.add(panel, new GBC(0, 2).w(4));
 
@@ -129,7 +128,7 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
     this.size.setValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), value.size));
     this.bold.setSelected(value.bold);
     this.italic.setSelected(value.italic);
-    
+
     this.setSample();
   }
 
