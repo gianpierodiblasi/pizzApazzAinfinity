@@ -58,6 +58,9 @@ public class Z4Translations {
   public static String DELETE_DRAWING_TOOL_MESSAGE = "";
   public static String FROM_LIBRARY = "";
 
+  // Ribbon Text
+  public static String TEXT = "";
+
   // Ribbon History
   public static String HISTORY = "";
   public static String UNDO = "";
@@ -327,6 +330,9 @@ public class Z4Translations {
     Z4Translations.DELETE_DRAWING_TOOL_MESSAGE = "Do you really want to delete the drawing tool?";
     Z4Translations.FROM_LIBRARY = "From Library";
 
+    // Ribbon Text
+    Z4Translations.TEXT = "Text";
+
     // Ribbon History
     Z4Translations.HISTORY = "History";
     Z4Translations.UNDO = "Undo";
@@ -583,6 +589,9 @@ public class Z4Translations {
     Z4Translations.DELETE_DRAWING_TOOL_MESSAGE = "Vuoi davvero eliminare lo strumento di disegno?";
     Z4Translations.FROM_LIBRARY = "Da Libreria";
 
+    // Ribbon Text
+    Z4Translations.TEXT = "Testo";
+    
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";
     Z4Translations.UNDO = "Annulla";

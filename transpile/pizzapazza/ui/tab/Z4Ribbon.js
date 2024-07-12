@@ -11,6 +11,8 @@ class Z4Ribbon extends JSTabbedPane {
 
    drawingToolPanel = new Z4RibbonDrawingToolPanel();
 
+   textPanel = new Z4RibbonTextPanel();
+
    historyPanel = new Z4RibbonHistoryPanel();
 
    settingsPanel = new Z4RibbonSettingsPanel();
@@ -28,14 +30,16 @@ class Z4Ribbon extends JSTabbedPane {
     this.addTab(Z4Translations.PROJECT, this.projectPanel);
     this.addTab(Z4Translations.LAYER, this.layerPanel);
     this.addTab(Z4Translations.DRAWING_TOOL, this.drawingToolPanel);
+    this.addTab(Z4Translations.TEXT, this.textPanel);
     this.addTab(Z4Translations.HISTORY, this.historyPanel);
     this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
     this.addTab(Z4Translations.HELP, this.helpPanel);
     this.addChangeListener(event => {
-      this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
-      // if (this.historyPanel.getStyle().display == "grid") {
-      // this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
-      // }
+      if (this.textPanel.getStyle().display !== "none") {
+        this.textPanel.checkFonts();
+      } else {
+        this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
+      }
     });
     this.settingsPanel.setHistoryPanel(this.historyPanel);
   }
@@ -47,7 +51,7 @@ class Z4Ribbon extends JSTabbedPane {
    */
    setCanvas(canvas) {
     this.canvas = canvas;
-    canvas.setRibbonPanels(this.projectPanel, this.layerPanel, this.drawingToolPanel, this.historyPanel);
+    canvas.setRibbonPanels(this.projectPanel, this.layerPanel, this.drawingToolPanel, this.textPanel, this.historyPanel);
   }
 
   /**

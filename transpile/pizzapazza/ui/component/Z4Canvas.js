@@ -43,6 +43,8 @@ class Z4Canvas extends JSComponent {
 
    ribbonDrawingToolPanel = null;
 
+   ribbonTextPanel = null;
+
    ribbonHistoryPanel = null;
 
    statusPanel = null;
@@ -127,16 +129,19 @@ class Z4Canvas extends JSComponent {
    * @param ribbonProjectPanel The ribbon project panel
    * @param ribbonLayerPanel The ribbon layer panel
    * @param ribbonDrawingToolPanel The ribbon drawing tool panel
+   * @param ribbonTextPanel The ribbon text panel
    * @param ribbonHistoryPanel The ribbon history panel
    */
-   setRibbonPanels(ribbonProjectPanel, ribbonLayerPanel, ribbonDrawingToolPanel, ribbonHistoryPanel) {
+   setRibbonPanels(ribbonProjectPanel, ribbonLayerPanel, ribbonDrawingToolPanel, ribbonTextPanel, ribbonHistoryPanel) {
     this.ribbonProjectPanel = ribbonProjectPanel;
     this.ribbonLayerPanel = ribbonLayerPanel;
     this.ribbonDrawingToolPanel = ribbonDrawingToolPanel;
+    this.ribbonTextPanel = ribbonTextPanel;
     this.ribbonHistoryPanel = ribbonHistoryPanel;
     this.ribbonProjectPanel.setCanvas(this);
     this.ribbonLayerPanel.setCanvas(this);
     this.ribbonDrawingToolPanel.setCanvas(this);
+    this.ribbonTextPanel.setCanvas(this);
     this.ribbonHistoryPanel.setCanvas(this);
     this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);
     this.ioManager.setRibbonPanels(ribbonLayerPanel, ribbonDrawingToolPanel, ribbonHistoryPanel);

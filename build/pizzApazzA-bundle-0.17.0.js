@@ -1919,6 +1919,8 @@ class Z4Canvas extends JSComponent {
 
    ribbonDrawingToolPanel = null;
 
+   ribbonTextPanel = null;
+
    ribbonHistoryPanel = null;
 
    statusPanel = null;
@@ -2003,16 +2005,19 @@ class Z4Canvas extends JSComponent {
    * @param ribbonProjectPanel The ribbon project panel
    * @param ribbonLayerPanel The ribbon layer panel
    * @param ribbonDrawingToolPanel The ribbon drawing tool panel
+   * @param ribbonTextPanel The ribbon text panel
    * @param ribbonHistoryPanel The ribbon history panel
    */
-   setRibbonPanels(ribbonProjectPanel, ribbonLayerPanel, ribbonDrawingToolPanel, ribbonHistoryPanel) {
+   setRibbonPanels(ribbonProjectPanel, ribbonLayerPanel, ribbonDrawingToolPanel, ribbonTextPanel, ribbonHistoryPanel) {
     this.ribbonProjectPanel = ribbonProjectPanel;
     this.ribbonLayerPanel = ribbonLayerPanel;
     this.ribbonDrawingToolPanel = ribbonDrawingToolPanel;
+    this.ribbonTextPanel = ribbonTextPanel;
     this.ribbonHistoryPanel = ribbonHistoryPanel;
     this.ribbonProjectPanel.setCanvas(this);
     this.ribbonLayerPanel.setCanvas(this);
     this.ribbonDrawingToolPanel.setCanvas(this);
+    this.ribbonTextPanel.setCanvas(this);
     this.ribbonHistoryPanel.setCanvas(this);
     this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);
     this.ioManager.setRibbonPanels(ribbonLayerPanel, ribbonDrawingToolPanel, ribbonHistoryPanel);
@@ -7220,7 +7225,11 @@ class Z4RibbonSettingsPanel extends Z4AbstractRibbonPanel {
  */
 class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
-   fontChecked = false;
+   canvas = null;
+
+   fontsChecked = false;
+
+   fonts = new Array();
 
   /**
    * Creates the object
@@ -7232,30 +7241,56 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
   }
 
   /**
+   * Sets the canvas to manage
+   *
+   * @param canvas The canvas
+   */
+   setCanvas(canvas) {
+    this.canvas = canvas;
+  }
+
+  /**
    * Checks the available fonts
    */
    checkFonts() {
-    if (this.fontChecked) {
+    if (this.fontsChecked) {
+      this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
     } else {
-      let fontsToCheck = new Set();
-      // const fontCheck = new Set([
-      // 'Arial', 'Arial Black', 'Bahnschrift', 'Calibri', 'Cambria', 'Cambria Math', 'Candara', 'Comic Sans MS', 'Consolas', 'Constantia', 'Corbel', 'Courier New', 'Ebrima', 'Franklin Gothic Medium', 'Gabriola', 'Gadugi', 'Georgia', 'HoloLens MDL2 Assets', 'Impact', 'Ink Free', 'Javanese Text', 'Leelawadee UI', 'Lucida Console', 'Lucida Sans Unicode', 'Malgun Gothic', 'Marlett', 'Microsoft Himalaya', 'Microsoft JhengHei', 'Microsoft New Tai Lue', 'Microsoft PhagsPa', 'Microsoft Sans Serif', 'Microsoft Tai Le', 'Microsoft YaHei', 'Microsoft Yi Baiti', 'MingLiU-ExtB', 'Mongolian Baiti', 'MS Gothic', 'MV Boli', 'Myanmar Text', 'Nirmala UI', 'Palatino Linotype', 'Segoe MDL2 Assets', 'Segoe Print', 'Segoe Script', 'Segoe UI', 'Segoe UI Historic', 'Segoe UI Emoji', 'Segoe UI Symbol', 'SimSun', 'Sitka', 'Sylfaen', 'Symbol', 'Tahoma', 'Times New Roman', 'Trebuchet MS', 'Verdana', 'Webdings', 'Wingdings', 'Yu Gothic',
-      // 'American Typewriter', 'Andale Mono', 'Arial', 'Arial Black', 'Arial Narrow', 'Arial Rounded MT Bold', 'Arial Unicode MS', 'Avenir', 'Avenir Next', 'Avenir Next Condensed', 'Baskerville', 'Big Caslon', 'Bodoni 72', 'Bodoni 72 Oldstyle', 'Bodoni 72 Smallcaps', 'Bradley Hand', 'Brush Script MT', 'Chalkboard', 'Chalkboard SE', 'Chalkduster', 'Charter', 'Cochin', 'Comic Sans MS', 'Copperplate', 'Courier', 'Courier New', 'Didot', 'DIN Alternate', 'DIN Condensed', 'Futura', 'Geneva', 'Georgia', 'Gill Sans', 'Helvetica', 'Helvetica Neue', 'Herculanum', 'Hoefler Text', 'Impact', 'Lucida Grande', 'Luminari', 'Marker Felt', 'Menlo', 'Microsoft Sans Serif', 'Monaco', 'Noteworthy', 'Optima', 'Palatino', 'Papyrus', 'Phosphate', 'Rockwell', 'Savoye LET', 'SignPainter', 'Skia', 'Snell Roundhand', 'Tahoma', 'Times', 'Times New Roman', 'Trattatello', 'Trebuchet MS', 'Verdana', 'Zapfino',
-      // ].sort());
-      // 
-      // document.fonts.ready.then(()=> {
-      // const fontAvailable = new Set();
-      // 
-      // for (const font of fontCheck.values()) {
-      // if (document.fonts.check(`12px "${font}"`)) {
-      // fontAvailable.add(font);
-      // }
-      // }
-      // 
-      // console.log('Available Fonts:', [...fontAvailable.values()]);
-      // });
-      this.fontChecked = true;
+      this.checkStandardFonts();
     }
+  }
+
+   checkStandardFonts() {
+    let fontsToCheck = new Set(new Array("Arial", "Arial Black", "Bahnschrift", "Calibri", "Cambria", "Cambria Math", "Candara", "Comic Sans MS", "Consolas", "Constantia", "Corbel", "Courier New", "Ebrima", "Franklin Gothic Medium", "Gabriola", "Gadugi", "Georgia", "HoloLens MDL2 Assets", "Impact", "Ink Free", "Javanese Text", "Leelawadee UI", "Lucida Console", "Lucida Sans Unicode", "Malgun Gothic", "Marlett", "Microsoft Himalaya", "Microsoft JhengHei", "Microsoft New Tai Lue", "Microsoft PhagsPa", "Microsoft Sans Serif", "Microsoft Tai Le", "Microsoft YaHei", "Microsoft Yi Baiti", "MingLiU-ExtB", "Mongolian Baiti", "MS Gothic", "MV Boli", "Myanmar Text", "Nirmala UI", "Palatino Linotype", "Segoe MDL2 Assets", "Segoe Print", "Segoe Script", "Segoe UI", "Segoe UI Historic", "Segoe UI Emoji", "Segoe UI Symbol", "SimSun", "Sitka", "Sylfaen", "Symbol", "Tahoma", "Times New Roman", "Trebuchet MS", "Verdana", "Webdings", "Wingdings", "Yu Gothic", "American Typewriter", "Andale Mono", "Arial", "Arial Black", "Arial Narrow", "Arial Rounded MT Bold", "Arial Unicode MS", "Avenir", "Avenir Next", "Avenir Next Condensed", "Baskerville", "Big Caslon", "Bodoni 72", "Bodoni 72 Oldstyle", "Bodoni 72 Smallcaps", "Bradley Hand", "Brush Script MT", "Chalkboard", "Chalkboard SE", "Chalkduster", "Charter", "Cochin", "Comic Sans MS", "Copperplate", "Courier", "Courier New", "Didot", "DIN Alternate", "DIN Condensed", "Futura", "Geneva", "Georgia", "Gill Sans", "Helvetica", "Helvetica Neue", "Herculanum", "Hoefler Text", "Impact", "Lucida Grande", "Luminari", "Marker Felt", "Menlo", "Microsoft Sans Serif", "Monaco", "Noteworthy", "Optima", "Palatino", "Papyrus", "Phosphate", "Rockwell", "Savoye LET", "SignPainter", "Skia", "Snell Roundhand", "Tahoma", "Times", "Times New Roman", "Trattatello", "Trebuchet MS", "Verdana", "Zapfino"));
+    let foundFonts = new Set();
+    document.fonts.ready.then(() => {
+      fontsToCheck.forEach((value, key, set) => {
+        if (document.fonts.check("12px '" + value + "'")) {
+          foundFonts.add(value);
+        }
+      });
+      this.checkLocalFonts(foundFonts);
+      return null;
+    });
+  }
+
+   checkLocalFonts(foundFonts) {
+    if (typeof window["queryLocalFonts"] === "function") {
+      window.queryLocalFonts().then(localFonts => {
+        localFonts.forEach(localFont => foundFonts.add(localFont.family));
+        this.setFontsChecked(foundFonts);
+        return null;
+      });
+    } else {
+      this.setFontsChecked(foundFonts);
+    }
+  }
+
+   setFontsChecked(foundFonts) {
+    foundFonts.forEach((value, key, set) => this.fonts.push(value));
+    this.fonts.sort();
+    this.fontsChecked = true;
+    this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
   }
 }
 /**
@@ -13208,6 +13243,8 @@ class Z4Ribbon extends JSTabbedPane {
 
    drawingToolPanel = new Z4RibbonDrawingToolPanel();
 
+   textPanel = new Z4RibbonTextPanel();
+
    historyPanel = new Z4RibbonHistoryPanel();
 
    settingsPanel = new Z4RibbonSettingsPanel();
@@ -13225,14 +13262,16 @@ class Z4Ribbon extends JSTabbedPane {
     this.addTab(Z4Translations.PROJECT, this.projectPanel);
     this.addTab(Z4Translations.LAYER, this.layerPanel);
     this.addTab(Z4Translations.DRAWING_TOOL, this.drawingToolPanel);
+    this.addTab(Z4Translations.TEXT, this.textPanel);
     this.addTab(Z4Translations.HISTORY, this.historyPanel);
     this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
     this.addTab(Z4Translations.HELP, this.helpPanel);
     this.addChangeListener(event => {
-      this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
-      // if (this.historyPanel.getStyle().display == "grid") {
-      // this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
-      // }
+      if (this.textPanel.getStyle().display !== "none") {
+        this.textPanel.checkFonts();
+      } else {
+        this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
+      }
     });
     this.settingsPanel.setHistoryPanel(this.historyPanel);
   }
@@ -13244,7 +13283,7 @@ class Z4Ribbon extends JSTabbedPane {
    */
    setCanvas(canvas) {
     this.canvas = canvas;
-    canvas.setRibbonPanels(this.projectPanel, this.layerPanel, this.drawingToolPanel, this.historyPanel);
+    canvas.setRibbonPanels(this.projectPanel, this.layerPanel, this.drawingToolPanel, this.textPanel, this.historyPanel);
   }
 
   /**
@@ -18866,6 +18905,9 @@ class Z4Translations {
 
   static  FROM_LIBRARY = "";
 
+  // Ribbon Text
+  static  TEXT = "";
+
   // Ribbon History
   static  HISTORY = "";
 
@@ -19307,6 +19349,8 @@ class Z4Translations {
     Z4Translations.PIZZAPAZZA_DRAWING_TOOLS = "pizzApazzA Drawing Tools";
     Z4Translations.DELETE_DRAWING_TOOL_MESSAGE = "Do you really want to delete the drawing tool?";
     Z4Translations.FROM_LIBRARY = "From Library";
+    // Ribbon Text
+    Z4Translations.TEXT = "Text";
     // Ribbon History
     Z4Translations.HISTORY = "History";
     Z4Translations.UNDO = "Undo";
@@ -19547,6 +19591,8 @@ class Z4Translations {
     Z4Translations.PIZZAPAZZA_DRAWING_TOOLS = "Strumenti di Disegno pizzApazzA";
     Z4Translations.DELETE_DRAWING_TOOL_MESSAGE = "Vuoi davvero eliminare lo strumento di disegno?";
     Z4Translations.FROM_LIBRARY = "Da Libreria";
+    // Ribbon Text
+    Z4Translations.TEXT = "Testo";
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";
     Z4Translations.UNDO = "Annulla";
@@ -19898,3 +19944,13 @@ class Z4UI {
   constructor() {
   }
 }
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+

@@ -23,6 +23,7 @@ import pizzapazza.ui.panel.ribbon.Z4RibbonDrawingToolPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonProjectPanel;
+import pizzapazza.ui.panel.ribbon.Z4RibbonTextPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4DrawingTool;
 import pizzapazza.util.Z4Layer;
@@ -46,10 +47,10 @@ import simulation.js.$Uint8Array;
  * @author gianpiero.diblasi
  */
 public class Z4Canvas extends JSComponent {
-
+  
   private final $Canvas canvas = ($Canvas) document.createElement("canvas");
   private final $CanvasRenderingContext2D ctx = this.canvas.getContext("2d");
-
+  
   private final $Canvas canvasGrid = ($Canvas) document.createElement("canvas");
   private final $CanvasRenderingContext2D ctxGrid = this.canvasGrid.getContext("2d");
   private $Path2D pathGrid;
@@ -58,21 +59,22 @@ public class Z4Canvas extends JSComponent {
   private boolean dottedGrid;
   private boolean magneticGrid;
   private Color colorGrid;
-
+  
   private final $Canvas canvasBounds = ($Canvas) document.createElement("canvas");
   private final $CanvasRenderingContext2D ctxBounds = this.canvasBounds.getContext("2d");
   private boolean showLayerBounds;
-
+  
   private final $Canvas canvasOverlay = ($Canvas) document.createElement("canvas");
   private final $CanvasRenderingContext2D ctxOverlay = this.canvasOverlay.getContext("2d");
   private final Set<Z4CanvasOverlayMode> canvasOverlayModes = new Set<>();
-
+  
   private Z4RibbonProjectPanel ribbonProjectPanel;
   private Z4RibbonLayerPanel ribbonLayerPanel;
   private Z4RibbonDrawingToolPanel ribbonDrawingToolPanel;
+  private Z4RibbonTextPanel ribbonTextPanel;
   private Z4RibbonHistoryPanel ribbonHistoryPanel;
   private Z4StatusPanel statusPanel;
-
+  
   private String projectName;
   private FileSystemFileHandle handle;
   private int width;
@@ -82,14 +84,14 @@ public class Z4Canvas extends JSComponent {
   private boolean saved = true;
   private boolean changed = false;
   private boolean isOpenFromHistory;
-
+  
   private final Z4Paper paper = new Z4Paper();
   private Z4Layer selectedLayer;
-
+  
   private final Array<Z4DrawingTool> drawingTools = new Array<>();
   private Z4DrawingTool selectedDrawingTool;
   private Z4DrawingDirection drawingDirection = Z4DrawingDirection.FREE;
-
+  
   private final Z4CanvasMouseManager mouseManager = new Z4CanvasMouseManager(this, this.ctx);
   private final Z4CanvasIOManager ioManager = new Z4CanvasIOManager(this, this.paper, this.drawingTools);
   private final Z4CanvasHistoryManager historyManager = new Z4CanvasHistoryManager(this, this.paper);
@@ -105,17 +107,17 @@ public class Z4Canvas extends JSComponent {
     this.appendNodeChild(this.canvasGrid);
     this.appendNodeChild(this.canvasBounds);
     this.appendNodeChild(this.canvasOverlay);
-
+    
     this.canvas.classList.add("main-canvas");
     this.canvas.addEventListener("mouseenter", event -> this.mouseManager.onMouse((MouseEvent) event, "enter"));
     this.canvas.addEventListener("mouseleave", event -> this.mouseManager.onMouse((MouseEvent) event, "leave"));
     this.canvas.addEventListener("mousedown", event -> this.mouseManager.onMouse((MouseEvent) event, "down"));
     this.canvas.addEventListener("mousemove", event -> this.mouseManager.onMouse((MouseEvent) event, "move"));
     this.canvas.addEventListener("mouseup", event -> this.mouseManager.onMouse((MouseEvent) event, "up"));
-
+    
     this.canvasOverlay.addEventListener("mousemove", event -> this.mouseManager.onMouse((MouseEvent) event, "move"));
     this.canvasOverlay.addEventListener("mouseup", event -> this.mouseManager.onMouse((MouseEvent) event, "up"));
-
+    
     this.addEventListener("wheel", event -> {
       WheelEvent evt = (WheelEvent) event;
       if (!evt.ctrlKey) {
@@ -144,19 +146,22 @@ public class Z4Canvas extends JSComponent {
    * @param ribbonProjectPanel The ribbon project panel
    * @param ribbonLayerPanel The ribbon layer panel
    * @param ribbonDrawingToolPanel The ribbon drawing tool panel
+   * @param ribbonTextPanel The ribbon text panel
    * @param ribbonHistoryPanel The ribbon history panel
    */
-  public void setRibbonPanels(Z4RibbonProjectPanel ribbonProjectPanel, Z4RibbonLayerPanel ribbonLayerPanel, Z4RibbonDrawingToolPanel ribbonDrawingToolPanel, Z4RibbonHistoryPanel ribbonHistoryPanel) {
+  public void setRibbonPanels(Z4RibbonProjectPanel ribbonProjectPanel, Z4RibbonLayerPanel ribbonLayerPanel, Z4RibbonDrawingToolPanel ribbonDrawingToolPanel, Z4RibbonTextPanel ribbonTextPanel, Z4RibbonHistoryPanel ribbonHistoryPanel) {
     this.ribbonProjectPanel = ribbonProjectPanel;
     this.ribbonLayerPanel = ribbonLayerPanel;
     this.ribbonDrawingToolPanel = ribbonDrawingToolPanel;
+    this.ribbonTextPanel = ribbonTextPanel;
     this.ribbonHistoryPanel = ribbonHistoryPanel;
-
+    
     this.ribbonProjectPanel.setCanvas(this);
     this.ribbonLayerPanel.setCanvas(this);
     this.ribbonDrawingToolPanel.setCanvas(this);
+    this.ribbonTextPanel.setCanvas(this);
     this.ribbonHistoryPanel.setCanvas(this);
-
+    
     this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);
     this.ioManager.setRibbonPanels(ribbonLayerPanel, ribbonDrawingToolPanel, ribbonHistoryPanel);
     this.historyManager.setRibbonLayerPanel(ribbonLayerPanel);
@@ -170,7 +175,7 @@ public class Z4Canvas extends JSComponent {
   public void setStatusPanel(Z4StatusPanel statusPanel) {
     this.statusPanel = statusPanel;
     this.statusPanel.setCanvas(this);
-
+    
     this.mouseManager.setStatusPanel(statusPanel);
     this.ioManager.setStatusPanel(statusPanel);
   }
@@ -186,19 +191,19 @@ public class Z4Canvas extends JSComponent {
   public void create(int width, int height, Object filling) {
     this.paper.reset();
     this.paper.addLayer(Z4Translations.BACKGROUND_LAYER, width, height, filling, width, height);
-
+    
     this.setSize(width, height);
-
+    
     this.ribbonLayerPanel.reset();
     this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), null, true);
-
+    
     this.drawingTools.length = 0;
     this.ribbonDrawingToolPanel.reset();
-
+    
     Color.resetHistory();
     Z4GradientColor.resetHistory();
     Z4BiGradientColor.resetHistory();
-
+    
     this.ribbonHistoryPanel.resetHistory(() -> {
       this.afterCreate("", width, height);
       this.fitZoomIfNeeded();
@@ -240,28 +245,28 @@ public class Z4Canvas extends JSComponent {
    */
   public void afterCreate(String projectName, int width, int height) {
     this.projectName = projectName;
-
+    
     this.statusPanel.setProjectName(projectName);
     this.statusPanel.setProjectSize(width, height);
-
+    
     if (!this.isOpenFromHistory) {
       this.statusPanel.setZoom(1);
       this.statusPanel.setDrawingDirection(Z4DrawingDirection.FREE);
       this.statusPanel.resetCanvasGridPanel(width, height, false);
-
+      
       this.zoom = 1;
       this.mouseManager.setZoom(this.zoom);
       this.mouseManager.setMagneticGrid(null, 0, false);
-
+      
       this.setDrawingDirection(Z4DrawingDirection.FREE);
       this.pathGrid = null;
       this.showLayerBounds = false;
-
+      
       this.setSaved(true);
       this.changed = false;
     }
     this.isOpenFromHistory = false;
-
+    
     this.canvas.width = width * this.zoom;
     this.canvas.height = height * this.zoom;
     this.canvasGrid.width = width * this.zoom;
@@ -270,7 +275,7 @@ public class Z4Canvas extends JSComponent {
     this.canvasBounds.height = height * this.zoom;
     this.canvasOverlay.width = width * this.zoom;
     this.canvasOverlay.height = height * this.zoom;
-
+    
     this.drawCanvas();
     this.drawCanvasGrid();
     this.drawCanvasBounds();
@@ -424,9 +429,9 @@ public class Z4Canvas extends JSComponent {
   public void afterAddLayer() {
     this.changed = true;
     this.saveHistory("standard,tool");
-
+    
     this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), null, true);
-
+    
     this.setSaved(false);
   }
 
@@ -439,24 +444,24 @@ public class Z4Canvas extends JSComponent {
     Point offset = layer.getOffset();
     layer.convertToBlob(blob -> {
       $Image image = ($Image) document.createElement("img");
-
+      
       image.onload = event -> {
         this.paper.addLayerFromImage(this.findLayerName(), image, this.width, this.height);
-
+        
         this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), duplicate -> {
           duplicate.setOpacity(layer.getOpacity());
           duplicate.setCompositeOperation(layer.getCompositeOperation());
           duplicate.setHidden(layer.isHidden());
           duplicate.move(offset.x, offset.y);
         }, true);
-
+        
         this.changed = true;
         this.saveHistory("standard,tool");
         this.setSaved(false);
         this.drawCanvas();
         return null;
       };
-
+      
       image.src = URL.createObjectURL(blob);
     });
   }
@@ -471,22 +476,22 @@ public class Z4Canvas extends JSComponent {
    */
   public int deleteLayer(Z4Layer layer, boolean fromMerge) {
     int index = this.paper.deleteLayer(layer);
-
+    
     if (!fromMerge) {
       if (this.selectedLayer == layer) {
         int count = this.getLayersCount();
         this.setSelectedLayer(this.paper.getLayerAt(count - 1));
-
+        
         document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ") .z4layerpreview-selector").textContent = Z4LayerPreview.SELECTED_LAYER_CONTENT;
         ((HTMLElement) document.querySelector(".z4layerpreview:nth-child(" + (count + (index < count ? 1 : 0)) + ")")).scrollIntoView();
       }
-
+      
       this.changed = true;
       this.saveHistory("standard,tool");
       this.setSaved(false);
       this.drawCanvas();
     }
-
+    
     return index;
   }
 
@@ -558,11 +563,11 @@ public class Z4Canvas extends JSComponent {
   public void setSelectedLayerAndAddLayerPreview(Z4Layer selectedLayer, $Apply_1_Void<Z4Layer> apply, boolean add) {
     this.selectedLayer = selectedLayer;
     this.mouseManager.setSelectedLayer(this.selectedLayer);
-
+    
     if ($exists(apply)) {
       apply.$apply(this.selectedLayer);
     }
-
+    
     if (add) {
       this.ribbonLayerPanel.addLayerPreview(this.selectedLayer);
     }
@@ -604,7 +609,7 @@ public class Z4Canvas extends JSComponent {
   public void removeCanvasOverlayMode(Z4CanvasOverlayMode canvasOverlayMode) {
     this.addRemoveCanvasOverlayMode(canvasOverlayMode, false);
   }
-
+  
   private void addRemoveCanvasOverlayMode(Z4CanvasOverlayMode canvasOverlayMode, boolean add) {
     if (add) {
       this.canvasOverlayModes.add(canvasOverlayMode);
@@ -613,7 +618,7 @@ public class Z4Canvas extends JSComponent {
       this.canvasOverlayModes.delete(canvasOverlayMode);
       this.mouseManager.removeCanvasOverlayMode(canvasOverlayMode);
     }
-
+    
     this.canvasOverlay.style.pointerEvents = $exists(this.canvasOverlayModes.size) ? "auto" : "none";
     this.drawCanvasOverlay();
   }
@@ -656,11 +661,11 @@ public class Z4Canvas extends JSComponent {
   public void replaceDrawingTool(Z4DrawingTool oldDrawingTool, Z4DrawingTool newDrawingTool) {
     int index = this.drawingTools.indexOf(oldDrawingTool);
     this.drawingTools.$set(index, newDrawingTool);
-
+    
     if (this.selectedDrawingTool == oldDrawingTool) {
       this.setSelectedDrawingTool(newDrawingTool);
     }
-
+    
     this.setSaved(false);
   }
 
@@ -673,17 +678,17 @@ public class Z4Canvas extends JSComponent {
   public int deleteDrawingTool(Z4DrawingTool drawingTool) {
     int index = this.drawingTools.indexOf(drawingTool);
     this.drawingTools.splice(index, 1);
-
+    
     if (this.selectedDrawingTool != drawingTool) {
     } else if ($exists(this.drawingTools.length)) {
       this.setSelectedDrawingTool(this.drawingTools.$get(this.drawingTools.length - 1));
-
+      
       document.querySelector(".z4drawingtoolpreview:nth-child(" + (this.drawingTools.length + (index < this.drawingTools.length ? 1 : 0)) + ") .z4drawingtoolpreview-selector").textContent = Z4DrawingToolPreview.SELECTED_DRAWING_TOOL_CONTENT;
       ((HTMLElement) document.querySelector(".z4drawingtoolpreview:nth-child(" + (this.drawingTools.length + (index < this.drawingTools.length ? 1 : 0)) + ")")).scrollIntoView();
     } else {
       this.setSelectedDrawingTool(null);
     }
-
+    
     this.setSaved(false);
     return index;
   }
@@ -727,9 +732,9 @@ public class Z4Canvas extends JSComponent {
   public void setSelectedDrawingToolAndAddDrawingToolPreview(Z4DrawingTool selectedDrawingTool, boolean add) {
     this.selectedDrawingTool = selectedDrawingTool;
     this.mouseManager.setSelectedDrawingTool(selectedDrawingTool);
-
+    
     this.saveHistory("tool");
-
+    
     if (add) {
       this.ribbonDrawingToolPanel.addDrawingToolPreview(this.selectedDrawingTool);
     }
@@ -801,7 +806,7 @@ public class Z4Canvas extends JSComponent {
   public void setSize(int width, int height) {
     this.width = width;
     this.height = height;
-
+    
     this.mouseManager.setSize(this.getSize());
     this.ioManager.setSize(this.getSize());
     this.historyManager.setSize(this.getSize());
@@ -888,7 +893,7 @@ public class Z4Canvas extends JSComponent {
   public void setZoom(double zoom) {
     this.zoom = zoom;
     this.mouseManager.setZoom(this.zoom);
-
+    
     this.canvas.width = this.width * zoom;
     this.canvas.height = this.height * zoom;
     this.canvasGrid.width = this.width * zoom;
@@ -897,9 +902,9 @@ public class Z4Canvas extends JSComponent {
     this.canvasBounds.height = this.height * zoom;
     this.canvasOverlay.width = this.width * zoom;
     this.canvasOverlay.height = this.height * zoom;
-
+    
     this.pathGrid = $exists(this.pathGrid) ? this.createGrid() : null;
-
+    
     this.drawCanvas();
     this.drawCanvasGrid();
     this.drawCanvasBounds();
@@ -923,7 +928,7 @@ public class Z4Canvas extends JSComponent {
       this.statusPanel.setZoom(this.zoom);
     }
   }
-
+  
   private void zoomInOut($Apply_0_T<Double> apply) {
     if (this.zooming) {
     } else {
@@ -972,16 +977,16 @@ public class Z4Canvas extends JSComponent {
     this.dottedGrid = dottedGrid;
     this.magneticGrid = magnetic;
     this.colorGrid = color;
-
+    
     this.pathGrid = visible ? this.createGrid() : null;
     this.mouseManager.setMagneticGrid(center, plotWidth, visible && magnetic);
-
+    
     this.drawCanvasGrid();
   }
-
+  
   private $Path2D createGrid() {
     $Path2D grid = new $Path2D();
-
+    
     if (this.dottedGrid) {
       for (int x = this.centerGrid.x; x > 0; x -= this.plotWidthGrid) {
         this.createDottedGrid(grid, x);
@@ -1003,10 +1008,10 @@ public class Z4Canvas extends JSComponent {
         this.createLineGrid(grid, 0, y, this.width, y);
       }
     }
-
+    
     if (this.magneticGrid) {
       int magneticRadius = parseInt(this.plotWidthGrid * Z4Constants.MAGNETISM_PERCENTAGE);
-
+      
       for (int x = this.centerGrid.x; x > 0; x -= this.plotWidthGrid) {
         this.createMagneticGrid(grid, x, magneticRadius);
       }
@@ -1014,10 +1019,10 @@ public class Z4Canvas extends JSComponent {
         this.createMagneticGrid(grid, x, magneticRadius);
       }
     }
-
+    
     return grid;
   }
-
+  
   private void createDottedGrid($Path2D grid, int x) {
     for (int y = this.centerGrid.y; y > 0; y -= this.plotWidthGrid) {
       grid.moveTo(x + 2 / this.zoom, y);
@@ -1028,12 +1033,12 @@ public class Z4Canvas extends JSComponent {
       grid.arc(x, y, 2 / this.zoom, 0, Z4Math.TWO_PI);
     }
   }
-
+  
   private void createLineGrid($Path2D grid, int x0, int y0, int x1, int y1) {
     grid.moveTo(x0, y0);
     grid.lineTo(x1, y1);
   }
-
+  
   private void createMagneticGrid($Path2D grid, int x, int magneticRadius) {
     for (int y = this.centerGrid.y; y > 0; y -= this.plotWidthGrid) {
       grid.moveTo(x + magneticRadius, y);
@@ -1061,10 +1066,10 @@ public class Z4Canvas extends JSComponent {
    */
   public void resize(int width, int height) {
     this.setSize(width, height);
-
+    
     this.statusPanel.setProjectSize(this.width, this.height);
     this.statusPanel.resetCanvasGridPanel(this.width, this.height, true);
-
+    
     this.canvas.width = this.width * this.zoom;
     this.canvas.height = this.height * this.zoom;
     this.canvasGrid.width = this.width * this.zoom;
@@ -1073,7 +1078,7 @@ public class Z4Canvas extends JSComponent {
     this.canvasBounds.height = this.height * this.zoom;
     this.canvasOverlay.width = this.width * this.zoom;
     this.canvasOverlay.height = this.height * this.zoom;
-
+    
     this.drawCanvas();
     this.drawCanvasGrid();
     this.drawCanvasBounds();
@@ -1085,29 +1090,29 @@ public class Z4Canvas extends JSComponent {
    */
   public void drawCanvas() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
+    
     this.ctx.save();
     this.ctx.scale(this.zoom, this.zoom);
     this.paper.draw(this.ctx, false);
     this.ctx.restore();
   }
-
+  
   private void drawCanvasGrid() {
     this.ctxGrid.clearRect(0, 0, this.canvasGrid.width, this.canvasGrid.height);
-
+    
     if ($exists(this.pathGrid)) {
       this.ctxGrid.save();
       this.ctxGrid.scale(this.zoom, this.zoom);
-
+      
       this.ctxGrid.strokeStyle = Z4Constants.$getStyle(this.colorGrid.getRGBA_HEX());
       this.ctxGrid.lineWidth = 1 / this.zoom;
       this.ctxGrid.stroke(this.pathGrid);
-
+      
       this.ctxGrid.beginPath();
       this.ctxGrid.arc(this.centerGrid.x, this.centerGrid.y, 4 / this.zoom, 0, Z4Math.TWO_PI);
       this.ctxGrid.fillStyle = Z4Constants.$getStyle(this.colorGrid.getRGBA_HEX());
       this.ctxGrid.fill();
-
+      
       this.ctxGrid.restore();
     }
   }
@@ -1117,10 +1122,10 @@ public class Z4Canvas extends JSComponent {
    */
   public void drawCanvasBounds() {
     this.ctxBounds.clearRect(0, 0, this.canvasBounds.width, this.canvasBounds.height);
-
+    
     boolean show = false;
     $Path2D bounds = new $Path2D();
-
+    
     for (int index = 0; index < this.getLayersCount(); index++) {
       Z4Layer layer = this.paper.getLayerAt(index);
       if (this.showLayerBounds || layer.isShowBounds()) {
@@ -1128,22 +1133,22 @@ public class Z4Canvas extends JSComponent {
         bounds.rect(layer.getOffset().x, layer.getOffset().y, layer.getSize().width, layer.getSize().height);
       }
     }
-
+    
     if (show) {
       this.ctxBounds.save();
       this.ctxBounds.scale(this.zoom, this.zoom);
       this.ctxBounds.lineWidth = 3 / this.zoom;
-
+      
       Array<Double> dash = new Array<>();
       this.ctxBounds.strokeStyle = Z4Constants.$getStyle("black");
       this.ctxBounds.setLineDash(dash);
       this.ctxBounds.stroke(bounds);
-
+      
       dash.push(2 * this.ctxBounds.lineWidth, 2 * this.ctxBounds.lineWidth);
       this.ctxBounds.strokeStyle = Z4Constants.$getStyle("white");
       this.ctxBounds.setLineDash(dash);
       this.ctxBounds.stroke(bounds);
-
+      
       this.ctxBounds.restore();
     }
   }
@@ -1153,7 +1158,7 @@ public class Z4Canvas extends JSComponent {
    */
   public void drawCanvasOverlay() {
     this.ctxOverlay.clearRect(0, 0, this.canvasOverlay.width, this.canvasOverlay.height);
-
+    
     if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
     }
   }

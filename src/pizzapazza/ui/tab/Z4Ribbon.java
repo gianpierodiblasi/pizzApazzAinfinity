@@ -10,6 +10,7 @@ import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonProjectPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonSettingsPanel;
+import pizzapazza.ui.panel.ribbon.Z4RibbonTextPanel;
 import pizzapazza.util.Z4Translations;
 
 /**
@@ -22,6 +23,7 @@ public class Z4Ribbon extends JSTabbedPane {
   private final Z4RibbonProjectPanel projectPanel = new Z4RibbonProjectPanel();
   private final Z4RibbonLayerPanel layerPanel = new Z4RibbonLayerPanel();
   private final Z4RibbonDrawingToolPanel drawingToolPanel = new Z4RibbonDrawingToolPanel();
+  private final Z4RibbonTextPanel textPanel = new Z4RibbonTextPanel();
   private final Z4RibbonHistoryPanel historyPanel = new Z4RibbonHistoryPanel();
   private final Z4RibbonSettingsPanel settingsPanel = new Z4RibbonSettingsPanel();
   private final Z4RibbonHelpPanel helpPanel = new Z4RibbonHelpPanel();
@@ -39,15 +41,16 @@ public class Z4Ribbon extends JSTabbedPane {
     this.addTab(Z4Translations.PROJECT, this.projectPanel);
     this.addTab(Z4Translations.LAYER, this.layerPanel);
     this.addTab(Z4Translations.DRAWING_TOOL, this.drawingToolPanel);
+    this.addTab(Z4Translations.TEXT, this.textPanel);
     this.addTab(Z4Translations.HISTORY, this.historyPanel);
     this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
     this.addTab(Z4Translations.HELP, this.helpPanel);
     this.addChangeListener(event -> {
-      this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
-
-//      if (this.historyPanel.getStyle().display == "grid") {
-//        this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
-//      }
+      if (this.textPanel.getStyle().display != "none") {
+        this.textPanel.checkFonts();
+      } else {
+        this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
+      }
     });
 
     this.settingsPanel.setHistoryPanel(this.historyPanel);
@@ -60,7 +63,7 @@ public class Z4Ribbon extends JSTabbedPane {
    */
   public void setCanvas(Z4Canvas canvas) {
     this.canvas = canvas;
-    canvas.setRibbonPanels(this.projectPanel, this.layerPanel, this.drawingToolPanel, this.historyPanel);
+    canvas.setRibbonPanels(this.projectPanel, this.layerPanel, this.drawingToolPanel, this.textPanel, this.historyPanel);
   }
 
   /**
