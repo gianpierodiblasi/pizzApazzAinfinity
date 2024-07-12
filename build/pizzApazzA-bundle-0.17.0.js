@@ -7242,7 +7242,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbontextpanel");
-    this.textInfo.font = new Z4Font("Arial", 12, false, false);
+    this.textInfo.font = new Z4Font("Arial", 15, true, true);
     this.fontSelection.setContentAreaFilled(false);
     this.fontSelection.setText(Z4Translations.FONT_SELECTION);
     this.fontSelection.addActionListener(event => {
@@ -11828,11 +11828,7 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
     let index = this.radios.findIndex(radio => radio.isSelected() && radio.getStyle().display !== "none");
     if (index !== -1) {
       this.value = new Z4Font(this.fonts[index], this.size.getValue().getValue(), this.bold.isSelected(), this.italic.isSelected());
-      this.sample.setText(Z4Translations.STRING_EXAMPLE);
-      this.sample.getStyle().fontFamily = this.value.family;
-      this.sample.getStyle().fontSize = this.value.size + "px";
-      this.sample.getStyle().fontStyle = this.value.italic ? "italic" : "normal";
-      this.sample.getStyle().fontWeight = this.value.bold ? "bold" : "normal";
+      this.setSample();
     } else {
       this.value = null;
       this.sample.setText("");
@@ -11849,6 +11845,18 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
     } else {
       this.radios.forEach(radio => radio.setSelected(false));
     }
+    this.size.setValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), value.size));
+    this.bold.setSelected(value.bold);
+    this.italic.setSelected(value.italic);
+    this.setSample();
+  }
+
+   setSample() {
+    this.sample.setText(Z4Translations.STRING_EXAMPLE);
+    this.sample.getStyle().fontFamily = this.value.family;
+    this.sample.getStyle().fontSize = this.value.size + "px";
+    this.sample.getStyle().fontStyle = this.value.italic ? "italic" : "normal";
+    this.sample.getStyle().fontWeight = this.value.bold ? "bold" : "normal";
   }
 }
 /**
