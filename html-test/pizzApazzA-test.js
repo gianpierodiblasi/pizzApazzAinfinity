@@ -1382,6 +1382,7 @@ class TestFontSelectionPanel extends JSFrame {
       foundFonts.forEach((value, key, set) => fonts.push(value));
       fonts.sort();
       let fontSelectionPanel = new Z4FontSelectionPanel(fonts);
+      fontSelectionPanel.addChangeListener(event => console.log(fontSelectionPanel.getValue()));
       let p = new JSPanel();
       p.add(fontSelectionPanel, null);
       this.getContentPane().add(p, BorderLayout.NORTH);

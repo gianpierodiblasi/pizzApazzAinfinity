@@ -278,6 +278,10 @@ class Z4Translations {
 
   static  FILTER = "";
 
+  static  BOLD = "";
+
+  static  ITALIC = "";
+
   // Color
   static  COLOR = "";
 
@@ -625,6 +629,8 @@ class Z4Translations {
     Z4Translations.DRAWING_TOOL_OPEN_ERROR_MESSAGE = "It is not possible to open the drawing tool";
     Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE = "Do not show this message again";
     Z4Translations.FILTER = "Filter";
+    Z4Translations.BOLD = "Bold";
+    Z4Translations.ITALIC = "Italic";
     // Color
     Z4Translations.COLOR = "Color";
     Z4Translations.FILLING_COLOR = "Filling Color";
@@ -868,6 +874,8 @@ class Z4Translations {
     Z4Translations.DRAWING_TOOL_OPEN_ERROR_MESSAGE = "Non \u00E8 possibile aprire lo strumento di disegno";
     Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE = "Non mostrare pi\u00F9 questo messaggio";
     Z4Translations.FILTER = "Filtra";
+    Z4Translations.BOLD = "Grassetto";
+    Z4Translations.ITALIC = "Corsivo";
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";

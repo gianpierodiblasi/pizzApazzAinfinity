@@ -1,5 +1,6 @@
 package pizzapazza.ui.panel;
 
+import static def.dom.Globals.console;
 import def.js.Array;
 import def.js.Set;
 import javascript.awt.BorderLayout;
@@ -37,7 +38,8 @@ public class TestFontSelectionPanel extends JSFrame {
       fonts.sort();
 
       Z4FontSelectionPanel fontSelectionPanel = new Z4FontSelectionPanel(fonts);
-
+      fontSelectionPanel.addChangeListener(event -> console.log(fontSelectionPanel.getValue()));
+      
       JSPanel p = new JSPanel();
       p.add(fontSelectionPanel, null);
       this.getContentPane().add(p, BorderLayout.NORTH);

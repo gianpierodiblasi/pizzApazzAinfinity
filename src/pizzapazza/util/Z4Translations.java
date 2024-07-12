@@ -167,6 +167,9 @@ public class Z4Translations {
   public static String DRAWING_TOOL_OPEN_ERROR_MESSAGE = "";
   public static String DO_NOT_SHOW_AGAIN_MESSAGE = "";
   public static String FILTER = "";
+  public static String BOLD = "";
+  public static String ITALIC = "";
+
   // Color
   public static String COLOR = "";
   public static String FILLING_COLOR = "";
@@ -442,6 +445,8 @@ public class Z4Translations {
     Z4Translations.DRAWING_TOOL_OPEN_ERROR_MESSAGE = "It is not possible to open the drawing tool";
     Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE = "Do not show this message again";
     Z4Translations.FILTER = "Filter";
+    Z4Translations.BOLD = "Bold";
+    Z4Translations.ITALIC = "Italic";
 
     // Color
     Z4Translations.COLOR = "Color";
@@ -702,7 +707,9 @@ public class Z4Translations {
     Z4Translations.DRAWING_TOOL_OPEN_ERROR_MESSAGE = "Non \u00E8 possibile aprire lo strumento di disegno";
     Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE = "Non mostrare pi\u00F9 questo messaggio";
     Z4Translations.FILTER = "Filtra";
-
+    Z4Translations.BOLD = "Grassetto";
+    Z4Translations.ITALIC = "Corsivo";
+    
     // Color
     Z4Translations.COLOR = "Colore";
     Z4Translations.FILLING_COLOR = "Colore di Riempimento";
