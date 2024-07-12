@@ -35,7 +35,7 @@ class Z4Canvas extends JSComponent {
 
    ctxOverlay = this.canvasOverlay.getContext("2d");
 
-   canvasOverlayModes = new Array();
+   canvasOverlayModes = new Set();
 
    ribbonProjectPanel = null;
 
@@ -560,15 +560,14 @@ class Z4Canvas extends JSComponent {
   }
 
    addRemoveCanvasOverlayMode(canvasOverlayMode, add) {
-    let index = this.canvasOverlayModes.indexOf(canvasOverlayMode);
-    if (add && index === -1) {
-      this.canvasOverlayModes.push(canvasOverlayMode);
+    if (add) {
+      this.canvasOverlayModes.add(canvasOverlayMode);
       this.mouseManager.addCanvasOverlayMode(canvasOverlayMode);
-    } else if (!add && index !== -1) {
-      this.canvasOverlayModes.splice(index, 1);
+    } else {
+      this.canvasOverlayModes.delete(canvasOverlayMode);
       this.mouseManager.removeCanvasOverlayMode(canvasOverlayMode);
     }
-    this.canvasOverlay.style.pointerEvents = this.canvasOverlayModes.length ? "auto" : "none";
+    this.canvasOverlay.style.pointerEvents = this.canvasOverlayModes.size ? "auto" : "none";
     this.drawCanvasOverlay();
   }
 
@@ -1073,7 +1072,7 @@ class Z4Canvas extends JSComponent {
    */
    drawCanvasOverlay() {
     this.ctxOverlay.clearRect(0, 0, this.canvasOverlay.width, this.canvasOverlay.height);
-    if (this.canvasOverlayModes.indexOf(Z4CanvasOverlayMode.PICK_COLOR) !== -1) {
+    if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
     }
   }
 }

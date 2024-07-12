@@ -8,6 +8,7 @@ import def.dom.MouseEvent;
 import def.dom.URL;
 import def.dom.WheelEvent;
 import def.js.Array;
+import def.js.Set;
 import javascript.awt.Color;
 import javascript.awt.Dimension;
 import javascript.awt.Point;
@@ -64,7 +65,7 @@ public class Z4Canvas extends JSComponent {
 
   private final $Canvas canvasOverlay = ($Canvas) document.createElement("canvas");
   private final $CanvasRenderingContext2D ctxOverlay = this.canvasOverlay.getContext("2d");
-  private final Array<Z4CanvasOverlayMode> canvasOverlayModes = new Array<>();
+  private final Set<Z4CanvasOverlayMode> canvasOverlayModes = new Set<>();
 
   private Z4RibbonProjectPanel ribbonProjectPanel;
   private Z4RibbonLayerPanel ribbonLayerPanel;
@@ -605,16 +606,15 @@ public class Z4Canvas extends JSComponent {
   }
 
   private void addRemoveCanvasOverlayMode(Z4CanvasOverlayMode canvasOverlayMode, boolean add) {
-    int index = this.canvasOverlayModes.indexOf(canvasOverlayMode);
-    if (add && index == -1) {
-      this.canvasOverlayModes.push(canvasOverlayMode);
+    if (add) {
+      this.canvasOverlayModes.add(canvasOverlayMode);
       this.mouseManager.addCanvasOverlayMode(canvasOverlayMode);
-    } else if (!add && index != -1) {
-      this.canvasOverlayModes.splice(index, 1);
+    } else {
+      this.canvasOverlayModes.delete(canvasOverlayMode);
       this.mouseManager.removeCanvasOverlayMode(canvasOverlayMode);
     }
 
-    this.canvasOverlay.style.pointerEvents = $exists(this.canvasOverlayModes.length) ? "auto" : "none";
+    this.canvasOverlay.style.pointerEvents = $exists(this.canvasOverlayModes.size) ? "auto" : "none";
     this.drawCanvasOverlay();
   }
 
@@ -1154,7 +1154,7 @@ public class Z4Canvas extends JSComponent {
   public void drawCanvasOverlay() {
     this.ctxOverlay.clearRect(0, 0, this.canvasOverlay.width, this.canvasOverlay.height);
 
-    if (this.canvasOverlayModes.indexOf(Z4CanvasOverlayMode.PICK_COLOR) != -1) {
+    if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
     }
   }
 }

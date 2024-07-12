@@ -1911,7 +1911,7 @@ class Z4Canvas extends JSComponent {
 
    ctxOverlay = this.canvasOverlay.getContext("2d");
 
-   canvasOverlayModes = new Array();
+   canvasOverlayModes = new Set();
 
    ribbonProjectPanel = null;
 
@@ -2436,15 +2436,14 @@ class Z4Canvas extends JSComponent {
   }
 
    addRemoveCanvasOverlayMode(canvasOverlayMode, add) {
-    let index = this.canvasOverlayModes.indexOf(canvasOverlayMode);
-    if (add && index === -1) {
-      this.canvasOverlayModes.push(canvasOverlayMode);
+    if (add) {
+      this.canvasOverlayModes.add(canvasOverlayMode);
       this.mouseManager.addCanvasOverlayMode(canvasOverlayMode);
-    } else if (!add && index !== -1) {
-      this.canvasOverlayModes.splice(index, 1);
+    } else {
+      this.canvasOverlayModes.delete(canvasOverlayMode);
       this.mouseManager.removeCanvasOverlayMode(canvasOverlayMode);
     }
-    this.canvasOverlay.style.pointerEvents = this.canvasOverlayModes.length ? "auto" : "none";
+    this.canvasOverlay.style.pointerEvents = this.canvasOverlayModes.size ? "auto" : "none";
     this.drawCanvasOverlay();
   }
 
@@ -2949,7 +2948,7 @@ class Z4Canvas extends JSComponent {
    */
    drawCanvasOverlay() {
     this.ctxOverlay.clearRect(0, 0, this.canvasOverlay.width, this.canvasOverlay.height);
-    if (this.canvasOverlayModes.indexOf(Z4CanvasOverlayMode.PICK_COLOR) !== -1) {
+    if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
     }
   }
 }
@@ -3727,7 +3726,7 @@ class Z4CanvasMouseManager {
 
    zoom = 0.0;
 
-   canvasOverlayModes = new Array();
+   canvasOverlayModes = new Set();
 
    ribbonHistoryPanel = null;
 
@@ -3814,9 +3813,7 @@ class Z4CanvasMouseManager {
    * @param canvasOverlayMode The canvas overlay mode
    */
    addCanvasOverlayMode(canvasOverlayMode) {
-    if (this.canvasOverlayModes.indexOf(canvasOverlayMode) === -1) {
-      this.canvasOverlayModes.push(canvasOverlayMode);
-    }
+    this.canvasOverlayModes.add(canvasOverlayMode);
   }
 
   /**
@@ -3825,10 +3822,7 @@ class Z4CanvasMouseManager {
    * @param canvasOverlayMode The canvas overlay mode
    */
    removeCanvasOverlayMode(canvasOverlayMode) {
-    let index = this.canvasOverlayModes.indexOf(canvasOverlayMode);
-    if (index !== -1) {
-      this.canvasOverlayModes.splice(index, 1);
-    }
+    this.canvasOverlayModes.delete(canvasOverlayMode);
   }
 
   /**
@@ -3860,7 +3854,7 @@ class Z4CanvasMouseManager {
     let y = Math.min(this.size.height, Math.max(0, event.offsetY / this.zoom));
     let xParsed = parseInt(x);
     let yParsed = parseInt(y);
-    if (this.canvasOverlayModes.indexOf(Z4CanvasOverlayMode.PICK_COLOR) !== -1) {
+    if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
       switch(type) {
         case "up":
           this.statusPanel.colorPicked(this.canvas.getColorAt(xParsed, yParsed), this.canvas.getSelectedLayerColorAt(xParsed, yParsed));
@@ -4003,6 +3997,10 @@ class Z4CanvasOverlayMode {
    * The canvas overlay is used to pick a color
    */
   static PICK_COLOR = 'PICK_COLOR';
+  /**
+   * The canvas overlay is used to draw a text
+   */
+  static DRAW_TEXT = 'DRAW_TEXT';
 }
 /**
  * The drawing tool preview
@@ -7213,6 +7211,51 @@ class Z4RibbonSettingsPanel extends Z4AbstractRibbonPanel {
     let selectedSavingDelay = this.savingDelay.getSelectedItem();
     let selectedSavingInterval = this.savingInterval.getSelectedItem();
     this.historyPanel.setHistoryManagementSettings(selectedHistoryManagement.key, selectedSavingDelay.key, selectedSavingInterval.key);
+  }
+}
+/**
+ * The ribbon panel containing the settings to draw text
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
+
+   fontChecked = false;
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super();
+    this.setLayout(new GridBagLayout());
+    this.cssAddClass("z4ribbontextpanel");
+  }
+
+  /**
+   * Checks the available fonts
+   */
+   checkFonts() {
+    if (this.fontChecked) {
+    } else {
+      let fontsToCheck = new Set();
+      // const fontCheck = new Set([
+      // 'Arial', 'Arial Black', 'Bahnschrift', 'Calibri', 'Cambria', 'Cambria Math', 'Candara', 'Comic Sans MS', 'Consolas', 'Constantia', 'Corbel', 'Courier New', 'Ebrima', 'Franklin Gothic Medium', 'Gabriola', 'Gadugi', 'Georgia', 'HoloLens MDL2 Assets', 'Impact', 'Ink Free', 'Javanese Text', 'Leelawadee UI', 'Lucida Console', 'Lucida Sans Unicode', 'Malgun Gothic', 'Marlett', 'Microsoft Himalaya', 'Microsoft JhengHei', 'Microsoft New Tai Lue', 'Microsoft PhagsPa', 'Microsoft Sans Serif', 'Microsoft Tai Le', 'Microsoft YaHei', 'Microsoft Yi Baiti', 'MingLiU-ExtB', 'Mongolian Baiti', 'MS Gothic', 'MV Boli', 'Myanmar Text', 'Nirmala UI', 'Palatino Linotype', 'Segoe MDL2 Assets', 'Segoe Print', 'Segoe Script', 'Segoe UI', 'Segoe UI Historic', 'Segoe UI Emoji', 'Segoe UI Symbol', 'SimSun', 'Sitka', 'Sylfaen', 'Symbol', 'Tahoma', 'Times New Roman', 'Trebuchet MS', 'Verdana', 'Webdings', 'Wingdings', 'Yu Gothic',
+      // 'American Typewriter', 'Andale Mono', 'Arial', 'Arial Black', 'Arial Narrow', 'Arial Rounded MT Bold', 'Arial Unicode MS', 'Avenir', 'Avenir Next', 'Avenir Next Condensed', 'Baskerville', 'Big Caslon', 'Bodoni 72', 'Bodoni 72 Oldstyle', 'Bodoni 72 Smallcaps', 'Bradley Hand', 'Brush Script MT', 'Chalkboard', 'Chalkboard SE', 'Chalkduster', 'Charter', 'Cochin', 'Comic Sans MS', 'Copperplate', 'Courier', 'Courier New', 'Didot', 'DIN Alternate', 'DIN Condensed', 'Futura', 'Geneva', 'Georgia', 'Gill Sans', 'Helvetica', 'Helvetica Neue', 'Herculanum', 'Hoefler Text', 'Impact', 'Lucida Grande', 'Luminari', 'Marker Felt', 'Menlo', 'Microsoft Sans Serif', 'Monaco', 'Noteworthy', 'Optima', 'Palatino', 'Papyrus', 'Phosphate', 'Rockwell', 'Savoye LET', 'SignPainter', 'Skia', 'Snell Roundhand', 'Tahoma', 'Times', 'Times New Roman', 'Trattatello', 'Trebuchet MS', 'Verdana', 'Zapfino',
+      // ].sort());
+      // 
+      // document.fonts.ready.then(()=> {
+      // const fontAvailable = new Set();
+      // 
+      // for (const font of fontCheck.values()) {
+      // if (document.fonts.check(`12px "${font}"`)) {
+      // fontAvailable.add(font);
+      // }
+      // }
+      // 
+      // console.log('Available Fonts:', [...fontAvailable.values()]);
+      // });
+      this.fontChecked = true;
+    }
   }
 }
 /**
@@ -13171,6 +13214,8 @@ class Z4Ribbon extends JSTabbedPane {
 
    helpPanel = new Z4RibbonHelpPanel();
 
+   canvas = null;
+
   /**
    * Creates the object
    */
@@ -13183,6 +13228,12 @@ class Z4Ribbon extends JSTabbedPane {
     this.addTab(Z4Translations.HISTORY, this.historyPanel);
     this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
     this.addTab(Z4Translations.HELP, this.helpPanel);
+    this.addChangeListener(event => {
+      this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
+      // if (this.historyPanel.getStyle().display == "grid") {
+      // this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
+      // }
+    });
     this.settingsPanel.setHistoryPanel(this.historyPanel);
   }
 
@@ -13192,6 +13243,7 @@ class Z4Ribbon extends JSTabbedPane {
    * @param canvas The canvas
    */
    setCanvas(canvas) {
+    this.canvas = canvas;
     canvas.setRibbonPanels(this.projectPanel, this.layerPanel, this.drawingToolPanel, this.historyPanel);
   }
 

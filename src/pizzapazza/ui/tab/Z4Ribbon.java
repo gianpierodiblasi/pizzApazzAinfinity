@@ -2,6 +2,7 @@ package pizzapazza.ui.tab;
 
 import javascript.swing.JSTabbedPane;
 import pizzapazza.ui.component.Z4Canvas;
+import pizzapazza.ui.component.Z4CanvasOverlayMode;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonDrawingToolPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHelpPanel;
@@ -25,9 +26,12 @@ public class Z4Ribbon extends JSTabbedPane {
   private final Z4RibbonSettingsPanel settingsPanel = new Z4RibbonSettingsPanel();
   private final Z4RibbonHelpPanel helpPanel = new Z4RibbonHelpPanel();
 
+  private Z4Canvas canvas;
+
   /**
    * Creates the object
    */
+  @SuppressWarnings("StringEquality")
   public Z4Ribbon() {
     super();
     this.cssAddClass("z4ribbon");
@@ -38,6 +42,13 @@ public class Z4Ribbon extends JSTabbedPane {
     this.addTab(Z4Translations.HISTORY, this.historyPanel);
     this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
     this.addTab(Z4Translations.HELP, this.helpPanel);
+    this.addChangeListener(event -> {
+      this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
+
+//      if (this.historyPanel.getStyle().display == "grid") {
+//        this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
+//      }
+    });
 
     this.settingsPanel.setHistoryPanel(this.historyPanel);
   }
@@ -48,6 +59,7 @@ public class Z4Ribbon extends JSTabbedPane {
    * @param canvas The canvas
    */
   public void setCanvas(Z4Canvas canvas) {
+    this.canvas = canvas;
     canvas.setRibbonPanels(this.projectPanel, this.layerPanel, this.drawingToolPanel, this.historyPanel);
   }
 

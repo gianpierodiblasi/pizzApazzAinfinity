@@ -17,6 +17,8 @@ class Z4Ribbon extends JSTabbedPane {
 
    helpPanel = new Z4RibbonHelpPanel();
 
+   canvas = null;
+
   /**
    * Creates the object
    */
@@ -29,6 +31,12 @@ class Z4Ribbon extends JSTabbedPane {
     this.addTab(Z4Translations.HISTORY, this.historyPanel);
     this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
     this.addTab(Z4Translations.HELP, this.helpPanel);
+    this.addChangeListener(event => {
+      this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
+      // if (this.historyPanel.getStyle().display == "grid") {
+      // this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
+      // }
+    });
     this.settingsPanel.setHistoryPanel(this.historyPanel);
   }
 
@@ -38,6 +46,7 @@ class Z4Ribbon extends JSTabbedPane {
    * @param canvas The canvas
    */
    setCanvas(canvas) {
+    this.canvas = canvas;
     canvas.setRibbonPanels(this.projectPanel, this.layerPanel, this.drawingToolPanel, this.historyPanel);
   }
 

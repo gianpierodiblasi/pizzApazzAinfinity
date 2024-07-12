@@ -1,7 +1,7 @@
 package pizzapazza.ui.component;
 
 import def.dom.MouseEvent;
-import def.js.Array;
+import def.js.Set;
 import javascript.awt.Dimension;
 import javascript.awt.Point;
 import pizzapazza.iterator.Z4PointIteratorDrawingAction;
@@ -43,7 +43,7 @@ public class Z4CanvasMouseManager {
   private Dimension size;
   private double zoom;
 
-  private final Array<Z4CanvasOverlayMode> canvasOverlayModes = new Array<>();
+  private final Set<Z4CanvasOverlayMode> canvasOverlayModes = new Set<>();
 
   private Z4RibbonHistoryPanel ribbonHistoryPanel;
   private Z4StatusPanel statusPanel;
@@ -127,9 +127,7 @@ public class Z4CanvasMouseManager {
    * @param canvasOverlayMode The canvas overlay mode
    */
   public void addCanvasOverlayMode(Z4CanvasOverlayMode canvasOverlayMode) {
-    if (this.canvasOverlayModes.indexOf(canvasOverlayMode) == -1) {
-      this.canvasOverlayModes.push(canvasOverlayMode);
-    }
+    this.canvasOverlayModes.add(canvasOverlayMode);
   }
 
   /**
@@ -138,10 +136,7 @@ public class Z4CanvasMouseManager {
    * @param canvasOverlayMode The canvas overlay mode
    */
   public void removeCanvasOverlayMode(Z4CanvasOverlayMode canvasOverlayMode) {
-    int index = this.canvasOverlayModes.indexOf(canvasOverlayMode);
-    if (index != -1) {
-      this.canvasOverlayModes.splice(index, 1);
-    }
+    this.canvasOverlayModes.delete(canvasOverlayMode);
   }
 
   /**
@@ -174,7 +169,7 @@ public class Z4CanvasMouseManager {
     int xParsed = parseInt(x);
     int yParsed = parseInt(y);
 
-    if (this.canvasOverlayModes.indexOf(Z4CanvasOverlayMode.PICK_COLOR) != -1) {
+    if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
       switch (type) {
         case "up":
           this.statusPanel.colorPicked(this.canvas.getColorAt(xParsed, yParsed), this.canvas.getSelectedLayerColorAt(xParsed, yParsed));
