@@ -1,7 +1,9 @@
 package pizzapazza.math.geometricshape;
 
+import def.js.Array;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
+import static simulation.js.$Globals.parseInt;
 
 /**
  * The sinusoidal curve
@@ -10,43 +12,67 @@ import pizzapazza.math.Z4Point;
  */
 public class Z4SinusoidalCurve implements Z4GeometricShape {
 
-  private final double x;
-  private final double y;
+  private final double x1;
+  private final double y1;
+  private final double x2;
+  private final double y2;
   private final double period;
   private final double amplitude;
   private final double angle;
 
   private final double two_PI_over_period;
+  private final Z4Polyline polyline;
+  private final static int APPROX_SEGMENTS = 64;
 
   /**
    * Creates the object
    *
-   * @param x The x-axis coordinate of the start point of the sinusoid
-   * @param y The y-axis coordinate of the start point of the sinusoid
+   * @param x1 The x-axis coordinate of the start point of the sinusoid
+   * @param y1 The y-axis coordinate of the start point of the sinusoid
+   * @param x2 The x-axis coordinate of the end point of the sinusoid
+   * @param y2 The y-axis coordinate of the end point of the sinusoid
    * @param period The period of the sinusoid
    * @param amplitude The amplitude of the sinusoid
    * @param angle The rotation angle of the sinusoid
    */
-  public Z4SinusoidalCurve(double x, double y, double period, double amplitude, double angle) {
+  public Z4SinusoidalCurve(double x1, double y1, double x2, double y2, double period, double amplitude, double angle) {
     super();
 
-    this.x = x;
-    this.y = y;
+    this.x1 = x1;
+    this.y1 = y2;
+    this.x2 = x2;
+    this.y2 = y2;
     this.period = period;
     this.amplitude = amplitude;
     this.angle = angle;
 
     this.two_PI_over_period = Z4Math.TWO_PI / this.period;
+
+    double distance = Z4Math.distance(x1, y1, x2, y2);
+    int size = parseInt(distance * Z4SinusoidalCurve.APPROX_SEGMENTS / period) - 1;
+    
+    if (size > 0) {
+      double rotation = Z4Math.atan(x1, y1, x2, y2);
+
+      Array<Z4Point> points = new Array<>();
+      for (int i = 0; i <= size; i++) {
+        double x = distance * i / size;
+        double y = Math.sin(angle + this.two_PI_over_period * x) * amplitude;
+        points.push(Z4Math.rotoTranslate(x, y, rotation, x1, y1));
+      }
+      this.polyline = new Z4Polyline(points);
+    } else {
+      this.polyline = new Z4Polyline(new Array<>(new Z4Point(x1, y1), new Z4Point(x2, y2)));
+    }
   }
 
   @Override
   public Z4Polyline getPolyline() {
-    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    return this.polyline;
   }
 
   @Override
   public double distance(double x, double y) {
-    Z4Point rotated = Z4Math.rotate(x - this.x, y - this.y, this.angle);
-    return Math.abs(rotated.y - this.amplitude * Math.sin(rotated.x * this.two_PI_over_period));
+    return polyline.distance(x, y);
   }
 }

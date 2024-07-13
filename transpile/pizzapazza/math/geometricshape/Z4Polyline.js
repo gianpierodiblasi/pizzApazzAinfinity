@@ -17,33 +17,6 @@ class Z4Polyline extends Z4GeometricShape {
     this.points = points.map(point => point);
   }
 
-  /**
-   * Returns the start point
-   *
-   * @return The start point
-   */
-   getP1() {
-    return this.points[0];
-  }
-
-  /**
-   * Returns the end point
-   *
-   * @return The end point
-   */
-   getP2() {
-    return this.points[this.points.length - 1];
-  }
-
-  /**
-   * Returns the internal points
-   *
-   * @return The internal points
-   */
-   getInternalPoints() {
-    return this.points.slice(1, this.points.length - 1);
-  }
-
    getPolyline() {
     return this;
   }
