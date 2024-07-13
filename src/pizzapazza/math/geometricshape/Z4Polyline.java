@@ -12,7 +12,17 @@ import pizzapazza.math.Z4Point;
  */
 public class Z4Polyline implements Z4GeometricShape {
 
-  public final Array<Z4Point> points = new Array<>();
+  private final Array<Z4Point> points;
+
+  /**
+   * Creates the object
+   *
+   * @param points The points
+   */
+  public Z4Polyline(Array<Z4Point> points) {
+    super();
+    this.points = points.map(point -> point);
+  }
 
   /**
    * Returns the start point

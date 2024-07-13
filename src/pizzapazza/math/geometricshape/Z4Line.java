@@ -1,5 +1,6 @@
 package pizzapazza.math.geometricshape;
 
+import def.js.Array;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 
@@ -34,10 +35,7 @@ public class Z4Line implements Z4GeometricShape {
 
   @Override
   public Z4Polyline getPolyline() {
-    Z4Polyline polyline = new Z4Polyline();
-    polyline.points.push(new Z4Point(this.x1, this.y1));
-    polyline.points.push(new Z4Point(this.x2, this.y2));
-    return polyline;
+    return new Z4Polyline(new Array<>(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2)));
   }
 
   @Override

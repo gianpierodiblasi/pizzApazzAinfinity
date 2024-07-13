@@ -1,5 +1,6 @@
 package simulation.bezier;
 
+import def.js.Array;
 import pizzapazza.math.Z4Point;
 
 /**
@@ -29,5 +30,9 @@ public class $Bezier {
 
   public double length() {
     return 0;
+  }
+
+  public Array<Z4Point> getLUT(int steps) {
+    return null;
   }
 }

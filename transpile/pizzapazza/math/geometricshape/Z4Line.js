@@ -30,10 +30,7 @@ class Z4Line extends Z4GeometricShape {
   }
 
    getPolyline() {
-    let polyline = new Z4Polyline();
-    polyline.points.push(new Z4Point(this.x1, this.y1));
-    polyline.points.push(new Z4Point(this.x2, this.y2));
-    return polyline;
+    return new Z4Polyline(new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2)));
   }
 
    distance(x, y) {

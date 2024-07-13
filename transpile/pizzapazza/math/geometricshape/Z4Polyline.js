@@ -5,7 +5,17 @@
  */
 class Z4Polyline extends Z4GeometricShape {
 
-   points = new Array();
+   points = null;
+
+  /**
+   * Creates the object
+   *
+   * @param points The points
+   */
+  constructor(points) {
+    super();
+    this.points = points.map(point => point);
+  }
 
   /**
    * Returns the start point
