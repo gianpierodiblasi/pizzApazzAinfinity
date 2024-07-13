@@ -14,7 +14,12 @@ public class Z4TextInfo {
   public boolean textEmpty;
   public int textBorder;
   public Color textBorderColor;
+  public int textShearX;
+  public int textShearY;
 
+  public boolean shadow;
   public String shadowText;
   public boolean shadowEmpty;
+  public int shadowShearX;
+  public int shadowShearY;
 }

@@ -280,6 +280,12 @@ class Z4Translations {
 
   static  EMPTY = "";
 
+  static  SHEARING = "";
+
+  static  HORIZONTAL = "";
+
+  static  VERTICAL = "";
+
   // Text
   static  BOLD = "";
 
@@ -637,6 +643,9 @@ class Z4Translations {
     Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE = "Do not show this message again";
     Z4Translations.FILTER = "Filter";
     Z4Translations.EMPTY = "Empty";
+    Z4Translations.SHEARING = "Shearing";
+    Z4Translations.HORIZONTAL = "Horizontal";
+    Z4Translations.VERTICAL = "Vertical";
     // Text
     Z4Translations.BOLD = "Bold";
     Z4Translations.ITALIC = "Italic";
@@ -886,6 +895,9 @@ class Z4Translations {
     Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE = "Non mostrare pi\u00F9 questo messaggio";
     Z4Translations.FILTER = "Filtra";
     Z4Translations.EMPTY = "Vuoto";
+    Z4Translations.SHEARING = "Inclinazione";
+    Z4Translations.HORIZONTAL = "Orizzontale";
+    Z4Translations.VERTICAL = "Verticale";
     // Text
     Z4Translations.BOLD = "Grassetto";
     Z4Translations.ITALIC = "Corsivo";

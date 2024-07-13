@@ -168,6 +168,9 @@ public class Z4Translations {
   public static String DO_NOT_SHOW_AGAIN_MESSAGE = "";
   public static String FILTER = "";
   public static String EMPTY = "";
+  public static String SHEARING = "";
+  public static String HORIZONTAL = "";
+  public static String VERTICAL = "";
 
   // Text
   public static String BOLD = "";
@@ -451,6 +454,9 @@ public class Z4Translations {
     Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE = "Do not show this message again";
     Z4Translations.FILTER = "Filter";
     Z4Translations.EMPTY = "Empty";
+    Z4Translations.SHEARING = "Shearing";
+    Z4Translations.HORIZONTAL = "Horizontal";
+    Z4Translations.VERTICAL = "Vertical";
 
     // Text
     Z4Translations.BOLD = "Bold";
@@ -718,6 +724,9 @@ public class Z4Translations {
     Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE = "Non mostrare pi\u00F9 questo messaggio";
     Z4Translations.FILTER = "Filtra";
     Z4Translations.EMPTY = "Vuoto";
+    Z4Translations.SHEARING = "Inclinazione";
+    Z4Translations.HORIZONTAL = "Orizzontale";
+    Z4Translations.VERTICAL = "Verticale";
 
     // Text
     Z4Translations.BOLD = "Grassetto";

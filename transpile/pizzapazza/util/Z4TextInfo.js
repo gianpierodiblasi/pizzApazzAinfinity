@@ -15,7 +15,17 @@ class Z4TextInfo {
 
    textBorderColor = null;
 
+   textShearX = 0;
+
+   textShearY = 0;
+
+   shadow = false;
+
    shadowText = null;
 
    shadowEmpty = false;
+
+   shadowShearX = 0;
+
+   shadowShearY = 0;
 }
