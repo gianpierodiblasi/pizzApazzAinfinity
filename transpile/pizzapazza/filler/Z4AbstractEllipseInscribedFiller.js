@@ -91,6 +91,6 @@ class Z4AbstractEllipseInscribedFiller extends Z4AbstractBoundaryBehaviorFiller 
   }
 
    getDistance(x, y, divider) {
-    return this.edges.map(edge => Z4Math.ptSegDist(edge.x1, edge.y1, edge.x2, edge.y2, x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current)) / (this.d00 / divider);
+    return this.edges.map(edge => edge.distance(x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current)) / (this.d00 / divider);
   }
 }

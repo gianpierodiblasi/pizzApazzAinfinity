@@ -3,9 +3,9 @@ package pizzapazza.filler;
 import def.js.Array;
 import def.js.Math;
 import pizzapazza.color.Z4GradientColor;
-import pizzapazza.math.Z4Line;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
+import pizzapazza.math.geometricshape.Z4Line;
 
 /**
  * A (multi) star filler

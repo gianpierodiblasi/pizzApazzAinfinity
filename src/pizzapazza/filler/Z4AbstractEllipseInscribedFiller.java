@@ -2,9 +2,9 @@ package pizzapazza.filler;
 
 import def.js.Array;
 import pizzapazza.color.Z4GradientColor;
-import pizzapazza.math.Z4Line;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
+import pizzapazza.math.geometricshape.Z4Line;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$OffscreenCanvas;
 import static simulation.js.$Globals.$exists;
@@ -102,8 +102,6 @@ public abstract class Z4AbstractEllipseInscribedFiller extends Z4AbstractBoundar
   }
 
   private double getDistance(double x, double y, int divider) {
-    return this.edges.
-            map(edge -> Z4Math.ptSegDist(edge.x1, edge.y1, edge.x2, edge.y2, x, y)).
-            reduce((accumulator, current, index, array) -> Math.min(accumulator, current)) / (this.d00 / divider);
+    return this.edges.map(edge -> edge.distance(x, y)).reduce((accumulator, current, index, array) -> Math.min(accumulator, current)) / (this.d00 / divider);
   }
 }
