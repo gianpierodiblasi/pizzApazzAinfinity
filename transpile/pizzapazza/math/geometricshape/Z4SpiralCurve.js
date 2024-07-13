@@ -3,7 +3,7 @@
  *
  * @author gianpiero.diblasi
  */
-class Z4SpiralCurve extends Z4GeometricShape {
+class Z4SpiralCurve extends Z4GeometricCurve {
 
    x1 = 0.0;
 
@@ -17,10 +17,6 @@ class Z4SpiralCurve extends Z4GeometricShape {
 
    angle = 0.0;
 
-   polyline = null;
-
-  static  APPROX_SEGMENTS = 64;
-
   /**
    * Creates the object
    *
@@ -31,7 +27,7 @@ class Z4SpiralCurve extends Z4GeometricShape {
    * @param radius The radius of the sinusoid
    * @param angle The rotation angle of the sinusoid
    */
-  constructor(x1, y1, x2, y2, period, radius, angle) {
+  constructor(x1, y1, x2, y2, radius, angle) {
     super();
     this.x1 = x1;
     this.y1 = y2;
@@ -40,11 +36,11 @@ class Z4SpiralCurve extends Z4GeometricShape {
     this.radius = radius;
     this.angle = angle;
     let distance = Z4Math.distance(x1, y1, x2, y2);
-    let size = parseInt(distance * Z4SpiralCurve.APPROX_SEGMENTS / radius) - 1;
+    let size = parseInt(distance * Z4GeometricCurve.APPROX_SEGMENTS / radius) - 1;
     if (size > 0) {
       let points = new Array();
       for (let i = 0; i <= size; i++) {
-        let t = i / Z4SpiralCurve.APPROX_SEGMENTS;
+        let t = i / Z4GeometricCurve.APPROX_SEGMENTS;
         let a = angle + Z4Math.TWO_PI * t;
         let r = radius * t;
         points.push(new Z4Point(r * Math.cos(a) + x1, r * Math.sin(a) + y1));
@@ -53,13 +49,5 @@ class Z4SpiralCurve extends Z4GeometricShape {
     } else {
       this.polyline = new Z4Polyline(new Array(new Z4Point(x1, y1), new Z4Point(x2, y2)));
     }
-  }
-
-   getPolyline() {
-    return this.polyline;
-  }
-
-   distance(x, y) {
-    return polyline.distance(x, y);
   }
 }
