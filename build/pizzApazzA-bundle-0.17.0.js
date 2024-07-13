@@ -1130,6 +1130,302 @@ class Z4GeometricCurve extends Z4GeometricShape {
   }
 }
 /**
+ * Common abstract object for geometric frames. A <i>Z4GeometricFrame</i> is a
+ * geometric shape representing a frame curve
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4GeometricFrame extends Z4GeometricCurve {
+
+   x = 0.0;
+
+   y = 0.0;
+
+   w = 0.0;
+
+   h = 0.0;
+
+   angle = 0.0;
+
+   sx = 0.0;
+
+   sy = 0.0;
+
+  /**
+   * Creates the object
+   *
+   * @param x The x location of the frame
+   * @param y The y location of the frame
+   * @param w The width of the frame
+   * @param h The height of the frame
+   * @param angle The rotation of the frame
+   * @param sx The x shear of the frame
+   * @param sy The y shear of the frame
+   */
+  constructor(x, y, w, h, angle, sx, sy) {
+    super();
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.angle = angle;
+    this.sx = sx;
+    this.sy = sy;
+  }
+}
+/**
+ * An elliptic curve
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4EllipseFrame extends Z4GeometricFrame {
+
+   startAngle = 0.0;
+
+   extentAngle = 0.0;
+
+  /**
+   * Creates the oject
+   *
+   * @param x The x location of the ellipse (not rotated)
+   * @param y The y location of the ellipse (not rotated)
+   * @param w The width of the ellipse (not sheared)
+   * @param h The height of the ellipse (not sheared)
+   * @param angle The rotation angle
+   * @param sx The x shear of the ellipse
+   * @param sy The y shear of the ellipse
+   * @param startAngle The start angle
+   * @param extentAngle The extent angle
+   */
+  constructor(x, y, w, h, angle, sx, sy, startAngle, extentAngle) {
+    super(x, y, w, h, angle, sx, sy);
+    this.startAngle = startAngle;
+    this.extentAngle = extentAngle;
+    // tx=AffineTransform.getRotateInstance(angle);
+    // tx.concatenate(AffineTransform.getShearInstance(sx,sy));
+    // 
+    // double w2=(w-1)/2;
+    // double h2=(h-1)/2;
+    // 
+    // double xx=w2*Math.cos(startAngle)+w2;
+    // double yy=h2*Math.sin(startAngle)+h2;
+    // Point2D pp=tx.deltaTransform(new Point2D.Double(xx,yy),null);
+    // Point2D.Double p=new Point2D.Double(pp.getX()+x,pp.getY()+y);
+    // double v=extentAngle/this.APPROX_SEGMENTS;
+    // 
+    // Point2D.Double[] ip=new Point2D.Double[APPROX_SEGMENTS-1];
+    // for (int i=0;i<ip.length;i++)
+    // {
+    // double angolo=startAngle+v*(i+1);
+    // xx=w2*Math.cos(angolo)+w2;
+    // yy=h2*Math.sin(angolo)+h2;
+    // pp=tx.deltaTransform(new Point2D.Double(xx,yy),null);
+    // ip[i]=new Point2D.Double(pp.getX()+x,pp.getY()+y);
+    // }
+    // 
+    // polyline=new Polyline(p,ip,extentAngle==GZ4Math.TWO_PI?p:ip[ip.length-1]);
+    // 
+    // tx.concatenate(AffineTransform.getScaleInstance(w,h));
+  }
+}
+/**
+ * A rectangular curve
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4RectangleFrame extends Z4GeometricFrame {
+
+  /**
+   * Creates the object
+   *
+   * @param x The x location of the rectangle (not rotated)
+   * @param y The y location of the rectangle (not rotated)
+   * @param w The width of the rectangle (not sheared)
+   * @param h The height of the rectangle (not sheared)
+   * @param angle The rotation angle of the rectangle
+   * @param sx The x shear of the rectangle
+   * @param sy The y shear of the rectangle
+   */
+  constructor(x, y, w, h, angle, sx, sy) {
+    super(x, y, w, h, angle, sx, sy);
+    // tx=AffineTransform.getRotateInstance(angle);
+    // tx.concatenate(AffineTransform.getShearInstance(sx,sy));
+    // 
+    // Point2D pp=tx.deltaTransform(new Point2D.Double(0,0),null);
+    // Point2D.Double p=new Point2D.Double(pp.getX()+x,pp.getY()+y);
+    // 
+    // pp=tx.deltaTransform(new Point2D.Double(w-1,0),null);
+    // Point2D.Double ip1=new Point2D.Double(pp.getX()+x,pp.getY()+y);
+    // 
+    // pp=tx.deltaTransform(new Point2D.Double(w-1,h-1),null);
+    // Point2D.Double ip2=new Point2D.Double(pp.getX()+x,pp.getY()+y);
+    // 
+    // pp=tx.deltaTransform(new Point2D.Double(0,h-1),null);
+    // Point2D.Double ip3=new Point2D.Double(pp.getX()+x,pp.getY()+y);
+    // 
+    // polyline=new Polyline(p,new Point2D.Double[] {ip1,ip2,ip3},p);
+    // 
+    // tx.concatenate(AffineTransform.getScaleInstance(w,h));
+  }
+}
+/**
+ * A rectangular curve with rounded vertices
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4RoundRectangleFrame extends Z4GeometricFrame {
+
+  // private final static double ADVANCE=0.15;
+  // private final static int APPROX_SEGMENTS=16;
+  // 
+  /**
+   * Creates the object
+   *
+   * @param x The x location of the rounded rectangle (not rotated)
+   * @param y The y location of the rounded rectangle (not rotated)
+   * @param w The width of the rounded rectangle (not sheared)
+   * @param h The height of the rounded rectangle (not sheared)
+   * @param angle The rotation angle of the rounded rectangle
+   * @param sx The x shear of the rounded rectangle
+   * @param sy The y shear of the rounded rectangle
+   */
+  constructor(x, y, w, h, angle, sx, sy) {
+    super(x, y, w, h, angle, sx, sy);
+    // AffineTransform tx=AffineTransform.getRotateInstance(angle);
+    // tx.concatenate(AffineTransform.getShearInstance(sx,sy));
+    // double min=Math.min(w,h);
+    // double minADV=min*this.ADVANCE;
+    // ArrayList points=new ArrayList();
+    // 
+    // //First point NW
+    // Point2D pp=tx.deltaTransform(new Point2D.Double(minADV,0),null);
+    // Point2D.Double p=new Point2D.Double(pp.getX()+x,pp.getY()+y);
+    // 
+    // //Second point NE
+    // pp=tx.deltaTransform(new Point2D.Double(w-1-minADV,0),null);
+    // points.add(new Point2D.Double(pp.getX()+x,pp.getY()+y));
+    // 
+    // //Arc NE
+    // this.createArc(tx,points,minADV,GZ4Math.HALF_THREE_PI,this.APPROX_SEGMENTS,w-1-minADV,minADV);
+    // 
+    // //Third point SE
+    // pp=tx.deltaTransform(new Point2D.Double(w-1,h-1-minADV),null);
+    // points.add(new Point2D.Double(pp.getX()+x,pp.getY()+y));
+    // 
+    // //Arc SE
+    // this.createArc(tx,points,minADV,0,this.APPROX_SEGMENTS,w-1-minADV,h-1-minADV);
+    // 
+    // //fourth point SW
+    // pp=tx.deltaTransform(new Point2D.Double(minADV,h-1),null);
+    // points.add(new Point2D.Double(pp.getX()+x,pp.getY()+y));
+    // 
+    // //Arc SW
+    // this.createArc(tx,points,minADV,GZ4Math.HALF_PI,this.APPROX_SEGMENTS,minADV,h-1-minADV);
+    // 
+    // //fifth point NE
+    // pp=tx.deltaTransform(new Point2D.Double(0,minADV),null);
+    // points.add(new Point2D.Double(pp.getX()+x,pp.getY()+y));
+    // 
+    // //Arc NE
+    // this.createArc(tx,points,minADV,Math.PI,this.APPROX_SEGMENTS-1,minADV,minADV); //Il -1 serve per non prendere il punto iniziale p
+    // 
+    // Point2D.Double[] ppp=new Point2D.Double[points.size()];
+    // points.toArray(ppp);
+    // polyline=new Polyline(p,ppp,p);
+  }
+  // private void createArc(AffineTransform tx, ArrayList points, double min, double startAngle, int count, double dx, double dy)
+  // {
+  // for (int i=0;i<count;i++)
+  // {
+  // double angle=startAngle+GZ4Math.HALF_PI*(i+1)/this.APPROX_SEGMENTS;
+  // double xx=min*Math.cos(angle);
+  // double yy=min*Math.sin(angle);
+  // 
+  // Point2D pp=tx.deltaTransform(new Point2D.Double(xx+dx,yy+dy),null);
+  // points.add(new Point2D.Double(pp.getX()+x,pp.getY()+y));
+  // }
+  // }
+}
+/**
+ * A sequence of geometric shapes
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4GeometricShapeSequence extends Z4GeometricCurve {
+
+   shapes = null;
+
+  /**
+   * Creates the object
+   *
+   * @param shapes The sequence of geometric shapes
+   */
+  constructor(shapes) {
+    this.shapes = shapes;
+    this.polyline = this.shapes.map(shape => shape.getPolyline()).reduce((accumulator, current, index, array) => accumulator.concat(current));
+  }
+}
+/**
+ * The sinusoidal curve
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4SinusoidalCurve extends Z4GeometricCurve {
+
+   x1 = 0.0;
+
+   y1 = 0.0;
+
+   x2 = 0.0;
+
+   y2 = 0.0;
+
+   period = 0.0;
+
+   amplitude = 0.0;
+
+   angle = 0.0;
+
+   two_PI_over_period = 0.0;
+
+  /**
+   * Creates the object
+   *
+   * @param x1 The x-axis coordinate of the start point of the sinusoid
+   * @param y1 The y-axis coordinate of the start point of the sinusoid
+   * @param x2 The x-axis coordinate of the end point of the sinusoid
+   * @param y2 The y-axis coordinate of the end point of the sinusoid
+   * @param period The period of the sinusoid
+   * @param amplitude The amplitude of the sinusoid
+   * @param angle The rotation angle of the sinusoid
+   */
+  constructor(x1, y1, x2, y2, period, amplitude, angle) {
+    super();
+    this.x1 = x1;
+    this.y1 = y2;
+    this.x2 = x2;
+    this.y2 = y2;
+    this.period = period;
+    this.amplitude = amplitude;
+    this.angle = angle;
+    this.two_PI_over_period = Z4Math.TWO_PI / period;
+    let distance = Z4Math.distance(x1, y1, x2, y2);
+    let size = parseInt(distance * Z4GeometricCurve.APPROX_SEGMENTS / period) - 1;
+    if (size > 0) {
+      let rotation = Z4Math.atan(x1, y1, x2, y2);
+      let points = new Array();
+      for (let i = 0; i <= size; i++) {
+        let x = distance * i / size;
+        let y = Math.sin(angle + this.two_PI_over_period * x) * amplitude;
+        points.push(Z4Math.rotoTranslate(x, y, rotation, x1, y1));
+      }
+      this.polyline = new Z4Polyline(points);
+    } else {
+      this.polyline = new Z4Polyline(new Array(new Z4Point(x1, y1), new Z4Point(x2, y2)));
+    }
+  }
+}
+/**
  * The spiral curve
  *
  * @author gianpiero.diblasi
@@ -1180,35 +1476,6 @@ class Z4SpiralCurve extends Z4GeometricCurve {
     } else {
       this.polyline = new Z4Polyline(new Array(new Z4Point(x1, y1), new Z4Point(x2, y2)));
     }
-  }
-}
-/**
- * A sequence of geometric shapes
- *
- * @author gianpiero.diblasi
- */
-class Z4GeometricShapeSequence extends Z4GeometricShape {
-
-   shapes = null;
-
-   polyline = null;
-
-  /**
-   * Creates the object
-   *
-   * @param shapes The sequence of geometric shapes
-   */
-  constructor(shapes) {
-    this.shapes = shapes;
-    this.polyline = this.shapes.map(shape => shape.getPolyline()).reduce((accumulator, current, index, array) => accumulator.concat(current));
-  }
-
-   getPolyline() {
-    return this.polyline;
-  }
-
-   distance(x, y) {
-    return this.polyline.distance(x, y);
   }
 }
 /**
@@ -1360,78 +1627,6 @@ class Z4SinglePointShape extends Z4GeometricShape {
 
    distance(x, y) {
     return Z4Math.distance(this.x, this.y, x, y);
-  }
-}
-/**
- * The sinusoidal curve
- *
- * @author gianpiero.diblasi
- */
-class Z4SinusoidalCurve extends Z4GeometricShape {
-
-   x1 = 0.0;
-
-   y1 = 0.0;
-
-   x2 = 0.0;
-
-   y2 = 0.0;
-
-   period = 0.0;
-
-   amplitude = 0.0;
-
-   angle = 0.0;
-
-   two_PI_over_period = 0.0;
-
-   polyline = null;
-
-  static  APPROX_SEGMENTS = 64;
-
-  /**
-   * Creates the object
-   *
-   * @param x1 The x-axis coordinate of the start point of the sinusoid
-   * @param y1 The y-axis coordinate of the start point of the sinusoid
-   * @param x2 The x-axis coordinate of the end point of the sinusoid
-   * @param y2 The y-axis coordinate of the end point of the sinusoid
-   * @param period The period of the sinusoid
-   * @param amplitude The amplitude of the sinusoid
-   * @param angle The rotation angle of the sinusoid
-   */
-  constructor(x1, y1, x2, y2, period, amplitude, angle) {
-    super();
-    this.x1 = x1;
-    this.y1 = y2;
-    this.x2 = x2;
-    this.y2 = y2;
-    this.period = period;
-    this.amplitude = amplitude;
-    this.angle = angle;
-    this.two_PI_over_period = Z4Math.TWO_PI / this.period;
-    let distance = Z4Math.distance(x1, y1, x2, y2);
-    let size = parseInt(distance * Z4SinusoidalCurve.APPROX_SEGMENTS / period) - 1;
-    if (size > 0) {
-      let rotation = Z4Math.atan(x1, y1, x2, y2);
-      let points = new Array();
-      for (let i = 0; i <= size; i++) {
-        let x = distance * i / size;
-        let y = Math.sin(angle + this.two_PI_over_period * x) * amplitude;
-        points.push(Z4Math.rotoTranslate(x, y, rotation, x1, y1));
-      }
-      this.polyline = new Z4Polyline(points);
-    } else {
-      this.polyline = new Z4Polyline(new Array(new Z4Point(x1, y1), new Z4Point(x2, y2)));
-    }
-  }
-
-   getPolyline() {
-    return this.polyline;
-  }
-
-   distance(x, y) {
-    return polyline.distance(x, y);
   }
 }
 /**

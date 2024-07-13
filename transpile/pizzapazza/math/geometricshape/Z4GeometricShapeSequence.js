@@ -3,11 +3,9 @@
  *
  * @author gianpiero.diblasi
  */
-class Z4GeometricShapeSequence extends Z4GeometricShape {
+class Z4GeometricShapeSequence extends Z4GeometricCurve {
 
    shapes = null;
-
-   polyline = null;
 
   /**
    * Creates the object
@@ -17,13 +15,5 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
   constructor(shapes) {
     this.shapes = shapes;
     this.polyline = this.shapes.map(shape => shape.getPolyline()).reduce((accumulator, current, index, array) => accumulator.concat(current));
-  }
-
-   getPolyline() {
-    return this.polyline;
-  }
-
-   distance(x, y) {
-    return this.polyline.distance(x, y);
   }
 }

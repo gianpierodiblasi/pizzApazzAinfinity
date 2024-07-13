@@ -10,7 +10,7 @@ import static simulation.js.$Globals.parseInt;
  *
  * @author gianpiero.diblasi
  */
-public class Z4SinusoidalCurve implements Z4GeometricShape {
+public class Z4SinusoidalCurve extends Z4GeometricCurve {
 
   private final double x1;
   private final double y1;
@@ -21,9 +21,7 @@ public class Z4SinusoidalCurve implements Z4GeometricShape {
   private final double angle;
 
   private final double two_PI_over_period;
-  private final Z4Polyline polyline;
-  private final static int APPROX_SEGMENTS = 64;
-
+  
   /**
    * Creates the object
    *
@@ -46,10 +44,10 @@ public class Z4SinusoidalCurve implements Z4GeometricShape {
     this.amplitude = amplitude;
     this.angle = angle;
 
-    this.two_PI_over_period = Z4Math.TWO_PI / this.period;
+    this.two_PI_over_period = Z4Math.TWO_PI / period;
 
     double distance = Z4Math.distance(x1, y1, x2, y2);
-    int size = parseInt(distance * Z4SinusoidalCurve.APPROX_SEGMENTS / period) - 1;
+    int size = parseInt(distance * Z4GeometricCurve.APPROX_SEGMENTS / period) - 1;
     
     if (size > 0) {
       double rotation = Z4Math.atan(x1, y1, x2, y2);
@@ -64,15 +62,5 @@ public class Z4SinusoidalCurve implements Z4GeometricShape {
     } else {
       this.polyline = new Z4Polyline(new Array<>(new Z4Point(x1, y1), new Z4Point(x2, y2)));
     }
-  }
-
-  @Override
-  public Z4Polyline getPolyline() {
-    return this.polyline;
-  }
-
-  @Override
-  public double distance(double x, double y) {
-    return polyline.distance(x, y);
   }
 }

@@ -3,7 +3,7 @@
  *
  * @author gianpiero.diblasi
  */
-class Z4SinusoidalCurve extends Z4GeometricShape {
+class Z4SinusoidalCurve extends Z4GeometricCurve {
 
    x1 = 0.0;
 
@@ -20,10 +20,6 @@ class Z4SinusoidalCurve extends Z4GeometricShape {
    angle = 0.0;
 
    two_PI_over_period = 0.0;
-
-   polyline = null;
-
-  static  APPROX_SEGMENTS = 64;
 
   /**
    * Creates the object
@@ -45,9 +41,9 @@ class Z4SinusoidalCurve extends Z4GeometricShape {
     this.period = period;
     this.amplitude = amplitude;
     this.angle = angle;
-    this.two_PI_over_period = Z4Math.TWO_PI / this.period;
+    this.two_PI_over_period = Z4Math.TWO_PI / period;
     let distance = Z4Math.distance(x1, y1, x2, y2);
-    let size = parseInt(distance * Z4SinusoidalCurve.APPROX_SEGMENTS / period) - 1;
+    let size = parseInt(distance * Z4GeometricCurve.APPROX_SEGMENTS / period) - 1;
     if (size > 0) {
       let rotation = Z4Math.atan(x1, y1, x2, y2);
       let points = new Array();
@@ -60,13 +56,5 @@ class Z4SinusoidalCurve extends Z4GeometricShape {
     } else {
       this.polyline = new Z4Polyline(new Array(new Z4Point(x1, y1), new Z4Point(x2, y2)));
     }
-  }
-
-   getPolyline() {
-    return this.polyline;
-  }
-
-   distance(x, y) {
-    return polyline.distance(x, y);
   }
 }
