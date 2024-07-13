@@ -55,7 +55,7 @@ class Z4AbstractEllipseInscribedFiller extends Z4AbstractBoundaryBehaviorFiller 
       }
     });
     this.ctx.closePath();
-    this.d00 = this.edges.map(edge => Z4Math.ptSegDist(edge.x1, edge.y1, edge.x2, edge.y2, 0, 0)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
+    this.d00 = this.edges.map(edge => edge.distance(0, 0)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
   }
 
   /**

@@ -12,12 +12,12 @@ import static simulation.js.$Globals.parseInt;
  */
 public class Z4QuadCurve implements Z4GeometricShape {
 
-  public final double x1;
-  public final double y1;
-  public final double ctrlx;
-  public final double ctrly;
-  public final double x2;
-  public final double y2;
+  private final double x1;
+  private final double y1;
+  private final double ctrlx;
+  private final double ctrly;
+  private final double x2;
+  private final double y2;
 
   private final $Bezier bezier;
 
