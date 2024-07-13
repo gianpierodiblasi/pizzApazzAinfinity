@@ -6,18 +6,16 @@ import simulation.bezier.$Bezier;
 import static simulation.js.$Globals.parseInt;
 
 /**
- * The cubic bezier curve
+ * The quadratic bezier curve
  *
  * @author gianpiero.diblasi
  */
-public class Z4BezierCurve implements Z4GeometricShape {
+public class Z4QuadCurve implements Z4GeometricShape {
 
   public final double x1;
   public final double y1;
-  public final double ctrlx1;
-  public final double ctrly1;
-  public final double ctrlx2;
-  public final double ctrly2;
+  public final double ctrlx;
+  public final double ctrly;
   public final double x2;
   public final double y2;
 
@@ -28,28 +26,22 @@ public class Z4BezierCurve implements Z4GeometricShape {
    *
    * @param x1 The x-axis coordinate of the start point of the curve
    * @param y1 The y-axis coordinate of the start point of the curve
-   * @param ctrlx1 The x-axis coordinate of the first control point of the curve
-   * @param ctrly1 The y-axis coordinate of the first control point of the curve
-   * @param ctrlx2 The x-axis coordinate of the second control point of the
-   * curve
-   * @param ctrly2 The y-axis coordinate of the second control point of the
-   * curve
+   * @param ctrlx The x-axis coordinate of the first control point of the curve
+   * @param ctrly The y-axis coordinate of the first control point of the curve
    * @param x2 The x-axis coordinate of the end point of the curve
    * @param y2 The y-axis coordinate of the end point of the curve
    */
-  public Z4BezierCurve(double x1, double y1, double ctrlx1, double ctrly1, double ctrlx2, double ctrly2, double x2, double y2) {
+  public Z4QuadCurve(double x1, double y1, double ctrlx, double ctrly, double x2, double y2) {
     super();
 
     this.x1 = x1;
     this.y1 = y1;
-    this.ctrlx1 = ctrlx1;
-    this.ctrly1 = ctrly1;
-    this.ctrlx2 = ctrlx2;
-    this.ctrly2 = ctrly2;
+    this.ctrlx = ctrlx;
+    this.ctrly = ctrly;
     this.x2 = x2;
     this.y2 = y2;
 
-    this.bezier = new $Bezier(this.x1, this.y1, this.ctrlx1, this.ctrly1, this.ctrlx2, this.ctrly2, this.x2, this.y2);
+    this.bezier = new $Bezier(this.x1, this.y1, this.ctrlx, this.ctrly, this.x2, this.y2);
   }
 
   @Override

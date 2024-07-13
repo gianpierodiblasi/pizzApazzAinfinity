@@ -1,4 +1,6 @@
 /**
+ * The cubic bezier curve
+ *
  * @author gianpiero.diblasi
  */
 class Z4BezierCurve extends Z4GeometricShape {
