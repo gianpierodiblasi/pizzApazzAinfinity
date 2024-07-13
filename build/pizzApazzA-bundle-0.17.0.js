@@ -1104,6 +1104,35 @@ class Z4BezierCurve extends Z4GeometricShape {
   }
 }
 /**
+ * A sequence of geometric shapes
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4GeometricShapeSequence extends Z4GeometricShape {
+
+   shapes = null;
+
+   polyline = null;
+
+  /**
+   * Creates the object
+   *
+   * @param shapes The sequence of geometric shapes
+   */
+  constructor(shapes) {
+    this.shapes = shapes;
+    this.polyline = this.shapes.map(shape => shape.getPolyline()).reduce((accumulator, current, index, array) => accumulator.concat(current));
+  }
+
+   getPolyline() {
+    return this.polyline;
+  }
+
+   distance(x, y) {
+    return this.polyline.distance(x, y);
+  }
+}
+/**
  * The line
  *
  * @author gianpiero.diblasi
@@ -1167,6 +1196,16 @@ class Z4Polyline extends Z4GeometricShape {
 
    distance(x, y) {
     return this.points.map((point, index, array) => index === 0 ? Number.MAX_VALUE : Z4Math.ptSegDist(point.x, point.y, array[index - 1].x, array[index - 1].x, x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
+  }
+
+  /**
+   * Concatenates this polyline with another polyline
+   *
+   * @param polyline The other polyline
+   * @return The concatenation of this polyline with the other polyline
+   */
+   concat(polyline) {
+    return new Z4Polyline((this.points).concat(polyline.points));
   }
 }
 /**
