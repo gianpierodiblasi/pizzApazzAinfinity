@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -197,6 +197,14 @@ extends javascript.swing.JSPanel</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#colorPicked(javascript.awt.Color,javascript.awt.Color)">colorPicked</a></span>&#8203;(javascript.awt.Color&nbsp;projectColor,
+           javascript.awt.Color&nbsp;layerColor)</code></th>
+<td class="colLast">
+<div class="block">A color has been picked</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resetCanvasGridPanel(int,int,boolean)">resetCanvasGridPanel</a></span>&#8203;(int&nbsp;width,
                     int&nbsp;height,
                     boolean&nbsp;resetOnlySize)</code></th>
@@ -204,21 +212,21 @@ extends javascript.swing.JSPanel</pre>
 <div class="block">Resets the canvas grid panel</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCanvas(pizzapazza.ui.component.Z4Canvas)">setCanvas</a></span>&#8203;(<a href="../component/Z4Canvas.html" title="class in pizzapazza.ui.component">Z4Canvas</a>&nbsp;canvas)</code></th>
 <td class="colLast">
 <div class="block">Sets the canvas to manage</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDrawingDirection(pizzapazza.math.Z4DrawingDirection)">setDrawingDirection</a></span>&#8203;(<a href="../../math/Z4DrawingDirection.html" title="enum in pizzapazza.math">Z4DrawingDirection</a>&nbsp;drawingDirection)</code></th>
 <td class="colLast">
 <div class="block">Sets the drawing direction</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMousePosition(int,int)">setMousePosition</a></span>&#8203;(int&nbsp;x,
                 int&nbsp;y)</code></th>
@@ -226,14 +234,14 @@ extends javascript.swing.JSPanel</pre>
 <div class="block">Sets the mouse position</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setProjectName(java.lang.String)">setProjectName</a></span>&#8203;(java.lang.String&nbsp;projectName)</code></th>
 <td class="colLast">
 <div class="block">Sets the project name</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setProjectSize(int,int)">setProjectSize</a></span>&#8203;(int&nbsp;width,
               int&nbsp;height)</code></th>
@@ -241,7 +249,7 @@ extends javascript.swing.JSPanel</pre>
 <div class="block">Sets the project size</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setZoom(double)">setZoom</a></span>&#8203;(double&nbsp;zoom)</code></th>
 <td class="colLast">
@@ -306,6 +314,22 @@ extends javascript.swing.JSPanel</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="colorPicked(javascript.awt.Color,javascript.awt.Color)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>colorPicked</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;colorPicked&#8203;(javascript.awt.Color&nbsp;projectColor,
+                        javascript.awt.Color&nbsp;layerColor)</pre>
+<div class="block">A color has been picked</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>projectColor</code> - The color picked from the project, it can be null</dd>
+<dd><code>layerColor</code> - The color picked from the layer, it can be null</dd>
+</dl>
+</li>
+</ul>
 <a id="setCanvas(pizzapazza.ui.component.Z4Canvas)">
 <!--   -->
 </a>

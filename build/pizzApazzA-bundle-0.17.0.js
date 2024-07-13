@@ -1020,6 +1020,117 @@ class Z4PointIteratorType {
   static SCATTERER = 'SCATTERER';
 }
 /**
+ * The common interface of all geometric shapes
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4GeometricShape {
+
+  /**
+   * Returns the nearest polyline
+   *
+   * @return The nearest polyline
+   */
+   getPolyline() {
+  }
+
+  /**
+   * Returns the distance from a given point of this geometric shape
+   *
+   * @param x The x-axis coordinate of the point
+   * @param y The y-axis coordinate of the point
+   * @return The distance from a given point of this geometric shape
+   */
+   distance(x, y) {
+  }
+}
+/**
+ * The line
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Line extends Z4GeometricShape {
+
+   x1 = 0.0;
+
+   y1 = 0.0;
+
+   x2 = 0.0;
+
+   y2 = 0.0;
+
+  /**
+   * Creates the object
+   *
+   * @param x1 The x-axis coordinate of the start point of the line
+   * @param y1 The y-axis coordinate of the start point of the line
+   * @param x2 The x-axis coordinate of the end point of the line
+   * @param y2 The y-axis coordinate of the end point of the line
+   */
+  constructor(x1, y1, x2, y2) {
+    super();
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2;
+  }
+
+   getPolyline() {
+    let polyline = new Z4Polyline();
+    polyline.points.push(new Z4Point(this.x1, this.y1));
+    polyline.points.push(new Z4Point(this.x2, this.y2));
+    return polyline;
+  }
+
+   distance(x, y) {
+    return Z4Math.ptSegDist(this.x1, this.y1, this.x2, this.y2, x, y);
+  }
+}
+/**
+ * The poyline
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Polyline extends Z4GeometricShape {
+
+   points = new Array();
+
+  /**
+   * Returns the start point
+   *
+   * @return The start point
+   */
+   getP1() {
+    return this.points[0];
+  }
+
+  /**
+   * Returns the end point
+   *
+   * @return The end point
+   */
+   getP2() {
+    return this.points[this.points.length - 1];
+  }
+
+  /**
+   * Returns the internal points
+   *
+   * @return The internal points
+   */
+   getInternalPoints() {
+    return this.points.slice(1, this.points.length - 1);
+  }
+
+   getPolyline() {
+    return this;
+  }
+
+   distance(x, y) {
+    return this.points.map((point, index, array) => index === 0 ? Number.MAX_VALUE : Z4Math.ptSegDist(point.x, point.y, array[index - 1].x, array[index - 1].x, x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
+  }
+}
+/**
  * The direction of a drawing
  *
  * @author gianpiero.diblasi
@@ -20259,13 +20370,3 @@ class Z4UI {
   constructor() {
   }
 }
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-

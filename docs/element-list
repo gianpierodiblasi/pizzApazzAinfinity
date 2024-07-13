@@ -2,6 +2,7 @@ pizzapazza.color
 pizzapazza.filler
 pizzapazza.iterator
 pizzapazza.math
+pizzapazza.math.geometricshape
 pizzapazza.painter
 pizzapazza.ui.component
 pizzapazza.ui.frame
@@ -12,6 +13,5 @@ pizzapazza.ui.panel.iterator
 pizzapazza.ui.panel.math
 pizzapazza.ui.panel.painter
 pizzapazza.ui.panel.ribbon
-pizzapazza.ui.panel.util
 pizzapazza.ui.tab
 pizzapazza.util
