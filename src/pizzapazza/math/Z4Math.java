@@ -11,14 +11,24 @@ import def.js.Math;
 public class Z4Math {
 
   /**
-   * 2*PI value
+   * PI/4 value
    */
-  public final static double TWO_PI = 2 * Math.PI;
+  public final static double QUARTER_PI = Math.PI / 4;
 
   /**
    * PI/2 value
    */
   public final static double HALF_PI = Math.PI / 2;
+
+  /**
+   * 3*PI/2 angle
+   */
+  public final static double HALF_THREE_PI = 3 * Math.PI / 2;
+
+  /**
+   * 2*PI value
+   */
+  public final static double TWO_PI = 2 * Math.PI;
 
   /**
    * The square root of 2
@@ -233,6 +243,19 @@ public class Z4Math {
     double cos = Math.cos(angle);
     double sin = Math.sin(angle);
     return new Z4Point(x * cos + y * sin + tx, x * sin - y * cos + ty);
+  }
+
+  /**
+   * Sheares a point
+   *
+   * @param x The x-axis coordinate of the point
+   * @param y The y-axis coordinate of the point
+   * @param sx The x shear
+   * @param sy The y shear
+   * @return The sheared point
+   */
+  public static Z4Point shear(double x, double y, double sx, double sy) {
+    return new Z4Point(x + sx * y, sy * +y);
   }
 
   /**

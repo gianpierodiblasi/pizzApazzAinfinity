@@ -6,14 +6,24 @@
 class Z4Math {
 
   /**
-   * 2*PI value
+   * PI/4 value
    */
-  static  TWO_PI = 2 * Math.PI;
+  static  QUARTER_PI = Math.PI / 4;
 
   /**
    * PI/2 value
    */
   static  HALF_PI = Math.PI / 2;
+
+  /**
+   * 3*PI/2 angle
+   */
+  static  HALF_THREE_PI = 3 * Math.PI / 2;
+
+  /**
+   * 2*PI value
+   */
+  static  TWO_PI = 2 * Math.PI;
 
   /**
    * The square root of 2
@@ -224,6 +234,19 @@ class Z4Math {
     let cos = Math.cos(angle);
     let sin = Math.sin(angle);
     return new Z4Point(x * cos + y * sin + tx, x * sin - y * cos + ty);
+  }
+
+  /**
+   * Sheares a point
+   *
+   * @param x The x-axis coordinate of the point
+   * @param y The y-axis coordinate of the point
+   * @param sx The x shear
+   * @param sy The y shear
+   * @return The sheared point
+   */
+  static  shear(x, y, sx, sy) {
+    return new Z4Point(x + sx * y, sy * +y);
   }
 
   /**

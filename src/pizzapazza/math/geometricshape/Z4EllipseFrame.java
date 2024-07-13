@@ -1,5 +1,9 @@
 package pizzapazza.math.geometricshape;
 
+import def.js.Array;
+import pizzapazza.math.Z4Math;
+import pizzapazza.math.Z4Point;
+
 /**
  * An elliptic curve
  *
@@ -28,31 +32,19 @@ public class Z4EllipseFrame extends Z4GeometricFrame {
 
     this.startAngle = startAngle;
     this.extentAngle = extentAngle;
-    
-//    tx=AffineTransform.getRotateInstance(angle);
-//    tx.concatenate(AffineTransform.getShearInstance(sx,sy));
-//
-//    double w2=(w-1)/2;
-//    double h2=(h-1)/2;
-//
-//    double xx=w2*Math.cos(startAngle)+w2;
-//    double yy=h2*Math.sin(startAngle)+h2;
-//    Point2D pp=tx.deltaTransform(new Point2D.Double(xx,yy),null);
-//    Point2D.Double p=new Point2D.Double(pp.getX()+x,pp.getY()+y);
-//    double v=extentAngle/this.APPROX_SEGMENTS;
-//
-//    Point2D.Double[] ip=new Point2D.Double[APPROX_SEGMENTS-1];
-//    for (int i=0;i<ip.length;i++)
-//    {
-//      double angolo=startAngle+v*(i+1);
-//      xx=w2*Math.cos(angolo)+w2;
-//      yy=h2*Math.sin(angolo)+h2;
-//      pp=tx.deltaTransform(new Point2D.Double(xx,yy),null);
-//      ip[i]=new Point2D.Double(pp.getX()+x,pp.getY()+y);
-//    }
-//
-//    polyline=new Polyline(p,ip,extentAngle==GZ4Math.TWO_PI?p:ip[ip.length-1]);
-//
-//    tx.concatenate(AffineTransform.getScaleInstance(w,h));
+
+    double w2 = (w - 1) / 2;
+    double h2 = (h - 1) / 2;
+    double incAngle = extentAngle / Z4GeometricCurve.APPROX_SEGMENTS;
+
+    Array<Z4Point> points = new Array<>();
+    for (int i = 0; i <= Z4GeometricCurve.APPROX_SEGMENTS; i++) {
+      double currentAngle = startAngle + incAngle * i;
+      double xx = w2 * Math.cos(currentAngle) + w2;
+      double yy = h2 * Math.sin(currentAngle) + h2;
+      Z4Point p = Z4Math.shear(xx, yy, sx, sy);
+      points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
+    }
+    this.polyline = new Z4Polyline(points);
   }
 }

@@ -5,9 +5,10 @@
  */
 class Z4RoundRectangleFrame extends Z4GeometricFrame {
 
-  // private final static double ADVANCE=0.15;
-  // private final static int APPROX_SEGMENTS=16;
-  // 
+  static  ADVANCE = 0.15;
+
+  static  ROUND_APPROX_SEGMENTS = 16;
+
   /**
    * Creates the object
    *
@@ -21,58 +22,43 @@ class Z4RoundRectangleFrame extends Z4GeometricFrame {
    */
   constructor(x, y, w, h, angle, sx, sy) {
     super(x, y, w, h, angle, sx, sy);
-    // AffineTransform tx=AffineTransform.getRotateInstance(angle);
-    // tx.concatenate(AffineTransform.getShearInstance(sx,sy));
-    // double min=Math.min(w,h);
-    // double minADV=min*this.ADVANCE;
-    // ArrayList points=new ArrayList();
-    // 
-    // //First point NW
-    // Point2D pp=tx.deltaTransform(new Point2D.Double(minADV,0),null);
-    // Point2D.Double p=new Point2D.Double(pp.getX()+x,pp.getY()+y);
-    // 
-    // //Second point NE
-    // pp=tx.deltaTransform(new Point2D.Double(w-1-minADV,0),null);
-    // points.add(new Point2D.Double(pp.getX()+x,pp.getY()+y));
-    // 
-    // //Arc NE
-    // this.createArc(tx,points,minADV,GZ4Math.HALF_THREE_PI,this.APPROX_SEGMENTS,w-1-minADV,minADV);
-    // 
-    // //Third point SE
-    // pp=tx.deltaTransform(new Point2D.Double(w-1,h-1-minADV),null);
-    // points.add(new Point2D.Double(pp.getX()+x,pp.getY()+y));
-    // 
-    // //Arc SE
-    // this.createArc(tx,points,minADV,0,this.APPROX_SEGMENTS,w-1-minADV,h-1-minADV);
-    // 
-    // //fourth point SW
-    // pp=tx.deltaTransform(new Point2D.Double(minADV,h-1),null);
-    // points.add(new Point2D.Double(pp.getX()+x,pp.getY()+y));
-    // 
-    // //Arc SW
-    // this.createArc(tx,points,minADV,GZ4Math.HALF_PI,this.APPROX_SEGMENTS,minADV,h-1-minADV);
-    // 
-    // //fifth point NE
-    // pp=tx.deltaTransform(new Point2D.Double(0,minADV),null);
-    // points.add(new Point2D.Double(pp.getX()+x,pp.getY()+y));
-    // 
-    // //Arc NE
-    // this.createArc(tx,points,minADV,Math.PI,this.APPROX_SEGMENTS-1,minADV,minADV); //Il -1 serve per non prendere il punto iniziale p
-    // 
-    // Point2D.Double[] ppp=new Point2D.Double[points.size()];
-    // points.toArray(ppp);
-    // polyline=new Polyline(p,ppp,p);
+    let min = Math.min(w, h);
+    let advance = min * Z4RoundRectangleFrame.ADVANCE;
+    let points = new Array();
+    // First point NW
+    let p = Z4Math.shear(advance, 0, sx, sy);
+    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
+    // Second point NE
+    p = Z4Math.shear(w - 1 - advance, 0, sx, sy);
+    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
+    // Arc NE
+    this.createArc(points, advance, Z4Math.HALF_THREE_PI, w - 1 - advance, advance, x, y, sx, sy);
+    // Third point SE
+    p = Z4Math.shear(w - 1, h - 1 - advance, sx, sy);
+    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
+    // Arc SE
+    this.createArc(points, advance, 0, w - 1 - advance, h - 1 - advance, x, y, sx, sy);
+    // fourth point SW
+    p = Z4Math.shear(advance, h - 1, sx, sy);
+    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
+    // Arc SW
+    this.createArc(points, advance, Z4Math.HALF_PI, advance, h - 1 - advance, x, y, sx, sy);
+    // fifth point NW
+    p = Z4Math.shear(0, advance, sx, sy);
+    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
+    // Arc NW
+    this.createArc(points, advance, Math.PI, advance, advance, x, y, sx, sy);
+    points.push(points[0]);
+    this.polyline = new Z4Polyline(points);
   }
-  // private void createArc(AffineTransform tx, ArrayList points, double min, double startAngle, int count, double dx, double dy)
-  // {
-  // for (int i=0;i<count;i++)
-  // {
-  // double angle=startAngle+GZ4Math.HALF_PI*(i+1)/this.APPROX_SEGMENTS;
-  // double xx=min*Math.cos(angle);
-  // double yy=min*Math.sin(angle);
-  // 
-  // Point2D pp=tx.deltaTransform(new Point2D.Double(xx+dx,yy+dy),null);
-  // points.add(new Point2D.Double(pp.getX()+x,pp.getY()+y));
-  // }
-  // }
+
+   createArc(points, advance, startAngle, dx, dy, x, y, sx, sy) {
+    for (let i = 1; i < Z4RoundRectangleFrame.ROUND_APPROX_SEGMENTS; i++) {
+      let angle = startAngle + Z4Math.HALF_PI * i / Z4RoundRectangleFrame.ROUND_APPROX_SEGMENTS;
+      let xx = advance * Math.cos(angle);
+      let yy = advance * Math.sin(angle);
+      let p = Z4Math.shear(xx + dx, yy + dy, sx, sy);
+      points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
+    }
+  }
 }

@@ -1,5 +1,9 @@
 package pizzapazza.math.geometricshape;
 
+import def.js.Array;
+import pizzapazza.math.Z4Math;
+import pizzapazza.math.Z4Point;
+
 /**
  * A rectangular curve
  *
@@ -20,25 +24,23 @@ public class Z4RectangleFrame extends Z4GeometricFrame {
    */
   public Z4RectangleFrame(double x, double y, double w, double h, double angle, double sx, double sy) {
     super(x, y, w, h, angle, sx, sy);
-    
-//    tx=AffineTransform.getRotateInstance(angle);
-//    tx.concatenate(AffineTransform.getShearInstance(sx,sy));
-//
-//    Point2D pp=tx.deltaTransform(new Point2D.Double(0,0),null);
-//    Point2D.Double p=new Point2D.Double(pp.getX()+x,pp.getY()+y);
-//
-//    pp=tx.deltaTransform(new Point2D.Double(w-1,0),null);
-//    Point2D.Double ip1=new Point2D.Double(pp.getX()+x,pp.getY()+y);
-//
-//    pp=tx.deltaTransform(new Point2D.Double(w-1,h-1),null);
-//    Point2D.Double ip2=new Point2D.Double(pp.getX()+x,pp.getY()+y);
-//
-//    pp=tx.deltaTransform(new Point2D.Double(0,h-1),null);
-//    Point2D.Double ip3=new Point2D.Double(pp.getX()+x,pp.getY()+y);
-//
-//    polyline=new Polyline(p,new Point2D.Double[] {ip1,ip2,ip3},p);
-//
-//    tx.concatenate(AffineTransform.getScaleInstance(w,h));
+
+    Array<Z4Point> points = new Array<>();
+
+    Z4Point p = Z4Math.shear(0, 0, sx, sy);
+    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
+
+    p = Z4Math.shear(w - 1, 0, sx, sy);
+    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
+
+    p = Z4Math.shear(w - 1, h - 1, sx, sy);
+    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
+
+    p = Z4Math.shear(0, h - 1, sx, sy);
+    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
+
+    points.push(points.$get(0));
+    this.polyline = new Z4Polyline(points);
   }
 
 }
