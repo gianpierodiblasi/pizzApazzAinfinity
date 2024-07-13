@@ -1,4 +1,4 @@
-package pizzapazza.ui.panel.util;
+package pizzapazza.ui.panel;
 
 import static def.dom.Globals.clearTimeout;
 import static def.dom.Globals.document;
@@ -54,7 +54,6 @@ import pizzapazza.painter.Z4Painter;
 import pizzapazza.painter.Z4PainterType;
 import pizzapazza.painter.Z4PatternPainter;
 import pizzapazza.painter.Z4Shape2DPainter;
-import pizzapazza.ui.panel.Z4AbstractValuePanel;
 import pizzapazza.ui.panel.color.Z4BiGradientColorPanel;
 import pizzapazza.ui.panel.color.Z4ColorPanel;
 import pizzapazza.ui.panel.color.Z4ColorProgressionPanel;

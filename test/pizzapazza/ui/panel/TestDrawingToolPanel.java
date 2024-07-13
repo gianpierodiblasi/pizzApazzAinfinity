@@ -1,4 +1,4 @@
-package pizzapazza.ui.panel.util;
+package pizzapazza.ui.panel;
 
 import static def.dom.Globals.console;
 import javascript.awt.BorderLayout;
