@@ -8124,12 +8124,13 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     if (this.fontsChecked) {
       this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
     } else {
-      Z4Font.getAvailableFontFamilies(true, available => {
+      Z4UI.pleaseWait(this, true, false, false, false, "", () => Z4Font.getAvailableFontFamilies(true, available => {
         available.forEach((font, key, array) => this.fonts.push(font));
         this.fonts.sort();
         this.fontsChecked = true;
         this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
-      });
+        Z4UI.pleaseWaitCompleted();
+      }));
     }
   }
 }
@@ -12492,7 +12493,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
           (this.cardPanels[card]).addChangeListener(event => this.valueIsAdjusting = (this.cardPanels[card]).getValueIsAdjusting());
           break;
         case "COLOR":
-          this.cardPanels[card] = new Z4ColorPanel();
+          this.cardPanels[card] = new JSColorPanel();
           (this.cardPanels[card]).getStyle().minWidth = "15rem";
           break;
         case "GRADIENT-COLOR":
@@ -12515,7 +12516,10 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
       });
       this.cardPanel.add(this.cardPanels[card], card);
     }
-    if (value) {
+    if (!value) {
+    } else if (card === "COLOR") {
+      (this.cardPanels[card]).setSelectedColor(value);
+    } else {
       (this.cardPanels[card]).setValue(value);
     }
     if (show) {
@@ -12536,7 +12540,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     let colorProgressionPanel = this.cardPanels["COLOR-PROGRESSION"];
     switch(this.selectedSpatioTemporalColorCard) {
       case "COLOR":
-        spatioTemporalColor = Z4SpatioTemporalColor.fromColor((this.cardPanels[this.selectedSpatioTemporalColorCard]).getValue());
+        spatioTemporalColor = Z4SpatioTemporalColor.fromColor((this.cardPanels[this.selectedSpatioTemporalColorCard]).getSelectedColor());
         colorProgressionPanel.setProgressionSettings(pointIterator.getType(), options, true, false, false);
         break;
       case "GRADIENT-COLOR":
@@ -13137,7 +13141,7 @@ class Z4FillingPanel extends JSPanel {
 
    cardColorSelectors = new Array("FLAT", "GRADIENT", "NONE", "BIGRADIENT");
 
-   cardColorPanels = new Array(new Z4ColorPanel(), new Z4GradientColorPanel(), new JSPanel(), new Z4BiGradientColorPanel());
+   cardColorPanels = new Array(new JSColorPanel(), new Z4GradientColorPanel(), new JSPanel(), new Z4BiGradientColorPanel());
 
    width = Z4Constants.DEFAULT_IMAGE_SIZE;
 
@@ -13169,8 +13173,7 @@ class Z4FillingPanel extends JSPanel {
     panelFiller.getStyle().display = "none";
     this.add(panelFiller, new GBC(4, 0).wxy(1, 1).a(GBC.NORTH));
     let colorPanel = this.cardColorPanels[0];
-    colorPanel.setLabel(Z4Translations.FILLING_COLOR);
-    colorPanel.setValue(new Color(255, 255, 255, 255));
+    colorPanel.setSelectedColor(new Color(255, 255, 255, 255));
     colorPanel.getStyle().minWidth = "15rem";
     let gradientColorPanel = this.cardColorPanels[1];
     gradientColorPanel.addChangeListener(event => {
@@ -13288,7 +13291,7 @@ class Z4FillingPanel extends JSPanel {
    getSelectedFilling() {
     switch(this.selectedFillerSelector) {
       case "FLAT":
-        return (this.cardColorPanels[0]).getValue();
+        return (this.cardColorPanels[0]).getSelectedColor();
       case "LINEAR":
       case "VERTEX":
       case "CONIC":

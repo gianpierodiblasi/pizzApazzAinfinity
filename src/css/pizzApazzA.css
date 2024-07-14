@@ -18,6 +18,10 @@
   cursor: default;
 }
 
+.jscolorpanel .jstabbedpane {
+  height: 23rem;
+}
+
 .jslabel.jslabel-vertical {
   writing-mode: vertical-lr;
   transform: rotate(180deg);

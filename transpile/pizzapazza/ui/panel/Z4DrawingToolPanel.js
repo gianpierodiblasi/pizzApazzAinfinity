@@ -509,7 +509,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
           (this.cardPanels[card]).addChangeListener(event => this.valueIsAdjusting = (this.cardPanels[card]).getValueIsAdjusting());
           break;
         case "COLOR":
-          this.cardPanels[card] = new Z4ColorPanel();
+          this.cardPanels[card] = new JSColorPanel();
           (this.cardPanels[card]).getStyle().minWidth = "15rem";
           break;
         case "GRADIENT-COLOR":
@@ -532,7 +532,10 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
       });
       this.cardPanel.add(this.cardPanels[card], card);
     }
-    if (value) {
+    if (!value) {
+    } else if (card === "COLOR") {
+      (this.cardPanels[card]).setSelectedColor(value);
+    } else {
       (this.cardPanels[card]).setValue(value);
     }
     if (show) {
@@ -553,7 +556,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
     let colorProgressionPanel = this.cardPanels["COLOR-PROGRESSION"];
     switch(this.selectedSpatioTemporalColorCard) {
       case "COLOR":
-        spatioTemporalColor = Z4SpatioTemporalColor.fromColor((this.cardPanels[this.selectedSpatioTemporalColorCard]).getValue());
+        spatioTemporalColor = Z4SpatioTemporalColor.fromColor((this.cardPanels[this.selectedSpatioTemporalColorCard]).getSelectedColor());
         colorProgressionPanel.setProgressionSettings(pointIterator.getType(), options, true, false, false);
         break;
       case "GRADIENT-COLOR":

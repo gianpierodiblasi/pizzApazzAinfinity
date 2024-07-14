@@ -167,12 +167,13 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     if (this.fontsChecked) {
       this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
     } else {
-      Z4Font.getAvailableFontFamilies(true, available => {
+      Z4UI.pleaseWait(this, true, false, false, false, "", () => Z4Font.getAvailableFontFamilies(true, available => {
         available.forEach((font, key, array) => this.fonts.push(font));
         this.fonts.sort();
         this.fontsChecked = true;
         this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
-      });
+        Z4UI.pleaseWaitCompleted();
+      }));
     }
   }
 }

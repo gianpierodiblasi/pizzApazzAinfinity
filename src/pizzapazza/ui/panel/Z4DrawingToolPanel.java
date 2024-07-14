@@ -21,6 +21,7 @@ import javascript.swing.JSRadioButton;
 import javascript.swing.JSTabbedPane;
 import javascript.swing.JSTextField;
 import javascript.swing.colorchooser.JSColorMiniSwatchesPanel;
+import javascript.swing.colorchooser.JSColorPanel;
 import pizzapazza.color.Z4BiGradientColor;
 import pizzapazza.color.Z4ColorProgression;
 import pizzapazza.color.Z4ColorProgressionBehavior;
@@ -55,7 +56,6 @@ import pizzapazza.painter.Z4PainterType;
 import pizzapazza.painter.Z4PatternPainter;
 import pizzapazza.painter.Z4Shape2DPainter;
 import pizzapazza.ui.panel.color.Z4BiGradientColorPanel;
-import pizzapazza.ui.panel.color.Z4ColorPanel;
 import pizzapazza.ui.panel.color.Z4ColorProgressionPanel;
 import pizzapazza.ui.panel.color.Z4ColorProgressionPanelOrientation;
 import pizzapazza.ui.panel.color.Z4GradientColorPanel;
@@ -141,7 +141,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
   private final String tabbedPaneID = "z4drawingtoolpanel_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
 
   private int currentTimeoutID;
-  
+
   /**
    * Creates the object
    */
@@ -280,7 +280,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
                     new Color(0, 0, 0, 0)
             ),
             Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)),
-            new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0,false, Z4Lighting.NONE)
+            new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE)
     ));
   }
 
@@ -622,7 +622,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     this.check(this.selectedColorProgression, "COLOR-PROGRESSION", css, this.value.getProgression(), false);
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "StringEquality"})
   private String check(JSComponent selected, String card, String css, Object value, boolean show) {
     if ($exists(css)) {
       selected.cssAddClass("z4drawingtoolpanel-" + css + "-selected");
@@ -675,7 +675,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
           ((Z4AbstractValuePanel<Z4NaturalFigurePainter>) this.cardPanels.$get(card)).addChangeListener(event -> this.valueIsAdjusting = ((Z4PainterPanel<Z4NaturalFigurePainter>) this.cardPanels.$get(card)).getValueIsAdjusting());
           break;
         case "COLOR":
-          this.cardPanels.$set(card, new Z4ColorPanel());
+          this.cardPanels.$set(card, new JSColorPanel());
           ((JSComponent) this.cardPanels.$get(card)).getStyle().minWidth = "15rem";
           break;
         case "GRADIENT-COLOR":
@@ -701,7 +701,10 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
       this.cardPanel.add(this.cardPanels.$get(card), card);
     }
 
-    if ($exists(value)) {
+    if (!$exists(value)) {
+    } else if (card == "COLOR") {
+      ((JSColorPanel) this.cardPanels.$get(card)).setSelectedColor((Color) value);
+    } else {
       ((Z4AbstractValuePanel) this.cardPanels.$get(card)).setValue(value);
     }
 
@@ -728,7 +731,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     Z4ColorProgressionPanel colorProgressionPanel = (Z4ColorProgressionPanel) this.cardPanels.$get("COLOR-PROGRESSION");
     switch (this.selectedSpatioTemporalColorCard) {
       case "COLOR":
-        spatioTemporalColor = Z4SpatioTemporalColor.fromColor(((Z4ColorPanel) this.cardPanels.$get(this.selectedSpatioTemporalColorCard)).getValue());
+        spatioTemporalColor = Z4SpatioTemporalColor.fromColor(((JSColorPanel) this.cardPanels.$get(this.selectedSpatioTemporalColorCard)).getSelectedColor());
         colorProgressionPanel.setProgressionSettings(pointIterator.getType(), options, true, false, false);
         break;
       case "GRADIENT-COLOR":

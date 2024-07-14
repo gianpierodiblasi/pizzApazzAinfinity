@@ -10,14 +10,13 @@ import javascript.awt.GridBagLayout;
 import javascript.swing.ButtonGroup;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
+import javascript.swing.colorchooser.JSColorPanel;
 import pizzapazza.color.Z4BiGradientColor;
 import pizzapazza.ui.panel.color.Z4BiGradientColorPanel;
-import pizzapazza.ui.panel.color.Z4ColorPanel;
 import pizzapazza.ui.panel.color.Z4GradientColorPanel;
 import pizzapazza.ui.panel.filler.Z4AbstractFillerPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4EmptyImageProducer;
-import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import static simulation.js.$Globals.$exists;
 
@@ -32,7 +31,7 @@ public class Z4FillingPanel extends JSPanel {
   private final Array<JSPanel> cardFillerPanels = new Array<>(new JSPanel(), null, null, null, null, null, null, null, new JSPanel());
   private final Array<String> cardFillerEvalPanels = new Array<>("", "new Z4LinearFillerPanel()", "new Z4VertexBasedFillerPanel()", "new Z4ConicFillerPanel()", "new Z4SpiralFillerPanel()", "new Z4BezierFillerPanel()", "new Z4SinusoidalFillerPanel()", "new Z4TextureFillerPanel()", "");
   private final Array<String> cardColorSelectors = new Array<>("FLAT", "GRADIENT", "NONE", "BIGRADIENT");
-  private final Array<JSPanel> cardColorPanels = new Array<>(new Z4ColorPanel(), new Z4GradientColorPanel(), new JSPanel(), new Z4BiGradientColorPanel());
+  private final Array<JSPanel> cardColorPanels = new Array<>(new JSColorPanel(), new Z4GradientColorPanel(), new JSPanel(), new Z4BiGradientColorPanel());
 
   private int width = Z4Constants.DEFAULT_IMAGE_SIZE;
   private int height = Z4Constants.DEFAULT_IMAGE_SIZE;
@@ -68,9 +67,8 @@ public class Z4FillingPanel extends JSPanel {
     panelFiller.getStyle().display = "none";
     this.add(panelFiller, new GBC(4, 0).wxy(1, 1).a(GBC.NORTH));
 
-    Z4ColorPanel colorPanel = (Z4ColorPanel) this.cardColorPanels.$get(0);
-    colorPanel.setLabel(Z4Translations.FILLING_COLOR);
-    colorPanel.setValue(new Color(255, 255, 255, 255));
+    JSColorPanel colorPanel = (JSColorPanel) this.cardColorPanels.$get(0);
+    colorPanel.setSelectedColor(new Color(255, 255, 255, 255));
     colorPanel.getStyle().minWidth = "15rem";
 
     Z4GradientColorPanel gradientColorPanel = (Z4GradientColorPanel) this.cardColorPanels.$get(1);
@@ -202,7 +200,7 @@ public class Z4FillingPanel extends JSPanel {
   public Object getSelectedFilling() {
     switch (this.selectedFillerSelector) {
       case "FLAT":
-        return ((Z4AbstractValuePanel<Color>) this.cardColorPanels.$get(0)).getValue();
+        return ((JSColorPanel) this.cardColorPanels.$get(0)).getSelectedColor();
       case "LINEAR":
       case "VERTEX":
       case "CONIC":

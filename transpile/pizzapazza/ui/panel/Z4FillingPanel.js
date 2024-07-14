@@ -13,7 +13,7 @@ class Z4FillingPanel extends JSPanel {
 
    cardColorSelectors = new Array("FLAT", "GRADIENT", "NONE", "BIGRADIENT");
 
-   cardColorPanels = new Array(new Z4ColorPanel(), new Z4GradientColorPanel(), new JSPanel(), new Z4BiGradientColorPanel());
+   cardColorPanels = new Array(new JSColorPanel(), new Z4GradientColorPanel(), new JSPanel(), new Z4BiGradientColorPanel());
 
    width = Z4Constants.DEFAULT_IMAGE_SIZE;
 
@@ -45,8 +45,7 @@ class Z4FillingPanel extends JSPanel {
     panelFiller.getStyle().display = "none";
     this.add(panelFiller, new GBC(4, 0).wxy(1, 1).a(GBC.NORTH));
     let colorPanel = this.cardColorPanels[0];
-    colorPanel.setLabel(Z4Translations.FILLING_COLOR);
-    colorPanel.setValue(new Color(255, 255, 255, 255));
+    colorPanel.setSelectedColor(new Color(255, 255, 255, 255));
     colorPanel.getStyle().minWidth = "15rem";
     let gradientColorPanel = this.cardColorPanels[1];
     gradientColorPanel.addChangeListener(event => {
@@ -164,7 +163,7 @@ class Z4FillingPanel extends JSPanel {
    getSelectedFilling() {
     switch(this.selectedFillerSelector) {
       case "FLAT":
-        return (this.cardColorPanels[0]).getValue();
+        return (this.cardColorPanels[0]).getSelectedColor();
       case "LINEAR":
       case "VERTEX":
       case "CONIC":
