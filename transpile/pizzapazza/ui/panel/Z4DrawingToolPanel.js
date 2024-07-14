@@ -208,12 +208,13 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
         this.check(this.selectedColorProgression, "COLOR-PROGRESSION", null, null, true);
         break;
     }
-    this.transparent1.getStyle().display = card === "BIGRADIENT-COLOR" ? "none" : "flex";
-    this.swatchesPanel1.getStyle().display = card === "BIGRADIENT-COLOR" ? "none" : "flex";
-    this.preview1.getStyle().display = card === "BIGRADIENT-COLOR" ? "none" : "flex";
-    this.transparent2.getStyle().display = card === "BIGRADIENT-COLOR" ? "flex" : "none";
-    this.swatchesPanel2.getStyle().display = card === "BIGRADIENT-COLOR" ? "flex" : "none";
-    this.preview2.getStyle().display = card === "BIGRADIENT-COLOR" ? "flex" : "none";
+    let b = card === "COLOR" || card === "BIGRADIENT-COLOR";
+    this.transparent1.getStyle().display = b ? "none" : "flex";
+    this.swatchesPanel1.getStyle().display = b ? "none" : "flex";
+    this.preview1.getStyle().display = b ? "none" : "flex";
+    this.transparent2.getStyle().display = b ? "flex" : "none";
+    this.swatchesPanel2.getStyle().display = b ? "flex" : "none";
+    this.preview2.getStyle().display = b ? "flex" : "none";
     this.valueIsAdjusting = false;
     this.createValue();
     this.drawPreview();
