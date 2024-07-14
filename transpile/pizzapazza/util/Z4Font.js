@@ -78,6 +78,7 @@ class Z4Font {
 
   static  getFontDataUint8Array(fontFamily) {
     Z4Font.CTX.clearRect(0, 0, 100, 100);
+    Z4Font.CTX.font = "100px Arial";
     Z4Font.CTX.font = "100px " + fontFamily + ", Arial";
     Z4Font.CTX.fillText("a", 50, 50);
     return Z4Font.CTX.getImageData(0, 0, 100, 100).data;

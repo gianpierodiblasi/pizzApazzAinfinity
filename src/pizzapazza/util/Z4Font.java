@@ -92,6 +92,7 @@ public class Z4Font {
 
   private static Uint8Array getFontDataUint8Array(String fontFamily) {
     Z4Font.CTX.clearRect(0, 0, 100, 100);
+    Z4Font.CTX.font = "100px Arial";
     Z4Font.CTX.font = "100px " + fontFamily + ", Arial";
     Z4Font.CTX.fillText("a", 50, 50);
 

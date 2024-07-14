@@ -12648,6 +12648,8 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
    addFont(font, buttonGroup, panel) {
     let radio = new JSRadioButton();
     radio.setText(font);
+    radio.getStyle().fontFamily = font;
+    radio.setTooltip(font);
     radio.addActionListener(event => this.onFontChange());
     this.radios.push(radio);
     buttonGroup.add(radio);
@@ -14530,6 +14532,7 @@ class Z4Font {
 
   static  getFontDataUint8Array(fontFamily) {
     Z4Font.CTX.clearRect(0, 0, 100, 100);
+    Z4Font.CTX.font = "100px Arial";
     Z4Font.CTX.font = "100px " + fontFamily + ", Arial";
     Z4Font.CTX.fillText("a", 50, 50);
     return Z4Font.CTX.getImageData(0, 0, 100, 100).data;

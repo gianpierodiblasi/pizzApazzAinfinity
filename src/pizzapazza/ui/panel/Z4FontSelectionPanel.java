@@ -89,6 +89,8 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
   private void addFont(String font, ButtonGroup buttonGroup, JSPanel panel) {
     JSRadioButton radio = new JSRadioButton();
     radio.setText(font);
+    radio.getStyle().fontFamily = font;
+    radio.setTooltip(font);
     radio.addActionListener(event -> this.onFontChange());
 
     this.radios.push(radio);
