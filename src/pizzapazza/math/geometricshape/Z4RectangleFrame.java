@@ -1,7 +1,7 @@
 package pizzapazza.math.geometricshape;
 
 import def.js.Array;
-import pizzapazza.math.Z4Math;
+import pizzapazza.math.Z4AffineTransform;
 import pizzapazza.math.Z4Point;
 
 /**
@@ -25,20 +25,13 @@ public class Z4RectangleFrame extends Z4GeometricFrame {
   public Z4RectangleFrame(double x, double y, double w, double h, double angle, double sx, double sy) {
     super(x, y, w, h, angle, sx, sy);
 
+    Z4AffineTransform tx = Z4AffineTransform.translate(x, y).concatenate(Z4AffineTransform.rotate(angle)).concatenate(Z4AffineTransform.shear(sx, sy));
+
     Array<Z4Point> points = new Array<>();
-
-    Z4Point p = Z4Math.shear(0, 0, sx, sy);
-    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
-
-    p = Z4Math.shear(w - 1, 0, sx, sy);
-    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
-
-    p = Z4Math.shear(w - 1, h - 1, sx, sy);
-    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
-
-    p = Z4Math.shear(0, h - 1, sx, sy);
-    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
-
+    points.push(tx.transform(0, 0));
+    points.push(tx.transform(w - 1, 0));
+    points.push(tx.transform(w - 1, h - 1));
+    points.push(tx.transform(0, h - 1));
     points.push(points.$get(0));
     this.polyline = new Z4Polyline(points);
   }

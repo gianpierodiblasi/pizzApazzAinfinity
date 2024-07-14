@@ -1,6 +1,7 @@
 package pizzapazza.math.geometricshape;
 
 import def.js.Array;
+import pizzapazza.math.Z4AffineTransform;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 
@@ -30,52 +31,29 @@ public class Z4RoundRectangleFrame extends Z4GeometricFrame {
 
     double min = Math.min(w, h);
     double advance = min * Z4RoundRectangleFrame.ADVANCE;
+    Z4AffineTransform tx = Z4AffineTransform.translate(x, y).concatenate(Z4AffineTransform.rotate(angle)).concatenate(Z4AffineTransform.shear(sx, sy));
+
     Array<Z4Point> points = new Array<>();
-
-    //First point NW
-    Z4Point p = Z4Math.shear(advance, 0, sx, sy);
-    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
-
-    //Second point NE
-    p = Z4Math.shear(w - 1 - advance, 0, sx, sy);
-    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
-
-    //Arc NE
-    this.createArc(points, advance, Z4Math.HALF_THREE_PI, w - 1 - advance, advance, x, y, sx, sy);
-
-    //Third point SE
-    p = Z4Math.shear(w - 1, h - 1 - advance, sx, sy);
-    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
-
-    //Arc SE
-    this.createArc(points, advance, 0, w - 1 - advance, h - 1 - advance, x, y, sx, sy);
-
-    //fourth point SW
-    p = Z4Math.shear(advance, h - 1, sx, sy);
-    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
-
-    //Arc SW
-    this.createArc(points, advance, Z4Math.HALF_PI, advance, h - 1 - advance, x, y, sx, sy);
-
-    //fifth point NW
-    p = Z4Math.shear(0, advance, sx, sy);
-    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
-
-    //Arc NW
-    this.createArc(points, advance, Math.PI, advance, advance, x, y, sx, sy);
-
+    points.push(tx.transform(advance, 0)); //First point NW
+    points.push(tx.transform(w - 1 - advance, 0)); //Second point NE
+    this.createArc(points, tx, advance, Z4Math.HALF_THREE_PI, w - 1 - advance, advance); //Arc NE
+    points.push(tx.transform(w - 1, h - 1 - advance)); //Third point SE
+    this.createArc(points, tx, advance, 0, w - 1 - advance, h - 1 - advance); //Arc SE
+    points.push(tx.transform(advance, h - 1)); //fourth point SW
+    this.createArc(points, tx, advance, Z4Math.HALF_PI, advance, h - 1 - advance); //Arc SW
+    points.push(tx.transform(0, advance)); //fifth point NW
+    this.createArc(points, tx, advance, Math.PI, advance, advance); //Arc NW
     points.push(points.$get(0));
     this.polyline = new Z4Polyline(points);
   }
 
-  private void createArc(Array<Z4Point> points, double advance, double startAngle, double dx, double dy, double x, double y, double sx, double sy) {
+  private void createArc(Array<Z4Point> points, Z4AffineTransform tx, double advance, double startAngle, double dx, double dy) {
     for (int i = 1; i < Z4RoundRectangleFrame.ROUND_APPROX_SEGMENTS; i++) {
       double angle = startAngle + Z4Math.HALF_PI * i / Z4RoundRectangleFrame.ROUND_APPROX_SEGMENTS;
       double xx = advance * Math.cos(angle);
       double yy = advance * Math.sin(angle);
 
-      Z4Point p = Z4Math.shear(xx + dx, yy + dy, sx, sy);
-      points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
+      points.push(tx.transform(xx + dx, yy + dy));
     }
   }
 }

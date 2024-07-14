@@ -1265,13 +1265,13 @@ class Z4EllipseFrame extends Z4GeometricFrame {
     let w2 = (w - 1) / 2;
     let h2 = (h - 1) / 2;
     let incAngle = extentAngle / Z4GeometricCurve.APPROX_SEGMENTS;
+    let tx = Z4AffineTransform.translate(x, y).concatenate(Z4AffineTransform.rotate(angle)).concatenate(Z4AffineTransform.shear(sx, sy));
     let points = new Array();
     for (let i = 0; i <= Z4GeometricCurve.APPROX_SEGMENTS; i++) {
       let currentAngle = startAngle + incAngle * i;
       let xx = w2 * Math.cos(currentAngle) + w2;
       let yy = h2 * Math.sin(currentAngle) + h2;
-      let p = Z4Math.shear(xx, yy, sx, sy);
-      points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
+      points.push(tx.transform(xx, yy));
     }
     this.polyline = new Z4Polyline(points);
   }
@@ -1296,15 +1296,12 @@ class Z4RectangleFrame extends Z4GeometricFrame {
    */
   constructor(x, y, w, h, angle, sx, sy) {
     super(x, y, w, h, angle, sx, sy);
+    let tx = Z4AffineTransform.translate(x, y).concatenate(Z4AffineTransform.rotate(angle)).concatenate(Z4AffineTransform.shear(sx, sy));
     let points = new Array();
-    let p = Z4Math.shear(0, 0, sx, sy);
-    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
-    p = Z4Math.shear(w - 1, 0, sx, sy);
-    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
-    p = Z4Math.shear(w - 1, h - 1, sx, sy);
-    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
-    p = Z4Math.shear(0, h - 1, sx, sy);
-    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
+    points.push(tx.transform(0, 0));
+    points.push(tx.transform(w - 1, 0));
+    points.push(tx.transform(w - 1, h - 1));
+    points.push(tx.transform(0, h - 1));
     points.push(points[0]);
     this.polyline = new Z4Polyline(points);
   }
@@ -1335,41 +1332,36 @@ class Z4RoundRectangleFrame extends Z4GeometricFrame {
     super(x, y, w, h, angle, sx, sy);
     let min = Math.min(w, h);
     let advance = min * Z4RoundRectangleFrame.ADVANCE;
+    let tx = Z4AffineTransform.translate(x, y).concatenate(Z4AffineTransform.rotate(angle)).concatenate(Z4AffineTransform.shear(sx, sy));
     let points = new Array();
     // First point NW
-    let p = Z4Math.shear(advance, 0, sx, sy);
-    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
+    points.push(tx.transform(advance, 0));
     // Second point NE
-    p = Z4Math.shear(w - 1 - advance, 0, sx, sy);
-    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
+    points.push(tx.transform(w - 1 - advance, 0));
     // Arc NE
-    this.createArc(points, advance, Z4Math.HALF_THREE_PI, w - 1 - advance, advance, x, y, sx, sy);
+    this.createArc(points, tx, advance, Z4Math.HALF_THREE_PI, w - 1 - advance, advance);
     // Third point SE
-    p = Z4Math.shear(w - 1, h - 1 - advance, sx, sy);
-    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
+    points.push(tx.transform(w - 1, h - 1 - advance));
     // Arc SE
-    this.createArc(points, advance, 0, w - 1 - advance, h - 1 - advance, x, y, sx, sy);
+    this.createArc(points, tx, advance, 0, w - 1 - advance, h - 1 - advance);
     // fourth point SW
-    p = Z4Math.shear(advance, h - 1, sx, sy);
-    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
+    points.push(tx.transform(advance, h - 1));
     // Arc SW
-    this.createArc(points, advance, Z4Math.HALF_PI, advance, h - 1 - advance, x, y, sx, sy);
+    this.createArc(points, tx, advance, Z4Math.HALF_PI, advance, h - 1 - advance);
     // fifth point NW
-    p = Z4Math.shear(0, advance, sx, sy);
-    points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
+    points.push(tx.transform(0, advance));
     // Arc NW
-    this.createArc(points, advance, Math.PI, advance, advance, x, y, sx, sy);
+    this.createArc(points, tx, advance, Math.PI, advance, advance);
     points.push(points[0]);
     this.polyline = new Z4Polyline(points);
   }
 
-   createArc(points, advance, startAngle, dx, dy, x, y, sx, sy) {
+   createArc(points, tx, advance, startAngle, dx, dy) {
     for (let i = 1; i < Z4RoundRectangleFrame.ROUND_APPROX_SEGMENTS; i++) {
       let angle = startAngle + Z4Math.HALF_PI * i / Z4RoundRectangleFrame.ROUND_APPROX_SEGMENTS;
       let xx = advance * Math.cos(angle);
       let yy = advance * Math.sin(angle);
-      let p = Z4Math.shear(xx + dx, yy + dy, sx, sy);
-      points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
+      points.push(tx.transform(xx + dx, yy + dy));
     }
   }
 }
@@ -1603,6 +1595,113 @@ class Z4SinglePointShape extends Z4GeometricShape {
 
    distance(x, y) {
     return Z4Math.distance(this.x, this.y, x, y);
+  }
+}
+/**
+ * A 2D affine transform
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4AffineTransform {
+
+   m00 = 0.0;
+
+   m10 = 0.0;
+
+   m01 = 0.0;
+
+   m11 = 0.0;
+
+   m02 = 0.0;
+
+   m12 = 0.0;
+
+  constructor(m00, m10, m01, m11, m02, m12) {
+    this.m00 = m00;
+    this.m10 = m10;
+    this.m01 = m01;
+    this.m11 = m11;
+    this.m02 = m02;
+    this.m12 = m12;
+  }
+
+  /**
+   * Returns a transform representing a translation
+   *
+   * @param tx The translation in the x-axis direction
+   * @param ty The translation in the y-axis direction
+   * @return A transform representing a translation
+   */
+  static  translate(tx, ty) {
+    return new Z4AffineTransform(1, 0, 0, 1, tx, ty);
+  }
+
+  /**
+   * Returns a transform representing a rotation
+   *
+   * @param angle The angle (in radians)
+   * @return A transform representing a rotation
+   */
+  static  rotate(angle) {
+    let cos = Math.cos(angle);
+    let sin = Math.sin(angle);
+    return new Z4AffineTransform(cos, sin, sin, -cos, 0, 0);
+  }
+
+  /**
+   * Returns a transform representing a scaling
+   *
+   * @param sx The scaling factor along the x-axis direction
+   * @param sy The scaling factor along the y-axis direction
+   * @return A transform representing a scaling
+   */
+  static  scale(sx, sy) {
+    return new Z4AffineTransform(sx, 0, 0, sy, 0, 0);
+  }
+
+  /**
+   * Returns a transform representing a shearing
+   *
+   * @param shx The shift multiplier in the direction of the positive x-axis as
+   * a factor of their y coordinate
+   * @param shy The shift multiplier in the direction of the positive y-axis as
+   * a factor of their X coordinate
+   * @return A transform representing a shearing
+   */
+  static  shear(shx, shy) {
+    return new Z4AffineTransform(1, shx, shy, 1, 0, 0);
+  }
+
+  /**
+   * Concatenates an affine transform Tx to this affine transform Cx, that is
+   * Cx'(p) = Cx(Tx(p))
+   *
+   * @param Tx the affine transform to concatenate
+   * @return This concatenated transform
+   */
+   concatenate(Tx) {
+    let M00 = this.m00;
+    let M01 = this.m01;
+    let M10 = this.m10;
+    let M11 = this.m11;
+    this.m00 = M00 * Tx.m00 + M01 * Tx.m10;
+    this.m01 = M00 * Tx.m01 * +M01 * Tx.m11;
+    this.m02 += M00 * Tx.m02 + M01 * Tx.m12;
+    this.m10 = M10 * Tx.m00 + M11 * Tx.m10;
+    this.m11 = M10 * Tx.m01 + M11 * Tx.m11;
+    this.m12 += M10 * Tx.m02 + M11 * Tx.m12;
+    return this;
+  }
+
+  /**
+   * Transforms a point
+   *
+   * @param x The x-axis coordinate of the point
+   * @param y The y-axis coordinate of the point
+   * @return The transformed point
+   */
+   transform(x, y) {
+    return new Z4Point(x * this.m00 + y * this.m01 + this.m02, x * this.m10 + y * this.m11 + this.m12);
   }
 }
 /**

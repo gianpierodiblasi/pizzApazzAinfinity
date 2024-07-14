@@ -1,7 +1,7 @@
 package pizzapazza.math.geometricshape;
 
 import def.js.Array;
-import pizzapazza.math.Z4Math;
+import pizzapazza.math.Z4AffineTransform;
 import pizzapazza.math.Z4Point;
 
 /**
@@ -37,13 +37,14 @@ public class Z4EllipseFrame extends Z4GeometricFrame {
     double h2 = (h - 1) / 2;
     double incAngle = extentAngle / Z4GeometricCurve.APPROX_SEGMENTS;
 
+    Z4AffineTransform tx = Z4AffineTransform.translate(x, y).concatenate(Z4AffineTransform.rotate(angle)).concatenate(Z4AffineTransform.shear(sx, sy));
+
     Array<Z4Point> points = new Array<>();
     for (int i = 0; i <= Z4GeometricCurve.APPROX_SEGMENTS; i++) {
       double currentAngle = startAngle + incAngle * i;
       double xx = w2 * Math.cos(currentAngle) + w2;
       double yy = h2 * Math.sin(currentAngle) + h2;
-      Z4Point p = Z4Math.shear(xx, yy, sx, sy);
-      points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
+      points.push(tx.transform(xx, yy));
     }
     this.polyline = new Z4Polyline(points);
   }

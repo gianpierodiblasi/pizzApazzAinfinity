@@ -29,13 +29,13 @@ class Z4EllipseFrame extends Z4GeometricFrame {
     let w2 = (w - 1) / 2;
     let h2 = (h - 1) / 2;
     let incAngle = extentAngle / Z4GeometricCurve.APPROX_SEGMENTS;
+    let tx = Z4AffineTransform.translate(x, y).concatenate(Z4AffineTransform.rotate(angle)).concatenate(Z4AffineTransform.shear(sx, sy));
     let points = new Array();
     for (let i = 0; i <= Z4GeometricCurve.APPROX_SEGMENTS; i++) {
       let currentAngle = startAngle + incAngle * i;
       let xx = w2 * Math.cos(currentAngle) + w2;
       let yy = h2 * Math.sin(currentAngle) + h2;
-      let p = Z4Math.shear(xx, yy, sx, sy);
-      points.push(Z4Math.rotoTranslate(p.x, p.y, angle, x, y));
+      points.push(tx.transform(xx, yy));
     }
     this.polyline = new Z4Polyline(points);
   }
