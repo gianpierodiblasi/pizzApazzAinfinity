@@ -24,7 +24,7 @@ class Z4RoundRectangleFrame extends Z4GeometricFrame {
     super(x, y, w, h, angle, sx, sy);
     let min = Math.min(w, h);
     let advance = min * Z4RoundRectangleFrame.ADVANCE;
-    let tx = Z4AffineTransform.translate(x, y).concatenate(Z4AffineTransform.rotate(angle)).concatenate(Z4AffineTransform.shear(sx, sy));
+    let tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
     let points = new Array();
     // First point NW
     points.push(tx.transform(advance, 0));

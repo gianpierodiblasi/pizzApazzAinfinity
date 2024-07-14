@@ -78,19 +78,77 @@ public class Z4AffineTransform {
    * @return This concatenated transform
    */
   public Z4AffineTransform concatenate(Z4AffineTransform Tx) {
+    this.contatenateComponents(Tx.m00, Tx.m10, Tx.m01, Tx.m11, Tx.m02, Tx.m12);
+    return this;
+  }
+
+  /**
+   * Concatenates a translation Tx to this affine transform Cx, that is Cx'(p) =
+   * Cx(Tx(p))
+   *
+   * @param tx The translation in the x-axis direction
+   * @param ty The translation in the y-axis direction
+   * @return This concatenated transform
+   */
+  public Z4AffineTransform concatenateTranslate(double tx, double ty) {
+    this.contatenateComponents(1, 0, 0, 1, tx, ty);
+    return this;
+  }
+
+  /**
+   * Concatenates a rotation Tx to this affine transform Cx, that is Cx'(p) =
+   * Cx(Tx(p))
+   *
+   * @param angle The angle (in radians)
+   * @return This concatenated transform
+   */
+  public Z4AffineTransform concatenateRotate(double angle) {
+    double cos = Math.cos(angle);
+    double sin = Math.sin(angle);
+    this.contatenateComponents(cos, sin, sin, -cos, 0, 0);
+    return this;
+  }
+
+  /**
+   * Concatenates a scaling Tx to this affine transform Cx, that is Cx'(p) =
+   * Cx(Tx(p))
+   *
+   * @param sx The scaling factor along the x-axis direction
+   * @param sy The scaling factor along the y-axis direction
+   * @return This concatenated transform
+   */
+  public Z4AffineTransform concatenateScale(double sx, double sy) {
+    this.contatenateComponents(sx, 0, 0, sy, 0, 0);
+    return this;
+  }
+
+  /**
+   * Concatenates a shearing Tx to this affine transform Cx, that is Cx'(p) =
+   * Cx(Tx(p))
+   *
+   * @param shx The shift multiplier in the direction of the positive x-axis as
+   * a factor of their y coordinate
+   * @param shy The shift multiplier in the direction of the positive y-axis as
+   * a factor of their X coordinate
+   * @return This concatenated transform
+   */
+  public Z4AffineTransform concatenateShear(double shx, double shy) {
+    this.contatenateComponents(1, shx, shy, 1, 0, 0);
+    return this;
+  }
+
+  private void contatenateComponents(double T00, double T10, double T01, double T11, double T02, double T12) {
     double M00 = this.m00;
     double M01 = this.m01;
     double M10 = this.m10;
     double M11 = this.m11;
 
-    this.m00 = M00 * Tx.m00 + M01 * Tx.m10;
-    this.m01 = M00 * Tx.m01 * +M01 * Tx.m11;
-    this.m02 += M00 * Tx.m02 + M01 * Tx.m12;
-    this.m10 = M10 * Tx.m00 + M11 * Tx.m10;
-    this.m11 = M10 * Tx.m01 + M11 * Tx.m11;
-    this.m12 += M10 * Tx.m02 + M11 * Tx.m12;
-
-    return this;
+    this.m00 = M00 * T00 + M01 * T10;
+    this.m10 = M10 * T00 + M11 * T10;
+    this.m01 = M00 * T01 * +M01 * T11;
+    this.m11 = M10 * T01 + M11 * T11;
+    this.m02 += M00 * T02 + M01 * T12;
+    this.m12 += M10 * T02 + M11 * T12;
   }
 
   /**

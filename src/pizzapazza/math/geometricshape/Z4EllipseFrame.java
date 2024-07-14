@@ -37,7 +37,7 @@ public class Z4EllipseFrame extends Z4GeometricFrame {
     double h2 = (h - 1) / 2;
     double incAngle = extentAngle / Z4GeometricCurve.APPROX_SEGMENTS;
 
-    Z4AffineTransform tx = Z4AffineTransform.translate(x, y).concatenate(Z4AffineTransform.rotate(angle)).concatenate(Z4AffineTransform.shear(sx, sy));
+    Z4AffineTransform tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
 
     Array<Z4Point> points = new Array<>();
     for (int i = 0; i <= Z4GeometricCurve.APPROX_SEGMENTS; i++) {

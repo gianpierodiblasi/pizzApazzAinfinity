@@ -25,7 +25,7 @@ public class Z4RectangleFrame extends Z4GeometricFrame {
   public Z4RectangleFrame(double x, double y, double w, double h, double angle, double sx, double sy) {
     super(x, y, w, h, angle, sx, sy);
 
-    Z4AffineTransform tx = Z4AffineTransform.translate(x, y).concatenate(Z4AffineTransform.rotate(angle)).concatenate(Z4AffineTransform.shear(sx, sy));
+    Z4AffineTransform tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
 
     Array<Z4Point> points = new Array<>();
     points.push(tx.transform(0, 0));

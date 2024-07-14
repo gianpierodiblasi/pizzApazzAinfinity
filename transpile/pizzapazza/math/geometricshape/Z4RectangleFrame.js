@@ -18,7 +18,7 @@ class Z4RectangleFrame extends Z4GeometricFrame {
    */
   constructor(x, y, w, h, angle, sx, sy) {
     super(x, y, w, h, angle, sx, sy);
-    let tx = Z4AffineTransform.translate(x, y).concatenate(Z4AffineTransform.rotate(angle)).concatenate(Z4AffineTransform.shear(sx, sy));
+    let tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
     let points = new Array();
     points.push(tx.transform(0, 0));
     points.push(tx.transform(w - 1, 0));

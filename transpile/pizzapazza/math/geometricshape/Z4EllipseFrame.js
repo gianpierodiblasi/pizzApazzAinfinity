@@ -29,7 +29,7 @@ class Z4EllipseFrame extends Z4GeometricFrame {
     let w2 = (w - 1) / 2;
     let h2 = (h - 1) / 2;
     let incAngle = extentAngle / Z4GeometricCurve.APPROX_SEGMENTS;
-    let tx = Z4AffineTransform.translate(x, y).concatenate(Z4AffineTransform.rotate(angle)).concatenate(Z4AffineTransform.shear(sx, sy));
+    let tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
     let points = new Array();
     for (let i = 0; i <= Z4GeometricCurve.APPROX_SEGMENTS; i++) {
       let currentAngle = startAngle + incAngle * i;

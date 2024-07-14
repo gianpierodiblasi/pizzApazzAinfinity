@@ -31,7 +31,7 @@ public class Z4RoundRectangleFrame extends Z4GeometricFrame {
 
     double min = Math.min(w, h);
     double advance = min * Z4RoundRectangleFrame.ADVANCE;
-    Z4AffineTransform tx = Z4AffineTransform.translate(x, y).concatenate(Z4AffineTransform.rotate(angle)).concatenate(Z4AffineTransform.shear(sx, sy));
+    Z4AffineTransform tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
 
     Array<Z4Point> points = new Array<>();
     points.push(tx.transform(advance, 0)); //First point NW

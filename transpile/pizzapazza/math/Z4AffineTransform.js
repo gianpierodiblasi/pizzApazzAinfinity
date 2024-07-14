@@ -81,17 +81,76 @@ class Z4AffineTransform {
    * @return This concatenated transform
    */
    concatenate(Tx) {
+    this.contatenateComponents(Tx.m00, Tx.m10, Tx.m01, Tx.m11, Tx.m02, Tx.m12);
+    return this;
+  }
+
+  /**
+   * Concatenates a translation Tx to this affine transform Cx, that is Cx'(p) =
+   * Cx(Tx(p))
+   *
+   * @param tx The translation in the x-axis direction
+   * @param ty The translation in the y-axis direction
+   * @return This concatenated transform
+   */
+   concatenateTranslate(tx, ty) {
+    this.contatenateComponents(1, 0, 0, 1, tx, ty);
+    return this;
+  }
+
+  /**
+   * Concatenates a rotation Tx to this affine transform Cx, that is Cx'(p) =
+   * Cx(Tx(p))
+   *
+   * @param angle The angle (in radians)
+   * @return This concatenated transform
+   */
+   concatenateRotate(angle) {
+    let cos = Math.cos(angle);
+    let sin = Math.sin(angle);
+    this.contatenateComponents(cos, sin, sin, -cos, 0, 0);
+    return this;
+  }
+
+  /**
+   * Concatenates a scaling Tx to this affine transform Cx, that is Cx'(p) =
+   * Cx(Tx(p))
+   *
+   * @param sx The scaling factor along the x-axis direction
+   * @param sy The scaling factor along the y-axis direction
+   * @return This concatenated transform
+   */
+   concatenateScale(sx, sy) {
+    this.contatenateComponents(sx, 0, 0, sy, 0, 0);
+    return this;
+  }
+
+  /**
+   * Concatenates a shearing Tx to this affine transform Cx, that is Cx'(p) =
+   * Cx(Tx(p))
+   *
+   * @param shx The shift multiplier in the direction of the positive x-axis as
+   * a factor of their y coordinate
+   * @param shy The shift multiplier in the direction of the positive y-axis as
+   * a factor of their X coordinate
+   * @return This concatenated transform
+   */
+   concatenateShear(shx, shy) {
+    this.contatenateComponents(1, shx, shy, 1, 0, 0);
+    return this;
+  }
+
+   contatenateComponents(T00, T10, T01, T11, T02, T12) {
     let M00 = this.m00;
     let M01 = this.m01;
     let M10 = this.m10;
     let M11 = this.m11;
-    this.m00 = M00 * Tx.m00 + M01 * Tx.m10;
-    this.m01 = M00 * Tx.m01 * +M01 * Tx.m11;
-    this.m02 += M00 * Tx.m02 + M01 * Tx.m12;
-    this.m10 = M10 * Tx.m00 + M11 * Tx.m10;
-    this.m11 = M10 * Tx.m01 + M11 * Tx.m11;
-    this.m12 += M10 * Tx.m02 + M11 * Tx.m12;
-    return this;
+    this.m00 = M00 * T00 + M01 * T10;
+    this.m10 = M10 * T00 + M11 * T10;
+    this.m01 = M00 * T01 * +M01 * T11;
+    this.m11 = M10 * T01 + M11 * T11;
+    this.m02 += M00 * T02 + M01 * T12;
+    this.m12 += M10 * T02 + M11 * T12;
   }
 
   /**
