@@ -280,6 +280,7 @@ public class Z4GradientColorPanel extends Z4AbstractValuePanel<Z4GradientColor> 
     }, () -> radios.some((radio, index, array) -> radio.isSelected()), response -> {
       if (response == JSOptionPane.OK_OPTION) {
         this.setValue(Z4GradientColor.getHistory().$get(radios.findIndex(radio -> radio.isSelected())));
+        this.onchange();
       }
     });
   }

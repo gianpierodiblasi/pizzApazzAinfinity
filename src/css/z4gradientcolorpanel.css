@@ -11,7 +11,7 @@
   overflow-y: scroll;
 }
 .z4gradientcolorpanel-historypanel {
-  width:100%;
+  width: 100%;
 }
 .z4gradientcolorpanel-historypanel canvas {
   border-radius: var(--roundness);

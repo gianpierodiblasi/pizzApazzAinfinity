@@ -642,6 +642,14 @@
   white-space: nowrap;
   overflow: hidden;
   
+}.z4gradientcolorchooser {
+  min-width: 5rem;
+}
+
+.z4gradientcolorchooser summary canvas {
+  border-radius: calc(var(--roundness) + .1rem);
+  border: 1px solid var(--main-action-bgcolor);
+  background-image: url(../image/util/chessboard.png);
 }.z4gradientcolorpanel canvas {
   border: 1px solid var(--main-action-bgcolor);
   background-image: url(../image/util/chessboard.png);
@@ -655,7 +663,7 @@
   overflow-y: scroll;
 }
 .z4gradientcolorpanel-historypanel {
-  width:100%;
+  width: 100%;
 }
 .z4gradientcolorpanel-historypanel canvas {
   border-radius: var(--roundness);

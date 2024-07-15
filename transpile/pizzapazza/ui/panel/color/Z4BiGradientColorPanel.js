@@ -350,6 +350,7 @@ class Z4BiGradientColorPanel extends Z4AbstractValuePanel {
     }, () => radios.some((radio, index, array) => radio.isSelected()), response => {
       if (response === JSOptionPane.OK_OPTION) {
         this.setValue(Z4BiGradientColor.getHistory()[radios.findIndex(radio => radio.isSelected())]);
+        this.onchange();
       }
     });
   }

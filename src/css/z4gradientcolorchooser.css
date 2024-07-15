@@ -1,0 +1,9 @@
+.z4gradientcolorchooser {
+  min-width: 5rem;
+}
+
+.z4gradientcolorchooser summary canvas {
+  border-radius: calc(var(--roundness) + .1rem);
+  border: 1px solid var(--main-action-bgcolor);
+  background-image: url(../image/util/chessboard.png);
+}
