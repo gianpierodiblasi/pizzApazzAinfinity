@@ -62,7 +62,7 @@ public class Z4RibbonLayerPanel extends Z4AbstractRibbonPanel {
 
     this.showLayerBounds.setText(Z4Translations.SHOW_LAYER_BOUNDS);
     this.showLayerBounds.addActionListener(event -> this.canvas.setShowLayerBounds(this.showLayerBounds.isSelected()));
-    this.add(this.showLayerBounds, new GBC(4, 2).a(GBC.NORTH));
+    this.add(this.showLayerBounds, new GBC(4, 2).a(GBC.NORTH).i(0, 5, 0, 5));
 
     Z4UI.addVLine(this, new GBC(5, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 

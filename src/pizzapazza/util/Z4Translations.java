@@ -175,6 +175,7 @@ public class Z4Translations {
   public static String SHEARING = "";
   public static String HORIZONTAL = "";
   public static String VERTICAL = "";
+  public static String APPLY = "";
 
   // Text
   public static String BOLD = "";
@@ -464,6 +465,7 @@ public class Z4Translations {
     Z4Translations.SHEARING = "Shearing";
     Z4Translations.HORIZONTAL = "Horizontal";
     Z4Translations.VERTICAL = "Vertical";
+    Z4Translations.APPLY = "Apply";
 
     // Text
     Z4Translations.BOLD = "Bold";
@@ -737,6 +739,7 @@ public class Z4Translations {
     Z4Translations.SHEARING = "Inclinazione";
     Z4Translations.HORIZONTAL = "Orizzontale";
     Z4Translations.VERTICAL = "Verticale";
+    Z4Translations.APPLY = "Applica";
 
     // Text
     Z4Translations.BOLD = "Grassetto";

@@ -294,6 +294,8 @@ class Z4Translations {
 
   static  VERTICAL = "";
 
+  static  APPLY = "";
+
   // Text
   static  BOLD = "";
 
@@ -656,6 +658,7 @@ class Z4Translations {
     Z4Translations.SHEARING = "Shearing";
     Z4Translations.HORIZONTAL = "Horizontal";
     Z4Translations.VERTICAL = "Vertical";
+    Z4Translations.APPLY = "Apply";
     // Text
     Z4Translations.BOLD = "Bold";
     Z4Translations.ITALIC = "Italic";
@@ -911,6 +914,7 @@ class Z4Translations {
     Z4Translations.SHEARING = "Inclinazione";
     Z4Translations.HORIZONTAL = "Orizzontale";
     Z4Translations.VERTICAL = "Verticale";
+    Z4Translations.APPLY = "Applica";
     // Text
     Z4Translations.BOLD = "Grassetto";
     Z4Translations.ITALIC = "Corsivo";
