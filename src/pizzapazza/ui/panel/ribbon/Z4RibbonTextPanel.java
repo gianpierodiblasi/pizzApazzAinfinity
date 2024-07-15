@@ -110,18 +110,16 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     int x = 3;
     Z4UI.addLabel(this, Z4Translations.TEXT, new GBC(x, 0).h(2).a(GBC.WEST).i(5, 5, 2, 0));
 
+    this.textColor.setCloseOnChange(false);
+    this.textColor.setSelectedColor(this.getBlackBiGradientColor());
+    this.add(this.textColor, new GBC(x + 1, 0).h(2).a(GBC.EAST).i(1, 0, 1, 5));
+
     this.textText.addActionListener(event -> this.onTextInfoChange());
-    this.add(this.textText, new GBC(x, 2).a(GBC.WEST).f(GBC.VERTICAL).i(0, 0, 0, 5));
+    this.add(this.textText, new GBC(x, 2).w(2).f(GBC.VERTICAL).i(0, 0, 0, 5));
 
     this.textEmpty.setText(Z4Translations.EMPTY_HIS);
     this.textEmpty.addActionListener(event -> this.onTextInfoChange());
     this.add(this.textEmpty, new GBC(x, 3).a(GBC.WEST));
-
-    Z4UI.addLabel(this, Z4Translations.COLOR, new GBC(x + 1, 0).h(2).a(GBC.WEST).i(5, 5, 2, 0));
-
-    this.textColor.setCloseOnChange(false);
-    this.textColor.setSelectedColor(this.getBlackBiGradientColor());
-    this.add(this.textColor, new GBC(x + 1, 2).h(2).a(GBC.NORTH).i(0, 0, 0, 5));
 
     Z4UI.addLabel(this, Z4Translations.BORDER, new GBC(x + 2, 0).h(2).a(GBC.WEST).i(5, 5, 2, 0));
 

@@ -33,7 +33,7 @@ public class Z4GradientColorChooser extends JSDropDown {
   private final Array<ChangeListener> listeners = new Array<>();
 
   private static final int WIDTH = 45;
-  private static final int HEIGHT = 14;
+  private static final int HEIGHT = 12;
 
   /**
    * Creates the object

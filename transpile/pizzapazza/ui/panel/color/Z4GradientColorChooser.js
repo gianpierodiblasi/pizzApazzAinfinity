@@ -19,7 +19,7 @@ class Z4GradientColorChooser extends JSDropDown {
 
   static  WIDTH = 45;
 
-  static  HEIGHT = 14;
+  static  HEIGHT = 12;
 
   /**
    * Creates the object
