@@ -156,6 +156,8 @@ class Z4Translations {
 
   static  RESET = "";
 
+  static  RESET_MESSAGE = "";
+
   static  WIDTH = "";
 
   static  HEIGHT = "";
@@ -589,6 +591,7 @@ class Z4Translations {
     Z4Translations.FILENAME = "File Name";
     Z4Translations.QUALITY = "Quality";
     Z4Translations.RESET = "Reset";
+    Z4Translations.RESET_MESSAGE = "Do you really want to restore the initial parameters?";
     Z4Translations.WIDTH = "Width";
     Z4Translations.HEIGHT = "Height";
     Z4Translations.RESOLUTION = "Resolution";
@@ -845,6 +848,7 @@ class Z4Translations {
     Z4Translations.FILENAME = "Nome File";
     Z4Translations.QUALITY = "Qualit\u00E0";
     Z4Translations.RESET = "Ripristina";
+    Z4Translations.RESET_MESSAGE = "Vuoi davvero ripristinare i parametri iniziali?";
     Z4Translations.WIDTH = "Larghezza";
     Z4Translations.HEIGHT = "Altezza";
     Z4Translations.RESOLUTION = "Risoluzione";

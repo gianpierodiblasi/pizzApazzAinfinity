@@ -180,25 +180,29 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
   }
 
    onReset() {
-    this.textInfo.font = new Z4Font("Arial", 12, false, false);
-    this.rotation.setValue(new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false));
-    this.textText.setText("");
-    this.textEmpty.setSelected(false);
-    this.textColor.setSelectedColor(this.getBlackBiGradientColor());
-    this.textBorder.setValue(0);
-    this.textBorderColor.setSelectedColor(new Color(0, 0, 0, 255));
-    this.textShearX.setValue(0);
-    this.textShearY.setValue(0);
-    this.shadow.setSelected(false);
-    this.shadowText.setText("");
-    this.shadowEmpty.setSelected(false);
-    this.shadowReflex.setSelected(false);
-    this.shadowColor.setSelectedColor(new Color(0, 0, 0, 128));
-    this.shadowOffsetX.setValue(0);
-    this.shadowOffsetY.setValue(0);
-    this.shadowShearX.setValue(0);
-    this.shadowShearY.setValue(0);
-    this.onTextInfoChange();
+    JSOptionPane.showConfirmDialog(Z4Translations.RESET_MESSAGE, Z4Translations.RESET, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
+      if (response === JSOptionPane.YES_OPTION) {
+        this.textInfo.font = new Z4Font("Arial", 12, false, false);
+        this.rotation.setValue(new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false));
+        this.textText.setText("");
+        this.textEmpty.setSelected(false);
+        this.textColor.setSelectedColor(this.getBlackBiGradientColor());
+        this.textBorder.setValue(0);
+        this.textBorderColor.setSelectedColor(new Color(0, 0, 0, 255));
+        this.textShearX.setValue(0);
+        this.textShearY.setValue(0);
+        this.shadow.setSelected(false);
+        this.shadowText.setText("");
+        this.shadowEmpty.setSelected(false);
+        this.shadowReflex.setSelected(false);
+        this.shadowColor.setSelectedColor(new Color(0, 0, 0, 128));
+        this.shadowOffsetX.setValue(0);
+        this.shadowOffsetY.setValue(0);
+        this.shadowShearX.setValue(0);
+        this.shadowShearY.setValue(0);
+        this.onTextInfoChange();
+      }
+    });
   }
 
    getBlackBiGradientColor() {
