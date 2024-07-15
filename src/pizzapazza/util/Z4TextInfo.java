@@ -1,7 +1,7 @@
 package pizzapazza.util;
 
 import javascript.awt.Color;
-import pizzapazza.color.Z4BiGradientColor;
+import pizzapazza.color.Z4GradientColor;
 import pizzapazza.math.Z4Rotation;
 
 /**
@@ -16,7 +16,7 @@ public class Z4TextInfo {
 
   public String textText;
   public boolean textEmpty;
-  public Z4BiGradientColor textColor;
+  public Z4GradientColor textColor;
   public int textBorder;
   public Color textBorderColor;
   public int textShearX;

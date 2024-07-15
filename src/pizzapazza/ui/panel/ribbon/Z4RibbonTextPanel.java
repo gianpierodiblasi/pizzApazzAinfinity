@@ -12,7 +12,6 @@ import javascript.swing.JSOptionPane;
 import javascript.swing.JSSpinner;
 import javascript.swing.JSTextField;
 import javascript.swing.SpinnerNumberModel;
-import pizzapazza.color.Z4BiGradientColor;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.math.Z4FancifulValue;
 import pizzapazza.math.Z4RandomValue;
@@ -27,7 +26,7 @@ import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.component.Z4CanvasOverlayMode;
 import pizzapazza.ui.component.Z4DropDown;
 import pizzapazza.ui.panel.Z4FontSelectionPanel;
-import pizzapazza.ui.panel.color.Z4BiGradientColorChooser;
+import pizzapazza.ui.panel.color.Z4GradientColorChooser;
 import pizzapazza.ui.panel.math.Z4RotationPanel;
 import pizzapazza.ui.panel.math.Z4RotationPanelOrientation;
 import pizzapazza.util.Z4Font;
@@ -49,7 +48,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
   private final JSTextField textText = new JSTextField();
   private final JSCheckBox textEmpty = new JSCheckBox();
-  private final Z4BiGradientColorChooser textColor = new Z4BiGradientColorChooser();
+  private final Z4GradientColorChooser textColor = new Z4GradientColorChooser();
   private final JSSpinner textBorder = new JSSpinner();
   private final JSColorChooser textBorderColor = new JSColorChooser();
   private final JSSpinner textShearX = new JSSpinner();
@@ -121,7 +120,6 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     Z4UI.addLabel(this, Z4Translations.COLOR, new GBC(x + 1, 0).h(2).a(GBC.WEST).i(5, 5, 2, 0));
 
     this.textColor.setCloseOnChange(false);
-    this.textColor.setSpaceTimeLabelsVisible(false);
     this.textColor.setSelectedColor(this.getBlackBiGradientColor());
     this.add(this.textColor, new GBC(x + 1, 2).h(2).a(GBC.NORTH).i(0, 0, 0, 5));
 
@@ -135,7 +133,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textBorderColor.setCloseOnChange(false);
     this.textBorderColor.setSelectedColor(new Color(0, 0, 0, 255));
     this.textBorderColor.addChangeListener(event -> this.onTextInfoChange());
-    this.add(this.textBorderColor, new GBC(x + 2, 3).f(GBC.HORIZONTAL).i(0, 0, 0, 5));
+    this.add(this.textBorderColor, new GBC(x + 2, 3).f(GBC.HORIZONTAL).i(1, 0, 0, 5));
 
     Z4UI.addLabel(this, Z4Translations.SHEARING, new GBC(x + 3, 0).w(2).a(GBC.WEST).i(5, 5, 0, 0));
     Z4UI.addLabel(this, Z4Translations.HORIZONTAL, new GBC(x + 3, 1).a(GBC.WEST).i(0, 5, 0, 0)).getStyle().fontSize = "smaller";
@@ -158,10 +156,11 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.shadow.addActionListener(event -> this.onTextInfoChange());
     this.add(this.shadow, new GBC(x, 0).h(2).a(GBC.WEST));
 
-//    this.textBorderColor.setCloseOnChange(false);
-//    this.textBorderColor.setSelectedColor(new Color(0, 0, 0, 255));
-//    this.textBorderColor.addChangeListener(event -> this.onTextInfoChange());
-//    this.add(this.textBorderColor, new GBC(x + 2, 3).f(GBC.HORIZONTAL).i(0, 0, 0, 5));
+    this.shadowColor.setCloseOnChange(false);
+    this.shadowColor.setSelectedColor(new Color(0, 0, 0, 128));
+    this.shadowColor.addChangeListener(event -> this.onTextInfoChange());
+    this.add(this.shadowColor, new GBC(x + 1, 0).h(2).a(GBC.EAST).i(1, 0, 1, 5));
+
     this.shadowText.addActionListener(event -> this.onTextInfoChange());
     this.add(this.shadowText, new GBC(x, 2).f(GBC.VERTICAL).w(2).a(GBC.WEST).i(0, 0, 0, 5));
 
@@ -259,7 +258,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.shadowText.setText("");
     this.shadowEmpty.setSelected(false);
     this.shadowReflex.setSelected(false);
-    this.shadowColor.setSelectedColor(new Color(0, 0, 0, 255));
+    this.shadowColor.setSelectedColor(new Color(0, 0, 0, 128));
     this.shadowOffsetX.setValue(0);
     this.shadowOffsetY.setValue(0);
     this.shadowShearX.setValue(0);
@@ -268,17 +267,10 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.onTextInfoChange();
   }
 
-  private Z4BiGradientColor getBlackBiGradientColor() {
-    Z4GradientColor black0 = new Z4GradientColor();
-    black0.addColor(new Color(0, 0, 0, 255), 0);
-
-    Z4GradientColor black1 = new Z4GradientColor();
-    black1.addColor(new Color(0, 0, 0, 255), 0);
-
-    Z4BiGradientColor biblack = new Z4BiGradientColor();
-    biblack.addColor(black0, 0);
-    biblack.addColor(black1, 1);
-    return biblack;
+  private Z4GradientColor getBlackBiGradientColor() {
+    Z4GradientColor black = new Z4GradientColor();
+    black.addColor(new Color(0, 0, 0, 255), 0);
+    return black;
   }
 
   /**
