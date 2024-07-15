@@ -7,9 +7,13 @@ class Z4TextInfo {
 
    font = null;
 
+   rotation = null;
+
    textText = null;
 
    textEmpty = false;
+
+   textColor = null;
 
    textBorder = 0;
 
@@ -24,6 +28,10 @@ class Z4TextInfo {
    shadowText = null;
 
    shadowEmpty = false;
+
+   shadowOffsetX = 0;
+
+   shadowOffsetY = 0;
 
    shadowShearX = 0;
 
