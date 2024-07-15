@@ -25,6 +25,8 @@ public class Z4TextInfo {
   public boolean shadow;
   public String shadowText;
   public boolean shadowEmpty;
+  public Color shadowColor;
+  public boolean shadowReflex;
   public int shadowOffsetX;
   public int shadowOffsetY;
   public int shadowShearX;

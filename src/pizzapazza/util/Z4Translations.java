@@ -60,6 +60,8 @@ public class Z4Translations {
 
   // Ribbon Text
   public static String TEXT = "";
+  public static String FONT_SELECTION = "";
+  public static String REFLEX = "";
 
   // Ribbon History
   public static String HISTORY = "";
@@ -167,7 +169,8 @@ public class Z4Translations {
   public static String DRAWING_TOOL_OPEN_ERROR_MESSAGE = "";
   public static String DO_NOT_SHOW_AGAIN_MESSAGE = "";
   public static String FILTER = "";
-  public static String EMPTY = "";
+  public static String EMPTY_HIS = "";
+  public static String EMPTY_HER = "";
   public static String SHEARING = "";
   public static String HORIZONTAL = "";
   public static String VERTICAL = "";
@@ -176,7 +179,6 @@ public class Z4Translations {
   public static String BOLD = "";
   public static String ITALIC = "";
   public static String STRING_EXAMPLE = "";
-  public static String FONT_SELECTION = "";
 
   // Color
   public static String COLOR = "";
@@ -343,6 +345,8 @@ public class Z4Translations {
 
     // Ribbon Text
     Z4Translations.TEXT = "Text";
+    Z4Translations.FONT_SELECTION = "Font Selection";
+    Z4Translations.REFLEX = "Reflex";
 
     // Ribbon History
     Z4Translations.HISTORY = "History";
@@ -453,7 +457,8 @@ public class Z4Translations {
     Z4Translations.DRAWING_TOOL_OPEN_ERROR_MESSAGE = "It is not possible to open the drawing tool";
     Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE = "Do not show this message again";
     Z4Translations.FILTER = "Filter";
-    Z4Translations.EMPTY = "Empty";
+    Z4Translations.EMPTY_HIS = "Empty";
+    Z4Translations.EMPTY_HER = "Empty";
     Z4Translations.SHEARING = "Shearing";
     Z4Translations.HORIZONTAL = "Horizontal";
     Z4Translations.VERTICAL = "Vertical";
@@ -462,7 +467,6 @@ public class Z4Translations {
     Z4Translations.BOLD = "Bold";
     Z4Translations.ITALIC = "Italic";
     Z4Translations.STRING_EXAMPLE = "Sample string of the selected font";
-    Z4Translations.FONT_SELECTION = "Font Selection";
 
     // Color
     Z4Translations.COLOR = "Color";
@@ -613,6 +617,8 @@ public class Z4Translations {
 
     // Ribbon Text
     Z4Translations.TEXT = "Testo";
+    Z4Translations.FONT_SELECTION = "Selezione Font";
+    Z4Translations.REFLEX = "Riflessa";
 
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";
@@ -723,7 +729,8 @@ public class Z4Translations {
     Z4Translations.DRAWING_TOOL_OPEN_ERROR_MESSAGE = "Non \u00E8 possibile aprire lo strumento di disegno";
     Z4Translations.DO_NOT_SHOW_AGAIN_MESSAGE = "Non mostrare pi\u00F9 questo messaggio";
     Z4Translations.FILTER = "Filtra";
-    Z4Translations.EMPTY = "Vuoto";
+    Z4Translations.EMPTY_HIS = "Vuoto";
+    Z4Translations.EMPTY_HER = "Vuota";
     Z4Translations.SHEARING = "Inclinazione";
     Z4Translations.HORIZONTAL = "Orizzontale";
     Z4Translations.VERTICAL = "Verticale";
@@ -732,7 +739,6 @@ public class Z4Translations {
     Z4Translations.BOLD = "Grassetto";
     Z4Translations.ITALIC = "Corsivo";
     Z4Translations.STRING_EXAMPLE = "Stringa di esempio del font selezionato";
-    Z4Translations.FONT_SELECTION = "Selezione Font";
 
     // Color
     Z4Translations.COLOR = "Colore";

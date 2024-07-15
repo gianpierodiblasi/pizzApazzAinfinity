@@ -29,6 +29,10 @@ class Z4TextInfo {
 
    shadowEmpty = false;
 
+   shadowColor = null;
+
+   shadowReflex = false;
+
    shadowOffsetX = 0;
 
    shadowOffsetY = 0;
