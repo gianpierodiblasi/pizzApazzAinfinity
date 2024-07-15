@@ -113,6 +113,7 @@ public class Z4Translations {
   public static String PATTERNS = "";
   public static String EDIT = "";
   public static String FIT = "";
+  public static String OFFSET = "";
   public static String OFFSET_X = "";
   public static String OFFSET_Y = "";
   public static String BASIC = "";
@@ -401,6 +402,7 @@ public class Z4Translations {
     Z4Translations.PATTERNS = "Patterns";
     Z4Translations.EDIT = "Edit";
     Z4Translations.FIT = "Fit";
+    Z4Translations.OFFSET = "Offset";
     Z4Translations.OFFSET_X = "Offset X";
     Z4Translations.OFFSET_Y = "Offset Y";
     Z4Translations.BASIC = "Basic";
@@ -673,6 +675,7 @@ public class Z4Translations {
     Z4Translations.PATTERNS = "Trame";
     Z4Translations.EDIT = "Modifica";
     Z4Translations.FIT = "Adatta";
+    Z4Translations.OFFSET = "Offset";
     Z4Translations.OFFSET_X = "Offset X";
     Z4Translations.OFFSET_Y = "Offset Y";
     Z4Translations.BASIC = "Base";

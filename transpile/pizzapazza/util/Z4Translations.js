@@ -170,6 +170,8 @@ class Z4Translations {
 
   static  FIT = "";
 
+  static  OFFSET = "";
+
   static  OFFSET_X = "";
 
   static  OFFSET_Y = "";
@@ -592,6 +594,7 @@ class Z4Translations {
     Z4Translations.PATTERNS = "Patterns";
     Z4Translations.EDIT = "Edit";
     Z4Translations.FIT = "Fit";
+    Z4Translations.OFFSET = "Offset";
     Z4Translations.OFFSET_X = "Offset X";
     Z4Translations.OFFSET_Y = "Offset Y";
     Z4Translations.BASIC = "Basic";
@@ -846,6 +849,7 @@ class Z4Translations {
     Z4Translations.PATTERNS = "Trame";
     Z4Translations.EDIT = "Modifica";
     Z4Translations.FIT = "Adatta";
+    Z4Translations.OFFSET = "Offset";
     Z4Translations.OFFSET_X = "Offset X";
     Z4Translations.OFFSET_Y = "Offset Y";
     Z4Translations.BASIC = "Base";

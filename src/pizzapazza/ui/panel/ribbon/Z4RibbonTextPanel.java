@@ -177,18 +177,25 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.shadowReflex.addActionListener(event -> this.onTextInfoChange());
     this.add(this.shadowReflex, new GBC(x + 1, 4).h(2).a(GBC.EAST).i(0, 0, 0, 5));
 
-    Z4UI.addLabel(this, Z4Translations.OFFSET_X, new GBC(x + 2, 0).h(2).a(GBC.WEST).i(5, 5, 2, 0));
-    Z4UI.addLabel(this, Z4Translations.OFFSET_Y, new GBC(x + 3, 0).h(2).a(GBC.WEST).i(5, 5, 2, 0));
-
+    dropDown = new Z4DropDown(".z4ribbontextpanel-offset");
+    label = new JSLabel();
+    label.setText(Z4Translations.OFFSET);
+    dropDown.appendChildInTree("summary", label);
+    panel = new JSPanel();
+    panel.cssAddClass("z4ribbontextpanel-offset");
+    panel.setLayout(new GridBagLayout());
+    Z4UI.addLabel(panel, Z4Translations.HORIZONTAL, new GBC(0, 0).a(GBC.WEST));
+    Z4UI.addLabel(panel, Z4Translations.VERTICAL, new GBC(1, 0).a(GBC.WEST));
     this.shadowOffsetX.cssAddClass("jsspinner_w_4rem");
     this.shadowOffsetX.setModel(new SpinnerNumberModel(0, -200, 200, 1));
     this.shadowOffsetX.addChangeListener(event -> this.onTextInfoChange());
-    this.add(this.shadowOffsetX, new GBC(x + 2, 2).h(2).a(GBC.WEST).i(0, 0, 0, 5));
-
+    panel.add(this.shadowOffsetX, new GBC(0, 1).a(GBC.WEST).i(0, 0, 0, 5));
     this.shadowOffsetY.cssAddClass("jsspinner_w_4rem");
     this.shadowOffsetY.setModel(new SpinnerNumberModel(0, -200, 200, 1));
     this.shadowOffsetY.addChangeListener(event -> this.onTextInfoChange());
-    this.add(this.shadowOffsetY, new GBC(x + 3, 2).h(2).a(GBC.WEST).i(0, 0, 0, 5));
+    panel.add(this.shadowOffsetY, new GBC(1, 1).a(GBC.WEST));
+    dropDown.appendChild(panel);
+    this.add(dropDown, new GBC(x + 2, 2).h(2).f(GBC.VERTICAL).i(0, 0, 0, 5));
 
     dropDown = new Z4DropDown(".z4ribbontextpanel-shearing");
     label = new JSLabel();
@@ -208,11 +215,11 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.shadowShearY.addChangeListener(event -> this.onTextInfoChange());
     panel.add(this.shadowShearY, new GBC(1, 1).a(GBC.WEST));
     dropDown.appendChild(panel);
-    this.add(dropDown, new GBC(x + 4, 2).h(2).f(GBC.VERTICAL));
-    
-    Z4UI.addVLine(this, new GBC(x + 5, 0).h(6).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    this.add(dropDown, new GBC(x + 3, 2).h(2).f(GBC.VERTICAL));
 
-    x = 13;
+    Z4UI.addVLine(this, new GBC(x + 4, 0).h(6).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+
+    x = 12;
     this.apply.setContentAreaFilled(false);
     this.apply.setText("APPLY");
     this.apply.addActionListener(event -> {
