@@ -9,6 +9,7 @@ import javascript.swing.JSCheckBox;
 import javascript.swing.JSColorChooser;
 import javascript.swing.JSLabel;
 import javascript.swing.JSOptionPane;
+import javascript.swing.JSPanel;
 import javascript.swing.JSSpinner;
 import javascript.swing.JSTextField;
 import javascript.swing.SpinnerNumberModel;
@@ -97,13 +98,13 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     });
     this.add(this.font, new GBC(0, 0).h(3).f(GBC.HORIZONTAL).i(0, 5, 0, 5));
 
-    Z4DropDown rotationDropDown = new Z4DropDown(".z4rotationpanel");
+    Z4DropDown dropDown = new Z4DropDown(".z4rotationpanel");
     JSLabel label = new JSLabel();
     label.setText(Z4Translations.ROTATION);
-    rotationDropDown.appendChildInTree("summary", label);
+    dropDown.appendChildInTree("summary", label);
     this.rotation.addChangeListener(event -> this.onTextInfoChange());
-    rotationDropDown.appendChild(this.rotation);
-    this.add(rotationDropDown, new GBC(0, 3).h(3).f(GBC.HORIZONTAL).i(0, 5, 0, 5));
+    dropDown.appendChild(this.rotation);
+    this.add(dropDown, new GBC(0, 3).h(3).f(GBC.HORIZONTAL).i(0, 5, 0, 5));
 
     Z4UI.addVLine(this, new GBC(1, 0).h(6).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
@@ -133,23 +134,29 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textBorderColor.addChangeListener(event -> this.onTextInfoChange());
     this.add(this.textBorderColor, new GBC(x + 2, 4).h(2).f(GBC.HORIZONTAL).i(1, 0, 0, 5));
 
-    Z4UI.addLabel(this, Z4Translations.SHEARING, new GBC(x + 3, 0).w(2).a(GBC.WEST).i(5, 5, 0, 0));
-    Z4UI.addLabel(this, Z4Translations.HORIZONTAL, new GBC(x + 3, 1).a(GBC.WEST).i(0, 5, 0, 0)).getStyle().fontSize = "smaller";
-    Z4UI.addLabel(this, Z4Translations.VERTICAL, new GBC(x + 4, 1).a(GBC.WEST).i(0, 5, 0, 0)).getStyle().fontSize = "smaller";
-
+    dropDown = new Z4DropDown(".z4ribbontextpanel-shearing");
+    label = new JSLabel();
+    label.setText(Z4Translations.SHEARING);
+    dropDown.appendChildInTree("summary", label);
+    JSPanel panel = new JSPanel();
+    panel.cssAddClass("z4ribbontextpanel-shearing");
+    panel.setLayout(new GridBagLayout());
+    Z4UI.addLabel(panel, Z4Translations.HORIZONTAL, new GBC(0, 0).a(GBC.WEST));
+    Z4UI.addLabel(panel, Z4Translations.VERTICAL, new GBC(1, 0).a(GBC.WEST));
     this.textShearX.cssAddClass("jsspinner_w_4rem");
     this.textShearX.setModel(new SpinnerNumberModel(0, -200, 200, 1));
     this.textShearX.addChangeListener(event -> this.onTextInfoChange());
-    this.add(this.textShearX, new GBC(x + 3, 2).h(2).a(GBC.WEST).i(0, 0, 0, 5));
-
+    panel.add(this.textShearX, new GBC(0, 1).a(GBC.WEST).i(0, 0, 0, 5));
     this.textShearY.cssAddClass("jsspinner_w_4rem");
     this.textShearY.setModel(new SpinnerNumberModel(0, -200, 200, 1));
     this.textShearY.addChangeListener(event -> this.onTextInfoChange());
-    this.add(this.textShearY, new GBC(x + 4, 2).h(2).a(GBC.WEST));
+    panel.add(this.textShearY, new GBC(1, 1).a(GBC.WEST));
+    dropDown.appendChild(panel);
+    this.add(dropDown, new GBC(x + 3, 2).h(2).f(GBC.VERTICAL));
 
-    Z4UI.addVLine(this, new GBC(x + 5, 0).h(6).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addVLine(this, new GBC(x + 4, 0).h(6).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
-    x = 8;
+    x = 7;
     this.shadow.setText(Z4Translations.SHADOW);
     this.shadow.addActionListener(event -> this.onTextInfoChange());
     this.add(this.shadow, new GBC(x, 0).h(2).a(GBC.WEST));
@@ -183,23 +190,29 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.shadowOffsetY.addChangeListener(event -> this.onTextInfoChange());
     this.add(this.shadowOffsetY, new GBC(x + 3, 2).h(2).a(GBC.WEST).i(0, 0, 0, 5));
 
-    Z4UI.addLabel(this, Z4Translations.SHEARING, new GBC(x + 4, 0).w(2).a(GBC.WEST).i(5, 5, 0, 0));
-    Z4UI.addLabel(this, Z4Translations.HORIZONTAL, new GBC(x + 4, 1).a(GBC.WEST).i(0, 5, 0, 0)).getStyle().fontSize = "smaller";
-    Z4UI.addLabel(this, Z4Translations.VERTICAL, new GBC(x + 5, 1).a(GBC.WEST).i(0, 5, 0, 0)).getStyle().fontSize = "smaller";
-
+    dropDown = new Z4DropDown(".z4ribbontextpanel-shearing");
+    label = new JSLabel();
+    label.setText(Z4Translations.SHEARING);
+    dropDown.appendChildInTree("summary", label);
+    panel = new JSPanel();
+    panel.cssAddClass("z4ribbontextpanel-shearing");
+    panel.setLayout(new GridBagLayout());
+    Z4UI.addLabel(panel, Z4Translations.HORIZONTAL, new GBC(0, 0).a(GBC.WEST));
+    Z4UI.addLabel(panel, Z4Translations.VERTICAL, new GBC(1, 0).a(GBC.WEST));
     this.shadowShearX.cssAddClass("jsspinner_w_4rem");
     this.shadowShearX.setModel(new SpinnerNumberModel(0, -200, 200, 1));
     this.shadowShearX.addChangeListener(event -> this.onTextInfoChange());
-    this.add(this.shadowShearX, new GBC(x + 4, 2).h(2).a(GBC.WEST).i(0, 0, 0, 5));
-
+    panel.add(this.shadowShearX, new GBC(0, 1).a(GBC.WEST).i(0, 0, 0, 5));
     this.shadowShearY.cssAddClass("jsspinner_w_4rem");
     this.shadowShearY.setModel(new SpinnerNumberModel(0, -200, 200, 1));
     this.shadowShearY.addChangeListener(event -> this.onTextInfoChange());
-    this.add(this.shadowShearY, new GBC(x + 5, 2).h(2).a(GBC.WEST));
+    panel.add(this.shadowShearY, new GBC(1, 1).a(GBC.WEST));
+    dropDown.appendChild(panel);
+    this.add(dropDown, new GBC(x + 4, 2).h(2).f(GBC.VERTICAL));
+    
+    Z4UI.addVLine(this, new GBC(x + 5, 0).h(6).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
-    Z4UI.addVLine(this, new GBC(x + 6, 0).h(6).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
-
-    x = 15;
+    x = 13;
     this.apply.setContentAreaFilled(false);
     this.apply.setText("APPLY");
     this.apply.addActionListener(event -> {
