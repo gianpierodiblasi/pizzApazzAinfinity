@@ -73,26 +73,26 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
         }
       });
     });
-    this.add(this.font, new GBC(0, 0).f(GBC.HORIZONTAL).i(1, 5, 0, 5));
+    this.add(this.font, new GBC(0, 1).f(GBC.BOTH).i(0, 5, 0, 5));
     let dropDown = new Z4DropDown(".z4rotationpanel");
     let label = new JSLabel();
     label.setText(Z4Translations.ROTATION);
     dropDown.appendChildInTree("summary", label);
     this.rotation.addChangeListener(event => this.onTextInfoChange());
     dropDown.appendChild(this.rotation);
-    this.add(dropDown, new GBC(0, 1).f(GBC.BOTH).i(0, 5, 0, 5));
+    this.add(dropDown, new GBC(0, 2).f(GBC.HORIZONTAL).a(GBC.NORTH).i(1, 5, 0, 5));
     Z4UI.addVLine(this, new GBC(1, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     let x = 2;
     Z4UI.addLabel(this, Z4Translations.TEXT, new GBC(x, 0).a(GBC.WEST).i(5, 5, 2, 0));
-    this.textColor.setCloseOnChange(false);
-    this.textColor.setSelectedColor(this.getBlackBiGradientColor());
-    this.add(this.textColor, new GBC(x + 1, 0).a(GBC.EAST).i(1, 0, 1, 5));
     this.textText.addActionListener(event => this.onTextInfoChange());
     this.add(this.textText, new GBC(x, 1).w(2).f(GBC.VERTICAL).i(0, 5, 0, 5));
     this.textEmpty.setText(Z4Translations.EMPTY_HIS);
     this.textEmpty.addActionListener(event => this.onTextInfoChange());
-    this.add(this.textEmpty, new GBC(x, 2).a(GBC.WEST).i(0, 5, 0, 0));
-    this.addDropDown("z4ribbontextpanel-shearing", Z4Translations.SHEARING, this.textShearX, this.textShearY, x + 2, 1, 0);
+    this.add(this.textEmpty, new GBC(x, 2).a(GBC.NORTHWEST).i(0, 5, 0, 0));
+    this.textColor.setCloseOnChange(false);
+    this.textColor.setSelectedColor(this.getBlackBiGradientColor());
+    this.add(this.textColor, new GBC(x + 1, 2).a(GBC.NORTHEAST).i(1, 0, 0, 5));
+    this.addDropDown("z4ribbontextpanel-shearing", Z4Translations.SHEARING, this.textShearX, this.textShearY, x + 2, 1, 0, GBC.CENTER, GBC.VERTICAL);
     Z4UI.addLabel(this, Z4Translations.BORDER, new GBC(x + 3, 0).a(GBC.WEST).i(5, 5, 2, 0));
     this.textBorder.cssAddClass("jsspinner_w_4rem");
     this.textBorder.setModel(new SpinnerNumberModel(0, 1, 20, 1));
@@ -101,41 +101,43 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textBorderColor.setCloseOnChange(false);
     this.textBorderColor.setSelectedColor(new Color(0, 0, 0, 255));
     this.textBorderColor.addChangeListener(event => this.onTextInfoChange());
-    this.add(this.textBorderColor, new GBC(x + 3, 2).f(GBC.HORIZONTAL).i(1, 0, 0, 5));
+    this.add(this.textBorderColor, new GBC(x + 3, 2).f(GBC.HORIZONTAL).a(GBC.NORTH).i(1, 0, 0, 5));
     Z4UI.addVLine(this, new GBC(x + 4, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     x = 7;
+    this.shadow.getStyle().maxHeight = ".1rem";
     this.shadow.setText(Z4Translations.SHADOW);
     this.shadow.addActionListener(event => this.onTextInfoChange());
     this.add(this.shadow, new GBC(x, 0).a(GBC.WEST).i(0, 5, 0, 0));
-    this.shadowColor.setCloseOnChange(false);
-    this.shadowColor.setSelectedColor(new Color(0, 0, 0, 128));
-    this.shadowColor.addChangeListener(event => this.onTextInfoChange());
-    this.add(this.shadowColor, new GBC(x + 1, 0).a(GBC.EAST).i(1, 0, 1, 5));
+    this.shadowReflex.getStyle().maxHeight = ".1rem";
+    this.shadowReflex.setText(Z4Translations.REFLEX);
+    this.shadowReflex.addActionListener(event => this.onTextInfoChange());
+    this.add(this.shadowReflex, new GBC(x + 1, 0).a(GBC.EAST).i(0, 0, 0, 5));
     this.shadowText.addActionListener(event => this.onTextInfoChange());
     this.add(this.shadowText, new GBC(x, 1).f(GBC.VERTICAL).w(2).a(GBC.WEST).i(0, 5, 0, 5));
     this.shadowEmpty.setText(Z4Translations.EMPTY_HER);
     this.shadowEmpty.addActionListener(event => this.onTextInfoChange());
-    this.add(this.shadowEmpty, new GBC(x, 2).a(GBC.WEST).i(0, 5, 0, 0));
-    this.shadowReflex.setText(Z4Translations.REFLEX);
-    this.shadowReflex.addActionListener(event => this.onTextInfoChange());
-    this.add(this.shadowReflex, new GBC(x + 1, 2).a(GBC.EAST).i(0, 0, 0, 5));
-    this.addDropDown("z4ribbontextpanel-offset", Z4Translations.OFFSET, this.shadowOffsetX, this.shadowOffsetY, x + 2, 0, 1);
-    this.addDropDown("z4ribbontextpanel-shearing", Z4Translations.SHEARING, this.shadowShearX, this.shadowShearY, x + 2, 1, 0);
+    this.add(this.shadowEmpty, new GBC(x, 2).a(GBC.NORTHWEST).i(0, 5, 0, 0));
+    this.shadowColor.setCloseOnChange(false);
+    this.shadowColor.setSelectedColor(new Color(0, 0, 0, 128));
+    this.shadowColor.addChangeListener(event => this.onTextInfoChange());
+    this.add(this.shadowColor, new GBC(x + 1, 2).a(GBC.NORTHEAST).i(1, 0, 0, 5));
+    this.addDropDown("z4ribbontextpanel-shearing", Z4Translations.SHEARING, this.shadowShearX, this.shadowShearY, x + 2, 1, 0, GBC.CENTER, GBC.BOTH);
+    this.addDropDown("z4ribbontextpanel-offset", Z4Translations.OFFSET, this.shadowOffsetX, this.shadowOffsetY, x + 2, 2, 1, GBC.NORTH, GBC.HORIZONTAL);
     Z4UI.addVLine(this, new GBC(x + 3, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     x = 11;
     this.apply.setContentAreaFilled(false);
     this.apply.setText(Z4Translations.APPLY);
     this.apply.addActionListener(event => {
     });
-    this.add(this.apply, new GBC(x, 0).f(GBC.HORIZONTAL).i(0, 5, 0, 0));
+    this.add(this.apply, new GBC(x, 1).f(GBC.BOTH).i(0, 5, 0, 0));
     this.reset.setContentAreaFilled(false);
     this.reset.setText(Z4Translations.RESET);
     this.reset.addActionListener(event => this.onReset());
-    this.add(this.reset, new GBC(x, 2).f(GBC.HORIZONTAL).i(0, 5, 0, 0));
+    this.add(this.reset, new GBC(x, 2).a(GBC.NORTH).f(GBC.HORIZONTAL).i(1, 5, 0, 0));
     Z4UI.addLabel(this, "", new GBC(x + 1, 0).wx(1));
   }
 
-   addDropDown(dropDownContentSelector, title, xSpin, ySpin, x, y, upddown) {
+   addDropDown(dropDownContentSelector, title, xSpin, ySpin, x, y, top, anchor, fill) {
     let dropDown = new Z4DropDown("." + dropDownContentSelector);
     let label = new JSLabel();
     label.setText(title);
@@ -154,7 +156,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     ySpin.addChangeListener(event => this.onTextInfoChange());
     panel.add(ySpin, new GBC(1, 1).a(GBC.WEST));
     dropDown.appendChild(panel);
-    this.add(dropDown, new GBC(x, y).f(GBC.VERTICAL).i(upddown, 0, upddown, 5));
+    this.add(dropDown, new GBC(x, y).a(anchor).f(fill).i(top, 0, 0, 5));
   }
 
    onTextInfoChange() {
