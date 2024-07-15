@@ -7,6 +7,7 @@ import javascript.awt.GridBagLayout;
 import javascript.swing.JSButton;
 import javascript.swing.JSCheckBox;
 import javascript.swing.JSColorChooser;
+import javascript.swing.JSLabel;
 import javascript.swing.JSOptionPane;
 import javascript.swing.JSSpinner;
 import javascript.swing.JSTextField;
@@ -24,6 +25,7 @@ import pizzapazza.math.Z4SignedRandomValue;
 import pizzapazza.math.Z4SignedValue;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.component.Z4CanvasOverlayMode;
+import pizzapazza.ui.component.Z4DropDown;
 import pizzapazza.ui.panel.Z4FontSelectionPanel;
 import pizzapazza.ui.panel.color.Z4BiGradientColorChooser;
 import pizzapazza.ui.panel.math.Z4RotationPanel;
@@ -92,11 +94,15 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
         }
       });
     });
-    this.add(this.font, new GBC(0, 2).f(GBC.VERTICAL));
+    this.add(this.font, new GBC(0, 2).f(GBC.VERTICAL).i(0, 0, 0, 5));
 
-    this.rotation.setLabel(Z4Translations.ROTATION);
+    Z4DropDown rotationDropDown = new Z4DropDown(".z4rotationpanel");
+    JSLabel label = new JSLabel();
+    label.setText(Z4Translations.ROTATION);
+    rotationDropDown.appendChildInTree("summary", label);
     this.rotation.addChangeListener(event -> this.onTextInfoChange());
-    this.add(this.rotation, new GBC(1, 0).h(4));
+    rotationDropDown.appendChild(this.rotation);
+    this.add(rotationDropDown, new GBC(1, 2).f(GBC.VERTICAL));
 
     Z4UI.addVLine(this, new GBC(2, 0).h(4).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 

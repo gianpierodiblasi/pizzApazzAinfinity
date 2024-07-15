@@ -69,10 +69,14 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
         }
       });
     });
-    this.add(this.font, new GBC(0, 2).f(GBC.VERTICAL));
-    this.rotation.setLabel(Z4Translations.ROTATION);
+    this.add(this.font, new GBC(0, 2).f(GBC.VERTICAL).i(0, 0, 0, 5));
+    let rotationDropDown = new Z4DropDown(".z4rotationpanel");
+    let label = new JSLabel();
+    label.setText(Z4Translations.ROTATION);
+    rotationDropDown.appendChildInTree("summary", label);
     this.rotation.addChangeListener(event => this.onTextInfoChange());
-    this.add(this.rotation, new GBC(1, 0).h(4));
+    rotationDropDown.appendChild(this.rotation);
+    this.add(rotationDropDown, new GBC(1, 2).f(GBC.VERTICAL));
     Z4UI.addVLine(this, new GBC(2, 0).h(4).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     let x = 3;
     Z4UI.addLabel(this, Z4Translations.TEXT, new GBC(x, 0).h(2).a(GBC.WEST).i(5, 5, 2, 0));
