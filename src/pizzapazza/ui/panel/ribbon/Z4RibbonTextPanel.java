@@ -96,7 +96,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
         }
       });
     });
-    this.add(this.font, new GBC(0, 1).f(GBC.BOTH).i(0, 5, 0, 5));
+    this.add(this.font, new GBC(0, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 5));
 
     Z4DropDown dropDown = new Z4DropDown(".z4rotationpanel");
     JSLabel label = new JSLabel();
@@ -169,7 +169,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.apply.setText(Z4Translations.APPLY);
     this.apply.addActionListener(event -> {
     });
-    this.add(this.apply, new GBC(x, 1).f(GBC.BOTH).i(0, 5, 0, 0));
+    this.add(this.apply, new GBC(x, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 0));
 
     this.reset.setContentAreaFilled(false);
     this.reset.setText(Z4Translations.RESET);
