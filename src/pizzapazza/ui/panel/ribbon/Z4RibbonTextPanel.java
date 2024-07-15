@@ -93,102 +93,110 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
       });
     });
     this.add(this.font, new GBC(0, 2).f(GBC.VERTICAL));
-    Z4UI.addVLine(this, new GBC(1, 0).h(4).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
-    Z4UI.addLabel(this, Z4Translations.TEXT, new GBC(2, 0).h(2).a(GBC.WEST).i(5, 5, 2, 0));
+    this.rotation.setLabel(Z4Translations.ROTATION);
+    this.rotation.addChangeListener(event -> this.onTextInfoChange());
+    this.add(this.rotation, new GBC(1, 0).h(4));
+
+    Z4UI.addVLine(this, new GBC(2, 0).h(4).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+
+    int x = 3;
+    Z4UI.addLabel(this, Z4Translations.TEXT, new GBC(x, 0).h(2).a(GBC.WEST).i(5, 5, 2, 0));
 
     this.textText.addActionListener(event -> this.onTextInfoChange());
-    this.add(this.textText, new GBC(2, 2).a(GBC.WEST).f(GBC.VERTICAL).i(0, 0, 0, 5));
+    this.add(this.textText, new GBC(x, 2).a(GBC.WEST).f(GBC.VERTICAL).i(0, 0, 0, 5));
 
     this.textEmpty.setText(Z4Translations.EMPTY);
     this.textEmpty.addActionListener(event -> this.onTextInfoChange());
-    this.add(this.textEmpty, new GBC(2, 3).a(GBC.WEST));
+    this.add(this.textEmpty, new GBC(x, 3).a(GBC.WEST));
 
-    Z4UI.addLabel(this, Z4Translations.COLOR, new GBC(3, 0).h(2).a(GBC.WEST).i(5, 5, 2, 0));
+    Z4UI.addLabel(this, Z4Translations.COLOR, new GBC(x + 1, 0).h(2).a(GBC.WEST).i(5, 5, 2, 0));
 
     this.textColor.setCloseOnChange(false);
     this.textColor.setSpaceTimeLabelsVisible(false);
     this.textColor.setSelectedColor(this.getBlackBiGradientColor());
-    this.add(this.textColor, new GBC(3, 2).h(2).a(GBC.NORTH).i(0, 0, 0, 5));
+    this.add(this.textColor, new GBC(x + 1, 2).h(2).a(GBC.NORTH).i(0, 0, 0, 5));
 
-    Z4UI.addLabel(this, Z4Translations.BORDER, new GBC(5, 0).h(2).a(GBC.WEST).i(5, 5, 2, 0));
+    Z4UI.addLabel(this, Z4Translations.BORDER, new GBC(x + 2, 0).h(2).a(GBC.WEST).i(5, 5, 2, 0));
 
     this.textBorder.cssAddClass("jsspinner_w_4rem");
     this.textBorder.setModel(new SpinnerNumberModel(0, 1, 20, 1));
     this.textBorder.addChangeListener(event -> this.onTextInfoChange());
-    this.add(this.textBorder, new GBC(5, 2).a(GBC.WEST).i(0, 0, 0, 5));
+    this.add(this.textBorder, new GBC(x + 2, 2).a(GBC.WEST).i(0, 0, 0, 5));
 
     this.textBorderColor.setCloseOnChange(false);
     this.textBorderColor.setSelectedColor(new Color(0, 0, 0, 255));
     this.textBorderColor.addChangeListener(event -> this.onTextInfoChange());
-    this.add(this.textBorderColor, new GBC(5, 3).f(GBC.HORIZONTAL).i(0, 0, 0, 5));
+    this.add(this.textBorderColor, new GBC(x + 2, 3).f(GBC.HORIZONTAL).i(0, 0, 0, 5));
 
-    Z4UI.addLabel(this, Z4Translations.SHEARING, new GBC(6, 0).w(2).a(GBC.WEST).i(5, 5, 0, 0));
-    Z4UI.addLabel(this, Z4Translations.HORIZONTAL, new GBC(6, 1).a(GBC.WEST).i(0, 5, 0, 0)).getStyle().fontSize = "smaller";
-    Z4UI.addLabel(this, Z4Translations.VERTICAL, new GBC(7, 1).a(GBC.WEST).i(0, 5, 0, 0)).getStyle().fontSize = "smaller";
+    Z4UI.addLabel(this, Z4Translations.SHEARING, new GBC(x + 3, 0).w(2).a(GBC.WEST).i(5, 5, 0, 0));
+    Z4UI.addLabel(this, Z4Translations.HORIZONTAL, new GBC(x + 3, 1).a(GBC.WEST).i(0, 5, 0, 0)).getStyle().fontSize = "smaller";
+    Z4UI.addLabel(this, Z4Translations.VERTICAL, new GBC(x + 4, 1).a(GBC.WEST).i(0, 5, 0, 0)).getStyle().fontSize = "smaller";
 
     this.textShearX.cssAddClass("jsspinner_w_4rem");
     this.textShearX.setModel(new SpinnerNumberModel(0, -200, 200, 1));
     this.textShearX.addChangeListener(event -> this.onTextInfoChange());
-    this.add(this.textShearX, new GBC(6, 2).a(GBC.WEST).i(0, 0, 0, 5));
+    this.add(this.textShearX, new GBC(x + 3, 2).a(GBC.WEST).i(0, 0, 0, 5));
 
     this.textShearY.cssAddClass("jsspinner_w_4rem");
     this.textShearY.setModel(new SpinnerNumberModel(0, -200, 200, 1));
     this.textShearY.addChangeListener(event -> this.onTextInfoChange());
-    this.add(this.textShearY, new GBC(7, 2).a(GBC.WEST));
+    this.add(this.textShearY, new GBC(x + 4, 2).a(GBC.WEST));
 
-    Z4UI.addVLine(this, new GBC(11, 0).h(4).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addVLine(this, new GBC(x + 5, 0).h(4).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
+    x = 9;
     this.shadow.setText(Z4Translations.SHADOW);
     this.shadow.addActionListener(event -> this.onTextInfoChange());
-    this.add(this.shadow, new GBC(12, 0).h(2).a(GBC.WEST));
+    this.add(this.shadow, new GBC(x, 0).h(2).a(GBC.WEST));
 
     this.shadowText.addActionListener(event -> this.onTextInfoChange());
-    this.add(this.shadowText, new GBC(12, 2).f(GBC.VERTICAL).a(GBC.WEST).i(0, 0, 0, 5));
+    this.add(this.shadowText, new GBC(x, 2).f(GBC.VERTICAL).a(GBC.WEST).i(0, 0, 0, 5));
 
     this.shadowEmpty.setText(Z4Translations.EMPTY);
     this.shadowEmpty.addActionListener(event -> this.onTextInfoChange());
-    this.add(this.shadowEmpty, new GBC(12, 3).a(GBC.WEST));
+    this.add(this.shadowEmpty, new GBC(x, 3).a(GBC.WEST));
 
-    Z4UI.addLabel(this, Z4Translations.OFFSET_X, new GBC(13, 0).h(2).a(GBC.WEST).i(5, 5, 2, 0));
-    Z4UI.addLabel(this, Z4Translations.OFFSET_Y, new GBC(14, 0).h(2).a(GBC.WEST).i(5, 5, 2, 0));
+    Z4UI.addLabel(this, Z4Translations.OFFSET_X, new GBC(x + 1, 0).h(2).a(GBC.WEST).i(5, 5, 2, 0));
+    Z4UI.addLabel(this, Z4Translations.OFFSET_Y, new GBC(x + 2, 0).h(2).a(GBC.WEST).i(5, 5, 2, 0));
 
     this.shadowOffsetX.cssAddClass("jsspinner_w_4rem");
     this.shadowOffsetX.setModel(new SpinnerNumberModel(0, -200, 200, 1));
     this.shadowOffsetX.addChangeListener(event -> this.onTextInfoChange());
-    this.add(this.shadowOffsetX, new GBC(13, 2).a(GBC.WEST).i(0, 0, 0, 5));
+    this.add(this.shadowOffsetX, new GBC(x + 1, 2).a(GBC.WEST).i(0, 0, 0, 5));
 
     this.shadowOffsetY.cssAddClass("jsspinner_w_4rem");
     this.shadowOffsetY.setModel(new SpinnerNumberModel(0, -200, 200, 1));
     this.shadowOffsetY.addChangeListener(event -> this.onTextInfoChange());
-    this.add(this.shadowOffsetY, new GBC(14, 2).a(GBC.WEST).i(0, 0, 0, 5));
+    this.add(this.shadowOffsetY, new GBC(x + 2, 2).a(GBC.WEST).i(0, 0, 0, 5));
 
-    Z4UI.addLabel(this, Z4Translations.SHEARING, new GBC(15, 0).w(2).a(GBC.WEST).i(5, 5, 0, 0));
-    Z4UI.addLabel(this, Z4Translations.HORIZONTAL, new GBC(15, 1).a(GBC.WEST).i(0, 5, 0, 0)).getStyle().fontSize = "smaller";
-    Z4UI.addLabel(this, Z4Translations.VERTICAL, new GBC(16, 1).a(GBC.WEST).i(0, 5, 0, 0)).getStyle().fontSize = "smaller";
+    Z4UI.addLabel(this, Z4Translations.SHEARING, new GBC(x + 3, 0).w(2).a(GBC.WEST).i(5, 5, 0, 0));
+    Z4UI.addLabel(this, Z4Translations.HORIZONTAL, new GBC(x + 3, 1).a(GBC.WEST).i(0, 5, 0, 0)).getStyle().fontSize = "smaller";
+    Z4UI.addLabel(this, Z4Translations.VERTICAL, new GBC(x + 4, 1).a(GBC.WEST).i(0, 5, 0, 0)).getStyle().fontSize = "smaller";
 
     this.shadowShearX.cssAddClass("jsspinner_w_4rem");
     this.shadowShearX.setModel(new SpinnerNumberModel(0, -200, 200, 1));
     this.shadowShearX.addChangeListener(event -> this.onTextInfoChange());
-    this.add(this.shadowShearX, new GBC(15, 2).a(GBC.WEST).i(0, 0, 0, 5));
+    this.add(this.shadowShearX, new GBC(x + 3, 2).a(GBC.WEST).i(0, 0, 0, 5));
 
     this.shadowShearY.cssAddClass("jsspinner_w_4rem");
     this.shadowShearY.setModel(new SpinnerNumberModel(0, -200, 200, 1));
     this.shadowShearY.addChangeListener(event -> this.onTextInfoChange());
-    this.add(this.shadowShearY, new GBC(16, 2).a(GBC.WEST));
+    this.add(this.shadowShearY, new GBC(x + 4, 2).a(GBC.WEST));
 
-    Z4UI.addVLine(this, new GBC(21, 0).h(4).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addVLine(this, new GBC(x + 5, 0).h(4).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
+    x = 15;
     this.apply.setContentAreaFilled(false);
     this.apply.setText("APPLY");
     this.apply.addActionListener(event -> {
     });
-    this.add(this.apply, new GBC(22, 2).i(0, 0, 0, 5));
+    this.add(this.apply, new GBC(x, 2).i(0, 0, 0, 5));
 
     this.reset.setContentAreaFilled(false);
     this.reset.setText(Z4Translations.RESET);
     this.reset.addActionListener(event -> this.onReset());
-    this.add(this.reset, new GBC(23, 2));
+    this.add(this.reset, new GBC(x + 1, 2));
   }
 
   private void onTextInfoChange() {
@@ -270,7 +278,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
       this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
     } else {
       Z4UI.pleaseWait(this, true, false, false, false, "", () -> Z4Font.getAvailableFontFamilies(false, available -> {
-        available.forEach((font, key, array) -> this.fonts.push(font));
+        available.forEach((f, key, array) -> this.fonts.push(f));
         this.fonts.sort();
 
         this.fontsChecked = true;
