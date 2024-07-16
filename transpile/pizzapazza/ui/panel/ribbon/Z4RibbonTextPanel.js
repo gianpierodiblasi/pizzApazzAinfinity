@@ -63,6 +63,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbontextpanel");
     this.textInfo.font = new Z4Font("Arial", 12, false, false);
+    this.textInfo.shape = new Z4Line(50, 50, 450, 450);
     this.font.setContentAreaFilled(false);
     this.font.setText(Z4Translations.FONT_SELECTION);
     this.font.addActionListener(event => {

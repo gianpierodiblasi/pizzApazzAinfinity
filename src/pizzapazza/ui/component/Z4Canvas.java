@@ -1184,7 +1184,11 @@ public class Z4Canvas extends JSComponent {
 
     if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
     } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT) && $exists(this.textInfo) && $exists(this.textInfo.shape)) {
+      this.ctxOverlay.save();
+      this.ctxOverlay.scale(this.zoom, this.zoom);
+      
       this.textManager.drawText(this.ctxOverlay, true);
+      this.ctxOverlay.restore();
     }
   }
 }

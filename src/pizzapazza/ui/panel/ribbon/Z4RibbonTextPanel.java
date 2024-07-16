@@ -23,6 +23,7 @@ import pizzapazza.math.Z4Sign;
 import pizzapazza.math.Z4SignBehavior;
 import pizzapazza.math.Z4SignedRandomValue;
 import pizzapazza.math.Z4SignedValue;
+import pizzapazza.math.geometricshape.Z4Line;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.component.Z4CanvasOverlayMode;
 import pizzapazza.ui.component.Z4DropDown;
@@ -83,6 +84,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.cssAddClass("z4ribbontextpanel");
 
     this.textInfo.font = new Z4Font("Arial", 12, false, false);
+    this.textInfo.shape = new Z4Line(50, 50, 450, 450);
 
     this.font.setContentAreaFilled(false);
     this.font.setText(Z4Translations.FONT_SELECTION);

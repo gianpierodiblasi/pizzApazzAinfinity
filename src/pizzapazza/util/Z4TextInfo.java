@@ -12,25 +12,25 @@ import pizzapazza.math.geometricshape.Z4GeometricShape;
  */
 public class Z4TextInfo {
 
-  public Z4Font font;
-  public Z4Rotation rotation;
-  public Z4GeometricShape shape;
+  public Z4Font font; // NON USATO
+  public Z4Rotation rotation; // NON USATO
+  public Z4GeometricShape shape; // NON USATO
   
-  public String textText;
-  public boolean textEmpty;
-  public Z4GradientColor textColor;
-  public int textBorder;
-  public Color textBorderColor;
-  public int textShearX;
-  public int textShearY;
+  public String textText; // NON USATO
+  public boolean textEmpty; // NON USATO
+  public Z4GradientColor textColor; // NON USATO
+  public int textBorder; // NON USATO
+  public Color textBorderColor; // NON USATO
+  public int textShearX; // NON USATO
+  public int textShearY; // NON USATO
 
-  public boolean shadow;
-  public String shadowText;
-  public boolean shadowEmpty;
-  public Color shadowColor;
-  public boolean shadowReflex;
-  public int shadowOffsetX;
-  public int shadowOffsetY;
-  public int shadowShearX;
-  public int shadowShearY;
+  public boolean shadow; // NON USATO
+  public String shadowText; // NON USATO
+  public boolean shadowEmpty; // NON USATO
+  public Color shadowColor; // NON USATO
+  public boolean shadowReflex; // NON USATO
+  public int shadowOffsetX; // NON USATO
+  public int shadowOffsetY; // NON USATO
+  public int shadowShearX; // NON USATO
+  public int shadowShearY; // NON USATO
 }

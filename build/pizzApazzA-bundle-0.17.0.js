@@ -3830,7 +3830,10 @@ class Z4Canvas extends JSComponent {
     this.ctxOverlay.clearRect(0, 0, this.canvasOverlay.width, this.canvasOverlay.height);
     if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
     } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT) && this.textInfo && this.textInfo.shape) {
+      this.ctxOverlay.save();
+      this.ctxOverlay.scale(this.zoom, this.zoom);
       this.textManager.drawText(this.ctxOverlay, true);
+      this.ctxOverlay.restore();
     }
   }
 }
@@ -5049,6 +5052,20 @@ class Z4CanvasTextManager {
    * otherwise
    */
    drawText(ctx, drawPath) {
+    if (this.textInfo.shadow) {
+      if (this.textInfo.shadowText.length() === 0) {
+        this.textInfo.shadowText = this.textInfo.textText;
+      }
+      // Shape[] shape = TextFactory.getTestoOutline(g.getFontRenderContext(), textInfo.shadowText, textInfo.font, pathS, textInfo.rotationType, textInfo.constantAngle, textInfo.rotationAngles, textInfo.shearXShadow, textInfo.shearYShadow, textInfo.reflex, textInfo.gShape, textInfo.shadowLocation);
+      // TextFactory.draw(g, textInfo.color, shape, pathS, textInfo.fullGlobalColor, textInfo.shadingOnLetter, textInfo.emptyShadow, textInfo.negative, textInfo.deltaColor);
+    }
+    // TextFactory.draw(g, null, shape, pathT, textInfo.fullGlobalColor, textInfo.shadingOnLetter, textInfo.emptyText, false, 0);
+    // 
+    // if (textInfo.textBorder) {
+    // g.setPaint(textInfo.textColorBorder);
+    // g.setStroke(new BasicStroke(textInfo.textThicknessBorder, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+    // g.draw(pathT);
+    // }
   }
 }
 /**
@@ -8663,6 +8680,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbontextpanel");
     this.textInfo.font = new Z4Font("Arial", 12, false, false);
+    this.textInfo.shape = new Z4Line(50, 50, 450, 450);
     this.font.setContentAreaFilled(false);
     this.font.setText(Z4Translations.FONT_SELECTION);
     this.font.addActionListener(event => {
@@ -20607,42 +20625,61 @@ class Z4ResizeOptions {
  */
 class Z4TextInfo {
 
+  // NON USATO
    font = null;
 
+  // NON USATO
    rotation = null;
 
+  // NON USATO
    shape = null;
 
+  // NON USATO
    textText = null;
 
+  // NON USATO
    textEmpty = false;
 
+  // NON USATO
    textColor = null;
 
+  // NON USATO
    textBorder = 0;
 
+  // NON USATO
    textBorderColor = null;
 
+  // NON USATO
    textShearX = 0;
 
+  // NON USATO
    textShearY = 0;
 
+  // NON USATO
    shadow = false;
 
+  // NON USATO
    shadowText = null;
 
+  // NON USATO
    shadowEmpty = false;
 
+  // NON USATO
    shadowColor = null;
 
+  // NON USATO
    shadowReflex = false;
 
+  // NON USATO
    shadowOffsetX = 0;
 
+  // NON USATO
    shadowOffsetY = 0;
 
+  // NON USATO
    shadowShearX = 0;
 
+  // NON USATO
    shadowShearY = 0;
 }
 /**

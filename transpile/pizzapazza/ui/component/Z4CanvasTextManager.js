@@ -162,5 +162,19 @@ class Z4CanvasTextManager {
    * otherwise
    */
    drawText(ctx, drawPath) {
+    if (this.textInfo.shadow) {
+      if (this.textInfo.shadowText.length() === 0) {
+        this.textInfo.shadowText = this.textInfo.textText;
+      }
+      // Shape[] shape = TextFactory.getTestoOutline(g.getFontRenderContext(), textInfo.shadowText, textInfo.font, pathS, textInfo.rotationType, textInfo.constantAngle, textInfo.rotationAngles, textInfo.shearXShadow, textInfo.shearYShadow, textInfo.reflex, textInfo.gShape, textInfo.shadowLocation);
+      // TextFactory.draw(g, textInfo.color, shape, pathS, textInfo.fullGlobalColor, textInfo.shadingOnLetter, textInfo.emptyShadow, textInfo.negative, textInfo.deltaColor);
+    }
+    // TextFactory.draw(g, null, shape, pathT, textInfo.fullGlobalColor, textInfo.shadingOnLetter, textInfo.emptyText, false, 0);
+    // 
+    // if (textInfo.textBorder) {
+    // g.setPaint(textInfo.textColorBorder);
+    // g.setStroke(new BasicStroke(textInfo.textThicknessBorder, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+    // g.draw(pathT);
+    // }
   }
 }
