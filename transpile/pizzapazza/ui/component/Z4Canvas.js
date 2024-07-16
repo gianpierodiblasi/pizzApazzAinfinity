@@ -1101,7 +1101,7 @@ class Z4Canvas extends JSComponent {
    drawCanvasOverlay() {
     this.ctxOverlay.clearRect(0, 0, this.canvasOverlay.width, this.canvasOverlay.height);
     if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
-    } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT) && this.textInfo) {
+    } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT) && this.textInfo && this.textInfo.shape) {
       this.textManager.drawText(this.ctxOverlay, true);
     }
   }

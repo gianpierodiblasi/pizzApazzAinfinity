@@ -273,7 +273,7 @@ public class Z4Canvas extends JSComponent {
       this.mouseManager.setZoom(this.zoom);
       this.mouseManager.setMagneticGrid(null, 0, false);
       this.textManager.setZoom(this.zoom);
-      
+
       this.setDrawingDirection(Z4DrawingDirection.FREE);
       this.pathGrid = null;
       this.showLayerBounds = false;
@@ -1183,7 +1183,7 @@ public class Z4Canvas extends JSComponent {
     this.ctxOverlay.clearRect(0, 0, this.canvasOverlay.width, this.canvasOverlay.height);
 
     if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
-    } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT) && $exists(this.textInfo)) {
+    } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT) && $exists(this.textInfo) && $exists(this.textInfo.shape)) {
       this.textManager.drawText(this.ctxOverlay, true);
     }
   }

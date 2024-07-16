@@ -225,14 +225,14 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
    */
    checkFonts() {
     if (this.fontsChecked) {
-      this.canvas.setTextInfo(this.textInfo);
+      this.onTextInfoChange();
       this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
     } else {
       Z4UI.pleaseWait(this, true, false, false, false, "", () => Z4Font.getAvailableFontFamilies(false, available => {
         available.forEach((f, key, array) => this.fonts.push(f));
         this.fonts.sort();
         this.fontsChecked = true;
-        this.canvas.setTextInfo(this.textInfo);
+        this.onTextInfoChange();
         this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
         Z4UI.pleaseWaitCompleted();
       }));

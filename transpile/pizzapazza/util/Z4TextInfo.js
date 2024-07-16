@@ -9,6 +9,8 @@ class Z4TextInfo {
 
    rotation = null;
 
+   shape = null;
+
    textText = null;
 
    textEmpty = false;

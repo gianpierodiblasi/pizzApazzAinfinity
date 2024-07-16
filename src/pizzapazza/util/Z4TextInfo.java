@@ -3,6 +3,7 @@ package pizzapazza.util;
 import javascript.awt.Color;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.math.Z4Rotation;
+import pizzapazza.math.geometricshape.Z4GeometricShape;
 
 /**
  * Utility object to store text info
@@ -13,7 +14,8 @@ public class Z4TextInfo {
 
   public Z4Font font;
   public Z4Rotation rotation;
-
+  public Z4GeometricShape shape;
+  
   public String textText;
   public boolean textEmpty;
   public Z4GradientColor textColor;

@@ -171,6 +171,7 @@ public class Z4CanvasTextManager {
 //      this.startStandard();
 //    }
 //  }
+//  
   /**
    * Draws a text
    *
