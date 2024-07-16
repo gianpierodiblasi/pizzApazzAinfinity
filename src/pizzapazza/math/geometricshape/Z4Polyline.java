@@ -6,6 +6,7 @@ import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Vector;
 import simulation.js.$Array;
+import static simulation.js.$Globals.$exists;
 
 /**
  * The poyline
@@ -15,7 +16,7 @@ import simulation.js.$Array;
 public class Z4Polyline implements Z4GeometricShape {
 
   private final Array<Z4Point> points;
-  private final double len;
+  private final Array<Double> cumLen = new $Array<>();
 
   /**
    * Creates the object
@@ -26,9 +27,13 @@ public class Z4Polyline implements Z4GeometricShape {
     super();
     this.points = points.map(point -> point);
 
-    this.len = this.points.
-            map((point, index, array) -> index == 0 ? 0 : Z4Math.distance(point.x, point.y, array.$get(index - 1).x, array.$get(index - 1).y)).
-            reduce((accumulator, current, index, array) -> accumulator + current);
+    this.points.forEach((point, index, array) -> {
+      if (index == 0) {
+        this.cumLen.push(0.0);
+      } else {
+        this.cumLen.push(this.cumLen.$get(index - 1) + Z4Math.distance(point.x, point.y, array.$get(index - 1).x, array.$get(index - 1).y));
+      }
+    });
   }
 
   @Override
@@ -55,48 +60,34 @@ public class Z4Polyline implements Z4GeometricShape {
 
   @Override
   public double getLength() {
-    return this.len;
+    return this.cumLen.$get(this.cumLen.length - 1);
   }
 
   @Override
   public Z4Point getPointAt(double position) {
-    double cumLen = 0;
-    position *= this.len;
+    double finalPos = position * this.cumLen.$get(this.cumLen.length - 1);
+    int index = this.cumLen.findIndex(pos -> pos >= finalPos, null);
 
-    for (int index = 1; index < this.points.length; index++) {
-      double distance = Z4Math.distance(this.points.$get(index).x, this.points.$get(index).y, this.points.$get(index - 1).x, this.points.$get(index - 1).y);
-
-      if (cumLen <= position && position <= cumLen + distance) {
-        double div = (position - cumLen) / distance;
-        double x = (this.points.$get(index).x - this.points.$get(index - 1).x) * div + this.points.$get(index - 1).x;
-        double y = (this.points.$get(index).y - this.points.$get(index - 1).y) * div + this.points.$get(index - 1).y;
-        return new Z4Point(x, y);
-      } else {
-        cumLen += distance;
-      }
+    if (this.cumLen.$get(index) == finalPos) {
+      return this.points.$get(index);
+    } else if (this.cumLen.$get(index - 1) == finalPos) {
+      return this.points.$get(index - 1);
+    } else {
+      double div = (finalPos - this.cumLen.$get(index - 1)) / (this.cumLen.$get(index) - this.cumLen.$get(index - 1));
+      double x = (this.points.$get(index).x - this.points.$get(index - 1).x) * div + this.points.$get(index - 1).x;
+      double y = (this.points.$get(index).y - this.points.$get(index - 1).y) * div + this.points.$get(index - 1).y;
+      return new Z4Point(x, y);
     }
-
-    return this.points.$get(this.points.length - 1);
   }
 
   @Override
   public Z4Vector getTangentAt(double position) {
-    double cumLen = 0;
-    position *= this.len;
-
-    for (int index = 1; index < this.points.length; index++) {
-      double distance = Z4Math.distance(this.points.$get(index).x, this.points.$get(index).y, this.points.$get(index - 1).x, this.points.$get(index - 1).y);
-
-      if (cumLen <= position && position <= cumLen + distance) {
-        return Z4Vector.fromPoints(this.points.$get(index - 1).x, this.points.$get(index - 1).y, this.points.$get(index).x, this.points.$get(index).y);
-      } else {
-        cumLen += distance;
-      }
+    double finalPos = position * this.cumLen.$get(this.cumLen.length - 1);
+    int index = this.cumLen.findIndex(pos -> pos >= finalPos, null);
+    if (!$exists(index)) {
+      index = 1;
     }
 
-    return Z4Vector.fromPoints(
-            this.points.$get(this.points.length - 2).x, this.points.$get(this.points.length - 2).y,
-            this.points.$get(this.points.length - 1).x, this.points.$get(this.points.length - 1).y
-    );
+    return Z4Vector.fromPoints(this.points.$get(index - 1).x, this.points.$get(index - 1).y, this.points.$get(index).x, this.points.$get(index).y);
   }
 }
