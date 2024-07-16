@@ -96,6 +96,8 @@ public class Z4Canvas extends JSComponent {
 
   private Z4TextInfo textInfo;
 
+  private final Array<$Canvas> canvasArray = new Array<>(this.canvas, this.canvasGrid, this.canvasBounds, this.canvasOverlay);
+
   private final Z4CanvasMouseManager mouseManager = new Z4CanvasMouseManager(this, this.ctx);
   private final Z4CanvasIOManager ioManager = new Z4CanvasIOManager(this, this.paper, this.drawingTools);
   private final Z4CanvasTextManager textManager = new Z4CanvasTextManager(this, this.ctx);
@@ -280,14 +282,7 @@ public class Z4Canvas extends JSComponent {
     }
     this.isOpenFromHistory = false;
 
-    this.canvas.width = width * this.zoom;
-    this.canvas.height = height * this.zoom;
-    this.canvasGrid.width = width * this.zoom;
-    this.canvasGrid.height = height * this.zoom;
-    this.canvasBounds.width = width * this.zoom;
-    this.canvasBounds.height = height * this.zoom;
-    this.canvasOverlay.width = width * this.zoom;
-    this.canvasOverlay.height = height * this.zoom;
+    this.setCanvasSize(width, height, this.zoom);
 
     this.drawCanvas();
     this.drawCanvasGrid();
@@ -909,15 +904,7 @@ public class Z4Canvas extends JSComponent {
     this.zoom = zoom;
     this.mouseManager.setZoom(this.zoom);
     this.textManager.setZoom(this.zoom);
-
-    this.canvas.width = this.width * zoom;
-    this.canvas.height = this.height * zoom;
-    this.canvasGrid.width = this.width * zoom;
-    this.canvasGrid.height = this.height * zoom;
-    this.canvasBounds.width = this.width * zoom;
-    this.canvasBounds.height = this.height * zoom;
-    this.canvasOverlay.width = this.width * zoom;
-    this.canvasOverlay.height = this.height * zoom;
+    this.setCanvasSize(this.width, this.height, zoom);
 
     this.pathGrid = $exists(this.pathGrid) ? this.createGrid() : null;
 
@@ -1096,20 +1083,19 @@ public class Z4Canvas extends JSComponent {
 
     this.statusPanel.setProjectSize(this.width, this.height);
     this.statusPanel.resetCanvasGridPanel(this.width, this.height, true);
-
-    this.canvas.width = this.width * this.zoom;
-    this.canvas.height = this.height * this.zoom;
-    this.canvasGrid.width = this.width * this.zoom;
-    this.canvasGrid.height = this.height * this.zoom;
-    this.canvasBounds.width = this.width * this.zoom;
-    this.canvasBounds.height = this.height * this.zoom;
-    this.canvasOverlay.width = this.width * this.zoom;
-    this.canvasOverlay.height = this.height * this.zoom;
+    this.setCanvasSize(this.width, this.height, this.zoom);
 
     this.drawCanvas();
     this.drawCanvasGrid();
     this.drawCanvasBounds();
     this.drawCanvasOverlay();
+  }
+
+  private void setCanvasSize(int width, int height, double zoom) {
+    this.canvasArray.forEach(c -> {
+      c.width = width * zoom;
+      c.height = height * zoom;
+    });
   }
 
   /**
