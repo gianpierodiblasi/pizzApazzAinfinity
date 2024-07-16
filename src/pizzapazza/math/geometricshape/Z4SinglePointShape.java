@@ -3,6 +3,7 @@ package pizzapazza.math.geometricshape;
 import def.js.Array;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
+import pizzapazza.math.Z4Vector;
 
 /**
  * A geometric shape described by a single point
@@ -27,5 +28,20 @@ public class Z4SinglePointShape implements Z4GeometricShape {
   @Override
   public double distance(double x, double y) {
     return Z4Math.distance(this.x, this.y, x, y);
+  }
+
+  @Override
+  public double getLength() {
+    return 0;
+  }
+
+  @Override
+  public Z4Point getPointAt(double position) {
+    return new Z4Point(this.x, this.y);
+  }
+
+  @Override
+  public Z4Vector getTangentAt(double position) {
+    return Z4Vector.fromVector(this.x, this.y, 0, 0);
   }
 }

@@ -3,6 +3,7 @@ package pizzapazza.math.geometricshape;
 import def.js.Array;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
+import pizzapazza.math.Z4Vector;
 
 /**
  * The line
@@ -41,5 +42,22 @@ public class Z4Line implements Z4GeometricShape {
   @Override
   public double distance(double x, double y) {
     return Z4Math.ptSegDist(this.x1, this.y1, this.x2, this.y2, x, y);
+  }
+
+  @Override
+  public double getLength() {
+    return Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
+  }
+
+  @Override
+  public Z4Point getPointAt(double position) {
+    double x = (this.x2 - this.x1) * position + this.x1;
+    double y = (this.y2 - this.y1) * position + this.y1;
+    return new Z4Point(x, y);
+  }
+
+  @Override
+  public Z4Vector getTangentAt(double position) {
+    return Z4Vector.fromPoints(this.x1, this.y1, this.x2, this.y2);
   }
 }

@@ -2,6 +2,7 @@ package pizzapazza.math.geometricshape;
 
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
+import pizzapazza.math.Z4Vector;
 import simulation.bezier.$Bezier;
 import static simulation.js.$Globals.parseInt;
 
@@ -61,5 +62,22 @@ public abstract class Z4AbstractBezierCurve implements Z4GeometricShape {
   public double distance(double x, double y) {
     Z4Point point = this.bezier.project(new Z4Point(x, y));
     return Z4Math.distance(point.x, point.y, x, y);
+  }
+
+  @Override
+  public double getLength() {
+    return this.bezier.length();
+  }
+
+  @Override
+  public Z4Point getPointAt(double position) {
+    return this.bezier.get(position);
+  }
+
+  @Override
+  public Z4Vector getTangentAt(double position) {
+    Z4Point point = this.bezier.get(position);
+    Z4Point derivative = this.bezier.derivative(position);
+    return Z4Vector.fromPoints(point.x, point.y, point.x + derivative.x, point.y + derivative.y);
   }
 }

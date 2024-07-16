@@ -1,5 +1,8 @@
 package pizzapazza.math.geometricshape;
 
+import pizzapazza.math.Z4Point;
+import pizzapazza.math.Z4Vector;
+
 /**
  * Common abstract object for geometric curves. A <i>Z4GeometricCurve</i> is a
  * geometric shape representing a generic curve
@@ -26,5 +29,20 @@ public abstract class Z4GeometricCurve implements Z4GeometricShape {
   @Override
   public double distance(double x, double y) {
     return this.polyline.distance(x, y);
+  }
+
+  @Override
+  public double getLength() {
+    return this.polyline.getLength();
+  }
+
+  @Override
+  public Z4Point getPointAt(double position) {
+    return this.polyline.getPointAt(position);
+  }
+
+  @Override
+  public Z4Vector getTangentAt(double position) {
+    return this.polyline.getTangentAt(position);
   }
 }
