@@ -180,18 +180,7 @@ class Z4CanvasTextManager {
     let strForMeasureLen = 0;
     eval("strForMeasureLen = strForMeasure.length;");
     if (strToPrintLen === 1) {
-      let next = this.textInfo.shape.getTangentAt(0.5);
-      let c = null;
-      if (color instanceof Color) {
-        c = (color).getRGBA_HEX();
-      } else {
-        c = this.textInfo.textColor.getColorAt(0.5, true).getRGBA_HEX();
-        // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(strToPrintLen);
-        // c = this.textInfo.textColor.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
-        // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(strToPrintLen);
-        // c = this.textInfo.textColor.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
-      }
-      this.drawChar(ctx, strToPrint, next, empty, c, offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
+      this.drawChar(ctx, strToPrint, this.textInfo.shape.getTangentAt(0.5), empty, this.getColor(ctx, strToPrint, color, 0.5), offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
     } else if (strToPrintLen > 1) {
       let x0 = strToPrintLen === strForMeasureLen ? ctx.measureText(strForMeasure.substring(0, 1)).width / 2 : ctx.measureText(strToPrint.substring(0, 1)).width / 2;
       let x1 = strToPrintLen === strForMeasureLen ? ctx.measureText(strForMeasure).width - ctx.measureText(strForMeasure.substring(strForMeasureLen - 1)).width / 2 : ctx.measureText(strToPrint).width - ctx.measureText(strToPrint.substring(strToPrintLen - 1)).width / 2;
@@ -201,20 +190,21 @@ class Z4CanvasTextManager {
         let s = strToPrint.substring(i, i + 1);
         let x = strToPrintLen === strForMeasureLen ? ctx.measureText(strForMeasure.substring(i, i + 1)).width : ctx.measureText(s).width;
         let div = (x / 2 + progress - x0) / x1_x0;
-        let next = this.textInfo.shape.getTangentAt(div);
-        let c = null;
-        if (color instanceof Color) {
-          c = (color).getRGBA_HEX();
-        } else {
-          c = this.textInfo.textColor.getColorAt(div, true).getRGBA_HEX();
-          // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(s);
-          // c = this.textInfo.textColor.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
-          // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(s);
-          // c = this.textInfo.textColor.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
-        }
-        this.drawChar(ctx, s, next, empty, c, offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
+        this.drawChar(ctx, s, this.textInfo.shape.getTangentAt(div), empty, this.getColor(ctx, s, color, div), offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
         progress += x;
       }
+    }
+  }
+
+   getColor(ctx, str, color, div) {
+    if (color instanceof Color) {
+      return (color).getRGBA_HEX();
+    } else {
+      return this.textInfo.textColor.getColorAt(div, true).getRGBA_HEX();
+      // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(s);
+      // c = this.textInfo.textColor.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
+      // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(s);
+      // c = this.textInfo.textColor.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
     }
   }
 
