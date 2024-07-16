@@ -121,6 +121,7 @@ public class Z4GradientColor extends Z4AbstractGradientColor<Color> {
             forEach(position -> subGradientColor.addColor(this.getColorAt(position, false), (position - start) / diff));
 
     subGradientColor.addColor(this.getColorAt(end, false), 1);
+    subGradientColor.setRipple(this.getRipple());
     return subGradientColor;
   }
 

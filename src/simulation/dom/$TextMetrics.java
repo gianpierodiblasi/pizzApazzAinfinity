@@ -11,4 +11,6 @@ public class $TextMetrics extends TextMetrics {
 
   public double actualBoundingBoxAscent;
   public double actualBoundingBoxDescent;
+  public double actualBoundingBoxLeft;
+  public double actualBoundingBoxRight;
 }

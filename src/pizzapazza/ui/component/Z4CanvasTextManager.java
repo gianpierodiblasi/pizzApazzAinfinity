@@ -12,6 +12,7 @@ import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Layer;
 import pizzapazza.util.Z4TextInfo;
 import simulation.dom.$CanvasRenderingContext2D;
+import simulation.dom.$TextMetrics;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
 
@@ -194,10 +195,10 @@ public class Z4CanvasTextManager {
       this.draw(ctx, $exists(this.textInfo.shadowText) ? this.textInfo.shadowText : this.textInfo.textText, this.textInfo.textText, this.textInfo.shadowEmpty, this.textInfo.shadowColor, this.textInfo.shadowOffsetX, this.textInfo.shadowOffsetY, this.textInfo.shadowShearX, this.textInfo.shadowShearY, 0, null, this.textInfo.shadowReflex);
     }
 
-    this.draw(ctx, this.textInfo.textText, this.textInfo.textText, this.textInfo.textEmpty, null, 0, 0, this.textInfo.textShearX, this.textInfo.textShearY, this.textInfo.textBorder, this.textInfo.textBorderColor, false);
+    this.draw(ctx, this.textInfo.textText, this.textInfo.textText, this.textInfo.textEmpty, this.textInfo.textColor, 0, 0, this.textInfo.textShearX, this.textInfo.textShearY, this.textInfo.textBorder, this.textInfo.textBorderColor, false);
   }
 
-  private void draw($CanvasRenderingContext2D ctx, String strToPrint, String strForMeasure, boolean empty, Color color, int offsetX, int offsetY, int shearX, int shearY, int border, Color borderColor, boolean reflex) {
+  private void draw($CanvasRenderingContext2D ctx, String strToPrint, String strForMeasure, boolean empty, Object color, int offsetX, int offsetY, int shearX, int shearY, int border, Color borderColor, boolean reflex) {
     shearX /= Z4CanvasTextManager.SHEARING_COEFFICIENT;
     shearY /= Z4CanvasTextManager.SHEARING_COEFFICIENT;
 
@@ -208,7 +209,19 @@ public class Z4CanvasTextManager {
 
     if (strToPrintLen == 1) {
       Z4Vector next = this.textInfo.shape.getTangentAt(0.5);
-      String c = $exists(color) ? color.getRGBA_HEX() : this.textInfo.textColor.getColorAt(0.5, true).getRGBA_HEX();
+
+      Object c;
+      if (color instanceof Color) {
+        c = ((Color) color).getRGBA_HEX();
+      } else {
+        c = this.textInfo.textColor.getColorAt(0.5, true).getRGBA_HEX();
+        
+//          $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(strToPrintLen);
+//          c = this.textInfo.textColor.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
+//          $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(strToPrintLen);
+//          c = this.textInfo.textColor.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
+      }
+
       this.drawChar(ctx, strToPrint, next, empty, c, offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
     } else if (strToPrintLen > 1) {
       double x0 = strToPrintLen == strForMeasureLen
@@ -228,14 +241,26 @@ public class Z4CanvasTextManager {
 
         double div = (x / 2 + progress - x0) / x1_x0;
         Z4Vector next = this.textInfo.shape.getTangentAt(div);
-        String c = $exists(color) ? color.getRGBA_HEX() : this.textInfo.textColor.getColorAt(div, true).getRGBA_HEX();
+
+        Object c;
+        if (color instanceof Color) {
+          c = ((Color) color).getRGBA_HEX();
+        } else {
+          c = this.textInfo.textColor.getColorAt(div, true).getRGBA_HEX();
+
+//          $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(s);
+//          c = this.textInfo.textColor.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
+//          $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(s);
+//          c = this.textInfo.textColor.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
+        }
+
         this.drawChar(ctx, s, next, empty, c, offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
         progress += x;
       }
     }
   }
 
-  private void drawChar($CanvasRenderingContext2D ctx, String s, Z4Vector next, boolean empty, String c, int offsetX, int offsetY, int shearX, int shearY, int border, Color borderColor, boolean reflex) {
+  private void drawChar($CanvasRenderingContext2D ctx, String s, Z4Vector next, boolean empty, Object color, int offsetX, int offsetY, int shearX, int shearY, int border, Color borderColor, boolean reflex) {
     ctx.save();
 
     ctx.translate(next.x0 + offsetX, next.y0 + offsetY);
@@ -245,8 +270,8 @@ public class Z4CanvasTextManager {
       ctx.transform(1, 0, 0, -1, 0, 0);
     }
 
-    ctx.strokeStyle = Z4Constants.$getStyle(c);
-    ctx.fillStyle = Z4Constants.$getStyle(c);
+    ctx.strokeStyle = Z4Constants.$getStyle(color);
+    ctx.fillStyle = Z4Constants.$getStyle(color);
 
     if (empty) {
       ctx.strokeText(s, 0, 0);

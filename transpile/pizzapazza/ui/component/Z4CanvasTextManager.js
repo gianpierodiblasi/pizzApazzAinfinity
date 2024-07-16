@@ -169,7 +169,7 @@ class Z4CanvasTextManager {
     if (this.textInfo.shadow) {
       this.draw(ctx, this.textInfo.shadowText ? this.textInfo.shadowText : this.textInfo.textText, this.textInfo.textText, this.textInfo.shadowEmpty, this.textInfo.shadowColor, this.textInfo.shadowOffsetX, this.textInfo.shadowOffsetY, this.textInfo.shadowShearX, this.textInfo.shadowShearY, 0, null, this.textInfo.shadowReflex);
     }
-    this.draw(ctx, this.textInfo.textText, this.textInfo.textText, this.textInfo.textEmpty, null, 0, 0, this.textInfo.textShearX, this.textInfo.textShearY, this.textInfo.textBorder, this.textInfo.textBorderColor, false);
+    this.draw(ctx, this.textInfo.textText, this.textInfo.textText, this.textInfo.textEmpty, this.textInfo.textColor, 0, 0, this.textInfo.textShearX, this.textInfo.textShearY, this.textInfo.textBorder, this.textInfo.textBorderColor, false);
   }
 
    draw(ctx, strToPrint, strForMeasure, empty, color, offsetX, offsetY, shearX, shearY, border, borderColor, reflex) {
@@ -181,7 +181,16 @@ class Z4CanvasTextManager {
     eval("strForMeasureLen = strForMeasure.length;");
     if (strToPrintLen === 1) {
       let next = this.textInfo.shape.getTangentAt(0.5);
-      let c = color ? color.getRGBA_HEX() : this.textInfo.textColor.getColorAt(0.5, true).getRGBA_HEX();
+      let c = null;
+      if (color instanceof Color) {
+        c = (color).getRGBA_HEX();
+      } else {
+        c = this.textInfo.textColor.getColorAt(0.5, true).getRGBA_HEX();
+        // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(strToPrintLen);
+        // c = this.textInfo.textColor.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
+        // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(strToPrintLen);
+        // c = this.textInfo.textColor.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
+      }
       this.drawChar(ctx, strToPrint, next, empty, c, offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
     } else if (strToPrintLen > 1) {
       let x0 = strToPrintLen === strForMeasureLen ? ctx.measureText(strForMeasure.substring(0, 1)).width / 2 : ctx.measureText(strToPrint.substring(0, 1)).width / 2;
@@ -193,14 +202,23 @@ class Z4CanvasTextManager {
         let x = strToPrintLen === strForMeasureLen ? ctx.measureText(strForMeasure.substring(i, i + 1)).width : ctx.measureText(s).width;
         let div = (x / 2 + progress - x0) / x1_x0;
         let next = this.textInfo.shape.getTangentAt(div);
-        let c = color ? color.getRGBA_HEX() : this.textInfo.textColor.getColorAt(div, true).getRGBA_HEX();
+        let c = null;
+        if (color instanceof Color) {
+          c = (color).getRGBA_HEX();
+        } else {
+          c = this.textInfo.textColor.getColorAt(div, true).getRGBA_HEX();
+          // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(s);
+          // c = this.textInfo.textColor.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
+          // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(s);
+          // c = this.textInfo.textColor.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
+        }
         this.drawChar(ctx, s, next, empty, c, offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
         progress += x;
       }
     }
   }
 
-   drawChar(ctx, s, next, empty, c, offsetX, offsetY, shearX, shearY, border, borderColor, reflex) {
+   drawChar(ctx, s, next, empty, color, offsetX, offsetY, shearX, shearY, border, borderColor, reflex) {
     ctx.save();
     ctx.translate(next.x0 + offsetX, next.y0 + offsetY);
     ctx.rotate(this.textInfo.rotation.next(next.phase));
@@ -208,8 +226,8 @@ class Z4CanvasTextManager {
     if (reflex) {
       ctx.transform(1, 0, 0, -1, 0, 0);
     }
-    ctx.strokeStyle = Z4Constants.getStyle(c);
-    ctx.fillStyle = Z4Constants.getStyle(c);
+    ctx.strokeStyle = Z4Constants.getStyle(color);
+    ctx.fillStyle = Z4Constants.getStyle(color);
     if (empty) {
       ctx.strokeText(s, 0, 0);
     } else {
