@@ -8,6 +8,7 @@ import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.util.Z4Layer;
 import pizzapazza.util.Z4TextInfo;
 import simulation.dom.$CanvasRenderingContext2D;
+import static simulation.js.$Globals.parseInt;
 
 /**
  * The text manager of a Z4Canvas
@@ -30,8 +31,6 @@ public class Z4CanvasTextManager {
   private Z4StatusPanel statusPanel;
 //
 //  private boolean pressed;
-//  private double onStartX;
-//  private double onStartY;
 
   /**
    * Creates the object
@@ -79,6 +78,24 @@ public class Z4CanvasTextManager {
   }
 
   /**
+   * Adds a canvas overlay mode
+   *
+   * @param canvasOverlayMode The canvas overlay mode
+   */
+  public void addCanvasOverlayMode(Z4CanvasOverlayMode canvasOverlayMode) {
+    this.canvasOverlayModes.add(canvasOverlayMode);
+  }
+
+  /**
+   * Removes a canvas overlay mode
+   *
+   * @param canvasOverlayMode The canvas overlay mode
+   */
+  public void removeCanvasOverlayMode(Z4CanvasOverlayMode canvasOverlayMode) {
+    this.canvasOverlayModes.delete(canvasOverlayMode);
+  }
+
+  /**
    * Sets the ribbon history panel
    *
    * @param ribbonHistoryPanel The ribbon history panel
@@ -103,22 +120,14 @@ public class Z4CanvasTextManager {
    * @param type The event type
    */
   public void onMouse(MouseEvent event, String type) {
-//    double x = Math.min(this.size.width, Math.max(0, event.offsetX / this.zoom));
-//    double y = Math.min(this.size.height, Math.max(0, event.offsetY / this.zoom));
-//    int xParsed = parseInt(x);
-//    int yParsed = parseInt(y);
-//
-//    if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
-//      switch (type) {
-//        case "up":
-//          this.statusPanel.colorPicked(this.canvas.getColorAt(xParsed, yParsed), this.canvas.getSelectedLayerColorAt(xParsed, yParsed));
-//          break;
-//        case "move":
-//          this.statusPanel.setMousePosition(xParsed, yParsed);
-//          break;
-//      }
-//    } else {
-//      switch (type) {
+    double x = Math.min(this.size.width, Math.max(0, event.offsetX / this.zoom));
+    double y = Math.min(this.size.height, Math.max(0, event.offsetY / this.zoom));
+    int xParsed = parseInt(x);
+    int yParsed = parseInt(y);
+
+    if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
+    } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT)) {
+      switch (type) {
 //        case "enter":
 //          this.pressed = event.buttons == 1;
 //          this.onAction(Z4PointIteratorDrawingAction.START, x, y);
@@ -128,10 +137,9 @@ public class Z4CanvasTextManager {
 //          this.pressed = true;
 //          this.onAction(Z4PointIteratorDrawingAction.START, x, y);
 //          break;
-//        case "move":
-//          this.statusPanel.setMousePosition(xParsed, yParsed);
-//          this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
-//          break;
+        case "move":
+          this.statusPanel.setMousePosition(xParsed, yParsed);
+          break;
 //        case "up":
 //          this.onStop(x, y);
 //          break;
@@ -140,8 +148,8 @@ public class Z4CanvasTextManager {
 //            this.onStop(x, y);
 //          }
 //          break;
-//      }
-//    }
+      }
+    }
   }
 
 //  private void onAction(Z4PointIteratorDrawingAction action, double x, double y) {
@@ -163,7 +171,6 @@ public class Z4CanvasTextManager {
 //      this.startStandard();
 //    }
 //  }
-
   /**
    * Draws a text
    *

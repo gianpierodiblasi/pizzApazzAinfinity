@@ -162,6 +162,7 @@ class Z4CanvasMouseManager {
           this.statusPanel.setMousePosition(xParsed, yParsed);
           break;
       }
+    } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT)) {
     } else {
       switch(type) {
         case "enter":

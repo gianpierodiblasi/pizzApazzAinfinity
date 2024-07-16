@@ -23,8 +23,6 @@ class Z4CanvasTextManager {
 
   // 
   // private boolean pressed;
-  // private double onStartX;
-  // private double onStartY;
   /**
    * Creates the object
    *
@@ -71,6 +69,24 @@ class Z4CanvasTextManager {
   }
 
   /**
+   * Adds a canvas overlay mode
+   *
+   * @param canvasOverlayMode The canvas overlay mode
+   */
+   addCanvasOverlayMode(canvasOverlayMode) {
+    this.canvasOverlayModes.add(canvasOverlayMode);
+  }
+
+  /**
+   * Removes a canvas overlay mode
+   *
+   * @param canvasOverlayMode The canvas overlay mode
+   */
+   removeCanvasOverlayMode(canvasOverlayMode) {
+    this.canvasOverlayModes.delete(canvasOverlayMode);
+  }
+
+  /**
    * Sets the ribbon history panel
    *
    * @param ribbonHistoryPanel The ribbon history panel
@@ -95,45 +111,27 @@ class Z4CanvasTextManager {
    * @param type The event type
    */
    onMouse(event, type) {
-    // double x = Math.min(this.size.width, Math.max(0, event.offsetX / this.zoom));
-    // double y = Math.min(this.size.height, Math.max(0, event.offsetY / this.zoom));
-    // int xParsed = parseInt(x);
-    // int yParsed = parseInt(y);
-    // 
-    // if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
-    // switch (type) {
-    // case "up":
-    // this.statusPanel.colorPicked(this.canvas.getColorAt(xParsed, yParsed), this.canvas.getSelectedLayerColorAt(xParsed, yParsed));
-    // break;
-    // case "move":
-    // this.statusPanel.setMousePosition(xParsed, yParsed);
-    // break;
-    // }
-    // } else {
-    // switch (type) {
-    // case "enter":
-    // this.pressed = event.buttons == 1;
-    // this.onAction(Z4PointIteratorDrawingAction.START, x, y);
-    // this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
-    // break;
-    // case "down":
-    // this.pressed = true;
-    // this.onAction(Z4PointIteratorDrawingAction.START, x, y);
-    // break;
-    // case "move":
-    // this.statusPanel.setMousePosition(xParsed, yParsed);
-    // this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
-    // break;
-    // case "up":
-    // this.onStop(x, y);
-    // break;
-    // case "leave":
-    // if (this.pressed) {
-    // this.onStop(x, y);
-    // }
-    // break;
-    // }
-    // }
+    let x = Math.min(this.size.width, Math.max(0, event.offsetX / this.zoom));
+    let y = Math.min(this.size.height, Math.max(0, event.offsetY / this.zoom));
+    let xParsed = parseInt(x);
+    let yParsed = parseInt(y);
+    if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
+    } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT)) {
+      switch(type) {
+        // case "enter":
+        // this.pressed = event.buttons == 1;
+        // this.onAction(Z4PointIteratorDrawingAction.START, x, y);
+        // this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
+        // break;
+        // case "down":
+        // this.pressed = true;
+        // this.onAction(Z4PointIteratorDrawingAction.START, x, y);
+        // break;
+        case "move":
+          this.statusPanel.setMousePosition(xParsed, yParsed);
+          break;
+      }
+    }
   }
 
   // private void onAction(Z4PointIteratorDrawingAction action, double x, double y) {

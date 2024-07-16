@@ -272,7 +272,8 @@ public class Z4Canvas extends JSComponent {
       this.zoom = 1;
       this.mouseManager.setZoom(this.zoom);
       this.mouseManager.setMagneticGrid(null, 0, false);
-
+      this.textManager.setZoom(this.zoom);
+      
       this.setDrawingDirection(Z4DrawingDirection.FREE);
       this.pathGrid = null;
       this.showLayerBounds = false;
@@ -623,9 +624,11 @@ public class Z4Canvas extends JSComponent {
     if (add) {
       this.canvasOverlayModes.add(canvasOverlayMode);
       this.mouseManager.addCanvasOverlayMode(canvasOverlayMode);
+      this.textManager.addCanvasOverlayMode(canvasOverlayMode);
     } else {
       this.canvasOverlayModes.delete(canvasOverlayMode);
       this.mouseManager.removeCanvasOverlayMode(canvasOverlayMode);
+      this.textManager.removeCanvasOverlayMode(canvasOverlayMode);
     }
 
     this.canvasOverlay.style.pointerEvents = $exists(this.canvasOverlayModes.size) ? "auto" : "none";
