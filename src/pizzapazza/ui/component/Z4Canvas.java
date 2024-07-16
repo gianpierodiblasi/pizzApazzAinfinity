@@ -28,6 +28,7 @@ import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4DrawingTool;
 import pizzapazza.util.Z4Layer;
 import pizzapazza.util.Z4Paper;
+import pizzapazza.util.Z4TextInfo;
 import pizzapazza.util.Z4Translations;
 import simulation.dom.$Canvas;
 import simulation.dom.$CanvasRenderingContext2D;
@@ -93,8 +94,11 @@ public class Z4Canvas extends JSComponent {
   private Z4DrawingTool selectedDrawingTool;
   private Z4DrawingDirection drawingDirection = Z4DrawingDirection.FREE;
 
+  private Z4TextInfo textInfo;
+
   private final Z4CanvasMouseManager mouseManager = new Z4CanvasMouseManager(this, this.ctx);
   private final Z4CanvasIOManager ioManager = new Z4CanvasIOManager(this, this.paper, this.drawingTools);
+  private final Z4CanvasTextManager textManager = new Z4CanvasTextManager(this, this.ctx);
   private final Z4CanvasHistoryManager historyManager = new Z4CanvasHistoryManager(this, this.paper);
 
   /**
@@ -118,6 +122,12 @@ public class Z4Canvas extends JSComponent {
 
     this.canvasOverlay.addEventListener("mousemove", event -> this.mouseManager.onMouse((MouseEvent) event, "move"));
     this.canvasOverlay.addEventListener("mouseup", event -> this.mouseManager.onMouse((MouseEvent) event, "up"));
+
+    this.canvasOverlay.addEventListener("mouseenter", event -> this.textManager.onMouse((MouseEvent) event, "enter"));
+    this.canvasOverlay.addEventListener("mouseleave", event -> this.textManager.onMouse((MouseEvent) event, "leave"));
+    this.canvasOverlay.addEventListener("mousedown", event -> this.textManager.onMouse((MouseEvent) event, "down"));
+    this.canvasOverlay.addEventListener("mousemove", event -> this.textManager.onMouse((MouseEvent) event, "move"));
+    this.canvasOverlay.addEventListener("mouseup", event -> this.textManager.onMouse((MouseEvent) event, "up"));
 
     this.addEventListener("wheel", event -> {
       WheelEvent evt = (WheelEvent) event;
@@ -165,6 +175,7 @@ public class Z4Canvas extends JSComponent {
 
     this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);
     this.ioManager.setRibbonPanels(ribbonLayerPanel, ribbonDrawingToolPanel, ribbonHistoryPanel);
+    this.textManager.setRibbonHistoryPanel(ribbonHistoryPanel);
     this.historyManager.setRibbonLayerPanel(ribbonLayerPanel);
   }
 
@@ -179,6 +190,7 @@ public class Z4Canvas extends JSComponent {
 
     this.mouseManager.setStatusPanel(statusPanel);
     this.ioManager.setStatusPanel(statusPanel);
+    this.textManager.setStatusPanel(statusPanel);
   }
 
   /**
@@ -564,6 +576,7 @@ public class Z4Canvas extends JSComponent {
   public void setSelectedLayerAndAddLayerPreview(Z4Layer selectedLayer, $Apply_1_Void<Z4Layer> apply, boolean add) {
     this.selectedLayer = selectedLayer;
     this.mouseManager.setSelectedLayer(this.selectedLayer);
+    this.textManager.setSelectedLayer(this.selectedLayer);
 
     if ($exists(apply)) {
       apply.$apply(this.selectedLayer);
@@ -810,6 +823,7 @@ public class Z4Canvas extends JSComponent {
 
     this.mouseManager.setSize(this.getSize());
     this.ioManager.setSize(this.getSize());
+    this.textManager.setSize(this.getSize());
     this.historyManager.setSize(this.getSize());
   }
 
@@ -894,6 +908,7 @@ public class Z4Canvas extends JSComponent {
   public void setZoom(double zoom) {
     this.zoom = zoom;
     this.mouseManager.setZoom(this.zoom);
+    this.textManager.setZoom(this.zoom);
 
     this.canvas.width = this.width * zoom;
     this.canvas.height = this.height * zoom;
@@ -1052,6 +1067,17 @@ public class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Sets the text info
+   *
+   * @param textInfo The text info
+   */
+  public void setTextInfo(Z4TextInfo textInfo) {
+    this.textInfo = textInfo;
+    this.textManager.setTextInfo(textInfo);
+    this.drawCanvasOverlay();
+  }
+
+  /**
    * Rotates the canvas in clockwise
    */
   @SuppressWarnings("SuspiciousNameCombination")
@@ -1161,6 +1187,7 @@ public class Z4Canvas extends JSComponent {
     this.ctxOverlay.clearRect(0, 0, this.canvasOverlay.width, this.canvasOverlay.height);
 
     if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
+    } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT) && $exists(this.textInfo)) {
     }
   }
 }

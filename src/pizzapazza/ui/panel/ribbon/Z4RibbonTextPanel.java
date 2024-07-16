@@ -228,6 +228,8 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textInfo.shadowOffsetY = parseInt(this.shadowOffsetY.getValue());
     this.textInfo.shadowShearX = parseInt(this.shadowShearX.getValue());
     this.textInfo.shadowShearY = parseInt(this.shadowShearY.getValue());
+
+    this.canvas.setTextInfo(this.textInfo);
   }
 
   private void onReset() {
@@ -285,6 +287,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
    */
   public void checkFonts() {
     if (this.fontsChecked) {
+      this.canvas.setTextInfo(this.textInfo);
       this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
     } else {
       Z4UI.pleaseWait(this, true, false, false, false, "", () -> Z4Font.getAvailableFontFamilies(false, available -> {
@@ -292,6 +295,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
         this.fonts.sort();
 
         this.fontsChecked = true;
+        this.canvas.setTextInfo(this.textInfo);
         this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
         Z4UI.pleaseWaitCompleted();
       }));

@@ -77,9 +77,13 @@ class Z4Canvas extends JSComponent {
 
    drawingDirection = Z4DrawingDirection.FREE;
 
+   textInfo = null;
+
    mouseManager = new Z4CanvasMouseManager(this, this.ctx);
 
    ioManager = new Z4CanvasIOManager(this, this.paper, this.drawingTools);
+
+   textManager = new Z4CanvasTextManager(this, this.ctx);
 
    historyManager = new Z4CanvasHistoryManager(this, this.paper);
 
@@ -101,6 +105,11 @@ class Z4Canvas extends JSComponent {
     this.canvas.addEventListener("mouseup", event => this.mouseManager.onMouse(event, "up"));
     this.canvasOverlay.addEventListener("mousemove", event => this.mouseManager.onMouse(event, "move"));
     this.canvasOverlay.addEventListener("mouseup", event => this.mouseManager.onMouse(event, "up"));
+    this.canvasOverlay.addEventListener("mouseenter", event => this.textManager.onMouse(event, "enter"));
+    this.canvasOverlay.addEventListener("mouseleave", event => this.textManager.onMouse(event, "leave"));
+    this.canvasOverlay.addEventListener("mousedown", event => this.textManager.onMouse(event, "down"));
+    this.canvasOverlay.addEventListener("mousemove", event => this.textManager.onMouse(event, "move"));
+    this.canvasOverlay.addEventListener("mouseup", event => this.textManager.onMouse(event, "up"));
     this.addEventListener("wheel", event => {
       let evt = event;
       if (!evt.ctrlKey) {
@@ -145,6 +154,7 @@ class Z4Canvas extends JSComponent {
     this.ribbonHistoryPanel.setCanvas(this);
     this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);
     this.ioManager.setRibbonPanels(ribbonLayerPanel, ribbonDrawingToolPanel, ribbonHistoryPanel);
+    this.textManager.setRibbonHistoryPanel(ribbonHistoryPanel);
     this.historyManager.setRibbonLayerPanel(ribbonLayerPanel);
   }
 
@@ -158,6 +168,7 @@ class Z4Canvas extends JSComponent {
     this.statusPanel.setCanvas(this);
     this.mouseManager.setStatusPanel(statusPanel);
     this.ioManager.setStatusPanel(statusPanel);
+    this.textManager.setStatusPanel(statusPanel);
   }
 
   /**
@@ -519,6 +530,7 @@ class Z4Canvas extends JSComponent {
    setSelectedLayerAndAddLayerPreview(selectedLayer, apply, add) {
     this.selectedLayer = selectedLayer;
     this.mouseManager.setSelectedLayer(this.selectedLayer);
+    this.textManager.setSelectedLayer(this.selectedLayer);
     if (apply) {
       apply(this.selectedLayer);
     }
@@ -752,6 +764,7 @@ class Z4Canvas extends JSComponent {
     this.height = height;
     this.mouseManager.setSize(this.getSize());
     this.ioManager.setSize(this.getSize());
+    this.textManager.setSize(this.getSize());
     this.historyManager.setSize(this.getSize());
   }
 
@@ -836,6 +849,7 @@ class Z4Canvas extends JSComponent {
    setZoom(zoom) {
     this.zoom = zoom;
     this.mouseManager.setZoom(this.zoom);
+    this.textManager.setZoom(this.zoom);
     this.canvas.width = this.width * zoom;
     this.canvas.height = this.height * zoom;
     this.canvasGrid.width = this.width * zoom;
@@ -985,6 +999,17 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Sets the text info
+   *
+   * @param textInfo The text info
+   */
+   setTextInfo(textInfo) {
+    this.textInfo = textInfo;
+    this.textManager.setTextInfo(textInfo);
+    this.drawCanvasOverlay();
+  }
+
+  /**
    * Rotates the canvas in clockwise
    */
    rotatePlus90() {
@@ -1078,6 +1103,7 @@ class Z4Canvas extends JSComponent {
    drawCanvasOverlay() {
     this.ctxOverlay.clearRect(0, 0, this.canvasOverlay.width, this.canvasOverlay.height);
     if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
+    } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT) && this.textInfo) {
     }
   }
 }
