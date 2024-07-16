@@ -100,7 +100,7 @@ public class Z4Canvas extends JSComponent {
 
   private final Z4CanvasMouseManager mouseManager = new Z4CanvasMouseManager(this, this.ctx);
   private final Z4CanvasIOManager ioManager = new Z4CanvasIOManager(this, this.paper, this.drawingTools);
-  private final Z4CanvasTextManager textManager = new Z4CanvasTextManager(this, this.ctx);
+  private final Z4CanvasTextManager textManager = new Z4CanvasTextManager(this);
   private final Z4CanvasHistoryManager historyManager = new Z4CanvasHistoryManager(this, this.paper);
 
   /**
@@ -1065,6 +1065,16 @@ public class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Draws a text
+   */
+  public void drawText() {
+    this.selectedLayer.drawText(this.textManager);
+    this.setChanged(true);
+    this.setSaved(false);
+    this.saveHistory("standard,tool");
+  }
+
+  /**
    * Rotates the canvas in clockwise
    */
   @SuppressWarnings("SuspiciousNameCombination")
@@ -1166,14 +1176,12 @@ public class Z4Canvas extends JSComponent {
     }
   }
 
-  /**
-   * Draws the canvas overlay
-   */
-  public void drawCanvasOverlay() {
+  private void drawCanvasOverlay() {
     this.ctxOverlay.clearRect(0, 0, this.canvasOverlay.width, this.canvasOverlay.height);
 
     if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
     } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT) && $exists(this.textInfo)) {
+      this.textManager.drawText(this.ctxOverlay, true);
     }
   }
 }

@@ -9,6 +9,7 @@ import pizzapazza.color.Z4BiGradientColor;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.filler.Z4AbstractFiller;
 import pizzapazza.math.Z4DrawingPoint;
+import pizzapazza.ui.component.Z4CanvasTextManager;
 import pizzapazza.ui.component.Z4LayerPreview;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$Image;
@@ -322,6 +323,19 @@ public class Z4Layer {
     this.offscreenCtx.translate(drawingPoint.z4Vector.x0 - this.offsetX, drawingPoint.z4Vector.y0 - this.offsetY);
     this.offscreenCtx.rotate(drawingPoint.z4Vector.phase);
     drawingTool.draw(this.offscreenCtx, drawingPoint);
+    this.offscreenCtx.restore();
+
+    this.blob = null;
+  }
+
+  /**
+   * Draws a text
+   *
+   * @param textManager The manager used to draw the text
+   */
+  public void drawText(Z4CanvasTextManager textManager) {
+    this.offscreenCtx.save();
+    textManager.drawText(this.offscreenCtx, false);
     this.offscreenCtx.restore();
 
     this.blob = null;
