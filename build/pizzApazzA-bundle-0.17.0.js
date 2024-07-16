@@ -5073,22 +5073,23 @@ class Z4CanvasTextManager {
     ctx.font = (this.textInfo.font.italic ? "italic " : "") + (this.textInfo.font.bold ? "bold " : "") + this.textInfo.font.size + "px '" + this.textInfo.font.family + "'";
     ctx.textAlign = "center";
     if (this.textInfo.shadow) {
-      this.draw(ctx, this.textInfo.shadowText ? this.textInfo.shadowText : this.textInfo.textText, this.textInfo.shadowEmpty, this.textInfo.shadowColor, this.textInfo.shadowOffsetX, this.textInfo.shadowOffsetY, this.textInfo.shadowShearX, this.textInfo.shadowShearY, 0, null, this.textInfo.shadowReflex);
+      this.draw(ctx, this.textInfo.shadowText ? this.textInfo.shadowText : this.textInfo.textText, this.textInfo.textText, this.textInfo.shadowEmpty, this.textInfo.shadowColor, this.textInfo.shadowOffsetX, this.textInfo.shadowOffsetY, this.textInfo.shadowShearX, this.textInfo.shadowShearY, 0, null, this.textInfo.shadowReflex);
     }
-    this.draw(ctx, this.textInfo.textText, this.textInfo.textEmpty, null, 0, 0, this.textInfo.textShearX, this.textInfo.textShearY, this.textInfo.textBorder, this.textInfo.textBorderColor, false);
+    this.draw(ctx, this.textInfo.textText, this.textInfo.textText, this.textInfo.textEmpty, null, 0, 0, this.textInfo.textShearX, this.textInfo.textShearY, this.textInfo.textBorder, this.textInfo.textBorderColor, false);
   }
 
-   draw(ctx, str, empty, color, offsetX, offsetY, shearX, shearY, border, borderColor, reflex) {
+   draw(ctx, strToPrint, strForMeasure, empty, color, offsetX, offsetY, shearX, shearY, border, borderColor, reflex) {
     shearX /= Z4CanvasTextManager.SHEARING_COEFFICIENT;
     shearY /= Z4CanvasTextManager.SHEARING_COEFFICIENT;
-    let strLen = 0;
-    eval("strLen = str.length;");
+    let strToPrintLen = 0;
+    eval("strToPrintLen = strToPrint.length;");
+    let strForMeasureLen = 0;
+    eval("strForMeasureLen = strForMeasure.length;");
     let progress = 0;
-    let strWidth = ctx.measureText(str).width;
-    for (let i = 0; i < strLen; i++) {
-      let s = str.substring(i, i + 1);
-      let sWidth = ctx.measureText(s).width;
-      let pos = sWidth / strWidth;
+    let strWidth = strToPrintLen === strForMeasureLen ? ctx.measureText(strForMeasure).width : ctx.measureText(strToPrint).width;
+    for (let i = 0; i < strToPrintLen; i++) {
+      let s = strToPrint.substring(i, i + 1);
+      let pos = (strToPrintLen === strForMeasureLen ? ctx.measureText(strForMeasure.substring(i, i + 1)).width : ctx.measureText(s).width) / strWidth;
       let next = this.textInfo.shape.getTangentAt(progress + pos / 2);
       let c = color ? color.getRGBA_HEX() : this.textInfo.textColor.getColorAt(progress + pos / 2, true).getRGBA_HEX();
       progress += pos;
@@ -8849,7 +8850,6 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     // TO DELETE
     this.textInfo.font = new Z4Font("Arial", 50, false, false);
     this.textInfo.shape = new Z4Line(50, 50, 450, 450);
-    this.textInfo.textText = "Ciao Mamma!";
     // TO DELETE
     this.canvas.setTextInfo(this.textInfo);
   }

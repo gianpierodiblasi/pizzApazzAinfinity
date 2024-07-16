@@ -185,7 +185,6 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     // TO DELETE
     this.textInfo.font = new Z4Font("Arial", 50, false, false);
     this.textInfo.shape = new Z4Line(50, 50, 450, 450);
-    this.textInfo.textText = "Ciao Mamma!";
     // TO DELETE
     this.canvas.setTextInfo(this.textInfo);
   }

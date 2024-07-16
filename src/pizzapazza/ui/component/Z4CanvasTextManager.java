@@ -191,26 +191,28 @@ public class Z4CanvasTextManager {
     ctx.textAlign = "center";
 
     if (this.textInfo.shadow) {
-      this.draw(ctx, $exists(this.textInfo.shadowText) ? this.textInfo.shadowText : this.textInfo.textText, this.textInfo.shadowEmpty, this.textInfo.shadowColor, this.textInfo.shadowOffsetX, this.textInfo.shadowOffsetY, this.textInfo.shadowShearX, this.textInfo.shadowShearY, 0, null, this.textInfo.shadowReflex);
+      this.draw(ctx, $exists(this.textInfo.shadowText) ? this.textInfo.shadowText : this.textInfo.textText, this.textInfo.textText, this.textInfo.shadowEmpty, this.textInfo.shadowColor, this.textInfo.shadowOffsetX, this.textInfo.shadowOffsetY, this.textInfo.shadowShearX, this.textInfo.shadowShearY, 0, null, this.textInfo.shadowReflex);
     }
 
-    this.draw(ctx, this.textInfo.textText, this.textInfo.textEmpty, null, 0, 0, this.textInfo.textShearX, this.textInfo.textShearY, this.textInfo.textBorder, this.textInfo.textBorderColor, false);
+    this.draw(ctx, this.textInfo.textText, this.textInfo.textText, this.textInfo.textEmpty, null, 0, 0, this.textInfo.textShearX, this.textInfo.textShearY, this.textInfo.textBorder, this.textInfo.textBorderColor, false);
   }
 
-  private void draw($CanvasRenderingContext2D ctx, String str, boolean empty, Color color, int offsetX, int offsetY, int shearX, int shearY, int border, Color borderColor, boolean reflex) {
+  private void draw($CanvasRenderingContext2D ctx, String strToPrint, String strForMeasure, boolean empty, Color color, int offsetX, int offsetY, int shearX, int shearY, int border, Color borderColor, boolean reflex) {
     shearX /= Z4CanvasTextManager.SHEARING_COEFFICIENT;
     shearY /= Z4CanvasTextManager.SHEARING_COEFFICIENT;
 
-    int strLen = 0;
-    eval("strLen = str.length;");
+    int strToPrintLen = 0;
+    eval("strToPrintLen = strToPrint.length;");
+    int strForMeasureLen = 0;
+    eval("strForMeasureLen = strForMeasure.length;");
+
     double progress = 0;
-    double strWidth = ctx.measureText(str).width;
+    double strWidth = strToPrintLen == strForMeasureLen ? ctx.measureText(strForMeasure).width : ctx.measureText(strToPrint).width;
 
-    for (int i = 0; i < strLen; i++) {
-      String s = str.substring(i, i + 1);
-      double sWidth = ctx.measureText(s).width;
+    for (int i = 0; i < strToPrintLen; i++) {
+      String s = strToPrint.substring(i, i + 1);
+      double pos = (strToPrintLen == strForMeasureLen ? ctx.measureText(strForMeasure.substring(i, i + 1)).width : ctx.measureText(s).width) / strWidth;
 
-      double pos = sWidth / strWidth;
       Z4Vector next = this.textInfo.shape.getTangentAt(progress + pos / 2);
       String c = $exists(color) ? color.getRGBA_HEX() : this.textInfo.textColor.getColorAt(progress + pos / 2, true).getRGBA_HEX();
       progress += pos;
