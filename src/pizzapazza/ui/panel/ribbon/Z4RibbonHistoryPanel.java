@@ -18,6 +18,7 @@ import pizzapazza.ui.component.Z4HistoryPreview;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
+import simulation.dom.$IDBCursor;
 import simulation.js.$Apply_0_Void;
 import simulation.js.$Apply_1_Void;
 import simulation.js.$Apply_3_Void;
@@ -26,7 +27,6 @@ import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.setInterval;
 import static simulation.js.$Globals.setTimeout;
 import static simulation.js.$Globals.window;
-import simulation.js.$IDBCursor;
 import simulation.js.$Object;
 
 /**

@@ -1,4 +1,4 @@
-package simulation.js;
+package simulation.dom;
 
 import def.dom.IDBCursor;
 

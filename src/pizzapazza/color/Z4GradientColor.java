@@ -104,6 +104,27 @@ public class Z4GradientColor extends Z4AbstractGradientColor<Color> {
   }
 
   /**
+   * Returns a gradient color obtained as a sub portion of this gradient color
+   *
+   * @param start The start position (in the range [0,1])
+   * @param end The end position (in the range [0,1])
+   * @return The sub portion of this gradient color
+   */
+  public Z4GradientColor subGradientColor(double start, double end) {
+    double diff = end - start;
+
+    Z4GradientColor subGradientColor = new Z4GradientColor();
+    subGradientColor.addColor(this.getColorAt(start, false), 0);
+
+    this.colorPositions.
+            filter(position -> start <= position && position <= end).
+            forEach(position -> subGradientColor.addColor(this.getColorAt(position, false), (position - start) / diff));
+
+    subGradientColor.addColor(this.getColorAt(end, false), 1);
+    return subGradientColor;
+  }
+
+  /**
    * Lights up this Z4GradientColor, the transparency is not changed
    *
    * @param inOut true for an in-out lighting, false for an out-in lighting
