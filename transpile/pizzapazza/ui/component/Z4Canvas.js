@@ -1005,6 +1005,8 @@ class Z4Canvas extends JSComponent {
    */
    drawText() {
     this.selectedLayer.drawText(this.textManager);
+    this.selectedLayer.getLayerPreview().drawLayer();
+    this.drawCanvas();
     this.setChanged(true);
     this.setSaved(false);
     this.saveHistory("standard,tool");

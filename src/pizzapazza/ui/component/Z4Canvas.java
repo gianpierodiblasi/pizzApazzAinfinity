@@ -1072,6 +1072,9 @@ public class Z4Canvas extends JSComponent {
    */
   public void drawText() {
     this.selectedLayer.drawText(this.textManager);
+    this.selectedLayer.getLayerPreview().drawLayer();
+    this.drawCanvas();
+
     this.setChanged(true);
     this.setSaved(false);
     this.saveHistory("standard,tool");
@@ -1186,7 +1189,7 @@ public class Z4Canvas extends JSComponent {
     } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT) && $exists(this.textInfo) && $exists(this.textInfo.shape)) {
       this.ctxOverlay.save();
       this.ctxOverlay.scale(this.zoom, this.zoom);
-      
+
       this.textManager.drawText(this.ctxOverlay, true);
       this.ctxOverlay.restore();
     }
