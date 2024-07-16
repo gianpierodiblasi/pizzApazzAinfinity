@@ -62,6 +62,7 @@ public class Z4Translations {
   public static String TEXT = "";
   public static String FONT_SELECTION = "";
   public static String REFLEX = "";
+  public static String TEXT_WARNING_MESSAGE = "";
 
   // Ribbon History
   public static String HISTORY = "";
@@ -350,6 +351,7 @@ public class Z4Translations {
     Z4Translations.TEXT = "Text";
     Z4Translations.FONT_SELECTION = "Font Selection";
     Z4Translations.REFLEX = "Reflex";
+    Z4Translations.TEXT_WARNING_MESSAGE = "Create a shape or a path to draw the text";
 
     // Ribbon History
     Z4Translations.HISTORY = "History";
@@ -625,6 +627,7 @@ public class Z4Translations {
     Z4Translations.TEXT = "Testo";
     Z4Translations.FONT_SELECTION = "Selezione Font";
     Z4Translations.REFLEX = "Riflessa";
+    Z4Translations.TEXT_WARNING_MESSAGE = "Creare una forma o un percorso per disegnare il testo";
 
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";

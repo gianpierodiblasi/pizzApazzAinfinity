@@ -82,6 +82,8 @@ class Z4Translations {
 
   static  REFLEX = "";
 
+  static  TEXT_WARNING_MESSAGE = "";
+
   // Ribbon History
   static  HISTORY = "";
 
@@ -552,6 +554,7 @@ class Z4Translations {
     Z4Translations.TEXT = "Text";
     Z4Translations.FONT_SELECTION = "Font Selection";
     Z4Translations.REFLEX = "Reflex";
+    Z4Translations.TEXT_WARNING_MESSAGE = "Create a shape or a path to draw the text";
     // Ribbon History
     Z4Translations.HISTORY = "History";
     Z4Translations.UNDO = "Undo";
@@ -809,6 +812,7 @@ class Z4Translations {
     Z4Translations.TEXT = "Testo";
     Z4Translations.FONT_SELECTION = "Selezione Font";
     Z4Translations.REFLEX = "Riflessa";
+    Z4Translations.TEXT_WARNING_MESSAGE = "Creare una forma o un percorso per disegnare il testo";
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";
     Z4Translations.UNDO = "Annulla";

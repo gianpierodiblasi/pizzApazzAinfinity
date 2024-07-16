@@ -65,6 +65,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
   private final JSSpinner shadowShearX = new JSSpinner();
   private final JSSpinner shadowShearY = new JSSpinner();
 
+  private final JSLabel warningMessage = new JSLabel();
   private final JSButton apply = new JSButton();
   private final JSButton reset = new JSButton();
 
@@ -165,6 +166,11 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     Z4UI.addVLine(this, new GBC(x + 3, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
     x = 11;
+    this.warningMessage.setText(Z4Translations.TEXT_WARNING_MESSAGE);
+    this.warningMessage.getStyle().fontSize = "smaller";
+    this.add(this.warningMessage, new GBC(x, 0).w(2).a(GBC.WEST).wx(1).i(0, 5, 0, 0));
+
+    this.apply.setEnabled(false);
     this.apply.setContentAreaFilled(false);
     this.apply.setText(Z4Translations.APPLY);
     this.apply.addActionListener(event -> this.canvas.drawText());
@@ -174,8 +180,6 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.reset.setText(Z4Translations.RESET);
     this.reset.addActionListener(event -> this.onReset());
     this.add(this.reset, new GBC(x, 2).a(GBC.NORTH).f(GBC.HORIZONTAL).i(1, 5, 0, 0));
-
-    Z4UI.addLabel(this, "", new GBC(x + 1, 0).wx(1));
   }
 
   private void addDropDown(String dropDownContentSelector, String title, JSSpinner xSpin, JSSpinner ySpin, int x, int y, int top, int anchor, int fill) {
