@@ -238,10 +238,10 @@ public class Z4CanvasTextManager {
     } else {
       return this.textInfo.textColor.getColorAt(div, true).getRGBA_HEX();
 
-//          $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(s);
-//          c = this.textInfo.textColor.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
-//          $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(s);
-//          c = this.textInfo.textColor.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
+//      $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
+//      return this.textInfo.textColor.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
+//          $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
+//          return this.textInfo.textColor.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
     }
   }
 
