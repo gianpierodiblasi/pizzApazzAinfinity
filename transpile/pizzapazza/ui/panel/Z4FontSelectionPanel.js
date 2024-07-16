@@ -19,6 +19,8 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
 
    fonts = null;
 
+   sampleString = null;
+
   /**
    * Creates the object
    *
@@ -98,8 +100,21 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
     this.setSample();
   }
 
+  /**
+   * Sets the sample string to use to preview the font
+   *
+   * @param str The sample string, if empty or null the default sample string is
+   * used
+   */
+   setSampleString(str) {
+    this.sampleString = str;
+    if (this.value) {
+      this.setSample();
+    }
+  }
+
    setSample() {
-    this.sample.setText(Z4Translations.STRING_EXAMPLE);
+    this.sample.setText(this.sampleString ? this.sampleString : Z4Translations.STRING_EXAMPLE);
     this.sample.getStyle().fontFamily = this.value.family;
     this.sample.getStyle().fontSize = this.value.size + "px";
     this.sample.getStyle().fontStyle = this.value.italic ? "italic" : "normal";

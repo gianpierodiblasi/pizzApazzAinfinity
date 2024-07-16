@@ -15,6 +15,7 @@ import javascript.swing.SpinnerNumberModel;
 import pizzapazza.util.Z4Font;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
+import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
 import static simulation.js.$Globals.setTimeout;
 
@@ -33,6 +34,7 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
   private final JSCheckBox italic = new JSCheckBox();
 
   private final Array<String> fonts;
+  private String sampleString;
 
   /**
    * Creates the object
@@ -132,8 +134,21 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
     this.setSample();
   }
 
+  /**
+   * Sets the sample string to use to preview the font
+   *
+   * @param str The sample string, if empty or null the default sample string is
+   * used
+   */
+  public void setSampleString(String str) {
+    this.sampleString = str;
+    if ($exists(this.value)) {
+      this.setSample();
+    }
+  }
+
   private void setSample() {
-    this.sample.setText(Z4Translations.STRING_EXAMPLE);
+    this.sample.setText($exists(this.sampleString) ? this.sampleString : Z4Translations.STRING_EXAMPLE);
 
     this.sample.getStyle().fontFamily = this.value.family;
     this.sample.getStyle().fontSize = this.value.size + "px";

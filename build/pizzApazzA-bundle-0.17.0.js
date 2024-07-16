@@ -8727,11 +8727,12 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbontextpanel");
-    this.textInfo.font = new Z4Font("Arial", 12, false, false);
+    this.textInfo.font = new Z4Font("Arial", 24, false, false);
     this.font.setContentAreaFilled(false);
     this.font.setText(Z4Translations.FONT_SELECTION);
     this.font.addActionListener(event => {
       let fontSelectionPanel = new Z4FontSelectionPanel(this.fonts);
+      fontSelectionPanel.setSampleString(this.textInfo.textText);
       fontSelectionPanel.setValue(this.textInfo.font);
       JSOptionPane.showInputDialog(fontSelectionPanel, Z4Translations.FONT_SELECTION, listener => fontSelectionPanel.addChangeListener(listener), () => !!(fontSelectionPanel.getValue()), response => {
         if (response === JSOptionPane.OK_OPTION) {
@@ -8848,7 +8849,6 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textInfo.shadowShearX = parseInt(this.shadowShearX.getValue());
     this.textInfo.shadowShearY = parseInt(this.shadowShearY.getValue());
     // TO DELETE
-    this.textInfo.font = new Z4Font("Arial", 50, false, false);
     this.textInfo.shape = new Z4Line(50, 50, 450, 450);
     // TO DELETE
     this.canvas.setTextInfo(this.textInfo);
@@ -8857,7 +8857,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
    onReset() {
     JSOptionPane.showConfirmDialog(Z4Translations.RESET_MESSAGE, Z4Translations.RESET, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
       if (response === JSOptionPane.YES_OPTION) {
-        this.textInfo.font = new Z4Font("Arial", 12, false, false);
+        this.textInfo.font = new Z4Font("Arial", 24, false, false);
         this.rotation.setValue(new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false));
         this.textText.setText("");
         this.textEmpty.setSelected(false);
@@ -13391,6 +13391,8 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
 
    fonts = null;
 
+   sampleString = null;
+
   /**
    * Creates the object
    *
@@ -13470,8 +13472,21 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
     this.setSample();
   }
 
+  /**
+   * Sets the sample string to use to preview the font
+   *
+   * @param str The sample string, if empty or null the default sample string is
+   * used
+   */
+   setSampleString(str) {
+    this.sampleString = str;
+    if (this.value) {
+      this.setSample();
+    }
+  }
+
    setSample() {
-    this.sample.setText(Z4Translations.STRING_EXAMPLE);
+    this.sample.setText(this.sampleString ? this.sampleString : Z4Translations.STRING_EXAMPLE);
     this.sample.getStyle().fontFamily = this.value.family;
     this.sample.getStyle().fontSize = this.value.size + "px";
     this.sample.getStyle().fontStyle = this.value.italic ? "italic" : "normal";
