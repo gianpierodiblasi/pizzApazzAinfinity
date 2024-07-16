@@ -21,4 +21,16 @@ class Z4SinglePointShape extends Z4GeometricShape {
    distance(x, y) {
     return Z4Math.distance(this.x, this.y, x, y);
   }
+
+   getLength() {
+    return 0;
+  }
+
+   getPointAt(position) {
+    return new Z4Point(this.x, this.y);
+  }
+
+   getTangentAt(position) {
+    return Z4Vector.fromVector(this.x, this.y, 0, 0);
+  }
 }

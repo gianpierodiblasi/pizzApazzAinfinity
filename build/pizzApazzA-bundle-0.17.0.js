@@ -1041,6 +1041,32 @@ class Z4GeometricShape {
    */
    distance(x, y) {
   }
+
+  /**
+   * Returns The length of this geometric shape
+   *
+   * @return The length of this geometric shape
+   */
+   getLength() {
+  }
+
+  /**
+   * Returns the point of this geometric shape at a given position
+   *
+   * @param position The position (in the range [0,1])
+   * @return The point of this geometric shape at a given position
+   */
+   getPointAt(position) {
+  }
+
+  /**
+   * Returns the tangent vector of this geometric shape at a given position
+   *
+   * @param position The position (in the range [0,1])
+   * @return The tangent vector of this geometric shape at a given position
+   */
+   getTangentAt(position) {
+  }
 }
 /**
  * Common abstract object for quadric and cubic bezier curves
@@ -1096,6 +1122,20 @@ class Z4AbstractBezierCurve extends Z4GeometricShape {
    distance(x, y) {
     let point = this.bezier.project(new Z4Point(x, y));
     return Z4Math.distance(point.x, point.y, x, y);
+  }
+
+   getLength() {
+    return this.bezier.length();
+  }
+
+   getPointAt(position) {
+    return this.bezier.get(position);
+  }
+
+   getTangentAt(position) {
+    let point = this.bezier.get(position);
+    let derivative = this.bezier.derivative(position);
+    return Z4Vector.fromPoints(point.x, point.y, point.x + derivative.x, point.y + derivative.y);
   }
 }
 /**
@@ -1188,6 +1228,18 @@ class Z4GeometricCurve extends Z4GeometricShape {
 
    distance(x, y) {
     return this.polyline.distance(x, y);
+  }
+
+   getLength() {
+    return this.polyline.getLength();
+  }
+
+   getPointAt(position) {
+    return this.polyline.getPointAt(position);
+  }
+
+   getTangentAt(position) {
+    return this.polyline.getTangentAt(position);
   }
 }
 /**
@@ -1535,6 +1587,20 @@ class Z4Line extends Z4GeometricShape {
    distance(x, y) {
     return Z4Math.ptSegDist(this.x1, this.y1, this.x2, this.y2, x, y);
   }
+
+   getLength() {
+    return Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
+  }
+
+   getPointAt(position) {
+    let x = (this.x2 - this.x1) * position + this.x1;
+    let y = (this.y2 - this.y1) * position + this.y1;
+    return new Z4Point(x, y);
+  }
+
+   getTangentAt(position) {
+    return Z4Vector.fromPoints(this.x1, this.y1, this.x2, this.y2);
+  }
 }
 /**
  * The poyline
@@ -1545,6 +1611,8 @@ class Z4Polyline extends Z4GeometricShape {
 
    points = null;
 
+   cumLen = new Array();
+
   /**
    * Creates the object
    *
@@ -1553,6 +1621,13 @@ class Z4Polyline extends Z4GeometricShape {
   constructor(points) {
     super();
     this.points = points.map(point => point);
+    this.points.forEach((point, index, array) => {
+      if (index === 0) {
+        this.cumLen.push(0.0);
+      } else {
+        this.cumLen.push(this.cumLen[index - 1] + Z4Math.distance(point.x, point.y, array[index - 1].x, array[index - 1].y));
+      }
+    });
   }
 
    getPolyline() {
@@ -1560,7 +1635,7 @@ class Z4Polyline extends Z4GeometricShape {
   }
 
    distance(x, y) {
-    return this.points.map((point, index, array) => index === 0 ? Number.MAX_VALUE : Z4Math.ptSegDist(point.x, point.y, array[index - 1].x, array[index - 1].x, x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
+    return this.points.map((point, index, array) => index === 0 ? Number.MAX_VALUE : Z4Math.ptSegDist(point.x, point.y, array[index - 1].x, array[index - 1].y, x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
   }
 
   /**
@@ -1571,6 +1646,34 @@ class Z4Polyline extends Z4GeometricShape {
    */
    concat(polyline) {
     return new Z4Polyline((this.points).concat(polyline.points));
+  }
+
+   getLength() {
+    return this.cumLen[this.cumLen.length - 1];
+  }
+
+   getPointAt(position) {
+    let finalPos = position * this.cumLen[this.cumLen.length - 1];
+    let index = this.cumLen.findIndex(pos => pos >= finalPos, null);
+    if (this.cumLen[index] === finalPos) {
+      return this.points[index];
+    } else if (this.cumLen[index - 1] === finalPos) {
+      return this.points[index - 1];
+    } else {
+      let div = (finalPos - this.cumLen[index - 1]) / (this.cumLen[index] - this.cumLen[index - 1]);
+      let x = (this.points[index].x - this.points[index - 1].x) * div + this.points[index - 1].x;
+      let y = (this.points[index].y - this.points[index - 1].y) * div + this.points[index - 1].y;
+      return new Z4Point(x, y);
+    }
+  }
+
+   getTangentAt(position) {
+    let finalPos = position * this.cumLen[this.cumLen.length - 1];
+    let index = this.cumLen.findIndex(pos => pos >= finalPos, null);
+    if (!index) {
+      index = 1;
+    }
+    return Z4Vector.fromPoints(this.points[index - 1].x, this.points[index - 1].y, this.points[index].x, this.points[index].y);
   }
 }
 /**
@@ -1595,6 +1698,18 @@ class Z4SinglePointShape extends Z4GeometricShape {
 
    distance(x, y) {
     return Z4Math.distance(this.x, this.y, x, y);
+  }
+
+   getLength() {
+    return 0;
+  }
+
+   getPointAt(position) {
+    return new Z4Point(this.x, this.y);
+  }
+
+   getTangentAt(position) {
+    return Z4Vector.fromVector(this.x, this.y, 0, 0);
   }
 }
 /**
@@ -2698,7 +2813,7 @@ class Z4Canvas extends JSComponent {
 
    ioManager = new Z4CanvasIOManager(this, this.paper, this.drawingTools);
 
-   textManager = new Z4CanvasTextManager(this, this.ctx);
+   textManager = new Z4CanvasTextManager(this);
 
    historyManager = new Z4CanvasHistoryManager(this, this.paper);
 
@@ -3611,6 +3726,16 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Draws a text
+   */
+   drawText() {
+    this.selectedLayer.drawText(this.textManager);
+    this.setChanged(true);
+    this.setSaved(false);
+    this.saveHistory("standard,tool");
+  }
+
+  /**
    * Rotates the canvas in clockwise
    */
    rotatePlus90() {
@@ -3698,13 +3823,11 @@ class Z4Canvas extends JSComponent {
     }
   }
 
-  /**
-   * Draws the canvas overlay
-   */
    drawCanvasOverlay() {
     this.ctxOverlay.clearRect(0, 0, this.canvasOverlay.width, this.canvasOverlay.height);
     if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
     } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT) && this.textInfo) {
+      this.textManager.drawText(this.ctxOverlay, true);
     }
   }
 }
@@ -4767,8 +4890,6 @@ class Z4CanvasTextManager {
 
    canvas = null;
 
-   ctx = null;
-
    selectedLayer = null;
 
    textInfo = null;
@@ -4791,11 +4912,9 @@ class Z4CanvasTextManager {
    * Creates the object
    *
    * @param canvas The canvas
-   * @param ctx The canvas context
    */
-  constructor(canvas, ctx) {
+  constructor(canvas) {
     this.canvas = canvas;
-    this.ctx = ctx;
   }
 
   /**
@@ -4899,6 +5018,7 @@ class Z4CanvasTextManager {
     // }
     // }
   }
+
   // private void onAction(Z4PointIteratorDrawingAction action, double x, double y) {
   // Z4Point point = this.checkPoint(action, x, y);
   // 
@@ -4918,85 +5038,15 @@ class Z4CanvasTextManager {
   // this.startStandard();
   // }
   // }
-  // private Z4Point checkPoint(Z4PointIteratorDrawingAction action, double x, double y) {
-  // Z4Point point = this.magneticGrid ? Z4Math.nearestPointInGrid(x, y, this.centerGrid.x, this.centerGrid.y, this.plotWidthGrid, Z4Constants.MAGNETISM_PERCENTAGE) : new Z4Point(x, y);
-  // 
-  // if (!$exists(point)) {
-  // if (action == Z4PointIteratorDrawingAction.START) {
-  // this.pressed = false;
-  // }
-  // 
-  // return null;
-  // } else if (action == Z4PointIteratorDrawingAction.START) {
-  // this.onStartX = x;
-  // this.onStartY = y;
-  // 
-  // return point;
-  // } else if (this.drawingDirection == Z4DrawingDirection.FREE) {
-  // return point;
-  // } else if (this.drawingDirection == Z4DrawingDirection.HORIZONTAL) {
-  // return new Z4Point(point.x, this.onStartY);
-  // } else if (this.drawingDirection == Z4DrawingDirection.VERTICAL) {
-  // return new Z4Point(this.onStartX, point.y);
-  // } else {
-  // return null;
-  // }
-  // }
-  // @SuppressWarnings("empty-statement")
-  // private void iteratePoints(Z4PointIteratorDrawingAction action) {
-  // if (action != Z4PointIteratorDrawingAction.STOP) {
-  // while (this.drawNextPoint());
-  // 
-  // if (this.selectedDrawingTool.isInfinitePointGenerator() && this.pressed) {
-  // setTimeout(() -> this.iteratePoints(action), this.selectedDrawingTool.getInfinitePointGeneratorSleep());
-  // }
-  // } else if ($exists(this.selectedDrawingTool.getNextCountOnSTOP())) {
-  // Z4UI.pleaseWait(this.canvas, true, true, false, true, "", () -> this.iteratePoint(0));
-  // } else {
-  // this.startStandard();
-  // }
-  // }
-  // private void iteratePoint(int value) {
-  // Z4UI.setPleaseWaitProgressBarValue(100 * value / this.selectedDrawingTool.getNextCountOnSTOP());
-  // 
-  // if (this.drawNextPoint()) {
-  // Z4UI.pleaseWaitAdvanced(() -> this.iteratePoint(value + 1));
-  // } else {
-  // this.startStandard();
-  // Z4UI.pleaseWaitCompleted();
-  // }
-  // }
-  // private boolean drawNextPoint() {
-  // Z4DrawingPoint next = this.selectedDrawingTool.next();
-  // if (!$exists(next)) {
-  // return false;
-  // } else if (next.intent == Z4DrawingPointIntent.DRAW_OBJECTS) {
-  // this.selectedLayer.drawTool(this.selectedDrawingTool, next);
-  // this.selectedLayer.getLayerPreview().drawLayer();
-  // this.canvas.drawCanvas();
-  // return true;
-  // } else {
-  // if (this.zoom != 1) {
-  // next = new Z4DrawingPoint(Z4Vector.fromPoints(this.zoom * next.z4Vector.x0, this.zoom * next.z4Vector.y0, this.zoom * next.z4Vector.x, this.zoom * next.z4Vector.y), next.intensity, next.temporalPosition, next.intent, next.side, next.useVectorModuleAsSize);
-  // }
-  // 
-  // if (next.intent == Z4DrawingPointIntent.REPLACE_PREVIOUS_BOUNDS) {
-  // this.canvas.drawCanvas();
-  // }
-  // 
-  // this.ctx.save();
-  // this.ctx.translate(next.z4Vector.x0, next.z4Vector.y0);
-  // this.ctx.rotate(next.z4Vector.phase);
-  // this.selectedDrawingTool.draw(this.ctx, next);
-  // this.ctx.restore();
-  // return true;
-  // }
-  // }
-  // private void startStandard() {
-  // this.canvas.setChanged(true);
-  // this.canvas.setSaved(false);
-  // this.ribbonHistoryPanel.startStandard();
-  // }
+  /**
+   * Draws a text
+   *
+   * @param ctx The context used to draw the text
+   * @param drawPath true to draw the path where the text is drawn, false
+   * otherwise
+   */
+   drawText(ctx, drawPath) {
+  }
 }
 /**
  * The drawing tool preview
@@ -8674,8 +8724,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     x = 11;
     this.apply.setContentAreaFilled(false);
     this.apply.setText(Z4Translations.APPLY);
-    this.apply.addActionListener(event => {
-    });
+    this.apply.addActionListener(event => this.canvas.drawText());
     this.add(this.apply, new GBC(x, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 0));
     this.reset.setContentAreaFilled(false);
     this.reset.setText(Z4Translations.RESET);
@@ -20284,6 +20333,18 @@ class Z4Layer {
     this.offscreenCtx.translate(drawingPoint.z4Vector.x0 - this.offsetX, drawingPoint.z4Vector.y0 - this.offsetY);
     this.offscreenCtx.rotate(drawingPoint.z4Vector.phase);
     drawingTool.draw(this.offscreenCtx, drawingPoint);
+    this.offscreenCtx.restore();
+    this.blob = null;
+  }
+
+  /**
+   * Draws a text
+   *
+   * @param textManager The manager used to draw the text
+   */
+   drawText(textManager) {
+    this.offscreenCtx.save();
+    textManager.drawText(this.offscreenCtx, false);
     this.offscreenCtx.restore();
     this.blob = null;
   }

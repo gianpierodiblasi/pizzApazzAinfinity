@@ -85,7 +85,7 @@ class Z4Canvas extends JSComponent {
 
    ioManager = new Z4CanvasIOManager(this, this.paper, this.drawingTools);
 
-   textManager = new Z4CanvasTextManager(this, this.ctx);
+   textManager = new Z4CanvasTextManager(this);
 
    historyManager = new Z4CanvasHistoryManager(this, this.paper);
 
@@ -998,6 +998,16 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Draws a text
+   */
+   drawText() {
+    this.selectedLayer.drawText(this.textManager);
+    this.setChanged(true);
+    this.setSaved(false);
+    this.saveHistory("standard,tool");
+  }
+
+  /**
    * Rotates the canvas in clockwise
    */
    rotatePlus90() {
@@ -1085,13 +1095,11 @@ class Z4Canvas extends JSComponent {
     }
   }
 
-  /**
-   * Draws the canvas overlay
-   */
    drawCanvasOverlay() {
     this.ctxOverlay.clearRect(0, 0, this.canvasOverlay.width, this.canvasOverlay.height);
     if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
     } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT) && this.textInfo) {
+      this.textManager.drawText(this.ctxOverlay, true);
     }
   }
 }

@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10,"i55":10,"i56":10,"i57":10,"i58":10,"i59":10,"i60":10,"i61":10,"i62":10,"i63":10,"i64":10,"i65":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10,"i55":10,"i56":10,"i57":10,"i58":10,"i59":10,"i60":10,"i61":10,"i62":10,"i63":10,"i64":10,"i65":10,"i66":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -325,9 +325,9 @@ extends javascript.swing.JSComponent</pre>
 </tr>
 <tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#drawCanvasOverlay()">drawCanvasOverlay</a></span>()</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#drawText()">drawText</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Draws the canvas overlay</div>
+<div class="block">Draws a text</div>
 </td>
 </tr>
 <tr id="i19" class="rowColor">
@@ -673,12 +673,19 @@ extends javascript.swing.JSComponent</pre>
 </tr>
 <tr id="i64" class="altColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTextInfo(pizzapazza.util.Z4TextInfo)">setTextInfo</a></span>&#8203;(<a href="../../util/Z4TextInfo.html" title="class in pizzapazza.util">Z4TextInfo</a>&nbsp;textInfo)</code></th>
+<td class="colLast">
+<div class="block">Sets the text info</div>
+</td>
+</tr>
+<tr id="i65" class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setZoom(double)">setZoom</a></span>&#8203;(double&nbsp;zoom)</code></th>
 <td class="colLast">
 <div class="block">Sets the zoom</div>
 </td>
 </tr>
-<tr id="i65" class="rowColor">
+<tr id="i66" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toHistory(simulation.js.$Apply_1_Void)">toHistory</a></span>&#8203;(simulation.js.$Apply_1_Void&lt;simulation.js.$Object&gt;&nbsp;apply)</code></th>
 <td class="colLast">
@@ -1649,6 +1656,30 @@ extends javascript.swing.JSComponent</pre>
 </dl>
 </li>
 </ul>
+<a id="setTextInfo(pizzapazza.util.Z4TextInfo)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setTextInfo</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setTextInfo&#8203;(<a href="../../util/Z4TextInfo.html" title="class in pizzapazza.util">Z4TextInfo</a>&nbsp;textInfo)</pre>
+<div class="block">Sets the text info</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>textInfo</code> - The text info</dd>
+</dl>
+</li>
+</ul>
+<a id="drawText()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>drawText</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;drawText()</pre>
+<div class="block">Draws a text</div>
+</li>
+</ul>
 <a id="rotatePlus90()">
 <!--   -->
 </a>
@@ -1688,21 +1719,11 @@ extends javascript.swing.JSComponent</pre>
 <a id="drawCanvasBounds()">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>drawCanvasBounds</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;drawCanvasBounds()</pre>
 <div class="block">Draws the canvas (and layer) bounds</div>
-</li>
-</ul>
-<a id="drawCanvasOverlay()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>drawCanvasOverlay</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;drawCanvasOverlay()</pre>
-<div class="block">Draws the canvas overlay</div>
 </li>
 </ul>
 </li>

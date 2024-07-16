@@ -7,8 +7,6 @@ class Z4CanvasTextManager {
 
    canvas = null;
 
-   ctx = null;
-
    selectedLayer = null;
 
    textInfo = null;
@@ -31,11 +29,9 @@ class Z4CanvasTextManager {
    * Creates the object
    *
    * @param canvas The canvas
-   * @param ctx The canvas context
    */
-  constructor(canvas, ctx) {
+  constructor(canvas) {
     this.canvas = canvas;
-    this.ctx = ctx;
   }
 
   /**
@@ -139,6 +135,7 @@ class Z4CanvasTextManager {
     // }
     // }
   }
+
   // private void onAction(Z4PointIteratorDrawingAction action, double x, double y) {
   // Z4Point point = this.checkPoint(action, x, y);
   // 
@@ -158,83 +155,13 @@ class Z4CanvasTextManager {
   // this.startStandard();
   // }
   // }
-  // private Z4Point checkPoint(Z4PointIteratorDrawingAction action, double x, double y) {
-  // Z4Point point = this.magneticGrid ? Z4Math.nearestPointInGrid(x, y, this.centerGrid.x, this.centerGrid.y, this.plotWidthGrid, Z4Constants.MAGNETISM_PERCENTAGE) : new Z4Point(x, y);
-  // 
-  // if (!$exists(point)) {
-  // if (action == Z4PointIteratorDrawingAction.START) {
-  // this.pressed = false;
-  // }
-  // 
-  // return null;
-  // } else if (action == Z4PointIteratorDrawingAction.START) {
-  // this.onStartX = x;
-  // this.onStartY = y;
-  // 
-  // return point;
-  // } else if (this.drawingDirection == Z4DrawingDirection.FREE) {
-  // return point;
-  // } else if (this.drawingDirection == Z4DrawingDirection.HORIZONTAL) {
-  // return new Z4Point(point.x, this.onStartY);
-  // } else if (this.drawingDirection == Z4DrawingDirection.VERTICAL) {
-  // return new Z4Point(this.onStartX, point.y);
-  // } else {
-  // return null;
-  // }
-  // }
-  // @SuppressWarnings("empty-statement")
-  // private void iteratePoints(Z4PointIteratorDrawingAction action) {
-  // if (action != Z4PointIteratorDrawingAction.STOP) {
-  // while (this.drawNextPoint());
-  // 
-  // if (this.selectedDrawingTool.isInfinitePointGenerator() && this.pressed) {
-  // setTimeout(() -> this.iteratePoints(action), this.selectedDrawingTool.getInfinitePointGeneratorSleep());
-  // }
-  // } else if ($exists(this.selectedDrawingTool.getNextCountOnSTOP())) {
-  // Z4UI.pleaseWait(this.canvas, true, true, false, true, "", () -> this.iteratePoint(0));
-  // } else {
-  // this.startStandard();
-  // }
-  // }
-  // private void iteratePoint(int value) {
-  // Z4UI.setPleaseWaitProgressBarValue(100 * value / this.selectedDrawingTool.getNextCountOnSTOP());
-  // 
-  // if (this.drawNextPoint()) {
-  // Z4UI.pleaseWaitAdvanced(() -> this.iteratePoint(value + 1));
-  // } else {
-  // this.startStandard();
-  // Z4UI.pleaseWaitCompleted();
-  // }
-  // }
-  // private boolean drawNextPoint() {
-  // Z4DrawingPoint next = this.selectedDrawingTool.next();
-  // if (!$exists(next)) {
-  // return false;
-  // } else if (next.intent == Z4DrawingPointIntent.DRAW_OBJECTS) {
-  // this.selectedLayer.drawTool(this.selectedDrawingTool, next);
-  // this.selectedLayer.getLayerPreview().drawLayer();
-  // this.canvas.drawCanvas();
-  // return true;
-  // } else {
-  // if (this.zoom != 1) {
-  // next = new Z4DrawingPoint(Z4Vector.fromPoints(this.zoom * next.z4Vector.x0, this.zoom * next.z4Vector.y0, this.zoom * next.z4Vector.x, this.zoom * next.z4Vector.y), next.intensity, next.temporalPosition, next.intent, next.side, next.useVectorModuleAsSize);
-  // }
-  // 
-  // if (next.intent == Z4DrawingPointIntent.REPLACE_PREVIOUS_BOUNDS) {
-  // this.canvas.drawCanvas();
-  // }
-  // 
-  // this.ctx.save();
-  // this.ctx.translate(next.z4Vector.x0, next.z4Vector.y0);
-  // this.ctx.rotate(next.z4Vector.phase);
-  // this.selectedDrawingTool.draw(this.ctx, next);
-  // this.ctx.restore();
-  // return true;
-  // }
-  // }
-  // private void startStandard() {
-  // this.canvas.setChanged(true);
-  // this.canvas.setSaved(false);
-  // this.ribbonHistoryPanel.startStandard();
-  // }
+  /**
+   * Draws a text
+   *
+   * @param ctx The context used to draw the text
+   * @param drawPath true to draw the path where the text is drawn, false
+   * otherwise
+   */
+   drawText(ctx, drawPath) {
+  }
 }

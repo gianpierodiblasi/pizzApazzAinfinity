@@ -309,6 +309,18 @@ class Z4Layer {
   }
 
   /**
+   * Draws a text
+   *
+   * @param textManager The manager used to draw the text
+   */
+   drawText(textManager) {
+    this.offscreenCtx.save();
+    textManager.drawText(this.offscreenCtx, false);
+    this.offscreenCtx.restore();
+    this.blob = null;
+  }
+
+  /**
    * Horizontally flips the layer
    */
    flipHorizonal() {

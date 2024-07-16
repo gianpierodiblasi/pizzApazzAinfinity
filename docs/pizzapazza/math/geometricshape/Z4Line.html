@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -240,10 +240,31 @@ implements <a href="Z4GeometricShape.html" title="interface in pizzapazza.math.g
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLength()">getLength</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns The length of this geometric shape</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="../Z4Point.html" title="class in pizzapazza.math">Z4Point</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPointAt(double)">getPointAt</a></span>&#8203;(double&nbsp;position)</code></th>
+<td class="colLast">
+<div class="block">Returns the point of this geometric shape at a given position</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="Z4Polyline.html" title="class in pizzapazza.math.geometricshape">Z4Polyline</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPolyline()">getPolyline</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the nearest polyline</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="../Z4Vector.html" title="class in pizzapazza.math">Z4Vector</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTangentAt(double)">getTangentAt</a></span>&#8203;(double&nbsp;position)</code></th>
+<td class="colLast">
+<div class="block">Returns the tangent vector of this geometric shape at a given position</div>
 </td>
 </tr>
 </table>
@@ -366,7 +387,7 @@ implements <a href="Z4GeometricShape.html" title="interface in pizzapazza.math.g
 <a id="distance(double,double)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>distance</h4>
 <pre class="methodSignature">public&nbsp;double&nbsp;distance&#8203;(double&nbsp;x,
@@ -381,6 +402,61 @@ implements <a href="Z4GeometricShape.html" title="interface in pizzapazza.math.g
 <dd><code>y</code> - The y-axis coordinate of the point</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The distance from a given point of this geometric shape</dd>
+</dl>
+</li>
+</ul>
+<a id="getLength()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLength</h4>
+<pre class="methodSignature">public&nbsp;double&nbsp;getLength()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Z4GeometricShape.html#getLength()">Z4GeometricShape</a></code></span></div>
+<div class="block">Returns The length of this geometric shape</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Z4GeometricShape.html#getLength()">getLength</a></code>&nbsp;in interface&nbsp;<code><a href="Z4GeometricShape.html" title="interface in pizzapazza.math.geometricshape">Z4GeometricShape</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The length of this geometric shape</dd>
+</dl>
+</li>
+</ul>
+<a id="getPointAt(double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPointAt</h4>
+<pre class="methodSignature">public&nbsp;<a href="../Z4Point.html" title="class in pizzapazza.math">Z4Point</a>&nbsp;getPointAt&#8203;(double&nbsp;position)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Z4GeometricShape.html#getPointAt(double)">Z4GeometricShape</a></code></span></div>
+<div class="block">Returns the point of this geometric shape at a given position</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Z4GeometricShape.html#getPointAt(double)">getPointAt</a></code>&nbsp;in interface&nbsp;<code><a href="Z4GeometricShape.html" title="interface in pizzapazza.math.geometricshape">Z4GeometricShape</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>position</code> - The position (in the range [0,1])</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The point of this geometric shape at a given position</dd>
+</dl>
+</li>
+</ul>
+<a id="getTangentAt(double)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getTangentAt</h4>
+<pre class="methodSignature">public&nbsp;<a href="../Z4Vector.html" title="class in pizzapazza.math">Z4Vector</a>&nbsp;getTangentAt&#8203;(double&nbsp;position)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Z4GeometricShape.html#getTangentAt(double)">Z4GeometricShape</a></code></span></div>
+<div class="block">Returns the tangent vector of this geometric shape at a given position</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Z4GeometricShape.html#getTangentAt(double)">getTangentAt</a></code>&nbsp;in interface&nbsp;<code><a href="Z4GeometricShape.html" title="interface in pizzapazza.math.geometricshape">Z4GeometricShape</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>position</code> - The position (in the range [0,1])</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The tangent vector of this geometric shape at a given position</dd>
 </dl>
 </li>
 </ul>

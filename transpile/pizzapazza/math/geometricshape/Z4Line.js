@@ -36,4 +36,18 @@ class Z4Line extends Z4GeometricShape {
    distance(x, y) {
     return Z4Math.ptSegDist(this.x1, this.y1, this.x2, this.y2, x, y);
   }
+
+   getLength() {
+    return Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
+  }
+
+   getPointAt(position) {
+    let x = (this.x2 - this.x1) * position + this.x1;
+    let y = (this.y2 - this.y1) * position + this.y1;
+    return new Z4Point(x, y);
+  }
+
+   getTangentAt(position) {
+    return Z4Vector.fromPoints(this.x1, this.y1, this.x2, this.y2);
+  }
 }

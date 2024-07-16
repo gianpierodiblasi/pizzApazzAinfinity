@@ -23,4 +23,16 @@ class Z4GeometricCurve extends Z4GeometricShape {
    distance(x, y) {
     return this.polyline.distance(x, y);
   }
+
+   getLength() {
+    return this.polyline.getLength();
+  }
+
+   getPointAt(position) {
+    return this.polyline.getPointAt(position);
+  }
+
+   getTangentAt(position) {
+    return this.polyline.getTangentAt(position);
+  }
 }

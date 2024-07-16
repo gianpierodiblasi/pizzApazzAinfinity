@@ -53,4 +53,18 @@ class Z4AbstractBezierCurve extends Z4GeometricShape {
     let point = this.bezier.project(new Z4Point(x, y));
     return Z4Math.distance(point.x, point.y, x, y);
   }
+
+   getLength() {
+    return this.bezier.length();
+  }
+
+   getPointAt(position) {
+    return this.bezier.get(position);
+  }
+
+   getTangentAt(position) {
+    let point = this.bezier.get(position);
+    let derivative = this.bezier.derivative(position);
+    return Z4Vector.fromPoints(point.x, point.y, point.x + derivative.x, point.y + derivative.y);
+  }
 }

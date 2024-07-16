@@ -127,8 +127,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     x = 11;
     this.apply.setContentAreaFilled(false);
     this.apply.setText(Z4Translations.APPLY);
-    this.apply.addActionListener(event => {
-    });
+    this.apply.addActionListener(event => this.canvas.drawText());
     this.add(this.apply, new GBC(x, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 0));
     this.reset.setContentAreaFilled(false);
     this.reset.setText(Z4Translations.RESET);

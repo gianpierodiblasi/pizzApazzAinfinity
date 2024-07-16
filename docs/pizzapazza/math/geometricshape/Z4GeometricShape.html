@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":6};
+var data = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -128,7 +128,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><code><a href="Z4Line.html" title="class in pizzapazza.math.geometricshape">Z4Line</a></code>, <code><a href="Z4Polyline.html" title="class in pizzapazza.math.geometricshape">Z4Polyline</a></code></dd>
+<dd><code><a href="Z4AbstractBezierCurve.html" title="class in pizzapazza.math.geometricshape">Z4AbstractBezierCurve</a></code>, <code><a href="Z4BezierCurve.html" title="class in pizzapazza.math.geometricshape">Z4BezierCurve</a></code>, <code><a href="Z4EllipseFrame.html" title="class in pizzapazza.math.geometricshape">Z4EllipseFrame</a></code>, <code><a href="Z4GeometricCurve.html" title="class in pizzapazza.math.geometricshape">Z4GeometricCurve</a></code>, <code><a href="Z4GeometricFrame.html" title="class in pizzapazza.math.geometricshape">Z4GeometricFrame</a></code>, <code><a href="Z4GeometricShapeSequence.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShapeSequence</a></code>, <code><a href="Z4Line.html" title="class in pizzapazza.math.geometricshape">Z4Line</a></code>, <code><a href="Z4Polyline.html" title="class in pizzapazza.math.geometricshape">Z4Polyline</a></code>, <code><a href="Z4QuadCurve.html" title="class in pizzapazza.math.geometricshape">Z4QuadCurve</a></code>, <code><a href="Z4RectangleFrame.html" title="class in pizzapazza.math.geometricshape">Z4RectangleFrame</a></code>, <code><a href="Z4RoundRectangleFrame.html" title="class in pizzapazza.math.geometricshape">Z4RoundRectangleFrame</a></code>, <code><a href="Z4SinglePointShape.html" title="class in pizzapazza.math.geometricshape">Z4SinglePointShape</a></code>, <code><a href="Z4SinusoidalCurve.html" title="class in pizzapazza.math.geometricshape">Z4SinusoidalCurve</a></code>, <code><a href="Z4SpiralCurve.html" title="class in pizzapazza.math.geometricshape">Z4SpiralCurve</a></code></dd>
 </dl>
 <hr>
 <pre>public interface <span class="typeNameLabel">Z4GeometricShape</span></pre>
@@ -166,10 +166,31 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLength()">getLength</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns The length of this geometric shape</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="../Z4Point.html" title="class in pizzapazza.math">Z4Point</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPointAt(double)">getPointAt</a></span>&#8203;(double&nbsp;position)</code></th>
+<td class="colLast">
+<div class="block">Returns the point of this geometric shape at a given position</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="Z4Polyline.html" title="class in pizzapazza.math.geometricshape">Z4Polyline</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPolyline()">getPolyline</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the nearest polyline</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="../Z4Vector.html" title="class in pizzapazza.math">Z4Vector</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTangentAt(double)">getTangentAt</a></span>&#8203;(double&nbsp;position)</code></th>
+<td class="colLast">
+<div class="block">Returns the tangent vector of this geometric shape at a given position</div>
 </td>
 </tr>
 </table>
@@ -206,7 +227,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <a id="distance(double,double)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>distance</h4>
 <pre class="methodSignature">double&nbsp;distance&#8203;(double&nbsp;x,
@@ -218,6 +239,52 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code>y</code> - The y-axis coordinate of the point</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The distance from a given point of this geometric shape</dd>
+</dl>
+</li>
+</ul>
+<a id="getLength()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLength</h4>
+<pre class="methodSignature">double&nbsp;getLength()</pre>
+<div class="block">Returns The length of this geometric shape</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The length of this geometric shape</dd>
+</dl>
+</li>
+</ul>
+<a id="getPointAt(double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPointAt</h4>
+<pre class="methodSignature"><a href="../Z4Point.html" title="class in pizzapazza.math">Z4Point</a>&nbsp;getPointAt&#8203;(double&nbsp;position)</pre>
+<div class="block">Returns the point of this geometric shape at a given position</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>position</code> - The position (in the range [0,1])</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The point of this geometric shape at a given position</dd>
+</dl>
+</li>
+</ul>
+<a id="getTangentAt(double)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getTangentAt</h4>
+<pre class="methodSignature"><a href="../Z4Vector.html" title="class in pizzapazza.math">Z4Vector</a>&nbsp;getTangentAt&#8203;(double&nbsp;position)</pre>
+<div class="block">Returns the tangent vector of this geometric shape at a given position</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>position</code> - The position (in the range [0,1])</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The tangent vector of this geometric shape at a given position</dd>
 </dl>
 </li>
 </ul>
