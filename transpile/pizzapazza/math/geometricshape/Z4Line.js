@@ -48,6 +48,11 @@ class Z4Line extends Z4GeometricShape {
   }
 
    getTangentAt(position) {
-    return Z4Vector.fromPoints(this.x1, this.y1, this.x2, this.y2);
+    if (position !== 1) {
+      let point = this.getPointAt(position);
+      return Z4Vector.fromPoints(point.x, point.y, this.x2, this.y2);
+    } else {
+      return Z4Vector.fromVector(this.x2, this.y2, 1, Z4Math.atan(this.x1, this.y1, this.x2, this.y2));
+    }
   }
 }

@@ -58,6 +58,11 @@ public class Z4Line implements Z4GeometricShape {
 
   @Override
   public Z4Vector getTangentAt(double position) {
-    return Z4Vector.fromPoints(this.x1, this.y1, this.x2, this.y2);
+    if (position != 1) {
+      Z4Point point = this.getPointAt(position);
+      return Z4Vector.fromPoints(point.x, point.y, this.x2, this.y2);
+    } else {
+      return Z4Vector.fromVector(this.x2, this.y2, 1, Z4Math.atan(this.x1, this.y1, this.x2, this.y2));
+    }
   }
 }

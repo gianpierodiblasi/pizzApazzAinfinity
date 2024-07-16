@@ -23,6 +23,8 @@ class Z4CanvasTextManager {
 
   // 
   // private boolean pressed;
+  static  SHEARING_COEFFICIENT = 50;
+
   /**
    * Creates the object
    *
@@ -162,19 +164,48 @@ class Z4CanvasTextManager {
    * otherwise
    */
    drawText(ctx, drawPath) {
+    ctx.font = (this.textInfo.font.italic ? "italic " : "") + (this.textInfo.font.bold ? "bold " : "") + this.textInfo.font.size + "px '" + this.textInfo.font.family + "'";
+    ctx.textAlign = "center";
     if (this.textInfo.shadow) {
-      if (this.textInfo.shadowText.length() === 0) {
-        this.textInfo.shadowText = this.textInfo.textText;
-      }
-      // Shape[] shape = TextFactory.getTestoOutline(g.getFontRenderContext(), textInfo.shadowText, textInfo.font, pathS, textInfo.rotationType, textInfo.constantAngle, textInfo.rotationAngles, textInfo.shearXShadow, textInfo.shearYShadow, textInfo.reflex, textInfo.gShape, textInfo.shadowLocation);
-      // TextFactory.draw(g, textInfo.color, shape, pathS, textInfo.fullGlobalColor, textInfo.shadingOnLetter, textInfo.emptyShadow, textInfo.negative, textInfo.deltaColor);
+      this.draw(ctx, this.textInfo.shadowText ? this.textInfo.shadowText : this.textInfo.textText, this.textInfo.shadowEmpty, this.textInfo.shadowColor, this.textInfo.shadowOffsetX, this.textInfo.shadowOffsetY, this.textInfo.shadowShearX, this.textInfo.shadowShearY, 0, null, this.textInfo.shadowReflex);
     }
-    // TextFactory.draw(g, null, shape, pathT, textInfo.fullGlobalColor, textInfo.shadingOnLetter, textInfo.emptyText, false, 0);
-    // 
-    // if (textInfo.textBorder) {
-    // g.setPaint(textInfo.textColorBorder);
-    // g.setStroke(new BasicStroke(textInfo.textThicknessBorder, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-    // g.draw(pathT);
-    // }
+    this.draw(ctx, this.textInfo.textText, this.textInfo.textEmpty, null, 0, 0, this.textInfo.textShearX, this.textInfo.textShearY, this.textInfo.textBorder, this.textInfo.textBorderColor, false);
+  }
+
+   draw(ctx, str, empty, color, offsetX, offsetY, shearX, shearY, border, borderColor, reflex) {
+    shearX /= Z4CanvasTextManager.SHEARING_COEFFICIENT;
+    shearY /= Z4CanvasTextManager.SHEARING_COEFFICIENT;
+    let strLen = 0;
+    eval("strLen = str.length;");
+    let progress = 0;
+    let strWidth = ctx.measureText(str).width;
+    for (let i = 0; i < strLen; i++) {
+      let s = str.substring(i, i + 1);
+      let sWidth = ctx.measureText(s).width;
+      let pos = sWidth / strWidth;
+      let next = this.textInfo.shape.getTangentAt(progress + pos / 2);
+      let c = color ? color.getRGBA_HEX() : this.textInfo.textColor.getColorAt(progress + pos / 2, true).getRGBA_HEX();
+      progress += pos;
+      ctx.save();
+      ctx.translate(next.x0 + offsetX, next.y0 + offsetY);
+      ctx.rotate(this.textInfo.rotation.next(next.phase));
+      ctx.transform(1, shearY, -shearX, 1, 0, 0);
+      if (reflex) {
+        ctx.transform(1, 0, 0, -1, 0, 0);
+      }
+      ctx.strokeStyle = Z4Constants.getStyle(c);
+      ctx.fillStyle = Z4Constants.getStyle(c);
+      if (empty) {
+        ctx.strokeText(s, 0, 0);
+      } else {
+        ctx.fillText(s, 0, 0);
+      }
+      if (border) {
+        ctx.lineWidth = border;
+        ctx.strokeStyle = Z4Constants.getStyle(borderColor.getRGBA_HEX());
+        ctx.strokeText(s, 0, 0);
+      }
+      ctx.restore();
+    }
   }
 }

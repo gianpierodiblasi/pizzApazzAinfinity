@@ -84,10 +84,20 @@ public class Z4Polyline implements Z4GeometricShape {
   public Z4Vector getTangentAt(double position) {
     double finalPos = position * this.cumLen.$get(this.cumLen.length - 1);
     int index = this.cumLen.findIndex(pos -> pos >= finalPos, null);
-    if (!$exists(index)) {
-      index = 1;
-    }
 
-    return Z4Vector.fromPoints(this.points.$get(index - 1).x, this.points.$get(index - 1).y, this.points.$get(index).x, this.points.$get(index).y);
+    if (this.cumLen.$get(index) == finalPos) {
+      if (!$exists(index)) {
+        index = 1;
+      }
+
+      return Z4Vector.fromPoints(this.points.$get(index - 1).x, this.points.$get(index - 1).y, this.points.$get(index).x, this.points.$get(index).y);
+    } else if (this.cumLen.$get(index - 1) == finalPos) {
+      return Z4Vector.fromPoints(this.points.$get(index - 1).x, this.points.$get(index - 1).y, this.points.$get(index).x, this.points.$get(index).y);
+    } else {
+      double div = (finalPos - this.cumLen.$get(index - 1)) / (this.cumLen.$get(index) - this.cumLen.$get(index - 1));
+      double x = (this.points.$get(index).x - this.points.$get(index - 1).x) * div + this.points.$get(index - 1).x;
+      double y = (this.points.$get(index).y - this.points.$get(index - 1).y) * div + this.points.$get(index - 1).y;
+      return Z4Vector.fromPoints(x, y, this.points.$get(index).x, this.points.$get(index).y);
+    }
   }
 }

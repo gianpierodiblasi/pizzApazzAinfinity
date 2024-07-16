@@ -84,7 +84,6 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.cssAddClass("z4ribbontextpanel");
 
     this.textInfo.font = new Z4Font("Arial", 12, false, false);
-    this.textInfo.shape = new Z4Line(50, 50, 450, 450);
 
     this.font.setContentAreaFilled(false);
     this.font.setText(Z4Translations.FONT_SELECTION);
@@ -122,6 +121,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
     this.textColor.setCloseOnChange(false);
     this.textColor.setSelectedColor(this.getBlackBiGradientColor());
+    this.textColor.addChangeListener(event -> this.onTextInfoChange());
     this.add(this.textColor, new GBC(x + 1, 2).a(GBC.NORTHEAST).i(1, 0, 0, 5));
 
     this.addDropDown("z4ribbontextpanel-shearing", Z4Translations.SHEARING, this.textShearX, this.textShearY, x + 2, 1, 0, GBC.CENTER, GBC.VERTICAL);
@@ -233,6 +233,12 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textInfo.shadowOffsetY = parseInt(this.shadowOffsetY.getValue());
     this.textInfo.shadowShearX = parseInt(this.shadowShearX.getValue());
     this.textInfo.shadowShearY = parseInt(this.shadowShearY.getValue());
+
+    // TO DELETE
+    this.textInfo.font = new Z4Font("Arial", 50, false, false);
+    this.textInfo.shape = new Z4Line(50, 50, 450, 450);
+    this.textInfo.textText = "Ciao Mamma!";
+    // TO DELETE
 
     this.canvas.setTextInfo(this.textInfo);
   }

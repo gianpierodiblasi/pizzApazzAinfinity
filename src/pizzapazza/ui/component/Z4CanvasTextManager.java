@@ -1,13 +1,18 @@
 package pizzapazza.ui.component;
 
 import def.dom.MouseEvent;
+import static def.js.Globals.eval;
 import def.js.Set;
+import javascript.awt.Color;
 import javascript.awt.Dimension;
+import pizzapazza.math.Z4Vector;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
+import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Layer;
 import pizzapazza.util.Z4TextInfo;
 import simulation.dom.$CanvasRenderingContext2D;
+import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
 
 /**
@@ -31,6 +36,8 @@ public class Z4CanvasTextManager {
   private Z4StatusPanel statusPanel;
 //
 //  private boolean pressed;
+
+  private final static double SHEARING_COEFFICIENT = 50;
 
   /**
    * Creates the object
@@ -180,20 +187,59 @@ public class Z4CanvasTextManager {
    * otherwise
    */
   public void drawText($CanvasRenderingContext2D ctx, boolean drawPath) {
+    ctx.font = (this.textInfo.font.italic ? "italic " : "") + (this.textInfo.font.bold ? "bold " : "") + this.textInfo.font.size + "px '" + this.textInfo.font.family + "'";
+    ctx.textAlign = "center";
+
     if (this.textInfo.shadow) {
-      if (this.textInfo.shadowText.length() == 0) {
-        this.textInfo.shadowText = this.textInfo.textText;
-      }
-//      Shape[] shape = TextFactory.getTestoOutline(g.getFontRenderContext(), textInfo.shadowText, textInfo.font, pathS, textInfo.rotationType, textInfo.constantAngle, textInfo.rotationAngles, textInfo.shearXShadow, textInfo.shearYShadow, textInfo.reflex, textInfo.gShape, textInfo.shadowLocation);
-//      TextFactory.draw(g, textInfo.color, shape, pathS, textInfo.fullGlobalColor, textInfo.shadingOnLetter, textInfo.emptyShadow, textInfo.negative, textInfo.deltaColor);
+      this.draw(ctx, $exists(this.textInfo.shadowText) ? this.textInfo.shadowText : this.textInfo.textText, this.textInfo.shadowEmpty, this.textInfo.shadowColor, this.textInfo.shadowOffsetX, this.textInfo.shadowOffsetY, this.textInfo.shadowShearX, this.textInfo.shadowShearY, 0, null, this.textInfo.shadowReflex);
     }
 
-//    TextFactory.draw(g, null, shape, pathT, textInfo.fullGlobalColor, textInfo.shadingOnLetter, textInfo.emptyText, false, 0);
-//
-//    if (textInfo.textBorder) {
-//      g.setPaint(textInfo.textColorBorder);
-//      g.setStroke(new BasicStroke(textInfo.textThicknessBorder, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-//      g.draw(pathT);
-//    }
+    this.draw(ctx, this.textInfo.textText, this.textInfo.textEmpty, null, 0, 0, this.textInfo.textShearX, this.textInfo.textShearY, this.textInfo.textBorder, this.textInfo.textBorderColor, false);
+  }
+
+  private void draw($CanvasRenderingContext2D ctx, String str, boolean empty, Color color, int offsetX, int offsetY, int shearX, int shearY, int border, Color borderColor, boolean reflex) {
+    shearX /= Z4CanvasTextManager.SHEARING_COEFFICIENT;
+    shearY /= Z4CanvasTextManager.SHEARING_COEFFICIENT;
+
+    int strLen = 0;
+    eval("strLen = str.length;");
+    double progress = 0;
+    double strWidth = ctx.measureText(str).width;
+
+    for (int i = 0; i < strLen; i++) {
+      String s = str.substring(i, i + 1);
+      double sWidth = ctx.measureText(s).width;
+
+      double pos = sWidth / strWidth;
+      Z4Vector next = this.textInfo.shape.getTangentAt(progress + pos / 2);
+      String c = $exists(color) ? color.getRGBA_HEX() : this.textInfo.textColor.getColorAt(progress + pos / 2, true).getRGBA_HEX();
+      progress += pos;
+
+      ctx.save();
+
+      ctx.translate(next.x0 + offsetX, next.y0 + offsetY);
+      ctx.rotate(this.textInfo.rotation.next(next.phase));
+      ctx.transform(1, shearY, -shearX, 1, 0, 0);
+      if (reflex) {
+        ctx.transform(1, 0, 0, -1, 0, 0);
+      }
+
+      ctx.strokeStyle = Z4Constants.$getStyle(c);
+      ctx.fillStyle = Z4Constants.$getStyle(c);
+
+      if (empty) {
+        ctx.strokeText(s, 0, 0);
+      } else {
+        ctx.fillText(s, 0, 0);
+      }
+
+      if ($exists(border)) {
+        ctx.lineWidth = border;
+        ctx.strokeStyle = Z4Constants.$getStyle(borderColor.getRGBA_HEX());
+        ctx.strokeText(s, 0, 0);
+      }
+
+      ctx.restore();
+    }
   }
 }

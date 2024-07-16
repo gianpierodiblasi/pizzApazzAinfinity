@@ -1599,7 +1599,12 @@ class Z4Line extends Z4GeometricShape {
   }
 
    getTangentAt(position) {
-    return Z4Vector.fromPoints(this.x1, this.y1, this.x2, this.y2);
+    if (position !== 1) {
+      let point = this.getPointAt(position);
+      return Z4Vector.fromPoints(point.x, point.y, this.x2, this.y2);
+    } else {
+      return Z4Vector.fromVector(this.x2, this.y2, 1, Z4Math.atan(this.x1, this.y1, this.x2, this.y2));
+    }
   }
 }
 /**
@@ -1670,10 +1675,19 @@ class Z4Polyline extends Z4GeometricShape {
    getTangentAt(position) {
     let finalPos = position * this.cumLen[this.cumLen.length - 1];
     let index = this.cumLen.findIndex(pos => pos >= finalPos, null);
-    if (!index) {
-      index = 1;
+    if (this.cumLen[index] === finalPos) {
+      if (!index) {
+        index = 1;
+      }
+      return Z4Vector.fromPoints(this.points[index - 1].x, this.points[index - 1].y, this.points[index].x, this.points[index].y);
+    } else if (this.cumLen[index - 1] === finalPos) {
+      return Z4Vector.fromPoints(this.points[index - 1].x, this.points[index - 1].y, this.points[index].x, this.points[index].y);
+    } else {
+      let div = (finalPos - this.cumLen[index - 1]) / (this.cumLen[index] - this.cumLen[index - 1]);
+      let x = (this.points[index].x - this.points[index - 1].x) * div + this.points[index - 1].x;
+      let y = (this.points[index].y - this.points[index - 1].y) * div + this.points[index - 1].y;
+      return Z4Vector.fromPoints(x, y, this.points[index].x, this.points[index].y);
     }
-    return Z4Vector.fromPoints(this.points[index - 1].x, this.points[index - 1].y, this.points[index].x, this.points[index].y);
   }
 }
 /**
@@ -4913,6 +4927,8 @@ class Z4CanvasTextManager {
 
   // 
   // private boolean pressed;
+  static  SHEARING_COEFFICIENT = 50;
+
   /**
    * Creates the object
    *
@@ -5052,20 +5068,49 @@ class Z4CanvasTextManager {
    * otherwise
    */
    drawText(ctx, drawPath) {
+    ctx.font = (this.textInfo.font.italic ? "italic " : "") + (this.textInfo.font.bold ? "bold " : "") + this.textInfo.font.size + "px '" + this.textInfo.font.family + "'";
+    ctx.textAlign = "center";
     if (this.textInfo.shadow) {
-      if (this.textInfo.shadowText.length() === 0) {
-        this.textInfo.shadowText = this.textInfo.textText;
-      }
-      // Shape[] shape = TextFactory.getTestoOutline(g.getFontRenderContext(), textInfo.shadowText, textInfo.font, pathS, textInfo.rotationType, textInfo.constantAngle, textInfo.rotationAngles, textInfo.shearXShadow, textInfo.shearYShadow, textInfo.reflex, textInfo.gShape, textInfo.shadowLocation);
-      // TextFactory.draw(g, textInfo.color, shape, pathS, textInfo.fullGlobalColor, textInfo.shadingOnLetter, textInfo.emptyShadow, textInfo.negative, textInfo.deltaColor);
+      this.draw(ctx, this.textInfo.shadowText ? this.textInfo.shadowText : this.textInfo.textText, this.textInfo.shadowEmpty, this.textInfo.shadowColor, this.textInfo.shadowOffsetX, this.textInfo.shadowOffsetY, this.textInfo.shadowShearX, this.textInfo.shadowShearY, 0, null, this.textInfo.shadowReflex);
     }
-    // TextFactory.draw(g, null, shape, pathT, textInfo.fullGlobalColor, textInfo.shadingOnLetter, textInfo.emptyText, false, 0);
-    // 
-    // if (textInfo.textBorder) {
-    // g.setPaint(textInfo.textColorBorder);
-    // g.setStroke(new BasicStroke(textInfo.textThicknessBorder, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-    // g.draw(pathT);
-    // }
+    this.draw(ctx, this.textInfo.textText, this.textInfo.textEmpty, null, 0, 0, this.textInfo.textShearX, this.textInfo.textShearY, this.textInfo.textBorder, this.textInfo.textBorderColor, false);
+  }
+
+   draw(ctx, str, empty, color, offsetX, offsetY, shearX, shearY, border, borderColor, reflex) {
+    shearX /= Z4CanvasTextManager.SHEARING_COEFFICIENT;
+    shearY /= Z4CanvasTextManager.SHEARING_COEFFICIENT;
+    let strLen = 0;
+    eval("strLen = str.length;");
+    let progress = 0;
+    let strWidth = ctx.measureText(str).width;
+    for (let i = 0; i < strLen; i++) {
+      let s = str.substring(i, i + 1);
+      let sWidth = ctx.measureText(s).width;
+      let pos = sWidth / strWidth;
+      let next = this.textInfo.shape.getTangentAt(progress + pos / 2);
+      let c = color ? color.getRGBA_HEX() : this.textInfo.textColor.getColorAt(progress + pos / 2, true).getRGBA_HEX();
+      progress += pos;
+      ctx.save();
+      ctx.translate(next.x0 + offsetX, next.y0 + offsetY);
+      ctx.rotate(this.textInfo.rotation.next(next.phase));
+      ctx.transform(1, shearY, -shearX, 1, 0, 0);
+      if (reflex) {
+        ctx.transform(1, 0, 0, -1, 0, 0);
+      }
+      ctx.strokeStyle = Z4Constants.getStyle(c);
+      ctx.fillStyle = Z4Constants.getStyle(c);
+      if (empty) {
+        ctx.strokeText(s, 0, 0);
+      } else {
+        ctx.fillText(s, 0, 0);
+      }
+      if (border) {
+        ctx.lineWidth = border;
+        ctx.strokeStyle = Z4Constants.getStyle(borderColor.getRGBA_HEX());
+        ctx.strokeText(s, 0, 0);
+      }
+      ctx.restore();
+    }
   }
 }
 /**
@@ -8680,7 +8725,6 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbontextpanel");
     this.textInfo.font = new Z4Font("Arial", 12, false, false);
-    this.textInfo.shape = new Z4Line(50, 50, 450, 450);
     this.font.setContentAreaFilled(false);
     this.font.setText(Z4Translations.FONT_SELECTION);
     this.font.addActionListener(event => {
@@ -8711,6 +8755,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.add(this.textEmpty, new GBC(x, 2).a(GBC.NORTHWEST).i(0, 5, 0, 0));
     this.textColor.setCloseOnChange(false);
     this.textColor.setSelectedColor(this.getBlackBiGradientColor());
+    this.textColor.addChangeListener(event => this.onTextInfoChange());
     this.add(this.textColor, new GBC(x + 1, 2).a(GBC.NORTHEAST).i(1, 0, 0, 5));
     this.addDropDown("z4ribbontextpanel-shearing", Z4Translations.SHEARING, this.textShearX, this.textShearY, x + 2, 1, 0, GBC.CENTER, GBC.VERTICAL);
     Z4UI.addLabel(this, Z4Translations.BORDER, new GBC(x + 3, 0).a(GBC.WEST).i(5, 5, 2, 0));
@@ -8799,6 +8844,11 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textInfo.shadowOffsetY = parseInt(this.shadowOffsetY.getValue());
     this.textInfo.shadowShearX = parseInt(this.shadowShearX.getValue());
     this.textInfo.shadowShearY = parseInt(this.shadowShearY.getValue());
+    // TO DELETE
+    this.textInfo.font = new Z4Font("Arial", 50, false, false);
+    this.textInfo.shape = new Z4Line(50, 50, 450, 450);
+    this.textInfo.textText = "Ciao Mamma!";
+    // TO DELETE
     this.canvas.setTextInfo(this.textInfo);
   }
 
@@ -20625,61 +20675,42 @@ class Z4ResizeOptions {
  */
 class Z4TextInfo {
 
-  // NON USATO
    font = null;
 
-  // NON USATO
    rotation = null;
 
-  // NON USATO
    shape = null;
 
-  // NON USATO
    textText = null;
 
-  // NON USATO
    textEmpty = false;
 
-  // NON USATO
    textColor = null;
 
-  // NON USATO
    textBorder = 0;
 
-  // NON USATO
    textBorderColor = null;
 
-  // NON USATO
    textShearX = 0;
 
-  // NON USATO
    textShearY = 0;
 
-  // NON USATO
    shadow = false;
 
-  // NON USATO
    shadowText = null;
 
-  // NON USATO
    shadowEmpty = false;
 
-  // NON USATO
    shadowColor = null;
 
-  // NON USATO
    shadowReflex = false;
 
-  // NON USATO
    shadowOffsetX = 0;
 
-  // NON USATO
    shadowOffsetY = 0;
 
-  // NON USATO
    shadowShearX = 0;
 
-  // NON USATO
    shadowShearY = 0;
 }
 /**

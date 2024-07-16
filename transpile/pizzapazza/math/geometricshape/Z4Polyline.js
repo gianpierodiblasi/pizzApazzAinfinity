@@ -66,9 +66,18 @@ class Z4Polyline extends Z4GeometricShape {
    getTangentAt(position) {
     let finalPos = position * this.cumLen[this.cumLen.length - 1];
     let index = this.cumLen.findIndex(pos => pos >= finalPos, null);
-    if (!index) {
-      index = 1;
+    if (this.cumLen[index] === finalPos) {
+      if (!index) {
+        index = 1;
+      }
+      return Z4Vector.fromPoints(this.points[index - 1].x, this.points[index - 1].y, this.points[index].x, this.points[index].y);
+    } else if (this.cumLen[index - 1] === finalPos) {
+      return Z4Vector.fromPoints(this.points[index - 1].x, this.points[index - 1].y, this.points[index].x, this.points[index].y);
+    } else {
+      let div = (finalPos - this.cumLen[index - 1]) / (this.cumLen[index] - this.cumLen[index - 1]);
+      let x = (this.points[index].x - this.points[index - 1].x) * div + this.points[index - 1].x;
+      let y = (this.points[index].y - this.points[index - 1].y) * div + this.points[index - 1].y;
+      return Z4Vector.fromPoints(x, y, this.points[index].x, this.points[index].y);
     }
-    return Z4Vector.fromPoints(this.points[index - 1].x, this.points[index - 1].y, this.points[index].x, this.points[index].y);
   }
 }
