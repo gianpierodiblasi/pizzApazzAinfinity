@@ -206,42 +206,60 @@ public class Z4CanvasTextManager {
     int strForMeasureLen = 0;
     eval("strForMeasureLen = strForMeasure.length;");
 
-    double progress = 0;
-    double strWidth = strToPrintLen == strForMeasureLen ? ctx.measureText(strForMeasure).width : ctx.measureText(strToPrint).width;
+    if (strToPrintLen == 1) {
+      Z4Vector next = this.textInfo.shape.getTangentAt(0.5);
+      String c = $exists(color) ? color.getRGBA_HEX() : this.textInfo.textColor.getColorAt(0.5, true).getRGBA_HEX();
+      this.drawChar(ctx, strToPrint, next, empty, c, offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
+    } else if (strToPrintLen > 1) {
+      double x0 = strToPrintLen == strForMeasureLen
+              ? ctx.measureText(strForMeasure.substring(0, 1)).width / 2
+              : ctx.measureText(strToPrint.substring(0, 1)).width / 2;
 
-    for (int i = 0; i < strToPrintLen; i++) {
-      String s = strToPrint.substring(i, i + 1);
-      double pos = (strToPrintLen == strForMeasureLen ? ctx.measureText(strForMeasure.substring(i, i + 1)).width : ctx.measureText(s).width) / strWidth;
+      double x1 = strToPrintLen == strForMeasureLen
+              ? ctx.measureText(strForMeasure).width - ctx.measureText(strForMeasure.substring(strForMeasureLen - 1)).width / 2
+              : ctx.measureText(strToPrint).width - ctx.measureText(strToPrint.substring(strToPrintLen - 1)).width / 2;
 
-      Z4Vector next = this.textInfo.shape.getTangentAt(progress + pos / 2);
-      String c = $exists(color) ? color.getRGBA_HEX() : this.textInfo.textColor.getColorAt(progress + pos / 2, true).getRGBA_HEX();
-      progress += pos;
+      double progress = 0;
+      double x1_x0 = x1 - x0;
 
-      ctx.save();
+      for (int i = 0; i < strToPrintLen; i++) {
+        String s = strToPrint.substring(i, i + 1);
+        double x = strToPrintLen == strForMeasureLen ? ctx.measureText(strForMeasure.substring(i, i + 1)).width : ctx.measureText(s).width;
 
-      ctx.translate(next.x0 + offsetX, next.y0 + offsetY);
-      ctx.rotate(this.textInfo.rotation.next(next.phase));
-      ctx.transform(1, shearY, -shearX, 1, 0, 0);
-      if (reflex) {
-        ctx.transform(1, 0, 0, -1, 0, 0);
+        double div = (x / 2 + progress - x0) / x1_x0;
+        Z4Vector next = this.textInfo.shape.getTangentAt(div);
+        String c = $exists(color) ? color.getRGBA_HEX() : this.textInfo.textColor.getColorAt(div, true).getRGBA_HEX();
+        this.drawChar(ctx, s, next, empty, c, offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
+        progress += x;
       }
-
-      ctx.strokeStyle = Z4Constants.$getStyle(c);
-      ctx.fillStyle = Z4Constants.$getStyle(c);
-
-      if (empty) {
-        ctx.strokeText(s, 0, 0);
-      } else {
-        ctx.fillText(s, 0, 0);
-      }
-
-      if ($exists(border)) {
-        ctx.lineWidth = border;
-        ctx.strokeStyle = Z4Constants.$getStyle(borderColor.getRGBA_HEX());
-        ctx.strokeText(s, 0, 0);
-      }
-
-      ctx.restore();
     }
+  }
+
+  private void drawChar($CanvasRenderingContext2D ctx, String s, Z4Vector next, boolean empty, String c, int offsetX, int offsetY, int shearX, int shearY, int border, Color borderColor, boolean reflex) {
+    ctx.save();
+
+    ctx.translate(next.x0 + offsetX, next.y0 + offsetY);
+    ctx.rotate(this.textInfo.rotation.next(next.phase));
+    ctx.transform(1, shearY, -shearX, 1, 0, 0);
+    if (reflex) {
+      ctx.transform(1, 0, 0, -1, 0, 0);
+    }
+
+    ctx.strokeStyle = Z4Constants.$getStyle(c);
+    ctx.fillStyle = Z4Constants.$getStyle(c);
+
+    if (empty) {
+      ctx.strokeText(s, 0, 0);
+    } else {
+      ctx.fillText(s, 0, 0);
+    }
+
+    if ($exists(border)) {
+      ctx.lineWidth = border;
+      ctx.strokeStyle = Z4Constants.$getStyle(borderColor.getRGBA_HEX());
+      ctx.strokeText(s, 0, 0);
+    }
+
+    ctx.restore();
   }
 }
