@@ -13535,13 +13535,12 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
   }
 
    setValue(value) {
+    this.value = value;
     this.filter.setText("");
-    this.onFiltering();
     this.radios.forEach((radio, index, array) => {
       radio.setSelected(false);
       radio.getStyle().display = "flex";
     });
-    this.value = value;
     let index = this.fonts.findIndex(font => font === value.family);
     if (index !== -1) {
       this.radios[index].setSelected(true);

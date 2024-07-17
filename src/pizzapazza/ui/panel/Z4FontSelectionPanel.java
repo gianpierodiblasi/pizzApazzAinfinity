@@ -131,15 +131,14 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
   @Override
   @SuppressWarnings("StringEquality")
   public void setValue(Z4Font value) {
+    this.value = value;
+    
     this.filter.setText("");
-    this.onFiltering();
-
+    
     this.radios.forEach((radio, index, array) -> {
       radio.setSelected(false);
       radio.getStyle().display = "flex";
     });
-
-    this.value = value;
 
     int index = this.fonts.findIndex(font -> font == value.family);
     if (index != -1) {
