@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":9,"i6":10,"i7":10,"i8":10,"i9":9,"i10":9};
+var data = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":9,"i6":10,"i7":10,"i8":10,"i9":9,"i10":9,"i11":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -295,6 +295,14 @@ extends <a href="Z4AbstractGradientColor.html" title="class in pizzapazza.color"
 <div class="block">Resets the gradient color history</div>
 </td>
 </tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code><a href="Z4GradientColor.html" title="class in pizzapazza.color">Z4GradientColor</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#subGradientColor(double,double)">subGradientColor</a></span>&#8203;(double&nbsp;start,
+                double&nbsp;end)</code></th>
+<td class="colLast">
+<div class="block">Returns a gradient color obtained as a sub portion of this gradient color</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.pizzapazza.color.Z4AbstractGradientColor">
@@ -443,6 +451,24 @@ extends <a href="Z4AbstractGradientColor.html" title="class in pizzapazza.color"
 <dd><code>y1</code> - The y-axis coordinate of the end point</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The linear gradient</dd>
+</dl>
+</li>
+</ul>
+<a id="subGradientColor(double,double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>subGradientColor</h4>
+<pre class="methodSignature">public&nbsp;<a href="Z4GradientColor.html" title="class in pizzapazza.color">Z4GradientColor</a>&nbsp;subGradientColor&#8203;(double&nbsp;start,
+                                        double&nbsp;end)</pre>
+<div class="block">Returns a gradient color obtained as a sub portion of this gradient color</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>start</code> - The start position (in the range [0,1])</dd>
+<dd><code>end</code> - The end position (in the range [0,1])</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The sub portion of this gradient color</dd>
 </dl>
 </li>
 </ul>

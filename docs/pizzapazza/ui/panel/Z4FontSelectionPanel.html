@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -218,13 +218,35 @@ extends <a href="Z4AbstractValuePanel.html" title="class in pizzapazza.ui.panel"
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getValueIsAdjusting()">getValueIsAdjusting</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns if the value is adjusting</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setAutoSelectFirstFontOnFiltering(boolean)">setAutoSelectFirstFontOnFiltering</a></span>&#8203;(boolean&nbsp;autoSelectFirstFontOnFiltering)</code></th>
+<td class="colLast">
+<div class="block">Sets if the first font in the list has to be auto-selected on filtering; if
+ no font is found then the "Arial" font is automatically selected</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSampleString(java.lang.String)">setSampleString</a></span>&#8203;(java.lang.String&nbsp;str)</code></th>
 <td class="colLast">
 <div class="block">Sets the sample string to use to preview the font</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSampleVisible(boolean)">setSampleVisible</a></span>&#8203;(boolean&nbsp;b)</code></th>
+<td class="colLast">
+<div class="block">Sets the visibility of the sample string</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setValue(pizzapazza.util.Z4Font)">setValue</a></span>&#8203;(<a href="../../util/Z4Font.html" title="class in pizzapazza.util">Z4Font</a>&nbsp;value)</code></th>
 <td class="colLast">
@@ -314,6 +336,50 @@ extends <a href="Z4AbstractValuePanel.html" title="class in pizzapazza.ui.panel"
 <dd><code><a href="Z4AbstractValuePanel.html#setValue(T)">setValue</a></code>&nbsp;in class&nbsp;<code><a href="Z4AbstractValuePanel.html" title="class in pizzapazza.ui.panel">Z4AbstractValuePanel</a>&lt;<a href="../../util/Z4Font.html" title="class in pizzapazza.util">Z4Font</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>value</code> - The value</dd>
+</dl>
+</li>
+</ul>
+<a id="getValueIsAdjusting()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getValueIsAdjusting</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;getValueIsAdjusting()</pre>
+<div class="block">Returns if the value is adjusting</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the value is adjusting, false otherwise</dd>
+</dl>
+</li>
+</ul>
+<a id="setAutoSelectFirstFontOnFiltering(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setAutoSelectFirstFontOnFiltering</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setAutoSelectFirstFontOnFiltering&#8203;(boolean&nbsp;autoSelectFirstFontOnFiltering)</pre>
+<div class="block">Sets if the first font in the list has to be auto-selected on filtering; if
+ no font is found then the "Arial" font is automatically selected</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>autoSelectFirstFontOnFiltering</code> - true to auto-select the first font in
+ the list on filtering, false otherwise</dd>
+</dl>
+</li>
+</ul>
+<a id="setSampleVisible(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSampleVisible</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setSampleVisible&#8203;(boolean&nbsp;b)</pre>
+<div class="block">Sets the visibility of the sample string</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>b</code> - true to show the sample string, false otherwise</dd>
 </dl>
 </li>
 </ul>
