@@ -46,7 +46,7 @@ import static simulation.js.$Globals.parseInt;
  */
 public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
-  private final JSButton font = new JSButton();
+  private Z4FontSelectionPanel fontSelectionPanel;
   private final Z4RotationPanel rotation = new Z4RotationPanel(Z4RotationPanelOrientation.HORIZONTAL);
 
   private final JSTextField textText = new JSTextField();
@@ -74,7 +74,6 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
   private Z4Canvas canvas;
   private boolean fontsChecked;
-  private final Array<String> fonts = new Array<>();
   private final Z4TextInfo textInfo = new Z4TextInfo();
 
   /**
@@ -85,9 +84,6 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbontextpanel");
 
-    this.textInfo.font = new Z4Font("Arial", 24, false, false);
-
-    this.addFont(0);
     this.addRotation(0);
     Z4UI.addVLine(this, new GBC(1, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
@@ -165,31 +161,32 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
   }
 
   private void addFont(int x) {
-    this.font.setContentAreaFilled(false);
-    this.font.setText(Z4Translations.FONT_SELECTION);
-    this.font.addActionListener(event -> {
-      Z4FontSelectionPanel fontSelectionPanel = new Z4FontSelectionPanel(this.fonts);
-      fontSelectionPanel.setSampleString(this.textInfo.textText);
-      fontSelectionPanel.setValue(this.textInfo.font);
+    Z4DropDown dropDown = new Z4DropDown(".z4ribbontextpanel-font");
+    dropDown.cssAddClass("z4ribbontextpanel-editor");
 
-      JSOptionPane.showInputDialog(fontSelectionPanel, Z4Translations.FONT_SELECTION, listener -> fontSelectionPanel.addChangeListener(listener), () -> $exists(fontSelectionPanel.getValue()), response -> {
-        if (response == JSOptionPane.OK_OPTION) {
-          this.textInfo.font = fontSelectionPanel.getValue();
-          this.onTextInfoChange(false);
-        }
-      });
-    });
-    this.add(this.font, new GBC(x, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 5));
+    JSLabel label = new JSLabel();
+    label.setText(Z4Translations.FONT_SELECTION);
+    dropDown.appendChildInTree("summary", label);
+
+    this.fontSelectionPanel.setValue(new Z4Font("Arial", 24, false, false));
+    this.fontSelectionPanel.cssAddClass("z4ribbontextpanel-font");
+    this.fontSelectionPanel.addChangeListener(event -> this.onTextInfoChange(this.fontSelectionPanel.getValueIsAdjusting()));
+    dropDown.appendChild(this.fontSelectionPanel);
+
+    this.add(dropDown, new GBC(x, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 5));
   }
 
   private void addRotation(int x) {
     Z4DropDown dropDown = new Z4DropDown(".z4rotationpanel");
     dropDown.cssAddClass("z4ribbontextpanel-editor");
+
     JSLabel label = new JSLabel();
     label.setText(Z4Translations.ROTATION);
     dropDown.appendChildInTree("summary", label);
+
     this.rotation.addChangeListener(event -> this.onTextInfoChange(this.rotation.getValueIsAdjusting()));
     dropDown.appendChild(this.rotation);
+
     this.add(dropDown, new GBC(x, 2).f(GBC.HORIZONTAL).a(GBC.NORTH).i(1, 5, 0, 5));
   }
 
@@ -258,9 +255,11 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
       }
     });
 
+    this.textInfo.font = this.fontSelectionPanel.getValue();
     this.textInfo.rotation = this.rotation.getValue();
 
     this.textInfo.textText = this.textText.getText();
+    this.fontSelectionPanel.setSampleVisible(!$exists(this.textInfo.textText));
     this.textInfo.textEmpty = this.textEmpty.isSelected();
     this.textInfo.textColor = this.textColor.getSelectedColor();
     this.textInfo.textBorder = parseInt(this.textBorder.getValue());
@@ -288,7 +287,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
   private void onReset() {
     JSOptionPane.showConfirmDialog(Z4Translations.RESET_MESSAGE, Z4Translations.RESET, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response -> {
       if (response == JSOptionPane.YES_OPTION) {
-        this.textInfo.font = new Z4Font("Arial", 24, false, false);
+        this.fontSelectionPanel.setValue(new Z4Font("Arial", 24, false, false));
         this.rotation.setValue(new Z4Rotation(
                 0,
                 new Z4FancifulValue(
@@ -344,8 +343,11 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
       this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
     } else {
       Z4UI.pleaseWait(this, true, false, false, false, "", () -> Z4Font.getAvailableFontFamilies(false, available -> {
-        available.forEach((f, key, array) -> this.fonts.push(f));
-        this.fonts.sort();
+        Array<String> fonts = new Array<>();
+        available.forEach((f, key, array) -> fonts.push(f));
+        fonts.sort();
+        this.fontSelectionPanel = new Z4FontSelectionPanel(fonts);
+        this.addFont(0);
 
         this.fontsChecked = true;
         this.onTextInfoChange(false);

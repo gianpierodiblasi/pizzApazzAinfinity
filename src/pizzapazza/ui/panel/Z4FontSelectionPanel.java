@@ -35,13 +35,14 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
 
   private final Array<String> fonts;
   private String sampleString;
+  private boolean valueIsAdjusting;
+  private boolean autoSelectFirstFontOnFiltering;
 
   /**
    * Creates the object
    *
    * @param fonts The available fonts
    */
-  @SuppressWarnings("IndexOfReplaceableByContains")
   public Z4FontSelectionPanel(Array<String> fonts) {
     super();
     this.setLayout(new GridBagLayout());
@@ -52,12 +53,8 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
     Z4UI.addLabel(this, Z4Translations.FILTER, new GBC(0, 0).a(GBC.WEST));
 
     this.filter.addActionListener(event -> {
-      String str = this.filter.getText().toLowerCase();
-      this.radios.forEach((radio, index, array) -> {
-        radio.setSelected(false);
-        radio.getStyle().display = this.fonts.$get(index).toLowerCase().indexOf(str) != -1 ? "flex" : "none";
-      });
-      this.onFontChange();
+      this.onFiltering();
+      this.onFontChange(false);
     });
     this.add(this.filter, new GBC(0, 1).a(GBC.WEST).wx(1));
 
@@ -65,15 +62,15 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
 
     this.size.cssAddClass("jsspinner_w_4rem");
     this.size.setModel(new SpinnerNumberModel(12, 7, 400, 1));
-    this.size.addChangeListener(event -> this.onFontChange());
+    this.size.addChangeListener(event -> this.onFontChange(this.size.getValueIsAdjusting()));
     this.add(this.size, new GBC(1, 1).a(GBC.WEST).i(0, 0, 0, 5));
 
     this.bold.setText(Z4Translations.BOLD);
-    this.bold.addActionListener(event -> this.onFontChange());
+    this.bold.addActionListener(event -> this.onFontChange(false));
     this.add(this.bold, new GBC(2, 1).i(0, 0, 0, 5));
 
     this.italic.setText(Z4Translations.ITALIC);
-    this.italic.addActionListener(event -> this.onFontChange());
+    this.italic.addActionListener(event -> this.onFontChange(false));
     this.add(this.italic, new GBC(3, 1));
 
     JSPanel panel = new JSPanel();
@@ -93,15 +90,27 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
     radio.setText(font);
     radio.getStyle().fontFamily = font;
     radio.setTooltip(font);
-    radio.addActionListener(event -> this.onFontChange());
+    radio.addActionListener(event -> this.onFontChange(false));
 
     this.radios.push(radio);
     buttonGroup.add(radio);
     panel.add(radio, null);
   }
 
+  @SuppressWarnings("IndexOfReplaceableByContains")
+  private void onFiltering() {
+    String str = this.filter.getText().toLowerCase();
+    this.radios.forEach((radio, index, array) -> {
+      radio.setSelected(false);
+      radio.getStyle().display = this.fonts.$get(index).toLowerCase().indexOf(str) != -1 ? "flex" : "none";
+    });
+
+  }
+
   @SuppressWarnings("StringEquality")
-  private void onFontChange() {
+  private void onFontChange(boolean b) {
+    this.valueIsAdjusting = b;
+
     int index = this.radios.findIndex(radio -> radio.isSelected() && radio.getStyle().display != "none");
     if (index != -1) {
       this.value = new Z4Font(this.fonts.$get(index), parseInt(this.size.getValue()), this.bold.isSelected(), this.italic.isSelected());
@@ -132,6 +141,35 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
     this.italic.setSelected(value.italic);
 
     this.setSample();
+  }
+
+  /**
+   * Returns if the value is adjusting
+   *
+   * @return true if the value is adjusting, false otherwise
+   */
+  public boolean getValueIsAdjusting() {
+    return this.valueIsAdjusting;
+  }
+
+  /**
+   * Sets if the first font in the list has to be auto-selected on filtering; if
+   * no font is found then the "Arial" font is automatically selected
+   *
+   * @param autoSelectFirstFontOnFiltering true to auto-select the first font in
+   * the list on filtering, false otherwise
+   */
+  public void setAutoSelectFirstFontOnFiltering(boolean autoSelectFirstFontOnFiltering) {
+    this.autoSelectFirstFontOnFiltering = autoSelectFirstFontOnFiltering;
+  }
+
+  /**
+   * Sets the visibility of the sample string
+   *
+   * @param b true to show the sample string, false otherwise
+   */
+  public void setSampleVisible(boolean b) {
+    this.sample.getStyle().display = b ? "flex" : "none";
   }
 
   /**

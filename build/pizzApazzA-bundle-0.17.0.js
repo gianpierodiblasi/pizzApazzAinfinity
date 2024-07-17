@@ -8697,7 +8697,7 @@ class Z4RibbonSettingsPanel extends Z4AbstractRibbonPanel {
  */
 class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
-   font = new JSButton();
+   fontSelectionPanel = null;
 
    rotation = new Z4RotationPanel(Z4RotationPanelOrientation.HORIZONTAL);
 
@@ -8745,8 +8745,6 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
    fontsChecked = false;
 
-   fonts = new Array();
-
    textInfo = new Z4TextInfo();
 
   /**
@@ -8756,8 +8754,6 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     super();
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbontextpanel");
-    this.textInfo.font = new Z4Font("Arial", 24, false, false);
-    this.addFont(0);
     this.addRotation(0);
     Z4UI.addVLine(this, new GBC(1, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     let x = 2;
@@ -8818,20 +8814,16 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
   }
 
    addFont(x) {
-    this.font.setContentAreaFilled(false);
-    this.font.setText(Z4Translations.FONT_SELECTION);
-    this.font.addActionListener(event => {
-      let fontSelectionPanel = new Z4FontSelectionPanel(this.fonts);
-      fontSelectionPanel.setSampleString(this.textInfo.textText);
-      fontSelectionPanel.setValue(this.textInfo.font);
-      JSOptionPane.showInputDialog(fontSelectionPanel, Z4Translations.FONT_SELECTION, listener => fontSelectionPanel.addChangeListener(listener), () => !!(fontSelectionPanel.getValue()), response => {
-        if (response === JSOptionPane.OK_OPTION) {
-          this.textInfo.font = fontSelectionPanel.getValue();
-          this.onTextInfoChange(false);
-        }
-      });
-    });
-    this.add(this.font, new GBC(x, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 5));
+    let dropDown = new Z4DropDown(".z4ribbontextpanel-font");
+    dropDown.cssAddClass("z4ribbontextpanel-editor");
+    let label = new JSLabel();
+    label.setText(Z4Translations.FONT_SELECTION);
+    dropDown.appendChildInTree("summary", label);
+    this.fontSelectionPanel.setValue(new Z4Font("Arial", 24, false, false));
+    this.fontSelectionPanel.cssAddClass("z4ribbontextpanel-font");
+    this.fontSelectionPanel.addChangeListener(event => this.onTextInfoChange(this.fontSelectionPanel.getValueIsAdjusting()));
+    dropDown.appendChild(this.fontSelectionPanel);
+    this.add(dropDown, new GBC(x, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 5));
   }
 
    addRotation(x) {
@@ -8897,8 +8889,10 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
         element.removeAttribute("transparent");
       }
     });
+    this.textInfo.font = this.fontSelectionPanel.getValue();
     this.textInfo.rotation = this.rotation.getValue();
     this.textInfo.textText = this.textText.getText();
+    this.fontSelectionPanel.setSampleVisible(!this.textInfo.textText);
     this.textInfo.textEmpty = this.textEmpty.isSelected();
     this.textInfo.textColor = this.textColor.getSelectedColor();
     this.textInfo.textBorder = parseInt(this.textBorder.getValue());
@@ -8923,7 +8917,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
    onReset() {
     JSOptionPane.showConfirmDialog(Z4Translations.RESET_MESSAGE, Z4Translations.RESET, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
       if (response === JSOptionPane.YES_OPTION) {
-        this.textInfo.font = new Z4Font("Arial", 24, false, false);
+        this.fontSelectionPanel.setValue(new Z4Font("Arial", 24, false, false));
         this.rotation.setValue(new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false));
         this.textText.setText("");
         this.textEmpty.setSelected(false);
@@ -8970,8 +8964,11 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
       this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
     } else {
       Z4UI.pleaseWait(this, true, false, false, false, "", () => Z4Font.getAvailableFontFamilies(false, available => {
-        available.forEach((f, key, array) => this.fonts.push(f));
-        this.fonts.sort();
+        let fonts = new Array();
+        available.forEach((f, key, array) => fonts.push(f));
+        fonts.sort();
+        this.fontSelectionPanel = new Z4FontSelectionPanel(fonts);
+        this.addFont(0);
         this.fontsChecked = true;
         this.onTextInfoChange(false);
         this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
@@ -13459,6 +13456,10 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
 
    sampleString = null;
 
+   valueIsAdjusting = false;
+
+   autoSelectFirstFontOnFiltering = false;
+
   /**
    * Creates the object
    *
@@ -13471,24 +13472,20 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
     this.fonts = fonts;
     Z4UI.addLabel(this, Z4Translations.FILTER, new GBC(0, 0).a(GBC.WEST));
     this.filter.addActionListener(event => {
-      let str = this.filter.getText().toLowerCase();
-      this.radios.forEach((radio, index, array) => {
-        radio.setSelected(false);
-        radio.getStyle().display = this.fonts[index].toLowerCase().indexOf(str) !== -1 ? "flex" : "none";
-      });
-      this.onFontChange();
+      this.onFiltering();
+      this.onFontChange(false);
     });
     this.add(this.filter, new GBC(0, 1).a(GBC.WEST).wx(1));
     Z4UI.addLabel(this, Z4Translations.DIMENSION, new GBC(1, 0).a(GBC.WEST));
     this.size.cssAddClass("jsspinner_w_4rem");
     this.size.setModel(new SpinnerNumberModel(12, 7, 400, 1));
-    this.size.addChangeListener(event => this.onFontChange());
+    this.size.addChangeListener(event => this.onFontChange(this.size.getValueIsAdjusting()));
     this.add(this.size, new GBC(1, 1).a(GBC.WEST).i(0, 0, 0, 5));
     this.bold.setText(Z4Translations.BOLD);
-    this.bold.addActionListener(event => this.onFontChange());
+    this.bold.addActionListener(event => this.onFontChange(false));
     this.add(this.bold, new GBC(2, 1).i(0, 0, 0, 5));
     this.italic.setText(Z4Translations.ITALIC);
-    this.italic.addActionListener(event => this.onFontChange());
+    this.italic.addActionListener(event => this.onFontChange(false));
     this.add(this.italic, new GBC(3, 1));
     let panel = new JSPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -13505,13 +13502,22 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
     radio.setText(font);
     radio.getStyle().fontFamily = font;
     radio.setTooltip(font);
-    radio.addActionListener(event => this.onFontChange());
+    radio.addActionListener(event => this.onFontChange(false));
     this.radios.push(radio);
     buttonGroup.add(radio);
     panel.add(radio, null);
   }
 
-   onFontChange() {
+   onFiltering() {
+    let str = this.filter.getText().toLowerCase();
+    this.radios.forEach((radio, index, array) => {
+      radio.setSelected(false);
+      radio.getStyle().display = this.fonts[index].toLowerCase().indexOf(str) !== -1 ? "flex" : "none";
+    });
+  }
+
+   onFontChange(b) {
+    this.valueIsAdjusting = b;
     let index = this.radios.findIndex(radio => radio.isSelected() && radio.getStyle().display !== "none");
     if (index !== -1) {
       this.value = new Z4Font(this.fonts[index], parseInt(this.size.getValue()), this.bold.isSelected(), this.italic.isSelected());
@@ -13536,6 +13542,35 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
     this.bold.setSelected(value.bold);
     this.italic.setSelected(value.italic);
     this.setSample();
+  }
+
+  /**
+   * Returns if the value is adjusting
+   *
+   * @return true if the value is adjusting, false otherwise
+   */
+   getValueIsAdjusting() {
+    return this.valueIsAdjusting;
+  }
+
+  /**
+   * Sets if the first font in the list has to be auto-selected on filtering; if
+   * no font is found then the "Arial" font is automatically selected
+   *
+   * @param autoSelectFirstFontOnFiltering true to auto-select the first font in
+   * the list on filtering, false otherwise
+   */
+   setAutoSelectFirstFontOnFiltering(autoSelectFirstFontOnFiltering) {
+    this.autoSelectFirstFontOnFiltering = autoSelectFirstFontOnFiltering;
+  }
+
+  /**
+   * Sets the visibility of the sample string
+   *
+   * @param b true to show the sample string, false otherwise
+   */
+   setSampleVisible(b) {
+    this.sample.getStyle().display = b ? "flex" : "none";
   }
 
   /**

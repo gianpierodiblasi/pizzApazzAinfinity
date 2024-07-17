@@ -21,6 +21,10 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
 
    sampleString = null;
 
+   valueIsAdjusting = false;
+
+   autoSelectFirstFontOnFiltering = false;
+
   /**
    * Creates the object
    *
@@ -33,24 +37,20 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
     this.fonts = fonts;
     Z4UI.addLabel(this, Z4Translations.FILTER, new GBC(0, 0).a(GBC.WEST));
     this.filter.addActionListener(event => {
-      let str = this.filter.getText().toLowerCase();
-      this.radios.forEach((radio, index, array) => {
-        radio.setSelected(false);
-        radio.getStyle().display = this.fonts[index].toLowerCase().indexOf(str) !== -1 ? "flex" : "none";
-      });
-      this.onFontChange();
+      this.onFiltering();
+      this.onFontChange(false);
     });
     this.add(this.filter, new GBC(0, 1).a(GBC.WEST).wx(1));
     Z4UI.addLabel(this, Z4Translations.DIMENSION, new GBC(1, 0).a(GBC.WEST));
     this.size.cssAddClass("jsspinner_w_4rem");
     this.size.setModel(new SpinnerNumberModel(12, 7, 400, 1));
-    this.size.addChangeListener(event => this.onFontChange());
+    this.size.addChangeListener(event => this.onFontChange(this.size.getValueIsAdjusting()));
     this.add(this.size, new GBC(1, 1).a(GBC.WEST).i(0, 0, 0, 5));
     this.bold.setText(Z4Translations.BOLD);
-    this.bold.addActionListener(event => this.onFontChange());
+    this.bold.addActionListener(event => this.onFontChange(false));
     this.add(this.bold, new GBC(2, 1).i(0, 0, 0, 5));
     this.italic.setText(Z4Translations.ITALIC);
-    this.italic.addActionListener(event => this.onFontChange());
+    this.italic.addActionListener(event => this.onFontChange(false));
     this.add(this.italic, new GBC(3, 1));
     let panel = new JSPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -67,13 +67,22 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
     radio.setText(font);
     radio.getStyle().fontFamily = font;
     radio.setTooltip(font);
-    radio.addActionListener(event => this.onFontChange());
+    radio.addActionListener(event => this.onFontChange(false));
     this.radios.push(radio);
     buttonGroup.add(radio);
     panel.add(radio, null);
   }
 
-   onFontChange() {
+   onFiltering() {
+    let str = this.filter.getText().toLowerCase();
+    this.radios.forEach((radio, index, array) => {
+      radio.setSelected(false);
+      radio.getStyle().display = this.fonts[index].toLowerCase().indexOf(str) !== -1 ? "flex" : "none";
+    });
+  }
+
+   onFontChange(b) {
+    this.valueIsAdjusting = b;
     let index = this.radios.findIndex(radio => radio.isSelected() && radio.getStyle().display !== "none");
     if (index !== -1) {
       this.value = new Z4Font(this.fonts[index], parseInt(this.size.getValue()), this.bold.isSelected(), this.italic.isSelected());
@@ -98,6 +107,35 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
     this.bold.setSelected(value.bold);
     this.italic.setSelected(value.italic);
     this.setSample();
+  }
+
+  /**
+   * Returns if the value is adjusting
+   *
+   * @return true if the value is adjusting, false otherwise
+   */
+   getValueIsAdjusting() {
+    return this.valueIsAdjusting;
+  }
+
+  /**
+   * Sets if the first font in the list has to be auto-selected on filtering; if
+   * no font is found then the "Arial" font is automatically selected
+   *
+   * @param autoSelectFirstFontOnFiltering true to auto-select the first font in
+   * the list on filtering, false otherwise
+   */
+   setAutoSelectFirstFontOnFiltering(autoSelectFirstFontOnFiltering) {
+    this.autoSelectFirstFontOnFiltering = autoSelectFirstFontOnFiltering;
+  }
+
+  /**
+   * Sets the visibility of the sample string
+   *
+   * @param b true to show the sample string, false otherwise
+   */
+   setSampleVisible(b) {
+    this.sample.getStyle().display = b ? "flex" : "none";
   }
 
   /**
