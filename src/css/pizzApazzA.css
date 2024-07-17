@@ -139,6 +139,9 @@
 
 .z4ribbontextpanel {
 }
+.z4ribbontextpanel .z4ribbontextpanel-editor[transparent=true] > :not(summary), .z4ribbontextpanel .z4ribbontextpanel-editor[transparent=true] > :not(summary) * {
+  background: transparent !important;
+}
 
 .z4ribbonhistorypanel {
 }

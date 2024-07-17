@@ -307,9 +307,9 @@ class Z4LayerPreview extends JSDropDown {
       spinner.setValue(slider.getValue());
     }
     if (adjusting) {
-      this.editor.setAttribute("offset", "true");
+      this.editor.setAttribute("transparent", "true");
     } else {
-      this.editor.removeAttribute("offset");
+      this.editor.removeAttribute("transparent");
     }
     this.layer.setOpacity(this.opacitySpinner.getValue() / 100);
     this.layer.move(this.offsetXSlider.getValue(), this.offsetYSlider.getValue());
