@@ -203,15 +203,20 @@ class Z4CanvasTextManager {
     } else if (this.textInfo.textColorFilling === Z4TextInfoTextColorFilling.UNIFORM) {
       return this.textInfo.textColor.getColorAt(div, false).getRGBA_HEX();
     } else if (this.textInfo.textColorFilling === Z4TextInfoTextColorFilling.SUBGRADIENT) {
-      let textMetrics = ctx.measureText(str);
-      return this.textInfo.textColor.subGradientColor(start, end).createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
-      // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
-      // return this.textInfo.textColor.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
+      return this.getCanvasGradient(ctx, this.textInfo.textColor.subGradientColor(start, end), str);
     } else if (this.textInfo.textColorFilling === Z4TextInfoTextColorFilling.GRADIENT) {
-      let textMetrics = ctx.measureText(str);
-      return this.textInfo.textColor.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
-      // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
-      // return this.textInfo.textColor.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
+      return this.getCanvasGradient(ctx, this.textInfo.textColor, str);
+    } else {
+      return null;
+    }
+  }
+
+   getCanvasGradient(ctx, color, str) {
+    let textMetrics = ctx.measureText(str);
+    if (this.textInfo.textColorOrientation === Z4TextInfoTextColorOrientation.HORIZONTAL) {
+      return color.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
+    } else if (this.textInfo.textColorOrientation === Z4TextInfoTextColorOrientation.VERTICAL) {
+      return color.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
     } else {
       return null;
     }

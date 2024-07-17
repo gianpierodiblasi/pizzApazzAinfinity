@@ -261,6 +261,7 @@ public class Z4Translations {
   public static String BACKWARD = "";
   public static String DISTANCE = "";
   public static String CENTER_VERB = "";
+  public static String ORIENTATION = "";
 
   // Composite Operation
   public static String COMPOSITE_OPERATION = "";
@@ -557,6 +558,7 @@ public class Z4Translations {
     Z4Translations.BACKWARD = "Backward";
     Z4Translations.DISTANCE = "Distance";
     Z4Translations.CENTER_VERB = "Center";
+    Z4Translations.ORIENTATION = "Orientation";
 
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
@@ -837,6 +839,7 @@ public class Z4Translations {
     Z4Translations.BACKWARD = "Indietro";
     Z4Translations.DISTANCE = "Distanza";
     Z4Translations.CENTER_VERB = "Centra";
+    Z4Translations.ORIENTATION = "Orientamento";
 
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";

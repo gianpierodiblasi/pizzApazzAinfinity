@@ -39,6 +39,7 @@ import pizzapazza.ui.panel.math.Z4RotationPanelOrientation;
 import pizzapazza.util.Z4Font;
 import pizzapazza.util.Z4TextInfo;
 import pizzapazza.util.Z4TextInfoTextColorFilling;
+import pizzapazza.util.Z4TextInfoTextColorOrientation;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
@@ -62,6 +63,8 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
   private final JSRadioButton textColorFillingUNIFORM = new JSRadioButton();
   private final JSRadioButton textColorFillingSUBGRADIENT = new JSRadioButton();
   private final JSRadioButton textColorFillingGRADIENT = new JSRadioButton();
+  private final JSRadioButton textColorOrientationHORIZONTAL = new JSRadioButton();
+  private final JSRadioButton textColorOrientationVERTICAL = new JSRadioButton();
   private final JSSpinner textBorder = new JSSpinner();
   private final JSColorChooser textBorderColor = new JSColorChooser();
   private final JSSpinner textShearX = new JSSpinner();
@@ -223,22 +226,34 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     });
     panel.add(this.textColor, new GBC(0, 0).h(4).i(0, 0, 0, 5));
 
-    Z4UI.addLabel(panel, Z4Translations.FILLING, new GBC(1, 0).a(GBC.WEST));
+    Z4UI.addLabel(panel, Z4Translations.FILLING, new GBC(1, 0).a(GBC.WEST).i(0, 0, 0, 5));
     ButtonGroup group = new ButtonGroup();
     this.textColorFillingUNIFORM.setSelected(true);
     this.textColorFillingUNIFORM.setText(Z4Translations.UNIFORM);
     this.textColorFillingUNIFORM.addActionListener(event -> this.onTextInfoChange(false));
-    panel.add(this.textColorFillingUNIFORM, new GBC(1, 1).a(GBC.WEST));
+    panel.add(this.textColorFillingUNIFORM, new GBC(1, 1).a(GBC.WEST).i(0, 0, 0, 5));
     group.add(this.textColorFillingUNIFORM);
     this.textColorFillingSUBGRADIENT.setText(Z4Translations.PARTIAL);
     this.textColorFillingSUBGRADIENT.addActionListener(event -> this.onTextInfoChange(false));
-    panel.add(this.textColorFillingSUBGRADIENT, new GBC(1, 2).a(GBC.WEST));
+    panel.add(this.textColorFillingSUBGRADIENT, new GBC(1, 2).a(GBC.WEST).i(0, 0, 0, 5));
     group.add(this.textColorFillingSUBGRADIENT);
     this.textColorFillingGRADIENT.setText(Z4Translations.TOTAL);
     this.textColorFillingGRADIENT.addActionListener(event -> this.onTextInfoChange(false));
-    panel.add(this.textColorFillingGRADIENT, new GBC(1, 3).a(GBC.NORTHWEST).wy(1));
+    panel.add(this.textColorFillingGRADIENT, new GBC(1, 3).a(GBC.NORTHWEST).wy(1).i(0, 0, 0, 5));
     group.add(this.textColorFillingGRADIENT);
 
+    Z4UI.addLabel(panel, Z4Translations.ORIENTATION, new GBC(2, 0).a(GBC.WEST));
+    group = new ButtonGroup();
+    this.textColorOrientationHORIZONTAL.setSelected(true);
+    this.textColorOrientationHORIZONTAL.setText(Z4Translations.HORIZONTAL);
+    this.textColorOrientationHORIZONTAL.addActionListener(event -> this.onTextInfoChange(false));
+    panel.add(this.textColorOrientationHORIZONTAL, new GBC(2, 1).a(GBC.WEST));
+    group.add(this.textColorOrientationHORIZONTAL);
+    this.textColorOrientationVERTICAL.setText(Z4Translations.VERTICAL);
+    this.textColorOrientationVERTICAL.addActionListener(event -> this.onTextInfoChange(false));
+    panel.add(this.textColorOrientationVERTICAL, new GBC(2, 2).a(GBC.WEST));
+    group.add(this.textColorOrientationVERTICAL);
+    
     this.add(dropDown, new GBC(x, 2).a(GBC.NORTHEAST).i(1, 0, 0, 5));
 
     this.putImageData(ctx, width, height);
@@ -341,6 +356,11 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     } else if (this.textColorFillingGRADIENT.isSelected()) {
       this.textInfo.textColorFilling = Z4TextInfoTextColorFilling.GRADIENT;
     }
+    if (this.textColorOrientationHORIZONTAL.isSelected()) {
+      this.textInfo.textColorOrientation = Z4TextInfoTextColorOrientation.HORIZONTAL;
+    } else if (this.textColorOrientationVERTICAL.isSelected()) {
+      this.textInfo.textColorOrientation = Z4TextInfoTextColorOrientation.VERTICAL;
+    }
     this.textInfo.textBorder = parseInt(this.textBorder.getValue());
     this.textInfo.textBorderColor = this.textBorderColor.getSelectedColor();
     this.textInfo.textShearX = parseInt(this.textShearX.getValue());
@@ -379,6 +399,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
         this.textEmpty.setSelected(false);
         this.textColor.setValue(this.getBlackBiGradientColor());
         this.textColorFillingUNIFORM.setSelected(true);
+        this.textColorOrientationHORIZONTAL.setSelected(true);
         this.textBorder.setValue(0);
         this.textBorderColor.setSelectedColor(new Color(0, 0, 0, 255));
         this.textShearX.setValue(0);

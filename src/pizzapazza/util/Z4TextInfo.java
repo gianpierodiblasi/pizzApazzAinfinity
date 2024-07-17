@@ -20,6 +20,7 @@ public class Z4TextInfo {
   public boolean textEmpty;
   public Z4GradientColor textColor;
   public Z4TextInfoTextColorFilling textColorFilling;
+  public Z4TextInfoTextColorOrientation textColorOrientation;
   public int textBorder;
   public Color textBorderColor;
   public int textShearX;

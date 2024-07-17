@@ -5115,15 +5115,20 @@ class Z4CanvasTextManager {
     } else if (this.textInfo.textColorFilling === Z4TextInfoTextColorFilling.UNIFORM) {
       return this.textInfo.textColor.getColorAt(div, false).getRGBA_HEX();
     } else if (this.textInfo.textColorFilling === Z4TextInfoTextColorFilling.SUBGRADIENT) {
-      let textMetrics = ctx.measureText(str);
-      return this.textInfo.textColor.subGradientColor(start, end).createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
-      // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
-      // return this.textInfo.textColor.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
+      return this.getCanvasGradient(ctx, this.textInfo.textColor.subGradientColor(start, end), str);
     } else if (this.textInfo.textColorFilling === Z4TextInfoTextColorFilling.GRADIENT) {
-      let textMetrics = ctx.measureText(str);
-      return this.textInfo.textColor.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
-      // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
-      // return this.textInfo.textColor.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
+      return this.getCanvasGradient(ctx, this.textInfo.textColor, str);
+    } else {
+      return null;
+    }
+  }
+
+   getCanvasGradient(ctx, color, str) {
+    let textMetrics = ctx.measureText(str);
+    if (this.textInfo.textColorOrientation === Z4TextInfoTextColorOrientation.HORIZONTAL) {
+      return color.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
+    } else if (this.textInfo.textColorOrientation === Z4TextInfoTextColorOrientation.VERTICAL) {
+      return color.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
     } else {
       return null;
     }
@@ -8733,6 +8738,10 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
    textColorFillingGRADIENT = new JSRadioButton();
 
+   textColorOrientationHORIZONTAL = new JSRadioButton();
+
+   textColorOrientationVERTICAL = new JSRadioButton();
+
    textBorder = new JSSpinner();
 
    textBorderColor = new JSColorChooser();
@@ -8882,21 +8891,32 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
       this.onTextInfoChange(this.textColor.getValueIsAdjusting());
     });
     panel.add(this.textColor, new GBC(0, 0).h(4).i(0, 0, 0, 5));
-    Z4UI.addLabel(panel, Z4Translations.FILLING, new GBC(1, 0).a(GBC.WEST));
+    Z4UI.addLabel(panel, Z4Translations.FILLING, new GBC(1, 0).a(GBC.WEST).i(0, 0, 0, 5));
     let group = new ButtonGroup();
     this.textColorFillingUNIFORM.setSelected(true);
     this.textColorFillingUNIFORM.setText(Z4Translations.UNIFORM);
     this.textColorFillingUNIFORM.addActionListener(event => this.onTextInfoChange(false));
-    panel.add(this.textColorFillingUNIFORM, new GBC(1, 1).a(GBC.WEST));
+    panel.add(this.textColorFillingUNIFORM, new GBC(1, 1).a(GBC.WEST).i(0, 0, 0, 5));
     group.add(this.textColorFillingUNIFORM);
     this.textColorFillingSUBGRADIENT.setText(Z4Translations.PARTIAL);
     this.textColorFillingSUBGRADIENT.addActionListener(event => this.onTextInfoChange(false));
-    panel.add(this.textColorFillingSUBGRADIENT, new GBC(1, 2).a(GBC.WEST));
+    panel.add(this.textColorFillingSUBGRADIENT, new GBC(1, 2).a(GBC.WEST).i(0, 0, 0, 5));
     group.add(this.textColorFillingSUBGRADIENT);
     this.textColorFillingGRADIENT.setText(Z4Translations.TOTAL);
     this.textColorFillingGRADIENT.addActionListener(event => this.onTextInfoChange(false));
-    panel.add(this.textColorFillingGRADIENT, new GBC(1, 3).a(GBC.NORTHWEST).wy(1));
+    panel.add(this.textColorFillingGRADIENT, new GBC(1, 3).a(GBC.NORTHWEST).wy(1).i(0, 0, 0, 5));
     group.add(this.textColorFillingGRADIENT);
+    Z4UI.addLabel(panel, Z4Translations.ORIENTATION, new GBC(2, 0).a(GBC.WEST));
+    group = new ButtonGroup();
+    this.textColorOrientationHORIZONTAL.setSelected(true);
+    this.textColorOrientationHORIZONTAL.setText(Z4Translations.HORIZONTAL);
+    this.textColorOrientationHORIZONTAL.addActionListener(event => this.onTextInfoChange(false));
+    panel.add(this.textColorOrientationHORIZONTAL, new GBC(2, 1).a(GBC.WEST));
+    group.add(this.textColorOrientationHORIZONTAL);
+    this.textColorOrientationVERTICAL.setText(Z4Translations.VERTICAL);
+    this.textColorOrientationVERTICAL.addActionListener(event => this.onTextInfoChange(false));
+    panel.add(this.textColorOrientationVERTICAL, new GBC(2, 2).a(GBC.WEST));
+    group.add(this.textColorOrientationVERTICAL);
     this.add(dropDown, new GBC(x, 2).a(GBC.NORTHEAST).i(1, 0, 0, 5));
     this.putImageData(ctx, width, height);
   }
@@ -8982,6 +9002,11 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     } else if (this.textColorFillingGRADIENT.isSelected()) {
       this.textInfo.textColorFilling = Z4TextInfoTextColorFilling.GRADIENT;
     }
+    if (this.textColorOrientationHORIZONTAL.isSelected()) {
+      this.textInfo.textColorOrientation = Z4TextInfoTextColorOrientation.HORIZONTAL;
+    } else if (this.textColorOrientationVERTICAL.isSelected()) {
+      this.textInfo.textColorOrientation = Z4TextInfoTextColorOrientation.VERTICAL;
+    }
     this.textInfo.textBorder = parseInt(this.textBorder.getValue());
     this.textInfo.textBorderColor = this.textBorderColor.getSelectedColor();
     this.textInfo.textShearX = parseInt(this.textShearX.getValue());
@@ -9010,6 +9035,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
         this.textEmpty.setSelected(false);
         this.textColor.setValue(this.getBlackBiGradientColor());
         this.textColorFillingUNIFORM.setSelected(true);
+        this.textColorOrientationHORIZONTAL.setSelected(true);
         this.textBorder.setValue(0);
         this.textBorderColor.setSelectedColor(new Color(0, 0, 0, 255));
         this.textShearX.setValue(0);
@@ -20950,6 +20976,8 @@ class Z4TextInfo {
 
    textColorFilling = null;
 
+   textColorOrientation = null;
+
    textBorder = 0;
 
    textBorderColor = null;
@@ -20997,6 +21025,16 @@ class Z4TextInfoTextColorFilling {
    * Each character is filled by using the gradient color
    */
   static GRADIENT = 'GRADIENT';
+}
+/**
+ * The orientation used to color each character of a text
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4TextInfoTextColorOrientation {
+
+  static HORIZONTAL = 'HORIZONTAL';
+  static VERTICAL = 'VERTICAL';
 }
 /**
  * The object managing the translations, currently only the English and Italian
@@ -21451,6 +21489,8 @@ class Z4Translations {
 
   static  CENTER_VERB = "";
 
+  static  ORIENTATION = "";
+
   // Composite Operation
   static  COMPOSITE_OPERATION = "";
 
@@ -21751,6 +21791,7 @@ class Z4Translations {
     Z4Translations.BACKWARD = "Backward";
     Z4Translations.DISTANCE = "Distance";
     Z4Translations.CENTER_VERB = "Center";
+    Z4Translations.ORIENTATION = "Orientation";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "This is the default setting and draws the layer on top of the existing content";
@@ -22013,6 +22054,7 @@ class Z4Translations {
     Z4Translations.BACKWARD = "Indietro";
     Z4Translations.DISTANCE = "Distanza";
     Z4Translations.CENTER_VERB = "Centra";
+    Z4Translations.ORIENTATION = "Orientamento";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "Questa \u00E8 l'impostazione predefinita e disegna il livello sopra il contenuto esistente";

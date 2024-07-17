@@ -1,10 +1,12 @@
 package pizzapazza.ui.component;
 
+import def.dom.CanvasGradient;
 import def.dom.MouseEvent;
 import static def.js.Globals.eval;
 import def.js.Set;
 import javascript.awt.Color;
 import javascript.awt.Dimension;
+import pizzapazza.color.Z4GradientColor;
 import pizzapazza.math.Z4Vector;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
@@ -12,6 +14,7 @@ import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Layer;
 import pizzapazza.util.Z4TextInfo;
 import pizzapazza.util.Z4TextInfoTextColorFilling;
+import pizzapazza.util.Z4TextInfoTextColorOrientation;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$TextMetrics;
 import static simulation.js.$Globals.$exists;
@@ -240,15 +243,20 @@ public class Z4CanvasTextManager {
     } else if (this.textInfo.textColorFilling == Z4TextInfoTextColorFilling.UNIFORM) {
       return this.textInfo.textColor.getColorAt(div, false).getRGBA_HEX();
     } else if (this.textInfo.textColorFilling == Z4TextInfoTextColorFilling.SUBGRADIENT) {
-      $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
-      return this.textInfo.textColor.subGradientColor(start, end).createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
-//          $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
-//          return this.textInfo.textColor.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
+      return this.getCanvasGradient(ctx, this.textInfo.textColor.subGradientColor(start, end), str);
     } else if (this.textInfo.textColorFilling == Z4TextInfoTextColorFilling.GRADIENT) {
-      $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
-      return this.textInfo.textColor.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
-//          $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
-//          return this.textInfo.textColor.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
+      return this.getCanvasGradient(ctx, this.textInfo.textColor, str);
+    } else {
+      return null;
+    }
+  }
+
+  private CanvasGradient getCanvasGradient($CanvasRenderingContext2D ctx, Z4GradientColor color, String str) {
+    $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
+    if (this.textInfo.textColorOrientation == Z4TextInfoTextColorOrientation.HORIZONTAL) {
+      return color.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
+    } else if (this.textInfo.textColorOrientation == Z4TextInfoTextColorOrientation.VERTICAL) {
+      return color.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
     } else {
       return null;
     }
