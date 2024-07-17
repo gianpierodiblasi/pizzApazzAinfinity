@@ -17,6 +17,8 @@ class Z4TextInfo {
 
    textColor = null;
 
+   textColorFilling = null;
+
    textBorder = 0;
 
    textBorderColor = null;

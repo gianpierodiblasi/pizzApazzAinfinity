@@ -180,31 +180,40 @@ class Z4CanvasTextManager {
     let strForMeasureLen = 0;
     eval("strForMeasureLen = strForMeasure.length;");
     if (strToPrintLen === 1) {
-      this.drawChar(ctx, strToPrint, this.textInfo.shape.getTangentAt(0.5), empty, this.getColor(ctx, strToPrint, color, 0.5), offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
+      this.drawChar(ctx, strToPrint, this.textInfo.shape.getTangentAt(0.5), empty, this.getColor(ctx, strToPrint, color, 0.5, 0, 1), offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
     } else if (strToPrintLen > 1) {
       let x0 = strToPrintLen === strForMeasureLen ? ctx.measureText(strForMeasure.substring(0, 1)).width / 2 : ctx.measureText(strToPrint.substring(0, 1)).width / 2;
       let x1 = strToPrintLen === strForMeasureLen ? ctx.measureText(strForMeasure).width - ctx.measureText(strForMeasure.substring(strForMeasureLen - 1)).width / 2 : ctx.measureText(strToPrint).width - ctx.measureText(strToPrint.substring(strToPrintLen - 1)).width / 2;
       let progress = 0;
       let x1_x0 = x1 - x0;
+      let strWidth = ctx.measureText(strToPrint).width;
       for (let i = 0; i < strToPrintLen; i++) {
         let s = strToPrint.substring(i, i + 1);
         let x = strToPrintLen === strForMeasureLen ? ctx.measureText(strForMeasure.substring(i, i + 1)).width : ctx.measureText(s).width;
         let div = (x / 2 + progress - x0) / x1_x0;
-        this.drawChar(ctx, s, this.textInfo.shape.getTangentAt(div), empty, this.getColor(ctx, s, color, div), offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
+        this.drawChar(ctx, s, this.textInfo.shape.getTangentAt(div), empty, this.getColor(ctx, s, color, div, progress / strWidth, (progress + x) / strWidth), offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
         progress += x;
       }
     }
   }
 
-   getColor(ctx, str, color, div) {
+   getColor(ctx, str, color, div, start, end) {
     if (color instanceof Color) {
       return (color).getRGBA_HEX();
-    } else {
+    } else if (this.textInfo.textColorFilling === Z4TextInfoTextColorFilling.UNIFORM) {
       return this.textInfo.textColor.getColorAt(div, false).getRGBA_HEX();
-      // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
-      // return this.textInfo.textColor.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
+    } else if (this.textInfo.textColorFilling === Z4TextInfoTextColorFilling.SUBGRADIENT) {
+      let textMetrics = ctx.measureText(str);
+      return this.textInfo.textColor.subGradientColor(start, end).createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
       // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
       // return this.textInfo.textColor.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
+    } else if (this.textInfo.textColorFilling === Z4TextInfoTextColorFilling.GRADIENT) {
+      let textMetrics = ctx.measureText(str);
+      return this.textInfo.textColor.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
+      // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
+      // return this.textInfo.textColor.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
+    } else {
+      return null;
     }
   }
 

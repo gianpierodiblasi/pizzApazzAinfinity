@@ -179,6 +179,9 @@ public class Z4Translations {
   public static String HORIZONTAL = "";
   public static String VERTICAL = "";
   public static String APPLY_ON = "";
+  public static String UNIFORM = "";
+  public static String PARTIAL = "";
+  public static String TOTAL = "";
 
   // Text
   public static String BOLD = "";
@@ -472,6 +475,9 @@ public class Z4Translations {
     Z4Translations.HORIZONTAL = "Horizontal";
     Z4Translations.VERTICAL = "Vertical";
     Z4Translations.APPLY_ON = "Apply On";
+    Z4Translations.UNIFORM = "Uniform";
+    Z4Translations.PARTIAL = "Partial";
+    Z4Translations.TOTAL = "Total";
 
     // Text
     Z4Translations.BOLD = "Bold";
@@ -749,6 +755,9 @@ public class Z4Translations {
     Z4Translations.HORIZONTAL = "Orizzontale";
     Z4Translations.VERTICAL = "Verticale";
     Z4Translations.APPLY_ON = "Applica Su";
+    Z4Translations.UNIFORM = "Uniforme";
+    Z4Translations.PARTIAL = "Parziale";
+    Z4Translations.TOTAL = "Totale";
 
     // Text
     Z4Translations.BOLD = "Grassetto";

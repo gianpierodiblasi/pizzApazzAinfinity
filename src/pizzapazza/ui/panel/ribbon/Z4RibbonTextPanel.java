@@ -1,15 +1,20 @@
 package pizzapazza.ui.panel.ribbon;
 
+import static def.dom.Globals.document;
+import def.dom.ImageData;
 import def.js.Array;
 import javascript.awt.Color;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
+import javascript.swing.ButtonGroup;
 import javascript.swing.JSButton;
 import javascript.swing.JSCheckBox;
 import javascript.swing.JSColorChooser;
+import javascript.swing.JSComponent;
 import javascript.swing.JSLabel;
 import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
+import javascript.swing.JSRadioButton;
 import javascript.swing.JSSpinner;
 import javascript.swing.JSTextField;
 import javascript.swing.SpinnerNumberModel;
@@ -28,16 +33,18 @@ import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.component.Z4CanvasOverlayMode;
 import pizzapazza.ui.component.Z4DropDown;
 import pizzapazza.ui.panel.Z4FontSelectionPanel;
-import pizzapazza.ui.panel.color.Z4GradientColorChooser;
+import pizzapazza.ui.panel.color.Z4GradientColorPanel;
 import pizzapazza.ui.panel.math.Z4RotationPanel;
 import pizzapazza.ui.panel.math.Z4RotationPanelOrientation;
 import pizzapazza.util.Z4Font;
 import pizzapazza.util.Z4TextInfo;
+import pizzapazza.util.Z4TextInfoTextColorFilling;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
+import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
-import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.parseInt;
+import simulation.js.$Uint8Array;
 
 /**
  * The ribbon panel containing the settings to draw text
@@ -51,7 +58,10 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
   private final JSTextField textText = new JSTextField();
   private final JSCheckBox textEmpty = new JSCheckBox();
-  private final Z4GradientColorChooser textColor = new Z4GradientColorChooser();
+  private final Z4GradientColorPanel textColor = new Z4GradientColorPanel();
+  private final JSRadioButton textColorFillingUNIFORM = new JSRadioButton();
+  private final JSRadioButton textColorFillingSUBGRADIENT = new JSRadioButton();
+  private final JSRadioButton textColorFillingGRADIENT = new JSRadioButton();
   private final JSSpinner textBorder = new JSSpinner();
   private final JSColorChooser textBorderColor = new JSColorChooser();
   private final JSSpinner textShearX = new JSSpinner();
@@ -96,12 +106,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textEmpty.addActionListener(event -> this.onTextInfoChange(false));
     this.add(this.textEmpty, new GBC(x, 2).a(GBC.NORTHWEST).i(0, 5, 0, 0));
 
-    this.textColor.setCloseOnChange(false);
-    this.textColor.setRippleVisible(false);
-    this.textColor.cssAddClass("z4ribbontextpanel-editor");
-    this.textColor.setSelectedColor(this.getBlackBiGradientColor());
-    this.textColor.addChangeListener(event -> this.onTextInfoChange(this.textColor.getValueIsAdjusting()));
-    this.add(this.textColor, new GBC(x + 1, 2).a(GBC.NORTHEAST).i(1, 0, 0, 5));
+    this.addTextColor(x + 1);
 
     this.addDropDown("z4ribbontextpanel-shearing", Z4Translations.SHEARING, this.textShearX, this.textShearY, x + 2, 1, 0, GBC.CENTER, GBC.VERTICAL);
 
@@ -192,6 +197,71 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.add(dropDown, new GBC(x, 2).f(GBC.HORIZONTAL).a(GBC.NORTH).i(1, 5, 0, 5));
   }
 
+  private void addTextColor(int x) {
+    Z4DropDown dropDown = new Z4DropDown(".z4ribbontextpanel-text-color");
+    dropDown.cssAddClass("z4ribbontextpanel-editor");
+    dropDown.cssAddClass("z4ribbontextpanel-text-color-dropdown");
+    int width = 45;
+    int height = 12;
+    JSComponent colorPreview = new JSComponent(document.createElement("canvas"));
+    colorPreview.setProperty("width", "" + width);
+    colorPreview.setProperty("height", "" + height);
+    dropDown.appendChildInTree("summary", colorPreview);
+
+    $CanvasRenderingContext2D ctx = colorPreview.invoke("getContext('2d')");
+
+    JSPanel panel = new JSPanel();
+    panel.cssAddClass("z4ribbontextpanel-text-color");
+    panel.setLayout(new GridBagLayout());
+    dropDown.appendChild(panel);
+
+    this.textColor.setRippleVisible(false);
+    this.textColor.setValue(this.getBlackBiGradientColor());
+    this.textColor.addChangeListener(event -> {
+      this.putImageData(ctx, width, height);
+      this.onTextInfoChange(this.textColor.getValueIsAdjusting());
+    });
+    panel.add(this.textColor, new GBC(0, 0).h(4).i(0, 0, 0, 5));
+
+    Z4UI.addLabel(panel, Z4Translations.FILLING, new GBC(1, 0).a(GBC.WEST));
+    ButtonGroup group = new ButtonGroup();
+    this.textColorFillingUNIFORM.setSelected(true);
+    this.textColorFillingUNIFORM.setText(Z4Translations.UNIFORM);
+    this.textColorFillingUNIFORM.addActionListener(event -> this.onTextInfoChange(false));
+    panel.add(this.textColorFillingUNIFORM, new GBC(1, 1).a(GBC.WEST));
+    group.add(this.textColorFillingUNIFORM);
+    this.textColorFillingSUBGRADIENT.setText(Z4Translations.PARTIAL);
+    this.textColorFillingSUBGRADIENT.addActionListener(event -> this.onTextInfoChange(false));
+    panel.add(this.textColorFillingSUBGRADIENT, new GBC(1, 2).a(GBC.WEST));
+    group.add(this.textColorFillingSUBGRADIENT);
+    this.textColorFillingGRADIENT.setText(Z4Translations.TOTAL);
+    this.textColorFillingGRADIENT.addActionListener(event -> this.onTextInfoChange(false));
+    panel.add(this.textColorFillingGRADIENT, new GBC(1, 3).a(GBC.NORTHWEST).wy(1));
+    group.add(this.textColorFillingGRADIENT);
+
+    this.add(dropDown, new GBC(x, 2).a(GBC.NORTHEAST).i(1, 0, 0, 5));
+
+    this.putImageData(ctx, width, height);
+  }
+
+  private void putImageData($CanvasRenderingContext2D ctx, int width, int height) {
+    ImageData imageData = ctx.createImageData(width, height);
+    $Uint8Array data = ($Uint8Array) imageData.data;
+
+    for (int x = 0; x < width; x++) {
+      Color color = this.textColor.getValue().getColorAt(x / width, false);
+      for (int y = 0; y < height; y++) {
+        int idx = (y * width + x) * 4;
+        data.$set(idx, color.red);
+        data.$set(idx + 1, color.green);
+        data.$set(idx + 2, color.blue);
+        data.$set(idx + 3, color.alpha);
+      }
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+  }
+
   private void addDropDown(String dropDownContentSelector, String title, JSSpinner xSpin, JSSpinner ySpin, int x, int y, int top, int anchor, int fill) {
     Z4DropDown dropDown = new Z4DropDown("." + dropDownContentSelector);
     dropDown.cssAddClass("z4ribbontextpanel-editor");
@@ -263,7 +333,14 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textInfo.textText = this.textText.getText();
     this.fontSelectionPanel.setSampleVisible(!$exists(this.textInfo.textText));
     this.textInfo.textEmpty = this.textEmpty.isSelected();
-    this.textInfo.textColor = this.textColor.getSelectedColor();
+    this.textInfo.textColor = this.textColor.getValue();
+    if (this.textColorFillingUNIFORM.isSelected()) {
+      this.textInfo.textColorFilling = Z4TextInfoTextColorFilling.UNIFORM;
+    } else if (this.textColorFillingSUBGRADIENT.isSelected()) {
+      this.textInfo.textColorFilling = Z4TextInfoTextColorFilling.SUBGRADIENT;
+    } else if (this.textColorFillingGRADIENT.isSelected()) {
+      this.textInfo.textColorFilling = Z4TextInfoTextColorFilling.GRADIENT;
+    }
     this.textInfo.textBorder = parseInt(this.textBorder.getValue());
     this.textInfo.textBorderColor = this.textBorderColor.getSelectedColor();
     this.textInfo.textShearX = parseInt(this.textShearX.getValue());
@@ -300,7 +377,8 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
         this.textText.setText("");
         this.textEmpty.setSelected(false);
-        this.textColor.setSelectedColor(this.getBlackBiGradientColor());
+        this.textColor.setValue(this.getBlackBiGradientColor());
+        this.textColorFillingUNIFORM.setSelected(true);
         this.textBorder.setValue(0);
         this.textBorderColor.setSelectedColor(new Color(0, 0, 0, 255));
         this.textShearX.setValue(0);

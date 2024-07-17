@@ -13,7 +13,13 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
    textEmpty = new JSCheckBox();
 
-   textColor = new Z4GradientColorChooser();
+   textColor = new Z4GradientColorPanel();
+
+   textColorFillingUNIFORM = new JSRadioButton();
+
+   textColorFillingSUBGRADIENT = new JSRadioButton();
+
+   textColorFillingGRADIENT = new JSRadioButton();
 
    textBorder = new JSSpinner();
 
@@ -71,12 +77,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textEmpty.setText(Z4Translations.EMPTY_HIS);
     this.textEmpty.addActionListener(event => this.onTextInfoChange(false));
     this.add(this.textEmpty, new GBC(x, 2).a(GBC.NORTHWEST).i(0, 5, 0, 0));
-    this.textColor.setCloseOnChange(false);
-    this.textColor.setRippleVisible(false);
-    this.textColor.cssAddClass("z4ribbontextpanel-editor");
-    this.textColor.setSelectedColor(this.getBlackBiGradientColor());
-    this.textColor.addChangeListener(event => this.onTextInfoChange(this.textColor.getValueIsAdjusting()));
-    this.add(this.textColor, new GBC(x + 1, 2).a(GBC.NORTHEAST).i(1, 0, 0, 5));
+    this.addTextColor(x + 1);
     this.addDropDown("z4ribbontextpanel-shearing", Z4Translations.SHEARING, this.textShearX, this.textShearY, x + 2, 1, 0, GBC.CENTER, GBC.VERTICAL);
     Z4UI.addLabel(this, Z4Translations.BORDER, new GBC(x + 3, 0).a(GBC.WEST).i(5, 5, 2, 0));
     this.textBorder.cssAddClass("jsspinner_w_4rem");
@@ -147,6 +148,63 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.add(dropDown, new GBC(x, 2).f(GBC.HORIZONTAL).a(GBC.NORTH).i(1, 5, 0, 5));
   }
 
+   addTextColor(x) {
+    let dropDown = new Z4DropDown(".z4ribbontextpanel-text-color");
+    dropDown.cssAddClass("z4ribbontextpanel-editor");
+    dropDown.cssAddClass("z4ribbontextpanel-text-color-dropdown");
+    let width = 45;
+    let height = 12;
+    let colorPreview = new JSComponent(document.createElement("canvas"));
+    colorPreview.setProperty("width", "" + width);
+    colorPreview.setProperty("height", "" + height);
+    dropDown.appendChildInTree("summary", colorPreview);
+    let ctx = colorPreview.invoke("getContext('2d')");
+    let panel = new JSPanel();
+    panel.cssAddClass("z4ribbontextpanel-text-color");
+    panel.setLayout(new GridBagLayout());
+    dropDown.appendChild(panel);
+    this.textColor.setRippleVisible(false);
+    this.textColor.setValue(this.getBlackBiGradientColor());
+    this.textColor.addChangeListener(event => {
+      this.putImageData(ctx, width, height);
+      this.onTextInfoChange(this.textColor.getValueIsAdjusting());
+    });
+    panel.add(this.textColor, new GBC(0, 0).h(4).i(0, 0, 0, 5));
+    Z4UI.addLabel(panel, Z4Translations.FILLING, new GBC(1, 0).a(GBC.WEST));
+    let group = new ButtonGroup();
+    this.textColorFillingUNIFORM.setSelected(true);
+    this.textColorFillingUNIFORM.setText(Z4Translations.UNIFORM);
+    this.textColorFillingUNIFORM.addActionListener(event => this.onTextInfoChange(false));
+    panel.add(this.textColorFillingUNIFORM, new GBC(1, 1).a(GBC.WEST));
+    group.add(this.textColorFillingUNIFORM);
+    this.textColorFillingSUBGRADIENT.setText(Z4Translations.PARTIAL);
+    this.textColorFillingSUBGRADIENT.addActionListener(event => this.onTextInfoChange(false));
+    panel.add(this.textColorFillingSUBGRADIENT, new GBC(1, 2).a(GBC.WEST));
+    group.add(this.textColorFillingSUBGRADIENT);
+    this.textColorFillingGRADIENT.setText(Z4Translations.TOTAL);
+    this.textColorFillingGRADIENT.addActionListener(event => this.onTextInfoChange(false));
+    panel.add(this.textColorFillingGRADIENT, new GBC(1, 3).a(GBC.NORTHWEST).wy(1));
+    group.add(this.textColorFillingGRADIENT);
+    this.add(dropDown, new GBC(x, 2).a(GBC.NORTHEAST).i(1, 0, 0, 5));
+    this.putImageData(ctx, width, height);
+  }
+
+   putImageData(ctx, width, height) {
+    let imageData = ctx.createImageData(width, height);
+    let data = imageData.data;
+    for (let x = 0; x < width; x++) {
+      let color = this.textColor.getValue().getColorAt(x / width, false);
+      for (let y = 0; y < height; y++) {
+        let idx = (y * width + x) * 4;
+        data[idx] = color.red;
+        data[idx + 1] = color.green;
+        data[idx + 2] = color.blue;
+        data[idx + 3] = color.alpha;
+      }
+    }
+    ctx.putImageData(imageData, 0, 0);
+  }
+
    addDropDown(dropDownContentSelector, title, xSpin, ySpin, x, y, top, anchor, fill) {
     let dropDown = new Z4DropDown("." + dropDownContentSelector);
     dropDown.cssAddClass("z4ribbontextpanel-editor");
@@ -204,7 +262,14 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textInfo.textText = this.textText.getText();
     this.fontSelectionPanel.setSampleVisible(!this.textInfo.textText);
     this.textInfo.textEmpty = this.textEmpty.isSelected();
-    this.textInfo.textColor = this.textColor.getSelectedColor();
+    this.textInfo.textColor = this.textColor.getValue();
+    if (this.textColorFillingUNIFORM.isSelected()) {
+      this.textInfo.textColorFilling = Z4TextInfoTextColorFilling.UNIFORM;
+    } else if (this.textColorFillingSUBGRADIENT.isSelected()) {
+      this.textInfo.textColorFilling = Z4TextInfoTextColorFilling.SUBGRADIENT;
+    } else if (this.textColorFillingGRADIENT.isSelected()) {
+      this.textInfo.textColorFilling = Z4TextInfoTextColorFilling.GRADIENT;
+    }
     this.textInfo.textBorder = parseInt(this.textBorder.getValue());
     this.textInfo.textBorderColor = this.textBorderColor.getSelectedColor();
     this.textInfo.textShearX = parseInt(this.textShearX.getValue());
@@ -231,7 +296,8 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
         this.rotation.setValue(new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false));
         this.textText.setText("");
         this.textEmpty.setSelected(false);
-        this.textColor.setSelectedColor(this.getBlackBiGradientColor());
+        this.textColor.setValue(this.getBlackBiGradientColor());
+        this.textColorFillingUNIFORM.setSelected(true);
         this.textBorder.setValue(0);
         this.textBorderColor.setSelectedColor(new Color(0, 0, 0, 255));
         this.textShearX.setValue(0);

@@ -5092,31 +5092,40 @@ class Z4CanvasTextManager {
     let strForMeasureLen = 0;
     eval("strForMeasureLen = strForMeasure.length;");
     if (strToPrintLen === 1) {
-      this.drawChar(ctx, strToPrint, this.textInfo.shape.getTangentAt(0.5), empty, this.getColor(ctx, strToPrint, color, 0.5), offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
+      this.drawChar(ctx, strToPrint, this.textInfo.shape.getTangentAt(0.5), empty, this.getColor(ctx, strToPrint, color, 0.5, 0, 1), offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
     } else if (strToPrintLen > 1) {
       let x0 = strToPrintLen === strForMeasureLen ? ctx.measureText(strForMeasure.substring(0, 1)).width / 2 : ctx.measureText(strToPrint.substring(0, 1)).width / 2;
       let x1 = strToPrintLen === strForMeasureLen ? ctx.measureText(strForMeasure).width - ctx.measureText(strForMeasure.substring(strForMeasureLen - 1)).width / 2 : ctx.measureText(strToPrint).width - ctx.measureText(strToPrint.substring(strToPrintLen - 1)).width / 2;
       let progress = 0;
       let x1_x0 = x1 - x0;
+      let strWidth = ctx.measureText(strToPrint).width;
       for (let i = 0; i < strToPrintLen; i++) {
         let s = strToPrint.substring(i, i + 1);
         let x = strToPrintLen === strForMeasureLen ? ctx.measureText(strForMeasure.substring(i, i + 1)).width : ctx.measureText(s).width;
         let div = (x / 2 + progress - x0) / x1_x0;
-        this.drawChar(ctx, s, this.textInfo.shape.getTangentAt(div), empty, this.getColor(ctx, s, color, div), offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
+        this.drawChar(ctx, s, this.textInfo.shape.getTangentAt(div), empty, this.getColor(ctx, s, color, div, progress / strWidth, (progress + x) / strWidth), offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
         progress += x;
       }
     }
   }
 
-   getColor(ctx, str, color, div) {
+   getColor(ctx, str, color, div, start, end) {
     if (color instanceof Color) {
       return (color).getRGBA_HEX();
-    } else {
+    } else if (this.textInfo.textColorFilling === Z4TextInfoTextColorFilling.UNIFORM) {
       return this.textInfo.textColor.getColorAt(div, false).getRGBA_HEX();
-      // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
-      // return this.textInfo.textColor.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
+    } else if (this.textInfo.textColorFilling === Z4TextInfoTextColorFilling.SUBGRADIENT) {
+      let textMetrics = ctx.measureText(str);
+      return this.textInfo.textColor.subGradientColor(start, end).createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
       // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
       // return this.textInfo.textColor.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
+    } else if (this.textInfo.textColorFilling === Z4TextInfoTextColorFilling.GRADIENT) {
+      let textMetrics = ctx.measureText(str);
+      return this.textInfo.textColor.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
+      // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
+      // return this.textInfo.textColor.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
+    } else {
+      return null;
     }
   }
 
@@ -8716,7 +8725,13 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
    textEmpty = new JSCheckBox();
 
-   textColor = new Z4GradientColorChooser();
+   textColor = new Z4GradientColorPanel();
+
+   textColorFillingUNIFORM = new JSRadioButton();
+
+   textColorFillingSUBGRADIENT = new JSRadioButton();
+
+   textColorFillingGRADIENT = new JSRadioButton();
 
    textBorder = new JSSpinner();
 
@@ -8774,12 +8789,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textEmpty.setText(Z4Translations.EMPTY_HIS);
     this.textEmpty.addActionListener(event => this.onTextInfoChange(false));
     this.add(this.textEmpty, new GBC(x, 2).a(GBC.NORTHWEST).i(0, 5, 0, 0));
-    this.textColor.setCloseOnChange(false);
-    this.textColor.setRippleVisible(false);
-    this.textColor.cssAddClass("z4ribbontextpanel-editor");
-    this.textColor.setSelectedColor(this.getBlackBiGradientColor());
-    this.textColor.addChangeListener(event => this.onTextInfoChange(this.textColor.getValueIsAdjusting()));
-    this.add(this.textColor, new GBC(x + 1, 2).a(GBC.NORTHEAST).i(1, 0, 0, 5));
+    this.addTextColor(x + 1);
     this.addDropDown("z4ribbontextpanel-shearing", Z4Translations.SHEARING, this.textShearX, this.textShearY, x + 2, 1, 0, GBC.CENTER, GBC.VERTICAL);
     Z4UI.addLabel(this, Z4Translations.BORDER, new GBC(x + 3, 0).a(GBC.WEST).i(5, 5, 2, 0));
     this.textBorder.cssAddClass("jsspinner_w_4rem");
@@ -8850,6 +8860,63 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.add(dropDown, new GBC(x, 2).f(GBC.HORIZONTAL).a(GBC.NORTH).i(1, 5, 0, 5));
   }
 
+   addTextColor(x) {
+    let dropDown = new Z4DropDown(".z4ribbontextpanel-text-color");
+    dropDown.cssAddClass("z4ribbontextpanel-editor");
+    dropDown.cssAddClass("z4ribbontextpanel-text-color-dropdown");
+    let width = 45;
+    let height = 12;
+    let colorPreview = new JSComponent(document.createElement("canvas"));
+    colorPreview.setProperty("width", "" + width);
+    colorPreview.setProperty("height", "" + height);
+    dropDown.appendChildInTree("summary", colorPreview);
+    let ctx = colorPreview.invoke("getContext('2d')");
+    let panel = new JSPanel();
+    panel.cssAddClass("z4ribbontextpanel-text-color");
+    panel.setLayout(new GridBagLayout());
+    dropDown.appendChild(panel);
+    this.textColor.setRippleVisible(false);
+    this.textColor.setValue(this.getBlackBiGradientColor());
+    this.textColor.addChangeListener(event => {
+      this.putImageData(ctx, width, height);
+      this.onTextInfoChange(this.textColor.getValueIsAdjusting());
+    });
+    panel.add(this.textColor, new GBC(0, 0).h(4).i(0, 0, 0, 5));
+    Z4UI.addLabel(panel, Z4Translations.FILLING, new GBC(1, 0).a(GBC.WEST));
+    let group = new ButtonGroup();
+    this.textColorFillingUNIFORM.setSelected(true);
+    this.textColorFillingUNIFORM.setText(Z4Translations.UNIFORM);
+    this.textColorFillingUNIFORM.addActionListener(event => this.onTextInfoChange(false));
+    panel.add(this.textColorFillingUNIFORM, new GBC(1, 1).a(GBC.WEST));
+    group.add(this.textColorFillingUNIFORM);
+    this.textColorFillingSUBGRADIENT.setText(Z4Translations.PARTIAL);
+    this.textColorFillingSUBGRADIENT.addActionListener(event => this.onTextInfoChange(false));
+    panel.add(this.textColorFillingSUBGRADIENT, new GBC(1, 2).a(GBC.WEST));
+    group.add(this.textColorFillingSUBGRADIENT);
+    this.textColorFillingGRADIENT.setText(Z4Translations.TOTAL);
+    this.textColorFillingGRADIENT.addActionListener(event => this.onTextInfoChange(false));
+    panel.add(this.textColorFillingGRADIENT, new GBC(1, 3).a(GBC.NORTHWEST).wy(1));
+    group.add(this.textColorFillingGRADIENT);
+    this.add(dropDown, new GBC(x, 2).a(GBC.NORTHEAST).i(1, 0, 0, 5));
+    this.putImageData(ctx, width, height);
+  }
+
+   putImageData(ctx, width, height) {
+    let imageData = ctx.createImageData(width, height);
+    let data = imageData.data;
+    for (let x = 0; x < width; x++) {
+      let color = this.textColor.getValue().getColorAt(x / width, false);
+      for (let y = 0; y < height; y++) {
+        let idx = (y * width + x) * 4;
+        data[idx] = color.red;
+        data[idx + 1] = color.green;
+        data[idx + 2] = color.blue;
+        data[idx + 3] = color.alpha;
+      }
+    }
+    ctx.putImageData(imageData, 0, 0);
+  }
+
    addDropDown(dropDownContentSelector, title, xSpin, ySpin, x, y, top, anchor, fill) {
     let dropDown = new Z4DropDown("." + dropDownContentSelector);
     dropDown.cssAddClass("z4ribbontextpanel-editor");
@@ -8907,7 +8974,14 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textInfo.textText = this.textText.getText();
     this.fontSelectionPanel.setSampleVisible(!this.textInfo.textText);
     this.textInfo.textEmpty = this.textEmpty.isSelected();
-    this.textInfo.textColor = this.textColor.getSelectedColor();
+    this.textInfo.textColor = this.textColor.getValue();
+    if (this.textColorFillingUNIFORM.isSelected()) {
+      this.textInfo.textColorFilling = Z4TextInfoTextColorFilling.UNIFORM;
+    } else if (this.textColorFillingSUBGRADIENT.isSelected()) {
+      this.textInfo.textColorFilling = Z4TextInfoTextColorFilling.SUBGRADIENT;
+    } else if (this.textColorFillingGRADIENT.isSelected()) {
+      this.textInfo.textColorFilling = Z4TextInfoTextColorFilling.GRADIENT;
+    }
     this.textInfo.textBorder = parseInt(this.textBorder.getValue());
     this.textInfo.textBorderColor = this.textBorderColor.getSelectedColor();
     this.textInfo.textShearX = parseInt(this.textShearX.getValue());
@@ -8934,7 +9008,8 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
         this.rotation.setValue(new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false));
         this.textText.setText("");
         this.textEmpty.setSelected(false);
-        this.textColor.setSelectedColor(this.getBlackBiGradientColor());
+        this.textColor.setValue(this.getBlackBiGradientColor());
+        this.textColorFillingUNIFORM.setSelected(true);
         this.textBorder.setValue(0);
         this.textBorderColor.setSelectedColor(new Color(0, 0, 0, 255));
         this.textShearX.setValue(0);
@@ -20873,6 +20948,8 @@ class Z4TextInfo {
 
    textColor = null;
 
+   textColorFilling = null;
+
    textBorder = 0;
 
    textBorderColor = null;
@@ -20898,6 +20975,28 @@ class Z4TextInfo {
    shadowShearX = 0;
 
    shadowShearY = 0;
+}
+/**
+ * The filling used to color each character of a text
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4TextInfoTextColorFilling {
+
+  /**
+   * Each character is filled by an uniform color obtained based on the
+   * character's position in the text
+   */
+  static UNIFORM = 'UNIFORM';
+  /**
+   * Each character is filled by a gradient obtained as a proportional of the
+   * gradient color based on the character's position in the text
+   */
+  static SUBGRADIENT = 'SUBGRADIENT';
+  /**
+   * Each character is filled by using the gradient color
+   */
+  static GRADIENT = 'GRADIENT';
 }
 /**
  * The object managing the translations, currently only the English and Italian
@@ -21202,6 +21301,12 @@ class Z4Translations {
   static  VERTICAL = "";
 
   static  APPLY_ON = "";
+
+  static  UNIFORM = "";
+
+  static  PARTIAL = "";
+
+  static  TOTAL = "";
 
   // Text
   static  BOLD = "";
@@ -21569,6 +21674,9 @@ class Z4Translations {
     Z4Translations.HORIZONTAL = "Horizontal";
     Z4Translations.VERTICAL = "Vertical";
     Z4Translations.APPLY_ON = "Apply On";
+    Z4Translations.UNIFORM = "Uniform";
+    Z4Translations.PARTIAL = "Partial";
+    Z4Translations.TOTAL = "Total";
     // Text
     Z4Translations.BOLD = "Bold";
     Z4Translations.ITALIC = "Italic";
@@ -21828,6 +21936,9 @@ class Z4Translations {
     Z4Translations.HORIZONTAL = "Orizzontale";
     Z4Translations.VERTICAL = "Verticale";
     Z4Translations.APPLY_ON = "Applica Su";
+    Z4Translations.UNIFORM = "Uniforme";
+    Z4Translations.PARTIAL = "Parziale";
+    Z4Translations.TOTAL = "Totale";
     // Text
     Z4Translations.BOLD = "Grassetto";
     Z4Translations.ITALIC = "Corsivo";

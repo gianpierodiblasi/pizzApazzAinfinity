@@ -11,6 +11,7 @@ import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Layer;
 import pizzapazza.util.Z4TextInfo;
+import pizzapazza.util.Z4TextInfoTextColorFilling;
 import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$TextMetrics;
 import static simulation.js.$Globals.$exists;
@@ -208,7 +209,7 @@ public class Z4CanvasTextManager {
     eval("strForMeasureLen = strForMeasure.length;");
 
     if (strToPrintLen == 1) {
-      this.drawChar(ctx, strToPrint, this.textInfo.shape.getTangentAt(0.5), empty, this.getColor(ctx, strToPrint, color, 0.5), offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
+      this.drawChar(ctx, strToPrint, this.textInfo.shape.getTangentAt(0.5), empty, this.getColor(ctx, strToPrint, color, 0.5, 0, 1), offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
     } else if (strToPrintLen > 1) {
       double x0 = strToPrintLen == strForMeasureLen
               ? ctx.measureText(strForMeasure.substring(0, 1)).width / 2
@@ -220,28 +221,36 @@ public class Z4CanvasTextManager {
 
       double progress = 0;
       double x1_x0 = x1 - x0;
+      double strWidth = ctx.measureText(strToPrint).width;
 
       for (int i = 0; i < strToPrintLen; i++) {
         String s = strToPrint.substring(i, i + 1);
         double x = strToPrintLen == strForMeasureLen ? ctx.measureText(strForMeasure.substring(i, i + 1)).width : ctx.measureText(s).width;
 
         double div = (x / 2 + progress - x0) / x1_x0;
-        this.drawChar(ctx, s, this.textInfo.shape.getTangentAt(div), empty, this.getColor(ctx, s, color, div), offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
+        this.drawChar(ctx, s, this.textInfo.shape.getTangentAt(div), empty, this.getColor(ctx, s, color, div, progress / strWidth, (progress + x) / strWidth), offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
         progress += x;
       }
     }
   }
 
-  private Object getColor($CanvasRenderingContext2D ctx, String str, Object color, double div) {
+  private Object getColor($CanvasRenderingContext2D ctx, String str, Object color, double div, double start, double end) {
     if (color instanceof Color) {
       return ((Color) color).getRGBA_HEX();
-    } else {
+    } else if (this.textInfo.textColorFilling == Z4TextInfoTextColorFilling.UNIFORM) {
       return this.textInfo.textColor.getColorAt(div, false).getRGBA_HEX();
-
-//      $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
-//      return this.textInfo.textColor.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
+    } else if (this.textInfo.textColorFilling == Z4TextInfoTextColorFilling.SUBGRADIENT) {
+      $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
+      return this.textInfo.textColor.subGradientColor(start, end).createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
 //          $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
 //          return this.textInfo.textColor.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
+    } else if (this.textInfo.textColorFilling == Z4TextInfoTextColorFilling.GRADIENT) {
+      $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
+      return this.textInfo.textColor.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
+//          $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
+//          return this.textInfo.textColor.createLinearGradient(ctx, 0, -textMetrics.actualBoundingBoxAscent, 0, textMetrics.actualBoundingBoxDescent);
+    } else {
+      return null;
     }
   }
 

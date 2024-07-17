@@ -137,12 +137,6 @@
 .z4ribbondrawingtoolpanel {
 }
 
-.z4ribbontextpanel {
-}
-.z4ribbontextpanel .z4ribbontextpanel-editor[transparent=true] > :not(summary), .z4ribbontextpanel .z4ribbontextpanel-editor[transparent=true] > :not(summary) * {
-  background: transparent !important;
-}
-
 .z4ribbonhistorypanel {
 }
 
@@ -805,7 +799,18 @@
 .z4ribbonhelppanel .z4check-install span {
   margin-top: -3px;
 }
-.z4rotationpanel {
+.z4ribbontextpanel {
+}
+
+.z4ribbontextpanel .z4ribbontextpanel-editor[transparent=true] > :not(summary), .z4ribbontextpanel .z4ribbontextpanel-editor[transparent=true] > :not(summary) * {
+  background: transparent !important;
+}
+
+.z4ribbontextpanel .z4ribbontextpanel-text-color-dropdown summary canvas {
+  border-radius: calc(var(--roundness) + .1rem);
+  border: 1px solid var(--main-action-bgcolor);
+  background-image: url(../image/util/chessboard.png);
+}.z4rotationpanel {
 }
 
 .z4rotationpanel .z4rotationpanel-radio img,

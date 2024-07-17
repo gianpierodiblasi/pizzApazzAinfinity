@@ -15,10 +15,11 @@ public class Z4TextInfo {
   public Z4Font font;
   public Z4Rotation rotation;
   public Z4GeometricShape shape;
-  
+
   public String textText;
   public boolean textEmpty;
   public Z4GradientColor textColor;
+  public Z4TextInfoTextColorFilling textColorFilling;
   public int textBorder;
   public Color textBorderColor;
   public int textShearX;
