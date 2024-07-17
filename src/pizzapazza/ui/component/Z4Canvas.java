@@ -1069,8 +1069,15 @@ public class Z4Canvas extends JSComponent {
 
   /**
    * Draws a text
+   *
+   * @param newLayer true to draw the text on a new layer, false otherwise
    */
-  public void drawText() {
+  public void drawText(boolean newLayer) {
+    if (newLayer) {
+      this.paper.addLayer(this.textInfo.textText + ($exists(this.textInfo.shadowText) ? "/" + this.textInfo.shadowText : ""), this.width, this.height, null, this.width, this.height);
+      this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), null, true);
+    }
+
     this.selectedLayer.drawText(this.textManager);
     this.selectedLayer.getLayerPreview().drawLayer();
     this.drawCanvas();

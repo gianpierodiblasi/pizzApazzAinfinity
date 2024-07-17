@@ -41,6 +41,7 @@ public class Z4Translations {
   public static String LAYER = "";
   public static String LAYER_NAME = "";
   public static String NEW_LAYER = "";
+  public static String SELECTED_LAYER = "";
   public static String BACKGROUND_LAYER = "";
   public static String DELETE_LAYER_MESSAGE = "";
   public static String MERGE_VISIBLE_LAYERS = "";
@@ -177,7 +178,7 @@ public class Z4Translations {
   public static String SHEARING = "";
   public static String HORIZONTAL = "";
   public static String VERTICAL = "";
-  public static String APPLY = "";
+  public static String APPLY_ON = "";
 
   // Text
   public static String BOLD = "";
@@ -330,6 +331,7 @@ public class Z4Translations {
     Z4Translations.LAYER = "Layer";
     Z4Translations.LAYER_NAME = "Layer Name";
     Z4Translations.NEW_LAYER = "New Layer";
+    Z4Translations.SELECTED_LAYER = "Selected Layer";
     Z4Translations.BACKGROUND_LAYER = "Bkgrd";
     Z4Translations.DELETE_LAYER_MESSAGE = "Do you really want to delete the layer?";
     Z4Translations.MERGE_VISIBLE_LAYERS = "Merge Visible Layers";
@@ -469,7 +471,7 @@ public class Z4Translations {
     Z4Translations.SHEARING = "Shearing";
     Z4Translations.HORIZONTAL = "Horizontal";
     Z4Translations.VERTICAL = "Vertical";
-    Z4Translations.APPLY = "Apply";
+    Z4Translations.APPLY_ON = "Apply On";
 
     // Text
     Z4Translations.BOLD = "Bold";
@@ -606,6 +608,7 @@ public class Z4Translations {
     Z4Translations.LAYER = "Livello";
     Z4Translations.LAYER_NAME = "Nome Livello";
     Z4Translations.NEW_LAYER = "Nuovo Livello";
+    Z4Translations.SELECTED_LAYER = "Livello Selezionato";
     Z4Translations.BACKGROUND_LAYER = "Sfondo";
     Z4Translations.DELETE_LAYER_MESSAGE = "Vuoi davvero eliminare il livello?";
     Z4Translations.MERGE_VISIBLE_LAYERS = "Fondi Livelli Visibili";
@@ -745,7 +748,7 @@ public class Z4Translations {
     Z4Translations.SHEARING = "Inclinazione";
     Z4Translations.HORIZONTAL = "Orizzontale";
     Z4Translations.VERTICAL = "Verticale";
-    Z4Translations.APPLY = "Applica";
+    Z4Translations.APPLY_ON = "Applica Su";
 
     // Text
     Z4Translations.BOLD = "Grassetto";

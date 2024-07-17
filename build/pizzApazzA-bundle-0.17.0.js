@@ -3744,8 +3744,14 @@ class Z4Canvas extends JSComponent {
 
   /**
    * Draws a text
+   *
+   * @param newLayer true to draw the text on a new layer, false otherwise
    */
-   drawText() {
+   drawText(newLayer) {
+    if (newLayer) {
+      this.paper.addLayer(this.textInfo.textText + (this.textInfo.shadowText ? "/" + this.textInfo.shadowText : ""), this.width, this.height, null, this.width, this.height);
+      this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), null, true);
+    }
     this.selectedLayer.drawText(this.textManager);
     this.selectedLayer.getLayerPreview().drawLayer();
     this.drawCanvas();
@@ -8729,7 +8735,9 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
    warningMessage = new JSLabel();
 
-   apply = new JSButton();
+   applyOnSelectedLayer = new JSButton();
+
+   applyOnNewLayer = new JSButton();
 
    reset = new JSButton();
 
@@ -8749,28 +8757,8 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.setLayout(new GridBagLayout());
     this.cssAddClass("z4ribbontextpanel");
     this.textInfo.font = new Z4Font("Arial", 24, false, false);
-    this.font.setContentAreaFilled(false);
-    this.font.setText(Z4Translations.FONT_SELECTION);
-    this.font.addActionListener(event => {
-      let fontSelectionPanel = new Z4FontSelectionPanel(this.fonts);
-      fontSelectionPanel.setSampleString(this.textInfo.textText);
-      fontSelectionPanel.setValue(this.textInfo.font);
-      JSOptionPane.showInputDialog(fontSelectionPanel, Z4Translations.FONT_SELECTION, listener => fontSelectionPanel.addChangeListener(listener), () => !!(fontSelectionPanel.getValue()), response => {
-        if (response === JSOptionPane.OK_OPTION) {
-          this.textInfo.font = fontSelectionPanel.getValue();
-          this.onTextInfoChange(false);
-        }
-      });
-    });
-    this.add(this.font, new GBC(0, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 5));
-    let dropDown = new Z4DropDown(".z4rotationpanel");
-    dropDown.cssAddClass("z4ribbontextpanel-editor");
-    let label = new JSLabel();
-    label.setText(Z4Translations.ROTATION);
-    dropDown.appendChildInTree("summary", label);
-    this.rotation.addChangeListener(event => this.onTextInfoChange(this.rotation.getValueIsAdjusting()));
-    dropDown.appendChild(this.rotation);
-    this.add(dropDown, new GBC(0, 2).f(GBC.HORIZONTAL).a(GBC.NORTH).i(1, 5, 0, 5));
+    this.addFont(0);
+    this.addRotation(0);
     Z4UI.addVLine(this, new GBC(1, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     let x = 2;
     Z4UI.addLabel(this, Z4Translations.TEXT, new GBC(x, 0).a(GBC.WEST).i(5, 5, 2, 0));
@@ -8822,15 +8810,39 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.warningMessage.setText(Z4Translations.TEXT_WARNING_MESSAGE);
     this.warningMessage.getStyle().fontSize = "smaller";
     this.add(this.warningMessage, new GBC(x, 0).w(2).a(GBC.WEST).wx(1).i(0, 5, 0, 0));
-    this.apply.setEnabled(false);
-    this.apply.setContentAreaFilled(false);
-    this.apply.setText(Z4Translations.APPLY);
-    this.apply.addActionListener(event => this.canvas.drawText());
-    this.add(this.apply, new GBC(x, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 0));
+    this.addApply(x);
     this.reset.setContentAreaFilled(false);
     this.reset.setText(Z4Translations.RESET);
     this.reset.addActionListener(event => this.onReset());
     this.add(this.reset, new GBC(x, 2).a(GBC.NORTH).f(GBC.HORIZONTAL).i(1, 5, 0, 0));
+  }
+
+   addFont(x) {
+    this.font.setContentAreaFilled(false);
+    this.font.setText(Z4Translations.FONT_SELECTION);
+    this.font.addActionListener(event => {
+      let fontSelectionPanel = new Z4FontSelectionPanel(this.fonts);
+      fontSelectionPanel.setSampleString(this.textInfo.textText);
+      fontSelectionPanel.setValue(this.textInfo.font);
+      JSOptionPane.showInputDialog(fontSelectionPanel, Z4Translations.FONT_SELECTION, listener => fontSelectionPanel.addChangeListener(listener), () => !!(fontSelectionPanel.getValue()), response => {
+        if (response === JSOptionPane.OK_OPTION) {
+          this.textInfo.font = fontSelectionPanel.getValue();
+          this.onTextInfoChange(false);
+        }
+      });
+    });
+    this.add(this.font, new GBC(x, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 5));
+  }
+
+   addRotation(x) {
+    let dropDown = new Z4DropDown(".z4rotationpanel");
+    dropDown.cssAddClass("z4ribbontextpanel-editor");
+    let label = new JSLabel();
+    label.setText(Z4Translations.ROTATION);
+    dropDown.appendChildInTree("summary", label);
+    this.rotation.addChangeListener(event => this.onTextInfoChange(this.rotation.getValueIsAdjusting()));
+    dropDown.appendChild(this.rotation);
+    this.add(dropDown, new GBC(x, 2).f(GBC.HORIZONTAL).a(GBC.NORTH).i(1, 5, 0, 5));
   }
 
    addDropDown(dropDownContentSelector, title, xSpin, ySpin, x, y, top, anchor, fill) {
@@ -8854,6 +8866,27 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     panel.add(ySpin, new GBC(1, 1).a(GBC.WEST));
     dropDown.appendChild(panel);
     this.add(dropDown, new GBC(x, y).a(anchor).f(fill).i(top, 0, 0, 5));
+  }
+
+   addApply(x) {
+    let dropDown = new Z4DropDown(".z4ribbontextpanel-apply");
+    dropDown.cssAddClass("z4ribbontextpanel-editor");
+    let label = new JSLabel();
+    label.setText(Z4Translations.APPLY_ON);
+    dropDown.appendChildInTree("summary", label);
+    let panel = new JSPanel();
+    panel.cssAddClass("z4ribbontextpanel-apply");
+    panel.setLayout(new GridBagLayout());
+    dropDown.appendChild(panel);
+    this.applyOnSelectedLayer.setContentAreaFilled(false);
+    this.applyOnSelectedLayer.setText(Z4Translations.SELECTED_LAYER);
+    this.applyOnSelectedLayer.addActionListener(event => this.canvas.drawText(false));
+    panel.add(this.applyOnSelectedLayer, new GBC(0, 0).f(GBC.HORIZONTAL));
+    this.applyOnNewLayer.setContentAreaFilled(false);
+    this.applyOnNewLayer.setText(Z4Translations.NEW_LAYER);
+    this.applyOnNewLayer.addActionListener(event => this.canvas.drawText(true));
+    panel.add(this.applyOnNewLayer, new GBC(0, 1).i(1, 0, 0, 0).f(GBC.HORIZONTAL));
+    this.add(dropDown, new GBC(x, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 0));
   }
 
    onTextInfoChange(adjusting) {
@@ -20829,6 +20862,8 @@ class Z4Translations {
 
   static  NEW_LAYER = "";
 
+  static  SELECTED_LAYER = "";
+
   static  BACKGROUND_LAYER = "";
 
   static  DELETE_LAYER_MESSAGE = "";
@@ -21081,7 +21116,7 @@ class Z4Translations {
 
   static  VERTICAL = "";
 
-  static  APPLY = "";
+  static  APPLY_ON = "";
 
   // Text
   static  BOLD = "";
@@ -21318,6 +21353,7 @@ class Z4Translations {
     Z4Translations.LAYER = "Layer";
     Z4Translations.LAYER_NAME = "Layer Name";
     Z4Translations.NEW_LAYER = "New Layer";
+    Z4Translations.SELECTED_LAYER = "Selected Layer";
     Z4Translations.BACKGROUND_LAYER = "Bkgrd";
     Z4Translations.DELETE_LAYER_MESSAGE = "Do you really want to delete the layer?";
     Z4Translations.MERGE_VISIBLE_LAYERS = "Merge Visible Layers";
@@ -21447,7 +21483,7 @@ class Z4Translations {
     Z4Translations.SHEARING = "Shearing";
     Z4Translations.HORIZONTAL = "Horizontal";
     Z4Translations.VERTICAL = "Vertical";
-    Z4Translations.APPLY = "Apply";
+    Z4Translations.APPLY_ON = "Apply On";
     // Text
     Z4Translations.BOLD = "Bold";
     Z4Translations.ITALIC = "Italic";
@@ -21576,6 +21612,7 @@ class Z4Translations {
     Z4Translations.LAYER = "Livello";
     Z4Translations.LAYER_NAME = "Nome Livello";
     Z4Translations.NEW_LAYER = "Nuovo Livello";
+    Z4Translations.SELECTED_LAYER = "Livello Selezionato";
     Z4Translations.BACKGROUND_LAYER = "Sfondo";
     Z4Translations.DELETE_LAYER_MESSAGE = "Vuoi davvero eliminare il livello?";
     Z4Translations.MERGE_VISIBLE_LAYERS = "Fondi Livelli Visibili";
@@ -21705,7 +21742,7 @@ class Z4Translations {
     Z4Translations.SHEARING = "Inclinazione";
     Z4Translations.HORIZONTAL = "Orizzontale";
     Z4Translations.VERTICAL = "Verticale";
-    Z4Translations.APPLY = "Applica";
+    Z4Translations.APPLY_ON = "Applica Su";
     // Text
     Z4Translations.BOLD = "Grassetto";
     Z4Translations.ITALIC = "Corsivo";

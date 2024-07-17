@@ -68,7 +68,8 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
   private final JSSpinner shadowShearY = new JSSpinner();
 
   private final JSLabel warningMessage = new JSLabel();
-  private final JSButton apply = new JSButton();
+  private final JSButton applyOnSelectedLayer = new JSButton();
+  private final JSButton applyOnNewLayer = new JSButton();
   private final JSButton reset = new JSButton();
 
   private Z4Canvas canvas;
@@ -86,31 +87,8 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
     this.textInfo.font = new Z4Font("Arial", 24, false, false);
 
-    this.font.setContentAreaFilled(false);
-    this.font.setText(Z4Translations.FONT_SELECTION);
-    this.font.addActionListener(event -> {
-      Z4FontSelectionPanel fontSelectionPanel = new Z4FontSelectionPanel(this.fonts);
-      fontSelectionPanel.setSampleString(this.textInfo.textText);
-      fontSelectionPanel.setValue(this.textInfo.font);
-
-      JSOptionPane.showInputDialog(fontSelectionPanel, Z4Translations.FONT_SELECTION, listener -> fontSelectionPanel.addChangeListener(listener), () -> $exists(fontSelectionPanel.getValue()), response -> {
-        if (response == JSOptionPane.OK_OPTION) {
-          this.textInfo.font = fontSelectionPanel.getValue();
-          this.onTextInfoChange(false);
-        }
-      });
-    });
-    this.add(this.font, new GBC(0, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 5));
-
-    Z4DropDown dropDown = new Z4DropDown(".z4rotationpanel");
-    dropDown.cssAddClass("z4ribbontextpanel-editor");
-    JSLabel label = new JSLabel();
-    label.setText(Z4Translations.ROTATION);
-    dropDown.appendChildInTree("summary", label);
-    this.rotation.addChangeListener(event -> this.onTextInfoChange(this.rotation.getValueIsAdjusting()));
-    dropDown.appendChild(this.rotation);
-    this.add(dropDown, new GBC(0, 2).f(GBC.HORIZONTAL).a(GBC.NORTH).i(1, 5, 0, 5));
-
+    this.addFont(0);
+    this.addRotation(0);
     Z4UI.addVLine(this, new GBC(1, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
     int x = 2;
@@ -178,11 +156,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.warningMessage.getStyle().fontSize = "smaller";
     this.add(this.warningMessage, new GBC(x, 0).w(2).a(GBC.WEST).wx(1).i(0, 5, 0, 0));
 
-    this.apply.setEnabled(false);
-    this.apply.setContentAreaFilled(false);
-    this.apply.setText(Z4Translations.APPLY);
-    this.apply.addActionListener(event -> this.canvas.drawText());
-    this.add(this.apply, new GBC(x, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 0));
+    this.addApply(x);
 
     this.reset.setContentAreaFilled(false);
     this.reset.setText(Z4Translations.RESET);
@@ -190,10 +164,39 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.add(this.reset, new GBC(x, 2).a(GBC.NORTH).f(GBC.HORIZONTAL).i(1, 5, 0, 0));
   }
 
+  private void addFont(int x) {
+    this.font.setContentAreaFilled(false);
+    this.font.setText(Z4Translations.FONT_SELECTION);
+    this.font.addActionListener(event -> {
+      Z4FontSelectionPanel fontSelectionPanel = new Z4FontSelectionPanel(this.fonts);
+      fontSelectionPanel.setSampleString(this.textInfo.textText);
+      fontSelectionPanel.setValue(this.textInfo.font);
+
+      JSOptionPane.showInputDialog(fontSelectionPanel, Z4Translations.FONT_SELECTION, listener -> fontSelectionPanel.addChangeListener(listener), () -> $exists(fontSelectionPanel.getValue()), response -> {
+        if (response == JSOptionPane.OK_OPTION) {
+          this.textInfo.font = fontSelectionPanel.getValue();
+          this.onTextInfoChange(false);
+        }
+      });
+    });
+    this.add(this.font, new GBC(x, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 5));
+  }
+
+  private void addRotation(int x) {
+    Z4DropDown dropDown = new Z4DropDown(".z4rotationpanel");
+    dropDown.cssAddClass("z4ribbontextpanel-editor");
+    JSLabel label = new JSLabel();
+    label.setText(Z4Translations.ROTATION);
+    dropDown.appendChildInTree("summary", label);
+    this.rotation.addChangeListener(event -> this.onTextInfoChange(this.rotation.getValueIsAdjusting()));
+    dropDown.appendChild(this.rotation);
+    this.add(dropDown, new GBC(x, 2).f(GBC.HORIZONTAL).a(GBC.NORTH).i(1, 5, 0, 5));
+  }
+
   private void addDropDown(String dropDownContentSelector, String title, JSSpinner xSpin, JSSpinner ySpin, int x, int y, int top, int anchor, int fill) {
     Z4DropDown dropDown = new Z4DropDown("." + dropDownContentSelector);
     dropDown.cssAddClass("z4ribbontextpanel-editor");
-    
+
     JSLabel label = new JSLabel();
     label.setText(title);
     dropDown.appendChildInTree("summary", label);
@@ -218,6 +221,32 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     dropDown.appendChild(panel);
 
     this.add(dropDown, new GBC(x, y).a(anchor).f(fill).i(top, 0, 0, 5));
+  }
+
+  private void addApply(int x) {
+    Z4DropDown dropDown = new Z4DropDown(".z4ribbontextpanel-apply");
+    dropDown.cssAddClass("z4ribbontextpanel-editor");
+
+    JSLabel label = new JSLabel();
+    label.setText(Z4Translations.APPLY_ON);
+    dropDown.appendChildInTree("summary", label);
+
+    JSPanel panel = new JSPanel();
+    panel.cssAddClass("z4ribbontextpanel-apply");
+    panel.setLayout(new GridBagLayout());
+    dropDown.appendChild(panel);
+
+    this.applyOnSelectedLayer.setContentAreaFilled(false);
+    this.applyOnSelectedLayer.setText(Z4Translations.SELECTED_LAYER);
+    this.applyOnSelectedLayer.addActionListener(event -> this.canvas.drawText(false));
+    panel.add(this.applyOnSelectedLayer, new GBC(0, 0).f(GBC.HORIZONTAL));
+
+    this.applyOnNewLayer.setContentAreaFilled(false);
+    this.applyOnNewLayer.setText(Z4Translations.NEW_LAYER);
+    this.applyOnNewLayer.addActionListener(event -> this.canvas.drawText(true));
+    panel.add(this.applyOnNewLayer, new GBC(0, 1).i(1, 0, 0, 0).f(GBC.HORIZONTAL));
+
+    this.add(dropDown, new GBC(x, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 0));
   }
 
   private void onTextInfoChange(boolean adjusting) {
