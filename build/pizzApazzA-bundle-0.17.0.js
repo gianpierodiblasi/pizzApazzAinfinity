@@ -8819,6 +8819,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     let label = new JSLabel();
     label.setText(Z4Translations.FONT_SELECTION);
     dropDown.appendChildInTree("summary", label);
+    this.fontSelectionPanel.setAutoSelectFirstFontOnFiltering(true);
     this.fontSelectionPanel.setValue(new Z4Font("Arial", 24, false, false));
     this.fontSelectionPanel.cssAddClass("z4ribbontextpanel-font");
     this.fontSelectionPanel.addChangeListener(event => this.onTextInfoChange(this.fontSelectionPanel.getValueIsAdjusting()));
@@ -13471,10 +13472,7 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
     this.cssAddClass("z4fontselectionpanel");
     this.fonts = fonts;
     Z4UI.addLabel(this, Z4Translations.FILTER, new GBC(0, 0).a(GBC.WEST));
-    this.filter.addActionListener(event => {
-      this.onFiltering();
-      this.onFontChange(false);
-    });
+    this.filter.addActionListener(event => this.onFiltering());
     this.add(this.filter, new GBC(0, 1).a(GBC.WEST).wx(1));
     Z4UI.addLabel(this, Z4Translations.DIMENSION, new GBC(1, 0).a(GBC.WEST));
     this.size.cssAddClass("jsspinner_w_4rem");
@@ -13510,10 +13508,17 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
 
    onFiltering() {
     let str = this.filter.getText().toLowerCase();
-    this.radios.forEach((radio, index, array) => {
-      radio.setSelected(false);
-      radio.getStyle().display = this.fonts[index].toLowerCase().indexOf(str) !== -1 ? "flex" : "none";
-    });
+    this.radios.forEach((radio, index, array) => radio.getStyle().display = this.fonts[index].toLowerCase().indexOf(str) !== -1 ? "flex" : "none");
+    let found = this.radios.find((radio, index, array) => radio.getStyle().display === "flex");
+    if (!this.autoSelectFirstFontOnFiltering || this.radios.some((radio, index, array) => radio.isSelected())) {
+    } else if (found) {
+      found.setSelected(true);
+    } else {
+      let index = this.fonts.findIndex(font => font === "Arial");
+      this.radios[index].setSelected(true);
+      this.radios[index].getStyle().display = "flex";
+    }
+    this.onFontChange(false);
   }
 
    onFontChange(b) {
@@ -13530,13 +13535,17 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
   }
 
    setValue(value) {
+    this.filter.setText("");
+    this.onFiltering();
+    this.radios.forEach((radio, index, array) => {
+      radio.setSelected(false);
+      radio.getStyle().display = "flex";
+    });
     this.value = value;
     let index = this.fonts.findIndex(font => font === value.family);
     if (index !== -1) {
       this.radios[index].setSelected(true);
       setTimeout(() => this.radios[index].invoke("scrollIntoView()"), 0);
-    } else {
-      this.radios.forEach(radio => radio.setSelected(false));
     }
     this.size.setValue(value.size);
     this.bold.setSelected(value.bold);

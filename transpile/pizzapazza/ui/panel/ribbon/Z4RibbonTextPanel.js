@@ -127,6 +127,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     let label = new JSLabel();
     label.setText(Z4Translations.FONT_SELECTION);
     dropDown.appendChildInTree("summary", label);
+    this.fontSelectionPanel.setAutoSelectFirstFontOnFiltering(true);
     this.fontSelectionPanel.setValue(new Z4Font("Arial", 24, false, false));
     this.fontSelectionPanel.cssAddClass("z4ribbontextpanel-font");
     this.fontSelectionPanel.addChangeListener(event => this.onTextInfoChange(this.fontSelectionPanel.getValueIsAdjusting()));

@@ -52,10 +52,7 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
 
     Z4UI.addLabel(this, Z4Translations.FILTER, new GBC(0, 0).a(GBC.WEST));
 
-    this.filter.addActionListener(event -> {
-      this.onFiltering();
-      this.onFontChange(false);
-    });
+    this.filter.addActionListener(event -> this.onFiltering());
     this.add(this.filter, new GBC(0, 1).a(GBC.WEST).wx(1));
 
     Z4UI.addLabel(this, Z4Translations.DIMENSION, new GBC(1, 0).a(GBC.WEST));
@@ -97,14 +94,22 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
     panel.add(radio, null);
   }
 
-  @SuppressWarnings("IndexOfReplaceableByContains")
+  @SuppressWarnings({"IndexOfReplaceableByContains", "StringEquality"})
   private void onFiltering() {
     String str = this.filter.getText().toLowerCase();
-    this.radios.forEach((radio, index, array) -> {
-      radio.setSelected(false);
-      radio.getStyle().display = this.fonts.$get(index).toLowerCase().indexOf(str) != -1 ? "flex" : "none";
-    });
+    this.radios.forEach((radio, index, array) -> radio.getStyle().display = this.fonts.$get(index).toLowerCase().indexOf(str) != -1 ? "flex" : "none");
 
+    JSRadioButton found = this.radios.find((radio, index, array) -> radio.getStyle().display == "flex");
+    if (!this.autoSelectFirstFontOnFiltering || this.radios.some((radio, index, array) -> radio.isSelected())) {
+    } else if ($exists(found)) {
+      found.setSelected(true);
+    } else {
+      int index = this.fonts.findIndex(font -> font == "Arial");
+      this.radios.$get(index).setSelected(true);
+      this.radios.$get(index).getStyle().display = "flex";
+    }
+
+    this.onFontChange(false);
   }
 
   @SuppressWarnings("StringEquality")
@@ -126,14 +131,20 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
   @Override
   @SuppressWarnings("StringEquality")
   public void setValue(Z4Font value) {
+    this.filter.setText("");
+    this.onFiltering();
+
+    this.radios.forEach((radio, index, array) -> {
+      radio.setSelected(false);
+      radio.getStyle().display = "flex";
+    });
+
     this.value = value;
 
     int index = this.fonts.findIndex(font -> font == value.family);
     if (index != -1) {
       this.radios.$get(index).setSelected(true);
       setTimeout(() -> this.radios.$get(index).invoke("scrollIntoView()"), 0);
-    } else {
-      this.radios.forEach(radio -> radio.setSelected(false));
     }
 
     this.size.setValue(value.size);
