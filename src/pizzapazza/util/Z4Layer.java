@@ -335,6 +335,7 @@ public class Z4Layer {
    */
   public void drawText(Z4CanvasTextManager textManager) {
     this.offscreenCtx.save();
+    this.offscreenCtx.translate(-this.offsetX, -this.offsetY);
     textManager.drawText(this.offscreenCtx, false);
     this.offscreenCtx.restore();
 

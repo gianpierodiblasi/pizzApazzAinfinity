@@ -315,6 +315,7 @@ class Z4Layer {
    */
    drawText(textManager) {
     this.offscreenCtx.save();
+    this.offscreenCtx.translate(-this.offsetX, -this.offsetY);
     textManager.drawText(this.offscreenCtx, false);
     this.offscreenCtx.restore();
     this.blob = null;
