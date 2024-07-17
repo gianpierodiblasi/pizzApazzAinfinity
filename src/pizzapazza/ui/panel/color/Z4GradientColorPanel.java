@@ -11,6 +11,7 @@ import javascript.awt.GridBagLayout;
 import javascript.swing.ButtonGroup;
 import javascript.swing.JSButton;
 import javascript.swing.JSComponent;
+import javascript.swing.JSLabel;
 import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
@@ -39,6 +40,7 @@ public class Z4GradientColorPanel extends Z4AbstractValuePanel<Z4GradientColor> 
 
   private final JSComponent preview = new JSComponent(document.createElement("canvas"));
   private final $CanvasRenderingContext2D ctx = this.preview.invoke("getContext('2d')");
+  private final JSLabel rippleLabel;
   private final JSSpinner rippleSpinner = new JSSpinner();
   private final JSSlider rippleSlider = new JSSlider();
   private final Z4ColorPanel colorPanel = new Z4ColorPanel();
@@ -90,7 +92,7 @@ public class Z4GradientColorPanel extends Z4AbstractValuePanel<Z4GradientColor> 
     }));
     this.add(this.delete, new GBC(2, 1).a(GBC.WEST).i(0, 5, 0, 0));
 
-    Z4UI.addLabel(this, Z4Translations.RIPPLE, new GBC(0, 2).a(GBC.WEST));
+    this.rippleLabel = Z4UI.addLabel(this, Z4Translations.RIPPLE, new GBC(0, 2).a(GBC.WEST));
 
     this.rippleSpinner.cssAddClass("jsspinner_w_4rem");
     this.rippleSpinner.setModel(new SpinnerNumberModel(0, 0, 100, 1));
@@ -340,14 +342,29 @@ public class Z4GradientColorPanel extends Z4AbstractValuePanel<Z4GradientColor> 
     return this.valueIsAdjusting;
   }
 
+  /**
+   * Sets the visibility of the ripple
+   *
+   * @param b true to show the ripple, false otherwise
+   */
+  public void setRippleVisible(boolean b) {
+    this.rippleLabel.getStyle().display = b ? "block" : "none";
+    this.rippleSpinner.getStyle().display = b ? "grid" : "none";
+    this.rippleSlider.getStyle().display = b ? "flex" : "none";
+  }
+
   @Override
   public Z4GradientColor getValue() {
     return Z4GradientColor.fromJSON(this.value.toJSON());
   }
 
   @Override
+  @SuppressWarnings("StringEquality")
   public void setValue(Z4GradientColor value) {
     this.value = Z4GradientColor.fromJSON(value.toJSON());
+    if (this.rippleLabel.getStyle().display == "none") {
+      this.value.setRipple(0);
+    }
 
     this.colorPanel.setValue(this.value.getColorAtIndex(this.selectedIndex));
     this.drawPreview(false);

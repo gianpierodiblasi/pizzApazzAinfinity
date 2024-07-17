@@ -158,17 +158,28 @@ public class Z4GradientColorChooser extends JSDropDown {
   }
 
   /**
+   * Sets the visibility of the ripple
+   *
+   * @param b true to show the ripple, false otherwise
+   */
+  public void setRippleVisible(boolean b) {
+    this.panel.setRippleVisible(b);
+  }
+
+  /**
    * Shows a dialog to select the gradient color
    *
    * @param title The title
    * @param gradientColor The initial gradient color (it can be null)
+   * @param rippleVisible true to show the ripple, false otherwise
    * @param response The function to call on close
    */
-  public static void showDialog(String title, Z4GradientColor gradientColor, $Apply_1_Void<Z4GradientColor> response) {
+  public static void showDialog(String title, Z4GradientColor gradientColor, boolean rippleVisible, $Apply_1_Void<Z4GradientColor> response) {
     Z4GradientColorPanel panel = new Z4GradientColorPanel();
     if ($exists(gradientColor)) {
       panel.setValue(gradientColor);
     }
+    panel.setRippleVisible(rippleVisible);
 
     JSOptionPane.showInputDialog(panel, title, (changeListener) -> panel.addChangeListener(changeListener), () -> true, res -> {
       if (res == JSOptionPane.OK_OPTION) {

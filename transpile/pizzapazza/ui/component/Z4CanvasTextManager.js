@@ -200,7 +200,7 @@ class Z4CanvasTextManager {
     if (color instanceof Color) {
       return (color).getRGBA_HEX();
     } else {
-      return this.textInfo.textColor.getColorAt(div, true).getRGBA_HEX();
+      return this.textInfo.textColor.getColorAt(div, false).getRGBA_HEX();
       // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
       // return this.textInfo.textColor.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
       // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);

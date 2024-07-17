@@ -5112,7 +5112,7 @@ class Z4CanvasTextManager {
     if (color instanceof Color) {
       return (color).getRGBA_HEX();
     } else {
-      return this.textInfo.textColor.getColorAt(div, true).getRGBA_HEX();
+      return this.textInfo.textColor.getColorAt(div, false).getRGBA_HEX();
       // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
       // return this.textInfo.textColor.createLinearGradient(ctx, -textMetrics.actualBoundingBoxLeft, 0, textMetrics.actualBoundingBoxRight, 0);
       // $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
@@ -6238,17 +6238,28 @@ class Z4GradientColorChooser extends JSDropDown {
   }
 
   /**
+   * Sets the visibility of the ripple
+   *
+   * @param b true to show the ripple, false otherwise
+   */
+   setRippleVisible(b) {
+    this.panel.setRippleVisible(b);
+  }
+
+  /**
    * Shows a dialog to select the gradient color
    *
    * @param title The title
    * @param gradientColor The initial gradient color (it can be null)
+   * @param rippleVisible true to show the ripple, false otherwise
    * @param response The function to call on close
    */
-  static  showDialog(title, gradientColor, response) {
+  static  showDialog(title, gradientColor, rippleVisible, response) {
     let panel = new Z4GradientColorPanel();
     if (gradientColor) {
       panel.setValue(gradientColor);
     }
+    panel.setRippleVisible(rippleVisible);
     JSOptionPane.showInputDialog(panel, title, (changeListener) => panel.addChangeListener(changeListener), () => true, res => {
       if (res === JSOptionPane.OK_OPTION) {
         let selected = panel.getValue();
@@ -8764,6 +8775,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textEmpty.addActionListener(event => this.onTextInfoChange(false));
     this.add(this.textEmpty, new GBC(x, 2).a(GBC.NORTHWEST).i(0, 5, 0, 0));
     this.textColor.setCloseOnChange(false);
+    this.textColor.setRippleVisible(false);
     this.textColor.cssAddClass("z4ribbontextpanel-editor");
     this.textColor.setSelectedColor(this.getBlackBiGradientColor());
     this.textColor.addChangeListener(event => this.onTextInfoChange(this.textColor.getValueIsAdjusting()));
@@ -9865,6 +9877,8 @@ class Z4GradientColorPanel extends Z4AbstractValuePanel {
 
    ctx = this.preview.invoke("getContext('2d')");
 
+   rippleLabel = null;
+
    rippleSpinner = new JSSpinner();
 
    rippleSlider = new JSSlider();
@@ -9919,7 +9933,7 @@ class Z4GradientColorPanel extends Z4AbstractValuePanel {
       }
     }));
     this.add(this.delete, new GBC(2, 1).a(GBC.WEST).i(0, 5, 0, 0));
-    Z4UI.addLabel(this, Z4Translations.RIPPLE, new GBC(0, 2).a(GBC.WEST));
+    this.rippleLabel = Z4UI.addLabel(this, Z4Translations.RIPPLE, new GBC(0, 2).a(GBC.WEST));
     this.rippleSpinner.cssAddClass("jsspinner_w_4rem");
     this.rippleSpinner.setModel(new SpinnerNumberModel(0, 0, 100, 1));
     this.rippleSpinner.addChangeListener(event => this.onRippleChange(true, this.rippleSpinner.getValueIsAdjusting()));
@@ -10135,12 +10149,26 @@ class Z4GradientColorPanel extends Z4AbstractValuePanel {
     return this.valueIsAdjusting;
   }
 
+  /**
+   * Sets the visibility of the ripple
+   *
+   * @param b true to show the ripple, false otherwise
+   */
+   setRippleVisible(b) {
+    this.rippleLabel.getStyle().display = b ? "block" : "none";
+    this.rippleSpinner.getStyle().display = b ? "grid" : "none";
+    this.rippleSlider.getStyle().display = b ? "flex" : "none";
+  }
+
    getValue() {
     return Z4GradientColor.fromJSON(this.value.toJSON());
   }
 
    setValue(value) {
     this.value = Z4GradientColor.fromJSON(value.toJSON());
+    if (this.rippleLabel.getStyle().display === "none") {
+      this.value.setRipple(0);
+    }
     this.colorPanel.setValue(this.value.getColorAtIndex(this.selectedIndex));
     this.drawPreview(false);
   }

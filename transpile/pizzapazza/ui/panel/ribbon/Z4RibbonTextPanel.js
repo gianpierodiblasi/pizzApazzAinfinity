@@ -72,6 +72,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textEmpty.addActionListener(event => this.onTextInfoChange(false));
     this.add(this.textEmpty, new GBC(x, 2).a(GBC.NORTHWEST).i(0, 5, 0, 0));
     this.textColor.setCloseOnChange(false);
+    this.textColor.setRippleVisible(false);
     this.textColor.cssAddClass("z4ribbontextpanel-editor");
     this.textColor.setSelectedColor(this.getBlackBiGradientColor());
     this.textColor.addChangeListener(event => this.onTextInfoChange(this.textColor.getValueIsAdjusting()));

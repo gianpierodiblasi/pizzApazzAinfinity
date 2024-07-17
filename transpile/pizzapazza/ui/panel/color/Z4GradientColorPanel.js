@@ -9,6 +9,8 @@ class Z4GradientColorPanel extends Z4AbstractValuePanel {
 
    ctx = this.preview.invoke("getContext('2d')");
 
+   rippleLabel = null;
+
    rippleSpinner = new JSSpinner();
 
    rippleSlider = new JSSlider();
@@ -63,7 +65,7 @@ class Z4GradientColorPanel extends Z4AbstractValuePanel {
       }
     }));
     this.add(this.delete, new GBC(2, 1).a(GBC.WEST).i(0, 5, 0, 0));
-    Z4UI.addLabel(this, Z4Translations.RIPPLE, new GBC(0, 2).a(GBC.WEST));
+    this.rippleLabel = Z4UI.addLabel(this, Z4Translations.RIPPLE, new GBC(0, 2).a(GBC.WEST));
     this.rippleSpinner.cssAddClass("jsspinner_w_4rem");
     this.rippleSpinner.setModel(new SpinnerNumberModel(0, 0, 100, 1));
     this.rippleSpinner.addChangeListener(event => this.onRippleChange(true, this.rippleSpinner.getValueIsAdjusting()));
@@ -279,12 +281,26 @@ class Z4GradientColorPanel extends Z4AbstractValuePanel {
     return this.valueIsAdjusting;
   }
 
+  /**
+   * Sets the visibility of the ripple
+   *
+   * @param b true to show the ripple, false otherwise
+   */
+   setRippleVisible(b) {
+    this.rippleLabel.getStyle().display = b ? "block" : "none";
+    this.rippleSpinner.getStyle().display = b ? "grid" : "none";
+    this.rippleSlider.getStyle().display = b ? "flex" : "none";
+  }
+
    getValue() {
     return Z4GradientColor.fromJSON(this.value.toJSON());
   }
 
    setValue(value) {
     this.value = Z4GradientColor.fromJSON(value.toJSON());
+    if (this.rippleLabel.getStyle().display === "none") {
+      this.value.setRipple(0);
+    }
     this.colorPanel.setValue(this.value.getColorAtIndex(this.selectedIndex));
     this.drawPreview(false);
   }
