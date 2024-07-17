@@ -72,22 +72,36 @@ class Z4FontSelectionPanel extends Z4AbstractValuePanel {
 
    onFiltering() {
     let str = this.filter.getText().toLowerCase();
-    this.radios.forEach((radio, index, array) => radio.getStyle().display = this.fonts[index].toLowerCase().indexOf(str) !== -1 ? "flex" : "none");
+    this.radios.forEach((radio, index, array) => {
+      let b = this.fonts[index].toLowerCase().indexOf(str) !== -1;
+      radio.getStyle().display = b ? "flex" : "none";
+      if (!b) {
+        radio.setSelected(false);
+      }
+    });
+    let selected = this.radios.find((radio, index, array) => radio.isSelected());
     let found = this.radios.find((radio, index, array) => radio.getStyle().display === "flex");
-    if (!this.autoSelectFirstFontOnFiltering || this.radios.some((radio, index, array) => radio.isSelected())) {
+    if (!this.autoSelectFirstFontOnFiltering) {
+      if (selected) {
+        setTimeout(() => selected.invoke("scrollIntoView()"), 0);
+      }
+    } else if (selected) {
+      setTimeout(() => selected.invoke("scrollIntoView()"), 0);
     } else if (found) {
       found.setSelected(true);
+      setTimeout(() => found.invoke("scrollIntoView()"), 0);
     } else {
       let index = this.fonts.findIndex(font => font === "Arial");
       this.radios[index].setSelected(true);
       this.radios[index].getStyle().display = "flex";
+      setTimeout(() => this.radios[index].invoke("scrollIntoView()"), 0);
     }
     this.onFontChange(false);
   }
 
    onFontChange(b) {
     this.valueIsAdjusting = b;
-    let index = this.radios.findIndex(radio => radio.isSelected() && radio.getStyle().display !== "none");
+    let index = this.radios.findIndex(radio => radio.isSelected());
     if (index !== -1) {
       this.value = new Z4Font(this.fonts[index], parseInt(this.size.getValue()), this.bold.isSelected(), this.italic.isSelected());
       this.setSample();

@@ -97,16 +97,31 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
   @SuppressWarnings({"IndexOfReplaceableByContains", "StringEquality"})
   private void onFiltering() {
     String str = this.filter.getText().toLowerCase();
-    this.radios.forEach((radio, index, array) -> radio.getStyle().display = this.fonts.$get(index).toLowerCase().indexOf(str) != -1 ? "flex" : "none");
+    this.radios.forEach((radio, index, array) -> {
+      boolean b = this.fonts.$get(index).toLowerCase().indexOf(str) != -1;
+      radio.getStyle().display = b ? "flex" : "none";
+      if (!b) {
+        radio.setSelected(false);
+      }
+    });
 
+    JSRadioButton selected = this.radios.find((radio, index, array) -> radio.isSelected());
     JSRadioButton found = this.radios.find((radio, index, array) -> radio.getStyle().display == "flex");
-    if (!this.autoSelectFirstFontOnFiltering || this.radios.some((radio, index, array) -> radio.isSelected())) {
+
+    if (!this.autoSelectFirstFontOnFiltering) {
+      if ($exists(selected)) {
+        setTimeout(() -> selected.invoke("scrollIntoView()"), 0);
+      }
+    } else if ($exists(selected)) {
+      setTimeout(() -> selected.invoke("scrollIntoView()"), 0);
     } else if ($exists(found)) {
       found.setSelected(true);
+      setTimeout(() -> found.invoke("scrollIntoView()"), 0);
     } else {
       int index = this.fonts.findIndex(font -> font == "Arial");
       this.radios.$get(index).setSelected(true);
       this.radios.$get(index).getStyle().display = "flex";
+      setTimeout(() -> this.radios.$get(index).invoke("scrollIntoView()"), 0);
     }
 
     this.onFontChange(false);
@@ -116,7 +131,7 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
   private void onFontChange(boolean b) {
     this.valueIsAdjusting = b;
 
-    int index = this.radios.findIndex(radio -> radio.isSelected() && radio.getStyle().display != "none");
+    int index = this.radios.findIndex(radio -> radio.isSelected());
     if (index != -1) {
       this.value = new Z4Font(this.fonts.$get(index), parseInt(this.size.getValue()), this.bold.isSelected(), this.italic.isSelected());
       this.setSample();
@@ -132,9 +147,9 @@ public class Z4FontSelectionPanel extends Z4AbstractValuePanel<Z4Font> {
   @SuppressWarnings("StringEquality")
   public void setValue(Z4Font value) {
     this.value = value;
-    
+
     this.filter.setText("");
-    
+
     this.radios.forEach((radio, index, array) -> {
       radio.setSelected(false);
       radio.getStyle().display = "flex";
