@@ -253,7 +253,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textColorOrientationVERTICAL.addActionListener(event -> this.onTextInfoChange(false));
     panel.add(this.textColorOrientationVERTICAL, new GBC(2, 2).a(GBC.WEST));
     group.add(this.textColorOrientationVERTICAL);
-    
+
     this.add(dropDown, new GBC(x, 2).a(GBC.NORTHEAST).i(1, 0, 0, 5));
 
     this.putImageData(ctx, width, height);
@@ -322,12 +322,18 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
     this.applyOnSelectedLayer.setContentAreaFilled(false);
     this.applyOnSelectedLayer.setText(Z4Translations.SELECTED_LAYER);
-    this.applyOnSelectedLayer.addActionListener(event -> this.canvas.drawText(false));
+    this.applyOnSelectedLayer.addActionListener(event -> {
+      this.canvas.drawText(false);
+      dropDown.removeAttribute("open");
+    });
     panel.add(this.applyOnSelectedLayer, new GBC(0, 0).f(GBC.HORIZONTAL));
 
     this.applyOnNewLayer.setContentAreaFilled(false);
     this.applyOnNewLayer.setText(Z4Translations.NEW_LAYER);
-    this.applyOnNewLayer.addActionListener(event -> this.canvas.drawText(true));
+    this.applyOnNewLayer.addActionListener(event -> {
+      this.canvas.drawText(true);
+      dropDown.removeAttribute("open");
+    });
     panel.add(this.applyOnNewLayer, new GBC(0, 1).i(1, 0, 0, 0).f(GBC.HORIZONTAL));
 
     this.add(dropDown, new GBC(x, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 0));
