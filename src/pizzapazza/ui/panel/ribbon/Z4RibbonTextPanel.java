@@ -313,7 +313,9 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     dropDown.cssAddClass("z4ribbontextpanel-editor");
     dropDown.setLabel(Z4Translations.APPLY_ON);
     this.applyOnSelectedLayer = dropDown.addMenu(Z4Translations.SELECTED_LAYER, event -> this.canvas.drawText(false));
+    this.applyOnSelectedLayer.setEnabled(false);
     this.applyOnNewLayer = dropDown.addMenu(Z4Translations.NEW_LAYER, event -> this.canvas.drawText(true));
+    this.applyOnNewLayer.setEnabled(false);
     this.add(dropDown, new GBC(x, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 0));
   }
 
@@ -331,6 +333,8 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
     this.textInfo.textText = this.textText.getText();
     this.fontSelectionPanel.setSampleVisible(!$exists(this.textInfo.textText));
+    this.applyOnSelectedLayer.setEnabled($exists(this.textInfo.textText));
+    this.applyOnNewLayer.setEnabled($exists(this.textInfo.textText));
     this.textInfo.textEmpty = this.textEmpty.isSelected();
     this.textInfo.textColor = this.textColor.getValue();
     if (this.textColorFillingUNIFORM.isSelected()) {
