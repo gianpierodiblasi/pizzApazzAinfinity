@@ -11,6 +11,7 @@ import javascript.swing.JSButton;
 import javascript.swing.JSCheckBox;
 import javascript.swing.JSColorChooser;
 import javascript.swing.JSComponent;
+import javascript.swing.JSDropDownMenu;
 import javascript.swing.JSLabel;
 import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
@@ -81,8 +82,8 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
   private final JSSpinner shadowShearY = new JSSpinner();
 
   private final JSLabel warningMessage = new JSLabel();
-  private final JSButton applyOnSelectedLayer = new JSButton();
-  private final JSButton applyOnNewLayer = new JSButton();
+  private JSButton applyOnSelectedLayer;
+  private JSButton applyOnNewLayer;
   private final JSButton reset = new JSButton();
 
   private Z4Canvas canvas;
@@ -308,34 +309,11 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
   }
 
   private void addApply(int x) {
-    Z4DropDown dropDown = new Z4DropDown(".z4ribbontextpanel-apply");
+    JSDropDownMenu dropDown = new JSDropDownMenu();
     dropDown.cssAddClass("z4ribbontextpanel-editor");
-
-    JSLabel label = new JSLabel();
-    label.setText(Z4Translations.APPLY_ON);
-    dropDown.appendChildInTree("summary", label);
-
-    JSPanel panel = new JSPanel();
-    panel.cssAddClass("z4ribbontextpanel-apply");
-    panel.setLayout(new GridBagLayout());
-    dropDown.appendChild(panel);
-
-    this.applyOnSelectedLayer.setContentAreaFilled(false);
-    this.applyOnSelectedLayer.setText(Z4Translations.SELECTED_LAYER);
-    this.applyOnSelectedLayer.addActionListener(event -> {
-      this.canvas.drawText(false);
-      dropDown.removeAttribute("open");
-    });
-    panel.add(this.applyOnSelectedLayer, new GBC(0, 0).f(GBC.HORIZONTAL));
-
-    this.applyOnNewLayer.setContentAreaFilled(false);
-    this.applyOnNewLayer.setText(Z4Translations.NEW_LAYER);
-    this.applyOnNewLayer.addActionListener(event -> {
-      this.canvas.drawText(true);
-      dropDown.removeAttribute("open");
-    });
-    panel.add(this.applyOnNewLayer, new GBC(0, 1).i(1, 0, 0, 0).f(GBC.HORIZONTAL));
-
+    dropDown.setLabel(Z4Translations.APPLY_ON);
+    this.applyOnSelectedLayer = dropDown.addMenu(Z4Translations.SELECTED_LAYER, event -> this.canvas.drawText(false));
+    this.applyOnNewLayer = dropDown.addMenu(Z4Translations.NEW_LAYER, event -> this.canvas.drawText(true));
     this.add(dropDown, new GBC(x, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 0));
   }
 
