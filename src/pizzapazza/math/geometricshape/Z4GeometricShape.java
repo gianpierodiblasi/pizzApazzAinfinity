@@ -74,7 +74,7 @@ public abstract class Z4GeometricShape implements Z4JSONable {
    * Creates a Z4GeometricShape from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   public static Z4GeometricShape fromJSON($Object json) {
     switch ("" + json.$get("type")) {

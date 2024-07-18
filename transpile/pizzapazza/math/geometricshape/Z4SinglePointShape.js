@@ -52,9 +52,20 @@ class Z4SinglePointShape extends Z4GeometricShape {
    * Creates a Z4SinglePointShape from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   static  fromJSON(json) {
     return new Z4SinglePointShape(json["x"], json["y"]);
+  }
+
+  /**
+   * Creates a Z4SinglePointShape contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  static  fromSize(width, height) {
+    return new Z4SinglePointShape(width / 2, height / 2);
   }
 }

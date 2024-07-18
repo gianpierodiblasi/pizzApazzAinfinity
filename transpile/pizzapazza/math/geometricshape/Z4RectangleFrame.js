@@ -32,9 +32,20 @@ class Z4RectangleFrame extends Z4GeometricFrame {
    * Creates a Z4RectangleFrame from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   static  fromJSON(json) {
     return new Z4RectangleFrame(json["x"], json["y"], json["w"], json["h"], json["angle"], json["sx"], json["sy"]);
+  }
+
+  /**
+   * Creates a Z4RectangleFrame contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  static  fromSize(width, height) {
+    return new Z4RectangleFrame(width / 4, height / 4, width / 2, height / 2, 0, 0, 0);
   }
 }

@@ -48,13 +48,28 @@ public class Z4QuadCurve extends Z4AbstractBezierCurve {
    * Creates a Z4QuadCurve from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   public static Z4QuadCurve fromJSON($Object json) {
     return new Z4QuadCurve(
             json.$get("x1"), json.$get("y1"),
             json.$get("ctrlx"), json.$get("ctrly"),
             json.$get("x2"), json.$get("y2")
+    );
+  }
+
+  /**
+   * Creates a Z4QuadCurve contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  public static Z4QuadCurve fromSize(int width, int height) {
+    return new Z4QuadCurve(
+            width / 4, height / 2,
+            width / 2, height / 4,
+            3 * width / 4, height / 2
     );
   }
 }

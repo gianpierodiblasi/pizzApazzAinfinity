@@ -73,13 +73,28 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
    * Creates a Z4SpiralCurve from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   public static Z4SpiralCurve fromJSON($Object json) {
     return new Z4SpiralCurve(
             json.$get("x1"), json.$get("y1"),
             json.$get("x2"), json.$get("y2"),
             json.$get("radius"), json.$get("angle")
+    );
+  }
+
+  /**
+   * Creates a Z4SpiralCurve contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  public static Z4SpiralCurve fromSize(int width, int height) {
+    return new Z4SpiralCurve(
+            width / 2, height / 2,
+            3 * width / 4, height / 2,
+            width / 8, 0
     );
   }
 }

@@ -58,7 +58,7 @@ public class Z4BezierCurve extends Z4AbstractBezierCurve {
    * Creates a Z4BezierCurve from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   public static Z4BezierCurve fromJSON($Object json) {
     return new Z4BezierCurve(
@@ -66,6 +66,22 @@ public class Z4BezierCurve extends Z4AbstractBezierCurve {
             json.$get("ctrlx1"), json.$get("ctrly1"),
             json.$get("ctrlx2"), json.$get("ctrly2"),
             json.$get("x2"), json.$get("y2")
+    );
+  }
+
+  /**
+   * Creates a Z4BezierCurve contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  public static Z4BezierCurve fromSize(int width, int height) {
+    return new Z4BezierCurve(
+            width / 4, height / 2,
+            3 * width / 8, height / 4,
+            5 * width / 8, height / 4,
+            3 * width / 4, height / 2
     );
   }
 }

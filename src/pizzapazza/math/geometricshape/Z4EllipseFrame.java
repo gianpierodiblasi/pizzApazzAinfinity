@@ -2,6 +2,7 @@ package pizzapazza.math.geometricshape;
 
 import def.js.Array;
 import pizzapazza.math.Z4AffineTransform;
+import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import simulation.js.$Object;
 
@@ -62,7 +63,7 @@ public class Z4EllipseFrame extends Z4GeometricFrame {
    * Creates a Z4EllipseFrame from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   public static Z4EllipseFrame fromJSON($Object json) {
     return new Z4EllipseFrame(
@@ -71,5 +72,22 @@ public class Z4EllipseFrame extends Z4GeometricFrame {
             json.$get("angle"),
             json.$get("sx"), json.$get("sy"),
             json.$get("startAngle"), json.$get("extentAngle"));
+  }
+
+  /**
+   * Creates a Z4EllipseFrame contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  public static Z4EllipseFrame fromSize(int width, int height) {
+    return new Z4EllipseFrame(
+            width / 4, height / 4,
+            width / 2, height / 2,
+            0,
+            0, 0,
+            0, Z4Math.TWO_PI
+    );
   }
 }

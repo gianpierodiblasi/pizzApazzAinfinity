@@ -15647,7 +15647,7 @@ class Z4GeometricShape extends Z4JSONable {
    * Creates a Z4GeometricShape from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   static  fromJSON(json) {
     switch("" + json["type"]) {
@@ -15803,10 +15803,21 @@ class Z4BezierCurve extends Z4AbstractBezierCurve {
    * Creates a Z4BezierCurve from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   static  fromJSON(json) {
     return new Z4BezierCurve(json["x1"], json["y1"], json["ctrlx1"], json["ctrly1"], json["ctrlx2"], json["ctrly2"], json["x2"], json["y2"]);
+  }
+
+  /**
+   * Creates a Z4BezierCurve contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  static  fromSize(width, height) {
+    return new Z4BezierCurve(width / 4, height / 2, 3 * width / 8, height / 4, 5 * width / 8, height / 4, 3 * width / 4, height / 2);
   }
 }
 /**
@@ -15852,10 +15863,21 @@ class Z4QuadCurve extends Z4AbstractBezierCurve {
    * Creates a Z4QuadCurve from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   static  fromJSON(json) {
     return new Z4QuadCurve(json["x1"], json["y1"], json["ctrlx"], json["ctrly"], json["x2"], json["y2"]);
+  }
+
+  /**
+   * Creates a Z4QuadCurve contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  static  fromSize(width, height) {
+    return new Z4QuadCurve(width / 4, height / 2, width / 2, height / 4, 3 * width / 4, height / 2);
   }
 }
 /**
@@ -16015,10 +16037,21 @@ class Z4EllipseFrame extends Z4GeometricFrame {
    * Creates a Z4EllipseFrame from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   static  fromJSON(json) {
     return new Z4EllipseFrame(json["x"], json["y"], json["w"], json["h"], json["angle"], json["sx"], json["sy"], json["startAngle"], json["extentAngle"]);
+  }
+
+  /**
+   * Creates a Z4EllipseFrame contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  static  fromSize(width, height) {
+    return new Z4EllipseFrame(width / 4, height / 4, width / 2, height / 2, 0, 0, 0, 0, Z4Math.TWO_PI);
   }
 }
 /**
@@ -16055,10 +16088,21 @@ class Z4RectangleFrame extends Z4GeometricFrame {
    * Creates a Z4RectangleFrame from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   static  fromJSON(json) {
     return new Z4RectangleFrame(json["x"], json["y"], json["w"], json["h"], json["angle"], json["sx"], json["sy"]);
+  }
+
+  /**
+   * Creates a Z4RectangleFrame contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  static  fromSize(width, height) {
+    return new Z4RectangleFrame(width / 4, height / 4, width / 2, height / 2, 0, 0, 0);
   }
 }
 /**
@@ -16124,10 +16168,21 @@ class Z4RoundRectangleFrame extends Z4GeometricFrame {
    * Creates a Z4RoundRectangleFrame from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   static  fromJSON(json) {
     return new Z4RoundRectangleFrame(json["x"], json["y"], json["w"], json["h"], json["angle"], json["sx"], json["sy"]);
+  }
+
+  /**
+   * Creates a Z4RoundRectangleFrame contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  static  fromSize(width, height) {
+    return new Z4RoundRectangleFrame(width / 4, height / 4, width / 2, height / 2, 0, 0, 0);
   }
 }
 /**
@@ -16162,7 +16217,7 @@ class Z4GeometricShapeSequence extends Z4GeometricCurve {
    * Creates a Z4GeometricShapeSequence from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   static  fromJSON(json) {
     let shapes = new Array();
@@ -16246,10 +16301,21 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
    * Creates a Z4SinusoidalCurve from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   static  fromJSON(json) {
     return new Z4SinusoidalCurve(json["x1"], json["y1"], json["x2"], json["y2"], json["period"], json["amplitude"], json["angle"]);
+  }
+
+  /**
+   * Creates a Z4SinusoidalCurve contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  static  fromSize(width, height) {
+    return new Z4SinusoidalCurve(width / 2, height / 2, 3 * width / 4, height / 2, width / 8, height / 4, 0);
   }
 }
 /**
@@ -16320,10 +16386,21 @@ class Z4SpiralCurve extends Z4GeometricCurve {
    * Creates a Z4SpiralCurve from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   static  fromJSON(json) {
     return new Z4SpiralCurve(json["x1"], json["y1"], json["x2"], json["y2"], json["radius"], json["angle"]);
+  }
+
+  /**
+   * Creates a Z4SpiralCurve contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  static  fromSize(width, height) {
+    return new Z4SpiralCurve(width / 2, height / 2, 3 * width / 4, height / 2, width / 8, 0);
   }
 }
 /**
@@ -16397,10 +16474,21 @@ class Z4Line extends Z4GeometricShape {
    * Creates a Z4Line from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   static  fromJSON(json) {
     return new Z4Line(json["x1"], json["y1"], json["x2"], json["y2"]);
+  }
+
+  /**
+   * Creates a Z4Line contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  static  fromSize(width, height) {
+    return new Z4Line(width / 4, height / 2, 3 * width / 4, height / 2);
   }
 }
 /**
@@ -16503,12 +16591,23 @@ class Z4Polyline extends Z4GeometricShape {
    * Creates a Z4Polyline from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   static  fromJSON(json) {
     let points = new Array();
     (json["points"]).forEach(pointJSON => points.push(new Z4Point(pointJSON["x"], pointJSON["y"])));
     return new Z4Polyline(points);
+  }
+
+  /**
+   * Creates a Z4Polyline contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  static  fromSize(width, height) {
+    return new Z4Polyline(new Array(new Z4Point(width / 4, height / 2), new Z4Point(width / 2, height / 4), new Z4Point(3 * width / 4, height / 2)));
   }
 }
 /**
@@ -16565,10 +16664,21 @@ class Z4SinglePointShape extends Z4GeometricShape {
    * Creates a Z4SinglePointShape from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   static  fromJSON(json) {
     return new Z4SinglePointShape(json["x"], json["y"]);
+  }
+
+  /**
+   * Creates a Z4SinglePointShape contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  static  fromSize(width, height) {
+    return new Z4SinglePointShape(width / 2, height / 2);
   }
 }
 /**

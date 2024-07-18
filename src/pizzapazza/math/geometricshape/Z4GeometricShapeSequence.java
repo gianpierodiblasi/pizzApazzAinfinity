@@ -39,7 +39,7 @@ public class Z4GeometricShapeSequence extends Z4GeometricCurve {
    * Creates a Z4GeometricShapeSequence from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   @SuppressWarnings("unchecked")
   public static Z4GeometricShapeSequence fromJSON($Object json) {

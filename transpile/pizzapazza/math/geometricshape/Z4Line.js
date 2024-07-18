@@ -69,9 +69,20 @@ class Z4Line extends Z4GeometricShape {
    * Creates a Z4Line from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   static  fromJSON(json) {
     return new Z4Line(json["x1"], json["y1"], json["x2"], json["y2"]);
+  }
+
+  /**
+   * Creates a Z4Line contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  static  fromSize(width, height) {
+    return new Z4Line(width / 4, height / 2, 3 * width / 4, height / 2);
   }
 }

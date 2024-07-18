@@ -98,11 +98,22 @@ class Z4Polyline extends Z4GeometricShape {
    * Creates a Z4Polyline from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   static  fromJSON(json) {
     let points = new Array();
     (json["points"]).forEach(pointJSON => points.push(new Z4Point(pointJSON["x"], pointJSON["y"])));
     return new Z4Polyline(points);
+  }
+
+  /**
+   * Creates a Z4Polyline contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  static  fromSize(width, height) {
+    return new Z4Polyline(new Array(new Z4Point(width / 4, height / 2), new Z4Point(width / 2, height / 4), new Z4Point(3 * width / 4, height / 2)));
   }
 }

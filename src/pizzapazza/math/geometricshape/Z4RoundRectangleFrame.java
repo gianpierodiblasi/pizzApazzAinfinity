@@ -57,12 +57,12 @@ public class Z4RoundRectangleFrame extends Z4GeometricFrame {
       points.push(tx.transform(xx + dx, yy + dy));
     }
   }
-  
+
   /**
    * Creates a Z4RoundRectangleFrame from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   public static Z4RoundRectangleFrame fromJSON($Object json) {
     return new Z4RoundRectangleFrame(
@@ -70,5 +70,21 @@ public class Z4RoundRectangleFrame extends Z4GeometricFrame {
             json.$get("w"), json.$get("h"),
             json.$get("angle"),
             json.$get("sx"), json.$get("sy"));
+  }
+
+  /**
+   * Creates a Z4RoundRectangleFrame contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  public static Z4RoundRectangleFrame fromSize(int width, int height) {
+    return new Z4RoundRectangleFrame(
+            width / 4, height / 4,
+            width / 2, height / 2,
+            0,
+            0, 0
+    );
   }
 }

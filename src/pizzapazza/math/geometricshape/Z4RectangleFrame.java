@@ -41,7 +41,7 @@ public class Z4RectangleFrame extends Z4GeometricFrame {
    * Creates a Z4RectangleFrame from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   public static Z4RectangleFrame fromJSON($Object json) {
     return new Z4RectangleFrame(
@@ -49,5 +49,21 @@ public class Z4RectangleFrame extends Z4GeometricFrame {
             json.$get("w"), json.$get("h"),
             json.$get("angle"),
             json.$get("sx"), json.$get("sy"));
+  }
+
+  /**
+   * Creates a Z4RectangleFrame contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  public static Z4RectangleFrame fromSize(int width, int height) {
+    return new Z4RectangleFrame(
+            width / 4, height / 4,
+            width / 2, height / 2,
+            0,
+            0, 0
+    );
   }
 }

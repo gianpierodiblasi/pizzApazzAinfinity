@@ -74,9 +74,20 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
    * Creates a Z4SinusoidalCurve from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   static  fromJSON(json) {
     return new Z4SinusoidalCurve(json["x1"], json["y1"], json["x2"], json["y2"], json["period"], json["amplitude"], json["angle"]);
+  }
+
+  /**
+   * Creates a Z4SinusoidalCurve contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  static  fromSize(width, height) {
+    return new Z4SinusoidalCurve(width / 2, height / 2, 3 * width / 4, height / 2, width / 8, height / 4, 0);
   }
 }

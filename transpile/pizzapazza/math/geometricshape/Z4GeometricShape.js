@@ -71,7 +71,7 @@ class Z4GeometricShape extends Z4JSONable {
    * Creates a Z4GeometricShape from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   static  fromJSON(json) {
     switch("" + json["type"]) {

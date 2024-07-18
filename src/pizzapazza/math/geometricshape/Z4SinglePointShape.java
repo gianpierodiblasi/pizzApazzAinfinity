@@ -24,7 +24,7 @@ public class Z4SinglePointShape extends Z4GeometricShape {
    */
   public Z4SinglePointShape(double x, double y) {
     super(Z4GeometricShapeType.POINT);
-    
+
     this.x = x;
     this.y = y;
   }
@@ -66,9 +66,20 @@ public class Z4SinglePointShape extends Z4GeometricShape {
    * Creates a Z4SinglePointShape from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   public static Z4SinglePointShape fromJSON($Object json) {
     return new Z4SinglePointShape(json.$get("x"), json.$get("y"));
+  }
+
+  /**
+   * Creates a Z4SinglePointShape contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  public static Z4SinglePointShape fromSize(int width, int height) {
+    return new Z4SinglePointShape(width / 2, height / 2);
   }
 }

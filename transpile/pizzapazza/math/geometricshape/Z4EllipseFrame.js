@@ -51,9 +51,20 @@ class Z4EllipseFrame extends Z4GeometricFrame {
    * Creates a Z4EllipseFrame from a JSON object
    *
    * @param json The JSON object
-   * @return the geometric shape
+   * @return The geometric shape
    */
   static  fromJSON(json) {
     return new Z4EllipseFrame(json["x"], json["y"], json["w"], json["h"], json["angle"], json["sx"], json["sy"], json["startAngle"], json["extentAngle"]);
+  }
+
+  /**
+   * Creates a Z4EllipseFrame contained in a given size
+   *
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  static  fromSize(width, height) {
+    return new Z4EllipseFrame(width / 4, height / 4, width / 2, height / 2, 0, 0, 0, 0, Z4Math.TWO_PI);
   }
 }
