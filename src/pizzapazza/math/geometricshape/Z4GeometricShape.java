@@ -1,5 +1,6 @@
 package pizzapazza.math.geometricshape;
 
+import def.js.Array;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Vector;
 import pizzapazza.util.Z4JSONable;
@@ -62,6 +63,13 @@ public abstract class Z4GeometricShape implements Z4JSONable {
    * @return The tangent vector of this geometric shape at a given position
    */
   public abstract Z4Vector getTangentAt(double position);
+
+  /**
+   * Returns the points to control/edit the geometric shape
+   *
+   * @return The points to control/edit the geometric shape
+   */
+  public abstract Array<Z4Point> getControlPoints();
 
   @Override
   public $Object toJSON() {

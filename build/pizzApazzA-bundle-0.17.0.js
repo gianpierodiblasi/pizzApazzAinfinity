@@ -15637,6 +15637,9 @@ class Z4GeometricShape extends Z4JSONable {
    getTangentAt(position) {
   }
 
+   getControlPoints() {
+  }
+
    toJSON() {
     let json = new Object();
     json["type"] = this.type;

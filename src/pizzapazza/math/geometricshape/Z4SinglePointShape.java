@@ -55,6 +55,11 @@ public class Z4SinglePointShape extends Z4GeometricShape {
   }
 
   @Override
+  public Array<Z4Point> getControlPoints() {
+    return new Array<>(new Z4Point(this.x, this.y));
+  }
+
+  @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
     json.$set("x", this.x);

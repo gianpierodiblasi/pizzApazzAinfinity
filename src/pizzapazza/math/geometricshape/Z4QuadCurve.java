@@ -1,5 +1,7 @@
 package pizzapazza.math.geometricshape;
 
+import def.js.Array;
+import pizzapazza.math.Z4Point;
 import simulation.bezier.$Bezier;
 import simulation.js.$Object;
 
@@ -30,6 +32,11 @@ public class Z4QuadCurve extends Z4AbstractBezierCurve {
     this.ctrly = ctrly;
 
     this.bezier = new $Bezier(this.x1, this.y1, this.ctrlx, this.ctrly, this.x2, this.y2);
+  }
+
+  @Override
+  public Array<Z4Point> getControlPoints() {
+    return new Array<>(new Z4Point(this.x1, this.y1), new Z4Point(this.ctrlx, this.ctrly), new Z4Point(this.x2, this.y2));
   }
 
   @Override

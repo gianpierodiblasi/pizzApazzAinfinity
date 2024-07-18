@@ -68,6 +68,11 @@ public class Z4Line extends Z4GeometricShape {
   }
 
   @Override
+  public Array<Z4Point> getControlPoints() {
+    return new Array<>(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2));
+  }
+
+  @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
     json.$set("x1", this.x1);

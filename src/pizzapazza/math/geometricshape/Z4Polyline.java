@@ -103,6 +103,11 @@ public class Z4Polyline extends Z4GeometricShape {
   }
 
   @Override
+  public Array<Z4Point> getControlPoints() {
+    return this.points.map(point -> point);
+  }
+
+  @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
 

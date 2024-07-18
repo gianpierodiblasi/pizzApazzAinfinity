@@ -58,6 +58,15 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
   }
 
   @Override
+  public Array<Z4Point> getControlPoints() {
+    return new Array<>(
+            new Z4Point(this.x1, this.y1),
+            new Z4Point(this.x2, this.y2),
+            new Z4Point(this.x1 + this.radius * Math.cos(this.angle), this.y1 - this.radius * Math.sin(this.angle))
+    );
+  }
+
+  @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
     json.$set("x1", this.x1);
