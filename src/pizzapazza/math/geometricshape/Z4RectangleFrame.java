@@ -3,6 +3,7 @@ package pizzapazza.math.geometricshape;
 import def.js.Array;
 import pizzapazza.math.Z4AffineTransform;
 import pizzapazza.math.Z4Point;
+import simulation.js.$Object;
 
 /**
  * A rectangular curve
@@ -23,7 +24,7 @@ public class Z4RectangleFrame extends Z4GeometricFrame {
    * @param sy The y shear of the rectangle
    */
   public Z4RectangleFrame(double x, double y, double w, double h, double angle, double sx, double sy) {
-    super(x, y, w, h, angle, sx, sy);
+    super(Z4GeometricShapeType.RECTANGLE, x, y, w, h, angle, sx, sy);
 
     Z4AffineTransform tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
 
@@ -36,4 +37,17 @@ public class Z4RectangleFrame extends Z4GeometricFrame {
     this.polyline = new Z4Polyline(points);
   }
 
+  /**
+   * Creates a Z4RectangleFrame from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  public static Z4RectangleFrame fromJSON($Object json) {
+    return new Z4RectangleFrame(
+            json.$get("x"), json.$get("y"),
+            json.$get("w"), json.$get("h"),
+            json.$get("angle"),
+            json.$get("sx"), json.$get("sy"));
+  }
 }

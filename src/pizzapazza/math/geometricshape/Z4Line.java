@@ -4,13 +4,14 @@ import def.js.Array;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Vector;
+import simulation.js.$Object;
 
 /**
  * The line
  *
  * @author gianpiero.diblasi
  */
-public class Z4Line implements Z4GeometricShape {
+public class Z4Line extends Z4GeometricShape {
 
   public final double x1;
   public final double y1;
@@ -26,7 +27,7 @@ public class Z4Line implements Z4GeometricShape {
    * @param y2 The y-axis coordinate of the end point of the line
    */
   public Z4Line(double x1, double y1, double x2, double y2) {
-    super();
+    super(Z4GeometricShapeType.LINE);
 
     this.x1 = x1;
     this.y1 = y1;
@@ -64,5 +65,25 @@ public class Z4Line implements Z4GeometricShape {
     } else {
       return Z4Vector.fromVector(this.x2, this.y2, 1, Z4Math.atan(this.x1, this.y1, this.x2, this.y2));
     }
+  }
+
+  @Override
+  public $Object toJSON() {
+    $Object json = super.toJSON();
+    json.$set("x1", this.x1);
+    json.$set("y1", this.y1);
+    json.$set("x2", this.x2);
+    json.$set("y2", this.y2);
+    return json;
+  }
+
+  /**
+   * Creates a Z4Line from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  public static Z4Line fromJSON($Object json) {
+    return new Z4Line(json.$get("x1"), json.$get("y1"), json.$get("x2"), json.$get("y2"));
   }
 }

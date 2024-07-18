@@ -1018,713 +1018,23 @@ class Z4PointIteratorType {
   static SCATTERER = 'SCATTERER';
 }
 /**
- * The common interface of all geometric shapes
+ * The geometry shape type
  *
  * @author gianpiero.diblasi
  */
-class Z4GeometricShape {
-
-  /**
-   * Returns the nearest polyline
-   *
-   * @return The nearest polyline
-   */
-   getPolyline() {
-  }
-
-  /**
-   * Returns the distance from a given point of this geometric shape
-   *
-   * @param x The x-axis coordinate of the point
-   * @param y The y-axis coordinate of the point
-   * @return The distance from a given point of this geometric shape
-   */
-   distance(x, y) {
-  }
-
-  /**
-   * Returns The length of this geometric shape
-   *
-   * @return The length of this geometric shape
-   */
-   getLength() {
-  }
-
-  /**
-   * Returns the point of this geometric shape at a given position
-   *
-   * @param position The position (in the range [0,1])
-   * @return The point of this geometric shape at a given position
-   */
-   getPointAt(position) {
-  }
-
-  /**
-   * Returns the tangent vector of this geometric shape at a given position
-   *
-   * @param position The position (in the range [0,1])
-   * @return The tangent vector of this geometric shape at a given position
-   */
-   getTangentAt(position) {
-  }
-}
-/**
- * Common abstract object for quadric and cubic bezier curves
- *
- * @author gianpiero.diblasi
- */
-class Z4AbstractBezierCurve extends Z4GeometricShape {
-
-  /**
-   * The x-axis coordinate of the start point of the curve
-   */
-   x1 = 0.0;
-
-  /**
-   * The y-axis coordinate of the start point of the curve
-   */
-   y1 = 0.0;
-
-  /**
-   * The x-axis coordinate of the end point of the curve
-   */
-   x2 = 0.0;
-
-  /**
-   * The y-axis coordinate of the end point of the curve
-   */
-   y2 = 0.0;
-
-  /**
-   * The bezier curve
-   */
-   bezier = null;
-
-  /**
-   * Creates the object
-   *
-   * @param x1 The x-axis coordinate of the start point of the curve
-   * @param y1 The y-axis coordinate of the start point of the curve
-   * @param x2 The x-axis coordinate of the end point of the curve
-   * @param y2 The y-axis coordinate of the end point of the curve
-   */
-  constructor(x1, y1, x2, y2) {
-    this.x1 = x1;
-    this.y1 = y1;
-    this.x2 = x2;
-    this.y2 = y2;
-  }
-
-   getPolyline() {
-    return new Z4Polyline(this.bezier.getLUT(parseInt(this.bezier.length() / 2)));
-  }
-
-   distance(x, y) {
-    let point = this.bezier.project(new Z4Point(x, y));
-    return Z4Math.distance(point.x, point.y, x, y);
-  }
-
-   getLength() {
-    return this.bezier.length();
-  }
-
-   getPointAt(position) {
-    return this.bezier.get(position);
-  }
-
-   getTangentAt(position) {
-    let point = this.bezier.get(position);
-    let derivative = this.bezier.derivative(position);
-    return Z4Vector.fromPoints(point.x, point.y, point.x + derivative.x, point.y + derivative.y);
-  }
-}
-/**
- * The cubic bezier curve
- *
- * @author gianpiero.diblasi
- */
-class Z4BezierCurve extends Z4AbstractBezierCurve {
-
-   ctrlx1 = 0.0;
-
-   ctrly1 = 0.0;
-
-   ctrlx2 = 0.0;
-
-   ctrly2 = 0.0;
-
-  /**
-   * Creates the object
-   *
-   * @param x1 The x-axis coordinate of the start point of the curve
-   * @param y1 The y-axis coordinate of the start point of the curve
-   * @param ctrlx1 The x-axis coordinate of the first control point of the curve
-   * @param ctrly1 The y-axis coordinate of the first control point of the curve
-   * @param ctrlx2 The x-axis coordinate of the second control point of the
-   * curve
-   * @param ctrly2 The y-axis coordinate of the second control point of the
-   * curve
-   * @param x2 The x-axis coordinate of the end point of the curve
-   * @param y2 The y-axis coordinate of the end point of the curve
-   */
-  constructor(x1, y1, ctrlx1, ctrly1, ctrlx2, ctrly2, x2, y2) {
-    super(x1, y1, x2, y2);
-    this.ctrlx1 = ctrlx1;
-    this.ctrly1 = ctrly1;
-    this.ctrlx2 = ctrlx2;
-    this.ctrly2 = ctrly2;
-    this.bezier = new Bezier(this.x1, this.y1, this.ctrlx1, this.ctrly1, this.ctrlx2, this.ctrly2, this.x2, this.y2);
-  }
-}
-/**
- * The quadratic bezier curve
- *
- * @author gianpiero.diblasi
- */
-class Z4QuadCurve extends Z4AbstractBezierCurve {
-
-   ctrlx = 0.0;
-
-   ctrly = 0.0;
-
-  /**
-   * Creates the object
-   *
-   * @param x1 The x-axis coordinate of the start point of the curve
-   * @param y1 The y-axis coordinate of the start point of the curve
-   * @param ctrlx The x-axis coordinate of the first control point of the curve
-   * @param ctrly The y-axis coordinate of the first control point of the curve
-   * @param x2 The x-axis coordinate of the end point of the curve
-   * @param y2 The y-axis coordinate of the end point of the curve
-   */
-  constructor(x1, y1, ctrlx, ctrly, x2, y2) {
-    super(x1, y1, x2, y2);
-    this.ctrlx = ctrlx;
-    this.ctrly = ctrly;
-    this.bezier = new Bezier(this.x1, this.y1, this.ctrlx, this.ctrly, this.x2, this.y2);
-  }
-}
-/**
- * Common abstract object for geometric curves. A <i>Z4GeometricCurve</i> is a
- * geometric shape representing a generic curve
- *
- * @author gianpiero.diblasi
- */
-class Z4GeometricCurve extends Z4GeometricShape {
-
-  /**
-   * The nearest polyline representing the curve
-   */
-   polyline = null;
-
-  /**
-   * The number of segments to approximate the curve with a polyline
-   */
-  static  APPROX_SEGMENTS = 64;
-
-   getPolyline() {
-    return this.polyline;
-  }
-
-   distance(x, y) {
-    return this.polyline.distance(x, y);
-  }
-
-   getLength() {
-    return this.polyline.getLength();
-  }
-
-   getPointAt(position) {
-    return this.polyline.getPointAt(position);
-  }
-
-   getTangentAt(position) {
-    return this.polyline.getTangentAt(position);
-  }
-}
-/**
- * Common abstract object for geometric frames. A <i>Z4GeometricFrame</i> is a
- * geometric shape representing a frame curve
- *
- * @author gianpiero.diblasi
- */
-class Z4GeometricFrame extends Z4GeometricCurve {
-
-   x = 0.0;
-
-   y = 0.0;
-
-   w = 0.0;
-
-   h = 0.0;
-
-   angle = 0.0;
-
-   sx = 0.0;
-
-   sy = 0.0;
-
-  /**
-   * Creates the object
-   *
-   * @param x The x location of the frame
-   * @param y The y location of the frame
-   * @param w The width of the frame
-   * @param h The height of the frame
-   * @param angle The rotation of the frame
-   * @param sx The x shear of the frame
-   * @param sy The y shear of the frame
-   */
-  constructor(x, y, w, h, angle, sx, sy) {
-    super();
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
-    this.angle = angle;
-    this.sx = sx;
-    this.sy = sy;
-  }
-}
-/**
- * An elliptic curve
- *
- * @author gianpiero.diblasi
- */
-class Z4EllipseFrame extends Z4GeometricFrame {
-
-   startAngle = 0.0;
-
-   extentAngle = 0.0;
-
-  /**
-   * Creates the oject
-   *
-   * @param x The x location of the ellipse (not rotated)
-   * @param y The y location of the ellipse (not rotated)
-   * @param w The width of the ellipse (not sheared)
-   * @param h The height of the ellipse (not sheared)
-   * @param angle The rotation angle
-   * @param sx The x shear of the ellipse
-   * @param sy The y shear of the ellipse
-   * @param startAngle The start angle
-   * @param extentAngle The extent angle
-   */
-  constructor(x, y, w, h, angle, sx, sy, startAngle, extentAngle) {
-    super(x, y, w, h, angle, sx, sy);
-    this.startAngle = startAngle;
-    this.extentAngle = extentAngle;
-    let w2 = (w - 1) / 2;
-    let h2 = (h - 1) / 2;
-    let incAngle = extentAngle / Z4GeometricCurve.APPROX_SEGMENTS;
-    let tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
-    let points = new Array();
-    for (let i = 0; i <= Z4GeometricCurve.APPROX_SEGMENTS; i++) {
-      let currentAngle = startAngle + incAngle * i;
-      let xx = w2 * Math.cos(currentAngle) + w2;
-      let yy = h2 * Math.sin(currentAngle) + h2;
-      points.push(tx.transform(xx, yy));
-    }
-    this.polyline = new Z4Polyline(points);
-  }
-}
-/**
- * A rectangular curve
- *
- * @author gianpiero.diblasi
- */
-class Z4RectangleFrame extends Z4GeometricFrame {
-
-  /**
-   * Creates the object
-   *
-   * @param x The x location of the rectangle (not rotated)
-   * @param y The y location of the rectangle (not rotated)
-   * @param w The width of the rectangle (not sheared)
-   * @param h The height of the rectangle (not sheared)
-   * @param angle The rotation angle of the rectangle
-   * @param sx The x shear of the rectangle
-   * @param sy The y shear of the rectangle
-   */
-  constructor(x, y, w, h, angle, sx, sy) {
-    super(x, y, w, h, angle, sx, sy);
-    let tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
-    let points = new Array();
-    points.push(tx.transform(0, 0));
-    points.push(tx.transform(w - 1, 0));
-    points.push(tx.transform(w - 1, h - 1));
-    points.push(tx.transform(0, h - 1));
-    points.push(points[0]);
-    this.polyline = new Z4Polyline(points);
-  }
-}
-/**
- * A rectangular curve with rounded vertices
- *
- * @author gianpiero.diblasi
- */
-class Z4RoundRectangleFrame extends Z4GeometricFrame {
-
-  static  ADVANCE = 0.15;
-
-  static  ROUND_APPROX_SEGMENTS = 16;
-
-  /**
-   * Creates the object
-   *
-   * @param x The x location of the rounded rectangle (not rotated)
-   * @param y The y location of the rounded rectangle (not rotated)
-   * @param w The width of the rounded rectangle (not sheared)
-   * @param h The height of the rounded rectangle (not sheared)
-   * @param angle The rotation angle of the rounded rectangle
-   * @param sx The x shear of the rounded rectangle
-   * @param sy The y shear of the rounded rectangle
-   */
-  constructor(x, y, w, h, angle, sx, sy) {
-    super(x, y, w, h, angle, sx, sy);
-    let min = Math.min(w, h);
-    let advance = min * Z4RoundRectangleFrame.ADVANCE;
-    let tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
-    let points = new Array();
-    // First point NW
-    points.push(tx.transform(advance, 0));
-    // Second point NE
-    points.push(tx.transform(w - 1 - advance, 0));
-    // Arc NE
-    this.createArc(points, tx, advance, Z4Math.HALF_THREE_PI, w - 1 - advance, advance);
-    // Third point SE
-    points.push(tx.transform(w - 1, h - 1 - advance));
-    // Arc SE
-    this.createArc(points, tx, advance, 0, w - 1 - advance, h - 1 - advance);
-    // fourth point SW
-    points.push(tx.transform(advance, h - 1));
-    // Arc SW
-    this.createArc(points, tx, advance, Z4Math.HALF_PI, advance, h - 1 - advance);
-    // fifth point NW
-    points.push(tx.transform(0, advance));
-    // Arc NW
-    this.createArc(points, tx, advance, Math.PI, advance, advance);
-    points.push(points[0]);
-    this.polyline = new Z4Polyline(points);
-  }
-
-   createArc(points, tx, advance, startAngle, dx, dy) {
-    for (let i = 1; i < Z4RoundRectangleFrame.ROUND_APPROX_SEGMENTS; i++) {
-      let angle = startAngle + Z4Math.HALF_PI * i / Z4RoundRectangleFrame.ROUND_APPROX_SEGMENTS;
-      let xx = advance * Math.cos(angle);
-      let yy = advance * Math.sin(angle);
-      points.push(tx.transform(xx + dx, yy + dy));
-    }
-  }
-}
-/**
- * A sequence of geometric shapes
- *
- * @author gianpiero.diblasi
- */
-class Z4GeometricShapeSequence extends Z4GeometricCurve {
-
-   shapes = null;
-
-  /**
-   * Creates the object
-   *
-   * @param shapes The sequence of geometric shapes
-   */
-  constructor(shapes) {
-    this.shapes = shapes;
-    this.polyline = this.shapes.map(shape => shape.getPolyline()).reduce((accumulator, current, index, array) => accumulator.concat(current));
-  }
-}
-/**
- * The sinusoidal curve
- *
- * @author gianpiero.diblasi
- */
-class Z4SinusoidalCurve extends Z4GeometricCurve {
-
-   x1 = 0.0;
-
-   y1 = 0.0;
-
-   x2 = 0.0;
-
-   y2 = 0.0;
-
-   period = 0.0;
-
-   amplitude = 0.0;
-
-   angle = 0.0;
-
-   two_PI_over_period = 0.0;
-
-  /**
-   * Creates the object
-   *
-   * @param x1 The x-axis coordinate of the start point of the sinusoid
-   * @param y1 The y-axis coordinate of the start point of the sinusoid
-   * @param x2 The x-axis coordinate of the end point of the sinusoid
-   * @param y2 The y-axis coordinate of the end point of the sinusoid
-   * @param period The period of the sinusoid
-   * @param amplitude The amplitude of the sinusoid
-   * @param angle The rotation angle of the sinusoid
-   */
-  constructor(x1, y1, x2, y2, period, amplitude, angle) {
-    super();
-    this.x1 = x1;
-    this.y1 = y2;
-    this.x2 = x2;
-    this.y2 = y2;
-    this.period = period;
-    this.amplitude = amplitude;
-    this.angle = angle;
-    this.two_PI_over_period = Z4Math.TWO_PI / period;
-    let distance = Z4Math.distance(x1, y1, x2, y2);
-    let size = parseInt(distance * Z4GeometricCurve.APPROX_SEGMENTS / period) - 1;
-    if (size > 0) {
-      let rotation = Z4Math.atan(x1, y1, x2, y2);
-      let points = new Array();
-      for (let i = 0; i <= size; i++) {
-        let x = distance * i / size;
-        let y = Math.sin(angle + this.two_PI_over_period * x) * amplitude;
-        points.push(Z4Math.rotoTranslate(x, y, rotation, x1, y1));
-      }
-      this.polyline = new Z4Polyline(points);
-    } else {
-      this.polyline = new Z4Polyline(new Array(new Z4Point(x1, y1), new Z4Point(x2, y2)));
-    }
-  }
-}
-/**
- * The spiral curve
- *
- * @author gianpiero.diblasi
- */
-class Z4SpiralCurve extends Z4GeometricCurve {
-
-   x1 = 0.0;
-
-   y1 = 0.0;
-
-   x2 = 0.0;
-
-   y2 = 0.0;
-
-   radius = 0.0;
-
-   angle = 0.0;
-
-  /**
-   * Creates the object
-   *
-   * @param x1 The x-axis coordinate of the start point of the spiral
-   * @param y1 The y-axis coordinate of the start point of the spiral
-   * @param x2 The x-axis coordinate of the end point of the spiral
-   * @param y2 The y-axis coordinate of the end point of the spiral
-   * @param radius The radius of the sinusoid
-   * @param angle The rotation angle of the sinusoid
-   */
-  constructor(x1, y1, x2, y2, radius, angle) {
-    super();
-    this.x1 = x1;
-    this.y1 = y2;
-    this.x2 = x2;
-    this.y2 = y2;
-    this.radius = radius;
-    this.angle = angle;
-    let distance = Z4Math.distance(x1, y1, x2, y2);
-    let size = parseInt(distance * Z4GeometricCurve.APPROX_SEGMENTS / radius) - 1;
-    if (size > 0) {
-      let points = new Array();
-      for (let i = 0; i <= size; i++) {
-        let t = i / Z4GeometricCurve.APPROX_SEGMENTS;
-        let a = angle + Z4Math.TWO_PI * t;
-        let r = radius * t;
-        points.push(new Z4Point(r * Math.cos(a) + x1, r * Math.sin(a) + y1));
-      }
-      this.polyline = new Z4Polyline(points);
-    } else {
-      this.polyline = new Z4Polyline(new Array(new Z4Point(x1, y1), new Z4Point(x2, y2)));
-    }
-  }
-}
-/**
- * The line
- *
- * @author gianpiero.diblasi
- */
-class Z4Line extends Z4GeometricShape {
-
-   x1 = 0.0;
-
-   y1 = 0.0;
-
-   x2 = 0.0;
-
-   y2 = 0.0;
-
-  /**
-   * Creates the object
-   *
-   * @param x1 The x-axis coordinate of the start point of the line
-   * @param y1 The y-axis coordinate of the start point of the line
-   * @param x2 The x-axis coordinate of the end point of the line
-   * @param y2 The y-axis coordinate of the end point of the line
-   */
-  constructor(x1, y1, x2, y2) {
-    super();
-    this.x1 = x1;
-    this.y1 = y1;
-    this.x2 = x2;
-    this.y2 = y2;
-  }
-
-   getPolyline() {
-    return new Z4Polyline(new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2)));
-  }
-
-   distance(x, y) {
-    return Z4Math.ptSegDist(this.x1, this.y1, this.x2, this.y2, x, y);
-  }
-
-   getLength() {
-    return Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
-  }
-
-   getPointAt(position) {
-    let x = (this.x2 - this.x1) * position + this.x1;
-    let y = (this.y2 - this.y1) * position + this.y1;
-    return new Z4Point(x, y);
-  }
-
-   getTangentAt(position) {
-    if (position !== 1) {
-      let point = this.getPointAt(position);
-      return Z4Vector.fromPoints(point.x, point.y, this.x2, this.y2);
-    } else {
-      return Z4Vector.fromVector(this.x2, this.y2, 1, Z4Math.atan(this.x1, this.y1, this.x2, this.y2));
-    }
-  }
-}
-/**
- * The poyline
- *
- * @author gianpiero.diblasi
- */
-class Z4Polyline extends Z4GeometricShape {
-
-   points = null;
-
-   cumLen = new Array();
-
-  /**
-   * Creates the object
-   *
-   * @param points The points
-   */
-  constructor(points) {
-    super();
-    this.points = points.map(point => point);
-    this.points.forEach((point, index, array) => {
-      if (index === 0) {
-        this.cumLen.push(0.0);
-      } else {
-        this.cumLen.push(this.cumLen[index - 1] + Z4Math.distance(point.x, point.y, array[index - 1].x, array[index - 1].y));
-      }
-    });
-  }
-
-   getPolyline() {
-    return this;
-  }
-
-   distance(x, y) {
-    return this.points.map((point, index, array) => index === 0 ? Number.MAX_VALUE : Z4Math.ptSegDist(point.x, point.y, array[index - 1].x, array[index - 1].y, x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
-  }
-
-  /**
-   * Concatenates this polyline with another polyline
-   *
-   * @param polyline The other polyline
-   * @return The concatenation of this polyline with the other polyline
-   */
-   concat(polyline) {
-    return new Z4Polyline((this.points).concat(polyline.points));
-  }
-
-   getLength() {
-    return this.cumLen[this.cumLen.length - 1];
-  }
-
-   getPointAt(position) {
-    let finalPos = position * this.cumLen[this.cumLen.length - 1];
-    let index = this.cumLen.findIndex(pos => pos >= finalPos, null);
-    if (this.cumLen[index] === finalPos) {
-      return this.points[index];
-    } else if (this.cumLen[index - 1] === finalPos) {
-      return this.points[index - 1];
-    } else {
-      let div = (finalPos - this.cumLen[index - 1]) / (this.cumLen[index] - this.cumLen[index - 1]);
-      let x = (this.points[index].x - this.points[index - 1].x) * div + this.points[index - 1].x;
-      let y = (this.points[index].y - this.points[index - 1].y) * div + this.points[index - 1].y;
-      return new Z4Point(x, y);
-    }
-  }
-
-   getTangentAt(position) {
-    let finalPos = position * this.cumLen[this.cumLen.length - 1];
-    let index = this.cumLen.findIndex(pos => pos >= finalPos, null);
-    if (this.cumLen[index] === finalPos) {
-      if (!index) {
-        index = 1;
-      }
-      return Z4Vector.fromPoints(this.points[index - 1].x, this.points[index - 1].y, this.points[index].x, this.points[index].y);
-    } else if (this.cumLen[index - 1] === finalPos) {
-      return Z4Vector.fromPoints(this.points[index - 1].x, this.points[index - 1].y, this.points[index].x, this.points[index].y);
-    } else {
-      let div = (finalPos - this.cumLen[index - 1]) / (this.cumLen[index] - this.cumLen[index - 1]);
-      let x = (this.points[index].x - this.points[index - 1].x) * div + this.points[index - 1].x;
-      let y = (this.points[index].y - this.points[index - 1].y) * div + this.points[index - 1].y;
-      return Z4Vector.fromPoints(x, y, this.points[index].x, this.points[index].y);
-    }
-  }
-}
-/**
- * A geometric shape described by a single point
- *
- * @author gianpiero.diblasi
- */
-class Z4SinglePointShape extends Z4GeometricShape {
-
-   x = 0.0;
-
-   y = 0.0;
-
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-
-   getPolyline() {
-    return new Z4Polyline(new Array(new Z4Point(x, y), new Z4Point(x, y)));
-  }
-
-   distance(x, y) {
-    return Z4Math.distance(this.x, this.y, x, y);
-  }
-
-   getLength() {
-    return 0;
-  }
-
-   getPointAt(position) {
-    return new Z4Point(this.x, this.y);
-  }
-
-   getTangentAt(position) {
-    return Z4Vector.fromVector(this.x, this.y, 0, 0);
-  }
+class Z4GeometricShapeType {
+
+  static POINT = 'POINT';
+  static LINE = 'LINE';
+  static POLYLINE = 'POLYLINE';
+  static ELLIPSE = 'ELLIPSE';
+  static RECTANGLE = 'RECTANGLE';
+  static ROUND_RECTANGLE = 'ROUND_RECTANGLE';
+  static QUAD = 'QUAD';
+  static BEZIER = 'BEZIER';
+  static SINUSOIDAL = 'SINUSOIDAL';
+  static SPIRAL = 'SPIRAL';
+  static SEQUENCE = 'SEQUENCE';
 }
 /**
  * A 2D affine transform
@@ -16262,6 +15572,1003 @@ class Z4SpatioTemporalColor extends Z4JSONable {
     } else {
       return null;
     }
+  }
+}
+/**
+ * The common interface of all geometric shapes
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4GeometricShape extends Z4JSONable {
+
+   type = null;
+
+  /**
+   * Creates the object
+   *
+   * @param type The type
+   */
+  constructor(type) {
+    super();
+    this.type = type;
+  }
+
+  /**
+   * Returns the nearest polyline
+   *
+   * @return The nearest polyline
+   */
+   getPolyline() {
+  }
+
+  /**
+   * Returns the distance from a given point of this geometric shape
+   *
+   * @param x The x-axis coordinate of the point
+   * @param y The y-axis coordinate of the point
+   * @return The distance from a given point of this geometric shape
+   */
+   distance(x, y) {
+  }
+
+  /**
+   * Returns The length of this geometric shape
+   *
+   * @return The length of this geometric shape
+   */
+   getLength() {
+  }
+
+  /**
+   * Returns the point of this geometric shape at a given position
+   *
+   * @param position The position (in the range [0,1])
+   * @return The point of this geometric shape at a given position
+   */
+   getPointAt(position) {
+  }
+
+  /**
+   * Returns the tangent vector of this geometric shape at a given position
+   *
+   * @param position The position (in the range [0,1])
+   * @return The tangent vector of this geometric shape at a given position
+   */
+   getTangentAt(position) {
+  }
+
+   toJSON() {
+    let json = new Object();
+    json["type"] = this.type;
+    return json;
+  }
+
+  /**
+   * Creates a Z4GeometricShape from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  static  fromJSON(json) {
+    switch("" + json["type"]) {
+      case "POINT":
+        return Z4SinglePointShape.fromJSON(json);
+      case "LINE":
+        return Z4Line.fromJSON(json);
+      case "POLYLINE":
+        return Z4Polyline.fromJSON(json);
+      case "BEZIER":
+        return Z4BezierCurve.fromJSON(json);
+      case "ELLIPSE":
+        return Z4EllipseFrame.fromJSON(json);
+      case "RECTANGLE":
+        return Z4RectangleFrame.fromJSON(json);
+      case "ROUND_RECTANGLE":
+        return Z4RoundRectangleFrame.fromJSON(json);
+      case "SINUSOIDAL":
+        return Z4SinusoidalCurve.fromJSON(json);
+      case "SPIRAL":
+        return Z4SpiralCurve.fromJSON(json);
+      case "SEQUENCE":
+        return Z4GeometricShapeSequence.fromJSON(json);
+      default:
+        return null;
+    }
+  }
+}
+/**
+ * Common abstract object for quadric and cubic bezier curves
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4AbstractBezierCurve extends Z4GeometricShape {
+
+  /**
+   * The x-axis coordinate of the start point of the curve
+   */
+   x1 = 0.0;
+
+  /**
+   * The y-axis coordinate of the start point of the curve
+   */
+   y1 = 0.0;
+
+  /**
+   * The x-axis coordinate of the end point of the curve
+   */
+   x2 = 0.0;
+
+  /**
+   * The y-axis coordinate of the end point of the curve
+   */
+   y2 = 0.0;
+
+  /**
+   * The bezier curve
+   */
+   bezier = null;
+
+  /**
+   * Creates the object
+   *
+   * @param type The type
+   * @param x1 The x-axis coordinate of the start point of the curve
+   * @param y1 The y-axis coordinate of the start point of the curve
+   * @param x2 The x-axis coordinate of the end point of the curve
+   * @param y2 The y-axis coordinate of the end point of the curve
+   */
+  constructor(type, x1, y1, x2, y2) {
+    super(type);
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2;
+  }
+
+   getPolyline() {
+    return new Z4Polyline(this.bezier.getLUT(parseInt(this.bezier.length() / 2)));
+  }
+
+   distance(x, y) {
+    let point = this.bezier.project(new Z4Point(x, y));
+    return Z4Math.distance(point.x, point.y, x, y);
+  }
+
+   getLength() {
+    return this.bezier.length();
+  }
+
+   getPointAt(position) {
+    return this.bezier.get(position);
+  }
+
+   getTangentAt(position) {
+    let point = this.bezier.get(position);
+    let derivative = this.bezier.derivative(position);
+    return Z4Vector.fromPoints(point.x, point.y, point.x + derivative.x, point.y + derivative.y);
+  }
+}
+/**
+ * The cubic bezier curve
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4BezierCurve extends Z4AbstractBezierCurve {
+
+   ctrlx1 = 0.0;
+
+   ctrly1 = 0.0;
+
+   ctrlx2 = 0.0;
+
+   ctrly2 = 0.0;
+
+  /**
+   * Creates the object
+   *
+   * @param x1 The x-axis coordinate of the start point of the curve
+   * @param y1 The y-axis coordinate of the start point of the curve
+   * @param ctrlx1 The x-axis coordinate of the first control point of the curve
+   * @param ctrly1 The y-axis coordinate of the first control point of the curve
+   * @param ctrlx2 The x-axis coordinate of the second control point of the
+   * curve
+   * @param ctrly2 The y-axis coordinate of the second control point of the
+   * curve
+   * @param x2 The x-axis coordinate of the end point of the curve
+   * @param y2 The y-axis coordinate of the end point of the curve
+   */
+  constructor(x1, y1, ctrlx1, ctrly1, ctrlx2, ctrly2, x2, y2) {
+    super(Z4GeometricShapeType.BEZIER, x1, y1, x2, y2);
+    this.ctrlx1 = ctrlx1;
+    this.ctrly1 = ctrly1;
+    this.ctrlx2 = ctrlx2;
+    this.ctrly2 = ctrly2;
+    this.bezier = new Bezier(this.x1, this.y1, this.ctrlx1, this.ctrly1, this.ctrlx2, this.ctrly2, this.x2, this.y2);
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    json["x1"] = this.x1;
+    json["y1"] = this.y1;
+    json["ctrlx1"] = this.ctrlx1;
+    json["ctrly1"] = this.ctrly1;
+    json["ctrlx2"] = this.ctrlx2;
+    json["ctrly2"] = this.ctrly2;
+    json["x2"] = this.x2;
+    json["y2"] = this.y2;
+    return json;
+  }
+
+  /**
+   * Creates a Z4BezierCurve from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  static  fromJSON(json) {
+    return new Z4BezierCurve(json["x1"], json["y1"], json["ctrlx1"], json["ctrly1"], json["ctrlx2"], json["ctrly2"], json["x2"], json["y2"]);
+  }
+}
+/**
+ * The quadratic bezier curve
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4QuadCurve extends Z4AbstractBezierCurve {
+
+   ctrlx = 0.0;
+
+   ctrly = 0.0;
+
+  /**
+   * Creates the object
+   *
+   * @param x1 The x-axis coordinate of the start point of the curve
+   * @param y1 The y-axis coordinate of the start point of the curve
+   * @param ctrlx The x-axis coordinate of the first control point of the curve
+   * @param ctrly The y-axis coordinate of the first control point of the curve
+   * @param x2 The x-axis coordinate of the end point of the curve
+   * @param y2 The y-axis coordinate of the end point of the curve
+   */
+  constructor(x1, y1, ctrlx, ctrly, x2, y2) {
+    super(Z4GeometricShapeType.QUAD, x1, y1, x2, y2);
+    this.ctrlx = ctrlx;
+    this.ctrly = ctrly;
+    this.bezier = new Bezier(this.x1, this.y1, this.ctrlx, this.ctrly, this.x2, this.y2);
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    json["x1"] = this.x1;
+    json["y1"] = this.y1;
+    json["ctrlx"] = this.ctrlx;
+    json["ctrly"] = this.ctrly;
+    json["x2"] = this.x2;
+    json["y2"] = this.y2;
+    return json;
+  }
+
+  /**
+   * Creates a Z4QuadCurve from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  static  fromJSON(json) {
+    return new Z4QuadCurve(json["x1"], json["y1"], json["ctrlx"], json["ctrly"], json["x2"], json["y2"]);
+  }
+}
+/**
+ * Common abstract object for geometric curves. A <i>Z4GeometricCurve</i> is a
+ * geometric shape representing a generic curve
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4GeometricCurve extends Z4GeometricShape {
+
+  /**
+   * The nearest polyline representing the curve
+   */
+   polyline = null;
+
+  /**
+   * The number of segments to approximate the curve with a polyline
+   */
+  static  APPROX_SEGMENTS = 64;
+
+  /**
+   * Creates the object
+   *
+   * @param type The type
+   */
+  constructor(type) {
+    super(type);
+  }
+
+   getPolyline() {
+    return this.polyline;
+  }
+
+   distance(x, y) {
+    return this.polyline.distance(x, y);
+  }
+
+   getLength() {
+    return this.polyline.getLength();
+  }
+
+   getPointAt(position) {
+    return this.polyline.getPointAt(position);
+  }
+
+   getTangentAt(position) {
+    return this.polyline.getTangentAt(position);
+  }
+}
+/**
+ * Common abstract object for geometric frames. A <i>Z4GeometricFrame</i> is a
+ * geometric shape representing a frame curve
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4GeometricFrame extends Z4GeometricCurve {
+
+   x = 0.0;
+
+   y = 0.0;
+
+   w = 0.0;
+
+   h = 0.0;
+
+   angle = 0.0;
+
+   sx = 0.0;
+
+   sy = 0.0;
+
+  /**
+   * Creates the object
+   *
+   * @param type The type
+   * @param x The x location of the frame
+   * @param y The y location of the frame
+   * @param w The width of the frame
+   * @param h The height of the frame
+   * @param angle The rotation of the frame
+   * @param sx The x shear of the frame
+   * @param sy The y shear of the frame
+   */
+  constructor(type, x, y, w, h, angle, sx, sy) {
+    super(type);
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.angle = angle;
+    this.sx = sx;
+    this.sy = sy;
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    json["x"] = this.x;
+    json["y"] = this.y;
+    json["w"] = this.w;
+    json["h"] = this.h;
+    json["angle"] = this.angle;
+    json["sx"] = this.sx;
+    json["sy"] = this.sy;
+    return json;
+  }
+}
+/**
+ * An elliptic curve
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4EllipseFrame extends Z4GeometricFrame {
+
+   startAngle = 0.0;
+
+   extentAngle = 0.0;
+
+  /**
+   * Creates the oject
+   *
+   * @param x The x location of the ellipse (not rotated)
+   * @param y The y location of the ellipse (not rotated)
+   * @param w The width of the ellipse (not sheared)
+   * @param h The height of the ellipse (not sheared)
+   * @param angle The rotation angle
+   * @param sx The x shear of the ellipse
+   * @param sy The y shear of the ellipse
+   * @param startAngle The start angle
+   * @param extentAngle The extent angle
+   */
+  constructor(x, y, w, h, angle, sx, sy, startAngle, extentAngle) {
+    super(Z4GeometricShapeType.ELLIPSE, x, y, w, h, angle, sx, sy);
+    this.startAngle = startAngle;
+    this.extentAngle = extentAngle;
+    let w2 = (w - 1) / 2;
+    let h2 = (h - 1) / 2;
+    let incAngle = extentAngle / Z4GeometricCurve.APPROX_SEGMENTS;
+    let tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
+    let points = new Array();
+    for (let i = 0; i <= Z4GeometricCurve.APPROX_SEGMENTS; i++) {
+      let currentAngle = startAngle + incAngle * i;
+      let xx = w2 * Math.cos(currentAngle) + w2;
+      let yy = h2 * Math.sin(currentAngle) + h2;
+      points.push(tx.transform(xx, yy));
+    }
+    this.polyline = new Z4Polyline(points);
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    json["startAngle"] = this.startAngle;
+    json["extentAngle"] = this.extentAngle;
+    return json;
+  }
+
+  /**
+   * Creates a Z4EllipseFrame from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  static  fromJSON(json) {
+    return new Z4EllipseFrame(json["x"], json["y"], json["w"], json["h"], json["angle"], json["sx"], json["sy"], json["startAngle"], json["extentAngle"]);
+  }
+}
+/**
+ * A rectangular curve
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4RectangleFrame extends Z4GeometricFrame {
+
+  /**
+   * Creates the object
+   *
+   * @param x The x location of the rectangle (not rotated)
+   * @param y The y location of the rectangle (not rotated)
+   * @param w The width of the rectangle (not sheared)
+   * @param h The height of the rectangle (not sheared)
+   * @param angle The rotation angle of the rectangle
+   * @param sx The x shear of the rectangle
+   * @param sy The y shear of the rectangle
+   */
+  constructor(x, y, w, h, angle, sx, sy) {
+    super(Z4GeometricShapeType.RECTANGLE, x, y, w, h, angle, sx, sy);
+    let tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
+    let points = new Array();
+    points.push(tx.transform(0, 0));
+    points.push(tx.transform(w - 1, 0));
+    points.push(tx.transform(w - 1, h - 1));
+    points.push(tx.transform(0, h - 1));
+    points.push(points[0]);
+    this.polyline = new Z4Polyline(points);
+  }
+
+  /**
+   * Creates a Z4RectangleFrame from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  static  fromJSON(json) {
+    return new Z4RectangleFrame(json["x"], json["y"], json["w"], json["h"], json["angle"], json["sx"], json["sy"]);
+  }
+}
+/**
+ * A rectangular curve with rounded vertices
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4RoundRectangleFrame extends Z4GeometricFrame {
+
+  static  ADVANCE = 0.15;
+
+  static  ROUND_APPROX_SEGMENTS = 16;
+
+  /**
+   * Creates the object
+   *
+   * @param x The x location of the rounded rectangle (not rotated)
+   * @param y The y location of the rounded rectangle (not rotated)
+   * @param w The width of the rounded rectangle (not sheared)
+   * @param h The height of the rounded rectangle (not sheared)
+   * @param angle The rotation angle of the rounded rectangle
+   * @param sx The x shear of the rounded rectangle
+   * @param sy The y shear of the rounded rectangle
+   */
+  constructor(x, y, w, h, angle, sx, sy) {
+    super(Z4GeometricShapeType.ROUND_RECTANGLE, x, y, w, h, angle, sx, sy);
+    let min = Math.min(w, h);
+    let advance = min * Z4RoundRectangleFrame.ADVANCE;
+    let tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
+    let points = new Array();
+    // First point NW
+    points.push(tx.transform(advance, 0));
+    // Second point NE
+    points.push(tx.transform(w - 1 - advance, 0));
+    // Arc NE
+    this.createArc(points, tx, advance, Z4Math.HALF_THREE_PI, w - 1 - advance, advance);
+    // Third point SE
+    points.push(tx.transform(w - 1, h - 1 - advance));
+    // Arc SE
+    this.createArc(points, tx, advance, 0, w - 1 - advance, h - 1 - advance);
+    // fourth point SW
+    points.push(tx.transform(advance, h - 1));
+    // Arc SW
+    this.createArc(points, tx, advance, Z4Math.HALF_PI, advance, h - 1 - advance);
+    // fifth point NW
+    points.push(tx.transform(0, advance));
+    // Arc NW
+    this.createArc(points, tx, advance, Math.PI, advance, advance);
+    points.push(points[0]);
+    this.polyline = new Z4Polyline(points);
+  }
+
+   createArc(points, tx, advance, startAngle, dx, dy) {
+    for (let i = 1; i < Z4RoundRectangleFrame.ROUND_APPROX_SEGMENTS; i++) {
+      let angle = startAngle + Z4Math.HALF_PI * i / Z4RoundRectangleFrame.ROUND_APPROX_SEGMENTS;
+      let xx = advance * Math.cos(angle);
+      let yy = advance * Math.sin(angle);
+      points.push(tx.transform(xx + dx, yy + dy));
+    }
+  }
+
+  /**
+   * Creates a Z4RoundRectangleFrame from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  static  fromJSON(json) {
+    return new Z4RoundRectangleFrame(json["x"], json["y"], json["w"], json["h"], json["angle"], json["sx"], json["sy"]);
+  }
+}
+/**
+ * A sequence of geometric shapes
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4GeometricShapeSequence extends Z4GeometricCurve {
+
+   shapes = null;
+
+  /**
+   * Creates the object
+   *
+   * @param shapes The sequence of geometric shapes
+   */
+  constructor(shapes) {
+    super(Z4GeometricShapeType.SEQUENCE);
+    this.shapes = shapes;
+    this.polyline = this.shapes.map(shape => shape.getPolyline()).reduce((accumulator, current, index, array) => accumulator.concat(current));
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    let shapesJSON = new Array();
+    this.shapes.forEach(shape => shapesJSON.push(shape.toJSON()));
+    json["shapes"] = shapesJSON;
+    return json;
+  }
+
+  /**
+   * Creates a Z4GeometricShapeSequence from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  static  fromJSON(json) {
+    let shapes = new Array();
+    (json["shapes"]).forEach(shapeJSON => shapes.push(Z4GeometricShape.fromJSON(shapeJSON)));
+    return new Z4GeometricShapeSequence(shapes);
+  }
+}
+/**
+ * The sinusoidal curve
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4SinusoidalCurve extends Z4GeometricCurve {
+
+   x1 = 0.0;
+
+   y1 = 0.0;
+
+   x2 = 0.0;
+
+   y2 = 0.0;
+
+   period = 0.0;
+
+   amplitude = 0.0;
+
+   angle = 0.0;
+
+   two_PI_over_period = 0.0;
+
+  /**
+   * Creates the object
+   *
+   * @param x1 The x-axis coordinate of the start point of the sinusoid
+   * @param y1 The y-axis coordinate of the start point of the sinusoid
+   * @param x2 The x-axis coordinate of the end point of the sinusoid
+   * @param y2 The y-axis coordinate of the end point of the sinusoid
+   * @param period The period of the sinusoid
+   * @param amplitude The amplitude of the sinusoid
+   * @param angle The rotation angle of the sinusoid
+   */
+  constructor(x1, y1, x2, y2, period, amplitude, angle) {
+    super(Z4GeometricShapeType.SINUSOIDAL);
+    this.x1 = x1;
+    this.y1 = y2;
+    this.x2 = x2;
+    this.y2 = y2;
+    this.period = period;
+    this.amplitude = amplitude;
+    this.angle = angle;
+    this.two_PI_over_period = Z4Math.TWO_PI / period;
+    let distance = Z4Math.distance(x1, y1, x2, y2);
+    let size = parseInt(distance * Z4GeometricCurve.APPROX_SEGMENTS / period) - 1;
+    if (size > 0) {
+      let rotation = Z4Math.atan(x1, y1, x2, y2);
+      let points = new Array();
+      for (let i = 0; i <= size; i++) {
+        let x = distance * i / size;
+        let y = Math.sin(angle + this.two_PI_over_period * x) * amplitude;
+        points.push(Z4Math.rotoTranslate(x, y, rotation, x1, y1));
+      }
+      this.polyline = new Z4Polyline(points);
+    } else {
+      this.polyline = new Z4Polyline(new Array(new Z4Point(x1, y1), new Z4Point(x2, y2)));
+    }
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    json["x1"] = this.x1;
+    json["y1"] = this.y1;
+    json["x2"] = this.x2;
+    json["y2"] = this.y2;
+    json["period"] = this.period;
+    json["amplitude"] = this.amplitude;
+    json["angle"] = this.angle;
+    return json;
+  }
+
+  /**
+   * Creates a Z4SinusoidalCurve from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  static  fromJSON(json) {
+    return new Z4SinusoidalCurve(json["x1"], json["y1"], json["x2"], json["y2"], json["period"], json["amplitude"], json["angle"]);
+  }
+}
+/**
+ * The spiral curve
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4SpiralCurve extends Z4GeometricCurve {
+
+   x1 = 0.0;
+
+   y1 = 0.0;
+
+   x2 = 0.0;
+
+   y2 = 0.0;
+
+   radius = 0.0;
+
+   angle = 0.0;
+
+  /**
+   * Creates the object
+   *
+   * @param x1 The x-axis coordinate of the start point of the spiral
+   * @param y1 The y-axis coordinate of the start point of the spiral
+   * @param x2 The x-axis coordinate of the end point of the spiral
+   * @param y2 The y-axis coordinate of the end point of the spiral
+   * @param radius The radius of the sinusoid
+   * @param angle The rotation angle of the sinusoid
+   */
+  constructor(x1, y1, x2, y2, radius, angle) {
+    super(Z4GeometricShapeType.SPIRAL);
+    this.x1 = x1;
+    this.y1 = y2;
+    this.x2 = x2;
+    this.y2 = y2;
+    this.radius = radius;
+    this.angle = angle;
+    let distance = Z4Math.distance(x1, y1, x2, y2);
+    let size = parseInt(distance * Z4GeometricCurve.APPROX_SEGMENTS / radius) - 1;
+    if (size > 0) {
+      let points = new Array();
+      for (let i = 0; i <= size; i++) {
+        let t = i / Z4GeometricCurve.APPROX_SEGMENTS;
+        let a = angle + Z4Math.TWO_PI * t;
+        let r = radius * t;
+        points.push(new Z4Point(r * Math.cos(a) + x1, r * Math.sin(a) + y1));
+      }
+      this.polyline = new Z4Polyline(points);
+    } else {
+      this.polyline = new Z4Polyline(new Array(new Z4Point(x1, y1), new Z4Point(x2, y2)));
+    }
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    json["x1"] = this.x1;
+    json["y1"] = this.y1;
+    json["x2"] = this.x2;
+    json["y2"] = this.y2;
+    json["radius"] = this.radius;
+    json["angle"] = this.angle;
+    return json;
+  }
+
+  /**
+   * Creates a Z4SpiralCurve from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  static  fromJSON(json) {
+    return new Z4SpiralCurve(json["x1"], json["y1"], json["x2"], json["y2"], json["radius"], json["angle"]);
+  }
+}
+/**
+ * The line
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Line extends Z4GeometricShape {
+
+   x1 = 0.0;
+
+   y1 = 0.0;
+
+   x2 = 0.0;
+
+   y2 = 0.0;
+
+  /**
+   * Creates the object
+   *
+   * @param x1 The x-axis coordinate of the start point of the line
+   * @param y1 The y-axis coordinate of the start point of the line
+   * @param x2 The x-axis coordinate of the end point of the line
+   * @param y2 The y-axis coordinate of the end point of the line
+   */
+  constructor(x1, y1, x2, y2) {
+    super(Z4GeometricShapeType.LINE);
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2;
+  }
+
+   getPolyline() {
+    return new Z4Polyline(new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2)));
+  }
+
+   distance(x, y) {
+    return Z4Math.ptSegDist(this.x1, this.y1, this.x2, this.y2, x, y);
+  }
+
+   getLength() {
+    return Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
+  }
+
+   getPointAt(position) {
+    let x = (this.x2 - this.x1) * position + this.x1;
+    let y = (this.y2 - this.y1) * position + this.y1;
+    return new Z4Point(x, y);
+  }
+
+   getTangentAt(position) {
+    if (position !== 1) {
+      let point = this.getPointAt(position);
+      return Z4Vector.fromPoints(point.x, point.y, this.x2, this.y2);
+    } else {
+      return Z4Vector.fromVector(this.x2, this.y2, 1, Z4Math.atan(this.x1, this.y1, this.x2, this.y2));
+    }
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    json["x1"] = this.x1;
+    json["y1"] = this.y1;
+    json["x2"] = this.x2;
+    json["y2"] = this.y2;
+    return json;
+  }
+
+  /**
+   * Creates a Z4Line from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  static  fromJSON(json) {
+    return new Z4Line(json["x1"], json["y1"], json["x2"], json["y2"]);
+  }
+}
+/**
+ * The poyline
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Polyline extends Z4GeometricShape {
+
+   points = null;
+
+   cumLen = new Array();
+
+  /**
+   * Creates the object
+   *
+   * @param points The points
+   */
+  constructor(points) {
+    super(Z4GeometricShapeType.POLYLINE);
+    this.points = points.map(point => point);
+    this.points.forEach((point, index, array) => {
+      if (index === 0) {
+        this.cumLen.push(0.0);
+      } else {
+        this.cumLen.push(this.cumLen[index - 1] + Z4Math.distance(point.x, point.y, array[index - 1].x, array[index - 1].y));
+      }
+    });
+  }
+
+   getPolyline() {
+    return this;
+  }
+
+   distance(x, y) {
+    return this.points.map((point, index, array) => index === 0 ? Number.MAX_VALUE : Z4Math.ptSegDist(point.x, point.y, array[index - 1].x, array[index - 1].y, x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
+  }
+
+  /**
+   * Concatenates this polyline with another polyline
+   *
+   * @param polyline The other polyline
+   * @return The concatenation of this polyline with the other polyline
+   */
+   concat(polyline) {
+    return new Z4Polyline((this.points).concat(polyline.points));
+  }
+
+   getLength() {
+    return this.cumLen[this.cumLen.length - 1];
+  }
+
+   getPointAt(position) {
+    let finalPos = position * this.cumLen[this.cumLen.length - 1];
+    let index = this.cumLen.findIndex(pos => pos >= finalPos, null);
+    if (this.cumLen[index] === finalPos) {
+      return this.points[index];
+    } else if (this.cumLen[index - 1] === finalPos) {
+      return this.points[index - 1];
+    } else {
+      let div = (finalPos - this.cumLen[index - 1]) / (this.cumLen[index] - this.cumLen[index - 1]);
+      let x = (this.points[index].x - this.points[index - 1].x) * div + this.points[index - 1].x;
+      let y = (this.points[index].y - this.points[index - 1].y) * div + this.points[index - 1].y;
+      return new Z4Point(x, y);
+    }
+  }
+
+   getTangentAt(position) {
+    let finalPos = position * this.cumLen[this.cumLen.length - 1];
+    let index = this.cumLen.findIndex(pos => pos >= finalPos, null);
+    if (this.cumLen[index] === finalPos) {
+      if (!index) {
+        index = 1;
+      }
+      return Z4Vector.fromPoints(this.points[index - 1].x, this.points[index - 1].y, this.points[index].x, this.points[index].y);
+    } else if (this.cumLen[index - 1] === finalPos) {
+      return Z4Vector.fromPoints(this.points[index - 1].x, this.points[index - 1].y, this.points[index].x, this.points[index].y);
+    } else {
+      let div = (finalPos - this.cumLen[index - 1]) / (this.cumLen[index] - this.cumLen[index - 1]);
+      let x = (this.points[index].x - this.points[index - 1].x) * div + this.points[index - 1].x;
+      let y = (this.points[index].y - this.points[index - 1].y) * div + this.points[index - 1].y;
+      return Z4Vector.fromPoints(x, y, this.points[index].x, this.points[index].y);
+    }
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    let pointsJSON = new Array();
+    this.points.forEach(point => {
+      let pointJSON = new Object();
+      pointJSON["x"] = point.x;
+      pointJSON["y"] = point.y;
+      pointsJSON.push(pointJSON);
+    });
+    json["points"] = pointsJSON;
+    return json;
+  }
+
+  /**
+   * Creates a Z4Polyline from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  static  fromJSON(json) {
+    let points = new Array();
+    (json["points"]).forEach(pointJSON => points.push(new Z4Point(pointJSON["x"], pointJSON["y"])));
+    return new Z4Polyline(points);
+  }
+}
+/**
+ * A geometric shape described by a single point
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4SinglePointShape extends Z4GeometricShape {
+
+   x = 0.0;
+
+   y = 0.0;
+
+  /**
+   * Creates the object
+   *
+   * @param x The x-axis coordinate of the point
+   * @param y The y-axis coordinate of the point
+   */
+  constructor(x, y) {
+    super(Z4GeometricShapeType.POINT);
+    this.x = x;
+    this.y = y;
+  }
+
+   getPolyline() {
+    return new Z4Polyline(new Array(new Z4Point(x, y), new Z4Point(x, y)));
+  }
+
+   distance(x, y) {
+    return Z4Math.distance(this.x, this.y, x, y);
+  }
+
+   getLength() {
+    return 0;
+  }
+
+   getPointAt(position) {
+    return new Z4Point(this.x, this.y);
+  }
+
+   getTangentAt(position) {
+    return Z4Vector.fromVector(this.x, this.y, 0, 0);
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    json["x"] = this.x;
+    json["y"] = this.y;
+    return json;
+  }
+
+  /**
+   * Creates a Z4SinglePointShape from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  static  fromJSON(json) {
+    return new Z4SinglePointShape(json["x"], json["y"]);
   }
 }
 /**

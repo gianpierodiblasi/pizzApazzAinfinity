@@ -9,7 +9,7 @@ import pizzapazza.math.Z4Vector;
  *
  * @author gianpiero.diblasi
  */
-public abstract class Z4GeometricCurve implements Z4GeometricShape {
+public abstract class Z4GeometricCurve extends Z4GeometricShape {
 
   /**
    * The nearest polyline representing the curve
@@ -20,6 +20,15 @@ public abstract class Z4GeometricCurve implements Z4GeometricShape {
    * The number of segments to approximate the curve with a polyline
    */
   protected final static int APPROX_SEGMENTS = 64;
+
+  /**
+   * Creates the object
+   *
+   * @param type The type
+   */
+  public Z4GeometricCurve(Z4GeometricShapeType type) {
+    super(type);
+  }
 
   @Override
   public Z4Polyline getPolyline() {

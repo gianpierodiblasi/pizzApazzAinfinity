@@ -33,7 +33,7 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
    * @param angle The rotation angle of the sinusoid
    */
   constructor(x1, y1, x2, y2, period, amplitude, angle) {
-    super();
+    super(Z4GeometricShapeType.SINUSOIDAL);
     this.x1 = x1;
     this.y1 = y2;
     this.x2 = x2;
@@ -56,5 +56,27 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
     } else {
       this.polyline = new Z4Polyline(new Array(new Z4Point(x1, y1), new Z4Point(x2, y2)));
     }
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    json["x1"] = this.x1;
+    json["y1"] = this.y1;
+    json["x2"] = this.x2;
+    json["y2"] = this.y2;
+    json["period"] = this.period;
+    json["amplitude"] = this.amplitude;
+    json["angle"] = this.angle;
+    return json;
+  }
+
+  /**
+   * Creates a Z4SinusoidalCurve from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  static  fromJSON(json) {
+    return new Z4SinusoidalCurve(json["x1"], json["y1"], json["x2"], json["y2"], json["period"], json["amplitude"], json["angle"]);
   }
 }

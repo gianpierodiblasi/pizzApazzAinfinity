@@ -4,18 +4,27 @@ import def.js.Array;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Vector;
+import simulation.js.$Object;
 
 /**
  * A geometric shape described by a single point
  *
  * @author gianpiero.diblasi
  */
-public class Z4SinglePointShape implements Z4GeometricShape {
+public class Z4SinglePointShape extends Z4GeometricShape {
 
   private final double x;
   private final double y;
 
+  /**
+   * Creates the object
+   *
+   * @param x The x-axis coordinate of the point
+   * @param y The y-axis coordinate of the point
+   */
   public Z4SinglePointShape(double x, double y) {
+    super(Z4GeometricShapeType.POINT);
+    
     this.x = x;
     this.y = y;
   }
@@ -43,5 +52,23 @@ public class Z4SinglePointShape implements Z4GeometricShape {
   @Override
   public Z4Vector getTangentAt(double position) {
     return Z4Vector.fromVector(this.x, this.y, 0, 0);
+  }
+
+  @Override
+  public $Object toJSON() {
+    $Object json = super.toJSON();
+    json.$set("x", this.x);
+    json.$set("y", this.y);
+    return json;
+  }
+
+  /**
+   * Creates a Z4SinglePointShape from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  public static Z4SinglePointShape fromJSON($Object json) {
+    return new Z4SinglePointShape(json.$get("x"), json.$get("y"));
   }
 }

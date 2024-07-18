@@ -1,6 +1,7 @@
 package pizzapazza.math.geometricshape;
 
 import simulation.bezier.$Bezier;
+import simulation.js.$Object;
 
 /**
  * The cubic bezier curve
@@ -29,7 +30,7 @@ public class Z4BezierCurve extends Z4AbstractBezierCurve {
    * @param y2 The y-axis coordinate of the end point of the curve
    */
   public Z4BezierCurve(double x1, double y1, double ctrlx1, double ctrly1, double ctrlx2, double ctrly2, double x2, double y2) {
-    super(x1, y1, x2, y2);
+    super(Z4GeometricShapeType.BEZIER, x1, y1, x2, y2);
 
     this.ctrlx1 = ctrlx1;
     this.ctrly1 = ctrly1;
@@ -37,5 +38,34 @@ public class Z4BezierCurve extends Z4AbstractBezierCurve {
     this.ctrly2 = ctrly2;
 
     this.bezier = new $Bezier(this.x1, this.y1, this.ctrlx1, this.ctrly1, this.ctrlx2, this.ctrly2, this.x2, this.y2);
+  }
+
+  @Override
+  public $Object toJSON() {
+    $Object json = super.toJSON();
+    json.$set("x1", this.x1);
+    json.$set("y1", this.y1);
+    json.$set("ctrlx1", this.ctrlx1);
+    json.$set("ctrly1", this.ctrly1);
+    json.$set("ctrlx2", this.ctrlx2);
+    json.$set("ctrly2", this.ctrly2);
+    json.$set("x2", this.x2);
+    json.$set("y2", this.y2);
+    return json;
+  }
+
+  /**
+   * Creates a Z4BezierCurve from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  public static Z4BezierCurve fromJSON($Object json) {
+    return new Z4BezierCurve(
+            json.$get("x1"), json.$get("y1"),
+            json.$get("ctrlx1"), json.$get("ctrly1"),
+            json.$get("ctrlx2"), json.$get("ctrly2"),
+            json.$get("x2"), json.$get("y2")
+    );
   }
 }

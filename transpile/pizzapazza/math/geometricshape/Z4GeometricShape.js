@@ -3,7 +3,19 @@
  *
  * @author gianpiero.diblasi
  */
-class Z4GeometricShape {
+class Z4GeometricShape extends Z4JSONable {
+
+   type = null;
+
+  /**
+   * Creates the object
+   *
+   * @param type The type
+   */
+  constructor(type) {
+    super();
+    this.type = type;
+  }
 
   /**
    * Returns the nearest polyline
@@ -47,5 +59,44 @@ class Z4GeometricShape {
    * @return The tangent vector of this geometric shape at a given position
    */
    getTangentAt(position) {
+  }
+
+   toJSON() {
+    let json = new Object();
+    json["type"] = this.type;
+    return json;
+  }
+
+  /**
+   * Creates a Z4GeometricShape from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  static  fromJSON(json) {
+    switch("" + json["type"]) {
+      case "POINT":
+        return Z4SinglePointShape.fromJSON(json);
+      case "LINE":
+        return Z4Line.fromJSON(json);
+      case "POLYLINE":
+        return Z4Polyline.fromJSON(json);
+      case "BEZIER":
+        return Z4BezierCurve.fromJSON(json);
+      case "ELLIPSE":
+        return Z4EllipseFrame.fromJSON(json);
+      case "RECTANGLE":
+        return Z4RectangleFrame.fromJSON(json);
+      case "ROUND_RECTANGLE":
+        return Z4RoundRectangleFrame.fromJSON(json);
+      case "SINUSOIDAL":
+        return Z4SinusoidalCurve.fromJSON(json);
+      case "SPIRAL":
+        return Z4SpiralCurve.fromJSON(json);
+      case "SEQUENCE":
+        return Z4GeometricShapeSequence.fromJSON(json);
+      default:
+        return null;
+    }
   }
 }

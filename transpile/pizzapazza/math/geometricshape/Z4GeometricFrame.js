@@ -23,6 +23,7 @@ class Z4GeometricFrame extends Z4GeometricCurve {
   /**
    * Creates the object
    *
+   * @param type The type
    * @param x The x location of the frame
    * @param y The y location of the frame
    * @param w The width of the frame
@@ -31,8 +32,8 @@ class Z4GeometricFrame extends Z4GeometricCurve {
    * @param sx The x shear of the frame
    * @param sy The y shear of the frame
    */
-  constructor(x, y, w, h, angle, sx, sy) {
-    super();
+  constructor(type, x, y, w, h, angle, sx, sy) {
+    super(type);
     this.x = x;
     this.y = y;
     this.w = w;
@@ -40,5 +41,17 @@ class Z4GeometricFrame extends Z4GeometricCurve {
     this.angle = angle;
     this.sx = sx;
     this.sy = sy;
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    json["x"] = this.x;
+    json["y"] = this.y;
+    json["w"] = this.w;
+    json["h"] = this.h;
+    json["angle"] = this.angle;
+    json["sx"] = this.sx;
+    json["sy"] = this.sy;
+    return json;
   }
 }

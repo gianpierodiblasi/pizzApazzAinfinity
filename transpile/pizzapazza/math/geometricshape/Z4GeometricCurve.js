@@ -16,6 +16,15 @@ class Z4GeometricCurve extends Z4GeometricShape {
    */
   static  APPROX_SEGMENTS = 64;
 
+  /**
+   * Creates the object
+   *
+   * @param type The type
+   */
+  constructor(type) {
+    super(type);
+  }
+
    getPolyline() {
     return this.polyline;
   }

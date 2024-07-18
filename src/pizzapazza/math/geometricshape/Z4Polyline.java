@@ -7,13 +7,14 @@ import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Vector;
 import simulation.js.$Array;
 import static simulation.js.$Globals.$exists;
+import simulation.js.$Object;
 
 /**
  * The poyline
  *
  * @author gianpiero.diblasi
  */
-public class Z4Polyline implements Z4GeometricShape {
+public class Z4Polyline extends Z4GeometricShape {
 
   private final Array<Z4Point> points;
   private final Array<Double> cumLen = new $Array<>();
@@ -24,7 +25,7 @@ public class Z4Polyline implements Z4GeometricShape {
    * @param points The points
    */
   public Z4Polyline(Array<Z4Point> points) {
-    super();
+    super(Z4GeometricShapeType.POLYLINE);
     this.points = points.map(point -> point);
 
     this.points.forEach((point, index, array) -> {
@@ -99,5 +100,34 @@ public class Z4Polyline implements Z4GeometricShape {
       double y = (this.points.$get(index).y - this.points.$get(index - 1).y) * div + this.points.$get(index - 1).y;
       return Z4Vector.fromPoints(x, y, this.points.$get(index).x, this.points.$get(index).y);
     }
+  }
+
+  @Override
+  public $Object toJSON() {
+    $Object json = super.toJSON();
+
+    Array<$Object> pointsJSON = new Array<>();
+    this.points.forEach(point -> {
+      $Object pointJSON = new $Object();
+      pointJSON.$set("x", point.x);
+      pointJSON.$set("y", point.y);
+      pointsJSON.push(pointJSON);
+    });
+    json.$set("points", pointsJSON);
+
+    return json;
+  }
+
+  /**
+   * Creates a Z4Polyline from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  @SuppressWarnings("unchecked")
+  public static Z4Polyline fromJSON($Object json) {
+    Array<Z4Point> points = new Array<>();
+    ((Iterable<$Object>) json.$get("points")).forEach(pointJSON -> points.push(new Z4Point(pointJSON.$get("x"), pointJSON.$get("y"))));
+    return new Z4Polyline(points);
   }
 }

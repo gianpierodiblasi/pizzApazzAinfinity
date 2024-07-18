@@ -33,12 +33,14 @@ class Z4AbstractBezierCurve extends Z4GeometricShape {
   /**
    * Creates the object
    *
+   * @param type The type
    * @param x1 The x-axis coordinate of the start point of the curve
    * @param y1 The y-axis coordinate of the start point of the curve
    * @param x2 The x-axis coordinate of the end point of the curve
    * @param y2 The y-axis coordinate of the end point of the curve
    */
-  constructor(x1, y1, x2, y2) {
+  constructor(type, x1, y1, x2, y2) {
+    super(type);
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;

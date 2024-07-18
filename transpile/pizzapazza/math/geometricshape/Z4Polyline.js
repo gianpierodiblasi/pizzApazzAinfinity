@@ -15,7 +15,7 @@ class Z4Polyline extends Z4GeometricShape {
    * @param points The points
    */
   constructor(points) {
-    super();
+    super(Z4GeometricShapeType.POLYLINE);
     this.points = points.map(point => point);
     this.points.forEach((point, index, array) => {
       if (index === 0) {
@@ -79,5 +79,30 @@ class Z4Polyline extends Z4GeometricShape {
       let y = (this.points[index].y - this.points[index - 1].y) * div + this.points[index - 1].y;
       return Z4Vector.fromPoints(x, y, this.points[index].x, this.points[index].y);
     }
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    let pointsJSON = new Array();
+    this.points.forEach(point => {
+      let pointJSON = new Object();
+      pointJSON["x"] = point.x;
+      pointJSON["y"] = point.y;
+      pointsJSON.push(pointJSON);
+    });
+    json["points"] = pointsJSON;
+    return json;
+  }
+
+  /**
+   * Creates a Z4Polyline from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  static  fromJSON(json) {
+    let points = new Array();
+    (json["points"]).forEach(pointJSON => points.push(new Z4Point(pointJSON["x"], pointJSON["y"])));
+    return new Z4Polyline(points);
   }
 }

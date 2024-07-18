@@ -21,7 +21,7 @@ class Z4RoundRectangleFrame extends Z4GeometricFrame {
    * @param sy The y shear of the rounded rectangle
    */
   constructor(x, y, w, h, angle, sx, sy) {
-    super(x, y, w, h, angle, sx, sy);
+    super(Z4GeometricShapeType.ROUND_RECTANGLE, x, y, w, h, angle, sx, sy);
     let min = Math.min(w, h);
     let advance = min * Z4RoundRectangleFrame.ADVANCE;
     let tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
@@ -55,5 +55,15 @@ class Z4RoundRectangleFrame extends Z4GeometricFrame {
       let yy = advance * Math.sin(angle);
       points.push(tx.transform(xx + dx, yy + dy));
     }
+  }
+
+  /**
+   * Creates a Z4RoundRectangleFrame from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  static  fromJSON(json) {
+    return new Z4RoundRectangleFrame(json["x"], json["y"], json["w"], json["h"], json["angle"], json["sx"], json["sy"]);
   }
 }

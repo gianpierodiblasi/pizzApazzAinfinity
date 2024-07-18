@@ -4,6 +4,7 @@ import def.js.Array;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import static simulation.js.$Globals.parseInt;
+import simulation.js.$Object;
 
 /**
  * The spiral curve
@@ -30,7 +31,7 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
    * @param angle The rotation angle of the sinusoid
    */
   public Z4SpiralCurve(double x1, double y1, double x2, double y2, double radius, double angle) {
-    super();
+    super(Z4GeometricShapeType.SPIRAL);
 
     this.x1 = x1;
     this.y1 = y2;
@@ -54,5 +55,31 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
     } else {
       this.polyline = new Z4Polyline(new Array<>(new Z4Point(x1, y1), new Z4Point(x2, y2)));
     }
+  }
+
+  @Override
+  public $Object toJSON() {
+    $Object json = super.toJSON();
+    json.$set("x1", this.x1);
+    json.$set("y1", this.y1);
+    json.$set("x2", this.x2);
+    json.$set("y2", this.y2);
+    json.$set("radius", this.radius);
+    json.$set("angle", this.angle);
+    return json;
+  }
+
+  /**
+   * Creates a Z4SpiralCurve from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  public static Z4SpiralCurve fromJSON($Object json) {
+    return new Z4SpiralCurve(
+            json.$get("x1"), json.$get("y1"),
+            json.$get("x2"), json.$get("y2"),
+            json.$get("radius"), json.$get("angle")
+    );
   }
 }

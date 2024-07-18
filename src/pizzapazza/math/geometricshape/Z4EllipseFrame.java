@@ -3,6 +3,7 @@ package pizzapazza.math.geometricshape;
 import def.js.Array;
 import pizzapazza.math.Z4AffineTransform;
 import pizzapazza.math.Z4Point;
+import simulation.js.$Object;
 
 /**
  * An elliptic curve
@@ -28,7 +29,7 @@ public class Z4EllipseFrame extends Z4GeometricFrame {
    * @param extentAngle The extent angle
    */
   public Z4EllipseFrame(double x, double y, double w, double h, double angle, double sx, double sy, double startAngle, double extentAngle) {
-    super(x, y, w, h, angle, sx, sy);
+    super(Z4GeometricShapeType.ELLIPSE, x, y, w, h, angle, sx, sy);
 
     this.startAngle = startAngle;
     this.extentAngle = extentAngle;
@@ -47,5 +48,28 @@ public class Z4EllipseFrame extends Z4GeometricFrame {
       points.push(tx.transform(xx, yy));
     }
     this.polyline = new Z4Polyline(points);
+  }
+
+  @Override
+  public $Object toJSON() {
+    $Object json = super.toJSON();
+    json.$set("startAngle", this.startAngle);
+    json.$set("extentAngle", this.extentAngle);
+    return json;
+  }
+
+  /**
+   * Creates a Z4EllipseFrame from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  public static Z4EllipseFrame fromJSON($Object json) {
+    return new Z4EllipseFrame(
+            json.$get("x"), json.$get("y"),
+            json.$get("w"), json.$get("h"),
+            json.$get("angle"),
+            json.$get("sx"), json.$get("sy"),
+            json.$get("startAngle"), json.$get("extentAngle"));
   }
 }

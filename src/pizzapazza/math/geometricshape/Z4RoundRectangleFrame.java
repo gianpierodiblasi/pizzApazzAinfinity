@@ -4,6 +4,7 @@ import def.js.Array;
 import pizzapazza.math.Z4AffineTransform;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
+import simulation.js.$Object;
 
 /**
  * A rectangular curve with rounded vertices
@@ -27,7 +28,7 @@ public class Z4RoundRectangleFrame extends Z4GeometricFrame {
    * @param sy The y shear of the rounded rectangle
    */
   public Z4RoundRectangleFrame(double x, double y, double w, double h, double angle, double sx, double sy) {
-    super(x, y, w, h, angle, sx, sy);
+    super(Z4GeometricShapeType.ROUND_RECTANGLE, x, y, w, h, angle, sx, sy);
 
     double min = Math.min(w, h);
     double advance = min * Z4RoundRectangleFrame.ADVANCE;
@@ -55,5 +56,19 @@ public class Z4RoundRectangleFrame extends Z4GeometricFrame {
 
       points.push(tx.transform(xx + dx, yy + dy));
     }
+  }
+  
+  /**
+   * Creates a Z4RoundRectangleFrame from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  public static Z4RoundRectangleFrame fromJSON($Object json) {
+    return new Z4RoundRectangleFrame(
+            json.$get("x"), json.$get("y"),
+            json.$get("w"), json.$get("h"),
+            json.$get("angle"),
+            json.$get("sx"), json.$get("sy"));
   }
 }

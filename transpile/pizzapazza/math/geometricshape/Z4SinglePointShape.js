@@ -9,7 +9,14 @@ class Z4SinglePointShape extends Z4GeometricShape {
 
    y = 0.0;
 
+  /**
+   * Creates the object
+   *
+   * @param x The x-axis coordinate of the point
+   * @param y The y-axis coordinate of the point
+   */
   constructor(x, y) {
+    super(Z4GeometricShapeType.POINT);
     this.x = x;
     this.y = y;
   }
@@ -32,5 +39,22 @@ class Z4SinglePointShape extends Z4GeometricShape {
 
    getTangentAt(position) {
     return Z4Vector.fromVector(this.x, this.y, 0, 0);
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    json["x"] = this.x;
+    json["y"] = this.y;
+    return json;
+  }
+
+  /**
+   * Creates a Z4SinglePointShape from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  static  fromJSON(json) {
+    return new Z4SinglePointShape(json["x"], json["y"]);
   }
 }

@@ -23,7 +23,7 @@ class Z4EllipseFrame extends Z4GeometricFrame {
    * @param extentAngle The extent angle
    */
   constructor(x, y, w, h, angle, sx, sy, startAngle, extentAngle) {
-    super(x, y, w, h, angle, sx, sy);
+    super(Z4GeometricShapeType.ELLIPSE, x, y, w, h, angle, sx, sy);
     this.startAngle = startAngle;
     this.extentAngle = extentAngle;
     let w2 = (w - 1) / 2;
@@ -38,5 +38,22 @@ class Z4EllipseFrame extends Z4GeometricFrame {
       points.push(tx.transform(xx, yy));
     }
     this.polyline = new Z4Polyline(points);
+  }
+
+   toJSON() {
+    let json = super.toJSON();
+    json["startAngle"] = this.startAngle;
+    json["extentAngle"] = this.extentAngle;
+    return json;
+  }
+
+  /**
+   * Creates a Z4EllipseFrame from a JSON object
+   *
+   * @param json The JSON object
+   * @return the geometric shape
+   */
+  static  fromJSON(json) {
+    return new Z4EllipseFrame(json["x"], json["y"], json["w"], json["h"], json["angle"], json["sx"], json["sy"], json["startAngle"], json["extentAngle"]);
   }
 }

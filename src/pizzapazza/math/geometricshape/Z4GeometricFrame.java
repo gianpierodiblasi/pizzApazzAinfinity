@@ -1,5 +1,7 @@
 package pizzapazza.math.geometricshape;
 
+import simulation.js.$Object;
+
 /**
  * Common abstract object for geometric frames. A <i>Z4GeometricFrame</i> is a
  * geometric shape representing a frame curve
@@ -19,6 +21,7 @@ public abstract class Z4GeometricFrame extends Z4GeometricCurve {
   /**
    * Creates the object
    *
+   * @param type The type
    * @param x The x location of the frame
    * @param y The y location of the frame
    * @param w The width of the frame
@@ -27,8 +30,8 @@ public abstract class Z4GeometricFrame extends Z4GeometricCurve {
    * @param sx The x shear of the frame
    * @param sy The y shear of the frame
    */
-  public Z4GeometricFrame(double x, double y, double w, double h, double angle, double sx, double sy) {
-    super();
+  public Z4GeometricFrame(Z4GeometricShapeType type, double x, double y, double w, double h, double angle, double sx, double sy) {
+    super(type);
 
     this.x = x;
     this.y = y;
@@ -37,5 +40,18 @@ public abstract class Z4GeometricFrame extends Z4GeometricCurve {
     this.angle = angle;
     this.sx = sx;
     this.sy = sy;
+  }
+
+  @Override
+  public $Object toJSON() {
+    $Object json = super.toJSON();
+    json.$set("x", this.x);
+    json.$set("y", this.y);
+    json.$set("w", this.w);
+    json.$set("h", this.h);
+    json.$set("angle", this.angle);
+    json.$set("sx", this.sx);
+    json.$set("sy", this.sy);
+    return json;
   }
 }

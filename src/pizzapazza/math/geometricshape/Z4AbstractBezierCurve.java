@@ -11,7 +11,7 @@ import static simulation.js.$Globals.parseInt;
  *
  * @author gianpiero.diblasi
  */
-public abstract class Z4AbstractBezierCurve implements Z4GeometricShape {
+public abstract class Z4AbstractBezierCurve extends Z4GeometricShape {
 
   /**
    * The x-axis coordinate of the start point of the curve
@@ -41,12 +41,14 @@ public abstract class Z4AbstractBezierCurve implements Z4GeometricShape {
   /**
    * Creates the object
    *
+   * @param type The type
    * @param x1 The x-axis coordinate of the start point of the curve
    * @param y1 The y-axis coordinate of the start point of the curve
    * @param x2 The x-axis coordinate of the end point of the curve
    * @param y2 The y-axis coordinate of the end point of the curve
    */
-  public Z4AbstractBezierCurve(double x1, double y1, double x2, double y2) {
+  public Z4AbstractBezierCurve(Z4GeometricShapeType type, double x1, double y1, double x2, double y2) {
+    super(type);
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
