@@ -59,7 +59,7 @@ public class Z4RoundRectangleFrame extends Z4GeometricFrame {
   }
 
   @Override
-  public Z4GeometricShape fromDataChanged(double x, double y, int pointIndex, double spinnerValue, int spinnerIndex) {
+  public Z4GeometricShape fromDataChanged(double x, double y, int pointIndex, double spinnerValue, int spinnerIndex, int width, int height) {
     return null;
   }
   

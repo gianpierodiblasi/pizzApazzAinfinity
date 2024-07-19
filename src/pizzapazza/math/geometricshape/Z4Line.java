@@ -83,7 +83,7 @@ public class Z4Line extends Z4GeometricShape {
   }
 
   @Override
-  public Z4GeometricShape fromDataChanged(double x, double y, int pointIndex, double spinnerValue, int spinnerIndex) {
+  public Z4GeometricShape fromDataChanged(double x, double y, int pointIndex, double spinnerValue, int spinnerIndex, int width, int height) {
     if (pointIndex == 0) {
       return new Z4Line(x, y, this.x2, this.y2);
     } else if (pointIndex == 1) {

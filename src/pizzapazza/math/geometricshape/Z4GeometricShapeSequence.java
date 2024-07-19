@@ -44,7 +44,7 @@ public class Z4GeometricShapeSequence extends Z4GeometricCurve {
   }
 
   @Override
-  public Z4GeometricShape fromDataChanged(double x, double y, int pointIndex, double spinnerValue, int spinnerIndex) {
+  public Z4GeometricShape fromDataChanged(double x, double y, int pointIndex, double spinnerValue, int spinnerIndex, int width, int height) {
     return null;
   }
   

@@ -97,9 +97,11 @@ class Z4GeometricShape extends Z4JSONable {
    * @param spinnerValue The changed spinner value
    * @param spinnerIndex The index of the changed spinner value, -1 if no
    * spinner is changed
+   * @param width The available area width
+   * @param height The available area height
    * @return The geometric shape
    */
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
   }
 
    toJSON() {

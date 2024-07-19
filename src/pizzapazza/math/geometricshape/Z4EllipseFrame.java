@@ -69,10 +69,10 @@ public class Z4EllipseFrame extends Z4GeometricFrame {
   }
 
   @Override
-  public Z4GeometricShape fromDataChanged(double x, double y, int pointIndex, double spinnerValue, int spinnerIndex) {
+  public Z4GeometricShape fromDataChanged(double x, double y, int pointIndex, double spinnerValue, int spinnerIndex, int width, int height) {
     return null;
   }
-  
+
   @Override
   public $Object toJSON() {
     $Object json = super.toJSON();

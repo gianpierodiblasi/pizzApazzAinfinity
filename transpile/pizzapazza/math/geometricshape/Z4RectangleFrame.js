@@ -28,7 +28,7 @@ class Z4RectangleFrame extends Z4GeometricFrame {
     this.polyline = new Z4Polyline(points);
   }
 
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     return null;
   }
 

@@ -53,7 +53,7 @@ class Z4SinglePointShape extends Z4GeometricShape {
     return new Array();
   }
 
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     return pointIndex === 0 ? new Z4SinglePointShape(x, y) : this;
   }
 

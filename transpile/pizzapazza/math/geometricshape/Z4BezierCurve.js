@@ -44,7 +44,7 @@ class Z4BezierCurve extends Z4AbstractBezierCurve {
     return new Array(0, 1, 1, 2, 2, 3);
   }
 
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     if (pointIndex === 0) {
       return new Z4BezierCurve(x, y, this.ctrlx1, this.ctrly1, this.ctrlx2, this.ctrly2, this.x2, this.y2);
     } else if (pointIndex === 1) {

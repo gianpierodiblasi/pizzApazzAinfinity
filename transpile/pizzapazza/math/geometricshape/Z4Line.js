@@ -68,7 +68,7 @@ class Z4Line extends Z4GeometricShape {
     return new Array();
   }
 
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     if (pointIndex === 0) {
       return new Z4Line(x, y, this.x2, this.y2);
     } else if (pointIndex === 1) {
