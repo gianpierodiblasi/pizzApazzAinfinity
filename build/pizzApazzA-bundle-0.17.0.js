@@ -15735,6 +15735,40 @@ class Z4GeometricShape extends Z4JSONable {
         return null;
     }
   }
+
+  /**
+   * Creates a Z4GeometricShape contained in a given size
+   *
+   * @param type The type
+   * @param width The width
+   * @param height The height
+   * @return The geometric shape
+   */
+  static  fromSize(type, width, height) {
+    switch("" + type) {
+      case "POINT":
+        return Z4SinglePointShape.fromSize(width, height);
+      case "LINE":
+        return Z4Line.fromSize(width, height);
+      case "POLYLINE":
+        return Z4Polyline.fromSize(width, height);
+      case "BEZIER":
+        return Z4BezierCurve.fromSize(width, height);
+      case "ELLIPSE":
+        return Z4EllipseFrame.fromSize(width, height);
+      case "RECTANGLE":
+        return Z4RectangleFrame.fromSize(width, height);
+      case "ROUND_RECTANGLE":
+        return Z4RoundRectangleFrame.fromSize(width, height);
+      case "SINUSOIDAL":
+        return Z4SinusoidalCurve.fromSize(width, height);
+      case "SPIRAL":
+        return Z4SpiralCurve.fromSize(width, height);
+      case "SEQUENCE":
+      default:
+        return null;
+    }
+  }
 }
 /**
  * Common abstract object for quadric and cubic bezier curves
