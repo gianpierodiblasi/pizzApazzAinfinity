@@ -15680,11 +15680,21 @@ class Z4GeometricShape extends Z4JSONable {
   }
 
   /**
-   * Returns the spinner configuration to control/edit the geometri shape
+   * Returns the connections between the control points
    *
-   * @return The spinner configuration to control/edit the geometri shape
+   * @return The connections between the control points, as an array where even
+   * positions contains the indices of the starting point of the connections and
+   * odd positions contains the indices of the ending point of the connections
    */
-   getSpinnerConfiguration() {
+   getControlPointConnections() {
+  }
+
+  /**
+   * Returns the spinner configurations to control/edit the geometri shape
+   *
+   * @return The spinner configurations to control/edit the geometri shape
+   */
+   getSpinnerConfigurations() {
   }
 
    toJSON() {
@@ -15798,7 +15808,7 @@ class Z4AbstractBezierCurve extends Z4GeometricShape {
     return Z4Vector.fromPoints(point.x, point.y, point.x + derivative.x, point.y + derivative.y);
   }
 
-   getSpinnerConfiguration() {
+   getSpinnerConfigurations() {
     return new Array();
   }
 }
@@ -15838,6 +15848,14 @@ class Z4BezierCurve extends Z4AbstractBezierCurve {
     this.ctrlx2 = ctrlx2;
     this.ctrly2 = ctrly2;
     this.bezier = new Bezier(this.x1, this.y1, this.ctrlx1, this.ctrly1, this.ctrlx2, this.ctrly2, this.x2, this.y2);
+  }
+
+   getControlPoints() {
+    return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.ctrlx1, this.ctrly1), new Z4Point(this.ctrlx2, this.ctrly2), new Z4Point(this.x2, this.y2));
+  }
+
+   getControlPointConnections() {
+    return new Array(0, 1, 1, 2, 2, 3);
   }
 
    toJSON() {
@@ -15900,6 +15918,14 @@ class Z4QuadCurve extends Z4AbstractBezierCurve {
     this.ctrlx = ctrlx;
     this.ctrly = ctrly;
     this.bezier = new Bezier(this.x1, this.y1, this.ctrlx, this.ctrly, this.x2, this.y2);
+  }
+
+   getControlPoints() {
+    return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.ctrlx, this.ctrly), new Z4Point(this.x2, this.y2));
+  }
+
+   getControlPointConnections() {
+    return new Array(0, 1, 1, 2);
   }
 
    toJSON() {
@@ -16030,7 +16056,11 @@ class Z4GeometricFrame extends Z4GeometricCurve {
     return new Array(new Z4Point(this.x + this.w / 2, this.y + this.h / 2), new Z4Point(this.x + this.w / 2 + Math.cos(this.angle), this.y + this.h / 2 + Math.sin(angle)), new Z4Point(this.x + this.w / 2 + Math.cos(this.angle - Z4Math.HALF_PI), this.y + this.h / 2 + Math.sin(angle - Z4Math.HALF_PI)));
   }
 
-   getSpinnerConfiguration() {
+   getControlPointConnections() {
+    return new Array(0, 1, 0, 2);
+  }
+
+   getSpinnerConfigurations() {
     return new Array(new Z4GeometricShapeSpinnerConfiguration(Z4Translations.SHEARING, Z4Translations.HORIZONTAL, 0, 0, 200), new Z4GeometricShapeSpinnerConfiguration(Z4Translations.SHEARING, Z4Translations.VERTICAL, 0, 0, 200));
   }
 
@@ -16095,6 +16125,12 @@ class Z4EllipseFrame extends Z4GeometricFrame {
     controlPoints.push(new Z4Point(controlPoints[0].x + w2 * Math.cos(this.startAngle), controlPoints[0].y + h2 * Math.sin(this.startAngle)));
     controlPoints.push(new Z4Point(controlPoints[0].x + w2 * Math.cos(this.startAngle + this.extentAngle), controlPoints[0].y + h2 * Math.sin(this.startAngle + this.extentAngle)));
     return controlPoints;
+  }
+
+   getControlPointConnections() {
+    let controlPointConnections = super.getControlPointConnections();
+    controlPointConnections.push(0, 3, 0, 4);
+    return controlPointConnections;
   }
 
    toJSON() {
@@ -16280,7 +16316,13 @@ class Z4GeometricShapeSequence extends Z4GeometricCurve {
     return this.shapes.map(shape => shape.getControlPoints()).reduce((accumulator, current, index, array) => (accumulator).concat(current));
   }
 
-   getSpinnerConfiguration() {
+   getControlPointConnections() {
+    let controlPointConnections = new Array();
+    this.shapes.map(shape => shape.getControlPointConnections()).forEach(cpc => cpc.map(value => value + controlPointConnections.length).forEach(value => controlPointConnections.push(value)));
+    return controlPointConnections;
+  }
+
+   getSpinnerConfigurations() {
     return this.shapes.map(shape => shape.getSpinnerConfiguration()).reduce((accumulator, current, index, array) => (accumulator).concat(current));
   }
 
@@ -16369,7 +16411,11 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
     return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2), new Z4Point(this.x1 + this.period * Math.cos(rotation), this.y1 + this.period * Math.sin(rotation)), new Z4Point(this.x1 + this.amplitude * Math.cos(rotation - Z4Math.HALF_PI), this.y1 + this.amplitude * Math.sin(rotation - Z4Math.HALF_PI)));
   }
 
-   getSpinnerConfiguration() {
+   getControlPointConnections() {
+    return new Array(0, 1, 0, 2, 0, 3);
+  }
+
+   getSpinnerConfigurations() {
     return new Array(new Z4GeometricShapeSpinnerConfiguration("", Z4Translations.ANGLE, 0, 0, 360));
   }
 
@@ -16463,7 +16509,11 @@ class Z4SpiralCurve extends Z4GeometricCurve {
     return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2), new Z4Point(this.x1 + this.radius * Math.cos(this.angle), this.y1 + this.radius * Math.sin(this.angle)));
   }
 
-   getSpinnerConfiguration() {
+   getControlPointConnections() {
+    return new Array(0, 1, 0, 2);
+  }
+
+   getSpinnerConfigurations() {
     return new Array();
   }
 
@@ -16561,7 +16611,11 @@ class Z4Line extends Z4GeometricShape {
     return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2));
   }
 
-   getSpinnerConfiguration() {
+   getControlPointConnections() {
+    return new Array(0, 1);
+  }
+
+   getSpinnerConfigurations() {
     return new Array();
   }
 
@@ -16682,7 +16736,18 @@ class Z4Polyline extends Z4GeometricShape {
     return this.points.map(point => point);
   }
 
-   getSpinnerConfiguration() {
+   getControlPointConnections() {
+    let controlPointConnections = new Array();
+    this.points.forEach((point, index, array) => {
+      controlPointConnections.push(index);
+      if (0 < index && index < this.points.length - 1) {
+        controlPointConnections.push(index);
+      }
+    });
+    return controlPointConnections;
+  }
+
+   getSpinnerConfigurations() {
     return new Array();
   }
 
@@ -16769,7 +16834,11 @@ class Z4SinglePointShape extends Z4GeometricShape {
     return new Array(new Z4Point(this.x, this.y));
   }
 
-   getSpinnerConfiguration() {
+   getControlPointConnections() {
+    return new Array();
+  }
+
+   getSpinnerConfigurations() {
     return new Array();
   }
 

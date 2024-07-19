@@ -40,6 +40,11 @@ public class Z4QuadCurve extends Z4AbstractBezierCurve {
   }
 
   @Override
+  public Array<Integer> getControlPointConnections() {
+    return new Array<>(0, 1, 1, 2);
+  }
+
+  @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
     json.$set("x1", this.x1);

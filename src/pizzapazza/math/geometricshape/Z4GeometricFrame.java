@@ -56,7 +56,12 @@ public abstract class Z4GeometricFrame extends Z4GeometricCurve {
   }
 
   @Override
-  public Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfiguration() {
+  public Array<Integer> getControlPointConnections() {
+    return new Array<>(0, 1, 0, 2);
+  }
+
+  @Override
+  public Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfigurations() {
     return new Array<>(
             new Z4GeometricShapeSpinnerConfiguration(Z4Translations.SHEARING, Z4Translations.HORIZONTAL, 0, 0, 200),
             new Z4GeometricShapeSpinnerConfiguration(Z4Translations.SHEARING, Z4Translations.VERTICAL, 0, 0, 200)

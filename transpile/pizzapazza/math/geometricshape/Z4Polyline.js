@@ -85,7 +85,18 @@ class Z4Polyline extends Z4GeometricShape {
     return this.points.map(point => point);
   }
 
-   getSpinnerConfiguration() {
+   getControlPointConnections() {
+    let controlPointConnections = new Array();
+    this.points.forEach((point, index, array) => {
+      controlPointConnections.push(index);
+      if (0 < index && index < this.points.length - 1) {
+        controlPointConnections.push(index);
+      }
+    });
+    return controlPointConnections;
+  }
+
+   getSpinnerConfigurations() {
     return new Array();
   }
 

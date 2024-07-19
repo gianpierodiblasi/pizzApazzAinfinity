@@ -70,11 +70,21 @@ class Z4GeometricShape extends Z4JSONable {
   }
 
   /**
-   * Returns the spinner configuration to control/edit the geometri shape
+   * Returns the connections between the control points
    *
-   * @return The spinner configuration to control/edit the geometri shape
+   * @return The connections between the control points, as an array where even
+   * positions contains the indices of the starting point of the connections and
+   * odd positions contains the indices of the ending point of the connections
    */
-   getSpinnerConfiguration() {
+   getControlPointConnections() {
+  }
+
+  /**
+   * Returns the spinner configurations to control/edit the geometri shape
+   *
+   * @return The spinner configurations to control/edit the geometri shape
+   */
+   getSpinnerConfigurations() {
   }
 
    toJSON() {

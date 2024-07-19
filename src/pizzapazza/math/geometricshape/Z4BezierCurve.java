@@ -46,7 +46,12 @@ public class Z4BezierCurve extends Z4AbstractBezierCurve {
   public Array<Z4Point> getControlPoints() {
     return new Array<>(new Z4Point(this.x1, this.y1), new Z4Point(this.ctrlx1, this.ctrly1), new Z4Point(this.ctrlx2, this.ctrly2), new Z4Point(this.x2, this.y2));
   }
-  
+
+  @Override
+  public Array<Integer> getControlPointConnections() {
+    return new Array<>(0, 1, 1, 2, 2, 3);
+  }
+
   @Override
   public $Object toJSON() {
     $Object json = super.toJSON();

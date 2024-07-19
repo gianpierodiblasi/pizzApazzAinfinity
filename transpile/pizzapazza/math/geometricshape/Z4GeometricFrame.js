@@ -47,7 +47,11 @@ class Z4GeometricFrame extends Z4GeometricCurve {
     return new Array(new Z4Point(this.x + this.w / 2, this.y + this.h / 2), new Z4Point(this.x + this.w / 2 + Math.cos(this.angle), this.y + this.h / 2 + Math.sin(angle)), new Z4Point(this.x + this.w / 2 + Math.cos(this.angle - Z4Math.HALF_PI), this.y + this.h / 2 + Math.sin(angle - Z4Math.HALF_PI)));
   }
 
-   getSpinnerConfiguration() {
+   getControlPointConnections() {
+    return new Array(0, 1, 0, 2);
+  }
+
+   getSpinnerConfigurations() {
     return new Array(new Z4GeometricShapeSpinnerConfiguration(Z4Translations.SHEARING, Z4Translations.HORIZONTAL, 0, 0, 200), new Z4GeometricShapeSpinnerConfiguration(Z4Translations.SHEARING, Z4Translations.VERTICAL, 0, 0, 200));
   }
 

@@ -62,6 +62,13 @@ public class Z4EllipseFrame extends Z4GeometricFrame {
   }
 
   @Override
+  public Array<Integer> getControlPointConnections() {
+    Array<Integer> controlPointConnections = super.getControlPointConnections();
+    controlPointConnections.push(0, 3, 0, 4);
+    return controlPointConnections;
+  }
+
+  @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
     json.$set("startAngle", this.startAngle);

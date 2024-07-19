@@ -60,7 +60,12 @@ public class Z4SinglePointShape extends Z4GeometricShape {
   }
 
   @Override
-  public Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfiguration() {
+  public Array<Integer> getControlPointConnections() {
+    return new Array<>();
+  }
+
+  @Override
+  public Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfigurations() {
     return new Array<>();
   }
 

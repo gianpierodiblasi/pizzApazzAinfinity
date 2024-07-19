@@ -45,7 +45,11 @@ class Z4SinglePointShape extends Z4GeometricShape {
     return new Array(new Z4Point(this.x, this.y));
   }
 
-   getSpinnerConfiguration() {
+   getControlPointConnections() {
+    return new Array();
+  }
+
+   getSpinnerConfigurations() {
     return new Array();
   }
 

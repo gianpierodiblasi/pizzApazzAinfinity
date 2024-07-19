@@ -60,7 +60,11 @@ class Z4Line extends Z4GeometricShape {
     return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2));
   }
 
-   getSpinnerConfiguration() {
+   getControlPointConnections() {
+    return new Array(0, 1);
+  }
+
+   getSpinnerConfigurations() {
     return new Array();
   }
 

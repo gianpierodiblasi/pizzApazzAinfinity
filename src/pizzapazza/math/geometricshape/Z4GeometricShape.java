@@ -72,11 +72,20 @@ public abstract class Z4GeometricShape implements Z4JSONable {
   public abstract Array<Z4Point> getControlPoints();
 
   /**
-   * Returns the spinner configuration to control/edit the geometri shape
+   * Returns the connections between the control points
    *
-   * @return The spinner configuration to control/edit the geometri shape
+   * @return The connections between the control points, as an array where even
+   * positions contains the indices of the starting point of the connections and
+   * odd positions contains the indices of the ending point of the connections
    */
-  public abstract Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfiguration();
+  public abstract Array<Integer> getControlPointConnections();
+
+  /**
+   * Returns the spinner configurations to control/edit the geometri shape
+   *
+   * @return The spinner configurations to control/edit the geometri shape
+   */
+  public abstract Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfigurations();
 
   @Override
   public $Object toJSON() {

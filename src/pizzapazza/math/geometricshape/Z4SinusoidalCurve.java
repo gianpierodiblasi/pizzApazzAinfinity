@@ -79,7 +79,12 @@ public class Z4SinusoidalCurve extends Z4GeometricCurve {
   }
 
   @Override
-  public Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfiguration() {
+  public Array<Integer> getControlPointConnections() {
+    return new Array<>(0, 1, 0, 2, 0, 3);
+  }
+
+  @Override
+  public Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfigurations() {
     return new Array<>(new Z4GeometricShapeSpinnerConfiguration("", Z4Translations.ANGLE, 0, 0, 360));
   }
 

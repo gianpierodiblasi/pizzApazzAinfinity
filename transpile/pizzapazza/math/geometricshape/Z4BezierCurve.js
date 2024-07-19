@@ -36,6 +36,14 @@ class Z4BezierCurve extends Z4AbstractBezierCurve {
     this.bezier = new Bezier(this.x1, this.y1, this.ctrlx1, this.ctrly1, this.ctrlx2, this.ctrly2, this.x2, this.y2);
   }
 
+   getControlPoints() {
+    return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.ctrlx1, this.ctrly1), new Z4Point(this.ctrlx2, this.ctrly2), new Z4Point(this.x2, this.y2));
+  }
+
+   getControlPointConnections() {
+    return new Array(0, 1, 1, 2, 2, 3);
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["x1"] = this.x1;

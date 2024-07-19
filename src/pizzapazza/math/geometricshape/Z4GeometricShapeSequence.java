@@ -32,7 +32,14 @@ public class Z4GeometricShapeSequence extends Z4GeometricCurve {
   }
 
   @Override
-  public Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfiguration() {
+  public Array<Integer> getControlPointConnections() {
+    Array<Integer> controlPointConnections = new Array<>();
+    this.shapes.map(shape -> shape.getControlPointConnections()).forEach(cpc -> cpc.map(value -> value + controlPointConnections.length).forEach(value -> controlPointConnections.push(value)));
+    return controlPointConnections;
+  }
+
+  @Override
+  public Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfigurations() {
     return this.shapes.map(shape -> shape.getSpinnerConfiguration()).reduce((accumulator, current, index, array) -> (($Array<Z4GeometricShapeSpinnerConfiguration>) accumulator).concat(current));
   }
 

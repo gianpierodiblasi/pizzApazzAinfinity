@@ -26,6 +26,14 @@ class Z4QuadCurve extends Z4AbstractBezierCurve {
     this.bezier = new Bezier(this.x1, this.y1, this.ctrlx, this.ctrly, this.x2, this.y2);
   }
 
+   getControlPoints() {
+    return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.ctrlx, this.ctrly), new Z4Point(this.x2, this.y2));
+  }
+
+   getControlPointConnections() {
+    return new Array(0, 1, 1, 2);
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["x1"] = this.x1;

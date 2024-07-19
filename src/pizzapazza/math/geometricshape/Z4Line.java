@@ -73,7 +73,12 @@ public class Z4Line extends Z4GeometricShape {
   }
 
   @Override
-  public Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfiguration() {
+  public Array<Integer> getControlPointConnections() {
+    return new Array<>(0, 1);
+  }
+
+  @Override
+  public Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfigurations() {
     return new Array<>();
   }
 

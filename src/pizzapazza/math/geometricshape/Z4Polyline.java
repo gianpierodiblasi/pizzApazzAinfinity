@@ -108,7 +108,19 @@ public class Z4Polyline extends Z4GeometricShape {
   }
 
   @Override
-  public Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfiguration() {
+  public Array<Integer> getControlPointConnections() {
+    Array<Integer> controlPointConnections = new Array<>();
+    this.points.forEach((point, index, array) -> {
+      controlPointConnections.push(index);
+      if (0 < index && index < this.points.length - 1) {
+        controlPointConnections.push(index);
+      }
+    });
+    return controlPointConnections;
+  }
+
+  @Override
+  public Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfigurations() {
     return new Array<>();
   }
 

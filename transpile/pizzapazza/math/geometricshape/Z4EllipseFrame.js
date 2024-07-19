@@ -49,6 +49,12 @@ class Z4EllipseFrame extends Z4GeometricFrame {
     return controlPoints;
   }
 
+   getControlPointConnections() {
+    let controlPointConnections = super.getControlPointConnections();
+    controlPointConnections.push(0, 3, 0, 4);
+    return controlPointConnections;
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["startAngle"] = this.startAngle;

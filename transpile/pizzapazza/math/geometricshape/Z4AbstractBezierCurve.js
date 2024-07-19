@@ -70,7 +70,7 @@ class Z4AbstractBezierCurve extends Z4GeometricShape {
     return Z4Vector.fromPoints(point.x, point.y, point.x + derivative.x, point.y + derivative.y);
   }
 
-   getSpinnerConfiguration() {
+   getSpinnerConfigurations() {
     return new Array();
   }
 }

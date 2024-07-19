@@ -22,7 +22,13 @@ class Z4GeometricShapeSequence extends Z4GeometricCurve {
     return this.shapes.map(shape => shape.getControlPoints()).reduce((accumulator, current, index, array) => (accumulator).concat(current));
   }
 
-   getSpinnerConfiguration() {
+   getControlPointConnections() {
+    let controlPointConnections = new Array();
+    this.shapes.map(shape => shape.getControlPointConnections()).forEach(cpc => cpc.map(value => value + controlPointConnections.length).forEach(value => controlPointConnections.push(value)));
+    return controlPointConnections;
+  }
+
+   getSpinnerConfigurations() {
     return this.shapes.map(shape => shape.getSpinnerConfiguration()).reduce((accumulator, current, index, array) => (accumulator).concat(current));
   }
 
