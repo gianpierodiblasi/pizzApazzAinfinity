@@ -43,6 +43,10 @@ class Z4GeometricFrame extends Z4GeometricCurve {
     this.sy = sy;
   }
 
+   getControlPoints() {
+    return new Array(new Z4Point(this.x + this.w / 2, this.y + this.h / 2), new Z4Point(this.x + this.w / 2 + Math.cos(this.angle), this.y + this.h / 2 + Math.sin(angle)), new Z4Point(this.x + this.w / 2 + Math.cos(this.angle - Z4Math.HALF_PI), this.y + this.h / 2 + Math.sin(angle - Z4Math.HALF_PI)));
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["x"] = this.x;

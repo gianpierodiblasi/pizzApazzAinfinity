@@ -1,5 +1,8 @@
 package pizzapazza.math.geometricshape;
 
+import def.js.Array;
+import pizzapazza.math.Z4Math;
+import pizzapazza.math.Z4Point;
 import simulation.js.$Object;
 
 /**
@@ -40,6 +43,15 @@ public abstract class Z4GeometricFrame extends Z4GeometricCurve {
     this.angle = angle;
     this.sx = sx;
     this.sy = sy;
+  }
+
+  @Override
+  public Array<Z4Point> getControlPoints() {
+    return new Array<>(
+            new Z4Point(this.x + this.w / 2, this.y + this.h / 2),
+            new Z4Point(this.x + this.w / 2 + Math.cos(this.angle), this.y + this.h / 2 + Math.sin(angle)),
+            new Z4Point(this.x + this.w / 2 + Math.cos(this.angle - Z4Math.HALF_PI), this.y + this.h / 2 + Math.sin(angle - Z4Math.HALF_PI))
+    );
   }
 
   @Override

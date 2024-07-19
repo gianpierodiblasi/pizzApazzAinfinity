@@ -40,6 +40,15 @@ class Z4EllipseFrame extends Z4GeometricFrame {
     this.polyline = new Z4Polyline(points);
   }
 
+   getControlPoints() {
+    let controlPoints = super.getControlPoints();
+    let w2 = Z4Math.distance(controlPoints[0].x, controlPoints[0].y, controlPoints[1].x, controlPoints[1].y) - 5;
+    let h2 = Z4Math.distance(controlPoints[0].x, controlPoints[0].y, controlPoints[2].x, controlPoints[2].y) - 5;
+    controlPoints.push(new Z4Point(controlPoints[0].x + w2 * Math.cos(this.startAngle), controlPoints[0].y + h2 * Math.sin(this.startAngle)));
+    controlPoints.push(new Z4Point(controlPoints[0].x + w2 * Math.cos(this.startAngle + this.extentAngle), controlPoints[0].y + h2 * Math.sin(this.startAngle + this.extentAngle)));
+    return controlPoints;
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["startAngle"] = this.startAngle;

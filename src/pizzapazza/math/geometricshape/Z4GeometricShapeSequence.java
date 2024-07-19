@@ -1,6 +1,8 @@
 package pizzapazza.math.geometricshape;
 
 import def.js.Array;
+import pizzapazza.math.Z4Point;
+import simulation.js.$Array;
 import simulation.js.$Object;
 
 /**
@@ -22,6 +24,11 @@ public class Z4GeometricShapeSequence extends Z4GeometricCurve {
 
     this.shapes = shapes;
     this.polyline = this.shapes.map(shape -> shape.getPolyline()).reduce((accumulator, current, index, array) -> accumulator.concat(current));
+  }
+
+  @Override
+  public Array<Z4Point> getControlPoints() {
+    return this.shapes.map(shape -> shape.getControlPoints()).reduce((accumulator, current, index, array) -> (($Array<Z4Point>) accumulator).concat(current));
   }
 
   @Override

@@ -52,6 +52,16 @@ public class Z4EllipseFrame extends Z4GeometricFrame {
   }
 
   @Override
+  public Array<Z4Point> getControlPoints() {
+    Array<Z4Point> controlPoints = super.getControlPoints();
+    double w2 = Z4Math.distance(controlPoints.$get(0).x, controlPoints.$get(0).y, controlPoints.$get(1).x, controlPoints.$get(1).y) - 5;
+    double h2 = Z4Math.distance(controlPoints.$get(0).x, controlPoints.$get(0).y, controlPoints.$get(2).x, controlPoints.$get(2).y) - 5;
+    controlPoints.push(new Z4Point(controlPoints.$get(0).x + w2 * Math.cos(this.startAngle), controlPoints.$get(0).y + h2 * Math.sin(this.startAngle)));
+    controlPoints.push(new Z4Point(controlPoints.$get(0).x + w2 * Math.cos(this.startAngle + this.extentAngle), controlPoints.$get(0).y + h2 * Math.sin(this.startAngle + this.extentAngle)));
+    return controlPoints;
+  }
+
+  @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
     json.$set("startAngle", this.startAngle);

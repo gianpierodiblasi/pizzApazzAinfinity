@@ -18,6 +18,10 @@ class Z4GeometricShapeSequence extends Z4GeometricCurve {
     this.polyline = this.shapes.map(shape => shape.getPolyline()).reduce((accumulator, current, index, array) => accumulator.concat(current));
   }
 
+   getControlPoints() {
+    return this.shapes.map(shape => shape.getControlPoints()).reduce((accumulator, current, index, array) => (accumulator).concat(current));
+  }
+
    toJSON() {
     let json = super.toJSON();
     let shapesJSON = new Array();

@@ -15975,6 +15975,10 @@ class Z4GeometricFrame extends Z4GeometricCurve {
     this.sy = sy;
   }
 
+   getControlPoints() {
+    return new Array(new Z4Point(this.x + this.w / 2, this.y + this.h / 2), new Z4Point(this.x + this.w / 2 + Math.cos(this.angle), this.y + this.h / 2 + Math.sin(angle)), new Z4Point(this.x + this.w / 2 + Math.cos(this.angle - Z4Math.HALF_PI), this.y + this.h / 2 + Math.sin(angle - Z4Math.HALF_PI)));
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["x"] = this.x;
@@ -16027,6 +16031,15 @@ class Z4EllipseFrame extends Z4GeometricFrame {
       points.push(tx.transform(xx, yy));
     }
     this.polyline = new Z4Polyline(points);
+  }
+
+   getControlPoints() {
+    let controlPoints = super.getControlPoints();
+    let w2 = Z4Math.distance(controlPoints[0].x, controlPoints[0].y, controlPoints[1].x, controlPoints[1].y) - 5;
+    let h2 = Z4Math.distance(controlPoints[0].x, controlPoints[0].y, controlPoints[2].x, controlPoints[2].y) - 5;
+    controlPoints.push(new Z4Point(controlPoints[0].x + w2 * Math.cos(this.startAngle), controlPoints[0].y + h2 * Math.sin(this.startAngle)));
+    controlPoints.push(new Z4Point(controlPoints[0].x + w2 * Math.cos(this.startAngle + this.extentAngle), controlPoints[0].y + h2 * Math.sin(this.startAngle + this.extentAngle)));
+    return controlPoints;
   }
 
    toJSON() {
@@ -16208,6 +16221,10 @@ class Z4GeometricShapeSequence extends Z4GeometricCurve {
     this.polyline = this.shapes.map(shape => shape.getPolyline()).reduce((accumulator, current, index, array) => accumulator.concat(current));
   }
 
+   getControlPoints() {
+    return this.shapes.map(shape => shape.getControlPoints()).reduce((accumulator, current, index, array) => (accumulator).concat(current));
+  }
+
    toJSON() {
     let json = super.toJSON();
     let shapesJSON = new Array();
@@ -16286,6 +16303,11 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
     } else {
       this.polyline = new Z4Polyline(new Array(new Z4Point(x1, y1), new Z4Point(x2, y2)));
     }
+  }
+
+   getControlPoints() {
+    let rotation = Z4Math.atan(this.x1, this.y1, this.x2, this.y2);
+    return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2), new Z4Point(this.x1 + this.period * Math.cos(rotation), this.y1 + this.period * Math.sin(rotation)), new Z4Point(this.x1 + this.amplitude * Math.cos(rotation - Z4Math.HALF_PI), this.y1 + this.amplitude * Math.sin(rotation - Z4Math.HALF_PI)));
   }
 
    toJSON() {
@@ -16372,6 +16394,10 @@ class Z4SpiralCurve extends Z4GeometricCurve {
     } else {
       this.polyline = new Z4Polyline(new Array(new Z4Point(x1, y1), new Z4Point(x2, y2)));
     }
+  }
+
+   getControlPoints() {
+    return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2), new Z4Point(this.x1 + this.radius * Math.cos(this.angle), this.y1 + this.radius * Math.sin(this.angle)));
   }
 
    toJSON() {
