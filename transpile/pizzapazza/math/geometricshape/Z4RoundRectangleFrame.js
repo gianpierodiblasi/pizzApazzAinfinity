@@ -57,6 +57,10 @@ class Z4RoundRectangleFrame extends Z4GeometricFrame {
     }
   }
 
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+    return null;
+  }
+
   /**
    * Creates a Z4RoundRectangleFrame from a JSON object
    *

@@ -55,6 +55,10 @@ class Z4EllipseFrame extends Z4GeometricFrame {
     return controlPointConnections;
   }
 
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+    return null;
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["startAngle"] = this.startAngle;

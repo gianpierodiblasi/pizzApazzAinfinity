@@ -15991,6 +15991,18 @@ class Z4QuadCurve extends Z4AbstractBezierCurve {
     return new Array(0, 1, 1, 2);
   }
 
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+    if (pointIndex === 0) {
+      return new Z4QuadCurve(x, y, this.ctrlx, this.ctrly, this.x2, this.y2);
+    } else if (pointIndex === 1) {
+      return new Z4QuadCurve(this.x1, this.y1, x, y, this.x2, this.y2);
+    } else if (pointIndex === 2) {
+      return new Z4QuadCurve(this.x1, this.y1, this.ctrlx, this.ctrly, x, y);
+    } else {
+      return this;
+    }
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["x1"] = this.x1;
@@ -16196,6 +16208,10 @@ class Z4EllipseFrame extends Z4GeometricFrame {
     return controlPointConnections;
   }
 
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+    return null;
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["startAngle"] = this.startAngle;
@@ -16252,6 +16268,10 @@ class Z4RectangleFrame extends Z4GeometricFrame {
     points.push(tx.transform(0, h - 1));
     points.push(points[0]);
     this.polyline = new Z4Polyline(points);
+  }
+
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+    return null;
   }
 
   /**
@@ -16334,6 +16354,10 @@ class Z4RoundRectangleFrame extends Z4GeometricFrame {
     }
   }
 
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+    return null;
+  }
+
   /**
    * Creates a Z4RoundRectangleFrame from a JSON object
    *
@@ -16387,6 +16411,10 @@ class Z4GeometricShapeSequence extends Z4GeometricCurve {
 
    getSpinnerConfigurations() {
     return this.shapes.map(shape => shape.getSpinnerConfigurations()).reduce((accumulator, current, index, array) => (accumulator).concat(current));
+  }
+
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+    return null;
   }
 
    toJSON() {
@@ -16480,6 +16508,10 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
 
    getSpinnerConfigurations() {
     return new Array(new Z4GeometricShapeSpinnerConfiguration("", Z4Translations.ANGLE, 0, 0, 360));
+  }
+
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+    return null;
   }
 
    toJSON() {
@@ -16578,6 +16610,10 @@ class Z4SpiralCurve extends Z4GeometricCurve {
 
    getSpinnerConfigurations() {
     return new Array();
+  }
+
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+    return null;
   }
 
    toJSON() {
@@ -16822,6 +16858,10 @@ class Z4Polyline extends Z4GeometricShape {
 
    getSpinnerConfigurations() {
     return new Array();
+  }
+
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+    return pointIndex !== -1 ? new Z4Polyline(this.points.map((point, index, array) => index === pointIndex ? new Z4Point(x, y) : point)) : this;
   }
 
    toJSON() {

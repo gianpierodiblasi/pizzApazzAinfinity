@@ -63,6 +63,10 @@ class Z4SpiralCurve extends Z4GeometricCurve {
     return new Array();
   }
 
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+    return null;
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["x1"] = this.x1;

@@ -28,6 +28,10 @@ class Z4RectangleFrame extends Z4GeometricFrame {
     this.polyline = new Z4Polyline(points);
   }
 
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+    return null;
+  }
+
   /**
    * Creates a Z4RectangleFrame from a JSON object
    *

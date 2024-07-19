@@ -100,6 +100,10 @@ class Z4Polyline extends Z4GeometricShape {
     return new Array();
   }
 
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+    return pointIndex !== -1 ? new Z4Polyline(this.points.map((point, index, array) => index === pointIndex ? new Z4Point(x, y) : point)) : this;
+  }
+
    toJSON() {
     let json = super.toJSON();
     let pointsJSON = new Array();
