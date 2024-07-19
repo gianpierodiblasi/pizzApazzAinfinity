@@ -6223,12 +6223,12 @@ class Z4SinusoidalFillerPanel extends Z4AbstractFillerPanel {
         angle2 = Z4Math.atan(points[0].x, points[0].y, points[2].x, points[2].y);
         radius3 = Z4Math.distance(points[0].x, points[0].y, points[3].x, points[3].y);
         angle3 = Z4Math.atan(points[0].x, points[0].y, points[3].x, points[3].y);
+        point1 = this.getPoint(x, y, points[1].x - offsetX, points[1].y - offsetY, radius1, angle1, width, height);
+        point2 = this.getPoint(x, y, points[2].x - offsetX, points[2].y - offsetY, radius2, angle2, width, height);
+        point3 = this.getPoint(x, y, points[3].x - offsetX, points[3].y - offsetY, radius3, angle3, width, height);
         points[0] = new Point(x, y);
-        point1 = this.getPoint(points[0].x, points[0].y, points[1].x - offsetX, points[1].y - offsetY, radius1, angle1, width, height);
         points[1] = new Point(Math.round(point1.x), Math.round(point1.y));
-        point2 = this.getPoint(points[0].x, points[0].y, points[2].x - offsetX, points[2].y - offsetY, radius2, angle2, width, height);
         points[2] = new Point(Math.round(point2.x), Math.round(point2.y));
-        point3 = this.getPoint(points[0].x, points[0].y, points[3].x - offsetX, points[3].y - offsetY, radius3, angle3, width, height);
         points[3] = new Point(Math.round(point3.x), Math.round(point3.y));
         break;
       case 1:

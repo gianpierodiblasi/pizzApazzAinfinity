@@ -58,15 +58,13 @@ public class Z4SinusoidalFillerPanel extends Z4AbstractFillerPanel {
         radius3 = Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(3).x, points.$get(3).y);
         angle3 = Z4Math.atan(points.$get(0).x, points.$get(0).y, points.$get(3).x, points.$get(3).y);
 
+        point1 = this.getPoint(x, y, points.$get(1).x - offsetX, points.$get(1).y - offsetY, radius1, angle1, width, height);
+        point2 = this.getPoint(x, y, points.$get(2).x - offsetX, points.$get(2).y - offsetY, radius2, angle2, width, height);
+        point3 = this.getPoint(x, y, points.$get(3).x - offsetX, points.$get(3).y - offsetY, radius3, angle3, width, height);
+
         points.$set(0, new Point(x, y));
-
-        point1 = this.getPoint(points.$get(0).x, points.$get(0).y, points.$get(1).x - offsetX, points.$get(1).y - offsetY, radius1, angle1, width, height);
         points.$set(1, new Point((int) Math.round(point1.x), (int) Math.round(point1.y)));
-
-        point2 = this.getPoint(points.$get(0).x, points.$get(0).y, points.$get(2).x - offsetX, points.$get(2).y - offsetY, radius2, angle2, width, height);
         points.$set(2, new Point((int) Math.round(point2.x), (int) Math.round(point2.y)));
-
-        point3 = this.getPoint(points.$get(0).x, points.$get(0).y, points.$get(3).x - offsetX, points.$get(3).y - offsetY, radius3, angle3, width, height);
         points.$set(3, new Point((int) Math.round(point3.x), (int) Math.round(point3.y)));
         break;
       case 1:
@@ -78,12 +76,14 @@ public class Z4SinusoidalFillerPanel extends Z4AbstractFillerPanel {
         point2 = this.getPoint(
                 points.$get(0).x, points.$get(0).y,
                 points.$get(0).x + radius2 * Math.cos(angle2), points.$get(0).y + radius2 * Math.sin(angle2),
-                radius2, angle2, width, height);
+                radius2, angle2, width, height
+        );
 
         point3 = this.getPoint(
                 points.$get(0).x, points.$get(0).y,
                 points.$get(0).x + radius3 * Math.cos(angle3), points.$get(0).y + radius3 * Math.sin(angle3),
-                radius3, angle3, width, height);
+                radius3, angle3, width, height
+        );
 
         points.$set(1, new Point(x, y));
         points.$set(2, new Point((int) Math.round(point2.x), (int) Math.round(point2.y)));
@@ -98,12 +98,14 @@ public class Z4SinusoidalFillerPanel extends Z4AbstractFillerPanel {
         point1 = this.getPoint(
                 points.$get(0).x, points.$get(0).y,
                 points.$get(0).x + radius1 * Math.cos(angle1), points.$get(0).y + radius1 * Math.sin(angle1),
-                radius1, angle1, width, height);
+                radius1, angle1, width, height
+        );
 
         point3 = this.getPoint(
                 points.$get(0).x, points.$get(0).y,
                 points.$get(0).x + radius3 * Math.cos(angle3), points.$get(0).y + radius3 * Math.sin(angle3),
-                radius3, angle3, width, height);
+                radius3, angle3, width, height
+        );
 
         points.$set(1, new Point((int) Math.round(point1.x), (int) Math.round(point1.y)));
         points.$set(2, new Point(x, y));
@@ -118,12 +120,14 @@ public class Z4SinusoidalFillerPanel extends Z4AbstractFillerPanel {
         point1 = this.getPoint(
                 points.$get(0).x, points.$get(0).y,
                 points.$get(0).x + radius1 * Math.cos(angle1), points.$get(0).y + radius1 * Math.sin(angle1),
-                radius1, angle1, width, height);
+                radius1, angle1, width, height
+        );
 
         point2 = this.getPoint(
                 points.$get(0).x, points.$get(0).y,
                 points.$get(0).x + radius2 * Math.cos(angle2), points.$get(0).y + radius2 * Math.sin(angle2),
-                radius2, angle2, width, height);
+                radius2, angle2, width, height
+        );
 
         points.$set(1, new Point((int) Math.round(point1.x), (int) Math.round(point1.y)));
         points.$set(2, new Point((int) Math.round(point2.x), (int) Math.round(point2.y)));
@@ -172,7 +176,7 @@ public class Z4SinusoidalFillerPanel extends Z4AbstractFillerPanel {
   @Override
   protected void drawObjects($CanvasRenderingContext2D ctx, Array<Point> mappedPoints) {
     ctx.lineWidth = 3;
-    
+
     Array<Double> dash = new Array<>();
 
     ctx.beginPath();

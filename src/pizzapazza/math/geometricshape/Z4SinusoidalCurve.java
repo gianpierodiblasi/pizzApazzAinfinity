@@ -122,8 +122,17 @@ public class Z4SinusoidalCurve extends Z4GeometricCurve {
         angle2 = Z4Math.atan(this.x1, this.y1, x, y);
         angle3 = Z4Math.atan(this.x1, this.y1, x, y) - Z4Math.HALF_PI;
 
-        point2 = this.getPoint(this.x1, this.y1, this.x1 + this.period * Math.cos(angle2), this.y1 + this.period * Math.sin(angle2), this.period, angle2, width, height);
-        point3 = this.getPoint(this.x1, this.y1, this.x1 + this.amplitude * Math.cos(angle3), this.y1 + this.amplitude * Math.sin(angle3), this.amplitude, angle3, width, height);
+        point2 = this.getPoint(
+                this.x1, this.y1,
+                this.x1 + this.period * Math.cos(angle2), this.y1 + this.period * Math.sin(angle2),
+                this.period, angle2, width, height
+        );
+
+        point3 = this.getPoint(
+                this.x1, this.y1,
+                this.x1 + this.amplitude * Math.cos(angle3), this.y1 + this.amplitude * Math.sin(angle3),
+                this.amplitude, angle3, width, height
+        );
 
         return new Z4SinusoidalCurve(
                 this.x1, this.y1,
@@ -136,8 +145,17 @@ public class Z4SinusoidalCurve extends Z4GeometricCurve {
         angle1 = Z4Math.atan(this.x1, this.y1, x, y);
         angle3 = angle1 - Z4Math.HALF_PI;
 
-        point1 = this.getPoint(this.x1, this.y1, this.x1 + radius1 * Math.cos(angle1), this.y1 + radius1 * Math.sin(angle1), radius1, angle1, width, height);
-        point3 = this.getPoint(this.x1, this.y1, this.x1 + this.amplitude * Math.cos(angle3), this.y1 + this.amplitude * Math.sin(angle3), this.amplitude, angle3, width, height);
+        point1 = this.getPoint(
+                this.x1, this.y1,
+                this.x1 + radius1 * Math.cos(angle1), this.y1 + radius1 * Math.sin(angle1),
+                radius1, angle1, width, height
+        );
+
+        point3 = this.getPoint(
+                this.x1, this.y1,
+                this.x1 + this.amplitude * Math.cos(angle3), this.y1 + this.amplitude * Math.sin(angle3),
+                this.amplitude, angle3, width, height
+        );
 
         return new Z4SinusoidalCurve(
                 this.x1, this.y1,
@@ -150,8 +168,17 @@ public class Z4SinusoidalCurve extends Z4GeometricCurve {
         angle1 = Z4Math.atan(this.x1, this.y1, x, y) + Z4Math.HALF_PI;
         angle2 = angle1;
 
-        point1 = this.getPoint(this.x1, this.y1, this.x1 + radius1 * Math.cos(angle1), this.y1 + radius1 * Math.sin(angle1), radius1, angle1, width, height);
-        point2 = this.getPoint(this.x1, this.y1, this.x1 + this.period * Math.cos(angle2), this.y1 + this.period * Math.sin(angle2), this.period, angle2, width, height);
+        point1 = this.getPoint(
+                this.x1, this.y1,
+                this.x1 + radius1 * Math.cos(angle1), this.y1 + radius1 * Math.sin(angle1),
+                radius1, angle1, width, height
+        );
+
+        point2 = this.getPoint(
+                this.x1, this.y1,
+                this.x1 + this.period * Math.cos(angle2), this.y1 + this.period * Math.sin(angle2),
+                this.period, angle2, width, height
+        );
 
         return new Z4SinusoidalCurve(
                 this.x1, this.y1,
