@@ -44,6 +44,11 @@ public class Z4GeometricShapeSequence extends Z4GeometricCurve {
   }
 
   @Override
+  public Z4GeometricShape fromDataChanged(double x, double y, int pointIndex, double spinnerValue, int spinnerIndex) {
+    return null;
+  }
+  
+  @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
 

@@ -68,6 +68,16 @@ class Z4Line extends Z4GeometricShape {
     return new Array();
   }
 
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+    if (pointIndex === 0) {
+      return new Z4Line(x, y, this.x2, this.y2);
+    } else if (pointIndex === 1) {
+      return new Z4Line(this.x1, this.y1, x, y);
+    } else {
+      return this;
+    }
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["x1"] = this.x1;

@@ -125,6 +125,11 @@ public class Z4Polyline extends Z4GeometricShape {
   }
 
   @Override
+  public Z4GeometricShape fromDataChanged(double x, double y, int pointIndex, double spinnerValue, int spinnerIndex) {
+    return pointIndex != -1 ? new Z4Polyline(this.points.map((point, index, array) -> index == pointIndex ? new Z4Point(x, y) : point)) : this;
+  }
+
+  @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
 

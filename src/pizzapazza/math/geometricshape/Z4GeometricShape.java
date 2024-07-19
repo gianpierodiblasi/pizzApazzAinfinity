@@ -87,6 +87,20 @@ public abstract class Z4GeometricShape implements Z4JSONable {
    */
   public abstract Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfigurations();
 
+  /**
+   * Returns a Z4GeometricShape obtained by this Z4GeometricShape when a data
+   * (point or spinner) is changed
+   *
+   * @param x The x-axis coordinate of the changed point
+   * @param y The y-axis coordinate of the changed point
+   * @param pointIndex The index of the changed point, -1 if no point is changed
+   * @param spinnerValue The changed spinner value
+   * @param spinnerIndex The index of the changed spinner value, -1 if no
+   * spinner is changed
+   * @return The geometric shape
+   */
+  public abstract Z4GeometricShape fromDataChanged(double x, double y, int pointIndex, double spinnerValue, int spinnerIndex);
+
   @Override
   public $Object toJSON() {
     $Object json = new $Object();

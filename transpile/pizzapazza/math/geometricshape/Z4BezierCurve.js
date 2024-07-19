@@ -44,6 +44,20 @@ class Z4BezierCurve extends Z4AbstractBezierCurve {
     return new Array(0, 1, 1, 2, 2, 3);
   }
 
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+    if (pointIndex === 0) {
+      return new Z4BezierCurve(x, y, this.ctrlx1, this.ctrly1, this.ctrlx2, this.ctrly2, this.x2, this.y2);
+    } else if (pointIndex === 1) {
+      return new Z4BezierCurve(this.x1, this.y1, x, y, this.ctrlx2, this.ctrly2, this.x2, this.y2);
+    } else if (pointIndex === 2) {
+      return new Z4BezierCurve(this.x1, this.y1, this.ctrlx1, this.ctrly1, x, y, this.x2, this.y2);
+    } else if (pointIndex === 3) {
+      return new Z4BezierCurve(this.x1, this.y1, this.ctrlx1, this.ctrly1, this.ctrlx2, this.ctrly2, x, y);
+    } else {
+      return this;
+    }
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["x1"] = this.x1;

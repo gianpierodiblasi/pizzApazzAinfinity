@@ -53,6 +53,10 @@ class Z4SinglePointShape extends Z4GeometricShape {
     return new Array();
   }
 
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+    return pointIndex === 0 ? new Z4SinglePointShape(x, y) : this;
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["x"] = this.x;

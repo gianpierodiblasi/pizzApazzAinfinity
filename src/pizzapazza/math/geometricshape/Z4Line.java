@@ -83,6 +83,17 @@ public class Z4Line extends Z4GeometricShape {
   }
 
   @Override
+  public Z4GeometricShape fromDataChanged(double x, double y, int pointIndex, double spinnerValue, int spinnerIndex) {
+    if (pointIndex == 0) {
+      return new Z4Line(x, y, this.x2, this.y2);
+    } else if (pointIndex == 1) {
+      return new Z4Line(this.x1, this.y1, x, y);
+    } else {
+      return this;
+    }
+  }
+
+  @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
     json.$set("x1", this.x1);

@@ -58,6 +58,11 @@ public class Z4RoundRectangleFrame extends Z4GeometricFrame {
     }
   }
 
+  @Override
+  public Z4GeometricShape fromDataChanged(double x, double y, int pointIndex, double spinnerValue, int spinnerIndex) {
+    return null;
+  }
+  
   /**
    * Creates a Z4RoundRectangleFrame from a JSON object
    *

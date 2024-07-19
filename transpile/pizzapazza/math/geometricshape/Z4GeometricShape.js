@@ -87,6 +87,21 @@ class Z4GeometricShape extends Z4JSONable {
    getSpinnerConfigurations() {
   }
 
+  /**
+   * Returns a Z4GeometricShape obtained by this Z4GeometricShape when a data
+   * (point or spinner) is changed
+   *
+   * @param x The x-axis coordinate of the changed point
+   * @param y The y-axis coordinate of the changed point
+   * @param pointIndex The index of the changed point, -1 if no point is changed
+   * @param spinnerValue The changed spinner value
+   * @param spinnerIndex The index of the changed spinner value, -1 if no
+   * spinner is changed
+   * @return The geometric shape
+   */
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+  }
+
    toJSON() {
     let json = new Object();
     json["type"] = this.type;

@@ -70,6 +70,11 @@ public class Z4SinglePointShape extends Z4GeometricShape {
   }
 
   @Override
+  public Z4GeometricShape fromDataChanged(double x, double y, int pointIndex, double spinnerValue, int spinnerIndex) {
+    return pointIndex == 0 ? new Z4SinglePointShape(x, y) : this;
+  }
+
+  @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
     json.$set("x", this.x);

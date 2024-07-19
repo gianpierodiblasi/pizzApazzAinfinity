@@ -37,6 +37,11 @@ public class Z4RectangleFrame extends Z4GeometricFrame {
     this.polyline = new Z4Polyline(points);
   }
 
+  @Override
+  public Z4GeometricShape fromDataChanged(double x, double y, int pointIndex, double spinnerValue, int spinnerIndex) {
+    return null;
+  }
+  
   /**
    * Creates a Z4RectangleFrame from a JSON object
    *

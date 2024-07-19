@@ -15697,6 +15697,21 @@ class Z4GeometricShape extends Z4JSONable {
    getSpinnerConfigurations() {
   }
 
+  /**
+   * Returns a Z4GeometricShape obtained by this Z4GeometricShape when a data
+   * (point or spinner) is changed
+   *
+   * @param x The x-axis coordinate of the changed point
+   * @param y The y-axis coordinate of the changed point
+   * @param pointIndex The index of the changed point, -1 if no point is changed
+   * @param spinnerValue The changed spinner value
+   * @param spinnerIndex The index of the changed spinner value, -1 if no
+   * spinner is changed
+   * @return The geometric shape
+   */
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+  }
+
    toJSON() {
     let json = new Object();
     json["type"] = this.type;
@@ -15890,6 +15905,20 @@ class Z4BezierCurve extends Z4AbstractBezierCurve {
 
    getControlPointConnections() {
     return new Array(0, 1, 1, 2, 2, 3);
+  }
+
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+    if (pointIndex === 0) {
+      return new Z4BezierCurve(x, y, this.ctrlx1, this.ctrly1, this.ctrlx2, this.ctrly2, this.x2, this.y2);
+    } else if (pointIndex === 1) {
+      return new Z4BezierCurve(this.x1, this.y1, x, y, this.ctrlx2, this.ctrly2, this.x2, this.y2);
+    } else if (pointIndex === 2) {
+      return new Z4BezierCurve(this.x1, this.y1, this.ctrlx1, this.ctrly1, x, y, this.x2, this.y2);
+    } else if (pointIndex === 3) {
+      return new Z4BezierCurve(this.x1, this.y1, this.ctrlx1, this.ctrly1, this.ctrlx2, this.ctrly2, x, y);
+    } else {
+      return this;
+    }
   }
 
    toJSON() {
@@ -16653,6 +16682,16 @@ class Z4Line extends Z4GeometricShape {
     return new Array();
   }
 
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+    if (pointIndex === 0) {
+      return new Z4Line(x, y, this.x2, this.y2);
+    } else if (pointIndex === 1) {
+      return new Z4Line(this.x1, this.y1, x, y);
+    } else {
+      return this;
+    }
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["x1"] = this.x1;
@@ -16874,6 +16913,10 @@ class Z4SinglePointShape extends Z4GeometricShape {
 
    getSpinnerConfigurations() {
     return new Array();
+  }
+
+   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex) {
+    return pointIndex === 0 ? new Z4SinglePointShape(x, y) : this;
   }
 
    toJSON() {

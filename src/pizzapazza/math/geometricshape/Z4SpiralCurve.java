@@ -77,6 +77,11 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
   }
 
   @Override
+  public Z4GeometricShape fromDataChanged(double x, double y, int pointIndex, double spinnerValue, int spinnerIndex) {
+    return null;
+  }
+
+  @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
     json.$set("x1", this.x1);
