@@ -29,7 +29,7 @@ class Z4GeometricShapeSequence extends Z4GeometricCurve {
   }
 
    getSpinnerConfigurations() {
-    return this.shapes.map(shape => shape.getSpinnerConfiguration()).reduce((accumulator, current, index, array) => (accumulator).concat(current));
+    return this.shapes.map(shape => shape.getSpinnerConfigurations()).reduce((accumulator, current, index, array) => (accumulator).concat(current));
   }
 
    toJSON() {

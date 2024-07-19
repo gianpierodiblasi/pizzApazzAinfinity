@@ -40,7 +40,7 @@ public class Z4GeometricShapeSequence extends Z4GeometricCurve {
 
   @Override
   public Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfigurations() {
-    return this.shapes.map(shape -> shape.getSpinnerConfiguration()).reduce((accumulator, current, index, array) -> (($Array<Z4GeometricShapeSpinnerConfiguration>) accumulator).concat(current));
+    return this.shapes.map(shape -> shape.getSpinnerConfigurations()).reduce((accumulator, current, index, array) -> (($Array<Z4GeometricShapeSpinnerConfiguration>) accumulator).concat(current));
   }
 
   @Override
