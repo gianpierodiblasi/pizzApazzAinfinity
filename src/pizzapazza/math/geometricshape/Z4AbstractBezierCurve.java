@@ -1,5 +1,6 @@
 package pizzapazza.math.geometricshape;
 
+import def.js.Array;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Vector;
@@ -81,5 +82,10 @@ public abstract class Z4AbstractBezierCurve extends Z4GeometricShape {
     Z4Point point = this.bezier.get(position);
     Z4Point derivative = this.bezier.derivative(position);
     return Z4Vector.fromPoints(point.x, point.y, point.x + derivative.x, point.y + derivative.y);
+  }
+
+  @Override
+  public Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfiguration() {
+    return new Array<>();
   }
 }

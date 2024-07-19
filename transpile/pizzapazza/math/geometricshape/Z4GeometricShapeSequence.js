@@ -22,6 +22,10 @@ class Z4GeometricShapeSequence extends Z4GeometricCurve {
     return this.shapes.map(shape => shape.getControlPoints()).reduce((accumulator, current, index, array) => (accumulator).concat(current));
   }
 
+   getSpinnerConfiguration() {
+    return this.shapes.map(shape => shape.getSpinnerConfiguration()).reduce((accumulator, current, index, array) => (accumulator).concat(current));
+  }
+
    toJSON() {
     let json = super.toJSON();
     let shapesJSON = new Array();

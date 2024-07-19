@@ -56,6 +56,14 @@ class Z4Line extends Z4GeometricShape {
     }
   }
 
+   getControlPoints() {
+    return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2));
+  }
+
+   getSpinnerConfiguration() {
+    return new Array();
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["x1"] = this.x1;

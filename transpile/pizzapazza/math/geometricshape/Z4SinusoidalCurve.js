@@ -63,6 +63,10 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
     return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2), new Z4Point(this.x1 + this.period * Math.cos(rotation), this.y1 + this.period * Math.sin(rotation)), new Z4Point(this.x1 + this.amplitude * Math.cos(rotation - Z4Math.HALF_PI), this.y1 + this.amplitude * Math.sin(rotation - Z4Math.HALF_PI)));
   }
 
+   getSpinnerConfiguration() {
+    return new Array(new Z4GeometricShapeSpinnerConfiguration("", Z4Translations.ANGLE, 0, 0, 360));
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["x1"] = this.x1;

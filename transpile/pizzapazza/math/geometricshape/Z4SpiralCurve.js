@@ -55,6 +55,10 @@ class Z4SpiralCurve extends Z4GeometricCurve {
     return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2), new Z4Point(this.x1 + this.radius * Math.cos(this.angle), this.y1 + this.radius * Math.sin(this.angle)));
   }
 
+   getSpinnerConfiguration() {
+    return new Array();
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["x1"] = this.x1;

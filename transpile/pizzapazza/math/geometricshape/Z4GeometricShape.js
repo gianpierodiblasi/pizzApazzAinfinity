@@ -61,7 +61,20 @@ class Z4GeometricShape extends Z4JSONable {
    getTangentAt(position) {
   }
 
+  /**
+   * Returns the points to control/edit the geometric shape
+   *
+   * @return The points to control/edit the geometric shape
+   */
    getControlPoints() {
+  }
+
+  /**
+   * Returns the spinner configuration to control/edit the geometri shape
+   *
+   * @return The spinner configuration to control/edit the geometri shape
+   */
+   getSpinnerConfiguration() {
   }
 
    toJSON() {

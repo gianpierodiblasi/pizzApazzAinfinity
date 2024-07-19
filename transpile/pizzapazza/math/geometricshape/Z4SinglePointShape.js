@@ -41,6 +41,14 @@ class Z4SinglePointShape extends Z4GeometricShape {
     return Z4Vector.fromVector(this.x, this.y, 0, 0);
   }
 
+   getControlPoints() {
+    return new Array(new Z4Point(this.x, this.y));
+  }
+
+   getSpinnerConfiguration() {
+    return new Array();
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["x"] = this.x;

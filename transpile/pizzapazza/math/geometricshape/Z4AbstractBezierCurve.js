@@ -69,4 +69,8 @@ class Z4AbstractBezierCurve extends Z4GeometricShape {
     let derivative = this.bezier.derivative(position);
     return Z4Vector.fromPoints(point.x, point.y, point.x + derivative.x, point.y + derivative.y);
   }
+
+   getSpinnerConfiguration() {
+    return new Array();
+  }
 }

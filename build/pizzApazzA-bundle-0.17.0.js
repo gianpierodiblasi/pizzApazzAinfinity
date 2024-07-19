@@ -1018,6 +1018,40 @@ class Z4PointIteratorType {
   static SCATTERER = 'SCATTERER';
 }
 /**
+ * The configuration of a spinner used by a geometrishape
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4GeometricShapeSpinnerConfiguration {
+
+   grouping = null;
+
+   label = null;
+
+   value = 0;
+
+   minimum = 0;
+
+   maximum = 0;
+
+  /**
+   * Creates the object
+   *
+   * @param grouping The grouping label, to group more spinners
+   * @param label The spinner label
+   * @param value The value
+   * @param minimum The minimum value
+   * @param maximum The maximum value
+   */
+  constructor(grouping, label, value, minimum, maximum) {
+    this.grouping = grouping;
+    this.label = label;
+    this.value = value;
+    this.minimum = minimum;
+    this.maximum = maximum;
+  }
+}
+/**
  * The geometry shape type
  *
  * @author gianpiero.diblasi
@@ -15637,7 +15671,20 @@ class Z4GeometricShape extends Z4JSONable {
    getTangentAt(position) {
   }
 
+  /**
+   * Returns the points to control/edit the geometric shape
+   *
+   * @return The points to control/edit the geometric shape
+   */
    getControlPoints() {
+  }
+
+  /**
+   * Returns the spinner configuration to control/edit the geometri shape
+   *
+   * @return The spinner configuration to control/edit the geometri shape
+   */
+   getSpinnerConfiguration() {
   }
 
    toJSON() {
@@ -15749,6 +15796,10 @@ class Z4AbstractBezierCurve extends Z4GeometricShape {
     let point = this.bezier.get(position);
     let derivative = this.bezier.derivative(position);
     return Z4Vector.fromPoints(point.x, point.y, point.x + derivative.x, point.y + derivative.y);
+  }
+
+   getSpinnerConfiguration() {
+    return new Array();
   }
 }
 /**
@@ -15977,6 +16028,10 @@ class Z4GeometricFrame extends Z4GeometricCurve {
 
    getControlPoints() {
     return new Array(new Z4Point(this.x + this.w / 2, this.y + this.h / 2), new Z4Point(this.x + this.w / 2 + Math.cos(this.angle), this.y + this.h / 2 + Math.sin(angle)), new Z4Point(this.x + this.w / 2 + Math.cos(this.angle - Z4Math.HALF_PI), this.y + this.h / 2 + Math.sin(angle - Z4Math.HALF_PI)));
+  }
+
+   getSpinnerConfiguration() {
+    return new Array(new Z4GeometricShapeSpinnerConfiguration(Z4Translations.SHEARING, Z4Translations.HORIZONTAL, 0, 0, 200), new Z4GeometricShapeSpinnerConfiguration(Z4Translations.SHEARING, Z4Translations.VERTICAL, 0, 0, 200));
   }
 
    toJSON() {
@@ -16225,6 +16280,10 @@ class Z4GeometricShapeSequence extends Z4GeometricCurve {
     return this.shapes.map(shape => shape.getControlPoints()).reduce((accumulator, current, index, array) => (accumulator).concat(current));
   }
 
+   getSpinnerConfiguration() {
+    return this.shapes.map(shape => shape.getSpinnerConfiguration()).reduce((accumulator, current, index, array) => (accumulator).concat(current));
+  }
+
    toJSON() {
     let json = super.toJSON();
     let shapesJSON = new Array();
@@ -16308,6 +16367,10 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
    getControlPoints() {
     let rotation = Z4Math.atan(this.x1, this.y1, this.x2, this.y2);
     return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2), new Z4Point(this.x1 + this.period * Math.cos(rotation), this.y1 + this.period * Math.sin(rotation)), new Z4Point(this.x1 + this.amplitude * Math.cos(rotation - Z4Math.HALF_PI), this.y1 + this.amplitude * Math.sin(rotation - Z4Math.HALF_PI)));
+  }
+
+   getSpinnerConfiguration() {
+    return new Array(new Z4GeometricShapeSpinnerConfiguration("", Z4Translations.ANGLE, 0, 0, 360));
   }
 
    toJSON() {
@@ -16400,6 +16463,10 @@ class Z4SpiralCurve extends Z4GeometricCurve {
     return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2), new Z4Point(this.x1 + this.radius * Math.cos(this.angle), this.y1 + this.radius * Math.sin(this.angle)));
   }
 
+   getSpinnerConfiguration() {
+    return new Array();
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["x1"] = this.x1;
@@ -16488,6 +16555,14 @@ class Z4Line extends Z4GeometricShape {
     } else {
       return Z4Vector.fromVector(this.x2, this.y2, 1, Z4Math.atan(this.x1, this.y1, this.x2, this.y2));
     }
+  }
+
+   getControlPoints() {
+    return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2));
+  }
+
+   getSpinnerConfiguration() {
+    return new Array();
   }
 
    toJSON() {
@@ -16603,6 +16678,14 @@ class Z4Polyline extends Z4GeometricShape {
     }
   }
 
+   getControlPoints() {
+    return this.points.map(point => point);
+  }
+
+   getSpinnerConfiguration() {
+    return new Array();
+  }
+
    toJSON() {
     let json = super.toJSON();
     let pointsJSON = new Array();
@@ -16680,6 +16763,14 @@ class Z4SinglePointShape extends Z4GeometricShape {
 
    getTangentAt(position) {
     return Z4Vector.fromVector(this.x, this.y, 0, 0);
+  }
+
+   getControlPoints() {
+    return new Array(new Z4Point(this.x, this.y));
+  }
+
+   getSpinnerConfiguration() {
+    return new Array();
   }
 
    toJSON() {

@@ -67,6 +67,11 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
   }
 
   @Override
+  public Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfiguration() {
+    return new Array<>();
+  }
+
+  @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
     json.$set("x1", this.x1);

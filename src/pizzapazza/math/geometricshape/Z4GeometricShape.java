@@ -71,6 +71,13 @@ public abstract class Z4GeometricShape implements Z4JSONable {
    */
   public abstract Array<Z4Point> getControlPoints();
 
+  /**
+   * Returns the spinner configuration to control/edit the geometri shape
+   *
+   * @return The spinner configuration to control/edit the geometri shape
+   */
+  public abstract Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfiguration();
+
   @Override
   public $Object toJSON() {
     $Object json = new $Object();

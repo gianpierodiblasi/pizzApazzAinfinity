@@ -60,6 +60,11 @@ public class Z4SinglePointShape extends Z4GeometricShape {
   }
 
   @Override
+  public Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfiguration() {
+    return new Array<>();
+  }
+
+  @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
     json.$set("x", this.x);
