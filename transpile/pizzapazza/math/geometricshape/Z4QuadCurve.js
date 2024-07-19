@@ -34,7 +34,7 @@ class Z4QuadCurve extends Z4AbstractBezierCurve {
     return new Array(0, 1, 1, 2);
   }
 
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
+   fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     if (pointIndex === 0) {
       return new Z4QuadCurve(x, y, this.ctrlx, this.ctrly, this.x2, this.y2);
     } else if (pointIndex === 1) {

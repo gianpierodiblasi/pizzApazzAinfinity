@@ -91,6 +91,7 @@ class Z4GeometricShape extends Z4JSONable {
    * Returns a Z4GeometricShape obtained by this Z4GeometricShape when a data
    * (point or spinner) is changed
    *
+   * @param controlPoints The control points
    * @param x The x-axis coordinate of the changed point
    * @param y The y-axis coordinate of the changed point
    * @param pointIndex The index of the changed point, -1 if no point is changed
@@ -101,7 +102,7 @@ class Z4GeometricShape extends Z4JSONable {
    * @param height The available area height
    * @return The geometric shape
    */
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
+   fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
   }
 
    toJSON() {

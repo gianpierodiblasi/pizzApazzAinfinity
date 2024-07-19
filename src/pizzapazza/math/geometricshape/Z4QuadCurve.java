@@ -45,7 +45,7 @@ public class Z4QuadCurve extends Z4AbstractBezierCurve {
   }
 
   @Override
-  public Z4GeometricShape fromDataChanged(double x, double y, int pointIndex, double spinnerValue, int spinnerIndex, int width, int height) {
+  public Z4GeometricShape fromDataChanged(Array<Z4Point> controlPoints, double x, double y, int pointIndex, double spinnerValue, int spinnerIndex, int width, int height) {
     if (pointIndex == 0) {
       return new Z4QuadCurve(x, y, this.ctrlx, this.ctrly, this.x2, this.y2);
     } else if (pointIndex == 1) {

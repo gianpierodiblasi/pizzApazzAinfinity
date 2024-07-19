@@ -15701,6 +15701,7 @@ class Z4GeometricShape extends Z4JSONable {
    * Returns a Z4GeometricShape obtained by this Z4GeometricShape when a data
    * (point or spinner) is changed
    *
+   * @param controlPoints The control points
    * @param x The x-axis coordinate of the changed point
    * @param y The y-axis coordinate of the changed point
    * @param pointIndex The index of the changed point, -1 if no point is changed
@@ -15711,7 +15712,7 @@ class Z4GeometricShape extends Z4JSONable {
    * @param height The available area height
    * @return The geometric shape
    */
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
+   fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
   }
 
    toJSON() {
@@ -15909,7 +15910,7 @@ class Z4BezierCurve extends Z4AbstractBezierCurve {
     return new Array(0, 1, 1, 2, 2, 3);
   }
 
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
+   fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     if (pointIndex === 0) {
       return new Z4BezierCurve(x, y, this.ctrlx1, this.ctrly1, this.ctrlx2, this.ctrly2, this.x2, this.y2);
     } else if (pointIndex === 1) {
@@ -15993,7 +15994,7 @@ class Z4QuadCurve extends Z4AbstractBezierCurve {
     return new Array(0, 1, 1, 2);
   }
 
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
+   fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     if (pointIndex === 0) {
       return new Z4QuadCurve(x, y, this.ctrlx, this.ctrly, this.x2, this.y2);
     } else if (pointIndex === 1) {
@@ -16210,7 +16211,7 @@ class Z4EllipseFrame extends Z4GeometricFrame {
     return controlPointConnections;
   }
 
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
+   fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     return null;
   }
 
@@ -16272,7 +16273,7 @@ class Z4RectangleFrame extends Z4GeometricFrame {
     this.polyline = new Z4Polyline(points);
   }
 
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
+   fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     return null;
   }
 
@@ -16356,7 +16357,7 @@ class Z4RoundRectangleFrame extends Z4GeometricFrame {
     }
   }
 
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
+   fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     return null;
   }
 
@@ -16415,7 +16416,7 @@ class Z4GeometricShapeSequence extends Z4GeometricCurve {
     return this.shapes.map(shape => shape.getSpinnerConfigurations()).reduce((accumulator, current, index, array) => (accumulator).concat(current));
   }
 
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
+   fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     return null;
   }
 
@@ -16512,102 +16513,95 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
     return new Array(new Z4GeometricShapeSpinnerConfiguration("", Z4Translations.ANGLE, 0, 0, 360));
   }
 
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
-    // double angle1;
-    // double radius1;
-    // Z4Point point1;
-    // double angle2;
-    // double radius2;
-    // Z4Point point2;
-    // double angle3;
-    // double radius3;
-    // Z4Point point3;
-    // 
-    // switch (selectedIndex) {
-    // case 0:
-    // int offsetX = points.$get(0).x - x;
-    // int offsetY = points.$get(0).y - y;
-    // 
-    // radius1 = Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(1).x, points.$get(1).y);
-    // angle1 = Z4Math.atan(points.$get(0).x, points.$get(0).y, points.$get(1).x, points.$get(1).y);
-    // radius2 = Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(2).x, points.$get(2).y);
-    // angle2 = Z4Math.atan(points.$get(0).x, points.$get(0).y, points.$get(2).x, points.$get(2).y);
-    // radius3 = Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(3).x, points.$get(3).y);
-    // angle3 = Z4Math.atan(points.$get(0).x, points.$get(0).y, points.$get(3).x, points.$get(3).y);
-    // 
-    // points.$set(0, new Point(x, y));
-    // 
-    // point1 = this.getPoint(points.$get(0).x, points.$get(0).y, points.$get(1).x - offsetX, points.$get(1).y - offsetY, radius1, angle1, width, height);
-    // points.$set(1, new Point((int) Math.round(point1.x), (int) Math.round(point1.y)));
-    // 
-    // point2 = this.getPoint(points.$get(0).x, points.$get(0).y, points.$get(2).x - offsetX, points.$get(2).y - offsetY, radius2, angle2, width, height);
-    // points.$set(2, new Point((int) Math.round(point2.x), (int) Math.round(point2.y)));
-    // 
-    // point3 = this.getPoint(points.$get(0).x, points.$get(0).y, points.$get(3).x - offsetX, points.$get(3).y - offsetY, radius3, angle3, width, height);
-    // points.$set(3, new Point((int) Math.round(point3.x), (int) Math.round(point3.y)));
-    // break;
-    // case 1:
-    // radius2 = Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(2).x, points.$get(2).y);
-    // angle2 = Z4Math.atan(points.$get(0).x, points.$get(0).y, x, y) + Z4Math.HALF_PI;
-    // radius3 = Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(3).x, points.$get(3).y);
-    // angle3 = Z4Math.atan(points.$get(0).x, points.$get(0).y, x, y) + Math.PI;
-    // 
-    // point2 = this.getPoint(
-    // points.$get(0).x, points.$get(0).y,
-    // points.$get(0).x + radius2 * Math.cos(angle2), points.$get(0).y + radius2 * Math.sin(angle2),
-    // radius2, angle2, width, height);
-    // 
-    // point3 = this.getPoint(
-    // points.$get(0).x, points.$get(0).y,
-    // points.$get(0).x + radius3 * Math.cos(angle3), points.$get(0).y + radius3 * Math.sin(angle3),
-    // radius3, angle3, width, height);
-    // 
-    // points.$set(1, new Point(x, y));
-    // points.$set(2, new Point((int) Math.round(point2.x), (int) Math.round(point2.y)));
-    // points.$set(3, new Point((int) Math.round(point3.x), (int) Math.round(point3.y)));
-    // break;
-    // case 2:
-    // radius1 = Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(1).x, points.$get(1).y);
-    // angle1 = Z4Math.atan(points.$get(0).x, points.$get(0).y, x, y) - Z4Math.HALF_PI;
-    // radius3 = Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(3).x, points.$get(3).y);
-    // angle3 = Z4Math.atan(points.$get(0).x, points.$get(0).y, x, y) + Z4Math.HALF_PI;
-    // 
-    // point1 = this.getPoint(
-    // points.$get(0).x, points.$get(0).y,
-    // points.$get(0).x + radius1 * Math.cos(angle1), points.$get(0).y + radius1 * Math.sin(angle1),
-    // radius1, angle1, width, height);
-    // 
-    // point3 = this.getPoint(
-    // points.$get(0).x, points.$get(0).y,
-    // points.$get(0).x + radius3 * Math.cos(angle3), points.$get(0).y + radius3 * Math.sin(angle3),
-    // radius3, angle3, width, height);
-    // 
-    // points.$set(1, new Point((int) Math.round(point1.x), (int) Math.round(point1.y)));
-    // points.$set(2, new Point(x, y));
-    // points.$set(3, new Point((int) Math.round(point3.x), (int) Math.round(point3.y)));
-    // break;
-    // case 3:
-    // radius1 = Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(1).x, points.$get(1).y);
-    // angle1 = Z4Math.atan(points.$get(0).x, points.$get(0).y, x, y) + Math.PI;
-    // radius2 = Z4Math.distance(points.$get(0).x, points.$get(0).y, points.$get(2).x, points.$get(2).y);
-    // angle2 = Z4Math.atan(points.$get(0).x, points.$get(0).y, x, y) - Z4Math.HALF_PI;
-    // 
-    // point1 = this.getPoint(
-    // points.$get(0).x, points.$get(0).y,
-    // points.$get(0).x + radius1 * Math.cos(angle1), points.$get(0).y + radius1 * Math.sin(angle1),
-    // radius1, angle1, width, height);
-    // 
-    // point2 = this.getPoint(
-    // points.$get(0).x, points.$get(0).y,
-    // points.$get(0).x + radius2 * Math.cos(angle2), points.$get(0).y + radius2 * Math.sin(angle2),
-    // radius2, angle2, width, height);
-    // 
-    // points.$set(1, new Point((int) Math.round(point1.x), (int) Math.round(point1.y)));
-    // points.$set(2, new Point((int) Math.round(point2.x), (int) Math.round(point2.y)));
-    // points.$set(3, new Point(x, y));
-    // break;
-    // }
-    return null;
+   fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
+    let angle1 = 0.0;
+    let radius1 = 0.0;
+    let point1 = null;
+    let angle2 = 0.0;
+    let radius2 = 0.0;
+    let point2 = null;
+    let angle3 = 0.0;
+    let radius3 = 0.0;
+    let point3 = null;
+    switch(pointIndex) {
+      case 0:
+        let offsetX = this.x1 - x;
+        let offsetY = this.y1 - y;
+        radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
+        angle1 = Z4Math.atan(this.x1, this.y1, this.x2, this.y2);
+        radius2 = this.period;
+        angle2 = angle1;
+        radius3 = this.amplitude;
+        angle3 = angle1 - Z4Math.HALF_PI;
+        point1 = this.getPoint(x, y, this.x2 - offsetX, this.y2 - offsetY, radius1, angle1, width, height);
+        point2 = this.getPoint(x, y, controlPoints[2].x - offsetX, controlPoints[2].y - offsetY, radius2, angle2, width, height);
+        radius2 = Z4Math.distance(x, y, point2.x, point2.y);
+        point3 = this.getPoint(this.x1, this.y1, controlPoints[3].x - offsetX, controlPoints[3].y - offsetY, radius3, angle3, width, height);
+        radius3 = Z4Math.distance(x, y, point3.x, point3.y);
+        return new Z4SinusoidalCurve(x, y, point1.x, point1.y, radius2, radius3, spinnerIndex === 0 ? spinnerValue : this.angle);
+      case 1:
+        // radius2 = Z4Math.distance(this.x1, this.y1, points.$get(2).x, points.$get(2).y);
+        // angle2 = Z4Math.atan(this.x1, this.y1, x, y) + Z4Math.HALF_PI;
+        // radius3 = Z4Math.distance(this.x1, this.y1, points.$get(3).x, points.$get(3).y);
+        // angle3 = Z4Math.atan(this.x1, this.y1, x, y) + Math.PI;
+        // 
+        // point2 = this.getPoint(
+        // this.x1, this.y1,
+        // this.x1 + radius2 * Math.cos(angle2), this.y1 + radius2 * Math.sin(angle2),
+        // radius2, angle2, width, height);
+        // 
+        // point3 = this.getPoint(
+        // this.x1, this.y1,
+        // this.x1 + radius3 * Math.cos(angle3), this.y1 + radius3 * Math.sin(angle3),
+        // radius3, angle3, width, height);
+        // 
+        // points.$set(1, new Point(x, y));
+        // points.$set(2, new Point((int) Math.round(point2.x), (int) Math.round(point2.y)));
+        // points.$set(3, new Point((int) Math.round(point3.x), (int) Math.round(point3.y)));
+        return null;
+      case 2:
+        // radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
+        // angle1 = Z4Math.atan(this.x1, this.y1, x, y) - Z4Math.HALF_PI;
+        // radius3 = Z4Math.distance(this.x1, this.y1, points.$get(3).x, points.$get(3).y);
+        // angle3 = Z4Math.atan(this.x1, this.y1, x, y) + Z4Math.HALF_PI;
+        // 
+        // point1 = this.getPoint(
+        // this.x1, this.y1,
+        // this.x1 + radius1 * Math.cos(angle1), this.y1 + radius1 * Math.sin(angle1),
+        // radius1, angle1, width, height);
+        // 
+        // point3 = this.getPoint(
+        // this.x1, this.y1,
+        // this.x1 + radius3 * Math.cos(angle3), this.y1 + radius3 * Math.sin(angle3),
+        // radius3, angle3, width, height);
+        // 
+        // points.$set(1, new Point((int) Math.round(point1.x), (int) Math.round(point1.y)));
+        // points.$set(2, new Point(x, y));
+        // points.$set(3, new Point((int) Math.round(point3.x), (int) Math.round(point3.y)));
+        return null;
+      case 3:
+        // radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
+        // angle1 = Z4Math.atan(this.x1, this.y1, x, y) + Math.PI;
+        // radius2 = Z4Math.distance(this.x1, this.y1, points.$get(2).x, points.$get(2).y);
+        // angle2 = Z4Math.atan(this.x1, this.y1, x, y) - Z4Math.HALF_PI;
+        // 
+        // point1 = this.getPoint(
+        // this.x1, this.y1,
+        // this.x1 + radius1 * Math.cos(angle1), this.y1 + radius1 * Math.sin(angle1),
+        // radius1, angle1, width, height);
+        // 
+        // point2 = this.getPoint(
+        // this.x1, this.y1,
+        // this.x1 + radius2 * Math.cos(angle2), this.y1 + radius2 * Math.sin(angle2),
+        // radius2, angle2, width, height);
+        // 
+        // points.$set(1, new Point((int) Math.round(point1.x), (int) Math.round(point1.y)));
+        // points.$set(2, new Point((int) Math.round(point2.x), (int) Math.round(point2.y)));
+        // points.$set(3, new Point(x, y));
+        return null;
+      default:
+        return new Z4SinusoidalCurve(this.x1, this.y1, this.x2, this.y2, this.period, this.amplitude, spinnerIndex === 0 ? spinnerValue : this.angle);
+    }
   }
 
    getPoint(cx, cy, x, y, radius, angle, width, height) {
@@ -16717,7 +16711,7 @@ class Z4SpiralCurve extends Z4GeometricCurve {
     return new Array();
   }
 
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
+   fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     return null;
   }
 
@@ -16823,7 +16817,7 @@ class Z4Line extends Z4GeometricShape {
     return new Array();
   }
 
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
+   fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     if (pointIndex === 0) {
       return new Z4Line(x, y, this.x2, this.y2);
     } else if (pointIndex === 1) {
@@ -16965,7 +16959,7 @@ class Z4Polyline extends Z4GeometricShape {
     return new Array();
   }
 
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
+   fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     return pointIndex !== -1 ? new Z4Polyline(this.points.map((point, index, array) => index === pointIndex ? new Z4Point(x, y) : point)) : this;
   }
 
@@ -17060,7 +17054,7 @@ class Z4SinglePointShape extends Z4GeometricShape {
     return new Array();
   }
 
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
+   fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     return pointIndex === 0 ? new Z4SinglePointShape(x, y) : this;
   }
 

@@ -32,7 +32,7 @@ class Z4GeometricShapeSequence extends Z4GeometricCurve {
     return this.shapes.map(shape => shape.getSpinnerConfigurations()).reduce((accumulator, current, index, array) => (accumulator).concat(current));
   }
 
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
+   fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     return null;
   }
 

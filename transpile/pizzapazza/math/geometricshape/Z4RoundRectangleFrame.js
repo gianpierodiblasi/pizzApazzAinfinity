@@ -57,7 +57,7 @@ class Z4RoundRectangleFrame extends Z4GeometricFrame {
     }
   }
 
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
+   fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     return null;
   }
 

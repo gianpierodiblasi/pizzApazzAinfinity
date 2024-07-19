@@ -125,7 +125,7 @@ public class Z4Polyline extends Z4GeometricShape {
   }
 
   @Override
-  public Z4GeometricShape fromDataChanged(double x, double y, int pointIndex, double spinnerValue, int spinnerIndex, int width, int height) {
+  public Z4GeometricShape fromDataChanged(Array<Z4Point> controlPoints, double x, double y, int pointIndex, double spinnerValue, int spinnerIndex, int width, int height) {
     return pointIndex != -1 ? new Z4Polyline(this.points.map((point, index, array) -> index == pointIndex ? new Z4Point(x, y) : point)) : this;
   }
 

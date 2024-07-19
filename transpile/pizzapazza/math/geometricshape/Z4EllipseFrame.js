@@ -55,7 +55,7 @@ class Z4EllipseFrame extends Z4GeometricFrame {
     return controlPointConnections;
   }
 
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
+   fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     return null;
   }
 

@@ -63,7 +63,7 @@ class Z4SpiralCurve extends Z4GeometricCurve {
     return new Array();
   }
 
-   fromDataChanged(x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
+   fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     return null;
   }
 
