@@ -64,7 +64,16 @@ class Z4SpiralCurve extends Z4GeometricCurve {
   }
 
    fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
-    return null;
+    switch(pointIndex) {
+      case 0:
+        return new Z4SpiralCurve(x, y, this.x2, this.y2, this.radius, this.angle);
+      case 1:
+        return new Z4SpiralCurve(this.x1, this.y1, x, y, this.radius, this.angle);
+      case 2:
+        return new Z4SpiralCurve(this.x1, this.y1, this.x2, this.y2, Z4Math.distance(this.x1, this.y1, x, y), Z4Math.atan(this.x1, this.y1, x, y));
+      default:
+        return this;
+    }
   }
 
    toJSON() {

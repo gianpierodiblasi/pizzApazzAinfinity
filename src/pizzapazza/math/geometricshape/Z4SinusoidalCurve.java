@@ -187,7 +187,7 @@ public class Z4SinusoidalCurve extends Z4GeometricCurve {
                 spinnerIndex == 0 ? spinnerValue : this.angle
         );
       default:
-        return new Z4SinusoidalCurve(this.x1, this.y1, this.x2, this.y2, this.period, this.amplitude, spinnerIndex == 0 ? spinnerValue : Z4Math.deg2rad(this.angle));
+        return spinnerIndex == 0 ? new Z4SinusoidalCurve(this.x1, this.y1, this.x2, this.y2, this.period, this.amplitude, Z4Math.deg2rad(spinnerValue)) : this;
     }
   }
 

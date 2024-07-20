@@ -16554,7 +16554,7 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
         point2 = this.getPoint(this.x1, this.y1, this.x1 + this.period * Math.cos(angle2), this.y1 + this.period * Math.sin(angle2), this.period, angle2, width, height);
         return new Z4SinusoidalCurve(this.x1, this.y1, point1.x, point1.y, Z4Math.distance(x, y, point2.x, point2.y), Z4Math.distance(this.x1, this.y1, x, y), spinnerIndex === 0 ? spinnerValue : this.angle);
       default:
-        return new Z4SinusoidalCurve(this.x1, this.y1, this.x2, this.y2, this.period, this.amplitude, spinnerIndex === 0 ? spinnerValue : Z4Math.deg2rad(this.angle));
+        return spinnerIndex === 0 ? new Z4SinusoidalCurve(this.x1, this.y1, this.x2, this.y2, this.period, this.amplitude, Z4Math.deg2rad(spinnerValue)) : this;
     }
   }
 
@@ -16666,7 +16666,16 @@ class Z4SpiralCurve extends Z4GeometricCurve {
   }
 
    fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
-    return null;
+    switch(pointIndex) {
+      case 0:
+        return new Z4SpiralCurve(x, y, this.x2, this.y2, this.radius, this.angle);
+      case 1:
+        return new Z4SpiralCurve(this.x1, this.y1, x, y, this.radius, this.angle);
+      case 2:
+        return new Z4SpiralCurve(this.x1, this.y1, this.x2, this.y2, Z4Math.distance(this.x1, this.y1, x, y), Z4Math.atan(this.x1, this.y1, x, y));
+      default:
+        return this;
+    }
   }
 
    toJSON() {

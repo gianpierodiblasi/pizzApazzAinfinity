@@ -78,7 +78,16 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
 
   @Override
   public Z4GeometricShape fromDataChanged(Array<Z4Point> controlPoints, double x, double y, int pointIndex, double spinnerValue, int spinnerIndex, int width, int height) {
-    return null;
+    switch (pointIndex) {
+      case 0:
+        return new Z4SpiralCurve(x, y, this.x2, this.y2, this.radius, this.angle);
+      case 1:
+        return new Z4SpiralCurve(this.x1, this.y1, x, y, this.radius, this.angle);
+      case 2:
+        return new Z4SpiralCurve(this.x1, this.y1, this.x2, this.y2, Z4Math.distance(this.x1, this.y1, x, y), Z4Math.atan(this.x1, this.y1, x, y));
+      default:
+        return this;
+    }
   }
 
   @Override
