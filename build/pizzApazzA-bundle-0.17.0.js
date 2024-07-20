@@ -16419,7 +16419,7 @@ class Z4GeometricShapeSequence extends Z4GeometricCurve {
    */
   constructor(shapes) {
     super(Z4GeometricShapeType.SEQUENCE);
-    this.shapes = shapes;
+    this.shapes = shapes.map(shape => shape);
     this.polyline = this.shapes.map(shape => shape.getPolyline()).reduce((accumulator, current, index, array) => accumulator.concat(current));
   }
 
@@ -16438,7 +16438,34 @@ class Z4GeometricShapeSequence extends Z4GeometricCurve {
   }
 
    fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
-    return null;
+    let objForControlPoints = this.getChangedGeometricShape(pointIndex, index => this.shapes[index].getControlPoints().length);
+    let objForSpinnerConfigurations = this.getChangedGeometricShape(spinnerIndex, index => this.shapes[index].getSpinnerConfigurations().length);
+    let newShapes = this.shapes;
+    if (objForControlPoints) {
+      newShapes = newShapes.map(shape => shape === objForControlPoints["shape"] ? shape.fromDataChanged(shape.getControlPoints(), x, y, objForControlPoints["index"], spinnerValue, -1, width, height) : shape);
+    }
+    if (objForSpinnerConfigurations) {
+      newShapes = newShapes.map(shape => shape === objForSpinnerConfigurations["shape"] ? shape.fromDataChanged(shape.getControlPoints(), x, y, -1, spinnerValue, objForSpinnerConfigurations["index"], width, height) : shape);
+    }
+    return newShapes !== this.shapes ? new Z4GeometricShapeSequence(newShapes) : this;
+  }
+
+   getChangedGeometricShape(indexToFind, apply) {
+    let index = 0;
+    let shape = null;
+    while (indexToFind !== -1 && !shape && index < this.shapes.length) {
+      let len = apply(index);
+      if (indexToFind < len) {
+        shape = this.shapes[index];
+      } else {
+        indexToFind -= len;
+        index++;
+      }
+    }
+    let obj = new Object();
+    obj["shape"] = shape;
+    obj["index"] = indexToFind;
+    return shape ? obj : null;
   }
 
    toJSON() {
