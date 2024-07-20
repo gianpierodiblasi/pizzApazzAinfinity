@@ -15,10 +15,10 @@ public class Z4RectangleFrame extends Z4GeometricFrame {
   /**
    * Creates the object
    *
-   * @param x The x location of the rectangle (not rotated)
-   * @param y The y location of the rectangle (not rotated)
-   * @param w The width of the rectangle (not sheared)
-   * @param h The height of the rectangle (not sheared)
+   * @param x The x center location of the rectangle (not rotated)
+   * @param y The y center location of the rectangle (not rotated)
+   * @param w The half width of the rectangle (not sheared)
+   * @param h The half height of the rectangle (not sheared)
    * @param angle The rotation angle of the rectangle
    * @param sx The x shear of the rectangle
    * @param sy The y shear of the rectangle
@@ -29,10 +29,10 @@ public class Z4RectangleFrame extends Z4GeometricFrame {
     Z4AffineTransform tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
 
     Array<Z4Point> points = new Array<>();
-    points.push(tx.transform(0, 0));
-    points.push(tx.transform(w - 1, 0));
-    points.push(tx.transform(w - 1, h - 1));
-    points.push(tx.transform(0, h - 1));
+    points.push(tx.transform(-w, -h));
+    points.push(tx.transform(w, -h));
+    points.push(tx.transform(w, h));
+    points.push(tx.transform(-w, h));
     points.push(points.$get(0));
     this.polyline = new Z4Polyline(points);
   }
@@ -41,7 +41,7 @@ public class Z4RectangleFrame extends Z4GeometricFrame {
   public Z4GeometricShape fromDataChanged(Array<Z4Point> controlPoints, double x, double y, int pointIndex, double spinnerValue, int spinnerIndex, int width, int height) {
     return null;
   }
-  
+
   /**
    * Creates a Z4RectangleFrame from a JSON object
    *
@@ -65,8 +65,8 @@ public class Z4RectangleFrame extends Z4GeometricFrame {
    */
   public static Z4RectangleFrame fromSize(int width, int height) {
     return new Z4RectangleFrame(
-            width / 4, height / 4,
             width / 2, height / 2,
+            width / 4, height / 4,
             0,
             0, 0
     );

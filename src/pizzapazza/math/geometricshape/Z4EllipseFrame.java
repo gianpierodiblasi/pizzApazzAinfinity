@@ -19,10 +19,10 @@ public class Z4EllipseFrame extends Z4GeometricFrame {
   /**
    * Creates the oject
    *
-   * @param x The x location of the ellipse (not rotated)
-   * @param y The y location of the ellipse (not rotated)
-   * @param w The width of the ellipse (not sheared)
-   * @param h The height of the ellipse (not sheared)
+   * @param x The x center location of the ellipse (not rotated)
+   * @param y The y center location of the ellipse (not rotated)
+   * @param w The half width of the ellipse (not sheared)
+   * @param h The half height of the ellipse (not sheared)
    * @param angle The rotation angle
    * @param sx The x shear of the ellipse
    * @param sy The y shear of the ellipse
@@ -35,8 +35,6 @@ public class Z4EllipseFrame extends Z4GeometricFrame {
     this.startAngle = startAngle;
     this.extentAngle = extentAngle;
 
-    double w2 = (w - 1) / 2;
-    double h2 = (h - 1) / 2;
     double incAngle = extentAngle / Z4GeometricCurve.APPROX_SEGMENTS;
 
     Z4AffineTransform tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
@@ -44,8 +42,8 @@ public class Z4EllipseFrame extends Z4GeometricFrame {
     Array<Z4Point> points = new Array<>();
     for (int i = 0; i <= Z4GeometricCurve.APPROX_SEGMENTS; i++) {
       double currentAngle = startAngle + incAngle * i;
-      double xx = w2 * Math.cos(currentAngle) + w2;
-      double yy = h2 * Math.sin(currentAngle) + h2;
+      double xx = w * Math.cos(currentAngle);
+      double yy = h * Math.sin(currentAngle);
       points.push(tx.transform(xx, yy));
     }
     this.polyline = new Z4Polyline(points);
@@ -53,11 +51,13 @@ public class Z4EllipseFrame extends Z4GeometricFrame {
 
   @Override
   public Array<Z4Point> getControlPoints() {
+    double w2 = this.w - 5;
+    double h2 = this.h - 5;
+    Z4AffineTransform tx = Z4AffineTransform.translate(this.x, this.y).concatenateRotate(this.angle).concatenateShear(this.sx, this.sy);
+
     Array<Z4Point> controlPoints = super.getControlPoints();
-    double w2 = Z4Math.distance(controlPoints.$get(0).x, controlPoints.$get(0).y, controlPoints.$get(1).x, controlPoints.$get(1).y) - 5;
-    double h2 = Z4Math.distance(controlPoints.$get(0).x, controlPoints.$get(0).y, controlPoints.$get(2).x, controlPoints.$get(2).y) - 5;
-    controlPoints.push(new Z4Point(controlPoints.$get(0).x + w2 * Math.cos(this.startAngle), controlPoints.$get(0).y + h2 * Math.sin(this.startAngle)));
-    controlPoints.push(new Z4Point(controlPoints.$get(0).x + w2 * Math.cos(this.startAngle + this.extentAngle), controlPoints.$get(0).y + h2 * Math.sin(this.startAngle + this.extentAngle)));
+    controlPoints.push(tx.transform(w2 * Math.cos(this.startAngle), h2 * Math.sin(this.startAngle)));
+    controlPoints.push(tx.transform(w2 * Math.cos(this.startAngle + this.extentAngle), h2 * Math.sin(this.startAngle + this.extentAngle)));
     return controlPoints;
   }
 
@@ -105,8 +105,8 @@ public class Z4EllipseFrame extends Z4GeometricFrame {
    */
   public static Z4EllipseFrame fromSize(int width, int height) {
     return new Z4EllipseFrame(
-            width / 4, height / 4,
             width / 2, height / 2,
+            width / 4, height / 4,
             0,
             0, 0,
             0, Z4Math.TWO_PI

@@ -16093,28 +16093,49 @@ class Z4GeometricCurve extends Z4GeometricShape {
  */
 class Z4GeometricFrame extends Z4GeometricCurve {
 
+  /**
+   * The x center location of the frame
+   */
    x = 0.0;
 
+  /**
+   * The y center location of the frame
+   */
    y = 0.0;
 
+  /**
+   * The half width of the frame
+   */
    w = 0.0;
 
+  /**
+   * The half height of the frame
+   */
    h = 0.0;
 
+  /**
+   * The rotation of the frame
+   */
    angle = 0.0;
 
+  /**
+   * The x shear of the frame
+   */
    sx = 0.0;
 
+  /**
+   * The y shear of the frame
+   */
    sy = 0.0;
 
   /**
    * Creates the object
    *
    * @param type The type
-   * @param x The x location of the frame
-   * @param y The y location of the frame
-   * @param w The width of the frame
-   * @param h The height of the frame
+   * @param x The x center location of the frame
+   * @param y The y center location of the frame
+   * @param w The half width of the frame
+   * @param h The half height of the frame
    * @param angle The rotation of the frame
    * @param sx The x shear of the frame
    * @param sy The y shear of the frame
@@ -16131,7 +16152,8 @@ class Z4GeometricFrame extends Z4GeometricCurve {
   }
 
    getControlPoints() {
-    return new Array(new Z4Point(this.x + this.w / 2, this.y + this.h / 2), new Z4Point(this.x + this.w / 2 + Math.cos(this.angle), this.y + this.h / 2 + Math.sin(angle)), new Z4Point(this.x + this.w / 2 + Math.cos(this.angle - Z4Math.HALF_PI), this.y + this.h / 2 + Math.sin(angle - Z4Math.HALF_PI)));
+    let tx = Z4AffineTransform.translate(this.x, this.y).concatenateRotate(this.angle).concatenateShear(this.sx, this.sy);
+    return new Array(new Z4Point(this.x, this.y), tx.transform(this.w, 0), tx.transform(0, this.h));
   }
 
    getControlPointConnections() {
@@ -16168,10 +16190,10 @@ class Z4EllipseFrame extends Z4GeometricFrame {
   /**
    * Creates the oject
    *
-   * @param x The x location of the ellipse (not rotated)
-   * @param y The y location of the ellipse (not rotated)
-   * @param w The width of the ellipse (not sheared)
-   * @param h The height of the ellipse (not sheared)
+   * @param x The x center location of the ellipse (not rotated)
+   * @param y The y center location of the ellipse (not rotated)
+   * @param w The half width of the ellipse (not sheared)
+   * @param h The half height of the ellipse (not sheared)
    * @param angle The rotation angle
    * @param sx The x shear of the ellipse
    * @param sy The y shear of the ellipse
@@ -16182,26 +16204,25 @@ class Z4EllipseFrame extends Z4GeometricFrame {
     super(Z4GeometricShapeType.ELLIPSE, x, y, w, h, angle, sx, sy);
     this.startAngle = startAngle;
     this.extentAngle = extentAngle;
-    let w2 = (w - 1) / 2;
-    let h2 = (h - 1) / 2;
     let incAngle = extentAngle / Z4GeometricCurve.APPROX_SEGMENTS;
     let tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
     let points = new Array();
     for (let i = 0; i <= Z4GeometricCurve.APPROX_SEGMENTS; i++) {
       let currentAngle = startAngle + incAngle * i;
-      let xx = w2 * Math.cos(currentAngle) + w2;
-      let yy = h2 * Math.sin(currentAngle) + h2;
+      let xx = w * Math.cos(currentAngle);
+      let yy = h * Math.sin(currentAngle);
       points.push(tx.transform(xx, yy));
     }
     this.polyline = new Z4Polyline(points);
   }
 
    getControlPoints() {
+    let w2 = this.w - 5;
+    let h2 = this.h - 5;
+    let tx = Z4AffineTransform.translate(this.x, this.y).concatenateRotate(this.angle).concatenateShear(this.sx, this.sy);
     let controlPoints = super.getControlPoints();
-    let w2 = Z4Math.distance(controlPoints[0].x, controlPoints[0].y, controlPoints[1].x, controlPoints[1].y) - 5;
-    let h2 = Z4Math.distance(controlPoints[0].x, controlPoints[0].y, controlPoints[2].x, controlPoints[2].y) - 5;
-    controlPoints.push(new Z4Point(controlPoints[0].x + w2 * Math.cos(this.startAngle), controlPoints[0].y + h2 * Math.sin(this.startAngle)));
-    controlPoints.push(new Z4Point(controlPoints[0].x + w2 * Math.cos(this.startAngle + this.extentAngle), controlPoints[0].y + h2 * Math.sin(this.startAngle + this.extentAngle)));
+    controlPoints.push(tx.transform(w2 * Math.cos(this.startAngle), h2 * Math.sin(this.startAngle)));
+    controlPoints.push(tx.transform(w2 * Math.cos(this.startAngle + this.extentAngle), h2 * Math.sin(this.startAngle + this.extentAngle)));
     return controlPoints;
   }
 
@@ -16240,7 +16261,7 @@ class Z4EllipseFrame extends Z4GeometricFrame {
    * @return The geometric shape
    */
   static  fromSize(width, height) {
-    return new Z4EllipseFrame(width / 4, height / 4, width / 2, height / 2, 0, 0, 0, 0, Z4Math.TWO_PI);
+    return new Z4EllipseFrame(width / 2, height / 2, width / 4, height / 4, 0, 0, 0, 0, Z4Math.TWO_PI);
   }
 }
 /**
@@ -16253,10 +16274,10 @@ class Z4RectangleFrame extends Z4GeometricFrame {
   /**
    * Creates the object
    *
-   * @param x The x location of the rectangle (not rotated)
-   * @param y The y location of the rectangle (not rotated)
-   * @param w The width of the rectangle (not sheared)
-   * @param h The height of the rectangle (not sheared)
+   * @param x The x center location of the rectangle (not rotated)
+   * @param y The y center location of the rectangle (not rotated)
+   * @param w The half width of the rectangle (not sheared)
+   * @param h The half height of the rectangle (not sheared)
    * @param angle The rotation angle of the rectangle
    * @param sx The x shear of the rectangle
    * @param sy The y shear of the rectangle
@@ -16265,10 +16286,10 @@ class Z4RectangleFrame extends Z4GeometricFrame {
     super(Z4GeometricShapeType.RECTANGLE, x, y, w, h, angle, sx, sy);
     let tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
     let points = new Array();
-    points.push(tx.transform(0, 0));
-    points.push(tx.transform(w - 1, 0));
-    points.push(tx.transform(w - 1, h - 1));
-    points.push(tx.transform(0, h - 1));
+    points.push(tx.transform(-w, -h));
+    points.push(tx.transform(w, -h));
+    points.push(tx.transform(w, h));
+    points.push(tx.transform(-w, h));
     points.push(points[0]);
     this.polyline = new Z4Polyline(points);
   }
@@ -16295,7 +16316,7 @@ class Z4RectangleFrame extends Z4GeometricFrame {
    * @return The geometric shape
    */
   static  fromSize(width, height) {
-    return new Z4RectangleFrame(width / 4, height / 4, width / 2, height / 2, 0, 0, 0);
+    return new Z4RectangleFrame(width / 2, height / 2, width / 4, height / 4, 0, 0, 0);
   }
 }
 /**
@@ -16312,10 +16333,10 @@ class Z4RoundRectangleFrame extends Z4GeometricFrame {
   /**
    * Creates the object
    *
-   * @param x The x location of the rounded rectangle (not rotated)
-   * @param y The y location of the rounded rectangle (not rotated)
-   * @param w The width of the rounded rectangle (not sheared)
-   * @param h The height of the rounded rectangle (not sheared)
+   * @param x The x center location of the rounded rectangle (not rotated)
+   * @param y The y center location of the rounded rectangle (not rotated)
+   * @param w The half width of the rounded rectangle (not sheared)
+   * @param h The half height of the rounded rectangle (not sheared)
    * @param angle The rotation angle of the rounded rectangle
    * @param sx The x shear of the rounded rectangle
    * @param sy The y shear of the rounded rectangle
@@ -16327,32 +16348,32 @@ class Z4RoundRectangleFrame extends Z4GeometricFrame {
     let tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
     let points = new Array();
     // First point NW
-    points.push(tx.transform(advance, 0));
+    points.push(tx.transform(advance - w, -h));
     // Second point NE
-    points.push(tx.transform(w - 1 - advance, 0));
+    points.push(tx.transform(w - advance, -h));
     // Arc NE
-    this.createArc(points, tx, advance, Z4Math.HALF_THREE_PI, w - 1 - advance, advance);
+    this.createArc(points, tx, advance, Z4Math.HALF_THREE_PI, w - advance, advance - h);
     // Third point SE
-    points.push(tx.transform(w - 1, h - 1 - advance));
+    points.push(tx.transform(w, h - advance));
     // Arc SE
-    this.createArc(points, tx, advance, 0, w - 1 - advance, h - 1 - advance);
+    this.createArc(points, tx, advance, 0, w - advance, h - advance);
     // fourth point SW
-    points.push(tx.transform(advance, h - 1));
+    points.push(tx.transform(advance - w, h));
     // Arc SW
-    this.createArc(points, tx, advance, Z4Math.HALF_PI, advance, h - 1 - advance);
+    this.createArc(points, tx, advance, Z4Math.HALF_PI, advance - w, h - advance);
     // fifth point NW
-    points.push(tx.transform(0, advance));
+    points.push(tx.transform(-w, advance - h));
     // Arc NW
-    this.createArc(points, tx, advance, Math.PI, advance, advance);
+    this.createArc(points, tx, advance, Math.PI, advance - w, advance - h);
     points.push(points[0]);
     this.polyline = new Z4Polyline(points);
   }
 
    createArc(points, tx, advance, startAngle, dx, dy) {
     for (let i = 1; i < Z4RoundRectangleFrame.ROUND_APPROX_SEGMENTS; i++) {
-      let angle = startAngle + Z4Math.HALF_PI * i / Z4RoundRectangleFrame.ROUND_APPROX_SEGMENTS;
-      let xx = advance * Math.cos(angle);
-      let yy = advance * Math.sin(angle);
+      let angleArc = startAngle + Z4Math.HALF_PI * i / Z4RoundRectangleFrame.ROUND_APPROX_SEGMENTS;
+      let xx = advance * Math.cos(angleArc);
+      let yy = advance * Math.sin(angleArc);
       points.push(tx.transform(xx + dx, yy + dy));
     }
   }
@@ -16379,7 +16400,7 @@ class Z4RoundRectangleFrame extends Z4GeometricFrame {
    * @return The geometric shape
    */
   static  fromSize(width, height) {
-    return new Z4RoundRectangleFrame(width / 4, height / 4, width / 2, height / 2, 0, 0, 0);
+    return new Z4RoundRectangleFrame(width / 2, height / 2, width / 4, height / 4, 0, 0, 0);
   }
 }
 /**

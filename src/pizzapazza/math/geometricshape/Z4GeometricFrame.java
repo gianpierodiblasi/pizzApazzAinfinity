@@ -1,7 +1,7 @@
 package pizzapazza.math.geometricshape;
 
 import def.js.Array;
-import pizzapazza.math.Z4Math;
+import pizzapazza.math.Z4AffineTransform;
 import pizzapazza.math.Z4Point;
 import pizzapazza.util.Z4Translations;
 import simulation.js.$Object;
@@ -14,22 +14,49 @@ import simulation.js.$Object;
  */
 public abstract class Z4GeometricFrame extends Z4GeometricCurve {
 
-  private final double x;
-  private final double y;
-  private final double w;
-  private final double h;
-  private final double angle;
-  private final double sx;
-  private final double sy;
+  /**
+   * The x center location of the frame
+   */
+  protected final double x;
+
+  /**
+   * The y center location of the frame
+   */
+  protected final double y;
+
+  /**
+   * The half width of the frame
+   */
+  protected final double w;
+
+  /**
+   * The half height of the frame
+   */
+  protected final double h;
+
+  /**
+   * The rotation of the frame
+   */
+  protected final double angle;
+
+  /**
+   * The x shear of the frame
+   */
+  protected final double sx;
+
+  /**
+   * The y shear of the frame
+   */
+  protected final double sy;
 
   /**
    * Creates the object
    *
    * @param type The type
-   * @param x The x location of the frame
-   * @param y The y location of the frame
-   * @param w The width of the frame
-   * @param h The height of the frame
+   * @param x The x center location of the frame
+   * @param y The y center location of the frame
+   * @param w The half width of the frame
+   * @param h The half height of the frame
    * @param angle The rotation of the frame
    * @param sx The x shear of the frame
    * @param sy The y shear of the frame
@@ -48,10 +75,12 @@ public abstract class Z4GeometricFrame extends Z4GeometricCurve {
 
   @Override
   public Array<Z4Point> getControlPoints() {
+    Z4AffineTransform tx = Z4AffineTransform.translate(this.x, this.y).concatenateRotate(this.angle).concatenateShear(this.sx, this.sy);
+
     return new Array<>(
-            new Z4Point(this.x + this.w / 2, this.y + this.h / 2),
-            new Z4Point(this.x + this.w / 2 + Math.cos(this.angle), this.y + this.h / 2 + Math.sin(angle)),
-            new Z4Point(this.x + this.w / 2 + Math.cos(this.angle - Z4Math.HALF_PI), this.y + this.h / 2 + Math.sin(angle - Z4Math.HALF_PI))
+            new Z4Point(this.x, this.y),
+            tx.transform(this.w, 0),
+            tx.transform(0, this.h)
     );
   }
 

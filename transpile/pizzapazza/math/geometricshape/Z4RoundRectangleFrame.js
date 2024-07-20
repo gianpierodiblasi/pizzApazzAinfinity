@@ -12,10 +12,10 @@ class Z4RoundRectangleFrame extends Z4GeometricFrame {
   /**
    * Creates the object
    *
-   * @param x The x location of the rounded rectangle (not rotated)
-   * @param y The y location of the rounded rectangle (not rotated)
-   * @param w The width of the rounded rectangle (not sheared)
-   * @param h The height of the rounded rectangle (not sheared)
+   * @param x The x center location of the rounded rectangle (not rotated)
+   * @param y The y center location of the rounded rectangle (not rotated)
+   * @param w The half width of the rounded rectangle (not sheared)
+   * @param h The half height of the rounded rectangle (not sheared)
    * @param angle The rotation angle of the rounded rectangle
    * @param sx The x shear of the rounded rectangle
    * @param sy The y shear of the rounded rectangle
@@ -27,32 +27,32 @@ class Z4RoundRectangleFrame extends Z4GeometricFrame {
     let tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
     let points = new Array();
     // First point NW
-    points.push(tx.transform(advance, 0));
+    points.push(tx.transform(advance - w, -h));
     // Second point NE
-    points.push(tx.transform(w - 1 - advance, 0));
+    points.push(tx.transform(w - advance, -h));
     // Arc NE
-    this.createArc(points, tx, advance, Z4Math.HALF_THREE_PI, w - 1 - advance, advance);
+    this.createArc(points, tx, advance, Z4Math.HALF_THREE_PI, w - advance, advance - h);
     // Third point SE
-    points.push(tx.transform(w - 1, h - 1 - advance));
+    points.push(tx.transform(w, h - advance));
     // Arc SE
-    this.createArc(points, tx, advance, 0, w - 1 - advance, h - 1 - advance);
+    this.createArc(points, tx, advance, 0, w - advance, h - advance);
     // fourth point SW
-    points.push(tx.transform(advance, h - 1));
+    points.push(tx.transform(advance - w, h));
     // Arc SW
-    this.createArc(points, tx, advance, Z4Math.HALF_PI, advance, h - 1 - advance);
+    this.createArc(points, tx, advance, Z4Math.HALF_PI, advance - w, h - advance);
     // fifth point NW
-    points.push(tx.transform(0, advance));
+    points.push(tx.transform(-w, advance - h));
     // Arc NW
-    this.createArc(points, tx, advance, Math.PI, advance, advance);
+    this.createArc(points, tx, advance, Math.PI, advance - w, advance - h);
     points.push(points[0]);
     this.polyline = new Z4Polyline(points);
   }
 
    createArc(points, tx, advance, startAngle, dx, dy) {
     for (let i = 1; i < Z4RoundRectangleFrame.ROUND_APPROX_SEGMENTS; i++) {
-      let angle = startAngle + Z4Math.HALF_PI * i / Z4RoundRectangleFrame.ROUND_APPROX_SEGMENTS;
-      let xx = advance * Math.cos(angle);
-      let yy = advance * Math.sin(angle);
+      let angleArc = startAngle + Z4Math.HALF_PI * i / Z4RoundRectangleFrame.ROUND_APPROX_SEGMENTS;
+      let xx = advance * Math.cos(angleArc);
+      let yy = advance * Math.sin(angleArc);
       points.push(tx.transform(xx + dx, yy + dy));
     }
   }
@@ -79,6 +79,6 @@ class Z4RoundRectangleFrame extends Z4GeometricFrame {
    * @return The geometric shape
    */
   static  fromSize(width, height) {
-    return new Z4RoundRectangleFrame(width / 4, height / 4, width / 2, height / 2, 0, 0, 0);
+    return new Z4RoundRectangleFrame(width / 2, height / 2, width / 4, height / 4, 0, 0, 0);
   }
 }

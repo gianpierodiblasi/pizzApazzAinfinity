@@ -6,28 +6,49 @@
  */
 class Z4GeometricFrame extends Z4GeometricCurve {
 
+  /**
+   * The x center location of the frame
+   */
    x = 0.0;
 
+  /**
+   * The y center location of the frame
+   */
    y = 0.0;
 
+  /**
+   * The half width of the frame
+   */
    w = 0.0;
 
+  /**
+   * The half height of the frame
+   */
    h = 0.0;
 
+  /**
+   * The rotation of the frame
+   */
    angle = 0.0;
 
+  /**
+   * The x shear of the frame
+   */
    sx = 0.0;
 
+  /**
+   * The y shear of the frame
+   */
    sy = 0.0;
 
   /**
    * Creates the object
    *
    * @param type The type
-   * @param x The x location of the frame
-   * @param y The y location of the frame
-   * @param w The width of the frame
-   * @param h The height of the frame
+   * @param x The x center location of the frame
+   * @param y The y center location of the frame
+   * @param w The half width of the frame
+   * @param h The half height of the frame
    * @param angle The rotation of the frame
    * @param sx The x shear of the frame
    * @param sy The y shear of the frame
@@ -44,7 +65,8 @@ class Z4GeometricFrame extends Z4GeometricCurve {
   }
 
    getControlPoints() {
-    return new Array(new Z4Point(this.x + this.w / 2, this.y + this.h / 2), new Z4Point(this.x + this.w / 2 + Math.cos(this.angle), this.y + this.h / 2 + Math.sin(angle)), new Z4Point(this.x + this.w / 2 + Math.cos(this.angle - Z4Math.HALF_PI), this.y + this.h / 2 + Math.sin(angle - Z4Math.HALF_PI)));
+    let tx = Z4AffineTransform.translate(this.x, this.y).concatenateRotate(this.angle).concatenateShear(this.sx, this.sy);
+    return new Array(new Z4Point(this.x, this.y), tx.transform(this.w, 0), tx.transform(0, this.h));
   }
 
    getControlPointConnections() {
