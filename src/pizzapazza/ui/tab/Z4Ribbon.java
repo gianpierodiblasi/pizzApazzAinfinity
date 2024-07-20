@@ -4,6 +4,7 @@ import javascript.swing.JSTabbedPane;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.component.Z4CanvasOverlayMode;
 import pizzapazza.ui.panel.Z4StatusPanel;
+import pizzapazza.ui.panel.math.geometricshape.Z4ShapesAndPathsPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonDrawingToolPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHelpPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
@@ -29,6 +30,7 @@ public class Z4Ribbon extends JSTabbedPane {
   private final Z4RibbonHelpPanel helpPanel = new Z4RibbonHelpPanel();
 
   private Z4Canvas canvas;
+  private Z4ShapesAndPathsPanel shapesAndPathsPanel;
 
   /**
    * Creates the object
@@ -48,8 +50,10 @@ public class Z4Ribbon extends JSTabbedPane {
     this.addChangeListener(event -> {
       if (this.textPanel.getStyle().display != "none") {
         this.textPanel.checkFonts();
+        this.shapesAndPathsPanel.getStyle().removeProperty("display");
       } else {
         this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
+        this.shapesAndPathsPanel.getStyle().display = "none";
       }
     });
 
@@ -64,6 +68,15 @@ public class Z4Ribbon extends JSTabbedPane {
   public void setCanvas(Z4Canvas canvas) {
     this.canvas = canvas;
     canvas.setRibbonPanels(this.projectPanel, this.layerPanel, this.drawingToolPanel, this.textPanel, this.historyPanel);
+  }
+
+  /**
+   * Sets the shapes and paths panel
+   *
+   * @param shapesAndPathsPanel
+   */
+  public void setShapesAndPathsPanel(Z4ShapesAndPathsPanel shapesAndPathsPanel) {
+    this.shapesAndPathsPanel = shapesAndPathsPanel;
   }
 
   /**

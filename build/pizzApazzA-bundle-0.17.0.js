@@ -5253,6 +5253,8 @@ class Z4Frame extends JSFrame {
 
    canvas = new Z4Canvas();
 
+   shapesAndPathsPanel = new Z4ShapesAndPathsPanel();
+
    statusPanel = new Z4StatusPanel();
 
   /**
@@ -5262,10 +5264,16 @@ class Z4Frame extends JSFrame {
     super();
     this.cssAddClass("z4frame");
     this.ribbon.setCanvas(this.canvas);
+    this.ribbon.setShapesAndPathsPanel(this.shapesAndPathsPanel);
     this.ribbon.setStatusPanel(this.statusPanel);
     this.canvas.setStatusPanel(this.statusPanel);
+    let panel = new JSPanel();
+    panel.setLayout(new GridBagLayout());
+    panel.add(this.shapesAndPathsPanel, new GBC(0, 0).f(GBC.BOTH).wxy(1, 1));
+    this.shapesAndPathsPanel.getStyle().display = "none";
     this.getContentPane().add(this.ribbon, BorderLayout.NORTH);
     this.getContentPane().add(this.canvas, BorderLayout.CENTER);
+    this.getContentPane().add(panel, BorderLayout.EAST);
     this.getContentPane().add(this.statusPanel, BorderLayout.SOUTH);
     this.canvas.create(Z4Constants.DEFAULT_IMAGE_SIZE, Z4Constants.DEFAULT_IMAGE_SIZE, new Color(0, 0, 0, 0));
     window.onbeforeunload = event => {
@@ -6716,6 +6724,22 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
     ctx.strokeStyle = Z4Constants.getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();
+  }
+}
+/**
+ * The panel to manage shapes and paths
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4ShapesAndPathsPanel extends JSPanel {
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super();
+    this.cssAddClass("z4shapesandpathspanel");
+    this.setLayout(new GridBagLayout());
   }
 }
 /**
@@ -14600,6 +14624,8 @@ class Z4Ribbon extends JSTabbedPane {
 
    canvas = null;
 
+   shapesAndPathsPanel = null;
+
   /**
    * Creates the object
    */
@@ -14616,8 +14642,10 @@ class Z4Ribbon extends JSTabbedPane {
     this.addChangeListener(event => {
       if (this.textPanel.getStyle().display !== "none") {
         this.textPanel.checkFonts();
+        this.shapesAndPathsPanel.getStyle().removeProperty("display");
       } else {
         this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
+        this.shapesAndPathsPanel.getStyle().display = "none";
       }
     });
     this.settingsPanel.setHistoryPanel(this.historyPanel);
@@ -14631,6 +14659,15 @@ class Z4Ribbon extends JSTabbedPane {
    setCanvas(canvas) {
     this.canvas = canvas;
     canvas.setRibbonPanels(this.projectPanel, this.layerPanel, this.drawingToolPanel, this.textPanel, this.historyPanel);
+  }
+
+  /**
+   * Sets the shapes and paths panel
+   *
+   * @param shapesAndPathsPanel
+   */
+   setShapesAndPathsPanel(shapesAndPathsPanel) {
+    this.shapesAndPathsPanel = shapesAndPathsPanel;
   }
 
   /**
@@ -22314,6 +22351,22 @@ class Z4Translations {
 
   static  ORIENTATION = "";
 
+  static  SHAPES_AND_PATHS = "";
+
+  static  LINE = "";
+
+  static  ELLIPSE = "";
+
+  static  RECTANGLE = "";
+
+  static  ROUND_RECTANGLE = "";
+
+  static  QUAD = "";
+
+  static  SINUSOIDAL = "";
+
+  static  SPIRAL = "";
+
   // Composite Operation
   static  COMPOSITE_OPERATION = "";
 
@@ -22615,6 +22668,14 @@ class Z4Translations {
     Z4Translations.DISTANCE = "Distance";
     Z4Translations.CENTER_VERB = "Center";
     Z4Translations.ORIENTATION = "Orientation";
+    Z4Translations.SHAPES_AND_PATHS = "Shapes & Paths";
+    Z4Translations.LINE = "Line";
+    Z4Translations.ELLIPSE = "Ellipse";
+    Z4Translations.RECTANGLE = "Rectangle";
+    Z4Translations.ROUND_RECTANGLE = "Round Rectangle";
+    Z4Translations.QUAD = "Quadric";
+    Z4Translations.SINUSOIDAL = "Sinusoidal";
+    Z4Translations.SPIRAL = "Spiral";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "This is the default setting and draws the layer on top of the existing content";
@@ -22878,6 +22939,14 @@ class Z4Translations {
     Z4Translations.DISTANCE = "Distanza";
     Z4Translations.CENTER_VERB = "Centra";
     Z4Translations.ORIENTATION = "Orientamento";
+    Z4Translations.SHAPES_AND_PATHS = "Forme & Percorsi";
+    Z4Translations.LINE = "Linea";
+    Z4Translations.ELLIPSE = "Ellisse";
+    Z4Translations.RECTANGLE = "Rettangolo";
+    Z4Translations.ROUND_RECTANGLE = "Rettangolo Arrotondato";
+    Z4Translations.QUAD = "Quadrica";
+    Z4Translations.SINUSOIDAL = "Sinusoidale";
+    Z4Translations.SPIRAL = "Spirale";
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "Questa \u00E8 l'impostazione predefinita e disegna il livello sopra il contenuto esistente";

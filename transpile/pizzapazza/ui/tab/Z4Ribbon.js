@@ -21,6 +21,8 @@ class Z4Ribbon extends JSTabbedPane {
 
    canvas = null;
 
+   shapesAndPathsPanel = null;
+
   /**
    * Creates the object
    */
@@ -37,8 +39,10 @@ class Z4Ribbon extends JSTabbedPane {
     this.addChangeListener(event => {
       if (this.textPanel.getStyle().display !== "none") {
         this.textPanel.checkFonts();
+        this.shapesAndPathsPanel.getStyle().removeProperty("display");
       } else {
         this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
+        this.shapesAndPathsPanel.getStyle().display = "none";
       }
     });
     this.settingsPanel.setHistoryPanel(this.historyPanel);
@@ -52,6 +56,15 @@ class Z4Ribbon extends JSTabbedPane {
    setCanvas(canvas) {
     this.canvas = canvas;
     canvas.setRibbonPanels(this.projectPanel, this.layerPanel, this.drawingToolPanel, this.textPanel, this.historyPanel);
+  }
+
+  /**
+   * Sets the shapes and paths panel
+   *
+   * @param shapesAndPathsPanel
+   */
+   setShapesAndPathsPanel(shapesAndPathsPanel) {
+    this.shapesAndPathsPanel = shapesAndPathsPanel;
   }
 
   /**

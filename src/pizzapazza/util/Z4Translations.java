@@ -262,6 +262,14 @@ public class Z4Translations {
   public static String DISTANCE = "";
   public static String CENTER_VERB = "";
   public static String ORIENTATION = "";
+  public static String SHAPES_AND_PATHS = "";
+  public static String LINE = "";
+  public static String ELLIPSE = "";
+  public static String RECTANGLE = "";
+  public static String ROUND_RECTANGLE = "";
+  public static String QUAD = "";
+  public static String SINUSOIDAL = "";
+  public static String SPIRAL = "";
 
   // Composite Operation
   public static String COMPOSITE_OPERATION = "";
@@ -559,7 +567,15 @@ public class Z4Translations {
     Z4Translations.DISTANCE = "Distance";
     Z4Translations.CENTER_VERB = "Center";
     Z4Translations.ORIENTATION = "Orientation";
-
+    Z4Translations.SHAPES_AND_PATHS = "Shapes & Paths";
+    Z4Translations.LINE = "Line";
+    Z4Translations.ELLIPSE = "Ellipse";
+    Z4Translations.RECTANGLE = "Rectangle";
+    Z4Translations.ROUND_RECTANGLE = "Round Rectangle";
+    Z4Translations.QUAD = "Quadric";
+    Z4Translations.SINUSOIDAL = "Sinusoidal";
+    Z4Translations.SPIRAL = "Spiral";
+  
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "This is the default setting and draws the layer on top of the existing content";
@@ -840,7 +856,15 @@ public class Z4Translations {
     Z4Translations.DISTANCE = "Distanza";
     Z4Translations.CENTER_VERB = "Centra";
     Z4Translations.ORIENTATION = "Orientamento";
-
+    Z4Translations.SHAPES_AND_PATHS = "Forme & Percorsi";
+    Z4Translations.LINE = "Linea";
+    Z4Translations.ELLIPSE = "Ellisse";
+    Z4Translations.RECTANGLE = "Rettangolo";
+    Z4Translations.ROUND_RECTANGLE = "Rettangolo Arrotondato";
+    Z4Translations.QUAD = "Quadrica";
+    Z4Translations.SINUSOIDAL = "Sinusoidale";
+    Z4Translations.SPIRAL = "Spirale";
+    
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "Questa \u00E8 l'impostazione predefinita e disegna il livello sopra il contenuto esistente";
