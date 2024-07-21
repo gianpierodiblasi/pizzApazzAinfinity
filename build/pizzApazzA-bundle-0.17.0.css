@@ -656,16 +656,16 @@
   background-color: white;
 }
 
-/*.z4geometricshapepreview summary button {
+.z4geometricshapepreview summary button {
   pointer-events: auto;
   border: none;
   padding: 1px 2px;
   max-height: 15px;
-}*/
+}
 
-/*.z4geometricshapepreview summary .z4geometricshapepreview-selector {
+.z4geometricshapepreview summary .z4geometricshapepreview-selector {
   font-family: monospace;
-}*/
+}
 
 /*.z4geometricshapepreview .z4geometricshapepreview-editor[transparent=true], .z4geometricshapepreview .z4geometricshapepreview-editor[transparent=true] * {
   background: transparent;
