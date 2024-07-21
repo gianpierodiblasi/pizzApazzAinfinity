@@ -1016,6 +1016,15 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Sets the selected geometric shape
+   *
+   * @param shape The selected geometric shape
+   */
+   setSelectedGeometricShape(shape) {
+    this.setSelectedGeometricShapeAndAddGeometricShapePreview(shape, null, false);
+  }
+
+  /**
    * Sets the selected geometric shape and adds the geometric shape preview
    *
    * @param shape The selected geometric shape

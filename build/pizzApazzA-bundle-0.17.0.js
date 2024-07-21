@@ -3102,6 +3102,15 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Sets the selected geometric shape
+   *
+   * @param shape The selected geometric shape
+   */
+   setSelectedGeometricShape(shape) {
+    this.setSelectedGeometricShapeAndAddGeometricShapePreview(shape, null, false);
+  }
+
+  /**
    * Sets the selected geometric shape and adds the geometric shape preview
    *
    * @param shape The selected geometric shape
@@ -6915,7 +6924,7 @@ class Z4GeometricShapePreview extends JSDropDown {
     selector.addActionListener(event => {
       document.querySelectorAll(".z4geometricshapepreview .z4geometricshapepreview-selector").forEach(element => element.textContent = Z4GeometricShapePreview.UNSELECTED_GEOMETRIC_SHAPE_CONTENT);
       selector.setText(Z4GeometricShapePreview.SELECTED_GEOMETRIC_SHAPE_CONTENT);
-      // this.canvas.setSelectedLayer(this.layer);
+      this.canvas.setSelectedGeometricShape(this.shape);
     });
     this.summary.add(selector, new GBC(1, 0).a(GBC.NORTH).i(0, 2, 0, 0));
     this.appendChildInTree("summary", this.summary);

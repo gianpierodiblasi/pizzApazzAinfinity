@@ -85,7 +85,7 @@ public class Z4GeometricShapePreview extends JSDropDown {
     selector.addActionListener(event -> {
       document.querySelectorAll(".z4geometricshapepreview .z4geometricshapepreview-selector").forEach(element -> element.textContent = Z4GeometricShapePreview.UNSELECTED_GEOMETRIC_SHAPE_CONTENT);
       selector.setText(Z4GeometricShapePreview.SELECTED_GEOMETRIC_SHAPE_CONTENT);
-//      this.canvas.setSelectedLayer(this.layer);
+      this.canvas.setSelectedGeometricShape(this.shape);
     });
     this.summary.add(selector, new GBC(1, 0).a(GBC.NORTH).i(0, 2, 0, 0));
 
@@ -351,7 +351,7 @@ public class Z4GeometricShapePreview extends JSDropDown {
 
       this.ctx.save();
 
-      this.ctx.lineWidth = 3/this.zoom;
+      this.ctx.lineWidth = 3 / this.zoom;
       this.ctx.scale(this.zoom, this.zoom);
 
       Array<Double> dash = new Array<>();
