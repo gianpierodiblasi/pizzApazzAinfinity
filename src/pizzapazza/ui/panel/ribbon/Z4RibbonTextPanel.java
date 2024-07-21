@@ -88,6 +88,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
   private Z4Canvas canvas;
   private boolean fontsChecked;
+  private int selectedControlPoint = 0;
   private final Z4TextInfo textInfo = new Z4TextInfo();
 
   /**
@@ -364,7 +365,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textInfo.shadowShearX = parseInt(this.shadowShearX.getValue());
     this.textInfo.shadowShearY = parseInt(this.shadowShearY.getValue());
 
-    this.canvas.setTextInfo(this.textInfo, 0);
+    this.canvas.setTextInfo(this.textInfo, this.selectedControlPoint);
   }
 
   private void onReset() {
@@ -434,6 +435,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
       this.warningMessage.getStyle().removeProperty("display");
     }
 
+    this.selectedControlPoint = selectedControlPoint;
     this.canvas.setTextInfo(this.textInfo, selectedControlPoint);
   }
 

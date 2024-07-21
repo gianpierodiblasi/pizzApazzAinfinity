@@ -8583,6 +8583,8 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
    fontsChecked = false;
 
+   selectedControlPoint = 0;
+
    textInfo = new Z4TextInfo();
 
   /**
@@ -8815,7 +8817,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textInfo.shadowOffsetY = parseInt(this.shadowOffsetY.getValue());
     this.textInfo.shadowShearX = parseInt(this.shadowShearX.getValue());
     this.textInfo.shadowShearY = parseInt(this.shadowShearY.getValue());
-    this.canvas.setTextInfo(this.textInfo, 0);
+    this.canvas.setTextInfo(this.textInfo, this.selectedControlPoint);
   }
 
    onReset() {
@@ -8874,6 +8876,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     } else {
       this.warningMessage.getStyle().removeProperty("display");
     }
+    this.selectedControlPoint = selectedControlPoint;
     this.canvas.setTextInfo(this.textInfo, selectedControlPoint);
   }
 
