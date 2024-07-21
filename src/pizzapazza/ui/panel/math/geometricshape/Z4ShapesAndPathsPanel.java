@@ -36,40 +36,31 @@ public class Z4ShapesAndPathsPanel extends JSPanel {
     this.cssAddClass("z4shapesandpathspanel");
     this.setLayout(new GridBagLayout());
 
-    JSComponent fieldset = new JSComponent(document.createElement("fieldset"));
-    this.add(fieldset, new GBC(0, 0).f(GBC.BOTH).wxy(1, 1));
+    Z4UI.addLabel(this, Z4Translations.SHAPES_AND_PATHS, new GBC(0, 0).w(2).a(GBC.WEST).i(-9, 5, 5, 0));
 
-    JSComponent legend = new JSComponent(document.createElement("legend"));
-    legend.setContent(Z4Translations.SHAPES_AND_PATHS);
-    fieldset.appendChild(legend);
+    JSDropDownMenu dropDownMenu = new JSDropDownMenu();
+    dropDownMenu.setLabel(Z4Translations.NEW_HIS);
+    dropDownMenu.addMenu(Z4Translations.LINE, event -> this.canvas.addGeometricShape(Z4GeometricShapeType.LINE));
+    dropDownMenu.addMenu(Z4Translations.POLYLINE, event -> this.canvas.addGeometricShape(Z4GeometricShapeType.POLYLINE));
+    dropDownMenu.addMenu(Z4Translations.ELLIPSE, event -> this.canvas.addGeometricShape(Z4GeometricShapeType.ELLIPSE));
+    dropDownMenu.addMenu(Z4Translations.RECTANGLE, event -> this.canvas.addGeometricShape(Z4GeometricShapeType.RECTANGLE));
+    dropDownMenu.addMenu(Z4Translations.ROUND_RECTANGLE, event -> this.canvas.addGeometricShape(Z4GeometricShapeType.ROUND_RECTANGLE));
+    dropDownMenu.addMenu(Z4Translations.QUAD, event -> this.canvas.addGeometricShape(Z4GeometricShapeType.QUAD));
+    dropDownMenu.addMenu(Z4Translations.BEZIER, event -> this.canvas.addGeometricShape(Z4GeometricShapeType.BEZIER));
+    dropDownMenu.addMenu(Z4Translations.SINUSOIDAL, event -> this.canvas.addGeometricShape(Z4GeometricShapeType.SINUSOIDAL));
+    dropDownMenu.addMenu(Z4Translations.SPIRAL, event -> this.canvas.addGeometricShape(Z4GeometricShapeType.SPIRAL));
+    this.add(dropDownMenu, new GBC(0, 1).i(0, 2, 0, 5));
 
-//    JSPanel panel = new JSPanel();
-//    panel.setLayout(new GridBagLayout());
-//    fieldset.appendChild(panel);
-//
-//    JSDropDownMenu dropDownMenu = new JSDropDownMenu();
-//    dropDownMenu.setLabel(Z4Translations.NEW_HIS);
-//    dropDownMenu.addMenu(Z4Translations.LINE, event -> this.canvas.addGeometricShape(Z4GeometricShapeType.LINE));
-//    dropDownMenu.addMenu(Z4Translations.POLYLINE, event -> this.canvas.addGeometricShape(Z4GeometricShapeType.POLYLINE));
-//    dropDownMenu.addMenu(Z4Translations.ELLIPSE, event -> this.canvas.addGeometricShape(Z4GeometricShapeType.ELLIPSE));
-//    dropDownMenu.addMenu(Z4Translations.RECTANGLE, event -> this.canvas.addGeometricShape(Z4GeometricShapeType.RECTANGLE));
-//    dropDownMenu.addMenu(Z4Translations.ROUND_RECTANGLE, event -> this.canvas.addGeometricShape(Z4GeometricShapeType.ROUND_RECTANGLE));
-//    dropDownMenu.addMenu(Z4Translations.QUAD, event -> this.canvas.addGeometricShape(Z4GeometricShapeType.QUAD));
-//    dropDownMenu.addMenu(Z4Translations.BEZIER, event -> this.canvas.addGeometricShape(Z4GeometricShapeType.BEZIER));
-//    dropDownMenu.addMenu(Z4Translations.SINUSOIDAL, event -> this.canvas.addGeometricShape(Z4GeometricShapeType.SINUSOIDAL));
-//    dropDownMenu.addMenu(Z4Translations.SPIRAL, event -> this.canvas.addGeometricShape(Z4GeometricShapeType.SPIRAL));
-//    panel.add(dropDownMenu, new GBC(0, 0).i(0, 0, 0, 5));
-//
-//    JSButton button = new JSButton();
-//    button.setText(Z4Translations.MERGE);
-//    button.setContentAreaFilled(false);
-//    panel.add(button, new GBC(1, 0).a(GBC.WEST).f(GBC.VERTICAL));
-//
-//    Z4UI.addHLine(panel, new GBC(0, 1).w(2).wx(1).f(GBC.HORIZONTAL).i(2, 1, 2, 1));
-//
-//    this.geometricShapesPreview.setLayout(new BoxLayout(this.geometricShapesPreview, BoxLayout.Y_AXIS));
-//    this.geometricShapesPreview.getStyle().overflowY = "scroll";
-//    fieldset.appendChild(this.geometricShapesPreview);
+    JSButton button = new JSButton();
+    button.setText(Z4Translations.MERGE);
+    button.setContentAreaFilled(false);
+    this.add(button, new GBC(1, 1).a(GBC.WEST).f(GBC.VERTICAL));
+
+    Z4UI.addHLine(this, new GBC(0, 2).w(2).wx(1).f(GBC.HORIZONTAL).i(2, 1, 2, 1));
+
+    this.geometricShapesPreview.setLayout(new BoxLayout(this.geometricShapesPreview, BoxLayout.Y_AXIS));
+    this.geometricShapesPreview.getStyle().overflowY = "scroll";
+    this.add(this.geometricShapesPreview, new GBC(0, 3).w(2).wxy(1, 1).f(GBC.BOTH).i(5, 2, 5, 2));
   }
 
   /**
@@ -89,7 +80,7 @@ public class Z4ShapesAndPathsPanel extends JSPanel {
   public void setStatusPanel(Z4StatusPanel statusPanel) {
     this.statusPanel = statusPanel;
   }
-  
+
   /**
    * Adds a new geometric shape preview
    *
