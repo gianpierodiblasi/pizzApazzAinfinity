@@ -16937,7 +16937,7 @@ class Z4SpiralCurve extends Z4GeometricCurve {
     this.radius = radius;
     this.angle = angle;
     let distance = Z4Math.distance(x1, y1, x2, y2);
-    let size = parseInt(distance * Z4GeometricCurve.APPROX_SEGMENTS / radius) - 1;
+    let size = parseInt(distance * Z4GeometricCurve.APPROX_SEGMENTS / radius);
     if (size > 0) {
       let points = new Array();
       for (let i = 0; i <= size; i++) {

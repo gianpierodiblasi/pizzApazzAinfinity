@@ -41,7 +41,7 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
     this.angle = angle;
 
     double distance = Z4Math.distance(x1, y1, x2, y2);
-    int size = parseInt(distance * Z4GeometricCurve.APPROX_SEGMENTS / radius) - 1;
+    int size = parseInt(distance * Z4GeometricCurve.APPROX_SEGMENTS / radius);
 
     if (size > 0) {
       Array<Z4Point> points = new Array<>();
