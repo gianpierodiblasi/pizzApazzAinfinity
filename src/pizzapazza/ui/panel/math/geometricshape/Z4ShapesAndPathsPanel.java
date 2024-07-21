@@ -4,7 +4,6 @@ import javascript.awt.BoxLayout;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
 import javascript.swing.JSButton;
-import javascript.swing.JSComponent;
 import javascript.swing.JSDropDownMenu;
 import javascript.swing.JSPanel;
 import pizzapazza.math.geometricshape.Z4GeometricShape;
@@ -13,7 +12,6 @@ import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
-import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.setTimeout;
 
 /**
