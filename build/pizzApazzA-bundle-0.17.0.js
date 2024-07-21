@@ -4324,6 +4324,10 @@ class Z4CanvasTextManager {
 
   // 
   // private boolean pressed;
+   selectedIndex = -1;
+
+  static  SELECTOR_RADIUS = 7;
+
   static  SHEARING_COEFFICIENT = 50;
 
   /**
@@ -4471,6 +4475,17 @@ class Z4CanvasTextManager {
       this.draw(ctx, this.textInfo.shadowText ? this.textInfo.shadowText : this.textInfo.textText, this.textInfo.textText, this.textInfo.shadowEmpty, this.textInfo.shadowColor, this.textInfo.shadowOffsetX, this.textInfo.shadowOffsetY, this.textInfo.shadowShearX, this.textInfo.shadowShearY, 0, null, this.textInfo.shadowReflex);
     }
     this.draw(ctx, this.textInfo.textText, this.textInfo.textText, this.textInfo.textEmpty, this.textInfo.textColor, 0, 0, this.textInfo.textShearX, this.textInfo.textShearY, this.textInfo.textBorder, this.textInfo.textBorderColor, false);
+    if (drawPath) {
+      let controlPoints = this.textInfo.shape.getControlPoints();
+      let controlPointConnections = this.textInfo.shape.getControlPointConnections();
+      ctx.save();
+      controlPoints.forEach((point, index, array) => this.drawCircle(ctx, point, index));
+      for (let index = 0; index < controlPointConnections.length; index += 2) {
+        this.drawLine(ctx, controlPoints[controlPointConnections[index]], controlPoints[controlPointConnections[index + 1]]);
+      }
+      this.drawPolyline(ctx, this.textInfo.shape.getPolyline());
+      ctx.restore();
+    }
   }
 
    draw(ctx, strToPrint, strForMeasure, empty, color, offsetX, offsetY, shearX, shearY, border, borderColor, reflex) {
@@ -4544,6 +4559,68 @@ class Z4CanvasTextManager {
       ctx.strokeText(s, 0, 0);
     }
     ctx.restore();
+  }
+
+   drawCircle(ctx, point, index) {
+    ctx.lineWidth = 3 / this.zoom;
+    let dash = new Array();
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, Z4CanvasTextManager.SELECTOR_RADIUS, 0, 2 * Math.PI);
+    ctx.strokeStyle = Z4Constants.getStyle(index === this.selectedIndex ? "red" : "black");
+    ctx.setLineDash(dash);
+    ctx.stroke();
+    dash.push(2.5, 2.5);
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, Z4CanvasTextManager.SELECTOR_RADIUS, 0, 2 * Math.PI);
+    ctx.strokeStyle = Z4Constants.getStyle("white");
+    ctx.setLineDash(dash);
+    ctx.stroke();
+  }
+
+   drawLine(ctx, p1, p2) {
+    ctx.lineWidth = 3 / this.zoom;
+    let dash = new Array();
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    ctx.lineTo(p2.x, p2.y);
+    ctx.strokeStyle = Z4Constants.getStyle("black");
+    ctx.setLineDash(dash);
+    ctx.stroke();
+    dash.push(2.5, 2.5);
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    ctx.lineTo(p2.x, p2.y);
+    ctx.strokeStyle = Z4Constants.getStyle("white");
+    ctx.setLineDash(dash);
+    ctx.stroke();
+  }
+
+   drawPolyline(ctx, polyline) {
+    ctx.lineWidth = 3 / this.zoom;
+    let dash = new Array();
+    ctx.beginPath();
+    polyline.getControlPoints().forEach((point, index, array) => {
+      if (index) {
+        ctx.lineTo(point.x, point.y);
+      } else {
+        ctx.moveTo(point.x, point.y);
+      }
+    });
+    ctx.strokeStyle = Z4Constants.getStyle("green");
+    ctx.setLineDash(dash);
+    ctx.stroke();
+    dash.push(2.5, 2.5);
+    ctx.beginPath();
+    polyline.getControlPoints().forEach((point, index, array) => {
+      if (index) {
+        ctx.lineTo(point.x, point.y);
+      } else {
+        ctx.moveTo(point.x, point.y);
+      }
+    });
+    ctx.strokeStyle = Z4Constants.getStyle("white");
+    ctx.setLineDash(dash);
+    ctx.stroke();
   }
 }
 /**
