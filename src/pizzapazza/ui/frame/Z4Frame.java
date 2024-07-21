@@ -36,8 +36,8 @@ public class Z4Frame extends JSFrame {
     this.ribbon.setCanvas(this.canvas);
     this.ribbon.setShapesAndPathsPanel(this.shapesAndPathsPanel);
     this.ribbon.setStatusPanel(this.statusPanel);
-    this.canvas.setStatusPanel(this.statusPanel);
     this.canvas.setShapesAndPathsPanel(this.shapesAndPathsPanel);
+    this.canvas.setStatusPanel(this.statusPanel);
     this.shapesAndPathsPanel.setStatusPanel(this.statusPanel);
 
     JSPanel panel = new JSPanel();
