@@ -38,7 +38,9 @@ class Z4ShapesAndPathsPanel extends JSPanel {
     Z4UI.addHLine(this, new GBC(0, 2).w(2).wx(1).f(GBC.HORIZONTAL).i(2, 1, 2, 1));
     this.geometricShapesPreview.setLayout(new BoxLayout(this.geometricShapesPreview, BoxLayout.Y_AXIS));
     this.geometricShapesPreview.getStyle().overflowY = "scroll";
+    this.geometricShapesPreview.getStyle().height = (window.innerHeight - 230) + "px";
     this.add(this.geometricShapesPreview, new GBC(0, 3).w(2).wxy(1, 1).f(GBC.BOTH).i(5, 2, 5, 2));
+    window.addEventListener("resize", event => this.geometricShapesPreview.getStyle().height = (window.innerHeight - 230) + "px");
   }
 
   /**
@@ -68,6 +70,7 @@ class Z4ShapesAndPathsPanel extends JSPanel {
     let preview = new Z4GeometricShapePreview();
     preview.setShapesAndPathsPanel(this);
     preview.setGeometriShape(this.canvas, shape);
+    document.querySelectorAll(".z4geometricshapepreview .z4geometricshapepreview-selector").forEach(element => element.textContent = Z4GeometricShapePreview.UNSELECTED_GEOMETRIC_SHAPE_CONTENT);
     this.geometricShapesPreview.add(preview, null);
     setTimeout(() => preview.invoke("scrollIntoView()"), 0);
   }

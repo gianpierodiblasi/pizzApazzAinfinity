@@ -12,7 +12,9 @@ import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
+import static simulation.js.$Globals.document;
 import static simulation.js.$Globals.setTimeout;
+import static simulation.js.$Globals.window;
 
 /**
  * The panel to manage shapes and paths
@@ -58,7 +60,10 @@ public class Z4ShapesAndPathsPanel extends JSPanel {
 
     this.geometricShapesPreview.setLayout(new BoxLayout(this.geometricShapesPreview, BoxLayout.Y_AXIS));
     this.geometricShapesPreview.getStyle().overflowY = "scroll";
+    this.geometricShapesPreview.getStyle().height = (window.innerHeight - 230) + "px";
     this.add(this.geometricShapesPreview, new GBC(0, 3).w(2).wxy(1, 1).f(GBC.BOTH).i(5, 2, 5, 2));
+
+    window.addEventListener("resize", event -> this.geometricShapesPreview.getStyle().height = (window.innerHeight - 230) + "px");
   }
 
   /**
@@ -88,6 +93,8 @@ public class Z4ShapesAndPathsPanel extends JSPanel {
     Z4GeometricShapePreview preview = new Z4GeometricShapePreview();
     preview.setShapesAndPathsPanel(this);
     preview.setGeometriShape(this.canvas, shape);
+
+    document.querySelectorAll(".z4geometricshapepreview .z4geometricshapepreview-selector").forEach(element -> element.textContent = Z4GeometricShapePreview.UNSELECTED_GEOMETRIC_SHAPE_CONTENT);
 
     this.geometricShapesPreview.add(preview, null);
     setTimeout(() -> preview.invoke("scrollIntoView()"), 0);
