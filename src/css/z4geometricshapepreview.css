@@ -1,0 +1,27 @@
+.z4geometricshapepreview {
+  margin-bottom: 2px;
+}
+
+.z4geometricshapepreview summary canvas {
+  border: 1px solid var(--main-action-bgcolor);
+  background-color: white;
+}
+
+/*.z4geometricshapepreview summary button {
+  pointer-events: auto;
+  border: none;
+  padding: 1px 2px;
+  max-height: 15px;
+}*/
+
+/*.z4geometricshapepreview summary .z4geometricshapepreview-selector {
+  font-family: monospace;
+}*/
+
+/*.z4geometricshapepreview .z4geometricshapepreview-editor[transparent=true], .z4geometricshapepreview .z4geometricshapepreview-editor[transparent=true] * {
+  background: transparent;
+}*/
+
+/*.z4geometricshapepreview .z4geometricshapepreview-setlayer {
+  display: none;
+}*/

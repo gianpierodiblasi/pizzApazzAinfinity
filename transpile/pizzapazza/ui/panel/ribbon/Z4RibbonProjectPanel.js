@@ -84,7 +84,7 @@ class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
       document.querySelectorAll(".z4layerpreview .z4layerpreview-setlayer").forEach(element => (element).click());
       this.afterTransform();
     });
-    Z4UI.addVLine(this, new GBC(16, 0).h(3).wxy(1, 1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addVLine(this, new GBC(16, 0).h(3).wxy(1, 1).a(GBC.WEST).f(GBC.VERTICAL).i(1, 2, 1, 2));
   }
 
    flip(operation, apply) {

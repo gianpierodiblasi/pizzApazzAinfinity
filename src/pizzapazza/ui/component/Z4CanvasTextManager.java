@@ -329,7 +329,7 @@ public class Z4CanvasTextManager {
   }
   
   private void drawLine($CanvasRenderingContext2D ctx, Z4Point p1, Z4Point p2) {
-    ctx.lineWidth = 3 / this.zoom;
+    ctx.lineWidth = 2 / this.zoom;
     
     Array<Double> dash = new Array<>();
     

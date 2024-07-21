@@ -2,14 +2,10 @@
   border-radius: var(--roundness);
   border-color: var(--main-action-bgcolor);
   margin: 1px !important;
+  min-width: 14.1rem;
 }
 
 .z4shapesandpathspanel fieldset {
   border-radius: var(--roundness);
   border-color: var(--main-action-bgcolor);
-}
-
-.z4shapesandpathspanel .z4shapesandpathspanel-container {
-  width: 100%;
-  height: 100%;
 }

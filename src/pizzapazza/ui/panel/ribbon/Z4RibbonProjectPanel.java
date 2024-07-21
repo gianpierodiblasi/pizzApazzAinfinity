@@ -135,7 +135,7 @@ public class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
       this.afterTransform();
     });
 
-    Z4UI.addVLine(this, new GBC(16, 0).h(3).wxy(1, 1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addVLine(this, new GBC(16, 0).h(3).wxy(1, 1).a(GBC.WEST).f(GBC.VERTICAL).i(1, 2, 1, 2));
   }
 
   private void flip($Apply_1_Void<Z4Layer> operation, $Apply_3_V<Point, Point, Dimension, Point> apply) {

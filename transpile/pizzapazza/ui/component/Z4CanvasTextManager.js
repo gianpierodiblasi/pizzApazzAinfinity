@@ -277,7 +277,7 @@ class Z4CanvasTextManager {
   }
 
    drawLine(ctx, p1, p2) {
-    ctx.lineWidth = 3 / this.zoom;
+    ctx.lineWidth = 2 / this.zoom;
     let dash = new Array();
     ctx.beginPath();
     ctx.moveTo(p1.x, p1.y);
