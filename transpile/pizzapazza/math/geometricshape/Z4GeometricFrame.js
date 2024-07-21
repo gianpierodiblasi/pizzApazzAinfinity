@@ -66,7 +66,7 @@ class Z4GeometricFrame extends Z4GeometricCurve {
 
    getControlPoints() {
     let tx = Z4AffineTransform.translate(this.x, this.y).concatenateRotate(this.angle).concatenateShear(this.sx, this.sy);
-    return new Array(new Z4Point(this.x, this.y), tx.transform(this.w, 0), tx.transform(0, this.h));
+    return new Array(new Z4Point(this.x, this.y), tx.transform(this.w, 0), tx.transform(0, -this.h));
   }
 
    getControlPointConnections() {

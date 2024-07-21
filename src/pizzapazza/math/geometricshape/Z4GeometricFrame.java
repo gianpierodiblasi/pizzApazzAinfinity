@@ -80,7 +80,7 @@ public abstract class Z4GeometricFrame extends Z4GeometricCurve {
     return new Array<>(
             new Z4Point(this.x, this.y),
             tx.transform(this.w, 0),
-            tx.transform(0, this.h)
+            tx.transform(0, -this.h)
     );
   }
 
