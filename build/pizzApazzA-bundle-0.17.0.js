@@ -8633,9 +8633,9 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
    setGeometricShape(shape) {
     this.textInfo.shape = shape;
     if (shape) {
-      this.warningMessage.getStyle().removeProperty("display");
-    } else {
       this.warningMessage.getStyle().display = "none";
+    } else {
+      this.warningMessage.getStyle().removeProperty("display");
     }
     this.canvas.setTextInfo(this.textInfo);
   }

@@ -428,9 +428,9 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textInfo.shape = shape;
 
     if ($exists(shape)) {
-      this.warningMessage.getStyle().removeProperty("display");
-    } else {
       this.warningMessage.getStyle().display = "none";
+    } else {
+      this.warningMessage.getStyle().removeProperty("display");
     }
 
     this.canvas.setTextInfo(this.textInfo);
