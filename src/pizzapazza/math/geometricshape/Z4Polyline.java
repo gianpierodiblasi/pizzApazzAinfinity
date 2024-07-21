@@ -87,11 +87,11 @@ public class Z4Polyline extends Z4GeometricShape {
     int index = this.cumLen.findIndex(pos -> pos >= finalPos, null);
 
     if (this.cumLen.$get(index) == finalPos) {
-      if (!$exists(index)) {
-        index = 1;
+      if ($exists(index)) {
+        return Z4Vector.fromVector(this.points.$get(index).x, this.points.$get(index).y, 1, Z4Math.atan(this.points.$get(index - 1).x, this.points.$get(index - 1).y, this.points.$get(index).x, this.points.$get(index).y));
+      } else {
+        return Z4Vector.fromPoints(this.points.$get(index).x, this.points.$get(index).y, this.points.$get(index + 1).x, this.points.$get(index + 1).y);
       }
-
-      return Z4Vector.fromPoints(this.points.$get(index - 1).x, this.points.$get(index - 1).y, this.points.$get(index).x, this.points.$get(index).y);
     } else if (this.cumLen.$get(index - 1) == finalPos) {
       return Z4Vector.fromPoints(this.points.$get(index - 1).x, this.points.$get(index - 1).y, this.points.$get(index).x, this.points.$get(index).y);
     } else {

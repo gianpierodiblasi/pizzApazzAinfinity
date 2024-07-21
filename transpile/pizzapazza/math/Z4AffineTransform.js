@@ -46,7 +46,7 @@ class Z4AffineTransform {
   static  rotate(angle) {
     let cos = Math.cos(angle);
     let sin = Math.sin(angle);
-    return new Z4AffineTransform(cos, sin, sin, -cos, 0, 0);
+    return new Z4AffineTransform(cos, sin, -sin, cos, 0, 0);
   }
 
   /**
@@ -108,7 +108,7 @@ class Z4AffineTransform {
    concatenateRotate(angle) {
     let cos = Math.cos(angle);
     let sin = Math.sin(angle);
-    this.contatenateComponents(cos, sin, sin, -cos, 0, 0);
+    this.contatenateComponents(cos, sin, -sin, cos, 0, 0);
     return this;
   }
 

@@ -109,7 +109,7 @@ public class Z4EllipseFrame extends Z4GeometricFrame {
             width / 4, height / 4,
             0,
             0, 0,
-            0, Z4Math.TWO_PI
+            Math.PI, Z4Math.TWO_PI
     );
   }
 }

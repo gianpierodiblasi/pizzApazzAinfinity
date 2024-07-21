@@ -83,6 +83,6 @@ class Z4EllipseFrame extends Z4GeometricFrame {
    * @return The geometric shape
    */
   static  fromSize(width, height) {
-    return new Z4EllipseFrame(width / 2, height / 2, width / 4, height / 4, 0, 0, 0, 0, Z4Math.TWO_PI);
+    return new Z4EllipseFrame(width / 2, height / 2, width / 4, height / 4, 0, 0, 0, Math.PI, Z4Math.TWO_PI);
   }
 }

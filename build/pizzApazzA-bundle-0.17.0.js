@@ -1118,7 +1118,7 @@ class Z4AffineTransform {
   static  rotate(angle) {
     let cos = Math.cos(angle);
     let sin = Math.sin(angle);
-    return new Z4AffineTransform(cos, sin, sin, -cos, 0, 0);
+    return new Z4AffineTransform(cos, sin, -sin, cos, 0, 0);
   }
 
   /**
@@ -1180,7 +1180,7 @@ class Z4AffineTransform {
    concatenateRotate(angle) {
     let cos = Math.cos(angle);
     let sin = Math.sin(angle);
-    this.contatenateComponents(cos, sin, sin, -cos, 0, 0);
+    this.contatenateComponents(cos, sin, -sin, cos, 0, 0);
     return this;
   }
 
@@ -16513,7 +16513,7 @@ class Z4EllipseFrame extends Z4GeometricFrame {
    * @return The geometric shape
    */
   static  fromSize(width, height) {
-    return new Z4EllipseFrame(width / 2, height / 2, width / 4, height / 4, 0, 0, 0, 0, Z4Math.TWO_PI);
+    return new Z4EllipseFrame(width / 2, height / 2, width / 4, height / 4, 0, 0, 0, Math.PI, Z4Math.TWO_PI);
   }
 }
 /**
@@ -17187,10 +17187,11 @@ class Z4Polyline extends Z4GeometricShape {
     let finalPos = position * this.cumLen[this.cumLen.length - 1];
     let index = this.cumLen.findIndex(pos => pos >= finalPos, null);
     if (this.cumLen[index] === finalPos) {
-      if (!index) {
-        index = 1;
+      if (index) {
+        return Z4Vector.fromVector(this.points[index].x, this.points[index].y, 1, Z4Math.atan(this.points[index - 1].x, this.points[index - 1].y, this.points[index].x, this.points[index].y));
+      } else {
+        return Z4Vector.fromPoints(this.points[index].x, this.points[index].y, this.points[index + 1].x, this.points[index + 1].y);
       }
-      return Z4Vector.fromPoints(this.points[index - 1].x, this.points[index - 1].y, this.points[index].x, this.points[index].y);
     } else if (this.cumLen[index - 1] === finalPos) {
       return Z4Vector.fromPoints(this.points[index - 1].x, this.points[index - 1].y, this.points[index].x, this.points[index].y);
     } else {

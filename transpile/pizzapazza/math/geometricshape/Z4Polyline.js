@@ -67,10 +67,11 @@ class Z4Polyline extends Z4GeometricShape {
     let finalPos = position * this.cumLen[this.cumLen.length - 1];
     let index = this.cumLen.findIndex(pos => pos >= finalPos, null);
     if (this.cumLen[index] === finalPos) {
-      if (!index) {
-        index = 1;
+      if (index) {
+        return Z4Vector.fromVector(this.points[index].x, this.points[index].y, 1, Z4Math.atan(this.points[index - 1].x, this.points[index - 1].y, this.points[index].x, this.points[index].y));
+      } else {
+        return Z4Vector.fromPoints(this.points[index].x, this.points[index].y, this.points[index + 1].x, this.points[index + 1].y);
       }
-      return Z4Vector.fromPoints(this.points[index - 1].x, this.points[index - 1].y, this.points[index].x, this.points[index].y);
     } else if (this.cumLen[index - 1] === finalPos) {
       return Z4Vector.fromPoints(this.points[index - 1].x, this.points[index - 1].y, this.points[index].x, this.points[index].y);
     } else {
