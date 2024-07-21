@@ -62,6 +62,7 @@ class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
           }
           this.canvas.resize(resizeOptions.containerWidth, resizeOptions.containerHeight);
           document.querySelectorAll(".z4layerpreview .z4layerpreview-setlayer").forEach(element => (element).click());
+          document.querySelectorAll(".z4geometricshapepreview .z4geometricshapepreview-setgeometricshape").forEach(element => (element).click());
           this.afterTransform();
         }
       });
@@ -69,6 +70,7 @@ class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
     this.addButton(Z4Translations.ROTATE_PLUS_90, true, 10, 2, "left", 0, event => {
       this.rotatePlus90();
       document.querySelectorAll(".z4layerpreview .z4layerpreview-setlayer").forEach(element => (element).click());
+      document.querySelectorAll(".z4geometricshapepreview .z4geometricshapepreview-setgeometricshape").forEach(element => (element).click());
       this.afterTransform();
     });
     this.addButton(Z4Translations.ROTATE_MINUS_90, true, 11, 2, "both", 0, event => {
@@ -76,12 +78,14 @@ class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
       this.rotatePlus90();
       this.rotatePlus90();
       document.querySelectorAll(".z4layerpreview .z4layerpreview-setlayer").forEach(element => (element).click());
+      document.querySelectorAll(".z4geometricshapepreview .z4geometricshapepreview-setgeometricshape").forEach(element => (element).click());
       this.afterTransform();
     });
     this.addButton(Z4Translations.ROTATE_180, true, 12, 2, "right", 0, event => {
       this.rotatePlus90();
       this.rotatePlus90();
       document.querySelectorAll(".z4layerpreview .z4layerpreview-setlayer").forEach(element => (element).click());
+      document.querySelectorAll(".z4geometricshapepreview .z4geometricshapepreview-setgeometricshape").forEach(element => (element).click());
       this.afterTransform();
     });
     Z4UI.addVLine(this, new GBC(16, 0).h(3).wxy(1, 1).a(GBC.WEST).f(GBC.VERTICAL).i(1, 2, 1, 2));
@@ -97,6 +101,7 @@ class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
       layer.move(newOffset.x, newOffset.y);
     }
     document.querySelectorAll(".z4layerpreview .z4layerpreview-setlayer").forEach(element => (element).click());
+    document.querySelectorAll(".z4geometricshapepreview .z4geometricshapepreview-setgeometricshape").forEach(element => (element).click());
     this.afterTransform();
   }
 

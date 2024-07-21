@@ -113,6 +113,7 @@ class Z4GeometricShapePreview extends JSDropDown {
       }
     }));
     this.editor.add(button, new GBC(1, 5).a(GBC.SOUTHEAST));
+    // this.addButton(panelTransform, "", 3, 1, event -> this.setGeometriShape(this.canvas, this.shape)).cssAddClass("z4geometricshapepreview-setgeometricshape");
     this.appendChild(this.editor);
   }
 
