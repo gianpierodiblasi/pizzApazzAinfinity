@@ -79,6 +79,8 @@ class Z4Canvas extends JSComponent {
 
    drawingDirection = Z4DrawingDirection.FREE;
 
+   geometricShapes = new Array();
+
    selectedGeometricShape = null;
 
    textInfo = null;
@@ -1009,10 +1011,9 @@ class Z4Canvas extends JSComponent {
    * @param type The type
    */
    addGeometricShape(type) {
-    this.changed = true;
-    this.setSelectedGeometricShapeAndAddGeometricShapePreview(Z4GeometricShape.fromSize(type, this.width, this.height), null, true);
+    this.geometricShapes.push(Z4GeometricShape.fromSize(type, this.width, this.height));
+    this.setSelectedGeometricShapeAndAddGeometricShapePreview(this.geometricShapes[this.geometricShapes.length - 1], true);
     this.setSaved(false);
-    this.drawCanvasOverlay();
   }
 
   /**
@@ -1021,23 +1022,18 @@ class Z4Canvas extends JSComponent {
    * @param shape The selected geometric shape
    */
    setSelectedGeometricShape(shape) {
-    this.setSelectedGeometricShapeAndAddGeometricShapePreview(shape, null, false);
+    this.setSelectedGeometricShapeAndAddGeometricShapePreview(shape, false);
   }
 
   /**
    * Sets the selected geometric shape and adds the geometric shape preview
    *
    * @param shape The selected geometric shape
-   * @param apply The function to apply before adding the geometric shape
-   * preview
    * @param add true to add the layer preview, false otherwise
    */
-   setSelectedGeometricShapeAndAddGeometricShapePreview(shape, apply, add) {
+   setSelectedGeometricShapeAndAddGeometricShapePreview(shape, add) {
     this.selectedGeometricShape = shape;
     this.ribbonTextPanel.setGeometricShape(shape);
-    if (apply) {
-      apply(this.selectedGeometricShape);
-    }
     if (add) {
       this.shapesAndPathsPanel.addGeometricShapePreview(this.selectedGeometricShape);
     }

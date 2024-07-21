@@ -18,9 +18,9 @@
   font-family: monospace;
 }
 
-/*.z4geometricshapepreview .z4geometricshapepreview-editor[transparent=true], .z4geometricshapepreview .z4geometricshapepreview-editor[transparent=true] * {
+.z4geometricshapepreview .z4geometricshapepreview-editor[transparent=true], .z4geometricshapepreview .z4geometricshapepreview-editor[transparent=true] * {
   background: transparent;
-}*/
+}
 
 /*.z4geometricshapepreview .z4geometricshapepreview-setlayer {
   display: none;

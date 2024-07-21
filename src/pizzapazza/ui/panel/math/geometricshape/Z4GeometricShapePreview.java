@@ -5,20 +5,24 @@ import def.js.Array;
 import javascript.awt.Dimension;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
-import javascript.awt.event.ActionListener;
 import javascript.swing.JSButton;
 import javascript.swing.JSComponent;
 import javascript.swing.JSDropDown;
+import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
 import javascript.swing.JSSlider;
 import javascript.swing.JSSpinner;
+import javascript.swing.SpinnerNumberModel;
+import pizzapazza.math.Z4Point;
 import pizzapazza.math.geometricshape.Z4GeometricShape;
 import pizzapazza.math.geometricshape.Z4Polyline;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
+import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.parseInt;
 
 /**
  * The layer preview
@@ -31,11 +35,11 @@ public class Z4GeometricShapePreview extends JSDropDown {
   private final JSComponent preview = new JSComponent(document.createElement("canvas"));
   private final $CanvasRenderingContext2D ctx = this.preview.invoke("getContext('2d')");
 
-//  private final JSSlider offsetXSlider = new JSSlider();
-//  private final JSSpinner offsetXSpinner = new JSSpinner();
-//  private final JSSlider offsetYSlider = new JSSlider();
-//  private final JSSpinner offsetYSpinner = new JSSpinner();
-  private final JSButton delete = new JSButton();
+  private final JSPanel editor = new JSPanel();
+  private final JSSlider xSlider = new JSSlider();
+  private final JSSpinner xSpinner = new JSSpinner();
+  private final JSSlider ySlider = new JSSlider();
+  private final JSSpinner ySpinner = new JSSpinner();
 
   private Z4ShapesAndPathsPanel shapesAndPathsPanel;
   private Z4Canvas canvas;
@@ -64,8 +68,7 @@ public class Z4GeometricShapePreview extends JSDropDown {
       if ("" + this.getProperty("open") == "true") {
         this.changed = false;
       } else if (this.changed) {
-//        this.canvas.setChanged(true);
-//        this.canvas.saveHistory("standard,tool");
+        this.canvas.setSaved(false);
       }
     });
 
@@ -90,208 +93,79 @@ public class Z4GeometricShapePreview extends JSDropDown {
     this.summary.add(selector, new GBC(1, 0).a(GBC.NORTH).i(0, 2, 0, 0));
 
     this.appendChildInTree("summary", this.summary);
-//
-//    this.editor.cssAddClass("z4geometricshapepreview-editor");
-//    this.editor.addChangeListener(event -> this.computePopupPosition());
-//
-//    JSPanel panelBasic = new JSPanel();
-//    panelBasic.setLayout(new GridBagLayout());
-//
-//    this.editName.addActionListener(event -> {
-//      String newName = this.editName.getText();
-//      if ($exists(newName)) {
-//        this.changed = true;
-//        this.canvas.setSaved(false);
-//        this.name.setText(newName);
-//        this.layer.setName(newName);
-//        this.setChildAttributeByQuery("summary", "title", newName);
-//      }
-//    });
-//
-//    Z4UI.addLabel(panelBasic, Z4Translations.LAYER_NAME, new GBC(0, 0).a(GBC.WEST).wx(1));
-//    panelBasic.add(this.size, new GBC(1, 0).a(GBC.EAST).w(4));
-//    panelBasic.add(this.editName, new GBC(0, 1).w(5).a(GBC.WEST).f(GBC.HORIZONTAL).i(0, 0, 5, 0));
-//
-//    Z4UI.addLabel(panelBasic, Z4Translations.OFFSET_X, new GBC(0, 2).a(GBC.WEST));
-//
-//    this.offsetXSpinner.cssAddClass("jsspinner_w_4rem");
-//    this.offsetXSpinner.addChangeListener(event -> this.onChange(true, this.offsetXSpinner.getValueIsAdjusting(), this.offsetXSpinner, this.offsetXSlider));
-//    panelBasic.add(this.offsetXSpinner, new GBC(1, 2).a(GBC.EAST));
-//
-//    this.offsetXSlider.getStyle().minWidth = "20rem";
-//    this.offsetXSlider.addChangeListener(event -> this.onChange(false, this.offsetXSlider.getValueIsAdjusting(), this.offsetXSpinner, this.offsetXSlider));
-//    panelBasic.add(this.offsetXSlider, new GBC(0, 3).w(2).a(GBC.NORTH).f(GBC.HORIZONTAL));
-//
-//    Z4UI.addLabel(panelBasic, Translations.JSColorChooser_OPACITY, new GBC(0, 4).a(GBC.WEST));
-//
-//    this.opacitySpinner.cssAddClass("jsspinner_w_4rem");
-//    this.opacitySpinner.addChangeListener(event -> this.onChange(true, this.opacitySpinner.getValueIsAdjusting(), this.opacitySpinner, this.opacitySlider));
-//    panelBasic.add(this.opacitySpinner, new GBC(1, 4).a(GBC.EAST));
-//
-//    this.opacitySlider.addChangeListener(event -> this.onChange(false, this.opacitySlider.getValueIsAdjusting(), this.opacitySpinner, this.opacitySlider));
-//    this.opacitySlider.getStyle().minWidth = "20rem";
-//    panelBasic.add(this.opacitySlider, new GBC(0, 5).w(2).a(GBC.NORTH).f(GBC.HORIZONTAL));
-//
-//    Z4UI.addVLine(panelBasic, new GBC(2, 2).h(6).f(GBC.VERTICAL).i(1, 2, 1, 2));
-//    Z4UI.addLabel(panelBasic, Z4Translations.OFFSET_Y, new GBC(3, 5).h(3).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
-//
-//    this.offsetYSpinner.cssAddClass("jsspinner-vertical");
-//    this.offsetYSpinner.cssAddClass("jsspinner_h_4rem");
-//    this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
-//    this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
-//    this.offsetYSpinner.addChangeListener(event -> this.onChange(true, this.offsetYSpinner.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
-//    panelBasic.add(this.offsetYSpinner, new GBC(3, 2).h(3).a(GBC.NORTH));
-//
-//    this.offsetYSlider.setOrientation(JSSlider.VERTICAL);
-//    this.offsetYSlider.setInverted(true);
-//    this.offsetYSlider.getStyle().minHeight = "20rem";
-//    this.offsetYSlider.getStyle().minWidth = "1.5rem";
-//    this.offsetYSlider.addChangeListener(event -> this.onChange(false, this.offsetYSlider.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
-//    panelBasic.add(this.offsetYSlider, new GBC(4, 2).h(6).wy(1).a(GBC.NORTH));
-//
-//    JSCheckBox showLayerBounds = new JSCheckBox();
-//    showLayerBounds.setText(Z4Translations.SHOW_LAYER_BOUNDS);
-//    showLayerBounds.addActionListener(event -> {
-//      this.layer.setShowBounds(showLayerBounds.isSelected());
-//      this.canvas.drawCanvasBounds();
-//    });
-//    panelBasic.add(showLayerBounds, new GBC(0, 6).a(GBC.NORTHWEST));
-//
-//    button = new JSButton();
-//    button.setText(Z4Translations.DUPLICATE);
-//    button.addActionListener(event -> {
-//      this.changed = true;
+
+    this.editor.cssAddClass("z4geometricshapepreview-editor");
+    this.editor.setLayout(new GridBagLayout());
+
+    Z4UI.addLabel(this.editor, "x", new GBC(0, 0).a(GBC.WEST));
+
+    this.xSpinner.cssAddClass("jsspinner_w_4rem");
+    this.xSpinner.addChangeListener(event -> this.onChange(true, this.xSpinner.getValueIsAdjusting(), this.xSpinner, this.xSlider));
+    this.editor.add(this.xSpinner, new GBC(1, 0).a(GBC.EAST));
+
+    this.xSlider.getStyle().minWidth = "20rem";
+    this.xSlider.addChangeListener(event -> this.onChange(false, this.xSlider.getValueIsAdjusting(), this.xSpinner, this.xSlider));
+    this.editor.add(this.xSlider, new GBC(0, 1).w(2).a(GBC.NORTH).f(GBC.HORIZONTAL));
+
+    Z4UI.addVLine(this.editor, new GBC(2, 0).h(6).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addLabel(this.editor, "y", new GBC(3, 3).h(3).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
+
+    this.ySpinner.cssAddClass("jsspinner-vertical");
+    this.ySpinner.cssAddClass("jsspinner_h_4rem");
+    this.ySpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
+    this.ySpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
+    this.ySpinner.addChangeListener(event -> this.onChange(true, this.ySpinner.getValueIsAdjusting(), this.ySpinner, this.ySlider));
+    this.editor.add(this.ySpinner, new GBC(3, 0).h(3).a(GBC.NORTH));
+
+    this.ySlider.setOrientation(JSSlider.VERTICAL);
+    this.ySlider.setInverted(true);
+    this.ySlider.getStyle().minHeight = "20rem";
+    this.ySlider.getStyle().minWidth = "1.5rem";
+    this.ySlider.addChangeListener(event -> this.onChange(false, this.ySlider.getValueIsAdjusting(), this.ySpinner, this.ySlider));
+    this.editor.add(this.ySlider, new GBC(4, 0).h(6).wy(1).a(GBC.NORTH).f(GBC.VERTICAL));
+
+    JSButton button = new JSButton();
+    button.setText(Z4Translations.DUPLICATE);
+    button.addActionListener(event -> {
+      this.changed = true;
 //      this.canvas.duplicateLayer(this.layer);
-//      this.removeAttribute("open");
-//    });
-//    panelBasic.add(button, new GBC(0, 7).a(GBC.SOUTHWEST));
-//
-//    this.delete.setText(Z4Translations.DELETE);
-//    this.delete.addActionListener(event -> JSOptionPane.showConfirmDialog(Z4Translations.DELETE_LAYER_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response -> {
-//      if (response == JSOptionPane.YES_OPTION) {
-//        this.changed = true;
+      this.removeAttribute("open");
+    });
+    this.editor.add(button, new GBC(0, 5).a(GBC.SOUTHWEST));
+
+    button = new JSButton();
+    button.setText(Z4Translations.DELETE);
+    button.addActionListener(event -> JSOptionPane.showConfirmDialog(Z4Translations.DELETE_SHAPES_AND_PATHS_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response -> {
+      if (response == JSOptionPane.YES_OPTION) {
+        this.changed = true;
 //        int index = this.canvas.deleteLayer(this.layer, false);
 //        document.querySelector(".z4geometricshapepreview:nth-child(" + (index + 1) + ")").remove();
-//      }
-//    }));
-//    panelBasic.add(this.delete, new GBC(1, 7).a(GBC.SOUTHEAST));
-//
-//    this.editor.addTab(Z4Translations.BASIC, panelBasic);
-//
-//    JSPanel panelAdvanced = new JSPanel();
-//    panelAdvanced.setLayout(new GridBagLayout());
-//
-//    Z4UI.addLabel(panelAdvanced, Z4Translations.COMPOSITE_OPERATION, new GBC(0, 0).a(GBC.WEST));
-//
-//    Z4Constants.COMPOSITE_OPERATION.forEach((array, index, parent) -> {
-//      array.forEach((element, index2, array2) -> {
-//        JSRadioButton radio = new JSRadioButton();
-//        radio.setContentAreaFilled(false);
-//        radio.setToggle();
-//        radio.setText(element);
-//        radio.setTooltip(Z4Translations.$get("COMPOSITE_OPERATION_" + element.toUpperCase().replace("-", "_")));
-//        radio.addActionListener(event -> this.onAction(element));
-//
-//        this.compositeOperations.push(radio);
-//        this.compositeOperationsGroup.add(radio);
-//
-//        panelAdvanced.add(radio, new GBC(index2, index + 1).a(GBC.WEST).f(GBC.HORIZONTAL).i(1, 1, 1, 1));
-//      });
-//    });
-//
-//    this.editor.addTab(Z4Translations.ADVANCED, panelAdvanced);
-//
-//    JSPanel panelTransform = new JSPanel();
-//    panelTransform.setLayout(new GridBagLayout());
-//
-//    this.editor.addTab(Z4Translations.TRANSFORM, panelTransform);
-//    this.addButton(panelTransform, Z4Translations.FLIP_HORIZONTAL, 0, 0, event -> {
-//      this.layer.flipHorizonal();
-//      this.afterTransform();
-//    });
-//    this.addButton(panelTransform, Z4Translations.FLIP_VERTICAL, 1, 0, event -> {
-//      this.layer.flipVertical();
-//      this.afterTransform();
-//    });
-//    this.addButton(panelTransform, Z4Translations.RESIZE, 2, 0, event -> {
-//      Dimension layerSize = this.layer.getSize();
-//      $OffscreenCanvas offsetCanvas = new $OffscreenCanvas(layerSize.width, layerSize.height);
-//      this.layer.draw(offsetCanvas.getContext("2d"), true);
-//
-//      Z4ResizeImagePanel resizeImagePanel = new Z4ResizeImagePanel();
-//      resizeImagePanel.setCanvas(offsetCanvas, layerSize.width, layerSize.height);
-//
-//      JSOptionPane.showInputDialog(resizeImagePanel, Z4Translations.RESIZE, listener -> resizeImagePanel.addChangeListener(listener), () -> {
-//        Z4ResizeOptions resizeOptions = resizeImagePanel.getResizeOptions();
-//        boolean containerOK = 0 < resizeOptions.containerWidth && resizeOptions.containerWidth <= Z4Constants.MAX_IMAGE_SIZE && 0 < resizeOptions.containerHeight && resizeOptions.containerHeight <= Z4Constants.MAX_IMAGE_SIZE;
-//        boolean contentOK = 0 < resizeOptions.contentWidth && resizeOptions.contentWidth <= Z4Constants.MAX_IMAGE_SIZE && 0 < resizeOptions.contentHeight && resizeOptions.contentHeight <= Z4Constants.MAX_IMAGE_SIZE;
-//        return containerOK && contentOK;
-//      }, response -> {
-//        if (response == JSOptionPane.OK_OPTION) {
-//          this.layer.resize(resizeImagePanel.getResizeOptions());
-//          this.setLayer(this.canvas, this.layer);
-//          this.afterTransform();
-//        }
-//      });
-//    });
-//    this.addButton(panelTransform, Z4Translations.ROTATE_PLUS_90, 0, 1, event -> {
-//      this.layer.rotatePlus90();
-//      this.setLayer(this.canvas, this.layer);
-//      this.afterTransform();
-//    });
-//    this.addButton(panelTransform, Z4Translations.ROTATE_MINUS_90, 1, 1, event -> {
-//      this.layer.rotatePlus90();
-//      this.layer.rotatePlus90();
-//      this.layer.rotatePlus90();
-//      this.setLayer(this.canvas, this.layer);
-//      this.afterTransform();
-//    });
-//    this.addButton(panelTransform, Z4Translations.ROTATE_180, 2, 1, event -> {
-//      this.layer.rotatePlus90();
-//      this.layer.rotatePlus90();
-//      this.setLayer(this.canvas, this.layer);
-//      this.afterTransform();
-//    });
-//    this.addButton(panelTransform, "", 3, 1, event -> this.setLayer(this.canvas, this.layer)).cssAddClass("z4geometricshapepreview-setlayer");
-//    this.appendChild(this.editor);
-  }
+      }
+    }));
+    this.editor.add(button, new GBC(1, 5).a(GBC.SOUTHEAST));
 
-  private JSButton addButton(JSPanel panel, String text, int gridx, int gridy, ActionListener listener) {
-    JSButton button = new JSButton();
-//    button.setText(text);
-//    button.setContentAreaFilled(false);
-//    button.addActionListener(listener);
-//    panel.add(button, new GBC(gridx, gridy).f(GBC.HORIZONTAL).i(1, 1, 1, 1));
-    return button;
+    this.appendChild(this.editor);
   }
 
   private void onChange(boolean spTosl, boolean adjusting, JSSpinner spinner, JSSlider slider) {
-//    this.changed = true;
-//    this.canvas.setSaved(false);
-//
-//    if (spTosl) {
-//      slider.setValue((int) spinner.getValue());
-//    } else {
-//      spinner.setValue(slider.getValue());
-//    }
-//
-//    if (adjusting) {
-//      this.editor.setAttribute("transparent", "true");
-//    } else {
-//      this.editor.removeAttribute("transparent");
-//    }
-//
+    this.changed = true;
+
+    if (spTosl) {
+      slider.setValue((int) spinner.getValue());
+    } else {
+      spinner.setValue(slider.getValue());
+    }
+
+    if (adjusting) {
+      this.editor.setAttribute("transparent", "true");
+    } else {
+      this.editor.removeAttribute("transparent");
+    }
+
 //    this.layer.setOpacity(this.opacitySpinner.getValue() / 100);
-//    this.layer.move(this.offsetXSlider.getValue(), this.offsetYSlider.getValue());
+//    this.layer.move(this.xSlider.getValue(), this.ySlider.getValue());
 //    this.canvas.drawCanvas();
 //    this.canvas.drawCanvasBounds();
-  }
-
-  private void onAction(String text) {
-//    this.changed = true;
-//    this.canvas.setSaved(false);
-//    this.layer.setCompositeOperation(text);
-//    this.canvas.drawCanvas();
   }
 
   /**
@@ -328,17 +202,17 @@ public class Z4GeometricShapePreview extends JSDropDown {
     this.preview.getStyle().marginLeft = (Z4GeometricShapePreview.PREVIEW_SIZE - w - 1) / 2 + "px";
     this.preview.getStyle().marginRight = (Z4GeometricShapePreview.PREVIEW_SIZE - w - 1) / 2 + "px";
 
-//    Point p = layer.getOffset();
-//    Dimension dC = this.canvas.getSize();
-//    this.offsetXSlider.setMinimum(-d.width);
-//    this.offsetXSlider.setMaximum(dC.width);
-//    this.offsetXSlider.setValue(p.x);
-//    this.offsetXSpinner.setModel(new SpinnerNumberModel(p.x, -d.width, dC.width, 1));
-//    this.offsetYSlider.setMinimum(-d.height);
-//    this.offsetYSlider.setMaximum(dC.height);
-//    this.offsetYSlider.setValue(p.y);
-//    this.offsetYSpinner.setModel(new SpinnerNumberModel(p.y, -d.height, dC.height, 1));
-//
+    Z4Point p = this.shape.getControlPoints().$get(0);
+    Dimension dC = this.canvas.getSize();
+    this.xSlider.setMinimum(0);
+    this.xSlider.setMaximum(dC.width);
+    this.xSlider.setValue(parseInt(p.x));
+    this.xSpinner.setModel(new SpinnerNumberModel(parseInt(p.x), 0, dC.width, 1));
+    this.ySlider.setMinimum(0);
+    this.ySlider.setMaximum(dC.height);
+    this.ySlider.setValue(parseInt(p.y));
+    this.ySpinner.setModel(new SpinnerNumberModel(parseInt(p.y), 0, dC.height, 1));
+
     this.drawShape();
   }
 
