@@ -19,7 +19,6 @@ import pizzapazza.color.Z4GradientColor;
 import pizzapazza.math.Z4DrawingDirection;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.geometricshape.Z4GeometricShape;
-import pizzapazza.math.geometricshape.Z4GeometricShapeType;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.math.geometricshape.Z4ShapesAndPathsPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonDrawingToolPanel;
@@ -1075,11 +1074,11 @@ public class Z4Canvas extends JSComponent {
   /**
    * Adds a geometric shape
    *
-   * @param type The type
+   * @param shape The geometric shape
    */
-  public void addGeometricShape(Z4GeometricShapeType type) {
-    this.geometricShapes.push(Z4GeometricShape.fromSize(type, this.width, this.height));
-    this.setSelectedGeometricShapeAndAddGeometricShapePreview(this.geometricShapes.$get(this.geometricShapes.length - 1), true);
+  public void addGeometricShape(Z4GeometricShape shape) {
+    this.geometricShapes.push(shape);
+    this.setSelectedGeometricShapeAndAddGeometricShapePreview(shape, true);
     this.setSaved(false);
   }
 

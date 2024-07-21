@@ -97,8 +97,10 @@ class Z4GeometricShapePreview extends JSDropDown {
     button.setText(Z4Translations.DUPLICATE);
     button.addActionListener(event => {
       this.changed = true;
-      // this.canvas.duplicateLayer(this.layer);
+      let json = this.shape.toJSON();
+      this.canvas.addGeometricShape(Z4GeometricShape.fromJSON(json));
       this.removeAttribute("open");
+      setTimeout(() => document.querySelector(".z4geometricshapepreview:nth-last-child(1)").setAttribute("open", "open"), 0);
     });
     this.editor.add(button, new GBC(0, 5).a(GBC.SOUTHWEST));
     button = new JSButton();

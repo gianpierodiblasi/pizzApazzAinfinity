@@ -3094,11 +3094,11 @@ class Z4Canvas extends JSComponent {
   /**
    * Adds a geometric shape
    *
-   * @param type The type
+   * @param shape The geometric shape
    */
-   addGeometricShape(type) {
-    this.geometricShapes.push(Z4GeometricShape.fromSize(type, this.width, this.height));
-    this.setSelectedGeometricShapeAndAddGeometricShapePreview(this.geometricShapes[this.geometricShapes.length - 1], true);
+   addGeometricShape(shape) {
+    this.geometricShapes.push(shape);
+    this.setSelectedGeometricShapeAndAddGeometricShapePreview(shape, true);
     this.setSaved(false);
   }
 
@@ -6970,8 +6970,10 @@ class Z4GeometricShapePreview extends JSDropDown {
     button.setText(Z4Translations.DUPLICATE);
     button.addActionListener(event => {
       this.changed = true;
-      // this.canvas.duplicateLayer(this.layer);
+      let json = this.shape.toJSON();
+      this.canvas.addGeometricShape(Z4GeometricShape.fromJSON(json));
       this.removeAttribute("open");
+      setTimeout(() => document.querySelector(".z4geometricshapepreview:nth-last-child(1)").setAttribute("open", "open"), 0);
     });
     this.editor.add(button, new GBC(0, 5).a(GBC.SOUTHWEST));
     button = new JSButton();
@@ -7108,15 +7110,15 @@ class Z4ShapesAndPathsPanel extends JSPanel {
     Z4UI.addLabel(this, Z4Translations.SHAPES_AND_PATHS, new GBC(0, 0).w(2).a(GBC.WEST).i(-9, 5, 5, 0));
     let dropDownMenu = new JSDropDownMenu();
     dropDownMenu.setLabel(Z4Translations.NEW_HIS);
-    dropDownMenu.addMenu(Z4Translations.LINE, event => this.canvas.addGeometricShape(Z4GeometricShapeType.LINE));
-    dropDownMenu.addMenu(Z4Translations.POLYLINE, event => this.canvas.addGeometricShape(Z4GeometricShapeType.POLYLINE));
-    dropDownMenu.addMenu(Z4Translations.ELLIPSE, event => this.canvas.addGeometricShape(Z4GeometricShapeType.ELLIPSE));
-    dropDownMenu.addMenu(Z4Translations.RECTANGLE, event => this.canvas.addGeometricShape(Z4GeometricShapeType.RECTANGLE));
-    dropDownMenu.addMenu(Z4Translations.ROUND_RECTANGLE, event => this.canvas.addGeometricShape(Z4GeometricShapeType.ROUND_RECTANGLE));
-    dropDownMenu.addMenu(Z4Translations.QUAD, event => this.canvas.addGeometricShape(Z4GeometricShapeType.QUAD));
-    dropDownMenu.addMenu(Z4Translations.BEZIER, event => this.canvas.addGeometricShape(Z4GeometricShapeType.BEZIER));
-    dropDownMenu.addMenu(Z4Translations.SINUSOIDAL, event => this.canvas.addGeometricShape(Z4GeometricShapeType.SINUSOIDAL));
-    dropDownMenu.addMenu(Z4Translations.SPIRAL, event => this.canvas.addGeometricShape(Z4GeometricShapeType.SPIRAL));
+    dropDownMenu.addMenu(Z4Translations.LINE, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.LINE, this.canvas.getSize().width, this.canvas.getSize().height)));
+    dropDownMenu.addMenu(Z4Translations.POLYLINE, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.POLYLINE, this.canvas.getSize().width, this.canvas.getSize().height)));
+    dropDownMenu.addMenu(Z4Translations.ELLIPSE, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.ELLIPSE, this.canvas.getSize().width, this.canvas.getSize().height)));
+    dropDownMenu.addMenu(Z4Translations.RECTANGLE, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.RECTANGLE, this.canvas.getSize().width, this.canvas.getSize().height)));
+    dropDownMenu.addMenu(Z4Translations.ROUND_RECTANGLE, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.ROUND_RECTANGLE, this.canvas.getSize().width, this.canvas.getSize().height)));
+    dropDownMenu.addMenu(Z4Translations.QUAD, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.QUAD, this.canvas.getSize().width, this.canvas.getSize().height)));
+    dropDownMenu.addMenu(Z4Translations.BEZIER, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.BEZIER, this.canvas.getSize().width, this.canvas.getSize().height)));
+    dropDownMenu.addMenu(Z4Translations.SINUSOIDAL, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.SINUSOIDAL, this.canvas.getSize().width, this.canvas.getSize().height)));
+    dropDownMenu.addMenu(Z4Translations.SPIRAL, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.SPIRAL, this.canvas.getSize().width, this.canvas.getSize().height)));
     this.add(dropDownMenu, new GBC(0, 1).i(0, 2, 0, 5));
     let button = new JSButton();
     button.setText(Z4Translations.MERGE);

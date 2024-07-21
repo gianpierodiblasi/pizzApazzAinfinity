@@ -23,6 +23,8 @@ import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
+import static simulation.js.$Globals.setTimeout;
+import simulation.js.$Object;
 
 /**
  * The layer preview
@@ -128,8 +130,12 @@ public class Z4GeometricShapePreview extends JSDropDown {
     button.setText(Z4Translations.DUPLICATE);
     button.addActionListener(event -> {
       this.changed = true;
-//      this.canvas.duplicateLayer(this.layer);
+      
+      $Object json = this.shape.toJSON();
+      this.canvas.addGeometricShape(Z4GeometricShape.fromJSON(json));
+
       this.removeAttribute("open");
+      setTimeout(() -> document.querySelector(".z4geometricshapepreview:nth-last-child(1)").setAttribute("open", "open"), 0);
     });
     this.editor.add(button, new GBC(0, 5).a(GBC.SOUTHWEST));
 
