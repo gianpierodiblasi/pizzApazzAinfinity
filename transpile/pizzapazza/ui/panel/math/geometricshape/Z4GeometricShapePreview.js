@@ -106,8 +106,8 @@ class Z4GeometricShapePreview extends JSDropDown {
     button.addActionListener(event => JSOptionPane.showConfirmDialog(Z4Translations.DELETE_SHAPES_AND_PATHS_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
       if (response === JSOptionPane.YES_OPTION) {
         this.changed = true;
-        // int index = this.canvas.deleteLayer(this.layer, false);
-        // document.querySelector(".z4geometricshapepreview:nth-child(" + (index + 1) + ")").remove();
+        let index = this.canvas.deleteGeometricShape(this.shape);
+        document.querySelector(".z4geometricshapepreview:nth-child(" + (index + 1) + ")").remove();
       }
     }));
     this.editor.add(button, new GBC(1, 5).a(GBC.SOUTHEAST));
@@ -126,7 +126,6 @@ class Z4GeometricShapePreview extends JSDropDown {
     } else {
       this.editor.removeAttribute("transparent");
     }
-    // this.layer.setOpacity(this.opacitySpinner.getValue() / 100);
     // this.layer.move(this.xSlider.getValue(), this.ySlider.getValue());
     // this.canvas.drawCanvas();
     // this.canvas.drawCanvasBounds();

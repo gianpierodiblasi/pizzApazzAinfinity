@@ -1084,6 +1084,22 @@ public class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Deletes a geometric shape
+   *
+   * @param shape The geometric shape
+   * @return The geometric shape index
+   */
+  public int deleteGeometricShape(Z4GeometricShape shape) {
+    int index = this.geometricShapes.indexOf(shape);
+    this.geometricShapes.splice(index, 1);
+    if (this.selectedGeometricShape == shape) {
+      this.setSelectedGeometricShape(null);
+    }
+    this.setSaved(false);
+    return index;
+  }
+
+  /**
    * Sets the selected geometric shape
    *
    * @param shape The selected geometric shape
