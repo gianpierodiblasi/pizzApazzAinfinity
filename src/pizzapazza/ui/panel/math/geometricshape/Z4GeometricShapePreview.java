@@ -47,6 +47,7 @@ public class Z4GeometricShapePreview extends JSDropDown {
   private Z4Canvas canvas;
   private Z4GeometricShape shape;
   private double zoom = 1;
+  private int selectedControlPoint = 0;
   private boolean changed;
 
   /**
@@ -90,6 +91,8 @@ public class Z4GeometricShapePreview extends JSDropDown {
     selector.addActionListener(event -> {
       document.querySelectorAll(".z4geometricshapepreview .z4geometricshapepreview-selector").forEach(element -> element.textContent = Z4GeometricShapePreview.UNSELECTED_GEOMETRIC_SHAPE_CONTENT);
       selector.setText(Z4GeometricShapePreview.SELECTED_GEOMETRIC_SHAPE_CONTENT);
+      this.selectedControlPoint = 0;
+      // selezionare il primo radiobutton
       this.canvas.setSelectedGeometricShape(this.shape);
     });
     this.summary.add(selector, new GBC(1, 0).a(GBC.NORTH).i(0, 2, 0, 0));
@@ -130,7 +133,7 @@ public class Z4GeometricShapePreview extends JSDropDown {
     button.setText(Z4Translations.DUPLICATE);
     button.addActionListener(event -> {
       this.changed = true;
-      
+
       $Object json = this.shape.toJSON();
       this.canvas.addGeometricShape(Z4GeometricShape.fromJSON(json));
 
@@ -150,7 +153,7 @@ public class Z4GeometricShapePreview extends JSDropDown {
     }));
     this.editor.add(button, new GBC(1, 5).a(GBC.SOUTHEAST));
 //    this.addButton(panelTransform, "", 3, 1, event -> this.setGeometriShape(this.canvas, this.shape)).cssAddClass("z4geometricshapepreview-setgeometricshape");
-    
+
     this.appendChild(this.editor);
   }
 

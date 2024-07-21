@@ -29,6 +29,8 @@ class Z4GeometricShapePreview extends JSDropDown {
 
    zoom = 1;
 
+   selectedControlPoint = 0;
+
    changed = false;
 
   /**
@@ -66,6 +68,8 @@ class Z4GeometricShapePreview extends JSDropDown {
     selector.addActionListener(event => {
       document.querySelectorAll(".z4geometricshapepreview .z4geometricshapepreview-selector").forEach(element => element.textContent = Z4GeometricShapePreview.UNSELECTED_GEOMETRIC_SHAPE_CONTENT);
       selector.setText(Z4GeometricShapePreview.SELECTED_GEOMETRIC_SHAPE_CONTENT);
+      this.selectedControlPoint = 0;
+      // selezionare il primo radiobutton
       this.canvas.setSelectedGeometricShape(this.shape);
     });
     this.summary.add(selector, new GBC(1, 0).a(GBC.NORTH).i(0, 2, 0, 0));

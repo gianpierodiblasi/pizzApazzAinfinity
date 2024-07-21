@@ -29,23 +29,23 @@ import static simulation.js.$Globals.parseInt;
  * @author gianpiero.diblasi
  */
 public class Z4CanvasTextManager {
-  
+
   private final Z4Canvas canvas;
-  
+
   private Z4Layer selectedLayer;
   private Z4TextInfo textInfo;
-  
+
   private Dimension size;
   private double zoom;
-  
+
   private final Set<Z4CanvasOverlayMode> canvasOverlayModes = new Set<>();
-  
+
   private Z4RibbonHistoryPanel ribbonHistoryPanel;
   private Z4StatusPanel statusPanel;
 //
 //  private boolean pressed;
-  private int selectedIndex = -1;
-  
+  private int selectedControlPoint;
+
   private final static int SELECTOR_RADIUS = 7;
   private final static double SHEARING_COEFFICIENT = 50;
 
@@ -71,9 +71,11 @@ public class Z4CanvasTextManager {
    * Sets the text info
    *
    * @param textInfo The text info
+   * @param selectedControlPoint The selected control point
    */
-  public void setTextInfo(Z4TextInfo textInfo) {
+  public void setTextInfo(Z4TextInfo textInfo, int selectedControlPoint) {
     this.textInfo = textInfo;
+    this.selectedControlPoint = selectedControlPoint;
   }
 
   /**
@@ -141,7 +143,7 @@ public class Z4CanvasTextManager {
     double y = Math.min(this.size.height, Math.max(0, event.offsetY / this.zoom));
     int xParsed = parseInt(x);
     int yParsed = parseInt(y);
-    
+
     if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
     } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT)) {
       switch (type) {
@@ -199,17 +201,17 @@ public class Z4CanvasTextManager {
   public void drawText($CanvasRenderingContext2D ctx, boolean drawPath) {
     ctx.font = (this.textInfo.font.italic ? "italic " : "") + (this.textInfo.font.bold ? "bold " : "") + this.textInfo.font.size + "px '" + this.textInfo.font.family + "'";
     ctx.textAlign = "center";
-    
+
     if (this.textInfo.shadow) {
       this.draw(ctx, $exists(this.textInfo.shadowText) ? this.textInfo.shadowText : this.textInfo.textText, this.textInfo.textText, this.textInfo.shadowEmpty, this.textInfo.shadowColor, this.textInfo.shadowOffsetX, this.textInfo.shadowOffsetY, this.textInfo.shadowShearX, this.textInfo.shadowShearY, 0, null, this.textInfo.shadowReflex);
     }
-    
+
     this.draw(ctx, this.textInfo.textText, this.textInfo.textText, this.textInfo.textEmpty, this.textInfo.textColor, 0, 0, this.textInfo.textShearX, this.textInfo.textShearY, this.textInfo.textBorder, this.textInfo.textBorderColor, false);
-    
+
     if (drawPath) {
       Array<Z4Point> controlPoints = this.textInfo.shape.getControlPoints();
       Array<Integer> controlPointConnections = this.textInfo.shape.getControlPointConnections();
-      
+
       ctx.save();
       controlPoints.forEach((point, index, array) -> this.drawCircle(ctx, point, index));
       for (int index = 0; index < controlPointConnections.length; index += 2) {
@@ -219,42 +221,42 @@ public class Z4CanvasTextManager {
       ctx.restore();
     }
   }
-  
+
   private void draw($CanvasRenderingContext2D ctx, String strToPrint, String strForMeasure, boolean empty, Object color, int offsetX, int offsetY, int shearX, int shearY, int border, Color borderColor, boolean reflex) {
     shearX /= Z4CanvasTextManager.SHEARING_COEFFICIENT;
     shearY /= Z4CanvasTextManager.SHEARING_COEFFICIENT;
-    
+
     int strToPrintLen = 0;
     eval("strToPrintLen = strToPrint.length;");
     int strForMeasureLen = 0;
     eval("strForMeasureLen = strForMeasure.length;");
-    
+
     if (strToPrintLen == 1) {
       this.drawChar(ctx, strToPrint, this.textInfo.shape.getTangentAt(0.5), empty, this.getColor(ctx, strToPrint, color, 0.5, 0, 1), offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
     } else if (strToPrintLen > 1) {
       double x0 = strToPrintLen == strForMeasureLen
               ? ctx.measureText(strForMeasure.substring(0, 1)).width / 2
               : ctx.measureText(strToPrint.substring(0, 1)).width / 2;
-      
+
       double x1 = strToPrintLen == strForMeasureLen
               ? ctx.measureText(strForMeasure).width - ctx.measureText(strForMeasure.substring(strForMeasureLen - 1)).width / 2
               : ctx.measureText(strToPrint).width - ctx.measureText(strToPrint.substring(strToPrintLen - 1)).width / 2;
-      
+
       double progress = 0;
       double x1_x0 = x1 - x0;
       double strWidth = ctx.measureText(strToPrint).width;
-      
+
       for (int i = 0; i < strToPrintLen; i++) {
         String s = strToPrint.substring(i, i + 1);
         double x = strToPrintLen == strForMeasureLen ? ctx.measureText(strForMeasure.substring(i, i + 1)).width : ctx.measureText(s).width;
-        
+
         double div = (x / 2 + progress - x0) / x1_x0;
         this.drawChar(ctx, s, this.textInfo.shape.getTangentAt(div), empty, this.getColor(ctx, s, color, div, progress / strWidth, (progress + x) / strWidth), offsetX, offsetY, shearX, shearY, border, borderColor, reflex);
         progress += x;
       }
     }
   }
-  
+
   private Object getColor($CanvasRenderingContext2D ctx, String str, Object color, double div, double start, double end) {
     if (color instanceof Color) {
       return ((Color) color).getRGBA_HEX();
@@ -268,7 +270,7 @@ public class Z4CanvasTextManager {
       return null;
     }
   }
-  
+
   private CanvasGradient getCanvasGradient($CanvasRenderingContext2D ctx, Z4GradientColor color, String str) {
     $TextMetrics textMetrics = ($TextMetrics) ctx.measureText(str);
     if (this.textInfo.textColorOrientation == Z4TextInfoTextColorOrientation.HORIZONTAL) {
@@ -279,69 +281,69 @@ public class Z4CanvasTextManager {
       return null;
     }
   }
-  
+
   private void drawChar($CanvasRenderingContext2D ctx, String s, Z4Vector next, boolean empty, Object color, int offsetX, int offsetY, int shearX, int shearY, int border, Color borderColor, boolean reflex) {
     ctx.save();
-    
+
     ctx.translate(next.x0 + offsetX, next.y0 + offsetY);
     ctx.rotate(this.textInfo.rotation.next(next.phase));
     ctx.transform(1, shearY, -shearX, 1, 0, 0);
     if (reflex) {
       ctx.transform(1, 0, 0, -1, 0, 0);
     }
-    
+
     ctx.strokeStyle = Z4Constants.$getStyle(color);
     ctx.fillStyle = Z4Constants.$getStyle(color);
-    
+
     if (empty) {
       ctx.strokeText(s, 0, 0);
     } else {
       ctx.fillText(s, 0, 0);
     }
-    
+
     if ($exists(border)) {
       ctx.lineWidth = border;
       ctx.strokeStyle = Z4Constants.$getStyle(borderColor.getRGBA_HEX());
       ctx.strokeText(s, 0, 0);
     }
-    
+
     ctx.restore();
   }
-  
+
   private void drawCircle($CanvasRenderingContext2D ctx, Z4Point point, int index) {
     ctx.lineWidth = 3 / this.zoom;
-    
+
     Array<Double> dash = new Array<>();
-    
+
     ctx.beginPath();
     ctx.arc(point.x, point.y, Z4CanvasTextManager.SELECTOR_RADIUS, 0, 2 * Math.PI);
-    ctx.strokeStyle = Z4Constants.$getStyle(index == this.selectedIndex ? "red" : "black");
+    ctx.strokeStyle = Z4Constants.$getStyle(index == this.selectedControlPoint ? "red" : "black");
     ctx.setLineDash(dash);
     ctx.stroke();
-    
+
     dash.push(2.5, 2.5);
-    
+
     ctx.beginPath();
     ctx.arc(point.x, point.y, Z4CanvasTextManager.SELECTOR_RADIUS, 0, 2 * Math.PI);
     ctx.strokeStyle = Z4Constants.$getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke();
   }
-  
+
   private void drawLine($CanvasRenderingContext2D ctx, Z4Point p1, Z4Point p2) {
     ctx.lineWidth = 2 / this.zoom;
-    
+
     Array<Double> dash = new Array<>();
-    
+
     ctx.beginPath();
     ctx.moveTo(p1.x, p1.y);
     ctx.lineTo(p2.x, p2.y);
     ctx.strokeStyle = Z4Constants.$getStyle("black");
     ctx.setLineDash(dash);
     ctx.stroke();
-    
+
     dash.push(2.5, 2.5);
-    
+
     ctx.beginPath();
     ctx.moveTo(p1.x, p1.y);
     ctx.lineTo(p2.x, p2.y);
@@ -349,12 +351,12 @@ public class Z4CanvasTextManager {
     ctx.setLineDash(dash);
     ctx.stroke();
   }
-  
+
   private void drawPolyline($CanvasRenderingContext2D ctx, Z4Polyline polyline) {
     ctx.lineWidth = 3 / this.zoom;
-    
+
     Array<Double> dash = new Array<>();
-    
+
     ctx.beginPath();
     polyline.getControlPoints().forEach((point, index, array) -> {
       if ($exists(index)) {
@@ -366,9 +368,9 @@ public class Z4CanvasTextManager {
     ctx.strokeStyle = Z4Constants.$getStyle("green");
     ctx.setLineDash(dash);
     ctx.stroke();
-    
+
     dash.push(2.5, 2.5);
-    
+
     ctx.beginPath();
     polyline.getControlPoints().forEach((point, index, array) -> {
       if ($exists(index)) {

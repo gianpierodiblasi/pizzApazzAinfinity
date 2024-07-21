@@ -1049,7 +1049,7 @@ class Z4Canvas extends JSComponent {
    */
    setSelectedGeometricShapeAndAddGeometricShapePreview(shape, add) {
     this.selectedGeometricShape = shape;
-    this.ribbonTextPanel.setGeometricShape(shape);
+    this.ribbonTextPanel.setGeometricShape(shape, 0);
     if (add) {
       this.shapesAndPathsPanel.addGeometricShapePreview(this.selectedGeometricShape);
     }
@@ -1059,10 +1059,11 @@ class Z4Canvas extends JSComponent {
    * Sets the text info
    *
    * @param textInfo The text info
+   * @param selectedControlPoint The selected control point
    */
-   setTextInfo(textInfo) {
+   setTextInfo(textInfo, selectedControlPoint) {
     this.textInfo = textInfo;
-    this.textManager.setTextInfo(textInfo);
+    this.textManager.setTextInfo(textInfo, selectedControlPoint);
     this.drawCanvasOverlay();
   }
 

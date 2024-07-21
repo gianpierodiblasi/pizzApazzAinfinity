@@ -3135,7 +3135,7 @@ class Z4Canvas extends JSComponent {
    */
    setSelectedGeometricShapeAndAddGeometricShapePreview(shape, add) {
     this.selectedGeometricShape = shape;
-    this.ribbonTextPanel.setGeometricShape(shape);
+    this.ribbonTextPanel.setGeometricShape(shape, 0);
     if (add) {
       this.shapesAndPathsPanel.addGeometricShapePreview(this.selectedGeometricShape);
     }
@@ -3145,10 +3145,11 @@ class Z4Canvas extends JSComponent {
    * Sets the text info
    *
    * @param textInfo The text info
+   * @param selectedControlPoint The selected control point
    */
-   setTextInfo(textInfo) {
+   setTextInfo(textInfo, selectedControlPoint) {
     this.textInfo = textInfo;
-    this.textManager.setTextInfo(textInfo);
+    this.textManager.setTextInfo(textInfo, selectedControlPoint);
     this.drawCanvasOverlay();
   }
 
@@ -4345,7 +4346,7 @@ class Z4CanvasTextManager {
 
   // 
   // private boolean pressed;
-   selectedIndex = -1;
+   selectedControlPoint = 0;
 
   static  SELECTOR_RADIUS = 7;
 
@@ -4373,9 +4374,11 @@ class Z4CanvasTextManager {
    * Sets the text info
    *
    * @param textInfo The text info
+   * @param selectedControlPoint The selected control point
    */
-   setTextInfo(textInfo) {
+   setTextInfo(textInfo, selectedControlPoint) {
     this.textInfo = textInfo;
+    this.selectedControlPoint = selectedControlPoint;
   }
 
   /**
@@ -4587,7 +4590,7 @@ class Z4CanvasTextManager {
     let dash = new Array();
     ctx.beginPath();
     ctx.arc(point.x, point.y, Z4CanvasTextManager.SELECTOR_RADIUS, 0, 2 * Math.PI);
-    ctx.strokeStyle = Z4Constants.getStyle(index === this.selectedIndex ? "red" : "black");
+    ctx.strokeStyle = Z4Constants.getStyle(index === this.selectedControlPoint ? "red" : "black");
     ctx.setLineDash(dash);
     ctx.stroke();
     dash.push(2.5, 2.5);
@@ -6902,6 +6905,8 @@ class Z4GeometricShapePreview extends JSDropDown {
 
    zoom = 1;
 
+   selectedControlPoint = 0;
+
    changed = false;
 
   /**
@@ -6939,6 +6944,8 @@ class Z4GeometricShapePreview extends JSDropDown {
     selector.addActionListener(event => {
       document.querySelectorAll(".z4geometricshapepreview .z4geometricshapepreview-selector").forEach(element => element.textContent = Z4GeometricShapePreview.UNSELECTED_GEOMETRIC_SHAPE_CONTENT);
       selector.setText(Z4GeometricShapePreview.SELECTED_GEOMETRIC_SHAPE_CONTENT);
+      this.selectedControlPoint = 0;
+      // selezionare il primo radiobutton
       this.canvas.setSelectedGeometricShape(this.shape);
     });
     this.summary.add(selector, new GBC(1, 0).a(GBC.NORTH).i(0, 2, 0, 0));
@@ -8808,7 +8815,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textInfo.shadowOffsetY = parseInt(this.shadowOffsetY.getValue());
     this.textInfo.shadowShearX = parseInt(this.shadowShearX.getValue());
     this.textInfo.shadowShearY = parseInt(this.shadowShearY.getValue());
-    this.canvas.setTextInfo(this.textInfo);
+    this.canvas.setTextInfo(this.textInfo, 0);
   }
 
    onReset() {
@@ -8858,15 +8865,16 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
    * Sets the geometric shape
    *
    * @param shape The geometric shape
+   * @param selectedControlPoint The selected control point
    */
-   setGeometricShape(shape) {
+   setGeometricShape(shape, selectedControlPoint) {
     this.textInfo.shape = shape;
     if (shape) {
       this.warningMessage.getStyle().display = "none";
     } else {
       this.warningMessage.getStyle().removeProperty("display");
     }
-    this.canvas.setTextInfo(this.textInfo);
+    this.canvas.setTextInfo(this.textInfo, selectedControlPoint);
   }
 
   /**

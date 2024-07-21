@@ -364,7 +364,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textInfo.shadowShearX = parseInt(this.shadowShearX.getValue());
     this.textInfo.shadowShearY = parseInt(this.shadowShearY.getValue());
 
-    this.canvas.setTextInfo(this.textInfo);
+    this.canvas.setTextInfo(this.textInfo, 0);
   }
 
   private void onReset() {
@@ -423,8 +423,9 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
    * Sets the geometric shape
    *
    * @param shape The geometric shape
+   * @param selectedControlPoint The selected control point
    */
-  public void setGeometricShape(Z4GeometricShape shape) {
+  public void setGeometricShape(Z4GeometricShape shape, int selectedControlPoint) {
     this.textInfo.shape = shape;
 
     if ($exists(shape)) {
@@ -433,7 +434,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
       this.warningMessage.getStyle().removeProperty("display");
     }
 
-    this.canvas.setTextInfo(this.textInfo);
+    this.canvas.setTextInfo(this.textInfo, selectedControlPoint);
   }
 
   /**

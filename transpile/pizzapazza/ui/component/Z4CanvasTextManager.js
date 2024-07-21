@@ -23,7 +23,7 @@ class Z4CanvasTextManager {
 
   // 
   // private boolean pressed;
-   selectedIndex = -1;
+   selectedControlPoint = 0;
 
   static  SELECTOR_RADIUS = 7;
 
@@ -51,9 +51,11 @@ class Z4CanvasTextManager {
    * Sets the text info
    *
    * @param textInfo The text info
+   * @param selectedControlPoint The selected control point
    */
-   setTextInfo(textInfo) {
+   setTextInfo(textInfo, selectedControlPoint) {
     this.textInfo = textInfo;
+    this.selectedControlPoint = selectedControlPoint;
   }
 
   /**
@@ -265,7 +267,7 @@ class Z4CanvasTextManager {
     let dash = new Array();
     ctx.beginPath();
     ctx.arc(point.x, point.y, Z4CanvasTextManager.SELECTOR_RADIUS, 0, 2 * Math.PI);
-    ctx.strokeStyle = Z4Constants.getStyle(index === this.selectedIndex ? "red" : "black");
+    ctx.strokeStyle = Z4Constants.getStyle(index === this.selectedControlPoint ? "red" : "black");
     ctx.setLineDash(dash);
     ctx.stroke();
     dash.push(2.5, 2.5);
