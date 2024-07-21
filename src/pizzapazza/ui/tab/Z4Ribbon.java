@@ -47,6 +47,7 @@ public class Z4Ribbon extends JSTabbedPane {
     this.addTab(Z4Translations.HISTORY, this.historyPanel);
     this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
     this.addTab(Z4Translations.HELP, this.helpPanel);
+    
     this.addChangeListener(event -> {
       if (this.textPanel.getStyle().display != "none") {
         this.textPanel.checkFonts();

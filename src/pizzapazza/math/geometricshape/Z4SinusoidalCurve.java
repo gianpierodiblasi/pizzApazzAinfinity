@@ -235,8 +235,8 @@ public class Z4SinusoidalCurve extends Z4GeometricCurve {
    */
   public static Z4SinusoidalCurve fromSize(int width, int height) {
     return new Z4SinusoidalCurve(
-            width / 2, height / 2,
+            width / 4, height / 2,
             3 * width / 4, height / 2,
-            width / 8, height / 4, 0);
+            width / 2, height / 4, 0);
   }
 }

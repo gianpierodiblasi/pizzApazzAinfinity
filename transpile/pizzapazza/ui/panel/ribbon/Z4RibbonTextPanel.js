@@ -295,9 +295,6 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textInfo.shadowOffsetY = parseInt(this.shadowOffsetY.getValue());
     this.textInfo.shadowShearX = parseInt(this.shadowShearX.getValue());
     this.textInfo.shadowShearY = parseInt(this.shadowShearY.getValue());
-    // TO DELETE
-    this.textInfo.shape = new Z4Line(50, 50, 450, 450);
-    // TO DELETE
     this.canvas.setTextInfo(this.textInfo);
   }
 
@@ -342,6 +339,21 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
    */
    setCanvas(canvas) {
     this.canvas = canvas;
+  }
+
+  /**
+   * Sets the geometric shape
+   *
+   * @param shape The geometric shape
+   */
+   setGeometricShape(shape) {
+    this.textInfo.shape = shape;
+    if (shape) {
+      this.warningMessage.getStyle().removeProperty("display");
+    } else {
+      this.warningMessage.getStyle().display = "none";
+    }
+    this.canvas.setTextInfo(this.textInfo);
   }
 
   /**

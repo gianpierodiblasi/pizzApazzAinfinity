@@ -2133,6 +2133,8 @@ class Z4Canvas extends JSComponent {
 
    ribbonHistoryPanel = null;
 
+   shapesAndPathsPanel = null;
+
    statusPanel = null;
 
    projectName = null;
@@ -2162,6 +2164,8 @@ class Z4Canvas extends JSComponent {
    selectedDrawingTool = null;
 
    drawingDirection = Z4DrawingDirection.FREE;
+
+   selectedGeometricShape = null;
 
    textInfo = null;
 
@@ -2244,6 +2248,16 @@ class Z4Canvas extends JSComponent {
     this.ioManager.setRibbonPanels(ribbonLayerPanel, ribbonDrawingToolPanel, ribbonHistoryPanel);
     this.textManager.setRibbonHistoryPanel(ribbonHistoryPanel);
     this.historyManager.setRibbonLayerPanel(ribbonLayerPanel);
+  }
+
+  /**
+   * Sets the shapes and paths panel
+   *
+   * @param shapesAndPathsPanel The shapes and paths panel
+   */
+   setShapesAndPathsPanel(shapesAndPathsPanel) {
+    this.shapesAndPathsPanel = shapesAndPathsPanel;
+    this.shapesAndPathsPanel.setCanvas(this);
   }
 
   /**
@@ -3072,6 +3086,37 @@ class Z4Canvas extends JSComponent {
     for (let y = this.centerGrid.y; y < this.height; y += this.plotWidthGrid) {
       grid.moveTo(x + magneticRadius, y);
       grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
+    }
+  }
+
+  /**
+   * Adds a geometric shape
+   *
+   * @param type The type
+   */
+   addGeometricShape(type) {
+    this.changed = true;
+    this.setSelectedGeometricShapeAndAddGeometricShapePreview(Z4GeometricShape.fromSize(type, this.width, this.height), null, true);
+    this.setSaved(false);
+    this.drawCanvasOverlay();
+  }
+
+  /**
+   * Sets the selected geometric shape and adds the geometric shape preview
+   *
+   * @param shape The selected geometric shape
+   * @param apply The function to apply before adding the geometric shape
+   * preview
+   * @param add true to add the layer preview, false otherwise
+   */
+   setSelectedGeometricShapeAndAddGeometricShapePreview(shape, apply, add) {
+    this.selectedGeometricShape = shape;
+    this.ribbonTextPanel.setGeometricShape(shape);
+    if (apply) {
+      apply(this.selectedGeometricShape);
+    }
+    if (add) {
+      this.shapesAndPathsPanel.addGeometricShapePreview(this.selectedGeometricShape);
     }
   }
 
@@ -5267,6 +5312,8 @@ class Z4Frame extends JSFrame {
     this.ribbon.setShapesAndPathsPanel(this.shapesAndPathsPanel);
     this.ribbon.setStatusPanel(this.statusPanel);
     this.canvas.setStatusPanel(this.statusPanel);
+    this.canvas.setShapesAndPathsPanel(this.shapesAndPathsPanel);
+    this.shapesAndPathsPanel.setStatusPanel(this.statusPanel);
     let panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
     panel.add(this.shapesAndPathsPanel, new GBC(0, 0).f(GBC.BOTH).wxy(1, 1));
@@ -6733,6 +6780,12 @@ class Z4VertexBasedFillerPanel extends Z4AbstractFillerPanel {
  */
 class Z4ShapesAndPathsPanel extends JSPanel {
 
+   geometricShapesPreview = new JSPanel();
+
+   statusPanel = null;
+
+   canvas = null;
+
   /**
    * Creates the object
    */
@@ -6749,6 +6802,66 @@ class Z4ShapesAndPathsPanel extends JSPanel {
     panel.cssAddClass("z4shapesandpathspanel-container");
     panel.setLayout(new GridBagLayout());
     fieldset.appendChild(panel);
+    let dropDownMenu = new JSDropDownMenu();
+    dropDownMenu.setLabel(Z4Translations.NEW_HIS);
+    dropDownMenu.addMenu(Z4Translations.LINE, event => this.canvas.addGeometricShape(Z4GeometricShapeType.LINE));
+    dropDownMenu.addMenu(Z4Translations.POLYLINE, event => this.canvas.addGeometricShape(Z4GeometricShapeType.POLYLINE));
+    dropDownMenu.addMenu(Z4Translations.ELLIPSE, event => this.canvas.addGeometricShape(Z4GeometricShapeType.ELLIPSE));
+    dropDownMenu.addMenu(Z4Translations.RECTANGLE, event => this.canvas.addGeometricShape(Z4GeometricShapeType.RECTANGLE));
+    dropDownMenu.addMenu(Z4Translations.ROUND_RECTANGLE, event => this.canvas.addGeometricShape(Z4GeometricShapeType.ROUND_RECTANGLE));
+    dropDownMenu.addMenu(Z4Translations.QUAD, event => this.canvas.addGeometricShape(Z4GeometricShapeType.QUAD));
+    dropDownMenu.addMenu(Z4Translations.BEZIER, event => this.canvas.addGeometricShape(Z4GeometricShapeType.BEZIER));
+    dropDownMenu.addMenu(Z4Translations.SINUSOIDAL, event => this.canvas.addGeometricShape(Z4GeometricShapeType.SINUSOIDAL));
+    dropDownMenu.addMenu(Z4Translations.SPIRAL, event => this.canvas.addGeometricShape(Z4GeometricShapeType.SPIRAL));
+    panel.add(dropDownMenu, new GBC(0, 0).i(0, 0, 0, 5));
+    let button = new JSButton();
+    button.setText(Z4Translations.MERGE);
+    button.setContentAreaFilled(false);
+    panel.add(button, new GBC(1, 0).f(GBC.VERTICAL));
+    Z4UI.addHLine(panel, new GBC(0, 1).w(2).wx(1).f(GBC.HORIZONTAL).i(2, 1, 2, 1));
+    this.geometricShapesPreview.setLayout(new BoxLayout(this.geometricShapesPreview, BoxLayout.Y_AXIS));
+    this.geometricShapesPreview.getStyle().overflowY = "scroll";
+    panel.add(this.geometricShapesPreview, new GBC(0, 2).w(2).wy(1).f(GBC.BOTH));
+  }
+
+  /**
+   * Sets the canvas to manage
+   *
+   * @param canvas The canvas
+   */
+   setCanvas(canvas) {
+    this.canvas = canvas;
+  }
+
+  /**
+   * Sets the status panel
+   *
+   * @param statusPanel The status panel
+   */
+   setStatusPanel(statusPanel) {
+    this.statusPanel = statusPanel;
+  }
+
+  /**
+   * Adds a new geometric shape preview
+   *
+   * @param shape The geometric shape
+   */
+   addGeometricShapePreview(shape) {
+    // Z4LayerPreview preview = new Z4LayerPreview();
+    // preview.setRibbonLayerPanel(this);
+    // preview.setLayer(this.canvas, layer);
+    // preview.setChildAttributeByQuery("summary", "draggable", "true");
+    // preview.addEventListener("dragstart", event -> {
+    // ((DragEvent) event).dataTransfer.effectAllowed = "move";
+    // this.layerDnD = layer;
+    // this.previewDnD = preview;
+    // });
+    // 
+    // document.querySelectorAll(".z4layerpreview .z4layerpreview-selector").forEach(element -> element.textContent = Z4LayerPreview.UNSELECTED_LAYER_CONTENT);
+    // 
+    // this.layersPreview.add(preview, null);
+    // setTimeout(() -> preview.invoke("scrollIntoView()"), 0);
   }
 }
 /**
@@ -8389,9 +8502,6 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textInfo.shadowOffsetY = parseInt(this.shadowOffsetY.getValue());
     this.textInfo.shadowShearX = parseInt(this.shadowShearX.getValue());
     this.textInfo.shadowShearY = parseInt(this.shadowShearY.getValue());
-    // TO DELETE
-    this.textInfo.shape = new Z4Line(50, 50, 450, 450);
-    // TO DELETE
     this.canvas.setTextInfo(this.textInfo);
   }
 
@@ -8436,6 +8546,21 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
    */
    setCanvas(canvas) {
     this.canvas = canvas;
+  }
+
+  /**
+   * Sets the geometric shape
+   *
+   * @param shape The geometric shape
+   */
+   setGeometricShape(shape) {
+    this.textInfo.shape = shape;
+    if (shape) {
+      this.warningMessage.getStyle().removeProperty("display");
+    } else {
+      this.warningMessage.getStyle().display = "none";
+    }
+    this.canvas.setTextInfo(this.textInfo);
   }
 
   /**
@@ -15781,14 +15906,16 @@ class Z4GeometricShape extends Z4JSONable {
         return Z4Line.fromJSON(json);
       case "POLYLINE":
         return Z4Polyline.fromJSON(json);
-      case "BEZIER":
-        return Z4BezierCurve.fromJSON(json);
       case "ELLIPSE":
         return Z4EllipseFrame.fromJSON(json);
       case "RECTANGLE":
         return Z4RectangleFrame.fromJSON(json);
       case "ROUND_RECTANGLE":
         return Z4RoundRectangleFrame.fromJSON(json);
+      case "QUAD":
+        return Z4QuadCurve.fromJSON(json);
+      case "BEZIER":
+        return Z4BezierCurve.fromJSON(json);
       case "SINUSOIDAL":
         return Z4SinusoidalCurve.fromJSON(json);
       case "SPIRAL":
@@ -15816,14 +15943,16 @@ class Z4GeometricShape extends Z4JSONable {
         return Z4Line.fromSize(width, height);
       case "POLYLINE":
         return Z4Polyline.fromSize(width, height);
-      case "BEZIER":
-        return Z4BezierCurve.fromSize(width, height);
       case "ELLIPSE":
         return Z4EllipseFrame.fromSize(width, height);
       case "RECTANGLE":
         return Z4RectangleFrame.fromSize(width, height);
       case "ROUND_RECTANGLE":
         return Z4RoundRectangleFrame.fromSize(width, height);
+      case "QUAD":
+        return Z4QuadCurve.fromSize(width, height);
+      case "BEZIER":
+        return Z4BezierCurve.fromSize(width, height);
       case "SINUSOIDAL":
         return Z4SinusoidalCurve.fromSize(width, height);
       case "SPIRAL":
@@ -16690,7 +16819,7 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
    * @return The geometric shape
    */
   static  fromSize(width, height) {
-    return new Z4SinusoidalCurve(width / 2, height / 2, 3 * width / 4, height / 2, width / 8, height / 4, 0);
+    return new Z4SinusoidalCurve(width / 4, height / 2, 3 * width / 4, height / 2, width / 2, height / 4, 0);
   }
 }
 /**
@@ -22059,6 +22188,8 @@ class Z4Translations {
   static  CHECK_UPDATE = "";
 
   // Other
+  static  NEW_HIS = "";
+
   static  PROJECT_NAME = "";
 
   static  FILENAME = "";
@@ -22524,6 +22655,7 @@ class Z4Translations {
     Z4Translations.INSTALL = "<span>Install pizzApazzA<sup>&#8734;</sup></span>";
     Z4Translations.CHECK_UPDATE = "Check for Updates";
     // Other
+    Z4Translations.NEW_HIS = "New";
     Z4Translations.PROJECT_NAME = "Project Name";
     Z4Translations.FILENAME = "File Name";
     Z4Translations.QUALITY = "Quality";
@@ -22795,6 +22927,7 @@ class Z4Translations {
     Z4Translations.INSTALL = "<span>Installa pizzApazzA<sup>&#8734;</sup></span>";
     Z4Translations.CHECK_UPDATE = "Controlla gli Aggiornamenti";
     // Other
+    Z4Translations.NEW_HIS = "Nuovo";
     Z4Translations.PROJECT_NAME = "Nome Progetto";
     Z4Translations.FILENAME = "Nome File";
     Z4Translations.QUALITY = "Qualit\u00E0";

@@ -125,14 +125,16 @@ public abstract class Z4GeometricShape implements Z4JSONable {
         return Z4Line.fromJSON(json);
       case "POLYLINE":
         return Z4Polyline.fromJSON(json);
-      case "BEZIER":
-        return Z4BezierCurve.fromJSON(json);
       case "ELLIPSE":
         return Z4EllipseFrame.fromJSON(json);
       case "RECTANGLE":
         return Z4RectangleFrame.fromJSON(json);
       case "ROUND_RECTANGLE":
         return Z4RoundRectangleFrame.fromJSON(json);
+      case "QUAD":
+        return Z4QuadCurve.fromJSON(json);
+      case "BEZIER":
+        return Z4BezierCurve.fromJSON(json);
       case "SINUSOIDAL":
         return Z4SinusoidalCurve.fromJSON(json);
       case "SPIRAL":
@@ -160,14 +162,16 @@ public abstract class Z4GeometricShape implements Z4JSONable {
         return Z4Line.fromSize(width, height);
       case "POLYLINE":
         return Z4Polyline.fromSize(width, height);
-      case "BEZIER":
-        return Z4BezierCurve.fromSize(width, height);
       case "ELLIPSE":
         return Z4EllipseFrame.fromSize(width, height);
       case "RECTANGLE":
         return Z4RectangleFrame.fromSize(width, height);
       case "ROUND_RECTANGLE":
         return Z4RoundRectangleFrame.fromSize(width, height);
+      case "QUAD":
+        return Z4QuadCurve.fromSize(width, height);
+      case "BEZIER":
+        return Z4BezierCurve.fromSize(width, height);
       case "SINUSOIDAL":
         return Z4SinusoidalCurve.fromSize(width, height);
       case "SPIRAL":

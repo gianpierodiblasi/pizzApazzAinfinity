@@ -23,6 +23,8 @@ class Z4Frame extends JSFrame {
     this.ribbon.setShapesAndPathsPanel(this.shapesAndPathsPanel);
     this.ribbon.setStatusPanel(this.statusPanel);
     this.canvas.setStatusPanel(this.statusPanel);
+    this.canvas.setShapesAndPathsPanel(this.shapesAndPathsPanel);
+    this.shapesAndPathsPanel.setStatusPanel(this.statusPanel);
     let panel = new JSPanel();
     panel.setLayout(new GridBagLayout());
     panel.add(this.shapesAndPathsPanel, new GBC(0, 0).f(GBC.BOTH).wxy(1, 1));

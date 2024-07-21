@@ -18,7 +18,10 @@ import pizzapazza.color.Z4BiGradientColor;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.math.Z4DrawingDirection;
 import pizzapazza.math.Z4Math;
+import pizzapazza.math.geometricshape.Z4GeometricShape;
+import pizzapazza.math.geometricshape.Z4GeometricShapeType;
 import pizzapazza.ui.panel.Z4StatusPanel;
+import pizzapazza.ui.panel.math.geometricshape.Z4ShapesAndPathsPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonDrawingToolPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
@@ -75,6 +78,7 @@ public class Z4Canvas extends JSComponent {
   private Z4RibbonDrawingToolPanel ribbonDrawingToolPanel;
   private Z4RibbonTextPanel ribbonTextPanel;
   private Z4RibbonHistoryPanel ribbonHistoryPanel;
+  private Z4ShapesAndPathsPanel shapesAndPathsPanel;
   private Z4StatusPanel statusPanel;
 
   private String projectName;
@@ -94,6 +98,7 @@ public class Z4Canvas extends JSComponent {
   private Z4DrawingTool selectedDrawingTool;
   private Z4DrawingDirection drawingDirection = Z4DrawingDirection.FREE;
 
+  private Z4GeometricShape selectedGeometricShape;
   private Z4TextInfo textInfo;
 
   private final Array<$Canvas> canvasArray = new Array<>(this.canvas, this.canvasGrid, this.canvasBounds, this.canvasOverlay);
@@ -179,6 +184,16 @@ public class Z4Canvas extends JSComponent {
     this.ioManager.setRibbonPanels(ribbonLayerPanel, ribbonDrawingToolPanel, ribbonHistoryPanel);
     this.textManager.setRibbonHistoryPanel(ribbonHistoryPanel);
     this.historyManager.setRibbonLayerPanel(ribbonLayerPanel);
+  }
+
+  /**
+   * Sets the shapes and paths panel
+   *
+   * @param shapesAndPathsPanel The shapes and paths panel
+   */
+  public void setShapesAndPathsPanel(Z4ShapesAndPathsPanel shapesAndPathsPanel) {
+    this.shapesAndPathsPanel = shapesAndPathsPanel;
+    this.shapesAndPathsPanel.setCanvas(this);
   }
 
   /**
@@ -1053,6 +1068,39 @@ public class Z4Canvas extends JSComponent {
     for (int y = this.centerGrid.y; y < this.height; y += this.plotWidthGrid) {
       grid.moveTo(x + magneticRadius, y);
       grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
+    }
+  }
+
+  /**
+   * Adds a geometric shape
+   *
+   * @param type The type
+   */
+  public void addGeometricShape(Z4GeometricShapeType type) {
+    this.changed = true;
+    this.setSelectedGeometricShapeAndAddGeometricShapePreview(Z4GeometricShape.fromSize(type, this.width, this.height), null, true);
+    this.setSaved(false);
+    this.drawCanvasOverlay();
+  }
+
+  /**
+   * Sets the selected geometric shape and adds the geometric shape preview
+   *
+   * @param shape The selected geometric shape
+   * @param apply The function to apply before adding the geometric shape
+   * preview
+   * @param add true to add the layer preview, false otherwise
+   */
+  public void setSelectedGeometricShapeAndAddGeometricShapePreview(Z4GeometricShape shape, $Apply_1_Void<Z4GeometricShape> apply, boolean add) {
+    this.selectedGeometricShape = shape;
+    this.ribbonTextPanel.setGeometricShape(shape);
+
+    if ($exists(apply)) {
+      apply.$apply(this.selectedGeometricShape);
+    }
+
+    if (add) {
+      this.shapesAndPathsPanel.addGeometricShapePreview(this.selectedGeometricShape);
     }
   }
 

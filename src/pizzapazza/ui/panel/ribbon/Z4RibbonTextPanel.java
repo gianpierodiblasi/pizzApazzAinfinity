@@ -29,7 +29,7 @@ import pizzapazza.math.Z4Sign;
 import pizzapazza.math.Z4SignBehavior;
 import pizzapazza.math.Z4SignedRandomValue;
 import pizzapazza.math.Z4SignedValue;
-import pizzapazza.math.geometricshape.Z4Line;
+import pizzapazza.math.geometricshape.Z4GeometricShape;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.component.Z4CanvasOverlayMode;
 import pizzapazza.ui.component.Z4DropDown;
@@ -364,10 +364,6 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textInfo.shadowShearX = parseInt(this.shadowShearX.getValue());
     this.textInfo.shadowShearY = parseInt(this.shadowShearY.getValue());
 
-    // TO DELETE
-    this.textInfo.shape = new Z4Line(50, 50, 450, 450);
-    // TO DELETE
-
     this.canvas.setTextInfo(this.textInfo);
   }
 
@@ -421,6 +417,23 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
    */
   public void setCanvas(Z4Canvas canvas) {
     this.canvas = canvas;
+  }
+
+  /**
+   * Sets the geometric shape
+   *
+   * @param shape The geometric shape
+   */
+  public void setGeometricShape(Z4GeometricShape shape) {
+    this.textInfo.shape = shape;
+
+    if ($exists(shape)) {
+      this.warningMessage.getStyle().removeProperty("display");
+    } else {
+      this.warningMessage.getStyle().display = "none";
+    }
+
+    this.canvas.setTextInfo(this.textInfo);
   }
 
   /**

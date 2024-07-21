@@ -47,6 +47,8 @@ class Z4Canvas extends JSComponent {
 
    ribbonHistoryPanel = null;
 
+   shapesAndPathsPanel = null;
+
    statusPanel = null;
 
    projectName = null;
@@ -76,6 +78,8 @@ class Z4Canvas extends JSComponent {
    selectedDrawingTool = null;
 
    drawingDirection = Z4DrawingDirection.FREE;
+
+   selectedGeometricShape = null;
 
    textInfo = null;
 
@@ -158,6 +162,16 @@ class Z4Canvas extends JSComponent {
     this.ioManager.setRibbonPanels(ribbonLayerPanel, ribbonDrawingToolPanel, ribbonHistoryPanel);
     this.textManager.setRibbonHistoryPanel(ribbonHistoryPanel);
     this.historyManager.setRibbonLayerPanel(ribbonLayerPanel);
+  }
+
+  /**
+   * Sets the shapes and paths panel
+   *
+   * @param shapesAndPathsPanel The shapes and paths panel
+   */
+   setShapesAndPathsPanel(shapesAndPathsPanel) {
+    this.shapesAndPathsPanel = shapesAndPathsPanel;
+    this.shapesAndPathsPanel.setCanvas(this);
   }
 
   /**
@@ -986,6 +1000,37 @@ class Z4Canvas extends JSComponent {
     for (let y = this.centerGrid.y; y < this.height; y += this.plotWidthGrid) {
       grid.moveTo(x + magneticRadius, y);
       grid.arc(x, y, magneticRadius, 0, Z4Math.TWO_PI);
+    }
+  }
+
+  /**
+   * Adds a geometric shape
+   *
+   * @param type The type
+   */
+   addGeometricShape(type) {
+    this.changed = true;
+    this.setSelectedGeometricShapeAndAddGeometricShapePreview(Z4GeometricShape.fromSize(type, this.width, this.height), null, true);
+    this.setSaved(false);
+    this.drawCanvasOverlay();
+  }
+
+  /**
+   * Sets the selected geometric shape and adds the geometric shape preview
+   *
+   * @param shape The selected geometric shape
+   * @param apply The function to apply before adding the geometric shape
+   * preview
+   * @param add true to add the layer preview, false otherwise
+   */
+   setSelectedGeometricShapeAndAddGeometricShapePreview(shape, apply, add) {
+    this.selectedGeometricShape = shape;
+    this.ribbonTextPanel.setGeometricShape(shape);
+    if (apply) {
+      apply(this.selectedGeometricShape);
+    }
+    if (add) {
+      this.shapesAndPathsPanel.addGeometricShapePreview(this.selectedGeometricShape);
     }
   }
 

@@ -152,6 +152,8 @@ class Z4Translations {
   static  CHECK_UPDATE = "";
 
   // Other
+  static  NEW_HIS = "";
+
   static  PROJECT_NAME = "";
 
   static  FILENAME = "";
@@ -617,6 +619,7 @@ class Z4Translations {
     Z4Translations.INSTALL = "<span>Install pizzApazzA<sup>&#8734;</sup></span>";
     Z4Translations.CHECK_UPDATE = "Check for Updates";
     // Other
+    Z4Translations.NEW_HIS = "New";
     Z4Translations.PROJECT_NAME = "Project Name";
     Z4Translations.FILENAME = "File Name";
     Z4Translations.QUALITY = "Quality";
@@ -888,6 +891,7 @@ class Z4Translations {
     Z4Translations.INSTALL = "<span>Installa pizzApazzA<sup>&#8734;</sup></span>";
     Z4Translations.CHECK_UPDATE = "Controlla gli Aggiornamenti";
     // Other
+    Z4Translations.NEW_HIS = "Nuovo";
     Z4Translations.PROJECT_NAME = "Nome Progetto";
     Z4Translations.FILENAME = "Nome File";
     Z4Translations.QUALITY = "Qualit\u00E0";

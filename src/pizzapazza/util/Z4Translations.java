@@ -104,6 +104,7 @@ public class Z4Translations {
   public static String CHECK_UPDATE = "";
 
   // Other
+  public static String NEW_HIS = "";
   public static String PROJECT_NAME = "";
   public static String FILENAME = "";
   public static String QUALITY = "";
@@ -409,6 +410,7 @@ public class Z4Translations {
     Z4Translations.CHECK_UPDATE = "Check for Updates";
 
     // Other
+    Z4Translations.NEW_HIS = "New";
     Z4Translations.PROJECT_NAME = "Project Name";
     Z4Translations.FILENAME = "File Name";
     Z4Translations.QUALITY = "Quality";
@@ -575,7 +577,7 @@ public class Z4Translations {
     Z4Translations.QUAD = "Quadric";
     Z4Translations.SINUSOIDAL = "Sinusoidal";
     Z4Translations.SPIRAL = "Spiral";
-  
+
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Composite Operation";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "This is the default setting and draws the layer on top of the existing content";
@@ -698,6 +700,7 @@ public class Z4Translations {
     Z4Translations.CHECK_UPDATE = "Controlla gli Aggiornamenti";
 
     // Other
+    Z4Translations.NEW_HIS = "Nuovo";
     Z4Translations.PROJECT_NAME = "Nome Progetto";
     Z4Translations.FILENAME = "Nome File";
     Z4Translations.QUALITY = "Qualit\u00E0";
@@ -864,7 +867,7 @@ public class Z4Translations {
     Z4Translations.QUAD = "Quadrica";
     Z4Translations.SINUSOIDAL = "Sinusoidale";
     Z4Translations.SPIRAL = "Spirale";
-    
+
     // Composite Operation
     Z4Translations.COMPOSITE_OPERATION = "Operazione Composita";
     Z4Translations.COMPOSITE_OPERATION_SOURCE_OVER = "Questa \u00E8 l'impostazione predefinita e disegna il livello sopra il contenuto esistente";
