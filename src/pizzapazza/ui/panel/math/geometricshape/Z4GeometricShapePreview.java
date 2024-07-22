@@ -202,7 +202,7 @@ public class Z4GeometricShapePreview extends JSDropDown {
    * @param canvas The canvas
    * @param shape The geometric shape
    */
-  @SuppressWarnings({"StringEquality", "unchecked"})
+  @SuppressWarnings({"StringEquality", "unchecked", "null"})
   public void setGeometriShape(Z4Canvas canvas, Z4GeometricShape shape) {
     this.canvas = canvas;
     this.shape = shape;
