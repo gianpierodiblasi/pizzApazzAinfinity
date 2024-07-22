@@ -34,7 +34,7 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
     super(Z4GeometricShapeType.SPIRAL);
 
     this.x1 = x1;
-    this.y1 = y2;
+    this.y1 = y1;
     this.x2 = x2;
     this.y2 = y2;
     this.radius = radius;
@@ -79,7 +79,15 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
   @Override
   public Z4GeometricShape fromDataChanged(Array<Z4Point> controlPoints, double x, double y, int pointIndex, double spinnerValue, int spinnerIndex, int width, int height) {
     if (pointIndex == 0) {
-      return new Z4SpiralCurve(x, y, this.x2, this.y2, this.radius, this.angle);
+      double offsetX = this.x1 - x;
+      double offsetY = this.y1 - y;
+
+      double radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
+
+      Z4Point point1 = this.getPoint(x, y, this.x2 - offsetX, this.y2 - offsetY, radius1, this.angle, width, height);
+      Z4Point point2 = this.getPoint(x, y, controlPoints.$get(2).x - offsetX, controlPoints.$get(2).y - offsetY, this.radius, this.angle, width, height);
+
+      return new Z4SpiralCurve(x, y, point1.x, point1.y, Z4Math.distance(x, y, point2.x, point2.y), this.angle);
     } else if (pointIndex == 1) {
       return new Z4SpiralCurve(this.x1, this.y1, x, y, this.radius, this.angle);
     } else if (pointIndex == 2) {
@@ -87,6 +95,15 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
     } else {
       return this;
     }
+  }
+
+  private Z4Point getPoint(double cx, double cy, double x, double y, double radius, double angle, int width, int height) {
+    while ((x < 0 || x > width || y < 0 || y > height) && radius > 0) {
+      radius = Math.max(0, radius - 0.05);
+      x = cx + radius * Math.cos(angle);
+      y = cy + radius * Math.sin(angle);
+    }
+    return new Z4Point(x, y);
   }
 
   @Override

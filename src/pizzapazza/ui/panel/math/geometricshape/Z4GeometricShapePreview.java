@@ -5,11 +5,13 @@ import def.js.Array;
 import javascript.awt.Dimension;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
+import javascript.swing.ButtonGroup;
 import javascript.swing.JSButton;
 import javascript.swing.JSComponent;
 import javascript.swing.JSDropDown;
 import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
+import javascript.swing.JSRadioButton;
 import javascript.swing.JSSlider;
 import javascript.swing.JSSpinner;
 import javascript.swing.SpinnerNumberModel;
@@ -24,7 +26,6 @@ import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
 import static simulation.js.$Globals.setTimeout;
-import simulation.js.$Object;
 
 /**
  * The layer preview
@@ -42,6 +43,8 @@ public class Z4GeometricShapePreview extends JSDropDown {
   private final JSSpinner xSpinner = new JSSpinner();
   private final JSSlider ySlider = new JSSlider();
   private final JSSpinner ySpinner = new JSSpinner();
+  private final JSPanel radioPanel = new JSPanel();
+  private final JSPanel spinnerPanel = new JSPanel();
 
   private Z4ShapesAndPathsPanel shapesAndPathsPanel;
   private Z4Canvas canvas;
@@ -91,9 +94,7 @@ public class Z4GeometricShapePreview extends JSDropDown {
     selector.addActionListener(event -> {
       document.querySelectorAll(".z4geometricshapepreview .z4geometricshapepreview-selector").forEach(element -> element.textContent = Z4GeometricShapePreview.UNSELECTED_GEOMETRIC_SHAPE_CONTENT);
       selector.setText(Z4GeometricShapePreview.SELECTED_GEOMETRIC_SHAPE_CONTENT);
-      this.selectedControlPoint = 0;
-      // selezionare il primo radiobutton
-      this.canvas.setSelectedGeometricShape(this.shape);
+      this.canvas.setSelectedGeometricShape(this.shape, this.selectedControlPoint);
     });
     this.summary.add(selector, new GBC(1, 0).a(GBC.NORTH).i(0, 2, 0, 0));
 
@@ -115,6 +116,10 @@ public class Z4GeometricShapePreview extends JSDropDown {
     Z4UI.addVLine(this.editor, new GBC(2, 0).h(6).f(GBC.VERTICAL).i(1, 2, 1, 2));
     Z4UI.addLabel(this.editor, "y", new GBC(3, 3).h(3).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
 
+    this.editor.add(this.radioPanel, new GBC(0, 2).wh(2, 2).f(GBC.BOTH));
+    this.spinnerPanel.setLayout(new GridBagLayout());
+    this.editor.add(this.spinnerPanel, new GBC(0, 4).w(2).f(GBC.BOTH));
+
     this.ySpinner.cssAddClass("jsspinner-vertical");
     this.ySpinner.cssAddClass("jsspinner_h_4rem");
     this.ySpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
@@ -133,10 +138,7 @@ public class Z4GeometricShapePreview extends JSDropDown {
     button.setText(Z4Translations.DUPLICATE);
     button.addActionListener(event -> {
       this.changed = true;
-
-      $Object json = this.shape.toJSON();
-      this.canvas.addGeometricShape(Z4GeometricShape.fromJSON(json));
-
+      this.canvas.addGeometricShape(Z4GeometricShape.fromJSON(this.shape.toJSON()));
       this.removeAttribute("open");
       setTimeout(() -> document.querySelector(".z4geometricshapepreview:nth-last-child(1)").setAttribute("open", "open"), 0);
     });
@@ -152,6 +154,7 @@ public class Z4GeometricShapePreview extends JSDropDown {
       }
     }));
     this.editor.add(button, new GBC(1, 5).a(GBC.SOUTHEAST));
+//    
 //    this.addButton(panelTransform, "", 3, 1, event -> this.setGeometriShape(this.canvas, this.shape)).cssAddClass("z4geometricshapepreview-setgeometricshape");
 
     this.appendChild(this.editor);
@@ -172,9 +175,9 @@ public class Z4GeometricShapePreview extends JSDropDown {
       this.editor.removeAttribute("transparent");
     }
 
-//    this.layer.move(this.xSlider.getValue(), this.ySlider.getValue());
-//    this.canvas.drawCanvas();
-//    this.canvas.drawCanvasBounds();
+    Z4GeometricShape newShape = this.shape.fromDataChanged(this.shape.getControlPoints(), this.xSlider.getValue(), this.ySlider.getValue(), this.selectedControlPoint, 0, -1, this.canvas.getSize().width, this.canvas.getSize().width);
+    this.canvas.replaceGeometricShape(this.shape, newShape, this.selectedControlPoint);
+    this.setGeometriShape(this.canvas, newShape);
   }
 
   /**
@@ -211,7 +214,28 @@ public class Z4GeometricShapePreview extends JSDropDown {
     this.preview.getStyle().marginLeft = (Z4GeometricShapePreview.PREVIEW_SIZE - w - 1) / 2 + "px";
     this.preview.getStyle().marginRight = (Z4GeometricShapePreview.PREVIEW_SIZE - w - 1) / 2 + "px";
 
-    Z4Point p = this.shape.getControlPoints().$get(0);
+    this.radioPanel.setContent("");
+    ButtonGroup buttonGroup = new ButtonGroup();
+    this.shape.getControlPoints().forEach((controlPoint, index, array) -> {
+      JSRadioButton radio = new JSRadioButton();
+      radio.setSelected(index == this.selectedControlPoint);
+      radio.setText("" + (index + 1));
+      radio.addActionListener(event -> {
+        this.selectedControlPoint = index;
+        Z4Point p = this.shape.getControlPoints().$get(this.selectedControlPoint);
+        this.xSlider.setValue(parseInt(p.x));
+        this.xSpinner.setValue(parseInt(p.x));
+        this.ySlider.setValue(parseInt(p.y));
+        this.ySpinner.setValue(parseInt(p.y));
+        
+        this.canvas.replaceGeometricShape(this.shape, this.shape, this.selectedControlPoint);
+      });
+
+      this.radioPanel.add(radio, null);
+      buttonGroup.add(radio);
+    });
+
+    Z4Point p = this.shape.getControlPoints().$get(this.selectedControlPoint);
     Dimension dC = this.canvas.getSize();
     this.xSlider.setMinimum(0);
     this.xSlider.setMaximum(dC.width);

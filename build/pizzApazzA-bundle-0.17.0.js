@@ -3098,7 +3098,23 @@ class Z4Canvas extends JSComponent {
    */
    addGeometricShape(shape) {
     this.geometricShapes.push(shape);
-    this.setSelectedGeometricShapeAndAddGeometricShapePreview(shape, true);
+    this.setSelectedGeometricShapeAndAddGeometricShapePreview(shape, 0, true);
+    this.setSaved(false);
+  }
+
+  /**
+   * Replaces a geometric shape
+   *
+   * @param oldShape The old geometric shape
+   * @param newShape The new geometric shape
+   * @param selectedControlPoint The selected control point
+   */
+   replaceGeometricShape(oldShape, newShape, selectedControlPoint) {
+    let index = this.geometricShapes.indexOf(oldShape);
+    this.geometricShapes[index] = newShape;
+    if (this.selectedGeometricShape === oldShape) {
+      this.setSelectedGeometricShape(newShape, selectedControlPoint);
+    }
     this.setSaved(false);
   }
 
@@ -3112,7 +3128,7 @@ class Z4Canvas extends JSComponent {
     let index = this.geometricShapes.indexOf(shape);
     this.geometricShapes.splice(index, 1);
     if (this.selectedGeometricShape === shape) {
-      this.setSelectedGeometricShape(null);
+      this.setSelectedGeometricShape(null, 0);
     }
     this.setSaved(false);
     return index;
@@ -3122,20 +3138,22 @@ class Z4Canvas extends JSComponent {
    * Sets the selected geometric shape
    *
    * @param shape The selected geometric shape
+   * @param selectedControlPoint The selected control point
    */
-   setSelectedGeometricShape(shape) {
-    this.setSelectedGeometricShapeAndAddGeometricShapePreview(shape, false);
+   setSelectedGeometricShape(shape, selectedControlPoint) {
+    this.setSelectedGeometricShapeAndAddGeometricShapePreview(shape, selectedControlPoint, false);
   }
 
   /**
    * Sets the selected geometric shape and adds the geometric shape preview
    *
    * @param shape The selected geometric shape
+   * @param selectedControlPoint The selected control point
    * @param add true to add the layer preview, false otherwise
    */
-   setSelectedGeometricShapeAndAddGeometricShapePreview(shape, add) {
+   setSelectedGeometricShapeAndAddGeometricShapePreview(shape, selectedControlPoint, add) {
     this.selectedGeometricShape = shape;
-    this.ribbonTextPanel.setGeometricShape(shape, 0);
+    this.ribbonTextPanel.setGeometricShape(shape, selectedControlPoint);
     if (add) {
       this.shapesAndPathsPanel.addGeometricShapePreview(this.selectedGeometricShape);
     }
@@ -6897,6 +6915,10 @@ class Z4GeometricShapePreview extends JSDropDown {
 
    ySpinner = new JSSpinner();
 
+   radioPanel = new JSPanel();
+
+   spinnerPanel = new JSPanel();
+
    shapesAndPathsPanel = null;
 
    canvas = null;
@@ -6944,9 +6966,7 @@ class Z4GeometricShapePreview extends JSDropDown {
     selector.addActionListener(event => {
       document.querySelectorAll(".z4geometricshapepreview .z4geometricshapepreview-selector").forEach(element => element.textContent = Z4GeometricShapePreview.UNSELECTED_GEOMETRIC_SHAPE_CONTENT);
       selector.setText(Z4GeometricShapePreview.SELECTED_GEOMETRIC_SHAPE_CONTENT);
-      this.selectedControlPoint = 0;
-      // selezionare il primo radiobutton
-      this.canvas.setSelectedGeometricShape(this.shape);
+      this.canvas.setSelectedGeometricShape(this.shape, this.selectedControlPoint);
     });
     this.summary.add(selector, new GBC(1, 0).a(GBC.NORTH).i(0, 2, 0, 0));
     this.appendChildInTree("summary", this.summary);
@@ -6961,6 +6981,9 @@ class Z4GeometricShapePreview extends JSDropDown {
     this.editor.add(this.xSlider, new GBC(0, 1).w(2).a(GBC.NORTH).f(GBC.HORIZONTAL));
     Z4UI.addVLine(this.editor, new GBC(2, 0).h(6).f(GBC.VERTICAL).i(1, 2, 1, 2));
     Z4UI.addLabel(this.editor, "y", new GBC(3, 3).h(3).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
+    this.editor.add(this.radioPanel, new GBC(0, 2).wh(2, 2).f(GBC.BOTH));
+    this.spinnerPanel.setLayout(new GridBagLayout());
+    this.editor.add(this.spinnerPanel, new GBC(0, 4).w(2).f(GBC.BOTH));
     this.ySpinner.cssAddClass("jsspinner-vertical");
     this.ySpinner.cssAddClass("jsspinner_h_4rem");
     this.ySpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
@@ -6977,8 +7000,7 @@ class Z4GeometricShapePreview extends JSDropDown {
     button.setText(Z4Translations.DUPLICATE);
     button.addActionListener(event => {
       this.changed = true;
-      let json = this.shape.toJSON();
-      this.canvas.addGeometricShape(Z4GeometricShape.fromJSON(json));
+      this.canvas.addGeometricShape(Z4GeometricShape.fromJSON(this.shape.toJSON()));
       this.removeAttribute("open");
       setTimeout(() => document.querySelector(".z4geometricshapepreview:nth-last-child(1)").setAttribute("open", "open"), 0);
     });
@@ -6993,6 +7015,7 @@ class Z4GeometricShapePreview extends JSDropDown {
       }
     }));
     this.editor.add(button, new GBC(1, 5).a(GBC.SOUTHEAST));
+    // 
     // this.addButton(panelTransform, "", 3, 1, event -> this.setGeometriShape(this.canvas, this.shape)).cssAddClass("z4geometricshapepreview-setgeometricshape");
     this.appendChild(this.editor);
   }
@@ -7009,9 +7032,9 @@ class Z4GeometricShapePreview extends JSDropDown {
     } else {
       this.editor.removeAttribute("transparent");
     }
-    // this.layer.move(this.xSlider.getValue(), this.ySlider.getValue());
-    // this.canvas.drawCanvas();
-    // this.canvas.drawCanvasBounds();
+    let newShape = this.shape.fromDataChanged(this.shape.getControlPoints(), this.xSlider.getValue(), this.ySlider.getValue(), this.selectedControlPoint, 0, -1, this.canvas.getSize().width, this.canvas.getSize().width);
+    this.canvas.replaceGeometricShape(this.shape, newShape, this.selectedControlPoint);
+    this.setGeometriShape(this.canvas, newShape);
   }
 
   /**
@@ -7045,7 +7068,25 @@ class Z4GeometricShapePreview extends JSDropDown {
     this.preview.getStyle().marginBottom = (Z4GeometricShapePreview.PREVIEW_SIZE - h - 1) / 2 + "px";
     this.preview.getStyle().marginLeft = (Z4GeometricShapePreview.PREVIEW_SIZE - w - 1) / 2 + "px";
     this.preview.getStyle().marginRight = (Z4GeometricShapePreview.PREVIEW_SIZE - w - 1) / 2 + "px";
-    let p = this.shape.getControlPoints()[0];
+    this.radioPanel.setContent("");
+    let buttonGroup = new ButtonGroup();
+    this.shape.getControlPoints().forEach((controlPoint, index, array) => {
+      let radio = new JSRadioButton();
+      radio.setSelected(index === this.selectedControlPoint);
+      radio.setText("" + (index + 1));
+      radio.addActionListener(event => {
+        this.selectedControlPoint = index;
+        let p = this.shape.getControlPoints()[this.selectedControlPoint];
+        this.xSlider.setValue(parseInt(p.x));
+        this.xSpinner.setValue(parseInt(p.x));
+        this.ySlider.setValue(parseInt(p.y));
+        this.ySpinner.setValue(parseInt(p.y));
+        this.canvas.replaceGeometricShape(this.shape, this.shape, this.selectedControlPoint);
+      });
+      this.radioPanel.add(radio, null);
+      buttonGroup.add(radio);
+    });
+    let p = this.shape.getControlPoints()[this.selectedControlPoint];
     let dC = this.canvas.getSize();
     this.xSlider.setMinimum(0);
     this.xSlider.setMaximum(dC.width);
@@ -17171,7 +17212,7 @@ class Z4SpiralCurve extends Z4GeometricCurve {
   constructor(x1, y1, x2, y2, radius, angle) {
     super(Z4GeometricShapeType.SPIRAL);
     this.x1 = x1;
-    this.y1 = y2;
+    this.y1 = y1;
     this.x2 = x2;
     this.y2 = y2;
     this.radius = radius;
@@ -17206,7 +17247,12 @@ class Z4SpiralCurve extends Z4GeometricCurve {
 
    fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     if (pointIndex === 0) {
-      return new Z4SpiralCurve(x, y, this.x2, this.y2, this.radius, this.angle);
+      let offsetX = this.x1 - x;
+      let offsetY = this.y1 - y;
+      let radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
+      let point1 = this.getPoint(x, y, this.x2 - offsetX, this.y2 - offsetY, radius1, this.angle, width, height);
+      let point2 = this.getPoint(x, y, controlPoints[2].x - offsetX, controlPoints[2].y - offsetY, this.radius, this.angle, width, height);
+      return new Z4SpiralCurve(x, y, point1.x, point1.y, Z4Math.distance(x, y, point2.x, point2.y), this.angle);
     } else if (pointIndex === 1) {
       return new Z4SpiralCurve(this.x1, this.y1, x, y, this.radius, this.angle);
     } else if (pointIndex === 2) {
@@ -17214,6 +17260,15 @@ class Z4SpiralCurve extends Z4GeometricCurve {
     } else {
       return this;
     }
+  }
+
+   getPoint(cx, cy, x, y, radius, angle, width, height) {
+    while ((x < 0 || x > width || y < 0 || y > height) && radius > 0) {
+      radius = Math.max(0, radius - 0.05);
+      x = cx + radius * Math.cos(angle);
+      y = cy + radius * Math.sin(angle);
+    }
+    return new Z4Point(x, y);
   }
 
    toJSON() {

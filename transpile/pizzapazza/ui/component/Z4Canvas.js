@@ -1012,7 +1012,23 @@ class Z4Canvas extends JSComponent {
    */
    addGeometricShape(shape) {
     this.geometricShapes.push(shape);
-    this.setSelectedGeometricShapeAndAddGeometricShapePreview(shape, true);
+    this.setSelectedGeometricShapeAndAddGeometricShapePreview(shape, 0, true);
+    this.setSaved(false);
+  }
+
+  /**
+   * Replaces a geometric shape
+   *
+   * @param oldShape The old geometric shape
+   * @param newShape The new geometric shape
+   * @param selectedControlPoint The selected control point
+   */
+   replaceGeometricShape(oldShape, newShape, selectedControlPoint) {
+    let index = this.geometricShapes.indexOf(oldShape);
+    this.geometricShapes[index] = newShape;
+    if (this.selectedGeometricShape === oldShape) {
+      this.setSelectedGeometricShape(newShape, selectedControlPoint);
+    }
     this.setSaved(false);
   }
 
@@ -1026,7 +1042,7 @@ class Z4Canvas extends JSComponent {
     let index = this.geometricShapes.indexOf(shape);
     this.geometricShapes.splice(index, 1);
     if (this.selectedGeometricShape === shape) {
-      this.setSelectedGeometricShape(null);
+      this.setSelectedGeometricShape(null, 0);
     }
     this.setSaved(false);
     return index;
@@ -1036,20 +1052,22 @@ class Z4Canvas extends JSComponent {
    * Sets the selected geometric shape
    *
    * @param shape The selected geometric shape
+   * @param selectedControlPoint The selected control point
    */
-   setSelectedGeometricShape(shape) {
-    this.setSelectedGeometricShapeAndAddGeometricShapePreview(shape, false);
+   setSelectedGeometricShape(shape, selectedControlPoint) {
+    this.setSelectedGeometricShapeAndAddGeometricShapePreview(shape, selectedControlPoint, false);
   }
 
   /**
    * Sets the selected geometric shape and adds the geometric shape preview
    *
    * @param shape The selected geometric shape
+   * @param selectedControlPoint The selected control point
    * @param add true to add the layer preview, false otherwise
    */
-   setSelectedGeometricShapeAndAddGeometricShapePreview(shape, add) {
+   setSelectedGeometricShapeAndAddGeometricShapePreview(shape, selectedControlPoint, add) {
     this.selectedGeometricShape = shape;
-    this.ribbonTextPanel.setGeometricShape(shape, 0);
+    this.ribbonTextPanel.setGeometricShape(shape, selectedControlPoint);
     if (add) {
       this.shapesAndPathsPanel.addGeometricShapePreview(this.selectedGeometricShape);
     }

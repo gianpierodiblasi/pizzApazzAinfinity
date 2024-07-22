@@ -1078,7 +1078,25 @@ public class Z4Canvas extends JSComponent {
    */
   public void addGeometricShape(Z4GeometricShape shape) {
     this.geometricShapes.push(shape);
-    this.setSelectedGeometricShapeAndAddGeometricShapePreview(shape, true);
+    this.setSelectedGeometricShapeAndAddGeometricShapePreview(shape, 0, true);
+    this.setSaved(false);
+  }
+
+  /**
+   * Replaces a geometric shape
+   *
+   * @param oldShape The old geometric shape
+   * @param newShape The new geometric shape
+   * @param selectedControlPoint The selected control point
+   */
+  public void replaceGeometricShape(Z4GeometricShape oldShape, Z4GeometricShape newShape, int selectedControlPoint) {
+    int index = this.geometricShapes.indexOf(oldShape);
+    this.geometricShapes.$set(index, newShape);
+
+    if (this.selectedGeometricShape == oldShape) {
+      this.setSelectedGeometricShape(newShape, selectedControlPoint);
+    }
+
     this.setSaved(false);
   }
 
@@ -1092,7 +1110,7 @@ public class Z4Canvas extends JSComponent {
     int index = this.geometricShapes.indexOf(shape);
     this.geometricShapes.splice(index, 1);
     if (this.selectedGeometricShape == shape) {
-      this.setSelectedGeometricShape(null);
+      this.setSelectedGeometricShape(null, 0);
     }
     this.setSaved(false);
     return index;
@@ -1102,20 +1120,22 @@ public class Z4Canvas extends JSComponent {
    * Sets the selected geometric shape
    *
    * @param shape The selected geometric shape
+   * @param selectedControlPoint The selected control point
    */
-  public void setSelectedGeometricShape(Z4GeometricShape shape) {
-    this.setSelectedGeometricShapeAndAddGeometricShapePreview(shape, false);
+  public void setSelectedGeometricShape(Z4GeometricShape shape, int selectedControlPoint) {
+    this.setSelectedGeometricShapeAndAddGeometricShapePreview(shape, selectedControlPoint, false);
   }
 
   /**
    * Sets the selected geometric shape and adds the geometric shape preview
    *
    * @param shape The selected geometric shape
+   * @param selectedControlPoint The selected control point
    * @param add true to add the layer preview, false otherwise
    */
-  public void setSelectedGeometricShapeAndAddGeometricShapePreview(Z4GeometricShape shape, boolean add) {
+  public void setSelectedGeometricShapeAndAddGeometricShapePreview(Z4GeometricShape shape, int selectedControlPoint, boolean add) {
     this.selectedGeometricShape = shape;
-    this.ribbonTextPanel.setGeometricShape(shape, 0);
+    this.ribbonTextPanel.setGeometricShape(shape, selectedControlPoint);
 
     if (add) {
       this.shapesAndPathsPanel.addGeometricShapePreview(this.selectedGeometricShape);
