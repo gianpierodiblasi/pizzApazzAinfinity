@@ -37,7 +37,7 @@ public class Z4EllipseFrame extends Z4GeometricFrame {
 
     double incAngle = extentAngle / Z4GeometricCurve.APPROX_SEGMENTS;
 
-    Z4AffineTransform tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
+    Z4AffineTransform tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(this.sy / Z4GeometricFrame.SHEARING_COEFFICIENT, -this.sx / Z4GeometricFrame.SHEARING_COEFFICIENT);
 
     Array<Z4Point> points = new Array<>();
     for (int i = 0; i <= Z4GeometricCurve.APPROX_SEGMENTS; i++) {
@@ -53,7 +53,7 @@ public class Z4EllipseFrame extends Z4GeometricFrame {
   public Array<Z4Point> getControlPoints() {
     double w2 = this.w - 5;
     double h2 = this.h - 5;
-    Z4AffineTransform tx = Z4AffineTransform.translate(this.x, this.y).concatenateRotate(this.angle).concatenateShear(this.sx, this.sy);
+    Z4AffineTransform tx = Z4AffineTransform.translate(this.x, this.y).concatenateRotate(this.angle).concatenateShear(this.sy / Z4GeometricFrame.SHEARING_COEFFICIENT, -this.sx / Z4GeometricFrame.SHEARING_COEFFICIENT);
 
     Array<Z4Point> controlPoints = super.getControlPoints();
     controlPoints.push(tx.transform(w2 * Math.cos(this.startAngle), h2 * Math.sin(this.startAngle)));
@@ -70,7 +70,18 @@ public class Z4EllipseFrame extends Z4GeometricFrame {
 
   @Override
   public Z4GeometricShape fromDataChanged(Array<Z4Point> controlPoints, double x, double y, int pointIndex, double spinnerValue, int spinnerIndex, int width, int height) {
-    return null;
+    if (pointIndex == 3) {
+      return null;
+    } else if (pointIndex == 4) {
+      return null;
+    } else {
+      return super.fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height);
+    }
+  }
+
+  @Override
+  protected Z4GeometricFrame fromParameters(double x, double y, double w, double h, double angle, double sx, double sy) {
+    return new Z4EllipseFrame(x, y, w, h, angle, sx, sy, this.startAngle, this.extentAngle);
   }
 
   @Override

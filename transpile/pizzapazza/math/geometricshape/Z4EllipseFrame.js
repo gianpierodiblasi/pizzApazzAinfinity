@@ -27,7 +27,7 @@ class Z4EllipseFrame extends Z4GeometricFrame {
     this.startAngle = startAngle;
     this.extentAngle = extentAngle;
     let incAngle = extentAngle / Z4GeometricCurve.APPROX_SEGMENTS;
-    let tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
+    let tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(this.sy / Z4GeometricFrame.SHEARING_COEFFICIENT, -this.sx / Z4GeometricFrame.SHEARING_COEFFICIENT);
     let points = new Array();
     for (let i = 0; i <= Z4GeometricCurve.APPROX_SEGMENTS; i++) {
       let currentAngle = startAngle + incAngle * i;
@@ -41,7 +41,7 @@ class Z4EllipseFrame extends Z4GeometricFrame {
    getControlPoints() {
     let w2 = this.w - 5;
     let h2 = this.h - 5;
-    let tx = Z4AffineTransform.translate(this.x, this.y).concatenateRotate(this.angle).concatenateShear(this.sx, this.sy);
+    let tx = Z4AffineTransform.translate(this.x, this.y).concatenateRotate(this.angle).concatenateShear(this.sy / Z4GeometricFrame.SHEARING_COEFFICIENT, -this.sx / Z4GeometricFrame.SHEARING_COEFFICIENT);
     let controlPoints = super.getControlPoints();
     controlPoints.push(tx.transform(w2 * Math.cos(this.startAngle), h2 * Math.sin(this.startAngle)));
     controlPoints.push(tx.transform(w2 * Math.cos(this.startAngle + this.extentAngle), h2 * Math.sin(this.startAngle + this.extentAngle)));
@@ -55,7 +55,17 @@ class Z4EllipseFrame extends Z4GeometricFrame {
   }
 
    fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
-    return null;
+    if (pointIndex === 3) {
+      return null;
+    } else if (pointIndex === 4) {
+      return null;
+    } else {
+      return super.fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height);
+    }
+  }
+
+   fromParameters(x, y, w, h, angle, sx, sy) {
+    return new Z4EllipseFrame(x, y, w, h, angle, sx, sy, this.startAngle, this.extentAngle);
   }
 
    toJSON() {

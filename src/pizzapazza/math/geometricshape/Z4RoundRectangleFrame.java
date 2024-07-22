@@ -32,7 +32,7 @@ public class Z4RoundRectangleFrame extends Z4GeometricFrame {
 
     double min = Math.min(w, h);
     double advance = min * Z4RoundRectangleFrame.ADVANCE;
-    Z4AffineTransform tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(sx, sy);
+    Z4AffineTransform tx = Z4AffineTransform.translate(x, y).concatenateRotate(angle).concatenateShear(this.sy / Z4GeometricFrame.SHEARING_COEFFICIENT, -this.sx / Z4GeometricFrame.SHEARING_COEFFICIENT);
 
     Array<Z4Point> points = new Array<>();
     points.push(tx.transform(advance - w, -h)); //First point NW
@@ -59,8 +59,8 @@ public class Z4RoundRectangleFrame extends Z4GeometricFrame {
   }
 
   @Override
-  public Z4GeometricShape fromDataChanged(Array<Z4Point> controlPoints, double x, double y, int pointIndex, double spinnerValue, int spinnerIndex, int width, int height) {
-    return null;
+  protected Z4GeometricFrame fromParameters(double x, double y, double w, double h, double angle, double sx, double sy) {
+    return new Z4RoundRectangleFrame(x, y, w, h, angle, sx, sy);
   }
 
   /**
