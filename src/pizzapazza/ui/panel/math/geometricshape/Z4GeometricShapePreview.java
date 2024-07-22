@@ -2,6 +2,7 @@ package pizzapazza.ui.panel.math.geometricshape;
 
 import static def.dom.Globals.document;
 import def.js.Array;
+import def.js.Object;
 import javascript.awt.Dimension;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
@@ -9,6 +10,7 @@ import javascript.swing.ButtonGroup;
 import javascript.swing.JSButton;
 import javascript.swing.JSComponent;
 import javascript.swing.JSDropDown;
+import javascript.swing.JSLabel;
 import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
 import javascript.swing.JSRadioButton;
@@ -17,6 +19,7 @@ import javascript.swing.JSSpinner;
 import javascript.swing.SpinnerNumberModel;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.geometricshape.Z4GeometricShape;
+import pizzapazza.math.geometricshape.Z4GeometricShapeSpinnerConfiguration;
 import pizzapazza.math.geometricshape.Z4Polyline;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.util.Z4Constants;
@@ -52,6 +55,7 @@ public class Z4GeometricShapePreview extends JSDropDown {
   private double zoom = 1;
   private int selectedControlPoint = 0;
   private boolean changed;
+  private boolean spinnerPanelDone;
 
   /**
    * The text content for the selected button
@@ -65,6 +69,9 @@ public class Z4GeometricShapePreview extends JSDropDown {
 
   private final static int PREVIEW_SIZE = 75;
 
+  /**
+   * Creates the object
+   */
   @SuppressWarnings("StringEquality")
   public Z4GeometricShapePreview() {
     super(".z4geometricshapepreview-editor");
@@ -175,7 +182,7 @@ public class Z4GeometricShapePreview extends JSDropDown {
       this.editor.removeAttribute("transparent");
     }
 
-    Z4GeometricShape newShape = this.shape.fromDataChanged(this.shape.getControlPoints(), this.xSlider.getValue(), this.ySlider.getValue(), this.selectedControlPoint, 0, -1, this.canvas.getSize().width, this.canvas.getSize().width);
+    Z4GeometricShape newShape = this.shape.fromDataChanged(this.shape.getControlPoints(), this.xSlider.getValue(), this.ySlider.getValue(), this.selectedControlPoint, 0, -1, this.canvas.getSize().width, this.canvas.getSize().height);
     this.canvas.replaceGeometricShape(this.shape, newShape, this.selectedControlPoint);
     this.setGeometriShape(this.canvas, newShape);
   }
@@ -195,7 +202,7 @@ public class Z4GeometricShapePreview extends JSDropDown {
    * @param canvas The canvas
    * @param shape The geometric shape
    */
-  @SuppressWarnings("StringEquality")
+  @SuppressWarnings({"StringEquality", "unchecked"})
   public void setGeometriShape(Z4Canvas canvas, Z4GeometricShape shape) {
     this.canvas = canvas;
     this.shape = shape;
@@ -227,13 +234,50 @@ public class Z4GeometricShapePreview extends JSDropDown {
         this.xSpinner.setValue(parseInt(p.x));
         this.ySlider.setValue(parseInt(p.y));
         this.ySpinner.setValue(parseInt(p.y));
-        
+
         this.canvas.replaceGeometricShape(this.shape, this.shape, this.selectedControlPoint);
       });
 
       this.radioPanel.add(radio, null);
       buttonGroup.add(radio);
     });
+
+    if (!this.spinnerPanelDone) {
+      Array<Array<Z4GeometricShapeSpinnerConfiguration>> map = new Array<>();
+      Array<Z4GeometricShapeSpinnerConfiguration> spinnerConfigurations = this.shape.getSpinnerConfigurations();
+      spinnerConfigurations.forEach(spinnerConfiguration -> {
+        if (!$exists(map.$get(spinnerConfiguration.grouping))) {
+          map.$set(spinnerConfiguration.grouping, new Array<>());
+        }
+        ((Array<Z4GeometricShapeSpinnerConfiguration>) map.$get(spinnerConfiguration.grouping)).push(spinnerConfiguration);
+      });
+      int max = $exists(Object.keys(map).length) ? Object.keys(map).map(key -> ((Array<Z4GeometricShapeSpinnerConfiguration>) map.$get(key)).length).reduce((accumulator, current, index, array) -> Math.max(accumulator, current)) : 0;
+
+      Object.keys(map).forEach((key, index, array) -> {
+        if ($exists(key)) {
+          JSLabel grouping = new JSLabel();
+          grouping.setText("" + key);
+          this.spinnerPanel.add(grouping, new GBC(0, index * 3).w(max).a(GBC.WEST));
+        }
+
+        ((Array<Z4GeometricShapeSpinnerConfiguration>) map.$get(key)).forEach((spinnerConfiguration, index2, array2) -> {
+          JSLabel label = new JSLabel();
+          label.setText(spinnerConfiguration.label);
+          this.spinnerPanel.add(label, new GBC(index2, index * 3 + 1).a(GBC.WEST));
+
+          JSSpinner spinner = new JSSpinner();
+          spinner.cssAddClass("jsspinner_w_4rem");
+          spinner.setModel(new SpinnerNumberModel(spinnerConfiguration.value, spinnerConfiguration.minimum, spinnerConfiguration.maximum, 1));
+          spinner.addChangeListener(event -> {
+            Z4GeometricShape newShape = this.shape.fromDataChanged(this.shape.getControlPoints(), 0, 0, -1, spinner.getValue(), spinnerConfigurations.indexOf(spinnerConfiguration), this.canvas.getSize().width, this.canvas.getSize().height);
+            this.canvas.replaceGeometricShape(this.shape, newShape, this.selectedControlPoint);
+            this.setGeometriShape(this.canvas, newShape);
+          });
+          this.spinnerPanel.add(spinner, new GBC(index2, index * 3 + 2).f(GBC.HORIZONTAL).i(0, 0, 0, 5));
+        });
+      });
+      this.spinnerPanelDone = true;
+    }
 
     Z4Point p = this.shape.getControlPoints().$get(this.selectedControlPoint);
     Dimension dC = this.canvas.getSize();

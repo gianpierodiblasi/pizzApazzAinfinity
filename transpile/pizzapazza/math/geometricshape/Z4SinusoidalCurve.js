@@ -68,7 +68,7 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
   }
 
    getSpinnerConfigurations() {
-    return new Array(new Z4GeometricShapeSpinnerConfiguration("", Z4Translations.ANGLE, 0, 0, 360));
+    return new Array(new Z4GeometricShapeSpinnerConfiguration("", Z4Translations.ANGLE, parseInt(Z4Math.rad2deg(this.angle)), 0, 360));
   }
 
    fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {

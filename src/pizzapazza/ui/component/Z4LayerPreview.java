@@ -85,6 +85,9 @@ public class Z4LayerPreview extends JSDropDown {
 
   private final static int PREVIEW_SIZE = 50;
 
+  /**
+   * Creates the object
+   */
   @SuppressWarnings("StringEquality")
   public Z4LayerPreview() {
     super(".z4layerpreview-editor");

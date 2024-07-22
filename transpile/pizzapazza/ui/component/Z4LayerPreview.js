@@ -66,6 +66,9 @@ class Z4LayerPreview extends JSDropDown {
 
   static  PREVIEW_SIZE = 50;
 
+  /**
+   * Creates the object
+   */
   constructor() {
     super(".z4layerpreview-editor");
     this.cssAddClass("z4layerpreview");

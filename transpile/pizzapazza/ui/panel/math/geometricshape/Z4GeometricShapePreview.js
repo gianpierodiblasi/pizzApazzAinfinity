@@ -37,6 +37,8 @@ class Z4GeometricShapePreview extends JSDropDown {
 
    changed = false;
 
+   spinnerPanelDone = false;
+
   /**
    * The text content for the selected button
    */
@@ -49,6 +51,9 @@ class Z4GeometricShapePreview extends JSDropDown {
 
   static  PREVIEW_SIZE = 75;
 
+  /**
+   * Creates the object
+   */
   constructor() {
     super(".z4geometricshapepreview-editor");
     this.cssAddClass("z4geometricshapepreview");
@@ -138,7 +143,7 @@ class Z4GeometricShapePreview extends JSDropDown {
     } else {
       this.editor.removeAttribute("transparent");
     }
-    let newShape = this.shape.fromDataChanged(this.shape.getControlPoints(), this.xSlider.getValue(), this.ySlider.getValue(), this.selectedControlPoint, 0, -1, this.canvas.getSize().width, this.canvas.getSize().width);
+    let newShape = this.shape.fromDataChanged(this.shape.getControlPoints(), this.xSlider.getValue(), this.ySlider.getValue(), this.selectedControlPoint, 0, -1, this.canvas.getSize().width, this.canvas.getSize().height);
     this.canvas.replaceGeometricShape(this.shape, newShape, this.selectedControlPoint);
     this.setGeometriShape(this.canvas, newShape);
   }
@@ -192,6 +197,39 @@ class Z4GeometricShapePreview extends JSDropDown {
       this.radioPanel.add(radio, null);
       buttonGroup.add(radio);
     });
+    if (!this.spinnerPanelDone) {
+      let map = new Array();
+      let spinnerConfigurations = this.shape.getSpinnerConfigurations();
+      spinnerConfigurations.forEach(spinnerConfiguration => {
+        if (!map[spinnerConfiguration.grouping]) {
+          map[spinnerConfiguration.grouping] = new Array();
+        }
+        (map[spinnerConfiguration.grouping]).push(spinnerConfiguration);
+      });
+      let max = Object.keys(map).length ? Object.keys(map).map(key => (map[key]).length).reduce((accumulator, current, index, array) => Math.max(accumulator, current)) : 0;
+      Object.keys(map).forEach((key, index, array) => {
+        if (key) {
+          let grouping = new JSLabel();
+          grouping.setText("" + key);
+          this.spinnerPanel.add(grouping, new GBC(0, index * 3).w(max).a(GBC.WEST));
+        }
+        (map[key]).forEach((spinnerConfiguration, index2, array2) => {
+          let label = new JSLabel();
+          label.setText(spinnerConfiguration.label);
+          this.spinnerPanel.add(label, new GBC(index2, index * 3 + 1).a(GBC.WEST));
+          let spinner = new JSSpinner();
+          spinner.cssAddClass("jsspinner_w_4rem");
+          spinner.setModel(new SpinnerNumberModel(spinnerConfiguration.value, spinnerConfiguration.minimum, spinnerConfiguration.maximum, 1));
+          spinner.addChangeListener(event => {
+            let newShape = this.shape.fromDataChanged(this.shape.getControlPoints(), 0, 0, -1, spinner.getValue(), spinnerConfigurations.indexOf(spinnerConfiguration), this.canvas.getSize().width, this.canvas.getSize().height);
+            this.canvas.replaceGeometricShape(this.shape, newShape, this.selectedControlPoint);
+            this.setGeometriShape(this.canvas, newShape);
+          });
+          this.spinnerPanel.add(spinner, new GBC(index2, index * 3 + 2).f(GBC.HORIZONTAL).i(0, 0, 0, 5));
+        });
+      });
+      this.spinnerPanelDone = true;
+    }
     let p = this.shape.getControlPoints()[this.selectedControlPoint];
     let dC = this.canvas.getSize();
     this.xSlider.setMinimum(0);
