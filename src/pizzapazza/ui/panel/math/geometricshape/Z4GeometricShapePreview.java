@@ -279,11 +279,10 @@ public class Z4GeometricShapePreview extends JSDropDown {
     this.shape.getButtonConfigurations().forEach(buttonConfiguration -> {
       JSButton button = new JSButton();
       button.setText(buttonConfiguration.label);
-      button.addActionListener(event -> {
-        Z4GeometricShape newShape = buttonConfiguration.onClick.$apply(this.shape.getControlPoints(), this.selectedControlPoint);
+      button.addActionListener(event -> buttonConfiguration.onClick.$apply(this.shape.getControlPoints(), this.selectedControlPoint, newShape -> {
         this.canvas.replaceGeometricShape(this.shape, newShape, this.selectedControlPoint);
         this.setGeometriShape(this.canvas, newShape);
-      });
+      }));
       this.buttonPanel.add(button, null);
     });
 

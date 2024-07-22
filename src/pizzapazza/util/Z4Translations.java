@@ -133,6 +133,7 @@ public class Z4Translations {
   public static String ADD = "";
   public static String DELETE = "";
   public static String CANNOT_DELETE_POINT_MESSAGE = "";
+  public static String DELETE_POINT_MESSAGE = "";
   public static String DUPLICATE = "";
   public static String TRANSFORM = "";
   public static String FLIP_HORIZONTAL = "";
@@ -442,6 +443,7 @@ public class Z4Translations {
     Z4Translations.ADD = "Add";
     Z4Translations.DELETE = "Delete";
     Z4Translations.CANNOT_DELETE_POINT_MESSAGE = "Cannot delete the point";
+    Z4Translations.DELETE_POINT_MESSAGE = "Do you really want to delete the point?";
     Z4Translations.DUPLICATE = "Duplicate";
     Z4Translations.TRANSFORM = "Transform";
     Z4Translations.FLIP_HORIZONTAL = "Flip Horizontal";
@@ -734,7 +736,8 @@ public class Z4Translations {
     Z4Translations.RIPPLE = "Caoticit\u00E0";
     Z4Translations.ADD = "Aggiungi";
     Z4Translations.DELETE = "Elimina";
-    Z4Translations.CANNOT_DELETE_POINT_MESSAGE = "Non \u00E8 possibile cancellare il punto";
+    Z4Translations.CANNOT_DELETE_POINT_MESSAGE = "Non \u00E8 possibile eliminare il punto";
+    Z4Translations.DELETE_POINT_MESSAGE = "Vuoi davvero eliminare il punto?";
     Z4Translations.DUPLICATE = "Duplica";
     Z4Translations.TRANSFORM = "Trasforma";
     Z4Translations.FLIP_HORIZONTAL = "Rifletti Orizzontale";

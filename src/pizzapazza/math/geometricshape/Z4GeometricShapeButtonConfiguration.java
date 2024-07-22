@@ -2,7 +2,8 @@ package pizzapazza.math.geometricshape;
 
 import def.js.Array;
 import pizzapazza.math.Z4Point;
-import simulation.js.$Apply_2_V;
+import simulation.js.$Apply_1_Void;
+import simulation.js.$Apply_3_Void;
 
 /**
  * The configuration of a button used by a geometrishape
@@ -12,7 +13,7 @@ import simulation.js.$Apply_2_V;
 public class Z4GeometricShapeButtonConfiguration {
 
   public final String label;
-  public final $Apply_2_V<Array<Z4Point>, Integer, Z4GeometricShape> onClick;
+  public final $Apply_3_Void<Array<Z4Point>, Integer, $Apply_1_Void<Z4GeometricShape>> onClick;
 
   /**
    * Creates the object
@@ -21,7 +22,7 @@ public class Z4GeometricShapeButtonConfiguration {
    * @param onClick The action to do on click
    *
    */
-  public Z4GeometricShapeButtonConfiguration(String label, $Apply_2_V<Array<Z4Point>, Integer, Z4GeometricShape> onClick) {
+  public Z4GeometricShapeButtonConfiguration(String label, $Apply_3_Void<Array<Z4Point>, Integer, $Apply_1_Void<Z4GeometricShape>> onClick) {
     this.label = label;
     this.onClick = onClick;
   }

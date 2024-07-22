@@ -102,7 +102,7 @@ class Z4Polyline extends Z4GeometricShape {
   }
 
    getButtonConfigurations() {
-    return new Array(new Z4GeometricShapeButtonConfiguration(Z4Translations.ADD, (controlPoints, selectedControlPoint) => {
+    return new Array(new Z4GeometricShapeButtonConfiguration(Z4Translations.ADD, (controlPoints, selectedControlPoint, apply) => {
       let newPoints = new Array();
       controlPoints.forEach((controlPoint, index, array) => {
         if (index !== selectedControlPoint) {
@@ -115,13 +115,19 @@ class Z4Polyline extends Z4GeometricShape {
           newPoints.push(new Z4Point((controlPoints[index].x + controlPoints[index + 1].x) / 2, (controlPoints[index].y + controlPoints[index + 1].y) / 2));
         }
       });
-      return new Z4Polyline(newPoints);
-    }), new Z4GeometricShapeButtonConfiguration(Z4Translations.DELETE, (controlPoints, selectedControlPoint) => {
+      apply(new Z4Polyline(newPoints));
+    }), new Z4GeometricShapeButtonConfiguration(Z4Translations.DELETE, (controlPoints, selectedControlPoint, apply) => {
       if (controlPoints.length === 2) {
         JSOptionPane.showMessageDialog(Z4Translations.CANNOT_DELETE_POINT_MESSAGE, Z4Translations.DELETE, JSOptionPane.WARNING_MESSAGE, null);
-        return this;
+        apply(this);
       } else {
-        return new Z4Polyline(controlPoints.filter((controlPoint, index, array) => selectedControlPoint !== index));
+        JSOptionPane.showConfirmDialog(Z4Translations.DELETE_POINT_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
+          if (response === JSOptionPane.YES_OPTION) {
+            apply(new Z4Polyline(controlPoints.filter((controlPoint, index, array) => selectedControlPoint !== index)));
+          } else {
+            apply(this);
+          }
+        });
       }
     }));
   }

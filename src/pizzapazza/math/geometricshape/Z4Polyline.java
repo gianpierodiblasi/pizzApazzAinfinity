@@ -129,7 +129,7 @@ public class Z4Polyline extends Z4GeometricShape {
   @Override
   public Array<Z4GeometricShapeButtonConfiguration> getButtonConfigurations() {
     return new Array<>(
-            new Z4GeometricShapeButtonConfiguration(Z4Translations.ADD, (controlPoints, selectedControlPoint) -> {
+            new Z4GeometricShapeButtonConfiguration(Z4Translations.ADD, (controlPoints, selectedControlPoint, apply) -> {
               Array<Z4Point> newPoints = new Array<>();
               controlPoints.forEach((controlPoint, index, array) -> {
                 if (index != selectedControlPoint) {
@@ -142,14 +142,20 @@ public class Z4Polyline extends Z4GeometricShape {
                   newPoints.push(new Z4Point((controlPoints.$get(index).x + controlPoints.$get(index + 1).x) / 2, (controlPoints.$get(index).y + controlPoints.$get(index + 1).y) / 2));
                 }
               });
-              return new Z4Polyline(newPoints);
+              apply.$apply(new Z4Polyline(newPoints));
             }),
-            new Z4GeometricShapeButtonConfiguration(Z4Translations.DELETE, (controlPoints, selectedControlPoint) -> {
+            new Z4GeometricShapeButtonConfiguration(Z4Translations.DELETE, (controlPoints, selectedControlPoint, apply) -> {
               if (controlPoints.length == 2) {
                 JSOptionPane.showMessageDialog(Z4Translations.CANNOT_DELETE_POINT_MESSAGE, Z4Translations.DELETE, JSOptionPane.WARNING_MESSAGE, null);
-                return this;
+                apply.$apply(this);
               } else {
-                return new Z4Polyline(controlPoints.filter((controlPoint, index, array) -> selectedControlPoint != index));
+                JSOptionPane.showConfirmDialog(Z4Translations.DELETE_POINT_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response -> {
+                  if (response == JSOptionPane.YES_OPTION) {
+                    apply.$apply(new Z4Polyline(controlPoints.filter((controlPoint, index, array) -> selectedControlPoint != index)));
+                  } else {
+                    apply.$apply(this);
+                  }
+                });
               }
             })
     );
