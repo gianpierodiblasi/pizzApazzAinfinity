@@ -7,6 +7,8 @@ class Z4GeometricShape extends Z4JSONable {
 
    type = null;
 
+   geometricShapePreview = null;
+
   /**
    * Creates the object
    *
@@ -109,6 +111,24 @@ class Z4GeometricShape extends Z4JSONable {
     let json = new Object();
     json["type"] = this.type;
     return json;
+  }
+
+  /**
+   * Sets the geometric shape preview
+   *
+   * @param geometricShapePreview The geometric shape preview
+   */
+   setGeometricShapePreview(geometricShapePreview) {
+    this.geometricShapePreview = geometricShapePreview;
+  }
+
+  /**
+   * Returns the geometric shape preview
+   *
+   * @return The geometric shape preview
+   */
+   getGeometricShapePreview() {
+    return this.geometricShapePreview;
   }
 
   /**

@@ -2197,6 +2197,7 @@ class Z4Canvas extends JSComponent {
     this.canvas.addEventListener("mousedown", event => this.mouseManager.onMouse(event, "down"));
     this.canvas.addEventListener("mousemove", event => this.mouseManager.onMouse(event, "move"));
     this.canvas.addEventListener("mouseup", event => this.mouseManager.onMouse(event, "up"));
+    this.canvasOverlay.classList.add("z4canvas-overlay");
     this.canvasOverlay.addEventListener("mousemove", event => this.mouseManager.onMouse(event, "move"));
     this.canvasOverlay.addEventListener("mouseup", event => this.mouseManager.onMouse(event, "up"));
     this.canvasOverlay.addEventListener("mouseenter", event => this.textManager.onMouse(event, "enter"));
@@ -4362,8 +4363,8 @@ class Z4CanvasTextManager {
 
    statusPanel = null;
 
-  // 
-  // private boolean pressed;
+   pressed = false;
+
    selectedControlPoint = 0;
 
   static  SELECTOR_RADIUS = 7;
@@ -4467,42 +4468,48 @@ class Z4CanvasTextManager {
     if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
     } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT)) {
       switch(type) {
-        // case "enter":
-        // this.pressed = event.buttons == 1;
-        // this.onAction(Z4PointIteratorDrawingAction.START, x, y);
-        // this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
-        // break;
-        // case "down":
-        // this.pressed = true;
-        // this.onAction(Z4PointIteratorDrawingAction.START, x, y);
-        // break;
+        case "enter":
+          break;
+        case "down":
+          if (this.textInfo.shape) {
+            this.textInfo.shape.getControlPoints().forEach((point, index, array) => {
+              if (Z4Math.distance(point.x, point.y, x, y) <= Z4CanvasTextManager.SELECTOR_RADIUS) {
+                this.pressed = true;
+                this.selectedControlPoint = index;
+                this.textInfo.shape.getGeometricShapePreview().setSelectedControlPoint(index);
+              }
+            });
+          }
+          break;
         case "move":
           this.statusPanel.setMousePosition(xParsed, yParsed);
+          if (this.pressed) {
+            // this.setPointPosition(this.points, this.selectedIndex, parseInt(this.width * event.offsetX / w), parseInt(this.height * event.offsetY / h), this.width, this.height);
+            // this.setXY();
+            // this.drawPreview(true);
+          } else {
+            this.canvas.getChilStyleByQuery(".z4canvas-overlay").cursor = "default";
+            if (this.textInfo.shape) {
+              this.textInfo.shape.getControlPoints().forEach((point, index, array) => {
+                if (Z4Math.distance(point.x, point.y, x, y) <= Z4CanvasTextManager.SELECTOR_RADIUS) {
+                  this.canvas.getChilStyleByQuery(".z4canvas-overlay").cursor = "pointer";
+                }
+              });
+            }
+          }
+          break;
+        case "up":
+          this.pressed = false;
+          break;
+        case "leave":
+          if (this.pressed) {
+            this.pressed = false;
+          }
           break;
       }
     }
   }
 
-  // private void onAction(Z4PointIteratorDrawingAction action, double x, double y) {
-  // Z4Point point = this.checkPoint(action, x, y);
-  // 
-  // if (!$exists(this.selectedDrawingTool) || !$exists(this.selectedLayer) || !$exists(point)) {
-  // } else if (this.pressed && this.selectedDrawingTool.drawAction(action, point.x, point.y)) {
-  // this.ribbonHistoryPanel.stopStandard();
-  // this.iteratePoints(action);
-  // }
-  // }
-  // private void onStop(double x, double y) {
-  // this.pressed = false;
-  // if (!$exists(this.selectedDrawingTool) || !$exists(this.selectedLayer)) {
-  // } else if (this.selectedDrawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
-  // this.ribbonHistoryPanel.stopStandard();
-  // this.iteratePoints(Z4PointIteratorDrawingAction.STOP);
-  // } else {
-  // this.startStandard();
-  // }
-  // }
-  // 
   /**
    * Draws a text
    *
@@ -6922,6 +6929,8 @@ class Z4GeometricShapePreview extends JSDropDown {
 
    spinnerPanel = new JSPanel();
 
+   radios = new Array();
+
    shapesAndPathsPanel = null;
 
    canvas = null;
@@ -7063,8 +7072,7 @@ class Z4GeometricShapePreview extends JSDropDown {
    setGeometriShape(canvas, shape) {
     this.canvas = canvas;
     this.shape = shape;
-    // this.layer.setLayerPreview(this);
-    // 
+    this.shape.setGeometricShapePreview(this);
     let d = canvas.getSize();
     let ratio = d.width / d.height;
     let w = ratio > 1 ? Z4GeometricShapePreview.PREVIEW_SIZE : Z4GeometricShapePreview.PREVIEW_SIZE * ratio;
@@ -7082,16 +7090,9 @@ class Z4GeometricShapePreview extends JSDropDown {
       let radio = new JSRadioButton();
       radio.setSelected(index === this.selectedControlPoint);
       radio.setText("" + (index + 1));
-      radio.addActionListener(event => {
-        this.selectedControlPoint = index;
-        let p = this.shape.getControlPoints()[this.selectedControlPoint];
-        this.xSlider.setValue(parseInt(p.x));
-        this.xSpinner.setValue(parseInt(p.x));
-        this.ySlider.setValue(parseInt(p.y));
-        this.ySpinner.setValue(parseInt(p.y));
-        this.canvas.replaceGeometricShape(this.shape, this.shape, this.selectedControlPoint);
-      });
+      radio.addActionListener(event => this.setSelectedControlPoint(index));
       this.radioPanel.add(radio, null);
+      this.radios.push(radio);
       buttonGroup.add(radio);
     });
     if (!this.spinnerPanelDone) {
@@ -7138,6 +7139,22 @@ class Z4GeometricShapePreview extends JSDropDown {
     this.ySlider.setValue(parseInt(p.y));
     this.ySpinner.setModel(new SpinnerNumberModel(parseInt(p.y), 0, dC.height, 1));
     this.drawShape();
+  }
+
+  /**
+   * Sets the selected control point
+   *
+   * @param selectedControlPoint The selected control point
+   */
+   setSelectedControlPoint(selectedControlPoint) {
+    this.selectedControlPoint = selectedControlPoint;
+    this.radios[selectedControlPoint].setSelected(true);
+    let p = this.shape.getControlPoints()[this.selectedControlPoint];
+    this.xSlider.setValue(parseInt(p.x));
+    this.xSpinner.setValue(parseInt(p.x));
+    this.ySlider.setValue(parseInt(p.y));
+    this.ySpinner.setValue(parseInt(p.y));
+    this.canvas.replaceGeometricShape(this.shape, this.shape, this.selectedControlPoint);
   }
 
   /**
@@ -16187,6 +16204,8 @@ class Z4GeometricShape extends Z4JSONable {
 
    type = null;
 
+   geometricShapePreview = null;
+
   /**
    * Creates the object
    *
@@ -16289,6 +16308,24 @@ class Z4GeometricShape extends Z4JSONable {
     let json = new Object();
     json["type"] = this.type;
     return json;
+  }
+
+  /**
+   * Sets the geometric shape preview
+   *
+   * @param geometricShapePreview The geometric shape preview
+   */
+   setGeometricShapePreview(geometricShapePreview) {
+    this.geometricShapePreview = geometricShapePreview;
+  }
+
+  /**
+   * Returns the geometric shape preview
+   *
+   * @return The geometric shape preview
+   */
+   getGeometricShapePreview() {
+    return this.geometricShapePreview;
   }
 
   /**

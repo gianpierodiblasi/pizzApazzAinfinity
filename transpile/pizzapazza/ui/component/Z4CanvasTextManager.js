@@ -21,8 +21,8 @@ class Z4CanvasTextManager {
 
    statusPanel = null;
 
-  // 
-  // private boolean pressed;
+   pressed = false;
+
    selectedControlPoint = 0;
 
   static  SELECTOR_RADIUS = 7;
@@ -126,42 +126,48 @@ class Z4CanvasTextManager {
     if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
     } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT)) {
       switch(type) {
-        // case "enter":
-        // this.pressed = event.buttons == 1;
-        // this.onAction(Z4PointIteratorDrawingAction.START, x, y);
-        // this.onAction(Z4PointIteratorDrawingAction.CONTINUE, x, y);
-        // break;
-        // case "down":
-        // this.pressed = true;
-        // this.onAction(Z4PointIteratorDrawingAction.START, x, y);
-        // break;
+        case "enter":
+          break;
+        case "down":
+          if (this.textInfo.shape) {
+            this.textInfo.shape.getControlPoints().forEach((point, index, array) => {
+              if (Z4Math.distance(point.x, point.y, x, y) <= Z4CanvasTextManager.SELECTOR_RADIUS) {
+                this.pressed = true;
+                this.selectedControlPoint = index;
+                this.textInfo.shape.getGeometricShapePreview().setSelectedControlPoint(index);
+              }
+            });
+          }
+          break;
         case "move":
           this.statusPanel.setMousePosition(xParsed, yParsed);
+          if (this.pressed) {
+            // this.setPointPosition(this.points, this.selectedIndex, parseInt(this.width * event.offsetX / w), parseInt(this.height * event.offsetY / h), this.width, this.height);
+            // this.setXY();
+            // this.drawPreview(true);
+          } else {
+            this.canvas.getChilStyleByQuery(".z4canvas-overlay").cursor = "default";
+            if (this.textInfo.shape) {
+              this.textInfo.shape.getControlPoints().forEach((point, index, array) => {
+                if (Z4Math.distance(point.x, point.y, x, y) <= Z4CanvasTextManager.SELECTOR_RADIUS) {
+                  this.canvas.getChilStyleByQuery(".z4canvas-overlay").cursor = "pointer";
+                }
+              });
+            }
+          }
+          break;
+        case "up":
+          this.pressed = false;
+          break;
+        case "leave":
+          if (this.pressed) {
+            this.pressed = false;
+          }
           break;
       }
     }
   }
 
-  // private void onAction(Z4PointIteratorDrawingAction action, double x, double y) {
-  // Z4Point point = this.checkPoint(action, x, y);
-  // 
-  // if (!$exists(this.selectedDrawingTool) || !$exists(this.selectedLayer) || !$exists(point)) {
-  // } else if (this.pressed && this.selectedDrawingTool.drawAction(action, point.x, point.y)) {
-  // this.ribbonHistoryPanel.stopStandard();
-  // this.iteratePoints(action);
-  // }
-  // }
-  // private void onStop(double x, double y) {
-  // this.pressed = false;
-  // if (!$exists(this.selectedDrawingTool) || !$exists(this.selectedLayer)) {
-  // } else if (this.selectedDrawingTool.drawAction(Z4PointIteratorDrawingAction.STOP, x, y)) {
-  // this.ribbonHistoryPanel.stopStandard();
-  // this.iteratePoints(Z4PointIteratorDrawingAction.STOP);
-  // } else {
-  // this.startStandard();
-  // }
-  // }
-  // 
   /**
    * Draws a text
    *

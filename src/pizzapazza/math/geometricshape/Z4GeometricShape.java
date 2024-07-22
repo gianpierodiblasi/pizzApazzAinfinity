@@ -3,6 +3,7 @@ package pizzapazza.math.geometricshape;
 import def.js.Array;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Vector;
+import pizzapazza.ui.panel.math.geometricshape.Z4GeometricShapePreview;
 import pizzapazza.util.Z4JSONable;
 import simulation.js.$Object;
 
@@ -14,6 +15,7 @@ import simulation.js.$Object;
 public abstract class Z4GeometricShape implements Z4JSONable {
 
   private final Z4GeometricShapeType type;
+  private Z4GeometricShapePreview geometricShapePreview;
 
   /**
    * Creates the object
@@ -109,6 +111,24 @@ public abstract class Z4GeometricShape implements Z4JSONable {
     $Object json = new $Object();
     json.$set("type", this.type);
     return json;
+  }
+
+  /**
+   * Sets the geometric shape preview
+   *
+   * @param geometricShapePreview The geometric shape preview
+   */
+  public void setGeometricShapePreview(Z4GeometricShapePreview geometricShapePreview) {
+    this.geometricShapePreview = geometricShapePreview;
+  }
+
+  /**
+   * Returns the geometric shape preview
+   *
+   * @return The geometric shape preview
+   */
+  public Z4GeometricShapePreview getGeometricShapePreview() {
+    return this.geometricShapePreview;
   }
 
   /**

@@ -25,6 +25,8 @@ class Z4GeometricShapePreview extends JSDropDown {
 
    spinnerPanel = new JSPanel();
 
+   radios = new Array();
+
    shapesAndPathsPanel = null;
 
    canvas = null;
@@ -166,8 +168,7 @@ class Z4GeometricShapePreview extends JSDropDown {
    setGeometriShape(canvas, shape) {
     this.canvas = canvas;
     this.shape = shape;
-    // this.layer.setLayerPreview(this);
-    // 
+    this.shape.setGeometricShapePreview(this);
     let d = canvas.getSize();
     let ratio = d.width / d.height;
     let w = ratio > 1 ? Z4GeometricShapePreview.PREVIEW_SIZE : Z4GeometricShapePreview.PREVIEW_SIZE * ratio;
@@ -185,16 +186,9 @@ class Z4GeometricShapePreview extends JSDropDown {
       let radio = new JSRadioButton();
       radio.setSelected(index === this.selectedControlPoint);
       radio.setText("" + (index + 1));
-      radio.addActionListener(event => {
-        this.selectedControlPoint = index;
-        let p = this.shape.getControlPoints()[this.selectedControlPoint];
-        this.xSlider.setValue(parseInt(p.x));
-        this.xSpinner.setValue(parseInt(p.x));
-        this.ySlider.setValue(parseInt(p.y));
-        this.ySpinner.setValue(parseInt(p.y));
-        this.canvas.replaceGeometricShape(this.shape, this.shape, this.selectedControlPoint);
-      });
+      radio.addActionListener(event => this.setSelectedControlPoint(index));
       this.radioPanel.add(radio, null);
+      this.radios.push(radio);
       buttonGroup.add(radio);
     });
     if (!this.spinnerPanelDone) {
@@ -241,6 +235,22 @@ class Z4GeometricShapePreview extends JSDropDown {
     this.ySlider.setValue(parseInt(p.y));
     this.ySpinner.setModel(new SpinnerNumberModel(parseInt(p.y), 0, dC.height, 1));
     this.drawShape();
+  }
+
+  /**
+   * Sets the selected control point
+   *
+   * @param selectedControlPoint The selected control point
+   */
+   setSelectedControlPoint(selectedControlPoint) {
+    this.selectedControlPoint = selectedControlPoint;
+    this.radios[selectedControlPoint].setSelected(true);
+    let p = this.shape.getControlPoints()[this.selectedControlPoint];
+    this.xSlider.setValue(parseInt(p.x));
+    this.xSpinner.setValue(parseInt(p.x));
+    this.ySlider.setValue(parseInt(p.y));
+    this.ySpinner.setValue(parseInt(p.y));
+    this.canvas.replaceGeometricShape(this.shape, this.shape, this.selectedControlPoint);
   }
 
   /**

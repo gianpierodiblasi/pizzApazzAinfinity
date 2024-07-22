@@ -111,6 +111,7 @@ class Z4Canvas extends JSComponent {
     this.canvas.addEventListener("mousedown", event => this.mouseManager.onMouse(event, "down"));
     this.canvas.addEventListener("mousemove", event => this.mouseManager.onMouse(event, "move"));
     this.canvas.addEventListener("mouseup", event => this.mouseManager.onMouse(event, "up"));
+    this.canvasOverlay.classList.add("z4canvas-overlay");
     this.canvasOverlay.addEventListener("mousemove", event => this.mouseManager.onMouse(event, "move"));
     this.canvasOverlay.addEventListener("mouseup", event => this.mouseManager.onMouse(event, "up"));
     this.canvasOverlay.addEventListener("mouseenter", event => this.textManager.onMouse(event, "enter"));
