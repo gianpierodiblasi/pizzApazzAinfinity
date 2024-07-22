@@ -72,44 +72,85 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
   }
 
    fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
-    let angle1 = 0.0;
-    let radius1 = 0.0;
-    let point1 = null;
-    let angle2 = 0.0;
-    let point2 = null;
-    let angle3 = 0.0;
-    let point3 = null;
     if (pointIndex === 0) {
       let offsetX = this.x1 - x;
       let offsetY = this.y1 - y;
-      radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
-      angle1 = Z4Math.atan(this.x1, this.y1, this.x2, this.y2);
-      angle2 = angle1;
-      angle3 = angle1 - Z4Math.HALF_PI;
-      point1 = this.getPoint(x, y, this.x2 - offsetX, this.y2 - offsetY, radius1, angle1, width, height);
-      point2 = this.getPoint(x, y, controlPoints[2].x - offsetX, controlPoints[2].y - offsetY, this.period, angle2, width, height);
-      point3 = this.getPoint(this.x1, this.y1, controlPoints[3].x - offsetX, controlPoints[3].y - offsetY, this.amplitude, angle3, width, height);
+      let radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
+      let angle1 = Z4Math.atan(this.x1, this.y1, this.x2, this.y2);
+      let angle2 = angle1;
+      let angle3 = angle1 - Z4Math.HALF_PI;
+      let point1 = this.getPoint(x, y, this.x2 - offsetX, this.y2 - offsetY, radius1, angle1, width, height);
+      let point2 = this.getPoint(x, y, controlPoints[2].x - offsetX, controlPoints[2].y - offsetY, this.period, angle2, width, height);
+      let point3 = this.getPoint(this.x1, this.y1, controlPoints[3].x - offsetX, controlPoints[3].y - offsetY, this.amplitude, angle3, width, height);
       return new Z4SinusoidalCurve(x, y, point1.x, point1.y, Z4Math.distance(x, y, point2.x, point2.y), Z4Math.distance(x, y, point3.x, point3.y), spinnerIndex === 0 ? spinnerValue : this.angle);
-    } else if (pointIndex === 1) {
-      angle2 = Z4Math.atan(this.x1, this.y1, x, y);
-      angle3 = Z4Math.atan(this.x1, this.y1, x, y) - Z4Math.HALF_PI;
-      point2 = this.getPoint(this.x1, this.y1, this.x1 + this.period * Math.cos(angle2), this.y1 + this.period * Math.sin(angle2), this.period, angle2, width, height);
-      point3 = this.getPoint(this.x1, this.y1, this.x1 + this.amplitude * Math.cos(angle3), this.y1 + this.amplitude * Math.sin(angle3), this.amplitude, angle3, width, height);
-      return new Z4SinusoidalCurve(this.x1, this.y1, x, y, Z4Math.distance(this.x1, this.y1, point2.x, point2.y), Z4Math.distance(this.x1, this.y1, point3.x, point3.y), spinnerIndex === 0 ? spinnerValue : this.angle);
-    } else if (pointIndex === 2) {
-      radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
-      angle1 = Z4Math.atan(this.x1, this.y1, x, y);
-      angle3 = angle1 - Z4Math.HALF_PI;
-      point1 = this.getPoint(this.x1, this.y1, this.x1 + radius1 * Math.cos(angle1), this.y1 + radius1 * Math.sin(angle1), radius1, angle1, width, height);
-      point3 = this.getPoint(this.x1, this.y1, this.x1 + this.amplitude * Math.cos(angle3), this.y1 + this.amplitude * Math.sin(angle3), this.amplitude, angle3, width, height);
-      return new Z4SinusoidalCurve(this.x1, this.y1, point1.x, point1.y, Z4Math.distance(this.x1, this.y1, x, y), Z4Math.distance(x, y, point3.x, point3.y), spinnerIndex === 0 ? spinnerValue : this.angle);
-    } else if (pointIndex === 3) {
-      radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
-      angle1 = Z4Math.atan(this.x1, this.y1, x, y) + Z4Math.HALF_PI;
-      angle2 = angle1;
-      point1 = this.getPoint(this.x1, this.y1, this.x1 + radius1 * Math.cos(angle1), this.y1 + radius1 * Math.sin(angle1), radius1, angle1, width, height);
-      point2 = this.getPoint(this.x1, this.y1, this.x1 + this.period * Math.cos(angle2), this.y1 + this.period * Math.sin(angle2), this.period, angle2, width, height);
-      return new Z4SinusoidalCurve(this.x1, this.y1, point1.x, point1.y, Z4Math.distance(x, y, point2.x, point2.y), Z4Math.distance(this.x1, this.y1, x, y), spinnerIndex === 0 ? spinnerValue : this.angle);
+      // } else if (pointIndex == 1) {
+      // angle2 = Z4Math.atan(this.x1, this.y1, x, y);
+      // angle3 = Z4Math.atan(this.x1, this.y1, x, y) - Z4Math.HALF_PI;
+      // 
+      // point2 = this.getPoint(
+      // this.x1, this.y1,
+      // this.x1 + this.period * Math.cos(angle2), this.y1 + this.period * Math.sin(angle2),
+      // this.period, angle2, width, height
+      // );
+      // 
+      // point3 = this.getPoint(
+      // this.x1, this.y1,
+      // this.x1 + this.amplitude * Math.cos(angle3), this.y1 + this.amplitude * Math.sin(angle3),
+      // this.amplitude, angle3, width, height
+      // );
+      // 
+      // return new Z4SinusoidalCurve(
+      // this.x1, this.y1,
+      // x, y,
+      // Z4Math.distance(this.x1, this.y1, point2.x, point2.y), Z4Math.distance(this.x1, this.y1, point3.x, point3.y),
+      // spinnerIndex == 0 ? spinnerValue : this.angle
+      // );
+      // } else if (pointIndex == 2) {
+      // radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
+      // angle1 = Z4Math.atan(this.x1, this.y1, x, y);
+      // angle3 = angle1 - Z4Math.HALF_PI;
+      // 
+      // point1 = this.getPoint(
+      // this.x1, this.y1,
+      // this.x1 + radius1 * Math.cos(angle1), this.y1 + radius1 * Math.sin(angle1),
+      // radius1, angle1, width, height
+      // );
+      // 
+      // point3 = this.getPoint(
+      // this.x1, this.y1,
+      // this.x1 + this.amplitude * Math.cos(angle3), this.y1 + this.amplitude * Math.sin(angle3),
+      // this.amplitude, angle3, width, height
+      // );
+      // 
+      // return new Z4SinusoidalCurve(
+      // this.x1, this.y1,
+      // point1.x, point1.y,
+      // Z4Math.distance(this.x1, this.y1, x, y), Z4Math.distance(x, y, point3.x, point3.y),
+      // spinnerIndex == 0 ? spinnerValue : this.angle
+      // );
+      // } else if (pointIndex == 3) {
+      // radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
+      // angle1 = Z4Math.atan(this.x1, this.y1, x, y) + Z4Math.HALF_PI;
+      // angle2 = angle1;
+      // 
+      // point1 = this.getPoint(
+      // this.x1, this.y1,
+      // this.x1 + radius1 * Math.cos(angle1), this.y1 + radius1 * Math.sin(angle1),
+      // radius1, angle1, width, height
+      // );
+      // 
+      // point2 = this.getPoint(
+      // this.x1, this.y1,
+      // this.x1 + this.period * Math.cos(angle2), this.y1 + this.period * Math.sin(angle2),
+      // this.period, angle2, width, height
+      // );
+      // 
+      // return new Z4SinusoidalCurve(
+      // this.x1, this.y1,
+      // point1.x, point1.y,
+      // Z4Math.distance(x, y, point2.x, point2.y), Z4Math.distance(this.x1, this.y1, x, y),
+      // spinnerIndex == 0 ? spinnerValue : this.angle
+      // );
     } else {
       return spinnerIndex === 0 ? new Z4SinusoidalCurve(this.x1, this.y1, this.x2, this.y2, this.period, this.amplitude, Z4Math.deg2rad(spinnerValue)) : this;
     }

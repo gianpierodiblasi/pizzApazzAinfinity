@@ -18,7 +18,6 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
   private final double x2;
   private final double y2;
   private final double radius;
-  private final double angle;
 
   /**
    * Creates the object
@@ -30,7 +29,7 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
    * @param radius The radius of the sinusoid
    * @param angle The rotation angle of the sinusoid
    */
-  public Z4SpiralCurve(double x1, double y1, double x2, double y2, double radius, double angle) {
+  public Z4SpiralCurve(double x1, double y1, double x2, double y2, double radius) {
     super(Z4GeometricShapeType.SPIRAL);
 
     this.x1 = x1;
@@ -38,12 +37,12 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
     this.x2 = x2;
     this.y2 = y2;
     this.radius = radius;
-    this.angle = angle;
 
     double distance = Z4Math.distance(x1, y1, x2, y2);
     int size = parseInt(distance * Z4GeometricCurve.APPROX_SEGMENTS / radius);
 
     if (size > 0) {
+      double angle = Z4Math.atan(x1, y1, x2, y2);
       Array<Z4Point> points = new Array<>();
       for (int i = 0; i <= size; i++) {
         double t = i / Z4GeometricCurve.APPROX_SEGMENTS;
@@ -59,10 +58,12 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
 
   @Override
   public Array<Z4Point> getControlPoints() {
+    double angle = Z4Math.atan(this.x1, this.y1, this.x2, this.y2);
+
     return new Array<>(
             new Z4Point(this.x1, this.y1),
             new Z4Point(this.x2, this.y2),
-            new Z4Point(this.x1 + this.radius * Math.cos(this.angle), this.y1 + this.radius * Math.sin(this.angle))
+            new Z4Point(this.x1 + this.radius * Math.cos(angle), this.y1 + this.radius * Math.sin(angle))
     );
   }
 
@@ -83,15 +84,21 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
       double offsetY = this.y1 - y;
 
       double radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
+      double angle1 = Z4Math.atan(this.x1, this.y1, this.x2, this.y2);
 
-      Z4Point point1 = this.getPoint(x, y, this.x2 - offsetX, this.y2 - offsetY, radius1, this.angle, width, height);
-      Z4Point point2 = this.getPoint(x, y, controlPoints.$get(2).x - offsetX, controlPoints.$get(2).y - offsetY, this.radius, this.angle, width, height);
+      Z4Point point1 = this.getPoint(x, y, this.x2 - offsetX, this.y2 - offsetY, radius1, angle1, width, height);
+      Z4Point point2 = this.getPoint(x, y, controlPoints.$get(2).x - offsetX, controlPoints.$get(2).y - offsetY, this.radius, angle1, width, height);
 
-      return new Z4SpiralCurve(x, y, point1.x, point1.y, Z4Math.distance(x, y, point2.x, point2.y), this.angle);
+      return new Z4SpiralCurve(x, y, point1.x, point1.y, Z4Math.distance(x, y, point2.x, point2.y));
     } else if (pointIndex == 1) {
-      return new Z4SpiralCurve(this.x1, this.y1, x, y, this.radius, this.angle);
+      return new Z4SpiralCurve(this.x1, this.y1, x, y, this.radius);
     } else if (pointIndex == 2) {
-      return new Z4SpiralCurve(this.x1, this.y1, this.x2, this.y2, Z4Math.distance(this.x1, this.y1, x, y), Z4Math.atan(this.x1, this.y1, x, y));
+      double radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
+      double angle1 = Z4Math.atan(this.x1, this.y1, x, y);
+
+      Z4Point point1 = this.getPoint(this.x1, this.y1, this.x1 + radius1 * Math.cos(angle1), this.y1 + radius1 * Math.sin(angle1), radius1, angle1, width, height);
+
+      return new Z4SpiralCurve(this.x1, this.y1, point1.x, point1.y, Z4Math.distance(this.x1, this.y1, x, y));
     } else {
       return this;
     }
@@ -114,7 +121,6 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
     json.$set("x2", this.x2);
     json.$set("y2", this.y2);
     json.$set("radius", this.radius);
-    json.$set("angle", this.angle);
     return json;
   }
 
@@ -128,7 +134,7 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
     return new Z4SpiralCurve(
             json.$get("x1"), json.$get("y1"),
             json.$get("x2"), json.$get("y2"),
-            json.$get("radius"), json.$get("angle")
+            json.$get("radius")
     );
   }
 
@@ -143,7 +149,7 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
     return new Z4SpiralCurve(
             width / 2, height / 2,
             3 * width / 4, height / 2,
-            width / 8, 0
+            width / 8
     );
   }
 }

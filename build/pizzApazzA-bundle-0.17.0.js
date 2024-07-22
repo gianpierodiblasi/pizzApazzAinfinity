@@ -17095,44 +17095,85 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
   }
 
    fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
-    let angle1 = 0.0;
-    let radius1 = 0.0;
-    let point1 = null;
-    let angle2 = 0.0;
-    let point2 = null;
-    let angle3 = 0.0;
-    let point3 = null;
     if (pointIndex === 0) {
       let offsetX = this.x1 - x;
       let offsetY = this.y1 - y;
-      radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
-      angle1 = Z4Math.atan(this.x1, this.y1, this.x2, this.y2);
-      angle2 = angle1;
-      angle3 = angle1 - Z4Math.HALF_PI;
-      point1 = this.getPoint(x, y, this.x2 - offsetX, this.y2 - offsetY, radius1, angle1, width, height);
-      point2 = this.getPoint(x, y, controlPoints[2].x - offsetX, controlPoints[2].y - offsetY, this.period, angle2, width, height);
-      point3 = this.getPoint(this.x1, this.y1, controlPoints[3].x - offsetX, controlPoints[3].y - offsetY, this.amplitude, angle3, width, height);
+      let radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
+      let angle1 = Z4Math.atan(this.x1, this.y1, this.x2, this.y2);
+      let angle2 = angle1;
+      let angle3 = angle1 - Z4Math.HALF_PI;
+      let point1 = this.getPoint(x, y, this.x2 - offsetX, this.y2 - offsetY, radius1, angle1, width, height);
+      let point2 = this.getPoint(x, y, controlPoints[2].x - offsetX, controlPoints[2].y - offsetY, this.period, angle2, width, height);
+      let point3 = this.getPoint(this.x1, this.y1, controlPoints[3].x - offsetX, controlPoints[3].y - offsetY, this.amplitude, angle3, width, height);
       return new Z4SinusoidalCurve(x, y, point1.x, point1.y, Z4Math.distance(x, y, point2.x, point2.y), Z4Math.distance(x, y, point3.x, point3.y), spinnerIndex === 0 ? spinnerValue : this.angle);
-    } else if (pointIndex === 1) {
-      angle2 = Z4Math.atan(this.x1, this.y1, x, y);
-      angle3 = Z4Math.atan(this.x1, this.y1, x, y) - Z4Math.HALF_PI;
-      point2 = this.getPoint(this.x1, this.y1, this.x1 + this.period * Math.cos(angle2), this.y1 + this.period * Math.sin(angle2), this.period, angle2, width, height);
-      point3 = this.getPoint(this.x1, this.y1, this.x1 + this.amplitude * Math.cos(angle3), this.y1 + this.amplitude * Math.sin(angle3), this.amplitude, angle3, width, height);
-      return new Z4SinusoidalCurve(this.x1, this.y1, x, y, Z4Math.distance(this.x1, this.y1, point2.x, point2.y), Z4Math.distance(this.x1, this.y1, point3.x, point3.y), spinnerIndex === 0 ? spinnerValue : this.angle);
-    } else if (pointIndex === 2) {
-      radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
-      angle1 = Z4Math.atan(this.x1, this.y1, x, y);
-      angle3 = angle1 - Z4Math.HALF_PI;
-      point1 = this.getPoint(this.x1, this.y1, this.x1 + radius1 * Math.cos(angle1), this.y1 + radius1 * Math.sin(angle1), radius1, angle1, width, height);
-      point3 = this.getPoint(this.x1, this.y1, this.x1 + this.amplitude * Math.cos(angle3), this.y1 + this.amplitude * Math.sin(angle3), this.amplitude, angle3, width, height);
-      return new Z4SinusoidalCurve(this.x1, this.y1, point1.x, point1.y, Z4Math.distance(this.x1, this.y1, x, y), Z4Math.distance(x, y, point3.x, point3.y), spinnerIndex === 0 ? spinnerValue : this.angle);
-    } else if (pointIndex === 3) {
-      radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
-      angle1 = Z4Math.atan(this.x1, this.y1, x, y) + Z4Math.HALF_PI;
-      angle2 = angle1;
-      point1 = this.getPoint(this.x1, this.y1, this.x1 + radius1 * Math.cos(angle1), this.y1 + radius1 * Math.sin(angle1), radius1, angle1, width, height);
-      point2 = this.getPoint(this.x1, this.y1, this.x1 + this.period * Math.cos(angle2), this.y1 + this.period * Math.sin(angle2), this.period, angle2, width, height);
-      return new Z4SinusoidalCurve(this.x1, this.y1, point1.x, point1.y, Z4Math.distance(x, y, point2.x, point2.y), Z4Math.distance(this.x1, this.y1, x, y), spinnerIndex === 0 ? spinnerValue : this.angle);
+      // } else if (pointIndex == 1) {
+      // angle2 = Z4Math.atan(this.x1, this.y1, x, y);
+      // angle3 = Z4Math.atan(this.x1, this.y1, x, y) - Z4Math.HALF_PI;
+      // 
+      // point2 = this.getPoint(
+      // this.x1, this.y1,
+      // this.x1 + this.period * Math.cos(angle2), this.y1 + this.period * Math.sin(angle2),
+      // this.period, angle2, width, height
+      // );
+      // 
+      // point3 = this.getPoint(
+      // this.x1, this.y1,
+      // this.x1 + this.amplitude * Math.cos(angle3), this.y1 + this.amplitude * Math.sin(angle3),
+      // this.amplitude, angle3, width, height
+      // );
+      // 
+      // return new Z4SinusoidalCurve(
+      // this.x1, this.y1,
+      // x, y,
+      // Z4Math.distance(this.x1, this.y1, point2.x, point2.y), Z4Math.distance(this.x1, this.y1, point3.x, point3.y),
+      // spinnerIndex == 0 ? spinnerValue : this.angle
+      // );
+      // } else if (pointIndex == 2) {
+      // radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
+      // angle1 = Z4Math.atan(this.x1, this.y1, x, y);
+      // angle3 = angle1 - Z4Math.HALF_PI;
+      // 
+      // point1 = this.getPoint(
+      // this.x1, this.y1,
+      // this.x1 + radius1 * Math.cos(angle1), this.y1 + radius1 * Math.sin(angle1),
+      // radius1, angle1, width, height
+      // );
+      // 
+      // point3 = this.getPoint(
+      // this.x1, this.y1,
+      // this.x1 + this.amplitude * Math.cos(angle3), this.y1 + this.amplitude * Math.sin(angle3),
+      // this.amplitude, angle3, width, height
+      // );
+      // 
+      // return new Z4SinusoidalCurve(
+      // this.x1, this.y1,
+      // point1.x, point1.y,
+      // Z4Math.distance(this.x1, this.y1, x, y), Z4Math.distance(x, y, point3.x, point3.y),
+      // spinnerIndex == 0 ? spinnerValue : this.angle
+      // );
+      // } else if (pointIndex == 3) {
+      // radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
+      // angle1 = Z4Math.atan(this.x1, this.y1, x, y) + Z4Math.HALF_PI;
+      // angle2 = angle1;
+      // 
+      // point1 = this.getPoint(
+      // this.x1, this.y1,
+      // this.x1 + radius1 * Math.cos(angle1), this.y1 + radius1 * Math.sin(angle1),
+      // radius1, angle1, width, height
+      // );
+      // 
+      // point2 = this.getPoint(
+      // this.x1, this.y1,
+      // this.x1 + this.period * Math.cos(angle2), this.y1 + this.period * Math.sin(angle2),
+      // this.period, angle2, width, height
+      // );
+      // 
+      // return new Z4SinusoidalCurve(
+      // this.x1, this.y1,
+      // point1.x, point1.y,
+      // Z4Math.distance(x, y, point2.x, point2.y), Z4Math.distance(this.x1, this.y1, x, y),
+      // spinnerIndex == 0 ? spinnerValue : this.angle
+      // );
     } else {
       return spinnerIndex === 0 ? new Z4SinusoidalCurve(this.x1, this.y1, this.x2, this.y2, this.period, this.amplitude, Z4Math.deg2rad(spinnerValue)) : this;
     }
@@ -17197,8 +17238,6 @@ class Z4SpiralCurve extends Z4GeometricCurve {
 
    radius = 0.0;
 
-   angle = 0.0;
-
   /**
    * Creates the object
    *
@@ -17209,17 +17248,17 @@ class Z4SpiralCurve extends Z4GeometricCurve {
    * @param radius The radius of the sinusoid
    * @param angle The rotation angle of the sinusoid
    */
-  constructor(x1, y1, x2, y2, radius, angle) {
+  constructor(x1, y1, x2, y2, radius) {
     super(Z4GeometricShapeType.SPIRAL);
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
     this.y2 = y2;
     this.radius = radius;
-    this.angle = angle;
     let distance = Z4Math.distance(x1, y1, x2, y2);
     let size = parseInt(distance * Z4GeometricCurve.APPROX_SEGMENTS / radius);
     if (size > 0) {
+      let angle = Z4Math.atan(x1, y1, x2, y2);
       let points = new Array();
       for (let i = 0; i <= size; i++) {
         let t = i / Z4GeometricCurve.APPROX_SEGMENTS;
@@ -17234,7 +17273,8 @@ class Z4SpiralCurve extends Z4GeometricCurve {
   }
 
    getControlPoints() {
-    return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2), new Z4Point(this.x1 + this.radius * Math.cos(this.angle), this.y1 + this.radius * Math.sin(this.angle)));
+    let angle = Z4Math.atan(this.x1, this.y1, this.x2, this.y2);
+    return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2), new Z4Point(this.x1 + this.radius * Math.cos(angle), this.y1 + this.radius * Math.sin(angle)));
   }
 
    getControlPointConnections() {
@@ -17250,13 +17290,17 @@ class Z4SpiralCurve extends Z4GeometricCurve {
       let offsetX = this.x1 - x;
       let offsetY = this.y1 - y;
       let radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
-      let point1 = this.getPoint(x, y, this.x2 - offsetX, this.y2 - offsetY, radius1, this.angle, width, height);
-      let point2 = this.getPoint(x, y, controlPoints[2].x - offsetX, controlPoints[2].y - offsetY, this.radius, this.angle, width, height);
-      return new Z4SpiralCurve(x, y, point1.x, point1.y, Z4Math.distance(x, y, point2.x, point2.y), this.angle);
+      let angle1 = Z4Math.atan(this.x1, this.y1, this.x2, this.y2);
+      let point1 = this.getPoint(x, y, this.x2 - offsetX, this.y2 - offsetY, radius1, angle1, width, height);
+      let point2 = this.getPoint(x, y, controlPoints[2].x - offsetX, controlPoints[2].y - offsetY, this.radius, angle1, width, height);
+      return new Z4SpiralCurve(x, y, point1.x, point1.y, Z4Math.distance(x, y, point2.x, point2.y));
     } else if (pointIndex === 1) {
-      return new Z4SpiralCurve(this.x1, this.y1, x, y, this.radius, this.angle);
+      return new Z4SpiralCurve(this.x1, this.y1, x, y, this.radius);
     } else if (pointIndex === 2) {
-      return new Z4SpiralCurve(this.x1, this.y1, this.x2, this.y2, Z4Math.distance(this.x1, this.y1, x, y), Z4Math.atan(this.x1, this.y1, x, y));
+      let radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
+      let angle1 = Z4Math.atan(this.x1, this.y1, x, y);
+      let point1 = this.getPoint(this.x1, this.y1, this.x1 + radius1 * Math.cos(angle1), this.y1 + radius1 * Math.sin(angle1), radius1, angle1, width, height);
+      return new Z4SpiralCurve(this.x1, this.y1, point1.x, point1.y, Z4Math.distance(this.x1, this.y1, x, y));
     } else {
       return this;
     }
@@ -17278,7 +17322,6 @@ class Z4SpiralCurve extends Z4GeometricCurve {
     json["x2"] = this.x2;
     json["y2"] = this.y2;
     json["radius"] = this.radius;
-    json["angle"] = this.angle;
     return json;
   }
 
@@ -17289,7 +17332,7 @@ class Z4SpiralCurve extends Z4GeometricCurve {
    * @return The geometric shape
    */
   static  fromJSON(json) {
-    return new Z4SpiralCurve(json["x1"], json["y1"], json["x2"], json["y2"], json["radius"], json["angle"]);
+    return new Z4SpiralCurve(json["x1"], json["y1"], json["x2"], json["y2"], json["radius"]);
   }
 
   /**
@@ -17300,7 +17343,7 @@ class Z4SpiralCurve extends Z4GeometricCurve {
    * @return The geometric shape
    */
   static  fromSize(width, height) {
-    return new Z4SpiralCurve(width / 2, height / 2, 3 * width / 4, height / 2, width / 8, 0);
+    return new Z4SpiralCurve(width / 2, height / 2, 3 * width / 4, height / 2, width / 8);
   }
 }
 /**
