@@ -71,9 +71,17 @@ public class Z4EllipseFrame extends Z4GeometricFrame {
   @Override
   public Z4GeometricShape fromDataChanged(Array<Z4Point> controlPoints, double x, double y, int pointIndex, double spinnerValue, int spinnerIndex, int width, int height) {
     if (pointIndex == 3) {
-      return null;
+      Z4AffineTransform txInverse = Z4AffineTransform.translate(this.x, this.y).concatenateRotate(this.angle).concatenateShear(this.sy / Z4GeometricFrame.SHEARING_COEFFICIENT, -this.sx / Z4GeometricFrame.SHEARING_COEFFICIENT).inverse();
+
+      Z4Point point3 = txInverse.transform(x, y);
+
+      return new Z4EllipseFrame(this.x, this.y, this.w, this.h, this.angle, this.sx, this.sy, Z4Math.atan(0, 0, point3.x, point3.y), this.extentAngle);
     } else if (pointIndex == 4) {
-      return null;
+      Z4AffineTransform txInverse = Z4AffineTransform.translate(this.x, this.y).concatenateRotate(this.angle).concatenateShear(this.sy / Z4GeometricFrame.SHEARING_COEFFICIENT, -this.sx / Z4GeometricFrame.SHEARING_COEFFICIENT).inverse();
+
+      Z4Point point4 = txInverse.transform(x, y);
+      double angle4 = Z4Math.atan(0, 0, point4.x, point4.y) - this.startAngle;
+      return new Z4EllipseFrame(this.x, this.y, this.w, this.h, this.angle, this.sx, this.sy, this.startAngle, angle4 > 0 ? angle4 : (Z4Math.TWO_PI + angle4));
     } else {
       return super.fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height);
     }
