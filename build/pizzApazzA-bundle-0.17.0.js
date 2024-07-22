@@ -1226,6 +1226,22 @@ class Z4AffineTransform {
   }
 
   /**
+   * Returns the inverse of this affine transform
+   *
+   * @return The inverse of this affine transform
+   */
+   inverse() {
+    let det = this.m00 * this.m11 - this.m01 * this.m10;
+    let i00 = +this.m11 / det;
+    let i01 = -this.m01 / det;
+    let i02 = (this.m01 * this.m12 - this.m11 * this.m02) / det;
+    let i10 = -this.m10 / det;
+    let i11 = +this.m00 / det;
+    let i12 = (this.m10 * this.m02 - this.m00 * this.m12) / det;
+    return new Z4AffineTransform(i00, i10, i01, i11, i02, i12);
+  }
+
+  /**
    * Transforms a point
    *
    * @param x The x-axis coordinate of the point
@@ -16927,19 +16943,28 @@ class Z4RectangleFrame extends Z4GeometricFrame {
    fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     if (pointIndex === 0) {
       let tx = Z4AffineTransform.translate(x, y).concatenateRotate(this.angle).concatenateShear(this.sy / Z4GeometricFrame.SHEARING_COEFFICIENT, -this.sx / Z4GeometricFrame.SHEARING_COEFFICIENT);
+      let txInverse = tx.inverse();
       let point1 = this.getPoint(tx, tx.transform(this.w, 0), this.w, 0, width, height);
+      point1 = txInverse.transform(point1.x, point1.y);
       let point2 = this.getPoint(tx, tx.transform(0, this.h), 0, this.h, width, height);
-      return new Z4RectangleFrame(x, y, Z4Math.distance(x, y, point1.x, point1.y), Z4Math.distance(x, y, point2.x, point2.y), this.angle, this.sx, this.sy);
+      point2 = txInverse.transform(point2.x, point2.y);
+      return new Z4RectangleFrame(x, y, Z4Math.distance(0, 0, point1.x, point1.y), Z4Math.distance(0, 0, point2.x, point2.y), this.angle, this.sx, this.sy);
     } else if (pointIndex === 1) {
       let angle1 = Z4Math.atan(this.x, this.y, x, y);
       let tx = Z4AffineTransform.translate(this.x, this.y).concatenateRotate(angle1).concatenateShear(this.sy / Z4GeometricFrame.SHEARING_COEFFICIENT, -this.sx / Z4GeometricFrame.SHEARING_COEFFICIENT);
+      let txInverse = tx.inverse();
+      let point1 = txInverse.transform(x, y);
       let point2 = this.getPoint(tx, tx.transform(0, this.h), 0, this.h, width, height);
-      return new Z4RectangleFrame(this.x, this.y, Z4Math.distance(this.x, this.y, x, y), Z4Math.distance(this.x, this.y, point2.x, point2.y), angle1, this.sx, this.sy);
+      point2 = txInverse.transform(point2.x, point2.y);
+      return new Z4RectangleFrame(this.x, this.y, Z4Math.distance(0, 0, point1.x, point1.y), Z4Math.distance(0, 0, point2.x, point2.y), angle1, this.sx, this.sy);
     } else if (pointIndex === 2) {
       let angle2 = Z4Math.atan(this.x, this.y, x, y) - Z4Math.HALF_PI;
       let tx = Z4AffineTransform.translate(this.x, this.y).concatenateRotate(angle2).concatenateShear(this.sy / Z4GeometricFrame.SHEARING_COEFFICIENT, -this.sx / Z4GeometricFrame.SHEARING_COEFFICIENT);
+      let txInverse = tx.inverse();
       let point1 = this.getPoint(tx, tx.transform(this.w, 0), this.w, 0, width, height);
-      return new Z4RectangleFrame(this.x, this.y, Z4Math.distance(this.x, this.y, point1.x, point1.y), Z4Math.distance(this.x, this.y, x, y), angle2, this.sx, this.sy);
+      point1 = txInverse.transform(point1.x, point1.y);
+      let point2 = txInverse.transform(x, y);
+      return new Z4RectangleFrame(this.x, this.y, Z4Math.distance(0, 0, point1.x, point1.y), Z4Math.distance(0, 0, point2.x, point2.y), angle2, this.sx, this.sy);
     } else if (spinnerIndex === 0) {
       return new Z4RectangleFrame(this.x, this.y, this.w, this.h, this.angle, spinnerValue, this.sy);
     } else if (spinnerIndex === 1) {

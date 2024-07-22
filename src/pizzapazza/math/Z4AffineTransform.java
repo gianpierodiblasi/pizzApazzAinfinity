@@ -152,6 +152,23 @@ public class Z4AffineTransform {
   }
 
   /**
+   * Returns the inverse of this affine transform
+   *
+   * @return The inverse of this affine transform
+   */
+  public Z4AffineTransform inverse() {
+    double det = this.m00 * this.m11 - this.m01 * this.m10;
+    double i00 = +this.m11 / det;
+    double i01 = -this.m01 / det;
+    double i02 = (this.m01 * this.m12 - this.m11 * this.m02) / det;
+    double i10 = -this.m10 / det;
+    double i11 = +this.m00 / det;
+    double i12 = (this.m10 * this.m02 - this.m00 * this.m12) / det;
+
+    return new Z4AffineTransform(i00, i10, i01, i11, i02, i12);
+  }
+
+  /**
    * Transforms a point
    *
    * @param x The x-axis coordinate of the point

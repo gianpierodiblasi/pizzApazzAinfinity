@@ -154,6 +154,22 @@ class Z4AffineTransform {
   }
 
   /**
+   * Returns the inverse of this affine transform
+   *
+   * @return The inverse of this affine transform
+   */
+   inverse() {
+    let det = this.m00 * this.m11 - this.m01 * this.m10;
+    let i00 = +this.m11 / det;
+    let i01 = -this.m01 / det;
+    let i02 = (this.m01 * this.m12 - this.m11 * this.m02) / det;
+    let i10 = -this.m10 / det;
+    let i11 = +this.m00 / det;
+    let i12 = (this.m10 * this.m02 - this.m00 * this.m12) / det;
+    return new Z4AffineTransform(i00, i10, i01, i11, i02, i12);
+  }
+
+  /**
    * Transforms a point
    *
    * @param x The x-axis coordinate of the point

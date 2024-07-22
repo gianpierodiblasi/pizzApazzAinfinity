@@ -42,25 +42,34 @@ public class Z4RectangleFrame extends Z4GeometricFrame {
   public Z4GeometricShape fromDataChanged(Array<Z4Point> controlPoints, double x, double y, int pointIndex, double spinnerValue, int spinnerIndex, int width, int height) {
     if (pointIndex == 0) {
       Z4AffineTransform tx = Z4AffineTransform.translate(x, y).concatenateRotate(this.angle).concatenateShear(this.sy / Z4GeometricFrame.SHEARING_COEFFICIENT, -this.sx / Z4GeometricFrame.SHEARING_COEFFICIENT);
+      Z4AffineTransform txInverse = tx.inverse();
 
       Z4Point point1 = this.getPoint(tx, tx.transform(this.w, 0), this.w, 0, width, height);
+      point1 = txInverse.transform(point1.x, point1.y);
       Z4Point point2 = this.getPoint(tx, tx.transform(0, this.h), 0, this.h, width, height);
+      point2 = txInverse.transform(point2.x, point2.y);
 
-      return new Z4RectangleFrame(x, y, Z4Math.distance(x, y, point1.x, point1.y), Z4Math.distance(x, y, point2.x, point2.y), this.angle, this.sx, this.sy);
+      return new Z4RectangleFrame(x, y, Z4Math.distance(0, 0, point1.x, point1.y), Z4Math.distance(0, 0, point2.x, point2.y), this.angle, this.sx, this.sy);
     } else if (pointIndex == 1) {
       double angle1 = Z4Math.atan(this.x, this.y, x, y);
       Z4AffineTransform tx = Z4AffineTransform.translate(this.x, this.y).concatenateRotate(angle1).concatenateShear(this.sy / Z4GeometricFrame.SHEARING_COEFFICIENT, -this.sx / Z4GeometricFrame.SHEARING_COEFFICIENT);
+      Z4AffineTransform txInverse = tx.inverse();
 
+      Z4Point point1 = txInverse.transform(x, y);
       Z4Point point2 = this.getPoint(tx, tx.transform(0, this.h), 0, this.h, width, height);
+      point2 = txInverse.transform(point2.x, point2.y);
 
-      return new Z4RectangleFrame(this.x, this.y, Z4Math.distance(this.x, this.y, x, y), Z4Math.distance(this.x, this.y, point2.x, point2.y), angle1, this.sx, this.sy);
+      return new Z4RectangleFrame(this.x, this.y, Z4Math.distance(0, 0, point1.x, point1.y), Z4Math.distance(0, 0, point2.x, point2.y), angle1, this.sx, this.sy);
     } else if (pointIndex == 2) {
       double angle2 = Z4Math.atan(this.x, this.y, x, y) - Z4Math.HALF_PI;
       Z4AffineTransform tx = Z4AffineTransform.translate(this.x, this.y).concatenateRotate(angle2).concatenateShear(this.sy / Z4GeometricFrame.SHEARING_COEFFICIENT, -this.sx / Z4GeometricFrame.SHEARING_COEFFICIENT);
+      Z4AffineTransform txInverse = tx.inverse();
 
       Z4Point point1 = this.getPoint(tx, tx.transform(this.w, 0), this.w, 0, width, height);
+      point1 = txInverse.transform(point1.x, point1.y);
+      Z4Point point2 = txInverse.transform(x, y);
 
-      return new Z4RectangleFrame(this.x, this.y, Z4Math.distance(this.x, this.y, point1.x, point1.y), Z4Math.distance(this.x, this.y, x, y), angle2, this.sx, this.sy);
+      return new Z4RectangleFrame(this.x, this.y, Z4Math.distance(0, 0, point1.x, point1.y), Z4Math.distance(0, 0, point2.x, point2.y), angle2, this.sx, this.sy);
     } else if (spinnerIndex == 0) {
       return new Z4RectangleFrame(this.x, this.y, this.w, this.h, this.angle, spinnerValue, this.sy);
     } else if (spinnerIndex == 1) {
