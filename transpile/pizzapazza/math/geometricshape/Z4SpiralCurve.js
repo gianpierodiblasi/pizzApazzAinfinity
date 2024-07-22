@@ -22,7 +22,7 @@ class Z4SpiralCurve extends Z4GeometricCurve {
    * @param y1 The y-axis coordinate of the start point of the spiral
    * @param x2 The x-axis coordinate of the end point of the spiral
    * @param y2 The y-axis coordinate of the end point of the spiral
-   * @param radius The radius of the sinusoid
+   * @param radius The radius of the spiral
    */
   constructor(x1, y1, x2, y2, radius) {
     super(Z4GeometricShapeType.SPIRAL);
