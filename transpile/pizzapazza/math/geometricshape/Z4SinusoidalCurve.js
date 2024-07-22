@@ -71,6 +71,10 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
     return new Array(new Z4GeometricShapeSpinnerConfiguration("", Z4Translations.ANGLE, parseInt(Z4Math.rad2deg(this.angle)), 0, 360));
   }
 
+   getButtonConfigurations() {
+    return new Array();
+  }
+
    fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     if (pointIndex === 0) {
       let offsetX = this.x1 - x;

@@ -101,6 +101,31 @@ class Z4Polyline extends Z4GeometricShape {
     return new Array();
   }
 
+   getButtonConfigurations() {
+    return new Array(new Z4GeometricShapeButtonConfiguration(Z4Translations.ADD, (controlPoints, selectedControlPoint) => {
+      let newPoints = new Array();
+      controlPoints.forEach((controlPoint, index, array) => {
+        if (index !== selectedControlPoint) {
+          newPoints.push(controlPoint);
+        } else if (index === controlPoints.length - 1) {
+          newPoints.push(new Z4Point((controlPoints[index - 1].x + controlPoints[index].x) / 2, (controlPoints[index - 1].y + controlPoints[index].y) / 2));
+          newPoints.push(controlPoint);
+        } else {
+          newPoints.push(controlPoint);
+          newPoints.push(new Z4Point((controlPoints[index].x + controlPoints[index + 1].x) / 2, (controlPoints[index].y + controlPoints[index + 1].y) / 2));
+        }
+      });
+      return new Z4Polyline(newPoints);
+    }), new Z4GeometricShapeButtonConfiguration(Z4Translations.DELETE, (controlPoints, selectedControlPoint) => {
+      if (controlPoints.length === 2) {
+        JSOptionPane.showMessageDialog(Z4Translations.CANNOT_DELETE_POINT_MESSAGE, Z4Translations.DELETE, JSOptionPane.WARNING_MESSAGE, null);
+        return this;
+      } else {
+        return new Z4Polyline(controlPoints.filter((controlPoint, index, array) => selectedControlPoint !== index));
+      }
+    }));
+  }
+
    fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     return pointIndex !== -1 ? new Z4Polyline(this.points.map((point, index, array) => index === pointIndex ? new Z4Point(x, y) : point)) : this;
   }

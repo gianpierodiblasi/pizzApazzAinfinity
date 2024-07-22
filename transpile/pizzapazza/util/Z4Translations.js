@@ -204,7 +204,11 @@ class Z4Translations {
 
   static  RIPPLE = "";
 
+  static  ADD = "";
+
   static  DELETE = "";
+
+  static  CANNOT_DELETE_POINT_MESSAGE = "";
 
   static  DUPLICATE = "";
 
@@ -647,7 +651,9 @@ class Z4Translations {
     Z4Translations.LOCK_ASPECT_RATIO = "Lock Aspect Ratio";
     Z4Translations.LOCK = "Lock";
     Z4Translations.RIPPLE = "Ripple";
+    Z4Translations.ADD = "Add";
     Z4Translations.DELETE = "Delete";
+    Z4Translations.CANNOT_DELETE_POINT_MESSAGE = "Cannot delete the point";
     Z4Translations.DUPLICATE = "Duplicate";
     Z4Translations.TRANSFORM = "Transform";
     Z4Translations.FLIP_HORIZONTAL = "Flip Horizontal";
@@ -920,7 +926,9 @@ class Z4Translations {
     Z4Translations.LOCK_ASPECT_RATIO = "Blocca Proporzioni";
     Z4Translations.LOCK = "Blocca";
     Z4Translations.RIPPLE = "Caoticit\u00E0";
+    Z4Translations.ADD = "Aggiungi";
     Z4Translations.DELETE = "Elimina";
+    Z4Translations.CANNOT_DELETE_POINT_MESSAGE = "Non \u00E8 possibile cancellare il punto";
     Z4Translations.DUPLICATE = "Duplica";
     Z4Translations.TRANSFORM = "Trasforma";
     Z4Translations.FLIP_HORIZONTAL = "Rifletti Orizzontale";

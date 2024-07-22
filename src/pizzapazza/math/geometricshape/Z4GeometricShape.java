@@ -90,6 +90,13 @@ public abstract class Z4GeometricShape implements Z4JSONable {
   public abstract Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfigurations();
 
   /**
+   * Returns the button configurations to control/edit the geometri shape
+   *
+   * @return The button configurations to control/edit the geometri shape
+   */
+  public abstract Array<Z4GeometricShapeButtonConfiguration> getButtonConfigurations();
+  
+  /**
    * Returns a Z4GeometricShape obtained by this Z4GeometricShape when a data
    * (point or spinner) is changed
    *

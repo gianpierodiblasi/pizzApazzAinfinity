@@ -32,6 +32,10 @@ class Z4GeometricShapeSequence extends Z4GeometricCurve {
     return this.shapes.map(shape => shape.getSpinnerConfigurations()).reduce((accumulator, current, index, array) => (accumulator).concat(current));
   }
 
+   getButtonConfigurations() {
+    return new Array();
+  }
+
    fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     let objForControlPoints = this.getChangedGeometricShape(pointIndex, index => this.shapes[index].getControlPoints().length);
     let objForSpinnerConfigurations = this.getChangedGeometricShape(spinnerIndex, index => this.shapes[index].getSpinnerConfigurations().length);

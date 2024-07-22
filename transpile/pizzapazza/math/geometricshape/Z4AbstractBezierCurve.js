@@ -73,4 +73,8 @@ class Z4AbstractBezierCurve extends Z4GeometricShape {
    getSpinnerConfigurations() {
     return new Array();
   }
+
+   getButtonConfigurations() {
+    return new Array();
+  }
 }

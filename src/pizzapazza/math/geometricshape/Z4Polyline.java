@@ -2,9 +2,11 @@ package pizzapazza.math.geometricshape;
 
 import def.js.Array;
 import def.js.Number;
+import javascript.swing.JSOptionPane;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Vector;
+import pizzapazza.util.Z4Translations;
 import simulation.js.$Array;
 import static simulation.js.$Globals.$exists;
 import simulation.js.$Object;
@@ -122,6 +124,35 @@ public class Z4Polyline extends Z4GeometricShape {
   @Override
   public Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfigurations() {
     return new Array<>();
+  }
+
+  @Override
+  public Array<Z4GeometricShapeButtonConfiguration> getButtonConfigurations() {
+    return new Array<>(
+            new Z4GeometricShapeButtonConfiguration(Z4Translations.ADD, (controlPoints, selectedControlPoint) -> {
+              Array<Z4Point> newPoints = new Array<>();
+              controlPoints.forEach((controlPoint, index, array) -> {
+                if (index != selectedControlPoint) {
+                  newPoints.push(controlPoint);
+                } else if (index == controlPoints.length - 1) {
+                  newPoints.push(new Z4Point((controlPoints.$get(index - 1).x + controlPoints.$get(index).x) / 2, (controlPoints.$get(index - 1).y + controlPoints.$get(index).y) / 2));
+                  newPoints.push(controlPoint);
+                } else {
+                  newPoints.push(controlPoint);
+                  newPoints.push(new Z4Point((controlPoints.$get(index).x + controlPoints.$get(index + 1).x) / 2, (controlPoints.$get(index).y + controlPoints.$get(index + 1).y) / 2));
+                }
+              });
+              return new Z4Polyline(newPoints);
+            }),
+            new Z4GeometricShapeButtonConfiguration(Z4Translations.DELETE, (controlPoints, selectedControlPoint) -> {
+              if (controlPoints.length == 2) {
+                JSOptionPane.showMessageDialog(Z4Translations.CANNOT_DELETE_POINT_MESSAGE, Z4Translations.DELETE, JSOptionPane.WARNING_MESSAGE, null);
+                return this;
+              } else {
+                return new Z4Polyline(controlPoints.filter((controlPoint, index, array) -> selectedControlPoint != index));
+              }
+            })
+    );
   }
 
   @Override

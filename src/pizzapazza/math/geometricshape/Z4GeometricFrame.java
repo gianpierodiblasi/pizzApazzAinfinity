@@ -103,6 +103,11 @@ public abstract class Z4GeometricFrame extends Z4GeometricCurve {
     );
   }
 
+  @Override
+  public Array<Z4GeometricShapeButtonConfiguration> getButtonConfigurations() {
+    return new Array<>();
+  }
+
   /**
    * Returns a new geometric frame from given parameters
    *

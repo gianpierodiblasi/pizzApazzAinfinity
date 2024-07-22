@@ -48,6 +48,7 @@ public class Z4GeometricShapePreview extends JSDropDown {
   private final JSSpinner ySpinner = new JSSpinner();
   private final JSPanel radioPanel = new JSPanel();
   private final JSPanel spinnerPanel = new JSPanel();
+  private final JSPanel buttonPanel = new JSPanel();
 
   private final Array<JSRadioButton> radios = new Array<>();
   private Z4ShapesAndPathsPanel shapesAndPathsPanel;
@@ -121,12 +122,13 @@ public class Z4GeometricShapePreview extends JSDropDown {
     this.xSlider.addChangeListener(event -> this.onChange(false, this.xSlider.getValueIsAdjusting(), this.xSpinner, this.xSlider));
     this.editor.add(this.xSlider, new GBC(0, 1).w(2).a(GBC.NORTH).f(GBC.HORIZONTAL));
 
-    Z4UI.addVLine(this.editor, new GBC(2, 0).h(6).f(GBC.VERTICAL).i(1, 2, 1, 2));
-    Z4UI.addLabel(this.editor, "y", new GBC(3, 3).h(3).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
+    Z4UI.addVLine(this.editor, new GBC(2, 0).h(7).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addLabel(this.editor, "y", new GBC(3, 3).h(4).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
 
     this.editor.add(this.radioPanel, new GBC(0, 2).wh(2, 2).f(GBC.BOTH));
     this.spinnerPanel.setLayout(new GridBagLayout());
     this.editor.add(this.spinnerPanel, new GBC(0, 4).w(2).f(GBC.BOTH));
+    this.editor.add(this.buttonPanel, new GBC(0, 5).w(2).f(GBC.BOTH));
 
     this.ySpinner.cssAddClass("jsspinner-vertical");
     this.ySpinner.cssAddClass("jsspinner_h_4rem");
@@ -140,7 +142,7 @@ public class Z4GeometricShapePreview extends JSDropDown {
     this.ySlider.getStyle().minHeight = "20rem";
     this.ySlider.getStyle().minWidth = "1.5rem";
     this.ySlider.addChangeListener(event -> this.onChange(false, this.ySlider.getValueIsAdjusting(), this.ySpinner, this.ySlider));
-    this.editor.add(this.ySlider, new GBC(4, 0).h(6).wy(1).a(GBC.NORTH).f(GBC.VERTICAL));
+    this.editor.add(this.ySlider, new GBC(4, 0).h(7).wy(1).a(GBC.NORTH).f(GBC.VERTICAL));
 
     JSButton button = new JSButton();
     button.setText(Z4Translations.DUPLICATE);
@@ -150,7 +152,7 @@ public class Z4GeometricShapePreview extends JSDropDown {
       this.removeAttribute("open");
       setTimeout(() -> document.querySelector(".z4geometricshapepreview:nth-last-child(1)").setAttribute("open", "open"), 0);
     });
-    this.editor.add(button, new GBC(0, 5).a(GBC.SOUTHWEST));
+    this.editor.add(button, new GBC(0, 6).a(GBC.SOUTHWEST));
 
     button = new JSButton();
     button.setText(Z4Translations.DELETE);
@@ -161,7 +163,7 @@ public class Z4GeometricShapePreview extends JSDropDown {
         document.querySelector(".z4geometricshapepreview:nth-child(" + (index + 1) + ")").remove();
       }
     }));
-    this.editor.add(button, new GBC(1, 5).a(GBC.SOUTHEAST));
+    this.editor.add(button, new GBC(1, 6).a(GBC.SOUTHEAST));
 //    
 //    this.addButton(panelTransform, "", 3, 1, event -> this.setGeometriShape(this.canvas, this.shape)).cssAddClass("z4geometricshapepreview-setgeometricshape");
 
@@ -273,6 +275,18 @@ public class Z4GeometricShapePreview extends JSDropDown {
       this.spinnerPanelDone = true;
     }
 
+    this.buttonPanel.setContent("");
+    this.shape.getButtonConfigurations().forEach(buttonConfiguration -> {
+      JSButton button = new JSButton();
+      button.setText(buttonConfiguration.label);
+      button.addActionListener(event -> {
+        Z4GeometricShape newShape = buttonConfiguration.onClick.$apply(this.shape.getControlPoints(), this.selectedControlPoint);
+        this.canvas.replaceGeometricShape(this.shape, newShape, this.selectedControlPoint);
+        this.setGeometriShape(this.canvas, newShape);
+      });
+      this.buttonPanel.add(button, null);
+    });
+
     Z4Point p = this.shape.getControlPoints().$get(this.selectedControlPoint);
     Dimension dC = this.canvas.getSize();
     this.xSlider.setMinimum(0);
@@ -307,6 +321,7 @@ public class Z4GeometricShapePreview extends JSDropDown {
 
   /**
    * Sets the position of the selected control point
+   *
    * @param x The x-axis coordinate of the selected control point
    * @param y The y-axis coordinate of the selected control point
    */

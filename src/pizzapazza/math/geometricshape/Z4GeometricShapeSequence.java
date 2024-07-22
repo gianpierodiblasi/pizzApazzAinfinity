@@ -46,6 +46,11 @@ public class Z4GeometricShapeSequence extends Z4GeometricCurve {
   }
 
   @Override
+  public Array<Z4GeometricShapeButtonConfiguration> getButtonConfigurations() {
+    return new Array<>();
+  }
+  
+  @Override
   public Z4GeometricShape fromDataChanged(Array<Z4Point> controlPoints, double x, double y, int pointIndex, double spinnerValue, int spinnerIndex, int width, int height) {
     $Object objForControlPoints = this.getChangedGeometricShape(pointIndex, index -> this.shapes.$get(index).getControlPoints().length);
     $Object objForSpinnerConfigurations = this.getChangedGeometricShape(spinnerIndex, index -> this.shapes.$get(index).getSpinnerConfigurations().length);

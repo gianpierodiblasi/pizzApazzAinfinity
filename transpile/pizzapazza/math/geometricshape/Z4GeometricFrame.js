@@ -82,6 +82,10 @@ class Z4GeometricFrame extends Z4GeometricCurve {
     return new Array(new Z4GeometricShapeSpinnerConfiguration(Z4Translations.SHEARING, Z4Translations.HORIZONTAL, 0, -200, 200), new Z4GeometricShapeSpinnerConfiguration(Z4Translations.SHEARING, Z4Translations.VERTICAL, 0, -200, 200));
   }
 
+   getButtonConfigurations() {
+    return new Array();
+  }
+
   /**
    * Returns a new geometric frame from given parameters
    *

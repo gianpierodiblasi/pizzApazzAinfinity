@@ -88,4 +88,9 @@ public abstract class Z4AbstractBezierCurve extends Z4GeometricShape {
   public Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfigurations() {
     return new Array<>();
   }
+  
+  @Override
+  public Array<Z4GeometricShapeButtonConfiguration> getButtonConfigurations() {
+    return new Array<>();
+  }
 }

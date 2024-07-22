@@ -1018,6 +1018,28 @@ class Z4PointIteratorType {
   static SCATTERER = 'SCATTERER';
 }
 /**
+ * The configuration of a button used by a geometrishape
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4GeometricShapeButtonConfiguration {
+
+   label = null;
+
+   onClick = null;
+
+  /**
+   * Creates the object
+   *
+   * @param label The spinner label
+   * @param onClick The action to do on click
+   */
+  constructor(label, onClick) {
+    this.label = label;
+    this.onClick = onClick;
+  }
+}
+/**
  * The configuration of a spinner used by a geometrishape
  *
  * @author gianpiero.diblasi
@@ -6943,6 +6965,8 @@ class Z4GeometricShapePreview extends JSDropDown {
 
    spinnerPanel = new JSPanel();
 
+   buttonPanel = new JSPanel();
+
    radios = new Array();
 
    shapesAndPathsPanel = null;
@@ -7010,11 +7034,12 @@ class Z4GeometricShapePreview extends JSDropDown {
     this.xSlider.getStyle().minWidth = "20rem";
     this.xSlider.addChangeListener(event => this.onChange(false, this.xSlider.getValueIsAdjusting(), this.xSpinner, this.xSlider));
     this.editor.add(this.xSlider, new GBC(0, 1).w(2).a(GBC.NORTH).f(GBC.HORIZONTAL));
-    Z4UI.addVLine(this.editor, new GBC(2, 0).h(6).f(GBC.VERTICAL).i(1, 2, 1, 2));
-    Z4UI.addLabel(this.editor, "y", new GBC(3, 3).h(3).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
+    Z4UI.addVLine(this.editor, new GBC(2, 0).h(7).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addLabel(this.editor, "y", new GBC(3, 3).h(4).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
     this.editor.add(this.radioPanel, new GBC(0, 2).wh(2, 2).f(GBC.BOTH));
     this.spinnerPanel.setLayout(new GridBagLayout());
     this.editor.add(this.spinnerPanel, new GBC(0, 4).w(2).f(GBC.BOTH));
+    this.editor.add(this.buttonPanel, new GBC(0, 5).w(2).f(GBC.BOTH));
     this.ySpinner.cssAddClass("jsspinner-vertical");
     this.ySpinner.cssAddClass("jsspinner_h_4rem");
     this.ySpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
@@ -7026,7 +7051,7 @@ class Z4GeometricShapePreview extends JSDropDown {
     this.ySlider.getStyle().minHeight = "20rem";
     this.ySlider.getStyle().minWidth = "1.5rem";
     this.ySlider.addChangeListener(event => this.onChange(false, this.ySlider.getValueIsAdjusting(), this.ySpinner, this.ySlider));
-    this.editor.add(this.ySlider, new GBC(4, 0).h(6).wy(1).a(GBC.NORTH).f(GBC.VERTICAL));
+    this.editor.add(this.ySlider, new GBC(4, 0).h(7).wy(1).a(GBC.NORTH).f(GBC.VERTICAL));
     let button = new JSButton();
     button.setText(Z4Translations.DUPLICATE);
     button.addActionListener(event => {
@@ -7035,7 +7060,7 @@ class Z4GeometricShapePreview extends JSDropDown {
       this.removeAttribute("open");
       setTimeout(() => document.querySelector(".z4geometricshapepreview:nth-last-child(1)").setAttribute("open", "open"), 0);
     });
-    this.editor.add(button, new GBC(0, 5).a(GBC.SOUTHWEST));
+    this.editor.add(button, new GBC(0, 6).a(GBC.SOUTHWEST));
     button = new JSButton();
     button.setText(Z4Translations.DELETE);
     button.addActionListener(event => JSOptionPane.showConfirmDialog(Z4Translations.DELETE_SHAPES_AND_PATHS_MESSAGE, Z4Translations.DELETE, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
@@ -7045,7 +7070,7 @@ class Z4GeometricShapePreview extends JSDropDown {
         document.querySelector(".z4geometricshapepreview:nth-child(" + (index + 1) + ")").remove();
       }
     }));
-    this.editor.add(button, new GBC(1, 5).a(GBC.SOUTHEAST));
+    this.editor.add(button, new GBC(1, 6).a(GBC.SOUTHEAST));
     // 
     // this.addButton(panelTransform, "", 3, 1, event -> this.setGeometriShape(this.canvas, this.shape)).cssAddClass("z4geometricshapepreview-setgeometricshape");
     this.appendChild(this.editor);
@@ -7143,6 +7168,17 @@ class Z4GeometricShapePreview extends JSDropDown {
       });
       this.spinnerPanelDone = true;
     }
+    this.buttonPanel.setContent("");
+    this.shape.getButtonConfigurations().forEach(buttonConfiguration => {
+      let button = new JSButton();
+      button.setText(buttonConfiguration.label);
+      button.addActionListener(event => {
+        let newShape = buttonConfiguration.onClick(this.shape.getControlPoints(), this.selectedControlPoint);
+        this.canvas.replaceGeometricShape(this.shape, newShape, this.selectedControlPoint);
+        this.setGeometriShape(this.canvas, newShape);
+      });
+      this.buttonPanel.add(button, null);
+    });
     let p = this.shape.getControlPoints()[this.selectedControlPoint];
     let dC = this.canvas.getSize();
     this.xSlider.setMinimum(0);
@@ -7174,6 +7210,7 @@ class Z4GeometricShapePreview extends JSDropDown {
 
   /**
    * Sets the position of the selected control point
+   *
    * @param x The x-axis coordinate of the selected control point
    * @param y The y-axis coordinate of the selected control point
    */
@@ -16317,6 +16354,14 @@ class Z4GeometricShape extends Z4JSONable {
   }
 
   /**
+   * Returns the button configurations to control/edit the geometri shape
+   *
+   * @return The button configurations to control/edit the geometri shape
+   */
+   getButtonConfigurations() {
+  }
+
+  /**
    * Returns a Z4GeometricShape obtained by this Z4GeometricShape when a data
    * (point or spinner) is changed
    *
@@ -16502,6 +16547,10 @@ class Z4AbstractBezierCurve extends Z4GeometricShape {
   }
 
    getSpinnerConfigurations() {
+    return new Array();
+  }
+
+   getButtonConfigurations() {
     return new Array();
   }
 }
@@ -16808,6 +16857,10 @@ class Z4GeometricFrame extends Z4GeometricCurve {
 
    getSpinnerConfigurations() {
     return new Array(new Z4GeometricShapeSpinnerConfiguration(Z4Translations.SHEARING, Z4Translations.HORIZONTAL, 0, -200, 200), new Z4GeometricShapeSpinnerConfiguration(Z4Translations.SHEARING, Z4Translations.VERTICAL, 0, -200, 200));
+  }
+
+   getButtonConfigurations() {
+    return new Array();
   }
 
   /**
@@ -17160,6 +17213,10 @@ class Z4GeometricShapeSequence extends Z4GeometricCurve {
     return this.shapes.map(shape => shape.getSpinnerConfigurations()).reduce((accumulator, current, index, array) => (accumulator).concat(current));
   }
 
+   getButtonConfigurations() {
+    return new Array();
+  }
+
    fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     let objForControlPoints = this.getChangedGeometricShape(pointIndex, index => this.shapes[index].getControlPoints().length);
     let objForSpinnerConfigurations = this.getChangedGeometricShape(spinnerIndex, index => this.shapes[index].getSpinnerConfigurations().length);
@@ -17282,6 +17339,10 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
 
    getSpinnerConfigurations() {
     return new Array(new Z4GeometricShapeSpinnerConfiguration("", Z4Translations.ANGLE, parseInt(Z4Math.rad2deg(this.angle)), 0, 360));
+  }
+
+   getButtonConfigurations() {
+    return new Array();
   }
 
    fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
@@ -17426,6 +17487,10 @@ class Z4SpiralCurve extends Z4GeometricCurve {
     return new Array();
   }
 
+   getButtonConfigurations() {
+    return new Array();
+  }
+
    fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     if (pointIndex === 0) {
       let offsetX = this.x1 - x;
@@ -17554,6 +17619,10 @@ class Z4Line extends Z4GeometricShape {
   }
 
    getSpinnerConfigurations() {
+    return new Array();
+  }
+
+   getButtonConfigurations() {
     return new Array();
   }
 
@@ -17700,6 +17769,31 @@ class Z4Polyline extends Z4GeometricShape {
     return new Array();
   }
 
+   getButtonConfigurations() {
+    return new Array(new Z4GeometricShapeButtonConfiguration(Z4Translations.ADD, (controlPoints, selectedControlPoint) => {
+      let newPoints = new Array();
+      controlPoints.forEach((controlPoint, index, array) => {
+        if (index !== selectedControlPoint) {
+          newPoints.push(controlPoint);
+        } else if (index === controlPoints.length - 1) {
+          newPoints.push(new Z4Point((controlPoints[index - 1].x + controlPoints[index].x) / 2, (controlPoints[index - 1].y + controlPoints[index].y) / 2));
+          newPoints.push(controlPoint);
+        } else {
+          newPoints.push(controlPoint);
+          newPoints.push(new Z4Point((controlPoints[index].x + controlPoints[index + 1].x) / 2, (controlPoints[index].y + controlPoints[index + 1].y) / 2));
+        }
+      });
+      return new Z4Polyline(newPoints);
+    }), new Z4GeometricShapeButtonConfiguration(Z4Translations.DELETE, (controlPoints, selectedControlPoint) => {
+      if (controlPoints.length === 2) {
+        JSOptionPane.showMessageDialog(Z4Translations.CANNOT_DELETE_POINT_MESSAGE, Z4Translations.DELETE, JSOptionPane.WARNING_MESSAGE, null);
+        return this;
+      } else {
+        return new Z4Polyline(controlPoints.filter((controlPoint, index, array) => selectedControlPoint !== index));
+      }
+    }));
+  }
+
    fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     return pointIndex !== -1 ? new Z4Polyline(this.points.map((point, index, array) => index === pointIndex ? new Z4Point(x, y) : point)) : this;
   }
@@ -17792,6 +17886,10 @@ class Z4SinglePointShape extends Z4GeometricShape {
   }
 
    getSpinnerConfigurations() {
+    return new Array();
+  }
+
+   getButtonConfigurations() {
     return new Array();
   }
 
@@ -22797,7 +22895,11 @@ class Z4Translations {
 
   static  RIPPLE = "";
 
+  static  ADD = "";
+
   static  DELETE = "";
+
+  static  CANNOT_DELETE_POINT_MESSAGE = "";
 
   static  DUPLICATE = "";
 
@@ -23240,7 +23342,9 @@ class Z4Translations {
     Z4Translations.LOCK_ASPECT_RATIO = "Lock Aspect Ratio";
     Z4Translations.LOCK = "Lock";
     Z4Translations.RIPPLE = "Ripple";
+    Z4Translations.ADD = "Add";
     Z4Translations.DELETE = "Delete";
+    Z4Translations.CANNOT_DELETE_POINT_MESSAGE = "Cannot delete the point";
     Z4Translations.DUPLICATE = "Duplicate";
     Z4Translations.TRANSFORM = "Transform";
     Z4Translations.FLIP_HORIZONTAL = "Flip Horizontal";
@@ -23513,7 +23617,9 @@ class Z4Translations {
     Z4Translations.LOCK_ASPECT_RATIO = "Blocca Proporzioni";
     Z4Translations.LOCK = "Blocca";
     Z4Translations.RIPPLE = "Caoticit\u00E0";
+    Z4Translations.ADD = "Aggiungi";
     Z4Translations.DELETE = "Elimina";
+    Z4Translations.CANNOT_DELETE_POINT_MESSAGE = "Non \u00E8 possibile cancellare il punto";
     Z4Translations.DUPLICATE = "Duplica";
     Z4Translations.TRANSFORM = "Trasforma";
     Z4Translations.FLIP_HORIZONTAL = "Rifletti Orizzontale";
