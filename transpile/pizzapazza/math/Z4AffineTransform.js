@@ -147,7 +147,7 @@ class Z4AffineTransform {
     let M11 = this.m11;
     this.m00 = M00 * T00 + M01 * T10;
     this.m10 = M10 * T00 + M11 * T10;
-    this.m01 = M00 * T01 * +M01 * T11;
+    this.m01 = M00 * T01 + M01 * T11;
     this.m11 = M10 * T01 + M11 * T11;
     this.m02 += M00 * T02 + M01 * T12;
     this.m12 += M10 * T02 + M11 * T12;

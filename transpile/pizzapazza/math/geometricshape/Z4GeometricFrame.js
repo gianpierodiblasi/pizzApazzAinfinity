@@ -42,6 +42,11 @@ class Z4GeometricFrame extends Z4GeometricCurve {
    sy = 0.0;
 
   /**
+   * The shearing coefficient
+   */
+  static  SHEARING_COEFFICIENT = 50;
+
+  /**
    * Creates the object
    *
    * @param type The type
@@ -65,8 +70,8 @@ class Z4GeometricFrame extends Z4GeometricCurve {
   }
 
    getControlPoints() {
-    let tx = Z4AffineTransform.translate(this.x, this.y).concatenateRotate(this.angle).concatenateShear(this.sx, this.sy);
-    return new Array(new Z4Point(this.x, this.y), tx.transform(this.w, 0), tx.transform(0, -this.h));
+    let tx = Z4AffineTransform.translate(this.x, this.y).concatenateRotate(this.angle).concatenateShear(this.sy / Z4GeometricFrame.SHEARING_COEFFICIENT, -this.sx / Z4GeometricFrame.SHEARING_COEFFICIENT);
+    return new Array(tx.transform(0, 0), tx.transform(this.w, 0), tx.transform(0, this.h));
   }
 
    getControlPointConnections() {
@@ -74,7 +79,7 @@ class Z4GeometricFrame extends Z4GeometricCurve {
   }
 
    getSpinnerConfigurations() {
-    return new Array(new Z4GeometricShapeSpinnerConfiguration(Z4Translations.SHEARING, Z4Translations.HORIZONTAL, 0, 0, 200), new Z4GeometricShapeSpinnerConfiguration(Z4Translations.SHEARING, Z4Translations.VERTICAL, 0, 0, 200));
+    return new Array(new Z4GeometricShapeSpinnerConfiguration(Z4Translations.SHEARING, Z4Translations.HORIZONTAL, 0, -200, 200), new Z4GeometricShapeSpinnerConfiguration(Z4Translations.SHEARING, Z4Translations.VERTICAL, 0, -200, 200));
   }
 
    toJSON() {
