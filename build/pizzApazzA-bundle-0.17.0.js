@@ -4484,9 +4484,7 @@ class Z4CanvasTextManager {
         case "move":
           this.statusPanel.setMousePosition(xParsed, yParsed);
           if (this.pressed) {
-            // this.setPointPosition(this.points, this.selectedIndex, parseInt(this.width * event.offsetX / w), parseInt(this.height * event.offsetY / h), this.width, this.height);
-            // this.setXY();
-            // this.drawPreview(true);
+            this.textInfo.shape.getGeometricShapePreview().setSelectedControlPointPosition(xParsed, yParsed);
           } else {
             this.canvas.getChilStyleByQuery(".z4canvas-overlay").cursor = "default";
             if (this.textInfo.shape) {
@@ -7084,6 +7082,7 @@ class Z4GeometricShapePreview extends JSDropDown {
     this.preview.getStyle().marginBottom = (Z4GeometricShapePreview.PREVIEW_SIZE - h - 1) / 2 + "px";
     this.preview.getStyle().marginLeft = (Z4GeometricShapePreview.PREVIEW_SIZE - w - 1) / 2 + "px";
     this.preview.getStyle().marginRight = (Z4GeometricShapePreview.PREVIEW_SIZE - w - 1) / 2 + "px";
+    this.radios.length = 0;
     this.radioPanel.setContent("");
     let buttonGroup = new ButtonGroup();
     this.shape.getControlPoints().forEach((controlPoint, index, array) => {
@@ -7091,8 +7090,8 @@ class Z4GeometricShapePreview extends JSDropDown {
       radio.setSelected(index === this.selectedControlPoint);
       radio.setText("" + (index + 1));
       radio.addActionListener(event => this.setSelectedControlPoint(index));
-      this.radioPanel.add(radio, null);
       this.radios.push(radio);
+      this.radioPanel.add(radio, null);
       buttonGroup.add(radio);
     });
     if (!this.spinnerPanelDone) {
@@ -7155,6 +7154,21 @@ class Z4GeometricShapePreview extends JSDropDown {
     this.ySlider.setValue(parseInt(p.y));
     this.ySpinner.setValue(parseInt(p.y));
     this.canvas.replaceGeometricShape(this.shape, this.shape, this.selectedControlPoint);
+  }
+
+  /**
+   * Sets the position of the selected control point
+   * @param x The x-axis coordinate of the selected control point
+   * @param y The y-axis coordinate of the selected control point
+   */
+   setSelectedControlPointPosition(x, y) {
+    this.xSlider.setValue(x);
+    this.xSpinner.setValue(x);
+    this.ySlider.setValue(y);
+    this.ySpinner.setValue(y);
+    let newShape = this.shape.fromDataChanged(this.shape.getControlPoints(), x, y, this.selectedControlPoint, 0, -1, this.canvas.getSize().width, this.canvas.getSize().height);
+    this.canvas.replaceGeometricShape(this.shape, newShape, this.selectedControlPoint);
+    this.setGeometriShape(this.canvas, newShape);
   }
 
   /**

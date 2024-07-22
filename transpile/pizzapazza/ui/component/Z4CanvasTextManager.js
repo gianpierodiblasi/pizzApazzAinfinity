@@ -142,9 +142,7 @@ class Z4CanvasTextManager {
         case "move":
           this.statusPanel.setMousePosition(xParsed, yParsed);
           if (this.pressed) {
-            // this.setPointPosition(this.points, this.selectedIndex, parseInt(this.width * event.offsetX / w), parseInt(this.height * event.offsetY / h), this.width, this.height);
-            // this.setXY();
-            // this.drawPreview(true);
+            this.textInfo.shape.getGeometricShapePreview().setSelectedControlPointPosition(xParsed, yParsed);
           } else {
             this.canvas.getChilStyleByQuery(".z4canvas-overlay").cursor = "default";
             if (this.textInfo.shape) {
