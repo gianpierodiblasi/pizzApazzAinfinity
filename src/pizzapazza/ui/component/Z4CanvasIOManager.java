@@ -74,7 +74,7 @@ public class Z4CanvasIOManager {
    * @param canvas The canvas
    * @param paper The paper
    * @param drawingTools The drawing tools
-   * @param shapes The geometric shapes
+   * @param geometricShapes The geometric shapes
    */
   public Z4CanvasIOManager(Z4Canvas canvas, Z4Paper paper, Array<Z4DrawingTool> drawingTools, Array<Z4GeometricShape> geometricShapes) {
     this.canvas = canvas;
@@ -255,6 +255,7 @@ public class Z4CanvasIOManager {
           this.ribbonDrawingToolPanel.reset();
 
           this.ribbonTextPanel.reset();
+          this.geometricShapes.length = 0;
           this.shapesAndPathsPanel.reset();
 
           Color.resetHistory();
@@ -343,9 +344,11 @@ public class Z4CanvasIOManager {
 
   private void jsonToArrays($JSZip zip, $Apply_0_Void apply) {
     this.jsonToArray(zip, "drawingTools", false, drawingTool -> this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(($Object) drawingTool)),
-            () -> this.jsonToArray(zip, "colors", true, color -> Color.pushHistory(Color.fromJSON(($Object) color)),
-                    () -> this.jsonToArray(zip, "gradientcolors", true, color -> Z4GradientColor.pushHistory(Z4GradientColor.fromJSON(($Object) color)),
-                            () -> this.jsonToArray(zip, "bigradientcolors", true, color -> Z4BiGradientColor.pushHistory(Z4BiGradientColor.fromJSON(($Object) color)), apply)
+            () -> this.jsonToArray(zip, "geometricShapes", false, shape -> this.canvas.addGeometricShape(Z4GeometricShape.fromJSON(($Object) shape)),
+                    () -> this.jsonToArray(zip, "colors", true, color -> Color.pushHistory(Color.fromJSON(($Object) color)),
+                            () -> this.jsonToArray(zip, "gradientcolors", true, color -> Z4GradientColor.pushHistory(Z4GradientColor.fromJSON(($Object) color)),
+                                    () -> this.jsonToArray(zip, "bigradientcolors", true, color -> Z4BiGradientColor.pushHistory(Z4BiGradientColor.fromJSON(($Object) color)), apply)
+                            )
                     )
             )
     );
@@ -405,6 +408,7 @@ public class Z4CanvasIOManager {
       this.layerToJSON(zip, projectName, new Array<>(), 0, obj -> {
         $Apply_0_Void finish = () -> {
           this.writeJSONArray(zip, "drawingTools", array -> this.drawingTools.forEach(drawingTool -> array.push(drawingTool.toJSON())));
+          this.writeJSONArray(zip, "geometricShapes", array -> this.geometricShapes.forEach(geometricShape -> array.push(geometricShape.toJSON())));
           this.writeJSONArray(zip, "colors", array -> Color.getHistory().forEach(color -> array.push(color.getJSON())));
           this.writeJSONArray(zip, "gradientcolors", array -> Z4GradientColor.getHistory().forEach(color -> array.push(color.toJSON())));
           this.writeJSONArray(zip, "bigradientcolors", array -> Z4BiGradientColor.getHistory().forEach(color -> array.push(color.toJSON())));

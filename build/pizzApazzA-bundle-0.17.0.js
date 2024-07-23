@@ -3485,7 +3485,7 @@ class Z4CanvasIOManager {
    * @param canvas The canvas
    * @param paper The paper
    * @param drawingTools The drawing tools
-   * @param shapes The geometric shapes
+   * @param geometricShapes The geometric shapes
    */
   constructor(canvas, paper, drawingTools, geometricShapes) {
     this.canvas = canvas;
@@ -3652,6 +3652,7 @@ class Z4CanvasIOManager {
           this.drawingTools.length = 0;
           this.ribbonDrawingToolPanel.reset();
           this.ribbonTextPanel.reset();
+          this.geometricShapes.length = 0;
           this.shapesAndPathsPanel.reset();
           Color.resetHistory();
           Z4GradientColor.resetHistory();
@@ -3728,7 +3729,7 @@ class Z4CanvasIOManager {
   }
 
    jsonToArrays(zip, apply) {
-    this.jsonToArray(zip, "drawingTools", false, drawingTool => this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)), () => this.jsonToArray(zip, "colors", true, color => Color.pushHistory(Color.fromJSON(color)), () => this.jsonToArray(zip, "gradientcolors", true, color => Z4GradientColor.pushHistory(Z4GradientColor.fromJSON(color)), () => this.jsonToArray(zip, "bigradientcolors", true, color => Z4BiGradientColor.pushHistory(Z4BiGradientColor.fromJSON(color)), apply))));
+    this.jsonToArray(zip, "drawingTools", false, drawingTool => this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)), () => this.jsonToArray(zip, "geometricShapes", false, shape => this.canvas.addGeometricShape(Z4GeometricShape.fromJSON(shape)), () => this.jsonToArray(zip, "colors", true, color => Color.pushHistory(Color.fromJSON(color)), () => this.jsonToArray(zip, "gradientcolors", true, color => Z4GradientColor.pushHistory(Z4GradientColor.fromJSON(color)), () => this.jsonToArray(zip, "bigradientcolors", true, color => Z4BiGradientColor.pushHistory(Z4BiGradientColor.fromJSON(color)), apply)))));
   }
 
    jsonToArray(zip, name, reverse, applyObj, apply) {
@@ -3781,6 +3782,7 @@ class Z4CanvasIOManager {
       this.layerToJSON(zip, projectName, new Array(), 0, obj => {
         let finish = () => {
           this.writeJSONArray(zip, "drawingTools", array => this.drawingTools.forEach(drawingTool => array.push(drawingTool.toJSON())));
+          this.writeJSONArray(zip, "geometricShapes", array => this.geometricShapes.forEach(geometricShape => array.push(geometricShape.toJSON())));
           this.writeJSONArray(zip, "colors", array => Color.getHistory().forEach(color => array.push(color.getJSON())));
           this.writeJSONArray(zip, "gradientcolors", array => Z4GradientColor.getHistory().forEach(color => array.push(color.toJSON())));
           this.writeJSONArray(zip, "bigradientcolors", array => Z4BiGradientColor.getHistory().forEach(color => array.push(color.toJSON())));
