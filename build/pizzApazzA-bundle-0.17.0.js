@@ -3203,6 +3203,25 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Returns a geometric shape
+   *
+   * @param index The geometric shape index
+   * @return The geometric shape
+   */
+   getGeometricShapeAt(index) {
+    return this.geometricShapes[index];
+  }
+
+  /**
+   * Returns the geometric shapes count
+   *
+   * @return The geometric shapes count
+   */
+   getGeometricShapesCount() {
+    return this.geometricShapes.length;
+  }
+
+  /**
    * Sets the text info
    *
    * @param textInfo The text info
@@ -7269,6 +7288,80 @@ class Z4GeometricShapePreview extends JSDropDown {
   }
 }
 /**
+ * The panel to merge geometric shapes
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4MergeGeometricShapePanel extends JSPanel {
+
+   checkboxes = new Array();
+
+   geometricShapes = new Array();
+
+   listeners = new Array();
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super();
+    this.cssAddClass("z4mergegeometricshapepanel");
+    this.setLayout(new GridBagLayout());
+  }
+
+  /**
+   * Returns the selected geometric shapes
+   *
+   * @return The selected geometric shapes
+   */
+   getSelectedGeometricShapes() {
+    return this.geometricShapes;
+  }
+
+  /**
+   * Sets the canvas
+   *
+   * @param canvas The canvas
+   */
+   setCanvas(canvas) {
+    for (let index = 0; index < canvas.getGeometricShapesCount(); index++) {
+      let shape = canvas.getGeometricShapeAt(index);
+      let checkbox = new JSCheckBox();
+      checkbox.addActionListener(event => {
+        if (checkbox.isSelected()) {
+          this.geometricShapes.push(shape);
+        } else {
+          this.geometricShapes.splice(this.geometricShapes.indexOf(shape), 1);
+        }
+        this.onchange();
+      });
+      this.add(checkbox, new GBC(0, index + 1).a(GBC.WEST));
+      let preview = new JSComponent(document.createElement("canvas"));
+      let ctx = preview.invoke("getContext('2d')");
+    }
+  }
+
+   onchange() {
+    let event = new ChangeEvent();
+    this.listeners.forEach(listener => {
+      if (typeof listener === "function") {
+        listener(event);
+      } else {
+        listener.stateChanged(event);
+      }
+    });
+  }
+
+  /**
+   * Adds a change listener
+   *
+   * @param listener The listener
+   */
+   addChangeListener(listener) {
+    this.listeners.push(listener);
+  }
+}
+/**
  * The panel to manage shapes and paths
  *
  * @author gianpiero.diblasi
@@ -7304,6 +7397,7 @@ class Z4ShapesAndPathsPanel extends JSPanel {
     let button = new JSButton();
     button.setText(Z4Translations.MERGE);
     button.setContentAreaFilled(false);
+    button.addActionListener(event => this.merge());
     this.add(button, new GBC(1, 1).a(GBC.WEST).f(GBC.VERTICAL));
     Z4UI.addHLine(this, new GBC(0, 2).w(2).wx(1).f(GBC.HORIZONTAL).i(2, 1, 2, 1));
     this.geometricShapesPreview.setLayout(new BoxLayout(this.geometricShapesPreview, BoxLayout.Y_AXIS));
@@ -7311,6 +7405,22 @@ class Z4ShapesAndPathsPanel extends JSPanel {
     this.geometricShapesPreview.getStyle().height = (window.innerHeight - 230) + "px";
     this.add(this.geometricShapesPreview, new GBC(0, 3).w(2).wxy(1, 1).f(GBC.BOTH).i(5, 2, 5, 2));
     window.addEventListener("resize", event => this.geometricShapesPreview.getStyle().height = (window.innerHeight - 230) + "px");
+  }
+
+   merge() {
+    let panel = new Z4MergeGeometricShapePanel();
+    panel.setCanvas(this.canvas);
+    JSOptionPane.showInputDialog(panel, Z4Translations.MERGE, listener => panel.addChangeListener(listener), () => panel.getSelectedGeometricShapes().length > 1, response => {
+      if (response === JSOptionPane.OK_OPTION) {
+        let selected = panel.getSelectedGeometricShapes();
+        selected.forEach(shape => {
+          let index = this.canvas.deleteGeometricShape(shape);
+          document.querySelector(".z4geometricshapepreview:nth-child(" + (index + 1) + ")").remove();
+        });
+        // 
+        // this.canvas.mergeGeometricShapes(selected);
+      }
+    });
   }
 
   /**

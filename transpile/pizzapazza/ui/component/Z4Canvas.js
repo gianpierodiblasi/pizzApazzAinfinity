@@ -1079,6 +1079,25 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Returns a geometric shape
+   *
+   * @param index The geometric shape index
+   * @return The geometric shape
+   */
+   getGeometricShapeAt(index) {
+    return this.geometricShapes[index];
+  }
+
+  /**
+   * Returns the geometric shapes count
+   *
+   * @return The geometric shapes count
+   */
+   getGeometricShapesCount() {
+    return this.geometricShapes.length;
+  }
+
+  /**
    * Sets the text info
    *
    * @param textInfo The text info

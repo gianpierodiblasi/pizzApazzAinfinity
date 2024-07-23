@@ -1,0 +1,7 @@
+.z4mergegeometricshapepanel {
+}
+
+.z4mergegeometricshapepanel canvas {
+  border: 1px solid var(--main-action-bgcolor);
+  background-color: white;
+}

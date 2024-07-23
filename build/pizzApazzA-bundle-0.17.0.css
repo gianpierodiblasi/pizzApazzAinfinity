@@ -781,6 +781,12 @@
 }
 .z4lightingpanel .z4lightingpanel-radio:nth-child(5) img {
   content: url(../image/color/z4lighting_darkened_out_in.svg);
+}.z4mergegeometricshapepanel {
+}
+
+.z4mergegeometricshapepanel canvas {
+  border: 1px solid var(--main-action-bgcolor);
+  background-color: white;
 }.z4naturalfigurepainterpanel {
 }
 
