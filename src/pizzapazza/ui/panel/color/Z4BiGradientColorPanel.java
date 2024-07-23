@@ -426,7 +426,7 @@ public class Z4BiGradientColorPanel extends Z4AbstractValuePanel<Z4BiGradientCol
   private void drawPreview(boolean adjusting) {
     if (this.width > 0 && this.height > 0) {
       this.putImageData(this.ctx, this.value, this.width, this.height);
-      
+
       for (int biIndex = 0; biIndex < this.value.getColorCount(); biIndex++) {
         double biPosition = this.value.getColorPositionAtIndex(biIndex);
         Z4GradientColor gradientColor = this.value.getColorAtIndex(biIndex);
@@ -523,6 +523,8 @@ public class Z4BiGradientColorPanel extends Z4AbstractValuePanel<Z4BiGradientCol
   public void setValue(Z4BiGradientColor value) {
     this.value = Z4BiGradientColor.fromJSON(value.toJSON());
 
+    this.biSelectedIndex = 0;
+    this.selectedIndex = 0;
     this.colorPanel.setValue(this.value.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
     this.drawPreview(false);
   }

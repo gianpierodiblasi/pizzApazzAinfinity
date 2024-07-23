@@ -61,6 +61,8 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
   private final JSTextField textText = new JSTextField();
   private final JSCheckBox textEmpty = new JSCheckBox();
   private final Z4GradientColorPanel textColor = new Z4GradientColorPanel();
+  private final JSComponent textColorPreview = new JSComponent(document.createElement("canvas"));
+  private final $CanvasRenderingContext2D ctxTextColorPreview = this.textColorPreview.invoke("getContext('2d')");
   private final JSRadioButton textColorFillingUNIFORM = new JSRadioButton();
   private final JSRadioButton textColorFillingSUBGRADIENT = new JSRadioButton();
   private final JSRadioButton textColorFillingGRADIENT = new JSRadioButton();
@@ -89,6 +91,9 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
   private boolean fontsChecked;
   private int selectedControlPoint = 0;
   private final Z4TextInfo textInfo = new Z4TextInfo();
+
+  private final static int TEXT_COLOR_PREVIEW_WIDTH = 45;
+  private final static int TEXT_COLOR_PREVIEW_HEIGHT = 12;
 
   /**
    * Creates the object
@@ -210,14 +215,10 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     Z4DropDown dropDown = new Z4DropDown(".z4ribbontextpanel-text-color");
     dropDown.cssAddClass("z4ribbontextpanel-editor");
     dropDown.cssAddClass("z4ribbontextpanel-text-color-dropdown");
-    int width = 45;
-    int height = 12;
-    JSComponent colorPreview = new JSComponent(document.createElement("canvas"));
-    colorPreview.setProperty("width", "" + width);
-    colorPreview.setProperty("height", "" + height);
-    dropDown.appendChildInTree("summary", colorPreview);
 
-    $CanvasRenderingContext2D ctx = colorPreview.invoke("getContext('2d')");
+    this.textColorPreview.setProperty("width", "" + Z4RibbonTextPanel.TEXT_COLOR_PREVIEW_WIDTH);
+    this.textColorPreview.setProperty("height", "" + Z4RibbonTextPanel.TEXT_COLOR_PREVIEW_HEIGHT);
+    dropDown.appendChildInTree("summary", this.textColorPreview);
 
     JSPanel panel = new JSPanel();
     panel.cssAddClass("z4ribbontextpanel-text-color");
@@ -227,7 +228,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textColor.setRippleVisible(false);
     this.textColor.setValue(this.getBlackBiGradientColor());
     this.textColor.addChangeListener(event -> {
-      this.putImageData(ctx, width, height);
+      this.putImageData();
       this.onTextInfoChange(this.textColor.getValueIsAdjusting());
     });
     panel.add(this.textColor, new GBC(0, 0).h(4).i(0, 0, 0, 5));
@@ -262,17 +263,17 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
     this.add(dropDown, new GBC(x, 2).a(GBC.NORTHEAST).i(1, 0, 0, 5));
 
-    this.putImageData(ctx, width, height);
+    this.putImageData();
   }
 
-  private void putImageData($CanvasRenderingContext2D ctx, int width, int height) {
-    ImageData imageData = ctx.createImageData(width, height);
+  private void putImageData() {
+    ImageData imageData = this.ctxTextColorPreview.createImageData(Z4RibbonTextPanel.TEXT_COLOR_PREVIEW_WIDTH, Z4RibbonTextPanel.TEXT_COLOR_PREVIEW_HEIGHT);
     $Uint8Array data = ($Uint8Array) imageData.data;
 
-    for (int x = 0; x < width; x++) {
-      Color color = this.textColor.getValue().getColorAt(x / width, false);
-      for (int y = 0; y < height; y++) {
-        int idx = (y * width + x) * 4;
+    for (int x = 0; x < Z4RibbonTextPanel.TEXT_COLOR_PREVIEW_WIDTH; x++) {
+      Color color = this.textColor.getValue().getColorAt(x / Z4RibbonTextPanel.TEXT_COLOR_PREVIEW_WIDTH, false);
+      for (int y = 0; y < Z4RibbonTextPanel.TEXT_COLOR_PREVIEW_HEIGHT; y++) {
+        int idx = (y * Z4RibbonTextPanel.TEXT_COLOR_PREVIEW_WIDTH + x) * 4;
         data.$set(idx, color.red);
         data.$set(idx + 1, color.green);
         data.$set(idx + 2, color.blue);
@@ -280,7 +281,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
       }
     }
 
-    ctx.putImageData(imageData, 0, 0);
+    this.ctxTextColorPreview.putImageData(imageData, 0, 0);
   }
 
   private void addDropDown(String dropDownContentSelector, String title, JSSpinner xSpin, JSSpinner ySpin, int x, int y, int top, int anchor, int fill) {
@@ -390,6 +391,7 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textText.setText("");
     this.textEmpty.setSelected(false);
     this.textColor.setValue(this.getBlackBiGradientColor());
+    this.putImageData();
     this.textColorFillingUNIFORM.setSelected(true);
     this.textColorOrientationHORIZONTAL.setSelected(true);
     this.textBorder.setValue(0);

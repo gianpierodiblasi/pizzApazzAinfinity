@@ -441,6 +441,8 @@ class Z4BiGradientColorPanel extends Z4AbstractValuePanel {
 
    setValue(value) {
     this.value = Z4BiGradientColor.fromJSON(value.toJSON());
+    this.biSelectedIndex = 0;
+    this.selectedIndex = 0;
     this.colorPanel.setValue(this.value.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
     this.drawPreview(false);
   }

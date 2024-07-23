@@ -8701,6 +8701,10 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
    textColor = new Z4GradientColorPanel();
 
+   textColorPreview = new JSComponent(document.createElement("canvas"));
+
+   ctxTextColorPreview = this.textColorPreview.invoke("getContext('2d')");
+
    textColorFillingUNIFORM = new JSRadioButton();
 
    textColorFillingSUBGRADIENT = new JSRadioButton();
@@ -8750,6 +8754,10 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
    selectedControlPoint = 0;
 
    textInfo = new Z4TextInfo();
+
+  static  TEXT_COLOR_PREVIEW_WIDTH = 45;
+
+  static  TEXT_COLOR_PREVIEW_HEIGHT = 12;
 
   /**
    * Creates the object
@@ -8847,13 +8855,9 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     let dropDown = new Z4DropDown(".z4ribbontextpanel-text-color");
     dropDown.cssAddClass("z4ribbontextpanel-editor");
     dropDown.cssAddClass("z4ribbontextpanel-text-color-dropdown");
-    let width = 45;
-    let height = 12;
-    let colorPreview = new JSComponent(document.createElement("canvas"));
-    colorPreview.setProperty("width", "" + width);
-    colorPreview.setProperty("height", "" + height);
-    dropDown.appendChildInTree("summary", colorPreview);
-    let ctx = colorPreview.invoke("getContext('2d')");
+    this.textColorPreview.setProperty("width", "" + Z4RibbonTextPanel.TEXT_COLOR_PREVIEW_WIDTH);
+    this.textColorPreview.setProperty("height", "" + Z4RibbonTextPanel.TEXT_COLOR_PREVIEW_HEIGHT);
+    dropDown.appendChildInTree("summary", this.textColorPreview);
     let panel = new JSPanel();
     panel.cssAddClass("z4ribbontextpanel-text-color");
     panel.setLayout(new GridBagLayout());
@@ -8861,7 +8865,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textColor.setRippleVisible(false);
     this.textColor.setValue(this.getBlackBiGradientColor());
     this.textColor.addChangeListener(event => {
-      this.putImageData(ctx, width, height);
+      this.putImageData();
       this.onTextInfoChange(this.textColor.getValueIsAdjusting());
     });
     panel.add(this.textColor, new GBC(0, 0).h(4).i(0, 0, 0, 5));
@@ -8892,23 +8896,23 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     panel.add(this.textColorOrientationVERTICAL, new GBC(2, 2).a(GBC.WEST));
     group.add(this.textColorOrientationVERTICAL);
     this.add(dropDown, new GBC(x, 2).a(GBC.NORTHEAST).i(1, 0, 0, 5));
-    this.putImageData(ctx, width, height);
+    this.putImageData();
   }
 
-   putImageData(ctx, width, height) {
-    let imageData = ctx.createImageData(width, height);
+   putImageData() {
+    let imageData = this.ctxTextColorPreview.createImageData(Z4RibbonTextPanel.TEXT_COLOR_PREVIEW_WIDTH, Z4RibbonTextPanel.TEXT_COLOR_PREVIEW_HEIGHT);
     let data = imageData.data;
-    for (let x = 0; x < width; x++) {
-      let color = this.textColor.getValue().getColorAt(x / width, false);
-      for (let y = 0; y < height; y++) {
-        let idx = (y * width + x) * 4;
+    for (let x = 0; x < Z4RibbonTextPanel.TEXT_COLOR_PREVIEW_WIDTH; x++) {
+      let color = this.textColor.getValue().getColorAt(x / Z4RibbonTextPanel.TEXT_COLOR_PREVIEW_WIDTH, false);
+      for (let y = 0; y < Z4RibbonTextPanel.TEXT_COLOR_PREVIEW_HEIGHT; y++) {
+        let idx = (y * Z4RibbonTextPanel.TEXT_COLOR_PREVIEW_WIDTH + x) * 4;
         data[idx] = color.red;
         data[idx + 1] = color.green;
         data[idx + 2] = color.blue;
         data[idx + 3] = color.alpha;
       }
     }
-    ctx.putImageData(imageData, 0, 0);
+    this.ctxTextColorPreview.putImageData(imageData, 0, 0);
   }
 
    addDropDown(dropDownContentSelector, title, xSpin, ySpin, x, y, top, anchor, fill) {
@@ -8999,6 +9003,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.textText.setText("");
     this.textEmpty.setSelected(false);
     this.textColor.setValue(this.getBlackBiGradientColor());
+    this.putImageData();
     this.textColorFillingUNIFORM.setSelected(true);
     this.textColorOrientationHORIZONTAL.setSelected(true);
     this.textBorder.setValue(0);
@@ -9585,6 +9590,8 @@ class Z4BiGradientColorPanel extends Z4AbstractValuePanel {
 
    setValue(value) {
     this.value = Z4BiGradientColor.fromJSON(value.toJSON());
+    this.biSelectedIndex = 0;
+    this.selectedIndex = 0;
     this.colorPanel.setValue(this.value.getColorAtIndex(this.biSelectedIndex).getColorAtIndex(this.selectedIndex));
     this.drawPreview(false);
   }
@@ -10258,6 +10265,7 @@ class Z4GradientColorPanel extends Z4AbstractValuePanel {
     if (this.rippleLabel.getStyle().display === "none") {
       this.value.setRipple(0);
     }
+    this.selectedIndex = 0;
     this.colorPanel.setValue(this.value.getColorAtIndex(this.selectedIndex));
     this.drawPreview(false);
   }

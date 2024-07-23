@@ -301,6 +301,7 @@ class Z4GradientColorPanel extends Z4AbstractValuePanel {
     if (this.rippleLabel.getStyle().display === "none") {
       this.value.setRipple(0);
     }
+    this.selectedIndex = 0;
     this.colorPanel.setValue(this.value.getColorAtIndex(this.selectedIndex));
     this.drawPreview(false);
   }
