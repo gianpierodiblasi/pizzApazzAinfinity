@@ -91,7 +91,7 @@ class Z4MergeGeometricShapePanel extends JSPanel {
   }
 
    drawShape(ctx, shape, zoom) {
-    let path2D = shape.getPolyline().getPath2D();
+    let path2D = shape.getPath2D();
     ctx.save();
     ctx.lineWidth = 3 / zoom;
     ctx.scale(zoom, zoom);

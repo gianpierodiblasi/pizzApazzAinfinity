@@ -5,6 +5,7 @@ import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Vector;
 import simulation.js.$Object;
+import simulation.js.$Path2D;
 
 /**
  * The line
@@ -36,8 +37,11 @@ public class Z4Line extends Z4GeometricShape {
   }
 
   @Override
-  public Z4Polyline getPolyline() {
-    return new Z4Polyline(new Array<>(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2)));
+  public $Path2D getPath2D() {
+    $Path2D path = new $Path2D();
+    path.moveTo(this.x1, this.y1);
+    path.lineTo(this.x2, this.y2);
+    return path;
   }
 
   @Override

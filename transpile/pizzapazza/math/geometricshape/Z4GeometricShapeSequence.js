@@ -7,10 +7,6 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
 
    shapes = null;
 
-   polylines = null;
-
-   polyline = null;
-
   /**
    * Creates the object
    *
@@ -19,40 +15,41 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
   constructor(shapes) {
     super(Z4GeometricShapeType.SEQUENCE);
     this.shapes = shapes.map(shape => shape);
-    this.polylines = this.shapes.map(shape => shape.getPolyline());
-    this.polyline = this.shapes.map(shape => shape.getPolyline()).reduce((accumulator, current, index, array) => accumulator.concat(new Z4Polyline(new Array(null))).concat(current));
   }
 
-   getPolyline() {
-    return this.polyline;
+   getPath2D() {
+    let path = new Path2D();
+    this.shapes.forEach(shape => path.addPath(shape.getPath2D()));
+    return path;
   }
 
    distance(x, y) {
-    return this.polylines.map(poly => poly.distance(x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
+    return this.shapes.map(shape => shape.distance(x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
   }
 
    getLength() {
-    return this.polylines.map(poly => poly.getLength()).reduce((accumulator, current, index, array) => accumulator + current);
+    return this.shapes.map(shape => shape.getLength()).reduce((accumulator, current, index, array) => accumulator + current);
   }
 
    getPointAt(position) {
-    return this.getAt(position, (index, pos) => this.polylines[index].getPointAt(pos));
+    return this.getAt(position, (index, pos) => this.shapes[index].getPointAt(pos));
   }
 
    getTangentAt(position) {
-    return this.getAt(position, (index, pos) => this.polylines[index].getTangentAt(pos));
+    return this.getAt(position, (index, pos) => this.shapes[index].getTangentAt(pos));
   }
 
    getAt(position, apply) {
-    position *= this.getLength();
-    let index = 0;
-    let len = this.polylines[index].getLength();
-    while (len < position) {
-      position -= len;
-      index++;
-      len = this.polylines[index].getLength();
+    position *= parseInt(this.getLength());
+    for (let index = 0; index < this.shapes.length; index++) {
+      let len = this.shapes[index].getLength();
+      if (position < len) {
+        return apply(index, position / len);
+      } else {
+        position -= len;
+      }
     }
-    return apply(index, position / len);
+    return apply(this.shapes.length - 1, 1.0);
   }
 
    getControlPoints() {
@@ -61,7 +58,7 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
 
    getControlPointConnections() {
     let controlPointConnections = new Array();
-    this.shapes.map(shape => shape.getControlPointConnections()).forEach(cpc => cpc.map(value => value + controlPointConnections.length).forEach(value => controlPointConnections.push(value)));
+    this.shapes.map(shape => shape.getControlPointConnections()).forEach(cpc => cpc.map(value => value + (controlPointConnections.length ? controlPointConnections.length / 2 + 1 : 0)).forEach(value => controlPointConnections.push(value)));
     return controlPointConnections;
   }
 

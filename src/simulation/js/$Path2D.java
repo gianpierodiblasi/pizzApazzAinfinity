@@ -22,6 +22,9 @@ public class $Path2D {
   public void bezierCurveTo(double cp1x, double cp1y, double cp2x, double cp2y, double x, double y) {
   }
 
+  public void addPath($Path2D path) {
+  }
+  
   public void closePath() {
   }
 }

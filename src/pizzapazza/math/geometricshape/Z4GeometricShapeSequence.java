@@ -7,7 +7,9 @@ import simulation.js.$Apply_1_V;
 import simulation.js.$Apply_2_V;
 import simulation.js.$Array;
 import static simulation.js.$Globals.$exists;
+import static simulation.js.$Globals.parseInt;
 import simulation.js.$Object;
+import simulation.js.$Path2D;
 
 /**
  * A sequence of geometric shapes
@@ -17,8 +19,6 @@ import simulation.js.$Object;
 public class Z4GeometricShapeSequence extends Z4GeometricShape {
 
   private final Array<Z4GeometricShape> shapes;
-  private final Array<Z4Polyline> polylines;
-  private final Z4Polyline polyline;
 
   /**
    * Creates the object
@@ -29,49 +29,47 @@ public class Z4GeometricShapeSequence extends Z4GeometricShape {
     super(Z4GeometricShapeType.SEQUENCE);
 
     this.shapes = shapes.map(shape -> shape);
-    this.polylines = this.shapes.map(shape -> shape.getPolyline());
-    this.polyline = this.shapes.map(shape -> shape.getPolyline()).reduce((accumulator, current, index, array) -> accumulator.concat(new Z4Polyline(new Array<>((Z4Point) null))).concat(current));
   }
 
   @Override
-  public Z4Polyline getPolyline() {
-    return this.polyline;
+  public $Path2D getPath2D() {
+    $Path2D path = new $Path2D();
+    this.shapes.forEach(shape -> path.addPath(shape.getPath2D()));
+    return path;
   }
 
   @Override
   public double distance(double x, double y) {
-    return this.polylines.
-            map(poly -> poly.distance(x, y)).
-            reduce((accumulator, current, index, array) -> Math.min(accumulator, current));
+    return this.shapes.map(shape -> shape.distance(x, y)).reduce((accumulator, current, index, array) -> Math.min(accumulator, current));
   }
 
   @Override
   public double getLength() {
-    return this.polylines.map(poly -> poly.getLength()).reduce((accumulator, current, index, array) -> accumulator + current);
+    return this.shapes.map(shape -> shape.getLength()).reduce((accumulator, current, index, array) -> accumulator + current);
   }
 
   @Override
   public Z4Point getPointAt(double position) {
-    return this.getAt(position, (index, pos) -> this.polylines.$get(index).getPointAt(pos));
+    return this.getAt(position, (index, pos) -> this.shapes.$get(index).getPointAt(pos));
   }
 
   @Override
   public Z4Vector getTangentAt(double position) {
-    return this.getAt(position, (index, pos) -> this.polylines.$get(index).getTangentAt(pos));
+    return this.getAt(position, (index, pos) -> this.shapes.$get(index).getTangentAt(pos));
   }
 
   private <T> T getAt(double position, $Apply_2_V<Integer, Double, T> apply) {
-    position *= this.getLength();
-
-    int index = 0;
-    double len = this.polylines.$get(index).getLength();
-    while (len < position) {
-      position -= len;
-      index++;
-      len = this.polylines.$get(index).getLength();
+    position *= parseInt(this.getLength());
+    for (int index = 0; index < this.shapes.length; index++) {
+      double len = this.shapes.$get(index).getLength();
+      if (position < len) {
+        return apply.$apply(index, position / len);
+      } else {
+        position -= len;
+      }
     }
 
-    return apply.$apply(index, position / len);
+    return apply.$apply(this.shapes.length - 1, 1.0);
   }
 
   @Override
@@ -82,7 +80,7 @@ public class Z4GeometricShapeSequence extends Z4GeometricShape {
   @Override
   public Array<Integer> getControlPointConnections() {
     Array<Integer> controlPointConnections = new Array<>();
-    this.shapes.map(shape -> shape.getControlPointConnections()).forEach(cpc -> cpc.map(value -> value + controlPointConnections.length).forEach(value -> controlPointConnections.push(value)));
+    this.shapes.map(shape -> shape.getControlPointConnections()).forEach(cpc -> cpc.map(value -> value + ($exists(controlPointConnections.length) ? controlPointConnections.length / 2 + 1 : 0)).forEach(value -> controlPointConnections.push(value)));
     return controlPointConnections;
   }
 

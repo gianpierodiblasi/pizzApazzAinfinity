@@ -29,8 +29,11 @@ class Z4Line extends Z4GeometricShape {
     this.y2 = y2;
   }
 
-   getPolyline() {
-    return new Z4Polyline(new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2)));
+   getPath2D() {
+    let path = new Path2D();
+    path.moveTo(this.x1, this.y1);
+    path.lineTo(this.x2, this.y2);
+    return path;
   }
 
    distance(x, y) {

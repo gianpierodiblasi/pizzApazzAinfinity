@@ -7,6 +7,7 @@ import pizzapazza.ui.panel.math.geometricshape.Z4GeometricShapePreview;
 import pizzapazza.util.Z4JSONable;
 import static simulation.js.$Globals.$exists;
 import simulation.js.$Object;
+import simulation.js.$Path2D;
 
 /**
  * The common interface of all geometric shapes
@@ -29,11 +30,11 @@ public abstract class Z4GeometricShape implements Z4JSONable {
   }
 
   /**
-   * Returns the nearest polyline
+   * Returns the path describing this geometric shape
    *
-   * @return The nearest polyline
+   * @return The path describing this geometric shape
    */
-  public abstract Z4Polyline getPolyline();
+  public abstract $Path2D getPath2D();
 
   /**
    * Returns the distance from a given point of this geometric shape

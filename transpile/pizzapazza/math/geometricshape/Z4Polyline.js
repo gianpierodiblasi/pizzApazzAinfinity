@@ -9,8 +9,6 @@ class Z4Polyline extends Z4GeometricShape {
 
    cumLen = new Array();
 
-   moveTo = false;
-
   /**
    * Creates the object
    *
@@ -23,7 +21,7 @@ class Z4Polyline extends Z4GeometricShape {
       if (index === 0) {
         this.cumLen.push(0.0);
       } else {
-        this.cumLen.push(this.cumLen[index - 1] + Z4Math.distance(point.x, point.y, array[index - 1].x, array[index - 1].y));
+        this.cumLen.push(this.cumLen[index - 1] + Z4Math.distance(point.x, point.y, this.points[index - 1].x, this.points[index - 1].y));
       }
     });
   }
@@ -38,29 +36,16 @@ class Z4Polyline extends Z4GeometricShape {
     return new Z4Polyline((this.points).concat(polyline.points));
   }
 
-  /**
-   * Returns the path describing this polyline
-   *
-   * @return The path describing this polyline
-   */
    getPath2D() {
-    this.moveTo = true;
     let path2D = new Path2D();
     this.points.forEach((point, index, array) => {
-      if (this.moveTo) {
-        path2D.moveTo(point.x, point.y);
-        this.moveTo = false;
-      } else if (point) {
+      if (index) {
         path2D.lineTo(point.x, point.y);
       } else {
-        this.moveTo = true;
+        path2D.moveTo(point.x, point.y);
       }
     });
     return path2D;
-  }
-
-   getPolyline() {
-    return this;
   }
 
    distance(x, y) {

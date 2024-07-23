@@ -117,7 +117,7 @@ public class Z4MergeGeometricShapePanel extends JSPanel {
   }
 
   void drawShape($CanvasRenderingContext2D ctx, Z4GeometricShape shape, double zoom) {
-    $Path2D path2D = shape.getPolyline().getPath2D();
+    $Path2D path2D = shape.getPath2D();
 
     ctx.save();
 

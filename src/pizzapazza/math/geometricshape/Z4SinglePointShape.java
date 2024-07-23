@@ -5,6 +5,7 @@ import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Vector;
 import simulation.js.$Object;
+import simulation.js.$Path2D;
 
 /**
  * A geometric shape described by a single point
@@ -30,8 +31,10 @@ public class Z4SinglePointShape extends Z4GeometricShape {
   }
 
   @Override
-  public Z4Polyline getPolyline() {
-    return new Z4Polyline(new Array<>(new Z4Point(x, y), new Z4Point(x, y)));
+  public $Path2D getPath2D() {
+    $Path2D path = new $Path2D();
+    path.moveTo(this.x, this.y);
+    return path;
   }
 
   @Override

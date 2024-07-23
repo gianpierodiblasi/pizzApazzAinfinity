@@ -21,8 +21,10 @@ class Z4SinglePointShape extends Z4GeometricShape {
     this.y = y;
   }
 
-   getPolyline() {
-    return new Z4Polyline(new Array(new Z4Point(x, y), new Z4Point(x, y)));
+   getPath2D() {
+    let path = new Path2D();
+    path.moveTo(this.x, this.y);
+    return path;
   }
 
    distance(x, y) {

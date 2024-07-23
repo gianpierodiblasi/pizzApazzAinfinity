@@ -20,11 +20,11 @@ class Z4GeometricShape extends Z4JSONable {
   }
 
   /**
-   * Returns the nearest polyline
+   * Returns the path describing this geometric shape
    *
-   * @return The nearest polyline
+   * @return The path describing this geometric shape
    */
-   getPolyline() {
+   getPath2D() {
   }
 
   /**

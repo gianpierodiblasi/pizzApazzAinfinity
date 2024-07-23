@@ -4621,7 +4621,7 @@ class Z4CanvasTextManager {
       for (let index = 0; index < controlPointConnections.length; index += 2) {
         this.drawLine(ctx, controlPoints[controlPointConnections[index]], controlPoints[controlPointConnections[index + 1]]);
       }
-      this.drawPolyline(ctx, this.textInfo.shape.getPolyline().getPath2D());
+      this.drawPolyline(ctx, this.textInfo.shape.getPath2D());
       ctx.restore();
     }
   }
@@ -7271,7 +7271,7 @@ class Z4GeometricShapePreview extends JSDropDown {
    */
    drawShape() {
     if (this.shape) {
-      let path2D = this.shape.getPolyline().getPath2D();
+      let path2D = this.shape.getPath2D();
       this.ctx.save();
       this.ctx.lineWidth = 3 / this.zoom;
       this.ctx.scale(this.zoom, this.zoom);
@@ -7380,7 +7380,7 @@ class Z4MergeGeometricShapePanel extends JSPanel {
   }
 
    drawShape(ctx, shape, zoom) {
-    let path2D = shape.getPolyline().getPath2D();
+    let path2D = shape.getPath2D();
     ctx.save();
     ctx.lineWidth = 3 / zoom;
     ctx.scale(zoom, zoom);
@@ -16496,11 +16496,11 @@ class Z4GeometricShape extends Z4JSONable {
   }
 
   /**
-   * Returns the nearest polyline
+   * Returns the path describing this geometric shape
    *
-   * @return The nearest polyline
+   * @return The path describing this geometric shape
    */
-   getPolyline() {
+   getPath2D() {
   }
 
   /**
@@ -16762,8 +16762,8 @@ class Z4AbstractBezierCurve extends Z4GeometricShape {
     this.y2 = y2;
   }
 
-   getPolyline() {
-    return new Z4Polyline(this.bezier.getLUT(parseInt(this.bezier.length() / 2)));
+   getPath2D() {
+    return new Z4Polyline(this.bezier.getLUT(parseInt(this.bezier.length() / 2))).getPath2D();
   }
 
    distance(x, y) {
@@ -16994,8 +16994,8 @@ class Z4GeometricCurve extends Z4GeometricShape {
     super(type);
   }
 
-   getPolyline() {
-    return this.polyline;
+   getPath2D() {
+    return this.polyline.getPath2D();
   }
 
    distance(x, y) {
@@ -17711,10 +17711,6 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
 
    shapes = null;
 
-   polylines = null;
-
-   polyline = null;
-
   /**
    * Creates the object
    *
@@ -17723,40 +17719,41 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
   constructor(shapes) {
     super(Z4GeometricShapeType.SEQUENCE);
     this.shapes = shapes.map(shape => shape);
-    this.polylines = this.shapes.map(shape => shape.getPolyline());
-    this.polyline = this.shapes.map(shape => shape.getPolyline()).reduce((accumulator, current, index, array) => accumulator.concat(new Z4Polyline(new Array(null))).concat(current));
   }
 
-   getPolyline() {
-    return this.polyline;
+   getPath2D() {
+    let path = new Path2D();
+    this.shapes.forEach(shape => path.addPath(shape.getPath2D()));
+    return path;
   }
 
    distance(x, y) {
-    return this.polylines.map(poly => poly.distance(x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
+    return this.shapes.map(shape => shape.distance(x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
   }
 
    getLength() {
-    return this.polylines.map(poly => poly.getLength()).reduce((accumulator, current, index, array) => accumulator + current);
+    return this.shapes.map(shape => shape.getLength()).reduce((accumulator, current, index, array) => accumulator + current);
   }
 
    getPointAt(position) {
-    return this.getAt(position, (index, pos) => this.polylines[index].getPointAt(pos));
+    return this.getAt(position, (index, pos) => this.shapes[index].getPointAt(pos));
   }
 
    getTangentAt(position) {
-    return this.getAt(position, (index, pos) => this.polylines[index].getTangentAt(pos));
+    return this.getAt(position, (index, pos) => this.shapes[index].getTangentAt(pos));
   }
 
    getAt(position, apply) {
-    position *= this.getLength();
-    let index = 0;
-    let len = this.polylines[index].getLength();
-    while (len < position) {
-      position -= len;
-      index++;
-      len = this.polylines[index].getLength();
+    position *= parseInt(this.getLength());
+    for (let index = 0; index < this.shapes.length; index++) {
+      let len = this.shapes[index].getLength();
+      if (position < len) {
+        return apply(index, position / len);
+      } else {
+        position -= len;
+      }
     }
-    return apply(index, position / len);
+    return apply(this.shapes.length - 1, 1.0);
   }
 
    getControlPoints() {
@@ -17765,7 +17762,7 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
 
    getControlPointConnections() {
     let controlPointConnections = new Array();
-    this.shapes.map(shape => shape.getControlPointConnections()).forEach(cpc => cpc.map(value => value + controlPointConnections.length).forEach(value => controlPointConnections.push(value)));
+    this.shapes.map(shape => shape.getControlPointConnections()).forEach(cpc => cpc.map(value => value + (controlPointConnections.length ? controlPointConnections.length / 2 + 1 : 0)).forEach(value => controlPointConnections.push(value)));
     return controlPointConnections;
   }
 
@@ -17863,8 +17860,11 @@ class Z4Line extends Z4GeometricShape {
     this.y2 = y2;
   }
 
-   getPolyline() {
-    return new Z4Polyline(new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2)));
+   getPath2D() {
+    let path = new Path2D();
+    path.moveTo(this.x1, this.y1);
+    path.lineTo(this.x2, this.y2);
+    return path;
   }
 
    distance(x, y) {
@@ -17957,8 +17957,6 @@ class Z4Polyline extends Z4GeometricShape {
 
    cumLen = new Array();
 
-   moveTo = false;
-
   /**
    * Creates the object
    *
@@ -17971,7 +17969,7 @@ class Z4Polyline extends Z4GeometricShape {
       if (index === 0) {
         this.cumLen.push(0.0);
       } else {
-        this.cumLen.push(this.cumLen[index - 1] + Z4Math.distance(point.x, point.y, array[index - 1].x, array[index - 1].y));
+        this.cumLen.push(this.cumLen[index - 1] + Z4Math.distance(point.x, point.y, this.points[index - 1].x, this.points[index - 1].y));
       }
     });
   }
@@ -17986,29 +17984,16 @@ class Z4Polyline extends Z4GeometricShape {
     return new Z4Polyline((this.points).concat(polyline.points));
   }
 
-  /**
-   * Returns the path describing this polyline
-   *
-   * @return The path describing this polyline
-   */
    getPath2D() {
-    this.moveTo = true;
     let path2D = new Path2D();
     this.points.forEach((point, index, array) => {
-      if (this.moveTo) {
-        path2D.moveTo(point.x, point.y);
-        this.moveTo = false;
-      } else if (point) {
+      if (index) {
         path2D.lineTo(point.x, point.y);
       } else {
-        this.moveTo = true;
+        path2D.moveTo(point.x, point.y);
       }
     });
     return path2D;
-  }
-
-   getPolyline() {
-    return this;
   }
 
    distance(x, y) {
@@ -18166,8 +18151,10 @@ class Z4SinglePointShape extends Z4GeometricShape {
     this.y = y;
   }
 
-   getPolyline() {
-    return new Z4Polyline(new Array(new Z4Point(x, y), new Z4Point(x, y)));
+   getPath2D() {
+    let path = new Path2D();
+    path.moveTo(this.x, this.y);
+    return path;
   }
 
    distance(x, y) {

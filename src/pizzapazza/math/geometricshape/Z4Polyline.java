@@ -21,7 +21,6 @@ public class Z4Polyline extends Z4GeometricShape {
 
   private final Array<Z4Point> points;
   private final Array<Double> cumLen = new $Array<>();
-  private boolean moveTo;
 
   /**
    * Creates the object
@@ -36,7 +35,7 @@ public class Z4Polyline extends Z4GeometricShape {
       if (index == 0) {
         this.cumLen.push(0.0);
       } else {
-        this.cumLen.push(this.cumLen.$get(index - 1) + Z4Math.distance(point.x, point.y, array.$get(index - 1).x, array.$get(index - 1).y));
+        this.cumLen.push(this.cumLen.$get(index - 1) + Z4Math.distance(point.x, point.y, this.points.$get(index - 1).x, this.points.$get(index - 1).y));
       }
     });
   }
@@ -51,32 +50,19 @@ public class Z4Polyline extends Z4GeometricShape {
     return new Z4Polyline((($Array<Z4Point>) this.points).concat(polyline.points));
   }
 
-  /**
-   * Returns the path describing this polyline
-   *
-   * @return The path describing this polyline
-   */
+  @Override
   public $Path2D getPath2D() {
-    this.moveTo = true;
     $Path2D path2D = new $Path2D();
 
     this.points.forEach((point, index, array) -> {
-      if (this.moveTo) {
-        path2D.moveTo(point.x, point.y);
-        this.moveTo = false;
-      } else if ($exists(point)) {
+      if ($exists(index)) {
         path2D.lineTo(point.x, point.y);
       } else {
-        this.moveTo = true;
+        path2D.moveTo(point.x, point.y);
       }
     });
 
     return path2D;
-  }
-
-  @Override
-  public Z4Polyline getPolyline() {
-    return this;
   }
 
   @Override

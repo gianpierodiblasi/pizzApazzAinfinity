@@ -188,7 +188,7 @@ class Z4CanvasTextManager {
       for (let index = 0; index < controlPointConnections.length; index += 2) {
         this.drawLine(ctx, controlPoints[controlPointConnections[index]], controlPoints[controlPointConnections[index + 1]]);
       }
-      this.drawPolyline(ctx, this.textInfo.shape.getPolyline().getPath2D());
+      this.drawPolyline(ctx, this.textInfo.shape.getPath2D());
       ctx.restore();
     }
   }

@@ -6,6 +6,7 @@ import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Vector;
 import simulation.bezier.$Bezier;
 import static simulation.js.$Globals.parseInt;
+import simulation.js.$Path2D;
 
 /**
  * Common abstract object for quadric and cubic bezier curves
@@ -57,8 +58,8 @@ public abstract class Z4AbstractBezierCurve extends Z4GeometricShape {
   }
 
   @Override
-  public Z4Polyline getPolyline() {
-    return new Z4Polyline(this.bezier.getLUT(parseInt(this.bezier.length() / 2)));
+  public $Path2D getPath2D() {
+    return new Z4Polyline(this.bezier.getLUT(parseInt(this.bezier.length() / 2))).getPath2D();
   }
 
   @Override
@@ -88,7 +89,7 @@ public abstract class Z4AbstractBezierCurve extends Z4GeometricShape {
   public Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfigurations() {
     return new Array<>();
   }
-  
+
   @Override
   public Array<Z4GeometricShapeButtonConfiguration> getButtonConfigurations() {
     return new Array<>();
