@@ -162,7 +162,7 @@ class Z4Canvas extends JSComponent {
     this.ribbonTextPanel.setCanvas(this);
     this.ribbonHistoryPanel.setCanvas(this);
     this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);
-    this.ioManager.setRibbonPanels(ribbonLayerPanel, ribbonDrawingToolPanel, ribbonHistoryPanel);
+    this.ioManager.setRibbonPanels(ribbonProjectPanel, ribbonLayerPanel, ribbonDrawingToolPanel, ribbonTextPanel, ribbonHistoryPanel);
     this.textManager.setRibbonHistoryPanel(ribbonHistoryPanel);
     this.historyManager.setRibbonLayerPanel(ribbonLayerPanel);
   }
@@ -175,6 +175,7 @@ class Z4Canvas extends JSComponent {
    setShapesAndPathsPanel(shapesAndPathsPanel) {
     this.shapesAndPathsPanel = shapesAndPathsPanel;
     this.shapesAndPathsPanel.setCanvas(this);
+    this.ioManager.setShapesAndPathsPanel(shapesAndPathsPanel);
   }
 
   /**
@@ -206,6 +207,8 @@ class Z4Canvas extends JSComponent {
     this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), null, true);
     this.drawingTools.length = 0;
     this.ribbonDrawingToolPanel.reset();
+    this.ribbonTextPanel.reset();
+    this.shapesAndPathsPanel.reset();
     Color.resetHistory();
     Z4GradientColor.resetHistory();
     Z4BiGradientColor.resetHistory();

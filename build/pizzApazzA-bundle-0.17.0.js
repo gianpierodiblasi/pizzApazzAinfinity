@@ -2286,7 +2286,7 @@ class Z4Canvas extends JSComponent {
     this.ribbonTextPanel.setCanvas(this);
     this.ribbonHistoryPanel.setCanvas(this);
     this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);
-    this.ioManager.setRibbonPanels(ribbonLayerPanel, ribbonDrawingToolPanel, ribbonHistoryPanel);
+    this.ioManager.setRibbonPanels(ribbonProjectPanel, ribbonLayerPanel, ribbonDrawingToolPanel, ribbonTextPanel, ribbonHistoryPanel);
     this.textManager.setRibbonHistoryPanel(ribbonHistoryPanel);
     this.historyManager.setRibbonLayerPanel(ribbonLayerPanel);
   }
@@ -2299,6 +2299,7 @@ class Z4Canvas extends JSComponent {
    setShapesAndPathsPanel(shapesAndPathsPanel) {
     this.shapesAndPathsPanel = shapesAndPathsPanel;
     this.shapesAndPathsPanel.setCanvas(this);
+    this.ioManager.setShapesAndPathsPanel(shapesAndPathsPanel);
   }
 
   /**
@@ -2330,6 +2331,8 @@ class Z4Canvas extends JSComponent {
     this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), null, true);
     this.drawingTools.length = 0;
     this.ribbonDrawingToolPanel.reset();
+    this.ribbonTextPanel.reset();
+    this.shapesAndPathsPanel.reset();
     Color.resetHistory();
     Z4GradientColor.resetHistory();
     Z4BiGradientColor.resetHistory();
@@ -3459,11 +3462,17 @@ class Z4CanvasIOManager {
 
    size = null;
 
+   ribbonProjectPanel = null;
+
    ribbonLayerPanel = null;
 
    ribbonDrawingToolPanel = null;
 
+   ribbonTextPanel = null;
+
    ribbonHistoryPanel = null;
+
+   shapesAndPathsPanel = null;
 
    statusPanel = null;
 
@@ -3490,16 +3499,29 @@ class Z4CanvasIOManager {
   }
 
   /**
-   * Sets the ribbon history panel
+   * Sets the ribbon panels
    *
+   * @param ribbonProjectPanel The ribbon project panel
    * @param ribbonLayerPanel The ribbon layer panel
    * @param ribbonDrawingToolPanel The ribbon drawing tool panel
+   * @param ribbonTextPanel The ribbon text panel
    * @param ribbonHistoryPanel The ribbon history panel
    */
-   setRibbonPanels(ribbonLayerPanel, ribbonDrawingToolPanel, ribbonHistoryPanel) {
+   setRibbonPanels(ribbonProjectPanel, ribbonLayerPanel, ribbonDrawingToolPanel, ribbonTextPanel, ribbonHistoryPanel) {
+    this.ribbonProjectPanel = ribbonProjectPanel;
     this.ribbonLayerPanel = ribbonLayerPanel;
     this.ribbonDrawingToolPanel = ribbonDrawingToolPanel;
+    this.ribbonTextPanel = ribbonTextPanel;
     this.ribbonHistoryPanel = ribbonHistoryPanel;
+  }
+
+  /**
+   * Sets the shapes and paths panel
+   *
+   * @param shapesAndPathsPanel The shapes and paths panel
+   */
+   setShapesAndPathsPanel(shapesAndPathsPanel) {
+    this.shapesAndPathsPanel = shapesAndPathsPanel;
   }
 
   /**
@@ -3571,6 +3593,8 @@ class Z4CanvasIOManager {
         this.canvas.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.canvas.getLayersCount() - 1), null, true);
         this.drawingTools.length = 0;
         this.ribbonDrawingToolPanel.reset();
+        this.ribbonTextPanel.reset();
+        this.shapesAndPathsPanel.reset();
         Color.resetHistory();
         Z4GradientColor.resetHistory();
         Z4BiGradientColor.resetHistory();
@@ -3621,6 +3645,8 @@ class Z4CanvasIOManager {
           this.ribbonLayerPanel.reset();
           this.drawingTools.length = 0;
           this.ribbonDrawingToolPanel.reset();
+          this.ribbonTextPanel.reset();
+          this.shapesAndPathsPanel.reset();
           Color.resetHistory();
           Z4GradientColor.resetHistory();
           Z4BiGradientColor.resetHistory();
@@ -7303,6 +7329,13 @@ class Z4ShapesAndPathsPanel extends JSPanel {
     document.querySelectorAll(".z4geometricshapepreview .z4geometricshapepreview-selector").forEach(element => element.textContent = Z4GeometricShapePreview.UNSELECTED_GEOMETRIC_SHAPE_CONTENT);
     this.geometricShapesPreview.add(preview, null);
     setTimeout(() => preview.invoke("scrollIntoView()"), 0);
+  }
+
+  /**
+   * Resets the geometric shape preview
+   */
+   reset() {
+    this.geometricShapesPreview.setProperty("innerHTML", "");
   }
 }
 /**

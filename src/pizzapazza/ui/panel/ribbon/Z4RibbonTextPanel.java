@@ -167,7 +167,11 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
     this.reset.setContentAreaFilled(false);
     this.reset.setText(Z4Translations.RESET);
-    this.reset.addActionListener(event -> this.onReset());
+    this.reset.addActionListener(event -> JSOptionPane.showConfirmDialog(Z4Translations.RESET_MESSAGE, Z4Translations.RESET, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response -> {
+      if (response == JSOptionPane.YES_OPTION) {
+        this.onReset();
+      }
+    }));
     this.add(this.reset, new GBC(x, 2).a(GBC.NORTH).f(GBC.HORIZONTAL).i(1, 5, 0, 0));
   }
 
@@ -369,40 +373,36 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
   }
 
   private void onReset() {
-    JSOptionPane.showConfirmDialog(Z4Translations.RESET_MESSAGE, Z4Translations.RESET, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response -> {
-      if (response == JSOptionPane.YES_OPTION) {
-        this.fontSelectionPanel.setValue(new Z4Font("Arial", 24, false, false));
-        this.rotation.setValue(new Z4Rotation(
-                0,
-                new Z4FancifulValue(
-                        new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0),
-                        new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-                        false),
-                Z4RotationBehavior.FIXED, false));
+    this.fontSelectionPanel.setValue(new Z4Font("Arial", 24, false, false));
+    this.rotation.setValue(new Z4Rotation(
+            0,
+            new Z4FancifulValue(
+                    new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0),
+                    new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
+                    false),
+            Z4RotationBehavior.FIXED, false));
 
-        this.textText.setText("");
-        this.textEmpty.setSelected(false);
-        this.textColor.setValue(this.getBlackBiGradientColor());
-        this.textColorFillingUNIFORM.setSelected(true);
-        this.textColorOrientationHORIZONTAL.setSelected(true);
-        this.textBorder.setValue(0);
-        this.textBorderColor.setSelectedColor(new Color(0, 0, 0, 255));
-        this.textShearX.setValue(0);
-        this.textShearY.setValue(0);
+    this.textText.setText("");
+    this.textEmpty.setSelected(false);
+    this.textColor.setValue(this.getBlackBiGradientColor());
+    this.textColorFillingUNIFORM.setSelected(true);
+    this.textColorOrientationHORIZONTAL.setSelected(true);
+    this.textBorder.setValue(0);
+    this.textBorderColor.setSelectedColor(new Color(0, 0, 0, 255));
+    this.textShearX.setValue(0);
+    this.textShearY.setValue(0);
 
-        this.shadow.setSelected(false);
-        this.shadowText.setText("");
-        this.shadowEmpty.setSelected(false);
-        this.shadowReflex.setSelected(false);
-        this.shadowColor.setSelectedColor(new Color(0, 0, 0, 128));
-        this.shadowOffsetX.setValue(0);
-        this.shadowOffsetY.setValue(0);
-        this.shadowShearX.setValue(0);
-        this.shadowShearY.setValue(0);
+    this.shadow.setSelected(false);
+    this.shadowText.setText("");
+    this.shadowEmpty.setSelected(false);
+    this.shadowReflex.setSelected(false);
+    this.shadowColor.setSelectedColor(new Color(0, 0, 0, 128));
+    this.shadowOffsetX.setValue(0);
+    this.shadowOffsetY.setValue(0);
+    this.shadowShearX.setValue(0);
+    this.shadowShearY.setValue(0);
 
-        this.onTextInfoChange(false);
-      }
-    });
+    this.onTextInfoChange(false);
   }
 
   private Z4GradientColor getBlackBiGradientColor() {
@@ -437,6 +437,14 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
     this.selectedControlPoint = selectedControlPoint;
     this.canvas.setTextInfo(this.textInfo, selectedControlPoint);
+  }
+
+  /**
+   * Resets the ribbon text panel
+   */
+  public void reset() {
+    this.setGeometricShape(null, this.selectedControlPoint);
+    this.onReset();
   }
 
   /**

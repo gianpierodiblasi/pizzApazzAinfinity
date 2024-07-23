@@ -74,4 +74,11 @@ class Z4ShapesAndPathsPanel extends JSPanel {
     this.geometricShapesPreview.add(preview, null);
     setTimeout(() => preview.invoke("scrollIntoView()"), 0);
   }
+
+  /**
+   * Resets the geometric shape preview
+   */
+   reset() {
+    this.geometricShapesPreview.setProperty("innerHTML", "");
+  }
 }
