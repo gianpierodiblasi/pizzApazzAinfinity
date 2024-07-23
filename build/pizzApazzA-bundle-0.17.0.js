@@ -17761,8 +17761,17 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
   }
 
    getControlPointConnections() {
+    let cumCount = new Array();
     let controlPointConnections = new Array();
-    this.shapes.map(shape => shape.getControlPointConnections()).forEach(cpc => cpc.map(value => value + (controlPointConnections.length ? controlPointConnections.length / 2 + 1 : 0)).forEach(value => controlPointConnections.push(value)));
+    this.shapes.forEach((shape, index, array) => {
+      if (index === 0) {
+        cumCount.push(shape.getControlPoints().length);
+        shape.getControlPointConnections().forEach(value => controlPointConnections.push(value));
+      } else {
+        cumCount.push(cumCount[index - 1] + shape.getControlPoints().length);
+        shape.getControlPointConnections().forEach(value => controlPointConnections.push(value + cumCount[index - 1]));
+      }
+    });
     return controlPointConnections;
   }
 
