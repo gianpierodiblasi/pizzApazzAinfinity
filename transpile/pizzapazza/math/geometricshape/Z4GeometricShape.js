@@ -124,7 +124,7 @@ class Z4GeometricShape extends Z4JSONable {
    * @return The geometric shape
    */
    fromResize(width, height) {
-    switch("" + type) {
+    switch("" + this.type) {
       case "POINT":
       case "LINE":
       case "POLYLINE":

@@ -123,7 +123,7 @@ public abstract class Z4GeometricShape implements Z4JSONable {
    * @return The geometric shape
    */
   public Z4GeometricShape fromResize(int width, int height) {
-    switch ("" + type) {
+    switch ("" + this.type) {
       case "POINT":
       case "LINE":
       case "POLYLINE":

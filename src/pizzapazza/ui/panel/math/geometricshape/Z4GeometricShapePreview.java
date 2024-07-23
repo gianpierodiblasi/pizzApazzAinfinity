@@ -110,10 +110,12 @@ public class Z4GeometricShapePreview extends JSDropDown {
     JSButton button = new JSButton();
     button.cssAddClass("z4geometricshapepreview-setgeometricshape");
     button.addActionListener(event -> {
-//      this.setGeometriShape(this.canvas, this.shape);
+      Z4GeometricShape newShape = this.shape.fromResize(this.canvas.getSize().width, this.canvas.getSize().height);
+      this.canvas.replaceGeometricShape(this.shape, newShape, this.selectedControlPoint);
+      this.setGeometriShape(this.canvas, newShape);
     });
     this.summary.add(button, new GBC(1, 1));
-    
+
     this.appendChildInTree("summary", this.summary);
 
     this.editor.cssAddClass("z4geometricshapepreview-editor");

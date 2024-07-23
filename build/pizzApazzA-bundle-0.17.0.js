@@ -7037,7 +7037,9 @@ class Z4GeometricShapePreview extends JSDropDown {
     let button = new JSButton();
     button.cssAddClass("z4geometricshapepreview-setgeometricshape");
     button.addActionListener(event => {
-      // this.setGeometriShape(this.canvas, this.shape);
+      let newShape = this.shape.fromResize(this.canvas.getSize().width, this.canvas.getSize().height);
+      this.canvas.replaceGeometricShape(this.shape, newShape, this.selectedControlPoint);
+      this.setGeometriShape(this.canvas, newShape);
     });
     this.summary.add(button, new GBC(1, 1));
     this.appendChildInTree("summary", this.summary);
@@ -16411,7 +16413,7 @@ class Z4GeometricShape extends Z4JSONable {
    * @return The geometric shape
    */
    fromResize(width, height) {
-    switch("" + type) {
+    switch("" + this.type) {
       case "POINT":
       case "LINE":
       case "POLYLINE":
