@@ -41,13 +41,13 @@ public class Z4GeometricShapeSequence extends Z4GeometricShape {
   @Override
   public double distance(double x, double y) {
     return this.polylines.
-            map(polyline -> polyline.distance(x, y)).
+            map(poly -> poly.distance(x, y)).
             reduce((accumulator, current, index, array) -> Math.min(accumulator, current));
   }
 
   @Override
   public double getLength() {
-    return this.polylines.map(polyline -> polyline.getLength()).reduce((accumulator, current, index, array) -> accumulator + current);
+    return this.polylines.map(poly -> poly.getLength()).reduce((accumulator, current, index, array) -> accumulator + current);
   }
 
   @Override
