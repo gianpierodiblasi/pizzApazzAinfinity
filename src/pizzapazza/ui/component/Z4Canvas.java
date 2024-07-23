@@ -104,7 +104,7 @@ public class Z4Canvas extends JSComponent {
   private final Array<$Canvas> canvasArray = new Array<>(this.canvas, this.canvasGrid, this.canvasBounds, this.canvasOverlay);
 
   private final Z4CanvasMouseManager mouseManager = new Z4CanvasMouseManager(this, this.ctx);
-  private final Z4CanvasIOManager ioManager = new Z4CanvasIOManager(this, this.paper, this.drawingTools);
+  private final Z4CanvasIOManager ioManager = new Z4CanvasIOManager(this, this.paper, this.drawingTools, this.geometricShapes);
   private final Z4CanvasTextManager textManager = new Z4CanvasTextManager(this);
   private final Z4CanvasHistoryManager historyManager = new Z4CanvasHistoryManager(this, this.paper);
 
@@ -195,7 +195,7 @@ public class Z4Canvas extends JSComponent {
   public void setShapesAndPathsPanel(Z4ShapesAndPathsPanel shapesAndPathsPanel) {
     this.shapesAndPathsPanel = shapesAndPathsPanel;
     this.shapesAndPathsPanel.setCanvas(this);
-    
+
     this.ioManager.setShapesAndPathsPanel(shapesAndPathsPanel);
   }
 
@@ -234,8 +234,9 @@ public class Z4Canvas extends JSComponent {
     this.ribbonDrawingToolPanel.reset();
 
     this.ribbonTextPanel.reset();
+    this.geometricShapes.length = 0;
     this.shapesAndPathsPanel.reset();
-    
+
     Color.resetHistory();
     Z4GradientColor.resetHistory();
     Z4BiGradientColor.resetHistory();

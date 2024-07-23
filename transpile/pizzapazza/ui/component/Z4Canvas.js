@@ -89,7 +89,7 @@ class Z4Canvas extends JSComponent {
 
    mouseManager = new Z4CanvasMouseManager(this, this.ctx);
 
-   ioManager = new Z4CanvasIOManager(this, this.paper, this.drawingTools);
+   ioManager = new Z4CanvasIOManager(this, this.paper, this.drawingTools, this.geometricShapes);
 
    textManager = new Z4CanvasTextManager(this);
 
@@ -208,6 +208,7 @@ class Z4Canvas extends JSComponent {
     this.drawingTools.length = 0;
     this.ribbonDrawingToolPanel.reset();
     this.ribbonTextPanel.reset();
+    this.geometricShapes.length = 0;
     this.shapesAndPathsPanel.reset();
     Color.resetHistory();
     Z4GradientColor.resetHistory();

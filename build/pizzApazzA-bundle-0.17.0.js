@@ -2213,7 +2213,7 @@ class Z4Canvas extends JSComponent {
 
    mouseManager = new Z4CanvasMouseManager(this, this.ctx);
 
-   ioManager = new Z4CanvasIOManager(this, this.paper, this.drawingTools);
+   ioManager = new Z4CanvasIOManager(this, this.paper, this.drawingTools, this.geometricShapes);
 
    textManager = new Z4CanvasTextManager(this);
 
@@ -2332,6 +2332,7 @@ class Z4Canvas extends JSComponent {
     this.drawingTools.length = 0;
     this.ribbonDrawingToolPanel.reset();
     this.ribbonTextPanel.reset();
+    this.geometricShapes.length = 0;
     this.shapesAndPathsPanel.reset();
     Color.resetHistory();
     Z4GradientColor.resetHistory();
@@ -3460,6 +3461,8 @@ class Z4CanvasIOManager {
 
    drawingTools = null;
 
+   geometricShapes = null;
+
    size = null;
 
    ribbonProjectPanel = null;
@@ -3482,11 +3485,13 @@ class Z4CanvasIOManager {
    * @param canvas The canvas
    * @param paper The paper
    * @param drawingTools The drawing tools
+   * @param shapes The geometric shapes
    */
-  constructor(canvas, paper, drawingTools) {
+  constructor(canvas, paper, drawingTools, geometricShapes) {
     this.canvas = canvas;
     this.paper = paper;
     this.drawingTools = drawingTools;
+    this.geometricShapes = geometricShapes;
   }
 
   /**
@@ -3594,6 +3599,7 @@ class Z4CanvasIOManager {
         this.drawingTools.length = 0;
         this.ribbonDrawingToolPanel.reset();
         this.ribbonTextPanel.reset();
+        this.geometricShapes.length = 0;
         this.shapesAndPathsPanel.reset();
         Color.resetHistory();
         Z4GradientColor.resetHistory();

@@ -20,6 +20,7 @@ import javascript.util.fsa.FileSystemFileHandle;
 import javascript.util.fsa.FileSystemWritableFileStreamCreateOptions;
 import pizzapazza.color.Z4BiGradientColor;
 import pizzapazza.color.Z4GradientColor;
+import pizzapazza.math.geometricshape.Z4GeometricShape;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.math.geometricshape.Z4ShapesAndPathsPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonDrawingToolPanel;
@@ -56,6 +57,7 @@ public class Z4CanvasIOManager {
   private final Z4Canvas canvas;
   private final Z4Paper paper;
   private final Array<Z4DrawingTool> drawingTools;
+  private final Array<Z4GeometricShape> geometricShapes;
   private Dimension size;
 
   private Z4RibbonProjectPanel ribbonProjectPanel;
@@ -72,11 +74,13 @@ public class Z4CanvasIOManager {
    * @param canvas The canvas
    * @param paper The paper
    * @param drawingTools The drawing tools
+   * @param shapes The geometric shapes
    */
-  public Z4CanvasIOManager(Z4Canvas canvas, Z4Paper paper, Array<Z4DrawingTool> drawingTools) {
+  public Z4CanvasIOManager(Z4Canvas canvas, Z4Paper paper, Array<Z4DrawingTool> drawingTools, Array<Z4GeometricShape> geometricShapes) {
     this.canvas = canvas;
     this.paper = paper;
     this.drawingTools = drawingTools;
+    this.geometricShapes = geometricShapes;
   }
 
   /**
@@ -191,6 +195,7 @@ public class Z4CanvasIOManager {
         this.ribbonDrawingToolPanel.reset();
 
         this.ribbonTextPanel.reset();
+        this.geometricShapes.length = 0;
         this.shapesAndPathsPanel.reset();
 
         Color.resetHistory();
