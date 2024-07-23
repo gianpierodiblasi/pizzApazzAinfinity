@@ -7296,8 +7296,6 @@ class Z4MergeGeometricShapePanel extends JSPanel {
 
    delete = new JSCheckBox();
 
-   checkboxes = new Array();
-
    selectedPanel = new JSPanel();
 
    containerPanel = new JSPanel();
@@ -7315,12 +7313,14 @@ class Z4MergeGeometricShapePanel extends JSPanel {
     super();
     this.cssAddClass("z4mergegeometricshapepanel");
     this.setLayout(new GridBagLayout());
+    this.delete.setText(Z4Translations.DELETE_SELECTED_SHAPES_AND_PATHS_MESSAGE);
+    this.add(this.delete, new GBC(0, 0).a(GBC.WEST));
     this.selectedPanel.cssAddClass("z4mergegeometricshapepanel-selected");
     this.selectedPanel.setLayout(new BoxLayout(this.selectedPanel, BoxLayout.X_AXIS));
-    this.add(this.selectedPanel, new GBC(0, 0).i(0, 0, 2, 0));
+    this.add(this.selectedPanel, new GBC(0, 1).i(0, 0, 2, 0));
     this.containerPanel.cssAddClass("z4mergegeometricshapepanel-container");
     this.containerPanel.setLayout(new GridBagLayout());
-    this.add(this.containerPanel, new GBC(0, 1).f(GBC.HORIZONTAL));
+    this.add(this.containerPanel, new GBC(0, 2).f(GBC.HORIZONTAL));
   }
 
   /**
@@ -7330,6 +7330,16 @@ class Z4MergeGeometricShapePanel extends JSPanel {
    */
    getSelectedGeometricShapes() {
     return this.selectedGeometricShapes;
+  }
+
+  /**
+   * Returns if the merging shapes/paths have to be deleted
+   *
+   * @return true if the merging shapes/paths have to be deleted, false
+   * otherwise
+   */
+   isDeleteSelectedShapesAndPaths() {
+    return this.delete.isSelected();
   }
 
   /**
@@ -7471,12 +7481,13 @@ class Z4ShapesAndPathsPanel extends JSPanel {
     JSOptionPane.showInputDialog(panel, Z4Translations.MERGE, listener => panel.addChangeListener(listener), () => panel.getSelectedGeometricShapes().length > 1, response => {
       if (response === JSOptionPane.OK_OPTION) {
         let selected = panel.getSelectedGeometricShapes();
-        selected.forEach(shape => {
-          let index = this.canvas.deleteGeometricShape(shape);
-          document.querySelector(".z4geometricshapepreview:nth-child(" + (index + 1) + ")").remove();
-        });
-        // 
-        // this.canvas.mergeGeometricShapes(selected);
+        if (panel.isDeleteSelectedShapesAndPaths()) {
+          selected.forEach(shape => {
+            let index = this.canvas.deleteGeometricShape(shape);
+            document.querySelector(".z4geometricshapepreview:nth-child(" + (index + 1) + ")").remove();
+          });
+        }
+        this.canvas.addGeometricShape(new Z4GeometricShapeSequence(selected));
       }
     });
   }

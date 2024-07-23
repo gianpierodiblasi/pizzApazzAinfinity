@@ -50,12 +50,13 @@ class Z4ShapesAndPathsPanel extends JSPanel {
     JSOptionPane.showInputDialog(panel, Z4Translations.MERGE, listener => panel.addChangeListener(listener), () => panel.getSelectedGeometricShapes().length > 1, response => {
       if (response === JSOptionPane.OK_OPTION) {
         let selected = panel.getSelectedGeometricShapes();
-        selected.forEach(shape => {
-          let index = this.canvas.deleteGeometricShape(shape);
-          document.querySelector(".z4geometricshapepreview:nth-child(" + (index + 1) + ")").remove();
-        });
-        // 
-        // this.canvas.mergeGeometricShapes(selected);
+        if (panel.isDeleteSelectedShapesAndPaths()) {
+          selected.forEach(shape => {
+            let index = this.canvas.deleteGeometricShape(shape);
+            document.querySelector(".z4geometricshapepreview:nth-child(" + (index + 1) + ")").remove();
+          });
+        }
+        this.canvas.addGeometricShape(new Z4GeometricShapeSequence(selected));
       }
     });
   }

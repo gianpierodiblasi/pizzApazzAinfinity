@@ -14,6 +14,7 @@ import javascript.swing.event.ChangeListener;
 import pizzapazza.math.geometricshape.Z4GeometricShape;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.util.Z4Constants;
+import pizzapazza.util.Z4Translations;
 import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$typeof;
 import static simulation.js.$Globals.parseInt;
@@ -26,8 +27,7 @@ import simulation.js.$Path2D;
  */
 public class Z4MergeGeometricShapePanel extends JSPanel {
 
-  private final JSCheckBox delete=new JSCheckBox();
-  private final Array<JSCheckBox> checkboxes = new Array<>();
+  private final JSCheckBox delete = new JSCheckBox();
   private final JSPanel selectedPanel = new JSPanel();
   private final JSPanel containerPanel = new JSPanel();
 
@@ -44,13 +44,15 @@ public class Z4MergeGeometricShapePanel extends JSPanel {
     this.cssAddClass("z4mergegeometricshapepanel");
     this.setLayout(new GridBagLayout());
 
+    this.delete.setText(Z4Translations.DELETE_SELECTED_SHAPES_AND_PATHS_MESSAGE);
+    this.add(this.delete, new GBC(0, 0).a(GBC.WEST));
     this.selectedPanel.cssAddClass("z4mergegeometricshapepanel-selected");
     this.selectedPanel.setLayout(new BoxLayout(this.selectedPanel, BoxLayout.X_AXIS));
-    this.add(this.selectedPanel, new GBC(0, 0).i(0, 0, 2, 0));
+    this.add(this.selectedPanel, new GBC(0, 1).i(0, 0, 2, 0));
 
     this.containerPanel.cssAddClass("z4mergegeometricshapepanel-container");
     this.containerPanel.setLayout(new GridBagLayout());
-    this.add(this.containerPanel, new GBC(0, 1).f(GBC.HORIZONTAL));
+    this.add(this.containerPanel, new GBC(0, 2).f(GBC.HORIZONTAL));
   }
 
   /**
@@ -60,6 +62,16 @@ public class Z4MergeGeometricShapePanel extends JSPanel {
    */
   public Array<Z4GeometricShape> getSelectedGeometricShapes() {
     return this.selectedGeometricShapes;
+  }
+
+  /**
+   * Returns if the merging shapes/paths have to be deleted
+   *
+   * @return true if the merging shapes/paths have to be deleted, false
+   * otherwise
+   */
+  public boolean isDeleteSelectedShapesAndPaths() {
+    return this.delete.isSelected();
   }
 
   /**
