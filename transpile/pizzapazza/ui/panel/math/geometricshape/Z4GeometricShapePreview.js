@@ -71,7 +71,7 @@ class Z4GeometricShapePreview extends JSDropDown {
     this.preview.setAttribute("width", "" + Z4GeometricShapePreview.PREVIEW_SIZE);
     this.preview.setAttribute("height", "" + Z4GeometricShapePreview.PREVIEW_SIZE);
     this.summary.setLayout(new GridBagLayout());
-    this.summary.add(this.preview, new GBC(0, 0));
+    this.summary.add(this.preview, new GBC(0, 0).h(2));
     let selector = new JSButton();
     selector.setText(Z4GeometricShapePreview.SELECTED_GEOMETRIC_SHAPE_CONTENT);
     selector.setTooltip(Z4Translations.SELECTED);
@@ -84,6 +84,12 @@ class Z4GeometricShapePreview extends JSDropDown {
       this.canvas.setSelectedGeometricShape(this.shape, this.selectedControlPoint);
     });
     this.summary.add(selector, new GBC(1, 0).a(GBC.NORTH).i(0, 2, 0, 0));
+    let button = new JSButton();
+    button.cssAddClass("z4geometricshapepreview-setgeometricshape");
+    button.addActionListener(event => {
+      // this.setGeometriShape(this.canvas, this.shape);
+    });
+    this.summary.add(button, new GBC(1, 1));
     this.appendChildInTree("summary", this.summary);
     this.editor.cssAddClass("z4geometricshapepreview-editor");
     this.editor.setLayout(new GridBagLayout());
@@ -112,7 +118,7 @@ class Z4GeometricShapePreview extends JSDropDown {
     this.ySlider.getStyle().minWidth = "1.5rem";
     this.ySlider.addChangeListener(event => this.onChange(false, this.ySlider.getValueIsAdjusting(), this.ySpinner, this.ySlider));
     this.editor.add(this.ySlider, new GBC(4, 0).h(7).wy(1).a(GBC.NORTH).f(GBC.VERTICAL));
-    let button = new JSButton();
+    button = new JSButton();
     button.setText(Z4Translations.DUPLICATE);
     button.addActionListener(event => {
       this.changed = true;
@@ -131,8 +137,6 @@ class Z4GeometricShapePreview extends JSDropDown {
       }
     }));
     this.editor.add(button, new GBC(1, 6).a(GBC.SOUTHEAST));
-    // 
-    // this.addButton(panelTransform, "", 3, 1, event -> this.setGeometriShape(this.canvas, this.shape)).cssAddClass("z4geometricshapepreview-setgeometricshape");
     this.appendChild(this.editor);
   }
 

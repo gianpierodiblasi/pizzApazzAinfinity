@@ -115,6 +115,33 @@ class Z4GeometricShape extends Z4JSONable {
    fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
   }
 
+  /**
+   * Returns a Z4GeometricShape obtained after a canvas resize in order to fit
+   * the new dimensions
+   *
+   * @param width The new width
+   * @param height The new height
+   * @return The geometric shape
+   */
+   fromResize(width, height) {
+    switch("" + type) {
+      case "POINT":
+      case "LINE":
+      case "POLYLINE":
+      case "ELLIPSE":
+      case "RECTANGLE":
+      case "ROUND_RECTANGLE":
+      case "QUAD":
+      case "BEZIER":
+      case "SINUSOIDAL":
+      case "SPIRAL":
+        return this.getControlPoints().find((point, index, array) => point.x >= width || point.y >= height) ? Z4GeometricShape.fromSize(this.type, width, height) : this;
+      case "SEQUENCE":
+      default:
+        return null;
+    }
+  }
+
    toJSON() {
     let json = new Object();
     json["type"] = this.type;

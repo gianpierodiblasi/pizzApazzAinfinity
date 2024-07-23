@@ -5,6 +5,7 @@ import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Vector;
 import pizzapazza.ui.panel.math.geometricshape.Z4GeometricShapePreview;
 import pizzapazza.util.Z4JSONable;
+import static simulation.js.$Globals.$exists;
 import simulation.js.$Object;
 
 /**
@@ -95,7 +96,7 @@ public abstract class Z4GeometricShape implements Z4JSONable {
    * @return The button configurations to control/edit the geometri shape
    */
   public abstract Array<Z4GeometricShapeButtonConfiguration> getButtonConfigurations();
-  
+
   /**
    * Returns a Z4GeometricShape obtained by this Z4GeometricShape when a data
    * (point or spinner) is changed
@@ -112,6 +113,34 @@ public abstract class Z4GeometricShape implements Z4JSONable {
    * @return The geometric shape
    */
   public abstract Z4GeometricShape fromDataChanged(Array<Z4Point> controlPoints, double x, double y, int pointIndex, double spinnerValue, int spinnerIndex, int width, int height);
+
+  /**
+   * Returns a Z4GeometricShape obtained after a canvas resize in order to fit
+   * the new dimensions
+   *
+   * @param width The new width
+   * @param height The new height
+   * @return The geometric shape
+   */
+  public Z4GeometricShape fromResize(int width, int height) {
+    switch ("" + type) {
+      case "POINT":
+      case "LINE":
+      case "POLYLINE":
+      case "ELLIPSE":
+      case "RECTANGLE":
+      case "ROUND_RECTANGLE":
+      case "QUAD":
+      case "BEZIER":
+      case "SINUSOIDAL":
+      case "SPIRAL":
+        return $exists(this.getControlPoints().find((point, index, array) -> point.x >= width || point.y >= height)) ? Z4GeometricShape.fromSize(this.type, width, height) : this;
+      case "SEQUENCE":
+        
+      default:
+        return null;
+    }
+  }
 
   @Override
   public $Object toJSON() {

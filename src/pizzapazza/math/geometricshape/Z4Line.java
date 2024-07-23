@@ -86,7 +86,7 @@ public class Z4Line extends Z4GeometricShape {
   public Array<Z4GeometricShapeButtonConfiguration> getButtonConfigurations() {
     return new Array<>();
   }
-  
+
   @Override
   public Z4GeometricShape fromDataChanged(Array<Z4Point> controlPoints, double x, double y, int pointIndex, double spinnerValue, int spinnerIndex, int width, int height) {
     if (pointIndex == 0) {
