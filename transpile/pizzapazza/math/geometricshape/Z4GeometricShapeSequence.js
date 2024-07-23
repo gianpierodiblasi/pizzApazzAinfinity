@@ -104,6 +104,10 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
     return shape ? obj : null;
   }
 
+   fromResize(width, height) {
+    return new Z4GeometricShapeSequence(this.shapes.map(shape => shape.fromResize(width, height)));
+  }
+
    toJSON() {
     let json = super.toJSON();
     let shapesJSON = new Array();

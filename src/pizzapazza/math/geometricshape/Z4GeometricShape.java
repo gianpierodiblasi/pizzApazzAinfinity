@@ -136,7 +136,6 @@ public abstract class Z4GeometricShape implements Z4JSONable {
       case "SPIRAL":
         return $exists(this.getControlPoints().find((point, index, array) -> point.x >= width || point.y >= height)) ? Z4GeometricShape.fromSize(this.type, width, height) : this;
       case "SEQUENCE":
-        
       default:
         return null;
     }

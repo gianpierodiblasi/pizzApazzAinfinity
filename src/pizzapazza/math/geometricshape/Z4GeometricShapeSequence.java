@@ -132,6 +132,11 @@ public class Z4GeometricShapeSequence extends Z4GeometricShape {
   }
 
   @Override
+  public Z4GeometricShape fromResize(int width, int height) {
+    return new Z4GeometricShapeSequence(this.shapes.map(shape -> shape.fromResize(width, height)));
+  }
+
+  @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
 
