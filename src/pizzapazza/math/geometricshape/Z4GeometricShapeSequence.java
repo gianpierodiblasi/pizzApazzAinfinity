@@ -2,7 +2,9 @@ package pizzapazza.math.geometricshape;
 
 import def.js.Array;
 import pizzapazza.math.Z4Point;
+import pizzapazza.math.Z4Vector;
 import simulation.js.$Apply_1_V;
+import simulation.js.$Apply_2_V;
 import simulation.js.$Array;
 import static simulation.js.$Globals.$exists;
 import simulation.js.$Object;
@@ -12,9 +14,11 @@ import simulation.js.$Object;
  *
  * @author gianpiero.diblasi
  */
-public class Z4GeometricShapeSequence extends Z4GeometricCurve {
+public class Z4GeometricShapeSequence extends Z4GeometricShape {
 
   private final Array<Z4GeometricShape> shapes;
+  private final Array<Z4Polyline> polylines;
+  private final Z4Polyline polyline;
 
   /**
    * Creates the object
@@ -25,7 +29,49 @@ public class Z4GeometricShapeSequence extends Z4GeometricCurve {
     super(Z4GeometricShapeType.SEQUENCE);
 
     this.shapes = shapes.map(shape -> shape);
-    this.polyline = this.shapes.map(shape -> shape.getPolyline()).reduce((accumulator, current, index, array) -> accumulator.concat(current));
+    this.polylines = this.shapes.map(shape -> shape.getPolyline());
+    this.polyline = this.shapes.map(shape -> shape.getPolyline()).reduce((accumulator, current, index, array) -> accumulator.concat(new Z4Polyline(new Array<>((Z4Point) null))).concat(current));
+  }
+
+  @Override
+  public Z4Polyline getPolyline() {
+    return this.polyline;
+  }
+
+  @Override
+  public double distance(double x, double y) {
+    return this.polylines.
+            map(polyline -> polyline.distance(x, y)).
+            reduce((accumulator, current, index, array) -> Math.min(accumulator, current));
+  }
+
+  @Override
+  public double getLength() {
+    return this.polylines.map(polyline -> polyline.getLength()).reduce((accumulator, current, index, array) -> accumulator + current);
+  }
+
+  @Override
+  public Z4Point getPointAt(double position) {
+    return this.getAt(position, (index, pos) -> this.polylines.$get(index).getPointAt(pos));
+  }
+
+  @Override
+  public Z4Vector getTangentAt(double position) {
+    return this.getAt(position, (index, pos) -> this.polylines.$get(index).getTangentAt(pos));
+  }
+
+  private <T> T getAt(double position, $Apply_2_V<Integer, Double, T> apply) {
+    position *= this.getLength();
+
+    int index = 0;
+    double len = this.polylines.$get(index).getLength();
+    while (len < position) {
+      position -= len;
+      index++;
+      len = this.polylines.$get(index).getLength();
+    }
+
+    return apply.$apply(index, position / len);
   }
 
   @Override
@@ -47,9 +93,9 @@ public class Z4GeometricShapeSequence extends Z4GeometricCurve {
 
   @Override
   public Array<Z4GeometricShapeButtonConfiguration> getButtonConfigurations() {
-    return new Array<>();
+    return this.shapes.map(shape -> shape.getButtonConfigurations()).reduce((accumulator, current, index, array) -> (($Array<Z4GeometricShapeButtonConfiguration>) accumulator).concat(current));
   }
-  
+
   @Override
   public Z4GeometricShape fromDataChanged(Array<Z4Point> controlPoints, double x, double y, int pointIndex, double spinnerValue, int spinnerIndex, int width, int height) {
     $Object objForControlPoints = this.getChangedGeometricShape(pointIndex, index -> this.shapes.$get(index).getControlPoints().length);

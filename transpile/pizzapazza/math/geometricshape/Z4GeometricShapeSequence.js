@@ -3,9 +3,13 @@
  *
  * @author gianpiero.diblasi
  */
-class Z4GeometricShapeSequence extends Z4GeometricCurve {
+class Z4GeometricShapeSequence extends Z4GeometricShape {
 
    shapes = null;
+
+   polylines = null;
+
+   polyline = null;
 
   /**
    * Creates the object
@@ -15,7 +19,40 @@ class Z4GeometricShapeSequence extends Z4GeometricCurve {
   constructor(shapes) {
     super(Z4GeometricShapeType.SEQUENCE);
     this.shapes = shapes.map(shape => shape);
-    this.polyline = this.shapes.map(shape => shape.getPolyline()).reduce((accumulator, current, index, array) => accumulator.concat(current));
+    this.polylines = this.shapes.map(shape => shape.getPolyline());
+    this.polyline = this.shapes.map(shape => shape.getPolyline()).reduce((accumulator, current, index, array) => accumulator.concat(new Z4Polyline(new Array(null))).concat(current));
+  }
+
+   getPolyline() {
+    return this.polyline;
+  }
+
+   distance(x, y) {
+    return this.polylines.map(polyline => polyline.distance(x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
+  }
+
+   getLength() {
+    return this.polylines.map(polyline => polyline.getLength()).reduce((accumulator, current, index, array) => accumulator + current);
+  }
+
+   getPointAt(position) {
+    return this.getAt(position, (index, pos) => this.polylines[index].getPointAt(pos));
+  }
+
+   getTangentAt(position) {
+    return this.getAt(position, (index, pos) => this.polylines[index].getTangentAt(pos));
+  }
+
+   getAt(position, apply) {
+    position *= this.getLength();
+    let index = 0;
+    let len = this.polylines[index].getLength();
+    while (len < position) {
+      position -= len;
+      index++;
+      len = this.polylines[index].getLength();
+    }
+    return apply(index, position / len);
   }
 
    getControlPoints() {
@@ -33,7 +70,7 @@ class Z4GeometricShapeSequence extends Z4GeometricCurve {
   }
 
    getButtonConfigurations() {
-    return new Array();
+    return this.shapes.map(shape => shape.getButtonConfigurations()).reduce((accumulator, current, index, array) => (accumulator).concat(current));
   }
 
    fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
