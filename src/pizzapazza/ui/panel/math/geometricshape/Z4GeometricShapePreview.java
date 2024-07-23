@@ -20,7 +20,6 @@ import javascript.swing.SpinnerNumberModel;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.geometricshape.Z4GeometricShape;
 import pizzapazza.math.geometricshape.Z4GeometricShapeSpinnerConfiguration;
-import pizzapazza.math.geometricshape.Z4Polyline;
 import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4Translations;
@@ -29,6 +28,7 @@ import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
 import static simulation.js.$Globals.setTimeout;
+import simulation.js.$Path2D;
 
 /**
  * The layer preview
@@ -340,7 +340,7 @@ public class Z4GeometricShapePreview extends JSDropDown {
    */
   public void drawShape() {
     if ($exists(this.shape)) {
-      Z4Polyline polyline = this.shape.getPolyline();
+      $Path2D path2D = this.shape.getPolyline().getPath2D();
 
       this.ctx.save();
 
@@ -349,31 +349,15 @@ public class Z4GeometricShapePreview extends JSDropDown {
 
       Array<Double> dash = new Array<>();
 
-      this.ctx.beginPath();
-      polyline.getControlPoints().forEach((point, index, array) -> {
-        if ($exists(index)) {
-          this.ctx.lineTo(point.x, point.y);
-        } else {
-          this.ctx.moveTo(point.x, point.y);
-        }
-      });
       this.ctx.strokeStyle = Z4Constants.$getStyle("green");
       this.ctx.setLineDash(dash);
-      this.ctx.stroke();
+      this.ctx.stroke(path2D);
 
       dash.push(2.5, 2.5);
 
-      this.ctx.beginPath();
-      polyline.getControlPoints().forEach((point, index, array) -> {
-        if ($exists(index)) {
-          this.ctx.lineTo(point.x, point.y);
-        } else {
-          this.ctx.moveTo(point.x, point.y);
-        }
-      });
       this.ctx.strokeStyle = Z4Constants.$getStyle("white");
       this.ctx.setLineDash(dash);
-      this.ctx.stroke();
+      this.ctx.stroke(path2D);
 
       this.ctx.restore();
     }

@@ -288,34 +288,18 @@ class Z4GeometricShapePreview extends JSDropDown {
    */
    drawShape() {
     if (this.shape) {
-      let polyline = this.shape.getPolyline();
+      let path2D = this.shape.getPolyline().getPath2D();
       this.ctx.save();
       this.ctx.lineWidth = 3 / this.zoom;
       this.ctx.scale(this.zoom, this.zoom);
       let dash = new Array();
-      this.ctx.beginPath();
-      polyline.getControlPoints().forEach((point, index, array) => {
-        if (index) {
-          this.ctx.lineTo(point.x, point.y);
-        } else {
-          this.ctx.moveTo(point.x, point.y);
-        }
-      });
       this.ctx.strokeStyle = Z4Constants.getStyle("green");
       this.ctx.setLineDash(dash);
-      this.ctx.stroke();
+      this.ctx.stroke(path2D);
       dash.push(2.5, 2.5);
-      this.ctx.beginPath();
-      polyline.getControlPoints().forEach((point, index, array) => {
-        if (index) {
-          this.ctx.lineTo(point.x, point.y);
-        } else {
-          this.ctx.moveTo(point.x, point.y);
-        }
-      });
       this.ctx.strokeStyle = Z4Constants.getStyle("white");
       this.ctx.setLineDash(dash);
-      this.ctx.stroke();
+      this.ctx.stroke(path2D);
       this.ctx.restore();
     }
   }

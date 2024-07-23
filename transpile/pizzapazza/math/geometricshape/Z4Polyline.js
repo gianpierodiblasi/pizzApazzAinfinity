@@ -9,6 +9,8 @@ class Z4Polyline extends Z4GeometricShape {
 
    cumLen = new Array();
 
+   moveTo = false;
+
   /**
    * Creates the object
    *
@@ -26,14 +28,6 @@ class Z4Polyline extends Z4GeometricShape {
     });
   }
 
-   getPolyline() {
-    return this;
-  }
-
-   distance(x, y) {
-    return this.points.map((point, index, array) => index === 0 ? Number.MAX_VALUE : Z4Math.ptSegDist(point.x, point.y, array[index - 1].x, array[index - 1].y, x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
-  }
-
   /**
    * Concatenates this polyline with another polyline
    *
@@ -42,6 +36,35 @@ class Z4Polyline extends Z4GeometricShape {
    */
    concat(polyline) {
     return new Z4Polyline((this.points).concat(polyline.points));
+  }
+
+  /**
+   * Returns the path describing this polyline
+   *
+   * @return The path describing this polyline
+   */
+   getPath2D() {
+    this.moveTo = true;
+    let path2D = new Path2D();
+    this.points.forEach((point, index, array) => {
+      if (this.moveTo) {
+        path2D.moveTo(point.x, point.y);
+        this.moveTo = false;
+      } else if (point) {
+        path2D.lineTo(point.x, point.y);
+      } else {
+        this.moveTo = true;
+      }
+    });
+    return path2D;
+  }
+
+   getPolyline() {
+    return this;
+  }
+
+   distance(x, y) {
+    return this.points.map((point, index, array) => index === 0 ? Number.MAX_VALUE : Z4Math.ptSegDist(point.x, point.y, array[index - 1].x, array[index - 1].y, x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
   }
 
    getLength() {

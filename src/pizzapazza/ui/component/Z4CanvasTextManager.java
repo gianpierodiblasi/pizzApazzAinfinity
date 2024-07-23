@@ -11,7 +11,6 @@ import pizzapazza.color.Z4GradientColor;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Vector;
-import pizzapazza.math.geometricshape.Z4Polyline;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.util.Z4Constants;
@@ -23,6 +22,7 @@ import simulation.dom.$CanvasRenderingContext2D;
 import simulation.dom.$TextMetrics;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
+import simulation.js.$Path2D;
 
 /**
  * The text manager of a Z4Canvas
@@ -215,7 +215,7 @@ public class Z4CanvasTextManager {
       for (int index = 0; index < controlPointConnections.length; index += 2) {
         this.drawLine(ctx, controlPoints.$get(controlPointConnections.$get(index)), controlPoints.$get(controlPointConnections.$get(index + 1)));
       }
-      this.drawPolyline(ctx, this.textInfo.shape.getPolyline());
+      this.drawPolyline(ctx, this.textInfo.shape.getPolyline().getPath2D());
       ctx.restore();
     }
   }
@@ -350,35 +350,19 @@ public class Z4CanvasTextManager {
     ctx.stroke();
   }
 
-  private void drawPolyline($CanvasRenderingContext2D ctx, Z4Polyline polyline) {
+  private void drawPolyline($CanvasRenderingContext2D ctx, $Path2D path2D) {
     ctx.lineWidth = 3 / this.zoom;
 
     Array<Double> dash = new Array<>();
 
-    ctx.beginPath();
-    polyline.getControlPoints().forEach((point, index, array) -> {
-      if ($exists(index)) {
-        ctx.lineTo(point.x, point.y);
-      } else {
-        ctx.moveTo(point.x, point.y);
-      }
-    });
     ctx.strokeStyle = Z4Constants.$getStyle("green");
     ctx.setLineDash(dash);
-    ctx.stroke();
+    ctx.stroke(path2D);
 
     dash.push(2.5, 2.5);
 
-    ctx.beginPath();
-    polyline.getControlPoints().forEach((point, index, array) -> {
-      if ($exists(index)) {
-        ctx.lineTo(point.x, point.y);
-      } else {
-        ctx.moveTo(point.x, point.y);
-      }
-    });
     ctx.strokeStyle = Z4Constants.$getStyle("white");
     ctx.setLineDash(dash);
-    ctx.stroke();
+    ctx.stroke(path2D);
   }
 }

@@ -4568,7 +4568,7 @@ class Z4CanvasTextManager {
       for (let index = 0; index < controlPointConnections.length; index += 2) {
         this.drawLine(ctx, controlPoints[controlPointConnections[index]], controlPoints[controlPointConnections[index + 1]]);
       }
-      this.drawPolyline(ctx, this.textInfo.shape.getPolyline());
+      this.drawPolyline(ctx, this.textInfo.shape.getPolyline().getPath2D());
       ctx.restore();
     }
   }
@@ -4680,32 +4680,16 @@ class Z4CanvasTextManager {
     ctx.stroke();
   }
 
-   drawPolyline(ctx, polyline) {
+   drawPolyline(ctx, path2D) {
     ctx.lineWidth = 3 / this.zoom;
     let dash = new Array();
-    ctx.beginPath();
-    polyline.getControlPoints().forEach((point, index, array) => {
-      if (index) {
-        ctx.lineTo(point.x, point.y);
-      } else {
-        ctx.moveTo(point.x, point.y);
-      }
-    });
     ctx.strokeStyle = Z4Constants.getStyle("green");
     ctx.setLineDash(dash);
-    ctx.stroke();
+    ctx.stroke(path2D);
     dash.push(2.5, 2.5);
-    ctx.beginPath();
-    polyline.getControlPoints().forEach((point, index, array) => {
-      if (index) {
-        ctx.lineTo(point.x, point.y);
-      } else {
-        ctx.moveTo(point.x, point.y);
-      }
-    });
     ctx.strokeStyle = Z4Constants.getStyle("white");
     ctx.setLineDash(dash);
-    ctx.stroke();
+    ctx.stroke(path2D);
   }
 }
 /**
@@ -7228,34 +7212,18 @@ class Z4GeometricShapePreview extends JSDropDown {
    */
    drawShape() {
     if (this.shape) {
-      let polyline = this.shape.getPolyline();
+      let path2D = this.shape.getPolyline().getPath2D();
       this.ctx.save();
       this.ctx.lineWidth = 3 / this.zoom;
       this.ctx.scale(this.zoom, this.zoom);
       let dash = new Array();
-      this.ctx.beginPath();
-      polyline.getControlPoints().forEach((point, index, array) => {
-        if (index) {
-          this.ctx.lineTo(point.x, point.y);
-        } else {
-          this.ctx.moveTo(point.x, point.y);
-        }
-      });
       this.ctx.strokeStyle = Z4Constants.getStyle("green");
       this.ctx.setLineDash(dash);
-      this.ctx.stroke();
+      this.ctx.stroke(path2D);
       dash.push(2.5, 2.5);
-      this.ctx.beginPath();
-      polyline.getControlPoints().forEach((point, index, array) => {
-        if (index) {
-          this.ctx.lineTo(point.x, point.y);
-        } else {
-          this.ctx.moveTo(point.x, point.y);
-        }
-      });
       this.ctx.strokeStyle = Z4Constants.getStyle("white");
       this.ctx.setLineDash(dash);
-      this.ctx.stroke();
+      this.ctx.stroke(path2D);
       this.ctx.restore();
     }
   }
@@ -17713,6 +17681,8 @@ class Z4Polyline extends Z4GeometricShape {
 
    cumLen = new Array();
 
+   moveTo = false;
+
   /**
    * Creates the object
    *
@@ -17730,14 +17700,6 @@ class Z4Polyline extends Z4GeometricShape {
     });
   }
 
-   getPolyline() {
-    return this;
-  }
-
-   distance(x, y) {
-    return this.points.map((point, index, array) => index === 0 ? Number.MAX_VALUE : Z4Math.ptSegDist(point.x, point.y, array[index - 1].x, array[index - 1].y, x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
-  }
-
   /**
    * Concatenates this polyline with another polyline
    *
@@ -17746,6 +17708,35 @@ class Z4Polyline extends Z4GeometricShape {
    */
    concat(polyline) {
     return new Z4Polyline((this.points).concat(polyline.points));
+  }
+
+  /**
+   * Returns the path describing this polyline
+   *
+   * @return The path describing this polyline
+   */
+   getPath2D() {
+    this.moveTo = true;
+    let path2D = new Path2D();
+    this.points.forEach((point, index, array) => {
+      if (this.moveTo) {
+        path2D.moveTo(point.x, point.y);
+        this.moveTo = false;
+      } else if (point) {
+        path2D.lineTo(point.x, point.y);
+      } else {
+        this.moveTo = true;
+      }
+    });
+    return path2D;
+  }
+
+   getPolyline() {
+    return this;
+  }
+
+   distance(x, y) {
+    return this.points.map((point, index, array) => index === 0 ? Number.MAX_VALUE : Z4Math.ptSegDist(point.x, point.y, array[index - 1].x, array[index - 1].y, x, y)).reduce((accumulator, current, index, array) => Math.min(accumulator, current));
   }
 
    getLength() {

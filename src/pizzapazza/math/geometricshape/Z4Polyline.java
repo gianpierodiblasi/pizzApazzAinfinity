@@ -10,6 +10,7 @@ import pizzapazza.util.Z4Translations;
 import simulation.js.$Array;
 import static simulation.js.$Globals.$exists;
 import simulation.js.$Object;
+import simulation.js.$Path2D;
 
 /**
  * The poyline
@@ -20,6 +21,7 @@ public class Z4Polyline extends Z4GeometricShape {
 
   private final Array<Z4Point> points;
   private final Array<Double> cumLen = new $Array<>();
+  private boolean moveTo;
 
   /**
    * Creates the object
@@ -39,6 +41,39 @@ public class Z4Polyline extends Z4GeometricShape {
     });
   }
 
+  /**
+   * Concatenates this polyline with another polyline
+   *
+   * @param polyline The other polyline
+   * @return The concatenation of this polyline with the other polyline
+   */
+  public Z4Polyline concat(Z4Polyline polyline) {
+    return new Z4Polyline((($Array<Z4Point>) this.points).concat(polyline.points));
+  }
+
+  /**
+   * Returns the path describing this polyline
+   *
+   * @return The path describing this polyline
+   */
+  public $Path2D getPath2D() {
+    this.moveTo = true;
+    $Path2D path2D = new $Path2D();
+
+    this.points.forEach((point, index, array) -> {
+      if (this.moveTo) {
+        path2D.moveTo(point.x, point.y);
+        this.moveTo = false;
+      } else if ($exists(point)) {
+        path2D.lineTo(point.x, point.y);
+      } else {
+        this.moveTo = true;
+      }
+    });
+
+    return path2D;
+  }
+
   @Override
   public Z4Polyline getPolyline() {
     return this;
@@ -49,16 +84,6 @@ public class Z4Polyline extends Z4GeometricShape {
     return this.points.
             map((point, index, array) -> index == 0 ? Number.MAX_VALUE : Z4Math.ptSegDist(point.x, point.y, array.$get(index - 1).x, array.$get(index - 1).y, x, y)).
             reduce((accumulator, current, index, array) -> Math.min(accumulator, current));
-  }
-
-  /**
-   * Concatenates this polyline with another polyline
-   *
-   * @param polyline The other polyline
-   * @return The concatenation of this polyline with the other polyline
-   */
-  public Z4Polyline concat(Z4Polyline polyline) {
-    return new Z4Polyline((($Array<Z4Point>) this.points).concat(polyline.points));
   }
 
   @Override
