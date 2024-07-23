@@ -784,6 +784,20 @@
 }.z4mergegeometricshapepanel {
 }
 
+.z4mergegeometricshapepanel .z4mergegeometricshapepanel-selected {
+  height: 100px;
+  width: 40rem;
+  overflow-x: scroll;
+  border: 2px solid var(--main-action-bgcolor);
+  border-radius: var(--roundness);
+  padding: 2px;
+}
+
+.z4mergegeometricshapepanel .z4mergegeometricshapepanel-container {
+  height: 30rem;
+  overflow-y: scroll;
+}
+
 .z4mergegeometricshapepanel canvas {
   border: 1px solid var(--main-action-bgcolor);
   background-color: white;

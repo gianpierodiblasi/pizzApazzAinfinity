@@ -268,6 +268,7 @@ public class Z4Translations {
   public static String ORIENTATION = "";
   public static String SHAPES_AND_PATHS = "";
   public static String DELETE_SHAPES_AND_PATHS_MESSAGE = "";
+  public static String DELETE_SELECTED_SHAPES_AND_PATHS_MESSAGE = "";
   public static String LINE = "";
   public static String ELLIPSE = "";
   public static String RECTANGLE = "";
@@ -578,6 +579,7 @@ public class Z4Translations {
     Z4Translations.ORIENTATION = "Orientation";
     Z4Translations.SHAPES_AND_PATHS = "Shapes & Paths";
     Z4Translations.DELETE_SHAPES_AND_PATHS_MESSAGE = "Do you really want to delete the shape/path?";
+    Z4Translations.DELETE_SELECTED_SHAPES_AND_PATHS_MESSAGE = "Delete selected shapes/paths";
     Z4Translations.LINE = "Line";
     Z4Translations.ELLIPSE = "Ellipse";
     Z4Translations.RECTANGLE = "Rectangle";
@@ -872,6 +874,7 @@ public class Z4Translations {
     Z4Translations.ORIENTATION = "Orientamento";
     Z4Translations.SHAPES_AND_PATHS = "Forme & Percorsi";
     Z4Translations.DELETE_SHAPES_AND_PATHS_MESSAGE = "Vuoi davvero eliminare la forma/il percorso?";
+    Z4Translations.DELETE_SELECTED_SHAPES_AND_PATHS_MESSAGE = "Elimina le forme/i percorsi selezionati";
     Z4Translations.LINE = "Linea";
     Z4Translations.ELLIPSE = "Ellisse";
     Z4Translations.RECTANGLE = "Rettangolo";
