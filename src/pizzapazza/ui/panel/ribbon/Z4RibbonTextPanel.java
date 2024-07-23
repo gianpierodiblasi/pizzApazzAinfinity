@@ -84,7 +84,6 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
   private final JSLabel warningMessage = new JSLabel();
   private JSButton applyOnSelectedLayer;
   private JSButton applyOnNewLayer;
-  private final JSButton reset = new JSButton();
 
   private Z4Canvas canvas;
   private boolean fontsChecked;
@@ -165,14 +164,15 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
     this.addApply(x);
 
-    this.reset.setContentAreaFilled(false);
-    this.reset.setText(Z4Translations.RESET);
-    this.reset.addActionListener(event -> JSOptionPane.showConfirmDialog(Z4Translations.RESET_MESSAGE, Z4Translations.RESET, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response -> {
+    JSButton reset = new JSButton();
+    reset.setContentAreaFilled(false);
+    reset.setText(Z4Translations.RESET);
+    reset.addActionListener(event -> JSOptionPane.showConfirmDialog(Z4Translations.RESET_MESSAGE, Z4Translations.RESET, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response -> {
       if (response == JSOptionPane.YES_OPTION) {
         this.onReset();
       }
     }));
-    this.add(this.reset, new GBC(x, 2).a(GBC.NORTH).f(GBC.HORIZONTAL).i(1, 5, 0, 0));
+    this.add(reset, new GBC(x, 2).a(GBC.NORTH).f(GBC.HORIZONTAL).i(1, 5, 0, 0));
   }
 
   private void addFont(int x) {
@@ -333,11 +333,13 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
       }
     });
 
-    this.textInfo.font = this.fontSelectionPanel.getValue();
+    this.textInfo.font = $exists(this.fontSelectionPanel) ? this.fontSelectionPanel.getValue() : null;
     this.textInfo.rotation = this.rotation.getValue();
 
     this.textInfo.textText = this.textText.getText();
-    this.fontSelectionPanel.setSampleVisible(!$exists(this.textInfo.textText));
+    if ($exists(this.fontSelectionPanel)) {
+      this.fontSelectionPanel.setSampleVisible(!$exists(this.textInfo.textText));
+    }
     this.applyOnSelectedLayer.setEnabled($exists(this.textInfo.textText));
     this.applyOnNewLayer.setEnabled($exists(this.textInfo.textText));
     this.textInfo.textEmpty = this.textEmpty.isSelected();
@@ -373,7 +375,10 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
   }
 
   private void onReset() {
-    this.fontSelectionPanel.setValue(new Z4Font("Arial", 24, false, false));
+    if ($exists(this.fontSelectionPanel)) {
+      this.fontSelectionPanel.setValue(new Z4Font("Arial", 24, false, false));
+    }
+
     this.rotation.setValue(new Z4Rotation(
             0,
             new Z4FancifulValue(

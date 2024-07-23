@@ -8743,8 +8743,6 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
    applyOnNewLayer = null;
 
-   reset = new JSButton();
-
    canvas = null;
 
    fontsChecked = false;
@@ -8809,10 +8807,15 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     this.warningMessage.getStyle().fontSize = "smaller";
     this.add(this.warningMessage, new GBC(x, 0).w(2).a(GBC.WEST).wx(1).i(0, 5, 0, 0));
     this.addApply(x);
-    this.reset.setContentAreaFilled(false);
-    this.reset.setText(Z4Translations.RESET);
-    this.reset.addActionListener(event => this.onReset());
-    this.add(this.reset, new GBC(x, 2).a(GBC.NORTH).f(GBC.HORIZONTAL).i(1, 5, 0, 0));
+    let reset = new JSButton();
+    reset.setContentAreaFilled(false);
+    reset.setText(Z4Translations.RESET);
+    reset.addActionListener(event => JSOptionPane.showConfirmDialog(Z4Translations.RESET_MESSAGE, Z4Translations.RESET, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
+      if (response === JSOptionPane.YES_OPTION) {
+        this.onReset();
+      }
+    }));
+    this.add(reset, new GBC(x, 2).a(GBC.NORTH).f(GBC.HORIZONTAL).i(1, 5, 0, 0));
   }
 
    addFont(x) {
@@ -8950,10 +8953,12 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
         element.removeAttribute("transparent");
       }
     });
-    this.textInfo.font = this.fontSelectionPanel.getValue();
+    this.textInfo.font = this.fontSelectionPanel ? this.fontSelectionPanel.getValue() : null;
     this.textInfo.rotation = this.rotation.getValue();
     this.textInfo.textText = this.textText.getText();
-    this.fontSelectionPanel.setSampleVisible(!this.textInfo.textText);
+    if (this.fontSelectionPanel) {
+      this.fontSelectionPanel.setSampleVisible(!this.textInfo.textText);
+    }
     this.applyOnSelectedLayer.setEnabled(!!(this.textInfo.textText));
     this.applyOnNewLayer.setEnabled(!!(this.textInfo.textText));
     this.textInfo.textEmpty = this.textEmpty.isSelected();
@@ -8987,31 +8992,29 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
   }
 
    onReset() {
-    JSOptionPane.showConfirmDialog(Z4Translations.RESET_MESSAGE, Z4Translations.RESET, JSOptionPane.YES_NO_OPTION, JSOptionPane.QUESTION_MESSAGE, response => {
-      if (response === JSOptionPane.YES_OPTION) {
-        this.fontSelectionPanel.setValue(new Z4Font("Arial", 24, false, false));
-        this.rotation.setValue(new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false));
-        this.textText.setText("");
-        this.textEmpty.setSelected(false);
-        this.textColor.setValue(this.getBlackBiGradientColor());
-        this.textColorFillingUNIFORM.setSelected(true);
-        this.textColorOrientationHORIZONTAL.setSelected(true);
-        this.textBorder.setValue(0);
-        this.textBorderColor.setSelectedColor(new Color(0, 0, 0, 255));
-        this.textShearX.setValue(0);
-        this.textShearY.setValue(0);
-        this.shadow.setSelected(false);
-        this.shadowText.setText("");
-        this.shadowEmpty.setSelected(false);
-        this.shadowReflex.setSelected(false);
-        this.shadowColor.setSelectedColor(new Color(0, 0, 0, 128));
-        this.shadowOffsetX.setValue(0);
-        this.shadowOffsetY.setValue(0);
-        this.shadowShearX.setValue(0);
-        this.shadowShearY.setValue(0);
-        this.onTextInfoChange(false);
-      }
-    });
+    if (this.fontSelectionPanel) {
+      this.fontSelectionPanel.setValue(new Z4Font("Arial", 24, false, false));
+    }
+    this.rotation.setValue(new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.RANDOM), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.RANDOM), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false));
+    this.textText.setText("");
+    this.textEmpty.setSelected(false);
+    this.textColor.setValue(this.getBlackBiGradientColor());
+    this.textColorFillingUNIFORM.setSelected(true);
+    this.textColorOrientationHORIZONTAL.setSelected(true);
+    this.textBorder.setValue(0);
+    this.textBorderColor.setSelectedColor(new Color(0, 0, 0, 255));
+    this.textShearX.setValue(0);
+    this.textShearY.setValue(0);
+    this.shadow.setSelected(false);
+    this.shadowText.setText("");
+    this.shadowEmpty.setSelected(false);
+    this.shadowReflex.setSelected(false);
+    this.shadowColor.setSelectedColor(new Color(0, 0, 0, 128));
+    this.shadowOffsetX.setValue(0);
+    this.shadowOffsetY.setValue(0);
+    this.shadowShearX.setValue(0);
+    this.shadowShearY.setValue(0);
+    this.onTextInfoChange(false);
   }
 
    getBlackBiGradientColor() {
@@ -9044,6 +9047,14 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     }
     this.selectedControlPoint = selectedControlPoint;
     this.canvas.setTextInfo(this.textInfo, selectedControlPoint);
+  }
+
+  /**
+   * Resets the ribbon text panel
+   */
+   reset() {
+    this.setGeometricShape(null, this.selectedControlPoint);
+    this.onReset();
   }
 
   /**
