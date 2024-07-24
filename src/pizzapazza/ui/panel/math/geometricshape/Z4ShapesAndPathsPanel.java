@@ -3,9 +3,9 @@ package pizzapazza.ui.panel.math.geometricshape;
 import static def.dom.Globals.document;
 import def.js.Array;
 import javascript.awt.BoxLayout;
+import javascript.awt.Dimension;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
-import javascript.swing.JSButton;
 import javascript.swing.JSDropDownMenu;
 import javascript.swing.JSOptionPane;
 import javascript.swing.JSPanel;
@@ -54,11 +54,11 @@ public class Z4ShapesAndPathsPanel extends JSPanel {
     dropDownMenu.addMenu(Z4Translations.SPIRAL, event -> this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.SPIRAL, this.canvas.getSize().width, this.canvas.getSize().height))).setContentAreaFilled(false);
     this.add(dropDownMenu, new GBC(0, 1).i(0, 2, 0, 5));
 
-    JSButton button = new JSButton();
-    button.setText(Z4Translations.MERGE);
-    button.setContentAreaFilled(false);
-    button.addActionListener(event -> this.merge());
-    this.add(button, new GBC(1, 1).a(GBC.WEST).f(GBC.VERTICAL));
+    dropDownMenu = new JSDropDownMenu();
+    dropDownMenu.setLabel(Z4Translations.ACTIONS);
+    dropDownMenu.addMenu(Z4Translations.MERGE, event -> this.mergeConnect(false)).setContentAreaFilled(false);
+    dropDownMenu.addMenu(Z4Translations.CONNECT, event -> this.mergeConnect(true)).setContentAreaFilled(false);
+    this.add(dropDownMenu, new GBC(1, 1).a(GBC.WEST).f(GBC.VERTICAL));
 
     Z4UI.addHLine(this, new GBC(0, 2).w(2).wx(1).f(GBC.HORIZONTAL).i(2, 1, 2, 1));
 
@@ -70,9 +70,9 @@ public class Z4ShapesAndPathsPanel extends JSPanel {
     window.addEventListener("resize", event -> this.geometricShapesPreview.getStyle().height = (window.innerHeight - 230) + "px");
   }
 
-  private void merge() {
-    Z4MergeGeometricShapePanel panel = new Z4MergeGeometricShapePanel();
-    panel.setCanvas(this.canvas);
+  private void mergeConnect(boolean connect) {
+    Z4MergeConnectGeometricShapePanel panel = new Z4MergeConnectGeometricShapePanel();
+    panel.setCanvas(this.canvas, connect);
 
     JSOptionPane.showInputDialog(panel, Z4Translations.MERGE, listener -> panel.addChangeListener(listener), () -> panel.getSelectedGeometricShapes().length > 1, response -> {
       if (response == JSOptionPane.OK_OPTION) {
@@ -84,7 +84,12 @@ public class Z4ShapesAndPathsPanel extends JSPanel {
           });
         }
 
-        this.canvas.addGeometricShape(new Z4GeometricShapeSequence(selected));
+        if (connect) {
+          Dimension d = this.canvas.getSize();
+          this.canvas.addGeometricShape(selected.reduce((accumulator, current, index, array) -> accumulator.connect(current, d.width, d.height)));
+        } else {
+          this.canvas.addGeometricShape(new Z4GeometricShapeSequence(selected));
+        }
       }
     });
   }

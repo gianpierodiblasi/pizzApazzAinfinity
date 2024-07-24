@@ -21,11 +21,11 @@ import static simulation.js.$Globals.parseInt;
 import simulation.js.$Path2D;
 
 /**
- * The panel to merge geometric shapes
+ * The panel to merge/connect geometric shapes
  *
  * @author gianpiero.diblasi
  */
-public class Z4MergeGeometricShapePanel extends JSPanel {
+public class Z4MergeConnectGeometricShapePanel extends JSPanel {
 
   private final JSCheckBox delete = new JSCheckBox();
   private final JSPanel selectedPanel = new JSPanel();
@@ -39,18 +39,18 @@ public class Z4MergeGeometricShapePanel extends JSPanel {
   /**
    * Creates the object
    */
-  public Z4MergeGeometricShapePanel() {
+  public Z4MergeConnectGeometricShapePanel() {
     super();
-    this.cssAddClass("z4mergegeometricshapepanel");
+    this.cssAddClass("z4mergeconnectgeometricshapepanel");
     this.setLayout(new GridBagLayout());
 
     this.delete.setText(Z4Translations.DELETE_SELECTED_SHAPES_AND_PATHS_MESSAGE);
     this.add(this.delete, new GBC(0, 0).a(GBC.WEST));
-    this.selectedPanel.cssAddClass("z4mergegeometricshapepanel-selected");
+    this.selectedPanel.cssAddClass("z4mergeconnectgeometricshapepanel-selected");
     this.selectedPanel.setLayout(new BoxLayout(this.selectedPanel, BoxLayout.X_AXIS));
     this.add(this.selectedPanel, new GBC(0, 1).i(0, 0, 2, 0));
 
-    this.containerPanel.cssAddClass("z4mergegeometricshapepanel-container");
+    this.containerPanel.cssAddClass("z4mergeconnectgeometricshapepanel-container");
     this.containerPanel.setLayout(new GridBagLayout());
     this.add(this.containerPanel, new GBC(0, 2).f(GBC.HORIZONTAL));
   }
@@ -78,28 +78,31 @@ public class Z4MergeGeometricShapePanel extends JSPanel {
    * Sets the canvas
    *
    * @param canvas The canvas
+   * @param onlyPaths true to show only paths, false otherwise (paths and shapes
+   * will be shown)
    */
-  public void setCanvas(Z4Canvas canvas) {
+  public void setCanvas(Z4Canvas canvas, boolean onlyPaths) {
     Dimension d = canvas.getSize();
     double ratio = d.width / d.height;
-    double w = ratio > 1 ? Z4MergeGeometricShapePanel.PREVIEW_SIZE : Z4MergeGeometricShapePanel.PREVIEW_SIZE * ratio;
-    double h = ratio > 1 ? Z4MergeGeometricShapePanel.PREVIEW_SIZE / ratio : Z4MergeGeometricShapePanel.PREVIEW_SIZE;
+    double w = ratio > 1 ? Z4MergeConnectGeometricShapePanel.PREVIEW_SIZE : Z4MergeConnectGeometricShapePanel.PREVIEW_SIZE * ratio;
+    double h = ratio > 1 ? Z4MergeConnectGeometricShapePanel.PREVIEW_SIZE / ratio : Z4MergeConnectGeometricShapePanel.PREVIEW_SIZE;
     double zoom = Math.min(w / d.width, h / d.height);
 
     for (int index = 0; index < canvas.getGeometricShapesCount(); index++) {
       Z4GeometricShape shape = canvas.getGeometricShapeAt(index);
+      if (!onlyPaths || shape.isPath()) {
+        JSCheckBox checkbox = new JSCheckBox();
+        checkbox.addActionListener(event -> this.onClick(checkbox, shape, w, h, zoom));
 
-      JSCheckBox checkbox = new JSCheckBox();
-      checkbox.addActionListener(event -> this.onClick(checkbox, shape, w, h, zoom));
-
-      this.containerPanel.add(checkbox, new GBC((index % 4) * 4, parseInt(index / 4)));
-      JSComponent preview = this.createPreview(w, h);
-      preview.addEventListener("mousedown", event -> {
-        checkbox.setSelected(!checkbox.isSelected());
-        this.onClick(checkbox, shape, w, h, zoom);
-      });
-      this.drawShape(preview.invoke("getContext('2d')"), shape, zoom);
-      this.containerPanel.add(preview, new GBC((index % 4) * 4 + 1, parseInt(index / 4)).i(5, 0, 0, 5));
+        this.containerPanel.add(checkbox, new GBC((index % 4) * 4, parseInt(index / 4)));
+        JSComponent preview = this.createPreview(w, h);
+        preview.addEventListener("mousedown", event -> {
+          checkbox.setSelected(!checkbox.isSelected());
+          this.onClick(checkbox, shape, w, h, zoom);
+        });
+        this.drawShape(preview.invoke("getContext('2d')"), shape, zoom);
+        this.containerPanel.add(preview, new GBC((index % 4) * 4 + 1, parseInt(index / 4)).i(5, 0, 0, 5));
+      }
     }
   }
 
@@ -108,10 +111,10 @@ public class Z4MergeGeometricShapePanel extends JSPanel {
 
     preview.setAttribute("width", "" + w);
     preview.setAttribute("height", "" + h);
-    preview.getStyle().marginTop = (Z4MergeGeometricShapePanel.PREVIEW_SIZE - h - 1) / 2 + "px";
-    preview.getStyle().marginBottom = (Z4MergeGeometricShapePanel.PREVIEW_SIZE - h - 1) / 2 + "px";
-    preview.getStyle().marginLeft = (Z4MergeGeometricShapePanel.PREVIEW_SIZE - w - 1) / 2 + "px";
-    preview.getStyle().marginRight = (Z4MergeGeometricShapePanel.PREVIEW_SIZE - w - 1) / 2 + "px";
+    preview.getStyle().marginTop = (Z4MergeConnectGeometricShapePanel.PREVIEW_SIZE - h - 1) / 2 + "px";
+    preview.getStyle().marginBottom = (Z4MergeConnectGeometricShapePanel.PREVIEW_SIZE - h - 1) / 2 + "px";
+    preview.getStyle().marginLeft = (Z4MergeConnectGeometricShapePanel.PREVIEW_SIZE - w - 1) / 2 + "px";
+    preview.getStyle().marginRight = (Z4MergeConnectGeometricShapePanel.PREVIEW_SIZE - w - 1) / 2 + "px";
 
     return preview;
   }
@@ -149,7 +152,7 @@ public class Z4MergeGeometricShapePanel extends JSPanel {
     } else {
       int indexOf = this.selectedGeometricShapes.indexOf(shape);
       this.selectedGeometricShapes.splice(indexOf, 1);
-      document.querySelector(".z4mergegeometricshapepanel-selected canvas:nth-child(" + (indexOf + 1) + ")").remove();
+      document.querySelector(".z4mergeconnectgeometricshapepanel-selected canvas:nth-child(" + (indexOf + 1) + ")").remove();
     }
     this.onchange();
   }

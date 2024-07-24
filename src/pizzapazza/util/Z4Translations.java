@@ -145,6 +145,7 @@ public class Z4Translations {
   public static String TIME = "";
   public static String FILLING = "";
   public static String MERGE = "";
+  public static String CONNECT = "";
   public static String NONE_HIM = "";
   public static String NONE_HER = "";
   public static String BORDER = "";
@@ -456,6 +457,7 @@ public class Z4Translations {
     Z4Translations.TIME = "\u2190 Time";
     Z4Translations.FILLING = "Filling";
     Z4Translations.MERGE = "Merge";
+    Z4Translations.CONNECT = "Connect";
     Z4Translations.NONE_HIM = "None";
     Z4Translations.NONE_HER = "None";
     Z4Translations.BORDER = "Border";
@@ -751,6 +753,7 @@ public class Z4Translations {
     Z4Translations.TIME = "\u2190 Tempo";
     Z4Translations.FILLING = "Riempimento";
     Z4Translations.MERGE = "Fondi";
+    Z4Translations.CONNECT = "Connetti";
     Z4Translations.NONE_HIM = "Nessuno";
     Z4Translations.NONE_HER = "Nessuna";
     Z4Translations.BORDER = "Bordo";

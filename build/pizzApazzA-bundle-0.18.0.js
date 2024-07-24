@@ -1355,6 +1355,48 @@ class Z4DrawingPointIntent {
   static DRAW_OBJECTS = 'DRAW_OBJECTS';
 }
 /**
+ * The infinite line
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4InfiniteLine {
+
+   a = 0.0;
+
+   b = 0.0;
+
+   c = 0.0;
+
+   pythagoras = 0.0;
+
+  /**
+   * Creates the object
+   *
+   * @param x1 The x-axis coordinate of the first point of the infinite line
+   * @param y1 The y-axis coordinate of the first point of the infinite line
+   * @param x2 The x-axis coordinate of the second point of the infinite line
+   * @param y2 The y-axis coordinate of the second point of the infinite line
+   */
+  constructor(x1, y1, x2, y2) {
+    this.a = y2 - y1;
+    this.b = x1 - x2;
+    this.c = x2 * y1 - x1 * y2;
+    this.pythagoras = Math.sqrt(this.a * this.a + this.b * this.b);
+  }
+
+  /**
+   * Returns the intersection point between this and another infinite line, if
+   * the point exists (the two lines are not parallels)
+   *
+   * @param line The other line
+   * @return The intersection point, null if the point does not exist
+   */
+   getIntersectionPoint(line) {
+    let det = this.a * line.b - line.a * this.b;
+    return det ? new Z4Point((this.b * line.c - line.b * this.c) / det, (line.a * this.c - this.a * line.c) / det) : null;
+  }
+}
+/**
  * The utility library for math
  *
  * @author gianpiero.diblasi
@@ -7288,11 +7330,11 @@ class Z4GeometricShapePreview extends JSDropDown {
   }
 }
 /**
- * The panel to merge geometric shapes
+ * The panel to merge/connect geometric shapes
  *
  * @author gianpiero.diblasi
  */
-class Z4MergeGeometricShapePanel extends JSPanel {
+class Z4MergeConnectGeometricShapePanel extends JSPanel {
 
    delete = new JSCheckBox();
 
@@ -7311,14 +7353,14 @@ class Z4MergeGeometricShapePanel extends JSPanel {
    */
   constructor() {
     super();
-    this.cssAddClass("z4mergegeometricshapepanel");
+    this.cssAddClass("z4mergeconnectgeometricshapepanel");
     this.setLayout(new GridBagLayout());
     this.delete.setText(Z4Translations.DELETE_SELECTED_SHAPES_AND_PATHS_MESSAGE);
     this.add(this.delete, new GBC(0, 0).a(GBC.WEST));
-    this.selectedPanel.cssAddClass("z4mergegeometricshapepanel-selected");
+    this.selectedPanel.cssAddClass("z4mergeconnectgeometricshapepanel-selected");
     this.selectedPanel.setLayout(new BoxLayout(this.selectedPanel, BoxLayout.X_AXIS));
     this.add(this.selectedPanel, new GBC(0, 1).i(0, 0, 2, 0));
-    this.containerPanel.cssAddClass("z4mergegeometricshapepanel-container");
+    this.containerPanel.cssAddClass("z4mergeconnectgeometricshapepanel-container");
     this.containerPanel.setLayout(new GridBagLayout());
     this.add(this.containerPanel, new GBC(0, 2).f(GBC.HORIZONTAL));
   }
@@ -7346,25 +7388,29 @@ class Z4MergeGeometricShapePanel extends JSPanel {
    * Sets the canvas
    *
    * @param canvas The canvas
+   * @param onlyPaths true to show only paths, false otherwise (paths and shapes
+   * will be shown)
    */
-   setCanvas(canvas) {
+   setCanvas(canvas, onlyPaths) {
     let d = canvas.getSize();
     let ratio = d.width / d.height;
-    let w = ratio > 1 ? Z4MergeGeometricShapePanel.PREVIEW_SIZE : Z4MergeGeometricShapePanel.PREVIEW_SIZE * ratio;
-    let h = ratio > 1 ? Z4MergeGeometricShapePanel.PREVIEW_SIZE / ratio : Z4MergeGeometricShapePanel.PREVIEW_SIZE;
+    let w = ratio > 1 ? Z4MergeConnectGeometricShapePanel.PREVIEW_SIZE : Z4MergeConnectGeometricShapePanel.PREVIEW_SIZE * ratio;
+    let h = ratio > 1 ? Z4MergeConnectGeometricShapePanel.PREVIEW_SIZE / ratio : Z4MergeConnectGeometricShapePanel.PREVIEW_SIZE;
     let zoom = Math.min(w / d.width, h / d.height);
     for (let index = 0; index < canvas.getGeometricShapesCount(); index++) {
       let shape = canvas.getGeometricShapeAt(index);
-      let checkbox = new JSCheckBox();
-      checkbox.addActionListener(event => this.onClick(checkbox, shape, w, h, zoom));
-      this.containerPanel.add(checkbox, new GBC((index % 4) * 4, parseInt(index / 4)));
-      let preview = this.createPreview(w, h);
-      preview.addEventListener("mousedown", event => {
-        checkbox.setSelected(!checkbox.isSelected());
-        this.onClick(checkbox, shape, w, h, zoom);
-      });
-      this.drawShape(preview.invoke("getContext('2d')"), shape, zoom);
-      this.containerPanel.add(preview, new GBC((index % 4) * 4 + 1, parseInt(index / 4)).i(5, 0, 0, 5));
+      if (!onlyPaths || shape.isPath()) {
+        let checkbox = new JSCheckBox();
+        checkbox.addActionListener(event => this.onClick(checkbox, shape, w, h, zoom));
+        this.containerPanel.add(checkbox, new GBC((index % 4) * 4, parseInt(index / 4)));
+        let preview = this.createPreview(w, h);
+        preview.addEventListener("mousedown", event => {
+          checkbox.setSelected(!checkbox.isSelected());
+          this.onClick(checkbox, shape, w, h, zoom);
+        });
+        this.drawShape(preview.invoke("getContext('2d')"), shape, zoom);
+        this.containerPanel.add(preview, new GBC((index % 4) * 4 + 1, parseInt(index / 4)).i(5, 0, 0, 5));
+      }
     }
   }
 
@@ -7372,10 +7418,10 @@ class Z4MergeGeometricShapePanel extends JSPanel {
     let preview = new JSComponent(document.createElement("canvas"));
     preview.setAttribute("width", "" + w);
     preview.setAttribute("height", "" + h);
-    preview.getStyle().marginTop = (Z4MergeGeometricShapePanel.PREVIEW_SIZE - h - 1) / 2 + "px";
-    preview.getStyle().marginBottom = (Z4MergeGeometricShapePanel.PREVIEW_SIZE - h - 1) / 2 + "px";
-    preview.getStyle().marginLeft = (Z4MergeGeometricShapePanel.PREVIEW_SIZE - w - 1) / 2 + "px";
-    preview.getStyle().marginRight = (Z4MergeGeometricShapePanel.PREVIEW_SIZE - w - 1) / 2 + "px";
+    preview.getStyle().marginTop = (Z4MergeConnectGeometricShapePanel.PREVIEW_SIZE - h - 1) / 2 + "px";
+    preview.getStyle().marginBottom = (Z4MergeConnectGeometricShapePanel.PREVIEW_SIZE - h - 1) / 2 + "px";
+    preview.getStyle().marginLeft = (Z4MergeConnectGeometricShapePanel.PREVIEW_SIZE - w - 1) / 2 + "px";
+    preview.getStyle().marginRight = (Z4MergeConnectGeometricShapePanel.PREVIEW_SIZE - w - 1) / 2 + "px";
     return preview;
   }
 
@@ -7404,7 +7450,7 @@ class Z4MergeGeometricShapePanel extends JSPanel {
     } else {
       let indexOf = this.selectedGeometricShapes.indexOf(shape);
       this.selectedGeometricShapes.splice(indexOf, 1);
-      document.querySelector(".z4mergegeometricshapepanel-selected canvas:nth-child(" + (indexOf + 1) + ")").remove();
+      document.querySelector(".z4mergeconnectgeometricshapepanel-selected canvas:nth-child(" + (indexOf + 1) + ")").remove();
     }
     this.onchange();
   }
@@ -7462,11 +7508,11 @@ class Z4ShapesAndPathsPanel extends JSPanel {
     dropDownMenu.addMenu(Z4Translations.SINUSOIDAL, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.SINUSOIDAL, this.canvas.getSize().width, this.canvas.getSize().height))).setContentAreaFilled(false);
     dropDownMenu.addMenu(Z4Translations.SPIRAL, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.SPIRAL, this.canvas.getSize().width, this.canvas.getSize().height))).setContentAreaFilled(false);
     this.add(dropDownMenu, new GBC(0, 1).i(0, 2, 0, 5));
-    let button = new JSButton();
-    button.setText(Z4Translations.MERGE);
-    button.setContentAreaFilled(false);
-    button.addActionListener(event => this.merge());
-    this.add(button, new GBC(1, 1).a(GBC.WEST).f(GBC.VERTICAL));
+    dropDownMenu = new JSDropDownMenu();
+    dropDownMenu.setLabel(Z4Translations.ACTIONS);
+    dropDownMenu.addMenu(Z4Translations.MERGE, event => this.mergeConnect(false)).setContentAreaFilled(false);
+    dropDownMenu.addMenu(Z4Translations.CONNECT, event => this.mergeConnect(true)).setContentAreaFilled(false);
+    this.add(dropDownMenu, new GBC(1, 1).a(GBC.WEST).f(GBC.VERTICAL));
     Z4UI.addHLine(this, new GBC(0, 2).w(2).wx(1).f(GBC.HORIZONTAL).i(2, 1, 2, 1));
     this.geometricShapesPreview.setLayout(new BoxLayout(this.geometricShapesPreview, BoxLayout.Y_AXIS));
     this.geometricShapesPreview.getStyle().overflowY = "scroll";
@@ -7475,9 +7521,9 @@ class Z4ShapesAndPathsPanel extends JSPanel {
     window.addEventListener("resize", event => this.geometricShapesPreview.getStyle().height = (window.innerHeight - 230) + "px");
   }
 
-   merge() {
-    let panel = new Z4MergeGeometricShapePanel();
-    panel.setCanvas(this.canvas);
+   mergeConnect(connect) {
+    let panel = new Z4MergeConnectGeometricShapePanel();
+    panel.setCanvas(this.canvas, connect);
     JSOptionPane.showInputDialog(panel, Z4Translations.MERGE, listener => panel.addChangeListener(listener), () => panel.getSelectedGeometricShapes().length > 1, response => {
       if (response === JSOptionPane.OK_OPTION) {
         let selected = panel.getSelectedGeometricShapes();
@@ -7487,7 +7533,12 @@ class Z4ShapesAndPathsPanel extends JSPanel {
             document.querySelector(".z4geometricshapepreview:nth-child(" + (index + 1) + ")").remove();
           });
         }
-        this.canvas.addGeometricShape(new Z4GeometricShapeSequence(selected));
+        if (connect) {
+          let d = this.canvas.getSize();
+          this.canvas.addGeometricShape(selected.reduce((accumulator, current, index, array) => accumulator.connect(current, d.width, d.height)));
+        } else {
+          this.canvas.addGeometricShape(new Z4GeometricShapeSequence(selected));
+        }
       }
     });
   }
@@ -16519,10 +16570,15 @@ class Z4GeometricShape extends Z4JSONable {
    */
    connect(shape, width, height) {
     let p1 = this.getTangentAt(1);
-    let ctrl1 = this.getPoint(p1.x0, p1.y0, p1.x, p1.y, p1.module * 5, p1.phase, width, height);
+    let line1 = new Z4InfiniteLine(p1.x0, p1.y0, p1.x, p1.y);
     let p2 = shape.getTangentAt(0);
-    let ctrl2 = this.getPoint(p2.x0, p2.y0, p2.x0 + p2.module * 5 * Math.cos(p2.phase - Math.PI), p2.y0 + p2.module * 5 * Math.sin(p2.phase - Math.PI), p2.module * 5, p2.phase - Math.PI, width, height);
-    return new Z4GeometricShapeSequence(new Array(this, new Z4BezierCurve(p1.x, p1.y, ctrl1.x, ctrl1.y, ctrl2.x, ctrl2.y, p2.x, p2.y), shape));
+    let line2 = new Z4InfiniteLine(p2.x0, p2.y0, p2.x, p2.y);
+    let ctrl = line1.getIntersectionPoint(line2);
+    if (!ctrl) {
+      ctrl = new Z4Point((p1.x0 + p2.x0) / 2, (p1.y0 + p2.y0) / 2);
+    }
+    ctrl = this.getPoint(p1.x0, p1.y0, ctrl.x, ctrl.y, Z4Math.distance(p1.x0, p1.y0, ctrl.x, ctrl.y), Z4Math.atan(p1.x0, p1.y0, ctrl.x, ctrl.y), width, height);
+    return new Z4GeometricShapeSequence(new Array(this, new Z4BezierCurve(p1.x0, p1.y0, ctrl.x, ctrl.y, ctrl.x, ctrl.y, p2.x0, p2.y0), shape));
   }
 
    getPoint(cx, cy, x, y, radius, angle, width, height) {
@@ -23310,6 +23366,8 @@ class Z4Translations {
 
   static  MERGE = "";
 
+  static  CONNECT = "";
+
   static  NONE_HIM = "";
 
   static  NONE_HER = "";
@@ -23746,6 +23804,7 @@ class Z4Translations {
     Z4Translations.TIME = "\u2190 Time";
     Z4Translations.FILLING = "Filling";
     Z4Translations.MERGE = "Merge";
+    Z4Translations.CONNECT = "Connect";
     Z4Translations.NONE_HIM = "None";
     Z4Translations.NONE_HER = "None";
     Z4Translations.BORDER = "Border";
@@ -24023,6 +24082,7 @@ class Z4Translations {
     Z4Translations.TIME = "\u2190 Tempo";
     Z4Translations.FILLING = "Riempimento";
     Z4Translations.MERGE = "Fondi";
+    Z4Translations.CONNECT = "Connetti";
     Z4Translations.NONE_HIM = "Nessuno";
     Z4Translations.NONE_HER = "Nessuna";
     Z4Translations.BORDER = "Bordo";

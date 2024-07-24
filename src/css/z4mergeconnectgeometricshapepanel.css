@@ -1,7 +1,7 @@
-.z4mergegeometricshapepanel {
+.z4mergeconnectgeometricshapepanel {
 }
 
-.z4mergegeometricshapepanel .z4mergegeometricshapepanel-selected {
+.z4mergeconnectgeometricshapepanel .z4mergeconnectgeometricshapepanel-selected {
   height: 100px;
   width: 40rem;
   overflow-x: scroll;
@@ -10,12 +10,12 @@
   padding: 2px;
 }
 
-.z4mergegeometricshapepanel .z4mergegeometricshapepanel-container {
+.z4mergeconnectgeometricshapepanel .z4mergeconnectgeometricshapepanel-container {
   height: 30rem;
   overflow-y: scroll;
 }
 
-.z4mergegeometricshapepanel canvas {
+.z4mergeconnectgeometricshapepanel canvas {
   border: 1px solid var(--main-action-bgcolor);
   background-color: white;
 }

@@ -30,10 +30,15 @@ class Z4GeometricShape extends Z4JSONable {
    */
    connect(shape, width, height) {
     let p1 = this.getTangentAt(1);
-    let ctrl1 = this.getPoint(p1.x0, p1.y0, p1.x, p1.y, p1.module * 5, p1.phase, width, height);
+    let line1 = new Z4InfiniteLine(p1.x0, p1.y0, p1.x, p1.y);
     let p2 = shape.getTangentAt(0);
-    let ctrl2 = this.getPoint(p2.x0, p2.y0, p2.x0 + p2.module * 5 * Math.cos(p2.phase - Math.PI), p2.y0 + p2.module * 5 * Math.sin(p2.phase - Math.PI), p2.module * 5, p2.phase - Math.PI, width, height);
-    return new Z4GeometricShapeSequence(new Array(this, new Z4BezierCurve(p1.x, p1.y, ctrl1.x, ctrl1.y, ctrl2.x, ctrl2.y, p2.x, p2.y), shape));
+    let line2 = new Z4InfiniteLine(p2.x0, p2.y0, p2.x, p2.y);
+    let ctrl = line1.getIntersectionPoint(line2);
+    if (!ctrl) {
+      ctrl = new Z4Point((p1.x0 + p2.x0) / 2, (p1.y0 + p2.y0) / 2);
+    }
+    ctrl = this.getPoint(p1.x0, p1.y0, ctrl.x, ctrl.y, Z4Math.distance(p1.x0, p1.y0, ctrl.x, ctrl.y), Z4Math.atan(p1.x0, p1.y0, ctrl.x, ctrl.y), width, height);
+    return new Z4GeometricShapeSequence(new Array(this, new Z4BezierCurve(p1.x0, p1.y0, ctrl.x, ctrl.y, ctrl.x, ctrl.y, p2.x0, p2.y0), shape));
   }
 
    getPoint(cx, cy, x, y, radius, angle, width, height) {
