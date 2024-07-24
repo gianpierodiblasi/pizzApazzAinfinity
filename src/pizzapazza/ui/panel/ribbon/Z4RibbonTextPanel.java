@@ -3,6 +3,7 @@ package pizzapazza.ui.panel.ribbon;
 import static def.dom.Globals.document;
 import def.dom.ImageData;
 import def.js.Array;
+import def.js.RegExp;
 import javascript.awt.Color;
 import javascript.awt.GBC;
 import javascript.awt.GridBagLayout;
@@ -91,6 +92,8 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
   private boolean fontsChecked;
   private int selectedControlPoint = 0;
   private final Z4TextInfo textInfo = new Z4TextInfo();
+
+  private boolean isProd;
 
   private final static int TEXT_COLOR_PREVIEW_WIDTH = 45;
   private final static int TEXT_COLOR_PREVIEW_HEIGHT = 12;
@@ -320,8 +323,10 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     dropDown.setLabel(Z4Translations.APPLY_ON);
     this.applyOnSelectedLayer = dropDown.addMenu(Z4Translations.SELECTED_LAYER, event -> this.canvas.drawText(false));
     this.applyOnSelectedLayer.setEnabled(false);
+    this.applyOnSelectedLayer.setContentAreaFilled(false);
     this.applyOnNewLayer = dropDown.addMenu(Z4Translations.NEW_LAYER, event -> this.canvas.drawText(true));
     this.applyOnNewLayer.setEnabled(false);
+    this.applyOnNewLayer.setContentAreaFilled(false);
     this.add(dropDown, new GBC(x, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 0));
   }
 
@@ -341,8 +346,8 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     if ($exists(this.fontSelectionPanel)) {
       this.fontSelectionPanel.setSampleVisible(!$exists(this.textInfo.textText));
     }
-    this.applyOnSelectedLayer.setEnabled($exists(this.textInfo.textText));
-    this.applyOnNewLayer.setEnabled($exists(this.textInfo.textText));
+    this.applyOnSelectedLayer.setEnabled($exists(this.textInfo.textText) && $exists(this.textInfo.shape));
+    this.applyOnNewLayer.setEnabled($exists(this.textInfo.textText) && $exists(this.textInfo.shape));
     this.textInfo.textEmpty = this.textEmpty.isSelected();
     this.textInfo.textColor = this.textColor.getValue();
     if (this.textColorFillingUNIFORM.isSelected()) {
@@ -441,6 +446,8 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     } else {
       this.warningMessage.getStyle().removeProperty("display");
     }
+    this.applyOnSelectedLayer.setEnabled($exists(this.textInfo.textText) && $exists(this.textInfo.shape));
+    this.applyOnNewLayer.setEnabled($exists(this.textInfo.textText) && $exists(this.textInfo.shape));
 
     this.selectedControlPoint = selectedControlPoint;
     this.canvas.setTextInfo(this.textInfo, selectedControlPoint);
@@ -457,12 +464,21 @@ public class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
   /**
    * Checks the available fonts
    */
+  @SuppressWarnings("IndexOfReplaceableByContains")
   public void checkFonts() {
     if (this.fontsChecked) {
       this.onTextInfoChange(false);
       this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
     } else {
-      Z4UI.pleaseWait(this, true, false, false, false, "", () -> Z4Font.getAvailableFontFamilies(false, available -> {
+      RegExp regExp = new RegExp("pizzApazzA-bundle-.*js");
+      document.querySelectorAll("script").forEach(script -> {
+        String src = script.getAttribute("src");
+        if (regExp.test(src) && src.indexOf("-min-") != -1) {
+          this.isProd = true;
+        }
+      });
+
+      Z4UI.pleaseWait(this, true, false, false, false, "", () -> Z4Font.getAvailableFontFamilies(this.isProd, available -> {
         Array<String> fonts = new Array<>();
         available.forEach((f, key, array) -> fonts.push(f));
         fonts.sort();

@@ -7452,15 +7452,15 @@ class Z4ShapesAndPathsPanel extends JSPanel {
     Z4UI.addLabel(this, Z4Translations.SHAPES_AND_PATHS, new GBC(0, 0).w(2).a(GBC.WEST).i(-9, 5, 5, 0));
     let dropDownMenu = new JSDropDownMenu();
     dropDownMenu.setLabel(Z4Translations.NEW_HIS);
-    dropDownMenu.addMenu(Z4Translations.LINE, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.LINE, this.canvas.getSize().width, this.canvas.getSize().height)));
-    dropDownMenu.addMenu(Z4Translations.POLYLINE, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.POLYLINE, this.canvas.getSize().width, this.canvas.getSize().height)));
-    dropDownMenu.addMenu(Z4Translations.ELLIPSE, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.ELLIPSE, this.canvas.getSize().width, this.canvas.getSize().height)));
-    dropDownMenu.addMenu(Z4Translations.RECTANGLE, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.RECTANGLE, this.canvas.getSize().width, this.canvas.getSize().height)));
-    dropDownMenu.addMenu(Z4Translations.ROUND_RECTANGLE, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.ROUND_RECTANGLE, this.canvas.getSize().width, this.canvas.getSize().height)));
-    dropDownMenu.addMenu(Z4Translations.QUAD, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.QUAD, this.canvas.getSize().width, this.canvas.getSize().height)));
-    dropDownMenu.addMenu(Z4Translations.BEZIER, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.BEZIER, this.canvas.getSize().width, this.canvas.getSize().height)));
-    dropDownMenu.addMenu(Z4Translations.SINUSOIDAL, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.SINUSOIDAL, this.canvas.getSize().width, this.canvas.getSize().height)));
-    dropDownMenu.addMenu(Z4Translations.SPIRAL, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.SPIRAL, this.canvas.getSize().width, this.canvas.getSize().height)));
+    dropDownMenu.addMenu(Z4Translations.LINE, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.LINE, this.canvas.getSize().width, this.canvas.getSize().height))).setContentAreaFilled(false);
+    dropDownMenu.addMenu(Z4Translations.POLYLINE, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.POLYLINE, this.canvas.getSize().width, this.canvas.getSize().height))).setContentAreaFilled(false);
+    dropDownMenu.addMenu(Z4Translations.ELLIPSE, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.ELLIPSE, this.canvas.getSize().width, this.canvas.getSize().height))).setContentAreaFilled(false);
+    dropDownMenu.addMenu(Z4Translations.RECTANGLE, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.RECTANGLE, this.canvas.getSize().width, this.canvas.getSize().height))).setContentAreaFilled(false);
+    dropDownMenu.addMenu(Z4Translations.ROUND_RECTANGLE, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.ROUND_RECTANGLE, this.canvas.getSize().width, this.canvas.getSize().height))).setContentAreaFilled(false);
+    dropDownMenu.addMenu(Z4Translations.QUAD, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.QUAD, this.canvas.getSize().width, this.canvas.getSize().height))).setContentAreaFilled(false);
+    dropDownMenu.addMenu(Z4Translations.BEZIER, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.BEZIER, this.canvas.getSize().width, this.canvas.getSize().height))).setContentAreaFilled(false);
+    dropDownMenu.addMenu(Z4Translations.SINUSOIDAL, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.SINUSOIDAL, this.canvas.getSize().width, this.canvas.getSize().height))).setContentAreaFilled(false);
+    dropDownMenu.addMenu(Z4Translations.SPIRAL, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.SPIRAL, this.canvas.getSize().width, this.canvas.getSize().height))).setContentAreaFilled(false);
     this.add(dropDownMenu, new GBC(0, 1).i(0, 2, 0, 5));
     let button = new JSButton();
     button.setText(Z4Translations.MERGE);
@@ -8948,6 +8948,8 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
 
    textInfo = new Z4TextInfo();
 
+   isProd = false;
+
   static  TEXT_COLOR_PREVIEW_WIDTH = 45;
 
   static  TEXT_COLOR_PREVIEW_HEIGHT = 12;
@@ -9137,8 +9139,10 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     dropDown.setLabel(Z4Translations.APPLY_ON);
     this.applyOnSelectedLayer = dropDown.addMenu(Z4Translations.SELECTED_LAYER, event => this.canvas.drawText(false));
     this.applyOnSelectedLayer.setEnabled(false);
+    this.applyOnSelectedLayer.setContentAreaFilled(false);
     this.applyOnNewLayer = dropDown.addMenu(Z4Translations.NEW_LAYER, event => this.canvas.drawText(true));
     this.applyOnNewLayer.setEnabled(false);
+    this.applyOnNewLayer.setContentAreaFilled(false);
     this.add(dropDown, new GBC(x, 1).f(GBC.HORIZONTAL).i(0, 5, 0, 0));
   }
 
@@ -9156,8 +9160,8 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     if (this.fontSelectionPanel) {
       this.fontSelectionPanel.setSampleVisible(!this.textInfo.textText);
     }
-    this.applyOnSelectedLayer.setEnabled(!!(this.textInfo.textText));
-    this.applyOnNewLayer.setEnabled(!!(this.textInfo.textText));
+    this.applyOnSelectedLayer.setEnabled(this.textInfo.textText && this.textInfo.shape);
+    this.applyOnNewLayer.setEnabled(this.textInfo.textText && this.textInfo.shape);
     this.textInfo.textEmpty = this.textEmpty.isSelected();
     this.textInfo.textColor = this.textColor.getValue();
     if (this.textColorFillingUNIFORM.isSelected()) {
@@ -9243,6 +9247,8 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     } else {
       this.warningMessage.getStyle().removeProperty("display");
     }
+    this.applyOnSelectedLayer.setEnabled(this.textInfo.textText && this.textInfo.shape);
+    this.applyOnNewLayer.setEnabled(this.textInfo.textText && this.textInfo.shape);
     this.selectedControlPoint = selectedControlPoint;
     this.canvas.setTextInfo(this.textInfo, selectedControlPoint);
   }
@@ -9263,7 +9269,14 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
       this.onTextInfoChange(false);
       this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
     } else {
-      Z4UI.pleaseWait(this, true, false, false, false, "", () => Z4Font.getAvailableFontFamilies(false, available => {
+      let regExp = new RegExp("pizzApazzA-bundle-.*js");
+      document.querySelectorAll("script").forEach(script => {
+        let src = script.getAttribute("src");
+        if (regExp.test(src) && src.indexOf("-min-") !== -1) {
+          this.isProd = true;
+        }
+      });
+      Z4UI.pleaseWait(this, true, false, false, false, "", () => Z4Font.getAvailableFontFamilies(this.isProd, available => {
         let fonts = new Array();
         available.forEach((f, key, array) => fonts.push(f));
         fonts.sort();
