@@ -7513,7 +7513,7 @@ class Z4ShapesAndPathsPanel extends JSPanel {
     this.cssAddClass("z4shapesandpathspanel");
     this.setLayout(new GridBagLayout());
     Z4UI.addLabel(this, Z4Translations.SHAPES_AND_PATHS, new GBC(0, 0).w(2).a(GBC.WEST).i(-9, 5, 5, 0));
-    this.drawDirection.setText("DRAW DIRECTION");
+    this.drawDirection.setText(Z4Translations.DRAW_DIRECTION);
     this.drawDirection.addActionListener(event => this.canvas.setDrawGeometricShapeDirection(this.drawDirection.isSelected()));
     this.add(this.drawDirection, new GBC(0, 1).w(2).a(GBC.WEST));
     let dropDownMenu = new JSDropDownMenu();
@@ -7536,9 +7536,9 @@ class Z4ShapesAndPathsPanel extends JSPanel {
     Z4UI.addHLine(this, new GBC(0, 3).w(2).wx(1).f(GBC.HORIZONTAL).i(2, 1, 2, 1));
     this.geometricShapesPreview.setLayout(new BoxLayout(this.geometricShapesPreview, BoxLayout.Y_AXIS));
     this.geometricShapesPreview.getStyle().overflowY = "scroll";
-    this.geometricShapesPreview.getStyle().height = (window.innerHeight - 230) + "px";
+    this.geometricShapesPreview.getStyle().height = (window.innerHeight - 255) + "px";
     this.add(this.geometricShapesPreview, new GBC(0, 3).w(2).wxy(1, 1).f(GBC.BOTH).i(5, 2, 5, 2));
-    window.addEventListener("resize", event => this.geometricShapesPreview.getStyle().height = (window.innerHeight - 230) + "px");
+    window.addEventListener("resize", event => this.geometricShapesPreview.getStyle().height = (window.innerHeight - 255) + "px");
   }
 
    mergeConnect(connect) {
@@ -16632,6 +16632,22 @@ class Z4GeometricShape extends Z4JSONable {
   }
 
   /**
+   * Draws a direction arrow in a path
+   *
+   * @param path The path
+   */
+   drawDirection(path) {
+    let vector = this.getTangentAt(0.5);
+    let tx = Z4AffineTransform.translate(vector.x0, vector.y0).concatenateRotate(vector.phase);
+    path.moveTo(vector.x0, vector.y0);
+    let p = tx.transform(-20, -10);
+    path.lineTo(p.x, p.y);
+    p = tx.transform(-20, +10);
+    path.lineTo(p.x, p.y);
+    path.lineTo(vector.x0, vector.y0);
+  }
+
+  /**
    * Returns the distance from a given point of this geometric shape
    *
    * @param x The x-axis coordinate of the point
@@ -16894,8 +16910,8 @@ class Z4AbstractBezierCurve extends Z4GeometricShape {
     return true;
   }
 
-   getPath2D() {
-    return new Z4Polyline(this.bezier.getLUT(parseInt(this.bezier.length() / 2))).getPath2D();
+   getPath2D(withDirection) {
+    return new Z4Polyline(this.bezier.getLUT(parseInt(this.bezier.length() / 2))).getPath2D(withDirection);
   }
 
    distance(x, y) {
@@ -17126,8 +17142,8 @@ class Z4GeometricCurve extends Z4GeometricShape {
     super(type);
   }
 
-   getPath2D() {
-    return this.polyline.getPath2D();
+   getPath2D(withDirection) {
+    return this.polyline.getPath2D(withDirection);
   }
 
    distance(x, y) {
@@ -17869,9 +17885,9 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
     return this.shapes.map(shape => shape.isPath()).reduce((accumulator, current, index, array) => accumulator && current);
   }
 
-   getPath2D() {
+   getPath2D(withDirection) {
     let path = new Path2D();
-    this.shapes.forEach(shape => path.addPath(shape.getPath2D()));
+    this.shapes.forEach(shape => path.addPath(shape.getPath2D(withDirection)));
     return path;
   }
 
@@ -18021,10 +18037,13 @@ class Z4Line extends Z4GeometricShape {
     return true;
   }
 
-   getPath2D() {
+   getPath2D(withDirection) {
     let path = new Path2D();
     path.moveTo(this.x1, this.y1);
     path.lineTo(this.x2, this.y2);
+    if (withDirection) {
+      this.drawDirection(path);
+    }
     return path;
   }
 
@@ -18149,7 +18168,7 @@ class Z4Polyline extends Z4GeometricShape {
     return true;
   }
 
-   getPath2D() {
+   getPath2D(withDirection) {
     let path2D = new Path2D();
     this.points.forEach((point, index, array) => {
       if (index) {
@@ -18158,6 +18177,9 @@ class Z4Polyline extends Z4GeometricShape {
         path2D.moveTo(point.x, point.y);
       }
     });
+    if (withDirection) {
+      this.drawDirection(path2D);
+    }
     return path2D;
   }
 
@@ -18320,7 +18342,7 @@ class Z4SinglePointShape extends Z4GeometricShape {
     return true;
   }
 
-   getPath2D() {
+   getPath2D(withDirection) {
     let path = new Path2D();
     path.moveTo(this.x, this.y);
     return path;
@@ -23420,6 +23442,8 @@ class Z4Translations {
 
   static  ACTIONS = "";
 
+  static  DRAW_DIRECTION = "";
+
   static  DRAWING_DIRECTION = "";
 
   static  SHOW_GRID = "";
@@ -23843,6 +23867,7 @@ class Z4Translations {
     Z4Translations.MOVE_TOP = "Move to Top";
     Z4Translations.TRY_ME = "Try Me";
     Z4Translations.ACTIONS = "Actions";
+    Z4Translations.DRAW_DIRECTION = "Draw Direction";
     Z4Translations.DRAWING_DIRECTION = "Drawing Direction";
     Z4Translations.SHOW_GRID = "Show Grid";
     Z4Translations.MAGNETIC_GRID = "Magnetic Grid";
@@ -24121,6 +24146,7 @@ class Z4Translations {
     Z4Translations.MOVE_TOP = "Muovi in Cima";
     Z4Translations.TRY_ME = "Provami";
     Z4Translations.ACTIONS = "Azioni";
+    Z4Translations.DRAW_DIRECTION = "Disegna Direzione";
     Z4Translations.DRAWING_DIRECTION = "Direzione di Disegno";
     Z4Translations.SHOW_GRID = "Mostra Griglia";
     Z4Translations.MAGNETIC_GRID = "Griglia Magnetica";

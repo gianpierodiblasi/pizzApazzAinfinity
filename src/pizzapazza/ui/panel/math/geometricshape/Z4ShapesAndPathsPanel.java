@@ -43,7 +43,7 @@ public class Z4ShapesAndPathsPanel extends JSPanel {
 
     Z4UI.addLabel(this, Z4Translations.SHAPES_AND_PATHS, new GBC(0, 0).w(2).a(GBC.WEST).i(-9, 5, 5, 0));
 
-    this.drawDirection.setText("DRAW DIRECTION");
+    this.drawDirection.setText(Z4Translations.DRAW_DIRECTION);
     this.drawDirection.addActionListener(event -> this.canvas.setDrawGeometricShapeDirection(this.drawDirection.isSelected()));
     this.add(this.drawDirection, new GBC(0, 1).w(2).a(GBC.WEST));
 
@@ -70,10 +70,10 @@ public class Z4ShapesAndPathsPanel extends JSPanel {
 
     this.geometricShapesPreview.setLayout(new BoxLayout(this.geometricShapesPreview, BoxLayout.Y_AXIS));
     this.geometricShapesPreview.getStyle().overflowY = "scroll";
-    this.geometricShapesPreview.getStyle().height = (window.innerHeight - 230) + "px";
+    this.geometricShapesPreview.getStyle().height = (window.innerHeight - 255) + "px";
     this.add(this.geometricShapesPreview, new GBC(0, 3).w(2).wxy(1, 1).f(GBC.BOTH).i(5, 2, 5, 2));
 
-    window.addEventListener("resize", event -> this.geometricShapesPreview.getStyle().height = (window.innerHeight - 230) + "px");
+    window.addEventListener("resize", event -> this.geometricShapesPreview.getStyle().height = (window.innerHeight - 255) + "px");
   }
 
   private void mergeConnect(boolean connect) {

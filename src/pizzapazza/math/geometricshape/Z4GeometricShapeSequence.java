@@ -37,9 +37,9 @@ public class Z4GeometricShapeSequence extends Z4GeometricShape {
   }
 
   @Override
-  public $Path2D getPath2D() {
+  public $Path2D getPath2D(boolean withDirection) {
     $Path2D path = new $Path2D();
-    this.shapes.forEach(shape -> path.addPath(shape.getPath2D()));
+    this.shapes.forEach(shape -> path.addPath(shape.getPath2D(withDirection)));
     return path;
   }
 

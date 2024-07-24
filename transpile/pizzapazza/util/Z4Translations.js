@@ -264,6 +264,8 @@ class Z4Translations {
 
   static  ACTIONS = "";
 
+  static  DRAW_DIRECTION = "";
+
   static  DRAWING_DIRECTION = "";
 
   static  SHOW_GRID = "";
@@ -687,6 +689,7 @@ class Z4Translations {
     Z4Translations.MOVE_TOP = "Move to Top";
     Z4Translations.TRY_ME = "Try Me";
     Z4Translations.ACTIONS = "Actions";
+    Z4Translations.DRAW_DIRECTION = "Draw Direction";
     Z4Translations.DRAWING_DIRECTION = "Drawing Direction";
     Z4Translations.SHOW_GRID = "Show Grid";
     Z4Translations.MAGNETIC_GRID = "Magnetic Grid";
@@ -965,6 +968,7 @@ class Z4Translations {
     Z4Translations.MOVE_TOP = "Muovi in Cima";
     Z4Translations.TRY_ME = "Provami";
     Z4Translations.ACTIONS = "Azioni";
+    Z4Translations.DRAW_DIRECTION = "Disegna Direzione";
     Z4Translations.DRAWING_DIRECTION = "Direzione di Disegno";
     Z4Translations.SHOW_GRID = "Mostra Griglia";
     Z4Translations.MAGNETIC_GRID = "Griglia Magnetica";

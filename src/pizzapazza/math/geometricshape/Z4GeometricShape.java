@@ -1,6 +1,7 @@
 package pizzapazza.math.geometricshape;
 
 import def.js.Array;
+import pizzapazza.math.Z4AffineTransform;
 import pizzapazza.math.Z4InfiniteLine;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
@@ -80,6 +81,25 @@ public abstract class Z4GeometricShape implements Z4JSONable {
    * @return The path describing this geometric shape
    */
   public abstract $Path2D getPath2D(boolean withDirection);
+
+  /**
+   * Draws a direction arrow in a path
+   *
+   * @param path The path
+   */
+  protected void drawDirection($Path2D path) {
+    Z4Vector vector = this.getTangentAt(0.5);
+
+    Z4AffineTransform tx = Z4AffineTransform.translate(vector.x0, vector.y0).concatenateRotate(vector.phase);
+    path.moveTo(vector.x0, vector.y0);
+
+    Z4Point p = tx.transform(-20, -10);
+    path.lineTo(p.x, p.y);
+    p = tx.transform(-20, +10);
+    path.lineTo(p.x, p.y);
+
+    path.lineTo(vector.x0, vector.y0);
+  }
 
   /**
    * Returns the distance from a given point of this geometric shape

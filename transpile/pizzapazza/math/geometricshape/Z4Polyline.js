@@ -40,7 +40,7 @@ class Z4Polyline extends Z4GeometricShape {
     return true;
   }
 
-   getPath2D() {
+   getPath2D(withDirection) {
     let path2D = new Path2D();
     this.points.forEach((point, index, array) => {
       if (index) {
@@ -49,6 +49,9 @@ class Z4Polyline extends Z4GeometricShape {
         path2D.moveTo(point.x, point.y);
       }
     });
+    if (withDirection) {
+      this.drawDirection(path2D);
+    }
     return path2D;
   }
 

@@ -33,10 +33,13 @@ class Z4Line extends Z4GeometricShape {
     return true;
   }
 
-   getPath2D() {
+   getPath2D(withDirection) {
     let path = new Path2D();
     path.moveTo(this.x1, this.y1);
     path.lineTo(this.x2, this.y2);
+    if (withDirection) {
+      this.drawDirection(path);
+    }
     return path;
   }
 

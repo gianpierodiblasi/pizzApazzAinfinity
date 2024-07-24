@@ -70,6 +70,22 @@ class Z4GeometricShape extends Z4JSONable {
   }
 
   /**
+   * Draws a direction arrow in a path
+   *
+   * @param path The path
+   */
+   drawDirection(path) {
+    let vector = this.getTangentAt(0.5);
+    let tx = Z4AffineTransform.translate(vector.x0, vector.y0).concatenateRotate(vector.phase);
+    path.moveTo(vector.x0, vector.y0);
+    let p = tx.transform(-20, -10);
+    path.lineTo(p.x, p.y);
+    p = tx.transform(-20, +10);
+    path.lineTo(p.x, p.y);
+    path.lineTo(vector.x0, vector.y0);
+  }
+
+  /**
    * Returns the distance from a given point of this geometric shape
    *
    * @param x The x-axis coordinate of the point

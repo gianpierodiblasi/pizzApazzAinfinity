@@ -25,8 +25,8 @@ class Z4GeometricCurve extends Z4GeometricShape {
     super(type);
   }
 
-   getPath2D() {
-    return this.polyline.getPath2D();
+   getPath2D(withDirection) {
+    return this.polyline.getPath2D(withDirection);
   }
 
    distance(x, y) {

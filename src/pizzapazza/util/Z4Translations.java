@@ -160,6 +160,7 @@ public class Z4Translations {
   public static String MOVE_TOP = "";
   public static String TRY_ME = "";
   public static String ACTIONS = "";
+  public static String DRAW_DIRECTION = "";
   public static String DRAWING_DIRECTION = "";
   public static String SHOW_GRID = "";
   public static String MAGNETIC_GRID = "";
@@ -472,6 +473,7 @@ public class Z4Translations {
     Z4Translations.MOVE_TOP = "Move to Top";
     Z4Translations.TRY_ME = "Try Me";
     Z4Translations.ACTIONS = "Actions";
+    Z4Translations.DRAW_DIRECTION = "Draw Direction";
     Z4Translations.DRAWING_DIRECTION = "Drawing Direction";
     Z4Translations.SHOW_GRID = "Show Grid";
     Z4Translations.MAGNETIC_GRID = "Magnetic Grid";
@@ -768,6 +770,7 @@ public class Z4Translations {
     Z4Translations.MOVE_TOP = "Muovi in Cima";
     Z4Translations.TRY_ME = "Provami";
     Z4Translations.ACTIONS = "Azioni";
+    Z4Translations.DRAW_DIRECTION = "Disegna Direzione";
     Z4Translations.DRAWING_DIRECTION = "Direzione di Disegno";
     Z4Translations.SHOW_GRID = "Mostra Griglia";
     Z4Translations.MAGNETIC_GRID = "Griglia Magnetica";

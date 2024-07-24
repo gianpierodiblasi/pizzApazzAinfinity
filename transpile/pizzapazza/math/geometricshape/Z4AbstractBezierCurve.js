@@ -51,8 +51,8 @@ class Z4AbstractBezierCurve extends Z4GeometricShape {
     return true;
   }
 
-   getPath2D() {
-    return new Z4Polyline(this.bezier.getLUT(parseInt(this.bezier.length() / 2))).getPath2D();
+   getPath2D(withDirection) {
+    return new Z4Polyline(this.bezier.getLUT(parseInt(this.bezier.length() / 2))).getPath2D(withDirection);
   }
 
    distance(x, y) {

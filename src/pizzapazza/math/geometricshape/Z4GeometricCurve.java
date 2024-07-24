@@ -32,8 +32,8 @@ public abstract class Z4GeometricCurve extends Z4GeometricShape {
   }
 
   @Override
-  public $Path2D getPath2D() {
-    return this.polyline.getPath2D();
+  public $Path2D getPath2D(boolean withDirection) {
+    return this.polyline.getPath2D(withDirection);
   }
 
   @Override
