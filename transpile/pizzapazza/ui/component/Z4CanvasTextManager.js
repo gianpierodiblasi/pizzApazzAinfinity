@@ -172,8 +172,10 @@ class Z4CanvasTextManager {
    * @param ctx The context used to draw the text
    * @param drawPath true to draw the path where the text is drawn, false
    * otherwise
+   * @param withDirection true to show an arrow representing the direction of
+   * the path, false otherwise
    */
-   drawText(ctx, drawPath) {
+   drawText(ctx, drawPath, withDirection) {
     ctx.font = (this.textInfo.font.italic ? "italic " : "") + (this.textInfo.font.bold ? "bold " : "") + this.textInfo.font.size + "px '" + this.textInfo.font.family + "'";
     ctx.textAlign = "center";
     if (this.textInfo.shadow) {
@@ -188,7 +190,7 @@ class Z4CanvasTextManager {
       for (let index = 0; index < controlPointConnections.length; index += 2) {
         this.drawLine(ctx, controlPoints[controlPointConnections[index]], controlPoints[controlPointConnections[index + 1]]);
       }
-      this.drawPolyline(ctx, this.textInfo.shape.getPath2D());
+      this.drawPolyline(ctx, this.textInfo.shape.getPath2D(withDirection));
       ctx.restore();
     }
   }

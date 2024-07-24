@@ -347,7 +347,7 @@ public class Z4GeometricShapePreview extends JSDropDown {
    */
   public void drawShape() {
     if ($exists(this.shape)) {
-      $Path2D path2D = this.shape.getPath2D();
+      $Path2D path2D = this.shape.getPath2D(false);
 
       this.ctx.save();
 

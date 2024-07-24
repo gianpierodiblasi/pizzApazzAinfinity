@@ -83,6 +83,8 @@ class Z4Canvas extends JSComponent {
 
    selectedGeometricShape = null;
 
+   drawGeometricShapeDirection = false;
+
    textInfo = null;
 
    canvasArray = new Array(this.canvas, this.canvasGrid, this.canvasBounds, this.canvasOverlay);
@@ -1098,6 +1100,17 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Sets if to show an arrow representing the direction of a geometric shape
+   *
+   * @param drawGeometricShapeDirection true to show an arrow representing the
+   * direction of a geometric shape, false otherwise
+   */
+   setDrawGeometricShapeDirection(drawGeometricShapeDirection) {
+    this.drawGeometricShapeDirection = drawGeometricShapeDirection;
+    this.drawCanvasOverlay();
+  }
+
+  /**
    * Sets the text info
    *
    * @param textInfo The text info
@@ -1221,7 +1234,7 @@ class Z4Canvas extends JSComponent {
     } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT) && this.textInfo && this.textInfo.shape) {
       this.ctxOverlay.save();
       this.ctxOverlay.scale(this.zoom, this.zoom);
-      this.textManager.drawText(this.ctxOverlay, true);
+      this.textManager.drawText(this.ctxOverlay, true, this.drawGeometricShapeDirection);
       this.ctxOverlay.restore();
     }
   }

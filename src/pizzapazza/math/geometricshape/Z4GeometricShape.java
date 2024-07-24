@@ -75,9 +75,11 @@ public abstract class Z4GeometricShape implements Z4JSONable {
   /**
    * Returns the path describing this geometric shape
    *
+   * @param withDirection true to show an arrow representing the direction of
+   * the path, false otherwise
    * @return The path describing this geometric shape
    */
-  public abstract $Path2D getPath2D();
+  public abstract $Path2D getPath2D(boolean withDirection);
 
   /**
    * Returns the distance from a given point of this geometric shape

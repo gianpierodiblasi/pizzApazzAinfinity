@@ -5,6 +5,8 @@
  */
 class Z4ShapesAndPathsPanel extends JSPanel {
 
+   drawDirection = new JSCheckBox();
+
    geometricShapesPreview = new JSPanel();
 
    statusPanel = null;
@@ -19,6 +21,9 @@ class Z4ShapesAndPathsPanel extends JSPanel {
     this.cssAddClass("z4shapesandpathspanel");
     this.setLayout(new GridBagLayout());
     Z4UI.addLabel(this, Z4Translations.SHAPES_AND_PATHS, new GBC(0, 0).w(2).a(GBC.WEST).i(-9, 5, 5, 0));
+    this.drawDirection.setText("DRAW DIRECTION");
+    this.drawDirection.addActionListener(event => this.canvas.setDrawGeometricShapeDirection(this.drawDirection.isSelected()));
+    this.add(this.drawDirection, new GBC(0, 1).w(2).a(GBC.WEST));
     let dropDownMenu = new JSDropDownMenu();
     dropDownMenu.setLabel(Z4Translations.NEW_HIS);
     dropDownMenu.addMenu(Z4Translations.LINE, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.LINE, this.canvas.getSize().width, this.canvas.getSize().height))).setContentAreaFilled(false);
@@ -30,13 +35,13 @@ class Z4ShapesAndPathsPanel extends JSPanel {
     dropDownMenu.addMenu(Z4Translations.BEZIER, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.BEZIER, this.canvas.getSize().width, this.canvas.getSize().height))).setContentAreaFilled(false);
     dropDownMenu.addMenu(Z4Translations.SINUSOIDAL, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.SINUSOIDAL, this.canvas.getSize().width, this.canvas.getSize().height))).setContentAreaFilled(false);
     dropDownMenu.addMenu(Z4Translations.SPIRAL, event => this.canvas.addGeometricShape(Z4GeometricShape.fromSize(Z4GeometricShapeType.SPIRAL, this.canvas.getSize().width, this.canvas.getSize().height))).setContentAreaFilled(false);
-    this.add(dropDownMenu, new GBC(0, 1).i(0, 2, 0, 5));
+    this.add(dropDownMenu, new GBC(0, 2).i(0, 2, 0, 5));
     dropDownMenu = new JSDropDownMenu();
     dropDownMenu.setLabel(Z4Translations.ACTIONS);
     dropDownMenu.addMenu(Z4Translations.MERGE, event => this.mergeConnect(false)).setContentAreaFilled(false);
     dropDownMenu.addMenu(Z4Translations.CONNECT, event => this.mergeConnect(true)).setContentAreaFilled(false);
-    this.add(dropDownMenu, new GBC(1, 1).a(GBC.WEST).f(GBC.VERTICAL));
-    Z4UI.addHLine(this, new GBC(0, 2).w(2).wx(1).f(GBC.HORIZONTAL).i(2, 1, 2, 1));
+    this.add(dropDownMenu, new GBC(1, 2).a(GBC.WEST).f(GBC.VERTICAL));
+    Z4UI.addHLine(this, new GBC(0, 3).w(2).wx(1).f(GBC.HORIZONTAL).i(2, 1, 2, 1));
     this.geometricShapesPreview.setLayout(new BoxLayout(this.geometricShapesPreview, BoxLayout.Y_AXIS));
     this.geometricShapesPreview.getStyle().overflowY = "scroll";
     this.geometricShapesPreview.getStyle().height = (window.innerHeight - 230) + "px";
@@ -102,6 +107,8 @@ class Z4ShapesAndPathsPanel extends JSPanel {
    * Resets the geometric shape preview
    */
    reset() {
+    this.drawDirection.setSelected(false);
+    this.canvas.setDrawGeometricShapeDirection(false);
     this.geometricShapesPreview.setProperty("innerHTML", "");
   }
 }

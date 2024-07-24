@@ -99,6 +99,7 @@ public class Z4Canvas extends JSComponent {
 
   private final Array<Z4GeometricShape> geometricShapes = new Array<>();
   private Z4GeometricShape selectedGeometricShape;
+  private boolean drawGeometricShapeDirection;
   private Z4TextInfo textInfo;
 
   private final Array<$Canvas> canvasArray = new Array<>(this.canvas, this.canvasGrid, this.canvasBounds, this.canvasOverlay);
@@ -1169,6 +1170,17 @@ public class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Sets if to show an arrow representing the direction of a geometric shape
+   *
+   * @param drawGeometricShapeDirection true to show an arrow representing the
+   * direction of a geometric shape, false otherwise
+   */
+  public void setDrawGeometricShapeDirection(boolean drawGeometricShapeDirection) {
+    this.drawGeometricShapeDirection = drawGeometricShapeDirection;
+    this.drawCanvasOverlay();
+  }
+
+  /**
    * Sets the text info
    *
    * @param textInfo The text info
@@ -1310,7 +1322,7 @@ public class Z4Canvas extends JSComponent {
       this.ctxOverlay.save();
       this.ctxOverlay.scale(this.zoom, this.zoom);
 
-      this.textManager.drawText(this.ctxOverlay, true);
+      this.textManager.drawText(this.ctxOverlay, true, this.drawGeometricShapeDirection);
       this.ctxOverlay.restore();
     }
   }

@@ -62,9 +62,11 @@ class Z4GeometricShape extends Z4JSONable {
   /**
    * Returns the path describing this geometric shape
    *
+   * @param withDirection true to show an arrow representing the direction of
+   * the path, false otherwise
    * @return The path describing this geometric shape
    */
-   getPath2D() {
+   getPath2D(withDirection) {
   }
 
   /**
