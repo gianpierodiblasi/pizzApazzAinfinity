@@ -7,14 +7,19 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
 
    shapes = null;
 
+   connected = false;
+
   /**
    * Creates the object
    *
    * @param shapes The sequence of geometric shapes
+   * @param connected true if the sequence is connected (the last point of a
+   * shape overlaps the first point of the following shape), false otherwise
    */
-  constructor(shapes) {
+  constructor(shapes, connected) {
     super(Z4GeometricShapeType.SEQUENCE);
     this.shapes = shapes.map(shape => shape);
+    this.connected = connected;
   }
 
    isPath() {
@@ -88,12 +93,24 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
     let objForSpinnerConfigurations = this.getChangedGeometricShape(spinnerIndex, index => this.shapes[index].getSpinnerConfigurations().length);
     let newShapes = this.shapes;
     if (objForControlPoints) {
-      newShapes = newShapes.map(shape => shape === objForControlPoints["shape"] ? shape.fromDataChanged(shape.getControlPoints(), x, y, objForControlPoints["index"], spinnerValue, -1, width, height) : shape);
+      let controlPointIndex = objForControlPoints["index"];
+      newShapes = newShapes.map((shape, index, array) => {
+        if (!this.connected) {
+          return shape === objForControlPoints["shape"] ? shape.fromDataChanged(shape.getControlPoints(), x, y, controlPointIndex, spinnerValue, -1, width, height) : shape;
+        } else if (index < this.shapes.length - 1 && this.shapes[index + 1] === objForControlPoints["shape"] && controlPointIndex === 0) {
+          let currentControlPoints = shape.getControlPoints();
+          return shape.fromDataChanged(currentControlPoints, x, y, currentControlPoints.length - 1, spinnerValue, -1, width, height);
+        } else if (index && this.shapes[index - 1] === objForControlPoints["shape"] && controlPointIndex === this.shapes[index - 1].getControlPoints().length - 1) {
+          return shape.fromDataChanged(shape.getControlPoints(), x, y, 0, spinnerValue, -1, width, height);
+        } else {
+          return shape === objForControlPoints["shape"] ? shape.fromDataChanged(shape.getControlPoints(), x, y, controlPointIndex, spinnerValue, -1, width, height) : shape;
+        }
+      });
     }
     if (objForSpinnerConfigurations) {
       newShapes = newShapes.map(shape => shape === objForSpinnerConfigurations["shape"] ? shape.fromDataChanged(shape.getControlPoints(), x, y, -1, spinnerValue, objForSpinnerConfigurations["index"], width, height) : shape);
     }
-    return newShapes !== this.shapes ? new Z4GeometricShapeSequence(newShapes) : this;
+    return newShapes !== this.shapes ? new Z4GeometricShapeSequence(newShapes, this.connected) : this;
   }
 
    getChangedGeometricShape(indexToFind, apply) {
@@ -115,7 +132,7 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
   }
 
    fromResize(width, height) {
-    return new Z4GeometricShapeSequence(this.shapes.map(shape => shape.fromResize(width, height)));
+    return new Z4GeometricShapeSequence(this.shapes.map(shape => shape.fromResize(width, height)), this.connected);
   }
 
    toJSON() {
@@ -123,6 +140,7 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
     let shapesJSON = new Array();
     this.shapes.forEach(shape => shapesJSON.push(shape.toJSON()));
     json["shapes"] = shapesJSON;
+    json["connected"] = this.connected;
     return json;
   }
 
@@ -135,6 +153,6 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
   static  fromJSON(json) {
     let shapes = new Array();
     (json["shapes"]).forEach(shapeJSON => shapes.push(Z4GeometricShape.fromJSON(shapeJSON)));
-    return new Z4GeometricShapeSequence(shapes);
+    return new Z4GeometricShapeSequence(shapes, json["connected"]);
   }
 }

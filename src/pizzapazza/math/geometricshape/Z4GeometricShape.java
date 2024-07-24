@@ -53,7 +53,7 @@ public abstract class Z4GeometricShape implements Z4JSONable {
     }
     ctrl = this.getPoint(p1.x0, p1.y0, ctrl.x, ctrl.y, Z4Math.distance(p1.x0, p1.y0, ctrl.x, ctrl.y), Z4Math.atan(p1.x0, p1.y0, ctrl.x, ctrl.y), width, height);
 
-    return new Z4GeometricShapeSequence(new Array<>(this, new Z4BezierCurve(p1.x0, p1.y0, ctrl.x, ctrl.y, ctrl.x, ctrl.y, p2.x0, p2.y0), shape));
+    return new Z4GeometricShapeSequence(new Array<>(this, new Z4BezierCurve(p1.x0, p1.y0, ctrl.x, ctrl.y, ctrl.x, ctrl.y, p2.x0, p2.y0), shape), true);
   }
 
   private Z4Point getPoint(double cx, double cy, double x, double y, double radius, double angle, int width, int height) {

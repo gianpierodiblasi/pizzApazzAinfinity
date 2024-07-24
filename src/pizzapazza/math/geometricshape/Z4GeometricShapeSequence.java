@@ -19,16 +19,20 @@ import simulation.js.$Path2D;
 public class Z4GeometricShapeSequence extends Z4GeometricShape {
 
   private final Array<Z4GeometricShape> shapes;
+  private final boolean connected;
 
   /**
    * Creates the object
    *
    * @param shapes The sequence of geometric shapes
+   * @param connected true if the sequence is connected (the last point of a
+   * shape overlaps the first point of the following shape), false otherwise
    */
-  public Z4GeometricShapeSequence(Array<Z4GeometricShape> shapes) {
+  public Z4GeometricShapeSequence(Array<Z4GeometricShape> shapes, boolean connected) {
     super(Z4GeometricShapeType.SEQUENCE);
 
     this.shapes = shapes.map(shape -> shape);
+    this.connected = connected;
   }
 
   @Override
@@ -115,12 +119,24 @@ public class Z4GeometricShapeSequence extends Z4GeometricShape {
 
     Array<Z4GeometricShape> newShapes = this.shapes;
     if ($exists(objForControlPoints)) {
-      newShapes = newShapes.map(shape -> shape == objForControlPoints.$get("shape") ? shape.fromDataChanged(shape.getControlPoints(), x, y, objForControlPoints.$get("index"), spinnerValue, -1, width, height) : shape);
+      int controlPointIndex = objForControlPoints.$get("index");
+      newShapes = newShapes.map((shape, index, array) -> {
+        if (!this.connected) {
+          return shape == objForControlPoints.$get("shape") ? shape.fromDataChanged(shape.getControlPoints(), x, y, controlPointIndex, spinnerValue, -1, width, height) : shape;
+        } else if (index < this.shapes.length - 1 && this.shapes.$get(index + 1) == objForControlPoints.$get("shape") && controlPointIndex == 0) {
+          Array<Z4Point> currentControlPoints = shape.getControlPoints();
+          return shape.fromDataChanged(currentControlPoints, x, y, currentControlPoints.length - 1, spinnerValue, -1, width, height);
+        } else if ($exists(index) && this.shapes.$get(index - 1) == objForControlPoints.$get("shape") && controlPointIndex == this.shapes.$get(index - 1).getControlPoints().length - 1) {
+          return shape.fromDataChanged(shape.getControlPoints(), x, y, 0, spinnerValue, -1, width, height);
+        } else {
+          return shape == objForControlPoints.$get("shape") ? shape.fromDataChanged(shape.getControlPoints(), x, y, controlPointIndex, spinnerValue, -1, width, height) : shape;
+        }
+      });
     }
     if ($exists(objForSpinnerConfigurations)) {
       newShapes = newShapes.map(shape -> shape == objForSpinnerConfigurations.$get("shape") ? shape.fromDataChanged(shape.getControlPoints(), x, y, -1, spinnerValue, objForSpinnerConfigurations.$get("index"), width, height) : shape);
     }
-    return newShapes != this.shapes ? new Z4GeometricShapeSequence(newShapes) : this;
+    return newShapes != this.shapes ? new Z4GeometricShapeSequence(newShapes, this.connected) : this;
   }
 
   private $Object getChangedGeometricShape(int indexToFind, $Apply_1_V<Integer, Integer> apply) {
@@ -145,7 +161,7 @@ public class Z4GeometricShapeSequence extends Z4GeometricShape {
 
   @Override
   public Z4GeometricShape fromResize(int width, int height) {
-    return new Z4GeometricShapeSequence(this.shapes.map(shape -> shape.fromResize(width, height)));
+    return new Z4GeometricShapeSequence(this.shapes.map(shape -> shape.fromResize(width, height)), this.connected);
   }
 
   @Override
@@ -155,7 +171,7 @@ public class Z4GeometricShapeSequence extends Z4GeometricShape {
     Array<$Object> shapesJSON = new Array<>();
     this.shapes.forEach(shape -> shapesJSON.push(shape.toJSON()));
     json.$set("shapes", shapesJSON);
-
+    json.$set("connected", this.connected);
     return json;
   }
 
@@ -169,6 +185,6 @@ public class Z4GeometricShapeSequence extends Z4GeometricShape {
   public static Z4GeometricShapeSequence fromJSON($Object json) {
     Array<Z4GeometricShape> shapes = new Array<>();
     ((Iterable<$Object>) json.$get("shapes")).forEach(shapeJSON -> shapes.push(Z4GeometricShape.fromJSON(shapeJSON)));
-    return new Z4GeometricShapeSequence(shapes);
+    return new Z4GeometricShapeSequence(shapes, json.$get("connected"));
   }
 }

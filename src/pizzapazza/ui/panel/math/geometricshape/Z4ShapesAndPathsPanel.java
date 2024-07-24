@@ -94,7 +94,7 @@ public class Z4ShapesAndPathsPanel extends JSPanel {
           Dimension d = this.canvas.getSize();
           this.canvas.addGeometricShape(selected.reduce((accumulator, current, index, array) -> accumulator.connect(current, d.width, d.height)));
         } else {
-          this.canvas.addGeometricShape(new Z4GeometricShapeSequence(selected));
+          this.canvas.addGeometricShape(new Z4GeometricShapeSequence(selected, false));
         }
       }
     });

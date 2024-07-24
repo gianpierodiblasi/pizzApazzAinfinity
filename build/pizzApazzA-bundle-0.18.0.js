@@ -4674,7 +4674,8 @@ class Z4CanvasTextManager {
       let controlPoints = this.textInfo.shape.getControlPoints();
       let controlPointConnections = this.textInfo.shape.getControlPointConnections();
       ctx.save();
-      controlPoints.forEach((point, index, array) => this.drawCircle(ctx, point, index));
+      controlPoints.filter((point, index, array) => index !== this.selectedControlPoint).forEach((point, index, array) => this.drawCircle(ctx, point, "black"));
+      this.drawCircle(ctx, controlPoints[this.selectedControlPoint], "red");
       for (let index = 0; index < controlPointConnections.length; index += 2) {
         this.drawLine(ctx, controlPoints[controlPointConnections[index]], controlPoints[controlPointConnections[index + 1]]);
       }
@@ -4756,12 +4757,12 @@ class Z4CanvasTextManager {
     ctx.restore();
   }
 
-   drawCircle(ctx, point, index) {
+   drawCircle(ctx, point, color) {
     ctx.lineWidth = 3 / this.zoom;
     let dash = new Array();
     ctx.beginPath();
     ctx.arc(point.x, point.y, Z4CanvasTextManager.SELECTOR_RADIUS, 0, 2 * Math.PI);
-    ctx.strokeStyle = Z4Constants.getStyle(index === this.selectedControlPoint ? "red" : "black");
+    ctx.strokeStyle = Z4Constants.getStyle(color);
     ctx.setLineDash(dash);
     ctx.stroke();
     dash.push(2.5, 2.5);
@@ -7416,14 +7417,14 @@ class Z4MergeConnectGeometricShapePanel extends JSPanel {
       let shape = canvas.getGeometricShapeAt(index);
       if (!onlyPaths || shape.isPath()) {
         let checkbox = new JSCheckBox();
-        checkbox.addActionListener(event => this.onClick(checkbox, shape, w, h, zoom));
+        checkbox.addActionListener(event => this.onClick(checkbox, shape, w, h, zoom, onlyPaths));
         this.containerPanel.add(checkbox, new GBC((index % 4) * 4, parseInt(index / 4)));
         let preview = this.createPreview(w, h);
         preview.addEventListener("mousedown", event => {
           checkbox.setSelected(!checkbox.isSelected());
-          this.onClick(checkbox, shape, w, h, zoom);
+          this.onClick(checkbox, shape, w, h, zoom, onlyPaths);
         });
-        this.drawShape(preview.invoke("getContext('2d')"), shape, zoom);
+        this.drawShape(preview.invoke("getContext('2d')"), shape, zoom, onlyPaths);
         this.containerPanel.add(preview, new GBC((index % 4) * 4 + 1, parseInt(index / 4)).i(5, 0, 0, 5));
       }
     }
@@ -7440,8 +7441,8 @@ class Z4MergeConnectGeometricShapePanel extends JSPanel {
     return preview;
   }
 
-   drawShape(ctx, shape, zoom) {
-    let path2D = shape.getPath2D(false);
+   drawShape(ctx, shape, zoom, widthDirection) {
+    let path2D = shape.getPath2D(widthDirection);
     ctx.save();
     ctx.lineWidth = 3 / zoom;
     ctx.scale(zoom, zoom);
@@ -7456,11 +7457,11 @@ class Z4MergeConnectGeometricShapePanel extends JSPanel {
     ctx.restore();
   }
 
-   onClick(checkbox, shape, w, h, zoom) {
+   onClick(checkbox, shape, w, h, zoom, withDirection) {
     if (checkbox.isSelected()) {
       this.selectedGeometricShapes.push(shape);
       let preview = this.createPreview(w, h);
-      this.drawShape(preview.invoke("getContext('2d')"), shape, zoom);
+      this.drawShape(preview.invoke("getContext('2d')"), shape, zoom, withDirection);
       this.selectedPanel.add(preview, null);
     } else {
       let indexOf = this.selectedGeometricShapes.indexOf(shape);
@@ -7557,7 +7558,7 @@ class Z4ShapesAndPathsPanel extends JSPanel {
           let d = this.canvas.getSize();
           this.canvas.addGeometricShape(selected.reduce((accumulator, current, index, array) => accumulator.connect(current, d.width, d.height)));
         } else {
-          this.canvas.addGeometricShape(new Z4GeometricShapeSequence(selected));
+          this.canvas.addGeometricShape(new Z4GeometricShapeSequence(selected, false));
         }
       }
     });
@@ -16600,7 +16601,7 @@ class Z4GeometricShape extends Z4JSONable {
       ctrl = new Z4Point((p1.x0 + p2.x0) / 2, (p1.y0 + p2.y0) / 2);
     }
     ctrl = this.getPoint(p1.x0, p1.y0, ctrl.x, ctrl.y, Z4Math.distance(p1.x0, p1.y0, ctrl.x, ctrl.y), Z4Math.atan(p1.x0, p1.y0, ctrl.x, ctrl.y), width, height);
-    return new Z4GeometricShapeSequence(new Array(this, new Z4BezierCurve(p1.x0, p1.y0, ctrl.x, ctrl.y, ctrl.x, ctrl.y, p2.x0, p2.y0), shape));
+    return new Z4GeometricShapeSequence(new Array(this, new Z4BezierCurve(p1.x0, p1.y0, ctrl.x, ctrl.y, ctrl.x, ctrl.y, p2.x0, p2.y0), shape), true);
   }
 
    getPoint(cx, cy, x, y, radius, angle, width, height) {
@@ -17899,14 +17900,19 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
 
    shapes = null;
 
+   connected = false;
+
   /**
    * Creates the object
    *
    * @param shapes The sequence of geometric shapes
+   * @param connected true if the sequence is connected (the last point of a
+   * shape overlaps the first point of the following shape), false otherwise
    */
-  constructor(shapes) {
+  constructor(shapes, connected) {
     super(Z4GeometricShapeType.SEQUENCE);
     this.shapes = shapes.map(shape => shape);
+    this.connected = connected;
   }
 
    isPath() {
@@ -17980,12 +17986,24 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
     let objForSpinnerConfigurations = this.getChangedGeometricShape(spinnerIndex, index => this.shapes[index].getSpinnerConfigurations().length);
     let newShapes = this.shapes;
     if (objForControlPoints) {
-      newShapes = newShapes.map(shape => shape === objForControlPoints["shape"] ? shape.fromDataChanged(shape.getControlPoints(), x, y, objForControlPoints["index"], spinnerValue, -1, width, height) : shape);
+      let controlPointIndex = objForControlPoints["index"];
+      newShapes = newShapes.map((shape, index, array) => {
+        if (!this.connected) {
+          return shape === objForControlPoints["shape"] ? shape.fromDataChanged(shape.getControlPoints(), x, y, controlPointIndex, spinnerValue, -1, width, height) : shape;
+        } else if (index < this.shapes.length - 1 && this.shapes[index + 1] === objForControlPoints["shape"] && controlPointIndex === 0) {
+          let currentControlPoints = shape.getControlPoints();
+          return shape.fromDataChanged(currentControlPoints, x, y, currentControlPoints.length - 1, spinnerValue, -1, width, height);
+        } else if (index && this.shapes[index - 1] === objForControlPoints["shape"] && controlPointIndex === this.shapes[index - 1].getControlPoints().length - 1) {
+          return shape.fromDataChanged(shape.getControlPoints(), x, y, 0, spinnerValue, -1, width, height);
+        } else {
+          return shape === objForControlPoints["shape"] ? shape.fromDataChanged(shape.getControlPoints(), x, y, controlPointIndex, spinnerValue, -1, width, height) : shape;
+        }
+      });
     }
     if (objForSpinnerConfigurations) {
       newShapes = newShapes.map(shape => shape === objForSpinnerConfigurations["shape"] ? shape.fromDataChanged(shape.getControlPoints(), x, y, -1, spinnerValue, objForSpinnerConfigurations["index"], width, height) : shape);
     }
-    return newShapes !== this.shapes ? new Z4GeometricShapeSequence(newShapes) : this;
+    return newShapes !== this.shapes ? new Z4GeometricShapeSequence(newShapes, this.connected) : this;
   }
 
    getChangedGeometricShape(indexToFind, apply) {
@@ -18007,7 +18025,7 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
   }
 
    fromResize(width, height) {
-    return new Z4GeometricShapeSequence(this.shapes.map(shape => shape.fromResize(width, height)));
+    return new Z4GeometricShapeSequence(this.shapes.map(shape => shape.fromResize(width, height)), this.connected);
   }
 
    toJSON() {
@@ -18015,6 +18033,7 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
     let shapesJSON = new Array();
     this.shapes.forEach(shape => shapesJSON.push(shape.toJSON()));
     json["shapes"] = shapesJSON;
+    json["connected"] = this.connected;
     return json;
   }
 
@@ -18027,7 +18046,7 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
   static  fromJSON(json) {
     let shapes = new Array();
     (json["shapes"]).forEach(shapeJSON => shapes.push(Z4GeometricShape.fromJSON(shapeJSON)));
-    return new Z4GeometricShapeSequence(shapes);
+    return new Z4GeometricShapeSequence(shapes, json["connected"]);
   }
 }
 /**

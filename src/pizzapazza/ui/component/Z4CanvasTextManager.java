@@ -213,7 +213,9 @@ public class Z4CanvasTextManager {
       Array<Integer> controlPointConnections = this.textInfo.shape.getControlPointConnections();
 
       ctx.save();
-      controlPoints.forEach((point, index, array) -> this.drawCircle(ctx, point, index));
+      controlPoints.filter((point, index, array) -> index != this.selectedControlPoint).forEach((point, index, array) -> this.drawCircle(ctx, point, "black"));
+      this.drawCircle(ctx, controlPoints.$get(this.selectedControlPoint), "red");
+
       for (int index = 0; index < controlPointConnections.length; index += 2) {
         this.drawLine(ctx, controlPoints.$get(controlPointConnections.$get(index)), controlPoints.$get(controlPointConnections.$get(index + 1)));
       }
@@ -310,14 +312,14 @@ public class Z4CanvasTextManager {
     ctx.restore();
   }
 
-  private void drawCircle($CanvasRenderingContext2D ctx, Z4Point point, int index) {
+  private void drawCircle($CanvasRenderingContext2D ctx, Z4Point point, String color) {
     ctx.lineWidth = 3 / this.zoom;
 
     Array<Double> dash = new Array<>();
 
     ctx.beginPath();
     ctx.arc(point.x, point.y, Z4CanvasTextManager.SELECTOR_RADIUS, 0, 2 * Math.PI);
-    ctx.strokeStyle = Z4Constants.$getStyle(index == this.selectedControlPoint ? "red" : "black");
+    ctx.strokeStyle = Z4Constants.$getStyle(color);
     ctx.setLineDash(dash);
     ctx.stroke();
 

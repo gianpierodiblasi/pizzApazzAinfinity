@@ -70,14 +70,14 @@ class Z4MergeConnectGeometricShapePanel extends JSPanel {
       let shape = canvas.getGeometricShapeAt(index);
       if (!onlyPaths || shape.isPath()) {
         let checkbox = new JSCheckBox();
-        checkbox.addActionListener(event => this.onClick(checkbox, shape, w, h, zoom));
+        checkbox.addActionListener(event => this.onClick(checkbox, shape, w, h, zoom, onlyPaths));
         this.containerPanel.add(checkbox, new GBC((index % 4) * 4, parseInt(index / 4)));
         let preview = this.createPreview(w, h);
         preview.addEventListener("mousedown", event => {
           checkbox.setSelected(!checkbox.isSelected());
-          this.onClick(checkbox, shape, w, h, zoom);
+          this.onClick(checkbox, shape, w, h, zoom, onlyPaths);
         });
-        this.drawShape(preview.invoke("getContext('2d')"), shape, zoom);
+        this.drawShape(preview.invoke("getContext('2d')"), shape, zoom, onlyPaths);
         this.containerPanel.add(preview, new GBC((index % 4) * 4 + 1, parseInt(index / 4)).i(5, 0, 0, 5));
       }
     }
@@ -94,8 +94,8 @@ class Z4MergeConnectGeometricShapePanel extends JSPanel {
     return preview;
   }
 
-   drawShape(ctx, shape, zoom) {
-    let path2D = shape.getPath2D(false);
+   drawShape(ctx, shape, zoom, widthDirection) {
+    let path2D = shape.getPath2D(widthDirection);
     ctx.save();
     ctx.lineWidth = 3 / zoom;
     ctx.scale(zoom, zoom);
@@ -110,11 +110,11 @@ class Z4MergeConnectGeometricShapePanel extends JSPanel {
     ctx.restore();
   }
 
-   onClick(checkbox, shape, w, h, zoom) {
+   onClick(checkbox, shape, w, h, zoom, withDirection) {
     if (checkbox.isSelected()) {
       this.selectedGeometricShapes.push(shape);
       let preview = this.createPreview(w, h);
-      this.drawShape(preview.invoke("getContext('2d')"), shape, zoom);
+      this.drawShape(preview.invoke("getContext('2d')"), shape, zoom, withDirection);
       this.selectedPanel.add(preview, null);
     } else {
       let indexOf = this.selectedGeometricShapes.indexOf(shape);

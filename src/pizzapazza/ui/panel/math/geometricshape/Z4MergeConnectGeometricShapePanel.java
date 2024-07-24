@@ -92,15 +92,15 @@ public class Z4MergeConnectGeometricShapePanel extends JSPanel {
       Z4GeometricShape shape = canvas.getGeometricShapeAt(index);
       if (!onlyPaths || shape.isPath()) {
         JSCheckBox checkbox = new JSCheckBox();
-        checkbox.addActionListener(event -> this.onClick(checkbox, shape, w, h, zoom));
+        checkbox.addActionListener(event -> this.onClick(checkbox, shape, w, h, zoom, onlyPaths));
 
         this.containerPanel.add(checkbox, new GBC((index % 4) * 4, parseInt(index / 4)));
         JSComponent preview = this.createPreview(w, h);
         preview.addEventListener("mousedown", event -> {
           checkbox.setSelected(!checkbox.isSelected());
-          this.onClick(checkbox, shape, w, h, zoom);
+          this.onClick(checkbox, shape, w, h, zoom, onlyPaths);
         });
-        this.drawShape(preview.invoke("getContext('2d')"), shape, zoom);
+        this.drawShape(preview.invoke("getContext('2d')"), shape, zoom, onlyPaths);
         this.containerPanel.add(preview, new GBC((index % 4) * 4 + 1, parseInt(index / 4)).i(5, 0, 0, 5));
       }
     }
@@ -119,8 +119,8 @@ public class Z4MergeConnectGeometricShapePanel extends JSPanel {
     return preview;
   }
 
-  void drawShape($CanvasRenderingContext2D ctx, Z4GeometricShape shape, double zoom) {
-    $Path2D path2D = shape.getPath2D(false);
+  void drawShape($CanvasRenderingContext2D ctx, Z4GeometricShape shape, double zoom, boolean widthDirection) {
+    $Path2D path2D = shape.getPath2D(widthDirection);
 
     ctx.save();
 
@@ -142,12 +142,12 @@ public class Z4MergeConnectGeometricShapePanel extends JSPanel {
     ctx.restore();
   }
 
-  private void onClick(JSCheckBox checkbox, Z4GeometricShape shape, double w, double h, double zoom) {
+  private void onClick(JSCheckBox checkbox, Z4GeometricShape shape, double w, double h, double zoom, boolean withDirection) {
     if (checkbox.isSelected()) {
       this.selectedGeometricShapes.push(shape);
 
       JSComponent preview = this.createPreview(w, h);
-      this.drawShape(preview.invoke("getContext('2d')"), shape, zoom);
+      this.drawShape(preview.invoke("getContext('2d')"), shape, zoom, withDirection);
       this.selectedPanel.add(preview, null);
     } else {
       int indexOf = this.selectedGeometricShapes.indexOf(shape);
