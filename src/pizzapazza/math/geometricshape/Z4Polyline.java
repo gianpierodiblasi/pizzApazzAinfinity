@@ -54,7 +54,7 @@ public class Z4Polyline extends Z4GeometricShape {
   public boolean isPath() {
     return true;
   }
-  
+
   @Override
   public $Path2D getPath2D(boolean withDirection) {
     $Path2D path2D = new $Path2D();
@@ -68,9 +68,13 @@ public class Z4Polyline extends Z4GeometricShape {
     });
 
     if (withDirection) {
-      this.drawDirection(path2D);
+      this.cumLen.forEach((value, index, array) -> {
+        if ($exists(index)) {
+          this.drawDirection(path2D, (this.cumLen.$get(index - 1) + (value - this.cumLen.$get(index - 1)) / 2) / this.getLength());
+        }
+      });
     }
-    
+
     return path2D;
   }
 

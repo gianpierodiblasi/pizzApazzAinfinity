@@ -86,9 +86,10 @@ public abstract class Z4GeometricShape implements Z4JSONable {
    * Draws a direction arrow in a path
    *
    * @param path The path
+   * @param position The arrow position
    */
-  protected void drawDirection($Path2D path) {
-    Z4Vector vector = this.getTangentAt(0.5);
+  protected void drawDirection($Path2D path, double position) {
+    Z4Vector vector = this.getTangentAt(position);
 
     Z4AffineTransform tx = Z4AffineTransform.translate(vector.x0, vector.y0).concatenateRotate(vector.phase);
     path.moveTo(vector.x0, vector.y0);

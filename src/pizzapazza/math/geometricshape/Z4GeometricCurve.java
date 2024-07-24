@@ -2,7 +2,6 @@ package pizzapazza.math.geometricshape;
 
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Vector;
-import simulation.js.$Path2D;
 
 /**
  * Common abstract object for geometric curves. A <i>Z4GeometricCurve</i> is a
@@ -29,11 +28,6 @@ public abstract class Z4GeometricCurve extends Z4GeometricShape {
    */
   public Z4GeometricCurve(Z4GeometricShapeType type) {
     super(type);
-  }
-
-  @Override
-  public $Path2D getPath2D(boolean withDirection) {
-    return this.polyline.getPath2D(withDirection);
   }
 
   @Override

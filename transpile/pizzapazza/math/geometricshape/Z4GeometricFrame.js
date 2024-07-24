@@ -73,6 +73,17 @@ class Z4GeometricFrame extends Z4GeometricCurve {
     return false;
   }
 
+   getPath2D(withDirection) {
+    let path2D = this.polyline.getPath2D(false);
+    if (withDirection) {
+      this.drawDirection(path2D, 0.2);
+      this.drawDirection(path2D, 0.4);
+      this.drawDirection(path2D, 0.6);
+      this.drawDirection(path2D, 0.8);
+    }
+    return path2D;
+  }
+
    getControlPoints() {
     let tx = Z4AffineTransform.translate(this.x, this.y).concatenateRotate(this.angle).concatenateShear(this.sy / Z4GeometricFrame.SHEARING_COEFFICIENT, -this.sx / Z4GeometricFrame.SHEARING_COEFFICIENT);
     return new Array(tx.transform(0, 0), tx.transform(this.w, 0), tx.transform(0, this.h));

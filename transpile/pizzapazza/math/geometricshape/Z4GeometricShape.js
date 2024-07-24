@@ -73,9 +73,10 @@ class Z4GeometricShape extends Z4JSONable {
    * Draws a direction arrow in a path
    *
    * @param path The path
+   * @param position The arrow position
    */
-   drawDirection(path) {
-    let vector = this.getTangentAt(0.5);
+   drawDirection(path, position) {
+    let vector = this.getTangentAt(position);
     let tx = Z4AffineTransform.translate(vector.x0, vector.y0).concatenateRotate(vector.phase);
     path.moveTo(vector.x0, vector.y0);
     let p = tx.transform(-20, -10);

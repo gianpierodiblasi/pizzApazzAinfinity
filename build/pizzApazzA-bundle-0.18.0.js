@@ -16635,9 +16635,10 @@ class Z4GeometricShape extends Z4JSONable {
    * Draws a direction arrow in a path
    *
    * @param path The path
+   * @param position The arrow position
    */
-   drawDirection(path) {
-    let vector = this.getTangentAt(0.5);
+   drawDirection(path, position) {
+    let vector = this.getTangentAt(position);
     let tx = Z4AffineTransform.translate(vector.x0, vector.y0).concatenateRotate(vector.phase);
     path.moveTo(vector.x0, vector.y0);
     let p = tx.transform(-20, -10);
@@ -16911,7 +16912,11 @@ class Z4AbstractBezierCurve extends Z4GeometricShape {
   }
 
    getPath2D(withDirection) {
-    return new Z4Polyline(this.bezier.getLUT(parseInt(this.bezier.length() / 2))).getPath2D(withDirection);
+    let path = new Z4Polyline(this.bezier.getLUT(parseInt(this.bezier.length() / 2))).getPath2D(false);
+    if (withDirection) {
+      this.drawDirection(path, 0.5);
+    }
+    return path;
   }
 
    distance(x, y) {
@@ -17142,10 +17147,6 @@ class Z4GeometricCurve extends Z4GeometricShape {
     super(type);
   }
 
-   getPath2D(withDirection) {
-    return this.polyline.getPath2D(withDirection);
-  }
-
    distance(x, y) {
     return this.polyline.distance(x, y);
   }
@@ -17235,6 +17236,17 @@ class Z4GeometricFrame extends Z4GeometricCurve {
 
    isPath() {
     return false;
+  }
+
+   getPath2D(withDirection) {
+    let path2D = this.polyline.getPath2D(false);
+    if (withDirection) {
+      this.drawDirection(path2D, 0.2);
+      this.drawDirection(path2D, 0.4);
+      this.drawDirection(path2D, 0.6);
+      this.drawDirection(path2D, 0.8);
+    }
+    return path2D;
   }
 
    getControlPoints() {
@@ -17634,6 +17646,14 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
     return true;
   }
 
+   getPath2D(withDirection) {
+    let path2D = this.polyline.getPath2D(false);
+    if (withDirection) {
+      this.drawDirection(path2D, 0.5);
+    }
+    return path2D;
+  }
+
    getControlPoints() {
     let rotation = Z4Math.atan(this.x1, this.y1, this.x2, this.y2);
     return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2), new Z4Point(this.x1 + this.period * Math.cos(rotation), this.y1 + this.period * Math.sin(rotation)), new Z4Point(this.x1 + this.amplitude * Math.cos(rotation - Z4Math.HALF_PI), this.y1 + this.amplitude * Math.sin(rotation - Z4Math.HALF_PI)));
@@ -17782,6 +17802,14 @@ class Z4SpiralCurve extends Z4GeometricCurve {
 
    isPath() {
     return true;
+  }
+
+   getPath2D(withDirection) {
+    let path2D = this.polyline.getPath2D(false);
+    if (withDirection) {
+      this.drawDirection(path2D, 0.5);
+    }
+    return path2D;
   }
 
    getControlPoints() {
@@ -18042,7 +18070,7 @@ class Z4Line extends Z4GeometricShape {
     path.moveTo(this.x1, this.y1);
     path.lineTo(this.x2, this.y2);
     if (withDirection) {
-      this.drawDirection(path);
+      this.drawDirection(path, 0.5);
     }
     return path;
   }
@@ -18178,7 +18206,11 @@ class Z4Polyline extends Z4GeometricShape {
       }
     });
     if (withDirection) {
-      this.drawDirection(path2D);
+      this.cumLen.forEach((value, index, array) => {
+        if (index) {
+          this.drawDirection(path2D, (this.cumLen[index - 1] + (value - this.cumLen[index - 1]) / 2) / this.getLength());
+        }
+      });
     }
     return path2D;
   }

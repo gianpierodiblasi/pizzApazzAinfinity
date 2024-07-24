@@ -6,6 +6,7 @@ import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import pizzapazza.util.Z4Translations;
 import simulation.js.$Object;
+import simulation.js.$Path2D;
 
 /**
  * Common abstract object for geometric frames. A <i>Z4GeometricFrame</i> is a
@@ -82,6 +83,18 @@ public abstract class Z4GeometricFrame extends Z4GeometricCurve {
   @Override
   public boolean isPath() {
     return false;
+  }
+  
+  @Override
+  public $Path2D getPath2D(boolean withDirection) {
+    $Path2D path2D = this.polyline.getPath2D(false);
+    if (withDirection) {
+      this.drawDirection(path2D, 0.2);
+      this.drawDirection(path2D, 0.4);
+      this.drawDirection(path2D, 0.6);
+      this.drawDirection(path2D, 0.8);
+    }
+    return path2D;
   }
   
   @Override

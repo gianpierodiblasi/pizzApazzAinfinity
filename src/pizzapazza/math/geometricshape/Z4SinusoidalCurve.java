@@ -6,6 +6,7 @@ import pizzapazza.math.Z4Point;
 import pizzapazza.util.Z4Translations;
 import static simulation.js.$Globals.parseInt;
 import simulation.js.$Object;
+import simulation.js.$Path2D;
 
 /**
  * The sinusoidal curve
@@ -70,7 +71,16 @@ public class Z4SinusoidalCurve extends Z4GeometricCurve {
   public boolean isPath() {
     return true;
   }
-  
+
+  @Override
+  public $Path2D getPath2D(boolean withDirection) {
+    $Path2D path2D = this.polyline.getPath2D(false);
+    if (withDirection) {
+      this.drawDirection(path2D, 0.5);
+    }
+    return path2D;
+  }
+
   @Override
   public Array<Z4Point> getControlPoints() {
     double rotation = Z4Math.atan(this.x1, this.y1, this.x2, this.y2);
@@ -97,7 +107,7 @@ public class Z4SinusoidalCurve extends Z4GeometricCurve {
   public Array<Z4GeometricShapeButtonConfiguration> getButtonConfigurations() {
     return new Array<>();
   }
-  
+
   @Override
   public Z4GeometricShape fromDataChanged(Array<Z4Point> controlPoints, double x, double y, int pointIndex, double spinnerValue, int spinnerIndex, int width, int height) {
     if (pointIndex == 0) {

@@ -49,8 +49,9 @@ public class Z4Line extends Z4GeometricShape {
     path.lineTo(this.x2, this.y2);
 
     if (withDirection) {
-      this.drawDirection(path);
+      this.drawDirection(path, 0.5);
     }
+    
     return path;
   }
 

@@ -50,7 +50,11 @@ class Z4Polyline extends Z4GeometricShape {
       }
     });
     if (withDirection) {
-      this.drawDirection(path2D);
+      this.cumLen.forEach((value, index, array) => {
+        if (index) {
+          this.drawDirection(path2D, (this.cumLen[index - 1] + (value - this.cumLen[index - 1]) / 2) / this.getLength());
+        }
+      });
     }
     return path2D;
   }

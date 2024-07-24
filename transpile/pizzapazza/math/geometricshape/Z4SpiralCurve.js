@@ -52,6 +52,14 @@ class Z4SpiralCurve extends Z4GeometricCurve {
     return true;
   }
 
+   getPath2D(withDirection) {
+    let path2D = this.polyline.getPath2D(false);
+    if (withDirection) {
+      this.drawDirection(path2D, 0.5);
+    }
+    return path2D;
+  }
+
    getControlPoints() {
     let angle = Z4Math.atan(this.x1, this.y1, this.x2, this.y2);
     return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2), new Z4Point(this.x1 + this.radius * Math.cos(angle), this.y1 + this.radius * Math.sin(angle)));

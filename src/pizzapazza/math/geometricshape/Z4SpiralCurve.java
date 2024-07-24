@@ -5,6 +5,7 @@ import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import static simulation.js.$Globals.parseInt;
 import simulation.js.$Object;
+import simulation.js.$Path2D;
 
 /**
  * The spiral curve
@@ -12,7 +13,7 @@ import simulation.js.$Object;
  * @author gianpiero.diblasi
  */
 public class Z4SpiralCurve extends Z4GeometricCurve {
-
+  
   private final double x1;
   private final double y1;
   private final double x2;
@@ -30,16 +31,16 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
    */
   public Z4SpiralCurve(double x1, double y1, double x2, double y2, double radius) {
     super(Z4GeometricShapeType.SPIRAL);
-
+    
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
     this.y2 = y2;
     this.radius = radius;
-
+    
     double distance = Z4Math.distance(x1, y1, x2, y2);
     int size = parseInt(distance * Z4GeometricCurve.APPROX_SEGMENTS / radius);
-
+    
     if (size > 0) {
       double angle = Z4Math.atan(x1, y1, x2, y2);
       Array<Z4Point> points = new Array<>();
@@ -54,33 +55,42 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
       this.polyline = new Z4Polyline(new Array<>(new Z4Point(x1, y1), new Z4Point(x2, y2)));
     }
   }
-
+  
   @Override
   public boolean isPath() {
     return true;
   }
   
   @Override
+  public $Path2D getPath2D(boolean withDirection) {
+    $Path2D path2D = this.polyline.getPath2D(false);
+    if (withDirection) {
+      this.drawDirection(path2D, 0.5);
+    }
+    return path2D;
+  }
+  
+  @Override
   public Array<Z4Point> getControlPoints() {
     double angle = Z4Math.atan(this.x1, this.y1, this.x2, this.y2);
-
+    
     return new Array<>(
             new Z4Point(this.x1, this.y1),
             new Z4Point(this.x2, this.y2),
             new Z4Point(this.x1 + this.radius * Math.cos(angle), this.y1 + this.radius * Math.sin(angle))
     );
   }
-
+  
   @Override
   public Array<Integer> getControlPointConnections() {
     return new Array<>(0, 1, 0, 2);
   }
-
+  
   @Override
   public Array<Z4GeometricShapeSpinnerConfiguration> getSpinnerConfigurations() {
     return new Array<>();
   }
-
+  
   @Override
   public Array<Z4GeometricShapeButtonConfiguration> getButtonConfigurations() {
     return new Array<>();
@@ -91,28 +101,28 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
     if (pointIndex == 0) {
       double offsetX = this.x1 - x;
       double offsetY = this.y1 - y;
-
+      
       double radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
       double angle1 = Z4Math.atan(this.x1, this.y1, this.x2, this.y2);
-
+      
       Z4Point point1 = this.getPoint(x, y, this.x2 - offsetX, this.y2 - offsetY, radius1, angle1, width, height);
       Z4Point point2 = this.getPoint(x, y, controlPoints.$get(2).x - offsetX, controlPoints.$get(2).y - offsetY, this.radius, angle1, width, height);
-
+      
       return new Z4SpiralCurve(x, y, point1.x, point1.y, Z4Math.distance(x, y, point2.x, point2.y));
     } else if (pointIndex == 1) {
       return new Z4SpiralCurve(this.x1, this.y1, x, y, this.radius);
     } else if (pointIndex == 2) {
       double radius1 = Z4Math.distance(this.x1, this.y1, this.x2, this.y2);
       double angle1 = Z4Math.atan(this.x1, this.y1, x, y);
-
+      
       Z4Point point1 = this.getPoint(this.x1, this.y1, this.x1 + radius1 * Math.cos(angle1), this.y1 + radius1 * Math.sin(angle1), radius1, angle1, width, height);
-
+      
       return new Z4SpiralCurve(this.x1, this.y1, point1.x, point1.y, Z4Math.distance(this.x1, this.y1, x, y));
     } else {
       return this;
     }
   }
-
+  
   private Z4Point getPoint(double cx, double cy, double x, double y, double radius, double angle, int width, int height) {
     while ((x < 0 || x > width || y < 0 || y > height) && radius > 0) {
       radius = Math.max(0, radius - 0.05);
@@ -121,7 +131,7 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
     }
     return new Z4Point(x, y);
   }
-
+  
   @Override
   public $Object toJSON() {
     $Object json = super.toJSON();

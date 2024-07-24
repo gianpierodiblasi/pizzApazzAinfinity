@@ -62,6 +62,14 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
     return true;
   }
 
+   getPath2D(withDirection) {
+    let path2D = this.polyline.getPath2D(false);
+    if (withDirection) {
+      this.drawDirection(path2D, 0.5);
+    }
+    return path2D;
+  }
+
    getControlPoints() {
     let rotation = Z4Math.atan(this.x1, this.y1, this.x2, this.y2);
     return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2), new Z4Point(this.x1 + this.period * Math.cos(rotation), this.y1 + this.period * Math.sin(rotation)), new Z4Point(this.x1 + this.amplitude * Math.cos(rotation - Z4Math.HALF_PI), this.y1 + this.amplitude * Math.sin(rotation - Z4Math.HALF_PI)));
