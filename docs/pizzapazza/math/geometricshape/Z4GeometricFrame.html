@@ -27,8 +27,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":6,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -99,7 +99,7 @@ loadScripts(document, 'script');</script>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -174,6 +174,70 @@ extends <a href="Z4GeometricCurve.html" title="class in pizzapazza.math.geometri
 <!--   -->
 </a>
 <h3>Field Summary</h3>
+<table class="memberSummary">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Field</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#angle">angle</a></span></code></th>
+<td class="colLast">
+<div class="block">The rotation of the frame</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#h">h</a></span></code></th>
+<td class="colLast">
+<div class="block">The half height of the frame</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#SHEARING_COEFFICIENT">SHEARING_COEFFICIENT</a></span></code></th>
+<td class="colLast">
+<div class="block">The shearing coefficient</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sx">sx</a></span></code></th>
+<td class="colLast">
+<div class="block">The x shear of the frame</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sy">sy</a></span></code></th>
+<td class="colLast">
+<div class="block">The y shear of the frame</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#w">w</a></span></code></th>
+<td class="colLast">
+<div class="block">The half width of the frame</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#x">x</a></span></code></th>
+<td class="colLast">
+<div class="block">The x center location of the frame</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#y">y</a></span></code></th>
+<td class="colLast">
+<div class="block">The y center location of the frame</div>
+</td>
+</tr>
+</table>
 <ul class="blockList">
 <li class="blockList"><a id="fields.inherited.from.class.pizzapazza.math.geometricshape.Z4GeometricCurve">
 <!--   -->
@@ -222,34 +286,69 @@ extends <a href="Z4GeometricCurve.html" title="class in pizzapazza.math.geometri
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code><a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromDataChanged(def.js.Array,double,double,int,double,int,int,int)">fromDataChanged</a></span>&#8203;(def.js.Array&lt;<a href="../Z4Point.html" title="class in pizzapazza.math">Z4Point</a>&gt;&nbsp;controlPoints,
+               double&nbsp;x,
+               double&nbsp;y,
+               int&nbsp;pointIndex,
+               double&nbsp;spinnerValue,
+               int&nbsp;spinnerIndex,
+               int&nbsp;width,
+               int&nbsp;height)</code></th>
+<td class="colLast">
+<div class="block">Returns a Z4GeometricShape obtained by this Z4GeometricShape when a data
+ (point or spinner) is changed</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>protected abstract <a href="Z4GeometricFrame.html" title="class in pizzapazza.math.geometricshape">Z4GeometricFrame</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromParameters(double,double,double,double,double,double,double)">fromParameters</a></span>&#8203;(double&nbsp;x,
+              double&nbsp;y,
+              double&nbsp;w,
+              double&nbsp;h,
+              double&nbsp;angle,
+              double&nbsp;sx,
+              double&nbsp;sy)</code></th>
+<td class="colLast">
+<div class="block">Returns a new geometric frame from given parameters</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>def.js.Array&lt;<a href="Z4GeometricShapeButtonConfiguration.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShapeButtonConfiguration</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getButtonConfigurations()">getButtonConfigurations</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the button configurations to control/edit the geometri shape</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>def.js.Array&lt;java.lang.Integer&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getControlPointConnections()">getControlPointConnections</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the connections between the control points</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>def.js.Array&lt;<a href="../Z4Point.html" title="class in pizzapazza.math">Z4Point</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getControlPoints()">getControlPoints</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the points to control/edit the geometric shape</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>def.js.Array&lt;<a href="Z4GeometricShapeSpinnerConfiguration.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShapeSpinnerConfiguration</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSpinnerConfigurations()">getSpinnerConfigurations</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the spinner configurations to control/edit the geometri shape</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>simulation.js.$Object</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toJSON()">toJSON</a></span>()</code></th>
 <td class="colLast">
@@ -262,14 +361,14 @@ extends <a href="Z4GeometricCurve.html" title="class in pizzapazza.math.geometri
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;pizzapazza.math.geometricshape.<a href="Z4GeometricCurve.html" title="class in pizzapazza.math.geometricshape">Z4GeometricCurve</a></h3>
-<code><a href="Z4GeometricCurve.html#distance(double,double)">distance</a>, <a href="Z4GeometricCurve.html#getLength()">getLength</a>, <a href="Z4GeometricCurve.html#getPointAt(double)">getPointAt</a>, <a href="Z4GeometricCurve.html#getPolyline()">getPolyline</a>, <a href="Z4GeometricCurve.html#getTangentAt(double)">getTangentAt</a></code></li>
+<code><a href="Z4GeometricCurve.html#distance(double,double)">distance</a>, <a href="Z4GeometricCurve.html#getLength()">getLength</a>, <a href="Z4GeometricCurve.html#getPath2D()">getPath2D</a>, <a href="Z4GeometricCurve.html#getPointAt(double)">getPointAt</a>, <a href="Z4GeometricCurve.html#getTangentAt(double)">getTangentAt</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.pizzapazza.math.geometricshape.Z4GeometricShape">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;pizzapazza.math.geometricshape.<a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a></h3>
-<code><a href="Z4GeometricShape.html#fromDataChanged(double,double,int,double,int)">fromDataChanged</a>, <a href="Z4GeometricShape.html#fromJSON(simulation.js.$Object)">fromJSON</a>, <a href="Z4GeometricShape.html#fromSize(pizzapazza.math.geometricshape.Z4GeometricShapeType,int,int)">fromSize</a></code></li>
+<code><a href="Z4GeometricShape.html#fromJSON(simulation.js.$Object)">fromJSON</a>, <a href="Z4GeometricShape.html#fromResize(int,int)">fromResize</a>, <a href="Z4GeometricShape.html#fromSize(pizzapazza.math.geometricshape.Z4GeometricShapeType,int,int)">fromSize</a>, <a href="Z4GeometricShape.html#getGeometricShapePreview()">getGeometricShapePreview</a>, <a href="Z4GeometricShape.html#setGeometricShapePreview(pizzapazza.ui.panel.math.geometricshape.Z4GeometricShapePreview)">setGeometricShapePreview</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -287,6 +386,100 @@ extends <a href="Z4GeometricCurve.html" title="class in pizzapazza.math.geometri
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a id="x">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>x</h4>
+<pre>protected final&nbsp;double x</pre>
+<div class="block">The x center location of the frame</div>
+</li>
+</ul>
+<a id="y">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>y</h4>
+<pre>protected final&nbsp;double y</pre>
+<div class="block">The y center location of the frame</div>
+</li>
+</ul>
+<a id="w">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>w</h4>
+<pre>protected final&nbsp;double w</pre>
+<div class="block">The half width of the frame</div>
+</li>
+</ul>
+<a id="h">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>h</h4>
+<pre>protected final&nbsp;double h</pre>
+<div class="block">The half height of the frame</div>
+</li>
+</ul>
+<a id="angle">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>angle</h4>
+<pre>protected final&nbsp;double angle</pre>
+<div class="block">The rotation of the frame</div>
+</li>
+</ul>
+<a id="sx">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>sx</h4>
+<pre>protected final&nbsp;double sx</pre>
+<div class="block">The x shear of the frame</div>
+</li>
+</ul>
+<a id="sy">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>sy</h4>
+<pre>protected final&nbsp;double sy</pre>
+<div class="block">The y shear of the frame</div>
+</li>
+</ul>
+<a id="SHEARING_COEFFICIENT">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>SHEARING_COEFFICIENT</h4>
+<pre>protected static final&nbsp;double SHEARING_COEFFICIENT</pre>
+<div class="block">The shearing coefficient</div>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../constant-values.html#pizzapazza.math.geometricshape.Z4GeometricFrame.SHEARING_COEFFICIENT">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</section>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <section role="region">
 <ul class="blockList">
@@ -312,10 +505,10 @@ extends <a href="Z4GeometricCurve.html" title="class in pizzapazza.math.geometri
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>type</code> - The type</dd>
-<dd><code>x</code> - The x location of the frame</dd>
-<dd><code>y</code> - The y location of the frame</dd>
-<dd><code>w</code> - The width of the frame</dd>
-<dd><code>h</code> - The height of the frame</dd>
+<dd><code>x</code> - The x center location of the frame</dd>
+<dd><code>y</code> - The y center location of the frame</dd>
+<dd><code>w</code> - The half width of the frame</dd>
+<dd><code>h</code> - The half height of the frame</dd>
 <dd><code>angle</code> - The rotation of the frame</dd>
 <dd><code>sx</code> - The x shear of the frame</dd>
 <dd><code>sy</code> - The y shear of the frame</dd>
@@ -382,6 +575,86 @@ extends <a href="Z4GeometricCurve.html" title="class in pizzapazza.math.geometri
 <dd><code><a href="Z4GeometricShape.html#getSpinnerConfigurations()">getSpinnerConfigurations</a></code>&nbsp;in class&nbsp;<code><a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The spinner configurations to control/edit the geometri shape</dd>
+</dl>
+</li>
+</ul>
+<a id="getButtonConfigurations()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getButtonConfigurations</h4>
+<pre class="methodSignature">public&nbsp;def.js.Array&lt;<a href="Z4GeometricShapeButtonConfiguration.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShapeButtonConfiguration</a>&gt;&nbsp;getButtonConfigurations()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Z4GeometricShape.html#getButtonConfigurations()">Z4GeometricShape</a></code></span></div>
+<div class="block">Returns the button configurations to control/edit the geometri shape</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Z4GeometricShape.html#getButtonConfigurations()">getButtonConfigurations</a></code>&nbsp;in class&nbsp;<code><a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The button configurations to control/edit the geometri shape</dd>
+</dl>
+</li>
+</ul>
+<a id="fromParameters(double,double,double,double,double,double,double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fromParameters</h4>
+<pre class="methodSignature">protected abstract&nbsp;<a href="Z4GeometricFrame.html" title="class in pizzapazza.math.geometricshape">Z4GeometricFrame</a>&nbsp;fromParameters&#8203;(double&nbsp;x,
+                                                   double&nbsp;y,
+                                                   double&nbsp;w,
+                                                   double&nbsp;h,
+                                                   double&nbsp;angle,
+                                                   double&nbsp;sx,
+                                                   double&nbsp;sy)</pre>
+<div class="block">Returns a new geometric frame from given parameters</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>x</code> - The x center location of the frame</dd>
+<dd><code>y</code> - The y center location of the frame</dd>
+<dd><code>w</code> - The half width of the frame</dd>
+<dd><code>h</code> - The half height of the frame</dd>
+<dd><code>angle</code> - The rotation of the frame</dd>
+<dd><code>sx</code> - The x shear of the frame</dd>
+<dd><code>sy</code> - The y shear of the frame</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The new geometric frame</dd>
+</dl>
+</li>
+</ul>
+<a id="fromDataChanged(def.js.Array,double,double,int,double,int,int,int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fromDataChanged</h4>
+<pre class="methodSignature">public&nbsp;<a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a>&nbsp;fromDataChanged&#8203;(def.js.Array&lt;<a href="../Z4Point.html" title="class in pizzapazza.math">Z4Point</a>&gt;&nbsp;controlPoints,
+                                        double&nbsp;x,
+                                        double&nbsp;y,
+                                        int&nbsp;pointIndex,
+                                        double&nbsp;spinnerValue,
+                                        int&nbsp;spinnerIndex,
+                                        int&nbsp;width,
+                                        int&nbsp;height)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Z4GeometricShape.html#fromDataChanged(def.js.Array,double,double,int,double,int,int,int)">Z4GeometricShape</a></code></span></div>
+<div class="block">Returns a Z4GeometricShape obtained by this Z4GeometricShape when a data
+ (point or spinner) is changed</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Z4GeometricShape.html#fromDataChanged(def.js.Array,double,double,int,double,int,int,int)">fromDataChanged</a></code>&nbsp;in class&nbsp;<code><a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>controlPoints</code> - The control points</dd>
+<dd><code>x</code> - The x-axis coordinate of the changed point</dd>
+<dd><code>y</code> - The y-axis coordinate of the changed point</dd>
+<dd><code>pointIndex</code> - The index of the changed point, -1 if no point is changed</dd>
+<dd><code>spinnerValue</code> - The changed spinner value</dd>
+<dd><code>spinnerIndex</code> - The index of the changed spinner value, -1 if no
+ spinner is changed</dd>
+<dd><code>width</code> - The available area width</dd>
+<dd><code>height</code> - The available area height</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The geometric shape</dd>
 </dl>
 </li>
 </ul>
@@ -466,7 +739,7 @@ extends <a href="Z4GeometricCurve.html" title="class in pizzapazza.math.geometri
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>

@@ -15506,7 +15506,7 @@ class Z4Ribbon extends JSTabbedPane {
   /**
    * Sets the shapes and paths panel
    *
-   * @param shapesAndPathsPanel
+   * @param shapesAndPathsPanel The shapes and paths panel
    */
    setShapesAndPathsPanel(shapesAndPathsPanel) {
     this.shapesAndPathsPanel = shapesAndPathsPanel;

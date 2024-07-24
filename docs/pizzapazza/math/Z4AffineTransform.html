@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":9,"i6":9,"i7":9,"i8":10,"i9":9};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":9,"i7":9,"i8":9,"i9":10,"i10":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -206,13 +206,20 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="Z4AffineTransform.html" title="class in pizzapazza.math">Z4AffineTransform</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#inverse()">inverse</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the inverse of this affine transform</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static <a href="Z4AffineTransform.html" title="class in pizzapazza.math">Z4AffineTransform</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rotate(double)">rotate</a></span>&#8203;(double&nbsp;angle)</code></th>
 <td class="colLast">
 <div class="block">Returns a transform representing a rotation</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static <a href="Z4AffineTransform.html" title="class in pizzapazza.math">Z4AffineTransform</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#scale(double,double)">scale</a></span>&#8203;(double&nbsp;sx,
      double&nbsp;sy)</code></th>
@@ -220,7 +227,7 @@ extends java.lang.Object</pre>
 <div class="block">Returns a transform representing a scaling</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static <a href="Z4AffineTransform.html" title="class in pizzapazza.math">Z4AffineTransform</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shear(double,double)">shear</a></span>&#8203;(double&nbsp;shx,
      double&nbsp;shy)</code></th>
@@ -228,7 +235,7 @@ extends java.lang.Object</pre>
 <div class="block">Returns a transform representing a shearing</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="Z4Point.html" title="class in pizzapazza.math">Z4Point</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#transform(double,double)">transform</a></span>&#8203;(double&nbsp;x,
          double&nbsp;y)</code></th>
@@ -236,7 +243,7 @@ extends java.lang.Object</pre>
 <div class="block">Transforms a point</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static <a href="Z4AffineTransform.html" title="class in pizzapazza.math">Z4AffineTransform</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#translate(double,double)">translate</a></span>&#8203;(double&nbsp;tx,
          double&nbsp;ty)</code></th>
@@ -430,6 +437,20 @@ extends java.lang.Object</pre>
  a factor of their X coordinate</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>This concatenated transform</dd>
+</dl>
+</li>
+</ul>
+<a id="inverse()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>inverse</h4>
+<pre class="methodSignature">public&nbsp;<a href="Z4AffineTransform.html" title="class in pizzapazza.math">Z4AffineTransform</a>&nbsp;inverse()</pre>
+<div class="block">Returns the inverse of this affine transform</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The inverse of this affine transform</dd>
 </dl>
 </li>
 </ul>

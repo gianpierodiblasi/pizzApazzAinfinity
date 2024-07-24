@@ -225,11 +225,14 @@ extends <a href="Z4AbstractBezierCurve.html" title="class in pizzapazza.math.geo
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromDataChanged(double,double,int,double,int)">fromDataChanged</a></span>&#8203;(double&nbsp;x,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromDataChanged(def.js.Array,double,double,int,double,int,int,int)">fromDataChanged</a></span>&#8203;(def.js.Array&lt;<a href="../Z4Point.html" title="class in pizzapazza.math">Z4Point</a>&gt;&nbsp;controlPoints,
+               double&nbsp;x,
                double&nbsp;y,
                int&nbsp;pointIndex,
                double&nbsp;spinnerValue,
-               int&nbsp;spinnerIndex)</code></th>
+               int&nbsp;spinnerIndex,
+               int&nbsp;width,
+               int&nbsp;height)</code></th>
 <td class="colLast">
 <div class="block">Returns a Z4GeometricShape obtained by this Z4GeometricShape when a data
  (point or spinner) is changed</div>
@@ -277,14 +280,14 @@ extends <a href="Z4AbstractBezierCurve.html" title="class in pizzapazza.math.geo
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;pizzapazza.math.geometricshape.<a href="Z4AbstractBezierCurve.html" title="class in pizzapazza.math.geometricshape">Z4AbstractBezierCurve</a></h3>
-<code><a href="Z4AbstractBezierCurve.html#distance(double,double)">distance</a>, <a href="Z4AbstractBezierCurve.html#getLength()">getLength</a>, <a href="Z4AbstractBezierCurve.html#getPointAt(double)">getPointAt</a>, <a href="Z4AbstractBezierCurve.html#getPolyline()">getPolyline</a>, <a href="Z4AbstractBezierCurve.html#getSpinnerConfigurations()">getSpinnerConfigurations</a>, <a href="Z4AbstractBezierCurve.html#getTangentAt(double)">getTangentAt</a></code></li>
+<code><a href="Z4AbstractBezierCurve.html#distance(double,double)">distance</a>, <a href="Z4AbstractBezierCurve.html#getButtonConfigurations()">getButtonConfigurations</a>, <a href="Z4AbstractBezierCurve.html#getLength()">getLength</a>, <a href="Z4AbstractBezierCurve.html#getPath2D()">getPath2D</a>, <a href="Z4AbstractBezierCurve.html#getPointAt(double)">getPointAt</a>, <a href="Z4AbstractBezierCurve.html#getSpinnerConfigurations()">getSpinnerConfigurations</a>, <a href="Z4AbstractBezierCurve.html#getTangentAt(double)">getTangentAt</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.pizzapazza.math.geometricshape.Z4GeometricShape">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;pizzapazza.math.geometricshape.<a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a></h3>
-<code><a href="Z4GeometricShape.html#fromSize(pizzapazza.math.geometricshape.Z4GeometricShapeType,int,int)">fromSize</a></code></li>
+<code><a href="Z4GeometricShape.html#fromResize(int,int)">fromResize</a>, <a href="Z4GeometricShape.html#fromSize(pizzapazza.math.geometricshape.Z4GeometricShapeType,int,int)">fromSize</a>, <a href="Z4GeometricShape.html#getGeometricShapePreview()">getGeometricShapePreview</a>, <a href="Z4GeometricShape.html#setGeometricShapePreview(pizzapazza.ui.panel.math.geometricshape.Z4GeometricShapePreview)">setGeometricShapePreview</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -385,30 +388,36 @@ extends <a href="Z4AbstractBezierCurve.html" title="class in pizzapazza.math.geo
 </dl>
 </li>
 </ul>
-<a id="fromDataChanged(double,double,int,double,int)">
+<a id="fromDataChanged(def.js.Array,double,double,int,double,int,int,int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>fromDataChanged</h4>
-<pre class="methodSignature">public&nbsp;<a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a>&nbsp;fromDataChanged&#8203;(double&nbsp;x,
+<pre class="methodSignature">public&nbsp;<a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a>&nbsp;fromDataChanged&#8203;(def.js.Array&lt;<a href="../Z4Point.html" title="class in pizzapazza.math">Z4Point</a>&gt;&nbsp;controlPoints,
+                                        double&nbsp;x,
                                         double&nbsp;y,
                                         int&nbsp;pointIndex,
                                         double&nbsp;spinnerValue,
-                                        int&nbsp;spinnerIndex)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Z4GeometricShape.html#fromDataChanged(double,double,int,double,int)">Z4GeometricShape</a></code></span></div>
+                                        int&nbsp;spinnerIndex,
+                                        int&nbsp;width,
+                                        int&nbsp;height)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Z4GeometricShape.html#fromDataChanged(def.js.Array,double,double,int,double,int,int,int)">Z4GeometricShape</a></code></span></div>
 <div class="block">Returns a Z4GeometricShape obtained by this Z4GeometricShape when a data
  (point or spinner) is changed</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Z4GeometricShape.html#fromDataChanged(double,double,int,double,int)">fromDataChanged</a></code>&nbsp;in class&nbsp;<code><a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a></code></dd>
+<dd><code><a href="Z4GeometricShape.html#fromDataChanged(def.js.Array,double,double,int,double,int,int,int)">fromDataChanged</a></code>&nbsp;in class&nbsp;<code><a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>controlPoints</code> - The control points</dd>
 <dd><code>x</code> - The x-axis coordinate of the changed point</dd>
 <dd><code>y</code> - The y-axis coordinate of the changed point</dd>
 <dd><code>pointIndex</code> - The index of the changed point, -1 if no point is changed</dd>
 <dd><code>spinnerValue</code> - The changed spinner value</dd>
 <dd><code>spinnerIndex</code> - The index of the changed spinner value, -1 if no
  spinner is changed</dd>
+<dd><code>width</code> - The available area width</dd>
+<dd><code>height</code> - The available area height</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The geometric shape</dd>
 </dl>

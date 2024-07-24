@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -209,9 +209,24 @@ extends <a href="Z4AbstractRibbonPanel.html" title="class in pizzapazza.ui.panel
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#reset()">reset</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Resets the ribbon text panel</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCanvas(pizzapazza.ui.component.Z4Canvas)">setCanvas</a></span>&#8203;(<a href="../../component/Z4Canvas.html" title="class in pizzapazza.ui.component">Z4Canvas</a>&nbsp;canvas)</code></th>
 <td class="colLast">
 <div class="block">Sets the canvas to manage</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setGeometricShape(pizzapazza.math.geometricshape.Z4GeometricShape,int)">setGeometricShape</a></span>&#8203;(<a href="../../../math/geometricshape/Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a>&nbsp;shape,
+                 int&nbsp;selectedControlPoint)</code></th>
+<td class="colLast">
+<div class="block">Sets the geometric shape</div>
 </td>
 </tr>
 </table>
@@ -291,6 +306,32 @@ extends <a href="Z4AbstractRibbonPanel.html" title="class in pizzapazza.ui.panel
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>canvas</code> - The canvas</dd>
 </dl>
+</li>
+</ul>
+<a id="setGeometricShape(pizzapazza.math.geometricshape.Z4GeometricShape,int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setGeometricShape</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setGeometricShape&#8203;(<a href="../../../math/geometricshape/Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a>&nbsp;shape,
+                              int&nbsp;selectedControlPoint)</pre>
+<div class="block">Sets the geometric shape</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>shape</code> - The geometric shape</dd>
+<dd><code>selectedControlPoint</code> - The selected control point</dd>
+</dl>
+</li>
+</ul>
+<a id="reset()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>reset</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;reset()</pre>
+<div class="block">Resets the ribbon text panel</div>
 </li>
 </ul>
 <a id="checkFonts()">
