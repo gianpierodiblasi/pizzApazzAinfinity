@@ -67,6 +67,11 @@ public class Z4SinusoidalCurve extends Z4GeometricCurve {
   }
 
   @Override
+  public boolean isPath() {
+    return true;
+  }
+  
+  @Override
   public Array<Z4Point> getControlPoints() {
     double rotation = Z4Math.atan(this.x1, this.y1, this.x2, this.y2);
 

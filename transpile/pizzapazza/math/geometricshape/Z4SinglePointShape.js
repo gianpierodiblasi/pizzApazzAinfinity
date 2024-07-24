@@ -21,6 +21,10 @@ class Z4SinglePointShape extends Z4GeometricShape {
     this.y = y;
   }
 
+   isPath() {
+    return true;
+  }
+
    getPath2D() {
     let path = new Path2D();
     path.moveTo(this.x, this.y);

@@ -17,6 +17,10 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
     this.shapes = shapes.map(shape => shape);
   }
 
+   isPath() {
+    return this.shapes.map(shape => shape.isPath()).reduce((accumulator, current, index, array) => accumulator && current);
+  }
+
    getPath2D() {
     let path = new Path2D();
     this.shapes.forEach(shape => path.addPath(shape.getPath2D()));

@@ -51,6 +51,11 @@ public class Z4Polyline extends Z4GeometricShape {
   }
 
   @Override
+  public boolean isPath() {
+    return true;
+  }
+  
+  @Override
   public $Path2D getPath2D() {
     $Path2D path2D = new $Path2D();
 

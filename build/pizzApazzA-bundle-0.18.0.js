@@ -16488,7 +16488,7 @@ class Z4SpatioTemporalColor extends Z4JSONable {
   }
 }
 /**
- * The common interface of all geometric shapes
+ * The common interface of all geometric shapes (and paths)
  *
  * @author gianpiero.diblasi
  */
@@ -16506,6 +16506,41 @@ class Z4GeometricShape extends Z4JSONable {
   constructor(type) {
     super();
     this.type = type;
+  }
+
+  /**
+   * Connects this geometric shape with another geometric shape by means of a
+   * bezier curve
+   *
+   * @param shape The other shape
+   * @param width The available area width
+   * @param height The available area height
+   * @return The new geometric shape
+   */
+   connect(shape, width, height) {
+    let p1 = this.getTangentAt(1);
+    let ctrl1 = this.getPoint(p1.x0, p1.y0, p1.x, p1.y, p1.module * 5, p1.phase, width, height);
+    let p2 = shape.getTangentAt(0);
+    let ctrl2 = this.getPoint(p2.x0, p2.y0, p2.x0 + p2.module * 5 * Math.cos(p2.phase - Math.PI), p2.y0 + p2.module * 5 * Math.sin(p2.phase - Math.PI), p2.module * 5, p2.phase - Math.PI, width, height);
+    return new Z4GeometricShapeSequence(new Array(this, new Z4BezierCurve(p1.x, p1.y, ctrl1.x, ctrl1.y, ctrl2.x, ctrl2.y, p2.x, p2.y), shape));
+  }
+
+   getPoint(cx, cy, x, y, radius, angle, width, height) {
+    while ((x < 0 || x > width || y < 0 || y > height) && radius > 0) {
+      radius = Math.max(0, radius - 0.05);
+      x = cx + radius * Math.cos(angle);
+      y = cy + radius * Math.sin(angle);
+    }
+    return new Z4Point(x, y);
+  }
+
+  /**
+   * Checks if this geometric shape is a path (it is not closed)
+   *
+   * @return true this geometric shape is a path (it is not closed), false
+   * otherwise
+   */
+   isPath() {
   }
 
   /**
@@ -16773,6 +16808,10 @@ class Z4AbstractBezierCurve extends Z4GeometricShape {
     this.y1 = y1;
     this.x2 = x2;
     this.y2 = y2;
+  }
+
+   isPath() {
+    return true;
   }
 
    getPath2D() {
@@ -17096,6 +17135,10 @@ class Z4GeometricFrame extends Z4GeometricCurve {
     this.angle = angle;
     this.sx = sx;
     this.sy = sy;
+  }
+
+   isPath() {
+    return false;
   }
 
    getControlPoints() {
@@ -17491,6 +17534,10 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
     }
   }
 
+   isPath() {
+    return true;
+  }
+
    getControlPoints() {
     let rotation = Z4Math.atan(this.x1, this.y1, this.x2, this.y2);
     return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2), new Z4Point(this.x1 + this.period * Math.cos(rotation), this.y1 + this.period * Math.sin(rotation)), new Z4Point(this.x1 + this.amplitude * Math.cos(rotation - Z4Math.HALF_PI), this.y1 + this.amplitude * Math.sin(rotation - Z4Math.HALF_PI)));
@@ -17637,6 +17684,10 @@ class Z4SpiralCurve extends Z4GeometricCurve {
     }
   }
 
+   isPath() {
+    return true;
+  }
+
    getControlPoints() {
     let angle = Z4Math.atan(this.x1, this.y1, this.x2, this.y2);
     return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2), new Z4Point(this.x1 + this.radius * Math.cos(angle), this.y1 + this.radius * Math.sin(angle)));
@@ -17732,6 +17783,10 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
   constructor(shapes) {
     super(Z4GeometricShapeType.SEQUENCE);
     this.shapes = shapes.map(shape => shape);
+  }
+
+   isPath() {
+    return this.shapes.map(shape => shape.isPath()).reduce((accumulator, current, index, array) => accumulator && current);
   }
 
    getPath2D() {
@@ -17882,6 +17937,10 @@ class Z4Line extends Z4GeometricShape {
     this.y2 = y2;
   }
 
+   isPath() {
+    return true;
+  }
+
    getPath2D() {
     let path = new Path2D();
     path.moveTo(this.x1, this.y1);
@@ -18004,6 +18063,10 @@ class Z4Polyline extends Z4GeometricShape {
    */
    concat(polyline) {
     return new Z4Polyline((this.points).concat(polyline.points));
+  }
+
+   isPath() {
+    return true;
   }
 
    getPath2D() {
@@ -18171,6 +18234,10 @@ class Z4SinglePointShape extends Z4GeometricShape {
     super(Z4GeometricShapeType.POINT);
     this.x = x;
     this.y = y;
+  }
+
+   isPath() {
+    return true;
   }
 
    getPath2D() {

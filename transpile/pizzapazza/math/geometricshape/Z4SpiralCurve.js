@@ -48,6 +48,10 @@ class Z4SpiralCurve extends Z4GeometricCurve {
     }
   }
 
+   isPath() {
+    return true;
+  }
+
    getControlPoints() {
     let angle = Z4Math.atan(this.x1, this.y1, this.x2, this.y2);
     return new Array(new Z4Point(this.x1, this.y1), new Z4Point(this.x2, this.y2), new Z4Point(this.x1 + this.radius * Math.cos(angle), this.y1 + this.radius * Math.sin(angle)));

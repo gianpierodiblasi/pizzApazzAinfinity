@@ -29,6 +29,10 @@ class Z4Line extends Z4GeometricShape {
     this.y2 = y2;
   }
 
+   isPath() {
+    return true;
+  }
+
    getPath2D() {
     let path = new Path2D();
     path.moveTo(this.x1, this.y1);

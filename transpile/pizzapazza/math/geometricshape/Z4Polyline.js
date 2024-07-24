@@ -36,6 +36,10 @@ class Z4Polyline extends Z4GeometricShape {
     return new Z4Polyline((this.points).concat(polyline.points));
   }
 
+   isPath() {
+    return true;
+  }
+
    getPath2D() {
     let path2D = new Path2D();
     this.points.forEach((point, index, array) => {

@@ -32,6 +32,11 @@ public class Z4GeometricShapeSequence extends Z4GeometricShape {
   }
 
   @Override
+  public boolean isPath() {
+    return this.shapes.map(shape -> shape.isPath()).reduce((accumulator, current, index, array) -> accumulator && current);
+  }
+
+  @Override
   public $Path2D getPath2D() {
     $Path2D path = new $Path2D();
     this.shapes.forEach(shape -> path.addPath(shape.getPath2D()));

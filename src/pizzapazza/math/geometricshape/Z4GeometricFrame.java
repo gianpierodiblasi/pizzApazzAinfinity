@@ -80,6 +80,11 @@ public abstract class Z4GeometricFrame extends Z4GeometricCurve {
   }
 
   @Override
+  public boolean isPath() {
+    return false;
+  }
+  
+  @Override
   public Array<Z4Point> getControlPoints() {
     Z4AffineTransform tx = Z4AffineTransform.translate(this.x, this.y).concatenateRotate(this.angle).concatenateShear(this.sy / Z4GeometricFrame.SHEARING_COEFFICIENT, -this.sx / Z4GeometricFrame.SHEARING_COEFFICIENT);
 

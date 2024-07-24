@@ -56,6 +56,11 @@ public class Z4SpiralCurve extends Z4GeometricCurve {
   }
 
   @Override
+  public boolean isPath() {
+    return true;
+  }
+  
+  @Override
   public Array<Z4Point> getControlPoints() {
     double angle = Z4Math.atan(this.x1, this.y1, this.x2, this.y2);
 

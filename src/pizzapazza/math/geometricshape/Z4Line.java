@@ -37,6 +37,11 @@ public class Z4Line extends Z4GeometricShape {
   }
 
   @Override
+  public boolean isPath() {
+    return true;
+  }
+  
+  @Override
   public $Path2D getPath2D() {
     $Path2D path = new $Path2D();
     path.moveTo(this.x1, this.y1);

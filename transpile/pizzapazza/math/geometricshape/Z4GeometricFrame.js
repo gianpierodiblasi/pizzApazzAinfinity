@@ -69,6 +69,10 @@ class Z4GeometricFrame extends Z4GeometricCurve {
     this.sy = sy;
   }
 
+   isPath() {
+    return false;
+  }
+
    getControlPoints() {
     let tx = Z4AffineTransform.translate(this.x, this.y).concatenateRotate(this.angle).concatenateShear(this.sy / Z4GeometricFrame.SHEARING_COEFFICIENT, -this.sx / Z4GeometricFrame.SHEARING_COEFFICIENT);
     return new Array(tx.transform(0, 0), tx.transform(this.w, 0), tx.transform(0, this.h));

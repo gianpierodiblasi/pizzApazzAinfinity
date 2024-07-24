@@ -10,7 +10,7 @@ import simulation.js.$Object;
 import simulation.js.$Path2D;
 
 /**
- * The common interface of all geometric shapes
+ * The common interface of all geometric shapes (and paths)
  *
  * @author gianpiero.diblasi
  */
@@ -28,6 +28,42 @@ public abstract class Z4GeometricShape implements Z4JSONable {
     super();
     this.type = type;
   }
+
+  /**
+   * Connects this geometric shape with another geometric shape by means of a
+   * bezier curve
+   *
+   * @param shape The other shape
+   * @param width The available area width
+   * @param height The available area height
+   * @return The new geometric shape
+   */
+  public Z4GeometricShape connect(Z4GeometricShape shape, int width, int height) {
+    Z4Vector p1 = this.getTangentAt(1);
+    Z4Point ctrl1 = this.getPoint(p1.x0, p1.y0, p1.x, p1.y, p1.module * 5, p1.phase, width, height);
+
+    Z4Vector p2 = shape.getTangentAt(0);
+    Z4Point ctrl2 = this.getPoint(p2.x0, p2.y0, p2.x0 + p2.module * 5 * Math.cos(p2.phase - Math.PI), p2.y0 + p2.module * 5 * Math.sin(p2.phase - Math.PI), p2.module * 5, p2.phase - Math.PI, width, height);
+
+    return new Z4GeometricShapeSequence(new Array<>(this, new Z4BezierCurve(p1.x, p1.y, ctrl1.x, ctrl1.y, ctrl2.x, ctrl2.y, p2.x, p2.y), shape));
+  }
+
+  private Z4Point getPoint(double cx, double cy, double x, double y, double radius, double angle, int width, int height) {
+    while ((x < 0 || x > width || y < 0 || y > height) && radius > 0) {
+      radius = Math.max(0, radius - 0.05);
+      x = cx + radius * Math.cos(angle);
+      y = cy + radius * Math.sin(angle);
+    }
+    return new Z4Point(x, y);
+  }
+
+  /**
+   * Checks if this geometric shape is a path (it is not closed)
+   *
+   * @return true this geometric shape is a path (it is not closed), false
+   * otherwise
+   */
+  public abstract boolean isPath();
 
   /**
    * Returns the path describing this geometric shape
