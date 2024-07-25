@@ -84,19 +84,22 @@ public abstract class Z4GeometricFrame extends Z4GeometricCurve {
   public boolean isPath() {
     return false;
   }
-  
+
   @Override
-  public $Path2D getPath2D(boolean withDirection) {
-    $Path2D path2D = this.polyline.getPath2D(false);
-    if (withDirection) {
-      this.drawDirection(path2D, 0.2);
-      this.drawDirection(path2D, 0.4);
-      this.drawDirection(path2D, 0.6);
-      this.drawDirection(path2D, 0.8);
-    }
-    return path2D;
+  public $Path2D getPath2D() {
+    return this.polyline.getPath2D();
   }
-  
+
+  @Override
+  public Array<$Path2D> getDirectionArrows() {
+    return new Array<>(
+            this.getDirectionArrowAt(0.2),
+            this.getDirectionArrowAt(0.4),
+            this.getDirectionArrowAt(0.6),
+            this.getDirectionArrowAt(0.8)
+    );
+  }
+
   @Override
   public Array<Z4Point> getControlPoints() {
     Z4AffineTransform tx = Z4AffineTransform.translate(this.x, this.y).concatenateRotate(this.angle).concatenateShear(this.sy / Z4GeometricFrame.SHEARING_COEFFICIENT, -this.sx / Z4GeometricFrame.SHEARING_COEFFICIENT);

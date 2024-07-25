@@ -294,7 +294,7 @@ class Z4GeometricShapePreview extends JSDropDown {
    */
    drawShape() {
     if (this.shape) {
-      let path2D = this.shape.getPath2D(false);
+      let path2D = this.shape.getPath2D();
       this.ctx.save();
       this.ctx.lineWidth = 3 / this.zoom;
       this.ctx.scale(this.zoom, this.zoom);

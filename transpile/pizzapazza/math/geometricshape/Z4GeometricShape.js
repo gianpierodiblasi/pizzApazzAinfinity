@@ -62,28 +62,36 @@ class Z4GeometricShape extends Z4JSONable {
   /**
    * Returns the path describing this geometric shape
    *
-   * @param withDirection true to show an arrow representing the direction of
-   * the path, false otherwise
    * @return The path describing this geometric shape
    */
-   getPath2D(withDirection) {
+   getPath2D() {
   }
 
   /**
-   * Draws a direction arrow in a path
+   * Returns a list of arrows representing the direction of this geometric shape
    *
-   * @param path The path
-   * @param position The arrow position
+   * @return A list of arrows representing the direction of this geometric shape
    */
-   drawDirection(path, position) {
+   getDirectionArrows() {
+  }
+
+  /**
+   * Retuns a direction arrow in a path at a given position
+   *
+   * @param position The arrow position
+   * @return The direction arrow
+   */
+   getDirectionArrowAt(position) {
     let vector = this.getTangentAt(position);
     let tx = Z4AffineTransform.translate(vector.x0, vector.y0).concatenateRotate(vector.phase);
+    let path = new Path2D();
     path.moveTo(vector.x0, vector.y0);
     let p = tx.transform(-20, -10);
     path.lineTo(p.x, p.y);
     p = tx.transform(-20, +10);
     path.lineTo(p.x, p.y);
-    path.lineTo(vector.x0, vector.y0);
+    path.closePath();
+    return path;
   }
 
   /**

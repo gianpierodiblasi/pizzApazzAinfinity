@@ -4679,7 +4679,7 @@ class Z4CanvasTextManager {
       for (let index = 0; index < controlPointConnections.length; index += 2) {
         this.drawLine(ctx, controlPoints[controlPointConnections[index]], controlPoints[controlPointConnections[index + 1]]);
       }
-      this.drawPolyline(ctx, this.textInfo.shape.getPath2D(withDirection));
+      this.drawPolyline(ctx, this.textInfo.shape.getPath2D(), withDirection ? this.textInfo.shape.getDirectionArrows() : new Array());
       ctx.restore();
     }
   }
@@ -4791,7 +4791,7 @@ class Z4CanvasTextManager {
     ctx.stroke();
   }
 
-   drawPolyline(ctx, path2D) {
+   drawPolyline(ctx, path2D, directionArrows) {
     ctx.lineWidth = 3 / this.zoom;
     let dash = new Array();
     ctx.strokeStyle = Z4Constants.getStyle("green");
@@ -4801,6 +4801,13 @@ class Z4CanvasTextManager {
     ctx.strokeStyle = Z4Constants.getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke(path2D);
+    ctx.setLineDash(new Array());
+    directionArrows.forEach(directionArrow => {
+      ctx.fillStyle = Z4Constants.getStyle("white");
+      ctx.fill(directionArrow);
+      ctx.strokeStyle = Z4Constants.getStyle("green");
+      ctx.stroke(directionArrow);
+    });
   }
 }
 /**
@@ -7329,7 +7336,7 @@ class Z4GeometricShapePreview extends JSDropDown {
    */
    drawShape() {
     if (this.shape) {
-      let path2D = this.shape.getPath2D(false);
+      let path2D = this.shape.getPath2D();
       this.ctx.save();
       this.ctx.lineWidth = 3 / this.zoom;
       this.ctx.scale(this.zoom, this.zoom);
@@ -7441,8 +7448,8 @@ class Z4MergeConnectGeometricShapePanel extends JSPanel {
     return preview;
   }
 
-   drawShape(ctx, shape, zoom, widthDirection) {
-    let path2D = shape.getPath2D(widthDirection);
+   drawShape(ctx, shape, zoom, withDirection) {
+    let path2D = shape.getPath2D();
     ctx.save();
     ctx.lineWidth = 3 / zoom;
     ctx.scale(zoom, zoom);
@@ -7454,6 +7461,15 @@ class Z4MergeConnectGeometricShapePanel extends JSPanel {
     ctx.strokeStyle = Z4Constants.getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke(path2D);
+    if (withDirection) {
+      ctx.setLineDash(new Array());
+      shape.getDirectionArrows().forEach(directionArrow => {
+        ctx.fillStyle = Z4Constants.getStyle("white");
+        ctx.fill(directionArrow);
+        ctx.strokeStyle = Z4Constants.getStyle("green");
+        ctx.stroke(directionArrow);
+      });
+    }
     ctx.restore();
   }
 
@@ -16625,28 +16641,36 @@ class Z4GeometricShape extends Z4JSONable {
   /**
    * Returns the path describing this geometric shape
    *
-   * @param withDirection true to show an arrow representing the direction of
-   * the path, false otherwise
    * @return The path describing this geometric shape
    */
-   getPath2D(withDirection) {
+   getPath2D() {
   }
 
   /**
-   * Draws a direction arrow in a path
+   * Returns a list of arrows representing the direction of this geometric shape
    *
-   * @param path The path
-   * @param position The arrow position
+   * @return A list of arrows representing the direction of this geometric shape
    */
-   drawDirection(path, position) {
+   getDirectionArrows() {
+  }
+
+  /**
+   * Retuns a direction arrow in a path at a given position
+   *
+   * @param position The arrow position
+   * @return The direction arrow
+   */
+   getDirectionArrowAt(position) {
     let vector = this.getTangentAt(position);
     let tx = Z4AffineTransform.translate(vector.x0, vector.y0).concatenateRotate(vector.phase);
+    let path = new Path2D();
     path.moveTo(vector.x0, vector.y0);
     let p = tx.transform(-20, -10);
     path.lineTo(p.x, p.y);
     p = tx.transform(-20, +10);
     path.lineTo(p.x, p.y);
-    path.lineTo(vector.x0, vector.y0);
+    path.closePath();
+    return path;
   }
 
   /**
@@ -16912,12 +16936,12 @@ class Z4AbstractBezierCurve extends Z4GeometricShape {
     return true;
   }
 
-   getPath2D(withDirection) {
-    let path = new Z4Polyline(this.bezier.getLUT(parseInt(this.bezier.length() / 2))).getPath2D(false);
-    if (withDirection) {
-      this.drawDirection(path, 0.5);
-    }
-    return path;
+   getPath2D() {
+    return new Z4Polyline(this.bezier.getLUT(parseInt(this.bezier.length() / 2))).getPath2D();
+  }
+
+   getDirectionArrows() {
+    return new Array(this.getDirectionArrowAt(0.5));
   }
 
    distance(x, y) {
@@ -17239,15 +17263,12 @@ class Z4GeometricFrame extends Z4GeometricCurve {
     return false;
   }
 
-   getPath2D(withDirection) {
-    let path2D = this.polyline.getPath2D(false);
-    if (withDirection) {
-      this.drawDirection(path2D, 0.2);
-      this.drawDirection(path2D, 0.4);
-      this.drawDirection(path2D, 0.6);
-      this.drawDirection(path2D, 0.8);
-    }
-    return path2D;
+   getPath2D() {
+    return this.polyline.getPath2D();
+  }
+
+   getDirectionArrows() {
+    return new Array(this.getDirectionArrowAt(0.2), this.getDirectionArrowAt(0.4), this.getDirectionArrowAt(0.6), this.getDirectionArrowAt(0.8));
   }
 
    getControlPoints() {
@@ -17647,12 +17668,12 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
     return true;
   }
 
-   getPath2D(withDirection) {
-    let path2D = this.polyline.getPath2D(false);
-    if (withDirection) {
-      this.drawDirection(path2D, 0.5);
-    }
-    return path2D;
+   getPath2D() {
+    return this.polyline.getPath2D();
+  }
+
+   getDirectionArrows() {
+    return new Array(this.getDirectionArrowAt(0.5));
   }
 
    getControlPoints() {
@@ -17805,12 +17826,12 @@ class Z4SpiralCurve extends Z4GeometricCurve {
     return true;
   }
 
-   getPath2D(withDirection) {
-    let path2D = this.polyline.getPath2D(false);
-    if (withDirection) {
-      this.drawDirection(path2D, 0.5);
-    }
-    return path2D;
+   getPath2D() {
+    return this.polyline.getPath2D();
+  }
+
+   getDirectionArrows() {
+    return new Array(this.getDirectionArrowAt(0.5));
   }
 
    getControlPoints() {
@@ -17919,10 +17940,14 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
     return this.shapes.map(shape => shape.isPath()).reduce((accumulator, current, index, array) => accumulator && current);
   }
 
-   getPath2D(withDirection) {
+   getPath2D() {
     let path = new Path2D();
-    this.shapes.forEach(shape => path.addPath(shape.getPath2D(withDirection)));
+    this.shapes.forEach(shape => path.addPath(shape.getPath2D()));
     return path;
+  }
+
+   getDirectionArrows() {
+    return this.shapes.map(shape => shape.getDirectionArrows()).reduce((accumulator, current, index, array) => (accumulator).concat(current));
   }
 
    distance(x, y) {
@@ -18084,14 +18109,15 @@ class Z4Line extends Z4GeometricShape {
     return true;
   }
 
-   getPath2D(withDirection) {
+   getPath2D() {
     let path = new Path2D();
     path.moveTo(this.x1, this.y1);
     path.lineTo(this.x2, this.y2);
-    if (withDirection) {
-      this.drawDirection(path, 0.5);
-    }
     return path;
+  }
+
+   getDirectionArrows() {
+    return new Array(this.getDirectionArrowAt(0.5));
   }
 
    distance(x, y) {
@@ -18215,7 +18241,7 @@ class Z4Polyline extends Z4GeometricShape {
     return true;
   }
 
-   getPath2D(withDirection) {
+   getPath2D() {
     let path2D = new Path2D();
     this.points.forEach((point, index, array) => {
       if (index) {
@@ -18224,14 +18250,17 @@ class Z4Polyline extends Z4GeometricShape {
         path2D.moveTo(point.x, point.y);
       }
     });
-    if (withDirection) {
-      this.cumLen.forEach((value, index, array) => {
-        if (index) {
-          this.drawDirection(path2D, (this.cumLen[index - 1] + (value - this.cumLen[index - 1]) / 2) / this.getLength());
-        }
-      });
-    }
     return path2D;
+  }
+
+   getDirectionArrows() {
+    let directionArrows = new Array();
+    this.cumLen.forEach((value, index, array) => {
+      if (index) {
+        directionArrows.push(this.getDirectionArrowAt((this.cumLen[index - 1] + (value - this.cumLen[index - 1]) / 2) / this.getLength()));
+      }
+    });
+    return directionArrows;
   }
 
    distance(x, y) {
@@ -18393,10 +18422,14 @@ class Z4SinglePointShape extends Z4GeometricShape {
     return true;
   }
 
-   getPath2D(withDirection) {
+   getPath2D() {
     let path = new Path2D();
     path.moveTo(this.x, this.y);
     return path;
+  }
+
+   getDirectionArrows() {
+    return new Array();
   }
 
    distance(x, y) {

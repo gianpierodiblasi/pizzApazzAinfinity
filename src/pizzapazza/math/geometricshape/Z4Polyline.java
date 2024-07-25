@@ -56,7 +56,7 @@ public class Z4Polyline extends Z4GeometricShape {
   }
 
   @Override
-  public $Path2D getPath2D(boolean withDirection) {
+  public $Path2D getPath2D() {
     $Path2D path2D = new $Path2D();
 
     this.points.forEach((point, index, array) -> {
@@ -67,15 +67,20 @@ public class Z4Polyline extends Z4GeometricShape {
       }
     });
 
-    if (withDirection) {
-      this.cumLen.forEach((value, index, array) -> {
-        if ($exists(index)) {
-          this.drawDirection(path2D, (this.cumLen.$get(index - 1) + (value - this.cumLen.$get(index - 1)) / 2) / this.getLength());
-        }
-      });
-    }
-
     return path2D;
+  }
+
+  @Override
+  public Array<$Path2D> getDirectionArrows() {
+    Array<$Path2D> directionArrows = new $Array<>();
+
+    this.cumLen.forEach((value, index, array) -> {
+      if ($exists(index)) {
+        directionArrows.push(this.getDirectionArrowAt((this.cumLen.$get(index - 1) + (value - this.cumLen.$get(index - 1)) / 2) / this.getLength()));
+      }
+    });
+
+    return directionArrows;
   }
 
   @Override

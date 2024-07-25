@@ -94,8 +94,8 @@ class Z4MergeConnectGeometricShapePanel extends JSPanel {
     return preview;
   }
 
-   drawShape(ctx, shape, zoom, widthDirection) {
-    let path2D = shape.getPath2D(widthDirection);
+   drawShape(ctx, shape, zoom, withDirection) {
+    let path2D = shape.getPath2D();
     ctx.save();
     ctx.lineWidth = 3 / zoom;
     ctx.scale(zoom, zoom);
@@ -107,6 +107,15 @@ class Z4MergeConnectGeometricShapePanel extends JSPanel {
     ctx.strokeStyle = Z4Constants.getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke(path2D);
+    if (withDirection) {
+      ctx.setLineDash(new Array());
+      shape.getDirectionArrows().forEach(directionArrow => {
+        ctx.fillStyle = Z4Constants.getStyle("white");
+        ctx.fill(directionArrow);
+        ctx.strokeStyle = Z4Constants.getStyle("green");
+        ctx.stroke(directionArrow);
+      });
+    }
     ctx.restore();
   }
 

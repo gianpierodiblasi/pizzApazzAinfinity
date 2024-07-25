@@ -63,12 +63,13 @@ public abstract class Z4AbstractBezierCurve extends Z4GeometricShape {
   }
 
   @Override
-  public $Path2D getPath2D(boolean withDirection) {
-    $Path2D path = new Z4Polyline(this.bezier.getLUT(parseInt(this.bezier.length() / 2))).getPath2D(false);
-    if (withDirection) {
-      this.drawDirection(path, 0.5);
-    }
-    return path;
+  public $Path2D getPath2D() {
+    return new Z4Polyline(this.bezier.getLUT(parseInt(this.bezier.length() / 2))).getPath2D();
+  }
+
+  @Override
+  public Array<$Path2D> getDirectionArrows() {
+    return new Array<>(this.getDirectionArrowAt(0.5));
   }
 
   @Override

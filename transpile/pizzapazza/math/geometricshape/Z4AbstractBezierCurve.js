@@ -51,12 +51,12 @@ class Z4AbstractBezierCurve extends Z4GeometricShape {
     return true;
   }
 
-   getPath2D(withDirection) {
-    let path = new Z4Polyline(this.bezier.getLUT(parseInt(this.bezier.length() / 2))).getPath2D(false);
-    if (withDirection) {
-      this.drawDirection(path, 0.5);
-    }
-    return path;
+   getPath2D() {
+    return new Z4Polyline(this.bezier.getLUT(parseInt(this.bezier.length() / 2))).getPath2D();
+  }
+
+   getDirectionArrows() {
+    return new Array(this.getDirectionArrowAt(0.5));
   }
 
    distance(x, y) {

@@ -1,7 +1,6 @@
 package pizzapazza.math.geometricshape;
 
 import def.js.Array;
-import pizzapazza.math.Z4AffineTransform;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Vector;
@@ -43,16 +42,16 @@ public class Z4Line extends Z4GeometricShape {
   }
 
   @Override
-  public $Path2D getPath2D(boolean withDirection) {
+  public $Path2D getPath2D() {
     $Path2D path = new $Path2D();
     path.moveTo(this.x1, this.y1);
     path.lineTo(this.x2, this.y2);
-
-    if (withDirection) {
-      this.drawDirection(path, 0.5);
-    }
-    
     return path;
+  }
+
+  @Override
+  public Array<$Path2D> getDirectionArrows() {
+    return new Array<>(this.getDirectionArrowAt(0.5));
   }
 
   @Override

@@ -40,7 +40,7 @@ class Z4Polyline extends Z4GeometricShape {
     return true;
   }
 
-   getPath2D(withDirection) {
+   getPath2D() {
     let path2D = new Path2D();
     this.points.forEach((point, index, array) => {
       if (index) {
@@ -49,14 +49,17 @@ class Z4Polyline extends Z4GeometricShape {
         path2D.moveTo(point.x, point.y);
       }
     });
-    if (withDirection) {
-      this.cumLen.forEach((value, index, array) => {
-        if (index) {
-          this.drawDirection(path2D, (this.cumLen[index - 1] + (value - this.cumLen[index - 1]) / 2) / this.getLength());
-        }
-      });
-    }
     return path2D;
+  }
+
+   getDirectionArrows() {
+    let directionArrows = new Array();
+    this.cumLen.forEach((value, index, array) => {
+      if (index) {
+        directionArrows.push(this.getDirectionArrowAt((this.cumLen[index - 1] + (value - this.cumLen[index - 1]) / 2) / this.getLength()));
+      }
+    });
+    return directionArrows;
   }
 
    distance(x, y) {

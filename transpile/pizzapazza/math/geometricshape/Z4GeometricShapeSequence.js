@@ -26,10 +26,14 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
     return this.shapes.map(shape => shape.isPath()).reduce((accumulator, current, index, array) => accumulator && current);
   }
 
-   getPath2D(withDirection) {
+   getPath2D() {
     let path = new Path2D();
-    this.shapes.forEach(shape => path.addPath(shape.getPath2D(withDirection)));
+    this.shapes.forEach(shape => path.addPath(shape.getPath2D()));
     return path;
+  }
+
+   getDirectionArrows() {
+    return this.shapes.map(shape => shape.getDirectionArrows()).reduce((accumulator, current, index, array) => (accumulator).concat(current));
   }
 
    distance(x, y) {

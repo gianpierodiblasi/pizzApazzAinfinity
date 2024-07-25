@@ -73,15 +73,12 @@ class Z4GeometricFrame extends Z4GeometricCurve {
     return false;
   }
 
-   getPath2D(withDirection) {
-    let path2D = this.polyline.getPath2D(false);
-    if (withDirection) {
-      this.drawDirection(path2D, 0.2);
-      this.drawDirection(path2D, 0.4);
-      this.drawDirection(path2D, 0.6);
-      this.drawDirection(path2D, 0.8);
-    }
-    return path2D;
+   getPath2D() {
+    return this.polyline.getPath2D();
+  }
+
+   getDirectionArrows() {
+    return new Array(this.getDirectionArrowAt(0.2), this.getDirectionArrowAt(0.4), this.getDirectionArrowAt(0.6), this.getDirectionArrowAt(0.8));
   }
 
    getControlPoints() {

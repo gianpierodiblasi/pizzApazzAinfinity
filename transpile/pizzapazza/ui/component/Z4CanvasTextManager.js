@@ -191,7 +191,7 @@ class Z4CanvasTextManager {
       for (let index = 0; index < controlPointConnections.length; index += 2) {
         this.drawLine(ctx, controlPoints[controlPointConnections[index]], controlPoints[controlPointConnections[index + 1]]);
       }
-      this.drawPolyline(ctx, this.textInfo.shape.getPath2D(withDirection));
+      this.drawPolyline(ctx, this.textInfo.shape.getPath2D(), withDirection ? this.textInfo.shape.getDirectionArrows() : new Array());
       ctx.restore();
     }
   }
@@ -303,7 +303,7 @@ class Z4CanvasTextManager {
     ctx.stroke();
   }
 
-   drawPolyline(ctx, path2D) {
+   drawPolyline(ctx, path2D, directionArrows) {
     ctx.lineWidth = 3 / this.zoom;
     let dash = new Array();
     ctx.strokeStyle = Z4Constants.getStyle("green");
@@ -313,5 +313,12 @@ class Z4CanvasTextManager {
     ctx.strokeStyle = Z4Constants.getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke(path2D);
+    ctx.setLineDash(new Array());
+    directionArrows.forEach(directionArrow => {
+      ctx.fillStyle = Z4Constants.getStyle("white");
+      ctx.fill(directionArrow);
+      ctx.strokeStyle = Z4Constants.getStyle("green");
+      ctx.stroke(directionArrow);
+    });
   }
 }

@@ -34,12 +34,17 @@ public class Z4SinglePointShape extends Z4GeometricShape {
   public boolean isPath() {
     return true;
   }
-  
+
   @Override
-  public $Path2D getPath2D(boolean withDirection) {
+  public $Path2D getPath2D() {
     $Path2D path = new $Path2D();
     path.moveTo(this.x, this.y);
     return path;
+  }
+
+  @Override
+  public Array<$Path2D> getDirectionArrows() {
+    return new Array<>();
   }
 
   @Override

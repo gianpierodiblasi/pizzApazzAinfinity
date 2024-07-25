@@ -73,12 +73,13 @@ public class Z4SinusoidalCurve extends Z4GeometricCurve {
   }
 
   @Override
-  public $Path2D getPath2D(boolean withDirection) {
-    $Path2D path2D = this.polyline.getPath2D(false);
-    if (withDirection) {
-      this.drawDirection(path2D, 0.5);
-    }
-    return path2D;
+  public $Path2D getPath2D() {
+    return this.polyline.getPath2D();
+  }
+
+  @Override
+  public Array<$Path2D> getDirectionArrows() {
+    return new Array<>(this.getDirectionArrowAt(0.5));
   }
 
   @Override

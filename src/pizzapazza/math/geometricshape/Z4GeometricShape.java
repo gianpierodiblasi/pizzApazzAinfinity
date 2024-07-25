@@ -76,22 +76,28 @@ public abstract class Z4GeometricShape implements Z4JSONable {
   /**
    * Returns the path describing this geometric shape
    *
-   * @param withDirection true to show an arrow representing the direction of
-   * the path, false otherwise
    * @return The path describing this geometric shape
    */
-  public abstract $Path2D getPath2D(boolean withDirection);
+  public abstract $Path2D getPath2D();
 
   /**
-   * Draws a direction arrow in a path
+   * Returns a list of arrows representing the direction of this geometric shape
    *
-   * @param path The path
-   * @param position The arrow position
+   * @return A list of arrows representing the direction of this geometric shape
    */
-  protected void drawDirection($Path2D path, double position) {
-    Z4Vector vector = this.getTangentAt(position);
+  public abstract Array<$Path2D> getDirectionArrows();
 
+  /**
+   * Retuns a direction arrow in a path at a given position
+   *
+   * @param position The arrow position
+   * @return The direction arrow
+   */
+  protected $Path2D getDirectionArrowAt(double position) {
+    Z4Vector vector = this.getTangentAt(position);
     Z4AffineTransform tx = Z4AffineTransform.translate(vector.x0, vector.y0).concatenateRotate(vector.phase);
+
+    $Path2D path = new $Path2D();
     path.moveTo(vector.x0, vector.y0);
 
     Z4Point p = tx.transform(-20, -10);
@@ -99,7 +105,8 @@ public abstract class Z4GeometricShape implements Z4JSONable {
     p = tx.transform(-20, +10);
     path.lineTo(p.x, p.y);
 
-    path.lineTo(vector.x0, vector.y0);
+    path.closePath();
+    return path;
   }
 
   /**

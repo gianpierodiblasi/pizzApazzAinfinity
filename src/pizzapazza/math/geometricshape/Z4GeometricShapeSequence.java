@@ -41,10 +41,16 @@ public class Z4GeometricShapeSequence extends Z4GeometricShape {
   }
 
   @Override
-  public $Path2D getPath2D(boolean withDirection) {
+  public $Path2D getPath2D() {
     $Path2D path = new $Path2D();
-    this.shapes.forEach(shape -> path.addPath(shape.getPath2D(withDirection)));
+    this.shapes.forEach(shape -> path.addPath(shape.getPath2D()));
     return path;
+  }
+
+  @Override
+  public Array<$Path2D> getDirectionArrows() {
+    return this.shapes.map(shape -> shape.getDirectionArrows()).reduce((accumulator, current, index, array) -> (($Array<$Path2D>) accumulator).concat(current));
+
   }
 
   @Override

@@ -62,12 +62,12 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
     return true;
   }
 
-   getPath2D(withDirection) {
-    let path2D = this.polyline.getPath2D(false);
-    if (withDirection) {
-      this.drawDirection(path2D, 0.5);
-    }
-    return path2D;
+   getPath2D() {
+    return this.polyline.getPath2D();
+  }
+
+   getDirectionArrows() {
+    return new Array(this.getDirectionArrowAt(0.5));
   }
 
    getControlPoints() {

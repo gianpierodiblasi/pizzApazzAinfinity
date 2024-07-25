@@ -119,8 +119,8 @@ public class Z4MergeConnectGeometricShapePanel extends JSPanel {
     return preview;
   }
 
-  void drawShape($CanvasRenderingContext2D ctx, Z4GeometricShape shape, double zoom, boolean widthDirection) {
-    $Path2D path2D = shape.getPath2D(widthDirection);
+  void drawShape($CanvasRenderingContext2D ctx, Z4GeometricShape shape, double zoom, boolean withDirection) {
+    $Path2D path2D = shape.getPath2D();
 
     ctx.save();
 
@@ -138,6 +138,17 @@ public class Z4MergeConnectGeometricShapePanel extends JSPanel {
     ctx.strokeStyle = Z4Constants.$getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke(path2D);
+
+    if (withDirection) {
+      ctx.setLineDash(new Array<>());
+      shape.getDirectionArrows().forEach(directionArrow -> {
+        ctx.fillStyle = Z4Constants.$getStyle("white");
+        ctx.fill(directionArrow);
+
+        ctx.strokeStyle = Z4Constants.$getStyle("green");
+        ctx.stroke(directionArrow);
+      });
+    }
 
     ctx.restore();
   }

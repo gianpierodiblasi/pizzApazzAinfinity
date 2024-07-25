@@ -25,10 +25,14 @@ class Z4SinglePointShape extends Z4GeometricShape {
     return true;
   }
 
-   getPath2D(withDirection) {
+   getPath2D() {
     let path = new Path2D();
     path.moveTo(this.x, this.y);
     return path;
+  }
+
+   getDirectionArrows() {
+    return new Array();
   }
 
    distance(x, y) {
