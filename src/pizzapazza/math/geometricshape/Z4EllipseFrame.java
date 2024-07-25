@@ -93,6 +93,12 @@ public class Z4EllipseFrame extends Z4GeometricFrame {
   }
 
   @Override
+  public Z4GeometricShape fromRotation(double cx, double cy, double angle) {
+    Z4Point p = Z4Math.rotoTranslate(this.x - cx, this.y - cy, angle, cx, cy);
+    return new Z4EllipseFrame(p.x, p.y, this.w, this.h, this.angle, this.sx, this.sy, this.startAngle, this.extentAngle);
+  }
+
+  @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
     json.$set("startAngle", this.startAngle);

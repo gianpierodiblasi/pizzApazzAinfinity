@@ -1,6 +1,7 @@
 package pizzapazza.math.geometricshape;
 
 import def.js.Array;
+import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Vector;
 import simulation.js.$Apply_1_V;
@@ -163,6 +164,11 @@ public class Z4GeometricShapeSequence extends Z4GeometricShape {
     obj.$set("shape", shape);
     obj.$set("index", indexToFind);
     return $exists(shape) ? obj : null;
+  }
+
+  @Override
+  public Z4GeometricShape fromRotation(double cx, double cy, double angle) {
+    return new Z4GeometricShapeSequence(this.shapes.map(shape -> shape.fromRotation(cx, cy, angle)), this.connected);
   }
 
   @Override

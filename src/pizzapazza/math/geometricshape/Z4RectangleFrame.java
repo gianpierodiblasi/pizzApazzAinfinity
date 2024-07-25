@@ -2,6 +2,7 @@ package pizzapazza.math.geometricshape;
 
 import def.js.Array;
 import pizzapazza.math.Z4AffineTransform;
+import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import simulation.js.$Object;
 
@@ -40,6 +41,12 @@ public class Z4RectangleFrame extends Z4GeometricFrame {
   @Override
   protected Z4GeometricFrame fromParameters(double x, double y, double w, double h, double angle, double sx, double sy) {
     return new Z4RectangleFrame(x, y, w, h, angle, sx, sy);
+  }
+
+  @Override
+  public Z4GeometricShape fromRotation(double cx, double cy, double angle) {
+    Z4Point p = Z4Math.rotoTranslate(this.x - cx, this.y - cy, angle, cx, cy);
+    return new Z4RectangleFrame(p.x, p.y, this.w, this.h, this.angle, this.sx, this.sy);
   }
 
   /**

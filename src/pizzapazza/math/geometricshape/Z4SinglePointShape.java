@@ -93,6 +93,12 @@ public class Z4SinglePointShape extends Z4GeometricShape {
   }
 
   @Override
+  public Z4GeometricShape fromRotation(double cx, double cy, double angle) {
+    Z4Point p = Z4Math.rotoTranslate(this.x - cx, this.y - cy, angle, cx, cy);
+    return new Z4SinglePointShape(p.x, p.y);
+  }
+
+  @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
     json.$set("x", this.x);

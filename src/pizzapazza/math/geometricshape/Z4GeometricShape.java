@@ -33,8 +33,8 @@ public abstract class Z4GeometricShape implements Z4JSONable {
   }
 
   /**
-   * Connects this geometric shape with another geometric shape by means of a
-   * bezier curve
+   * Returns a Z4GeometricShape obtained by connecting this geometric shape with
+   * another geometric shape by means of a bezier curve
    *
    * @param shape The other shape
    * @param width The available area width
@@ -214,6 +214,16 @@ public abstract class Z4GeometricShape implements Z4JSONable {
         return null;
     }
   }
+
+  /**
+   * Returns a Z4GeometricShape obtained by rotating this geometric shape
+   *
+   * @param cx The x-axis coordinate of the rotation center
+   * @param cy The y-axis coordinate of the rotation center
+   * @param angle The angle (in radians)
+   * @return The geometric shape
+   */
+  public abstract Z4GeometricShape fromRotation(double cx, double cy, double angle);
 
   @Override
   public $Object toJSON() {

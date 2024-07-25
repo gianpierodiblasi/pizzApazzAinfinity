@@ -113,6 +113,13 @@ public class Z4Line extends Z4GeometricShape {
   }
 
   @Override
+  public Z4GeometricShape fromRotation(double cx, double cy, double angle) {
+    Z4Point p1 = Z4Math.rotoTranslate(this.x1 - cx, this.y1 - cy, angle, cx, cy);
+    Z4Point p2 = Z4Math.rotoTranslate(this.x2 - cx, this.y2 - cy, angle, cx, cy);
+    return new Z4Line(p1.x, p1.y, p2.x, p2.y);
+  }
+
+  @Override
   public $Object toJSON() {
     $Object json = super.toJSON();
     json.$set("x1", this.x1);

@@ -1,6 +1,7 @@
 package pizzapazza.math.geometricshape;
 
 import def.js.Array;
+import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import simulation.bezier.$Bezier;
 import simulation.js.$Object;
@@ -65,6 +66,15 @@ public class Z4BezierCurve extends Z4AbstractBezierCurve {
     } else {
       return this;
     }
+  }
+
+  @Override
+  public Z4GeometricShape fromRotation(double cx, double cy, double angle) {
+    Z4Point p1 = Z4Math.rotoTranslate(this.x1 - cx, this.y1 - cy, angle, cx, cy);
+    Z4Point ctrl1 = Z4Math.rotoTranslate(this.ctrlx1 - cx, this.ctrly1 - cy, angle, cx, cy);
+    Z4Point ctrl2 = Z4Math.rotoTranslate(this.ctrlx2 - cx, this.ctrly2 - cy, angle, cx, cy);
+    Z4Point p2 = Z4Math.rotoTranslate(this.x2 - cx, this.y2 - cy, angle, cx, cy);
+    return new Z4BezierCurve(p1.x, p1.y, ctrl1.x, ctrl1.y, ctrl2.x, ctrl2.y, p2.x, p2.y);
   }
 
   @Override
