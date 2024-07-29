@@ -73,6 +73,11 @@ class Z4EllipseFrame extends Z4GeometricFrame {
     return new Z4EllipseFrame(x, y, w, h, angle, sx, sy, this.startAngle, this.extentAngle);
   }
 
+   fromRotation(cx, cy, angle) {
+    let p = Z4Math.rotoTranslate(this.x - cx, this.y - cy, angle, cx, cy);
+    return new Z4EllipseFrame(p.x, p.y, this.w, this.h, this.angle, this.sx, this.sy, this.startAngle, this.extentAngle);
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["startAngle"] = this.startAngle;

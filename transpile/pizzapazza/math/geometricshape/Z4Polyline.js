@@ -27,7 +27,8 @@ class Z4Polyline extends Z4GeometricShape {
   }
 
   /**
-   * Concatenates this polyline with another polyline
+   * Returns a Z4GeometricShape obtained by concatenating this polyline with
+   * another polyline
    *
    * @param polyline The other polyline
    * @return The concatenation of this polyline with the other polyline
@@ -156,6 +157,10 @@ class Z4Polyline extends Z4GeometricShape {
 
    fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     return pointIndex !== -1 ? new Z4Polyline(this.points.map((point, index, array) => index === pointIndex ? new Z4Point(x, y) : point)) : this;
+  }
+
+   fromRotation(cx, cy, angle) {
+    return new Z4Polyline(this.points.map(point => Z4Math.rotoTranslate(point.x - cx, point.y - cy, angle, cx, cy)));
   }
 
    toJSON() {

@@ -133,6 +133,12 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
     return new Z4Point(x, y);
   }
 
+   fromRotation(cx, cy, angle) {
+    let p1 = Z4Math.rotoTranslate(this.x1 - cx, this.y1 - cy, angle, cx, cy);
+    let p2 = Z4Math.rotoTranslate(this.x2 - cx, this.y2 - cy, angle, cx, cy);
+    return new Z4SinusoidalCurve(p1.x, p1.y, p2.x, p2.y, this.period, this.amplitude, this.angle);
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["x1"] = this.x1;

@@ -32,6 +32,11 @@ class Z4RectangleFrame extends Z4GeometricFrame {
     return new Z4RectangleFrame(x, y, w, h, angle, sx, sy);
   }
 
+   fromRotation(cx, cy, angle) {
+    let p = Z4Math.rotoTranslate(this.x - cx, this.y - cy, angle, cx, cy);
+    return new Z4RectangleFrame(p.x, p.y, this.w, this.h, this.angle, this.sx, this.sy);
+  }
+
   /**
    * Creates a Z4RectangleFrame from a JSON object
    *

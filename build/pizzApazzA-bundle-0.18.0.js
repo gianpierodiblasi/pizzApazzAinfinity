@@ -16599,8 +16599,8 @@ class Z4GeometricShape extends Z4JSONable {
   }
 
   /**
-   * Connects this geometric shape with another geometric shape by means of a
-   * bezier curve
+   * Returns a Z4GeometricShape obtained by connecting this geometric shape with
+   * another geometric shape by means of a bezier curve
    *
    * @param shape The other shape
    * @param width The available area width
@@ -16786,6 +16786,17 @@ class Z4GeometricShape extends Z4JSONable {
       default:
         return null;
     }
+  }
+
+  /**
+   * Returns a Z4GeometricShape obtained by rotating this geometric shape
+   *
+   * @param cx The x-axis coordinate of the rotation center
+   * @param cy The y-axis coordinate of the rotation center
+   * @param angle The angle (in radians)
+   * @return The geometric shape
+   */
+   fromRotation(cx, cy, angle) {
   }
 
    toJSON() {
@@ -17031,6 +17042,14 @@ class Z4BezierCurve extends Z4AbstractBezierCurve {
     }
   }
 
+   fromRotation(cx, cy, angle) {
+    let p1 = Z4Math.rotoTranslate(this.x1 - cx, this.y1 - cy, angle, cx, cy);
+    let ctrl1 = Z4Math.rotoTranslate(this.ctrlx1 - cx, this.ctrly1 - cy, angle, cx, cy);
+    let ctrl2 = Z4Math.rotoTranslate(this.ctrlx2 - cx, this.ctrly2 - cy, angle, cx, cy);
+    let p2 = Z4Math.rotoTranslate(this.x2 - cx, this.y2 - cy, angle, cx, cy);
+    return new Z4BezierCurve(p1.x, p1.y, ctrl1.x, ctrl1.y, ctrl2.x, ctrl2.y, p2.x, p2.y);
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["x1"] = this.x1;
@@ -17111,6 +17130,13 @@ class Z4QuadCurve extends Z4AbstractBezierCurve {
     } else {
       return this;
     }
+  }
+
+   fromRotation(cx, cy, angle) {
+    let p1 = Z4Math.rotoTranslate(this.x1 - cx, this.y1 - cy, angle, cx, cy);
+    let ctrl = Z4Math.rotoTranslate(this.ctrlx - cx, this.ctrly - cy, angle, cx, cy);
+    let p2 = Z4Math.rotoTranslate(this.x2 - cx, this.y2 - cy, angle, cx, cy);
+    return new Z4QuadCurve(p1.x, p1.y, ctrl.x, ctrl.y, p2.x, p2.y);
   }
 
    toJSON() {
@@ -17437,6 +17463,11 @@ class Z4EllipseFrame extends Z4GeometricFrame {
     return new Z4EllipseFrame(x, y, w, h, angle, sx, sy, this.startAngle, this.extentAngle);
   }
 
+   fromRotation(cx, cy, angle) {
+    let p = Z4Math.rotoTranslate(this.x - cx, this.y - cy, angle, cx, cy);
+    return new Z4EllipseFrame(p.x, p.y, this.w, this.h, this.angle, this.sx, this.sy, this.startAngle, this.extentAngle);
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["startAngle"] = this.startAngle;
@@ -17497,6 +17528,11 @@ class Z4RectangleFrame extends Z4GeometricFrame {
 
    fromParameters(x, y, w, h, angle, sx, sy) {
     return new Z4RectangleFrame(x, y, w, h, angle, sx, sy);
+  }
+
+   fromRotation(cx, cy, angle) {
+    let p = Z4Math.rotoTranslate(this.x - cx, this.y - cy, angle, cx, cy);
+    return new Z4RectangleFrame(p.x, p.y, this.w, this.h, this.angle, this.sx, this.sy);
   }
 
   /**
@@ -17581,6 +17617,11 @@ class Z4RoundRectangleFrame extends Z4GeometricFrame {
 
    fromParameters(x, y, w, h, angle, sx, sy) {
     return new Z4RoundRectangleFrame(x, y, w, h, angle, sx, sy);
+  }
+
+   fromRotation(cx, cy, angle) {
+    let p = Z4Math.rotoTranslate(this.x - cx, this.y - cy, angle, cx, cy);
+    return new Z4RoundRectangleFrame(p.x, p.y, this.w, this.h, this.angle, this.sx, this.sy);
   }
 
   /**
@@ -17739,6 +17780,12 @@ class Z4SinusoidalCurve extends Z4GeometricCurve {
     return new Z4Point(x, y);
   }
 
+   fromRotation(cx, cy, angle) {
+    let p1 = Z4Math.rotoTranslate(this.x1 - cx, this.y1 - cy, angle, cx, cy);
+    let p2 = Z4Math.rotoTranslate(this.x2 - cx, this.y2 - cy, angle, cx, cy);
+    return new Z4SinusoidalCurve(p1.x, p1.y, p2.x, p2.y, this.period, this.amplitude, this.angle);
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["x1"] = this.x1;
@@ -17889,6 +17936,12 @@ class Z4SpiralCurve extends Z4GeometricCurve {
     json["y2"] = this.y2;
     json["radius"] = this.radius;
     return json;
+  }
+
+   fromRotation(cx, cy, angle) {
+    let p1 = Z4Math.rotoTranslate(this.x1 - cx, this.y1 - cy, angle, cx, cy);
+    let p2 = Z4Math.rotoTranslate(this.x2 - cx, this.y2 - cy, angle, cx, cy);
+    return new Z4SpiralCurve(p1.x, p1.y, p2.x, p2.y, this.radius);
   }
 
   /**
@@ -18049,6 +18102,10 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
     return shape ? obj : null;
   }
 
+   fromRotation(cx, cy, angle) {
+    return new Z4GeometricShapeSequence(this.shapes.map(shape => shape.fromRotation(cx, cy, angle)), this.connected);
+  }
+
    fromResize(width, height) {
     return new Z4GeometricShapeSequence(this.shapes.map(shape => shape.fromResize(width, height)), this.connected);
   }
@@ -18169,6 +18226,12 @@ class Z4Line extends Z4GeometricShape {
     }
   }
 
+   fromRotation(cx, cy, angle) {
+    let p1 = Z4Math.rotoTranslate(this.x1 - cx, this.y1 - cy, angle, cx, cy);
+    let p2 = Z4Math.rotoTranslate(this.x2 - cx, this.y2 - cy, angle, cx, cy);
+    return new Z4Line(p1.x, p1.y, p2.x, p2.y);
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["x1"] = this.x1;
@@ -18228,7 +18291,8 @@ class Z4Polyline extends Z4GeometricShape {
   }
 
   /**
-   * Concatenates this polyline with another polyline
+   * Returns a Z4GeometricShape obtained by concatenating this polyline with
+   * another polyline
    *
    * @param polyline The other polyline
    * @return The concatenation of this polyline with the other polyline
@@ -18359,6 +18423,10 @@ class Z4Polyline extends Z4GeometricShape {
     return pointIndex !== -1 ? new Z4Polyline(this.points.map((point, index, array) => index === pointIndex ? new Z4Point(x, y) : point)) : this;
   }
 
+   fromRotation(cx, cy, angle) {
+    return new Z4Polyline(this.points.map(point => Z4Math.rotoTranslate(point.x - cx, point.y - cy, angle, cx, cy)));
+  }
+
    toJSON() {
     let json = super.toJSON();
     let pointsJSON = new Array();
@@ -18466,6 +18534,11 @@ class Z4SinglePointShape extends Z4GeometricShape {
 
    fromDataChanged(controlPoints, x, y, pointIndex, spinnerValue, spinnerIndex, width, height) {
     return pointIndex === 0 ? new Z4SinglePointShape(x, y) : this;
+  }
+
+   fromRotation(cx, cy, angle) {
+    let p = Z4Math.rotoTranslate(this.x - cx, this.y - cy, angle, cx, cy);
+    return new Z4SinglePointShape(p.x, p.y);
   }
 
    toJSON() {

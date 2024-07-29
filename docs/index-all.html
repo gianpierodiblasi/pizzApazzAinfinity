@@ -159,7 +159,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Adds a change listener</div>
 </dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/ui/panel/math/geometricshape/Z4MergeGeometricShapePanel.html#addChangeListener(javascript.swing.event.ChangeListener)">addChangeListener(ChangeListener)</a></span> - Method in class pizzapazza.ui.panel.math.geometricshape.<a href="pizzapazza/ui/panel/math/geometricshape/Z4MergeGeometricShapePanel.html" title="class in pizzapazza.ui.panel.math.geometricshape">Z4MergeGeometricShapePanel</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/ui/panel/math/geometricshape/Z4MergeConnectGeometricShapePanel.html#addChangeListener(javascript.swing.event.ChangeListener)">addChangeListener(ChangeListener)</a></span> - Method in class pizzapazza.ui.panel.math.geometricshape.<a href="pizzapazza/ui/panel/math/geometricshape/Z4MergeConnectGeometricShapePanel.html" title="class in pizzapazza.ui.panel.math.geometricshape">Z4MergeConnectGeometricShapePanel</a></dt>
 <dd>
 <div class="block">Adds a change listener</div>
 </dd>
@@ -477,7 +477,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4Polyline.html#concat(pizzapazza.math.geometricshape.Z4Polyline)">concat(Z4Polyline)</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4Polyline.html" title="class in pizzapazza.math.geometricshape">Z4Polyline</a></dt>
 <dd>
-<div class="block">Concatenates this polyline with another polyline</div>
+<div class="block">Returns a Z4GeometricShape obtained by concatenating this polyline with
+ another polyline</div>
 </dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/math/Z4AffineTransform.html#concatenate(pizzapazza.math.Z4AffineTransform)">concatenate(Z4AffineTransform)</a></span> - Method in class pizzapazza.math.<a href="pizzapazza/math/Z4AffineTransform.html" title="class in pizzapazza.math">Z4AffineTransform</a></dt>
 <dd>
@@ -508,6 +509,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Configures the arrays of accepted file types</div>
 </dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4GeometricShape.html#connect(pizzapazza.math.geometricshape.Z4GeometricShape,int,int)">connect(Z4GeometricShape, int, int)</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a></dt>
+<dd>
+<div class="block">Returns a Z4GeometricShape obtained by connecting this geometric shape with
+ another geometric shape by means of a bezier curve</div>
+</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/util/Z4Translations.html#CONNECT">CONNECT</a></span> - Static variable in class pizzapazza.util.<a href="pizzapazza/util/Z4Translations.html" title="class in pizzapazza.util">Z4Translations</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/util/Z4Translations.html#CONSOLIDATE">CONSOLIDATE</a></span> - Static variable in class pizzapazza.util.<a href="pizzapazza/util/Z4Translations.html" title="class in pizzapazza.util">Z4Translations</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/util/Z4Translations.html#CONSOLIDATE_MESSAGE">CONSOLIDATE_MESSAGE</a></span> - Static variable in class pizzapazza.util.<a href="pizzapazza/util/Z4Translations.html" title="class in pizzapazza.util">Z4Translations</a></dt>
@@ -742,6 +750,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">The point has to be used to draw bounds</div>
 </dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/util/Z4Translations.html#DRAW_DIRECTION">DRAW_DIRECTION</a></span> - Static variable in class pizzapazza.util.<a href="pizzapazza/util/Z4Translations.html" title="class in pizzapazza.util">Z4Translations</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/math/Z4DrawingPointIntent.html#DRAW_OBJECTS">DRAW_OBJECTS</a></span> - pizzapazza.math.<a href="pizzapazza/math/Z4DrawingPointIntent.html" title="enum in pizzapazza.math">Z4DrawingPointIntent</a></dt>
 <dd>
 <div class="block">The point has to be used to draw objects</div>
@@ -838,7 +848,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Draws a text</div>
 </dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/ui/component/Z4CanvasTextManager.html#drawText(simulation.dom.$CanvasRenderingContext2D,boolean)">drawText($CanvasRenderingContext2D, boolean)</a></span> - Method in class pizzapazza.ui.component.<a href="pizzapazza/ui/component/Z4CanvasTextManager.html" title="class in pizzapazza.ui.component">Z4CanvasTextManager</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/ui/component/Z4CanvasTextManager.html#drawText(simulation.dom.$CanvasRenderingContext2D,boolean,boolean)">drawText($CanvasRenderingContext2D, boolean, boolean)</a></span> - Method in class pizzapazza.ui.component.<a href="pizzapazza/ui/component/Z4CanvasTextManager.html" title="class in pizzapazza.ui.component">Z4CanvasTextManager</a></dt>
 <dd>
 <div class="block">Draws a text</div>
 </dd>
@@ -1201,6 +1211,32 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4GeometricShapeSequence.html#fromResize(int,int)">fromResize(int, int)</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4GeometricShapeSequence.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShapeSequence</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4BezierCurve.html#fromRotation(double,double,double)">fromRotation(double, double, double)</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4BezierCurve.html" title="class in pizzapazza.math.geometricshape">Z4BezierCurve</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4EllipseFrame.html#fromRotation(double,double,double)">fromRotation(double, double, double)</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4EllipseFrame.html" title="class in pizzapazza.math.geometricshape">Z4EllipseFrame</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4GeometricShape.html#fromRotation(double,double,double)">fromRotation(double, double, double)</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a></dt>
+<dd>
+<div class="block">Returns a Z4GeometricShape obtained by rotating this geometric shape</div>
+</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4GeometricShapeSequence.html#fromRotation(double,double,double)">fromRotation(double, double, double)</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4GeometricShapeSequence.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShapeSequence</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4Line.html#fromRotation(double,double,double)">fromRotation(double, double, double)</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4Line.html" title="class in pizzapazza.math.geometricshape">Z4Line</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4Polyline.html#fromRotation(double,double,double)">fromRotation(double, double, double)</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4Polyline.html" title="class in pizzapazza.math.geometricshape">Z4Polyline</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4QuadCurve.html#fromRotation(double,double,double)">fromRotation(double, double, double)</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4QuadCurve.html" title="class in pizzapazza.math.geometricshape">Z4QuadCurve</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4RectangleFrame.html#fromRotation(double,double,double)">fromRotation(double, double, double)</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4RectangleFrame.html" title="class in pizzapazza.math.geometricshape">Z4RectangleFrame</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4RoundRectangleFrame.html#fromRotation(double,double,double)">fromRotation(double, double, double)</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4RoundRectangleFrame.html" title="class in pizzapazza.math.geometricshape">Z4RoundRectangleFrame</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4SinglePointShape.html#fromRotation(double,double,double)">fromRotation(double, double, double)</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4SinglePointShape.html" title="class in pizzapazza.math.geometricshape">Z4SinglePointShape</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4SinusoidalCurve.html#fromRotation(double,double,double)">fromRotation(double, double, double)</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4SinusoidalCurve.html" title="class in pizzapazza.math.geometricshape">Z4SinusoidalCurve</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4SpiralCurve.html#fromRotation(double,double,double)">fromRotation(double, double, double)</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4SpiralCurve.html" title="class in pizzapazza.math.geometricshape">Z4SpiralCurve</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4BezierCurve.html#fromSize(int,int)">fromSize(int, int)</a></span> - Static method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4BezierCurve.html" title="class in pizzapazza.math.geometricshape">Z4BezierCurve</a></dt>
 <dd>
 <div class="block">Creates a Z4BezierCurve contained in a given size</div>
@@ -1465,6 +1501,30 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Returns the current key in the history buffer</div>
 </dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4GeometricShape.html#getDirectionArrowAt(double)">getDirectionArrowAt(double)</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a></dt>
+<dd>
+<div class="block">Retuns a direction arrow in a path at a given position</div>
+</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4AbstractBezierCurve.html#getDirectionArrows()">getDirectionArrows()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4AbstractBezierCurve.html" title="class in pizzapazza.math.geometricshape">Z4AbstractBezierCurve</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4GeometricFrame.html#getDirectionArrows()">getDirectionArrows()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4GeometricFrame.html" title="class in pizzapazza.math.geometricshape">Z4GeometricFrame</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4GeometricShape.html#getDirectionArrows()">getDirectionArrows()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a></dt>
+<dd>
+<div class="block">Returns a list of arrows representing the direction of this geometric shape</div>
+</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4GeometricShapeSequence.html#getDirectionArrows()">getDirectionArrows()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4GeometricShapeSequence.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShapeSequence</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4Line.html#getDirectionArrows()">getDirectionArrows()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4Line.html" title="class in pizzapazza.math.geometricshape">Z4Line</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4Polyline.html#getDirectionArrows()">getDirectionArrows()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4Polyline.html" title="class in pizzapazza.math.geometricshape">Z4Polyline</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4SinglePointShape.html#getDirectionArrows()">getDirectionArrows()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4SinglePointShape.html" title="class in pizzapazza.math.geometricshape">Z4SinglePointShape</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4SinusoidalCurve.html#getDirectionArrows()">getDirectionArrows()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4SinusoidalCurve.html" title="class in pizzapazza.math.geometricshape">Z4SinusoidalCurve</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4SpiralCurve.html#getDirectionArrows()">getDirectionArrows()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4SpiralCurve.html" title="class in pizzapazza.math.geometricshape">Z4SpiralCurve</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/filler/Z4AbstractDistanceBasedBoundaryBehaviorFiller.html#getDistance(int,int)">getDistance(int, int)</a></span> - Method in class pizzapazza.filler.<a href="pizzapazza/filler/Z4AbstractDistanceBasedBoundaryBehaviorFiller.html" title="class in pizzapazza.filler">Z4AbstractDistanceBasedBoundaryBehaviorFiller</a></dt>
 <dd>
 <div class="block">Returns the distance of a point</div>
@@ -1636,6 +1696,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Returns the tension of the second internal control point</div>
 </dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4InfiniteLine.html#getIntersectionPoint(pizzapazza.math.Z4InfiniteLine)">getIntersectionPoint(Z4InfiniteLine)</a></span> - Method in class pizzapazza.math.<a href="pizzapazza/math/Z4InfiniteLine.html" title="class in pizzapazza.math">Z4InfiniteLine</a></dt>
+<dd>
+<div class="block">Returns the intersection point between this and another infinite line, if
+ the point exists (the two lines are not parallels)</div>
+</dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/ui/component/Z4Canvas.html#getLayerAt(int)">getLayerAt(int)</a></span> - Method in class pizzapazza.ui.component.<a href="pizzapazza/ui/component/Z4Canvas.html" title="class in pizzapazza.ui.component">Z4Canvas</a></dt>
 <dd>
 <div class="block">Returns a layer</div>
@@ -1752,7 +1817,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4AbstractBezierCurve.html#getPath2D()">getPath2D()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4AbstractBezierCurve.html" title="class in pizzapazza.math.geometricshape">Z4AbstractBezierCurve</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4GeometricCurve.html#getPath2D()">getPath2D()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4GeometricCurve.html" title="class in pizzapazza.math.geometricshape">Z4GeometricCurve</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4GeometricFrame.html#getPath2D()">getPath2D()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4GeometricFrame.html" title="class in pizzapazza.math.geometricshape">Z4GeometricFrame</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4GeometricShape.html#getPath2D()">getPath2D()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a></dt>
 <dd>
@@ -1765,6 +1830,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4Polyline.html#getPath2D()">getPath2D()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4Polyline.html" title="class in pizzapazza.math.geometricshape">Z4Polyline</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4SinglePointShape.html#getPath2D()">getPath2D()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4SinglePointShape.html" title="class in pizzapazza.math.geometricshape">Z4SinglePointShape</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4SinusoidalCurve.html#getPath2D()">getPath2D()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4SinusoidalCurve.html" title="class in pizzapazza.math.geometricshape">Z4SinusoidalCurve</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4SpiralCurve.html#getPath2D()">getPath2D()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4SpiralCurve.html" title="class in pizzapazza.math.geometricshape">Z4SpiralCurve</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/painter/Z4BrushPainter.html#getPattern()">getPattern()</a></span> - Method in class pizzapazza.painter.<a href="pizzapazza/painter/Z4BrushPainter.html" title="class in pizzapazza.painter">Z4BrushPainter</a></dt>
 <dd>
@@ -1892,7 +1961,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Returns the selected filling (an instance of Color, Z4AbstractFiller or
  Z4BiGradientColor)</div>
 </dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/ui/panel/math/geometricshape/Z4MergeGeometricShapePanel.html#getSelectedGeometricShapes()">getSelectedGeometricShapes()</a></span> - Method in class pizzapazza.ui.panel.math.geometricshape.<a href="pizzapazza/ui/panel/math/geometricshape/Z4MergeGeometricShapePanel.html" title="class in pizzapazza.ui.panel.math.geometricshape">Z4MergeGeometricShapePanel</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/ui/panel/math/geometricshape/Z4MergeConnectGeometricShapePanel.html#getSelectedGeometricShapes()">getSelectedGeometricShapes()</a></span> - Method in class pizzapazza.ui.panel.math.geometricshape.<a href="pizzapazza/ui/panel/math/geometricshape/Z4MergeConnectGeometricShapePanel.html" title="class in pizzapazza.ui.panel.math.geometricshape">Z4MergeConnectGeometricShapePanel</a></dt>
 <dd>
 <div class="block">Returns the selected geometric shapes</div>
 </dd>
@@ -2333,7 +2402,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Returns if the rotation has to be delayed (rotated by a PI angle)</div>
 </dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/ui/panel/math/geometricshape/Z4MergeGeometricShapePanel.html#isDeleteSelectedShapesAndPaths()">isDeleteSelectedShapesAndPaths()</a></span> - Method in class pizzapazza.ui.panel.math.geometricshape.<a href="pizzapazza/ui/panel/math/geometricshape/Z4MergeGeometricShapePanel.html" title="class in pizzapazza.ui.panel.math.geometricshape">Z4MergeGeometricShapePanel</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/ui/panel/math/geometricshape/Z4MergeConnectGeometricShapePanel.html#isDeleteSelectedShapesAndPaths()">isDeleteSelectedShapesAndPaths()</a></span> - Method in class pizzapazza.ui.panel.math.geometricshape.<a href="pizzapazza/ui/panel/math/geometricshape/Z4MergeConnectGeometricShapePanel.html" title="class in pizzapazza.ui.panel.math.geometricshape">Z4MergeConnectGeometricShapePanel</a></dt>
 <dd>
 <div class="block">Returns if the merging shapes/paths have to be deleted</div>
 </dd>
@@ -2377,6 +2446,26 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Check if each pattern can be resized</div>
 </dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4AbstractBezierCurve.html#isPath()">isPath()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4AbstractBezierCurve.html" title="class in pizzapazza.math.geometricshape">Z4AbstractBezierCurve</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4GeometricFrame.html#isPath()">isPath()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4GeometricFrame.html" title="class in pizzapazza.math.geometricshape">Z4GeometricFrame</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4GeometricShape.html#isPath()">isPath()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a></dt>
+<dd>
+<div class="block">Checks if this geometric shape is a path (it is not closed)</div>
+</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4GeometricShapeSequence.html#isPath()">isPath()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4GeometricShapeSequence.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShapeSequence</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4Line.html#isPath()">isPath()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4Line.html" title="class in pizzapazza.math.geometricshape">Z4Line</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4Polyline.html#isPath()">isPath()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4Polyline.html" title="class in pizzapazza.math.geometricshape">Z4Polyline</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4SinglePointShape.html#isPath()">isPath()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4SinglePointShape.html" title="class in pizzapazza.math.geometricshape">Z4SinglePointShape</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4SinusoidalCurve.html#isPath()">isPath()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4SinusoidalCurve.html" title="class in pizzapazza.math.geometricshape">Z4SinusoidalCurve</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4SpiralCurve.html#isPath()">isPath()</a></span> - Method in class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4SpiralCurve.html" title="class in pizzapazza.math.geometricshape">Z4SpiralCurve</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/ui/panel/filler/Z4AbstractFillerPanel.html#isPointEnabled(int)">isPointEnabled(int)</a></span> - Method in class pizzapazza.ui.panel.filler.<a href="pizzapazza/ui/panel/filler/Z4AbstractFillerPanel.html" title="class in pizzapazza.ui.panel.filler">Z4AbstractFillerPanel</a></dt>
 <dd>
 <div class="block">Checks if a point is enabled</div>
@@ -3319,10 +3408,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Sets if the first font in the list has to be auto-selected on filtering; if
  no font is found then the "Arial" font is automatically selected</div>
 </dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/ui/panel/math/geometricshape/Z4MergeGeometricShapePanel.html#setCanvas(pizzapazza.ui.component.Z4Canvas)">setCanvas(Z4Canvas)</a></span> - Method in class pizzapazza.ui.panel.math.geometricshape.<a href="pizzapazza/ui/panel/math/geometricshape/Z4MergeGeometricShapePanel.html" title="class in pizzapazza.ui.panel.math.geometricshape">Z4MergeGeometricShapePanel</a></dt>
-<dd>
-<div class="block">Sets the canvas</div>
-</dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/ui/panel/math/geometricshape/Z4ShapesAndPathsPanel.html#setCanvas(pizzapazza.ui.component.Z4Canvas)">setCanvas(Z4Canvas)</a></span> - Method in class pizzapazza.ui.panel.math.geometricshape.<a href="pizzapazza/ui/panel/math/geometricshape/Z4ShapesAndPathsPanel.html" title="class in pizzapazza.ui.panel.math.geometricshape">Z4ShapesAndPathsPanel</a></dt>
 <dd>
 <div class="block">Sets the canvas to manage</div>
@@ -3363,6 +3448,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Sets the canvas to manage</div>
 </dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/ui/panel/math/geometricshape/Z4MergeConnectGeometricShapePanel.html#setCanvas(pizzapazza.ui.component.Z4Canvas,boolean)">setCanvas(Z4Canvas, boolean)</a></span> - Method in class pizzapazza.ui.panel.math.geometricshape.<a href="pizzapazza/ui/panel/math/geometricshape/Z4MergeConnectGeometricShapePanel.html" title="class in pizzapazza.ui.panel.math.geometricshape">Z4MergeConnectGeometricShapePanel</a></dt>
+<dd>
+<div class="block">Sets the canvas</div>
+</dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/ui/panel/Z4ResizeImagePanel.html#setCanvas(simulation.dom.$OffscreenCanvas,int,int)">setCanvas($OffscreenCanvas, int, int)</a></span> - Method in class pizzapazza.ui.panel.<a href="pizzapazza/ui/panel/Z4ResizeImagePanel.html" title="class in pizzapazza.ui.panel">Z4ResizeImagePanel</a></dt>
 <dd>
 <div class="block">Sets the canvas to resize</div>
@@ -3390,6 +3479,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="pizzapazza/ui/panel/ribbon/Z4RibbonHistoryPanel.html#setCurrentKey(int)">setCurrentKey(int)</a></span> - Method in class pizzapazza.ui.panel.ribbon.<a href="pizzapazza/ui/panel/ribbon/Z4RibbonHistoryPanel.html" title="class in pizzapazza.ui.panel.ribbon">Z4RibbonHistoryPanel</a></dt>
 <dd>
 <div class="block">Sets the current key in the history buffer</div>
+</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/ui/component/Z4Canvas.html#setDrawGeometricShapeDirection(boolean)">setDrawGeometricShapeDirection(boolean)</a></span> - Method in class pizzapazza.ui.component.<a href="pizzapazza/ui/component/Z4Canvas.html" title="class in pizzapazza.ui.component">Z4Canvas</a></dt>
+<dd>
+<div class="block">Sets if to show an arrow representing the direction of a geometric shape</div>
 </dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/ui/component/Z4Canvas.html#setDrawingDirection(pizzapazza.math.Z4DrawingDirection)">setDrawingDirection(Z4DrawingDirection)</a></span> - Method in class pizzapazza.ui.component.<a href="pizzapazza/ui/component/Z4Canvas.html" title="class in pizzapazza.ui.component">Z4Canvas</a></dt>
 <dd>
@@ -5227,7 +5320,7 @@ the order they are declared.</div>
 </dd>
 <dt><a href="pizzapazza/math/geometricshape/Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape"><span class="typeNameLink">Z4GeometricShape</span></a> - Class in <a href="pizzapazza/math/geometricshape/package-summary.html">pizzapazza.math.geometricshape</a></dt>
 <dd>
-<div class="block">The common interface of all geometric shapes</div>
+<div class="block">The common interface of all geometric shapes (and paths)</div>
 </dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4GeometricShape.html#%3Cinit%3E(pizzapazza.math.geometricshape.Z4GeometricShapeType)">Z4GeometricShape(Z4GeometricShapeType)</a></span> - Constructor for class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a></dt>
 <dd>
@@ -5253,7 +5346,7 @@ the order they are declared.</div>
 <dd>
 <div class="block">A sequence of geometric shapes</div>
 </dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4GeometricShapeSequence.html#%3Cinit%3E(def.js.Array)">Z4GeometricShapeSequence(Array&lt;Z4GeometricShape&gt;)</a></span> - Constructor for class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4GeometricShapeSequence.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShapeSequence</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/geometricshape/Z4GeometricShapeSequence.html#%3Cinit%3E(def.js.Array,boolean)">Z4GeometricShapeSequence(Array&lt;Z4GeometricShape&gt;, boolean)</a></span> - Constructor for class pizzapazza.math.geometricshape.<a href="pizzapazza/math/geometricshape/Z4GeometricShapeSequence.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShapeSequence</a></dt>
 <dd>
 <div class="block">Creates the object</div>
 </dd>
@@ -5298,6 +5391,14 @@ the order they are declared.</div>
 <div class="block">The history preview</div>
 </dd>
 <dt><span class="memberNameLink"><a href="pizzapazza/ui/component/Z4HistoryPreview.html#%3Cinit%3E()">Z4HistoryPreview()</a></span> - Constructor for class pizzapazza.ui.component.<a href="pizzapazza/ui/component/Z4HistoryPreview.html" title="class in pizzapazza.ui.component">Z4HistoryPreview</a></dt>
+<dd>
+<div class="block">Creates the object</div>
+</dd>
+<dt><a href="pizzapazza/math/Z4InfiniteLine.html" title="class in pizzapazza.math"><span class="typeNameLink">Z4InfiniteLine</span></a> - Class in <a href="pizzapazza/math/package-summary.html">pizzapazza.math</a></dt>
+<dd>
+<div class="block">The infinite line</div>
+</dd>
+<dt><span class="memberNameLink"><a href="pizzapazza/math/Z4InfiniteLine.html#%3Cinit%3E(double,double,double,double)">Z4InfiniteLine(double, double, double, double)</a></span> - Constructor for class pizzapazza.math.<a href="pizzapazza/math/Z4InfiniteLine.html" title="class in pizzapazza.math">Z4InfiniteLine</a></dt>
 <dd>
 <div class="block">Creates the object</div>
 </dd>
@@ -5365,11 +5466,11 @@ the order they are declared.</div>
 <dd>
 <div class="block">The utility library for math</div>
 </dd>
-<dt><a href="pizzapazza/ui/panel/math/geometricshape/Z4MergeGeometricShapePanel.html" title="class in pizzapazza.ui.panel.math.geometricshape"><span class="typeNameLink">Z4MergeGeometricShapePanel</span></a> - Class in <a href="pizzapazza/ui/panel/math/geometricshape/package-summary.html">pizzapazza.ui.panel.math.geometricshape</a></dt>
+<dt><a href="pizzapazza/ui/panel/math/geometricshape/Z4MergeConnectGeometricShapePanel.html" title="class in pizzapazza.ui.panel.math.geometricshape"><span class="typeNameLink">Z4MergeConnectGeometricShapePanel</span></a> - Class in <a href="pizzapazza/ui/panel/math/geometricshape/package-summary.html">pizzapazza.ui.panel.math.geometricshape</a></dt>
 <dd>
-<div class="block">The panel to merge geometric shapes</div>
+<div class="block">The panel to merge/connect geometric shapes</div>
 </dd>
-<dt><span class="memberNameLink"><a href="pizzapazza/ui/panel/math/geometricshape/Z4MergeGeometricShapePanel.html#%3Cinit%3E()">Z4MergeGeometricShapePanel()</a></span> - Constructor for class pizzapazza.ui.panel.math.geometricshape.<a href="pizzapazza/ui/panel/math/geometricshape/Z4MergeGeometricShapePanel.html" title="class in pizzapazza.ui.panel.math.geometricshape">Z4MergeGeometricShapePanel</a></dt>
+<dt><span class="memberNameLink"><a href="pizzapazza/ui/panel/math/geometricshape/Z4MergeConnectGeometricShapePanel.html#%3Cinit%3E()">Z4MergeConnectGeometricShapePanel()</a></span> - Constructor for class pizzapazza.ui.panel.math.geometricshape.<a href="pizzapazza/ui/panel/math/geometricshape/Z4MergeConnectGeometricShapePanel.html" title="class in pizzapazza.ui.panel.math.geometricshape">Z4MergeConnectGeometricShapePanel</a></dt>
 <dd>
 <div class="block">Creates the object</div>
 </dd>

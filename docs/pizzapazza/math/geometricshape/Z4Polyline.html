@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":9,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -198,7 +198,8 @@ extends <a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometri
 <td class="colFirst"><code><a href="Z4Polyline.html" title="class in pizzapazza.math.geometricshape">Z4Polyline</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#concat(pizzapazza.math.geometricshape.Z4Polyline)">concat</a></span>&#8203;(<a href="Z4Polyline.html" title="class in pizzapazza.math.geometricshape">Z4Polyline</a>&nbsp;polyline)</code></th>
 <td class="colLast">
-<div class="block">Concatenates this polyline with another polyline</div>
+<div class="block">Returns a Z4GeometricShape obtained by concatenating this polyline with
+ another polyline</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -232,6 +233,15 @@ extends <a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometri
 </td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromRotation(double,double,double)">fromRotation</a></span>&#8203;(double&nbsp;cx,
+            double&nbsp;cy,
+            double&nbsp;angle)</code></th>
+<td class="colLast">
+<div class="block">Returns a Z4GeometricShape obtained by rotating this geometric shape</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static <a href="Z4Polyline.html" title="class in pizzapazza.math.geometricshape">Z4Polyline</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromSize(int,int)">fromSize</a></span>&#8203;(int&nbsp;width,
         int&nbsp;height)</code></th>
@@ -239,63 +249,77 @@ extends <a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometri
 <div class="block">Creates a Z4Polyline contained in a given size</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>def.js.Array&lt;<a href="Z4GeometricShapeButtonConfiguration.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShapeButtonConfiguration</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getButtonConfigurations()">getButtonConfigurations</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the button configurations to control/edit the geometri shape</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>def.js.Array&lt;java.lang.Integer&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getControlPointConnections()">getControlPointConnections</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the connections between the control points</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>def.js.Array&lt;<a href="../Z4Point.html" title="class in pizzapazza.math">Z4Point</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getControlPoints()">getControlPoints</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the points to control/edit the geometric shape</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>def.js.Array&lt;simulation.js.$Path2D&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDirectionArrows()">getDirectionArrows</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns a list of arrows representing the direction of this geometric shape</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLength()">getLength</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns The length of this geometric shape</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>simulation.js.$Path2D</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPath2D()">getPath2D</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the path describing this geometric shape</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="../Z4Point.html" title="class in pizzapazza.math">Z4Point</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPointAt(double)">getPointAt</a></span>&#8203;(double&nbsp;position)</code></th>
 <td class="colLast">
 <div class="block">Returns the point of this geometric shape at a given position</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>def.js.Array&lt;<a href="Z4GeometricShapeSpinnerConfiguration.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShapeSpinnerConfiguration</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSpinnerConfigurations()">getSpinnerConfigurations</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the spinner configurations to control/edit the geometri shape</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="../Z4Vector.html" title="class in pizzapazza.math">Z4Vector</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTangentAt(double)">getTangentAt</a></span>&#8203;(double&nbsp;position)</code></th>
 <td class="colLast">
 <div class="block">Returns the tangent vector of this geometric shape at a given position</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i15" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isPath()">isPath</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Checks if this geometric shape is a path (it is not closed)</div>
+</td>
+</tr>
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>simulation.js.$Object</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toJSON()">toJSON</a></span>()</code></th>
 <td class="colLast">
@@ -308,7 +332,7 @@ extends <a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometri
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;pizzapazza.math.geometricshape.<a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a></h3>
-<code><a href="Z4GeometricShape.html#fromResize(int,int)">fromResize</a>, <a href="Z4GeometricShape.html#fromSize(pizzapazza.math.geometricshape.Z4GeometricShapeType,int,int)">fromSize</a>, <a href="Z4GeometricShape.html#getGeometricShapePreview()">getGeometricShapePreview</a>, <a href="Z4GeometricShape.html#setGeometricShapePreview(pizzapazza.ui.panel.math.geometricshape.Z4GeometricShapePreview)">setGeometricShapePreview</a></code></li>
+<code><a href="Z4GeometricShape.html#connect(pizzapazza.math.geometricshape.Z4GeometricShape,int,int)">connect</a>, <a href="Z4GeometricShape.html#fromResize(int,int)">fromResize</a>, <a href="Z4GeometricShape.html#fromSize(pizzapazza.math.geometricshape.Z4GeometricShapeType,int,int)">fromSize</a>, <a href="Z4GeometricShape.html#getDirectionArrowAt(double)">getDirectionArrowAt</a>, <a href="Z4GeometricShape.html#getGeometricShapePreview()">getGeometricShapePreview</a>, <a href="Z4GeometricShape.html#setGeometricShapePreview(pizzapazza.ui.panel.math.geometricshape.Z4GeometricShapePreview)">setGeometricShapePreview</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -364,12 +388,31 @@ extends <a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometri
 <li class="blockList">
 <h4>concat</h4>
 <pre class="methodSignature">public&nbsp;<a href="Z4Polyline.html" title="class in pizzapazza.math.geometricshape">Z4Polyline</a>&nbsp;concat&#8203;(<a href="Z4Polyline.html" title="class in pizzapazza.math.geometricshape">Z4Polyline</a>&nbsp;polyline)</pre>
-<div class="block">Concatenates this polyline with another polyline</div>
+<div class="block">Returns a Z4GeometricShape obtained by concatenating this polyline with
+ another polyline</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>polyline</code> - The other polyline</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The concatenation of this polyline with the other polyline</dd>
+</dl>
+</li>
+</ul>
+<a id="isPath()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isPath</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isPath()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Z4GeometricShape.html#isPath()">Z4GeometricShape</a></code></span></div>
+<div class="block">Checks if this geometric shape is a path (it is not closed)</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Z4GeometricShape.html#isPath()">isPath</a></code>&nbsp;in class&nbsp;<code><a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true this geometric shape is a path (it is not closed), false
+ otherwise</dd>
 </dl>
 </li>
 </ul>
@@ -387,6 +430,23 @@ extends <a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometri
 <dd><code><a href="Z4GeometricShape.html#getPath2D()">getPath2D</a></code>&nbsp;in class&nbsp;<code><a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The path describing this geometric shape</dd>
+</dl>
+</li>
+</ul>
+<a id="getDirectionArrows()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDirectionArrows</h4>
+<pre class="methodSignature">public&nbsp;def.js.Array&lt;simulation.js.$Path2D&gt;&nbsp;getDirectionArrows()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Z4GeometricShape.html#getDirectionArrows()">Z4GeometricShape</a></code></span></div>
+<div class="block">Returns a list of arrows representing the direction of this geometric shape</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Z4GeometricShape.html#getDirectionArrows()">getDirectionArrows</a></code>&nbsp;in class&nbsp;<code><a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A list of arrows representing the direction of this geometric shape</dd>
 </dl>
 </li>
 </ul>
@@ -566,6 +626,29 @@ extends <a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometri
  spinner is changed</dd>
 <dd><code>width</code> - The available area width</dd>
 <dd><code>height</code> - The available area height</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The geometric shape</dd>
+</dl>
+</li>
+</ul>
+<a id="fromRotation(double,double,double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fromRotation</h4>
+<pre class="methodSignature">public&nbsp;<a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a>&nbsp;fromRotation&#8203;(double&nbsp;cx,
+                                     double&nbsp;cy,
+                                     double&nbsp;angle)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Z4GeometricShape.html#fromRotation(double,double,double)">Z4GeometricShape</a></code></span></div>
+<div class="block">Returns a Z4GeometricShape obtained by rotating this geometric shape</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Z4GeometricShape.html#fromRotation(double,double,double)">fromRotation</a></code>&nbsp;in class&nbsp;<code><a href="Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>cx</code> - The x-axis coordinate of the rotation center</dd>
+<dd><code>cy</code> - The y-axis coordinate of the rotation center</dd>
+<dd><code>angle</code> - The angle (in radians)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The geometric shape</dd>
 </dl>

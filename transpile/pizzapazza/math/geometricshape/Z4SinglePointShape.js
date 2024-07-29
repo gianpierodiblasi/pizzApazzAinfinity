@@ -71,6 +71,11 @@ class Z4SinglePointShape extends Z4GeometricShape {
     return pointIndex === 0 ? new Z4SinglePointShape(x, y) : this;
   }
 
+   fromRotation(cx, cy, angle) {
+    let p = Z4Math.rotoTranslate(this.x - cx, this.y - cy, angle, cx, cy);
+    return new Z4SinglePointShape(p.x, p.y);
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["x"] = this.x;

@@ -46,6 +46,13 @@ class Z4QuadCurve extends Z4AbstractBezierCurve {
     }
   }
 
+   fromRotation(cx, cy, angle) {
+    let p1 = Z4Math.rotoTranslate(this.x1 - cx, this.y1 - cy, angle, cx, cy);
+    let ctrl = Z4Math.rotoTranslate(this.ctrlx - cx, this.ctrly - cy, angle, cx, cy);
+    let p2 = Z4Math.rotoTranslate(this.x2 - cx, this.y2 - cy, angle, cx, cy);
+    return new Z4QuadCurve(p1.x, p1.y, ctrl.x, ctrl.y, p2.x, p2.y);
+  }
+
    toJSON() {
     let json = super.toJSON();
     json["x1"] = this.x1;

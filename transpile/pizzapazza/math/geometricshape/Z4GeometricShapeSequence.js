@@ -135,6 +135,10 @@ class Z4GeometricShapeSequence extends Z4GeometricShape {
     return shape ? obj : null;
   }
 
+   fromRotation(cx, cy, angle) {
+    return new Z4GeometricShapeSequence(this.shapes.map(shape => shape.fromRotation(cx, cy, angle)), this.connected);
+  }
+
    fromResize(width, height) {
     return new Z4GeometricShapeSequence(this.shapes.map(shape => shape.fromResize(width, height)), this.connected);
   }
