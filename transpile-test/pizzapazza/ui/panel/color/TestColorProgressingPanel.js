@@ -23,6 +23,7 @@ class TestColorProgressingPanel extends JSFrame {
     this.addRadio(panel, buttonGroup, Z4PointIteratorType.TRACER);
     this.addRadio(panel, buttonGroup, Z4PointIteratorType.AIRBRUSH);
     this.addRadio(panel, buttonGroup, Z4PointIteratorType.SPIROGRAPH);
+    this.addRadio(panel, buttonGroup, Z4PointIteratorType.RULER);
     this.addRadio(panel, buttonGroup, Z4PointIteratorType.SCATTERER);
     buttonGroup = new ButtonGroup();
     this.addRadio2(panel, buttonGroup, "COLOR", true, false, false);

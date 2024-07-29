@@ -5,6 +5,7 @@ import pizzapazza.color.Z4SpatioTemporalColor;
 import pizzapazza.iterator.Z4Airbrush;
 import pizzapazza.iterator.Z4PointIterator;
 import pizzapazza.iterator.Z4PointIteratorDrawingAction;
+import pizzapazza.iterator.Z4Ruler;
 import pizzapazza.iterator.Z4Scatterer;
 import pizzapazza.iterator.Z4Spirograph;
 import pizzapazza.iterator.Z4Stamper;
@@ -191,6 +192,9 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
         break;
       case "SPIROGRAPH":
         pointIterator = Z4Spirograph.fromJSON(pointIteratorJSON);
+        break;
+      case "RULER":
+        pointIterator = Z4Ruler.fromJSON(pointIteratorJSON);
         break;
       case "SCATTERER":
         pointIterator = Z4Scatterer.fromJSON(pointIteratorJSON);

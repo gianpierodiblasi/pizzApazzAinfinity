@@ -159,6 +159,9 @@
 .z4spirographpanel {
 }
 
+.z4rulerpanel {
+}
+
 .z4scattererpanel {
 }
 
@@ -479,6 +482,9 @@
 }
 .z4drawingtoolpanel .z4drawingtoolpanel-selector-spirograph img, .z4drawingtoolpanel-spirograph-selected img {
   content: url(../image/iterator/spirograph.svg);
+}
+.z4drawingtoolpanel .z4drawingtoolpanel-selector-ruler img, .z4drawingtoolpanel-ruler-selected img {
+  content: url(../image/iterator/ruler.png);
 }
 .z4drawingtoolpanel .z4drawingtoolpanel-selector-scatterer img, .z4drawingtoolpanel-scatterer-selected img {
   content: url(../image/iterator/scatterer.svg);
