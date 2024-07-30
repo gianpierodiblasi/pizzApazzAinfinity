@@ -11,6 +11,9 @@ window.onload = () => {
     if (event.ctrlKey && (event.key === "+" || event.key === "-")) {
       event.preventDefault();
       document.querySelector(".z4canvas").dispatchEvent(new event.constructor(event.type, event));
+    } else if (event.ctrlKey && (event.key === "z" || event.key === "y")) {
+      event.preventDefault();
+      document.querySelector(".z4ribbonhistorypanel").dispatchEvent(new event.constructor(event.type, event));
     }
   });
 

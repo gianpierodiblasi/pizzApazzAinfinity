@@ -11,6 +11,9 @@ window.onload = () => {
     if (event.ctrlKey && (event.key === "+" || event.key === "-")) {
       event.preventDefault();
       document.querySelector(".z4canvas").dispatchEvent(new event.constructor(event.type, event));
+    } else if (event.ctrlKey && (event.key === "z" || event.key === "y")) {
+      event.preventDefault();
+      document.querySelector(".z4ribbonhistorypanel").dispatchEvent(new event.constructor(event.type, event));
     }
   });
 
@@ -8047,6 +8050,17 @@ class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
       window.indexedDB.deleteDatabase(this.dbName);
       return null;
     };
+    this.addEventListener("keydown", event => {
+      let evt = event;
+      if (!evt.ctrlKey) {
+      } else if (evt.key === "z") {
+        evt.stopPropagation();
+        this.undo.invoke("click()");
+      } else if (evt.key === "y") {
+        evt.stopPropagation();
+        this.redo.invoke("click()");
+      }
+    });
   }
 
    undoRedo(event2) {

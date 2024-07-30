@@ -6,6 +6,7 @@ import static def.dom.Globals.clearTimeout;
 import def.dom.HTMLElement;
 import def.dom.IDBDatabase;
 import def.dom.IDBKeyRange;
+import def.dom.KeyboardEvent;
 import def.js.Date;
 import javascript.awt.BoxLayout;
 import javascript.awt.GBC;
@@ -60,6 +61,7 @@ public class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
   /**
    * Creates the object
    */
+  @SuppressWarnings("StringEquality")
   public Z4RibbonHistoryPanel() {
     super();
     this.setLayout(new GridBagLayout());
@@ -86,6 +88,18 @@ public class Z4RibbonHistoryPanel extends Z4AbstractRibbonPanel {
       window.indexedDB.deleteDatabase(this.dbName);
       return null;
     };
+
+    this.addEventListener("keydown", event -> {
+      KeyboardEvent evt = (KeyboardEvent) event;
+      if (!evt.ctrlKey) {
+      } else if (evt.key == "z") {
+        evt.stopPropagation();
+        this.undo.invoke("click()");
+      } else if (evt.key == "y") {
+        evt.stopPropagation();
+        this.redo.invoke("click()");
+      }
+    });
   }
 
   private Object undoRedo(Event event2) {
