@@ -188,6 +188,7 @@ public class Z4Translations {
   public static String UNIFORM = "";
   public static String PARTIAL = "";
   public static String TOTAL = "";
+  public static String KALEIDOSCOPE = "";
 
   // Text
   public static String BOLD = "";
@@ -501,6 +502,7 @@ public class Z4Translations {
     Z4Translations.UNIFORM = "Uniform";
     Z4Translations.PARTIAL = "Partial";
     Z4Translations.TOTAL = "Total";
+    Z4Translations.KALEIDOSCOPE = "Kaleidoscope";
 
     // Text
     Z4Translations.BOLD = "Bold";
@@ -798,6 +800,7 @@ public class Z4Translations {
     Z4Translations.UNIFORM = "Uniforme";
     Z4Translations.PARTIAL = "Parziale";
     Z4Translations.TOTAL = "Totale";
+    Z4Translations.KALEIDOSCOPE = "Caleidoscopio";
 
     // Text
     Z4Translations.BOLD = "Grassetto";

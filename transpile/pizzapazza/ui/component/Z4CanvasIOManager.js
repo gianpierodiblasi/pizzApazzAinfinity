@@ -148,6 +148,7 @@ class Z4CanvasIOManager {
         this.canvas.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.canvas.getLayersCount() - 1), null, true);
         this.drawingTools.length = 0;
         this.ribbonDrawingToolPanel.reset();
+        this.ribbonDrawingToolPanel.refreshCanvasSize(false);
         this.ribbonTextPanel.reset();
         this.geometricShapes.length = 0;
         this.shapesAndPathsPanel.reset();
@@ -210,6 +211,7 @@ class Z4CanvasIOManager {
           this.ribbonHistoryPanel.resetHistory(() => {
             let json = JSON.parse("" + str);
             this.canvas.setSize(json["width"], json["height"]);
+            this.ribbonDrawingToolPanel.refreshCanvasSize(false);
             this.openLayer(zip, json, json["layers"], 0);
           });
         });

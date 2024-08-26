@@ -2249,6 +2249,8 @@ class Z4Canvas extends JSComponent {
 
    drawingDirection = Z4DrawingDirection.FREE;
 
+   kaleidoscope = new Z4Kaleidoscope(1, 0, 0);
+
    geometricShapes = new Array();
 
    selectedGeometricShape = null;
@@ -2379,6 +2381,7 @@ class Z4Canvas extends JSComponent {
     this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), null, true);
     this.drawingTools.length = 0;
     this.ribbonDrawingToolPanel.reset();
+    this.ribbonDrawingToolPanel.refreshCanvasSize(false);
     this.ribbonTextPanel.reset();
     this.geometricShapes.length = 0;
     this.shapesAndPathsPanel.reset();
@@ -3100,6 +3103,16 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Sets the kaleidoscope
+   *
+   * @param kaleidoscope The kaleidoscope
+   */
+   setKaleidoscope(kaleidoscope) {
+    this.kaleidoscope = kaleidoscope;
+    this.drawCanvasOverlay();
+  }
+
+  /**
    * Sets the grid
    *
    * @param visible true if the grid is visible, false otherwise
@@ -3325,6 +3338,7 @@ class Z4Canvas extends JSComponent {
    */
    resize(width, height) {
     this.setSize(width, height);
+    this.ribbonDrawingToolPanel.refreshCanvasSize(true);
     this.statusPanel.setProjectSize(this.width, this.height);
     this.statusPanel.resetCanvasGridPanel(this.width, this.height, true);
     this.setCanvasSize(this.width, this.height, this.zoom);
@@ -3401,10 +3415,32 @@ class Z4Canvas extends JSComponent {
    drawCanvasOverlay() {
     this.ctxOverlay.clearRect(0, 0, this.canvasOverlay.width, this.canvasOverlay.height);
     if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
-    } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT) && this.textInfo && this.textInfo.shape) {
+    } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT)) {
+      if (this.textInfo && this.textInfo.shape) {
+        this.ctxOverlay.save();
+        this.ctxOverlay.scale(this.zoom, this.zoom);
+        this.textManager.drawText(this.ctxOverlay, true, this.drawGeometricShapeDirection);
+        this.ctxOverlay.restore();
+      }
+    } else if (this.kaleidoscope.getMultiplicity() > 1) {
       this.ctxOverlay.save();
       this.ctxOverlay.scale(this.zoom, this.zoom);
-      this.textManager.drawText(this.ctxOverlay, true, this.drawGeometricShapeDirection);
+      this.ctxOverlay.lineWidth = 3 / this.zoom;
+      let path = new Path2D();
+      path.moveTo(this.kaleidoscope.getOffsetX(), this.kaleidoscope.getOffsetY() - 15 / this.zoom);
+      path.lineTo(this.kaleidoscope.getOffsetX(), this.kaleidoscope.getOffsetY() + 15 / this.zoom);
+      path.moveTo(this.kaleidoscope.getOffsetX() - 15 / this.zoom, this.kaleidoscope.getOffsetY());
+      path.lineTo(this.kaleidoscope.getOffsetX() + 15 / this.zoom, this.kaleidoscope.getOffsetY());
+      path.moveTo(this.kaleidoscope.getOffsetX() + 20 / this.zoom, this.kaleidoscope.getOffsetY());
+      path.arc(this.kaleidoscope.getOffsetX(), this.kaleidoscope.getOffsetY(), 20 / this.zoom, 0, Z4Math.TWO_PI);
+      let dash = new Array();
+      this.ctxOverlay.strokeStyle = Z4Constants.getStyle("black");
+      this.ctxOverlay.setLineDash(dash);
+      this.ctxOverlay.stroke(path);
+      dash.push(this.ctxOverlay.lineWidth, this.ctxOverlay.lineWidth);
+      this.ctxOverlay.strokeStyle = Z4Constants.getStyle("white");
+      this.ctxOverlay.setLineDash(dash);
+      this.ctxOverlay.stroke(path);
       this.ctxOverlay.restore();
     }
   }
@@ -3676,6 +3712,7 @@ class Z4CanvasIOManager {
         this.canvas.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.canvas.getLayersCount() - 1), null, true);
         this.drawingTools.length = 0;
         this.ribbonDrawingToolPanel.reset();
+        this.ribbonDrawingToolPanel.refreshCanvasSize(false);
         this.ribbonTextPanel.reset();
         this.geometricShapes.length = 0;
         this.shapesAndPathsPanel.reset();
@@ -3738,6 +3775,7 @@ class Z4CanvasIOManager {
           this.ribbonHistoryPanel.resetHistory(() => {
             let json = JSON.parse("" + str);
             this.canvas.setSize(json["width"], json["height"]);
+            this.ribbonDrawingToolPanel.refreshCanvasSize(false);
             this.openLayer(zip, json, json["layers"], 0);
           });
         });
@@ -7802,6 +7840,18 @@ class Z4AbstractRibbonPanel extends JSPanel {
  */
 class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
 
+   multiplicitySlider = new JSSlider();
+
+   multiplicitySpinner = new JSSpinner();
+
+   offsetXSlider = new JSSlider();
+
+   offsetXSpinner = new JSSpinner();
+
+   offsetYSlider = new JSSlider();
+
+   offsetYSpinner = new JSSpinner();
+
    drawingToolsPreview = new JSPanel();
 
    statusPanel = null;
@@ -7822,9 +7872,95 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.addButton(Z4Translations.SAVE_DRAWING_TOOLS_AS, true, 4, 1, "", 0, event => this.save());
     Z4UI.addVLine(this, new GBC(5, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    this.addKaleidoscope();
+    Z4UI.addVLine(this, new GBC(7, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.drawingToolsPreview.setLayout(new BoxLayout(this.drawingToolsPreview, BoxLayout.X_AXIS));
     this.drawingToolsPreview.getStyle().overflowX = "scroll";
-    this.add(this.drawingToolsPreview, new GBC(6, 0).h(2).wx(1).f(GBC.BOTH));
+    this.add(this.drawingToolsPreview, new GBC(8, 0).h(2).wx(1).f(GBC.BOTH));
+  }
+
+   addKaleidoscope() {
+    let dropDown = new Z4DropDown(".z4kaleidoscopepanel");
+    dropDown.cssAddClass("z4kaleidoscopedropdown");
+    this.add(dropDown, new GBC(6, 1).a(GBC.NORTH).i(0, 5, 0, 5));
+    let label = new JSLabel();
+    label.setText(Z4Translations.KALEIDOSCOPE);
+    dropDown.appendChildInTree("summary", label);
+    let panel = new JSPanel();
+    panel.cssAddClass("z4kaleidoscopepanel");
+    panel.setLayout(new GridBagLayout());
+    dropDown.appendChild(panel);
+    Z4UI.addLabel(panel, Z4Translations.MULTIPLICITY, new GBC(0, 0).a(GBC.WEST));
+    this.multiplicitySlider.addChangeListener(event => this.onchange(false, this.multiplicitySpinner, this.multiplicitySlider, this.multiplicitySlider.getValueIsAdjusting()));
+    panel.add(this.multiplicitySlider, new GBC(0, 1).w(2).f(GBC.HORIZONTAL));
+    this.multiplicitySpinner.cssAddClass("jsspinner_w_4rem");
+    this.multiplicitySpinner.addChangeListener(event => this.onchange(true, this.multiplicitySpinner, this.multiplicitySlider, this.multiplicitySpinner.getValueIsAdjusting()));
+    panel.add(this.multiplicitySpinner, new GBC(1, 0).a(GBC.EAST));
+    Z4UI.addLabel(panel, Z4Translations.OFFSET_X, new GBC(0, 2).a(GBC.WEST));
+    this.offsetXSlider.getStyle().minWidth = "20rem";
+    this.offsetXSlider.addChangeListener(event => this.onchange(false, this.offsetXSpinner, this.offsetXSlider, this.offsetXSlider.getValueIsAdjusting()));
+    panel.add(this.offsetXSlider, new GBC(0, 3).w(2).f(GBC.HORIZONTAL));
+    this.offsetXSpinner.cssAddClass("jsspinner_w_4rem");
+    this.offsetXSpinner.addChangeListener(event => this.onchange(true, this.offsetXSpinner, this.offsetXSlider, this.offsetXSpinner.getValueIsAdjusting()));
+    panel.add(this.offsetXSpinner, new GBC(1, 2).a(GBC.EAST));
+    Z4UI.addVLine(panel, new GBC(2, 0).h(5).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addLabel(panel, Z4Translations.OFFSET_Y, new GBC(3, 3).h(2).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
+    this.offsetYSpinner.cssAddClass("jsspinner-vertical");
+    this.offsetYSpinner.cssAddClass("jsspinner_h_4rem");
+    this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
+    this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
+    this.offsetYSpinner.addChangeListener(event => this.onchange(true, this.offsetYSpinner, this.offsetYSlider, this.offsetYSpinner.getValueIsAdjusting()));
+    panel.add(this.offsetYSpinner, new GBC(3, 0).h(3).a(GBC.NORTH));
+    this.offsetYSlider.setOrientation(JSSlider.VERTICAL);
+    this.offsetYSlider.setInverted(true);
+    this.offsetYSlider.getStyle().minWidth = "1.5rem";
+    this.offsetYSlider.getStyle().minHeight = "20rem";
+    this.offsetYSlider.addChangeListener(event => this.onchange(false, this.offsetYSpinner, this.offsetYSlider, this.offsetYSlider.getValueIsAdjusting()));
+    panel.add(this.offsetYSlider, new GBC(4, 0).h(5).wy(1).a(GBC.NORTH).f(GBC.VERTICAL));
+  }
+
+   onchange(spTosl, spinner, slider, adjusting) {
+    if (adjusting) {
+      document.querySelector(".z4kaleidoscopedropdown").setAttribute("transparent", "true");
+    } else {
+      document.querySelector(".z4kaleidoscopedropdown").removeAttribute("transparent");
+    }
+    if (spinner && spTosl) {
+      slider.setValue(spinner.getValue());
+    } else if (spinner) {
+      spinner.setValue(slider.getValue());
+    }
+    this.offsetXSpinner.setEnabled(this.multiplicitySlider.getValue() > 1);
+    this.offsetXSlider.setEnabled(this.multiplicitySlider.getValue() > 1);
+    this.offsetYSpinner.setEnabled(this.multiplicitySlider.getValue() > 1);
+    this.offsetYSlider.setEnabled(this.multiplicitySlider.getValue() > 1);
+    this.canvas.setKaleidoscope(new Z4Kaleidoscope(this.multiplicitySlider.getValue(), this.offsetXSlider.getValue(), this.offsetYSlider.getValue()));
+  }
+
+  /**
+   * Refreshes the canvas size
+   *
+   * @param resetOnlySize true to reset only the canvas size, false otherwise
+   */
+   refreshCanvasSize(resetOnlySize) {
+    let size = this.canvas.getSize();
+    if (!resetOnlySize) {
+      this.multiplicitySpinner.setModel(new SpinnerNumberModel(1, 1, 12, 1));
+      this.multiplicitySlider.setMinimum(1);
+      this.multiplicitySlider.setMaximum(12);
+      this.multiplicitySlider.setValue(1);
+    }
+    this.offsetXSpinner.setEnabled(this.multiplicitySlider.getValue() > 1);
+    this.offsetXSpinner.setModel(new SpinnerNumberModel(parseInt(size.width / 2), 0, size.width, 1));
+    this.offsetXSlider.setEnabled(this.multiplicitySlider.getValue() > 1);
+    this.offsetXSlider.setMaximum(size.width);
+    this.offsetXSlider.setValue(parseInt(size.width / 2));
+    this.offsetYSpinner.setEnabled(this.multiplicitySlider.getValue() > 1);
+    this.offsetYSpinner.setModel(new SpinnerNumberModel(parseInt(size.height / 2), 0, size.height, 1));
+    this.offsetYSlider.setEnabled(this.multiplicitySlider.getValue() > 1);
+    this.offsetYSlider.setMaximum(size.height);
+    this.offsetYSlider.setValue(parseInt(size.height / 2));
+    this.canvas.setKaleidoscope(new Z4Kaleidoscope(this.multiplicitySlider.getValue(), this.offsetXSlider.getValue(), this.offsetYSlider.getValue()));
   }
 
   /**
@@ -7834,6 +7970,7 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
    */
    setCanvas(canvas) {
     this.canvas = canvas;
+    this.refreshCanvasSize(false);
   }
 
   /**
@@ -22949,6 +23086,59 @@ class Z4Shape2DPainter extends Z4Painter {
   }
 }
 /**
+ * A kaleidoscope
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4Kaleidoscope {
+
+   multiplicity = 0;
+
+   offsetX = 0;
+
+   offsetY = 0;
+
+  /**
+   * Creates the object
+   *
+   * @param multiplicity The multiplicity
+   * @param offsetX The X offset
+   * @param offsetY The Y offset
+   */
+  constructor(multiplicity, offsetX, offsetY) {
+    this.multiplicity = multiplicity;
+    this.offsetX = offsetX;
+    this.offsetY = offsetY;
+  }
+
+  /**
+   * Returns the multiplicity
+   *
+   * @return The multiplicity
+   */
+   getMultiplicity() {
+    return this.multiplicity;
+  }
+
+  /**
+   * Returns the X offset
+   *
+   * @return The X offset
+   */
+   getOffsetX() {
+    return this.offsetX;
+  }
+
+  /**
+   * Returns the Y offset
+   *
+   * @return The Y offset
+   */
+   getOffsetY() {
+    return this.offsetY;
+  }
+}
+/**
  * The object representing a layer
  *
  * @author gianpiero.diblasi
@@ -23917,6 +24107,8 @@ class Z4Translations {
 
   static  TOTAL = "";
 
+  static  KALEIDOSCOPE = "";
+
   // Text
   static  BOLD = "";
 
@@ -24314,6 +24506,7 @@ class Z4Translations {
     Z4Translations.UNIFORM = "Uniform";
     Z4Translations.PARTIAL = "Partial";
     Z4Translations.TOTAL = "Total";
+    Z4Translations.KALEIDOSCOPE = "Kaleidoscope";
     // Text
     Z4Translations.BOLD = "Bold";
     Z4Translations.ITALIC = "Italic";
@@ -24593,6 +24786,7 @@ class Z4Translations {
     Z4Translations.UNIFORM = "Uniforme";
     Z4Translations.PARTIAL = "Parziale";
     Z4Translations.TOTAL = "Totale";
+    Z4Translations.KALEIDOSCOPE = "Caleidoscopio";
     // Text
     Z4Translations.BOLD = "Grassetto";
     Z4Translations.ITALIC = "Corsivo";

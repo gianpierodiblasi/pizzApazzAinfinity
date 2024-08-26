@@ -320,6 +320,8 @@ class Z4Translations {
 
   static  TOTAL = "";
 
+  static  KALEIDOSCOPE = "";
+
   // Text
   static  BOLD = "";
 
@@ -717,6 +719,7 @@ class Z4Translations {
     Z4Translations.UNIFORM = "Uniform";
     Z4Translations.PARTIAL = "Partial";
     Z4Translations.TOTAL = "Total";
+    Z4Translations.KALEIDOSCOPE = "Kaleidoscope";
     // Text
     Z4Translations.BOLD = "Bold";
     Z4Translations.ITALIC = "Italic";
@@ -996,6 +999,7 @@ class Z4Translations {
     Z4Translations.UNIFORM = "Uniforme";
     Z4Translations.PARTIAL = "Parziale";
     Z4Translations.TOTAL = "Totale";
+    Z4Translations.KALEIDOSCOPE = "Caleidoscopio";
     // Text
     Z4Translations.BOLD = "Grassetto";
     Z4Translations.ITALIC = "Corsivo";

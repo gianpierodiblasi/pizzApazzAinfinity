@@ -28,6 +28,7 @@ import pizzapazza.ui.panel.ribbon.Z4RibbonProjectPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonTextPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4DrawingTool;
+import pizzapazza.util.Z4Kaleidoscope;
 import pizzapazza.util.Z4Layer;
 import pizzapazza.util.Z4Paper;
 import pizzapazza.util.Z4TextInfo;
@@ -96,6 +97,7 @@ public class Z4Canvas extends JSComponent {
   private final Array<Z4DrawingTool> drawingTools = new Array<>();
   private Z4DrawingTool selectedDrawingTool;
   private Z4DrawingDirection drawingDirection = Z4DrawingDirection.FREE;
+  private Z4Kaleidoscope kaleidoscope = new Z4Kaleidoscope(1, 0, 0);
 
   private final Array<Z4GeometricShape> geometricShapes = new Array<>();
   private Z4GeometricShape selectedGeometricShape;
@@ -233,6 +235,7 @@ public class Z4Canvas extends JSComponent {
 
     this.drawingTools.length = 0;
     this.ribbonDrawingToolPanel.reset();
+    this.ribbonDrawingToolPanel.refreshCanvasSize(false);
 
     this.ribbonTextPanel.reset();
     this.geometricShapes.length = 0;
@@ -991,6 +994,16 @@ public class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Sets the kaleidoscope
+   *
+   * @param kaleidoscope The kaleidoscope
+   */
+  public void setKaleidoscope(Z4Kaleidoscope kaleidoscope) {
+    this.kaleidoscope = kaleidoscope;
+    this.drawCanvasOverlay();
+  }
+
+  /**
    * Sets the grid
    *
    * @param visible true if the grid is visible, false otherwise
@@ -1228,6 +1241,7 @@ public class Z4Canvas extends JSComponent {
    */
   public void resize(int width, int height) {
     this.setSize(width, height);
+    this.ribbonDrawingToolPanel.refreshCanvasSize(true);
 
     this.statusPanel.setProjectSize(this.width, this.height);
     this.statusPanel.resetCanvasGridPanel(this.width, this.height, true);
@@ -1318,11 +1332,37 @@ public class Z4Canvas extends JSComponent {
     this.ctxOverlay.clearRect(0, 0, this.canvasOverlay.width, this.canvasOverlay.height);
 
     if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
-    } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT) && $exists(this.textInfo) && $exists(this.textInfo.shape)) {
+    } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT)) {
+      if ($exists(this.textInfo) && $exists(this.textInfo.shape)) {
+        this.ctxOverlay.save();
+        this.ctxOverlay.scale(this.zoom, this.zoom);
+
+        this.textManager.drawText(this.ctxOverlay, true, this.drawGeometricShapeDirection);
+        this.ctxOverlay.restore();
+      }
+    } else if (this.kaleidoscope.getMultiplicity() > 1) {
       this.ctxOverlay.save();
       this.ctxOverlay.scale(this.zoom, this.zoom);
+      this.ctxOverlay.lineWidth = 3 / this.zoom;
 
-      this.textManager.drawText(this.ctxOverlay, true, this.drawGeometricShapeDirection);
+      $Path2D path = new $Path2D();
+      path.moveTo(this.kaleidoscope.getOffsetX(), this.kaleidoscope.getOffsetY() - 15 / this.zoom);
+      path.lineTo(this.kaleidoscope.getOffsetX(), this.kaleidoscope.getOffsetY() + 15 / this.zoom);
+      path.moveTo(this.kaleidoscope.getOffsetX() - 15 / this.zoom, this.kaleidoscope.getOffsetY());
+      path.lineTo(this.kaleidoscope.getOffsetX() + 15 / this.zoom, this.kaleidoscope.getOffsetY());
+      path.moveTo(this.kaleidoscope.getOffsetX() + 20 / this.zoom, this.kaleidoscope.getOffsetY());
+      path.arc(this.kaleidoscope.getOffsetX(), this.kaleidoscope.getOffsetY(), 20 / this.zoom, 0, Z4Math.TWO_PI);
+
+      Array<Double> dash = new Array<>();
+      this.ctxOverlay.strokeStyle = Z4Constants.$getStyle("black");
+      this.ctxOverlay.setLineDash(dash);
+      this.ctxOverlay.stroke(path);
+
+      dash.push(this.ctxOverlay.lineWidth, this.ctxOverlay.lineWidth);
+      this.ctxOverlay.strokeStyle = Z4Constants.$getStyle("white");
+      this.ctxOverlay.setLineDash(dash);
+      this.ctxOverlay.stroke(path);
+
       this.ctxOverlay.restore();
     }
   }

@@ -136,6 +136,9 @@
 
 .z4ribbondrawingtoolpanel {
 }
+.z4ribbondrawingtoolpanel .z4kaleidoscopedropdown[transparent=true], .z4ribbondrawingtoolpanel .z4kaleidoscopedropdown[transparent=true] * {
+  background: transparent;
+}
 
 .z4ribbonhistorypanel {
 }

@@ -193,6 +193,7 @@ public class Z4CanvasIOManager {
 
         this.drawingTools.length = 0;
         this.ribbonDrawingToolPanel.reset();
+        this.ribbonDrawingToolPanel.refreshCanvasSize(false);
 
         this.ribbonTextPanel.reset();
         this.geometricShapes.length = 0;
@@ -265,7 +266,8 @@ public class Z4CanvasIOManager {
           this.ribbonHistoryPanel.resetHistory(() -> {
             $Object json = ($Object) JSON.parse("" + str);
             this.canvas.setSize(json.$get("width"), json.$get("height"));
-
+            this.ribbonDrawingToolPanel.refreshCanvasSize(false);
+            
             this.openLayer(zip, json, json.$get("layers"), 0);
           });
         });
