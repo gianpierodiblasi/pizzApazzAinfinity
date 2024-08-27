@@ -203,9 +203,7 @@ class Z4Shape2DPainter extends Z4Painter {
           context.restore();
         }
         if (currentBorderWidth > 0 || currentBorderHeight > 0) {
-          context.save();
           this.drawPath(context, currentWidth + currentBorderWidth, currentHeight + currentBorderHeight, this.borderColor);
-          context.restore();
         }
         if (spatioTemporalColor.isColor()) {
           let color = spatioTemporalColor.getColorAt(-1, -1);

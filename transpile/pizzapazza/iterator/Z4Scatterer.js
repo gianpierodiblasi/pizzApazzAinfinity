@@ -121,7 +121,6 @@ class Z4Scatterer extends Z4PointIterator {
       context.fill();
       context.restore();
       let next = null;
-      let kaleidoscope = new Z4Kaleidoscope(1, 0, 0);
       while ((next = this.next(spatioTemporalColor, finalColorProgression)) !== null) {
         if (valueIsAdjusting) {
           next = new Z4DrawingPoint(next.z4Vector, next.intensity, next.temporalPosition, Z4DrawingPointIntent.DRAW_BOUNDS, next.side, next.useVectorModuleAsSize);
@@ -129,7 +128,7 @@ class Z4Scatterer extends Z4PointIterator {
         context.save();
         context.translate(next.z4Vector.x0, next.z4Vector.y0);
         context.rotate(next.z4Vector.phase);
-        finalPainter.draw(context, next, finalSpatioTemporalColor, finalColorProgression, kaleidoscope);
+        finalPainter.draw(context, next, finalSpatioTemporalColor, finalColorProgression);
         context.restore();
       }
     });

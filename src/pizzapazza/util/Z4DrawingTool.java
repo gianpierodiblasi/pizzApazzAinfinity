@@ -123,10 +123,9 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
    *
    * @param context The context to use to perform the drawing
    * @param drawingPoint The point where to perform the drawing
-   * @param kaleidoscope The kaleidoscope to use to perform the drawing
    */
-  public void draw($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint, Z4Kaleidoscope kaleidoscope) {
-    this.painter.draw(context, drawingPoint, this.spatioTemporalColor, this.progression, kaleidoscope);
+  public void draw($CanvasRenderingContext2D context, Z4DrawingPoint drawingPoint) {
+    this.painter.draw(context, drawingPoint, this.spatioTemporalColor, this.progression);
   }
 
   /**

@@ -30,7 +30,7 @@ public class $CanvasRenderingContext2D extends CanvasRenderingContext2D {
 
   public void drawImage($Image canvas, double x, double y, double w, double h) {
   }
-  
+
   public void drawImage($OffscreenCanvas canvas, double x, double y) {
   }
 
@@ -46,5 +46,15 @@ public class $CanvasRenderingContext2D extends CanvasRenderingContext2D {
 
   public Union4<String, CanvasGradient, CanvasPattern, Object> createPattern($Image image, String string) {
     return null;
+  }
+
+  public $DOMMatrix getTransform() {
+    return null;
+  }
+
+  public void resetTransform() {
+  }
+
+  public void transform(double a, double b, double c, double d, double e, double f) {
   }
 }

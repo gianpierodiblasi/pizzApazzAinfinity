@@ -139,7 +139,6 @@ class Z4Spirograph extends Z4PointIterator {
 
    drawDemoPoint(context, arrowPainter, spatioTemporalColor, progression, valueIsAdjusting) {
     let next = null;
-    let kaleidoscope = new Z4Kaleidoscope(1, 0, 0);
     while ((next = this.next(spatioTemporalColor, progression)) !== null) {
       if (valueIsAdjusting) {
         next = new Z4DrawingPoint(next.z4Vector, next.intensity, next.temporalPosition, Z4DrawingPointIntent.DRAW_BOUNDS, next.side, next.useVectorModuleAsSize);
@@ -148,7 +147,7 @@ class Z4Spirograph extends Z4PointIterator {
         context.save();
         context.translate(next.z4Vector.x0, next.z4Vector.y0);
         context.rotate(next.z4Vector.phase);
-        arrowPainter.draw(context, next, spatioTemporalColor, progression, kaleidoscope);
+        arrowPainter.draw(context, next, spatioTemporalColor, progression);
         context.restore();
       }
     }

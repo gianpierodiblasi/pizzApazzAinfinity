@@ -50,4 +50,26 @@ class Z4Kaleidoscope {
    getOffsetY() {
     return this.offsetY;
   }
+
+  /**
+   * Iterate a drawing
+   *
+   * @param context The context to use to perform the drawing
+   * @param draw The action used to perform the drawing
+   */
+   iterate(context, draw) {
+    draw();
+    let incAngle = Z4Math.TWO_PI / this.multiplicity;
+    let matrix = context.getTransform();
+    for (let index = 1; index < this.multiplicity; index++) {
+      let angle = index * incAngle;
+      context.save();
+      context.resetTransform();
+      context.translate(this.offsetX, this.offsetY);
+      context.rotate(angle);
+      context.transform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f);
+      draw();
+      context.restore();
+    }
+  }
 }

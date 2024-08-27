@@ -1,5 +1,10 @@
 package pizzapazza.util;
 
+import pizzapazza.math.Z4Math;
+import simulation.dom.$CanvasRenderingContext2D;
+import simulation.dom.$DOMMatrix;
+import simulation.js.$Apply_0_Void;
+
 /**
  * A kaleidoscope
  *
@@ -49,5 +54,32 @@ public class Z4Kaleidoscope {
    */
   public int getOffsetY() {
     return this.offsetY;
+  }
+
+  /**
+   * Iterate a drawing
+   *
+   * @param context The context to use to perform the drawing
+   * @param draw The action used to perform the drawing
+   */
+  public void iterate($CanvasRenderingContext2D context, $Apply_0_Void draw) {
+    draw.$apply();
+
+    double incAngle = Z4Math.TWO_PI / this.multiplicity;
+    $DOMMatrix matrix = context.getTransform();
+
+    for (int index = 1; index < this.multiplicity; index++) {
+      double angle = index * incAngle;
+
+      context.save();
+      context.resetTransform();
+      context.translate(this.offsetX, this.offsetY);
+      context.rotate(angle);
+      context.transform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f);
+
+      draw.$apply();
+
+      context.restore();
+    }
   }
 }
