@@ -315,7 +315,14 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
 
    onAction(action, x, y) {
     if (this.pressedTryMe && this.value.drawAction(action, x, y)) {
+      if (this.value.isDrawBoundsWhileMoving()) {
+        this.ctxTryMe.clearRect(0, 0, this.widthTryMe, this.heightTryMe);
+        this.offscreenCtxBounds.clearRect(0, 0, this.widthTryMe, this.heightTryMe);
+      }
       this.iteratePoints(action);
+      if (this.value.isDrawBoundsWhileMoving()) {
+        this.ctxTryMe.drawImage(this.offscreenObjects, 0, 0);
+      }
     }
   }
 

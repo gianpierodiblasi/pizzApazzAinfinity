@@ -70,7 +70,7 @@ public class Z4Spirograph extends Z4PointIterator {
       if (progression.isResetOnStartMoving()) {
         this.nextdDrawingPoint = null;
       }
-      
+
       return false;
     } else if (action == Z4PointIteratorDrawingAction.CONTINUE) {
       this.currentPoint = new Z4Point(x, y);
@@ -160,6 +160,11 @@ public class Z4Spirograph extends Z4PointIterator {
   }
 
   @Override
+  public boolean isDrawBoundsWhileMoving() {
+    return false;
+  }
+
+  @Override
   public void drawDemo($CanvasRenderingContext2D context, Z4Painter painter, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression, double width, double height, boolean valueIsAdjusting) {
     Z4Painter finalPainter = $exists(painter) ? painter : new Z4ArrowPainter();
     Z4SpatioTemporalColor finalSpatioTemporalColor = $exists(spatioTemporalColor) ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
@@ -167,15 +172,15 @@ public class Z4Spirograph extends Z4PointIterator {
 
     Array<Z4Point> points = this.initDraw(width, height);
     Z4Point start = points.$get(0);
-    this.drawAction(Z4PointIteratorDrawingAction.START,finalColorProgression, start.x, start.y);
+    this.drawAction(Z4PointIteratorDrawingAction.START, finalColorProgression, start.x, start.y);
 
     points.slice(1).forEach(point -> {
-      this.drawAction(Z4PointIteratorDrawingAction.CONTINUE,finalColorProgression, point.x, point.y);
+      this.drawAction(Z4PointIteratorDrawingAction.CONTINUE, finalColorProgression, point.x, point.y);
       this.drawDemoPoint(context, finalPainter, finalSpatioTemporalColor, finalColorProgression, valueIsAdjusting);
     });
 
     Z4Point stop = points.$get(points.length - 1);
-    this.drawAction(Z4PointIteratorDrawingAction.STOP,finalColorProgression, stop.x, stop.y);
+    this.drawAction(Z4PointIteratorDrawingAction.STOP, finalColorProgression, stop.x, stop.y);
     this.drawDemoPoint(context, finalPainter, finalSpatioTemporalColor, finalColorProgression, valueIsAdjusting);
   }
 

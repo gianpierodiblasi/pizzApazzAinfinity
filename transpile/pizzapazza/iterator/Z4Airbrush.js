@@ -134,6 +134,10 @@ class Z4Airbrush extends Z4PointIterator {
     return parseInt(250 / this.speed);
   }
 
+   isDrawBoundsWhileMoving() {
+    return false;
+  }
+
    drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
     painter = painter ? painter : new Z4ArrowPainter();
     spatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));

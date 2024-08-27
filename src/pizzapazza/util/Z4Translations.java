@@ -223,6 +223,7 @@ public class Z4Translations {
   public static String DRAW_WHILE_MOVING = "";
   public static String SCATTERING = "";
   public static String ASSISTED_DRAWING = "";
+  public static String RULER = "";
 
   // Painter
   public static String TENSION = "";
@@ -537,6 +538,7 @@ public class Z4Translations {
     Z4Translations.DRAW_WHILE_MOVING = "Draw While Moving";
     Z4Translations.SCATTERING = "Scattering";
     Z4Translations.ASSISTED_DRAWING = "Assisted Drawing";
+    Z4Translations.RULER = "Ruler";
 
     // Painter
     Z4Translations.TENSION = "Tension";
@@ -835,6 +837,7 @@ public class Z4Translations {
     Z4Translations.DRAW_WHILE_MOVING = "Disegna Durante il Movimento";
     Z4Translations.SCATTERING = "Dispersione";
     Z4Translations.ASSISTED_DRAWING = "Disegno Assistito";
+    Z4Translations.RULER = "Righello";
 
     // Painter
     Z4Translations.TENSION = "Tensione";

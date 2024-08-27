@@ -21,6 +21,8 @@ class Z4Tracer extends Z4PointIterator {
 
    assistedDrawing = false;
 
+   ruler = false;
+
    path = null;
 
    before = null;
@@ -49,6 +51,8 @@ class Z4Tracer extends Z4PointIterator {
 
    connect = false;
 
+   startPoint = null;
+
    currentVector = null;
 
    currentMultiplicityCounter = 0;
@@ -66,9 +70,10 @@ class Z4Tracer extends Z4PointIterator {
    * @param endlessSustain true for an endless sustain, false otherwise
    * @param step The step
    * @param assistedDrawing true to use the assisted drawing, false otherwise
+   * @param ruler true to use a ruler, false otherwise
    * @param rotation The rotation
    */
-  constructor(multiplicity, push, attack, sustain, release, endlessSustain, step, assistedDrawing, rotation) {
+  constructor(multiplicity, push, attack, sustain, release, endlessSustain, step, assistedDrawing, ruler, rotation) {
     super(rotation);
     this.multiplicity = multiplicity;
     this.push = push;
@@ -78,6 +83,7 @@ class Z4Tracer extends Z4PointIterator {
     this.endlessSustain = endlessSustain;
     this.step = step;
     this.assistedDrawing = assistedDrawing;
+    this.ruler = ruler;
   }
 
    getType() {
@@ -156,33 +162,32 @@ class Z4Tracer extends Z4PointIterator {
     return this.assistedDrawing;
   }
 
+  /**
+   * Checks if the ruler is active
+   *
+   * @return true if the ruler is active, false otherwise
+   */
+   isRuler() {
+    return this.ruler;
+  }
+
    drawAction(action, progression, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.currentPoint = new Z4Point(x, y);
       this.hasNext = false;
-      this.path = null;
-      this.envelopeA = this.attack.next();
-      this.envelopeS = this.sustain.next();
-      this.envelopeR = this.release.next();
-      this.envelopeAS = this.envelopeA + this.envelopeS;
-      this.envelopeASR = this.envelopeA + this.envelopeS + this.envelopeR;
-      this.envelopePosition = 0;
-      this.envelopeStep = this.step.next();
-      this.clones = new Array();
-      this.fromClones = false;
-      this.surplus = 0;
-      this.connect = false;
-      if (progression.isResetOnStartMoving()) {
-        this.nextdDrawingPoint = null;
-      }
+      this.startPoint = this.currentPoint;
+      this.reset(progression);
       return false;
     } else if (action === Z4PointIteratorDrawingAction.CONTINUE) {
       this.currentMultiplicityCounter = 0;
       this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
       let distance = Z4Math.distance(this.currentPoint.x, this.currentPoint.y, x, y);
-      if (!this.assistedDrawing) {
+      if (this.ruler) {
+        this.reset(progression);
+        this.path = Z4TracerPath.fromLine(this.startPoint.x, this.startPoint.y, x, y, this.surplus, this.envelopeStep);
+        this.hasNext = this.path.hasNext();
+      } else if (!this.assistedDrawing) {
         this.path = Z4TracerPath.fromLine(this.currentPoint.x, this.currentPoint.y, x, y, this.surplus, this.envelopeStep);
-        this.connect = true;
         this.currentPoint = new Z4Point(x, y);
         this.hasNext = this.path.hasNext();
         if (!this.hasNext) {
@@ -219,6 +224,24 @@ class Z4Tracer extends Z4PointIterator {
     }
   }
 
+   reset(progression) {
+    this.path = null;
+    this.envelopeA = this.attack.next();
+    this.envelopeS = this.sustain.next();
+    this.envelopeR = this.release.next();
+    this.envelopeAS = this.envelopeA + this.envelopeS;
+    this.envelopeASR = this.envelopeA + this.envelopeS + this.envelopeR;
+    this.envelopePosition = 0;
+    this.envelopeStep = this.step.next();
+    this.clones = new Array();
+    this.fromClones = false;
+    this.surplus = 0;
+    this.connect = false;
+    if (progression.isResetOnStartMoving()) {
+      this.nextdDrawingPoint = null;
+    }
+  }
+
    next(color, progression) {
     if (!this.hasNext) {
       return null;
@@ -240,7 +263,7 @@ class Z4Tracer extends Z4PointIterator {
       } else {
         vector = Z4Vector.fromVector(this.currentVector.x0, this.currentVector.y0, 1, angle);
       }
-      let intent = Z4DrawingPointIntent.DRAW_OBJECTS;
+      let intent = this.ruler ? Z4DrawingPointIntent.DRAW_BOUNDS : Z4DrawingPointIntent.DRAW_OBJECTS;
       let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
       if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.TEMPORAL) {
         temporalPosition = progression.next(temporalPosition);
@@ -290,6 +313,10 @@ class Z4Tracer extends Z4PointIterator {
 
    getInfinitePointGeneratorSleep() {
     return 0;
+  }
+
+   isDrawBoundsWhileMoving() {
+    return true;
   }
 
    drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
@@ -344,6 +371,7 @@ class Z4Tracer extends Z4PointIterator {
     json["endlessSustain"] = this.endlessSustain;
     json["step"] = this.step.toJSON();
     json["assistedDrawing"] = this.assistedDrawing;
+    json["ruler"] = this.ruler;
     return json;
   }
 
@@ -354,6 +382,6 @@ class Z4Tracer extends Z4PointIterator {
    * @return the tracer
    */
   static  fromJSON(json) {
-    return new Z4Tracer(Z4FancifulValue.fromJSON(json["multiplicity"]), Z4FancifulValue.fromJSON(json["push"]), Z4FancifulValue.fromJSON(json["attack"]), Z4FancifulValue.fromJSON(json["sustain"]), Z4FancifulValue.fromJSON(json["release"]), json["endlessSustain"], Z4FancifulValue.fromJSON(json["step"]), json["assistedDrawing"], Z4Rotation.fromJSON(json["rotation"]));
+    return new Z4Tracer(Z4FancifulValue.fromJSON(json["multiplicity"]), Z4FancifulValue.fromJSON(json["push"]), Z4FancifulValue.fromJSON(json["attack"]), Z4FancifulValue.fromJSON(json["sustain"]), Z4FancifulValue.fromJSON(json["release"]), json["endlessSustain"], Z4FancifulValue.fromJSON(json["step"]), json["assistedDrawing"], json["ruler"], Z4Rotation.fromJSON(json["rotation"]));
   }
 }

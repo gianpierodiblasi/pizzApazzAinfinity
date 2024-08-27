@@ -223,6 +223,9 @@ public class Z4CanvasMouseManager {
     if (!$exists(this.selectedDrawingTool) || !$exists(this.selectedLayer) || !$exists(point)) {
     } else if (this.pressed && this.selectedDrawingTool.drawAction(action, point.x, point.y)) {
       this.ribbonHistoryPanel.stopStandard();
+      if (this.selectedDrawingTool.isDrawBoundsWhileMoving()) {
+        this.canvas.drawCanvas();
+      }
       this.iteratePoints(action);
     }
   }

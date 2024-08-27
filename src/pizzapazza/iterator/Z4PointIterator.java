@@ -103,6 +103,15 @@ public abstract class Z4PointIterator implements Z4NextableWithTwoParams<Z4Drawi
   public abstract int getInfinitePointGeneratorSleep();
 
   /**
+   * Checks if this Z4PointIterator has to draw bounds while moving (for example
+   * a Z4Tracer while ruler property equals to true)
+   *
+   * @return true if this Z4PointIterator has to draw bounds while moving, false
+   * otherwise
+   */
+  public abstract boolean isDrawBoundsWhileMoving();
+
+  /**
    * Draws a demo of this Z4PointIterator
    *
    * @param context The context where to draw the demo

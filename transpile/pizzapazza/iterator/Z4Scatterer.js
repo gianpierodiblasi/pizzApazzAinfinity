@@ -107,6 +107,10 @@ class Z4Scatterer extends Z4PointIterator {
     return 0;
   }
 
+   isDrawBoundsWhileMoving() {
+    return false;
+  }
+
    drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
     let finalPainter = painter ? painter : new Z4ArrowPainter();
     let finalSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));

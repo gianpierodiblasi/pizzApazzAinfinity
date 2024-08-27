@@ -13,6 +13,8 @@ class Z4TracerPanel extends Z4PointIteratorPanel {
 
    assistedDrawing = new JSCheckBox();
 
+   ruler = new JSCheckBox();
+
    attack = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTALLY_VERTICAL);
 
    sustain = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTALLY_VERTICAL);
@@ -54,7 +56,7 @@ class Z4TracerPanel extends Z4PointIteratorPanel {
     this.sustain.cssAddClass("z4abstractvaluepanel-titled");
     this.sustain.addChangeListener(event => this.onIteratorChange(this.sustain.getValueIsAdjusting()));
     this.sustain.add(this.endlessSustain, new GBC(0, 4).w(3).a(GBC.WEST));
-    this.add(this.sustain, new GBC(4, 0).h(2).a(GBC.NORTH).i(0, 0, 0, 1));
+    this.add(this.sustain, new GBC(4, 0).h(3).a(GBC.NORTH).i(0, 0, 0, 1));
     this.endlessSustain.setText(Z4Translations.ENDLESS);
     this.endlessSustain.addActionListener(event => this.onIteratorChange(false));
     this.release.setSignsVisible(false);
@@ -65,15 +67,18 @@ class Z4TracerPanel extends Z4PointIteratorPanel {
     this.assistedDrawing.setText(Z4Translations.ASSISTED_DRAWING);
     this.assistedDrawing.addActionListener(event => this.onIteratorChange(false));
     this.add(this.assistedDrawing, new GBC(3, 1).a(GBC.NORTHWEST));
-    this.add(this.rotation, new GBC(0, 1).w(3).a(GBC.WEST).i(1, 0, 0, 0));
-    this.setValue(new Z4Tracer(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), true, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), true, new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)));
+    this.ruler.setText(Z4Translations.RULER);
+    this.ruler.addActionListener(event => this.onIteratorChange(false));
+    this.add(this.ruler, new GBC(3, 2).wy(1).a(GBC.NORTHWEST));
+    this.add(this.rotation, new GBC(0, 1).wh(3, 2).a(GBC.WEST).i(1, 0, 0, 0));
+    this.setValue(new Z4Tracer(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), true, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), true, false, new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)));
   }
 
    onIteratorChange(valueIsAdjusting) {
     this.valueIsAdjusting = valueIsAdjusting;
     this.sustain.setEnabled(this.enabled && !this.endlessSustain.isSelected());
     this.release.setEnabled(this.enabled && !this.endlessSustain.isSelected());
-    this.value = new Z4Tracer(this.multiplicity.getValue(), this.push.getValue(), this.attack.getValue(), this.sustain.getValue(), this.release.getValue(), this.endlessSustain.isSelected(), this.step.getValue(), this.assistedDrawing.isSelected(), this.rotation.getValue());
+    this.value = new Z4Tracer(this.multiplicity.getValue(), this.push.getValue(), this.attack.getValue(), this.sustain.getValue(), this.release.getValue(), this.endlessSustain.isSelected(), this.step.getValue(), this.assistedDrawing.isSelected(), this.ruler.isSelected(), this.rotation.getValue());
     this.onchange();
   }
 
@@ -89,6 +94,7 @@ class Z4TracerPanel extends Z4PointIteratorPanel {
     this.endlessSustain.setSelected(value.isEndlessSustain());
     this.step.setValue(value.getStep());
     this.assistedDrawing.setSelected(value.isAssistedDrawing());
+    this.ruler.setSelected(value.isRuler());
   }
 
    setEnabled(b) {
@@ -101,5 +107,6 @@ class Z4TracerPanel extends Z4PointIteratorPanel {
     this.endlessSustain.setEnabled(b);
     this.step.setEnabled(b);
     this.assistedDrawing.setEnabled(b);
+    this.ruler.setEnabled(b);
   }
 }

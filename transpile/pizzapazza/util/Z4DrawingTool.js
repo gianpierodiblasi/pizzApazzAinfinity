@@ -135,6 +135,17 @@ class Z4DrawingTool extends Z4Nextable {
     return this.pointIterator.getInfinitePointGeneratorSleep();
   }
 
+  /**
+   * Checks if the Z4PointIterator has to draw bounds while moving (for example
+   * a Z4Tracer while ruler property equals to true)
+   *
+   * @return true if the Z4PointIterator has to draw bounds while moving, false
+   * otherwise
+   */
+   isDrawBoundsWhileMoving() {
+    return this.pointIterator.isDrawBoundsWhileMoving();
+  }
+
    toJSON() {
     let json = new Object();
     json["name"] = this.name;

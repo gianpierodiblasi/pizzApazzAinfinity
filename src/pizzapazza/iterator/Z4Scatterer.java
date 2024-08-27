@@ -150,6 +150,11 @@ public class Z4Scatterer extends Z4PointIterator {
   }
 
   @Override
+  public boolean isDrawBoundsWhileMoving() {
+    return false;
+  }
+  
+  @Override
   public void drawDemo($CanvasRenderingContext2D context, Z4Painter painter, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression, double width, double height, boolean valueIsAdjusting) {
     Z4Painter finalPainter = $exists(painter) ? painter : new Z4ArrowPainter();
     Z4SpatioTemporalColor finalSpatioTemporalColor = $exists(spatioTemporalColor) ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));

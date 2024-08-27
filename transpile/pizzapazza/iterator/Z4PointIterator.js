@@ -96,6 +96,16 @@ class Z4PointIterator extends Z4NextableWithTwoParams {
   }
 
   /**
+   * Checks if this Z4PointIterator has to draw bounds while moving (for example
+   * a Z4Tracer while ruler property equals to true)
+   *
+   * @return true if this Z4PointIterator has to draw bounds while moving, false
+   * otherwise
+   */
+   isDrawBoundsWhileMoving() {
+  }
+
+  /**
    * Draws a demo of this Z4PointIterator
    *
    * @param context The context where to draw the demo

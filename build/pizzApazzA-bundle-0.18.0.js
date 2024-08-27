@@ -4432,6 +4432,9 @@ class Z4CanvasMouseManager {
     if (!this.selectedDrawingTool || !this.selectedLayer || !point) {
     } else if (this.pressed && this.selectedDrawingTool.drawAction(action, point.x, point.y)) {
       this.ribbonHistoryPanel.stopStandard();
+      if (this.selectedDrawingTool.isDrawBoundsWhileMoving()) {
+        this.canvas.drawCanvas();
+      }
       this.iteratePoints(action);
     }
   }
@@ -11149,6 +11152,8 @@ class Z4TracerPanel extends Z4PointIteratorPanel {
 
    assistedDrawing = new JSCheckBox();
 
+   ruler = new JSCheckBox();
+
    attack = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTALLY_VERTICAL);
 
    sustain = new Z4FancifulValuePanel(Z4FancifulValuePanelOrientation.HORIZONTALLY_VERTICAL);
@@ -11190,7 +11195,7 @@ class Z4TracerPanel extends Z4PointIteratorPanel {
     this.sustain.cssAddClass("z4abstractvaluepanel-titled");
     this.sustain.addChangeListener(event => this.onIteratorChange(this.sustain.getValueIsAdjusting()));
     this.sustain.add(this.endlessSustain, new GBC(0, 4).w(3).a(GBC.WEST));
-    this.add(this.sustain, new GBC(4, 0).h(2).a(GBC.NORTH).i(0, 0, 0, 1));
+    this.add(this.sustain, new GBC(4, 0).h(3).a(GBC.NORTH).i(0, 0, 0, 1));
     this.endlessSustain.setText(Z4Translations.ENDLESS);
     this.endlessSustain.addActionListener(event => this.onIteratorChange(false));
     this.release.setSignsVisible(false);
@@ -11201,15 +11206,18 @@ class Z4TracerPanel extends Z4PointIteratorPanel {
     this.assistedDrawing.setText(Z4Translations.ASSISTED_DRAWING);
     this.assistedDrawing.addActionListener(event => this.onIteratorChange(false));
     this.add(this.assistedDrawing, new GBC(3, 1).a(GBC.NORTHWEST));
-    this.add(this.rotation, new GBC(0, 1).w(3).a(GBC.WEST).i(1, 0, 0, 0));
-    this.setValue(new Z4Tracer(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), true, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), true, new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)));
+    this.ruler.setText(Z4Translations.RULER);
+    this.ruler.addActionListener(event => this.onIteratorChange(false));
+    this.add(this.ruler, new GBC(3, 2).wy(1).a(GBC.NORTHWEST));
+    this.add(this.rotation, new GBC(0, 1).wh(3, 2).a(GBC.WEST).i(1, 0, 0, 0));
+    this.setValue(new Z4Tracer(new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), true, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), true, false, new Z4Rotation(0, new Z4FancifulValue(new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0), new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)), false), Z4RotationBehavior.FIXED, false)));
   }
 
    onIteratorChange(valueIsAdjusting) {
     this.valueIsAdjusting = valueIsAdjusting;
     this.sustain.setEnabled(this.enabled && !this.endlessSustain.isSelected());
     this.release.setEnabled(this.enabled && !this.endlessSustain.isSelected());
-    this.value = new Z4Tracer(this.multiplicity.getValue(), this.push.getValue(), this.attack.getValue(), this.sustain.getValue(), this.release.getValue(), this.endlessSustain.isSelected(), this.step.getValue(), this.assistedDrawing.isSelected(), this.rotation.getValue());
+    this.value = new Z4Tracer(this.multiplicity.getValue(), this.push.getValue(), this.attack.getValue(), this.sustain.getValue(), this.release.getValue(), this.endlessSustain.isSelected(), this.step.getValue(), this.assistedDrawing.isSelected(), this.ruler.isSelected(), this.rotation.getValue());
     this.onchange();
   }
 
@@ -11225,6 +11233,7 @@ class Z4TracerPanel extends Z4PointIteratorPanel {
     this.endlessSustain.setSelected(value.isEndlessSustain());
     this.step.setValue(value.getStep());
     this.assistedDrawing.setSelected(value.isAssistedDrawing());
+    this.ruler.setSelected(value.isRuler());
   }
 
    setEnabled(b) {
@@ -11237,6 +11246,7 @@ class Z4TracerPanel extends Z4PointIteratorPanel {
     this.endlessSustain.setEnabled(b);
     this.step.setEnabled(b);
     this.assistedDrawing.setEnabled(b);
+    this.ruler.setEnabled(b);
   }
 }
 /**
@@ -13735,7 +13745,14 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
 
    onAction(action, x, y) {
     if (this.pressedTryMe && this.value.drawAction(action, x, y)) {
+      if (this.value.isDrawBoundsWhileMoving()) {
+        this.ctxTryMe.clearRect(0, 0, this.widthTryMe, this.heightTryMe);
+        this.offscreenCtxBounds.clearRect(0, 0, this.widthTryMe, this.heightTryMe);
+      }
       this.iteratePoints(action);
+      if (this.value.isDrawBoundsWhileMoving()) {
+        this.ctxTryMe.drawImage(this.offscreenObjects, 0, 0);
+      }
     }
   }
 
@@ -19319,6 +19336,17 @@ class Z4DrawingTool extends Z4Nextable {
     return this.pointIterator.getInfinitePointGeneratorSleep();
   }
 
+  /**
+   * Checks if the Z4PointIterator has to draw bounds while moving (for example
+   * a Z4Tracer while ruler property equals to true)
+   *
+   * @return true if the Z4PointIterator has to draw bounds while moving, false
+   * otherwise
+   */
+   isDrawBoundsWhileMoving() {
+    return this.pointIterator.isDrawBoundsWhileMoving();
+  }
+
    toJSON() {
     let json = new Object();
     json["name"] = this.name;
@@ -19783,6 +19811,16 @@ class Z4PointIterator extends Z4NextableWithTwoParams {
   }
 
   /**
+   * Checks if this Z4PointIterator has to draw bounds while moving (for example
+   * a Z4Tracer while ruler property equals to true)
+   *
+   * @return true if this Z4PointIterator has to draw bounds while moving, false
+   * otherwise
+   */
+   isDrawBoundsWhileMoving() {
+  }
+
+  /**
    * Draws a demo of this Z4PointIterator
    *
    * @param context The context where to draw the demo
@@ -19940,6 +19978,10 @@ class Z4Airbrush extends Z4PointIterator {
     return parseInt(250 / this.speed);
   }
 
+   isDrawBoundsWhileMoving() {
+    return false;
+  }
+
    drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
     painter = painter ? painter : new Z4ArrowPainter();
     spatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
@@ -20085,6 +20127,10 @@ class Z4Scatterer extends Z4PointIterator {
 
    getInfinitePointGeneratorSleep() {
     return 0;
+  }
+
+   isDrawBoundsWhileMoving() {
+    return false;
   }
 
    drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
@@ -20248,6 +20294,10 @@ class Z4Spirograph extends Z4PointIterator {
 
    getInfinitePointGeneratorSleep() {
     return 0;
+  }
+
+   isDrawBoundsWhileMoving() {
+    return false;
   }
 
    drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
@@ -20414,6 +20464,10 @@ class Z4Stamper extends Z4PointIterator {
     return 0;
   }
 
+   isDrawBoundsWhileMoving() {
+    return false;
+  }
+
    drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
     let finalPainter = painter ? painter : new Z4ArrowPainter();
     let finalSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
@@ -20491,6 +20545,8 @@ class Z4Tracer extends Z4PointIterator {
 
    assistedDrawing = false;
 
+   ruler = false;
+
    path = null;
 
    before = null;
@@ -20519,6 +20575,8 @@ class Z4Tracer extends Z4PointIterator {
 
    connect = false;
 
+   startPoint = null;
+
    currentVector = null;
 
    currentMultiplicityCounter = 0;
@@ -20536,9 +20594,10 @@ class Z4Tracer extends Z4PointIterator {
    * @param endlessSustain true for an endless sustain, false otherwise
    * @param step The step
    * @param assistedDrawing true to use the assisted drawing, false otherwise
+   * @param ruler true to use a ruler, false otherwise
    * @param rotation The rotation
    */
-  constructor(multiplicity, push, attack, sustain, release, endlessSustain, step, assistedDrawing, rotation) {
+  constructor(multiplicity, push, attack, sustain, release, endlessSustain, step, assistedDrawing, ruler, rotation) {
     super(rotation);
     this.multiplicity = multiplicity;
     this.push = push;
@@ -20548,6 +20607,7 @@ class Z4Tracer extends Z4PointIterator {
     this.endlessSustain = endlessSustain;
     this.step = step;
     this.assistedDrawing = assistedDrawing;
+    this.ruler = ruler;
   }
 
    getType() {
@@ -20626,33 +20686,32 @@ class Z4Tracer extends Z4PointIterator {
     return this.assistedDrawing;
   }
 
+  /**
+   * Checks if the ruler is active
+   *
+   * @return true if the ruler is active, false otherwise
+   */
+   isRuler() {
+    return this.ruler;
+  }
+
    drawAction(action, progression, x, y) {
     if (action === Z4PointIteratorDrawingAction.START) {
       this.currentPoint = new Z4Point(x, y);
       this.hasNext = false;
-      this.path = null;
-      this.envelopeA = this.attack.next();
-      this.envelopeS = this.sustain.next();
-      this.envelopeR = this.release.next();
-      this.envelopeAS = this.envelopeA + this.envelopeS;
-      this.envelopeASR = this.envelopeA + this.envelopeS + this.envelopeR;
-      this.envelopePosition = 0;
-      this.envelopeStep = this.step.next();
-      this.clones = new Array();
-      this.fromClones = false;
-      this.surplus = 0;
-      this.connect = false;
-      if (progression.isResetOnStartMoving()) {
-        this.nextdDrawingPoint = null;
-      }
+      this.startPoint = this.currentPoint;
+      this.reset(progression);
       return false;
     } else if (action === Z4PointIteratorDrawingAction.CONTINUE) {
       this.currentMultiplicityCounter = 0;
       this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
       let distance = Z4Math.distance(this.currentPoint.x, this.currentPoint.y, x, y);
-      if (!this.assistedDrawing) {
+      if (this.ruler) {
+        this.reset(progression);
+        this.path = Z4TracerPath.fromLine(this.startPoint.x, this.startPoint.y, x, y, this.surplus, this.envelopeStep);
+        this.hasNext = this.path.hasNext();
+      } else if (!this.assistedDrawing) {
         this.path = Z4TracerPath.fromLine(this.currentPoint.x, this.currentPoint.y, x, y, this.surplus, this.envelopeStep);
-        this.connect = true;
         this.currentPoint = new Z4Point(x, y);
         this.hasNext = this.path.hasNext();
         if (!this.hasNext) {
@@ -20689,6 +20748,24 @@ class Z4Tracer extends Z4PointIterator {
     }
   }
 
+   reset(progression) {
+    this.path = null;
+    this.envelopeA = this.attack.next();
+    this.envelopeS = this.sustain.next();
+    this.envelopeR = this.release.next();
+    this.envelopeAS = this.envelopeA + this.envelopeS;
+    this.envelopeASR = this.envelopeA + this.envelopeS + this.envelopeR;
+    this.envelopePosition = 0;
+    this.envelopeStep = this.step.next();
+    this.clones = new Array();
+    this.fromClones = false;
+    this.surplus = 0;
+    this.connect = false;
+    if (progression.isResetOnStartMoving()) {
+      this.nextdDrawingPoint = null;
+    }
+  }
+
    next(color, progression) {
     if (!this.hasNext) {
       return null;
@@ -20710,7 +20787,7 @@ class Z4Tracer extends Z4PointIterator {
       } else {
         vector = Z4Vector.fromVector(this.currentVector.x0, this.currentVector.y0, 1, angle);
       }
-      let intent = Z4DrawingPointIntent.DRAW_OBJECTS;
+      let intent = this.ruler ? Z4DrawingPointIntent.DRAW_BOUNDS : Z4DrawingPointIntent.DRAW_OBJECTS;
       let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
       if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.TEMPORAL) {
         temporalPosition = progression.next(temporalPosition);
@@ -20760,6 +20837,10 @@ class Z4Tracer extends Z4PointIterator {
 
    getInfinitePointGeneratorSleep() {
     return 0;
+  }
+
+   isDrawBoundsWhileMoving() {
+    return true;
   }
 
    drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
@@ -20814,6 +20895,7 @@ class Z4Tracer extends Z4PointIterator {
     json["endlessSustain"] = this.endlessSustain;
     json["step"] = this.step.toJSON();
     json["assistedDrawing"] = this.assistedDrawing;
+    json["ruler"] = this.ruler;
     return json;
   }
 
@@ -20824,7 +20906,7 @@ class Z4Tracer extends Z4PointIterator {
    * @return the tracer
    */
   static  fromJSON(json) {
-    return new Z4Tracer(Z4FancifulValue.fromJSON(json["multiplicity"]), Z4FancifulValue.fromJSON(json["push"]), Z4FancifulValue.fromJSON(json["attack"]), Z4FancifulValue.fromJSON(json["sustain"]), Z4FancifulValue.fromJSON(json["release"]), json["endlessSustain"], Z4FancifulValue.fromJSON(json["step"]), json["assistedDrawing"], Z4Rotation.fromJSON(json["rotation"]));
+    return new Z4Tracer(Z4FancifulValue.fromJSON(json["multiplicity"]), Z4FancifulValue.fromJSON(json["push"]), Z4FancifulValue.fromJSON(json["attack"]), Z4FancifulValue.fromJSON(json["sustain"]), Z4FancifulValue.fromJSON(json["release"]), json["endlessSustain"], Z4FancifulValue.fromJSON(json["step"]), json["assistedDrawing"], json["ruler"], Z4Rotation.fromJSON(json["rotation"]));
   }
 }
 /**
@@ -23916,6 +23998,8 @@ class Z4Translations {
 
   static  ASSISTED_DRAWING = "";
 
+  static  RULER = "";
+
   // Painter
   static  TENSION = "";
 
@@ -24286,6 +24370,7 @@ class Z4Translations {
     Z4Translations.DRAW_WHILE_MOVING = "Draw While Moving";
     Z4Translations.SCATTERING = "Scattering";
     Z4Translations.ASSISTED_DRAWING = "Assisted Drawing";
+    Z4Translations.RULER = "Ruler";
     // Painter
     Z4Translations.TENSION = "Tension";
     Z4Translations.HOLE = "Hole";
@@ -24566,6 +24651,7 @@ class Z4Translations {
     Z4Translations.DRAW_WHILE_MOVING = "Disegna Durante il Movimento";
     Z4Translations.SCATTERING = "Dispersione";
     Z4Translations.ASSISTED_DRAWING = "Disegno Assistito";
+    Z4Translations.RULER = "Righello";
     // Painter
     Z4Translations.TENSION = "Tensione";
     Z4Translations.HOLE = "Buco";
