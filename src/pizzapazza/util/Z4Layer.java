@@ -9,6 +9,7 @@ import pizzapazza.color.Z4BiGradientColor;
 import pizzapazza.color.Z4GradientColor;
 import pizzapazza.filler.Z4AbstractFiller;
 import pizzapazza.math.Z4DrawingPoint;
+import pizzapazza.math.Z4Math;
 import pizzapazza.ui.component.Z4CanvasTextManager;
 import pizzapazza.ui.component.Z4LayerPreview;
 import simulation.dom.$CanvasRenderingContext2D;
@@ -320,11 +321,20 @@ public class Z4Layer {
    * @param kaleidoscope The kaleidoscope to use to perform the drawing
    */
   public void drawTool(Z4DrawingTool drawingTool, Z4DrawingPoint drawingPoint, Z4Kaleidoscope kaleidoscope) {
-    this.offscreenCtx.save();
-    this.offscreenCtx.translate(drawingPoint.z4Vector.x0 - this.offsetX, drawingPoint.z4Vector.y0 - this.offsetY);
-    this.offscreenCtx.rotate(drawingPoint.z4Vector.phase);
-    drawingTool.draw(this.offscreenCtx, drawingPoint, kaleidoscope);
-    this.offscreenCtx.restore();
+    double incAngle = Z4Math.TWO_PI / kaleidoscope.multiplicity;
+    for (int index = 0; index < kaleidoscope.multiplicity; index++) {
+      double angle = index * incAngle;
+
+      this.offscreenCtx.save();
+      this.offscreenCtx.translate(kaleidoscope.offsetX - this.offsetX, kaleidoscope.offsetY - this.offsetY);
+      this.offscreenCtx.rotate(angle);
+      this.offscreenCtx.translate(drawingPoint.z4Vector.x0 - kaleidoscope.offsetX, drawingPoint.z4Vector.y0 - kaleidoscope.offsetY);
+      this.offscreenCtx.rotate(drawingPoint.z4Vector.phase);
+      
+      drawingTool.draw(this.offscreenCtx, drawingPoint);
+      
+      this.offscreenCtx.restore();
+    }
 
     this.blob = null;
   }

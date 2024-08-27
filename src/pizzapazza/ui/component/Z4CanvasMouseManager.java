@@ -307,11 +307,19 @@ public class Z4CanvasMouseManager {
         this.canvas.drawCanvas();
       }
 
-      this.ctx.save();
-      this.ctx.translate(next.z4Vector.x0, next.z4Vector.y0);
-      this.ctx.rotate(next.z4Vector.phase);
-      this.selectedDrawingTool.draw(this.ctx, next, this.kaleidoscope);
-      this.ctx.restore();
+      double incAngle = Z4Math.TWO_PI / this.kaleidoscope.multiplicity;
+      for (int index = 0; index < this.kaleidoscope.multiplicity; index++) {
+        double angle = index * incAngle;
+
+        this.ctx.save();
+        this.ctx.translate(this.kaleidoscope.offsetX, this.kaleidoscope.offsetY);
+        this.ctx.rotate(angle);
+        this.ctx.translate(next.z4Vector.x0 - this.kaleidoscope.offsetX, next.z4Vector.y0 - this.kaleidoscope.offsetY);
+        this.ctx.rotate(next.z4Vector.phase);
+        this.selectedDrawingTool.draw(this.ctx, next);
+        this.ctx.restore();
+      }
+
       return true;
     }
   }

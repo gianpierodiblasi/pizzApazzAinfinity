@@ -1341,18 +1341,18 @@ public class Z4Canvas extends JSComponent {
         this.textManager.drawText(this.ctxOverlay, true, this.drawGeometricShapeDirection);
         this.ctxOverlay.restore();
       }
-    } else if (this.kaleidoscope.getMultiplicity() > 1) {
+    } else if (this.kaleidoscope.multiplicity > 1) {
       this.ctxOverlay.save();
       this.ctxOverlay.scale(this.zoom, this.zoom);
       this.ctxOverlay.lineWidth = 3 / this.zoom;
 
       $Path2D path = new $Path2D();
-      path.moveTo(this.kaleidoscope.getOffsetX(), this.kaleidoscope.getOffsetY() - 15 / this.zoom);
-      path.lineTo(this.kaleidoscope.getOffsetX(), this.kaleidoscope.getOffsetY() + 15 / this.zoom);
-      path.moveTo(this.kaleidoscope.getOffsetX() - 15 / this.zoom, this.kaleidoscope.getOffsetY());
-      path.lineTo(this.kaleidoscope.getOffsetX() + 15 / this.zoom, this.kaleidoscope.getOffsetY());
-      path.moveTo(this.kaleidoscope.getOffsetX() + 20 / this.zoom, this.kaleidoscope.getOffsetY());
-      path.arc(this.kaleidoscope.getOffsetX(), this.kaleidoscope.getOffsetY(), 20 / this.zoom, 0, Z4Math.TWO_PI);
+      path.moveTo(this.kaleidoscope.offsetX, this.kaleidoscope.offsetY - 15 / this.zoom);
+      path.lineTo(this.kaleidoscope.offsetX, this.kaleidoscope.offsetY + 15 / this.zoom);
+      path.moveTo(this.kaleidoscope.offsetX - 15 / this.zoom, this.kaleidoscope.offsetY);
+      path.lineTo(this.kaleidoscope.offsetX + 15 / this.zoom, this.kaleidoscope.offsetY);
+      path.moveTo(this.kaleidoscope.offsetX + 20 / this.zoom, this.kaleidoscope.offsetY);
+      path.arc(this.kaleidoscope.offsetX, this.kaleidoscope.offsetY, 20 / this.zoom, 0, Z4Math.TWO_PI);
 
       Array<Double> dash = new Array<>();
       this.ctxOverlay.strokeStyle = Z4Constants.$getStyle("black");

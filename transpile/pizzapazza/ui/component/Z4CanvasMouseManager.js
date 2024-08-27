@@ -282,11 +282,17 @@ class Z4CanvasMouseManager {
       if (next.intent === Z4DrawingPointIntent.REPLACE_PREVIOUS_BOUNDS) {
         this.canvas.drawCanvas();
       }
-      this.ctx.save();
-      this.ctx.translate(next.z4Vector.x0, next.z4Vector.y0);
-      this.ctx.rotate(next.z4Vector.phase);
-      this.selectedDrawingTool.draw(this.ctx, next, this.kaleidoscope);
-      this.ctx.restore();
+      let incAngle = Z4Math.TWO_PI / this.kaleidoscope.multiplicity;
+      for (let index = 0; index < this.kaleidoscope.multiplicity; index++) {
+        let angle = index * incAngle;
+        this.ctx.save();
+        this.ctx.translate(this.kaleidoscope.offsetX, this.kaleidoscope.offsetY);
+        this.ctx.rotate(angle);
+        this.ctx.translate(next.z4Vector.x0 - this.kaleidoscope.offsetX, next.z4Vector.y0 - this.kaleidoscope.offsetY);
+        this.ctx.rotate(next.z4Vector.phase);
+        this.selectedDrawingTool.draw(this.ctx, next);
+        this.ctx.restore();
+      }
       return true;
     }
   }

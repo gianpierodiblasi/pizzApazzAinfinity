@@ -301,11 +301,17 @@ class Z4Layer {
    * @param kaleidoscope The kaleidoscope to use to perform the drawing
    */
    drawTool(drawingTool, drawingPoint, kaleidoscope) {
-    this.offscreenCtx.save();
-    this.offscreenCtx.translate(drawingPoint.z4Vector.x0 - this.offsetX, drawingPoint.z4Vector.y0 - this.offsetY);
-    this.offscreenCtx.rotate(drawingPoint.z4Vector.phase);
-    drawingTool.draw(this.offscreenCtx, drawingPoint, kaleidoscope);
-    this.offscreenCtx.restore();
+    let incAngle = Z4Math.TWO_PI / kaleidoscope.multiplicity;
+    for (let index = 0; index < kaleidoscope.multiplicity; index++) {
+      let angle = index * incAngle;
+      this.offscreenCtx.save();
+      this.offscreenCtx.translate(kaleidoscope.offsetX - this.offsetX, kaleidoscope.offsetY - this.offsetY);
+      this.offscreenCtx.rotate(angle);
+      this.offscreenCtx.translate(drawingPoint.z4Vector.x0 - kaleidoscope.offsetX, drawingPoint.z4Vector.y0 - kaleidoscope.offsetY);
+      this.offscreenCtx.rotate(drawingPoint.z4Vector.phase);
+      drawingTool.draw(this.offscreenCtx, drawingPoint);
+      this.offscreenCtx.restore();
+    }
     this.blob = null;
   }
 

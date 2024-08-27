@@ -3423,17 +3423,17 @@ class Z4Canvas extends JSComponent {
         this.textManager.drawText(this.ctxOverlay, true, this.drawGeometricShapeDirection);
         this.ctxOverlay.restore();
       }
-    } else if (this.kaleidoscope.getMultiplicity() > 1) {
+    } else if (this.kaleidoscope.multiplicity > 1) {
       this.ctxOverlay.save();
       this.ctxOverlay.scale(this.zoom, this.zoom);
       this.ctxOverlay.lineWidth = 3 / this.zoom;
       let path = new Path2D();
-      path.moveTo(this.kaleidoscope.getOffsetX(), this.kaleidoscope.getOffsetY() - 15 / this.zoom);
-      path.lineTo(this.kaleidoscope.getOffsetX(), this.kaleidoscope.getOffsetY() + 15 / this.zoom);
-      path.moveTo(this.kaleidoscope.getOffsetX() - 15 / this.zoom, this.kaleidoscope.getOffsetY());
-      path.lineTo(this.kaleidoscope.getOffsetX() + 15 / this.zoom, this.kaleidoscope.getOffsetY());
-      path.moveTo(this.kaleidoscope.getOffsetX() + 20 / this.zoom, this.kaleidoscope.getOffsetY());
-      path.arc(this.kaleidoscope.getOffsetX(), this.kaleidoscope.getOffsetY(), 20 / this.zoom, 0, Z4Math.TWO_PI);
+      path.moveTo(this.kaleidoscope.offsetX, this.kaleidoscope.offsetY - 15 / this.zoom);
+      path.lineTo(this.kaleidoscope.offsetX, this.kaleidoscope.offsetY + 15 / this.zoom);
+      path.moveTo(this.kaleidoscope.offsetX - 15 / this.zoom, this.kaleidoscope.offsetY);
+      path.lineTo(this.kaleidoscope.offsetX + 15 / this.zoom, this.kaleidoscope.offsetY);
+      path.moveTo(this.kaleidoscope.offsetX + 20 / this.zoom, this.kaleidoscope.offsetY);
+      path.arc(this.kaleidoscope.offsetX, this.kaleidoscope.offsetY, 20 / this.zoom, 0, Z4Math.TWO_PI);
       let dash = new Array();
       this.ctxOverlay.strokeStyle = Z4Constants.getStyle("black");
       this.ctxOverlay.setLineDash(dash);
@@ -4509,11 +4509,17 @@ class Z4CanvasMouseManager {
       if (next.intent === Z4DrawingPointIntent.REPLACE_PREVIOUS_BOUNDS) {
         this.canvas.drawCanvas();
       }
-      this.ctx.save();
-      this.ctx.translate(next.z4Vector.x0, next.z4Vector.y0);
-      this.ctx.rotate(next.z4Vector.phase);
-      this.selectedDrawingTool.draw(this.ctx, next, this.kaleidoscope);
-      this.ctx.restore();
+      let incAngle = Z4Math.TWO_PI / this.kaleidoscope.multiplicity;
+      for (let index = 0; index < this.kaleidoscope.multiplicity; index++) {
+        let angle = index * incAngle;
+        this.ctx.save();
+        this.ctx.translate(this.kaleidoscope.offsetX, this.kaleidoscope.offsetY);
+        this.ctx.rotate(angle);
+        this.ctx.translate(next.z4Vector.x0 - this.kaleidoscope.offsetX, next.z4Vector.y0 - this.kaleidoscope.offsetY);
+        this.ctx.rotate(next.z4Vector.phase);
+        this.selectedDrawingTool.draw(this.ctx, next);
+        this.ctx.restore();
+      }
       return true;
     }
   }
@@ -23120,55 +23126,6 @@ class Z4Kaleidoscope {
     this.offsetX = offsetX;
     this.offsetY = offsetY;
   }
-
-  /**
-   * Returns the multiplicity
-   *
-   * @return The multiplicity
-   */
-   getMultiplicity() {
-    return this.multiplicity;
-  }
-
-  /**
-   * Returns the X offset
-   *
-   * @return The X offset
-   */
-   getOffsetX() {
-    return this.offsetX;
-  }
-
-  /**
-   * Returns the Y offset
-   *
-   * @return The Y offset
-   */
-   getOffsetY() {
-    return this.offsetY;
-  }
-
-  /**
-   * Iterate a drawing
-   *
-   * @param context The context to use to perform the drawing
-   * @param draw The action used to perform the drawing
-   */
-   iterate(context, draw) {
-    draw();
-    let incAngle = Z4Math.TWO_PI / this.multiplicity;
-    let matrix = context.getTransform();
-    for (let index = 1; index < this.multiplicity; index++) {
-      let angle = index * incAngle;
-      context.save();
-      context.resetTransform();
-      context.translate(this.offsetX, this.offsetY);
-      context.rotate(angle);
-      context.transform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f);
-      draw();
-      context.restore();
-    }
-  }
 }
 /**
  * The object representing a layer
@@ -23473,11 +23430,17 @@ class Z4Layer {
    * @param kaleidoscope The kaleidoscope to use to perform the drawing
    */
    drawTool(drawingTool, drawingPoint, kaleidoscope) {
-    this.offscreenCtx.save();
-    this.offscreenCtx.translate(drawingPoint.z4Vector.x0 - this.offsetX, drawingPoint.z4Vector.y0 - this.offsetY);
-    this.offscreenCtx.rotate(drawingPoint.z4Vector.phase);
-    drawingTool.draw(this.offscreenCtx, drawingPoint, kaleidoscope);
-    this.offscreenCtx.restore();
+    let incAngle = Z4Math.TWO_PI / kaleidoscope.multiplicity;
+    for (let index = 0; index < kaleidoscope.multiplicity; index++) {
+      let angle = index * incAngle;
+      this.offscreenCtx.save();
+      this.offscreenCtx.translate(kaleidoscope.offsetX - this.offsetX, kaleidoscope.offsetY - this.offsetY);
+      this.offscreenCtx.rotate(angle);
+      this.offscreenCtx.translate(drawingPoint.z4Vector.x0 - kaleidoscope.offsetX, drawingPoint.z4Vector.y0 - kaleidoscope.offsetY);
+      this.offscreenCtx.rotate(drawingPoint.z4Vector.phase);
+      drawingTool.draw(this.offscreenCtx, drawingPoint);
+      this.offscreenCtx.restore();
+    }
     this.blob = null;
   }
 
