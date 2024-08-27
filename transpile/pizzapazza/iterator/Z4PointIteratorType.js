@@ -9,6 +9,5 @@ class Z4PointIteratorType {
   static TRACER = 'TRACER';
   static AIRBRUSH = 'AIRBRUSH';
   static SPIROGRAPH = 'SPIROGRAPH';
-  static RULER = 'RULER';
   static SCATTERER = 'SCATTERER';
 }

@@ -168,9 +168,6 @@ class Z4DrawingTool extends Z4Nextable {
       case "SPIROGRAPH":
         pointIterator = Z4Spirograph.fromJSON(pointIteratorJSON);
         break;
-      case "RULER":
-        pointIterator = Z4Ruler.fromJSON(pointIteratorJSON);
-        break;
       case "SCATTERER":
         pointIterator = Z4Scatterer.fromJSON(pointIteratorJSON);
         break;

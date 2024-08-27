@@ -10,6 +10,5 @@ public enum Z4PointIteratorType {
   TRACER,
   AIRBRUSH,
   SPIROGRAPH,
-  RULER,
   SCATTERER;
 }

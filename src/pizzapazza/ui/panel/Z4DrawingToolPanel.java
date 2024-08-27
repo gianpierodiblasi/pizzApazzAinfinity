@@ -32,7 +32,6 @@ import pizzapazza.iterator.Z4Airbrush;
 import pizzapazza.iterator.Z4PointIterator;
 import pizzapazza.iterator.Z4PointIteratorDrawingAction;
 import pizzapazza.iterator.Z4PointIteratorType;
-import pizzapazza.iterator.Z4Ruler;
 import pizzapazza.iterator.Z4Scatterer;
 import pizzapazza.iterator.Z4Spirograph;
 import pizzapazza.iterator.Z4Stamper;
@@ -62,7 +61,6 @@ import pizzapazza.ui.panel.color.Z4ColorProgressionPanelOrientation;
 import pizzapazza.ui.panel.color.Z4GradientColorPanel;
 import pizzapazza.ui.panel.iterator.Z4AirbrushPanel;
 import pizzapazza.ui.panel.iterator.Z4PointIteratorPanel;
-import pizzapazza.ui.panel.iterator.Z4RulerPanel;
 import pizzapazza.ui.panel.iterator.Z4ScattererPanel;
 import pizzapazza.ui.panel.iterator.Z4SpirographPanel;
 import pizzapazza.ui.panel.iterator.Z4StamperPanel;
@@ -203,7 +201,6 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
     this.addRadioButton(panelRadio, buttonGroup, "TRACER");
     this.addRadioButton(panelRadio, buttonGroup, "AIRBRUSH");
     this.addRadioButton(panelRadio, buttonGroup, "SPIROGRAPH");
-    this.addRadioButton(panelRadio, buttonGroup, "RULER");
     this.addRadioButton(panelRadio, buttonGroup, "SCATTERER");
 
     panelRadio = new JSPanel();
@@ -320,9 +317,8 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
       case "TRACER":
       case "AIRBRUSH":
       case "SPIROGRAPH":
-      case "RULER":
       case "SCATTERER":
-        new Array<>("z4drawingtoolpanel-stamper-selected", "z4drawingtoolpanel-tracer-selected", "z4drawingtoolpanel-airbrush-selected", "z4drawingtoolpanel-spirograph-selected", "z4drawingtoolpanel-ruler-selected", "z4drawingtoolpanel-scatterer-selected").forEach(css -> this.selectedPointInterator.cssRemoveClass(css));
+        new Array<>("z4drawingtoolpanel-stamper-selected", "z4drawingtoolpanel-tracer-selected", "z4drawingtoolpanel-airbrush-selected", "z4drawingtoolpanel-spirograph-selected", "z4drawingtoolpanel-scatterer-selected").forEach(css -> this.selectedPointInterator.cssRemoveClass(css));
         this.selectedPointInteratorCard = this.check(this.selectedPointInterator, card, card.toLowerCase(), null, true);
         break;
       case "SHAPE2D":
@@ -569,7 +565,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
   }
 
   private void setPointInterator() {
-    new Array<>("z4drawingtoolpanel-stamper-selected", "z4drawingtoolpanel-tracer-selected", "z4drawingtoolpanel-airbrush-selected", "z4drawingtoolpanel-spirograph-selected", "z4drawingtoolpanel-ruler-selected", "z4drawingtoolpanel-scatterer-selected").forEach(css -> this.selectedPointInterator.cssRemoveClass(css));
+    new Array<>("z4drawingtoolpanel-stamper-selected", "z4drawingtoolpanel-tracer-selected", "z4drawingtoolpanel-airbrush-selected", "z4drawingtoolpanel-spirograph-selected", "z4drawingtoolpanel-scatterer-selected").forEach(css -> this.selectedPointInterator.cssRemoveClass(css));
 
     if (this.value.getPointIterator().getType() == Z4PointIteratorType.STAMPER) {
       this.selectedPointInteratorCard = this.check(this.selectedPointInterator, "STAMPER", "stamper", this.value.getPointIterator(), true);
@@ -579,8 +575,6 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
       this.selectedPointInteratorCard = this.check(this.selectedPointInterator, "AIRBRUSH", "airbrush", this.value.getPointIterator(), true);
     } else if (this.value.getPointIterator().getType() == Z4PointIteratorType.SPIROGRAPH) {
       this.selectedPointInteratorCard = this.check(this.selectedPointInterator, "SPIROGRAPH", "spirograph", this.value.getPointIterator(), true);
-    } else if (this.value.getPointIterator().getType() == Z4PointIteratorType.RULER) {
-      this.selectedPointInteratorCard = this.check(this.selectedPointInterator, "RULER", "ruler", this.value.getPointIterator(), true);
     } else if (this.value.getPointIterator().getType() == Z4PointIteratorType.SCATTERER) {
       this.selectedPointInteratorCard = this.check(this.selectedPointInterator, "SCATTERER", "scatterer", this.value.getPointIterator(), true);
     }
@@ -652,10 +646,6 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
         case "SPIROGRAPH":
           this.cardPanels.$set(card, new Z4SpirographPanel());
           ((Z4AbstractValuePanel<Z4Spirograph>) this.cardPanels.$get(card)).addChangeListener(event -> this.valueIsAdjusting = ((Z4PointIteratorPanel<Z4Spirograph>) this.cardPanels.$get(card)).getValueIsAdjusting());
-          break;
-        case "RULER":
-          this.cardPanels.$set(card, new Z4RulerPanel());
-          ((Z4AbstractValuePanel<Z4Ruler>) this.cardPanels.$get(card)).addChangeListener(event -> this.valueIsAdjusting = ((Z4PointIteratorPanel<Z4Ruler>) this.cardPanels.$get(card)).getValueIsAdjusting());
           break;
         case "SCATTERER":
           this.cardPanels.$set(card, new Z4ScattererPanel());
