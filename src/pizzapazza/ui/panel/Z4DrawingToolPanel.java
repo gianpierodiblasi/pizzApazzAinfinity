@@ -468,6 +468,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
 
       if (this.value.isDrawBoundsWhileMoving()) {
         this.ctxTryMe.drawImage(this.offscreenObjects, 0, 0);
+        this.ctxTryMe.drawImage(this.offscreenBounds, 0, 0);
       }
     }
   }

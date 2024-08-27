@@ -322,6 +322,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
       this.iteratePoints(action);
       if (this.value.isDrawBoundsWhileMoving()) {
         this.ctxTryMe.drawImage(this.offscreenObjects, 0, 0);
+        this.ctxTryMe.drawImage(this.offscreenBounds, 0, 0);
       }
     }
   }

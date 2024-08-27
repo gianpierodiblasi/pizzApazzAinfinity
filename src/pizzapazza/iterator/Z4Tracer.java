@@ -276,7 +276,7 @@ public class Z4Tracer extends Z4PointIterator {
       return new Z4DrawingPoint(
               clone.z4Vector,
               clone.intensity,
-              this.clonePos / this.clones.length,
+              progression.getColorProgressionBehavior() == Z4ColorProgressionBehavior.RELATIVE_TO_PATH ? this.clonePos / this.clones.length : clone.temporalPosition,
               Z4DrawingPointIntent.DRAW_OBJECTS,
               clone.side,
               clone.useVectorModuleAsSize
@@ -362,7 +362,7 @@ public class Z4Tracer extends Z4PointIterator {
 
   @Override
   public boolean isDrawBoundsWhileMoving() {
-    return true;
+    return this.ruler;
   }
 
   @Override

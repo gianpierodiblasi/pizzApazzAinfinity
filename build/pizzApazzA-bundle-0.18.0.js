@@ -13752,6 +13752,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
       this.iteratePoints(action);
       if (this.value.isDrawBoundsWhileMoving()) {
         this.ctxTryMe.drawImage(this.offscreenObjects, 0, 0);
+        this.ctxTryMe.drawImage(this.offscreenBounds, 0, 0);
       }
     }
   }
@@ -20773,7 +20774,7 @@ class Z4Tracer extends Z4PointIterator {
       let clone = this.clones[this.clonePos];
       this.clonePos++;
       this.hasNext = this.clonePos < this.clones.length;
-      return new Z4DrawingPoint(clone.z4Vector, clone.intensity, this.clonePos / this.clones.length, Z4DrawingPointIntent.DRAW_OBJECTS, clone.side, clone.useVectorModuleAsSize);
+      return new Z4DrawingPoint(clone.z4Vector, clone.intensity, progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.RELATIVE_TO_PATH ? this.clonePos / this.clones.length : clone.temporalPosition, Z4DrawingPointIntent.DRAW_OBJECTS, clone.side, clone.useVectorModuleAsSize);
     } else {
       if (!this.currentMultiplicityCounter) {
         this.currentVector = this.path.next();
@@ -20840,7 +20841,7 @@ class Z4Tracer extends Z4PointIterator {
   }
 
    isDrawBoundsWhileMoving() {
-    return true;
+    return this.ruler;
   }
 
    drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
