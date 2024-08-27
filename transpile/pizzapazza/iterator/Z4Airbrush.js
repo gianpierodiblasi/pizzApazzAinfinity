@@ -140,6 +140,7 @@ class Z4Airbrush extends Z4PointIterator {
     progression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE);
     this.drawAction(Z4PointIteratorDrawingAction.START, progression, width / 2, height / 2);
     let next = null;
+    let kaleidoscope = new Z4Kaleidoscope(1, 0, 0);
     while ((next = this.next(spatioTemporalColor, progression)) !== null) {
       if (valueIsAdjusting) {
         next = new Z4DrawingPoint(next.z4Vector, next.intensity, next.temporalPosition, Z4DrawingPointIntent.DRAW_BOUNDS, next.side, next.useVectorModuleAsSize);
@@ -147,7 +148,7 @@ class Z4Airbrush extends Z4PointIterator {
       context.save();
       context.translate(next.z4Vector.x0, next.z4Vector.y0);
       context.rotate(next.z4Vector.phase);
-      painter.draw(context, next, spatioTemporalColor, progression);
+      painter.draw(context, next, spatioTemporalColor, progression, kaleidoscope);
       context.restore();
     }
     this.drawAction(Z4PointIteratorDrawingAction.STOP, progression, width / 2, height / 2);

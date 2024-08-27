@@ -14,6 +14,7 @@ import pizzapazza.math.Z4Rotation;
 import pizzapazza.math.Z4Vector;
 import pizzapazza.painter.Z4ArrowPainter;
 import pizzapazza.painter.Z4Painter;
+import pizzapazza.util.Z4Kaleidoscope;
 import simulation.dom.$CanvasRenderingContext2D;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
@@ -182,6 +183,7 @@ public class Z4Airbrush extends Z4PointIterator {
     this.drawAction(Z4PointIteratorDrawingAction.START, progression, width / 2, height / 2);
 
     Z4DrawingPoint next;
+    Z4Kaleidoscope kaleidoscope = new Z4Kaleidoscope(1, 0, 0);
     while ((next = this.next(spatioTemporalColor, progression)) != null) {
       if (valueIsAdjusting) {
         next = new Z4DrawingPoint(next.z4Vector, next.intensity, next.temporalPosition, Z4DrawingPointIntent.DRAW_BOUNDS, next.side, next.useVectorModuleAsSize);
@@ -190,7 +192,7 @@ public class Z4Airbrush extends Z4PointIterator {
       context.save();
       context.translate(next.z4Vector.x0, next.z4Vector.y0);
       context.rotate(next.z4Vector.phase);
-      painter.draw(context, next, spatioTemporalColor, progression);
+      painter.draw(context, next, spatioTemporalColor, progression, kaleidoscope);
       context.restore();
     }
 

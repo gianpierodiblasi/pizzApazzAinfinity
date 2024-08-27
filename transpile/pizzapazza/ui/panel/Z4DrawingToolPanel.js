@@ -79,6 +79,8 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
 
    currentTimeoutID = 0;
 
+   kaleidoscope = new Z4Kaleidoscope(1, 0, 0);
+
   /**
    * Creates the object
    */
@@ -359,7 +361,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
       this.offscreenCtxObjects.save();
       this.offscreenCtxObjects.translate(next.z4Vector.x0, next.z4Vector.y0);
       this.offscreenCtxObjects.rotate(next.z4Vector.phase);
-      this.value.draw(this.offscreenCtxObjects, next);
+      this.value.draw(this.offscreenCtxObjects, next, this.kaleidoscope);
       this.offscreenCtxObjects.restore();
       this.ctxTryMe.drawImage(this.offscreenObjects, 0, 0);
       return true;
@@ -370,7 +372,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
       this.offscreenCtxBounds.save();
       this.offscreenCtxBounds.translate(next.z4Vector.x0, next.z4Vector.y0);
       this.offscreenCtxBounds.rotate(next.z4Vector.phase);
-      this.value.draw(this.offscreenCtxBounds, next);
+      this.value.draw(this.offscreenCtxBounds, next, this.kaleidoscope);
       this.offscreenCtxBounds.restore();
       this.ctxTryMe.drawImage(this.offscreenObjects, 0, 0);
       this.ctxTryMe.drawImage(this.offscreenBounds, 0, 0);

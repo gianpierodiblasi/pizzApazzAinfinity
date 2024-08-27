@@ -100,9 +100,10 @@ class Z4DrawingTool extends Z4Nextable {
    *
    * @param context The context to use to perform the drawing
    * @param drawingPoint The point where to perform the drawing
+   * @param kaleidoscope The kaleidoscope to use to perform the drawing
    */
-   draw(context, drawingPoint) {
-    this.painter.draw(context, drawingPoint, this.spatioTemporalColor, this.progression);
+   draw(context, drawingPoint, kaleidoscope) {
+    this.painter.draw(context, drawingPoint, this.spatioTemporalColor, this.progression, kaleidoscope);
   }
 
   /**

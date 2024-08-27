@@ -3109,6 +3109,7 @@ class Z4Canvas extends JSComponent {
    */
    setKaleidoscope(kaleidoscope) {
     this.kaleidoscope = kaleidoscope;
+    this.mouseManager.setKaleidoscope(kaleidoscope);
     this.drawCanvasOverlay();
   }
 
@@ -4241,6 +4242,8 @@ class Z4CanvasMouseManager {
 
    drawingDirection = Z4DrawingDirection.FREE;
 
+   kaleidoscope = new Z4Kaleidoscope(1, 0, 0);
+
    centerGrid = null;
 
    plotWidthGrid = 0;
@@ -4299,6 +4302,15 @@ class Z4CanvasMouseManager {
    */
    setDrawingDirection(drawingDirection) {
     this.drawingDirection = drawingDirection;
+  }
+
+  /**
+   * Sets the kaleidoscope
+   *
+   * @param kaleidoscope The kaleidoscope
+   */
+   setKaleidoscope(kaleidoscope) {
+    this.kaleidoscope = kaleidoscope;
   }
 
   /**
@@ -4486,7 +4498,7 @@ class Z4CanvasMouseManager {
     if (!next) {
       return false;
     } else if (next.intent === Z4DrawingPointIntent.DRAW_OBJECTS) {
-      this.selectedLayer.drawTool(this.selectedDrawingTool, next);
+      this.selectedLayer.drawTool(this.selectedDrawingTool, next, this.kaleidoscope);
       this.selectedLayer.getLayerPreview().drawLayer();
       this.canvas.drawCanvas();
       return true;
@@ -4500,7 +4512,7 @@ class Z4CanvasMouseManager {
       this.ctx.save();
       this.ctx.translate(next.z4Vector.x0, next.z4Vector.y0);
       this.ctx.rotate(next.z4Vector.phase);
-      this.selectedDrawingTool.draw(this.ctx, next);
+      this.selectedDrawingTool.draw(this.ctx, next, this.kaleidoscope);
       this.ctx.restore();
       return true;
     }
@@ -13519,6 +13531,8 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
 
    currentTimeoutID = 0;
 
+   kaleidoscope = new Z4Kaleidoscope(1, 0, 0);
+
   /**
    * Creates the object
    */
@@ -13799,7 +13813,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
       this.offscreenCtxObjects.save();
       this.offscreenCtxObjects.translate(next.z4Vector.x0, next.z4Vector.y0);
       this.offscreenCtxObjects.rotate(next.z4Vector.phase);
-      this.value.draw(this.offscreenCtxObjects, next);
+      this.value.draw(this.offscreenCtxObjects, next, this.kaleidoscope);
       this.offscreenCtxObjects.restore();
       this.ctxTryMe.drawImage(this.offscreenObjects, 0, 0);
       return true;
@@ -13810,7 +13824,7 @@ class Z4DrawingToolPanel extends Z4AbstractValuePanel {
       this.offscreenCtxBounds.save();
       this.offscreenCtxBounds.translate(next.z4Vector.x0, next.z4Vector.y0);
       this.offscreenCtxBounds.rotate(next.z4Vector.phase);
-      this.value.draw(this.offscreenCtxBounds, next);
+      this.value.draw(this.offscreenCtxBounds, next, this.kaleidoscope);
       this.offscreenCtxBounds.restore();
       this.ctxTryMe.drawImage(this.offscreenObjects, 0, 0);
       this.ctxTryMe.drawImage(this.offscreenBounds, 0, 0);
@@ -19312,9 +19326,10 @@ class Z4DrawingTool extends Z4Nextable {
    *
    * @param context The context to use to perform the drawing
    * @param drawingPoint The point where to perform the drawing
+   * @param kaleidoscope The kaleidoscope to use to perform the drawing
    */
-   draw(context, drawingPoint) {
-    this.painter.draw(context, drawingPoint, this.spatioTemporalColor, this.progression);
+   draw(context, drawingPoint, kaleidoscope) {
+    this.painter.draw(context, drawingPoint, this.spatioTemporalColor, this.progression, kaleidoscope);
   }
 
   /**
@@ -19977,6 +19992,7 @@ class Z4Airbrush extends Z4PointIterator {
     progression = progression ? progression : new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE);
     this.drawAction(Z4PointIteratorDrawingAction.START, progression, width / 2, height / 2);
     let next = null;
+    let kaleidoscope = new Z4Kaleidoscope(1, 0, 0);
     while ((next = this.next(spatioTemporalColor, progression)) !== null) {
       if (valueIsAdjusting) {
         next = new Z4DrawingPoint(next.z4Vector, next.intensity, next.temporalPosition, Z4DrawingPointIntent.DRAW_BOUNDS, next.side, next.useVectorModuleAsSize);
@@ -19984,7 +20000,7 @@ class Z4Airbrush extends Z4PointIterator {
       context.save();
       context.translate(next.z4Vector.x0, next.z4Vector.y0);
       context.rotate(next.z4Vector.phase);
-      painter.draw(context, next, spatioTemporalColor, progression);
+      painter.draw(context, next, spatioTemporalColor, progression, kaleidoscope);
       context.restore();
     }
     this.drawAction(Z4PointIteratorDrawingAction.STOP, progression, width / 2, height / 2);
@@ -20331,6 +20347,7 @@ class Z4Scatterer extends Z4PointIterator {
       context.fill();
       context.restore();
       let next = null;
+      let kaleidoscope = new Z4Kaleidoscope(1, 0, 0);
       while ((next = this.next(spatioTemporalColor, finalColorProgression)) !== null) {
         if (valueIsAdjusting) {
           next = new Z4DrawingPoint(next.z4Vector, next.intensity, next.temporalPosition, Z4DrawingPointIntent.DRAW_BOUNDS, next.side, next.useVectorModuleAsSize);
@@ -20338,7 +20355,7 @@ class Z4Scatterer extends Z4PointIterator {
         context.save();
         context.translate(next.z4Vector.x0, next.z4Vector.y0);
         context.rotate(next.z4Vector.phase);
-        finalPainter.draw(context, next, finalSpatioTemporalColor, finalColorProgression);
+        finalPainter.draw(context, next, finalSpatioTemporalColor, finalColorProgression, kaleidoscope);
         context.restore();
       }
     });
@@ -20511,6 +20528,7 @@ class Z4Spirograph extends Z4PointIterator {
 
    drawDemoPoint(context, arrowPainter, spatioTemporalColor, progression, valueIsAdjusting) {
     let next = null;
+    let kaleidoscope = new Z4Kaleidoscope(1, 0, 0);
     while ((next = this.next(spatioTemporalColor, progression)) !== null) {
       if (valueIsAdjusting) {
         next = new Z4DrawingPoint(next.z4Vector, next.intensity, next.temporalPosition, Z4DrawingPointIntent.DRAW_BOUNDS, next.side, next.useVectorModuleAsSize);
@@ -20519,7 +20537,7 @@ class Z4Spirograph extends Z4PointIterator {
         context.save();
         context.translate(next.z4Vector.x0, next.z4Vector.y0);
         context.rotate(next.z4Vector.phase);
-        arrowPainter.draw(context, next, spatioTemporalColor, progression);
+        arrowPainter.draw(context, next, spatioTemporalColor, progression, kaleidoscope);
         context.restore();
       }
     }
@@ -20658,6 +20676,7 @@ class Z4Stamper extends Z4PointIterator {
       context.fill();
       context.restore();
       let next = null;
+      let kaleidoscope = new Z4Kaleidoscope(1, 0, 0);
       while ((next = this.next(spatioTemporalColor, finalColorProgression)) !== null) {
         if (valueIsAdjusting) {
           next = new Z4DrawingPoint(next.z4Vector, next.intensity, next.temporalPosition, Z4DrawingPointIntent.DRAW_BOUNDS, next.side, next.useVectorModuleAsSize);
@@ -20665,7 +20684,7 @@ class Z4Stamper extends Z4PointIterator {
         context.save();
         context.translate(next.z4Vector.x0, next.z4Vector.y0);
         context.rotate(next.z4Vector.phase);
-        finalPainter.draw(context, next, finalSpatioTemporalColor, finalColorProgression);
+        finalPainter.draw(context, next, finalSpatioTemporalColor, finalColorProgression, kaleidoscope);
         context.restore();
       }
     });
@@ -21020,6 +21039,7 @@ class Z4Tracer extends Z4PointIterator {
     context.fill();
     context.restore();
     let next = null;
+    let kaleidoscope = new Z4Kaleidoscope(1, 0, 0);
     while ((next = this.next(spatioTemporalColor, progression)) !== null) {
       if (valueIsAdjusting) {
         next = new Z4DrawingPoint(next.z4Vector, next.intensity, next.temporalPosition, Z4DrawingPointIntent.DRAW_BOUNDS, next.side, next.useVectorModuleAsSize);
@@ -21028,7 +21048,7 @@ class Z4Tracer extends Z4PointIterator {
         context.save();
         context.translate(next.z4Vector.x0, next.z4Vector.y0);
         context.rotate(next.z4Vector.phase);
-        painter.draw(context, next, spatioTemporalColor, progression);
+        painter.draw(context, next, spatioTemporalColor, progression, kaleidoscope);
         context.restore();
       }
     }
@@ -21137,8 +21157,9 @@ class Z4Painter extends Z4JSONable {
    * @param drawingPoint The point where to perform the drawing
    * @param spatioTemporalColor The color to use to perform the drawing
    * @param progression The color progression to use to perform the drawing
+   * @param kaleidoscope The kaleidoscope to use to perform the drawing
    */
-   draw(context, drawingPoint, spatioTemporalColor, progression) {
+   draw(context, drawingPoint, spatioTemporalColor, progression, kaleidoscope) {
   }
 
    toJSON() {
@@ -23438,12 +23459,13 @@ class Z4Layer {
    *
    * @param drawingTool The tool to perform the drawing
    * @param drawingPoint The point where to perform the drawing
+   * @param kaleidoscope The kaleidoscope to use to perform the drawing
    */
-   drawTool(drawingTool, drawingPoint) {
+   drawTool(drawingTool, drawingPoint, kaleidoscope) {
     this.offscreenCtx.save();
     this.offscreenCtx.translate(drawingPoint.z4Vector.x0 - this.offsetX, drawingPoint.z4Vector.y0 - this.offsetY);
     this.offscreenCtx.rotate(drawingPoint.z4Vector.phase);
-    drawingTool.draw(this.offscreenCtx, drawingPoint);
+    drawingTool.draw(this.offscreenCtx, drawingPoint, kaleidoscope);
     this.offscreenCtx.restore();
     this.blob = null;
   }

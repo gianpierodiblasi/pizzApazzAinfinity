@@ -1000,6 +1000,7 @@ public class Z4Canvas extends JSComponent {
    */
   public void setKaleidoscope(Z4Kaleidoscope kaleidoscope) {
     this.kaleidoscope = kaleidoscope;
+    this.mouseManager.setKaleidoscope(kaleidoscope);
     this.drawCanvasOverlay();
   }
 

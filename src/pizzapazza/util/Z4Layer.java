@@ -317,12 +317,13 @@ public class Z4Layer {
    *
    * @param drawingTool The tool to perform the drawing
    * @param drawingPoint The point where to perform the drawing
+   * @param kaleidoscope The kaleidoscope to use to perform the drawing
    */
-  public void drawTool(Z4DrawingTool drawingTool, Z4DrawingPoint drawingPoint) {
+  public void drawTool(Z4DrawingTool drawingTool, Z4DrawingPoint drawingPoint, Z4Kaleidoscope kaleidoscope) {
     this.offscreenCtx.save();
     this.offscreenCtx.translate(drawingPoint.z4Vector.x0 - this.offsetX, drawingPoint.z4Vector.y0 - this.offsetY);
     this.offscreenCtx.rotate(drawingPoint.z4Vector.phase);
-    drawingTool.draw(this.offscreenCtx, drawingPoint);
+    drawingTool.draw(this.offscreenCtx, drawingPoint, kaleidoscope);
     this.offscreenCtx.restore();
 
     this.blob = null;

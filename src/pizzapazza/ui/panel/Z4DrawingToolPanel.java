@@ -77,6 +77,7 @@ import pizzapazza.ui.panel.painter.Z4Shape2DPainterPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4DrawingTool;
 import pizzapazza.util.Z4EmptyImageProducer;
+import pizzapazza.util.Z4Kaleidoscope;
 import pizzapazza.util.Z4Translations;
 import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
@@ -143,6 +144,8 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
   private final String tabbedPaneID = "z4drawingtoolpanel_" + new Date().getTime() + "_" + parseInt(1000 * Math.random());
 
   private int currentTimeoutID;
+
+  private final Z4Kaleidoscope kaleidoscope = new Z4Kaleidoscope(1, 0, 0);
 
   /**
    * Creates the object
@@ -509,7 +512,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
       this.offscreenCtxObjects.save();
       this.offscreenCtxObjects.translate(next.z4Vector.x0, next.z4Vector.y0);
       this.offscreenCtxObjects.rotate(next.z4Vector.phase);
-      this.value.draw(this.offscreenCtxObjects, next);
+      this.value.draw(this.offscreenCtxObjects, next, this.kaleidoscope);
       this.offscreenCtxObjects.restore();
 
       this.ctxTryMe.drawImage(this.offscreenObjects, 0, 0);
@@ -522,7 +525,7 @@ public class Z4DrawingToolPanel extends Z4AbstractValuePanel<Z4DrawingTool> {
       this.offscreenCtxBounds.save();
       this.offscreenCtxBounds.translate(next.z4Vector.x0, next.z4Vector.y0);
       this.offscreenCtxBounds.rotate(next.z4Vector.phase);
-      this.value.draw(this.offscreenCtxBounds, next);
+      this.value.draw(this.offscreenCtxBounds, next, this.kaleidoscope);
       this.offscreenCtxBounds.restore();
 
       this.ctxTryMe.drawImage(this.offscreenObjects, 0, 0);

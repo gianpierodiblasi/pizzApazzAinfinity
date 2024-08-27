@@ -20,8 +20,9 @@ class Z4Painter extends Z4JSONable {
    * @param drawingPoint The point where to perform the drawing
    * @param spatioTemporalColor The color to use to perform the drawing
    * @param progression The color progression to use to perform the drawing
+   * @param kaleidoscope The kaleidoscope to use to perform the drawing
    */
-   draw(context, drawingPoint, spatioTemporalColor, progression) {
+   draw(context, drawingPoint, spatioTemporalColor, progression, kaleidoscope) {
   }
 
    toJSON() {

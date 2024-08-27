@@ -15,6 +15,8 @@ class Z4CanvasMouseManager {
 
    drawingDirection = Z4DrawingDirection.FREE;
 
+   kaleidoscope = new Z4Kaleidoscope(1, 0, 0);
+
    centerGrid = null;
 
    plotWidthGrid = 0;
@@ -73,6 +75,15 @@ class Z4CanvasMouseManager {
    */
    setDrawingDirection(drawingDirection) {
     this.drawingDirection = drawingDirection;
+  }
+
+  /**
+   * Sets the kaleidoscope
+   *
+   * @param kaleidoscope The kaleidoscope
+   */
+   setKaleidoscope(kaleidoscope) {
+    this.kaleidoscope = kaleidoscope;
   }
 
   /**
@@ -260,7 +271,7 @@ class Z4CanvasMouseManager {
     if (!next) {
       return false;
     } else if (next.intent === Z4DrawingPointIntent.DRAW_OBJECTS) {
-      this.selectedLayer.drawTool(this.selectedDrawingTool, next);
+      this.selectedLayer.drawTool(this.selectedDrawingTool, next, this.kaleidoscope);
       this.selectedLayer.getLayerPreview().drawLayer();
       this.canvas.drawCanvas();
       return true;
@@ -274,7 +285,7 @@ class Z4CanvasMouseManager {
       this.ctx.save();
       this.ctx.translate(next.z4Vector.x0, next.z4Vector.y0);
       this.ctx.rotate(next.z4Vector.phase);
-      this.selectedDrawingTool.draw(this.ctx, next);
+      this.selectedDrawingTool.draw(this.ctx, next, this.kaleidoscope);
       this.ctx.restore();
       return true;
     }

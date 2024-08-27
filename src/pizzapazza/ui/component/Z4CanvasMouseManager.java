@@ -15,6 +15,7 @@ import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4DrawingTool;
+import pizzapazza.util.Z4Kaleidoscope;
 import pizzapazza.util.Z4Layer;
 import pizzapazza.util.Z4UI;
 import simulation.dom.$CanvasRenderingContext2D;
@@ -35,6 +36,7 @@ public class Z4CanvasMouseManager {
   private Z4Layer selectedLayer;
   private Z4DrawingTool selectedDrawingTool;
   private Z4DrawingDirection drawingDirection = Z4DrawingDirection.FREE;
+  private Z4Kaleidoscope kaleidoscope = new Z4Kaleidoscope(1, 0, 0);
 
   private Point centerGrid;
   private int plotWidthGrid;
@@ -88,6 +90,15 @@ public class Z4CanvasMouseManager {
    */
   public void setDrawingDirection(Z4DrawingDirection drawingDirection) {
     this.drawingDirection = drawingDirection;
+  }
+
+  /**
+   * Sets the kaleidoscope
+   *
+   * @param kaleidoscope The kaleidoscope
+   */
+  public void setKaleidoscope(Z4Kaleidoscope kaleidoscope) {
+    this.kaleidoscope = kaleidoscope;
   }
 
   /**
@@ -283,7 +294,7 @@ public class Z4CanvasMouseManager {
     if (!$exists(next)) {
       return false;
     } else if (next.intent == Z4DrawingPointIntent.DRAW_OBJECTS) {
-      this.selectedLayer.drawTool(this.selectedDrawingTool, next);
+      this.selectedLayer.drawTool(this.selectedDrawingTool, next, this.kaleidoscope);
       this.selectedLayer.getLayerPreview().drawLayer();
       this.canvas.drawCanvas();
       return true;
@@ -299,7 +310,7 @@ public class Z4CanvasMouseManager {
       this.ctx.save();
       this.ctx.translate(next.z4Vector.x0, next.z4Vector.y0);
       this.ctx.rotate(next.z4Vector.phase);
-      this.selectedDrawingTool.draw(this.ctx, next);
+      this.selectedDrawingTool.draw(this.ctx, next, this.kaleidoscope);
       this.ctx.restore();
       return true;
     }
