@@ -5,7 +5,7 @@
   "start_url": ".",
   "display": "standalone",
   "icons": [{
-      "src": "image/app_icon/app_icon_16.png",
+      "src": "image/app_icon/app_icon_16.gif",
       "sizes": "16x16",
       "type": "image/png"
     }, {
@@ -63,7 +63,7 @@
         "application/zip": [".z4i"]
       },
       "icons": [{
-          "src": "image/app_icon/app_icon_16.png",
+          "src": "image/app_icon/app_icon_16.gif",
           "sizes": "16x16",
           "type": "image/png"
         }, {
