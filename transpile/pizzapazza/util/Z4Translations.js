@@ -379,6 +379,8 @@ class Z4Translations {
 
   static  SCATTERING = "";
 
+  static  FREE_DRAWING = "";
+
   static  ASSISTED_DRAWING = "";
 
   static  RULER = "";
@@ -752,6 +754,7 @@ class Z4Translations {
     Z4Translations.SPEED = "Speed";
     Z4Translations.DRAW_WHILE_MOVING = "Draw While Moving";
     Z4Translations.SCATTERING = "Scattering";
+    Z4Translations.FREE = "Free Drawing";
     Z4Translations.ASSISTED_DRAWING = "Assisted Drawing";
     Z4Translations.RULER = "Ruler";
     // Painter
@@ -1033,6 +1036,7 @@ class Z4Translations {
     Z4Translations.SPEED = "Velocit\u00E0";
     Z4Translations.DRAW_WHILE_MOVING = "Disegna Durante il Movimento";
     Z4Translations.SCATTERING = "Dispersione";
+    Z4Translations.FREE_DRAWING = "Disegno Libero";
     Z4Translations.ASSISTED_DRAWING = "Disegno Assistito";
     Z4Translations.RULER = "Righello";
     // Painter
