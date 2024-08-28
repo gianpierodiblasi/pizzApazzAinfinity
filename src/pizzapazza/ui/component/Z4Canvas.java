@@ -1118,6 +1118,13 @@ public class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Applies the selected geometric shape to the selected drawing tool
+   */
+  public void applyGeometricShape() {
+    this.mouseManager.applyGeometricShape();
+  }
+
+  /**
    * Adds a geometric shape
    *
    * @param shape The geometric shape
@@ -1184,14 +1191,14 @@ public class Z4Canvas extends JSComponent {
     this.mouseManager.setSelectedGeometricShape(shape);
 
     this.canvasOverlay.style.pointerEvents = $exists(this.canvasOverlayModes.size) || ($exists(this.selectedDrawingTool) && this.selectedDrawingTool.useShapesAndPaths() && $exists(this.selectedGeometricShape)) ? "auto" : "none";
-    
+
     this.ribbonDrawingToolPanel.setApplyEnabled($exists(this.selectedDrawingTool) && this.selectedDrawingTool.useShapesAndPaths() && $exists(this.selectedGeometricShape));
     this.ribbonTextPanel.setGeometricShape(shape, selectedControlPoint);
 
     if (add) {
       this.shapesAndPathsPanel.addGeometricShapePreview(this.selectedGeometricShape);
     }
-    
+
     this.drawCanvas();
     this.drawCanvasOverlay();
   }
@@ -1365,6 +1372,7 @@ public class Z4Canvas extends JSComponent {
     this.ctxOverlay.clearRect(0, 0, this.canvasOverlay.width, this.canvasOverlay.height);
 
     if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
+      this.drawCanvas();
     } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT)) {
       if ($exists(this.textInfo) && $exists(this.textInfo.shape)) {
         this.ctxOverlay.save();

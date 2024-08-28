@@ -3241,6 +3241,13 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Applies the selected geometric shape to the selected drawing tool
+   */
+   applyGeometricShape() {
+    this.mouseManager.applyGeometricShape();
+  }
+
+  /**
    * Adds a geometric shape
    *
    * @param shape The geometric shape
@@ -3465,6 +3472,7 @@ class Z4Canvas extends JSComponent {
    drawCanvasOverlay() {
     this.ctxOverlay.clearRect(0, 0, this.canvasOverlay.width, this.canvasOverlay.height);
     if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
+      this.drawCanvas();
     } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT)) {
       if (this.textInfo && this.textInfo.shape) {
         this.ctxOverlay.save();
@@ -4649,6 +4657,15 @@ class Z4CanvasMouseManager {
     ctx.strokeStyle = Z4Constants.getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke(path);
+  }
+
+  /**
+   * Applies the selected geometric shape to the selected drawing tool
+   */
+   applyGeometricShape() {
+    this.canvas.drawCanvas();
+    let p = this.selectedGeometricShape.getPointAt(1);
+    this.onStop(p.x, p.y);
   }
 
   /**
@@ -8098,8 +8115,7 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     this.addButton(Z4Translations.SAVE_DRAWING_TOOLS_AS, true, 4, 1, "", 0, event => this.save());
     Z4UI.addVLine(this, new GBC(5, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.addKaleidoscope();
-    this.apply = this.addButton(Z4Translations.APPLY, false, 6, 2, "", 5, event => {
-    });
+    this.apply = this.addButton(Z4Translations.APPLY_SHAPES_AND_PATHS, false, 6, 2, "", 5, event => this.canvas.applyGeometricShape());
     Z4UI.addVLine(this, new GBC(7, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.drawingToolsPreview.setLayout(new BoxLayout(this.drawingToolsPreview, BoxLayout.X_AXIS));
     this.drawingToolsPreview.getStyle().overflowX = "scroll";
@@ -8109,7 +8125,7 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
    addKaleidoscope() {
     let dropDown = new Z4DropDown(".z4kaleidoscopepanel");
     dropDown.cssAddClass("z4kaleidoscopedropdown");
-    this.add(dropDown, new GBC(6, 1).a(GBC.NORTH).i(0, 5, 0, 5));
+    this.add(dropDown, new GBC(6, 1).a(GBC.NORTHWEST).i(0, 5, 0, 5));
     let label = new JSLabel();
     label.setText(Z4Translations.KALEIDOSCOPE);
     dropDown.appendChildInTree("summary", label);
@@ -24203,7 +24219,7 @@ class Z4Translations {
 
   static  APPLY_ON = "";
 
-  static  APPLY = "";
+  static  APPLY_SHAPES_AND_PATHS = "";
 
   static  UNIFORM = "";
 
@@ -24611,7 +24627,7 @@ class Z4Translations {
     Z4Translations.HORIZONTAL = "Horizontal";
     Z4Translations.VERTICAL = "Vertical";
     Z4Translations.APPLY_ON = "Apply On";
-    Z4Translations.APPLY = "Apply";
+    Z4Translations.APPLY_SHAPES_AND_PATHS = "Apply Shapes & Paths";
     Z4Translations.UNIFORM = "Uniform";
     Z4Translations.PARTIAL = "Partial";
     Z4Translations.TOTAL = "Total";
@@ -24894,7 +24910,7 @@ class Z4Translations {
     Z4Translations.HORIZONTAL = "Orizzontale";
     Z4Translations.VERTICAL = "Verticale";
     Z4Translations.APPLY_ON = "Applica Su";
-    Z4Translations.APPLY = "Applica";
+    Z4Translations.APPLY_SHAPES_AND_PATHS = "Applica Forme & Percorsi";
     Z4Translations.UNIFORM = "Uniforme";
     Z4Translations.PARTIAL = "Parziale";
     Z4Translations.TOTAL = "Totale";

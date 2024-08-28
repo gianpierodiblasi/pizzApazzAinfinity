@@ -415,6 +415,16 @@ public class Z4CanvasMouseManager {
   }
 
   /**
+   * Applies the selected geometric shape to the selected drawing tool
+   */
+  public void applyGeometricShape() {
+    this.canvas.drawCanvas();
+
+    Z4Point p = this.selectedGeometricShape.getPointAt(1);
+    this.onStop(p.x, p.y);
+  }
+
+  /**
    * Draws the geometric shape
    *
    * @param ctx The context used to draw the kaleidoscope

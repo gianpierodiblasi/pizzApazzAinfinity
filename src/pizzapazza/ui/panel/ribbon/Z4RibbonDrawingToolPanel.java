@@ -91,8 +91,7 @@ public class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     Z4UI.addVLine(this, new GBC(5, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
     this.addKaleidoscope();
-    this.apply = this.addButton(Z4Translations.APPLY, false, 6, 2, "", 5, event -> {
-    });
+    this.apply = this.addButton(Z4Translations.APPLY_SHAPES_AND_PATHS, false, 6, 2, "", 5, event -> this.canvas.applyGeometricShape());
     Z4UI.addVLine(this, new GBC(7, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
 
     this.drawingToolsPreview.setLayout(new BoxLayout(this.drawingToolsPreview, BoxLayout.X_AXIS));
@@ -103,7 +102,7 @@ public class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
   private void addKaleidoscope() {
     Z4DropDown dropDown = new Z4DropDown(".z4kaleidoscopepanel");
     dropDown.cssAddClass("z4kaleidoscopedropdown");
-    this.add(dropDown, new GBC(6, 1).a(GBC.NORTH).i(0, 5, 0, 5));
+    this.add(dropDown, new GBC(6, 1).a(GBC.NORTHWEST).i(0, 5, 0, 5));
 
     JSLabel label = new JSLabel();
     label.setText(Z4Translations.KALEIDOSCOPE);

@@ -185,7 +185,7 @@ public class Z4Translations {
   public static String HORIZONTAL = "";
   public static String VERTICAL = "";
   public static String APPLY_ON = "";
-  public static String APPLY = "";
+  public static String APPLY_SHAPES_AND_PATHS = "";
   public static String UNIFORM = "";
   public static String PARTIAL = "";
   public static String TOTAL = "";
@@ -502,7 +502,7 @@ public class Z4Translations {
     Z4Translations.HORIZONTAL = "Horizontal";
     Z4Translations.VERTICAL = "Vertical";
     Z4Translations.APPLY_ON = "Apply On";
-    Z4Translations.APPLY = "Apply";
+    Z4Translations.APPLY_SHAPES_AND_PATHS = "Apply Shapes & Paths";
     Z4Translations.UNIFORM = "Uniform";
     Z4Translations.PARTIAL = "Partial";
     Z4Translations.TOTAL = "Total";
@@ -803,7 +803,7 @@ public class Z4Translations {
     Z4Translations.HORIZONTAL = "Orizzontale";
     Z4Translations.VERTICAL = "Verticale";
     Z4Translations.APPLY_ON = "Applica Su";
-    Z4Translations.APPLY = "Applica";
+    Z4Translations.APPLY_SHAPES_AND_PATHS = "Applica Forme & Percorsi";
     Z4Translations.UNIFORM = "Uniforme";
     Z4Translations.PARTIAL = "Parziale";
     Z4Translations.TOTAL = "Totale";

@@ -1048,6 +1048,13 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Applies the selected geometric shape to the selected drawing tool
+   */
+   applyGeometricShape() {
+    this.mouseManager.applyGeometricShape();
+  }
+
+  /**
    * Adds a geometric shape
    *
    * @param shape The geometric shape
@@ -1272,6 +1279,7 @@ class Z4Canvas extends JSComponent {
    drawCanvasOverlay() {
     this.ctxOverlay.clearRect(0, 0, this.canvasOverlay.width, this.canvasOverlay.height);
     if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
+      this.drawCanvas();
     } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT)) {
       if (this.textInfo && this.textInfo.shape) {
         this.ctxOverlay.save();
