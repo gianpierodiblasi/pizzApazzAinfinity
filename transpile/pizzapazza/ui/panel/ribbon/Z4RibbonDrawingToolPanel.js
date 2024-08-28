@@ -40,7 +40,7 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     this.addButton(Z4Translations.SAVE_DRAWING_TOOLS_AS, true, 4, 1, "", 0, event => this.save());
     Z4UI.addVLine(this, new GBC(5, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.addKaleidoscope();
-    this.apply = this.addButton(Z4Translations.APPLY_SHAPES_AND_PATHS, false, 6, 2, "", 5, event => this.canvas.applyGeometricShape());
+    this.apply = this.addButton(Z4Translations.APPLY_SHAPES_AND_PATHS, false, 6, 2, "", 1, event => this.canvas.applyGeometricShape());
     Z4UI.addVLine(this, new GBC(7, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.drawingToolsPreview.setLayout(new BoxLayout(this.drawingToolsPreview, BoxLayout.X_AXIS));
     this.drawingToolsPreview.getStyle().overflowX = "scroll";
