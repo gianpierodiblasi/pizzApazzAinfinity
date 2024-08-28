@@ -218,6 +218,8 @@ class Z4Canvas extends JSComponent {
     this.ribbonTextPanel.reset();
     this.geometricShapes.length = 0;
     this.shapesAndPathsPanel.reset();
+    this.selectedDrawingTool = null;
+    this.selectedGeometricShape = null;
     Color.resetHistory();
     Z4GradientColor.resetHistory();
     Z4BiGradientColor.resetHistory();
@@ -234,6 +236,8 @@ class Z4Canvas extends JSComponent {
    * @param handle The file handle
    */
    createFromHandle(handle) {
+    this.selectedDrawingTool = null;
+    this.selectedGeometricShape = null;
     this.ioManager.createFromHandle(handle);
   }
 
@@ -243,6 +247,8 @@ class Z4Canvas extends JSComponent {
    * @param file The file
    */
    createFromFile(file) {
+    this.selectedDrawingTool = null;
+    this.selectedGeometricShape = null;
     this.ioManager.createFromFile(file);
   }
 
@@ -250,6 +256,8 @@ class Z4Canvas extends JSComponent {
    * Creates a new project from an image in the clipboard
    */
    createFromClipboard() {
+    this.selectedDrawingTool = null;
+    this.selectedGeometricShape = null;
     this.ioManager.createFromClipboard();
   }
 
@@ -292,6 +300,8 @@ class Z4Canvas extends JSComponent {
    * @param handle The file handle
    */
    openProjectFromHandle(handle) {
+    this.selectedDrawingTool = null;
+    this.selectedGeometricShape = null;
     this.handle = handle;
     this.ioManager.openProjectFromHandle(handle);
   }
@@ -302,6 +312,8 @@ class Z4Canvas extends JSComponent {
    * @param file The file
    */
    openProjectFromFile(file) {
+    this.selectedDrawingTool = null;
+    this.selectedGeometricShape = null;
     this.ioManager.openProjectFromFile(file);
   }
 
