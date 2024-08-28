@@ -105,7 +105,7 @@ public class Z4Airbrush extends Z4PointIterator {
       if (progression.isResetOnStartMoving()) {
         this.nextdDrawingPoint = null;
       }
-      
+
       return true;
     } else if (action == Z4PointIteratorDrawingAction.CONTINUE) {
       this.currentPoint = new Z4Point(x, y);
@@ -177,7 +177,12 @@ public class Z4Airbrush extends Z4PointIterator {
   public boolean isDrawBoundsWhileMoving() {
     return false;
   }
-  
+
+  @Override
+  public boolean useShapesAndPaths() {
+    return false;
+  }
+
   @Override
   public void drawDemo($CanvasRenderingContext2D context, Z4Painter painter, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression, double width, double height, boolean valueIsAdjusting) {
     painter = $exists(painter) ? painter : new Z4ArrowPainter();

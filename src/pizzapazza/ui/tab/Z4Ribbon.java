@@ -13,6 +13,7 @@ import pizzapazza.ui.panel.ribbon.Z4RibbonProjectPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonSettingsPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonTextPanel;
 import pizzapazza.util.Z4Translations;
+import static simulation.js.$Globals.$exists;
 
 /**
  * The main ribbon of the application
@@ -47,10 +48,13 @@ public class Z4Ribbon extends JSTabbedPane {
     this.addTab(Z4Translations.HISTORY, this.historyPanel);
     this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
     this.addTab(Z4Translations.HELP, this.helpPanel);
-    
+
     this.addChangeListener(event -> {
       if (this.textPanel.getStyle().display != "none") {
         this.textPanel.checkFonts();
+        this.shapesAndPathsPanel.getStyle().removeProperty("display");
+      } else if ($exists(this.canvas.getSelectedDrawingTool()) && this.canvas.getSelectedDrawingTool().useShapesAndPaths()) {
+        this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
         this.shapesAndPathsPanel.getStyle().removeProperty("display");
       } else {
         this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);

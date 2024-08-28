@@ -698,6 +698,15 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Returns the selected drawing tool
+   *
+   * @return The selected drawing tool
+   */
+   getSelectedDrawingTool() {
+    return this.selectedDrawingTool;
+  }
+
+  /**
    * Sets the selected drawing tool
    *
    * @param selectedDrawingTool The selected drawing tool
@@ -715,6 +724,11 @@ class Z4Canvas extends JSComponent {
    setSelectedDrawingToolAndAddDrawingToolPreview(selectedDrawingTool, add) {
     this.selectedDrawingTool = selectedDrawingTool;
     this.mouseManager.setSelectedDrawingTool(selectedDrawingTool);
+    if (this.selectedDrawingTool.useShapesAndPaths()) {
+      this.shapesAndPathsPanel.getStyle().removeProperty("display");
+    } else {
+      this.shapesAndPathsPanel.getStyle().display = "none";
+    }
     this.saveHistory("tool");
     if (add) {
       this.ribbonDrawingToolPanel.addDrawingToolPreview(this.selectedDrawingTool);

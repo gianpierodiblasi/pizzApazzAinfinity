@@ -104,13 +104,22 @@ public abstract class Z4PointIterator implements Z4NextableWithTwoParams<Z4Drawi
 
   /**
    * Checks if this Z4PointIterator has to draw bounds while moving (for example
-   * a Z4Tracer while ruler property equals to true)
+   * a Z4Tracer with drawing mode property equals to RULER)
    *
    * @return true if this Z4PointIterator has to draw bounds while moving, false
    * otherwise
    */
   public abstract boolean isDrawBoundsWhileMoving();
 
+  /**
+   * Checks if this Z4PointIterator uses the shapes & paths (for example
+   * a Z4Tracer with drawing mode property equals to SHAPES_AND_PATHS)
+   *
+   * @return true if this Z4PointIterator uses the shapes & paths, false
+   * otherwise
+   */
+  public abstract boolean useShapesAndPaths();
+  
   /**
    * Draws a demo of this Z4PointIterator
    *

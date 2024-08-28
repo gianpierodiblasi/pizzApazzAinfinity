@@ -137,13 +137,24 @@ class Z4DrawingTool extends Z4Nextable {
 
   /**
    * Checks if the Z4PointIterator has to draw bounds while moving (for example
-   * a Z4Tracer while ruler property equals to true)
+   * a Z4Tracer with drawing mode property equals to RULER)
    *
    * @return true if the Z4PointIterator has to draw bounds while moving, false
    * otherwise
    */
    isDrawBoundsWhileMoving() {
     return this.pointIterator.isDrawBoundsWhileMoving();
+  }
+
+  /**
+   * Checks if the Z4PointIterator uses the shapes & paths (for example a
+   * Z4Tracer with drawing mode property equals to SHAPES_AND_PATHS)
+   *
+   * @return true if the Z4PointIterator uses the shapes & paths, false
+   * otherwise
+   */
+   useShapesAndPaths() {
+    return this.pointIterator.useShapesAndPaths();
   }
 
    toJSON() {

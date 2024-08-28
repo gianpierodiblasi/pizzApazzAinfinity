@@ -307,6 +307,10 @@ class Z4Tracer extends Z4PointIterator {
     return this.drawingMode === Z4TracerDrawingMode.RULER;
   }
 
+   useShapesAndPaths() {
+    return this.drawingMode === Z4TracerDrawingMode.SHAPES_AND_PATHS;
+  }
+
    drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
     painter = painter ? painter : new Z4ArrowPainter();
     spatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));

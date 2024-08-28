@@ -44,9 +44,9 @@ class Z4ShapesAndPathsPanel extends JSPanel {
     Z4UI.addHLine(this, new GBC(0, 3).w(2).wx(1).f(GBC.HORIZONTAL).i(2, 1, 2, 1));
     this.geometricShapesPreview.setLayout(new BoxLayout(this.geometricShapesPreview, BoxLayout.Y_AXIS));
     this.geometricShapesPreview.getStyle().overflowY = "scroll";
-    this.geometricShapesPreview.getStyle().height = (window.innerHeight - 255) + "px";
+    this.geometricShapesPreview.getStyle().height = (window.innerHeight - 265) + "px";
     this.add(this.geometricShapesPreview, new GBC(0, 3).w(2).wxy(1, 1).f(GBC.BOTH).i(5, 2, 5, 2));
-    window.addEventListener("resize", event => this.geometricShapesPreview.getStyle().height = (window.innerHeight - 255) + "px");
+    window.addEventListener("resize", event => this.geometricShapesPreview.getStyle().height = (window.innerHeight - 265) + "px");
   }
 
    mergeConnect(connect) {

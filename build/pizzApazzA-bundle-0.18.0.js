@@ -2891,6 +2891,15 @@ class Z4Canvas extends JSComponent {
   }
 
   /**
+   * Returns the selected drawing tool
+   *
+   * @return The selected drawing tool
+   */
+   getSelectedDrawingTool() {
+    return this.selectedDrawingTool;
+  }
+
+  /**
    * Sets the selected drawing tool
    *
    * @param selectedDrawingTool The selected drawing tool
@@ -2908,6 +2917,11 @@ class Z4Canvas extends JSComponent {
    setSelectedDrawingToolAndAddDrawingToolPreview(selectedDrawingTool, add) {
     this.selectedDrawingTool = selectedDrawingTool;
     this.mouseManager.setSelectedDrawingTool(selectedDrawingTool);
+    if (this.selectedDrawingTool.useShapesAndPaths()) {
+      this.shapesAndPathsPanel.getStyle().removeProperty("display");
+    } else {
+      this.shapesAndPathsPanel.getStyle().display = "none";
+    }
     this.saveHistory("tool");
     if (add) {
       this.ribbonDrawingToolPanel.addDrawingToolPreview(this.selectedDrawingTool);
@@ -7639,9 +7653,9 @@ class Z4ShapesAndPathsPanel extends JSPanel {
     Z4UI.addHLine(this, new GBC(0, 3).w(2).wx(1).f(GBC.HORIZONTAL).i(2, 1, 2, 1));
     this.geometricShapesPreview.setLayout(new BoxLayout(this.geometricShapesPreview, BoxLayout.Y_AXIS));
     this.geometricShapesPreview.getStyle().overflowY = "scroll";
-    this.geometricShapesPreview.getStyle().height = (window.innerHeight - 255) + "px";
+    this.geometricShapesPreview.getStyle().height = (window.innerHeight - 265) + "px";
     this.add(this.geometricShapesPreview, new GBC(0, 3).w(2).wxy(1, 1).f(GBC.BOTH).i(5, 2, 5, 2));
-    window.addEventListener("resize", event => this.geometricShapesPreview.getStyle().height = (window.innerHeight - 255) + "px");
+    window.addEventListener("resize", event => this.geometricShapesPreview.getStyle().height = (window.innerHeight - 265) + "px");
   }
 
    mergeConnect(connect) {
@@ -15808,6 +15822,9 @@ class Z4Ribbon extends JSTabbedPane {
       if (this.textPanel.getStyle().display !== "none") {
         this.textPanel.checkFonts();
         this.shapesAndPathsPanel.getStyle().removeProperty("display");
+      } else if (this.canvas.getSelectedDrawingTool() && this.canvas.getSelectedDrawingTool().useShapesAndPaths()) {
+        this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
+        this.shapesAndPathsPanel.getStyle().removeProperty("display");
       } else {
         this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
         this.shapesAndPathsPanel.getStyle().display = "none";
@@ -19385,13 +19402,24 @@ class Z4DrawingTool extends Z4Nextable {
 
   /**
    * Checks if the Z4PointIterator has to draw bounds while moving (for example
-   * a Z4Tracer while ruler property equals to true)
+   * a Z4Tracer with drawing mode property equals to RULER)
    *
    * @return true if the Z4PointIterator has to draw bounds while moving, false
    * otherwise
    */
    isDrawBoundsWhileMoving() {
     return this.pointIterator.isDrawBoundsWhileMoving();
+  }
+
+  /**
+   * Checks if the Z4PointIterator uses the shapes & paths (for example a
+   * Z4Tracer with drawing mode property equals to SHAPES_AND_PATHS)
+   *
+   * @return true if the Z4PointIterator uses the shapes & paths, false
+   * otherwise
+   */
+   useShapesAndPaths() {
+    return this.pointIterator.useShapesAndPaths();
   }
 
    toJSON() {
@@ -19859,12 +19887,22 @@ class Z4PointIterator extends Z4NextableWithTwoParams {
 
   /**
    * Checks if this Z4PointIterator has to draw bounds while moving (for example
-   * a Z4Tracer while ruler property equals to true)
+   * a Z4Tracer with drawing mode property equals to RULER)
    *
    * @return true if this Z4PointIterator has to draw bounds while moving, false
    * otherwise
    */
    isDrawBoundsWhileMoving() {
+  }
+
+  /**
+   * Checks if this Z4PointIterator uses the shapes & paths (for example
+   * a Z4Tracer with drawing mode property equals to SHAPES_AND_PATHS)
+   *
+   * @return true if this Z4PointIterator uses the shapes & paths, false
+   * otherwise
+   */
+   useShapesAndPaths() {
   }
 
   /**
@@ -20029,6 +20067,10 @@ class Z4Airbrush extends Z4PointIterator {
     return false;
   }
 
+   useShapesAndPaths() {
+    return false;
+  }
+
    drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
     painter = painter ? painter : new Z4ArrowPainter();
     spatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
@@ -20177,6 +20219,10 @@ class Z4Scatterer extends Z4PointIterator {
   }
 
    isDrawBoundsWhileMoving() {
+    return false;
+  }
+
+   useShapesAndPaths() {
     return false;
   }
 
@@ -20347,6 +20393,10 @@ class Z4Spirograph extends Z4PointIterator {
     return false;
   }
 
+   useShapesAndPaths() {
+    return false;
+  }
+
    drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {
     let finalPainter = painter ? painter : new Z4ArrowPainter();
     let finalSpatioTemporalColor = spatioTemporalColor ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));
@@ -20512,6 +20562,10 @@ class Z4Stamper extends Z4PointIterator {
   }
 
    isDrawBoundsWhileMoving() {
+    return false;
+  }
+
+   useShapesAndPaths() {
     return false;
   }
 
@@ -20876,6 +20930,10 @@ class Z4Tracer extends Z4PointIterator {
 
    isDrawBoundsWhileMoving() {
     return this.drawingMode === Z4TracerDrawingMode.RULER;
+  }
+
+   useShapesAndPaths() {
+    return this.drawingMode === Z4TracerDrawingMode.SHAPES_AND_PATHS;
   }
 
    drawDemo(context, painter, spatioTemporalColor, progression, width, height, valueIsAdjusting) {

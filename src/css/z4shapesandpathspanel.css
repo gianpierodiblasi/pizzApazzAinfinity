@@ -1,7 +1,7 @@
 .z4shapesandpathspanel {
   border-radius: var(--roundness);
   border: 2px solid var(--main-action-bgcolor);
-  margin: 1px !important;
+  margin: 10px 1px 1px 1px !important;
   width: 12rem;
 }
 

@@ -355,6 +355,11 @@ public class Z4Tracer extends Z4PointIterator {
   }
 
   @Override
+  public boolean useShapesAndPaths() {
+    return this.drawingMode == Z4TracerDrawingMode.SHAPES_AND_PATHS;
+  }
+
+  @Override
   public void drawDemo($CanvasRenderingContext2D context, Z4Painter painter, Z4SpatioTemporalColor spatioTemporalColor, Z4ColorProgression progression, double width, double height, boolean valueIsAdjusting) {
     painter = $exists(painter) ? painter : new Z4ArrowPainter();
     spatioTemporalColor = $exists(spatioTemporalColor) ? spatioTemporalColor : Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255));

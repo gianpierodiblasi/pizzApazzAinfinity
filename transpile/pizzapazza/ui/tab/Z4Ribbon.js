@@ -40,6 +40,9 @@ class Z4Ribbon extends JSTabbedPane {
       if (this.textPanel.getStyle().display !== "none") {
         this.textPanel.checkFonts();
         this.shapesAndPathsPanel.getStyle().removeProperty("display");
+      } else if (this.canvas.getSelectedDrawingTool() && this.canvas.getSelectedDrawingTool().useShapesAndPaths()) {
+        this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
+        this.shapesAndPathsPanel.getStyle().removeProperty("display");
       } else {
         this.canvas.removeCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
         this.shapesAndPathsPanel.getStyle().display = "none";
