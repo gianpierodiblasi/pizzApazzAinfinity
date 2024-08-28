@@ -390,6 +390,17 @@ class Z4CanvasMouseManager {
    * the path, false otherwise
    */
    drawGeometricShape(ctx, withDirection) {
+    this.canvas.drawCanvas();
+    let prevPressed = this.pressed;
+    this.pressed = true;
+    let p = this.selectedGeometricShape.getPointAt(0);
+    this.onAction(Z4PointIteratorDrawingAction.START, p.x, p.y);
+    this.onAction(Z4PointIteratorDrawingAction.CONTINUE, p.x, p.y);
+    for (let s = 0.01; s <= 1; s += 0.01) {
+      p = this.selectedGeometricShape.getPointAt(s);
+      this.onAction(Z4PointIteratorDrawingAction.CONTINUE, p.x, p.y);
+    }
+    this.pressed = prevPressed;
     let controlPoints = this.selectedGeometricShape.getControlPoints();
     let controlPointConnections = this.selectedGeometricShape.getControlPointConnections();
     ctx.save();

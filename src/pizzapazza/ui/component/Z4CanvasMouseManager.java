@@ -422,6 +422,21 @@ public class Z4CanvasMouseManager {
    * the path, false otherwise
    */
   public void drawGeometricShape($CanvasRenderingContext2D ctx, boolean withDirection) {
+    this.canvas.drawCanvas();
+    boolean prevPressed = this.pressed;
+
+    this.pressed = true;
+    Z4Point p = this.selectedGeometricShape.getPointAt(0);
+    this.onAction(Z4PointIteratorDrawingAction.START, p.x, p.y);
+    this.onAction(Z4PointIteratorDrawingAction.CONTINUE, p.x, p.y);
+
+    for (double s = 0.01; s <= 1; s += 0.01) {
+      p = this.selectedGeometricShape.getPointAt(s);
+      this.onAction(Z4PointIteratorDrawingAction.CONTINUE, p.x, p.y);
+    }
+
+    this.pressed = prevPressed;
+
     Array<Z4Point> controlPoints = this.selectedGeometricShape.getControlPoints();
     Array<Integer> controlPointConnections = this.selectedGeometricShape.getControlPointConnections();
 

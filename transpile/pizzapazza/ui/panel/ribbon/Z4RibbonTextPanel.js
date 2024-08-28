@@ -389,6 +389,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     if (this.fontsChecked) {
       this.onTextInfoChange(false);
       this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
+      this.canvas.drawCanvas();
     } else {
       let regExp = new RegExp("pizzApazzA-bundle-.*js");
       document.querySelectorAll("script").forEach(script => {
@@ -406,6 +407,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
         this.fontsChecked = true;
         this.onTextInfoChange(false);
         this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
+        this.canvas.drawCanvas();
         Z4UI.pleaseWaitCompleted();
       }));
     }

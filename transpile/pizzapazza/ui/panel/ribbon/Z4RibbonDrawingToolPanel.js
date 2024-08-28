@@ -17,6 +17,8 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
 
    offsetYSpinner = new JSSpinner();
 
+   apply = null;
+
    drawingToolsPreview = new JSPanel();
 
    statusPanel = null;
@@ -34,14 +36,16 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     this.addButton(Z4Translations.CREATE, true, 0, 1, "left", 0, event => this.create());
     this.addButton(Z4Translations.FROM_FILE, true, 1, 1, "both", 0, event => this.open());
     this.addButton(Z4Translations.FROM_LIBRARY, true, 2, 1, "right", 0, event => this.openFromLibrary());
-    Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addVLine(this, new GBC(3, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.addButton(Z4Translations.SAVE_DRAWING_TOOLS_AS, true, 4, 1, "", 0, event => this.save());
-    Z4UI.addVLine(this, new GBC(5, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addVLine(this, new GBC(5, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.addKaleidoscope();
-    Z4UI.addVLine(this, new GBC(7, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    this.apply = this.addButton(Z4Translations.APPLY, false, 6, 2, "", 5, event => {
+    });
+    Z4UI.addVLine(this, new GBC(7, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.drawingToolsPreview.setLayout(new BoxLayout(this.drawingToolsPreview, BoxLayout.X_AXIS));
     this.drawingToolsPreview.getStyle().overflowX = "scroll";
-    this.add(this.drawingToolsPreview, new GBC(8, 0).h(2).wx(1).f(GBC.BOTH));
+    this.add(this.drawingToolsPreview, new GBC(8, 0).h(3).wx(1).f(GBC.BOTH));
   }
 
    addKaleidoscope() {
@@ -213,6 +217,7 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
    */
    reset() {
     this.drawingToolsPreview.setProperty("innerHTML", "");
+    this.apply.setEnabled(false);
   }
 
   /**
@@ -227,5 +232,14 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     document.querySelectorAll(".z4drawingtoolpreview .z4drawingtoolpreview-selector").forEach(element => element.textContent = Z4DrawingToolPreview.UNSELECTED_DRAWING_TOOL_CONTENT);
     this.drawingToolsPreview.add(preview, null);
     setTimeout(() => preview.invoke("scrollIntoView()"), 0);
+  }
+
+  /**
+   * Enables the apply button
+   *
+   * @param b true to enable the apply button, false otherwise
+   */
+   setApplyEnabled(b) {
+    this.apply.setEnabled(b);
   }
 }

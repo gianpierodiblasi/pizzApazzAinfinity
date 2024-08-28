@@ -793,9 +793,13 @@ public class Z4Canvas extends JSComponent {
 
     this.saveHistory("tool");
 
+    this.ribbonDrawingToolPanel.setApplyEnabled($exists(this.selectedDrawingTool) && this.selectedDrawingTool.useShapesAndPaths() && $exists(this.selectedGeometricShape));
     if (add) {
       this.ribbonDrawingToolPanel.addDrawingToolPreview(this.selectedDrawingTool);
     }
+
+    this.drawCanvas();
+    this.drawCanvasOverlay();
   }
 
   /**
@@ -1180,12 +1184,16 @@ public class Z4Canvas extends JSComponent {
     this.mouseManager.setSelectedGeometricShape(shape);
 
     this.canvasOverlay.style.pointerEvents = $exists(this.canvasOverlayModes.size) || ($exists(this.selectedDrawingTool) && this.selectedDrawingTool.useShapesAndPaths() && $exists(this.selectedGeometricShape)) ? "auto" : "none";
-
+    
+    this.ribbonDrawingToolPanel.setApplyEnabled($exists(this.selectedDrawingTool) && this.selectedDrawingTool.useShapesAndPaths() && $exists(this.selectedGeometricShape));
     this.ribbonTextPanel.setGeometricShape(shape, selectedControlPoint);
 
     if (add) {
       this.shapesAndPathsPanel.addGeometricShapePreview(this.selectedGeometricShape);
     }
+    
+    this.drawCanvas();
+    this.drawCanvasOverlay();
   }
 
   /**

@@ -250,7 +250,7 @@ class Z4Tracer extends Z4PointIterator {
       } else {
         vector = Z4Vector.fromVector(this.currentVector.x0, this.currentVector.y0, 1, angle);
       }
-      let intent = this.isDrawBoundsWhileMoving() ? Z4DrawingPointIntent.DRAW_BOUNDS : Z4DrawingPointIntent.DRAW_OBJECTS;
+      let intent = this.isDrawBoundsWhileMoving() || this.useShapesAndPaths() ? Z4DrawingPointIntent.DRAW_BOUNDS : Z4DrawingPointIntent.DRAW_OBJECTS;
       let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
       if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.TEMPORAL) {
         temporalPosition = progression.next(temporalPosition);

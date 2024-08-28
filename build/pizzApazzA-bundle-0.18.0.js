@@ -2927,9 +2927,12 @@ class Z4Canvas extends JSComponent {
       this.shapesAndPathsPanel.getStyle().display = "none";
     }
     this.saveHistory("tool");
+    this.ribbonDrawingToolPanel.setApplyEnabled(this.selectedDrawingTool && this.selectedDrawingTool.useShapesAndPaths() && this.selectedGeometricShape);
     if (add) {
       this.ribbonDrawingToolPanel.addDrawingToolPreview(this.selectedDrawingTool);
     }
+    this.drawCanvas();
+    this.drawCanvasOverlay();
   }
 
   /**
@@ -3301,10 +3304,13 @@ class Z4Canvas extends JSComponent {
     this.selectedGeometricShape = shape;
     this.mouseManager.setSelectedGeometricShape(shape);
     this.canvasOverlay.style.pointerEvents = this.canvasOverlayModes.size || (this.selectedDrawingTool && this.selectedDrawingTool.useShapesAndPaths() && this.selectedGeometricShape) ? "auto" : "none";
+    this.ribbonDrawingToolPanel.setApplyEnabled(this.selectedDrawingTool && this.selectedDrawingTool.useShapesAndPaths() && this.selectedGeometricShape);
     this.ribbonTextPanel.setGeometricShape(shape, selectedControlPoint);
     if (add) {
       this.shapesAndPathsPanel.addGeometricShapePreview(this.selectedGeometricShape);
     }
+    this.drawCanvas();
+    this.drawCanvasOverlay();
   }
 
   /**
@@ -4653,6 +4659,17 @@ class Z4CanvasMouseManager {
    * the path, false otherwise
    */
    drawGeometricShape(ctx, withDirection) {
+    this.canvas.drawCanvas();
+    let prevPressed = this.pressed;
+    this.pressed = true;
+    let p = this.selectedGeometricShape.getPointAt(0);
+    this.onAction(Z4PointIteratorDrawingAction.START, p.x, p.y);
+    this.onAction(Z4PointIteratorDrawingAction.CONTINUE, p.x, p.y);
+    for (let s = 0.01; s <= 1; s += 0.01) {
+      p = this.selectedGeometricShape.getPointAt(s);
+      this.onAction(Z4PointIteratorDrawingAction.CONTINUE, p.x, p.y);
+    }
+    this.pressed = prevPressed;
     let controlPoints = this.selectedGeometricShape.getControlPoints();
     let controlPointConnections = this.selectedGeometricShape.getControlPointConnections();
     ctx.save();
@@ -8058,6 +8075,8 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
 
    offsetYSpinner = new JSSpinner();
 
+   apply = null;
+
    drawingToolsPreview = new JSPanel();
 
    statusPanel = null;
@@ -8075,14 +8094,16 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     this.addButton(Z4Translations.CREATE, true, 0, 1, "left", 0, event => this.create());
     this.addButton(Z4Translations.FROM_FILE, true, 1, 1, "both", 0, event => this.open());
     this.addButton(Z4Translations.FROM_LIBRARY, true, 2, 1, "right", 0, event => this.openFromLibrary());
-    Z4UI.addVLine(this, new GBC(3, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addVLine(this, new GBC(3, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.addButton(Z4Translations.SAVE_DRAWING_TOOLS_AS, true, 4, 1, "", 0, event => this.save());
-    Z4UI.addVLine(this, new GBC(5, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    Z4UI.addVLine(this, new GBC(5, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.addKaleidoscope();
-    Z4UI.addVLine(this, new GBC(7, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    this.apply = this.addButton(Z4Translations.APPLY, false, 6, 2, "", 5, event => {
+    });
+    Z4UI.addVLine(this, new GBC(7, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
     this.drawingToolsPreview.setLayout(new BoxLayout(this.drawingToolsPreview, BoxLayout.X_AXIS));
     this.drawingToolsPreview.getStyle().overflowX = "scroll";
-    this.add(this.drawingToolsPreview, new GBC(8, 0).h(2).wx(1).f(GBC.BOTH));
+    this.add(this.drawingToolsPreview, new GBC(8, 0).h(3).wx(1).f(GBC.BOTH));
   }
 
    addKaleidoscope() {
@@ -8254,6 +8275,7 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
    */
    reset() {
     this.drawingToolsPreview.setProperty("innerHTML", "");
+    this.apply.setEnabled(false);
   }
 
   /**
@@ -8268,6 +8290,15 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     document.querySelectorAll(".z4drawingtoolpreview .z4drawingtoolpreview-selector").forEach(element => element.textContent = Z4DrawingToolPreview.UNSELECTED_DRAWING_TOOL_CONTENT);
     this.drawingToolsPreview.add(preview, null);
     setTimeout(() => preview.invoke("scrollIntoView()"), 0);
+  }
+
+  /**
+   * Enables the apply button
+   *
+   * @param b true to enable the apply button, false otherwise
+   */
+   setApplyEnabled(b) {
+    this.apply.setEnabled(b);
   }
 }
 /**
@@ -9716,6 +9747,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
     if (this.fontsChecked) {
       this.onTextInfoChange(false);
       this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
+      this.canvas.drawCanvas();
     } else {
       let regExp = new RegExp("pizzApazzA-bundle-.*js");
       document.querySelectorAll("script").forEach(script => {
@@ -9733,6 +9765,7 @@ class Z4RibbonTextPanel extends Z4AbstractRibbonPanel {
         this.fontsChecked = true;
         this.onTextInfoChange(false);
         this.canvas.addCanvasOverlayMode(Z4CanvasOverlayMode.DRAW_TEXT);
+        this.canvas.drawCanvas();
         Z4UI.pleaseWaitCompleted();
       }));
     }
@@ -21023,7 +21056,7 @@ class Z4Tracer extends Z4PointIterator {
       } else {
         vector = Z4Vector.fromVector(this.currentVector.x0, this.currentVector.y0, 1, angle);
       }
-      let intent = this.isDrawBoundsWhileMoving() ? Z4DrawingPointIntent.DRAW_BOUNDS : Z4DrawingPointIntent.DRAW_OBJECTS;
+      let intent = this.isDrawBoundsWhileMoving() || this.useShapesAndPaths() ? Z4DrawingPointIntent.DRAW_BOUNDS : Z4DrawingPointIntent.DRAW_OBJECTS;
       let temporalPosition = this.nextdDrawingPoint ? this.nextdDrawingPoint.temporalPosition : -1;
       if (progression.getColorProgressionBehavior() === Z4ColorProgressionBehavior.TEMPORAL) {
         temporalPosition = progression.next(temporalPosition);
@@ -24170,6 +24203,8 @@ class Z4Translations {
 
   static  APPLY_ON = "";
 
+  static  APPLY = "";
+
   static  UNIFORM = "";
 
   static  PARTIAL = "";
@@ -24576,6 +24611,7 @@ class Z4Translations {
     Z4Translations.HORIZONTAL = "Horizontal";
     Z4Translations.VERTICAL = "Vertical";
     Z4Translations.APPLY_ON = "Apply On";
+    Z4Translations.APPLY = "Apply";
     Z4Translations.UNIFORM = "Uniform";
     Z4Translations.PARTIAL = "Partial";
     Z4Translations.TOTAL = "Total";
@@ -24858,6 +24894,7 @@ class Z4Translations {
     Z4Translations.HORIZONTAL = "Orizzontale";
     Z4Translations.VERTICAL = "Verticale";
     Z4Translations.APPLY_ON = "Applica Su";
+    Z4Translations.APPLY = "Applica";
     Z4Translations.UNIFORM = "Uniforme";
     Z4Translations.PARTIAL = "Parziale";
     Z4Translations.TOTAL = "Totale";
