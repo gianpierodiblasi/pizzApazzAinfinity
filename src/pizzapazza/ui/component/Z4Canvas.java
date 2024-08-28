@@ -1362,6 +1362,13 @@ public class Z4Canvas extends JSComponent {
         this.mouseManager.drawKaleidoscope(this.ctxOverlay);
         this.ctxOverlay.restore();
       }
+
+      if ($exists(this.selectedDrawingTool) && this.selectedDrawingTool.useShapesAndPaths() && $exists(this.selectedGeometricShape)) {
+        this.ctxOverlay.save();
+        this.ctxOverlay.scale(this.zoom, this.zoom);
+        this.mouseManager.drawShapesAndPaths(this.ctxOverlay, this.selectedGeometricShape, this.drawGeometricShapeDirection);
+        this.ctxOverlay.restore();
+      }
     }
   }
 }

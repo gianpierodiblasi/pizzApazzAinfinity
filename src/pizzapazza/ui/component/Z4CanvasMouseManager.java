@@ -12,6 +12,7 @@ import pizzapazza.math.Z4DrawingPointIntent;
 import pizzapazza.math.Z4Math;
 import pizzapazza.math.Z4Point;
 import pizzapazza.math.Z4Vector;
+import pizzapazza.math.geometricshape.Z4GeometricShape;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.util.Z4Constants;
@@ -55,6 +56,9 @@ public class Z4CanvasMouseManager {
   private boolean pressed;
   private double onStartX;
   private double onStartY;
+  private int selectedControlPoint;
+
+  private final static int SELECTOR_RADIUS = 7;
 
   /**
    * Creates the object
@@ -360,5 +364,87 @@ public class Z4CanvasMouseManager {
     ctx.strokeStyle = Z4Constants.$getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke(path);
+  }
+
+  public void drawShapesAndPaths($CanvasRenderingContext2D ctx, Z4GeometricShape shape, boolean withDirection) {
+    Array<Z4Point> controlPoints = shape.getControlPoints();
+    Array<Integer> controlPointConnections = shape.getControlPointConnections();
+
+    ctx.save();
+    controlPoints.filter((point, index, array) -> index != this.selectedControlPoint).forEach((point, index, array) -> this.drawCircle(ctx, point, "black"));
+    this.drawCircle(ctx, controlPoints.$get(this.selectedControlPoint), "red");
+
+    for (int index = 0; index < controlPointConnections.length; index += 2) {
+      this.drawLine(ctx, controlPoints.$get(controlPointConnections.$get(index)), controlPoints.$get(controlPointConnections.$get(index + 1)));
+    }
+    this.drawPolyline(ctx, shape.getPath2D(), withDirection ? shape.getDirectionArrows() : new Array<>());
+    ctx.restore();
+  }
+
+  private void drawCircle($CanvasRenderingContext2D ctx, Z4Point point, String color) {
+    ctx.lineWidth = 3 / this.zoom;
+
+    Array<Double> dash = new Array<>();
+
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, Z4CanvasMouseManager.SELECTOR_RADIUS, 0, 2 * Math.PI);
+    ctx.strokeStyle = Z4Constants.$getStyle(color);
+    ctx.setLineDash(dash);
+    ctx.stroke();
+
+    dash.push(2.5, 2.5);
+
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, Z4CanvasMouseManager.SELECTOR_RADIUS, 0, 2 * Math.PI);
+    ctx.strokeStyle = Z4Constants.$getStyle("white");
+    ctx.setLineDash(dash);
+    ctx.stroke();
+  }
+
+  private void drawLine($CanvasRenderingContext2D ctx, Z4Point p1, Z4Point p2) {
+    ctx.lineWidth = 2 / this.zoom;
+
+    Array<Double> dash = new Array<>();
+
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    ctx.lineTo(p2.x, p2.y);
+    ctx.strokeStyle = Z4Constants.$getStyle("black");
+    ctx.setLineDash(dash);
+    ctx.stroke();
+
+    dash.push(2.5, 2.5);
+
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    ctx.lineTo(p2.x, p2.y);
+    ctx.strokeStyle = Z4Constants.$getStyle("white");
+    ctx.setLineDash(dash);
+    ctx.stroke();
+  }
+
+  private void drawPolyline($CanvasRenderingContext2D ctx, $Path2D path2D, Array<$Path2D> directionArrows) {
+    ctx.lineWidth = 3 / this.zoom;
+
+    Array<Double> dash = new Array<>();
+
+    ctx.strokeStyle = Z4Constants.$getStyle("green");
+    ctx.setLineDash(dash);
+    ctx.stroke(path2D);
+
+    dash.push(2.5, 2.5);
+
+    ctx.strokeStyle = Z4Constants.$getStyle("white");
+    ctx.setLineDash(dash);
+    ctx.stroke(path2D);
+
+    ctx.setLineDash(new Array<>());
+    directionArrows.forEach(directionArrow -> {
+      ctx.fillStyle = Z4Constants.$getStyle("white");
+      ctx.fill(directionArrow);
+
+      ctx.strokeStyle = Z4Constants.$getStyle("green");
+      ctx.stroke(directionArrow);
+    });
   }
 }

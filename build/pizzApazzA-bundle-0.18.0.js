@@ -3467,6 +3467,12 @@ class Z4Canvas extends JSComponent {
         this.mouseManager.drawKaleidoscope(this.ctxOverlay);
         this.ctxOverlay.restore();
       }
+      if (this.selectedDrawingTool && this.selectedDrawingTool.useShapesAndPaths() && this.selectedGeometricShape) {
+        this.ctxOverlay.save();
+        this.ctxOverlay.scale(this.zoom, this.zoom);
+        this.mouseManager.drawShapesAndPaths(this.ctxOverlay, this.selectedGeometricShape, this.drawGeometricShapeDirection);
+        this.ctxOverlay.restore();
+      }
     }
   }
 }
@@ -4290,6 +4296,10 @@ class Z4CanvasMouseManager {
 
    onStartY = 0.0;
 
+   selectedControlPoint = 0;
+
+  static  SELECTOR_RADIUS = 7;
+
   /**
    * Creates the object
    *
@@ -4579,6 +4589,72 @@ class Z4CanvasMouseManager {
     ctx.strokeStyle = Z4Constants.getStyle("white");
     ctx.setLineDash(dash);
     ctx.stroke(path);
+  }
+
+   drawShapesAndPaths(ctx, shape, withDirection) {
+    let controlPoints = shape.getControlPoints();
+    let controlPointConnections = shape.getControlPointConnections();
+    ctx.save();
+    controlPoints.filter((point, index, array) => index !== this.selectedControlPoint).forEach((point, index, array) => this.drawCircle(ctx, point, "black"));
+    this.drawCircle(ctx, controlPoints[this.selectedControlPoint], "red");
+    for (let index = 0; index < controlPointConnections.length; index += 2) {
+      this.drawLine(ctx, controlPoints[controlPointConnections[index]], controlPoints[controlPointConnections[index + 1]]);
+    }
+    this.drawPolyline(ctx, shape.getPath2D(), withDirection ? shape.getDirectionArrows() : new Array());
+    ctx.restore();
+  }
+
+   drawCircle(ctx, point, color) {
+    ctx.lineWidth = 3 / this.zoom;
+    let dash = new Array();
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, Z4CanvasMouseManager.SELECTOR_RADIUS, 0, 2 * Math.PI);
+    ctx.strokeStyle = Z4Constants.getStyle(color);
+    ctx.setLineDash(dash);
+    ctx.stroke();
+    dash.push(2.5, 2.5);
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, Z4CanvasMouseManager.SELECTOR_RADIUS, 0, 2 * Math.PI);
+    ctx.strokeStyle = Z4Constants.getStyle("white");
+    ctx.setLineDash(dash);
+    ctx.stroke();
+  }
+
+   drawLine(ctx, p1, p2) {
+    ctx.lineWidth = 2 / this.zoom;
+    let dash = new Array();
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    ctx.lineTo(p2.x, p2.y);
+    ctx.strokeStyle = Z4Constants.getStyle("black");
+    ctx.setLineDash(dash);
+    ctx.stroke();
+    dash.push(2.5, 2.5);
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    ctx.lineTo(p2.x, p2.y);
+    ctx.strokeStyle = Z4Constants.getStyle("white");
+    ctx.setLineDash(dash);
+    ctx.stroke();
+  }
+
+   drawPolyline(ctx, path2D, directionArrows) {
+    ctx.lineWidth = 3 / this.zoom;
+    let dash = new Array();
+    ctx.strokeStyle = Z4Constants.getStyle("green");
+    ctx.setLineDash(dash);
+    ctx.stroke(path2D);
+    dash.push(2.5, 2.5);
+    ctx.strokeStyle = Z4Constants.getStyle("white");
+    ctx.setLineDash(dash);
+    ctx.stroke(path2D);
+    ctx.setLineDash(new Array());
+    directionArrows.forEach(directionArrow => {
+      ctx.fillStyle = Z4Constants.getStyle("white");
+      ctx.fill(directionArrow);
+      ctx.strokeStyle = Z4Constants.getStyle("green");
+      ctx.stroke(directionArrow);
+    });
   }
 }
 /**
