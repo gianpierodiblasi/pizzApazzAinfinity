@@ -305,4 +305,28 @@ class Z4CanvasMouseManager {
     this.canvas.setSaved(false);
     this.ribbonHistoryPanel.startStandard();
   }
+
+  /**
+   * Draws the kaleidoscope center
+   *
+   * @param ctx The context used to draw the kaleidoscope
+   */
+   drawKaleidoscope(ctx) {
+    ctx.lineWidth = 3 / this.zoom;
+    let path = new Path2D();
+    path.moveTo(this.kaleidoscope.offsetX, this.kaleidoscope.offsetY - 15 / this.zoom);
+    path.lineTo(this.kaleidoscope.offsetX, this.kaleidoscope.offsetY + 15 / this.zoom);
+    path.moveTo(this.kaleidoscope.offsetX - 15 / this.zoom, this.kaleidoscope.offsetY);
+    path.lineTo(this.kaleidoscope.offsetX + 15 / this.zoom, this.kaleidoscope.offsetY);
+    path.moveTo(this.kaleidoscope.offsetX + 20 / this.zoom, this.kaleidoscope.offsetY);
+    path.arc(this.kaleidoscope.offsetX, this.kaleidoscope.offsetY, 20 / this.zoom, 0, Z4Math.TWO_PI);
+    let dash = new Array();
+    ctx.strokeStyle = Z4Constants.getStyle("black");
+    ctx.setLineDash(dash);
+    ctx.stroke(path);
+    dash.push(ctx.lineWidth, ctx.lineWidth);
+    ctx.strokeStyle = Z4Constants.getStyle("white");
+    ctx.setLineDash(dash);
+    ctx.stroke(path);
+  }
 }

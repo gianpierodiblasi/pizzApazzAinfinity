@@ -181,7 +181,7 @@ public class Z4Tracer extends Z4PointIterator {
       this.currentMultiplicityTotal = parseInt(this.multiplicity.next());
 
       double distance = Z4Math.distance(this.currentPoint.x, this.currentPoint.y, x, y);
-      if (this.drawingMode == Z4TracerDrawingMode.FREE) {
+      if (this.drawingMode == Z4TracerDrawingMode.FREE || this.drawingMode == Z4TracerDrawingMode.SHAPES_AND_PATHS) {
         this.path = Z4TracerPath.fromLine(this.currentPoint.x, this.currentPoint.y, x, y, this.surplus, this.envelopeStep);
 
         this.currentPoint = new Z4Point(x, y);
@@ -215,7 +215,6 @@ public class Z4Tracer extends Z4PointIterator {
         this.path = Z4TracerPath.fromLine(this.startPoint.x, this.startPoint.y, x, y, this.surplus, this.envelopeStep);
 
         this.hasNext = this.path.hasNext();
-      } else if (this.drawingMode == Z4TracerDrawingMode.SHAPES_AND_PATHS) {
       } else {
         this.hasNext = false;
       }

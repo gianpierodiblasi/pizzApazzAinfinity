@@ -1267,26 +1267,13 @@ class Z4Canvas extends JSComponent {
         this.textManager.drawText(this.ctxOverlay, true, this.drawGeometricShapeDirection);
         this.ctxOverlay.restore();
       }
-    } else if (this.kaleidoscope.multiplicity > 1) {
-      this.ctxOverlay.save();
-      this.ctxOverlay.scale(this.zoom, this.zoom);
-      this.ctxOverlay.lineWidth = 3 / this.zoom;
-      let path = new Path2D();
-      path.moveTo(this.kaleidoscope.offsetX, this.kaleidoscope.offsetY - 15 / this.zoom);
-      path.lineTo(this.kaleidoscope.offsetX, this.kaleidoscope.offsetY + 15 / this.zoom);
-      path.moveTo(this.kaleidoscope.offsetX - 15 / this.zoom, this.kaleidoscope.offsetY);
-      path.lineTo(this.kaleidoscope.offsetX + 15 / this.zoom, this.kaleidoscope.offsetY);
-      path.moveTo(this.kaleidoscope.offsetX + 20 / this.zoom, this.kaleidoscope.offsetY);
-      path.arc(this.kaleidoscope.offsetX, this.kaleidoscope.offsetY, 20 / this.zoom, 0, Z4Math.TWO_PI);
-      let dash = new Array();
-      this.ctxOverlay.strokeStyle = Z4Constants.getStyle("black");
-      this.ctxOverlay.setLineDash(dash);
-      this.ctxOverlay.stroke(path);
-      dash.push(this.ctxOverlay.lineWidth, this.ctxOverlay.lineWidth);
-      this.ctxOverlay.strokeStyle = Z4Constants.getStyle("white");
-      this.ctxOverlay.setLineDash(dash);
-      this.ctxOverlay.stroke(path);
-      this.ctxOverlay.restore();
+    } else {
+      if (this.kaleidoscope.multiplicity > 1) {
+        this.ctxOverlay.save();
+        this.ctxOverlay.scale(this.zoom, this.zoom);
+        this.mouseManager.drawKaleidoscope(this.ctxOverlay);
+        this.ctxOverlay.restore();
+      }
     }
   }
 }
