@@ -18,7 +18,7 @@ class Z4TracerDrawingMode {
    */
   static RULER = 'RULER';
   /**
-   * The shapes & paths mode
+   * The shapes &amp; paths mode
    */
   static SHAPES_AND_PATHS = 'SHAPES_AND_PATHS';
 }

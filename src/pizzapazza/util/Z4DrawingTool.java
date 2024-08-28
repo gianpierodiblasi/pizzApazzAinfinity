@@ -169,10 +169,10 @@ public class Z4DrawingTool implements Z4Nextable<Z4DrawingPoint> {
   }
 
   /**
-   * Checks if the Z4PointIterator uses the shapes & paths (for example a
+   * Checks if the Z4PointIterator uses the shapes &amp; paths (for example a
    * Z4Tracer with drawing mode property equals to SHAPES_AND_PATHS)
    *
-   * @return true if the Z4PointIterator uses the shapes & paths, false
+   * @return true if the Z4PointIterator uses the shapes &amp; paths, false
    * otherwise
    */
   public boolean useShapesAndPaths() {

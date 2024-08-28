@@ -106,10 +106,10 @@ class Z4PointIterator extends Z4NextableWithTwoParams {
   }
 
   /**
-   * Checks if this Z4PointIterator uses the shapes & paths (for example
+   * Checks if this Z4PointIterator uses the shapes &amp; paths (for example
    * a Z4Tracer with drawing mode property equals to SHAPES_AND_PATHS)
    *
-   * @return true if this Z4PointIterator uses the shapes & paths, false
+   * @return true if this Z4PointIterator uses the shapes &amp; paths, false
    * otherwise
    */
    useShapesAndPaths() {

@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10};
+var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -188,14 +188,14 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,boolean,pizzapazza.math.Z4FancifulValue,boolean,pizzapazza.math.Z4Rotation)">Z4Tracer</a></span>&#8203;(<a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;multiplicity,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,boolean,pizzapazza.math.Z4FancifulValue,pizzapazza.iterator.Z4TracerDrawingMode,pizzapazza.math.Z4Rotation)">Z4Tracer</a></span>&#8203;(<a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;multiplicity,
         <a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;push,
         <a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;attack,
         <a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;sustain,
         <a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;release,
         boolean&nbsp;endlessSustain,
         <a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;step,
-        boolean&nbsp;assistedDrawing,
+        <a href="Z4TracerDrawingMode.html" title="enum in pizzapazza.iterator">Z4TracerDrawingMode</a>&nbsp;drawingMode,
         <a href="../math/Z4Rotation.html" title="class in pizzapazza.math">Z4Rotation</a>&nbsp;rotation)</code></th>
 <td class="colLast">
 <div class="block">Creates the object</div>
@@ -257,76 +257,84 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 </td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="Z4TracerDrawingMode.html" title="enum in pizzapazza.iterator">Z4TracerDrawingMode</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDrawingMode()">getDrawingMode</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the drawing mode</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInfinitePointGeneratorSleep()">getInfinitePointGeneratorSleep</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the sleeping time between a point generation and the successive</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMultiplicity()">getMultiplicity</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the multiplicity</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNextCountOnSTOP()">getNextCountOnSTOP</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the count of next points to draw on STOP action</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPush()">getPush</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the push</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRelease()">getRelease</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the release</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStep()">getStep</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the step</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSustain()">getSustain</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the sustain</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="Z4PointIteratorType.html" title="enum in pizzapazza.iterator">Z4PointIteratorType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getType()">getType</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the point iterator type</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isAssistedDrawing()">isAssistedDrawing</a></span>()</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isDrawBoundsWhileMoving()">isDrawBoundsWhileMoving</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Checks if the assisted drawing is active</div>
+<div class="block">Checks if this Z4PointIterator has to draw bounds while moving (for example
+ a Z4Tracer with drawing mode property equals to RULER)</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isEndlessSustain()">isEndlessSustain</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Checks if the sustain is endless</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInfinitePointGenerator()">isInfinitePointGenerator</a></span>()</code></th>
 <td class="colLast">
@@ -334,7 +342,7 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
  an airbrush)</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code><a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#next(pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">next</a></span>&#8203;(<a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;color,
     <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression)</code></th>
@@ -342,11 +350,19 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <div class="block">Returns the next value</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>simulation.js.$Object</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toJSON()">toJSON</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns this object as a JSON object</div>
+</td>
+</tr>
+<tr id="i18" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#useShapesAndPaths()">useShapesAndPaths</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Checks if this Z4PointIterator uses the shapes &amp; paths (for example
+ a Z4Tracer with drawing mode property equals to SHAPES_AND_PATHS)</div>
 </td>
 </tr>
 </table>
@@ -380,7 +396,7 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,boolean,pizzapazza.math.Z4FancifulValue,boolean,pizzapazza.math.Z4Rotation)">
+<a id="&lt;init&gt;(pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,pizzapazza.math.Z4FancifulValue,boolean,pizzapazza.math.Z4FancifulValue,pizzapazza.iterator.Z4TracerDrawingMode,pizzapazza.math.Z4Rotation)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -393,7 +409,7 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
                 <a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;release,
                 boolean&nbsp;endlessSustain,
                 <a href="../math/Z4FancifulValue.html" title="class in pizzapazza.math">Z4FancifulValue</a>&nbsp;step,
-                boolean&nbsp;assistedDrawing,
+                <a href="Z4TracerDrawingMode.html" title="enum in pizzapazza.iterator">Z4TracerDrawingMode</a>&nbsp;drawingMode,
                 <a href="../math/Z4Rotation.html" title="class in pizzapazza.math">Z4Rotation</a>&nbsp;rotation)</pre>
 <div class="block">Creates the object</div>
 <dl>
@@ -405,7 +421,7 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <dd><code>release</code> - The release</dd>
 <dd><code>endlessSustain</code> - true for an endless sustain, false otherwise</dd>
 <dd><code>step</code> - The step</dd>
-<dd><code>assistedDrawing</code> - true to use the assisted drawing, false otherwise</dd>
+<dd><code>drawingMode</code> - The drawing mode</dd>
 <dd><code>rotation</code> - The rotation</dd>
 </dl>
 </li>
@@ -535,17 +551,17 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 </dl>
 </li>
 </ul>
-<a id="isAssistedDrawing()">
+<a id="getDrawingMode()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>isAssistedDrawing</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;isAssistedDrawing()</pre>
-<div class="block">Checks if the assisted drawing is active</div>
+<h4>getDrawingMode</h4>
+<pre class="methodSignature">public&nbsp;<a href="Z4TracerDrawingMode.html" title="enum in pizzapazza.iterator">Z4TracerDrawingMode</a>&nbsp;getDrawingMode()</pre>
+<div class="block">Returns the drawing mode</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the assisted drawing is active, false otherwise</dd>
+<dd>The drawing mode</dd>
 </dl>
 </li>
 </ul>
@@ -649,6 +665,44 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The sleeping time between a point generation and the successive (in
  milliseconds)</dd>
+</dl>
+</li>
+</ul>
+<a id="isDrawBoundsWhileMoving()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isDrawBoundsWhileMoving</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isDrawBoundsWhileMoving()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Z4PointIterator.html#isDrawBoundsWhileMoving()">Z4PointIterator</a></code></span></div>
+<div class="block">Checks if this Z4PointIterator has to draw bounds while moving (for example
+ a Z4Tracer with drawing mode property equals to RULER)</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Z4PointIterator.html#isDrawBoundsWhileMoving()">isDrawBoundsWhileMoving</a></code>&nbsp;in class&nbsp;<code><a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if this Z4PointIterator has to draw bounds while moving, false
+ otherwise</dd>
+</dl>
+</li>
+</ul>
+<a id="useShapesAndPaths()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>useShapesAndPaths</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;useShapesAndPaths()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Z4PointIterator.html#useShapesAndPaths()">Z4PointIterator</a></code></span></div>
+<div class="block">Checks if this Z4PointIterator uses the shapes &amp; paths (for example
+ a Z4Tracer with drawing mode property equals to SHAPES_AND_PATHS)</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Z4PointIterator.html#useShapesAndPaths()">useShapesAndPaths</a></code>&nbsp;in class&nbsp;<code><a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if this Z4PointIterator uses the shapes &amp; paths, false
+ otherwise</dd>
 </dl>
 </li>
 </ul>

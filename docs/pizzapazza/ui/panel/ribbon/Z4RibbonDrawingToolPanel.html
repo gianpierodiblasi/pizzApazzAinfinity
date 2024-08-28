@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -209,19 +209,33 @@ extends <a href="Z4AbstractRibbonPanel.html" title="class in pizzapazza.ui.panel
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshCanvasSize(boolean)">refreshCanvasSize</a></span>&#8203;(boolean&nbsp;resetOnlySize)</code></th>
+<td class="colLast">
+<div class="block">Refreshes the canvas size</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#reset()">reset</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Resets the drawing tools preview</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setApplyEnabled(boolean)">setApplyEnabled</a></span>&#8203;(boolean&nbsp;b)</code></th>
+<td class="colLast">
+<div class="block">Enables the apply button</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCanvas(pizzapazza.ui.component.Z4Canvas)">setCanvas</a></span>&#8203;(<a href="../../component/Z4Canvas.html" title="class in pizzapazza.ui.component">Z4Canvas</a>&nbsp;canvas)</code></th>
 <td class="colLast">
 <div class="block">Sets the canvas to manage</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStatusPanel(pizzapazza.ui.panel.Z4StatusPanel)">setStatusPanel</a></span>&#8203;(<a href="../Z4StatusPanel.html" title="class in pizzapazza.ui.panel">Z4StatusPanel</a>&nbsp;statusPanel)</code></th>
 <td class="colLast">
@@ -293,6 +307,20 @@ extends <a href="Z4AbstractRibbonPanel.html" title="class in pizzapazza.ui.panel
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="refreshCanvasSize(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>refreshCanvasSize</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;refreshCanvasSize&#8203;(boolean&nbsp;resetOnlySize)</pre>
+<div class="block">Refreshes the canvas size</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>resetOnlySize</code> - true to reset only the canvas size, false otherwise</dd>
+</dl>
+</li>
+</ul>
 <a id="setCanvas(pizzapazza.ui.component.Z4Canvas)">
 <!--   -->
 </a>
@@ -334,7 +362,7 @@ extends <a href="Z4AbstractRibbonPanel.html" title="class in pizzapazza.ui.panel
 <a id="addDrawingToolPreview(pizzapazza.util.Z4DrawingTool)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>addDrawingToolPreview</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;addDrawingToolPreview&#8203;(<a href="../../../util/Z4DrawingTool.html" title="class in pizzapazza.util">Z4DrawingTool</a>&nbsp;drawingTool)</pre>
@@ -342,6 +370,20 @@ extends <a href="Z4AbstractRibbonPanel.html" title="class in pizzapazza.ui.panel
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>drawingTool</code> - The drawing tool</dd>
+</dl>
+</li>
+</ul>
+<a id="setApplyEnabled(boolean)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setApplyEnabled</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setApplyEnabled&#8203;(boolean&nbsp;b)</pre>
+<div class="block">Enables the apply button</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>b</code> - true to enable the apply button, false otherwise</dd>
 </dl>
 </li>
 </ul>

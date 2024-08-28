@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -280,13 +280,21 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isDrawBoundsWhileMoving()">isDrawBoundsWhileMoving</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Checks if this Z4PointIterator has to draw bounds while moving (for example
+ a Z4Tracer with drawing mode property equals to RULER)</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInfinitePointGenerator()">isInfinitePointGenerator</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Checks if this Z4PointIterator is an infinite point generator (for example
  an airbrush)</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../math/Z4DrawingPoint.html" title="class in pizzapazza.math">Z4DrawingPoint</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#next(pizzapazza.color.Z4SpatioTemporalColor,pizzapazza.color.Z4ColorProgression)">next</a></span>&#8203;(<a href="../color/Z4SpatioTemporalColor.html" title="class in pizzapazza.color">Z4SpatioTemporalColor</a>&nbsp;color,
     <a href="../color/Z4ColorProgression.html" title="class in pizzapazza.color">Z4ColorProgression</a>&nbsp;progression)</code></th>
@@ -294,11 +302,19 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <div class="block">Returns the next value</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>simulation.js.$Object</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toJSON()">toJSON</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns this object as a JSON object</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#useShapesAndPaths()">useShapesAndPaths</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Checks if this Z4PointIterator uses the shapes &amp; paths (for example
+ a Z4Tracer with drawing mode property equals to SHAPES_AND_PATHS)</div>
 </td>
 </tr>
 </table>
@@ -505,6 +521,44 @@ extends <a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4Po
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The sleeping time between a point generation and the successive (in
  milliseconds)</dd>
+</dl>
+</li>
+</ul>
+<a id="isDrawBoundsWhileMoving()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isDrawBoundsWhileMoving</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isDrawBoundsWhileMoving()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Z4PointIterator.html#isDrawBoundsWhileMoving()">Z4PointIterator</a></code></span></div>
+<div class="block">Checks if this Z4PointIterator has to draw bounds while moving (for example
+ a Z4Tracer with drawing mode property equals to RULER)</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Z4PointIterator.html#isDrawBoundsWhileMoving()">isDrawBoundsWhileMoving</a></code>&nbsp;in class&nbsp;<code><a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if this Z4PointIterator has to draw bounds while moving, false
+ otherwise</dd>
+</dl>
+</li>
+</ul>
+<a id="useShapesAndPaths()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>useShapesAndPaths</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;useShapesAndPaths()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Z4PointIterator.html#useShapesAndPaths()">Z4PointIterator</a></code></span></div>
+<div class="block">Checks if this Z4PointIterator uses the shapes &amp; paths (for example
+ a Z4Tracer with drawing mode property equals to SHAPES_AND_PATHS)</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Z4PointIterator.html#useShapesAndPaths()">useShapesAndPaths</a></code>&nbsp;in class&nbsp;<code><a href="Z4PointIterator.html" title="class in pizzapazza.iterator">Z4PointIterator</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if this Z4PointIterator uses the shapes &amp; paths, false
+ otherwise</dd>
 </dl>
 </li>
 </ul>

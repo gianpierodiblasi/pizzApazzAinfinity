@@ -20,7 +20,7 @@ public enum Z4TracerDrawingMode {
    */
   RULER,
   /**
-   * The shapes & paths mode
+   * The shapes &amp; paths mode
    */
   SHAPES_AND_PATHS;
 }

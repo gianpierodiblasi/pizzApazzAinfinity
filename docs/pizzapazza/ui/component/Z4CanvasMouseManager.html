@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -195,27 +195,56 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#applyGeometricShape()">applyGeometricShape</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Applies the selected geometric shape to the selected drawing tool</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#drawGeometricShape(simulation.dom.$CanvasRenderingContext2D,boolean)">drawGeometricShape</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx,
+                  boolean&nbsp;withDirection)</code></th>
+<td class="colLast">
+<div class="block">Draws the geometric shape</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#drawKaleidoscope(simulation.dom.$CanvasRenderingContext2D)">drawKaleidoscope</a></span>&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx)</code></th>
+<td class="colLast">
+<div class="block">Draws the kaleidoscope center</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onMouse(def.dom.MouseEvent,java.lang.String)">onMouse</a></span>&#8203;(def.dom.MouseEvent&nbsp;event,
        java.lang.String&nbsp;type)</code></th>
 <td class="colLast">
 <div class="block">The mouse event manager</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeCanvasOverlayMode(pizzapazza.ui.component.Z4CanvasOverlayMode)">removeCanvasOverlayMode</a></span>&#8203;(<a href="Z4CanvasOverlayMode.html" title="enum in pizzapazza.ui.component">Z4CanvasOverlayMode</a>&nbsp;canvasOverlayMode)</code></th>
 <td class="colLast">
 <div class="block">Removes a canvas overlay mode</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDrawingDirection(pizzapazza.math.Z4DrawingDirection)">setDrawingDirection</a></span>&#8203;(<a href="../../math/Z4DrawingDirection.html" title="enum in pizzapazza.math">Z4DrawingDirection</a>&nbsp;drawingDirection)</code></th>
 <td class="colLast">
 <div class="block">Sets the drawing direction</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setKaleidoscope(pizzapazza.util.Z4Kaleidoscope)">setKaleidoscope</a></span>&#8203;(<a href="../../util/Z4Kaleidoscope.html" title="class in pizzapazza.util">Z4Kaleidoscope</a>&nbsp;kaleidoscope)</code></th>
+<td class="colLast">
+<div class="block">Sets the kaleidoscope</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMagneticGrid(javascript.awt.Point,int,boolean)">setMagneticGrid</a></span>&#8203;(javascript.awt.Point&nbsp;center,
                int&nbsp;plotWidth,
@@ -224,42 +253,49 @@ extends java.lang.Object</pre>
 <div class="block">Sets the magnetic grid</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setRibbonHistoryPanel(pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel)">setRibbonHistoryPanel</a></span>&#8203;(<a href="../panel/ribbon/Z4RibbonHistoryPanel.html" title="class in pizzapazza.ui.panel.ribbon">Z4RibbonHistoryPanel</a>&nbsp;ribbonHistoryPanel)</code></th>
 <td class="colLast">
 <div class="block">Sets the ribbon history panel</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSelectedDrawingTool(pizzapazza.util.Z4DrawingTool)">setSelectedDrawingTool</a></span>&#8203;(<a href="../../util/Z4DrawingTool.html" title="class in pizzapazza.util">Z4DrawingTool</a>&nbsp;selectedDrawingTool)</code></th>
 <td class="colLast">
 <div class="block">Sets the selected drawing tool</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSelectedGeometricShape(pizzapazza.math.geometricshape.Z4GeometricShape)">setSelectedGeometricShape</a></span>&#8203;(<a href="../../math/geometricshape/Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a>&nbsp;selectedGeometricShape)</code></th>
+<td class="colLast">
+<div class="block">Sets the selected geometric shape</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSelectedLayer(pizzapazza.util.Z4Layer)">setSelectedLayer</a></span>&#8203;(<a href="../../util/Z4Layer.html" title="class in pizzapazza.util">Z4Layer</a>&nbsp;selectedLayer)</code></th>
 <td class="colLast">
 <div class="block">Sets the selected layer</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSize(javascript.awt.Dimension)">setSize</a></span>&#8203;(javascript.awt.Dimension&nbsp;size)</code></th>
 <td class="colLast">
 <div class="block">Sets the size</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStatusPanel(pizzapazza.ui.panel.Z4StatusPanel)">setStatusPanel</a></span>&#8203;(<a href="../panel/Z4StatusPanel.html" title="class in pizzapazza.ui.panel">Z4StatusPanel</a>&nbsp;statusPanel)</code></th>
 <td class="colLast">
 <div class="block">Sets the status panel</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setZoom(double)">setZoom</a></span>&#8203;(double&nbsp;zoom)</code></th>
 <td class="colLast">
@@ -355,6 +391,34 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>drawingDirection</code> - The drawing direction</dd>
+</dl>
+</li>
+</ul>
+<a id="setKaleidoscope(pizzapazza.util.Z4Kaleidoscope)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setKaleidoscope</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setKaleidoscope&#8203;(<a href="../../util/Z4Kaleidoscope.html" title="class in pizzapazza.util">Z4Kaleidoscope</a>&nbsp;kaleidoscope)</pre>
+<div class="block">Sets the kaleidoscope</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>kaleidoscope</code> - The kaleidoscope</dd>
+</dl>
+</li>
+</ul>
+<a id="setSelectedGeometricShape(pizzapazza.math.geometricshape.Z4GeometricShape)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSelectedGeometricShape</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setSelectedGeometricShape&#8203;(<a href="../../math/geometricshape/Z4GeometricShape.html" title="class in pizzapazza.math.geometricshape">Z4GeometricShape</a>&nbsp;selectedGeometricShape)</pre>
+<div class="block">Sets the selected geometric shape</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>selectedGeometricShape</code> - The selected geometric shape</dd>
 </dl>
 </li>
 </ul>
@@ -463,7 +527,7 @@ extends java.lang.Object</pre>
 <a id="onMouse(def.dom.MouseEvent,java.lang.String)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>onMouse</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;onMouse&#8203;(def.dom.MouseEvent&nbsp;event,
@@ -473,6 +537,47 @@ extends java.lang.Object</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>event</code> - The mouse event</dd>
 <dd><code>type</code> - The event type</dd>
+</dl>
+</li>
+</ul>
+<a id="drawKaleidoscope(simulation.dom.$CanvasRenderingContext2D)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>drawKaleidoscope</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;drawKaleidoscope&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx)</pre>
+<div class="block">Draws the kaleidoscope center</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>ctx</code> - The context used to draw the kaleidoscope</dd>
+</dl>
+</li>
+</ul>
+<a id="applyGeometricShape()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>applyGeometricShape</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;applyGeometricShape()</pre>
+<div class="block">Applies the selected geometric shape to the selected drawing tool</div>
+</li>
+</ul>
+<a id="drawGeometricShape(simulation.dom.$CanvasRenderingContext2D,boolean)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>drawGeometricShape</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;drawGeometricShape&#8203;(simulation.dom.$CanvasRenderingContext2D&nbsp;ctx,
+                               boolean&nbsp;withDirection)</pre>
+<div class="block">Draws the geometric shape</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>ctx</code> - The context used to draw the kaleidoscope</dd>
+<dd><code>withDirection</code> - true to show an arrow representing the direction of
+ the path, false otherwise</dd>
 </dl>
 </li>
 </ul>
