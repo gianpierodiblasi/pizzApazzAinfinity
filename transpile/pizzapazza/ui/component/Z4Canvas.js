@@ -116,6 +116,9 @@ class Z4Canvas extends JSComponent {
     this.canvas.addEventListener("mousemove", event => this.mouseManager.onMouse(event, "move"));
     this.canvas.addEventListener("mouseup", event => this.mouseManager.onMouse(event, "up"));
     this.canvasOverlay.classList.add("z4canvas-overlay");
+    this.canvasOverlay.addEventListener("mouseenter", event => this.mouseManager.onMouse(event, "enter"));
+    this.canvasOverlay.addEventListener("mouseleave", event => this.mouseManager.onMouse(event, "leave"));
+    this.canvasOverlay.addEventListener("mousedown", event => this.mouseManager.onMouse(event, "down"));
     this.canvasOverlay.addEventListener("mousemove", event => this.mouseManager.onMouse(event, "move"));
     this.canvasOverlay.addEventListener("mouseup", event => this.mouseManager.onMouse(event, "up"));
     this.canvasOverlay.addEventListener("mouseenter", event => this.textManager.onMouse(event, "enter"));
@@ -608,7 +611,7 @@ class Z4Canvas extends JSComponent {
       this.mouseManager.removeCanvasOverlayMode(canvasOverlayMode);
       this.textManager.removeCanvasOverlayMode(canvasOverlayMode);
     }
-    this.canvasOverlay.style.pointerEvents = this.canvasOverlayModes.size ? "auto" : "none";
+    this.canvasOverlay.style.pointerEvents = this.canvasOverlayModes.size || (this.selectedDrawingTool && this.selectedDrawingTool.useShapesAndPaths() && this.selectedGeometricShape) ? "auto" : "none";
     this.drawCanvasOverlay();
   }
 
@@ -724,6 +727,7 @@ class Z4Canvas extends JSComponent {
    setSelectedDrawingToolAndAddDrawingToolPreview(selectedDrawingTool, add) {
     this.selectedDrawingTool = selectedDrawingTool;
     this.mouseManager.setSelectedDrawingTool(selectedDrawingTool);
+    this.canvasOverlay.style.pointerEvents = this.canvasOverlayModes.size || (this.selectedDrawingTool && this.selectedDrawingTool.useShapesAndPaths() && this.selectedGeometricShape) ? "auto" : "none";
     if (this.selectedDrawingTool.useShapesAndPaths()) {
       this.shapesAndPathsPanel.getStyle().removeProperty("display");
     } else {
@@ -1102,6 +1106,8 @@ class Z4Canvas extends JSComponent {
    */
    setSelectedGeometricShapeAndAddGeometricShapePreview(shape, selectedControlPoint, add) {
     this.selectedGeometricShape = shape;
+    this.mouseManager.setSelectedGeometricShape(shape);
+    this.canvasOverlay.style.pointerEvents = this.canvasOverlayModes.size || (this.selectedDrawingTool && this.selectedDrawingTool.useShapesAndPaths() && this.selectedGeometricShape) ? "auto" : "none";
     this.ribbonTextPanel.setGeometricShape(shape, selectedControlPoint);
     if (add) {
       this.shapesAndPathsPanel.addGeometricShapePreview(this.selectedGeometricShape);
@@ -1277,7 +1283,7 @@ class Z4Canvas extends JSComponent {
       if (this.selectedDrawingTool && this.selectedDrawingTool.useShapesAndPaths() && this.selectedGeometricShape) {
         this.ctxOverlay.save();
         this.ctxOverlay.scale(this.zoom, this.zoom);
-        this.mouseManager.drawShapesAndPaths(this.ctxOverlay, this.selectedGeometricShape, this.drawGeometricShapeDirection);
+        this.mouseManager.drawGeometricShape(this.ctxOverlay, this.drawGeometricShapeDirection);
         this.ctxOverlay.restore();
       }
     }

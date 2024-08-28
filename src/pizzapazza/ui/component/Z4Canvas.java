@@ -131,6 +131,9 @@ public class Z4Canvas extends JSComponent {
     this.canvas.addEventListener("mouseup", event -> this.mouseManager.onMouse((MouseEvent) event, "up"));
 
     this.canvasOverlay.classList.add("z4canvas-overlay");
+    this.canvasOverlay.addEventListener("mouseenter", event -> this.mouseManager.onMouse((MouseEvent) event, "enter"));
+    this.canvasOverlay.addEventListener("mouseleave", event -> this.mouseManager.onMouse((MouseEvent) event, "leave"));
+    this.canvasOverlay.addEventListener("mousedown", event -> this.mouseManager.onMouse((MouseEvent) event, "down"));
     this.canvasOverlay.addEventListener("mousemove", event -> this.mouseManager.onMouse((MouseEvent) event, "move"));
     this.canvasOverlay.addEventListener("mouseup", event -> this.mouseManager.onMouse((MouseEvent) event, "up"));
 
@@ -657,7 +660,7 @@ public class Z4Canvas extends JSComponent {
       this.textManager.removeCanvasOverlayMode(canvasOverlayMode);
     }
 
-    this.canvasOverlay.style.pointerEvents = $exists(this.canvasOverlayModes.size) ? "auto" : "none";
+    this.canvasOverlay.style.pointerEvents = $exists(this.canvasOverlayModes.size) || ($exists(this.selectedDrawingTool) && this.selectedDrawingTool.useShapesAndPaths() && $exists(this.selectedGeometricShape)) ? "auto" : "none";
     this.drawCanvasOverlay();
   }
 
@@ -779,6 +782,8 @@ public class Z4Canvas extends JSComponent {
   public void setSelectedDrawingToolAndAddDrawingToolPreview(Z4DrawingTool selectedDrawingTool, boolean add) {
     this.selectedDrawingTool = selectedDrawingTool;
     this.mouseManager.setSelectedDrawingTool(selectedDrawingTool);
+
+    this.canvasOverlay.style.pointerEvents = $exists(this.canvasOverlayModes.size) || ($exists(this.selectedDrawingTool) && this.selectedDrawingTool.useShapesAndPaths() && $exists(this.selectedGeometricShape)) ? "auto" : "none";
 
     if (this.selectedDrawingTool.useShapesAndPaths()) {
       this.shapesAndPathsPanel.getStyle().removeProperty("display");
@@ -1172,6 +1177,10 @@ public class Z4Canvas extends JSComponent {
    */
   public void setSelectedGeometricShapeAndAddGeometricShapePreview(Z4GeometricShape shape, int selectedControlPoint, boolean add) {
     this.selectedGeometricShape = shape;
+    this.mouseManager.setSelectedGeometricShape(shape);
+
+    this.canvasOverlay.style.pointerEvents = $exists(this.canvasOverlayModes.size) || ($exists(this.selectedDrawingTool) && this.selectedDrawingTool.useShapesAndPaths() && $exists(this.selectedGeometricShape)) ? "auto" : "none";
+
     this.ribbonTextPanel.setGeometricShape(shape, selectedControlPoint);
 
     if (add) {
@@ -1366,7 +1375,7 @@ public class Z4Canvas extends JSComponent {
       if ($exists(this.selectedDrawingTool) && this.selectedDrawingTool.useShapesAndPaths() && $exists(this.selectedGeometricShape)) {
         this.ctxOverlay.save();
         this.ctxOverlay.scale(this.zoom, this.zoom);
-        this.mouseManager.drawShapesAndPaths(this.ctxOverlay, this.selectedGeometricShape, this.drawGeometricShapeDirection);
+        this.mouseManager.drawGeometricShape(this.ctxOverlay, this.drawGeometricShapeDirection);
         this.ctxOverlay.restore();
       }
     }

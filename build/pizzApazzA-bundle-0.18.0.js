@@ -2309,6 +2309,9 @@ class Z4Canvas extends JSComponent {
     this.canvas.addEventListener("mousemove", event => this.mouseManager.onMouse(event, "move"));
     this.canvas.addEventListener("mouseup", event => this.mouseManager.onMouse(event, "up"));
     this.canvasOverlay.classList.add("z4canvas-overlay");
+    this.canvasOverlay.addEventListener("mouseenter", event => this.mouseManager.onMouse(event, "enter"));
+    this.canvasOverlay.addEventListener("mouseleave", event => this.mouseManager.onMouse(event, "leave"));
+    this.canvasOverlay.addEventListener("mousedown", event => this.mouseManager.onMouse(event, "down"));
     this.canvasOverlay.addEventListener("mousemove", event => this.mouseManager.onMouse(event, "move"));
     this.canvasOverlay.addEventListener("mouseup", event => this.mouseManager.onMouse(event, "up"));
     this.canvasOverlay.addEventListener("mouseenter", event => this.textManager.onMouse(event, "enter"));
@@ -2801,7 +2804,7 @@ class Z4Canvas extends JSComponent {
       this.mouseManager.removeCanvasOverlayMode(canvasOverlayMode);
       this.textManager.removeCanvasOverlayMode(canvasOverlayMode);
     }
-    this.canvasOverlay.style.pointerEvents = this.canvasOverlayModes.size ? "auto" : "none";
+    this.canvasOverlay.style.pointerEvents = this.canvasOverlayModes.size || (this.selectedDrawingTool && this.selectedDrawingTool.useShapesAndPaths() && this.selectedGeometricShape) ? "auto" : "none";
     this.drawCanvasOverlay();
   }
 
@@ -2917,6 +2920,7 @@ class Z4Canvas extends JSComponent {
    setSelectedDrawingToolAndAddDrawingToolPreview(selectedDrawingTool, add) {
     this.selectedDrawingTool = selectedDrawingTool;
     this.mouseManager.setSelectedDrawingTool(selectedDrawingTool);
+    this.canvasOverlay.style.pointerEvents = this.canvasOverlayModes.size || (this.selectedDrawingTool && this.selectedDrawingTool.useShapesAndPaths() && this.selectedGeometricShape) ? "auto" : "none";
     if (this.selectedDrawingTool.useShapesAndPaths()) {
       this.shapesAndPathsPanel.getStyle().removeProperty("display");
     } else {
@@ -3295,6 +3299,8 @@ class Z4Canvas extends JSComponent {
    */
    setSelectedGeometricShapeAndAddGeometricShapePreview(shape, selectedControlPoint, add) {
     this.selectedGeometricShape = shape;
+    this.mouseManager.setSelectedGeometricShape(shape);
+    this.canvasOverlay.style.pointerEvents = this.canvasOverlayModes.size || (this.selectedDrawingTool && this.selectedDrawingTool.useShapesAndPaths() && this.selectedGeometricShape) ? "auto" : "none";
     this.ribbonTextPanel.setGeometricShape(shape, selectedControlPoint);
     if (add) {
       this.shapesAndPathsPanel.addGeometricShapePreview(this.selectedGeometricShape);
@@ -3470,7 +3476,7 @@ class Z4Canvas extends JSComponent {
       if (this.selectedDrawingTool && this.selectedDrawingTool.useShapesAndPaths() && this.selectedGeometricShape) {
         this.ctxOverlay.save();
         this.ctxOverlay.scale(this.zoom, this.zoom);
-        this.mouseManager.drawShapesAndPaths(this.ctxOverlay, this.selectedGeometricShape, this.drawGeometricShapeDirection);
+        this.mouseManager.drawGeometricShape(this.ctxOverlay, this.drawGeometricShapeDirection);
         this.ctxOverlay.restore();
       }
     }
@@ -4274,6 +4280,8 @@ class Z4CanvasMouseManager {
 
    kaleidoscope = new Z4Kaleidoscope(1, 0, 0);
 
+   selectedGeometricShape = null;
+
    centerGrid = null;
 
    plotWidthGrid = 0;
@@ -4345,6 +4353,15 @@ class Z4CanvasMouseManager {
    */
    setKaleidoscope(kaleidoscope) {
     this.kaleidoscope = kaleidoscope;
+  }
+
+  /**
+   * Sets the selected geometric shape
+   *
+   * @param selectedGeometricShape The selected geometric shape
+   */
+   setSelectedGeometricShape(selectedGeometricShape) {
+    this.selectedGeometricShape = selectedGeometricShape;
   }
 
   /**
@@ -4435,6 +4452,43 @@ class Z4CanvasMouseManager {
           break;
       }
     } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT)) {
+    } else if (this.selectedDrawingTool && this.selectedDrawingTool.useShapesAndPaths()) {
+      if (this.selectedGeometricShape) {
+        switch(type) {
+          case "enter":
+            break;
+          case "down":
+            this.selectedGeometricShape.getControlPoints().forEach((point, index, array) => {
+              if (Z4Math.distance(point.x, point.y, x, y) <= Z4CanvasMouseManager.SELECTOR_RADIUS) {
+                this.pressed = true;
+                this.selectedControlPoint = index;
+                this.selectedGeometricShape.getGeometricShapePreview().setSelectedControlPoint(index);
+              }
+            });
+            break;
+          case "move":
+            this.statusPanel.setMousePosition(xParsed, yParsed);
+            if (this.pressed) {
+              this.selectedGeometricShape.getGeometricShapePreview().setSelectedControlPointPosition(xParsed, yParsed);
+            } else {
+              this.canvas.getChilStyleByQuery(".z4canvas-overlay").cursor = "default";
+              this.selectedGeometricShape.getControlPoints().forEach((point, index, array) => {
+                if (Z4Math.distance(point.x, point.y, x, y) <= Z4CanvasMouseManager.SELECTOR_RADIUS) {
+                  this.canvas.getChilStyleByQuery(".z4canvas-overlay").cursor = "pointer";
+                }
+              });
+            }
+            break;
+          case "up":
+            this.pressed = false;
+            break;
+          case "leave":
+            if (this.pressed) {
+              this.pressed = false;
+            }
+            break;
+        }
+      }
     } else {
       switch(type) {
         case "enter":
@@ -4591,16 +4645,23 @@ class Z4CanvasMouseManager {
     ctx.stroke(path);
   }
 
-   drawShapesAndPaths(ctx, shape, withDirection) {
-    let controlPoints = shape.getControlPoints();
-    let controlPointConnections = shape.getControlPointConnections();
+  /**
+   * Draws the geometric shape
+   *
+   * @param ctx The context used to draw the kaleidoscope
+   * @param withDirection true to show an arrow representing the direction of
+   * the path, false otherwise
+   */
+   drawGeometricShape(ctx, withDirection) {
+    let controlPoints = this.selectedGeometricShape.getControlPoints();
+    let controlPointConnections = this.selectedGeometricShape.getControlPointConnections();
     ctx.save();
     controlPoints.filter((point, index, array) => index !== this.selectedControlPoint).forEach((point, index, array) => this.drawCircle(ctx, point, "black"));
     this.drawCircle(ctx, controlPoints[this.selectedControlPoint], "red");
     for (let index = 0; index < controlPointConnections.length; index += 2) {
       this.drawLine(ctx, controlPoints[controlPointConnections[index]], controlPoints[controlPointConnections[index + 1]]);
     }
-    this.drawPolyline(ctx, shape.getPath2D(), withDirection ? shape.getDirectionArrows() : new Array());
+    this.drawPolyline(ctx, this.selectedGeometricShape.getPath2D(), withDirection ? this.selectedGeometricShape.getDirectionArrows() : new Array());
     ctx.restore();
   }
 

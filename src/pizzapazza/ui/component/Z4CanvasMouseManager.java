@@ -40,6 +40,7 @@ public class Z4CanvasMouseManager {
   private Z4DrawingTool selectedDrawingTool;
   private Z4DrawingDirection drawingDirection = Z4DrawingDirection.FREE;
   private Z4Kaleidoscope kaleidoscope = new Z4Kaleidoscope(1, 0, 0);
+  private Z4GeometricShape selectedGeometricShape;
 
   private Point centerGrid;
   private int plotWidthGrid;
@@ -105,6 +106,15 @@ public class Z4CanvasMouseManager {
    */
   public void setKaleidoscope(Z4Kaleidoscope kaleidoscope) {
     this.kaleidoscope = kaleidoscope;
+  }
+
+  /**
+   * Sets the selected geometric shape
+   *
+   * @param selectedGeometricShape The selected geometric shape
+   */
+  public void setSelectedGeometricShape(Z4GeometricShape selectedGeometricShape) {
+    this.selectedGeometricShape = selectedGeometricShape;
   }
 
   /**
@@ -196,6 +206,44 @@ public class Z4CanvasMouseManager {
           break;
       }
     } else if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.DRAW_TEXT)) {
+    } else if ($exists(this.selectedDrawingTool) && this.selectedDrawingTool.useShapesAndPaths()) {
+      if ($exists(this.selectedGeometricShape)) {
+        switch (type) {
+          case "enter":
+            break;
+          case "down":
+            this.selectedGeometricShape.getControlPoints().forEach((point, index, array) -> {
+              if (Z4Math.distance(point.x, point.y, x, y) <= Z4CanvasMouseManager.SELECTOR_RADIUS) {
+                this.pressed = true;
+                this.selectedControlPoint = index;
+                this.selectedGeometricShape.getGeometricShapePreview().setSelectedControlPoint(index);
+              }
+            });
+            break;
+          case "move":
+            this.statusPanel.setMousePosition(xParsed, yParsed);
+
+            if (this.pressed) {
+              this.selectedGeometricShape.getGeometricShapePreview().setSelectedControlPointPosition(xParsed, yParsed);
+            } else {
+              this.canvas.getChilStyleByQuery(".z4canvas-overlay").cursor = "default";
+              this.selectedGeometricShape.getControlPoints().forEach((point, index, array) -> {
+                if (Z4Math.distance(point.x, point.y, x, y) <= Z4CanvasMouseManager.SELECTOR_RADIUS) {
+                  this.canvas.getChilStyleByQuery(".z4canvas-overlay").cursor = "pointer";
+                }
+              });
+            }
+            break;
+          case "up":
+            this.pressed = false;
+            break;
+          case "leave":
+            if (this.pressed) {
+              this.pressed = false;
+            }
+            break;
+        }
+      }
     } else {
       switch (type) {
         case "enter":
@@ -366,9 +414,16 @@ public class Z4CanvasMouseManager {
     ctx.stroke(path);
   }
 
-  public void drawShapesAndPaths($CanvasRenderingContext2D ctx, Z4GeometricShape shape, boolean withDirection) {
-    Array<Z4Point> controlPoints = shape.getControlPoints();
-    Array<Integer> controlPointConnections = shape.getControlPointConnections();
+  /**
+   * Draws the geometric shape
+   *
+   * @param ctx The context used to draw the kaleidoscope
+   * @param withDirection true to show an arrow representing the direction of
+   * the path, false otherwise
+   */
+  public void drawGeometricShape($CanvasRenderingContext2D ctx, boolean withDirection) {
+    Array<Z4Point> controlPoints = this.selectedGeometricShape.getControlPoints();
+    Array<Integer> controlPointConnections = this.selectedGeometricShape.getControlPointConnections();
 
     ctx.save();
     controlPoints.filter((point, index, array) -> index != this.selectedControlPoint).forEach((point, index, array) -> this.drawCircle(ctx, point, "black"));
@@ -377,7 +432,7 @@ public class Z4CanvasMouseManager {
     for (int index = 0; index < controlPointConnections.length; index += 2) {
       this.drawLine(ctx, controlPoints.$get(controlPointConnections.$get(index)), controlPoints.$get(controlPointConnections.$get(index + 1)));
     }
-    this.drawPolyline(ctx, shape.getPath2D(), withDirection ? shape.getDirectionArrows() : new Array<>());
+    this.drawPolyline(ctx, this.selectedGeometricShape.getPath2D(), withDirection ? this.selectedGeometricShape.getDirectionArrows() : new Array<>());
     ctx.restore();
   }
 
