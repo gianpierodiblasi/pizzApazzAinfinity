@@ -82,6 +82,7 @@ public class Z4RibbonRulerAndClippingPanel extends Z4AbstractRibbonPanel {
 
     this.rulers.addEventListener("mousedown", event -> this.onMouse((MouseEvent) event, "down"));
     this.rulers.addEventListener("mousemove", event -> this.onMouse((MouseEvent) event, "move"));
+    this.rulers.addEventListener("mouseleave", event -> this.onMouse((MouseEvent) event, "leave"));
     panel.add(this.rulers, new GBC(1, 1).wh(2, 2));
 
     this.topSpinner.cssAddClass("jsspinner-vertical");
@@ -146,6 +147,7 @@ public class Z4RibbonRulerAndClippingPanel extends Z4AbstractRibbonPanel {
         this.canvas.setRulers(this.showTopRuler, this.showBottomRuler, this.showLeftRuler, this.showRightRuler, this.topSlider.getValue(), this.bottomSlider.getValue(), this.leftSlider.getValue(), this.rightSlider.getValue());
         break;
       case "move":
+      case "leave":
         this.rulers.getStyle().cursor = insideTop || insideBottom || insideLeft || insideRight ? "pointer" : "default";
         break;
     }
