@@ -86,8 +86,8 @@ class Z4Translations {
 
   static  TEXT_WARNING_MESSAGE = "";
 
-  // Ribbon Clipping & Ruler
-  static  CLIPPING_AND_RULER = "";
+  // Ribbon Ruler & Clipping
+  static  RULER_AND_CLIPPING = "";
 
   // Ribbon History
   static  HISTORY = "";
@@ -609,8 +609,8 @@ class Z4Translations {
     Z4Translations.FONT_SELECTION = "Font Selection";
     Z4Translations.REFLEX = "Reflex";
     Z4Translations.TEXT_WARNING_MESSAGE = "Create a shape or a path to draw the text";
-    // Ribbon Clipping & Ruler
-    Z4Translations.CLIPPING_AND_RULER = "Clipping & Ruler";
+    // Ribbon Ruler & Clipping
+    Z4Translations.RULER_AND_CLIPPING = "Ruler & Clipping";
     // Ribbon History
     Z4Translations.HISTORY = "History";
     Z4Translations.UNDO = "Undo";
@@ -894,8 +894,8 @@ class Z4Translations {
     Z4Translations.FONT_SELECTION = "Selezione Font";
     Z4Translations.REFLEX = "Riflessa";
     Z4Translations.TEXT_WARNING_MESSAGE = "Creare una forma o un percorso per disegnare il testo";
-    // Ribbon Clipping & Ruler
-    Z4Translations.CLIPPING_AND_RULER = "Ritaglio & Righello";
+    // Ribbon Ruler & Clipping
+    Z4Translations.RULER_AND_CLIPPING = "Righello & Ritaglio";
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";
     Z4Translations.UNDO = "Annulla";

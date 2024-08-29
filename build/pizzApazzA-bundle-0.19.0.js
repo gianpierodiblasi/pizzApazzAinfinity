@@ -2224,9 +2224,9 @@ class Z4Canvas extends JSComponent {
 
    showLayerBounds = false;
 
-   canvasClippingAndRuler = document.createElement("canvas");
+   canvasRulerAndClipping = document.createElement("canvas");
 
-   ctxClippingAndRuler = this.canvasClippingAndRuler.getContext("2d");
+   ctxRulerAndClipping = this.canvasRulerAndClipping.getContext("2d");
 
    showTopRuler = false;
 
@@ -2244,6 +2244,9 @@ class Z4Canvas extends JSComponent {
 
    rightRulerPosition = 0;
 
+  /**
+   * The ruler size
+   */
   static  RULER_SIZE = 10;
 
    canvasOverlay = document.createElement("canvas");
@@ -2260,7 +2263,7 @@ class Z4Canvas extends JSComponent {
 
    ribbonTextPanel = null;
 
-   ribbonClippingAndRulerPanel = null;
+   ribbonRulerAndClippingPanel = null;
 
    ribbonHistoryPanel = null;
 
@@ -2306,7 +2309,7 @@ class Z4Canvas extends JSComponent {
 
    textInfo = null;
 
-   canvasArray = new Array(this.canvas, this.canvasGrid, this.canvasBounds, this.canvasOverlay, this.canvasClippingAndRuler);
+   canvasArray = new Array(this.canvas, this.canvasGrid, this.canvasBounds, this.canvasOverlay, this.canvasRulerAndClipping);
 
    mouseManager = new Z4CanvasMouseManager(this, this.ctx);
 
@@ -2325,7 +2328,7 @@ class Z4Canvas extends JSComponent {
     this.appendNodeChild(this.canvas);
     this.appendNodeChild(this.canvasGrid);
     this.appendNodeChild(this.canvasBounds);
-    this.appendNodeChild(this.canvasClippingAndRuler);
+    this.appendNodeChild(this.canvasRulerAndClipping);
     this.appendNodeChild(this.canvasOverlay);
     this.canvas.classList.add("main-canvas");
     this.canvas.addEventListener("mouseenter", event => this.mouseManager.onMouse(event, "enter"));
@@ -2373,24 +2376,24 @@ class Z4Canvas extends JSComponent {
    * @param ribbonLayerPanel The ribbon layer panel
    * @param ribbonDrawingToolPanel The ribbon drawing tool panel
    * @param ribbonTextPanel The ribbon text panel
-   * @param ribbonClippingAndRulerPanel
+   * @param ribbonRulerAndClippingPanel The ruler and clipping panel
    * @param ribbonHistoryPanel The ribbon history panel
    */
-   setRibbonPanels(ribbonProjectPanel, ribbonLayerPanel, ribbonDrawingToolPanel, ribbonTextPanel, ribbonClippingAndRulerPanel, ribbonHistoryPanel) {
+   setRibbonPanels(ribbonProjectPanel, ribbonLayerPanel, ribbonDrawingToolPanel, ribbonTextPanel, ribbonRulerAndClippingPanel, ribbonHistoryPanel) {
     this.ribbonProjectPanel = ribbonProjectPanel;
     this.ribbonLayerPanel = ribbonLayerPanel;
     this.ribbonDrawingToolPanel = ribbonDrawingToolPanel;
     this.ribbonTextPanel = ribbonTextPanel;
-    this.ribbonClippingAndRulerPanel = ribbonClippingAndRulerPanel;
+    this.ribbonRulerAndClippingPanel = ribbonRulerAndClippingPanel;
     this.ribbonHistoryPanel = ribbonHistoryPanel;
     this.ribbonProjectPanel.setCanvas(this);
     this.ribbonLayerPanel.setCanvas(this);
     this.ribbonDrawingToolPanel.setCanvas(this);
     this.ribbonTextPanel.setCanvas(this);
-    this.ribbonClippingAndRulerPanel.setCanvas(this);
+    this.ribbonRulerAndClippingPanel.setCanvas(this);
     this.ribbonHistoryPanel.setCanvas(this);
     this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);
-    this.ioManager.setRibbonPanels(ribbonProjectPanel, ribbonLayerPanel, ribbonDrawingToolPanel, ribbonTextPanel, ribbonHistoryPanel);
+    this.ioManager.setRibbonPanels(ribbonProjectPanel, ribbonLayerPanel, ribbonDrawingToolPanel, ribbonTextPanel, ribbonRulerAndClippingPanel, ribbonHistoryPanel);
     this.textManager.setRibbonHistoryPanel(ribbonHistoryPanel);
     this.historyManager.setRibbonLayerPanel(ribbonLayerPanel);
   }
@@ -2439,6 +2442,8 @@ class Z4Canvas extends JSComponent {
     this.ribbonTextPanel.reset();
     this.geometricShapes.length = 0;
     this.shapesAndPathsPanel.reset();
+    this.ribbonRulerAndClippingPanel.reset();
+    this.ribbonRulerAndClippingPanel.refreshCanvasSize(false);
     Color.resetHistory();
     Z4GradientColor.resetHistory();
     Z4BiGradientColor.resetHistory();
@@ -2498,7 +2503,6 @@ class Z4Canvas extends JSComponent {
       this.setDrawingDirection(Z4DrawingDirection.FREE);
       this.pathGrid = null;
       this.showLayerBounds = false;
-      this.setRulers(false, false, false, false, 0, 0, 0, 0);
       this.setSaved(true);
       this.changed = false;
     }
@@ -2829,7 +2833,7 @@ class Z4Canvas extends JSComponent {
     this.bottomRulerPosition = bottomRulerPosition;
     this.leftRulerPosition = leftRulerPosition;
     this.rightRulerPosition = rightRulerPosition;
-    this.drawCanvasClippingAndRuler();
+    this.drawCanvasRulerAndClipping();
   }
 
   /**
@@ -3449,10 +3453,10 @@ class Z4Canvas extends JSComponent {
    resize(width, height) {
     this.setSize(width, height);
     this.ribbonDrawingToolPanel.refreshCanvasSize(true);
+    this.ribbonRulerAndClippingPanel.refreshCanvasSize(true);
     this.statusPanel.setProjectSize(this.width, this.height);
     this.statusPanel.resetCanvasGridPanel(this.width, this.height, true);
     this.setCanvasSize(this.width, this.height, this.zoom);
-    this.setRulers(false, false, false, false, 0, 0, 0, 0);
     this.drawAllCanvas();
   }
 
@@ -3467,7 +3471,7 @@ class Z4Canvas extends JSComponent {
     this.drawCanvas();
     this.drawCanvasGrid();
     this.drawCanvasBounds();
-    this.drawCanvasClippingAndRuler();
+    this.drawCanvasRulerAndClipping();
     this.drawCanvasOverlay();
   }
 
@@ -3528,29 +3532,29 @@ class Z4Canvas extends JSComponent {
     }
   }
 
-   drawCanvasClippingAndRuler() {
-    this.ctxClippingAndRuler.clearRect(0, 0, this.canvasClippingAndRuler.width, this.canvasClippingAndRuler.height);
-    this.ctxClippingAndRuler.save();
-    this.ctxClippingAndRuler.scale(this.zoom, this.zoom);
-    this.ctxClippingAndRuler.fillStyle = Z4Constants.getStyle("blue");
-    this.ctxClippingAndRuler.strokeStyle = Z4Constants.getStyle("black");
+   drawCanvasRulerAndClipping() {
+    this.ctxRulerAndClipping.clearRect(0, 0, this.canvasRulerAndClipping.width, this.canvasRulerAndClipping.height);
+    this.ctxRulerAndClipping.save();
+    this.ctxRulerAndClipping.scale(this.zoom, this.zoom);
+    this.ctxRulerAndClipping.fillStyle = Z4Constants.getStyle("blue");
+    this.ctxRulerAndClipping.strokeStyle = Z4Constants.getStyle("black");
     if (this.showTopRuler) {
-      this.ctxClippingAndRuler.fillRect(0, this.topRulerPosition, this.width, Z4Canvas.RULER_SIZE);
-      this.ctxClippingAndRuler.strokeRect(0, this.topRulerPosition, this.width, Z4Canvas.RULER_SIZE);
+      this.ctxRulerAndClipping.fillRect(0, this.topRulerPosition, this.width, Z4Canvas.RULER_SIZE);
+      this.ctxRulerAndClipping.strokeRect(0, this.topRulerPosition, this.width, Z4Canvas.RULER_SIZE);
     }
     if (this.showBottomRuler) {
-      this.ctxClippingAndRuler.fillRect(0, this.height - Z4Canvas.RULER_SIZE - this.bottomRulerPosition, this.width, Z4Canvas.RULER_SIZE);
-      this.ctxClippingAndRuler.strokeRect(0, this.height - Z4Canvas.RULER_SIZE - this.bottomRulerPosition, this.width, Z4Canvas.RULER_SIZE);
+      this.ctxRulerAndClipping.fillRect(0, this.height - Z4Canvas.RULER_SIZE - this.bottomRulerPosition, this.width, Z4Canvas.RULER_SIZE);
+      this.ctxRulerAndClipping.strokeRect(0, this.height - Z4Canvas.RULER_SIZE - this.bottomRulerPosition, this.width, Z4Canvas.RULER_SIZE);
     }
     if (this.showLeftRuler) {
-      this.ctxClippingAndRuler.fillRect(this.leftRulerPosition, 0, Z4Canvas.RULER_SIZE, this.height);
-      this.ctxClippingAndRuler.strokeRect(this.leftRulerPosition, 0, Z4Canvas.RULER_SIZE, this.height);
+      this.ctxRulerAndClipping.fillRect(this.leftRulerPosition, 0, Z4Canvas.RULER_SIZE, this.height);
+      this.ctxRulerAndClipping.strokeRect(this.leftRulerPosition, 0, Z4Canvas.RULER_SIZE, this.height);
     }
     if (this.showRightRuler) {
-      this.ctxClippingAndRuler.fillRect(this.width - this.rightRulerPosition - Z4Canvas.RULER_SIZE, 0, Z4Canvas.RULER_SIZE, this.height);
-      this.ctxClippingAndRuler.strokeRect(this.width - this.rightRulerPosition - Z4Canvas.RULER_SIZE, 0, Z4Canvas.RULER_SIZE, this.height);
+      this.ctxRulerAndClipping.fillRect(this.width - this.rightRulerPosition - Z4Canvas.RULER_SIZE, 0, Z4Canvas.RULER_SIZE, this.height);
+      this.ctxRulerAndClipping.strokeRect(this.width - this.rightRulerPosition - Z4Canvas.RULER_SIZE, 0, Z4Canvas.RULER_SIZE, this.height);
     }
-    this.ctxClippingAndRuler.restore();
+    this.ctxRulerAndClipping.restore();
   }
 
    drawCanvasOverlay() {
@@ -3720,6 +3724,8 @@ class Z4CanvasIOManager {
 
    ribbonDrawingToolPanel = null;
 
+   ribbonRulerAndClippingPanel = null;
+
    ribbonTextPanel = null;
 
    ribbonHistoryPanel = null;
@@ -3759,13 +3765,15 @@ class Z4CanvasIOManager {
    * @param ribbonLayerPanel The ribbon layer panel
    * @param ribbonDrawingToolPanel The ribbon drawing tool panel
    * @param ribbonTextPanel The ribbon text panel
+   * @param ribbonRulerAndClippingPanel The ruler and clipping panel
    * @param ribbonHistoryPanel The ribbon history panel
    */
-   setRibbonPanels(ribbonProjectPanel, ribbonLayerPanel, ribbonDrawingToolPanel, ribbonTextPanel, ribbonHistoryPanel) {
+   setRibbonPanels(ribbonProjectPanel, ribbonLayerPanel, ribbonDrawingToolPanel, ribbonTextPanel, ribbonRulerAndClippingPanel, ribbonHistoryPanel) {
     this.ribbonProjectPanel = ribbonProjectPanel;
     this.ribbonLayerPanel = ribbonLayerPanel;
     this.ribbonDrawingToolPanel = ribbonDrawingToolPanel;
     this.ribbonTextPanel = ribbonTextPanel;
+    this.ribbonRulerAndClippingPanel = ribbonRulerAndClippingPanel;
     this.ribbonHistoryPanel = ribbonHistoryPanel;
   }
 
@@ -3851,6 +3859,8 @@ class Z4CanvasIOManager {
         this.ribbonTextPanel.reset();
         this.geometricShapes.length = 0;
         this.shapesAndPathsPanel.reset();
+        this.ribbonRulerAndClippingPanel.reset();
+        this.ribbonRulerAndClippingPanel.refreshCanvasSize(false);
         Color.resetHistory();
         Z4GradientColor.resetHistory();
         Z4BiGradientColor.resetHistory();
@@ -3904,6 +3914,7 @@ class Z4CanvasIOManager {
           this.ribbonTextPanel.reset();
           this.geometricShapes.length = 0;
           this.shapesAndPathsPanel.reset();
+          this.ribbonRulerAndClippingPanel.reset();
           Color.resetHistory();
           Z4GradientColor.resetHistory();
           Z4BiGradientColor.resetHistory();
@@ -3911,6 +3922,7 @@ class Z4CanvasIOManager {
             let json = JSON.parse("" + str);
             this.canvas.setSize(json["width"], json["height"]);
             this.ribbonDrawingToolPanel.refreshCanvasSize(false);
+            this.ribbonRulerAndClippingPanel.refreshCanvasSize(false);
             this.openLayer(zip, json, json["layers"], 0);
           });
         });
@@ -8158,301 +8170,6 @@ class Z4AbstractRibbonPanel extends JSPanel {
   }
 }
 /**
- * The ribbon panel containing the clipping & ruler menus
- *
- * @author gianpiero.diblasi
- */
-class Z4RibbonClippingAndRulerPanel extends Z4AbstractRibbonPanel {
-
-  // private final JSPanel drawingToolsPreview = new JSPanel();
-   statusPanel = null;
-
-   canvas = null;
-
-  /**
-   * Creates the object
-   */
-  constructor() {
-    super();
-    this.setLayout(new GridBagLayout());
-    this.cssAddClass("z4ribbonclippingandrulerpanel");
-    // Z4UI.addLabel(this, Z4Translations.NEW_DRAWING_TOOL, new GBC(0, 0).w(3).a(GBC.WEST).i(5, 5, 2, 0));
-    // 
-    // this.addButton(Z4Translations.CREATE, true, 0, 1, "left", 0, event -> this.create());
-    // this.addButton(Z4Translations.FROM_FILE, true, 1, 1, "both", 0, event -> this.open());
-    // this.addButton(Z4Translations.FROM_LIBRARY, true, 2, 1, "right", 0, event -> this.openFromLibrary());
-    // Z4UI.addVLine(this, new GBC(3, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
-    // 
-    // this.addButton(Z4Translations.SAVE_DRAWING_TOOLS_AS, true, 4, 1, "", 0, event -> this.save());
-    // Z4UI.addVLine(this, new GBC(5, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
-    // 
-    // this.addKaleidoscope();
-    // this.apply = this.addButton(Z4Translations.APPLY_SHAPES_AND_PATHS, false, 6, 2, "", 1, event -> this.canvas.applyGeometricShape());
-    // Z4UI.addVLine(this, new GBC(7, 0).h(3).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
-    // 
-    // this.drawingToolsPreview.setLayout(new BoxLayout(this.drawingToolsPreview, BoxLayout.X_AXIS));
-    // this.drawingToolsPreview.getStyle().overflowX = "scroll";
-    // this.add(this.drawingToolsPreview, new GBC(8, 0).h(3).wx(1).f(GBC.BOTH));
-  }
-
-  // private void addKaleidoscope() {
-  // Z4DropDown dropDown = new Z4DropDown(".z4kaleidoscopepanel");
-  // dropDown.cssAddClass("z4kaleidoscopedropdown");
-  // this.add(dropDown, new GBC(6, 1).a(GBC.NORTHWEST).i(0, 5, 0, 5));
-  // 
-  // JSLabel label = new JSLabel();
-  // label.setText(Z4Translations.KALEIDOSCOPE);
-  // dropDown.appendChildInTree("summary", label);
-  // 
-  // JSPanel panel = new JSPanel();
-  // panel.cssAddClass("z4kaleidoscopepanel");
-  // panel.setLayout(new GridBagLayout());
-  // dropDown.appendChild(panel);
-  // 
-  // Z4UI.addLabel(panel, Z4Translations.MULTIPLICITY, new GBC(0, 0).a(GBC.WEST));
-  // 
-  // this.multiplicitySlider.addChangeListener(event -> this.onchange(false, this.multiplicitySpinner, this.multiplicitySlider, this.multiplicitySlider.getValueIsAdjusting()));
-  // panel.add(this.multiplicitySlider, new GBC(0, 1).w(2).f(GBC.HORIZONTAL));
-  // 
-  // this.multiplicitySpinner.cssAddClass("jsspinner_w_4rem");
-  // this.multiplicitySpinner.addChangeListener(event -> this.onchange(true, this.multiplicitySpinner, this.multiplicitySlider, this.multiplicitySpinner.getValueIsAdjusting()));
-  // panel.add(this.multiplicitySpinner, new GBC(1, 0).a(GBC.EAST));
-  // 
-  // Z4UI.addLabel(panel, Z4Translations.OFFSET_X, new GBC(0, 2).a(GBC.WEST));
-  // 
-  // this.offsetXSlider.getStyle().minWidth = "20rem";
-  // this.offsetXSlider.addChangeListener(event -> this.onchange(false, this.offsetXSpinner, this.offsetXSlider, this.offsetXSlider.getValueIsAdjusting()));
-  // panel.add(this.offsetXSlider, new GBC(0, 3).w(2).f(GBC.HORIZONTAL));
-  // 
-  // this.offsetXSpinner.cssAddClass("jsspinner_w_4rem");
-  // this.offsetXSpinner.addChangeListener(event -> this.onchange(true, this.offsetXSpinner, this.offsetXSlider, this.offsetXSpinner.getValueIsAdjusting()));
-  // panel.add(this.offsetXSpinner, new GBC(1, 2).a(GBC.EAST));
-  // 
-  // Z4UI.addVLine(panel, new GBC(2, 0).h(5).f(GBC.VERTICAL).i(1, 2, 1, 2));
-  // 
-  // Z4UI.addLabel(panel, Z4Translations.OFFSET_Y, new GBC(3, 3).h(2).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
-  // 
-  // this.offsetYSpinner.cssAddClass("jsspinner-vertical");
-  // this.offsetYSpinner.cssAddClass("jsspinner_h_4rem");
-  // this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
-  // this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
-  // this.offsetYSpinner.addChangeListener(event -> this.onchange(true, this.offsetYSpinner, this.offsetYSlider, this.offsetYSpinner.getValueIsAdjusting()));
-  // panel.add(this.offsetYSpinner, new GBC(3, 0).h(3).a(GBC.NORTH));
-  // 
-  // this.offsetYSlider.setOrientation(JSSlider.VERTICAL);
-  // this.offsetYSlider.setInverted(true);
-  // this.offsetYSlider.getStyle().minWidth = "1.5rem";
-  // this.offsetYSlider.getStyle().minHeight = "20rem";
-  // this.offsetYSlider.addChangeListener(event -> this.onchange(false, this.offsetYSpinner, this.offsetYSlider, this.offsetYSlider.getValueIsAdjusting()));
-  // panel.add(this.offsetYSlider, new GBC(4, 0).h(5).wy(1).a(GBC.NORTH).f(GBC.VERTICAL));
-  // }
-  // private void onchange(boolean spTosl, JSSpinner spinner, JSSlider slider, boolean adjusting) {
-  // if (adjusting) {
-  // document.querySelector(".z4kaleidoscopedropdown").setAttribute("transparent", "true");
-  // } else {
-  // document.querySelector(".z4kaleidoscopedropdown").removeAttribute("transparent");
-  // }
-  // 
-  // if ($exists(spinner) && spTosl) {
-  // slider.setValue((int) spinner.getValue());
-  // } else if ($exists(spinner)) {
-  // spinner.setValue(slider.getValue());
-  // }
-  // 
-  // this.offsetXSpinner.setEnabled(this.multiplicitySlider.getValue() > 1);
-  // this.offsetXSlider.setEnabled(this.multiplicitySlider.getValue() > 1);
-  // this.offsetYSpinner.setEnabled(this.multiplicitySlider.getValue() > 1);
-  // this.offsetYSlider.setEnabled(this.multiplicitySlider.getValue() > 1);
-  // 
-  // this.canvas.setKaleidoscope(new Z4Kaleidoscope(this.multiplicitySlider.getValue(), this.offsetXSlider.getValue(), this.offsetYSlider.getValue()));
-  // }
-  /**
-   * Refreshes the canvas size
-   *
-   * @param resetOnlySize true to reset only the canvas size, false otherwise
-   */
-  // public void refreshCanvasSize(boolean resetOnlySize) {
-  // Dimension size = this.canvas.getSize();
-  // 
-  // if (!resetOnlySize) {
-  // this.multiplicitySpinner.setModel(new SpinnerNumberModel(1, 1, 12, 1));
-  // this.multiplicitySlider.setMinimum(1);
-  // this.multiplicitySlider.setMaximum(12);
-  // this.multiplicitySlider.setValue(1);
-  // }
-  // 
-  // this.offsetXSpinner.setEnabled(this.multiplicitySlider.getValue() > 1);
-  // this.offsetXSpinner.setModel(new SpinnerNumberModel(parseInt(size.width / 2), 0, size.width, 1));
-  // this.offsetXSlider.setEnabled(this.multiplicitySlider.getValue() > 1);
-  // this.offsetXSlider.setMaximum(size.width);
-  // this.offsetXSlider.setValue(parseInt(size.width / 2));
-  // 
-  // this.offsetYSpinner.setEnabled(this.multiplicitySlider.getValue() > 1);
-  // this.offsetYSpinner.setModel(new SpinnerNumberModel(parseInt(size.height / 2), 0, size.height, 1));
-  // this.offsetYSlider.setEnabled(this.multiplicitySlider.getValue() > 1);
-  // this.offsetYSlider.setMaximum(size.height);
-  // this.offsetYSlider.setValue(parseInt(size.height / 2));
-  // 
-  // this.canvas.setKaleidoscope(new Z4Kaleidoscope(this.multiplicitySlider.getValue(), this.offsetXSlider.getValue(), this.offsetYSlider.getValue()));
-  // }
-  /**
-   * Sets the canvas to manage
-   *
-   * @param canvas The canvas
-   */
-   setCanvas(canvas) {
-    this.canvas = canvas;
-    // this.refreshCanvasSize(false);
-  }
-
-  /**
-   * Sets the status panel
-   *
-   * @param statusPanel The status panel
-   */
-   setStatusPanel(statusPanel) {
-    this.statusPanel = statusPanel;
-  }
-  // private void create() {
-  // this.canvas.addDrawingTool(new Z4DrawingTool(
-  // this.canvas.findDrawingToolName(),
-  // new Z4Stamper(
-  // new Z4FancifulValue(
-  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 1),
-  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-  // false),
-  // new Z4FancifulValue(
-  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-  // false),
-  // new Z4Rotation(0, new Z4FancifulValue(
-  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-  // false), Z4RotationBehavior.FIXED, false)),
-  // new Z4Shape2DPainter(
-  // new Z4FancifulValue(
-  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
-  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-  // false),
-  // new Z4FancifulValue(
-  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 10),
-  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-  // false),
-  // false, false, -1,
-  // new Z4FancifulValue(
-  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-  // false),
-  // new Z4FancifulValue(
-  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-  // false),
-  // new Color(0, 0, 0, 0),
-  // new Z4FancifulValue(
-  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-  // false),
-  // new Z4FancifulValue(
-  // new Z4SignedValue(new Z4Sign(Z4SignBehavior.POSITIVE), 0),
-  // new Z4SignedRandomValue(new Z4Sign(Z4SignBehavior.POSITIVE), new Z4RandomValue(0, Z4RandomValueBehavior.CLASSIC, 0)),
-  // false),
-  // new Color(0, 0, 0, 0)
-  // ),
-  // Z4SpatioTemporalColor.fromColor(new Color(0, 0, 0, 255)),
-  // new Z4ColorProgression(Z4ColorProgressionBehavior.SPATIAL, 0, false, Z4Lighting.NONE)
-  // ));
-  // 
-  // setTimeout(() -> document.querySelector(".z4drawingtoolpreview:nth-last-child(1)").setAttribute("open", "open"), 0);
-  // }
-  // private void open() {
-  // if ($typeof(window.$get("showOpenFilePicker"), "function")) {
-  // FilePickerOptions options = new FilePickerOptions();
-  // options.excludeAcceptAllOption = true;
-  // options.id = Z4Constants.TOOL_FILE_ID;
-  // options.multiple = true;
-  // options.types = Z4Constants.PIZZAPAZZA_OPEN_TOOLS_FILE_TYPE;
-  // 
-  // JSFilePicker.showOpenFilePicker(options, 0, handles -> handles.forEach(handle -> this.canvas.addDrawingToolFromHandle(handle)));
-  // } else {
-  // JSFileChooser.showOpenDialog(".z4t,.z4ts", JSFileChooser.MULTIPLE_SELECTION, 0, files -> files.forEach(file -> this.canvas.addDrawingToolFromFile(file)));
-  // }
-  // }
-  // private void openFromLibrary() {
-  // Z4OpenDrawingToolsFromLibraryPanel panel = new Z4OpenDrawingToolsFromLibraryPanel();
-  // 
-  // JSOptionPane.showInputDialog(panel, Z4Translations.FROM_LIBRARY, listener -> panel.addChangeListener(listener), () -> $exists(panel.getSelectedDrawingTools().length), response -> {
-  // if (response == JSOptionPane.OK_OPTION) {
-  // panel.getSelectedDrawingTools().forEach(drawingTool -> this.canvas.addDrawingTool(Z4DrawingTool.fromJSON(drawingTool)));
-  // }
-  // });
-  // }
-  // private void save() {
-  // if ($typeof(window.$get("showSaveFilePicker"), "function")) {
-  // this.saveToolsToHandle();
-  // } else {
-  // this.saveToolsToFile();
-  // }
-  // }
-  // private void saveToolsToFile() {
-  // JSPanel panel = new JSPanel();
-  // panel.setLayout(new BorderLayout(0, 0));
-  // 
-  // JSLabel label = new JSLabel();
-  // label.setText(Z4Translations.FILENAME);
-  // panel.add(label, BorderLayout.NORTH);
-  // 
-  // JSTextField fileName = new JSTextField();
-  // fileName.setText(this.canvas.getProjectName());
-  // panel.add(fileName, BorderLayout.CENTER);
-  // 
-  // JSOptionPane.showInputDialog(panel, Z4Translations.SAVE, listener -> fileName.addActionListener(event -> listener.$apply(new ChangeEvent())), () -> $exists(fileName.getText()), response -> {
-  // if (response == JSOptionPane.OK_OPTION) {
-  // this.canvas.saveDrawingToolsToFile(fileName.getText());
-  // }
-  // });
-  // }
-  // private void saveToolsToHandle() {
-  // FilePickerOptions options = new FilePickerOptions();
-  // options.excludeAcceptAllOption = true;
-  // options.id = Z4Constants.TOOL_FILE_ID;
-  // options.multiple = false;
-  // options.suggestedName = this.canvas.getProjectName();
-  // options.types = Z4Constants.PIZZAPAZZA_SAVE_TOOLS_FILE_TYPE;
-  // 
-  // JSFilePicker.showSaveFilePicker(options, handle -> this.canvas.saveDrawingToolsToHandle(handle));
-  // }
-  /**
-   * Resets the drawing tools preview
-   */
-  // public void reset() {
-  // this.drawingToolsPreview.setProperty("innerHTML", "");
-  // this.apply.setEnabled(false);
-  // }
-  /**
-   * Adds a new drawing tool preview
-   *
-   * @param drawingTool The drawing tool
-   */
-  // public void addDrawingToolPreview(Z4DrawingTool drawingTool) {
-  // Z4DrawingToolPreview preview = new Z4DrawingToolPreview();
-  // preview.setRibbonDrawingToolPanel(this);
-  // preview.setDrawingTool(this.canvas, drawingTool);
-  // 
-  // document.querySelectorAll(".z4drawingtoolpreview .z4drawingtoolpreview-selector").forEach(element -> element.textContent = Z4DrawingToolPreview.UNSELECTED_DRAWING_TOOL_CONTENT);
-  // 
-  // this.drawingToolsPreview.add(preview, null);
-  // setTimeout(() -> preview.invoke("scrollIntoView()"), 0);
-  // }
-  /**
-   * Enables the apply button
-   *
-   * @param b true to enable the apply button, false otherwise
-   */
-  // public void setApplyEnabled(boolean b) {
-  // this.apply.setEnabled(b);
-  // }
-}
-/**
  * The ribbon panel containing the drawing tool menus
  *
  * @author gianpiero.diblasi
@@ -9553,6 +9270,215 @@ class Z4RibbonProjectPanel extends Z4AbstractRibbonPanel {
    */
    setSaveEnabled(b) {
     this.saveProjectButton.setEnabled(b);
+  }
+}
+/**
+ * The ribbon panel containing the ruler and clipping menus
+ *
+ * @author gianpiero.diblasi
+ */
+class Z4RibbonRulerAndClippingPanel extends Z4AbstractRibbonPanel {
+
+   rulers = new JSComponent(document.createElement("img"));
+
+   topSlider = new JSSlider();
+
+   topSpinner = new JSSpinner();
+
+   bottomSlider = new JSSlider();
+
+   bottomSpinner = new JSSpinner();
+
+   leftSlider = new JSSlider();
+
+   leftSpinner = new JSSpinner();
+
+   rightSlider = new JSSlider();
+
+   rightSpinner = new JSSpinner();
+
+   clippingsPreview = new JSPanel();
+
+   statusPanel = null;
+
+   canvas = null;
+
+   showTopRuler = false;
+
+   showBottomRuler = false;
+
+   showLeftRuler = false;
+
+   showRightRuler = false;
+
+  /**
+   * Creates the object
+   */
+  constructor() {
+    super();
+    this.setLayout(new GridBagLayout());
+    this.cssAddClass("z4ribbonrulerandclippingpanel");
+    this.addRulers();
+    Z4UI.addVLine(this, new GBC(1, 0).h(2).wy(1).f(GBC.VERTICAL).i(1, 2, 1, 2));
+    this.clippingsPreview.setLayout(new BoxLayout(this.clippingsPreview, BoxLayout.X_AXIS));
+    this.clippingsPreview.getStyle().overflowX = "scroll";
+    this.add(this.clippingsPreview, new GBC(2, 0).h(2).wx(1).f(GBC.BOTH));
+  }
+
+   addRulers() {
+    let dropDown = new Z4DropDown(".z4ribbonrulerandclippingpanel-rulers");
+    dropDown.cssAddClass("z4ribbonrulerandclippingpaneldropdown");
+    this.add(dropDown, new GBC(0, 1).a(GBC.NORTHWEST).i(5, 5, 5, 5));
+    let label = new JSLabel();
+    label.setText(Z4Translations.RULER);
+    dropDown.appendChildInTree("summary", label);
+    let panel = new JSPanel();
+    panel.cssAddClass("z4ribbonrulerandclippingpanel-rulers");
+    panel.setLayout(new GridBagLayout());
+    dropDown.appendChild(panel);
+    this.rulers.addEventListener("mousedown", event => this.onMouse(event, "down"));
+    this.rulers.addEventListener("mousemove", event => this.onMouse(event, "move"));
+    panel.add(this.rulers, new GBC(1, 1).wh(2, 2));
+    this.topSpinner.cssAddClass("jsspinner-vertical");
+    this.topSpinner.cssAddClass("jsspinner_h_4rem");
+    this.topSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
+    this.topSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
+    this.topSpinner.addChangeListener(event => this.onchange(true, this.topSpinner, this.topSlider, this.topSpinner.getValueIsAdjusting()));
+    panel.add(this.topSpinner, new GBC(1, 0).a(GBC.NORTH));
+    this.topSlider.setOrientation(JSSlider.VERTICAL);
+    this.topSlider.setInverted(true);
+    this.topSlider.getStyle().minWidth = "1.5rem";
+    this.topSlider.getStyle().minHeight = "20rem";
+    this.topSlider.addChangeListener(event => this.onchange(false, this.topSpinner, this.topSlider, this.topSlider.getValueIsAdjusting()));
+    panel.add(this.topSlider, new GBC(2, 0).a(GBC.WEST).wx(1));
+    this.bottomSpinner.cssAddClass("jsspinner-vertical");
+    this.bottomSpinner.cssAddClass("jsspinner_h_4rem");
+    this.bottomSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
+    this.bottomSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
+    this.bottomSpinner.addChangeListener(event => this.onchange(true, this.bottomSpinner, this.bottomSlider, this.bottomSpinner.getValueIsAdjusting()));
+    panel.add(this.bottomSpinner, new GBC(1, 3).a(GBC.SOUTH));
+    this.bottomSlider.setOrientation(JSSlider.VERTICAL);
+    this.bottomSlider.getStyle().minWidth = "1.5rem";
+    this.bottomSlider.getStyle().minHeight = "20rem";
+    this.bottomSlider.addChangeListener(event => this.onchange(false, this.bottomSpinner, this.bottomSlider, this.bottomSlider.getValueIsAdjusting()));
+    panel.add(this.bottomSlider, new GBC(2, 3).a(GBC.WEST).wx(1));
+    this.leftSpinner.cssAddClass("jsspinner_w_4rem");
+    this.leftSpinner.addChangeListener(event => this.onchange(true, this.leftSpinner, this.leftSlider, this.leftSpinner.getValueIsAdjusting()));
+    panel.add(this.leftSpinner, new GBC(0, 1).a(GBC.WEST));
+    this.leftSlider.getStyle().minWidth = "20rem";
+    this.leftSlider.addChangeListener(event => this.onchange(false, this.leftSpinner, this.leftSlider, this.leftSlider.getValueIsAdjusting()));
+    panel.add(this.leftSlider, new GBC(0, 2).a(GBC.NORTH).wy(1));
+    this.rightSpinner.cssAddClass("jsspinner_w_4rem");
+    this.rightSpinner.addChangeListener(event => this.onchange(true, this.rightSpinner, this.rightSlider, this.rightSpinner.getValueIsAdjusting()));
+    panel.add(this.rightSpinner, new GBC(3, 1).a(GBC.EAST));
+    this.rightSlider.getStyle().minWidth = "20rem";
+    this.rightSlider.setInverted(true);
+    this.rightSlider.addChangeListener(event => this.onchange(false, this.rightSpinner, this.rightSlider, this.rightSlider.getValueIsAdjusting()));
+    panel.add(this.rightSlider, new GBC(3, 2).a(GBC.NORTH).wy(1));
+    this.setRulers(false, false, false, false);
+  }
+
+   onMouse(event, type) {
+    let insideTop = (16 < event.offsetX && event.offsetX < 48) && (0 < event.offsetY && event.offsetY < 12);
+    let insideBottom = (16 < event.offsetX && event.offsetX < 48) && (52 < event.offsetY && event.offsetY < 64);
+    let insideLeft = (0 < event.offsetX && event.offsetX < 12) && (16 < event.offsetY && event.offsetY < 48);
+    let insideRight = (52 < event.offsetX && event.offsetX < 64) && (16 < event.offsetY && event.offsetY < 48);
+    switch(type) {
+      case "down":
+        this.showTopRuler = insideTop ? !this.showTopRuler : this.showTopRuler;
+        this.showBottomRuler = insideBottom ? !this.showBottomRuler : this.showBottomRuler;
+        this.showLeftRuler = insideLeft ? !this.showLeftRuler : this.showLeftRuler;
+        this.showRightRuler = insideRight ? !this.showRightRuler : this.showRightRuler;
+        this.canvas.setRulers(this.showTopRuler, this.showBottomRuler, this.showLeftRuler, this.showRightRuler, this.topSlider.getValue(), this.bottomSlider.getValue(), this.leftSlider.getValue(), this.rightSlider.getValue());
+        break;
+      case "move":
+        this.rulers.getStyle().cursor = insideTop || insideBottom || insideLeft || insideRight ? "pointer" : "default";
+        break;
+    }
+    this.setRulers(insideTop, insideBottom, insideLeft, insideRight);
+  }
+
+   setRulers(insideTop, insideBottom, insideLeft, insideRight) {
+    let color = Color.fromRGB_HEX(window.getComputedStyle(document.body).getPropertyValue("--main-action-bgcolor")).getRGB_String();
+    this.rulers.getStyle().backgroundImage = "url( \"data:image/svg+xml," + "<svg width='64' height='64' xmlns='http://www.w3.org/2000/svg'>" + "<rect x='16' y='0' width='32' height='12' fill='" + (this.showTopRuler ? color : "transparent") + "' stroke='" + (insideTop ? "black" : "transparent") + "'/>" + "<rect x='16' y='52' width='32' height='12' fill='" + (this.showBottomRuler ? color : "transparent") + "' stroke='" + (insideBottom ? "black" : "transparent") + "'/>" + "<rect x='0' y='16' width='12' height='32' fill='" + (this.showLeftRuler ? color : "transparent") + "' stroke='" + (insideLeft ? "black" : "transparent") + "'/>" + "" + "<rect x='52' y='16' width='12' height='32' fill='" + (this.showRightRuler ? color : "transparent") + "' stroke='" + (insideRight ? "black" : "transparent") + "'/>" + "</svg>" + "\")";
+    this.topSlider.setEnabled(this.showTopRuler);
+    this.topSpinner.setEnabled(this.showTopRuler);
+    this.bottomSlider.setEnabled(this.showBottomRuler);
+    this.bottomSpinner.setEnabled(this.showBottomRuler);
+    this.leftSlider.setEnabled(this.showLeftRuler);
+    this.leftSpinner.setEnabled(this.showLeftRuler);
+    this.rightSlider.setEnabled(this.showRightRuler);
+    this.rightSpinner.setEnabled(this.showRightRuler);
+  }
+
+   onchange(spTosl, spinner, slider, adjusting) {
+    if (adjusting) {
+      document.querySelector(".z4ribbonrulerandclippingpaneldropdown").setAttribute("transparent", "true");
+    } else {
+      document.querySelector(".z4ribbonrulerandclippingpaneldropdown").removeAttribute("transparent");
+    }
+    if (spinner && spTosl) {
+      slider.setValue(spinner.getValue());
+    } else if (spinner) {
+      spinner.setValue(slider.getValue());
+    }
+    this.setRulers(false, false, false, false);
+    this.canvas.setRulers(this.showTopRuler, this.showBottomRuler, this.showLeftRuler, this.showRightRuler, this.topSlider.getValue(), this.bottomSlider.getValue(), this.leftSlider.getValue(), this.rightSlider.getValue());
+  }
+
+  /**
+   * Refreshes the canvas size
+   *
+   * @param resetOnlySize true to reset only the canvas size, false otherwise
+   */
+   refreshCanvasSize(resetOnlySize) {
+    let size = this.canvas.getSize();
+    if (!resetOnlySize) {
+      this.showTopRuler = false;
+      this.showBottomRuler = false;
+      this.showLeftRuler = false;
+      this.showRightRuler = false;
+    }
+    this.topSpinner.setModel(new SpinnerNumberModel(0, 0, size.height - 2 * Z4Canvas.RULER_SIZE, 1));
+    this.topSlider.setMaximum(size.height - 2 * Z4Canvas.RULER_SIZE);
+    this.topSlider.setValue(0);
+    this.bottomSpinner.setModel(new SpinnerNumberModel(0, 0, size.height - 2 * Z4Canvas.RULER_SIZE, 1));
+    this.bottomSlider.setMaximum(size.height - 2 * Z4Canvas.RULER_SIZE);
+    this.bottomSlider.setValue(0);
+    this.leftSpinner.setModel(new SpinnerNumberModel(0, 0, size.width - 2 * Z4Canvas.RULER_SIZE, 1));
+    this.leftSlider.setMaximum(size.width - 2 * Z4Canvas.RULER_SIZE);
+    this.leftSlider.setValue(0);
+    this.rightSpinner.setModel(new SpinnerNumberModel(0, 0, size.width - 2 * Z4Canvas.RULER_SIZE, 1));
+    this.rightSlider.setMaximum(size.width - 2 * Z4Canvas.RULER_SIZE);
+    this.rightSlider.setValue(0);
+    this.setRulers(false, false, false, false);
+    this.canvas.setRulers(this.showTopRuler, this.showBottomRuler, this.showLeftRuler, this.showRightRuler, this.topSlider.getValue(), this.bottomSlider.getValue(), this.leftSlider.getValue(), this.rightSlider.getValue());
+  }
+
+  /**
+   * Sets the canvas to manage
+   *
+   * @param canvas The canvas
+   */
+   setCanvas(canvas) {
+    this.canvas = canvas;
+    this.refreshCanvasSize(false);
+  }
+
+  /**
+   * Sets the status panel
+   *
+   * @param statusPanel The status panel
+   */
+   setStatusPanel(statusPanel) {
+    this.statusPanel = statusPanel;
+  }
+
+  /**
+   * Resets the drawing tools preview
+   */
+   reset() {
+    this.clippingsPreview.setProperty("innerHTML", "");
   }
 }
 /**
@@ -16371,7 +16297,7 @@ class Z4Ribbon extends JSTabbedPane {
 
    textPanel = new Z4RibbonTextPanel();
 
-   clippingAndRulerPanel = new Z4RibbonClippingAndRulerPanel();
+   rulerAndClippingPanel = new Z4RibbonRulerAndClippingPanel();
 
    historyPanel = new Z4RibbonHistoryPanel();
 
@@ -16393,7 +16319,7 @@ class Z4Ribbon extends JSTabbedPane {
     this.addTab(Z4Translations.LAYER, this.layerPanel);
     this.addTab(Z4Translations.DRAWING_TOOL, this.drawingToolPanel);
     this.addTab(Z4Translations.TEXT, this.textPanel);
-    this.addTab(Z4Translations.CLIPPING_AND_RULER, this.clippingAndRulerPanel);
+    this.addTab(Z4Translations.RULER_AND_CLIPPING, this.rulerAndClippingPanel);
     this.addTab(Z4Translations.HISTORY, this.historyPanel);
     this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
     this.addTab(Z4Translations.HELP, this.helpPanel);
@@ -16419,7 +16345,7 @@ class Z4Ribbon extends JSTabbedPane {
    */
    setCanvas(canvas) {
     this.canvas = canvas;
-    canvas.setRibbonPanels(this.projectPanel, this.layerPanel, this.drawingToolPanel, this.textPanel, this.clippingAndRulerPanel, this.historyPanel);
+    canvas.setRibbonPanels(this.projectPanel, this.layerPanel, this.drawingToolPanel, this.textPanel, this.rulerAndClippingPanel, this.historyPanel);
   }
 
   /**
@@ -16440,7 +16366,7 @@ class Z4Ribbon extends JSTabbedPane {
     this.projectPanel.setStatusPanel(statusPanel);
     this.layerPanel.setStatusPanel(statusPanel);
     this.drawingToolPanel.setStatusPanel(statusPanel);
-    this.clippingAndRulerPanel.setStatusPanel(statusPanel);
+    this.rulerAndClippingPanel.setStatusPanel(statusPanel);
     this.historyPanel.setStatusPanel(statusPanel);
   }
 }
@@ -24374,8 +24300,8 @@ class Z4Translations {
 
   static  TEXT_WARNING_MESSAGE = "";
 
-  // Ribbon Clipping & Ruler
-  static  CLIPPING_AND_RULER = "";
+  // Ribbon Ruler & Clipping
+  static  RULER_AND_CLIPPING = "";
 
   // Ribbon History
   static  HISTORY = "";
@@ -24897,8 +24823,8 @@ class Z4Translations {
     Z4Translations.FONT_SELECTION = "Font Selection";
     Z4Translations.REFLEX = "Reflex";
     Z4Translations.TEXT_WARNING_MESSAGE = "Create a shape or a path to draw the text";
-    // Ribbon Clipping & Ruler
-    Z4Translations.CLIPPING_AND_RULER = "Clipping & Ruler";
+    // Ribbon Ruler & Clipping
+    Z4Translations.RULER_AND_CLIPPING = "Ruler & Clipping";
     // Ribbon History
     Z4Translations.HISTORY = "History";
     Z4Translations.UNDO = "Undo";
@@ -25182,8 +25108,8 @@ class Z4Translations {
     Z4Translations.FONT_SELECTION = "Selezione Font";
     Z4Translations.REFLEX = "Riflessa";
     Z4Translations.TEXT_WARNING_MESSAGE = "Creare una forma o un percorso per disegnare il testo";
-    // Ribbon Clipping & Ruler
-    Z4Translations.CLIPPING_AND_RULER = "Ritaglio & Righello";
+    // Ribbon Ruler & Clipping
+    Z4Translations.RULER_AND_CLIPPING = "Righello & Ritaglio";
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";
     Z4Translations.UNDO = "Annulla";

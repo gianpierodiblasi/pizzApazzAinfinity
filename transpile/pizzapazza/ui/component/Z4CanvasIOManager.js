@@ -21,6 +21,8 @@ class Z4CanvasIOManager {
 
    ribbonDrawingToolPanel = null;
 
+   ribbonRulerAndClippingPanel = null;
+
    ribbonTextPanel = null;
 
    ribbonHistoryPanel = null;
@@ -60,13 +62,15 @@ class Z4CanvasIOManager {
    * @param ribbonLayerPanel The ribbon layer panel
    * @param ribbonDrawingToolPanel The ribbon drawing tool panel
    * @param ribbonTextPanel The ribbon text panel
+   * @param ribbonRulerAndClippingPanel The ruler and clipping panel
    * @param ribbonHistoryPanel The ribbon history panel
    */
-   setRibbonPanels(ribbonProjectPanel, ribbonLayerPanel, ribbonDrawingToolPanel, ribbonTextPanel, ribbonHistoryPanel) {
+   setRibbonPanels(ribbonProjectPanel, ribbonLayerPanel, ribbonDrawingToolPanel, ribbonTextPanel, ribbonRulerAndClippingPanel, ribbonHistoryPanel) {
     this.ribbonProjectPanel = ribbonProjectPanel;
     this.ribbonLayerPanel = ribbonLayerPanel;
     this.ribbonDrawingToolPanel = ribbonDrawingToolPanel;
     this.ribbonTextPanel = ribbonTextPanel;
+    this.ribbonRulerAndClippingPanel = ribbonRulerAndClippingPanel;
     this.ribbonHistoryPanel = ribbonHistoryPanel;
   }
 
@@ -152,6 +156,8 @@ class Z4CanvasIOManager {
         this.ribbonTextPanel.reset();
         this.geometricShapes.length = 0;
         this.shapesAndPathsPanel.reset();
+        this.ribbonRulerAndClippingPanel.reset();
+        this.ribbonRulerAndClippingPanel.refreshCanvasSize(false);
         Color.resetHistory();
         Z4GradientColor.resetHistory();
         Z4BiGradientColor.resetHistory();
@@ -205,6 +211,7 @@ class Z4CanvasIOManager {
           this.ribbonTextPanel.reset();
           this.geometricShapes.length = 0;
           this.shapesAndPathsPanel.reset();
+          this.ribbonRulerAndClippingPanel.reset();
           Color.resetHistory();
           Z4GradientColor.resetHistory();
           Z4BiGradientColor.resetHistory();
@@ -212,6 +219,7 @@ class Z4CanvasIOManager {
             let json = JSON.parse("" + str);
             this.canvas.setSize(json["width"], json["height"]);
             this.ribbonDrawingToolPanel.refreshCanvasSize(false);
+            this.ribbonRulerAndClippingPanel.refreshCanvasSize(false);
             this.openLayer(zip, json, json["layers"], 0);
           });
         });

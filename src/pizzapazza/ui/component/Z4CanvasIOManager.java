@@ -27,6 +27,7 @@ import pizzapazza.ui.panel.ribbon.Z4RibbonDrawingToolPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonProjectPanel;
+import pizzapazza.ui.panel.ribbon.Z4RibbonRulerAndClippingPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonTextPanel;
 import pizzapazza.util.Z4Constants;
 import pizzapazza.util.Z4DrawingTool;
@@ -63,6 +64,7 @@ public class Z4CanvasIOManager {
   private Z4RibbonProjectPanel ribbonProjectPanel;
   private Z4RibbonLayerPanel ribbonLayerPanel;
   private Z4RibbonDrawingToolPanel ribbonDrawingToolPanel;
+  private Z4RibbonRulerAndClippingPanel ribbonRulerAndClippingPanel;
   private Z4RibbonTextPanel ribbonTextPanel;
   private Z4RibbonHistoryPanel ribbonHistoryPanel;
   private Z4ShapesAndPathsPanel shapesAndPathsPanel;
@@ -99,13 +101,15 @@ public class Z4CanvasIOManager {
    * @param ribbonLayerPanel The ribbon layer panel
    * @param ribbonDrawingToolPanel The ribbon drawing tool panel
    * @param ribbonTextPanel The ribbon text panel
+   * @param ribbonRulerAndClippingPanel The ruler and clipping panel
    * @param ribbonHistoryPanel The ribbon history panel
    */
-  public void setRibbonPanels(Z4RibbonProjectPanel ribbonProjectPanel, Z4RibbonLayerPanel ribbonLayerPanel, Z4RibbonDrawingToolPanel ribbonDrawingToolPanel, Z4RibbonTextPanel ribbonTextPanel, Z4RibbonHistoryPanel ribbonHistoryPanel) {
+  public void setRibbonPanels(Z4RibbonProjectPanel ribbonProjectPanel, Z4RibbonLayerPanel ribbonLayerPanel, Z4RibbonDrawingToolPanel ribbonDrawingToolPanel, Z4RibbonTextPanel ribbonTextPanel, Z4RibbonRulerAndClippingPanel ribbonRulerAndClippingPanel, Z4RibbonHistoryPanel ribbonHistoryPanel) {
     this.ribbonProjectPanel = ribbonProjectPanel;
     this.ribbonLayerPanel = ribbonLayerPanel;
     this.ribbonDrawingToolPanel = ribbonDrawingToolPanel;
     this.ribbonTextPanel = ribbonTextPanel;
+    this.ribbonRulerAndClippingPanel = ribbonRulerAndClippingPanel;
     this.ribbonHistoryPanel = ribbonHistoryPanel;
   }
 
@@ -199,6 +203,9 @@ public class Z4CanvasIOManager {
         this.geometricShapes.length = 0;
         this.shapesAndPathsPanel.reset();
 
+        this.ribbonRulerAndClippingPanel.reset();
+        this.ribbonRulerAndClippingPanel.refreshCanvasSize(false);
+
         Color.resetHistory();
         Z4GradientColor.resetHistory();
         Z4BiGradientColor.resetHistory();
@@ -259,6 +266,8 @@ public class Z4CanvasIOManager {
           this.geometricShapes.length = 0;
           this.shapesAndPathsPanel.reset();
 
+          this.ribbonRulerAndClippingPanel.reset();
+          
           Color.resetHistory();
           Z4GradientColor.resetHistory();
           Z4BiGradientColor.resetHistory();
@@ -267,7 +276,8 @@ public class Z4CanvasIOManager {
             $Object json = ($Object) JSON.parse("" + str);
             this.canvas.setSize(json.$get("width"), json.$get("height"));
             this.ribbonDrawingToolPanel.refreshCanvasSize(false);
-            
+            this.ribbonRulerAndClippingPanel.refreshCanvasSize(false);
+
             this.openLayer(zip, json, json.$get("layers"), 0);
           });
         });

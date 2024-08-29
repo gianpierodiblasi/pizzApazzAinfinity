@@ -5,12 +5,12 @@ import pizzapazza.ui.component.Z4Canvas;
 import pizzapazza.ui.component.Z4CanvasOverlayMode;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.math.geometricshape.Z4ShapesAndPathsPanel;
-import pizzapazza.ui.panel.ribbon.Z4RibbonClippingAndRulerPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonDrawingToolPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHelpPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonProjectPanel;
+import pizzapazza.ui.panel.ribbon.Z4RibbonRulerAndClippingPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonSettingsPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonTextPanel;
 import pizzapazza.util.Z4Translations;
@@ -27,7 +27,7 @@ public class Z4Ribbon extends JSTabbedPane {
   private final Z4RibbonLayerPanel layerPanel = new Z4RibbonLayerPanel();
   private final Z4RibbonDrawingToolPanel drawingToolPanel = new Z4RibbonDrawingToolPanel();
   private final Z4RibbonTextPanel textPanel = new Z4RibbonTextPanel();
-  private final Z4RibbonClippingAndRulerPanel clippingAndRulerPanel = new Z4RibbonClippingAndRulerPanel();
+  private final Z4RibbonRulerAndClippingPanel rulerAndClippingPanel = new Z4RibbonRulerAndClippingPanel();
   private final Z4RibbonHistoryPanel historyPanel = new Z4RibbonHistoryPanel();
   private final Z4RibbonSettingsPanel settingsPanel = new Z4RibbonSettingsPanel();
   private final Z4RibbonHelpPanel helpPanel = new Z4RibbonHelpPanel();
@@ -47,7 +47,7 @@ public class Z4Ribbon extends JSTabbedPane {
     this.addTab(Z4Translations.LAYER, this.layerPanel);
     this.addTab(Z4Translations.DRAWING_TOOL, this.drawingToolPanel);
     this.addTab(Z4Translations.TEXT, this.textPanel);
-    this.addTab(Z4Translations.CLIPPING_AND_RULER, this.clippingAndRulerPanel);
+    this.addTab(Z4Translations.RULER_AND_CLIPPING, this.rulerAndClippingPanel);
     this.addTab(Z4Translations.HISTORY, this.historyPanel);
     this.addTab(Z4Translations.SETTINGS, this.settingsPanel);
     this.addTab(Z4Translations.HELP, this.helpPanel);
@@ -75,7 +75,7 @@ public class Z4Ribbon extends JSTabbedPane {
    */
   public void setCanvas(Z4Canvas canvas) {
     this.canvas = canvas;
-    canvas.setRibbonPanels(this.projectPanel, this.layerPanel, this.drawingToolPanel, this.textPanel, this.clippingAndRulerPanel, this.historyPanel);
+    canvas.setRibbonPanels(this.projectPanel, this.layerPanel, this.drawingToolPanel, this.textPanel, this.rulerAndClippingPanel, this.historyPanel);
   }
 
   /**
@@ -96,7 +96,7 @@ public class Z4Ribbon extends JSTabbedPane {
     this.projectPanel.setStatusPanel(statusPanel);
     this.layerPanel.setStatusPanel(statusPanel);
     this.drawingToolPanel.setStatusPanel(statusPanel);
-    this.clippingAndRulerPanel.setStatusPanel(statusPanel);
+    this.rulerAndClippingPanel.setStatusPanel(statusPanel);
     this.historyPanel.setStatusPanel(statusPanel);
   }
 }
