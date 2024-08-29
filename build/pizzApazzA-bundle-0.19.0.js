@@ -2230,6 +2230,10 @@ class Z4Canvas extends JSComponent {
 
    canvasOverlayModes = new Set();
 
+   canvasClippingAndRuler = document.createElement("canvas");
+
+   ctxClippingAndRuler = this.canvasClippingAndRuler.getContext("2d");
+
    ribbonProjectPanel = null;
 
    ribbonLayerPanel = null;
@@ -2282,7 +2286,7 @@ class Z4Canvas extends JSComponent {
 
    textInfo = null;
 
-   canvasArray = new Array(this.canvas, this.canvasGrid, this.canvasBounds, this.canvasOverlay);
+   canvasArray = new Array(this.canvas, this.canvasGrid, this.canvasBounds, this.canvasOverlay, this.canvasClippingAndRuler);
 
    mouseManager = new Z4CanvasMouseManager(this, this.ctx);
 
@@ -2302,6 +2306,7 @@ class Z4Canvas extends JSComponent {
     this.appendNodeChild(this.canvasGrid);
     this.appendNodeChild(this.canvasBounds);
     this.appendNodeChild(this.canvasOverlay);
+    this.appendNodeChild(this.canvasClippingAndRuler);
     this.canvas.classList.add("main-canvas");
     this.canvas.addEventListener("mouseenter", event => this.mouseManager.onMouse(event, "enter"));
     this.canvas.addEventListener("mouseleave", event => this.mouseManager.onMouse(event, "leave"));
@@ -2411,8 +2416,6 @@ class Z4Canvas extends JSComponent {
     this.ribbonTextPanel.reset();
     this.geometricShapes.length = 0;
     this.shapesAndPathsPanel.reset();
-    this.selectedDrawingTool = null;
-    this.selectedGeometricShape = null;
     Color.resetHistory();
     Z4GradientColor.resetHistory();
     Z4BiGradientColor.resetHistory();
@@ -2429,8 +2432,6 @@ class Z4Canvas extends JSComponent {
    * @param handle The file handle
    */
    createFromHandle(handle) {
-    this.selectedDrawingTool = null;
-    this.selectedGeometricShape = null;
     this.ioManager.createFromHandle(handle);
   }
 
@@ -2440,8 +2441,6 @@ class Z4Canvas extends JSComponent {
    * @param file The file
    */
    createFromFile(file) {
-    this.selectedDrawingTool = null;
-    this.selectedGeometricShape = null;
     this.ioManager.createFromFile(file);
   }
 
@@ -2449,8 +2448,6 @@ class Z4Canvas extends JSComponent {
    * Creates a new project from an image in the clipboard
    */
    createFromClipboard() {
-    this.selectedDrawingTool = null;
-    this.selectedGeometricShape = null;
     this.ioManager.createFromClipboard();
   }
 
@@ -2466,6 +2463,8 @@ class Z4Canvas extends JSComponent {
     this.statusPanel.setProjectName(projectName);
     this.statusPanel.setProjectSize(width, height);
     if (!this.isOpenFromHistory) {
+      this.selectedDrawingTool = null;
+      this.selectedGeometricShape = null;
       this.statusPanel.setZoom(1);
       this.statusPanel.setDrawingDirection(Z4DrawingDirection.FREE);
       this.statusPanel.resetCanvasGridPanel(width, height, false);
@@ -2481,10 +2480,7 @@ class Z4Canvas extends JSComponent {
     }
     this.isOpenFromHistory = false;
     this.setCanvasSize(width, height, this.zoom);
-    this.drawCanvas();
-    this.drawCanvasGrid();
-    this.drawCanvasBounds();
-    this.drawCanvasOverlay();
+    this.drawAllCanvas();
   }
 
   /**
@@ -3102,10 +3098,7 @@ class Z4Canvas extends JSComponent {
     this.textManager.setZoom(this.zoom);
     this.setCanvasSize(this.width, this.height, zoom);
     this.pathGrid = this.pathGrid ? this.createGrid() : null;
-    this.drawCanvas();
-    this.drawCanvasGrid();
-    this.drawCanvasBounds();
-    this.drawCanvasOverlay();
+    this.drawAllCanvas();
   }
 
   /**
@@ -3411,10 +3404,7 @@ class Z4Canvas extends JSComponent {
     this.statusPanel.setProjectSize(this.width, this.height);
     this.statusPanel.resetCanvasGridPanel(this.width, this.height, true);
     this.setCanvasSize(this.width, this.height, this.zoom);
-    this.drawCanvas();
-    this.drawCanvasGrid();
-    this.drawCanvasBounds();
-    this.drawCanvasOverlay();
+    this.drawAllCanvas();
   }
 
    setCanvasSize(width, height, zoom) {
@@ -3422,6 +3412,14 @@ class Z4Canvas extends JSComponent {
       c.width = width * zoom;
       c.height = height * zoom;
     });
+  }
+
+   drawAllCanvas() {
+    this.drawCanvas();
+    this.drawCanvasGrid();
+    this.drawCanvasBounds();
+    this.drawCanvasOverlay();
+    this.drawCanvasClippingAndRuler();
   }
 
   /**
@@ -3506,6 +3504,9 @@ class Z4Canvas extends JSComponent {
         this.ctxOverlay.restore();
       }
     }
+  }
+
+   drawCanvasClippingAndRuler() {
   }
 }
 /**
