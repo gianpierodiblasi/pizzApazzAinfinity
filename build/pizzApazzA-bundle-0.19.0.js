@@ -2224,15 +2224,33 @@ class Z4Canvas extends JSComponent {
 
    showLayerBounds = false;
 
+   canvasClippingAndRuler = document.createElement("canvas");
+
+   ctxClippingAndRuler = this.canvasClippingAndRuler.getContext("2d");
+
+   showTopRuler = false;
+
+   showBottomRuler = false;
+
+   showLeftRuler = false;
+
+   showRightRuler = false;
+
+   topRulerPosition = 0;
+
+   bottomRulerPosition = 0;
+
+   leftRulerPosition = 0;
+
+   rightRulerPosition = 0;
+
+  static  RULER_SIZE = 10;
+
    canvasOverlay = document.createElement("canvas");
 
    ctxOverlay = this.canvasOverlay.getContext("2d");
 
    canvasOverlayModes = new Set();
-
-   canvasClippingAndRuler = document.createElement("canvas");
-
-   ctxClippingAndRuler = this.canvasClippingAndRuler.getContext("2d");
 
    ribbonProjectPanel = null;
 
@@ -2305,8 +2323,8 @@ class Z4Canvas extends JSComponent {
     this.appendNodeChild(this.canvas);
     this.appendNodeChild(this.canvasGrid);
     this.appendNodeChild(this.canvasBounds);
-    this.appendNodeChild(this.canvasOverlay);
     this.appendNodeChild(this.canvasClippingAndRuler);
+    this.appendNodeChild(this.canvasOverlay);
     this.canvas.classList.add("main-canvas");
     this.canvas.addEventListener("mouseenter", event => this.mouseManager.onMouse(event, "enter"));
     this.canvas.addEventListener("mouseleave", event => this.mouseManager.onMouse(event, "leave"));
@@ -2475,6 +2493,7 @@ class Z4Canvas extends JSComponent {
       this.setDrawingDirection(Z4DrawingDirection.FREE);
       this.pathGrid = null;
       this.showLayerBounds = false;
+      this.setRulers(false, false, false, false, 0, 0, 0, 0);
       this.setSaved(true);
       this.changed = false;
     }
@@ -2782,6 +2801,30 @@ class Z4Canvas extends JSComponent {
    setShowLayerBounds(showLayerBounds) {
     this.showLayerBounds = showLayerBounds;
     this.drawCanvasBounds();
+  }
+
+  /**
+   * Sets the rulers
+   *
+   * @param showTopRuler true to show the top ruler, false otherwise
+   * @param showBottomRuler true to show the bottom ruler, false otherwise
+   * @param showLeftRuler true to show the left ruler, false otherwise
+   * @param showRightRuler true to show the right ruler, false otherwise
+   * @param topRulerPosition The top ruler position
+   * @param bottomRulerPosition The bottom ruler position
+   * @param leftRulerPosition The left ruler position
+   * @param rightRulerPosition The right ruler position
+   */
+   setRulers(showTopRuler, showBottomRuler, showLeftRuler, showRightRuler, topRulerPosition, bottomRulerPosition, leftRulerPosition, rightRulerPosition) {
+    this.showTopRuler = showTopRuler;
+    this.showBottomRuler = showBottomRuler;
+    this.showLeftRuler = showLeftRuler;
+    this.showRightRuler = showRightRuler;
+    this.topRulerPosition = topRulerPosition;
+    this.bottomRulerPosition = bottomRulerPosition;
+    this.leftRulerPosition = leftRulerPosition;
+    this.rightRulerPosition = rightRulerPosition;
+    this.drawCanvasClippingAndRuler();
   }
 
   /**
@@ -3404,6 +3447,7 @@ class Z4Canvas extends JSComponent {
     this.statusPanel.setProjectSize(this.width, this.height);
     this.statusPanel.resetCanvasGridPanel(this.width, this.height, true);
     this.setCanvasSize(this.width, this.height, this.zoom);
+    this.setRulers(false, false, false, false, 0, 0, 0, 0);
     this.drawAllCanvas();
   }
 
@@ -3418,8 +3462,8 @@ class Z4Canvas extends JSComponent {
     this.drawCanvas();
     this.drawCanvasGrid();
     this.drawCanvasBounds();
-    this.drawCanvasOverlay();
     this.drawCanvasClippingAndRuler();
+    this.drawCanvasOverlay();
   }
 
   /**
@@ -3479,6 +3523,31 @@ class Z4Canvas extends JSComponent {
     }
   }
 
+   drawCanvasClippingAndRuler() {
+    this.ctxClippingAndRuler.clearRect(0, 0, this.canvasClippingAndRuler.width, this.canvasClippingAndRuler.height);
+    this.ctxClippingAndRuler.save();
+    this.ctxClippingAndRuler.scale(this.zoom, this.zoom);
+    this.ctxClippingAndRuler.fillStyle = Z4Constants.getStyle("blue");
+    this.ctxClippingAndRuler.strokeStyle = Z4Constants.getStyle("black");
+    if (this.showTopRuler) {
+      this.ctxClippingAndRuler.fillRect(0, this.topRulerPosition, this.width, Z4Canvas.RULER_SIZE);
+      this.ctxClippingAndRuler.strokeRect(0, this.topRulerPosition, this.width, Z4Canvas.RULER_SIZE);
+    }
+    if (this.showBottomRuler) {
+      this.ctxClippingAndRuler.fillRect(0, this.height - Z4Canvas.RULER_SIZE - this.bottomRulerPosition, this.width, Z4Canvas.RULER_SIZE);
+      this.ctxClippingAndRuler.strokeRect(0, this.height - Z4Canvas.RULER_SIZE - this.bottomRulerPosition, this.width, Z4Canvas.RULER_SIZE);
+    }
+    if (this.showLeftRuler) {
+      this.ctxClippingAndRuler.fillRect(this.leftRulerPosition, 0, Z4Canvas.RULER_SIZE, this.height);
+      this.ctxClippingAndRuler.strokeRect(this.leftRulerPosition, 0, Z4Canvas.RULER_SIZE, this.height);
+    }
+    if (this.showRightRuler) {
+      this.ctxClippingAndRuler.fillRect(this.width - this.rightRulerPosition - Z4Canvas.RULER_SIZE, 0, Z4Canvas.RULER_SIZE, this.height);
+      this.ctxClippingAndRuler.strokeRect(this.width - this.rightRulerPosition - Z4Canvas.RULER_SIZE, 0, Z4Canvas.RULER_SIZE, this.height);
+    }
+    this.ctxClippingAndRuler.restore();
+  }
+
    drawCanvasOverlay() {
     this.ctxOverlay.clearRect(0, 0, this.canvasOverlay.width, this.canvasOverlay.height);
     if (this.canvasOverlayModes.has(Z4CanvasOverlayMode.PICK_COLOR)) {
@@ -3504,9 +3573,6 @@ class Z4Canvas extends JSComponent {
         this.ctxOverlay.restore();
       }
     }
-  }
-
-   drawCanvasClippingAndRuler() {
   }
 }
 /**
