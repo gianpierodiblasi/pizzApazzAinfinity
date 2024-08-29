@@ -21,6 +21,7 @@ import pizzapazza.math.Z4Math;
 import pizzapazza.math.geometricshape.Z4GeometricShape;
 import pizzapazza.ui.panel.Z4StatusPanel;
 import pizzapazza.ui.panel.math.geometricshape.Z4ShapesAndPathsPanel;
+import pizzapazza.ui.panel.ribbon.Z4RibbonClippingAndRulerPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonDrawingToolPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonHistoryPanel;
 import pizzapazza.ui.panel.ribbon.Z4RibbonLayerPanel;
@@ -89,6 +90,7 @@ public class Z4Canvas extends JSComponent {
   private Z4RibbonLayerPanel ribbonLayerPanel;
   private Z4RibbonDrawingToolPanel ribbonDrawingToolPanel;
   private Z4RibbonTextPanel ribbonTextPanel;
+  private Z4RibbonClippingAndRulerPanel ribbonClippingAndRulerPanel;
   private Z4RibbonHistoryPanel ribbonHistoryPanel;
   private Z4ShapesAndPathsPanel shapesAndPathsPanel;
   private Z4StatusPanel statusPanel;
@@ -185,19 +187,22 @@ public class Z4Canvas extends JSComponent {
    * @param ribbonLayerPanel The ribbon layer panel
    * @param ribbonDrawingToolPanel The ribbon drawing tool panel
    * @param ribbonTextPanel The ribbon text panel
+   * @param ribbonClippingAndRulerPanel
    * @param ribbonHistoryPanel The ribbon history panel
    */
-  public void setRibbonPanels(Z4RibbonProjectPanel ribbonProjectPanel, Z4RibbonLayerPanel ribbonLayerPanel, Z4RibbonDrawingToolPanel ribbonDrawingToolPanel, Z4RibbonTextPanel ribbonTextPanel, Z4RibbonHistoryPanel ribbonHistoryPanel) {
+  public void setRibbonPanels(Z4RibbonProjectPanel ribbonProjectPanel, Z4RibbonLayerPanel ribbonLayerPanel, Z4RibbonDrawingToolPanel ribbonDrawingToolPanel, Z4RibbonTextPanel ribbonTextPanel, Z4RibbonClippingAndRulerPanel ribbonClippingAndRulerPanel, Z4RibbonHistoryPanel ribbonHistoryPanel) {
     this.ribbonProjectPanel = ribbonProjectPanel;
     this.ribbonLayerPanel = ribbonLayerPanel;
     this.ribbonDrawingToolPanel = ribbonDrawingToolPanel;
     this.ribbonTextPanel = ribbonTextPanel;
+    this.ribbonClippingAndRulerPanel = ribbonClippingAndRulerPanel;
     this.ribbonHistoryPanel = ribbonHistoryPanel;
 
     this.ribbonProjectPanel.setCanvas(this);
     this.ribbonLayerPanel.setCanvas(this);
     this.ribbonDrawingToolPanel.setCanvas(this);
     this.ribbonTextPanel.setCanvas(this);
+    this.ribbonClippingAndRulerPanel.setCanvas(this);
     this.ribbonHistoryPanel.setCanvas(this);
 
     this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);

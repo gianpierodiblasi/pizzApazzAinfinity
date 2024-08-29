@@ -65,6 +65,9 @@ public class Z4Translations {
   public static String REFLEX = "";
   public static String TEXT_WARNING_MESSAGE = "";
 
+  // Ribbon Clipping & Ruler
+  public static String CLIPPING_AND_RULER = "";
+
   // Ribbon History
   public static String HISTORY = "";
   public static String UNDO = "";
@@ -379,6 +382,9 @@ public class Z4Translations {
     Z4Translations.REFLEX = "Reflex";
     Z4Translations.TEXT_WARNING_MESSAGE = "Create a shape or a path to draw the text";
 
+    // Ribbon Clipping & Ruler
+    Z4Translations.CLIPPING_AND_RULER = "Clipping & Ruler";
+
     // Ribbon History
     Z4Translations.HISTORY = "History";
     Z4Translations.UNDO = "Undo";
@@ -680,6 +686,9 @@ public class Z4Translations {
     Z4Translations.REFLEX = "Riflessa";
     Z4Translations.TEXT_WARNING_MESSAGE = "Creare una forma o un percorso per disegnare il testo";
 
+    // Ribbon Clipping & Ruler
+    Z4Translations.CLIPPING_AND_RULER = "Ritaglio & Righello";
+    
     // Ribbon History
     Z4Translations.HISTORY = "Cronologia";
     Z4Translations.UNDO = "Annulla";

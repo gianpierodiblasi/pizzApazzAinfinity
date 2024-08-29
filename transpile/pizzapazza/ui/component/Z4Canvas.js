@@ -67,6 +67,8 @@ class Z4Canvas extends JSComponent {
 
    ribbonTextPanel = null;
 
+   ribbonClippingAndRulerPanel = null;
+
    ribbonHistoryPanel = null;
 
    shapesAndPathsPanel = null;
@@ -178,18 +180,21 @@ class Z4Canvas extends JSComponent {
    * @param ribbonLayerPanel The ribbon layer panel
    * @param ribbonDrawingToolPanel The ribbon drawing tool panel
    * @param ribbonTextPanel The ribbon text panel
+   * @param ribbonClippingAndRulerPanel
    * @param ribbonHistoryPanel The ribbon history panel
    */
-   setRibbonPanels(ribbonProjectPanel, ribbonLayerPanel, ribbonDrawingToolPanel, ribbonTextPanel, ribbonHistoryPanel) {
+   setRibbonPanels(ribbonProjectPanel, ribbonLayerPanel, ribbonDrawingToolPanel, ribbonTextPanel, ribbonClippingAndRulerPanel, ribbonHistoryPanel) {
     this.ribbonProjectPanel = ribbonProjectPanel;
     this.ribbonLayerPanel = ribbonLayerPanel;
     this.ribbonDrawingToolPanel = ribbonDrawingToolPanel;
     this.ribbonTextPanel = ribbonTextPanel;
+    this.ribbonClippingAndRulerPanel = ribbonClippingAndRulerPanel;
     this.ribbonHistoryPanel = ribbonHistoryPanel;
     this.ribbonProjectPanel.setCanvas(this);
     this.ribbonLayerPanel.setCanvas(this);
     this.ribbonDrawingToolPanel.setCanvas(this);
     this.ribbonTextPanel.setCanvas(this);
+    this.ribbonClippingAndRulerPanel.setCanvas(this);
     this.ribbonHistoryPanel.setCanvas(this);
     this.mouseManager.setRibbonHistoryPanel(ribbonHistoryPanel);
     this.ioManager.setRibbonPanels(ribbonProjectPanel, ribbonLayerPanel, ribbonDrawingToolPanel, ribbonTextPanel, ribbonHistoryPanel);
