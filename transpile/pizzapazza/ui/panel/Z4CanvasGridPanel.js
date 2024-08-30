@@ -126,10 +126,7 @@ class Z4CanvasGridPanel extends JSDropDown {
     Z4UI.addLabel(panel, Z4Translations.OFFSET_X, new GBC(0, 0).a(GBC.WEST));
     Z4UI.addVLine(panel, new GBC(2, 0).h(8).f(GBC.VERTICAL).i(1, 2, 1, 2));
     Z4UI.addLabel(panel, Z4Translations.OFFSET_Y, new GBC(3, 4).h(4).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
-    this.offsetYSpinner.cssAddClass("jsspinner-vertical");
-    this.offsetYSpinner.cssAddClass("jsspinner_h_4rem");
-    this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
-    this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
+    Z4UI.setVerticalSpinner(this.offsetYSpinner);
     this.offsetYSpinner.addChangeListener(event => this.onchange(true, this.offsetYSpinner, this.offsetYSlider));
     panel.add(this.offsetYSpinner, new GBC(3, 0).h(4).a(GBC.NORTH));
     this.offsetYSlider.setOrientation(JSSlider.VERTICAL);

@@ -65,11 +65,8 @@ class Z4BiGradientColorPanel extends Z4AbstractValuePanel {
     this.preview.addEventListener("mouseup", event => this.onMouse(event, "up"));
     this.add(this.preview, new GBC(1, 2).wh(2, 2));
     Z4UI.addLabel(this, Z4Translations.RIPPLE, new GBC(3, 3).h(2).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
-    this.biRippleSpinner.cssAddClass("jsspinner-vertical");
-    this.biRippleSpinner.cssAddClass("jsspinner_h_4rem");
+    Z4UI.setVerticalSpinner(this.biRippleSpinner);
     this.biRippleSpinner.setModel(new SpinnerNumberModel(0, 0, 100, 1));
-    this.biRippleSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
-    this.biRippleSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
     this.biRippleSpinner.addChangeListener(event => this.onRippleChange(true, this.biRippleSpinner.getValueIsAdjusting(), this.biRippleSpinner, this.biRippleSlider, true));
     this.add(this.biRippleSpinner, new GBC(3, 0).h(3).a(GBC.NORTHEAST).i(0, 5, 0, 0));
     this.biRippleSlider.setValue(0);

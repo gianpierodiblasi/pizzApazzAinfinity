@@ -10,6 +10,7 @@ import javascript.swing.JSComponent;
 import javascript.swing.JSLabel;
 import javascript.swing.JSPanel;
 import javascript.swing.JSProgressBar;
+import javascript.swing.JSSpinner;
 import simulation.js.$Apply_0_Void;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.setTimeout;
@@ -164,6 +165,18 @@ public class Z4UI {
     div.getStyle().background = "var(--main-action-bgcolor)";
     panel.add(div, gbc);
     return div;
+  }
+
+  /**
+   * Sets a spinner to be vertical
+   *
+   * @param spinner The spinner
+   */
+  public static void setVerticalSpinner(JSSpinner spinner) {
+    spinner.cssAddClass("jsspinner-vertical");
+    spinner.cssAddClass("jsspinner_h_4rem");
+    spinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
+    spinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
   }
 
   private Z4UI() {

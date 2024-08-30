@@ -144,6 +144,18 @@ class Z4UI {
     return div;
   }
 
+  /**
+   * Sets a spinner to be vertical
+   *
+   * @param spinner The spinner
+   */
+  static  setVerticalSpinner(spinner) {
+    spinner.cssAddClass("jsspinner-vertical");
+    spinner.cssAddClass("jsspinner_h_4rem");
+    spinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
+    spinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
+  }
+
   constructor() {
   }
 }

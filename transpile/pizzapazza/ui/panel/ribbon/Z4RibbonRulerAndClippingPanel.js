@@ -66,10 +66,7 @@ class Z4RibbonRulerAndClippingPanel extends Z4AbstractRibbonPanel {
     this.rulers.addEventListener("mousemove", event => this.onMouse(event, "move"));
     this.rulers.addEventListener("mouseleave", event => this.onMouse(event, "leave"));
     panel.add(this.rulers, new GBC(1, 1).wh(2, 2));
-    this.topSpinner.cssAddClass("jsspinner-vertical");
-    this.topSpinner.cssAddClass("jsspinner_h_4rem");
-    this.topSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
-    this.topSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
+    Z4UI.setVerticalSpinner(this.topSpinner);
     this.topSpinner.addChangeListener(event => this.onchange(true, this.topSpinner, this.topSlider, this.topSpinner.getValueIsAdjusting()));
     panel.add(this.topSpinner, new GBC(1, 0).a(GBC.NORTH));
     this.topSlider.setOrientation(JSSlider.VERTICAL);
@@ -78,10 +75,7 @@ class Z4RibbonRulerAndClippingPanel extends Z4AbstractRibbonPanel {
     this.topSlider.getStyle().minHeight = "20rem";
     this.topSlider.addChangeListener(event => this.onchange(false, this.topSpinner, this.topSlider, this.topSlider.getValueIsAdjusting()));
     panel.add(this.topSlider, new GBC(2, 0).a(GBC.WEST).wx(1));
-    this.bottomSpinner.cssAddClass("jsspinner-vertical");
-    this.bottomSpinner.cssAddClass("jsspinner_h_4rem");
-    this.bottomSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
-    this.bottomSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
+    Z4UI.setVerticalSpinner(this.bottomSpinner);
     this.bottomSpinner.addChangeListener(event => this.onchange(true, this.bottomSpinner, this.bottomSlider, this.bottomSpinner.getValueIsAdjusting()));
     panel.add(this.bottomSpinner, new GBC(1, 3).a(GBC.SOUTH));
     this.bottomSlider.setOrientation(JSSlider.VERTICAL);

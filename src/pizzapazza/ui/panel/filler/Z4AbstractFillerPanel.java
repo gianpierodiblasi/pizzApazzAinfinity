@@ -82,11 +82,8 @@ public abstract class Z4AbstractFillerPanel extends JSPanel {
 
     Z4UI.addLabel(this, "y", new GBC(2, 2).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
 
-    this.ySpinner.cssAddClass("jsspinner-vertical");
-    this.ySpinner.cssAddClass("jsspinner_h_4rem");
+    Z4UI.setVerticalSpinner(this.ySpinner);
     this.ySpinner.setModel(new SpinnerNumberModel(0, 0, this.height, 1));
-    this.ySpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
-    this.ySpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
     this.ySpinner.addChangeListener(event -> this.onChange(true, this.ySpinner.getValueIsAdjusting(), this.ySpinner, this.ySlider, false));
     this.add(this.ySpinner, new GBC(2, 1).wy(1).a(GBC.NORTHEAST));
 

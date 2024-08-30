@@ -108,10 +108,7 @@ class Z4GeometricShapePreview extends JSDropDown {
     this.spinnerPanel.setLayout(new GridBagLayout());
     this.editor.add(this.spinnerPanel, new GBC(0, 4).w(2).f(GBC.BOTH));
     this.editor.add(this.buttonPanel, new GBC(0, 5).w(2).f(GBC.BOTH));
-    this.ySpinner.cssAddClass("jsspinner-vertical");
-    this.ySpinner.cssAddClass("jsspinner_h_4rem");
-    this.ySpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
-    this.ySpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
+    Z4UI.setVerticalSpinner(this.ySpinner);
     this.ySpinner.addChangeListener(event => this.onChange(true, this.ySpinner.getValueIsAdjusting(), this.ySpinner, this.ySlider));
     this.editor.add(this.ySpinner, new GBC(3, 0).h(3).a(GBC.NORTH));
     this.ySlider.setOrientation(JSSlider.VERTICAL);

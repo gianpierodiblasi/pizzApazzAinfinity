@@ -224,10 +224,7 @@ public class Z4LayerPreview extends JSDropDown {
     Z4UI.addVLine(panelBasic, new GBC(2, 2).h(6).f(GBC.VERTICAL).i(1, 2, 1, 2));
     Z4UI.addLabel(panelBasic, Z4Translations.OFFSET_Y, new GBC(3, 5).h(3).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
 
-    this.offsetYSpinner.cssAddClass("jsspinner-vertical");
-    this.offsetYSpinner.cssAddClass("jsspinner_h_4rem");
-    this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
-    this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
+    Z4UI.setVerticalSpinner(this.offsetYSpinner);
     this.offsetYSpinner.addChangeListener(event -> this.onChange(true, this.offsetYSpinner.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
     panelBasic.add(this.offsetYSpinner, new GBC(3, 2).h(3).a(GBC.NORTH));
 

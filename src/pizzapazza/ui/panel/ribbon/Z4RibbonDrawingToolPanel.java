@@ -136,10 +136,7 @@ public class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
 
     Z4UI.addLabel(panel, Z4Translations.OFFSET_Y, new GBC(3, 3).h(2).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
 
-    this.offsetYSpinner.cssAddClass("jsspinner-vertical");
-    this.offsetYSpinner.cssAddClass("jsspinner_h_4rem");
-    this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
-    this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
+    Z4UI.setVerticalSpinner(this.offsetYSpinner);
     this.offsetYSpinner.addChangeListener(event -> this.onchange(true, this.offsetYSpinner, this.offsetYSlider, this.offsetYSpinner.getValueIsAdjusting()));
     panel.add(this.offsetYSpinner, new GBC(3, 0).h(3).a(GBC.NORTH));
 

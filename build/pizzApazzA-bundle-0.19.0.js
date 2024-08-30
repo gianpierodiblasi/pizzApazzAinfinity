@@ -5700,10 +5700,7 @@ class Z4LayerPreview extends JSDropDown {
     panelBasic.add(this.opacitySlider, new GBC(0, 5).w(2).a(GBC.NORTH).f(GBC.HORIZONTAL));
     Z4UI.addVLine(panelBasic, new GBC(2, 2).h(6).f(GBC.VERTICAL).i(1, 2, 1, 2));
     Z4UI.addLabel(panelBasic, Z4Translations.OFFSET_Y, new GBC(3, 5).h(3).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
-    this.offsetYSpinner.cssAddClass("jsspinner-vertical");
-    this.offsetYSpinner.cssAddClass("jsspinner_h_4rem");
-    this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
-    this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
+    Z4UI.setVerticalSpinner(this.offsetYSpinner);
     this.offsetYSpinner.addChangeListener(event => this.onChange(true, this.offsetYSpinner.getValueIsAdjusting(), this.offsetYSpinner, this.offsetYSlider));
     panelBasic.add(this.offsetYSpinner, new GBC(3, 2).h(3).a(GBC.NORTH));
     this.offsetYSlider.setOrientation(JSSlider.VERTICAL);
@@ -6409,11 +6406,8 @@ class Z4AbstractFillerPanel extends JSPanel {
     this.preview.addEventListener("mouseup", event => this.onMouse(event, "up"));
     this.add(this.preview, new GBC(0, 1).wh(2, 2).wxy(1, 1).i(2, 2, 2, 2));
     Z4UI.addLabel(this, "y", new GBC(2, 2).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
-    this.ySpinner.cssAddClass("jsspinner-vertical");
-    this.ySpinner.cssAddClass("jsspinner_h_4rem");
+    Z4UI.setVerticalSpinner(this.ySpinner);
     this.ySpinner.setModel(new SpinnerNumberModel(0, 0, this.height, 1));
-    this.ySpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
-    this.ySpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
     this.ySpinner.addChangeListener(event => this.onChange(true, this.ySpinner.getValueIsAdjusting(), this.ySpinner, this.ySlider, false));
     this.add(this.ySpinner, new GBC(2, 1).wy(1).a(GBC.NORTHEAST));
     this.ySlider.setMaximum(this.height);
@@ -7528,10 +7522,7 @@ class Z4GeometricShapePreview extends JSDropDown {
     this.spinnerPanel.setLayout(new GridBagLayout());
     this.editor.add(this.spinnerPanel, new GBC(0, 4).w(2).f(GBC.BOTH));
     this.editor.add(this.buttonPanel, new GBC(0, 5).w(2).f(GBC.BOTH));
-    this.ySpinner.cssAddClass("jsspinner-vertical");
-    this.ySpinner.cssAddClass("jsspinner_h_4rem");
-    this.ySpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
-    this.ySpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
+    Z4UI.setVerticalSpinner(this.ySpinner);
     this.ySpinner.addChangeListener(event => this.onChange(true, this.ySpinner.getValueIsAdjusting(), this.ySpinner, this.ySlider));
     this.editor.add(this.ySpinner, new GBC(3, 0).h(3).a(GBC.NORTH));
     this.ySlider.setOrientation(JSSlider.VERTICAL);
@@ -8244,10 +8235,7 @@ class Z4RibbonDrawingToolPanel extends Z4AbstractRibbonPanel {
     panel.add(this.offsetXSpinner, new GBC(1, 2).a(GBC.EAST));
     Z4UI.addVLine(panel, new GBC(2, 0).h(5).f(GBC.VERTICAL).i(1, 2, 1, 2));
     Z4UI.addLabel(panel, Z4Translations.OFFSET_Y, new GBC(3, 3).h(2).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
-    this.offsetYSpinner.cssAddClass("jsspinner-vertical");
-    this.offsetYSpinner.cssAddClass("jsspinner_h_4rem");
-    this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
-    this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
+    Z4UI.setVerticalSpinner(this.offsetYSpinner);
     this.offsetYSpinner.addChangeListener(event => this.onchange(true, this.offsetYSpinner, this.offsetYSlider, this.offsetYSpinner.getValueIsAdjusting()));
     panel.add(this.offsetYSpinner, new GBC(3, 0).h(3).a(GBC.NORTH));
     this.offsetYSlider.setOrientation(JSSlider.VERTICAL);
@@ -9340,10 +9328,7 @@ class Z4RibbonRulerAndClippingPanel extends Z4AbstractRibbonPanel {
     this.rulers.addEventListener("mousemove", event => this.onMouse(event, "move"));
     this.rulers.addEventListener("mouseleave", event => this.onMouse(event, "leave"));
     panel.add(this.rulers, new GBC(1, 1).wh(2, 2));
-    this.topSpinner.cssAddClass("jsspinner-vertical");
-    this.topSpinner.cssAddClass("jsspinner_h_4rem");
-    this.topSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
-    this.topSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
+    Z4UI.setVerticalSpinner(this.topSpinner);
     this.topSpinner.addChangeListener(event => this.onchange(true, this.topSpinner, this.topSlider, this.topSpinner.getValueIsAdjusting()));
     panel.add(this.topSpinner, new GBC(1, 0).a(GBC.NORTH));
     this.topSlider.setOrientation(JSSlider.VERTICAL);
@@ -9352,10 +9337,7 @@ class Z4RibbonRulerAndClippingPanel extends Z4AbstractRibbonPanel {
     this.topSlider.getStyle().minHeight = "20rem";
     this.topSlider.addChangeListener(event => this.onchange(false, this.topSpinner, this.topSlider, this.topSlider.getValueIsAdjusting()));
     panel.add(this.topSlider, new GBC(2, 0).a(GBC.WEST).wx(1));
-    this.bottomSpinner.cssAddClass("jsspinner-vertical");
-    this.bottomSpinner.cssAddClass("jsspinner_h_4rem");
-    this.bottomSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
-    this.bottomSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
+    Z4UI.setVerticalSpinner(this.bottomSpinner);
     this.bottomSpinner.addChangeListener(event => this.onchange(true, this.bottomSpinner, this.bottomSlider, this.bottomSpinner.getValueIsAdjusting()));
     panel.add(this.bottomSpinner, new GBC(1, 3).a(GBC.SOUTH));
     this.bottomSlider.setOrientation(JSSlider.VERTICAL);
@@ -10224,11 +10206,8 @@ class Z4BiGradientColorPanel extends Z4AbstractValuePanel {
     this.preview.addEventListener("mouseup", event => this.onMouse(event, "up"));
     this.add(this.preview, new GBC(1, 2).wh(2, 2));
     Z4UI.addLabel(this, Z4Translations.RIPPLE, new GBC(3, 3).h(2).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
-    this.biRippleSpinner.cssAddClass("jsspinner-vertical");
-    this.biRippleSpinner.cssAddClass("jsspinner_h_4rem");
+    Z4UI.setVerticalSpinner(this.biRippleSpinner);
     this.biRippleSpinner.setModel(new SpinnerNumberModel(0, 0, 100, 1));
-    this.biRippleSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
-    this.biRippleSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
     this.biRippleSpinner.addChangeListener(event => this.onRippleChange(true, this.biRippleSpinner.getValueIsAdjusting(), this.biRippleSpinner, this.biRippleSlider, true));
     this.add(this.biRippleSpinner, new GBC(3, 0).h(3).a(GBC.NORTHEAST).i(0, 5, 0, 0));
     this.biRippleSlider.setValue(0);
@@ -14916,10 +14895,7 @@ class Z4CanvasGridPanel extends JSDropDown {
     Z4UI.addLabel(panel, Z4Translations.OFFSET_X, new GBC(0, 0).a(GBC.WEST));
     Z4UI.addVLine(panel, new GBC(2, 0).h(8).f(GBC.VERTICAL).i(1, 2, 1, 2));
     Z4UI.addLabel(panel, Z4Translations.OFFSET_Y, new GBC(3, 4).h(4).a(GBC.SOUTH)).cssAddClass("jslabel-vertical");
-    this.offsetYSpinner.cssAddClass("jsspinner-vertical");
-    this.offsetYSpinner.cssAddClass("jsspinner_h_4rem");
-    this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
-    this.offsetYSpinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
+    Z4UI.setVerticalSpinner(this.offsetYSpinner);
     this.offsetYSpinner.addChangeListener(event => this.onchange(true, this.offsetYSpinner, this.offsetYSlider));
     panel.add(this.offsetYSpinner, new GBC(3, 0).h(4).a(GBC.NORTH));
     this.offsetYSlider.setOrientation(JSSlider.VERTICAL);
@@ -25495,6 +25471,18 @@ class Z4UI {
     div.getStyle().background = "var(--main-action-bgcolor)";
     panel.add(div, gbc);
     return div;
+  }
+
+  /**
+   * Sets a spinner to be vertical
+   *
+   * @param spinner The spinner
+   */
+  static  setVerticalSpinner(spinner) {
+    spinner.cssAddClass("jsspinner-vertical");
+    spinner.cssAddClass("jsspinner_h_4rem");
+    spinner.setChildPropertyByQuery("*:nth-child(2)", "textContent", "\u25B6");
+    spinner.setChildPropertyByQuery("*:nth-child(3)", "textContent", "\u25C0");
   }
 
   constructor() {
