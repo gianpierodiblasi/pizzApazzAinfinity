@@ -67,34 +67,34 @@ class Z4RibbonRulerAndClippingPanel extends Z4AbstractRibbonPanel {
     this.rulers.addEventListener("mouseleave", event => this.onMouse(event, "leave"));
     panel.add(this.rulers, new GBC(1, 1).wh(2, 2));
     Z4UI.setVerticalSpinner(this.topSpinner);
-    this.topSpinner.addChangeListener(event => this.onchange(true, this.topSpinner, this.topSlider, this.topSpinner.getValueIsAdjusting()));
+    this.topSpinner.addChangeListener(event => this.onchange(true, this.topSpinner, this.topSlider, this.bottomSpinner, this.bottomSlider, this.canvas.getSize().height, this.topSpinner.getValueIsAdjusting()));
     panel.add(this.topSpinner, new GBC(1, 0).a(GBC.NORTH));
     this.topSlider.setOrientation(JSSlider.VERTICAL);
     this.topSlider.setInverted(true);
     this.topSlider.getStyle().minWidth = "1.5rem";
     this.topSlider.getStyle().minHeight = "20rem";
-    this.topSlider.addChangeListener(event => this.onchange(false, this.topSpinner, this.topSlider, this.topSlider.getValueIsAdjusting()));
+    this.topSlider.addChangeListener(event => this.onchange(false, this.topSpinner, this.topSlider, this.bottomSpinner, this.bottomSlider, this.canvas.getSize().height, this.topSlider.getValueIsAdjusting()));
     panel.add(this.topSlider, new GBC(2, 0).a(GBC.WEST).wx(1));
     Z4UI.setVerticalSpinner(this.bottomSpinner);
-    this.bottomSpinner.addChangeListener(event => this.onchange(true, this.bottomSpinner, this.bottomSlider, this.bottomSpinner.getValueIsAdjusting()));
+    this.bottomSpinner.addChangeListener(event => this.onchange(true, this.bottomSpinner, this.bottomSlider, this.topSpinner, this.topSlider, this.canvas.getSize().height, this.bottomSpinner.getValueIsAdjusting()));
     panel.add(this.bottomSpinner, new GBC(1, 3).a(GBC.SOUTH));
     this.bottomSlider.setOrientation(JSSlider.VERTICAL);
     this.bottomSlider.getStyle().minWidth = "1.5rem";
     this.bottomSlider.getStyle().minHeight = "20rem";
-    this.bottomSlider.addChangeListener(event => this.onchange(false, this.bottomSpinner, this.bottomSlider, this.bottomSlider.getValueIsAdjusting()));
+    this.bottomSlider.addChangeListener(event => this.onchange(false, this.bottomSpinner, this.bottomSlider, this.topSpinner, this.topSlider, this.canvas.getSize().height, this.bottomSlider.getValueIsAdjusting()));
     panel.add(this.bottomSlider, new GBC(2, 3).a(GBC.WEST).wx(1));
     this.leftSpinner.cssAddClass("jsspinner_w_4rem");
-    this.leftSpinner.addChangeListener(event => this.onchange(true, this.leftSpinner, this.leftSlider, this.leftSpinner.getValueIsAdjusting()));
+    this.leftSpinner.addChangeListener(event => this.onchange(true, this.leftSpinner, this.leftSlider, this.rightSpinner, this.rightSlider, this.canvas.getSize().width, this.leftSpinner.getValueIsAdjusting()));
     panel.add(this.leftSpinner, new GBC(0, 1).a(GBC.WEST));
     this.leftSlider.getStyle().minWidth = "20rem";
-    this.leftSlider.addChangeListener(event => this.onchange(false, this.leftSpinner, this.leftSlider, this.leftSlider.getValueIsAdjusting()));
+    this.leftSlider.addChangeListener(event => this.onchange(false, this.leftSpinner, this.leftSlider, this.rightSpinner, this.rightSlider, this.canvas.getSize().width, this.leftSlider.getValueIsAdjusting()));
     panel.add(this.leftSlider, new GBC(0, 2).a(GBC.NORTH).wy(1));
     this.rightSpinner.cssAddClass("jsspinner_w_4rem");
-    this.rightSpinner.addChangeListener(event => this.onchange(true, this.rightSpinner, this.rightSlider, this.rightSpinner.getValueIsAdjusting()));
+    this.rightSpinner.addChangeListener(event => this.onchange(true, this.rightSpinner, this.rightSlider, this.leftSpinner, this.leftSlider, this.canvas.getSize().width, this.rightSpinner.getValueIsAdjusting()));
     panel.add(this.rightSpinner, new GBC(3, 1).a(GBC.EAST));
     this.rightSlider.getStyle().minWidth = "20rem";
     this.rightSlider.setInverted(true);
-    this.rightSlider.addChangeListener(event => this.onchange(false, this.rightSpinner, this.rightSlider, this.rightSlider.getValueIsAdjusting()));
+    this.rightSlider.addChangeListener(event => this.onchange(false, this.rightSpinner, this.rightSlider, this.leftSpinner, this.leftSlider, this.canvas.getSize().width, this.rightSlider.getValueIsAdjusting()));
     panel.add(this.rightSlider, new GBC(3, 2).a(GBC.NORTH).wy(1));
     this.setRulers(false, false, false, false);
   }
@@ -133,7 +133,7 @@ class Z4RibbonRulerAndClippingPanel extends Z4AbstractRibbonPanel {
     this.rightSpinner.setEnabled(this.showRightRuler);
   }
 
-   onchange(spTosl, spinner, slider, adjusting) {
+   onchange(spTosl, spinner, slider, otherSpinner, otherSlider, max, adjusting) {
     if (adjusting) {
       document.querySelector(".z4ribbonrulerandclippingpaneldropdown").setAttribute("transparent", "true");
     } else {
@@ -143,6 +143,10 @@ class Z4RibbonRulerAndClippingPanel extends Z4AbstractRibbonPanel {
       slider.setValue(spinner.getValue());
     } else if (spinner) {
       spinner.setValue(slider.getValue());
+    }
+    if (slider.getValue() + otherSlider.getValue() + 2 * Z4Canvas.RULER_SIZE >= max) {
+      otherSlider.setValue(max - slider.getValue() - 2 * Z4Canvas.RULER_SIZE);
+      otherSpinner.setValue(max - slider.getValue() - 2 * Z4Canvas.RULER_SIZE);
     }
     this.setRulers(false, false, false, false);
     this.canvas.setRulers(this.showTopRuler, this.showBottomRuler, this.showLeftRuler, this.showRightRuler, this.topSlider.getValue(), this.bottomSlider.getValue(), this.leftSlider.getValue(), this.rightSlider.getValue());
