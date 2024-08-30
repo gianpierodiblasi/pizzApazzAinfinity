@@ -2244,6 +2244,8 @@ class Z4Canvas extends JSComponent {
 
    rightRulerPosition = 0;
 
+   clippingRegion = null;
+
   /**
    * The ruler size
    */
@@ -2833,6 +2835,13 @@ class Z4Canvas extends JSComponent {
     this.bottomRulerPosition = bottomRulerPosition;
     this.leftRulerPosition = leftRulerPosition;
     this.rightRulerPosition = rightRulerPosition;
+    let x = this.showLeftRuler ? this.leftRulerPosition + Z4Canvas.RULER_SIZE : 0;
+    let y = this.showTopRuler ? this.topRulerPosition + Z4Canvas.RULER_SIZE : 0;
+    let w = this.width - (this.showRightRuler ? this.rightRulerPosition + Z4Canvas.RULER_SIZE : 0) - (this.showLeftRuler ? this.leftRulerPosition + Z4Canvas.RULER_SIZE : 0);
+    let h = this.height - (this.showBottomRuler ? this.bottomRulerPosition + Z4Canvas.RULER_SIZE : 0) - (this.showTopRuler ? this.topRulerPosition + Z4Canvas.RULER_SIZE : 0);
+    this.clippingRegion = new Path2D();
+    this.clippingRegion.rect(x, y, w, h);
+    this.mouseManager.setClippingRegion(this.clippingRegion);
     this.drawCanvasRulerAndClipping();
   }
 
@@ -3429,7 +3438,7 @@ class Z4Canvas extends JSComponent {
       this.paper.addLayer(this.textInfo.textText + (this.textInfo.shadowText ? "/" + this.textInfo.shadowText : ""), this.width, this.height, null, this.width, this.height);
       this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), null, true);
     }
-    this.selectedLayer.drawText(this.textManager);
+    this.selectedLayer.drawText(this.textManager, this.clippingRegion);
     this.selectedLayer.getLayerPreview().drawLayer();
     this.drawCanvas();
     this.setChanged(true);
@@ -4392,6 +4401,8 @@ class Z4CanvasMouseManager {
 
    selectedGeometricShape = null;
 
+   clippingRegion = null;
+
    centerGrid = null;
 
    plotWidthGrid = 0;
@@ -4463,6 +4474,15 @@ class Z4CanvasMouseManager {
    */
    setKaleidoscope(kaleidoscope) {
     this.kaleidoscope = kaleidoscope;
+  }
+
+  /**
+   * Sets the clipping region
+   *
+   * @param clippingRegion The clipping region
+   */
+   setClippingRegion(clippingRegion) {
+    this.clippingRegion = clippingRegion;
   }
 
   /**
@@ -4699,7 +4719,7 @@ class Z4CanvasMouseManager {
     if (!next) {
       return false;
     } else if (next.intent === Z4DrawingPointIntent.DRAW_OBJECTS) {
-      this.selectedLayer.drawTool(this.selectedDrawingTool, next, this.kaleidoscope);
+      this.selectedLayer.drawTool(this.selectedDrawingTool, next, this.kaleidoscope, this.clippingRegion);
       this.selectedLayer.getLayerPreview().drawLayer();
       this.canvas.drawCanvas();
       return true;
@@ -23841,13 +23861,16 @@ class Z4Layer {
    * @param drawingTool The tool to perform the drawing
    * @param drawingPoint The point where to perform the drawing
    * @param kaleidoscope The kaleidoscope to use to perform the drawing
+   * @param clippingRegion The clipping region
    */
-   drawTool(drawingTool, drawingPoint, kaleidoscope) {
+   drawTool(drawingTool, drawingPoint, kaleidoscope, clippingRegion) {
     let incAngle = Z4Math.TWO_PI / kaleidoscope.multiplicity;
     for (let index = 0; index < kaleidoscope.multiplicity; index++) {
       let angle = index * incAngle;
       this.offscreenCtx.save();
-      this.offscreenCtx.translate(kaleidoscope.offsetX - this.offsetX, kaleidoscope.offsetY - this.offsetY);
+      this.offscreenCtx.translate(-this.offsetX, -this.offsetY);
+      this.offscreenCtx.clip(clippingRegion);
+      this.offscreenCtx.translate(kaleidoscope.offsetX, kaleidoscope.offsetY);
       this.offscreenCtx.rotate(angle);
       this.offscreenCtx.translate(drawingPoint.z4Vector.x0 - kaleidoscope.offsetX, drawingPoint.z4Vector.y0 - kaleidoscope.offsetY);
       this.offscreenCtx.rotate(drawingPoint.z4Vector.phase);
@@ -23861,10 +23884,12 @@ class Z4Layer {
    * Draws a text
    *
    * @param textManager The manager used to draw the text
+   * @param clippingRegion The clipping region
    */
-   drawText(textManager) {
+   drawText(textManager, clippingRegion) {
     this.offscreenCtx.save();
     this.offscreenCtx.translate(-this.offsetX, -this.offsetY);
+    this.offscreenCtx.clip(clippingRegion);
     textManager.drawText(this.offscreenCtx, false, false);
     this.offscreenCtx.restore();
     this.blob = null;

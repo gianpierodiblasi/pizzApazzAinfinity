@@ -19,6 +19,8 @@ class Z4CanvasMouseManager {
 
    selectedGeometricShape = null;
 
+   clippingRegion = null;
+
    centerGrid = null;
 
    plotWidthGrid = 0;
@@ -90,6 +92,15 @@ class Z4CanvasMouseManager {
    */
    setKaleidoscope(kaleidoscope) {
     this.kaleidoscope = kaleidoscope;
+  }
+
+  /**
+   * Sets the clipping region
+   *
+   * @param clippingRegion The clipping region
+   */
+   setClippingRegion(clippingRegion) {
+    this.clippingRegion = clippingRegion;
   }
 
   /**
@@ -326,7 +337,7 @@ class Z4CanvasMouseManager {
     if (!next) {
       return false;
     } else if (next.intent === Z4DrawingPointIntent.DRAW_OBJECTS) {
-      this.selectedLayer.drawTool(this.selectedDrawingTool, next, this.kaleidoscope);
+      this.selectedLayer.drawTool(this.selectedDrawingTool, next, this.kaleidoscope, this.clippingRegion);
       this.selectedLayer.getLayerPreview().drawLayer();
       this.canvas.drawCanvas();
       return true;

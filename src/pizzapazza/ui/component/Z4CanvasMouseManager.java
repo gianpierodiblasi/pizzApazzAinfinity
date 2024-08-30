@@ -41,6 +41,7 @@ public class Z4CanvasMouseManager {
   private Z4DrawingDirection drawingDirection = Z4DrawingDirection.FREE;
   private Z4Kaleidoscope kaleidoscope = new Z4Kaleidoscope(1, 0, 0);
   private Z4GeometricShape selectedGeometricShape;
+  private $Path2D clippingRegion;
 
   private Point centerGrid;
   private int plotWidthGrid;
@@ -106,6 +107,15 @@ public class Z4CanvasMouseManager {
    */
   public void setKaleidoscope(Z4Kaleidoscope kaleidoscope) {
     this.kaleidoscope = kaleidoscope;
+  }
+
+  /**
+   * Sets the clipping region
+   *
+   * @param clippingRegion The clipping region
+   */
+  public void setClippingRegion($Path2D clippingRegion) {
+    this.clippingRegion = clippingRegion;
   }
 
   /**
@@ -351,7 +361,7 @@ public class Z4CanvasMouseManager {
     if (!$exists(next)) {
       return false;
     } else if (next.intent == Z4DrawingPointIntent.DRAW_OBJECTS) {
-      this.selectedLayer.drawTool(this.selectedDrawingTool, next, this.kaleidoscope);
+      this.selectedLayer.drawTool(this.selectedDrawingTool, next, this.kaleidoscope, this.clippingRegion);
       this.selectedLayer.getLayerPreview().drawLayer();
       this.canvas.drawCanvas();
       return true;

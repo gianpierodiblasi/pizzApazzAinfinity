@@ -80,6 +80,7 @@ public class Z4Canvas extends JSComponent {
   private int bottomRulerPosition;
   private int leftRulerPosition;
   private int rightRulerPosition;
+  private $Path2D clippingRegion;
 
   /**
    * The ruler size
@@ -686,6 +687,15 @@ public class Z4Canvas extends JSComponent {
     this.leftRulerPosition = leftRulerPosition;
     this.rightRulerPosition = rightRulerPosition;
 
+    int x = this.showLeftRuler ? this.leftRulerPosition + Z4Canvas.RULER_SIZE : 0;
+    int y = this.showTopRuler ? this.topRulerPosition + Z4Canvas.RULER_SIZE : 0;
+    int w = this.width - (this.showRightRuler ? this.rightRulerPosition + Z4Canvas.RULER_SIZE : 0) - (this.showLeftRuler ? this.leftRulerPosition + Z4Canvas.RULER_SIZE : 0);
+    int h = this.height - (this.showBottomRuler ? this.bottomRulerPosition + Z4Canvas.RULER_SIZE : 0) - (this.showTopRuler ? this.topRulerPosition + Z4Canvas.RULER_SIZE : 0);
+
+    this.clippingRegion = new $Path2D();
+    this.clippingRegion.rect(x, y, w, h);
+    this.mouseManager.setClippingRegion(this.clippingRegion);
+    
     this.drawCanvasRulerAndClipping();
   }
 
@@ -1311,7 +1321,7 @@ public class Z4Canvas extends JSComponent {
       this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), null, true);
     }
 
-    this.selectedLayer.drawText(this.textManager);
+    this.selectedLayer.drawText(this.textManager, this.clippingRegion);
     this.selectedLayer.getLayerPreview().drawLayer();
     this.drawCanvas();
 

@@ -51,6 +51,8 @@ class Z4Canvas extends JSComponent {
 
    rightRulerPosition = 0;
 
+   clippingRegion = null;
+
   /**
    * The ruler size
    */
@@ -640,6 +642,13 @@ class Z4Canvas extends JSComponent {
     this.bottomRulerPosition = bottomRulerPosition;
     this.leftRulerPosition = leftRulerPosition;
     this.rightRulerPosition = rightRulerPosition;
+    let x = this.showLeftRuler ? this.leftRulerPosition + Z4Canvas.RULER_SIZE : 0;
+    let y = this.showTopRuler ? this.topRulerPosition + Z4Canvas.RULER_SIZE : 0;
+    let w = this.width - (this.showRightRuler ? this.rightRulerPosition + Z4Canvas.RULER_SIZE : 0) - (this.showLeftRuler ? this.leftRulerPosition + Z4Canvas.RULER_SIZE : 0);
+    let h = this.height - (this.showBottomRuler ? this.bottomRulerPosition + Z4Canvas.RULER_SIZE : 0) - (this.showTopRuler ? this.topRulerPosition + Z4Canvas.RULER_SIZE : 0);
+    this.clippingRegion = new Path2D();
+    this.clippingRegion.rect(x, y, w, h);
+    this.mouseManager.setClippingRegion(this.clippingRegion);
     this.drawCanvasRulerAndClipping();
   }
 
@@ -1236,7 +1245,7 @@ class Z4Canvas extends JSComponent {
       this.paper.addLayer(this.textInfo.textText + (this.textInfo.shadowText ? "/" + this.textInfo.shadowText : ""), this.width, this.height, null, this.width, this.height);
       this.setSelectedLayerAndAddLayerPreview(this.paper.getLayerAt(this.getLayersCount() - 1), null, true);
     }
-    this.selectedLayer.drawText(this.textManager);
+    this.selectedLayer.drawText(this.textManager, this.clippingRegion);
     this.selectedLayer.getLayerPreview().drawLayer();
     this.drawCanvas();
     this.setChanged(true);

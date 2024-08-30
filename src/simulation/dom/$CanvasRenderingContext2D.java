@@ -54,7 +54,7 @@ public class $CanvasRenderingContext2D extends CanvasRenderingContext2D {
 
   public void resetTransform() {
   }
-
-  public void transform(double a, double b, double c, double d, double e, double f) {
+  
+  public void clip($Path2D path) {
   }
 }

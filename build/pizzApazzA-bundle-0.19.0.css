@@ -140,12 +140,6 @@
   background: transparent;
 }
 
-.z4ribbonrulerandclippingpanel {
-}
-.z4ribbonrulerandclippingpanel .z4ribbonrulerandclippingpanel-rulers img {
-  content: url(../image/util/crossRuler.gif);
-}
-
 .z4ribbonhistorypanel {
 }
 
@@ -854,6 +848,14 @@
 }
 .z4ribbonhelppanel .z4check-install span {
   margin-top: -3px;
+}
+.z4ribbonrulerandclippingpanel {
+}
+.z4ribbonrulerandclippingpanel .z4ribbonrulerandclippingpaneldropdown[transparent=true], .z4ribbonrulerandclippingpanel .z4ribbonrulerandclippingpaneldropdown[transparent=true] * {
+  background: transparent;
+}
+.z4ribbonrulerandclippingpanel .z4ribbonrulerandclippingpanel-rulers img {
+  content: url(../image/util/crossRuler.gif);
 }
 .z4ribbontextpanel {
 }

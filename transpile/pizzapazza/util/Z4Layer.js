@@ -299,13 +299,16 @@ class Z4Layer {
    * @param drawingTool The tool to perform the drawing
    * @param drawingPoint The point where to perform the drawing
    * @param kaleidoscope The kaleidoscope to use to perform the drawing
+   * @param clippingRegion The clipping region
    */
-   drawTool(drawingTool, drawingPoint, kaleidoscope) {
+   drawTool(drawingTool, drawingPoint, kaleidoscope, clippingRegion) {
     let incAngle = Z4Math.TWO_PI / kaleidoscope.multiplicity;
     for (let index = 0; index < kaleidoscope.multiplicity; index++) {
       let angle = index * incAngle;
       this.offscreenCtx.save();
-      this.offscreenCtx.translate(kaleidoscope.offsetX - this.offsetX, kaleidoscope.offsetY - this.offsetY);
+      this.offscreenCtx.translate(-this.offsetX, -this.offsetY);
+      this.offscreenCtx.clip(clippingRegion);
+      this.offscreenCtx.translate(kaleidoscope.offsetX, kaleidoscope.offsetY);
       this.offscreenCtx.rotate(angle);
       this.offscreenCtx.translate(drawingPoint.z4Vector.x0 - kaleidoscope.offsetX, drawingPoint.z4Vector.y0 - kaleidoscope.offsetY);
       this.offscreenCtx.rotate(drawingPoint.z4Vector.phase);
@@ -319,10 +322,12 @@ class Z4Layer {
    * Draws a text
    *
    * @param textManager The manager used to draw the text
+   * @param clippingRegion The clipping region
    */
-   drawText(textManager) {
+   drawText(textManager, clippingRegion) {
     this.offscreenCtx.save();
     this.offscreenCtx.translate(-this.offsetX, -this.offsetY);
+    this.offscreenCtx.clip(clippingRegion);
     textManager.drawText(this.offscreenCtx, false, false);
     this.offscreenCtx.restore();
     this.blob = null;

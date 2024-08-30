@@ -1,0 +1,8 @@
+.z4ribbonrulerandclippingpanel {
+}
+.z4ribbonrulerandclippingpanel .z4ribbonrulerandclippingpaneldropdown[transparent=true], .z4ribbonrulerandclippingpanel .z4ribbonrulerandclippingpaneldropdown[transparent=true] * {
+  background: transparent;
+}
+.z4ribbonrulerandclippingpanel .z4ribbonrulerandclippingpanel-rulers img {
+  content: url(../image/util/crossRuler.gif);
+}

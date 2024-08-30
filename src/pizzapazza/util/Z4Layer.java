@@ -19,6 +19,7 @@ import simulation.js.$Apply_1_Void;
 import static simulation.js.$Globals.$exists;
 import static simulation.js.$Globals.parseInt;
 import simulation.js.$Object;
+import simulation.js.$Path2D;
 import simulation.js.$Uint8Array;
 
 /**
@@ -319,20 +320,23 @@ public class Z4Layer {
    * @param drawingTool The tool to perform the drawing
    * @param drawingPoint The point where to perform the drawing
    * @param kaleidoscope The kaleidoscope to use to perform the drawing
+   * @param clippingRegion The clipping region
    */
-  public void drawTool(Z4DrawingTool drawingTool, Z4DrawingPoint drawingPoint, Z4Kaleidoscope kaleidoscope) {
+  public void drawTool(Z4DrawingTool drawingTool, Z4DrawingPoint drawingPoint, Z4Kaleidoscope kaleidoscope, $Path2D clippingRegion) {
     double incAngle = Z4Math.TWO_PI / kaleidoscope.multiplicity;
     for (int index = 0; index < kaleidoscope.multiplicity; index++) {
       double angle = index * incAngle;
 
       this.offscreenCtx.save();
-      this.offscreenCtx.translate(kaleidoscope.offsetX - this.offsetX, kaleidoscope.offsetY - this.offsetY);
+      this.offscreenCtx.translate(-this.offsetX, -this.offsetY);
+      this.offscreenCtx.clip(clippingRegion);
+      this.offscreenCtx.translate(kaleidoscope.offsetX, kaleidoscope.offsetY);
       this.offscreenCtx.rotate(angle);
       this.offscreenCtx.translate(drawingPoint.z4Vector.x0 - kaleidoscope.offsetX, drawingPoint.z4Vector.y0 - kaleidoscope.offsetY);
       this.offscreenCtx.rotate(drawingPoint.z4Vector.phase);
-      
+
       drawingTool.draw(this.offscreenCtx, drawingPoint);
-      
+
       this.offscreenCtx.restore();
     }
 
@@ -343,10 +347,12 @@ public class Z4Layer {
    * Draws a text
    *
    * @param textManager The manager used to draw the text
+   * @param clippingRegion The clipping region
    */
-  public void drawText(Z4CanvasTextManager textManager) {
+  public void drawText(Z4CanvasTextManager textManager, $Path2D clippingRegion) {
     this.offscreenCtx.save();
     this.offscreenCtx.translate(-this.offsetX, -this.offsetY);
+    this.offscreenCtx.clip(clippingRegion);
     textManager.drawText(this.offscreenCtx, false, false);
     this.offscreenCtx.restore();
 
